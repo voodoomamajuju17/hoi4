@@ -1,0 +1,163 @@
+# =============================================================================
+# 08_territory.yaml — Reparto territorial sobre el mapa vanilla
+# =============================================================================
+# Estrategia: reskin del mapa vanilla. Mismos states y provincias, reasignados
+# y renombrados. NO se generan bitmaps.
+#
+# ESTADO: bloqueado por AD003 / Q007.
+# Los territorios de abajo están descritos por NOMBRE DE REGIÓN, no por state
+# ID. Para generar history/states/*.txt hacen falta los IDs numéricos de HOI4
+# vanilla, que no tengo en este entorno y no voy a escribir de memoria: un ID
+# equivocado reasigna territorio ajeno EN SILENCIO, sin error de carga. Es
+# exactamente la clase de bug más caro de encontrar.
+# =============================================================================
+
+strategy: vanilla_reskin
+resolution_method: unresolved
+resolution_proposal: >
+  El generador toma un flag --vanilla-path apuntando a la instalación de HOI4,
+  lee history/states/*.txt y resuelve nombre de región -> lista de state IDs.
+  Así el spec sigue siendo legible y no se hardcodea nada frágil.
+see: [Q007, Q035]
+
+# =============================================================================
+territories:
+
+  # ---------------------------------------------------------------------------
+  EFE:
+    src: canon
+    doc_section: "§3.1"
+    doc_quote: >
+      "Núcleo confirmado en la revisión más reciente: Argentina, Uruguay, Chile
+      —sin Tierra del Fuego ni Magallanes— y Rio Grande do Sul."
+    capital: "Buenos Aires"
+    capital_src: canon
+    core_regions:
+      - name: "Argentina"
+        exclusions: ["Tierra del Fuego (parte argentina)", "Misiones", "Formosa"]
+        exclusions_src: inferred
+        exclusions_note: >
+          Misiones y Formosa se excluyen porque el doc las asigna explícitamente
+          al satélite YYG. Tierra del Fuego va a PTA. La exclusión es deducción
+          mía a partir de las listas de los satélites, no está dicha así.
+        state_ids: unknown
+      - name: "Uruguay"
+        state_ids: unknown
+      - name: "Chile"
+        exclusions: ["Magallanes", "Tierra del Fuego (parte chilena)"]
+        exclusions_src: canon
+        exclusions_note: "El doc dice literalmente '—sin Tierra del Fuego ni Magallanes—'."
+        state_ids: unknown
+      - name: "Rio Grande do Sul"
+        state_ids: unknown
+    cores: all_core_regions
+    cores_src: inferred
+    cores_note: "El doc dice 'núcleo territorial'; lo interpreto como cores del EFE."
+
+  # ---------------------------------------------------------------------------
+  PTA:
+    src: canon
+    doc_section: "§3.1"
+    doc_quote: 'Satélite "Patagonia Austral": Tierra del Fuego, Magallanes y Malvinas.'
+    core_regions:
+      - name: "Tierra del Fuego"
+        state_ids: unknown
+        note: >
+          En HOI4 vanilla Tierra del Fuego puede estar repartida entre states
+          argentinos y chilenos, o ser un solo state. Hay que verificarlo contra
+          los archivos reales antes de partirla.
+      - name: "Magallanes"
+        state_ids: unknown
+      - name: "Malvinas / Falkland Islands"
+        state_ids: unknown
+    capital: unknown   # ver Q012
+    canon_note: >
+      Malvinas estaba en territorio directo del EFE en una versión anterior.
+      La revisión posterior la mueve acá. Prevalece esta. (§3.1)
+
+  # ---------------------------------------------------------------------------
+  YYG:
+    src: canon
+    doc_section: "§3.1"
+    doc_quote: >
+      'Satélite "Yvytu Ykua Guasu": Paraguay, Mato Grosso, Paraná, Santa
+      Catarina, Misiones y Formosa.'
+    core_regions:
+      - name: "Paraguay"
+        state_ids: unknown
+      - name: "Mato Grosso"
+        state_ids: unknown
+        ambiguity: >
+          En Brasil moderno existen Mato Grosso y Mato Grosso do Sul. El doc
+          dice solo "Mato Grosso". No sé si incluye ambos. Ver Q036.
+      - name: "Paraná"
+        state_ids: unknown
+      - name: "Santa Catarina"
+        state_ids: unknown
+      - name: "Misiones"
+        state_ids: unknown
+      - name: "Formosa"
+        state_ids: unknown
+    capital: unknown   # ver Q012
+
+  # ---------------------------------------------------------------------------
+  ASC: { src: unknown, core_regions: unknown, see: Q010 }
+  FCU: { src: unknown, core_regions: unknown, see: Q010 }
+  HSN: { src: unknown, core_regions: unknown, see: Q010 }
+  NAS:
+    src: unknown
+    core_regions: unknown
+    hint: "Identidad 'neoandina' (§7). Sugiere los Andes, pero no está delimitado."
+    hint_src: inferred
+    see: Q010
+  SHD:
+    src: unknown
+    core_regions: unknown
+    hint: "Prefijo 'Sino-' (§8). Sugiere China, pero no está delimitado."
+    hint_src: inferred
+    see: Q010
+  APF:
+    src: unknown
+    core_regions: unknown
+    hint: "'African People's Federation' + 'federación amplia' (§9)."
+    hint_src: inferred
+    see: Q010
+  NRE:
+    src: unknown
+    core_regions: unknown
+    warning: >
+      NO usar la geografía del New Roman Axis de 2023 (Italia, España, Grecia,
+      sur de Francia, Hungría, Argentina, Uruguay, Japón, Corea). El doc la
+      declara incompatible con el EFE actual y la marca como borrador histórico
+      (§10.1). Argentina y Uruguay son del EFE.
+    see: Q010
+
+# =============================================================================
+conflicts_detected:
+  - id: C001
+    severity: blocking_for_full_map
+    text: >
+      El doc reparte territorio SOLO para el EFE y sus dos satélites. Las otras
+      siete potencias no tienen ni una región asignada. Con el mapa vanilla,
+      eso deja el 95% del planeta sin dueño definido. La Fase 3 (solo EFE) puede
+      avanzar igual, pero la Fase 5 no.
+    see: Q010
+
+  - id: C002
+    severity: informational
+    text: >
+      El EFE ocupa el Cono Sur casi completo. Cualquier asignación futura del
+      NRE o de la NASK tiene que respetarlo. La NASK es "neoandina" y el EFE
+      tiene todo Chile: hay una frontera andina que va a haber que negociar.
+    see: Q037
+
+# =============================================================================
+state_renaming:
+  policy: required
+  policy_src: inferred
+  note: >
+    El reskin exige renombrar states: dejar "Buenos Aires" con su nombre vanilla
+    es aceptable, pero el mapa entero con nombres de 1936 rompe la ambientación.
+    El doc no da ni un solo nombre nuevo de state.
+  scope_phase3: "Solo los states del EFE + satélites."
+  see: Q038

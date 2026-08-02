@@ -1,0 +1,163 @@
+# =============================================================================
+# 01_ideologies.yaml — Ideologías custom
+# =============================================================================
+# El documento NO define ideologías en términos de HOI4. Define regímenes en
+# prosa. Todo lo de este archivo es por lo tanto `inferred` o `invented`, y está
+# marcado como tal. Es el archivo del spec con más superficie de revisión.
+#
+# Estructura asumida: AD002 = reskin_groups (ver 00_project.yaml).
+# Cada ideología del mod es un `type` (sub-ideología) dentro de uno de los
+# cuatro grupos vanilla, que se conservan como claves internas y se renombran
+# por localisation.
+# =============================================================================
+
+strategy: reskin_groups
+strategy_src: inferred
+strategy_note: "Pendiente de tu OK — ver AD002 / Q006."
+
+# -----------------------------------------------------------------------------
+# Grupos (claves internas vanilla, etiquetas nuevas)
+# -----------------------------------------------------------------------------
+groups:
+
+  - key: fascism
+    display_key: ideology_group_ecoauthoritarian
+    loc:
+      english: "Eco-Authoritarianism"
+      spanish: "Ecoautoritarismo"
+    src: inferred
+    from_doc: >
+      §3.2 — "respuesta autoritaria al colapso ecológico", "ecologismo extremo,
+      militarización, autosuficiencia, control social y conservación coercitiva".
+    color_rgb: [58, 92, 54]
+    color_src: invented
+    color_why: "HOI4 exige color en el bloque de ideología. Verde oscuro por el tema."
+    types:
+      - key: ecofascism
+        loc:
+          english: "Ecofascism"
+          spanish: "Ecofascismo"
+        used_by: [EFE]
+        src: inferred
+      - key: imperial_restoration
+        loc:
+          english: "Imperial Restoration"
+          spanish: "Restauración Imperial"
+        used_by: [NRE]
+        src: inferred
+        from_doc: "§10 — Neo Roman Empire, Legiones y Oficiales, fantasía neo-romana."
+
+  - key: communism
+    display_key: ideology_group_collectivist
+    loc:
+      english: "Collectivism"
+      spanish: "Colectivismo"
+    src: inferred
+    from_doc: "§4 — 'sociedad socialista altamente automatizada'."
+    color_rgb: [178, 44, 44]
+    color_src: invented
+    types:
+      - key: automated_socialism
+        loc:
+          english: "Automated Socialism"
+          spanish: "Socialismo Automatizado"
+        used_by: [ASC]
+        src: canon
+        from_doc: "El nombre 'Automated Socialist Commune' es literal del doc."
+      - key: continental_federalism
+        loc:
+          english: "Continental Federalism"
+          spanish: "Federalismo Continental"
+        used_by: [APF]
+        src: inferred
+        from_doc: "§9 — 'integración regional', 'federación amplia'."
+        warning: >
+          Meter APF en el grupo `communism` es una decisión mía sin apoyo en el
+          doc. El doc no dice que la APF sea de izquierda; dice que su eje es
+          político-territorial. Puede que le corresponda otro grupo. Ver Q008.
+
+  - key: democratic
+    display_key: ideology_group_market
+    loc:
+      english: "Market Order"
+      spanish: "Orden de Mercado"
+    src: inferred
+    from_doc: "§5 y §6 — polo hipercapitalista (FCCU) y comercio marítimo (HSN)."
+    color_rgb: [212, 168, 52]
+    color_src: invented
+    types:
+      - key: corporate_union
+        loc:
+          english: "Corporate Union"
+          spanish: "Unión Corporativa"
+        used_by: [FCU]
+        src: inferred
+        from_doc: "§5 — 'cuatro corporaciones que actúan como centros de poder'."
+      - key: mercantile_thalassocracy
+        loc:
+          english: "Mercantile Thalassocracy"
+          spanish: "Talasocracia Mercantil"
+        used_by: [HSN]
+        src: inferred
+        from_doc: "§6 — 'depender más del control de rutas y de la red mercantil'."
+
+  - key: neutrality
+    display_key: ideology_group_technocratic
+    loc:
+      english: "Technocratic Order"
+      spanish: "Orden Tecnocrático"
+    src: inferred
+    color_rgb: [110, 118, 132]
+    color_src: invented
+    types:
+      - key: harmonious_directorate
+        loc:
+          english: "Harmonious Directorate"
+          spanish: "Directorio Armónico"
+        used_by: [SHD]
+        src: inferred
+        from_doc: >
+          §8 — el doc dice explícitamente que "Armonía" sugiere un medidor
+          político/social PERO que esa interpretación NO se adopta como canon.
+          Esta ideología respeta esa cautela: toma solo el nombre.
+      - key: solar_monarchism
+        loc:
+          english: "Solar Monarchism"
+          spanish: "Monarquismo Solar"
+        used_by: [NAS]
+        src: invented
+        why: >
+          El doc solo da "NeoAndean Sky Kingdom" e "Inti-Soma". "Kingdom" implica
+          monarquía e "Inti" es el sol incaico. Todo lo demás es mío. Ver Q009.
+      - key: unaligned_state
+        loc:
+          english: "Unaligned"
+          spanish: "No Alineado"
+        used_by: []
+        note: "Default para los 30 países libres sin definir. Ver 09_free_countries.yaml."
+        src: invented
+        why: "Los países libres necesitan una ideología para existir; el doc no da ninguna."
+
+# -----------------------------------------------------------------------------
+# Advertencia técnica
+# -----------------------------------------------------------------------------
+technical_notes:
+  - id: TN001
+    text: >
+      Si un país arranca con una sub-ideología custom, TODOS los personajes con
+      rol de country_leader de ese país deben declarar esa misma sub-ideología
+      en su bloque `country_leader = { ideology = ... }`. La sección 14 del doc
+      reporta exactamente este error en la build anterior ("algunos líderes
+      apuntaban a ideologías vanilla que no se encontraban correctamente").
+      El generador debe validar esta correspondencia de forma cruzada y fallar
+      en tiempo de generación, no en tiempo de carga del juego.
+    enforce_in_generator: true
+
+  - id: TN002
+    text: >
+      No tengo certeza sobre el conjunto exacto de campos obligatorios del
+      bloque `ai` dentro de una definición de ideología en la versión actual de
+      HOI4, ni sobre si `can_collaborate` sigue existiendo con ese nombre.
+      Antes de generar common/ideologies/ te voy a pedir confirmar contra la
+      versión del juego que estés usando, en vez de escribirlo de memoria.
+    see: Q004

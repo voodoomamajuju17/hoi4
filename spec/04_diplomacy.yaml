@@ -1,0 +1,89 @@
+# =============================================================================
+# 04_diplomacy.yaml — Estado diplomático inicial (2100.1.1)
+# =============================================================================
+# El documento define UNA sola relación diplomática con certeza: el EFE y sus
+# dos satélites. Nada más. No hay facciones, guerras, alianzas ni matriz de
+# opiniones en la biblia de diseño.
+#
+# Un mod de HOI4 carga perfectamente sin nada de esto, así que la ausencia no
+# bloquea la Fase 3. Pero sin relaciones el mundo es diplomáticamente plano.
+# Ver Q018.
+# =============================================================================
+
+subject_relations:
+  - overlord: EFE
+    subject: PTA
+    autonomy_level: unknown        # ver Q019
+    src: canon
+    doc_quote: 'Satélite "Patagonia Austral": Tierra del Fuego, Magallanes y Malvinas.'
+    note: >
+      El doc dice "satélite". HOI4 tiene varios niveles concretos
+      (autonomy_puppet, autonomy_integrated_puppet, autonomy_dominion,
+      autonomy_supervised_state, autonomy_free...). "Satélite" no mapea a uno
+      solo. Elegir el nivel cambia bastante el gameplay: cuánto extractan de
+      manpower/factories y si pueden ser anexados.
+
+  - overlord: EFE
+    subject: YYG
+    autonomy_level: unknown        # ver Q019
+    src: canon
+    doc_quote: 'Satélite "Yvytu Ykua Guasu": Paraguay, Mato Grosso, Paraná, Santa Catarina, Misiones y Formosa.'
+
+# =============================================================================
+factions:
+  status: unknown
+  src: unknown
+  see: Q018
+  note: >
+    El doc no define ni una sola facción/alianza. Con 8 potencias y 30 países
+    libres, la estructura de bloques es probablemente el dato de diseño más
+    importante que falta: define de qué va la partida.
+
+wars_at_start:
+  status: unknown
+  src: unknown
+  see: Q018
+
+opinion_matrix:
+  status: unknown
+  src: unknown
+  see: Q018
+  candidate_relations_from_doc:
+    - between: [EFE, NAS]
+      basis: "Pacto de Bosques Eternos, 2072"
+      src: non_canon_legacy
+      caveat: >
+        Aparece SOLO en la cronología antigua (§12), que el doc marca como
+        material a mantener separado por incompatibilidad con la biografía de
+        Aurelio IV. Además está firmado con el "Neo Andean Sky Kingdom", que es
+        el precursor de la NASK, no necesariamente la misma entidad.
+        NO es canon. Lo dejo listado porque es el único vínculo bilateral que
+        aparece en todo el documento y sería una lástima perderlo si querés
+        reciclarlo. Ver Q020.
+
+    - between: [EFE, NRE]
+      basis: "Conflicto territorial implícito"
+      src: inferred
+      caveat: >
+        Inferencia mía, débil. El doc dice que el NRE viejo reclamaba Argentina
+        y Uruguay, y que eso es incompatible con el EFE actual. Eso es una nota
+        de continuidad editorial, no un conflicto in-game. No lo tomes como
+        canon; lo anoto solo como semilla narrativa posible.
+
+# =============================================================================
+generation_rules:
+  - >
+    Las sujeciones se emiten en history/countries/<TAG>.txt del overlord con
+    puppet/set_autonomy, no en el del subject. El generador debe emitirlas una
+    sola vez para evitar estados contradictorios.
+  - >
+    Todo TAG referenciado acá debe existir en 02_countries.yaml. El generador
+    valida y falla si no.
+
+technical_notes:
+  - id: TN005
+    text: >
+      No voy a escribir el bloque set_autonomy de memoria. Los nombres exactos
+      de los autonomy_state y qué campos acepta `set_autonomy` cambiaron entre
+      versiones (y con La Résistance / Waking the Tiger). Confirmame la versión
+      del juego (Q004) y el nivel deseado (Q019) antes de generar esta parte.

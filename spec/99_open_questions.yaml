@@ -1,0 +1,561 @@
+# =============================================================================
+# 99_open_questions.yaml — Preguntas abiertas
+# =============================================================================
+# Todo lo que el documento dejó ambiguo, en vez de inventarlo.
+#
+# blocking_phase:
+#   2  — hay que responderla antes de escribir el generador
+#   3  — hay que responderla antes de la vertical slice del EFE
+#   5  — hay que responderla antes de producir las otras seis facciones
+#   -  — no bloquea nada; es mejora
+#
+# priority: critical | high | medium | low
+# =============================================================================
+
+summary:
+  total: 41
+  blocking_phase_2: [Q001, Q002, Q004, Q006]
+  blocking_phase_3: [Q003, Q005, Q007, Q013, Q019, Q021, Q029, Q031, Q034, Q035, Q038]
+  blocking_phase_5: [Q008, Q009, Q010, Q016, Q017, Q018, Q022, Q023, Q024, Q025, Q026, Q027, Q028, Q030, Q032, Q039]
+  non_blocking: [Q011, Q012, Q014, Q015, Q020, Q033, Q036, Q037, Q040, Q041]
+
+questions:
+
+# =============================================================================
+# BLOQUE A — Identidad del proyecto
+# =============================================================================
+
+- id: Q001
+  priority: critical
+  blocking_phase: 2
+  topic: "¿'Seven Dominions' o '2100 Meganations'?"
+  question: >
+    Tu pedido dice que el mod se llama "Seven Dominions" y que tiene SIETE
+    facciones. El documento que me pasaste se titula "2100 Meganations" y define
+    OCHO mega-naciones con TAG, nombre y mecánica. No son la misma cosa y no
+    puedo deducir cuál manda.
+  what_i_did: >
+    Armé el spec siguiendo al DOCUMENTO (ocho, "2100 Meganations"), porque es la
+    única fuente con contenido verificable. Aislé el nombre, el año y el conteo
+    en 00_project.yaml para que corregirlo sean tres líneas.
+  options:
+    - "El doc manda: son 8 y el mod es 2100 Meganations. (spec actual, no toco nada)"
+    - "El prompt manda: son 7 y el mod es Seven Dominions. Decime CUÁL de las ocho se cae y por qué."
+    - "Son 7 porque dos se fusionaron. Decime cuáles y cómo queda la mecánica resultante."
+    - "Seven Dominions es un rename y siguen siendo 8. (el '7' era un desliz)"
+  why_it_matters: >
+    Es el único dato del que dependen todos los demás archivos. Si son siete,
+    hay una facción entera de spec que sobra, y probablemente un reparto
+    territorial distinto.
+
+- id: Q002
+  priority: critical
+  blocking_phase: 2
+  topic: "¿Año 2100 o 2137?"
+  question: >
+    Mismo choque. El prompt dice 2137, el doc dice 2100 (en el título, en §1, en
+    §16, y en el nombre de la carpeta de trabajo).
+  what_i_did: "Puse 2100.1.1 como start_date, siguiendo al doc."
+  note: >
+    Si la respuesta es 2137, ojo con la biografía de Aurelio IV: nacido en 2046,
+    en 2137 tendría 91 años. Golpe en 2079, coronado en 2081 — llevaría 56 años
+    en el trono. Es posible (es sci-fi, puede haber longevidad), pero es una
+    decisión de lore, no un detalle. Si es 2137 necesito saber si Aurelio IV
+    sigue vivo o si el líder inicial es un sucesor.
+
+- id: Q003
+  priority: critical
+  blocking_phase: 3
+  topic: "Fecha exacta de inicio"
+  question: >
+    El doc da el AÑO pero no el día. HOI4 necesita una fecha completa en
+    defines y en history.
+  proposal: "2100.1.1 (1 de enero), salvo que haya un hito narrativo mejor."
+  what_i_did: "Asumí 2100.1.1 y lo marqué como inferred."
+
+- id: Q004
+  priority: critical
+  blocking_phase: 2
+  topic: "Versión de HOI4 y DLCs"
+  question: >
+    ¿Contra qué versión del juego generamos, y qué DLCs tenés? Necesito el
+    número de versión exacto (ej. 1.14.x, 1.15.x).
+  why_it_matters: >
+    Es la pregunta que más errores de carga previene. Cambian entre versiones:
+    la sintaxis de common/characters/, los campos del bloque `ai` de las
+    ideologías, los nombres de autonomy_state, la disponibilidad de
+    power_balance (que es justo lo que necesita la mecánica de FCU), y varias
+    claves de modificador que usé en 05_ideas.yaml.
+    Sin esto voy a estar preguntándote cosas de a una en la Fase 4 en vez de
+    generarlas bien de entrada.
+  affects: [TN002, TN003, TN005, TN006, Q024]
+
+# =============================================================================
+# BLOQUE B — Decisiones técnicas
+# =============================================================================
+
+- id: Q005
+  priority: high
+  blocking_phase: 3
+  topic: "TAGs de 4 letras: FCCU y NASK"
+  question: >
+    HOI4 exige TAGs de exactamente 3 caracteres. "FCCU" y "NASK" no cargan.
+  what_i_did: "Los acorté a FCU y NAS. Es invención mía por necesidad técnica."
+  options:
+    - "FCU / NAS (spec actual)"
+    - "FCC / NSK"
+    - "Otros que prefieras — decímelos y los cambio."
+  note: "El jugador nunca ve el TAG interno; los nombres largos van en localisation."
+
+- id: Q006
+  priority: critical
+  blocking_phase: 2
+  topic: "¿Reemplazar las ideologías vanilla o reskinearlas?"
+  question: "Ver AD002 en 00_project.yaml para el detalle completo."
+  my_recommendation: >
+    reskin_groups: mantener las 4 claves internas vanilla (democratic, fascism,
+    communism, neutrality) y meter las ideologías del mod como sub-ideologías,
+    renombrando todo por localisation.
+  why: >
+    Es lo que hacen los TC grandes, y evita exactamente el error que reporta la
+    §14 del doc sobre la build anterior ("algunos líderes apuntaban a
+    ideologías vanilla que no se encontraban correctamente"). Borrar las
+    ideologías vanilla obliga a sobreescribir montañas de contenido base.
+  cost_if_wrong: "Alto. Cambiar de estrategia después toca todos los archivos de país."
+
+- id: Q007
+  priority: critical
+  blocking_phase: 3
+  topic: "State IDs de HOI4 vanilla"
+  question: >
+    Necesito los IDs numéricos de state de Argentina, Uruguay, Chile, Rio Grande
+    do Sul, Tierra del Fuego, Magallanes, Malvinas, Paraguay, Mato Grosso,
+    Paraná, Santa Catarina, Misiones y Formosa.
+  why_i_dont_guess: >
+    No tengo los archivos del juego base en este entorno. Un state ID
+    equivocado reasigna territorio ajeno EN SILENCIO: el mod carga sin error y
+    el bug aparece recién mirando el mapa. Es el peor tipo de error para
+    debuggear y es totalmente evitable.
+  how_to_unblock:
+    - "Opción A (mejor): el generador recibe --vanilla-path y lee history/states/ directo. Ver Q035."
+    - "Opción B: me pasás un zip/volcado de history/states/ de tu instalación."
+    - "Opción C: me pasás la lista nombre->ID de esos states y la hardcodeo en el spec."
+
+- id: Q013
+  priority: high
+  blocking_phase: 3
+  topic: "graphical_culture de los países"
+  question: >
+    Cada país necesita `graphical_culture` y `graphical_culture_2d`, y el valor
+    tiene que existir en interface/*.gfx. Uno inventado rompe la carga.
+  options:
+    - "Reusar culturas vanilla (western_european_gfx, etc.). Carga seguro, es feo temáticamente."
+    - "Definir culturas propias por facción. Más trabajo, hay que generar los .gfx."
+  my_recommendation: >
+    Reusar vanilla en la Fase 3. La vertical slice tiene que CARGAR; la estética
+    de los retratos es lo primero que se puede mejorar después sin riesgo.
+
+- id: Q034
+  priority: medium
+  blocking_phase: 3
+  topic: "Iconos de los focos"
+  question: "¿Iconos vanilla genéricos o placeholders .dds propios?"
+  my_recommendation: >
+    Vanilla genéricos (GFX_focus_generic_*) para la Fase 3. Un icono vanilla
+    carga seguro; un .dds mal generado da cuadro roto o crash. Las banderas sí
+    van como placeholder .dds porque no hay alternativa: no existe bandera
+    vanilla para EFE.
+
+- id: Q035
+  priority: high
+  blocking_phase: 3
+  topic: "¿El generador puede leer la carpeta de HOI4 vanilla?"
+  question: >
+    ¿Tenés HOI4 instalado en la misma máquina donde vas a correr el generador, y
+    me podés dar la ruta? Ej: ~/.steam/steam/steamapps/common/Hearts of Iron IV
+  why: >
+    Resuelve Q007 de raíz y además permite validar automáticamente que cada
+    modificador, trait e ideología que emitimos existe de verdad. Convierte
+    media Fase 4 en errores en tiempo de generación en vez de errores en
+    error.log.
+
+# =============================================================================
+# BLOQUE C — Contenido faltante: territorio y países
+# =============================================================================
+
+- id: Q010
+  priority: critical
+  blocking_phase: 5
+  topic: "Territorio de las siete potencias que no son EFE"
+  question: >
+    El doc reparte territorio SOLO para EFE, PTA e YYG. Las otras siete no
+    tienen ni una región asignada. ¿Dónde va cada una?
+  hints_available:
+    NAS: "'neoandina' — Andes, pero el EFE ya tiene todo Chile."
+    SHD: "'Sino-' — China."
+    APF: "'African' — África, alcance desconocido."
+    NRE: "Linaje romano, pero el mapa viejo está prohibido (§10.1)."
+    ASC: "Solo la pista legacy de Nueva Zelanda (no canon)."
+    FCU: "Nada."
+    HSN: "'High Seas' — marítimo, sin territorio claro."
+  note: "Sin esto la Fase 5 no arranca. La Fase 3 (solo EFE) sí puede."
+
+- id: Q036
+  priority: low
+  blocking_phase: "-"
+  topic: "¿'Mato Grosso' incluye Mato Grosso do Sul?"
+  question: >
+    El satélite YYG lleva "Mato Grosso". En Brasil hay dos estados con ese
+    nombre (Mato Grosso y Mato Grosso do Sul). Geográficamente Mato Grosso do
+    Sul es el que limita con Paraguay, así que tendría más sentido para YYG.
+    No lo asumí.
+
+- id: Q037
+  priority: low
+  blocking_phase: "-"
+  topic: "Frontera andina EFE / NAS"
+  question: >
+    El EFE tiene Chile entero (menos Magallanes). La NAS es "neoandina". Si la
+    NAS tiene los Andes centrales, comparten una frontera larga. ¿Es una
+    frontera tensa, un pacto (ver Q020), o la NAS está más al norte?
+
+- id: Q038
+  priority: high
+  blocking_phase: 3
+  topic: "Renombre de states"
+  question: >
+    El reskin del mapa implica renombrar states. El doc no da ni un nombre nuevo.
+    Para la Fase 3 son ~15-20 states del EFE y satélites.
+  options:
+    - "Dejar los nombres vanilla en v1 y renombrar después."
+    - "Me pasás los nombres nuevos."
+    - "Los propongo yo y los revisás. (los marcaría todos como invented)"
+  my_recommendation: >
+    La primera para la Fase 3. Que la slice cargue primero; los nombres son
+    localisation pura y se cambian sin tocar lógica.
+
+- id: Q039
+  priority: high
+  blocking_phase: 5
+  topic: "Los 30 países libres"
+  question: >
+    El doc los menciona cuatro veces y les da función de diseño, pero no nombra
+    ninguno. ¿Cuáles son?
+  sub_questions:
+    - "¿TAGs vanilla reciclados con nombre nuevo, o TAGs nuevos?"
+    - "¿Focus tree genérico compartido, o ninguno?"
+    - "¿Enganchan con mecánicas (nodos de HSN, integración de APF) o son lore?"
+  note: >
+    La tercera sub-pregunta importa más de lo que parece: si los nodos
+    comerciales de HSN y la integración regional de APF dependen de países
+    libres concretos, entonces esos 30 países son una dependencia dura de dos
+    sistemas nacionales, no decorado.
+
+# =============================================================================
+# BLOQUE D — Contenido faltante: líderes, diplomacia, ideologías
+# =============================================================================
+
+- id: Q008
+  priority: medium
+  blocking_phase: 5
+  topic: "¿A qué grupo ideológico pertenece la APF?"
+  question: >
+    Metí a la APF en el grupo `communism` con una ideología
+    "Federalismo Continental", pero es la asignación más débil de todo el spec.
+    El doc no dice que la APF sea de izquierda: dice que su eje es
+    político-territorial (cohesión federal), lo cual es ortogonal al eje
+    económico. Podría ir en cualquier grupo.
+
+- id: Q009
+  priority: high
+  blocking_phase: 5
+  topic: "Inti-Soma (NAS) — todo el sistema"
+  question: >
+    El doc da el nombre y nada más, y dice explícitamente que la prioridad es
+    reconstruirlo desde los archivos originales ANTES de completar lore.
+    ¿Tenés esos archivos o conversaciones? ¿Qué es "Soma" acá — el compuesto
+    védico, la referencia a Un Mundo Feliz, el cuerpo (soma/griego)?
+  what_i_did: >
+    Respeté la instrucción: no inventé nada de Inti-Soma. Lo único que puse es
+    la ideología "Monarquismo Solar", que sí es invento mío y está marcada.
+
+- id: Q016
+  priority: high
+  blocking_phase: 5
+  topic: "Líderes de las siete potencias sin líder"
+  question: "El doc solo define a Aurelio IV (EFE). ¿Quién gobierna las otras siete?"
+  design_note: >
+    Ojo con la ASC: una "Commune" socialista automatizada puede no tener una
+    figura personal de liderazgo — podría ser un consejo, una IA o un cargo
+    rotativo. Inventarle un dictador con cara contradiría el concepto. Lo mismo
+    con la FCU: ¿el líder es un CEO, o el consejo de las cuatro corporaciones?
+    Estas dos son decisiones de lore, no huecos a rellenar.
+
+- id: Q012
+  priority: low
+  blocking_phase: "-"
+  topic: "Capitales y líderes de PTA e YYG"
+  question: >
+    Los satélites tienen territorio canon pero no capital ni líder.
+    Para PTA la capital plausible sería Ushuaia o Punta Arenas; para YYG,
+    Asunción. No las asumí.
+
+- id: Q014
+  priority: low
+  blocking_phase: "-"
+  topic: "Fecha de la Batalla de Iguazú"
+  question: >
+    El doc la pone en la trayectoria de Aurelio IV entre las Milicias Verdes y
+    el golpe de 2079, pero sin año. Es un buen candidato a evento histórico.
+
+- id: Q015
+  priority: low
+  blocking_phase: "-"
+  topic: "Traits de Aurelio IV"
+  question: >
+    El doc no le da traits. Puedo dejarlo sin traits (carga perfecto) o definir
+    traits propios en common/country_leader/.
+  what_i_did: "Fase 3 sale sin traits salvo que digas otra cosa."
+
+- id: Q018
+  priority: critical
+  blocking_phase: 5
+  topic: "Estructura diplomática global"
+  question: >
+    El doc no define NI UNA facción, alianza, guerra o relación bilateral entre
+    las ocho potencias. ¿Hay bloques? ¿Guerra fría multipolar? ¿Todos contra
+    todos? ¿Alguna guerra activa al inicio?
+  why_it_matters: >
+    Es, después de Q010, el hueco más grande del documento. Define de qué va la
+    partida. Ocho potencias sin relaciones definidas es un roster, no un
+    escenario.
+
+- id: Q019
+  priority: high
+  blocking_phase: 3
+  topic: "Nivel de autonomía de PTA e YYG"
+  question: >
+    El doc dice "satélite". HOI4 tiene niveles concretos (autonomy_puppet,
+    autonomy_integrated_puppet, autonomy_dominion, autonomy_supervised_state...)
+    y la elección cambia bastante el juego: cuánto manpower y cuántas fábricas
+    extrae el EFE, y si puede anexarlos.
+  my_guess_if_forced: >
+    autonomy_integrated_puppet, por el tono coercitivo del régimen. Pero es
+    guess, no lo escribo sin tu OK.
+
+- id: Q020
+  priority: low
+  blocking_phase: "-"
+  topic: "¿Qué se recicla de la cronología 2060/2080?"
+  question: >
+    El doc la marca como no canon pero la conserva como banco de ideas, y la
+    §15 pide decidir qué se recicla. Los candidatos más fuertes:
+    Desastre de Atacama (2048), Bloqueo de Valparaíso (2056), Pacto de Bosques
+    Eternos con NASK (2072), Operación Raíz Profunda (2067).
+  what_i_did: >
+    Tomé UN solo préstamo: "Restauración Total" como nombre de rama de focos del
+    EFE. Está marcado en 07_focus_trees.yaml. Decime si preferís que no toque
+    nada de esa cronología y lo saco.
+
+- id: Q040
+  priority: low
+  blocking_phase: "-"
+  topic: "La capital 'Gaia'"
+  question: >
+    La cronología vieja dice que hacia 2080 la capital del EFE se llamaba
+    "Gaia". El canon actual dice Buenos Aires. ¿Buenos Aires fue renombrada
+    "Gaia" y después revertida, o "Gaia" es de la línea descartada?
+  note: "Detecté esta incompatibilidad yo; el doc no la menciona."
+
+- id: Q041
+  priority: low
+  blocking_phase: "-"
+  topic: "¿'Guardia Verde' y 'Milicias Verdes' son lo mismo?"
+  question: >
+    El canon actual dice que Aurelio IV viene de las "Milicias Verdes" (§3.3).
+    La cronología vieja menciona la "Guardia Verde" en 2054 (§12). ¿Son la misma
+    organización en dos momentos, o dos cosas distintas? Afecta cómo escribo los
+    eventos de apertura del EFE.
+
+# =============================================================================
+# BLOQUE E — Mecánicas sin definir
+# =============================================================================
+
+- id: Q021
+  priority: critical
+  blocking_phase: 3
+  topic: "BioSteel: qué mide el contador"
+  question: >
+    El doc da los umbrales (5/10/15, "por ejemplo") pero no dice QUÉ se acumula.
+    ¿5 qué? ¿Fábricas de bioacero construidas? ¿Puntos ganados por decisión?
+    ¿Focos completados? ¿Producción acumulada?
+  why_it_blocks_phase3: >
+    Es la mecánica central de la vertical slice. Sin saber qué acumula, no puedo
+    escribir el trigger que dispara el cambio de tier.
+  my_fallback_if_you_prefer: >
+    Si querés que avance igual, la implementación más simple y menos comprometida
+    es: 3 focos en la rama de BioSteel, cada uno otorga un tier. Cero variables,
+    cero GUI, carga seguro. Después se reemplaza por el sistema real sin tocar el
+    resto del mod. Decime si lo hago así y lo marco como provisional.
+
+- id: Q022
+  priority: high
+  blocking_phase: 5
+  topic: "EPI (EFE) — qué es"
+  question: "¿Qué significa la sigla? ¿Cuál es la fórmula? ¿Qué efectos tiene?"
+  what_i_did: >
+    Excluido de la Fase 3. El propio doc dice que hay que documentarlo antes de
+    codificarlo, así que la vertical slice sale con BioSteel y sin EPI.
+
+- id: Q023
+  priority: high
+  blocking_phase: 5
+  topic: "Poder de Cómputo (ASC) — escalas"
+  question: >
+    El loop está claro (datacenters dan capacidad, autónomos consumen, overload
+    penaliza org y suministro). Faltan los números y una decisión de
+    implementación: ¿los datacenters son un building nuevo en
+    common/buildings/, o un modificador de state?
+  note: >
+    Es la mecánica mejor definida del doc después de BioSteel, y la única con un
+    loop cerrado. Candidata natural a segunda facción.
+
+- id: Q024
+  priority: high
+  blocking_phase: 5
+  topic: "Equilibrio civil-militar (FCU)"
+  question: >
+    ¿Qué mueve la barra, cuál es su rango, y qué modificadores hay en cada
+    extremo?
+  technical_note: >
+    HOI4 tiene un sistema nativo de power_balance que encaja casi exactamente
+    con lo que describe el doc. Antes de comprometerlo necesito confirmar que tu
+    versión lo soporta (Q004).
+
+- id: Q017
+  priority: high
+  blocking_phase: 5
+  topic: "Las cuatro corporaciones de FCU"
+  question: >
+    ¿Cómo se llaman? ¿De qué rubro es cada una? ¿Qué bonificaciones dan y cómo
+    se gana o pierde influencia con ellas?
+  what_i_did: "No inventé nombres. El doc marca esto como pendiente explícito."
+
+- id: Q025
+  priority: high
+  blocking_phase: 5
+  topic: "TFI y nodos comerciales (HSN)"
+  question: >
+    ¿Qué significa TFI? ¿Y los nodos: se crean, se capturan, se pierden? ¿Son
+    states concretos, provincias navales, o entidades abstractas?
+  note: >
+    Si los nodos son entidades abstractas, es lo más caro de implementar de todo
+    el mod: no hay soporte nativo y hay que construirlo con variables y GUI
+    custom. Si son states, es mucho más barato. La respuesta cambia el
+    presupuesto de esta facción por completo.
+
+- id: Q026
+  priority: high
+  blocking_phase: 5
+  topic: "Armonía (SHD)"
+  question: "¿Qué es? ¿Qué la sube y qué la baja? ¿Qué pasa en cada extremo?"
+  important: >
+    El doc PROHÍBE explícitamente asumir que es un medidor: dice que el nombre
+    lo sugiere pero que "esa interpretación no se adopta aquí como canon".
+    Respeté eso. No asumí barra.
+
+- id: Q027
+  priority: high
+  blocking_phase: 5
+  topic: "Integración regional (APF)"
+  question: >
+    ¿Cuáles son los niveles concretos? ¿Qué decisiones avanzan la cohesión? ¿Qué
+    penalizaciones hay por cohesión baja?
+  design_target_from_doc: "Federación extensa pero difícil de cohesionar."
+
+- id: Q028
+  priority: high
+  blocking_phase: 5
+  topic: "Legiones y Oficiales (NRE)"
+  question: >
+    ¿Qué es una Legión mecánicamente — un template de división, una unidad
+    nombrada, un modificador de ejército? ¿Y los Oficiales: hay pool, promoción,
+    lealtad, coste?
+  note: >
+    El doc usa "deberían conectar", o sea que describe intención de diseño, no
+    reglas. Es la facción con más distancia entre concepto y sistema.
+
+# =============================================================================
+# BLOQUE F — Balance y contenido derivado
+# =============================================================================
+
+- id: Q029
+  priority: high
+  blocking_phase: 3
+  topic: "Valores de las ideas nacionales del EFE"
+  question: >
+    TODOS los números de 05_ideas.yaml son invento mío. El doc no da ni uno.
+    ¿Querés revisarlos ahora, o los dejamos como placeholder y los balanceamos
+    después de que la slice cargue?
+  my_recommendation: >
+    Dejarlos y balancear después. Los valores no afectan si el mod carga; solo
+    afectan si es divertido. Primero que cargue.
+
+- id: Q030
+  priority: medium
+  blocking_phase: 5
+  topic: "Ideas nacionales de las otras siete"
+  question: >
+    No las derivé. Para la ASC hay material de sobra en §4.1, pero preferí no
+    gastar decisiones de balance en facciones que todavía no tienen ni
+    territorio ni líder.
+
+- id: Q031
+  priority: critical
+  blocking_phase: 3
+  topic: "¿Te sirve el esqueleto de focos del EFE?"
+  question: >
+    El documento NO contiene ningún árbol de foco. El esqueleto de 16 focos en
+    07_focus_trees.yaml está construido sobre cuatro anclajes canon (biografía
+    de Aurelio IV, ejes de régimen de §3.2, umbrales de BioSteel, los dos
+    satélites), pero los títulos, la estructura, las ramas y las recompensas son
+    INVENTADOS por mí.
+  what_i_need: >
+    Un OK, o un "rehacelo así". Es puro spec: tirarlo y rehacerlo no cuesta
+    nada ahora, y cuesta bastante después de la Fase 3.
+  branches_proposed:
+    - "Consolidación del Mandato (4 focos) — golpe, Iguazú, Milicias Verdes, coronación"
+    - "Restauración Total (3) — reforestación, cuotas de consumo, autarquía"
+    - "La Carrera del Bioacero (3) — los tres umbrales"
+    - "Los Satélites Custodios (2) — PTA e YYG"
+    - "Agua, Semilla y Palanca (2) — proyección exterior no militar"
+
+- id: Q033
+  priority: medium
+  blocking_phase: "-"
+  topic: "¿El árbol del EFE tiene rama de guerra?"
+  question: >
+    No le puse ninguna rama de conquista porque el doc no dice contra quién
+    pelea el EFE. Un árbol de HOI4 sin objetivos militares es raro. Depende de
+    Q010 (dónde están los demás) y Q018 (quién es enemigo de quién).
+
+- id: Q032
+  priority: medium
+  blocking_phase: 5
+  topic: "Árboles de las otras siete"
+  question: >
+    No los esbocé. Sin territorio, sin líder y con la mecánica en "solo nombre",
+    cualquier árbol sería ficción pura de mi parte.
+  note: >
+    Se destraban solos cuando se respondan Q010, Q016 y las preguntas de
+    mecánicas del bloque E. No necesitan una respuesta propia.
+
+- id: Q011
+  priority: low
+  blocking_phase: "-"
+  topic: "Traducción de 'High Seas Market Nation'"
+  question: >
+    Puse "Nación de Mercado de Alta Mar", que es literal pero pesada.
+    Alternativas: "Mercado de Alta Mar", "Nación Mercantil de Alta Mar".
+    Lo mismo vale para el resto de las traducciones: todos los nombres en
+    español de 02_countries.yaml son míos y son revisables.

@@ -1,0 +1,142 @@
+# =============================================================================
+# 00_project.yaml — Metadatos del mod y decisiones de arquitectura
+# =============================================================================
+
+project:
+  # -------------------------------------------------------------------------
+  # CONFLICTO SIN RESOLVER — ver Q001, Q002, Q003 en 99_open_questions.yaml
+  #
+  # El pedido hablaba de "Seven Dominions", año 2137, SIETE facciones.
+  # La biblia de diseño adjunta dice "2100 Meganations", año 2100, OCHO
+  # mega-naciones + 30 países libres.
+  #
+  # El spec sigue al DOCUMENTO, porque es la única fuente con contenido real.
+  # Estos tres campos están aislados acá justamente para que cambiarlos sea
+  # trivial si el canon es el otro.
+  # -------------------------------------------------------------------------
+  name: "2100 Meganations"
+  src: canon
+  start_date: "2100.1.1"
+  start_date_src: inferred   # el doc fija el año 2100; el día exacto no aparece
+  major_powers_count: 8
+  free_countries_count: 30
+
+  version: "0.1.0"
+  supported_game_version: unknown   # ver Q004
+  mod_folder_name: "meganations_2100"
+  mod_folder_name_src: inferred     # el doc menciona "hoi4_2100_mechanics" como
+                                    # carpeta de trabajo previa, no como nombre del mod
+
+  tags_used:
+    - map
+    - national_focus
+    - ideologies
+    - events
+    - gameplay
+    - alternative_history
+
+# =============================================================================
+# Restricciones duras del proyecto (dadas por el usuario, no por el doc)
+# =============================================================================
+constraints:
+  map:
+    strategy: vanilla_reskin
+    detail: >
+      v1 reutiliza el mapa vanilla sin tocar. Mismos states y provincias,
+      renombrados y reasignados a las potencias. NO se generan provinces.bmp,
+      heightmap.bmp, terrain.bmp ni definition.csv nuevos.
+    forbidden_outputs:
+      - map/provinces.bmp
+      - map/heightmap.bmp
+      - map/terrain.bmp
+      - map/definition.csv
+      - map/rivers.bmp
+    allowed_outputs:
+      - history/states/*.txt        # reasignación de owner/cores
+      - localisation/*_states_l_*.yml   # renombrado de states
+  localisation:
+    rule: >
+      La localisation viaja SIEMPRE en el mismo commit que el contenido que la
+      consume. Cero claves huérfanas. El generador debe fallar si emite una clave
+      referenciada sin definir, o una clave definida sin referenciar.
+    enforce_in_generator: true
+    languages:
+      - english
+      - spanish
+  art:
+    rule: "Solo placeholders programáticos. Ningún asset se presenta como final."
+  hoi4_syntax:
+    rule: >
+      Ante duda sobre un efecto, trigger o scope, se pregunta. No se adivina.
+      Un archivo que no carga cuesta más que una pregunta.
+  git:
+    rule: "Un commit por fase, mensajes descriptivos."
+
+# =============================================================================
+# Decisiones de arquitectura que el spec necesita resueltas antes de Fase 2
+# =============================================================================
+architecture_decisions:
+
+  - id: AD001
+    topic: "TAGs de 4 letras"
+    status: resolved_by_necessity
+    problem: >
+      HOI4 exige que los country tags sean EXACTAMENTE 3 caracteres
+      ([A-Z]{3}) en common/country_tags/*.txt. El documento usa "FCCU" y
+      "NASK", que son de 4. El juego no carga con esos tags.
+    decision: >
+      Se acortan a FCU y NAS en el código. El nombre largo del doc se conserva
+      íntegro en la localisation, que es lo que el jugador ve.
+    src: invented
+    why: "Restricción técnica del motor, no elección de diseño."
+    see: Q005
+
+  - id: AD002
+    topic: "¿Ideologías custom reemplazan o conviven con las vanilla?"
+    status: recommendation_pending_approval
+    problem: >
+      Un total conversion pide ideologías propias. Pero borrar las cuatro
+      ideologías vanilla (democratic, fascism, communism, neutrality) rompe
+      todo archivo vanilla que las referencie: focos genéricos, AI, decisiones,
+      efectos de rendición, dynamic faction names, y el propio menú de partida.
+    options:
+      - key: replace
+        detail: "Borrar las 4 vanilla y definir 8 grupos nuevos."
+        cost: "Alto. Hay que sobreescribir muchísimo contenido vanilla."
+      - key: reskin_groups
+        detail: >
+          Mantener los 4 GRUPOS vanilla como claves internas y meter las
+          ideologías del mod como sub-ideologías (types) dentro de ellos.
+          Se renombra todo por localisation.
+        cost: "Bajo. El motor sigue encontrando lo que espera."
+      - key: hybrid
+        detail: "4 grupos vanilla + grupos nuevos adicionales."
+        cost: "Medio, pero es el que más superficie de bugs tiene."
+    recommendation: reskin_groups
+    rationale: >
+      Es lo que hace la mayoría de los TC grandes. El jugador nunca ve la clave
+      interna, y evita la clase de error que el propio doc reporta en la sección
+      14: "algunos líderes apuntaban a ideologías vanilla que no se encontraban
+      correctamente". El spec en 01_ideologies.yaml está escrito asumiendo
+      reskin_groups, pero la estructura soporta cambiar a replace.
+    see: Q006
+
+  - id: AD003
+    topic: "State IDs concretos del reparto territorial"
+    status: blocked
+    problem: >
+      08_territory.yaml describe territorios por región con nombre
+      ("Rio Grande do Sul", "Magallanes"). Para generar history/states/*.txt
+      hacen falta los IDs numéricos de state de HOI4 vanilla.
+      No tengo los archivos del juego base en este entorno y no voy a
+      escribir IDs de memoria: un ID equivocado reasigna territorio ajeno
+      en silencio y no da error de carga.
+    unblock_options:
+      - "Pasarme el volcado de history/states/ de tu instalación vanilla."
+      - "Pasarme map/strategicregions/ + el listado de states con nombre e ID."
+      - "Que el generador lea la carpeta vanilla en runtime vía una ruta configurable."
+    recommendation: >
+      La tercera. El generador toma --vanilla-path y resuelve nombre -> ID
+      leyendo los archivos reales. Así el spec sigue siendo legible por humanos
+      y no se hardcodea nada frágil.
+    see: Q007

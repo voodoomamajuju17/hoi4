@@ -1,0 +1,137 @@
+# =============================================================================
+# 03_leaders.yaml — Líderes y personajes
+# =============================================================================
+# El documento define UN solo líder con biografía: Aurelio IV del EFE.
+# Las otras siete potencias no tienen líder recuperado. No se inventaron.
+# =============================================================================
+
+characters:
+
+  # ---------------------------------------------------------------------------
+  - id: EFE_aurelio_iv
+    country: EFE
+    src: canon
+    doc_section: "§3.3"
+    name:
+      civil: "Aurelio Benítez-Araújo"
+      civil_src: canon
+      regnal:
+        english: "Emperor Aurelio IV"
+        spanish: "Emperador Aurelio IV"
+      regnal_src: canon
+    born: 2046
+    born_src: canon
+    age_at_start: 54          # 2100 - 2046
+    age_src: inferred
+    biography:
+      - event: "Milicias Verdes"
+        src: canon
+        date: unknown
+      - event: "Batalla de Iguazú"
+        src: canon
+        date: unknown         # ver Q014
+      - event: "Golpe de Estado"
+        date: 2079
+        src: canon
+        title_taken: "Custodio de la Tierra"
+        title_taken_english: "Custodian of the Earth"
+        title_taken_src: canon
+      - event: "Proclamación imperial"
+        date: 2081
+        src: canon
+    roles:
+      country_leader:
+        ideology: ecofascism
+        src: inferred
+        note: "Debe coincidir exactamente con la sub-ideología inicial del EFE. Ver TN001."
+        traits: unknown        # ver Q015
+      field_marshal: false
+      advisor: false
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/EFE/aurelio_iv.dds"
+      src: invented
+      why: "HOI4 renderiza un cuadro roto sin portrait. Es placeholder programático."
+
+  # ---------------------------------------------------------------------------
+  # Líderes faltantes — NO inventados a propósito.
+  # ---------------------------------------------------------------------------
+  - country: ASC
+    status: unknown
+    src: unknown
+    see: Q016
+    note: >
+      Complicación de diseño: una "Commune" socialista automatizada puede no
+      tener una figura personal de liderazgo. Podría ser un consejo, una IA o
+      un cargo rotativo. Inventar un dictador con nombre y cara contradiría
+      posiblemente el concepto. Necesito tu decisión.
+
+  - country: FCU
+    status: unknown
+    src: unknown
+    see: Q016
+    note: >
+      El doc dice que hay cuatro corporaciones que son centros de poder, pero no
+      da sus nombres. El líder del país podría ser un CEO, un consejo de los
+      cuatro, o un cargo neutral. Depende de Q017.
+
+  - country: HSN
+    status: unknown
+    src: unknown
+    see: Q016
+
+  - country: NAS
+    status: unknown
+    src: unknown
+    see: Q016
+    note: >
+      "Kingdom" implica un monarca, pero el doc dice literalmente que no se
+      recuperaron "fórmula, territorio exacto, líder o estructura institucional".
+      No invento una dinastía.
+
+  - country: SHD
+    status: unknown
+    src: unknown
+    see: Q016
+
+  - country: APF
+    status: unknown
+    src: unknown
+    see: Q016
+
+  - country: NRE
+    status: unknown
+    src: unknown
+    see: Q016
+    warning: >
+      NO reutilizar "Grand Imperator Augustus Valerius". Ese personaje pertenece
+      al New Roman Axis de 2023, que el doc marca como borrador histórico no
+      canon (§10.1). Si lo querés reciclar, decímelo explícitamente.
+
+  # ---------------------------------------------------------------------------
+  - country: PTA
+    status: unknown
+    src: unknown
+    see: Q012
+  - country: YYG
+    status: unknown
+    src: unknown
+    see: Q012
+
+# =============================================================================
+technical_notes:
+  - id: TN003
+    text: >
+      HOI4 moderno usa common/characters/*.txt con bloques `advisor`,
+      `country_leader`, `corps_commander`, `field_marshal` dentro de un mismo
+      personaje, y `recruit_character` en history. La sintaxis vieja de
+      create_country_leader en history sigue funcionando pero está deprecada.
+      Voy a usar common/characters/, pero quiero confirmarlo contra tu versión
+      del juego antes de generar. Ver Q004.
+
+  - id: TN004
+    text: >
+      Los traits de country_leader deben existir en
+      common/country_leader/*.txt. Un trait inexistente rompe la carga.
+      Como el doc no da traits para Aurelio IV, la Fase 3 sale sin traits
+      salvo que definamos los propios. Ver Q015.

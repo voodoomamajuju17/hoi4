@@ -1,0 +1,261 @@
+# =============================================================================
+# 02_countries.yaml — Países
+# =============================================================================
+# Colores: TODOS inventados. HOI4 no carga un país sin color y el doc no da
+# ninguno. Cambialos sin culpa.
+# =============================================================================
+
+major_powers:
+
+  # ---------------------------------------------------------------------------
+  - tag: EFE
+    tag_src: canon
+    name:
+      english: "Ecofascist Empire"
+      spanish: "Imperio Ecofascista"
+    name_src: canon              # inglés literal del doc
+    name_spanish_src: inferred   # la traducción es mía
+    adjective:
+      english: "Ecofascist"
+      spanish: "Ecofascista"
+    adjective_src: inferred
+    ideology: ecofascism
+    ideology_group: fascism
+    capital: "Buenos Aires"
+    capital_src: canon
+    capital_state_id: unknown    # ver AD003 / Q007
+    color_rgb: [45, 84, 41]
+    color_src: invented
+    is_major: true
+    coverage: high
+    doc_section: "§3"
+    note: "Facción con más lore recuperado. Vertical slice de Fase 3."
+
+  # ---------------------------------------------------------------------------
+  - tag: ASC
+    tag_src: canon
+    name:
+      english: "Automated Socialist Commune"
+      spanish: "Comuna Socialista Automatizada"
+    name_src: canon
+    name_spanish_src: inferred
+    adjective:
+      english: "Communard"
+      spanish: "Comunal"
+    adjective_src: invented
+    adjective_why: "HOI4 pide adjetivo para nombres dinámicos de facción y unidades."
+    ideology: automated_socialism
+    ideology_group: communism
+    capital: unknown             # ver Q010
+    capital_state_id: unknown
+    color_rgb: [190, 55, 55]
+    color_src: invented
+    is_major: true
+    coverage: mechanic_only
+    doc_section: "§4"
+
+  # ---------------------------------------------------------------------------
+  - tag: FCU
+    tag_src: invented
+    tag_why: "El doc dice 'FCCU' (4 chars). HOI4 exige 3. Ver AD001."
+    tag_in_doc: "FCCU"
+    name:
+      english: "Free Corporative Capital Union"
+      spanish: "Unión Libre de Capital Corporativo"
+    name_src: canon
+    name_spanish_src: inferred
+    adjective:
+      english: "Corporative"
+      spanish: "Corporativa"
+    adjective_src: inferred
+    ideology: corporate_union
+    ideology_group: democratic
+    capital: unknown
+    capital_state_id: unknown
+    color_rgb: [222, 176, 48]
+    color_src: invented
+    is_major: true
+    coverage: concept_only
+    doc_section: "§5"
+
+  # ---------------------------------------------------------------------------
+  - tag: HSN
+    tag_src: canon
+    name:
+      english: "High Seas Market Nation"
+      spanish: "Nación de Mercado de Alta Mar"
+    name_src: canon
+    name_spanish_src: inferred
+    name_spanish_note: "Traducción provisional; suena pesada en español. Ver Q011."
+    adjective:
+      english: "High Seas"
+      spanish: "Altamarina"
+    adjective_src: invented
+    ideology: mercantile_thalassocracy
+    ideology_group: democratic
+    capital: unknown
+    capital_state_id: unknown
+    color_rgb: [40, 138, 176]
+    color_src: invented
+    is_major: true
+    coverage: name_only
+    doc_section: "§6"
+
+  # ---------------------------------------------------------------------------
+  - tag: NAS
+    tag_src: invented
+    tag_why: "El doc dice 'NASK' (4 chars). HOI4 exige 3. Ver AD001."
+    tag_in_doc: "NASK"
+    name:
+      english: "NeoAndean Sky Kingdom"
+      spanish: "Reino Celeste Neoandino"
+    name_src: canon
+    name_spanish_src: inferred
+    adjective:
+      english: "NeoAndean"
+      spanish: "Neoandino"
+    adjective_src: inferred
+    ideology: solar_monarchism
+    ideology_group: neutrality
+    capital: unknown
+    capital_state_id: unknown
+    color_rgb: [214, 122, 40]
+    color_src: invented
+    is_major: true
+    coverage: name_only
+    doc_section: "§7"
+    note: >
+      El doc pide explícitamente reconstruir Inti-Soma desde los archivos
+      originales ANTES de completar lore adicional. Respetado: no se inventó nada
+      más allá del nombre y la ideología.
+
+  # ---------------------------------------------------------------------------
+  - tag: SHD
+    tag_src: canon
+    name:
+      english: "Sino-Harmonious Directorate"
+      spanish: "Directorio Sino-Armónico"
+    name_src: canon
+    name_spanish_src: inferred
+    adjective:
+      english: "Directorate"
+      spanish: "Directorial"
+    adjective_src: invented
+    ideology: harmonious_directorate
+    ideology_group: neutrality
+    capital: unknown
+    capital_state_id: unknown
+    color_rgb: [188, 62, 96]
+    color_src: invented
+    is_major: true
+    coverage: name_only
+    doc_section: "§8"
+
+  # ---------------------------------------------------------------------------
+  - tag: APF
+    tag_src: canon
+    name:
+      english: "African People's Federation"
+      spanish: "Federación de los Pueblos Africanos"
+    name_src: canon
+    name_spanish_src: inferred
+    adjective:
+      english: "Federal African"
+      spanish: "Panafricana"
+    adjective_src: invented
+    ideology: continental_federalism
+    ideology_group: communism   # decisión débil — ver Q008
+    capital: unknown
+    capital_state_id: unknown
+    color_rgb: [72, 154, 92]
+    color_src: invented
+    is_major: true
+    coverage: concept_only
+    doc_section: "§9"
+
+  # ---------------------------------------------------------------------------
+  - tag: NRE
+    tag_src: canon
+    name:
+      english: "Neo Roman Empire"
+      spanish: "Neo Imperio Romano"
+    name_src: canon
+    name_spanish_src: inferred
+    adjective:
+      english: "Neo Roman"
+      spanish: "Neorromana"
+    adjective_src: inferred
+    ideology: imperial_restoration
+    ideology_group: fascism
+    capital: unknown
+    capital_state_id: unknown
+    color_rgb: [128, 40, 48]
+    color_src: invented
+    is_major: true
+    coverage: concept_only
+    doc_section: "§10"
+    warning: >
+      NO importar la geografía del New Roman Axis de 2023. El doc lo prohíbe
+      explícitamente (§10.1): incluía Argentina, Uruguay, Japón y Corea, lo cual
+      es incompatible con el EFE actual. Ver 10_legacy_lore.yaml.
+
+# =============================================================================
+# Satélites / subjects
+# =============================================================================
+subjects:
+
+  - tag: PTA
+    tag_src: invented
+    tag_why: "El doc nombra el satélite pero no le da TAG."
+    name:
+      english: "Southern Patagonia"
+      spanish: "Patagonia Austral"
+    name_src: canon              # "Patagonia Austral" es literal del doc
+    name_english_src: inferred
+    adjective:
+      english: "Patagonian"
+      spanish: "Patagónica"
+    adjective_src: inferred
+    overlord: EFE
+    overlord_src: canon
+    ideology: ecofascism
+    ideology_src: inferred
+    ideology_why: "Satélite del EFE; el doc no le asigna régimen propio."
+    capital: unknown             # ver Q012
+    color_rgb: [92, 124, 88]
+    color_src: invented
+    is_major: false
+    doc_section: "§3.1"
+
+  - tag: YYG
+    tag_src: invented
+    tag_why: "El doc nombra el satélite pero no le da TAG."
+    name:
+      english: "Yvytu Ykua Guasu"
+      spanish: "Yvytu Ykua Guasu"
+    name_src: canon
+    name_note: "Nombre en guaraní. No se traduce; se usa igual en ambos idiomas."
+    adjective:
+      english: "Yvytu"
+      spanish: "Yvytu"
+    adjective_src: invented
+    overlord: EFE
+    overlord_src: canon
+    ideology: ecofascism
+    ideology_src: inferred
+    capital: unknown             # ver Q012
+    color_rgb: [108, 140, 76]
+    color_src: invented
+    is_major: false
+    doc_section: "§3.1"
+
+# =============================================================================
+# Reglas de generación
+# =============================================================================
+generation_rules:
+  - "Un archivo por país en common/countries/<Nombre>.txt con graphical_culture y color."
+  - "common/country_tags/00_countries.txt lista TAG = \"countries/<archivo>.txt\"."
+  - "Toda clave de nombre/adjetivo debe existir en EN y ES o el generador falla."
+  - >
+    graphical_culture: pendiente. HOI4 solo acepta valores definidos en
+    interface/*.gfx. Usar uno inexistente rompe la carga. Ver Q013.

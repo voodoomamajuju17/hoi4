@@ -1,0 +1,146 @@
+# =============================================================================
+# 10_legacy_lore.yaml — Material histórico / NO CANON
+# =============================================================================
+# Nada de este archivo se genera. Es un banco de ideas.
+#
+# El generador de la Fase 2 debe IGNORAR este archivo por completo. Existe para
+# que el material viejo no se pierda y para que quede explícito qué NO hay que
+# importar por accidente.
+#
+# El documento es muy insistente en esto (§11, §12, §10.1): hay dos rosters
+# previos con mapas incompatibles, y mezclarlos rompe el canon actual.
+# =============================================================================
+
+status: NOT_CANON
+generator_must_ignore: true
+
+# =============================================================================
+# Genealogía del roster (doc §11)
+# =============================================================================
+roster_evolution:
+  src: canon   # la tabla de correspondencias sí es canon; las entidades viejas no
+  mappings:
+    - old: "Ecofascist Empire"
+      new: EFE
+      relation: "Continuidad directa"
+    - old: "Fully Automated Socialist Kingdom"
+      new: ASC
+      relation: "Linaje conceptual claro; nombre/forma política revisados"
+    - old: "Ultracapitalistic Republic"
+      new: FCU
+      relation: "Linaje conceptual probable"
+    - old: "Andean Consortium"
+      new: NAS
+      relation: "Precursor temático; equivalencia NO formalmente recuperada"
+    - old: "Oceanic Cooperative"
+      new: HSN
+      relation: "Precursor temático; equivalencia NO formalmente recuperada"
+    - old: "Pan-African Alliance"
+      new: APF
+      relation: "Precursor temático claro"
+    - old: "New Roman Axis"
+      new: NRE
+      relation: "Linaje romano claro; MAPA VIEJO DESCARTADO"
+    - old: "Seleucid Restart"
+      new: SHD
+      relation: "NO hay continuidad recuperada; el roster cambió"
+
+# =============================================================================
+# New Roman Axis (2023) — doc §10.1
+# =============================================================================
+new_roman_axis:
+  status: NOT_CANON
+  capital: "Roma"
+  leader: "Grand Imperator Augustus Valerius"
+  ideology: "fascista"
+  territory: ["Italia", "España", "Grecia", "sur de Francia", "Hungría",
+              "Argentina", "Uruguay", "Japón", "Corea"]
+  units: ["Imperial Legionnaire"]
+  technologies: ["Architectural Marvels", "Refined Propaganda"]
+  focuses: ["Path of Conquest", "Cultural Hegemony"]
+  incompatibility: >
+    Incluye Argentina y Uruguay, que en el canon actual son núcleo del EFE.
+    El doc dice textualmente que "debe tratarse como borrador histórico, no
+    como canon de NRE".
+  salvageable_ideas:
+    - "Nombre de unidad 'Imperial Legionnaire' — encaja con la mecánica Legiones."
+    - "Tecnologías 'Architectural Marvels' y 'Refined Propaganda'."
+    - "Focos 'Path of Conquest' / 'Cultural Hegemony'."
+  do_not_salvage:
+    - "El mapa entero."
+    - "Augustus Valerius como líder (ver 03_leaders.yaml)."
+
+# =============================================================================
+# Fully Automated Socialist Kingdom (2023)
+# =============================================================================
+fask:
+  status: NOT_CANON
+  associated_with: "Nueva Zelanda"
+  manifesto_themes:
+    - "liberación mediante automatización"
+    - "prosperidad universal"
+    - "armonía ecológica"
+    - "tecnocracia democrática"
+    - "educación universal"
+    - "renacimiento cultural"
+    - "cooperación internacional"
+  relation_to_canon: >
+    Genealogía conceptual de la ASC. El doc advierte que no debe confundirse
+    con el canon actual.
+  salvageable_ideas:
+    - "El manifiesto entero sirve como material de eventos/focos de la ASC."
+    - "El vínculo con Nueva Zelanda es la única pista territorial de la ASC en todo el doc."
+
+# =============================================================================
+# Ultracapitalistic Republic (2023)
+# =============================================================================
+ultracapitalistic_republic:
+  status: NOT_CANON
+  themes: ["mercado", "industria", "desigualdad como contracara"]
+  relation_to_canon: "Ancestro conceptual de FCU, no el nombre actual."
+
+# =============================================================================
+# Cronología antigua del EFE — doc §12
+# =============================================================================
+efe_old_chronology:
+  status: NOT_CANON
+  written_for: "una versión situada alrededor de 2080"
+  events:
+    - { year: 2041, event: "Era del Colapso" }
+    - { year: 2048, event: "Desastre de Atacama" }
+    - { year: 2052, event: "Revolución de la Tierra Viva / fundación (versión antigua)" }
+    - { year: 2054, event: "Restauración Total / Guardia Verde" }
+    - { year: 2056, event: "Bloqueo de Valparaíso" }
+    - { year: 2060, event: "Reforma Cultural Verde" }
+    - { year: 2064, event: "Purificación Continental / protectorados" }
+    - { year: 2067, event: "Operación Raíz Profunda" }
+    - { year: 2070, event: "Crisis del Litoral" }
+    - { year: 2072, event: "Pacto de Bosques Eternos con el Neo Andean Sky Kingdom" }
+    - { year: 2080, event: "Guerra fría verde; capital llamada Gaia; reeducación ambiental" }
+  main_incompatibility:
+    src: canon
+    text: >
+      La versión posterior fija el golpe de Aurelio IV en 2079 y su coronación
+      en 2081. La "fundación" de 2052 no puede trasladarse sin decidir si fue un
+      precursor, un primer régimen, o una cronología descartada.
+  additional_incompatibility_detected_by_me:
+    src: inferred
+    text: >
+      La cronología vieja dice que en 2080 la capital se llamaba "Gaia".
+      El canon actual dice que la capital es Buenos Aires (§3.3 / §16).
+      Si el mod arranca en 2100, o hubo un renombre entre 2080 y 2100, o la
+      capital "Gaia" pertenece a la línea descartada. No lo resolví.
+    see: Q040
+  usage_in_spec:
+    - >
+      "Restauración Total" (2054) se reutilizó SOLO como nombre de rama de focos
+      del EFE en 07_focus_trees.yaml. Es el único préstamo. Ver Q020.
+    - >
+      "Guardia Verde" (2054) aparece en una descripción de idea. Ojo: el canon
+      actual dice "Milicias Verdes" (§3.3), no "Guardia Verde". Pueden ser la
+      misma organización en dos momentos, o dos cosas distintas. Ver Q041.
+  salvageable_ideas:
+    - "Desastre de Atacama (2048) — evento fundacional de trauma ecológico."
+    - "Bloqueo de Valparaíso (2056) — encaja con la autarquía canon."
+    - "Pacto de Bosques Eternos (2072) — único vínculo bilateral EFE-NASK del doc."
+    - "Operación Raíz Profunda (2067) — buen nombre para una decisión militar."

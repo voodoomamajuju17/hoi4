@@ -1,0 +1,212 @@
+# =============================================================================
+# 05_ideas.yaml — Ideas nacionales (national spirits)
+# =============================================================================
+# El documento NO contiene ninguna idea nacional en términos de HOI4: no hay
+# nombres de spirits, ni modificadores, ni valores.
+#
+# Lo que sí hay es prosa de régimen bastante densa para el EFE (§3.2) y para la
+# ASC (§4). De ahí derivé las ideas del EFE, que son las que necesita la
+# vertical slice.
+#
+# TODOS los valores numéricos de este archivo son INVENTADOS. El doc no da ni
+# uno. Son puntos de partida para balancear, no diseño recuperado.
+# =============================================================================
+
+value_policy:
+  all_modifier_values_are: invented
+  why: "HOI4 no acepta una idea sin modificadores. El doc no aporta números."
+  status: "Placeholder de balance. Esperá tocarlos todos."
+  see: Q029
+
+# =============================================================================
+countries:
+
+  # ---------------------------------------------------------------------------
+  EFE:
+    coverage: derived_from_prose
+    starting_ideas:
+
+      - id: EFE_mandato_verde
+        name:
+          english: "The Green Mandate"
+          spanish: "El Mandato Verde"
+        name_src: invented
+        concept_src: canon
+        doc_basis: >
+          §3.2 — "La legitimidad del régimen proviene de presentar la
+          supervivencia ecológica como un mandato superior a los derechos
+          individuales y a la política convencional."
+        desc:
+          english: >
+            Ecological survival is proclaimed above individual rights and
+            conventional politics. Obedience is not asked for; it is assumed.
+          spanish: >
+            La supervivencia ecológica se proclama por encima de los derechos
+            individuales y de la política convencional. La obediencia no se
+            pide; se da por supuesta.
+        modifiers:
+          political_power_gain: 0.10
+          stability_factor: 0.05
+          democratic_drift: -0.02
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_conservacion_coercitiva
+        name:
+          english: "Coercive Conservation"
+          spanish: "Conservación Coercitiva"
+        name_src: inferred
+        name_note: "'conservación coercitiva' es literal del doc; el título es mío."
+        concept_src: canon
+        doc_basis: >
+          §3.2 — "Reforestación y restauración ambiental aplicadas de forma
+          obligatoria" + "Militarización de la protección de recursos y
+          territorios."
+        desc:
+          english: >
+            Reforestation and ecological restoration are compulsory labour.
+            The Green Guard enforces the treeline as it would a border.
+          spanish: >
+            La reforestación y la restauración ecológica son trabajo obligatorio.
+            La Guardia Verde custodia la línea de árboles como si fuera una frontera.
+        modifiers:
+          production_speed_infrastructure_factor: 0.10
+          consumer_goods_factor: 0.05
+        modifiers_src: invented
+        removable: false
+        note: >
+          El coste en bienes de consumo es intencional: el doc insiste en que
+          cada sistema debe crear "ventajas claras y también cuellos de botella
+          propios" (§1).
+
+      - id: EFE_autarquia_estrategica
+        name:
+          english: "Strategic Autarky"
+          spanish: "Autarquía Estratégica"
+        name_src: inferred
+        concept_src: canon
+        doc_basis: >
+          §3.2 — "Tendencia a la autosuficiencia y a tratar la dependencia
+          económica como vulnerabilidad estratégica."
+        desc:
+          english: >
+            Economic dependence is treated as a strategic vulnerability.
+            The Empire would rather build it badly than buy it well.
+          spanish: >
+            La dependencia económica se trata como una vulnerabilidad estratégica.
+            El Imperio prefiere fabricarlo mal antes que comprarlo bien.
+        modifiers:
+          trade_opinion_factor: -0.25
+          local_resources_factor: 0.10
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_control_poblacional
+        name:
+          english: "Population and Consumption Control"
+          spanish: "Control de Población y Consumo"
+        name_src: inferred
+        concept_src: canon
+        doc_basis: "§3.2 — 'Control de población y consumo como parte del proyecto estatal.'"
+        desc:
+          english: >
+            Births, calories and kilometres are all allocated by the same
+            ministry. The population is a variable to be managed.
+          spanish: >
+            Los nacimientos, las calorías y los kilómetros los asigna el mismo
+            ministerio. La población es una variable a administrar.
+        modifiers:
+          consumer_goods_factor: -0.10
+          monthly_population: -0.15
+        modifiers_src: invented
+        removable: false
+        note: >
+          Trade-off deliberado: menos bienes de consumo (bueno) a cambio de
+          menos crecimiento poblacional (malo a largo plazo).
+
+    # -------------------------------------------------------------------------
+    # Ideas escalonadas de BioSteel — ver 06_mechanics.yaml#biosteel
+    # -------------------------------------------------------------------------
+    biosteel_tiers:
+      implementation: national_spirit_swap
+      implementation_src: inferred
+      note: >
+        Implementación recomendada para Fase 3 (sin GUI custom). Un spirit por
+        umbral, intercambiado por decisión/evento al cruzar el threshold.
+      tiers:
+        - tier: 1
+          threshold: 5
+          threshold_src: canon
+          id: EFE_biosteel_t1
+          name:
+            english: "BioSteel Foundries"
+            spanish: "Fundiciones de Bioacero"
+          name_src: invented
+          modifiers:
+            production_speed_arms_factory_factor: 0.05
+          modifiers_src: invented
+        - tier: 2
+          threshold: 10
+          threshold_src: canon
+          id: EFE_biosteel_t2
+          name:
+            english: "BioSteel Industry"
+            spanish: "Industria del Bioacero"
+          name_src: invented
+          modifiers:
+            production_speed_arms_factory_factor: 0.10
+            army_armor_attack_factor: 0.05
+          modifiers_src: invented
+        - tier: 3
+          threshold: 15
+          threshold_src: canon
+          id: EFE_biosteel_t3
+          name:
+            english: "Living Armour"
+            spanish: "Armadura Viviente"
+          name_src: invented
+          modifiers:
+            production_speed_arms_factory_factor: 0.15
+            army_armor_attack_factor: 0.10
+            army_armor_defence_factor: 0.10
+          modifiers_src: invented
+      unknown:
+        - "Qué acumula el contador de BioSteel (ver Q021)."
+        - "Si los tiers son acumulativos o excluyentes."
+
+  # ---------------------------------------------------------------------------
+  ASC:
+    coverage: unknown
+    starting_ideas: unknown
+    see: Q030
+    note: >
+      Hay material de sobra en §4.1 para derivar ideas (capacidad de cómputo,
+      overload, ejércitos autónomos), pero no forma parte de la vertical slice
+      y prefiero no gastar decisiones de balance en una facción que todavía no
+      tiene ni territorio ni líder.
+
+  FCU: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  HSN: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  NAS: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  SHD: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  APF: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  NRE: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  PTA: { coverage: unknown, starting_ideas: unknown, see: Q012 }
+  YYG: { coverage: unknown, starting_ideas: unknown, see: Q012 }
+
+# =============================================================================
+technical_notes:
+  - id: TN006
+    text: >
+      Cada clave de modificador usada acá tiene que existir en el juego. Están
+      elegidas del set vanilla común (production_speed_*, consumer_goods_factor,
+      stability_factor, etc.), pero `monthly_population` y `local_resources_factor`
+      son las dos que quiero verificar contra tu versión antes de generar,
+      porque son las que más han cambiado de nombre entre parches. Ver Q004.
+
+  - id: TN007
+    text: >
+      Toda idea necesita clave de nombre Y de descripción en localisation
+      (`<id>` y `<id>_desc`). El generador emite ambas en EN y ES o falla.
+      Esto cumple la regla de cero claves huérfanas.
+    enforce_in_generator: true

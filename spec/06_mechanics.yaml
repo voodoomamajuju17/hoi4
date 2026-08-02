@@ -1,0 +1,291 @@
+# =============================================================================
+# 06_mechanics.yaml — Sistemas nacionales asimétricos
+# =============================================================================
+# Este es el corazón del diseño según §1: "cada mega-nación gira alrededor de un
+# recurso, equilibrio o sistema exclusivo" y "el poder militar no debería poder
+# separarse de la infraestructura o del modelo económico que lo sostiene".
+#
+# El campo `definition_status` es el dato más importante de cada entrada:
+#   implementable  — hay loop suficiente para codificarlo
+#   partial        — hay loop parcial, faltan números
+#   name_only      — solo se recuperó el nombre del sistema
+# =============================================================================
+
+mechanics:
+
+  # ===========================================================================
+  - id: biosteel
+    country: EFE
+    definition_status: partial
+    src: canon
+    doc_section: "§3.4"
+    name:
+      english: "BioSteel"
+      spanish: "Bioacero"
+    name_src: canon
+    model: tiered_progression
+    model_src: canon
+    doc_quote: >
+      "funciona como una progresión por niveles. Se recuperó una lógica de
+      umbrales —por ejemplo 5 / 10 / 15— que desbloquean mejoras sucesivas.
+      Esto lo convierte en una carrera nacional de desarrollo material."
+    thresholds: [5, 10, 15]
+    thresholds_src: canon
+    thresholds_caveat: >
+      El doc dice "por ejemplo", o sea que los cita como ilustración, no como
+      valores cerrados. Tratarlos como provisionales.
+    unknown:
+      - "Unidad de medida: ¿qué es 'un' punto de BioSteel?"
+      - "Cómo se acumula: ¿producción por fábrica? ¿por decisión? ¿por foco?"
+      - "Qué desbloquea cada umbral concretamente."
+      - "Si se puede perder / decaer."
+    see: Q021
+    hoi4_implementation_candidates:
+      - approach: scripted_variable + dynamic_modifier
+        pro: "Flexible, permite umbrales arbitrarios y GUI custom."
+        con: "Requiere GUI propia para que el jugador lo vea."
+      - approach: national_spirit escalonado por decisión
+        pro: "Simple, visible en el panel de política sin GUI nueva."
+        con: "Poco granular; los umbrales son saltos, no una barra."
+    recommendation: >
+      Para la Fase 3 arrancaría con la segunda (national spirit escalonado), que
+      es la que carga sin GUI custom, y migraría a variables+GUI cuando el resto
+      esté estable. Codificar una GUI custom antes de que el mod cargue limpio
+      es invertir el orden de riesgo.
+
+  # ===========================================================================
+  - id: epi
+    country: EFE
+    definition_status: name_only
+    src: canon
+    doc_section: "§3.4"
+    name:
+      english: "EPI"
+      spanish: "EPI"
+    acronym_meaning: unknown
+    doc_quote: >
+      "EPI aparece asociado al EFE como segundo eje mecánico confirmado por
+      nombre. No se recuperó de forma fiable su fórmula ni sus efectos exactos,
+      así que debe considerarse un sistema pendiente de documentar antes de
+      codificarlo de nuevo."
+    unknown:
+      - "Qué significa la sigla EPI."
+      - "Fórmula."
+      - "Efectos."
+      - "Cómo interactúa con BioSteel."
+    see: Q022
+    phase3_decision: excluded
+    phase3_rationale: >
+      El propio doc dice que hay que documentarlo ANTES de codificarlo.
+      La vertical slice del EFE sale con BioSteel y sin EPI. Cuando definas EPI
+      se agrega al spec y se regenera; no hay que tocar output.
+
+  # ===========================================================================
+  - id: compute_power
+    country: ASC
+    definition_status: implementable
+    src: canon
+    doc_section: "§4.1"
+    name:
+      english: "Compute Power"
+      spanish: "Poder de Cómputo"
+    name_src: canon
+    model: capacity_vs_consumption
+    loop:
+      - "Los datacenters aportan slots/capacidad de red."
+      - "Los ejércitos o sistemas autónomos consumen esa capacidad."
+      - "Si el consumo supera la capacidad, penalizaciones de organización y suministro."
+    loop_src: canon
+    design_note_from_doc: >
+      "Esta mecánica es una de las más claras del conjunto porque convierte una
+      fantasía tecnológica —el ejército autónomo— en un problema logístico y de
+      planificación."
+    unknown:
+      - "Escalas numéricas exactas (cuánta capacidad da un datacenter)."
+      - "Fuentes de capacidad además de datacenters."
+      - "Magnitud de las penalizaciones de overload."
+      - "¿Los datacenters son un building nuevo o un state modifier?"
+    see: Q023
+    note: >
+      Es la mecánica mejor definida del documento después de BioSteel: tiene un
+      loop cerrado (produce -> consume -> penaliza) y no solo un nombre.
+      Candidata natural a segunda facción implementada.
+
+  # ===========================================================================
+  - id: civil_military_balance
+    country: FCU
+    definition_status: partial
+    src: canon
+    doc_section: "§5"
+    name:
+      english: "Civil-Military Balance"
+      spanish: "Equilibrio Civil-Militar"
+    model: two_pole_balance
+    model_src: canon
+    doc_quote: >
+      "El sistema debería hacer que militarizarse tenga un coste real sobre la
+      economía civil, y viceversa."
+    hoi4_implementation_candidates:
+      - approach: power_balance
+        note: >
+          HOI4 tiene un sistema nativo de "power balance" (barra de dos polos
+          con rangos que aplican modificadores). Encaja casi exactamente con lo
+          que describe el doc. Necesito confirmar que tu versión del juego lo
+          soporta antes de comprometerlo. Ver Q004.
+    unknown:
+      - "Rango de la barra y qué la mueve."
+      - "Modificadores en cada extremo."
+    see: Q024
+
+  # ===========================================================================
+  - id: four_corporations
+    country: FCU
+    definition_status: partial
+    src: canon
+    doc_section: "§5"
+    name:
+      english: "The Four Corporations"
+      spanish: "Las Cuatro Corporaciones"
+    count: 4
+    count_src: canon
+    model: influence_actors
+    doc_quote: "Cuatro corporaciones con influencia propia."
+    unknown:
+      - "Nombres de las cuatro corporaciones."
+      - "Sector/rubro de cada una."
+      - "Ramas de bonificaciones."
+      - "Cómo se gana/pierde influencia con cada una."
+    see: Q017
+    note: >
+      El doc dice literalmente que este detalle "no apareció en la recuperación
+      actual y queda pendiente". No inventé nombres de corporaciones.
+
+  # ===========================================================================
+  - id: tfi
+    country: HSN
+    definition_status: name_only
+    src: canon
+    doc_section: "§6"
+    name:
+      english: "TFI"
+      spanish: "TFI"
+    acronym_meaning: unknown
+    unknown:
+      - "Qué significa TFI."
+      - "Matemática del sistema."
+    see: Q025
+
+  - id: trade_nodes
+    country: HSN
+    definition_status: partial
+    src: canon
+    doc_section: "§6"
+    name:
+      english: "Trade Nodes"
+      spanish: "Nodos Comerciales"
+    doc_quote: >
+      "La facción debe depender más del control de rutas y de la red mercantil
+      que de la simple posesión territorial."
+    unknown:
+      - "Cómo se crean, capturan y pierden los nodos."
+      - "Qué producen."
+      - "Si son states concretos, provincias navales o entidades abstractas."
+    see: Q025
+
+  # ===========================================================================
+  - id: inti_soma
+    country: NAS
+    definition_status: name_only
+    src: canon
+    doc_section: "§7"
+    name:
+      english: "Inti-Soma"
+      spanish: "Inti-Soma"
+    unknown:
+      - "Todo el loop mecánico."
+      - "Fórmula."
+    see: Q009
+    doc_instruction: >
+      "La prioridad de diseño debería ser reconstruir Inti-Soma a partir de los
+      archivos o conversaciones originales antes de completar lore adicional."
+      — Respetado. No se inventó nada.
+
+  # ===========================================================================
+  - id: harmony
+    country: SHD
+    definition_status: name_only
+    src: canon
+    doc_section: "§8"
+    name:
+      english: "Harmony"
+      spanish: "Armonía"
+    unknown:
+      - "Definición del sistema."
+      - "Qué la sube y qué la baja."
+    see: Q026
+    explicit_warning_from_doc: >
+      "El nombre sugiere un medidor político/social, pero esa interpretación no
+      se adopta aquí como canon porque el funcionamiento exacto no fue
+      recuperado." — O sea: NO asumir que es una barra. El doc lo prohíbe
+      expresamente. Yo tampoco lo asumí.
+
+  # ===========================================================================
+  - id: regional_integration
+    country: APF
+    definition_status: partial
+    src: canon
+    doc_section: "§9"
+    name:
+      english: "Regional Integration"
+      spanish: "Integración Regional"
+    model: political_territorial_progression
+    model_src: canon
+    doc_quote: >
+      "su progresión central parece ser política-territorial: convertir una
+      federación amplia en un actor cada vez más cohesionado."
+    target_experience: "Federación extensa pero difícil de cohesionar."
+    target_experience_src: canon
+    unknown:
+      - "Niveles concretos de integración."
+      - "Decisiones que la avanzan."
+      - "Penalizaciones por baja cohesión."
+    see: Q027
+
+  # ===========================================================================
+  - id: legions
+    country: NRE
+    definition_status: name_only
+    src: canon
+    doc_section: "§10"
+    name:
+      english: "Legions"
+      spanish: "Legiones"
+    unknown: ["Reglas", "Costes", "Relación con las divisiones normales"]
+    see: Q028
+
+  - id: officers
+    country: NRE
+    definition_status: name_only
+    src: canon
+    doc_section: "§10"
+    name:
+      english: "Officers"
+      spanish: "Oficiales"
+    doc_hint: >
+      "dos capas que deberían conectar la estructura del ejército con la
+      calidad, lealtad o especialización del mando."
+    doc_hint_caveat: "El doc usa 'deberían', o sea que es intención, no definición."
+    unknown: ["Calidad", "Lealtad", "Promoción", "Costes"]
+    see: Q028
+    target_experience: "Ejército potente condicionado por mando/estructura."
+    target_experience_src: canon
+
+# =============================================================================
+summary:
+  implementable: [compute_power]
+  partial: [biosteel, civil_military_balance, four_corporations, trade_nodes, regional_integration]
+  name_only: [epi, tfi, inti_soma, harmony, legions, officers]
+  note: >
+    6 de 12 sistemas son solo un nombre. Eso NO bloquea la Fase 3 (el EFE puede
+    salir con BioSteel y sin EPI), pero sí bloquea las Fases 5+ para las otras
+    seis facciones. La sección §15 del doc es literalmente esa lista de deudas.

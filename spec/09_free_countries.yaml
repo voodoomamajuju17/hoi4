@@ -1,0 +1,60 @@
+# =============================================================================
+# 09_free_countries.yaml — Los 30 países libres
+# =============================================================================
+# El documento menciona los 30 países libres cuatro veces (§1, §2 implícito,
+# §15, §16) y les asigna una función de diseño clara. Pero NO nombra ni uno.
+# =============================================================================
+
+count: 30
+count_src: canon
+
+design_function:
+  src: canon
+  doc_quote: >
+    "El mundo no está completamente absorbido por las mega-naciones: sobreviven
+    30 países libres, útiles como actores diplomáticos, zonas de disputa,
+    mercados, aliados o futuros objetivos."
+  roles:
+    - actores_diplomaticos
+    - zonas_de_disputa
+    - mercados
+    - aliados
+    - futuros_objetivos
+
+roster:
+  status: unknown
+  src: unknown
+  see: Q039
+  note: >
+    Cero países nombrados en todo el documento. La §15 lo lista como deuda
+    explícita: "Lista y función geopolítica de los 30 países libres."
+    No inventé 30 países.
+
+default_ideology_if_undefined: unaligned_state
+default_ideology_src: invented
+default_ideology_why: >
+  Todo país necesita una ideología para cargar. Si terminan definiéndose sin
+  régimen propio, este es el fallback. Ver 01_ideologies.yaml.
+
+# =============================================================================
+open_design_questions_embedded:
+  see: Q039
+  items:
+  - >
+    ¿Los 30 países libres son TAGs vanilla reciclados con nombre nuevo, o TAGs
+    nuevos? Reciclar vanilla ahorra muchísimo trabajo (ya tienen archivos,
+    banderas, nombres de unidades y leaders) pero arrastra contenido de 1936.
+  - >
+    ¿Tienen focus tree? Con 30 países, darles árbol propio a todos es
+    inviable. Lo normal es un árbol genérico compartido.
+  - >
+    ¿Los "mercados" y las "zonas de disputa" son solo lore, o enganchan con
+    mecánicas concretas (nodos comerciales de HSN, integración regional de APF)?
+    Si enganchan, los 30 países dejan de ser decorado y pasan a ser
+    dependencias duras de dos sistemas nacionales.
+
+phase_scope:
+  phase3: excluded
+  phase3_rationale: >
+    La vertical slice es EFE solo. Los países libres no son necesarios para que
+    el EFE cargue y sea jugable. Se posponen sin bloquear nada.

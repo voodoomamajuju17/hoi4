@@ -1,0 +1,261 @@
+# =============================================================================
+# 07_focus_trees.yaml — Esqueleto de árboles de foco
+# =============================================================================
+# ADVERTENCIA DE PROCEDENCIA
+#
+# El documento NO contiene ningún árbol de foco. Ni uno. No hay nombres de
+# focos, ni estructura, ni prerequisitos, ni recompensas.
+#
+# Lo único que existe en el doc que se parece a contenido de árbol son:
+#   - los hitos biográficos de Aurelio IV (§3.3)
+#   - los ejes de régimen del EFE (§3.2)
+#   - los umbrales de BioSteel (§3.4)
+#   - los dos satélites (§3.1)
+#
+# El esqueleto del EFE de abajo está construido SOBRE ESOS CUATRO ANCLAJES.
+# Todo lo demás —títulos, ramas, costes, prerequisitos, recompensas— es
+# INVENTADO por mí. Está marcado. Si el árbol no te cierra, se tira y se
+# rehace: es solo spec, no hay output que reescribir.
+#
+# Los árboles de las otras siete potencias NO se esbozaron: sin territorio, sin
+# líder y con la mecánica en "solo nombre", cualquier árbol sería ficción pura.
+# =============================================================================
+
+policy:
+  efe_tree_status: skeleton_invented_over_canon_anchors
+  other_trees_status: not_started
+  see: [Q031, Q032]
+
+# =============================================================================
+trees:
+
+  EFE:
+    id: efe_focus_tree
+    default: false
+    shared_focus_trees: []
+    anchors_from_doc:
+      - "Golpe de 2079 / título Custodio de la Tierra (§3.3)"
+      - "Proclamación imperial de 2081 (§3.3)"
+      - "Milicias Verdes y Batalla de Iguazú (§3.3)"
+      - "Reforestación obligatoria, control de población, autarquía (§3.2)"
+      - "Tecnologías de agua, semillas y restauración como herramientas de poder exterior (§3.2)"
+      - "BioSteel por umbrales 5/10/15 (§3.4)"
+      - "Satélites Patagonia Austral y Yvytu Ykua Guasu (§3.1)"
+
+    branches:
+
+      # -----------------------------------------------------------------------
+      - id: consolidacion
+        name:
+          english: "Consolidation of the Mandate"
+          spanish: "Consolidación del Mandato"
+        name_src: invented
+        theme_src: canon
+        theme_basis: "§3.2 y §3.3 — legitimidad del régimen, golpe, coronación."
+        focuses:
+          - id: EFE_custodio_de_la_tierra
+            name:
+              english: "Custodian of the Earth"
+              spanish: "Custodio de la Tierra"
+            name_src: canon      # el título es literal del doc
+            structure_src: invented
+            prerequisites: []
+            reward_intent: "Political power / arranque del árbol."
+            reward_exact: unknown
+          - id: EFE_legado_de_iguazu
+            name:
+              english: "The Legacy of Iguazú"
+              spanish: "El Legado de Iguazú"
+            name_src: inferred   # "Batalla de Iguazú" es canon; el foco es mío
+            prerequisites: [EFE_custodio_de_la_tierra]
+            reward_intent: "War support / bono de experiencia de ejército."
+            reward_exact: unknown
+          - id: EFE_milicias_verdes
+            name:
+              english: "The Green Militias"
+              spanish: "Las Milicias Verdes"
+            name_src: canon
+            prerequisites: [EFE_custodio_de_la_tierra]
+            reward_intent: "Manpower / unidad especial temática."
+            reward_exact: unknown
+          - id: EFE_corona_de_2081
+            name:
+              english: "The Crown of 2081"
+              spanish: "La Corona de 2081"
+            name_src: inferred
+            prerequisites: [EFE_legado_de_iguazu, EFE_milicias_verdes]
+            reward_intent: "Estabilidad / consolidación de la ideología."
+            reward_exact: unknown
+
+      # -----------------------------------------------------------------------
+      - id: restauracion
+        name:
+          english: "Total Restoration"
+          spanish: "Restauración Total"
+        name_src: non_canon_legacy
+        name_note: >
+          "Restauración Total" aparece en la cronología vieja de 2054 (§12), que
+          el doc marca como no canon. Lo reciclo solo como nombre de rama porque
+          encaja con la prosa canon de §3.2. Decime si preferís que no toque
+          nada de la cronología vieja. Ver Q020.
+        theme_src: canon
+        theme_basis: "§3.2 — reforestación obligatoria, control de población y consumo."
+        focuses:
+          - id: EFE_reforestacion_obligatoria
+            name:
+              english: "Compulsory Reforestation"
+              spanish: "Reforestación Obligatoria"
+            name_src: inferred
+            prerequisites: [EFE_custodio_de_la_tierra]
+            reward_intent: "Infraestructura / idea EFE_conservacion_coercitiva."
+            reward_exact: unknown
+          - id: EFE_cuotas_de_consumo
+            name:
+              english: "Consumption Quotas"
+              spanish: "Cuotas de Consumo"
+            name_src: inferred
+            prerequisites: [EFE_reforestacion_obligatoria]
+            reward_intent: "Idea EFE_control_poblacional."
+            reward_exact: unknown
+          - id: EFE_autosuficiencia
+            name:
+              english: "The Closed Circuit"
+              spanish: "El Circuito Cerrado"
+            name_src: invented
+            prerequisites: [EFE_cuotas_de_consumo]
+            reward_intent: "Idea EFE_autarquia_estrategica / bono de recursos."
+            reward_exact: unknown
+
+      # -----------------------------------------------------------------------
+      - id: biosteel_branch
+        name:
+          english: "The BioSteel Race"
+          spanish: "La Carrera del Bioacero"
+        name_src: inferred
+        theme_src: canon
+        theme_basis: "§3.4 — 'una carrera nacional de desarrollo material'."
+        focuses:
+          - id: EFE_biosteel_umbral_1
+            name:
+              english: "First Foundries"
+              spanish: "Primeras Fundiciones"
+            name_src: invented
+            prerequisites: [EFE_custodio_de_la_tierra]
+            reward_intent: "Desbloquea el contador de BioSteel + tier 1 (umbral 5)."
+            reward_exact: unknown
+            depends_on_mechanic: biosteel
+          - id: EFE_biosteel_umbral_2
+            name:
+              english: "Industrial Cultivation"
+              spanish: "Cultivo Industrial"
+            name_src: invented
+            prerequisites: [EFE_biosteel_umbral_1]
+            reward_intent: "Tier 2 (umbral 10)."
+            reward_exact: unknown
+            depends_on_mechanic: biosteel
+          - id: EFE_biosteel_umbral_3
+            name:
+              english: "Living Armour"
+              spanish: "Armadura Viviente"
+            name_src: invented
+            prerequisites: [EFE_biosteel_umbral_2]
+            reward_intent: "Tier 3 (umbral 15)."
+            reward_exact: unknown
+            depends_on_mechanic: biosteel
+
+      # -----------------------------------------------------------------------
+      - id: satelites
+        name:
+          english: "The Custodial Satellites"
+          spanish: "Los Satélites Custodios"
+        name_src: invented
+        theme_src: canon
+        theme_basis: "§3.1 — los dos satélites están definidos con territorio exacto."
+        focuses:
+          - id: EFE_patagonia_austral
+            name:
+              english: "Southern Patagonia"
+              spanish: "Patagonia Austral"
+            name_src: canon
+            prerequisites: [EFE_corona_de_2081]
+            reward_intent: "Integración del satélite PTA."
+            reward_exact: unknown
+          - id: EFE_yvytu_ykua_guasu
+            name:
+              english: "Yvytu Ykua Guasu"
+              spanish: "Yvytu Ykua Guasu"
+            name_src: canon
+            prerequisites: [EFE_corona_de_2081]
+            reward_intent: "Integración del satélite YYG."
+            reward_exact: unknown
+
+      # -----------------------------------------------------------------------
+      - id: diplomacia_verde
+        name:
+          english: "Water, Seed and Leverage"
+          spanish: "Agua, Semilla y Palanca"
+        name_src: invented
+        theme_src: canon
+        theme_basis: >
+          §3.2 — "Tecnologías de agua, semillas y restauración ecológica como
+          herramientas de poder exterior." Es la única línea del doc que apunta a
+          proyección exterior no militar del EFE.
+        focuses:
+          - id: EFE_bancos_de_semillas
+            name:
+              english: "The Seed Banks"
+              spanish: "Los Bancos de Semillas"
+            name_src: inferred
+            prerequisites: [EFE_autosuficiencia]
+            reward_intent: "Opinión / influencia sobre países libres."
+            reward_exact: unknown
+          - id: EFE_tratados_de_agua
+            name:
+              english: "Water Treaties"
+              spanish: "Tratados de Agua"
+            name_src: inferred
+            prerequisites: [EFE_bancos_de_semillas]
+            reward_intent: "Herramienta diplomática coercitiva."
+            reward_exact: unknown
+            blocked_by: >
+              Depende de que existan los 30 países libres y una estructura de
+              facciones. Ver Q018 y Q033.
+
+    unknown:
+      - "Costes en días de cada foco."
+      - "Coordenadas x/y de layout."
+      - "Recompensas exactas (todas están como reward_intent, no como efecto)."
+      - "Mutually exclusive entre ramas: ¿hay caminos excluyentes?"
+      - "Si el árbol tiene ramas de guerra/conquista y contra quién."
+    see: [Q031, Q033]
+
+  # ---------------------------------------------------------------------------
+  ASC: { status: not_started, see: Q032 }
+  FCU: { status: not_started, see: Q032 }
+  HSN: { status: not_started, see: Q032 }
+  NAS: { status: not_started, see: Q032 }
+  SHD: { status: not_started, see: Q032 }
+  APF: { status: not_started, see: Q032 }
+  NRE: { status: not_started, see: Q032 }
+
+# =============================================================================
+technical_notes:
+  - id: TN008
+    text: >
+      Un focus tree necesita al menos un foco sin prerequisitos o el árbol
+      queda inaccesible. Acá ese rol lo cumple EFE_custodio_de_la_tierra.
+    enforce_in_generator: true
+
+  - id: TN009
+    text: >
+      Todo foco necesita `icon`. HOI4 acepta iconos vanilla
+      (GFX_focus_generic_*) para no depender de arte propio. Para la Fase 3 voy
+      a usar iconos genéricos vanilla, no placeholders custom: un icono vanilla
+      carga seguro, un .dds mal generado no. Ver Q034.
+
+  - id: TN010
+    text: >
+      Cada foco necesita clave de localisation `<id>` y `<id>_desc`.
+      Con 16 focos en el EFE son 32 claves x 2 idiomas = 64 entradas.
+      El generador las emite junto con el árbol, en el mismo commit.
+    enforce_in_generator: true
