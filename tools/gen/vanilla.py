@@ -31,14 +31,57 @@ from pathlib import Path
 from . import pdx
 from .errors import VanillaError
 
+GAME_DIR = "Hearts of Iron IV"
+
 # Rutas donde suele estar HOI4 según el sistema operativo.
 CANDIDATE_PATHS = [
-    "~/.steam/steam/steamapps/common/Hearts of Iron IV",
-    "~/.local/share/Steam/steamapps/common/Hearts of Iron IV",
-    "~/Library/Application Support/Steam/steamapps/common/Hearts of Iron IV",
-    "C:/Program Files (x86)/Steam/steamapps/common/Hearts of Iron IV",
-    "D:/Steam/steamapps/common/Hearts of Iron IV",
+    f"~/.steam/steam/steamapps/common/{GAME_DIR}",
+    f"~/.local/share/Steam/steamapps/common/{GAME_DIR}",
+    f"~/Library/Application Support/Steam/steamapps/common/{GAME_DIR}",
+    f"C:/Program Files (x86)/Steam/steamapps/common/{GAME_DIR}",
+    f"C:/Program Files/Steam/steamapps/common/{GAME_DIR}",
+    f"D:/Steam/steamapps/common/{GAME_DIR}",
+    f"D:/SteamLibrary/steamapps/common/{GAME_DIR}",
+    f"E:/SteamLibrary/steamapps/common/{GAME_DIR}",
 ]
+
+# Donde Steam guarda el listado de sus bibliotecas. Sirve para encontrar el
+# juego cuando está en un disco secundario, que es el caso más común de
+# "no me lo detecta".
+STEAM_ROOTS = [
+    "~/.steam/steam",
+    "~/.local/share/Steam",
+    "~/.var/app/com.valvesoftware.Steam/data/Steam",
+    "~/Library/Application Support/Steam",
+    "C:/Program Files (x86)/Steam",
+    "C:/Program Files/Steam",
+]
+
+
+def steam_library_paths() -> list[Path]:
+    """Lee libraryfolders.vdf de Steam y devuelve las carpetas de biblioteca.
+
+    El .vdf es un formato propio de Valve, pero solo necesitamos los valores de
+    "path", así que alcanza con una regex en vez de un parser entero.
+    """
+    found: list[Path] = []
+    for raw_root in STEAM_ROOTS:
+        root = Path(os.path.expanduser(raw_root))
+        for relative in ("steamapps/libraryfolders.vdf", "config/libraryfolders.vdf"):
+            vdf = root / relative
+            if not vdf.exists():
+                continue
+            try:
+                text = vdf.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            for match in re.finditer(r'"path"\s+"([^"]+)"', text):
+                library = Path(match.group(1).replace("\\\\", "/").replace("\\", "/"))
+                if library.is_dir():
+                    found.append(library)
+        if (root / "steamapps").is_dir():
+            found.append(root)
+    return found
 
 
 @dataclass
@@ -193,8 +236,25 @@ def locate(explicit: str | None = None) -> Vanilla | None:
             return Vanilla(path)
 
     if explicit:
-        raise VanillaError(
-            f"no encontre una instalacion de HOI4 en '{explicit}'",
-            hint="deberia ser la carpeta que contiene common/, history/ y map/",
-        )
+        # Error util: si apuntaron al .exe o a la carpeta de mods, decirlo.
+        given = Path(os.path.expanduser(explicit))
+        hint = "deberia ser la carpeta que contiene common/, history/ y map/"
+        if given.is_file():
+            hint = (
+                f"'{given.name}' es un archivo. Pasa la CARPETA que lo contiene, "
+                f"no el ejecutable: {given.parent}"
+            )
+        elif (given / "mod").is_dir() or given.name == "mod":
+            hint = (
+                "esa parece la carpeta de MODS (Documentos/Paradox Interactive/...). "
+                "Necesito la de instalacion del juego, la de steamapps/common/."
+            )
+        raise VanillaError(f"no encontre una instalacion de HOI4 en '{explicit}'", hint=hint)
+
+    # Ultimo intento: recorrer las bibliotecas que Steam tenga declaradas,
+    # incluidas las de discos secundarios.
+    for library in steam_library_paths():
+        path = library / "steamapps" / "common" / GAME_DIR
+        if (path / "common").is_dir():
+            return Vanilla(path)
     return None
