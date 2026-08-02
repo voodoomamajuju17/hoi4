@@ -4,15 +4,9 @@
 
 project:
   # -------------------------------------------------------------------------
-  # CONFLICTO SIN RESOLVER — ver Q001, Q002, Q003 en 99_open_questions.yaml
-  #
-  # El pedido hablaba de "Seven Dominions", año 2137, SIETE facciones.
-  # La biblia de diseño adjunta dice "2100 Meganations", año 2100, OCHO
-  # mega-naciones + 30 países libres.
-  #
-  # El spec sigue al DOCUMENTO, porque es la única fuente con contenido real.
-  # Estos tres campos están aislados acá justamente para que cambiarlos sea
-  # trivial si el canon es el otro.
+  # RESUELTO — Q001 y Q002 confirmadas por el usuario (2026-08-02).
+  # El pedido inicial hablaba de "Seven Dominions", 2137, siete facciones.
+  # Manda el DOCUMENTO: ocho mega-naciones, año 2100.
   # -------------------------------------------------------------------------
   name: "2100 Meganations"
   src: canon
@@ -22,10 +16,23 @@ project:
   free_countries_count: 30
 
   version: "0.1.0"
-  supported_game_version: unknown   # ver Q004
+
+  # Q004 respondida: "última versión con todos los DLC".
+  # El generador NO hardcodea el número: lo lee de launcher-settings.json de tu
+  # instalación (--vanilla-path) o lo tomás vos con --game-version.
+  # Adivinar un número de versión acá no aporta nada y envejece mal.
+  supported_game_version: read_from_vanilla_install
+  all_dlc_assumed: true
   mod_folder_name: "meganations_2100"
   mod_folder_name_src: inferred     # el doc menciona "hoi4_2100_mechanics" como
                                     # carpeta de trabajo previa, no como nombre del mod
+
+  # replace_path: hace que el mod REEMPLACE una carpeta vanilla entera.
+  # Un total conversion lo termina necesitando (si no, arrancan los ~200 paises
+  # de 1936 junto a los nuestros), pero declararlo ANTES de generar el contenido
+  # que lo reemplaza deja el mundo vacio y el juego no arranca partida.
+  # Vacio a proposito hasta que la Fase 3 genere history/. Ver Q042.
+  replace_paths: []
 
   tags_used:
     - map
@@ -93,7 +100,9 @@ architecture_decisions:
 
   - id: AD002
     topic: "¿Ideologías custom reemplazan o conviven con las vanilla?"
-    status: recommendation_pending_approval
+    status: resolved
+    resolution: reskin_groups
+    resolved_by: "Usuario, 2026-08-02 (Q006)."
     problem: >
       Un total conversion pide ideologías propias. Pero borrar las cuatro
       ideologías vanilla (democratic, fascism, communism, neutrality) rompe
@@ -112,7 +121,6 @@ architecture_decisions:
       - key: hybrid
         detail: "4 grupos vanilla + grupos nuevos adicionales."
         cost: "Medio, pero es el que más superficie de bugs tiene."
-    recommendation: reskin_groups
     rationale: >
       Es lo que hace la mayoría de los TC grandes. El jugador nunca ve la clave
       interna, y evita la clase de error que el propio doc reporta en la sección

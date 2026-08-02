@@ -13,9 +13,11 @@
 # =============================================================================
 
 summary:
-  total: 41
-  blocking_phase_2: [Q001, Q002, Q004, Q006]
-  blocking_phase_3: [Q003, Q005, Q007, Q013, Q019, Q021, Q029, Q031, Q034, Q035, Q038]
+  total: 42
+  answered: [Q001, Q002, Q004, Q006]
+  answered_note: "Respondidas por el usuario 2026-08-02. Se conservan con su respuesta."
+  blocking_phase_2: []
+  blocking_phase_3: [Q003, Q005, Q007, Q013, Q019, Q021, Q029, Q031, Q034, Q035, Q038, Q042]
   blocking_phase_5: [Q008, Q009, Q010, Q016, Q017, Q018, Q022, Q023, Q024, Q025, Q026, Q027, Q028, Q030, Q032, Q039]
   non_blocking: [Q011, Q012, Q014, Q015, Q020, Q033, Q036, Q037, Q040, Q041]
 
@@ -26,6 +28,9 @@ questions:
 # =============================================================================
 
 - id: Q001
+  status: ANSWERED
+  answer: "8 facciones. Manda el documento."
+  answered_on: "2026-08-02"
   priority: critical
   blocking_phase: 2
   topic: "¿'Seven Dominions' o '2100 Meganations'?"
@@ -49,6 +54,9 @@ questions:
     territorial distinto.
 
 - id: Q002
+  status: ANSWERED
+  answer: "2100. La biografía de Aurelio IV queda coherente: 54 años al inicio."
+  answered_on: "2026-08-02"
   priority: critical
   blocking_phase: 2
   topic: "¿Año 2100 o 2137?"
@@ -74,6 +82,14 @@ questions:
   what_i_did: "Asumí 2100.1.1 y lo marqué como inferred."
 
 - id: Q004
+  status: ANSWERED_PARTIALLY
+  answer: "Última versión, todos los DLC."
+  answered_on: "2026-08-02"
+  still_needed: >
+    El número exacto sigue haciendo falta para supported_version del descriptor.
+    En vez de hardcodearlo, el generador lo lee de launcher-settings.json de tu
+    instalación. O sea que esto se resuelve solo cuando respondas Q035
+    (--vanilla-path). Si preferís, pasalo a mano con --game-version 1.x.y.
   priority: critical
   blocking_phase: 2
   topic: "Versión de HOI4 y DLCs"
@@ -108,6 +124,9 @@ questions:
   note: "El jugador nunca ve el TAG interno; los nombres largos van en localisation."
 
 - id: Q006
+  status: ANSWERED
+  answer: "Reskin. Implementado: el generador fusiona sobre el archivo vanilla."
+  answered_on: "2026-08-02"
   priority: critical
   blocking_phase: 2
   topic: "¿Reemplazar las ideologías vanilla o reskinearlas?"
@@ -559,3 +578,28 @@ questions:
     Alternativas: "Mercado de Alta Mar", "Nación Mercantil de Alta Mar".
     Lo mismo vale para el resto de las traducciones: todos los nombres en
     español de 02_countries.yaml son míos y son revisables.
+
+- id: Q042
+  priority: high
+  blocking_phase: 3
+  topic: "replace_path: ¿el mod reemplaza history/ y common/ vanilla?"
+  question: >
+    descriptor.mod puede declarar `replace_path` para que una carpeta vanilla se
+    ignore por completo en vez de fusionarse con la del mod. Un total conversion
+    lo necesita: sin replace_path de history/countries y history/states, la
+    partida arranca con los ~200 países de 1936 vanilla conviviendo con nuestras
+    ocho potencias.
+  why_not_yet: >
+    Declararlo ANTES de generar el contenido que lo reemplaza es peor que no
+    declararlo: el mundo queda literalmente vacío y el juego no arranca partida.
+    Hoy `replace_paths` está vacío a propósito en 00_project.yaml.
+  decision_needed_at: "Fase 3, junto con el primer history/ generado."
+  candidates:
+    - history/countries
+    - history/states
+    - common/national_focus
+    - common/ideas
+  note: >
+    Esto interactúa con Q039 (los 30 países libres). Si los países libres van a
+    ser TAGs vanilla reciclados, reemplazar history/countries entero significa
+    que hay que generar historia para los 30 también, no solo para las ocho.

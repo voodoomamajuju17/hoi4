@@ -12,8 +12,14 @@
 # =============================================================================
 
 strategy: reskin_groups
-strategy_src: inferred
-strategy_note: "Pendiente de tu OK — ver AD002 / Q006."
+strategy_src: user_decision
+strategy_note: "Confirmado por el usuario 2026-08-02 (Q006). Ver AD002."
+strategy_implication: >
+  El generador NO escribe common/ideologies/00_ideologies.txt desde cero:
+  lee el archivo vanilla, le inyecta nuestros `types` dentro de los cuatro
+  grupos existentes, y reescribe el archivo completo conservando todo lo demás
+  (rules, ai, dynamic_faction_names, war_impact_on_world_tension...).
+  Por eso el emisor de ideologías EXIGE --vanilla-path. Ver Q035.
 
 # -----------------------------------------------------------------------------
 # Grupos (claves internas vanilla, etiquetas nuevas)

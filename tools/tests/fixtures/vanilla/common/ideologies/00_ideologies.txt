@@ -1,0 +1,100 @@
+# FIXTURE DE TEST — no es el archivo real de HOI4.
+#
+# Reproduce solo la ESTRUCTURA de common/ideologies/00_ideologies.txt vanilla:
+# cuatro grupos, cada uno con un bloque `types` y campos hermanos que el merge
+# tiene que preservar intactos. Los valores son inventados a propósito para que
+# nadie confunda esto con contenido del juego.
+
+ideologies = {
+
+	democratic = {
+		types = {
+			conservatism = { }
+			liberalism = { }
+			socialism = { }
+		}
+		dynamic_faction_names = {
+			"FACTION_NAME_DEMOCRATIC_1"
+			"FACTION_NAME_DEMOCRATIC_2"
+		}
+		color = { 0 0 128 }
+		rules = {
+			can_force_government = yes
+			can_send_volunteers = yes
+			can_puppet = no
+		}
+		can_be_boosted = yes
+		can_collaborate = yes
+		war_impact_on_world_tension = -0.5
+		faction_impact_on_world_tension = -0.5
+		ai = {
+			ai_ideology_wanted_units_factor = 1.0
+		}
+	}
+
+	fascism = {
+		types = {
+			nazism = { }
+			fascism_ideology = { }
+			falangism = { }
+		}
+		dynamic_faction_names = {
+			"FACTION_NAME_FASCIST_1"
+		}
+		color = { 128 128 128 }
+		rules = {
+			can_force_government = yes
+			can_puppet = yes
+		}
+		can_be_boosted = yes
+		war_impact_on_world_tension = 0.5
+		faction_impact_on_world_tension = 0.5
+		ai = {
+			ai_ideology_wanted_units_factor = 1.2
+		}
+	}
+
+	communism = {
+		types = {
+			marxism = { }
+			leninism = { }
+			stalinism = { }
+		}
+		dynamic_faction_names = {
+			"FACTION_NAME_COMMUNIST_1"
+		}
+		color = { 128 0 0 }
+		rules = {
+			can_force_government = yes
+			can_puppet = yes
+		}
+		can_be_boosted = yes
+		war_impact_on_world_tension = 0.5
+		faction_impact_on_world_tension = 0.5
+		ai = {
+			ai_ideology_wanted_units_factor = 1.1
+		}
+	}
+
+	neutrality = {
+		types = {
+			despotism = { }
+			oligarchism = { }
+			anarchism = { }
+		}
+		dynamic_faction_names = {
+			"FACTION_NAME_NEUTRALITY_1"
+		}
+		color = { 128 128 80 }
+		rules = {
+			can_force_government = no
+			can_puppet = no
+		}
+		can_be_boosted = no
+		war_impact_on_world_tension = 0.0
+		faction_impact_on_world_tension = 0.0
+		ai = {
+			ai_ideology_wanted_units_factor = 1.0
+		}
+	}
+}
