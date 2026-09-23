@@ -107,6 +107,7 @@ class Vanilla:
             )
         self._states: list[StateInfo] | None = None
         self._documented: dict[str, set[str] | None] = {}
+        self._templates: dict[str, list[re.Pattern]] = {}
         self._gfx: set[str] | None = None
 
     # -- versión ------------------------------------------------------------
@@ -248,14 +249,70 @@ class Vanilla:
             self._documented[kind] = None
             return None
         words: set[str] = set()
+        templates: list[re.Pattern] = []
         for path in files:
             try:
                 text = path.read_text(encoding="utf-8-sig", errors="replace")
             except OSError:
                 continue
             words.update(re.findall(r"[A-Za-z_][A-Za-z0-9_]*", text))
+            templates.extend(_templates_in(text))
         self._documented[kind] = words
+        self._templates[kind] = templates
         return words
+
+    def is_documented(self, kind: str, key: str) -> bool | None:
+        """¿Existe `key`? None si no hay documentation/ contra qué validar.
+
+        Además del nombre literal acepta dos cosas que el juego arma solo y la
+        documentación lista con un hueco en vez de nombre por nombre:
+          - plantillas del propio archivo: `production_speed_<building>_factor`
+          - familias derivadas de datos vanilla: `<ideologia>_drift`,
+            `production_speed_<edificio>_factor`, etc.
+        """
+        known = self.documented_keys(kind)
+        if known is None:
+            return None
+        if key in known or key in self.dynamic_keys(kind):
+            return True
+        return any(t.fullmatch(key) for t in self._templates.get(kind, []))
+
+    def dynamic_keys(self, kind: str) -> set[str]:
+        """Nombres que HOI4 genera por cada ideología o edificio del juego."""
+        if kind != "modifiers":
+            return set()
+        out: set[str] = set()
+        ideologies: set[str] = set()
+        try:
+            for group, body in self.parse_ideologies().entries:
+                if not isinstance(body, pdx.Block) or group is None:
+                    continue
+                ideologies.add(group)
+                types = body.get("types")
+                if isinstance(types, pdx.Block):
+                    ideologies.update(k for k in types.keys())
+        except VanillaError:
+            pass
+        for ideology in ideologies:
+            out.update({f"{ideology}_drift", f"{ideology}_acceptance"})
+        for building in self.building_keys():
+            out.update({
+                f"production_speed_{building}_factor",
+                f"{building}_max_level",
+            })
+        return out
+
+    def building_keys(self) -> set[str]:
+        out: set[str] = set()
+        for path in sorted((self.root / "common" / "buildings").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("buildings")
+            if isinstance(block, pdx.Block):
+                out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block))
+        return out
 
     def gfx_names(self) -> set[str]:
         """Todos los sprites declarados en interface/**/*.gfx."""
@@ -292,6 +349,22 @@ class Vanilla:
                 if m and m.group(2).strip().lower() == wanted.strip().lower():
                     out.add(m.group(1))
         return sorted(out)
+
+
+def _templates_in(text: str) -> list[re.Pattern]:
+    """Nombres con hueco (`a_<x>_b`, `a_{x}_b`, `a_[x]_b`) pasados a regex."""
+    hole = r"(?:<[^<>\s]+>|\{[^{}\s]+\}|\[[^\[\]\s]+\])"
+    token = re.compile(rf"[A-Za-z0-9_]*{hole}(?:[A-Za-z0-9_]|{hole})*")
+    out = []
+    for raw in set(token.findall(text)):
+        parts = re.split(f"({hole})", raw)
+        pattern = "".join(
+            "[A-Za-z0-9_]+" if re.fullmatch(hole, part) else re.escape(part)
+            for part in parts if part
+        )
+        if pattern.replace("[A-Za-z0-9_]+", ""):  # un hueco solo no es plantilla
+            out.append(re.compile(pattern))
+    return out
 
 
 def locate(explicit: str | None = None) -> Vanilla | None:

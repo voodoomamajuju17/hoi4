@@ -71,13 +71,13 @@ class BuildContext:
         if not keys:
             return
         known = self.vanilla.documented_keys(kind) if self.vanilla else None
-        if known is None:
+        if known is None or self.vanilla is None:
             self.warn(
                 f"{kind}: no se validaron contra el juego (falta --vanilla-path o "
                 f"documentation/). Si alguno no existe, lo va a decir error.log."
             )
             return
-        missing = {k: where for k, where in keys.items() if k not in known}
+        missing = {k: where for k, where in keys.items() if not self.vanilla.is_documented(kind, k)}
         if missing:
             lines = "\n".join(f"    {k}  (en {where})" for k, where in sorted(missing.items()))
             raise GenError(

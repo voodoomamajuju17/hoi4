@@ -464,6 +464,25 @@ def test_vanilla_validation() -> None:
         check("icono inexistente cae a GFX_goal_unknown", "GFX_goal_unknown" in focus)
         check("avisa del icono reemplazado", any("no existe en el juego" in w for w in ctx.warnings))
 
+        # Caso real (reporte del usuario): la documentacion lista estos con
+        # hueco, no por nombre. Tienen que pasar igual.
+        templated = {"democratic_drift", "production_speed_arms_factory_factor",
+                     "production_speed_infrastructure_factor"}
+        check("el spec usa los modificadores con plantilla", templated <= mods, str(mods))
+        (docs / "modifiers_documentation.md").write_text(
+            "\n".join(sorted(mods - templated)) + "\n<ideology>_drift\n"
+        )
+        ctx = build(out, vanilla_path=str(van), quiet=True)
+        check("drift aceptado por plantilla del doc", True)
+        from tools.gen.vanilla import Vanilla
+        v = Vanilla(van)
+        check("plantilla <x> reconocida", v.is_documented("modifiers", "fascism_drift"))
+        check("edificio vanilla -> production_speed_*", v.is_documented(
+            "modifiers", "production_speed_arms_factory_factor"))
+        check("edificio inexistente no pasa", not v.is_documented(
+            "modifiers", "production_speed_datacenter_factor"))
+        check("un hueco solo no acepta cualquier cosa", not v.is_documented("modifiers", "inventado_total"))
+
         (docs / "modifiers_documentation.md").write_text(
             "\n".join(sorted(mods - {"monthly_population"}))
         )
