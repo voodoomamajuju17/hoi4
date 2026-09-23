@@ -142,6 +142,34 @@ def emit(ctx: BuildContext) -> None:
             continue
         _rewrite(ctx, s, new_owner, deposits.get(s.id, {}),
                  resource_delta.get(s.id, {}), added.get(s.id, {}), claims.get(s.id, ()))
+    _startup_ownership(ctx, assignment)
+
+
+def _startup_ownership(ctx: BuildContext, assignment: dict[int, str]) -> None:
+    """Red de seguridad al arrancar la partida (on_startup).
+
+    Algunas expansiones cambian dueños por fuera de la historia de los states
+    (on_actions, liberaciones de 1.19: el Congo seguía apareciendo). Si al
+    arrancar un state no es de quien dice el reparto, se le transfiere. Si ya
+    lo es, el efecto no hace nada.
+    """
+    if not assignment:
+        return
+    by_owner: dict[str, list[int]] = defaultdict(list)
+    for sid, tag in sorted(assignment.items()):
+        by_owner[tag].append(sid)
+    effect = Block()
+    for tag in sorted(by_owner):
+        for sid in by_owner[tag]:
+            cond = Block()
+            cond.add("limit", Block([("NOT", Block([("is_owned_by", tag)]))]))
+            cond.add(tag, Block([("transfer_state", sid)]))
+            effect.add(str(sid), Block([("if", cond)]))
+    root = Block([("on_actions", Block([("on_startup", Block([("effect", effect)]))]))])
+    ctx.write_script("common/on_actions/01_meganations_territory.txt", root,
+                     source="08_territory.yaml: cada state vuelve a su dueno del mod al arrancar")
+    ctx.verify_keys("effects", {"transfer_state": "on_startup del reparto"})
+    ctx.verify_keys("triggers", {"is_owned_by": "on_startup del reparto"})
 
 
 def _claims(ctx: BuildContext, assignment: dict[int, str], states) -> dict[int, set[str]]:
@@ -343,6 +371,26 @@ def _num(v: float):
     return int(v) if float(v).is_integer() else round(v, 3)
 
 
+def _strip_ownership(block: Block) -> Block | None:
+    """Saca dueños, núcleos y reclamos de un bloque de efectos anidado.
+
+    Los `limit` son condiciones (ahí `owner = X` pregunta, no asigna) y quedan
+    intactos. Si el bloque se queda sin efectos, devuelve None para borrarlo.
+    """
+    out = Block()
+    for k, v in block.entries:
+        if k in _DROP_FROM_HISTORY:
+            continue
+        if isinstance(v, Block) and k != "limit":
+            v = _strip_ownership(v)
+            if v is None:
+                continue
+        out.add(k, v)
+    if all(k == "limit" for k, _ in out.entries):
+        return None
+    return out
+
+
 def _unsafe(info: StateInfo) -> bool:
     """El parser trata < y > como =: reescribir un archivo con comparaciones
     le cambiaría el sentido."""
@@ -505,6 +553,12 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resource
                 continue
             if k and _DATE_KEY.match(k):
                 continue
+            if isinstance(v, Block):
+                # Bloques condicionales (if = { limit = { has_dlc ... } owner = COG }):
+                # sin esto, el dueño vanilla vuelve al arrancar la partida.
+                v = _strip_ownership(v)
+                if v is None:
+                    continue
             kept.append((k, v))
         history.entries = ([("owner", owner)] + kept + [("add_core_of", owner)]
                            + [("add_claim_by", tag) for tag in sorted(claims)])

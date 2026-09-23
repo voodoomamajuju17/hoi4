@@ -5,5 +5,15 @@ state = {
 	provinces = { 14 }
 	history = {
 		owner = ITA
+		if = {
+			limit = { has_dlc = "Thunder at our Gates" owner = ITA }
+			owner = COG
+			add_core_of = COG
+		}
+		if = {
+			limit = { has_dlc = "Thunder at our Gates" }
+			set_state_flag = fixture_flag
+			add_core_of = COG
+		}
 	}
 }

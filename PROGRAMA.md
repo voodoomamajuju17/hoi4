@@ -27,7 +27,7 @@ elementos también van por importancia.
   - [~] decisiones nacionales vanilla de países que no existen (China, Congo...): archivos vaciados
   - [ ] "AI tried to post an invalid command: unlock_trait_command"
 - [~] Culturas gráficas por región (Q013): sudamericana, asiática, africana, Commonwealth, Europa oriental, Medio Oriente
-- [~] Fondo del menú principal: detección por las pantallas del menú (`frontend*.gui`); el reporte lista lo que reemplaza
+- [ ] Fondo del menú principal: en 1.19 hay un selector ("Cambiar fondo"); el reporte trae un diagnóstico para encontrar dónde se define
 - [ ] Rendimiento: medir días por segundo con 29 países + guerras activas
 
 ## 2. Mundo y balance global
@@ -40,6 +40,8 @@ elementos también van por importancia.
 - [~] Ejército inicial (piso 20 para meganaciones), tecnologías por nivel, depósitos
 - [~] Armada y aviación heredadas de 1936 según la base, recortadas al 10% (flota solo HSN, FCU, NRE y ASC)
 - [~] Mundo vivo: reclamos, rivalidades, tensión mundial, 2 guerras al arranque
+- [~] 9 facciones: cada meganación con sus 2 satélites, más la Anarquía
+- [~] Congo: dueños dentro de bloques condicionales borrados + red de seguridad al arrancar
 - [ ] Ajustar con los números reales de `balance.txt` (objetivos de IC, pisos, tropas)
 - [ ] Decidir si la FCU necesita una penalización propia (hoy es la más fuerte en la práctica)
 - [ ] IA: estrategias por meganación (`common/ai_strategy`): a quién atacar, a quién aliarse, qué construir
@@ -93,7 +95,8 @@ Por facción:
 ## 7. Presentación y arte
 
 - [x] Bandera, retratos e íconos del EFE; fondo del menú principal
-- [ ] Banderas de las 28 facciones restantes (hoy son franjas provisorias)
+- [~] Banderas de las 8 meganaciones (arte del usuario)
+- [ ] Banderas de los 16 satélites y los 5 señores de la guerra (hoy son franjas provisorias)
 - [ ] Retratos de líderes de las 7 meganaciones y los satélites
 - [ ] Íconos de foco propios para los árboles nuevos
 - [ ] Imágenes de eventos propias

@@ -39,6 +39,7 @@ def emit(ctx: BuildContext) -> None:
     if ctx.vanilla is None:
         ctx.skip("fondo del menu principal", "hay que buscar la textura en el juego instalado", "Q035")
         return
+    _diagnose(ctx)
     targets = _menu_textures(ctx)
     if not targets:
         ctx.warn("menu: no encontre el sprite de fondo del menu principal en interface/; no se cambia.")
@@ -57,6 +58,55 @@ def emit(ctx: BuildContext) -> None:
         dest.write_bytes(data)
         ctx.track(dest)
     ctx.note(f"menu principal: fondo reemplazado en {', '.join(sorted(targets))}")
+
+
+_DIAG_LINE = re.compile(r"(?i)(main_?menu|frontend)\w*.*(background|_bg\b)|background\w*.*(select|picker|change|thumb)")
+_DIAG_NAME = re.compile(r"(?i)(main_?menu|frontend|menu_?bg|background)")
+
+
+def _diagnose(ctx: BuildContext) -> None:
+    """Lista para el reporte todo lo que parece fondo de menú, incluidas las
+    expansiones (dlc/*/*.zip). En 1.19 el menú tiene un selector de fondos
+    ("Cambiar fondo") y todavía no sé dónde se define: esto lo encuentra en
+    el juego instalado, sin adivinar."""
+    import zipfile
+
+    root = ctx.vanilla.root
+    hits: list[str] = []
+    for folder in ("interface", "common", "gfx"):
+        base = root / folder
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*")):
+            if path.suffix.lower() not in (".gui", ".gfx", ".txt") or path.stat().st_size > 2_000_000:
+                continue
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            for line in text.splitlines():
+                if _DIAG_LINE.search(line):
+                    hits.append(f"{path.relative_to(root).as_posix()}: {line.strip()[:110]}")
+                    break
+    dlc_hits: list[str] = []
+    for z in sorted((root / "dlc").glob("*/*.zip")) if (root / "dlc").is_dir() else []:
+        try:
+            with zipfile.ZipFile(z) as fh:
+                for name in fh.namelist():
+                    if _DIAG_NAME.search(name) and name.lower().endswith((".dds", ".gfx", ".gui", ".txt", ".png")):
+                        dlc_hits.append(f"{z.parent.name}/{z.name}: {name}")
+        except (OSError, zipfile.BadZipFile):
+            continue
+    lines = ["menu principal (diagnostico para el selector de fondos de 1.19):"]
+    lines += [f"      juego  {h}" for h in hits[:30]]
+    if len(hits) > 30:
+        lines.append(f"      ... y {len(hits) - 30} mas en el juego")
+    lines += [f"      dlc    {h}" for h in dlc_hits[:30]]
+    if len(dlc_hits) > 30:
+        lines.append(f"      ... y {len(dlc_hits) - 30} mas en expansiones")
+    if len(lines) == 1:
+        lines.append("      nada encontrado")
+    ctx.note("\n".join(lines))
 
 
 def _menu_textures(ctx: BuildContext) -> set[str]:

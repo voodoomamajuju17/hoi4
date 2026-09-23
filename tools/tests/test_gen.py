@@ -780,6 +780,19 @@ def test_balance() -> None:
         check("cultura que no existe en el juego cae a la europea con aviso",
               "western_european_gfx" in shd_c and any("SHD: la cultura grafica" in w for w in ctx.warnings), shd_c)
 
+        libya = (mod / "history/states/910-Fixture.txt").read_text()
+        check("Congo: el dueno dentro de un if condicional se borra", "COG" not in libya, libya)
+        check("el if que queda sin efectos desaparece, el que tiene otros efectos queda",
+              libya.count("if = {") == 1 and "fixture_flag" in libya and 'has_dlc = "Thunder' in libya, libya)
+        startup = (mod / "common/on_actions/01_meganations_territory.txt").read_text()
+        check("red de seguridad: on_startup devuelve cada state a su dueno", "on_startup" in startup
+              and "transfer_state = 910" in startup and "is_owned_by = APF" in startup, startup[:600])
+        apf_h = next((mod / "history/countries").glob("APF - *.txt")).read_text()
+        check("la APF funda su faccion con sus satelites",
+              "MEGANATIONS_APF_FACTION" in apf_h and "add_to_faction = ZET" in apf_h, apf_h[-800:])
+        check("bandera del usuario para la ASC", (mod / "gfx/flags/small/ASC.tga").exists()
+              and (mod / "gfx/flags/ASC.tga").read_bytes() == (REPO_ROOT / "assets/ASC/flags/ASC.tga").read_bytes())
+
         check("vacia las decisiones nacionales de un pais vanilla (GER)",
               "GER_example" not in (mod / "common/decisions/GER.txt").read_text())
         check("no toca las decisiones genericas", not (mod / "common/decisions/economy.txt").exists())
@@ -871,12 +884,12 @@ def test_vanilla_validation() -> None:
             mods.update(trait["modifiers"])
         docs = van / "documentation"
         docs.mkdir()
-        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n")
+        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat\n"
+            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

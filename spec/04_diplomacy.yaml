@@ -104,6 +104,27 @@ factions:
   # La Anarquía (2026-09-23): varios señores de la guerra regionales unidos
   # en una facción del juego. Se ve y juega como un bloque, pero cada región
   # es un país: si cae la capital de una, las otras siguen.
+  # Una facción por meganación con sus dos satélites (2026-09-23, pedido del
+  # usuario: "9 facciones en total comprendida la anarquía"). Nombres
+  # inventados. Consecuencia: en las guerras de arranque entran los satélites
+  # (ZBC y ZAL con la ASC, ZHI y ZDA con el NRE).
+  - { id: MEGANATIONS_EFE_FACTION, leader: EFE, members: [EFE, PTA, YYG], src: user_decision,
+      name: { english: "The Earth Pact", spanish: "El Pacto de la Tierra" } }
+  - { id: MEGANATIONS_ASC_FACTION, leader: ASC, members: [ASC, ZBC, ZAL], src: user_decision,
+      name: { english: "The Commune Network", spanish: "La Red de las Comunas" } }
+  - { id: MEGANATIONS_FCU_FACTION, leader: FCU, members: [FCU, ZNR, ZSE], src: user_decision,
+      name: { english: "The Continental Portfolio", spanish: "La Cartera Continental" } }
+  - { id: MEGANATIONS_HSN_FACTION, leader: HSN, members: [HSN, ZAS, ZAF], src: user_decision,
+      name: { english: "The League of Ports", spanish: "La Liga de los Puertos" } }
+  - { id: MEGANATIONS_NAS_FACTION, leader: NAS, members: [NAS, ZNG, ZLL], src: user_decision,
+      name: { english: "The Sun Confederacy", spanish: "La Confederación del Sol" } }
+  - { id: MEGANATIONS_SHD_FACTION, leader: SHD, members: [SHD, ZKR, ZST], src: user_decision,
+      name: { english: "The Harmonious Sphere", spanish: "La Esfera Armónica" } }
+  - { id: MEGANATIONS_APF_FACTION, leader: APF, members: [APF, ZSA, ZET], src: user_decision,
+      name: { english: "The Peoples' Congress", spanish: "El Congreso de los Pueblos" } }
+  - { id: MEGANATIONS_NRE_FACTION, leader: NRE, members: [NRE, ZHI, ZDA], src: user_decision,
+      name: { english: "Pax Romana", spanish: "La Pax Romana" } }
+
   - id: MEGANATIONS_ANARCHY_FACTION
     name: { english: "The Anarchy", spanish: "La Anarquía" }
     members: [ZWE, ZWI, ZWM, ZWB, ZAN]
