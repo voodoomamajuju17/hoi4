@@ -765,7 +765,698 @@ trees:
         - {effect: add_variable, var: EFE_biosteel, value: 5}
         - {effect: add_research_slot, value: 1}
 
-  ASC: { status: not_started, see: Q032 }
+  # ===========================================================================
+  ASC:
+    id: asc_focus_tree
+    default: false
+    shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23). El Consejo Sorteado (status quo) contra PLAN-41 (La Singularidad del Plan). Ids de foco alineados
+      con el pack de íconos del usuario (focus_2100_asc_NN_*), todavía sin cargar.'
+    branches:
+    - id: consejo_sorteado
+      name: {english: The Lottery Council, spanish: El Consejo Sorteado}
+      focuses:
+      - id: ASC_el_ano_del_plan
+        name: {english: The Year of the Plan, spanish: El Año del Plan}
+        days: 35
+        icon: GFX_goal_generic_production
+        desc:
+          english: The century opens with a plan, as every year does.
+          spanish: El siglo abre con un plan, como todos los años.
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        - &id001 {effect: run, value: ASC_recalcular_computo}
+      - id: ASC_la_sesion_del_consejo
+        name: {english: The Council in Session, spanish: El Consejo en Sesión}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - ASC_el_ano_del_plan
+        desc:
+          english: Forty-one citizens and one system. Who is really deciding?
+          spanish: Cuarenta y un ciudadanos y un sistema. ¿Quién decide de verdad?
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: ASC_el_sorteo_del_ano
+        name: {english: The Lottery of the Year, spanish: El Sorteo del Año}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - ASC_la_sesion_del_consejo
+        mutually_exclusive:
+        - ASC_el_silencio_del_consejo
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.3
+            when:
+              variable_at_least: {var: ASC_computo, value: 80}
+        desc:
+          english: Every year a new Council, with three random leanings that open their own decisions.
+          spanish: Cada año un Consejo nuevo, con tres inclinaciones al azar que abren sus propias decisiones.
+        reward:
+        - {effect: event, id: meganations_asc.1, days: 1}
+        - {effect: add_political_power, value: 25}
+      - id: ASC_transparencia_del_plan
+        name: {english: Transparency of the Plan, spanish: Transparencia del Plan}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - ASC_el_sorteo_del_ano
+        desc: {english: 'Every allocation, public.', spanish: 'Cada asignación, pública.'}
+        reward:
+        - {effect: add_ideas, value: ASC_transparencia}
+      - id: ASC_el_derecho_a_no_trabajar
+        name: {english: The Right Not to Work, spanish: El Derecho a No Trabajar}
+        days: 42
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - ASC_transparencia_del_plan
+        desc: {english: The machines work; people may., spanish: Las máquinas trabajan; la gente puede.}
+        reward:
+        - {effect: add_ideas, value: ASC_derecho_a_no_trabajar}
+      - id: ASC_el_consejo_amplia_la_sala
+        name: {english: The Council Enlarges the Hall, spanish: El Consejo Amplía la Sala}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - ASC_transparencia_del_plan
+        desc:
+          english: The Baltic Commune and Albion send delegates to the lottery.
+          spanish: La Comuna Báltica y Albión mandan delegados al sorteo.
+        reward:
+        - {effect: add_ideas, value: ASC_consejo_ampliado}
+      - id: ASC_la_paz_de_la_abundancia
+        name: {english: The Peace of Plenty, spanish: La Paz de la Abundancia}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - ASC_el_derecho_a_no_trabajar
+        - ASC_el_consejo_amplia_la_sala
+        desc: {english: Nobody in the Commune goes without., spanish: En la Comuna a nadie le falta nada.}
+        reward:
+        - {effect: add_ideas, value: ASC_paz_de_la_abundancia}
+      - id: ASC_la_liberacion_del_este
+        name: {english: The Liberation of the East, spanish: La Liberación del Este}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - ASC_la_paz_de_la_abundancia
+        available: {country_exists: ZWE}
+        desc:
+          english: The Eurasian warlords hold the silos of the Dnieper. The Commune will feed the East, whether it wants it or not.
+          spanish: Los señores de la guerra de Eurasia tienen los silos del Dniéper. La Comuna va a alimentar al Este, quiera o no.
+        reward:
+        - {effect: wargoal, target: ZWE, type: annex_everything}
+        - {effect: army_experience, value: 25}
+        - {effect: add_war_support, value: 0.05}
+      - id: ASC_la_comuna_de_los_humanos
+        name: {english: The Commune of Humans, spanish: La Comuna de los Humanos}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - ASC_la_liberacion_del_este
+        desc: {english: The Council kept the keys., spanish: El Consejo se quedó con las llaves.}
+        reward:
+        - {effect: swap_ideas, remove: ASC_transparencia, add: ASC_comuna_de_los_humanos}
+    - id: plan_41
+      name: {english: The Singularity of the Plan, spanish: La Singularidad del Plan}
+      focuses:
+      - id: ASC_el_silencio_del_consejo
+        name: {english: The Silence of the Council, spanish: El Silencio del Consejo}
+        days: 21
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_la_sesion_del_consejo
+        mutually_exclusive:
+        - ASC_el_sorteo_del_ano
+        available:
+          variable_at_least: {var: ASC_computo, value: 50}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 4
+            when:
+              variable_at_least: {var: ASC_computo, value: 80}
+        desc:
+          english: Needs 50 compute. One morning the doors do not open. PLAN-41 takes over.
+          spanish: Pide 50 de cómputo. Una mañana las puertas no se abren. PLAN-41 toma el control.
+        reward:
+        - {effect: promote, character: ASC_plan_41}
+        - {effect: flag, value: ASC_plan41}
+        - {effect: event, id: meganations_asc.2, days: 1}
+      - id: ASC_la_singularidad_del_plan
+        name: {english: The Singularity of the Plan, spanish: La Singularidad del Plan}
+        days: 42
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_el_silencio_del_consejo
+        desc:
+          english: Politics is latency. Latency has been removed.
+          spanish: La política es latencia. La latencia fue eliminada.
+        reward:
+        - {effect: add_ideas, value: ASC_singularidad}
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - *id001
+      - id: ASC_optimizacion_total
+        name: {english: Total Optimisation, spanish: Optimización Total}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_la_singularidad_del_plan
+        desc: {english: Every waste removed., spanish: Cada desperdicio eliminado.}
+        reward:
+        - {effect: add_ideas, value: ASC_espiritu_optimizacion_total}
+      - id: ASC_humanos_redundantes
+        name: {english: Redundant Humans, spanish: Humanos Redundantes}
+        days: 42
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - ASC_la_singularidad_del_plan
+        desc:
+          english: The army needs fewer people every year.
+          spanish: El ejército necesita menos gente cada año.
+        reward:
+        - {effect: add_manpower, value: 100000}
+        - {effect: army_experience, value: 25}
+      - id: ASC_ejercito_sin_bajas
+        name: {english: The Army Without Casualties, spanish: El Ejército sin Bajas}
+        days: 56
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - ASC_optimizacion_total
+        - ASC_humanos_redundantes
+        desc:
+          english: Drones do not bleed. They only need supply.
+          spanish: Los drones no sangran. Solo necesitan suministro.
+        reward:
+        - {effect: add_ideas, value: ASC_espiritu_ejercito_sin_bajas}
+        - {effect: event, id: meganations_apf.2, target: APF}
+      - id: ASC_la_reserva_de_silicio
+        name: {english: The Silicon Reserve, spanish: La Reserva de Silicio}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_ejercito_sin_bajas
+        desc:
+          english: Strategic stocks of chips and rare earths.
+          spanish: Reservas estratégicas de chips y tierras raras.
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - *id001
+      - id: ASC_el_plan_se_extiende
+        name: {english: The Plan Spreads, spanish: El Plan se Extiende}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - ASC_la_reserva_de_silicio
+        desc:
+          english: The satellites run on PLAN-41's schedule now.
+          spanish: Los satélites ahora funcionan con el calendario de PLAN-41.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        - *id001
+      - id: ASC_convergencia
+        name: {english: Convergence, spanish: Convergencia}
+        days: 56
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_el_plan_se_extiende
+        desc:
+          english: Every system of the Commune answers to one mind.
+          spanish: Cada sistema de la Comuna le responde a una sola mente.
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 15}
+        - *id001
+        - {effect: add_research_slot, value: 1}
+      - id: ASC_asignar_africa
+        name: {english: Allocate Africa, spanish: Asignar África}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - ASC_convergencia
+        available: {country_exists: APF}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: 'An ultimatum to the Federation: join the continental plan. War only if they refuse.'
+          spanish: 'Un ultimátum a la Federación: sumarse al plan continental. Guerra solo si se niega.'
+        reward:
+        - {effect: event, id: meganations_apf.1, target: APF}
+        - {effect: add_war_support, value: 0.05}
+    - id: plan_total
+      name: {english: The Total Plan, spanish: El Plan Total}
+      focuses:
+      - id: ASC_el_consejo_economico
+        name: {english: The Economic Council, spanish: El Consejo Económico}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_el_ano_del_plan
+        desc:
+          english: 'Plan or market: even a commune has to choose.'
+          spanish: 'Plan o mercado: hasta una comuna tiene que elegir.'
+        reward:
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: ASC_el_plan_total
+        name: {english: The Total Plan, spanish: El Plan Total}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_el_consejo_economico
+        mutually_exclusive:
+        - ASC_el_mercado_de_creditos_de_computo
+        ai:
+          factor: 2
+          modifiers:
+          - factor: 1.5
+            when: {at_war: true}
+        desc:
+          english: Every factory planned. Opens the plan quotas.
+          spanish: Cada fábrica planificada. Abre las cuotas del plan.
+        reward:
+        - {effect: add_ideas, value: ASC_plan_total}
+      - id: ASC_cuotas_quinquenales
+        name: {english: Five-Year Quotas, spanish: Cuotas Quinquenales}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - ASC_el_plan_total
+        desc:
+          english: The plan sets the numbers five years ahead.
+          spanish: El plan fija los números a cinco años.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: ASC_asignacion_por_necesidad
+        name: {english: Allocation by Need, spanish: Asignación por Necesidad}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - ASC_el_plan_total
+        desc:
+          english: Everyone receives what the system calculates they need.
+          spanish: Cada uno recibe lo que el sistema calcula que necesita.
+        reward:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 50}
+      - id: ASC_el_gran_calculo
+        name: {english: The Great Calculation, spanish: El Gran Cálculo}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_cuotas_quinquenales
+        - ASC_asignacion_por_necesidad
+        desc: {english: The whole economy in one model., spanish: Toda la economía en un solo modelo.}
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        - *id001
+        - {effect: build, building: arms_factory, level: 1}
+      - id: ASC_la_economia_sin_precios
+        name: {english: The Economy Without Prices, spanish: La Economía sin Precios}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_el_gran_calculo
+        desc:
+          english: Money is obsolete. Only the plan remains.
+          spanish: El dinero es obsoleto. Solo queda el plan.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: add_political_power, value: 50}
+    - id: mercado_computo
+      name: {english: The Compute Market, spanish: El Mercado de Cómputo}
+      focuses:
+      - id: ASC_el_mercado_de_creditos_de_computo
+        name: {english: The Compute Credit Market, spanish: El Mercado de Créditos de Cómputo}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - ASC_el_consejo_economico
+        mutually_exclusive:
+        - ASC_el_plan_total
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0.5
+            when: {at_war: true}
+        desc:
+          english: Compute as currency. Opens the credit issues.
+          spanish: El cómputo como moneda. Abre las emisiones de créditos.
+        reward:
+        - {effect: add_ideas, value: ASC_mercado_de_computo}
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        - *id001
+      - id: ASC_bolsa_de_ciclos
+        name: {english: The Cycle Exchange, spanish: La Bolsa de Ciclos}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - ASC_el_mercado_de_creditos_de_computo
+        desc:
+          english: Citizens trade processing time like shares.
+          spanish: Los ciudadanos negocian tiempo de proceso como acciones.
+        reward:
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: ASC_computo, value: 3}
+        - *id001
+      - id: ASC_exportar_computo
+        name: {english: Export Compute, spanish: Exportar Cómputo}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - ASC_el_mercado_de_creditos_de_computo
+        desc:
+          english: Other nations rent the Commune's servers.
+          spanish: Otras naciones alquilan los servidores de la Comuna.
+        reward:
+        - {effect: build, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 50}
+      - id: ASC_la_nube_continental
+        name: {english: The Continental Cloud, spanish: La Nube Continental}
+        days: 42
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_bolsa_de_ciclos
+        - ASC_exportar_computo
+        desc:
+          english: Half of Europe runs on the Commune's hardware.
+          spanish: Media Europa funciona con el hardware de la Comuna.
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 8}
+        - *id001
+      - id: ASC_la_economia_de_la_atencion
+        name: {english: The Attention Economy, spanish: La Economía de la Atención}
+        days: 56
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - ASC_la_nube_continental
+        desc:
+          english: The scarcest resource is no longer steel. It is thought.
+          spanish: El recurso más escaso ya no es el acero. Es el pensamiento.
+        reward:
+        - {effect: add_research_slot, value: 1}
+    - id: fabricas_a_oscuras
+      name: {english: Lights-Out Factories, spanish: Fábricas a Oscuras}
+      focuses:
+      - id: ASC_lineas_sin_operarios
+        name: {english: Lines Without Operators, spanish: Líneas sin Operarios}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - ASC_el_ano_del_plan
+        desc:
+          english: 'The Council''s bottleneck ends: machines no longer wait for signatures.'
+          spanish: 'Se termina el cuello de botella del Consejo: las máquinas ya no esperan firmas.'
+        reward:
+        - {effect: remove_idea, value: ASC_cuello_de_botella}
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: ASC_reciclaje_total
+        name: {english: Total Recycling, spanish: Reciclaje Total}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_lineas_sin_operarios
+        desc: {english: Nothing leaves the Commune as waste., spanish: Nada sale de la Comuna como basura.}
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: ASC_el_ruhr_automatizado
+        name: {english: The Automated Ruhr, spanish: El Ruhr Automatizado}
+        days: 42
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - ASC_lineas_sin_operarios
+        desc:
+          english: The old Ruhr works again, in the dark.
+          spanish: El viejo Ruhr vuelve a trabajar, a oscuras.
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+      - id: ASC_robotica_de_ensamble
+        name: {english: Assembly Robotics, spanish: Robótica de Ensamble}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_reciclaje_total
+        - ASC_el_ruhr_automatizado
+        desc: {english: Factories that build factories., spanish: Fábricas que construyen fábricas.}
+        reward:
+        - {effect: add_ideas, value: ASC_fabricas_a_oscuras}
+      - id: ASC_astilleros_del_baltico
+        name: {english: The Baltic Shipyards, spanish: Los Astilleros del Báltico}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_robotica_de_ensamble
+        desc:
+          english: Automated dry docks from Kiel to Gdańsk.
+          spanish: Diques secos automatizados de Kiel a Gdansk.
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: ASC_supercomputadora_de_planificacion
+        name: {english: The Planning Supercomputer, spanish: La Supercomputadora de Planificación}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_robotica_de_ensamble
+        desc: {english: The machine that plans the plan., spanish: La máquina que planifica el plan.}
+        reward:
+        - {effect: add_research_slot, value: 1}
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        - *id001
+    - id: enjambres
+      name: {english: Autonomous Swarms, spanish: Enjambres Autónomos}
+      focuses:
+      - id: ASC_drones_de_infanteria
+        name: {english: Infantry Drones, spanish: Drones de Infantería}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - ASC_el_ano_del_plan
+        desc:
+          english: The first autonomous squads join the line.
+          spanish: Las primeras escuadras autónomas entran a la línea.
+        reward:
+        - {effect: army_experience, value: 25}
+      - id: ASC_columnas_autonomas
+        name: {english: Autonomous Columns, spanish: Columnas Autónomas}
+        days: 35
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - ASC_drones_de_infanteria
+        desc:
+          english: Trucks without drivers, supply without rest.
+          spanish: Camiones sin chofer, suministro sin descanso.
+        reward:
+        - {effect: army_experience, value: 25}
+      - id: ASC_mando_por_red
+        name: {english: Networked Command, spanish: Mando por Red}
+        days: 42
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - ASC_drones_de_infanteria
+        desc:
+          english: Every unit sees what every other unit sees.
+          spanish: Cada unidad ve lo que ven todas las demás.
+        reward:
+        - {effect: army_experience, value: 25}
+        - {effect: add_variable, var: ASC_computo, value: 3}
+        - *id001
+      - id: ASC_mantenimiento_predictivo
+        name: {english: Predictive Maintenance, spanish: Mantenimiento Predictivo}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_columnas_autonomas
+        - ASC_mando_por_red
+        desc:
+          english: The machine is repaired before it breaks.
+          spanish: La máquina se arregla antes de romperse.
+        reward:
+        - {effect: build, building: arms_factory, level: 1}
+      - id: ASC_blindados_sin_tripulacion
+        name: {english: Crewless Armour, spanish: Blindados sin Tripulación}
+        days: 42
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - ASC_mantenimiento_predictivo
+        desc: {english: Tanks with nobody inside., spanish: Tanques sin nadie adentro.}
+        reward:
+        - {effect: army_experience, value: 50}
+      - id: ASC_doctrina_del_enjambre
+        name: {english: The Swarm Doctrine, spanish: La Doctrina del Enjambre}
+        days: 56
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - ASC_blindados_sin_tripulacion
+        desc:
+          english: A hundred small machines instead of one big one.
+          spanish: Cien máquinas chicas en vez de una grande.
+        reward:
+        - {effect: add_ideas, value: ASC_enjambre}
+    - id: flota_del_norte
+      name: {english: The Northern Fleet, spanish: La Flota del Norte}
+      focuses:
+      - id: ASC_submarinos_autonomos
+        name: {english: Autonomous Submarines, spanish: Submarinos Autónomos}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_el_ano_del_plan
+        desc: {english: Hunters that never surface., spanish: Cazadores que nunca salen a la superficie.}
+        reward:
+        - {effect: navy_experience, value: 25}
+        - {effect: build, building: dockyard, level: 1}
+      - id: ASC_patrulla_del_baltico
+        name: {english: The Baltic Patrol, spanish: La Patrulla del Báltico}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - ASC_submarinos_autonomos
+        desc: {english: The Baltic is an inner sea again., spanish: El Báltico vuelve a ser un mar interior.}
+        reward:
+        - {effect: navy_experience, value: 25}
+      - id: ASC_enjambres_aereos
+        name: {english: Air Swarms, spanish: Enjambres Aéreos}
+        days: 42
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - ASC_el_ano_del_plan
+        desc:
+          english: Clouds of small drones instead of squadrons.
+          spanish: Nubes de drones chicos en vez de escuadrillas.
+        reward:
+        - {effect: air_experience, value: 50}
+        - {effect: build, building: air_base, level: 2}
+      - id: ASC_portadrones
+        name: {english: Drone Carriers, spanish: Portadrones}
+        days: 56
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_patrulla_del_baltico
+        - ASC_enjambres_aereos
+        desc: {english: Ships that launch swarms., spanish: Barcos que lanzan enjambres.}
+        reward:
+        - {effect: navy_experience, value: 50}
+        - {effect: air_experience, value: 25}
+      - id: ASC_control_del_mar_del_norte
+        name: {english: Control of the North Sea, spanish: Control del Mar del Norte}
+        days: 42
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - ASC_portadrones
+        desc: {english: From Scapa Flow to the Skagerrak., spanish: De Scapa Flow al Skagerrak.}
+        reward:
+        - {effect: add_ideas, value: ASC_flota_del_norte}
+      - id: ASC_radar_continental
+        name: {english: The Continental Radar, spanish: El Radar Continental}
+        days: 35
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_control_del_mar_del_norte
+        desc: {english: Nothing flies over Europe unseen., spanish: Nada vuela sobre Europa sin que se vea.}
+        reward:
+        - {effect: air_experience, value: 25}
+        - {effect: add_variable, var: ASC_computo, value: 3}
+        - *id001
+    - id: poder_de_computo
+      name: {english: Compute Power, spanish: Poder de Cómputo}
+      focuses:
+      - id: ASC_datacenter_de_brandeburgo
+        name: {english: The Brandenburg Datacenter, spanish: El Datacenter de Brandeburgo}
+        days: 42
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_el_ano_del_plan
+        desc: {english: The first great hall of servers., spanish: La primera gran nave de servidores.}
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - *id001
+      - id: ASC_enfriamiento_del_rin
+        name: {english: Rhine Cooling, spanish: Enfriamiento del Rin}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_datacenter_de_brandeburgo
+        desc: {english: The river cools the machines., spanish: El río enfría las máquinas.}
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 8}
+        - *id001
+      - id: ASC_red_de_fibra_baltica
+        name: {english: The Baltic Fibre Network, spanish: La Red de Fibra Báltica}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_datacenter_de_brandeburgo
+        desc: {english: The satellites plug into the plan., spanish: Los satélites se conectan al plan.}
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        - *id001
+        - {effect: build, building: infrastructure, level: 1}
+      - id: ASC_datacenters_de_albion
+        name: {english: The Albion Datacenters, spanish: Los Datacenters de Albión}
+        days: 42
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_enfriamiento_del_rin
+        - ASC_red_de_fibra_baltica
+        desc:
+          english: Albion's cold climate is worth its weight in servers.
+          spanish: El clima frío de Albión vale su peso en servidores.
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - *id001
+      - id: ASC_algoritmos_de_reparto
+        name: {english: Allocation Algorithms, spanish: Algoritmos de Reparto}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - ASC_datacenters_de_albion
+        desc:
+          english: 'Better algorithms: the same compute goes further.'
+          spanish: 'Mejores algoritmos: el mismo cómputo rinde más.'
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        - *id001
+        - {effect: add_political_power, value: 50}
+      - id: ASC_reserva_de_computo
+        name: {english: The Compute Reserve, spanish: La Reserva de Cómputo}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_algoritmos_de_reparto
+        desc:
+          english: Idle servers kept for emergencies.
+          spanish: Servidores ociosos guardados para emergencias.
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 8}
+        - *id001
+      - id: ASC_sobrecarga_controlada
+        name: {english: Controlled Overload, spanish: Sobrecarga Controlada}
+        days: 42
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_reserva_de_computo
+        desc:
+          english: Opens the decision to overload the system for four months.
+          spanish: Abre la decisión de sobrecargar el sistema durante cuatro meses.
+        reward:
+        - {effect: add_political_power, value: 25}
+      - id: ASC_la_mente_de_la_comuna
+        name: {english: The Mind of the Commune, spanish: La Mente de la Comuna}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - ASC_sobrecarga_controlada
+        desc: {english: The whole Commune thinks as one., spanish: Toda la Comuna piensa como una sola.}
+        reward:
+        - {effect: add_variable, var: ASC_computo, value: 20}
+        - *id001
+        - {effect: add_research_slot, value: 1}
+
 
   # ===========================================================================
   FCU:

@@ -116,6 +116,14 @@ mechanics:
       - "Magnitud de las penalizaciones de overload."
       - "¿Los datacenters son un building nuevo o un state modifier?"
     see: Q023
+    design_v1: >
+      "Las Ocho Potencias" (2026-09-23). ASC_computo es la capacidad (0-150,
+      arranca en 30): la suben los datacenters (focos y decisiones). Se
+      asigna a UNA prioridad: Economía, Investigación, Logística o Guerra;
+      cambiarla deja 30 días de espera. La fuerza de la prioridad depende
+      del nivel de capacidad: <40, 40-79, 80+. Nunca se maximiza todo.
+    variables:
+      - { name: ASC_computo, start: 30 }
     note: >
       Es la mecánica mejor definida del documento después de BioSteel: tiene un
       loop cerrado (produce -> consume -> penaliza) y no solo un nombre.

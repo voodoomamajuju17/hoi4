@@ -65,7 +65,10 @@ eventos con ultimátum e IA con condiciones.
   (El Monte se Levanta, con crisis previa), integración de YYG/PTA en 3
   etapas, reforestación (120 días → núcleo), Autarquía vs Diplomacia del
   Agua, ultimátum a la FCU
-- [ ] **ASC** — Poder de Cómputo, Consejo Sorteado, PLAN-41 y drones
+- [~] **ASC** — árbol de 55 focos: Poder de Cómputo (capacidad + una prioridad,
+  30 días para cambiarla, 3 niveles), Consejo Sorteado (3 rasgos al azar por año),
+  PLAN-41, Plan Total vs Mercado de Cómputo, ultimátum a la APF
+- [ ] Íconos propios de los focos (pack de 96 del usuario, 12 por meganación): cargar cuando se pida
 - [ ] **HSN** — red de nodos, Kofi Aldana vs Inés Tavake (Botín, corso)
 - [ ] **NAS** — Qhapaq Ñan + Inti-Soma, los cuatro Suyus
 - [ ] **APF** — Desarrollo + Integración, Amara vs Diallo
@@ -102,7 +105,7 @@ eventos con ultimátum e IA con condiciones.
 - [~] Banderas de las 8 meganaciones (arte del usuario)
 - [ ] Banderas de los 16 satélites y los 5 señores de la guerra (hoy son franjas provisorias)
 - [ ] Retratos de los satélites, Marcus Rourke y Anahí Quiroga
-- [ ] Íconos de foco propios para los árboles nuevos
+- [ ] Íconos de foco propios: el pack de 96 ya está; falta conectarlo
 - [ ] Imágenes de eventos propias
 - [ ] Íconos de los paneles de decisiones
 - [ ] Pantallas de carga

@@ -442,6 +442,193 @@ countries:
         modifiers_src: invented
         why: "Balance (2026-09-23): la ASC arrancaba con 18,6% de la IC mundial."
         removable: false
+      - id: ASC_computo_economia_1
+        name: {english: 'Compute: Economy I', spanish: 'Cómputo: Economía I'}
+        desc:
+          english: The planning system assigns its capacity to economy. Level 1 of 3, set by the Commune's total compute.
+          spanish: El sistema de planificación asigna su capacidad a economía. Nivel 1 de 3, según el cómputo total de la Comuna.
+        modifiers: {industrial_capacity_factory: 0.05, production_speed_buildings_factor: 0.05}
+        src: user_design
+    focus_ideas:
+    - id: ASC_computo_economia_2
+      name: {english: 'Compute: Economy II', spanish: 'Cómputo: Economía II'}
+      desc:
+        english: The planning system assigns its capacity to economy. Level 2 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a economía. Nivel 2 de 3, según el cómputo total de la Comuna.
+      modifiers: {industrial_capacity_factory: 0.1, production_speed_buildings_factor: 0.1}
+      src: user_design
+    - id: ASC_computo_economia_3
+      name: {english: 'Compute: Economy III', spanish: 'Cómputo: Economía III'}
+      desc:
+        english: The planning system assigns its capacity to economy. Level 3 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a economía. Nivel 3 de 3, según el cómputo total de la Comuna.
+      modifiers: {industrial_capacity_factory: 0.15, production_speed_buildings_factor: 0.15}
+      src: user_design
+    - id: ASC_computo_investigacion_1
+      name: {english: 'Compute: Research I', spanish: 'Cómputo: Investigación I'}
+      desc:
+        english: The planning system assigns its capacity to research. Level 1 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a investigación. Nivel 1 de 3, según el cómputo total de la Comuna.
+      modifiers: {research_speed_factor: 0.05}
+      src: user_design
+    - id: ASC_computo_investigacion_2
+      name: {english: 'Compute: Research II', spanish: 'Cómputo: Investigación II'}
+      desc:
+        english: The planning system assigns its capacity to research. Level 2 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a investigación. Nivel 2 de 3, según el cómputo total de la Comuna.
+      modifiers: {research_speed_factor: 0.1}
+      src: user_design
+    - id: ASC_computo_investigacion_3
+      name: {english: 'Compute: Research III', spanish: 'Cómputo: Investigación III'}
+      desc:
+        english: The planning system assigns its capacity to research. Level 3 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a investigación. Nivel 3 de 3, según el cómputo total de la Comuna.
+      modifiers: {research_speed_factor: 0.15}
+      src: user_design
+    - id: ASC_computo_logistica_1
+      name: {english: 'Compute: Logistics I', spanish: 'Cómputo: Logística I'}
+      desc:
+        english: The planning system assigns its capacity to logistics. Level 1 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a logística. Nivel 1 de 3, según el cómputo total de la Comuna.
+      modifiers: {army_org_factor: 0.03, production_speed_infrastructure_factor: 0.1}
+      src: user_design
+    - id: ASC_computo_logistica_2
+      name: {english: 'Compute: Logistics II', spanish: 'Cómputo: Logística II'}
+      desc:
+        english: The planning system assigns its capacity to logistics. Level 2 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a logística. Nivel 2 de 3, según el cómputo total de la Comuna.
+      modifiers: {army_org_factor: 0.06, production_speed_infrastructure_factor: 0.2}
+      src: user_design
+    - id: ASC_computo_logistica_3
+      name: {english: 'Compute: Logistics III', spanish: 'Cómputo: Logística III'}
+      desc:
+        english: The planning system assigns its capacity to logistics. Level 3 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a logística. Nivel 3 de 3, según el cómputo total de la Comuna.
+      modifiers: {army_org_factor: 0.1, production_speed_infrastructure_factor: 0.3}
+      src: user_design
+    - id: ASC_computo_guerra_1
+      name: {english: 'Compute: War I', spanish: 'Cómputo: Guerra I'}
+      desc:
+        english: The planning system assigns its capacity to war. Level 1 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a guerra. Nivel 1 de 3, según el cómputo total de la Comuna.
+      modifiers: {army_attack_factor: 0.03, army_defence_factor: 0.03}
+      src: user_design
+    - id: ASC_computo_guerra_2
+      name: {english: 'Compute: War II', spanish: 'Cómputo: Guerra II'}
+      desc:
+        english: The planning system assigns its capacity to war. Level 2 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a guerra. Nivel 2 de 3, según el cómputo total de la Comuna.
+      modifiers: {army_attack_factor: 0.06, army_defence_factor: 0.06}
+      src: user_design
+    - id: ASC_computo_guerra_3
+      name: {english: 'Compute: War III', spanish: 'Cómputo: Guerra III'}
+      desc:
+        english: The planning system assigns its capacity to war. Level 3 of 3, set by the Commune's total compute.
+        spanish: El sistema de planificación asigna su capacidad a guerra. Nivel 3 de 3, según el cómputo total de la Comuna.
+      modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.1}
+      src: user_design
+    - id: ASC_transparencia
+      name: {english: Transparency of the Plan, spanish: Transparencia del Plan}
+      desc:
+        english: Every allocation is public. Every citizen can read why they got what they got.
+        spanish: Cada asignación es pública. Cualquier ciudadano puede leer por qué recibió lo que recibió.
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
+      src: user_design
+    - id: ASC_derecho_a_no_trabajar
+      name: {english: The Right Not to Work, spanish: El Derecho a No Trabajar}
+      desc:
+        english: The machines work. The citizens may, if they want to.
+        spanish: Las máquinas trabajan. Los ciudadanos pueden, si quieren.
+      modifiers: {stability_factor: 0.1, consumer_goods_factor: 0.05}
+      src: user_design
+    - id: ASC_paz_de_la_abundancia
+      name: {english: The Peace of Plenty, spanish: La Paz de la Abundancia}
+      desc:
+        english: Nobody in the Commune goes without. The neighbours notice.
+        spanish: En la Comuna a nadie le falta nada. Los vecinos lo notan.
+      modifiers: {stability_factor: 0.05, war_support_factor: -0.05, trade_opinion_factor: 0.2}
+      src: user_design
+    - id: ASC_comuna_de_los_humanos
+      name: {english: The Commune of Humans, spanish: La Comuna de los Humanos}
+      desc:
+        english: The Council kept the keys. The machine serves; people decide.
+        spanish: El Consejo se quedó con las llaves. La máquina sirve; la gente decide.
+      modifiers: {stability_factor: 0.1, political_power_gain: 0.1, research_speed_factor: 0.05}
+      src: user_design
+    - id: ASC_singularidad
+      name: {english: The Singularity of the Plan, spanish: La Singularidad del Plan}
+      desc:
+        english: 'HUMAN QUORUM: NOT REQUIRED. Politics is latency, and latency has been removed.'
+        spanish: 'QUÓRUM HUMANO: NO REQUERIDO. La política es latencia, y la latencia fue eliminada.'
+      modifiers:
+        political_power_gain: -0.4
+        research_speed_factor: 0.1
+        industrial_capacity_factory: 0.1
+        stability_factor: 0.15
+      src: user_design
+    - id: ASC_espiritu_optimizacion_total
+      name: {english: Total Optimisation, spanish: Optimización Total}
+      desc:
+        english: Every process is measured, every waste removed. Including some people.
+        spanish: Cada proceso se mide, cada desperdicio se elimina. Incluidas algunas personas.
+      modifiers: {production_speed_buildings_factor: 0.15, consumer_goods_factor: -0.05}
+      src: user_design
+    - id: ASC_espiritu_ejercito_sin_bajas
+      name: {english: The Army Without Casualties, spanish: El Ejército sin Bajas}
+      desc:
+        english: Drones do not come home in coffins. They do not come home at all without supply.
+        spanish: Los drones no vuelven en cajones. Sin suministro, no vuelven de ninguna forma.
+      modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.05, experience_gain_army: 0.1}
+      src: user_design
+    - id: ASC_plan_total
+      name: {english: The Total Plan, spanish: El Plan Total}
+      desc:
+        english: Every factory, every quota, every hour, planned.
+        spanish: Cada fábrica, cada cuota, cada hora, planificada.
+      modifiers: {production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: ASC_mercado_de_computo
+      name: {english: The Compute Credit Market, spanish: El Mercado de Créditos de Cómputo}
+      desc:
+        english: Compute credits circulate like money. The Commune trades in thought.
+        spanish: Los créditos de cómputo circulan como dinero. La Comuna comercia con pensamiento.
+      modifiers: {research_speed_factor: 0.05, consumer_goods_factor: -0.05, trade_opinion_factor: 0.15}
+      src: user_design
+    - id: ASC_fabricas_a_oscuras
+      name: {english: Lights-Out Factories, spanish: Fábricas a Oscuras}
+      desc:
+        english: Factories that need no light, because nobody works inside.
+        spanish: Fábricas que no necesitan luz, porque adentro no trabaja nadie.
+      modifiers: {industrial_capacity_factory: 0.1}
+      src: user_design
+    - id: ASC_enjambre
+      name: {english: The Swarm Doctrine, spanish: La Doctrina del Enjambre}
+      desc:
+        english: A hundred small machines instead of one big one.
+        spanish: Cien máquinas chicas en vez de una grande.
+      modifiers: {army_org_factor: 0.05, army_attack_factor: 0.05}
+      src: user_design
+    - id: ASC_flota_del_norte
+      name: {english: The Northern Fleet, spanish: La Flota del Norte}
+      desc:
+        english: Autonomous submarines hold the North Sea and the Baltic.
+        spanish: Submarinos autónomos controlan el Mar del Norte y el Báltico.
+      modifiers: {industrial_capacity_dockyard: 0.1}
+      src: user_design
+    - id: ASC_consejo_ampliado
+      name: {english: The Enlarged Council, spanish: El Consejo Ampliado}
+      desc:
+        english: The Baltic and Albion send delegates to the lottery.
+        spanish: El Báltico y Albión mandan delegados al sorteo.
+      modifiers: {political_power_gain: 0.05, stability_factor: 0.05}
+      src: user_design
+    - id: ASC_sobrecarga
+      name: {english: Controlled Overload, spanish: Sobrecarga Controlada}
+      desc:
+        english: The datacenters run hot. Everything is faster, until something melts.
+        spanish: Los datacenters funcionan al rojo. Todo va más rápido, hasta que algo se funde.
+      modifiers: {research_speed_factor: 0.1, production_speed_buildings_factor: 0.1, stability_factor: -0.05}
+      src: user_design
     see: Q030
 
   FCU:

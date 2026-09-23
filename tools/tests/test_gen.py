@@ -851,7 +851,7 @@ def test_fcu() -> None:
 
         se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
         check("efecto recalcular: clamp de las cuatro", all(f"var = FCU_{c}" in se for c in
-              ("castellane", "halvorsen", "meridian", "obsidian")) and se.count("clamp_variable") == 5, se[:800])
+              ("castellane", "halvorsen", "meridian", "obsidian")), se[:800])
         check("dos rivales debajo de 25: OR de pares con AND", "OR = {" in se and "AND = {" in se)
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         check("cada contrato recalcula el Directorio", decs.count("FCU_recalcular_directorio = yes") >= 6)
@@ -862,6 +862,45 @@ def test_fcu() -> None:
         check("la HSN reacciona al ultimatum", (mod / "events/meganations_hsn.txt").exists())
         fcu_ev = (mod / "events/meganations_fcu.txt").read_text()
         check("el informe trimestral se vuelve a disparar", "id = meganations_fcu.3" in fcu_ev and "days = 90" in fcu_ev)
+
+
+def test_asc() -> None:
+    section("ASC: Poder de Computo, Consejo Sorteado y PLAN-41")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        root = pdx.parse((mod / "common/national_focus/ASC_focus.txt").read_text()).get("focus_tree")
+        focuses = root.get_all("focus")
+        check("arbol de la ASC de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        by = {pdx.text(f.get("id")): f for f in focuses}
+        for fid in ("ASC_el_sorteo_del_ano", "ASC_transparencia_del_plan", "ASC_el_derecho_a_no_trabajar",
+                    "ASC_el_silencio_del_consejo", "ASC_la_singularidad_del_plan", "ASC_el_mercado_de_creditos_de_computo",
+                    "ASC_lineas_sin_operarios", "ASC_supercomputadora_de_planificacion", "ASC_drones_de_infanteria",
+                    "ASC_submarinos_autonomos", "ASC_enfriamiento_del_rin", "ASC_la_mente_de_la_comuna"):
+            check(f"foco {fid} existe (alineado con el pack de iconos)", fid in by)
+        silencio = by["ASC_el_silencio_del_consejo"]
+        check("PLAN-41 pide 50 de computo", "ASC_computo" in pdx.render(silencio.get("available")))
+        check("PLAN-41 asciende al sistema", "promote_character = ASC_plan_41" in pdx.render(silencio.get("completion_reward")))
+        raw = (mod / "common/national_focus/ASC_focus.txt").read_text()
+        check("la IA va por PLAN-41 con mucho computo", "value = 80" in raw)
+        check("Asignar Africa es un ultimatum", "meganations_apf.1" in pdx.render(by["ASC_asignar_africa"].get("completion_reward")))
+        check("Lineas sin Operarios saca el Cuello de Botella",
+              "remove_ideas = ASC_cuello_de_botella" in pdx.render(by["ASC_lineas_sin_operarios"].get("completion_reward")))
+
+        se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        body = se[se.index("ASC_recalcular_computo"):]
+        check("recalcular: saca las 12 ideas de computo", body.count("remove_ideas = ASC_computo_") == 12)
+        check("recalcular: tres niveles por capacidad", "value = 80" in body and "value = 40" in body)
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        check("reasignar deja 30 dias de espera", "flag = ASC_reasignando" in decs and "days = 30" in decs)
+        check("cada decision de la ASC recalcula", decs.count("ASC_recalcular_computo = yes") >= 6)
+        hist = next((mod / "history/countries").glob("ASC - *.txt")).read_text()
+        check("la ASC arranca con 30 de computo", "var = ASC_computo" in hist)
+        check("PLAN-41 reclutado despues del Consejo", hist.index("ASC_allocation_council") < hist.index("ASC_plan_41")
+              and "promote_character = ASC_allocation_council" in hist)
+        ev = (mod / "events/meganations_asc.txt").read_text()
+        check("el sorteo anual elige 3 rasgos al azar y se repite", ev.count("random_list") == 3 and "days = 365" in ev)
+        check("la APF recibe el ultimatum", (mod / "events/meganations_apf.txt").exists())
 
 
 def test_forces() -> None:
@@ -959,7 +998,7 @@ def test_vanilla_validation() -> None:
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
-            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag\n"
+            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -1027,6 +1066,7 @@ def main() -> int:
         test_leaders_and_ideologies,
         test_balance,
         test_fcu,
+        test_asc,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

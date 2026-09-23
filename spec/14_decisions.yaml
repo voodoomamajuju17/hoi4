@@ -508,6 +508,256 @@ categories:
           - { effect: build, building: industrial_complex, level: 1 }
         ai_factor: 5
 
+  # ===========================================================================
+  # ASC — Poder de Cómputo, el Consejo Sorteado, Plan o Mercado ("Las Ocho Potencias")
+  # ===========================================================================
+  - id: ASC_computo_category
+    country: ASC
+    icon_prefer:
+    - generic_research
+    - generic_industry
+    name: {english: Compute Power, spanish: Poder de Cómputo}
+    desc:
+      english: 'Total compute: [?ASC_computo]\nLevels: below 40, 40 to 79, 80 or more.\n\nThe compute goes to ONE priority. Changing it leaves the
+        system 30 days recalibrating. You can never maximise everything.'
+      spanish: 'Cómputo total: [?ASC_computo]\nNiveles: menos de 40, de 40 a 79, 80 o más.\n\nEl cómputo va a UNA prioridad. Cambiarla deja al sistema
+        30 días recalibrando. Nunca se puede maximizar todo.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: ASC_recalcular_computo}
+    decisions:
+    - id: ASC_asignar_economia
+      name: {english: Assign Compute to the Economy, spanish: Asignar Cómputo a la Economía}
+      desc: {english: Production and construction first., spanish: Primero la producción y la construcción.}
+      icon_prefer:
+      - generic_research
+      - generic_industry
+      cost: 25
+      available: {not_flag: ASC_reasignando}
+      effects:
+      - &id001 {effect: clear_flag, value: ASC_prioridad_guerra}
+      - &id002 {effect: clear_flag, value: ASC_prioridad_investigacion}
+      - &id003 {effect: clear_flag, value: ASC_prioridad_logistica}
+      - {effect: flag, value: ASC_reasignando, days: 30}
+      ai_factor: 2
+    - id: ASC_asignar_investigacion
+      name: {english: Assign Compute to Research, spanish: Asignar Cómputo a la Investigación}
+      desc: {english: Research first., spanish: Primero la investigación.}
+      icon_prefer:
+      - generic_research
+      - generic_industry
+      cost: 25
+      available: {not_flag: ASC_reasignando}
+      effects:
+      - *id001
+      - *id002
+      - *id003
+      - {effect: flag, value: ASC_prioridad_investigacion}
+      - {effect: flag, value: ASC_reasignando, days: 30}
+      ai_factor: 2
+    - id: ASC_asignar_logistica
+      name: {english: Assign Compute to Logistics, spanish: Asignar Cómputo a la Logística}
+      desc:
+        english: Supply, repairs and railways first.
+        spanish: Primero el suministro, las reparaciones y los trenes.
+      icon_prefer:
+      - generic_research
+      - generic_industry
+      cost: 25
+      available: {not_flag: ASC_reasignando}
+      effects:
+      - *id001
+      - *id002
+      - *id003
+      - {effect: flag, value: ASC_prioridad_logistica}
+      - {effect: flag, value: ASC_reasignando, days: 30}
+      ai_factor: 2
+    - id: ASC_asignar_guerra
+      name: {english: Assign Compute to War, spanish: Asignar Cómputo a la Guerra}
+      desc:
+        english: Drones and battle planning first.
+        spanish: Primero los drones y la planificación de batalla.
+      icon_prefer:
+      - generic_research
+      - generic_industry
+      cost: 25
+      available: {not_flag: ASC_reasignando}
+      effects:
+      - *id001
+      - *id002
+      - *id003
+      - {effect: flag, value: ASC_prioridad_guerra}
+      - {effect: flag, value: ASC_reasignando, days: 30}
+      ai_factor: 2
+    - id: ASC_construir_datacenter
+      name: {english: Build a Datacenter, spanish: Construir un Datacenter}
+      desc:
+        english: Another hall of servers cooled by the Rhine. +5 compute.
+        spanish: Otra nave de servidores enfriada por el Rin. +5 de cómputo.
+      icon_prefer:
+      - generic_construction
+      - generic_research
+      cost: 75
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: 5}
+      ai_factor: 5
+    - id: ASC_sobrecargar
+      name: {english: Overload the System, spanish: Sobrecargar el Sistema}
+      desc:
+        english: Run the datacenters hot for four months. Everything is faster, until something melts.
+        spanish: Hacer funcionar los datacenters al rojo durante cuatro meses. Todo va más rápido, hasta que algo se funde.
+      icon_prefer:
+      - generic_research
+      - generic_industry
+      cost: 50
+      cooldown_days: 365
+      visible: {focus: ASC_sobrecarga_controlada}
+      effects:
+      - {effect: timed_idea, idea: ASC_sobrecarga, days: 120}
+      ai_factor: 2
+  - id: ASC_consejo_category
+    country: ASC
+    icon_prefer:
+    - generic_political_actions
+    name: {english: The Lottery Council, spanish: El Consejo Sorteado}
+    desc:
+      english: Every year 41 delegates are drawn by lot. This year's Council has three leanings, and each one opens its own decision.
+      spanish: Cada año se sortean 41 delegados. El Consejo de este año tiene tres inclinaciones, y cada una abre su propia decisión.
+    src: user_design
+    after_effects:
+    - {effect: run, value: ASC_recalcular_computo}
+    decisions:
+    - id: ASC_consejo_ingenieros
+      name: {english: Engineering Programme, spanish: Programa de Ingeniería}
+      desc:
+        english: 'Only while this year''s Council has engineers. A council of engineers: infrastructure projects.'
+        spanish: 'Solo mientras el Consejo de este año tenga ingenieros. Un consejo de ingenieros: proyectos de infraestructura.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 50
+      cooldown_days: 120
+      visible: {flag: ASC_rasgo_ingenieros, not_flag: ASC_plan41}
+      effects:
+      - {effect: build, building: infrastructure, level: 2}
+      - {effect: add_variable, var: ASC_computo, value: 2}
+      ai_factor: 3
+    - id: ASC_consejo_pacifistas
+      name: {english: Peace Motion, spanish: Moción de Paz}
+      desc:
+        english: 'Only while this year''s Council has pacifists. A council of pacifists: peace pays.'
+        spanish: 'Solo mientras el Consejo de este año tenga pacifistas. Un consejo de pacifistas: la paz rinde.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 25
+      cooldown_days: 120
+      visible: {flag: ASC_rasgo_pacifistas, not_flag: ASC_plan41}
+      effects:
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_war_support, value: -0.05}
+      - {effect: add_political_power, value: 50}
+      ai_factor: 3
+      available: {at_war: false}
+    - id: ASC_consejo_productivistas
+      name: {english: Extraordinary Quota, spanish: Cuota Extraordinaria}
+      desc:
+        english: 'Only while this year''s Council has productivists. A council of productivists: extra quotas.'
+        spanish: 'Solo mientras el Consejo de este año tenga productivistas. Un consejo de productivistas: cuotas extraordinarias.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 75
+      cooldown_days: 120
+      visible: {flag: ASC_rasgo_productivistas, not_flag: ASC_plan41}
+      effects:
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 3
+    - id: ASC_consejo_agrarios
+      name: {english: Land Reform, spanish: Reforma Agraria}
+      desc:
+        english: 'Only while this year''s Council has agrarians. A council of agrarians: land reform.'
+        spanish: 'Solo mientras el Consejo de este año tenga agrarios. Un consejo de agrarios: reforma agraria.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 50
+      cooldown_days: 120
+      visible: {flag: ASC_rasgo_agrarios, not_flag: ASC_plan41}
+      effects:
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_manpower, value: 25000}
+      ai_factor: 3
+    - id: ASC_consejo_militaristas
+      name: {english: Council Mobilisation, spanish: Movilización del Consejo}
+      desc:
+        english: 'Only while this year''s Council has militarists. A council of militarists: mobilisation.'
+        spanish: 'Solo mientras el Consejo de este año tenga militaristas. Un consejo de militaristas: movilización.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 50
+      cooldown_days: 120
+      visible: {flag: ASC_rasgo_militaristas, not_flag: ASC_plan41}
+      effects:
+      - {effect: army_experience, value: 25}
+      - {effect: add_war_support, value: 0.05}
+      ai_factor: 3
+    - id: ASC_consejo_tecnofilos
+      name: {english: Server Expansion, spanish: Ampliación de Servidores}
+      desc:
+        english: 'Only while this year''s Council has technophiles. A council of technophiles: more servers.'
+        spanish: 'Solo mientras el Consejo de este año tenga tecnófilos. Un consejo de tecnófilos: más servidores.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 75
+      cooldown_days: 120
+      visible: {flag: ASC_rasgo_tecnofilos, not_flag: ASC_plan41}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: 5}
+      ai_factor: 3
+  - id: ASC_economia_category
+    country: ASC
+    icon_prefer:
+    - generic_industry
+    name: {english: Plan or Market, spanish: Plan o Mercado}
+    desc:
+      english: The Total Plan opens quotas; the Compute Credit Market opens credit issues.
+      spanish: El Plan Total abre cuotas; el Mercado de Créditos de Cómputo abre emisiones de créditos.
+    src: user_design
+    after_effects:
+    - {effect: run, value: ASC_recalcular_computo}
+    decisions:
+    - id: ASC_cuota_del_plan
+      name: {english: Plan Quota, spanish: Cuota del Plan}
+      desc: {english: 'A new factory, on schedule.', spanish: 'Una fábrica nueva, en fecha.'}
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 75
+      cooldown_days: 120
+      visible: {focus: ASC_el_plan_total}
+      effects:
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+    - id: ASC_emitir_creditos
+      name: {english: Issue Compute Credits, spanish: Emitir Créditos de Cómputo}
+      desc:
+        english: Sell compute time to the citizens. The system grows with the demand.
+        spanish: Venderles tiempo de cómputo a los ciudadanos. El sistema crece con la demanda.
+      icon_prefer:
+      - generic_research
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      visible: {focus: ASC_el_mercado_de_creditos_de_computo}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: 4}
+      - {effect: add_political_power, value: 25}
+      ai_factor: 5
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -576,3 +826,120 @@ scripted_effects:
         then:
           - { effect: flag, value: EFE_monte_listo }
           - { effect: event, id: meganations_efe.12 }
+
+  # ASC: saca las 12 ideas de cómputo y pone la que corresponde a la prioridad y al nivel.
+  - id: ASC_recalcular_computo
+    effects:
+    - {effect: clamp, var: ASC_computo, min: 0, max: 150}
+    - effect: if
+      when: {idea: ASC_computo_economia_1}
+      then:
+      - {effect: remove_idea, value: ASC_computo_economia_1}
+    - effect: if
+      when: {idea: ASC_computo_economia_2}
+      then:
+      - {effect: remove_idea, value: ASC_computo_economia_2}
+    - effect: if
+      when: {idea: ASC_computo_economia_3}
+      then:
+      - {effect: remove_idea, value: ASC_computo_economia_3}
+    - effect: if
+      when: {idea: ASC_computo_investigacion_1}
+      then:
+      - {effect: remove_idea, value: ASC_computo_investigacion_1}
+    - effect: if
+      when: {idea: ASC_computo_investigacion_2}
+      then:
+      - {effect: remove_idea, value: ASC_computo_investigacion_2}
+    - effect: if
+      when: {idea: ASC_computo_investigacion_3}
+      then:
+      - {effect: remove_idea, value: ASC_computo_investigacion_3}
+    - effect: if
+      when: {idea: ASC_computo_logistica_1}
+      then:
+      - {effect: remove_idea, value: ASC_computo_logistica_1}
+    - effect: if
+      when: {idea: ASC_computo_logistica_2}
+      then:
+      - {effect: remove_idea, value: ASC_computo_logistica_2}
+    - effect: if
+      when: {idea: ASC_computo_logistica_3}
+      then:
+      - {effect: remove_idea, value: ASC_computo_logistica_3}
+    - effect: if
+      when: {idea: ASC_computo_guerra_1}
+      then:
+      - {effect: remove_idea, value: ASC_computo_guerra_1}
+    - effect: if
+      when: {idea: ASC_computo_guerra_2}
+      then:
+      - {effect: remove_idea, value: ASC_computo_guerra_2}
+    - effect: if
+      when: {idea: ASC_computo_guerra_3}
+      then:
+      - {effect: remove_idea, value: ASC_computo_guerra_3}
+    - effect: if
+      when: {flag: ASC_prioridad_guerra}
+      then:
+      - effect: if
+        when:
+          variable_at_least: {var: ASC_computo, value: 80}
+        then:
+        - {effect: add_ideas, value: ASC_computo_guerra_3}
+        else:
+        - effect: if
+          when:
+            variable_at_least: {var: ASC_computo, value: 40}
+          then:
+          - {effect: add_ideas, value: ASC_computo_guerra_2}
+          else:
+          - {effect: add_ideas, value: ASC_computo_guerra_1}
+      else:
+      - effect: if
+        when: {flag: ASC_prioridad_investigacion}
+        then:
+        - effect: if
+          when:
+            variable_at_least: {var: ASC_computo, value: 80}
+          then:
+          - {effect: add_ideas, value: ASC_computo_investigacion_3}
+          else:
+          - effect: if
+            when:
+              variable_at_least: {var: ASC_computo, value: 40}
+            then:
+            - {effect: add_ideas, value: ASC_computo_investigacion_2}
+            else:
+            - {effect: add_ideas, value: ASC_computo_investigacion_1}
+        else:
+        - effect: if
+          when: {flag: ASC_prioridad_logistica}
+          then:
+          - effect: if
+            when:
+              variable_at_least: {var: ASC_computo, value: 80}
+            then:
+            - {effect: add_ideas, value: ASC_computo_logistica_3}
+            else:
+            - effect: if
+              when:
+                variable_at_least: {var: ASC_computo, value: 40}
+              then:
+              - {effect: add_ideas, value: ASC_computo_logistica_2}
+              else:
+              - {effect: add_ideas, value: ASC_computo_logistica_1}
+          else:
+          - effect: if
+            when:
+              variable_at_least: {var: ASC_computo, value: 80}
+            then:
+            - {effect: add_ideas, value: ASC_computo_economia_3}
+            else:
+            - effect: if
+              when:
+                variable_at_least: {var: ASC_computo, value: 40}
+              then:
+              - {effect: add_ideas, value: ASC_computo_economia_2}
+              else:
+              - {effect: add_ideas, value: ASC_computo_economia_1}

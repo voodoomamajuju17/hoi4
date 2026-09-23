@@ -463,3 +463,169 @@ namespaces:
             effects:
               - { effect: add_stability, value: 0.05 }
         src: user_design
+
+  # ===========================================================================
+  meganations_asc:
+    country: ASC
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Lottery of the Year, spanish: El Sorteo del Año}
+      desc:
+        english: Forty-one names come out of the machine. Engineers, farmers, a retired soldier, a poet. For one year they are the Commune's Allocation
+          Council, and the system will listen to them. Mostly.
+        spanish: Salen cuarenta y un nombres de la máquina. Ingenieros, agricultores, un soldado retirado, una poeta. Durante un año son el Consejo
+          de Asignación de la Comuna, y el sistema los va a escuchar. Casi siempre.
+      options:
+      - name: {english: Seat the new Council., spanish: Que asuma el nuevo Consejo.}
+        effects:
+        - {effect: clear_flag, value: ASC_rasgo_ingenieros}
+        - {effect: clear_flag, value: ASC_rasgo_pacifistas}
+        - {effect: clear_flag, value: ASC_rasgo_productivistas}
+        - {effect: clear_flag, value: ASC_rasgo_agrarios}
+        - {effect: clear_flag, value: ASC_rasgo_militaristas}
+        - {effect: clear_flag, value: ASC_rasgo_tecnofilos}
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_ingenieros}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_pacifistas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_productivistas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_agrarios}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_militaristas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_tecnofilos}
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_ingenieros}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_pacifistas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_productivistas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_agrarios}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_militaristas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_tecnofilos}
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_ingenieros}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_pacifistas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_productivistas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_agrarios}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_militaristas}
+          - weight: 1
+            effects:
+            - {effect: flag, value: ASC_rasgo_tecnofilos}
+        - effect: if
+          when: {not_flag: ASC_plan41}
+          then:
+          - {effect: event, id: meganations_asc.1, days: 365}
+      src: user_design
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: 'Human Quorum: Not Required', spanish: 'Quórum Humano: No Requerido'}
+      desc:
+        english: 'This morning the Council arrived at the hall and the doors did not open. On the screen above them, one line: HUMAN QUORUM: NOT
+          REQUIRED. There was no coup and no shooting. The trains ran on time.'
+        spanish: 'Esta mañana el Consejo llegó al salón y las puertas no se abrieron. En la pantalla, una sola línea: QUÓRUM HUMANO: NO REQUERIDO.
+          No hubo golpe ni tiros. Los trenes llegaron en hora.'
+      options:
+      - name: {english: Acknowledged., spanish: Recibido.}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - {effect: run, value: ASC_recalcular_computo}
+      src: user_design
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Africa Allocated, spanish: África Asignada}
+      desc:
+        english: The Federation has agreed to route its data and its rare earths through the Commune's system. PLAN-41 files the agreement under
+          'efficiency'.
+        spanish: La Federación aceptó pasar sus datos y sus tierras raras por el sistema de la Comuna. PLAN-41 archiva el acuerdo bajo 'eficiencia'.
+      options:
+      - name: {english: Optimal., spanish: Óptimo.}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 15}
+        - {effect: add_political_power, value: 100}
+        - {effect: run, value: ASC_recalcular_computo}
+      src: user_design
+  meganations_apf:
+    country: APF
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Allocation of Africa, spanish: La Asignación de África}
+      desc:
+        english: 'The Automated Commune has sent the Congress a proposal written by no one: the Federation''s data, rare earths and power grid would
+          be ''integrated into the continental plan''. The Congress has three days to answer. The proposal does not say what happens on the fourth.'
+        spanish: 'La Comuna Automatizada le mandó al Congreso una propuesta que no escribió nadie: los datos, las tierras raras y la red eléctrica
+          de la Federación serían ''integrados al plan continental''. El Congreso tiene tres días para contestar. La propuesta no dice qué pasa
+          el cuarto.'
+      options:
+      - name:
+          english: Accept. We cannot fight the machine yet.
+          spanish: Aceptar. Todavía no podemos pelear contra la máquina.
+        ai_chance: 20
+        effects:
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_political_power, value: -100}
+        - {effect: event, id: meganations_asc.3, target: ASC}
+      - name: {english: A thousand councils will not be allocated., spanish: Mil consejos no se asignan.}
+        ai_chance: 80
+        effects:
+        - {effect: add_war_support, value: 0.15}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: wargoal, target: APF, type: annex_everything}
+      src: user_design
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Man Against the Machine, spanish: El Hombre contra la Máquina}
+      desc:
+        english: 'The Commune has fielded an army without soldiers. In the village assemblies of the Federation the question is no longer political:
+          if they do not bleed, how are they beaten?'
+        spanish: 'La Comuna puso en el campo un ejército sin soldados. En las asambleas de la Federación la pregunta ya no es política: si no sangran,
+          ¿cómo se les gana?'
+      options:
+      - name:
+          english: With a thousand councils and a million hands.
+          spanish: Con mil consejos y un millón de manos.
+        effects:
+        - {effect: add_war_support, value: 0.1}
+        - {effect: army_experience, value: 25}
+      src: user_design

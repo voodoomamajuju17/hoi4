@@ -41,8 +41,7 @@ propuesta anterior de 8 árboles.
 1. **FCU** — cuatro influencias corporativas. *(v1 hecha)*
 2. **EFE** — Aurelio vs Anahí, integración de satélites por etapas,
    reforestación. *(v1 hecha)*
-3. **ASC** — Poder de Cómputo repartido en 4 áreas con espera de 30 días;
-   Consejo Sorteado con rasgos anuales; PLAN-41 con drones.
+3. **ASC** — Poder de Cómputo, Consejo Sorteado, PLAN-41. *(v1 hecha)*
 4. **HSN, NAS, APF** — nodos + botín; Qhapaq Ñan + Inti-Soma; integración
    federal (Desarrollo/Integración).
 5. **SHD y NRE al final** — tres caudales; prestigio de legiones +
@@ -111,3 +110,24 @@ la situación.
   evento a la FCU: si reconoce el agua, paga y el EFE cobra; si se niega,
   el EFE recibe el wargoal y la HSN vende seguros.
 - IA: más probable el Monte con estabilidad baja o en guerra.
+
+## ASC v1 — cómo quedó en el motor
+
+- **Poder de Cómputo**: `ASC_computo` (0-150, arranca en 30). Lo suben los
+  focos de datacenters y la decisión *Construir un Datacenter*. Se asigna a
+  UNA prioridad (Economía, Investigación, Logística o Guerra); cambiarla deja
+  una espera de 30 días. Cada prioridad tiene 3 niveles según la capacidad
+  (<40, 40-79, 80+): 12 ideas, recalculadas por `ASC_recalcular_computo`.
+- **Consejo Sorteado**: *El Sorteo del Año* dispara un evento anual que
+  elige 3 inclinaciones al azar entre 6 (ingenieros, pacifistas,
+  productivistas, agrarios, militaristas, tecnófilos); cada una habilita su
+  decisión ese año.
+- **PLAN-41**: pide 50 de cómputo; *QUÓRUM HUMANO: NO REQUERIDO*. −40% de
+  poder político, +investigación y producción, estabilidad casi fija.
+  *El Ejército sin Bajas* avisa a la APF (*El Hombre contra la Máquina*).
+  *Asignar África* es un ultimátum a la APF.
+- Plan Total (cuotas) contra Mercado de Créditos de Cómputo (emisiones).
+- *Líneas sin Operarios* elimina el Cuello de Botella del Consejo.
+- Los drones como batallón propio quedan para v2: una unidad nueva necesita
+  equipo, sprites y modelos; en v1 son ideas y experiencia.
+- Ids de foco alineados con el pack de íconos (`focus_2100_asc_NN_*`).

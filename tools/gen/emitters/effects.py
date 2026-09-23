@@ -9,7 +9,8 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: add_variable, var: X, value: N }      -> add_to_variable
   { effect: set_variable, var: X, value: N }      -> set_variable
   { effect: clamp, var: X, min: A, max: B }       -> clamp_variable
-  { effect: flag, value: X } / { effect: clear_flag, value: X }
+  { effect: flag, value: X, days: N } / { effect: clear_flag, value: X }   (days: vence sola)
+  { effect: random, options: [ { weight: N, effects: [...] }, ... ] } -> random_list
   { effect: remove_idea, value: X }               -> remove_ideas
   { effect: timed_idea, idea: X, days: N }        -> add_timed_idea
   { effect: event, id: ns.N, days: D, target: TAG } -> country_event (en TAG si se da)
@@ -133,7 +134,11 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect in ("flag", "clear_flag"):
             key = "set_country_flag" if effect == "flag" else "clr_country_flag"
-            block.add(key, item["value"])
+            if effect == "flag" and item.get("days"):
+                # bandera que vence sola: sirve como espera compartida entre decisiones
+                block.add(key, Block([("flag", item["value"]), ("days", int(item["days"]))]))
+            else:
+                block.add(key, item["value"])
             effects_used.setdefault(key, owner)
             continue
         if effect == "remove_idea":
@@ -180,6 +185,14 @@ def render_effects(owner: str, items: list[dict], known,
             # Ya está reclutado desde la historia (history.py): acá solo se asciende.
             block.add("promote_character", cid)
             effects_used.setdefault("promote_character", owner)
+            continue
+        if effect == "random":
+            inner = Block()
+            for opt in item["options"]:
+                inner.add(str(int(opt.get("weight", 1))),
+                          render_effects(owner, opt.get("effects") or [], ec, effects_used, where=where))
+            block.add("random_list", inner)
+            effects_used.setdefault("random_list", owner)
             continue
         if effect == "leader_trait":
             block.add("add_country_leader_trait", item["value"])
