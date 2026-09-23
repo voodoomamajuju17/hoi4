@@ -93,10 +93,19 @@ def emit(ctx: BuildContext) -> None:
             eq.add("producer", c.tag)
             b.add("add_equipment_to_stockpile", eq)
 
-        for ch in characters_mod.characters_of(ctx, c.tag):
-            # recruit_at_start: false -> lo recluta un foco (líder de una revolución).
-            if ch.get("recruit_at_start", True):
-                b.add("recruit_character", ch["id"])
+        # Todos se reclutan acá (el juego avisa si recruit_character se usa
+        # fuera de la historia). Los de `recruit_at_start: false` (líderes de
+        # una revolución) van al final, y después se confirma al líder de
+        # arranque con promote_character: un foco los asciende más tarde.
+        chars = characters_mod.characters_of(ctx, c.tag)
+        late = [ch for ch in chars if not ch.get("recruit_at_start", True)]
+        for ch in [ch for ch in chars if ch.get("recruit_at_start", True)] + late:
+            b.add("recruit_character", ch["id"])
+        if late:
+            first = next((ch for ch in chars if ch.get("recruit_at_start", True)
+                          and isinstance((ch.get("roles") or {}).get("country_leader"), dict)), None)
+            if first:
+                b.add("promote_character", first["id"])
 
         for fb in _faction_blocks(ctx, c.tag):
             b.entries.append(fb)

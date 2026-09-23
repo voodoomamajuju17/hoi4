@@ -824,8 +824,10 @@ def test_fcu() -> None:
         hist = next((mod / "history/countries").glob("FCU - *.txt")).read_text()
         check("las cuatro corporaciones arrancan en 50", all(f"var = FCU_{c}" in hist for c in
               ("castellane", "halvorsen", "meridian", "obsidian")) and hist.count("value = 50") >= 4, hist[-1500:])
-        check("Rourke no arranca reclutado", "FCU_marcus_rourke" not in hist)
-        check("Castellane si", "recruit_character = FCU_valeria_castellane" in hist)
+        check("Rourke se recluta en la historia, despues de Castellane",
+              hist.index("recruit_character = FCU_valeria_castellane") < hist.index("recruit_character = FCU_marcus_rourke"))
+        check("Castellane queda confirmada como lider", "promote_character = FCU_valeria_castellane" in hist)
+        check("el foco no recluta (error.log: solo en historia)", "recruit_character" not in reward)
 
         se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
         check("efecto recalcular: clamp de las cuatro", se.count("clamp_variable") == 4, se[:800])

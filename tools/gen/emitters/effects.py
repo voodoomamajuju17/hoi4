@@ -14,7 +14,7 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: timed_idea, idea: X, days: N }        -> add_timed_idea
   { effect: event, id: ns.N, days: D, target: TAG } -> country_event (en TAG si se da)
   { effect: scope, target: TAG, effects: [...] }   -> TAG = { ... }  (no "on": YAML lo lee como true)
-  { effect: promote, character: X }               -> recruit_character + promote_character
+  { effect: promote, character: X }               -> promote_character (reclutado en la historia)
   { effect: if, when: {condiciones}, then: [...], else: [...] }
   { effect: run, value: X }                       -> X = yes (efecto de 14_decisions.yaml -> scripted_effects)
 Los efectos se validan contra documentation/ del juego (verify_keys) y los
@@ -172,9 +172,8 @@ def render_effects(owner: str, items: list[dict], known,
             cid = item["character"]
             if ec.characters is not None and cid not in ec.characters:
                 raise SpecError(f"{owner}: promote '{cid}' no es un personaje de 03_leaders.yaml", where=where)
-            block.add("recruit_character", cid)
+            # Ya está reclutado desde la historia (history.py): acá solo se asciende.
             block.add("promote_character", cid)
-            effects_used.setdefault("recruit_character", owner)
             effects_used.setdefault("promote_character", owner)
             continue
         if effect == "run":

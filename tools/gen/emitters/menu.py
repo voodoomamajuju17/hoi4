@@ -98,6 +98,7 @@ def _diagnose(ctx: BuildContext) -> None:
         except (OSError, zipfile.BadZipFile):
             continue
     lines = ["menu principal (diagnostico para el selector de fondos de 1.19):"]
+    lines += _diagnose_deep(root)
     lines += [f"      juego  {h}" for h in hits[:30]]
     if len(hits) > 30:
         lines.append(f"      ... y {len(hits) - 30} mas en el juego")
@@ -107,6 +108,75 @@ def _diagnose(ctx: BuildContext) -> None:
     if len(lines) == 1:
         lines.append("      nada encontrado")
     ctx.note("\n".join(lines))
+
+
+_IMAGE_NAME = re.compile(r"(?i)(background|menu_?bg|main_?menu|frontend)[^/]*\.(dds|png|tga)$")
+_SKIP_DIRS = {"map", "history", "localisation", "sound", "music", "tutorial", "tests", "crash_reporter"}
+
+
+def _diagnose_deep(root) -> list[str]:
+    """Segunda ronda (el reemplazo de load_5.dds no alcanzó en 1.19.3)."""
+    out: list[str] = []
+    # 1) qué usa el elemento frontend_background de la pantalla principal
+    for gui in sorted((root / "interface").glob("frontend*.gui")):
+        try:
+            text = gui.read_text(encoding="utf-8-sig", errors="replace").splitlines()
+        except OSError:
+            continue
+        for i, line in enumerate(text):
+            if "frontend_background" in line or "background_selector" in line or "change_background" in line:
+                chunk = " | ".join(l.strip() for l in text[max(0, i - 2):i + 8] if l.strip())
+                out.append(f"      gui    {gui.name}:{i + 1}: {chunk[:300]}")
+    # 2) el botón "Cambiar fondo": su clave de texto y dónde se usa
+    keys: set[str] = set()
+    for yml in sorted((root / "localisation").rglob("*english*.yml")):
+        try:
+            for line in yml.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+                m = re.match(r'\s*([A-Za-z0-9_.]+):\d*\s*"(change background|backgrounds?)"', line, re.I)
+                if m:
+                    keys.add(m.group(1))
+                    out.append(f"      texto  {yml.name}: {line.strip()[:120]}")
+        except OSError:
+            continue
+    for key in sorted(keys)[:5]:
+        for folder in ("interface", "common", "gfx"):
+            base = root / folder
+            if not base.is_dir():
+                continue
+            for path in sorted(base.rglob("*")):
+                if path.suffix.lower() not in (".gui", ".gfx", ".txt"):
+                    continue
+                try:
+                    text = path.read_text(encoding="utf-8-sig", errors="replace")
+                except OSError:
+                    continue
+                idx = text.find(key)
+                if idx >= 0:
+                    lineno = text.count("\n", 0, idx) + 1
+                    lines = text.splitlines()
+                    chunk = " | ".join(l.strip() for l in lines[max(0, lineno - 6):lineno + 4] if l.strip())
+                    out.append(f"      usa    {path.relative_to(root).as_posix()}:{lineno}: {chunk[:300]}")
+    # 3) imágenes con nombre de fondo o menú, en el juego y en las carpetas de expansiones
+    found = 0
+    for path in sorted(root.rglob("*")):
+        rel = path.relative_to(root)
+        if rel.parts and rel.parts[0] in _SKIP_DIRS:
+            continue
+        if path.is_file() and _IMAGE_NAME.search(path.name):
+            dims = ""
+            if path.suffix.lower() == ".dds":
+                try:
+                    with path.open("rb") as fh:
+                        w, h = _dims(fh.read(128))
+                    dims = f" {w}x{h}"
+                except OSError:
+                    pass
+            out.append(f"      imagen {rel.as_posix()}{dims}")
+            found += 1
+            if found >= 40:
+                out.append("      ... (hay mas imagenes)")
+                break
+    return out
 
 
 def _menu_textures(ctx: BuildContext) -> set[str]:
