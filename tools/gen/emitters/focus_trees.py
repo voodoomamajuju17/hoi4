@@ -48,6 +48,17 @@ SCALAR_EFFECTS = {
 }
 
 
+def root_focus_ids(ctx: BuildContext, tag: str) -> list[str]:
+    """Focos sin prerequisitos del árbol de un país (los que se ven primero)."""
+    tree = (ctx.spec.raw["focus_trees"].get("trees") or {}).get(tag)
+    if not isinstance(tree, dict) or "branches" not in tree:
+        return []
+    return [
+        f["id"] for branch in tree["branches"] for f in branch.get("focuses", []) or []
+        if not f.get("prerequisites")
+    ]
+
+
 def emit(ctx: BuildContext) -> None:
     trees = ctx.spec.raw["focus_trees"].get("trees") or {}
     for tag, tree in trees.items():

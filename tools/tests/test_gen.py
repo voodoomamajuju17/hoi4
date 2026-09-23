@@ -264,7 +264,8 @@ def test_full_build() -> None:
         check("supported_version del fixture", 'supported_version = "1.99.*"' in descriptor, descriptor)
         check("tags no vacio", "tags = {" in descriptor and "map" in descriptor, descriptor)
         check("version entrecomillada", 'version = "0.1.0"' in descriptor, descriptor)
-        check("sin replace_path prematuro", "replace_path" not in descriptor, descriptor)
+        check("reemplaza los bookmarks vanilla", 'replace_path = "common/bookmarks"' in descriptor, descriptor)
+        check("history/ todavia no se reemplaza (Q042)", 'replace_path = "history' not in descriptor, descriptor)
 
         tags_text = (mod / "common/country_tags/00_meganations.txt").read_text()
         for tag in ("EFE", "ASC", "FCU", "NAS", "PTA", "YYG"):
@@ -471,6 +472,34 @@ def test_territory() -> None:
               "capital" not in (mod / "history/countries/ASC - Automated Socialist Commune.txt").read_text())
 
 
+def test_scenario() -> None:
+    section("escenario 2100: bookmark y fechas")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        root = pdx.parse((mod / "common/bookmarks/meganations_2100.txt").read_text())
+        bm = root.get("bookmarks").get("bookmark")
+        check("fecha 2100", pdx.text(bm.get("date")) == "2100.1.1.12")
+        check("EFE por defecto", pdx.text(bm.get("default_country")) == "EFE")
+        check("picture copiada de vanilla", pdx.text(bm.get("picture")) == "GFX_select_date_1936")
+        check("effect copiado de vanilla", isinstance(bm.get("effect"), pdx.Block))
+        efe = bm.get("EFE")
+        check("EFE destacado con su ideologia", pdx.text(efe.get("ideology")) == "fascism")
+        check("EFE muestra el foco raiz", "EFE_custodio_de_la_tierra" in [pdx.text(v) for _, v in efe.get("focuses").entries])
+        raw = (mod / "common/bookmarks/meganations_2100.txt").read_text()
+        check("bloque del resto del mundo entrecomillado", '"---" = {' in raw, raw)
+        defines = (mod / "common/defines/00_meganations_defines.lua").read_text()
+        check("START_DATE 2100", 'NDefines.NGame.START_DATE = "2100.1.1.12"' in defines, defines)
+        check("END_DATE 2200", 'NDefines.NGame.END_DATE = "2200.1.1.1"' in defines, defines)
+        es = (mod / "localisation/spanish/meganations_scenario_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("nombre del escenario en castellano", "La Era de las Meganaciones" in es)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), quiet=True)
+        check("sin vanilla igual hay bookmark (el descriptor reemplaza los vanilla)",
+              (ctx.mod_root / "common/bookmarks/meganations_2100.txt").exists())
+
+
 def test_vanilla_validation() -> None:
     section("validacion contra documentation/ e interface/ del juego")
     import shutil
@@ -558,6 +587,7 @@ def main() -> int:
         test_check_detects_edits,
         test_phase3_content,
         test_territory,
+        test_scenario,
         test_vanilla_validation,
     ):
         test()

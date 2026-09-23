@@ -1,0 +1,57 @@
+# =============================================================================
+# 11_scenario.yaml — Escenario de arranque (bookmark) y fecha del juego
+# =============================================================================
+# El mod arranca en 2100. Para eso hacen falta tres cosas:
+#
+#   1. Un bookmark propio (common/bookmarks/): es lo que muestra la pantalla de
+#      selección, con los países destacados arriba.
+#   2. Mover la fecha de inicio y de fin del juego (common/defines/). Con la
+#      fecha vanilla (1936) el juego no acepta un bookmark en 2100.
+#   3. Sacar los bookmarks vanilla de 1936 y 1939 (replace_path de
+#      common/bookmarks en el descriptor): con la fecha nueva quedarían
+#      apuntando a antes del inicio.
+#
+# Consecuencia a tener en cuenta: arrancando en 2100, el juego aplica TODA la
+# historia vanilla con fecha anterior (las entradas de 1939, 1940...). El
+# resto del mundo, que todavía es vanilla, arranca como en 1939 o más. Se
+# arregla cuando se reemplace la historia mundial (Q042, fase 5).
+# =============================================================================
+
+bookmark:
+  id: MEGANATIONS_2100
+  src: inferred
+  date: "2100.1.1.12"          # Q003: 1 de enero de 2100, mediodía (formato HOI4)
+  date_src: inferred
+  name:
+    english: "The Age of Meganations"
+    spanish: "La Era de las Meganaciones"
+  name_src: invented
+  desc:
+    english: "2100. The old nation-states are gone. Eight meganations divide what is left of the planet, each built around the one resource, balance or system it cannot live without."
+    spanish: "2100. Los viejos Estados nacionales ya no existen. Ocho meganaciones se reparten lo que queda del planeta, cada una construida alrededor del recurso, equilibrio o sistema sin el que no puede vivir."
+  desc_src: inferred
+  desc_basis: "§1 — 'cada mega-nación gira alrededor de un recurso, equilibrio o sistema exclusivo'."
+  default_country: EFE
+
+  # Países destacados arriba en la pantalla de selección. Solo los que tienen
+  # territorio: uno sin states no se puede jugar. Los demás se eligen en el mapa.
+  featured:
+    - tag: EFE
+      history:
+        english: "Aurelio IV rules the Southern Cone in the name of the Earth. The forests are growing back; the people are not asked. Somewhere in the pampas, the first vats of BioSteel are waiting."
+        spanish: "Aurelio IV gobierna el Cono Sur en nombre de la Tierra. Los bosques vuelven a crecer; a la gente no se le pregunta. En algún lugar de la pampa, las primeras cubas de Bioacero esperan."
+      history_src: invented
+      history_basis: "§3.2 y §3.3."
+
+  others_history:
+    english: "The rest of the world. Not every nation survived the century; those that did must choose a side."
+    spanish: "El resto del mundo. No todas las naciones sobrevivieron al siglo; las que lo hicieron tienen que elegir un bando."
+  others_history_src: invented
+
+game_dates:
+  start: "2100.1.1.12"
+  end: "2200.1.1.1"
+  end_src: invented
+  why: >
+    HOI4 corta la partida en END_DATE. Un siglo de margen: no hay nada en el
+    doc que diga cuándo termina el escenario.

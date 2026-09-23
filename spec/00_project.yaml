@@ -31,8 +31,11 @@ project:
   # Un total conversion lo termina necesitando (si no, arrancan los ~200 paises
   # de 1936 junto a los nuestros), pero declararlo ANTES de generar el contenido
   # que lo reemplaza deja el mundo vacio y el juego no arranca partida.
-  # Vacio a proposito hasta que la Fase 3 genere history/. Ver Q042.
-  replace_paths: []
+  # Q042: history/ todavía NO se reemplaza (el resto del mundo es vanilla).
+  # common/bookmarks sí: el mod genera su propio bookmark de 2100 y los de
+  # 1936/1939 quedarían antes de la fecha de inicio. Ver 11_scenario.yaml.
+  replace_paths:
+    - common/bookmarks
 
   tags_used:
     - map

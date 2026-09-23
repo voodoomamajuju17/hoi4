@@ -30,6 +30,7 @@ from .emitters import history as em_history
 from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
 from .emitters import resources as em_resources
+from .emitters import scenario as em_scenario
 from .emitters import territory as em_territory
 from .errors import GenError
 from .loc import LocRegistry
@@ -48,6 +49,7 @@ EMITTERS = [
     ("focus_trees", em_focus_trees.emit),
     ("territory", em_territory.emit),   # antes de history: define las capitales
     ("history", em_history.emit),
+    ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
 ]
 
 
