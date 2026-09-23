@@ -57,6 +57,11 @@ mechanics:
       vanilla_display_name: "Coal"
       icon: vanilla
       icon_note: "Sigue mostrando el ícono del carbón. Arte propio: después."
+    exclusive_to: EFE
+    exclusive_src: user_decision
+    exclusive_note: >
+      Q043: los demás países no tienen BioSteel. Se implementa poniendo en 0 el
+      carbón de todo state que no sea del EFE, al generar history/states/.
     counter: resource_amount
     counter_src: canon
     counter_note: >
@@ -72,7 +77,6 @@ mechanics:
     tiers_mode_note: "Cada tier reemplaza al anterior (swap_ideas); no se acumulan."
     unknown:
       - "De dónde saca el EFE su BioSteel: depende de history/states (Q007)."
-      - "Si BioSteel debe ser exclusivo del EFE o existir en todo el mundo (Q043)."
       - "Si se puede perder / decaer."
     see: [Q021, Q043]
 

@@ -57,16 +57,14 @@ genera el mod y lo copia a tu carpeta de mods.
 
 ### Si te dice "No encontre el juego solo"
 
-Pasale la ruta a mano:
+El script te pide la ruta ahí mismo, no hace falta cerrar nada:
 
 1. Abrí Steam
 2. Click derecho sobre **Hearts of Iron IV** → **Administrar** → **Explorar archivos locales**
-3. Se abre el explorador. Copiá la ruta de la barra de arriba.
-4. Corré de nuevo, pegando esa ruta entre comillas:
+3. Se abre una carpeta. Hacé click en la barra de direcciones de arriba y copiá la ruta (Ctrl+C).
+4. Volvé a la ventana negra del script, pegá la ruta (click derecho o Ctrl+V) y apretá Enter.
 
-```
-py empezar.py "C:\Program Files (x86)\Steam\steamapps\common\Hearts of Iron IV"
-```
+La ruta queda guardada: la próxima vez no te la pregunta.
 
 **Dos confusiones típicas:**
 

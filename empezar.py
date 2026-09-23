@@ -115,6 +115,17 @@ def paso_python() -> bool:
 # ---------------------------------------------------------------------------
 
 
+RUTA_GUARDADA = REPO / "ruta_del_juego.txt"
+
+
+def _limpiar_ruta(texto: str) -> str:
+    """Acepta la ruta como venga pegada: con comillas, espacios o apuntando al .exe."""
+    ruta = texto.strip().strip('"').strip("'").strip()
+    if ruta.lower().endswith(".exe"):
+        ruta = str(Path(ruta).parent)
+    return ruta
+
+
 def paso_buscar_juego(ruta_manual: str | None) -> object | None:
     titulo("PASO 2 de 5  —  Buscando tu Hearts of Iron IV")
 
@@ -122,27 +133,46 @@ def paso_buscar_juego(ruta_manual: str | None) -> object | None:
     from tools.gen import vanilla as vanilla_mod
     from tools.gen.errors import VanillaError
 
+    # La ruta que ya funciono una vez queda guardada: no hay que pegarla de nuevo.
+    if ruta_manual is None and RUTA_GUARDADA.exists():
+        ruta_manual = RUTA_GUARDADA.read_text(encoding="utf-8").strip() or None
+
+    juego = None
     try:
-        juego = vanilla_mod.locate(ruta_manual)
+        juego = vanilla_mod.locate(_limpiar_ruta(ruta_manual) if ruta_manual else None)
     except VanillaError as exc:
         mal(str(exc))
-        return None
 
-    if juego is None:
-        mal("No encontre el juego solo.")
+    while juego is None:
+        mal("No encontre el juego solo. Necesito que me digas donde esta.")
         say()
-        say("  QUE HACER:")
+        say("  COMO SACAR LA RUTA:")
         say("    1. Abri Steam")
         say("    2. Click derecho sobre 'Hearts of Iron IV' en tu biblioteca")
         say("    3. Administrar  ->  Explorar archivos locales")
-        say("    4. Copia la ruta de la barra de direcciones del explorador")
-        say("    5. Volve a correr este script asi:")
+        say("    4. Se abre una carpeta. Click en la barra de direcciones de arriba,")
+        say("       Ctrl+C para copiar")
+        say("    5. Volve a esta ventana, click derecho (o Ctrl+V) para pegar, y Enter")
         say()
-        say('       py empezar.py "C:\\ruta\\que\\copiaste"')
+        say("  (Enter sin escribir nada para salir)")
         say()
-        say("  OJO: es la carpeta que CONTIENE hoi4.exe, no el hoi4.exe.")
-        say("  Y NO es la carpeta de mods de Documentos.")
-        return None
+        try:
+            respuesta = input("  Pega la ruta aca: ")
+        except EOFError:
+            return None
+        if not respuesta.strip():
+            return None
+        try:
+            juego = vanilla_mod.locate(_limpiar_ruta(respuesta))
+        except VanillaError as exc:
+            say()
+            mal(str(exc))
+            say()
+
+    try:
+        RUTA_GUARDADA.write_text(str(juego.root), encoding="utf-8")
+    except OSError:
+        pass
 
     bien(f"Juego encontrado en: {juego.root}")
 
