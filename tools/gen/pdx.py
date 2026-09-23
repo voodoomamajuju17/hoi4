@@ -97,7 +97,7 @@ def inline_list(*values) -> Block:
 _BARE_TOKEN = re.compile(r"^[A-Za-z0-9_.:@\[\]-]+$")
 
 
-@dataclass
+@dataclass(frozen=True)
 class Quoted:
     """Fuerza comillas aunque el valor sea un token válido sin ellas.
 

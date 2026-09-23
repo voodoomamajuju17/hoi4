@@ -23,7 +23,7 @@ from . import ideas as ideas_mod
 SOURCE = "spec/11_scenario.yaml"
 LOC_FILE = "meganations_scenario"
 FALLBACK_PICTURE = "GFX_select_date_1936"
-EMITTED_FIELDS = ("name", "desc", "date", "picture", "default_country", "default")
+EMITTED_FIELDS = ("name", "desc", "date", "picture", "default_country")
 
 
 def emit(ctx: BuildContext) -> None:
@@ -52,26 +52,42 @@ def _emit_defines(ctx: BuildContext, dates: dict) -> None:
     ctx.write_text("common/defines/00_meganations_defines.lua", "\n".join(lines))
 
 
-def _vanilla_template(ctx: BuildContext) -> Block | None:
+def _vanilla_bookmarks(ctx: BuildContext) -> list[Block]:
     if ctx.vanilla is None:
-        return None
+        return []
+    out: list[Block] = []
     for path in sorted((ctx.vanilla.root / "common" / "bookmarks").glob("*.txt")):
         try:
             root = parse_file(path)
         except ValueError:
             continue
         bookmarks = root.get("bookmarks")
-        if isinstance(bookmarks, Block) and isinstance(bookmarks.get("bookmark"), Block):
-            return bookmarks.get("bookmark")
-    return None
+        if isinstance(bookmarks, Block):
+            out.extend(b for b in bookmarks.get_all("bookmark") if isinstance(b, Block))
+    return out
+
+
+def _vanilla_template(ctx: BuildContext) -> tuple[Block | None, set[str]]:
+    """(plantilla, campos que usa algún bookmark vanilla).
+
+    En 1.19.3 hay bookmarks sin `default` (solo el de 1936 lo tiene), así que
+    los campos se validan contra la UNIÓN de todos, y la plantilla preferida
+    es la que se marca como default.
+    """
+    all_bookmarks = _vanilla_bookmarks(ctx)
+    if not all_bookmarks:
+        return None, set()
+    fields = {k for b in all_bookmarks for k in b.keys()}
+    preferred = next((b for b in all_bookmarks if "default" in b.keys()), all_bookmarks[0])
+    return preferred, fields
 
 
 def _emit_bookmark(ctx: BuildContext, spec: dict) -> None:
-    template = _vanilla_template(ctx)
+    template, fields = _vanilla_template(ctx)
     if template is None:
         ctx.warn(f"bookmark: sin plantilla vanilla, uso picture={FALLBACK_PICTURE} sin verificar.")
     else:
-        missing = [f for f in EMITTED_FIELDS if f not in template.keys()]
+        missing = [f for f in EMITTED_FIELDS if f not in fields]
         if missing:
             raise SpecError(
                 f"el bookmark vanilla no tiene los campos {missing}: el formato cambio en esta version",
@@ -88,7 +104,10 @@ def _emit_bookmark(ctx: BuildContext, spec: dict) -> None:
     default_country = spec["default_country"]
     ctx.spec.country(default_country)
     b.add("default_country", Quoted(default_country))
-    b.add("default", True)
+    # `default` solo si algún bookmark del juego lo usa: en 1.19.3 el reporte
+    # mostró que no se puede dar por sentado.
+    if template is None or "default" in fields:
+        b.add("default", True)
 
     territory = ctx.data.get("territory")
     for entry in spec.get("featured", []) or []:
