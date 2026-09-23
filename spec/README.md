@@ -22,6 +22,7 @@ se cambia el spec y se regenera. Nunca al revés.
 | `09_free_countries.yaml` | Los 30 países libres |
 | `10_legacy_lore.yaml` | Material histórico / no canon, conservado como banco de ideas |
 | `11_scenario.yaml` | Bookmark de 2100, fechas de inicio y fin del juego |
+| `12_events.yaml` | Eventos y sus disparadores (arranque, focos) |
 | `99_open_questions.yaml` | Preguntas abiertas, en formato legible por máquina |
 
 ## Convención de procedencia

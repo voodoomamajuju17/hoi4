@@ -1,0 +1,83 @@
+# =============================================================================
+# 12_events.yaml — Eventos
+# =============================================================================
+# El documento NO contiene eventos. Los de abajo son INVENTADOS sobre anclajes
+# canon (biografía de Aurelio IV §3.3, prosa de régimen §3.2, BioSteel §3.4),
+# igual que el árbol de focos. Todos los textos y efectos son src: invented.
+#
+# Disparadores:
+#   on_startup        -> common/on_actions/, al empezar la partida
+#   focus: <id>       -> el foco lo dispara en su completion_reward
+#
+# Efectos de las opciones: mismo formato que las recompensas de foco
+# ({ effect, value }), validados contra documentation/ del juego.
+# =============================================================================
+
+namespaces:
+  meganations_efe:
+    country: EFE
+    events:
+
+      - id: 1
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "Year Zero of the Mandate"
+          spanish: "Año Cero del Mandato"
+        desc:
+          english: "The century turns and the Empire does not celebrate. In Buenos Aires the bells ring once, as the Custodian ordered: one ring for every forest still standing. The crowds in the plaza are silent, and silence is how obedience sounds. The Emperor looks south, to the vats, and north, to everything else."
+          spanish: "El siglo cambia y el Imperio no lo festeja. En Buenos Aires las campanas suenan una sola vez, como ordenó el Custodio: una campanada por cada bosque que sigue en pie. La multitud en la plaza está en silencio, y el silencio es el sonido de la obediencia. El Emperador mira al sur, hacia las cubas, y al norte, hacia todo lo demás."
+        options:
+          - name:
+              english: "The Earth first. Always."
+              spanish: "Primero la Tierra. Siempre."
+            effects:
+              - { effect: add_political_power, value: 25 }
+        src: invented
+
+      - id: 2
+        trigger: { focus: EFE_corona_de_2081 }
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The Anniversary of the Crown"
+          spanish: "El Aniversario de la Corona"
+        desc:
+          english: "Nineteen years ago the Custodian put on a crown woven from the first reforested oak. The Ministry of Ceremony asks how the anniversary should be marked: in the old austerity of the Militias, or with a spectacle that reminds the neighbours who rules the Southern Cone."
+          spanish: "Hace diecinueve años el Custodio se puso una corona tejida con el primer roble reforestado. El Ministerio del Ceremonial pregunta cómo marcar el aniversario: con la vieja austeridad de las Milicias, o con un espectáculo que les recuerde a los vecinos quién manda en el Cono Sur."
+        options:
+          - name:
+              english: "Austerity. The Earth does not need parades."
+              spanish: "Austeridad. La Tierra no necesita desfiles."
+            effects:
+              - { effect: add_stability, value: 0.05 }
+              - { effect: add_political_power, value: 50 }
+          - name:
+              english: "A parade the whole continent will hear."
+              spanish: "Un desfile que se escuche en todo el continente."
+            effects:
+              - { effect: add_war_support, value: 0.10 }
+              - { effect: add_political_power, value: -25 }
+        src: invented
+
+      - id: 3
+        trigger: { focus: EFE_biosteel_umbral_3 }
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "The Living Armour"
+          spanish: "La Armadura Viviente"
+        desc:
+          english: "The first plate grown entirely in the vats has been tested. It closed its own bullet holes in forty minutes. The engineers want it for the Green Guard's vehicles; the Ministry of Restoration wants it for the dams of the Paraná. There is not yet enough for both."
+          spanish: "Se probó la primera placa cultivada por completo en las cubas. Cerró sus propios agujeros de bala en cuarenta minutos. Los ingenieros la quieren para los vehículos de la Guardia Verde; el Ministerio de Restauración, para las represas del Paraná. Todavía no alcanza para las dos cosas."
+        options:
+          - name:
+              english: "To the Green Guard."
+              spanish: "Para la Guardia Verde."
+            effects:
+              - { effect: army_experience, value: 25 }
+          - name:
+              english: "To the dams. The Earth first."
+              spanish: "Para las represas. Primero la Tierra."
+            effects:
+              - { effect: add_stability, value: 0.05 }
+              - { effect: add_political_power, value: 75 }
+        src: invented

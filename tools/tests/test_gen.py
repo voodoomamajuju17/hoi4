@@ -500,6 +500,37 @@ def test_scenario() -> None:
               (ctx.mod_root / "common/bookmarks/meganations_2100.txt").exists())
 
 
+def test_events() -> None:
+    section("eventos y on_actions")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        raw = (mod / "events/meganations_efe.txt").read_text()
+        root = pdx.parse(raw)
+        check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
+        events = root.get_all("country_event")
+        check("3 eventos", len(events) == 3, str(len(events)))
+        for ev in events:
+            eid = pdx.text(ev.get("id"))
+            check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
+            for opt in ev.get_all("option"):
+                check(f"{eid}: opcion con nombre primero", opt.entries[0][0] == "name")
+        corona = events[1]
+        check("evento de la corona con 2 opciones", len(corona.get_all("option")) == 2)
+
+        on = pdx.parse((mod / "common/on_actions/00_meganations_on_actions.txt").read_text())
+        efe = on.get("on_actions").get("on_startup").get("effect").get("EFE")
+        check("on_startup dispara el evento 1 al EFE", pdx.text(efe.get("country_event")) == "meganations_efe.1")
+
+        focus = (mod / "common/national_focus/EFE_focus.txt").read_text()
+        check("el foco de la corona dispara el evento 2", "country_event = meganations_efe.2" in focus)
+        check("el umbral 3 dispara el evento 3", "country_event = meganations_efe.3" in focus)
+
+        es = (mod / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
+        for key in ("meganations_efe.1.t", "meganations_efe.2.b", "meganations_efe.3.d"):
+            check(f"loc {key}", f" {key}:0 " in es)
+
+
 def test_vanilla_validation() -> None:
     section("validacion contra documentation/ e interface/ del juego")
     import shutil
@@ -524,7 +555,7 @@ def test_vanilla_validation() -> None:
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
-            "add_manpower add_ideas swap_ideas set_autonomy\n"
+            "add_manpower add_ideas swap_ideas set_autonomy country_event\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir()
@@ -588,6 +619,7 @@ def main() -> int:
         test_phase3_content,
         test_territory,
         test_scenario,
+        test_events,
         test_vanilla_validation,
     ):
         test()

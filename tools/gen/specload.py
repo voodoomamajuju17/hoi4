@@ -28,6 +28,7 @@ SPEC_FILES = {
     "free_countries": "09_free_countries.yaml",
     "legacy": "10_legacy_lore.yaml",
     "scenario": "11_scenario.yaml",
+    "events": "12_events.yaml",
     "questions": "99_open_questions.yaml",
 }
 

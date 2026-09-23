@@ -68,8 +68,9 @@ tools/gen/            el generador
   specload.py         carga y valida spec/
   emitters/           un módulo por dominio de salida:
                       descriptor, ideologies, countries, resources,
-                      ideas, characters, focus_trees, territory, history
-tools/tests/          269 checks, corren sin el juego instalado
+                      ideas, characters, focus_trees, events,
+                      territory, history, scenario
+tools/tests/          305 checks, corren sin el juego instalado
 
 build/                SALIDA. Generada, no versionada, no editable.
 ```
@@ -88,7 +89,7 @@ Si al leer el spec no sabés de dónde salió un dato, es un bug del spec.
 |---|---|
 | 1 — Spec | listo |
 | 2 — Arquitectura y generador | listo: descriptor, ideologías, países, colores, banderas, localisation |
-| 3 — Vertical slice del EFE | en curso: probado en 1.19.3 (carga, focos y localisation OK). Territorio del EFE y satélites resuelto contra la instalación, BioSteel exclusivo del EFE. Falta: bookmark de 2100 y nombres de states (Q038) |
+| 3 — Vertical slice del EFE | en curso: probado en 1.19.3 (carga, focos y localisation OK). Territorio del EFE y satélites resuelto contra la instalación, BioSteel exclusivo del EFE. Escenario de 2100 propio y 3 eventos del EFE. Falta: probar la última tanda en el juego y nombres de states (Q038) |
 | 4 — Loop de debug con `error.log` | pendiente |
 | 5 — Las otras seis facciones | bloqueada por Q010, Q016, Q018 y las mecánicas sin definir |
 

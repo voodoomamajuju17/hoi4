@@ -25,6 +25,7 @@ from .context import BuildContext
 from .emitters import characters as em_characters
 from .emitters import countries as em_countries
 from .emitters import descriptor as em_descriptor
+from .emitters import events as em_events
 from .emitters import focus_trees as em_focus_trees
 from .emitters import history as em_history
 from .emitters import ideas as em_ideas
@@ -47,6 +48,7 @@ EMITTERS = [
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
     ("focus_trees", em_focus_trees.emit),
+    ("events", em_events.emit),
     ("territory", em_territory.emit),   # antes de history: define las capitales
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states

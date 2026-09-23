@@ -13,9 +13,8 @@ Prerequisitos: una lista en el spec significa "todos". En HOI4 eso es un
 bloque `prerequisite` por foco; varios focos dentro del MISMO bloque
 significarían "cualquiera de ellos".
 
-Recompensas: lista de { effect, value } del spec. Los efectos se validan
-contra documentation/ del juego si hay --vanilla-path. `add_ideas` y
-`swap_ideas` además se validan contra las ideas de 05_ideas.yaml.
+Recompensas: lista de { effect, value } del spec (ver effects.py). Si un
+evento de 12_events.yaml tiene `trigger: { focus: <id> }`, el foco lo dispara.
 """
 
 from __future__ import annotations
@@ -23,7 +22,9 @@ from __future__ import annotations
 from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block
+from . import events as events_mod
 from . import ideas as ideas_mod
+from .effects import render_effects
 
 SOURCE = "spec/07_focus_trees.yaml"
 LOC_FILE = "meganations_focus"
@@ -34,19 +35,6 @@ Y_STEP = 1
 
 # Ícono vanilla que existe siempre; se usa si el pedido no está en el juego.
 FALLBACK_ICON = "GFX_goal_unknown"
-
-# Efectos cuyo valor es un número o un id suelto: `efecto = valor`.
-SCALAR_EFFECTS = {
-    "add_political_power",
-    "add_stability",
-    "add_war_support",
-    "army_experience",
-    "navy_experience",
-    "air_experience",
-    "add_manpower",
-    "add_ideas",
-}
-
 
 def root_focus_ids(ctx: BuildContext, tag: str) -> list[str]:
     """Focos sin prerequisitos del árbol de un país (los que se ven primero)."""
@@ -124,7 +112,11 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
         reward = f.get("reward")
         if not isinstance(reward, list) or not reward:
             raise SpecError(f"{fid}: sin reward", where="07_focus_trees.yaml")
-        fb.add("completion_reward", _reward(fid, reward, known_ideas, effects_used))
+        completion = render_effects(fid, reward, known_ideas, effects_used, where="07_focus_trees.yaml")
+        for event_id in events_mod.fired_by_focus(ctx, fid):
+            completion.add("country_event", event_id)
+            effects_used.setdefault("country_event", fid)
+        fb.add("completion_reward", completion)
 
         ai = Block()
         ai.add("factor", 1)
@@ -239,32 +231,3 @@ def _biosteel_threshold(ctx: BuildContext, tier: int) -> tuple[str, str, int]:
                 int(thresholds[tier - 1]),
             )
     raise SpecError("no hay mecanica 'biosteel' en 06_mechanics.yaml", where="07_focus_trees.yaml")
-
-
-def _reward(fid: str, reward: list[dict], known_ideas: set[str], effects_used: dict[str, str]) -> Block:
-    block = Block()
-    for item in reward:
-        effect = item.get("effect")
-        if effect == "swap_ideas":
-            for role in ("remove", "add"):
-                if item.get(role) not in known_ideas:
-                    raise SpecError(f"{fid}: swap_ideas.{role} '{item.get(role)}' no es una idea del spec",
-                                    where="07_focus_trees.yaml")
-            inner = Block()
-            inner.add("remove_idea", item["remove"])
-            inner.add("add_idea", item["add"])
-            block.add("swap_ideas", inner)
-        elif effect in SCALAR_EFFECTS:
-            value = item.get("value")
-            if effect == "add_ideas" and value not in known_ideas:
-                raise SpecError(f"{fid}: add_ideas '{value}' no es una idea del spec",
-                                where="07_focus_trees.yaml")
-            block.add(effect, value)
-        else:
-            raise SpecError(
-                f"{fid}: efecto '{effect}' no soportado por el generador",
-                hint=f"soportados: swap_ideas, {', '.join(sorted(SCALAR_EFFECTS))}",
-                where="07_focus_trees.yaml",
-            )
-        effects_used.setdefault(effect, fid)
-    return block
