@@ -1021,7 +1021,146 @@ countries:
       modifiers: {industrial_capacity_factory: 0.1}
       src: user_design
     see: Q030
-  SHD: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  SHD:
+    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    focus_ideas:
+    - id: SHD_armonia_perfecta
+      name: {english: Perfect Harmony, spanish: Armonía Perfecta}
+      desc:
+        english: Production, Order and People within five points of each other. The system hums.
+        spanish: Producción, Orden y Pueblo a cinco puntos uno del otro. El sistema zumba.
+      modifiers:
+        production_speed_buildings_factor: 0.1
+        stability_factor: 0.05
+        industrial_capacity_factory: 0.05
+        research_speed_factor: 0.05
+      src: user_design
+    - id: SHD_armonia_parcial
+      name: {english: Partial Harmony, spanish: Armonía Parcial}
+      desc:
+        english: The flows are close enough. Nobody is drowning.
+        spanish: Los caudales están lo bastante cerca. Nadie se ahoga.
+      modifiers: {production_speed_buildings_factor: 0.05, stability_factor: 0.03}
+      src: user_design
+    - id: SHD_desborde
+      name: {english: Overflow, spanish: Desborde}
+      desc:
+        english: One of the flows has run dry, and the others are flooding.
+        spanish: Uno de los caudales se secó, y los otros se desbordan.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.1}
+      src: user_design
+    - id: SHD_crecida_1
+      name: {english: The Great Flood I, spanish: La Gran Crecida I}
+      desc:
+        english: The People rise above 80. The army rises with it.
+        spanish: El Pueblo pasa de 80. El ejército sube con él.
+      modifiers: {army_attack_factor: 0.05, war_support_factor: 0.1, industrial_capacity_factory: -0.05}
+      src: user_design
+    - id: SHD_crecida_2
+      name: {english: The Great Flood II, spanish: La Gran Crecida II}
+      desc:
+        english: Above 100. The river has left its bed.
+        spanish: Por encima de 100. El río salió de su cauce.
+      modifiers:
+        army_attack_factor: 0.1
+        army_defence_factor: 0.05
+        war_support_factor: 0.15
+        industrial_capacity_factory: -0.1
+      src: user_design
+    - id: SHD_crecida_3
+      name: {english: The Great Flood III, spanish: La Gran Crecida III}
+      desc:
+        english: Above 120. Nothing can stop it, not even the Directorate.
+        spanish: Por encima de 120. Nada lo detiene, ni el Directorio.
+      modifiers:
+        army_attack_factor: 0.2
+        army_defence_factor: 0.1
+        war_support_factor: 0.2
+        industrial_capacity_factory: -0.15
+        stability_factor: -0.05
+      src: user_design
+    - id: SHD_huelgas
+      name: {english: Strikes, spanish: Huelgas}
+      desc:
+        english: Order has fallen too low. Factories stop, then streets.
+        spanish: El Orden bajó demasiado. Paran las fábricas, después las calles.
+      modifiers: {industrial_capacity_factory: -0.1, stability_factor: -0.05}
+      src: user_design
+    - id: SHD_ingenieros_del_orden
+      name: {english: The Engineers of Order, spanish: Los Ingenieros del Orden}
+      desc: {english: Every ministry is run by an engineer., spanish: Cada ministerio lo dirige un ingeniero.}
+      modifiers: {political_power_gain: 0.1, research_speed_factor: 0.05}
+      src: user_design
+    - id: SHD_vigilancia
+      name: {english: Hydraulic Surveillance, spanish: Vigilancia Hidráulica}
+      desc:
+        english: The Directorate measures every flow, including people.
+        spanish: El Directorio mide cada caudal, incluida la gente.
+      modifiers: {stability_factor: 0.1}
+      src: user_design
+    - id: SHD_caudal_perfecto
+      name: {english: The Perfect Flow, spanish: El Caudal Perfecto}
+      desc:
+        english: A society that corrects itself before anyone notices.
+        spanish: Una sociedad que se corrige antes de que alguien lo note.
+      modifiers: {stability_factor: 0.15, political_power_gain: 0.15, production_speed_buildings_factor: 0.1}
+      src: user_design
+    - id: SHD_movilizacion_del_rio
+      name: {english: Mobilisation of the River, spanish: La Movilización del Río}
+      desc:
+        english: Four hundred million people, one current.
+        spanish: Cuatrocientos millones de personas, una sola corriente.
+      modifiers: {army_org_factor: 0.1, war_support_factor: 0.1}
+      src: user_design
+    - id: SHD_espiritu_el_rio_desbordado
+      name: {english: The River Unleashed, spanish: El Río Desbordado}
+      desc: {english: The flood has become the state., spanish: La crecida se volvió el Estado.}
+      modifiers: {army_attack_factor: 0.15, army_org_factor: 0.1, war_support_factor: 0.1}
+      src: user_design
+    - id: SHD_grandes_obras
+      name: {english: The Great Works, spanish: Las Grandes Obras}
+      desc:
+        english: Dams, canals and railways on a scale no one has seen since the old empires.
+        spanish: Represas, canales y ferrocarriles a una escala que no se veía desde los viejos imperios.
+      modifiers: {production_speed_buildings_factor: 0.15}
+      src: user_design
+    - id: SHD_grandes_obras_2
+      name: {english: The Age of Works, spanish: La Era de las Obras}
+      desc: {english: The country is one construction site., spanish: El país es una sola obra.}
+      modifiers: {production_speed_buildings_factor: 0.25, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: SHD_precision
+      name: {english: The Precision Economy, spanish: La Economía de Precisión}
+      desc:
+        english: Fewer factories, every one of them measured to the second.
+        spanish: Menos fábricas, cada una medida al segundo.
+      modifiers: {industrial_capacity_factory: 0.1, research_speed_factor: 0.05}
+      src: user_design
+    - id: SHD_precision_2
+      name: {english: The Calibrated Economy, spanish: La Economía Calibrada}
+      desc: {english: 'Nothing wasted, nothing late.', spanish: 'Nada desperdiciado, nada tarde.'}
+      modifiers: {industrial_capacity_factory: 0.2, research_speed_factor: 0.1}
+      src: user_design
+    - id: SHD_red_electrica
+      name: {english: The National Grid, spanish: La Red Eléctrica Nacional}
+      desc:
+        english: Every flow of power, measured and corrected.
+        spanish: Cada flujo de energía, medido y corregido.
+      modifiers: {industrial_capacity_factory: 0.1}
+      src: user_design
+    - id: SHD_espiritu_infanteria_de_masa
+      name: {english: Mass Infantry, spanish: Infantería de Masa}
+      desc: {english: 'Numbers are a flow, too.', spanish: Los números también son un caudal.}
+      modifiers: {army_defence_factor: 0.1, army_org_factor: 0.05}
+      src: user_design
+    - id: SHD_cielo_armonioso
+      name: {english: The Harmonious Sky, spanish: El Cielo Armonioso}
+      desc:
+        english: Surveillance drones over every province.
+        spanish: Drones de vigilancia sobre cada provincia.
+      modifiers: {stability_factor: 0.05, army_defence_factor: 0.05}
+      src: user_design
+    see: Q030
   APF:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:

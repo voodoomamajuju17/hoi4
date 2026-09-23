@@ -245,6 +245,22 @@ mechanics:
     - {name: APF_integracion_zsa, start: 10}
 
   # ===========================================================================
+  - id: shd_tres_caudales
+    country: SHD
+    definition_status: implementable
+    src: user_design
+    name: {english: The Three Flows, spanish: Los Tres Caudales}
+    design: 'Producción, Orden y Pueblo (0-100; arrancan 60/55/40). Cada decisión sube uno y baja otros. Los tres entre 45 y 55: Armonía Perfecta;
+      entre 35 y 65: Armonía Parcial; alguno por debajo de 20: Desborde. Con Zhou (La Gran Crecida) el Pueblo puede llegar a 130 y sube solo cada
+      mes: 80/100/120 dan la Crecida I/II/III (ejército más brutal, producción más baja) y con Orden bajo hay huelgas.'
+    variables:
+    - {name: SHD_produccion, start: 60}
+    - {name: SHD_orden, start: 55}
+    - {name: SHD_pueblo, start: 40}
+    - {name: SHD_integracion_zkr, start: 0}
+    - {name: SHD_integracion_zst, start: 0}
+
+  # ===========================================================================
   - id: civil_military_balance
     country: FCU
     definition_status: partial

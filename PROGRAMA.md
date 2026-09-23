@@ -81,7 +81,9 @@ eventos con ultimátum e IA con condiciones.
   miembro (Amara: integra despacio, no pasa al desarrollo; Diallo: rápido, territorios
   difíciles), Plan de Desarrollo Regional región por región, industria acelerada,
   Aldea vs Corredor, ultimátum a la ASC
-- [ ] **SHD** — los tres caudales, la Gran Crecida
+- [~] **SHD** — árbol de 51 focos con la tabla nueva: Producción, Orden y Pueblo con
+  Armonía Perfecta/Parcial y Desborde, Lin (integración de Corea y la Estepa, ultimátum
+  al NAS) vs Zhou (la Gran Crecida: el Pueblo hasta 130), Grandes Obras vs Precisión
 - [ ] **NRE** — prestigio de legiones, Auctoritas Militaris, AVE IMPERATOR
 - [ ] Interacciones entre potencias (20-30 eventos chicos)
 

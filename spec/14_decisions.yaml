@@ -1845,6 +1845,272 @@ categories:
       - {effect: build, building: industrial_complex, level: 1}
       ai_factor: 5
 
+  # ===========================================================================
+  # SHD — Los Tres Caudales, los Distritos Armónicos, Obras o Precisión
+  # ===========================================================================
+  - id: SHD_caudales_category
+    country: SHD
+    icon_prefer:
+    - generic_political_actions
+    name: {english: The Three Flows, spanish: Los Tres Caudales}
+    desc:
+      english: 'Production: [?SHD_produccion]\nOrder: [?SHD_orden]\nPeople: [?SHD_pueblo]\n\nAll three between 45 and 55: Perfect Harmony. Between
+        35 and 65: Partial Harmony. Any below 20: Overflow.\nUnder the Great Flood, the People rise to 130 and every level above 80 makes the army
+        more brutal.'
+      spanish: 'Producción: [?SHD_produccion]\nOrden: [?SHD_orden]\nPueblo: [?SHD_pueblo]\n\nLos tres entre 45 y 55: Armonía Perfecta. Entre 35
+        y 65: Armonía Parcial. Alguno por debajo de 20: Desborde.\nCon la Gran Crecida, el Pueblo sube hasta 130 y cada nivel por encima de 80 hace
+        al ejército más brutal.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: SHD_recalcular_caudales}
+    decisions:
+    - id: SHD_aumentar_cuotas
+      name: {english: Raise Industrial Quotas, spanish: Aumentar Cuotas Industriales}
+      desc: {english: 'Production +10, Order +3, People -8.', spanish: 'Producción +10, Orden +3, Pueblo -8.'}
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 75
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: SHD_produccion, value: 10}
+      - {effect: add_variable, var: SHD_orden, value: 3}
+      - {effect: add_variable, var: SHD_pueblo, value: -8}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+    - id: SHD_relajar_vigilancia
+      name: {english: Relax Surveillance, spanish: Relajar la Vigilancia}
+      desc: {english: 'People +10, Order -10.', spanish: 'Pueblo +10, Orden -10.'}
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 25
+      cooldown_days: 60
+      effects:
+      - {effect: add_variable, var: SHD_pueblo, value: 10}
+      - {effect: add_variable, var: SHD_orden, value: -10}
+      - {effect: add_stability, value: 0.03}
+      ai_factor: 5
+    - id: SHD_campana_de_disciplina
+      name: {english: Discipline Campaign, spanish: Campaña de Disciplina}
+      desc: {english: 'Order +12, Production -3, People -7.', spanish: 'Orden +12, Producción -3, Pueblo -7.'}
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 25
+      cooldown_days: 60
+      effects:
+      - {effect: add_variable, var: SHD_orden, value: 12}
+      - {effect: add_variable, var: SHD_produccion, value: -3}
+      - {effect: add_variable, var: SHD_pueblo, value: -7}
+      - {effect: add_political_power, value: 50}
+      ai_factor: 5
+    - id: SHD_fiesta_del_caudal
+      name: {english: Festival of the Flow, spanish: Fiesta del Caudal}
+      desc: {english: 'People +12, Production -5, Order -3.', spanish: 'Pueblo +12, Producción -5, Orden -3.'}
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - {effect: add_variable, var: SHD_pueblo, value: 12}
+      - {effect: add_variable, var: SHD_produccion, value: -5}
+      - {effect: add_variable, var: SHD_orden, value: -3}
+      - {effect: add_manpower, value: 25000}
+      ai_factor: 5
+    - id: SHD_ajuste_tecnico
+      name: {english: Technical Adjustment, spanish: Ajuste Técnico}
+      desc: {english: Each flow moves 5 toward 50., spanish: Cada caudal se mueve 5 hacia 50.}
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 75
+      cooldown_days: 120
+      effects:
+      - {effect: run, value: SHD_ajustar_produccion}
+      - {effect: run, value: SHD_ajustar_orden}
+      - {effect: run, value: SHD_ajustar_pueblo}
+      ai_factor: 5
+      visible: {not_flag: SHD_zhou}
+    - id: SHD_movilizacion_total
+      name: {english: Total Mobilisation, spanish: Movilización Total}
+      desc:
+        english: People +20, Production -10, Order -5. Only under the Great Flood.
+        spanish: Pueblo +20, Producción -10, Orden -5. Solo con la Gran Crecida.
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: SHD_pueblo, value: 20}
+      - {effect: add_variable, var: SHD_produccion, value: -10}
+      - {effect: add_variable, var: SHD_orden, value: -5}
+      - {effect: add_manpower, value: 150000}
+      ai_factor: 10
+      visible: {flag: SHD_zhou}
+  - id: SHD_integracion_category
+    country: SHD
+    icon_prefer:
+    - generic_political_actions
+    name: {english: The Harmonious Districts, spanish: Los Distritos Armónicos}
+    desc:
+      english: 'Korea: stage [?SHD_integracion_zkr] of 3.\nThe Steppe: stage [?SHD_integracion_zst] of 3.'
+      spanish: 'Corea: etapa [?SHD_integracion_zkr] de 3.\nLa Estepa: etapa [?SHD_integracion_zst] de 3.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: SHD_recalcular_caudales}
+    decisions:
+    - id: SHD_integrar_zkr_1
+      name: {english: Korean Engineers, spanish: Ingenieros Coreanos}
+      desc:
+        english: The protectorate's ministries answer to Beijing.
+        spanish: Los ministerios del protectorado le responden a Pekín.
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: SHD_integracion_zkr_abierta, country_exists: ZKR}
+      available:
+        variable_between: {var: SHD_integracion_zkr, min: 0, max: 0}
+      effects:
+      - {effect: add_variable, var: SHD_integracion_zkr, value: 1}
+      - {effect: add_variable, var: SHD_orden, value: 3}
+      ai_factor: 5
+    - id: SHD_integrar_zkr_2
+      name: {english: One Grid, spanish: Una Sola Red}
+      desc: {english: Korea joins the national grid., spanish: Corea entra a la red nacional.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 100
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: SHD_integracion_zkr_abierta, country_exists: ZKR}
+      available:
+        variable_between: {var: SHD_integracion_zkr, min: 1, max: 1}
+      effects:
+      - {effect: add_variable, var: SHD_integracion_zkr, value: 1}
+      - {effect: add_variable, var: SHD_orden, value: 3}
+      ai_factor: 5
+    - id: SHD_integrar_zkr_3
+      name: {english: Korea Is a District, spanish: Corea es un Distrito}
+      desc:
+        english: The protectorate becomes a district of the Directorate.
+        spanish: El protectorado pasa a ser un distrito del Directorio.
+      icon_prefer:
+      - generic_political_actions
+      cost: 125
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: SHD_integracion_zkr_abierta, country_exists: ZKR}
+      available:
+        variable_between: {var: SHD_integracion_zkr, min: 2, max: 2}
+      effects:
+      - {effect: add_variable, var: SHD_integracion_zkr, value: 1}
+      - {effect: add_variable, var: SHD_orden, value: 3}
+      - effect: scope
+        target: ZKR
+        effects:
+        - effect: states
+          pick: every
+          effects:
+          - {effect: add_core, value: SHD}
+      - {effect: annex, target: ZKR}
+      ai_factor: 5
+    - id: SHD_integrar_zst_1
+      name: {english: Weather Stations, spanish: Estaciones Meteorológicas}
+      desc: {english: The Steppe's shamans get sensors., spanish: Los chamanes de la Estepa reciben sensores.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: SHD_integracion_zst_abierta, country_exists: ZST}
+      available:
+        variable_between: {var: SHD_integracion_zst, min: 0, max: 0}
+      effects:
+      - {effect: add_variable, var: SHD_integracion_zst, value: 1}
+      - {effect: add_variable, var: SHD_orden, value: 3}
+      ai_factor: 5
+    - id: SHD_integrar_zst_2
+      name: {english: Irrigating the Steppe, spanish: Irrigar la Estepa}
+      desc: {english: Canals reach the pastures., spanish: Los canales llegan a los pastizales.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 100
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: SHD_integracion_zst_abierta, country_exists: ZST}
+      available:
+        variable_between: {var: SHD_integracion_zst, min: 1, max: 1}
+      effects:
+      - {effect: add_variable, var: SHD_integracion_zst, value: 1}
+      - {effect: add_variable, var: SHD_orden, value: 3}
+      ai_factor: 5
+    - id: SHD_integrar_zst_3
+      name: {english: The Steppe Is a District, spanish: La Estepa es un Distrito}
+      desc:
+        english: The Steppe becomes a district of the Directorate.
+        spanish: La Estepa pasa a ser un distrito del Directorio.
+      icon_prefer:
+      - generic_political_actions
+      cost: 125
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: SHD_integracion_zst_abierta, country_exists: ZST}
+      available:
+        variable_between: {var: SHD_integracion_zst, min: 2, max: 2}
+      effects:
+      - {effect: add_variable, var: SHD_integracion_zst, value: 1}
+      - {effect: add_variable, var: SHD_orden, value: 3}
+      - effect: scope
+        target: ZST
+        effects:
+        - effect: states
+          pick: every
+          effects:
+          - {effect: add_core, value: SHD}
+      - {effect: annex, target: ZST}
+      ai_factor: 5
+  - id: SHD_economia_category
+    country: SHD
+    icon_prefer:
+    - generic_industry
+    name: {english: Works or Precision, spanish: Obras o Precisión}
+    desc:
+      english: The Great Works open new works; the Precision Economy opens calibrations.
+      spanish: Las Grandes Obras abren obras nuevas; la Economía de Precisión abre calibraciones.
+    src: user_design
+    decisions:
+    - id: SHD_nueva_gran_obra
+      name: {english: A New Great Work, spanish: Una Nueva Gran Obra}
+      desc:
+        english: Another dam, another canal, another factory district.
+        spanish: Otra represa, otro canal, otro barrio de fábricas.
+      icon_prefer:
+      - generic_construction
+      cost: 75
+      cooldown_days: 120
+      visible: {focus: SHD_las_grandes_obras}
+      effects:
+      - {effect: build, building: industrial_complex, level: 2}
+      ai_factor: 5
+    - id: SHD_calibracion
+      name: {english: Calibration, spanish: Calibración}
+      desc:
+        english: 'Every line re-measured: +10% output for 90 days.'
+        spanish: 'Cada línea medida de nuevo: +10% de producción por 90 días.'
+      icon_prefer:
+      - generic_industry
+      cost: 50
+      cooldown_days: 150
+      visible: {focus: SHD_la_economia_de_precision}
+      effects:
+      - {effect: timed_idea, idea: SHD_red_electrica, days: 90}
+      ai_factor: 5
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -2172,3 +2438,147 @@ scripted_effects:
           - {effect: clear_flag, value: NAS_sobrecarga}
           - {effect: timed_idea, idea: NAS_noche_del_sol, days: 90}
           - {effect: event, id: meganations_nas.2}
+
+  # SHD: los tres caudales.
+  - id: SHD_recalcular_caudales
+    effects:
+    - {effect: clamp, var: SHD_produccion, min: 0, max: 100}
+    - {effect: clamp, var: SHD_orden, min: 0, max: 100}
+    - effect: if
+      when: {flag: SHD_zhou}
+      then:
+      - {effect: clamp, var: SHD_pueblo, min: 0, max: 130}
+      else:
+      - {effect: clamp, var: SHD_pueblo, min: 0, max: 100}
+    - effect: if
+      when: {idea: SHD_armonia_perfecta}
+      then:
+      - {effect: remove_idea, value: SHD_armonia_perfecta}
+    - effect: if
+      when: {idea: SHD_armonia_parcial}
+      then:
+      - {effect: remove_idea, value: SHD_armonia_parcial}
+    - effect: if
+      when: {idea: SHD_desborde}
+      then:
+      - {effect: remove_idea, value: SHD_desborde}
+    - effect: if
+      when: {idea: SHD_crecida_1}
+      then:
+      - {effect: remove_idea, value: SHD_crecida_1}
+    - effect: if
+      when: {idea: SHD_crecida_2}
+      then:
+      - {effect: remove_idea, value: SHD_crecida_2}
+    - effect: if
+      when: {idea: SHD_crecida_3}
+      then:
+      - {effect: remove_idea, value: SHD_crecida_3}
+    - effect: if
+      when: {not_flag: SHD_zhou}
+      then:
+      - effect: if
+        when:
+          all_between:
+            vars:
+            - SHD_produccion
+            - SHD_orden
+            - SHD_pueblo
+            min: 45
+            max: 55
+        then:
+        - {effect: add_ideas, value: SHD_armonia_perfecta}
+        else:
+        - effect: if
+          when:
+            all_between:
+              vars:
+              - SHD_produccion
+              - SHD_orden
+              - SHD_pueblo
+              min: 35
+              max: 65
+          then:
+          - {effect: add_ideas, value: SHD_armonia_parcial}
+      else:
+      - effect: if
+        when:
+          variable_at_least: {var: SHD_pueblo, value: 120}
+        then:
+        - {effect: add_ideas, value: SHD_crecida_3}
+        else:
+        - effect: if
+          when:
+            variable_at_least: {var: SHD_pueblo, value: 100}
+          then:
+          - {effect: add_ideas, value: SHD_crecida_2}
+          else:
+          - effect: if
+            when:
+              variable_at_least: {var: SHD_pueblo, value: 80}
+            then:
+            - {effect: add_ideas, value: SHD_crecida_1}
+    - effect: if
+      when:
+        any:
+        - variable_below: {var: SHD_produccion, value: 20}
+        - variable_below: {var: SHD_orden, value: 20}
+        - variable_below: {var: SHD_pueblo, value: 20}
+      then:
+      - {effect: add_ideas, value: SHD_desborde}
+  - id: SHD_mes_del_caudal
+    effects:
+    - effect: if
+      when: {flag: SHD_zhou}
+      then:
+      - {effect: add_variable, var: SHD_pueblo, value: 5}
+      - {effect: add_variable, var: SHD_orden, value: -2}
+    - effect: if
+      when:
+        variable_below: {var: SHD_orden, value: 30}
+        not_idea: SHD_huelgas
+      then:
+      - effect: random
+        options:
+        - weight: 70
+          effects: []
+        - weight: 30
+          effects:
+          - {effect: timed_idea, idea: SHD_huelgas, days: 60}
+    - {effect: run, value: SHD_recalcular_caudales}
+  - id: SHD_ajustar_produccion
+    effects:
+    - effect: if
+      when:
+        variable_at_least: {var: SHD_produccion, value: 55}
+      then:
+      - {effect: add_variable, var: SHD_produccion, value: -5}
+    - effect: if
+      when:
+        variable_below: {var: SHD_produccion, value: 46}
+      then:
+      - {effect: add_variable, var: SHD_produccion, value: 5}
+  - id: SHD_ajustar_orden
+    effects:
+    - effect: if
+      when:
+        variable_at_least: {var: SHD_orden, value: 55}
+      then:
+      - {effect: add_variable, var: SHD_orden, value: -5}
+    - effect: if
+      when:
+        variable_below: {var: SHD_orden, value: 46}
+      then:
+      - {effect: add_variable, var: SHD_orden, value: 5}
+  - id: SHD_ajustar_pueblo
+    effects:
+    - effect: if
+      when:
+        variable_at_least: {var: SHD_pueblo, value: 55}
+      then:
+      - {effect: add_variable, var: SHD_pueblo, value: -5}
+    - effect: if
+      when:
+        variable_below: {var: SHD_pueblo, value: 46}
+      then:
+      - {effect: add_variable, var: SHD_pueblo, value: 5}

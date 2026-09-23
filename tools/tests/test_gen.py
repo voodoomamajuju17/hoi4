@@ -996,6 +996,27 @@ def test_apf() -> None:
               "var = APF_desarrollo_zet" in next((mod / "history/countries").glob("APF - *.txt")).read_text())
 
 
+def test_shd() -> None:
+    section("SHD: tres caudales, Lin contra Zhou")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        root = pdx.parse((mod / "common/national_focus/SHD_focus.txt").read_text()).get("focus_tree")
+        focuses = root.get_all("focus")
+        check("arbol del SHD de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        by = {pdx.text(f.get("id")): f for f in focuses}
+        check("Zhou asciende con la Gran Crecida", "promote_character = SHD_zhou_mingyuan"
+              in pdx.render(by["SHD_abrir_las_compuertas"].get("completion_reward")))
+        check("Corregir el Sol es un ultimatum al NAS",
+              "meganations_nas.5" in pdx.render(by["SHD_corregir_el_sol"].get("completion_reward")))
+        eff = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        check("la armonia se recalcula", "SHD_recalcular_caudales" in eff and "SHD_armonia_perfecta" in eff
+              and "SHD_desborde" in eff)
+        check("el NAS recibe el ultimatum", "meganations_nas.5" in (mod / "events/meganations_nas.txt").read_text())
+        check("el SHD arranca con los tres caudales",
+              "var = SHD_pueblo" in next((mod / "history/countries").glob("SHD - *.txt")).read_text())
+
+
 def test_forces() -> None:
     section("armada y aviacion heredadas de 1936")
     with tempfile.TemporaryDirectory() as tmp:
@@ -1163,6 +1184,7 @@ def main() -> int:
         test_hsn,
         test_nas,
         test_apf,
+        test_shd,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

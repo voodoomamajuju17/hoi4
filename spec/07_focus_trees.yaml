@@ -3598,7 +3598,646 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
 
-  SHD: { status: not_started, see: Q032 }
+  # ===========================================================================
+  SHD:
+    id: shd_focus_tree
+    default: false
+    shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23), tabla de premios nueva. El Caudal Corregido (Lin Wenzhao) contra La Gran Crecida (Zhou Mingyuan).
+      Tres caudales. Ids alineados con el pack de íconos.'
+    branches:
+    - id: caudal_corregido
+      name: {english: The Corrected Flow, spanish: El Caudal Corregido}
+      focuses:
+      - id: SHD_el_directorio_de_2100
+        name: {english: The Directorate of 2100, spanish: El Directorio de 2100}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        desc:
+          english: Society is a hydraulic system. The Directorate corrects the flow.
+          spanish: La sociedad es un sistema hidráulico. El Directorio corrige el caudal.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_la_sesion_tecnica
+        name: {english: The Technical Session, spanish: La Sesión Técnica}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - SHD_el_directorio_de_2100
+        desc:
+          english: 'Precision or pressure: the Directorate must decide how to rule the flood.'
+          spanish: 'Precisión o presión: el Directorio tiene que decidir cómo gobernar la crecida.'
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: add_stability, value: 0.03}
+      - id: SHD_ajuste_tecnico_n_1
+        name: {english: Technical Adjustment No. 1, spanish: Ajuste Técnico nº 1}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - SHD_la_sesion_tecnica
+        mutually_exclusive:
+        - SHD_abrir_las_compuertas
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.3
+            when: {at_war: true}
+          - factor: 0.5
+            when: {stability_below: 0.4}
+        desc:
+          english: Lin Wenzhao publishes his first adjustment. Nobody notices; that is the point.
+          spanish: Lin Wenzhao publica su primer ajuste. Nadie lo nota; esa es la idea.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: run, value: SHD_ajustar_produccion}
+        - {effect: run, value: SHD_ajustar_orden}
+        - {effect: run, value: SHD_ajustar_pueblo}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_los_ingenieros_del_orden
+        name: {english: The Engineers of Order, spanish: Los Ingenieros del Orden}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - SHD_ajuste_tecnico_n_1
+        desc: {english: Every ministry run by an engineer., spanish: Cada ministerio dirigido por un ingeniero.}
+        reward:
+        - {effect: add_ideas, value: SHD_ingenieros_del_orden}
+      - id: SHD_vigilancia_hidraulica
+        name: {english: Hydraulic Surveillance, spanish: Vigilancia Hidráulica}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - SHD_ajuste_tecnico_n_1
+        desc: {english: 'Every flow measured, including people.', spanish: 'Cada caudal medido, incluida la gente.'}
+        reward:
+        - {effect: add_ideas, value: SHD_vigilancia}
+        - {effect: add_variable, var: SHD_orden, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_el_protectorado_coreano
+        name: {english: The Korean Protectorate, spanish: El Protectorado Coreano}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - SHD_los_ingenieros_del_orden
+        available: {country_exists: ZKR}
+        desc:
+          english: Opens the integration of Korea in three stages.
+          spanish: Abre la integración de Corea en tres etapas.
+        reward:
+        - {effect: flag, value: SHD_integracion_zkr_abierta}
+        - {effect: add_political_power, value: 50}
+      - id: SHD_la_estepa_irrigada
+        name: {english: The Irrigated Steppe, spanish: La Estepa Irrigada}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - SHD_vigilancia_hidraulica
+        available: {country_exists: ZST}
+        desc:
+          english: Opens the integration of the Steppe in three stages.
+          spanish: Abre la integración de la Estepa en tres etapas.
+        reward:
+        - {effect: flag, value: SHD_integracion_zst_abierta}
+        - {effect: add_political_power, value: 50}
+      - id: SHD_el_caudal_perfecto
+        name: {english: The Perfect Flow, spanish: El Caudal Perfecto}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - SHD_el_protectorado_coreano
+        - SHD_la_estepa_irrigada
+        desc:
+          english: A society that corrects itself before anyone notices.
+          spanish: Una sociedad que se corrige antes de que alguien lo note.
+        reward:
+        - {effect: swap_ideas, remove: SHD_vigilancia, add: SHD_caudal_perfecto}
+      - id: SHD_corregir_el_sol
+        name: {english: Correct the Sun, spanish: Corregir el Sol}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - SHD_el_caudal_perfecto
+        available: {country_exists: NAS}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: 'An ultimatum to the Sky Kingdom: harmonious standards or war.'
+          spanish: 'Un ultimátum al Reino Celeste: estándares armónicos o guerra.'
+        reward:
+        - {effect: event, id: meganations_nas.5, target: NAS}
+        - {effect: add_war_support, value: 0.05}
+    - id: gran_crecida
+      name: {english: The Great Flood, spanish: La Gran Crecida}
+      focuses:
+      - id: SHD_abrir_las_compuertas
+        name: {english: Open the Floodgates, spanish: Abrir las Compuertas}
+        days: 21
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - SHD_la_sesion_tecnica
+        mutually_exclusive:
+        - SHD_ajuste_tecnico_n_1
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 4
+            when: {at_war: true}
+          - factor: 3
+            when: {stability_below: 0.4}
+        desc:
+          english: 'Zhou Mingyuan takes over. Harmony is abandoned: the People can rise to 130 and rise by themselves every month.'
+          spanish: 'Asume Zhou Mingyuan. Se abandona la Armonía: el Pueblo puede llegar a 130 y sube solo cada mes.'
+        reward:
+        - {effect: promote, character: SHD_zhou_mingyuan}
+        - {effect: flag, value: SHD_zhou}
+        - {effect: add_variable, var: SHD_pueblo, value: 20}
+        - {effect: event, id: meganations_shd.3, days: 1}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_el_pueblo_es_el_caudal
+        name: {english: The People Are the Flow, spanish: El Pueblo es el Caudal}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - SHD_abrir_las_compuertas
+        desc: {english: Every citizen a drop of the river., spanish: 'Cada ciudadano, una gota del río.'}
+        reward:
+        - {effect: add_variable, var: SHD_pueblo, value: 10}
+        - {effect: add_manpower, value: 200000}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_la_movilizacion_del_rio
+        name: {english: Mobilisation of the River, spanish: La Movilización del Río}
+        days: 42
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - SHD_el_pueblo_es_el_caudal
+        desc:
+          english: Four hundred million people, one current.
+          spanish: Cuatrocientos millones de personas, una sola corriente.
+        reward:
+        - {effect: add_ideas, value: SHD_movilizacion_del_rio}
+      - id: SHD_oleadas
+        name: {english: Waves, spanish: Oleadas}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - SHD_la_movilizacion_del_rio
+        desc:
+          english: Wave after wave, like the river in spring.
+          spanish: Ola tras ola, como el río en primavera.
+        reward:
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+      - id: SHD_la_crecida_del_norte
+        name: {english: The Northern Flood, spanish: La Crecida del Norte}
+        days: 42
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - SHD_oleadas
+        desc:
+          english: The flood turns toward the steppe and the mountains.
+          spanish: La crecida gira hacia la estepa y las montañas.
+        reward:
+        - {effect: army_experience, value: 50}
+        - {effect: add_variable, var: SHD_pueblo, value: 10}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_el_rio_se_desborda
+        name: {english: The River Overflows, spanish: El Río se Desborda}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - SHD_la_crecida_del_norte
+        available: {country_exists: ZWI}
+        desc:
+          english: The Indostan warlords are next.
+          spanish: Los Señores de la Guerra del Indostán son los próximos.
+        reward:
+        - {effect: wargoal, target: ZWI, type: annex_everything}
+        - {effect: add_war_support, value: 0.1}
+      - id: SHD_el_rio_desbordado
+        name: {english: The River Unleashed, spanish: El Río Desbordado}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - SHD_el_rio_se_desborda
+        desc: {english: The flood has become the state., spanish: La crecida se volvió el Estado.}
+        reward:
+        - {effect: add_ideas, value: SHD_espiritu_el_rio_desbordado}
+        - {effect: add_research_slot, value: 1}
+    - id: grandes_obras
+      name: {english: The Great Works, spanish: Las Grandes Obras}
+      focuses:
+      - id: SHD_el_consejo_economico
+        name: {english: The Economic Council, spanish: El Consejo Económico}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_el_directorio_de_2100
+        desc:
+          english: Build everything, or build it perfectly.
+          spanish: Construirlo todo, o construirlo perfecto.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: add_variable, var: SHD_produccion, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_las_grandes_obras
+        name: {english: The Great Works, spanish: Las Grandes Obras}
+        days: 42
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - SHD_el_consejo_economico
+        mutually_exclusive:
+        - SHD_la_economia_de_precision
+        ai: {factor: 2}
+        desc:
+          english: Dams, canals, railways. Opens new great works.
+          spanish: Represas, canales, ferrocarriles. Abre obras nuevas.
+        reward:
+        - {effect: add_ideas, value: SHD_grandes_obras}
+      - id: SHD_el_gran_canal
+        name: {english: The Grand Canal, spanish: El Gran Canal}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - SHD_las_grandes_obras
+        desc:
+          english: The old canal, rebuilt for the century.
+          spanish: El viejo canal, reconstruido para el siglo.
+        reward:
+        - {effect: build, building: infrastructure, level: 3}
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: SHD_ciudades_nuevas
+        name: {english: New Cities, spanish: Ciudades Nuevas}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - SHD_las_grandes_obras
+        desc:
+          english: Cities built in a year, for a million people each.
+          spanish: Ciudades construidas en un año, para un millón de personas cada una.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: add_variable, var: SHD_pueblo, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_la_era_de_las_obras
+        name: {english: The Age of Works, spanish: La Era de las Obras}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_el_gran_canal
+        - SHD_ciudades_nuevas
+        desc: {english: The country is one construction site., spanish: El país es una sola obra.}
+        reward:
+        - {effect: swap_ideas, remove: SHD_grandes_obras, add: SHD_grandes_obras_2}
+    - id: precision
+      name: {english: The Precision Economy, spanish: La Economía de Precisión}
+      focuses:
+      - id: SHD_la_economia_de_precision
+        name: {english: The Precision Economy, spanish: La Economía de Precisión}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_el_consejo_economico
+        mutually_exclusive:
+        - SHD_las_grandes_obras
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: Fewer factories, every one measured. Opens calibrations.
+          spanish: Menos fábricas, cada una medida. Abre calibraciones.
+        reward:
+        - {effect: add_ideas, value: SHD_precision}
+      - id: SHD_metrologia_nacional
+        name: {english: National Metrology, spanish: Metrología Nacional}
+        days: 35
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - SHD_la_economia_de_precision
+        desc: {english: One standard for everything., spanish: Un estándar para todo.}
+        reward:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 2}
+      - id: SHD_lineas_calibradas
+        name: {english: Calibrated Lines, spanish: Líneas Calibradas}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_la_economia_de_precision
+        desc: {english: Nothing wasted., spanish: Nada desperdiciado.}
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+      - id: SHD_la_economia_calibrada
+        name: {english: The Calibrated Economy, spanish: La Economía Calibrada}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_metrologia_nacional
+        - SHD_lineas_calibradas
+        desc: {english: 'Nothing wasted, nothing late.', spanish: 'Nada desperdiciado, nada tarde.'}
+        reward:
+        - {effect: swap_ideas, remove: SHD_precision, add: SHD_precision_2}
+    - id: represas
+      name: {english: The Yangtze Dams, spanish: Las Represas del Yangtsé}
+      focuses:
+      - id: SHD_las_tres_gargantas
+        name: {english: The Three Gorges, spanish: Las Tres Gargantas}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - SHD_el_directorio_de_2100
+        desc: {english: 'The great dam, rebuilt and doubled.', spanish: 'La gran represa, reconstruida y duplicada.'}
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: add_variable, var: SHD_produccion, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_la_red_electrica_nacional
+        name: {english: The National Grid, spanish: La Red Eléctrica Nacional}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_las_tres_gargantas
+        desc: {english: 'Every flow of power, measured.', spanish: 'Cada flujo de energía, medido.'}
+        reward:
+        - {effect: add_ideas, value: SHD_red_electrica}
+      - id: SHD_el_polo_de_shanghai
+        name: {english: The Shanghai Hub, spanish: El Polo de Shanghái}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - SHD_las_tres_gargantas
+        desc:
+          english: The river's mouth becomes a factory.
+          spanish: La desembocadura del río se vuelve una fábrica.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: SHD_acerias_del_norte
+        name: {english: The Northern Steelworks, spanish: Las Acerías del Norte}
+        days: 42
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - SHD_la_red_electrica_nacional
+        - SHD_el_polo_de_shanghai
+        desc: {english: Steel for the flood., spanish: Acero para la crecida.}
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+      - id: SHD_astilleros_de_canton
+        name: {english: The Canton Shipyards, spanish: Los Astilleros de Cantón}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_acerias_del_norte
+        desc: {english: Dry docks on the Pearl River., spanish: Diques secos en el Río de las Perlas.}
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: SHD_instituto_del_caudal
+        name: {english: The Institute of the Flow, spanish: El Instituto del Caudal}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - SHD_acerias_del_norte
+        desc:
+          english: Where the Directorate learns to measure society.
+          spanish: Donde el Directorio aprende a medir a la sociedad.
+        reward:
+        - {effect: add_research_slot, value: 1}
+    - id: ejercito_del_caudal
+      name: {english: The Army of the Flow, spanish: El Ejército del Caudal}
+      focuses:
+      - id: SHD_infanteria_de_masa
+        name: {english: Mass Infantry, spanish: Infantería de Masa}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - SHD_el_directorio_de_2100
+        desc: {english: 'Numbers are a flow, too.', spanish: Los números también son un caudal.}
+        reward:
+        - {effect: add_ideas, value: SHD_espiritu_infanteria_de_masa}
+      - id: SHD_logistica_fluvial
+        name: {english: River Logistics, spanish: Logística Fluvial}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_infanteria_de_masa
+        desc: {english: 'Supply by barge, by canal, by river.', spanish: 'Suministro por barcaza, por canal, por río.'}
+        reward:
+        - {effect: build, building: infrastructure, level: 2}
+        - {effect: add_political_power, value: 50}
+      - id: SHD_ingenieros_de_combate
+        name: {english: Combat Engineers, spanish: Ingenieros de Combate}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - SHD_infanteria_de_masa
+        desc:
+          english: Every river crossed, every dam defended.
+          spanish: Cada río cruzado, cada represa defendida.
+        reward:
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
+      - id: SHD_defensa_en_profundidad
+        name: {english: Defence in Depth, spanish: Defensa en Profundidad}
+        days: 42
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - SHD_logistica_fluvial
+        - SHD_ingenieros_de_combate
+        desc:
+          english: The country is too deep to be conquered.
+          spanish: El país es demasiado profundo para ser conquistado.
+        reward:
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+      - id: SHD_artilleria_del_rio
+        name: {english: River Artillery, spanish: Artillería del Río}
+        days: 35
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - SHD_defensa_en_profundidad
+        desc: {english: Guns on every bank., spanish: Cañones en cada orilla.}
+        reward:
+        - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 2}
+      - id: SHD_el_general_de_la_crecida
+        name: {english: The General of the Flood, spanish: El General de la Crecida}
+        days: 56
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - SHD_artilleria_del_rio
+        desc: {english: One general for four hundred million., spanish: Un general para cuatrocientos millones.}
+        reward:
+        - {effect: army_experience, value: 75}
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+    - id: cielo
+      name: {english: The Harmonious Sky, spanish: El Cielo Armonioso}
+      focuses:
+      - id: SHD_drones_de_vigilancia
+        name: {english: Surveillance Drones, spanish: Drones de Vigilancia}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - SHD_el_directorio_de_2100
+        desc: {english: The Directorate sees every province., spanish: El Directorio ve cada provincia.}
+        reward:
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
+        - {effect: add_variable, var: SHD_orden, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_red_antiaerea
+        name: {english: The Anti-Air Network, spanish: La Red Antiaérea}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - SHD_drones_de_vigilancia
+        desc: {english: A closed sky., spanish: Un cielo cerrado.}
+        reward:
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 2}
+      - id: SHD_cazas_del_directorio
+        name: {english: Directorate Fighters, spanish: Cazas del Directorio}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - SHD_drones_de_vigilancia
+        desc:
+          english: Fighters built in the Directorate's own plants.
+          spanish: Cazas construidos en las plantas del propio Directorio.
+        reward:
+        - {effect: air_experience, value: 50}
+        - {effect: build, building: air_base, level: 2}
+      - id: SHD_el_cielo_armonioso
+        name: {english: The Harmonious Sky, spanish: El Cielo Armonioso}
+        days: 42
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - SHD_red_antiaerea
+        - SHD_cazas_del_directorio
+        desc: {english: 'Surveillance and defence, one system.', spanish: 'Vigilancia y defensa, un solo sistema.'}
+        reward:
+        - {effect: add_ideas, value: SHD_cielo_armonioso}
+      - id: SHD_bombarderos_tacticos
+        name: {english: Tactical Bombers, spanish: Bombarderos Tácticos}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - SHD_el_cielo_armonioso
+        desc: {english: The flood also comes from the sky., spanish: La crecida también viene del cielo.}
+        reward:
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
+      - id: SHD_la_flota_del_mar_de_china
+        name: {english: The China Sea Fleet, spanish: La Flota del Mar de China}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_bombarderos_tacticos
+        desc: {english: The Directorate founds a navy., spanish: El Directorio funda una armada.}
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
+        - {effect: navy_experience, value: 25}
+    - id: armonia
+      name: {english: Harmony, spanish: La Armonía}
+      focuses:
+      - id: SHD_los_tres_caudales
+        name: {english: The Three Flows, spanish: Los Tres Caudales}
+        days: 21
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - SHD_el_directorio_de_2100
+        desc:
+          english: Production, Order, People. Measure all three.
+          spanish: Producción, Orden, Pueblo. Medir los tres.
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_valvula_de_produccion
+        name: {english: The Production Valve, spanish: La Válvula de Producción}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_los_tres_caudales
+        desc: {english: +10 Production and two factories., spanish: +10 de Producción y dos fábricas.}
+        reward:
+        - {effect: add_variable, var: SHD_produccion, value: 10}
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_valvula_de_orden
+        name: {english: The Order Valve, spanish: La Válvula de Orden}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - SHD_los_tres_caudales
+        desc: {english: +10 Order and political power., spanish: +10 de Orden y poder político.}
+        reward:
+        - {effect: add_variable, var: SHD_orden, value: 10}
+        - {effect: add_political_power, value: 100}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_valvula_del_pueblo
+        name: {english: The People Valve, spanish: La Válvula del Pueblo}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - SHD_los_tres_caudales
+        desc: {english: +10 People and manpower., spanish: +10 de Pueblo y hombres.}
+        reward:
+        - {effect: add_variable, var: SHD_pueblo, value: 10}
+        - {effect: add_manpower, value: 100000}
+        - {effect: run, value: SHD_recalcular_caudales}
+      - id: SHD_ajuste_fino
+        name: {english: Fine Adjustment, spanish: Ajuste Fino}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - SHD_valvula_de_produccion
+        - SHD_valvula_de_orden
+        - SHD_valvula_del_pueblo
+        desc: {english: Every flow moves 5 toward 50., spanish: Cada caudal se mueve 5 hacia 50.}
+        reward:
+        - {effect: run, value: SHD_ajustar_produccion}
+        - {effect: run, value: SHD_ajustar_orden}
+        - {effect: run, value: SHD_ajustar_pueblo}
+        - {effect: run, value: SHD_recalcular_caudales}
+        - {effect: add_stability, value: 0.05}
+      - id: SHD_presion_controlada
+        name: {english: Controlled Pressure, spanish: Presión Controlada}
+        days: 35
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - SHD_ajuste_fino
+        desc: {english: The system learns to hold more., spanish: El sistema aprende a aguantar más.}
+        reward:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 2}
+      - id: SHD_el_aliviadero
+        name: {english: The Spillway, spanish: El Aliviadero}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_ajuste_fino
+        desc: {english: A way out for every overflow., spanish: Una salida para cada desborde.}
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: add_stability, value: 0.05}
+      - id: SHD_la_armonia_perfecta
+        name: {english: Perfect Harmony, spanish: La Armonía Perfecta}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - SHD_presion_controlada
+        - SHD_el_aliviadero
+        available:
+          all_between:
+            vars:
+            - SHD_produccion
+            - SHD_orden
+            - SHD_pueblo
+            min: 45
+            max: 55
+        desc: {english: Needs the three flows between 45 and 55., spanish: Pide los tres caudales entre 45 y 55.}
+        reward:
+        - {effect: add_research_slot, value: 1}
+        - {effect: add_political_power, value: 150}
+
   # ===========================================================================
   APF:
     id: apf_focus_tree

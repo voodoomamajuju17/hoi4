@@ -44,7 +44,7 @@ propuesta anterior de 8 árboles.
 3. **ASC** — Poder de Cómputo, Consejo Sorteado, PLAN-41. *(v1 hecha)*
 4. **HSN** *(v1 hecha)*, **NAS, APF** — Qhapaq Ñan + Inti-Soma; integración
    federal (Desarrollo/Integración).
-5. **SHD y NRE al final** — tres caudales; prestigio de legiones +
+5. **SHD** *(v1 hecha)* **y NRE al final** — tres caudales; prestigio de legiones +
    Auctoritas Militaris + AVE IMPERATOR.
 
 ## Por nación (resumen)
@@ -207,3 +207,21 @@ existe, se omite con aviso.
   los Emiratos del Desierto, La Federación sin Fronteras.
 - Industria generosa al principio (Polo de Lagos, Katanga, el Nilo,
   Despegue Industrial con 3 fábricas), Aldea contra Corredor.
+
+## SHD v1 — cómo quedó en el motor
+
+- **Tres Caudales**: Producción (60), Orden (55) y Pueblo (40), de 0 a 100.
+  Las decisiones de *Los Caudales* suben uno a costa de otro. Los tres entre
+  45 y 55: *Armonía Perfecta*; entre 35 y 65: *Armonía Parcial*; alguno por
+  debajo de 20: *Desborde*. Se recalcula cada mes (evento oculto).
+- **Lin Wenzhao** (El Caudal Corregido): Ajuste Técnico nº 1, Ingenieros del
+  Orden, Vigilancia Hidráulica, integración de Corea y la Estepa en tres
+  etapas, El Caudal Perfecto y *Corregir el Sol* (ultimátum al NAS).
+- **Zhou Mingyuan** (La Gran Crecida, retrato alternativo): el Pueblo puede
+  llegar a 130 y sube solo +5 por mes (Orden −2); Crecida I/II/III en 80, 100
+  y 120; con Orden bajo 30 hay 30% de huelgas. Oleadas, la Crecida del Norte
+  y El Río se Desborda (guerra a los señores del Indostán).
+- Economía opuesta: Las Grandes Obras (decisión de obras nuevas) contra La
+  Economía de Precisión (calibraciones). Represas del Yangtsé como industria,
+  Ejército del Caudal, El Cielo Armonioso (aire y la flota del Mar de China)
+  y La Armonía como árbol extra de 8 focos.
