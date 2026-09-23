@@ -68,8 +68,11 @@ def emit(ctx: BuildContext) -> None:
 
         # Contadores nacionales (06_mechanics.yaml -> variable), ej. BioSteel.
         for mech in ctx.spec.raw["mechanics"].get("mechanics", []) or []:
-            var = mech.get("variable")
-            if isinstance(var, dict) and var.get("country") == c.tag:
+            variables = [mech["variable"]] if isinstance(mech.get("variable"), dict) else []
+            variables += [v for v in mech.get("variables") or [] if isinstance(v, dict)]
+            for var in variables:
+                if var.get("country", mech.get("country")) != c.tag:
+                    continue
                 sv = Block()
                 sv.add("var", var["name"])
                 sv.add("value", var["start"])
@@ -91,7 +94,9 @@ def emit(ctx: BuildContext) -> None:
             b.add("add_equipment_to_stockpile", eq)
 
         for ch in characters_mod.characters_of(ctx, c.tag):
-            b.add("recruit_character", ch["id"])
+            # recruit_at_start: false -> lo recluta un foco (líder de una revolución).
+            if ch.get("recruit_at_start", True):
+                b.add("recruit_character", ch["id"])
 
         for fb in _faction_blocks(ctx, c.tag):
             b.entries.append(fb)
@@ -126,7 +131,8 @@ def emit(ctx: BuildContext) -> None:
         used["add_to_faction"] = "04_diplomacy.yaml"
     if ctx.data.get("techs"):
         used["set_technology"] = "13_military.yaml"
-    if any(isinstance(m.get("variable"), dict) for m in ctx.spec.raw["mechanics"].get("mechanics", []) or []):
+    if any(isinstance(m.get("variable"), dict) or m.get("variables")
+           for m in ctx.spec.raw["mechanics"].get("mechanics", []) or []):
         used["set_variable"] = "06_mechanics.yaml"
     if any(ctx.data.get("stockpile", {}).values()):
         used["add_equipment_to_stockpile"] = "13_military.yaml"

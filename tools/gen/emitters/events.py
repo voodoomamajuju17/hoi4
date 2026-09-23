@@ -19,7 +19,7 @@ from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block
 from . import ideas as ideas_mod
-from .effects import render_effects
+from .effects import EffectContext, scripted_effect_ids, render_effects
 
 SOURCE = "spec/12_events.yaml"
 LOC_FILE = "meganations_events"
@@ -47,6 +47,10 @@ def fired_by_focus(ctx: BuildContext, focus_id: str) -> list[str]:
     return out
 
 
+def all_event_ids(ctx: BuildContext) -> set[str]:
+    return {event_id(ns, ev) for ns, _, ev in _events(ctx)}
+
+
 def emit(ctx: BuildContext) -> None:
     known_ideas = ideas_mod.all_idea_ids(ctx)
     icons = ctx.vanilla.gfx_names() if ctx.vanilla else None
@@ -55,6 +59,13 @@ def emit(ctx: BuildContext) -> None:
     by_ns: dict[str, Block] = {}
     seen: set[str] = set()
     focus_ids = _all_focus_ids(ctx)
+    from .focus_trees import character_ids
+    effect_ctx = EffectContext(
+        known_ideas, {c.tag for c in ctx.spec.countries},
+        wargoals=ctx.vanilla.wargoal_types() if ctx.vanilla else None,
+        warn=ctx.warn, characters=character_ids(ctx), events=all_event_ids(ctx),
+        scripted=scripted_effect_ids(ctx.spec.raw),
+    )
 
     for ns, tag, ev in _events(ctx):
         ctx.spec.country(tag)
@@ -66,6 +77,8 @@ def emit(ctx: BuildContext) -> None:
         trig = ev.get("trigger")
         if trig == "on_startup":
             startup.append((tag, eid))
+        elif trig == "effect":
+            pass  # lo dispara el efecto `event` de un foco, decisión u otro evento
         elif isinstance(trig, dict) and "focus" in trig:
             if trig["focus"] not in focus_ids:
                 raise SpecError(f"{eid}: el foco '{trig['focus']}' no existe", where="12_events.yaml")
@@ -91,8 +104,10 @@ def emit(ctx: BuildContext) -> None:
         if not options or len(options) > len(OPTION_LETTERS):
             raise SpecError(f"{eid}: entre 1 y {len(OPTION_LETTERS)} opciones", where="12_events.yaml")
         for letter, opt in zip(OPTION_LETTERS, options):
-            ob = render_effects(eid, opt.get("effects") or [], known_ideas, effects_used, where="12_events.yaml")
+            ob = render_effects(eid, opt.get("effects") or [], effect_ctx, effects_used, where="12_events.yaml")
             ob.entries.insert(0, ("name", _loc(ctx, f"{eid}.{letter}", opt["name"])))
+            if "ai_chance" in opt:
+                ob.add("ai_chance", Block([("factor", opt["ai_chance"])]))
             b.add("option", ob)
 
         by_ns.setdefault(ns, Block()).add("country_event", b)
@@ -107,6 +122,7 @@ def emit(ctx: BuildContext) -> None:
         _emit_on_actions(ctx, startup)
         effects_used.setdefault("country_event", "on_startup")
     ctx.verify_keys("effects", effects_used)
+    ctx.verify_keys("triggers", effect_ctx.triggers_used)
 
 
 def _emit_on_actions(ctx: BuildContext, startup: list[tuple[str, str]]) -> None:

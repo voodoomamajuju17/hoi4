@@ -25,7 +25,7 @@ from ..pdx import Block, Quoted
 from . import events as events_mod
 from . import ideas as ideas_mod
 from . import resources as resources_mod
-from .effects import EffectContext, render_effects
+from .effects import EffectContext, scripted_effect_ids, render_conditions, render_effects
 
 SOURCE = "spec/07_focus_trees.yaml"
 LOC_FILE = "meganations_focus"
@@ -44,8 +44,13 @@ def root_focus_ids(ctx: BuildContext, tag: str) -> list[str]:
         return []
     return [
         f["id"] for branch in tree["branches"] for f in branch.get("focuses", []) or []
-        if not f.get("prerequisites")
+        if not _all_prereqs(f)
     ]
+
+
+def _all_prereqs(f: dict) -> list[str]:
+    """prerequisites (todos) + prerequisites_any (cualquiera de ellos)."""
+    return list(f.get("prerequisites", []) or []) + list(f.get("prerequisites_any", []) or [])
 
 
 def emit(ctx: BuildContext) -> None:
@@ -67,10 +72,10 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     if len(by_id) != len(focuses):
         raise SpecError(f"{tag}: ids de foco duplicados", where="07_focus_trees.yaml")
     for _, f in focuses:
-        for pre in f.get("prerequisites", []) or []:
+        for pre in _all_prereqs(f):
             if pre not in by_id:
                 raise SpecError(f"{f['id']}: prerequisito '{pre}' no existe", where="07_focus_trees.yaml")
-    if not any(not f.get("prerequisites") for _, f in focuses):
+    if not any(not _all_prereqs(f) for _, f in focuses):
         raise SpecError(f"{tag}: ningun foco sin prerequisitos, el arbol es inaccesible (TN008)",
                         where="07_focus_trees.yaml")
 
@@ -85,12 +90,16 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
         capital=(ctx.data.get("capitals") or {}).get(tag),
         resources={m["resource"]["key"] for m in resources_mod.new_resources(ctx)},
         warn=ctx.warn,
+        characters=character_ids(ctx),
+        events=events_mod.all_event_ids(ctx),
+        scripted=scripted_effect_ids(ctx.spec.raw),
+        shared_slots=ctx.vanilla.shared_slot_buildings() if ctx.vanilla else None,
     )
     exclusive = _exclusive_pairs(focuses, by_id)
     custom = _emit_custom_icons(ctx, tag, focuses)
     icons = (ctx.vanilla.gfx_names() | custom) if ctx.vanilla else None
     effects_used: dict[str, str] = {}
-    triggers_used: dict[str, str] = {}
+    triggers_used = effect_ctx.triggers_used
 
     body = Block()
     body.add("id", tree["id"])
@@ -111,10 +120,15 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
         x, y = positions[fid]
         fb.add("x", x)
         fb.add("y", y)
-        fb.add("cost", int(f.get("cost", 10)))
+        fb.add("cost", _cost(f))
         for pre in f.get("prerequisites", []) or []:
             p = Block()
             p.add("focus", pre)
+            fb.add("prerequisite", p)
+        if f.get("prerequisites_any"):
+            p = Block()
+            for pre in f["prerequisites_any"]:
+                p.add("focus", pre)
             fb.add("prerequisite", p)
         if exclusive.get(fid):
             me = Block()
@@ -135,9 +149,7 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             effects_used.setdefault("country_event", fid)
         fb.add("completion_reward", completion)
 
-        ai = Block()
-        ai.add("factor", 1)
-        fb.add("ai_will_do", ai)
+        fb.add("ai_will_do", _ai(fid, f.get("ai"), triggers_used))
         body.add("focus", fb)
 
         desc = f.get("desc")
@@ -182,7 +194,7 @@ def _depths(by_id: dict[str, dict]) -> dict[str, int]:
         if fid in visiting:
             raise SpecError(f"ciclo de prerequisitos en {fid}", where="07_focus_trees.yaml")
         visiting.add(fid)
-        pres = by_id[fid].get("prerequisites", []) or []
+        pres = _all_prereqs(by_id[fid])
         d = 0 if not pres else 1 + max(visit(p) for p in pres)
         visiting.discard(fid)
         depth[fid] = d
@@ -292,6 +304,39 @@ def _icon(ctx: BuildContext, focus: dict, icons: set[str] | None) -> str:
     return icon
 
 
+# Duraciones del diseño (21/35/42/56/70 días). HOI4 cuenta el costo en
+# semanas: cost = días / 7.
+def _cost(f: dict) -> int:
+    if "days" in f:
+        days = int(f["days"])
+        if days % 7:
+            raise SpecError(f"{f['id']}: days={days} no es multiplo de 7", where="07_focus_trees.yaml")
+        return days // 7
+    return int(f.get("cost", 10))
+
+
+def _ai(fid: str, spec: dict | None, triggers_used: dict[str, str]) -> Block:
+    """ai_will_do: factor base y modificadores condicionales.
+
+    ai: { factor: 1, modifiers: [ { factor: 5, when: {condiciones} } ] }
+    Así la IA elige una ruta por lo que le pasa (guerra, estabilidad...), no
+    por una moneda al aire.
+    """
+    ai = Block()
+    spec = spec or {}
+    ai.add("factor", spec.get("factor", 1))
+    for m in spec.get("modifiers") or []:
+        mod = Block()
+        mod.add("factor", m["factor"])
+        mod.entries.extend(render_conditions(fid, m["when"], triggers_used, where="07_focus_trees.yaml").entries)
+        ai.add("modifier", mod)
+    return ai
+
+
+def character_ids(ctx: BuildContext) -> set[str]:
+    return {ch["id"] for ch in ctx.spec.raw["leaders"].get("characters", []) or [] if isinstance(ch, dict)}
+
+
 def _available(ctx: BuildContext, tag: str, fid: str, spec: dict, triggers_used: dict[str, str]) -> Block:
     block = Block()
     for key, value in spec.items():
@@ -311,8 +356,8 @@ def _available(ctx: BuildContext, tag: str, fid: str, spec: dict, triggers_used:
             block.add("check_variable", inner)
             triggers_used.setdefault("check_variable", fid)
         else:
-            raise SpecError(f"{fid}: condicion desconocida '{key}' en available",
-                            where="07_focus_trees.yaml")
+            block.entries.extend(render_conditions(fid, {key: value}, triggers_used,
+                                                   where="07_focus_trees.yaml").entries)
     return block
 
 

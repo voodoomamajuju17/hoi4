@@ -6,8 +6,19 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: wargoal, target: TAG, type: X }      -> create_wargoal
   { effect: build, building: X, level: N }       -> en la capital, con slots
   { effect: add_resource, resource: X, amount: N } -> en la capital (id resuelto en el build)
-  { effect: add_variable, var: X, value: N }      -> add_to_variable Los efectos se validan contra
-documentation/ del juego (verify_keys) y los ids de idea contra 05_ideas.yaml.
+  { effect: add_variable, var: X, value: N }      -> add_to_variable
+  { effect: set_variable, var: X, value: N }      -> set_variable
+  { effect: clamp, var: X, min: A, max: B }       -> clamp_variable
+  { effect: flag, value: X } / { effect: clear_flag, value: X }
+  { effect: remove_idea, value: X }               -> remove_ideas
+  { effect: timed_idea, idea: X, days: N }        -> add_timed_idea
+  { effect: event, id: ns.N, days: D, target: TAG } -> country_event (en TAG si se da)
+  { effect: scope, target: TAG, effects: [...] }   -> TAG = { ... }  (no "on": YAML lo lee como true)
+  { effect: promote, character: X }               -> recruit_character + promote_character
+  { effect: if, when: {condiciones}, then: [...], else: [...] }
+  { effect: run, value: X }                       -> X = yes (efecto de 14_decisions.yaml -> scripted_effects)
+Los efectos se validan contra documentation/ del juego (verify_keys) y los
+ids de idea contra 05_ideas.yaml.
 """
 
 from __future__ import annotations
@@ -34,7 +45,15 @@ class EffectContext:
 
     def __init__(self, known_ideas: set[str], tags: set[str],
                  buildings: set[str] | None = None, wargoals: set[str] | None = None,
-                 capital: int | None = None, resources: set[str] | None = None, warn=None):
+                 capital: int | None = None, resources: set[str] | None = None, warn=None,
+                 characters: set[str] | None = None, events: set[str] | None = None,
+                 triggers_used: dict[str, str] | None = None, scripted: set[str] | None = None,
+                 shared_slots: set[str] | None = None):
+        self.shared_slots = shared_slots
+        self.scripted = scripted
+        self.characters = characters
+        self.events = events
+        self.triggers_used = triggers_used if triggers_used is not None else {}
         self.capital = capital
         self.warn = warn
         self.resources = resources or set()
@@ -82,18 +101,96 @@ def render_effects(owner: str, items: list[dict], known,
             construction.add("level", level)
             construction.add("instant_build", True)
             scope = Block()
-            scope.add("add_extra_state_shared_building_slots", level)
+            # Solo las fábricas y astilleros ocupan slots compartidos; la
+            # infraestructura o una base aérea no necesitan slot extra.
+            if ec.shared_slots is None or building in ec.shared_slots:
+                scope.add("add_extra_state_shared_building_slots", level)
+                effects_used.setdefault("add_extra_state_shared_building_slots", owner)
             scope.add("add_building_construction", construction)
             block.add("capital_scope", scope)
-            effects_used.setdefault("add_extra_state_shared_building_slots", owner)
             effects_used.setdefault("add_building_construction", owner)
             continue
-        if effect == "add_variable":
+        if effect in ("add_variable", "set_variable"):
             inner = Block()
             inner.add("var", item["var"])
             inner.add("value", item["value"])
-            block.add("add_to_variable", inner)
-            effects_used.setdefault("add_to_variable", owner)
+            key = "add_to_variable" if effect == "add_variable" else "set_variable"
+            block.add(key, inner)
+            effects_used.setdefault(key, owner)
+            continue
+        if effect == "clamp":
+            inner = Block()
+            inner.add("var", item["var"])
+            inner.add("min", item["min"])
+            inner.add("max", item["max"])
+            block.add("clamp_variable", inner)
+            effects_used.setdefault("clamp_variable", owner)
+            continue
+        if effect in ("flag", "clear_flag"):
+            key = "set_country_flag" if effect == "flag" else "clr_country_flag"
+            block.add(key, item["value"])
+            effects_used.setdefault(key, owner)
+            continue
+        if effect == "remove_idea":
+            if item.get("value") not in known_ideas:
+                raise SpecError(f"{owner}: remove_idea '{item.get('value')}' no es una idea del spec", where=where)
+            block.add("remove_ideas", item["value"])
+            effects_used.setdefault("remove_ideas", owner)
+            continue
+        if effect == "timed_idea":
+            if item.get("idea") not in known_ideas:
+                raise SpecError(f"{owner}: timed_idea '{item.get('idea')}' no es una idea del spec", where=where)
+            inner = Block()
+            inner.add("idea", item["idea"])
+            inner.add("days", int(item["days"]))
+            block.add("add_timed_idea", inner)
+            effects_used.setdefault("add_timed_idea", owner)
+            continue
+        if effect == "event":
+            eid = item["id"]
+            if ec.events is not None and eid not in ec.events:
+                raise SpecError(f"{owner}: el evento '{eid}' no existe en 12_events.yaml", where=where)
+            inner = Block()
+            inner.add("id", eid)
+            inner.add("days", int(item.get("days", 1)))
+            target = item.get("target")
+            if target:
+                if ec.tags and target not in ec.tags:
+                    raise SpecError(f"{owner}: evento para '{target}', que no es un pais del mod", where=where)
+                block.add(target, Block([("country_event", inner)]))
+            else:
+                block.add("country_event", inner)
+            effects_used.setdefault("country_event", owner)
+            continue
+        if effect == "scope":
+            target = item.get("target")
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: 'scope' apunta a '{target}', que no es un pais del mod", where=where)
+            block.add(target, render_effects(owner, item.get("effects") or [], ec, effects_used, where=where))
+            continue
+        if effect == "promote":
+            cid = item["character"]
+            if ec.characters is not None and cid not in ec.characters:
+                raise SpecError(f"{owner}: promote '{cid}' no es un personaje de 03_leaders.yaml", where=where)
+            block.add("recruit_character", cid)
+            block.add("promote_character", cid)
+            effects_used.setdefault("recruit_character", owner)
+            effects_used.setdefault("promote_character", owner)
+            continue
+        if effect == "run":
+            name = item["value"]
+            if ec.scripted is not None and name not in ec.scripted:
+                raise SpecError(f"{owner}: run '{name}' no esta en 14_decisions.yaml -> scripted_effects",
+                                where=where)
+            block.add(name, True)
+            continue
+        if effect == "if":
+            inner = Block()
+            inner.add("limit", render_conditions(owner, item.get("when") or {}, ec.triggers_used, where=where))
+            inner.entries.extend(render_effects(owner, item.get("then") or [], ec, effects_used, where=where).entries)
+            if item.get("else"):
+                inner.add("else", render_effects(owner, item["else"], ec, effects_used, where=where))
+            block.add("if", inner)
             continue
         if effect == "add_resource":
             resource = item.get("resource")
@@ -135,25 +232,90 @@ def render_effects(owner: str, items: list[dict], known,
 
 
 def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, where: str) -> Block:
-    """Condiciones comunes a focos y decisiones.
+    """Condiciones comunes a focos, decisiones y efectos `if`.
 
-      variable_at_least: { var, value }  -> check_variable (forma larga, sin operador)
-      stability_at_least: 0.4            -> has_stability > 0.4
+      variable_at_least: { var, value }   -> check_variable (forma larga, sin operador)
+      variable_below: { var, value }      -> check_variable less_than
+      variable_between: { var, min, max } -> dos check_variable
+      variables_below: [ {var, value}, .. ] -> todas por debajo
+      all_between: { vars: [..], min, max }
+      stability_at_least: 0.4             -> has_stability > 0.4
+      flag / not_flag: X                  -> has_country_flag
+      at_war: true|false                  -> has_war
+      idea / not_idea: X                  -> has_idea
+      focus: X                            -> has_completed_focus
+      country_exists: TAG
+      any: [ {..}, {..} ]                 -> OR
+      not: { .. }                         -> NOT (no se cumplen todas juntas)
+    Varias condiciones en el mismo bloque se cumplen todas (AND).
     """
     from ..pdx import Compare
+
+    def check(var, value, compare):
+        inner = Block()
+        inner.add("var", var)
+        inner.add("value", value)
+        inner.add("compare", compare)
+        triggers_used.setdefault("check_variable", owner)
+        return ("check_variable", inner)
 
     block = Block()
     for key, value in spec.items():
         if key == "variable_at_least":
-            inner = Block()
-            inner.add("var", value["var"])
-            inner.add("value", value["value"])
-            inner.add("compare", "greater_than_or_equals")
-            block.add("check_variable", inner)
-            triggers_used.setdefault("check_variable", owner)
+            block.entries.append(check(value["var"], value["value"], "greater_than_or_equals"))
+        elif key == "variable_below":
+            block.entries.append(check(value["var"], value["value"], "less_than"))
+        elif key == "variables_below":
+            for v in value:
+                block.entries.append(check(v["var"], v["value"], "less_than"))
+        elif key == "variable_between":
+            block.entries.append(check(value["var"], value["min"], "greater_than_or_equals"))
+            block.entries.append(check(value["var"], value["max"], "less_than_or_equals"))
+        elif key == "all_between":
+            for var in value["vars"]:
+                block.entries.append(check(var, value["min"], "greater_than_or_equals"))
+                block.entries.append(check(var, value["max"], "less_than_or_equals"))
+        elif key in ("flag", "not_flag"):
+            if key == "flag":
+                block.add("has_country_flag", value)
+            else:
+                block.add("NOT", Block([("has_country_flag", value)]))
+            triggers_used.setdefault("has_country_flag", owner)
+        elif key == "at_war":
+            block.add("has_war", bool(value))
+            triggers_used.setdefault("has_war", owner)
+        elif key in ("idea", "not_idea"):
+            if key == "idea":
+                block.add("has_idea", value)
+            else:
+                block.add("NOT", Block([("has_idea", value)]))
+            triggers_used.setdefault("has_idea", owner)
+        elif key == "focus":
+            block.add("has_completed_focus", value)
+            triggers_used.setdefault("has_completed_focus", owner)
+        elif key == "country_exists":
+            block.add("country_exists", value)
+            triggers_used.setdefault("country_exists", owner)
+        elif key == "any":
+            ors = Block()
+            for sub in value:
+                inner = render_conditions(owner, sub, triggers_used, where=where)
+                if len(inner.entries) == 1:
+                    ors.entries.extend(inner.entries)
+                else:
+                    ors.add("AND", inner)
+            block.add("OR", ors)
+        elif key == "not":
+            inner = render_conditions(owner, value, triggers_used, where=where)
+            # NOT = { A B } en HOI4 es "ninguna"; "no se cumplen todas" es NOT = { AND = {A B} }.
+            block.add("NOT", inner if len(inner.entries) == 1 else Block([("AND", inner)]))
         elif key == "stability_at_least":
             block.add("has_stability", Compare(">", float(value)))
             triggers_used.setdefault("has_stability", owner)
         else:
             raise SpecError(f"{owner}: condicion desconocida '{key}'", where=where)
     return block
+
+
+def scripted_effect_ids(spec_raw: dict) -> set[str]:
+    return {e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []}

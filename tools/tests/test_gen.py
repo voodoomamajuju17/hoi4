@@ -663,7 +663,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("4 eventos", len(events) == 4, str(len(events)))
+        check("6 eventos del EFE (4 propios + 2 reacciones a la FCU)", len(events) == 6, str(len(events)))
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
@@ -798,6 +798,49 @@ def test_balance() -> None:
         check("no toca las decisiones genericas", not (mod / "common/decisions/economy.txt").exists())
 
 
+def test_fcu() -> None:
+    section("FCU: el Directorio de las Cuatro y su arbol")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        tree = (mod / "common/national_focus/FCU_focus.txt").read_text()
+        root = pdx.parse(tree).get("focus_tree")
+        focuses = root.get_all("focus")
+        check("arbol de la FCU con 50+ focos", len(focuses) >= 50, str(len(focuses)))
+        by_id = {pdx.text(f.get("id")): f for f in focuses}
+        check("days -> cost en semanas (35 dias = 5)", pdx.text(by_id["FCU_ano_fiscal"].get("cost")) == "5")
+        opa = by_id["FCU_junta_de_emergencia"]
+        check("la OPA pide la bandera de la mecanica", "has_country_flag = FCU_opa_habilitada" in pdx.render(opa.get("available")))
+        check("la OPA y el segundo mandato se excluyen", "FCU_segundo_mandato" in pdx.render(opa.get("mutually_exclusive")))
+        reward = pdx.render(opa.get("completion_reward"))
+        check("la OPA asciende a Rourke", "promote_character = FCU_marcus_rourke" in reward, reward)
+        check("la IA prefiere la OPA en guerra", "has_war = yes" in pdx.render(opa.get("ai_will_do")))
+        bonos = pdx.render(by_id["FCU_bonos_del_directorio"])
+        check("prerequisites_any: un solo bloque con dos focos",
+              bonos.count("prerequisite = {") == 1 and "FCU_presupuesto_civil" in bonos and "FCU_presupuesto_militar" in bonos, bonos)
+        check("mesa redonda pide las cuatro entre 40 y 60",
+              pdx.render(by_id["FCU_la_mesa_redonda"].get("available")).count("check_variable") == 8)
+
+        hist = next((mod / "history/countries").glob("FCU - *.txt")).read_text()
+        check("las cuatro corporaciones arrancan en 50", all(f"var = FCU_{c}" in hist for c in
+              ("castellane", "halvorsen", "meridian", "obsidian")) and hist.count("value = 50") >= 4, hist[-1500:])
+        check("Rourke no arranca reclutado", "FCU_marcus_rourke" not in hist)
+        check("Castellane si", "recruit_character = FCU_valeria_castellane" in hist)
+
+        se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        check("efecto recalcular: clamp de las cuatro", se.count("clamp_variable") == 4, se[:800])
+        check("dos rivales debajo de 25: OR de pares con AND", "OR = {" in se and "AND = {" in se)
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        check("cada contrato recalcula el Directorio", decs.count("FCU_recalcular_directorio = yes") >= 6)
+        check("el dividendo solo en guerra", "has_war = yes" in decs)
+
+        efe_ev = (mod / "events/meganations_efe.txt").read_text()
+        check("ultimatum: rechazarlo le da a la FCU el wargoal", "FCU = {" in efe_ev and "create_wargoal" in efe_ev)
+        check("la HSN reacciona al ultimatum", (mod / "events/meganations_hsn.txt").exists())
+        fcu_ev = (mod / "events/meganations_fcu.txt").read_text()
+        check("el informe trimestral se vuelve a disparar", "id = meganations_fcu.3" in fcu_ev and "days = 90" in fcu_ev)
+
+
 def test_forces() -> None:
     section("armada y aviacion heredadas de 1936")
     with tempfile.TemporaryDirectory() as tmp:
@@ -884,12 +927,15 @@ def test_vanilla_validation() -> None:
             mods.update(trait["modifiers"])
         docs = van / "documentation"
         docs.mkdir()
-        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n")
+        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state\n"
+            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
+            "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
+            "set_country_flag clr_country_flag clamp_variable set_variable\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -956,6 +1002,7 @@ def main() -> int:
         test_events,
         test_leaders_and_ideologies,
         test_balance,
+        test_fcu,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

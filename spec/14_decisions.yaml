@@ -88,3 +88,200 @@ categories:
           - { effect: add_variable, var: EFE_biosteel, value: -3 }
           - { effect: army_experience, value: 30 }
         ai_factor: 3
+
+  # ===========================================================================
+  # FCU — El Directorio de las Cuatro ("Las Ocho Potencias", 2026-09-23)
+  # Cuatro influencias de 0 a 100 (06_mechanics.yaml -> four_corporations).
+  # Cada contrato favorece a una o dos corporaciones y perjudica a las otras.
+  # Después de cada contrato corre FCU_recalcular_directorio (abajo).
+  # ===========================================================================
+  - id: FCU_directorio_category
+    country: FCU
+    icon_prefer: [generic_industry, generic_production, generic_political_actions]
+    name:
+      english: "The Board of Four"
+      spanish: "El Directorio de las Cuatro"
+    desc:
+      english: "Castellane Water Trust: [?FCU_castellane]\\nHalvorsen-Ito Agrosystems: [?FCU_halvorsen]\\nMeridian Kinetics: [?FCU_meridian]\\nObsidian Ledger: [?FCU_obsidian]\\n\\nAll four between 40 and 60: Board Synergy.\\nAny of them below 15: Corporate War.\\nMeridian above 70 with two rivals below 25: the Hostile Takeover becomes possible."
+      spanish: "Castellane Water Trust: [?FCU_castellane]\\nHalvorsen-Ito Agrosystems: [?FCU_halvorsen]\\nMeridian Kinetics: [?FCU_meridian]\\nObsidian Ledger: [?FCU_obsidian]\\n\\nLas cuatro entre 40 y 60: Sinergia del Directorio.\\nAlguna por debajo de 15: Guerra Corporativa.\\nMeridian por encima de 70 con dos rivales por debajo de 25: se habilita la OPA Hostil."
+    src: user_design
+    after_effects:
+      - { effect: run, value: FCU_recalcular_directorio }
+
+    decisions:
+
+      - id: FCU_contrato_ferroviario
+        name: { english: "Automated Railway Contract", spanish: "Contrato Ferroviario Automatizado" }
+        desc:
+          english: "Meridian lays the track, Obsidian finances it. The farmers and the water board pay for it."
+          spanish: "Meridian pone las vías, Obsidian lo financia. Lo pagan los granjeros y el agua."
+        icon_prefer: [generic_construction, generic_industry]
+        cost: 50
+        cooldown_days: 60
+        visible: { not_flag: FCU_opa_consumada }
+        effects:
+          - { effect: add_variable, var: FCU_meridian, value: 10 }
+          - { effect: add_variable, var: FCU_obsidian, value: 5 }
+          - { effect: add_variable, var: FCU_halvorsen, value: -5 }
+          - { effect: add_variable, var: FCU_castellane, value: -5 }
+          - { effect: build, building: infrastructure, level: 1 }
+        ai_factor: 5
+
+      - id: FCU_subsidio_alimentario
+        name: { english: "Food Subsidy", spanish: "Subsidio Alimentario" }
+        desc:
+          english: "Halvorsen-Ito feeds the cities at a loss the Treasury covers. Obsidian calls it theft."
+          spanish: "Halvorsen-Ito alimenta a las ciudades a pérdida y el Tesoro la cubre. Obsidian lo llama robo."
+        icon_prefer: [generic_political_actions, generic_industry]
+        cost: 50
+        cooldown_days: 60
+        visible: { not_flag: FCU_opa_consumada }
+        effects:
+          - { effect: add_variable, var: FCU_halvorsen, value: 10 }
+          - { effect: add_variable, var: FCU_castellane, value: 5 }
+          - { effect: add_variable, var: FCU_meridian, value: -5 }
+          - { effect: add_variable, var: FCU_obsidian, value: -10 }
+          - { effect: add_stability, value: 0.03 }
+        ai_factor: 5
+
+      - id: FCU_licitacion_desalinizadoras
+        name: { english: "Desalination Tender", spanish: "Licitación de Desalinizadoras" }
+        desc:
+          english: "A new coast of desalination plants. Castellane wins the tender, as usual."
+          spanish: "Una costa nueva de desalinizadoras. Castellane gana la licitación, como siempre."
+        icon_prefer: [generic_construction, generic_industry]
+        cost: 75
+        cooldown_days: 90
+        visible: { not_flag: FCU_opa_consumada }
+        effects:
+          - { effect: add_variable, var: FCU_castellane, value: 10 }
+          - { effect: add_variable, var: FCU_halvorsen, value: 5 }
+          - { effect: add_variable, var: FCU_meridian, value: -5 }
+          - { effect: add_variable, var: FCU_obsidian, value: -5 }
+          - { effect: build, building: industrial_complex, level: 1 }
+        ai_factor: 4
+
+      - id: FCU_contrato_de_defensa
+        name: { english: "Defence Contract", spanish: "Contrato de Defensa" }
+        desc:
+          english: "Meridian Kinetics delivers a new line of arms. Everyone else delivers the budget."
+          spanish: "Meridian Kinetics entrega una línea nueva de armamento. Los demás entregan el presupuesto."
+        icon_prefer: [generic_army_support, generic_industry]
+        cost: 75
+        cooldown_days: 90
+        visible: { not_flag: FCU_opa_consumada }
+        effects:
+          - { effect: add_variable, var: FCU_meridian, value: 15 }
+          - { effect: add_variable, var: FCU_castellane, value: -5 }
+          - { effect: add_variable, var: FCU_halvorsen, value: -5 }
+          - { effect: add_variable, var: FCU_obsidian, value: -5 }
+          - { effect: army_experience, value: 15 }
+          - { effect: build, building: arms_factory, level: 1 }
+        ai_factor: 3
+
+      - id: FCU_desregulacion_financiera
+        name: { english: "Financial Deregulation", spanish: "Desregulación Financiera" }
+        desc:
+          english: "Obsidian Ledger writes its own rules for six months. Research flows, and so does the money nobody can trace."
+          spanish: "Obsidian Ledger escribe sus propias reglas por seis meses. La investigación fluye, y también la plata que nadie puede rastrear."
+        icon_prefer: [generic_research, generic_political_actions]
+        cost: 25
+        cooldown_days: 120
+        visible: { not_flag: FCU_opa_consumada }
+        effects:
+          - { effect: add_variable, var: FCU_obsidian, value: 15 }
+          - { effect: add_variable, var: FCU_halvorsen, value: -5 }
+          - { effect: add_variable, var: FCU_castellane, value: -5 }
+          - { effect: add_variable, var: FCU_meridian, value: -5 }
+          - { effect: timed_idea, idea: FCU_ventanilla_obsidian, days: 180 }
+        ai_factor: 3
+
+      - id: FCU_auditoria_del_directorio
+        name: { english: "Board Audit", spanish: "Auditoría del Directorio" }
+        desc:
+          english: "The Chair calls in the auditors. Whoever grew too much shrinks; whoever shrank too much gets a lifeline."
+          spanish: "La Presidencia llama a los auditores. La que creció de más se achica; la que se achicó de más recibe un salvavidas."
+        icon_prefer: [generic_political_actions, generic_research]
+        cost: 100
+        cooldown_days: 180
+        visible: { not_flag: FCU_opa_consumada }
+        effects:
+          - { effect: run, value: FCU_auditar_castellane }
+          - { effect: run, value: FCU_auditar_halvorsen }
+          - { effect: run, value: FCU_auditar_meridian }
+          - { effect: run, value: FCU_auditar_obsidian }
+        ai_factor: 2
+
+      - id: FCU_repartir_el_dividendo
+        name: { english: "Pay the War Dividend", spanish: "Repartir el Dividendo de Guerra" }
+        desc:
+          english: "The war is going well for the shareholders. Pay them before they ask."
+          spanish: "A los accionistas la guerra les está yendo bien. Hay que pagarles antes de que pregunten."
+        icon_prefer: [generic_army_support, generic_industry]
+        cost: 0
+        cooldown_days: 90
+        visible: { focus: FCU_el_dividendo_de_guerra }
+        available: { at_war: true }
+        effects:
+          - { effect: add_political_power, value: 75 }
+          - { effect: build, building: arms_factory, level: 1 }
+        ai_factor: 20
+
+scripted_effects:
+
+  # Después de cada contrato o foco que mueve una corporación.
+  - id: FCU_recalcular_directorio
+    effects:
+      - { effect: clamp, var: FCU_castellane, min: 0, max: 100 }
+      - { effect: clamp, var: FCU_halvorsen, min: 0, max: 100 }
+      - { effect: clamp, var: FCU_meridian, min: 0, max: 100 }
+      - { effect: clamp, var: FCU_obsidian, min: 0, max: 100 }
+      - effect: if
+        when: { not_flag: FCU_opa_consumada, all_between: { vars: [FCU_castellane, FCU_halvorsen, FCU_meridian, FCU_obsidian], min: 40, max: 60 } }
+        then:
+          - { effect: if, when: { not_idea: FCU_sinergia_del_directorio }, then: [ { effect: add_ideas, value: FCU_sinergia_del_directorio } ] }
+        else:
+          - { effect: if, when: { idea: FCU_sinergia_del_directorio }, then: [ { effect: remove_idea, value: FCU_sinergia_del_directorio } ] }
+      - effect: if
+        when:
+          not_flag: FCU_opa_consumada
+          any:
+            - { variable_below: { var: FCU_castellane, value: 15 } }
+            - { variable_below: { var: FCU_halvorsen, value: 15 } }
+            - { variable_below: { var: FCU_meridian, value: 15 } }
+            - { variable_below: { var: FCU_obsidian, value: 15 } }
+        then:
+          - { effect: if, when: { not_idea: FCU_guerra_corporativa }, then: [ { effect: add_ideas, value: FCU_guerra_corporativa } ] }
+        else:
+          - { effect: if, when: { idea: FCU_guerra_corporativa }, then: [ { effect: remove_idea, value: FCU_guerra_corporativa } ] }
+      - effect: if
+        when:
+          not_flag: FCU_opa_habilitada
+          variable_at_least: { var: FCU_meridian, value: 70 }
+          any:
+            - { variables_below: [ { var: FCU_castellane, value: 25 }, { var: FCU_halvorsen, value: 25 } ] }
+            - { variables_below: [ { var: FCU_castellane, value: 25 }, { var: FCU_obsidian, value: 25 } ] }
+            - { variables_below: [ { var: FCU_halvorsen, value: 25 }, { var: FCU_obsidian, value: 25 } ] }
+        then:
+          - { effect: flag, value: FCU_opa_habilitada }
+          - { effect: event, id: meganations_fcu.2 }
+
+  - id: FCU_auditar_castellane
+    effects:
+      - { effect: if, when: { variable_at_least: { var: FCU_castellane, value: 56 } }, then: [ { effect: add_variable, var: FCU_castellane, value: -10 } ] }
+      - { effect: if, when: { variable_below: { var: FCU_castellane, value: 45 } }, then: [ { effect: add_variable, var: FCU_castellane, value: 10 } ] }
+
+  - id: FCU_auditar_halvorsen
+    effects:
+      - { effect: if, when: { variable_at_least: { var: FCU_halvorsen, value: 56 } }, then: [ { effect: add_variable, var: FCU_halvorsen, value: -10 } ] }
+      - { effect: if, when: { variable_below: { var: FCU_halvorsen, value: 45 } }, then: [ { effect: add_variable, var: FCU_halvorsen, value: 10 } ] }
+
+  - id: FCU_auditar_meridian
+    effects:
+      - { effect: if, when: { variable_at_least: { var: FCU_meridian, value: 56 } }, then: [ { effect: add_variable, var: FCU_meridian, value: -10 } ] }
+      - { effect: if, when: { variable_below: { var: FCU_meridian, value: 45 } }, then: [ { effect: add_variable, var: FCU_meridian, value: 10 } ] }
+
+  - id: FCU_auditar_obsidian
+    effects:
+      - { effect: if, when: { variable_at_least: { var: FCU_obsidian, value: 56 } }, then: [ { effect: add_variable, var: FCU_obsidian, value: -10 } ] }
+      - { effect: if, when: { variable_below: { var: FCU_obsidian, value: 45 } }, then: [ { effect: add_variable, var: FCU_obsidian, value: 10 } ] }

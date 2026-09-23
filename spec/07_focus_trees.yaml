@@ -24,7 +24,7 @@
 policy:
   efe_tree_status: approved_by_user   # Q031, 2026-09-23
   efe_tree_origin: skeleton_invented_over_canon_anchors
-  other_trees_status: not_started
+  other_trees_status: in_progress   # FCU v1 (2026-09-23)
   see: [Q031, Q032]
 
 # =============================================================================
@@ -712,7 +712,772 @@ trees:
 
   # ---------------------------------------------------------------------------
   ASC: { status: not_started, see: Q032 }
-  FCU: { status: not_started, see: Q032 }
+
+  # ===========================================================================
+  FCU:
+    id: fcu_focus_tree
+    default: false
+    shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23). Ruta Castellane (status quo) contra La OPA Hostil (Rourke, se habilita con la mecánica del Directorio).
+      Versión 1 sin interfaz propia.'
+    branches:
+    - id: politica_castellane
+      name: {english: The Board of Four, spanish: El Directorio de las Cuatro}
+      focuses:
+      - id: FCU_ano_fiscal
+        name: {english: Fiscal Year 2100, spanish: El Año Fiscal 2100}
+        days: 35
+        icon: GFX_goal_generic_trade
+        desc:
+          english: A new century opens with a balance sheet. The Board wants to know who pays for it.
+          spanish: Un siglo nuevo abre con un balance. El Directorio quiere saber quién lo paga.
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: FCU_junta_anual
+        name: {english: The Annual Shareholders' Meeting, spanish: La Junta Anual de Accionistas}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - FCU_ano_fiscal
+        desc:
+          english: Every year the Four meet to decide who runs the Union. This year the room is tense.
+          spanish: Cada año las Cuatro se reúnen para decidir quién maneja la Unión. Este año el salón está tenso.
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: FCU_segundo_mandato
+        name: {english: Castellane's Second Term, spanish: El Segundo Mandato de Castellane}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - FCU_junta_anual
+        mutually_exclusive:
+        - FCU_junta_de_emergencia
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.3
+            when: {at_war: true}
+          - factor: 0.2
+            when: {flag: FCU_opa_habilitada}
+        desc:
+          english: 'Valeria Castellane keeps the Chair. Her secret: never let any of the Four win.'
+          spanish: 'Valeria Castellane conserva la Presidencia. Su secreto: no dejar ganar nunca a ninguna de las Cuatro.'
+        reward:
+        - {effect: add_political_power, value: 75}
+        - {effect: add_stability, value: 0.05}
+      - id: FCU_reparto_de_carteras
+        name: {english: Assigning the Portfolios, spanish: El Reparto de Carteras}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - FCU_segundo_mandato
+        desc:
+          english: Each corporation gets a ministry. Castellane keeps the one that signs the budgets.
+          spanish: Cada corporación recibe un ministerio. Castellane se queda con el que firma los presupuestos.
+        reward:
+        - {effect: add_ideas, value: FCU_carteras_repartidas}
+      - id: FCU_comida_para_todos
+        name: {english: 'Halvorsen-Ito: Food for Everyone', spanish: 'Halvorsen-Ito: Comida para Todos'}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - FCU_reparto_de_carteras
+        desc:
+          english: Halvorsen-Ito's vertical farms feed the cities at cost, and put their logo on every loaf.
+          spanish: Las granjas verticales de Halvorsen-Ito alimentan a las ciudades al costo, y ponen su logo en cada pan.
+        reward:
+        - {effect: add_variable, var: FCU_halvorsen, value: 10}
+        - {effect: add_stability, value: 0.03}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_el_libro_mayor
+        name: {english: 'Obsidian Ledger: The General Ledger', spanish: 'Obsidian Ledger: El Libro Mayor'}
+        days: 35
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - FCU_reparto_de_carteras
+        desc:
+          english: Every transaction in the Union goes through Obsidian's ledger. It knows what everyone owes.
+          spanish: Cada transacción de la Unión pasa por el libro de Obsidian. Sabe lo que debe cada uno.
+        reward:
+        - {effect: add_variable, var: FCU_obsidian, value: 10}
+        - {effect: add_political_power, value: 50}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_contratos_de_defensa
+        name: {english: 'Meridian Kinetics: Defence Contracts', spanish: 'Meridian Kinetics: Contratos de Defensa'}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - FCU_reparto_de_carteras
+        desc:
+          english: Meridian gets the army's orders, on the condition that it shares the profits with the Board.
+          spanish: Meridian se queda con los pedidos del ejército, con la condición de repartir las ganancias con el Directorio.
+        reward:
+        - {effect: add_variable, var: FCU_meridian, value: 10}
+        - {effect: army_experience, value: 20}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_grifos_de_la_union
+        name: {english: 'Castellane: The Union''s Taps', spanish: 'Castellane: Los Grifos de la Unión'}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - FCU_reparto_de_carteras
+        desc:
+          english: New desalination plants on both coasts. Water is Castellane's, and Castellane is the Chair.
+          spanish: Desalinizadoras nuevas en las dos costas. El agua es de Castellane, y Castellane es la Presidencia.
+        reward:
+        - {effect: add_variable, var: FCU_castellane, value: 10}
+        - {effect: build, building: industrial_complex, level: 1}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_la_mesa_redonda
+        name: {english: The Round Table, spanish: La Mesa Redonda}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - FCU_comida_para_todos
+        - FCU_el_libro_mayor
+        - FCU_contratos_de_defensa
+        - FCU_grifos_de_la_union
+        available:
+          all_between:
+            vars:
+            - FCU_castellane
+            - FCU_halvorsen
+            - FCU_meridian
+            - FCU_obsidian
+            min: 40
+            max: 60
+        desc:
+          english: Only possible with all four corporations between 40 and 60. The hardest thing in the Union is a board where nobody wins.
+          spanish: Solo posible con las cuatro corporaciones entre 40 y 60. Lo más difícil de la Unión es un directorio donde nadie gana.
+        reward:
+        - {effect: add_ideas, value: FCU_mesa_redonda}
+        - {effect: add_political_power, value: 50}
+      - id: FCU_grifos_cerrados_al_sur
+        name: {english: Close the Southern Taps, spanish: Cerrar los Grifos del Sur}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - FCU_la_mesa_redonda
+        available: {country_exists: EFE}
+        desc:
+          english: The Empire's northern cities drink Castellane's water. Remind them.
+          spanish: Las ciudades del norte del Imperio toman agua de Castellane. Hay que recordárselo.
+        reward:
+        - {effect: add_variable, var: FCU_castellane, value: 5}
+        - {effect: add_political_power, value: 50}
+        - {effect: event, id: meganations_efe.6, days: 1, target: EFE}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_adquisicion_del_sur
+        name: {english: The Acquisition of the South, spanish: La Adquisición del Sur}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - FCU_grifos_cerrados_al_sur
+        available: {country_exists: EFE}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: 'A formal acquisition offer to the Ecofascist Empire: the water, the vats, and a seat on the Board. If they refuse, Meridian
+            has a plan B.'
+          spanish: 'Una oferta formal de adquisición al Imperio Ecofascista: el agua, las cubas y una silla en el Directorio. Si la rechazan, Meridian
+            tiene un plan B.'
+        reward:
+        - {effect: event, id: meganations_efe.5, days: 1, target: EFE}
+        - {effect: event, id: meganations_hsn.1, days: 1, target: HSN}
+        - {effect: add_war_support, value: 0.05}
+    - id: politica_rourke
+      name: {english: The Hostile Takeover, spanish: La OPA Hostil}
+      focuses:
+      - id: FCU_junta_de_emergencia
+        name: {english: Emergency Shareholders' Meeting, spanish: Junta de Accionistas de Emergencia}
+        days: 21
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - FCU_junta_anual
+        mutually_exclusive:
+        - FCU_segundo_mandato
+        available: {flag: FCU_opa_habilitada}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 5
+            when: {at_war: true}
+        desc:
+          english: Available only when Meridian is above 70 and two rivals are below 25. Eleven minutes, one vote, a new Chief Executive.
+          spanish: Disponible solo con Meridian por encima de 70 y dos rivales por debajo de 25. Once minutos, un voto, un Director Ejecutivo nuevo.
+        reward:
+        - {effect: promote, character: FCU_marcus_rourke}
+        - {effect: flag, value: FCU_opa_consumada}
+        - {effect: timed_idea, idea: FCU_turbulencia_bursatil, days: 90}
+        - effect: if
+          when: {idea: FCU_sinergia_del_directorio}
+          then:
+          - {effect: remove_idea, value: FCU_sinergia_del_directorio}
+        - effect: if
+          when: {idea: FCU_guerra_corporativa}
+          then:
+          - {effect: remove_idea, value: FCU_guerra_corporativa}
+        - {effect: event, id: meganations_fcu.1, days: 1}
+      - id: FCU_absorber_a_halvorsen
+        name: {english: Meridian Absorbs Halvorsen-Ito, spanish: Meridian Absorbe a Halvorsen-Ito}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - FCU_junta_de_emergencia
+        desc:
+          english: The farms are Meridian's now. They feed the army first.
+          spanish: Las granjas ahora son de Meridian. Primero alimentan al ejército.
+        reward:
+        - {effect: set_variable, var: FCU_halvorsen, value: 0}
+        - {effect: add_variable, var: FCU_meridian, value: 15}
+        - {effect: add_ideas, value: FCU_raciones_meridian}
+        - {effect: army_experience, value: 25}
+      - id: FCU_liquidar_obsidian
+        name: {english: Obsidian Liquidated, spanish: Obsidian Liquidada}
+        days: 35
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - FCU_junta_de_emergencia
+        desc:
+          english: Obsidian's ledgers are sold at auction. The buyer is Meridian, with Obsidian's money.
+          spanish: Los libros de Obsidian se rematan. El comprador es Meridian, con la plata de Obsidian.
+        reward:
+        - {effect: set_variable, var: FCU_obsidian, value: 0}
+        - {effect: add_variable, var: FCU_meridian, value: 10}
+        - {effect: add_political_power, value: 150}
+      - id: FCU_castellane_firma
+        name: {english: Castellane Signs, spanish: Castellane Firma}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - FCU_absorber_a_halvorsen
+        - FCU_liquidar_obsidian
+        desc:
+          english: Valeria Castellane signs the sale of her company and leaves the capital. The water now answers to Meridian.
+          spanish: Valeria Castellane firma la venta de su compañía y se va de la capital. El agua ahora le responde a Meridian.
+        reward:
+        - {effect: set_variable, var: FCU_castellane, value: 0}
+        - {effect: set_variable, var: FCU_meridian, value: 100}
+        - {effect: swap_ideas, remove: FCU_directorio_de_las_cuatro, add: FCU_meridian_unica}
+      - id: FCU_el_dividendo_de_guerra
+        name: {english: The War Dividend, spanish: El Dividendo de Guerra}
+        days: 56
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - FCU_castellane_firma
+        desc:
+          english: The shareholders will be paid every quarter, as long as there is a war to pay them with.
+          spanish: A los accionistas se les paga cada trimestre, mientras haya una guerra con la cual pagarles.
+        reward:
+        - {effect: add_ideas, value: FCU_dividendo_de_guerra}
+        - {effect: event, id: meganations_fcu.3, days: 90}
+      - id: FCU_los_contratistas_globales
+        name: {english: Global Contractors, spanish: Contratistas Globales}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - FCU_el_dividendo_de_guerra
+        desc:
+          english: Meridian rents divisions to any country that pays. Experience comes back with the invoices.
+          spanish: Meridian alquila divisiones a cualquier país que pague. La experiencia vuelve con las facturas.
+        reward:
+        - {effect: add_ideas, value: FCU_contratistas_globales}
+        - {effect: army_experience, value: 25}
+      - id: FCU_adquirir_la_alta_mar
+        name: {english: Acquire the High Seas, spanish: Adquirir la Alta Mar}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - FCU_los_contratistas_globales
+        available: {country_exists: HSN}
+        desc:
+          english: 'A hostile offer to the High Seas Market Nation: a security fee on every Pacific cargo, or Meridian provides the security.'
+          spanish: 'Una oferta hostil a la Nación de Mercado de Alta Mar: una tasa de seguridad por cada carga del Pacífico, o Meridian se encarga
+            de la seguridad.'
+        reward:
+        - {effect: event, id: meganations_hsn.2, days: 1, target: HSN}
+        - {effect: add_war_support, value: 0.05}
+    - id: economia_dividendo
+      name: {english: The Civil Dividend, spanish: El Dividendo Civil}
+      focuses:
+      - id: FCU_consejo_economico
+        name: {english: The Economic Council, spanish: El Consejo Económico}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - FCU_ano_fiscal
+        desc:
+          english: 'Two models are fighting for the Union''s economy: a share for every citizen, or a tap for every rival.'
+          spanish: 'Dos modelos se pelean la economía de la Unión: una acción para cada ciudadano, o un grifo para cada rival.'
+        reward:
+        - {effect: add_political_power, value: 25}
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: FCU_el_dividendo
+        name: {english: The Dividend, spanish: El Dividendo}
+        days: 42
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - FCU_consejo_economico
+        mutually_exclusive:
+        - FCU_monopolio_del_agua
+        ai:
+          factor: 2
+          modifiers:
+          - factor: 0.5
+            when: {at_war: true}
+        desc:
+          english: Every citizen receives a share of the Union. Small, but real enough to defend.
+          spanish: Cada ciudadano recibe una acción de la Unión. Chiquita, pero lo bastante real como para defenderla.
+        reward:
+        - {effect: add_ideas, value: FCU_dividendo_civil}
+        - {effect: add_variable, var: FCU_halvorsen, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_zonas_francas
+        name: {english: Free Trade Zones, spanish: Zonas Francas}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - FCU_el_dividendo
+        desc:
+          english: Tax-free industrial parks along the Great Lakes.
+          spanish: Parques industriales libres de impuestos sobre los Grandes Lagos.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: FCU_consumo_de_masas
+        name: {english: Mass Consumption, spanish: Consumo de Masas}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - FCU_el_dividendo
+        desc:
+          english: Full shelves are the best propaganda the Board ever bought.
+          spanish: Las góndolas llenas son la mejor propaganda que el Directorio compró jamás.
+        reward:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_variable, var: FCU_halvorsen, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_abrir_la_exportacion
+        name: {english: The Export Market, spanish: El Mercado de Exportación}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - FCU_zonas_francas
+        - FCU_consumo_de_masas
+        desc:
+          english: The Union sells again to half the world.
+          spanish: La Unión vuelve a venderle a medio mundo.
+        reward:
+        - {effect: add_ideas, value: FCU_mercado_de_exportacion}
+        - {effect: add_variable, var: FCU_obsidian, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_hacia_la_abundancia
+        name: {english: The Economy of Plenty, spanish: La Economía de la Abundancia}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - FCU_abrir_la_exportacion
+        desc: {english: The Dividend becomes the system., spanish: El Dividendo se vuelve el sistema.}
+        reward:
+        - {effect: swap_ideas, remove: FCU_dividendo_civil, add: FCU_economia_de_la_abundancia}
+    - id: economia_agua
+      name: {english: The Water Monopoly, spanish: El Monopolio del Agua}
+      focuses:
+      - id: FCU_monopolio_del_agua
+        name: {english: The Water Monopoly, spanish: El Monopolio del Agua}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - FCU_consejo_economico
+        mutually_exclusive:
+        - FCU_el_dividendo
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: The Union does not export goods. It exports thirst, and sells the cure.
+          spanish: La Unión no exporta mercancías. Exporta sed, y vende la cura.
+        reward:
+        - {effect: add_ideas, value: FCU_monopolio_hidrico}
+        - {effect: add_variable, var: FCU_castellane, value: 10}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_desalinizadoras_del_golfo
+        name: {english: The Gulf Desalination Plants, spanish: Las Desalinizadoras del Golfo}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - FCU_monopolio_del_agua
+        desc:
+          english: A chain of plants from Texas to Florida.
+          spanish: Una cadena de plantas de Texas a Florida.
+        reward:
+        - {effect: build, building: industrial_complex, level: 1}
+        - {effect: add_variable, var: FCU_castellane, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_grifos_cerrados
+        name: {english: Closed Taps, spanish: Grifos Cerrados}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - FCU_monopolio_del_agua
+        available: {country_exists: EFE}
+        desc:
+          english: Neighbours who do not sign get no water. The Ecofascist Empire is the first to find out.
+          spanish: El vecino que no firma se queda sin agua. El Imperio Ecofascista es el primero en enterarse.
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: event, id: meganations_efe.6, days: 1, target: EFE}
+      - id: FCU_el_agua_es_poder
+        name: {english: Water Is Power, spanish: El Agua es Poder}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - FCU_desalinizadoras_del_golfo
+        - FCU_grifos_cerrados
+        desc:
+          english: Every treaty the Union signs now has a water clause.
+          spanish: Cada tratado que firma la Unión ahora tiene una cláusula de agua.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: FCU_castellane, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_el_imperio_del_agua
+        name: {english: The Water Empire, spanish: El Imperio del Agua}
+        days: 56
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - FCU_el_agua_es_poder
+        desc:
+          english: No army needed. Close the valve and wait.
+          spanish: No hace falta un ejército. Se cierra la válvula y se espera.
+        reward:
+        - {effect: swap_ideas, remove: FCU_monopolio_hidrico, add: FCU_imperio_del_agua}
+    - id: industria
+      name: {english: The Meridian Parks, spanish: Los Parques de Meridian}
+      focuses:
+      - id: FCU_zonas_industriales
+        name: {english: Industrial Zones, spanish: Zonas Industriales}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - FCU_ano_fiscal
+        desc:
+          english: The old Rust Belt, rebuilt by robots.
+          spanish: El viejo Cinturón del Óxido, reconstruido por robots.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: FCU_parque_de_pittsburgh
+        name: {english: The Pittsburgh Park, spanish: El Parque de Pittsburgh}
+        days: 35
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - FCU_zonas_industriales
+        desc:
+          english: Meridian's biggest arms complex.
+          spanish: El complejo de armamento más grande de Meridian.
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+        - {effect: add_variable, var: FCU_meridian, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_robotica_meridian
+        name: {english: Meridian Robotics, spanish: Robótica Meridian}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - FCU_zonas_industriales
+        desc:
+          english: Assembly arms that work three shifts and never unionise.
+          spanish: Brazos de ensamble que trabajan tres turnos y nunca se sindicalizan.
+        reward:
+        - {effect: add_ideas, value: FCU_robotica_industrial}
+        - {effect: add_variable, var: FCU_meridian, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_logistica_obsidian
+        name: {english: Obsidian Logistics, spanish: Logística Obsidian}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - FCU_parque_de_pittsburgh
+        - FCU_robotica_meridian
+        desc:
+          english: Obsidian's data routes every train in the Union.
+          spanish: Los datos de Obsidian rutean cada tren de la Unión.
+        reward:
+        - {effect: build, building: infrastructure, level: 2}
+        - {effect: add_variable, var: FCU_obsidian, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_astilleros_de_los_lagos
+        name: {english: The Lakes Shipyards, spanish: Los Astilleros de los Lagos}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - FCU_logistica_obsidian
+        desc:
+          english: Dry docks on the Great Lakes and the Gulf.
+          spanish: Diques secos en los Grandes Lagos y en el Golfo.
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: FCU_laboratorios_privados
+        name: {english: Private Laboratories, spanish: Laboratorios Privados}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - FCU_logistica_obsidian
+        desc:
+          english: The Four fund a joint research campus. Each one spies on the others.
+          spanish: Las Cuatro financian un campus de investigación conjunto. Cada una espía a las otras.
+        reward:
+        - {effect: add_research_slot, value: 1}
+    - id: ejercito
+      name: {english: Professional Contractors, spanish: Contratistas Profesionales}
+      focuses:
+      - id: FCU_fuerza_contratada
+        name: {english: The Contracted Force, spanish: La Fuerza Contratada}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - FCU_ano_fiscal
+        desc: {english: The Union does not conscript. It hires., spanish: La Unión no recluta. Contrata.}
+        reward:
+        - {effect: army_experience, value: 25}
+      - id: FCU_el_entrenamiento_corporativo
+        name: {english: Corporate Training, spanish: Entrenamiento Corporativo}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - FCU_fuerza_contratada
+        desc: {english: Quarterly targets and live ammunition., spanish: Objetivos trimestrales y munición real.}
+        reward:
+        - {effect: add_ideas, value: FCU_entrenamiento_corporativo}
+      - id: FCU_equipo_de_primera
+        name: {english: First-Class Equipment, spanish: Equipo de Primera}
+        days: 42
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - FCU_fuerza_contratada
+        desc:
+          english: Few soldiers, the best kit money can buy.
+          spanish: Pocos soldados, el mejor equipo que se puede comprar.
+        reward:
+        - {effect: build, building: arms_factory, level: 1}
+        - {effect: add_variable, var: FCU_meridian, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_seguro_de_vida
+        name: {english: Life Insurance, spanish: Seguro de Vida}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - FCU_el_entrenamiento_corporativo
+        - FCU_equipo_de_primera
+        desc:
+          english: Every contractor's family is insured. Volunteers queue up.
+          spanish: La familia de cada contratista está asegurada. Los voluntarios hacen fila.
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: add_manpower, value: 50000}
+      - id: FCU_divisiones_de_respuesta
+        name: {english: Rapid Response Divisions, spanish: Divisiones de Respuesta Rápida}
+        days: 42
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - FCU_seguro_de_vida
+        desc:
+          english: Few divisions, very expensive, always first.
+          spanish: Pocas divisiones, muy caras, siempre primeras.
+        reward:
+        - {effect: add_ideas, value: FCU_respuesta_rapida}
+      - id: FCU_el_comandante_contratado
+        name: {english: The Contracted Commander, spanish: El Comandante Contratado}
+        days: 56
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - FCU_divisiones_de_respuesta
+        desc:
+          english: The best general money can buy has a bonus clause for every city taken.
+          spanish: El mejor general que se puede comprar tiene una cláusula de bonificación por cada ciudad tomada.
+        reward:
+        - {effect: army_experience, value: 50}
+    - id: mar_aire
+      name: {english: The Two-Ocean Fleet, spanish: La Flota de Dos Océanos}
+      focuses:
+      - id: FCU_flota_del_atlantico
+        name: {english: The Atlantic Fleet, spanish: La Flota del Atlántico}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - FCU_ano_fiscal
+        desc: {english: Norfolk's docks work again., spanish: Los muelles de Norfolk vuelven a trabajar.}
+        reward:
+        - {effect: navy_experience, value: 25}
+        - {effect: build, building: dockyard, level: 1}
+      - id: FCU_flota_del_pacifico
+        name: {english: The Pacific Fleet, spanish: La Flota del Pacífico}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - FCU_flota_del_atlantico
+        desc:
+          english: San Diego and Seattle, facing the High Seas.
+          spanish: San Diego y Seattle, mirando a la Alta Mar.
+        reward:
+        - {effect: navy_experience, value: 25}
+        - {effect: build, building: dockyard, level: 1}
+      - id: FCU_escoltas_de_convoy
+        name: {english: Convoy Escorts, spanish: Escoltas de Convoy}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - FCU_flota_del_atlantico
+        desc:
+          english: Trade is the Union's lifeblood. It sails with escort.
+          spanish: El comercio es la sangre de la Unión. Navega con escolta.
+        reward:
+        - {effect: build, building: dockyard, level: 1}
+        - {effect: navy_experience, value: 15}
+      - id: FCU_superioridad_aerea
+        name: {english: Air Superiority, spanish: Superioridad Aérea}
+        days: 42
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - FCU_ano_fiscal
+        desc:
+          english: Meridian's drones own the skies over the Union.
+          spanish: Los drones de Meridian son dueños del cielo de la Unión.
+        reward:
+        - {effect: air_experience, value: 50}
+        - {effect: build, building: air_base, level: 2}
+      - id: FCU_portaaviones_corporativos
+        name: {english: Corporate Carriers, spanish: Portaaviones Corporativos}
+        days: 56
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - FCU_flota_del_pacifico
+        - FCU_superioridad_aerea
+        desc:
+          english: Floating airfields with a logo on the flight deck.
+          spanish: Aeródromos flotantes con un logo en la cubierta.
+        reward:
+        - {effect: navy_experience, value: 50}
+        - {effect: air_experience, value: 25}
+      - id: FCU_el_canal_asegurado
+        name: {english: The Secured Canal, spanish: El Canal Asegurado}
+        days: 56
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - FCU_portaaviones_corporativos
+        - FCU_escoltas_de_convoy
+        desc: {english: 'Both oceans, one Board.', spanish: 'Dos océanos, un directorio.'}
+        reward:
+        - {effect: add_ideas, value: FCU_dos_oceanos}
+    - id: directorio
+      name: {english: The Board Room, spanish: La Sala del Directorio}
+      focuses:
+      - id: FCU_el_tablero
+        name: {english: The Board Room, spanish: La Sala del Directorio}
+        days: 21
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - FCU_ano_fiscal
+        desc:
+          english: Four chairs, one table, a century of grudges.
+          spanish: Cuatro sillas, una mesa, un siglo de rencores.
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: FCU_arbitraje
+        name: {english: Corporate Arbitration, spanish: Arbitraje Corporativo}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - FCU_el_tablero
+        desc:
+          english: A permanent court for the Four's feuds.
+          spanish: Un tribunal permanente para las peleas de las Cuatro.
+        reward:
+        - {effect: add_ideas, value: FCU_arbitraje_corporativo}
+        - {effect: run, value: FCU_auditar_castellane}
+        - {effect: run, value: FCU_auditar_halvorsen}
+        - {effect: run, value: FCU_auditar_meridian}
+        - {effect: run, value: FCU_auditar_obsidian}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_presupuesto_civil
+        name: {english: The Civil Budget, spanish: El Presupuesto Civil}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - FCU_arbitraje
+        mutually_exclusive:
+        - FCU_presupuesto_militar
+        ai:
+          factor: 2
+          modifiers:
+          - factor: 0.3
+            when: {at_war: true}
+        desc: {english: Water and food first., spanish: Primero el agua y la comida.}
+        reward:
+        - {effect: add_variable, var: FCU_castellane, value: 5}
+        - {effect: add_variable, var: FCU_halvorsen, value: 5}
+        - {effect: add_variable, var: FCU_meridian, value: -5}
+        - {effect: build, building: industrial_complex, level: 1}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_presupuesto_militar
+        name: {english: The Military Budget, spanish: El Presupuesto Militar}
+        days: 35
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - FCU_arbitraje
+        mutually_exclusive:
+        - FCU_presupuesto_civil
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 4
+            when: {at_war: true}
+        desc: {english: Arms first. The rest can wait., spanish: Primero las armas. Lo demás puede esperar.}
+        reward:
+        - {effect: add_variable, var: FCU_meridian, value: 10}
+        - {effect: add_variable, var: FCU_obsidian, value: -5}
+        - {effect: build, building: arms_factory, level: 1}
+        - {effect: run, value: FCU_recalcular_directorio}
+      - id: FCU_bonos_del_directorio
+        name: {english: Board Bonds, spanish: Bonos del Directorio}
+        days: 42
+        icon: GFX_goal_generic_trade
+        desc:
+          english: Debt, sold to the citizens as patriotism.
+          spanish: Deuda, vendida a los ciudadanos como patriotismo.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: FCU_obsidian, value: 10}
+        - {effect: run, value: FCU_recalcular_directorio}
+        prerequisites_any:
+        - FCU_presupuesto_civil
+        - FCU_presupuesto_militar
+      - id: FCU_el_punto_de_equilibrio
+        name: {english: The Balance Point, spanish: El Punto de Equilibrio}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - FCU_bonos_del_directorio
+        available:
+          not_flag: FCU_opa_consumada
+          all_between:
+            vars:
+            - FCU_castellane
+            - FCU_halvorsen
+            - FCU_meridian
+            - FCU_obsidian
+            min: 35
+            max: 65
+        desc:
+          english: Only with the four between 35 and 65, and a Board that still exists.
+          spanish: Solo con las cuatro entre 35 y 65, y un Directorio que todavía exista.
+        reward:
+        - {effect: add_ideas, value: FCU_punto_de_equilibrio}
+
   HSN: { status: not_started, see: Q032 }
   NAS: { status: not_started, see: Q032 }
   SHD: { status: not_started, see: Q032 }

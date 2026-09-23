@@ -353,7 +353,150 @@ countries:
         removable: false
     see: Q030
 
-  FCU: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  FCU:
+    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    starting_ideas:
+      - id: FCU_directorio_de_las_cuatro
+        name: { english: "The Board of Four", spanish: "El Directorio de las Cuatro" }
+        desc:
+          english: "Four corporations share one board. Every law is a contract, and every contract has a loser."
+          spanish: "Cuatro corporaciones comparten un directorio. Cada ley es un contrato, y cada contrato tiene un perdedor."
+        modifiers: { political_power_gain: -0.1, production_speed_buildings_factor: 0.1 }
+        removable: false
+    focus_ideas:
+      - id: FCU_sinergia_del_directorio
+        name: { english: "Board Synergy", spanish: "Sinergia del Directorio" }
+        desc:
+          english: "The four corporations are balanced. For once, nobody is suing anybody."
+          spanish: "Las cuatro corporaciones están equilibradas. Por una vez, nadie le hace juicio a nadie."
+        modifiers: { industrial_capacity_factory: 0.1, research_speed_factor: 0.05, consumer_goods_factor: -0.05 }
+      - id: FCU_guerra_corporativa
+        name: { english: "Corporate War", spanish: "Guerra Corporativa" }
+        desc:
+          english: "One of the Four is drowning and has decided to take the others down with it: leaks, sabotage, outsourced strikes and lawsuits."
+          spanish: "Una de las Cuatro se está hundiendo y decidió llevarse a las otras puesta: filtraciones, sabotajes, huelgas tercerizadas y demandas."
+        modifiers: { stability_factor: -0.1, industrial_capacity_factory: -0.1, political_power_gain: -0.15 }
+      - id: FCU_ventanilla_obsidian
+        name: { english: "The Obsidian Window", spanish: "La Ventanilla de Obsidian" }
+        desc:
+          english: "Obsidian Ledger opened its data vaults to the Union's laboratories. The price will show up later."
+          spanish: "Obsidian Ledger abrió sus bóvedas de datos a los laboratorios de la Unión. El precio aparece después."
+        modifiers: { research_speed_factor: 0.05, political_power_gain: 0.1 }
+      - id: FCU_carteras_repartidas
+        name: { english: "Portfolios Assigned", spanish: "Carteras Repartidas" }
+        desc:
+          english: "Each corporation runs its own ministry. Nobody runs the government."
+          spanish: "Cada corporación maneja su ministerio. Nadie maneja el gobierno."
+        modifiers: { political_power_gain: 0.15 }
+      - id: FCU_mesa_redonda
+        name: { english: "The Round Table", spanish: "La Mesa Redonda" }
+        desc:
+          english: "Castellane's masterpiece: a board where no chair is higher than another."
+          spanish: "La obra maestra de Castellane: un directorio donde ninguna silla es más alta que otra."
+        modifiers: { stability_factor: 0.1, industrial_capacity_factory: 0.05, research_speed_factor: 0.05 }
+      - id: FCU_turbulencia_bursatil
+        name: { english: "Market Turbulence", spanish: "Turbulencia Bursátil" }
+        desc:
+          english: "A hostile takeover of an entire country. The markets are not taking it calmly."
+          spanish: "Una adquisición hostil de un país entero. Los mercados no se lo toman con calma."
+        modifiers: { stability_factor: -0.15, political_power_gain: -0.1 }
+      - id: FCU_raciones_meridian
+        name: { english: "Meridian Rations", spanish: "Raciones Meridian" }
+        desc:
+          english: "Halvorsen-Ito's farms now feed the army first. The supermarkets can wait."
+          spanish: "Las granjas de Halvorsen-Ito ahora alimentan primero al ejército. Los supermercados pueden esperar."
+        modifiers: { stability_factor: -0.05, war_support_factor: 0.05 }
+      - id: FCU_meridian_unica
+        name: { english: "One Company", spanish: "Una Sola Compañía" }
+        desc:
+          english: "There is no Board any more. There is Meridian, and there are its subsidiaries."
+          spanish: "Ya no hay Directorio. Está Meridian, y están sus subsidiarias."
+        modifiers: { production_speed_arms_factory_factor: 0.2, consumer_goods_factor: 0.05, stability_factor: -0.05 }
+      - id: FCU_dividendo_de_guerra
+        name: { english: "The War Dividend", spanish: "El Dividendo de Guerra" }
+        desc:
+          english: "Meridian does not invade countries. It makes vertical acquisitions with artillery, and the shareholders expect results every quarter."
+          spanish: "Meridian no invade países. Hace adquisiciones verticales con artillería, y los accionistas esperan resultados cada trimestre."
+        modifiers: { war_support_factor: 0.1, political_power_gain: 0.1 }
+      - id: FCU_caida_de_dividendos
+        name: { english: "Falling Dividends", spanish: "Caída de Dividendos" }
+        desc:
+          english: "A quarter without war. The shareholders are selling, and a militarised economy has nothing else to sell them."
+          spanish: "Un trimestre sin guerra. Los accionistas venden, y una economía militarizada no tiene otra cosa para ofrecerles."
+        modifiers: { stability_factor: -0.1, political_power_gain: -0.2 }
+      - id: FCU_contratistas_globales
+        name: { english: "Global Contractors", spanish: "Contratistas Globales" }
+        desc:
+          english: "Meridian rents its divisions to anyone who pays. The veterans come home with experience and invoices."
+          spanish: "Meridian alquila sus divisiones a quien pague. Los veteranos vuelven con experiencia y facturas."
+        modifiers: { experience_gain_army: 0.1, war_support_factor: 0.05 }
+      - id: FCU_dividendo_civil
+        name: { english: "The Civil Dividend", spanish: "El Dividendo Civil" }
+        desc:
+          english: "Every citizen holds a share. A small one."
+          spanish: "Cada ciudadano tiene una acción. Una chiquita."
+        modifiers: { consumer_goods_factor: -0.05, stability_factor: 0.05 }
+      - id: FCU_economia_de_la_abundancia
+        name: { english: "The Economy of Plenty", spanish: "La Economía de la Abundancia" }
+        desc:
+          english: "Shelves full, factories humming, and a population too comfortable to ask who owns what."
+          spanish: "Góndolas llenas, fábricas en marcha y una población demasiado cómoda para preguntar de quién es cada cosa."
+        modifiers: { consumer_goods_factor: -0.1, stability_factor: 0.1, industrial_capacity_factory: 0.05 }
+      - id: FCU_mercado_de_exportacion
+        name: { english: "The Export Market", spanish: "El Mercado de Exportación" }
+        desc:
+          english: "Half the continent buys American again. The other half is being sold to."
+          spanish: "Medio continente vuelve a comprar americano. Al otro medio le están vendiendo."
+        modifiers: { trade_opinion_factor: 0.2, production_speed_buildings_factor: 0.05 }
+      - id: FCU_monopolio_hidrico
+        name: { english: "The Water Monopoly", spanish: "El Monopolio del Agua" }
+        desc:
+          english: "Castellane owns the desalination plants, and the desalination plants own everyone."
+          spanish: "Castellane es dueña de las desalinizadoras, y las desalinizadoras son dueñas de todos."
+        modifiers: { political_power_gain: 0.1, trade_opinion_factor: -0.1 }
+      - id: FCU_imperio_del_agua
+        name: { english: "The Water Empire", spanish: "El Imperio del Agua" }
+        desc:
+          english: "No army needed. Close the valve and wait."
+          spanish: "No hace falta un ejército. Se cierra la válvula y se espera."
+        modifiers: { political_power_gain: 0.15, stability_factor: 0.05, production_speed_buildings_factor: 0.1 }
+      - id: FCU_robotica_industrial
+        name: { english: "Industrial Robotics", spanish: "Robótica Industrial" }
+        desc:
+          english: "Meridian's assembly arms work three shifts and never unionise."
+          spanish: "Los brazos de ensamble de Meridian trabajan tres turnos y nunca se sindicalizan."
+        modifiers: { production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05 }
+      - id: FCU_entrenamiento_corporativo
+        name: { english: "Corporate Training", spanish: "Entrenamiento Corporativo" }
+        desc:
+          english: "Performance reviews, quarterly targets and live ammunition."
+          spanish: "Evaluaciones de desempeño, objetivos trimestrales y munición real."
+        modifiers: { army_org_factor: 0.05, experience_gain_army: 0.1 }
+      - id: FCU_respuesta_rapida
+        name: { english: "Rapid Response Divisions", spanish: "Divisiones de Respuesta Rápida" }
+        desc:
+          english: "Few divisions, very expensive, always first."
+          spanish: "Pocas divisiones, muy caras, siempre primeras."
+        modifiers: { army_attack_factor: 0.05, army_defence_factor: 0.05 }
+      - id: FCU_dos_oceanos
+        name: { english: "Two Oceans", spanish: "Dos Océanos" }
+        desc:
+          english: "The Union faces both oceans, and both fleets answer to the same board."
+          spanish: "La Unión mira a los dos océanos, y las dos flotas responden al mismo directorio."
+        modifiers: { industrial_capacity_dockyard: 0.1, war_support_factor: 0.05 }
+      - id: FCU_arbitraje_corporativo
+        name: { english: "Corporate Arbitration", spanish: "Arbitraje Corporativo" }
+        desc:
+          english: "A permanent court where the Four settle their feuds before they reach the streets."
+          spanish: "Un tribunal permanente donde las Cuatro arreglan sus peleas antes de que lleguen a la calle."
+        modifiers: { political_power_gain: 0.05, stability_factor: 0.05 }
+      - id: FCU_punto_de_equilibrio
+        name: { english: "The Balance Point", spanish: "El Punto de Equilibrio" }
+        desc:
+          english: "The Board has learned to move together. It took a century and four lawyers per citizen."
+          spanish: "El Directorio aprendió a moverse junto. Costó un siglo y cuatro abogados por ciudadano."
+        modifiers: { stability_factor: 0.05, political_power_gain: 0.1 }
+    see: Q030
   HSN: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   NAS: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   SHD: { coverage: unknown, starting_ideas: unknown, see: Q030 }

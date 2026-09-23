@@ -99,3 +99,211 @@ namespaces:
               - { effect: add_war_support, value: 0.10 }
               - { effect: army_experience, value: 25 }
         src: invented
+
+      # --- Reacciones del EFE a la FCU ("Las Ocho Potencias", 2026-09-23) ---
+      - id: 5
+        trigger: effect   # lo manda el foco FCU_adquisicion_del_sur
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "The Acquisition of the South"
+          spanish: "La Adquisición del Sur"
+        desc:
+          english: "The Union's Board has sent Buenos Aires a formal acquisition offer: the water rights of the Guaraní Aquifer, the vats of the Pampa and a seat on the Board for the Emperor. The last paragraph is not an offer. It lists the divisions Meridian has moved to the Caribbean."
+          spanish: "El Directorio de la Unión mandó a Buenos Aires una oferta formal de adquisición: los derechos del Acuífero Guaraní, las cubas de la Pampa y una silla en el Directorio para el Emperador. El último párrafo no es una oferta. Enumera las divisiones que Meridian movió al Caribe."
+        options:
+          - name:
+              english: "Sell the water rights. Only the rights."
+              spanish: "Vender los derechos del agua. Solo los derechos."
+            ai_chance: 20
+            effects:
+              - { effect: add_stability, value: -0.10 }
+              - { effect: add_political_power, value: -50 }
+              - { effect: event, id: meganations_fcu.5, target: FCU }
+          - name:
+              english: "The water is not for sale."
+              spanish: "El agua no se vende."
+            ai_chance: 80
+            effects:
+              - { effect: add_war_support, value: 0.15 }
+              - { effect: scope, target: FCU, effects: [ { effect: wargoal, target: EFE, type: annex_everything } ] }
+        src: invented
+
+      - id: 6
+        trigger: effect   # lo manda el foco FCU_grifos_cerrados
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "The Northern Taps Close"
+          spanish: "Se Cierran los Grifos del Norte"
+        desc:
+          english: "Castellane Water Trust has cut the desalinated water it sold to our northern provinces. The Empire has its own aquifer, but not where the cities are."
+          spanish: "Castellane Water Trust cortó el agua desalinizada que les vendía a nuestras provincias del norte. El Imperio tiene su propio acuífero, pero no donde están las ciudades."
+        options:
+          - name:
+              english: "Pay their price, this time."
+              spanish: "Pagar su precio, esta vez."
+            ai_chance: 40
+            effects:
+              - { effect: add_political_power, value: -75 }
+          - name:
+              english: "Ration and endure."
+              spanish: "Racionar y aguantar."
+            ai_chance: 60
+            effects:
+              - { effect: add_stability, value: -0.05 }
+              - { effect: add_war_support, value: 0.05 }
+        src: invented
+
+  # ===========================================================================
+  meganations_fcu:
+    country: FCU
+    events:
+
+      - id: 1
+        trigger: effect   # FCU_junta_de_emergencia
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "Quorum: Not Required"
+          spanish: "Quórum: No Requerido"
+        desc:
+          english: "The emergency shareholders' meeting lasted eleven minutes. Meridian Kinetics voted its own shares, the shares it bought last night and the shares of two directors who did not show up. Marcus Rourke is Chief Executive of the Union. Nobody fired a shot; the lawyers did it all."
+          spanish: "La junta de accionistas de emergencia duró once minutos. Meridian Kinetics votó sus propias acciones, las que compró anoche y las de dos directores que no se presentaron. Marcus Rourke es Director Ejecutivo de la Unión. Nadie disparó un tiro; lo hicieron todo los abogados."
+        options:
+          - name:
+              english: "The Board is dissolved. Long live the company."
+              spanish: "El Directorio queda disuelto. Viva la compañía."
+            effects:
+              - { effect: add_political_power, value: 50 }
+        src: invented
+
+      - id: 2
+        trigger: effect   # FCU_recalcular_directorio, cuando Meridian domina
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "Meridian Smells Blood"
+          spanish: "Meridian Huele Sangre"
+        desc:
+          english: "Meridian Kinetics holds more contracts than the rest of the Board together, and two of its rivals are close to bankruptcy. In the lobbies of the capital, a word nobody dared say out loud is now in every conversation: takeover."
+          spanish: "Meridian Kinetics tiene más contratos que el resto del Directorio junto, y dos de sus rivales están al borde de la quiebra. En los pasillos de la capital, una palabra que nadie se animaba a decir en voz alta ahora está en todas las conversaciones: adquisición."
+        options:
+          - name:
+              english: "Let the Board take note."
+              spanish: "Que el Directorio tome nota."
+            effects:
+              - { effect: add_political_power, value: 25 }
+        src: invented
+
+      - id: 3
+        trigger: effect   # se repite cada 90 días desde FCU_dividendo_de_guerra
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "Quarterly Report to the Shareholders"
+          spanish: "Informe Trimestral a los Accionistas"
+        desc:
+          english: "Another quarter closes. The shareholders do not read the report; they read one line of it: are we at war?"
+          spanish: "Cierra otro trimestre. Los accionistas no leen el informe; leen una sola línea: ¿estamos en guerra?"
+        options:
+          - name:
+              english: "Publish the figures."
+              spanish: "Publicar los números."
+            effects:
+              - effect: if
+                when: { at_war: true }
+                then:
+                  - { effect: add_political_power, value: 50 }
+                else:
+                  - { effect: timed_idea, idea: FCU_caida_de_dividendos, days: 90 }
+              - { effect: event, id: meganations_fcu.3, days: 90 }
+        src: invented
+
+      - id: 5
+        trigger: effect   # respuesta del EFE a La Adquisición del Sur
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "The Empire Sells"
+          spanish: "El Imperio Vende"
+        desc:
+          english: "Buenos Aires signed the water rights and nothing else. Castellane calls it a start. Meridian calls it a delay."
+          spanish: "Buenos Aires firmó los derechos del agua y nada más. Castellane lo llama un comienzo. Meridian lo llama una demora."
+        options:
+          - name:
+              english: "Water today, the rest tomorrow."
+              spanish: "Hoy el agua, mañana lo demás."
+            effects:
+              - { effect: add_political_power, value: 150 }
+              - { effect: add_variable, var: FCU_castellane, value: 10 }
+              - { effect: run, value: FCU_recalcular_directorio }
+        src: invented
+
+      - id: 6
+        trigger: effect   # respuesta de la HSN a Adquirir la Alta Mar
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "The High Seas Pay"
+          spanish: "La Alta Mar Paga"
+        desc:
+          english: "The High Seas Market Nation has agreed to pay a 'security fee' on every cargo that crosses the Pacific. Meridian's shareholders applaud. Kofi Aldana's clearing house has started keeping a separate ledger."
+          spanish: "La Nación de Mercado de Alta Mar aceptó pagar una 'tasa de seguridad' por cada carga que cruza el Pacífico. Los accionistas de Meridian aplauden. La cámara de compensación de Kofi Aldana empezó a llevar un libro aparte."
+        options:
+          - name:
+              english: "An acquisition without a shot."
+              spanish: "Una adquisición sin un tiro."
+            effects:
+              - { effect: add_political_power, value: 150 }
+              - { effect: navy_experience, value: 25 }
+        src: invented
+
+  # ===========================================================================
+  meganations_hsn:
+    country: HSN
+    events:
+
+      - id: 1
+        trigger: effect   # la FCU manda su ultimátum al EFE
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "Insuring the River Plate Conflict"
+          spanish: "Asegurar el Conflicto del Plata"
+        desc:
+          english: "The Union has sent the Ecofascist Empire an ultimatum. Within the hour, the clearing house had priced the war: premiums on every cargo that crosses the South Atlantic, triple for anything flying a green flag."
+          spanish: "La Unión le mandó un ultimátum al Imperio Ecofascista. En menos de una hora la cámara de compensación ya le había puesto precio a la guerra: primas sobre cada carga que cruza el Atlántico Sur, triple para todo lo que lleve bandera verde."
+        options:
+          - name:
+              english: "Sell insurance to both sides."
+              spanish: "Venderles seguros a los dos bandos."
+            ai_chance: 70
+            effects:
+              - { effect: add_political_power, value: 75 }
+          - name:
+              english: "Stay out of the River Plate."
+              spanish: "Mantenerse lejos del Plata."
+            ai_chance: 30
+            effects:
+              - { effect: add_stability, value: 0.05 }
+        src: invented
+
+      - id: 2
+        trigger: effect   # el foco FCU_adquirir_la_alta_mar
+        picture: GFX_report_event_generic_factory
+        title:
+          english: "A Hostile Offer for the High Seas"
+          spanish: "Una Oferta Hostil por la Alta Mar"
+        desc:
+          english: "Marcus Rourke has sent Kofi Aldana a letter on Meridian letterhead: a 'security fee' on every Pacific cargo, or Meridian will provide the security itself. With carriers."
+          spanish: "Marcus Rourke le mandó a Kofi Aldana una carta con membrete de Meridian: una 'tasa de seguridad' por cada carga del Pacífico, o Meridian se va a encargar de la seguridad en persona. Con portaaviones."
+        options:
+          - name:
+              english: "Pay. Ships are expensive; fees are not."
+              spanish: "Pagar. Los barcos son caros; las tasas no."
+            ai_chance: 30
+            effects:
+              - { effect: add_political_power, value: -100 }
+              - { effect: add_stability, value: -0.05 }
+              - { effect: event, id: meganations_fcu.6, target: FCU }
+          - name:
+              english: "The sea belongs to whoever sails it."
+              spanish: "El mar es de quien lo navega."
+            ai_chance: 70
+            effects:
+              - { effect: add_war_support, value: 0.15 }
+              - { effect: scope, target: FCU, effects: [ { effect: wargoal, target: HSN, type: annex_everything } ] }
+        src: invented

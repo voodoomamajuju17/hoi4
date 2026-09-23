@@ -49,26 +49,27 @@ elementos también van por importancia.
 - [ ] Satélites: nivel de autonomía por bloque y cómo se liberan o anexan
 - [ ] Revisar capitales provisorias de los satélites (hoy: la región con más población)
 
-## 3. Identidad de las otras siete meganaciones
+## 3. Identidad de las ocho meganaciones
 
-Cada una necesita lo mismo que ya tiene el EFE. Orden sugerido: de la
-mecánica mejor definida en el documento a la menos definida.
+Diseño: `DISENO_OCHO_POTENCIAS.md` ("Las Ocho Potencias", aprobado 2026-09-23).
+Cada una: 44-52 focos (status quo, revolución, dos economías excluyentes,
+industria, ejército, aire/mar, árbol propio de su mecánica), ideas, decisiones,
+eventos con ultimátum e IA con condiciones.
 
-Para cada una:
-- [ ] Ideas nacionales de arranque (2 a 4)
-- [ ] Mecánica propia como panel de decisiones o contador (como el BioSteel)
-- [ ] Árbol de focos: 2 rutas políticas, 1 económica, 1 militar, con su enemigo natural
-- [ ] 3 a 5 eventos atados al árbol y a la mecánica
-- [ ] Rasgos de líder y un mariscal propio
-
-Por facción:
-- [ ] **ASC — Poder de Cómputo** (Q023): datacenters dan capacidad, los ejércitos autónomos la consumen, la sobrecarga penaliza
-- [ ] **FCU — Equilibrio civil-militar** (Q024): barra de dos polos entre las cuatro corporaciones; militarizarse le cuesta a la economía
-- [ ] **NRE — Legiones y Oficiales** (Q028): prestigio de legiones, aclamación del Imperator
-- [ ] **HSN — Nodos comerciales / TFI** (Q025): control de estrechos, peajes, flota
-- [ ] **SHD — Armonía** (Q026): medidor social que el Directorio corrige
-- [ ] **APF — Integración regional** (Q027): consejos que se suman a la federación
-- [ ] **NAS — Inti-Soma** (Q009): el Sol, el culto y la altura
+- [x] Infraestructura: duraciones en días, IA condicionada, prerrequisitos
+  "cualquiera de", variables, banderas, `if`, eventos entre países, cambio de
+  líder, ideas temporales, efectos reutilizables
+- [~] **FCU** — el Directorio de las Cuatro (4 influencias, contratos, OPA de
+  Rourke, ultimátums al EFE y a la HSN), árbol de 53 focos
+- [ ] **EFE** — rehacer el árbol: Aurelio vs Anahí, misiones de integración,
+  reforestación por etapas
+- [ ] **ASC** — Poder de Cómputo, Consejo Sorteado, PLAN-41 y drones
+- [ ] **HSN** — red de nodos, Kofi Aldana vs Inés Tavake (Botín, corso)
+- [ ] **NAS** — Qhapaq Ñan + Inti-Soma, los cuatro Suyus
+- [ ] **APF** — Desarrollo + Integración, Amara vs Diallo
+- [ ] **SHD** — los tres caudales, la Gran Crecida
+- [ ] **NRE** — prestigio de legiones, Auctoritas Militaris, AVE IMPERATOR
+- [ ] Interacciones entre potencias (20-30 eventos chicos)
 
 ## 4. El EFE, a fondo
 

@@ -102,8 +102,11 @@ def emit(ctx: BuildContext) -> None:
         add(f"{r['tag']:4} " + " ".join(f"{int(r['res'].get(k, 0)):>6}" for k in res_cols))
     add("")
 
-    counters = [m["variable"] for m in ctx.spec.raw["mechanics"].get("mechanics", []) or []
-                if isinstance(m.get("variable"), dict)]
+    counters = []
+    for m in ctx.spec.raw["mechanics"].get("mechanics", []) or []:
+        if isinstance(m.get("variable"), dict):
+            counters.append(m["variable"])
+        counters += [dict(v, country=v.get("country", m.get("country"))) for v in m.get("variables") or []]
     if counters:
         add("CONTADORES NACIONALES (no son recursos del mapa)")
         for v in counters:

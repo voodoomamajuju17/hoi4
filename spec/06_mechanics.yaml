@@ -150,25 +150,30 @@ mechanics:
   # ===========================================================================
   - id: four_corporations
     country: FCU
-    definition_status: partial
-    src: canon
+    definition_status: implementable
+    src: user_design   # "Las Ocho Potencias" (2026-09-23)
     doc_section: "§5"
     name:
-      english: "The Four Corporations"
-      spanish: "Las Cuatro Corporaciones"
+      english: "The Board of Four"
+      spanish: "El Directorio de las Cuatro"
     count: 4
-    count_src: canon
     model: influence_actors
     doc_quote: "Cuatro corporaciones con influencia propia."
-    unknown:
-      - "Nombres de las cuatro corporaciones."
-      - "Sector/rubro de cada una."
-      - "Ramas de bonificaciones."
-      - "Cómo se gana/pierde influencia con cada una."
+    design: >
+      Cuatro influencias de 0 a 100 que arrancan en 50. Los contratos
+      (14_decisions.yaml -> FCU_directorio_category) benefician a una o dos y
+      perjudican a las otras. Las cuatro entre 40 y 60 -> Sinergia del
+      Directorio. Alguna por debajo de 15 -> Guerra Corporativa (sabotajes,
+      filtraciones, demandas). Meridian por encima de 70 con dos rivales por
+      debajo de 25 -> se habilita La OPA Hostil (ruta de Rourke).
+      Versión 1 sin interfaz propia: variables + decisiones + ideas.
+    variables:
+      - { name: FCU_castellane, start: 50 }   # Castellane Water Trust: agua, desalinizadoras
+      - { name: FCU_halvorsen, start: 50 }    # Halvorsen-Ito Agrosystems: comida
+      - { name: FCU_meridian, start: 50 }     # Meridian Kinetics: armas y robótica
+      - { name: FCU_obsidian, start: 50 }     # Obsidian Ledger: finanzas y datos
+    thresholds: { synergy_min: 40, synergy_max: 60, crisis_below: 15, opa_meridian: 70, opa_rivals_below: 25 }
     see: Q017
-    note: >
-      El doc dice literalmente que este detalle "no apareció en la recuperación
-      actual y queda pendiente". No inventé nombres de corporaciones.
 
   # ===========================================================================
   - id: tfi
@@ -293,7 +298,8 @@ mechanics:
 # =============================================================================
 summary:
   implementable: [compute_power]
-  partial: [biosteel, civil_military_balance, four_corporations, trade_nodes, regional_integration]
+  partial: [biosteel, civil_military_balance, trade_nodes, regional_integration]
+  implementable_now: [four_corporations]
   name_only: [epi, tfi, inti_soma, harmony, legions, officers]
   note: >
     6 de 12 sistemas son solo un nombre. Eso NO bloquea la Fase 3 (el EFE puede
