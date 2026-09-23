@@ -3,12 +3,15 @@
 No se edita ninguna interfaz vanilla: se buscan en interface/**/*.gfx los
 sprites de fondo del menú principal y se escribe nuestra imagen en la MISMA
 ruta de textura (el archivo del mod pisa al vanilla). Si la textura vanilla
-tiene otro tamaño, la nuestra se reescala a ese tamaño (vecino más cercano,
-sin dependencias).
+tiene otro tamaño, la nuestra se reescala a ese tamaño sin deformarla: se
+ajusta al ancho, se centra y las franjas que sobran repiten el borde (vecino
+más cercano, sin dependencias).
 
-Candidatos: sprites cuyo nombre o textura hablan de menú principal y de fondo
-(main_menu / mainmenu / menu + bg / background). Se reportan en reporte.txt;
-si no aparece ninguno, se avisa y no se escribe nada.
+Candidatos: en 1.19 el fondo es GFX_frontend_bg (interface/frontendmainviewbg.gfx,
+un corneredTileSpriteType que apunta a gfx/loadingscreens/load_5.dds). Además
+se aceptan sprites cuyo nombre hable de menú principal y de fondo, por si una
+versión futura lo renombra. Se reportan en reporte.txt; si no aparece
+ninguno, se avisa y no se escribe nada.
 """
 
 from __future__ import annotations
@@ -18,7 +21,7 @@ import struct
 
 from ..context import BuildContext
 
-_NAME = re.compile(r"(?i)(main_?menu|menu).*(bg|background)|(bg|background).*(main_?menu)")
+_NAME = re.compile(r"(?i)^GFX_frontend_(main_?)?bg$|(main_?menu|menu).*(bg|background)|(bg|background).*(main_?menu)")
 _SPRITE = re.compile(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)"?\s+texturefile\s*=\s*"([^"]+)"', re.S)
 
 
@@ -58,7 +61,7 @@ def _menu_textures(ctx: BuildContext) -> set[str]:
             continue
         for name, texture in _SPRITE.findall(text):
             texture = texture.replace("\\", "/")
-            if texture.lower().endswith(".dds") and (_NAME.search(name) or _NAME.search(texture)):
+            if texture.lower().endswith(".dds") and _NAME.search(name):
                 out.add(texture)
     return out
 
@@ -71,14 +74,20 @@ def _dims(data: bytes) -> tuple[int, int]:
 
 
 def _resize(src: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
-    """Reescala un DDS A8R8G8B8 sin comprimir (el que escribe art.write_dds)."""
+    """Reescala un DDS A8R8G8B8 sin comprimir (el que escribe art.write_dds).
+
+    Ajusta al ancho nuevo manteniendo la proporción y centra en vertical; las
+    filas de arriba y abajo que no tienen imagen repiten la primera/última.
+    """
     body = src[128:]
     header = bytearray(src[:128])
     struct.pack_into("<III", header, 12, nh, nw, nw * 4)
+    scaled_h = max(1, round(h * nw / w))
+    top = (nh - scaled_h) // 2
     rows = []
     xs = [min(w - 1, x * w // nw) * 4 for x in range(nw)]
     for y in range(nh):
-        sy = min(h - 1, y * h // nh)
+        sy = min(h - 1, max(0, (y - top) * h // scaled_h))
         row = body[sy * w * 4:(sy + 1) * w * 4]
         rows.append(b"".join(row[x:x + 4] for x in xs))
     return bytes(header) + b"".join(rows)

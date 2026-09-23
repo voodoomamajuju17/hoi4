@@ -14,6 +14,11 @@ flota o ala pasa al país del mod que ahora tiene su base:
   flota -> dueño del state de su naval_base (o de su primer task_force)
   ala   -> dueño del state donde está basada
 
+Solo cuentan los OOB de arranque (1936): los set_naval_oob / set_air_oob
+dentro de bloques con fecha (1939...) son de otros bookmarks y duplicarían
+todo. Un ala en un state sin base aérea (el juego lo rechaza) se muda a la
+base aérea más grande del mismo país; si no tiene ninguna, se descarta.
+
 Lo que queda en territorio de la Anarquía se descarta. Las variantes que usa
 cada archivo (create_equipment_variant en su instant_effect) se copian a cada
 país que hereda algo de ese archivo. owner y creator pasan al país nuevo.
@@ -21,6 +26,7 @@ país que hereda algo de ese archivo. owner y creator pasan al país nuevo.
 
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 
 from ..context import BuildContext
@@ -28,6 +34,8 @@ from ..pdx import Block, Quoted, banner_for, parse_file, render
 from .military import faction_kind
 
 SOURCE = "flotas y alas vanilla de 1936, reasignadas por 08_territory.yaml"
+
+_DATE_KEY = re.compile(r"^\d{1,4}\.\d{1,2}\.\d{1,2}(\.\d{1,2})?$")
 
 
 def emit(ctx: BuildContext) -> None:
@@ -37,6 +45,11 @@ def emit(ctx: BuildContext) -> None:
     kinds = {c.tag: faction_kind(c) for c in ctx.spec.countries}
     receivers = {t for t, k in kinds.items() if k in ("meganation", "satellite")}
     prov_state = {p: s.id for s in ctx.vanilla.states() for p in s.provinces}
+    air_base = {s.id: (s.buildings or {}).get("air_base", 0) for s in ctx.vanilla.states()}
+    best_base: dict[str, int] = {}
+    for sid, tag in sorted(assignment.items()):
+        if air_base.get(sid, 0) > air_base.get(best_base.get(tag), 0):
+            best_base[tag] = sid
 
     def owner_of_province(prov) -> str | None:
         sid = prov_state.get(_int(prov))
@@ -49,11 +62,12 @@ def emit(ctx: BuildContext) -> None:
 
     naval_files, air_files = _vanilla_oob_files(ctx)
     fleets: dict[str, Block] = defaultdict(Block)
-    wings: dict[str, Block] = defaultdict(Block)
+    wings: dict[str, dict[int, Block]] = defaultdict(dict)
     variants: dict[str, dict[str, list]] = {"naval": defaultdict(list), "air": defaultdict(list)}
     ships = defaultdict(int)
     planes = defaultdict(int)
     dropped = 0
+    moved = 0
 
     for path in naval_files:
         root = _safe_parse(ctx, path)
@@ -96,8 +110,16 @@ def emit(ctx: BuildContext) -> None:
             if tag is None:
                 dropped += 1
                 continue
+            sid = _int(sid)
+            if air_base.get(sid, 0) <= 0:
+                if tag not in best_base:
+                    dropped += 1
+                    continue
+                sid = best_base[tag]
+                moved += 1
             _retag(wing, tag)
-            wings[tag].add(sid, wing)
+            merged = wings[tag].setdefault(sid, Block())
+            merged.entries.extend(wing.entries)
             planes[tag] += _sum_amounts(wing)
             used_by.add(tag)
         for tag in used_by:
@@ -112,7 +134,10 @@ def emit(ctx: BuildContext) -> None:
         name = f"{tag}_2100_naval"
         ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(root))
         ctx.data["naval_oob"][tag] = name
-    for tag, block in wings.items():
+    for tag, by_state in wings.items():
+        block = Block()
+        for sid in sorted(by_state):
+            block.add(str(sid), by_state[sid])
         root = Block()
         root.add("air_wings", block)
         _add_variants(root, variants["air"][tag])
@@ -123,7 +148,8 @@ def emit(ctx: BuildContext) -> None:
     ctx.data["planes"] = dict(planes)
     if fleets or wings:
         ctx.note(f"armada y aviacion: {sum(ships.values())} barcos y {sum(planes.values())} aviones heredados "
-                 f"de 1936; {dropped} flotas/alas en territorio de la Anarquia descartadas")
+                 f"de 1936; {dropped} flotas/alas en territorio de la Anarquia descartadas; "
+                 f"{moved} alas mudadas a una base aerea propia")
     elif naval_files or air_files:
         ctx.warn("armada y aviacion: habia OOB vanilla pero ninguna base quedo en manos de un pais del mod.")
 
@@ -156,13 +182,12 @@ def _collect(block: Block, key: str, out: list[str]) -> None:
     for k, v in block.entries:
         if k == key and not isinstance(v, Block):
             out.append(_text(v))
-        elif isinstance(v, Block):
+        elif isinstance(v, Block) and not _DATE_KEY.match(str(k)):
             _collect(v, key, out)
 
 
 def _safe_parse(ctx: BuildContext, path):
     raw = path.read_text(encoding="utf-8-sig", errors="replace")
-    import re
     if re.search(r'^[^#"\n]*[<>]', raw, re.MULTILINE):
         ctx.warn(f"{path.name}: usa comparaciones; no lo reasigno.")
         return None

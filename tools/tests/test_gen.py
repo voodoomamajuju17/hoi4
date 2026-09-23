@@ -492,7 +492,7 @@ def test_territory() -> None:
         terr = ctx.data["territory"]
         check("Buenos Aires (ARG) -> EFE", terr.get(900) == "EFE", str(terr))
         check("Cordoba (ARG) -> EFE", terr.get(902) == "EFE")
-        check("Formosa: el nombre explicito le gana al owner ARG", terr.get(903) == "YYG", str(terr))
+        check("Formosa queda en el EFE (decision del usuario)", terr.get(903) == "EFE", str(terr))
         check("Magallanes -> PTA", terr.get(901) == "PTA")
         check("Paraguay (PAR) -> YYG", terr.get(904) == "YYG")
         check("Rio Grande do Sul (BRA) -> EFE", terr.get(905) == "EFE")
@@ -762,8 +762,8 @@ def test_balance() -> None:
         bal = (Path(tmp) / "balance.txt").read_text()
         check("el balance muestra los totales mundiales OK", "TOTAL MUNDIAL" in bal and "DISTINTO" not in bal, bal)
 
-        menu = mod / "gfx/interface/mainmenu/mainmenu_bg.dds"
-        check("fondo del menu en la ruta del sprite vanilla", menu.exists())
+        menu = mod / "gfx/loadingscreens/load_5.dds"
+        check("fondo del menu en la ruta de GFX_frontend_bg", menu.exists())
         raw = menu.read_bytes()
         import struct as _st
         check("reescalado al tamano del vanilla (4x2)", _st.unpack_from("<II", raw, 12) == (2, 4), str(_st.unpack_from("<II", raw, 12)))
@@ -796,7 +796,10 @@ def test_forces() -> None:
         check("la historia carga la armada", 'set_naval_oob = "NRE_2100_naval"' in nre_h)
         check("la historia carga la aviacion", 'set_air_oob = "NRE_2100_air"' in nre_h)
         check("cuenta barcos", ctx.data["ships"].get("NRE") == 2, str(ctx.data["ships"]))
-        check("cuenta aviones", ctx.data["planes"].get("NRE") == 60, str(ctx.data["planes"]))
+        check("cuenta aviones (sin los OOB de 1939)", ctx.data["planes"].get("NRE") == 60, str(ctx.data["planes"]))
+        check("ignora el set_air_oob dentro de un bloque con fecha", "999" not in (mod / "history/units/NRE_2100_air.txt").read_text())
+        check("un ala sin base aerea propia se descarta (APF en Libia)",
+              not (mod / "history/units/APF_2100_air.txt").exists())
 
 
 def test_diplomacy() -> None:

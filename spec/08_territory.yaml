@@ -13,8 +13,8 @@
 #                              (sin distinguir mayúsculas ni tildes)
 #
 # Prioridad: un `state` explícito le gana a un `owner`. Así las exclusiones
-# salen solas: el EFE toma todo ARG, pero "Formosa" la pide YYG por nombre y
-# se la queda YYG. Dos `state` explícitos sobre el mismo state = error.
+# salen solas: el EFE toma todo ARG, pero "Tierra del Fuego" la pide PTA por
+# nombre y se la queda PTA. Dos `state` explícitos sobre el mismo state = error.
 #
 # Un nombre que no aparece en el juego NO frena el build: se avisa con los
 # nombres parecidos que sí existen, para corregir el spec con el reporte.
@@ -38,7 +38,7 @@ territories:
     capital_src: canon
     core_regions:
       - name: "Argentina"
-        exclusions: ["Tierra del Fuego (parte argentina)", "Misiones", "Formosa"]
+        exclusions: ["Tierra del Fuego (parte argentina)"]
         exclusions_src: inferred
         exclusions_note: >
           Misiones y Formosa se excluyen porque el doc las asigna explícitamente
@@ -62,8 +62,9 @@ territories:
     resolve_src: inferred
     resolve_note: >
       ARG, URG y CHL son los TAG vanilla de Argentina, Uruguay y Chile. Las
-      exclusiones (Tierra del Fuego, Magallanes, Misiones, Formosa) salen solas
-      porque las piden los satélites por nombre.
+      exclusiones (Tierra del Fuego, Magallanes) salen solas porque las pide
+      PTA por nombre. Misiones y Formosa quedan en el EFE por decisión del
+      usuario (2026-09-23), aunque el doc las daba a YYG.
     capital_state: ["Buenos Aires"]
     cores: all_core_regions
     cores_src: inferred
@@ -132,8 +133,8 @@ territories:
       - { state: ["Santa Catarina"] }
       # Misiones está dentro de la Región Mesopotámica en 1.19.3, y el usuario
       # decidió (2026-09-23) que la Mesopotamia es del EFE: YYG no la toma.
-      - { state: ["Misiones"] }
-      - { state: ["Formosa"] }
+      # Formosa también queda en el EFE (pedido del usuario, 2026-09-23):
+      # sale de Argentina, así que la toma el { owner: ARG } del EFE.
     resolve_src: inferred
     capital: "Asunción"
     capital_state: ["Paraguay", "Central Paraguay"]
