@@ -785,8 +785,9 @@ def test_forces() -> None:
         variants = nre.get("instant_effect").get_all("create_equipment_variant")
         check("copia las variantes de barcos", len(variants) == 2, str(len(variants)))
         check("no copia otros efectos del instant_effect", "add_political_power" not in raw)
-        apf = pdx.parse((mod / "history/units/APF_2100_naval.txt").read_text())
-        check("APF hereda la flota con base en Libia", pdx.text(apf.get("units").get("fleet").get("name")) == "Squadra Libia")
+        check("APF no esta en forces.navies: sin flota aunque tenga la base de Libia",
+              not (mod / "history/units/APF_2100_naval.txt").exists())
+        check("recorte: de 2 barcos queda 1 (el primero)", "Roma" in raw and "Zara" not in raw, raw)
         check("la flota en territorio de la Anarquia se descarta",
               not any((mod / "history/units").glob("ZWI_2100_naval.txt")))
         air = pdx.parse((mod / "history/units/NRE_2100_air.txt").read_text()).get("air_wings")
@@ -795,8 +796,11 @@ def test_forces() -> None:
         nre_h = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
         check("la historia carga la armada", 'set_naval_oob = "NRE_2100_naval"' in nre_h)
         check("la historia carga la aviacion", 'set_air_oob = "NRE_2100_air"' in nre_h)
-        check("cuenta barcos", ctx.data["ships"].get("NRE") == 2, str(ctx.data["ships"]))
-        check("cuenta aviones (sin los OOB de 1939)", ctx.data["planes"].get("NRE") == 60, str(ctx.data["planes"]))
+        check("cuenta barcos despues del recorte", ctx.data["ships"].get("NRE") == 1, str(ctx.data["ships"]))
+        check("aviones: 10% de 60 = 6, sube al piso de 10 (sin los OOB de 1939)",
+              ctx.data["planes"].get("NRE") == 10, str(ctx.data["planes"]))
+        check("la Anarquia no tiene aviones ni barcos",
+              not any(t in ctx.data["planes"] or t in ctx.data["ships"] for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")))
         check("ignora el set_air_oob dentro de un bloque con fecha", "999" not in (mod / "history/units/NRE_2100_air.txt").read_text())
         check("un ala sin base aerea propia se descarta (APF en Libia)",
               not (mod / "history/units/APF_2100_air.txt").exists())

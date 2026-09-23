@@ -37,7 +37,7 @@ elementos también van por importancia.
 - [~] Industrialización de EFE, NAS y APF; penalización de la ASC
 - [~] Leyes de reclutamiento según población
 - [~] Ejército inicial (piso 20 para meganaciones), tecnologías por nivel, depósitos
-- [~] Armada y aviación heredadas de 1936 según la base
+- [~] Armada y aviación heredadas de 1936 según la base, recortadas al 10% (flota solo HSN, FCU, NRE y ASC)
 - [~] Mundo vivo: reclamos, rivalidades, tensión mundial, 2 guerras al arranque
 - [ ] Ajustar con los números reales de `balance.txt` (objetivos de IC, pisos, tropas)
 - [ ] Decidir si la FCU necesita una penalización propia (hoy es la más fuerte en la práctica)
