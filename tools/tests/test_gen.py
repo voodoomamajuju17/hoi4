@@ -797,6 +797,9 @@ def test_balance() -> None:
         check("fondo grande al tamano del vanilla (1920x1080)",
               dlc.exists() and _st.unpack_from("<II", dlc.read_bytes(), 12) == (1080, 1920))
         check("no toca los botones chicos del menu", not (mod / "gfx/interface/frontend/menu_button.dds").exists())
+        lar = mod / "gfx/loadingscreens/load_prueba.dds"
+        check("pisa las pantallas de carga grandes de las expansiones (selector de fondos)",
+              lar.exists() and _st.unpack_from("<II", lar.read_bytes(), 12) == (1440, 1920))
 
         efe_c = (mod / "common/countries/Ecofascist_Empire.txt").read_text()
         check("EFE con cultura grafica sudamericana", "southamerican_gfx" in efe_c and "southamerican_2d" in efe_c, efe_c)
@@ -950,9 +953,9 @@ def test_nas() -> None:
         tropas = pdx.render(by["NAS_guerreros_de_la_puna"].get("completion_reward"))
         check("tabla nueva: bono de investigacion con categoria del juego",
               "add_tech_bonus" in tropas and "category = mountaineers_tech" in tropas and "uses = 2" in tropas, tropas)
-        check("un bono con categoria inexistente se omite con aviso",
-              any("'land_doctrine' no existe" in w for w in ctx.warnings)
-              and "land_doctrine" not in pdx.render(by["NAS_doctrina_de_la_quebrada"].get("completion_reward")))
+        check("las doctrinas dan experiencia de ejercito (land_doctrine no existe en 1.19)",
+              not any("categoria de investigacion" in w for w in ctx.warnings)
+              and "army_experience = 75" in pdx.render(by["NAS_doctrina_de_la_quebrada"].get("completion_reward")))
         check("Tawantinsuyu pide los cuatro suyus",
               pdx.render(by["NAS_el_tawantinsuyu"].get("available")).count("has_country_flag") == 4)
         check("el Inca asciende a su version Tawantinsuyu",

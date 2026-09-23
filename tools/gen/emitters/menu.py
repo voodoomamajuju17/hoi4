@@ -47,12 +47,10 @@ def emit(ctx: BuildContext) -> None:
     src = (ctx.spec.root.parent / spec["background"]).read_bytes()
     width, height = _dims(src)
     for texture in sorted(targets):
-        vanilla_file = ctx.vanilla.root / texture
         data = src
-        if vanilla_file.exists():
-            vw, vh = _dims(vanilla_file.read_bytes()[:128])
-            if (vw, vh) != (width, height) and vw and vh:
-                data = _resize(src, width, height, vw, vh)
+        vw, vh = _texture_dims(ctx, texture)
+        if (vw, vh) != (width, height) and vw and vh:
+            data = _resize(src, width, height, vw, vh)
         dest = ctx.mod_root / texture
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(data)
@@ -205,17 +203,34 @@ def _menu_textures(ctx: BuildContext) -> set[str]:
             out.add(texture)
         elif width and height and width * height >= 256 * 256:
             small.append(f"{name} {width}x{height}")
+    # El selector "Cambiar fondo" de 1.19 elige entre las pantallas de carga
+    # grandes del juego y de cada expansión (dlc/<x>/gfx/loadingscreens/,
+    # 1920x1440). El mod las pisa todas con la misma ruta relativa: así, elija
+    # el que elija, el fondo es el nuestro.
+    for base in [ctx.vanilla.root] + sorted((ctx.vanilla.root / "dlc").glob("*/")):
+        for path in sorted((base / "gfx" / "loadingscreens").glob("*.dds")):
+            try:
+                with path.open("rb") as fh:
+                    w, _h = _dims(fh.read(128))
+            except OSError:
+                continue
+            if w >= _MIN_BG_WIDTH:
+                out.add(f"gfx/loadingscreens/{path.name}")
     if small:
         ctx.note("menu principal: imagenes medianas del menu que NO se tocan: " + ", ".join(small[:15]))
     return out
 
 
 def _texture_dims(ctx: BuildContext, texture: str) -> tuple[int, int]:
-    try:
-        with (ctx.vanilla.root / texture).open("rb") as fh:
-            return _dims(fh.read(128))
-    except OSError:
-        return 0, 0
+    """Tamaño de la textura en el juego base o, si no está, en una expansión."""
+    root = ctx.vanilla.root
+    for path in [root / texture] + sorted((root / "dlc").glob(f"*/{texture}")):
+        try:
+            with path.open("rb") as fh:
+                return _dims(fh.read(128))
+        except OSError:
+            continue
+    return 0, 0
 
 
 def _dims(data: bytes) -> tuple[int, int]:
