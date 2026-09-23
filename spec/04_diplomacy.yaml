@@ -110,10 +110,43 @@ factions:
     leader: largest          # el miembro con más states
     src: user_decision
 
+# -----------------------------------------------------------------------------
+# Mundo vivo (2026-09-23). Todo inventado a partir del lore de 01_ideologies:
+# dos meganaciones por bloque = rivalidad interna, y el EFE contra la FCU.
+# -----------------------------------------------------------------------------
 wars_at_start:
-  status: unknown
-  src: unknown
-  see: Q018
+  # Como la Anarquía es una facción, sus otros miembros se suman a la guerra.
+  - { attacker: ASC, defender: ZWE, wargoal: annex_everything,
+      lore: "La Guerra del Este: la Comuna avanza sobre los silos del Dniéper." }
+  - { attacker: NRE, defender: ZWM, wargoal: annex_everything,
+      lore: "La Reconquista de Oriente: Roma vuelve al Levante." }
+
+rivalries:
+  - { between: [EFE, NRE], modifier: meganations_bloc_rival, lore: "Dos Restauraciones: la Tierra o Roma." }
+  - { between: [ASC, APF], modifier: meganations_bloc_rival, lore: "Máquinas o consejos: dos colectivismos." }
+  - { between: [FCU, HSN], modifier: meganations_bloc_rival, lore: "La corporación contra la flota." }
+  - { between: [SHD, NAS], modifier: meganations_bloc_rival, lore: "La Armonía contra el Sol." }
+  - { between: [EFE, FCU], modifier: meganations_natural_enemy, lore: "El agua no se vende." }
+
+opinion_modifiers:
+  - id: meganations_bloc_rival
+    value: -50
+    name: { english: "Rival of the same bloc", spanish: "Rival del mismo bloque" }
+  - id: meganations_natural_enemy
+    value: -100
+    name: { english: "Natural enemy", spanish: "Enemigo natural" }
+
+claims:
+  # Cada meganación reclama los states de la Anarquía que tocan su territorio
+  # o el de sus satélites (vecindad leída de map/provinces.bmp).
+  target: anarchy_neighbours   # (no "on": en YAML "on" es el booleano true)
+  by: meganations
+  src: invented
+
+world_tension:
+  threat: 30
+  name: { english: "The Great Unravelling", spanish: "El Gran Desarme" }
+  src: invented
 
 opinion_matrix:
   status: unknown

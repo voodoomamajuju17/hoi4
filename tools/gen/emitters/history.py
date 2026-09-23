@@ -96,6 +96,9 @@ def emit(ctx: BuildContext) -> None:
         for fb in _faction_blocks(ctx, c.tag):
             b.entries.append(fb)
 
+        for entry in (ctx.data.get("diplomacy_history") or {}).get(c.tag, []):
+            b.entries.append(entry)
+
         for rel in subjects_of(ctx, c.tag):
             sa = Block()
             sa.add("target", rel["subject"])

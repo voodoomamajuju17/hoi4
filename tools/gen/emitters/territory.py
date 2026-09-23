@@ -32,6 +32,7 @@ reescribe: se avisa y queda vanilla.
 from __future__ import annotations
 
 import difflib
+from collections import defaultdict
 import re
 import unicodedata
 
@@ -130,6 +131,8 @@ def emit(ctx: BuildContext) -> None:
     _rename_states(ctx, by_name)
     deposits = _starting_deposits(ctx, capitals)
     ctx.data["deposits"] = deposits
+    claims = _claims(ctx, assignment, states)
+    ctx.data["claims"] = claims
     resource_delta, added = economy_mod.plan(ctx, assignment, capitals)
     ctx.data["resource_delta"] = resource_delta
     ctx.data["added_buildings"] = added
@@ -138,7 +141,39 @@ def emit(ctx: BuildContext) -> None:
         if new_owner is None and s.id not in deposits:
             continue
         _rewrite(ctx, s, new_owner, deposits.get(s.id, {}),
-                 resource_delta.get(s.id, {}), added.get(s.id, {}))
+                 resource_delta.get(s.id, {}), added.get(s.id, {}), claims.get(s.id, ()))
+
+
+def _claims(ctx: BuildContext, assignment: dict[int, str], states) -> dict[int, set[str]]:
+    """Reclamos (04_diplomacy.yaml -> claims): cada meganación reclama los
+    states de la Anarquía que tocan su territorio o el de sus satélites."""
+    spec = ctx.spec.raw["diplomacy"].get("claims") or {}
+    if spec.get("target") != "anarchy_neighbours":
+        return {}
+    countries = {c.tag: c for c in ctx.spec.countries}
+    anarchy = {t for t, c in countries.items() if not c.is_major and not c.is_subject}
+
+    def claimant(tag: str) -> str | None:
+        c = countries.get(tag)
+        if c is None or tag in anarchy:
+            return None
+        return tag if c.is_major else c.overlord
+
+    adjacency = ctx.vanilla.province_adjacency(ctx.out_root / ".cache")
+    prov_state = {p: s.id for s in states for p in s.provinces}
+    out: dict[int, set[str]] = defaultdict(set)
+    for a, b in adjacency:
+        sa, sb = prov_state.get(a), prov_state.get(b)
+        if sa is None or sb is None or sa == sb:
+            continue
+        for x, y in ((sa, sb), (sb, sa)):
+            if assignment.get(x) in anarchy:
+                who = claimant(assignment.get(y, ""))
+                if who:
+                    out[x].add(who)
+    if out:
+        ctx.note(f"reclamos: {len(out)} states de la Anarquia reclamados por sus vecinos")
+    return dict(out)
 
 
 def _rename_states(ctx: BuildContext, by_name) -> None:
@@ -412,7 +447,8 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
 
 
 def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int],
-             resource_delta: dict | None = None, add_buildings: dict | None = None) -> bool:
+             resource_delta: dict | None = None, add_buildings: dict | None = None,
+             claims=()) -> bool:
     if _unsafe(info):
         return False
     root = parse_file(info.path)
@@ -470,7 +506,8 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resource
             if k and _DATE_KEY.match(k):
                 continue
             kept.append((k, v))
-        history.entries = [("owner", owner)] + kept + [("add_core_of", owner)]
+        history.entries = ([("owner", owner)] + kept + [("add_core_of", owner)]
+                           + [("add_claim_by", tag) for tag in sorted(claims)])
 
     ctx.write_script(f"history/states/{info.path.name}", root, source=SOURCE)
     return True

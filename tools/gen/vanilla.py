@@ -322,6 +322,8 @@ class Vanilla:
         Recorrer el bitmap entero tarda unos segundos, así que el resultado se
         guarda en cache_dir, invalidado por tamaño y fecha del .bmp.
         """
+        if getattr(self, "_adjacency", None) is not None:
+            return self._adjacency
         bmp = self.root / "map" / "provinces.bmp"
         if not bmp.exists():
             return set()
@@ -329,7 +331,8 @@ class Vanilla:
         cache = cache_dir / f"adjacency-{stamp}.json" if cache_dir else None
         if cache and cache.exists():
             try:
-                return {tuple(p) for p in json.loads(cache.read_text())}
+                self._adjacency = {tuple(p) for p in json.loads(cache.read_text())}
+                return self._adjacency
             except (ValueError, OSError):
                 pass
         pairs = _bmp_adjacency(bmp.read_bytes(), {c: p for p, (c, _, _) in self._definition().items()})
@@ -339,6 +342,7 @@ class Vanilla:
                 cache.write_text(json.dumps(sorted(pairs)))
             except OSError:
                 pass
+        self._adjacency = pairs
         return pairs
 
     def country_tags(self) -> set[str]:

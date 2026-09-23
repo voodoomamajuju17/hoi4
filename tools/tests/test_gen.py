@@ -799,6 +799,33 @@ def test_forces() -> None:
         check("cuenta aviones", ctx.data["planes"].get("NRE") == 60, str(ctx.data["planes"]))
 
 
+def test_diplomacy() -> None:
+    section("diplomacia: reclamos, rivalidades, guerras, tension")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        claims = ctx.data["claims"]
+        check("la NRE reclama Moscu (vecino anarquico)", "NRE" in claims.get(917, set()), str(claims))
+        check("el vecino de un satelite lo reclama su senor (SHD, no ZKR)",
+              "SHD" in claims.get(914, set()) and "ZKR" not in claims.get(914, set()), str(claims))
+        moscow = pdx.parse((mod / "history/states/917-Fixture.txt").read_text()).get("state").get("history")
+        check("el reclamo queda escrito en el state", "NRE" in [pdx.text(v) for v in moscow.get_all("add_claim_by")])
+        check("la Anarquia no reclama nada", not any(t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN") for s in claims.values() for t in s))
+
+        om = pdx.parse((mod / "common/opinion_modifiers/meganations_opinion_modifiers.txt").read_text()).get("opinion_modifiers")
+        check("modificador de rival de bloque -50", pdx.text(om.get("meganations_bloc_rival").get("value")) == "-50")
+        efe = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
+        nre = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
+        check("EFE mira mal a la NRE", "target = NRE" in efe and "meganations_bloc_rival" in efe)
+        check("y la NRE al EFE (dos sentidos)", "target = EFE" in nre)
+        check("rivalidad con un pais sin territorio no se escribe (FCU)", "target = FCU" not in efe)
+        check("tension mundial en el pais por defecto", "add_named_threat" in efe and "threat = 30" in efe)
+        asc = next((mod / "history/countries").glob("ASC - *.txt")).read_text()
+        check("la ASC arranca en guerra con Eurasia", "declare_war_on" in asc and "target = ZWE" in asc, asc[-600:])
+        check("guerra contra un pais sin territorio no se declara (ZWM)", "target = ZWM" not in nre)
+        check("avisa la guerra no declarada", any("ZWM" in w for w in ctx.warnings))
+
+
 def test_vanilla_validation() -> None:
     section("validacion contra documentation/ e interface/ del juego")
     import shutil
@@ -827,7 +854,7 @@ def test_vanilla_validation() -> None:
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob\n"
+            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -895,6 +922,7 @@ def main() -> int:
         test_leaders_and_ideologies,
         test_balance,
         test_forces,
+        test_diplomacy,
         test_vanilla_validation,
     ):
         test()

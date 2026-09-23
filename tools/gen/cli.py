@@ -27,6 +27,7 @@ from .emitters import characters as em_characters
 from .emitters import countries as em_countries
 from .emitters import decisions as em_decisions
 from .emitters import descriptor as em_descriptor
+from .emitters import diplomacy as em_diplomacy
 from .emitters import events as em_events
 from .emitters import focus_trees as em_focus_trees
 from .emitters import forces as em_forces
@@ -62,6 +63,7 @@ EMITTERS = [
     ("focus_trees", em_focus_trees.emit),
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
+    ("diplomacy", em_diplomacy.emit),   # antes que history: opiniones, guerras, tension
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
     ("menu", em_menu.emit),
