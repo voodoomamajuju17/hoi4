@@ -127,6 +127,7 @@ def emit(ctx: BuildContext) -> None:
             capitals[c.tag] = cap
     ctx.data["capitals"] = capitals
 
+    _rename_states(ctx, by_name)
     deposits = _starting_deposits(ctx, capitals)
     ctx.data["deposits"] = deposits
     for s in states:
@@ -134,6 +135,28 @@ def emit(ctx: BuildContext) -> None:
         if new_owner is None and s.id not in deposits:
             continue
         _rewrite(ctx, s, new_owner, deposits.get(s.id, {}))
+
+
+def _rename_states(ctx: BuildContext, by_name) -> None:
+    """Nombres de 2100: pisan STATE_<id> desde localisation/<idioma>/replace/."""
+    renames = (ctx.spec.raw["territory"].get("state_names") or {}).get("renames") or []
+    done = 0
+    for entry in renames:
+        options = entry["state"]
+        found = next((by_name[normalize(o)] for o in options if normalize(o) in by_name), None)
+        if not found:
+            ctx.warn(f"nombres: no hay ningun state llamado {' / '.join(options)}; no se renombra.")
+            continue
+        for s in found:
+            if not s.name_key:
+                continue
+            ctx.loc.define_and_reference(
+                s.name_key, en=entry["name"]["english"], es=entry["name"]["spanish"],
+                file="replace/meganations_states", origin=f"state_names:{options[0]}",
+            )
+            done += 1
+    if done:
+        ctx.note(f"nombres de 2100: {done} states renombrados")
 
 
 def capital_of(ctx, tag, assignment, names, by_state) -> int | None:

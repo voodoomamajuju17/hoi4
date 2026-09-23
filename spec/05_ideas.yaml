@@ -51,6 +51,23 @@ countries:
         modifiers_src: invented
         removable: false
 
+      - id: EFE_cubas_de_la_pampa
+        name:
+          english: "The Vats of the Pampas"
+          spanish: "Las Cubas de la Pampa"
+        name_src: invented
+        desc:
+          english: "The Empire is small next to the Union or the Commune. What it lacks in factories it makes up with the vats: every workshop grows its own tools, every depot its own walls."
+          spanish: "El Imperio es chico al lado de la Unión o de la Comuna. Lo que le falta en fábricas lo compensa con las cubas: cada taller cultiva sus propias herramientas, cada depósito sus propias paredes."
+        modifiers:
+          industrial_capacity_factory: 0.15
+          production_speed_buildings_factor: 0.15
+        modifiers_src: invented
+        why: >
+          Compensación industrial: en 1.19.3 el EFE arranca con 2,9% de la IC
+          del mundo contra 12,3% de la FCU (balance.txt). Ver 13_military.yaml.
+        removable: false
+
     # Las tres de abajo NO arrancan puestas: las dan los focos de Restauración
     # Total (cambio aprobado con Q031). Antes el foco "otorgaba" una idea que el
     # país ya tenía desde el día uno.

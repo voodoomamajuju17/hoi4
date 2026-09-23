@@ -1,0 +1,26 @@
+technologies = {
+	infantry_weapons = {
+		start_year = 1936
+	}
+	infantry_weapons1 = {
+		start_year = 1939
+	}
+	infantry_weapons2 = {
+		start_year = 1942
+	}
+	improved_infantry_weapons = {
+		start_year = 1943
+	}
+	tech_support = {
+	}
+	legacy_only_tech = {
+		start_year = 1936
+		allow_branch = {
+			NOT = { has_dlc = "Man the Guns" }
+		}
+	}
+	either_or_tech = {
+		start_year = 1936
+		xor = { other_tech }
+	}
+}

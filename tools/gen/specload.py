@@ -29,6 +29,7 @@ SPEC_FILES = {
     "legacy": "10_legacy_lore.yaml",
     "scenario": "11_scenario.yaml",
     "events": "12_events.yaml",
+    "military": "13_military.yaml",
     "questions": "99_open_questions.yaml",
 }
 

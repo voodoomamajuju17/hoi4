@@ -130,7 +130,7 @@ territories:
       - { state: ["Ponta Porã", "Ponta Pora", "Punta Pora", "Punta Porá", "Mato Grosso do Sul"] }
       - { state: ["Parana", "Paraná"] }
       - { state: ["Santa Catarina"] }
-      - { state: ["Misiones"] }
+      - { state: ["Misiones", "Región Mesopotámica", "Region Mesopotamica"] }   # 1.19.3: Misiones está dentro de la Mesopotamia
       - { state: ["Formosa"] }
     resolve_src: inferred
     capital: "Asunción"
@@ -408,6 +408,36 @@ state_renaming:
   scope_phase3: "Solo los states del EFE + satélites."
   decision_2026_09_23: "Nombres vanilla por ahora. Se renombra después (Q038)."
   see: Q038
+
+# =============================================================================
+# Nombres de 2100 (Q038, "hacé todo", 2026-09-23). Se buscan por el nombre
+# vanilla en inglés y se pisan en localisation/<idioma>/replace/. Solo EFE y
+# satélites por ahora; el resto del mundo conserva los nombres del juego.
+# Gaia: la cronología vieja decía que la capital se llamaba Gaia (Q040). Se
+# reconcilia con el canon: Aurelio IV rebautizó Buenos Aires al coronarse.
+# =============================================================================
+state_names:
+  src: invented
+  renames:
+    - { state: ["Buenos Aires"], name: { english: "Gaia", spanish: "Gaia" } }
+    - { state: ["Santiago"], name: { english: "Santiago of the Forest", spanish: "Santiago del Bosque" } }
+    - { state: ["Montevideo"], name: { english: "Custodian's Harbour", spanish: "Puerto Custodio" } }
+    - { state: ["Santa Fe"], name: { english: "Plain of the Vats", spanish: "Llanura de las Cubas" } }
+    - { state: ["Mendoza"], name: { english: "Reforested Cuyo", spanish: "Cuyo Reforestado" } }
+    - { state: ["Tucumán"], name: { english: "Yungas Forest", spanish: "Selva de las Yungas" } }
+    - { state: ["Chaco Austral"], name: { english: "Restored Chaco", spanish: "Gran Chaco Restaurado" } }
+    - { state: ["Río Negro"], name: { english: "Río Negro Frontier", spanish: "Frontera del Río Negro" } }
+    - { state: ["Rio Grande do Sul"], name: { english: "Gaucho Pampa", spanish: "Pampa Gaúcha" } }
+    - { state: ["Antofagasta"], name: { english: "Salt Flats of Antofagasta", spanish: "Salares de Antofagasta" } }
+    - { state: ["Magallanes"], name: { english: "Southern Custody", spanish: "Custodia Austral" } }
+    - { state: ["Tierra del Fuego"], name: { english: "Land of Glaciers", spanish: "Tierra de los Glaciares" } }
+    - { state: ["Falkland Islands"], name: { english: "Malvinas", spanish: "Malvinas" } }
+    - { state: ["Paraguay"], name: { english: "Asunción of the Waters", spanish: "Asunción de las Aguas" } }
+    - { state: ["Paraná"], name: { english: "Dams of the Paraná", spanish: "Represas del Paraná" } }
+    - { state: ["Mato Grosso"], name: { english: "Pantanal", spanish: "Pantanal" } }
+    - { state: ["Santa Catarina"], name: { english: "Guaraní Coast", spanish: "Costa Guaraní" } }
+    - { state: ["Región Mesopotámica"], name: { english: "Misiones and Mesopotamia", spanish: "Misiones y Mesopotamia" } }
+    - { state: ["Formosa"], name: { english: "Green Formosa", spanish: "Formosa Verde" } }
 
 # =============================================================================
 capital_fallback:

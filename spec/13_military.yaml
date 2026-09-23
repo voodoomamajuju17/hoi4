@@ -1,0 +1,70 @@
+# =============================================================================
+# 13_military.yaml — Arranque militar: tecnologías, ejército y equipo
+# =============================================================================
+# Pedido del usuario (2026-09-23): nadie arrancaba con ejército, equipo ni
+# tecnologías. Todo lo de este archivo es INVENTADO para balance. Nada se
+# escribe de memoria: los nombres de tecnologías, equipos y regimientos salen
+# de la instalación del juego y el generador falla si alguno no existe.
+#
+# "Nivel tecnológico 2100": el juego base no tiene tecnología de 2100. Se usa
+# su árbol como escala. Cada tipo de facción recibe TODAS las tecnologías
+# vanilla hasta un año tope (start_year), menos:
+#   - las doctrinas (hay que elegirlas: son caminos excluyentes)
+#   - las que tienen `xor` (excluyentes entre sí)
+#   - las variantes que solo existen SIN un DLC que tenés (NOT = { has_dlc })
+# =============================================================================
+
+tech_levels:
+  src: invented
+  # tipo de facción -> año tope de las tecnologías vanilla que arranca teniendo
+  meganation: 1942
+  satellite: 1940
+  anarchy: 1936
+  why: >
+    Las meganaciones son los Estados más avanzados del mundo de 2100; los
+    satélites dependen de su señor; la Anarquía es lo que quedó del colapso.
+
+army:
+  src: invented
+  # Divisiones = base + IC x factor, con un tope. IC = fábricas civiles + militares.
+  divisions:
+    meganation: { base: 6, per_ic: 0.25, max: 60 }
+    satellite:  { base: 3, per_ic: 0.25, max: 24 }
+  # Reparto de las divisiones entre plantillas, por tipo de facción.
+  mix:
+    meganation: { line_infantry: 0.60, motorized: 0.25, armored: 0.15 }
+    satellite:  { line_infantry: 0.80, motorized: 0.20 }
+  templates:
+    line_infantry:
+      name: { english: "Line Infantry", spanish: "Infantería de Línea" }
+      regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade]
+      support: [engineer, recon]
+    motorized:
+      name: { english: "Motorised Division", spanish: "División Motorizada" }
+      regiments: [motorized, motorized, motorized, motorized, artillery_brigade]
+      support: [engineer, recon]
+    armored:
+      name: { english: "Armoured Division", spanish: "División Blindada" }
+      regiments: [medium_armor, medium_armor, medium_armor, medium_armor, motorized, motorized]
+      support: [engineer, recon]
+
+stockpile:
+  src: invented
+  # Equipo en depósito por cada división, además del que traen puestas.
+  # Se usa la variante más nueva del arquetipo cuyo año no pase el nivel
+  # tecnológico de la facción.
+  per_division:
+    infantry_equipment: 400
+    support_equipment: 40
+    artillery_equipment: 36
+    motorized_equipment: 60
+  # Convoyes: base + por IC, para que el comercio funcione desde el día uno.
+  convoys: { equipment: convoy, base: 20, per_ic: 1.0 }
+
+# -----------------------------------------------------------------------------
+# Compensación industrial. El reporte de balance de 1.19.3 mostró al EFE con
+# 2,9% de la industria del mundo contra 12,3% de la FCU, su enemigo natural.
+# Se compensa con una idea nacional de arranque (ver 05_ideas.yaml:
+# EFE_cubas_de_la_pampa), no con fábricas regaladas: las fábricas extra no
+# entran en los slots de los states.
+# -----------------------------------------------------------------------------

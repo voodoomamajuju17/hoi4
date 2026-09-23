@@ -519,7 +519,44 @@ def test_territory() -> None:
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
         check("balance cuenta las milicias", any(l.startswith("ZAN") and l.rstrip().endswith(" 3") for l in bal.splitlines()), bal[:800])
         check("balance incluye el BioSteel inicial", "BioS" in bal)
-        check("balance alerta ejercitos vacios", "Sin ejercito inicial" in bal)
+        check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
+
+        section("arranque militar: tecnologias, ejercito, equipo")
+        efe_h = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
+        techs = pdx.parse(efe_h).get("set_technology")
+        keys = set(techs.keys())
+        check("meganacion: techs hasta 1942", {"infantry_weapons", "infantry_weapons1", "infantry_weapons2"} <= keys, str(keys))
+        check("no recibe techs posteriores", "improved_infantry_weapons" not in keys)
+        check("tech sin start_year cuenta como 1936", "tech_support" in keys)
+        check("no regala doctrinas", "mobile_warfare" not in keys)
+        check("no regala techs excluyentes (xor)", "either_or_tech" not in keys)
+        check("no regala variantes sin DLC", "legacy_only_tech" not in keys)
+        check("sin popup", pdx.text(techs.get("popup")) == "no")
+        pta_h = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
+        pta_t = set(pdx.parse(pta_h).get("set_technology").keys())
+        check("satelite: techs hasta 1940", "infantry_weapons1" in pta_t and "infantry_weapons2" not in pta_t)
+        zan_t = set(pdx.parse((mod / "history/countries/ZAN - The Lawless Lands.txt").read_text()).get("set_technology").keys())
+        check("anarquia: techs de 1936", "infantry_weapons" in zan_t and "infantry_weapons1" not in zan_t)
+
+        oob = pdx.parse((mod / "history/units/EFE_2100.txt").read_text())
+        tpls = [pdx.text(tpl.get("name")) for tpl in oob.get_all("division_template")]
+        check("EFE: tres plantillas", tpls == ["Infantería de Línea", "División Motorizada", "División Blindada"], str(tpls))
+        divs = oob.get("units").get_all("division")
+        check("EFE: divisiones = 6 + IC/4", len(divs) == 6, str(len(divs)))
+        check("EFE carga su oob", 'oob = "EFE_2100"' in efe_h)
+        stock = {pdx.text(b.get("type")): int(pdx.text(b.get("amount")))
+                 for b in pdx.parse(efe_h).get_all("add_equipment_to_stockpile")}
+        check("fusiles: la variante mas nueva hasta 1942", "infantry_equipment_3" in stock, str(stock))
+        check("fusiles: 400 por division", stock.get("infantry_equipment_3") == 2400, str(stock))
+        check("convoyes", "convoy_1" in stock)
+        check("avisa arquetipos de equipo que no existen", any("artillery_equipment" in w for w in ctx.warnings))
+
+        section("nombres de 2100 y compensacion industrial")
+        st = (mod / "localisation/spanish/replace/meganations_states_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("Buenos Aires se llama Gaia", 'STATE_900:0 "Gaia"' in st, st)
+        check("Magallanes es la Custodia Austral", 'STATE_901:0 "Custodia Austral"' in st)
+        check("nombres en replace/ (pisan los vanilla)", "replace" in str(mod / "localisation/spanish/replace"))
+        check("EFE arranca con Las Cubas de la Pampa", "EFE_cubas_de_la_pampa" in efe_h)
         zan = (mod / "history/countries/ZAN - The Lawless Lands.txt").read_text()
         check("la Anarquia carga su oob", 'oob = "ZAN_2100"' in zan, zan)
         check("nombre con comentario al final se lee",
@@ -673,7 +710,7 @@ def test_vanilla_validation() -> None:
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot add_resource\n"
+            "add_research_slot add_resource set_technology add_equipment_to_stockpile\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir()

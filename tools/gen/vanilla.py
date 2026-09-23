@@ -472,6 +472,74 @@ class Vanilla:
             out.update(re.findall(r"\bid\s*=\s*\"?([A-Za-z0-9_]+)", text))
         return out
 
+    def technologies(self) -> list[tuple[str, int, bool]]:
+        """(tech, start_year, elegible) de common/technologies/.
+
+        No elegible = no se regala al arranque: doctrinas (archivos o
+        carpetas con "doctrine"), techs con `xor` (excluyentes) y las que
+        solo existen SIN un DLC (bloques NOT = { has_dlc = ... }).
+        """
+        out: list[tuple[str, int, bool]] = []
+        for path in sorted((self.root / "common" / "technologies").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("technologies")
+            if not isinstance(block, pdx.Block):
+                continue
+            doctrine_file = "doctrine" in path.name.lower()
+            for name, tech in block.entries:
+                if not name or not isinstance(tech, pdx.Block) or name.startswith("@"):
+                    continue
+                year_text = pdx.text(tech.get("start_year")) if tech.get("start_year") is not None else None
+                year = int(year_text) if year_text and year_text.isdigit() else 1936
+                folder = tech.get("folder")
+                folder_name = pdx.text(folder.get("name")) if isinstance(folder, pdx.Block) and folder.get("name") else ""
+                eligible = not (
+                    doctrine_file
+                    or "doctrine" in (folder_name or "").lower()
+                    or "xor" in tech.keys()
+                    or _has_not_dlc(tech)
+                )
+                out.append((name, year, eligible))
+        return out
+
+    def equipment(self) -> dict[str, tuple[str | None, int]]:
+        """equipo -> (arquetipo, año) de common/units/equipment/. Los
+        arquetipos mismos quedan con arquetipo None."""
+        out: dict[str, tuple[str | None, int]] = {}
+        for path in sorted((self.root / "common" / "units" / "equipment").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("equipments")
+            if not isinstance(block, pdx.Block):
+                continue
+            for name, eq in block.entries:
+                if not name or not isinstance(eq, pdx.Block):
+                    continue
+                if pdx.text(eq.get("is_archetype")) == "yes":
+                    out[name] = (None, 0)
+                    continue
+                archetype = pdx.text(eq.get("archetype")) if eq.get("archetype") is not None else None
+                year_text = pdx.text(eq.get("year")) if eq.get("year") is not None else "1936"
+                out[name] = (archetype, int(year_text) if year_text.isdigit() else 1936)
+        return out
+
+    def sub_units(self) -> set[str]:
+        out: set[str] = set()
+        for path in (self.root / "common" / "units").glob("*.txt"):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("sub_units")
+            if isinstance(block, pdx.Block):
+                out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block))
+        return out
+
     def building_keys(self) -> set[str]:
         out: set[str] = set()
         for path in sorted((self.root / "common" / "buildings").glob("*.txt")):
@@ -525,6 +593,17 @@ class Vanilla:
 # la línea (# ...). La versión anterior exigía que la línea terminara en la
 # comilla y perdía los nombres con comentario: salían como "?" en el reporte.
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"((?:[^"\\]|\\.)*)"')
+
+
+def _has_not_dlc(block: pdx.Block) -> bool:
+    """¿Hay algún NOT = { ... has_dlc ... } adentro? (variante sin DLC)."""
+    for key, value in block.entries:
+        if isinstance(value, pdx.Block):
+            if key == "NOT" and any(k == "has_dlc" for k, _ in value.entries):
+                return True
+            if _has_not_dlc(value):
+                return True
+    return False
 
 
 def _bmp_adjacency(raw: bytes, color_to_prov: dict[int, int]) -> set[tuple[int, int]]:

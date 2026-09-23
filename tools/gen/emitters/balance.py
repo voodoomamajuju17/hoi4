@@ -33,7 +33,7 @@ def emit(ctx: BuildContext) -> None:
     continents = ctx.vanilla.state_continents()
     land = ctx.vanilla.land_provinces()
     deposits = ctx.data.get("deposits") or {}
-    militia = ctx.data.get("militia_count") or {}
+    militia = ctx.data.get("division_count") or ctx.data.get("militia_count") or {}
     extra_res = sorted({k for d in deposits.values() for k in d})
     res_cols = RESOURCES + extra_res
 
@@ -119,8 +119,18 @@ def emit(ctx: BuildContext) -> None:
     add("-" * 100)
     no_army = [r["tag"] for r in rows if r["states"] and not r["divisions"]]
     if no_army:
-        add(f"! Sin ejercito inicial: {', '.join(no_army)}. Solo la Anarquia tiene milicias.")
-    add("! Ningun pais del mod tiene inventario de equipo inicial ni tecnologias: arrancan de cero.")
+        add(f"! Sin ejercito inicial: {', '.join(no_army)}.")
+    techs = ctx.data.get("techs") or {}
+    stock = ctx.data.get("stockpile") or {}
+    no_tech = [r["tag"] for r in rows if r["states"] and not techs.get(r["tag"])]
+    if no_tech:
+        add(f"! Sin tecnologias iniciales: {', '.join(no_tech)}.")
+    if techs:
+        add("Tecnologias de arranque: " + ", ".join(
+            f"{tag} {len(v)}" for tag, v in sorted(techs.items(), key=lambda kv: -len(kv[1]))[:6]) + " ...")
+    no_stock = [r["tag"] for r in rows if r["states"] and r["kind"] != "Anarquia/indep." and not stock.get(r["tag"])]
+    if no_stock:
+        add(f"! Sin equipo en deposito: {', '.join(no_stock)}.")
     empty = [r["tag"] for r in rows if not r["states"]]
     if empty:
         add(f"! Sin territorio (no existen en el mapa): {', '.join(empty)}")

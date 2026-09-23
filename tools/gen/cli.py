@@ -31,6 +31,7 @@ from .emitters import focus_trees as em_focus_trees
 from .emitters import history as em_history
 from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
+from .emitters import military as em_military
 from .emitters import militia as em_militia
 from .emitters import resources as em_resources
 from .emitters import scenario as em_scenario
@@ -49,6 +50,7 @@ EMITTERS = [
     ("resources", em_resources.emit),
     ("territory", em_territory.emit),   # antes que focos e historia: define capitales
     ("militia", em_militia.emit),       # antes que history: define el oob
+    ("military", em_military.emit),     # despues de militia: tecnologias, ejercito, equipo
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
     ("focus_trees", em_focus_trees.emit),

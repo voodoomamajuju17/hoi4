@@ -57,6 +57,21 @@ def emit(ctx: BuildContext) -> None:
                 ideas.add(None, iid)
             b.add("add_ideas", ideas)
 
+        techs = (ctx.data.get("techs") or {}).get(c.tag)
+        if techs:
+            tb = Block()
+            for tech in techs:
+                tb.add(tech, 1)
+            tb.add("popup", False)
+            b.add("set_technology", tb)
+
+        for item, amount in (ctx.data.get("stockpile") or {}).get(c.tag, []):
+            eq = Block()
+            eq.add("type", item)
+            eq.add("amount", amount)
+            eq.add("producer", c.tag)
+            b.add("add_equipment_to_stockpile", eq)
+
         for ch in characters_mod.characters_of(ctx, c.tag):
             b.add("recruit_character", ch["id"])
 
@@ -77,7 +92,12 @@ def emit(ctx: BuildContext) -> None:
             "la capital tiene que ser un state propio y el reparto territorial no esta generado",
             "Q035",
         )
-    ctx.verify_keys("effects", {"set_autonomy": "04_diplomacy.yaml"} if _any_subjects(ctx) else {})
+    used = {"set_autonomy": "04_diplomacy.yaml"} if _any_subjects(ctx) else {}
+    if ctx.data.get("techs"):
+        used["set_technology"] = "13_military.yaml"
+    if any(ctx.data.get("stockpile", {}).values()):
+        used["add_equipment_to_stockpile"] = "13_military.yaml"
+    ctx.verify_keys("effects", used)
 
 
 def subjects_of(ctx: BuildContext, overlord: str) -> list[dict]:
