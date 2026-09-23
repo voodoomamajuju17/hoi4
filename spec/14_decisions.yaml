@@ -1,0 +1,90 @@
+# =============================================================================
+# 14_decisions.yaml — Paneles de decisiones (minijuegos nacionales)
+# =============================================================================
+# El usuario eligió (2026-09-23) que BioSteel sea un contador con su propio
+# panel de decisiones en vez de un recurso del mapa. Todo INVENTADO.
+#
+# El panel muestra el contador en su descripción ([?variable]). Las
+# decisiones ganan o gastan BioSteel y tienen tiempo de espera: el juego está
+# en elegir entre acumular (para los tiers de los focos, 5/10/15) o gastar ya.
+#
+# Íconos: se eligen entre los que usan las decisiones vanilla de tu juego
+# (se prueba la lista `icon_prefer` en orden y si ninguno existe se usa el
+# primero que haya). Nada se escribe de memoria.
+#
+# Condiciones soportadas: variable_at_least { var, value }, stability_at_least.
+# Efectos: los mismos de focos/eventos + add_variable { var, value }.
+# =============================================================================
+
+categories:
+
+  - id: EFE_biosteel_category
+    country: EFE
+    icon_prefer: [generic_industry, generic_production, generic_research]
+    name:
+      english: "The BioSteel Race"
+      spanish: "La Carrera del Bioacero"
+    desc:
+      english: "BioSteel stored in the vats: [?EFE_biosteel]\\n\\nThe tiers of the BioSteel Race need 5, 10 and 15. Every unit spent on the Green Guard is one the vats will have to grow again."
+      spanish: "Bioacero en las cubas: [?EFE_biosteel]\\n\\nLos niveles de la Carrera del Bioacero piden 5, 10 y 15. Cada unidad que se gasta en la Guardia Verde es una que las cubas tienen que volver a cultivar."
+    src: invented
+
+    decisions:
+
+      - id: EFE_ampliar_las_cubas
+        name: { english: "Expand the Vats", spanish: "Ampliar las Cubas" }
+        desc:
+          english: "Another hall of vats in the Plain of the Vats. Slow, expensive and safe."
+          spanish: "Otra nave de cubas en la Llanura de las Cubas. Lento, caro y seguro."
+        icon_prefer: [generic_industry, generic_construction]
+        cost: 50
+        cooldown_days: 30
+        effects:
+          - { effect: add_variable, var: EFE_biosteel, value: 1 }
+        ai_factor: 10
+
+      - id: EFE_cultivo_intensivo
+        name: { english: "Intensive Cultivation", spanish: "Cultivo Intensivo" }
+        desc:
+          english: "Double shifts in the vats and rationed water in the cities. The yield doubles; so do the complaints."
+          spanish: "Doble turno en las cubas y agua racionada en las ciudades. El rendimiento se duplica; las quejas también."
+        icon_prefer: [generic_industry, generic_production]
+        cost: 25
+        cooldown_days: 60
+        available:
+          stability_at_least: 0.40
+        effects:
+          - { effect: add_variable, var: EFE_biosteel, value: 2 }
+          - { effect: add_stability, value: -0.05 }
+        ai_factor: 5
+
+      - id: EFE_talar_el_bosque_viejo
+        name: { english: "Fell the Old Forest", spanish: "Talar el Bosque Viejo" }
+        desc:
+          english: "The vats need biomass and the oldest forests have the most. The Custodian swore to protect them. The Emperor needs armour."
+          spanish: "Las cubas necesitan biomasa y los bosques más viejos son los que más tienen. El Custodio juró protegerlos. El Emperador necesita blindaje."
+        icon_prefer: [generic_industry, generic_prepare_civil_war]
+        cost: 10
+        cooldown_days: 180
+        available:
+          stability_at_least: 0.50
+        effects:
+          - { effect: add_variable, var: EFE_biosteel, value: 4 }
+          - { effect: add_stability, value: -0.15 }
+          - { effect: add_war_support, value: -0.05 }
+        ai_factor: 1
+
+      - id: EFE_blindar_la_guardia
+        name: { english: "Armour the Green Guard", spanish: "Blindar a la Guardia Verde" }
+        desc:
+          english: "Spend BioSteel now: living armour for the Guard's veterans. The vats will have to start over."
+          spanish: "Gastar Bioacero ahora: blindaje vivo para los veteranos de la Guardia. Las cubas van a tener que empezar de nuevo."
+        icon_prefer: [generic_army_support, generic_industry]
+        cost: 25
+        cooldown_days: 90
+        available:
+          variable_at_least: { var: EFE_biosteel, value: 3 }
+        effects:
+          - { effect: add_variable, var: EFE_biosteel, value: -3 }
+          - { effect: army_experience, value: 30 }
+        ai_factor: 3

@@ -57,6 +57,15 @@ def emit(ctx: BuildContext) -> None:
                 ideas.add(None, iid)
             b.add("add_ideas", ideas)
 
+        # Contadores nacionales (06_mechanics.yaml -> variable), ej. BioSteel.
+        for mech in ctx.spec.raw["mechanics"].get("mechanics", []) or []:
+            var = mech.get("variable")
+            if isinstance(var, dict) and var.get("country") == c.tag:
+                sv = Block()
+                sv.add("var", var["name"])
+                sv.add("value", var["start"])
+                b.add("set_variable", sv)
+
         techs = (ctx.data.get("techs") or {}).get(c.tag)
         if techs:
             tb = Block()
@@ -95,6 +104,8 @@ def emit(ctx: BuildContext) -> None:
     used = {"set_autonomy": "04_diplomacy.yaml"} if _any_subjects(ctx) else {}
     if ctx.data.get("techs"):
         used["set_technology"] = "13_military.yaml"
+    if any(isinstance(m.get("variable"), dict) for m in ctx.spec.raw["mechanics"].get("mechanics", []) or []):
+        used["set_variable"] = "06_mechanics.yaml"
     if any(ctx.data.get("stockpile", {}).values()):
         used["add_equipment_to_stockpile"] = "13_military.yaml"
     ctx.verify_keys("effects", used)

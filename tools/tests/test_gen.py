@@ -411,9 +411,10 @@ def test_phase3_content() -> None:
         amounts = []
         for n in (1, 2, 3):
             f = next(f for f in focuses if pdx.text(f.get("id")) == f"EFE_biosteel_umbral_{n}")
-            cond = f.get("available").get("900").get("has_resources_amount")
-            check(f"umbral {n} pide biosteel", pdx.text(cond.get("resource")) == "biosteel")
-            amounts.append(pdx.text(cond.get("amount")))
+            cond = f.get("available").get("check_variable")
+            check(f"umbral {n} mira la variable EFE_biosteel", pdx.text(cond.get("var")) == "EFE_biosteel")
+            check(f"umbral {n} compara >=", pdx.text(cond.get("compare")) == "greater_than_or_equals")
+            amounts.append(pdx.text(cond.get("value")))
         check("umbrales 5/10/15", amounts == ["5", "10", "15"], str(amounts))
         t2 = next(f for f in focuses if pdx.text(f.get("id")) == "EFE_biosteel_umbral_2")
         swap = t2.get("completion_reward").get("swap_ideas")
@@ -452,24 +453,35 @@ def test_phase3_content() -> None:
             total = sum(int(pdx.text(v)) for _, v in pops.entries)
             check(f"popularidades suman 100 en {path.name}", total == 100, str(total))
 
-        resources = pdx.parse((mod / "common/resources/00_resources.txt").read_text()).get("resources")
-        check("biosteel es un recurso nuevo", isinstance(resources.get("biosteel"), pdx.Block))
-        check("copia los campos del acero", pdx.text(resources.get("biosteel").get("icon_frame")) == "5")
-        check("el carbon sigue existiendo", isinstance(resources.get("coal"), pdx.Block))
-        text = (mod / "localisation/english/meganations_resources_l_english.yml").read_text(encoding="utf-8-sig")
-        check("nombre del recurso", 'biosteel:0 "BioSteel"' in text, text)
-        check("clave derivada en mayusculas", 'PRODUCTION_MATERIALS_BIOSTEEL:0 "BioSteel"' in text, text)
-        check("no toca el carbon", "coal" not in text, text)
-        check("no toca claves que no son del recurso", "TECH_" not in text, text)
-        es = (mod / "localisation/spanish/meganations_resources_l_spanish.yml").read_text(encoding="utf-8-sig")
-        check("BioSteel en castellano", 'biosteel:0 "Bioacero"' in es, es)
-        capital = pdx.parse((mod / "history/states/900-Fixture.txt").read_text()).get("state")
-        check("5 de BioSteel en la capital del EFE",
-              pdx.text(capital.get("resources").get("biosteel")) == "5", str(capital.get("resources")))
+        check("BioSteel ya no es un recurso del mapa", not (mod / "common/resources").exists())
+        efe_hist = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
+        sv = pdx.parse(efe_hist).get("set_variable")
+        check("el EFE arranca con 5 de BioSteel (variable)",
+              pdx.text(sv.get("var")) == "EFE_biosteel" and pdx.text(sv.get("value")) == "5", efe_hist[-400:])
         by2 = {pdx.text(f.get("id")): f for f in focuses}
-        add = by2["EFE_biosteel_umbral_1"].get("completion_reward").get("add_resource")
-        check("el umbral 1 suma BioSteel en la capital",
-              pdx.text(add.get("type")) == "biosteel" and pdx.text(add.get("state")) == "900", str(add))
+        add = by2["EFE_biosteel_umbral_1"].get("completion_reward").get("add_to_variable")
+        check("el umbral 1 suma 3 de BioSteel",
+              pdx.text(add.get("var")) == "EFE_biosteel" and pdx.text(add.get("value")) == "3", str(add))
+
+        section("minijuego del BioSteel: decisiones")
+        cats = pdx.parse((mod / "common/decisions/categories/meganations_categories.txt").read_text())
+        cat = cats.get("EFE_biosteel_category")
+        check("panel propio del EFE", pdx.text(cat.get("allowed").get("original_tag")) == "EFE")
+        check("icono elegido entre los vanilla", pdx.text(cat.get("icon")) == "generic_industry")
+        decs_raw = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        decs = pdx.parse(decs_raw).get("EFE_biosteel_category")
+        check("4 decisiones", len(decs.keys()) == 4, str(decs.keys()))
+        ampliar = decs.get("EFE_ampliar_las_cubas")
+        check("ampliar: cuesta 50 y tiene espera", pdx.text(ampliar.get("cost")) == "50"
+              and pdx.text(ampliar.get("days_re_enable")) == "30")
+        check("ampliar: +1 BioSteel", pdx.text(ampliar.get("complete_effect").get("add_to_variable").get("value")) == "1")
+        check("icono de decision vanilla", pdx.text(ampliar.get("icon")) == "generic_industry")
+        check("cultivo intensivo pide estabilidad > 0.4", "has_stability > 0.4" in decs_raw, decs_raw[:2000])
+        blindar = decs.get("EFE_blindar_la_guardia")
+        check("blindar gasta 3", pdx.text(blindar.get("complete_effect").get("add_to_variable").get("value")) == "-3")
+        check("blindar pide tener 3", pdx.text(blindar.get("available").get("check_variable").get("value")) == "3")
+        dl = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("el panel muestra el contador", "[?EFE_biosteel]" in dl, dl[:500])
 
 
 def test_territory() -> None:
@@ -522,7 +534,7 @@ def test_territory() -> None:
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
         check("balance cuenta las milicias", any(l.startswith("ZAN") and l.rstrip().endswith(" 3") for l in bal.splitlines()), bal[:800])
-        check("balance incluye el BioSteel inicial", "BioS" in bal)
+        check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 5" in bal)
         check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
 
         section("arranque militar: tecnologias, ejercito, equipo")
@@ -709,12 +721,12 @@ def test_vanilla_validation() -> None:
             mods.update(trait["modifiers"])
         docs = van / "documentation"
         docs.mkdir()
-        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n")
+        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot add_resource set_technology add_equipment_to_stockpile\n"
+            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir()

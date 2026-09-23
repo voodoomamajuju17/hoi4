@@ -121,6 +121,14 @@ class Tagged:
     values: tuple
 
 
+@dataclass(frozen=True)
+class Compare:
+    """Un valor con operador de comparación: `has_stability > 0.4`."""
+
+    op: str
+    value: object
+
+
 def _fmt_scalar(value) -> str:
     if isinstance(value, Tagged):
         return f"{value.tag} {{ " + " ".join(_fmt_scalar(v) for v in value.values) + " }"
@@ -166,6 +174,8 @@ def write_block(b: Block, indent: int = 0) -> str:
             lines.append(f"{pad}{_fmt_scalar(value)}")
         elif isinstance(value, Comment):
             lines.append(f"{pad}# {value.text}")
+        elif isinstance(value, Compare):
+            lines.append(f"{pad}{key} {value.op} {_fmt_scalar(value.value)}")
         else:
             lines.append(f"{pad}{key} = {_fmt_scalar(value)}")
     return "\n".join(lines)

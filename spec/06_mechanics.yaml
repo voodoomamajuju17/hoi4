@@ -35,52 +35,31 @@ mechanics:
       El doc dice "por ejemplo", o sea que los cita como ilustración, no como
       valores cerrados. Tratarlos como provisionales. Ver Q043 -> unit_caveat.
 
-    # -- Q021 / Q043, rediseñado 2026-09-23 ------------------------------------
-    # Primera versión: BioSteel = carbón reskineado, y se le sacaba el carbón a
-    # todos los demás. El usuario detectó el problema: desde 1.17 las fábricas
-    # consumen energía que sale del carbón, así que el resto del mundo quedaba
-    # en déficit energético permanente.
-    #
-    # Versión actual: BioSteel es un RECURSO NUEVO (el séptimo). El carbón
-    # vuelve a ser carbón para todos. BioSteel solo existe donde el EFE lo
-    # cultiva: arranca con un yacimiento en la capital y los focos lo agrandan.
-    resource:
-      strategy: new_resource
-      key: biosteel
-      template: steel
-      template_note: >
-        La definición se copia del recurso vanilla `steel` (icon_frame, cic,
-        convoys...): no se escribe ningún campo de memoria. Sigue mostrando el
-        ícono del acero hasta que haya arte propio.
-      loc_template: steel
-      loc_note: >
-        Las claves de localisation se derivan de las del acero: toda clave
-        vanilla que contenga "steel" y muestre "Steel" se duplica con
-        "biosteel" y el texto "BioSteel".
-      starting_deposits:
-        - { country: EFE, state: capital, amount: 5 }
-      starting_deposits_src: invented
-      starting_deposits_why: >
-        Con 5 el tier 1 está disponible desde el arranque; el resto se gana con
-        focos (ver 07_focus_trees.yaml: effect add_resource).
+    # -- Rediseño final (2026-09-23): contador nacional + minijuego ---------------
+    # 1ra versión: carbón reskineado -> déficit energético mundial.
+    # 2da versión: recurso nuevo -> la interfaz de HOI4 tiene casilleros fijos
+    #   por recurso (error.log: "biosteel_checkbox") y no tenía ícono propio:
+    #   existía pero no se veía.
+    # Versión actual (elegida por el usuario, "B, totalmente"): una VARIABLE
+    # del EFE que se muestra en su propio panel de decisiones y se gana o se
+    # gasta con decisiones (spec/14_decisions.yaml). No toca la interfaz
+    # vanilla ni los recursos del mapa.
+    variable:
+      name: EFE_biosteel
+      country: EFE
+      start: 5
+      start_src: invented
+      start_why: "Con 5 el tier 1 está disponible desde el arranque."
     exclusive_to: EFE
     exclusive_src: user_decision
-    exclusive_note: "Nadie más lo tiene porque nadie más lo cultiva. No se le saca nada a nadie."
-    counter: resource_amount
+    counter: variable
     counter_src: canon
     counter_note: >
-      Lo que se mide es la cantidad de BioSteel que tiene el EFE. Cada umbral
-      es condición (`available`) de un foco de La Carrera del Bioacero.
-    counter_trigger:
-      key: has_resources_amount
-      syntax_status: unverified
-      why_unverified: >
-        No tengo los archivos del juego acá. Con --vanilla-path el generador
-        busca la clave en documentation/ de tu instalación y falla si no está.
+      Cada umbral (5/10/15) es condición de un foco de La Carrera del
+      Bioacero: check_variable sobre EFE_biosteel.
     tiers_mode: exclusive
     tiers_mode_note: "Cada tier reemplaza al anterior (swap_ideas); no se acumulan."
     unknown:
-      - "De dónde saca el EFE su BioSteel: depende de history/states (Q007)."
       - "Si se puede perder / decaer."
     see: [Q021, Q043]
 

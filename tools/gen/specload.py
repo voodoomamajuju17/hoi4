@@ -30,6 +30,7 @@ SPEC_FILES = {
     "scenario": "11_scenario.yaml",
     "events": "12_events.yaml",
     "military": "13_military.yaml",
+    "decisions": "14_decisions.yaml",
     "questions": "99_open_questions.yaml",
 }
 

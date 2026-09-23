@@ -576,7 +576,7 @@ trees:
             available:
               biosteel_tier: 1
             reward:
-              - { effect: add_resource, resource: biosteel, amount: 3 }
+              - { effect: add_variable, var: EFE_biosteel, value: 3 }
               - { effect: add_ideas, value: EFE_biosteel_t1 }
             reward_src: invented
             depends_on_mechanic: biosteel
@@ -661,7 +661,7 @@ trees:
               spanish: "Fábricas de armas sobre los viejos campos de soja, techadas con vidrio solar y cercadas con bosque nuevo."
             desc_src: invented
             reward:
-              - { effect: add_resource, resource: biosteel, amount: 3 }
+              - { effect: add_variable, var: EFE_biosteel, value: 3 }
               - { effect: build, building: arms_factory, level: 2 }
             reward_src: invented
           - id: EFE_red_hidrica_guarani
@@ -678,7 +678,7 @@ trees:
               spanish: "El acuífero más grande del continente ya no es una reserva. Es infraestructura."
             desc_src: invented
             reward:
-              - { effect: add_resource, resource: biosteel, amount: 2 }
+              - { effect: add_variable, var: EFE_biosteel, value: 2 }
               - { effect: add_ideas, value: EFE_red_hidrica }
             reward_src: invented
           - id: EFE_economia_circular
@@ -695,7 +695,7 @@ trees:
               spanish: "Nada se desperdicia, nada se importa, nada sale del círculo. El Imperio se alimenta de sí mismo y crece."
             desc_src: invented
             reward:
-              - { effect: add_resource, resource: biosteel, amount: 3 }
+              - { effect: add_variable, var: EFE_biosteel, value: 3 }
               - { effect: build, building: industrial_complex, level: 2 }
               - { effect: add_research_slot, value: 1 }
             reward_src: invented

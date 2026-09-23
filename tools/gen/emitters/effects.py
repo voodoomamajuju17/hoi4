@@ -5,7 +5,8 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: annex, target: TAG }                 -> annex_country
   { effect: wargoal, target: TAG, type: X }      -> create_wargoal
   { effect: build, building: X, level: N }       -> en la capital, con slots
-  { effect: add_resource, resource: X, amount: N } -> en la capital (id resuelto en el build) Los efectos se validan contra
+  { effect: add_resource, resource: X, amount: N } -> en la capital (id resuelto en el build)
+  { effect: add_variable, var: X, value: N }      -> add_to_variable Los efectos se validan contra
 documentation/ del juego (verify_keys) y los ids de idea contra 05_ideas.yaml.
 """
 
@@ -87,6 +88,13 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("add_extra_state_shared_building_slots", owner)
             effects_used.setdefault("add_building_construction", owner)
             continue
+        if effect == "add_variable":
+            inner = Block()
+            inner.add("var", item["var"])
+            inner.add("value", item["value"])
+            block.add("add_to_variable", inner)
+            effects_used.setdefault("add_to_variable", owner)
+            continue
         if effect == "add_resource":
             resource = item.get("resource")
             if ec.resources and resource not in ec.resources:
@@ -123,4 +131,29 @@ def render_effects(owner: str, items: list[dict], known,
                 where=where,
             )
         effects_used.setdefault(effect, owner)
+    return block
+
+
+def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, where: str) -> Block:
+    """Condiciones comunes a focos y decisiones.
+
+      variable_at_least: { var, value }  -> check_variable (forma larga, sin operador)
+      stability_at_least: 0.4            -> has_stability > 0.4
+    """
+    from ..pdx import Compare
+
+    block = Block()
+    for key, value in spec.items():
+        if key == "variable_at_least":
+            inner = Block()
+            inner.add("var", value["var"])
+            inner.add("value", value["value"])
+            inner.add("compare", "greater_than_or_equals")
+            block.add("check_variable", inner)
+            triggers_used.setdefault("check_variable", owner)
+        elif key == "stability_at_least":
+            block.add("has_stability", Compare(">", float(value)))
+            triggers_used.setdefault("has_stability", owner)
+        else:
+            raise SpecError(f"{owner}: condicion desconocida '{key}'", where=where)
     return block

@@ -23,6 +23,8 @@ se cambia el spec y se regenera. Nunca al revés.
 | `10_legacy_lore.yaml` | Material histórico / no canon, conservado como banco de ideas |
 | `11_scenario.yaml` | Bookmark de 2100, fechas de inicio y fin del juego |
 | `12_events.yaml` | Eventos y sus disparadores (arranque, focos) |
+| `13_military.yaml` | Tecnologías, ejército y equipo de arranque |
+| `14_decisions.yaml` | Paneles de decisiones (minijuego del BioSteel) |
 | `99_open_questions.yaml` | Preguntas abiertas, en formato legible por máquina |
 
 ## Convención de procedencia
