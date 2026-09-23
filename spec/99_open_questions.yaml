@@ -14,14 +14,13 @@
 
 summary:
   total: 43
-  answered: [Q001, Q002, Q004, Q006, Q007, Q019, Q035, Q021, Q031, Q036, Q038, Q043]
-  answered_note: >
-    Q001, Q002, Q004 y Q006 respondidas el 2026-08-02. Q021, Q031 y Q043 el
-    2026-09-23. Se conservan con su respuesta.
+  # Generado a partir del status de cada pregunta (2026-09-23). Las listas de
+  # bloqueo solo incluyen preguntas NO respondidas.
+  answered: [Q001, Q002, Q003, Q004, Q005, Q006, Q007, Q008, Q010, Q012, Q015, Q016, Q017, Q019, Q021, Q031, Q033, Q034, Q035, Q036, Q038, Q039, Q040, Q042, Q043]
   blocking_phase_2: []
-  blocking_phase_3: [Q003, Q005, Q013, Q029, Q034, Q042]
-  blocking_phase_5: [Q008, Q009, Q010, Q016, Q017, Q018, Q022, Q023, Q024, Q025, Q026, Q027, Q028, Q030, Q032, Q039]
-  non_blocking: [Q011, Q012, Q014, Q015, Q020, Q033, Q036, Q037, Q040, Q041]
+  blocking_phase_3: [Q013, Q029]
+  blocking_phase_5: [Q009, Q018, Q022, Q023, Q024, Q025, Q026, Q027, Q028, Q030, Q032]
+  non_blocking: [Q037, Q014, Q020, Q041, Q011]
 
 questions:
 
@@ -87,8 +86,8 @@ questions:
   what_i_did: "Asumí 2100.1.1 y lo marqué como inferred."
 
 - id: Q004
-  status: ANSWERED_PARTIALLY
-  answer: "Última versión, todos los DLC."
+  status: ANSWERED
+  answer: "Última versión, todos los DLC. Confirmado por el instalador: 1.19.3.0 con 40 DLC; supported_version se lee de la instalación."
   answered_on: "2026-08-02"
   still_needed: >
     El número exacto sigue haciendo falta para supported_version del descriptor.
@@ -116,6 +115,9 @@ questions:
 # =============================================================================
 
 - id: Q005
+  status: ANSWERED
+  answer: "Resuelto por necesidad técnica (AD001): FCU y NAS en el código, nombre largo en la localisation."
+  answered_on: "2026-09-23"
   priority: high
   blocking_phase: 3
   topic: "TAGs de 4 letras: FCCU y NASK"
@@ -183,6 +185,9 @@ questions:
     de los retratos es lo primero que se puede mejorar después sin riesgo.
 
 - id: Q034
+  status: ANSWERED
+  answer: "Íconos vanilla genéricos (verificados contra interface/*.gfx) más los 4 del pack de arte del usuario."
+  answered_on: "2026-09-23"
   priority: medium
   blocking_phase: 3
   topic: "Iconos de los focos"
@@ -274,6 +279,9 @@ questions:
     localisation pura y se cambian sin tocar lógica.
 
 - id: Q039
+  status: ANSWERED
+  answer: "Reemplazado por decisión del usuario (2026-09-23): no hay 30 países libres; el resto del mundo es la Anarquía (ZAN). Se aparta del doc (§1) a propósito."
+  answered_on: "2026-09-23"
   priority: high
   blocking_phase: 5
   topic: "Los 30 países libres"
@@ -645,6 +653,9 @@ questions:
     español de 02_countries.yaml son míos y son revisables.
 
 - id: Q042
+  status: ANSWERED
+  answer: "Se reemplazan common/bookmarks y events. history/ no: los países vanilla sin territorio se reducen a capital y gobierno (territory.py)."
+  answered_on: "2026-09-23"
   priority: high
   blocking_phase: 3
   topic: "replace_path: ¿el mod reemplaza history/ y common/ vanilla?"

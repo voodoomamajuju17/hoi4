@@ -159,6 +159,16 @@ def _rename_states(ctx: BuildContext, by_name) -> None:
                 s.name_key, en=entry["name"]["english"], es=entry["name"]["spanish"],
                 file="replace/meganations_states", origin=f"state_names:{options[0]}",
             )
+            # Divisiones y reportes usan el nombre nuevo.
+            ctx.data["state_names"][s.name_key] = entry["name"]["spanish"]
+            # La ciudad (punto de victoria principal) también, si el spec lo
+            # pide: si no, en el mapa la estrella seguía diciendo "Buenos Aires".
+            city = entry.get("city")
+            if city and s.vp_provinces:
+                ctx.loc.define_and_reference(
+                    f"VICTORY_POINTS_{s.vp_provinces[0]}", en=city["english"], es=city["spanish"],
+                    file="replace/meganations_states", origin=f"state_names:{options[0]}:city",
+                )
             done += 1
     if done:
         ctx.note(f"nombres de 2100: {done} states renombrados")
@@ -335,8 +345,13 @@ def _stub_landless_vanilla(ctx: BuildContext, assignment: dict[int, str]) -> Non
             vanilla = parse_file(path)
             for key in _STUB_KEYS:
                 value = vanilla.get(key)
-                if value is not None:
-                    stub.add(key, value)
+                if value is None:
+                    continue
+                if key == "set_popularities" and not _sums_100(value):
+                    # 1.19.3: Persia tenía popularidades que no suman 100 fuera
+                    # de sus bloques de DLC; el juego lo reportaba como error.
+                    continue
+                stub.add(key, value)
         except ValueError:
             # No parsea (en 1.19.3: NOR - Norway.txt). Quedarse con la
             # historia entera es peor: ejecuta focos y crea unidades de 1936.
@@ -355,6 +370,13 @@ def _stub_landless_vanilla(ctx: BuildContext, assignment: dict[int, str]) -> Non
         ctx.note(f"{stubbed} paises vanilla sin territorio: historia reducida a capital y gobierno")
 
 
+def _sums_100(block) -> bool:
+    try:
+        return abs(sum(float(str(getattr(v, "text", v))) for _, v in block.entries) - 100) < 0.01
+    except (TypeError, ValueError, AttributeError):
+        return False
+
+
 def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) -> None:
     """Un país vanilla que pierde su capital pero conserva states necesita otra.
 
@@ -362,7 +384,6 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
     capital en el state que le quede con más manpower. El resto del archivo
     queda igual.
     """
-    by_id = {s.id: s for s in ctx.vanilla.states()}
     remaining: dict[str, list[StateInfo]] = {}
     for s in ctx.vanilla.states():
         if s.id not in assignment and s.owner:

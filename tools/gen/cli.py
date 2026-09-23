@@ -145,12 +145,13 @@ def cmd_validate(args) -> int:
     spec = specload.load(args.spec or REPO_ROOT / "spec")
     types, groups = spec.ideology_index()
     questions = spec.raw["questions"]["questions"]
-    blocking = [q for q in questions if q.get("blocking_phase") in (2, 3)]
+    blocking = [q for q in questions if q.get("blocking_phase") in (2, 3) and q.get("status") != "ANSWERED"]
     print("spec valido")
     print(f"  paises:           {len(spec.countries)}")
     print(f"  grupos ideologia: {len(groups)}")
     print(f"  sub-ideologias:   {len(types)}")
-    print(f"  preguntas:        {len(questions)} ({len(blocking)} bloquean fase 2 o 3)")
+    answered = sum(1 for q in questions if q.get("status") == "ANSWERED")
+    print(f"  preguntas:        {len(questions)} ({answered} respondidas, {len(blocking)} abiertas bloquean fase 2 o 3)")
     return 0
 
 

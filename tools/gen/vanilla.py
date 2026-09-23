@@ -101,6 +101,7 @@ class StateInfo:
     buildings: dict | None = None      # edificio de state -> nivel (sin los de provincia)
     victory_points: int = 0
     category: str | None = None
+    vp_provinces: tuple[int, ...] = ()   # de mayor a menor valor
 
     @property
     def file_label(self) -> str:
@@ -216,6 +217,7 @@ class Vanilla:
                         pass
             buildings: dict[str, int] = {}
             vp = 0
+            vps: list[tuple[int, int]] = []
             if isinstance(history, pdx.Block):
                 b_block = history.get("buildings")
                 if isinstance(b_block, pdx.Block):
@@ -228,7 +230,9 @@ class Vanilla:
                 for vblock in history.get_all("victory_points"):
                     if isinstance(vblock, pdx.Block) and len(vblock) >= 2:
                         try:
-                            vp += int(float(pdx.text(vblock.entries[1][1])))
+                            value = int(float(pdx.text(vblock.entries[1][1])))
+                            vp += value
+                            vps.append((value, int(pdx.text(vblock.entries[0][1]))))
                         except (TypeError, ValueError):
                             pass
             cores = tuple(
@@ -248,6 +252,7 @@ class Vanilla:
                     buildings=buildings,
                     victory_points=vp,
                     category=pdx.text(state.get("state_category")) if state.get("state_category") is not None else None,
+                    vp_provinces=tuple(p for _, p in sorted(vps, key=lambda x: -x[0])),
                 )
             )
         self._states = out

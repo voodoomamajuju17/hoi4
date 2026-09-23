@@ -73,7 +73,7 @@ tools/gen/            el generador
                       descriptor, ideologies, countries, resources,
                       ideas, characters, focus_trees, events,
                       territory, history, scenario
-tools/tests/          663 checks, corren sin el juego instalado
+tools/tests/          669 checks, corren sin el juego instalado
 
 build/                SALIDA. Generada, no versionada, no editable.
 ```
@@ -91,10 +91,14 @@ Si al leer el spec no sabés de dónde salió un dato, es un bug del spec.
 | Fase | Estado |
 |---|---|
 | 1 — Spec | listo |
-| 2 — Arquitectura y generador | listo: descriptor, ideologías, países, colores, banderas, localisation |
-| 3 — Vertical slice del EFE | en curso: probado en 1.19.3 (carga, focos y localisation OK). Territorio del EFE y satélites resuelto contra la instalación, BioSteel exclusivo del EFE. Escenario de 2100 propio y 3 eventos del EFE. Falta: probar la última tanda en el juego y nombres de states (Q038) |
-| 4 — Loop de debug con `error.log` | pendiente |
-| 5 — Las otras seis facciones | bloqueada por Q010, Q016, Q018 y las mecánicas sin definir |
+| 2 — Arquitectura y generador | listo |
+| 3 — Vertical slice del EFE | jugable en 1.19.3: árbol de 31 focos, 4 eventos, minijuego del BioSteel, arte propio |
+| 4 — Loop de debug con `error.log` | en curso: cada prueba en el juego alimenta el generador |
+| 5 — Las otras siete | territorio, líder, ideología, ejército y balance listos; faltan árboles, ideas y mecánicas propias (Q030, Q032) y la diplomacia (Q018) |
+
+El mundo entero es del mod: 8 meganaciones, 16 satélites y la Anarquía. Los
+países del juego base quedan sin territorio. `build/balance.txt` resume con qué
+arranca cada facción.
 
 Lo que **no** cubren los tests, y por eso existe la Fase 4: si HOI4 acepta los
 nombres de campo que emitimos. Eso solo lo dice `error.log`.

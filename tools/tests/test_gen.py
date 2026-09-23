@@ -571,6 +571,9 @@ def test_territory() -> None:
         st = (mod / "localisation/spanish/replace/meganations_states_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("Buenos Aires se llama Gaia", 'STATE_900:0 "Gaia"' in st, st)
         check("Magallanes es la Custodia Austral", 'STATE_901:0 "Custodia Austral"' in st)
+        check("la ciudad capital tambien se llama Gaia", 'VICTORY_POINTS_1:0 "Gaia"' in st, st)
+        oob_txt = (mod / "history/units/EFE_2100.txt").read_text()
+        check("las divisiones usan el nombre nuevo", "de Gaia" in oob_txt and "de Buenos Aires" not in oob_txt)
         check("nombres en replace/ (pisan los vanilla)", "replace" in str(mod / "localisation/spanish/replace"))
         check("EFE arranca con Las Cubas de la Pampa", "EFE_cubas_de_la_pampa" in efe_h)
         zan = (mod / "history/countries/ZAN - The Lawless Lands.txt").read_text()
@@ -618,6 +621,8 @@ def test_scenario() -> None:
         bm = root.get("bookmarks").get("bookmark")
         check("fecha 2100", pdx.text(bm.get("date")) == "2100.1.1.12")
         check("EFE por defecto", pdx.text(bm.get("default_country")) == "EFE")
+        featured = [k for k in bm.keys() if isinstance(k, str) and len(k) == 3 and k.isupper()]
+        check("destaca a todas las meganaciones con territorio", {"EFE", "ASC", "NRE", "HSN", "APF"} <= set(featured), str(featured))
         check("picture copiada de vanilla", pdx.text(bm.get("picture")) == "GFX_select_date_1936")
         check("effect copiado de vanilla", isinstance(bm.get("effect"), pdx.Block))
         efe = bm.get("EFE")
