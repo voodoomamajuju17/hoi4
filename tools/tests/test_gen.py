@@ -408,7 +408,7 @@ def test_phase3_content() -> None:
         for n in (1, 2, 3):
             f = next(f for f in focuses if pdx.text(f.get("id")) == f"EFE_biosteel_umbral_{n}")
             cond = f.get("available").get("has_resources_amount")
-            check(f"umbral {n} pide coal", pdx.text(cond.get("resource")) == "coal")
+            check(f"umbral {n} pide biosteel", pdx.text(cond.get("resource")) == "biosteel")
             amounts.append(pdx.text(cond.get("amount")))
         check("umbrales 5/10/15", amounts == ["5", "10", "15"], str(amounts))
         t2 = next(f for f in focuses if pdx.text(f.get("id")) == "EFE_biosteel_umbral_2")
@@ -448,13 +448,24 @@ def test_phase3_content() -> None:
             total = sum(int(pdx.text(v)) for _, v in pops.entries)
             check(f"popularidades suman 100 en {path.name}", total == 100, str(total))
 
-        res = mod / "localisation/english/replace/meganations_resources_l_english.yml"
-        check("reskin de recurso en replace/", res.exists())
-        text = res.read_text(encoding="utf-8-sig")
-        check("coal pasa a BioSteel", 'coal:0 "BioSteel"' in text, text)
-        check("no toca otros recursos", "steel:0" not in text.replace("BioSteel", ""), text)
-        es = (mod / "localisation/spanish/replace/meganations_resources_l_spanish.yml").read_text(encoding="utf-8-sig")
-        check("coal en castellano", 'coal:0 "Bioacero"' in es, es)
+        resources = pdx.parse((mod / "common/resources/00_resources.txt").read_text()).get("resources")
+        check("biosteel es un recurso nuevo", isinstance(resources.get("biosteel"), pdx.Block))
+        check("copia los campos del acero", pdx.text(resources.get("biosteel").get("icon_frame")) == "5")
+        check("el carbon sigue existiendo", isinstance(resources.get("coal"), pdx.Block))
+        text = (mod / "localisation/english/meganations_resources_l_english.yml").read_text(encoding="utf-8-sig")
+        check("nombre del recurso", 'biosteel:0 "BioSteel"' in text, text)
+        check("clave derivada en mayusculas", 'PRODUCTION_MATERIALS_BIOSTEEL:0 "BioSteel"' in text, text)
+        check("no toca el carbon", "coal" not in text, text)
+        check("no toca claves que no son del recurso", "TECH_" not in text, text)
+        es = (mod / "localisation/spanish/meganations_resources_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("BioSteel en castellano", 'biosteel:0 "Bioacero"' in es, es)
+        capital = pdx.parse((mod / "history/states/900-Fixture.txt").read_text()).get("state")
+        check("5 de BioSteel en la capital del EFE",
+              pdx.text(capital.get("resources").get("biosteel")) == "5", str(capital.get("resources")))
+        by2 = {pdx.text(f.get("id")): f for f in focuses}
+        add = by2["EFE_biosteel_umbral_1"].get("completion_reward").get("add_resource")
+        check("el umbral 1 suma BioSteel en la capital",
+              pdx.text(add.get("type")) == "biosteel" and pdx.text(add.get("state")) == "900", str(add))
 
 
 def test_territory() -> None:
@@ -492,16 +503,16 @@ def test_territory() -> None:
         check("bloque 1939 borrado", "1939.1.1" not in hist.keys(), str(hist.keys()))
         check("edificios conservados", isinstance(hist.get("buildings"), pdx.Block))
         res = cordoba.get("state").get("resources")
-        check("el EFE conserva su BioSteel", pdx.text(res.get("coal")) == "12")
+        check("el carbon vanilla del EFE queda igual", pdx.text(res.get("coal")) == "12")
 
         ruhr = pdx.parse((states / "906-Fixture.txt").read_text()).get("state")
-        check("Ruhr pierde el carbon (BioSteel exclusivo)", ruhr.get("resources") is None, str(ruhr.keys()))
+        check("Ruhr conserva su carbon (energia para la ASC)", pdx.text(ruhr.get("resources").get("coal")) == "40")
         check("Ruhr pasa a la ASC", pdx.text(ruhr.get("history").get("owner")) == "ASC")
         par = pdx.parse((states / "904-Fixture.txt").read_text()).get("state")
-        check("el satelite tampoco tiene BioSteel", par.get("resources") is None)
+        check("el satelite conserva su carbon", pdx.text(par.get("resources").get("coal")) == "5")
+        check("el satelite no tiene BioSteel", "biosteel" not in par.get("resources").keys())
         check("archivo con comparaciones no se reescribe", not (states / "907-Fixture.txt").exists())
         check("avisa del archivo con comparaciones", any("907-Fixture" in w for w in ctx.warnings))
-        check("sin carbon y sin dueño nuevo no se reescribe", not (states / "905-Fixture.txt").read_text().count("coal"))
 
         check("avisa lo que no encontro con parecidos",
               any("Tierra del Fuego" in w for w in ctx.warnings), str(ctx.warnings))
@@ -627,7 +638,7 @@ def test_vanilla_validation() -> None:
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot\n"
+            "add_research_slot add_resource\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir()

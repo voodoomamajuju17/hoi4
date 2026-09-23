@@ -4,7 +4,8 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: swap_ideas, remove, add }
   { effect: annex, target: TAG }                 -> annex_country
   { effect: wargoal, target: TAG, type: X }      -> create_wargoal
-  { effect: build, building: X, level: N }       -> en la capital, con slots Los efectos se validan contra
+  { effect: build, building: X, level: N }       -> en la capital, con slots
+  { effect: add_resource, resource: X, amount: N } -> en la capital (id resuelto en el build) Los efectos se validan contra
 documentation/ del juego (verify_keys) y los ids de idea contra 05_ideas.yaml.
 """
 
@@ -31,7 +32,11 @@ class EffectContext:
     """Lo que hace falta para validar efectos que apuntan a cosas del juego."""
 
     def __init__(self, known_ideas: set[str], tags: set[str],
-                 buildings: set[str] | None = None, wargoals: set[str] | None = None):
+                 buildings: set[str] | None = None, wargoals: set[str] | None = None,
+                 capital: int | None = None, resources: set[str] | None = None, warn=None):
+        self.capital = capital
+        self.warn = warn
+        self.resources = resources or set()
         self.known_ideas = known_ideas
         self.tags = tags
         self.buildings = buildings or set()
@@ -81,6 +86,21 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("capital_scope", scope)
             effects_used.setdefault("add_extra_state_shared_building_slots", owner)
             effects_used.setdefault("add_building_construction", owner)
+            continue
+        if effect == "add_resource":
+            resource = item.get("resource")
+            if ec.resources and resource not in ec.resources:
+                raise SpecError(f"{owner}: recurso '{resource}' desconocido", where=where)
+            if ec.capital is None:
+                if ec.warn:
+                    ec.warn(f"{owner}: add_resource omitido, no hay capital resuelta (falta --vanilla-path).")
+                continue
+            inner = Block()
+            inner.add("type", resource)
+            inner.add("amount", int(item.get("amount", 1)))
+            inner.add("state", ec.capital)
+            block.add("add_resource", inner)
+            effects_used.setdefault("add_resource", owner)
             continue
         if effect == "swap_ideas":
             for role in ("remove", "add"):

@@ -23,7 +23,6 @@ from ..errors import SpecError
 from ..pdx import Block, Quoted
 from . import characters as characters_mod
 from . import ideas as ideas_mod
-from . import territory as territory_mod
 
 SOURCE = "spec/02_countries.yaml + 03_leaders.yaml + 05_ideas.yaml"
 
@@ -111,26 +110,7 @@ def _any_subjects(ctx: BuildContext) -> bool:
 
 
 def _capital(ctx: BuildContext, c) -> int | None:
-    assignment: dict[int, str] = ctx.data.get("territory") or {}
-    owned = [sid for sid, tag in assignment.items() if tag == c.tag]
-    if not owned:
-        return None
-    names = ctx.data.get("state_names") or {}
-    by_id = {s.id: s for s in ctx.vanilla.states()} if ctx.vanilla else {}
-    terr = (ctx.spec.raw["territory"].get("territories") or {}).get(c.tag) or {}
-    wanted = terr.get("capital_state")
-    if wanted:
-        options = {territory_mod.normalize(w) for w in wanted}
-        for sid in sorted(owned):
-            s = by_id.get(sid)
-            if s and options & {territory_mod.normalize(n) for n in (names.get(s.name_key), s.file_label) if n}:
-                return sid
-        ctx.warn(f"{c.tag}: la capital {' / '.join(wanted)} no esta entre sus states; uso la de mas manpower.")
-    best = max(owned, key=lambda sid: (by_id[sid].manpower if sid in by_id else 0, -sid))
-    if not wanted:
-        shown = territory_mod.display_name(by_id[best], names) if best in by_id else "?"
-        ctx.note(f"{c.tag}: capital provisoria {shown} ({best}), la de mas manpower. Ver Q012.")
-    return best
+    return (ctx.data.get("capitals") or {}).get(c.tag)
 
 
 def _popularities(ruling: str, share: int) -> Block:

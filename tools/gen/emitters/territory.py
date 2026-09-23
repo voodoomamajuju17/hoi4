@@ -16,8 +16,12 @@ Qué se toca en cada state reasignado:
     entrada con fecha anterior al inicio, y arrancamos en 2100: un cambio de
     dueño de 1939 pisaría el nuestro.
 
-BioSteel exclusivo (Q043): en todo state del mundo que NO quede en manos del
-EFE, el recurso reskineado se pone en 0 (se borra la entrada).
+Yacimientos iniciales de recursos propios (06_mechanics.yaml ->
+starting_deposits): se agregan al bloque `resources` del state (hoy: 5 de
+BioSteel en la capital del EFE). El carbón vanilla no se toca.
+
+Capitales: se resuelven acá (capital_of) porque las necesitan la historia de
+países y los efectos de foco que agregan recursos en la capital.
 
 Seguridad: el parser trata `<` y `>` como `=`. Un archivo que los use no se
 reescribe: se avisa y queda vanilla.
@@ -84,19 +88,59 @@ def emit(ctx: BuildContext) -> None:
         listed = ", ".join(f"{display_name(by_id[sid], names)} ({sid})" for sid in owned)
         ctx.note(f"territorio {tag}: {len(owned)} states: {listed or 'ninguno'}")
 
-    exclusive = spec.get("biosteel_exclusive_to")
-    resource = _biosteel_resource(ctx) if exclusive else None
+    by_state = {s.id: s for s in states}
+    capitals = {}
+    for c in ctx.spec.countries:
+        cap = capital_of(ctx, c.tag, assignment, names, by_state)
+        if cap is not None:
+            capitals[c.tag] = cap
+    ctx.data["capitals"] = capitals
 
-    stripped = 0
+    deposits = _starting_deposits(ctx, capitals)
     for s in states:
         new_owner = assignment.get(s.id)
-        strip = bool(resource) and new_owner != exclusive
-        if new_owner is None and not strip:
+        if new_owner is None and s.id not in deposits:
             continue
-        _, removed = _rewrite(ctx, s, new_owner, resource if strip else None)
-        stripped += removed
-    if resource:
-        ctx.note(f"BioSteel exclusivo de {exclusive}: '{resource}' quitado de {stripped} states de otros paises")
+        _rewrite(ctx, s, new_owner, deposits.get(s.id, {}))
+
+
+def capital_of(ctx, tag, assignment, names, by_state) -> int | None:
+    """Capital: la del spec (capital_state) si es propia; si no, la de más manpower."""
+    owned = [sid for sid, t in assignment.items() if t == tag]
+    if not owned:
+        return None
+    terr = (ctx.spec.raw["territory"].get("territories") or {}).get(tag) or {}
+    wanted = terr.get("capital_state")
+    if wanted:
+        options = {normalize(w) for w in wanted}
+        for sid in sorted(owned):
+            s = by_state.get(sid)
+            if s and options & {normalize(n) for n in (names.get(s.name_key), s.file_label) if n}:
+                return sid
+        ctx.warn(f"{tag}: la capital {' / '.join(wanted)} no esta entre sus states; uso la de mas manpower.")
+    best = max(owned, key=lambda sid: (by_state[sid].manpower if sid in by_state else 0, -sid))
+    if not wanted:
+        shown = display_name(by_state[best], names) if best in by_state else "?"
+        ctx.note(f"{tag}: capital provisoria {shown} ({best}), la de mas manpower.")
+    return best
+
+
+def _starting_deposits(ctx, capitals) -> dict[int, dict[str, int]]:
+    out: dict[int, dict[str, int]] = {}
+    for mech in ctx.spec.raw["mechanics"].get("mechanics", []) or []:
+        res = mech.get("resource")
+        if not isinstance(res, dict) or res.get("strategy") != "new_resource":
+            continue
+        for dep in res.get("starting_deposits", []) or []:
+            if dep.get("state") != "capital":
+                raise SpecError("starting_deposits: por ahora solo state: capital", where="06_mechanics.yaml")
+            sid = capitals.get(dep["country"])
+            if sid is None:
+                ctx.warn(f"{dep['country']} no tiene capital: no recibe su yacimiento de {res['key']}.")
+                continue
+            out.setdefault(sid, {})[res["key"]] = int(dep["amount"])
+            ctx.note(f"{res['key']}: {dep['amount']} en la capital de {dep['country']} (state {sid})")
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -206,37 +250,27 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
         ctx.note(f"{tag} perdio su capital: nueva capital {display_name(best, names)} ({best.id})")
 
 
-def _biosteel_resource(ctx: BuildContext) -> str | None:
-    for mech in ctx.spec.raw["mechanics"].get("mechanics", []) or []:
-        if mech.get("id") == "biosteel":
-            return (mech.get("resource") or {}).get("vanilla_key")
-    return None
-
-
-def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, strip_resource: str | None) -> tuple[bool, int]:
+def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int]) -> bool:
     raw = info.path.read_text(encoding="utf-8-sig", errors="replace")
-    root = parse_file(info.path)
-    state = root.get("state")
-    if not isinstance(state, Block):
-        return False, 0
-
-    removed = 0
-    if strip_resource:
-        resources = state.get("resources")
-        if isinstance(resources, Block) and strip_resource in resources.keys():
-            resources.entries = [(k, v) for k, v in resources.entries if k != strip_resource]
-            removed = 1
-            if not resources.entries:
-                state.entries = [(k, v) for k, v in state.entries if k != "resources"]
-    if owner is None and not removed:
-        return False, 0
-
     if any(m.group(1) for m in _COMPARISON.finditer(raw)):
         ctx.warn(
             f"{info.path.name}: usa comparaciones (< o >) y no lo reescribo para no "
             f"cambiarle el sentido. Queda vanilla."
         )
-        return False, 0
+        return False
+    root = parse_file(info.path)
+    state = root.get("state")
+    if not isinstance(state, Block):
+        return False
+
+    if add_resources:
+        resources = state.get("resources")
+        if not isinstance(resources, Block):
+            resources = Block()
+            state.add("resources", resources)
+        for key, amount in add_resources.items():
+            resources.entries = [(k, v) for k, v in resources.entries if k != key]
+            resources.add(key, amount)
 
     if owner is not None:
         history = state.get("history")
@@ -253,4 +287,4 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, strip_resour
         history.entries = [("owner", owner)] + kept + [("add_core_of", owner)]
 
     ctx.write_script(f"history/states/{info.path.name}", root, source=SOURCE)
-    return True, removed
+    return True

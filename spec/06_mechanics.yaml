@@ -35,33 +35,37 @@ mechanics:
       El doc dice "por ejemplo", o sea que los cita como ilustración, no como
       valores cerrados. Tratarlos como provisionales. Ver Q043 -> unit_caveat.
 
-    # -- Q021, respondida 2026-09-23 --------------------------------------------
-    # "Tiene que ser un recurso." BioSteel es un recurso estratégico del mapa,
-    # como el petróleo o el acero. Se implementa como RESKIN de un recurso
-    # vanilla: la clave interna sigue siendo la vanilla (el motor, el mercado
-    # internacional, los convoyes y el costo del equipo la siguen encontrando)
-    # y el jugador ve "BioSteel" por localisation.
+    # -- Q021 / Q043, rediseñado 2026-09-23 ------------------------------------
+    # Primera versión: BioSteel = carbón reskineado, y se le sacaba el carbón a
+    # todos los demás. El usuario detectó el problema: desde 1.17 las fábricas
+    # consumen energía que sale del carbón, así que el resto del mundo quedaba
+    # en déficit energético permanente.
+    #
+    # Versión actual: BioSteel es un RECURSO NUEVO (el séptimo). El carbón
+    # vuelve a ser carbón para todos. BioSteel solo existe donde el EFE lo
+    # cultiva: arranca con un yacimiento en la capital y los focos lo agrandan.
     resource:
-      vanilla_key: coal
-      vanilla_key_src: user_decision
-      vanilla_key_why: >
-        El usuario pidió reemplazar el carbón (Q021, Q043). El carbón existe
-        como recurso desde el parche 1.17 (nov. 2025, junto al DLC No
-        Compromise, No Surrender), disponible sin el DLC.
-      strategy: localisation_reskin
-      strategy_note: >
-        El generador busca en la localisation vanilla toda clave cuyo texto en
-        inglés sea exactamente el nombre del recurso ("Coal") y la pisa
-        desde localisation/<idioma>/replace/. No se escribe ninguna clave de
-        memoria: si cambia entre parches, se sigue encontrando.
-      vanilla_display_name: "Coal"
-      icon: vanilla
-      icon_note: "Sigue mostrando el ícono del carbón. Arte propio: después."
+      strategy: new_resource
+      key: biosteel
+      template: steel
+      template_note: >
+        La definición se copia del recurso vanilla `steel` (icon_frame, cic,
+        convoys...): no se escribe ningún campo de memoria. Sigue mostrando el
+        ícono del acero hasta que haya arte propio.
+      loc_template: steel
+      loc_note: >
+        Las claves de localisation se derivan de las del acero: toda clave
+        vanilla que contenga "steel" y muestre "Steel" se duplica con
+        "biosteel" y el texto "BioSteel".
+      starting_deposits:
+        - { country: EFE, state: capital, amount: 5 }
+      starting_deposits_src: invented
+      starting_deposits_why: >
+        Con 5 el tier 1 está disponible desde el arranque; el resto se gana con
+        focos (ver 07_focus_trees.yaml: effect add_resource).
     exclusive_to: EFE
     exclusive_src: user_decision
-    exclusive_note: >
-      Q043: los demás países no tienen BioSteel. Se implementa poniendo en 0 el
-      carbón de todo state que no sea del EFE, al generar history/states/.
+    exclusive_note: "Nadie más lo tiene porque nadie más lo cultiva. No se le saca nada a nadie."
     counter: resource_amount
     counter_src: canon
     counter_note: >

@@ -24,6 +24,7 @@ from ..errors import SpecError
 from ..pdx import Block, Quoted
 from . import events as events_mod
 from . import ideas as ideas_mod
+from . import resources as resources_mod
 from .effects import EffectContext, render_effects
 
 SOURCE = "spec/07_focus_trees.yaml"
@@ -81,6 +82,9 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
         {c.tag for c in ctx.spec.countries},
         ctx.vanilla.building_keys() if ctx.vanilla else None,
         ctx.vanilla.wargoal_types() if ctx.vanilla else None,
+        capital=(ctx.data.get("capitals") or {}).get(tag),
+        resources={m["resource"]["key"] for m in resources_mod.new_resources(ctx)},
+        warn=ctx.warn,
     )
     exclusive = _exclusive_pairs(focuses, by_id)
     custom = _emit_custom_icons(ctx, tag, focuses)
@@ -318,7 +322,7 @@ def _biosteel_threshold(ctx: BuildContext, tier: int) -> tuple[str, str, int]:
                 raise SpecError(f"biosteel_tier {tier} fuera de rango", where="07_focus_trees.yaml")
             return (
                 mech["counter_trigger"]["key"],
-                mech["resource"]["vanilla_key"],
+                mech["resource"]["key"],
                 int(thresholds[tier - 1]),
             )
     raise SpecError("no hay mecanica 'biosteel' en 06_mechanics.yaml", where="07_focus_trees.yaml")

@@ -45,11 +45,11 @@ EMITTERS = [
     ("ideologies", em_ideologies.emit),
     ("countries", em_countries.emit),
     ("resources", em_resources.emit),
+    ("territory", em_territory.emit),   # antes que focos e historia: define capitales
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
     ("focus_trees", em_focus_trees.emit),
     ("events", em_events.emit),
-    ("territory", em_territory.emit),   # antes de history: define las capitales
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
 ]
