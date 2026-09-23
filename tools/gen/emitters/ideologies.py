@@ -148,6 +148,9 @@ def _emit_localisation(ctx: BuildContext, groups_spec: list[dict]) -> None:
 
 
 def _group_desc(group: dict, language: str) -> str:
+    lore = group.get("lore")
+    if isinstance(lore, dict) and lore.get(language):
+        return lore[language]
     from_doc = group.get("from_doc")
     if from_doc:
         return " ".join(str(from_doc).split())
@@ -160,11 +163,10 @@ def _group_desc(group: dict, language: str) -> str:
 
 
 def _type_desc(t: dict, name: str, language: str) -> str:
-    """Descripción placeholder honesta.
-
-    El documento no da descripciones de ideología. En vez de inventar prosa que
-    despues nadie sabe si es canon, se marca como placeholder en el propio texto.
-    """
+    """La descripción del spec; si no hay, un placeholder que lo dice."""
+    desc = t.get("desc")
+    if isinstance(desc, dict) and desc.get(language):
+        return desc[language]
     if language == "english":
         return f"{name}. [Placeholder: the design bible does not define this ideology's text.]"
     return f"{name}. [Placeholder: la biblia de diseno no define el texto de esta ideologia.]"

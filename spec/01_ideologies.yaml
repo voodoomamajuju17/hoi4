@@ -1,169 +1,203 @@
 # =============================================================================
-# 01_ideologies.yaml — Ideologías custom
+# 01_ideologies.yaml — Ideologías
 # =============================================================================
-# El documento NO define ideologías en términos de HOI4. Define regímenes en
-# prosa. Todo lo de este archivo es por lo tanto `inferred` o `invented`, y está
-# marcado como tal. Es el archivo del spec con más superficie de revisión.
+# Esquema aprobado por el usuario el 2026-09-23 ("es perfecto, inventá todo").
 #
-# Estructura asumida: AD002 = reskin_groups (ver 00_project.yaml).
-# Cada ideología del mod es un `type` (sub-ideología) dentro de uno de los
-# cuatro grupos vanilla, que se conservan como claves internas y se renombran
-# por localisation.
+# LORE: el Gran Desarme (2040–2080). Colapso climático, automatización masiva
+# y guerras por recursos. Los Estados nacionales no cayeron en una guerra: se
+# deshicieron, porque dejaron de poder alimentar, emplear y proteger a su
+# gente. Lo que los reemplazó fueron regímenes que ofrecen UNA certeza a
+# cambio de todo lo demás. La pregunta que ordena el mundo de 2100 es:
+#
+#     ¿De dónde saca un gobierno el derecho a mandar?
+#
+# Cuatro respuestas = los cuatro grupos. Dos meganaciones por grupo, así cada
+# bloque tiene su rivalidad interna (quién restaura qué, máquinas o comunidad,
+# corporación o flota, armonía o sol).
+#
+# Técnica (AD002, reskin_groups): los grupos son las cuatro claves vanilla,
+# renombradas por localisation. Cada ideología del mod es un `type`
+# (sub-ideología) dentro de ellas. El grupo es lo que se ve en el gráfico de
+# popularidad y decide alianzas y elecciones; la sub-ideología es lo que
+# aparece junto al nombre del líder.
+#
+# Las sub-ideologías sin `used_by` son las menores: sirven para los 30 países
+# libres y como nombre de la oposición interna de cada meganación.
+#
+# Todo lo de este archivo es invented o inferred. El doc no define ideologías.
 # =============================================================================
 
 strategy: reskin_groups
 strategy_src: user_decision
 strategy_note: "Confirmado por el usuario 2026-08-02 (Q006). Ver AD002."
-strategy_implication: >
-  El generador NO escribe common/ideologies/00_ideologies.txt desde cero:
-  lee el archivo vanilla, le inyecta nuestros `types` dentro de los cuatro
-  grupos existentes, y reescribe el archivo completo conservando todo lo demás
-  (rules, ai, dynamic_faction_names, war_impact_on_world_tension...).
-  Por eso el emisor de ideologías EXIGE --vanilla-path. Ver Q035.
+scheme_src: user_approved_invention   # 2026-09-23
 
-# -----------------------------------------------------------------------------
-# Grupos (claves internas vanilla, etiquetas nuevas)
-# -----------------------------------------------------------------------------
 groups:
 
+  # ---------------------------------------------------------------------------
   - key: fascism
-    display_key: ideology_group_ecoauthoritarian
     loc:
-      english: "Eco-Authoritarianism"
-      spanish: "Ecoautoritarismo"
-    src: inferred
-    from_doc: >
-      §3.2 — "respuesta autoritaria al colapso ecológico", "ecologismo extremo,
-      militarización, autosuficiencia, control social y conservación coercitiva".
+      english: "Restoration"
+      spanish: "Restauración"
+    lore:
+      english: "Legitimacy comes from what existed before the collapse: the living Earth, the lost empire, the old nation. There was an order once. It will be restored, whatever it costs the living."
+      spanish: "La legitimidad viene de lo que existía antes del colapso: la Tierra viva, el imperio perdido, la vieja nación. Alguna vez hubo un orden. Se lo va a restaurar, cueste lo que les cueste a los vivos."
     color_rgb: [58, 92, 54]
-    color_src: invented
-    color_why: "HOI4 exige color en el bloque de ideología. Verde oscuro por el tema."
+    src: invented
     types:
       - key: ecofascism
-        loc:
-          english: "Ecofascism"
-          spanish: "Ecofascismo"
-        used_by: [EFE]
+        used_by: [EFE, PTA, YYG]
+        loc: { english: "Ecofascism", spanish: "Ecofascismo" }
+        desc:
+          english: "Ecological survival above individual rights. The forest is the nation, and the nation obeys."
+          spanish: "La supervivencia ecológica por encima de los derechos individuales. El bosque es la nación, y la nación obedece."
         src: inferred
+        from_doc: "§3.2"
       - key: imperial_restoration
-        loc:
-          english: "Imperial Restoration"
-          spanish: "Restauración Imperial"
         used_by: [NRE]
+        loc: { english: "Imperial Restoration", spanish: "Restauración Imperial" }
+        desc:
+          english: "Civilisation fell once before and Rome rebuilt it. Legions, magistrates and roads: the old answer to chaos."
+          spanish: "La civilización ya cayó una vez y Roma la reconstruyó. Legiones, magistrados y caminos: la vieja respuesta al caos."
         src: inferred
-        from_doc: "§10 — Neo Roman Empire, Legiones y Oficiales, fantasía neo-romana."
+        from_doc: "§10"
+      - key: bunker_junta
+        loc: { english: "Bunker Junta", spanish: "Junta de Búnker" }
+        desc:
+          english: "The officers who held the shelters when the cities burned never gave the keys back."
+          spanish: "Los oficiales que custodiaron los refugios cuando ardían las ciudades nunca devolvieron las llaves."
+        src: invented
+      - key: ruin_nationalism
+        loc: { english: "Ruin Nationalism", spanish: "Nacionalismo de las Ruinas" }
+        desc:
+          english: "The dead nation-states still have believers: flags without countries, anthems without borders."
+          spanish: "Los Estados nacionales muertos todavía tienen creyentes: banderas sin país, himnos sin fronteras."
+        src: invented
 
+  # ---------------------------------------------------------------------------
   - key: communism
-    display_key: ideology_group_collectivist
     loc:
       english: "Collectivism"
       spanish: "Colectivismo"
-    src: inferred
-    from_doc: "§4 — 'sociedad socialista altamente automatizada'."
+    lore:
+      english: "Legitimacy comes from the people. The collapse proved that no one survives alone: the machines, the land and the water belong to everyone, and no one is surplus."
+      spanish: "La legitimidad viene del pueblo. El colapso demostró que nadie se salva solo: las máquinas, la tierra y el agua son de todos, y nadie sobra."
     color_rgb: [178, 44, 44]
-    color_src: invented
+    src: invented
     types:
       - key: automated_socialism
-        loc:
-          english: "Automated Socialism"
-          spanish: "Socialismo Automatizado"
         used_by: [ASC]
+        loc: { english: "Automated Socialism", spanish: "Socialismo Automatizado" }
+        desc:
+          english: "The machines do the work and the Council allocates the output. Labour is optional; compute is not."
+          spanish: "Las máquinas hacen el trabajo y el Consejo reparte lo producido. Trabajar es opcional; el cómputo no."
         src: canon
-        from_doc: "El nombre 'Automated Socialist Commune' es literal del doc."
+        from_doc: "§4 — el nombre 'Automated Socialist Commune' es literal."
       - key: continental_federalism
-        loc:
-          english: "Continental Federalism"
-          spanish: "Federalismo Continental"
         used_by: [APF]
-        src: inferred
+        loc: { english: "Popular Federalism", spanish: "Federalismo Popular" }
+        desc:
+          english: "A thousand councils, one federation. Power rises from the village assembly to the continental congress, never the other way."
+          spanish: "Mil consejos, una federación. El poder sube de la asamblea del pueblo al congreso continental, nunca al revés."
+        src: invented
         from_doc: "§9 — 'integración regional', 'federación amplia'."
-        warning: >
-          Meter APF en el grupo `communism` es una decisión mía sin apoyo en el
-          doc. El doc no dice que la APF sea de izquierda; dice que su eje es
-          político-territorial. Puede que le corresponda otro grupo. Ver Q008.
+      - key: agrarian_communalism
+        loc: { english: "Agrarian Communalism", spanish: "Comunalismo Agrario" }
+        desc:
+          english: "The commune that feeds itself answers to no one. Seed banks, shared fields and a deep suspicion of cities."
+          spanish: "La comuna que se alimenta sola no le responde a nadie. Bancos de semillas, campos compartidos y una profunda desconfianza de las ciudades."
+        src: invented
+      - key: revolutionary_luddism
+        loc: { english: "Revolutionary Luddism", spanish: "Ludismo Revolucionario" }
+        desc:
+          english: "The machines took the jobs, then the choices. Smash the servers and give the future back to human hands."
+          spanish: "Las máquinas se llevaron los trabajos, después las decisiones. Hay que romper los servidores y devolverle el futuro a las manos humanas."
+        src: invented
 
+  # ---------------------------------------------------------------------------
   - key: democratic
-    display_key: ideology_group_market
     loc:
       english: "Market Order"
       spanish: "Orden de Mercado"
-    src: inferred
-    from_doc: "§5 y §6 — polo hipercapitalista (FCCU) y comercio marítimo (HSN)."
+    lore:
+      english: "Legitimacy comes from the contract. Everyone who holds a stake gets a vote, weighted by the size of the stake. The collapse was a market failure; the answer is a better market."
+      spanish: "La legitimidad viene del contrato. Todo el que tiene una participación vota, en proporción a esa participación. El colapso fue una falla de mercado; la respuesta es un mercado mejor."
     color_rgb: [212, 168, 52]
-    color_src: invented
+    src: invented
     types:
       - key: corporate_union
-        loc:
-          english: "Corporate Union"
-          spanish: "Unión Corporativa"
         used_by: [FCU]
+        loc: { english: "Corporate Union", spanish: "Unión Corporativa" }
+        desc:
+          english: "Four corporations, one board. Citizens are shareholders, elections are general meetings, and the constitution is a charter."
+          spanish: "Cuatro corporaciones, un directorio. Los ciudadanos son accionistas, las elecciones son asambleas generales y la constitución es un estatuto."
         src: inferred
         from_doc: "§5 — 'cuatro corporaciones que actúan como centros de poder'."
       - key: mercantile_thalassocracy
-        loc:
-          english: "Mercantile Thalassocracy"
-          spanish: "Talasocracia Mercantil"
         used_by: [HSN]
+        loc: { english: "Mercantile Thalassocracy", spanish: "Talasocracia Mercantil" }
+        desc:
+          english: "Whoever holds the sea lanes holds the world. A nation of ports, fleets and tolls, with no border it cannot sail past."
+          spanish: "El que controla las rutas del mar controla el mundo. Una nación de puertos, flotas y peajes, sin frontera que no pueda rodear navegando."
         src: inferred
-        from_doc: "§6 — 'depender más del control de rutas y de la red mercantil'."
+        from_doc: "§6"
+      - key: shareholder_republic
+        loc: { english: "Shareholder Republic", spanish: "República de Accionistas" }
+        desc:
+          english: "The old parliaments survive, but every seat is bought and every vote is audited."
+          spanish: "Los viejos parlamentos sobreviven, pero cada banca se compra y cada voto se audita."
+        src: invented
+      - key: charter_freehold
+        loc: { english: "Charter Freehold", spanish: "Ciudad-Carta Libre" }
+        desc:
+          english: "A city with a private charter, private police and private courts. No taxes, no welfare, no questions."
+          spanish: "Una ciudad con estatuto privado, policía privada y tribunales privados. Sin impuestos, sin asistencia, sin preguntas."
+        src: invented
 
+  # ---------------------------------------------------------------------------
   - key: neutrality
-    display_key: ideology_group_technocratic
     loc:
-      english: "Technocratic Order"
-      spanish: "Orden Tecnocrático"
-    src: inferred
+      english: "Transcendent Mandate"
+      spanish: "Mandato Trascendente"
+    lore:
+      english: "Legitimacy comes from above politics. Politics failed; Harmony does not. The Sun does not. Whoever speaks for the higher order does not need to ask for permission."
+      spanish: "La legitimidad viene de algo que está por encima de la política. La política fracasó; la Armonía no. El Sol no. El que habla en nombre del orden superior no necesita pedir permiso."
     color_rgb: [110, 118, 132]
-    color_src: invented
+    src: invented
     types:
       - key: harmonious_directorate
-        loc:
-          english: "Harmonious Directorate"
-          spanish: "Directorio Armónico"
         used_by: [SHD]
+        loc: { english: "Harmonious Directorate", spanish: "Directorio Armónico" }
+        desc:
+          english: "Society as a system to be balanced. The Directorate measures, corrects and never explains."
+          spanish: "La sociedad como un sistema a equilibrar. El Directorio mide, corrige y nunca explica."
         src: inferred
-        from_doc: >
-          §8 — el doc dice explícitamente que "Armonía" sugiere un medidor
-          político/social PERO que esa interpretación NO se adopta como canon.
-          Esta ideología respeta esa cautela: toma solo el nombre.
+        from_doc: "§8 — se toma solo el nombre 'Armonía', no la interpretación de medidor."
       - key: solar_monarchism
-        loc:
-          english: "Solar Monarchism"
-          spanish: "Monarquismo Solar"
         used_by: [NAS]
+        loc: { english: "Solar Monarchism", spanish: "Monarquismo Solar" }
+        desc:
+          english: "The Sapa Inti is the child of the Sun, and the Sun rose again over the Andes when everything else went dark."
+          spanish: "El Sapa Inti es hijo del Sol, y el Sol volvió a salir sobre los Andes cuando todo lo demás se apagó."
         src: invented
-        why: >
-          El doc solo da "NeoAndean Sky Kingdom" e "Inti-Soma". "Kingdom" implica
-          monarquía e "Inti" es el sol incaico. Todo lo demás es mío. Ver Q009.
+      - key: climate_theocracy
+        loc: { english: "Climate Theocracy", spanish: "Teocracia Climática" }
+        desc:
+          english: "The floods were a judgement. The priests read the weather and the faithful obey the forecast."
+          spanish: "Las inundaciones fueron un juicio. Los sacerdotes leen el clima y los fieles obedecen el pronóstico."
+        src: invented
       - key: unaligned_state
-        loc:
-          english: "Unaligned"
-          spanish: "No Alineado"
-        used_by: []
-        note: "Default para los 30 países libres sin definir. Ver 09_free_countries.yaml."
+        loc: { english: "Unaligned", spanish: "No Alineado" }
+        desc:
+          english: "Too small to choose, too stubborn to be chosen."
+          spanish: "Demasiado chico para elegir, demasiado terco para que lo elijan."
         src: invented
-        why: "Los países libres necesitan una ideología para existir; el doc no da ninguna."
+        note: "Default de los países libres sin definir. Ver 09_free_countries.yaml."
 
-# -----------------------------------------------------------------------------
-# Advertencia técnica
 # -----------------------------------------------------------------------------
 technical_notes:
   - id: TN001
     text: >
-      Si un país arranca con una sub-ideología custom, TODOS los personajes con
-      rol de country_leader de ese país deben declarar esa misma sub-ideología
-      en su bloque `country_leader = { ideology = ... }`. La sección 14 del doc
-      reporta exactamente este error en la build anterior ("algunos líderes
-      apuntaban a ideologías vanilla que no se encontraban correctamente").
-      El generador debe validar esta correspondencia de forma cruzada y fallar
-      en tiempo de generación, no en tiempo de carga del juego.
+      Todo country_leader de un país tiene que declarar la misma sub-ideología
+      con la que arranca el país. El generador lo avisa si no coinciden.
     enforce_in_generator: true
-
-  - id: TN002
-    text: >
-      No tengo certeza sobre el conjunto exacto de campos obligatorios del
-      bloque `ai` dentro de una definición de ideología en la versión actual de
-      HOI4, ni sobre si `can_collaborate` sigue existiendo con ese nombre.
-      Antes de generar common/ideologies/ te voy a pedir confirmar contra la
-      versión del juego que estés usando, en vez de escribirlo de memoria.
-    see: Q004

@@ -9,8 +9,11 @@ Solo se emiten los personajes con `id` en 03_leaders.yaml. Las entradas sin id
 son huecos declarados (Q016): no se inventa un líder para taparlos, el juego
 genera uno genérico.
 
-Traits: el doc no da ninguno (Q015) y un trait inexistente rompe la carga
-(TN004), así que el bloque sale vacío.
+Traits: propios del mod (03_leaders.yaml -> leader_traits), escritos en
+  common/country_leader/meganations_traits.txt
+Un trait vanilla escrito de memoria rompe la carga si no existe (TN004); uno
+propio lo definimos nosotros. Un personaje que pide un trait que no está en
+leader_traits frena el build.
 """
 
 from __future__ import annotations
@@ -38,7 +41,42 @@ def leaders_of(ctx: BuildContext, tag: str) -> list[dict]:
     ]
 
 
+TRAITS_SOURCE = "spec/03_leaders.yaml -> leader_traits"
+
+
+def _emit_traits(ctx: BuildContext) -> set[str]:
+    traits = ctx.spec.raw["leaders"].get("leader_traits") or []
+    if not traits:
+        return set()
+    if ctx.vanilla is not None:
+        found = any(
+            "leader_traits" in p.read_text(encoding="utf-8-sig", errors="replace")
+            for p in (ctx.vanilla.root / "common" / "country_leader").glob("*.txt")
+        )
+        if not found:
+            raise SpecError("common/country_leader/ del juego no usa 'leader_traits': cambio el formato",
+                            where="03_leaders.yaml")
+    body = Block()
+    modifiers_used: dict[str, str] = {}
+    for trait in traits:
+        tid = trait["id"]
+        tb = Block()
+        tb.add("random", False)
+        for key, value in (trait.get("modifiers") or {}).items():
+            tb.add(key, float(value))
+            modifiers_used.setdefault(key, tid)
+        body.add(ctx.loc.reference(tid, f"traits:{tid}"), tb)
+        ctx.loc.define(tid, en=trait["name"]["english"], es=trait["name"]["spanish"],
+                       file=LOC_FILE, origin=f"traits:{tid}")
+    root = Block()
+    root.add("leader_traits", body)
+    ctx.write_script("common/country_leader/meganations_traits.txt", root, source=TRAITS_SOURCE)
+    ctx.verify_keys("modifiers", modifiers_used)
+    return {t["id"] for t in traits}
+
+
 def emit(ctx: BuildContext) -> None:
+    known_traits = _emit_traits(ctx)
     types, _ = ctx.spec.ideology_index()
     by_country: dict[str, list[dict]] = {}
     for ch in defined_characters(ctx):
@@ -76,7 +114,14 @@ def emit(ctx: BuildContext) -> None:
                     )
                 role = Block()
                 role.add("ideology", ideology)
-                role.add("traits", Block())
+                traits = Block()
+                wanted = leader.get("traits")
+                for trait in wanted if isinstance(wanted, list) else []:
+                    if trait not in known_traits:
+                        raise SpecError(f"{cid}: el trait '{trait}' no esta en leader_traits",
+                                        where="03_leaders.yaml")
+                    traits.add(None, trait)
+                role.add("traits", traits)
                 body.add("country_leader", role)
 
             characters.add(cid, body)

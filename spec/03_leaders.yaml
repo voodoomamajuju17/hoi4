@@ -2,7 +2,11 @@
 # 03_leaders.yaml — Líderes y personajes
 # =============================================================================
 # El documento define UN solo líder con biografía: Aurelio IV del EFE.
-# Las otras siete potencias no tienen líder recuperado. No se inventaron.
+# Los demás los inventé a pedido del usuario (2026-09-23: "inventá todo"),
+# sobre el lore de 01_ideologies.yaml. Están marcados src: invented.
+#
+# Rasgos (traits): propios del mod, definidos abajo en `leader_traits`. Un
+# trait vanilla inventado de memoria rompe la carga (TN004); uno propio no.
 # =============================================================================
 
 characters:
@@ -44,7 +48,8 @@ characters:
         ideology: ecofascism
         src: inferred
         note: "Debe coincidir exactamente con la sub-ideología inicial del EFE. Ver TN001."
-        traits: unknown        # ver Q015
+        traits: [efe_custodian_of_the_earth]   # Q015: inventado
+        traits_src: invented
       field_marshal: false
       advisor: false
     portrait:
@@ -54,60 +59,135 @@ characters:
       why: "HOI4 renderiza un cuadro roto sin portrait. Es placeholder programático."
 
   # ---------------------------------------------------------------------------
-  # Líderes faltantes — NO inventados a propósito.
+  # Las otras siete potencias — inventados a pedido del usuario (Q016, Q017).
   # ---------------------------------------------------------------------------
-  - country: ASC
-    status: unknown
-    src: unknown
-    see: Q016
-    note: >
-      Complicación de diseño: una "Commune" socialista automatizada puede no
-      tener una figura personal de liderazgo. Podría ser un consejo, una IA o
-      un cargo rotativo. Inventar un dictador con nombre y cara contradiría
-      posiblemente el concepto. Necesito tu decisión.
+  - id: ASC_allocation_council
+    country: ASC
+    src: invented   # Q016: "inventá todo"
+    name:
+      regnal:
+        english: "The Allocation Council"
+        spanish: "El Consejo de Asignación"
+    lore: >
+      La Comuna no tiene un líder con cara, y eso es a propósito. El Consejo de Asignación son cuarenta y un delegados sorteados cada año entre toda la población, asistidos por el sistema de planificación que reparte la producción. En la práctica el sistema propone y el Consejo casi nunca dice que no. Resuelve Q016 respetando la advertencia de diseño: no hay dictador.
+    roles:
+      country_leader:
+        ideology: automated_socialism
+        traits: [asc_allocation_algorithm]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/ASC/allocation_council.dds"
 
-  - country: FCU
-    status: unknown
-    src: unknown
-    see: Q016
-    note: >
-      El doc dice que hay cuatro corporaciones que son centros de poder, pero no
-      da sus nombres. El líder del país podría ser un CEO, un consejo de los
-      cuatro, o un cargo neutral. Depende de Q017.
+  - id: FCU_valeria_castellane
+    country: FCU
+    src: invented   # Q016: "inventá todo"
+    name:
+      regnal:
+        english: "Chairwoman Valeria Castellane"
+        spanish: "Presidenta Valeria Castellane"
+    born: 2049
+    lore: >
+      Presidenta rotativa del Directorio de la Unión, en su segundo mandato de cuatro años. Viene de Castellane Water Trust, la corporación que controla las desalinizadoras, la más chica de las cuatro y la que todas necesitan. Las otras tres son Halvorsen-Ito Agrosystems (comida), Meridian Kinetics (armas y robótica) y Obsidian Ledger (finanzas y datos). Resuelve Q017.
+    roles:
+      country_leader:
+        ideology: corporate_union
+        traits: [fcu_chair_of_the_board]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/FCU/valeria_castellane.dds"
 
-  - country: HSN
-    status: unknown
-    src: unknown
-    see: Q016
+  - id: HSN_kofi_aldana
+    country: HSN
+    src: invented   # Q016: "inventá todo"
+    name:
+      regnal:
+        english: "Harbourmaster-General Kofi Aldana"
+        spanish: "Capitán General de Puertos Kofi Aldana"
+    born: 2055
+    lore: >
+      Nació en un carguero y dice que no pisó tierra firme hasta los doce años. La Nación de Alta Mar lo eligió Capitán General de Puertos porque controla la cámara de compensación de fletes: sabe qué barco lleva qué, a dónde y quién lo pagó.
+    roles:
+      country_leader:
+        ideology: mercantile_thalassocracy
+        traits: [hsn_master_of_the_lanes]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/HSN/kofi_aldana.dds"
 
-  - country: NAS
-    status: unknown
-    src: unknown
-    see: Q016
-    note: >
-      "Kingdom" implica un monarca, pero el doc dice literalmente que no se
-      recuperaron "fórmula, territorio exacto, líder o estructura institucional".
-      No invento una dinastía.
+  - id: NAS_amaru_quispe
+    country: NAS
+    src: invented   # Q016: "inventá todo"
+    name:
+      regnal:
+        english: "Sapa Inti Amaru Quispe II"
+        spanish: "Sapa Inti Amaru Quispe II"
+    born: 2071
+    lore: >
+      Segundo Sapa Inti de la dinastía restaurada. Su padre bajó de las terrazas agrícolas del altiplano cuando las ciudades de la costa se quedaron sin agua, y lo coronaron en Cusco el día que volvió a salir el sol después del Invierno de Ceniza. Joven, piadoso y convencido de que el Sol lo eligió.
+    roles:
+      country_leader:
+        ideology: solar_monarchism
+        traits: [nas_child_of_the_sun]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/NAS/amaru_quispe.dds"
 
-  - country: SHD
-    status: unknown
-    src: unknown
-    see: Q016
+  - id: SHD_lin_wenjing
+    country: SHD
+    src: invented   # Q016: "inventá todo"
+    name:
+      regnal:
+        english: "Director of Harmony Lin Wenjing"
+        spanish: "Directora de la Armonía Lin Wenjing"
+    born: 2043
+    lore: >
+      Ingeniera de sistemas de riego antes de ser Directora. Su doctrina es que una sociedad es un sistema hidráulico: si algo se desborda, se corrige el caudal antes de que se note. Nunca dio un discurso público. Sus decisiones se publican como ajustes técnicos.
+    roles:
+      country_leader:
+        ideology: harmonious_directorate
+        traits: [shd_the_harmonizer]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/SHD/lin_wenjing.dds"
 
-  - country: APF
-    status: unknown
-    src: unknown
-    see: Q016
+  - id: APF_amara_nwosu
+    country: APF
+    src: invented   # Q016: "inventá todo"
+    name:
+      regnal:
+        english: "Speaker Amara Nwosu-Keïta"
+        spanish: "Portavoz Amara Nwosu-Keïta"
+    born: 2058
+    lore: >
+      Portavoz del Congreso Continental, elegida por mil doscientos consejos locales. Maestra rural antes de la política; organizó la red de asambleas que mantuvo con vida a su región durante las sequías. No manda: coordina, y cuando coordina, un continente entero se mueve.
+    roles:
+      country_leader:
+        ideology: continental_federalism
+        traits: [apf_voice_of_the_councils]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/APF/amara_nwosu.dds"
 
-  - country: NRE
-    status: unknown
-    src: unknown
-    see: Q016
-    warning: >
-      NO reutilizar "Grand Imperator Augustus Valerius". Ese personaje pertenece
-      al New Roman Axis de 2023, que el doc marca como borrador histórico no
-      canon (§10.1). Si lo querés reciclar, decímelo explícitamente.
+  - id: NRE_lucius_varro
+    country: NRE
+    src: invented   # Q016: "inventá todo"
+    name:
+      regnal:
+        english: "Imperator Lucius Varro"
+        spanish: "Imperator Lucius Varro"
+    born: 2052
+    lore: >
+      Comandante de legión elevado a Imperator por aclamación de las tropas, como en los viejos tiempos. Cree que la historia es un ciclo y que a él le tocó la parte de reconstruir. NO es 'Augustus Valerius' (§10.1): ese personaje del borrador de 2023 no se usa.
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: [nre_imperator_of_the_legions]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/NRE/lucius_varro.dds"
 
+  # ---------------------------------------------------------------------------
+  # Satélites del EFE — inventados (Q012).
   # ---------------------------------------------------------------------------
   - id: PTA_ingrid_paillacar
     country: PTA
@@ -128,7 +208,7 @@ characters:
     roles:
       country_leader:
         ideology: ecofascism
-        traits: unknown
+        traits: [pta_glacier_keeper]
     portrait:
       status: placeholder
       path: "gfx/leaders/PTA/ingrid_paillacar.dds"
@@ -151,10 +231,76 @@ characters:
     roles:
       country_leader:
         ideology: ecofascism
-        traits: unknown
+        traits: [yyg_heir_apparent]
     portrait:
       status: placeholder
       path: "gfx/leaders/YYG/tupa_benitez.dds"
+
+# =============================================================================
+# Rasgos de líder propios del mod -> common/country_leader/
+# Todos inventados. Los valores son de balance provisorio.
+# =============================================================================
+leader_traits:
+  - id: efe_custodian_of_the_earth
+    name: { english: "Custodian of the Earth", spanish: "Custodio de la Tierra" }
+    modifiers:
+      war_support_factor: 0.05
+      production_speed_buildings_factor: 0.05
+    src: invented
+  - id: pta_glacier_keeper
+    name: { english: "Keeper of the Glaciers", spanish: "Guardiana de los Glaciares" }
+    modifiers:
+      research_speed_factor: 0.03
+      stability_factor: 0.05
+    src: invented
+  - id: yyg_heir_apparent
+    name: { english: "Heir Apparent", spanish: "Heredero Aparente" }
+    modifiers:
+      political_power_gain: 0.05
+      stability_factor: -0.03
+    src: invented
+  - id: asc_allocation_algorithm
+    name: { english: "Allocation Algorithm", spanish: "Algoritmo de Asignación" }
+    modifiers:
+      research_speed_factor: 0.05
+      consumer_goods_factor: -0.05
+    src: invented
+  - id: fcu_chair_of_the_board
+    name: { english: "Chair of the Board", spanish: "Presidencia del Directorio" }
+    modifiers:
+      industrial_capacity_factory: 0.05
+      stability_factor: -0.05
+    src: invented
+  - id: hsn_master_of_the_lanes
+    name: { english: "Master of the Sea Lanes", spanish: "Señor de las Rutas" }
+    modifiers:
+      trade_opinion_factor: 0.15
+      political_power_gain: 0.05
+    src: invented
+  - id: nas_child_of_the_sun
+    name: { english: "Child of the Sun", spanish: "Hijo del Sol" }
+    modifiers:
+      stability_factor: 0.1
+      war_support_factor: -0.05
+    src: invented
+  - id: shd_the_harmonizer
+    name: { english: "The Harmonizer", spanish: "La Armonizadora" }
+    modifiers:
+      stability_factor: 0.05
+      political_power_gain: 0.05
+    src: invented
+  - id: apf_voice_of_the_councils
+    name: { english: "Voice of the Councils", spanish: "Voz de los Consejos" }
+    modifiers:
+      political_power_gain: 0.1
+      stability_factor: 0.05
+    src: invented
+  - id: nre_imperator_of_the_legions
+    name: { english: "Imperator of the Legions", spanish: "Imperator de las Legiones" }
+    modifiers:
+      army_org_factor: 0.05
+      war_support_factor: 0.05
+    src: invented
 
 # =============================================================================
 technical_notes:

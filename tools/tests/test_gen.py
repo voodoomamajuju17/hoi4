@@ -531,6 +531,35 @@ def test_events() -> None:
             check(f"loc {key}", f" {key}:0 " in es)
 
 
+def test_leaders_and_ideologies() -> None:
+    section("lideres, rasgos e ideologias")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        spec = ctx.spec
+        for c in spec.countries:
+            chars = mod / f"common/characters/{c.tag}_characters.txt"
+            check(f"{c.tag} tiene lider", chars.exists())
+            if chars.exists():
+                check(f"{c.tag}: lider con la ideologia del pais (TN001)",
+                      f"ideology = {c.ideology}" in chars.read_text())
+        check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
+        traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
+        body = traits.get("leader_traits")
+        check("10 rasgos propios", len(body.keys()) == 10, str(body.keys()))
+        check("rasgos no aleatorios", all(pdx.text(v.get("random")) == "no" for _, v in body.entries))
+        efe = (mod / "common/characters/EFE_characters.txt").read_text()
+        check("Aurelio con su rasgo", "efe_custodian_of_the_earth" in efe)
+        ideos = (mod / "localisation/spanish/meganations_ideologies_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("grupo neutral renombrado", 'neutrality:0 "Mandato Trascendente"' in ideos, ideos[:400])
+        check("sin descripciones placeholder", "Placeholder" not in ideos)
+        types, groups = spec.ideology_index()
+        check("16 sub-ideologias", len(types) == 16, str(len(types)))
+        for g in groups:
+            check(f"{g}: dos meganaciones", sum(
+                1 for c in spec.countries if c.is_major and c.ideology_group == g) == 2)
+
+
 def test_vanilla_validation() -> None:
     section("validacion contra documentation/ e interface/ del juego")
     import shutil
@@ -550,6 +579,8 @@ def test_vanilla_validation() -> None:
                         mods.update(idea["modifiers"])
                 for tier in (c.get("biosteel_tiers") or {}).get("tiers", []):
                     mods.update(tier["modifiers"])
+        for trait in spec.raw["leaders"].get("leader_traits") or []:
+            mods.update(trait["modifiers"])
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n")
@@ -620,6 +651,7 @@ def main() -> int:
         test_territory,
         test_scenario,
         test_events,
+        test_leaders_and_ideologies,
         test_vanilla_validation,
     ):
         test()
