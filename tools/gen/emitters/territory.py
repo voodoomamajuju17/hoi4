@@ -116,6 +116,7 @@ def emit(ctx: BuildContext) -> None:
     ctx.data["capitals"] = capitals
 
     deposits = _starting_deposits(ctx, capitals)
+    ctx.data["deposits"] = deposits
     for s in states:
         new_owner = assignment.get(s.id)
         if new_owner is None and s.id not in deposits:

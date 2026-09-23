@@ -501,6 +501,11 @@ def test_territory() -> None:
         check("una milicia por territorio, en el state con mas manpower", locs == ["18", "20", "22"], str(locs))
         tpl = units.get("division_template")
         check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
+        bal = (Path(tmp) / "balance.txt").read_text()
+        check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
+        check("balance cuenta las milicias", any(l.startswith("ZAN") and l.rstrip().endswith(" 3") for l in bal.splitlines()), bal[:800])
+        check("balance incluye el BioSteel inicial", "BioS" in bal)
+        check("balance alerta ejercitos vacios", "Sin ejercito inicial" in bal)
         zan = (mod / "history/countries/ZAN - The Lawless Lands.txt").read_text()
         check("la Anarquia carga su oob", 'oob = "ZAN_2100"' in zan, zan)
         check("nombre con comentario al final se lee",

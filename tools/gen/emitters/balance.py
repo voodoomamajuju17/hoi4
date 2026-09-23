@@ -1,0 +1,140 @@
+"""Reporte de balance: qué arranca teniendo cada facción.
+
+Produce:
+  build/balance.txt    (fuera de la carpeta del mod: es para leer, no para el juego)
+
+Los números salen de los states del juego como quedan después del reparto:
+recursos, fábricas, manpower, provincias y puntos de victoria vanilla, más lo
+que agrega el mod (el BioSteel inicial, las milicias). Si cambia el reparto,
+cambia el reporte.
+
+No lo usa el juego. Sirve para balancear sin tener que abrir una partida.
+"""
+
+from __future__ import annotations
+
+from collections import Counter
+
+from ..context import BuildContext
+from .territory import display_name
+
+RESOURCES = ["oil", "aluminium", "rubber", "tungsten", "steel", "chromium", "coal"]
+RES_SHORT = {"oil": "Petr", "aluminium": "Alum", "rubber": "Cauch", "tungsten": "Tungs",
+             "steel": "Acero", "chromium": "Cromo", "coal": "Carbon", "biosteel": "BioS"}
+
+
+def emit(ctx: BuildContext) -> None:
+    assignment: dict[int, str] | None = ctx.data.get("territory")
+    if ctx.vanilla is None or assignment is None:
+        return
+
+    by_state = {s.id: s for s in ctx.vanilla.states()}
+    names = ctx.data.get("state_names") or {}
+    continents = ctx.vanilla.state_continents()
+    land = ctx.vanilla.land_provinces()
+    deposits = ctx.data.get("deposits") or {}
+    militia = ctx.data.get("militia_count") or {}
+    extra_res = sorted({k for d in deposits.values() for k in d})
+    res_cols = RESOURCES + extra_res
+
+    rows = []
+    for c in ctx.spec.countries:
+        owned = [by_state[sid] for sid, tag in assignment.items() if tag == c.tag and sid in by_state]
+        res = Counter()
+        bld = Counter()
+        cont = Counter()
+        for s in owned:
+            for k, v in (s.resources or {}).items():
+                res[k] += v
+            for k, v in (deposits.get(s.id) or {}).items():
+                res[k] += v
+            for k, v in (s.buildings or {}).items():
+                bld[k] += v
+            if continents.get(s.id):
+                cont[continents[s.id]] += 1
+        kind = ("Meganacion" if c.is_major else
+                f"Satelite de {c.overlord}" if c.is_subject else "Anarquia/indep.")
+        rows.append({
+            "tag": c.tag, "name": c.name_es, "kind": kind, "ideology": c.ideology,
+            "states": len(owned),
+            "provinces": sum(1 for s in owned for p in s.provinces if p in land) if land
+                         else sum(len(s.provinces) for s in owned),
+            "manpower": sum(s.manpower for s in owned),
+            "civ": bld["industrial_complex"], "mil": bld["arms_factory"], "dock": bld["dockyard"],
+            "infra": (sum(s.buildings.get("infrastructure", 0) for s in owned if s.buildings) / len(owned))
+                     if owned else 0,
+            "vp": sum(s.victory_points for s in owned),
+            "res": res,
+            "cont": cont,
+            "top": sorted(owned, key=lambda s: -s.manpower)[:3],
+            "divisions": militia.get(c.tag, 0),
+        })
+
+    lines: list[str] = []
+    add = lines.append
+    add("2100 MEGANATIONS - BALANCE DE ARRANQUE")
+    add("=" * 100)
+    add("Datos del juego instalado, despues del reparto del mod. Manpower = poblacion base de los")
+    add("states (el reclutable es un porcentaje segun leyes). IC = fabricas civiles + militares.")
+    add("")
+
+    header = f"{'TAG':4} {'Pais':32} {'Tipo':18} {'States':>6} {'Prov':>5} {'Manpower':>10} " \
+             f"{'Civ':>4} {'Mil':>4} {'Astil':>5} {'IC':>4} {'Infra':>5} {'VP':>4} {'Div':>4}"
+    add(header)
+    add("-" * len(header))
+    groups = [("Meganacion",), ("Satelite",), ("Anarquia",)]
+    for prefix in (g[0] for g in groups):
+        for r in sorted((r for r in rows if r["kind"].startswith(prefix)), key=lambda r: -(r["civ"] + r["mil"])):
+            add(f"{r['tag']:4} {r['name'][:32]:32} {r['kind'][:18]:18} {r['states']:>6} {r['provinces']:>5} "
+                f"{_mp(r['manpower']):>10} {r['civ']:>4} {r['mil']:>4} {r['dock']:>5} "
+                f"{r['civ'] + r['mil']:>4} {r['infra']:>5.1f} {r['vp']:>4} {r['divisions']:>4}")
+    add("")
+
+    add("RECURSOS")
+    head = f"{'TAG':4} " + " ".join(f"{RES_SHORT.get(k, k[:6]):>6}" for k in res_cols)
+    add(head)
+    add("-" * len(head))
+    for r in rows:
+        add(f"{r['tag']:4} " + " ".join(f"{int(r['res'].get(k, 0)):>6}" for k in res_cols))
+    add("")
+
+    add("TERRITORIO APROXIMADO")
+    add("-" * 100)
+    for r in rows:
+        total = sum(r["cont"].values()) or 1
+        conts = ", ".join(f"{k} {100 * v // total}%" for k, v in r["cont"].most_common(3)) or "sin territorio"
+        top = ", ".join(display_name(s, names) for s in r["top"]) or "-"
+        add(f"{r['tag']:4} {conts:40} principales: {top}")
+    add("")
+
+    total_ic = sum(r["civ"] + r["mil"] for r in rows) or 1
+    add("PESO RELATIVO (IC sobre el total del mundo)")
+    add("-" * 100)
+    for r in sorted(rows, key=lambda r: -(r["civ"] + r["mil"])):
+        share = 100 * (r["civ"] + r["mil"]) / total_ic
+        add(f"{r['tag']:4} {share:5.1f}%  {'#' * int(share)}")
+    add("")
+
+    add("ALERTAS")
+    add("-" * 100)
+    no_army = [r["tag"] for r in rows if r["states"] and not r["divisions"]]
+    if no_army:
+        add(f"! Sin ejercito inicial: {', '.join(no_army)}. Solo la Anarquia tiene milicias.")
+    add("! Ningun pais del mod tiene inventario de equipo inicial ni tecnologias: arrancan de cero.")
+    empty = [r["tag"] for r in rows if not r["states"]]
+    if empty:
+        add(f"! Sin territorio (no existen en el mapa): {', '.join(empty)}")
+
+    path = ctx.out_root / "balance.txt"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    ctx.track(path)
+    ctx.data["balance_path"] = path
+    ctx.note(f"balance: {path}")
+
+
+def _mp(value: int) -> str:
+    if value >= 1_000_000:
+        return f"{value / 1_000_000:.1f}M"
+    if value >= 1_000:
+        return f"{value / 1_000:.0f}k"
+    return str(value)

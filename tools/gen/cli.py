@@ -22,6 +22,7 @@ from pathlib import Path
 
 from . import specload, vanilla as vanilla_mod
 from .context import BuildContext
+from .emitters import balance as em_balance
 from .emitters import characters as em_characters
 from .emitters import countries as em_countries
 from .emitters import descriptor as em_descriptor
@@ -54,6 +55,7 @@ EMITTERS = [
     ("events", em_events.emit),
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
+    ("balance", em_balance.emit),       # ultimo: resume lo que quedo
 ]
 
 

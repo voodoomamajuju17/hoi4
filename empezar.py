@@ -344,6 +344,18 @@ def paso_reporte(juego, ctx) -> None:
         extra.append(f"Avisos:           {len(ctx.warnings)}")
         extra.append(f"Sin generar:      {len(ctx.skipped)}")
 
+        # La tabla de balance va al final del reporte y tambien suelta, al
+        # lado de este script, para poder abrirla sin buscar en build/.
+        balance = ctx.data.get("balance_path")
+        if balance and Path(balance).exists():
+            texto_balance = Path(balance).read_text(encoding="utf-8")
+            extra.append("")
+            extra.append(texto_balance)
+            try:
+                (REPO / "balance.txt").write_text(texto_balance, encoding="utf-8")
+            except OSError:
+                pass
+
     texto = "\n".join(_log_lines + extra) + "\n"
     REPORT.write_text(texto, encoding="utf-8")
     bien(f"Escrito en: {REPORT}")
@@ -384,11 +396,9 @@ def main() -> int:
         say("    2. Anda a 'Mods' y activa '2100 Meganations'")
         say("    3. Jugar")
         say()
-        say("  OJO — TODAVIA NO ES JUGABLE. Esta es una prueba de humo:")
-        say("  el mod tiene los 10 paises y las ideologias, pero NO tiene")
-        say("  territorio, ni historia, ni arbol de focos. Eso es la Fase 3.")
-        say("  Lo que importa ahora es que el LAUNCHER lo liste y el juego")
-        say("  llegue al menu sin explotar.")
+        say("  Es una version en desarrollo: el EFE tiene arbol, eventos y arte;")
+        say("  las otras potencias todavia no. Mira balance.txt para ver con")
+        say("  que arranca cada faccion.")
     say()
     say("  PASAME ESTO:")
     say(f"    1. El archivo  {REPORT}")

@@ -97,6 +97,9 @@ class StateInfo:
     path: Path
     manpower: int = 0
     cores: tuple[str, ...] = ()
+    resources: dict | None = None      # recurso -> cantidad
+    buildings: dict | None = None      # edificio de state -> nivel (sin los de provincia)
+    victory_points: int = 0
 
     @property
     def file_label(self) -> str:
@@ -202,6 +205,31 @@ class Vanilla:
             if sid is None:
                 continue
             mp = pdx.text(state.get("manpower")) or "0"
+            resources: dict[str, float] = {}
+            res_block = state.get("resources")
+            if isinstance(res_block, pdx.Block):
+                for k, v in res_block.entries:
+                    try:
+                        resources[k] = float(pdx.text(v))
+                    except (TypeError, ValueError):
+                        pass
+            buildings: dict[str, int] = {}
+            vp = 0
+            if isinstance(history, pdx.Block):
+                b_block = history.get("buildings")
+                if isinstance(b_block, pdx.Block):
+                    for k, v in b_block.entries:
+                        if k and not k.isdigit() and not isinstance(v, pdx.Block):
+                            try:
+                                buildings[k] = int(float(pdx.text(v)))
+                            except (TypeError, ValueError):
+                                pass
+                for vblock in history.get_all("victory_points"):
+                    if isinstance(vblock, pdx.Block) and len(vblock) >= 2:
+                        try:
+                            vp += int(float(pdx.text(vblock.entries[1][1])))
+                        except (TypeError, ValueError):
+                            pass
             cores = tuple(
                 c for c in (pdx.text(v) for v in history.get_all("add_core_of"))
                 if c
@@ -215,6 +243,9 @@ class Vanilla:
                     path=path,
                     manpower=int(mp) if mp.isdigit() else 0,
                     cores=cores,
+                    resources=resources,
+                    buildings=buildings,
+                    victory_points=vp,
                 )
             )
         self._states = out

@@ -73,7 +73,7 @@ tools/gen/            el generador
                       descriptor, ideologies, countries, resources,
                       ideas, characters, focus_trees, events,
                       territory, history, scenario
-tools/tests/          582 checks, corren sin el juego instalado
+tools/tests/          586 checks, corren sin el juego instalado
 
 build/                SALIDA. Generada, no versionada, no editable.
 ```

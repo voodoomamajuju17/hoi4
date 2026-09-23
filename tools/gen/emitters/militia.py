@@ -80,6 +80,7 @@ def emit(ctx: BuildContext) -> None:
         oob = f"{tag}_2100"
         ctx.write_text(f"history/units/{oob}.txt", banner_for("spec/08_territory.yaml -> militia") + render(root))
         ctx.data["oob"][tag] = oob
+        ctx.data.setdefault("militia_count", {})[tag] = placed
         if not adjacency:
             ctx.warn(f"milicias de {tag}: no pude leer map/provinces.bmp; una division por state.")
         ctx.note(f"milicias de {tag}: {placed} divisiones en {len(blobs)} territorios contiguos")
