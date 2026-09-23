@@ -193,7 +193,7 @@ def test_vanilla_fixture() -> None:
     check("4 grupos en el fixture", len([k for k, _ in ideologies.entries if k]) == 4)
 
     states = van.states()
-    check("18 states leidos", len(states) == 18, f"leyo {len(states)}")
+    check("19 states leidos", len(states) == 19, f"leyo {len(states)}")
     by_id = {s.id: s for s in states}
     check("state 900 con owner ARG", by_id[900].owner == "ARG")
     check("provincias parseadas", by_id[900].provinces == [1, 2, 3], str(by_id[900].provinces))
@@ -558,12 +558,12 @@ def test_territory() -> None:
         tpls = [pdx.text(tpl.get("name")) for tpl in oob.get_all("division_template")]
         check("EFE: tres plantillas", tpls == ["Infantería de Línea", "División Motorizada", "División Blindada"], str(tpls))
         divs = oob.get("units").get_all("division")
-        check("EFE: divisiones = 6 + IC/4", len(divs) == 6, str(len(divs)))
+        check("EFE: piso de 20 divisiones para meganaciones", len(divs) == 20, str(len(divs)))
         check("EFE carga su oob", 'oob = "EFE_2100"' in efe_h)
         stock = {pdx.text(b.get("type")): int(pdx.text(b.get("amount")))
                  for b in pdx.parse(efe_h).get_all("add_equipment_to_stockpile")}
         check("fusiles: la variante mas nueva hasta 1942", "infantry_equipment_3" in stock, str(stock))
-        check("fusiles: 400 por division", stock.get("infantry_equipment_3") == 2400, str(stock))
+        check("fusiles: 400 por division", stock.get("infantry_equipment_3") == 8000, str(stock))
         check("convoyes", "convoy_1" in stock)
         check("avisa arquetipos de equipo que no existen", any("artillery_equipment" in w for w in ctx.warnings))
 
@@ -698,6 +698,54 @@ def test_leaders_and_ideologies() -> None:
                 1 for c in spec.countries if c.is_major and c.ideology_group == g) == 2)
 
 
+def test_balance() -> None:
+    section("balance: transferencias invariantes, industrializacion, leyes, milicias")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        van = ctx.vanilla
+        from tools.gen.emitters import economy
+        for res in ("oil", "steel", "aluminium", "rubber", "tungsten", "chromium", "coal"):
+            before = sum((s.resources or {}).get(res, 0) for s in van.states())
+            after = sum(economy.resources_of(ctx, s).get(res, 0) for s in van.states())
+            check(f"total mundial de {res} invariable", before == after, f"{before} -> {after}")
+        # Y en los archivos generados, no solo en memoria.
+        total_steel = 0
+        for s in van.states():
+            f = mod / "history/states" / s.path.name
+            src = f if f.exists() else s.path
+            res = pdx.parse(src.read_text()).get("state").get("resources")
+            if isinstance(res, pdx.Block) and res.get("steel") is not None:
+                total_steel += float(pdx.text(res.get("steel")))
+        check("acero total en los archivos = vanilla (64)", total_steel == 64, str(total_steel))
+        delta = ctx.data["resource_delta"]
+        check("el Ruhr (ASC) dona acero", delta[906]["steel"] < 0, str(dict(delta[906])))
+        check("la ASC no baja de su minimo", 60 + delta[906]["steel"] >= 20, str(dict(delta[906])))
+        check("la capital del EFE recibe acero", delta[900]["steel"] > 0, str(dict(delta[900])))
+        zan_states = [sid for sid, tag in ctx.data["territory"].items() if tag == "ZAN"]
+        check("la Anarquia no dona ni recibe", all(not any(delta.get(sid, {}).values()) for sid in zan_states))
+
+        added = ctx.data["added_buildings"]
+        check("industrializacion: fabricas en slots libres del EFE (city 6 - 2 usados = 4)",
+              added.get(900, {}).get("industrial_complex") == 4, str(dict(added.get(900, {}))))
+        ba = pdx.parse((mod / "history/states/900-Fixture.txt").read_text()).get("state").get("history").get("buildings")
+        check("la fabrica queda escrita en el state", pdx.text(ba.get("industrial_complex")) == "6", str(ba))
+        check("la Anarquia no recibe fabricas", not any(added.get(sid) for sid in zan_states))
+
+        efe = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
+        check("EFE arranca con reclutamiento extensivo", "extensive_conscription" in efe)
+        apf = (mod / "history/countries/APF - African Peoples Federation.txt").read_text()
+        check("APF arranca con voluntarios", "volunteer_only" in apf, apf[-500:])
+        hsn = (mod / "history/countries/HSN - High Seas Market Nation.txt").read_text()
+        check("HSN arranca con voluntarios", "volunteer_only" in hsn)
+
+        check("Polonia pasa a la Comuna Baltica", ctx.data["territory"].get(918) == "ZBC")
+        asc = (mod / "history/countries/ASC - Automated Socialist Commune.txt").read_text()
+        check("la ASC arranca con el Cuello de Botella", "ASC_cuello_de_botella" in asc)
+        bal = (Path(tmp) / "balance.txt").read_text()
+        check("el balance muestra los totales mundiales OK", "TOTAL MUNDIAL" in bal and "DISTINTO" not in bal, bal)
+
+
 def test_vanilla_validation() -> None:
     section("validacion contra documentation/ e interface/ del juego")
     import shutil
@@ -792,6 +840,7 @@ def main() -> int:
         test_scenario,
         test_events,
         test_leaders_and_ideologies,
+        test_balance,
         test_vanilla_validation,
     ):
         test()

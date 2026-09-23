@@ -50,7 +50,10 @@ def emit(ctx: BuildContext) -> None:
         b.add("set_politics", sp)
         b.add("set_popularities", _popularities(c.ideology_group, int(politics.get("ruling_popularity", 70))))
 
-        starting = ideas_mod.starting_idea_ids(ctx, c.tag)
+        starting = list(ideas_mod.starting_idea_ids(ctx, c.tag))
+        law = _conscription_law(ctx, c.tag)
+        if law:
+            starting.append(law)
         if starting:
             ideas = Block()
             for iid in starting:
@@ -141,6 +144,23 @@ def _any_subjects(ctx: BuildContext) -> bool:
         r.get("autonomy_level") not in (None, "unknown")
         for r in ctx.spec.raw["diplomacy"].get("subject_relations", []) or []
     )
+
+
+_idea_cache: dict[int, set[str]] = {}
+
+
+def _conscription_law(ctx: BuildContext, tag: str) -> str | None:
+    """Ley de reclutamiento de arranque (15_balance.yaml), verificada contra
+    las ideas vanilla: una que no existe se saltea con aviso."""
+    laws = ((ctx.spec.raw.get("balance") or {}).get("conscription") or {}).get("laws") or {}
+    law = laws.get(tag)
+    if not law or ctx.vanilla is None:
+        return None
+    known = _idea_cache.setdefault(id(ctx), ctx.vanilla.idea_names())
+    if known and law not in known:
+        ctx.warn(f"reclutamiento: la ley '{law}' no existe en common/ideas/; {tag} arranca con la de defecto.")
+        return None
+    return law
 
 
 def _capital(ctx: BuildContext, c) -> int | None:

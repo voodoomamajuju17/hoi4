@@ -1,0 +1,52 @@
+# =============================================================================
+# 15_balance.yaml — Balance de arranque entre meganaciones
+# =============================================================================
+# Aprobado por el usuario (2026-09-23), con dos reglas duras:
+#   1. La Anarquía queda con sus recursos e industrias tal cual el juego base.
+#   2. El total mundial de cada recurso es INVARIABLE: si el juego base tiene
+#      1000 de acero repartidos, siguen existiendo exactamente 1000. Los
+#      mínimos por meganación se logran MOVIENDO recursos entre states, nunca
+#      creándolos. El generador verifica los totales y falla si no cierran.
+# Sin "recursos de identidad" (descartado por el usuario).
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Industrialización inicial: fábricas civiles en slots LIBRES de los states
+# de las meganaciones chicas, hasta una IC objetivo. Si no hay slots
+# suficientes, llega hasta donde pueda y lo dice el reporte.
+# Los slots salen de common/state_category/ vanilla; los edificios que
+# comparten slot, de common/buildings/ (shares_slots = yes).
+# -----------------------------------------------------------------------------
+industrialization:
+  src: invented
+  targets:        # TAG -> IC objetivo (civiles + militares)
+    EFE: 70
+    NAS: 60
+    APF: 80
+  building: industrial_complex
+
+# -----------------------------------------------------------------------------
+# Leyes de reclutamiento de arranque. Los gigantes en población arrancan con
+# poca movilización; los chicos, con mucha. Las leyes se verifican contra
+# common/ideas/ vanilla (si una no existe se saltea con aviso).
+# -----------------------------------------------------------------------------
+conscription:
+  src: invented
+  laws:
+    SHD: volunteer_only
+    APF: volunteer_only
+    HSN: volunteer_only
+    EFE: extensive_conscription
+    NAS: extensive_conscription
+
+# -----------------------------------------------------------------------------
+# Mínimo de recursos estratégicos por meganación, por TRANSFERENCIA.
+# Donantes: states de meganaciones y satélites con excedente (nunca la
+# Anarquía), empezando por el país que más tiene de ese recurso y, dentro de
+# él, por el state con más. Un donante no baja del mínimo si es meganación.
+# Receptor: la capital de la meganación que le falta.
+# -----------------------------------------------------------------------------
+resource_floor:
+  src: invented
+  per_meganation: 20
+  resources: [oil, steel, aluminium, rubber, tungsten, chromium]

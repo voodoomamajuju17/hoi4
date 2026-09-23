@@ -100,6 +100,7 @@ class StateInfo:
     resources: dict | None = None      # recurso -> cantidad
     buildings: dict | None = None      # edificio de state -> nivel (sin los de provincia)
     victory_points: int = 0
+    category: str | None = None
 
     @property
     def file_label(self) -> str:
@@ -246,6 +247,7 @@ class Vanilla:
                     resources=resources,
                     buildings=buildings,
                     victory_points=vp,
+                    category=pdx.text(state.get("state_category")) if state.get("state_category") is not None else None,
                 )
             )
         self._states = out
@@ -538,6 +540,55 @@ class Vanilla:
             block = root.get("sub_units")
             if isinstance(block, pdx.Block):
                 out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block))
+        return out
+
+    def state_category_slots(self) -> dict[str, int]:
+        """categoría de state -> local_building_slots (common/state_category/)."""
+        out: dict[str, int] = {}
+        for path in sorted((self.root / "common" / "state_category").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("state_categories")
+            if not isinstance(block, pdx.Block):
+                continue
+            for name, cat in block.entries:
+                if name and isinstance(cat, pdx.Block):
+                    slots = pdx.text(cat.get("local_building_slots")) if cat.get("local_building_slots") is not None else None
+                    if slots and slots.isdigit():
+                        out[name] = int(slots)
+        return out
+
+    def shared_slot_buildings(self) -> set[str]:
+        """Edificios que ocupan slots compartidos del state (shares_slots = yes)."""
+        out: set[str] = set()
+        for path in sorted((self.root / "common" / "buildings").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("buildings")
+            if isinstance(block, pdx.Block):
+                for name, b in block.entries:
+                    if name and isinstance(b, pdx.Block) and pdx.text(b.get("shares_slots")) == "yes":
+                        out.add(name)
+        return out
+
+    def idea_names(self) -> set[str]:
+        """Todas las ideas vanilla (incluye leyes) de common/ideas/."""
+        out: set[str] = set()
+        for path in sorted((self.root / "common" / "ideas").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            ideas = root.get("ideas")
+            if not isinstance(ideas, pdx.Block):
+                continue
+            for _, cat in ideas.entries:
+                if isinstance(cat, pdx.Block):
+                    out.update(k for k, v in cat.entries if k and isinstance(v, pdx.Block))
         return out
 
     def building_keys(self) -> set[str]:

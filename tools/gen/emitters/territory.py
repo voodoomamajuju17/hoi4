@@ -39,6 +39,7 @@ from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block, banner_for, parse_file
 from ..vanilla import StateInfo
+from . import economy as economy_mod
 
 SOURCE = "spec/08_territory.yaml (sobre history/states/ vanilla)"
 
@@ -130,11 +131,15 @@ def emit(ctx: BuildContext) -> None:
     _rename_states(ctx, by_name)
     deposits = _starting_deposits(ctx, capitals)
     ctx.data["deposits"] = deposits
+    resource_delta, added = economy_mod.plan(ctx, assignment, capitals)
+    ctx.data["resource_delta"] = resource_delta
+    ctx.data["added_buildings"] = added
     for s in states:
         new_owner = assignment.get(s.id)
         if new_owner is None and s.id not in deposits:
             continue
-        _rewrite(ctx, s, new_owner, deposits.get(s.id, {}))
+        _rewrite(ctx, s, new_owner, deposits.get(s.id, {}),
+                 resource_delta.get(s.id, {}), added.get(s.id, {}))
 
 
 def _rename_states(ctx: BuildContext, by_name) -> None:
@@ -281,6 +286,10 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
     return {sid: tag for sid, (_, tag) in claims.items()}
 
 
+def _num(v: float):
+    return int(v) if float(v).is_integer() else round(v, 3)
+
+
 def _unsafe(info: StateInfo) -> bool:
     """El parser trata < y > como =: reescribir un archivo con comparaciones
     le cambiaría el sentido."""
@@ -373,7 +382,8 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
         ctx.note(f"{tag} perdio su capital: nueva capital {display_name(best, names)} ({best.id})")
 
 
-def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int]) -> bool:
+def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int],
+             resource_delta: dict | None = None, add_buildings: dict | None = None) -> bool:
     if _unsafe(info):
         return False
     root = parse_file(info.path)
@@ -389,6 +399,35 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resource
         for key, amount in add_resources.items():
             resources.entries = [(k, v) for k, v in resources.entries if k != key]
             resources.add(key, amount)
+
+    if resource_delta and any(resource_delta.values()):
+        # Transferencias del balance (15_balance.yaml): se suman al valor
+        # vanilla; un recurso que queda en 0 se borra del bloque.
+        resources = state.get("resources")
+        if not isinstance(resources, Block):
+            resources = Block()
+            state.add("resources", resources)
+        current = {k: float(str(getattr(v, "text", v))) for k, v in resources.entries if k}
+        for key, d in resource_delta.items():
+            current[key] = current.get(key, 0.0) + d
+        resources.entries = [(k, _num(v)) for k, v in current.items() if v > 0]
+        if not resources.entries:
+            state.entries = [(k, v) for k, v in state.entries if k != "resources"]
+
+    if add_buildings:
+        history = state.get("history")
+        if not isinstance(history, Block):
+            history = Block()
+            state.add("history", history)
+        buildings = history.get("buildings")
+        if not isinstance(buildings, Block):
+            buildings = Block()
+            history.add("buildings", buildings)
+        for key, n in add_buildings.items():
+            old = buildings.get(key)
+            level = int(float(str(getattr(old, "text", old)))) if old is not None else 0
+            buildings.entries = [(k, v) for k, v in buildings.entries if k != key]
+            buildings.entries.insert(0, (key, level + n))
 
     if owner is not None:
         history = state.get("history")

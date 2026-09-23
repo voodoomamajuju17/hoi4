@@ -20,6 +20,7 @@ from __future__ import annotations
 from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block, Quoted, banner_for, render
+from . import economy as economy_mod
 from .territory import display_name
 
 SOURCE = "spec/13_military.yaml"
@@ -67,10 +68,11 @@ def emit(ctx: BuildContext) -> None:
         if kind == "anarchy" or kind not in spec["army"]["divisions"]:
             continue
 
-        ic = sum((s.buildings or {}).get("industrial_complex", 0) + (s.buildings or {}).get("arms_factory", 0)
-                 for s in owned)
+        ic = sum(economy_mod.buildings_of(ctx, s).get("industrial_complex", 0)
+                 + economy_mod.buildings_of(ctx, s).get("arms_factory", 0) for s in owned)
         rule = spec["army"]["divisions"][kind]
-        total = min(int(rule["max"]), int(rule["base"] + ic * float(rule["per_ic"])))
+        total = int(rule["base"] + ic * float(rule["per_ic"]))
+        total = max(int(rule.get("min", 0)), min(int(rule["max"]), total))
         plan = _split(total, spec["army"]["mix"][kind])
 
         root = Block()

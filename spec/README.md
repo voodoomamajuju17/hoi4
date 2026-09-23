@@ -25,6 +25,7 @@ se cambia el spec y se regenera. Nunca al revés.
 | `12_events.yaml` | Eventos y sus disparadores (arranque, focos) |
 | `13_military.yaml` | Tecnologías, ejército y equipo de arranque |
 | `14_decisions.yaml` | Paneles de decisiones (minijuego del BioSteel) |
+| `15_balance.yaml` | Industrialización, leyes de reclutamiento y mínimos de recursos (por transferencia) |
 | `99_open_questions.yaml` | Preguntas abiertas, en formato legible por máquina |
 
 ## Convención de procedencia

@@ -63,18 +63,25 @@ def emit(ctx: BuildContext) -> None:
 
         divisions = Block()
         placed = 0
+        per = float((ctx.spec.raw.get("military") or {}).get("militia", {}).get("states_per_division", 0) or 0)
         for blob in blobs:
-            main = max(blob, key=lambda sid: (by_state[sid].manpower, -sid))
-            province = next((p for p in by_state[main].provinces if p in land), None)
-            if province is None:
-                continue
-            div = Block()
-            div.add("name", Quoted(f"{template_name} de {display_name(by_state[main], names)}"))
-            div.add("location", province)
-            div.add("division_template", Quoted(template_name))
-            div.add("start_experience_factor", 0.1)
-            divisions.add("division", div)
-            placed += 1
+            # Una cada `per` states del territorio (mínimo una), en sus states
+            # más poblados. Sin `per`: una por territorio.
+            count = max(1, round(len(blob) / per)) if per > 0 else 1
+            spots = sorted(blob, key=lambda sid: (-by_state[sid].manpower, sid))
+            for i in range(count):
+                sid = spots[i % len(spots)]
+                province = next((p for p in by_state[sid].provinces if p in land), None)
+                if province is None:
+                    continue
+                div = Block()
+                div.add("name", Quoted(f"{template_name} de {display_name(by_state[sid], names)}"
+                                       + (f" {i // len(spots) + 1}" if i >= len(spots) else "")))
+                div.add("location", province)
+                div.add("division_template", Quoted(template_name))
+                div.add("start_experience_factor", 0.1)
+                divisions.add("division", div)
+                placed += 1
         root.add("units", divisions)
 
         oob = f"{tag}_2100"

@@ -16,6 +16,7 @@ from __future__ import annotations
 from collections import Counter
 
 from ..context import BuildContext
+from . import economy as economy_mod
 from .territory import display_name
 
 RESOURCES = ["oil", "aluminium", "rubber", "tungsten", "steel", "chromium", "coal"]
@@ -44,11 +45,11 @@ def emit(ctx: BuildContext) -> None:
         bld = Counter()
         cont = Counter()
         for s in owned:
-            for k, v in (s.resources or {}).items():
+            for k, v in economy_mod.resources_of(ctx, s).items():
                 res[k] += v
             for k, v in (deposits.get(s.id) or {}).items():
                 res[k] += v
-            for k, v in (s.buildings or {}).items():
+            for k, v in economy_mod.buildings_of(ctx, s).items():
                 bld[k] += v
             if continents.get(s.id):
                 cont[continents[s.id]] += 1
@@ -116,6 +117,15 @@ def emit(ctx: BuildContext) -> None:
     add("")
 
     total_ic = sum(r["civ"] + r["mil"] for r in rows) or 1
+    # Totales mundiales por recurso: tienen que ser idénticos a los vanilla.
+    add("TOTAL MUNDIAL DE RECURSOS (tiene que ser igual al del juego base)")
+    for k in RESOURCES:
+        vanilla_total = sum((s.resources or {}).get(k, 0) for s in by_state.values())
+        now = sum(economy_mod.resources_of(ctx, s).get(k, 0) for s in by_state.values())
+        mark = "OK" if abs(vanilla_total - now) < 1e-6 else "DISTINTO"
+        add(f"  {RES_SHORT.get(k, k):7} vanilla {vanilla_total:8.0f}   mod {now:8.0f}   {mark}")
+    add("")
+
     add("PESO RELATIVO (IC sobre el total del mundo)")
     add("-" * 100)
     for r in sorted(rows, key=lambda r: -(r["civ"] + r["mil"])):

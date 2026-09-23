@@ -336,14 +336,22 @@ countries:
 
   # ---------------------------------------------------------------------------
   ASC:
-    coverage: unknown
-    starting_ideas: unknown
+    coverage: balance_only
+    starting_ideas:
+      - id: ASC_cuello_de_botella
+        name:
+          english: "The Council Bottleneck"
+          spanish: "El Cuello de Botella del Consejo"
+        name_src: invented
+        desc:
+          english: "Every factory order passes through the Allocation Council's planning system. It never makes mistakes; it just takes its time."
+          spanish: "Cada orden de fábrica pasa por el sistema de planificación del Consejo de Asignación. Nunca se equivoca; solo se toma su tiempo."
+        modifiers:
+          industrial_capacity_factory: -0.15
+        modifiers_src: invented
+        why: "Balance (2026-09-23): la ASC arrancaba con 18,6% de la IC mundial."
+        removable: false
     see: Q030
-    note: >
-      Hay material de sobra en §4.1 para derivar ideas (capacidad de cómputo,
-      overload, ejércitos autónomos), pero no forma parte de la vertical slice
-      y prefiero no gastar decisiones de balance en una facción que todavía no
-      tiene ni territorio ni líder.
 
   FCU: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   HSN: { coverage: unknown, starting_ideas: unknown, see: Q030 }
