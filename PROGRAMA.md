@@ -109,7 +109,7 @@ eventos con ultimátum e IA con condiciones.
 - [x] Bandera, retratos e íconos del EFE
 - [x] Retratos de los líderes de las 7 meganaciones (arte del usuario)
 - [~] Banderas de las 8 meganaciones (arte del usuario)
-- [ ] Banderas de los 16 satélites y los 5 señores de la guerra (hoy son franjas provisorias)
+- [x] Banderas de los 16 satélites y los 5 señores de la guerra (arte del usuario)
 - [ ] Retratos de los satélites, Marcus Rourke y Anahí Quiroga
 - [ ] Íconos de foco propios: el pack de 96 ya está; falta conectarlo
 - [ ] Imágenes de eventos propias
