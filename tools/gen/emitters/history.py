@@ -122,13 +122,13 @@ def _capital(ctx: BuildContext, c) -> int | None:
     if wanted:
         options = {territory_mod.normalize(w) for w in wanted}
         for sid in sorted(owned):
-            shown = names.get(by_id[sid].name_key, "") if sid in by_id else ""
-            if territory_mod.normalize(shown) in options:
+            s = by_id.get(sid)
+            if s and options & {territory_mod.normalize(n) for n in (names.get(s.name_key), s.file_label) if n}:
                 return sid
         ctx.warn(f"{c.tag}: la capital {' / '.join(wanted)} no esta entre sus states; uso la de mas manpower.")
     best = max(owned, key=lambda sid: (by_id[sid].manpower if sid in by_id else 0, -sid))
     if not wanted:
-        shown = names.get(by_id[best].name_key, "?") if best in by_id else "?"
+        shown = territory_mod.display_name(by_id[best], names) if best in by_id else "?"
         ctx.note(f"{c.tag}: capital provisoria {shown} ({best}), la de mas manpower. Ver Q012.")
     return best
 

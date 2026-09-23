@@ -193,7 +193,7 @@ def test_vanilla_fixture() -> None:
     check("4 grupos en el fixture", len([k for k, _ in ideologies.entries if k]) == 4)
 
     states = van.states()
-    check("8 states leidos", len(states) == 8, f"leyo {len(states)}")
+    check("9 states leidos", len(states) == 9, f"leyo {len(states)}")
     by_id = {s.id: s for s in states}
     check("state 900 con owner ARG", by_id[900].owner == "ARG")
     check("provincias parseadas", by_id[900].provinces == [1, 2, 3], str(by_id[900].provinces))
@@ -437,6 +437,11 @@ def test_territory() -> None:
         check("Paraguay (PAR) -> YYG", terr.get(904) == "YYG")
         check("Rio Grande do Sul (BRA) -> EFE", terr.get(905) == "EFE")
         check("Ruhr no se toca", 906 not in terr)
+        check("nombre con comentario al final se lee",
+              ctx.data["state_names"].get("STATE_902") == "Córdoba", str(ctx.data["state_names"].get("STATE_902")))
+        check("Ponta Pora por nombre de archivo (sin localisation) -> YYG", terr.get(908) == "YYG", str(terr))
+        check("el reporte no muestra '?'", not any("?" in n for n in ctx.notes if n.startswith("territorio")),
+              str(ctx.notes))
 
         states = mod / "history/states"
         cordoba = pdx.parse((states / "902-Fixture.txt").read_text())

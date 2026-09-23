@@ -46,6 +46,11 @@ def normalize(name: str) -> str:
     return " ".join(text.lower().split())
 
 
+def display_name(s: StateInfo, names: dict[str, str]) -> str:
+    """Nombre en inglés del juego; si falta, el del archivo (278-Buenos Aires.txt)."""
+    return names.get(s.name_key) or s.file_label or "?"
+
+
 def emit(ctx: BuildContext) -> None:
     spec = ctx.spec.raw["territory"]
     territories = spec.get("territories") or {}
@@ -60,9 +65,12 @@ def emit(ctx: BuildContext) -> None:
     names = ctx.vanilla.state_localisation()
     by_name: dict[str, list[StateInfo]] = {}
     for s in states:
-        shown = names.get(s.name_key)
-        if shown:
-            by_name.setdefault(normalize(shown), []).append(s)
+        # Dos fuentes: la localisation y el nombre del archivo. Un state puede
+        # buscarse por cualquiera de las dos.
+        for shown in {names.get(s.name_key), s.file_label} - {None, ""}:
+            bucket = by_name.setdefault(normalize(shown), [])
+            if s not in bucket:
+                bucket.append(s)
 
     assignment = _resolve(ctx, wanted, states, names, by_name)
     ctx.data["territory"] = assignment
@@ -71,7 +79,7 @@ def emit(ctx: BuildContext) -> None:
     by_id = {s.id: s for s in states}
     for tag in wanted:
         owned = sorted(sid for sid, t in assignment.items() if t == tag)
-        listed = ", ".join(f"{names.get(by_id[sid].name_key, '?')} ({sid})" for sid in owned)
+        listed = ", ".join(f"{display_name(by_id[sid], names)} ({sid})" for sid in owned)
         ctx.note(f"territorio {tag}: {len(owned)} states: {listed or 'ninguno'}")
 
     exclusive = spec.get("biosteel_exclusive_to")
@@ -127,7 +135,7 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
                     prev = explicit.get(s.id)
                     if prev and prev != tag:
                         raise SpecError(
-                            f"state {s.id} ({names.get(s.name_key)}) lo piden por nombre {prev} y {tag}",
+                            f"state {s.id} ({display_name(s, names)}) lo piden por nombre {prev} y {tag}",
                             where="08_territory.yaml",
                         )
                     explicit[s.id] = tag

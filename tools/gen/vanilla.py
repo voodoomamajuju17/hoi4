@@ -97,6 +97,12 @@ class StateInfo:
     path: Path
     manpower: int = 0
 
+    @property
+    def file_label(self) -> str:
+        """'278-Buenos Aires.txt' -> 'Buenos Aires'. Segunda fuente de nombre."""
+        stem = self.path.stem
+        return stem.split("-", 1)[1].strip() if "-" in stem else ""
+
 
 class Vanilla:
     def __init__(self, root: Path):
@@ -217,7 +223,7 @@ class Vanilla:
         loc_dir = self.root / "localisation" / "english"
         if not loc_dir.is_dir():
             loc_dir = self.root / "localisation"
-        pattern = re.compile(r'^\s*(STATE_\d+):\d*\s+"(.*)"\s*$')
+        pattern = _LOC_LINE
         for path in loc_dir.glob("**/*_l_english.yml"):
             try:
                 text = path.read_text(encoding="utf-8-sig", errors="replace")
@@ -225,7 +231,7 @@ class Vanilla:
                 continue
             for line in text.splitlines():
                 m = pattern.match(line)
-                if m:
+                if m and m.group(1).startswith("STATE_"):
                     out[m.group(1)] = m.group(2)
         return out
 
@@ -352,7 +358,7 @@ class Vanilla:
         loc_dir = self.root / "localisation" / "english"
         if not loc_dir.is_dir():
             loc_dir = self.root / "localisation"
-        pattern = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s+"(.*)"\s*$')
+        pattern = _LOC_LINE
         for path in loc_dir.glob("**/*_l_english.yml"):
             try:
                 text = path.read_text(encoding="utf-8-sig", errors="replace")
@@ -363,6 +369,12 @@ class Vanilla:
                 if m and m.group(2).strip().lower() == wanted.strip().lower():
                     out.add(m.group(1))
         return sorted(out)
+
+
+# `CLAVE:0 "texto"`, tolerando comillas escapadas y comentarios al final de
+# la línea (# ...). La versión anterior exigía que la línea terminara en la
+# comilla y perdía los nombres con comentario: salían como "?" en el reporte.
+_LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"((?:[^"\\]|\\.)*)"')
 
 
 def _templates_in(text: str) -> list[re.Pattern]:
