@@ -106,7 +106,7 @@ def test_pdx_roundtrip() -> None:
 def test_spec_loads() -> None:
     section("spec")
     spec = specload.load(REPO_ROOT / "spec")
-    check("24 paises (8 meganaciones + 16 satelites)", len(spec.countries) == 24, f"hay {len(spec.countries)}")
+    check("25 paises (8 meganaciones + 16 satelites + la Anarquia)", len(spec.countries) == 25, f"hay {len(spec.countries)}")
     check("todos los TAG de 3 letras", all(len(c.tag) == 3 for c in spec.countries))
     tags = {c.tag for c in spec.countries}
     for expected in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "PTA", "YYG"):
@@ -193,7 +193,7 @@ def test_vanilla_fixture() -> None:
     check("4 grupos en el fixture", len([k for k, _ in ideologies.entries if k]) == 4)
 
     states = van.states()
-    check("14 states leidos", len(states) == 14, f"leyo {len(states)}")
+    check("18 states leidos", len(states) == 18, f"leyo {len(states)}")
     by_id = {s.id: s for s in states}
     check("state 900 con owner ARG", by_id[900].owner == "ARG")
     check("provincias parseadas", by_id[900].provinces == [1, 2, 3], str(by_id[900].provinces))
@@ -484,10 +484,25 @@ def test_territory() -> None:
         check("Italia europea -> NRE", terr.get(909) == "NRE", str(terr))
         check("Libia italiana -> APF por continente", terr.get(910) == "APF")
         check("Corea por core, aunque sea de Japon -> ZKR", terr.get(911) == "ZKR")
-        check("Japon propiamente dicho queda libre", 912 not in terr)
+        check("Japon -> HSN (los puertos)", terr.get(912) == "HSN")
+        check("India -> Anarquia (resto)", terr.get(914) == "ZAN" and terr.get(915) == "ZAN")
+        check("Moscu -> Anarquia", terr.get(917) == "ZAN")
+        check("state con comparaciones queda afuera del reparto", 907 not in terr)
+        check("nadie queda vanilla salvo lo no reescribible",
+              all(s.id in terr or s.id == 907 for s in ctx.vanilla.states() if s.owner), str(terr))
         check("Etiopia: el TAG le gana al continente -> ZET", terr.get(913) == "ZET")
-        jap = mod / "history/countries/JAP - Japan.txt"
-        check("Japon perdio Corea y su capital: se reubica", jap.exists() and "capital = 912" in jap.read_text())
+        sov = mod / "history/countries/SOV - Soviet Union.txt"
+        check("la URSS conserva un state y reubica su capital", sov.exists() and "capital = 907" in sov.read_text())
+
+        units = pdx.parse((mod / "history/units/ZAN_2100.txt").read_text())
+        divs = units.get("units").get_all("division")
+        check("3 milicias: India contigua, Ceilan y Moscu separadas", len(divs) == 3, str(len(divs)))
+        locs = sorted(pdx.text(d.get("location")) for d in divs)
+        check("una milicia por territorio, en el state con mas manpower", locs == ["18", "20", "22"], str(locs))
+        tpl = units.get("division_template")
+        check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
+        zan = (mod / "history/countries/ZAN - The Lawless Lands.txt").read_text()
+        check("la Anarquia carga su oob", 'oob = "ZAN_2100"' in zan, zan)
         check("nombre con comentario al final se lee",
               ctx.data["state_names"].get("STATE_902") == "Córdoba", str(ctx.data["state_names"].get("STATE_902")))
         check("Ponta Pora por nombre de archivo (sin localisation) -> YYG", terr.get(908) == "YYG", str(terr))
@@ -512,7 +527,7 @@ def test_territory() -> None:
         check("el satelite conserva su carbon", pdx.text(par.get("resources").get("coal")) == "5")
         check("el satelite no tiene BioSteel", "biosteel" not in par.get("resources").keys())
         check("archivo con comparaciones no se reescribe", not (states / "907-Fixture.txt").exists())
-        check("avisa del archivo con comparaciones", any("907-Fixture" in w for w in ctx.warnings))
+        check("avisa del archivo con comparaciones", any("907-Fixture" in w for w in ctx.warnings), str(ctx.warnings))
 
         check("avisa lo que no encontro con parecidos",
               any("Tierra del Fuego" in w for w in ctx.warnings), str(ctx.warnings))
@@ -604,7 +619,7 @@ def test_leaders_and_ideologies() -> None:
         check("grupo neutral renombrado", 'neutrality:0 "Mandato Trascendente"' in ideos, ideos[:400])
         check("sin descripciones placeholder", "Placeholder" not in ideos)
         types, groups = spec.ideology_index()
-        check("16 sub-ideologias", len(types) == 16, str(len(types)))
+        check("17 sub-ideologias", len(types) == 17, str(len(types)))
         for g in groups:
             check(f"{g}: dos meganaciones", sum(
                 1 for c in spec.countries if c.is_major and c.ideology_group == g) == 2)

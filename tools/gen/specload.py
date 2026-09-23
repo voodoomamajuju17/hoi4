@@ -84,6 +84,8 @@ class Spec:
             self.countries.append(self._country(entry, subject=False))
         for entry in data.get("subjects", []) or []:
             self.countries.append(self._country(entry, subject=True))
+        for entry in data.get("independents", []) or []:
+            self.countries.append(self._country(entry, subject=False))
 
     def _country(self, entry: dict, *, subject: bool) -> Country:
         tag = entry["tag"]

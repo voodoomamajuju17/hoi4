@@ -37,6 +37,9 @@ def emit(ctx: BuildContext) -> None:
         capital = _capital(ctx, c)
         if capital is not None:
             b.add("capital", capital)
+        oob = (ctx.data.get("oob") or {}).get(c.tag)
+        if oob:
+            b.add("oob", Quoted(oob))
         b.add("set_research_slots", int(politics.get("research_slots", 3)))
 
         sp = Block()

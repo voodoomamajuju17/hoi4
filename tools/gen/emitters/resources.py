@@ -14,7 +14,7 @@ Nada se escribe de memoria:
     cic, convoys...). El archivo vanilla se reescribe entero con la entrada
     nueva agregada, con el mismo nombre, para reemplazarlo sin duplicar.
   - Las claves de localisation se derivan de las del recurso plantilla: toda
-    clave vanilla con "steel" en el nombre y "Steel" como texto se duplica
+    clave vanilla que termina en "steel" y muestra "Steel" se duplica
     cambiando steel -> biosteel.
 Sin --vanilla-path no se puede hacer nada de esto: se salta y se avisa.
 """
@@ -84,7 +84,12 @@ def _vanilla_resources(ctx: BuildContext):
 
 def _localise(ctx: BuildContext, mech: dict, key: str, template: str) -> None:
     shown = template.capitalize()
-    keys = [k for k in ctx.vanilla.loc_keys_with_text(shown) if template in k.lower()]
+    # Solo claves que SON el recurso (steel, PRODUCTION_MATERIALS_STEEL), no las
+    # que lo mencionan (TECH_steel_works también dice "Steel").
+    keys = [
+        k for k in ctx.vanilla.loc_keys_with_text(shown)
+        if k.lower() == template or k.lower().endswith("_" + template)
+    ]
     if not keys:
         ctx.warn(f"no encontre claves de localisation del recurso '{template}'; "
                  f"'{key}' puede verse sin nombre en pantalla.")

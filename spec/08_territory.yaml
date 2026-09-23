@@ -168,6 +168,9 @@ territories:
     lore: >
       Venezuela.
     resolve:
+      - { owner: ENG, continent: south_america } # las Guayanas
+      - { owner: FRA, continent: south_america }
+      - { owner: HOL, continent: south_america }
       - { owner: VEN }
 
   FCU:
@@ -202,6 +205,9 @@ territories:
     lore: >
       El archipiélago del sudeste asiático: los estrechos por donde pasa la mitad de la carga del mundo.
     resolve:
+      - { owner: SIA }
+      - { owner: FRA, continent: asia }          # Indochina
+      - { owner: JAP }                           # los puertos de Japón
       - { owner: HOL, continent: asia }
       - { owner: PHI }
       - { state: ["Singapore", "Straits Settlements"] }
@@ -217,6 +223,9 @@ territories:
     lore: >
       Las Antillas mayores.
     resolve:
+      - { owner: ENG, continent: north_america } # colonias del Caribe
+      - { owner: FRA, continent: north_america }
+      - { owner: HOL, continent: north_america }
       - { owner: CUB }
       - { owner: HAI }
       - { owner: DOM }
@@ -226,6 +235,7 @@ territories:
     lore: >
       Australia y Nueva Zelanda.
     resolve:
+      - { continent: australia }                 # el resto del Pacífico
       - { owner: AST }
       - { owner: NZL }
 
@@ -234,6 +244,9 @@ territories:
     lore: >
       El norte industrial de Europa, del Rin al Vístula y a Escandinavia.
     resolve:
+      - { owner: CZE }
+      - { owner: AUS }
+      - { owner: SWI }
       - { owner: GER }
       - { owner: DEN }
       - { owner: NOR }
@@ -290,6 +303,7 @@ territories:
     lore: >
       Mongolia, Mengjiang y Tuvá.
     resolve:
+      - { owner: SOV, continent: asia }          # Siberia y Asia Central
       - { owner: MON }
       - { owner: MEN }
       - { owner: TAN }
@@ -321,6 +335,7 @@ territories:
     lore: >
       Italia, los Balcanes y Anatolia: el Imperio de Oriente y de Occidente, otra vez uno.
     resolve:
+      - { owner: FRA, continent: europe }        # Galia (2026-09-23: 50% del mundo libre)
       - { owner: ITA, continent: europe }
       - { owner: GRE }
       - { owner: ALB }
@@ -344,6 +359,23 @@ territories:
       - { owner: ROM }
       - { owner: BUL }
       - { owner: HUN }
+
+  # ===========================================================================
+  # La Anarquía: todo lo que no reclama nadie (decisión del usuario,
+  # 2026-09-23). Con el reparto de arriba queda aprox. la mitad del mundo
+  # que era libre: la URSS europea, India, Medio Oriente, el resto de Brasil.
+  # ===========================================================================
+  ZAN:
+    src: user_decision
+    resolve:
+      - { remainder: true }
+    militia:
+      one_division_per: contiguous_territory
+      template_name:
+        english: "Militia"
+        spanish: "Milicia"
+      regiments: [infantry, infantry]
+      src: invented
 
 # =============================================================================
 conflicts_detected:

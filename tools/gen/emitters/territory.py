@@ -78,6 +78,17 @@ def emit(ctx: BuildContext) -> None:
 
     _check_tags(ctx)
     assignment = _resolve(ctx, wanted, states, names, by_name)
+    # Un state cuyo archivo no se puede reescribir sin riesgo queda con su
+    # dueño vanilla: se lo saca del reparto ANTES de calcular capitales, para
+    # que ese dueño conserve una capital válida.
+    by_path = {s.id: s for s in states}
+    for sid in sorted(assignment):
+        if _unsafe(by_path[sid]):
+            ctx.warn(
+                f"{by_path[sid].path.name}: usa comparaciones (< o >) y no lo reescribo para no "
+                f"cambiarle el sentido. Queda de {by_path[sid].owner}, no de {assignment[sid]}."
+            )
+            del assignment[sid]
     _fix_vanilla_capitals(ctx, assignment, names)
     ctx.data["territory"] = assignment
     ctx.data["state_names"] = names
@@ -85,8 +96,16 @@ def emit(ctx: BuildContext) -> None:
     by_id = {s.id: s for s in states}
     for tag in wanted:
         owned = sorted(sid for sid, t in assignment.items() if t == tag)
-        listed = ", ".join(f"{display_name(by_id[sid], names)} ({sid})" for sid in owned)
-        ctx.note(f"territorio {tag}: {len(owned)} states: {listed or 'ninguno'}")
+        shown = [f"{display_name(by_id[sid], names)} ({sid})" for sid in owned[:12]]
+        more = f" y {len(owned) - 12} mas" if len(owned) > 12 else ""
+        ctx.note(f"territorio {tag}: {len(owned)} states: {', '.join(shown) or 'ninguno'}{more}")
+    remainder = next((tag for tag, terr in wanted.items()
+                      if any(sel.get("remainder") for sel in terr["resolve"])), None)
+    if remainder:
+        rest = sum(1 for t in assignment.values() if t == remainder)
+        total = len(assignment)
+        ctx.note(f"reparto: {total - rest} states en meganaciones y satelites, "
+                 f"{rest} en {remainder} ({100 * rest // max(total, 1)}% del mundo)")
 
     by_state = {s.id: s for s in states}
     capitals = {}
@@ -146,10 +165,11 @@ def _starting_deposits(ctx, capitals) -> dict[int, dict[str, int]]:
 # ---------------------------------------------------------------------------
 
 
-# Prioridad de los selectores: un nombre explícito le gana a un TAG o core, y
-# un TAG o core le gana a un continente entero. Dentro del mismo nivel, dos
-# países pidiendo el mismo state es un error del spec.
-_TIER_STATE, _TIER_OWNER, _TIER_CONTINENT = 3, 2, 1
+# Prioridad de los selectores, de mayor a menor: nombre explícito, core, TAG
+# dueño, continente, resto. El core le gana al dueño porque es más específico
+# (Corea es core de KOR aunque en 1936 la tenga Japón). Dentro del mismo nivel,
+# dos países pidiendo el mismo state es un error del spec.
+_TIER_STATE, _TIER_CORE, _TIER_OWNER, _TIER_CONTINENT = 4, 3, 2, 1
 
 
 def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
@@ -161,6 +181,7 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
       { core: KOR }                     states que son core de KOR
       { continent: africa }             todo un continente
       { state: [nombres] }              un state por nombre
+      { remainder: true }               todo lo que no pidió nadie (uno solo)
     """
     continents = ctx.vanilla.state_continents()
     claims: dict[int, tuple[int, str]] = {}   # state -> (nivel, TAG)
@@ -175,9 +196,15 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
                 where="08_territory.yaml",
             )
 
+    remainder_tag = None
     for tag, terr in wanted.items():
         ctx.spec.country(tag)
         for sel in terr["resolve"]:
+            if sel.get("remainder"):
+                if remainder_tag and remainder_tag != tag:
+                    raise SpecError(f"remainder pedido por {remainder_tag} y {tag}", where="08_territory.yaml")
+                remainder_tag = tag
+                continue
             if "state" in sel:
                 options = sel["state"] if isinstance(sel["state"], list) else [sel["state"]]
                 found = next((by_name[normalize(o)] for o in options if normalize(o) in by_name), None)
@@ -204,11 +231,25 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
                 matched.append(s)
             if not matched:
                 ctx.warn(f"territorio {tag}: el selector {sel} no encontro ningun state en esta version.")
-            tier = _TIER_OWNER if ("owner" in sel or "core" in sel) else _TIER_CONTINENT
+            tier = _TIER_CORE if "core" in sel else _TIER_OWNER if "owner" in sel else _TIER_CONTINENT
             for s in matched:
                 claim(s, tag, tier)
 
+    if remainder_tag:
+        # Solo states con dueño en vanilla: los que no tienen dueño son
+        # tierra de nadie a propósito (algunos islotes del juego).
+        for s in states:
+            if s.id not in claims and s.owner:
+                claims[s.id] = (0, remainder_tag)
+
     return {sid: tag for sid, (_, tag) in claims.items()}
+
+
+def _unsafe(info: StateInfo) -> bool:
+    """El parser trata < y > como =: reescribir un archivo con comparaciones
+    le cambiaría el sentido."""
+    raw = info.path.read_text(encoding="utf-8-sig", errors="replace")
+    return any(m.group(1) for m in _COMPARISON.finditer(raw))
 
 
 def _check_tags(ctx: BuildContext) -> None:
@@ -251,12 +292,7 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
 
 
 def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int]) -> bool:
-    raw = info.path.read_text(encoding="utf-8-sig", errors="replace")
-    if any(m.group(1) for m in _COMPARISON.finditer(raw)):
-        ctx.warn(
-            f"{info.path.name}: usa comparaciones (< o >) y no lo reescribo para no "
-            f"cambiarle el sentido. Queda vanilla."
-        )
+    if _unsafe(info):
         return False
     root = parse_file(info.path)
     state = root.get("state")

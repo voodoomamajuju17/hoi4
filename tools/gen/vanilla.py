@@ -220,6 +220,29 @@ class Vanilla:
         self._states = out
         return out
 
+    def _definition(self) -> dict[int, tuple[int, str, int]]:
+        """map/definition.csv: provincia -> (color RGB como int, tipo, continente)."""
+        if getattr(self, "_definition_cache", None) is not None:
+            return self._definition_cache
+        out: dict[int, tuple[int, str, int]] = {}
+        definition = self.root / "map" / "definition.csv"
+        if definition.exists():
+            for line in definition.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+                parts = line.split(";")
+                if len(parts) < 8 or not parts[0].isdigit():
+                    continue
+                try:
+                    r, g, b = int(parts[1]), int(parts[2]), int(parts[3])
+                    cont = int(parts[7]) if parts[7].strip().isdigit() else 0
+                except ValueError:
+                    continue
+                out[int(parts[0])] = ((r << 16) | (g << 8) | b, parts[4].strip(), cont)
+        self._definition_cache = out
+        return out
+
+    def land_provinces(self) -> set[int]:
+        return {p for p, (_, kind, _) in self._definition().items() if kind == "land"}
+
     def state_continents(self) -> dict[int, str]:
         """state id -> continente mayoritario de sus provincias.
 
@@ -235,15 +258,11 @@ class Vanilla:
             block = pdx.parse_file(cont_file).get("continents")
             if isinstance(block, pdx.Block):
                 names = [pdx.text(v) for _, v in block.entries]
-        by_province: dict[int, str] = {}
-        definition = self.root / "map" / "definition.csv"
-        if names and definition.exists():
-            for line in definition.read_text(encoding="utf-8-sig", errors="replace").splitlines():
-                parts = line.split(";")
-                if len(parts) >= 8 and parts[0].isdigit() and parts[7].strip().isdigit():
-                    idx = int(parts[7])
-                    if 1 <= idx <= len(names):
-                        by_province[int(parts[0])] = names[idx - 1]
+        by_province = {
+            p: names[idx - 1]
+            for p, (_, _, idx) in self._definition().items()
+            if 1 <= idx <= len(names)
+        }
         out: dict[int, str] = {}
         for s in self.states():
             counts: dict[str, int] = {}
@@ -255,6 +274,34 @@ class Vanilla:
                 out[s.id] = max(sorted(counts), key=lambda c: counts[c])
         self._continents = out
         return out
+
+    def province_adjacency(self, cache_dir: Path | None = None) -> set[tuple[int, int]]:
+        """Pares de provincias vecinas (a < b), leídos de map/provinces.bmp.
+
+        El juego no trae la lista de vecinos escrita: está implícita en el
+        bitmap, donde cada provincia es un color (definition.csv). Dos
+        provincias son vecinas si hay un pixel de una pegado a uno de la otra.
+        Recorrer el bitmap entero tarda unos segundos, así que el resultado se
+        guarda en cache_dir, invalidado por tamaño y fecha del .bmp.
+        """
+        bmp = self.root / "map" / "provinces.bmp"
+        if not bmp.exists():
+            return set()
+        stamp = f"{bmp.stat().st_size}-{int(bmp.stat().st_mtime)}"
+        cache = cache_dir / f"adjacency-{stamp}.json" if cache_dir else None
+        if cache and cache.exists():
+            try:
+                return {tuple(p) for p in json.loads(cache.read_text())}
+            except (ValueError, OSError):
+                pass
+        pairs = _bmp_adjacency(bmp.read_bytes(), {c: p for p, (c, _, _) in self._definition().items()})
+        if cache:
+            try:
+                cache.parent.mkdir(parents=True, exist_ok=True)
+                cache.write_text(json.dumps(sorted(pairs)))
+            except OSError:
+                pass
+        return pairs
 
     def country_tags(self) -> set[str]:
         """TAGs que ya usa el juego (common/country_tags/)."""
@@ -447,6 +494,42 @@ class Vanilla:
 # la línea (# ...). La versión anterior exigía que la línea terminara en la
 # comilla y perdía los nombres con comentario: salían como "?" en el reporte.
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"((?:[^"\\]|\\.)*)"')
+
+
+def _bmp_adjacency(raw: bytes, color_to_prov: dict[int, int]) -> set[tuple[int, int]]:
+    """Vecindad de provincias a partir de un BMP de 24 bits sin comprimir."""
+    import struct
+
+    if raw[:2] != b"BM":
+        raise VanillaError("provinces.bmp no es un BMP")
+    offset = struct.unpack_from("<I", raw, 10)[0]
+    width, height = struct.unpack_from("<ii", raw, 18)
+    bpp = struct.unpack_from("<H", raw, 28)[0]
+    if bpp != 24:
+        raise VanillaError(f"provinces.bmp de {bpp} bits; esperaba 24")
+    height = abs(height)
+    stride = (width * 3 + 3) & ~3
+    pairs: set[tuple[int, int]] = set()
+    prev: list[int] | None = None
+    for y in range(height):
+        start = offset + y * stride
+        row = raw[start:start + width * 3]
+        # BGR -> un int por pixel
+        cols = [row[i + 2] << 16 | row[i + 1] << 8 | row[i] for i in range(0, width * 3, 3)]
+        for a, b in zip(cols, cols[1:]):
+            if a != b:
+                pairs.add((a, b) if a < b else (b, a))
+        if prev is not None:
+            for a, b in zip(prev, cols):
+                if a != b:
+                    pairs.add((a, b) if a < b else (b, a))
+        prev = cols
+    out: set[tuple[int, int]] = set()
+    for a, b in pairs:
+        pa, pb = color_to_prov.get(a), color_to_prov.get(b)
+        if pa is not None and pb is not None and pa != pb:
+            out.add((pa, pb) if pa < pb else (pb, pa))
+    return out
 
 
 def _templates_in(text: str) -> list[re.Pattern]:
