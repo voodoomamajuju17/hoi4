@@ -24,7 +24,7 @@ from ..errors import SpecError
 from ..pdx import Block, Quoted
 from . import events as events_mod
 from . import ideas as ideas_mod
-from .effects import render_effects
+from .effects import EffectContext, render_effects
 
 SOURCE = "spec/07_focus_trees.yaml"
 LOC_FILE = "meganations_focus"
@@ -76,6 +76,13 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     depth = _depths(by_id)
     positions = _layout(focuses, depth)
     known_ideas = ideas_mod.all_idea_ids(ctx)
+    effect_ctx = EffectContext(
+        known_ideas,
+        {c.tag for c in ctx.spec.countries},
+        ctx.vanilla.building_keys() if ctx.vanilla else None,
+        ctx.vanilla.wargoal_types() if ctx.vanilla else None,
+    )
+    exclusive = _exclusive_pairs(focuses, by_id)
     custom = _emit_custom_icons(ctx, tag, focuses)
     icons = (ctx.vanilla.gfx_names() | custom) if ctx.vanilla else None
     effects_used: dict[str, str] = {}
@@ -105,6 +112,11 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             p = Block()
             p.add("focus", pre)
             fb.add("prerequisite", p)
+        if exclusive.get(fid):
+            me = Block()
+            for other in sorted(exclusive[fid]):
+                me.add("focus", other)
+            fb.add("mutually_exclusive", me)
 
         available = f.get("available")
         if isinstance(available, dict):
@@ -113,7 +125,7 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
         reward = f.get("reward")
         if not isinstance(reward, list) or not reward:
             raise SpecError(f"{fid}: sin reward", where="07_focus_trees.yaml")
-        completion = render_effects(fid, reward, known_ideas, effects_used, where="07_focus_trees.yaml")
+        completion = render_effects(fid, reward, effect_ctx, effects_used, where="07_focus_trees.yaml")
         for event_id in events_mod.fired_by_focus(ctx, fid):
             completion.add("country_event", event_id)
             effects_used.setdefault("country_event", fid)
@@ -141,6 +153,19 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
 
 
 # ---------------------------------------------------------------------------
+
+
+def _exclusive_pairs(focuses, by_id) -> dict[str, set[str]]:
+    """mutually_exclusive simétrico: si A excluye a B, B excluye a A."""
+    out: dict[str, set[str]] = {}
+    for _, f in focuses:
+        for other in f.get("mutually_exclusive", []) or []:
+            if other not in by_id:
+                raise SpecError(f"{f['id']}: mutually_exclusive con '{other}', que no existe",
+                                where="07_focus_trees.yaml")
+            out.setdefault(f["id"], set()).add(other)
+            out.setdefault(other, set()).add(f["id"])
+    return out
 
 
 def _depths(by_id: dict[str, dict]) -> dict[str, int]:
@@ -266,7 +291,13 @@ def _icon(ctx: BuildContext, focus: dict, icons: set[str] | None) -> str:
 def _available(ctx: BuildContext, fid: str, spec: dict, triggers_used: dict[str, str]) -> Block:
     block = Block()
     for key, value in spec.items():
-        if key == "biosteel_tier":
+        if key == "country_exists":
+            if value not in {c.tag for c in ctx.spec.countries}:
+                raise SpecError(f"{fid}: country_exists '{value}' no es un pais del mod",
+                                where="07_focus_trees.yaml")
+            block.add("country_exists", value)
+            triggers_used.setdefault("country_exists", fid)
+        elif key == "biosteel_tier":
             trigger_key, resource, amount = _biosteel_threshold(ctx, int(value))
             inner = Block()
             inner.add("resource", resource)

@@ -376,7 +376,24 @@ def test_phase3_content() -> None:
         tree = focus.get("focus_tree")
         focuses = tree.get_all("focus")
         ids = [pdx.text(f.get("id")) for f in focuses]
-        check("14 focos", len(focuses) == 14, str(len(focuses)))
+        check("31 focos", len(focuses) == 31, str(len(focuses)))
+        by = {pdx.text(f.get("id")): f for f in focuses}
+        dyn = by["EFE_dinastia_verde"].get("mutually_exclusive")
+        grd = by["EFE_la_guardia_manda"].get("mutually_exclusive")
+        check("rutas politicas excluyentes (ida)", pdx.text(dyn.get("focus")) == "EFE_la_guardia_manda")
+        check("rutas politicas excluyentes (vuelta)", pdx.text(grd.get("focus")) == "EFE_dinastia_verde")
+        war = by["EFE_la_guerra_del_agua"]
+        wg = war.get("completion_reward").get("create_wargoal")
+        check("la guerra del agua apunta a la FCU", pdx.text(wg.get("target")) == "FCU")
+        check("solo si la FCU existe", pdx.text(war.get("available").get("country_exists")) == "FCU")
+        check("antes hay que romper el cerco andino",
+              pdx.text(war.get("prerequisite").get("focus")) == "EFE_romper_el_cerco_andino")
+        heir = by["EFE_el_heredero_del_norte"].get("completion_reward").get("annex_country")
+        check("el heredero anexa YYG", pdx.text(heir.get("target")) == "YYG")
+        capital_build = by["EFE_ministerio_de_restauracion"].get("completion_reward").get("capital_scope")
+        check("fabricas con slots en la capital",
+              "add_extra_state_shared_building_slots" in capital_build.keys()
+              and pdx.text(capital_build.get("add_building_construction").get("type")) == "industrial_complex")
         check("arbol asignado al EFE", pdx.text(tree.get("country").get("modifier").get("tag")) == "EFE")
         coords = [(pdx.text(f.get("x")), pdx.text(f.get("y"))) for f in focuses]
         check("sin focos superpuestos", len(set(coords)) == len(coords), str(coords))
@@ -531,7 +548,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("3 eventos", len(events) == 3, str(len(events)))
+        check("4 eventos", len(events) == 4, str(len(events)))
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
@@ -605,10 +622,12 @@ def test_vanilla_validation() -> None:
             mods.update(trait["modifiers"])
         docs = van / "documentation"
         docs.mkdir()
-        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n")
+        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
-            "add_manpower add_ideas swap_ideas set_autonomy country_event\n"
+            "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
+            "create_wargoal add_building_construction add_extra_state_shared_building_slots "
+            "add_research_slot\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir()

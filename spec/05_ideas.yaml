@@ -132,6 +132,128 @@ countries:
           Trade-off deliberado: menos bienes de consumo (bueno) a cambio de
           menos crecimiento poblacional (malo a largo plazo).
 
+    # Ideas de las rutas políticas, económica y militar (2026-09-23).
+      - id: EFE_trono_del_bosque
+        granted_by: EFE_dinastia_verde
+        name:
+          english: "The Throne of the Forest"
+          spanish: "El Trono del Bosque"
+        name_src: invented
+        desc:
+          english: "The crown is hereditary now. The Empire will outlive its Emperor, and everyone knows who comes next."
+          spanish: "La corona ahora es hereditaria. El Imperio va a sobrevivir a su Emperador, y todos saben quién sigue."
+        modifiers:
+          political_power_gain: 0.1
+          stability_factor: 0.05
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_trono_eterno
+        granted_by: EFE_emperador_de_la_tierra
+        name:
+          english: "The Eternal Throne"
+          spanish: "El Trono Eterno"
+        name_src: invented
+        desc:
+          english: "Aurelio IV is no longer a ruler but a symbol: the Earth given a face and a crown."
+          spanish: "Aurelio IV ya no es un gobernante sino un símbolo: la Tierra con cara y corona."
+        modifiers:
+          political_power_gain: 0.15
+          stability_factor: 0.1
+          war_support_factor: 0.05
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_estado_guarnicion
+        granted_by: EFE_la_guardia_manda
+        name:
+          english: "The Garrison State"
+          spanish: "El Estado Guarnición"
+        name_src: invented
+        desc:
+          english: "The Green Guard sits at every ministry table. Orders come faster; arguments come never."
+          spanish: "La Guardia Verde se sienta en la mesa de cada ministerio. Las órdenes llegan más rápido; las discusiones, nunca."
+        modifiers:
+          army_org_factor: 0.05
+          war_support_factor: 0.05
+          political_power_gain: -0.05
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_junta_de_la_tierra
+        granted_by: EFE_la_junta_de_la_tierra
+        name:
+          english: "The Junta of the Earth"
+          spanish: "La Junta de la Tierra"
+        name_src: invented
+        desc:
+          english: "The Emperor reigns; the Marshal governs. The Empire has become an army with a country attached."
+          spanish: "El Emperador reina; el Mariscal gobierna. El Imperio se volvió un ejército con un país adentro."
+        modifiers:
+          army_org_factor: 0.1
+          war_support_factor: 0.1
+          research_speed_factor: 0.05
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_consejo_tecnico
+        granted_by: EFE_consejo_de_custodios
+        name:
+          english: "The Council of Custodians"
+          spanish: "El Consejo de Custodios"
+        name_src: invented
+        desc:
+          english: "Glaciologists, hydrologists and agronomists in uniform. The Guard gives the orders; the Council tells it which ones will work."
+          spanish: "Glaciólogos, hidrólogos y agrónomos de uniforme. La Guardia da las órdenes; el Consejo le dice cuáles van a funcionar."
+        modifiers:
+          research_speed_factor: 0.05
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_red_hidrica
+        granted_by: EFE_red_hidrica_guarani
+        name:
+          english: "The Guaraní Water Grid"
+          spanish: "La Red Hídrica Guaraní"
+        name_src: invented
+        desc:
+          english: "The aquifer feeds the factories now: pumped, filtered and rationed by the Ministry of Restoration."
+          spanish: "El acuífero ahora alimenta a las fábricas: bombeado, filtrado y racionado por el Ministerio de Restauración."
+        modifiers:
+          industrial_capacity_factory: 0.05
+          production_speed_buildings_factor: 0.1
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_guardia_movilizada
+        granted_by: EFE_guardia_verde_movilizada
+        name:
+          english: "The Mobilised Guard"
+          spanish: "La Guardia Movilizada"
+        name_src: invented
+        desc:
+          english: "Every forest ranger is a reservist and every reservist is a forest ranger."
+          spanish: "Todo guardabosques es reservista y todo reservista es guardabosques."
+        modifiers:
+          war_support_factor: 0.05
+          army_org_factor: 0.05
+        modifiers_src: invented
+        removable: false
+
+      - id: EFE_defensa_acuifero
+        granted_by: EFE_defensa_del_acuifero
+        name:
+          english: "Defence of the Aquifer"
+          spanish: "Defensa del Acuífero"
+        name_src: invented
+        desc:
+          english: "Bunkers under the soy fields, mines along the rivers. Whoever wants the water will have to drink it through a trench."
+          spanish: "Búnkers bajo los campos de soja, minas a lo largo de los ríos. El que quiera el agua va a tener que tomarla desde una trinchera."
+        modifiers:
+          army_defence_factor: 0.1
+        modifiers_src: invented
+        removable: false
+
     # -------------------------------------------------------------------------
     # Ideas escalonadas de BioSteel — ver 06_mechanics.yaml#biosteel
     # -------------------------------------------------------------------------

@@ -81,3 +81,21 @@ namespaces:
               - { effect: add_stability, value: 0.05 }
               - { effect: add_political_power, value: 75 }
         src: invented
+
+      - id: 4
+        trigger: { focus: EFE_la_guerra_del_agua }
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "Castellane's Last Offer"
+          spanish: "La Última Oferta de Castellane"
+        desc:
+          english: "Chairwoman Castellane's envoy arrives in Buenos Aires with a contract: ninety-nine years of rights to the Guaraní Aquifer, paid in desalination plants and hard currency. The Emperor reads it standing up. Then he hands it to Marshal Etchegaray, who reads it standing up too."
+          spanish: "El enviado de la Presidenta Castellane llega a Buenos Aires con un contrato: noventa y nueve años de derechos sobre el Acuífero Guaraní, pagados en desalinizadoras y moneda fuerte. El Emperador lo lee de pie. Después se lo da al Mariscal Etchegaray, que también lo lee de pie."
+        options:
+          - name:
+              english: "The Earth is not for sale."
+              spanish: "La Tierra no se vende."
+            effects:
+              - { effect: add_war_support, value: 0.10 }
+              - { effect: army_experience, value: 25 }
+        src: invented

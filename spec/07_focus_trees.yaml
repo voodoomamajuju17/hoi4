@@ -46,6 +46,101 @@ trees:
     branches:
 
       # -----------------------------------------------------------------------
+      - id: ruta_guerra
+        name:
+          english: "The Water War"
+          spanish: "La Guerra del Agua"
+        name_src: invented
+        theme_basis: "Ruta militar. Enemigo natural: la FCU (opuesto ideológico, codicia el Acuífero Guaraní). Antes hay que romper el cerco andino de la NAS, cliente de armas de Meridian Kinetics."
+        focuses:
+          - id: EFE_guardia_verde_movilizada
+            name:
+              english: "The Green Guard Mobilised"
+              spanish: "La Guardia Verde Movilizada"
+            name_src: invented
+            prerequisites: [EFE_milicias_verdes]
+            icon: GFX_goal_generic_allies_build_infantry
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "Castellane Water Trust has made a bid for the Guaraní Aquifer. The Empire answers with uniforms."
+              spanish: "Castellane Water Trust hizo una oferta por el Acuífero Guaraní. El Imperio contesta con uniformes."
+            desc_src: invented
+            reward:
+              - { effect: add_ideas, value: EFE_guardia_movilizada }
+              - { effect: army_experience, value: 25 }
+            reward_src: invented
+          - id: EFE_defensa_del_acuifero
+            name:
+              english: "Defence of the Aquifer"
+              spanish: "Defensa del Acuífero"
+            name_src: invented
+            prerequisites: [EFE_guardia_verde_movilizada]
+            icon: GFX_goal_generic_defence
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "If the Union comes for the water, it will find the Empire already dug in above it."
+              spanish: "Si la Unión viene por el agua, va a encontrar al Imperio ya atrincherado encima."
+            desc_src: invented
+            reward:
+              - { effect: add_ideas, value: EFE_defensa_acuifero }
+            reward_src: invented
+          - id: EFE_alas_del_condor
+            name:
+              english: "Wings of the Condor"
+              spanish: "Alas del Cóndor"
+            name_src: invented
+            prerequisites: [EFE_guardia_verde_movilizada]
+            icon: GFX_goal_generic_air_doctrine
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "The condor hunts from the heights. So will the Guard: mountain brigades, air mobility, no fixed front."
+              spanish: "El cóndor caza desde la altura. La Guardia también: brigadas de montaña, movilidad aérea, ningún frente fijo."
+            desc_src: invented
+            reward:
+              - { effect: army_experience, value: 25 }
+              - { effect: add_war_support, value: 0.05 }
+            reward_src: invented
+          - id: EFE_romper_el_cerco_andino
+            name:
+              english: "Break the Andean Encirclement"
+              spanish: "Romper el Cerco Andino"
+            name_src: invented
+            prerequisites: [EFE_defensa_del_acuifero, EFE_alas_del_condor]
+            icon: GFX_goal_generic_occupy_states_ongoing_war
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "The Sky Kingdom holds the passes and buys its rifles from Meridian Kinetics. The road to the Union's water runs through Cusco."
+              spanish: "El Reino del Cielo controla los pasos y le compra los fusiles a Meridian Kinetics. El camino hacia el agua de la Unión pasa por Cusco."
+            desc_src: invented
+            available:
+              country_exists: NAS
+            reward:
+              - { effect: wargoal, target: NAS, type: annex_everything }
+            reward_src: invented
+          - id: EFE_la_guerra_del_agua
+            name:
+              english: "The Water War"
+              spanish: "La Guerra del Agua"
+            name_src: invented
+            prerequisites: [EFE_romper_el_cerco_andino]
+            icon: GFX_goal_generic_major_war
+            icon_src: invented
+            cost: 14
+            desc:
+              english: "The Union wants to put a price on every litre of water on Earth. The Empire will not let the Earth be sold."
+              spanish: "La Unión quiere ponerle precio a cada litro de agua de la Tierra. El Imperio no va a dejar que vendan la Tierra."
+            desc_src: invented
+            available:
+              country_exists: FCU
+            reward:
+              - { effect: wargoal, target: FCU, type: annex_everything }
+            reward_src: invented
+
+      # -----------------------------------------------------------------------
       - id: consolidacion
         name:
           english: "Consolidation of the Mandate"
@@ -132,6 +227,206 @@ trees:
             reward_src: invented
 
       # -----------------------------------------------------------------------
+      - id: ruta_dinastia
+        name:
+          english: "The Green Dynasty"
+          spanish: "La Dinastía Verde"
+        name_src: invented
+        theme_basis: "Ruta política A (excluyente con La Guardia Manda): el Emperador y su linaje."
+        focuses:
+          - id: EFE_dinastia_verde
+            name:
+              english: "The Green Dynasty"
+              spanish: "La Dinastía Verde"
+            name_src: invented
+            prerequisites: [EFE_corona_de_2081]
+            mutually_exclusive: [EFE_la_guardia_manda]
+            icon: GFX_goal_generic_political_pressure
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "Aurelio IV declares the crown hereditary. The Custodian's emergency becomes a family inheritance."
+              spanish: "Aurelio IV declara hereditaria la corona. La emergencia del Custodio se vuelve una herencia familiar."
+            desc_src: invented
+            reward:
+              - { effect: add_ideas, value: EFE_trono_del_bosque }
+            reward_src: invented
+          - id: EFE_el_heredero_del_norte
+            name:
+              english: "The Heir of the North"
+              spanish: "El Heredero del Norte"
+            name_src: invented
+            prerequisites: [EFE_dinastia_verde]
+            icon: GFX_goal_generic_major_alliance
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "Tupã Benítez is recalled from Asunción and named heir. His satellite comes with him, into the Empire proper."
+              spanish: "Tupã Benítez vuelve de Asunción y es nombrado heredero. Su satélite viene con él, adentro del Imperio."
+            desc_src: invented
+            available:
+              country_exists: YYG
+            reward:
+              - { effect: annex, target: YYG }
+            reward_src: invented
+          - id: EFE_la_corte_de_los_bosques
+            name:
+              english: "The Court of the Forests"
+              spanish: "La Corte de los Bosques"
+            name_src: invented
+            prerequisites: [EFE_dinastia_verde]
+            icon: GFX_goal_generic_national_unity
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "Titles, oaths and a court that meets under the oldest trees of the Delta. Loyalty is now a ceremony."
+              spanish: "Títulos, juramentos y una corte que se reúne bajo los árboles más viejos del Delta. La lealtad ahora es una ceremonia."
+            desc_src: invented
+            reward:
+              - { effect: add_stability, value: 0.1 }
+              - { effect: add_political_power, value: 50 }
+            reward_src: invented
+          - id: EFE_emperador_de_la_tierra
+            name:
+              english: "Emperor of the Earth"
+              spanish: "Emperador de la Tierra"
+            name_src: invented
+            prerequisites: [EFE_el_heredero_del_norte, EFE_la_corte_de_los_bosques]
+            icon: GFX_goal_generic_political_pressure
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "Not Emperor of a country: Emperor of the Earth itself. The title is a claim, and the claim has no border."
+              spanish: "No Emperador de un país: Emperador de la Tierra misma. El título es un reclamo, y el reclamo no tiene frontera."
+            desc_src: invented
+            reward:
+              - { effect: swap_ideas, remove: EFE_trono_del_bosque, add: EFE_trono_eterno }
+            reward_src: invented
+
+      # -----------------------------------------------------------------------
+      - id: ruta_guardia
+        name:
+          english: "The Guard Commands"
+          spanish: "La Guardia Manda"
+        name_src: invented
+        theme_basis: "Ruta política B (excluyente con La Dinastía Verde): el Mariscal Etchegaray y los técnicos."
+        focuses:
+          - id: EFE_la_guardia_manda
+            name:
+              english: "The Guard Commands"
+              spanish: "La Guardia Manda"
+            name_src: invented
+            prerequisites: [EFE_corona_de_2081]
+            mutually_exclusive: [EFE_dinastia_verde]
+            icon: GFX_goal_generic_army_doctrines
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "Marshal Etchegaray does not want the crown. He wants every decision the crown makes to pass through his desk first."
+              spanish: "El Mariscal Etchegaray no quiere la corona. Quiere que cada decisión de la corona pase antes por su escritorio."
+            desc_src: invented
+            reward:
+              - { effect: add_ideas, value: EFE_estado_guarnicion }
+            reward_src: invented
+          - id: EFE_consejo_de_custodios
+            name:
+              english: "The Council of Custodians"
+              spanish: "El Consejo de Custodios"
+            name_src: invented
+            prerequisites: [EFE_la_guardia_manda]
+            icon: GFX_goal_generic_research
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "Custodian Paillacar brings her scientists north. The Guard needs to know which forests to defend and which ones are already lost."
+              spanish: "La Custodia Paillacar trae a sus científicos al norte. La Guardia necesita saber qué bosques defender y cuáles ya están perdidos."
+            desc_src: invented
+            reward:
+              - { effect: add_ideas, value: EFE_consejo_tecnico }
+              - { effect: add_research_slot, value: 1 }
+            reward_src: invented
+          - id: EFE_la_frontera_austral
+            name:
+              english: "The Southern Frontier"
+              spanish: "La Frontera Austral"
+            name_src: invented
+            prerequisites: [EFE_la_guardia_manda]
+            icon: GFX_goal_generic_major_alliance
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "A satellite is a luxury for an empire at peace. Southern Patagonia becomes a military district."
+              spanish: "Un satélite es un lujo para un imperio en paz. Patagonia Austral pasa a ser un distrito militar."
+            desc_src: invented
+            available:
+              country_exists: PTA
+            reward:
+              - { effect: annex, target: PTA }
+            reward_src: invented
+          - id: EFE_la_junta_de_la_tierra
+            name:
+              english: "The Junta of the Earth"
+              spanish: "La Junta de la Tierra"
+            name_src: invented
+            prerequisites: [EFE_consejo_de_custodios, EFE_la_frontera_austral]
+            icon: GFX_goal_generic_army_doctrines
+            icon_src: invented
+            cost: 10
+            desc:
+              english: "The Emperor still reigns. The Marshal governs, the scientists advise, and the Guard is everywhere."
+              spanish: "El Emperador todavía reina. El Mariscal gobierna, los científicos aconsejan y la Guardia está en todas partes."
+            desc_src: invented
+            reward:
+              - { effect: swap_ideas, remove: EFE_estado_guarnicion, add: EFE_junta_de_la_tierra }
+            reward_src: invented
+
+      # -----------------------------------------------------------------------
+      - id: satelites
+        name:
+          english: "The Custodial Satellites"
+          spanish: "Los Satélites Custodios"
+        name_src: invented
+        theme_src: canon
+        theme_basis: "§3.1 — los dos satélites están definidos con territorio exacto."
+        focuses:
+          - id: EFE_patagonia_austral
+            name:
+              english: "Southern Patagonia"
+              spanish: "Patagonia Austral"
+            name_src: canon
+            prerequisites: [EFE_corona_de_2081]
+            reward_intent: "Integración del satélite PTA."
+            icon: GFX_goal_generic_major_alliance
+            icon_src: invented
+            cost: 10
+            cost_src: invented
+            desc:
+              english: "The far south guards the Empire's back and its last glaciers. Its governors answer to the Crown."
+              spanish: "El extremo sur cuida la espalda del Imperio y sus últimos glaciares. Sus gobernadores responden a la Corona."
+            desc_src: invented
+            reward:
+              - { effect: add_political_power, value: 75 }
+            reward_src: invented
+          - id: EFE_yvytu_ykua_guasu
+            name:
+              english: "Yvytu Ykua Guasu"
+              spanish: "Yvytu Ykua Guasu"
+            name_src: canon
+            prerequisites: [EFE_corona_de_2081]
+            reward_intent: "Integración del satélite YYG."
+            icon: GFX_goal_generic_major_alliance
+            icon_src: invented
+            cost: 10
+            cost_src: invented
+            desc:
+              english: "The great water of the north is the Empire's reservoir, and its most precious hostage."
+              spanish: "La gran agua del norte es la reserva del Imperio, y su rehén más valioso."
+            desc_src: invented
+            reward:
+              - { effect: add_political_power, value: 75 }
+            reward_src: invented
+
+      # -----------------------------------------------------------------------
       - id: restauracion
         name:
           english: "Total Restoration"
@@ -201,6 +496,58 @@ trees:
             reward:
               - { effect: add_ideas, value: EFE_autarquia_estrategica }
             reward_src: invented
+
+      # -----------------------------------------------------------------------
+      - id: diplomacia_verde
+        name:
+          english: "Water, Seed and Leverage"
+          spanish: "Agua, Semilla y Palanca"
+        name_src: invented
+        theme_src: canon
+        theme_basis: >
+          §3.2 — "Tecnologías de agua, semillas y restauración ecológica como
+          herramientas de poder exterior." Es la única línea del doc que apunta a
+          proyección exterior no militar del EFE.
+        focuses:
+          - id: EFE_bancos_de_semillas
+            name:
+              english: "The Seed Banks"
+              spanish: "Los Bancos de Semillas"
+            name_src: inferred
+            prerequisites: [EFE_autosuficiencia]
+            reward_intent: "Opinión / influencia sobre países libres."
+            icon: GFX_goal_generic_trade
+            icon_src: invented
+            cost: 10
+            cost_src: invented
+            desc:
+              english: "The world's last seed vaults are in Imperial hands. Hunger is a diplomatic language."
+              spanish: "Las últimas bóvedas de semillas del mundo están en manos imperiales. El hambre es un idioma diplomático."
+            desc_src: invented
+            reward:
+              - { effect: add_political_power, value: 50 }
+            reward_src: invented
+          - id: EFE_tratados_de_agua
+            name:
+              english: "Water Treaties"
+              spanish: "Tratados de Agua"
+            name_src: inferred
+            prerequisites: [EFE_bancos_de_semillas]
+            reward_intent: "Herramienta diplomática coercitiva."
+            icon: GFX_goal_generic_trade
+            icon_src: invented
+            cost: 10
+            cost_src: invented
+            desc:
+              english: "Clean water, offered at a price. The price is never money."
+              spanish: "Agua limpia, ofrecida a un precio. El precio nunca es dinero."
+            desc_src: invented
+            reward:
+              - { effect: add_political_power, value: 75 }
+            reward_src: invented
+            blocked_by: >
+              Depende de que existan los 30 países libres y una estructura de
+              facciones. Ver Q018 y Q033.
 
       # -----------------------------------------------------------------------
       - id: biosteel_branch
@@ -276,102 +623,78 @@ trees:
             depends_on_mechanic: biosteel
 
       # -----------------------------------------------------------------------
-      - id: satelites
+      - id: ruta_economia
         name:
-          english: "The Custodial Satellites"
-          spanish: "Los Satélites Custodios"
+          english: "The Forest Economy"
+          spanish: "La Economía del Bosque"
         name_src: invented
-        theme_src: canon
-        theme_basis: "§3.1 — los dos satélites están definidos con territorio exacto."
+        theme_basis: "Ruta económica: fábricas y agua, sin romper el Mandato Verde."
         focuses:
-          - id: EFE_patagonia_austral
+          - id: EFE_ministerio_de_restauracion
             name:
-              english: "Southern Patagonia"
-              spanish: "Patagonia Austral"
-            name_src: canon
-            prerequisites: [EFE_corona_de_2081]
-            reward_intent: "Integración del satélite PTA."
-            icon: GFX_goal_generic_major_alliance
+              english: "Ministry of Restoration"
+              spanish: "Ministerio de Restauración"
+            name_src: invented
+            prerequisites: [EFE_custodio_de_la_tierra]
+            icon: GFX_goal_generic_construct_civ_factory
             icon_src: invented
             cost: 10
-            cost_src: invented
             desc:
-              english: "The far south guards the Empire's back and its last glaciers. Its governors answer to the Crown."
-              spanish: "El extremo sur cuida la espalda del Imperio y sus últimos glaciares. Sus gobernadores responden a la Corona."
+              english: "One ministry decides what is built, where, and which forest pays for it."
+              spanish: "Un solo ministerio decide qué se construye, dónde y qué bosque lo paga."
             desc_src: invented
             reward:
-              - { effect: add_political_power, value: 75 }
+              - { effect: build, building: industrial_complex, level: 2 }
             reward_src: invented
-          - id: EFE_yvytu_ykua_guasu
+          - id: EFE_fabricas_de_la_pampa
             name:
-              english: "Yvytu Ykua Guasu"
-              spanish: "Yvytu Ykua Guasu"
-            name_src: canon
-            prerequisites: [EFE_corona_de_2081]
-            reward_intent: "Integración del satélite YYG."
-            icon: GFX_goal_generic_major_alliance
+              english: "Factories of the Pampas"
+              spanish: "Fábricas de la Pampa"
+            name_src: invented
+            prerequisites: [EFE_ministerio_de_restauracion]
+            icon: GFX_goal_generic_construct_mil_factory
             icon_src: invented
             cost: 10
-            cost_src: invented
             desc:
-              english: "The great water of the north is the Empire's reservoir, and its most precious hostage."
-              spanish: "La gran agua del norte es la reserva del Imperio, y su rehén más valioso."
+              english: "Arms factories on the old soy fields, roofed with solar glass and fenced with new forest."
+              spanish: "Fábricas de armas sobre los viejos campos de soja, techadas con vidrio solar y cercadas con bosque nuevo."
             desc_src: invented
             reward:
-              - { effect: add_political_power, value: 75 }
+              - { effect: build, building: arms_factory, level: 2 }
             reward_src: invented
-
-      # -----------------------------------------------------------------------
-      - id: diplomacia_verde
-        name:
-          english: "Water, Seed and Leverage"
-          spanish: "Agua, Semilla y Palanca"
-        name_src: invented
-        theme_src: canon
-        theme_basis: >
-          §3.2 — "Tecnologías de agua, semillas y restauración ecológica como
-          herramientas de poder exterior." Es la única línea del doc que apunta a
-          proyección exterior no militar del EFE.
-        focuses:
-          - id: EFE_bancos_de_semillas
+          - id: EFE_red_hidrica_guarani
             name:
-              english: "The Seed Banks"
-              spanish: "Los Bancos de Semillas"
-            name_src: inferred
-            prerequisites: [EFE_autosuficiencia]
-            reward_intent: "Opinión / influencia sobre países libres."
-            icon: GFX_goal_generic_trade
+              english: "The Guaraní Water Grid"
+              spanish: "La Red Hídrica Guaraní"
+            name_src: invented
+            prerequisites: [EFE_ministerio_de_restauracion]
+            icon: GFX_goal_generic_production
             icon_src: invented
             cost: 10
-            cost_src: invented
             desc:
-              english: "The world's last seed vaults are in Imperial hands. Hunger is a diplomatic language."
-              spanish: "Las últimas bóvedas de semillas del mundo están en manos imperiales. El hambre es un idioma diplomático."
+              english: "The largest aquifer on the continent is no longer a reserve. It is infrastructure."
+              spanish: "El acuífero más grande del continente ya no es una reserva. Es infraestructura."
             desc_src: invented
             reward:
-              - { effect: add_political_power, value: 50 }
+              - { effect: add_ideas, value: EFE_red_hidrica }
             reward_src: invented
-          - id: EFE_tratados_de_agua
+          - id: EFE_economia_circular
             name:
-              english: "Water Treaties"
-              spanish: "Tratados de Agua"
-            name_src: inferred
-            prerequisites: [EFE_bancos_de_semillas]
-            reward_intent: "Herramienta diplomática coercitiva."
-            icon: GFX_goal_generic_trade
+              english: "The Circular Economy"
+              spanish: "La Economía Circular"
+            name_src: invented
+            prerequisites: [EFE_fabricas_de_la_pampa, EFE_red_hidrica_guarani]
+            icon: GFX_goal_generic_construct_civ_factory
             icon_src: invented
             cost: 10
-            cost_src: invented
             desc:
-              english: "Clean water, offered at a price. The price is never money."
-              spanish: "Agua limpia, ofrecida a un precio. El precio nunca es dinero."
+              english: "Nothing is wasted, nothing is imported, nothing leaves the circle. The Empire feeds on itself and grows."
+              spanish: "Nada se desperdicia, nada se importa, nada sale del círculo. El Imperio se alimenta de sí mismo y crece."
             desc_src: invented
             reward:
-              - { effect: add_political_power, value: 75 }
+              - { effect: build, building: industrial_complex, level: 2 }
+              - { effect: add_research_slot, value: 1 }
             reward_src: invented
-            blocked_by: >
-              Depende de que existan los 30 países libres y una estructura de
-              facciones. Ver Q018 y Q033.
 
     layout: auto
     layout_note: >
@@ -380,7 +703,7 @@ trees:
       recalcular el árbol a mano.
     unknown:
       - "Mutually exclusive entre ramas: ¿hay caminos excluyentes?"
-      - "Si el árbol tiene ramas de guerra/conquista y contra quién."
+      - "Rama de guerra: resuelta (2026-09-23). Enemigo natural FCU, vía la NAS."
     see: [Q031, Q033]
 
   # ---------------------------------------------------------------------------
