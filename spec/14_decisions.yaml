@@ -1623,6 +1623,228 @@ categories:
       - {effect: build, building: industrial_complex, level: 1}
       ai_factor: 5
 
+  # ===========================================================================
+  # APF — La Integración Federal, Aldea o Corredor ("Las Ocho Potencias")
+  # ===========================================================================
+  - id: APF_integracion_category
+    country: APF
+    icon_prefer:
+    - generic_political_actions
+    - generic_construction
+    name: {english: Federal Integration, spanish: La Integración Federal}
+    desc:
+      english: 'Highlands: Development [?APF_desarrollo_zet], Integration [?APF_integracion_zet]\nCape: Development [?APF_desarrollo_zsa], Integration
+        [?APF_integracion_zsa]\n\nAmara builds a federation; Diallo draws the map first.'
+      spanish: 'Tierras Altas: Desarrollo [?APF_desarrollo_zet], Integración [?APF_integracion_zet]\nCabo: Desarrollo [?APF_desarrollo_zsa], Integración
+        [?APF_integracion_zsa]\n\nAmara construye una federación; Diallo dibuja primero el mapa.'
+    src: user_design
+    decisions:
+    - id: APF_invertir_zet
+      name: {english: Invest in Highlands Federation, spanish: Invertir en la Federación de las Tierras Altas}
+      desc:
+        english: 'Congress money for the Highlands Federation: +20 Development and a factory there.'
+        spanish: 'Plata del Congreso para la Federación de las Tierras Altas: +20 de Desarrollo y una fábrica allá.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 50
+      cooldown_days: 60
+      visible: {flag: APF_integracion_abierta, country_exists: ZET}
+      available:
+        variable_below: {var: APF_desarrollo_zet, value: 100}
+      effects:
+      - {effect: add_variable, var: APF_desarrollo_zet, value: 20}
+      - {effect: clamp, var: APF_desarrollo_zet, min: 0, max: 100}
+      - effect: scope
+        target: ZET
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 8
+    - id: APF_integrar_zet
+      name: {english: Integrate Highlands Federation, spanish: Integrar la Federación de las Tierras Altas}
+      desc:
+        english: Under Amara, Integration grows +10 and can never pass Development. Under Diallo, +25 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +10 y nunca puede pasar al Desarrollo. Con Diallo, +25 y sí puede. En 100 el miembro se suma con
+          núcleos.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      visible: {flag: APF_integracion_abierta, country_exists: ZET}
+      available:
+        any:
+        - {flag: APF_diallo}
+        - variable_at_least: {var: APF_desarrollo_zet, value: APF_integracion_zet}
+      effects:
+      - {effect: add_variable, var: APF_integracion_zet, value: 10}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_integracion_zet, value: 15}
+      - effect: if
+        when:
+          variable_at_least: {var: APF_integracion_zet, value: 100}
+        then:
+        - effect: scope
+          target: ZET
+          effects:
+          - effect: states
+            pick: every
+            effects:
+            - {effect: add_core, value: APF}
+        - {effect: annex, target: ZET}
+        - {effect: event, id: meganations_apf.3}
+        - effect: if
+          when: {flag: APF_diallo}
+          then:
+          - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
+          else:
+          - {effect: add_stability, value: 0.05}
+      ai_factor: 8
+    - id: APF_invertir_zsa
+      name: {english: Invest in Cape Federation, spanish: Invertir en la Federación del Cabo}
+      desc:
+        english: 'Congress money for the Cape Federation: +20 Development and a factory there.'
+        spanish: 'Plata del Congreso para la Federación del Cabo: +20 de Desarrollo y una fábrica allá.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 50
+      cooldown_days: 60
+      visible: {flag: APF_integracion_abierta, country_exists: ZSA}
+      available:
+        variable_below: {var: APF_desarrollo_zsa, value: 100}
+      effects:
+      - {effect: add_variable, var: APF_desarrollo_zsa, value: 20}
+      - {effect: clamp, var: APF_desarrollo_zsa, min: 0, max: 100}
+      - effect: scope
+        target: ZSA
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 8
+    - id: APF_integrar_zsa
+      name: {english: Integrate Cape Federation, spanish: Integrar la Federación del Cabo}
+      desc:
+        english: Under Amara, Integration grows +10 and can never pass Development. Under Diallo, +25 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +10 y nunca puede pasar al Desarrollo. Con Diallo, +25 y sí puede. En 100 el miembro se suma con
+          núcleos.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      visible: {flag: APF_integracion_abierta, country_exists: ZSA}
+      available:
+        any:
+        - {flag: APF_diallo}
+        - variable_at_least: {var: APF_desarrollo_zsa, value: APF_integracion_zsa}
+      effects:
+      - {effect: add_variable, var: APF_integracion_zsa, value: 10}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_integracion_zsa, value: 15}
+      - effect: if
+        when:
+          variable_at_least: {var: APF_integracion_zsa, value: 100}
+        then:
+        - effect: scope
+          target: ZSA
+          effects:
+          - effect: states
+            pick: every
+            effects:
+            - {effect: add_core, value: APF}
+        - {effect: annex, target: ZSA}
+        - {effect: event, id: meganations_apf.3}
+        - effect: if
+          when: {flag: APF_diallo}
+          then:
+          - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
+          else:
+          - {effect: add_stability, value: 0.05}
+      ai_factor: 8
+    - id: APF_plan_de_desarrollo_regional
+      name: {english: Regional Development Plan, spanish: Plan de Desarrollo Regional}
+      desc:
+        english: One more region of the Federation gets roads and a factory. The Federation builds itself region by region.
+        spanish: Una región más de la Federación recibe caminos y una fábrica. La Federación se construye región por región.
+      icon_prefer:
+      - generic_construction
+      cost: 50
+      cooldown_days: 90
+      visible: {focus: APF_consejos_locales}
+      effects:
+      - effect: states
+        pick: random
+        when: {not_state_flag: APF_desarrollada}
+        effects:
+        - {effect: state_flag, value: APF_desarrollada}
+        - {effect: build_here, building: infrastructure, level: 2}
+        - {effect: build_here, building: industrial_complex, level: 1}
+      ai_factor: 10
+    - id: APF_liberar_regiones
+      name: {english: Liberate the Occupied Regions, spanish: Liberar las Regiones Ocupadas}
+      desc:
+        english: Every occupied region becomes a core at once. The councils will sort out the rest, eventually.
+        spanish: Cada región ocupada pasa a ser núcleo enseguida. Los consejos van a arreglar el resto, algún día.
+      icon_prefer:
+      - generic_political_actions
+      - generic_army_support
+      cost: 50
+      cooldown_days: 90
+      visible: {focus: APF_la_marcha_al_este}
+      effects:
+      - effect: states
+        pick: every
+        when: {not_core_of: APF}
+        effects:
+        - {effect: add_core, value: APF}
+      - {effect: timed_idea, idea: APF_territorios_dificiles, days: 120}
+      ai_factor: 10
+  - id: APF_economia_category
+    country: APF
+    icon_prefer:
+    - generic_industry
+    name: {english: Village or Corridor, spanish: Aldea o Corredor}
+    desc:
+      english: The Village opens village councils; the Corridor opens corridor sections.
+      spanish: La Aldea abre consejos de aldea; el Corredor abre tramos del corredor.
+    src: user_design
+    decisions:
+    - id: APF_consejo_de_aldea
+      name: {english: Village Council, spanish: Consejo de Aldea}
+      desc:
+        english: Another village that feeds and guards itself.
+        spanish: Otra aldea que se alimenta y se defiende sola.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 120
+      visible: {focus: APF_la_aldea_autosuficiente}
+      effects:
+      - {effect: add_stability, value: 0.03}
+      - {effect: add_manpower, value: 30000}
+      ai_factor: 5
+    - id: APF_tramo_del_corredor
+      name: {english: Corridor Section, spanish: Tramo del Corredor}
+      desc:
+        english: Another stretch of railway and an industrial hub.
+        spanish: Otro tramo de ferrocarril y un polo industrial.
+      icon_prefer:
+      - generic_construction
+      cost: 50
+      cooldown_days: 120
+      visible: {focus: APF_el_corredor_continental}
+      effects:
+      - effect: states
+        pick: random
+        when: {not_state_flag: APF_corredor}
+        effects:
+        - {effect: state_flag, value: APF_corredor}
+        - {effect: build_here, building: infrastructure, level: 3}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.

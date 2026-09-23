@@ -230,6 +230,21 @@ mechanics:
     - {name: NAS_integracion_zll, start: 0}
 
   # ===========================================================================
+  - id: apf_integracion_federal
+    country: APF
+    definition_status: implementable
+    src: user_design
+    name: {english: Federal Integration, spanish: La Integración Federal}
+    design: Cada miembro (Tierras Altas, Cabo) tiene Desarrollo e Integración de 0 a 100. Invertir sube el Desarrollo y construye en el miembro;
+      integrar sube la Integración, que con Amara no puede pasar al Desarrollo (+10 por paso) y con Diallo sí (+25). En 100 se anexa con núcleos;
+      con Diallo, con territorios difíciles. El Plan de Desarrollo Regional desarrolla regiones propias una por una en el mapa.
+    variables:
+    - {name: APF_desarrollo_zet, start: 20}
+    - {name: APF_integracion_zet, start: 10}
+    - {name: APF_desarrollo_zsa, start: 20}
+    - {name: APF_integracion_zsa, start: 10}
+
+  # ===========================================================================
   - id: civil_military_balance
     country: FCU
     definition_status: partial

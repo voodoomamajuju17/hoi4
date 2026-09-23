@@ -77,7 +77,10 @@ eventos con ultimátum e IA con condiciones.
   crece por regiones vecinas e integra), los cuatro Suyus como misiones, La Corte del
   Sol vs El Tawantinsuyu Renace, ultimátum a la SHD
 - [ ] Pasada de ajuste de premios para EFE, FCU, ASC y HSN (tabla nueva)
-- [ ] **APF** — Desarrollo + Integración, Amara vs Diallo
+- [~] **APF** — árbol de 48 focos con la tabla nueva: Desarrollo + Integración por
+  miembro (Amara: integra despacio, no pasa al desarrollo; Diallo: rápido, territorios
+  difíciles), Plan de Desarrollo Regional región por región, industria acelerada,
+  Aldea vs Corredor, ultimátum a la ASC
 - [ ] **SHD** — los tres caudales, la Gran Crecida
 - [ ] **NRE** — prestigio de legiones, Auctoritas Militaris, AVE IMPERATOR
 - [ ] Interacciones entre potencias (20-30 eventos chicos)

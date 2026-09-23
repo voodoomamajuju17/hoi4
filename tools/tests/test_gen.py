@@ -970,6 +970,32 @@ def test_nas() -> None:
         check("retrato alternativo del Inca", "amaru_quispe_tawantinsuyu.dds" in chars)
 
 
+def test_apf() -> None:
+    section("APF: integracion federal, Amara contra Diallo")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        root = pdx.parse((mod / "common/national_focus/APF_focus.txt").read_text()).get("focus_tree")
+        focuses = root.get_all("focus")
+        check("arbol de la APF de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        by = {pdx.text(f.get("id")): f for f in focuses}
+        check("Diallo asciende con su retrato", "promote_character = APF_kwame_diallo"
+              in pdx.render(by["APF_los_consejos_se_arman"].get("completion_reward")))
+        check("Contra la Maquina es un ultimatum a la ASC",
+              "meganations_asc.4" in pdx.render(by["APF_contra_la_maquina"].get("completion_reward")))
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        body = decs[decs.index("APF_integrar_zet"):]
+        check("con Amara la integracion no pasa al desarrollo", "value = APF_integracion_zet" in body[:1500])
+        check("con Diallo la integracion corre mas rapido y deja territorios dificiles",
+              "has_country_flag = APF_diallo" in body and "APF_territorios_dificiles" in body)
+        check("en 100 se anexa con nucleos", "annex_country" in body and "add_core_of = APF" in body)
+        check("desarrollo regional en el mapa, region por region", "APF_plan_de_desarrollo_regional" in decs
+              and "set_state_flag = APF_desarrollada" in decs)
+        check("la ASC recibe el ultimatum", "meganations_asc.4" in (mod / "events/meganations_asc.txt").read_text())
+        check("la APF arranca con 20 de desarrollo por miembro",
+              "var = APF_desarrollo_zet" in next((mod / "history/countries").glob("APF - *.txt")).read_text())
+
+
 def test_forces() -> None:
     section("armada y aviacion heredadas de 1936")
     with tempfile.TemporaryDirectory() as tmp:
@@ -1136,6 +1162,7 @@ def main() -> int:
         test_asc,
         test_hsn,
         test_nas,
+        test_apf,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

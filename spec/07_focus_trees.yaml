@@ -3599,7 +3599,597 @@ trees:
         - {effect: add_research_slot, value: 1}
 
   SHD: { status: not_started, see: Q032 }
-  APF: { status: not_started, see: Q032 }
+  # ===========================================================================
+  APF:
+    id: apf_focus_tree
+    default: false
+    shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23), con la tabla de premios nueva. Amara (El Congreso Continental) contra Kwame Diallo (La Marcha de
+      los Consejos). Integración federal por miembro. Ids alineados con el pack de íconos.'
+    branches:
+    - id: congreso
+      name: {english: The Continental Congress, spanish: El Congreso Continental}
+      focuses:
+      - id: APF_el_congreso_de_2100
+        name: {english: The Congress of 2100, spanish: El Congreso de 2100}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        desc:
+          english: A thousand councils meet in Lagos. The Federation has people and land; it lacks factories.
+          spanish: Mil consejos se reúnen en Lagos. A la Federación le sobran gente y tierra; le faltan fábricas.
+        reward:
+        - {effect: add_political_power, value: 100}
+      - id: APF_la_asamblea_de_lagos
+        name: {english: The Lagos Assembly, spanish: La Asamblea de Lagos}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - APF_el_congreso_de_2100
+        desc:
+          english: Build slowly and together, or draw the map by force.
+          spanish: Construir despacio y juntos, o dibujar el mapa a la fuerza.
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: add_stability, value: 0.03}
+      - id: APF_mil_consejos
+        name: {english: A Thousand Councils, spanish: Mil Consejos}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_la_asamblea_de_lagos
+        mutually_exclusive:
+        - APF_los_consejos_se_arman
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.3
+            when: {at_war: true}
+          - factor: 0.5
+            when: {stability_below: 0.4}
+        desc:
+          english: Amara coordinates; the councils decide. Opens federal integration.
+          spanish: Amara coordina; los consejos deciden. Abre la integración federal.
+        reward:
+        - {effect: add_ideas, value: APF_espiritu_mil_consejos}
+        - {effect: flag, value: APF_integracion_abierta}
+      - id: APF_el_cabo_se_suma
+        name: {english: The Cape Joins, spanish: El Cabo se Suma}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - APF_mil_consejos
+        available: {country_exists: ZSA}
+        desc:
+          english: 'The Cape''s councils vote to join: +20 Development and +20 Integration.'
+          spanish: 'Los consejos del Cabo votan sumarse: +20 de Desarrollo y +20 de Integración.'
+        reward:
+        - {effect: add_variable, var: APF_desarrollo_zsa, value: 20}
+        - {effect: add_variable, var: APF_integracion_zsa, value: 20}
+        - {effect: add_political_power, value: 50}
+      - id: APF_las_tierras_altas_se_suman
+        name: {english: The Highlands Join, spanish: Las Tierras Altas se Suman}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - APF_mil_consejos
+        available: {country_exists: ZET}
+        desc:
+          english: 'The plateau opens its seed banks: +20 Development and +20 Integration.'
+          spanish: 'La meseta abre sus bancos de semillas: +20 de Desarrollo y +20 de Integración.'
+        reward:
+        - {effect: add_variable, var: APF_desarrollo_zet, value: 20}
+        - {effect: add_variable, var: APF_integracion_zet, value: 20}
+        - {effect: add_political_power, value: 50}
+      - id: APF_la_constitucion_continental
+        name: {english: The Continental Constitution, spanish: La Constitución Continental}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_el_cabo_se_suma
+        - APF_las_tierras_altas_se_suman
+        desc: {english: One law from the Cape to Cairo., spanish: Una ley del Cabo al Cairo.}
+        reward:
+        - {effect: add_ideas, value: APF_constitucion_continental}
+      - id: APF_contra_la_maquina
+        name: {english: Against the Machine, spanish: Contra la Máquina}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - APF_la_constitucion_continental
+        available: {country_exists: ASC}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: 'An ultimatum to the Commune: out of Africa. War only if it refuses.'
+          spanish: 'Un ultimátum a la Comuna: fuera de África. Guerra solo si se niega.'
+        reward:
+        - {effect: event, id: meganations_asc.4, target: ASC}
+        - {effect: add_war_support, value: 0.05}
+      - id: APF_la_federacion_plena
+        name: {english: The Full Federation, spanish: La Federación Plena}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_contra_la_maquina
+        desc: {english: A continent that chose to be one., spanish: Un continente que eligió ser uno.}
+        reward:
+        - {effect: swap_ideas, remove: APF_espiritu_mil_consejos, add: APF_federacion_plena}
+        - {effect: add_research_slot, value: 1}
+    - id: marcha
+      name: {english: The March of the Councils, spanish: La Marcha de los Consejos}
+      focuses:
+      - id: APF_los_consejos_se_arman
+        name: {english: The Councils Take Up Arms, spanish: Los Consejos se Arman}
+        days: 21
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - APF_la_asamblea_de_lagos
+        mutually_exclusive:
+        - APF_mil_consejos
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 4
+            when: {at_war: true}
+          - factor: 3
+            when: {stability_below: 0.4}
+        desc:
+          english: Kwame Diallo takes the Congress's seal. Integration goes faster, and so does resistance.
+          spanish: Kwame Diallo toma el sello del Congreso. La integración va más rápido, y la resistencia también.
+        reward:
+        - {effect: promote, character: APF_kwame_diallo}
+        - {effect: flag, value: APF_diallo}
+        - {effect: flag, value: APF_integracion_abierta}
+        - {effect: event, id: meganations_apf.4, days: 1}
+      - id: APF_milicia_popular
+        name: {english: The People's Militia, spanish: La Milicia Popular}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - APF_los_consejos_se_arman
+        desc: {english: Every council has its rifles., spanish: Cada consejo tiene sus fusiles.}
+        reward:
+        - {effect: add_ideas, value: APF_espiritu_milicia_popular}
+        - {effect: add_manpower, value: 100000}
+      - id: APF_la_marcha_al_este
+        name: {english: The March East, spanish: La Marcha al Este}
+        days: 42
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - APF_milicia_popular
+        desc:
+          english: Toward Suez and beyond. Opens the liberation of occupied regions.
+          spanish: Hacia Suez y más allá. Abre la liberación de las regiones ocupadas.
+        reward:
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+        - {effect: army_experience, value: 25}
+      - id: APF_liberar_el_sinai
+        name: {english: Liberate the Sinai, spanish: Liberar el Sinaí}
+        days: 42
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - APF_la_marcha_al_este
+        available: {country_exists: ZWM}
+        desc:
+          english: The Desert Emirates hold the road east.
+          spanish: Los Emiratos del Desierto tienen el camino al este.
+        reward:
+        - {effect: wargoal, target: ZWM, type: annex_everything}
+        - {effect: add_war_support, value: 0.1}
+      - id: APF_los_emiratos_caen
+        name: {english: The Emirates Fall, spanish: Los Emiratos Caen}
+        days: 42
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - APF_liberar_el_sinai
+        available:
+          not: {country_exists: ZWM}
+        desc: {english: Needs the Desert Emirates gone., spanish: Pide que los Emiratos del Desierto hayan caído.}
+        reward:
+        - {effect: add_political_power, value: 150}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
+      - id: APF_la_federacion_sin_fronteras
+        name: {english: The Federation Without Borders, spanish: La Federación sin Fronteras}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_los_emiratos_caen
+        desc:
+          english: Wherever a council rises, the Federation follows.
+          spanish: Donde se levanta un consejo, la Federación va detrás.
+        reward:
+        - {effect: add_ideas, value: APF_federacion_sin_fronteras}
+        - {effect: add_research_slot, value: 1}
+    - id: aldea
+      name: {english: The Self-Sufficient Village, spanish: La Aldea Autosuficiente}
+      focuses:
+      - id: APF_el_consejo_economico
+        name: {english: The Economic Council, spanish: El Consejo Económico}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_el_congreso_de_2100
+        desc:
+          english: A resilient federation or a logistics monster.
+          spanish: Una federación resistente o un monstruo logístico.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: APF_la_aldea_autosuficiente
+        name: {english: The Self-Sufficient Village, spanish: La Aldea Autosuficiente}
+        days: 42
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - APF_el_consejo_economico
+        mutually_exclusive:
+        - APF_el_corredor_continental
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: Every village feeds and guards itself. Opens village councils.
+          spanish: Cada aldea se alimenta y se defiende sola. Abre los consejos de aldea.
+        reward:
+        - {effect: add_ideas, value: APF_aldea}
+      - id: APF_bancos_de_granos
+        name: {english: Grain Banks, spanish: Bancos de Granos}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - APF_la_aldea_autosuficiente
+        desc:
+          english: No famine will break the councils again.
+          spanish: Ninguna hambruna va a volver a quebrar a los consejos.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_stability, value: 0.05}
+      - id: APF_defensa_comunal
+        name: {english: Communal Defence, spanish: Defensa Comunal}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - APF_la_aldea_autosuficiente
+        desc: {english: Every village a fortress., spanish: 'Cada aldea, una fortaleza.'}
+        reward:
+        - {effect: add_manpower, value: 50000}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+      - id: APF_el_continente_de_aldeas
+        name: {english: The Village Continent, spanish: El Continente de Aldeas}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_bancos_de_granos
+        - APF_defensa_comunal
+        desc:
+          english: A federation that cannot be starved.
+          spanish: Una federación que no se puede matar de hambre.
+        reward:
+        - {effect: swap_ideas, remove: APF_aldea, add: APF_aldea_2}
+    - id: corredor
+      name: {english: The Continental Corridor, spanish: El Corredor Continental}
+      focuses:
+      - id: APF_el_corredor_continental
+        name: {english: The Continental Corridor, spanish: El Corredor Continental}
+        days: 42
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - APF_el_consejo_economico
+        mutually_exclusive:
+        - APF_la_aldea_autosuficiente
+        ai: {factor: 2}
+        desc:
+          english: Railways from Dakar to Dar es Salaam. Opens corridor sections.
+          spanish: Ferrocarriles de Dakar a Dar es Salaam. Abre los tramos del corredor.
+        reward:
+        - {effect: add_ideas, value: APF_corredor}
+      - id: APF_el_ferrocarril_transafricano
+        name: {english: The Trans-African Railway, spanish: El Ferrocarril Transafricano}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - APF_el_corredor_continental
+        desc: {english: 'The continent, tied by rail.', spanish: 'El continente, atado por rieles.'}
+        reward:
+        - {effect: build, building: infrastructure, level: 3}
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: APF_los_polos_mineros
+        name: {english: The Mining Hubs, spanish: Los Polos Mineros}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_el_corredor_continental
+        desc:
+          english: Copper, cobalt and coltan for the Federation's factories.
+          spanish: Cobre, cobalto y coltán para las fábricas de la Federación.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: APF_el_gigante_logistico
+        name: {english: The Logistics Giant, spanish: El Gigante Logístico}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_el_ferrocarril_transafricano
+        - APF_los_polos_mineros
+        desc:
+          english: The continent moves as one machine.
+          spanish: El continente se mueve como una sola máquina.
+        reward:
+        - {effect: swap_ideas, remove: APF_corredor, add: APF_corredor_2}
+    - id: polos
+      name: {english: The Sahel Hubs, spanish: Los Polos del Sahel}
+      focuses:
+      - id: APF_polo_de_lagos
+        name: {english: The Lagos Hub, spanish: El Polo de Lagos}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - APF_el_congreso_de_2100
+        desc:
+          english: The Federation's first great industrial hub.
+          spanish: El primer gran polo industrial de la Federación.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: build, building: infrastructure, level: 1}
+      - id: APF_acerias_de_katanga
+        name: {english: The Katanga Steelworks, spanish: Las Acerías de Katanga}
+        days: 35
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - APF_polo_de_lagos
+        desc: {english: Steel from the copper belt., spanish: Acero del cinturón del cobre.}
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+      - id: APF_el_nilo_industrial
+        name: {english: The Industrial Nile, spanish: El Nilo Industrial}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - APF_polo_de_lagos
+        desc: {english: Factories along the river., spanish: Fábricas a lo largo del río.}
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: APF_despegue_industrial
+        name: {english: Industrial Take-Off, spanish: Despegue Industrial}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_acerias_de_katanga
+        - APF_el_nilo_industrial
+        desc:
+          english: From lagging behind to a respectable power, in three years.
+          spanish: De rezagada a potencia respetable, en tres años.
+        reward:
+        - {effect: add_ideas, value: APF_espiritu_despegue_industrial}
+        - {effect: build, building: industrial_complex, level: 3}
+      - id: APF_astilleros_de_dakar
+        name: {english: The Dakar Shipyards, spanish: Los Astilleros de Dakar}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_despegue_industrial
+        desc: {english: Dry docks on the Atlantic., spanish: Diques secos en el Atlántico.}
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: APF_universidad_continental
+        name: {english: The Continental University, spanish: La Universidad Continental}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - APF_despegue_industrial
+        desc: {english: 'A thousand councils, one university.', spanish: 'Mil consejos, una universidad.'}
+        reward:
+        - {effect: add_research_slot, value: 1}
+    - id: milicias
+      name: {english: The Council Militias, spanish: Milicias de los Consejos}
+      focuses:
+      - id: APF_milicias_regulares
+        name: {english: Regular Militias, spanish: Milicias Regulares}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - APF_el_congreso_de_2100
+        desc: {english: The militias become an army., spanish: Las milicias se vuelven ejército.}
+        reward:
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
+      - id: APF_instructores
+        name: {english: Instructors, spanish: Instructores}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - APF_milicias_regulares
+        desc:
+          english: Veterans teach villagers to be soldiers.
+          spanish: Los veteranos les enseñan a los aldeanos a ser soldados.
+        reward:
+        - {effect: add_ideas, value: APF_espiritu_instructores}
+      - id: APF_guerra_de_movimiento
+        name: {english: War of Movement, spanish: Guerra de Movimiento}
+        days: 42
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - APF_milicias_regulares
+        desc:
+          english: A continent is too big to hold still.
+          spanish: Un continente es demasiado grande para quedarse quieto.
+        reward:
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+      - id: APF_infanteria_ligera
+        name: {english: Light Infantry, spanish: Infantería Ligera}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - APF_instructores
+        - APF_guerra_de_movimiento
+        desc: {english: 'Fast, cheap and everywhere.', spanish: 'Rápida, barata y en todos lados.'}
+        reward:
+        - {effect: add_ideas, value: APF_espiritu_infanteria_ligera}
+      - id: APF_defensa_de_la_aldea
+        name: {english: Defence of the Village, spanish: Defensa de la Aldea}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - APF_infanteria_ligera
+        desc: {english: Every village knows how to hold., spanish: Cada aldea sabe resistir.}
+        reward:
+        - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 2}
+      - id: APF_el_general_del_congreso
+        name: {english: The General of the Congress, spanish: El General del Congreso}
+        days: 56
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - APF_defensa_de_la_aldea
+        desc: {english: A general elected by the councils., spanish: Un general elegido por los consejos.}
+        reward:
+        - {effect: army_experience, value: 75}
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+    - id: alas
+      name: {english: Wings of the Continent, spanish: Alas del Continente}
+      focuses:
+      - id: APF_alas_del_continente
+        name: {english: Wings of the Continent, spanish: Alas del Continente}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - APF_el_congreso_de_2100
+        desc: {english: An air force for a whole continent., spanish: Una aviación para un continente entero.}
+        reward:
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
+      - id: APF_red_de_aerodromos
+        name: {english: The Airfield Network, spanish: La Red de Aeródromos}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_alas_del_continente
+        desc: {english: Runways from the desert to the jungle., spanish: Pistas del desierto a la selva.}
+        reward:
+        - {effect: build, building: air_base, level: 3}
+      - id: APF_apoyo_cercano
+        name: {english: Close Support, spanish: Apoyo Cercano}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - APF_alas_del_continente
+        desc: {english: Planes that fly with the militias., spanish: Aviones que vuelan con las milicias.}
+        reward:
+        - {effect: air_experience, value: 50}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
+      - id: APF_cazas_del_sahel
+        name: {english: Sahel Fighters, spanish: Cazas del Sahel}
+        days: 42
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - APF_red_de_aerodromos
+        - APF_apoyo_cercano
+        desc: {english: Fighters built for sand and heat., spanish: Cazas hechos para la arena y el calor.}
+        reward:
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
+      - id: APF_paracaidistas
+        name: {english: Paratroopers, spanish: Paracaidistas}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - APF_cazas_del_sahel
+        desc:
+          english: Where there are no roads, the Federation arrives from the sky.
+          spanish: Donde no hay caminos, la Federación llega desde el cielo.
+        reward:
+        - {effect: army_experience, value: 25}
+        - {effect: add_manpower, value: 20000}
+      - id: APF_la_armada_del_golfo
+        name: {english: The Gulf Navy, spanish: La Armada del Golfo}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_paracaidistas
+        desc:
+          english: The Federation founds a navy in the Gulf of Guinea.
+          spanish: La Federación funda una armada en el Golfo de Guinea.
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
+        - {effect: navy_experience, value: 25}
+    - id: integracion
+      name: {english: The Integration, spanish: La Integración}
+      focuses:
+      - id: APF_consejos_locales
+        name: {english: Local Councils, spanish: Consejos Locales}
+        days: 21
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - APF_el_congreso_de_2100
+        desc:
+          english: 'Opens the Regional Development Plan: region by region.'
+          spanish: 'Abre el Plan de Desarrollo Regional: región por región.'
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: APF_congresos_regionales
+        name: {english: Regional Congresses, spanish: Congresos Regionales}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - APF_consejos_locales
+        desc:
+          english: The councils elect regional congresses.
+          spanish: Los consejos eligen congresos regionales.
+        reward:
+        - {effect: add_political_power, value: 100}
+      - id: APF_moneda_comun
+        name: {english: The Common Currency, spanish: La Moneda Común}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - APF_consejos_locales
+        desc: {english: One currency for a thousand councils., spanish: Una moneda para mil consejos.}
+        reward:
+        - {effect: add_ideas, value: APF_espiritu_moneda_comun}
+      - id: APF_el_ejercito_federal
+        name: {english: The Federal Army, spanish: El Ejército Federal}
+        days: 42
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - APF_congresos_regionales
+        - APF_moneda_comun
+        desc: {english: One army for every member., spanish: Un ejército para todos los miembros.}
+        reward:
+        - {effect: add_manpower, value: 50000}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+      - id: APF_ciudadania_continental
+        name: {english: Continental Citizenship, spanish: Ciudadanía Continental}
+        days: 42
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_el_ejercito_federal
+        desc: {english: +10 Integration with both members., spanish: +10 de Integración con los dos miembros.}
+        reward:
+        - {effect: add_variable, var: APF_integracion_zet, value: 10}
+        - {effect: add_variable, var: APF_integracion_zsa, value: 10}
+        - {effect: add_political_power, value: 50}
+      - id: APF_la_red_de_consejos
+        name: {english: The Council Network, spanish: La Red de Consejos}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - APF_ciudadania_continental
+        desc:
+          english: The councils share roads, grain and factories.
+          spanish: Los consejos comparten caminos, granos y fábricas.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: APF_un_solo_pueblo
+        name: {english: One People, spanish: Un Solo Pueblo}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_la_red_de_consejos
+        desc: {english: 'From the Cape to Cairo, one people.', spanish: 'Del Cabo al Cairo, un solo pueblo.'}
+        reward:
+        - {effect: add_ideas, value: APF_espiritu_un_solo_pueblo}
+
   NRE: { status: not_started, see: Q032 }
 
 # =============================================================================

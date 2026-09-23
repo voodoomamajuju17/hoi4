@@ -1022,7 +1022,108 @@ countries:
       src: user_design
     see: Q030
   SHD: { coverage: unknown, starting_ideas: unknown, see: Q030 }
-  APF: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  APF:
+    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    focus_ideas:
+    - id: APF_espiritu_mil_consejos
+      name: {english: A Thousand Councils, spanish: Mil Consejos}
+      desc:
+        english: Power rises from the village assembly to the Congress.
+        spanish: El poder sube de la asamblea del pueblo al Congreso.
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
+      src: user_design
+    - id: APF_constitucion_continental
+      name: {english: The Continental Constitution, spanish: La Constitución Continental}
+      desc:
+        english: One law from the Cape to Cairo, written by a thousand councils.
+        spanish: Una ley del Cabo al Cairo, escrita por mil consejos.
+      modifiers: {stability_factor: 0.15, political_power_gain: 0.1}
+      src: user_design
+    - id: APF_federacion_plena
+      name: {english: The Full Federation, spanish: La Federación Plena}
+      desc: {english: A continent that chose to be one., spanish: Un continente que eligió ser uno.}
+      modifiers: {stability_factor: 0.15, political_power_gain: 0.15, industrial_capacity_factory: 0.1}
+      src: user_design
+    - id: APF_espiritu_milicia_popular
+      name: {english: The People's Militia, spanish: La Milicia Popular}
+      desc: {english: Every council has its rifles now., spanish: Cada consejo tiene ahora sus fusiles.}
+      modifiers: {war_support_factor: 0.15, army_org_factor: 0.05}
+      src: user_design
+    - id: APF_territorios_dificiles
+      name: {english: Difficult Territories, spanish: Territorios Difíciles}
+      desc:
+        english: The map was drawn first. Now it turns out people live inside it.
+        spanish: Primero se dibujó el mapa. Ahora resulta que adentro vive gente.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05}
+      src: user_design
+    - id: APF_federacion_sin_fronteras
+      name: {english: The Federation Without Borders, spanish: La Federación sin Fronteras}
+      desc:
+        english: Wherever a council rises, the Federation follows.
+        spanish: Donde se levanta un consejo, la Federación va detrás.
+      modifiers: {army_attack_factor: 0.15, war_support_factor: 0.1, political_power_gain: 0.1}
+      src: user_design
+    - id: APF_aldea
+      name: {english: The Self-Sufficient Village, spanish: La Aldea Autosuficiente}
+      desc:
+        english: Every village feeds itself and guards itself.
+        spanish: Cada aldea se alimenta y se defiende sola.
+      modifiers: {stability_factor: 0.1, army_defence_factor: 0.05}
+      src: user_design
+    - id: APF_aldea_2
+      name: {english: The Village Continent, spanish: El Continente de Aldeas}
+      desc:
+        english: A federation that cannot be starved or broken.
+        spanish: Una federación que no se puede matar de hambre ni quebrar.
+      modifiers: {stability_factor: 0.15, army_defence_factor: 0.1, political_power_gain: 0.05}
+      src: user_design
+    - id: APF_corredor
+      name: {english: The Continental Corridor, spanish: El Corredor Continental}
+      desc:
+        english: Railways and industrial hubs from Dakar to Dar es Salaam.
+        spanish: Ferrocarriles y polos industriales de Dakar a Dar es Salaam.
+      modifiers: {production_speed_buildings_factor: 0.1, local_resources_factor: 0.1}
+      src: user_design
+    - id: APF_corredor_2
+      name: {english: The Logistics Giant, spanish: El Gigante Logístico}
+      desc:
+        english: The continent moves as one machine.
+        spanish: El continente se mueve como una sola máquina.
+      modifiers:
+        production_speed_buildings_factor: 0.2
+        local_resources_factor: 0.15
+        industrial_capacity_factory: 0.1
+      src: user_design
+    - id: APF_espiritu_despegue_industrial
+      name: {english: Industrial Take-Off, spanish: Despegue Industrial}
+      desc:
+        english: The Federation is building itself while it grows.
+        spanish: La Federación se construye mientras crece.
+      modifiers: {production_speed_buildings_factor: 0.15, industrial_capacity_factory: 0.1}
+      src: user_design
+    - id: APF_espiritu_instructores
+      name: {english: Council Instructors, spanish: Instructores de los Consejos}
+      desc:
+        english: Veterans teach villagers to be soldiers.
+        spanish: Los veteranos les enseñan a los aldeanos a ser soldados.
+      modifiers: {army_org_factor: 0.1}
+      src: user_design
+    - id: APF_espiritu_infanteria_ligera
+      name: {english: Light Infantry, spanish: Infantería Ligera}
+      desc: {english: 'Fast, cheap and everywhere.', spanish: 'Rápida, barata y en todos lados.'}
+      modifiers: {army_attack_factor: 0.1}
+      src: user_design
+    - id: APF_espiritu_moneda_comun
+      name: {english: The Common Currency, spanish: La Moneda Común}
+      desc: {english: One currency for a thousand councils., spanish: Una moneda para mil consejos.}
+      modifiers: {trade_opinion_factor: 0.2, political_power_gain: 0.1}
+      src: user_design
+    - id: APF_espiritu_un_solo_pueblo
+      name: {english: One People, spanish: Un Solo Pueblo}
+      desc: {english: 'From the Cape to Cairo, one people.', spanish: 'Del Cabo al Cairo, un solo pueblo.'}
+      modifiers: {stability_factor: 0.2, political_power_gain: 0.15, research_speed_factor: 0.05}
+      src: user_design
+    see: Q030
   NRE: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   PTA: { coverage: unknown, starting_ideas: unknown, see: Q012 }
   YYG: { coverage: unknown, starting_ideas: unknown, see: Q012 }

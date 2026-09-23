@@ -187,3 +187,23 @@ existe, se omite con aviso.
   alternativo), Mit'a de Guerra, los Suyus, *La Bajada de la Montaña*
   (guerra a los Caudillos del Amazonas).
 - Terrazas contra Minería del Cielo.
+
+## APF v1 — cómo quedó en el motor
+
+- **Integración federal**: cada miembro (Tierras Altas, Cabo) tiene
+  Desarrollo e Integración (0-100, arrancan en 20 y 10). *Invertir* suma +20
+  de Desarrollo y construye una fábrica en el miembro. *Integrar* suma +10
+  con Amara, y nunca puede superar al Desarrollo; con Diallo suma +25 sin
+  esa traba. En 100: núcleos + anexión; con Diallo, *Territorios Difíciles*
+  por 180 días.
+- **Plan de Desarrollo Regional**: cada 90 días una región propia sin
+  desarrollar recibe +2 infraestructura y una fábrica (se ve en el mapa).
+- **Amara** (El Congreso Continental): Mil Consejos, el Cabo y las Tierras
+  Altas se suman, la Constitución Continental, *Contra la Máquina*
+  (ultimátum a la ASC), La Federación Plena.
+- **Kwame Diallo** (La Marcha de los Consejos, retrato alternativo):
+  Milicia Popular (+100.000 hombres), La Marcha al Este (abre *Liberar las
+  Regiones Ocupadas*: núcleos inmediatos con territorios difíciles), guerra a
+  los Emiratos del Desierto, La Federación sin Fronteras.
+- Industria generosa al principio (Polo de Lagos, Katanga, el Nilo,
+  Despegue Industrial con 3 fábricas), Aldea contra Corredor.
