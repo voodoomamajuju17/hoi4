@@ -124,7 +124,7 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
 
         available = f.get("available")
         if isinstance(available, dict):
-            fb.add("available", _available(ctx, fid, available, triggers_used))
+            fb.add("available", _available(ctx, tag, fid, available, triggers_used))
 
         reward = f.get("reward")
         if not isinstance(reward, list) or not reward:
@@ -292,7 +292,7 @@ def _icon(ctx: BuildContext, focus: dict, icons: set[str] | None) -> str:
     return icon
 
 
-def _available(ctx: BuildContext, fid: str, spec: dict, triggers_used: dict[str, str]) -> Block:
+def _available(ctx: BuildContext, tag: str, fid: str, spec: dict, triggers_used: dict[str, str]) -> Block:
     block = Block()
     for key, value in spec.items():
         if key == "country_exists":
@@ -302,11 +302,21 @@ def _available(ctx: BuildContext, fid: str, spec: dict, triggers_used: dict[str,
             block.add("country_exists", value)
             triggers_used.setdefault("country_exists", fid)
         elif key == "biosteel_tier":
+            # has_resources_amount es un trigger de STATE: en scope de país el
+            # juego lo rechaza ("Invalid scope type", error.log de 1.19.3). Se
+            # pregunta sobre la capital, que es donde viven todos los
+            # yacimientos de BioSteel (el inicial y los que suman los focos).
             trigger_key, resource, amount = _biosteel_threshold(ctx, int(value))
+            capital = (ctx.data.get("capitals") or {}).get(tag)
+            if capital is None:
+                ctx.warn(f"{fid}: sin capital resuelta, el umbral de BioSteel no se puede chequear.")
+                continue
             inner = Block()
             inner.add("resource", resource)
             inner.add("amount", amount)
-            block.add(trigger_key, inner)
+            scope = Block()
+            scope.add(trigger_key, inner)
+            block.add(str(capital), scope)
             triggers_used.setdefault(trigger_key, fid)
         else:
             raise SpecError(f"{fid}: condicion desconocida '{key}' en available",

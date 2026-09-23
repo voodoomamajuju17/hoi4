@@ -108,7 +108,22 @@ class Quoted:
     text: str
 
 
+@dataclass(frozen=True)
+class Tagged:
+    """Un bloque con etiqueta delante, en la misma línea: `rgb { 45 84 41 }`.
+
+    common/countries/colors.txt lo exige así. Escrito como bloque común sale
+    `color = { rgb { ... } }` en varias líneas, y el juego lo rechaza
+    ("Malformed token: rgb") y deja al país sin color.
+    """
+
+    tag: str
+    values: tuple
+
+
 def _fmt_scalar(value) -> str:
+    if isinstance(value, Tagged):
+        return f"{value.tag} {{ " + " ".join(_fmt_scalar(v) for v in value.values) + " }"
     if isinstance(value, Quoted):
         return '"' + str(value.text).replace('"', '\\"') + '"'
     if isinstance(value, bool):

@@ -12,6 +12,8 @@ Qué se toca en cada state reasignado:
   - owner      -> el país nuevo
   - controller -> se borra (lo controla el dueño)
   - add_core_of -> solo el país nuevo
+  - add_claim_by, start_resistance, add_resistance -> se borran (apuntan a
+    países de 1936)
   - bloques con fecha (1939.1.1 = {...}) -> se borran. El juego aplica toda
     entrada con fecha anterior al inicio, y arrancamos en 2100: un cambio de
     dueño de 1939 pisaría el nuestro.
@@ -39,6 +41,15 @@ from ..pdx import Block, banner_for, parse_file
 from ..vanilla import StateInfo
 
 SOURCE = "spec/08_territory.yaml (sobre history/states/ vanilla)"
+
+# Del bloque history de un state reasignado se sacan el dueño, el
+# controlador y los cores vanilla (se ponen los nuestros), y lo que apunta a
+# países que en 2100 no existen: resistencia y reclamos. En 1.19.3
+# Dalmatia tiraba "start_resistance ... is not a core".
+_DROP_FROM_HISTORY = {
+    "owner", "controller", "add_core_of", "add_claim_by",
+    "start_resistance", "add_resistance", "add_resistance_target",
+}
 
 _DATE_KEY = re.compile(r"^\d{1,4}\.\d{1,2}\.\d{1,2}(\.\d{1,2})?$")
 _COMPARISON = re.compile(r'"[^"]*"|#[^\n]*|([<>])')
@@ -90,6 +101,7 @@ def emit(ctx: BuildContext) -> None:
             )
             del assignment[sid]
     _fix_vanilla_capitals(ctx, assignment, names)
+    _stub_landless_vanilla(ctx, assignment)
     ctx.data["territory"] = assignment
     ctx.data["state_names"] = names
 
@@ -265,6 +277,46 @@ def _check_tags(ctx: BuildContext) -> None:
         )
 
 
+# Lo único que se conserva de la historia de un país vanilla que quedó sin
+# territorio: lo que necesita un país liberable (capital, gobierno).
+_STUB_KEYS = ("capital", "set_politics", "set_popularities")
+
+
+def _stub_landless_vanilla(ctx: BuildContext, assignment: dict[int, str]) -> None:
+    """Deja en su mínimo la historia de los países vanilla sin territorio.
+
+    Arrancando en 2100 el juego ejecuta TODA la historia vanilla: ejércitos
+    (oob), flotas, aviones, personajes y cada bloque con fecha (1939.1.1...).
+    Para un país que ya no tiene ni un state eso coloca unidades y ejecuta
+    anexiones sobre territorio ajeno; en 1.19.3 terminó en un crash
+    (EXCEPTION_ACCESS_VIOLATION durante "Executing History ... to 2100").
+    Se reescribe su archivo con el mismo nombre, como el de un país liberable.
+    """
+    owners_left = {s.owner for s in ctx.vanilla.states() if s.id not in assignment and s.owner}
+    ours = {c.tag for c in ctx.spec.countries}
+    stubbed = 0
+    for tag, path in ctx.vanilla.country_history_files().items():
+        if tag in ours or tag in owners_left:
+            continue
+        try:
+            vanilla = parse_file(path)
+        except ValueError:
+            ctx.warn(f"{path.name}: no pude leerlo; queda la historia vanilla entera.")
+            continue
+        stub = Block()
+        for key in _STUB_KEYS:
+            value = vanilla.get(key)
+            if value is not None:
+                stub.add(key, value)
+        ctx.write_script(
+            f"history/countries/{path.name}", stub,
+            source=f"history/countries/{path.name} vanilla, reducido: el pais no tiene territorio en 2100",
+        )
+        stubbed += 1
+    if stubbed:
+        ctx.note(f"{stubbed} paises vanilla sin territorio: historia reducida a capital y gobierno")
+
+
 def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) -> None:
     """Un país vanilla que pierde su capital pero conserva states necesita otra.
 
@@ -316,7 +368,7 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resource
             state.add("history", history)
         kept = []
         for k, v in history.entries:
-            if k in ("owner", "controller", "add_core_of"):
+            if k in _DROP_FROM_HISTORY:
                 continue
             if k and _DATE_KEY.match(k):
                 continue

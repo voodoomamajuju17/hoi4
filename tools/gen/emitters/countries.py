@@ -18,7 +18,7 @@ from __future__ import annotations
 
 from ..art import write_country_flags
 from ..context import BuildContext
-from ..pdx import Block
+from ..pdx import Block, Tagged
 from ..specload import Country
 
 SOURCE = "spec/02_countries.yaml"
@@ -69,14 +69,9 @@ def _emit_colors(ctx: BuildContext) -> None:
     ctx.write_script("common/countries/colors.txt", b, source=SOURCE)
 
 
-def _rgb(color: tuple[int, int, int]) -> Block:
-    b = Block()
-    b.add(None, "rgb")
-    inner = Block()
-    for channel in color:
-        inner.add(None, channel)
-    b.add(None, inner)
-    return b
+def _rgb(color: tuple[int, int, int]) -> Tagged:
+    """`rgb { r g b }` en una línea, como el colors.txt vanilla."""
+    return Tagged("rgb", tuple(color))
 
 
 def _emit_flags(ctx: BuildContext) -> None:

@@ -267,6 +267,9 @@ def test_full_build() -> None:
         check("reemplaza los bookmarks vanilla", 'replace_path = "common/bookmarks"' in descriptor, descriptor)
         check("history/ todavia no se reemplaza (Q042)", 'replace_path = "history' not in descriptor, descriptor)
 
+        colors = (mod / "common/countries/colors.txt").read_text()
+        check("color en una linea: rgb { r g b }", "color = rgb { 45 84 41 }" in colors, colors[400:700])
+        check("color_ui en una linea", "color_ui = rgb { 45 84 41 }" in colors)
         tags_text = (mod / "common/country_tags/00_meganations.txt").read_text()
         for tag in ("EFE", "ASC", "FCU", "NAS", "PTA", "YYG"):
             check(f"tag {tag} registrado", f"{tag} = " in tags_text)
@@ -407,7 +410,7 @@ def test_phase3_content() -> None:
         amounts = []
         for n in (1, 2, 3):
             f = next(f for f in focuses if pdx.text(f.get("id")) == f"EFE_biosteel_umbral_{n}")
-            cond = f.get("available").get("has_resources_amount")
+            cond = f.get("available").get("900").get("has_resources_amount")
             check(f"umbral {n} pide biosteel", pdx.text(cond.get("resource")) == "biosteel")
             amounts.append(pdx.text(cond.get("amount")))
         check("umbrales 5/10/15", amounts == ["5", "10", "15"], str(amounts))
@@ -491,6 +494,16 @@ def test_territory() -> None:
         check("nadie queda vanilla salvo lo no reescribible",
               all(s.id in terr or s.id == 907 for s in ctx.vanilla.states() if s.owner), str(terr))
         check("Etiopia: el TAG le gana al continente -> ZET", terr.get(913) == "ZET")
+        ger = (mod / "history/countries/GER - Germany.txt").read_text()
+        check("Alemania sin territorio: sin oob", "oob" not in ger, ger)
+        check("Alemania: sin historia de 1939", "1939" not in ger.split("####")[-1] and "annex_country" not in ger)
+        check("Alemania: sin personajes", "recruit_character" not in ger)
+        check("Alemania: conserva capital y gobierno para ser liberable",
+              "capital = 906" in ger and "set_politics" in ger and "set_popularities" in ger)
+        lazio = pdx.parse((mod / "history/states/909-Fixture.txt").read_text()).get("state").get("history")
+        check("sin reclamos de paises de 1936", "add_claim_by" not in lazio.keys())
+        check("sin resistencia de paises de 1936", "start_resistance" not in lazio.keys())
+        check("conserva los puntos de victoria", "victory_points" in lazio.keys())
         sov = mod / "history/countries/SOV - Soviet Union.txt"
         check("la URSS conserva un state y reubica su capital", sov.exists() and "capital = 907" in sov.read_text())
 
