@@ -17,6 +17,11 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: promote, character: X }               -> promote_character (reclutado en la historia)
   { effect: if, when: {condiciones}, then: [...], else: [...] }
   { effect: run, value: X }                       -> X = yes (efecto de 14_decisions.yaml -> scripted_effects)
+  { effect: leader_trait, value: X }              -> add_country_leader_trait
+  { effect: states, pick: random|every, when: {..}, effects: [..] }
+                                                  -> random_owned_controlled_state / every_owned_state
+  En regiones: { effect: add_core, value: TAG } / { effect: state_flag, value: X }
+               { effect: clear_state_flag, value: X }
 Los efectos se validan contra documentation/ del juego (verify_keys) y los
 ids de idea contra 05_ideas.yaml.
 """
@@ -176,6 +181,29 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("promote_character", cid)
             effects_used.setdefault("promote_character", owner)
             continue
+        if effect == "leader_trait":
+            block.add("add_country_leader_trait", item["value"])
+            effects_used.setdefault("add_country_leader_trait", owner)
+            continue
+        if effect == "states":
+            pick = item.get("pick", "every")
+            key = {"random": "random_owned_controlled_state", "every": "every_owned_state"}.get(pick)
+            if key is None:
+                raise SpecError(f"{owner}: states.pick '{pick}' (random o every)", where=where)
+            inner = Block()
+            if item.get("when"):
+                inner.add("limit", render_conditions(owner, item["when"], ec.triggers_used, where=where))
+            inner.entries.extend(render_effects(owner, item.get("effects") or [], ec, effects_used, where=where).entries)
+            block.add(key, inner)
+            effects_used.setdefault(key, owner)
+            continue
+        if effect in ("add_core", "state_flag", "clear_state_flag"):
+            key = {"add_core": "add_core_of", "state_flag": "set_state_flag", "clear_state_flag": "clr_state_flag"}[effect]
+            if effect == "add_core" and ec.tags and item["value"] not in ec.tags:
+                raise SpecError(f"{owner}: add_core '{item['value']}' no es un pais del mod", where=where)
+            block.add(key, item["value"])
+            effects_used.setdefault(key, owner)
+            continue
         if effect == "run":
             name = item["value"]
             if ec.scripted is not None and name not in ec.scripted:
@@ -244,6 +272,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       idea / not_idea: X                  -> has_idea
       focus: X                            -> has_completed_focus
       country_exists: TAG
+      core_of / not_core_of: TAG          -> is_core_of (en regiones)
+      state_flag / not_state_flag: X      -> has_state_flag (en regiones)
+      state_flag_days: { flag, days }     -> has_state_flag = { flag days > N }
+      stability_below: 0.4                -> has_stability < 0.4
       any: [ {..}, {..} ]                 -> OR
       not: { .. }                         -> NOT (no se cumplen todas juntas)
     Varias condiciones en el mismo bloque se cumplen todas (AND).
@@ -295,6 +327,27 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "country_exists":
             block.add("country_exists", value)
             triggers_used.setdefault("country_exists", owner)
+        elif key in ("core_of", "not_core_of"):
+            if key == "core_of":
+                block.add("is_core_of", value)
+            else:
+                block.add("NOT", Block([("is_core_of", value)]))
+            triggers_used.setdefault("is_core_of", owner)
+        elif key in ("state_flag", "not_state_flag"):
+            if key == "state_flag":
+                block.add("has_state_flag", value)
+            else:
+                block.add("NOT", Block([("has_state_flag", value)]))
+            triggers_used.setdefault("has_state_flag", owner)
+        elif key == "state_flag_days":
+            inner = Block()
+            inner.add("flag", value["flag"])
+            inner.add("days", Compare(">", int(value["days"])))
+            block.add("has_state_flag", inner)
+            triggers_used.setdefault("has_state_flag", owner)
+        elif key == "stability_below":
+            block.add("has_stability", Compare("<", float(value)))
+            triggers_used.setdefault("has_stability", owner)
         elif key == "any":
             ors = Block()
             for sub in value:

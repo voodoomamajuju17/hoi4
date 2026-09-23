@@ -227,6 +227,287 @@ categories:
           - { effect: build, building: arms_factory, level: 1 }
         ai_factor: 20
 
+  # ===========================================================================
+  # EFE — El Monte, la integración, la reforestación y la economía
+  # ("Las Ocho Potencias", 2026-09-23)
+  # ===========================================================================
+  - id: EFE_monte_category
+    country: EFE
+    icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+    name: { english: "The Forest Rises", spanish: "El Monte se Levanta" }
+    desc:
+      english: "The Fires of Gaia have split the Empire. Every decision tilts the balance between the court and the forest. Nobody knows exactly how close the rangers are to taking power; only that they are getting closer."
+      spanish: "Los Incendios de Gaia partieron al Imperio. Cada decisión inclina la balanza entre la corte y el monte. Nadie sabe exactamente cuánto les falta a los guardaparques para tomar el poder; solo que cada vez les falta menos."
+    src: user_design
+    after_effects:
+      - { effect: run, value: EFE_recalcular_monte }
+    decisions:
+      - id: EFE_apoyar_a_los_guardaparques
+        name: { english: "Back the Rangers", spanish: "Apoyar a los Guardaparques" }
+        desc: { english: "Arms and funds for the forest patrols. The court frowns.", spanish: "Armas y fondos para las patrullas del monte. La corte frunce el ceño." }
+        icon_prefer: [generic_army_support, generic_political_actions]
+        cost: 25
+        cooldown_days: 30
+        visible: { flag: EFE_crisis_del_monte, not_flag: EFE_monte_levantado }
+        effects:
+          - { effect: add_variable, var: EFE_control_del_monte, value: 15 }
+        ai_factor: 3
+      - id: EFE_militarizar_las_reservas
+        name: { english: "Militarise the Reserves", spanish: "Militarizar las Reservas" }
+        desc: { english: "The nature reserves become garrisons. The Guard trains the rangers.", spanish: "Las reservas naturales se vuelven guarniciones. La Guardia entrena a los guardaparques." }
+        icon_prefer: [generic_army_support, generic_prepare_civil_war]
+        cost: 50
+        cooldown_days: 45
+        visible: { flag: EFE_crisis_del_monte, not_flag: EFE_monte_levantado }
+        effects:
+          - { effect: add_variable, var: EFE_control_del_monte, value: 20 }
+          - { effect: army_experience, value: 10 }
+          - { effect: add_stability, value: -0.03 }
+        ai_factor: 2
+      - id: EFE_proteger_las_ciudades
+        name: { english: "Protect the Cities", spanish: "Proteger las Ciudades" }
+        desc: { english: "Police in the streets and bread in the markets. The court buys time.", spanish: "Policía en las calles y pan en los mercados. La corte compra tiempo." }
+        icon_prefer: [generic_political_actions, generic_industry]
+        cost: 50
+        cooldown_days: 30
+        visible: { flag: EFE_crisis_del_monte, not_flag: EFE_monte_levantado }
+        effects:
+          - { effect: add_variable, var: EFE_control_del_monte, value: -15 }
+          - { effect: add_stability, value: 0.05 }
+        ai_factor: 2
+      - id: EFE_evacuar_los_centros_urbanos
+        name: { english: "Evacuate the City Centres", spanish: "Evacuar los Centros Urbanos" }
+        desc: { english: "Half of Gaia is marched out to the plantations. The forest gains a million workers; the Empire loses its patience.", spanish: "Media Gaia marcha a las plantaciones. El monte gana un millón de trabajadores; el Imperio pierde la paciencia." }
+        icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+        cost: 25
+        cooldown_days: 60
+        visible: { flag: EFE_crisis_del_monte, not_flag: EFE_monte_levantado }
+        effects:
+          - { effect: add_variable, var: EFE_control_del_monte, value: 25 }
+          - { effect: add_stability, value: -0.08 }
+        ai_factor: 1
+
+  - id: EFE_integracion_category
+    country: EFE
+    icon_prefer: [generic_political_actions, generic_construction]
+    name: { english: "Integration of the Satellites", spanish: "La Integración de los Satélites" }
+    desc:
+      english: "Integration of Yvytu Ykua Guasu: stage [?EFE_integracion_yyg] of 3.\nIntegration of Southern Patagonia: stage [?EFE_integracion_pta] of 3.\n\nEvery stage costs political power and BioSteel, and the locals do not always agree."
+      spanish: "Integración de Yvytu Ykua Guasu: etapa [?EFE_integracion_yyg] de 3.\nIntegración de la Patagonia Austral: etapa [?EFE_integracion_pta] de 3.\n\nCada etapa cuesta poder político y Bioacero, y los locales no siempre están de acuerdo."
+    src: user_design
+    decisions:
+      - id: EFE_integrar_yyg_1
+        name: { english: "Guaraní Governors", spanish: "Gobernadores Guaraníes" }
+        desc: { english: "Imperial governors sit next to the council of Asunción.", spanish: "Gobernadores imperiales se sientan al lado del consejo de Asunción." }
+        icon_prefer: [generic_political_actions, generic_construction]
+        cost: 75
+        cooldown_days: 60
+        fire_only_once: true
+        visible: { flag: EFE_integracion_yyg_abierta, country_exists: YYG }
+        available:
+          variable_between: { var: EFE_integracion_yyg, min: 0, max: 0 }
+          variable_at_least: { var: EFE_biosteel, value: 1 }
+        effects:
+          - { effect: add_variable, var: EFE_integracion_yyg, value: 1 }
+          - { effect: add_variable, var: EFE_biosteel, value: -1 }
+          - { effect: add_stability, value: -0.02 }
+        ai_factor: 5
+      - id: EFE_integrar_yyg_2
+        name: { english: "One Currency, One Water", spanish: "Una Moneda, Una Agua" }
+        desc: { english: "The dams of the Paraná join the imperial grid.", spanish: "Las represas del Paraná entran a la red imperial." }
+        icon_prefer: [generic_political_actions, generic_construction]
+        cost: 100
+        cooldown_days: 60
+        fire_only_once: true
+        visible: { flag: EFE_integracion_yyg_abierta, country_exists: YYG }
+        available:
+          variable_between: { var: EFE_integracion_yyg, min: 1, max: 1 }
+          variable_at_least: { var: EFE_biosteel, value: 1 }
+        effects:
+          - { effect: add_variable, var: EFE_integracion_yyg, value: 1 }
+          - { effect: add_variable, var: EFE_biosteel, value: -1 }
+          - { effect: add_stability, value: -0.02 }
+        ai_factor: 5
+      - id: EFE_integrar_yyg_3
+        name: { english: "The Guaraní Missions Come Home", spanish: "Las Misiones Guaraníes Vuelven" }
+        desc: { english: "Yvytu Ykua Guasu becomes imperial land.", spanish: "Yvytu Ykua Guasu pasa a ser tierra imperial." }
+        icon_prefer: [generic_political_actions, generic_construction]
+        cost: 125
+        cooldown_days: 60
+        fire_only_once: true
+        visible: { flag: EFE_integracion_yyg_abierta, country_exists: YYG }
+        available:
+          variable_between: { var: EFE_integracion_yyg, min: 2, max: 2 }
+          variable_at_least: { var: EFE_biosteel, value: 1 }
+        effects:
+          - { effect: add_variable, var: EFE_integracion_yyg, value: 1 }
+          - { effect: add_variable, var: EFE_biosteel, value: -1 }
+          - { effect: add_stability, value: -0.02 }
+          - { effect: scope, target: YYG, effects: [ { effect: states, pick: every, effects: [ { effect: add_core, value: EFE } ] } ] }
+          - { effect: annex, target: YYG }
+          - { effect: event, id: meganations_efe.10 }
+        ai_factor: 5
+      - id: EFE_integrar_pta_1
+        name: { english: "Autonomy Reduced", spanish: "Autonomía Reducida" }
+        desc: { english: "Southern Patagonia's council loses its veto.", spanish: "El consejo de la Patagonia Austral pierde su veto." }
+        icon_prefer: [generic_political_actions, generic_construction]
+        cost: 75
+        cooldown_days: 60
+        fire_only_once: true
+        visible: { flag: EFE_integracion_pta_abierta, country_exists: PTA }
+        available:
+          variable_between: { var: EFE_integracion_pta, min: 0, max: 0 }
+          variable_at_least: { var: EFE_biosteel, value: 1 }
+        effects:
+          - { effect: add_variable, var: EFE_integracion_pta, value: 1 }
+          - { effect: add_variable, var: EFE_biosteel, value: -1 }
+          - { effect: add_stability, value: -0.02 }
+        ai_factor: 5
+      - id: EFE_integrar_pta_2
+        name: { english: "The Glacier Garrisons", spanish: "Las Guarniciones de los Glaciares" }
+        desc: { english: "The Guard takes over the southern passes.", spanish: "La Guardia se hace cargo de los pasos australes." }
+        icon_prefer: [generic_political_actions, generic_construction]
+        cost: 100
+        cooldown_days: 60
+        fire_only_once: true
+        visible: { flag: EFE_integracion_pta_abierta, country_exists: PTA }
+        available:
+          variable_between: { var: EFE_integracion_pta, min: 1, max: 1 }
+          variable_at_least: { var: EFE_biosteel, value: 1 }
+        effects:
+          - { effect: add_variable, var: EFE_integracion_pta, value: 1 }
+          - { effect: add_variable, var: EFE_biosteel, value: -1 }
+          - { effect: add_stability, value: -0.02 }
+        ai_factor: 5
+      - id: EFE_integrar_pta_3
+        name: { english: "The South Is the Empire", spanish: "El Sur es el Imperio" }
+        desc: { english: "Southern Patagonia becomes imperial land.", spanish: "La Patagonia Austral pasa a ser tierra imperial." }
+        icon_prefer: [generic_political_actions, generic_construction]
+        cost: 125
+        cooldown_days: 60
+        fire_only_once: true
+        visible: { flag: EFE_integracion_pta_abierta, country_exists: PTA }
+        available:
+          variable_between: { var: EFE_integracion_pta, min: 2, max: 2 }
+          variable_at_least: { var: EFE_biosteel, value: 1 }
+        effects:
+          - { effect: add_variable, var: EFE_integracion_pta, value: 1 }
+          - { effect: add_variable, var: EFE_biosteel, value: -1 }
+          - { effect: add_stability, value: -0.02 }
+          - { effect: scope, target: PTA, effects: [ { effect: states, pick: every, effects: [ { effect: add_core, value: EFE } ] } ] }
+          - { effect: annex, target: PTA }
+          - { effect: event, id: meganations_efe.11 }
+        ai_factor: 5
+
+  - id: EFE_reforestacion_category
+    country: EFE
+    icon_prefer: [generic_construction, generic_industry]
+    name: { english: "Sowing the Conquest", spanish: "Sembrar la Conquista" }
+    desc:
+      english: "Conquered land is not ruled: it is replanted. A region under reforestation becomes an ecological core after 120 days. Slow, but it never goes back.\n\nBioSteel in the vats: [?EFE_biosteel]"
+      spanish: "La tierra conquistada no se gobierna: se replanta. Una región en reforestación se vuelve núcleo ecológico a los 120 días. Lento, pero nunca retrocede.\n\nBioacero en las cubas: [?EFE_biosteel]"
+    src: user_design
+    decisions:
+      - id: EFE_sembrar_region
+        name: { english: "Sow an Occupied Region", spanish: "Sembrar una Región Ocupada" }
+        desc: { english: "Seeds, rangers and two units of BioSteel for a region that is not ours yet.", spanish: "Semillas, guardaparques y dos unidades de Bioacero para una región que todavía no es nuestra." }
+        icon_prefer: [generic_construction, generic_industry]
+        cost: 25
+        cooldown_days: 30
+        visible: { focus: EFE_sembrar_la_conquista }
+        available: { variable_at_least: { var: EFE_biosteel, value: 2 } }
+        effects:
+          - { effect: add_variable, var: EFE_biosteel, value: -2 }
+          - effect: states
+            pick: random
+            when: { not_core_of: EFE, not_state_flag: EFE_reforestando }
+            effects: [ { effect: state_flag, value: EFE_reforestando } ]
+        ai_factor: 10
+      - id: EFE_consolidar_el_bosque
+        name: { english: "Consolidate the Forest", spanish: "Consolidar el Bosque" }
+        desc: { english: "Every region that has been growing for 120 days becomes an ecological core of the Empire.", spanish: "Cada región que lleva 120 días creciendo se vuelve núcleo ecológico del Imperio." }
+        icon_prefer: [generic_construction, generic_political_actions]
+        cost: 25
+        cooldown_days: 60
+        visible: { focus: EFE_sembrar_la_conquista }
+        effects:
+          - effect: states
+            pick: every
+            when: { state_flag_days: { flag: EFE_reforestando, days: 120 } }
+            effects:
+              - { effect: add_core, value: EFE }
+              - { effect: clear_state_flag, value: EFE_reforestando }
+              - { effect: state_flag, value: EFE_nucleo_ecologico }
+        ai_factor: 10
+
+  - id: EFE_economia_category
+    country: EFE
+    icon_prefer: [generic_industry, generic_production]
+    name: { english: "The Aquifer and the Vats", spanish: "El Acuífero y las Cubas" }
+    desc:
+      english: "Autarky opens BioSteel projects; Water Diplomacy opens water contracts. The Empire can only choose one."
+      spanish: "La Autarquía abre proyectos de Bioacero; la Diplomacia del Agua abre contratos de agua. El Imperio puede elegir solo uno."
+    src: user_design
+    decisions:
+      - id: EFE_proyecto_cubas_profundas
+        name: { english: "Deep Vats Project", spanish: "Proyecto de Cubas Profundas" }
+        desc: { english: "A new vat complex under the Pampa.", spanish: "Un complejo nuevo de cubas bajo la Pampa." }
+        icon_prefer: [generic_industry, generic_construction]
+        cost: 50
+        cooldown_days: 90
+        visible: { focus: EFE_autarquia_del_bioacero }
+        effects:
+          - { effect: add_variable, var: EFE_biosteel, value: 2 }
+        ai_factor: 5
+      - id: EFE_proyecto_bosque_fabrica
+        name: { english: "Forest-Factory Project", spanish: "Proyecto Bosque-Fábrica" }
+        desc: { english: "Three units of BioSteel grow a factory where a forest used to be.", spanish: "Tres unidades de Bioacero hacen crecer una fábrica donde había un bosque." }
+        icon_prefer: [generic_construction, generic_industry]
+        cost: 25
+        cooldown_days: 120
+        visible: { focus: EFE_autarquia_del_bioacero }
+        available: { variable_at_least: { var: EFE_biosteel, value: 3 } }
+        effects:
+          - { effect: add_variable, var: EFE_biosteel, value: -3 }
+          - { effect: build, building: industrial_complex, level: 1 }
+        ai_factor: 3
+      - id: EFE_contrato_de_agua_asc
+        name: { english: "Water Contract with the Commune", spanish: "Contrato de Agua con la Comuna" }
+        desc: { english: "Fresh water from the aquifer for the Commune, paid in factories and goodwill.", spanish: "Agua dulce del acuífero para la Comuna, pagada en fábricas y buena voluntad." }
+        icon_prefer: [generic_political_actions, generic_industry]
+        cost: 25
+        cooldown_days: 180
+        visible: { focus: EFE_diplomacia_del_agua }
+        available: { country_exists: ASC }
+        effects:
+          - { effect: add_political_power, value: 75 }
+          - { effect: build, building: industrial_complex, level: 1 }
+        ai_factor: 5
+      - id: EFE_contrato_de_agua_apf
+        name: { english: "Water Contract with the Federation", spanish: "Contrato de Agua con la Federación" }
+        desc: { english: "Fresh water from the aquifer for the Federation, paid in factories and goodwill.", spanish: "Agua dulce del acuífero para la Federación, pagada en fábricas y buena voluntad." }
+        icon_prefer: [generic_political_actions, generic_industry]
+        cost: 25
+        cooldown_days: 180
+        visible: { focus: EFE_diplomacia_del_agua }
+        available: { country_exists: APF }
+        effects:
+          - { effect: add_political_power, value: 75 }
+          - { effect: build, building: industrial_complex, level: 1 }
+        ai_factor: 5
+      - id: EFE_contrato_de_agua_shd
+        name: { english: "Water Contract with the Directorate", spanish: "Contrato de Agua con el Directorio" }
+        desc: { english: "Fresh water from the aquifer for the Directorate, paid in factories and goodwill.", spanish: "Agua dulce del acuífero para el Directorio, pagada en fábricas y buena voluntad." }
+        icon_prefer: [generic_political_actions, generic_industry]
+        cost: 25
+        cooldown_days: 180
+        visible: { focus: EFE_diplomacia_del_agua }
+        available: { country_exists: SHD }
+        effects:
+          - { effect: add_political_power, value: 75 }
+          - { effect: build, building: industrial_complex, level: 1 }
+        ai_factor: 5
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -285,3 +566,13 @@ scripted_effects:
     effects:
       - { effect: if, when: { variable_at_least: { var: FCU_obsidian, value: 56 } }, then: [ { effect: add_variable, var: FCU_obsidian, value: -10 } ] }
       - { effect: if, when: { variable_below: { var: FCU_obsidian, value: 45 } }, then: [ { effect: add_variable, var: FCU_obsidian, value: 10 } ] }
+
+  # El Monte (EFE): pasado cierto umbral, el golpe queda al alcance de un foco.
+  - id: EFE_recalcular_monte
+    effects:
+      - { effect: clamp, var: EFE_control_del_monte, min: 0, max: 100 }
+      - effect: if
+        when: { variable_at_least: { var: EFE_control_del_monte, value: 60 }, not_flag: EFE_monte_listo }
+        then:
+          - { effect: flag, value: EFE_monte_listo }
+          - { effect: event, id: meganations_efe.12 }

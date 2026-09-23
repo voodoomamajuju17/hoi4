@@ -34,683 +34,737 @@ trees:
     id: efe_focus_tree
     default: false
     shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23). Aurelio IV (La Dinastía Verde) contra Anahí Quiroga (El Monte se Levanta). Reemplaza el árbol de
+      31 focos de la fase 3; se conservan ids, íconos y eventos donde sirven.'
     anchors_from_doc:
-      - "Golpe de 2079 / título Custodio de la Tierra (§3.3)"
-      - "Proclamación imperial de 2081 (§3.3)"
-      - "Milicias Verdes y Batalla de Iguazú (§3.3)"
-      - "Reforestación obligatoria, control de población, autarquía (§3.2)"
-      - "Tecnologías de agua, semillas y restauración como herramientas de poder exterior (§3.2)"
-      - "BioSteel por umbrales 5/10/15 (§3.4)"
-      - "Satélites Patagonia Austral y Yvytu Ykua Guasu (§3.1)"
-
+    - Golpe de 2079 / título Custodio de la Tierra (§3.3)
+    - Proclamación imperial de 2081 (§3.3)
+    - Milicias Verdes y Batalla de Iguazú (§3.3)
+    - Reforestación obligatoria, control de población, autarquía (§3.2)
+    - Tecnologías de agua, semillas y restauración como herramientas de poder exterior (§3.2)
+    - BioSteel por umbrales 5/10/15 (§3.4)
+    - Satélites Patagonia Austral y Yvytu Ykua Guasu (§3.1)
     branches:
+    - id: dinastia_verde
+      name: {english: The Green Dynasty, spanish: La Dinastía Verde}
+      focuses:
+      - id: EFE_custodio_de_la_tierra
+        name: {english: Custodian of the Earth, spanish: Custodio de la Tierra}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        desc:
+          english: The century turns. The Emperor who was once the Custodian surveys what the forest has given back, and what it still demands.
+          spanish: Cambia el siglo. El Emperador que alguna vez fue el Custodio mira lo que el bosque devolvió, y lo que todavía reclama.
+        reward:
+        - {effect: add_political_power, value: 75}
+      - id: EFE_la_hora_de_gaia
+        name: {english: The Hour of Gaia, spanish: La Hora de Gaia}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - EFE_custodio_de_la_tierra
+        desc:
+          english: The court wants continuity. The reserves want the forest to rule. The Empire has to decide who it belongs to.
+          spanish: La corte quiere continuidad. Las reservas quieren que mande el monte. El Imperio tiene que decidir de quién es.
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: EFE_el_mandato_renovado
+        name: {english: The Mandate Renewed, spanish: El Mandato Renovado}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - EFE_la_hora_de_gaia
+        mutually_exclusive:
+        - EFE_los_incendios_de_gaia
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.3
+            when: {stability_below: 0.4}
+        desc:
+          english: Aurelio IV renews the Green Mandate in front of the whole court. The rangers watch from the back of the hall.
+          spanish: Aurelio IV renueva el Mandato Verde frente a toda la corte. Los guardaparques miran desde el fondo del salón.
+        reward:
+        - {effect: add_political_power, value: 75}
+        - {effect: add_stability, value: 0.05}
+      - id: EFE_la_corte_de_los_bosques
+        name: {english: The Court of the Forests, spanish: La Corte de los Bosques}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - EFE_el_mandato_renovado
+        desc:
+          english: 'Ministers of Water, of Seed and of Silence. The court grows like a forest: slowly, and it blocks the light.'
+          spanish: 'Ministros del Agua, de la Semilla y del Silencio. La corte crece como un bosque: despacio, y tapa la luz.'
+        reward:
+        - {effect: add_ideas, value: EFE_trono_del_bosque}
+      - id: EFE_heredero_de_la_tierra
+        name: {english: Heir of the Earth, spanish: Heredero de la Tierra}
+        days: 56
+        icon: GFX_EFE_reforest_patagonia
+        icon_asset: assets/EFE/goals/EFE_reforest_patagonia.dds
+        prerequisites:
+        - EFE_la_corte_de_los_bosques
+        desc:
+          english: Aurelio names himself heir of the land itself. The vats work double shifts for the celebration.
+          spanish: Aurelio se nombra heredero de la tierra misma. Las cubas trabajan doble turno para la celebración.
+        reward:
+        - {effect: leader_trait, value: efe_heredero_de_la_tierra}
+        - {effect: add_variable, var: EFE_biosteel, value: 2}
+      - id: EFE_las_misiones_guaranies
+        name: {english: The Guaraní Missions, spanish: Las Misiones Guaraníes}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - EFE_la_corte_de_los_bosques
+        available: {country_exists: YYG}
+        desc:
+          english: Yvytu Ykua Guasu will be integrated, step by step, governor by governor. Opens the integration decisions.
+          spanish: Yvytu Ykua Guasu va a ser integrada, paso a paso, gobernador por gobernador. Abre las decisiones de integración.
+        reward:
+        - {effect: flag, value: EFE_integracion_yyg_abierta}
+        - {effect: add_political_power, value: 25}
+      - id: EFE_integrar_la_patagonia
+        name: {english: Integrate Southern Patagonia, spanish: Integrar la Patagonia Austral}
+        days: 56
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - EFE_las_misiones_guaranies
+        available: {country_exists: PTA}
+        desc:
+          english: Autonomy, then garrisons, then cores. The glaciers will be imperial. Opens the integration decisions.
+          spanish: Autonomía, después guarniciones, después núcleos. Los glaciares van a ser imperiales. Abre las decisiones de integración.
+        reward:
+        - {effect: flag, value: EFE_integracion_pta_abierta}
+        - {effect: add_political_power, value: 25}
+      - id: EFE_la_gran_muralla_verde
+        name: {english: The Great Green Wall, spanish: La Gran Muralla Verde}
+        days: 42
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - EFE_heredero_de_la_tierra
+        desc:
+          english: A belt of forest, bunkers and anti-air along the northern border.
+          spanish: Un cinturón de bosque, búnkeres y antiaéreos sobre la frontera norte.
+        reward:
+        - {effect: add_ideas, value: EFE_muralla_verde}
+      - id: EFE_guardian_del_acuifero
+        name: {english: Guardian of the Aquifer, spanish: Guardián del Acuífero}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - EFE_la_gran_muralla_verde
+        desc:
+          english: The Guaraní Aquifer is guarded like a crown jewel. Castellane sends an envoy anyway.
+          spanish: El Acuífero Guaraní se custodia como una joya de la corona. Castellane manda un enviado igual.
+        reward:
+        - {effect: add_ideas, value: EFE_defensa_acuifero}
+      - id: EFE_el_agua_no_se_vende
+        name: {english: The Water Is Not for Sale, spanish: El Agua no se Vende}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - EFE_guardian_del_acuifero
+        available: {country_exists: FCU, biosteel_tier: 2}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: 'An ultimatum to the Union: renounce the aquifer and pay for the water already taken. War only if they refuse. Needs BioSteel
+            tier 2.'
+          spanish: 'Un ultimátum a la Unión: renunciar al acuífero y pagar el agua que ya se llevó. Guerra solo si se niega. Pide Bioacero nivel
+            2.'
+        reward:
+        - {effect: event, id: meganations_fcu.7, days: 1, target: FCU}
+        - {effect: add_war_support, value: 0.05}
+      - id: EFE_la_corona_de_gaia
+        name: {english: The Crown of Gaia, spanish: La Corona de Gaia}
+        days: 56
+        icon: GFX_EFE_reforest_patagonia
+        icon_asset: assets/EFE/goals/EFE_reforest_patagonia.dds
+        prerequisites:
+        - EFE_el_agua_no_se_vende
+        - EFE_integrar_la_patagonia
+        desc:
+          english: The Emperor and the Earth are one crown.
+          spanish: El Emperador y la Tierra son una sola corona.
+        reward:
+        - {effect: swap_ideas, remove: EFE_trono_del_bosque, add: EFE_trono_eterno}
+        - {effect: add_variable, var: EFE_biosteel, value: 3}
+    - id: el_monte
+      name: {english: The Forest Rises, spanish: El Monte se Levanta}
+      focuses:
+      - id: EFE_los_incendios_de_gaia
+        name: {english: The Fires of Gaia, spanish: Los Incendios de Gaia}
+        days: 21
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - EFE_la_hora_de_gaia
+        mutually_exclusive:
+        - EFE_el_mandato_renovado
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 4
+            when: {stability_below: 0.4}
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: 'The plantations burn and the reserves take sides. Opens the Forest decisions: when the rangers control enough, the coup is one
+            focus away.'
+          spanish: 'Arden las plantaciones y las reservas toman partido. Abre las decisiones del Monte: cuando los guardaparques controlen lo suficiente,
+            el golpe está a un foco.'
+        reward:
+        - {effect: flag, value: EFE_crisis_del_monte}
+        - {effect: timed_idea, idea: EFE_crisis_del_monte, days: 120}
+        - {effect: run, value: EFE_recalcular_monte}
+      - id: EFE_el_monte_se_levanta
+        name: {english: The Forest Rises, spanish: El Monte se Levanta}
+        days: 14
+        icon: GFX_EFE_reforest_patagonia
+        icon_asset: assets/EFE/goals/EFE_reforest_patagonia.dds
+        prerequisites:
+        - EFE_los_incendios_de_gaia
+        available: {flag: EFE_monte_listo}
+        desc:
+          english: Needs the rangers' control of the reserves (60). Aurelio falls; Anahí Quiroga speaks for the forest.
+          spanish: Pide el control de las reservas por los guardaparques (60). Cae Aurelio; Anahí Quiroga habla por el monte.
+        reward:
+        - {effect: promote, character: EFE_anahi_quiroga}
+        - {effect: flag, value: EFE_monte_levantado}
+        - {effect: swap_ideas, remove: EFE_mandato_verde, add: EFE_mandato_del_monte}
+      - id: EFE_desurbanizar
+        name: {english: Deurbanise, spanish: Desurbanizar}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - EFE_el_monte_se_levanta
+        desc:
+          english: The cities are emptied into the countryside. Fewer factories, more BioSteel.
+          spanish: Las ciudades se vacían hacia el campo. Menos fábricas, más Bioacero.
+        reward:
+        - {effect: add_ideas, value: EFE_desurbanizacion}
+        - {effect: add_variable, var: EFE_biosteel, value: 3}
+        - {effect: add_manpower, value: 30000}
+      - id: EFE_el_bosque_es_el_ejercito
+        name: {english: The Forest Is the Army, spanish: El Bosque es el Ejército}
+        days: 42
+        icon: GFX_EFE_green_legions
+        icon_asset: assets/EFE/goals/EFE_green_legions.dds
+        prerequisites:
+        - EFE_desurbanizar
+        desc:
+          english: Every ranger is a soldier and every tree is cover.
+          spanish: Cada guardaparques es un soldado y cada árbol es una trinchera.
+        reward:
+        - {effect: add_ideas, value: EFE_bosque_armado}
+      - id: EFE_arrasar_la_tierra
+        name: {english: Scorched Earth, spanish: Tierra Arrasada}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - EFE_el_bosque_es_el_ejercito
+        desc:
+          english: Invaders will find nothing to eat, nothing to repair and nobody to rule.
+          spanish: El invasor no va a encontrar nada que comer, nada que reparar y nadie a quien gobernar.
+        reward:
+        - {effect: add_ideas, value: EFE_tierra_arrasada}
+      - id: EFE_sembrar_la_conquista
+        name: {english: Sow the Conquest, spanish: Sembrar la Conquista}
+        days: 56
+        icon: GFX_EFE_reforest_patagonia
+        icon_asset: assets/EFE/goals/EFE_reforest_patagonia.dds
+        prerequisites:
+        - EFE_desurbanizar
+        desc:
+          english: 'Conquered land is replanted: occupied, reforesting, ecological core. Opens the reforestation decisions.'
+          spanish: 'La tierra conquistada se replanta: ocupada, en reforestación, núcleo ecológico. Abre las decisiones de reforestación.'
+        reward:
+        - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_political_power, value: 50}
+      - id: EFE_que_avance_la_selva
+        name: {english: The Jungle Advances, spanish: La Selva Avanza}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - EFE_arrasar_la_tierra
+        - EFE_sembrar_la_conquista
+        desc:
+          english: 'The offensive moves at the speed of the forest: slowly, and it never goes back.'
+          spanish: 'La ofensiva avanza a la velocidad del bosque: despacio, y nunca retrocede.'
+        reward:
+        - {effect: add_ideas, value: EFE_la_selva_avanza}
+      - id: EFE_la_ofensiva_verde
+        name: {english: The Green Offensive, spanish: La Ofensiva Verde}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - EFE_que_avance_la_selva
+        available: {country_exists: ZWB}
+        desc:
+          english: The Amazon warlords burn the forest to sell the land. The forest answers.
+          spanish: Los Caudillos del Amazonas queman la selva para vender la tierra. La selva contesta.
+        reward:
+        - {effect: wargoal, target: ZWB, type: annex_everything}
+        - {effect: add_war_support, value: 0.1}
+      - id: EFE_un_continente_vivo
+        name: {english: A Living Continent, spanish: Un Continente Vivo}
+        days: 56
+        icon: GFX_EFE_reforest_patagonia
+        icon_asset: assets/EFE/goals/EFE_reforest_patagonia.dds
+        prerequisites:
+        - EFE_la_ofensiva_verde
+        desc:
+          english: Every reforested region is one more wall.
+          spanish: Cada región reforestada es un muro más.
+        reward:
+        - {effect: add_ideas, value: EFE_continente_vivo}
+    - id: autarquia
+      name: {english: The BioSteel Autarky, spanish: La Autarquía del Bioacero}
+      focuses:
+      - id: EFE_ministerio_de_restauracion
+        name: {english: Ministry of Restoration, spanish: Ministerio de la Restauración}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - EFE_custodio_de_la_tierra
+        desc:
+          english: 'Two models for the Empire''s economy: close the borders and grow everything, or sell water to the world.'
+          spanish: 'Dos modelos para la economía del Imperio: cerrar las fronteras y cultivarlo todo, o venderle agua al mundo.'
+        reward:
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: EFE_autarquia_del_bioacero
+        name: {english: The BioSteel Autarky, spanish: La Autarquía del Bioacero}
+        days: 42
+        icon: GFX_EFE_biofuel_autarky
+        icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
+        prerequisites:
+        - EFE_ministerio_de_restauracion
+        mutually_exclusive:
+        - EFE_diplomacia_del_agua
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: Nothing comes in, nothing goes out. Opens the BioSteel projects.
+          spanish: No entra nada, no sale nada. Abre los proyectos de Bioacero.
+        reward:
+        - {effect: add_ideas, value: EFE_autarquia_estrategica}
+        - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - id: EFE_cubas_profundas
+        name: {english: Deep Vats, spanish: Cubas Profundas}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_autarquia_del_bioacero
+        desc:
+          english: The vats go underground, where the bombers cannot reach.
+          spanish: Las cubas se van bajo tierra, donde no llegan los bombarderos.
+        reward:
+        - {effect: add_variable, var: EFE_biosteel, value: 2}
+      - id: EFE_bosques_fabrica
+        name: {english: Forest-Factories, spanish: Bosques-Fábrica}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - EFE_autarquia_del_bioacero
+        desc:
+          english: Factories that grow where forests used to be.
+          spanish: Fábricas que crecen donde había bosques.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: EFE_economia_circular
+        name: {english: The Circular Economy, spanish: La Economía Circular}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_cubas_profundas
+        - EFE_bosques_fabrica
+        desc:
+          english: Nothing is wasted. Everything returns to the vats.
+          spanish: Nada se desperdicia. Todo vuelve a las cubas.
+        reward:
+        - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_political_power, value: 50}
+      - id: EFE_la_autarquia_total
+        name: {english: Total Autarky, spanish: La Autarquía Total}
+        days: 56
+        icon: GFX_EFE_biofuel_autarky
+        icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
+        prerequisites:
+        - EFE_economia_circular
+        desc: {english: The Empire needs nobody., spanish: El Imperio no necesita a nadie.}
+        reward:
+        - {effect: swap_ideas, remove: EFE_autarquia_estrategica, add: EFE_autarquia_total}
+    - id: diplomacia_agua
+      name: {english: Water Diplomacy, spanish: La Diplomacia del Agua}
+      focuses:
+      - id: EFE_diplomacia_del_agua
+        name: {english: Water Diplomacy, spanish: La Diplomacia del Agua}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - EFE_ministerio_de_restauracion
+        mutually_exclusive:
+        - EFE_autarquia_del_bioacero
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0.5
+            when: {at_war: true}
+        desc:
+          english: The Guaraní Aquifer as an embassy. Opens the water contracts.
+          spanish: El Acuífero Guaraní como embajada. Abre los contratos de agua.
+        reward:
+        - {effect: add_ideas, value: EFE_diplomacia_hidrica}
+      - id: EFE_bancos_de_semillas
+        name: {english: Seed Banks, spanish: Bancos de Semillas}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - EFE_diplomacia_del_agua
+        desc:
+          english: The Empire lends seeds to the hungry, on its own terms.
+          spanish: El Imperio les presta semillas a los hambrientos, con sus condiciones.
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: add_stability, value: 0.03}
+      - id: EFE_tratados_de_agua
+        name: {english: Water Treaties, spanish: Tratados de Agua}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - EFE_diplomacia_del_agua
+        desc:
+          english: Every treaty the Empire signs now has a water clause.
+          spanish: Cada tratado que firma el Imperio ahora tiene una cláusula de agua.
+        reward:
+        - {effect: add_political_power, value: 75}
+      - id: EFE_el_acuifero_como_embajada
+        name: {english: The Aquifer as an Embassy, spanish: El Acuífero como Embajada}
+        days: 42
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - EFE_bancos_de_semillas
+        - EFE_tratados_de_agua
+        desc:
+          english: Foreign money builds the Empire's factories.
+          spanish: La plata extranjera construye las fábricas del Imperio.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: EFE_la_potencia_hidrica
+        name: {english: The Water Power, spanish: La Potencia Hídrica}
+        days: 56
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - EFE_el_acuifero_como_embajada
+        desc:
+          english: Half the world's thirst passes through the Southern Cone.
+          spanish: La mitad de la sed del mundo pasa por el Cono Sur.
+        reward:
+        - {effect: swap_ideas, remove: EFE_diplomacia_hidrica, add: EFE_potencia_hidrica}
+    - id: cubas
+      name: {english: The Pampa Vats, spanish: Las Cubas de la Pampa}
+      focuses:
+      - id: EFE_cubas_de_segunda_generacion
+        name: {english: Second-Generation Vats, spanish: Cubas de Segunda Generación}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_custodio_de_la_tierra
+        desc: {english: 'Faster cultures, deeper vats.', spanish: 'Cultivos más rápidos, cubas más hondas.'}
+        reward:
+        - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: EFE_biorrefinerias_de_rosario
+        name: {english: The Rosario Biorefineries, spanish: Las Biorrefinerías de Rosario}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - EFE_cubas_de_segunda_generacion
+        desc:
+          english: The Paraná's banks turn green and industrial.
+          spanish: Las orillas del Paraná se vuelven verdes e industriales.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: EFE_polo_industrial_de_gaia
+        name: {english: The Gaia Industrial Pole, spanish: El Polo Industrial de Gaia}
+        days: 42
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - EFE_cubas_de_segunda_generacion
+        desc: {english: Arms factories grown from BioSteel., spanish: Fábricas de armas crecidas de Bioacero.}
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+      - id: EFE_energia_de_biomasa
+        name: {english: Biomass Energy, spanish: Energía de Biomasa}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_biorrefinerias_de_rosario
+        - EFE_polo_industrial_de_gaia
+        desc: {english: The forest powers the grid., spanish: El bosque alimenta la red eléctrica.}
+        reward:
+        - {effect: add_ideas, value: EFE_red_hidrica}
+      - id: EFE_astilleros_del_plata
+        name: {english: The River Plate Shipyards, spanish: Los Astilleros del Plata}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_energia_de_biomasa
+        desc: {english: Dry docks on the River Plate., spanish: Diques secos en el Río de la Plata.}
+        reward:
+        - {effect: build, building: dockyard, level: 1}
+      - id: EFE_laboratorio_de_gaia
+        name: {english: The Gaia Laboratory, spanish: El Laboratorio de Gaia}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - EFE_energia_de_biomasa
+        desc:
+          english: Where BioSteel was born, the next thing is growing.
+          spanish: Donde nació el Bioacero, está creciendo lo que viene.
+        reward:
+        - {effect: add_research_slot, value: 1}
+    - id: guardia_verde
+      name: {english: The Green Guard, spanish: La Guardia Verde}
+      focuses:
+      - id: EFE_guardia_verde_movilizada
+        name: {english: The Green Guard Mobilised, spanish: La Guardia Verde Movilizada}
+        days: 35
+        icon: GFX_EFE_green_legions
+        icon_asset: assets/EFE/goals/EFE_green_legions.dds
+        prerequisites:
+        - EFE_custodio_de_la_tierra
+        desc:
+          english: The Guard that won at Iguazú goes back into uniform.
+          spanish: La Guardia que ganó en Iguazú vuelve a ponerse el uniforme.
+        reward:
+        - {effect: add_ideas, value: EFE_guardia_movilizada}
+        - {effect: army_experience, value: 25}
+      - id: EFE_doctrina_del_condor
+        name: {english: The Condor Doctrine, spanish: La Doctrina del Cóndor}
+        days: 35
+        icon: GFX_EFE_condor_doctrine
+        icon_asset: assets/EFE/goals/EFE_condor_doctrine.dds
+        prerequisites:
+        - EFE_guardia_verde_movilizada
+        desc:
+          english: Strike from the mountains, vanish into the forest.
+          spanish: Golpear desde la montaña, desaparecer en el bosque.
+        reward:
+        - {effect: army_experience, value: 25}
+      - id: EFE_legiones_de_iguazu
+        name: {english: The Iguazú Legions, spanish: Las Legiones de Iguazú}
+        days: 42
+        icon: GFX_EFE_green_legions
+        icon_asset: assets/EFE/goals/EFE_green_legions.dds
+        prerequisites:
+        - EFE_guardia_verde_movilizada
+        desc:
+          english: The veterans of Iguazú train a new generation.
+          spanish: Los veteranos de Iguazú entrenan a una generación nueva.
+        reward:
+        - {effect: add_manpower, value: 30000}
+        - {effect: army_experience, value: 15}
+      - id: EFE_entrenamiento_de_montana
+        name: {english: Mountain and Jungle, spanish: Montaña y Selva}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - EFE_doctrina_del_condor
+        - EFE_legiones_de_iguazu
+        desc:
+          english: The Guard trains where the maps end.
+          spanish: La Guardia se entrena donde terminan los mapas.
+        reward:
+        - {effect: add_ideas, value: EFE_montana_y_selva}
+      - id: EFE_el_mariscal_etchegaray
+        name: {english: Marshal Etchegaray, spanish: El Mariscal Etchegaray}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - EFE_entrenamiento_de_montana
+        desc:
+          english: The only officer who addresses the Emperor informally takes command of the Guard.
+          spanish: El único oficial que tutea al Emperador toma el mando de la Guardia.
+        reward:
+        - {effect: army_experience, value: 50}
+      - id: EFE_cultivar_la_armadura
+        name: {english: Living Armour, spanish: Armadura Viviente}
+        days: 56
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - EFE_el_mariscal_etchegaray
+        available: {biosteel_tier: 2}
+        desc:
+          english: BioSteel plates that close their own wounds. Needs BioSteel tier 2; spends 3.
+          spanish: Placas de Bioacero que cierran sus propias heridas. Pide Bioacero nivel 2; gasta 3.
+        reward:
+        - {effect: add_ideas, value: EFE_armadura_viviente}
+        - {effect: add_variable, var: EFE_biosteel, value: -3}
+    - id: condores
+      name: {english: The Condors, spanish: Los Cóndores}
+      focuses:
+      - id: EFE_alas_del_condor
+        name: {english: Wings of the Condor, spanish: Alas del Cóndor}
+        days: 35
+        icon: GFX_EFE_condor_doctrine
+        icon_asset: assets/EFE/goals/EFE_condor_doctrine.dds
+        prerequisites:
+        - EFE_custodio_de_la_tierra
+        desc:
+          english: The Empire's air force takes the condor as its emblem.
+          spanish: La aviación del Imperio toma al cóndor como emblema.
+        reward:
+        - {effect: air_experience, value: 25}
+      - id: EFE_aerodromos_de_la_pampa
+        name: {english: The Pampa Airfields, spanish: Los Aeródromos de la Pampa}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_alas_del_condor
+        desc:
+          english: Grass runways, hidden under the trees.
+          spanish: Pistas de pasto, escondidas bajo los árboles.
+        reward:
+        - {effect: build, building: air_base, level: 2}
+      - id: EFE_cazas_de_bioacero
+        name: {english: BioSteel Fighters, spanish: Cazas de Bioacero}
+        days: 42
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - EFE_alas_del_condor
+        desc:
+          english: Lighter, tougher airframes grown in the vats.
+          spanish: Fuselajes más livianos y duros, cultivados en las cubas.
+        reward:
+        - {effect: air_experience, value: 50}
+        - {effect: add_variable, var: EFE_biosteel, value: -1}
+      - id: EFE_bombardeo_de_precision
+        name: {english: Precision Bombing, spanish: Bombardeo de Precisión}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_aerodromos_de_la_pampa
+        - EFE_cazas_de_bioacero
+        desc: {english: 'Burn the factories, spare the forests.', spanish: 'Quemar las fábricas, salvar los bosques.'}
+        reward:
+        - {effect: air_experience, value: 25}
+      - id: EFE_cielo_de_gaia
+        name: {english: The Sky of Gaia, spanish: El Cielo de Gaia}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - EFE_bombardeo_de_precision
+        desc:
+          english: Anti-air batteries around the capital.
+          spanish: Baterías antiaéreas alrededor de la capital.
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: build, building: air_base, level: 1}
+      - id: EFE_flotilla_del_plata
+        name: {english: The River Plate Flotilla, spanish: La Flotilla del Plata}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_cielo_de_gaia
+        desc:
+          english: 'The Empire founds a navy: a few ships, and dockyards for more.'
+          spanish: 'El Imperio funda una armada: pocos barcos, y astilleros para más.'
+        reward:
+        - {effect: build, building: dockyard, level: 1}
+        - {effect: navy_experience, value: 25}
+    - id: ciclo_bioacero
+      name: {english: The BioSteel Cycle, spanish: El Ciclo del Bioacero}
+      focuses:
+      - id: EFE_primera_cosecha
+        name: {english: The First Harvest, spanish: La Primera Cosecha}
+        days: 21
+        icon: GFX_EFE_biofuel_autarky
+        icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
+        prerequisites:
+        - EFE_custodio_de_la_tierra
+        desc: {english: The first vats of the century are opened., spanish: Se abren las primeras cubas del siglo.}
+        reward:
+        - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - id: EFE_biosteel_umbral_1
+        name: {english: 'BioSteel Race: Tier 1', spanish: 'Carrera del Bioacero: Nivel 1'}
+        days: 42
+        icon: GFX_EFE_biofuel_autarky
+        icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
+        prerequisites:
+        - EFE_primera_cosecha
+        available: {biosteel_tier: 1}
+        desc:
+          english: 'Five units in the vats: the first applications reach the arms factories.'
+          spanish: 'Cinco unidades en las cubas: las primeras aplicaciones llegan a las fábricas de armas.'
+        reward:
+        - {effect: add_ideas, value: EFE_biosteel_t1}
+      - id: EFE_cepa_endurecida
+        name: {english: The Hardened Strain, spanish: La Cepa Endurecida}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - EFE_biosteel_umbral_1
+        desc:
+          english: A culture that survives frost and fire.
+          spanish: Un cultivo que resiste la helada y el fuego.
+        reward:
+        - {effect: add_variable, var: EFE_biosteel, value: 2}
+      - id: EFE_biosteel_umbral_2
+        name: {english: 'BioSteel Race: Tier 2', spanish: 'Carrera del Bioacero: Nivel 2'}
+        days: 42
+        icon: GFX_EFE_biofuel_autarky
+        icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
+        prerequisites:
+        - EFE_cepa_endurecida
+        available: {biosteel_tier: 2}
+        desc:
+          english: 'Ten units: BioSteel armour for the Guard.'
+          spanish: 'Diez unidades: blindaje de Bioacero para la Guardia.'
+        reward:
+        - {effect: swap_ideas, remove: EFE_biosteel_t1, add: EFE_biosteel_t2}
+      - id: EFE_exportar_semillas
+        name: {english: Export the Seeds, spanish: Exportar las Semillas}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - EFE_biosteel_umbral_2
+        desc:
+          english: Other nations pay for sterile BioSteel seeds.
+          spanish: Otras naciones pagan por semillas estériles de Bioacero.
+        reward:
+        - {effect: add_political_power, value: 75}
+      - id: EFE_biosteel_umbral_3
+        name: {english: 'BioSteel Race: Tier 3', spanish: 'Carrera del Bioacero: Nivel 3'}
+        days: 56
+        icon: GFX_EFE_biofuel_autarky
+        icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
+        prerequisites:
+        - EFE_exportar_semillas
+        available: {biosteel_tier: 3}
+        desc: {english: 'Fifteen units: the living metal.', spanish: 'Quince unidades: el metal vivo.'}
+        reward:
+        - {effect: swap_ideas, remove: EFE_biosteel_t2, add: EFE_biosteel_t3}
+      - id: EFE_el_metal_que_crece
+        name: {english: The Metal That Grows, spanish: El Metal que Crece}
+        days: 70
+        icon: GFX_EFE_biofuel_autarky
+        icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
+        prerequisites:
+        - EFE_biosteel_umbral_3
+        desc:
+          english: BioSteel grows by itself now. The vats only have to be fed.
+          spanish: El Bioacero ya crece solo. A las cubas solo hay que alimentarlas.
+        reward:
+        - {effect: add_variable, var: EFE_biosteel, value: 5}
+        - {effect: add_research_slot, value: 1}
 
-      # -----------------------------------------------------------------------
-      - id: ruta_guerra
-        name:
-          english: "The Water War"
-          spanish: "La Guerra del Agua"
-        name_src: invented
-        theme_basis: "Ruta militar. Enemigo natural: la FCU (opuesto ideológico, codicia el Acuífero Guaraní). Antes hay que romper el cerco andino de la NAS, cliente de armas de Meridian Kinetics."
-        focuses:
-          - id: EFE_guardia_verde_movilizada
-            name:
-              english: "The Green Guard Mobilised"
-              spanish: "La Guardia Verde Movilizada"
-            name_src: invented
-            prerequisites: [EFE_milicias_verdes]
-            icon: GFX_goal_generic_allies_build_infantry
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Castellane Water Trust has made a bid for the Guaraní Aquifer. The Empire answers with uniforms."
-              spanish: "Castellane Water Trust hizo una oferta por el Acuífero Guaraní. El Imperio contesta con uniformes."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_guardia_movilizada }
-              - { effect: army_experience, value: 25 }
-            reward_src: invented
-          - id: EFE_defensa_del_acuifero
-            name:
-              english: "Defence of the Aquifer"
-              spanish: "Defensa del Acuífero"
-            name_src: invented
-            prerequisites: [EFE_guardia_verde_movilizada]
-            icon: GFX_goal_generic_defence
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "If the Union comes for the water, it will find the Empire already dug in above it."
-              spanish: "Si la Unión viene por el agua, va a encontrar al Imperio ya atrincherado encima."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_defensa_acuifero }
-            reward_src: invented
-          - id: EFE_alas_del_condor
-            name:
-              english: "Wings of the Condor"
-              spanish: "Alas del Cóndor"
-            name_src: invented
-            prerequisites: [EFE_guardia_verde_movilizada]
-            icon: GFX_goal_generic_air_doctrine
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "The condor hunts from the heights. So will the Guard: mountain brigades, air mobility, no fixed front."
-              spanish: "El cóndor caza desde la altura. La Guardia también: brigadas de montaña, movilidad aérea, ningún frente fijo."
-            desc_src: invented
-            reward:
-              - { effect: army_experience, value: 25 }
-              - { effect: add_war_support, value: 0.05 }
-            reward_src: invented
-          - id: EFE_romper_el_cerco_andino
-            name:
-              english: "Break the Andean Encirclement"
-              spanish: "Romper el Cerco Andino"
-            name_src: invented
-            prerequisites: [EFE_defensa_del_acuifero, EFE_alas_del_condor]
-            icon: GFX_goal_generic_occupy_states_ongoing_war
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "The Sky Kingdom holds the passes and buys its rifles from Meridian Kinetics. The road to the Union's water runs through Cusco."
-              spanish: "El Reino del Cielo controla los pasos y le compra los fusiles a Meridian Kinetics. El camino hacia el agua de la Unión pasa por Cusco."
-            desc_src: invented
-            available:
-              country_exists: NAS
-            reward:
-              - { effect: wargoal, target: NAS, type: annex_everything }
-            reward_src: invented
-          - id: EFE_la_guerra_del_agua
-            name:
-              english: "The Water War"
-              spanish: "La Guerra del Agua"
-            name_src: invented
-            prerequisites: [EFE_romper_el_cerco_andino]
-            icon: GFX_goal_generic_major_war
-            icon_src: invented
-            cost: 14
-            desc:
-              english: "The Union wants to put a price on every litre of water on Earth. The Empire will not let the Earth be sold."
-              spanish: "La Unión quiere ponerle precio a cada litro de agua de la Tierra. El Imperio no va a dejar que vendan la Tierra."
-            desc_src: invented
-            available:
-              country_exists: FCU
-            reward:
-              - { effect: wargoal, target: FCU, type: annex_everything }
-            reward_src: invented
-
-      # -----------------------------------------------------------------------
-      - id: consolidacion
-        name:
-          english: "Consolidation of the Mandate"
-          spanish: "Consolidación del Mandato"
-        name_src: invented
-        theme_src: canon
-        theme_basis: "§3.2 y §3.3 — legitimidad del régimen, golpe, coronación."
-        focuses:
-          - id: EFE_custodio_de_la_tierra
-            name:
-              english: "Custodian of the Earth"
-              spanish: "Custodio de la Tierra"
-            name_src: canon      # el título es literal del doc
-            structure_src: invented
-            prerequisites: []
-            reward_intent: "Political power / arranque del árbol."
-            icon: GFX_goal_generic_political_pressure
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "In 2079 the Green Militias took the capital and their commander took a title no constitution had ever written: Custodian of the Earth."
-              spanish: "En 2079 las Milicias Verdes tomaron la capital y su comandante tomó un título que ninguna constitución había escrito: Custodio de la Tierra."
-            desc_src: invented
-            reward:
-              - { effect: add_political_power, value: 120 }
-            reward_src: invented
-          - id: EFE_legado_de_iguazu
-            name:
-              english: "The Legacy of Iguazú"
-              spanish: "El Legado de Iguazú"
-            name_src: inferred   # "Batalla de Iguazú" es canon; el foco es mío
-            prerequisites: [EFE_custodio_de_la_tierra]
-            reward_intent: "War support / bono de experiencia de ejército."
-            icon: GFX_EFE_condor_doctrine
-            icon_src: user_art
-            icon_asset: assets/EFE/goals/EFE_condor_doctrine.dds
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "Iguazú was where the Militias stopped being a movement and became an army. Every officer of the Empire is taught it as scripture."
-              spanish: "Iguazú fue donde las Milicias dejaron de ser un movimiento y se volvieron un ejército. Todo oficial del Imperio la aprende como escritura sagrada."
-            desc_src: invented
-            reward:
-              - { effect: add_war_support, value: 0.05 }
-              - { effect: army_experience, value: 10 }
-            reward_src: invented
-          - id: EFE_milicias_verdes
-            name:
-              english: "The Green Militias"
-              spanish: "Las Milicias Verdes"
-            name_src: canon
-            prerequisites: [EFE_custodio_de_la_tierra]
-            reward_intent: "Manpower / unidad especial temática."
-            icon: GFX_EFE_green_legions
-            icon_src: user_art
-            icon_asset: assets/EFE/goals/EFE_green_legions.dds
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "The Militias that brought the Custodian to power are too loyal to disband and too dangerous to ignore. Better to give them a uniform."
-              spanish: "Las Milicias que llevaron al Custodio al poder son demasiado leales para disolverlas y demasiado peligrosas para ignorarlas. Mejor darles uniforme."
-            desc_src: invented
-            reward:
-              - { effect: add_manpower, value: 20000 }
-            reward_src: invented
-          - id: EFE_corona_de_2081
-            name:
-              english: "The Crown of 2081"
-              spanish: "La Corona de 2081"
-            name_src: inferred
-            prerequisites: [EFE_legado_de_iguazu, EFE_milicias_verdes]
-            reward_intent: "Estabilidad / consolidación de la ideología."
-            icon: GFX_goal_generic_national_unity
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "Two years after the coup, the Custodian became Aurelio IV. The crown made the emergency permanent."
-              spanish: "Dos años después del golpe, el Custodio se convirtió en Aurelio IV. La corona volvió permanente la emergencia."
-            desc_src: invented
-            reward:
-              - { effect: add_stability, value: 0.1 }
-            reward_src: invented
-
-      # -----------------------------------------------------------------------
-      - id: ruta_dinastia
-        name:
-          english: "The Green Dynasty"
-          spanish: "La Dinastía Verde"
-        name_src: invented
-        theme_basis: "Ruta política A (excluyente con La Guardia Manda): el Emperador y su linaje."
-        focuses:
-          - id: EFE_dinastia_verde
-            name:
-              english: "The Green Dynasty"
-              spanish: "La Dinastía Verde"
-            name_src: invented
-            prerequisites: [EFE_corona_de_2081]
-            mutually_exclusive: [EFE_la_guardia_manda]
-            icon: GFX_goal_generic_political_pressure
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Aurelio IV declares the crown hereditary. The Custodian's emergency becomes a family inheritance."
-              spanish: "Aurelio IV declara hereditaria la corona. La emergencia del Custodio se vuelve una herencia familiar."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_trono_del_bosque }
-            reward_src: invented
-          - id: EFE_el_heredero_del_norte
-            name:
-              english: "The Heir of the North"
-              spanish: "El Heredero del Norte"
-            name_src: invented
-            prerequisites: [EFE_dinastia_verde]
-            icon: GFX_goal_generic_major_alliance
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Tupã Benítez is recalled from Asunción and named heir. His satellite comes with him, into the Empire proper."
-              spanish: "Tupã Benítez vuelve de Asunción y es nombrado heredero. Su satélite viene con él, adentro del Imperio."
-            desc_src: invented
-            available:
-              country_exists: YYG
-            reward:
-              - { effect: annex, target: YYG }
-            reward_src: invented
-          - id: EFE_la_corte_de_los_bosques
-            name:
-              english: "The Court of the Forests"
-              spanish: "La Corte de los Bosques"
-            name_src: invented
-            prerequisites: [EFE_dinastia_verde]
-            icon: GFX_goal_generic_national_unity
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Titles, oaths and a court that meets under the oldest trees of the Delta. Loyalty is now a ceremony."
-              spanish: "Títulos, juramentos y una corte que se reúne bajo los árboles más viejos del Delta. La lealtad ahora es una ceremonia."
-            desc_src: invented
-            reward:
-              - { effect: add_stability, value: 0.1 }
-              - { effect: add_political_power, value: 50 }
-            reward_src: invented
-          - id: EFE_emperador_de_la_tierra
-            name:
-              english: "Emperor of the Earth"
-              spanish: "Emperador de la Tierra"
-            name_src: invented
-            prerequisites: [EFE_el_heredero_del_norte, EFE_la_corte_de_los_bosques]
-            icon: GFX_goal_generic_political_pressure
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Not Emperor of a country: Emperor of the Earth itself. The title is a claim, and the claim has no border."
-              spanish: "No Emperador de un país: Emperador de la Tierra misma. El título es un reclamo, y el reclamo no tiene frontera."
-            desc_src: invented
-            reward:
-              - { effect: swap_ideas, remove: EFE_trono_del_bosque, add: EFE_trono_eterno }
-            reward_src: invented
-
-      # -----------------------------------------------------------------------
-      - id: ruta_guardia
-        name:
-          english: "The Guard Commands"
-          spanish: "La Guardia Manda"
-        name_src: invented
-        theme_basis: "Ruta política B (excluyente con La Dinastía Verde): el Mariscal Etchegaray y los técnicos."
-        focuses:
-          - id: EFE_la_guardia_manda
-            name:
-              english: "The Guard Commands"
-              spanish: "La Guardia Manda"
-            name_src: invented
-            prerequisites: [EFE_corona_de_2081]
-            mutually_exclusive: [EFE_dinastia_verde]
-            icon: GFX_goal_generic_army_doctrines
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Marshal Etchegaray does not want the crown. He wants every decision the crown makes to pass through his desk first."
-              spanish: "El Mariscal Etchegaray no quiere la corona. Quiere que cada decisión de la corona pase antes por su escritorio."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_estado_guarnicion }
-            reward_src: invented
-          - id: EFE_consejo_de_custodios
-            name:
-              english: "The Council of Custodians"
-              spanish: "El Consejo de Custodios"
-            name_src: invented
-            prerequisites: [EFE_la_guardia_manda]
-            icon: GFX_goal_generic_secret_weapon
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Custodian Paillacar brings her scientists north. The Guard needs to know which forests to defend and which ones are already lost."
-              spanish: "La Custodia Paillacar trae a sus científicos al norte. La Guardia necesita saber qué bosques defender y cuáles ya están perdidos."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_consejo_tecnico }
-              - { effect: add_research_slot, value: 1 }
-            reward_src: invented
-          - id: EFE_la_frontera_austral
-            name:
-              english: "The Southern Frontier"
-              spanish: "La Frontera Austral"
-            name_src: invented
-            prerequisites: [EFE_la_guardia_manda]
-            icon: GFX_goal_generic_major_alliance
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "A satellite is a luxury for an empire at peace. Southern Patagonia becomes a military district."
-              spanish: "Un satélite es un lujo para un imperio en paz. Patagonia Austral pasa a ser un distrito militar."
-            desc_src: invented
-            available:
-              country_exists: PTA
-            reward:
-              - { effect: annex, target: PTA }
-            reward_src: invented
-          - id: EFE_la_junta_de_la_tierra
-            name:
-              english: "The Junta of the Earth"
-              spanish: "La Junta de la Tierra"
-            name_src: invented
-            prerequisites: [EFE_consejo_de_custodios, EFE_la_frontera_austral]
-            icon: GFX_goal_generic_army_doctrines
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "The Emperor still reigns. The Marshal governs, the scientists advise, and the Guard is everywhere."
-              spanish: "El Emperador todavía reina. El Mariscal gobierna, los científicos aconsejan y la Guardia está en todas partes."
-            desc_src: invented
-            reward:
-              - { effect: swap_ideas, remove: EFE_estado_guarnicion, add: EFE_junta_de_la_tierra }
-            reward_src: invented
-
-      # -----------------------------------------------------------------------
-      - id: satelites
-        name:
-          english: "The Custodial Satellites"
-          spanish: "Los Satélites Custodios"
-        name_src: invented
-        theme_src: canon
-        theme_basis: "§3.1 — los dos satélites están definidos con territorio exacto."
-        focuses:
-          - id: EFE_patagonia_austral
-            name:
-              english: "Southern Patagonia"
-              spanish: "Patagonia Austral"
-            name_src: canon
-            prerequisites: [EFE_corona_de_2081]
-            reward_intent: "Integración del satélite PTA."
-            icon: GFX_goal_generic_major_alliance
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "The far south guards the Empire's back and its last glaciers. Its governors answer to the Crown."
-              spanish: "El extremo sur cuida la espalda del Imperio y sus últimos glaciares. Sus gobernadores responden a la Corona."
-            desc_src: invented
-            reward:
-              - { effect: add_political_power, value: 75 }
-            reward_src: invented
-          - id: EFE_yvytu_ykua_guasu
-            name:
-              english: "Yvytu Ykua Guasu"
-              spanish: "Yvytu Ykua Guasu"
-            name_src: canon
-            prerequisites: [EFE_corona_de_2081]
-            reward_intent: "Integración del satélite YYG."
-            icon: GFX_goal_generic_major_alliance
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "The great water of the north is the Empire's reservoir, and its most precious hostage."
-              spanish: "La gran agua del norte es la reserva del Imperio, y su rehén más valioso."
-            desc_src: invented
-            reward:
-              - { effect: add_political_power, value: 75 }
-            reward_src: invented
-
-      # -----------------------------------------------------------------------
-      - id: restauracion
-        name:
-          english: "Total Restoration"
-          spanish: "Restauración Total"
-        name_src: non_canon_legacy
-        name_note: >
-          "Restauración Total" aparece en la cronología vieja de 2054 (§12), que
-          el doc marca como no canon. Lo reciclo solo como nombre de rama porque
-          encaja con la prosa canon de §3.2. Decime si preferís que no toque
-          nada de la cronología vieja. Ver Q020.
-        theme_src: canon
-        theme_basis: "§3.2 — reforestación obligatoria, control de población y consumo."
-        focuses:
-          - id: EFE_reforestacion_obligatoria
-            name:
-              english: "Compulsory Reforestation"
-              spanish: "Reforestación Obligatoria"
-            name_src: inferred
-            prerequisites: [EFE_custodio_de_la_tierra]
-            reward_intent: "Infraestructura / idea EFE_conservacion_coercitiva."
-            icon: GFX_EFE_reforest_patagonia
-            icon_src: user_art
-            icon_asset: assets/EFE/goals/EFE_reforest_patagonia.dds
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "Every citizen owes the forest a number of hours a year. The Green Guard keeps the count."
-              spanish: "Todo ciudadano le debe al bosque una cantidad de horas por año. La Guardia Verde lleva la cuenta."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_conservacion_coercitiva }
-            reward_src: invented
-          - id: EFE_cuotas_de_consumo
-            name:
-              english: "Consumption Quotas"
-              spanish: "Cuotas de Consumo"
-            name_src: inferred
-            prerequisites: [EFE_reforestacion_obligatoria]
-            reward_intent: "Idea EFE_control_poblacional."
-            icon: GFX_goal_generic_propaganda
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "What each household may eat, burn and travel is now a line in a ministry ledger."
-              spanish: "Lo que cada hogar puede comer, quemar y recorrer es ahora una línea en el libro de un ministerio."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_control_poblacional }
-            reward_src: invented
-          - id: EFE_autosuficiencia
-            name:
-              english: "The Closed Circuit"
-              spanish: "El Circuito Cerrado"
-            name_src: invented
-            prerequisites: [EFE_cuotas_de_consumo]
-            reward_intent: "Idea EFE_autarquia_estrategica / bono de recursos."
-            icon: GFX_EFE_biofuel_autarky
-            icon_src: user_art
-            icon_asset: assets/EFE/goals/EFE_biofuel_autarky.dds
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "Nothing comes in that the Empire cannot make, and nothing goes out that the Empire might need."
-              spanish: "No entra nada que el Imperio no pueda fabricar, y no sale nada que el Imperio pueda necesitar."
-            desc_src: invented
-            reward:
-              - { effect: add_ideas, value: EFE_autarquia_estrategica }
-            reward_src: invented
-
-      # -----------------------------------------------------------------------
-      - id: diplomacia_verde
-        name:
-          english: "Water, Seed and Leverage"
-          spanish: "Agua, Semilla y Palanca"
-        name_src: invented
-        theme_src: canon
-        theme_basis: >
-          §3.2 — "Tecnologías de agua, semillas y restauración ecológica como
-          herramientas de poder exterior." Es la única línea del doc que apunta a
-          proyección exterior no militar del EFE.
-        focuses:
-          - id: EFE_bancos_de_semillas
-            name:
-              english: "The Seed Banks"
-              spanish: "Los Bancos de Semillas"
-            name_src: inferred
-            prerequisites: [EFE_autosuficiencia]
-            reward_intent: "Opinión / influencia sobre países libres."
-            icon: GFX_goal_generic_trade
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "The world's last seed vaults are in Imperial hands. Hunger is a diplomatic language."
-              spanish: "Las últimas bóvedas de semillas del mundo están en manos imperiales. El hambre es un idioma diplomático."
-            desc_src: invented
-            reward:
-              - { effect: add_political_power, value: 50 }
-            reward_src: invented
-          - id: EFE_tratados_de_agua
-            name:
-              english: "Water Treaties"
-              spanish: "Tratados de Agua"
-            name_src: inferred
-            prerequisites: [EFE_bancos_de_semillas]
-            reward_intent: "Herramienta diplomática coercitiva."
-            icon: GFX_goal_generic_trade
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "Clean water, offered at a price. The price is never money."
-              spanish: "Agua limpia, ofrecida a un precio. El precio nunca es dinero."
-            desc_src: invented
-            reward:
-              - { effect: add_political_power, value: 75 }
-            reward_src: invented
-            blocked_by: >
-              Depende de que existan los 30 países libres y una estructura de
-              facciones. Ver Q018 y Q033.
-
-      # -----------------------------------------------------------------------
-      - id: biosteel_branch
-        name:
-          english: "The BioSteel Race"
-          spanish: "La Carrera del Bioacero"
-        name_src: inferred
-        theme_src: canon
-        theme_basis: "§3.4 — 'una carrera nacional de desarrollo material'."
-        focuses:
-          - id: EFE_biosteel_umbral_1
-            name:
-              english: "First Foundries"
-              spanish: "Primeras Fundiciones"
-            name_src: invented
-            prerequisites: [EFE_custodio_de_la_tierra]
-            reward_intent: "Desbloquea el contador de BioSteel + tier 1 (umbral 5)."
-            icon: GFX_goal_generic_construct_mil_factory
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "Once the Empire controls enough BioSteel, the first foundries can start growing it at scale."
-              spanish: "Cuando el Imperio controle suficiente Bioacero, las primeras fundiciones podrán cultivarlo a escala."
-            desc_src: invented
-            available:
-              biosteel_tier: 1
-            reward:
-              - { effect: add_variable, var: EFE_biosteel, value: 3 }
-              - { effect: add_ideas, value: EFE_biosteel_t1 }
-            reward_src: invented
-            depends_on_mechanic: biosteel
-          - id: EFE_biosteel_umbral_2
-            name:
-              english: "Industrial Cultivation"
-              spanish: "Cultivo Industrial"
-            name_src: invented
-            prerequisites: [EFE_biosteel_umbral_1]
-            reward_intent: "Tier 2 (umbral 10)."
-            icon: GFX_goal_generic_production
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "More BioSteel, more vats, more tonnes. The race is no longer against the others but against time."
-              spanish: "Más Bioacero, más cubas, más toneladas. La carrera ya no es contra los demás sino contra el tiempo."
-            desc_src: invented
-            available:
-              biosteel_tier: 2
-            reward:
-              - { effect: swap_ideas, remove: EFE_biosteel_t1, add: EFE_biosteel_t2 }
-            reward_src: invented
-            depends_on_mechanic: biosteel
-          - id: EFE_biosteel_umbral_3
-            name:
-              english: "Living Armour"
-              spanish: "Armadura Viviente"
-            name_src: invented
-            prerequisites: [EFE_biosteel_umbral_2]
-            reward_intent: "Tier 3 (umbral 15)."
-            icon: GFX_goal_generic_army_tanks
-            icon_src: invented
-            cost: 10
-            cost_src: invented
-            desc:
-              english: "With enough BioSteel, armour stops being built and starts being grown."
-              spanish: "Con suficiente Bioacero, el blindaje deja de construirse y empieza a cultivarse."
-            desc_src: invented
-            available:
-              biosteel_tier: 3
-            reward:
-              - { effect: swap_ideas, remove: EFE_biosteel_t2, add: EFE_biosteel_t3 }
-            reward_src: invented
-            depends_on_mechanic: biosteel
-
-      # -----------------------------------------------------------------------
-      - id: ruta_economia
-        name:
-          english: "The Forest Economy"
-          spanish: "La Economía del Bosque"
-        name_src: invented
-        theme_basis: "Ruta económica: fábricas y agua, sin romper el Mandato Verde."
-        focuses:
-          - id: EFE_ministerio_de_restauracion
-            name:
-              english: "Ministry of Restoration"
-              spanish: "Ministerio de Restauración"
-            name_src: invented
-            prerequisites: [EFE_custodio_de_la_tierra]
-            icon: GFX_goal_generic_construct_civ_factory
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "One ministry decides what is built, where, and which forest pays for it."
-              spanish: "Un solo ministerio decide qué se construye, dónde y qué bosque lo paga."
-            desc_src: invented
-            reward:
-              - { effect: build, building: industrial_complex, level: 2 }
-            reward_src: invented
-          - id: EFE_fabricas_de_la_pampa
-            name:
-              english: "Factories of the Pampas"
-              spanish: "Fábricas de la Pampa"
-            name_src: invented
-            prerequisites: [EFE_ministerio_de_restauracion]
-            icon: GFX_goal_generic_construct_mil_factory
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Arms factories on the old soy fields, roofed with solar glass and fenced with new forest."
-              spanish: "Fábricas de armas sobre los viejos campos de soja, techadas con vidrio solar y cercadas con bosque nuevo."
-            desc_src: invented
-            reward:
-              - { effect: add_variable, var: EFE_biosteel, value: 3 }
-              - { effect: build, building: arms_factory, level: 2 }
-            reward_src: invented
-          - id: EFE_red_hidrica_guarani
-            name:
-              english: "The Guaraní Water Grid"
-              spanish: "La Red Hídrica Guaraní"
-            name_src: invented
-            prerequisites: [EFE_ministerio_de_restauracion]
-            icon: GFX_goal_generic_production
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "The largest aquifer on the continent is no longer a reserve. It is infrastructure."
-              spanish: "El acuífero más grande del continente ya no es una reserva. Es infraestructura."
-            desc_src: invented
-            reward:
-              - { effect: add_variable, var: EFE_biosteel, value: 2 }
-              - { effect: add_ideas, value: EFE_red_hidrica }
-            reward_src: invented
-          - id: EFE_economia_circular
-            name:
-              english: "The Circular Economy"
-              spanish: "La Economía Circular"
-            name_src: invented
-            prerequisites: [EFE_fabricas_de_la_pampa, EFE_red_hidrica_guarani]
-            icon: GFX_goal_generic_construct_civ_factory
-            icon_src: invented
-            cost: 10
-            desc:
-              english: "Nothing is wasted, nothing is imported, nothing leaves the circle. The Empire feeds on itself and grows."
-              spanish: "Nada se desperdicia, nada se importa, nada sale del círculo. El Imperio se alimenta de sí mismo y crece."
-            desc_src: invented
-            reward:
-              - { effect: add_variable, var: EFE_biosteel, value: 3 }
-              - { effect: build, building: industrial_complex, level: 2 }
-              - { effect: add_research_slot, value: 1 }
-            reward_src: invented
-
-    layout: auto
-    layout_note: >
-      Las coordenadas x/y las calcula el generador: profundidad por
-      prerequisitos, una columna por rama. Así agregar un foco no obliga a
-      recalcular el árbol a mano.
-    unknown:
-      - "Mutually exclusive entre ramas: ¿hay caminos excluyentes?"
-      - "Rama de guerra: resuelta (2026-09-23). Enemigo natural FCU, vía la NAS."
-    see: [Q031, Q033]
-
-  # ---------------------------------------------------------------------------
   ASC: { status: not_started, see: Q032 }
 
   # ===========================================================================

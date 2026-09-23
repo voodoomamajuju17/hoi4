@@ -122,6 +122,22 @@ mechanics:
       Candidata natural a segunda facción implementada.
 
   # ===========================================================================
+  - id: efe_monte_e_integracion
+    country: EFE
+    definition_status: implementable
+    src: user_design   # "Las Ocho Potencias" (2026-09-23)
+    name: { english: "The Forest and the Integration", spanish: "El Monte y la Integración" }
+    design: >
+      EFE_control_del_monte: oculto, sube o baja con las decisiones de la
+      crisis del Monte; en 60 habilita el golpe de Anahí Quiroga.
+      EFE_integracion_yyg / EFE_integracion_pta: etapas 0-3 de la
+      integración de los satélites; en 3 se anexan con núcleos.
+    variables:
+      - { name: EFE_control_del_monte, start: 0 }
+      - { name: EFE_integracion_yyg, start: 0 }
+      - { name: EFE_integracion_pta, start: 0 }
+
+  # ===========================================================================
   - id: civil_military_balance
     country: FCU
     definition_status: partial

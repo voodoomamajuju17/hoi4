@@ -87,6 +87,28 @@ characters:
   # ---------------------------------------------------------------------------
   # Las otras siete potencias — inventados a pedido del usuario (Q016, Q017).
   # ---------------------------------------------------------------------------
+  - id: EFE_anahi_quiroga
+    country: EFE
+    src: invented   # "Las Ocho Potencias" (2026-09-23): líder de la ruta El Monte se Levanta
+    recruit_at_start: false   # la asciende el foco EFE_el_monte_se_levanta
+    name:
+      regnal:
+        english: "Anahí Quiroga, Voice of the Forest"
+        spanish: "Anahí Quiroga, la Voz del Monte"
+    born: 2068
+    lore: >
+      Guardaparques de las Yungas, hija de los comuneros que replantaron el
+      Chaco con las manos. Nunca creyó en la corte de Buenos Aires: para ella
+      el Imperio traicionó al bosque el día que puso cubas donde había
+      árboles. Cuando el monte se levanta, ella habla por él.
+    roles:
+      country_leader:
+        ideology: ecofascism
+        traits: [efe_voz_del_monte]
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/EFE/anahi_quiroga.dds"
+
   - id: ASC_allocation_council
     country: ASC
     src: invented   # Q016: "inventá todo"
@@ -623,6 +645,18 @@ characters:
 # Todos inventados. Los valores son de balance provisorio.
 # =============================================================================
 leader_traits:
+  - id: efe_heredero_de_la_tierra
+    name: { english: "Heir of the Earth", spanish: "Heredero de la Tierra" }
+    modifiers:
+      stability_factor: 0.05
+      industrial_capacity_factory: 0.05
+    src: invented   # foco EFE_heredero_de_la_tierra
+  - id: efe_voz_del_monte
+    name: { english: "Voice of the Forest", spanish: "Voz del Monte" }
+    modifiers:
+      army_defence_factor: 0.05
+      war_support_factor: 0.10
+    src: invented   # Anahí Quiroga
   - id: efe_custodian_of_the_earth
     name: { english: "Custodian of the Earth", spanish: "Custodio de la Tierra" }
     modifiers:

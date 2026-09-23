@@ -380,24 +380,33 @@ def test_phase3_content() -> None:
         tree = focus.get("focus_tree")
         focuses = tree.get_all("focus")
         ids = [pdx.text(f.get("id")) for f in focuses]
-        check("31 focos", len(focuses) == 31, str(len(focuses)))
+        check("arbol del EFE de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
-        dyn = by["EFE_dinastia_verde"].get("mutually_exclusive")
-        grd = by["EFE_la_guardia_manda"].get("mutually_exclusive")
-        check("rutas politicas excluyentes (ida)", pdx.text(dyn.get("focus")) == "EFE_la_guardia_manda")
-        check("rutas politicas excluyentes (vuelta)", pdx.text(grd.get("focus")) == "EFE_dinastia_verde")
-        war = by["EFE_la_guerra_del_agua"]
-        wg = war.get("completion_reward").get("create_wargoal")
-        check("la guerra del agua apunta a la FCU", pdx.text(wg.get("target")) == "FCU")
-        check("solo si la FCU existe", pdx.text(war.get("available").get("country_exists")) == "FCU")
-        check("antes hay que romper el cerco andino",
-              pdx.text(war.get("prerequisite").get("focus")) == "EFE_romper_el_cerco_andino")
-        heir = by["EFE_el_heredero_del_norte"].get("completion_reward").get("annex_country")
-        check("el heredero anexa YYG", pdx.text(heir.get("target")) == "YYG")
+        aurelio = by["EFE_el_mandato_renovado"].get("mutually_exclusive")
+        monte = by["EFE_los_incendios_de_gaia"].get("mutually_exclusive")
+        check("Aurelio y el Monte se excluyen (ida)", pdx.text(aurelio.get("focus")) == "EFE_los_incendios_de_gaia")
+        check("Aurelio y el Monte se excluyen (vuelta)", pdx.text(monte.get("focus")) == "EFE_el_mandato_renovado")
+        golpe = by["EFE_el_monte_se_levanta"]
+        check("el golpe pide el control del monte", "has_country_flag = EFE_monte_listo" in pdx.render(golpe.get("available")))
+        check("el golpe asciende a Anahi", "promote_character = EFE_anahi_quiroga" in pdx.render(golpe.get("completion_reward")))
+        check("el golpe dura 14 dias (2 semanas)", pdx.text(golpe.get("cost")) == "2")
+        agua = by["EFE_el_agua_no_se_vende"]
+        reward = pdx.render(agua.get("completion_reward"))
+        check("El Agua no se Vende es un ultimatum, no un wargoal directo",
+              "create_wargoal" not in reward and "meganations_fcu.7" in reward, reward)
+        check("el ultimatum pide Bioacero nivel 2", "EFE_biosteel" in pdx.render(agua.get("available")))
+        raw_tree = (mod / "common/national_focus/EFE_focus.txt").read_text()
+        monte_raw = raw_tree[raw_tree.index("id = EFE_los_incendios_de_gaia"):]
+        check("la IA toma el Monte si la estabilidad es baja",
+              "has_stability < 0.4" in monte_raw[:monte_raw.index("focus = {")])
+        check("la integracion abre decisiones, no anexa de golpe",
+              "annex_country" not in pdx.render(by["EFE_las_misiones_guaranies"].get("completion_reward")))
         capital_build = by["EFE_ministerio_de_restauracion"].get("completion_reward").get("capital_scope")
         check("fabricas con slots en la capital",
               "add_extra_state_shared_building_slots" in capital_build.keys()
               and pdx.text(capital_build.get("add_building_construction").get("type")) == "industrial_complex")
+        airfield = pdx.render(by["EFE_aerodromos_de_la_pampa"].get("completion_reward"))
+        check("una base aerea no suma slots compartidos", "add_extra_state_shared_building_slots" not in airfield, airfield)
         check("arbol asignado al EFE", pdx.text(tree.get("country").get("modifier").get("tag")) == "EFE")
         coords = [(pdx.text(f.get("x")), pdx.text(f.get("y"))) for f in focuses]
         check("sin focos superpuestos", len(set(coords)) == len(coords), str(coords))
@@ -405,7 +414,7 @@ def test_phase3_content() -> None:
             fid = pdx.text(f.get("id"))
             for pre in f.get_all("prerequisite"):
                 check(f"{fid}: prerequisito existe", pdx.text(pre.get("focus")) in ids)
-        corona = next(f for f in focuses if pdx.text(f.get("id")) == "EFE_corona_de_2081")
+        corona = by["EFE_la_corona_de_gaia"]
         check("prerequisitos AND = dos bloques", len(corona.get_all("prerequisite")) == 2)
 
         amounts = []
@@ -459,9 +468,20 @@ def test_phase3_content() -> None:
         check("el EFE arranca con 5 de BioSteel (variable)",
               pdx.text(sv.get("var")) == "EFE_biosteel" and pdx.text(sv.get("value")) == "5", efe_hist[-400:])
         by2 = {pdx.text(f.get("id")): f for f in focuses}
-        add = by2["EFE_biosteel_umbral_1"].get("completion_reward").get("add_to_variable")
-        check("el umbral 1 suma 3 de BioSteel",
-              pdx.text(add.get("var")) == "EFE_biosteel" and pdx.text(add.get("value")) == "3", str(add))
+        add = by2["EFE_el_metal_que_crece"].get("completion_reward").get("add_to_variable")
+        check("El Metal que Crece suma 5 de BioSteel",
+              pdx.text(add.get("var")) == "EFE_biosteel" and pdx.text(add.get("value")) == "5", str(add))
+        check("Anahi se recluta despues de Aurelio y Aurelio queda confirmado",
+              efe_hist.index("recruit_character = EFE_aurelio_iv") < efe_hist.index("recruit_character = EFE_anahi_quiroga")
+              and "promote_character = EFE_aurelio_iv" in efe_hist)
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        check("reforestacion: sembrar marca una region no propia",
+              "random_owned_controlled_state" in decs and "set_state_flag = EFE_reforestando" in decs)
+        check("reforestacion: a los 120 dias pasa a nucleo",
+              "days > 120" in decs and "add_core_of = EFE" in decs, decs[:200])
+        check("integracion por etapas: la ultima anexa con nucleos",
+              "annex_country" in decs and decs.index("add_core_of = EFE") < decs.rindex("annex_country"))
+        check("cada decision del Monte recalcula", decs.count("EFE_recalcular_monte = yes") == 4)
 
         section("minijuego del BioSteel: decisiones")
         cats = pdx.parse((mod / "common/decisions/categories/meganations_categories.txt").read_text())
@@ -663,7 +683,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("6 eventos del EFE (4 propios + 2 reacciones a la FCU)", len(events) == 6, str(len(events)))
+        check("12 eventos del EFE", len(events) == 12, str(len(events)))
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
@@ -700,7 +720,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("10 rasgos propios", len(body.keys()) == 10, str(body.keys()))
+        check("12 rasgos propios", len(body.keys()) == 12, str(body.keys()))
         check("rasgos no aleatorios", all(pdx.text(v.get("random")) == "no" for _, v in body.entries))
         efe = (mod / "common/characters/EFE_characters.txt").read_text()
         check("Aurelio con su rasgo", "efe_custodian_of_the_earth" in efe)
@@ -830,7 +850,8 @@ def test_fcu() -> None:
         check("el foco no recluta (error.log: solo en historia)", "recruit_character" not in reward)
 
         se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
-        check("efecto recalcular: clamp de las cuatro", se.count("clamp_variable") == 4, se[:800])
+        check("efecto recalcular: clamp de las cuatro", all(f"var = FCU_{c}" in se for c in
+              ("castellane", "halvorsen", "meridian", "obsidian")) and se.count("clamp_variable") == 5, se[:800])
         check("dos rivales debajo de 25: OR de pares con AND", "OR = {" in se and "AND = {" in se)
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         check("cada contrato recalcula el Directorio", decs.count("FCU_recalcular_directorio = yes") >= 6)
@@ -930,14 +951,15 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
-            "set_country_flag clr_country_flag clamp_variable set_variable\n"
+            "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
+            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

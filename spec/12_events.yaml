@@ -36,7 +36,7 @@ namespaces:
         src: invented
 
       - id: 2
-        trigger: { focus: EFE_corona_de_2081 }
+        trigger: { focus: EFE_la_corte_de_los_bosques }
         picture: GFX_report_event_generic_rally
         title:
           english: "The Anniversary of the Crown"
@@ -83,7 +83,7 @@ namespaces:
         src: invented
 
       - id: 4
-        trigger: { focus: EFE_la_guerra_del_agua }
+        trigger: { focus: EFE_guardian_del_acuifero }
         picture: GFX_report_event_generic_rally
         title:
           english: "Castellane's Last Offer"
@@ -152,6 +152,109 @@ namespaces:
               - { effect: add_stability, value: -0.05 }
               - { effect: add_war_support, value: 0.05 }
         src: invented
+
+      - id: 7
+        trigger: { focus: EFE_los_incendios_de_gaia }
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The Fires of Gaia"
+          spanish: "Los Incendios de Gaia"
+        desc:
+          english: "The plantations north of Gaia burned for three nights. The court blames saboteurs; the rangers blame the vats. In the reserves, men and women in green uniforms are asking the same question: who does the forest obey?"
+          spanish: "Las plantaciones al norte de Gaia ardieron tres noches. La corte culpa a saboteadores; los guardaparques culpan a las cubas. En las reservas, hombres y mujeres de uniforme verde se hacen la misma pregunta: ¿a quién obedece el monte?"
+        options:
+          - name:
+              english: "The forest will answer."
+              spanish: "El monte va a contestar."
+            effects:
+              - { effect: add_variable, var: EFE_control_del_monte, value: 10 }
+        src: user_design
+
+      - id: 8
+        trigger: { focus: EFE_el_monte_se_levanta }
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The Forest Rises"
+          spanish: "El Monte se Levanta"
+        desc:
+          english: "The rangers came down from the Yungas at dawn. By noon the Guard had stopped taking orders from the palace. Aurelio IV is still Emperor in name, somewhere in a residence full of plants. Anahí Quiroga speaks for the forest now, and the forest has stopped negotiating."
+          spanish: "Los guardaparques bajaron de las Yungas al amanecer. Al mediodía la Guardia ya no recibía órdenes del palacio. Aurelio IV sigue siendo Emperador de nombre, en alguna residencia llena de plantas. Ahora Anahí Quiroga habla por el monte, y el monte dejó de negociar."
+        options:
+          - name:
+              english: "Let the cities empty."
+              spanish: "Que se vacíen las ciudades."
+            effects:
+              - { effect: add_war_support, value: 0.10 }
+        src: user_design
+
+      - id: 9
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The Union Recognises the Water"
+          spanish: "La Unión Reconoce el Agua"
+        desc:
+          english: "Castellane's Board has signed: the Guaraní Aquifer belongs to the Empire, and the Union will pay for every litre it takes. In Buenos Aires the bells ring once."
+          spanish: "El Directorio de Castellane firmó: el Acuífero Guaraní es del Imperio, y la Unión va a pagar cada litro que se lleve. En Buenos Aires las campanas suenan una sola vez."
+        options:
+          - name:
+              english: "The water was never for sale."
+              spanish: "El agua nunca estuvo en venta."
+            effects:
+              - { effect: add_political_power, value: 150 }
+              - { effect: add_stability, value: 0.05 }
+        src: user_design
+
+      - id: 10
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The Guaraní Missions Come Home"
+          spanish: "Las Misiones Guaraníes Vuelven"
+        desc:
+          english: "Yvytu Ykua Guasu's council dissolved itself this morning. The dams of the Paraná fly the green flag."
+          spanish: "El consejo de Yvytu Ykua Guasu se disolvió esta mañana. Las represas del Paraná izan la bandera verde."
+        options:
+          - name:
+              english: "One Earth, one Empire."
+              spanish: "Una Tierra, un Imperio."
+            effects:
+              - { effect: add_political_power, value: 50 }
+        src: user_design
+
+      - id: 11
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The South Is the Empire"
+          spanish: "El Sur es el Imperio"
+        desc:
+          english: "The glacier garrisons lowered the Austral flag without a shot. From Tierra del Fuego to the Paraná, the Empire is one."
+          spanish: "Las guarniciones de los glaciares arriaron la bandera austral sin un tiro. De Tierra del Fuego al Paraná, el Imperio es uno solo."
+        options:
+          - name:
+              english: "The Custodian's map is complete."
+              spanish: "El mapa del Custodio está completo."
+            effects:
+              - { effect: add_stability, value: 0.05 }
+        src: user_design
+
+      - id: 12
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The Rangers Are Ready"
+          spanish: "Los Guardaparques Están Listos"
+        desc:
+          english: "Reports from the reserves say the same thing in different words: the Guard will not fire on the rangers. Whoever wants the forest to rise only has to ask."
+          spanish: "Los informes de las reservas dicen lo mismo con distintas palabras: la Guardia no va a disparar contra los guardaparques. El que quiera que el monte se levante solo tiene que pedirlo."
+        options:
+          - name:
+              english: "Noted."
+              spanish: "Tomado nota."
+            effects:
+              - { effect: add_political_power, value: 25 }
+        src: user_design
 
   # ===========================================================================
   meganations_fcu:
@@ -252,6 +355,35 @@ namespaces:
               - { effect: navy_experience, value: 25 }
         src: invented
 
+      - id: 7
+        trigger: effect   # ultimátum del foco EFE_el_agua_no_se_vende
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "The Water Is Not for Sale"
+          spanish: "El Agua no se Vende"
+        desc:
+          english: "The Ecofascist Empire demands that the Union renounce every claim on the Guaraní Aquifer and pay for the water it has already taken. The note is signed by the Emperor and countersigned by Marshal Etchegaray."
+          spanish: "El Imperio Ecofascista exige que la Unión renuncie a todo reclamo sobre el Acuífero Guaraní y pague el agua que ya se llevó. La nota la firma el Emperador y la refrenda el Mariscal Etchegaray."
+        options:
+          - name:
+              english: "Recognise their water. Business is business."
+              spanish: "Reconocer su agua. Los negocios son los negocios."
+            ai_chance: 30
+            effects:
+              - { effect: add_political_power, value: -100 }
+              - { effect: add_variable, var: FCU_castellane, value: -10 }
+              - { effect: run, value: FCU_recalcular_directorio }
+              - { effect: event, id: meganations_efe.9, target: EFE }
+          - name:
+              english: "The Union does not take orders from trees."
+              spanish: "La Unión no recibe órdenes de los árboles."
+            ai_chance: 70
+            effects:
+              - { effect: add_war_support, value: 0.10 }
+              - { effect: scope, target: EFE, effects: [ { effect: wargoal, target: FCU, type: annex_everything } ] }
+              - { effect: event, id: meganations_hsn.3, target: HSN }
+        src: user_design
+
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -307,3 +439,27 @@ namespaces:
               - { effect: add_war_support, value: 0.15 }
               - { effect: scope, target: FCU, effects: [ { effect: wargoal, target: HSN, type: annex_everything } ] }
         src: invented
+
+      - id: 3
+        trigger: effect   # la FCU rechaza el ultimátum del EFE
+        picture: GFX_report_event_generic_rally
+        title:
+          english: "Insuring the Water War"
+          spanish: "Asegurar la Guerra del Agua"
+        desc:
+          english: "The Union has refused the Empire's ultimatum. The clearing house prices the war before the first shot: premiums on everything that sails between the Gulf and the River Plate."
+          spanish: "La Unión rechazó el ultimátum del Imperio. La cámara de compensación le pone precio a la guerra antes del primer tiro: primas sobre todo lo que navega entre el Golfo y el Río de la Plata."
+        options:
+          - name:
+              english: "Sell insurance to both sides."
+              spanish: "Venderles seguros a los dos bandos."
+            ai_chance: 70
+            effects:
+              - { effect: add_political_power, value: 75 }
+          - name:
+              english: "Stay out of it."
+              spanish: "Mantenerse afuera."
+            ai_chance: 30
+            effects:
+              - { effect: add_stability, value: 0.05 }
+        src: user_design

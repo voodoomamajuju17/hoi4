@@ -274,6 +274,97 @@ countries:
     # -------------------------------------------------------------------------
     # Ideas escalonadas de BioSteel — ver 06_mechanics.yaml#biosteel
     # -------------------------------------------------------------------------
+      - id: EFE_mandato_del_monte
+        name: { english: "The Mandate of the Forest", spanish: "El Mandato del Monte" }
+        desc:
+          english: "The forest governs now. The cities are only tolerated."
+          spanish: "Ahora gobierna el monte. Las ciudades apenas se toleran."
+        modifiers: { political_power_gain: 0.05, war_support_factor: 0.1, stability_factor: -0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_crisis_del_monte
+        name: { english: "The Forest Crisis", spanish: "La Crisis del Monte" }
+        desc:
+          english: "Rangers against courtiers, reserves against cities. The Empire is choosing a side."
+          spanish: "Guardaparques contra cortesanos, reservas contra ciudades. El Imperio está eligiendo un bando."
+        modifiers: { stability_factor: -0.15, political_power_gain: -0.1 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_muralla_verde
+        name: { english: "The Great Green Wall", spanish: "La Gran Muralla Verde" }
+        desc:
+          english: "A belt of forest, bunkers and anti-air along the northern border."
+          spanish: "Un cinturón de bosque, búnkeres y antiaéreos sobre la frontera norte."
+        modifiers: { army_defence_factor: 0.1, production_speed_buildings_factor: 0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_desurbanizacion
+        name: { english: "Deurbanisation", spanish: "Desurbanización" }
+        desc:
+          english: "The cities are emptied into the countryside. Fewer factories, more hands for the forest."
+          spanish: "Las ciudades se vacían hacia el campo. Menos fábricas, más manos para el bosque."
+        modifiers: { industrial_capacity_factory: -0.1, consumer_goods_factor: -0.05, stability_factor: 0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_bosque_armado
+        name: { english: "The Forest Is the Army", spanish: "El Bosque es el Ejército" }
+        desc:
+          english: "Every ranger is a soldier and every tree is cover."
+          spanish: "Cada guardaparques es un soldado y cada árbol es una trinchera."
+        modifiers: { army_defence_factor: 0.15, army_org_factor: 0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_tierra_arrasada
+        name: { english: "Scorched Earth", spanish: "Tierra Arrasada" }
+        desc:
+          english: "Whoever invades the Empire finds nothing to eat, nothing to repair and nobody to rule."
+          spanish: "El que invade el Imperio no encuentra nada que comer, nada que reparar y nadie a quien gobernar."
+        modifiers: { war_support_factor: 0.1, army_defence_factor: 0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_la_selva_avanza
+        name: { english: "The Jungle Advances", spanish: "La Selva Avanza" }
+        desc:
+          english: "The offensive moves at the speed of the forest: slowly, and it never goes back."
+          spanish: "La ofensiva avanza a la velocidad del bosque: despacio, y nunca retrocede."
+        modifiers: { army_attack_factor: 0.1, experience_gain_army: 0.1 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_continente_vivo
+        name: { english: "A Living Continent", spanish: "Un Continente Vivo" }
+        desc:
+          english: "Every reforested region is one more wall and one more factory that grows by itself."
+          spanish: "Cada región reforestada es un muro más y una fábrica más que crece sola."
+        modifiers: { army_defence_factor: 0.1, army_attack_factor: 0.05, stability_factor: 0.1 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_diplomacia_hidrica
+        name: { english: "Water Diplomacy", spanish: "Diplomacia del Agua" }
+        desc:
+          english: "The Guaraní Aquifer as an embassy: fresh water in exchange for factories and friends."
+          spanish: "El Acuífero Guaraní como embajada: agua dulce a cambio de fábricas y amigos."
+        modifiers: { trade_opinion_factor: 0.25, political_power_gain: 0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_potencia_hidrica
+        name: { english: "The Water Power", spanish: "La Potencia Hídrica" }
+        desc:
+          english: "Half the world's thirst passes through the Southern Cone."
+          spanish: "La mitad de la sed del mundo pasa por el Cono Sur."
+        modifiers: { trade_opinion_factor: 0.3, political_power_gain: 0.1, industrial_capacity_factory: 0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_autarquia_total
+        name: { english: "Total Autarky", spanish: "Autarquía Total" }
+        desc:
+          english: "Nothing comes in, nothing goes out. The vats feed the Empire."
+          spanish: "No entra nada, no sale nada. Las cubas alimentan al Imperio."
+        modifiers: { industrial_capacity_factory: 0.1, local_resources_factor: 0.15, trade_opinion_factor: -0.25 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_montana_y_selva
+        name: { english: "Mountain and Jungle", spanish: "Montaña y Selva" }
+        desc:
+          english: "The Guard trains where the maps end."
+          spanish: "La Guardia se entrena donde terminan los mapas."
+        modifiers: { army_defence_factor: 0.05, army_org_factor: 0.05 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_armadura_viviente
+        name: { english: "Living Armour", spanish: "Armadura Viviente" }
+        desc:
+          english: "BioSteel plates that close their own wounds."
+          spanish: "Placas de Bioacero que cierran sus propias heridas."
+        modifiers: { army_armor_attack_factor: 0.1, army_armor_defence_factor: 0.1 }
+        src: user_design   # "Las Ocho Potencias" (2026-09-23)
     biosteel_tiers:
       implementation: national_spirit_swap
       implementation_src: inferred

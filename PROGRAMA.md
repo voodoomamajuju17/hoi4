@@ -61,8 +61,10 @@ eventos con ultimátum e IA con condiciones.
   líder, ideas temporales, efectos reutilizables
 - [~] **FCU** — el Directorio de las Cuatro (4 influencias, contratos, OPA de
   Rourke, ultimátums al EFE y a la HSN), árbol de 53 focos
-- [ ] **EFE** — rehacer el árbol: Aurelio vs Anahí, misiones de integración,
-  reforestación por etapas
+- [~] **EFE** — árbol de 56 focos: Aurelio (Dinastía Verde) vs Anahí Quiroga
+  (El Monte se Levanta, con crisis previa), integración de YYG/PTA en 3
+  etapas, reforestación (120 días → núcleo), Autarquía vs Diplomacia del
+  Agua, ultimátum a la FCU
 - [ ] **ASC** — Poder de Cómputo, Consejo Sorteado, PLAN-41 y drones
 - [ ] **HSN** — red de nodos, Kofi Aldana vs Inés Tavake (Botín, corso)
 - [ ] **NAS** — Qhapaq Ñan + Inti-Soma, los cuatro Suyus
@@ -95,10 +97,11 @@ eventos con ultimátum e IA con condiciones.
 
 ## 7. Presentación y arte
 
-- [x] Bandera, retratos e íconos del EFE; fondo del menú principal
+- [x] Bandera, retratos e íconos del EFE
+- [x] Retratos de los líderes de las 7 meganaciones (arte del usuario)
 - [~] Banderas de las 8 meganaciones (arte del usuario)
 - [ ] Banderas de los 16 satélites y los 5 señores de la guerra (hoy son franjas provisorias)
-- [ ] Retratos de líderes de las 7 meganaciones y los satélites
+- [ ] Retratos de los satélites, Marcus Rourke y Anahí Quiroga
 - [ ] Íconos de foco propios para los árboles nuevos
 - [ ] Imágenes de eventos propias
 - [ ] Íconos de los paneles de decisiones

@@ -39,8 +39,8 @@ propuesta anterior de 8 árboles.
 ## Orden de implementación
 
 1. **FCU** — cuatro influencias corporativas. *(v1 hecha)*
-2. **EFE** — rehacer el árbol actual con este formato: Aurelio vs Anahí,
-   integración de satélites por misiones, reforestación por etapas.
+2. **EFE** — Aurelio vs Anahí, integración de satélites por etapas,
+   reforestación. *(v1 hecha)*
 3. **ASC** — Poder de Cómputo repartido en 4 áreas con espera de 30 días;
    Consejo Sorteado con rasgos anuales; PLAN-41 con drones.
 4. **HSN, NAS, APF** — nodos + botín; Qhapaq Ñan + Inti-Soma; integración
@@ -86,3 +86,28 @@ propuesta anterior de 8 árboles.
 Pendiente de la FCU para v2: sabotajes y filtraciones como eventos propios de
 la Guerra Corporativa, contratos con otras potencias, IA de contratos según
 la situación.
+
+## EFE v1 — cómo quedó en el motor
+
+- Árbol de 56 focos en 7 ramas: La Dinastía Verde (Aurelio), El Monte se
+  Levanta (Anahí), Autarquía del Bioacero / Diplomacia del Agua
+  (excluyentes), Las Cubas de la Pampa, La Guardia Verde, Los Cóndores, El
+  Ciclo del Bioacero.
+- **Golpe con proceso**: *Los Incendios de Gaia* (21 días) abre el panel "El
+  Monte se Levanta": cuatro decisiones mueven `EFE_control_del_monte`
+  (oculto). En 60 salta *Los Guardaparques Están Listos* y se habilita *El
+  Monte se Levanta* (14 días): asume Anahí Quiroga, el Mandato Verde pasa a
+  ser el Mandato del Monte.
+- **Integración por etapas**: *Las Misiones Guaraníes* e *Integrar la
+  Patagonia Austral* abren tres decisiones cada una (PP + 1 Bioacero, −2%
+  estabilidad, 60 días entre etapas). La tercera da núcleos y anexa.
+- **Reforestación**: *Sembrar la Conquista* abre "Sembrar una región
+  ocupada" (2 Bioacero, marca una región no propia) y "Consolidar el
+  bosque" (las que llevan 120 días pasan a núcleo). Versión 1 con dos
+  etapas por región (el motor guarda datos por región, no por provincia).
+- **Economías**: la Autarquía abre proyectos de Bioacero; la Diplomacia del
+  Agua abre contratos de agua con la ASC, la APF y la SHD.
+- **Ultimátum**: *El Agua no se Vende* (pide Bioacero nivel 2) manda un
+  evento a la FCU: si reconoce el agua, paga y el EFE cobra; si se niega,
+  el EFE recibe el wargoal y la HSN vende seguros.
+- IA: más probable el Monte con estabilidad baja o en guerra.
