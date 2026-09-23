@@ -758,6 +758,430 @@ categories:
       - {effect: add_political_power, value: 25}
       ai_factor: 5
 
+  # ===========================================================================
+  # HSN — La Cámara de Compensación, Puerto Libre o Peaje ("Las Ocho Potencias")
+  # ===========================================================================
+  - id: HSN_nodos_category
+    country: HSN
+    icon_prefer:
+    - generic_naval
+    - generic_political_actions
+    name: {english: The Clearing House, spanish: La Cámara de Compensación}
+    desc:
+      english: 'Nodes under control: [?HSN_nodos] of 8 (Malacca, Sunda, Kanto, Manila, Taiwan, Hong Kong, Okinawa, Tsushima).\n2, 4 and 6 nodes
+        strengthen the Node Network; all 8 open the World Clearing House. Losing one hurts.\n\nLoot in the holds: [?HSN_botin]'
+      spanish: 'Nodos bajo control: [?HSN_nodos] de 8 (Malaca, Sunda, Kanto, Manila, Taiwán, Hong Kong, Okinawa, Tsushima).\n2, 4 y 6 nodos refuerzan
+        la Red de Nodos; los 8 abren la Cámara Mundial de Compensación. Perder uno duele.\n\nBotín en las bodegas: [?HSN_botin]'
+    src: user_design
+    decisions:
+    - id: HSN_asegurar_convoyes_efe
+      name:
+        english: Insure the Convoys of The Ecofascist Empire
+        spanish: Asegurar los Convoyes de El Imperio Ecofascista
+      desc:
+        english: The Ecofascist Empire is at war and its cargo needs cover. The High Seas sell umbrellas to people being bombed.
+        spanish: El Imperio Ecofascista está en guerra y su carga necesita cobertura. La Alta Mar les vende paraguas a los que están siendo bombardeados.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 10
+      cooldown_days: 90
+      visible: {flag: HSN_seguros, not_flag: HSN_tavake, country_exists: EFE}
+      available:
+        country:
+          tag: EFE
+          when: {at_war: true}
+        not: {war_with: EFE}
+      effects:
+      - {effect: add_political_power, value: 60}
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      ai_factor: 5
+    - id: HSN_asegurar_convoyes_fcu
+      name: {english: Insure the Convoys of The Union, spanish: Asegurar los Convoyes de La Unión}
+      desc:
+        english: The Union is at war and its cargo needs cover. The High Seas sell umbrellas to people being bombed.
+        spanish: La Unión está en guerra y su carga necesita cobertura. La Alta Mar les vende paraguas a los que están siendo bombardeados.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 10
+      cooldown_days: 90
+      visible: {flag: HSN_seguros, not_flag: HSN_tavake, country_exists: FCU}
+      available:
+        country:
+          tag: FCU
+          when: {at_war: true}
+        not: {war_with: FCU}
+      effects:
+      - {effect: add_political_power, value: 60}
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      ai_factor: 5
+    - id: HSN_asegurar_convoyes_asc
+      name: {english: Insure the Convoys of The Commune, spanish: Asegurar los Convoyes de La Comuna}
+      desc:
+        english: The Commune is at war and its cargo needs cover. The High Seas sell umbrellas to people being bombed.
+        spanish: La Comuna está en guerra y su carga necesita cobertura. La Alta Mar les vende paraguas a los que están siendo bombardeados.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 10
+      cooldown_days: 90
+      visible: {flag: HSN_seguros, not_flag: HSN_tavake, country_exists: ASC}
+      available:
+        country:
+          tag: ASC
+          when: {at_war: true}
+        not: {war_with: ASC}
+      effects:
+      - {effect: add_political_power, value: 60}
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      ai_factor: 5
+    - id: HSN_asegurar_convoyes_nre
+      name: {english: Insure the Convoys of Rome, spanish: Asegurar los Convoyes de Roma}
+      desc:
+        english: Rome is at war and its cargo needs cover. The High Seas sell umbrellas to people being bombed.
+        spanish: Roma está en guerra y su carga necesita cobertura. La Alta Mar les vende paraguas a los que están siendo bombardeados.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 10
+      cooldown_days: 90
+      visible: {flag: HSN_seguros, not_flag: HSN_tavake, country_exists: NRE}
+      available:
+        country:
+          tag: NRE
+          when: {at_war: true}
+        not: {war_with: NRE}
+      effects:
+      - {effect: add_political_power, value: 60}
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      ai_factor: 5
+    - id: HSN_asegurar_convoyes_shd
+      name: {english: Insure the Convoys of The Directorate, spanish: Asegurar los Convoyes de El Directorio}
+      desc:
+        english: The Directorate is at war and its cargo needs cover. The High Seas sell umbrellas to people being bombed.
+        spanish: El Directorio está en guerra y su carga necesita cobertura. La Alta Mar les vende paraguas a los que están siendo bombardeados.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 10
+      cooldown_days: 90
+      visible: {flag: HSN_seguros, not_flag: HSN_tavake, country_exists: SHD}
+      available:
+        country:
+          tag: SHD
+          when: {at_war: true}
+        not: {war_with: SHD}
+      effects:
+      - {effect: add_political_power, value: 60}
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      ai_factor: 5
+    - id: HSN_asegurar_convoyes_apf
+      name: {english: Insure the Convoys of The Federation, spanish: Asegurar los Convoyes de La Federación}
+      desc:
+        english: The Federation is at war and its cargo needs cover. The High Seas sell umbrellas to people being bombed.
+        spanish: La Federación está en guerra y su carga necesita cobertura. La Alta Mar les vende paraguas a los que están siendo bombardeados.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 10
+      cooldown_days: 90
+      visible: {flag: HSN_seguros, not_flag: HSN_tavake, country_exists: APF}
+      available:
+        country:
+          tag: APF
+          when: {at_war: true}
+        not: {war_with: APF}
+      effects:
+      - {effect: add_political_power, value: 60}
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      ai_factor: 5
+    - id: HSN_asegurar_convoyes_nas
+      name: {english: Insure the Convoys of The Sun Kingdom, spanish: Asegurar los Convoyes de El Reino del Sol}
+      desc:
+        english: The Sun Kingdom is at war and its cargo needs cover. The High Seas sell umbrellas to people being bombed.
+        spanish: El Reino del Sol está en guerra y su carga necesita cobertura. La Alta Mar les vende paraguas a los que están siendo bombardeados.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 10
+      cooldown_days: 90
+      visible: {flag: HSN_seguros, not_flag: HSN_tavake, country_exists: NAS}
+      available:
+        country:
+          tag: NAS
+          when: {at_war: true}
+        not: {war_with: NAS}
+      effects:
+      - {effect: add_political_power, value: 60}
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      ai_factor: 5
+    - id: HSN_patente_de_corso_efe
+      name:
+        english: Letter of Marque against The Ecofascist Empire
+        spanish: Patente de Corso contra El Imperio Ecofascista
+      desc:
+        english: Ninety days of licensed piracy against a concrete enemy.
+        spanish: Noventa días de piratería con licencia contra un enemigo concreto.
+      icon_prefer:
+      - generic_naval
+      - generic_army_support
+      cost: 25
+      cooldown_days: 90
+      visible: {flag: HSN_patentes, war_with: EFE}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 6}
+      - {effect: navy_experience, value: 10}
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: add_stability, value: -0.03}
+      ai_factor: 10
+    - id: HSN_patente_de_corso_fcu
+      name: {english: Letter of Marque against The Union, spanish: Patente de Corso contra La Unión}
+      desc:
+        english: Ninety days of licensed piracy against a concrete enemy.
+        spanish: Noventa días de piratería con licencia contra un enemigo concreto.
+      icon_prefer:
+      - generic_naval
+      - generic_army_support
+      cost: 25
+      cooldown_days: 90
+      visible: {flag: HSN_patentes, war_with: FCU}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 6}
+      - {effect: navy_experience, value: 10}
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: add_stability, value: -0.03}
+      ai_factor: 10
+    - id: HSN_patente_de_corso_asc
+      name: {english: Letter of Marque against The Commune, spanish: Patente de Corso contra La Comuna}
+      desc:
+        english: Ninety days of licensed piracy against a concrete enemy.
+        spanish: Noventa días de piratería con licencia contra un enemigo concreto.
+      icon_prefer:
+      - generic_naval
+      - generic_army_support
+      cost: 25
+      cooldown_days: 90
+      visible: {flag: HSN_patentes, war_with: ASC}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 6}
+      - {effect: navy_experience, value: 10}
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: add_stability, value: -0.03}
+      ai_factor: 10
+    - id: HSN_patente_de_corso_nre
+      name: {english: Letter of Marque against Rome, spanish: Patente de Corso contra Roma}
+      desc:
+        english: Ninety days of licensed piracy against a concrete enemy.
+        spanish: Noventa días de piratería con licencia contra un enemigo concreto.
+      icon_prefer:
+      - generic_naval
+      - generic_army_support
+      cost: 25
+      cooldown_days: 90
+      visible: {flag: HSN_patentes, war_with: NRE}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 6}
+      - {effect: navy_experience, value: 10}
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: add_stability, value: -0.03}
+      ai_factor: 10
+    - id: HSN_patente_de_corso_shd
+      name: {english: Letter of Marque against The Directorate, spanish: Patente de Corso contra El Directorio}
+      desc:
+        english: Ninety days of licensed piracy against a concrete enemy.
+        spanish: Noventa días de piratería con licencia contra un enemigo concreto.
+      icon_prefer:
+      - generic_naval
+      - generic_army_support
+      cost: 25
+      cooldown_days: 90
+      visible: {flag: HSN_patentes, war_with: SHD}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 6}
+      - {effect: navy_experience, value: 10}
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: add_stability, value: -0.03}
+      ai_factor: 10
+    - id: HSN_patente_de_corso_apf
+      name: {english: Letter of Marque against The Federation, spanish: Patente de Corso contra La Federación}
+      desc:
+        english: Ninety days of licensed piracy against a concrete enemy.
+        spanish: Noventa días de piratería con licencia contra un enemigo concreto.
+      icon_prefer:
+      - generic_naval
+      - generic_army_support
+      cost: 25
+      cooldown_days: 90
+      visible: {flag: HSN_patentes, war_with: APF}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 6}
+      - {effect: navy_experience, value: 10}
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_stability, value: -0.03}
+      ai_factor: 10
+    - id: HSN_patente_de_corso_nas
+      name:
+        english: Letter of Marque against The Sun Kingdom
+        spanish: Patente de Corso contra El Reino del Sol
+      desc:
+        english: Ninety days of licensed piracy against a concrete enemy.
+        spanish: Noventa días de piratería con licencia contra un enemigo concreto.
+      icon_prefer:
+      - generic_naval
+      - generic_army_support
+      cost: 25
+      cooldown_days: 90
+      visible: {flag: HSN_patentes, war_with: NAS}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 6}
+      - {effect: navy_experience, value: 10}
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: add_stability, value: -0.03}
+      ai_factor: 10
+    - id: HSN_botin_reparaciones
+      name: {english: Repairs Paid in Loot, spanish: Reparaciones con Botín}
+      desc:
+        english: Captured spare parts for the fleet. Costs 5 loot.
+        spanish: Repuestos capturados para la flota. Cuesta 5 de botín.
+      icon_prefer:
+      - generic_naval
+      - generic_industry
+      cost: 0
+      cooldown_days: 60
+      visible: {flag: HSN_botin_abierto}
+      available:
+        variable_at_least: {var: HSN_botin, value: 5}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: -5}
+      - {effect: navy_experience, value: 25}
+      ai_factor: 5
+    - id: HSN_botin_recursos
+      name: {english: Empty the Holds, spanish: Vaciar las Bodegas}
+      desc:
+        english: Seized raw materials, for three months. Costs 5 loot.
+        spanish: Materias primas incautadas, por tres meses. Cuesta 5 de botín.
+      icon_prefer:
+      - generic_naval
+      - generic_industry
+      cost: 0
+      cooldown_days: 60
+      visible: {flag: HSN_botin_abierto}
+      available:
+        variable_at_least: {var: HSN_botin, value: 5}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: -5}
+      - {effect: timed_idea, idea: HSN_bodegas_llenas, days: 90}
+      ai_factor: 5
+    - id: HSN_botin_equipo
+      name: {english: Foreign Equipment, spanish: Equipo Extranjero}
+      desc:
+        english: Captured machinery becomes an arms plant. Costs 8 loot.
+        spanish: La maquinaria capturada se vuelve una planta de armas. Cuesta 8 de botín.
+      icon_prefer:
+      - generic_naval
+      - generic_industry
+      cost: 0
+      cooldown_days: 60
+      visible: {flag: HSN_botin_abierto}
+      available:
+        variable_at_least: {var: HSN_botin, value: 8}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: -8}
+      - {effect: build, building: arms_factory, level: 1}
+      ai_factor: 5
+    - id: HSN_botin_marines
+      name: {english: Hire Marines, spanish: Contratar Marines}
+      desc:
+        english: Crews from every port want a share. Costs 4 loot.
+        spanish: Tripulaciones de todos los puertos quieren su parte. Cuesta 4 de botín.
+      icon_prefer:
+      - generic_naval
+      - generic_industry
+      cost: 0
+      cooldown_days: 60
+      visible: {flag: HSN_botin_abierto}
+      available:
+        variable_at_least: {var: HSN_botin, value: 4}
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: -4}
+      - {effect: add_manpower, value: 20000}
+      ai_factor: 5
+  - id: HSN_economia_category
+    country: HSN
+    icon_prefer:
+    - generic_naval
+    - generic_industry
+    name: {english: Free Port or Toll, spanish: Puerto Libre o Peaje}
+    desc:
+      english: The Free Port opens new free ports; the Toll opens toll hikes.
+      spanish: El Puerto Libre abre puertos francos nuevos; el Peaje abre subas de peaje.
+    src: user_design
+    decisions:
+    - id: HSN_abrir_puerto_franco
+      name: {english: Open a Free Port, spanish: Abrir un Puerto Franco}
+      desc:
+        english: Another duty-free harbour, another industrial district.
+        spanish: Otro puerto libre de aranceles, otro barrio industrial.
+      icon_prefer:
+      - generic_construction
+      - generic_naval
+      cost: 50
+      cooldown_days: 120
+      visible: {focus: HSN_el_puerto_libre}
+      effects:
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+    - id: HSN_subir_el_peaje
+      name: {english: Raise the Toll, spanish: Subir el Peaje}
+      desc:
+        english: Every strait costs a little more. Everybody complains; everybody pays.
+        spanish: Cada estrecho cuesta un poco más. Todos se quejan; todos pagan.
+      icon_prefer:
+      - generic_political_actions
+      - generic_naval
+      cost: 0
+      cooldown_days: 180
+      visible: {focus: HSN_el_peaje_de_los_estrechos}
+      effects:
+      - {effect: add_political_power, value: 100}
+      ai_factor: 5
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -943,3 +1367,119 @@ scripted_effects:
               - {effect: add_ideas, value: ASC_computo_economia_2}
               else:
               - {effect: add_ideas, value: ASC_computo_economia_1}
+
+  # HSN: cuenta los nodos controlados, pone la idea del nivel, castiga perder uno y suma botín.
+  - id: HSN_recalcular_nodos
+    effects:
+    - {effect: set_variable, var: HSN_nodos_prev, value: HSN_nodos}
+    - {effect: set_variable, var: HSN_nodos, value: 0}
+    - effect: if
+      when:
+        controls_state:
+        - Singapore
+        - Straits Settlements
+        - Malaya
+        - Kuala Lumpur
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when:
+        controls_state:
+        - West Java
+        - Banten
+        - Batavia
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when:
+        controls_state:
+        - Kanto
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when:
+        controls_state:
+        - Manila
+        - Luzon
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when:
+        controls_state:
+        - Taiwan
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when:
+        controls_state:
+        - Hong Kong
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when:
+        controls_state:
+        - Okinawa
+        - Ryukyu
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when:
+        controls_state:
+        - Kitakyūshū
+        - Kitakyushu
+        - Kyushu
+        - Fukuoka
+      then:
+      - {effect: add_variable, var: HSN_nodos, value: 1}
+    - effect: if
+      when: {idea: HSN_red_nodos_1}
+      then:
+      - {effect: remove_idea, value: HSN_red_nodos_1}
+    - effect: if
+      when: {idea: HSN_red_nodos_2}
+      then:
+      - {effect: remove_idea, value: HSN_red_nodos_2}
+    - effect: if
+      when: {idea: HSN_red_nodos_3}
+      then:
+      - {effect: remove_idea, value: HSN_red_nodos_3}
+    - effect: if
+      when: {idea: HSN_camara_mundial}
+      then:
+      - {effect: remove_idea, value: HSN_camara_mundial}
+    - effect: if
+      when: {not_flag: HSN_tavake}
+      then:
+      - effect: if
+        when:
+          variable_at_least: {var: HSN_nodos, value: 8}
+        then:
+        - {effect: add_ideas, value: HSN_camara_mundial}
+        else:
+        - effect: if
+          when:
+            variable_at_least: {var: HSN_nodos, value: 6}
+          then:
+          - {effect: add_ideas, value: HSN_red_nodos_3}
+          else:
+          - effect: if
+            when:
+              variable_at_least: {var: HSN_nodos, value: 4}
+            then:
+            - {effect: add_ideas, value: HSN_red_nodos_2}
+            else:
+            - effect: if
+              when:
+                variable_at_least: {var: HSN_nodos, value: 2}
+              then:
+              - {effect: add_ideas, value: HSN_red_nodos_1}
+    - effect: if
+      when:
+        variable_below: {var: HSN_nodos, value: HSN_nodos_prev}
+      then:
+      - {effect: timed_idea, idea: HSN_nodo_perdido, days: 180}
+    - effect: if
+      when: {flag: HSN_tavake, at_war: true}
+      then:
+      - {effect: add_variable, var: HSN_botin, value: 2}
+      - {effect: add_variable, var: HSN_botin, value: HSN_nodos}

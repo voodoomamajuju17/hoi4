@@ -903,6 +903,36 @@ def test_asc() -> None:
         check("la APF recibe el ultimatum", (mod / "events/meganations_apf.txt").exists())
 
 
+def test_hsn() -> None:
+    section("HSN: red de nodos, seguros, corso y botin")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        root = pdx.parse((mod / "common/national_focus/HSN_focus.txt").read_text()).get("focus_tree")
+        focuses = root.get_all("focus")
+        check("arbol de la HSN de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        by = {pdx.text(f.get("id")): f for f in focuses}
+        check("Aldana y Tavake se excluyen", "HSN_el_motin_de_kanto" in pdx.render(by["HSN_el_libro_de_fletes"].get("mutually_exclusive")))
+        check("el motin asciende a Tavake", "promote_character = HSN_ines_tavake" in pdx.render(by["HSN_el_motin_de_kanto"].get("completion_reward")))
+        check("el bloqueo legal es un ultimatum a la FCU", "meganations_fcu.8" in pdx.render(by["HSN_bloqueo_legal"].get("completion_reward")))
+        se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        body = se[se.index("HSN_recalcular_nodos"):]
+        check("los nodos son regiones reales: Kanto resuelto por nombre", "controls_state = 912" in body, body[:600])
+        check("un nodo que no existe nunca cuenta (y avisa)", "always = no" in body
+              and any("Hong Kong" in w for w in ctx.warnings))
+        check("perder un nodo da la idea de crisis", "HSN_nodo_perdido" in body and "value = HSN_nodos_prev" in body)
+        check("con Tavake no hay peajes", "HSN_tavake" in body)
+        ev = (mod / "events/meganations_hsn.txt").read_text()
+        check("el conteo es un evento oculto que se repite cada 30 dias", "hide_window = yes" in ev and "days = 30" in ev)
+        oa = (mod / "common/on_actions/00_meganations_on_actions.txt").read_text()
+        check("el conteo arranca con la partida", "meganations_hsn.4" in oa)
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        check("seguros solo a quien esta en guerra y no contra nosotros",
+              "HSN_asegurar_convoyes_fcu" in decs and "has_war_with = FCU" in decs)
+        check("patentes de corso contra enemigos concretos", "HSN_patente_de_corso_fcu" in decs)
+        check("el botin se gasta en decisiones", "HSN_botin_marines" in decs and "HSN_botin" in decs)
+
+
 def test_forces() -> None:
     section("armada y aviacion heredadas de 1936")
     with tempfile.TemporaryDirectory() as tmp:
@@ -990,7 +1020,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -998,7 +1028,7 @@ def test_vanilla_validation() -> None:
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
-            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list\n"
+            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -1067,6 +1097,7 @@ def main() -> int:
         test_balance,
         test_fcu,
         test_asc,
+        test_hsn,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

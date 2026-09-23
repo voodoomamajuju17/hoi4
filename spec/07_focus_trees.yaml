@@ -2223,7 +2223,667 @@ trees:
         reward:
         - {effect: add_ideas, value: FCU_punto_de_equilibrio}
 
-  HSN: { status: not_started, see: Q032 }
+  # ===========================================================================
+  HSN:
+    id: hsn_focus_tree
+    default: false
+    shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23). Kofi Aldana (La Cámara de Compensación) contra Inés Tavake (La Hermandad de la Cubierta). Nodos
+      físicos del mapa. Ids alineados con el pack de íconos.'
+    branches:
+    - id: aldana
+      name: {english: The Clearing House, spanish: La Cámara de Compensación}
+      focuses:
+      - id: HSN_el_libro_de_fletes_2100
+        name: {english: The Freight Ledger of 2100, spanish: El Libro de Fletes de 2100}
+        days: 35
+        icon: GFX_goal_generic_trade
+        desc:
+          english: 'Who carries what, where, and who paid for it: the clearing house knows.'
+          spanish: 'Qué lleva quién, a dónde y quién lo pagó: la cámara de compensación lo sabe.'
+        reward:
+        - {effect: add_political_power, value: 50}
+        - &hsn_id001 {effect: run, value: HSN_recalcular_nodos}
+      - id: HSN_la_junta_de_capitanes
+        name: {english: The Captains' Assembly, spanish: La Junta de Capitanes}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - HSN_el_libro_de_fletes_2100
+        desc:
+          english: The insurers want order. The crews want their share.
+          spanish: Las aseguradoras quieren orden. Las tripulaciones quieren su parte.
+        reward:
+        - {effect: add_political_power, value: 50}
+      - id: HSN_el_libro_de_fletes
+        name: {english: The Freight Ledger, spanish: El Libro de Fletes}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_la_junta_de_capitanes
+        mutually_exclusive:
+        - HSN_el_motin_de_kanto
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.3
+            when: {stability_below: 0.4}
+        desc:
+          english: Kofi Aldana keeps the ledger, and the ledger keeps the peace.
+          spanish: Kofi Aldana lleva el libro, y el libro mantiene la paz.
+        reward:
+        - {effect: add_political_power, value: 75}
+        - {effect: add_stability, value: 0.05}
+      - id: HSN_neutralidad_armada
+        name: {english: Armed Neutrality, spanish: Neutralidad Armada}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - HSN_el_libro_de_fletes
+        desc: {english: 'Nobody''s wars, and nobody''s victim.', spanish: 'Las guerras de nadie, y víctima de nadie.'}
+        reward:
+        - {effect: add_ideas, value: HSN_espiritu_neutralidad_armada}
+      - id: HSN_seguros_maritimos
+        name: {english: Maritime Insurance, spanish: Seguros Marítimos}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_el_libro_de_fletes
+        desc:
+          english: 'Opens the insurance decisions: sell cover to meganations at war.'
+          spanish: 'Abre las decisiones de seguros: venderles cobertura a las meganaciones en guerra.'
+        reward:
+        - {effect: flag, value: HSN_seguros}
+        - {effect: add_political_power, value: 25}
+      - id: HSN_arbitraje_de_alta_mar
+        name: {english: High Seas Arbitration, spanish: El Arbitraje de Alta Mar}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - HSN_neutralidad_armada
+        - HSN_seguros_maritimos
+        desc:
+          english: Every maritime dispute settled here, for a fee.
+          spanish: Cada disputa marítima se resuelve acá, con arancel.
+        reward:
+        - {effect: add_ideas, value: HSN_arbitraje}
+      - id: HSN_puertos_francos_del_pacifico
+        name: {english: The Pacific Free Ports, spanish: Los Puertos Francos del Pacífico}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_arbitraje_de_alta_mar
+        desc:
+          english: The Austral Sea Compact joins the clearing house.
+          spanish: El Pacto del Mar Austral se suma a la cámara de compensación.
+        reward:
+        - {effect: add_political_power, value: 75}
+        - {effect: build, building: dockyard, level: 1}
+      - id: HSN_el_tratado_de_los_estrechos
+        name: {english: The Treaty of the Straits, spanish: El Tratado de los Estrechos}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_puertos_francos_del_pacifico
+        desc:
+          english: The straits are neutral; the High Seas decide what neutral means.
+          spanish: Los estrechos son neutrales; la Alta Mar decide qué significa neutral.
+        reward:
+        - {effect: add_ideas, value: HSN_tratado_estrechos}
+        - *hsn_id001
+      - id: HSN_bloqueo_legal
+        name: {english: The Legal Blockade, spanish: El Bloqueo Legal}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - HSN_el_tratado_de_los_estrechos
+        available: {country_exists: FCU}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: Declare the Union's cargo uninsurable until it pays the toll. War only if it refuses.
+          spanish: Declarar inasegurable la carga de la Unión hasta que pague el peaje. Guerra solo si se niega.
+        reward:
+        - {effect: event, id: meganations_fcu.8, target: FCU}
+    - id: tavake
+      name: {english: The Brotherhood of the Deck, spanish: La Hermandad de la Cubierta}
+      focuses:
+      - id: HSN_el_motin_de_kanto
+        name: {english: The Mutiny of Kanto, spanish: El Motín de Kanto}
+        days: 21
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - HSN_la_junta_de_capitanes
+        mutually_exclusive:
+        - HSN_el_libro_de_fletes
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 4
+            when: {stability_below: 0.4}
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: The crews take the ports. Inés Tavake takes the clearing house. The toll system disappears; loot replaces it.
+          spanish: Las tripulaciones toman los puertos. Inés Tavake toma la cámara de compensación. Desaparecen los peajes; los reemplaza el botín.
+        reward:
+        - {effect: promote, character: HSN_ines_tavake}
+        - {effect: flag, value: HSN_tavake}
+        - {effect: event, id: meganations_hsn.6, days: 1}
+        - *hsn_id001
+      - id: HSN_capitanes_electos
+        name: {english: Elected Captains, spanish: Capitanes Electos}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - HSN_el_motin_de_kanto
+        desc: {english: Every ship votes its captain., spanish: Cada barco elige a su capitán.}
+        reward:
+        - {effect: add_ideas, value: HSN_espiritu_capitanes_electos}
+      - id: HSN_patentes_de_corso
+        name: {english: Letters of Marque, spanish: Patentes de Corso}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - HSN_el_motin_de_kanto
+        desc:
+          english: Opens 90-day letters of marque against concrete enemies.
+          spanish: Abre patentes de corso de 90 días contra enemigos concretos.
+        reward:
+        - {effect: flag, value: HSN_patentes}
+        - {effect: navy_experience, value: 25}
+      - id: HSN_botin_compartido
+        name: {english: Shared Loot, spanish: Botín Compartido}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_capitanes_electos
+        - HSN_patentes_de_corso
+        desc:
+          english: 'Opens the loot decisions: repairs, resources, equipment, marines.'
+          spanish: 'Abre las decisiones de botín: reparaciones, recursos, equipo, marines.'
+        reward:
+        - {effect: flag, value: HSN_botin_abierto}
+        - {effect: add_variable, var: HSN_botin, value: 10}
+      - id: HSN_la_flota_libre
+        name: {english: The Free Fleet, spanish: La Flota Libre}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - HSN_botin_compartido
+        desc:
+          english: Every ship with a crew is a warship.
+          spanish: Cada barco con tripulación es un buque de guerra.
+        reward:
+        - {effect: navy_experience, value: 50}
+        - {effect: build, building: dockyard, level: 1}
+      - id: HSN_la_hermandad_de_la_cubierta
+        name: {english: The Brotherhood of the Deck, spanish: La Hermandad de la Cubierta}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - HSN_la_flota_libre
+        desc: {english: 'No tolls, no insurers, no masters.', spanish: 'Sin peajes, sin aseguradoras, sin patrones.'}
+        reward:
+        - {effect: add_ideas, value: HSN_hermandad}
+      - id: HSN_abordaje_del_mundo
+        name: {english: Board the World, spanish: Abordaje del Mundo}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - HSN_la_hermandad_de_la_cubierta
+        available: {country_exists: FCU}
+        desc:
+          english: The Union sank our ships for a century. Now it is their turn.
+          spanish: La Unión hundió nuestros barcos durante un siglo. Ahora les toca a ellos.
+        reward:
+        - {effect: wargoal, target: FCU, type: annex_everything}
+        - {effect: add_war_support, value: 0.1}
+    - id: puerto_libre
+      name: {english: The Free Port, spanish: El Puerto Libre}
+      focuses:
+      - id: HSN_el_consejo_mercantil
+        name: {english: The Mercantile Council, spanish: El Consejo Mercantil}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_el_libro_de_fletes_2100
+        desc:
+          english: 'Volume or margin: the High Seas must choose.'
+          spanish: 'Volumen o margen: la Alta Mar tiene que elegir.'
+        reward:
+        - {effect: build, building: industrial_complex, level: 1}
+      - id: HSN_el_puerto_libre
+        name: {english: The Free Port, spanish: El Puerto Libre}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_el_consejo_mercantil
+        mutually_exclusive:
+        - HSN_el_peaje_de_los_estrechos
+        ai: {factor: 2}
+        desc:
+          english: No tariffs, only volume. Opens new free ports.
+          spanish: Sin aranceles, solo volumen. Abre puertos francos nuevos.
+        reward:
+        - {effect: add_ideas, value: HSN_puerto_libre}
+      - id: HSN_zonas_de_transbordo
+        name: {english: Transshipment Zones, spanish: Zonas de Transbordo}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - HSN_el_puerto_libre
+        desc:
+          english: Cargo changes ships and the High Seas keep a cut.
+          spanish: La carga cambia de barco y la Alta Mar se queda con una parte.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: HSN_la_bolsa_de_fletes
+        name: {english: The Freight Exchange, spanish: La Bolsa de Fletes}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_el_puerto_libre
+        desc:
+          english: Futures on cargo that has not sailed yet.
+          spanish: Futuros sobre carga que todavía no zarpó.
+        reward:
+        - {effect: add_political_power, value: 75}
+      - id: HSN_el_mercado_del_pacifico
+        name: {english: The Pacific Market, spanish: El Mercado del Pacífico}
+        days: 56
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_zonas_de_transbordo
+        - HSN_la_bolsa_de_fletes
+        desc:
+          english: Every port of the Pacific trades in High Seas credit.
+          spanish: Cada puerto del Pacífico comercia con crédito de la Alta Mar.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: add_stability, value: 0.05}
+    - id: peaje
+      name: {english: The Straits Toll, spanish: El Peaje de los Estrechos}
+      focuses:
+      - id: HSN_el_peaje_de_los_estrechos
+        name: {english: The Straits Toll, spanish: El Peaje de los Estrechos}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - HSN_el_consejo_mercantil
+        mutually_exclusive:
+        - HSN_el_puerto_libre
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {at_war: true}
+        desc: {english: Every ship pays. Opens toll hikes., spanish: Cada barco paga. Abre las subas de peaje.}
+        reward:
+        - {effect: add_ideas, value: HSN_peaje_estrechos}
+      - id: HSN_aduanas_flotantes
+        name: {english: Floating Customs, spanish: Aduanas Flotantes}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - HSN_el_peaje_de_los_estrechos
+        desc:
+          english: Customs ships anchored in every strait.
+          spanish: Barcos aduaneros anclados en cada estrecho.
+        reward:
+        - {effect: build, building: dockyard, level: 1}
+        - {effect: add_political_power, value: 25}
+      - id: HSN_el_arancel_de_guerra
+        name: {english: The War Tariff, spanish: El Arancel de Guerra}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - HSN_el_peaje_de_los_estrechos
+        desc: {english: Belligerents pay double., spanish: Los beligerantes pagan el doble.}
+        reward:
+        - {effect: add_political_power, value: 100}
+      - id: HSN_los_estrechos_cerrados
+        name: {english: The Closed Straits, spanish: Los Estrechos Cerrados}
+        days: 56
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - HSN_aduanas_flotantes
+        - HSN_el_arancel_de_guerra
+        desc: {english: Whoever does not pay does not pass., spanish: El que no paga no pasa.}
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+        - {effect: add_war_support, value: 0.05}
+    - id: astilleros
+      name: {english: Floating Shipyards, spanish: Astilleros Flotantes}
+      focuses:
+      - id: HSN_astilleros_flotantes
+        name: {english: Floating Shipyards, spanish: Astilleros Flotantes}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - HSN_el_libro_de_fletes_2100
+        desc:
+          english: Dry docks that sail to where the work is.
+          spanish: Diques secos que navegan hasta donde está el trabajo.
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: HSN_diques_de_kanto
+        name: {english: The Kanto Docks, spanish: Los Diques de Kanto}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - HSN_astilleros_flotantes
+        desc:
+          english: The old docks of Tokyo Bay, rebuilt.
+          spanish: Los viejos diques de la bahía de Tokio, reconstruidos.
+        reward:
+        - effect: in_state
+          state:
+          - Kanto
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+        - {effect: build, building: dockyard, level: 1}
+      - id: HSN_refinerias_de_borneo
+        name: {english: The Borneo Refineries, spanish: Las Refinerías de Borneo}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - HSN_astilleros_flotantes
+        desc:
+          english: Fuel for the largest fleet of the century.
+          spanish: Combustible para la flota más grande del siglo.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: HSN_puertos_de_aguas_profundas
+        name: {english: Deep-Water Ports, spanish: Puertos de Aguas Profundas}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - HSN_diques_de_kanto
+        - HSN_refinerias_de_borneo
+        desc:
+          english: Ports for ships that no longer fit anywhere else.
+          spanish: Puertos para barcos que ya no entran en ningún otro lado.
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: HSN_ciudades_flotantes
+        name: {english: Floating Cities, spanish: Ciudades Flotantes}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - HSN_puertos_de_aguas_profundas
+        desc: {english: Whole districts built on hulls., spanish: Barrios enteros construidos sobre cascos.}
+        reward:
+        - {effect: add_ideas, value: HSN_espiritu_ciudades_flotantes}
+      - id: HSN_la_oficina_de_patentes_navales
+        name: {english: The Naval Patent Office, spanish: La Oficina de Patentes Navales}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - HSN_puertos_de_aguas_profundas
+        desc:
+          english: Every hull design of the century passes through here.
+          spanish: Cada diseño de casco del siglo pasa por acá.
+        reward:
+        - {effect: add_research_slot, value: 1}
+    - id: cubierta
+      name: {english: Deck Infantry, spanish: Infantería de Cubierta}
+      focuses:
+      - id: HSN_marines_de_alta_mar
+        name: {english: High Seas Marines, spanish: Marines de Alta Mar}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - HSN_el_libro_de_fletes_2100
+        desc: {english: Sailors who can hold a beach., spanish: Marineros que pueden sostener una playa.}
+        reward:
+        - {effect: army_experience, value: 25}
+      - id: HSN_doctrina_de_desembarco
+        name: {english: Landing Doctrine, spanish: Doctrina de Desembarco}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - HSN_marines_de_alta_mar
+        desc: {english: From ship to shore in one tide., spanish: Del barco a la costa en una marea.}
+        reward:
+        - {effect: army_experience, value: 25}
+      - id: HSN_asalto_anfibio
+        name: {english: Amphibious Assault, spanish: Asalto Anfibio}
+        days: 42
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - HSN_marines_de_alta_mar
+        desc: {english: The islands are taken from the sea., spanish: Las islas se toman desde el mar.}
+        reward:
+        - {effect: army_experience, value: 25}
+        - {effect: navy_experience, value: 25}
+      - id: HSN_guarniciones_de_isla
+        name: {english: Island Garrisons, spanish: Guarniciones de Isla}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - HSN_doctrina_de_desembarco
+        - HSN_asalto_anfibio
+        desc: {english: Every node has its garrison., spanish: Cada nodo tiene su guarnición.}
+        reward:
+        - {effect: add_manpower, value: 25000}
+      - id: HSN_fuerzas_de_muelle
+        name: {english: Dock Forces, spanish: Fuerzas de Muelle}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - HSN_guarniciones_de_isla
+        desc: {english: Stevedores with rifles., spanish: Estibadores con fusiles.}
+        reward:
+        - {effect: add_ideas, value: HSN_infanteria_de_cubierta}
+      - id: HSN_el_almirante_de_tierra
+        name: {english: The Land Admiral, spanish: El Almirante de Tierra}
+        days: 56
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - HSN_fuerzas_de_muelle
+        desc:
+          english: The only general who learned war on a deck.
+          spanish: El único general que aprendió la guerra en una cubierta.
+        reward:
+        - {effect: army_experience, value: 50}
+    - id: armada
+      name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
+      focuses:
+      - id: HSN_escoltas_de_convoy
+        name: {english: Convoy Escorts, spanish: Escoltas de Convoy}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - HSN_el_libro_de_fletes_2100
+        desc:
+          english: Nobody attacks an insured convoy twice.
+          spanish: Nadie ataca dos veces un convoy asegurado.
+        reward:
+        - {effect: navy_experience, value: 25}
+        - {effect: build, building: dockyard, level: 1}
+      - id: HSN_aviacion_naval
+        name: {english: Naval Aviation, spanish: Aviación Naval}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - HSN_escoltas_de_convoy
+        desc: {english: Planes that know the sea., spanish: Aviones que conocen el mar.}
+        reward:
+        - {effect: air_experience, value: 50}
+        - {effect: build, building: air_base, level: 2}
+      - id: HSN_cazadores_de_submarinos
+        name: {english: Submarine Hunters, spanish: Cazadores de Submarinos}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - HSN_escoltas_de_convoy
+        desc:
+          english: The ASC's submarines are the first target.
+          spanish: Los submarinos de la ASC son el primer blanco.
+        reward:
+        - {effect: navy_experience, value: 25}
+      - id: HSN_grupos_de_portaaviones
+        name: {english: Carrier Groups, spanish: Grupos de Portaaviones}
+        days: 56
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - HSN_aviacion_naval
+        - HSN_cazadores_de_submarinos
+        desc:
+          english: The clearing house finances the carriers; the carriers protect the clearing house.
+          spanish: La cámara de compensación financia los portaaviones; los portaaviones protegen a la cámara.
+        reward:
+        - {effect: navy_experience, value: 50}
+        - {effect: air_experience, value: 25}
+      - id: HSN_la_armada_de_alta_mar
+        name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - HSN_grupos_de_portaaviones
+        desc: {english: The largest fleet of the century., spanish: La flota más grande del siglo.}
+        reward:
+        - {effect: add_ideas, value: HSN_armada_de_alta_mar}
+      - id: HSN_dominio_de_las_rutas
+        name: {english: Mastery of the Routes, spanish: Dominio de las Rutas}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_la_armada_de_alta_mar
+        desc:
+          english: Every route in Asia is a High Seas route.
+          spanish: Cada ruta de Asia es una ruta de la Alta Mar.
+        reward:
+        - {effect: navy_experience, value: 25}
+        - *hsn_id001
+    - id: nodos
+      name: {english: The Nodes, spanish: Los Nodos}
+      focuses:
+      - id: HSN_malaca
+        name: {english: 'Node: Malacca', spanish: 'Nodo: Malaca'}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_el_libro_de_fletes_2100
+        desc:
+          english: 'The first node: the strait where half the world''s oil passes.'
+          spanish: 'El primer nodo: el estrecho por donde pasa la mitad del petróleo del mundo.'
+        reward:
+        - effect: in_state
+          state:
+          - Singapore
+          - Straits Settlements
+          - Malaya
+          - Kuala Lumpur
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: air_base, level: 1}
+        - *hsn_id001
+      - id: HSN_nodo_sunda
+        name: {english: 'Node: Sunda', spanish: 'Nodo: Sunda'}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_malaca
+        desc: {english: The southern door between two oceans., spanish: La puerta sur entre dos océanos.}
+        reward:
+        - effect: in_state
+          state:
+          - West Java
+          - Banten
+          - Batavia
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: air_base, level: 1}
+        - *hsn_id001
+      - id: HSN_nodo_manila
+        name: {english: 'Node: Manila', spanish: 'Nodo: Manila'}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_nodo_sunda
+        desc:
+          english: The bay that watches the South China Sea.
+          spanish: La bahía que vigila el Mar de la China Meridional.
+        reward:
+        - effect: in_state
+          state:
+          - Manila
+          - Luzon
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: air_base, level: 1}
+        - *hsn_id001
+      - id: HSN_nodo_taiwan
+        name: {english: 'Node: Taiwan', spanish: 'Nodo: Taiwán'}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_nodo_manila
+        desc:
+          english: The strait the Directorate watches every day.
+          spanish: El estrecho que el Directorio mira todos los días.
+        reward:
+        - effect: in_state
+          state:
+          - Taiwan
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: air_base, level: 1}
+        - *hsn_id001
+      - id: HSN_nodo_hong_kong
+        name: {english: 'Node: Hong Kong', spanish: 'Nodo: Hong Kong'}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_nodo_taiwan
+        desc:
+          english: A node in the hands of the warlords. The High Seas claim it.
+          spanish: Un nodo en manos de los señores de la guerra. La Alta Mar lo reclama.
+        reward:
+        - effect: in_state
+          state:
+          - Hong Kong
+          effects:
+          - {effect: claim, value: HSN}
+        - *hsn_id001
+        - {effect: add_political_power, value: 25}
+      - id: HSN_nodo_okinawa
+        name: {english: 'Node: Okinawa', spanish: 'Nodo: Okinawa'}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_nodo_hong_kong
+        desc:
+          english: The chain of islands that closes the East China Sea.
+          spanish: La cadena de islas que cierra el Mar de la China Oriental.
+        reward:
+        - effect: in_state
+          state:
+          - Okinawa
+          - Ryukyu
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: air_base, level: 1}
+        - *hsn_id001
+      - id: HSN_la_red_de_alta_mar
+        name: {english: The High Seas Network, spanish: La Red de Alta Mar}
+        days: 70
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_nodo_okinawa
+        desc:
+          english: 'Every node connected: a network that no fleet can cut in one place.'
+          spanish: 'Todos los nodos conectados: una red que ninguna flota puede cortar en un solo lugar.'
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_research_slot, value: 1}
+        - *hsn_id001
+
   NAS: { status: not_started, see: Q032 }
   SHD: { status: not_started, see: Q032 }
   APF: { status: not_started, see: Q032 }

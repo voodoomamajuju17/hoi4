@@ -19,6 +19,7 @@ from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block
 from . import ideas as ideas_mod
+from . import effects as effects_mod
 from .effects import EffectContext, scripted_effect_ids, render_effects
 
 SOURCE = "spec/12_events.yaml"
@@ -52,6 +53,7 @@ def all_event_ids(ctx: BuildContext) -> set[str]:
 
 
 def emit(ctx: BuildContext) -> None:
+    effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     known_ideas = ideas_mod.all_idea_ids(ctx)
     icons = ctx.vanilla.gfx_names() if ctx.vanilla else None
     effects_used: dict[str, str] = {}
@@ -99,6 +101,8 @@ def emit(ctx: BuildContext) -> None:
             else:
                 ctx.warn(f"{eid}: la imagen '{picture}' no existe en el juego; el evento sale sin imagen.")
         b.add("is_triggered_only", True)
+        if ev.get("hidden"):
+            b.add("hide_window", True)  # evento de mantenimiento: corre sin ventana
 
         options = ev.get("options") or []
         if not options or len(options) > len(OPTION_LETTERS):

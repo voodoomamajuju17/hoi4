@@ -384,6 +384,33 @@ namespaces:
               - { effect: event, id: meganations_hsn.3, target: HSN }
         src: user_design
 
+      - id: 8
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Legal Blockade, spanish: El Bloqueo Legal}
+        desc:
+          english: The High Seas clearing house has declared the Union's Pacific cargo 'uninsurable' until the Union pays the toll of the straits like
+            everyone else. Without insurance, no ship leaves port.
+          spanish: La cámara de compensación de la Alta Mar declaró 'inasegurable' la carga de la Unión en el Pacífico hasta que pague el peaje de los
+            estrechos como todos. Sin seguro, ningún barco sale del puerto.
+        options:
+        - name: {english: Pay. Cheaper than a war., spanish: Pagar. Más barato que una guerra.}
+          ai_chance: 40
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: event, id: meganations_hsn.5, target: HSN}
+        - name:
+            english: Meridian will insure our ships. With guns.
+            spanish: Meridian va a asegurar nuestros barcos. Con cañones.
+          ai_chance: 60
+          effects:
+          - {effect: add_war_support, value: 0.1}
+          - effect: scope
+            target: HSN
+            effects:
+            - {effect: wargoal, target: FCU, type: annex_everything}
+        src: user_design
+
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -462,6 +489,47 @@ namespaces:
             ai_chance: 30
             effects:
               - { effect: add_stability, value: 0.05 }
+        src: user_design
+
+      - id: 4
+        trigger: on_startup
+        hidden: true
+        picture: GFX_report_event_generic_factory
+        title: {english: Node Count, spanish: Conteo de Nodos}
+        desc: {english: Monthly count of the node network., spanish: Conteo mensual de la red de nodos.}
+        options:
+        - name: {english: Update the ledgers., spanish: Actualizar los libros.}
+          effects:
+          - {effect: run, value: HSN_recalcular_nodos}
+          - {effect: event, id: meganations_hsn.4, days: 30}
+        src: user_design
+      - id: 5
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Union Pays the Toll, spanish: La Unión Paga el Peaje}
+        desc:
+          english: 'The Union has accepted the High Seas'' terms: every Union cargo in the Pacific pays the clearing house. Kofi Aldana does not celebrate.
+            He files the receipt.'
+          spanish: 'La Unión aceptó las condiciones de la Alta Mar: cada carga de la Unión en el Pacífico le paga a la cámara de compensación. Kofi
+            Aldana no festeja. Archiva el recibo.'
+        options:
+        - name: {english: Filed., spanish: Archivado.}
+          effects:
+          - {effect: add_political_power, value: 150}
+        src: user_design
+      - id: 6
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Mutiny of Kanto, spanish: El Motín de Kanto}
+        desc:
+          english: Four hundred sailors and a megaphone. By evening the port of Kanto flies a black flag over the clearing house, and Captain Inés Tavake
+            announces that the sea no longer pays anyone.
+          spanish: Cuatrocientos marineros y un megáfono. A la noche el puerto de Kanto flamea una bandera negra sobre la cámara de compensación, y
+            la Capitana Inés Tavake anuncia que el mar ya no le paga a nadie.
+        options:
+        - name: {english: No masters., spanish: Sin patrones.}
+          effects:
+          - {effect: add_war_support, value: 0.1}
         src: user_design
 
   # ===========================================================================

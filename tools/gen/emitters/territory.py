@@ -90,6 +90,8 @@ def emit(ctx: BuildContext) -> None:
                 bucket.append(s)
 
     _check_tags(ctx)
+    # Para focos y decisiones que apuntan a una región por nombre (nodos de la HSN...).
+    ctx.data["state_ids_by_name"] = {k: v[0].id for k, v in by_name.items()}
     assignment = _resolve(ctx, wanted, states, names, by_name)
     # Un state cuyo archivo no se puede reescribir sin riesgo queda con su
     # dueño vanilla: se lo saca del reparto ANTES de calcular capitales, para

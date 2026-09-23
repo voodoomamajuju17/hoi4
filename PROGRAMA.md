@@ -69,7 +69,9 @@ eventos con ultimátum e IA con condiciones.
   30 días para cambiarla, 3 niveles), Consejo Sorteado (3 rasgos al azar por año),
   PLAN-41, Plan Total vs Mercado de Cómputo, ultimátum a la APF
 - [ ] Íconos propios de los focos (pack de 96 del usuario, 12 por meganación): cargar cuando se pida
-- [ ] **HSN** — red de nodos, Kofi Aldana vs Inés Tavake (Botín, corso)
+- [~] **HSN** — árbol de 50 focos: 8 nodos reales del mapa (conteo mensual, 2/4/6/8,
+  perder uno duele), Aldana (seguros, arbitraje, Bloqueo Legal a la FCU) vs Inés
+  Tavake (sin peajes: Botín, patentes de corso), Puerto Libre vs Peaje
 - [ ] **NAS** — Qhapaq Ñan + Inti-Soma, los cuatro Suyus
 - [ ] **APF** — Desarrollo + Integración, Amara vs Diallo
 - [ ] **SHD** — los tres caudales, la Gran Crecida

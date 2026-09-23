@@ -775,7 +775,131 @@ countries:
           spanish: "El Directorio aprendió a moverse junto. Costó un siglo y cuatro abogados por ciudadano."
         modifiers: { stability_factor: 0.05, political_power_gain: 0.1 }
     see: Q030
-  HSN: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  HSN:
+    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    focus_ideas:
+    - id: HSN_red_nodos_1
+      name: {english: The Node Network I, spanish: La Red de Nodos I}
+      desc:
+        english: 'Two or more nodes: convoys insured, routes secured.'
+        spanish: 'Dos nodos o más: convoyes asegurados, rutas protegidas.'
+      modifiers: {trade_opinion_factor: 0.1, industrial_capacity_dockyard: 0.05}
+      src: user_design
+    - id: HSN_red_nodos_2
+      name: {english: The Node Network II, spanish: La Red de Nodos II}
+      desc:
+        english: 'Four or more nodes: tolls pay for factories nobody has to build.'
+        spanish: 'Cuatro nodos o más: los peajes pagan fábricas que nadie tiene que construir.'
+      modifiers: {trade_opinion_factor: 0.15, industrial_capacity_dockyard: 0.1, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: HSN_red_nodos_3
+      name: {english: The Node Network III, spanish: La Red de Nodos III}
+      desc:
+        english: 'Six or more nodes: every cargo manifest in Asia crosses the clearing house.'
+        spanish: 'Seis nodos o más: cada manifiesto de carga de Asia pasa por la cámara de compensación.'
+      modifiers:
+        trade_opinion_factor: 0.2
+        industrial_capacity_dockyard: 0.1
+        industrial_capacity_factory: 0.1
+        research_speed_factor: 0.05
+      src: user_design
+    - id: HSN_camara_mundial
+      name: {english: The World Clearing House, spanish: La Cámara Mundial de Compensación}
+      desc:
+        english: All eight nodes. Half the world's cargo pays the High Seas before it arrives.
+        spanish: Los ocho nodos. La mitad de la carga del mundo le paga a la Alta Mar antes de llegar.
+      modifiers:
+        trade_opinion_factor: 0.3
+        industrial_capacity_dockyard: 0.15
+        industrial_capacity_factory: 0.1
+        research_speed_factor: 0.05
+        political_power_gain: 0.1
+      src: user_design
+    - id: HSN_nodo_perdido
+      name: {english: A Node Lost, spanish: Un Nodo Perdido}
+      desc:
+        english: A strait has fallen. The insurers panic, and so do the captains.
+        spanish: Cayó un estrecho. Las aseguradoras entran en pánico, y los capitanes también.
+      modifiers: {stability_factor: -0.1, political_power_gain: -0.15}
+      src: user_design
+    - id: HSN_espiritu_neutralidad_armada
+      name: {english: Armed Neutrality, spanish: Neutralidad Armada}
+      desc:
+        english: The High Seas fight nobody's wars, and sink anyone who tries to make them.
+        spanish: La Alta Mar no pelea las guerras de nadie, y hunde al que intente obligarla.
+      modifiers: {army_defence_factor: 0.05, industrial_capacity_dockyard: 0.05}
+      src: user_design
+    - id: HSN_arbitraje
+      name: {english: High Seas Arbitration, spanish: El Arbitraje de Alta Mar}
+      desc:
+        english: Every maritime dispute in Asia is settled in the clearing house, for a fee.
+        spanish: Cada disputa marítima de Asia se resuelve en la cámara de compensación, con arancel.
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
+      src: user_design
+    - id: HSN_tratado_estrechos
+      name: {english: The Treaty of the Straits, spanish: El Tratado de los Estrechos}
+      desc:
+        english: The straits are neutral, and the High Seas define neutral.
+        spanish: Los estrechos son neutrales, y la Alta Mar define qué es neutral.
+      modifiers: {trade_opinion_factor: 0.15, political_power_gain: 0.05}
+      src: user_design
+    - id: HSN_espiritu_capitanes_electos
+      name: {english: Elected Captains, spanish: Capitanes Electos}
+      desc:
+        english: Every ship votes its captain. Every captain can be voted off.
+        spanish: Cada barco elige a su capitán. Cada capitán puede ser votado afuera.
+      modifiers: {war_support_factor: 0.1, stability_factor: -0.05}
+      src: user_design
+    - id: HSN_hermandad
+      name: {english: The Brotherhood of the Deck, spanish: La Hermandad de la Cubierta}
+      desc:
+        english: No tolls, no insurers, no masters. The sea belongs to whoever sails it.
+        spanish: Sin peajes, sin aseguradoras, sin patrones. El mar es de quien lo navega.
+      modifiers: {war_support_factor: 0.1, army_attack_factor: 0.05, industrial_capacity_dockyard: 0.1}
+      src: user_design
+    - id: HSN_bodegas_llenas
+      name: {english: Full Holds, spanish: Bodegas Llenas}
+      desc:
+        english: The loot is in the warehouses. For a while, nothing is scarce.
+        spanish: El botín está en los galpones. Por un tiempo, nada escasea.
+      modifiers: {local_resources_factor: 0.15}
+      src: user_design
+    - id: HSN_puerto_libre
+      name: {english: The Free Port, spanish: El Puerto Libre}
+      desc:
+        english: No tariffs, only volume. Everything passes through the High Seas.
+        spanish: Sin aranceles, solo volumen. Todo pasa por la Alta Mar.
+      modifiers: {trade_opinion_factor: 0.25, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: HSN_peaje_estrechos
+      name: {english: The Straits Toll, spanish: El Peaje de los Estrechos}
+      desc:
+        english: Every ship pays. Nobody likes it; everybody pays.
+        spanish: Cada barco paga. A nadie le gusta; todos pagan.
+      modifiers: {political_power_gain: 0.15, trade_opinion_factor: -0.15}
+      src: user_design
+    - id: HSN_espiritu_ciudades_flotantes
+      name: {english: Floating Cities, spanish: Ciudades Flotantes}
+      desc:
+        english: Whole districts built on hulls. The nation is wherever its docks are.
+        spanish: Barrios enteros construidos sobre cascos. La nación está donde estén sus muelles.
+      modifiers: {industrial_capacity_dockyard: 0.1, production_speed_buildings_factor: 0.1}
+      src: user_design
+    - id: HSN_infanteria_de_cubierta
+      name: {english: Deck Infantry, spanish: Infantería de Cubierta}
+      desc:
+        english: Marines who fight from the ship to the beach and back.
+        spanish: Infantes que pelean del barco a la playa y de vuelta.
+      modifiers: {army_attack_factor: 0.05, army_org_factor: 0.05}
+      src: user_design
+    - id: HSN_armada_de_alta_mar
+      name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
+      desc:
+        english: The largest fleet of the century answers to a clearing house.
+        spanish: La flota más grande del siglo le responde a una cámara de compensación.
+      modifiers: {industrial_capacity_dockyard: 0.1, war_support_factor: 0.05}
+      src: user_design
+    see: Q030
   NAS: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   SHD: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   APF: { coverage: unknown, starting_ideas: unknown, see: Q030 }

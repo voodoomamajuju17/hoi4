@@ -146,6 +146,55 @@ mechanics:
       - { name: EFE_integracion_pta, start: 0 }
 
   # ===========================================================================
+  - id: hsn_red_de_nodos
+    country: HSN
+    definition_status: implementable
+    src: user_design
+    name: {english: The Node Network, spanish: La Red de Nodos}
+    design: 'Ocho nodos físicos (regiones reales del mapa). Un evento oculto mensual cuenta los que la HSN controla: 2+, 4+, 6+ y los 8 dan ideas
+      crecientes (con los 8: Cámara Mundial de Compensación). Perder un nodo da una idea de crisis por 180 días. Con Tavake no hay peajes: los nodos
+      y la guerra generan Botín.'
+    nodes:
+    - id: malaca
+      names:
+      - Singapore
+      - Straits Settlements
+      - Malaya
+      - Kuala Lumpur
+    - id: sunda
+      names:
+      - West Java
+      - Banten
+      - Batavia
+    - id: kanto
+      names:
+      - Kanto
+    - id: manila
+      names:
+      - Manila
+      - Luzon
+    - id: taiwan
+      names:
+      - Taiwan
+    - id: hong_kong
+      names:
+      - Hong Kong
+    - id: okinawa
+      names:
+      - Okinawa
+      - Ryukyu
+    - id: kyushu
+      names:
+      - Kitakyūshū
+      - Kitakyushu
+      - Kyushu
+      - Fukuoka
+    variables:
+    - {name: HSN_nodos, start: 0}
+    - {name: HSN_nodos_prev, start: 0}
+    - {name: HSN_botin, start: 0}
+
+  # ===========================================================================
   - id: civil_military_balance
     country: FCU
     definition_status: partial

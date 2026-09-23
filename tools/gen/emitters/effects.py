@@ -10,6 +10,9 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: set_variable, var: X, value: N }      -> set_variable
   { effect: clamp, var: X, min: A, max: B }       -> clamp_variable
   { effect: flag, value: X, days: N } / { effect: clear_flag, value: X }   (days: vence sola)
+  { effect: in_state, state: [nombres], effects: [...] } -> ID = { ... }
+  { effect: build_here, building, level }         -> construcción en la región del scope
+  { effect: claim, value: TAG }                   -> add_claim_by (en regiones)
   { effect: random, options: [ { weight: N, effects: [...] }, ... ] } -> random_list
   { effect: remove_idea, value: X }               -> remove_ideas
   { effect: timed_idea, idea: X, days: N }        -> add_timed_idea
@@ -29,8 +32,38 @@ ids de idea contra 05_ideas.yaml.
 
 from __future__ import annotations
 
+import unicodedata
+
 from ..errors import SpecError
 from ..pdx import Block
+
+# Regiones por nombre (lo carga cada emisor desde el reparto del territorio).
+# Un nombre que no está en el juego se reemplaza por algo que nunca se cumple
+# y queda anotado en UNRESOLVED para que el emisor avise.
+_STATES: dict[str, int] | None = None
+UNRESOLVED: set[str] = set()
+
+
+def use_states(mapping: dict[str, int] | None) -> None:
+    global _STATES
+    _STATES = mapping
+
+
+def _norm(name: str) -> str:
+    text = unicodedata.normalize("NFKD", name)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    return " ".join(text.lower().split())
+
+
+def resolve_state(names) -> int | None:
+    names = [names] if isinstance(names, (str, int)) else list(names)
+    for n in names:
+        if isinstance(n, int):
+            return n
+        if _STATES and _norm(n) in _STATES:
+            return _STATES[_norm(n)]
+    UNRESOLVED.add(" / ".join(str(n) for n in names))
+    return None
 
 # Efectos cuyo valor es un número o un id suelto: `efecto = valor`.
 SCALAR_EFFECTS = {
@@ -217,6 +250,27 @@ def render_effects(owner: str, items: list[dict], known,
             block.add(key, item["value"])
             effects_used.setdefault(key, owner)
             continue
+        if effect == "in_state":
+            sid = resolve_state(item["state"])
+            if sid is None:
+                continue
+            block.add(str(sid), render_effects(owner, item.get("effects") or [], ec, effects_used, where=where))
+            continue
+        if effect == "build_here":
+            building = item.get("building")
+            if ec.buildings and building not in ec.buildings:
+                raise SpecError(f"{owner}: el edificio '{building}' no existe en common/buildings/", where=where)
+            construction = Block()
+            construction.add("type", building)
+            construction.add("level", int(item.get("level", 1)))
+            construction.add("instant_build", True)
+            block.add("add_building_construction", construction)
+            effects_used.setdefault("add_building_construction", owner)
+            continue
+        if effect == "claim":
+            block.add("add_claim_by", item["value"])
+            effects_used.setdefault("add_claim_by", owner)
+            continue
         if effect == "run":
             name = item["value"]
             if ec.scripted is not None and name not in ec.scripted:
@@ -289,6 +343,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       state_flag / not_state_flag: X      -> has_state_flag (en regiones)
       state_flag_days: { flag, days }     -> has_state_flag = { flag days > N }
       stability_below: 0.4                -> has_stability < 0.4
+      controls_state: [nombres]           -> controls_state (región por nombre)
+      war_with: TAG                       -> has_war_with
+      country: { tag, when: {..} }        -> TAG = { .. }
       any: [ {..}, {..} ]                 -> OR
       not: { .. }                         -> NOT (no se cumplen todas juntas)
     Varias condiciones en el mismo bloque se cumplen todas (AND).
@@ -358,6 +415,18 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             inner.add("days", Compare(">", int(value["days"])))
             block.add("has_state_flag", inner)
             triggers_used.setdefault("has_state_flag", owner)
+        elif key == "controls_state":
+            sid = resolve_state(value)
+            if sid is None:
+                block.add("always", False)
+            else:
+                block.add("controls_state", sid)
+                triggers_used.setdefault("controls_state", owner)
+        elif key == "war_with":
+            block.add("has_war_with", value)
+            triggers_used.setdefault("has_war_with", owner)
+        elif key == "country":
+            block.add(value["tag"], render_conditions(owner, value["when"], triggers_used, where=where))
         elif key == "stability_below":
             block.add("has_stability", Compare("<", float(value)))
             triggers_used.setdefault("has_stability", owner)

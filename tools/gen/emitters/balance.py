@@ -25,6 +25,10 @@ RES_SHORT = {"oil": "Petr", "aluminium": "Alum", "rubber": "Cauch", "tungsten": 
 
 
 def emit(ctx: BuildContext) -> None:
+    from . import effects as effects_mod
+    for name in sorted(effects_mod.UNRESOLVED):
+        ctx.warn(f"region '{name}' no existe en este juego: esa condicion nunca se cumple.")
+    effects_mod.UNRESOLVED.clear()
     assignment: dict[int, str] | None = ctx.data.get("territory")
     if ctx.vanilla is None or assignment is None:
         return

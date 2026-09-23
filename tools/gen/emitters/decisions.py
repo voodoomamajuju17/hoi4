@@ -19,6 +19,7 @@ from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block, parse_file
 from . import ideas as ideas_mod
+from . import effects as effects_mod
 from .effects import EffectContext, scripted_effect_ids, render_conditions, render_effects
 
 SOURCE = "spec/14_decisions.yaml"
@@ -30,6 +31,7 @@ CATEGORY_FIELDS = ("icon", "allowed")
 
 
 def emit(ctx: BuildContext) -> None:
+    effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     categories = (ctx.spec.raw.get("decisions") or {}).get("categories") or []
     scripted = (ctx.spec.raw.get("decisions") or {}).get("scripted_effects") or []
     if not categories and not scripted:

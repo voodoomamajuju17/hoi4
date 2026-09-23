@@ -25,6 +25,7 @@ from ..pdx import Block, Quoted
 from . import events as events_mod
 from . import ideas as ideas_mod
 from . import resources as resources_mod
+from . import effects as effects_mod
 from .effects import EffectContext, scripted_effect_ids, render_conditions, render_effects
 
 SOURCE = "spec/07_focus_trees.yaml"
@@ -54,6 +55,7 @@ def _all_prereqs(f: dict) -> list[str]:
 
 
 def emit(ctx: BuildContext) -> None:
+    effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     trees = ctx.spec.raw["focus_trees"].get("trees") or {}
     for tag, tree in trees.items():
         if not isinstance(tree, dict) or "branches" not in tree:

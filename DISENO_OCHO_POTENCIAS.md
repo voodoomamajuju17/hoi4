@@ -42,7 +42,7 @@ propuesta anterior de 8 árboles.
 2. **EFE** — Aurelio vs Anahí, integración de satélites por etapas,
    reforestación. *(v1 hecha)*
 3. **ASC** — Poder de Cómputo, Consejo Sorteado, PLAN-41. *(v1 hecha)*
-4. **HSN, NAS, APF** — nodos + botín; Qhapaq Ñan + Inti-Soma; integración
+4. **HSN** *(v1 hecha)*, **NAS, APF** — Qhapaq Ñan + Inti-Soma; integración
    federal (Desarrollo/Integración).
 5. **SHD y NRE al final** — tres caudales; prestigio de legiones +
    Auctoritas Militaris + AVE IMPERATOR.
@@ -131,3 +131,21 @@ la situación.
 - Los drones como batallón propio quedan para v2: una unidad nueva necesita
   equipo, sprites y modelos; en v1 son ideas y experiencia.
 - Ids de foco alineados con el pack de íconos (`focus_2100_asc_NN_*`).
+
+## HSN v1 — cómo quedó en el motor
+
+- **Nodos físicos**: Malaca, Sunda, Kanto, Manila, Taiwán, Hong Kong,
+  Okinawa y Tsushima, buscados por nombre en el juego instalado (el reporte
+  avisa si alguno no existe). Un evento oculto cuenta cada 30 días los que la
+  HSN controla: 2+, 4+, 6+ → Red de Nodos I/II/III; los 8 → Cámara Mundial de
+  Compensación. Si el conteo baja, *Un Nodo Perdido* por 180 días. Hong Kong
+  arranca en manos de la Anarquía: el foco del nodo lo reclama.
+- **Kofi Aldana**: neutralidad armada, arbitraje, tratado de los estrechos;
+  *Seguros Marítimos* abre decisiones para venderles cobertura a las
+  meganaciones en guerra (no contra la HSN). *El Bloqueo Legal* es un
+  ultimátum a la FCU.
+- **Inés Tavake** (*El Motín de Kanto*): se apagan las ideas de peaje; los
+  nodos y la guerra generan **Botín** cada mes, que se gasta en reparaciones,
+  recursos, equipo y marines. *Patentes de Corso*: 90 días contra un enemigo
+  concreto. *Abordaje del Mundo*: guerra directa a la FCU.
+- Puerto Libre (puertos francos) contra Peaje de los Estrechos (subas).
