@@ -96,6 +96,7 @@ class StateInfo:
     provinces: list[int]
     path: Path
     manpower: int = 0
+    cores: tuple[str, ...] = ()
 
     @property
     def file_label(self) -> str:
@@ -201,6 +202,10 @@ class Vanilla:
             if sid is None:
                 continue
             mp = pdx.text(state.get("manpower")) or "0"
+            cores = tuple(
+                c for c in (pdx.text(v) for v in history.get_all("add_core_of"))
+                if c
+            ) if isinstance(history, pdx.Block) else ()
             out.append(
                 StateInfo(
                     id=int(sid),
@@ -209,9 +214,76 @@ class Vanilla:
                     provinces=provinces,
                     path=path,
                     manpower=int(mp) if mp.isdigit() else 0,
+                    cores=cores,
                 )
             )
         self._states = out
+        return out
+
+    def state_continents(self) -> dict[int, str]:
+        """state id -> continente mayoritario de sus provincias.
+
+        Sale de map/definition.csv (columna 8 = índice de continente) y
+        map/continent.txt (la lista de nombres, en orden, desde 1). Sin esos
+        archivos devuelve {} y los selectores por continente no matchean nada.
+        """
+        if getattr(self, "_continents", None) is not None:
+            return self._continents
+        names: list[str] = []
+        cont_file = self.root / "map" / "continent.txt"
+        if cont_file.exists():
+            block = pdx.parse_file(cont_file).get("continents")
+            if isinstance(block, pdx.Block):
+                names = [pdx.text(v) for _, v in block.entries]
+        by_province: dict[int, str] = {}
+        definition = self.root / "map" / "definition.csv"
+        if names and definition.exists():
+            for line in definition.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+                parts = line.split(";")
+                if len(parts) >= 8 and parts[0].isdigit() and parts[7].strip().isdigit():
+                    idx = int(parts[7])
+                    if 1 <= idx <= len(names):
+                        by_province[int(parts[0])] = names[idx - 1]
+        out: dict[int, str] = {}
+        for s in self.states():
+            counts: dict[str, int] = {}
+            for prov in s.provinces:
+                cont = by_province.get(prov)
+                if cont:
+                    counts[cont] = counts.get(cont, 0) + 1
+            if counts:
+                out[s.id] = max(sorted(counts), key=lambda c: counts[c])
+        self._continents = out
+        return out
+
+    def country_tags(self) -> set[str]:
+        """TAGs que ya usa el juego (common/country_tags/)."""
+        tags: set[str] = set()
+        for path in (self.root / "common" / "country_tags").glob("*.txt"):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            tags.update(re.findall(r"^\s*([A-Z][A-Z0-9]{2})\s*=", text, re.MULTILINE))
+        return tags
+
+    def wargoal_types(self) -> set[str]:
+        words: set[str] = set()
+        for path in (self.root / "common" / "wargoals").glob("*.txt"):
+            try:
+                words.update(re.findall(r"^\t?([a-z_]+)\s*=\s*\{",
+                                        path.read_text(encoding="utf-8-sig", errors="replace"), re.MULTILINE))
+            except OSError:
+                continue
+        return words
+
+    def country_history_files(self) -> dict[str, Path]:
+        """TAG -> history/countries/<TAG - Nombre>.txt vanilla."""
+        out: dict[str, Path] = {}
+        for path in sorted((self.root / "history" / "countries").glob("*.txt")):
+            tag = path.name[:3]
+            if re.fullmatch(r"[A-Z][A-Z0-9]{2}", tag):
+                out.setdefault(tag, path)
         return out
 
     def states_owned_by(self, tag: str) -> list[StateInfo]:

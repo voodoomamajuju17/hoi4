@@ -139,36 +139,211 @@ territories:
     capital_why: "Asunción: la única capital histórica dentro del satélite."
 
   # ---------------------------------------------------------------------------
-  ASC: { src: unknown, core_regions: unknown, see: Q010 }
-  FCU: { src: unknown, core_regions: unknown, see: Q010 }
-  HSN: { src: unknown, core_regions: unknown, see: Q010 }
+  # ===========================================================================
+  # Reparto del mundo — inventado a pedido del usuario (2026-09-23), Q010.
+  # Selectores por TAG de 1936 y por continente del mapa; ver cabecera.
+  # Lo que no pide nadie queda vanilla: son los países libres (Francia,
+  # la URSS, Japón, India, Medio Oriente...).
+  # ===========================================================================
   NAS:
-    src: unknown
-    core_regions: unknown
-    hint: "Identidad 'neoandina' (§7). Sugiere los Andes, pero no está delimitado."
-    hint_src: inferred
-    see: Q010
+    src: invented
+    lore: >
+      Los Andes centrales: el imperio del Sol volvió donde estuvo el Tahuantinsuyo.
+    resolve:
+      - { owner: PRU }
+      - { owner: BOL }
+      - { owner: ECU }
+    capital_state: ["Cusco", "Cuzco", "Lima"]
+
+  ZNG:
+    src: invented
+    lore: >
+      Colombia y Panamá: el canal y las lluvias.
+    resolve:
+      - { owner: COL }
+      - { owner: PAN }
+
+  ZLL:
+    src: invented
+    lore: >
+      Venezuela.
+    resolve:
+      - { owner: VEN }
+
+  FCU:
+    src: invented
+    lore: >
+      Los Estados Unidos continentales: las cuatro corporaciones se repartieron los restos de la república.
+    resolve:
+      - { owner: USA, continent: north_america }
+    capital_state: ["New York"]
+
+  ZNR:
+    src: invented
+    lore: >
+      Canadá.
+    resolve:
+      - { owner: CAN }
+
+  ZSE:
+    src: invented
+    lore: >
+      México y Centroamérica.
+    resolve:
+      - { owner: MEX }
+      - { owner: GUA }
+      - { owner: HON }
+      - { owner: ELS }
+      - { owner: NIC }
+      - { owner: COS }
+
+  HSN:
+    src: invented
+    lore: >
+      El archipiélago del sudeste asiático: los estrechos por donde pasa la mitad de la carga del mundo.
+    resolve:
+      - { owner: HOL, continent: asia }
+      - { owner: PHI }
+      - { state: ["Singapore", "Straits Settlements"] }
+      - { state: ["Malaya", "Federated Malay States"] }
+      - { state: ["Johor", "Unfederated Malay States"] }
+      - { state: ["Sarawak"] }
+      - { state: ["North Borneo", "Sabah"] }
+      - { state: ["Brunei"] }
+    capital_state: ["Singapore", "Straits Settlements", "Java", "West Java"]
+
+  ZAF:
+    src: invented
+    lore: >
+      Las Antillas mayores.
+    resolve:
+      - { owner: CUB }
+      - { owner: HAI }
+      - { owner: DOM }
+
+  ZAS:
+    src: invented
+    lore: >
+      Australia y Nueva Zelanda.
+    resolve:
+      - { owner: AST }
+      - { owner: NZL }
+
+  ASC:
+    src: invented
+    lore: >
+      El norte industrial de Europa, del Rin al Vístula y a Escandinavia.
+    resolve:
+      - { owner: GER }
+      - { owner: DEN }
+      - { owner: NOR }
+      - { owner: SWE }
+      - { owner: POL }
+      - { owner: LUX }
+      - { owner: HOL, continent: europe }
+      - { owner: BEL, continent: europe }
+    capital_state: ["Berlin", "Brandenburg"]
+
+  ZBC:
+    src: invented
+    lore: >
+      Finlandia y los países bálticos.
+    resolve:
+      - { owner: FIN }
+      - { owner: EST }
+      - { owner: LAT }
+      - { owner: LIT }
+
+  ZAL:
+    src: invented
+    lore: >
+      Gran Bretaña e Irlanda.
+    resolve:
+      - { owner: ENG, continent: europe }
+      - { owner: IRE }
+
   SHD:
-    src: unknown
-    core_regions: unknown
-    hint: "Prefijo 'Sino-' (§8). Sugiere China, pero no está delimitado."
-    hint_src: inferred
-    see: Q010
+    src: invented
+    lore: >
+      China, reunificada por el Directorio sobre los restos de todos los gobiernos que se la disputaron.
+    resolve:
+      - { owner: CHI }
+      - { owner: PRC }
+      - { owner: SHX }
+      - { owner: XSM }
+      - { owner: GXC }
+      - { owner: YUN }
+      - { owner: SIK }
+      - { owner: MAN }
+      - { owner: TIB }
+    capital_state: ["Beijing", "Peking", "Hebei"]
+
+  ZKR:
+    src: invented
+    lore: >
+      La península de Corea.
+    resolve:
+      - { core: KOR }
+
+  ZST:
+    src: invented
+    lore: >
+      Mongolia, Mengjiang y Tuvá.
+    resolve:
+      - { owner: MON }
+      - { owner: MEN }
+      - { owner: TAN }
+
   APF:
-    src: unknown
-    core_regions: unknown
-    hint: "'African People's Federation' + 'federación amplia' (§9)."
-    hint_src: inferred
-    see: Q010
+    src: invented
+    lore: >
+      África entera, salvo la meseta etíope y el Cabo.
+    resolve:
+      - { continent: africa }
+    capital_state: ["Lagos", "Nigeria", "Southern Nigeria", "Leopoldville"]
+
+  ZET:
+    src: invented
+    lore: >
+      Etiopía.
+    resolve:
+      - { owner: ETH }
+
+  ZSA:
+    src: invented
+    lore: >
+      Sudáfrica.
+    resolve:
+      - { owner: SAF }
+
   NRE:
-    src: unknown
-    core_regions: unknown
-    warning: >
-      NO usar la geografía del New Roman Axis de 2023 (Italia, España, Grecia,
-      sur de Francia, Hungría, Argentina, Uruguay, Japón, Corea). El doc la
-      declara incompatible con el EFE actual y la marca como borrador histórico
-      (§10.1). Argentina y Uruguay son del EFE.
-    see: Q010
+    src: invented
+    lore: >
+      Italia, los Balcanes y Anatolia: el Imperio de Oriente y de Occidente, otra vez uno.
+    resolve:
+      - { owner: ITA, continent: europe }
+      - { owner: GRE }
+      - { owner: ALB }
+      - { owner: YUG }
+      - { owner: TUR }
+    capital_state: ["Rome", "Lazio"]
+
+  ZHI:
+    src: invented
+    lore: >
+      La península ibérica.
+    resolve:
+      - { owner: SPR, continent: europe }
+      - { owner: POR, continent: europe }
+
+  ZDA:
+    src: invented
+    lore: >
+      Rumania, Bulgaria y Hungría.
+    resolve:
+      - { owner: ROM }
+      - { owner: BUL }
+      - { owner: HUN }
 
 # =============================================================================
 conflicts_detected:

@@ -106,7 +106,7 @@ def test_pdx_roundtrip() -> None:
 def test_spec_loads() -> None:
     section("spec")
     spec = specload.load(REPO_ROOT / "spec")
-    check("10 paises", len(spec.countries) == 10, f"hay {len(spec.countries)}")
+    check("24 paises (8 meganaciones + 16 satelites)", len(spec.countries) == 24, f"hay {len(spec.countries)}")
     check("todos los TAG de 3 letras", all(len(c.tag) == 3 for c in spec.countries))
     tags = {c.tag for c in spec.countries}
     for expected in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "PTA", "YYG"):
@@ -193,7 +193,7 @@ def test_vanilla_fixture() -> None:
     check("4 grupos en el fixture", len([k for k, _ in ideologies.entries if k]) == 4)
 
     states = van.states()
-    check("9 states leidos", len(states) == 9, f"leyo {len(states)}")
+    check("14 states leidos", len(states) == 14, f"leyo {len(states)}")
     by_id = {s.id: s for s in states}
     check("state 900 con owner ARG", by_id[900].owner == "ARG")
     check("provincias parseadas", by_id[900].provinces == [1, 2, 3], str(by_id[900].provinces))
@@ -415,7 +415,9 @@ def test_phase3_content() -> None:
         check("foco usa icono propio aunque vanilla no lo tenga", "icon = GFX_EFE_green_legions" in focus_txt)
 
         hist_dir = mod / "history/countries"
-        check("historia para los 10 paises", len(list(hist_dir.glob("*.txt"))) == 10)
+        ours = {c.tag for c in ctx.spec.countries}
+        own_files = [p for p in hist_dir.glob("*.txt") if p.name[:3] in ours]
+        check("historia para todos nuestros paises", len(own_files) == len(ours), str(len(own_files)))
         efe = (hist_dir / "EFE - Ecofascist Empire.txt").read_text()
         check("EFE recluta a Aurelio", "recruit_character = EFE_aurelio_iv" in efe)
         check("mariscal reclutado", "recruit_character = EFE_bruno_etchegaray" in efe)
@@ -424,7 +426,7 @@ def test_phase3_content() -> None:
         check("capital del EFE = Buenos Aires (900)", "capital = 900" in efe, efe)
         check("EFE somete a PTA como titere comun",
               "target = PTA" in efe and "autonomy_state = autonomy_puppet" in efe, efe)
-        for path in hist_dir.glob("*.txt"):
+        for path in own_files:
             pops = pdx.parse(path.read_text()).get("set_popularities")
             total = sum(int(pdx.text(v)) for _, v in pops.entries)
             check(f"popularidades suman 100 en {path.name}", total == 100, str(total))
@@ -450,7 +452,14 @@ def test_territory() -> None:
         check("Magallanes -> PTA", terr.get(901) == "PTA")
         check("Paraguay (PAR) -> YYG", terr.get(904) == "YYG")
         check("Rio Grande do Sul (BRA) -> EFE", terr.get(905) == "EFE")
-        check("Ruhr no se toca", 906 not in terr)
+        check("Ruhr (GER) -> ASC", terr.get(906) == "ASC")
+        check("Italia europea -> NRE", terr.get(909) == "NRE", str(terr))
+        check("Libia italiana -> APF por continente", terr.get(910) == "APF")
+        check("Corea por core, aunque sea de Japon -> ZKR", terr.get(911) == "ZKR")
+        check("Japon propiamente dicho queda libre", 912 not in terr)
+        check("Etiopia: el TAG le gana al continente -> ZET", terr.get(913) == "ZET")
+        jap = mod / "history/countries/JAP - Japan.txt"
+        check("Japon perdio Corea y su capital: se reubica", jap.exists() and "capital = 912" in jap.read_text())
         check("nombre con comentario al final se lee",
               ctx.data["state_names"].get("STATE_902") == "Córdoba", str(ctx.data["state_names"].get("STATE_902")))
         check("Ponta Pora por nombre de archivo (sin localisation) -> YYG", terr.get(908) == "YYG", str(terr))
@@ -470,7 +479,7 @@ def test_territory() -> None:
 
         ruhr = pdx.parse((states / "906-Fixture.txt").read_text()).get("state")
         check("Ruhr pierde el carbon (BioSteel exclusivo)", ruhr.get("resources") is None, str(ruhr.keys()))
-        check("Ruhr sigue siendo aleman", pdx.text(ruhr.get("history").get("owner")) == "GER")
+        check("Ruhr pasa a la ASC", pdx.text(ruhr.get("history").get("owner")) == "ASC")
         par = pdx.parse((states / "904-Fixture.txt").read_text()).get("state")
         check("el satelite tampoco tiene BioSteel", par.get("resources") is None)
         check("archivo con comparaciones no se reescribe", not (states / "907-Fixture.txt").exists())
@@ -482,7 +491,7 @@ def test_territory() -> None:
         pta = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
         check("capital provisoria del satelite", "capital = 901" in pta, pta)
         check("pais sin territorio no lleva capital",
-              "capital" not in (mod / "history/countries/ASC - Automated Socialist Commune.txt").read_text())
+              "capital" not in (mod / "history/countries/FCU - Free Corporative Capital Union.txt").read_text())
 
 
 def test_scenario() -> None:

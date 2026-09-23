@@ -31,7 +31,7 @@ import unicodedata
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block, parse_file
+from ..pdx import Block, banner_for, parse_file
 from ..vanilla import StateInfo
 
 SOURCE = "spec/08_territory.yaml (sobre history/states/ vanilla)"
@@ -72,7 +72,9 @@ def emit(ctx: BuildContext) -> None:
             if s not in bucket:
                 bucket.append(s)
 
+    _check_tags(ctx)
     assignment = _resolve(ctx, wanted, states, names, by_name)
+    _fix_vanilla_capitals(ctx, assignment, names)
     ctx.data["territory"] = assignment
     ctx.data["state_names"] = names
 
@@ -100,30 +102,39 @@ def emit(ctx: BuildContext) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
-    """state id -> TAG nuevo. Los `state` explícitos le ganan a los `owner`."""
-    by_owner: dict[str, list[StateInfo]] = {}
-    for s in states:
-        if s.owner:
-            by_owner.setdefault(s.owner, []).append(s)
+# Prioridad de los selectores: un nombre explícito le gana a un TAG o core, y
+# un TAG o core le gana a un continente entero. Dentro del mismo nivel, dos
+# países pidiendo el mismo state es un error del spec.
+_TIER_STATE, _TIER_OWNER, _TIER_CONTINENT = 3, 2, 1
 
-    explicit: dict[int, str] = {}
-    broad: dict[int, str] = {}
+
+def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
+    """state id -> TAG nuevo.
+
+    Selectores (se pueden combinar owner/core con continent, que filtra):
+      { owner: ITA }                    states que ITA tiene en vanilla
+      { owner: ITA, continent: europe } solo los europeos
+      { core: KOR }                     states que son core de KOR
+      { continent: africa }             todo un continente
+      { state: [nombres] }              un state por nombre
+    """
+    continents = ctx.vanilla.state_continents()
+    claims: dict[int, tuple[int, str]] = {}   # state -> (nivel, TAG)
+
+    def claim(s: StateInfo, tag: str, tier: int) -> None:
+        prev = claims.get(s.id)
+        if prev is None or prev[0] < tier:
+            claims[s.id] = (tier, tag)
+        elif prev[0] == tier and prev[1] != tag:
+            raise SpecError(
+                f"state {s.id} ({display_name(s, names)}) lo piden {prev[1]} y {tag} con la misma prioridad",
+                where="08_territory.yaml",
+            )
+
     for tag, terr in wanted.items():
         ctx.spec.country(tag)
         for sel in terr["resolve"]:
-            if "owner" in sel:
-                owned = by_owner.get(sel["owner"], [])
-                if not owned:
-                    ctx.warn(f"territorio {tag}: el TAG vanilla '{sel['owner']}' no tiene states en esta version.")
-                for s in owned:
-                    prev = broad.get(s.id)
-                    if prev and prev != tag:
-                        raise SpecError(
-                            f"state {s.id} lo piden por dueño {prev} y {tag}", where="08_territory.yaml"
-                        )
-                    broad[s.id] = tag
-            elif "state" in sel:
+            if "state" in sel:
                 options = sel["state"] if isinstance(sel["state"], list) else [sel["state"]]
                 found = next((by_name[normalize(o)] for o in options if normalize(o) in by_name), None)
                 if not found:
@@ -132,16 +143,67 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
                     ctx.warn(f"territorio {tag}: no hay ningun state llamado {' / '.join(options)}.{hint}")
                     continue
                 for s in found:
-                    prev = explicit.get(s.id)
-                    if prev and prev != tag:
-                        raise SpecError(
-                            f"state {s.id} ({display_name(s, names)}) lo piden por nombre {prev} y {tag}",
-                            where="08_territory.yaml",
-                        )
-                    explicit[s.id] = tag
-            else:
+                    claim(s, tag, _TIER_STATE)
+                continue
+
+            if not any(k in sel for k in ("owner", "core", "continent")):
                 raise SpecError(f"territorio {tag}: selector desconocido {sel}", where="08_territory.yaml")
-    return {**broad, **explicit}
+            continent = sel.get("continent")
+            matched = []
+            for s in states:
+                if "owner" in sel and s.owner != sel["owner"]:
+                    continue
+                if "core" in sel and sel["core"] not in s.cores:
+                    continue
+                if continent and continents.get(s.id) != continent:
+                    continue
+                matched.append(s)
+            if not matched:
+                ctx.warn(f"territorio {tag}: el selector {sel} no encontro ningun state en esta version.")
+            tier = _TIER_OWNER if ("owner" in sel or "core" in sel) else _TIER_CONTINENT
+            for s in matched:
+                claim(s, tag, tier)
+
+    return {sid: tag for sid, (_, tag) in claims.items()}
+
+
+def _check_tags(ctx: BuildContext) -> None:
+    """Nuestros TAG no pueden pisar uno vanilla: el país vanilla desaparece."""
+    vanilla_tags = ctx.vanilla.country_tags()
+    clash = sorted(c.tag for c in ctx.spec.countries if c.tag in vanilla_tags)
+    if clash:
+        raise SpecError(
+            f"estos TAG ya existen en el juego: {', '.join(clash)}",
+            hint="cambialos en 02_countries.yaml (los satelites usan prefijo Z para evitarlo)",
+            where="02_countries.yaml",
+        )
+
+
+def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) -> None:
+    """Un país vanilla que pierde su capital pero conserva states necesita otra.
+
+    Se reescribe su history/countries vanilla (mismo nombre de archivo) con la
+    capital en el state que le quede con más manpower. El resto del archivo
+    queda igual.
+    """
+    by_id = {s.id: s for s in ctx.vanilla.states()}
+    remaining: dict[str, list[StateInfo]] = {}
+    for s in ctx.vanilla.states():
+        if s.id not in assignment and s.owner:
+            remaining.setdefault(s.owner, []).append(s)
+    ours = {c.tag for c in ctx.spec.countries}
+    for tag, path in ctx.vanilla.country_history_files().items():
+        if tag in ours or tag not in remaining:
+            continue
+        raw = path.read_text(encoding="utf-8-sig", errors="replace")
+        m = re.search(r"^\s*capital\s*=\s*(\d+)", raw, re.MULTILINE)
+        if not m or int(m.group(1)) not in assignment:
+            continue
+        best = max(remaining[tag], key=lambda s: (s.manpower, -s.id))
+        fixed = raw[: m.start(1)] + str(best.id) + raw[m.end(1):]
+        banner = banner_for(f"history/countries/{path.name} vanilla, capital reubicada por 08_territory.yaml")
+        ctx.write_text(f"history/countries/{path.name}", banner + fixed)
+        ctx.note(f"{tag} perdio su capital: nueva capital {display_name(best, names)} ({best.id})")
 
 
 def _biosteel_resource(ctx: BuildContext) -> str | None:
