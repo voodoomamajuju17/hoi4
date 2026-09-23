@@ -277,10 +277,16 @@ def render_effects(owner: str, items: list[dict], known,
             building = item.get("building")
             if ec.buildings and building not in ec.buildings:
                 raise SpecError(f"{owner}: el edificio '{building}' no existe en common/buildings/", where=where)
+            level = int(item.get("level", 1))
             construction = Block()
             construction.add("type", building)
-            construction.add("level", int(item.get("level", 1)))
+            construction.add("level", level)
             construction.add("instant_build", True)
+            # como `build`: fábricas y astilleros llevan su propio slot, si no
+            # en una región llena la construcción no se haría
+            if ec.shared_slots is None or building in ec.shared_slots:
+                block.add("add_extra_state_shared_building_slots", level)
+                effects_used.setdefault("add_extra_state_shared_building_slots", owner)
             block.add("add_building_construction", construction)
             effects_used.setdefault("add_building_construction", owner)
             continue
@@ -466,6 +472,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
                 else:
                     block.add("controls_state", sid)
                     triggers_used.setdefault("controls_state", owner)
+        elif key == "coastal":
+            block.add("is_coastal", bool(value))
+            triggers_used.setdefault("is_coastal", owner)
         elif key == "stability_below":
             block.add("has_stability", Compare("<", float(value)))
             triggers_used.setdefault("has_stability", owner)

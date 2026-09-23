@@ -150,7 +150,7 @@ la situación.
   concreto. *Abordaje del Mundo*: guerra directa a la FCU.
 - Puerto Libre (puertos francos) contra Peaje de los Estrechos (subas).
 
-## Tabla de premios (desde la NAS; EFE, FCU, ASC y HSN se ajustan al final)
+## Tabla de premios (las 8 potencias; EFE, FCU, ASC y HSN ajustadas después)
 
 | Duración | Premio típico |
 |---|---|

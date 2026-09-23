@@ -401,10 +401,12 @@ def test_phase3_content() -> None:
               "has_stability < 0.4" in monte_raw[:monte_raw.index("focus = {")])
         check("la integracion abre decisiones, no anexa de golpe",
               "annex_country" not in pdx.render(by["EFE_las_misiones_guaranies"].get("completion_reward")))
-        capital_build = by["EFE_ministerio_de_restauracion"].get("completion_reward").get("capital_scope")
-        check("fabricas con slots en la capital",
-              "add_extra_state_shared_building_slots" in capital_build.keys()
-              and pdx.text(capital_build.get("add_building_construction").get("type")) == "industrial_complex")
+        rand_build = by["EFE_ministerio_de_restauracion"].get("completion_reward").get_all("random_owned_controlled_state")
+        check("tabla nueva: 2 fabricas en regiones al azar, cada una con su slot",
+              len(rand_build) == 2 and all("add_extra_state_shared_building_slots" in b.keys()
+              and pdx.text(b.get("add_building_construction").get("type")) == "industrial_complex" for b in rand_build))
+        dock = pdx.render(by["EFE_astilleros_del_plata"].get("completion_reward"))
+        check("los astilleros van a una region con costa", "is_coastal = yes" in dock, dock)
         airfield = pdx.render(by["EFE_aerodromos_de_la_pampa"].get("completion_reward"))
         check("una base aerea no suma slots compartidos", "add_extra_state_shared_building_slots" not in airfield, airfield)
         check("arbol asignado al EFE", pdx.text(tree.get("country").get("modifier").get("tag")) == "EFE")
@@ -1112,6 +1114,13 @@ def test_diplomacy() -> None:
         asc = next((mod / "history/countries").glob("ASC - *.txt")).read_text()
         check("la ASC arranca en guerra con Eurasia", "declare_war_on" in asc and "target = ZWE" in asc, asc[-600:])
         check("guerra contra un pais sin territorio no se declara (ZWM)", "target = ZWM" not in nre)
+        # en el fixture ZWB no tiene territorio: se avisa en vez de escribirla
+        check("el EFE arranca con la justificacion contra los Caudillos del Amazonas (o avisa si no existen)",
+              ("create_wargoal" in efe and "target = ZWB" in efe)
+              or any("justificacion EFE -> ZWB" in w for w in ctx.warnings))
+        check("la justificacion no declara la guerra", "declare_war_on" not in efe)
+        bal = (Path(tmp) / "balance.txt").read_text()
+        check("balance: tabla de valor de los arboles", "VALOR DE LOS ARBOLES" in bal and "\nEFE " in bal[bal.index("VALOR DE LOS ARBOLES"):])
         check("avisa la guerra no declarada", any("ZWM" in w for w in ctx.warnings))
 
 
@@ -1139,7 +1148,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "

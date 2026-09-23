@@ -56,7 +56,7 @@ trees:
           english: The century turns. The Emperor who was once the Custodian surveys what the forest has given back, and what it still demands.
           spanish: Cambia el siglo. El Emperador que alguna vez fue el Custodio mira lo que el bosque devolvió, y lo que todavía reclama.
         reward:
-        - {effect: add_political_power, value: 75}
+        - {effect: add_political_power, value: 100}
       - id: EFE_la_hora_de_gaia
         name: {english: The Hour of Gaia, spanish: La Hora de Gaia}
         days: 35
@@ -67,7 +67,7 @@ trees:
           english: The court wants continuity. The reserves want the forest to rule. The Empire has to decide who it belongs to.
           spanish: La corte quiere continuidad. Las reservas quieren que mande el monte. El Imperio tiene que decidir de quién es.
         reward:
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 100}
       - id: EFE_el_mandato_renovado
         name: {english: The Mandate Renewed, spanish: El Mandato Renovado}
         days: 35
@@ -85,8 +85,7 @@ trees:
           english: Aurelio IV renews the Green Mandate in front of the whole court. The rangers watch from the back of the hall.
           spanish: Aurelio IV renueva el Mandato Verde frente a toda la corte. Los guardaparques miran desde el fondo del salón.
         reward:
-        - {effect: add_political_power, value: 75}
-        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 100}
       - id: EFE_la_corte_de_los_bosques
         name: {english: The Court of the Forests, spanish: La Corte de los Bosques}
         days: 35
@@ -123,10 +122,10 @@ trees:
           spanish: Yvytu Ykua Guasu va a ser integrada, paso a paso, gobernador por gobernador. Abre las decisiones de integración.
         reward:
         - {effect: flag, value: EFE_integracion_yyg_abierta}
-        - {effect: add_political_power, value: 25}
+        - {effect: add_political_power, value: 100}
       - id: EFE_integrar_la_patagonia
         name: {english: Integrate Southern Patagonia, spanish: Integrar la Patagonia Austral}
-        days: 56
+        days: 42
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - EFE_las_misiones_guaranies
@@ -136,7 +135,7 @@ trees:
           spanish: Autonomía, después guarniciones, después núcleos. Los glaciares van a ser imperiales. Abre las decisiones de integración.
         reward:
         - {effect: flag, value: EFE_integracion_pta_abierta}
-        - {effect: add_political_power, value: 25}
+        - {effect: add_political_power, value: 100}
       - id: EFE_la_gran_muralla_verde
         name: {english: The Great Green Wall, spanish: La Gran Muralla Verde}
         days: 42
@@ -283,7 +282,18 @@ trees:
           spanish: 'La tierra conquistada se replanta: ocupada, en reforestación, núcleo ecológico. Abre las decisiones de reforestación.'
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
-        - {effect: add_political_power, value: 50}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: EFE_que_avance_la_selva
         name: {english: The Jungle Advances, spanish: La Selva Avanza}
         days: 35
@@ -307,8 +317,8 @@ trees:
           english: The Amazon warlords burn the forest to sell the land. The forest answers.
           spanish: Los Caudillos del Amazonas queman la selva para vender la tierra. La selva contesta.
         reward:
-        - {effect: wargoal, target: ZWB, type: annex_everything}
-        - {effect: add_war_support, value: 0.1}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
+        - {effect: add_ideas, value: EFE_ofensiva_verde}
       - id: EFE_un_continente_vivo
         name: {english: A Living Continent, spanish: Un Continente Vivo}
         days: 56
@@ -334,7 +344,14 @@ trees:
           english: 'Two models for the Empire''s economy: close the borders and grow everything, or sell water to the world.'
           spanish: 'Dos modelos para la economía del Imperio: cerrar las fronteras y cultivarlo todo, o venderle agua al mundo.'
         reward:
-        - {effect: build, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: EFE_autarquia_del_bioacero
         name: {english: The BioSteel Autarky, spanish: La Autarquía del Bioacero}
         days: 42
@@ -366,6 +383,7 @@ trees:
           spanish: Las cubas se van bajo tierra, donde no llegan los bombarderos.
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
       - id: EFE_bosques_fabrica
         name: {english: Forest-Factories, spanish: Bosques-Fábrica}
         days: 35
@@ -376,7 +394,14 @@ trees:
           english: Factories that grow where forests used to be.
           spanish: Fábricas que crecen donde había bosques.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: EFE_economia_circular
         name: {english: The Circular Economy, spanish: La Economía Circular}
         days: 42
@@ -389,7 +414,7 @@ trees:
           spanish: Nada se desperdicia. Todo vuelve a las cubas.
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 100}
       - id: EFE_la_autarquia_total
         name: {english: Total Autarky, spanish: La Autarquía Total}
         days: 56
@@ -431,8 +456,7 @@ trees:
           english: The Empire lends seeds to the hungry, on its own terms.
           spanish: El Imperio les presta semillas a los hambrientos, con sus condiciones.
         reward:
-        - {effect: add_political_power, value: 50}
-        - {effect: add_stability, value: 0.03}
+        - {effect: add_political_power, value: 100}
       - id: EFE_tratados_de_agua
         name: {english: Water Treaties, spanish: Tratados de Agua}
         days: 35
@@ -443,7 +467,14 @@ trees:
           english: Every treaty the Empire signs now has a water clause.
           spanish: Cada tratado que firma el Imperio ahora tiene una cláusula de agua.
         reward:
-        - {effect: add_political_power, value: 75}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: EFE_el_acuifero_como_embajada
         name: {english: The Aquifer as an Embassy, spanish: El Acuífero como Embajada}
         days: 42
@@ -455,7 +486,15 @@ trees:
           english: Foreign money builds the Empire's factories.
           spanish: La plata extranjera construye las fábricas del Imperio.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 50}
       - id: EFE_la_potencia_hidrica
         name: {english: The Water Power, spanish: La Potencia Hídrica}
         days: 56
@@ -479,7 +518,14 @@ trees:
         desc: {english: 'Faster cultures, deeper vats.', spanish: 'Cultivos más rápidos, cubas más hondas.'}
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
-        - {effect: build, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: EFE_biorrefinerias_de_rosario
         name: {english: The Rosario Biorefineries, spanish: Las Biorrefinerías de Rosario}
         days: 35
@@ -490,7 +536,14 @@ trees:
           english: The Paraná's banks turn green and industrial.
           spanish: Las orillas del Paraná se vuelven verdes e industriales.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: EFE_polo_industrial_de_gaia
         name: {english: The Gaia Industrial Pole, spanish: El Polo Industrial de Gaia}
         days: 42
@@ -499,7 +552,15 @@ trees:
         - EFE_cubas_de_segunda_generacion
         desc: {english: Arms factories grown from BioSteel., spanish: Fábricas de armas crecidas de Bioacero.}
         reward:
-        - {effect: build, building: arms_factory, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
       - id: EFE_energia_de_biomasa
         name: {english: Biomass Energy, spanish: Energía de Biomasa}
         days: 35
@@ -518,7 +579,16 @@ trees:
         - EFE_energia_de_biomasa
         desc: {english: Dry docks on the River Plate., spanish: Diques secos en el Río de la Plata.}
         reward:
-        - {effect: build, building: dockyard, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: EFE_laboratorio_de_gaia
         name: {english: The Gaia Laboratory, spanish: El Laboratorio de Gaia}
         days: 70
@@ -545,7 +615,6 @@ trees:
           spanish: La Guardia que ganó en Iguazú vuelve a ponerse el uniforme.
         reward:
         - {effect: add_ideas, value: EFE_guardia_movilizada}
-        - {effect: army_experience, value: 25}
       - id: EFE_doctrina_del_condor
         name: {english: The Condor Doctrine, spanish: La Doctrina del Cóndor}
         days: 35
@@ -557,7 +626,7 @@ trees:
           english: Strike from the mountains, vanish into the forest.
           spanish: Golpear desde la montaña, desaparecer en el bosque.
         reward:
-        - {effect: army_experience, value: 25}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: EFE_legiones_de_iguazu
         name: {english: The Iguazú Legions, spanish: Las Legiones de Iguazú}
         days: 42
@@ -569,8 +638,8 @@ trees:
           english: The veterans of Iguazú train a new generation.
           spanish: Los veteranos de Iguazú entrenan a una generación nueva.
         reward:
-        - {effect: add_manpower, value: 30000}
-        - {effect: army_experience, value: 15}
+        - {effect: add_manpower, value: 50000}
+        - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 1}
       - id: EFE_entrenamiento_de_montana
         name: {english: Mountain and Jungle, spanish: Montaña y Selva}
         days: 35
@@ -593,7 +662,7 @@ trees:
           english: The only officer who addresses the Emperor informally takes command of the Guard.
           spanish: El único oficial que tutea al Emperador toma el mando de la Guardia.
         reward:
-        - {effect: army_experience, value: 50}
+        - {effect: army_experience, value: 75}
       - id: EFE_cultivar_la_armadura
         name: {english: Living Armour, spanish: Armadura Viviente}
         days: 56
@@ -621,7 +690,7 @@ trees:
           english: The Empire's air force takes the condor as its emblem.
           spanish: La aviación del Imperio toma al cóndor como emblema.
         reward:
-        - {effect: air_experience, value: 25}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
       - id: EFE_aerodromos_de_la_pampa
         name: {english: The Pampa Airfields, spanish: Los Aeródromos de la Pampa}
         days: 35
@@ -633,6 +702,7 @@ trees:
           spanish: Pistas de pasto, escondidas bajo los árboles.
         reward:
         - {effect: build, building: air_base, level: 2}
+        - {effect: air_experience, value: 25}
       - id: EFE_cazas_de_bioacero
         name: {english: BioSteel Fighters, spanish: Cazas de Bioacero}
         days: 42
@@ -643,8 +713,8 @@ trees:
           english: Lighter, tougher airframes grown in the vats.
           spanish: Fuselajes más livianos y duros, cultivados en las cubas.
         reward:
-        - {effect: air_experience, value: 50}
         - {effect: add_variable, var: EFE_biosteel, value: -1}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: EFE_bombardeo_de_precision
         name: {english: Precision Bombing, spanish: Bombardeo de Precisión}
         days: 35
@@ -654,7 +724,7 @@ trees:
         - EFE_cazas_de_bioacero
         desc: {english: 'Burn the factories, spare the forests.', spanish: 'Quemar las fábricas, salvar los bosques.'}
         reward:
-        - {effect: air_experience, value: 25}
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
       - id: EFE_cielo_de_gaia
         name: {english: The Sky of Gaia, spanish: El Cielo de Gaia}
         days: 35
@@ -666,7 +736,7 @@ trees:
           spanish: Baterías antiaéreas alrededor de la capital.
         reward:
         - {effect: add_war_support, value: 0.05}
-        - {effect: build, building: air_base, level: 1}
+        - {effect: air_experience, value: 50}
       - id: EFE_flotilla_del_plata
         name: {english: The River Plate Flotilla, spanish: La Flotilla del Plata}
         days: 56
@@ -677,8 +747,17 @@ trees:
           english: 'The Empire founds a navy: a few ships, and dockyards for more.'
           spanish: 'El Imperio funda una armada: pocos barcos, y astilleros para más.'
         reward:
-        - {effect: build, building: dockyard, level: 1}
-        - {effect: navy_experience, value: 25}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
     - id: ciclo_bioacero
       name: {english: The BioSteel Cycle, spanish: El Ciclo del Bioacero}
       focuses:
@@ -716,6 +795,7 @@ trees:
           spanish: Un cultivo que resiste la helada y el fuego.
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_political_power, value: 50}
       - id: EFE_biosteel_umbral_2
         name: {english: 'BioSteel Race: Tier 2', spanish: 'Carrera del Bioacero: Nivel 2'}
         days: 42
@@ -739,7 +819,7 @@ trees:
           english: Other nations pay for sterile BioSteel seeds.
           spanish: Otras naciones pagan por semillas estériles de Bioacero.
         reward:
-        - {effect: add_political_power, value: 75}
+        - {effect: add_political_power, value: 100}
       - id: EFE_biosteel_umbral_3
         name: {english: 'BioSteel Race: Tier 3', spanish: 'Carrera del Bioacero: Nivel 3'}
         days: 56
@@ -784,9 +864,9 @@ trees:
           english: The century opens with a plan, as every year does.
           spanish: El siglo abre con un plan, como todos los años.
         reward:
-        - {effect: add_political_power, value: 50}
         - {effect: add_variable, var: ASC_computo, value: 5}
-        - &id001 {effect: run, value: ASC_recalcular_computo}
+        - {effect: run, value: ASC_recalcular_computo}
+        - {effect: add_political_power, value: 100}
       - id: ASC_la_sesion_del_consejo
         name: {english: The Council in Session, spanish: El Consejo en Sesión}
         days: 35
@@ -797,7 +877,7 @@ trees:
           english: Forty-one citizens and one system. Who is really deciding?
           spanish: Cuarenta y un ciudadanos y un sistema. ¿Quién decide de verdad?
         reward:
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 100}
       - id: ASC_el_sorteo_del_ano
         name: {english: The Lottery of the Year, spanish: El Sorteo del Año}
         days: 35
@@ -817,7 +897,7 @@ trees:
           spanish: Cada año un Consejo nuevo, con tres inclinaciones al azar que abren sus propias decisiones.
         reward:
         - {effect: event, id: meganations_asc.1, days: 1}
-        - {effect: add_political_power, value: 25}
+        - {effect: add_political_power, value: 100}
       - id: ASC_transparencia_del_plan
         name: {english: Transparency of the Plan, spanish: Transparencia del Plan}
         days: 35
@@ -869,7 +949,6 @@ trees:
           spanish: Los señores de la guerra de Eurasia tienen los silos del Dniéper. La Comuna va a alimentar al Este, quiera o no.
         reward:
         - {effect: wargoal, target: ZWE, type: annex_everything}
-        - {effect: army_experience, value: 25}
         - {effect: add_war_support, value: 0.05}
       - id: ASC_la_comuna_de_los_humanos
         name: {english: The Commune of Humans, spanish: La Comuna de los Humanos}
@@ -918,7 +997,7 @@ trees:
         reward:
         - {effect: add_ideas, value: ASC_singularidad}
         - {effect: add_variable, var: ASC_computo, value: 10}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
       - id: ASC_optimizacion_total
         name: {english: Total Optimisation, spanish: Optimización Total}
         days: 35
@@ -939,7 +1018,7 @@ trees:
           spanish: El ejército necesita menos gente cada año.
         reward:
         - {effect: add_manpower, value: 100000}
-        - {effect: army_experience, value: 25}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: ASC_ejercito_sin_bajas
         name: {english: The Army Without Casualties, spanish: El Ejército sin Bajas}
         days: 56
@@ -964,7 +1043,8 @@ trees:
           spanish: Reservas estratégicas de chips y tierras raras.
         reward:
         - {effect: add_variable, var: ASC_computo, value: 10}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
       - id: ASC_el_plan_se_extiende
         name: {english: The Plan Spreads, spanish: El Plan se Extiende}
         days: 42
@@ -977,7 +1057,7 @@ trees:
         reward:
         - {effect: add_political_power, value: 100}
         - {effect: add_variable, var: ASC_computo, value: 5}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
       - id: ASC_convergencia
         name: {english: Convergence, spanish: Convergencia}
         days: 56
@@ -989,7 +1069,7 @@ trees:
           spanish: Cada sistema de la Comuna le responde a una sola mente.
         reward:
         - {effect: add_variable, var: ASC_computo, value: 15}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
         - {effect: add_research_slot, value: 1}
       - id: ASC_asignar_africa
         name: {english: Allocate Africa, spanish: Asignar África}
@@ -1022,7 +1102,14 @@ trees:
           english: 'Plan or market: even a commune has to choose.'
           spanish: 'Plan o mercado: hasta una comuna tiene que elegir.'
         reward:
-        - {effect: build, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: ASC_el_plan_total
         name: {english: The Total Plan, spanish: El Plan Total}
         days: 42
@@ -1051,7 +1138,14 @@ trees:
           english: The plan sets the numbers five years ahead.
           spanish: El plan fija los números a cinco años.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: ASC_asignacion_por_necesidad
         name: {english: Allocation by Need, spanish: Asignación por Necesidad}
         days: 35
@@ -1062,8 +1156,7 @@ trees:
           english: Everyone receives what the system calculates they need.
           spanish: Cada uno recibe lo que el sistema calcula que necesita.
         reward:
-        - {effect: add_stability, value: 0.05}
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 100}
       - id: ASC_el_gran_calculo
         name: {english: The Great Calculation, spanish: El Gran Cálculo}
         days: 42
@@ -1074,8 +1167,15 @@ trees:
         desc: {english: The whole economy in one model., spanish: Toda la economía en un solo modelo.}
         reward:
         - {effect: add_variable, var: ASC_computo, value: 5}
-        - *id001
-        - {effect: build, building: arms_factory, level: 1}
+        - {effect: run, value: ASC_recalcular_computo}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: ASC_la_economia_sin_precios
         name: {english: The Economy Without Prices, spanish: La Economía sin Precios}
         days: 56
@@ -1086,8 +1186,18 @@ trees:
           english: Money is obsolete. Only the plan remains.
           spanish: El dinero es obsoleto. Solo queda el plan.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
-        - {effect: add_political_power, value: 50}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
     - id: mercado_computo
       name: {english: The Compute Market, spanish: El Mercado de Cómputo}
       focuses:
@@ -1110,7 +1220,7 @@ trees:
         reward:
         - {effect: add_ideas, value: ASC_mercado_de_computo}
         - {effect: add_variable, var: ASC_computo, value: 5}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
       - id: ASC_bolsa_de_ciclos
         name: {english: The Cycle Exchange, spanish: La Bolsa de Ciclos}
         days: 35
@@ -1121,9 +1231,9 @@ trees:
           english: Citizens trade processing time like shares.
           spanish: Los ciudadanos negocian tiempo de proceso como acciones.
         reward:
-        - {effect: add_political_power, value: 75}
         - {effect: add_variable, var: ASC_computo, value: 3}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
+        - {effect: add_political_power, value: 100}
       - id: ASC_exportar_computo
         name: {english: Export Compute, spanish: Exportar Cómputo}
         days: 35
@@ -1134,8 +1244,14 @@ trees:
           english: Other nations rent the Commune's servers.
           spanish: Otras naciones alquilan los servidores de la Comuna.
         reward:
-        - {effect: build, building: industrial_complex, level: 1}
-        - {effect: add_political_power, value: 50}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: ASC_la_nube_continental
         name: {english: The Continental Cloud, spanish: La Nube Continental}
         days: 42
@@ -1148,7 +1264,8 @@ trees:
           spanish: Media Europa funciona con el hardware de la Comuna.
         reward:
         - {effect: add_variable, var: ASC_computo, value: 8}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
+        - {effect: add_political_power, value: 100}
       - id: ASC_la_economia_de_la_atencion
         name: {english: The Attention Economy, spanish: La Economía de la Atención}
         days: 56
@@ -1174,7 +1291,6 @@ trees:
           spanish: 'Se termina el cuello de botella del Consejo: las máquinas ya no esperan firmas.'
         reward:
         - {effect: remove_idea, value: ASC_cuello_de_botella}
-        - {effect: build, building: industrial_complex, level: 1}
       - id: ASC_reciclaje_total
         name: {english: Total Recycling, spanish: Reciclaje Total}
         days: 35
@@ -1183,7 +1299,7 @@ trees:
         - ASC_lineas_sin_operarios
         desc: {english: Nothing leaves the Commune as waste., spanish: Nada sale de la Comuna como basura.}
         reward:
-        - {effect: add_political_power, value: 50}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
       - id: ASC_el_ruhr_automatizado
         name: {english: The Automated Ruhr, spanish: El Ruhr Automatizado}
         days: 42
@@ -1194,7 +1310,14 @@ trees:
           english: The old Ruhr works again, in the dark.
           spanish: El viejo Ruhr vuelve a trabajar, a oscuras.
         reward:
-        - {effect: build, building: arms_factory, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: ASC_robotica_de_ensamble
         name: {english: Assembly Robotics, spanish: Robótica de Ensamble}
         days: 35
@@ -1215,7 +1338,16 @@ trees:
           english: Automated dry docks from Kiel to Gdańsk.
           spanish: Diques secos automatizados de Kiel a Gdansk.
         reward:
-        - {effect: build, building: dockyard, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: ASC_supercomputadora_de_planificacion
         name: {english: The Planning Supercomputer, spanish: La Supercomputadora de Planificación}
         days: 70
@@ -1226,7 +1358,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
         - {effect: add_variable, var: ASC_computo, value: 5}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
     - id: enjambres
       name: {english: Autonomous Swarms, spanish: Enjambres Autónomos}
       focuses:
@@ -1240,7 +1372,7 @@ trees:
           english: The first autonomous squads join the line.
           spanish: Las primeras escuadras autónomas entran a la línea.
         reward:
-        - {effect: army_experience, value: 25}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: ASC_columnas_autonomas
         name: {english: Autonomous Columns, spanish: Columnas Autónomas}
         days: 35
@@ -1251,7 +1383,7 @@ trees:
           english: Trucks without drivers, supply without rest.
           spanish: Camiones sin chofer, suministro sin descanso.
         reward:
-        - {effect: army_experience, value: 25}
+        - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 1}
       - id: ASC_mando_por_red
         name: {english: Networked Command, spanish: Mando por Red}
         days: 42
@@ -1262,9 +1394,9 @@ trees:
           english: Every unit sees what every other unit sees.
           spanish: Cada unidad ve lo que ven todas las demás.
         reward:
-        - {effect: army_experience, value: 25}
         - {effect: add_variable, var: ASC_computo, value: 3}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
       - id: ASC_mantenimiento_predictivo
         name: {english: Predictive Maintenance, spanish: Mantenimiento Predictivo}
         days: 35
@@ -1276,7 +1408,14 @@ trees:
           english: The machine is repaired before it breaks.
           spanish: La máquina se arregla antes de romperse.
         reward:
-        - {effect: build, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: ASC_blindados_sin_tripulacion
         name: {english: Crewless Armour, spanish: Blindados sin Tripulación}
         days: 42
@@ -1285,7 +1424,7 @@ trees:
         - ASC_mantenimiento_predictivo
         desc: {english: Tanks with nobody inside., spanish: Tanques sin nadie adentro.}
         reward:
-        - {effect: army_experience, value: 50}
+        - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}
       - id: ASC_doctrina_del_enjambre
         name: {english: The Swarm Doctrine, spanish: La Doctrina del Enjambre}
         days: 56
@@ -1308,8 +1447,7 @@ trees:
         - ASC_el_ano_del_plan
         desc: {english: Hunters that never surface., spanish: Cazadores que nunca salen a la superficie.}
         reward:
-        - {effect: navy_experience, value: 25}
-        - {effect: build, building: dockyard, level: 1}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
       - id: ASC_patrulla_del_baltico
         name: {english: The Baltic Patrol, spanish: La Patrulla del Báltico}
         days: 35
@@ -1318,7 +1456,16 @@ trees:
         - ASC_submarinos_autonomos
         desc: {english: The Baltic is an inner sea again., spanish: El Báltico vuelve a ser un mar interior.}
         reward:
-        - {effect: navy_experience, value: 25}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: ASC_enjambres_aereos
         name: {english: Air Swarms, spanish: Enjambres Aéreos}
         days: 42
@@ -1329,8 +1476,7 @@ trees:
           english: Clouds of small drones instead of squadrons.
           spanish: Nubes de drones chicos en vez de escuadrillas.
         reward:
-        - {effect: air_experience, value: 50}
-        - {effect: build, building: air_base, level: 2}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: ASC_portadrones
         name: {english: Drone Carriers, spanish: Portadrones}
         days: 56
@@ -1340,8 +1486,21 @@ trees:
         - ASC_enjambres_aereos
         desc: {english: Ships that launch swarms., spanish: Barcos que lanzan enjambres.}
         reward:
-        - {effect: navy_experience, value: 50}
-        - {effect: air_experience, value: 25}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: ASC_control_del_mar_del_norte
         name: {english: Control of the North Sea, spanish: Control del Mar del Norte}
         days: 42
@@ -1359,9 +1518,9 @@ trees:
         - ASC_control_del_mar_del_norte
         desc: {english: Nothing flies over Europe unseen., spanish: Nada vuela sobre Europa sin que se vea.}
         reward:
-        - {effect: air_experience, value: 25}
         - {effect: add_variable, var: ASC_computo, value: 3}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
     - id: poder_de_computo
       name: {english: Compute Power, spanish: Poder de Cómputo}
       focuses:
@@ -1374,7 +1533,7 @@ trees:
         desc: {english: The first great hall of servers., spanish: La primera gran nave de servidores.}
         reward:
         - {effect: add_variable, var: ASC_computo, value: 10}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
       - id: ASC_enfriamiento_del_rin
         name: {english: Rhine Cooling, spanish: Enfriamiento del Rin}
         days: 35
@@ -1384,7 +1543,7 @@ trees:
         desc: {english: The river cools the machines., spanish: El río enfría las máquinas.}
         reward:
         - {effect: add_variable, var: ASC_computo, value: 8}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
       - id: ASC_red_de_fibra_baltica
         name: {english: The Baltic Fibre Network, spanish: La Red de Fibra Báltica}
         days: 35
@@ -1394,7 +1553,7 @@ trees:
         desc: {english: The satellites plug into the plan., spanish: Los satélites se conectan al plan.}
         reward:
         - {effect: add_variable, var: ASC_computo, value: 5}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
         - {effect: build, building: infrastructure, level: 1}
       - id: ASC_datacenters_de_albion
         name: {english: The Albion Datacenters, spanish: Los Datacenters de Albión}
@@ -1408,7 +1567,7 @@ trees:
           spanish: El clima frío de Albión vale su peso en servidores.
         reward:
         - {effect: add_variable, var: ASC_computo, value: 10}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
       - id: ASC_algoritmos_de_reparto
         name: {english: Allocation Algorithms, spanish: Algoritmos de Reparto}
         days: 35
@@ -1420,7 +1579,7 @@ trees:
           spanish: 'Mejores algoritmos: el mismo cómputo rinde más.'
         reward:
         - {effect: add_variable, var: ASC_computo, value: 5}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
         - {effect: add_political_power, value: 50}
       - id: ASC_reserva_de_computo
         name: {english: The Compute Reserve, spanish: La Reserva de Cómputo}
@@ -1433,7 +1592,7 @@ trees:
           spanish: Servidores ociosos guardados para emergencias.
         reward:
         - {effect: add_variable, var: ASC_computo, value: 8}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
       - id: ASC_sobrecarga_controlada
         name: {english: Controlled Overload, spanish: Sobrecarga Controlada}
         days: 42
@@ -1444,7 +1603,7 @@ trees:
           english: Opens the decision to overload the system for four months.
           spanish: Abre la decisión de sobrecargar el sistema durante cuatro meses.
         reward:
-        - {effect: add_political_power, value: 25}
+        - {effect: add_political_power, value: 100}
       - id: ASC_la_mente_de_la_comuna
         name: {english: The Mind of the Commune, spanish: La Mente de la Comuna}
         days: 70
@@ -1454,7 +1613,7 @@ trees:
         desc: {english: The whole Commune thinks as one., spanish: Toda la Comuna piensa como una sola.}
         reward:
         - {effect: add_variable, var: ASC_computo, value: 20}
-        - *id001
+        - {effect: run, value: ASC_recalcular_computo}
         - {effect: add_research_slot, value: 1}
 
 
@@ -1477,7 +1636,7 @@ trees:
           english: A new century opens with a balance sheet. The Board wants to know who pays for it.
           spanish: Un siglo nuevo abre con un balance. El Directorio quiere saber quién lo paga.
         reward:
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 100}
       - id: FCU_junta_anual
         name: {english: The Annual Shareholders' Meeting, spanish: La Junta Anual de Accionistas}
         days: 35
@@ -1488,7 +1647,7 @@ trees:
           english: Every year the Four meet to decide who runs the Union. This year the room is tense.
           spanish: Cada año las Cuatro se reúnen para decidir quién maneja la Unión. Este año el salón está tenso.
         reward:
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 100}
       - id: FCU_segundo_mandato
         name: {english: Castellane's Second Term, spanish: El Segundo Mandato de Castellane}
         days: 35
@@ -1508,8 +1667,7 @@ trees:
           english: 'Valeria Castellane keeps the Chair. Her secret: never let any of the Four win.'
           spanish: 'Valeria Castellane conserva la Presidencia. Su secreto: no dejar ganar nunca a ninguna de las Cuatro.'
         reward:
-        - {effect: add_political_power, value: 75}
-        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 100}
       - id: FCU_reparto_de_carteras
         name: {english: Assigning the Portfolios, spanish: El Reparto de Carteras}
         days: 35
@@ -1532,8 +1690,9 @@ trees:
           spanish: Las granjas verticales de Halvorsen-Ito alimentan a las ciudades al costo, y ponen su logo en cada pan.
         reward:
         - {effect: add_variable, var: FCU_halvorsen, value: 10}
-        - {effect: add_stability, value: 0.03}
         - {effect: run, value: FCU_recalcular_directorio}
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 50}
       - id: FCU_el_libro_mayor
         name: {english: 'Obsidian Ledger: The General Ledger', spanish: 'Obsidian Ledger: El Libro Mayor'}
         days: 35
@@ -1545,8 +1704,8 @@ trees:
           spanish: Cada transacción de la Unión pasa por el libro de Obsidian. Sabe lo que debe cada uno.
         reward:
         - {effect: add_variable, var: FCU_obsidian, value: 10}
-        - {effect: add_political_power, value: 50}
         - {effect: run, value: FCU_recalcular_directorio}
+        - {effect: add_political_power, value: 100}
       - id: FCU_contratos_de_defensa
         name: {english: 'Meridian Kinetics: Defence Contracts', spanish: 'Meridian Kinetics: Contratos de Defensa'}
         days: 35
@@ -1558,8 +1717,8 @@ trees:
           spanish: Meridian se queda con los pedidos del ejército, con la condición de repartir las ganancias con el Directorio.
         reward:
         - {effect: add_variable, var: FCU_meridian, value: 10}
-        - {effect: army_experience, value: 20}
         - {effect: run, value: FCU_recalcular_directorio}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: FCU_grifos_de_la_union
         name: {english: 'Castellane: The Union''s Taps', spanish: 'Castellane: Los Grifos de la Unión'}
         days: 35
@@ -1571,8 +1730,15 @@ trees:
           spanish: Desalinizadoras nuevas en las dos costas. El agua es de Castellane, y Castellane es la Presidencia.
         reward:
         - {effect: add_variable, var: FCU_castellane, value: 10}
-        - {effect: build, building: industrial_complex, level: 1}
         - {effect: run, value: FCU_recalcular_directorio}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: FCU_la_mesa_redonda
         name: {english: The Round Table, spanish: La Mesa Redonda}
         days: 56
@@ -1596,7 +1762,6 @@ trees:
           spanish: Solo posible con las cuatro corporaciones entre 40 y 60. Lo más difícil de la Unión es un directorio donde nadie gana.
         reward:
         - {effect: add_ideas, value: FCU_mesa_redonda}
-        - {effect: add_political_power, value: 50}
       - id: FCU_grifos_cerrados_al_sur
         name: {english: Close the Southern Taps, spanish: Cerrar los Grifos del Sur}
         days: 42
@@ -1609,9 +1774,9 @@ trees:
           spanish: Las ciudades del norte del Imperio toman agua de Castellane. Hay que recordárselo.
         reward:
         - {effect: add_variable, var: FCU_castellane, value: 5}
-        - {effect: add_political_power, value: 50}
         - {effect: event, id: meganations_efe.6, days: 1, target: EFE}
         - {effect: run, value: FCU_recalcular_directorio}
+        - {effect: add_political_power, value: 100}
       - id: FCU_adquisicion_del_sur
         name: {english: The Acquisition of the South, spanish: La Adquisición del Sur}
         days: 70
@@ -1679,7 +1844,6 @@ trees:
         - {effect: set_variable, var: FCU_halvorsen, value: 0}
         - {effect: add_variable, var: FCU_meridian, value: 15}
         - {effect: add_ideas, value: FCU_raciones_meridian}
-        - {effect: army_experience, value: 25}
       - id: FCU_liquidar_obsidian
         name: {english: Obsidian Liquidated, spanish: Obsidian Liquidada}
         days: 35
@@ -1730,7 +1894,6 @@ trees:
           spanish: Meridian alquila divisiones a cualquier país que pague. La experiencia vuelve con las facturas.
         reward:
         - {effect: add_ideas, value: FCU_contratistas_globales}
-        - {effect: army_experience, value: 25}
       - id: FCU_adquirir_la_alta_mar
         name: {english: Acquire the High Seas, spanish: Adquirir la Alta Mar}
         days: 70
@@ -1758,8 +1921,14 @@ trees:
           english: 'Two models are fighting for the Union''s economy: a share for every citizen, or a tap for every rival.'
           spanish: 'Dos modelos se pelean la economía de la Unión: una acción para cada ciudadano, o un grifo para cada rival.'
         reward:
-        - {effect: add_political_power, value: 25}
-        - {effect: build, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: FCU_el_dividendo
         name: {english: The Dividend, spanish: El Dividendo}
         days: 42
@@ -1790,7 +1959,14 @@ trees:
           english: Tax-free industrial parks along the Great Lakes.
           spanish: Parques industriales libres de impuestos sobre los Grandes Lagos.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: FCU_consumo_de_masas
         name: {english: Mass Consumption, spanish: Consumo de Masas}
         days: 35
@@ -1801,9 +1977,9 @@ trees:
           english: Full shelves are the best propaganda the Board ever bought.
           spanish: Las góndolas llenas son la mejor propaganda que el Directorio compró jamás.
         reward:
-        - {effect: add_stability, value: 0.05}
         - {effect: add_variable, var: FCU_halvorsen, value: 5}
         - {effect: run, value: FCU_recalcular_directorio}
+        - {effect: add_political_power, value: 100}
       - id: FCU_abrir_la_exportacion
         name: {english: The Export Market, spanish: El Mercado de Exportación}
         days: 35
@@ -1860,9 +2036,16 @@ trees:
           english: A chain of plants from Texas to Florida.
           spanish: Una cadena de plantas de Texas a Florida.
         reward:
-        - {effect: build, building: industrial_complex, level: 1}
         - {effect: add_variable, var: FCU_castellane, value: 5}
         - {effect: run, value: FCU_recalcular_directorio}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: FCU_grifos_cerrados
         name: {english: Closed Taps, spanish: Grifos Cerrados}
         days: 35
@@ -1874,8 +2057,8 @@ trees:
           english: Neighbours who do not sign get no water. The Ecofascist Empire is the first to find out.
           spanish: El vecino que no firma se queda sin agua. El Imperio Ecofascista es el primero en enterarse.
         reward:
-        - {effect: add_political_power, value: 50}
         - {effect: event, id: meganations_efe.6, days: 1, target: EFE}
+        - {effect: add_political_power, value: 100}
       - id: FCU_el_agua_es_poder
         name: {english: Water Is Power, spanish: El Agua es Poder}
         days: 35
@@ -1914,7 +2097,14 @@ trees:
           english: The old Rust Belt, rebuilt by robots.
           spanish: El viejo Cinturón del Óxido, reconstruido por robots.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: FCU_parque_de_pittsburgh
         name: {english: The Pittsburgh Park, spanish: El Parque de Pittsburgh}
         days: 35
@@ -1925,9 +2115,16 @@ trees:
           english: Meridian's biggest arms complex.
           spanish: El complejo de armamento más grande de Meridian.
         reward:
-        - {effect: build, building: arms_factory, level: 2}
         - {effect: add_variable, var: FCU_meridian, value: 5}
         - {effect: run, value: FCU_recalcular_directorio}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: FCU_robotica_meridian
         name: {english: Meridian Robotics, spanish: Robótica Meridian}
         days: 42
@@ -1952,9 +2149,16 @@ trees:
           english: Obsidian's data routes every train in the Union.
           spanish: Los datos de Obsidian rutean cada tren de la Unión.
         reward:
-        - {effect: build, building: infrastructure, level: 2}
         - {effect: add_variable, var: FCU_obsidian, value: 5}
         - {effect: run, value: FCU_recalcular_directorio}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: infrastructure, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: infrastructure, level: 2}
       - id: FCU_astilleros_de_los_lagos
         name: {english: The Lakes Shipyards, spanish: Los Astilleros de los Lagos}
         days: 35
@@ -1965,7 +2169,16 @@ trees:
           english: Dry docks on the Great Lakes and the Gulf.
           spanish: Diques secos en los Grandes Lagos y en el Golfo.
         reward:
-        - {effect: build, building: dockyard, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: FCU_laboratorios_privados
         name: {english: Private Laboratories, spanish: Laboratorios Privados}
         days: 70
@@ -1988,7 +2201,7 @@ trees:
         - FCU_ano_fiscal
         desc: {english: The Union does not conscript. It hires., spanish: La Unión no recluta. Contrata.}
         reward:
-        - {effect: army_experience, value: 25}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: FCU_el_entrenamiento_corporativo
         name: {english: Corporate Training, spanish: Entrenamiento Corporativo}
         days: 35
@@ -2008,9 +2221,16 @@ trees:
           english: Few soldiers, the best kit money can buy.
           spanish: Pocos soldados, el mejor equipo que se puede comprar.
         reward:
-        - {effect: build, building: arms_factory, level: 1}
         - {effect: add_variable, var: FCU_meridian, value: 5}
         - {effect: run, value: FCU_recalcular_directorio}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: FCU_seguro_de_vida
         name: {english: Life Insurance, spanish: Seguro de Vida}
         days: 35
@@ -2022,8 +2242,7 @@ trees:
           english: Every contractor's family is insured. Volunteers queue up.
           spanish: La familia de cada contratista está asegurada. Los voluntarios hacen fila.
         reward:
-        - {effect: add_war_support, value: 0.05}
-        - {effect: add_manpower, value: 50000}
+        - {effect: add_manpower, value: 100000}
       - id: FCU_divisiones_de_respuesta
         name: {english: Rapid Response Divisions, spanish: Divisiones de Respuesta Rápida}
         days: 42
@@ -2046,6 +2265,7 @@ trees:
           spanish: El mejor general que se puede comprar tiene una cláusula de bonificación por cada ciudad tomada.
         reward:
         - {effect: army_experience, value: 50}
+        - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}
     - id: mar_aire
       name: {english: The Two-Ocean Fleet, spanish: La Flota de Dos Océanos}
       focuses:
@@ -2057,8 +2277,16 @@ trees:
         - FCU_ano_fiscal
         desc: {english: Norfolk's docks work again., spanish: Los muelles de Norfolk vuelven a trabajar.}
         reward:
-        - {effect: navy_experience, value: 25}
-        - {effect: build, building: dockyard, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: FCU_flota_del_pacifico
         name: {english: The Pacific Fleet, spanish: La Flota del Pacífico}
         days: 35
@@ -2069,8 +2297,7 @@ trees:
           english: San Diego and Seattle, facing the High Seas.
           spanish: San Diego y Seattle, mirando a la Alta Mar.
         reward:
-        - {effect: navy_experience, value: 25}
-        - {effect: build, building: dockyard, level: 1}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
       - id: FCU_escoltas_de_convoy
         name: {english: Convoy Escorts, spanish: Escoltas de Convoy}
         days: 35
@@ -2081,8 +2308,7 @@ trees:
           english: Trade is the Union's lifeblood. It sails with escort.
           spanish: El comercio es la sangre de la Unión. Navega con escolta.
         reward:
-        - {effect: build, building: dockyard, level: 1}
-        - {effect: navy_experience, value: 15}
+        - {effect: navy_experience, value: 50}
       - id: FCU_superioridad_aerea
         name: {english: Air Superiority, spanish: Superioridad Aérea}
         days: 42
@@ -2093,8 +2319,7 @@ trees:
           english: Meridian's drones own the skies over the Union.
           spanish: Los drones de Meridian son dueños del cielo de la Unión.
         reward:
-        - {effect: air_experience, value: 50}
-        - {effect: build, building: air_base, level: 2}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: FCU_portaaviones_corporativos
         name: {english: Corporate Carriers, spanish: Portaaviones Corporativos}
         days: 56
@@ -2106,8 +2331,21 @@ trees:
           english: Floating airfields with a logo on the flight deck.
           spanish: Aeródromos flotantes con un logo en la cubierta.
         reward:
-        - {effect: navy_experience, value: 50}
-        - {effect: air_experience, value: 25}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: FCU_el_canal_asegurado
         name: {english: The Secured Canal, spanish: El Canal Asegurado}
         days: 56
@@ -2166,8 +2404,15 @@ trees:
         - {effect: add_variable, var: FCU_castellane, value: 5}
         - {effect: add_variable, var: FCU_halvorsen, value: 5}
         - {effect: add_variable, var: FCU_meridian, value: -5}
-        - {effect: build, building: industrial_complex, level: 1}
         - {effect: run, value: FCU_recalcular_directorio}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: FCU_presupuesto_militar
         name: {english: The Military Budget, spanish: El Presupuesto Militar}
         days: 35
@@ -2185,8 +2430,15 @@ trees:
         reward:
         - {effect: add_variable, var: FCU_meridian, value: 10}
         - {effect: add_variable, var: FCU_obsidian, value: -5}
-        - {effect: build, building: arms_factory, level: 1}
         - {effect: run, value: FCU_recalcular_directorio}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: FCU_bonos_del_directorio
         name: {english: Board Bonds, spanish: Bonos del Directorio}
         days: 42
@@ -2242,8 +2494,8 @@ trees:
           english: 'Who carries what, where, and who paid for it: the clearing house knows.'
           spanish: 'Qué lleva quién, a dónde y quién lo pagó: la cámara de compensación lo sabe.'
         reward:
-        - {effect: add_political_power, value: 50}
-        - &hsn_id001 {effect: run, value: HSN_recalcular_nodos}
+        - {effect: run, value: HSN_recalcular_nodos}
+        - {effect: add_political_power, value: 100}
       - id: HSN_la_junta_de_capitanes
         name: {english: The Captains' Assembly, spanish: La Junta de Capitanes}
         days: 35
@@ -2254,7 +2506,7 @@ trees:
           english: The insurers want order. The crews want their share.
           spanish: Las aseguradoras quieren orden. Las tripulaciones quieren su parte.
         reward:
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 100}
       - id: HSN_el_libro_de_fletes
         name: {english: The Freight Ledger, spanish: El Libro de Fletes}
         days: 35
@@ -2272,8 +2524,7 @@ trees:
           english: Kofi Aldana keeps the ledger, and the ledger keeps the peace.
           spanish: Kofi Aldana lleva el libro, y el libro mantiene la paz.
         reward:
-        - {effect: add_political_power, value: 75}
-        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 100}
       - id: HSN_neutralidad_armada
         name: {english: Armed Neutrality, spanish: Neutralidad Armada}
         days: 35
@@ -2294,7 +2545,7 @@ trees:
           spanish: 'Abre las decisiones de seguros: venderles cobertura a las meganaciones en guerra.'
         reward:
         - {effect: flag, value: HSN_seguros}
-        - {effect: add_political_power, value: 25}
+        - {effect: add_political_power, value: 100}
       - id: HSN_arbitraje_de_alta_mar
         name: {english: High Seas Arbitration, spanish: El Arbitraje de Alta Mar}
         days: 42
@@ -2317,8 +2568,16 @@ trees:
           english: The Austral Sea Compact joins the clearing house.
           spanish: El Pacto del Mar Austral se suma a la cámara de compensación.
         reward:
-        - {effect: add_political_power, value: 75}
-        - {effect: build, building: dockyard, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: HSN_el_tratado_de_los_estrechos
         name: {english: The Treaty of the Straits, spanish: El Tratado de los Estrechos}
         days: 42
@@ -2330,7 +2589,7 @@ trees:
           spanish: Los estrechos son neutrales; la Alta Mar decide qué significa neutral.
         reward:
         - {effect: add_ideas, value: HSN_tratado_estrechos}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
       - id: HSN_bloqueo_legal
         name: {english: The Legal Blockade, spanish: El Bloqueo Legal}
         days: 70
@@ -2373,7 +2632,7 @@ trees:
         - {effect: promote, character: HSN_ines_tavake}
         - {effect: flag, value: HSN_tavake}
         - {effect: event, id: meganations_hsn.6, days: 1}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
       - id: HSN_capitanes_electos
         name: {english: Elected Captains, spanish: Capitanes Electos}
         days: 35
@@ -2394,7 +2653,7 @@ trees:
           spanish: Abre patentes de corso de 90 días contra enemigos concretos.
         reward:
         - {effect: flag, value: HSN_patentes}
-        - {effect: navy_experience, value: 25}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
       - id: HSN_botin_compartido
         name: {english: Shared Loot, spanish: Botín Compartido}
         days: 42
@@ -2408,6 +2667,7 @@ trees:
         reward:
         - {effect: flag, value: HSN_botin_abierto}
         - {effect: add_variable, var: HSN_botin, value: 10}
+        - {effect: add_political_power, value: 100}
       - id: HSN_la_flota_libre
         name: {english: The Free Fleet, spanish: La Flota Libre}
         days: 42
@@ -2418,8 +2678,17 @@ trees:
           english: Every ship with a crew is a warship.
           spanish: Cada barco con tripulación es un buque de guerra.
         reward:
-        - {effect: navy_experience, value: 50}
-        - {effect: build, building: dockyard, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - {effect: navy_experience, value: 25}
       - id: HSN_la_hermandad_de_la_cubierta
         name: {english: The Brotherhood of the Deck, spanish: La Hermandad de la Cubierta}
         days: 56
@@ -2455,7 +2724,14 @@ trees:
           english: 'Volume or margin: the High Seas must choose.'
           spanish: 'Volumen o margen: la Alta Mar tiene que elegir.'
         reward:
-        - {effect: build, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: HSN_el_puerto_libre
         name: {english: The Free Port, spanish: El Puerto Libre}
         days: 42
@@ -2480,7 +2756,14 @@ trees:
           english: Cargo changes ships and the High Seas keep a cut.
           spanish: La carga cambia de barco y la Alta Mar se queda con una parte.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: HSN_la_bolsa_de_fletes
         name: {english: The Freight Exchange, spanish: La Bolsa de Fletes}
         days: 35
@@ -2491,7 +2774,7 @@ trees:
           english: Futures on cargo that has not sailed yet.
           spanish: Futuros sobre carga que todavía no zarpó.
         reward:
-        - {effect: add_political_power, value: 75}
+        - {effect: add_political_power, value: 100}
       - id: HSN_el_mercado_del_pacifico
         name: {english: The Pacific Market, spanish: El Mercado del Pacífico}
         days: 56
@@ -2503,8 +2786,18 @@ trees:
           english: Every port of the Pacific trades in High Seas credit.
           spanish: Cada puerto del Pacífico comercia con crédito de la Alta Mar.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
-        - {effect: add_stability, value: 0.05}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
     - id: peaje
       name: {english: The Straits Toll, spanish: El Peaje de los Estrechos}
       focuses:
@@ -2534,8 +2827,16 @@ trees:
           english: Customs ships anchored in every strait.
           spanish: Barcos aduaneros anclados en cada estrecho.
         reward:
-        - {effect: build, building: dockyard, level: 1}
-        - {effect: add_political_power, value: 25}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: HSN_el_arancel_de_guerra
         name: {english: The War Tariff, spanish: El Arancel de Guerra}
         days: 35
@@ -2554,8 +2855,18 @@ trees:
         - HSN_el_arancel_de_guerra
         desc: {english: Whoever does not pay does not pass., spanish: El que no paga no pasa.}
         reward:
-        - {effect: build, building: arms_factory, level: 2}
-        - {effect: add_war_support, value: 0.05}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
     - id: astilleros
       name: {english: Floating Shipyards, spanish: Astilleros Flotantes}
       focuses:
@@ -2569,7 +2880,16 @@ trees:
           english: Dry docks that sail to where the work is.
           spanish: Diques secos que navegan hasta donde está el trabajo.
         reward:
-        - {effect: build, building: dockyard, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: HSN_diques_de_kanto
         name: {english: The Kanto Docks, spanish: Los Diques de Kanto}
         days: 35
@@ -2585,7 +2905,7 @@ trees:
           - Kanto
           effects:
           - {effect: build_here, building: infrastructure, level: 1}
-        - {effect: build, building: dockyard, level: 1}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
       - id: HSN_refinerias_de_borneo
         name: {english: The Borneo Refineries, spanish: Las Refinerías de Borneo}
         days: 35
@@ -2596,7 +2916,14 @@ trees:
           english: Fuel for the largest fleet of the century.
           spanish: Combustible para la flota más grande del siglo.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: HSN_puertos_de_aguas_profundas
         name: {english: Deep-Water Ports, spanish: Puertos de Aguas Profundas}
         days: 42
@@ -2608,7 +2935,16 @@ trees:
           english: Ports for ships that no longer fit anywhere else.
           spanish: Puertos para barcos que ya no entran en ningún otro lado.
         reward:
-        - {effect: build, building: dockyard, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: HSN_ciudades_flotantes
         name: {english: Floating Cities, spanish: Ciudades Flotantes}
         days: 56
@@ -2640,7 +2976,7 @@ trees:
         - HSN_el_libro_de_fletes_2100
         desc: {english: Sailors who can hold a beach., spanish: Marineros que pueden sostener una playa.}
         reward:
-        - {effect: army_experience, value: 25}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: HSN_doctrina_de_desembarco
         name: {english: Landing Doctrine, spanish: Doctrina de Desembarco}
         days: 35
@@ -2649,7 +2985,7 @@ trees:
         - HSN_marines_de_alta_mar
         desc: {english: From ship to shore in one tide., spanish: Del barco a la costa en una marea.}
         reward:
-        - {effect: army_experience, value: 25}
+        - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 1}
       - id: HSN_asalto_anfibio
         name: {english: Amphibious Assault, spanish: Asalto Anfibio}
         days: 42
@@ -2658,7 +2994,7 @@ trees:
         - HSN_marines_de_alta_mar
         desc: {english: The islands are taken from the sea., spanish: Las islas se toman desde el mar.}
         reward:
-        - {effect: army_experience, value: 25}
+        - {effect: army_experience, value: 50}
         - {effect: navy_experience, value: 25}
       - id: HSN_guarniciones_de_isla
         name: {english: Island Garrisons, spanish: Guarniciones de Isla}
@@ -2669,7 +3005,7 @@ trees:
         - HSN_asalto_anfibio
         desc: {english: Every node has its garrison., spanish: Cada nodo tiene su guarnición.}
         reward:
-        - {effect: add_manpower, value: 25000}
+        - {effect: add_manpower, value: 75000}
       - id: HSN_fuerzas_de_muelle
         name: {english: Dock Forces, spanish: Fuerzas de Muelle}
         days: 35
@@ -2689,7 +3025,7 @@ trees:
           english: The only general who learned war on a deck.
           spanish: El único general que aprendió la guerra en una cubierta.
         reward:
-        - {effect: army_experience, value: 50}
+        - {effect: army_experience, value: 75}
     - id: armada
       name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
       focuses:
@@ -2703,8 +3039,7 @@ trees:
           english: Nobody attacks an insured convoy twice.
           spanish: Nadie ataca dos veces un convoy asegurado.
         reward:
-        - {effect: navy_experience, value: 25}
-        - {effect: build, building: dockyard, level: 1}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
       - id: HSN_aviacion_naval
         name: {english: Naval Aviation, spanish: Aviación Naval}
         days: 35
@@ -2713,8 +3048,7 @@ trees:
         - HSN_escoltas_de_convoy
         desc: {english: Planes that know the sea., spanish: Aviones que conocen el mar.}
         reward:
-        - {effect: air_experience, value: 50}
-        - {effect: build, building: air_base, level: 2}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
       - id: HSN_cazadores_de_submarinos
         name: {english: Submarine Hunters, spanish: Cazadores de Submarinos}
         days: 35
@@ -2725,7 +3059,7 @@ trees:
           english: The ASC's submarines are the first target.
           spanish: Los submarinos de la ASC son el primer blanco.
         reward:
-        - {effect: navy_experience, value: 25}
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
       - id: HSN_grupos_de_portaaviones
         name: {english: Carrier Groups, spanish: Grupos de Portaaviones}
         days: 56
@@ -2737,8 +3071,21 @@ trees:
           english: The clearing house finances the carriers; the carriers protect the clearing house.
           spanish: La cámara de compensación financia los portaaviones; los portaaviones protegen a la cámara.
         reward:
-        - {effect: navy_experience, value: 50}
-        - {effect: air_experience, value: 25}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+          when: {coastal: true}
       - id: HSN_la_armada_de_alta_mar
         name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
         days: 56
@@ -2758,8 +3105,9 @@ trees:
           english: Every route in Asia is a High Seas route.
           spanish: Cada ruta de Asia es una ruta de la Alta Mar.
         reward:
-        - {effect: navy_experience, value: 25}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
+        - {effect: navy_experience, value: 50}
+        - {effect: add_political_power, value: 50}
     - id: nodos
       name: {english: The Nodes, spanish: Los Nodos}
       focuses:
@@ -2782,7 +3130,7 @@ trees:
           effects:
           - {effect: build_here, building: infrastructure, level: 1}
           - {effect: build_here, building: air_base, level: 1}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
       - id: HSN_nodo_sunda
         name: {english: 'Node: Sunda', spanish: 'Nodo: Sunda'}
         days: 35
@@ -2799,7 +3147,7 @@ trees:
           effects:
           - {effect: build_here, building: infrastructure, level: 1}
           - {effect: build_here, building: air_base, level: 1}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
       - id: HSN_nodo_manila
         name: {english: 'Node: Manila', spanish: 'Nodo: Manila'}
         days: 35
@@ -2817,7 +3165,7 @@ trees:
           effects:
           - {effect: build_here, building: infrastructure, level: 1}
           - {effect: build_here, building: air_base, level: 1}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
       - id: HSN_nodo_taiwan
         name: {english: 'Node: Taiwan', spanish: 'Nodo: Taiwán'}
         days: 35
@@ -2834,7 +3182,7 @@ trees:
           effects:
           - {effect: build_here, building: infrastructure, level: 1}
           - {effect: build_here, building: air_base, level: 1}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
       - id: HSN_nodo_hong_kong
         name: {english: 'Node: Hong Kong', spanish: 'Nodo: Hong Kong'}
         days: 35
@@ -2850,7 +3198,7 @@ trees:
           - Hong Kong
           effects:
           - {effect: claim, value: HSN}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
         - {effect: add_political_power, value: 25}
       - id: HSN_nodo_okinawa
         name: {english: 'Node: Okinawa', spanish: 'Nodo: Okinawa'}
@@ -2869,7 +3217,7 @@ trees:
           effects:
           - {effect: build_here, building: infrastructure, level: 1}
           - {effect: build_here, building: air_base, level: 1}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
       - id: HSN_la_red_de_alta_mar
         name: {english: The High Seas Network, spanish: La Red de Alta Mar}
         days: 70
@@ -2882,7 +3230,7 @@ trees:
         reward:
         - {effect: add_political_power, value: 100}
         - {effect: add_research_slot, value: 1}
-        - *hsn_id001
+        - {effect: run, value: HSN_recalcular_nodos}
 
   # ===========================================================================
   NAS:

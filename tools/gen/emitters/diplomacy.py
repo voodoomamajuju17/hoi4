@@ -76,6 +76,24 @@ def emit(ctx: BuildContext) -> None:
         effects["declare_war_on"] = SOURCE
         ctx.note(f"guerra al arranque: {att} contra {dfd}")
 
+    # Justificaciones de guerra ya hechas: el país arranca con el objetivo de
+    # guerra listo y decide él cuándo declarar.
+    for w in spec.get("wargoals_at_start", []) or []:
+        if not isinstance(w, dict):
+            continue
+        holder, target = w["holder"], w["target"]
+        if holder not in alive or target not in alive:
+            ctx.warn(f"justificacion {holder} -> {target}: alguno no tiene territorio; no se crea.")
+            continue
+        if wargoals and w["wargoal"] not in wargoals:
+            raise SpecError(f"wargoal '{w['wargoal']}' no existe en common/wargoals/", where=SOURCE)
+        cw = Block()
+        cw.add("type", w["wargoal"])
+        cw.add("target", target)
+        out[holder].append(("create_wargoal", cw))
+        effects["create_wargoal"] = SOURCE
+        ctx.note(f"justificacion al arranque: {holder} contra {target}")
+
     tension = spec.get("world_tension")
     if isinstance(tension, dict) and tension.get("threat"):
         host = ctx.spec.raw["scenario"]["bookmark"]["default_country"]

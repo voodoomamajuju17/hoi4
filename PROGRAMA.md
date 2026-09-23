@@ -76,7 +76,10 @@ eventos con ultimátum e IA con condiciones.
   ceremonias, templos-batería, sobrecarga y La Noche del Sol), Qhapaq Ñan (camino que
   crece por regiones vecinas e integra), los cuatro Suyus como misiones, La Corte del
   Sol vs El Tawantinsuyu Renace, ultimátum a la SHD
-- [ ] Pasada de ajuste de premios para EFE, FCU, ASC y HSN (tabla nueva)
+- [x] Pasada de ajuste de premios para EFE, FCU, ASC y HSN (tabla nueva): 118 focos, fábricas en
+  regiones al azar (cada una con su slot; astilleros solo en la costa), bonos de investigación en vez
+  de experiencia suelta, ideas flojas llevadas al 10-20%. Tabla "VALOR DE LOS ARBOLES" en balance.txt
+- [x] El EFE arranca con la justificación lista contra los Caudillos del Amazonas (sin guerra declarada)
 - [~] **APF** — árbol de 48 focos con la tabla nueva: Desarrollo + Integración por
   miembro (Amara: integra despacio, no pasa al desarrollo; Diallo: rápido, territorios
   difíciles), Plan de Desarrollo Regional región por región, industria acelerada,

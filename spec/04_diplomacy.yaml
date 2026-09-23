@@ -142,6 +142,11 @@ wars_at_start:
   - { attacker: NRE, defender: ZWM, wargoal: annex_everything,
       lore: "La Reconquista de Oriente: Roma vuelve al Levante." }
 
+# Justificaciones listas al arranque (sin guerra declarada): el país elige cuándo.
+wargoals_at_start:
+  - { holder: EFE, target: ZWB, wargoal: annex_everything, src: user_decision,
+      lore: "El Amazonas en manos de caudillos: el Imperio ya tiene el decreto firmado." }
+
 rivalries:
   - { between: [EFE, NRE], modifier: meganations_bloc_rival, lore: "Dos Restauraciones: la Tierra o Roma." }
   - { between: [ASC, APF], modifier: meganations_bloc_rival, lore: "Máquinas o consejos: dos colectivismos." }

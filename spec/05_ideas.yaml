@@ -253,7 +253,7 @@ countries:
           spanish: "Todo guardabosques es reservista y todo reservista es guardabosques."
         modifiers:
           war_support_factor: 0.05
-          army_org_factor: 0.05
+          army_org_factor: 0.1
         modifiers_src: invented
         removable: false
 
@@ -323,6 +323,13 @@ countries:
           spanish: "La ofensiva avanza a la velocidad del bosque: despacio, y nunca retrocede."
         modifiers: { army_attack_factor: 0.1, experience_gain_army: 0.1 }
         src: user_design   # "Las Ocho Potencias" (2026-09-23)
+      - id: EFE_ofensiva_verde
+        name: {english: The Green Offensive, spanish: La Ofensiva Verde}
+        desc:
+          english: The jungle marches with the army, and the army marches with the jungle.
+          spanish: La selva marcha con el ejército, y el ejército con la selva.
+        modifiers: {army_attack_factor: 0.15, war_support_factor: 0.1}
+        src: user_design
       - id: EFE_continente_vivo
         name: { english: "A Living Continent", spanish: "Un Continente Vivo" }
         desc:
@@ -356,7 +363,7 @@ countries:
         desc:
           english: "The Guard trains where the maps end."
           spanish: "La Guardia se entrena donde terminan los mapas."
-        modifiers: { army_defence_factor: 0.05, army_org_factor: 0.05 }
+        modifiers: {army_defence_factor: 0.1, army_org_factor: 0.05}
         src: user_design   # "Las Ocho Potencias" (2026-09-23)
       - id: EFE_armadura_viviente
         name: { english: "Living Armour", spanish: "Armadura Viviente" }
@@ -606,7 +613,7 @@ countries:
       desc:
         english: A hundred small machines instead of one big one.
         spanish: Cien máquinas chicas en vez de una grande.
-      modifiers: {army_org_factor: 0.05, army_attack_factor: 0.05}
+      modifiers: {army_org_factor: 0.1, army_attack_factor: 0.1}
       src: user_design
     - id: ASC_flota_del_norte
       name: {english: The Northern Fleet, spanish: La Flota del Norte}
@@ -620,7 +627,7 @@ countries:
       desc:
         english: The Baltic and Albion send delegates to the lottery.
         spanish: El Báltico y Albión mandan delegados al sorteo.
-      modifiers: {political_power_gain: 0.05, stability_factor: 0.05}
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
       src: user_design
     - id: ASC_sobrecarga
       name: {english: Controlled Overload, spanish: Sobrecarga Controlada}
@@ -713,7 +720,7 @@ countries:
         desc:
           english: "Every citizen holds a share. A small one."
           spanish: "Cada ciudadano tiene una acción. Una chiquita."
-        modifiers: { consumer_goods_factor: -0.05, stability_factor: 0.05 }
+        modifiers: {consumer_goods_factor: -0.1, stability_factor: 0.05}
       - id: FCU_economia_de_la_abundancia
         name: { english: "The Economy of Plenty", spanish: "La Economía de la Abundancia" }
         desc:
@@ -755,25 +762,25 @@ countries:
         desc:
           english: "Few divisions, very expensive, always first."
           spanish: "Pocas divisiones, muy caras, siempre primeras."
-        modifiers: { army_attack_factor: 0.05, army_defence_factor: 0.05 }
+        modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.05}
       - id: FCU_dos_oceanos
         name: { english: "Two Oceans", spanish: "Dos Océanos" }
         desc:
           english: "The Union faces both oceans, and both fleets answer to the same board."
           spanish: "La Unión mira a los dos océanos, y las dos flotas responden al mismo directorio."
-        modifiers: { industrial_capacity_dockyard: 0.1, war_support_factor: 0.05 }
+        modifiers: {industrial_capacity_dockyard: 0.15, war_support_factor: 0.05}
       - id: FCU_arbitraje_corporativo
         name: { english: "Corporate Arbitration", spanish: "Arbitraje Corporativo" }
         desc:
           english: "A permanent court where the Four settle their feuds before they reach the streets."
           spanish: "Un tribunal permanente donde las Cuatro arreglan sus peleas antes de que lleguen a la calle."
-        modifiers: { political_power_gain: 0.05, stability_factor: 0.05 }
+        modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
       - id: FCU_punto_de_equilibrio
         name: { english: "The Balance Point", spanish: "El Punto de Equilibrio" }
         desc:
           english: "The Board has learned to move together. It took a century and four lawyers per citizen."
           spanish: "El Directorio aprendió a moverse junto. Costó un siglo y cuatro abogados por ciudadano."
-        modifiers: { stability_factor: 0.05, political_power_gain: 0.1 }
+        modifiers: {stability_factor: 0.1, political_power_gain: 0.1}
     see: Q030
   HSN:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
@@ -827,7 +834,7 @@ countries:
       desc:
         english: The High Seas fight nobody's wars, and sink anyone who tries to make them.
         spanish: La Alta Mar no pelea las guerras de nadie, y hunde al que intente obligarla.
-      modifiers: {army_defence_factor: 0.05, industrial_capacity_dockyard: 0.05}
+      modifiers: {army_defence_factor: 0.05, industrial_capacity_dockyard: 0.1}
       src: user_design
     - id: HSN_arbitraje
       name: {english: High Seas Arbitration, spanish: El Arbitraje de Alta Mar}
@@ -890,14 +897,14 @@ countries:
       desc:
         english: Marines who fight from the ship to the beach and back.
         spanish: Infantes que pelean del barco a la playa y de vuelta.
-      modifiers: {army_attack_factor: 0.05, army_org_factor: 0.05}
+      modifiers: {army_attack_factor: 0.1, army_org_factor: 0.05}
       src: user_design
     - id: HSN_armada_de_alta_mar
       name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
       desc:
         english: The largest fleet of the century answers to a clearing house.
         spanish: La flota más grande del siglo le responde a una cámara de compensación.
-      modifiers: {industrial_capacity_dockyard: 0.1, war_support_factor: 0.05}
+      modifiers: {industrial_capacity_dockyard: 0.15, war_support_factor: 0.05}
       src: user_design
     see: Q030
   NAS:

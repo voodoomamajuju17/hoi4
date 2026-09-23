@@ -143,6 +143,17 @@ def emit(ctx: BuildContext) -> None:
         add(f"{r['tag']:4} {share:5.1f}%  {'#' * int(share)}")
     add("")
 
+    tree_rows = _tree_values(ctx)
+    if tree_rows:
+        add("VALOR DE LOS ARBOLES (todo lo que dan los focos si se hicieran todos, sin contar exclusiones)")
+        add("-" * 100)
+        add(f"{'TAG':4} {'Focos':>5} {'Dias':>5} {'Civ':>4} {'Mil':>4} {'Ast':>4} {'Casillas':>8} {'PP':>6} "
+            f"{'Ideas':>5} {'Bonos inv.':>10} {'Exp.':>5}")
+        for tag, v in tree_rows:
+            add(f"{tag:4} {v['focos']:>5} {v['dias']:>5} {v['civ']:>4} {v['mil']:>4} {v['ast']:>4} {v['slot']:>8} "
+                f"{v['pp']:>6} {v['ideas']:>5} {v['tb']:>10} {v['xp']:>5}")
+        add("")
+
     add("ALERTAS")
     add("-" * 100)
     no_army = [r["tag"] for r in rows if r["states"] and not r["divisions"]]
@@ -168,6 +179,44 @@ def emit(ctx: BuildContext) -> None:
     ctx.track(path)
     ctx.data["balance_path"] = path
     ctx.note(f"balance: {path}")
+
+
+def _tree_values(ctx: BuildContext) -> list[tuple[str, dict]]:
+    """Suma los premios de cada árbol: fábricas, casillas, PP, ideas, bonos."""
+    trees = (ctx.spec.raw.get("focus_trees") or {}).get("trees") or {}
+    out = []
+    for tag, tree in trees.items():
+        if not isinstance(tree, dict) or not tree.get("branches"):
+            continue
+        v = dict(focos=0, dias=0, civ=0, mil=0, ast=0, slot=0, pp=0, ideas=0, tb=0, xp=0)
+
+        def walk(items):
+            for e in items or []:
+                kind = e.get("effect")
+                if kind in ("build", "build_here"):
+                    key = {"industrial_complex": "civ", "arms_factory": "mil", "dockyard": "ast"}.get(e.get("building"))
+                    if key:
+                        v[key] += int(e.get("level", 1))
+                elif kind == "add_research_slot":
+                    v["slot"] += int(e.get("value", 1))
+                elif kind == "add_political_power" and e.get("value", 0) > 0:
+                    v["pp"] += int(e["value"])
+                elif kind in ("add_ideas", "swap_ideas", "timed_idea"):
+                    v["ideas"] += 1
+                elif kind == "tech_bonus":
+                    v["tb"] += int(e.get("uses", 1))
+                elif kind in ("army_experience", "navy_experience", "air_experience"):
+                    v["xp"] += int(e.get("value", 0))
+                walk(e.get("effects"))
+                walk(e.get("then"))
+
+        for branch in tree["branches"]:
+            for f in branch.get("focuses") or []:
+                v["focos"] += 1
+                v["dias"] += int(f.get("days", 0))
+                walk(f.get("reward"))
+        out.append((tag, v))
+    return out
 
 
 def _mp(value: int) -> str:
