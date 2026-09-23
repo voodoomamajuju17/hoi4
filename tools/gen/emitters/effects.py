@@ -22,6 +22,8 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: if, when: {condiciones}, then: [...], else: [...] }
   { effect: run, value: X }                       -> X = yes (efecto de 14_decisions.yaml -> scripted_effects)
   { effect: leader_trait, value: X }              -> add_country_leader_trait
+  { effect: tech_bonus, category: X, bonus: 0.5, uses: 1 } -> add_tech_bonus (categoría leída del juego)
+  { effect: capital, effects: [...] }             -> capital_scope
   { effect: states, pick: random|every, when: {..}, effects: [..] }
                                                   -> random_owned_controlled_state / every_owned_state
   En regiones: { effect: add_core, value: TAG } / { effect: state_flag, value: X }
@@ -87,7 +89,8 @@ class EffectContext:
                  capital: int | None = None, resources: set[str] | None = None, warn=None,
                  characters: set[str] | None = None, events: set[str] | None = None,
                  triggers_used: dict[str, str] | None = None, scripted: set[str] | None = None,
-                 shared_slots: set[str] | None = None):
+                 shared_slots: set[str] | None = None, tech_categories: set[str] | None = None):
+        self.tech_categories = tech_categories
         self.shared_slots = shared_slots
         self.scripted = scripted
         self.characters = characters
@@ -227,6 +230,20 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("random_list", inner)
             effects_used.setdefault("random_list", owner)
             continue
+        if effect == "tech_bonus":
+            cat = item["category"]
+            if ec.tech_categories and cat not in ec.tech_categories:
+                if ec.warn:
+                    ec.warn(f"{owner}: la categoria de investigacion '{cat}' no existe en este juego; se omite el bono.")
+                continue
+            inner = Block()
+            inner.add("name", owner)
+            inner.add("bonus", float(item.get("bonus", 0.5)))
+            inner.add("uses", int(item.get("uses", 1)))
+            inner.add("category", cat)
+            block.add("add_tech_bonus", inner)
+            effects_used.setdefault("add_tech_bonus", owner)
+            continue
         if effect == "leader_trait":
             block.add("add_country_leader_trait", item["value"])
             effects_used.setdefault("add_country_leader_trait", owner)
@@ -270,6 +287,9 @@ def render_effects(owner: str, items: list[dict], known,
         if effect == "claim":
             block.add("add_claim_by", item["value"])
             effects_used.setdefault("add_claim_by", owner)
+            continue
+        if effect == "capital":
+            block.add("capital_scope", render_effects(owner, item.get("effects") or [], ec, effects_used, where=where))
             continue
         if effect == "run":
             name = item["value"]
@@ -335,6 +355,7 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       all_between: { vars: [..], min, max }
       stability_at_least: 0.4             -> has_stability > 0.4
       flag / not_flag: X                  -> has_country_flag
+      flags: [X, Y]                       -> todas esas banderas
       at_war: true|false                  -> has_war
       idea / not_idea: X                  -> has_idea
       focus: X                            -> has_completed_focus
@@ -345,6 +366,8 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       stability_below: 0.4                -> has_stability < 0.4
       controls_state: [nombres]           -> controls_state (región por nombre)
       war_with: TAG                       -> has_war_with
+      controls_all: [[nombres], ..]       -> controla todas esas regiones
+      neighbor_state_flag: X              -> any_neighbor_state tiene esa bandera (en regiones)
       country: { tag, when: {..} }        -> TAG = { .. }
       any: [ {..}, {..} ]                 -> OR
       not: { .. }                         -> NOT (no se cumplen todas juntas)
@@ -376,6 +399,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             for var in value["vars"]:
                 block.entries.append(check(var, value["min"], "greater_than_or_equals"))
                 block.entries.append(check(var, value["max"], "less_than_or_equals"))
+        elif key == "flags":
+            for f in value:
+                block.add("has_country_flag", f)
+            triggers_used.setdefault("has_country_flag", owner)
         elif key in ("flag", "not_flag"):
             if key == "flag":
                 block.add("has_country_flag", value)
@@ -427,6 +454,18 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             triggers_used.setdefault("has_war_with", owner)
         elif key == "country":
             block.add(value["tag"], render_conditions(owner, value["when"], triggers_used, where=where))
+        elif key == "neighbor_state_flag":
+            block.add("any_neighbor_state", Block([("has_state_flag", value)]))
+            triggers_used.setdefault("any_neighbor_state", owner)
+            triggers_used.setdefault("has_state_flag", owner)
+        elif key == "controls_all":
+            for names in value:
+                sid = resolve_state(names)
+                if sid is None:
+                    block.add("always", False)
+                else:
+                    block.add("controls_state", sid)
+                    triggers_used.setdefault("controls_state", owner)
         elif key == "stability_below":
             block.add("has_stability", Compare("<", float(value)))
             triggers_used.setdefault("has_stability", owner)

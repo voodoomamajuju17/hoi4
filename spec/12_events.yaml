@@ -256,6 +256,24 @@ namespaces:
               - { effect: add_political_power, value: 25 }
         src: user_design
 
+      - id: 13
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Andes Come Down, spanish: Los Andes Bajan}
+        desc:
+          english: The Sapa Inca has claimed the Amazon for the Antisuyu. In Buenos Aires the court asks whether the Sun's roads will stop at the forest,
+            or come through it.
+          spanish: El Sapa Inca reclamó la Amazonia para el Antisuyu. En Buenos Aires la corte se pregunta si los caminos del Sol se van a detener en
+            la selva, o la van a atravesar.
+        options:
+        - name: {english: Reinforce the northern border., spanish: Reforzar la frontera norte.}
+          effects:
+          - {effect: army_experience, value: 25}
+        - name: {english: The forest will not be paved., spanish: La selva no se asfalta.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
+
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -696,4 +714,91 @@ namespaces:
         effects:
         - {effect: add_war_support, value: 0.1}
         - {effect: army_experience, value: 25}
+      src: user_design
+
+  # ===========================================================================
+  meganations_nas:
+    country: NAS
+    events:
+    - id: 1
+      trigger: on_startup
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: The Month of the Sun, spanish: El Mes del Sol}
+      desc: {english: Monthly count of Inti-Soma., spanish: Conteo mensual del Inti-Soma.}
+      options:
+      - name: {english: The Sun gives., spanish: El Sol da.}
+        effects:
+        - {effect: run, value: NAS_mes_del_sol}
+        - {effect: event, id: meganations_nas.1, days: 30}
+      src: user_design
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Night of the Sun, spanish: La Noche del Sol}
+      desc:
+        english: The overloaded temples burned out one after another, from Cusco to Lake Titicaca. For the first time since the Ash Winter, the
+          Sun's light is gone from the altiplano, and the priests do not know how to explain it.
+        spanish: Los templos sobrecargados se quemaron uno tras otro, de Cusco al Titicaca. Por primera vez desde el Invierno de Ceniza, la luz
+          del Sol se fue del altiplano, y los sacerdotes no saben cómo explicarlo.
+      options:
+      - name: {english: The Sun will rise again., spanish: El Sol va a volver a salir.}
+        effects:
+        - {effect: add_war_support, value: -0.05}
+      src: user_design
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Inca Breaks the Silence, spanish: El Inca Rompe el Silencio}
+      desc:
+        english: 'Before the whole court, Amaru Quispe II took off the priests'' headdress and put on the crown of the four quarters. He is no longer
+          the Son of the Sun, he said: he is the Sapa Inca, and the Sun can follow him down the mountain.'
+        spanish: 'Frente a toda la corte, Amaru Quispe II se sacó el tocado de los sacerdotes y se puso la corona de las cuatro partes. Ya no es
+          el Hijo del Sol, dijo: es el Sapa Inca, y el Sol lo puede seguir montaña abajo.'
+      options:
+      - name: {english: To the four quarters., spanish: A las cuatro partes.}
+        effects:
+        - {effect: add_war_support, value: 0.1}
+      src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Directorate Bows, spanish: El Directorio se Inclina}
+      desc:
+        english: The Sino-Harmonious Directorate has recognised the Sun's sovereignty over the Pacific coast and its metals. A technical adjustment,
+          their communiqué says.
+        spanish: El Directorio Sino-Armónico reconoció la soberanía del Sol sobre la costa del Pacífico y sus metales. Un ajuste técnico, dice su
+          comunicado.
+      options:
+      - name: {english: The Sun shines on everyone., spanish: El Sol brilla para todos.}
+        effects:
+        - {effect: add_political_power, value: 150}
+        - {effect: add_variable, var: NAS_inti, value: 25}
+      src: user_design
+  meganations_shd:
+    country: SHD
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Sun against the Directorate, spanish: El Sol contra el Directorio}
+      desc:
+        english: 'The Neo-Andean Sky Kingdom demands that the Directorate withdraw its mining concessions from the Andes and recognise the Sun''s
+          sovereignty over the Pacific coast. The Director reads the demand as a flow reading: too high.'
+        spanish: 'El Reino Celeste Neoandino exige que el Directorio retire sus concesiones mineras de los Andes y reconozca la soberanía del Sol
+          sobre la costa del Pacífico. El Director lee la exigencia como una lectura de caudal: demasiado alta.'
+      options:
+      - name: {english: Adjust. The Andes are far., spanish: Ajustar. Los Andes quedan lejos.}
+        ai_chance: 40
+        effects:
+        - {effect: add_political_power, value: -100}
+        - {effect: event, id: meganations_nas.4, target: NAS}
+      - name: {english: Harmony does not bow to the Sun., spanish: La Armonía no se inclina ante el Sol.}
+        ai_chance: 60
+        effects:
+        - {effect: add_war_support, value: 0.1}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: wargoal, target: SHD, type: annex_everything}
       src: user_design

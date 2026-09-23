@@ -1182,6 +1182,447 @@ categories:
       - {effect: add_political_power, value: 100}
       ai_factor: 5
 
+  # ===========================================================================
+  # NAS — Inti-Soma, el Qhapaq Ñan, las Tierras Tributarias, Terrazas o Minas
+  # ===========================================================================
+  - id: NAS_inti_category
+    country: NAS
+    icon_prefer:
+    - generic_political_actions
+    - generic_research
+    name: {english: Inti-Soma, spanish: Inti-Soma}
+    desc:
+      english: 'Sacred light stored in the temples: [?NAS_inti] of [?NAS_inti_max]\nSun Farms: [?NAS_granjas] (each one adds 1 per month)\n\nThe
+        light is spent in ceremonies. An overloaded temple shines brighter, until the Night of the Sun.'
+      spanish: 'Luz sagrada guardada en los templos: [?NAS_inti] de [?NAS_inti_max]\nGranjas del Sol: [?NAS_granjas] (cada una suma 1 por mes)\n\nLa
+        luz se gasta en ceremonias. Un templo sobrecargado brilla más, hasta La Noche del Sol.'
+    src: user_design
+    decisions:
+    - id: NAS_ceremonia_raymi
+      name: {english: The Raymi, spanish: El Raymi}
+      desc:
+        english: 'The festival of the Sun: +10% stability for 90 days. Costs 20 Inti-Soma.'
+        spanish: 'La fiesta del Sol: +10% de estabilidad por 90 días. Cuesta 20 de Inti-Soma.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      cooldown_days: 90
+      available:
+        variable_at_least: {var: NAS_inti, value: 20}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -20}
+      - {effect: timed_idea, idea: NAS_raymi, days: 90}
+      ai_factor: 5
+    - id: NAS_ceremonia_solsticio
+      name: {english: War Solstice, spanish: Solsticio de Guerra}
+      desc:
+        english: +10% attack for 45 days. Costs 35 Inti-Soma.
+        spanish: +10% de ataque por 45 días. Cuesta 35 de Inti-Soma.
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      cooldown_days: 90
+      available:
+        variable_at_least: {var: NAS_inti, value: 35}
+        at_war: true
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -35}
+      - {effect: timed_idea, idea: NAS_solsticio, days: 45}
+      ai_factor: 5
+    - id: NAS_ceremonia_ofrenda
+      name: {english: Offering of Light, spanish: Ofrenda de Luz}
+      desc:
+        english: +10% factory output for 60 days. Costs 25 Inti-Soma.
+        spanish: +10% de producción de fábricas por 60 días. Cuesta 25 de Inti-Soma.
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      cooldown_days: 90
+      available:
+        variable_at_least: {var: NAS_inti, value: 25}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -25}
+      - {effect: timed_idea, idea: NAS_ofrenda, days: 60}
+      ai_factor: 5
+    - id: NAS_construir_granja
+      name: {english: Build a Sun Farm, spanish: Construir una Granja del Sol}
+      desc:
+        english: 'Another field of mirrors on the altiplano: +1 Inti-Soma per month.'
+        spanish: 'Otro campo de espejos en el altiplano: +1 de Inti-Soma por mes.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 75
+      cooldown_days: 120
+      available:
+        variable_below: {var: NAS_granjas, value: 5}
+      effects:
+      - {effect: add_variable, var: NAS_granjas, value: 1}
+      ai_factor: 5
+    - id: NAS_sobrecargar_los_templos
+      name: {english: The Sun Never Sets, spanish: Inti Nunca se Pone}
+      desc:
+        english: 'Overload the temples for six months: +50 Inti-Soma, even above the maximum. Every month above the maximum risks the Night of the
+          Sun.'
+        spanish: 'Sobrecargar los templos por seis meses: +50 de Inti-Soma, aunque pase el máximo. Cada mes por encima del máximo arriesga La Noche
+          del Sol.'
+      icon_prefer:
+      - generic_research
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 365
+      visible: {focus: NAS_inti_nunca_se_pone}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: 50}
+      - {effect: flag, value: NAS_sobrecarga, days: 180}
+      ai_factor: 2
+  - id: NAS_qhapaq_category
+    country: NAS
+    icon_prefer:
+    - generic_construction
+    name: {english: The Qhapaq Ñan, spanish: El Qhapaq Ñan}
+    desc:
+      english: The Inca road grows from the capital, region by region. A connected region gets roads at once, and after 90 days can be integrated
+        as a core.\n\nComplete the four Suyus by controlling their regions.
+      spanish: El camino inca crece desde la capital, región por región. Una región conectada recibe caminos enseguida, y a los 90 días se puede
+        integrar como núcleo.\n\nCompletá los cuatro Suyus controlando sus regiones.
+    src: user_design
+    decisions:
+    - id: NAS_extender_el_camino
+      name: {english: Extend the Road, spanish: Extender el Camino}
+      desc:
+        english: The road reaches one more region next to the network.
+        spanish: El camino llega a una región más, al lado de la red.
+      icon_prefer:
+      - generic_construction
+      cost: 50
+      cooldown_days: 45
+      visible: {focus: NAS_el_qhapaq_nan}
+      effects:
+      - effect: states
+        pick: random
+        when: {not_state_flag: NAS_qhapaq, neighbor_state_flag: NAS_qhapaq}
+        effects:
+        - {effect: state_flag, value: NAS_qhapaq}
+        - {effect: build_here, building: infrastructure, level: 2}
+      ai_factor: 10
+    - id: NAS_integrar_regiones_conectadas
+      name: {english: Integrate the Connected Regions, spanish: Integrar las Regiones Conectadas}
+      desc:
+        english: Every region connected for 90 days becomes a core of the Sun.
+        spanish: Cada región conectada hace 90 días pasa a ser núcleo del Sol.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 60
+      visible: {focus: NAS_el_qhapaq_nan}
+      effects:
+      - effect: states
+        pick: every
+        when:
+          state_flag_days: {flag: NAS_qhapaq, days: 90}
+          not_core_of: NAS
+        effects:
+        - {effect: add_core, value: NAS}
+      ai_factor: 10
+    - id: NAS_completar_cuntisuyu
+      name: {english: Complete the Cuntisuyu, spanish: Completar el Cuntisuyu}
+      desc:
+        english: Control every region of the western coast and the Cuntisuyu is whole again.
+        spanish: Controlar todas las regiones de la costa occidental y el Cuntisuyu vuelve a estar entero.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      fire_only_once: true
+      visible: {focus: NAS_el_cuntisuyu}
+      available:
+        controls_all:
+        - - Lima
+        - - Arequipa
+        - - Tacna-Moquegua
+          - Tacna
+      effects:
+      - {effect: flag, value: NAS_suyu_cuntisuyu}
+      - {effect: add_political_power, value: 100}
+      - effect: in_state
+        state:
+        - Lima
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - Arequipa
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - Tacna-Moquegua
+        - Tacna
+        effects:
+        - {effect: add_core, value: NAS}
+      ai_factor: 20
+    - id: NAS_completar_chinchaysuyu
+      name: {english: Complete the Chinchaysuyu, spanish: Completar el Chinchaysuyu}
+      desc:
+        english: Control every region of the north and the Chinchaysuyu is whole again.
+        spanish: Controlar todas las regiones de el norte y el Chinchaysuyu vuelve a estar entero.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      fire_only_once: true
+      visible: {focus: NAS_el_chinchaysuyu}
+      available:
+        controls_all:
+        - - Ecuador
+        - - La Libertad
+        - - Cundinamarca
+      effects:
+      - {effect: flag, value: NAS_suyu_chinchaysuyu}
+      - {effect: add_political_power, value: 100}
+      - effect: in_state
+        state:
+        - Ecuador
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - La Libertad
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - Cundinamarca
+        effects:
+        - {effect: add_core, value: NAS}
+      ai_factor: 20
+    - id: NAS_completar_antisuyu
+      name: {english: Complete the Antisuyu, spanish: Completar el Antisuyu}
+      desc:
+        english: Control every region of the Amazon and the Antisuyu is whole again.
+        spanish: Controlar todas las regiones de la Amazonía y el Antisuyu vuelve a estar entero.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      fire_only_once: true
+      visible: {focus: NAS_el_antisuyu}
+      available:
+        controls_all:
+        - - Loreto
+        - - Ucayali
+        - - Amazonas
+      effects:
+      - {effect: flag, value: NAS_suyu_antisuyu}
+      - {effect: add_political_power, value: 100}
+      - effect: in_state
+        state:
+        - Loreto
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - Ucayali
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - Amazonas
+        effects:
+        - {effect: add_core, value: NAS}
+      ai_factor: 20
+    - id: NAS_completar_collasuyu
+      name: {english: Complete the Collasuyu, spanish: Completar el Collasuyu}
+      desc:
+        english: Control every region of the south and the Collasuyu is whole again.
+        spanish: Controlar todas las regiones de el sur y el Collasuyu vuelve a estar entero.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      fire_only_once: true
+      visible: {focus: NAS_el_collasuyu}
+      available:
+        controls_all:
+        - - La Paz
+        - - Santa Cruz
+        - - Antofagasta
+      effects:
+      - {effect: flag, value: NAS_suyu_collasuyu}
+      - {effect: add_political_power, value: 100}
+      - effect: in_state
+        state:
+        - La Paz
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - Santa Cruz
+        effects:
+        - {effect: add_core, value: NAS}
+      - effect: in_state
+        state:
+        - Antofagasta
+        effects:
+        - {effect: add_core, value: NAS}
+      ai_factor: 20
+  - id: NAS_integracion_category
+    country: NAS
+    icon_prefer:
+    - generic_political_actions
+    name: {english: The Tributary Lands, spanish: Las Tierras Tributarias}
+    desc:
+      english: 'New Granada: stage [?NAS_integracion_zng] of 3.\nFree Plains of the Orinoco: stage [?NAS_integracion_zll] of 3.'
+      spanish: 'Nueva Granada: etapa [?NAS_integracion_zng] de 3.\nLlanos Libres del Orinoco: etapa [?NAS_integracion_zll] de 3.'
+    src: user_design
+    decisions:
+    - id: NAS_integrar_zng_1
+      name: {english: Rain Priests at Court, spanish: Sacerdotes de la Lluvia en la Corte}
+      desc:
+        english: New Granada's clergy joins the Sun's.
+        spanish: El clero de Nueva Granada se suma al del Sol.
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: NAS_integracion_zng_abierta, country_exists: ZNG}
+      available:
+        variable_between: {var: NAS_integracion_zng, min: 0, max: 0}
+      effects:
+      - {effect: add_variable, var: NAS_integracion_zng, value: 1}
+      - {effect: add_stability, value: -0.02}
+      ai_factor: 5
+    - id: NAS_integrar_zng_2
+      name: {english: The Canal Pays the Sun, spanish: El Canal le Paga al Sol}
+      desc: {english: The Panama tolls go to Cusco., spanish: Los peajes de Panamá van a Cusco.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 100
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: NAS_integracion_zng_abierta, country_exists: ZNG}
+      available:
+        variable_between: {var: NAS_integracion_zng, min: 1, max: 1}
+      effects:
+      - {effect: add_variable, var: NAS_integracion_zng, value: 1}
+      - {effect: add_stability, value: -0.02}
+      ai_factor: 5
+    - id: NAS_integrar_zng_3
+      name: {english: New Granada Comes Home, spanish: Nueva Granada Vuelve}
+      desc: {english: New Granada becomes land of the Sun., spanish: Nueva Granada pasa a ser tierra del Sol.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 125
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: NAS_integracion_zng_abierta, country_exists: ZNG}
+      available:
+        variable_between: {var: NAS_integracion_zng, min: 2, max: 2}
+      effects:
+      - {effect: add_variable, var: NAS_integracion_zng, value: 1}
+      - {effect: add_stability, value: -0.02}
+      - effect: scope
+        target: ZNG
+        effects:
+        - effect: states
+          pick: every
+          effects:
+          - {effect: add_core, value: NAS}
+      - {effect: annex, target: ZNG}
+      ai_factor: 5
+    - id: NAS_integrar_zll_1
+      name: {english: The Viceroy Kneels, spanish: El Virrey se Arrodilla}
+      desc: {english: The viceroy of the plains swears again., spanish: El virrey de los llanos vuelve a jurar.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: NAS_integracion_zll_abierta, country_exists: ZLL}
+      available:
+        variable_between: {var: NAS_integracion_zll, min: 0, max: 0}
+      effects:
+      - {effect: add_variable, var: NAS_integracion_zll, value: 1}
+      - {effect: add_stability, value: -0.02}
+      ai_factor: 5
+    - id: NAS_integrar_zll_2
+      name: {english: Roads to the Orinoco, spanish: Caminos al Orinoco}
+      desc: {english: The plains are tied to the mountains., spanish: Los llanos quedan atados a la montaña.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 100
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: NAS_integracion_zll_abierta, country_exists: ZLL}
+      available:
+        variable_between: {var: NAS_integracion_zll, min: 1, max: 1}
+      effects:
+      - {effect: add_variable, var: NAS_integracion_zll, value: 1}
+      - {effect: add_stability, value: -0.02}
+      ai_factor: 5
+    - id: NAS_integrar_zll_3
+      name: {english: The Plains Come Home, spanish: Los Llanos Vuelven}
+      desc:
+        english: The Free Plains become land of the Sun.
+        spanish: Los Llanos Libres pasan a ser tierra del Sol.
+      icon_prefer:
+      - generic_political_actions
+      cost: 125
+      cooldown_days: 60
+      fire_only_once: true
+      visible: {flag: NAS_integracion_zll_abierta, country_exists: ZLL}
+      available:
+        variable_between: {var: NAS_integracion_zll, min: 2, max: 2}
+      effects:
+      - {effect: add_variable, var: NAS_integracion_zll, value: 1}
+      - {effect: add_stability, value: -0.02}
+      - effect: scope
+        target: ZLL
+        effects:
+        - effect: states
+          pick: every
+          effects:
+          - {effect: add_core, value: NAS}
+      - {effect: annex, target: ZLL}
+      ai_factor: 5
+  - id: NAS_economia_category
+    country: NAS
+    icon_prefer:
+    - generic_industry
+    name: {english: Terraces or Mines, spanish: Terrazas o Minas}
+    desc:
+      english: The Terraces open new terraces; Sky Mining opens lithium contracts.
+      spanish: Las Terrazas abren terrazas nuevas; la Minería del Cielo abre contratos de litio.
+    src: user_design
+    decisions:
+    - id: NAS_nuevas_terrazas
+      name: {english: New Terraces, spanish: Nuevas Terrazas}
+      desc: {english: 'Another mountainside, carved and planted.', spanish: 'Otra ladera, tallada y sembrada.'}
+      icon_prefer:
+      - generic_construction
+      cost: 50
+      cooldown_days: 120
+      visible: {focus: NAS_las_terrazas}
+      effects:
+      - {effect: add_stability, value: 0.03}
+      - {effect: add_manpower, value: 20000}
+      ai_factor: 5
+    - id: NAS_contrato_de_litio
+      name: {english: Lithium Contract, spanish: Contrato de Litio}
+      desc:
+        english: A foreign buyer, a new mine, a new factory.
+        spanish: Un comprador extranjero, una mina nueva, una fábrica nueva.
+      icon_prefer:
+      - generic_industry
+      cost: 25
+      cooldown_days: 150
+      visible: {focus: NAS_la_mineria_del_cielo}
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -1483,3 +1924,29 @@ scripted_effects:
       then:
       - {effect: add_variable, var: HSN_botin, value: 2}
       - {effect: add_variable, var: HSN_botin, value: HSN_nodos}
+
+  # NAS: el Inti-Soma de cada mes (granjas, máximo, riesgo de sobrecarga).
+  - id: NAS_mes_del_sol
+    effects:
+    - {effect: add_variable, var: NAS_inti, value: NAS_granjas}
+    - effect: if
+      when:
+        not_flag: NAS_sobrecarga
+        variable_at_least: {var: NAS_inti, value: NAS_inti_max}
+      then:
+      - {effect: set_variable, var: NAS_inti, value: NAS_inti_max}
+    - effect: if
+      when:
+        flag: NAS_sobrecarga
+        variable_at_least: {var: NAS_inti, value: NAS_inti_max}
+      then:
+      - effect: random
+        options:
+        - weight: 80
+          effects: []
+        - weight: 20
+          effects:
+          - {effect: set_variable, var: NAS_inti, value: 0}
+          - {effect: clear_flag, value: NAS_sobrecarga}
+          - {effect: timed_idea, idea: NAS_noche_del_sol, days: 90}
+          - {effect: event, id: meganations_nas.2}

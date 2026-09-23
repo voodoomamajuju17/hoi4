@@ -195,6 +195,41 @@ mechanics:
     - {name: HSN_botin, start: 0}
 
   # ===========================================================================
+  - id: nas_qhapaq_nan_e_inti_soma
+    country: NAS
+    definition_status: implementable
+    src: user_design
+    name: {english: Qhapaq Ñan and Inti-Soma, spanish: Qhapaq Ñan e Inti-Soma}
+    design: 'Inti-Soma: la luz sagrada, 0 a NAS_inti_max (100, 150 o 200 con los Templos-Batería). Las Granjas del Sol suman NAS_granjas por mes
+      (evento oculto). Se gasta en ceremonias. Con la sobrecarga se puede pasar el máximo, con riesgo de La Noche del Sol. Qhapaq Ñan: el camino
+      sale de la capital y se extiende a regiones vecinas ya conectadas; las regiones conectadas se integran más fácil. Los cuatro Suyus son misiones
+      geográficas: controlar sus regiones las completa.'
+    suyus:
+      cuntisuyu:
+      - - Lima
+      - - Arequipa
+      - - Tacna-Moquegua
+        - Tacna
+      chinchaysuyu:
+      - - Ecuador
+      - - La Libertad
+      - - Cundinamarca
+      antisuyu:
+      - - Loreto
+      - - Ucayali
+      - - Amazonas
+      collasuyu:
+      - - La Paz
+      - - Santa Cruz
+      - - Antofagasta
+    variables:
+    - {name: NAS_inti, start: 20}
+    - {name: NAS_inti_max, start: 100}
+    - {name: NAS_granjas, start: 1}
+    - {name: NAS_integracion_zng, start: 0}
+    - {name: NAS_integracion_zll, start: 0}
+
+  # ===========================================================================
   - id: civil_military_balance
     country: FCU
     definition_status: partial

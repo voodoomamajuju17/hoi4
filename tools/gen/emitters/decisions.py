@@ -47,6 +47,7 @@ def emit(ctx: BuildContext) -> None:
         ctx.vanilla.wargoal_types() if ctx.vanilla else None,
         warn=ctx.warn, characters=character_ids(ctx), events=events_mod.all_event_ids(ctx),
         scripted=scripted_effect_ids(ctx.spec.raw),
+        tech_categories=ctx.vanilla.tech_categories() if ctx.vanilla else None,
         shared_slots=ctx.vanilla.shared_slot_buildings() if ctx.vanilla else None,
     )
     triggers_used = effect_ctx.triggers_used

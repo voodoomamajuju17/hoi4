@@ -72,7 +72,11 @@ eventos con ultimátum e IA con condiciones.
 - [~] **HSN** — árbol de 50 focos: 8 nodos reales del mapa (conteo mensual, 2/4/6/8,
   perder uno duele), Aldana (seguros, arbitraje, Bloqueo Legal a la FCU) vs Inés
   Tavake (sin peajes: Botín, patentes de corso), Puerto Libre vs Peaje
-- [ ] **NAS** — Qhapaq Ñan + Inti-Soma, los cuatro Suyus
+- [~] **NAS** — árbol de 54 focos con la tabla nueva de premios: Inti-Soma (granjas,
+  ceremonias, templos-batería, sobrecarga y La Noche del Sol), Qhapaq Ñan (camino que
+  crece por regiones vecinas e integra), los cuatro Suyus como misiones, La Corte del
+  Sol vs El Tawantinsuyu Renace, ultimátum a la SHD
+- [ ] Pasada de ajuste de premios para EFE, FCU, ASC y HSN (tabla nueva)
 - [ ] **APF** — Desarrollo + Integración, Amara vs Diallo
 - [ ] **SHD** — los tres caudales, la Gran Crecida
 - [ ] **NRE** — prestigio de legiones, Auctoritas Militaris, AVE IMPERATOR

@@ -530,6 +530,25 @@ class Vanilla:
                 out.append((name, year, eligible))
         return out
 
+    def tech_categories(self) -> set[str]:
+        """Categorías de investigación (bloques `categories` de cada tech):
+        lo que acepta add_tech_bonus."""
+        out: set[str] = set()
+        for path in sorted((self.root / "common" / "technologies").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("technologies")
+            if not isinstance(block, pdx.Block):
+                continue
+            for _, tech in block.entries:
+                if isinstance(tech, pdx.Block):
+                    cats = tech.get("categories")
+                    if isinstance(cats, pdx.Block):
+                        out.update(pdx.text(v) for _, v in cats.entries if not isinstance(v, pdx.Block))
+        return out
+
     def equipment(self) -> dict[str, tuple[str | None, int]]:
         """equipo -> (arquetipo, año) de common/units/equipment/. Los
         arquetipos mismos quedan con arquetipo None."""

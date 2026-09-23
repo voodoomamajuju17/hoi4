@@ -149,3 +149,41 @@ la situación.
   recursos, equipo y marines. *Patentes de Corso*: 90 días contra un enemigo
   concreto. *Abordaje del Mundo*: guerra directa a la FCU.
 - Puerto Libre (puertos francos) contra Peaje de los Estrechos (subas).
+
+## Tabla de premios (desde la NAS; EFE, FCU, ASC y HSN se ajustan al final)
+
+| Duración | Premio típico |
+|---|---|
+| 21 días | desbloqueo + 50 PP |
+| 35 días | uno de: 100 PP, 2 fábricas, idea del 10%, bono de investigación del 50% (1-2 usos) |
+| 42 días | desbloqueo de mecánica + un premio de 35 días |
+| 56 días | 3 fábricas, idea del 15-20% o mejora de una idea |
+| 70 días | slot de investigación, idea del 20-25%, o guerra/ultimátum con premio |
+
+Los bonos de investigación usan categorías leídas del juego; si una no
+existe, se omite con aviso.
+
+## NAS v1 — cómo quedó en el motor
+
+- **Inti-Soma**: `NAS_inti` (arranca en 20, máximo `NAS_inti_max` = 100).
+  Evento oculto mensual: suma `NAS_granjas`, recorta al máximo. Ceremonias:
+  Raymi (20: +10% estabilidad 90 días), Solsticio de Guerra (35, en guerra:
+  +10% ataque 45 días), Ofrenda de Luz (25: +10% producción 60 días).
+  Templos-Batería y El Sol Eterno suben el máximo. *Inti Nunca se Pone*
+  abre la sobrecarga (+50 por encima del máximo por 6 meses): cada mes
+  arriba del máximo, 20% de *La Noche del Sol*.
+- **Qhapaq Ñan**: *El Qhapaq Ñan* marca la capital; *Extender el Camino*
+  suma una región vecina a la red (+2 infraestructura); a los 90 días las
+  regiones conectadas se integran como núcleos.
+- **Los cuatro Suyus**: Cuntisuyu (Lima, Arequipa, Tacna), Chinchaysuyu
+  (Ecuador, La Libertad, Cundinamarca), Antisuyu (Loreto, Ucayali,
+  Amazonas) y Collasuyu (La Paz, Santa Cruz, Antofagasta). El foco da
+  reclamos; la decisión se completa al controlar las tres regiones y da
+  núcleos. Con los cuatro: *Tawantinsuyu*. El Antisuyu avisa al EFE.
+- **La Corte del Sol**: sacerdotes, Fortalezas de la Puna, integración de
+  Nueva Granada y los Llanos en 3 etapas, *El Sol contra el Directorio*
+  (ultimátum a la SHD), *El Trono del Sol*.
+- **El Tawantinsuyu Renace**: Amaru se vuelve Sapa Inca (retrato
+  alternativo), Mit'a de Guerra, los Suyus, *La Bajada de la Montaña*
+  (guerra a los Caudillos del Amazonas).
+- Terrazas contra Minería del Cielo.

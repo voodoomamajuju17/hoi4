@@ -687,7 +687,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("12 eventos del EFE", len(events) == 12, str(len(events)))
+        check("13 eventos del EFE", len(events) == 13, str(len(events)))
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
@@ -937,6 +937,39 @@ def test_hsn() -> None:
         check("el botin se gasta en decisiones", "HSN_botin_marines" in decs and "HSN_botin" in decs)
 
 
+def test_nas() -> None:
+    section("NAS: Inti-Soma, Qhapaq Nan, los Suyus y la tabla nueva de premios")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        raw = (mod / "common/national_focus/NAS_focus.txt").read_text()
+        root = pdx.parse(raw).get("focus_tree")
+        focuses = root.get_all("focus")
+        check("arbol de la NAS de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        by = {pdx.text(f.get("id")): f for f in focuses}
+        tropas = pdx.render(by["NAS_guerreros_de_la_puna"].get("completion_reward"))
+        check("tabla nueva: bono de investigacion con categoria del juego",
+              "add_tech_bonus" in tropas and "category = mountaineers_tech" in tropas and "uses = 2" in tropas, tropas)
+        check("un bono con categoria inexistente se omite con aviso",
+              any("'land_doctrine' no existe" in w for w in ctx.warnings)
+              and "land_doctrine" not in pdx.render(by["NAS_doctrina_de_la_quebrada"].get("completion_reward")))
+        check("Tawantinsuyu pide los cuatro suyus",
+              pdx.render(by["NAS_el_tawantinsuyu"].get("available")).count("has_country_flag") == 4)
+        check("el Inca asciende a su version Tawantinsuyu",
+              "promote_character = NAS_amaru_inca" in pdx.render(by["NAS_el_inca_rompe_el_silencio"].get("completion_reward")))
+        check("el Qhapaq Nan arranca en la capital", "capital_scope" in pdx.render(by["NAS_el_qhapaq_nan"].get("completion_reward")))
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        check("el camino crece hacia regiones vecinas conectadas", "any_neighbor_state" in decs)
+        check("ceremonias con costo de Inti-Soma", "NAS_ceremonia_raymi" in decs and "var = NAS_inti" in decs)
+        se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        body = se[se.index("NAS_mes_del_sol"):]
+        check("el mes del Sol suma las granjas y respeta el maximo", "value = NAS_granjas" in body and "value = NAS_inti_max" in body)
+        check("la sobrecarga arriesga La Noche del Sol", "random_list" in body and "NAS_noche_del_sol" in body)
+        check("el ultimatum al Directorio llega a la SHD", (mod / "events/meganations_shd.txt").exists())
+        chars = (mod / "common/characters/NAS_characters.txt").read_text()
+        check("retrato alternativo del Inca", "amaru_quispe_tawantinsuyu.dds" in chars)
+
+
 def test_forces() -> None:
     section("armada y aviacion heredadas de 1936")
     with tempfile.TemporaryDirectory() as tmp:
@@ -1024,7 +1057,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1032,7 +1065,7 @@ def test_vanilla_validation() -> None:
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
-            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by\n"
+            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -1102,6 +1135,7 @@ def main() -> int:
         test_fcu,
         test_asc,
         test_hsn,
+        test_nas,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

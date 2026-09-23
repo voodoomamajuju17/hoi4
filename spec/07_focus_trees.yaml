@@ -2884,7 +2884,720 @@ trees:
         - {effect: add_research_slot, value: 1}
         - *hsn_id001
 
-  NAS: { status: not_started, see: Q032 }
+  # ===========================================================================
+  NAS:
+    id: nas_focus_tree
+    default: false
+    shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23), con la tabla de premios nueva. La Corte del Sol contra El Tawantinsuyu Renace. Qhapaq Ñan + Inti-Soma.
+      Ids alineados con el pack de íconos.'
+    branches:
+    - id: corte_del_sol
+      name: {english: The Court of the Sun, spanish: La Corte del Sol}
+      focuses:
+      - id: NAS_el_sol_de_2100
+        name: {english: The Sun of 2100, spanish: El Sol de 2100}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        desc:
+          english: The Sun rose again over Cusco after the Ash Winter. It must not set.
+          spanish: El Sol volvió a salir sobre Cusco después del Invierno de Ceniza. No tiene que ponerse.
+        reward:
+        - {effect: add_political_power, value: 100}
+      - id: NAS_el_consejo_de_cusco
+        name: {english: The Council of Cusco, spanish: El Consejo de Cusco}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_el_sol_de_2100
+        desc:
+          english: The priests want the mountains; the young Sapa Inti looks down the valleys.
+          spanish: Los sacerdotes quieren las montañas; el joven Sapa Inti mira hacia los valles.
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: add_stability, value: 0.03}
+      - id: NAS_la_coronacion_renovada
+        name: {english: The Coronation Renewed, spanish: La Coronación Renovada}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - NAS_el_consejo_de_cusco
+        mutually_exclusive:
+        - NAS_el_inca_rompe_el_silencio
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.4
+            when: {at_war: true}
+        desc:
+          english: The Sapa Inti renews his vows before the Sun and the priests.
+          spanish: El Sapa Inti renueva sus votos ante el Sol y los sacerdotes.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_stability, value: 0.05}
+      - id: NAS_los_sacerdotes_del_sol
+        name: {english: The Priests of the Sun, spanish: Los Sacerdotes del Sol}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - NAS_la_coronacion_renovada
+        desc: {english: The Villac Umu speaks for the Sun., spanish: El Villac Umu habla por el Sol.}
+        reward:
+        - {effect: add_ideas, value: NAS_sacerdotes}
+      - id: NAS_fortalezas_de_la_puna
+        name: {english: Fortresses of the Puna, spanish: Fortalezas de la Puna}
+        days: 42
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - NAS_la_coronacion_renovada
+        desc:
+          english: Whoever wants the Andes has to climb them.
+          spanish: El que quiera los Andes tiene que subirlos.
+        reward:
+        - {effect: add_ideas, value: NAS_fortalezas_puna}
+        - {effect: tech_bonus, category: mountaineers_tech, bonus: 0.5, uses: 1}
+      - id: NAS_nueva_granada_leal
+        name: {english: Loyal New Granada, spanish: Nueva Granada Leal}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_los_sacerdotes_del_sol
+        available: {country_exists: ZNG}
+        desc:
+          english: Opens the integration of New Granada in three stages.
+          spanish: Abre la integración de Nueva Granada en tres etapas.
+        reward:
+        - {effect: flag, value: NAS_integracion_zng_abierta}
+        - {effect: add_political_power, value: 50}
+      - id: NAS_los_llanos_tributarios
+        name: {english: The Tributary Plains, spanish: Los Llanos Tributarios}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_nueva_granada_leal
+        available: {country_exists: ZLL}
+        desc:
+          english: Opens the integration of the Free Plains in three stages.
+          spanish: Abre la integración de los Llanos Libres en tres etapas.
+        reward:
+        - {effect: flag, value: NAS_integracion_zll_abierta}
+        - {effect: add_political_power, value: 50}
+      - id: NAS_el_invierno_nunca_mas
+        name: {english: Never Another Winter, spanish: El Invierno Nunca Más}
+        days: 56
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NAS_fortalezas_de_la_puna
+        - NAS_los_sacerdotes_del_sol
+        desc: {english: The granaries are full., spanish: Los graneros están llenos.}
+        reward:
+        - {effect: add_ideas, value: NAS_invierno_nunca_mas}
+      - id: NAS_el_sol_contra_el_directorio
+        name: {english: The Sun against the Directorate, spanish: El Sol contra el Directorio}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - NAS_el_invierno_nunca_mas
+        available: {country_exists: SHD}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: 'An ultimatum to the Directorate: out of the Andes. War only if it refuses.'
+          spanish: 'Un ultimátum al Directorio: fuera de los Andes. Guerra solo si se niega.'
+        reward:
+        - {effect: event, id: meganations_shd.1, target: SHD}
+        - {effect: add_war_support, value: 0.05}
+      - id: NAS_el_trono_del_sol
+        name: {english: The Throne of the Sun, spanish: El Trono del Sol}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - NAS_el_sol_contra_el_directorio
+        - NAS_los_llanos_tributarios
+        desc:
+          english: 'The Sapa Inti, the priests and the mountains: one throne.'
+          spanish: 'El Sapa Inti, los sacerdotes y las montañas: un solo trono.'
+        reward:
+        - {effect: swap_ideas, remove: NAS_sacerdotes, add: NAS_trono_del_sol}
+        - {effect: add_research_slot, value: 1}
+    - id: tawantinsuyu
+      name: {english: The Tawantinsuyu Reborn, spanish: El Tawantinsuyu Renace}
+      focuses:
+      - id: NAS_el_inca_rompe_el_silencio
+        name: {english: The Inca Breaks the Silence, spanish: El Inca Rompe el Silencio}
+        days: 21
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - NAS_el_consejo_de_cusco
+        mutually_exclusive:
+        - NAS_la_coronacion_renovada
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 3
+            when: {at_war: true}
+        desc:
+          english: 'Amaru breaks with the priests: he is the Sapa Inca now.'
+          spanish: 'Amaru rompe con los sacerdotes: ahora es el Sapa Inca.'
+        reward:
+        - {effect: promote, character: NAS_amaru_inca}
+        - {effect: flag, value: NAS_tawantinsuyu}
+        - {effect: event, id: meganations_nas.3, days: 1}
+        - {effect: add_political_power, value: 50}
+      - id: NAS_el_qhapaq_nan
+        name: {english: The Qhapaq Ñan, spanish: El Qhapaq Ñan}
+        days: 42
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NAS_el_inca_rompe_el_silencio
+        desc:
+          english: 'Opens the road decisions: the network starts at the capital.'
+          spanish: 'Abre las decisiones del camino: la red sale de la capital.'
+        reward:
+        - effect: capital
+          effects:
+          - {effect: state_flag, value: NAS_qhapaq}
+          - {effect: build_here, building: infrastructure, level: 2}
+        - {effect: add_political_power, value: 50}
+      - id: NAS_mita_de_guerra
+        name: {english: War Mit'a, spanish: Mit'a de Guerra}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - NAS_el_inca_rompe_el_silencio
+        desc:
+          english: The ancient labour tax, paid in soldiers.
+          spanish: El viejo tributo de trabajo, pagado en soldados.
+        reward:
+        - {effect: add_ideas, value: NAS_espiritu_mita_de_guerra}
+        - {effect: add_manpower, value: 50000}
+      - id: NAS_el_cuntisuyu
+        name: {english: The Cuntisuyu, spanish: El Cuntisuyu}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_el_qhapaq_nan
+        desc:
+          english: 'The western coast: Lima, Arequipa, Tacna. Opens its mission.'
+          spanish: 'La costa occidental: Lima, Arequipa, Tacna. Abre su misión.'
+        reward:
+        - {effect: add_political_power, value: 50}
+        - effect: in_state
+          state:
+          - Lima
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - Arequipa
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - Tacna-Moquegua
+          - Tacna
+          effects:
+          - {effect: claim, value: NAS}
+      - id: NAS_el_chinchaysuyu
+        name: {english: The Chinchaysuyu, spanish: El Chinchaysuyu}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_el_cuntisuyu
+        - NAS_mita_de_guerra
+        desc:
+          english: 'The north: Ecuador and New Granada. Opens its mission and New Granada''s integration.'
+          spanish: 'El norte: Ecuador y Nueva Granada. Abre su misión y la integración de Nueva Granada.'
+        reward:
+        - {effect: flag, value: NAS_integracion_zng_abierta}
+        - effect: in_state
+          state:
+          - Ecuador
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - La Libertad
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - Cundinamarca
+          effects:
+          - {effect: claim, value: NAS}
+      - id: NAS_el_antisuyu
+        name: {english: The Antisuyu, spanish: El Antisuyu}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_el_chinchaysuyu
+        desc:
+          english: The Amazon. The Empire in the south is watching.
+          spanish: La Amazonia. El Imperio del sur está mirando.
+        reward:
+        - effect: in_state
+          state:
+          - Loreto
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - Ucayali
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - Amazonas
+          effects:
+          - {effect: claim, value: NAS}
+        - {effect: event, id: meganations_efe.13, target: EFE}
+        - {effect: army_experience, value: 25}
+      - id: NAS_el_collasuyu
+        name: {english: The Collasuyu, spanish: El Collasuyu}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_el_antisuyu
+        desc:
+          english: The south, down to the Atacama. The Ecofascist Empire will not like it.
+          spanish: El sur, hasta Atacama. Al Imperio Ecofascista no le va a gustar.
+        reward:
+        - effect: in_state
+          state:
+          - La Paz
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - Santa Cruz
+          effects:
+          - {effect: claim, value: NAS}
+        - effect: in_state
+          state:
+          - Antofagasta
+          effects:
+          - {effect: claim, value: NAS}
+        - {effect: add_war_support, value: 0.05}
+      - id: NAS_la_bajada_de_la_montana
+        name: {english: Down from the Mountain, spanish: La Bajada de la Montaña}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - NAS_el_collasuyu
+        available: {country_exists: ZWB}
+        desc:
+          english: The Amazon warlords burn the forest; the Inca's roads will cross it.
+          spanish: Los Caudillos del Amazonas queman la selva; los caminos del Inca la van a cruzar.
+        reward:
+        - {effect: wargoal, target: ZWB, type: annex_everything}
+        - {effect: add_war_support, value: 0.1}
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.5, uses: 1}
+      - id: NAS_el_tawantinsuyu
+        name: {english: Tawantinsuyu, spanish: Tawantinsuyu}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - NAS_la_bajada_de_la_montana
+        available:
+          flags: [NAS_suyu_cuntisuyu, NAS_suyu_chinchaysuyu, NAS_suyu_antisuyu, NAS_suyu_collasuyu]
+        desc:
+          english: The four quarters are one again. Needs the four Suyus complete.
+          spanish: Las cuatro partes vuelven a ser una. Pide los cuatro Suyus completos.
+        reward:
+        - {effect: add_ideas, value: NAS_tawantinsuyu}
+        - {effect: add_research_slot, value: 1}
+    - id: terrazas
+      name: {english: The Terraces, spanish: Las Terrazas}
+      focuses:
+      - id: NAS_el_consejo_del_campo
+        name: {english: The Council of the Fields, spanish: El Consejo del Campo}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_el_sol_de_2100
+        desc: {english: Feed the kingdom or sell the mountain., spanish: Alimentar al reino o vender la montaña.}
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: NAS_las_terrazas
+        name: {english: The Terraces, spanish: Las Terrazas}
+        days: 42
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NAS_el_consejo_del_campo
+        mutually_exclusive:
+        - NAS_la_mineria_del_cielo
+        ai: {factor: 2}
+        desc:
+          english: Terrace by terrace. Opens new terraces.
+          spanish: Terraza por terraza. Abre terrazas nuevas.
+        reward:
+        - {effect: add_ideas, value: NAS_terrazas}
+      - id: NAS_la_mita_del_campo
+        name: {english: The Field Mit'a, spanish: La Mit'a del Campo}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NAS_las_terrazas
+        desc:
+          english: Everyone works the land one month a year.
+          spanish: Todos trabajan la tierra un mes por año.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: NAS_graneros_del_altiplano
+        name: {english: Granaries of the Altiplano, spanish: Graneros del Altiplano}
+        days: 35
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NAS_las_terrazas
+        desc: {english: Never hungry again., spanish: Nunca más hambre.}
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_stability, value: 0.05}
+      - id: NAS_el_reino_de_las_terrazas
+        name: {english: The Terrace Kingdom, spanish: El Reino de las Terrazas}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_la_mita_del_campo
+        - NAS_graneros_del_altiplano
+        desc: {english: Self-sufficient to the last potato., spanish: Autosuficiente hasta la última papa.}
+        reward:
+        - {effect: swap_ideas, remove: NAS_terrazas, add: NAS_terrazas_2}
+    - id: mineria
+      name: {english: Sky Mining, spanish: La Minería del Cielo}
+      focuses:
+      - id: NAS_la_mineria_del_cielo
+        name: {english: Sky Mining, spanish: La Minería del Cielo}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_el_consejo_del_campo
+        mutually_exclusive:
+        - NAS_las_terrazas
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: The highest mines in the world. Opens lithium contracts.
+          spanish: Las minas más altas del mundo. Abre contratos de litio.
+        reward:
+        - {effect: add_ideas, value: NAS_mineria}
+      - id: NAS_el_salar
+        name: {english: The Salt Flat, spanish: El Salar}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_la_mineria_del_cielo
+        desc:
+          english: Lithium for half the world's batteries.
+          spanish: Litio para la mitad de las baterías del mundo.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: NAS_capital_extranjero
+        name: {english: Foreign Capital, spanish: Capital Extranjero}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - NAS_la_mineria_del_cielo
+        desc: {english: 'Foreign money, local mountains.', spanish: 'Plata de afuera, montañas de acá.'}
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+      - id: NAS_la_montana_de_plata
+        name: {english: The Silver Mountain, spanish: La Montaña de Plata}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_el_salar
+        - NAS_capital_extranjero
+        desc: {english: 'Potosí again, without the slaves.', spanish: 'Potosí otra vez, sin esclavos.'}
+        reward:
+        - {effect: swap_ideas, remove: NAS_mineria, add: NAS_mineria_2}
+    - id: talleres
+      name: {english: Workshops of the Heights, spanish: Talleres de Altura}
+      focuses:
+      - id: NAS_talleres_de_altura
+        name: {english: Workshops of the Heights, spanish: Talleres de Altura}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NAS_el_sol_de_2100
+        desc: {english: Factories at four thousand metres., spanish: Fábricas a cuatro mil metros.}
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: NAS_hidroelectricas_andinas
+        name: {english: Andean Hydropower, spanish: Hidroeléctricas Andinas}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_talleres_de_altura
+        desc: {english: The meltwater powers the altiplano., spanish: El deshielo mueve al altiplano.}
+        reward:
+        - {effect: add_ideas, value: NAS_hidroelectricas}
+      - id: NAS_el_polo_de_lima
+        name: {english: The Lima Pole, spanish: El Polo de Lima}
+        days: 35
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - NAS_talleres_de_altura
+        desc: {english: Arms factories on the coast., spanish: Fábricas de armas en la costa.}
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+      - id: NAS_las_minas_de_potosi
+        name: {english: The Potosí Mines, spanish: Las Minas de Potosí}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_hidroelectricas_andinas
+        - NAS_el_polo_de_lima
+        desc: {english: The mountain gives again., spanish: La montaña vuelve a dar.}
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+      - id: NAS_astilleros_del_callao
+        name: {english: The Callao Shipyards, spanish: Los Astilleros del Callao}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_las_minas_de_potosi
+        desc: {english: Dry docks on the Pacific., spanish: Diques secos en el Pacífico.}
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: NAS_observatorio_del_sol
+        name: {english: The Observatory of the Sun, spanish: El Observatorio del Sol}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - NAS_las_minas_de_potosi
+        desc:
+          english: Where the priests watched the stars, the engineers watch the future.
+          spanish: Donde los sacerdotes miraban las estrellas, los ingenieros miran el futuro.
+        reward:
+        - {effect: add_research_slot, value: 1}
+    - id: guerreros
+      name: {english: Warriors of the Puna, spanish: Guerreros de la Puna}
+      focuses:
+      - id: NAS_guerreros_de_la_puna
+        name: {english: Warriors of the Puna, spanish: Guerreros de la Puna}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - NAS_el_sol_de_2100
+        desc:
+          english: Soldiers who breathe where others choke.
+          spanish: Soldados que respiran donde otros se ahogan.
+        reward:
+        - {effect: tech_bonus, category: mountaineers_tech, bonus: 0.5, uses: 2}
+      - id: NAS_aclimatacion
+        name: {english: Acclimatisation, spanish: Aclimatación}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NAS_guerreros_de_la_puna
+        desc: {english: Born at four thousand metres., spanish: Nacidos a cuatro mil metros.}
+        reward:
+        - {effect: add_ideas, value: NAS_espiritu_aclimatacion}
+      - id: NAS_la_guardia_del_inca
+        name: {english: The Inca's Guard, spanish: La Guardia del Inca}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - NAS_guerreros_de_la_puna
+        desc:
+          english: The best rifles for the best soldiers.
+          spanish: Los mejores fusiles para los mejores soldados.
+        reward:
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
+        - {effect: add_manpower, value: 30000}
+      - id: NAS_doctrina_de_la_quebrada
+        name: {english: The Ravine Doctrine, spanish: La Doctrina de la Quebrada}
+        days: 42
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NAS_aclimatacion
+        - NAS_la_guardia_del_inca
+        desc:
+          english: Strike from the ravine, vanish into the mountain.
+          spanish: Golpear desde la quebrada, desaparecer en la montaña.
+        reward:
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+      - id: NAS_montaneses_de_elite
+        name: {english: Elite Mountaineers, spanish: Montañeses de Élite}
+        days: 42
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - NAS_doctrina_de_la_quebrada
+        desc:
+          english: The best mountain troops of the century.
+          spanish: Las mejores tropas de montaña del siglo.
+        reward:
+        - {effect: add_ideas, value: NAS_montaneses}
+        - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 1}
+      - id: NAS_el_general_del_sol
+        name: {english: The General of the Sun, spanish: El General del Sol}
+        days: 56
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NAS_montaneses_de_elite
+        desc: {english: One general for the four quarters., spanish: Un general para las cuatro partes.}
+        reward:
+        - {effect: army_experience, value: 75}
+        - {effect: tech_bonus, category: land_doctrine, bonus: 0.75, uses: 1}
+    - id: alas_del_sol
+      name: {english: Wings of the Sun, spanish: Alas del Sol}
+      focuses:
+      - id: NAS_alas_del_sol
+        name: {english: Wings of the Sun, spanish: Alas del Sol}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - NAS_el_sol_de_2100
+        desc: {english: The condor's air force., spanish: La aviación del cóndor.}
+        reward:
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
+      - id: NAS_aerodromos_de_altura
+        name: {english: High-Altitude Airfields, spanish: Aeródromos de Altura}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_alas_del_sol
+        desc: {english: Runways where the air is thin., spanish: Pistas donde el aire es fino.}
+        reward:
+        - {effect: build, building: air_base, level: 3}
+      - id: NAS_cazas_del_condor
+        name: {english: Condor Fighters, spanish: Cazas del Cóndor}
+        days: 42
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - NAS_alas_del_sol
+        desc: {english: Fighters built for the mountains., spanish: Cazas hechos para la montaña.}
+        reward:
+        - {effect: air_experience, value: 50}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
+      - id: NAS_transporte_de_montana
+        name: {english: Mountain Transport, spanish: Transporte de Montaña}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_aerodromos_de_altura
+        - NAS_cazas_del_condor
+        desc:
+          english: Where the road cannot go, the plane does.
+          spanish: Donde no llega el camino, llega el avión.
+        reward:
+        - {effect: build, building: air_base, level: 2}
+        - {effect: add_political_power, value: 50}
+      - id: NAS_defensa_del_cielo
+        name: {english: Defence of the Sky, spanish: Defensa del Cielo}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - NAS_transporte_de_montana
+        desc: {english: The Sun's sky is closed., spanish: El cielo del Sol está cerrado.}
+        reward:
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 2}
+      - id: NAS_la_flota_del_pacifico
+        name: {english: The Pacific Fleet, spanish: La Flota del Pacífico}
+        days: 56
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_defensa_del_cielo
+        desc: {english: The Sun founds a navy., spanish: El Sol funda una armada.}
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
+        - {effect: navy_experience, value: 25}
+    - id: inti_soma
+      name: {english: Inti-Soma, spanish: Inti-Soma}
+      focuses:
+      - id: NAS_granjas_del_sol
+        name: {english: The Sun Farms, spanish: Las Granjas del Sol}
+        days: 21
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_el_sol_de_2100
+        desc: {english: Fields of mirrors on the altiplano., spanish: Campos de espejos en el altiplano.}
+        reward:
+        - {effect: add_variable, var: NAS_granjas, value: 1}
+        - {effect: add_political_power, value: 50}
+      - id: NAS_el_gran_raymi
+        name: {english: The Great Raymi, spanish: El Gran Raymi}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - NAS_granjas_del_sol
+        desc: {english: 'The festival of the Sun, as it was.', spanish: 'La fiesta del Sol, como era.'}
+        reward:
+        - {effect: add_variable, var: NAS_inti, value: 25}
+        - {effect: add_stability, value: 0.05}
+      - id: NAS_el_calendario_solar
+        name: {english: The Solar Calendar, spanish: El Calendario Solar}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NAS_granjas_del_sol
+        desc: {english: The state keeps the Sun's time., spanish: El Estado lleva el tiempo del Sol.}
+        reward:
+        - {effect: add_political_power, value: 100}
+      - id: NAS_templos_bateria
+        name: {english: Battery Temples, spanish: Templos-Batería}
+        days: 42
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - NAS_el_gran_raymi
+        - NAS_el_calendario_solar
+        desc:
+          english: 'The temples store the light: +50 maximum Inti-Soma.'
+          spanish: 'Los templos guardan la luz: +50 al máximo de Inti-Soma.'
+        reward:
+        - {effect: add_variable, var: NAS_inti_max, value: 50}
+      - id: NAS_la_chicha_del_sol
+        name: {english: The Sun's Chicha, spanish: La Chicha del Sol}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_templos_bateria
+        desc: {english: 'Another farm, another festival.', spanish: 'Otra granja, otra fiesta.'}
+        reward:
+        - {effect: add_variable, var: NAS_granjas, value: 1}
+        - {effect: add_variable, var: NAS_inti, value: 15}
+      - id: NAS_ofrenda_de_luz
+        name: {english: Offering of Light, spanish: Ofrenda de Luz}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_templos_bateria
+        desc: {english: The light goes to the factories., spanish: La luz va a las fábricas.}
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: NAS_el_sol_eterno
+        name: {english: The Eternal Sun, spanish: El Sol Eterno}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - NAS_la_chicha_del_sol
+        - NAS_ofrenda_de_luz
+        desc: {english: +1 farm and +50 maximum Inti-Soma., spanish: +1 granja y +50 al máximo de Inti-Soma.}
+        reward:
+        - {effect: add_variable, var: NAS_granjas, value: 1}
+        - {effect: add_variable, var: NAS_inti_max, value: 50}
+      - id: NAS_inti_nunca_se_pone
+        name: {english: The Sun Never Sets, spanish: Inti Nunca se Pone}
+        days: 70
+        icon: GFX_goal_generic_secret_weapon
+        prerequisites:
+        - NAS_el_sol_eterno
+        desc:
+          english: Opens the overload of the temples, above the maximum, at the risk of the Night of the Sun.
+          spanish: Abre la sobrecarga de los templos, por encima del máximo, con el riesgo de La Noche del Sol.
+        reward:
+        - {effect: add_research_slot, value: 1}
+
   SHD: { status: not_started, see: Q032 }
   APF: { status: not_started, see: Q032 }
   NRE: { status: not_started, see: Q032 }

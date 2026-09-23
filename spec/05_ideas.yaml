@@ -900,7 +900,127 @@ countries:
       modifiers: {industrial_capacity_dockyard: 0.1, war_support_factor: 0.05}
       src: user_design
     see: Q030
-  NAS: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  NAS:
+    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    focus_ideas:
+    - id: NAS_raymi
+      name: {english: The Raymi, spanish: El Raymi}
+      desc:
+        english: The festival of the Sun. For three months, nobody doubts the Sapa Inti.
+        spanish: La fiesta del Sol. Por tres meses, nadie duda del Sapa Inti.
+      modifiers: {stability_factor: 0.1}
+      src: user_design
+    - id: NAS_solsticio
+      name: {english: War Solstice, spanish: Solsticio de Guerra}
+      desc:
+        english: The longest day of the year, spent at war.
+        spanish: El día más largo del año, pasado en guerra.
+      modifiers: {army_attack_factor: 0.1}
+      src: user_design
+    - id: NAS_ofrenda
+      name: {english: Offering of Light, spanish: Ofrenda de Luz}
+      desc:
+        english: The temples lend their light to the factories.
+        spanish: Los templos les prestan su luz a las fábricas.
+      modifiers: {industrial_capacity_factory: 0.1}
+      src: user_design
+    - id: NAS_noche_del_sol
+      name: {english: The Night of the Sun, spanish: La Noche del Sol}
+      desc:
+        english: The temples burned out. The light is gone, and so is the faith.
+        spanish: Los templos se quemaron. Se fue la luz, y se fue la fe.
+      modifiers: {stability_factor: -0.15, political_power_gain: -0.2, industrial_capacity_factory: -0.1}
+      src: user_design
+    - id: NAS_sacerdotes
+      name: {english: The Priests of the Sun, spanish: Los Sacerdotes del Sol}
+      desc:
+        english: The Villac Umu speaks for the Sun; the court listens.
+        spanish: El Villac Umu habla por el Sol; la corte escucha.
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
+      src: user_design
+    - id: NAS_fortalezas_puna
+      name: {english: Fortresses of the Puna, spanish: Fortalezas de la Puna}
+      desc:
+        english: Whoever wants the Andes has to climb them.
+        spanish: El que quiera los Andes tiene que subirlos.
+      modifiers: {army_defence_factor: 0.15}
+      src: user_design
+    - id: NAS_invierno_nunca_mas
+      name: {english: Never Another Winter, spanish: El Invierno Nunca Más}
+      desc:
+        english: The granaries of the altiplano are full. The Ash Winter will not return.
+        spanish: Los graneros del altiplano están llenos. El Invierno de Ceniza no va a volver.
+      modifiers: {stability_factor: 0.1, political_power_gain: 0.1}
+      src: user_design
+    - id: NAS_trono_del_sol
+      name: {english: The Throne of the Sun, spanish: El Trono del Sol}
+      desc:
+        english: 'The Sapa Inti, the priests and the mountains: one throne.'
+        spanish: 'El Sapa Inti, los sacerdotes y las montañas: un solo trono.'
+      modifiers: {stability_factor: 0.15, political_power_gain: 0.15, army_defence_factor: 0.1}
+      src: user_design
+    - id: NAS_espiritu_mita_de_guerra
+      name: {english: War Mit'a, spanish: Mit'a de Guerra}
+      desc:
+        english: The ancient labour tax, paid in soldiers.
+        spanish: El viejo tributo de trabajo, pagado en soldados.
+      modifiers: {army_org_factor: 0.1, war_support_factor: 0.1}
+      src: user_design
+    - id: NAS_tawantinsuyu
+      name: {english: Tawantinsuyu, spanish: Tawantinsuyu}
+      desc:
+        english: The four quarters are one again. The roads hold the empire together.
+        spanish: Las cuatro partes vuelven a ser una. Los caminos sostienen al imperio.
+      modifiers:
+        stability_factor: 0.15
+        political_power_gain: 0.15
+        industrial_capacity_factory: 0.1
+        army_attack_factor: 0.1
+      src: user_design
+    - id: NAS_terrazas
+      name: {english: The Terraces, spanish: Las Terrazas}
+      desc:
+        english: The mountainsides feed the kingdom, terrace by terrace.
+        spanish: Las laderas alimentan al reino, terraza por terraza.
+      modifiers: {stability_factor: 0.1, production_speed_buildings_factor: 0.1}
+      src: user_design
+    - id: NAS_terrazas_2
+      name: {english: The Terrace Kingdom, spanish: El Reino de las Terrazas}
+      desc: {english: Self-sufficient to the last potato., spanish: Autosuficiente hasta la última papa.}
+      modifiers: {stability_factor: 0.15, production_speed_buildings_factor: 0.15, political_power_gain: 0.1}
+      src: user_design
+    - id: NAS_mineria
+      name: {english: Sky Mining, spanish: La Minería del Cielo}
+      desc:
+        english: Lithium and tungsten from the highest mines in the world, sold to whoever pays.
+        spanish: Litio y tungsteno de las minas más altas del mundo, vendidos a quien pague.
+      modifiers: {local_resources_factor: 0.15, trade_opinion_factor: 0.15}
+      src: user_design
+    - id: NAS_mineria_2
+      name: {english: The Silver Mountain, spanish: La Montaña de Plata}
+      desc:
+        english: Potosí again, without the slaves this time.
+        spanish: Potosí otra vez, esta vez sin esclavos.
+      modifiers: {local_resources_factor: 0.25, trade_opinion_factor: 0.2, industrial_capacity_factory: 0.1}
+      src: user_design
+    - id: NAS_espiritu_aclimatacion
+      name: {english: Acclimatisation, spanish: Aclimatación}
+      desc: {english: Soldiers born at four thousand metres., spanish: Soldados nacidos a cuatro mil metros.}
+      modifiers: {army_org_factor: 0.1}
+      src: user_design
+    - id: NAS_montaneses
+      name: {english: Elite Mountaineers, spanish: Montañeses de Élite}
+      desc:
+        english: The best mountain troops of the century.
+        spanish: Las mejores tropas de montaña del siglo.
+      modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.05}
+      src: user_design
+    - id: NAS_hidroelectricas
+      name: {english: Andean Hydropower, spanish: Hidroeléctricas Andinas}
+      desc: {english: The meltwater powers the altiplano., spanish: El deshielo mueve al altiplano.}
+      modifiers: {industrial_capacity_factory: 0.1}
+      src: user_design
+    see: Q030
   SHD: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   APF: { coverage: unknown, starting_ideas: unknown, see: Q030 }
   NRE: { coverage: unknown, starting_ideas: unknown, see: Q030 }

@@ -67,6 +67,7 @@ def emit(ctx: BuildContext) -> None:
         wargoals=ctx.vanilla.wargoal_types() if ctx.vanilla else None,
         warn=ctx.warn, characters=character_ids(ctx), events=all_event_ids(ctx),
         scripted=scripted_effect_ids(ctx.spec.raw),
+        tech_categories=ctx.vanilla.tech_categories() if ctx.vanilla else None,
     )
 
     for ns, tag, ev in _events(ctx):
