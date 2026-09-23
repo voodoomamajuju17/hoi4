@@ -1,0 +1,43 @@
+units = {
+	fleet = {
+		name = "Squadra Tirreno"
+		naval_base = 13
+		task_force = {
+			name = "Squadra Tirreno"
+			location = 13
+			ship = { name = "Roma" definition = battleship equipment = { ship_hull_heavy_1 = { amount = 1 owner = ITA creator = ITA version_name = "Classe Littorio" } } }
+			ship = { name = "Zara" definition = heavy_cruiser equipment = { ship_hull_cruiser_1 = { amount = 1 owner = ITA version_name = "Classe Zara" } } }
+		}
+	}
+	fleet = {
+		name = "Squadra Libia"
+		naval_base = 14
+		task_force = {
+			name = "Squadra Libia"
+			location = 14
+			ship = { name = "Tripoli" definition = destroyer equipment = { ship_hull_light_1 = { amount = 1 owner = ITA version_name = "Classe Navigatori" } } }
+		}
+	}
+	fleet = {
+		name = "Squadra Oceano Indiano"
+		naval_base = 18
+		task_force = {
+			name = "Squadra Oceano Indiano"
+			location = 18
+			ship = { name = "Lontano" definition = destroyer equipment = { ship_hull_light_1 = { amount = 1 owner = ITA version_name = "Classe Navigatori" } } }
+		}
+	}
+}
+instant_effect = {
+	create_equipment_variant = {
+		name = "Classe Littorio"
+		type = ship_hull_heavy_1
+		parent_version = 0
+	}
+	create_equipment_variant = {
+		name = "Classe Navigatori"
+		type = ship_hull_light_1
+		parent_version = 0
+	}
+	add_political_power = 999
+}

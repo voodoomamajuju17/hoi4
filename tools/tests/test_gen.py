@@ -545,7 +545,7 @@ def test_territory() -> None:
         check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
-        check("balance cuenta las milicias", any(l.startswith("ZWI") and l.rstrip().endswith(" 2") for l in bal.splitlines()), bal[:800])
+        check("balance cuenta las milicias", any(l.startswith("ZWI") and l.split()[-3] == "2" for l in bal.splitlines()), bal[:800])
         check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 5" in bal)
         check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
 
@@ -770,6 +770,35 @@ def test_balance() -> None:
         check("no toca otros sprites", not (mod / "gfx/interface/goals/goal_unknown.dds").exists())
 
 
+def test_forces() -> None:
+    section("armada y aviacion heredadas de 1936")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        nre = pdx.parse((mod / "history/units/NRE_2100_naval.txt").read_text())
+        fleets = nre.get("units").get_all("fleet")
+        check("NRE hereda la flota con base en Lazio", [pdx.text(f.get("name")) for f in fleets] == ["Squadra Tirreno"], str(fleets))
+        raw = (mod / "history/units/NRE_2100_naval.txt").read_text()
+        check("owner pasa a NRE", "owner = NRE" in raw and "owner = ITA" not in raw)
+        check("creator pasa a NRE", "creator = NRE" in raw)
+        check("usa la version de DLC (mtg), no la legacy", "Vecchia" not in raw)
+        variants = nre.get("instant_effect").get_all("create_equipment_variant")
+        check("copia las variantes de barcos", len(variants) == 2, str(len(variants)))
+        check("no copia otros efectos del instant_effect", "add_political_power" not in raw)
+        apf = pdx.parse((mod / "history/units/APF_2100_naval.txt").read_text())
+        check("APF hereda la flota con base en Libia", pdx.text(apf.get("units").get("fleet").get("name")) == "Squadra Libia")
+        check("la flota en territorio de la Anarquia se descarta",
+              not any((mod / "history/units").glob("ZWI_2100_naval.txt")))
+        air = pdx.parse((mod / "history/units/NRE_2100_air.txt").read_text()).get("air_wings")
+        check("NRE hereda el ala basada en Lazio", "909" in air.keys() and "914" not in air.keys())
+        check("owner del ala pasa a NRE", 'owner = "NRE"' in (mod / "history/units/NRE_2100_air.txt").read_text())
+        nre_h = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
+        check("la historia carga la armada", 'set_naval_oob = "NRE_2100_naval"' in nre_h)
+        check("la historia carga la aviacion", 'set_air_oob = "NRE_2100_air"' in nre_h)
+        check("cuenta barcos", ctx.data["ships"].get("NRE") == 2, str(ctx.data["ships"]))
+        check("cuenta aviones", ctx.data["planes"].get("NRE") == 60, str(ctx.data["planes"]))
+
+
 def test_vanilla_validation() -> None:
     section("validacion contra documentation/ e interface/ del juego")
     import shutil
@@ -798,7 +827,7 @@ def test_vanilla_validation() -> None:
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction\n"
+            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -865,6 +894,7 @@ def main() -> int:
         test_events,
         test_leaders_and_ideologies,
         test_balance,
+        test_forces,
         test_vanilla_validation,
     ):
         test()

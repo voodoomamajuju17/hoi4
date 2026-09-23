@@ -40,6 +40,12 @@ def emit(ctx: BuildContext) -> None:
         oob = (ctx.data.get("oob") or {}).get(c.tag)
         if oob:
             b.add("oob", Quoted(oob))
+        naval = (ctx.data.get("naval_oob") or {}).get(c.tag)
+        if naval:
+            b.add("set_naval_oob", Quoted(naval))
+        air = (ctx.data.get("air_oob") or {}).get(c.tag)
+        if air:
+            b.add("set_air_oob", Quoted(air))
         b.add("set_research_slots", int(politics.get("research_slots", 3)))
 
         sp = Block()
@@ -108,6 +114,10 @@ def emit(ctx: BuildContext) -> None:
             "Q035",
         )
     used = {"set_autonomy": "04_diplomacy.yaml"} if _any_subjects(ctx) else {}
+    if ctx.data.get("naval_oob"):
+        used["set_naval_oob"] = "forces.py"
+    if ctx.data.get("air_oob"):
+        used["set_air_oob"] = "forces.py"
     if faction_plan(ctx):
         used["create_faction"] = "04_diplomacy.yaml"
         used["add_to_faction"] = "04_diplomacy.yaml"

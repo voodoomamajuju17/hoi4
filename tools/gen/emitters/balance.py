@@ -69,6 +69,8 @@ def emit(ctx: BuildContext) -> None:
             "cont": cont,
             "top": sorted(owned, key=lambda s: -s.manpower)[:3],
             "divisions": militia.get(c.tag, 0),
+            "ships": (ctx.data.get("ships") or {}).get(c.tag, 0),
+            "planes": (ctx.data.get("planes") or {}).get(c.tag, 0),
         })
 
     lines: list[str] = []
@@ -80,7 +82,7 @@ def emit(ctx: BuildContext) -> None:
     add("")
 
     header = f"{'TAG':4} {'Pais':32} {'Tipo':18} {'States':>6} {'Prov':>5} {'Manpower':>10} " \
-             f"{'Civ':>4} {'Mil':>4} {'Astil':>5} {'IC':>4} {'Infra':>5} {'VP':>4} {'Div':>4}"
+             f"{'Civ':>4} {'Mil':>4} {'Astil':>5} {'IC':>4} {'Infra':>5} {'VP':>4} {'Div':>4} {'Barcos':>6} {'Aviones':>7}"
     add(header)
     add("-" * len(header))
     groups = [("Meganacion",), ("Satelite",), ("Anarquia",)]
@@ -88,7 +90,8 @@ def emit(ctx: BuildContext) -> None:
         for r in sorted((r for r in rows if r["kind"].startswith(prefix)), key=lambda r: -(r["civ"] + r["mil"])):
             add(f"{r['tag']:4} {r['name'][:32]:32} {r['kind'][:18]:18} {r['states']:>6} {r['provinces']:>5} "
                 f"{_mp(r['manpower']):>10} {r['civ']:>4} {r['mil']:>4} {r['dock']:>5} "
-                f"{r['civ'] + r['mil']:>4} {r['infra']:>5.1f} {r['vp']:>4} {r['divisions']:>4}")
+                f"{r['civ'] + r['mil']:>4} {r['infra']:>5.1f} {r['vp']:>4} {r['divisions']:>4} "
+                f"{r['ships']:>6} {r['planes']:>7}")
     add("")
 
     add("RECURSOS")
