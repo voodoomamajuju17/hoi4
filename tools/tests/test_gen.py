@@ -927,7 +927,7 @@ def test_hsn() -> None:
         check("perder un nodo da la idea de crisis", "HSN_nodo_perdido" in body and "value = HSN_nodos_prev" in body)
         check("con Tavake no hay peajes", "HSN_tavake" in body)
         ev = (mod / "events/meganations_hsn.txt").read_text()
-        check("el conteo es un evento oculto que se repite cada 30 dias", "hide_window = yes" in ev and "days = 30" in ev)
+        check("el conteo es un evento oculto (hidden = yes) que se repite cada 30 dias", "hidden = yes" in ev and "hide_window" not in ev and "days = 30" in ev)
         oa = (mod / "common/on_actions/00_meganations_on_actions.txt").read_text()
         check("el conteo arranca con la partida", "meganations_hsn.4" in oa)
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()

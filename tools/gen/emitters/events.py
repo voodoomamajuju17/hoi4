@@ -103,7 +103,7 @@ def emit(ctx: BuildContext) -> None:
                 ctx.warn(f"{eid}: la imagen '{picture}' no existe en el juego; el evento sale sin imagen.")
         b.add("is_triggered_only", True)
         if ev.get("hidden"):
-            b.add("hide_window", True)  # evento de mantenimiento: corre sin ventana
+            b.add("hidden", True)  # evento de mantenimiento: corre sin ventana (hide_window no existe en HOI4)
 
         options = ev.get("options") or []
         if not options or len(options) > len(OPTION_LETTERS):

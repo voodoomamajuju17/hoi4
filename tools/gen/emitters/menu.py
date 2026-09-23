@@ -132,7 +132,7 @@ def _diagnose_deep(root) -> list[str]:
     for yml in sorted((root / "localisation").rglob("*english*.yml")):
         try:
             for line in yml.read_text(encoding="utf-8-sig", errors="replace").splitlines():
-                m = re.match(r'\s*([A-Za-z0-9_.]+):\d*\s*"(change background|backgrounds?)"', line, re.I)
+                m = re.match(r'\s*([A-Za-z0-9_.]+):\d*\s*"(change background)"', line, re.I)
                 if m:
                     keys.add(m.group(1))
                     out.append(f"      texto  {yml.name}: {line.strip()[:120]}")
@@ -156,25 +156,23 @@ def _diagnose_deep(root) -> list[str]:
                     lines = text.splitlines()
                     chunk = " | ".join(l.strip() for l in lines[max(0, lineno - 6):lineno + 4] if l.strip())
                     out.append(f"      usa    {path.relative_to(root).as_posix()}:{lineno}: {chunk[:300]}")
-    # 3) imágenes con nombre de fondo o menú, en el juego y en las carpetas de expansiones
+    # 3) imágenes grandes (>= 1280 px de ancho) del juego y de las expansiones:
+    #    los fondos del selector de 1.19 son imágenes de pantalla completa.
     found = 0
-    for path in sorted(root.rglob("*")):
+    for path in sorted(root.rglob("*.dds")):
         rel = path.relative_to(root)
         if rel.parts and rel.parts[0] in _SKIP_DIRS:
             continue
-        if path.is_file() and _IMAGE_NAME.search(path.name):
-            dims = ""
-            if path.suffix.lower() == ".dds":
-                try:
-                    with path.open("rb") as fh:
-                        w, h = _dims(fh.read(128))
-                    dims = f" {w}x{h}"
-                except OSError:
-                    pass
-            out.append(f"      imagen {rel.as_posix()}{dims}")
+        try:
+            with path.open("rb") as fh:
+                w, h = _dims(fh.read(128))
+        except OSError:
+            continue
+        if w >= _MIN_BG_WIDTH:
+            out.append(f"      grande {rel.as_posix()} {w}x{h}")
             found += 1
-            if found >= 40:
-                out.append("      ... (hay mas imagenes)")
+            if found >= 60:
+                out.append("      ... (hay mas imagenes grandes)")
                 break
     return out
 
