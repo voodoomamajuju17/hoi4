@@ -88,9 +88,10 @@ y `map`.
 
 > ### Ojo: todavía NO es jugable
 >
-> Esto es una **prueba de humo**, no el mod. Ahora mismo tiene los 10 países y
-> las ideologías, pero **no tiene territorio, ni historia, ni árbol de focos**.
-> Eso es la Fase 3.
+> Esto es una **prueba de humo**, no el mod. Ahora mismo tiene los 10 países,
+> las ideologías, las ideas nacionales y el árbol de focos del EFE, a Aurelio IV
+> y el BioSteel (el carbón renombrado), pero **todavía no tiene territorio**:
+> los países existen pero no aparecen en el mapa. Eso viene después.
 >
 > Lo único que estamos probando es que el launcher lo liste y que el juego
 > llegue al menú sin romperse. Si esperás una partida jugable te vas a
@@ -102,7 +103,7 @@ y `map`.
 2. Si el juego tira algún error, el **`error.log`**, que está en:
    `Documentos\Paradox Interactive\Hearts of Iron IV\logs\error.log`
 
-Con eso corrijo el generador y pasamos a la Fase 3.
+Con eso corrijo el generador y seguimos con el territorio.
 
 ---
 

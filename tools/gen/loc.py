@@ -119,7 +119,10 @@ class LocRegistry:
             out_dir = mod_root / "localisation" / language
             out_dir.mkdir(parents=True, exist_ok=True)
             for logical_file, keys in sorted(by_file.items()):
+                # Un archivo logico "replace/x" va a localisation/<idioma>/replace/:
+                # lo que esta ahi pisa las claves vanilla con el mismo nombre.
                 path = out_dir / f"{logical_file}_l_{language}.yml"
+                path.parent.mkdir(parents=True, exist_ok=True)
                 lines = [f"l_{language}:"]
                 for key in sorted(keys):
                     text = self._defined[key][language]

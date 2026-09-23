@@ -1,0 +1,111 @@
+"""Ideas nacionales (national spirits).
+
+Produce:
+  common/ideas/<TAG>_ideas.txt
+  localisation de <id> y <id>_desc (TN007)
+
+Tres orígenes en 05_ideas.yaml, todos van al mismo archivo:
+  starting_ideas   — las pone history/countries el día uno
+  focus_ideas      — las da un foco (granted_by)
+  biosteel_tiers   — los tiers del Bioacero, intercambiados por focos
+
+Todas llevan `allowed = { always = no }`: ninguna se elige desde el panel de
+política, solo entran por historia o por efecto. Las no removibles llevan
+`removal_cost = -1`.
+"""
+
+from __future__ import annotations
+
+from ..context import BuildContext
+from ..errors import SpecError
+from ..pdx import Block
+
+SOURCE = "spec/05_ideas.yaml"
+LOC_FILE = "meganations_ideas"
+
+
+def ideas_of(ctx: BuildContext, tag: str) -> list[dict]:
+    """Todas las ideas definidas para un país, en orden estable."""
+    entry = (ctx.spec.raw["ideas"].get("countries") or {}).get(tag)
+    if not isinstance(entry, dict):
+        return []
+    out: list[dict] = []
+    for group in ("starting_ideas", "focus_ideas"):
+        value = entry.get(group)
+        if isinstance(value, list):
+            out.extend(value)
+    tiers = entry.get("biosteel_tiers")
+    if isinstance(tiers, dict):
+        out.extend(tiers.get("tiers", []) or [])
+    return out
+
+
+def starting_idea_ids(ctx: BuildContext, tag: str) -> list[str]:
+    entry = (ctx.spec.raw["ideas"].get("countries") or {}).get(tag)
+    if not isinstance(entry, dict) or not isinstance(entry.get("starting_ideas"), list):
+        return []
+    return [i["id"] for i in entry["starting_ideas"]]
+
+
+def all_idea_ids(ctx: BuildContext) -> set[str]:
+    return {i["id"] for c in ctx.spec.countries for i in ideas_of(ctx, c.tag)}
+
+
+def emit(ctx: BuildContext) -> None:
+    modifiers_used: dict[str, str] = {}
+    seen: set[str] = set()
+
+    for country in ctx.spec.countries:
+        ideas = ideas_of(ctx, country.tag)
+        if not ideas:
+            continue
+
+        group = Block()
+        for idea in ideas:
+            iid = idea["id"]
+            if iid in seen:
+                raise SpecError(f"idea duplicada: {iid}", where="05_ideas.yaml")
+            seen.add(iid)
+            if not iid.startswith(f"{country.tag}_"):
+                raise SpecError(
+                    f"la idea '{iid}' de {country.tag} no empieza con '{country.tag}_'",
+                    where="05_ideas.yaml",
+                )
+
+            modifiers = idea.get("modifiers")
+            if not isinstance(modifiers, dict) or not modifiers:
+                raise SpecError(
+                    f"{iid}: sin modificadores. HOI4 no acepta una idea vacia.",
+                    where="05_ideas.yaml",
+                )
+
+            body = Block()
+            allowed = Block()
+            allowed.add("always", False)
+            body.add("allowed", allowed)
+            if idea.get("removable") is False:
+                body.add("removal_cost", -1)
+            mod = Block()
+            for key, value in modifiers.items():
+                mod.add(key, float(value))
+                modifiers_used.setdefault(key, iid)
+            body.add("modifier", mod)
+            group.add(ctx.loc.reference(iid, f"ideas:{iid}"), body)
+
+            desc = idea.get("desc")
+            if not isinstance(desc, dict):
+                raise SpecError(f"{iid}: falta desc en EN y ES (TN007)", where="05_ideas.yaml")
+            ctx.loc.define(iid, en=idea["name"]["english"], es=idea["name"]["spanish"],
+                           file=LOC_FILE, origin=f"ideas:{iid}")
+            ctx.loc.define_and_reference(
+                f"{iid}_desc", en=desc["english"], es=desc["spanish"],
+                file=LOC_FILE, origin=f"ideas:{iid}",
+            )
+
+        root = Block()
+        country_block = Block()
+        country_block.add("country", group)
+        root.add("ideas", country_block)
+        ctx.write_script(f"common/ideas/{country.tag}_ideas.txt", root, source=SOURCE)
+
+    ctx.verify_keys("modifiers", modifiers_used)

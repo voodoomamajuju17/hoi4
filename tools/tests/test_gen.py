@@ -359,6 +359,121 @@ def test_check_detects_edits() -> None:
         check("detecta archivo borrado", any(kind == "FALTA" for kind, _ in diffs), str(diffs))
 
 
+def test_phase3_content() -> None:
+    section("fase 3: ideas, focos, personajes, historia, BioSteel")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+
+        ideas = (mod / "common/ideas/EFE_ideas.txt").read_text()
+        for iid in ("EFE_mandato_verde", "EFE_conservacion_coercitiva", "EFE_biosteel_t3"):
+            check(f"idea {iid}", f"{iid} = {{" in ideas)
+        check("ideas no elegibles desde el panel", "always = no" in ideas)
+        check("ideas no removibles", "removal_cost = -1" in ideas)
+
+        focus = pdx.parse((mod / "common/national_focus/EFE_focus.txt").read_text())
+        tree = focus.get("focus_tree")
+        focuses = tree.get_all("focus")
+        ids = [pdx.text(f.get("id")) for f in focuses]
+        check("14 focos", len(focuses) == 14, str(len(focuses)))
+        check("arbol asignado al EFE", pdx.text(tree.get("country").get("modifier").get("tag")) == "EFE")
+        coords = [(pdx.text(f.get("x")), pdx.text(f.get("y"))) for f in focuses]
+        check("sin focos superpuestos", len(set(coords)) == len(coords), str(coords))
+        for f in focuses:
+            fid = pdx.text(f.get("id"))
+            for pre in f.get_all("prerequisite"):
+                check(f"{fid}: prerequisito existe", pdx.text(pre.get("focus")) in ids)
+        corona = next(f for f in focuses if pdx.text(f.get("id")) == "EFE_corona_de_2081")
+        check("prerequisitos AND = dos bloques", len(corona.get_all("prerequisite")) == 2)
+
+        amounts = []
+        for n in (1, 2, 3):
+            f = next(f for f in focuses if pdx.text(f.get("id")) == f"EFE_biosteel_umbral_{n}")
+            cond = f.get("available").get("has_resources_amount")
+            check(f"umbral {n} pide coal", pdx.text(cond.get("resource")) == "coal")
+            amounts.append(pdx.text(cond.get("amount")))
+        check("umbrales 5/10/15", amounts == ["5", "10", "15"], str(amounts))
+        t2 = next(f for f in focuses if pdx.text(f.get("id")) == "EFE_biosteel_umbral_2")
+        swap = t2.get("completion_reward").get("swap_ideas")
+        check("tier 2 reemplaza al 1", pdx.text(swap.get("remove_idea")) == "EFE_biosteel_t1")
+
+        chars = (mod / "common/characters/EFE_characters.txt").read_text()
+        check("Aurelio IV lider ecofascista", "ideology = ecofascism" in chars)
+        check("retrato placeholder", (mod / "gfx/leaders/EFE/aurelio_iv.dds").exists())
+
+        hist_dir = mod / "history/countries"
+        check("historia para los 10 paises", len(list(hist_dir.glob("*.txt"))) == 10)
+        efe = (hist_dir / "EFE - Ecofascist Empire.txt").read_text()
+        check("EFE recluta a Aurelio", "recruit_character = EFE_aurelio_iv" in efe)
+        check("EFE arranca con el Mandato", "EFE_mandato_verde" in efe)
+        check("las ideas de foco no arrancan puestas", "EFE_conservacion_coercitiva" not in efe)
+        check("sin capital hasta que haya territorio", "capital" not in efe)
+        for path in hist_dir.glob("*.txt"):
+            pops = pdx.parse(path.read_text()).get("set_popularities")
+            total = sum(int(pdx.text(v)) for _, v in pops.entries)
+            check(f"popularidades suman 100 en {path.name}", total == 100, str(total))
+
+        res = mod / "localisation/english/replace/meganations_resources_l_english.yml"
+        check("reskin de recurso en replace/", res.exists())
+        text = res.read_text(encoding="utf-8-sig")
+        check("coal pasa a BioSteel", 'coal:0 "BioSteel"' in text, text)
+        check("no toca otros recursos", "steel:0" not in text.replace("BioSteel", ""), text)
+        es = (mod / "localisation/spanish/replace/meganations_resources_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("coal en castellano", 'coal:0 "Bioacero"' in es, es)
+
+
+def test_vanilla_validation() -> None:
+    section("validacion contra documentation/ e interface/ del juego")
+    import shutil
+
+    from tools.gen.errors import GenError
+
+    with tempfile.TemporaryDirectory() as tmp:
+        van = Path(tmp) / "vanilla"
+        shutil.copytree(FIXTURE_VANILLA, van)
+        spec = specload.load(REPO_ROOT / "spec")
+        mods = set()
+        for c in spec.raw["ideas"]["countries"].values():
+            if isinstance(c, dict):
+                for group in ("starting_ideas", "focus_ideas"):
+                    ideas = c.get(group)
+                    for idea in ideas if isinstance(ideas, list) else []:
+                        mods.update(idea["modifiers"])
+                for tier in (c.get("biosteel_tiers") or {}).get("tiers", []):
+                    mods.update(tier["modifiers"])
+        docs = van / "documentation"
+        docs.mkdir()
+        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n")
+        (docs / "effects_documentation.md").write_text(
+            "add_political_power add_stability add_war_support army_experience "
+            "add_manpower add_ideas swap_ideas\n"
+        )
+        (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
+        (van / "interface").mkdir()
+        (van / "interface/goals.gfx").write_text(
+            'spriteTypes = { spriteType = { name = "GFX_goal_generic_political_pressure" } '
+            'spriteType = { name = "GFX_goal_unknown" } }'
+        )
+
+        out = Path(tmp) / "out"
+        ctx = build(out, vanilla_path=str(van), quiet=True)
+        check("con todo documentado no hay avisos de validacion",
+              not any("no se validaron" in w for w in ctx.warnings), str(ctx.warnings))
+        focus = (ctx.mod_root / "common/national_focus/EFE_focus.txt").read_text()
+        check("icono existente se conserva", "GFX_goal_generic_political_pressure" in focus)
+        check("icono inexistente cae a GFX_goal_unknown", "GFX_goal_unknown" in focus)
+        check("avisa del icono reemplazado", any("no existe en el juego" in w for w in ctx.warnings))
+
+        (docs / "modifiers_documentation.md").write_text(
+            "\n".join(sorted(mods - {"monthly_population"}))
+        )
+        try:
+            build(out, vanilla_path=str(van), quiet=True)
+            check("modificador inexistente frena el build", False, "no fallo")
+        except GenError as exc:
+            check("modificador inexistente frena el build", "monthly_population" in str(exc), str(exc))
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -373,6 +488,8 @@ def main() -> int:
         test_build_without_vanilla,
         test_art,
         test_check_detects_edits,
+        test_phase3_content,
+        test_vanilla_validation,
     ):
         test()
 

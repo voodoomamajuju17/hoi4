@@ -22,9 +22,14 @@ from pathlib import Path
 
 from . import specload, vanilla as vanilla_mod
 from .context import BuildContext
+from .emitters import characters as em_characters
 from .emitters import countries as em_countries
 from .emitters import descriptor as em_descriptor
+from .emitters import focus_trees as em_focus_trees
+from .emitters import history as em_history
+from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
+from .emitters import resources as em_resources
 from .errors import GenError
 from .loc import LocRegistry
 
@@ -36,6 +41,11 @@ EMITTERS = [
     ("descriptor", em_descriptor.emit),
     ("ideologies", em_ideologies.emit),
     ("countries", em_countries.emit),
+    ("resources", em_resources.emit),
+    ("ideas", em_ideas.emit),
+    ("characters", em_characters.emit),
+    ("focus_trees", em_focus_trees.emit),
+    ("history", em_history.emit),
 ]
 
 

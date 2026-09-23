@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import pdx
+from .errors import GenError
 from .loc import LocRegistry
 from .specload import Spec
 from .vanilla import Vanilla
@@ -55,4 +56,32 @@ class BuildContext:
         self.skipped.append(Skipped(what, reason, question))
 
     def warn(self, message: str) -> None:
-        self.warnings.append(message)
+        if message not in self.warnings:
+            self.warnings.append(message)
+
+    # -- validación contra vanilla ------------------------------------------
+
+    def verify_keys(self, kind: str, keys: dict[str, str]) -> None:
+        """Verifica que cada clave exista en documentation/ del juego.
+
+        `keys` va de clave a dónde se usó, para que el error diga qué tocar.
+        Sin vanilla o sin documentation/ no hay contra qué validar: se avisa
+        una vez por tipo y se sigue.
+        """
+        if not keys:
+            return
+        known = self.vanilla.documented_keys(kind) if self.vanilla else None
+        if known is None:
+            self.warn(
+                f"{kind}: no se validaron contra el juego (falta --vanilla-path o "
+                f"documentation/). Si alguno no existe, lo va a decir error.log."
+            )
+            return
+        missing = {k: where for k, where in keys.items() if k not in known}
+        if missing:
+            lines = "\n".join(f"    {k}  (en {where})" for k, where in sorted(missing.items()))
+            raise GenError(
+                f"{len(missing)} {kind} que no existen en esta version del juego:\n{lines}",
+                hint="corregilos en spec/. Buscados en documentation/ de la instalacion.",
+                where=kind,
+            )

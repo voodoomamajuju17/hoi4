@@ -51,7 +51,13 @@ countries:
         modifiers_src: invented
         removable: false
 
+    # Las tres de abajo NO arrancan puestas: las dan los focos de Restauración
+    # Total (cambio aprobado con Q031). Antes el foco "otorgaba" una idea que el
+    # país ya tenía desde el día uno.
+    focus_ideas:
+
       - id: EFE_conservacion_coercitiva
+        granted_by: EFE_reforestacion_obligatoria
         name:
           english: "Coercive Conservation"
           spanish: "Conservación Coercitiva"
@@ -80,6 +86,7 @@ countries:
           propios" (§1).
 
       - id: EFE_autarquia_estrategica
+        granted_by: EFE_autosuficiencia
         name:
           english: "Strategic Autarky"
           spanish: "Autarquía Estratégica"
@@ -102,6 +109,7 @@ countries:
         removable: false
 
       - id: EFE_control_poblacional
+        granted_by: EFE_cuotas_de_consumo
         name:
           english: "Population and Consumption Control"
           spanish: "Control de Población y Consumo"
@@ -131,8 +139,9 @@ countries:
       implementation: national_spirit_swap
       implementation_src: inferred
       note: >
-        Implementación recomendada para Fase 3 (sin GUI custom). Un spirit por
-        umbral, intercambiado por decisión/evento al cruzar el threshold.
+        Un spirit por umbral. El foco de cada umbral pide la cantidad de
+        BioSteel (recurso, Q021) y cambia el tier: el tier 1 se agrega, el 2 y
+        el 3 reemplazan al anterior. Ver 06_mechanics.yaml#biosteel.
       tiers:
         - tier: 1
           threshold: 5
@@ -142,6 +151,10 @@ countries:
             english: "BioSteel Foundries"
             spanish: "Fundiciones de Bioacero"
           name_src: invented
+          desc:
+            english: "The first vats of living alloy are running. The yield is poor; the promise is not."
+            spanish: "Las primeras cubas de aleación viva ya funcionan. El rendimiento es pobre; la promesa, no."
+          desc_src: invented
           modifiers:
             production_speed_arms_factory_factor: 0.05
           modifiers_src: invented
@@ -153,6 +166,10 @@ countries:
             english: "BioSteel Industry"
             spanish: "Industria del Bioacero"
           name_src: invented
+          desc:
+            english: "BioSteel is no longer an experiment but a supply chain, grown by the tonne in the old pampas."
+            spanish: "El Bioacero ya no es un experimento sino una cadena de suministro, cultivada por tonelada en la vieja pampa."
+          desc_src: invented
           modifiers:
             production_speed_arms_factory_factor: 0.10
             army_armor_attack_factor: 0.05
@@ -165,14 +182,18 @@ countries:
             english: "Living Armour"
             spanish: "Armadura Viviente"
           name_src: invented
+          desc:
+            english: "Our armour heals, hardens and grows. The Empire no longer forges its weapons: it raises them."
+            spanish: "Nuestro blindaje sana, se endurece y crece. El Imperio ya no forja sus armas: las cría."
+          desc_src: invented
           modifiers:
             production_speed_arms_factory_factor: 0.15
             army_armor_attack_factor: 0.10
             army_armor_defence_factor: 0.10
           modifiers_src: invented
-      unknown:
-        - "Qué acumula el contador de BioSteel (ver Q021)."
-        - "Si los tiers son acumulativos o excluyentes."
+      resolved:
+        - "Qué acumula el contador: la cantidad del recurso BioSteel (Q021)."
+        - "Los tiers son excluyentes: cada uno reemplaza al anterior."
 
   # ---------------------------------------------------------------------------
   ASC:

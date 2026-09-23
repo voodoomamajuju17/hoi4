@@ -39,6 +39,8 @@ cosas, todas para no adivinar:
 
 | Qué | Por qué se lee en vez de escribirse |
 |---|---|
+| `documentation/` e `interface/` | Cada modificador, trigger y efecto que emitimos se busca ahí, y cada ícono de foco en los `.gfx`. Un nombre que no existe frena el build en vez de aparecer en `error.log`. |
+| `localisation/` | BioSteel es el carbón vanilla renombrado. Las claves a pisar se buscan por texto ("Coal"), no se escriben de memoria. |
 | `common/ideologies/` | La estrategia de reskin inyecta nuestras sub-ideologías en los cuatro grupos vanilla. Escribir el archivo de cero significaría reproducir de memoria los bloques `rules`, `ai` y `dynamic_faction_names`: un campo olvidado rompe la carga. |
 | `history/states/` | El reparto territorial del spec está por nombre de región. Un state ID inventado reasigna territorio ajeno **en silencio**, sin error de carga. |
 | `launcher-settings.json` | `supported_version` sale de ahí en vez de un número hardcodeado que envejece. |
@@ -56,7 +58,7 @@ instalación. Se genera local.
 spec/                 fuente de verdad, única carpeta editable a mano
   00_project.yaml     metadatos, restricciones, decisiones de arquitectura
   01_ideologies.yaml  ... (ver spec/README.md)
-  99_open_questions.yaml   42 preguntas abiertas, por fase que bloquean
+  99_open_questions.yaml   43 preguntas, por fase que bloquean
 
 tools/gen/            el generador
   pdx.py              lee y escribe Paradox script
@@ -64,8 +66,10 @@ tools/gen/            el generador
   art.py              TGA/DDS placeholder sin dependencias
   vanilla.py          puente con la instalación del juego
   specload.py         carga y valida spec/
-  emitters/           un módulo por dominio de salida
-tools/tests/          164 checks, corren sin el juego instalado
+  emitters/           un módulo por dominio de salida:
+                      descriptor, ideologies, countries, resources,
+                      ideas, characters, focus_trees, history
+tools/tests/          233 checks, corren sin el juego instalado
 
 build/                SALIDA. Generada, no versionada, no editable.
 ```
@@ -84,7 +88,7 @@ Si al leer el spec no sabés de dónde salió un dato, es un bug del spec.
 |---|---|
 | 1 — Spec | listo |
 | 2 — Arquitectura y generador | listo: descriptor, ideologías, países, colores, banderas, localisation |
-| 3 — Vertical slice del EFE | bloqueada por Q007, Q021, Q031, Q035 |
+| 3 — Vertical slice del EFE | en curso: ideas, árbol de focos, Aurelio IV, historia de países y BioSteel (carbón reskineado) generados. Falta territorio (Q007) y probarlo en el juego (Q035) |
 | 4 — Loop de debug con `error.log` | pendiente |
 | 5 — Las otras seis facciones | bloqueada por Q010, Q016, Q018 y las mecánicas sin definir |
 

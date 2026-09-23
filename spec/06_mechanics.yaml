@@ -16,7 +16,7 @@ mechanics:
   # ===========================================================================
   - id: biosteel
     country: EFE
-    definition_status: partial
+    definition_status: implementable
     src: canon
     doc_section: "§3.4"
     name:
@@ -33,25 +33,48 @@ mechanics:
     thresholds_src: canon
     thresholds_caveat: >
       El doc dice "por ejemplo", o sea que los cita como ilustración, no como
-      valores cerrados. Tratarlos como provisionales.
+      valores cerrados. Tratarlos como provisionales. Ver Q043 -> unit_caveat.
+
+    # -- Q021, respondida 2026-09-23 --------------------------------------------
+    # "Tiene que ser un recurso." BioSteel es un recurso estratégico del mapa,
+    # como el petróleo o el acero. Se implementa como RESKIN de un recurso
+    # vanilla: la clave interna sigue siendo la vanilla (el motor, el mercado
+    # internacional, los convoyes y el costo del equipo la siguen encontrando)
+    # y el jugador ve "BioSteel" por localisation.
+    resource:
+      vanilla_key: coal
+      vanilla_key_src: user_decision
+      vanilla_key_why: >
+        El usuario pidió reemplazar el carbón (Q021, Q043). El carbón existe
+        como recurso desde el parche 1.17 (nov. 2025, junto al DLC No
+        Compromise, No Surrender), disponible sin el DLC.
+      strategy: localisation_reskin
+      strategy_note: >
+        El generador busca en la localisation vanilla toda clave cuyo texto en
+        inglés sea exactamente el nombre del recurso ("Coal") y la pisa
+        desde localisation/<idioma>/replace/. No se escribe ninguna clave de
+        memoria: si cambia entre parches, se sigue encontrando.
+      vanilla_display_name: "Coal"
+      icon: vanilla
+      icon_note: "Sigue mostrando el ícono del carbón. Arte propio: después."
+    counter: resource_amount
+    counter_src: canon
+    counter_note: >
+      Lo que se mide es la cantidad de BioSteel que tiene el EFE. Cada umbral
+      es condición (`available`) de un foco de La Carrera del Bioacero.
+    counter_trigger:
+      key: has_resources_amount
+      syntax_status: unverified
+      why_unverified: >
+        No tengo los archivos del juego acá. Con --vanilla-path el generador
+        busca la clave en documentation/ de tu instalación y falla si no está.
+    tiers_mode: exclusive
+    tiers_mode_note: "Cada tier reemplaza al anterior (swap_ideas); no se acumulan."
     unknown:
-      - "Unidad de medida: ¿qué es 'un' punto de BioSteel?"
-      - "Cómo se acumula: ¿producción por fábrica? ¿por decisión? ¿por foco?"
-      - "Qué desbloquea cada umbral concretamente."
+      - "De dónde saca el EFE su BioSteel: depende de history/states (Q007)."
+      - "Si BioSteel debe ser exclusivo del EFE o existir en todo el mundo (Q043)."
       - "Si se puede perder / decaer."
-    see: Q021
-    hoi4_implementation_candidates:
-      - approach: scripted_variable + dynamic_modifier
-        pro: "Flexible, permite umbrales arbitrarios y GUI custom."
-        con: "Requiere GUI propia para que el jugador lo vea."
-      - approach: national_spirit escalonado por decisión
-        pro: "Simple, visible en el panel de política sin GUI nueva."
-        con: "Poco granular; los umbrales son saltos, no una barra."
-    recommendation: >
-      Para la Fase 3 arrancaría con la segunda (national spirit escalonado), que
-      es la que carga sin GUI custom, y migraría a variables+GUI cuando el resto
-      esté estable. Codificar una GUI custom antes de que el mod cargue limpio
-      es invertir el orden de riesgo.
+    see: [Q021, Q043]
 
   # ===========================================================================
   - id: epi

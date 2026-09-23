@@ -16,6 +16,10 @@ Existe por tres razones, todas defensivas:
   3. VERSIÓN. supported_version del descriptor sale de launcher-settings.json
      en vez de un número hardcodeado que envejece.
 
+  4. VALIDACIÓN. Los modificadores, triggers y efectos que emitimos se buscan
+     en documentation/ de la instalación, y los íconos en interface/*.gfx. Un
+     nombre que no existe falla acá, no en error.log.
+
 Sin --vanilla-path el generador sigue funcionando, pero salta lo que dependa
 de esto y lo dice fuerte. No inventa.
 """
@@ -102,6 +106,8 @@ class Vanilla:
                 hint="pasa la carpeta raiz del juego, la que contiene common/, history/ y map/",
             )
         self._states: list[StateInfo] | None = None
+        self._documented: dict[str, set[str] | None] = {}
+        self._gfx: set[str] | None = None
 
     # -- versión ------------------------------------------------------------
 
@@ -218,6 +224,74 @@ class Vanilla:
                 if m:
                     out[m.group(1)] = m.group(2)
         return out
+
+
+    # -- validación contra el juego -----------------------------------------
+
+    def documented_keys(self, kind: str) -> set[str] | None:
+        """Identificadores que aparecen en documentation/*<kind>*.
+
+        kind es 'modifiers', 'triggers' o 'effects'. HOI4 trae esos archivos
+        generados por el motor desde hace varios parches. Devuelve None si la
+        instalación no los tiene: sin fuente no se valida, se avisa.
+
+        Es un conjunto de TODAS las palabras del archivo, no un parser del
+        formato: puede dejar pasar un nombre que aparece solo en un texto
+        explicativo, pero nunca rechaza uno bueno. Rechazar uno bueno bloquea
+        el build; dejar pasar uno malo lo termina diciendo error.log.
+        """
+        if kind in self._documented:
+            return self._documented[kind]
+        doc_dir = self.root / "documentation"
+        files = sorted(doc_dir.glob(f"*{kind}*")) if doc_dir.is_dir() else []
+        if not files:
+            self._documented[kind] = None
+            return None
+        words: set[str] = set()
+        for path in files:
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            words.update(re.findall(r"[A-Za-z_][A-Za-z0-9_]*", text))
+        self._documented[kind] = words
+        return words
+
+    def gfx_names(self) -> set[str]:
+        """Todos los sprites declarados en interface/**/*.gfx."""
+        if self._gfx is not None:
+            return self._gfx
+        names: set[str] = set()
+        pattern = re.compile(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)')
+        for path in (self.root / "interface").glob("**/*.gfx"):
+            try:
+                names.update(pattern.findall(path.read_text(encoding="utf-8-sig", errors="replace")))
+            except OSError:
+                continue
+        self._gfx = names
+        return names
+
+    def loc_keys_with_text(self, wanted: str) -> list[str]:
+        """Claves de la localisation inglesa cuyo texto es exactamente `wanted`.
+
+        Sirve para reskinear algo por nombre visible (ej. el recurso "Coal")
+        sin escribir de memoria qué clave usa el juego para mostrarlo.
+        """
+        out: set[str] = set()
+        loc_dir = self.root / "localisation" / "english"
+        if not loc_dir.is_dir():
+            loc_dir = self.root / "localisation"
+        pattern = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s+"(.*)"\s*$')
+        for path in loc_dir.glob("**/*_l_english.yml"):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            for line in text.splitlines():
+                m = pattern.match(line)
+                if m and m.group(2).strip().lower() == wanted.strip().lower():
+                    out.add(m.group(1))
+        return sorted(out)
 
 
 def locate(explicit: str | None = None) -> Vanilla | None:

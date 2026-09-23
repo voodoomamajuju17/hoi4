@@ -13,11 +13,13 @@
 # =============================================================================
 
 summary:
-  total: 42
-  answered: [Q001, Q002, Q004, Q006]
-  answered_note: "Respondidas por el usuario 2026-08-02. Se conservan con su respuesta."
+  total: 43
+  answered: [Q001, Q002, Q004, Q006, Q021, Q031, Q043]
+  answered_note: >
+    Q001, Q002, Q004 y Q006 respondidas el 2026-08-02. Q021, Q031 y Q043 el
+    2026-09-23. Se conservan con su respuesta.
   blocking_phase_2: []
-  blocking_phase_3: [Q003, Q005, Q007, Q013, Q019, Q021, Q029, Q031, Q034, Q035, Q038, Q042]
+  blocking_phase_3: [Q003, Q005, Q007, Q013, Q019, Q029, Q034, Q035, Q038, Q042]
   blocking_phase_5: [Q008, Q009, Q010, Q016, Q017, Q018, Q022, Q023, Q024, Q025, Q026, Q027, Q028, Q030, Q032, Q039]
   non_blocking: [Q011, Q012, Q014, Q015, Q020, Q033, Q036, Q037, Q040, Q041]
 
@@ -401,6 +403,17 @@ questions:
 # =============================================================================
 
 - id: Q021
+  status: ANSWERED
+  answer: >
+    "Tiene que ser un recurso. Cambiemos algún recurso tipo el carbón por
+    BioSteel."
+  answered_on: "2026-09-23"
+  resolution: >
+    Se reskinea el recurso vanilla `coal` (existe desde el parche 1.17): mismo
+    recurso interno, renombrado a BioSteel/Bioacero por localisation. El
+    contador de los umbrales 5/10/15 es la cantidad de BioSteel que tiene el
+    EFE.
+  implemented_in: "06_mechanics.yaml#biosteel, 07_focus_trees.yaml#biosteel_branch"
   priority: critical
   blocking_phase: 3
   topic: "BioSteel: qué mide el contador"
@@ -530,6 +543,16 @@ questions:
     territorio ni líder.
 
 - id: Q031
+  status: ANSWERED
+  answer: "OK. Cambios de último momento bienvenidos."
+  answered_on: "2026-09-23"
+  changes_applied: >
+    (1) Las tres ideas de régimen que antes arrancaban puestas
+    (conservación coercitiva, control poblacional, autarquía) ahora las dan los
+    focos de Restauración Total: antes el foco "otorgaba" una idea que el país
+    ya tenía. Solo El Mandato Verde arranca puesto. (2) Los focos del Bioacero
+    piden cantidad de BioSteel como condición (umbral 5/10/15) y cambian el
+    tier de la idea en vez de acumular tres ideas.
   priority: critical
   blocking_phase: 3
   topic: "¿Te sirve el esqueleto de focos del EFE?"
@@ -603,3 +626,22 @@ questions:
     Esto interactúa con Q039 (los 30 países libres). Si los países libres van a
     ser TAGs vanilla reciclados, reemplazar history/countries entero significa
     que hay que generar historia para los 30 también, no solo para las ocho.
+
+- id: Q043
+  status: ANSWERED
+  answer: "Carbón (coal). Link a la wiki de Production como referencia."
+  answered_on: "2026-09-23"
+  priority: high
+  blocking_phase: 3
+  topic: "¿Qué recurso vanilla se convierte en BioSteel?"
+  question: "¿Qué recurso vanilla se reskinea como BioSteel?"
+  consequence: >
+    El recurso se renombra en TODO el mundo, no solo para el EFE: cualquier
+    país con carbón pasa a tener BioSteel, y todo lo que en vanilla consume
+    carbón pasa a consumir BioSteel. Si querés que sea exclusivo del EFE, hace
+    falta sacarle ese recurso a los states de los demás. Eso se hace en
+    history/states/, que depende de Q007.
+  unit_caveat: >
+    Los umbrales 5/10/15 del doc son chicos comparados con lo que produce un
+    state vanilla con carbón (decenas de unidades). Quedan en 5/10/15 hasta
+    que veamos en partida cuánto BioSteel tiene el EFE de verdad.

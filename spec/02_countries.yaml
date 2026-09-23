@@ -5,6 +5,19 @@
 # ninguno. Cambialos sin culpa.
 # =============================================================================
 
+# Política de arranque de history/countries/. El doc no da popularidades ni
+# calendario electoral para nadie: todo esto es INVENTADO para que el país
+# arranque con su ideología en el poder. Se puede pisar por país con un bloque
+# `politics` propio.
+default_politics:
+  src: invented
+  why: "HOI4 necesita popularidades que sumen 100 y un partido gobernante."
+  ruling_popularity: 70     # el resto se reparte parejo entre los otros 3 grupos
+  last_election: "2096.1.1"
+  election_frequency: 48
+  elections_allowed: false
+  research_slots: 3
+
 major_powers:
 
   # ---------------------------------------------------------------------------
