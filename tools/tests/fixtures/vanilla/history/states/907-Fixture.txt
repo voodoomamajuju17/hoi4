@@ -1,0 +1,16 @@
+state = {
+	id = 907
+	name = "STATE_907"
+	manpower = 100
+	resources = {
+		coal = 3
+	}
+	provinces = { 10 }
+	history = {
+		owner = SOV
+		if = {
+			limit = { num_of_factories > 5 }
+			add_core_of = SOV
+		}
+	}
+}

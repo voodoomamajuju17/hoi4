@@ -14,12 +14,12 @@
 
 summary:
   total: 43
-  answered: [Q001, Q002, Q004, Q006, Q021, Q031, Q043]
+  answered: [Q001, Q002, Q004, Q006, Q007, Q019, Q035, Q021, Q031, Q036, Q038, Q043]
   answered_note: >
     Q001, Q002, Q004 y Q006 respondidas el 2026-08-02. Q021, Q031 y Q043 el
     2026-09-23. Se conservan con su respuesta.
   blocking_phase_2: []
-  blocking_phase_3: [Q003, Q005, Q007, Q013, Q019, Q029, Q034, Q035, Q038, Q042]
+  blocking_phase_3: [Q003, Q005, Q013, Q029, Q034, Q042]
   blocking_phase_5: [Q008, Q009, Q010, Q016, Q017, Q018, Q022, Q023, Q024, Q025, Q026, Q027, Q028, Q030, Q032, Q039]
   non_blocking: [Q011, Q012, Q014, Q015, Q020, Q033, Q036, Q037, Q040, Q041]
 
@@ -145,6 +145,9 @@ questions:
   cost_if_wrong: "Alto. Cambiar de estrategia después toca todos los archivos de país."
 
 - id: Q007
+  status: ANSWERED
+  answer: 'Resuelto por lectura de la instalación en tiempo de build (08_territory.yaml -> resolve).'
+  answered_on: "2026-09-23"
   priority: critical
   blocking_phase: 3
   topic: "State IDs de HOI4 vanilla"
@@ -188,6 +191,9 @@ questions:
     vanilla para EFE.
 
 - id: Q035
+  status: ANSWERED
+  answer: "Sí. El instalador encontró C:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV (1.19.3, 40 DLC)."
+  answered_on: "2026-09-23"
   priority: high
   blocking_phase: 3
   topic: "¿El generador puede leer la carpeta de HOI4 vanilla?"
@@ -222,6 +228,9 @@ questions:
   note: "Sin esto la Fase 5 no arranca. La Fase 3 (solo EFE) sí puede."
 
 - id: Q036
+  status: ANSWERED
+  answer: "Sí, los dos."
+  answered_on: "2026-09-23"
   priority: low
   blocking_phase: "-"
   topic: "¿'Mato Grosso' incluye Mato Grosso do Sul?"
@@ -241,6 +250,9 @@ questions:
     frontera tensa, un pacto (ver Q020), o la NAS está más al norte?
 
 - id: Q038
+  status: ANSWERED
+  answer: '"Dejarlos por ahora." Nombres vanilla en v1.'
+  answered_on: "2026-09-23"
   priority: high
   blocking_phase: 3
   topic: "Renombre de states"
@@ -352,6 +364,9 @@ questions:
     escenario.
 
 - id: Q019
+  status: ANSWERED
+  answer: '"Títeres comunes." -> autonomy_puppet'
+  answered_on: "2026-09-23"
   priority: high
   blocking_phase: 3
   topic: "Nivel de autonomía de PTA e YYG"

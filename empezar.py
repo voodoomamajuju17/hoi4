@@ -220,6 +220,9 @@ def paso_generar(juego) -> object | None:
     bien(f"{ctx.loc.stats()} de localisation")
     bien(f"{len(ctx.spec.countries)} paises")
 
+    for n in ctx.notes:
+        bien(n)
+
     if ctx.warnings:
         say()
         say(f"  AVISOS ({len(ctx.warnings)}) — son esperados, no son errores:")

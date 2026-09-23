@@ -95,6 +95,7 @@ class StateInfo:
     owner: str | None
     provinces: list[int]
     path: Path
+    manpower: int = 0
 
 
 class Vanilla:
@@ -193,6 +194,7 @@ class Vanilla:
                 ]
             if sid is None:
                 continue
+            mp = pdx.text(state.get("manpower")) or "0"
             out.append(
                 StateInfo(
                     id=int(sid),
@@ -200,6 +202,7 @@ class Vanilla:
                     owner=owner or None,
                     provinces=provinces,
                     path=path,
+                    manpower=int(mp) if mp.isdigit() else 0,
                 )
             )
         self._states = out
@@ -300,6 +303,17 @@ class Vanilla:
                 f"production_speed_{building}_factor",
                 f"{building}_max_level",
             })
+        return out
+
+    def autonomy_ids(self) -> set[str]:
+        """ids de common/autonomous_states/ (autonomy_puppet, etc.)."""
+        out: set[str] = set()
+        for path in sorted((self.root / "common" / "autonomous_states").glob("*.txt")):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            out.update(re.findall(r"\bid\s*=\s*\"?([A-Za-z0-9_]+)", text))
         return out
 
     def building_keys(self) -> set[str]:

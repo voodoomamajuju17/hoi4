@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 from pathlib import Path
 
 from . import pdx
@@ -32,6 +33,9 @@ class BuildContext:
     written: list[Path] = field(default_factory=list)
     skipped: list[Skipped] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
+    # Resultados que un emisor le pasa a otro (ej. territorio -> historia).
+    data: dict[str, Any] = field(default_factory=dict)
 
     # -- escritura ----------------------------------------------------------
 
@@ -54,6 +58,10 @@ class BuildContext:
 
     def skip(self, what: str, reason: str, question: str | None = None) -> None:
         self.skipped.append(Skipped(what, reason, question))
+
+    def note(self, message: str) -> None:
+        """Dato informativo para el reporte: no es un problema."""
+        self.notes.append(message)
 
     def warn(self, message: str) -> None:
         if message not in self.warnings:

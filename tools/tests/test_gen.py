@@ -193,7 +193,7 @@ def test_vanilla_fixture() -> None:
     check("4 grupos en el fixture", len([k for k, _ in ideologies.entries if k]) == 4)
 
     states = van.states()
-    check("2 states leidos", len(states) == 2, f"leyo {len(states)}")
+    check("8 states leidos", len(states) == 8, f"leyo {len(states)}")
     by_id = {s.id: s for s in states}
     check("state 900 con owner ARG", by_id[900].owner == "ARG")
     check("provincias parseadas", by_id[900].provinces == [1, 2, 3], str(by_id[900].provinces))
@@ -407,7 +407,9 @@ def test_phase3_content() -> None:
         check("EFE recluta a Aurelio", "recruit_character = EFE_aurelio_iv" in efe)
         check("EFE arranca con el Mandato", "EFE_mandato_verde" in efe)
         check("las ideas de foco no arrancan puestas", "EFE_conservacion_coercitiva" not in efe)
-        check("sin capital hasta que haya territorio", "capital" not in efe)
+        check("capital del EFE = Buenos Aires (900)", "capital = 900" in efe, efe)
+        check("EFE somete a PTA como titere comun",
+              "target = PTA" in efe and "autonomy_state = autonomy_puppet" in efe, efe)
         for path in hist_dir.glob("*.txt"):
             pops = pdx.parse(path.read_text()).get("set_popularities")
             total = sum(int(pdx.text(v)) for _, v in pops.entries)
@@ -420,6 +422,48 @@ def test_phase3_content() -> None:
         check("no toca otros recursos", "steel:0" not in text.replace("BioSteel", ""), text)
         es = (mod / "localisation/spanish/replace/meganations_resources_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("coal en castellano", 'coal:0 "Bioacero"' in es, es)
+
+
+def test_territory() -> None:
+    section("territorio: reparto sobre states vanilla")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        terr = ctx.data["territory"]
+        check("Buenos Aires (ARG) -> EFE", terr.get(900) == "EFE", str(terr))
+        check("Cordoba (ARG) -> EFE", terr.get(902) == "EFE")
+        check("Formosa: el nombre explicito le gana al owner ARG", terr.get(903) == "YYG", str(terr))
+        check("Magallanes -> PTA", terr.get(901) == "PTA")
+        check("Paraguay (PAR) -> YYG", terr.get(904) == "YYG")
+        check("Rio Grande do Sul (BRA) -> EFE", terr.get(905) == "EFE")
+        check("Ruhr no se toca", 906 not in terr)
+
+        states = mod / "history/states"
+        cordoba = pdx.parse((states / "902-Fixture.txt").read_text())
+        hist = cordoba.get("state").get("history")
+        check("mismo nombre de archivo que vanilla", (states / "902-Fixture.txt").exists())
+        check("owner EFE", pdx.text(hist.get("owner")) == "EFE")
+        check("core solo del EFE", [pdx.text(v) for v in hist.get_all("add_core_of")] == ["EFE"])
+        check("bloque 1939 borrado", "1939.1.1" not in hist.keys(), str(hist.keys()))
+        check("edificios conservados", isinstance(hist.get("buildings"), pdx.Block))
+        res = cordoba.get("state").get("resources")
+        check("el EFE conserva su BioSteel", pdx.text(res.get("coal")) == "12")
+
+        ruhr = pdx.parse((states / "906-Fixture.txt").read_text()).get("state")
+        check("Ruhr pierde el carbon (BioSteel exclusivo)", ruhr.get("resources") is None, str(ruhr.keys()))
+        check("Ruhr sigue siendo aleman", pdx.text(ruhr.get("history").get("owner")) == "GER")
+        par = pdx.parse((states / "904-Fixture.txt").read_text()).get("state")
+        check("el satelite tampoco tiene BioSteel", par.get("resources") is None)
+        check("archivo con comparaciones no se reescribe", not (states / "907-Fixture.txt").exists())
+        check("avisa del archivo con comparaciones", any("907-Fixture" in w for w in ctx.warnings))
+        check("sin carbon y sin dueño nuevo no se reescribe", not (states / "905-Fixture.txt").read_text().count("coal"))
+
+        check("avisa lo que no encontro con parecidos",
+              any("Tierra del Fuego" in w for w in ctx.warnings), str(ctx.warnings))
+        pta = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
+        check("capital provisoria del satelite", "capital = 901" in pta, pta)
+        check("pais sin territorio no lleva capital",
+              "capital" not in (mod / "history/countries/ASC - Automated Socialist Commune.txt").read_text())
 
 
 def test_vanilla_validation() -> None:
@@ -446,7 +490,7 @@ def test_vanilla_validation() -> None:
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
-            "add_manpower add_ideas swap_ideas\n"
+            "add_manpower add_ideas swap_ideas set_autonomy\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir()
@@ -508,6 +552,7 @@ def main() -> int:
         test_art,
         test_check_detects_edits,
         test_phase3_content,
+        test_territory,
         test_vanilla_validation,
     ):
         test()

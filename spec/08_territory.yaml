@@ -4,20 +4,24 @@
 # Estrategia: reskin del mapa vanilla. Mismos states y provincias, reasignados
 # y renombrados. NO se generan bitmaps.
 #
-# ESTADO: bloqueado por AD003 / Q007.
-# Los territorios de abajo están descritos por NOMBRE DE REGIÓN, no por state
-# ID. Para generar history/states/*.txt hacen falta los IDs numéricos de HOI4
-# vanilla, que no tengo en este entorno y no voy a escribir de memoria: un ID
-# equivocado reasigna territorio ajeno EN SILENCIO, sin error de carga. Es
-# exactamente la clase de bug más caro de encontrar.
+# RESOLUCIÓN (Q007, Q035 — 2026-09-23): el generador lee history/states/ de la
+# instalación y resuelve cada territorio en tiempo de build con el bloque
+# `resolve`. Nunca se escribe un state ID a mano.
+#
+#   { owner: ARG }             todos los states que ARG tiene en vanilla
+#   { state: [nombre, ...] }   el state cuyo nombre en inglés es alguno de esos
+#                              (sin distinguir mayúsculas ni tildes)
+#
+# Prioridad: un `state` explícito le gana a un `owner`. Así las exclusiones
+# salen solas: el EFE toma todo ARG, pero "Formosa" la pide YYG por nombre y
+# se la queda YYG. Dos `state` explícitos sobre el mismo state = error.
+#
+# Un nombre que no aparece en el juego NO frena el build: se avisa con los
+# nombres parecidos que sí existen, para corregir el spec con el reporte.
 # =============================================================================
 
 strategy: vanilla_reskin
-resolution_method: unresolved
-resolution_proposal: >
-  El generador toma un flag --vanilla-path apuntando a la instalación de HOI4,
-  lee history/states/*.txt y resuelve nombre de región -> lista de state IDs.
-  Así el spec sigue siendo legible y no se hardcodea nada frágil.
+resolution_method: vanilla_lookup_at_build
 see: [Q007, Q035]
 
 # =============================================================================
@@ -50,6 +54,17 @@ territories:
         state_ids: unknown
       - name: "Rio Grande do Sul"
         state_ids: unknown
+    resolve:
+      - { owner: ARG }
+      - { owner: URG }
+      - { owner: CHL }
+      - { state: ["Rio Grande do Sul"] }
+    resolve_src: inferred
+    resolve_note: >
+      ARG, URG y CHL son los TAG vanilla de Argentina, Uruguay y Chile. Las
+      exclusiones (Tierra del Fuego, Magallanes, Misiones, Formosa) salen solas
+      porque las piden los satélites por nombre.
+    capital_state: ["Buenos Aires"]
     cores: all_core_regions
     cores_src: inferred
     cores_note: "El doc dice 'núcleo territorial'; lo interpreto como cores del EFE."
@@ -70,6 +85,11 @@ territories:
         state_ids: unknown
       - name: "Malvinas / Falkland Islands"
         state_ids: unknown
+    resolve:
+      - { state: ["Tierra del Fuego"] }
+      - { state: ["Magallanes"] }
+      - { state: ["Falkland Islands", "Malvinas", "Islas Malvinas"] }
+    resolve_src: inferred
     capital: unknown   # ver Q012
     canon_note: >
       Malvinas estaba en territorio directo del EFE en una versión anterior.
@@ -98,6 +118,15 @@ territories:
         state_ids: unknown
       - name: "Formosa"
         state_ids: unknown
+    resolve:
+      - { owner: PAR }
+      - { state: ["Mato Grosso"] }
+      - { state: ["Mato Grosso do Sul"] }   # Q036: sí, los dos
+      - { state: ["Parana", "Paraná"] }
+      - { state: ["Santa Catarina"] }
+      - { state: ["Misiones"] }
+      - { state: ["Formosa"] }
+    resolve_src: inferred
     capital: unknown   # ver Q012
 
   # ---------------------------------------------------------------------------
@@ -160,4 +189,16 @@ state_renaming:
     es aceptable, pero el mapa entero con nombres de 1936 rompe la ambientación.
     El doc no da ni un solo nombre nuevo de state.
   scope_phase3: "Solo los states del EFE + satélites."
+  decision_2026_09_23: "Nombres vanilla por ahora. Se renombra después (Q038)."
   see: Q038
+
+# =============================================================================
+capital_fallback:
+  rule: "Si el país no tiene capital en el spec, el state propio con más manpower."
+  src: invented
+  why: "HOI4 necesita una capital. PTA e YYG no tienen una canon (Q012)."
+
+# =============================================================================
+# BioSteel exclusivo del EFE (Q043): todo state que NO termine en manos del
+# EFE sale con su carbón en 0.
+biosteel_exclusive_to: EFE

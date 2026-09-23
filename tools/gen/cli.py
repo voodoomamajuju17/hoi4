@@ -30,6 +30,7 @@ from .emitters import history as em_history
 from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
 from .emitters import resources as em_resources
+from .emitters import territory as em_territory
 from .errors import GenError
 from .loc import LocRegistry
 
@@ -45,6 +46,7 @@ EMITTERS = [
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
     ("focus_trees", em_focus_trees.emit),
+    ("territory", em_territory.emit),   # antes de history: define las capitales
     ("history", em_history.emit),
 ]
 
@@ -104,6 +106,9 @@ def _report(ctx: BuildContext, van) -> None:
     print(f"  paises:  {len(ctx.spec.countries)}")
     print(f"  loc:     {ctx.spec and ctx.loc.stats()}")
     print(f"  archivos:{len(ctx.written)}")
+
+    for n in ctx.notes:
+        print(f"  {n}")
 
     if ctx.warnings:
         print(f"\n  AVISOS ({len(ctx.warnings)}):")
