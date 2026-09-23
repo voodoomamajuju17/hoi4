@@ -87,6 +87,9 @@ def emit(ctx: BuildContext) -> None:
         for ch in characters_mod.characters_of(ctx, c.tag):
             b.add("recruit_character", ch["id"])
 
+        for fb in _faction_blocks(ctx, c.tag):
+            b.entries.append(fb)
+
         for rel in subjects_of(ctx, c.tag):
             sa = Block()
             sa.add("target", rel["subject"])
@@ -105,6 +108,9 @@ def emit(ctx: BuildContext) -> None:
             "Q035",
         )
     used = {"set_autonomy": "04_diplomacy.yaml"} if _any_subjects(ctx) else {}
+    if faction_plan(ctx):
+        used["create_faction"] = "04_diplomacy.yaml"
+        used["add_to_faction"] = "04_diplomacy.yaml"
     if ctx.data.get("techs"):
         used["set_technology"] = "13_military.yaml"
     if any(isinstance(m.get("variable"), dict) for m in ctx.spec.raw["mechanics"].get("mechanics", []) or []):
@@ -136,6 +142,41 @@ def subjects_of(ctx: BuildContext, overlord: str) -> list[dict]:
                 where="04_diplomacy.yaml",
             )
         out.append(rel)
+    return out
+
+
+def faction_plan(ctx: BuildContext) -> list[tuple[dict, str, list[str]]]:
+    """(facción, líder, miembros con territorio) de 04_diplomacy.yaml."""
+    territory = ctx.data.get("territory") or {}
+    counts: dict[str, int] = {}
+    for tag in territory.values():
+        counts[tag] = counts.get(tag, 0) + 1
+    out = []
+    for f in ctx.spec.raw["diplomacy"].get("factions", []) or []:
+        if not isinstance(f, dict):
+            continue
+        members = [m for m in f["members"] if counts.get(m)]
+        if not members:
+            continue
+        leader = max(members, key=lambda m: (counts[m], m)) if f.get("leader") == "largest" else f["leader"]
+        out.append((f, leader, members))
+    return out
+
+
+def _faction_blocks(ctx: BuildContext, tag: str) -> list[tuple[str, object]]:
+    """create_faction + add_to_faction, en la historia del líder."""
+    out: list[tuple[str, object]] = []
+    for f, leader, members in faction_plan(ctx):
+        if leader != tag:
+            continue
+        key = ctx.loc.define_and_reference(
+            f["id"], en=f["name"]["english"], es=f["name"]["spanish"],
+            file="meganations_diplomacy", origin=f"factions:{f['id']}",
+        )
+        out.append(("create_faction", key))
+        for m in members:
+            if m != leader:
+                out.append(("add_to_faction", m))
     return out
 
 

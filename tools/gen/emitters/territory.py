@@ -112,13 +112,12 @@ def emit(ctx: BuildContext) -> None:
         shown = [f"{display_name(by_id[sid], names)} ({sid})" for sid in owned[:12]]
         more = f" y {len(owned) - 12} mas" if len(owned) > 12 else ""
         ctx.note(f"territorio {tag}: {len(owned)} states: {', '.join(shown) or 'ninguno'}{more}")
-    remainder = next((tag for tag, terr in wanted.items()
-                      if any(sel.get("remainder") for sel in terr["resolve"])), None)
-    if remainder:
-        rest = sum(1 for t in assignment.values() if t == remainder)
+    rest_tags = {tag for tag, terr in wanted.items() if any(sel.get("remainder") for sel in terr["resolve"])}
+    if rest_tags:
+        rest = sum(1 for t in assignment.values() if t in rest_tags)
         total = len(assignment)
         ctx.note(f"reparto: {total - rest} states en meganaciones y satelites, "
-                 f"{rest} en {remainder} ({100 * rest // max(total, 1)}% del mundo)")
+                 f"{rest} en la Anarquia ({', '.join(sorted(rest_tags))}; {100 * rest // max(total, 1)}% del mundo)")
 
     by_state = {s.id: s for s in states}
     capitals = {}
@@ -232,7 +231,8 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
       { core: KOR }                     states que son core de KOR
       { continent: africa }             todo un continente
       { state: [nombres] }              un state por nombre
-      { remainder: true }               todo lo que no pidió nadie (uno solo)
+      { remainder: true, continent: X } lo que no pidió nadie en ese continente
+      { remainder: true }               todo lo que quede (uno solo)
     """
     continents = ctx.vanilla.state_continents()
     claims: dict[int, tuple[int, str]] = {}   # state -> (nivel, TAG)
@@ -247,14 +247,19 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
                 where="08_territory.yaml",
             )
 
-    remainder_tag = None
+    # Restos: { remainder: true, continent: X } toma lo no pedido de ese
+    # continente; { remainder: true } sin continente, todo lo que quede. Dos
+    # restos para el mismo continente (o dos generales) es un error del spec.
+    remainders: dict[str | None, str] = {}
     for tag, terr in wanted.items():
         ctx.spec.country(tag)
         for sel in terr["resolve"]:
             if sel.get("remainder"):
-                if remainder_tag and remainder_tag != tag:
-                    raise SpecError(f"remainder pedido por {remainder_tag} y {tag}", where="08_territory.yaml")
-                remainder_tag = tag
+                key = sel.get("continent")
+                if key in remainders and remainders[key] != tag:
+                    raise SpecError(f"remainder de {key or 'todo el mundo'} pedido por {remainders[key]} y {tag}",
+                                    where="08_territory.yaml")
+                remainders[key] = tag
                 continue
             if "state" in sel:
                 options = sel["state"] if isinstance(sel["state"], list) else [sel["state"]]
@@ -286,12 +291,15 @@ def _resolve(ctx, wanted, states, names, by_name) -> dict[int, str]:
             for s in matched:
                 claim(s, tag, tier)
 
-    if remainder_tag:
-        # Solo states con dueño en vanilla: los que no tienen dueño son
-        # tierra de nadie a propósito (algunos islotes del juego).
-        for s in states:
-            if s.id not in claims and s.owner:
-                claims[s.id] = (0, remainder_tag)
+    # Solo states con dueño en vanilla: los que no tienen dueño son tierra de
+    # nadie a propósito (algunos islotes del juego). Primero los restos por
+    # continente, después el general.
+    for s in states:
+        if s.id in claims or not s.owner:
+            continue
+        tag = remainders.get(continents.get(s.id)) or remainders.get(None)
+        if tag:
+            claims[s.id] = (0, tag)
 
     return {sid: tag for sid, (_, tag) in claims.items()}
 

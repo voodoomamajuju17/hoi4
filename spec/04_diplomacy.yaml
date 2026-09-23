@@ -101,13 +101,14 @@ subject_relations:
 
 # =============================================================================
 factions:
-  status: unknown
-  src: unknown
-  see: Q018
-  note: >
-    El doc no define ni una sola facción/alianza. Con 8 potencias y 30 países
-    libres, la estructura de bloques es probablemente el dato de diseño más
-    importante que falta: define de qué va la partida.
+  # La Anarquía (2026-09-23): varios señores de la guerra regionales unidos
+  # en una facción del juego. Se ve y juega como un bloque, pero cada región
+  # es un país: si cae la capital de una, las otras siguen.
+  - id: MEGANATIONS_ANARCHY_FACTION
+    name: { english: "The Anarchy", spanish: "La Anarquía" }
+    members: [ZWE, ZWI, ZWM, ZWB, ZAN]
+    leader: largest          # el miembro con más states
+    src: user_decision
 
 wars_at_start:
   status: unknown

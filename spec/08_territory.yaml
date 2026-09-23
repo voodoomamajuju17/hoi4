@@ -369,6 +369,56 @@ territories:
   # 2026-09-23). Con el reparto de arriba queda aprox. la mitad del mundo
   # que era libre: la URSS europea, India, Medio Oriente, el resto de Brasil.
   # ===========================================================================
+  # La Anarquía por regiones (2026-09-23). Cada una toma lo que no pidió
+  # nadie en su continente; ZAN se queda con lo que sobre (islas, restos).
+  ZWE:
+    src: user_decision
+    resolve:
+      - { remainder: true, continent: europe }
+    militia:
+      one_division_per: contiguous_territory
+      template_name:
+        english: "Militia"
+        spanish: "Milicia"
+      regiments: [infantry, infantry]
+      src: invented
+
+  ZWI:
+    src: user_decision
+    resolve:
+      - { remainder: true, continent: asia }
+    militia:
+      one_division_per: contiguous_territory
+      template_name:
+        english: "Militia"
+        spanish: "Milicia"
+      regiments: [infantry, infantry]
+      src: invented
+
+  ZWM:
+    src: user_decision
+    resolve:
+      - { remainder: true, continent: middle_east }
+    militia:
+      one_division_per: contiguous_territory
+      template_name:
+        english: "Militia"
+        spanish: "Milicia"
+      regiments: [infantry, infantry]
+      src: invented
+
+  ZWB:
+    src: user_decision
+    resolve:
+      - { remainder: true, continent: south_america }
+    militia:
+      one_division_per: contiguous_territory
+      template_name:
+        english: "Militia"
+        spanish: "Milicia"
+      regiments: [infantry, infantry]
+      src: invented
+
   ZAN:
     src: user_decision
     resolve:

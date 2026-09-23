@@ -106,7 +106,7 @@ def test_pdx_roundtrip() -> None:
 def test_spec_loads() -> None:
     section("spec")
     spec = specload.load(REPO_ROOT / "spec")
-    check("25 paises (8 meganaciones + 16 satelites + la Anarquia)", len(spec.countries) == 25, f"hay {len(spec.countries)}")
+    check("29 paises (8 meganaciones + 16 satelites + 5 de la Anarquia)", len(spec.countries) == 29, f"hay {len(spec.countries)}")
     check("todos los TAG de 3 letras", all(len(c.tag) == 3 for c in spec.countries))
     tags = {c.tag for c in spec.countries}
     for expected in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "PTA", "YYG"):
@@ -501,8 +501,9 @@ def test_territory() -> None:
         check("Libia italiana -> APF por continente", terr.get(910) == "APF")
         check("Corea por core, aunque sea de Japon -> ZKR", terr.get(911) == "ZKR")
         check("Japon -> HSN (los puertos)", terr.get(912) == "HSN")
-        check("India -> Anarquia (resto)", terr.get(914) == "ZAN" and terr.get(915) == "ZAN")
-        check("Moscu -> Anarquia", terr.get(917) == "ZAN")
+        check("India -> Anarquia de Asia (ZWI)", terr.get(914) == "ZWI" and terr.get(915) == "ZWI")
+        check("Moscu -> Anarquia de Europa (ZWE)", terr.get(917) == "ZWE")
+        check("Ceilan (asia) -> ZWI", terr.get(916) == "ZWI")
         check("state con comparaciones queda afuera del reparto", 907 not in terr)
         check("nadie queda vanilla salvo lo no reescribible",
               all(s.id in terr or s.id == 907 for s in ctx.vanilla.states() if s.owner), str(terr))
@@ -524,16 +525,27 @@ def test_territory() -> None:
         sov = mod / "history/countries/SOV - Soviet Union.txt"
         check("la URSS conserva un state y reubica su capital", sov.exists() and "capital = 907" in sov.read_text())
 
-        units = pdx.parse((mod / "history/units/ZAN_2100.txt").read_text())
+        units = pdx.parse((mod / "history/units/ZWI_2100.txt").read_text())
         divs = units.get("units").get_all("division")
-        check("3 milicias: India contigua, Ceilan y Moscu separadas", len(divs) == 3, str(len(divs)))
+        check("2 milicias en Asia: India contigua y Ceilan aparte", len(divs) == 2, str(len(divs)))
         locs = sorted(pdx.text(d.get("location")) for d in divs)
-        check("una milicia por territorio, en el state con mas manpower", locs == ["18", "20", "22"], str(locs))
+        check("una milicia por territorio, en el state con mas manpower", locs == ["18", "20"], str(locs))
+        zwe = pdx.parse((mod / "history/units/ZWE_2100.txt").read_text()).get("units").get_all("division")
+        check("1 milicia en Europa (Moscu)", len(zwe) == 1 and pdx.text(zwe[0].get("location")) == "22")
+
+        section("la Anarquia como faccion")
+        leader_file = next(p for p in (mod / "history/countries").glob("ZWI - *.txt"))
+        lh = leader_file.read_text()
+        check("el de mas territorio (ZWI) funda la faccion", "create_faction = MEGANATIONS_ANARCHY_FACTION" in lh, lh[-600:])
+        check("suma a ZWE", "add_to_faction = ZWE" in lh)
+        check("no suma miembros sin territorio", "add_to_faction = ZWB" not in lh and "add_to_faction = ZAN" not in lh)
+        dip = (mod / "localisation/spanish/meganations_diplomacy_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("nombre de la faccion", 'MEGANATIONS_ANARCHY_FACTION:0 "La Anarquía"' in dip)
         tpl = units.get("division_template")
         check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
-        check("balance cuenta las milicias", any(l.startswith("ZAN") and l.rstrip().endswith(" 3") for l in bal.splitlines()), bal[:800])
+        check("balance cuenta las milicias", any(l.startswith("ZWI") and l.rstrip().endswith(" 2") for l in bal.splitlines()), bal[:800])
         check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 5" in bal)
         check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
 
@@ -551,7 +563,7 @@ def test_territory() -> None:
         pta_h = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
         pta_t = set(pdx.parse(pta_h).get("set_technology").keys())
         check("satelite: techs hasta 1940", "infantry_weapons1" in pta_t and "infantry_weapons2" not in pta_t)
-        zan_t = set(pdx.parse((mod / "history/countries/ZAN - The Lawless Lands.txt").read_text()).get("set_technology").keys())
+        zan_t = set(pdx.parse(next((mod / "history/countries").glob("ZWI - *.txt")).read_text()).get("set_technology").keys())
         check("anarquia: techs de 1936", "infantry_weapons" in zan_t and "infantry_weapons1" not in zan_t)
 
         oob = pdx.parse((mod / "history/units/EFE_2100.txt").read_text())
@@ -576,8 +588,8 @@ def test_territory() -> None:
         check("las divisiones usan el nombre nuevo", "de Gaia" in oob_txt and "de Buenos Aires" not in oob_txt)
         check("nombres en replace/ (pisan los vanilla)", "replace" in str(mod / "localisation/spanish/replace"))
         check("EFE arranca con Las Cubas de la Pampa", "EFE_cubas_de_la_pampa" in efe_h)
-        zan = (mod / "history/countries/ZAN - The Lawless Lands.txt").read_text()
-        check("la Anarquia carga su oob", 'oob = "ZAN_2100"' in zan, zan)
+        zwi = next((mod / "history/countries").glob("ZWI - *.txt")).read_text()
+        check("la Anarquia carga su oob", 'oob = "ZWI_2100"' in zwi, zwi)
         check("nombre con comentario al final se lee",
               ctx.data["state_names"].get("STATE_902") == "Córdoba", str(ctx.data["state_names"].get("STATE_902")))
         check("Ponta Pora por nombre de archivo (sin localisation) -> YYG", terr.get(908) == "YYG", str(terr))
@@ -727,7 +739,7 @@ def test_balance() -> None:
         check("el Ruhr (ASC) dona acero", delta[906]["steel"] < 0, str(dict(delta[906])))
         check("la ASC no baja de su minimo", 60 + delta[906]["steel"] >= 20, str(dict(delta[906])))
         check("la capital del EFE recibe acero", delta[900]["steel"] > 0, str(dict(delta[900])))
-        zan_states = [sid for sid, tag in ctx.data["territory"].items() if tag == "ZAN"]
+        zan_states = [sid for sid, tag in ctx.data["territory"].items() if tag in ("ZAN", "ZWE", "ZWI", "ZWM", "ZWB")]
         check("la Anarquia no dona ni recibe", all(not any(delta.get(sid, {}).values()) for sid in zan_states))
 
         added = ctx.data["added_buildings"]
@@ -786,7 +798,7 @@ def test_vanilla_validation() -> None:
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
-            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable\n"
+            "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
