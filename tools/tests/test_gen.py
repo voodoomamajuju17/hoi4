@@ -745,6 +745,13 @@ def test_balance() -> None:
         bal = (Path(tmp) / "balance.txt").read_text()
         check("el balance muestra los totales mundiales OK", "TOTAL MUNDIAL" in bal and "DISTINTO" not in bal, bal)
 
+        menu = mod / "gfx/interface/mainmenu/mainmenu_bg.dds"
+        check("fondo del menu en la ruta del sprite vanilla", menu.exists())
+        raw = menu.read_bytes()
+        import struct as _st
+        check("reescalado al tamano del vanilla (4x2)", _st.unpack_from("<II", raw, 12) == (2, 4), str(_st.unpack_from("<II", raw, 12)))
+        check("no toca otros sprites", not (mod / "gfx/interface/goals/goal_unknown.dds").exists())
+
 
 def test_vanilla_validation() -> None:
     section("validacion contra documentation/ e interface/ del juego")
@@ -777,7 +784,7 @@ def test_vanilla_validation() -> None:
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
-        (van / "interface").mkdir()
+        (van / "interface").mkdir(exist_ok=True)
         (van / "interface/goals.gfx").write_text(
             'spriteTypes = { spriteType = { name = "GFX_goal_generic_political_pressure" } '
             'spriteType = { name = "GFX_goal_unknown" } }'

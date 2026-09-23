@@ -33,6 +33,7 @@ from .emitters import history as em_history
 from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
 from .emitters import military as em_military
+from .emitters import menu as em_menu
 from .emitters import militia as em_militia
 from .emitters import names as em_names
 from .emitters import resources as em_resources
@@ -61,6 +62,7 @@ EMITTERS = [
     ("decisions", em_decisions.emit),
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
+    ("menu", em_menu.emit),
     ("balance", em_balance.emit),       # ultimo: resume lo que quedo
 ]
 

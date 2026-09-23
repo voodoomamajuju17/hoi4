@@ -55,3 +55,14 @@ game_dates:
   why: >
     HOI4 corta la partida en END_DATE. Un siglo de margen: no hay nada en el
     doc que diga cuándo termina el escenario.
+
+# -----------------------------------------------------------------------------
+# Menú principal (2026-09-23): arte del usuario. El generador busca en
+# interface/*.gfx del juego los sprites de fondo del menú principal y escribe
+# esta imagen en la MISMA ruta de textura, así la reemplaza sin tocar la
+# interfaz. Si el juego usa otro tamaño, se reescala al del original.
+# Fuente editable: assets/menu/meganations_menu_source.webp.
+# -----------------------------------------------------------------------------
+main_menu:
+  background: assets/menu/meganations_menu_bg.dds
+  src: user_art
