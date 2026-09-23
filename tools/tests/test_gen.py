@@ -497,6 +497,10 @@ def test_territory() -> None:
         check("Etiopia: el TAG le gana al continente -> ZET", terr.get(913) == "ZET")
         ger = (mod / "history/countries/GER - Germany.txt").read_text()
         check("Alemania sin territorio: sin oob", "oob" not in ger, ger)
+        nor = (mod / "history/countries/NOR - Norway.txt").read_text()
+        check("historia que no parsea: queda solo la capital", "capital = 912" in nor and "broken" not in nor, nor)
+        names = (mod / "common/names/00_meganations_names.txt").read_text()
+        check("EFE toma la lista de nombres argentina", "EFE = {" in names and "Perez" in names, names)
         check("Alemania: sin historia de 1939", "1939" not in ger.split("####")[-1] and "annex_country" not in ger)
         check("Alemania: sin personajes", "recruit_character" not in ger)
         check("Alemania: conserva capital y gobierno para ser liberable",

@@ -321,16 +321,22 @@ def _stub_landless_vanilla(ctx: BuildContext, assignment: dict[int, str]) -> Non
     for tag, path in ctx.vanilla.country_history_files().items():
         if tag in ours or tag in owners_left:
             continue
+        stub = Block()
         try:
             vanilla = parse_file(path)
+            for key in _STUB_KEYS:
+                value = vanilla.get(key)
+                if value is not None:
+                    stub.add(key, value)
         except ValueError:
-            ctx.warn(f"{path.name}: no pude leerlo; queda la historia vanilla entera.")
-            continue
-        stub = Block()
-        for key in _STUB_KEYS:
-            value = vanilla.get(key)
-            if value is not None:
-                stub.add(key, value)
+            # No parsea (en 1.19.3: NOR - Norway.txt). Quedarse con la
+            # historia entera es peor: ejecuta focos y crea unidades de 1936.
+            # Se rescata solo la capital con una búsqueda de texto.
+            raw = path.read_text(encoding="utf-8-sig", errors="replace")
+            m = re.search(r"^\s*capital\s*=\s*(\d+)", raw, re.MULTILINE)
+            if m:
+                stub.add("capital", int(m.group(1)))
+            ctx.warn(f"{path.name}: no parsea; se reduce a la capital sola.")
         ctx.write_script(
             f"history/countries/{path.name}", stub,
             source=f"history/countries/{path.name} vanilla, reducido: el pais no tiene territorio en 2100",

@@ -33,6 +33,7 @@ from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
 from .emitters import military as em_military
 from .emitters import militia as em_militia
+from .emitters import names as em_names
 from .emitters import resources as em_resources
 from .emitters import scenario as em_scenario
 from .emitters import territory as em_territory
@@ -53,6 +54,7 @@ EMITTERS = [
     ("military", em_military.emit),     # despues de militia: tecnologias, ejercito, equipo
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
+    ("names", em_names.emit),
     ("focus_trees", em_focus_trees.emit),
     ("events", em_events.emit),
     ("history", em_history.emit),
