@@ -34,8 +34,16 @@ project:
   # Q042: history/ todavía NO se reemplaza (el resto del mundo es vanilla).
   # common/bookmarks sí: el mod genera su propio bookmark de 2100 y los de
   # 1936/1939 quedarían antes de la fecha de inicio. Ver 11_scenario.yaml.
+  #
+  # events: en la primera partida (1.19.3, 2100.1.2) saltó "La Cuarta
+  # Internacional", un evento de noticias de 1938. Arrancando en 2100, todo
+  # evento vanilla cuya condición es "fecha posterior a 193x" se dispara.
+  # Reemplazar events/ los apaga a todos; los del mod viven en events/ del
+  # mod y siguen cargando. Costo esperado: error.log puede listar eventos
+  # vanilla que on_actions o decisiones vanilla ya no encuentran. No crashea.
   replace_paths:
     - common/bookmarks
+    - events
 
   tags_used:
     - map

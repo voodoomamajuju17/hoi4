@@ -20,7 +20,10 @@ from ..errors import SpecError
 from ..pdx import Block
 
 SOURCE = "spec/01_ideologies.yaml (fusionado con common/ideologies/ vanilla)"
-LOC_FILE = "meganations_ideologies"
+# En replace/: las claves de grupo (fascism, fascism_desc...) existen en el
+# juego base y, fuera de replace/, gana el texto vanilla. En 1.19.3 la
+# ventana de política mostraba "Fascista" en vez de "Restauración".
+LOC_FILE = "replace/meganations_ideologies"
 
 
 def emit(ctx: BuildContext) -> None:
@@ -148,9 +151,13 @@ def _emit_localisation(ctx: BuildContext, groups_spec: list[dict]) -> None:
 
 
 def _group_desc(group: dict, language: str) -> str:
-    lore = group.get("lore")
-    if isinstance(lore, dict) and lore.get(language):
-        return lore[language]
+    """<grupo>_desc: el juego lo muestra como NOMBRE DEL GOBIERNO en la fila
+    "Gobierno" de la ventana de política. Tiene que ser corto: con el lore
+    entero el texto se desbordaba (captura de 1.19.3). El lore queda en el spec.
+    """
+    government = group.get("government")
+    if isinstance(government, dict) and government.get(language):
+        return government[language]
     from_doc = group.get("from_doc")
     if from_doc:
         return " ".join(str(from_doc).split())

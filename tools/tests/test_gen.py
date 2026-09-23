@@ -265,6 +265,7 @@ def test_full_build() -> None:
         check("tags no vacio", "tags = {" in descriptor and "map" in descriptor, descriptor)
         check("version entrecomillada", 'version = "0.1.0"' in descriptor, descriptor)
         check("reemplaza los bookmarks vanilla", 'replace_path = "common/bookmarks"' in descriptor, descriptor)
+        check("reemplaza los eventos vanilla (1936-1945 se disparaban en 2100)", 'replace_path = "events"' in descriptor)
         check("history/ todavia no se reemplaza (Q042)", 'replace_path = "history' not in descriptor, descriptor)
 
         colors = (mod / "common/countries/colors.txt").read_text()
@@ -633,7 +634,8 @@ def test_leaders_and_ideologies() -> None:
         check("rasgos no aleatorios", all(pdx.text(v.get("random")) == "no" for _, v in body.entries))
         efe = (mod / "common/characters/EFE_characters.txt").read_text()
         check("Aurelio con su rasgo", "efe_custodian_of_the_earth" in efe)
-        ideos = (mod / "localisation/spanish/meganations_ideologies_l_spanish.yml").read_text(encoding="utf-8-sig")
+        ideos = (mod / "localisation/spanish/replace/meganations_ideologies_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("nombre de gobierno corto", 'fascism_desc:0 "Régimen de Restauración"' in ideos, ideos[:600])
         check("grupo neutral renombrado", 'neutrality:0 "Mandato Trascendente"' in ideos, ideos[:400])
         check("sin descripciones placeholder", "Placeholder" not in ideos)
         types, groups = spec.ideology_index()
