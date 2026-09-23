@@ -113,6 +113,14 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     country.add("modifier", modifier)
     body.add("country", country)
     body.add("default", bool(tree.get("default", False)))
+    # El panel de enfoques continuos va debajo del último foco. En su lugar
+    # por defecto tapa las filas de abajo (captura del usuario, 2026-09-23).
+    # Cada fila del árbol mide 130 px en pantalla.
+    last_row = max(y for _, y in positions.values())
+    pos = Block()
+    pos.add("x", 50)
+    pos.add("y", (last_row + 2) * 130)
+    body.add("continuous_focus_position", pos)
 
     for _, f in focuses:
         fid = f["id"]

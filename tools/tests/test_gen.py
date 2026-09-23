@@ -408,6 +408,10 @@ def test_phase3_content() -> None:
         airfield = pdx.render(by["EFE_aerodromos_de_la_pampa"].get("completion_reward"))
         check("una base aerea no suma slots compartidos", "add_extra_state_shared_building_slots" not in airfield, airfield)
         check("arbol asignado al EFE", pdx.text(tree.get("country").get("modifier").get("tag")) == "EFE")
+        cont = tree.get("continuous_focus_position")
+        max_y = max(int(pdx.text(f.get("y"))) for f in focuses)
+        check("los enfoques continuos van debajo del ultimo foco",
+              cont is not None and int(pdx.text(cont.get("y"))) > max_y * 130, str(cont))
         coords = [(pdx.text(f.get("x")), pdx.text(f.get("y"))) for f in focuses]
         check("sin focos superpuestos", len(set(coords)) == len(coords), str(coords))
         for f in focuses:
