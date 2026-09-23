@@ -375,6 +375,64 @@ characters:
       asset: assets/NRE/leaders/lucius_varro.dds
       path: "gfx/leaders/NRE/lucius_varro.dds"
 
+  - id: NRE_legado_arbogast
+    country: NRE
+    src: invented   # "Las Ocho Potencias" (2026-09-23): el Año de los Cuatro Imperatores
+    recruit_at_start: false   # lo asciende el foco NRE_la_legion_decide
+    name:
+      regnal:
+        english: "Legate Flavius Arbogast"
+        spanish: "Legado Flavius Arbogast"
+    born: 2061
+    lore: >
+      Legado de la Legio I Italica. Varro lo mandó a pelear al desierto para sacárselo de encima; volvió con la legión entera detrás y la convicción de que el Senado es un lujo que Roma no puede pagar.
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: [nre_aclamado_por_la_legion]
+    portrait:
+      status: user_art        # retratos alternativos del usuario, 2026-09-23
+      asset: assets/NRE/leaders/legado_arbogast.dds
+      path: "gfx/leaders/NRE/legado_arbogast.dds"
+
+  - id: NRE_irina_vasilescu
+    country: NRE
+    src: invented   # "Las Ocho Potencias" (2026-09-23): el Año de los Cuatro Imperatores
+    recruit_at_start: false   # lo aclama la Legio V Macedonica (evento AVE IMPERATOR)
+    name:
+      regnal:
+        english: "Legate Irina Vasilescu"
+        spanish: "Legada Irina Vasilescu"
+    born: 2066
+    lore: >
+      Legada de la Legio V Macedonica, acuartelada en el Danubio. Hija de la junta de los búnkeres de Dacia; la primera provincial que las legiones podrían aclamar.
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: [nre_aclamado_por_la_legion]
+    portrait:
+      status: placeholder     # falta el retrato: el generador pinta uno provisorio
+      path: "gfx/leaders/NRE/irina_vasilescu.dds"
+
+  - id: NRE_kerem_aydin
+    country: NRE
+    src: invented   # "Las Ocho Potencias" (2026-09-23): el Año de los Cuatro Imperatores
+    recruit_at_start: false   # lo aclama la Legio XII Fulminata (evento AVE IMPERATOR)
+    name:
+      regnal:
+        english: "Legate Kerem Aydin"
+        spanish: "Legado Kerem Aydın"
+    born: 2058
+    lore: >
+      Legado de la Legio XII Fulminata, guardiana de Anatolia. Viejo, paciente y popular entre los soldados: les promete tierras en Oriente a todos.
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: [nre_aclamado_por_la_legion]
+    portrait:
+      status: placeholder     # falta el retrato: el generador pinta uno provisorio
+      path: "gfx/leaders/NRE/kerem_aydin.dds"
+
   # ---------------------------------------------------------------------------
   # Satélites del EFE — inventados (Q012).
   # ---------------------------------------------------------------------------
@@ -812,7 +870,7 @@ leader_traits:
       war_support_factor: -0.05
     src: invented
   - id: shd_the_harmonizer
-    name: { english: "The Harmonizer", spanish: "La Armonizadora" }
+    name: { english: "The Harmonizer", spanish: "El Armonizador" }
     modifiers:
       stability_factor: 0.05
       political_power_gain: 0.05
@@ -828,6 +886,12 @@ leader_traits:
     modifiers:
       army_org_factor: 0.05
       war_support_factor: 0.05
+    src: invented
+  - id: nre_aclamado_por_la_legion
+    name: { english: "Acclaimed by the Legion", spanish: "Por Aclamación de la Legión" }
+    modifiers:
+      army_attack_factor: 0.05
+      stability_factor: -0.05
     src: invented
 
 # =============================================================================

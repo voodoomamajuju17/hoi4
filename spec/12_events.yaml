@@ -274,6 +274,52 @@ namespaces:
           - {effect: add_war_support, value: 0.05}
         src: user_design
 
+      - id: 14
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Rome against the Earth, spanish: Roma contra la Tierra}
+        desc:
+          english: 'The Neo Roman Empire demands that the Federal Ecological Empire recognise Rome''s primacy over the Atlantic and open its ports to
+            Roman fleets. The Emperor of the Earth reads it twice: two Restorations, and only one can be right.'
+          spanish: 'El Neo Imperio Romano exige que el Imperio Federal Ecológico reconozca la primacía de Roma sobre el Atlántico y le abra sus puertos
+            a las flotas romanas. El Emperador de la Tierra lo lee dos veces: dos Restauraciones, y solo una puede tener razón.'
+        options:
+        - name: {english: Open the ports., spanish: Abrir los puertos.}
+          ai_chance: 25
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_stability, value: -0.05}
+          - {effect: event, id: meganations_nre.7, target: NRE}
+        - name: {english: The Earth answers to no eagle., spanish: La Tierra no le responde a ningún águila.}
+          ai_chance: 75
+          effects:
+          - {effect: add_war_support, value: 0.1}
+          - effect: scope
+            target: NRE
+            effects:
+            - {effect: wargoal, target: EFE, type: annex_everything}
+        src: user_design
+      - id: 15
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Hispania Is Rome, spanish: Hispania es Roma}
+        desc:
+          english: The Neo Roman Empire has turned Iberia into a province. In the ports of the Plate, people remember that Spain once crossed the ocean
+            too.
+          spanish: El Neo Imperio Romano convirtió a Iberia en provincia. En los puertos del Plata la gente recuerda que España también cruzó el océano
+            una vez.
+        options:
+        - name: {english: Protest in every forum., spanish: Protestar en todos los foros.}
+          ai_chance: 50
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: add_political_power, value: 25}
+        - name: {english: Europe is Europe's problem., spanish: Europa es problema de Europa.}
+          ai_chance: 50
+          effects:
+          - {effect: add_stability, value: 0.02}
+        src: user_design
+
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -932,4 +978,189 @@ namespaces:
         effects:
         - {effect: add_political_power, value: 150}
         - {effect: add_variable, var: SHD_orden, value: 5}
+      src: user_design
+  # ===========================================================================
+  meganations_nre:
+    country: NRE
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Legion Decides, spanish: La Legión Decide}
+      desc:
+        english: 'The Legio I Italica marched into Rome at dawn. By noon Lucius Varro had left the Palatine, and by evening Flavius Arbogast had been
+          raised on the shields. The Senate was not consulted. The other legions are watching: if one legate can be acclaimed, so can another.'
+        spanish: 'La Legio I Italica entró en Roma al amanecer. Al mediodía Lucius Varro había dejado el Palatino, y a la noche Flavius Arbogast estaba
+          sobre los escudos. Al Senado no se le preguntó nada. Las otras legiones miran: si a un legado se lo puede aclamar, a otro también.'
+      options:
+      - name: {english: 'Ave, Arbogast!', spanish: '¡Ave, Arbogast!'}
+        effects:
+        - {effect: add_war_support, value: 0.1}
+      src: user_design
+    - id: 2
+      trigger: on_startup
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: The Month of the Legions, spanish: El Mes de las Legiones}
+      desc: {english: Monthly update of the legions., spanish: Actualización mensual de las legiones.}
+      options:
+      - name: {english: March., spanish: Marchar.}
+        effects:
+        - {effect: run, value: NRE_mes_de_las_legiones}
+        - {effect: event, id: meganations_nre.2, days: 30}
+      src: user_design
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Legion Demands, spanish: Una Legión Exige}
+      desc:
+        english: 'One of the legions has become too famous for the Senate''s comfort. Its legate sends a list of demands to the Curia: land for the
+          veterans, pay for the living and statues for the dead. The senators look at Varro.'
+        spanish: 'Una de las legiones se volvió demasiado famosa para la tranquilidad del Senado. Su legado manda una lista de exigencias a la Curia:
+          tierras para los veteranos, paga para los vivos y estatuas para los muertos. Los senadores miran a Varro.'
+      options:
+      - name: {english: Pay the donative., spanish: Pagar el donativo.}
+        ai_chance: 60
+        effects:
+        - {effect: add_political_power, value: -100}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: -20}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: -20}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: -20}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: The Senate does not negotiate with soldiers., spanish: El Senado no negocia con soldados.}
+        ai_chance: 40
+        effects:
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: -10}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: -10}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: -10}
+        - {effect: run, value: NRE_recalcular_legiones}
+      src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: AVE IMPERATOR, spanish: AVE IMPERATOR}
+      desc:
+        english: The Legio I Italica has had enough of the current Imperator. Its soldiers raise Flavius Arbogast on their shields once again and
+          march on the Palatine.
+        spanish: La Legio I Italica se cansó del Imperator actual. Sus soldados vuelven a levantar a Flavius Arbogast sobre los escudos y marchan
+          al Palatino.
+      options:
+      - name: {english: 'Ave, Arbogast!', spanish: '¡Ave, Arbogast!'}
+        ai_chance: 50
+        effects:
+        - {effect: promote, character: NRE_legado_arbogast}
+        - {effect: clear_flag, value: NRE_imperator_macedonica}
+        - {effect: clear_flag, value: NRE_imperator_fulminata}
+        - {effect: flag, value: NRE_imperator_italica}
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: -20}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: Pay them off (25 Auctoritas)., spanish: Comprarlos (25 de Auctoritas).}
+        ai_chance: 40
+        when:
+          variable_at_least: {var: NRE_auctoritas, value: 25}
+        effects:
+        - {effect: add_variable, var: NRE_auctoritas, value: -25}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: -30}
+        - {effect: add_stability, value: -0.03}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: The legion will be decimated., spanish: La legión será diezmada.}
+        ai_chance: 10
+        effects:
+        - {effect: add_variable, var: NRE_prestigio_italica, value: -40}
+        - {effect: add_stability, value: -0.15}
+        - {effect: add_war_support, value: -0.05}
+        - {effect: run, value: NRE_recalcular_legiones}
+      src: user_design
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: AVE IMPERATOR, spanish: AVE IMPERATOR}
+      desc:
+        english: On the Danube, the Legio V Macedonica has acclaimed its legate, Irina Vasilescu. For the first time a provincial could wear the purple.
+          The legion is already on the road to Rome.
+        spanish: En el Danubio, la Legio V Macedonica aclamó a su legada, Irina Vasilescu. Por primera vez una provincial podría vestir la púrpura.
+          La legión ya está en camino a Roma.
+      options:
+      - name: {english: 'Ave, Vasilescu!', spanish: '¡Ave, Vasilescu!'}
+        ai_chance: 50
+        effects:
+        - {effect: promote, character: NRE_irina_vasilescu}
+        - {effect: clear_flag, value: NRE_imperator_italica}
+        - {effect: clear_flag, value: NRE_imperator_fulminata}
+        - {effect: flag, value: NRE_imperator_macedonica}
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: -20}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: Pay them off (25 Auctoritas)., spanish: Comprarlos (25 de Auctoritas).}
+        ai_chance: 40
+        when:
+          variable_at_least: {var: NRE_auctoritas, value: 25}
+        effects:
+        - {effect: add_variable, var: NRE_auctoritas, value: -25}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: -30}
+        - {effect: add_stability, value: -0.03}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: The legion will be decimated., spanish: La legión será diezmada.}
+        ai_chance: 10
+        effects:
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: -40}
+        - {effect: add_stability, value: -0.15}
+        - {effect: add_war_support, value: -0.05}
+        - {effect: run, value: NRE_recalcular_legiones}
+      src: user_design
+    - id: 6
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: AVE IMPERATOR, spanish: AVE IMPERATOR}
+      desc:
+        english: In Anatolia, the Legio XII Fulminata has proclaimed Kerem Aydın Imperator and promised every soldier land in the East. The old legate
+          marches west, slowly and surely.
+        spanish: En Anatolia, la Legio XII Fulminata proclamó Imperator a Kerem Aydın y le prometió a cada soldado tierras en Oriente. El viejo legado
+          marcha al oeste, despacio y seguro.
+      options:
+      - name: {english: 'Ave, Aydın!', spanish: '¡Ave, Aydın!'}
+        ai_chance: 50
+        effects:
+        - {effect: promote, character: NRE_kerem_aydin}
+        - {effect: clear_flag, value: NRE_imperator_italica}
+        - {effect: clear_flag, value: NRE_imperator_macedonica}
+        - {effect: flag, value: NRE_imperator_fulminata}
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: -20}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: Pay them off (25 Auctoritas)., spanish: Comprarlos (25 de Auctoritas).}
+        ai_chance: 40
+        when:
+          variable_at_least: {var: NRE_auctoritas, value: 25}
+        effects:
+        - {effect: add_variable, var: NRE_auctoritas, value: -25}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: -30}
+        - {effect: add_stability, value: -0.03}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: The legion will be decimated., spanish: La legión será diezmada.}
+        ai_chance: 10
+        effects:
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: -40}
+        - {effect: add_stability, value: -0.15}
+        - {effect: add_war_support, value: -0.05}
+        - {effect: run, value: NRE_recalcular_legiones}
+      src: user_design
+    - id: 7
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Earth Bows to Rome, spanish: La Tierra se Inclina ante Roma}
+      desc:
+        english: The Federal Ecological Empire has accepted Rome's terms. Its Atlantic ports will fly the eagle next to the tree.
+        spanish: El Imperio Federal Ecológico aceptó las condiciones de Roma. Sus puertos del Atlántico van a llevar el águila al lado del árbol.
+      options:
+      - name: {english: Roma aeterna., spanish: Roma aeterna.}
+        effects:
+        - {effect: add_political_power, value: 150}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
       src: user_design

@@ -261,6 +261,26 @@ mechanics:
     - {name: SHD_integracion_zst, start: 0}
 
   # ===========================================================================
+  - id: nre_legiones_y_auctoritas
+    country: NRE
+    definition_status: implementable
+    src: user_design
+    name: {english: Legions and Auctoritas, spanish: Legiones y Auctoritas}
+    design: 'Tres legiones con nombre (Legio I Italica, Legio V Macedonica, Legio XII Fulminata) tienen prestigio 0-100. Ganan prestigio en guerra
+      (cada mes una al azar), con triunfos y con focos; en paz pierden 1 por mes. Una legión en 60 da Legiones Veteranas; en 80 exige privilegios
+      (menos poder político); en 100, en el Principado, amenaza al Senado. La Auctoritas Militaris (0-100) se gana en guerra y con focos, y se gasta
+      en ascensos, legiones nuevas, planes de campaña, la Guardia Pretoriana y donativos. En el Año de los Cuatro Imperatores, si la legión de otro
+      candidato llega a 85, aparece AVE IMPERATOR: aceptar cambia el líder (Arbogast, Vasilescu o Aydın) y cuesta estabilidad; rechazar cuesta Auctoritas.
+      Después de una aclamación hay 180 días de calma.'
+    variables:
+    - {name: NRE_prestigio_italica, start: 55}
+    - {name: NRE_prestigio_macedonica, start: 45}
+    - {name: NRE_prestigio_fulminata, start: 40}
+    - {name: NRE_auctoritas, start: 20}
+    - {name: NRE_provincia_zhi, start: 0}
+    - {name: NRE_provincia_zda, start: 0}
+
+  # ===========================================================================
   - id: civil_military_balance
     country: FCU
     definition_status: partial

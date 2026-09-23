@@ -44,7 +44,7 @@ propuesta anterior de 8 árboles.
 3. **ASC** — Poder de Cómputo, Consejo Sorteado, PLAN-41. *(v1 hecha)*
 4. **HSN** *(v1 hecha)*, **NAS, APF** — Qhapaq Ñan + Inti-Soma; integración
    federal (Desarrollo/Integración).
-5. **SHD** *(v1 hecha)* **y NRE al final** — tres caudales; prestigio de legiones +
+5. **SHD y NRE al final** *(v1 hechas)* — tres caudales; prestigio de legiones +
    Auctoritas Militaris + AVE IMPERATOR.
 
 ## Por nación (resumen)
@@ -225,3 +225,31 @@ existe, se omite con aviso.
   Economía de Precisión (calibraciones). Represas del Yangtsé como industria,
   Ejército del Caudal, El Cielo Armonioso (aire y la flota del Mar de China)
   y La Armonía como árbol extra de 8 focos.
+
+## NRE v1 — cómo quedó en el motor
+
+- **Legiones con nombre**: Legio I Italica (55), Legio V Macedonica (45) y
+  Legio XII Fulminata (40), con prestigio de 0 a 100. En guerra, cada mes una
+  legión al azar gana +6; en paz todas pierden 1. Suben también con focos y
+  con los *Triunfos* (decisión, una por legión). En 60 dan *Legiones
+  Veteranas*; en 80, *Privilegios Legionarios* (menos poder político); en 100,
+  durante el Principado, aparece *Una Legión Exige* (donativo o pelea con el
+  Senado).
+- **Auctoritas Militaris** (0-100, arranca en 20): +3 por mes en guerra, +1
+  en paz, y más con focos. Se gasta en Ascender Oficiales, Levantar una Nueva
+  Legión, Planes de Campaña, los Pretorianos y los Donativos.
+- **Varro** (El Principado): Senado Restaurado, Vías Imperiales (decisión
+  *Construir una Vía* en regiones al azar), Cursus Honorum, Hispania y Dacia
+  Provincia (provincialización en tres etapas, cada una con 50% de
+  estabilidad; la de Hispania avisa al EFE), El Equilibrio de Varro, Pax
+  Romana (pide 70% de estabilidad y paz: casilla de investigación + idea
+  fuerte) y *Roma contra la Tierra* (ultimátum al EFE).
+- **Arbogast** (El Año de los Cuatro Imperatores, retrato del usuario): La
+  Legión Decide lo asciende. Desde ahí, si la legión de otro candidato llega a
+  85, aparece **AVE IMPERATOR**: aceptar cambia el líder (Arbogast, Irina
+  Vasilescu o Kerem Aydın) y cuesta 10% de estabilidad; comprarlos cuesta 25
+  de Auctoritas; diezmar cuesta 15%. Después de cada aclamación hay 180 días
+  de calma. Vasilescu y Aydın usan retratos provisorios.
+- Annona (estabilidad y hombres) contra Tributo (poder político y fábricas),
+  Forjas Imperiales, Las Legiones, Mare Nostrum (aire y mar) y Legiones y
+  Oficiales como árbol extra de 6 focos. 53 focos en total.

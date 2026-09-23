@@ -687,7 +687,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("13 eventos del EFE", len(events) == 13, str(len(events)))
+        check("15 eventos del EFE", len(events) == 15, str(len(events)))
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
@@ -724,7 +724,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("12 rasgos propios", len(body.keys()) == 12, str(body.keys()))
+        check("13 rasgos propios", len(body.keys()) == 13, str(body.keys()))
         check("rasgos no aleatorios", all(pdx.text(v.get("random")) == "no" for _, v in body.entries))
         efe = (mod / "common/characters/EFE_characters.txt").read_text()
         check("Aurelio con su rasgo", "efe_custodian_of_the_earth" in efe)
@@ -1017,6 +1017,38 @@ def test_shd() -> None:
               "var = SHD_pueblo" in next((mod / "history/countries").glob("SHD - *.txt")).read_text())
 
 
+def test_nre() -> None:
+    section("NRE: legiones, Auctoritas, Varro contra los Cuatro Imperatores")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        root = pdx.parse((mod / "common/national_focus/NRE_focus.txt").read_text()).get("focus_tree")
+        focuses = root.get_all("focus")
+        check("arbol del NRE de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        by = {pdx.text(f.get("id")): f for f in focuses}
+        check("ids alineados con los iconos", all(i in by for i in (
+            "NRE_la_aclamacion_confirmada", "NRE_el_senado_restaurado", "NRE_las_vias_imperiales",
+            "NRE_la_legion_decide", "NRE_la_guardia_pretoriana", "NRE_la_annona", "NRE_las_forjas_imperiales",
+            "NRE_astilleros_de_ostia", "NRE_legio_i_italica", "NRE_mare_nostrum", "NRE_el_aquila_de_oro", "NRE_spqr")))
+        check("Arbogast asciende con La Legion Decide", "promote_character = NRE_legado_arbogast"
+              in pdx.render(by["NRE_la_legion_decide"].get("completion_reward")))
+        check("Roma contra la Tierra es un ultimatum al EFE",
+              "meganations_efe.14" in pdx.render(by["NRE_roma_contra_la_tierra"].get("completion_reward")))
+        eff = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        body = eff[eff.index("NRE_mes_de_las_legiones"):]
+        check("AVE IMPERATOR sale de la legion en 85", all(f"meganations_nre.{n}" in body for n in (4, 5, 6)))
+        ev = (mod / "events/meganations_nre.txt").read_text()
+        check("comprar a la legion solo con 25 de Auctoritas", "trigger" in ev and "promote_character = NRE_irina_vasilescu" in ev)
+        chars = (mod / "common/characters/NRE_characters.txt").read_text()
+        check("los cuatro imperatores existen", all(c in chars for c in (
+            "NRE_lucius_varro", "NRE_legado_arbogast", "NRE_irina_vasilescu", "NRE_kerem_aydin")))
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        check("provincializacion de Hispania y Dacia en tres etapas",
+              "NRE_provincia_zhi_3" in decs and "NRE_provincia_zda_3" in decs and "add_core_of = NRE" in decs)
+        check("el NRE arranca con prestigio y Auctoritas",
+              "var = NRE_auctoritas" in next((mod / "history/countries").glob("NRE - *.txt")).read_text())
+
+
 def test_forces() -> None:
     section("armada y aviacion heredadas de 1936")
     with tempfile.TemporaryDirectory() as tmp:
@@ -1185,6 +1217,7 @@ def main() -> int:
         test_nas,
         test_apf,
         test_shd,
+        test_nre,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

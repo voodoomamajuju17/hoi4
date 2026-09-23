@@ -4829,7 +4829,728 @@ trees:
         reward:
         - {effect: add_ideas, value: APF_espiritu_un_solo_pueblo}
 
-  NRE: { status: not_started, see: Q032 }
+  # ===========================================================================
+  NRE:
+    id: nre_focus_tree
+    default: false
+    shared_focus_trees: []
+    design: '"Las Ocho Potencias" (2026-09-23), tabla de premios nueva. El Principado (Varro) contra el Año de los Cuatro Imperatores (Arbogast).
+      Legiones con prestigio y Auctoritas Militaris. Ids alineados con el pack de íconos.'
+    branches:
+    - id: principado
+      name: {english: The Principate, spanish: El Principado}
+      focuses:
+      - id: NRE_la_aclamacion_confirmada
+        name: {english: The Acclamation Confirmed, spanish: La Aclamación Confirmada}
+        days: 35
+        icon: GFX_goal_generic_national_unity
+        desc:
+          english: The legions made Varro Imperator. Now the Senate must confirm it.
+          spanish: Las legiones hicieron Imperator a Varro. Ahora el Senado tiene que confirmarlo.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: NRE_auctoritas, value: 5}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_el_consilium
+        name: {english: The Consilium, spanish: El Consilium}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NRE_la_aclamacion_confirmada
+        desc:
+          english: 'Senate or legions: whoever sits closer to the Imperator rules Rome.'
+          spanish: 'Senado o legiones: el que se sienta más cerca del Imperator gobierna Roma.'
+        reward:
+        - {effect: add_political_power, value: 50}
+        - {effect: add_stability, value: 0.03}
+      - id: NRE_el_senado_restaurado
+        name: {english: The Senate Restored, spanish: El Senado Restaurado}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NRE_el_consilium
+        mutually_exclusive:
+        - NRE_la_legion_decide
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 0.3
+            when:
+              any:
+              - variable_at_least: {var: NRE_prestigio_italica, value: 80}
+              - variable_at_least: {var: NRE_prestigio_macedonica, value: 80}
+              - variable_at_least: {var: NRE_prestigio_fulminata, value: 80}
+          - factor: 0.5
+            when: {stability_below: 0.4}
+        desc:
+          english: Varro reopens the Curia. Politics becomes cheaper, and slower.
+          spanish: Varro reabre la Curia. La política se vuelve más barata, y más lenta.
+        reward:
+        - {effect: add_ideas, value: NRE_senado}
+        - {effect: flag, value: NRE_principado}
+      - id: NRE_las_vias_imperiales
+        name: {english: The Imperial Roads, spanish: Las Vías Imperiales}
+        days: 42
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NRE_el_senado_restaurado
+        desc:
+          english: All roads lead to Rome again. Opens road building.
+          spanish: Todos los caminos vuelven a llevar a Roma. Abre la construcción de vías.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: infrastructure, level: 2}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: infrastructure, level: 2}
+        - {effect: add_political_power, value: 50}
+      - id: NRE_el_cursus_honorum
+        name: {english: The Cursus Honorum, spanish: El Cursus Honorum}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NRE_el_senado_restaurado
+        desc: {english: A career open to anyone who served., spanish: Una carrera abierta a quien haya servido.}
+        reward:
+        - {effect: add_ideas, value: NRE_cursus_honorum}
+      - id: NRE_hispania_provincia
+        name: {english: Hispania Provincia, spanish: Hispania Provincia}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NRE_las_vias_imperiales
+        available: {country_exists: ZHI}
+        desc:
+          english: Opens the provincialisation of Hispania in three stages.
+          spanish: Abre la provincialización de Hispania en tres etapas.
+        reward:
+        - {effect: flag, value: NRE_provincia_zhi_abierta}
+        - {effect: add_political_power, value: 100}
+      - id: NRE_dacia_provincia
+        name: {english: Dacia Provincia, spanish: Dacia Provincia}
+        days: 42
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NRE_el_cursus_honorum
+        available: {country_exists: ZDA}
+        desc:
+          english: Opens the provincialisation of Dacia in three stages.
+          spanish: Abre la provincialización de Dacia en tres etapas.
+        reward:
+        - {effect: flag, value: NRE_provincia_zda_abierta}
+        - {effect: add_political_power, value: 100}
+      - id: NRE_el_equilibrio_de_varro
+        name: {english: Varro's Balance, spanish: El Equilibrio de Varro}
+        days: 56
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - NRE_hispania_provincia
+        - NRE_dacia_provincia
+        desc:
+          english: Senate, Imperator and legions, each holding the other two in check.
+          spanish: Senado, Imperator y legiones, cada uno frenando a los otros dos.
+        reward:
+        - {effect: swap_ideas, remove: NRE_senado, add: NRE_equilibrio}
+      - id: NRE_pax_romana
+        name: {english: Pax Romana, spanish: Pax Romana}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - NRE_el_equilibrio_de_varro
+        available: {stability_at_least: 0.7, at_war: false}
+        desc:
+          english: Needs 70% stability and peace. Then it is worth it.
+          spanish: Pide 70% de estabilidad y paz. Después vale la pena.
+        reward:
+        - {effect: add_research_slot, value: 1}
+        - {effect: add_ideas, value: NRE_espiritu_pax_romana}
+      - id: NRE_roma_contra_la_tierra
+        name: {english: Rome against the Earth, spanish: Roma contra la Tierra}
+        days: 70
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - NRE_el_equilibrio_de_varro
+        available: {country_exists: EFE}
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {at_war: true}
+        desc:
+          english: 'An ultimatum to the Ecological Empire: open the Atlantic to Rome, or war.'
+          spanish: 'Un ultimátum al Imperio Ecológico: abrirle el Atlántico a Roma, o guerra.'
+        reward:
+        - {effect: event, id: meganations_efe.14, target: EFE}
+        - {effect: add_war_support, value: 0.05}
+    - id: cuatro_imperatores
+      name: {english: The Year of the Four Imperatores, spanish: El Año de los Cuatro Imperatores}
+      focuses:
+      - id: NRE_la_legion_decide
+        name: {english: The Legion Decides, spanish: La Legión Decide}
+        days: 21
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NRE_el_consilium
+        mutually_exclusive:
+        - NRE_el_senado_restaurado
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 4
+            when:
+              any:
+              - variable_at_least: {var: NRE_prestigio_italica, value: 80}
+              - variable_at_least: {var: NRE_prestigio_macedonica, value: 80}
+              - variable_at_least: {var: NRE_prestigio_fulminata, value: 80}
+          - factor: 2
+            when: {at_war: true}
+          - factor: 3
+            when: {stability_below: 0.4}
+        desc:
+          english: Flavius Arbogast takes Rome. From now on, any legion at 85 can acclaim its own Imperator.
+          spanish: Flavius Arbogast toma Roma. Desde ahora, cualquier legión en 85 puede aclamar a su propio Imperator.
+        reward:
+        - {effect: promote, character: NRE_legado_arbogast}
+        - {effect: flag, value: NRE_cuatro}
+        - {effect: flag, value: NRE_imperator_italica}
+        - {effect: flag, value: NRE_aclamacion_reciente, days: 180}
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: 10}
+        - {effect: add_variable, var: NRE_auctoritas, value: 15}
+        - {effect: event, id: meganations_nre.1, days: 1}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_la_guardia_pretoriana
+        name: {english: The Praetorian Guard, spanish: La Guardia Pretoriana}
+        days: 42
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - NRE_la_legion_decide
+        desc:
+          english: The Imperator's own legion. Opens calling the Praetorians.
+          spanish: La legión propia del Imperator. Abre llamar a los pretorianos.
+        reward:
+        - {effect: add_ideas, value: NRE_guardia_pretoriana}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_los_donativos
+        name: {english: The Donatives, spanish: Los Donativos}
+        days: 42
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NRE_la_legion_decide
+        desc:
+          english: Gold for the legions. Opens donatives to cool them down.
+          spanish: Oro para las legiones. Abre los donativos para calmarlas.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_stability, value: 0.03}
+      - id: NRE_ave_imperator
+        name: {english: Ave Imperator, spanish: Ave Imperator}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - NRE_la_guardia_pretoriana
+        - NRE_los_donativos
+        desc:
+          english: Every legion names its candidate. Every candidate needs soldiers.
+          spanish: Cada legión nombra a su candidato. Cada candidato necesita soldados.
+        reward:
+        - {effect: add_variable, var: NRE_auctoritas, value: 15}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: add_manpower, value: 100000}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_el_ano_de_los_cuatro
+        name: {english: The Year of the Four, spanish: El Año de los Cuatro}
+        days: 56
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - NRE_ave_imperator
+        desc:
+          english: The legions make emperors. The emperors make war.
+          spanish: Las legiones hacen emperadores. Los emperadores hacen la guerra.
+        reward:
+        - {effect: add_ideas, value: NRE_ano_de_los_cuatro}
+      - id: NRE_la_marcha_al_norte
+        name: {english: The March North, spanish: La Marcha al Norte}
+        days: 56
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - NRE_el_ano_de_los_cuatro
+        available: {country_exists: ZWE}
+        ai: {factor: 2}
+        desc:
+          english: The legions want land. The Eurasian warlords have plenty.
+          spanish: Las legiones quieren tierras. Los señores de la guerra euroasiáticos tienen de sobra.
+        reward:
+        - {effect: wargoal, target: ZWE, type: annex_everything}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_el_imperio_de_las_legiones
+        name: {english: The Empire of the Legions, spanish: El Imperio de las Legiones}
+        days: 70
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NRE_la_marcha_al_norte
+        desc:
+          english: Rome has no armed forces. The armed forces have Rome.
+          spanish: Roma no tiene fuerzas armadas. Las fuerzas armadas tienen Roma.
+        reward:
+        - {effect: swap_ideas, remove: NRE_ano_de_los_cuatro, add: NRE_imperio_de_las_legiones}
+        - {effect: add_variable, var: NRE_auctoritas, value: 20}
+        - {effect: run, value: NRE_recalcular_legiones}
+    - id: erario
+      name: {english: The Treasury, spanish: El Erario}
+      focuses:
+      - id: NRE_el_erario
+        name: {english: The Treasury, spanish: El Erario}
+        days: 35
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - NRE_la_aclamacion_confirmada
+        desc:
+          english: Feed Rome or make the provinces pay.
+          spanish: Alimentar a Roma o hacer pagar a las provincias.
+        reward:
+        - {effect: build, building: industrial_complex, level: 2}
+      - id: NRE_la_annona
+        name: {english: The Annona, spanish: La Annona}
+        days: 42
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NRE_el_erario
+        mutually_exclusive:
+        - NRE_el_tributo
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {stability_below: 0.5}
+        desc:
+          english: Free grain for the citizens. Opens distributing the Annona.
+          spanish: Grano gratis para los ciudadanos. Abre repartir la Annona.
+        reward:
+        - {effect: add_ideas, value: NRE_annona}
+      - id: NRE_pan_y_circo
+        name: {english: Bread and Circuses, spanish: Pan y Circo}
+        days: 35
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - NRE_la_annona
+        desc: {english: The Colosseum reopens., spanish: El Coliseo reabre.}
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_stability, value: 0.03}
+      - id: NRE_los_graneros_imperiales
+        name: {english: The Imperial Granaries, spanish: Los Graneros Imperiales}
+        days: 56
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NRE_pan_y_circo
+        desc: {english: Nobody in the Empire goes hungry., spanish: Nadie pasa hambre en el Imperio.}
+        reward:
+        - {effect: swap_ideas, remove: NRE_annona, add: NRE_annona_2}
+      - id: NRE_el_tributo
+        name: {english: The Tribute, spanish: El Tributo}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - NRE_el_erario
+        mutually_exclusive:
+        - NRE_la_annona
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 2
+            when: {at_war: true}
+        desc:
+          english: The provinces pay Rome. Opens collecting the Tribute.
+          spanish: Las provincias le pagan a Roma. Abre cobrar el Tributo.
+        reward:
+        - {effect: add_ideas, value: NRE_tributo}
+      - id: NRE_las_provincias_pagan
+        name: {english: The Provinces Pay, spanish: Las Provincias Pagan}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NRE_el_tributo
+        desc:
+          english: Factories built with provincial money.
+          spanish: Fábricas hechas con plata de las provincias.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+      - id: NRE_el_fisco_imperial
+        name: {english: The Imperial Fiscus, spanish: El Fisco Imperial}
+        days: 56
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - NRE_las_provincias_pagan
+        desc:
+          english: Every coin passes through the Imperator's treasury.
+          spanish: Cada moneda pasa por el tesoro del Imperator.
+        reward:
+        - {effect: swap_ideas, remove: NRE_tributo, add: NRE_fisco}
+      - id: NRE_el_nuevo_aureus
+        name: {english: The New Aureus, spanish: El Nuevo Aureus}
+        days: 70
+        icon: GFX_goal_generic_trade
+        prerequisites_any:
+        - NRE_los_graneros_imperiales
+        - NRE_el_fisco_imperial
+        desc:
+          english: A gold coin with an eagle on one side and the Imperator on the other.
+          spanish: Una moneda de oro con un águila de un lado y el Imperator del otro.
+        reward:
+        - {effect: add_ideas, value: NRE_aureus}
+    - id: forjas
+      name: {english: The Imperial Forges, spanish: Las Forjas Imperiales}
+      focuses:
+      - id: NRE_las_forjas_imperiales
+        name: {english: The Imperial Forges, spanish: Las Forjas Imperiales}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NRE_la_aclamacion_confirmada
+        desc: {english: Steel for the eagles., spanish: Acero para las águilas.}
+        reward:
+        - {effect: build, building: arms_factory, level: 2}
+      - id: NRE_el_polo_de_milan
+        name: {english: The Milan Hub, spanish: El Polo de Milán}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NRE_las_forjas_imperiales
+        desc: {english: 'The old northern industry, rebuilt.', spanish: 'La vieja industria del norte, reconstruida.'}
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+      - id: NRE_las_acerias_de_anatolia
+        name: {english: The Anatolian Steelworks, spanish: Las Acerías de Anatolia}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NRE_las_forjas_imperiales
+        desc: {english: Steel from the East., spanish: Acero de Oriente.}
+        reward:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+      - id: NRE_los_nuevos_acueductos
+        name: {english: The New Aqueducts, spanish: Los Nuevos Acueductos}
+        days: 35
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NRE_el_polo_de_milan
+        desc: {english: Water and power for every city., spanish: Agua y energía para cada ciudad.}
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: infrastructure, level: 2}
+        - {effect: add_political_power, value: 50}
+      - id: NRE_astilleros_de_ostia
+        name: {english: The Ostia Shipyards, spanish: Astilleros de Ostia}
+        days: 42
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NRE_las_acerias_de_anatolia
+        desc: {english: The port of Rome builds ships again., spanish: El puerto de Roma vuelve a hacer barcos.}
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
+      - id: NRE_la_fabrica_del_imperio
+        name: {english: The Factory of the Empire, spanish: La Fábrica del Imperio}
+        days: 56
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NRE_los_nuevos_acueductos
+        desc:
+          english: Italy becomes one industrial district.
+          spanish: Italia se vuelve un solo distrito industrial.
+        reward:
+        - {effect: build, building: industrial_complex, level: 3}
+      - id: NRE_el_arsenal_de_roma
+        name: {english: The Arsenal of Rome, spanish: El Arsenal de Roma}
+        days: 56
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - NRE_astilleros_de_ostia
+        desc: {english: Every legion armed in Rome., spanish: Cada legión armada en Roma.}
+        reward:
+        - {effect: build, building: arms_factory, level: 3}
+      - id: NRE_la_economia_de_guerra
+        name: {english: The Imperial War Economy, spanish: La Economía de Guerra Imperial}
+        days: 70
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NRE_la_fabrica_del_imperio
+        - NRE_el_arsenal_de_roma
+        desc: {english: Every forge works for the legions., spanish: Cada forja trabaja para las legiones.}
+        reward:
+        - {effect: add_ideas, value: NRE_economia_de_guerra}
+    - id: legiones
+      name: {english: The Legions, spanish: Las Legiones}
+      focuses:
+      - id: NRE_las_legiones
+        name: {english: The Legions, spanish: Las Legiones}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - NRE_la_aclamacion_confirmada
+        desc:
+          english: Three legions with names, histories and ambitions.
+          spanish: Tres legiones con nombre, historia y ambiciones.
+        reward:
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+        - {effect: add_variable, var: NRE_auctoritas, value: 5}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_legio_i_italica
+        name: {english: Legio I Italica, spanish: Legio I Italica}
+        days: 42
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - NRE_las_legiones
+        desc:
+          english: The first legion of the Empire. Prestige +15.
+          spanish: La primera legión del Imperio. Prestigio +15.
+        reward:
+        - {effect: add_variable, var: NRE_prestigio_italica, value: 15}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_legio_v_macedonica
+        name: {english: Legio V Macedonica, spanish: Legio V Macedonica}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NRE_las_legiones
+        desc: {english: The legion of the Danube. Prestige +15., spanish: La legión del Danubio. Prestigio +15.}
+        reward:
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: 15}
+        - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 1}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_legio_xii_fulminata
+        name: {english: Legio XII Fulminata, spanish: Legio XII Fulminata}
+        days: 35
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - NRE_las_legiones
+        desc:
+          english: The Thunderbolt Legion of Anatolia. Prestige +15.
+          spanish: La Legión del Rayo de Anatolia. Prestigio +15.
+        reward:
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: 15}
+        - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 1}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_disciplina_de_hierro
+        name: {english: Iron Discipline, spanish: Disciplina de Hierro}
+        days: 35
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - NRE_legio_v_macedonica
+        desc:
+          english: Decimation is illegal. Everyone remembers it anyway.
+          spanish: La decimación es ilegal. Igual todos se acuerdan.
+        reward:
+        - {effect: add_ideas, value: NRE_espiritu_disciplina_de_hierro}
+      - id: NRE_el_aquila_de_oro
+        name: {english: The Golden Eagle, spanish: El Águila de Oro}
+        days: 56
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NRE_legio_i_italica
+        desc: {english: The eagles are back on the standards., spanish: Las águilas volvieron a los estandartes.}
+        reward:
+        - {effect: add_ideas, value: NRE_aquila_de_oro}
+      - id: NRE_los_blindados_del_rayo
+        name: {english: The Thunderbolt Armour, spanish: Los Blindados del Rayo}
+        days: 42
+        icon: GFX_goal_generic_army_tanks
+        prerequisites:
+        - NRE_legio_xii_fulminata
+        desc:
+          english: Tanks with the thunderbolt painted on the turret.
+          spanish: Tanques con el rayo pintado en la torreta.
+        reward:
+        - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}
+        - {effect: build, building: arms_factory, level: 1}
+      - id: NRE_el_ejercito_de_las_provincias
+        name: {english: The Army of the Provinces, spanish: El Ejército de las Provincias}
+        days: 70
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - NRE_el_aquila_de_oro
+        - NRE_disciplina_de_hierro
+        desc:
+          english: Every province sends its sons to the legions.
+          spanish: Cada provincia manda a sus hijos a las legiones.
+        reward:
+        - {effect: add_manpower, value: 300000}
+        - {effect: army_experience, value: 50}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+    - id: mare_nostrum
+      name: {english: Mare Nostrum, spanish: Mare Nostrum}
+      focuses:
+      - id: NRE_mare_nostrum
+        name: {english: Mare Nostrum, spanish: Mare Nostrum}
+        days: 42
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - NRE_la_aclamacion_confirmada
+        desc: {english: The Mediterranean is ours again., spanish: El Mediterráneo vuelve a ser nuestro.}
+        reward:
+        - {effect: add_ideas, value: NRE_mare_nostrum_idea}
+        - {effect: navy_experience, value: 25}
+      - id: NRE_la_flota_del_tirreno
+        name: {english: The Tyrrhenian Fleet, spanish: La Flota del Tirreno}
+        days: 35
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NRE_mare_nostrum
+        desc: {english: Dry docks from Naples to Livorno., spanish: Diques secos de Nápoles a Livorno.}
+        reward:
+        - {effect: build, building: dockyard, level: 2}
+      - id: NRE_las_aguilas_del_cielo
+        name: {english: The Eagles of the Sky, spanish: Las Águilas del Cielo}
+        days: 35
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - NRE_mare_nostrum
+        desc: {english: The eagle learns to fly again., spanish: El águila vuelve a aprender a volar.}
+        reward:
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
+        - {effect: air_experience, value: 25}
+      - id: NRE_la_aeronautica_imperial
+        name: {english: The Imperial Air Force, spanish: La Aeronáutica Imperial}
+        days: 42
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - NRE_las_aguilas_del_cielo
+        desc: {english: Air bases in every province., spanish: Bases aéreas en cada provincia.}
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: air_base, level: 2}
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
+      - id: NRE_el_cielo_de_roma
+        name: {english: The Sky of Rome, spanish: El Cielo de Roma}
+        days: 56
+        icon: GFX_goal_generic_air_doctrine
+        prerequisites:
+        - NRE_la_aeronautica_imperial
+        desc:
+          english: No enemy plane over the Eternal City.
+          spanish: Ningún avión enemigo sobre la Ciudad Eterna.
+        reward:
+        - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
+        - {effect: air_experience, value: 50}
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+      - id: NRE_el_mediterraneo_romano
+        name: {english: The Roman Mediterranean, spanish: El Mediterráneo Romano}
+        days: 70
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - NRE_la_flota_del_tirreno
+        desc:
+          english: From Gibraltar to the Bosphorus, every port flies the eagle.
+          spanish: De Gibraltar al Bósforo, cada puerto lleva el águila.
+        reward:
+        - {effect: swap_ideas, remove: NRE_mare_nostrum_idea, add: NRE_mediterraneo_romano}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
+    - id: oficiales
+      name: {english: Legions and Officers, spanish: Legiones y Oficiales}
+      focuses:
+      - id: NRE_legiones_y_oficiales
+        name: {english: Legions and Officers, spanish: Legiones y Oficiales}
+        days: 21
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NRE_la_aclamacion_confirmada
+        desc: {english: 'In Rome, officers are the currency.', spanish: 'En Roma, los oficiales son la moneda.'}
+        reward:
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_los_tribunos
+        name: {english: The Military Tribunes, spanish: Los Tribunos Militares}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NRE_legiones_y_oficiales
+        desc:
+          english: Young officers who learn war before politics.
+          spanish: Oficiales jóvenes que aprenden la guerra antes que la política.
+        reward:
+        - {effect: add_ideas, value: NRE_tribunos}
+      - id: NRE_los_centuriones
+        name: {english: The Centurions, spanish: Los Centuriones}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - NRE_legiones_y_oficiales
+        desc: {english: The backbone of every legion., spanish: La columna vertebral de cada legión.}
+        reward:
+        - {effect: army_experience, value: 50}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_los_veteranos
+        name: {english: The Veterans, spanish: Los Veteranos}
+        days: 42
+        icon: GFX_goal_generic_army_doctrines
+        prerequisites:
+        - NRE_los_tribunos
+        - NRE_los_centuriones
+        desc: {english: Every legion +10 prestige., spanish: Cada legión +10 de prestigio.}
+        reward:
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_el_triunfo
+        name: {english: The Triumph, spanish: El Triunfo}
+        days: 42
+        icon: GFX_goal_generic_propaganda
+        prerequisites:
+        - NRE_los_veteranos
+        desc:
+          english: The legions march through Rome with their spoils.
+          spanish: Las legiones desfilan por Roma con su botín.
+        reward:
+        - {effect: add_variable, var: NRE_auctoritas, value: 20}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: add_political_power, value: 50}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - id: NRE_spqr
+        name: {english: SPQR, spanish: SPQR}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - NRE_el_triunfo
+        desc:
+          english: Four letters on every standard, every building, every coin.
+          spanish: Cuatro letras en cada estandarte, cada edificio, cada moneda.
+        reward:
+        - {effect: add_ideas, value: NRE_spqr_idea}
+        - {effect: add_variable, var: NRE_auctoritas, value: 25}
+        - {effect: run, value: NRE_recalcular_legiones}
+
 
 # =============================================================================
 technical_notes:

@@ -2111,6 +2111,346 @@ categories:
       - {effect: timed_idea, idea: SHD_red_electrica, days: 90}
       ai_factor: 5
 
+  # ===========================================================================
+  # NRE — Las Legiones, las Provincias, Annona o Tributo
+  # ===========================================================================
+  - id: NRE_legiones_category
+    country: NRE
+    icon_prefer:
+    - generic_political_actions
+    name: {english: The Legions, spanish: Las Legiones}
+    desc:
+      english: 'Legio I Italica: [?NRE_prestigio_italica]\nLegio V Macedonica: [?NRE_prestigio_macedonica]\nLegio XII Fulminata: [?NRE_prestigio_fulminata]\nAuctoritas
+        Militaris: [?NRE_auctoritas]\n\nA legion at 60 is veteran; at 80 it demands privileges; at 100 it threatens the Senate. In the Year of the
+        Four Imperatores, a rival legion at 85 can acclaim its own emperor.'
+      spanish: 'Legio I Italica: [?NRE_prestigio_italica]\nLegio V Macedonica: [?NRE_prestigio_macedonica]\nLegio XII Fulminata: [?NRE_prestigio_fulminata]\nAuctoritas
+        Militaris: [?NRE_auctoritas]\n\nUna legión en 60 es veterana; en 80 exige privilegios; en 100 amenaza al Senado. En el Año de los Cuatro
+        Imperatores, una legión rival en 85 puede aclamar a su propio emperador.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: NRE_recalcular_legiones}
+    decisions:
+    - id: NRE_triunfo_italica
+      name: {english: Triumph of the Legio I Italica, spanish: Triunfo de la Legio I Italica}
+      desc:
+        english: The Legio I Italica parades through Rome. Its prestige +10, Auctoritas +5.
+        spanish: La Legio I Italica desfila por Roma. Su prestigio +10, Auctoritas +5.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: NRE_prestigio_italica, value: 10}
+      - {effect: add_variable, var: NRE_auctoritas, value: 5}
+      - {effect: add_war_support, value: 0.02}
+      ai_factor: 3
+    - id: NRE_triunfo_macedonica
+      name: {english: Triumph of the Legio V Macedonica, spanish: Triunfo de la Legio V Macedonica}
+      desc:
+        english: The Legio V Macedonica parades through Rome. Its prestige +10, Auctoritas +5.
+        spanish: La Legio V Macedonica desfila por Roma. Su prestigio +10, Auctoritas +5.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: NRE_prestigio_macedonica, value: 10}
+      - {effect: add_variable, var: NRE_auctoritas, value: 5}
+      - {effect: add_war_support, value: 0.02}
+      ai_factor: 3
+    - id: NRE_triunfo_fulminata
+      name: {english: Triumph of the Legio XII Fulminata, spanish: Triunfo de la Legio XII Fulminata}
+      desc:
+        english: The Legio XII Fulminata parades through Rome. Its prestige +10, Auctoritas +5.
+        spanish: La Legio XII Fulminata desfila por Roma. Su prestigio +10, Auctoritas +5.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: NRE_prestigio_fulminata, value: 10}
+      - {effect: add_variable, var: NRE_auctoritas, value: 5}
+      - {effect: add_war_support, value: 0.02}
+      ai_factor: 3
+    - id: NRE_ascender_oficiales
+      name: {english: Promote Officers, spanish: Ascender Oficiales}
+      desc:
+        english: 'Spend 15 Auctoritas: army experience.'
+        spanish: 'Gastar 15 de Auctoritas: experiencia de ejército.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 60
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
+      - {effect: army_experience, value: 25}
+      ai_factor: 5
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 15}
+    - id: NRE_nueva_legion
+      name: {english: Raise a New Legion, spanish: Levantar una Nueva Legión}
+      desc:
+        english: 'Spend 25 Auctoritas: 50,000 men and experience.'
+        spanish: 'Gastar 25 de Auctoritas: 50.000 hombres y experiencia.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -25}
+      - {effect: add_manpower, value: 50000}
+      - {effect: army_experience, value: 10}
+      ai_factor: 5
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 25}
+    - id: NRE_planes_de_campana_dec
+      name: {english: Draw Campaign Plans, spanish: Trazar Planes de Campaña}
+      desc:
+        english: 'Spend 20 Auctoritas: better attack and experience for 90 days.'
+        spanish: 'Gastar 20 de Auctoritas: mejor ataque y experiencia por 90 días.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -20}
+      - {effect: timed_idea, idea: NRE_planes_de_campana, days: 90}
+      ai_factor: 5
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 20}
+    - id: NRE_pretorianos
+      name: {english: Call the Praetorians, spanish: Llamar a los Pretorianos}
+      desc:
+        english: 'Spend 20 Auctoritas: stability, and no acclamation for 180 days.'
+        spanish: 'Gastar 20 de Auctoritas: estabilidad, y ninguna aclamación por 180 días.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -20}
+      - {effect: add_stability, value: 0.05}
+      - {effect: flag, value: NRE_aclamacion_reciente, days: 180}
+      ai_factor: 5
+      visible: {focus: NRE_la_guardia_pretoriana}
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 20}
+    - id: NRE_donativo
+      name: {english: Donative to the Legions, spanish: Donativo a las Legiones}
+      desc:
+        english: 'Spend 10 Auctoritas and political power: every legion -10, stability +3%.'
+        spanish: 'Gastar 10 de Auctoritas y poder político: cada legión -10, estabilidad +3%.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -10}
+      - {effect: add_variable, var: NRE_prestigio_italica, value: -10}
+      - {effect: add_variable, var: NRE_prestigio_macedonica, value: -10}
+      - {effect: add_variable, var: NRE_prestigio_fulminata, value: -10}
+      - {effect: add_stability, value: 0.03}
+      ai_factor: 5
+      visible: {focus: NRE_los_donativos}
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 10}
+  - id: NRE_provincias_category
+    country: NRE
+    icon_prefer:
+    - generic_political_actions
+    name: {english: The Provinces, spanish: Las Provincias}
+    desc:
+      english: 'Hispania: stage [?NRE_provincia_zhi] of 3.\nDacia: stage [?NRE_provincia_zda] of 3.\nEach stage needs 50% stability. The last one
+        turns the province into Roman land.'
+      spanish: 'Hispania: etapa [?NRE_provincia_zhi] de 3.\nDacia: etapa [?NRE_provincia_zda] de 3.\nCada etapa pide 50% de estabilidad. La última
+        vuelve la provincia tierra romana.'
+    src: user_design
+    decisions:
+    - id: NRE_provincia_zhi_1
+      name: {english: Roman Governors, spanish: Gobernadores Romanos}
+      desc: {english: A proconsul arrives in Madrid., spanish: Un procónsul llega a Madrid.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 90
+      fire_only_once: true
+      visible: {flag: NRE_provincia_zhi_abierta, country_exists: ZHI}
+      available:
+        variable_between: {var: NRE_provincia_zhi, min: 0, max: 0}
+        stability_at_least: 0.5
+      effects:
+      - {effect: add_variable, var: NRE_provincia_zhi, value: 1}
+      - {effect: add_variable, var: NRE_auctoritas, value: 2}
+      ai_factor: 5
+    - id: NRE_provincia_zhi_2
+      name: {english: Latin Law, spanish: Derecho Latino}
+      desc:
+        english: Hispanic cities receive Latin rights.
+        spanish: Las ciudades hispanas reciben el derecho latino.
+      icon_prefer:
+      - generic_political_actions
+      cost: 100
+      cooldown_days: 90
+      fire_only_once: true
+      visible: {flag: NRE_provincia_zhi_abierta, country_exists: ZHI}
+      available:
+        variable_between: {var: NRE_provincia_zhi, min: 1, max: 1}
+        stability_at_least: 0.5
+      effects:
+      - {effect: add_variable, var: NRE_provincia_zhi, value: 1}
+      - {effect: add_variable, var: NRE_auctoritas, value: 2}
+      ai_factor: 5
+    - id: NRE_provincia_zhi_3
+      name: {english: Hispania Is Rome, spanish: Hispania es Roma}
+      desc:
+        english: The province becomes part of the Empire.
+        spanish: La provincia pasa a ser parte del Imperio.
+      icon_prefer:
+      - generic_political_actions
+      cost: 125
+      cooldown_days: 90
+      fire_only_once: true
+      visible: {flag: NRE_provincia_zhi_abierta, country_exists: ZHI}
+      available:
+        variable_between: {var: NRE_provincia_zhi, min: 2, max: 2}
+        stability_at_least: 0.5
+      effects:
+      - {effect: add_variable, var: NRE_provincia_zhi, value: 1}
+      - {effect: add_variable, var: NRE_auctoritas, value: 2}
+      - effect: scope
+        target: ZHI
+        effects:
+        - effect: states
+          pick: every
+          effects:
+          - {effect: add_core, value: NRE}
+      - {effect: annex, target: ZHI}
+      - {effect: timed_idea, idea: NRE_provincia_rebelde, days: 180}
+      - effect: if
+        when: {country_exists: EFE}
+        then:
+        - {effect: event, id: meganations_efe.15, target: EFE}
+      ai_factor: 5
+    - id: NRE_provincia_zda_1
+      name: {english: The Danube Garrisons, spanish: Las Guarniciones del Danubio}
+      desc: {english: Roman legions leave the bunkers., spanish: Las legiones romanas salen de los búnkeres.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 90
+      fire_only_once: true
+      visible: {flag: NRE_provincia_zda_abierta, country_exists: ZDA}
+      available:
+        variable_between: {var: NRE_provincia_zda, min: 0, max: 0}
+        stability_at_least: 0.5
+      effects:
+      - {effect: add_variable, var: NRE_provincia_zda, value: 1}
+      - {effect: add_variable, var: NRE_auctoritas, value: 2}
+      ai_factor: 5
+    - id: NRE_provincia_zda_2
+      name: {english: The Dacian Colonies, spanish: Las Colonias Dacias}
+      desc:
+        english: Veterans get land along the Danube.
+        spanish: Los veteranos reciben tierras sobre el Danubio.
+      icon_prefer:
+      - generic_political_actions
+      cost: 100
+      cooldown_days: 90
+      fire_only_once: true
+      visible: {flag: NRE_provincia_zda_abierta, country_exists: ZDA}
+      available:
+        variable_between: {var: NRE_provincia_zda, min: 1, max: 1}
+        stability_at_least: 0.5
+      effects:
+      - {effect: add_variable, var: NRE_provincia_zda, value: 1}
+      - {effect: add_variable, var: NRE_auctoritas, value: 2}
+      ai_factor: 5
+    - id: NRE_provincia_zda_3
+      name: {english: Dacia Is Rome, spanish: Dacia es Roma}
+      desc:
+        english: The province becomes part of the Empire.
+        spanish: La provincia pasa a ser parte del Imperio.
+      icon_prefer:
+      - generic_political_actions
+      cost: 125
+      cooldown_days: 90
+      fire_only_once: true
+      visible: {flag: NRE_provincia_zda_abierta, country_exists: ZDA}
+      available:
+        variable_between: {var: NRE_provincia_zda, min: 2, max: 2}
+        stability_at_least: 0.5
+      effects:
+      - {effect: add_variable, var: NRE_provincia_zda, value: 1}
+      - {effect: add_variable, var: NRE_auctoritas, value: 2}
+      - effect: scope
+        target: ZDA
+        effects:
+        - effect: states
+          pick: every
+          effects:
+          - {effect: add_core, value: NRE}
+      - {effect: annex, target: ZDA}
+      - {effect: timed_idea, idea: NRE_provincia_rebelde, days: 180}
+      ai_factor: 5
+  - id: NRE_economia_category
+    country: NRE
+    icon_prefer:
+    - generic_industry
+    name: {english: Annona or Tribute, spanish: Annona o Tributo}
+    desc:
+      english: 'The Annona feeds Rome: stability and men. The Tribute makes the provinces pay: political power and factories.'
+      spanish: 'La Annona alimenta a Roma: estabilidad y hombres. El Tributo hace pagar a las provincias: poder político y fábricas.'
+    src: user_design
+    decisions:
+    - id: NRE_repartir_la_annona
+      name: {english: Distribute the Annona, spanish: Repartir la Annona}
+      desc:
+        english: 'Grain for the citizens: stability +5% and 30,000 volunteers.'
+        spanish: 'Grano para los ciudadanos: estabilidad +5% y 30.000 voluntarios.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 90
+      effects:
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_manpower, value: 30000}
+      ai_factor: 5
+      visible: {focus: NRE_la_annona}
+    - id: NRE_cobrar_el_tributo
+      name: {english: Collect the Tribute, spanish: Cobrar el Tributo}
+      desc:
+        english: 'The provinces pay: political power and a factory, at the cost of stability.'
+        spanish: 'Las provincias pagan: poder político y una fábrica, a costa de estabilidad.'
+      icon_prefer:
+      - generic_industry
+      cost: 0
+      cooldown_days: 120
+      effects:
+      - {effect: add_political_power, value: 75}
+      - effect: states
+        pick: random
+        effects:
+        - {effect: build_here, building: industrial_complex, level: 1}
+      - {effect: add_stability, value: -0.02}
+      ai_factor: 5
+      visible: {focus: NRE_el_tributo}
+    - id: NRE_construir_una_via
+      name: {english: Build a Road, spanish: Construir una Vía}
+      desc:
+        english: 'A new Roman road through a province: +2 infrastructure.'
+        spanish: 'Una nueva vía romana por una provincia: +2 de infraestructura.'
+      icon_prefer:
+      - generic_construction
+      cost: 50
+      cooldown_days: 90
+      effects:
+      - effect: states
+        pick: random
+        effects:
+        - {effect: build_here, building: infrastructure, level: 2}
+      ai_factor: 5
+      visible: {focus: NRE_las_vias_imperiales}
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -2582,3 +2922,98 @@ scripted_effects:
         variable_below: {var: SHD_pueblo, value: 46}
       then:
       - {effect: add_variable, var: SHD_pueblo, value: 5}
+
+  # NRE: legiones y Auctoritas.
+  - id: NRE_recalcular_legiones
+    effects:
+    - {effect: clamp, var: NRE_prestigio_italica, min: 0, max: 100}
+    - {effect: clamp, var: NRE_prestigio_macedonica, min: 0, max: 100}
+    - {effect: clamp, var: NRE_prestigio_fulminata, min: 0, max: 100}
+    - {effect: clamp, var: NRE_auctoritas, min: 0, max: 100}
+    - effect: if
+      when: {idea: NRE_legiones_veteranas}
+      then:
+      - {effect: remove_idea, value: NRE_legiones_veteranas}
+    - effect: if
+      when: {idea: NRE_privilegios_legionarios}
+      then:
+      - {effect: remove_idea, value: NRE_privilegios_legionarios}
+    - effect: if
+      when:
+        any:
+        - variable_at_least: {var: NRE_prestigio_italica, value: 60}
+        - variable_at_least: {var: NRE_prestigio_macedonica, value: 60}
+        - variable_at_least: {var: NRE_prestigio_fulminata, value: 60}
+      then:
+      - {effect: add_ideas, value: NRE_legiones_veteranas}
+    - effect: if
+      when:
+        any:
+        - variable_at_least: {var: NRE_prestigio_italica, value: 80}
+        - variable_at_least: {var: NRE_prestigio_macedonica, value: 80}
+        - variable_at_least: {var: NRE_prestigio_fulminata, value: 80}
+      then:
+      - {effect: add_ideas, value: NRE_privilegios_legionarios}
+  - id: NRE_mes_de_las_legiones
+    effects:
+    - effect: if
+      when: {at_war: true}
+      then:
+      - {effect: add_variable, var: NRE_auctoritas, value: 3}
+      - effect: random
+        options:
+        - weight: 40
+          effects:
+          - {effect: add_variable, var: NRE_prestigio_italica, value: 6}
+        - weight: 30
+          effects:
+          - {effect: add_variable, var: NRE_prestigio_macedonica, value: 6}
+        - weight: 30
+          effects:
+          - {effect: add_variable, var: NRE_prestigio_fulminata, value: 6}
+      else:
+      - {effect: add_variable, var: NRE_auctoritas, value: 1}
+      - {effect: add_variable, var: NRE_prestigio_italica, value: -1}
+      - {effect: add_variable, var: NRE_prestigio_macedonica, value: -1}
+      - {effect: add_variable, var: NRE_prestigio_fulminata, value: -1}
+    - effect: if
+      when: {focus: NRE_la_guardia_pretoriana}
+      then:
+      - {effect: add_variable, var: NRE_auctoritas, value: 1}
+    - {effect: run, value: NRE_recalcular_legiones}
+    - effect: if
+      when: {flag: NRE_cuatro, not_flag: NRE_aclamacion_reciente}
+      then:
+      - effect: if
+        when:
+          not_flag: NRE_imperator_italica
+          variable_at_least: {var: NRE_prestigio_italica, value: 85}
+        then:
+        - {effect: flag, value: NRE_aclamacion_reciente, days: 180}
+        - {effect: event, id: meganations_nre.4, days: 1}
+        else:
+        - effect: if
+          when:
+            not_flag: NRE_imperator_macedonica
+            variable_at_least: {var: NRE_prestigio_macedonica, value: 85}
+          then:
+          - {effect: flag, value: NRE_aclamacion_reciente, days: 180}
+          - {effect: event, id: meganations_nre.5, days: 1}
+          else:
+          - effect: if
+            when:
+              not_flag: NRE_imperator_fulminata
+              variable_at_least: {var: NRE_prestigio_fulminata, value: 85}
+            then:
+            - {effect: flag, value: NRE_aclamacion_reciente, days: 180}
+            - {effect: event, id: meganations_nre.6, days: 1}
+    - effect: if
+      when:
+        not_flag: NRE_exigencia_reciente
+        any:
+        - variable_at_least: {var: NRE_prestigio_italica, value: 100}
+        - variable_at_least: {var: NRE_prestigio_macedonica, value: 100}
+        - variable_at_least: {var: NRE_prestigio_fulminata, value: 100}
+      then:
+      - {effect: flag, value: NRE_exigencia_reciente, days: 180}
+      - {effect: event, id: meganations_nre.3, days: 1}

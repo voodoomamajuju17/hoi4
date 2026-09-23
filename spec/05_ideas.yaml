@@ -1263,7 +1263,175 @@ countries:
       modifiers: {stability_factor: 0.2, political_power_gain: 0.15, research_speed_factor: 0.05}
       src: user_design
     see: Q030
-  NRE: { coverage: unknown, starting_ideas: unknown, see: Q030 }
+  NRE:
+    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    focus_ideas:
+    - id: NRE_legiones_veteranas
+      name: {english: Veteran Legions, spanish: Legiones Veteranas}
+      desc:
+        english: At least one legion has passed 60 prestige. Its eagle is feared.
+        spanish: Al menos una legión pasó los 60 de prestigio. Su águila da miedo.
+      modifiers: {army_attack_factor: 0.05, army_org_factor: 0.05}
+      src: user_design
+    - id: NRE_privilegios_legionarios
+      name: {english: Legionary Privileges, spanish: Privilegios Legionarios}
+      desc:
+        english: A legion above 80 demands land, pay and a seat in the Consilium.
+        spanish: Una legión por encima de 80 exige tierras, paga y un asiento en el Consilium.
+      modifiers: {political_power_gain: -0.1, army_org_factor: 0.05}
+      src: user_design
+    - id: NRE_senado
+      name: {english: The Restored Senate, spanish: El Senado Restaurado}
+      desc:
+        english: Three hundred senators, and each of them knows he serves at the Imperator's pleasure.
+        spanish: Trescientos senadores, y cada uno sabe que sirve mientras el Imperator quiera.
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
+      src: user_design
+    - id: NRE_cursus_honorum
+      name: {english: The Cursus Honorum, spanish: El Cursus Honorum}
+      desc:
+        english: A career from quaestor to consul, open to anyone who served.
+        spanish: Una carrera de cuestor a cónsul, abierta a quien haya servido.
+      modifiers: {political_power_gain: 0.1, research_speed_factor: 0.03}
+      src: user_design
+    - id: NRE_equilibrio
+      name: {english: Varro's Balance, spanish: El Equilibrio de Varro}
+      desc:
+        english: Senate, Imperator and legions, each holding the other two in check.
+        spanish: Senado, Imperator y legiones, cada uno frenando a los otros dos.
+      modifiers: {stability_factor: 0.1, political_power_gain: 0.1}
+      src: user_design
+    - id: NRE_espiritu_pax_romana
+      name: {english: Pax Romana, spanish: Pax Romana}
+      desc:
+        english: Roads without bandits, provinces without revolts, an empire at rest.
+        spanish: Caminos sin bandidos, provincias sin revueltas, un imperio en reposo.
+      modifiers:
+        stability_factor: 0.15
+        political_power_gain: 0.15
+        industrial_capacity_factory: 0.1
+        production_speed_buildings_factor: 0.1
+      src: user_design
+    - id: NRE_guardia_pretoriana
+      name: {english: The Praetorian Guard, spanish: La Guardia Pretoriana}
+      desc:
+        english: The Imperator's own legion. Loyal, as long as it is paid.
+        spanish: La legión propia del Imperator. Leal, mientras se le pague.
+      modifiers: {stability_factor: 0.05, army_org_factor: 0.05}
+      src: user_design
+    - id: NRE_ano_de_los_cuatro
+      name: {english: The Year of the Four Imperatores, spanish: El Año de los Cuatro Imperatores}
+      desc:
+        english: The legions make emperors. The emperors make war.
+        spanish: Las legiones hacen emperadores. Los emperadores hacen la guerra.
+      modifiers: {army_attack_factor: 0.15, war_support_factor: 0.1, stability_factor: -0.05}
+      src: user_design
+    - id: NRE_imperio_de_las_legiones
+      name: {english: The Empire of the Legions, spanish: El Imperio de las Legiones}
+      desc:
+        english: Rome has no armed forces. The armed forces have Rome.
+        spanish: Roma no tiene fuerzas armadas. Las fuerzas armadas tienen Roma.
+      modifiers: {army_attack_factor: 0.2, army_org_factor: 0.1, war_support_factor: 0.1}
+      src: user_design
+    - id: NRE_annona
+      name: {english: The Annona, spanish: La Annona}
+      desc:
+        english: Free grain for every citizen of Rome, paid by the provinces.
+        spanish: Grano gratis para cada ciudadano de Roma, pagado por las provincias.
+      modifiers: {stability_factor: 0.05, consumer_goods_factor: -0.05}
+      src: user_design
+    - id: NRE_annona_2
+      name: {english: The Imperial Granaries, spanish: Los Graneros Imperiales}
+      desc:
+        english: Nobody in the Empire goes hungry. Nobody forgets who feeds them.
+        spanish: Nadie pasa hambre en el Imperio. Nadie se olvida de quién lo alimenta.
+      modifiers: {stability_factor: 0.1, consumer_goods_factor: -0.1, monthly_population: 0.1}
+      src: user_design
+    - id: NRE_tributo
+      name: {english: The Tribute, spanish: El Tributo}
+      desc:
+        english: The provinces pay Rome in money, steel and men.
+        spanish: Las provincias le pagan a Roma en dinero, acero y hombres.
+      modifiers: {political_power_gain: 0.1, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: NRE_fisco
+      name: {english: The Imperial Fiscus, spanish: El Fisco Imperial}
+      desc:
+        english: Every coin in the Empire passes through the Imperator's treasury.
+        spanish: Cada moneda del Imperio pasa por el tesoro del Imperator.
+      modifiers: {political_power_gain: 0.15, industrial_capacity_factory: 0.1}
+      src: user_design
+    - id: NRE_aureus
+      name: {english: The New Aureus, spanish: El Nuevo Aureus}
+      desc:
+        english: A gold coin with an eagle on one side and the Imperator on the other.
+        spanish: Una moneda de oro con un águila de un lado y el Imperator del otro.
+      modifiers: {trade_opinion_factor: 0.2, industrial_capacity_factory: 0.1, production_speed_buildings_factor: 0.1}
+      src: user_design
+    - id: NRE_economia_de_guerra
+      name: {english: The Imperial War Economy, spanish: La Economía de Guerra Imperial}
+      desc:
+        english: Every forge in the Empire works for the legions.
+        spanish: Cada forja del Imperio trabaja para las legiones.
+      modifiers: {industrial_capacity_factory: 0.2, production_speed_arms_factory_factor: 0.1}
+      src: user_design
+    - id: NRE_aquila_de_oro
+      name: {english: The Golden Eagle, spanish: El Águila de Oro}
+      desc:
+        english: The eagles are back on the standards, and the legions fight for them.
+        spanish: Las águilas volvieron a los estandartes, y las legiones pelean por ellas.
+      modifiers: {army_org_factor: 0.1, army_attack_factor: 0.1}
+      src: user_design
+    - id: NRE_espiritu_disciplina_de_hierro
+      name: {english: Iron Discipline, spanish: Disciplina de Hierro}
+      desc:
+        english: Decimation is illegal. Everyone remembers it anyway.
+        spanish: La decimación es ilegal. Igual todos se acuerdan.
+      modifiers: {army_defence_factor: 0.1}
+      src: user_design
+    - id: NRE_planes_de_campana
+      name: {english: Campaign Plans, spanish: Planes de Campaña}
+      desc:
+        english: The tribunes have drawn up the plans. The legions know where to go.
+        spanish: Los tribunos hicieron los planes. Las legiones saben adónde ir.
+      modifiers: {army_attack_factor: 0.05, experience_gain_army: 0.1}
+      src: user_design
+    - id: NRE_mare_nostrum_idea
+      name: {english: Our Sea, spanish: Nuestro Mar}
+      desc:
+        english: The Mediterranean is a Roman lake again.
+        spanish: El Mediterráneo vuelve a ser un lago romano.
+      modifiers: {industrial_capacity_dockyard: 0.1, trade_opinion_factor: 0.1}
+      src: user_design
+    - id: NRE_mediterraneo_romano
+      name: {english: The Roman Mediterranean, spanish: El Mediterráneo Romano}
+      desc:
+        english: From Gibraltar to the Bosphorus, every port flies the eagle.
+        spanish: De Gibraltar al Bósforo, cada puerto lleva el águila.
+      modifiers: {industrial_capacity_dockyard: 0.2, trade_opinion_factor: 0.2}
+      src: user_design
+    - id: NRE_tribunos
+      name: {english: The Military Tribunes, spanish: Los Tribunos Militares}
+      desc:
+        english: Young officers who learn war before they learn politics.
+        spanish: Oficiales jóvenes que aprenden la guerra antes que la política.
+      modifiers: {experience_gain_army: 0.1, army_org_factor: 0.05}
+      src: user_design
+    - id: NRE_spqr_idea
+      name: {english: Senatus Populusque Romanus, spanish: Senatus Populusque Romanus}
+      desc:
+        english: Four letters on every standard, every building, every coin.
+        spanish: Cuatro letras en cada estandarte, cada edificio, cada moneda.
+      modifiers: {stability_factor: 0.1, war_support_factor: 0.1, army_org_factor: 0.05}
+      src: user_design
+    - id: NRE_provincia_rebelde
+      name: {english: Unruly Province, spanish: Provincia Revoltosa}
+      desc:
+        english: The new province does not yet feel Roman.
+        spanish: La provincia nueva todavía no se siente romana.
+      modifiers: {stability_factor: -0.05}
+      src: user_design
+    see: Q030
   PTA: { coverage: unknown, starting_ideas: unknown, see: Q012 }
   YYG: { coverage: unknown, starting_ideas: unknown, see: Q012 }
 

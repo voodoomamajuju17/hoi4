@@ -20,7 +20,7 @@ from ..errors import SpecError
 from ..pdx import Block
 from . import ideas as ideas_mod
 from . import effects as effects_mod
-from .effects import EffectContext, scripted_effect_ids, render_effects
+from .effects import EffectContext, scripted_effect_ids, render_conditions, render_effects
 
 SOURCE = "spec/12_events.yaml"
 LOC_FILE = "meganations_events"
@@ -111,6 +111,10 @@ def emit(ctx: BuildContext) -> None:
         for letter, opt in zip(OPTION_LETTERS, options):
             ob = render_effects(eid, opt.get("effects") or [], effect_ctx, effects_used, where="12_events.yaml")
             ob.entries.insert(0, ("name", _loc(ctx, f"{eid}.{letter}", opt["name"])))
+            if opt.get("when"):
+                # opción que solo aparece si se cumple la condición
+                ob.entries.insert(1, ("trigger", render_conditions(
+                    eid, opt["when"], effect_ctx.triggers_used, where="12_events.yaml")))
             if "ai_chance" in opt:
                 ob.add("ai_chance", Block([("factor", opt["ai_chance"])]))
             b.add("option", ob)
