@@ -55,8 +55,8 @@ def emit(ctx: BuildContext) -> None:
                 ideas.add(None, iid)
             b.add("add_ideas", ideas)
 
-        for leader in characters_mod.leaders_of(ctx, c.tag):
-            b.add("recruit_character", leader["id"])
+        for ch in characters_mod.characters_of(ctx, c.tag):
+            b.add("recruit_character", ch["id"])
 
         for rel in subjects_of(ctx, c.tag):
             sa = Block()

@@ -7,7 +7,7 @@ from typing import Any
 from pathlib import Path
 
 from . import pdx
-from .errors import GenError
+from .errors import GenError, SpecError
 from .loc import LocRegistry
 from .specload import Spec
 from .vanilla import Vanilla
@@ -49,6 +49,21 @@ class BuildContext:
     def write_script(self, relative: str, block: pdx.Block, *, source: str) -> Path:
         """Escribe un .txt de Paradox con el banner de archivo generado."""
         return self.write_text(relative, pdx.banner_for(source) + pdx.render(block))
+
+    def copy_asset(self, source: str, relative: str) -> Path:
+        """Copia un archivo de assets/ (arte hecho a mano) a la salida.
+
+        assets/ es, con spec/, lo único editable a mano: el arte no se genera,
+        se referencia desde el spec y viaja tal cual.
+        """
+        src = self.spec.root.parent / source
+        if not src.is_file():
+            raise SpecError(f"no existe el asset '{source}'", where="assets")
+        dest = self.mod_root / relative
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(src.read_bytes())
+        self.written.append(dest)
+        return dest
 
     def track(self, path: Path) -> Path:
         self.written.append(path)

@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block
+from ..pdx import Block, Quoted
 from . import events as events_mod
 from . import ideas as ideas_mod
 from .effects import render_effects
@@ -76,7 +76,8 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     depth = _depths(by_id)
     positions = _layout(focuses, depth)
     known_ideas = ideas_mod.all_idea_ids(ctx)
-    icons = ctx.vanilla.gfx_names() if ctx.vanilla else None
+    custom = _emit_custom_icons(ctx, tag, focuses)
+    icons = (ctx.vanilla.gfx_names() | custom) if ctx.vanilla else None
     effects_used: dict[str, str] = {}
     triggers_used: dict[str, str] = {}
 
@@ -192,8 +193,67 @@ def _layout(focuses: list[tuple[str, dict]], depth: dict[str, int]) -> dict[str,
     return positions
 
 
+def _emit_custom_icons(ctx: BuildContext, tag: str, focuses: list[tuple[str, dict]]) -> set[str]:
+    """Íconos del usuario: copia el .dds y declara el sprite (normal y _shine).
+
+    El _shine es el brillo que HOI4 muestra cuando el foco está disponible;
+    sin él el foco se ve pero no brilla. Mismo formato que los goals vanilla.
+    """
+    sprites = Block()
+    names: set[str] = set()
+    for _, f in focuses:
+        asset = f.get("icon_asset")
+        if not asset:
+            continue
+        name = f["icon"]
+        if name in names:
+            continue
+        texture = f"gfx/interface/goals/{asset.rsplit('/', 1)[-1]}"
+        ctx.copy_asset(asset, texture)
+        names.add(name)
+
+        plain = Block()
+        plain.add("name", Quoted(name))
+        plain.add("texturefile", Quoted(texture))
+        sprites.add("spriteType", plain)
+
+        shine = Block()
+        shine.add("name", Quoted(f"{name}_shine"))
+        shine.add("texturefile", Quoted(texture))
+        shine.add("effectFile", Quoted("gfx/FX/buttonstate.lua"))
+        for rotation in (-90.0, 90.0):
+            anim = Block()
+            anim.add("animationmaskfile", Quoted(texture))
+            anim.add("animationtexturefile", Quoted("gfx/interface/goals/shine_overlay.dds"))
+            anim.add("animationrotation", rotation)
+            anim.add("animationlooping", False)
+            anim.add("animationtime", 0.75)
+            anim.add("animationdelay", 0)
+            anim.add("animationblendmode", Quoted("add"))
+            anim.add("animationtype", Quoted("scrolling"))
+            offset = Block()
+            offset.add("x", 0.0)
+            offset.add("y", 0.0)
+            anim.add("animationrotationoffset", offset)
+            scale = Block()
+            scale.add("x", 1.0)
+            scale.add("y", 1.0)
+            anim.add("animationtexturescale", scale)
+            shine.add("animation", anim)
+        shine.add("legacy_lazy_load", False)
+        sprites.add("spriteType", shine)
+
+    if names:
+        root = Block()
+        root.add("spriteTypes", sprites)
+        ctx.write_script(f"interface/meganations_{tag}_goals.gfx", root, source=SOURCE)
+    return names
+
+
 def _icon(ctx: BuildContext, focus: dict, icons: set[str] | None) -> str:
     icon = focus.get("icon") or FALLBACK_ICON
+    if focus.get("icon_asset"):
+        return icon
     if icons is None:
         ctx.warn("iconos de foco: no se validaron contra interface/*.gfx (falta --vanilla-path).")
         return icon

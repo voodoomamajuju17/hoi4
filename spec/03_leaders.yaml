@@ -53,10 +53,36 @@ characters:
       field_marshal: false
       advisor: false
     portrait:
-      status: placeholder
-      path: "gfx/leaders/EFE/aurelio_iv.dds"
-      src: invented
-      why: "HOI4 renderiza un cuadro roto sin portrait. Es placeholder programático."
+      status: user_art        # pack GFX del usuario, 2026-09-23
+      asset: assets/EFE/leaders/Aurelio_IV.dds
+      path: "gfx/leaders/EFE/Aurelio_IV.dds"
+
+  - id: EFE_bruno_etchegaray
+    country: EFE
+    src: invented
+    name:
+      regnal:
+        english: "Marshal Bruno Etchegaray"
+        spanish: "Mariscal Bruno Etchegaray"
+    born: 2049
+    lore: >
+      Comandante de la Guardia Verde. Estuvo en Iguazú al lado de Aurelio,
+      cuando las Milicias todavía peleaban con fusiles de caza. Es el único
+      oficial que tutea al Emperador en público, y el único al que el
+      Emperador no se atreve a retirar.
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits: []
+    portrait:
+      status: user_art
+      role: army
+      asset: assets/EFE/leaders/EFE_field_marshal_01.dds
+      path: "gfx/leaders/EFE/EFE_field_marshal_01.dds"
 
   # ---------------------------------------------------------------------------
   # Las otras siete potencias — inventados a pedido del usuario (Q016, Q017).

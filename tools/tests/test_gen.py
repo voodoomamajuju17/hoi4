@@ -400,12 +400,25 @@ def test_phase3_content() -> None:
 
         chars = (mod / "common/characters/EFE_characters.txt").read_text()
         check("Aurelio IV lider ecofascista", "ideology = ecofascism" in chars)
-        check("retrato placeholder", (mod / "gfx/leaders/EFE/aurelio_iv.dds").exists())
+        check("retrato del usuario copiado tal cual",
+              (mod / "gfx/leaders/EFE/Aurelio_IV.dds").read_bytes()
+              == (REPO_ROOT / "assets/EFE/leaders/Aurelio_IV.dds").read_bytes())
+        check("mariscal con retrato de ejercito", "army = {" in chars and "field_marshal = {" in chars, chars)
+        check("bandera del usuario", (mod / "gfx/flags/EFE.tga").read_bytes()
+              == (REPO_ROOT / "assets/EFE/flags/EFE.tga").read_bytes())
+        check("los demas siguen con bandera placeholder", (mod / "gfx/flags/ASC.tga").exists())
+        gfx = (mod / "interface/meganations_EFE_goals.gfx").read_text()
+        for icon in ("GFX_EFE_reforest_patagonia", "GFX_EFE_condor_doctrine"):
+            check(f"sprite {icon} y su _shine", f'"{icon}"' in gfx and f'"{icon}_shine"' in gfx)
+            check(f"textura de {icon} copiada", (mod / f"gfx/interface/goals/{icon[4:]}.dds").exists())
+        focus_txt = (mod / "common/national_focus/EFE_focus.txt").read_text()
+        check("foco usa icono propio aunque vanilla no lo tenga", "icon = GFX_EFE_green_legions" in focus_txt)
 
         hist_dir = mod / "history/countries"
         check("historia para los 10 paises", len(list(hist_dir.glob("*.txt"))) == 10)
         efe = (hist_dir / "EFE - Ecofascist Empire.txt").read_text()
         check("EFE recluta a Aurelio", "recruit_character = EFE_aurelio_iv" in efe)
+        check("mariscal reclutado", "recruit_character = EFE_bruno_etchegaray" in efe)
         check("EFE arranca con el Mandato", "EFE_mandato_verde" in efe)
         check("las ideas de foco no arrancan puestas", "EFE_conservacion_coercitiva" not in efe)
         check("capital del EFE = Buenos Aires (900)", "capital = 900" in efe, efe)

@@ -16,7 +16,8 @@ alguien tocó `build/` a mano, y muestra qué archivo.
 
 ```
 spec/*.yaml   ──►   tools/gen   ──►   build/meganations_2100/
-(a mano)            (Python)          (generado, no tocar)
+assets/             (Python)          (generado, no tocar)
+(a mano)
 ```
 
 ## Uso
@@ -55,7 +56,9 @@ instalación. Se genera local.
 ## Estructura
 
 ```
-spec/                 fuente de verdad, única carpeta editable a mano
+spec/                 fuente de verdad, editable a mano
+assets/               arte hecho a mano (banderas, retratos, íconos). El spec
+                      dice dónde va cada archivo; el generador lo copia tal cual
   00_project.yaml     metadatos, restricciones, decisiones de arquitectura
   01_ideologies.yaml  ... (ver spec/README.md)
   99_open_questions.yaml   43 preguntas, por fase que bloquean
@@ -70,7 +73,7 @@ tools/gen/            el generador
                       descriptor, ideologies, countries, resources,
                       ideas, characters, focus_trees, events,
                       territory, history, scenario
-tools/tests/          346 checks, corren sin el juego instalado
+tools/tests/          355 checks, corren sin el juego instalado
 
 build/                SALIDA. Generada, no versionada, no editable.
 ```

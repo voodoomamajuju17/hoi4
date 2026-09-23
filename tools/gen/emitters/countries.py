@@ -80,8 +80,18 @@ def _rgb(color: tuple[int, int, int]) -> Block:
 
 
 def _emit_flags(ctx: BuildContext) -> None:
+    """Bandera del usuario si el spec tiene `flag_asset`; si no, placeholder.
+
+    `flag_asset` es una carpeta con <TAG>.tga, medium/<TAG>.tga y
+    small/<TAG>.tga. <TAG>.tga es el fallback para cualquier ideología.
+    """
     gfx_root = ctx.mod_root / "gfx"
     for c in ctx.spec.countries:
+        asset = c.raw.get("flag_asset")
+        if asset:
+            for variant in ("", "medium/", "small/"):
+                ctx.copy_asset(f"{asset}/{variant}{c.tag}.tga", f"gfx/flags/{variant}{c.tag}.tga")
+            continue
         for path in write_country_flags(gfx_root, c.tag, c.color):
             ctx.track(path)
 

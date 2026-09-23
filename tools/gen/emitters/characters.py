@@ -34,6 +34,10 @@ def defined_characters(ctx: BuildContext) -> list[dict]:
     return [ch for ch in ctx.spec.raw["leaders"].get("characters", []) or [] if ch.get("id")]
 
 
+def characters_of(ctx: BuildContext, tag: str) -> list[dict]:
+    return [ch for ch in defined_characters(ctx) if ch["country"] == tag]
+
+
 def leaders_of(ctx: BuildContext, tag: str) -> list[dict]:
     return [
         ch for ch in defined_characters(ctx)
@@ -90,13 +94,18 @@ def emit(ctx: BuildContext) -> None:
             body = Block()
             body.add("name", ctx.loc.reference(cid, f"characters:{cid}"))
 
-            portrait_path = (ch.get("portrait") or {}).get("path")
+            portrait = ch.get("portrait") or {}
+            portrait_path = portrait.get("path")
             if portrait_path:
-                _write_portrait(ctx, portrait_path, country.color)
+                if portrait.get("asset"):
+                    ctx.copy_asset(portrait["asset"], portrait_path)
+                else:
+                    _write_portrait(ctx, portrait_path, country.color)
                 large = Block()
                 large.add("large", Quoted(portrait_path))
                 portraits = Block()
-                portraits.add("civilian", large)
+                # civilian para lideres de pais, army para militares
+                portraits.add(portrait.get("role", "civilian"), large)
                 body.add("portraits", portraits)
 
             leader = (ch.get("roles") or {}).get("country_leader")
@@ -123,6 +132,19 @@ def emit(ctx: BuildContext) -> None:
                     traits.add(None, trait)
                 role.add("traits", traits)
                 body.add("country_leader", role)
+
+            marshal = (ch.get("roles") or {}).get("field_marshal")
+            if isinstance(marshal, dict):
+                fm = Block()
+                traits = Block()
+                for trait in marshal.get("traits") or []:
+                    traits.add(None, trait)
+                fm.add("traits", traits)
+                for key in ("skill", "attack_skill", "defense_skill", "planning_skill", "logistics_skill"):
+                    if key not in marshal:
+                        raise SpecError(f"{cid}: field_marshal sin {key}", where="03_leaders.yaml")
+                    fm.add(key, int(marshal[key]))
+                body.add("field_marshal", fm)
 
             characters.add(cid, body)
 
