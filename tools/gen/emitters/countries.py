@@ -24,10 +24,11 @@ from ..specload import Country
 SOURCE = "spec/02_countries.yaml"
 LOC_FILE = "meganations_countries"
 
-# Q013: se reusan culturas graficas vanilla a proposito. Un valor inventado
-# rompe la carga porque tiene que existir en interface/*.gfx.
-DEFAULT_GFX_CULTURE = "western_european_gfx"
-DEFAULT_GFX_CULTURE_2D = "western_european_2d"
+# Q013: se reusan culturas graficas vanilla (una por region, campo `graphics`
+# de cada pais: "southamerican" -> southamerican_gfx / southamerican_2d). Un
+# valor inventado rompe la carga, asi que se valida contra los que usa algun
+# pais vanilla; si no existe, se cae a la europea occidental con aviso.
+DEFAULT_GFX = "western_european"
 
 
 def emit(ctx: BuildContext) -> None:
@@ -46,16 +47,20 @@ def _emit_tags(ctx: BuildContext) -> None:
 
 
 def _emit_country_files(ctx: BuildContext) -> None:
+    known = ctx.vanilla.graphical_cultures() if ctx.vanilla is not None else None
+    used: dict[str, list[str]] = {}
     for c in ctx.spec.countries:
+        base = c.raw.get("graphics") or DEFAULT_GFX
+        gfx, gfx2d = f"{base}_gfx", f"{base}_2d"
+        if known is not None and known[0] and (gfx not in known[0] or gfx2d not in known[1]):
+            ctx.warn(f"{c.tag}: la cultura grafica '{base}' no existe en este juego; uso {DEFAULT_GFX}.")
+            gfx, gfx2d = f"{DEFAULT_GFX}_gfx", f"{DEFAULT_GFX}_2d"
         b = Block()
-        b.add("graphical_culture", DEFAULT_GFX_CULTURE)
-        b.add("graphical_culture_2d", DEFAULT_GFX_CULTURE_2D)
+        b.add("graphical_culture", gfx)
+        b.add("graphical_culture_2d", gfx2d)
         ctx.write_script(f"common/countries/{c.filename}.txt", b, source=SOURCE)
-    ctx.warn(
-        f"graphical_culture de los {len(ctx.spec.countries)} paises = "
-        f"'{DEFAULT_GFX_CULTURE}' (vanilla). Es la opcion segura de Q013, no una "
-        f"decision estetica."
-    )
+        used.setdefault(gfx.removesuffix("_gfx"), []).append(c.tag)
+    ctx.note("culturas graficas: " + "; ".join(f"{k} ({len(v)})" for k, v in sorted(used.items())))
 
 
 def _emit_colors(ctx: BuildContext) -> None:

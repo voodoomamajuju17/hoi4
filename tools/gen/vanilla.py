@@ -356,6 +356,20 @@ class Vanilla:
             tags.update(re.findall(r"^\s*([A-Z][A-Z0-9]{2})\s*=", text, re.MULTILINE))
         return tags
 
+    def graphical_cultures(self) -> tuple[set[str], set[str]]:
+        """Valores de graphical_culture y graphical_culture_2d que usa algún
+        país vanilla (common/countries/). Son los únicos que seguro cargan."""
+        gfx: set[str] = set()
+        gfx2d: set[str] = set()
+        for path in (self.root / "common" / "countries").glob("*.txt"):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            gfx.update(re.findall(r"^\s*graphical_culture\s*=\s*\"?([a-z0-9_]+)", text, re.MULTILINE))
+            gfx2d.update(re.findall(r"^\s*graphical_culture_2d\s*=\s*\"?([a-z0-9_]+)", text, re.MULTILINE))
+        return gfx, gfx2d
+
     def wargoal_types(self) -> set[str]:
         words: set[str] = set()
         for path in (self.root / "common" / "wargoals").glob("*.txt"):

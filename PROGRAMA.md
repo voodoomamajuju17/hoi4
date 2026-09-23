@@ -24,9 +24,10 @@ elementos también van por importancia.
 - [~] Listas de nombres de personajes para los 29 países
 - [ ] Limpiar el ruido de error.log:
   - [ ] on_actions vanilla que apuntan a eventos que ya no cargan (evaluar `replace_path` de `common/on_actions` conservando los esenciales)
-  - [ ] decisiones vanilla de países que no existen (China, etc.): evaluar `replace_path` de `common/decisions`
+  - [~] decisiones nacionales vanilla de países que no existen (China, Congo...): archivos vaciados
   - [ ] "AI tried to post an invalid command: unlock_trait_command"
-- [ ] Culturas gráficas por región (Q013): modelos de soldados, tanques y retratos genéricos que no sean todos de Europa occidental
+- [~] Culturas gráficas por región (Q013): sudamericana, asiática, africana, Commonwealth, Europa oriental, Medio Oriente
+- [~] Fondo del menú principal: detección por las pantallas del menú (`frontend*.gui`); el reporte lista lo que reemplaza
 - [ ] Rendimiento: medir días por segundo con 29 países + guerras activas
 
 ## 2. Mundo y balance global

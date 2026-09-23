@@ -10,8 +10,13 @@ más cercano, sin dependencias).
 Candidatos: en 1.19 el fondo es GFX_frontend_bg (interface/frontendmainviewbg.gfx,
 un corneredTileSpriteType que apunta a gfx/loadingscreens/load_5.dds). Además
 se aceptan sprites cuyo nombre hable de menú principal y de fondo, por si una
-versión futura lo renombra. Se reportan en reporte.txt; si no aparece
-ninguno, se avisa y no se escribe nada.
+versión futura lo renombra.
+
+Como en 1.19.3 reemplazar solo GFX_frontend_bg no alcanzó (el menú siguió
+igual), también se toman los sprites que usan las pantallas del menú
+(interface/frontend*.gui y mainmenu*.gui) cuya textura es una imagen grande
+(al menos 1280 px de ancho): esos son fondos, no botones. Todo lo que se
+reemplaza y lo que se descartó va al reporte, para ver qué usa el juego.
 """
 
 from __future__ import annotations
@@ -23,6 +28,8 @@ from ..context import BuildContext
 
 _NAME = re.compile(r"(?i)^GFX_frontend_(main_?)?bg$|(main_?menu|menu).*(bg|background)|(bg|background).*(main_?menu)")
 _SPRITE = re.compile(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)"?\s+texturefile\s*=\s*"([^"]+)"', re.S)
+_GUI_SPRITE = re.compile(r'(?:spriteType|quadTextureSprite)\s*=\s*"?(GFX_[A-Za-z0-9_]+)"?')
+_MIN_BG_WIDTH = 1280
 
 
 def emit(ctx: BuildContext) -> None:
@@ -53,17 +60,44 @@ def emit(ctx: BuildContext) -> None:
 
 
 def _menu_textures(ctx: BuildContext) -> set[str]:
-    out: set[str] = set()
+    sprites: dict[str, str] = {}
     for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
         try:
             text = path.read_text(encoding="utf-8-sig", errors="replace")
         except OSError:
             continue
         for name, texture in _SPRITE.findall(text):
-            texture = texture.replace("\\", "/")
-            if texture.lower().endswith(".dds") and _NAME.search(name):
-                out.add(texture)
+            sprites.setdefault(name, texture.replace("\\", "/"))
+    out = {t for n, t in sprites.items() if t.lower().endswith(".dds") and _NAME.search(n)}
+
+    used: set[str] = set()
+    for pattern in ("frontend*.gui", "mainmenu*.gui", "main_menu*.gui"):
+        for path in (ctx.vanilla.root / "interface").glob(f"**/{pattern}"):
+            try:
+                used.update(_GUI_SPRITE.findall(path.read_text(encoding="utf-8-sig", errors="replace")))
+            except OSError:
+                continue
+    small = []
+    for name in sorted(used):
+        texture = sprites.get(name)
+        if not texture or not texture.lower().endswith(".dds"):
+            continue
+        width, height = _texture_dims(ctx, texture)
+        if width >= _MIN_BG_WIDTH:
+            out.add(texture)
+        elif width and height and width * height >= 256 * 256:
+            small.append(f"{name} {width}x{height}")
+    if small:
+        ctx.note("menu principal: imagenes medianas del menu que NO se tocan: " + ", ".join(small[:15]))
     return out
+
+
+def _texture_dims(ctx: BuildContext, texture: str) -> tuple[int, int]:
+    try:
+        with (ctx.vanilla.root / texture).open("rb") as fh:
+            return _dims(fh.read(128))
+    except OSError:
+        return 0, 0
 
 
 def _dims(data: bytes) -> tuple[int, int]:

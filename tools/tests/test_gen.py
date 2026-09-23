@@ -768,6 +768,21 @@ def test_balance() -> None:
         import struct as _st
         check("reescalado al tamano del vanilla (4x2)", _st.unpack_from("<II", raw, 12) == (2, 4), str(_st.unpack_from("<II", raw, 12)))
         check("no toca otros sprites", not (mod / "gfx/interface/goals/goal_unknown.dds").exists())
+        dlc = mod / "gfx/interface/frontend/dlc_menu_bg.dds"
+        check("reemplaza tambien el fondo grande que usa frontendmainview.gui", dlc.exists())
+        check("fondo grande al tamano del vanilla (1920x1080)",
+              dlc.exists() and _st.unpack_from("<II", dlc.read_bytes(), 12) == (1080, 1920))
+        check("no toca los botones chicos del menu", not (mod / "gfx/interface/frontend/menu_button.dds").exists())
+
+        efe_c = (mod / "common/countries/Ecofascist_Empire.txt").read_text()
+        check("EFE con cultura grafica sudamericana", "southamerican_gfx" in efe_c and "southamerican_2d" in efe_c, efe_c)
+        shd_c = next((mod / "common/countries").glob("Sino*.txt")).read_text()
+        check("cultura que no existe en el juego cae a la europea con aviso",
+              "western_european_gfx" in shd_c and any("SHD: la cultura grafica" in w for w in ctx.warnings), shd_c)
+
+        check("vacia las decisiones nacionales de un pais vanilla (GER)",
+              "GER_example" not in (mod / "common/decisions/GER.txt").read_text())
+        check("no toca las decisiones genericas", not (mod / "common/decisions/economy.txt").exists())
 
 
 def test_forces() -> None:
