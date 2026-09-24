@@ -1,0 +1,87 @@
+# =============================================================================
+# 2100 Meganations — IA de las potencias (2026-09-24)
+# =============================================================================
+# Cada plan se vuelve un bloque de common/ai_strategy/. Tipos validados contra
+# los que usa el juego instalado; uno desconocido se descarta con aviso.
+#
+# defaults.satellites: cada señor protege a sus satélites y ellos lo apoyan.
+# defaults.rivals: las rivalidades de 04_diplomacy se antagonizan.
+# plans: a quién conquistar, cuándo prepararse y cuándo declarar.
+# =============================================================================
+defaults:
+  satellites: {protect: 150, befriend: 100, support: 100}
+  rivals: {antagonize: 30}
+plans:
+- id: EFE_el_amazonas
+  country: EFE
+  lore: 'Tiene la justificación desde el primer día: prepara la guerra y declara cuando esté listo.'
+  strategies:
+  - {type: conquer, target: ZWB, value: 200}
+  - {type: prepare_for_war, target: ZWB, value: 100}
+  - {type: declare_war, target: ZWB, value: 100}
+- id: ASC_la_guerra_del_este
+  country: ASC
+  lore: 'Ya en guerra con Eurasia: empujar hasta el final.'
+  strategies:
+  - {type: conquer, target: ZWE, value: 200}
+- id: NRE_la_reconquista_de_oriente
+  country: NRE
+  lore: Ya en guerra con los Emiratos.
+  strategies:
+  - {type: conquer, target: ZWM, value: 200}
+- id: NRE_la_marcha_al_norte
+  country: NRE
+  lore: Terminado Oriente (o con el foco), las legiones miran a Eurasia.
+  enable:
+    any:
+    - {focus: NRE_la_marcha_al_norte}
+    - not: {country_exists: ZWM}
+  strategies:
+  - {type: conquer, target: ZWE, value: 150}
+  - {type: prepare_for_war, target: ZWE, value: 100}
+- id: SHD_el_indostan
+  country: SHD
+  lore: El Directorio quiere el Indostán; con Zhou lo quiere ya.
+  strategies:
+  - {type: conquer, target: ZWI, value: 100}
+  - {type: prepare_for_war, target: ZWI, value: 50}
+- id: SHD_la_crecida_hacia_el_sur
+  country: SHD
+  enable: {flag: SHD_zhou}
+  strategies:
+  - {type: conquer, target: ZWI, value: 200}
+  - {type: declare_war, target: ZWI, value: 100}
+- id: APF_los_emiratos
+  country: APF
+  lore: 'Del Sahel al Golfo: compite con Roma por los Emiratos.'
+  strategies:
+  - {type: conquer, target: ZWM, value: 75}
+- id: APF_la_marcha_de_los_consejos
+  country: APF
+  enable: {flag: APF_diallo}
+  strategies:
+  - {type: conquer, target: ZWM, value: 200}
+  - {type: declare_war, target: ZWM, value: 100}
+- id: NAS_la_selva_del_sol
+  country: NAS
+  lore: 'El Sol también quiere el Amazonas: compite con el EFE.'
+  strategies:
+  - {type: conquer, target: ZWB, value: 75}
+- id: FCU_el_canal
+  country: FCU
+  lore: El Canal de Panamá está en manos de caudillos. Mal negocio.
+  strategies:
+  - {type: conquer, target: ZWB, value: 60}
+- id: HSN_las_costas_del_indostan
+  country: HSN
+  lore: Puertos del Índico para la red de nodos.
+  strategies:
+  - {type: conquer, target: ZWI, value: 50}
+- id: FCU_contener_a_la_flota
+  country: FCU
+  strategies:
+  - {type: contain, target: HSN, value: 50}
+- id: HSN_contener_a_la_corporacion
+  country: HSN
+  strategies:
+  - {type: contain, target: FCU, value: 50}

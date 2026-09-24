@@ -337,6 +337,7 @@ trees:
         reward:
         - {effect: add_ideas, value: EFE_continente_vivo}
     - id: autarquia
+      ai_factor: 1.5
       name: {english: The BioSteel Autarky, spanish: La Autarquía del Bioacero}
       focuses:
       - id: EFE_ministerio_de_restauracion
@@ -431,6 +432,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: EFE_autarquia_estrategica, add: EFE_autarquia_total}
     - id: diplomacia_agua
+      ai_factor: 1.5
       name: {english: Water Diplomacy, spanish: La Diplomacia del Agua}
       focuses:
       - id: EFE_diplomacia_del_agua
@@ -512,6 +514,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: EFE_diplomacia_hidrica, add: EFE_potencia_hidrica}
     - id: cubas
+      ai_factor: 2
       name: {english: The Pampa Vats, spanish: Las Cubas de la Pampa}
       focuses:
       - id: EFE_cubas_de_segunda_generacion
@@ -608,6 +611,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: guardia_verde
+      ai_factor: 1.5
       name: {english: The Green Guard, spanish: La Guardia Verde}
       focuses:
       - id: EFE_guardia_verde_movilizada
@@ -685,6 +689,7 @@ trees:
         - {effect: add_ideas, value: EFE_armadura_viviente}
         - {effect: add_variable, var: EFE_biosteel, value: -3}
     - id: condores
+      ai_factor: 1
       name: {english: The Condors, spanish: Los Cóndores}
       focuses:
       - id: EFE_alas_del_condor
@@ -767,6 +772,7 @@ trees:
           when: {coastal: true}
         - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
     - id: ciclo_bioacero
+      ai_factor: 2
       name: {english: The BioSteel Cycle, spanish: El Ciclo del Bioacero}
       focuses:
       - id: EFE_primera_cosecha
@@ -1103,6 +1109,7 @@ trees:
         - {effect: event, id: meganations_apf.1, target: APF}
         - {effect: add_war_support, value: 0.05}
     - id: plan_total
+      ai_factor: 1.5
       name: {english: The Total Plan, spanish: El Plan Total}
       focuses:
       - id: ASC_el_consejo_economico
@@ -1212,6 +1219,7 @@ trees:
           effects:
           - {effect: build_here, building: industrial_complex, level: 1}
     - id: mercado_computo
+      ai_factor: 1.5
       name: {english: The Compute Market, spanish: El Mercado de Cómputo}
       focuses:
       - id: ASC_el_mercado_de_creditos_de_computo
@@ -1292,6 +1300,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: fabricas_a_oscuras
+      ai_factor: 2
       name: {english: Lights-Out Factories, spanish: Fábricas a Oscuras}
       focuses:
       - id: ASC_lineas_sin_operarios
@@ -1376,6 +1385,7 @@ trees:
         - {effect: add_variable, var: ASC_computo, value: 5}
         - {effect: run, value: ASC_recalcular_computo}
     - id: enjambres
+      ai_factor: 1.5
       name: {english: Autonomous Swarms, spanish: Enjambres Autónomos}
       focuses:
       - id: ASC_drones_de_infanteria
@@ -1454,6 +1464,7 @@ trees:
         reward:
         - {effect: add_ideas, value: ASC_enjambre}
     - id: flota_del_norte
+      ai_factor: 1
       name: {english: The Northern Fleet, spanish: La Flota del Norte}
       focuses:
       - id: ASC_submarinos_autonomos
@@ -1540,6 +1551,7 @@ trees:
         - {effect: run, value: ASC_recalcular_computo}
         - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
     - id: poder_de_computo
+      ai_factor: 2
       name: {english: Compute Power, spanish: Poder de Cómputo}
       focuses:
       - id: ASC_datacenter_de_brandeburgo
@@ -1933,6 +1945,7 @@ trees:
         - {effect: event, id: meganations_hsn.2, days: 1, target: HSN}
         - {effect: add_war_support, value: 0.05}
     - id: economia_dividendo
+      ai_factor: 1.5
       name: {english: The Civil Dividend, spanish: El Dividendo Civil}
       focuses:
       - id: FCU_consejo_economico
@@ -2028,6 +2041,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: FCU_dividendo_civil, add: FCU_economia_de_la_abundancia}
     - id: economia_agua
+      ai_factor: 1.5
       name: {english: The Water Monopoly, spanish: El Monopolio del Agua}
       focuses:
       - id: FCU_monopolio_del_agua
@@ -2111,6 +2125,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: FCU_monopolio_hidrico, add: FCU_imperio_del_agua}
     - id: industria
+      ai_factor: 2
       name: {english: The Meridian Parks, spanish: Los Parques de Meridian}
       focuses:
       - id: FCU_zonas_industriales
@@ -2219,6 +2234,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: ejercito
+      ai_factor: 1.2
       name: {english: Professional Contractors, spanish: Contratistas Profesionales}
       focuses:
       - id: FCU_fuerza_contratada
@@ -2296,6 +2312,7 @@ trees:
         - {effect: army_experience, value: 50}
         - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}
     - id: mar_aire
+      ai_factor: 1.5
       name: {english: The Two-Ocean Fleet, spanish: La Flota de Dos Océanos}
       focuses:
       - id: FCU_flota_del_atlantico
@@ -2387,6 +2404,7 @@ trees:
         reward:
         - {effect: add_ideas, value: FCU_dos_oceanos}
     - id: directorio
+      ai_factor: 1.5
       name: {english: The Board Room, spanish: La Sala del Directorio}
       focuses:
       - id: FCU_el_tablero
@@ -2749,6 +2767,7 @@ trees:
         - {effect: wargoal, target: FCU, type: annex_everything}
         - {effect: add_war_support, value: 0.1}
     - id: puerto_libre
+      ai_factor: 1.5
       name: {english: The Free Port, spanish: El Puerto Libre}
       focuses:
       - id: HSN_el_consejo_mercantil
@@ -2836,6 +2855,7 @@ trees:
           effects:
           - {effect: build_here, building: industrial_complex, level: 1}
     - id: peaje
+      ai_factor: 1.5
       name: {english: The Straits Toll, spanish: El Peaje de los Estrechos}
       focuses:
       - id: HSN_el_peaje_de_los_estrechos
@@ -2906,6 +2926,7 @@ trees:
           effects:
           - {effect: build_here, building: arms_factory, level: 1}
     - id: astilleros
+      ai_factor: 2
       name: {english: Floating Shipyards, spanish: Astilleros Flotantes}
       focuses:
       - id: HSN_astilleros_flotantes
@@ -3006,6 +3027,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: cubierta
+      ai_factor: 1
       name: {english: Deck Infantry, spanish: Infantería de Cubierta}
       focuses:
       - id: HSN_marines_de_alta_mar
@@ -3068,6 +3090,7 @@ trees:
         reward:
         - {effect: army_experience, value: 75}
     - id: armada
+      ai_factor: 2
       name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
       focuses:
       - id: HSN_escoltas_de_convoy
@@ -3151,6 +3174,7 @@ trees:
         - {effect: navy_experience, value: 50}
         - {effect: add_political_power, value: 50}
     - id: nodos
+      ai_factor: 1.5
       name: {english: The Nodes, spanish: Los Nodos}
       focuses:
       - id: HSN_malaca
@@ -3607,6 +3631,7 @@ trees:
         - {effect: add_ideas, value: NAS_tawantinsuyu}
         - {effect: add_research_slot, value: 1}
     - id: terrazas
+      ai_factor: 1.5
       name: {english: The Terraces, spanish: Las Terrazas}
       focuses:
       - id: NAS_el_consejo_del_campo
@@ -3664,6 +3689,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: NAS_terrazas, add: NAS_terrazas_2}
     - id: mineria
+      ai_factor: 1.5
       name: {english: Sky Mining, spanish: La Minería del Cielo}
       focuses:
       - id: NAS_la_mineria_del_cielo
@@ -3717,6 +3743,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: NAS_mineria, add: NAS_mineria_2}
     - id: talleres
+      ai_factor: 2
       name: {english: Workshops of the Heights, spanish: Talleres de Altura}
       focuses:
       - id: NAS_talleres_de_altura
@@ -3780,6 +3807,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: guerreros
+      ai_factor: 1.2
       name: {english: Warriors of the Puna, spanish: Guerreros de la Puna}
       focuses:
       - id: NAS_guerreros_de_la_puna
@@ -3850,6 +3878,7 @@ trees:
         - {effect: army_experience, value: 75}
         - {effect: army_experience, value: 75}
     - id: alas_del_sol
+      ai_factor: 0.7
       name: {english: Wings of the Sun, spanish: Alas del Sol}
       focuses:
       - id: NAS_alas_del_sol
@@ -3915,6 +3944,7 @@ trees:
         - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
         - {effect: navy_experience, value: 25}
     - id: inti_soma
+      ai_factor: 2
       name: {english: Inti-Soma, spanish: Inti-Soma}
       focuses:
       - id: NAS_granjas_del_sol
@@ -4238,6 +4268,7 @@ trees:
         - {effect: add_ideas, value: SHD_espiritu_el_rio_desbordado}
         - {effect: add_research_slot, value: 1}
     - id: grandes_obras
+      ai_factor: 1.5
       name: {english: The Great Works, spanish: Las Grandes Obras}
       focuses:
       - id: SHD_el_consejo_economico
@@ -4303,6 +4334,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: SHD_grandes_obras, add: SHD_grandes_obras_2}
     - id: precision
+      ai_factor: 1.5
       name: {english: The Precision Economy, spanish: La Economía de Precisión}
       focuses:
       - id: SHD_la_economia_de_precision
@@ -4353,6 +4385,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: SHD_precision, add: SHD_precision_2}
     - id: represas
+      ai_factor: 2
       name: {english: The Yangtze Dams, spanish: Las Represas del Yangtsé}
       focuses:
       - id: SHD_las_tres_gargantas
@@ -4420,6 +4453,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: ejercito_del_caudal
+      ai_factor: 1.5
       name: {english: The Army of the Flow, spanish: El Ejército del Caudal}
       focuses:
       - id: SHD_infanteria_de_masa
@@ -4485,6 +4519,7 @@ trees:
         - {effect: army_experience, value: 75}
         - {effect: army_experience, value: 75}
     - id: cielo
+      ai_factor: 1
       name: {english: The Harmonious Sky, spanish: El Cielo Armonioso}
       focuses:
       - id: SHD_drones_de_vigilancia
@@ -4551,6 +4586,7 @@ trees:
         - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
         - {effect: navy_experience, value: 25}
     - id: armonia
+      ai_factor: 1.5
       name: {english: Harmony, spanish: La Armonía}
       focuses:
       - id: SHD_los_tres_caudales
@@ -4864,6 +4900,7 @@ trees:
         - {effect: add_ideas, value: APF_federacion_sin_fronteras}
         - {effect: add_research_slot, value: 1}
     - id: aldea
+      ai_factor: 1.5
       name: {english: The Self-Sufficient Village, spanish: La Aldea Autosuficiente}
       focuses:
       - id: APF_el_consejo_economico
@@ -4930,6 +4967,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: APF_aldea, add: APF_aldea_2}
     - id: corredor
+      ai_factor: 1.5
       name: {english: The Continental Corridor, spanish: El Corredor Continental}
       focuses:
       - id: APF_el_corredor_continental
@@ -4981,6 +5019,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: APF_corredor, add: APF_corredor_2}
     - id: polos
+      ai_factor: 2
       name: {english: The Sahel Hubs, spanish: Los Polos del Sahel}
       focuses:
       - id: APF_polo_de_lagos
@@ -5048,6 +5087,7 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: milicias
+      ai_factor: 1.2
       name: {english: The Council Militias, spanish: Milicias de los Consejos}
       focuses:
       - id: APF_milicias_regulares
@@ -5112,6 +5152,7 @@ trees:
         - {effect: army_experience, value: 75}
         - {effect: army_experience, value: 75}
     - id: alas
+      ai_factor: 0.7
       name: {english: Wings of the Continent, spanish: Alas del Continente}
       focuses:
       - id: APF_alas_del_continente
@@ -5179,6 +5220,7 @@ trees:
         - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
         - {effect: navy_experience, value: 25}
     - id: integracion
+      ai_factor: 1.5
       name: {english: The Integration, spanish: La Integración}
       focuses:
       - id: APF_consejos_locales
@@ -5535,6 +5577,7 @@ trees:
         - {effect: add_variable, var: NRE_auctoritas, value: 20}
         - {effect: run, value: NRE_recalcular_legiones}
     - id: erario
+      ai_factor: 1.5
       name: {english: The Treasury, spanish: El Erario}
       focuses:
       - id: NRE_el_erario
@@ -5646,6 +5689,7 @@ trees:
         reward:
         - {effect: add_ideas, value: NRE_aureus}
     - id: forjas
+      ai_factor: 2
       name: {english: The Imperial Forges, spanish: Las Forjas Imperiales}
       focuses:
       - id: NRE_las_forjas_imperiales
@@ -5738,6 +5782,7 @@ trees:
         reward:
         - {effect: add_ideas, value: NRE_economia_de_guerra}
     - id: legiones
+      ai_factor: 2
       name: {english: The Legions, spanish: Las Legiones}
       focuses:
       - id: NRE_las_legiones
@@ -5843,6 +5888,7 @@ trees:
         - {effect: add_variable, var: NRE_prestigio_fulminata, value: 10}
         - {effect: run, value: NRE_recalcular_legiones}
     - id: mare_nostrum
+      ai_factor: 1.5
       name: {english: Mare Nostrum, spanish: Mare Nostrum}
       focuses:
       - id: NRE_mare_nostrum
@@ -5914,6 +5960,7 @@ trees:
         - {effect: swap_ideas, remove: NRE_mare_nostrum_idea, add: NRE_mediterraneo_romano}
         - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
     - id: oficiales
+      ai_factor: 1.5
       name: {english: Legions and Officers, spanish: Legiones y Oficiales}
       focuses:
       - id: NRE_legiones_y_oficiales

@@ -253,3 +253,17 @@ existe, se omite con aviso.
 - Annona (estabilidad y hombres) contra Tributo (poder político y fábricas),
   Forjas Imperiales, Las Legiones, Mare Nostrum (aire y mar) y Legiones y
   Oficiales como árbol extra de 6 focos. 53 focos en total.
+
+## IA v1 — cómo quedó en el motor
+
+- **Estrategias** (`spec/16_ai.yaml` → `common/ai_strategy/`): cada potencia
+  tiene un blanco de conquista que se abandona solo cuando el blanco
+  desaparece. Las revoluciones endurecen el plan: con Zhou la SHD declara al
+  Indostán; con Diallo la APF declara a los Emiratos. Los tipos se validan
+  contra los que usa el juego instalado.
+- **Satélites y rivales**, automáticos: cada señor protege y apoya a sus
+  satélites; las rivalidades de 04_diplomacy se antagonizan (30).
+- **Decisiones con criterio** (campo `ai` en 14_decisions): la IA mira la
+  mecánica antes de gastar.
+- **Peso por rama** (`ai_factor` en la rama de 07_focus_trees): vale para
+  todos los focos de la rama que no tengan uno propio.

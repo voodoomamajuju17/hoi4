@@ -32,6 +32,7 @@ SPEC_FILES = {
     "military": "13_military.yaml",
     "decisions": "14_decisions.yaml",
     "balance": "15_balance.yaml",
+    "ai": "16_ai.yaml",
     "questions": "99_open_questions.yaml",
 }
 

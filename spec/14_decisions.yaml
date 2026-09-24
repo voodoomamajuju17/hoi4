@@ -57,6 +57,11 @@ categories:
           - { effect: add_variable, var: EFE_biosteel, value: 2 }
           - { effect: add_stability, value: -0.05 }
         ai_factor: 5
+        ai:
+          factor: 5
+          modifiers:
+          - factor: 0
+            when: {stability_below: 0.4}
 
       - id: EFE_talar_el_bosque_viejo
         name: { english: "Fell the Old Forest", spanish: "Talar el Bosque Viejo" }
@@ -73,6 +78,11 @@ categories:
           - { effect: add_stability, value: -0.15 }
           - { effect: add_war_support, value: -0.05 }
         ai_factor: 1
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0
+            when: {stability_below: 0.5}
 
       - id: EFE_blindar_la_guardia
         name: { english: "Armour the Green Guard", spanish: "Blindar a la Guardia Verde" }
@@ -126,6 +136,20 @@ categories:
           - { effect: add_variable, var: FCU_castellane, value: -5 }
           - { effect: build, building: infrastructure, level: 1 }
         ai_factor: 5
+        ai:
+          factor: 5
+          modifiers:
+          - factor: 3
+            when:
+              any:
+              - variable_below: {var: FCU_meridian, value: 45}
+              - variable_below: {var: FCU_obsidian, value: 45}
+          - factor: 0
+            when:
+              any:
+              - variable_below: {var: FCU_halvorsen, value: 25}
+              - variable_below: {var: FCU_castellane, value: 25}
+              - variable_at_least: {var: FCU_meridian, value: 65}
 
       - id: FCU_subsidio_alimentario
         name: { english: "Food Subsidy", spanish: "Subsidio Alimentario" }
@@ -143,6 +167,18 @@ categories:
           - { effect: add_variable, var: FCU_obsidian, value: -10 }
           - { effect: add_stability, value: 0.03 }
         ai_factor: 5
+        ai:
+          factor: 5
+          modifiers:
+          - factor: 3
+            when:
+              variable_below: {var: FCU_halvorsen, value: 45}
+          - factor: 0
+            when:
+              any:
+              - variable_below: {var: FCU_obsidian, value: 30}
+              - variable_below: {var: FCU_meridian, value: 25}
+              - variable_at_least: {var: FCU_halvorsen, value: 65}
 
       - id: FCU_licitacion_desalinizadoras
         name: { english: "Desalination Tender", spanish: "Licitación de Desalinizadoras" }
@@ -160,6 +196,18 @@ categories:
           - { effect: add_variable, var: FCU_obsidian, value: -5 }
           - { effect: build, building: industrial_complex, level: 1 }
         ai_factor: 4
+        ai:
+          factor: 4
+          modifiers:
+          - factor: 3
+            when:
+              variable_below: {var: FCU_castellane, value: 45}
+          - factor: 0
+            when:
+              any:
+              - variable_below: {var: FCU_meridian, value: 25}
+              - variable_below: {var: FCU_obsidian, value: 25}
+              - variable_at_least: {var: FCU_castellane, value: 65}
 
       - id: FCU_contrato_de_defensa
         name: { english: "Defence Contract", spanish: "Contrato de Defensa" }
@@ -178,6 +226,21 @@ categories:
           - { effect: army_experience, value: 15 }
           - { effect: build, building: arms_factory, level: 1 }
         ai_factor: 3
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 3
+            when:
+              variable_below: {var: FCU_meridian, value: 40}
+          - factor: 2
+            when: {at_war: true}
+          - factor: 0
+            when:
+              any:
+              - variable_below: {var: FCU_castellane, value: 25}
+              - variable_below: {var: FCU_halvorsen, value: 25}
+              - variable_below: {var: FCU_obsidian, value: 25}
+              - variable_at_least: {var: FCU_meridian, value: 60}
 
       - id: FCU_desregulacion_financiera
         name: { english: "Financial Deregulation", spanish: "Desregulación Financiera" }
@@ -195,6 +258,19 @@ categories:
           - { effect: add_variable, var: FCU_meridian, value: -5 }
           - { effect: timed_idea, idea: FCU_ventanilla_obsidian, days: 180 }
         ai_factor: 3
+        ai:
+          factor: 3
+          modifiers:
+          - factor: 3
+            when:
+              variable_below: {var: FCU_obsidian, value: 40}
+          - factor: 0
+            when:
+              any:
+              - variable_below: {var: FCU_castellane, value: 25}
+              - variable_below: {var: FCU_halvorsen, value: 25}
+              - variable_below: {var: FCU_meridian, value: 25}
+              - variable_at_least: {var: FCU_obsidian, value: 60}
 
       - id: FCU_auditoria_del_directorio
         name: { english: "Board Audit", spanish: "Auditoría del Directorio" }
@@ -211,6 +287,16 @@ categories:
           - { effect: run, value: FCU_auditar_meridian }
           - { effect: run, value: FCU_auditar_obsidian }
         ai_factor: 2
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 10
+            when:
+              any:
+              - variable_below: {var: FCU_castellane, value: 20}
+              - variable_below: {var: FCU_halvorsen, value: 20}
+              - variable_below: {var: FCU_meridian, value: 20}
+              - variable_below: {var: FCU_obsidian, value: 20}
 
       - id: FCU_repartir_el_dividendo
         name: { english: "Pay the War Dividend", spanish: "Repartir el Dividendo de Guerra" }
@@ -252,6 +338,13 @@ categories:
         effects:
           - { effect: add_variable, var: EFE_control_del_monte, value: 15 }
         ai_factor: 3
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0.3
+            when: {stability_at_least: 0.4}
+          - factor: 3
+            when: {stability_below: 0.4}
       - id: EFE_militarizar_las_reservas
         name: { english: "Militarise the Reserves", spanish: "Militarizar las Reservas" }
         desc: { english: "The nature reserves become garrisons. The Guard trains the rangers.", spanish: "Las reservas naturales se vuelven guarniciones. La Guardia entrena a los guardaparques." }
@@ -264,6 +357,13 @@ categories:
           - { effect: army_experience, value: 10 }
           - { effect: add_stability, value: -0.03 }
         ai_factor: 2
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0.3
+            when: {stability_at_least: 0.4}
+          - factor: 3
+            when: {stability_below: 0.4}
       - id: EFE_proteger_las_ciudades
         name: { english: "Protect the Cities", spanish: "Proteger las Ciudades" }
         desc: { english: "Police in the streets and bread in the markets. The court buys time.", spanish: "Policía en las calles y pan en los mercados. La corte compra tiempo." }
@@ -275,6 +375,12 @@ categories:
           - { effect: add_variable, var: EFE_control_del_monte, value: -15 }
           - { effect: add_stability, value: 0.05 }
         ai_factor: 2
+        ai:
+          factor: 2
+          modifiers:
+          - factor: 5
+            when:
+              variable_at_least: {var: EFE_control_del_monte, value: 30}
       - id: EFE_evacuar_los_centros_urbanos
         name: { english: "Evacuate the City Centres", spanish: "Evacuar los Centros Urbanos" }
         desc: { english: "Half of Gaia is marched out to the plantations. The forest gains a million workers; the Empire loses its patience.", spanish: "Media Gaia marcha a las plantaciones. El monte gana un millón de trabajadores; el Imperio pierde la paciencia." }
@@ -286,6 +392,13 @@ categories:
           - { effect: add_variable, var: EFE_control_del_monte, value: 25 }
           - { effect: add_stability, value: -0.08 }
         ai_factor: 1
+        ai:
+          factor: 1
+          modifiers:
+          - factor: 0.2
+            when: {stability_at_least: 0.4}
+          - factor: 3
+            when: {stability_below: 0.4}
 
   - id: EFE_integracion_category
     country: EFE
@@ -540,6 +653,13 @@ categories:
       - &id003 {effect: clear_flag, value: ASC_prioridad_logistica}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
+      ai:
+        factor: 0.2
+        modifiers:
+        - factor: 0
+          when:
+            flags:
+            - ASC_reasignando
     - id: ASC_asignar_investigacion
       name: {english: Assign Compute to Research, spanish: Asignar Cómputo a la Investigación}
       desc: {english: Research first., spanish: Primero la investigación.}
@@ -555,6 +675,13 @@ categories:
       - {effect: flag, value: ASC_prioridad_investigacion}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when: {at_war: true}
+        - factor: 0
+          when: {flag: ASC_prioridad_investigacion}
     - id: ASC_asignar_logistica
       name: {english: Assign Compute to Logistics, spanish: Asignar Cómputo a la Logística}
       desc:
@@ -572,6 +699,11 @@ categories:
       - {effect: flag, value: ASC_prioridad_logistica}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
+      ai:
+        factor: 0.5
+        modifiers:
+        - factor: 0
+          when: {flag: ASC_prioridad_logistica}
     - id: ASC_asignar_guerra
       name: {english: Assign Compute to War, spanish: Asignar Cómputo a la Guerra}
       desc:
@@ -589,6 +721,13 @@ categories:
       - {effect: flag, value: ASC_prioridad_guerra}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 10
+          when: {at_war: true}
+        - factor: 0
+          when: {flag: ASC_prioridad_guerra}
     - id: ASC_construir_datacenter
       name: {english: Build a Datacenter, spanish: Construir un Datacenter}
       desc:
@@ -659,6 +798,11 @@ categories:
       - {effect: add_war_support, value: -0.05}
       - {effect: add_political_power, value: 50}
       ai_factor: 3
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when: {at_war: true}
       available: {at_war: false}
     - id: ASC_consejo_productivistas
       name: {english: Extraordinary Quota, spanish: Cuota Extraordinaria}
@@ -704,6 +848,11 @@ categories:
       - {effect: army_experience, value: 25}
       - {effect: add_war_support, value: 0.05}
       ai_factor: 3
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 3
+          when: {at_war: true}
     - id: ASC_consejo_tecnofilos
       name: {english: Server Expansion, spanish: Ampliación de Servidores}
       desc:
@@ -1231,6 +1380,9 @@ categories:
       - {effect: add_variable, var: NAS_inti, value: -35}
       - {effect: timed_idea, idea: NAS_solsticio, days: 45}
       ai_factor: 5
+      ai:
+        factor: 10
+        modifiers: []
     - id: NAS_ceremonia_ofrenda
       name: {english: Offering of Light, spanish: Ofrenda de Luz}
       desc:
@@ -1878,6 +2030,17 @@ categories:
       - {effect: add_variable, var: SHD_pueblo, value: -8}
       - {effect: build, building: industrial_complex, level: 1}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: SHD_produccion, value: 45}
+        - factor: 0
+          when:
+            any:
+            - variable_at_least: {var: SHD_produccion, value: 60}
+            - variable_below: {var: SHD_pueblo, value: 35}
     - id: SHD_relajar_vigilancia
       name: {english: Relax Surveillance, spanish: Relajar la Vigilancia}
       desc: {english: 'People +10, Order -10.', spanish: 'Pueblo +10, Orden -10.'}
@@ -1891,6 +2054,17 @@ categories:
       - {effect: add_variable, var: SHD_orden, value: -10}
       - {effect: add_stability, value: 0.03}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: SHD_pueblo, value: 45}
+        - factor: 0
+          when:
+            any:
+            - variable_at_least: {var: SHD_pueblo, value: 60}
+            - variable_below: {var: SHD_orden, value: 40}
     - id: SHD_campana_de_disciplina
       name: {english: Discipline Campaign, spanish: Campaña de Disciplina}
       desc: {english: 'Order +12, Production -3, People -7.', spanish: 'Orden +12, Producción -3, Pueblo -7.'}
@@ -1905,6 +2079,17 @@ categories:
       - {effect: add_variable, var: SHD_pueblo, value: -7}
       - {effect: add_political_power, value: 50}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: SHD_orden, value: 45}
+        - factor: 0
+          when:
+            any:
+            - variable_at_least: {var: SHD_orden, value: 60}
+            - variable_below: {var: SHD_pueblo, value: 35}
     - id: SHD_fiesta_del_caudal
       name: {english: Festival of the Flow, spanish: Fiesta del Caudal}
       desc: {english: 'People +12, Production -5, Order -3.', spanish: 'Pueblo +12, Producción -5, Orden -3.'}
@@ -1919,6 +2104,17 @@ categories:
       - {effect: add_variable, var: SHD_orden, value: -3}
       - {effect: add_manpower, value: 25000}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: SHD_pueblo, value: 45}
+        - factor: 0
+          when:
+            any:
+            - variable_at_least: {var: SHD_pueblo, value: 60}
+            - variable_below: {var: SHD_produccion, value: 40}
     - id: SHD_ajuste_tecnico
       name: {english: Technical Adjustment, spanish: Ajuste Técnico}
       desc: {english: Each flow moves 5 toward 50., spanish: Cada caudal se mueve 5 hacia 50.}
@@ -1932,6 +2128,18 @@ categories:
       - {effect: run, value: SHD_ajustar_orden}
       - {effect: run, value: SHD_ajustar_pueblo}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0
+          when:
+            all_between:
+              vars:
+              - SHD_produccion
+              - SHD_orden
+              - SHD_pueblo
+              min: 45
+              max: 55
       visible: {not_flag: SHD_zhou}
     - id: SHD_movilizacion_total
       name: {english: Total Mobilisation, spanish: Movilización Total}
@@ -1949,6 +2157,11 @@ categories:
       - {effect: add_variable, var: SHD_orden, value: -5}
       - {effect: add_manpower, value: 150000}
       ai_factor: 10
+      ai:
+        factor: 10
+        modifiers:
+        - factor: 0.2
+          when: {at_war: false}
       visible: {flag: SHD_zhou}
   - id: SHD_integracion_category
     country: SHD
@@ -2144,6 +2357,18 @@ categories:
       - {effect: add_variable, var: NRE_auctoritas, value: 5}
       - {effect: add_war_support, value: 0.02}
       ai_factor: 3
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            flag: NRE_cuatro
+            not_flag: NRE_imperator_italica
+            variable_at_least: {var: NRE_prestigio_italica, value: 65}
+        - factor: 0
+          when:
+            not_flag: NRE_cuatro
+            variable_at_least: {var: NRE_prestigio_italica, value: 85}
     - id: NRE_triunfo_macedonica
       name: {english: Triumph of the Legio V Macedonica, spanish: Triunfo de la Legio V Macedonica}
       desc:
@@ -2158,6 +2383,18 @@ categories:
       - {effect: add_variable, var: NRE_auctoritas, value: 5}
       - {effect: add_war_support, value: 0.02}
       ai_factor: 3
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            flag: NRE_cuatro
+            not_flag: NRE_imperator_macedonica
+            variable_at_least: {var: NRE_prestigio_macedonica, value: 65}
+        - factor: 0
+          when:
+            not_flag: NRE_cuatro
+            variable_at_least: {var: NRE_prestigio_macedonica, value: 85}
     - id: NRE_triunfo_fulminata
       name: {english: Triumph of the Legio XII Fulminata, spanish: Triunfo de la Legio XII Fulminata}
       desc:
@@ -2172,6 +2409,18 @@ categories:
       - {effect: add_variable, var: NRE_auctoritas, value: 5}
       - {effect: add_war_support, value: 0.02}
       ai_factor: 3
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            flag: NRE_cuatro
+            not_flag: NRE_imperator_fulminata
+            variable_at_least: {var: NRE_prestigio_fulminata, value: 65}
+        - factor: 0
+          when:
+            not_flag: NRE_cuatro
+            variable_at_least: {var: NRE_prestigio_fulminata, value: 85}
     - id: NRE_ascender_oficiales
       name: {english: Promote Officers, spanish: Ascender Oficiales}
       desc:
@@ -2185,6 +2434,14 @@ categories:
       - {effect: add_variable, var: NRE_auctoritas, value: -15}
       - {effect: army_experience, value: 25}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 2
+          when: {at_war: true}
+        - factor: 0.3
+          when:
+            variable_below: {var: NRE_auctoritas, value: 35}
       available:
         variable_at_least: {var: NRE_auctoritas, value: 15}
     - id: NRE_nueva_legion
@@ -2201,6 +2458,14 @@ categories:
       - {effect: add_manpower, value: 50000}
       - {effect: army_experience, value: 10}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when: {at_war: true}
+        - factor: 0.3
+          when:
+            variable_below: {var: NRE_auctoritas, value: 45}
       available:
         variable_at_least: {var: NRE_auctoritas, value: 25}
     - id: NRE_planes_de_campana_dec
@@ -2216,6 +2481,13 @@ categories:
       - {effect: add_variable, var: NRE_auctoritas, value: -20}
       - {effect: timed_idea, idea: NRE_planes_de_campana, days: 90}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when: {at_war: true}
+        - factor: 0
+          when: {at_war: false}
       available:
         variable_at_least: {var: NRE_auctoritas, value: 20}
     - id: NRE_pretorianos
@@ -2232,6 +2504,16 @@ categories:
       - {effect: add_stability, value: 0.05}
       - {effect: flag, value: NRE_aclamacion_reciente, days: 180}
       ai_factor: 5
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 5
+          when:
+            flag: NRE_cuatro
+            any:
+            - variable_at_least: {var: NRE_prestigio_italica, value: 75}
+            - variable_at_least: {var: NRE_prestigio_macedonica, value: 75}
+            - variable_at_least: {var: NRE_prestigio_fulminata, value: 75}
       visible: {focus: NRE_la_guardia_pretoriana}
       available:
         variable_at_least: {var: NRE_auctoritas, value: 20}
@@ -2251,6 +2533,22 @@ categories:
       - {effect: add_variable, var: NRE_prestigio_fulminata, value: -10}
       - {effect: add_stability, value: 0.03}
       ai_factor: 5
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 10
+          when:
+            any:
+            - variable_at_least: {var: NRE_prestigio_italica, value: 75}
+            - variable_at_least: {var: NRE_prestigio_macedonica, value: 75}
+            - variable_at_least: {var: NRE_prestigio_fulminata, value: 75}
+        - factor: 0
+          when:
+            not:
+              any:
+              - variable_at_least: {var: NRE_prestigio_italica, value: 60}
+              - variable_at_least: {var: NRE_prestigio_macedonica, value: 60}
+              - variable_at_least: {var: NRE_prestigio_fulminata, value: 60}
       visible: {focus: NRE_los_donativos}
       available:
         variable_at_least: {var: NRE_auctoritas, value: 10}
@@ -2415,6 +2713,11 @@ categories:
       - {effect: add_stability, value: 0.05}
       - {effect: add_manpower, value: 30000}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when: {stability_below: 0.5}
       visible: {focus: NRE_la_annona}
     - id: NRE_cobrar_el_tributo
       name: {english: Collect the Tribute, spanish: Cobrar el Tributo}
@@ -2433,6 +2736,11 @@ categories:
         - {effect: build_here, building: industrial_complex, level: 1}
       - {effect: add_stability, value: -0.02}
       ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0
+          when: {stability_below: 0.4}
       visible: {focus: NRE_el_tributo}
     - id: NRE_construir_una_via
       name: {english: Build a Road, spanish: Construir una Vía}

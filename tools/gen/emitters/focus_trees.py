@@ -66,7 +66,10 @@ def emit(ctx: BuildContext) -> None:
 
 def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     focuses: list[tuple[str, dict]] = []  # (rama, foco)
+    branch_ai: dict[str, float] = {}
     for branch in tree["branches"]:
+        if branch.get("ai_factor") is not None:
+            branch_ai[branch["id"]] = branch["ai_factor"]  # peso de la IA para toda la rama
         for focus in branch.get("focuses", []) or []:
             focuses.append((branch["id"], focus))
 
@@ -123,7 +126,7 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     pos.add("y", (last_row + 2) * 130)
     body.add("continuous_focus_position", pos)
 
-    for _, f in focuses:
+    for bid, f in focuses:
         fid = f["id"]
         fb = Block()
         fb.add("id", ctx.loc.reference(fid, f"focus:{fid}"))
@@ -160,7 +163,8 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             effects_used.setdefault("country_event", fid)
         fb.add("completion_reward", completion)
 
-        fb.add("ai_will_do", _ai(fid, f.get("ai"), triggers_used))
+        fb.add("ai_will_do", _ai(fid, f.get("ai") or ({"factor": branch_ai[bid]} if bid in branch_ai else None),
+                                 triggers_used))
         body.add("focus", fb)
 
         desc = f.get("desc")

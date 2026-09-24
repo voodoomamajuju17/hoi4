@@ -1054,6 +1054,48 @@ def test_nre() -> None:
               "var = NRE_auctoritas" in next((mod / "history/countries").glob("NRE - *.txt")).read_text())
 
 
+def test_ai() -> None:
+    section("IA: estrategias, decisiones con criterio, pesos por rama, iconos")
+    import shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        ai = (mod / "common/ai_strategy/meganations_ai.txt").read_text()
+        root = pdx.parse(ai)
+        plan = root.get("MEGANATIONS_ASC_la_guerra_del_este")
+        check("la ASC quiere conquistar Eurasia", plan is not None
+              and "type = conquer" in pdx.render(plan) and "id = ZWE" in pdx.render(plan))
+        check("el plan se abandona cuando el objetivo desaparece",
+              plan is not None and "country_exists = ZWE" in pdx.render(plan.get("abort")))
+        check("el senor protege a su satelite", "MEGANATIONS_EFE_protege_PTA" in ai and "type = protect" in ai)
+        check("el satelite apoya a su senor", "MEGANATIONS_PTA_apoya_EFE" in ai)
+        check("las rivalidades se antagonizan", "MEGANATIONS_EFE_rivaliza_con_NRE" in ai)
+        check("no hay planes contra paises sin territorio (ZWB en el fixture)", "id = ZWB" not in ai)
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        cuotas = decs[decs.index("SHD_aumentar_cuotas = {"):]
+        cuotas = cuotas[cuotas.index("ai_will_do"):cuotas.index("ai_will_do") + 900]
+        check("la SHD sube el caudal mas bajo", "var = SHD_produccion" in cuotas and "modifier" in cuotas, cuotas)
+        tree = (mod / "common/national_focus/EFE_focus.txt").read_text()
+        cubas = tree[tree.index("id = EFE_biorrefinerias_de_rosario"):]
+        check("la rama industrial pesa el doble", "factor = 2" in cubas[cubas.index("ai_will_do"):cubas.index("ai_will_do") + 60])
+        gfx = (mod / "interface/meganations_NRE_goals.gfx").read_text()
+        check("iconos del pack registrados con brillo",
+              "GFX_focus_2100_nre_09_legio_i_italica" in gfx and "GFX_focus_2100_nre_09_legio_i_italica_shine" in gfx)
+        check("icono copiado al mod", (mod / "gfx/interface/goals/focus_2100_nre_09_legio_i_italica.dds").exists())
+        nre = (mod / "common/national_focus/NRE_focus.txt").read_text()
+        check("el foco usa el icono", "icon = GFX_focus_2100_nre_09_legio_i_italica" in nre)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        van = Path(tmp) / "vanilla"
+        shutil.copytree(FIXTURE_VANILLA, van)
+        f = van / "common/ai_strategy/default.txt"
+        f.write_text(f.read_text().replace("type = contain", "type = protect"))
+        ctx = build(Path(tmp) / "out", vanilla_path=str(van), quiet=True)
+        ai = (ctx.mod_root / "common/ai_strategy/meganations_ai.txt").read_text()
+        check("un tipo que el juego no usa se descarta con aviso",
+              "type = contain" not in ai and any("contain" in w for w in ctx.warnings))
+
+
 def test_forces() -> None:
     section("armada y aviacion heredadas de 1936")
     with tempfile.TemporaryDirectory() as tmp:
@@ -1230,6 +1272,7 @@ def main() -> int:
         test_apf,
         test_shd,
         test_nre,
+        test_ai,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

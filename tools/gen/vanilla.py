@@ -370,6 +370,23 @@ class Vanilla:
             gfx2d.update(re.findall(r"^\s*graphical_culture_2d\s*=\s*\"?([a-z0-9_]+)", text, re.MULTILINE))
         return gfx, gfx2d
 
+    def ai_strategy_types(self) -> set[str] | None:
+        """Tipos de ai_strategy que usa el juego (common/ai_strategy/**).
+
+        No hay documentación de estos tipos: lo que el juego usa en sus propios
+        planes es lo único que se sabe que existe. None si no hay carpeta."""
+        folder = self.root / "common" / "ai_strategy"
+        if not folder.is_dir():
+            return None
+        words: set[str] = set()
+        for path in folder.rglob("*.txt"):
+            try:
+                words.update(re.findall(r"\btype\s*=\s*([a-z_]+)",
+                                        path.read_text(encoding="utf-8-sig", errors="replace")))
+            except OSError:
+                continue
+        return words
+
     def wargoal_types(self) -> set[str]:
         words: set[str] = set()
         for path in (self.root / "common" / "wargoals").glob("*.txt"):

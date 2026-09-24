@@ -91,7 +91,14 @@ def emit(ctx: BuildContext) -> None:
             db.add("complete_effect", render_effects(did, list(d["effects"]) + list(after), effect_ctx,
                                                      effects_used, where=SOURCE))
             ai = Block()
-            ai.add("factor", int(d.get("ai_factor", 1)))
+            ai_spec = d.get("ai") or {}
+            ai.add("factor", ai_spec.get("factor", int(d.get("ai_factor", 1))))
+            # peso condicional: la IA decide según el estado de la mecánica
+            for m in ai_spec.get("modifiers") or []:
+                mod = Block()
+                mod.add("factor", m["factor"])
+                mod.entries.extend(render_conditions(did, m["when"], triggers_used, where=SOURCE).entries)
+                ai.add("modifier", mod)
             db.add("ai_will_do", ai)
             body.add(ctx.loc.reference(did, f"decisions:{did}"), db)
             _loc(ctx, did, d["name"], define_only=True)

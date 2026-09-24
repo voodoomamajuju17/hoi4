@@ -91,6 +91,14 @@ eventos con ultimátum e IA con condiciones.
   Auctoritas Militaris como moneda, Varro (Senado, Vías, Hispania y Dacia en tres etapas,
   Pax Romana, ultimátum al EFE) vs Arbogast (AVE IMPERATOR cambia el líder entre cuatro
   imperatores), Annona vs Tributo. Faltan retratos de Vasilescu y Aydın
+- [x] Íconos propios: 96 focos (12 por potencia) con el pack del usuario
+- [~] **IA v1** (spec/16_ai.yaml): planes de conquista por potencia (EFE→Amazonas, ASC→Eurasia,
+  NRE→Emiratos y después Eurasia, SHD→Indostán, APF→Emiratos, NAS→Amazonas, FCU→el Canal,
+  HSN→costas del Indostán), señores que protegen a sus satélites, rivales que se antagonizan;
+  35 decisiones con criterio (SHD sube el caudal más bajo, FCU la influencia más baja, NRE calma
+  a las legiones antes de 85, ASC asigna cómputo a la guerra si está en guerra) y peso por rama
+  (industria ×2, mecánica propia ×1,5-2, aire de las potencias sin vocación ×0,7). Falta: plantillas
+  de división y producción por potencia
 - [ ] Interacciones entre potencias (20-30 eventos chicos)
 
 ## 4. El EFE, a fondo

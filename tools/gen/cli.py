@@ -22,6 +22,7 @@ from pathlib import Path
 
 from . import specload, vanilla as vanilla_mod
 from .context import BuildContext
+from .emitters import ai as em_ai
 from .emitters import balance as em_balance
 from .emitters import cleanup as em_cleanup
 from .emitters import characters as em_characters
@@ -65,7 +66,8 @@ EMITTERS = [
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
-    ("diplomacy", em_diplomacy.emit),   # antes que history: opiniones, guerras, tension
+    ("diplomacy", em_diplomacy.emit),
+    ("ai", em_ai.emit),                 # estrategias de IA: despues de territory (quien existe)   # antes que history: opiniones, guerras, tension
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
     ("menu", em_menu.emit),
