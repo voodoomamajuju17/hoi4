@@ -55,6 +55,9 @@ def emit(ctx: BuildContext) -> None:
     keep = float(cut.get("keep", 1.0))
     navies = set(cut["navies"]) if "navies" in cut else receivers
     min_planes = int(cut.get("min_planes", 0))
+    ship_definition = cut.get("ship_definition")      # p.ej. destroyer: solo ese tipo de barco
+    max_ships = int(cut.get("max_ships", 0) or 0)       # tope por país
+    with_air = bool(cut.get("air", True))
     unknown = navies - receivers
     if unknown:
         ctx.warn(f"armada: {', '.join(sorted(unknown))} en forces.navies no es meganacion ni satelite; se ignora.")
@@ -109,7 +112,7 @@ def emit(ctx: BuildContext) -> None:
         for tag in used_by:
             variants["naval"][tag].extend(_variants(root))
 
-    for path in air_files:
+    for path in (air_files if with_air else []):
         root = _safe_parse(ctx, path)
         if root is None:
             continue
@@ -152,12 +155,24 @@ def emit(ctx: BuildContext) -> None:
             if not wings[tag]:
                 del wings[tag], planes[tag]
 
+    if ship_definition or max_ships:
+        for tag in list(fleets):
+            fleets[tag] = _pick_ships(fleets[tag], ship_definition, max_ships)
+            ships[tag] = _count(fleets[tag], "ship")
+            if not ships[tag]:
+                del fleets[tag], ships[tag]
+
     ctx.data["naval_oob"] = {}
     ctx.data["air_oob"] = {}
+    ctx.data["ship_equipment"] = {}
     for tag, block in fleets.items():
         root = Block()
         root.add("units", block)
-        _add_variants(root, variants["naval"][tag])
+        used = _version_names(block)
+        # Solo las variantes que usan los barcos que quedaron: el resto serían
+        # diseños "basura" en el diseñador.
+        _add_variants(root, [(k, v) for k, v in variants["naval"][tag] if _variant_name(v) in used])
+        ctx.data["ship_equipment"][tag] = _equipment_of(root)
         name = f"{tag}_2100_naval"
         ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(root))
         ctx.data["naval_oob"][tag] = name
@@ -171,6 +186,15 @@ def emit(ctx: BuildContext) -> None:
         name = f"{tag}_2100_air"
         ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(root))
         ctx.data["air_oob"][tag] = name
+    # Los barcos que quedan necesitan las tecnologías de su casco y módulos.
+    if ctx.data["ship_equipment"]:
+        tree = ctx.vanilla.tech_tree()
+        for tag, eq in ctx.data["ship_equipment"].items():
+            need = sorted(t for t, info in tree.items() if info.get("enables", set()) & eq)
+            techs = ctx.data.setdefault("techs", {}).setdefault(tag, [])
+            techs.extend(t for t in need if t not in techs)
+            if need:
+                ctx.note(f"armada: {tag} recibe {', '.join(need)} para sus barcos")
     ctx.data["ships"] = dict(ships)
     ctx.data["planes"] = dict(planes)
     if fleets or wings:
@@ -262,6 +286,75 @@ def _add_variants(root: Block, entries: list[tuple[str, Block]]) -> None:
         seen.add(sig)
         effect.add(k, v)
     root.add("instant_effect", effect)
+
+
+def _pick_ships(fleets: Block, definition: str | None, limit: int) -> Block:
+    """Se queda con los barcos de ese tipo (definition) hasta `limit`, en
+    orden; borra task_force y flotas vacíos."""
+    left = [limit if limit else 10 ** 9]
+
+    def pick(block: Block) -> Block:
+        out = Block()
+        for k, v in block.entries:
+            if k == "ship":
+                d = _text(v.get("definition")) if isinstance(v, Block) else None
+                if (definition is None or d == definition) and left[0] > 0:
+                    out.add(k, v)
+                    left[0] -= 1
+            elif k in ("task_force", "fleet") and isinstance(v, Block):
+                sub = pick(v)
+                if _count(sub, "ship"):
+                    out.add(k, sub)
+            else:
+                out.add(k, v)
+        return out
+
+    return pick(fleets)
+
+
+def _version_names(block: Block) -> set[str]:
+    out: set[str] = set()
+    for k, v in block.entries:
+        if k == "version_name":
+            out.add(_text(v))
+        elif isinstance(v, Block):
+            out |= _version_names(v)
+    return out
+
+
+def _variant_name(v) -> str | None:
+    """Nombre de la variante que define una entrada de instant_effect."""
+    if not isinstance(v, Block):
+        return None
+    if v.get("name") is not None and v.get("type") is not None:
+        return _text(v.get("name"))
+    for k, sub in v.entries:
+        if k == "create_equipment_variant" and isinstance(sub, Block):
+            return _text(sub.get("name"))
+        if isinstance(sub, Block):
+            n = _variant_name(sub)
+            if n:
+                return n
+    return None
+
+
+def _equipment_of(root: Block) -> set[str]:
+    """Tipos de casco y módulos que usan las variantes: para dar las
+    tecnologías que los habilitan."""
+    out: set[str] = set()
+
+    def walk(b: Block) -> None:
+        for k, v in b.entries:
+            if k == "create_equipment_variant" and isinstance(v, Block):
+                if v.get("type") is not None:
+                    out.add(_text(v.get("type")))
+                mods = v.get("modules")
+                if isinstance(mods, Block):
+                    out.update(_text(m) for _, m in mods.entries if not isinstance(m, Block))
+            elif isinstance(v, Block):
+                walk(v)
+    walk(root)
+    return out
 
 
 def _thin_fleets(fleets: Block, keep: float) -> Block:

@@ -1,0 +1,280 @@
+# =============================================================================
+# 17_research.yaml — La investigación de 2100 (pedido del usuario, 2026-09-25)
+# =============================================================================
+# 1. Nombres: pisan los de las tecnologías y el equipo del juego
+#    (localisation/<idioma>/replace/). Un id que el juego instalado no tiene se
+#    ignora y se lista en el reporte; una tecnología sin entrada acá conserva
+#    su nombre vanilla (investigacion.txt las lista para la próxima pasada).
+# 2. Años: year_offset se suma al start_year de cada tecnología y al year de
+#    cada equipo (1936 -> 2100). Los archivos se reescriben a partir del juego
+#    instalado, así que siguen la versión que tengas. También se corren los
+#    años escritos en la pantalla de investigación, si son texto fijo.
+# =============================================================================
+year_offset: 164
+src: user_decision
+techs:
+  infantry_weapons: {en: Carbon-Fibre Rifles, es: Fusiles de Fibra de Carbono}
+  infantry_weapons1: {en: Light Coilguns, es: Fusiles de Bobina Ligeros}
+  infantry_weapons2: {en: Improved Coilguns, es: Fusiles de Bobina Mejorados}
+  improved_infantry_weapons: {en: Personal Pulse Weapons, es: Armas de Pulso Personales}
+  improved_infantry_weapons_2: {en: Advanced Pulse Weapons, es: Armas de Pulso Avanzadas}
+  advanced_infantry_weapons: {en: Directed-Energy Rifles, es: Fusiles de Energía Dirigida}
+  advanced_infantry_weapons2: {en: Directed-Energy Rifles II, es: Fusiles de Energía Dirigida II}
+  support_weapons: {en: Squad Support Drones I, es: Drones de Apoyo de Escuadra I}
+  support_weapons2: {en: Squad Support Drones II, es: Drones de Apoyo de Escuadra II}
+  support_weapons3: {en: Squad Support Drones III, es: Drones de Apoyo de Escuadra III}
+  support_weapons4: {en: Squad Support Drones IV, es: Drones de Apoyo de Escuadra IV}
+  tech_mountaineers: {en: Alpine Exosuits I, es: Exotrajes de Montaña I}
+  tech_mountaineers2: {en: Alpine Exosuits II, es: Exotrajes de Montaña II}
+  tech_mountaineers3: {en: Alpine Exosuits III, es: Exotrajes de Montaña III}
+  paratroopers: {en: Tiltrotor Assault Troops I, es: Tropas de Asalto en Tiltrotor I}
+  paratroopers2: {en: Tiltrotor Assault Troops II, es: Tropas de Asalto en Tiltrotor II}
+  paratroopers3: {en: Tiltrotor Assault Troops III, es: Tropas de Asalto en Tiltrotor III}
+  marines: {en: Autonomous Littoral Infantry I, es: Infantería Litoral Autónoma I}
+  marines2: {en: Autonomous Littoral Infantry II, es: Infantería Litoral Autónoma II}
+  marines3: {en: Autonomous Littoral Infantry III, es: Infantería Litoral Autónoma III}
+  motorised_infantry: {en: Electric Troop Carriers, es: Transportes Eléctricos de Tropa}
+  mechanised_infantry: {en: Autonomous Fighting Vehicles I, es: Vehículos de Combate Autónomos I}
+  mechanised_infantry2: {en: Autonomous Fighting Vehicles II, es: Vehículos de Combate Autónomos II}
+  mechanised_infantry3: {en: Autonomous Fighting Vehicles III, es: Vehículos de Combate Autónomos III}
+  amphibious_mechanized_infantry: {en: Amphibious Combat Drones I, es: Drones Anfibios de Combate I}
+  amphibious_mechanized_infantry_2: {en: Amphibious Combat Drones II, es: Drones Anfibios de Combate II}
+  night_vision: {en: Integrated Thermal Vision I, es: Visión Térmica Integrada I}
+  night_vision2: {en: Integrated Thermal Vision II, es: Visión Térmica Integrada II}
+  armored_car1: {en: AI Scout Vehicles I, es: Vehículos de Exploración con IA I}
+  armored_car2: {en: AI Scout Vehicles II, es: Vehículos de Exploración con IA II}
+  armored_car3: {en: AI Scout Vehicles III, es: Vehículos de Exploración con IA III}
+  tech_special_forces: {en: Augmented Special Forces I, es: Fuerzas Especiales Aumentadas I}
+  advanced_special_forces: {en: Augmented Special Forces II, es: Fuerzas Especiales Aumentadas II}
+  improved_special_forces: {en: Augmented Special Forces III, es: Fuerzas Especiales Aumentadas III}
+  extreme_environment_training: {en: Augmented Special Forces IV, es: Fuerzas Especiales Aumentadas IV}
+  tech_support: {en: Modular Support Doctrine, es: Doctrina de Apoyo Modular}
+  tech_engineers: {en: Drone Engineers I, es: Ingenieros de Drones I}
+  tech_engineers2: {en: Drone Engineers II, es: Ingenieros de Drones II}
+  tech_engineers3: {en: Drone Engineers III, es: Ingenieros de Drones III}
+  tech_engineers4: {en: Drone Engineers IV, es: Ingenieros de Drones IV}
+  tech_recon: {en: Swarm Reconnaissance I, es: Reconocimiento por Enjambre I}
+  tech_recon2: {en: Swarm Reconnaissance II, es: Reconocimiento por Enjambre II}
+  tech_recon3: {en: Swarm Reconnaissance III, es: Reconocimiento por Enjambre III}
+  tech_recon4: {en: Swarm Reconnaissance IV, es: Reconocimiento por Enjambre IV}
+  tech_military_police: {en: Biometric Military Police I, es: Policía Militar Biométrica I}
+  tech_military_police2: {en: Biometric Military Police II, es: Policía Militar Biométrica II}
+  tech_military_police3: {en: Biometric Military Police III, es: Policía Militar Biométrica III}
+  tech_military_police4: {en: Biometric Military Police IV, es: Policía Militar Biométrica IV}
+  tech_maintenance_company: {en: Predictive Maintenance I, es: Mantenimiento Predictivo I}
+  tech_maintenance_company2: {en: Predictive Maintenance II, es: Mantenimiento Predictivo II}
+  tech_maintenance_company3: {en: Predictive Maintenance III, es: Mantenimiento Predictivo III}
+  tech_maintenance_company4: {en: Predictive Maintenance IV, es: Mantenimiento Predictivo IV}
+  tech_field_hospital: {en: Robotic Field Hospitals I, es: Hospitales de Campaña Robóticos I}
+  tech_field_hospital2: {en: Robotic Field Hospitals II, es: Hospitales de Campaña Robóticos II}
+  tech_field_hospital3: {en: Robotic Field Hospitals III, es: Hospitales de Campaña Robóticos III}
+  tech_logistics_company: {en: Autonomous Logistics I, es: Logística Autónoma I}
+  tech_logistics_company2: {en: Autonomous Logistics II, es: Logística Autónoma II}
+  tech_logistics_company3: {en: Autonomous Logistics III, es: Logística Autónoma III}
+  tech_logistics_company4: {en: Autonomous Logistics IV, es: Logística Autónoma IV}
+  tech_signal_company: {en: Quantum Battle Networks I, es: Redes Cuánticas de Combate I}
+  tech_signal_company2: {en: Quantum Battle Networks II, es: Redes Cuánticas de Combate II}
+  tech_signal_company3: {en: Quantum Battle Networks III, es: Redes Cuánticas de Combate III}
+  tech_signal_company4: {en: Quantum Battle Networks IV, es: Redes Cuánticas de Combate IV}
+  tech_trucks: {en: Hydrogen Supply Trucks I, es: Camiones de Hidrógeno I}
+  tech_trucks2: {en: Hydrogen Supply Trucks II, es: Camiones de Hidrógeno II}
+  gw_artillery: {en: Legacy Howitzers, es: Obuses Heredados}
+  interwar_artillery: {en: Guided-Shell Howitzers, es: Obuses de Proyectil Guiado}
+  artillery1: {en: Precision Artillery I, es: Artillería de Precisión I}
+  artillery2: {en: Precision Artillery II, es: Artillería de Precisión II}
+  artillery3: {en: Precision Artillery III, es: Artillería de Precisión III}
+  artillery4: {en: Precision Artillery IV, es: Artillería de Precisión IV}
+  artillery5: {en: Precision Artillery V, es: Artillería de Precisión V}
+  interwar_antiair: {en: Point-Defence Lasers, es: Láseres de Defensa de Punto}
+  antiair1: {en: Area Air-Defence Lasers I, es: Láseres de Defensa Aérea I}
+  antiair2: {en: Area Air-Defence Lasers II, es: Láseres de Defensa Aérea II}
+  antiair3: {en: Area Air-Defence Lasers III, es: Láseres de Defensa Aérea III}
+  antiair4: {en: Area Air-Defence Lasers IV, es: Láseres de Defensa Aérea IV}
+  antiair5: {en: Area Air-Defence Lasers V, es: Láseres de Defensa Aérea V}
+  interwar_antitank: {en: Anti-Armour Missiles, es: Misiles Antiblindaje}
+  antitank1: {en: Top-Attack Missiles I, es: Misiles de Ataque Superior I}
+  antitank2: {en: Top-Attack Missiles II, es: Misiles de Ataque Superior II}
+  antitank3: {en: Top-Attack Missiles III, es: Misiles de Ataque Superior III}
+  antitank4: {en: Top-Attack Missiles IV, es: Misiles de Ataque Superior IV}
+  antitank5: {en: Top-Attack Missiles V, es: Misiles de Ataque Superior V}
+  rocket_artillery: {en: Missile-Swarm Artillery I, es: Artillería de Enjambre de Misiles I}
+  rocket_artillery2: {en: Missile-Swarm Artillery II, es: Artillería de Enjambre de Misiles II}
+  rocket_artillery3: {en: Missile-Swarm Artillery III, es: Artillería de Enjambre de Misiles III}
+  rocket_artillery4: {en: Missile-Swarm Artillery IV, es: Artillería de Enjambre de Misiles IV}
+  gwtank_chassis: {en: Legacy Combat Chassis, es: Chasis de Combate Heredado}
+  basic_light_tank_chassis: {en: Electric Light Chassis, es: Chasis Ligero Eléctrico}
+  improved_light_tank_chassis: {en: Hybrid Light Chassis, es: Chasis Ligero Híbrido}
+  advanced_light_tank_chassis: {en: Autonomous Light Chassis, es: Chasis Ligero Autónomo}
+  basic_medium_tank_chassis: {en: Electric Medium Chassis, es: Chasis Medio Eléctrico}
+  improved_medium_tank_chassis: {en: Hybrid Medium Chassis, es: Chasis Medio Híbrido}
+  advanced_medium_tank_chassis: {en: Autonomous Medium Chassis, es: Chasis Medio Autónomo}
+  main_battle_tank_chassis: {en: Autonomous Main Battle Chassis, es: Chasis de Combate Principal Autónomo}
+  basic_heavy_tank_chassis: {en: Electric Heavy Chassis, es: Chasis Pesado Eléctrico}
+  improved_heavy_tank_chassis: {en: Hybrid Heavy Chassis, es: Chasis Pesado Híbrido}
+  advanced_heavy_tank_chassis: {en: Autonomous Heavy Chassis, es: Chasis Pesado Autónomo}
+  super_heavy_tank_chassis: {en: Land Fortress Chassis, es: Chasis de Fortaleza Terrestre}
+  early_ship_hull_light: {en: Legacy Corvette Hull, es: Casco de Corbeta Heredado}
+  basic_ship_hull_light: {en: Stealth Corvette Hull, es: Casco de Corbeta Furtivo}
+  improved_ship_hull_light: {en: Autonomous Corvette Hull, es: Casco de Corbeta Autónomo}
+  advanced_ship_hull_light: {en: Next-Gen Corvette Hull, es: Casco de Corbeta de Nueva Generación}
+  early_ship_hull_cruiser: {en: Legacy Missile Cruiser Hull, es: Casco de Crucero Misilístico Heredado}
+  basic_ship_hull_cruiser: {en: Stealth Missile Cruiser Hull, es: Casco de Crucero Misilístico Furtivo}
+  improved_ship_hull_cruiser: {en: Autonomous Missile Cruiser Hull, es: Casco de Crucero Misilístico Autónomo}
+  advanced_ship_hull_cruiser: {en: Next-Gen Missile Cruiser Hull, es: Casco de Crucero Misilístico de Nueva Generación}
+  early_ship_hull_heavy: {en: Legacy Railgun Capital Ship Hull, es: Casco de Buque Capital de Riel Heredado}
+  basic_ship_hull_heavy: {en: Stealth Railgun Capital Ship Hull, es: Casco de Buque Capital de Riel Furtivo}
+  improved_ship_hull_heavy: {en: Autonomous Railgun Capital Ship Hull, es: Casco de Buque Capital de Riel Autónomo}
+  advanced_ship_hull_heavy: {en: Next-Gen Railgun Capital Ship Hull, es: Casco de Buque Capital de Riel de Nueva Generación}
+  early_ship_hull_carrier: {en: Legacy Drone Carrier Hull, es: Casco de Portadrones Heredado}
+  basic_ship_hull_carrier: {en: Stealth Drone Carrier Hull, es: Casco de Portadrones Furtivo}
+  improved_ship_hull_carrier: {en: Autonomous Drone Carrier Hull, es: Casco de Portadrones Autónomo}
+  advanced_ship_hull_carrier: {en: Next-Gen Drone Carrier Hull, es: Casco de Portadrones de Nueva Generación}
+  early_ship_hull_submarine: {en: Legacy Hydrogen Submarine Hull, es: Casco de Submarino de Hidrógeno Heredado}
+  basic_ship_hull_submarine: {en: Stealth Hydrogen Submarine Hull, es: Casco de Submarino de Hidrógeno Furtivo}
+  improved_ship_hull_submarine: {en: Autonomous Hydrogen Submarine Hull, es: Casco de Submarino de Hidrógeno Autónomo}
+  advanced_ship_hull_submarine: {en: Next-Gen Hydrogen Submarine Hull, es: Casco de Submarino de Hidrógeno de Nueva Generación}
+  iw_small_airframe: {en: Legacy Light Airframe, es: Fuselaje Ligero Heredado}
+  basic_small_airframe: {en: Composite Light Airframe, es: Fuselaje Ligero de Compuesto}
+  improved_small_airframe: {en: Stealth Light Airframe, es: Fuselaje Ligero Furtivo}
+  advanced_small_airframe: {en: Autonomous Light Airframe, es: Fuselaje Ligero Autónomo}
+  iw_medium_airframe: {en: Legacy Medium Airframe, es: Fuselaje Medio Heredado}
+  basic_medium_airframe: {en: Composite Medium Airframe, es: Fuselaje Medio de Compuesto}
+  improved_medium_airframe: {en: Stealth Medium Airframe, es: Fuselaje Medio Furtivo}
+  advanced_medium_airframe: {en: Autonomous Medium Airframe, es: Fuselaje Medio Autónomo}
+  iw_large_airframe: {en: Legacy Heavy Airframe, es: Fuselaje Pesado Heredado}
+  basic_large_airframe: {en: Composite Heavy Airframe, es: Fuselaje Pesado de Compuesto}
+  improved_large_airframe: {en: Stealth Heavy Airframe, es: Fuselaje Pesado Furtivo}
+  advanced_large_airframe: {en: Autonomous Heavy Airframe, es: Fuselaje Pesado Autónomo}
+  jet_engines: {en: Scramjet Engines, es: Motores Scramjet}
+  improved_jet_engines: {en: Improved Scramjets, es: Scramjets Mejorados}
+  experimental_rockets: {en: Hypersonic Rocketry, es: Cohetería Hipersónica}
+  rocket_engines: {en: Hypersonic Engines, es: Motores Hipersónicos}
+  improved_rocket_engines: {en: Improved Hypersonic Engines, es: Motores Hipersónicos Mejorados}
+  advanced_rocket_engines: {en: Orbital Launch Engines, es: Motores de Lanzamiento Orbital}
+  electronic_mechanical_engineering: {en: Photonic Engineering, es: Ingeniería Fotónica}
+  radio: {en: Quantum Field Networks, es: Redes Cuánticas de Campo}
+  radio_detection: {en: Plasma Sensors, es: Sensores de Plasma}
+  decimetric_radar: {en: AESA Radar, es: Radar AESA}
+  improved_decimetric_radar: {en: Improved AESA Radar, es: Radar AESA Mejorado}
+  centimetric_radar: {en: Quantum Radar, es: Radar Cuántico}
+  improved_centimetric_radar: {en: Improved Quantum Radar, es: Radar Cuántico Mejorado}
+  advanced_centimetric_radar: {en: Orbital Sensor Grid, es: Red de Sensores Orbitales}
+  mechanical_computing: {en: Neuromorphic Computing, es: Cómputo Neuromórfico}
+  computing_machine: {en: Quantum Computers, es: Computadoras Cuánticas}
+  improved_computing_machine: {en: Fault-Tolerant Quantum Computers, es: Computadoras Cuánticas Tolerantes a Fallos}
+  advanced_computing_machine: {en: Planetary Compute Grid, es: Red de Cómputo Planetaria}
+  basic_encryption: {en: Post-Quantum Encryption, es: Cifrado Poscuántico}
+  improved_encryption: {en: Lattice Encryption, es: Cifrado de Retículos}
+  advanced_encryption: {en: Adaptive AI Encryption, es: Cifrado Adaptativo por IA}
+  basic_decryption: {en: Quantum Cryptanalysis, es: Criptoanálisis Cuántico}
+  improved_decryption: {en: AI Cryptanalysis, es: Criptoanálisis por IA}
+  advanced_decryption: {en: Total Signals Intelligence, es: Inteligencia de Señales Total}
+  atomic_research: {en: Experimental Fusion, es: Fusión Experimental}
+  nuclear_reactor: {en: Fusion Reactor, es: Reactor de Fusión}
+  nukes: {en: Fusion Weapons, es: Armas de Fusión}
+  basic_machine_tools: {en: Industrial 3D Printing, es: Impresión 3D Industrial}
+  improved_machine_tools: {en: Additive Manufacturing, es: Fabricación Aditiva}
+  advanced_machine_tools: {en: Nanofabrication, es: Nanofabricación}
+  concentrated_industry: {en: Megafactories I, es: Megafábricas I}
+  concentrated_industry2: {en: Megafactories II, es: Megafábricas II}
+  concentrated_industry3: {en: Megafactories III, es: Megafábricas III}
+  concentrated_industry4: {en: Megafactories IV, es: Megafábricas IV}
+  concentrated_industry5: {en: Megafactories V, es: Megafábricas V}
+  dispersed_industry: {en: Distributed Microfactories I, es: Microfábricas Distribuidas I}
+  dispersed_industry2: {en: Distributed Microfactories II, es: Microfábricas Distribuidas II}
+  dispersed_industry3: {en: Distributed Microfactories III, es: Microfábricas Distribuidas III}
+  dispersed_industry4: {en: Distributed Microfactories IV, es: Microfábricas Distribuidas IV}
+  dispersed_industry5: {en: Distributed Microfactories V, es: Microfábricas Distribuidas V}
+  construction1: {en: Robotic Construction I, es: Construcción Robotizada I}
+  construction2: {en: Robotic Construction II, es: Construcción Robotizada II}
+  construction3: {en: Robotic Construction III, es: Construcción Robotizada III}
+  construction4: {en: Robotic Construction IV, es: Construcción Robotizada IV}
+  construction5: {en: Robotic Construction V, es: Construcción Robotizada V}
+  excavation1: {en: Autonomous Mining I, es: Minería Autónoma I}
+  excavation2: {en: Autonomous Mining II, es: Minería Autónoma II}
+  excavation3: {en: Autonomous Mining III, es: Minería Autónoma III}
+  excavation4: {en: Autonomous Mining IV, es: Minería Autónoma IV}
+  excavation5: {en: Autonomous Mining V, es: Minería Autónoma V}
+  fuel_silos: {en: Hydrogen Storage, es: Almacenes de Hidrógeno}
+  fuel_refining: {en: Biofuel Refining I, es: Refinado de Biocombustibles I}
+  fuel_refining2: {en: Biofuel Refining II, es: Refinado de Biocombustibles II}
+  fuel_refining3: {en: Biofuel Refining III, es: Refinado de Biocombustibles III}
+  fuel_refining4: {en: Biofuel Refining IV, es: Refinado de Biocombustibles IV}
+  fuel_refining5: {en: Biofuel Refining V, es: Refinado de Biocombustibles V}
+  synth_oil_experiments: {en: Synthetic Fuels, es: Combustibles Sintéticos}
+  oil_processing: {en: Hydrocarbon Synthesis, es: Síntesis de Hidrocarburos}
+  improved_oil_processing: {en: Improved Hydrocarbon Synthesis, es: Síntesis de Hidrocarburos Mejorada}
+  advanced_oil_processing: {en: Carbon-Capture Fuels, es: Combustibles de Captura de Carbono}
+equipment:
+  infantry_equipment_0: {en: Legacy Rifle Kit, es: Equipo de Fusil Heredado}
+  infantry_equipment_1: {en: Carbon-Fibre Rifle Kit, es: Equipo de Fusil de Carbono}
+  infantry_equipment_2: {en: Coilgun Kit, es: Equipo de Fusil de Bobina}
+  infantry_equipment_3: {en: Pulse Weapon Kit, es: Equipo de Armas de Pulso}
+  support_equipment_1: {en: Modular Support Kit I, es: Equipo de Apoyo Modular I}
+  artillery_equipment_1: {en: Guided Howitzer I, es: Obús Guiado I}
+  artillery_equipment_2: {en: Guided Howitzer II, es: Obús Guiado II}
+  artillery_equipment_3: {en: Guided Howitzer III, es: Obús Guiado III}
+  anti_air_equipment_1: {en: Air-Defence Laser I, es: Láser Antiaéreo I}
+  anti_air_equipment_2: {en: Air-Defence Laser II, es: Láser Antiaéreo II}
+  anti_air_equipment_3: {en: Air-Defence Laser III, es: Láser Antiaéreo III}
+  anti_tank_equipment_1: {en: Anti-Armour Missile Launcher I, es: Lanzamisiles Antiblindaje I}
+  anti_tank_equipment_2: {en: Anti-Armour Missile Launcher II, es: Lanzamisiles Antiblindaje II}
+  anti_tank_equipment_3: {en: Anti-Armour Missile Launcher III, es: Lanzamisiles Antiblindaje III}
+  rocket_artillery_equipment_1: {en: Missile-Swarm Launcher I, es: Lanzador de Enjambre I}
+  rocket_artillery_equipment_2: {en: Missile-Swarm Launcher II, es: Lanzador de Enjambre II}
+  rocket_artillery_equipment_3: {en: Missile-Swarm Launcher III, es: Lanzador de Enjambre III}
+  motorized_equipment_1: {en: Electric Troop Carrier, es: Transporte Eléctrico}
+  mechanized_equipment_1: {en: Autonomous Fighting Vehicle I, es: Vehículo de Combate Autónomo I}
+  mechanized_equipment_2: {en: Autonomous Fighting Vehicle II, es: Vehículo de Combate Autónomo II}
+  mechanized_equipment_3: {en: Autonomous Fighting Vehicle III, es: Vehículo de Combate Autónomo III}
+  amphibious_mechanized_equipment_1: {en: Amphibious Combat Drone I, es: Dron Anfibio de Combate I}
+  amphibious_mechanized_equipment_2: {en: Amphibious Combat Drone II, es: Dron Anfibio de Combate II}
+  convoy_1: {en: Autonomous Freighter, es: Carguero Autónomo}
+  train_equipment_1: {en: Maglev Freight Train, es: Tren Maglev de Carga}
+  train_equipment_2: {en: Heavy Maglev Train, es: Tren Maglev Pesado}
+  ship_hull_light_1: {en: Corvette Hull I, es: Casco de Corbeta I}
+  ship_hull_light_2: {en: Corvette Hull II, es: Casco de Corbeta II}
+  ship_hull_light_3: {en: Corvette Hull III, es: Casco de Corbeta III}
+  ship_hull_light_4: {en: Corvette Hull IV, es: Casco de Corbeta IV}
+  ship_hull_cruiser_1: {en: Missile Cruiser Hull I, es: Casco de Crucero Misilístico I}
+  ship_hull_cruiser_2: {en: Missile Cruiser Hull II, es: Casco de Crucero Misilístico II}
+  ship_hull_cruiser_3: {en: Missile Cruiser Hull III, es: Casco de Crucero Misilístico III}
+  ship_hull_cruiser_4: {en: Missile Cruiser Hull IV, es: Casco de Crucero Misilístico IV}
+  ship_hull_heavy_1: {en: Railgun Capital Ship Hull I, es: Casco de Buque Capital de Riel I}
+  ship_hull_heavy_2: {en: Railgun Capital Ship Hull II, es: Casco de Buque Capital de Riel II}
+  ship_hull_heavy_3: {en: Railgun Capital Ship Hull III, es: Casco de Buque Capital de Riel III}
+  ship_hull_heavy_4: {en: Railgun Capital Ship Hull IV, es: Casco de Buque Capital de Riel IV}
+  ship_hull_carrier_1: {en: Drone Carrier Hull I, es: Casco de Portadrones I}
+  ship_hull_carrier_2: {en: Drone Carrier Hull II, es: Casco de Portadrones II}
+  ship_hull_carrier_3: {en: Drone Carrier Hull III, es: Casco de Portadrones III}
+  ship_hull_carrier_4: {en: Drone Carrier Hull IV, es: Casco de Portadrones IV}
+  ship_hull_submarine_1: {en: Hydrogen Submarine Hull I, es: Casco de Submarino de Hidrógeno I}
+  ship_hull_submarine_2: {en: Hydrogen Submarine Hull II, es: Casco de Submarino de Hidrógeno II}
+  ship_hull_submarine_3: {en: Hydrogen Submarine Hull III, es: Casco de Submarino de Hidrógeno III}
+  ship_hull_submarine_4: {en: Hydrogen Submarine Hull IV, es: Casco de Submarino de Hidrógeno IV}
+  small_plane_airframe_0: {en: Light Airframe I, es: Fuselaje Ligero I}
+  small_plane_airframe_1: {en: Light Airframe II, es: Fuselaje Ligero II}
+  small_plane_airframe_2: {en: Light Airframe III, es: Fuselaje Ligero III}
+  small_plane_airframe_3: {en: Light Airframe IV, es: Fuselaje Ligero IV}
+  medium_plane_airframe_0: {en: Medium Airframe I, es: Fuselaje Medio I}
+  medium_plane_airframe_1: {en: Medium Airframe II, es: Fuselaje Medio II}
+  medium_plane_airframe_2: {en: Medium Airframe III, es: Fuselaje Medio III}
+  medium_plane_airframe_3: {en: Medium Airframe IV, es: Fuselaje Medio IV}
+  large_plane_airframe_0: {en: Heavy Airframe I, es: Fuselaje Pesado I}
+  large_plane_airframe_1: {en: Heavy Airframe II, es: Fuselaje Pesado II}
+  large_plane_airframe_2: {en: Heavy Airframe III, es: Fuselaje Pesado III}
+  large_plane_airframe_3: {en: Heavy Airframe IV, es: Fuselaje Pesado IV}
+  light_tank_chassis_0: {en: Light Combat Chassis I, es: Chasis de Combate Ligero I}
+  light_tank_chassis_1: {en: Light Combat Chassis II, es: Chasis de Combate Ligero II}
+  light_tank_chassis_2: {en: Light Combat Chassis III, es: Chasis de Combate Ligero III}
+  light_tank_chassis_3: {en: Light Combat Chassis IV, es: Chasis de Combate Ligero IV}
+  medium_tank_chassis_0: {en: Medium Combat Chassis I, es: Chasis de Combate Medio I}
+  medium_tank_chassis_1: {en: Medium Combat Chassis II, es: Chasis de Combate Medio II}
+  medium_tank_chassis_2: {en: Medium Combat Chassis III, es: Chasis de Combate Medio III}
+  medium_tank_chassis_3: {en: Medium Combat Chassis IV, es: Chasis de Combate Medio IV}
+  heavy_tank_chassis_0: {en: Heavy Combat Chassis I, es: Chasis de Combate Pesado I}
+  heavy_tank_chassis_1: {en: Heavy Combat Chassis II, es: Chasis de Combate Pesado II}
+  heavy_tank_chassis_2: {en: Heavy Combat Chassis III, es: Chasis de Combate Pesado III}
+  heavy_tank_chassis_3: {en: Heavy Combat Chassis IV, es: Chasis de Combate Pesado IV}
+  modern_tank_chassis_1: {en: Main Battle Chassis, es: Chasis de Combate Principal}
+  super_heavy_tank_chassis_1: {en: Land Fortress Chassis, es: Chasis de Fortaleza Terrestre}

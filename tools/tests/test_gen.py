@@ -553,9 +553,9 @@ def test_territory() -> None:
 
         units = pdx.parse((mod / "history/units/ZWI_2100.txt").read_text())
         divs = units.get("units").get_all("division")
-        check("2 milicias en Asia: India contigua y Ceilan aparte", len(divs) == 2, str(len(divs)))
+        check("una sola milicia por pais de la Anarquia (2026-09-25)", len(divs) == 1, str(len(divs)))
         locs = sorted(pdx.text(d.get("location")) for d in divs)
-        check("una milicia por territorio, en el state con mas manpower", locs == ["18", "20"], str(locs))
+        check("en el territorio mas poblado (India, no Ceilan)", locs == ["18"], str(locs))
         zwe = pdx.parse((mod / "history/units/ZWE_2100.txt").read_text()).get("units").get_all("division")
         check("1 milicia en Europa (Moscu)", len(zwe) == 1 and pdx.text(zwe[0].get("location")) == "22")
 
@@ -571,43 +571,45 @@ def test_territory() -> None:
         check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
-        check("balance cuenta las milicias", any(l.startswith("ZWI") and l.split()[-3] == "2" for l in bal.splitlines()), bal[:800])
+        check("balance cuenta las milicias", any(l.startswith("ZWI") and l.split()[-3] == "1" for l in bal.splitlines()), bal[:800])
         check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 5" in bal)
         check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
 
         section("arranque militar: tecnologias, ejercito, equipo")
         efe_h = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
-        check("el EFE (blindados) no tiene nada: en el fixture no hay pestaña de blindados",
-              "set_technology" not in efe_h)
+        check("el EFE (blindados) solo tiene lo basico: en el fixture no hay pestaña de blindados",
+              set(pdx.parse(efe_h).get("set_technology").keys()) - {"popup"} == {"infantry_weapons", "tech_support"})
         check("avisa la pestaña que falta y lista las que hay",
               any("investigacion" in w and "infantry_folder" in w for w in ctx.warnings))
         nre_h = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
         techs = pdx.parse(nre_h).get("set_technology")
-        keys = set(techs.keys()) - {"popup"}
+        keys = set(techs.keys()) - {"popup", "tech_support"}
         check("NRE (infanteria): las 5 primeras de la pestaña, en orden de arbol",
               keys == {"infantry_weapons", "either_or_tech", "infantry_weapons1", "infantry_weapons2",
                        "improved_infantry_weapons"}, str(keys))
         check("de un par excluyente toma uno solo", "other_tech" not in keys)
         check("no regala variantes sin DLC", "legacy_only_tech" not in keys)
-        check("no toma techs de otra pestaña", "tech_support" not in keys)
+        check("no toma techs de otra pestaña", "basic_ship_hull_heavy" not in keys)
         check("sin popup", pdx.text(techs.get("popup")) == "no")
         pta_h = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
-        check("satelite: nada investigado", "set_technology" not in pta_h)
+        check("satelite: solo lo basico", set(pdx.parse(pta_h).get("set_technology").keys()) - {"popup"} <= {"infantry_weapons", "tech_support"})
         zwi_h = next((mod / "history/countries").glob("ZWI - *.txt")).read_text()
-        check("anarquia: nada investigado", "set_technology" not in zwi_h)
+        check("anarquia: solo lo basico", set(pdx.parse(zwi_h).get("set_technology").keys()) - {"popup"} <= {"infantry_weapons", "tech_support"})
 
         oob = pdx.parse((mod / "history/units/EFE_2100.txt").read_text())
         tpls = [pdx.text(tpl.get("name")) for tpl in oob.get_all("division_template")]
-        check("EFE: tres plantillas", tpls == ["Infantería de Línea", "División Motorizada", "División Blindada"], str(tpls))
+        check("EFE: una sola plantilla, infanteria basica", tpls == ["Infantería Básica"], str(tpls))
         divs = oob.get("units").get_all("division")
-        check("EFE: piso de 20 divisiones para meganaciones", len(divs) == 20, str(len(divs)))
+        check("EFE: 2 divisiones", len(divs) == 2, str(len(divs)))
+        check("en la capital", all(pdx.text(d.get("location")) == pdx.text(divs[0].get("location")) for d in divs))
+        check("todos pueden fabricar equipo de infanteria (tecnologia base)",
+              "infantry_weapons" in efe_h and "infantry_weapons" in zwi_h and "infantry_weapons" in pta_h)
         check("EFE carga su oob", 'oob = "EFE_2100"' in efe_h)
         stock = {pdx.text(b.get("type")): int(pdx.text(b.get("amount")))
                  for b in pdx.parse(efe_h).get_all("add_equipment_to_stockpile")}
         check("fusiles: la variante mas nueva hasta 1942", "infantry_equipment_3" in stock, str(stock))
-        check("fusiles: 400 por division", stock.get("infantry_equipment_3") == 8000, str(stock))
+        check("fusiles: 4000 en deposito para una meganacion", stock.get("infantry_equipment_3") == 4000, str(stock))
         check("convoyes", "convoy_1" in stock)
-        check("avisa arquetipos de equipo que no existen", any("artillery_equipment" in w for w in ctx.warnings))
 
         section("nombres de 2100 y compensacion industrial")
         st = (mod / "localisation/spanish/replace/meganations_states_l_spanish.yml").read_text(encoding="utf-8-sig")
@@ -1093,6 +1095,16 @@ def test_ai() -> None:
                     if lim.strip().splitlines() and "NOT" not in lim and f"has_idea = {idea}" in lim:
                         bad.append(f"{name}:{idea}")
         check("tooltips: ninguna recalculacion quita una idea solo para volver a ponerla", not bad, str(bad))
+        tech = (mod / "common/technologies/infantry.txt").read_text()
+        check("investigacion: años corridos a 2100 (1936 -> 2100, 1943 -> 2107)",
+              "start_year = 2100" in tech and "start_year = 2107" in tech and "start_year = 1936" not in tech)
+        check("el resto del archivo del juego queda igual", "leads_to_tech = infantry_weapons1" in tech)
+        eq = (mod / "common/units/equipment/infantry.txt").read_text()
+        check("el equipo tambien corre de año", "year = 19" not in eq)
+        names = (mod / "localisation/spanish/replace/meganations_research_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("tecnologias con nombre de 2100", 'infantry_weapons:0 "Fusiles de Fibra de Carbono"' in names, names[:300])
+        check("sin espiritus vanilla que sacar en el fixture: no se escribe la limpieza",
+              not (mod / "events/meganations_limpieza.txt").exists())
         gfx = (mod / "interface/meganations_NRE_goals.gfx").read_text()
         check("iconos del pack registrados con brillo",
               "GFX_focus_2100_nre_09_legio_i_italica" in gfx and "GFX_focus_2100_nre_09_legio_i_italica_shine" in gfx)
@@ -1112,39 +1124,46 @@ def test_ai() -> None:
 
 
 def test_forces() -> None:
-    section("armada y aviacion heredadas de 1936")
+    section("armada y aviacion: sin aviones, solo destructores para la HSN")
+    import shutil
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
-        nre = pdx.parse((mod / "history/units/NRE_2100_naval.txt").read_text())
-        fleets = nre.get("units").get_all("fleet")
-        check("NRE hereda la flota con base en Lazio", [pdx.text(f.get("name")) for f in fleets] == ["Squadra Tirreno"], str(fleets))
+        check("nadie tiene aviones (2026-09-25)", not list((mod / "history/units").glob("*_air.txt")))
+        check("el NRE no esta en navies: sin flota", not (mod / "history/units/NRE_2100_naval.txt").exists())
+        check("la Anarquia no tiene barcos", not any(t in ctx.data["ships"] for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")))
+
+    # Con una copia del spec: el NRE con flota, solo acorazados, uno solo; y
+    # una franja de industria que obliga a la ASC a bajar.
+    with tempfile.TemporaryDirectory() as tmp:
+        spec = Path(tmp) / "spec"
+        shutil.copytree(REPO_ROOT / "spec", spec)
+        (Path(tmp) / "assets").symlink_to(REPO_ROOT / "assets")   # el spec apunta a ../assets
+        mil = (spec / "13_military.yaml").read_text()
+        mil = mil.replace("navies: [HSN]", "navies: [NRE]").replace("ship_definition: destroyer", "ship_definition: battleship")
+        (spec / "13_military.yaml").write_text(mil)
+        bal = (spec / "15_balance.yaml").read_text().replace("meganation: [95, 115]", "meganation: [0, 1]")
+        (spec / "15_balance.yaml").write_text(bal)
+        ctx = build(Path(tmp) / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=spec)
+        mod = ctx.mod_root
         raw = (mod / "history/units/NRE_2100_naval.txt").read_text()
+        check("solo el tipo pedido (acorazado), hasta el tope", "Roma" in raw and "Zara" not in raw, raw)
         check("owner pasa a NRE", "owner = NRE" in raw and "owner = ITA" not in raw)
-        check("creator pasa a NRE", "creator = NRE" in raw)
         check("usa la version de DLC (mtg), no la legacy", "Vecchia" not in raw)
-        variants = nre.get("instant_effect").get_all("create_equipment_variant")
-        check("copia las variantes de barcos", len(variants) == 2, str(len(variants)))
+        variants = pdx.parse(raw).get("instant_effect").get_all("create_equipment_variant")
+        check("solo las variantes que usan los barcos que quedan", [pdx.text(v.get("name")) for v in variants] == ["Classe Littorio"],
+              str([pdx.text(v.get("name")) for v in variants]))
         check("no copia otros efectos del instant_effect", "add_political_power" not in raw)
-        check("APF no esta en forces.navies: sin flota aunque tenga la base de Libia",
-              not (mod / "history/units/APF_2100_naval.txt").exists())
-        check("recorte: de 2 barcos queda 1 (el primero)", "Roma" in raw and "Zara" not in raw, raw)
-        check("la flota en territorio de la Anarquia se descarta",
-              not any((mod / "history/units").glob("ZWI_2100_naval.txt")))
-        air = pdx.parse((mod / "history/units/NRE_2100_air.txt").read_text()).get("air_wings")
-        check("NRE hereda el ala basada en Lazio", "909" in air.keys() and "914" not in air.keys())
-        check("owner del ala pasa a NRE", 'owner = "NRE"' in (mod / "history/units/NRE_2100_air.txt").read_text())
         nre_h = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
         check("la historia carga la armada", 'set_naval_oob = "NRE_2100_naval"' in nre_h)
-        check("la historia carga la aviacion", 'set_air_oob = "NRE_2100_air"' in nre_h)
-        check("cuenta barcos despues del recorte", ctx.data["ships"].get("NRE") == 1, str(ctx.data["ships"]))
-        check("aviones: 10% de 60 = 6, sube al piso de 10 (sin los OOB de 1939)",
-              ctx.data["planes"].get("NRE") == 10, str(ctx.data["planes"]))
-        check("la Anarquia no tiene aviones ni barcos",
-              not any(t in ctx.data["planes"] or t in ctx.data["ships"] for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")))
-        check("ignora el set_air_oob dentro de un bloque con fecha", "999" not in (mod / "history/units/NRE_2100_air.txt").read_text())
-        check("un ala sin base aerea propia se descarta (APF en Libia)",
-              not (mod / "history/units/APF_2100_air.txt").exists())
+        check("recibe la tecnologia del casco de sus barcos", "basic_ship_hull_heavy" in nre_h)
+        added = ctx.data["added_buildings"]
+        check("franja de industria: el EFE (2 IC en el fixture) baja a 1",
+              sum(added.get(900, {}).get(k, 0) for k in ("industrial_complex", "arms_factory")) == -1,
+              str(dict(added.get(900, {}))))
+        ba = pdx.parse((mod / "history/states/900-Fixture.txt").read_text()).get("state").get("history").get("buildings")
+        check("nunca queda un edificio en negativo",
+              all(int(float(pdx.text(v))) >= 0 for k, v in ba.entries if k in ("industrial_complex", "arms_factory")), str(ba))
 
 
 def test_diplomacy() -> None:

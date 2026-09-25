@@ -40,6 +40,7 @@ from .emitters import military as em_military
 from .emitters import menu as em_menu
 from .emitters import militia as em_militia
 from .emitters import names as em_names
+from .emitters import research as em_research
 from .emitters import resources as em_resources
 from .emitters import scenario as em_scenario
 from .emitters import territory as em_territory
@@ -59,6 +60,7 @@ EMITTERS = [
     ("militia", em_militia.emit),       # antes que history: define el oob
     ("military", em_military.emit),     # despues de militia: tecnologias, ejercito, equipo
     ("forces", em_forces.emit),         # armada y aviacion heredadas de 1936
+    ("research", em_research.emit),     # la investigacion de 2100: años y nombres
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
     ("names", em_names.emit),
@@ -66,6 +68,7 @@ EMITTERS = [
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
+    ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)
     ("diplomacy", em_diplomacy.emit),
     ("ai", em_ai.emit),                 # estrategias de IA: despues de territory (quien existe)   # antes que history: opiniones, guerras, tension
     ("history", em_history.emit),

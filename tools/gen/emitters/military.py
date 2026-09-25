@@ -47,6 +47,7 @@ def emit(ctx: BuildContext) -> None:
     names = ctx.data.get("state_names") or {}
     land = ctx.vanilla.land_provinces()
     specialty = _specialties(ctx, spec.get("research") or {})
+    tree = ctx.vanilla.tech_tree()
     equipment = ctx.vanilla.equipment()
     sub_units = ctx.vanilla.sub_units()
     _check_templates(spec, sub_units)
@@ -65,55 +66,54 @@ def emit(ctx: BuildContext) -> None:
         year = int(spec["stockpile_year"][kind])
         ctx.data["techs"][c.tag] = specialty.get(c.tag, [])
 
-        if kind == "anarchy" or kind not in spec["army"]["divisions"]:
+        base = [t for t in (spec.get("research") or {}).get("base_techs", []) if t in tree]
+        ctx.data["techs"][c.tag] = list(dict.fromkeys(base + specialty.get(c.tag, [])))
+
+        if kind == "anarchy":
             continue
 
-        ic = sum(economy_mod.buildings_of(ctx, s).get("industrial_complex", 0)
-                 + economy_mod.buildings_of(ctx, s).get("arms_factory", 0) for s in owned)
-        rule = spec["army"]["divisions"][kind]
-        total = int(rule["base"] + ic * float(rule["per_ic"]))
-        total = max(int(rule.get("min", 0)), min(int(rule["max"]), total))
-        plan = _split(total, spec["army"]["mix"][kind])
-
+        garrison = spec["army"]["garrison"]
+        count = int((garrison.get("overrides") or {}).get(c.tag, garrison[kind]))
+        tpl = spec["army"]["templates"][garrison["template"]]
+        tpl_name = tpl["name"]["spanish"]
         root = Block()
-        for key in plan:
-            root.add("division_template", _template(spec["army"]["templates"][key]))
+        root.add("division_template", _template(tpl))
 
-        # Divisiones repartidas entre los states más poblados, en ronda.
-        spots = [s for s in sorted(owned, key=lambda s: (-s.manpower, s.id))
-                 if any(p in land for p in s.provinces)] or owned
+        # Guarnición mínima en la capital (pedido del usuario, 2026-09-25).
+        cap = (ctx.data.get("capitals") or {}).get(c.tag)
+        spot = by_state.get(cap) if cap in by_state and any(p in land for p in by_state[cap].provinces) else None
+        if spot is None:
+            spot = next((s for s in sorted(owned, key=lambda s: (-s.manpower, s.id))
+                         if any(p in land for p in s.provinces)), owned[0])
         units = Block()
-        i = 0
-        for key, count in plan.items():
-            tpl_name = spec["army"]["templates"][key]["name"]["spanish"]
-            for n in range(count):
-                s = spots[i % len(spots)]
-                i += 1
-                province = next((p for p in s.provinces if p in land), s.provinces[0] if s.provinces else None)
-                if province is None:
-                    continue
-                div = Block()
-                div.add("name", Quoted(f"{n + 1}.ª {tpl_name} de {display_name(s, names)}"))
-                div.add("location", province)
-                div.add("division_template", Quoted(tpl_name))
-                div.add("start_experience_factor", 0.2)
-                units.add("division", div)
+        for n in range(count):
+            province = next((p for p in spot.provinces if p in land), spot.provinces[0] if spot.provinces else None)
+            if province is None:
+                continue
+            div = Block()
+            div.add("name", Quoted(f"{n + 1}.ª {tpl_name} de {display_name(spot, names)}"))
+            div.add("location", province)
+            div.add("division_template", Quoted(tpl_name))
+            div.add("start_experience_factor", 0.2)
+            units.add("division", div)
         root.add("units", units)
 
         oob = f"{c.tag}_2100"
         ctx.write_text(f"history/units/{oob}.txt", banner_for(SOURCE) + render(root))
         ctx.data["oob"][c.tag] = oob
-        ctx.data["division_count"][c.tag] = sum(plan.values())
+        ctx.data["division_count"][c.tag] = count
+        ic = sum(economy_mod.buildings_of(ctx, s).get("industrial_complex", 0)
+                 + economy_mod.buildings_of(ctx, s).get("arms_factory", 0) for s in owned)
 
         stock = []
-        for archetype, per_div in spec["stockpile"]["per_division"].items():
+        for archetype, amount in (spec["stockpile"]["per_kind"].get(kind) or {}).items():
             item = _best_variant(equipment, archetype, year)
             if item is None:
                 if archetype not in warned:
                     ctx.warn(f"deposito: no hay variante de '{archetype}' hasta {year} en el juego; se saltea.")
                     warned.add(archetype)
                 continue
-            stock.append((item, int(per_div * sum(plan.values()))))
+            stock.append((item, int(amount)))
         conv = spec["stockpile"]["convoys"]
         convoy = _best_variant(equipment, conv["equipment"], year)
         if convoy:

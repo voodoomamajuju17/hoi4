@@ -19,10 +19,14 @@
 # -----------------------------------------------------------------------------
 industrialization:
   src: invented
-  targets:        # TAG -> IC objetivo (civiles + militares)
-    EFE: 70
-    NAS: 60
-    APF: 80
+  # 2026-09-25 (pedido del usuario: "balancea más la industria"): franja de IC
+  # por tipo de país. Por debajo del mínimo se agregan fábricas civiles en
+  # slots libres; por encima del máximo se sacan fábricas de los states más
+  # industriales. `targets` sigue sirviendo para un país puntual.
+  band:
+    meganation: [95, 115]
+    satellite: [0, 35]
+  targets: {}
   building: industrial_complex
 
 # -----------------------------------------------------------------------------

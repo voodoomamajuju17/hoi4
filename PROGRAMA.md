@@ -97,8 +97,14 @@ eventos con ultimátum e IA con condiciones.
 - [x] Investigación de arranque: nadie tiene nada, salvo 5 tecnologías de la especialidad de cada
   meganación (NRE infantería, APF apoyo, EFE blindados, SHD artillería, HSN naval + apoyo naval,
   NAS aviación, ASC ingeniería, FCU industria)
-- [ ] Renombrar la investigación a 2100 (esperando investigacion.txt del juego real) y evaluar el
-  rediseño completo
+- [x] Investigación de 2100 v1 (spec/17_research.yaml): años +164 (1936 -> 2100) en tecnologías,
+  equipo y pantalla de investigación; 192 tecnologías y 72 equipos con nombre de 2100
+- [x] Sin unidades: 2 infanterías básicas en la capital por meganación (HSN: 1 + 3 destructores),
+  1 por satélite, 1 milicia por país de la Anarquía; sin aviones. Todos con equipo de infantería y
+  de apoyo investigado y en depósito
+- [x] Industria en franja: meganaciones 95-115 IC, satélites hasta 35
+- [x] Espíritus vanilla repartidos por región (Doctrina Monroe...) se sacan al día 1 y cada mes
+- [ ] Rediseño completo de la investigación (ramas propias): más adelante
 - [~] **IA v1** (spec/16_ai.yaml): planes de conquista por potencia (EFE→Amazonas, ASC→Eurasia,
   NRE→Emiratos y después Eurasia, SHD→Indostán, APF→Emiratos, NAS→Amazonas, FCU→el Canal,
   HSN→costas del Indostán), señores que protegen a sus satélites, rivales que se antagonizan;

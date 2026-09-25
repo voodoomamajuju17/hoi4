@@ -16,7 +16,7 @@ from __future__ import annotations
 import re
 
 from ..context import BuildContext
-from ..pdx import banner_for
+from ..pdx import Block, banner_for, render
 
 SOURCE = "decisiones nacionales vanilla de paises que en 2100 no existen"
 
@@ -38,3 +38,64 @@ def emit(ctx: BuildContext) -> None:
     if silenced:
         ctx.note(f"limpieza: {len(silenced)} archivos de decisiones de paises vanilla vaciados "
                  f"({', '.join(sorted(set(silenced))[:12])}{'...' if len(set(silenced)) > 12 else ''})")
+
+
+def emit_spirits(ctx: BuildContext) -> None:
+    """Espíritus vanilla que los scripts genéricos del juego reparten por
+    región o continente (ej. la "Doctrina Monroe" a todo país americano):
+    un evento oculto se los saca a los países del mod al día 1 y cada mes."""
+    if ctx.vanilla is None:
+        return
+    ours = sorted(c.tag for c in ctx.spec.countries)
+    spirits = sorted(ctx.vanilla.country_spirits() & ctx.vanilla.ideas_given_by_scripts())
+    if not spirits:
+        return
+    eff = Block()
+    for idea in spirits:
+        b = Block()
+        b.add("limit", Block([("has_idea", idea)]))
+        b.add("remove_ideas", idea)
+        eff.add("if", b)
+    root = Block()
+    root.add("MEGANATIONS_quitar_espiritus_vanilla", eff)
+    ctx.write_script("common/scripted_effects/meganations_limpieza.txt", root, source=SOURCE_SPIRITS)
+
+    ev = Block()
+    ev.add("id", "meganations_limpieza.1")
+    ev.add("hidden", True)
+    ev.add("is_triggered_only", True)
+    imm = Block()
+    imm.add("MEGANATIONS_quitar_espiritus_vanilla", True)
+    again = Block()
+    again.add("id", "meganations_limpieza.1")
+    again.add("days", 30)
+    imm.add("country_event", again)
+    ev.add("immediate", imm)
+    events = Block()
+    events.add("add_namespace", "meganations_limpieza")
+    events.add("country_event", ev)
+    ctx.write_script("events/meganations_limpieza.txt", events, source=SOURCE_SPIRITS)
+
+    who = Block()
+    who.add("limit", Block([("OR", Block([("tag", t) for t in ours]))]))
+    first = Block()
+    first.add("id", "meganations_limpieza.1")
+    first.add("days", 1)
+    who.add("country_event", first)
+    effect = Block()
+    effect.add("every_country", who)
+    startup = Block()
+    startup.add("effect", effect)
+    on = Block()
+    on.add("on_startup", startup)
+    root = Block()
+    root.add("on_actions", on)
+    ctx.write_script("common/on_actions/02_meganations_limpieza.txt", root, source=SOURCE_SPIRITS)
+    ctx.note(f"limpieza: {len(spirits)} espiritus vanilla que el juego reparte por region se sacan al dia 1 "
+             f"({', '.join(s for s in spirits if 'monroe' in s.lower()) or 'ninguno con monroe en el nombre'})")
+    ctx.verify_keys("effects", {"remove_ideas": SOURCE_SPIRITS, "every_country": SOURCE_SPIRITS,
+                                "country_event": SOURCE_SPIRITS})
+    ctx.verify_keys("triggers", {"has_idea": SOURCE_SPIRITS, "tag": SOURCE_SPIRITS})
+
+
+SOURCE_SPIRITS = "espiritus vanilla que el juego reparte por region o continente"

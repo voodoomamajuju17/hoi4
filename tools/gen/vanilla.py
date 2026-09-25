@@ -628,7 +628,13 @@ class Vanilla:
                         leads.append(pdx.text(pth.get("leads_to_tech")))
                 xor = tech.get("xor")
                 xor_list = [pdx.text(v) for _, v in xor.entries] if isinstance(xor, pdx.Block) else []
+                enables = set()
+                for field in ("enable_equipments", "enable_equipment_modules"):
+                    blk = tech.get(field)
+                    if isinstance(blk, pdx.Block):
+                        enables.update(pdx.text(v) for _, v in blk.entries)
                 out[name] = {
+                    "enables": enables,
                     "year": int(year_text) if year_text and year_text.isdigit() else 1936,
                     "folder": folder_name, "x": x, "y": y, "leads_to": leads, "xor": xor_list,
                     "eligible": not (doctrine_file or "doctrine" in folder_name.lower() or _has_not_dlc(tech)),
@@ -737,6 +743,42 @@ class Vanilla:
                 if isinstance(cat, pdx.Block):
                     out.update(k for k, v in cat.entries if k and isinstance(v, pdx.Block))
         return out
+
+    def country_spirits(self) -> set[str]:
+        """Espíritus nacionales vanilla (categoría `country` de common/ideas/,
+        sin leyes ni asesores)."""
+        out: set[str] = set()
+        for path in sorted((self.root / "common" / "ideas").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            ideas = root.get("ideas")
+            if not isinstance(ideas, pdx.Block):
+                continue
+            for key, cat in ideas.entries:
+                if key == "country" and isinstance(cat, pdx.Block):
+                    out.update(k for k, v in cat.entries if k and isinstance(v, pdx.Block))
+        return out
+
+    def ideas_given_by_scripts(self) -> set[str]:
+        """Ideas que los scripts genéricos del juego (on_actions, efectos,
+        eventos) pueden dar a cualquier país con add_ideas / add_timed_idea."""
+        found: set[str] = set()
+        one = re.compile(r"add_ideas\s*=\s*([A-Za-z0-9_.]+)")
+        many = re.compile(r"add_ideas\s*=\s*\{([^}]*)\}")
+        timed = re.compile(r"add_timed_idea\s*=\s*\{[^}]*?idea\s*=\s*([A-Za-z0-9_.]+)")
+        for folder in ("common/on_actions", "common/scripted_effects", "events"):
+            for path in sorted((self.root / folder).glob("**/*.txt")):
+                try:
+                    text = path.read_text(encoding="utf-8-sig", errors="replace")
+                except OSError:
+                    continue
+                found.update(one.findall(text))
+                found.update(timed.findall(text))
+                for group in many.findall(text):
+                    found.update(re.findall(r"[A-Za-z0-9_.]+", group))
+        return found
 
     def building_keys(self) -> set[str]:
         out: set[str] = set()

@@ -104,7 +104,26 @@ def _industrialize(ctx, spec, assignment, by_state, added) -> None:
     if not slots_by_cat:
         ctx.warn("industrializacion: no pude leer common/state_category/; se saltea.")
         return
-    for tag, target in (spec.get("targets") or {}).items():
+    # Franja por tipo de país (2026-09-25): quien está por debajo del mínimo
+    # recibe fábricas civiles; quien pasa el máximo pierde fábricas, primero
+    # en sus states más industriales.
+    band = spec.get("band") or {}
+    kind = {c.tag: ("meganation" if c.is_major else "satellite" if c.is_subject else "anarchy")
+            for c in ctx.spec.countries}
+    targets = dict(spec.get("targets") or {})
+    for tag, k in kind.items():
+        if k not in band:
+            continue
+        low, high = band[k]
+        owned = [by_state[sid] for sid, t in assignment.items() if t == tag and sid in by_state]
+        if not owned:
+            continue
+        ic = sum(_ic(s) for s in owned)
+        if ic < low:
+            targets[tag] = max(int(low), int(targets.get(tag, 0)))
+        elif ic > high:
+            _deindustrialize(ctx, tag, owned, ic - int(high), added)
+    for tag, target in targets.items():
         owned = [by_state[sid] for sid, t in assignment.items() if t == tag and sid in by_state]
         ic = sum(_ic(s) for s in owned)
         need = int(target) - ic
@@ -124,6 +143,26 @@ def _industrialize(ctx, spec, assignment, by_state, added) -> None:
         if placed < need:
             msg += f"; faltan {need - placed}: no hay mas slots libres"
         ctx.note(msg)
+
+
+def _deindustrialize(ctx, tag, owned, excess, added) -> None:
+    """Saca `excess` fábricas (civiles y militares, la que haya más en el
+    state) empezando por los states más industriales."""
+    removed = {"industrial_complex": 0, "arms_factory": 0}
+    left = excess
+    for s in sorted(owned, key=lambda s: (-_ic(s), s.id)):
+        if left <= 0:
+            break
+        have = {k: (s.buildings or {}).get(k, 0) + added[s.id].get(k, 0) for k in removed}
+        while left > 0 and (have["industrial_complex"] > 0 or have["arms_factory"] > 0):
+            k = "industrial_complex" if have["industrial_complex"] >= have["arms_factory"] else "arms_factory"
+            have[k] -= 1
+            added[s.id][k] -= 1
+            removed[k] += 1
+            left -= 1
+    total = sum(removed.values())
+    ctx.note(f"industrializacion: {tag} baja {total} IC ({removed['industrial_complex']} civiles, "
+             f"{removed['arms_factory']} militares) para quedar en la franja")
 
 
 def _ic(s: StateInfo) -> int:

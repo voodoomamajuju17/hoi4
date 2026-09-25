@@ -17,6 +17,9 @@
 research:
   src: user_decision
   techs_per_specialty: 5
+  # Lo mínimo para todos (meganaciones, satélites y Anarquía): fabricar
+  # equipo de infantería y de apoyo. Se validan contra el árbol del juego.
+  base_techs: [infantry_weapons, tech_support]
   folders:            # especialidad -> prefijos de las pestañas del juego
     infantry: [infantry]
     support: [support]
@@ -44,35 +47,30 @@ stockpile_year:
   satellite: 1940
   anarchy: 1936
 
+# Pedido del usuario (2026-09-25): se borran TODAS las unidades. Queda una
+# guarnición de infantería básica en la capital: 2 divisiones por meganación
+# (1 la HSN, que además tiene 3 destructores), 1 por satélite. La Anarquía
+# tiene 1 milicia (militia.per_country). Nada de motorizados ni blindados:
+# nadie tiene esas tecnologías.
 army:
-  src: invented
-  # Divisiones = base + IC x factor, con un tope. IC = fábricas civiles + militares.
-  divisions:
-    meganation: { base: 6, per_ic: 0.25, min: 20, max: 60 }   # piso de 20 (balance 2026-09-23)
-    satellite:  { base: 3, per_ic: 0.25, max: 24 }
-  # Reparto de las divisiones entre plantillas, por tipo de facción.
-  mix:
-    meganation: { line_infantry: 0.60, motorized: 0.25, armored: 0.15 }
-    satellite:  { line_infantry: 0.80, motorized: 0.20 }
+  src: user_decision
+  garrison:
+    template: basic_infantry
+    meganation: 2
+    satellite: 1
+    overrides: { HSN: 1 }
   templates:
-    line_infantry:
-      name: { english: "Line Infantry", spanish: "Infantería de Línea" }
-      regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade]
-      support: [engineer, recon]
-    motorized:
-      name: { english: "Motorised Division", spanish: "División Motorizada" }
-      regiments: [motorized, motorized, motorized, motorized, artillery_brigade]
-      support: [engineer, recon]
-    armored:
-      name: { english: "Armoured Division", spanish: "División Blindada" }
-      regiments: [medium_armor, medium_armor, medium_armor, medium_armor, motorized, motorized]
-      support: [engineer, recon]
+    basic_infantry:
+      name: { english: "Basic Infantry", spanish: "Infantería Básica" }
+      regiments: [infantry, infantry, infantry, infantry, infantry, infantry]
+      support: []
 
 # Milicias de la Anarquía: una cada `states_per_division` states de cada
 # territorio contiguo, mínimo una por territorio (balance 2026-09-23: con una
 # por territorio eran 29 para 233 states).
 militia:
   states_per_division: 3.5
+  per_country: 1      # 2026-09-25: una sola milicia por país de la Anarquía, en su state más poblado
 
 # -----------------------------------------------------------------------------
 # Armada y aviación de arranque (pedido del usuario, 2026-09-23): se heredan
@@ -87,21 +85,20 @@ militia:
 #     quedan con al menos min_planes. La Anarquía: cero.
 # -----------------------------------------------------------------------------
 forces:
-  src: user
-  keep: 0.10
-  navies: [HSN, FCU, NRE, ASC]
-  min_planes: 10
+  src: user_decision   # 2026-09-25: sin aviones; la HSN, 3 destructores heredados
+  keep: 1.0
+  navies: [HSN]
+  ship_definition: destroyer
+  max_ships: 3
+  air: false
 
 stockpile:
   src: invented
-  # Equipo en depósito por cada división, además del que traen puestas.
-  # Se usa la variante más nueva del arquetipo cuyo año no pase el nivel
-  # tecnológico de la facción.
-  per_division:
-    infantry_equipment: 400
-    support_equipment: 40
-    artillery_equipment: 36
-    motorized_equipment: 60
+  # Equipo en depósito por tipo de país (variante más nueva del arquetipo
+  # hasta stockpile_year). No se puede fabricar sin la tecnología, pero sirve.
+  per_kind:
+    meganation: { infantry_equipment: 4000, support_equipment: 300 }
+    satellite:  { infantry_equipment: 1200, support_equipment: 100 }
   # Convoyes: base + por IC, para que el comercio funcione desde el día uno.
   convoys: { equipment: convoy, base: 20, per_ic: 1.0 }
 
