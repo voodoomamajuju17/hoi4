@@ -72,6 +72,34 @@ countries:
     # Total (cambio aprobado con Q031). Antes el foco "otorgaba" una idea que el
     # país ya tenía desde el día uno.
     focus_ideas:
+      - id: EFE_cubas_forzadas
+        name: {english: Forced Vats, spanish: Cubas Forzadas}
+        desc:
+          english: The vats run past their limit. More armour, angrier workers.
+          spanish: Las cubas trabajan por encima de su límite. Más blindaje, obreros más enojados.
+        modifiers: {production_speed_arms_factory_factor: 0.05, stability_factor: -0.05}
+        src: user_design
+      - id: EFE_fiebre_de_las_cubas
+        name: {english: Vat Fever, spanish: Fiebre de las Cubas}
+        desc:
+          english: The living metal grows faster than anyone can shape it. Halls are sealed; people get sick.
+          spanish: El metal vivo crece más rápido de lo que se lo puede moldear. Se sellan naves; la gente se enferma.
+        modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.1}
+        src: user_design
+      - id: EFE_plaga_del_micelio
+        name: {english: The Mycelium Blight, spanish: La Plaga del Micelio}
+        desc:
+          english: A blight in the vats. Whole halls must be burned before it reaches the forests.
+          spanish: Una plaga en las cubas. Hay que quemar naves enteras antes de que llegue a los bosques.
+        modifiers: {industrial_capacity_factory: -0.15, production_speed_arms_factory_factor: -0.1}
+        src: user_design
+      - id: EFE_rotacion_de_cultivos
+        name: {english: Crop Rotation, spanish: Rotación de Cultivos}
+        desc:
+          english: The vats rest by turns, like fields.
+          spanish: Las cubas descansan por turnos, como los campos.
+        modifiers: {stability_factor: 0.05, production_speed_buildings_factor: 0.05}
+        src: user_design
 
       - id: EFE_conservacion_coercitiva
         granted_by: EFE_reforestacion_obligatoria
@@ -457,6 +485,20 @@ countries:
         modifiers: {industrial_capacity_factory: 0.05, production_speed_buildings_factor: 0.05}
         src: user_design
     focus_ideas:
+    - id: ASC_racionamiento_termico
+      name: {english: Thermal Rationing, spanish: Racionamiento Térmico}
+      desc:
+        english: The data centres run hot. The Plan throttles itself.
+        spanish: Los centros de datos están calientes. El Plan se frena a sí mismo.
+      modifiers: {research_speed_factor: -0.05, industrial_capacity_factory: -0.05}
+      src: user_design
+    - id: ASC_apagon
+      name: {english: Grid Blackout, spanish: Apagón de la Red}
+      desc:
+        english: Half the Commune's computers are dark. The Plan is being rebuilt from backups.
+        spanish: La mitad de las computadoras de la Comuna están apagadas. El Plan se reconstruye desde las copias.
+      modifiers: {research_speed_factor: -0.15, production_speed_buildings_factor: -0.1}
+      src: user_design
     - id: ASC_computo_economia_2
       name: {english: 'Compute: Economy II', spanish: 'Cómputo: Economía II'}
       desc:
@@ -649,6 +691,20 @@ countries:
         modifiers: { political_power_gain: -0.1, production_speed_buildings_factor: 0.1 }
         removable: false
     focus_ideas:
+      - id: FCU_bajo_sospecha
+        name: {english: Under Suspicion, spanish: Bajo Sospecha}
+        desc:
+          english: Journalists, auditors and short-sellers all smell blood.
+          spanish: Periodistas, auditores y especuladores huelen sangre.
+        modifiers: {political_power_gain: -0.1, stability_factor: -0.03}
+        src: user_design
+      - id: FCU_crisis_de_confianza
+        name: {english: Crisis of Confidence, spanish: Crisis de Confianza}
+        desc:
+          english: Nobody believes a word the Directorate says, least of all its shareholders.
+          spanish: Nadie cree una palabra del Directorio, y los accionistas menos que nadie.
+        modifiers: {political_power_gain: -0.15, stability_factor: -0.1, trade_opinion_factor: -0.1}
+        src: user_design
       - id: FCU_sinergia_del_directorio
         name: { english: "Board Synergy", spanish: "Sinergia del Directorio" }
         desc:
@@ -785,6 +841,20 @@ countries:
   HSN:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: HSN_bajo_vigilancia
+      name: {english: Under Watch, spanish: Bajo Vigilancia}
+      desc:
+        english: Every great power has a warship parked outside one of our straits.
+        spanish: Cada gran potencia tiene un buque de guerra estacionado frente a alguno de nuestros estrechos.
+      modifiers: {trade_opinion_factor: -0.1, stability_factor: -0.03}
+      src: user_design
+    - id: HSN_tributo_de_los_estrechos
+      name: {english: Tribute of the Straits, spanish: Tributo de los Estrechos}
+      desc:
+        english: We pay the powers to leave the straits alone. They like it too much.
+        spanish: Les pagamos a las potencias para que dejen tranquilos los estrechos. Les gusta demasiado.
+      modifiers: {political_power_gain: -0.1, trade_opinion_factor: 0.1}
+      src: user_design
     - id: HSN_red_nodos_1
       name: {english: The Node Network I, spanish: La Red de Nodos I}
       desc:
@@ -910,6 +980,20 @@ countries:
   NAS:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: NAS_sol_hambriento
+      name: {english: The Hungry Sun, spanish: El Sol Hambriento}
+      desc:
+        english: The temples are empty of light. The priests speak of punishment.
+        spanish: Los templos están vacíos de luz. Los sacerdotes hablan de castigo.
+      modifiers: {stability_factor: -0.08, war_support_factor: -0.05}
+      src: user_design
+    - id: NAS_fervor_solar
+      name: {english: Solar Fervour, spanish: Fervor Solar}
+      desc:
+        english: The temples overflow with light, and the faithful overflow with zeal.
+        spanish: Los templos rebosan de luz, y los fieles de fervor.
+      modifiers: {war_support_factor: 0.05, political_power_gain: 0.05, stability_factor: -0.05}
+      src: user_design
     - id: NAS_raymi
       name: {english: The Raymi, spanish: El Raymi}
       desc:
@@ -1031,6 +1115,18 @@ countries:
   SHD:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: SHD_inundacion
+      name: {english: The Flood Damage, spanish: Los Daños de la Crecida}
+      desc: {english: 'Roads, dams and factories under mud.', spanish: 'Caminos, represas y fábricas bajo el barro.'}
+      modifiers: {production_speed_buildings_factor: -0.1}
+      src: user_design
+    - id: SHD_boom_exportador
+      name: {english: Export Boom, spanish: Boom Exportador}
+      desc:
+        english: The world wants everything the Directorate makes.
+        spanish: El mundo quiere todo lo que hace el Directorio.
+      modifiers: {industrial_capacity_factory: 0.1, stability_factor: -0.03}
+      src: user_design
     - id: SHD_armonia_perfecta
       name: {english: Perfect Harmony, spanish: Armonía Perfecta}
       desc:
@@ -1171,6 +1267,20 @@ countries:
   APF:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: APF_consejos_inquietos
+      name: {english: Restless Councils, spanish: Consejos Inquietos}
+      desc:
+        english: The councils ask why the capital decides for them.
+        spanish: Los consejos preguntan por qué la capital decide por ellos.
+      modifiers: {stability_factor: -0.05, political_power_gain: -0.05}
+      src: user_design
+    - id: APF_consejos_en_rebeldia
+      name: {english: Councils in Revolt, spanish: Consejos en Rebeldía}
+      desc:
+        english: Whole regions have stopped answering Lagos.
+        spanish: Regiones enteras dejaron de contestarle a Lagos.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.1}
+      src: user_design
     - id: APF_espiritu_mil_consejos
       name: {english: A Thousand Councils, spanish: Mil Consejos}
       desc:
@@ -1273,6 +1383,13 @@ countries:
   NRE:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: NRE_legiones_ociosas
+      name: {english: Idle Legions, spanish: Legiones Ociosas}
+      desc:
+        english: Legions without a war look for a cause. Sometimes they find the Palatine.
+        spanish: Las legiones sin guerra buscan una causa. A veces encuentran el Palatino.
+      modifiers: {stability_factor: -0.05, political_power_gain: -0.05}
+      src: user_design
     - id: NRE_legiones_veteranas
       name: {english: Veteran Legions, spanish: Legiones Veteranas}
       desc:

@@ -496,10 +496,12 @@ def test_phase3_content() -> None:
         check("icono elegido entre los vanilla", pdx.text(cat.get("icon")) == "generic_industry")
         decs_raw = (mod / "common/decisions/meganations_decisions.txt").read_text()
         decs = pdx.parse(decs_raw).get("EFE_biosteel_category")
-        check("4 decisiones", len(decs.keys()) == 4, str(decs.keys()))
+        check("5 decisiones (con Purgar las Cubas)", len(decs.keys()) == 5, str(decs.keys()))
         ampliar = decs.get("EFE_ampliar_las_cubas")
         check("ampliar: cuesta 50 y tiene espera", pdx.text(ampliar.get("cost")) == "50"
-              and pdx.text(ampliar.get("days_re_enable")) == "30")
+              and pdx.text(ampliar.get("days_re_enable")) == "45")
+        ampl = pdx.render(ampliar.get("complete_effect"))
+        check("ampliar satura las cubas", "var = EFE_saturacion" in ampl, ampl)
         check("ampliar: +1 BioSteel", pdx.text(ampliar.get("complete_effect").get("add_to_variable").get("value")) == "1")
         check("icono de decision vanilla", pdx.text(ampliar.get("icon")) == "generic_industry")
         check("cultivo intensivo pide estabilidad > 0.4", "has_stability > 0.4" in decs_raw, decs_raw[:2000])
@@ -691,7 +693,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("15 eventos del EFE", len(events) == 15, str(len(events)))
+        check("18 eventos del EFE (pulso, explicacion y plaga)", len(events) == 18, str(len(events)))
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
@@ -1167,6 +1169,31 @@ def test_arte() -> None:
           "id: NRE_irina_vasilescu", "filename: NRE_irina_vasilescu.png", "size: 156x210", "transparent_background: false")))
 
 
+def test_mecanicas_v2() -> None:
+    section("mecanicas v2: pulso mensual, riesgos y explicacion al arranque")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        eff = pdx.parse((mod / "common/scripted_effects/meganations_effects.txt").read_text())
+        for tag, name in (("EFE", "EFE_pulso_de_las_cubas"), ("FCU", "FCU_pulso_del_directorio"), ("ASC", "ASC_pulso_de_la_red"),
+                          ("HSN", "HSN_pulso_de_las_potencias"), ("NAS", "NAS_pulso_de_los_templos"), ("SHD", "SHD_pulso_del_rio"),
+                          ("APF", "APF_pulso_de_los_consejos"), ("NRE", "NRE_pulso_del_ocio")):
+            check(f"{tag}: pulso mensual definido", eff.get(name) is not None)
+        cubas = pdx.render(eff.get("EFE_pulso_de_las_cubas"))
+        check("EFE: la saturacion baja sola y trae fiebre y plaga",
+              "EFE_fiebre_de_las_cubas" in cubas and "meganations_efe.22" in cubas and "EFE_biosteel" in cubas)
+        check("SHD: los caudales se mueven solos (P+2 Pu+1 O-1)", "var = SHD_produccion" in pdx.render(eff.get("SHD_pulso_del_rio")))
+        on = "".join(p.read_text() for p in (mod / "common/on_actions").glob("*.txt"))
+        check("cada pulso arranca el primer dia", all(f"meganations_{t}.20" in on for t in ("efe", "fcu", "asc", "hsn", "nas", "shd", "apf", "nre")))
+        check("cada potencia recibe su explicacion al arranque", all(f"meganations_{t}.21" in on for t in ("efe", "fcu", "asc", "hsn", "nas", "shd", "apf", "nre")))
+        decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        inv = decs[decs.index("APF_invertir_zet = {"):]
+        inv = inv[:inv.index("complete_effect")]
+        check("APF: invertir se ve desde el dia 1 (sin foco)", "APF_integracion_abierta" not in inv, inv)
+        es = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("SHD: el nombre de cada decision dice cuanto mueve", "Aumentar Cuotas (P+10 O+3 Pu-8)" in es)
+
+
 def test_forces() -> None:
     section("armada y aviacion: sin aviones, solo destructores para la HSN")
     import shutil
@@ -1352,6 +1379,7 @@ def main() -> int:
         test_nre,
         test_ai,
         test_arte,
+        test_mecanicas_v2,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

@@ -20,84 +20,131 @@ categories:
 
   - id: EFE_biosteel_category
     country: EFE
-    icon_prefer: [generic_industry, generic_production, generic_research]
-    name:
-      english: "The BioSteel Race"
-      spanish: "La Carrera del Bioacero"
+    icon_prefer:
+    - generic_industry
+    - generic_production
+    - generic_research
+    name: {english: The BioSteel Race, spanish: La Carrera del Bioacero}
     desc:
-      english: "BioSteel stored in the vats: [?EFE_biosteel]\\n\\nThe tiers of the BioSteel Race need 5, 10 and 15. Every unit spent on the Green Guard is one the vats will have to grow again."
-      spanish: "Bioacero en las cubas: [?EFE_biosteel]\\n\\nLos niveles de la Carrera del Bioacero piden 5, 10 y 15. Cada unidad que se gasta en la Guardia Verde es una que las cubas tienen que volver a cultivar."
+      english: 'BioSteel in the vats: [?EFE_biosteel]\nVat saturation: [?EFE_saturacion] / 100\n\nThe BioSteel Race tiers need 5, 10 and 15 BioSteel.
+        Every harvest raises the saturation of the vats; it falls by 3 per month on its own.\n40+: Forced Vats (more arms production, less stability).
+        70+: Vat Fever, and every month a chance of the Mycelium Blight.\nAbove 15 BioSteel the living metal rots: -1 per month. Purge the vats
+        before they purge you.'
+      spanish: 'Bioacero en las cubas: [?EFE_biosteel]\nSaturación de las cubas: [?EFE_saturacion] / 100\n\nLos niveles de la Carrera del Bioacero
+        piden 5, 10 y 15. Cada cosecha sube la saturación de las cubas; baja sola 3 por mes.\n40 o más: Cubas Forzadas (más producción militar,
+        menos estabilidad). 70 o más: Fiebre de las Cubas, y cada mes puede aparecer la Plaga del Micelio.\nPor encima de 15 de Bioacero el metal
+        vivo se pudre: -1 por mes. Purgá las cubas antes de que ellas te purguen a vos.'
     src: invented
-
     decisions:
-
-      - id: EFE_ampliar_las_cubas
-        name: { english: "Expand the Vats", spanish: "Ampliar las Cubas" }
-        desc:
-          english: "Another hall of vats in the Plain of the Vats. Slow, expensive and safe."
-          spanish: "Otra nave de cubas en la Llanura de las Cubas. Lento, caro y seguro."
-        icon_prefer: [generic_industry, generic_construction]
-        cost: 50
-        cooldown_days: 30
-        effects:
-          - { effect: add_variable, var: EFE_biosteel, value: 1 }
-        ai_factor: 10
-
-      - id: EFE_cultivo_intensivo
-        name: { english: "Intensive Cultivation", spanish: "Cultivo Intensivo" }
-        desc:
-          english: "Double shifts in the vats and rationed water in the cities. The yield doubles; so do the complaints."
-          spanish: "Doble turno en las cubas y agua racionada en las ciudades. El rendimiento se duplica; las quejas también."
-        icon_prefer: [generic_industry, generic_production]
-        cost: 25
-        cooldown_days: 60
-        available:
-          stability_at_least: 0.40
-        effects:
-          - { effect: add_variable, var: EFE_biosteel, value: 2 }
-          - { effect: add_stability, value: -0.05 }
-        ai_factor: 5
-        ai:
-          factor: 5
-          modifiers:
-          - factor: 0
-            when: {stability_below: 0.4}
-
-      - id: EFE_talar_el_bosque_viejo
-        name: { english: "Fell the Old Forest", spanish: "Talar el Bosque Viejo" }
-        desc:
-          english: "The vats need biomass and the oldest forests have the most. The Custodian swore to protect them. The Emperor needs armour."
-          spanish: "Las cubas necesitan biomasa y los bosques más viejos son los que más tienen. El Custodio juró protegerlos. El Emperador necesita blindaje."
-        icon_prefer: [generic_industry, generic_prepare_civil_war]
-        cost: 10
-        cooldown_days: 180
-        available:
-          stability_at_least: 0.50
-        effects:
-          - { effect: add_variable, var: EFE_biosteel, value: 4 }
-          - { effect: add_stability, value: -0.15 }
-          - { effect: add_war_support, value: -0.05 }
-        ai_factor: 1
-        ai:
-          factor: 1
-          modifiers:
-          - factor: 0
-            when: {stability_below: 0.5}
-
-      - id: EFE_blindar_la_guardia
-        name: { english: "Armour the Green Guard", spanish: "Blindar a la Guardia Verde" }
-        desc:
-          english: "Spend BioSteel now: living armour for the Guard's veterans. The vats will have to start over."
-          spanish: "Gastar Bioacero ahora: blindaje vivo para los veteranos de la Guardia. Las cubas van a tener que empezar de nuevo."
-        icon_prefer: [generic_army_support, generic_industry]
-        cost: 25
-        cooldown_days: 90
-        available:
-          variable_at_least: { var: EFE_biosteel, value: 3 }
-        effects:
-          - { effect: add_variable, var: EFE_biosteel, value: -3 }
-          - { effect: army_experience, value: 30 }
-        ai_factor: 3
+    - id: EFE_ampliar_las_cubas
+      name: {english: Expand the Vats, spanish: Ampliar las Cubas}
+      desc:
+        english: Another hall of vats in the Plain of the Vats. Slow, expensive and safe.
+        spanish: Otra nave de cubas en la Llanura de las Cubas. Lento, caro y seguro.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 45
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_saturacion, value: 6}
+      ai_factor: 10
+      ai:
+        factor: 10
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: EFE_saturacion, value: 75}
+        - factor: 0.3
+          when:
+            variable_at_least: {var: EFE_saturacion, value: 55}
+    - id: EFE_cultivo_intensivo
+      name: {english: Intensive Cultivation, spanish: Cultivo Intensivo}
+      desc:
+        english: Double shifts in the vats and rationed water in the cities. The yield doubles; so do the complaints.
+        spanish: Doble turno en las cubas y agua racionada en las ciudades. El rendimiento se duplica; las quejas también.
+      icon_prefer:
+      - generic_industry
+      - generic_production
+      cost: 25
+      cooldown_days: 60
+      available: {stability_at_least: 0.4}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: 2}
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_variable, var: EFE_saturacion, value: 12}
+      ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: EFE_saturacion, value: 60}
+        - factor: 0
+          when: {stability_below: 0.4}
+    - id: EFE_talar_el_bosque_viejo
+      name: {english: Fell the Old Forest, spanish: Talar el Bosque Viejo}
+      desc:
+        english: The vats need biomass and the oldest forests have the most. The Custodian swore to protect them. The Emperor needs armour.
+        spanish: Las cubas necesitan biomasa y los bosques más viejos son los que más tienen. El Custodio juró protegerlos. El Emperador necesita
+          blindaje.
+      icon_prefer:
+      - generic_industry
+      - generic_prepare_civil_war
+      cost: 10
+      cooldown_days: 180
+      available: {stability_at_least: 0.5}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: 4}
+      - {effect: add_stability, value: -0.15}
+      - {effect: add_war_support, value: -0.05}
+      - {effect: add_variable, var: EFE_saturacion, value: 15}
+      ai_factor: 1
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when: {stability_below: 0.5}
+    - id: EFE_blindar_la_guardia
+      name: {english: Armour the Green Guard, spanish: Blindar a la Guardia Verde}
+      desc:
+        english: 'Spend BioSteel now: living armour for the Guard''s veterans. The vats will have to start over.'
+        spanish: 'Gastar Bioacero ahora: blindaje vivo para los veteranos de la Guardia. Las cubas van a tener que empezar de nuevo.'
+      icon_prefer:
+      - generic_army_support
+      - generic_industry
+      cost: 25
+      cooldown_days: 90
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 3}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: army_experience, value: 30}
+      - {effect: add_variable, var: EFE_saturacion, value: -5}
+      ai_factor: 3
+    - id: EFE_purgar_las_cubas
+      name: {english: Purge the Vats, spanish: Purgar las Cubas}
+      desc:
+        english: 'Drain and sterilise a hall of vats: saturation -25, BioSteel -1.'
+        spanish: 'Vaciar y esterilizar una nave de cubas: saturación -25, Bioacero -1.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 60
+      effects:
+      - {effect: add_variable, var: EFE_saturacion, value: -25}
+      - {effect: add_variable, var: EFE_biosteel, value: -1}
+      ai_factor: 5
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 8
+          when:
+            variable_at_least: {var: EFE_saturacion, value: 60}
+        - factor: 0
+          when:
+            variable_below: {var: EFE_saturacion, value: 30}
 
   # ===========================================================================
   # FCU — El Directorio de las Cuatro ("Las Ocho Potencias", 2026-09-23)
@@ -107,211 +154,254 @@ categories:
   # ===========================================================================
   - id: FCU_directorio_category
     country: FCU
-    icon_prefer: [generic_industry, generic_production, generic_political_actions]
-    name:
-      english: "The Board of Four"
-      spanish: "El Directorio de las Cuatro"
+    icon_prefer:
+    - generic_industry
+    - generic_production
+    - generic_political_actions
+    name: {english: The Board of Four, spanish: El Directorio de las Cuatro}
     desc:
-      english: "Castellane Water Trust: [?FCU_castellane]\\nHalvorsen-Ito Agrosystems: [?FCU_halvorsen]\\nMeridian Kinetics: [?FCU_meridian]\\nObsidian Ledger: [?FCU_obsidian]\\n\\nAll four between 40 and 60: Board Synergy.\\nAny of them below 15: Corporate War.\\nMeridian above 70 with two rivals below 25: the Hostile Takeover becomes possible."
-      spanish: "Castellane Water Trust: [?FCU_castellane]\\nHalvorsen-Ito Agrosystems: [?FCU_halvorsen]\\nMeridian Kinetics: [?FCU_meridian]\\nObsidian Ledger: [?FCU_obsidian]\\n\\nLas cuatro entre 40 y 60: Sinergia del Directorio.\\nAlguna por debajo de 15: Guerra Corporativa.\\nMeridian por encima de 70 con dos rivales por debajo de 25: se habilita la OPA Hostil."
+      english: 'Castellane Water Trust: [?FCU_castellane]\nHalvorsen-Ito Agrosystems: [?FCU_halvorsen]\nMeridian Kinetics: [?FCU_meridian]\nObsidian
+        Ledger: [?FCU_obsidian]\nScandal: [?FCU_escandalo] / 100\n\nAll four between 40 and 60: Board Synergy. Any below 15: Corporate War. Meridian
+        above 70 with two rivals below 25: the Hostile Takeover opens.\nEvery month the strong get stronger: a corporation above 55 gains 1, one
+        below 45 loses 1.\nEvery contract raises scandal by 8 (it falls 2 per month). 50+: Under Suspicion. 80+: Crisis of Confidence, and the Leak
+        can break.'
+      spanish: 'Castellane Water Trust: [?FCU_castellane]\nHalvorsen-Ito Agrosystems: [?FCU_halvorsen]\nMeridian Kinetics: [?FCU_meridian]\nObsidian
+        Ledger: [?FCU_obsidian]\nEscándalo: [?FCU_escandalo] / 100\n\nLas cuatro entre 40 y 60: Sinergia del Directorio. Alguna por debajo de 15:
+        Guerra Corporativa. Meridian por encima de 70 con dos rivales por debajo de 25: se habilita la OPA Hostil.\nCada mes el fuerte se hace más
+        fuerte: una corporación arriba de 55 gana 1; una abajo de 45 pierde 1.\nCada contrato sube el escándalo 8 (baja 2 por mes). 50 o más: Bajo
+        Sospecha. 80 o más: Crisis de Confianza, y puede estallar la Filtración.'
     src: user_design
     after_effects:
-      - { effect: run, value: FCU_recalcular_directorio }
-
+    - {effect: run, value: FCU_recalcular_directorio}
     decisions:
-
-      - id: FCU_contrato_ferroviario
-        name: { english: "Automated Railway Contract", spanish: "Contrato Ferroviario Automatizado" }
-        desc:
-          english: "Meridian lays the track, Obsidian finances it. The farmers and the water board pay for it."
-          spanish: "Meridian pone las vías, Obsidian lo financia. Lo pagan los granjeros y el agua."
-        icon_prefer: [generic_construction, generic_industry]
-        cost: 50
-        cooldown_days: 60
-        visible: { not_flag: FCU_opa_consumada }
-        effects:
-          - { effect: add_variable, var: FCU_meridian, value: 10 }
-          - { effect: add_variable, var: FCU_obsidian, value: 5 }
-          - { effect: add_variable, var: FCU_halvorsen, value: -5 }
-          - { effect: add_variable, var: FCU_castellane, value: -5 }
-          - { effect: build, building: infrastructure, level: 1 }
-        ai_factor: 5
-        ai:
-          factor: 5
-          modifiers:
-          - factor: 3
-            when:
-              any:
-              - variable_below: {var: FCU_meridian, value: 45}
-              - variable_below: {var: FCU_obsidian, value: 45}
-          - factor: 0
-            when:
-              any:
-              - variable_below: {var: FCU_halvorsen, value: 25}
-              - variable_below: {var: FCU_castellane, value: 25}
-              - variable_at_least: {var: FCU_meridian, value: 65}
-
-      - id: FCU_subsidio_alimentario
-        name: { english: "Food Subsidy", spanish: "Subsidio Alimentario" }
-        desc:
-          english: "Halvorsen-Ito feeds the cities at a loss the Treasury covers. Obsidian calls it theft."
-          spanish: "Halvorsen-Ito alimenta a las ciudades a pérdida y el Tesoro la cubre. Obsidian lo llama robo."
-        icon_prefer: [generic_political_actions, generic_industry]
-        cost: 50
-        cooldown_days: 60
-        visible: { not_flag: FCU_opa_consumada }
-        effects:
-          - { effect: add_variable, var: FCU_halvorsen, value: 10 }
-          - { effect: add_variable, var: FCU_castellane, value: 5 }
-          - { effect: add_variable, var: FCU_meridian, value: -5 }
-          - { effect: add_variable, var: FCU_obsidian, value: -10 }
-          - { effect: add_stability, value: 0.03 }
-        ai_factor: 5
-        ai:
-          factor: 5
-          modifiers:
-          - factor: 3
-            when:
-              variable_below: {var: FCU_halvorsen, value: 45}
-          - factor: 0
-            when:
-              any:
-              - variable_below: {var: FCU_obsidian, value: 30}
-              - variable_below: {var: FCU_meridian, value: 25}
-              - variable_at_least: {var: FCU_halvorsen, value: 65}
-
-      - id: FCU_licitacion_desalinizadoras
-        name: { english: "Desalination Tender", spanish: "Licitación de Desalinizadoras" }
-        desc:
-          english: "A new coast of desalination plants. Castellane wins the tender, as usual."
-          spanish: "Una costa nueva de desalinizadoras. Castellane gana la licitación, como siempre."
-        icon_prefer: [generic_construction, generic_industry]
-        cost: 75
-        cooldown_days: 90
-        visible: { not_flag: FCU_opa_consumada }
-        effects:
-          - { effect: add_variable, var: FCU_castellane, value: 10 }
-          - { effect: add_variable, var: FCU_halvorsen, value: 5 }
-          - { effect: add_variable, var: FCU_meridian, value: -5 }
-          - { effect: add_variable, var: FCU_obsidian, value: -5 }
-          - { effect: build, building: industrial_complex, level: 1 }
-        ai_factor: 4
-        ai:
-          factor: 4
-          modifiers:
-          - factor: 3
-            when:
-              variable_below: {var: FCU_castellane, value: 45}
-          - factor: 0
-            when:
-              any:
-              - variable_below: {var: FCU_meridian, value: 25}
-              - variable_below: {var: FCU_obsidian, value: 25}
-              - variable_at_least: {var: FCU_castellane, value: 65}
-
-      - id: FCU_contrato_de_defensa
-        name: { english: "Defence Contract", spanish: "Contrato de Defensa" }
-        desc:
-          english: "Meridian Kinetics delivers a new line of arms. Everyone else delivers the budget."
-          spanish: "Meridian Kinetics entrega una línea nueva de armamento. Los demás entregan el presupuesto."
-        icon_prefer: [generic_army_support, generic_industry]
-        cost: 75
-        cooldown_days: 90
-        visible: { not_flag: FCU_opa_consumada }
-        effects:
-          - { effect: add_variable, var: FCU_meridian, value: 15 }
-          - { effect: add_variable, var: FCU_castellane, value: -5 }
-          - { effect: add_variable, var: FCU_halvorsen, value: -5 }
-          - { effect: add_variable, var: FCU_obsidian, value: -5 }
-          - { effect: army_experience, value: 15 }
-          - { effect: build, building: arms_factory, level: 1 }
-        ai_factor: 3
-        ai:
-          factor: 3
-          modifiers:
-          - factor: 3
-            when:
-              variable_below: {var: FCU_meridian, value: 40}
-          - factor: 2
-            when: {at_war: true}
-          - factor: 0
-            when:
-              any:
-              - variable_below: {var: FCU_castellane, value: 25}
-              - variable_below: {var: FCU_halvorsen, value: 25}
-              - variable_below: {var: FCU_obsidian, value: 25}
-              - variable_at_least: {var: FCU_meridian, value: 60}
-
-      - id: FCU_desregulacion_financiera
-        name: { english: "Financial Deregulation", spanish: "Desregulación Financiera" }
-        desc:
-          english: "Obsidian Ledger writes its own rules for six months. Research flows, and so does the money nobody can trace."
-          spanish: "Obsidian Ledger escribe sus propias reglas por seis meses. La investigación fluye, y también la plata que nadie puede rastrear."
-        icon_prefer: [generic_research, generic_political_actions]
-        cost: 25
-        cooldown_days: 120
-        visible: { not_flag: FCU_opa_consumada }
-        effects:
-          - { effect: add_variable, var: FCU_obsidian, value: 15 }
-          - { effect: add_variable, var: FCU_halvorsen, value: -5 }
-          - { effect: add_variable, var: FCU_castellane, value: -5 }
-          - { effect: add_variable, var: FCU_meridian, value: -5 }
-          - { effect: timed_idea, idea: FCU_ventanilla_obsidian, days: 180 }
-        ai_factor: 3
-        ai:
-          factor: 3
-          modifiers:
-          - factor: 3
-            when:
-              variable_below: {var: FCU_obsidian, value: 40}
-          - factor: 0
-            when:
-              any:
-              - variable_below: {var: FCU_castellane, value: 25}
-              - variable_below: {var: FCU_halvorsen, value: 25}
-              - variable_below: {var: FCU_meridian, value: 25}
-              - variable_at_least: {var: FCU_obsidian, value: 60}
-
-      - id: FCU_auditoria_del_directorio
-        name: { english: "Board Audit", spanish: "Auditoría del Directorio" }
-        desc:
-          english: "The Chair calls in the auditors. Whoever grew too much shrinks; whoever shrank too much gets a lifeline."
-          spanish: "La Presidencia llama a los auditores. La que creció de más se achica; la que se achicó de más recibe un salvavidas."
-        icon_prefer: [generic_political_actions, generic_research]
-        cost: 100
-        cooldown_days: 180
-        visible: { not_flag: FCU_opa_consumada }
-        effects:
-          - { effect: run, value: FCU_auditar_castellane }
-          - { effect: run, value: FCU_auditar_halvorsen }
-          - { effect: run, value: FCU_auditar_meridian }
-          - { effect: run, value: FCU_auditar_obsidian }
-        ai_factor: 2
-        ai:
-          factor: 1
-          modifiers:
-          - factor: 10
-            when:
-              any:
-              - variable_below: {var: FCU_castellane, value: 20}
-              - variable_below: {var: FCU_halvorsen, value: 20}
-              - variable_below: {var: FCU_meridian, value: 20}
-              - variable_below: {var: FCU_obsidian, value: 20}
-
-      - id: FCU_repartir_el_dividendo
-        name: { english: "Pay the War Dividend", spanish: "Repartir el Dividendo de Guerra" }
-        desc:
-          english: "The war is going well for the shareholders. Pay them before they ask."
-          spanish: "A los accionistas la guerra les está yendo bien. Hay que pagarles antes de que pregunten."
-        icon_prefer: [generic_army_support, generic_industry]
-        cost: 0
-        cooldown_days: 90
-        visible: { focus: FCU_el_dividendo_de_guerra }
-        available: { at_war: true }
-        effects:
-          - { effect: add_political_power, value: 75 }
-          - { effect: build, building: arms_factory, level: 1 }
-        ai_factor: 20
+    - id: FCU_contrato_ferroviario
+      name: {english: Automated Railway Contract, spanish: Contrato Ferroviario Automatizado}
+      desc:
+        english: Meridian lays the track, Obsidian finances it. The farmers and the water board pay for it.
+        spanish: Meridian pone las vías, Obsidian lo financia. Lo pagan los granjeros y el agua.
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 50
+      cooldown_days: 60
+      visible: {not_flag: FCU_opa_consumada}
+      effects:
+      - {effect: add_variable, var: FCU_meridian, value: 10}
+      - {effect: add_variable, var: FCU_obsidian, value: 5}
+      - {effect: add_variable, var: FCU_halvorsen, value: -5}
+      - {effect: add_variable, var: FCU_castellane, value: -5}
+      - {effect: build, building: infrastructure, level: 1}
+      - {effect: add_variable, var: FCU_escandalo, value: 8}
+      ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when:
+            any:
+            - variable_below: {var: FCU_meridian, value: 45}
+            - variable_below: {var: FCU_obsidian, value: 45}
+        - factor: 0
+          when:
+            any:
+            - variable_below: {var: FCU_halvorsen, value: 25}
+            - variable_below: {var: FCU_castellane, value: 25}
+            - variable_at_least: {var: FCU_meridian, value: 65}
+    - id: FCU_subsidio_alimentario
+      name: {english: Food Subsidy, spanish: Subsidio Alimentario}
+      desc:
+        english: Halvorsen-Ito feeds the cities at a loss the Treasury covers. Obsidian calls it theft.
+        spanish: Halvorsen-Ito alimenta a las ciudades a pérdida y el Tesoro la cubre. Obsidian lo llama robo.
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 50
+      cooldown_days: 60
+      visible: {not_flag: FCU_opa_consumada}
+      effects:
+      - {effect: add_variable, var: FCU_halvorsen, value: 10}
+      - {effect: add_variable, var: FCU_castellane, value: 5}
+      - {effect: add_variable, var: FCU_meridian, value: -5}
+      - {effect: add_variable, var: FCU_obsidian, value: -10}
+      - {effect: add_stability, value: 0.03}
+      - {effect: add_variable, var: FCU_escandalo, value: 8}
+      ai_factor: 5
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: FCU_halvorsen, value: 45}
+        - factor: 0
+          when:
+            any:
+            - variable_below: {var: FCU_obsidian, value: 30}
+            - variable_below: {var: FCU_meridian, value: 25}
+            - variable_at_least: {var: FCU_halvorsen, value: 65}
+    - id: FCU_licitacion_desalinizadoras
+      name: {english: Desalination Tender, spanish: Licitación de Desalinizadoras}
+      desc:
+        english: A new coast of desalination plants. Castellane wins the tender, as usual.
+        spanish: Una costa nueva de desalinizadoras. Castellane gana la licitación, como siempre.
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 75
+      cooldown_days: 90
+      visible: {not_flag: FCU_opa_consumada}
+      effects:
+      - {effect: add_variable, var: FCU_castellane, value: 10}
+      - {effect: add_variable, var: FCU_halvorsen, value: 5}
+      - {effect: add_variable, var: FCU_meridian, value: -5}
+      - {effect: add_variable, var: FCU_obsidian, value: -5}
+      - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: FCU_escandalo, value: 8}
+      ai_factor: 4
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: FCU_castellane, value: 45}
+        - factor: 0
+          when:
+            any:
+            - variable_below: {var: FCU_meridian, value: 25}
+            - variable_below: {var: FCU_obsidian, value: 25}
+            - variable_at_least: {var: FCU_castellane, value: 65}
+    - id: FCU_contrato_de_defensa
+      name: {english: Defence Contract, spanish: Contrato de Defensa}
+      desc:
+        english: Meridian Kinetics delivers a new line of arms. Everyone else delivers the budget.
+        spanish: Meridian Kinetics entrega una línea nueva de armamento. Los demás entregan el presupuesto.
+      icon_prefer:
+      - generic_army_support
+      - generic_industry
+      cost: 75
+      cooldown_days: 90
+      visible: {not_flag: FCU_opa_consumada}
+      effects:
+      - {effect: add_variable, var: FCU_meridian, value: 15}
+      - {effect: add_variable, var: FCU_castellane, value: -5}
+      - {effect: add_variable, var: FCU_halvorsen, value: -5}
+      - {effect: add_variable, var: FCU_obsidian, value: -5}
+      - {effect: army_experience, value: 15}
+      - {effect: build, building: arms_factory, level: 1}
+      - {effect: add_variable, var: FCU_escandalo, value: 8}
+      ai_factor: 3
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: FCU_meridian, value: 40}
+        - factor: 2
+          when: {at_war: true}
+        - factor: 0
+          when:
+            any:
+            - variable_below: {var: FCU_castellane, value: 25}
+            - variable_below: {var: FCU_halvorsen, value: 25}
+            - variable_below: {var: FCU_obsidian, value: 25}
+            - variable_at_least: {var: FCU_meridian, value: 60}
+    - id: FCU_desregulacion_financiera
+      name: {english: Financial Deregulation, spanish: Desregulación Financiera}
+      desc:
+        english: Obsidian Ledger writes its own rules for six months. Research flows, and so does the money nobody can trace.
+        spanish: Obsidian Ledger escribe sus propias reglas por seis meses. La investigación fluye, y también la plata que nadie puede rastrear.
+      icon_prefer:
+      - generic_research
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 120
+      visible: {not_flag: FCU_opa_consumada}
+      effects:
+      - {effect: add_variable, var: FCU_obsidian, value: 15}
+      - {effect: add_variable, var: FCU_halvorsen, value: -5}
+      - {effect: add_variable, var: FCU_castellane, value: -5}
+      - {effect: add_variable, var: FCU_meridian, value: -5}
+      - {effect: timed_idea, idea: FCU_ventanilla_obsidian, days: 180}
+      - {effect: add_variable, var: FCU_escandalo, value: 8}
+      ai_factor: 3
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 3
+          when:
+            variable_below: {var: FCU_obsidian, value: 40}
+        - factor: 0
+          when:
+            any:
+            - variable_below: {var: FCU_castellane, value: 25}
+            - variable_below: {var: FCU_halvorsen, value: 25}
+            - variable_below: {var: FCU_meridian, value: 25}
+            - variable_at_least: {var: FCU_obsidian, value: 60}
+    - id: FCU_auditoria_del_directorio
+      name: {english: Board Audit, spanish: Auditoría del Directorio}
+      desc:
+        english: The Chair calls in the auditors. Whoever grew too much shrinks; whoever shrank too much gets a lifeline.
+        spanish: La Presidencia llama a los auditores. La que creció de más se achica; la que se achicó de más recibe un salvavidas.
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 100
+      cooldown_days: 180
+      visible: {not_flag: FCU_opa_consumada}
+      effects:
+      - {effect: run, value: FCU_auditar_castellane}
+      - {effect: run, value: FCU_auditar_halvorsen}
+      - {effect: run, value: FCU_auditar_meridian}
+      - {effect: run, value: FCU_auditar_obsidian}
+      - {effect: add_variable, var: FCU_escandalo, value: -25}
+      ai_factor: 2
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 10
+          when:
+            any:
+            - variable_below: {var: FCU_castellane, value: 20}
+            - variable_below: {var: FCU_halvorsen, value: 20}
+            - variable_below: {var: FCU_meridian, value: 20}
+            - variable_below: {var: FCU_obsidian, value: 20}
+    - id: FCU_repartir_el_dividendo
+      name: {english: Pay the War Dividend, spanish: Repartir el Dividendo de Guerra}
+      desc:
+        english: The war is going well for the shareholders. Pay them before they ask.
+        spanish: A los accionistas la guerra les está yendo bien. Hay que pagarles antes de que pregunten.
+      icon_prefer:
+      - generic_army_support
+      - generic_industry
+      cost: 0
+      cooldown_days: 90
+      visible: {focus: FCU_el_dividendo_de_guerra}
+      available: {at_war: true}
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: build, building: arms_factory, level: 1}
+      ai_factor: 20
+    - id: FCU_relaciones_publicas
+      name: {english: Public Relations Campaign, spanish: Campaña de Relaciones Públicas}
+      desc:
+        english: 'Glossy ads, grateful journalists: scandal -12.'
+        spanish: 'Publicidad brillante, periodistas agradecidos: escándalo -12.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: FCU_escandalo, value: -12}
+      ai_factor: 5
+      visible: {not_flag: FCU_opa_consumada}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 6
+          when:
+            variable_at_least: {var: FCU_escandalo, value: 50}
+        - factor: 0
+          when:
+            variable_below: {var: FCU_escandalo, value: 30}
 
   # ===========================================================================
   # EFE — El Monte, la integración, la reforestación y la economía
@@ -631,10 +721,12 @@ categories:
     - generic_industry
     name: {english: Compute Power, spanish: Poder de Cómputo}
     desc:
-      english: 'Total compute: [?ASC_computo]\nLevels: below 40, 40 to 79, 80 or more.\n\nThe compute goes to ONE priority. Changing it leaves the
-        system 30 days recalibrating. You can never maximise everything.'
-      spanish: 'Cómputo total: [?ASC_computo]\nNiveles: menos de 40, de 40 a 79, 80 o más.\n\nEl cómputo va a UNA prioridad. Cambiarla deja al sistema
-        30 días recalibrando. Nunca se puede maximizar todo.'
+      english: 'Total compute: [?ASC_computo]   Grid heat: [?ASC_calor] / 100\nLevels: under 40, 40 to 79, 80 or more.\n\nCompute goes to ONE priority.
+        Changing it leaves the system recalibrating for 30 days.\nCompute needs upkeep: -1 per month. The more compute, the hotter the grid: +4
+        per month from 60, +8 from 100, and it cools by 3 below 60. 50+ heat: Thermal Rationing. 80+: blackouts.'
+      spanish: 'Cómputo total: [?ASC_computo]   Calor de la red: [?ASC_calor] / 100\nNiveles: menos de 40, de 40 a 79, 80 o más.\n\nEl cómputo va
+        a UNA prioridad. Cambiarla deja al sistema 30 días recalibrando.\nEl cómputo pide mantenimiento: -1 por mes. Cuanto más cómputo, más se
+        calienta la red: +4 por mes desde 60, +8 desde 100; por debajo de 60 se enfría 3. Calor 50 o más: Racionamiento Térmico. 80 o más: apagones.'
     src: user_design
     after_effects:
     - {effect: run, value: ASC_recalcular_computo}
@@ -648,9 +740,9 @@ categories:
       cost: 25
       available: {not_flag: ASC_reasignando}
       effects:
-      - &id001 {effect: clear_flag, value: ASC_prioridad_guerra}
-      - &id002 {effect: clear_flag, value: ASC_prioridad_investigacion}
-      - &id003 {effect: clear_flag, value: ASC_prioridad_logistica}
+      - {effect: clear_flag, value: ASC_prioridad_guerra}
+      - {effect: clear_flag, value: ASC_prioridad_investigacion}
+      - {effect: clear_flag, value: ASC_prioridad_logistica}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
       ai:
@@ -669,9 +761,9 @@ categories:
       cost: 25
       available: {not_flag: ASC_reasignando}
       effects:
-      - *id001
-      - *id002
-      - *id003
+      - {effect: clear_flag, value: ASC_prioridad_guerra}
+      - {effect: clear_flag, value: ASC_prioridad_investigacion}
+      - {effect: clear_flag, value: ASC_prioridad_logistica}
       - {effect: flag, value: ASC_prioridad_investigacion}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
@@ -693,9 +785,9 @@ categories:
       cost: 25
       available: {not_flag: ASC_reasignando}
       effects:
-      - *id001
-      - *id002
-      - *id003
+      - {effect: clear_flag, value: ASC_prioridad_guerra}
+      - {effect: clear_flag, value: ASC_prioridad_investigacion}
+      - {effect: clear_flag, value: ASC_prioridad_logistica}
       - {effect: flag, value: ASC_prioridad_logistica}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
@@ -715,9 +807,9 @@ categories:
       cost: 25
       available: {not_flag: ASC_reasignando}
       effects:
-      - *id001
-      - *id002
-      - *id003
+      - {effect: clear_flag, value: ASC_prioridad_guerra}
+      - {effect: clear_flag, value: ASC_prioridad_investigacion}
+      - {effect: clear_flag, value: ASC_prioridad_logistica}
       - {effect: flag, value: ASC_prioridad_guerra}
       - {effect: flag, value: ASC_reasignando, days: 30}
       ai_factor: 2
@@ -755,6 +847,27 @@ categories:
       effects:
       - {effect: timed_idea, idea: ASC_sobrecarga, days: 120}
       ai_factor: 2
+    - id: ASC_enfriar_los_datacenters
+      name: {english: Cool the Data Centres, spanish: Enfriar los Centros de Datos}
+      desc:
+        english: 'Divert rivers and power to the cooling towers: heat -30.'
+        spanish: 'Desviar ríos y energía a las torres de enfriamiento: calor -30.'
+      icon_prefer:
+      - generic_industry
+      cost: 50
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: ASC_calor, value: -30}
+      ai_factor: 5
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 8
+          when:
+            variable_at_least: {var: ASC_calor, value: 60}
+        - factor: 0
+          when:
+            variable_below: {var: ASC_calor, value: 30}
   - id: ASC_consejo_category
     country: ASC
     icon_prefer:
@@ -917,12 +1030,35 @@ categories:
     - generic_political_actions
     name: {english: The Clearing House, spanish: La Cámara de Compensación}
     desc:
-      english: 'Nodes under control: [?HSN_nodos] of 8 (Malacca, Sunda, Kanto, Manila, Taiwan, Hong Kong, Okinawa, Tsushima).\n2, 4 and 6 nodes
-        strengthen the Node Network; all 8 open the World Clearing House. Losing one hurts.\n\nLoot in the holds: [?HSN_botin]'
-      spanish: 'Nodos bajo control: [?HSN_nodos] de 8 (Malaca, Sunda, Kanto, Manila, Taiwán, Hong Kong, Okinawa, Tsushima).\n2, 4 y 6 nodos refuerzan
-        la Red de Nodos; los 8 abren la Cámara Mundial de Compensación. Perder uno duele.\n\nBotín en las bodegas: [?HSN_botin]'
+      english: 'Nodes under control: [?HSN_nodos]. 2, 4 and 6 nodes strengthen the Node Network; all of them open the World Clearing House. Losing
+        one hurts.\nPressure of the powers: [?HSN_presion] / 100 (+3 per month with 4 nodes, +6 with 6; falls 3 with fewer). 40+: Under Watch. 70+:
+        the powers demand a strait.\n\nLoot in the holds: [?HSN_botin]'
+      spanish: 'Nodos bajo control: [?HSN_nodos]. 2, 4 y 6 nodos refuerzan la Red de Nodos; todos abren la Cámara Mundial de Compensación. Perder
+        uno duele.\nPresión de las potencias: [?HSN_presion] / 100 (+3 por mes con 4 nodos, +6 con 6; baja 3 con menos). 40 o más: Bajo Vigilancia.
+        70 o más: las potencias exigen un estrecho.\n\nBotín en las bodegas: [?HSN_botin]'
     src: user_design
     decisions:
+    - id: HSN_diplomacia_de_puertos
+      name: {english: Port Diplomacy, spanish: Diplomacia de Puertos}
+      desc:
+        english: 'Free berths and discounts for the great powers'' fleets: pressure -20.'
+        spanish: 'Amarras gratis y descuentos para las flotas de las grandes potencias: presión -20.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: HSN_presion, value: -20}
+      ai_factor: 5
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 8
+          when:
+            variable_at_least: {var: HSN_presion, value: 50}
+        - factor: 0
+          when:
+            variable_below: {var: HSN_presion, value: 25}
     - id: HSN_asegurar_convoyes_efe
       name:
         english: Insure the Convoys of The Ecofascist Empire
@@ -1341,10 +1477,12 @@ categories:
     - generic_research
     name: {english: Inti-Soma, spanish: Inti-Soma}
     desc:
-      english: 'Sacred light stored in the temples: [?NAS_inti] of [?NAS_inti_max]\nSun Farms: [?NAS_granjas] (each one adds 1 per month)\n\nThe
-        light is spent in ceremonies. An overloaded temple shines brighter, until the Night of the Sun.'
-      spanish: 'Luz sagrada guardada en los templos: [?NAS_inti] de [?NAS_inti_max]\nGranjas del Sol: [?NAS_granjas] (cada una suma 1 por mes)\n\nLa
-        luz se gasta en ceremonias. Un templo sobrecargado brilla más, hasta La Noche del Sol.'
+      english: 'Sacred light in the temples: [?NAS_inti] of [?NAS_inti_max]\nSun Farms: [?NAS_granjas] (each adds 1 per month)\n\nThe temples burn
+        3 light per month. Below 10: the Hungry Sun. 90 or more: Solar Fervour. Light is spent on ceremonies; an overcharged temple shines brighter,
+        until the Night of the Sun. Eclipses happen.'
+      spanish: 'Luz sagrada en los templos: [?NAS_inti] de [?NAS_inti_max]\nGranjas del Sol: [?NAS_granjas] (cada una suma 1 por mes)\n\nLos templos
+        queman 3 de luz por mes. Por debajo de 10: el Sol Hambriento. 90 o más: Fervor Solar. La luz se gasta en ceremonias; un templo sobrecargado
+        brilla más, hasta La Noche del Sol. Hay eclipses.'
     src: user_design
     decisions:
     - id: NAS_ceremonia_raymi
@@ -1786,9 +1924,13 @@ categories:
     name: {english: Federal Integration, spanish: La Integración Federal}
     desc:
       english: 'Highlands: Development [?APF_desarrollo_zet], Integration [?APF_integracion_zet]\nCape: Development [?APF_desarrollo_zsa], Integration
-        [?APF_integracion_zsa]\n\nAmara builds a federation; Diallo draws the map first.'
+        [?APF_integracion_zsa]\nRegional tension: [?APF_tension] / 100\n\nInvest (from day one) raises Development and lowers tension. Integrate
+        (opened by the Federation focus) raises Integration and tension: +5 with Amara, +10 with Diallo. At 100 the member joins with cores. Tension
+        falls 2 per month; 50+: Restless Councils; 75+: the councils can rise.'
       spanish: 'Tierras Altas: Desarrollo [?APF_desarrollo_zet], Integración [?APF_integracion_zet]\nCabo: Desarrollo [?APF_desarrollo_zsa], Integración
-        [?APF_integracion_zsa]\n\nAmara construye una federación; Diallo dibuja primero el mapa.'
+        [?APF_integracion_zsa]\nTensión regional: [?APF_tension] / 100\n\nInvertir (desde el día 1) sube el Desarrollo y baja la tensión. Integrar
+        (lo abre el foco de la Federación) sube la Integración y la tensión: +5 con Amara, +10 con Diallo. En 100 el miembro se suma con núcleos.
+        La tensión baja 2 por mes; 50 o más: Consejos Inquietos; 75 o más: los consejos pueden levantarse.'
     src: user_design
     decisions:
     - id: APF_invertir_zet
@@ -1801,7 +1943,7 @@ categories:
       - generic_industry
       cost: 50
       cooldown_days: 60
-      visible: {flag: APF_integracion_abierta, country_exists: ZET}
+      visible: {country_exists: ZET}
       available:
         variable_below: {var: APF_desarrollo_zet, value: 100}
       effects:
@@ -1811,6 +1953,7 @@ categories:
         target: ZET
         effects:
         - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: APF_tension, value: -3}
       ai_factor: 8
     - id: APF_integrar_zet
       name: {english: Integrate Highlands Federation, spanish: Integrar la Federación de las Tierras Altas}
@@ -1852,6 +1995,12 @@ categories:
           - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
           else:
           - {effect: add_stability, value: 0.05}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        else:
+        - {effect: add_variable, var: APF_tension, value: 5}
       ai_factor: 8
     - id: APF_invertir_zsa
       name: {english: Invest in Cape Federation, spanish: Invertir en la Federación del Cabo}
@@ -1863,7 +2012,7 @@ categories:
       - generic_industry
       cost: 50
       cooldown_days: 60
-      visible: {flag: APF_integracion_abierta, country_exists: ZSA}
+      visible: {country_exists: ZSA}
       available:
         variable_below: {var: APF_desarrollo_zsa, value: 100}
       effects:
@@ -1873,6 +2022,7 @@ categories:
         target: ZSA
         effects:
         - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: APF_tension, value: -3}
       ai_factor: 8
     - id: APF_integrar_zsa
       name: {english: Integrate Cape Federation, spanish: Integrar la Federación del Cabo}
@@ -1914,6 +2064,12 @@ categories:
           - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
           else:
           - {effect: add_stability, value: 0.05}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        else:
+        - {effect: add_variable, var: APF_tension, value: 5}
       ai_factor: 8
     - id: APF_plan_de_desarrollo_regional
       name: {english: Regional Development Plan, spanish: Plan de Desarrollo Regional}
@@ -1953,6 +2109,28 @@ categories:
         - {effect: add_core, value: APF}
       - {effect: timed_idea, idea: APF_territorios_dificiles, days: 120}
       ai_factor: 10
+    - id: APF_asamblea_de_los_consejos
+      name: {english: Assembly of the Councils, spanish: Asamblea de los Consejos}
+      desc:
+        english: 'Every council sends a delegate to Lagos, and every delegate goes home heard: tension -20.'
+        spanish: 'Cada consejo manda un delegado a Lagos, y cada delegado vuelve a casa escuchado: tensión -20.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: APF_tension, value: -20}
+      - {effect: add_stability, value: 0.02}
+      ai_factor: 5
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 8
+          when:
+            variable_at_least: {var: APF_tension, value: 50}
+        - factor: 0
+          when:
+            variable_below: {var: APF_tension, value: 25}
   - id: APF_economia_category
     country: APF
     icon_prefer:
@@ -2006,18 +2184,22 @@ categories:
     - generic_political_actions
     name: {english: The Three Flows, spanish: Los Tres Caudales}
     desc:
-      english: 'Production: [?SHD_produccion]\nOrder: [?SHD_orden]\nPeople: [?SHD_pueblo]\n\nAll three between 45 and 55: Perfect Harmony. Between
-        35 and 65: Partial Harmony. Any below 20: Overflow.\nUnder the Great Flood, the People rise to 130 and every level above 80 makes the army
-        more brutal.'
-      spanish: 'Producción: [?SHD_produccion]\nOrden: [?SHD_orden]\nPueblo: [?SHD_pueblo]\n\nLos tres entre 45 y 55: Armonía Perfecta. Entre 35
-        y 65: Armonía Parcial. Alguno por debajo de 20: Desborde.\nCon la Gran Crecida, el Pueblo sube hasta 130 y cada nivel por encima de 80 hace
-        al ejército más brutal.'
+      english: 'Production (P): [?SHD_produccion]   Order (O): [?SHD_orden]   People (Pe): [?SHD_pueblo]\n\nGOAL: keep all three between 45 and
+        55 = Perfect Harmony. Between 35 and 65 = Partial Harmony. Any below 20 = Overflow.\nEVERY MONTH, BY ITSELF: Production +2, People +1, Order
+        -1. Correct it with the decisions below (the name says how much each one moves). Now and then a crisis pushes the flows: floods, strikes,
+        booms.\nUnder the Great Flood (Zhou) the People rise to 130 and +5 per month: at 80, 100 and 120 the army gets more brutal and production
+        falls.'
+      spanish: 'Producción (P): [?SHD_produccion]   Orden (O): [?SHD_orden]   Pueblo (Pu): [?SHD_pueblo]\n\nOBJETIVO: tener los tres entre 45 y
+        55 = Armonía Perfecta. Entre 35 y 65 = Armonía Parcial. Alguno por debajo de 20 = Desborde.\nCADA MES, SOLOS: Producción +2, Pueblo +1,
+        Orden -1. Se corrige con las decisiones de abajo (el nombre dice cuánto mueve cada una). Cada tanto una crisis empuja los caudales: crecidas,
+        huelgas, booms.\nCon la Gran Crecida (Zhou) el Pueblo llega a 130 y sube 5 por mes: en 80, 100 y 120 el ejército se vuelve más brutal y
+        la producción cae.'
     src: user_design
     after_effects:
     - {effect: run, value: SHD_recalcular_caudales}
     decisions:
     - id: SHD_aumentar_cuotas
-      name: {english: Raise Industrial Quotas, spanish: Aumentar Cuotas Industriales}
+      name: {english: Raise Quotas (P+10 O+3 Pe-8), spanish: Aumentar Cuotas (P+10 O+3 Pu-8)}
       desc: {english: 'Production +10, Order +3, People -8.', spanish: 'Producción +10, Orden +3, Pueblo -8.'}
       icon_prefer:
       - generic_political_actions
@@ -2042,7 +2224,7 @@ categories:
             - variable_at_least: {var: SHD_produccion, value: 60}
             - variable_below: {var: SHD_pueblo, value: 35}
     - id: SHD_relajar_vigilancia
-      name: {english: Relax Surveillance, spanish: Relajar la Vigilancia}
+      name: {english: Relax Surveillance (Pe+10 O-10), spanish: Relajar la Vigilancia (Pu+10 O-10)}
       desc: {english: 'People +10, Order -10.', spanish: 'Pueblo +10, Orden -10.'}
       icon_prefer:
       - generic_political_actions
@@ -2066,7 +2248,7 @@ categories:
             - variable_at_least: {var: SHD_pueblo, value: 60}
             - variable_below: {var: SHD_orden, value: 40}
     - id: SHD_campana_de_disciplina
-      name: {english: Discipline Campaign, spanish: Campaña de Disciplina}
+      name: {english: Discipline Campaign (O+12 P-3 Pe-7), spanish: Campaña de Disciplina (O+12 P-3 Pu-7)}
       desc: {english: 'Order +12, Production -3, People -7.', spanish: 'Orden +12, Producción -3, Pueblo -7.'}
       icon_prefer:
       - generic_political_actions
@@ -2091,7 +2273,7 @@ categories:
             - variable_at_least: {var: SHD_orden, value: 60}
             - variable_below: {var: SHD_pueblo, value: 35}
     - id: SHD_fiesta_del_caudal
-      name: {english: Festival of the Flow, spanish: Fiesta del Caudal}
+      name: {english: Festival of the Flow (Pe+12 P-5 O-3), spanish: Fiesta del Caudal (Pu+12 P-5 O-3)}
       desc: {english: 'People +12, Production -5, Order -3.', spanish: 'Pueblo +12, Producción -5, Orden -3.'}
       icon_prefer:
       - generic_political_actions
@@ -2116,7 +2298,7 @@ categories:
             - variable_at_least: {var: SHD_pueblo, value: 60}
             - variable_below: {var: SHD_produccion, value: 40}
     - id: SHD_ajuste_tecnico
-      name: {english: Technical Adjustment, spanish: Ajuste Técnico}
+      name: {english: Technical Adjustment (all 5 toward 50), spanish: Ajuste Técnico (todos 5 hacia 50)}
       desc: {english: Each flow moves 5 toward 50., spanish: Cada caudal se mueve 5 hacia 50.}
       icon_prefer:
       - generic_political_actions
@@ -2142,7 +2324,7 @@ categories:
               max: 55
       visible: {not_flag: SHD_zhou}
     - id: SHD_movilizacion_total
-      name: {english: Total Mobilisation, spanish: Movilización Total}
+      name: {english: Total Mobilisation (Pe+20 P-10 O-5), spanish: Movilización Total (Pu+20 P-10 O-5)}
       desc:
         english: People +20, Production -10, Order -5. Only under the Great Flood.
         spanish: Pueblo +20, Producción -10, Orden -5. Solo con la Gran Crecida.
@@ -2334,11 +2516,13 @@ categories:
     name: {english: The Legions, spanish: Las Legiones}
     desc:
       english: 'Legio I Italica: [?NRE_prestigio_italica]\nLegio V Macedonica: [?NRE_prestigio_macedonica]\nLegio XII Fulminata: [?NRE_prestigio_fulminata]\nAuctoritas
-        Militaris: [?NRE_auctoritas]\n\nA legion at 60 is veteran; at 80 it demands privileges; at 100 it threatens the Senate. In the Year of the
-        Four Imperatores, a rival legion at 85 can acclaim its own emperor.'
+        Militaris: [?NRE_auctoritas]\n\nIn peace the legions get bored: Auctoritas falls by 1 per month and, with little Auctoritas, a famous legion
+        can mutiny.\nA legion at 60 is veteran; at 80 it demands privileges; at 100 it threatens the Senate. In the Year of the Four Imperatores,
+        a rival legion at 85 can acclaim its own emperor.'
       spanish: 'Legio I Italica: [?NRE_prestigio_italica]\nLegio V Macedonica: [?NRE_prestigio_macedonica]\nLegio XII Fulminata: [?NRE_prestigio_fulminata]\nAuctoritas
-        Militaris: [?NRE_auctoritas]\n\nUna legión en 60 es veterana; en 80 exige privilegios; en 100 amenaza al Senado. En el Año de los Cuatro
-        Imperatores, una legión rival en 85 puede aclamar a su propio emperador.'
+        Militaris: [?NRE_auctoritas]\n\nEn paz las legiones se aburren: la Auctoritas baja 1 por mes y, con poca Auctoritas, una legión famosa puede
+        amotinarse.\nUna legión en 60 es veterana; en 80 exige privilegios; en 100 amenaza al Senado. En el Año de los Cuatro Imperatores, una legión
+        rival en 85 puede aclamar a su propio emperador.'
     src: user_design
     after_effects:
     - {effect: run, value: NRE_recalcular_legiones}
@@ -3189,3 +3373,303 @@ scripted_effects:
       then:
       - {effect: flag, value: NRE_exigencia_reciente, days: 180}
       - {effect: event, id: meganations_nre.3, days: 1}
+
+  # Las Ocho Potencias v2 (2026-09-26): el pulso mensual de cada mecánica y sus riesgos.
+  - id: EFE_pulso_de_las_cubas
+    effects:
+    - {effect: add_variable, var: EFE_saturacion, value: -3}
+    - effect: if
+      when: {focus: EFE_rotacion_de_cultivos}
+      then:
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+    - effect: if
+      when:
+        variable_at_least: {var: EFE_biosteel, value: 16}
+      then:
+      - {effect: add_variable, var: EFE_biosteel, value: -1}
+    - {effect: clamp, var: EFE_saturacion, min: 0, max: 100}
+    - effect: idea_tiers
+      tiers:
+      - idea: EFE_fiebre_de_las_cubas
+        when:
+          variable_at_least: {var: EFE_saturacion, value: 70}
+      - idea: EFE_cubas_forzadas
+        when:
+          variable_at_least: {var: EFE_saturacion, value: 40}
+    - effect: if
+      when:
+        not_flag: EFE_plaga_reciente
+        variable_at_least: {var: EFE_saturacion, value: 95}
+      then:
+      - {effect: flag, value: EFE_plaga_reciente, days: 120}
+      - {effect: event, id: meganations_efe.22, days: 1}
+      else:
+      - effect: if
+        when:
+          not_flag: EFE_plaga_reciente
+          variable_at_least: {var: EFE_saturacion, value: 70}
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: EFE_plaga_reciente, days: 120}
+            - {effect: event, id: meganations_efe.22, days: 1}
+  - id: FCU_pulso_del_directorio
+    effects:
+    - {effect: add_variable, var: FCU_escandalo, value: -2}
+    - effect: if
+      when:
+        variable_at_least: {var: FCU_castellane, value: 55}
+      then:
+      - {effect: add_variable, var: FCU_castellane, value: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: FCU_halvorsen, value: 55}
+      then:
+      - {effect: add_variable, var: FCU_halvorsen, value: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: FCU_meridian, value: 55}
+      then:
+      - {effect: add_variable, var: FCU_meridian, value: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: FCU_obsidian, value: 55}
+      then:
+      - {effect: add_variable, var: FCU_obsidian, value: 1}
+    - effect: if
+      when:
+        variable_below: {var: FCU_castellane, value: 45}
+      then:
+      - {effect: add_variable, var: FCU_castellane, value: -1}
+    - effect: if
+      when:
+        variable_below: {var: FCU_halvorsen, value: 45}
+      then:
+      - {effect: add_variable, var: FCU_halvorsen, value: -1}
+    - effect: if
+      when:
+        variable_below: {var: FCU_meridian, value: 45}
+      then:
+      - {effect: add_variable, var: FCU_meridian, value: -1}
+    - effect: if
+      when:
+        variable_below: {var: FCU_obsidian, value: 45}
+      then:
+      - {effect: add_variable, var: FCU_obsidian, value: -1}
+    - {effect: clamp, var: FCU_escandalo, min: 0, max: 100}
+    - {effect: run, value: FCU_recalcular_directorio}
+    - effect: idea_tiers
+      tiers:
+      - idea: FCU_crisis_de_confianza
+        when:
+          variable_at_least: {var: FCU_escandalo, value: 80}
+      - idea: FCU_bajo_sospecha
+        when:
+          variable_at_least: {var: FCU_escandalo, value: 50}
+    - effect: if
+      when:
+        not_flag: FCU_filtracion_reciente
+        variable_at_least: {var: FCU_escandalo, value: 80}
+      then:
+      - effect: random
+        options:
+        - weight: 70
+          effects: []
+        - weight: 30
+          effects:
+          - {effect: flag, value: FCU_filtracion_reciente, days: 120}
+          - {effect: event, id: meganations_fcu.22, days: 1}
+  - id: ASC_pulso_de_la_red
+    effects:
+    - effect: if
+      when:
+        variable_at_least: {var: ASC_computo, value: 21}
+      then:
+      - {effect: add_variable, var: ASC_computo, value: -1}
+    - effect: if
+      when:
+        variable_at_least: {var: ASC_computo, value: 100}
+      then:
+      - {effect: add_variable, var: ASC_calor, value: 8}
+      else:
+      - effect: if
+        when:
+          variable_at_least: {var: ASC_computo, value: 60}
+        then:
+        - {effect: add_variable, var: ASC_calor, value: 4}
+        else:
+        - {effect: add_variable, var: ASC_calor, value: -3}
+    - effect: if
+      when: {flag: ASC_prioridad_guerra}
+      then:
+      - {effect: add_variable, var: ASC_calor, value: 2}
+    - {effect: clamp, var: ASC_calor, min: 0, max: 100}
+    - effect: idea_tiers
+      tiers:
+      - idea: ASC_racionamiento_termico
+        when:
+          variable_at_least: {var: ASC_calor, value: 50}
+    - {effect: run, value: ASC_recalcular_computo}
+    - effect: if
+      when:
+        not_flag: ASC_apagon_reciente
+        variable_at_least: {var: ASC_calor, value: 80}
+      then:
+      - effect: random
+        options:
+        - weight: 70
+          effects: []
+        - weight: 30
+          effects:
+          - {effect: flag, value: ASC_apagon_reciente, days: 120}
+          - {effect: event, id: meganations_asc.22, days: 1}
+  - id: HSN_pulso_de_las_potencias
+    effects:
+    - effect: if
+      when:
+        variable_at_least: {var: HSN_nodos, value: 6}
+      then:
+      - {effect: add_variable, var: HSN_presion, value: 6}
+      else:
+      - effect: if
+        when:
+          variable_at_least: {var: HSN_nodos, value: 4}
+        then:
+        - {effect: add_variable, var: HSN_presion, value: 3}
+        else:
+        - {effect: add_variable, var: HSN_presion, value: -3}
+    - {effect: clamp, var: HSN_presion, min: 0, max: 100}
+    - effect: idea_tiers
+      tiers:
+      - idea: HSN_bajo_vigilancia
+        when:
+          variable_at_least: {var: HSN_presion, value: 40}
+    - effect: if
+      when:
+        not_flag: HSN_exigencia_reciente
+        variable_at_least: {var: HSN_presion, value: 70}
+      then:
+      - effect: random
+        options:
+        - weight: 70
+          effects: []
+        - weight: 30
+          effects:
+          - {effect: flag, value: HSN_exigencia_reciente, days: 150}
+          - {effect: event, id: meganations_hsn.22, days: 1}
+  - id: NAS_pulso_de_los_templos
+    effects:
+    - effect: if
+      when:
+        variable_at_least: {var: NAS_inti, value: 3}
+      then:
+      - {effect: add_variable, var: NAS_inti, value: -3}
+      else:
+      - {effect: set_variable, var: NAS_inti, value: 0}
+    - effect: idea_tiers
+      tiers:
+      - idea: NAS_fervor_solar
+        when:
+          variable_at_least: {var: NAS_inti, value: 90}
+    - effect: idea_tiers
+      tiers:
+      - idea: NAS_sol_hambriento
+        when:
+          variable_below: {var: NAS_inti, value: 10}
+    - effect: if
+      when: {not_flag: NAS_eclipse_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 96
+          effects: []
+        - weight: 4
+          effects:
+          - {effect: flag, value: NAS_eclipse_reciente, days: 365}
+          - {effect: event, id: meganations_nas.22, days: 1}
+  - id: SHD_pulso_del_rio
+    effects:
+    - effect: if
+      when: {not_flag: SHD_zhou}
+      then:
+      - {effect: add_variable, var: SHD_produccion, value: 2}
+      - {effect: add_variable, var: SHD_pueblo, value: 1}
+      - {effect: add_variable, var: SHD_orden, value: -1}
+    - effect: if
+      when: {not_flag: SHD_crisis_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 80
+          effects: []
+        - weight: 7
+          effects:
+          - {effect: flag, value: SHD_crisis_reciente, days: 90}
+          - {effect: event, id: meganations_shd.22, days: 1}
+        - weight: 7
+          effects:
+          - {effect: flag, value: SHD_crisis_reciente, days: 90}
+          - {effect: event, id: meganations_shd.23, days: 1}
+        - weight: 6
+          effects:
+          - {effect: flag, value: SHD_crisis_reciente, days: 90}
+          - {effect: event, id: meganations_shd.24, days: 1}
+    - {effect: run, value: SHD_recalcular_caudales}
+  - id: APF_pulso_de_los_consejos
+    effects:
+    - {effect: add_variable, var: APF_tension, value: -2}
+    - {effect: clamp, var: APF_tension, min: 0, max: 100}
+    - effect: idea_tiers
+      tiers:
+      - idea: APF_consejos_inquietos
+        when:
+          variable_at_least: {var: APF_tension, value: 50}
+    - effect: if
+      when:
+        not_flag: APF_levantamiento_reciente
+        variable_at_least: {var: APF_tension, value: 75}
+      then:
+      - effect: random
+        options:
+        - weight: 70
+          effects: []
+        - weight: 30
+          effects:
+          - {effect: flag, value: APF_levantamiento_reciente, days: 150}
+          - {effect: event, id: meganations_apf.22, days: 1}
+  - id: NRE_pulso_del_ocio
+    effects:
+    - effect: if
+      when: {at_war: false}
+      then:
+      - {effect: add_variable, var: NRE_auctoritas, value: -2}
+    - {effect: clamp, var: NRE_auctoritas, min: 0, max: 100}
+    - effect: idea_tiers
+      tiers:
+      - idea: NRE_legiones_ociosas
+        when:
+          at_war: false
+          variable_below: {var: NRE_auctoritas, value: 10}
+    - effect: if
+      when:
+        at_war: false
+        not_flag: NRE_motin_reciente
+        variable_below: {var: NRE_auctoritas, value: 15}
+        any:
+        - variable_at_least: {var: NRE_prestigio_italica, value: 70}
+        - variable_at_least: {var: NRE_prestigio_macedonica, value: 70}
+        - variable_at_least: {var: NRE_prestigio_fulminata, value: 70}
+      then:
+      - effect: random
+        options:
+        - weight: 80
+          effects: []
+        - weight: 20
+          effects:
+          - {effect: flag, value: NRE_motin_reciente, days: 180}
+          - {effect: event, id: meganations_nre.22, days: 1}
+    - {effect: run, value: NRE_recalcular_legiones}

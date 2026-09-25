@@ -320,6 +320,57 @@ namespaces:
           - {effect: add_stability, value: 0.02}
         src: user_design
 
+      - id: 20
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: Monthly pulse, spanish: Pulso mensual}
+        desc: {english: Monthly update., spanish: Actualización mensual.}
+        options:
+        - name: {english: Go on., spanish: Seguir.}
+          effects:
+          - {effect: run, value: EFE_pulso_de_las_cubas}
+          - {effect: event, id: meganations_efe.20, days: 30}
+        src: user_design
+        hidden: true
+      - id: 21
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: The BioSteel Race, spanish: La Carrera del Bioacero}
+        desc:
+          english: 'THE BIOSTEEL RACE\n\nThe vats of the Plain grow living metal: BioSteel. The tiers of the Race (5, 10 and 15) unlock the Empire''s
+            best armour, and the decisions of the BioSteel Race panel grow it.\n\nBut every harvest saturates the vats. Saturation falls by 3 per month;
+            at 40 the vats are forced, at 70 the Fever arrives and the Mycelium Blight can break out. And the living metal does not keep: above 15 it
+            rots.\n\nGrow, spend, purge. In that order.'
+          spanish: 'LA CARRERA DEL BIOACERO\n\nLas cubas de la Llanura cultivan metal vivo: el Bioacero. Los niveles de la Carrera (5, 10 y 15) abren
+            el mejor blindaje del Imperio, y las decisiones del panel La Carrera del Bioacero lo hacen crecer.\n\nPero cada cosecha satura las cubas.
+            La saturación baja 3 por mes; en 40 las cubas se fuerzan, en 70 llega la Fiebre y puede estallar la Plaga del Micelio. Y el metal vivo no
+            se guarda: por encima de 15 se pudre.\n\nCultivar, gastar, purgar. En ese orden.'
+        options:
+        - name: {english: Understood., spanish: Entendido.}
+          effects:
+          - {effect: add_political_power, value: 25}
+        src: user_design
+      - id: 22
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Mycelium Blight, spanish: La Plaga del Micelio}
+        desc:
+          english: Grey threads in the vats of the Plain. The living metal is being eaten from inside, and the blight is spreading hall by hall towards
+            the forests.
+          spanish: Hilos grises en las cubas de la Llanura. El metal vivo está siendo comido por dentro, y la plaga avanza nave por nave hacia los bosques.
+        options:
+        - name: {english: Burn the infected halls., spanish: Quemar las naves infectadas.}
+          effects:
+          - {effect: add_variable, var: EFE_biosteel, value: -4}
+          - {effect: add_variable, var: EFE_saturacion, value: -35}
+          ai_chance: 50
+        - name: {english: Seal them and wait., spanish: Sellarlas y esperar.}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: EFE_saturacion, value: -15}
+          - {effect: timed_idea, idea: EFE_plaga_del_micelio, days: 90}
+          ai_chance: 50
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -475,6 +526,63 @@ namespaces:
             - {effect: wargoal, target: FCU, type: annex_everything}
         src: user_design
 
+      - id: 20
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: Monthly pulse, spanish: Pulso mensual}
+        desc: {english: Monthly update., spanish: Actualización mensual.}
+        options:
+        - name: {english: Go on., spanish: Seguir.}
+          effects:
+          - {effect: run, value: FCU_pulso_del_directorio}
+          - {effect: event, id: meganations_fcu.20, days: 30}
+        src: user_design
+        hidden: true
+      - id: 21
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: The Board of Four, spanish: El Directorio de las Cuatro}
+        desc:
+          english: 'THE BOARD OF FOUR\n\nFour corporations own the Union: Castellane (water), Halvorsen-Ito (food), Meridian (arms) and Obsidian (finance).
+            The contracts of the Board panel favour one and hurt the others.\n\nKeep all four between 40 and 60 and the Board works as one. Let one
+            fall below 15 and they go to war with each other. And the strong get stronger on their own every month.\n\nEvery contract leaves a trail:
+            scandal. Audits and public relations clean it; ignore it and the Leak will come.'
+          spanish: 'EL DIRECTORIO DE LAS CUATRO\n\nCuatro corporaciones son dueñas de la Unión: Castellane (agua), Halvorsen-Ito (comida), Meridian
+            (armas) y Obsidian (finanzas). Los contratos del panel del Directorio favorecen a una y perjudican a las otras.\n\nCon las cuatro entre
+            40 y 60 el Directorio funciona como uno. Si una cae por debajo de 15, entran en guerra entre ellas. Y cada mes el fuerte se hace más fuerte
+            solo.\n\nCada contrato deja rastro: escándalo. Las auditorías y las relaciones públicas lo limpian; si lo ignorás, llega la Filtración.'
+        options:
+        - name: {english: Understood., spanish: Entendido.}
+          effects:
+          - {effect: add_political_power, value: 25}
+        src: user_design
+      - id: 22
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Leak, spanish: La Filtración}
+        desc:
+          english: 'Forty thousand internal documents of the Board are on every screen of the Union: bribes, private armies, water cut to whole towns.
+            Someone has to pay.'
+          spanish: 'Cuarenta mil documentos internos del Directorio están en todas las pantallas de la Unión: sobornos, ejércitos privados, agua cortada
+            a pueblos enteros. Alguien tiene que pagar.'
+        options:
+        - name: {english: Sacrifice Obsidian., spanish: Sacrificar a Obsidian.}
+          effects:
+          - {effect: add_variable, var: FCU_obsidian, value: -15}
+          - {effect: add_variable, var: FCU_escandalo, value: -30}
+          - {effect: run, value: FCU_recalcular_directorio}
+          ai_chance: 40
+        - name: {english: Buy the silence., spanish: Comprar el silencio.}
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_variable, var: FCU_escandalo, value: -20}
+          ai_chance: 40
+        - name: {english: Deny everything., spanish: Negarlo todo.}
+          effects:
+          - {effect: add_stability, value: -0.08}
+          - {effect: add_variable, var: FCU_escandalo, value: 5}
+          ai_chance: 20
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -596,6 +704,55 @@ namespaces:
           - {effect: add_war_support, value: 0.1}
         src: user_design
 
+      - id: 20
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: Monthly pulse, spanish: Pulso mensual}
+        desc: {english: Monthly update., spanish: Actualización mensual.}
+        options:
+        - name: {english: Go on., spanish: Seguir.}
+          effects:
+          - {effect: run, value: HSN_pulso_de_las_potencias}
+          - {effect: event, id: meganations_hsn.20, days: 30}
+        src: user_design
+        hidden: true
+      - id: 21
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: The Node Network, spanish: La Red de Nodos}
+        desc:
+          english: 'THE NODE NETWORK\n\nThe Nation lives on straits and ports: the nodes. Holding 2, 4, 6 or all of them strengthens the Network, and
+            every month the Network counts them.\n\nThe great powers are counting too. With 4 or more nodes their pressure rises every month; at 40
+            they watch us, at 70 they demand a strait. Port diplomacy keeps them calm, for a price.'
+          spanish: 'LA RED DE NODOS\n\nLa Nación vive de estrechos y puertos: los nodos. Tener 2, 4, 6 o todos refuerza la Red, y cada mes la Red los
+            cuenta.\n\nLas grandes potencias también cuentan. Con 4 nodos o más su presión sube cada mes; en 40 nos vigilan, en 70 exigen un estrecho.
+            La diplomacia de puertos las calma, por un precio.'
+        options:
+        - name: {english: Understood., spanish: Entendido.}
+          effects:
+          - {effect: add_political_power, value: 25}
+        src: user_design
+      - id: 22
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Powers Demand a Strait, spanish: Las Potencias Exigen un Estrecho}
+        desc:
+          english: 'Three fleets anchored outside our ports, and one letter signed by all of them: the Nation holds too many straits.'
+          spanish: 'Tres flotas ancladas frente a nuestros puertos, y una carta firmada por todas: la Nación tiene demasiados estrechos.'
+        options:
+        - name: {english: Pay them., spanish: Pagarles.}
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_variable, var: HSN_presion, value: -35}
+          - {effect: timed_idea, idea: HSN_tributo_de_los_estrechos, days: 180}
+          ai_chance: 50
+        - name: {english: Let them come and take it., spanish: Que vengan a buscarlo.}
+          effects:
+          - {effect: add_variable, var: HSN_presion, value: -10}
+          - {effect: add_war_support, value: 0.1}
+          - {effect: add_stability, value: -0.05}
+          ai_chance: 50
+        src: user_design
   # ===========================================================================
   meganations_asc:
     country: ASC
@@ -739,6 +896,59 @@ namespaces:
           - {effect: wargoal, target: ASC, type: annex_everything}
       src: user_design
 
+    - id: 20
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: Monthly pulse, spanish: Pulso mensual}
+      desc: {english: Monthly update., spanish: Actualización mensual.}
+      options:
+      - name: {english: Go on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: ASC_pulso_de_la_red}
+        - {effect: event, id: meganations_asc.20, days: 30}
+      src: user_design
+      hidden: true
+    - id: 21
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: Compute Power, spanish: El Poder de Cómputo}
+      desc:
+        english: 'COMPUTE POWER\n\nThe Commune plans everything with its compute. The Compute panel assigns it to ONE priority (economy, research,
+          logistics or war), and more compute means stronger bonuses.\n\nBut compute needs upkeep and it heats the grid: from 60 compute the grid
+          warms, from 100 it burns. Cool the data centres before Thermal Rationing, or before the blackout.'
+        spanish: 'PODER DE CÓMPUTO\n\nLa Comuna planifica todo con su cómputo. El panel de Cómputo lo asigna a UNA prioridad (economía, investigación,
+          logística o guerra), y más cómputo da bonos más fuertes.\n\nPero el cómputo pide mantenimiento y calienta la red: desde 60 la red se entibia,
+          desde 100 arde. Enfriá los centros de datos antes del Racionamiento Térmico, o antes del apagón.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects:
+        - {effect: add_political_power, value: 25}
+      src: user_design
+    - id: 22
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Grid Blackout, spanish: Apagón de la Red}
+      desc:
+        english: The cooling towers of the Rhine gave up at dawn. Half of the Commune's compute went dark with them, and the Plan is running on backups.
+        spanish: Las torres de enfriamiento del Rin se rindieron al amanecer. La mitad del cómputo de la Comuna se apagó con ellas, y el Plan corre
+          sobre copias de respaldo.
+      options:
+      - name:
+          english: 'Protect the Commune: shut down the military nodes.'
+          spanish: 'Proteger a la Comuna: apagar los nodos militares.'
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: -15}
+        - {effect: add_variable, var: ASC_calor, value: -40}
+        - {effect: timed_idea, idea: ASC_apagon, days: 60}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      - name: {english: 'Protect the Plan: sacrifice compute.', spanish: 'Proteger el Plan: sacrificar cómputo.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: -30}
+        - {effect: add_variable, var: ASC_calor, value: -25}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      src: user_design
   meganations_apf:
     country: APF
     events:
@@ -828,6 +1038,58 @@ namespaces:
         - {effect: add_stability, value: 0.05}
       src: user_design
 
+    - id: 20
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: Monthly pulse, spanish: Pulso mensual}
+      desc: {english: Monthly update., spanish: Actualización mensual.}
+      options:
+      - name: {english: Go on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: APF_pulso_de_los_consejos}
+        - {effect: event, id: meganations_apf.20, days: 30}
+      src: user_design
+      hidden: true
+    - id: 21
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The Federal Integration, spanish: La Integración Federal}
+      desc:
+        english: 'THE FEDERAL INTEGRATION\n\nThe Federation grows by bringing its members in: the Highlands and the Cape. In the Integration panel,
+          Invest raises a member''s Development from day one; Integrate (opened by the Federation focus) raises its Integration. At 100 the member
+          joins the Federation.\n\nBut integrating faster than developing raises regional tension. At 50 the councils grow restless; at 75 they can
+          rise. The Assembly of the Councils listens to them.'
+        spanish: 'LA INTEGRACIÓN FEDERAL\n\nLa Federación crece sumando a sus miembros: las Tierras Altas y el Cabo. En el panel de Integración, Invertir
+          sube el Desarrollo de un miembro desde el día 1; Integrar (lo abre el foco de la Federación) sube su Integración. En 100 el miembro se suma
+          a la Federación.\n\nPero integrar más rápido de lo que se desarrolla sube la tensión regional. En 50 los consejos se inquietan; en 75 pueden
+          levantarse. La Asamblea de los Consejos los escucha.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects:
+        - {effect: add_political_power, value: 25}
+      src: user_design
+    - id: 22
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Councils Rise, spanish: Los Consejos se Levantan}
+      desc:
+        english: From the Sahel to the Cape, a hundred councils have closed their roads to the Federation's engineers. They want a say, or they want
+          out.
+        spanish: Del Sahel al Cabo, cien consejos cerraron sus caminos a los ingenieros de la Federación. Quieren voz, o quieren irse.
+      options:
+      - name: {english: Give them what they ask., spanish: Darles lo que piden.}
+        effects:
+        - {effect: add_political_power, value: -100}
+        - {effect: add_variable, var: APF_tension, value: -35}
+        ai_chance: 60
+      - name: {english: Send the militias., spanish: Mandar a las milicias.}
+        effects:
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_variable, var: APF_tension, value: -20}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: timed_idea, idea: APF_consejos_en_rebeldia, days: 60}
+        ai_chance: 40
+      src: user_design
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -912,6 +1174,53 @@ namespaces:
           - {effect: wargoal, target: NAS, type: annex_everything}
       src: user_design
 
+    - id: 20
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: Monthly pulse, spanish: Pulso mensual}
+      desc: {english: Monthly update., spanish: Actualización mensual.}
+      options:
+      - name: {english: Go on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: NAS_pulso_de_los_templos}
+        - {effect: event, id: meganations_nas.20, days: 30}
+      src: user_design
+      hidden: true
+    - id: 21
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The Inti-Soma, spanish: El Inti-Soma}
+      desc:
+        english: THE INTI-SOMA\n\nThe Sun Farms fill the temples with sacred light, the Inti-Soma, which is spent on ceremonies (Inti panel). The
+          Qhapaq Ñan road, opened by the focus tree, carries the Empire to new valleys.\n\nThe temples burn 3 light per month. Empty temples mean
+          a Hungry Sun; overflowing ones, Solar Fervour. And sometimes the Sun goes dark.
+        spanish: 'EL INTI-SOMA\n\nLas Granjas del Sol llenan los templos de luz sagrada, el Inti-Soma, que se gasta en ceremonias (panel del Inti).
+          El Qhapaq Ñan, que abre el árbol de focos, lleva el Imperio a nuevos valles.\n\nLos templos queman 3 de luz por mes. Templos vacíos: el
+          Sol Hambriento. Rebosantes: Fervor Solar. Y a veces el Sol se oscurece.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects:
+        - {effect: add_political_power, value: 25}
+      src: user_design
+    - id: 22
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Eclipse, spanish: El Eclipse}
+      desc:
+        english: At noon the Sun went dark over Cusco. The temples lost their light in minutes, and the people are looking at the priests.
+        spanish: Al mediodía el Sol se oscureció sobre el Cusco. Los templos perdieron su luz en minutos, y el pueblo mira a los sacerdotes.
+      options:
+      - name: {english: An emergency ceremony., spanish: Una ceremonia de emergencia.}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: -10}
+        - {effect: add_political_power, value: -50}
+        ai_chance: 50
+      - name: {english: Let the people wait for the light., spanish: Que el pueblo espere la luz.}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: -30}
+        - {effect: add_stability, value: -0.05}
+        ai_chance: 50
+      src: user_design
   meganations_shd:
     country: SHD
     events:
@@ -978,6 +1287,103 @@ namespaces:
         effects:
         - {effect: add_political_power, value: 150}
         - {effect: add_variable, var: SHD_orden, value: 5}
+      src: user_design
+    - id: 20
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: Monthly pulse, spanish: Pulso mensual}
+      desc: {english: Monthly update., spanish: Actualización mensual.}
+      options:
+      - name: {english: Go on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: SHD_pulso_del_rio}
+        - {effect: event, id: meganations_shd.20, days: 30}
+      src: user_design
+      hidden: true
+    - id: 21
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The Three Flows, spanish: Los Tres Caudales}
+      desc:
+        english: 'THE THREE FLOWS\n\nThe Directorate measures society in three numbers: Production, Order and People. You can see them in the Three
+          Flows panel.\n\nThe goal is harmony: all three between 45 and 55 give Perfect Harmony; between 35 and 65, Partial. If any falls below 20,
+          the system overflows.\n\nThe river moves by itself: every month Production +2, People +1, Order -1. Each decision says in its name how much
+          it moves each flow. Floods, strikes and booms will push you off course.'
+        spanish: 'LOS TRES CAUDALES\n\nEl Directorio mide la sociedad con tres números: Producción, Orden y Pueblo. Se ven en el panel Los Tres Caudales.\n\nEl
+          objetivo es la armonía: los tres entre 45 y 55 dan Armonía Perfecta; entre 35 y 65, Parcial. Si alguno cae por debajo de 20, el sistema
+          se desborda.\n\nEl río se mueve solo: cada mes Producción +2, Pueblo +1, Orden -1. Cada decisión dice en su nombre cuánto mueve cada caudal.
+          Crecidas, huelgas y booms te van a sacar del rumbo.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects:
+        - {effect: add_political_power, value: 25}
+      src: user_design
+    - id: 22
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Yangtze Floods, spanish: La Crecida del Yangtsé}
+      desc:
+        english: The river has broken three dams. Millions are homeless, and the factories of the valley are under mud.
+        spanish: El río rompió tres represas. Millones se quedaron sin casa, y las fábricas del valle están bajo el barro.
+      options:
+      - name: {english: Evacuate the people (Pe+10 P-8)., spanish: Evacuar a la gente (Pu+10 P-8).}
+        effects:
+        - {effect: add_variable, var: SHD_pueblo, value: 10}
+        - {effect: add_variable, var: SHD_produccion, value: -8}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: Save the factories (P-3 Pe+15 O-5)., spanish: Salvar las fábricas (P-3 Pu+15 O-5).}
+        effects:
+        - {effect: add_variable, var: SHD_produccion, value: -3}
+        - {effect: add_variable, var: SHD_pueblo, value: 15}
+        - {effect: add_variable, var: SHD_orden, value: -5}
+        - {effect: timed_idea, idea: SHD_inundacion, days: 90}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      src: user_design
+    - id: 23
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Engineers' Strike, spanish: La Huelga de los Ingenieros}
+      desc:
+        english: The engineers who measure the flows have stopped measuring. They want more say in the Directorate.
+        spanish: Los ingenieros que miden los caudales dejaron de medir. Quieren más voz en el Directorio.
+      options:
+      - name: {english: Negotiate (O-5 P-5)., spanish: Negociar (O-5 P-5).}
+        effects:
+        - {effect: add_variable, var: SHD_orden, value: -5}
+        - {effect: add_variable, var: SHD_produccion, value: -5}
+        - {effect: add_political_power, value: -25}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: Break the strike (O+5 Pe-12)., spanish: Romper la huelga (O+5 Pu-12).}
+        effects:
+        - {effect: add_variable, var: SHD_orden, value: 5}
+        - {effect: add_variable, var: SHD_pueblo, value: -12}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      src: user_design
+    - id: 24
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Export Boom, spanish: El Boom Exportador}
+      desc:
+        english: The world wants everything the Directorate makes, and it wants it now.
+        spanish: El mundo quiere todo lo que hace el Directorio, y lo quiere ya.
+      options:
+      - name: {english: Ride the boom (P+12 Pe-5)., spanish: Aprovecharlo (P+12 Pu-5).}
+        effects:
+        - {effect: add_variable, var: SHD_produccion, value: 12}
+        - {effect: add_variable, var: SHD_pueblo, value: -5}
+        - {effect: timed_idea, idea: SHD_boom_exportador, days: 90}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: Share it out (Pe+8 P+4)., spanish: Repartirlo (Pu+8 P+4).}
+        effects:
+        - {effect: add_variable, var: SHD_pueblo, value: 8}
+        - {effect: add_variable, var: SHD_produccion, value: 4}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
       src: user_design
   # ===========================================================================
   meganations_nre:
@@ -1163,4 +1569,59 @@ namespaces:
         - {effect: add_political_power, value: 150}
         - {effect: add_variable, var: NRE_auctoritas, value: 10}
         - {effect: run, value: NRE_recalcular_legiones}
+      src: user_design
+    - id: 20
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: Monthly pulse, spanish: Pulso mensual}
+      desc: {english: Monthly update., spanish: Actualización mensual.}
+      options:
+      - name: {english: Go on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: NRE_pulso_del_ocio}
+        - {effect: event, id: meganations_nre.20, days: 30}
+      src: user_design
+      hidden: true
+    - id: 21
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The Legions, spanish: Las Legiones}
+      desc:
+        english: 'THE LEGIONS\n\nThree named legions carry Rome: Legio I Italica, V Macedonica and XII Fulminata. Their prestige grows in war and
+          with triumphs. Auctoritas Militaris is the currency of the officers: promotions, new legions, praetorians and donatives.\n\nA famous legion
+          is a strong one, and a dangerous one. In peace the legions get bored and Auctoritas drains away; with little Auctoritas, a legion above
+          70 can mutiny.'
+        spanish: 'LAS LEGIONES\n\nTres legiones con nombre sostienen a Roma: la Legio I Italica, la V Macedonica y la XII Fulminata. Su prestigio
+          crece en la guerra y con los triunfos. La Auctoritas Militaris es la moneda de los oficiales: ascensos, legiones nuevas, pretorianos y donativos.\n\nUna
+          legión famosa es fuerte, y peligrosa. En paz las legiones se aburren y la Auctoritas se escurre; con poca Auctoritas, una legión por encima
+          de 70 puede amotinarse.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects:
+        - {effect: add_political_power, value: 25}
+      src: user_design
+    - id: 22
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Legion Mutinies, spanish: La Legión se Amotina}
+      desc:
+        english: Without a war and without pay, a famous legion has refused to leave its barracks. Its centurions have a list of demands and a list
+          of names.
+        spanish: Sin guerra y sin paga, una legión famosa se negó a salir de sus cuarteles. Sus centuriones tienen una lista de exigencias y una lista
+          de nombres.
+      options:
+      - name: {english: An emergency donative., spanish: Un donativo de emergencia.}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 60
+      - name: {english: Decimate the ringleaders., spanish: Diezmar a los cabecillas.}
+        effects:
+        - {effect: add_stability, value: -0.08}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: -15}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: -15}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: -15}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 40
       src: user_design
