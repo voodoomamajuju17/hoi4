@@ -65,6 +65,14 @@ def emit(ctx: BuildContext) -> None:
 
 
 def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
+    # Convención de arte: assets/<TAG>/goals/<id_del_foco>.dds se conecta solo.
+    repo = ctx.spec.root.parent
+    for branch in tree["branches"]:
+        for f in branch.get("focuses", []) or []:
+            own = repo / "assets" / tag / "goals" / f"{f['id']}.dds"
+            if not f.get("icon_asset") and own.exists():
+                f["icon_asset"] = f"assets/{tag}/goals/{f['id']}.dds"
+                f["icon"] = f"GFX_focus_{f['id']}"
     focuses: list[tuple[str, dict]] = []  # (rama, foco)
     branch_ai: dict[str, float] = {}
     for branch in tree["branches"]:

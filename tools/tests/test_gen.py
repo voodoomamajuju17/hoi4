@@ -1119,6 +1119,50 @@ def test_ai() -> None:
               "type = contain" not in ai and any("contain" in w for w in ctx.warnings))
 
 
+def test_arte() -> None:
+    section("arte: iconos genericos, conexion por nombre, pedidos para el generador de imagenes")
+    import shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        shd = (ctx.mod_root / "common/ideas/SHD_ideas.txt").read_text()
+        body = shd[shd.index("SHD_precision = {"):]
+        check("un espiritu sin dibujo toma un icono generico del juego segun su efecto (sin '?')",
+              "picture = generic_production_bonus" in body[:300], body[:300])
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        shutil.copytree(REPO_ROOT / "spec", root / "spec")
+        shutil.copytree(REPO_ROOT / "assets", root / "assets")
+        px = [(10, 20, 30, 255)]
+        art.write_dds(root / "assets/NRE/goals/NRE_el_consilium.dds", 1, 1, px)
+        art.write_dds(root / "assets/NRE/ideas/NRE_senado.dds", 1, 1, px)
+        art.write_dds(root / "assets/NRE/leaders/irina_vasilescu.dds", 1, 1, px)
+        art.write_dds(root / "assets/events/meganations_nre.3.dds", 1, 1, px)
+        ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
+        mod = ctx.mod_root
+        tree = (mod / "common/national_focus/NRE_focus.txt").read_text()
+        check("foco: assets/<TAG>/goals/<id>.dds se conecta solo", "icon = GFX_focus_NRE_el_consilium" in tree)
+        check("con su sprite y brillo", "GFX_focus_NRE_el_consilium_shine" in (mod / "interface/meganations_NRE_goals.gfx").read_text())
+        ideas = (mod / "common/ideas/NRE_ideas.txt").read_text()
+        check("espiritu: assets/<TAG>/ideas/<id>.dds se conecta solo", "picture = NRE_senado" in ideas)
+        check("sprite del espiritu registrado", "GFX_idea_NRE_senado" in (mod / "interface/meganations_ideas.gfx").read_text())
+        port = mod / "gfx/leaders/NRE/irina_vasilescu.dds"
+        check("retrato: reemplaza al provisorio", port.exists() and port.read_bytes() == (root / "assets/NRE/leaders/irina_vasilescu.dds").read_bytes())
+        ev = (mod / "events/meganations_nre.txt").read_text()
+        check("evento: assets/events/<id>.dds reemplaza la imagen generica", "picture = GFX_meganations_nre_3" in ev)
+        check("sprite del evento registrado", "GFX_meganations_nre_3" in (mod / "interface/meganations_events.gfx").read_text())
+
+    from tools.arte import arte as arte_mod
+    items = arte_mod.catalog()
+    ids = [i["id"] for i in items]
+    check("catalogo de arte sin ids repetidos", len(ids) == len(set(ids)))
+    check("el catalogo cubre focos, espiritus, retratos y eventos",
+          {i["type"] for i in items} == set(arte_mod.KINDS))
+    req = arte_mod._request(next(i for i in items if i["id"] == "NRE_irina_vasilescu"))
+    check("el pedido sigue el contrato", all(k in req for k in ("ASSET_REQUEST", "type: leader_portrait",
+          "id: NRE_irina_vasilescu", "filename: NRE_irina_vasilescu.png", "size: 156x210", "transparent_background: false")))
+
+
 def test_forces() -> None:
     section("armada y aviacion: sin aviones, solo destructores para la HSN")
     import shutil
@@ -1303,6 +1347,7 @@ def main() -> int:
         test_shd,
         test_nre,
         test_ai,
+        test_arte,
         test_forces,
         test_diplomacy,
         test_vanilla_validation,

@@ -145,7 +145,10 @@ eventos con ultimátum e IA con condiciones.
 - [ ] Retratos de los satélites y de Irina Vasilescu y Kerem Aydın (NRE, hoy provisorios)
 - [x] Íconos de foco propios: el pack de 96, conectado
 - [ ] Íconos de los espíritus nacionales propios (hoy muchos salen con "?")
-- [ ] Imágenes de eventos propias
+- [x] Circuito de arte con ChatGPT (tools/arte): pedidos ASSET_REQUEST en arte/pedidos/, importador
+  que convierte y ubica por id; focos, espíritus, retratos y eventos se conectan solos por nombre
+- [x] Espíritus sin dibujo: ícono genérico del juego según su efecto (se acabaron los "?")
+- [ ] Imágenes de eventos propias (pedidas en arte/pedidos/4_eventos_*)
 - [ ] Íconos de los paneles de decisiones
 - [ ] Pantallas de carga
 

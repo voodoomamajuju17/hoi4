@@ -18,7 +18,7 @@ from __future__ import annotations
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block
+from ..pdx import Block, Quoted
 
 SOURCE = "spec/05_ideas.yaml"
 LOC_FILE = "meganations_ideas"
@@ -51,9 +51,45 @@ def all_idea_ids(ctx: BuildContext) -> set[str]:
     return {i["id"] for c in ctx.spec.countries for i in ideas_of(ctx, c.tag)}
 
 
+# Si no hay dibujo propio, un ícono genérico del juego según el modificador
+# que más pesa en la idea (así no sale "?"). Se busca por palabra clave entre
+# los sprites GFX_idea_* del juego instalado.
+_KEYWORDS = [
+    (("industrial_capacity", "production_speed"), ("production", "industr", "factory")),
+    (("research_speed",), ("research", "science", "scien")),
+    (("political_power",), ("political", "propaganda")),
+    (("stability",), ("stability", "unity", "national_unity")),
+    (("war_support",), ("war_support", "propaganda", "militar")),
+    (("army_", "experience_gain_army"), ("army", "infantry", "militar")),
+    (("trade_opinion", "consumer_goods"), ("trade", "econom")),
+    (("local_resources",), ("resource", "mining", "econom")),
+    (("monthly_population",), ("manpower", "population")),
+    (("dockyard", "navy", "naval"), ("naval", "navy")),
+]
+
+
+def _generic_picture(modifiers: dict, idea_sprites: list[str]) -> str | None:
+    if not idea_sprites:
+        return None
+    key = max(modifiers, key=lambda k: abs(float(modifiers[k])))
+    for prefixes, words in _KEYWORDS:
+        if any(key.startswith(p) or p in key for p in prefixes):
+            for word in words:
+                hits = [n for n in idea_sprites if word in n.lower()]
+                generic = [n for n in hits if "generic" in n.lower()]
+                if generic or hits:
+                    return (generic or hits)[0][len("GFX_idea_"):]
+    return None
+
+
 def emit(ctx: BuildContext) -> None:
     modifiers_used: dict[str, str] = {}
     seen: set[str] = set()
+    gfx = ctx.vanilla.gfx_names() if ctx.vanilla else None
+    idea_sprites = sorted(n for n in (gfx or ()) if n.startswith("GFX_idea_"))
+    repo = ctx.spec.root.parent
+    sprites = Block()
+    pictures = {"propia": 0, "generica": 0, "ninguna": 0}
 
     for country in ctx.spec.countries:
         ideas = ideas_of(ctx, country.tag)
@@ -90,6 +126,24 @@ def emit(ctx: BuildContext) -> None:
                 mod.add(key, float(value))
                 modifiers_used.setdefault(key, iid)
             body.add("modifier", mod)
+            # Dibujo: propio si está en assets/<TAG>/ideas/<id>.dds; si no, genérico del juego.
+            own = repo / "assets" / country.tag / "ideas" / f"{iid}.dds"
+            if own.exists():
+                texture = f"gfx/interface/ideas/meganations/{iid}.dds"
+                ctx.copy_asset(f"assets/{country.tag}/ideas/{iid}.dds", texture)
+                sprite = Block()
+                sprite.add("name", Quoted(f"GFX_idea_{iid}"))
+                sprite.add("texturefile", Quoted(texture))
+                sprites.add("spriteType", sprite)
+                body.entries.insert(0, ("picture", iid))
+                pictures["propia"] += 1
+            else:
+                generic = _generic_picture(modifiers, idea_sprites)
+                if generic:
+                    body.entries.insert(0, ("picture", generic))
+                    pictures["generica"] += 1
+                else:
+                    pictures["ninguna"] += 1
             group.add(ctx.loc.reference(iid, f"ideas:{iid}"), body)
 
             desc = idea.get("desc")
@@ -108,4 +162,10 @@ def emit(ctx: BuildContext) -> None:
         root.add("ideas", country_block)
         ctx.write_script(f"common/ideas/{country.tag}_ideas.txt", root, source=SOURCE)
 
+    if sprites.entries:
+        root = Block()
+        root.add("spriteTypes", sprites)
+        ctx.write_script("interface/meganations_ideas.gfx", root, source=SOURCE)
+    ctx.note(f"ideas: dibujo propio {pictures['propia']}, icono generico del juego {pictures['generica']}, "
+             f"sin dibujo {pictures['ninguna']}")
     ctx.verify_keys("modifiers", modifiers_used)

@@ -1,0 +1,43 @@
+PEDIDOS DE ARTE - 2100 MEGANATIONS
+==================================
+
+Para el generador de imágenes (ChatGPT):
+- Cada bloque ASSET_REQUEST es UNA imagen.
+- La imagen se entrega con el nombre de `filename` EXACTO (el id + .png).
+- Respetar la proporción de `size`; más grande está bien (se achica sola).
+- transparent_background: true -> PNG con fondo transparente.
+- Sin texto ni letras dentro de la imagen.
+- Mismo estilo dentro de cada potencia (ver `style`).
+
+Para devolver: juntar las imágenes en un .zip y pasárselo a Claude, que las
+convierte (tools/arte) y quedan conectadas solas en el próximo build.
+
+Orden sugerido: 1 retratos, 2 espíritus, 3 focos, 4 eventos.
+
+Archivos:
+  1_retratos_NRE.txt: 2
+  1_retratos_SATELITES_Y_ANARQUIA.txt: 21
+  2_espiritus_APF.txt: 15
+  2_espiritus_ASC.txt: 27
+  2_espiritus_EFE.txt: 27
+  2_espiritus_FCU.txt: 23
+  2_espiritus_HSN.txt: 16
+  2_espiritus_NAS.txt: 17
+  2_espiritus_NRE.txt: 23
+  2_espiritus_SHD.txt: 19
+  3_focos_APF.txt: 36
+  3_focos_ASC.txt: 43
+  3_focos_EFE.txt: 31
+  3_focos_FCU.txt: 41
+  3_focos_HSN.txt: 38
+  3_focos_NAS.txt: 42
+  3_focos_NRE.txt: 41
+  3_focos_SHD.txt: 39
+  4_eventos_APF.txt: 5
+  4_eventos_ASC.txt: 4
+  4_eventos_EFE.txt: 15
+  4_eventos_FCU.txt: 7
+  4_eventos_HSN.txt: 5
+  4_eventos_NAS.txt: 4
+  4_eventos_NRE.txt: 6
+  4_eventos_SHD.txt: 3

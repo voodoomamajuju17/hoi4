@@ -97,8 +97,12 @@ def emit(ctx: BuildContext) -> None:
             portrait = ch.get("portrait") or {}
             portrait_path = portrait.get("path")
             if portrait_path:
+                own = f"assets/{country.tag}/leaders/{portrait_path.rsplit('/', 1)[-1]}"
                 if portrait.get("asset"):
                     ctx.copy_asset(portrait["asset"], portrait_path)
+                elif (ctx.spec.root.parent / own).exists():
+                    # convención de arte (tools/arte): el retrato llegó después
+                    ctx.copy_asset(own, portrait_path)
                 else:
                     _write_portrait(ctx, portrait_path, country.color)
                 large = Block()

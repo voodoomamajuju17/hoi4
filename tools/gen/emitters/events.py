@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block
+from ..pdx import Block, Quoted
 from . import ideas as ideas_mod
 from . import effects as effects_mod
 from .effects import EffectContext, scripted_effect_ids, render_conditions, render_effects
@@ -60,6 +60,7 @@ def emit(ctx: BuildContext) -> None:
     startup: list[tuple[str, str]] = []  # (tag, id)
     by_ns: dict[str, Block] = {}
     seen: set[str] = set()
+    own_sprites = Block()
     focus_ids = _all_focus_ids(ctx)
     from .focus_trees import character_ids
     effect_ctx = EffectContext(
@@ -93,6 +94,17 @@ def emit(ctx: BuildContext) -> None:
         b.add("title", _loc(ctx, f"{eid}.t", ev["title"]))
         b.add("desc", _loc(ctx, f"{eid}.d", ev["desc"]))
         picture = ev.get("picture")
+        own = ctx.spec.root.parent / "assets" / "events" / f"{eid}.dds"
+        if own.exists():
+            # convención de arte (tools/arte): assets/events/<id>.dds reemplaza la imagen genérica
+            sprite_name = f"GFX_{eid.replace('.', '_')}"
+            ctx.copy_asset(f"assets/events/{eid}.dds", f"gfx/event_pictures/meganations/{eid}.dds")
+            sp = Block()
+            sp.add("name", Quoted(sprite_name))
+            sp.add("texturefile", Quoted(f"gfx/event_pictures/meganations/{eid}.dds"))
+            own_sprites.add("spriteType", sp)
+            b.add("picture", sprite_name)
+            picture = None
         if picture:
             if icons is None:
                 ctx.warn("imagenes de eventos: no se validaron contra interface/*.gfx (falta --vanilla-path).")
@@ -120,6 +132,11 @@ def emit(ctx: BuildContext) -> None:
             b.add("option", ob)
 
         by_ns.setdefault(ns, Block()).add("country_event", b)
+
+    if own_sprites.entries:
+        gfx_root = Block()
+        gfx_root.add("spriteTypes", own_sprites)
+        ctx.write_script("interface/meganations_events.gfx", gfx_root, source=SOURCE)
 
     for ns, events in by_ns.items():
         root = Block()

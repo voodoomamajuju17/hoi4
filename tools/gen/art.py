@@ -105,8 +105,10 @@ def write_dds(path: Path, width: int, height: int, pixels: list[RGB], alpha: int
     header += struct.pack("<IIIII", _DDSCAPS_TEXTURE, 0, 0, 0, 0)
 
     body = bytearray()
-    for r, g, b in pixels:
-        body += bytes((b, g, r, alpha))
+    for px in pixels:
+        # (r, g, b) usa el alpha fijo; (r, g, b, a) trae su propia transparencia
+        r, g, b = px[0], px[1], px[2]
+        body += bytes((b, g, r, px[3] if len(px) > 3 else alpha))
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(header + bytes(body))
 
