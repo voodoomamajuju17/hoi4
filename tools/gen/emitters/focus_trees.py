@@ -110,7 +110,7 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
         warn=ctx.warn,
         characters=character_ids(ctx),
         events=events_mod.all_event_ids(ctx),
-        scripted=scripted_effect_ids(ctx.spec.raw),
+        scripted=scripted_effect_ids(ctx.spec.raw), dynamic_modifiers=effects_mod.dynamic_modifier_ids(ctx.spec.raw),
         tech_categories=ctx.vanilla.tech_categories() if ctx.vanilla else None,
         shared_slots=ctx.vanilla.shared_slot_buildings() if ctx.vanilla else None,
     )

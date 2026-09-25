@@ -284,3 +284,45 @@ explicación al arrancar (`.21`). Los números están en el panel de cada una.
 | SHD | Deriva: Producción +2, Pueblo +1, Orden -1 por mes | crecidas, huelgas y booms al azar | Sensores del Caudal (deriva a la mitad) |
 | APF | Tensión regional (integrar +5 / +10 con Diallo) | 50 Consejos Inquietos, 75 levantamiento | Invertir, Asamblea de los Consejos, Radios Comunitarias |
 | NRE | En paz la Auctoritas baja | Legiones Ociosas; motín de una legión famosa | Colonias de Veteranos, guerra, donativos |
+
+## Mecánicas v3 — espíritus vivos y reglas de suma fija (2026-09-27)
+
+Pedido del usuario después de jugar: "no se entiende qué gano", "la IA sube
+todo y listo", "los caudales tienen números cualquiera", "el desarrollo
+llega a 100 al toque y la tensión nunca sube".
+
+- **Espíritus vivos** (`14_decisions.yaml -> dynamic_modifiers`): cada
+  potencia tiene un espíritu nacional cuyos números salen de sus variables
+  (`common/dynamic_modifiers/`). El pulso mensual (y cada decisión del panel)
+  recalcula las variables `<TAG>_ef_*` con `effect: math`. El panel muestra
+  el mismo número (`<TAG>_ef_*_ver`, en % y redondeado).
+  Las variables de HOI4 tienen 3 decimales: un factor como 0.0015 se escribe
+  como ×3 ÷2000.
+- **FCU**: las cuatro corporaciones suman siempre 200 (se normalizan). Cada
+  una por encima de 50 da su bonus y por debajo lo resta: Castellane →
+  estabilidad, Halvorsen → bienes de consumo, Meridian → fábricas militares,
+  Obsidian → poder político. Cada contrato sube una 10 y baja otra 10 (lo
+  dice el nombre). Sin "el fuerte se hace más fuerte": cada mes una al azar
+  hace lobby (+4). La OPA pide Meridian 70 con dos rivales bajo 35.
+- **SHD**: los tres caudales suman siempre 150. Producción → fábricas,
+  Orden → estabilidad, Pueblo → población reclutable. La Producción crece
+  sola (+2 por mes) y se come a los otros dos. Seis decisiones de a pares
+  (+10/−10) y el Ajuste Técnico. Zhou: el Pueblo hasta 130.
+- **ASC**: el cómputo es un bonus lineal en la prioridad elegida (antes, 12
+  ideas por niveles); 30 días sin bonus al cambiar. El calor resta
+  estabilidad.
+- **APF**: Invertir suma 10 de Desarrollo (antes 20) y 3 de tensión;
+  Integrar suma 8 de tensión (15 con Diallo); cada miembro a medio integrar
+  suma 2 por mes. El panel explica qué es el Desarrollo.
+- **NRE**: el panel explica la Auctoritas (respeto del ejército y moneda de
+  las decisiones militares). El prestigio da ataque; la Auctoritas,
+  organización; cada legión en 80+ cuesta poder político (reemplaza la idea
+  de Privilegios).
+- **EFE** (Bioacero → blindaje y defensa; saturación → estabilidad),
+  **NAS** (luz guardada → investigación: guardar o gastar), **HSN** (nodos
+  → comercio; presión → estabilidad).
+- **IA**: las decisiones de a pares solo se toman para corregir (subir lo
+  que está bajo 45 bajando lo que está sobre 50); la ASC elige Guerra en
+  guerra, Economía con poco cómputo e Investigación con mucho; la APF deja de
+  invertir con tensión alta; el NAS guarda luz; los Triunfos se usan en paz
+  cuando falta Auctoritas.

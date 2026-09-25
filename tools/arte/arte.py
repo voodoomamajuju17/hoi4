@@ -100,6 +100,13 @@ def catalog() -> list[dict]:
                     "type": "national_spirit_icon", "tag": tag, "id": idea["id"], "dest": dest,
                     "done": dest.exists(), "description": f"{name}: {_one_line(desc)}",
                 })
+    for dm in _load("14_decisions.yaml").get("dynamic_modifiers") or []:
+        tag = dm["country"]
+        dest = REPO / "assets" / tag / "ideas" / f"{dm['id']}.dds"
+        items.append({
+            "type": "national_spirit_icon", "tag": tag, "id": dm["id"], "dest": dest, "done": dest.exists(),
+            "description": f"{dm['name']['english']}: {_one_line(dm['desc']['english'])}",
+        })
     for ch in _load("03_leaders.yaml").get("characters") or []:
         portrait = (ch.get("portrait") or {}) if isinstance(ch, dict) else {}
         if not portrait.get("path"):

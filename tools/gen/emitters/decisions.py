@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block, parse_file
+from ..pdx import Block, Quoted, parse_file
 from . import ideas as ideas_mod
 from . import effects as effects_mod
 from .effects import EffectContext, scripted_effect_ids, render_conditions, render_effects
@@ -46,7 +46,7 @@ def emit(ctx: BuildContext) -> None:
         ctx.vanilla.building_keys() if ctx.vanilla else None,
         ctx.vanilla.wargoal_types() if ctx.vanilla else None,
         warn=ctx.warn, characters=character_ids(ctx), events=events_mod.all_event_ids(ctx),
-        scripted=scripted_effect_ids(ctx.spec.raw),
+        scripted=scripted_effect_ids(ctx.spec.raw), dynamic_modifiers=effects_mod.dynamic_modifier_ids(ctx.spec.raw),
         tech_categories=ctx.vanilla.tech_categories() if ctx.vanilla else None,
         shared_slots=ctx.vanilla.shared_slot_buildings() if ctx.vanilla else None,
     )
@@ -110,12 +110,70 @@ def emit(ctx: BuildContext) -> None:
         for e in scripted:
             se.add(e["id"], render_effects(e["id"], e["effects"], effect_ctx, effects_used, where=SOURCE))
         ctx.write_script("common/scripted_effects/meganations_effects.txt", se, source=SOURCE)
+    _emit_dynamic_modifiers(ctx)
     _check_fields(vanilla, ctx, used_optional)
     ctx.write_script("common/decisions/categories/meganations_categories.txt", cats, source=SOURCE)
     ctx.write_script("common/decisions/meganations_decisions.txt", decs, source=SOURCE)
     ctx.verify_keys("effects", effects_used)
     ctx.verify_keys("triggers", triggers_used)
     ctx.note(f"decisiones: {sum(len(c.get('decisions', [])) for c in categories)} en {len(categories)} panel(es)")
+
+
+def _emit_dynamic_modifiers(ctx: BuildContext) -> None:
+    """Espíritus vivos (dynamic_modifiers): cada modificador toma su valor de
+    una variable del país, así el espíritu muestra el bonus de ESE momento.
+    Las variables las calcula el pulso mensual de cada mecánica (math)."""
+    mods = (ctx.spec.raw.get("decisions") or {}).get("dynamic_modifiers") or []
+    if not mods:
+        return
+    gfx = ctx.vanilla.gfx_names() if ctx.vanilla else None
+    idea_sprites = sorted(n for n in (gfx or ()) if n.startswith("GFX_idea_"))
+    repo = ctx.spec.root.parent
+    root = Block()
+    sprites = Block()
+    used: dict[str, str] = {}
+    for m in mods:
+        mid = m["id"]
+        tag = m["country"]
+        ctx.spec.country(tag)
+        if not mid.startswith(f"{tag}_"):
+            raise SpecError(f"dynamic_modifier '{mid}' no empieza con '{tag}_'", where=SOURCE)
+        values = m.get("modifiers") or {}
+        if not values:
+            raise SpecError(f"dynamic_modifier '{mid}': sin modificadores", where=SOURCE)
+        body = Block()
+        own = repo / "assets" / tag / "ideas" / f"{mid}.dds"
+        if own.exists():
+            texture = f"gfx/interface/ideas/meganations/{mid}.dds"
+            ctx.copy_asset(f"assets/{tag}/ideas/{mid}.dds", texture)
+            sprite = Block()
+            sprite.add("name", Quoted(f"GFX_idea_{mid}"))
+            sprite.add("texturefile", Quoted(texture))
+            sprites.add("spriteType", sprite)
+            body.add("icon", f"GFX_idea_{mid}")
+        else:
+            first = next(iter(values))
+            generic = ideas_mod._generic_picture({first: 1}, idea_sprites)
+            if not generic:
+                # cualquier genérico del juego antes que el ícono vacío
+                fallback = [n for n in idea_sprites if "generic" in n.lower()]
+                generic = fallback[0][len("GFX_idea_"):] if fallback else None
+            if generic:
+                body.add("icon", f"GFX_idea_{generic}")
+        body.add("enable", Block([("always", True)]))
+        for key, var in values.items():
+            if not isinstance(var, str):
+                raise SpecError(f"{mid}.{key}: tiene que ser el nombre de una variable", where=SOURCE)
+            body.add(key, var)
+            used.setdefault(key, mid)
+        root.add(ctx.loc.reference(mid, f"dynamic_modifiers:{mid}"), body)
+        _loc(ctx, mid, m["name"], define_only=True)
+        _loc(ctx, f"{mid}_desc", m["desc"])
+    ctx.write_script("common/dynamic_modifiers/meganations_dynamic_modifiers.txt", root, source=SOURCE)
+    if sprites.entries:
+        ctx.write_script("interface/meganations_dynamic_modifiers.gfx", Block([("spriteTypes", sprites)]),
+                         source=SOURCE)
+    ctx.verify_keys("modifiers", used)
 
 
 def _vanilla(ctx: BuildContext) -> dict:

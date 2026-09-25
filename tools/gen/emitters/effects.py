@@ -73,6 +73,14 @@ def resolve_state(names) -> int | None:
     return None
 
 # Efectos cuyo valor es un número o un id suelto: `efecto = valor`.
+MATH_OPS = {
+    "set": "set_variable",
+    "add": "add_to_variable",
+    "sub": "subtract_from_variable",
+    "mul": "multiply_variable",
+    "div": "divide_variable",
+}
+
 SCALAR_EFFECTS = {
     "add_political_power",
     "add_stability",
@@ -94,7 +102,9 @@ class EffectContext:
                  capital: int | None = None, resources: set[str] | None = None, warn=None,
                  characters: set[str] | None = None, events: set[str] | None = None,
                  triggers_used: dict[str, str] | None = None, scripted: set[str] | None = None,
-                 shared_slots: set[str] | None = None, tech_categories: set[str] | None = None):
+                 shared_slots: set[str] | None = None, tech_categories: set[str] | None = None,
+                 dynamic_modifiers: set[str] | None = None):
+        self.dynamic_modifiers = dynamic_modifiers
         self.tech_categories = tech_categories
         self.shared_slots = shared_slots
         self.scripted = scripted
@@ -308,6 +318,33 @@ def render_effects(owner: str, items: list[dict], known,
                 raise SpecError(f"{owner}: run '{name}' no esta en 14_decisions.yaml -> scripted_effects",
                                 where=where)
             block.add(name, True)
+            continue
+        if effect == "math":
+            # Cuentas sobre variables, en orden: [op, var, valor] con op en
+            # set/add/sub/mul/div; el valor puede ser un número u otra variable.
+            for op, var, value in item["ops"]:
+                if op == "round":
+                    block.add("round_variable", var)
+                    effects_used.setdefault("round_variable", owner)
+                    continue
+                key = MATH_OPS.get(op)
+                if key is None:
+                    raise SpecError(f"{owner}: math '{op}' no existe (usar {', '.join(MATH_OPS)})", where=where)
+                block.add(key, Block([("var", var), ("value", value)]))
+                effects_used.setdefault(key, owner)
+            continue
+        if effect == "dynamic_modifier":
+            # Espíritu vivo: se agrega una vez; sus números salen de variables.
+            mid = item["id"]
+            if ec.dynamic_modifiers is not None and mid not in ec.dynamic_modifiers:
+                raise SpecError(f"{owner}: dynamic_modifier '{mid}' no esta en 14_decisions.yaml -> dynamic_modifiers",
+                                where=where)
+            guard = Block()
+            guard.add("limit", Block([("NOT", Block([("has_dynamic_modifier", Block([("modifier", mid)]))]))]))
+            guard.add("add_dynamic_modifier", Block([("modifier", mid)]))
+            block.add("if", guard)
+            ec.triggers_used.setdefault("has_dynamic_modifier", owner)
+            effects_used.setdefault("add_dynamic_modifier", owner)
             continue
         if effect == "equipment":
             # equipo al depósito (arquetipo o variante): add_equipment_to_stockpile
@@ -549,6 +586,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         else:
             raise SpecError(f"{owner}: condicion desconocida '{key}'", where=where)
     return block
+
+
+def dynamic_modifier_ids(spec_raw: dict) -> set[str]:
+    return {m["id"] for m in (spec_raw.get("decisions") or {}).get("dynamic_modifiers") or []}
 
 
 def scripted_effect_ids(spec_raw: dict) -> set[str]:

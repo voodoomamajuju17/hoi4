@@ -134,6 +134,7 @@ eventos con ultimátum e IA con condiciones.
 - [ ] Árbol corto o panel de decisiones para cada satélite (independencia vs lealtad)
 - [ ] Señores de la guerra: eventos de raid, alianzas temporales, reunificación
 - [ ] Liberar países de la Anarquía: qué pasa con una región conquistada
+- [~] Mecánicas v3 (2026-09-27): espíritus vivos con el bonus del momento, FCU y SHD de suma fija, APF más lenta y con tensión real, paneles que explican qué ganás, IA que corrige en vez de subir todo
 - [~] Conquistas con dilema: cada meganación, al tomar su región clave, elige proteger o explotar (evento + decisiones que se abren); más un evento de hito por mecánica
 
 ## 6. Diplomacia avanzada

@@ -504,13 +504,6 @@ countries:
         modifiers_src: invented
         why: "Balance (2026-09-23): la ASC arrancaba con 18,6% de la IC mundial."
         removable: false
-      - id: ASC_computo_economia_1
-        name: {english: 'Compute: Economy I', spanish: 'Cómputo: Economía I'}
-        desc:
-          english: The planning system assigns its capacity to economy. Level 1 of 3, set by the Commune's total compute.
-          spanish: El sistema de planificación asigna su capacidad a economía. Nivel 1 de 3, según el cómputo total de la Comuna.
-        modifiers: {industrial_capacity_factory: 0.05, production_speed_buildings_factor: 0.05}
-        src: user_design
     focus_ideas:
     - id: ASC_espiritu_computo_distribuido
       name: {english: Distributed Compute, spanish: El Cómputo Distribuido}
@@ -542,83 +535,6 @@ countries:
         english: Half the Commune's computers are dark. The Plan is being rebuilt from backups.
         spanish: La mitad de las computadoras de la Comuna están apagadas. El Plan se reconstruye desde las copias.
       modifiers: {research_speed_factor: -0.15, production_speed_buildings_factor: -0.1}
-      src: user_design
-    - id: ASC_computo_economia_2
-      name: {english: 'Compute: Economy II', spanish: 'Cómputo: Economía II'}
-      desc:
-        english: The planning system assigns its capacity to economy. Level 2 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a economía. Nivel 2 de 3, según el cómputo total de la Comuna.
-      modifiers: {industrial_capacity_factory: 0.1, production_speed_buildings_factor: 0.1}
-      src: user_design
-    - id: ASC_computo_economia_3
-      name: {english: 'Compute: Economy III', spanish: 'Cómputo: Economía III'}
-      desc:
-        english: The planning system assigns its capacity to economy. Level 3 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a economía. Nivel 3 de 3, según el cómputo total de la Comuna.
-      modifiers: {industrial_capacity_factory: 0.15, production_speed_buildings_factor: 0.15}
-      src: user_design
-    - id: ASC_computo_investigacion_1
-      name: {english: 'Compute: Research I', spanish: 'Cómputo: Investigación I'}
-      desc:
-        english: The planning system assigns its capacity to research. Level 1 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a investigación. Nivel 1 de 3, según el cómputo total de la Comuna.
-      modifiers: {research_speed_factor: 0.05}
-      src: user_design
-    - id: ASC_computo_investigacion_2
-      name: {english: 'Compute: Research II', spanish: 'Cómputo: Investigación II'}
-      desc:
-        english: The planning system assigns its capacity to research. Level 2 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a investigación. Nivel 2 de 3, según el cómputo total de la Comuna.
-      modifiers: {research_speed_factor: 0.1}
-      src: user_design
-    - id: ASC_computo_investigacion_3
-      name: {english: 'Compute: Research III', spanish: 'Cómputo: Investigación III'}
-      desc:
-        english: The planning system assigns its capacity to research. Level 3 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a investigación. Nivel 3 de 3, según el cómputo total de la Comuna.
-      modifiers: {research_speed_factor: 0.15}
-      src: user_design
-    - id: ASC_computo_logistica_1
-      name: {english: 'Compute: Logistics I', spanish: 'Cómputo: Logística I'}
-      desc:
-        english: The planning system assigns its capacity to logistics. Level 1 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a logística. Nivel 1 de 3, según el cómputo total de la Comuna.
-      modifiers: {army_org_factor: 0.03, production_speed_infrastructure_factor: 0.1}
-      src: user_design
-    - id: ASC_computo_logistica_2
-      name: {english: 'Compute: Logistics II', spanish: 'Cómputo: Logística II'}
-      desc:
-        english: The planning system assigns its capacity to logistics. Level 2 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a logística. Nivel 2 de 3, según el cómputo total de la Comuna.
-      modifiers: {army_org_factor: 0.06, production_speed_infrastructure_factor: 0.2}
-      src: user_design
-    - id: ASC_computo_logistica_3
-      name: {english: 'Compute: Logistics III', spanish: 'Cómputo: Logística III'}
-      desc:
-        english: The planning system assigns its capacity to logistics. Level 3 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a logística. Nivel 3 de 3, según el cómputo total de la Comuna.
-      modifiers: {army_org_factor: 0.1, production_speed_infrastructure_factor: 0.3}
-      src: user_design
-    - id: ASC_computo_guerra_1
-      name: {english: 'Compute: War I', spanish: 'Cómputo: Guerra I'}
-      desc:
-        english: The planning system assigns its capacity to war. Level 1 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a guerra. Nivel 1 de 3, según el cómputo total de la Comuna.
-      modifiers: {army_attack_factor: 0.03, army_defence_factor: 0.03}
-      src: user_design
-    - id: ASC_computo_guerra_2
-      name: {english: 'Compute: War II', spanish: 'Cómputo: Guerra II'}
-      desc:
-        english: The planning system assigns its capacity to war. Level 2 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a guerra. Nivel 2 de 3, según el cómputo total de la Comuna.
-      modifiers: {army_attack_factor: 0.06, army_defence_factor: 0.06}
-      src: user_design
-    - id: ASC_computo_guerra_3
-      name: {english: 'Compute: War III', spanish: 'Cómputo: Guerra III'}
-      desc:
-        english: The planning system assigns its capacity to war. Level 3 of 3, set by the Commune's total compute.
-        spanish: El sistema de planificación asigna su capacidad a guerra. Nivel 3 de 3, según el cómputo total de la Comuna.
-      modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.1}
       src: user_design
     - id: ASC_transparencia
       name: {english: Transparency of the Plan, spanish: Transparencia del Plan}
@@ -1528,13 +1444,6 @@ countries:
         english: At least one legion has passed 60 prestige. Its eagle is feared.
         spanish: Al menos una legión pasó los 60 de prestigio. Su águila da miedo.
       modifiers: {army_attack_factor: 0.05, army_org_factor: 0.05}
-      src: user_design
-    - id: NRE_privilegios_legionarios
-      name: {english: Legionary Privileges, spanish: Privilegios Legionarios}
-      desc:
-        english: A legion above 80 demands land, pay and a seat in the Consilium.
-        spanish: Una legión por encima de 80 exige tierras, paga y un asiento en el Consilium.
-      modifiers: {political_power_gain: -0.1, army_org_factor: 0.05}
       src: user_design
     - id: NRE_senado
       name: {english: The Restored Senate, spanish: El Senado Restaurado}

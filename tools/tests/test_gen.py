@@ -911,8 +911,16 @@ def test_asc() -> None:
 
         se = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
         body = se[se.index("ASC_recalcular_computo"):]
-        check("recalcular: saca las 12 ideas de computo", body.count("remove_ideas = ASC_computo_") == 12)
-        check("recalcular: tres niveles por capacidad", "value = 80" in body and "value = 40" in body)
+        body = " ".join(body[:body.index("\n}") + 2].split())
+        check("recalcular: sin las 12 ideas de computo (ahora es un espiritu vivo)", "ASC_computo_" not in body.replace("ASC_computo ", ""), body[:400])
+        check("recalcular: el bonus sale del computo", "multiply_variable = { var = ASC_ef_investigacion value = 3 } divide_variable = { var = ASC_ef_investigacion value = 2000 }" in body, body[:1500])
+        check("recalcular: agrega el espiritu vivo una sola vez",
+              "has_dynamic_modifier = { modifier = ASC_mod_red_de_computo }" in body and "add_dynamic_modifier = { modifier = ASC_mod_red_de_computo }" in body)
+        dm = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text())
+        red = dm.get("ASC_mod_red_de_computo")
+        check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
+        check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
+        check("8 espiritus vivos, uno por potencia", len(dm.entries) == 8, str([k for k, _ in dm.entries]))
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         check("reasignar deja 30 dias de espera", "flag = ASC_reasignando" in decs and "days = 30" in decs)
         check("cada decision de la ASC recalcula", decs.count("ASC_recalcular_computo = yes") >= 6)
@@ -1215,7 +1223,26 @@ def test_mecanicas_v2() -> None:
         inv = inv[:inv.index("complete_effect")]
         check("APF: invertir se ve desde el dia 1 (sin foco)", "APF_integracion_abierta" not in inv, inv)
         es = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
-        check("SHD: el nombre de cada decision dice cuanto mueve", "Aumentar Cuotas (P+10 O+3 Pu-8)" in es)
+        check("SHD: el nombre de cada decision dice cuanto mueve", "Aumentar Cuotas (P+10 Pu-10)" in es)
+        check("SHD: el panel explica que suman 150 y muestra el bonus", "SUMAN SIEMPRE 150" in es and "[?SHD_ef_produccion_ver]%" in es)
+        se_txt = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        shd = se_txt[se_txt.index("SHD_recalcular_caudales = {"):]
+        shd = " ".join(shd[:shd.index("\n}") + 2].split())
+        check("SHD: los caudales se normalizan a 150", "set_variable = { var = SHD_factor value = 150 }" in shd
+              and "divide_variable = { var = SHD_factor value = SHD_suma }" in shd and "round_variable = SHD_pueblo" in shd, shd[:1200])
+        fcu = se_txt[se_txt.index("FCU_recalcular_directorio = {"):]
+        fcu = " ".join(fcu[:fcu.index("\n}") + 2].split())
+        check("FCU: las cuatro se normalizan a 200", "set_variable = { var = FCU_factor value = 200 }" in fcu)
+        check("FCU: sin 'el fuerte se hace mas fuerte' (no es suma cero)", "FCU_castellane value = 1 }" not in se_txt)
+        check("FCU: cada contrato sube una y baja otra", "Contrato Ferroviario Automatizado (M+10 H-10)" in es)
+        check("APF: la tension sube con cada miembro a medio integrar", "var = APF_integracion_zet value = 30" in " ".join(se_txt.split()))
+        dec_txt = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        inv2 = dec_txt[dec_txt.index("APF_invertir_zet = {"):]
+        inv2 = " ".join(inv2[:inv2.index("ai_will_do")].split())
+        check("APF: invertir suma 10 de desarrollo y 3 de tension", "var = APF_desarrollo_zet value = 10" in inv2 and "var = APF_tension value = 3" in inv2, inv2)
+        check("APF: el panel explica que es el Desarrollo", "Desarrollo = cuánto invirtió la Federación" in es)
+        check("NRE: el panel explica la Auctoritas", "Es el respeto del ejército por el emperador" in es)
+        check("ASC: el panel dice para que sirve", "¿PARA QUÉ SIRVE?" in es and "[?ASC_ef_investigacion_ver]%" in es)
         efe = (mod / "common/national_focus/EFE_focus.txt").read_text()
         check("rama nueva del EFE: Rotar los Cultivos da su espiritu", "id = EFE_rotar_los_cultivos" in efe and "add_ideas = EFE_rotacion_de_cultivos" in efe)
         cubas = pdx.render(eff.get("EFE_pulso_de_las_cubas"))
@@ -1326,10 +1353,12 @@ def test_vanilla_validation() -> None:
                     mods.update(tier["modifiers"])
         for trait in spec.raw["leaders"].get("leader_traits") or []:
             mods.update(trait["modifiers"])
+        for dm in spec.raw["decisions"].get("dynamic_modifiers") or []:
+            mods.update(dm["modifiers"])
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1337,7 +1366,8 @@ def test_vanilla_validation() -> None:
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
-            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus\n"
+            "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
+            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
