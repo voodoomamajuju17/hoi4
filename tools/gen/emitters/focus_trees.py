@@ -55,6 +55,11 @@ def _all_prereqs(f: dict) -> list[str]:
 
 
 def emit(ctx: BuildContext) -> None:
+    from . import effects as _effects
+    _effects.KNOWN_FOCUSES.clear()
+    _effects.KNOWN_FOCUSES.update(
+        f["id"] for tree in ((ctx.spec.raw.get("focus_trees") or {}).get("trees") or {}).values()
+        if isinstance(tree, dict) for branch in tree.get("branches") or [] for f in branch.get("focuses") or [])
     effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     trees = ctx.spec.raw["focus_trees"].get("trees") or {}
     for tag, tree in trees.items():

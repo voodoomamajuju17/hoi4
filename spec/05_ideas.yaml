@@ -72,6 +72,19 @@ countries:
     # Total (cambio aprobado con Q031). Antes el foco "otorgaba" una idea que el
     # país ya tenía desde el día uno.
     focus_ideas:
+      - id: EFE_espiritu_bioacero_domesticado
+        name: {english: Tamed BioSteel, spanish: El Bioacero Domesticado}
+        desc: {english: The living metal obeys., spanish: El metal vivo obedece.}
+        modifiers: {production_speed_arms_factory_factor: 0.1, army_armor_defence_factor: 0.05}
+        src: user_design
+      - id: EFE_espiritu_selva_de_acero
+        name: {english: The Steel Jungle, spanish: La Selva de Acero}
+        desc: {english: Forests that grow armour., spanish: Bosques que crían blindaje.}
+        modifiers:
+          army_armor_attack_factor: 0.1
+          army_armor_defence_factor: 0.1
+          production_speed_arms_factory_factor: 0.05
+        src: user_design
       - id: EFE_cubas_forzadas
         name: {english: Forced Vats, spanish: Cubas Forzadas}
         desc:
@@ -485,6 +498,23 @@ countries:
         modifiers: {industrial_capacity_factory: 0.05, production_speed_buildings_factor: 0.05}
         src: user_design
     focus_ideas:
+    - id: ASC_espiritu_computo_distribuido
+      name: {english: Distributed Compute, spanish: El Cómputo Distribuido}
+      desc:
+        english: No single data centre carries the Plan.
+        spanish: Ningún centro de datos carga solo con el Plan.
+      modifiers: {research_speed_factor: 0.05, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: ASC_espiritu_red_fria
+      name: {english: The Cold Grid, spanish: La Red Fría}
+      desc: {english: Compute without fever., spanish: Cómputo sin fiebre.}
+      modifiers: {research_speed_factor: 0.1, production_speed_buildings_factor: 0.05}
+      src: user_design
+    - id: ASC_espiritu_mente_colectiva
+      name: {english: The Collective Mind, spanish: La Mente Colectiva}
+      desc: {english: Every citizen a node., spanish: Cada ciudadano un nodo.}
+      modifiers: {research_speed_factor: 0.1, industrial_capacity_factory: 0.1, stability_factor: 0.05}
+      src: user_design
     - id: ASC_racionamiento_termico
       name: {english: Thermal Rationing, spanish: Racionamiento Térmico}
       desc:
@@ -691,6 +721,18 @@ countries:
         modifiers: { political_power_gain: -0.1, production_speed_buildings_factor: 0.1 }
         removable: false
     focus_ideas:
+      - id: FCU_espiritu_prensa_amiga
+        name: {english: The Friendly Press, spanish: La Prensa Amiga}
+        desc:
+          english: The headlines are written before the news.
+          spanish: Los titulares se escriben antes que las noticias.
+        modifiers: {stability_factor: 0.05, political_power_gain: 0.05}
+        src: user_design
+      - id: FCU_espiritu_junta_de_accionistas
+        name: {english: Shareholders' Assembly, spanish: La Junta de Accionistas}
+        desc: {english: 'Every citizen, a shareholder.', spanish: 'Cada ciudadano, un accionista.'}
+        modifiers: {political_power_gain: 0.1, stability_factor: 0.05, industrial_capacity_factory: 0.05}
+        src: user_design
       - id: FCU_bajo_sospecha
         name: {english: Under Suspicion, spanish: Bajo Sospecha}
         desc:
@@ -841,6 +883,21 @@ countries:
   HSN:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: HSN_espiritu_seguros_potencias
+      name: {english: Insurance for the Powers, spanish: Seguros para las Potencias}
+      desc: {english: Everyone pays us to feel safe., spanish: Todos nos pagan para sentirse seguros.}
+      modifiers: {trade_opinion_factor: 0.15, political_power_gain: 0.05}
+      src: user_design
+    - id: HSN_espiritu_libre_paso
+      name: {english: Free Passage, spanish: Libre Paso}
+      desc: {english: Every flag passes; every flag pays., spanish: Toda bandera pasa; toda bandera paga.}
+      modifiers: {trade_opinion_factor: 0.2, stability_factor: 0.05}
+      src: user_design
+    - id: HSN_espiritu_talasocracia
+      name: {english: The Thalassocracy, spanish: La Talasocracia}
+      desc: {english: The sea is the state., spanish: El mar es el Estado.}
+      modifiers: {industrial_capacity_dockyard: 0.15, trade_opinion_factor: 0.1, political_power_gain: 0.05}
+      src: user_design
     - id: HSN_bajo_vigilancia
       name: {english: Under Watch, spanish: Bajo Vigilancia}
       desc:
@@ -980,6 +1037,20 @@ countries:
   NAS:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: NAS_espiritu_templos_eficientes
+      name: {english: Efficient Temples, spanish: Templos Eficientes}
+      desc: {english: 'Less light wasted, more light prayed.', spanish: 'Menos luz desperdiciada, más luz rezada.'}
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.05}
+      src: user_design
+    - id: NAS_espiritu_hijos_del_sol
+      name: {english: Children of the Sun, spanish: Hijos del Sol}
+      desc: {english: Every citizen carries a spark of Inti., spanish: Cada ciudadano lleva una chispa de Inti.}
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.05
+        research_speed_factor: 0.05
+        political_power_gain: 0.05
+      src: user_design
     - id: NAS_sol_hambriento
       name: {english: The Hungry Sun, spanish: El Sol Hambriento}
       desc:
@@ -1115,6 +1186,21 @@ countries:
   SHD:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: SHD_espiritu_sensores
+      name: {english: Flow Sensors, spanish: Sensores del Caudal}
+      desc: {english: Every flow measured every second., spanish: Cada caudal medido cada segundo.}
+      modifiers: {stability_factor: 0.05, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: SHD_espiritu_modelo_del_rio
+      name: {english: The River Model, spanish: El Modelo del Río}
+      desc: {english: 'The country, simulated down to the drop.', spanish: 'El país, simulado gota por gota.'}
+      modifiers: {research_speed_factor: 0.1, stability_factor: 0.05}
+      src: user_design
+    - id: SHD_espiritu_caudal_eterno
+      name: {english: The Eternal Flow, spanish: El Caudal Eterno}
+      desc: {english: The river and the state are one system., spanish: El río y el Estado son un solo sistema.}
+      modifiers: {industrial_capacity_factory: 0.1, stability_factor: 0.1, production_speed_buildings_factor: 0.05}
+      src: user_design
     - id: SHD_inundacion
       name: {english: The Flood Damage, spanish: Los Daños de la Crecida}
       desc: {english: 'Roads, dams and factories under mud.', spanish: 'Caminos, represas y fábricas bajo el barro.'}
@@ -1267,6 +1353,21 @@ countries:
   APF:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: APF_espiritu_radios_comunitarias
+      name: {english: Community Radio, spanish: Radios Comunitarias}
+      desc: {english: Every council has a microphone., spanish: Cada consejo tiene un micrófono.}
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.05}
+      src: user_design
+    - id: APF_espiritu_parlamento
+      name: {english: The Parliament of the Peoples, spanish: El Parlamento de los Pueblos}
+      desc: {english: 'A thousand councils, one parliament.', spanish: 'Mil consejos, un parlamento.'}
+      modifiers: {stability_factor: 0.1, political_power_gain: 0.1}
+      src: user_design
+    - id: APF_espiritu_africa_unida
+      name: {english: Africa United, spanish: África Unida}
+      desc: {english: From the Cape to Cairo., spanish: Del Cabo al Cairo.}
+      modifiers: {industrial_capacity_factory: 0.1, stability_factor: 0.1, war_support_factor: 0.05}
+      src: user_design
     - id: APF_consejos_inquietos
       name: {english: Restless Councils, spanish: Consejos Inquietos}
       desc:
@@ -1383,6 +1484,18 @@ countries:
   NRE:
     coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
     focus_ideas:
+    - id: NRE_espiritu_colonias_veteranos
+      name: {english: Veteran Colonies, spanish: Colonias de Veteranos}
+      desc:
+        english: Every veteran gets land, and remembers who gave it.
+        spanish: Cada veterano recibe tierra, y se acuerda de quién se la dio.
+      modifiers: {stability_factor: 0.05, monthly_population: 0.05}
+      src: user_design
+    - id: NRE_espiritu_disciplina_limes
+      name: {english: Discipline of the Limes, spanish: La Disciplina del Limes}
+      desc: {english: A frontier that holds., spanish: Una frontera que aguanta.}
+      modifiers: {army_defence_factor: 0.1, army_org_factor: 0.05, stability_factor: 0.05}
+      src: user_design
     - id: NRE_legiones_ociosas
       name: {english: Idle Legions, spanish: Legiones Ociosas}
       desc:

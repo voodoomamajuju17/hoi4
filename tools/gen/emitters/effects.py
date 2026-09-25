@@ -57,6 +57,11 @@ def _norm(name: str) -> str:
     return " ".join(text.lower().split())
 
 
+# Ids de todos los focos del mod (los carga focus_trees.emit antes de
+# renderizar nada): una condición `focus:` con un id que no existe es un error.
+KNOWN_FOCUSES: set[str] = set()
+
+
 def resolve_state(names) -> int | None:
     names = [names] if isinstance(names, (str, int)) else list(names)
     for n in names:
@@ -455,6 +460,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
                 block.add("NOT", Block([("has_idea", value)]))
             triggers_used.setdefault("has_idea", owner)
         elif key == "focus":
+            if KNOWN_FOCUSES and value not in KNOWN_FOCUSES:
+                raise SpecError(f"{owner}: la condicion pide el foco '{value}', que no existe en ningun arbol",
+                                where=where)
             block.add("has_completed_focus", value)
             triggers_used.setdefault("has_completed_focus", owner)
         elif key == "country_exists":

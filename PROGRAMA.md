@@ -112,7 +112,12 @@ eventos con ultimátum e IA con condiciones.
   a las legiones antes de 85, ASC asigna cómputo a la guerra si está en guerra) y peso por rama
   (industria ×2, mecánica propia ×1,5-2, aire de las potencias sin vocación ×0,7). Falta: plantillas
   de división y producción por potencia
-- [ ] Interacciones entre potencias (20-30 eventos chicos)
+- [x] Mecánicas v2 (2026-09-26): pulso mensual y un riesgo en cada potencia (saturación de las cubas,
+  escándalo, calor de la red, presión de las potencias, templos que consumen, deriva de los caudales,
+  tensión regional, legiones ociosas), crisis por evento y explicación de la mecánica al arrancar
+- [x] 6 focos nuevos por meganación (rama ligada a su mecánica v2) y +50% de duración en todos
+- [~] Interacciones entre potencias: 4 hechas (Bioacero en venta, Árbitro de los Mares, Cómputo para
+  la Tierra, Puertos para el Directorio) de 20-30
 
 ## 4. El EFE, a fondo
 

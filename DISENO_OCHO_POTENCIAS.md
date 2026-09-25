@@ -267,3 +267,20 @@ existe, se omite con aviso.
   mecánica antes de gastar.
 - **Peso por rama** (`ai_factor` en la rama de 07_focus_trees): vale para
   todos los focos de la rama que no tengan uno propio.
+
+## Mecánicas v2 (2026-09-26) — cada una con algo que crece solo y castiga
+
+Pedido del usuario: "demasiada producción = efecto negativo", mecánicas menos
+fáciles. Cada potencia tiene un pulso mensual (evento oculto `.20`) y una
+explicación al arrancar (`.21`). Los números están en el panel de cada una.
+
+| Potencia | Lo que crece | Castigo | Alivio |
+|---|---|---|---|
+| EFE | Saturación de las cubas (+6/+12/+15 por cosecha, -3 por mes) | 40 Cubas Forzadas, 70 Fiebre y Plaga del Micelio; Bioacero > 15 se pudre | Purgar las Cubas, Rotar los Cultivos |
+| FCU | Escándalo (+8 por contrato, -2 por mes); corporaciones que divergen solas | 50 Bajo Sospecha, 80 Crisis de Confianza y la Filtración | Auditoría, Relaciones Públicas, La Prensa Amiga |
+| ASC | Calor de la red (+4 desde 60 de cómputo, +8 desde 100); el cómputo decae 1 por mes | 50 Racionamiento Térmico, 80 Apagón | Enfriar los Centros de Datos, La Red Fría |
+| HSN | Presión de las potencias (+3 con 4 nodos, +6 con 6) | 40 Bajo Vigilancia, 70 exigen un estrecho | Diplomacia de Puertos, Seguros para las Potencias |
+| NAS | Los templos queman 3 de luz por mes | < 10 Sol Hambriento; ≥ 90 Fervor Solar; eclipses | Templos Eficientes, nuevas Granjas |
+| SHD | Deriva: Producción +2, Pueblo +1, Orden -1 por mes | crecidas, huelgas y booms al azar | Sensores del Caudal (deriva a la mitad) |
+| APF | Tensión regional (integrar +5 / +10 con Diallo) | 50 Consejos Inquietos, 75 levantamiento | Invertir, Asamblea de los Consejos, Radios Comunitarias |
+| NRE | En paz la Auctoritas baja | Legiones Ociosas; motín de una legión famosa | Colonias de Veteranos, guerra, donativos |

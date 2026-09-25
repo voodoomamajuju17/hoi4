@@ -371,6 +371,29 @@ namespaces:
           - {effect: timed_idea, idea: EFE_plaga_del_micelio, days: 90}
           ai_chance: 50
         src: user_design
+      - id: 23
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Compute for the Earth, spanish: Cómputo para la Tierra}
+        desc:
+          english: 'The Automated Commune offers the Empire its compute in exchange for water. Machines helping forests: the Custodian''s court is divided.'
+          spanish: 'La Comuna Automatizada le ofrece al Imperio su cómputo a cambio de agua. Máquinas ayudando a bosques: la corte del Custodio está
+            dividida.'
+        options:
+        - name: {english: Accept the machines., spanish: Aceptar a las máquinas.}
+          effects:
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: add_political_power, value: 75}
+          ai_chance: 50
+        - name: {english: The forest thinks for itself., spanish: El bosque piensa solo.}
+          effects:
+          - {effect: add_political_power, value: 25}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -583,6 +606,53 @@ namespaces:
           - {effect: add_variable, var: FCU_escandalo, value: 5}
           ai_chance: 20
         src: user_design
+      - id: 23
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: BioSteel for Sale, spanish: Bioacero en Venta}
+        desc:
+          english: The Ecological Empire, which has sworn a hundred times that water is not for sale, offers to sell us living armour. The Board is
+            amused, and interested.
+          spanish: El Imperio Ecológico, que juró cien veces que el agua no se vende, nos ofrece vendernos blindaje vivo. Al Directorio le causa gracia,
+            y le interesa.
+        options:
+        - name: {english: Buy it., spanish: Comprarlo.}
+          effects:
+          - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 1}
+          - {effect: add_political_power, value: -50}
+          - effect: scope
+            target: EFE
+            effects:
+            - {effect: add_political_power, value: 100}
+          ai_chance: 60
+        - name: {english: Embargo the heretics., spanish: Embargar a los herejes.}
+          effects:
+          - {effect: add_political_power, value: 25}
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 40
+        src: user_design
+      - id: 24
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Arbiter of the Seas, spanish: El Árbitro de los Mares}
+        desc:
+          english: The High Seas Nation offers to arbitrate the Board's disputes in its free ports. Neutral, fast and very well paid.
+          spanish: La Nación de Alta Mar ofrece arbitrar las disputas del Directorio en sus puertos francos. Neutral, rápida y muy bien paga.
+        options:
+        - name: {english: Accept the arbiter., spanish: Aceptar al árbitro.}
+          effects:
+          - {effect: add_variable, var: FCU_escandalo, value: -10}
+          - effect: scope
+            target: HSN
+            effects:
+            - {effect: add_political_power, value: 75}
+            - {effect: add_variable, var: HSN_presion, value: -10}
+          ai_chance: 60
+        - name: {english: The Union needs no arbiter., spanish: La Unión no necesita árbitros.}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 40
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -752,6 +822,29 @@ namespaces:
           - {effect: add_war_support, value: 0.1}
           - {effect: add_stability, value: -0.05}
           ai_chance: 50
+        src: user_design
+      - id: 23
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Ports for the Directorate, spanish: Puertos para el Directorio}
+        desc:
+          english: The Sino-Harmonious Directorate wants its goods to flow through our ports, measured and taxed at its own harmonious rates.
+          spanish: El Directorio Sino-Armónico quiere que sus mercancías pasen por nuestros puertos, medidas y gravadas con sus propias tarifas armónicas.
+        options:
+        - name: {english: Open the ports., spanish: Abrir los puertos.}
+          effects:
+          - {effect: add_political_power, value: 50}
+          - {effect: add_variable, var: HSN_presion, value: 10}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: add_variable, var: SHD_produccion, value: 5}
+            - {effect: run, value: SHD_recalcular_caudales}
+          ai_chance: 60
+        - name: {english: 'Our ports, our rates.', spanish: 'Nuestros puertos, nuestras tarifas.'}
+          effects:
+          - {effect: add_political_power, value: 25}
+          ai_chance: 40
         src: user_design
   # ===========================================================================
   meganations_asc:

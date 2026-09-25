@@ -3379,7 +3379,7 @@ scripted_effects:
     effects:
     - {effect: add_variable, var: EFE_saturacion, value: -3}
     - effect: if
-      when: {focus: EFE_rotacion_de_cultivos}
+      when: {focus: EFE_rotar_los_cultivos}
       then:
       - {effect: add_variable, var: EFE_saturacion, value: -3}
     - effect: if
@@ -3419,6 +3419,10 @@ scripted_effects:
             - {effect: event, id: meganations_efe.22, days: 1}
   - id: FCU_pulso_del_directorio
     effects:
+    - effect: if
+      when: {focus: FCU_la_prensa_amiga}
+      then:
+      - {effect: add_variable, var: FCU_escandalo, value: -2}
     - {effect: add_variable, var: FCU_escandalo, value: -2}
     - effect: if
       when:
@@ -3486,6 +3490,10 @@ scripted_effects:
   - id: ASC_pulso_de_la_red
     effects:
     - effect: if
+      when: {focus: ASC_el_computo_distribuido}
+      then:
+      - {effect: add_variable, var: ASC_calor, value: -2}
+    - effect: if
       when:
         variable_at_least: {var: ASC_computo, value: 21}
       then:
@@ -3530,6 +3538,10 @@ scripted_effects:
   - id: HSN_pulso_de_las_potencias
     effects:
     - effect: if
+      when: {focus: HSN_seguros_para_las_potencias}
+      then:
+      - {effect: add_variable, var: HSN_presion, value: -2}
+    - effect: if
       when:
         variable_at_least: {var: HSN_nodos, value: 6}
       then:
@@ -3564,6 +3576,10 @@ scripted_effects:
   - id: NAS_pulso_de_los_templos
     effects:
     - effect: if
+      when: {focus: NAS_templos_eficientes}
+      then:
+      - {effect: add_variable, var: NAS_inti, value: 2}
+    - effect: if
       when:
         variable_at_least: {var: NAS_inti, value: 3}
       then:
@@ -3594,6 +3610,11 @@ scripted_effects:
   - id: SHD_pulso_del_rio
     effects:
     - effect: if
+      when: {focus: SHD_sensores_del_caudal, not_flag: SHD_zhou}
+      then:
+      - {effect: add_variable, var: SHD_produccion, value: -1}
+      - {effect: add_variable, var: SHD_orden, value: 1}
+    - effect: if
       when: {not_flag: SHD_zhou}
       then:
       - {effect: add_variable, var: SHD_produccion, value: 2}
@@ -3621,6 +3642,10 @@ scripted_effects:
     - {effect: run, value: SHD_recalcular_caudales}
   - id: APF_pulso_de_los_consejos
     effects:
+    - effect: if
+      when: {focus: APF_radios_comunitarias}
+      then:
+      - {effect: add_variable, var: APF_tension, value: -1}
     - {effect: add_variable, var: APF_tension, value: -2}
     - {effect: clamp, var: APF_tension, min: 0, max: 100}
     - effect: idea_tiers
@@ -3643,6 +3668,10 @@ scripted_effects:
           - {effect: event, id: meganations_apf.22, days: 1}
   - id: NRE_pulso_del_ocio
     effects:
+    - effect: if
+      when: {focus: NRE_colonias_de_veteranos, at_war: false}
+      then:
+      - {effect: add_variable, var: NRE_auctoritas, value: 1}
     - effect: if
       when: {at_war: false}
       then:

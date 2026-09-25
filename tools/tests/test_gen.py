@@ -380,7 +380,7 @@ def test_phase3_content() -> None:
         tree = focus.get("focus_tree")
         focuses = tree.get_all("focus")
         ids = [pdx.text(f.get("id")) for f in focuses]
-        check("arbol del EFE de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        check("arbol del EFE de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         aurelio = by["EFE_el_mandato_renovado"].get("mutually_exclusive")
         monte = by["EFE_los_incendios_de_gaia"].get("mutually_exclusive")
@@ -389,7 +389,7 @@ def test_phase3_content() -> None:
         golpe = by["EFE_el_monte_se_levanta"]
         check("el golpe pide el control del monte", "has_country_flag = EFE_monte_listo" in pdx.render(golpe.get("available")))
         check("el golpe asciende a Anahi", "promote_character = EFE_anahi_quiroga" in pdx.render(golpe.get("completion_reward")))
-        check("el golpe dura 14 dias (2 semanas)", pdx.text(golpe.get("cost")) == "2")
+        check("el golpe dura 21 dias (3 semanas; +50% desde 2026-09-26)", pdx.text(golpe.get("cost")) == "3")
         agua = by["EFE_el_agua_no_se_vende"]
         reward = pdx.render(agua.get("completion_reward"))
         check("El Agua no se Vende es un ultimatum, no un wargoal directo",
@@ -693,7 +693,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("18 eventos del EFE (pulso, explicacion y plaga)", len(events) == 18, str(len(events)))
+        check("19 eventos del EFE (pulso, explicacion, plaga y oferta de la ASC)", len(events) == 19, str(len(events)))
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")
@@ -841,7 +841,7 @@ def test_fcu() -> None:
         focuses = root.get_all("focus")
         check("arbol de la FCU con 50+ focos", len(focuses) >= 50, str(len(focuses)))
         by_id = {pdx.text(f.get("id")): f for f in focuses}
-        check("days -> cost en semanas (35 dias = 5)", pdx.text(by_id["FCU_ano_fiscal"].get("cost")) == "5")
+        check("days -> cost en semanas (49 dias = 7)", pdx.text(by_id["FCU_ano_fiscal"].get("cost")) == "7")
         opa = by_id["FCU_junta_de_emergencia"]
         check("la OPA pide la bandera de la mecanica", "has_country_flag = FCU_opa_habilitada" in pdx.render(opa.get("available")))
         check("la OPA y el segundo mandato se excluyen", "FCU_segundo_mandato" in pdx.render(opa.get("mutually_exclusive")))
@@ -884,7 +884,7 @@ def test_asc() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/ASC_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la ASC de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        check("arbol de la ASC de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         for fid in ("ASC_el_sorteo_del_ano", "ASC_transparencia_del_plan", "ASC_el_derecho_a_no_trabajar",
                     "ASC_el_silencio_del_consejo", "ASC_la_singularidad_del_plan", "ASC_el_mercado_de_creditos_de_computo",
@@ -923,7 +923,7 @@ def test_hsn() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/HSN_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la HSN de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        check("arbol de la HSN de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("Aldana y Tavake se excluyen", "HSN_el_motin_de_kanto" in pdx.render(by["HSN_el_libro_de_fletes"].get("mutually_exclusive")))
         check("el motin asciende a Tavake", "promote_character = HSN_ines_tavake" in pdx.render(by["HSN_el_motin_de_kanto"].get("completion_reward")))
@@ -954,7 +954,7 @@ def test_nas() -> None:
         raw = (mod / "common/national_focus/NAS_focus.txt").read_text()
         root = pdx.parse(raw).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la NAS de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        check("arbol de la NAS de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         tropas = pdx.render(by["NAS_guerreros_de_la_puna"].get("completion_reward"))
         check("tabla nueva: bono de investigacion con categoria del juego",
@@ -986,7 +986,7 @@ def test_apf() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/APF_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la APF de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        check("arbol de la APF de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("Diallo asciende con su retrato", "promote_character = APF_kwame_diallo"
               in pdx.render(by["APF_los_consejos_se_arman"].get("completion_reward")))
@@ -1012,7 +1012,7 @@ def test_shd() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/SHD_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol del SHD de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        check("arbol del SHD de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("Zhou asciende con la Gran Crecida", "promote_character = SHD_zhou_mingyuan"
               in pdx.render(by["SHD_abrir_las_compuertas"].get("completion_reward")))
@@ -1033,7 +1033,7 @@ def test_nre() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/NRE_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol del NRE de 44-60 focos", 44 <= len(focuses) <= 60, str(len(focuses)))
+        check("arbol del NRE de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("ids alineados con los iconos", all(i in by for i in (
             "NRE_la_aclamacion_confirmada", "NRE_el_senado_restaurado", "NRE_las_vias_imperiales",
@@ -1158,6 +1158,21 @@ def test_arte() -> None:
         check("evento: assets/events/<id>.dds reemplaza la imagen generica", "picture = GFX_meganations_nre_3" in ev)
         check("sprite del evento registrado", "GFX_meganations_nre_3" in (mod / "interface/meganations_events.gfx").read_text())
 
+    import shutil as _sh
+    from tools.gen.errors import SpecError as _SpecError
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        _sh.copytree(REPO_ROOT / "spec", root / "spec")
+        (root / "assets").symlink_to(REPO_ROOT / "assets")
+        dec = (root / "spec/14_decisions.yaml").read_text().replace("focus: EFE_rotar_los_cultivos", "focus: EFE_foco_que_no_existe", 1)
+        (root / "spec/14_decisions.yaml").write_text(dec)
+        try:
+            build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
+            failed = False
+        except _SpecError as exc:
+            failed = "EFE_foco_que_no_existe" in str(exc)
+        check("una condicion con un foco que no existe frena el build", failed)
+
     from tools.arte import arte as arte_mod
     items = arte_mod.catalog()
     ids = [i["id"] for i in items]
@@ -1192,6 +1207,16 @@ def test_mecanicas_v2() -> None:
         check("APF: invertir se ve desde el dia 1 (sin foco)", "APF_integracion_abierta" not in inv, inv)
         es = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("SHD: el nombre de cada decision dice cuanto mueve", "Aumentar Cuotas (P+10 O+3 Pu-8)" in es)
+        efe = (mod / "common/national_focus/EFE_focus.txt").read_text()
+        check("rama nueva del EFE: Rotar los Cultivos da su espiritu", "id = EFE_rotar_los_cultivos" in efe and "add_ideas = EFE_rotacion_de_cultivos" in efe)
+        cubas = pdx.render(eff.get("EFE_pulso_de_las_cubas"))
+        check("y la rotacion alivia la saturacion en el pulso", "has_completed_focus = EFE_rotar_los_cultivos" in cubas)
+        fcu_ev = (mod / "events/meganations_fcu.txt").read_text()
+        check("interaccion: el Bioacero en venta le llega a la FCU y le paga al EFE",
+              "meganations_fcu.23" in fcu_ev and "EFE = {" in fcu_ev[fcu_ev.index("meganations_fcu.23"):])
+        check("interaccion: la HSN ofrece arbitraje a la FCU", "meganations_fcu.24" in fcu_ev)
+        check("interaccion: la ASC ofrece computo al EFE", "meganations_efe.23" in (mod / "events/meganations_efe.txt").read_text())
+        check("interaccion: el SHD pide puertos a la HSN", "meganations_hsn.23" in (mod / "events/meganations_hsn.txt").read_text())
 
 
 def test_forces() -> None:
