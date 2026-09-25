@@ -586,7 +586,7 @@ class Vanilla:
             for key, value in root.entries:
                 if key and key.startswith("@"):
                     try:
-                        consts[key] = float(pdx.text(value))
+                        consts[key] = float(_scalar(value))
                     except (TypeError, ValueError):
                         pass
             block = root.get("technologies")
@@ -595,13 +595,13 @@ class Vanilla:
             for key, value in block.entries:
                 if key and key.startswith("@"):
                     try:
-                        consts[key] = float(pdx.text(value))
+                        consts[key] = float(_scalar(value))
                     except (TypeError, ValueError):
                         pass
             doctrine_file = "doctrine" in path.name.lower()
 
             def num(v) -> float:
-                t = pdx.text(v) if v is not None else None
+                t = _scalar(v) if v is not None else None
                 if t is None:
                     return 0.0
                 if t in consts:
@@ -614,25 +614,27 @@ class Vanilla:
             for name, tech in block.entries:
                 if not name or not isinstance(tech, pdx.Block) or name.startswith("@"):
                     continue
-                year_text = pdx.text(tech.get("start_year")) if tech.get("start_year") is not None else None
+                year_text = _scalar(tech.get("start_year")) if tech.get("start_year") is not None else None
                 folder = tech.get("folder")
                 folder_name, x, y = "", 0.0, 0.0
                 if isinstance(folder, pdx.Block):
-                    folder_name = pdx.text(folder.get("name")) or ""
+                    folder_name = _scalar(folder.get("name")) or ""
                     pos = folder.get("position")
                     if isinstance(pos, pdx.Block):
                         x, y = num(pos.get("x")), num(pos.get("y"))
                 leads = []
                 for pth in tech.get_all("path"):
                     if isinstance(pth, pdx.Block) and pth.get("leads_to_tech") is not None:
-                        leads.append(pdx.text(pth.get("leads_to_tech")))
+                        lead = _scalar(pth.get("leads_to_tech"))
+                        if lead:
+                            leads.append(lead)
                 xor = tech.get("xor")
-                xor_list = [pdx.text(v) for _, v in xor.entries] if isinstance(xor, pdx.Block) else []
+                xor_list = [x for x in (_scalar(v) for _, v in xor.entries) if x] if isinstance(xor, pdx.Block) else []
                 enables = set()
                 for field in ("enable_equipments", "enable_equipment_modules"):
                     blk = tech.get(field)
                     if isinstance(blk, pdx.Block):
-                        enables.update(pdx.text(v) for _, v in blk.entries)
+                        enables.update(x for x in (_scalar(v) for _, v in blk.entries) if x)
                 out[name] = {
                     "enables": enables,
                     "year": int(year_text) if year_text and year_text.isdigit() else 1936,
@@ -833,6 +835,14 @@ class Vanilla:
 # la línea (# ...). La versión anterior exigía que la línea terminara en la
 # comilla y perdía los nombres con comentario: salían como "?" en el reporte.
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"((?:[^"\\]|\\.)*)"')
+
+
+def _scalar(value) -> str | None:
+    """Como pdx.text, pero un bloque (sintaxis rara de alguna versión) da None
+    en vez de romper la lectura de todo el árbol."""
+    if isinstance(value, pdx.Block):
+        return None
+    return pdx.text(value)
 
 
 def _has_not_dlc(block: pdx.Block) -> bool:

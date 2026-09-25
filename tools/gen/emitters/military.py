@@ -167,7 +167,10 @@ def _specialties(ctx: BuildContext, research: dict) -> dict[str, list[str]]:
         out[tag] = picked
         lines.append(f"{tag} {cat} ({', '.join(sorted(folders))}): {', '.join(picked)}")
     ctx.note("investigacion de arranque (el resto del mundo, nada):\n      " + "\n      ".join(lines))
-    _dump_tree(ctx, tree)
+    try:
+        _dump_tree(ctx, tree)
+    except Exception as exc:  # noqa: BLE001 - es solo un informe, nunca frena el mod
+        ctx.warn(f"investigacion.txt no se pudo escribir ({exc}); el mod sale igual.")
     return out
 
 
