@@ -356,6 +356,11 @@ def paso_reporte(juego, ctx) -> None:
             except OSError:
                 pass
 
+        investigacion = ctx.data.get("research_path")
+        if investigacion and Path(investigacion).exists():
+            extra.append("")
+            extra.append(Path(investigacion).read_text(encoding="utf-8"))
+
     texto = "\n".join(_log_lines + extra) + "\n"
     REPORT.write_text(texto, encoding="utf-8")
     bien(f"Escrito en: {REPORT}")

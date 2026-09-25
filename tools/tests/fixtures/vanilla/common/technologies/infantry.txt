@@ -1,27 +1,46 @@
+@1936 = 0
+@1939 = 2
+@1942 = 4
 technologies = {
 	infantry_weapons = {
 		start_year = 1936
 		categories = { infantry_weapons artillery mountaineers_tech industry electronics armor air_equipment naval_equipment }
+		path = { leads_to_tech = infantry_weapons1 research_cost_coeff = 1 }
+		path = { leads_to_tech = either_or_tech research_cost_coeff = 1 }
+		folder = { name = infantry_folder position = { x = 0 y = @1936 } }
 	}
 	infantry_weapons1 = {
 		start_year = 1939
+		path = { leads_to_tech = infantry_weapons2 research_cost_coeff = 1 }
+		folder = { name = infantry_folder position = { x = 0 y = @1939 } }
 	}
 	infantry_weapons2 = {
 		start_year = 1942
+		path = { leads_to_tech = improved_infantry_weapons research_cost_coeff = 1 }
+		folder = { name = infantry_folder position = { x = 0 y = @1942 } }
 	}
 	improved_infantry_weapons = {
 		start_year = 1943
+		folder = { name = infantry_folder position = { x = 0 y = 6 } }
 	}
 	tech_support = {
+		folder = { name = support_folder position = { x = 0 y = 0 } }
 	}
 	legacy_only_tech = {
 		start_year = 1936
 		allow_branch = {
 			NOT = { has_dlc = "Man the Guns" }
 		}
+		folder = { name = infantry_folder position = { x = 6 y = 0 } }
 	}
 	either_or_tech = {
 		start_year = 1936
 		xor = { other_tech }
+		folder = { name = infantry_folder position = { x = 2 y = 1 } }
+	}
+	other_tech = {
+		start_year = 1936
+		xor = { either_or_tech }
+		folder = { name = infantry_folder position = { x = 4 y = 1 } }
 	}
 }

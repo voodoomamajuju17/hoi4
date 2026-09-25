@@ -46,7 +46,7 @@ def emit(ctx: BuildContext) -> None:
     by_state = {s.id: s for s in ctx.vanilla.states()}
     names = ctx.data.get("state_names") or {}
     land = ctx.vanilla.land_provinces()
-    techs = ctx.vanilla.technologies()
+    specialty = _specialties(ctx, spec.get("research") or {})
     equipment = ctx.vanilla.equipment()
     sub_units = ctx.vanilla.sub_units()
     _check_templates(spec, sub_units)
@@ -62,8 +62,8 @@ def emit(ctx: BuildContext) -> None:
         if not owned:
             continue
         kind = faction_kind(c)
-        year = int(spec["tech_levels"][kind])
-        ctx.data["techs"][c.tag] = sorted(name for name, y, ok in techs if ok and y <= year)
+        year = int(spec["stockpile_year"][kind])
+        ctx.data["techs"][c.tag] = specialty.get(c.tag, [])
 
         if kind == "anarchy" or kind not in spec["army"]["divisions"]:
             continue
@@ -124,8 +124,89 @@ def emit(ctx: BuildContext) -> None:
         ctx.data["stockpile"][c.tag] = stock
 
     total_divs = sum(ctx.data["division_count"].values())
-    ctx.note(f"arranque militar: {total_divs} divisiones en total; tecnologias por nivel "
-             + ", ".join(f"{k} hasta {v}" for k, v in spec["tech_levels"].items() if isinstance(v, int)))
+    ctx.note(f"arranque militar: {total_divs} divisiones en total")
+
+
+def _specialties(ctx: BuildContext, research: dict) -> dict[str, list[str]]:
+    """Investigación de arranque (pedido del usuario, 2026-09-25): nadie
+    tiene nada investigado salvo las primeras N tecnologías de la pestaña
+    de su especialidad. "Primeras" = en el orden del árbol: solo se toma una
+    tecnología cuando ya se tomaron sus padres de la misma pestaña, por año
+    y posición; de un par excluyente (xor) se toma la primera."""
+    tree = ctx.vanilla.tech_tree()
+    all_folders = sorted({t["folder"] for t in tree.values() if t["folder"]})
+    n = int(research.get("techs_per_specialty", 5))
+    parents: dict[str, set[str]] = {}
+    for name, t in tree.items():
+        for child in t["leads_to"]:
+            parents.setdefault(child, set()).add(name)
+    out: dict[str, list[str]] = {}
+    lines = []
+    for tag, cat in (research.get("specialty") or {}).items():
+        prefixes = (research.get("folders") or {}).get(cat)
+        if not prefixes:
+            raise SpecError(f"research: la especialidad '{cat}' de {tag} no esta en folders", where=SOURCE)
+        folders = {f for f in all_folders if "doctrine" not in f.lower()
+                   and any(f.lower().startswith(p) for p in prefixes)}
+        if not folders:
+            ctx.warn(f"investigacion: ninguna pestaña del juego empieza con {prefixes} ({tag}); "
+                     f"pestañas: {', '.join(all_folders)}")
+            continue
+        pool = {k: v for k, v in tree.items() if v["folder"] in folders and v["eligible"]}
+        picked: list[str] = []
+        blocked: set[str] = set()
+        while len(picked) < n:
+            cands = [t for t in pool if t not in picked and t not in blocked
+                     and all(p in picked for p in parents.get(t, ()) if p in pool)]
+            if not cands:
+                break
+            cands.sort(key=lambda t: (pool[t]["year"], pool[t]["y"], pool[t]["x"], t))
+            chosen = cands[0]
+            picked.append(chosen)
+            blocked.update(pool[chosen]["xor"])
+        out[tag] = picked
+        lines.append(f"{tag} {cat} ({', '.join(sorted(folders))}): {', '.join(picked)}")
+    ctx.note("investigacion de arranque (el resto del mundo, nada):\n      " + "\n      ".join(lines))
+    _dump_tree(ctx, tree)
+    return out
+
+
+def _dump_tree(ctx: BuildContext, tree: dict[str, dict]) -> None:
+    """build/investigacion.txt: el árbol del juego instalado, pestaña por
+    pestaña, con sus nombres en inglés y castellano. Es la base para
+    renombrar las tecnologías y evaluar el rediseño de la investigación."""
+    import re
+    en = ctx.vanilla.localisation("english", set(tree))
+    es = ctx.vanilla.localisation("spanish", set(tree))
+    by_folder: dict[str, list[str]] = {}
+    for name, t in tree.items():
+        by_folder.setdefault(t["folder"] or "(sin pestaña)", []).append(name)
+    lines = ["INVESTIGACION DEL JUEGO INSTALADO (para renombrar y rediseñar)", "=" * 100,
+             "pestaña | año | x,y | tecnologia | ingles | castellano | excluye | lleva a", ""]
+    for folder in sorted(by_folder):
+        names = sorted(by_folder[folder], key=lambda n: (tree[n]["year"], tree[n]["y"], tree[n]["x"], n))
+        lines.append(f"-- {folder} ({len(names)})")
+        for n in names:
+            t = tree[n]
+            lines.append(f"{folder} | {t['year']} | {t['x']:g},{t['y']:g} | {n} | {en.get(n, '-')} | {es.get(n, '-')}"
+                         f" | {' '.join(t['xor']) or '-'} | {' '.join(t['leads_to']) or '-'}"
+                         + ("" if t["eligible"] else " | (doctrina o variante sin DLC)"))
+        lines.append("")
+    # Los años de la pantalla de investigación: ¿texto fijo en la interfaz?
+    years = re.compile(r'text\s*=\s*"(19[3-5]\d)"')
+    hits = []
+    for gui in sorted((ctx.vanilla.root / "interface").glob("**/*.gui")):
+        try:
+            found = years.findall(gui.read_text(encoding="utf-8-sig", errors="replace"))
+        except OSError:
+            continue
+        if found:
+            hits.append(f"{gui.relative_to(ctx.vanilla.root).as_posix()}: {len(found)} ({', '.join(sorted(set(found)))})")
+    lines.append("AÑOS ESCRITOS EN LA INTERFAZ (texto fijo \"19xx\")")
+    lines += hits or ["ninguno: los años salen de otro lado"]
+    path = ctx.out_root / "investigacion.txt"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    ctx.data["research_path"] = str(path)
 
 
 def _check_templates(spec: dict, sub_units: set[str]) -> None:

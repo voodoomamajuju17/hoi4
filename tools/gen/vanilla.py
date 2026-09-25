@@ -428,6 +428,25 @@ class Vanilla:
         return out
 
 
+    def localisation(self, lang: str, keys: set[str]) -> dict[str, str]:
+        """Texto vanilla de las claves pedidas, en 'english' o 'spanish'
+        (incluye las carpetas de las expansiones)."""
+        out: dict[str, str] = {}
+        roots = [self.root / "localisation"] + sorted((self.root / "dlc").glob("*/localisation"))
+        for base in roots:
+            if not base.is_dir():
+                continue
+            for path in base.glob(f"**/*_l_{lang}.yml"):
+                try:
+                    text = path.read_text(encoding="utf-8-sig", errors="replace")
+                except OSError:
+                    continue
+                for line in text.splitlines():
+                    m = _LOC_LINE.match(line)
+                    if m and m.group(1) in keys and m.group(1) not in out:
+                        out[m.group(1)] = m.group(2)
+        return out
+
     # -- validación contra el juego -----------------------------------------
 
     def documented_keys(self, kind: str) -> set[str] | None:
@@ -545,6 +564,75 @@ class Vanilla:
                     or _has_not_dlc(tech)
                 )
                 out.append((name, year, eligible))
+        return out
+
+    def tech_tree(self) -> dict[str, dict]:
+        """El árbol de investigación: tech -> {year, folder, x, y, leads_to,
+        xor, eligible}.
+
+        folder es la pestaña de la pantalla de investigación (infantry_folder,
+        naval_folder...); leads_to sale de los bloques `path`; x/y de
+        `folder.position` (con las variables @ del archivo resueltas).
+        eligible sigue la regla de technologies(): ni doctrinas ni variantes
+        que solo existen sin un DLC.
+        """
+        out: dict[str, dict] = {}
+        for path in sorted((self.root / "common" / "technologies").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            consts: dict[str, float] = {}
+            for key, value in root.entries:
+                if key and key.startswith("@"):
+                    try:
+                        consts[key] = float(pdx.text(value))
+                    except (TypeError, ValueError):
+                        pass
+            block = root.get("technologies")
+            if not isinstance(block, pdx.Block):
+                continue
+            for key, value in block.entries:
+                if key and key.startswith("@"):
+                    try:
+                        consts[key] = float(pdx.text(value))
+                    except (TypeError, ValueError):
+                        pass
+            doctrine_file = "doctrine" in path.name.lower()
+
+            def num(v) -> float:
+                t = pdx.text(v) if v is not None else None
+                if t is None:
+                    return 0.0
+                if t in consts:
+                    return consts[t]
+                try:
+                    return float(t)
+                except ValueError:
+                    return 0.0
+
+            for name, tech in block.entries:
+                if not name or not isinstance(tech, pdx.Block) or name.startswith("@"):
+                    continue
+                year_text = pdx.text(tech.get("start_year")) if tech.get("start_year") is not None else None
+                folder = tech.get("folder")
+                folder_name, x, y = "", 0.0, 0.0
+                if isinstance(folder, pdx.Block):
+                    folder_name = pdx.text(folder.get("name")) or ""
+                    pos = folder.get("position")
+                    if isinstance(pos, pdx.Block):
+                        x, y = num(pos.get("x")), num(pos.get("y"))
+                leads = []
+                for pth in tech.get_all("path"):
+                    if isinstance(pth, pdx.Block) and pth.get("leads_to_tech") is not None:
+                        leads.append(pdx.text(pth.get("leads_to_tech")))
+                xor = tech.get("xor")
+                xor_list = [pdx.text(v) for _, v in xor.entries] if isinstance(xor, pdx.Block) else []
+                out[name] = {
+                    "year": int(year_text) if year_text and year_text.isdigit() else 1936,
+                    "folder": folder_name, "x": x, "y": y, "leads_to": leads, "xor": xor_list,
+                    "eligible": not (doctrine_file or "doctrine" in folder_name.lower() or _has_not_dlc(tech)),
+                }
         return out
 
     def tech_categories(self) -> set[str]:

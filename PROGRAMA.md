@@ -92,6 +92,13 @@ eventos con ultimátum e IA con condiciones.
   Pax Romana, ultimátum al EFE) vs Arbogast (AVE IMPERATOR cambia el líder entre cuatro
   imperatores), Annona vs Tributo. Faltan retratos de Vasilescu y Aydın
 - [x] Íconos propios: 96 focos (12 por potencia) con el pack del usuario
+- [x] Tooltips: las recalculaciones (ASC, HSN, SHD, NRE) ya no muestran "quita X / pone X"; solo
+  cambian una idea cuando cambia de nivel (efecto idea_tiers)
+- [x] Investigación de arranque: nadie tiene nada, salvo 5 tecnologías de la especialidad de cada
+  meganación (NRE infantería, APF apoyo, EFE blindados, SHD artillería, HSN naval + apoyo naval,
+  NAS aviación, ASC ingeniería, FCU industria)
+- [ ] Renombrar la investigación a 2100 (esperando investigacion.txt del juego real) y evaluar el
+  rediseño completo
 - [~] **IA v1** (spec/16_ai.yaml): planes de conquista por potencia (EFE→Amazonas, ASC→Eurasia,
   NRE→Emiratos y después Eurasia, SHD→Indostán, APF→Emiratos, NAS→Amazonas, FCU→el Canal,
   HSN→costas del Indostán), señores que protegen a sus satélites, rivales que se antagonizan;

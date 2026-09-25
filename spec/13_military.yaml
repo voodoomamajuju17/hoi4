@@ -6,23 +6,43 @@
 # escribe de memoria: los nombres de tecnologías, equipos y regimientos salen
 # de la instalación del juego y el generador falla si alguno no existe.
 #
-# "Nivel tecnológico 2100": el juego base no tiene tecnología de 2100. Se usa
-# su árbol como escala. Cada tipo de facción recibe TODAS las tecnologías
-# vanilla hasta un año tope (start_year), menos:
-#   - las doctrinas (hay que elegirlas: son caminos excluyentes)
-#   - las que tienen `xor` (excluyentes entre sí)
-#   - las variantes que solo existen SIN un DLC que tenés (NOT = { has_dlc })
 # =============================================================================
 
-tech_levels:
+# Investigación de arranque (pedido del usuario, 2026-09-25): nadie tiene
+# nada investigado, salvo una especialidad por meganación: las primeras
+# `techs_per_specialty` tecnologías de esa pestaña del árbol, en orden (padres
+# primero, por año y posición; de un par excluyente, la primera). Satélites y
+# Anarquía: nada. "Investigación naval" y "apoyo naval" cuentan como una sola
+# (todas las pestañas que empiezan con "naval").
+research:
+  src: user_decision
+  techs_per_specialty: 5
+  folders:            # especialidad -> prefijos de las pestañas del juego
+    infantry: [infantry]
+    support: [support]
+    armor: [armour, armor]
+    artillery: [artillery]
+    naval: [naval]
+    air: [air]
+    engineering: [electronics, engineering]
+    industry: [industry]
+  specialty:
+    NRE: infantry      # las legiones
+    APF: support       # milicias, ingenieros, logística del corredor
+    EFE: armor         # el Bioacero y la armadura viviente
+    SHD: artillery     # la artillería del río, la masa
+    HSN: naval         # la flota de alta mar
+    NAS: air           # las alas del Sol, el cóndor
+    ASC: engineering   # el cómputo
+    FCU: industry      # las corporaciones
+
+# Año de referencia del EQUIPO en depósito (no de la investigación): la mejor
+# variante vanilla hasta ese año.
+stockpile_year:
   src: invented
-  # tipo de facción -> año tope de las tecnologías vanilla que arranca teniendo
   meganation: 1942
   satellite: 1940
   anarchy: 1936
-  why: >
-    Las meganaciones son los Estados más avanzados del mundo de 2100; los
-    satélites dependen de su señor; la Anarquía es lo que quedó del colapso.
 
 army:
   src: invented

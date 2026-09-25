@@ -577,20 +577,24 @@ def test_territory() -> None:
 
         section("arranque militar: tecnologias, ejercito, equipo")
         efe_h = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
-        techs = pdx.parse(efe_h).get("set_technology")
-        keys = set(techs.keys())
-        check("meganacion: techs hasta 1942", {"infantry_weapons", "infantry_weapons1", "infantry_weapons2"} <= keys, str(keys))
-        check("no recibe techs posteriores", "improved_infantry_weapons" not in keys)
-        check("tech sin start_year cuenta como 1936", "tech_support" in keys)
-        check("no regala doctrinas", "mobile_warfare" not in keys)
-        check("no regala techs excluyentes (xor)", "either_or_tech" not in keys)
+        check("el EFE (blindados) no tiene nada: en el fixture no hay pestaña de blindados",
+              "set_technology" not in efe_h)
+        check("avisa la pestaña que falta y lista las que hay",
+              any("investigacion" in w and "infantry_folder" in w for w in ctx.warnings))
+        nre_h = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
+        techs = pdx.parse(nre_h).get("set_technology")
+        keys = set(techs.keys()) - {"popup"}
+        check("NRE (infanteria): las 5 primeras de la pestaña, en orden de arbol",
+              keys == {"infantry_weapons", "either_or_tech", "infantry_weapons1", "infantry_weapons2",
+                       "improved_infantry_weapons"}, str(keys))
+        check("de un par excluyente toma uno solo", "other_tech" not in keys)
         check("no regala variantes sin DLC", "legacy_only_tech" not in keys)
+        check("no toma techs de otra pestaña", "tech_support" not in keys)
         check("sin popup", pdx.text(techs.get("popup")) == "no")
         pta_h = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
-        pta_t = set(pdx.parse(pta_h).get("set_technology").keys())
-        check("satelite: techs hasta 1940", "infantry_weapons1" in pta_t and "infantry_weapons2" not in pta_t)
-        zan_t = set(pdx.parse(next((mod / "history/countries").glob("ZWI - *.txt")).read_text()).get("set_technology").keys())
-        check("anarquia: techs de 1936", "infantry_weapons" in zan_t and "infantry_weapons1" not in zan_t)
+        check("satelite: nada investigado", "set_technology" not in pta_h)
+        zwi_h = next((mod / "history/countries").glob("ZWI - *.txt")).read_text()
+        check("anarquia: nada investigado", "set_technology" not in zwi_h)
 
         oob = pdx.parse((mod / "history/units/EFE_2100.txt").read_text())
         tpls = [pdx.text(tpl.get("name")) for tpl in oob.get_all("division_template")]
@@ -1078,6 +1082,17 @@ def test_ai() -> None:
         tree = (mod / "common/national_focus/EFE_focus.txt").read_text()
         cubas = tree[tree.index("id = EFE_biorrefinerias_de_rosario"):]
         check("la rama industrial pesa el doble", "factor = 2" in cubas[cubas.index("ai_will_do"):cubas.index("ai_will_do") + 60])
+        eff = pdx.parse((mod / "common/scripted_effects/meganations_effects.txt").read_text())
+        bad = []
+        for name, body in eff.entries:
+            for key, blk in body.entries if isinstance(body, pdx.Block) else []:
+                if key == "if" and isinstance(blk, pdx.Block) and blk.get("remove_ideas") is not None:
+                    idea = pdx.text(blk.get("remove_ideas"))
+                    lim = pdx.render(blk.get("limit"))
+                    # quitar una idea solo porque la tiene (y despues volver a ponerla) ensucia el tooltip
+                    if lim.strip().splitlines() and "NOT" not in lim and f"has_idea = {idea}" in lim:
+                        bad.append(f"{name}:{idea}")
+        check("tooltips: ninguna recalculacion quita una idea solo para volver a ponerla", not bad, str(bad))
         gfx = (mod / "interface/meganations_NRE_goals.gfx").read_text()
         check("iconos del pack registrados con brillo",
               "GFX_focus_2100_nre_09_legio_i_italica" in gfx and "GFX_focus_2100_nre_09_legio_i_italica_shine" in gfx)

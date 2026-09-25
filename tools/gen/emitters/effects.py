@@ -304,6 +304,36 @@ def render_effects(owner: str, items: list[dict], known,
                                 where=where)
             block.add(name, True)
             continue
+        if effect == "idea_tiers":
+            # Niveles excluyentes de una idea: gana el primer nivel cuya
+            # condición se cumple. Solo se quita o se pone lo que cambia, así
+            # el tooltip no muestra "quita X / pone X" cuando nada cambia
+            # (HOI4 evalúa los `limit` al mostrar el tooltip).
+            tiers = item["tiers"]
+            effective = []
+            for i, tier in enumerate(tiers):
+                earlier = [t.get("when") or {} for t in tiers[:i]]
+                parts = [tier.get("when") or {}]
+                if earlier:
+                    parts.append({"not": {"any": earlier}} if all(earlier) else {"always": False})
+                effective.append({"all": parts})
+            for tier, eff in zip(tiers, effective):
+                if ec.known_ideas and tier["idea"] not in ec.known_ideas:
+                    raise SpecError(f"{owner}: idea_tiers usa '{tier['idea']}', que no existe", where=where)
+                remove = Block()
+                remove.add("limit", render_conditions(owner, {"all": [{"idea": tier["idea"]}, {"not": eff}]},
+                                                      ec.triggers_used, where=where))
+                remove.add("remove_ideas", tier["idea"])
+                block.add("if", remove)
+            for tier, eff in zip(tiers, effective):
+                add = Block()
+                add.add("limit", render_conditions(owner, {"all": [{"not_idea": tier["idea"]}, eff]},
+                                                   ec.triggers_used, where=where))
+                add.add("add_ideas", tier["idea"])
+                block.add("if", add)
+            effects_used.setdefault("remove_ideas", owner)
+            effects_used.setdefault("add_ideas", owner)
+            continue
         if effect == "if":
             inner = Block()
             inner.add("limit", render_conditions(owner, item.get("when") or {}, ec.triggers_used, where=where))
@@ -487,6 +517,12 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
                 else:
                     ors.add("AND", inner)
             block.add("OR", ors)
+        elif key == "all":
+            # lista de condiciones que se cumplen todas (para combinar la misma clave dos veces)
+            for sub in value:
+                block.entries.extend(render_conditions(owner, sub, triggers_used, where=where).entries)
+        elif key == "always":
+            block.add("always", bool(value))
         elif key == "not":
             inner = render_conditions(owner, value, triggers_used, where=where)
             # NOT = { A B } en HOI4 es "ninguna"; "no se cumplen todas" es NOT = { AND = {A B} }.

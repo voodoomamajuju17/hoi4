@@ -2832,118 +2832,46 @@ scripted_effects:
   - id: ASC_recalcular_computo
     effects:
     - {effect: clamp, var: ASC_computo, min: 0, max: 150}
-    - effect: if
-      when: {idea: ASC_computo_economia_1}
-      then:
-      - {effect: remove_idea, value: ASC_computo_economia_1}
-    - effect: if
-      when: {idea: ASC_computo_economia_2}
-      then:
-      - {effect: remove_idea, value: ASC_computo_economia_2}
-    - effect: if
-      when: {idea: ASC_computo_economia_3}
-      then:
-      - {effect: remove_idea, value: ASC_computo_economia_3}
-    - effect: if
-      when: {idea: ASC_computo_investigacion_1}
-      then:
-      - {effect: remove_idea, value: ASC_computo_investigacion_1}
-    - effect: if
-      when: {idea: ASC_computo_investigacion_2}
-      then:
-      - {effect: remove_idea, value: ASC_computo_investigacion_2}
-    - effect: if
-      when: {idea: ASC_computo_investigacion_3}
-      then:
-      - {effect: remove_idea, value: ASC_computo_investigacion_3}
-    - effect: if
-      when: {idea: ASC_computo_logistica_1}
-      then:
-      - {effect: remove_idea, value: ASC_computo_logistica_1}
-    - effect: if
-      when: {idea: ASC_computo_logistica_2}
-      then:
-      - {effect: remove_idea, value: ASC_computo_logistica_2}
-    - effect: if
-      when: {idea: ASC_computo_logistica_3}
-      then:
-      - {effect: remove_idea, value: ASC_computo_logistica_3}
-    - effect: if
-      when: {idea: ASC_computo_guerra_1}
-      then:
-      - {effect: remove_idea, value: ASC_computo_guerra_1}
-    - effect: if
-      when: {idea: ASC_computo_guerra_2}
-      then:
-      - {effect: remove_idea, value: ASC_computo_guerra_2}
-    - effect: if
-      when: {idea: ASC_computo_guerra_3}
-      then:
-      - {effect: remove_idea, value: ASC_computo_guerra_3}
-    - effect: if
-      when: {flag: ASC_prioridad_guerra}
-      then:
-      - effect: if
+    - effect: idea_tiers
+      tiers:
+      - idea: ASC_computo_guerra_3
+        when:
+          flag: ASC_prioridad_guerra
+          variable_at_least: {var: ASC_computo, value: 80}
+      - idea: ASC_computo_guerra_2
+        when:
+          flag: ASC_prioridad_guerra
+          variable_at_least: {var: ASC_computo, value: 40}
+      - idea: ASC_computo_guerra_1
+        when: {flag: ASC_prioridad_guerra}
+      - idea: ASC_computo_investigacion_3
+        when:
+          flag: ASC_prioridad_investigacion
+          variable_at_least: {var: ASC_computo, value: 80}
+      - idea: ASC_computo_investigacion_2
+        when:
+          flag: ASC_prioridad_investigacion
+          variable_at_least: {var: ASC_computo, value: 40}
+      - idea: ASC_computo_investigacion_1
+        when: {flag: ASC_prioridad_investigacion}
+      - idea: ASC_computo_logistica_3
+        when:
+          flag: ASC_prioridad_logistica
+          variable_at_least: {var: ASC_computo, value: 80}
+      - idea: ASC_computo_logistica_2
+        when:
+          flag: ASC_prioridad_logistica
+          variable_at_least: {var: ASC_computo, value: 40}
+      - idea: ASC_computo_logistica_1
+        when: {flag: ASC_prioridad_logistica}
+      - idea: ASC_computo_economia_3
         when:
           variable_at_least: {var: ASC_computo, value: 80}
-        then:
-        - {effect: add_ideas, value: ASC_computo_guerra_3}
-        else:
-        - effect: if
-          when:
-            variable_at_least: {var: ASC_computo, value: 40}
-          then:
-          - {effect: add_ideas, value: ASC_computo_guerra_2}
-          else:
-          - {effect: add_ideas, value: ASC_computo_guerra_1}
-      else:
-      - effect: if
-        when: {flag: ASC_prioridad_investigacion}
-        then:
-        - effect: if
-          when:
-            variable_at_least: {var: ASC_computo, value: 80}
-          then:
-          - {effect: add_ideas, value: ASC_computo_investigacion_3}
-          else:
-          - effect: if
-            when:
-              variable_at_least: {var: ASC_computo, value: 40}
-            then:
-            - {effect: add_ideas, value: ASC_computo_investigacion_2}
-            else:
-            - {effect: add_ideas, value: ASC_computo_investigacion_1}
-        else:
-        - effect: if
-          when: {flag: ASC_prioridad_logistica}
-          then:
-          - effect: if
-            when:
-              variable_at_least: {var: ASC_computo, value: 80}
-            then:
-            - {effect: add_ideas, value: ASC_computo_logistica_3}
-            else:
-            - effect: if
-              when:
-                variable_at_least: {var: ASC_computo, value: 40}
-              then:
-              - {effect: add_ideas, value: ASC_computo_logistica_2}
-              else:
-              - {effect: add_ideas, value: ASC_computo_logistica_1}
-          else:
-          - effect: if
-            when:
-              variable_at_least: {var: ASC_computo, value: 80}
-            then:
-            - {effect: add_ideas, value: ASC_computo_economia_3}
-            else:
-            - effect: if
-              when:
-                variable_at_least: {var: ASC_computo, value: 40}
-              then:
-              - {effect: add_ideas, value: ASC_computo_economia_2}
-              else:
-              - {effect: add_ideas, value: ASC_computo_economia_1}
+      - idea: ASC_computo_economia_2
+        when:
+          variable_at_least: {var: ASC_computo, value: 40}
+      - idea: ASC_computo_economia_1
+        when: {}
 
   # HSN: cuenta los nodos controlados, pone la idea del nivel, castiga perder uno y suma botín.
   - id: HSN_recalcular_nodos
@@ -3008,48 +2936,24 @@ scripted_effects:
         - Fukuoka
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
-    - effect: if
-      when: {idea: HSN_red_nodos_1}
-      then:
-      - {effect: remove_idea, value: HSN_red_nodos_1}
-    - effect: if
-      when: {idea: HSN_red_nodos_2}
-      then:
-      - {effect: remove_idea, value: HSN_red_nodos_2}
-    - effect: if
-      when: {idea: HSN_red_nodos_3}
-      then:
-      - {effect: remove_idea, value: HSN_red_nodos_3}
-    - effect: if
-      when: {idea: HSN_camara_mundial}
-      then:
-      - {effect: remove_idea, value: HSN_camara_mundial}
-    - effect: if
-      when: {not_flag: HSN_tavake}
-      then:
-      - effect: if
+    - effect: idea_tiers
+      tiers:
+      - idea: HSN_camara_mundial
         when:
+          not_flag: HSN_tavake
           variable_at_least: {var: HSN_nodos, value: 8}
-        then:
-        - {effect: add_ideas, value: HSN_camara_mundial}
-        else:
-        - effect: if
-          when:
-            variable_at_least: {var: HSN_nodos, value: 6}
-          then:
-          - {effect: add_ideas, value: HSN_red_nodos_3}
-          else:
-          - effect: if
-            when:
-              variable_at_least: {var: HSN_nodos, value: 4}
-            then:
-            - {effect: add_ideas, value: HSN_red_nodos_2}
-            else:
-            - effect: if
-              when:
-                variable_at_least: {var: HSN_nodos, value: 2}
-              then:
-              - {effect: add_ideas, value: HSN_red_nodos_1}
+      - idea: HSN_red_nodos_3
+        when:
+          not_flag: HSN_tavake
+          variable_at_least: {var: HSN_nodos, value: 6}
+      - idea: HSN_red_nodos_2
+        when:
+          not_flag: HSN_tavake
+          variable_at_least: {var: HSN_nodos, value: 4}
+      - idea: HSN_red_nodos_1
+        when:
+          not_flag: HSN_tavake
+          variable_at_least: {var: HSN_nodos, value: 2}
     - effect: if
       when:
         variable_below: {var: HSN_nodos, value: HSN_nodos_prev}
@@ -3098,35 +3002,11 @@ scripted_effects:
       - {effect: clamp, var: SHD_pueblo, min: 0, max: 130}
       else:
       - {effect: clamp, var: SHD_pueblo, min: 0, max: 100}
-    - effect: if
-      when: {idea: SHD_armonia_perfecta}
-      then:
-      - {effect: remove_idea, value: SHD_armonia_perfecta}
-    - effect: if
-      when: {idea: SHD_armonia_parcial}
-      then:
-      - {effect: remove_idea, value: SHD_armonia_parcial}
-    - effect: if
-      when: {idea: SHD_desborde}
-      then:
-      - {effect: remove_idea, value: SHD_desborde}
-    - effect: if
-      when: {idea: SHD_crecida_1}
-      then:
-      - {effect: remove_idea, value: SHD_crecida_1}
-    - effect: if
-      when: {idea: SHD_crecida_2}
-      then:
-      - {effect: remove_idea, value: SHD_crecida_2}
-    - effect: if
-      when: {idea: SHD_crecida_3}
-      then:
-      - {effect: remove_idea, value: SHD_crecida_3}
-    - effect: if
-      when: {not_flag: SHD_zhou}
-      then:
-      - effect: if
+    - effect: idea_tiers
+      tiers:
+      - idea: SHD_armonia_perfecta
         when:
+          not_flag: SHD_zhou
           all_between:
             vars:
             - SHD_produccion
@@ -3134,46 +3014,38 @@ scripted_effects:
             - SHD_pueblo
             min: 45
             max: 55
-        then:
-        - {effect: add_ideas, value: SHD_armonia_perfecta}
-        else:
-        - effect: if
-          when:
-            all_between:
-              vars:
-              - SHD_produccion
-              - SHD_orden
-              - SHD_pueblo
-              min: 35
-              max: 65
-          then:
-          - {effect: add_ideas, value: SHD_armonia_parcial}
-      else:
-      - effect: if
+      - idea: SHD_armonia_parcial
         when:
+          not_flag: SHD_zhou
+          all_between:
+            vars:
+            - SHD_produccion
+            - SHD_orden
+            - SHD_pueblo
+            min: 35
+            max: 65
+    - effect: idea_tiers
+      tiers:
+      - idea: SHD_crecida_3
+        when:
+          flag: SHD_zhou
           variable_at_least: {var: SHD_pueblo, value: 120}
-        then:
-        - {effect: add_ideas, value: SHD_crecida_3}
-        else:
-        - effect: if
-          when:
-            variable_at_least: {var: SHD_pueblo, value: 100}
-          then:
-          - {effect: add_ideas, value: SHD_crecida_2}
-          else:
-          - effect: if
-            when:
-              variable_at_least: {var: SHD_pueblo, value: 80}
-            then:
-            - {effect: add_ideas, value: SHD_crecida_1}
-    - effect: if
-      when:
-        any:
-        - variable_below: {var: SHD_produccion, value: 20}
-        - variable_below: {var: SHD_orden, value: 20}
-        - variable_below: {var: SHD_pueblo, value: 20}
-      then:
-      - {effect: add_ideas, value: SHD_desborde}
+      - idea: SHD_crecida_2
+        when:
+          flag: SHD_zhou
+          variable_at_least: {var: SHD_pueblo, value: 100}
+      - idea: SHD_crecida_1
+        when:
+          flag: SHD_zhou
+          variable_at_least: {var: SHD_pueblo, value: 80}
+    - effect: idea_tiers
+      tiers:
+      - idea: SHD_desborde
+        when:
+          any:
+          - variable_below: {var: SHD_produccion, value: 20}
+          - variable_below: {var: SHD_orden, value: 20}
+          - variable_below: {var: SHD_pueblo, value: 20}
   - id: SHD_mes_del_caudal
     effects:
     - effect: if
@@ -3238,30 +3110,22 @@ scripted_effects:
     - {effect: clamp, var: NRE_prestigio_macedonica, min: 0, max: 100}
     - {effect: clamp, var: NRE_prestigio_fulminata, min: 0, max: 100}
     - {effect: clamp, var: NRE_auctoritas, min: 0, max: 100}
-    - effect: if
-      when: {idea: NRE_legiones_veteranas}
-      then:
-      - {effect: remove_idea, value: NRE_legiones_veteranas}
-    - effect: if
-      when: {idea: NRE_privilegios_legionarios}
-      then:
-      - {effect: remove_idea, value: NRE_privilegios_legionarios}
-    - effect: if
-      when:
-        any:
-        - variable_at_least: {var: NRE_prestigio_italica, value: 60}
-        - variable_at_least: {var: NRE_prestigio_macedonica, value: 60}
-        - variable_at_least: {var: NRE_prestigio_fulminata, value: 60}
-      then:
-      - {effect: add_ideas, value: NRE_legiones_veteranas}
-    - effect: if
-      when:
-        any:
-        - variable_at_least: {var: NRE_prestigio_italica, value: 80}
-        - variable_at_least: {var: NRE_prestigio_macedonica, value: 80}
-        - variable_at_least: {var: NRE_prestigio_fulminata, value: 80}
-      then:
-      - {effect: add_ideas, value: NRE_privilegios_legionarios}
+    - effect: idea_tiers
+      tiers:
+      - idea: NRE_legiones_veteranas
+        when:
+          any:
+          - variable_at_least: {var: NRE_prestigio_italica, value: 60}
+          - variable_at_least: {var: NRE_prestigio_macedonica, value: 60}
+          - variable_at_least: {var: NRE_prestigio_fulminata, value: 60}
+    - effect: idea_tiers
+      tiers:
+      - idea: NRE_privilegios_legionarios
+        when:
+          any:
+          - variable_at_least: {var: NRE_prestigio_italica, value: 80}
+          - variable_at_least: {var: NRE_prestigio_macedonica, value: 80}
+          - variable_at_least: {var: NRE_prestigio_fulminata, value: 80}
   - id: NRE_mes_de_las_legiones
     effects:
     - effect: if

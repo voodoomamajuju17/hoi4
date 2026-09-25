@@ -161,12 +161,9 @@ def emit(ctx: BuildContext) -> None:
         add(f"! Sin ejercito inicial: {', '.join(no_army)}.")
     techs = ctx.data.get("techs") or {}
     stock = ctx.data.get("stockpile") or {}
-    no_tech = [r["tag"] for r in rows if r["states"] and not techs.get(r["tag"])]
-    if no_tech:
-        add(f"! Sin tecnologias iniciales: {', '.join(no_tech)}.")
     if techs:
-        add("Tecnologias de arranque: " + ", ".join(
-            f"{tag} {len(v)}" for tag, v in sorted(techs.items(), key=lambda kv: -len(kv[1]))[:6]) + " ...")
+        add("Tecnologias de arranque (solo la especialidad de cada meganacion): " + ", ".join(
+            f"{tag} {len(v)}" for tag, v in sorted(techs.items()) if v))
     no_stock = [r["tag"] for r in rows if r["states"] and r["kind"] != "Anarquia/indep." and not stock.get(r["tag"])]
     if no_stock:
         add(f"! Sin equipo en deposito: {', '.join(no_stock)}.")
