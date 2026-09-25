@@ -309,6 +309,14 @@ def render_effects(owner: str, items: list[dict], known,
                                 where=where)
             block.add(name, True)
             continue
+        if effect == "equipment":
+            # equipo al depósito (arquetipo o variante): add_equipment_to_stockpile
+            inner = Block()
+            inner.add("type", item["type"])
+            inner.add("amount", int(item["amount"]))
+            block.add("add_equipment_to_stockpile", inner)
+            effects_used.setdefault("add_equipment_to_stockpile", owner)
+            continue
         if effect == "idea_tiers":
             # Niveles excluyentes de una idea: gana el primer nivel cuya
             # condición se cumple. Solo se quita o se pone lo que cambia, así

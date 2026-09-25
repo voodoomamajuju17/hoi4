@@ -138,12 +138,15 @@ def emit(ctx: BuildContext) -> None:
     resource_delta, added = economy_mod.plan(ctx, assignment, capitals)
     ctx.data["resource_delta"] = resource_delta
     ctx.data["added_buildings"] = added
+    manpower_new = economy_mod.population_plan(ctx, assignment)
+    ctx.data["manpower_new"] = manpower_new
     for s in states:
         new_owner = assignment.get(s.id)
         if new_owner is None and s.id not in deposits:
             continue
         _rewrite(ctx, s, new_owner, deposits.get(s.id, {}),
-                 resource_delta.get(s.id, {}), added.get(s.id, {}), claims.get(s.id, ()))
+                 resource_delta.get(s.id, {}), added.get(s.id, {}), claims.get(s.id, ()),
+                 manpower_new.get(s.id))
     _startup_ownership(ctx, assignment)
 
 
@@ -498,13 +501,15 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
 
 def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int],
              resource_delta: dict | None = None, add_buildings: dict | None = None,
-             claims=()) -> bool:
+             claims=(), manpower: int | None = None) -> bool:
     if _unsafe(info):
         return False
     root = parse_file(info.path)
     state = root.get("state")
     if not isinstance(state, Block):
         return False
+    if manpower is not None and state.get("manpower") is not None:
+        state.entries = [(k, manpower if k == "manpower" else v) for k, v in state.entries]
 
     if add_resources:
         resources = state.get("resources")

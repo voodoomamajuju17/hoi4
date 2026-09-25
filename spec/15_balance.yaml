@@ -30,6 +30,18 @@ industrialization:
   building: industrial_complex
 
 # -----------------------------------------------------------------------------
+# Población (manpower de los states), 2026-09-26: el usuario pidió bajarla al
+# 15% y que crezca pareja. Objetivo por país = factor x T^compress x R^(1-compress)
+# (T su total, R la mediana de su tipo): con compress 0.5 el SHD (465M) queda
+# en ~35M y la NAS (11M) en ~5M, en vez de 43 veces más.
+# -----------------------------------------------------------------------------
+population:
+  src: user_decision
+  factor: 0.15
+  compress: 0.5
+  min_per_state: 1000
+
+# -----------------------------------------------------------------------------
 # Leyes de reclutamiento de arranque. Los gigantes en población arrancan con
 # poca movilización; los chicos, con mucha. Las leyes se verifican contra
 # common/ideas/ vanilla (si una no existe se saltea con aviso).

@@ -190,3 +190,51 @@ def resources_of(ctx: BuildContext, s: StateInfo) -> dict[str, float]:
     for k, d in ((ctx.data.get("resource_delta") or {}).get(s.id) or {}).items():
         out[k] = out.get(k, 0.0) + d
     return {k: v for k, v in out.items() if v > 0}
+
+
+def population_plan(ctx: BuildContext, assignment: dict[int, str]) -> dict[int, int]:
+    """Población (manpower de los states) comprimida (15_balance.yaml -> population).
+
+    Pedido del usuario (2026-09-26): bajar la población al ~15% y que crezca
+    parejo ("que los chinos no tengan 500M y el Reino Celeste 5M"). Para cada
+    país: objetivo = factor x T^c x R^(1-c), con T su total, R la mediana de
+    su tipo (meganación, satélite, Anarquía) y c = compress (1 = mismas
+    proporciones, 0 = todos iguales). Cada state se escala por objetivo/T.
+    """
+    spec = (ctx.spec.raw.get("balance") or {}).get("population")
+    if not spec:
+        return {}
+    factor = float(spec.get("factor", 1.0))
+    comp = float(spec.get("compress", 1.0))
+    floor = int(spec.get("min_per_state", 1000))
+    by_state = {s.id: s for s in ctx.vanilla.states()}
+    kind = {c.tag: ("meganation" if c.is_major else "satellite" if c.is_subject else "anarchy") for c in ctx.spec.countries}
+    totals: dict[str, int] = defaultdict(int)
+    for sid, tag in assignment.items():
+        if sid in by_state:
+            totals[tag] += by_state[sid].manpower
+    medians: dict[str, float] = {}
+    for k in set(kind.values()):
+        vals = sorted(v for t, v in totals.items() if kind.get(t) == k and v > 0)
+        if vals:
+            medians[k] = vals[len(vals) // 2]
+    out: dict[int, int] = {}
+    summary = []
+    for tag, total in totals.items():
+        if total <= 0 or tag not in kind:
+            continue
+        ref = medians.get(kind[tag], total)
+        target = factor * (total ** comp) * (ref ** (1 - comp))
+        scale = target / total
+        for sid, t in assignment.items():
+            if t == tag and sid in by_state:
+                out[sid] = max(floor, int(by_state[sid].manpower * scale))
+        if kind[tag] == "meganation":
+            summary.append(f"{tag} {total / 1e6:.1f}M -> {target / 1e6:.1f}M")
+    ctx.note("poblacion: " + ", ".join(sorted(summary)))
+    return out
+
+
+def manpower_of(ctx: BuildContext, s: StateInfo) -> int:
+    """Población del state después del balance."""
+    return (ctx.data.get("manpower_new") or {}).get(s.id, s.manpower)

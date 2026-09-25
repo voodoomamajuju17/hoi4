@@ -64,7 +64,7 @@ def emit(ctx: BuildContext) -> None:
             "states": len(owned),
             "provinces": sum(1 for s in owned for p in s.provinces if p in land) if land
                          else sum(len(s.provinces) for s in owned),
-            "manpower": sum(s.manpower for s in owned),
+            "manpower": sum(economy_mod.manpower_of(ctx, s) for s in owned),
             "civ": bld["industrial_complex"], "mil": bld["arms_factory"], "dock": bld["dockyard"],
             "infra": (sum(s.buildings.get("infrastructure", 0) for s in owned if s.buildings) / len(owned))
                      if owned else 0,

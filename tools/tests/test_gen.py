@@ -555,11 +555,11 @@ def test_territory() -> None:
 
         units = pdx.parse((mod / "history/units/ZWI_2100.txt").read_text())
         divs = units.get("units").get_all("division")
-        check("una sola milicia por pais de la Anarquia (2026-09-25)", len(divs) == 1, str(len(divs)))
+        check("3 milicias por pais de la Anarquia (2026-09-26)", len(divs) == 3, str(len(divs)))
         locs = sorted(pdx.text(d.get("location")) for d in divs)
-        check("en el territorio mas poblado (India, no Ceilan)", locs == ["18"], str(locs))
+        check("en el territorio mas poblado (India, no Ceilan)", set(locs) <= {"18", "19", "20", "21"} and "18" in locs, str(locs))
         zwe = pdx.parse((mod / "history/units/ZWE_2100.txt").read_text()).get("units").get_all("division")
-        check("1 milicia en Europa (Moscu)", len(zwe) == 1 and pdx.text(zwe[0].get("location")) == "22")
+        check("3 milicias en Europa (Moscu)", len(zwe) == 3 and pdx.text(zwe[0].get("location")) == "22", str(len(zwe)))
 
         section("la Anarquia no es una faccion (2026-09-25)")
         lh = next(p for p in (mod / "history/countries").glob("ZWI - *.txt")).read_text()
@@ -569,7 +569,7 @@ def test_territory() -> None:
         check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
-        check("balance cuenta las milicias", any(l.startswith("ZWI") and l.split()[-3] == "1" for l in bal.splitlines()), bal[:800])
+        check("balance cuenta las milicias", any(l.startswith("ZWI") and " 3 " in l for l in bal.splitlines()), bal[:800])
         check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 5" in bal)
         check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
 
@@ -693,7 +693,16 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("19 eventos del EFE (pulso, explicacion, plaga y oferta de la ASC)", len(events) == 19, str(len(events)))
+        check("21 eventos del EFE (pulso, explicacion, plaga, oferta de la ASC, conquista, hito)", len(events) == 21, str(len(events)))
+        conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
+        check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
+        check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
+            next(p.name for p in (mod / "common/scripted_effects").glob("*.txt") if "EFE_pulso" in p.read_text())).read_text())
+        dec = "".join(p.read_text() for p in (mod / "common/decisions").glob("*.txt"))
+        check("decisiones que abre la conquista", "EFE_conquista_proteger" in dec and "EFE_conquista_explotar" in dec)
+        zwm = (mod / "events/meganations_zwm.txt").read_text()
+        check("los Emiratos tienen su pulso de levas", "ANARQUIA_levas" in zwm or "ANARQUIA_levas" in "".join(
+            p.read_text() for p in (mod / "common/scripted_effects").glob("*.txt")), zwm[:400])
         for ev in events:
             eid = pdx.text(ev.get("id"))
             check(f"{eid} solo por disparo", pdx.text(ev.get("is_triggered_only")) == "yes")

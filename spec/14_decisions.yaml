@@ -402,6 +402,34 @@ categories:
         - factor: 0
           when:
             variable_below: {var: FCU_escandalo, value: 30}
+    - id: FCU_licitar_el_canal
+      name: {english: Tender the Canal, spanish: Licitar el Canal}
+      desc:
+        english: 'A contract for the canal: political power +100, scandal +10.'
+        spanish: 'Un contrato por el canal: poder político +100, escándalo +10.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 180
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: add_variable, var: FCU_escandalo, value: 10}
+      ai_factor: 5
+      visible: {flag: FCU_conquista_proteger}
+    - id: FCU_peaje_de_guerra
+      name: {english: War Toll, spanish: Peaje de Guerra}
+      desc:
+        english: 'Double the toll for everyone at war: political power +150, scandal +15.'
+        spanish: 'Doble peaje para todo el que esté en guerra: poder político +150, escándalo +15.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 180
+      effects:
+      - {effect: add_political_power, value: 150}
+      - {effect: add_variable, var: FCU_escandalo, value: 15}
+      ai_factor: 5
+      visible: {flag: FCU_conquista_explotar}
 
   # ===========================================================================
   # EFE — El Monte, la integración, la reforestación y la economía
@@ -645,71 +673,121 @@ categories:
 
   - id: EFE_economia_category
     country: EFE
-    icon_prefer: [generic_industry, generic_production]
-    name: { english: "The Aquifer and the Vats", spanish: "El Acuífero y las Cubas" }
+    icon_prefer:
+    - generic_industry
+    - generic_production
+    name: {english: The Aquifer and the Vats, spanish: El Acuífero y las Cubas}
     desc:
-      english: "Autarky opens BioSteel projects; Water Diplomacy opens water contracts. The Empire can only choose one."
-      spanish: "La Autarquía abre proyectos de Bioacero; la Diplomacia del Agua abre contratos de agua. El Imperio puede elegir solo uno."
+      english: Autarky opens BioSteel projects; Water Diplomacy opens water contracts. The Empire can only choose one.
+      spanish: La Autarquía abre proyectos de Bioacero; la Diplomacia del Agua abre contratos de agua. El Imperio puede elegir solo uno.
     src: user_design
     decisions:
-      - id: EFE_proyecto_cubas_profundas
-        name: { english: "Deep Vats Project", spanish: "Proyecto de Cubas Profundas" }
-        desc: { english: "A new vat complex under the Pampa.", spanish: "Un complejo nuevo de cubas bajo la Pampa." }
-        icon_prefer: [generic_industry, generic_construction]
-        cost: 50
-        cooldown_days: 90
-        visible: { focus: EFE_autarquia_del_bioacero }
-        effects:
-          - { effect: add_variable, var: EFE_biosteel, value: 2 }
-        ai_factor: 5
-      - id: EFE_proyecto_bosque_fabrica
-        name: { english: "Forest-Factory Project", spanish: "Proyecto Bosque-Fábrica" }
-        desc: { english: "Three units of BioSteel grow a factory where a forest used to be.", spanish: "Tres unidades de Bioacero hacen crecer una fábrica donde había un bosque." }
-        icon_prefer: [generic_construction, generic_industry]
-        cost: 25
-        cooldown_days: 120
-        visible: { focus: EFE_autarquia_del_bioacero }
-        available: { variable_at_least: { var: EFE_biosteel, value: 3 } }
-        effects:
-          - { effect: add_variable, var: EFE_biosteel, value: -3 }
-          - { effect: build, building: industrial_complex, level: 1 }
-        ai_factor: 3
-      - id: EFE_contrato_de_agua_asc
-        name: { english: "Water Contract with the Commune", spanish: "Contrato de Agua con la Comuna" }
-        desc: { english: "Fresh water from the aquifer for the Commune, paid in factories and goodwill.", spanish: "Agua dulce del acuífero para la Comuna, pagada en fábricas y buena voluntad." }
-        icon_prefer: [generic_political_actions, generic_industry]
-        cost: 25
-        cooldown_days: 180
-        visible: { focus: EFE_diplomacia_del_agua }
-        available: { country_exists: ASC }
-        effects:
-          - { effect: add_political_power, value: 75 }
-          - { effect: build, building: industrial_complex, level: 1 }
-        ai_factor: 5
-      - id: EFE_contrato_de_agua_apf
-        name: { english: "Water Contract with the Federation", spanish: "Contrato de Agua con la Federación" }
-        desc: { english: "Fresh water from the aquifer for the Federation, paid in factories and goodwill.", spanish: "Agua dulce del acuífero para la Federación, pagada en fábricas y buena voluntad." }
-        icon_prefer: [generic_political_actions, generic_industry]
-        cost: 25
-        cooldown_days: 180
-        visible: { focus: EFE_diplomacia_del_agua }
-        available: { country_exists: APF }
-        effects:
-          - { effect: add_political_power, value: 75 }
-          - { effect: build, building: industrial_complex, level: 1 }
-        ai_factor: 5
-      - id: EFE_contrato_de_agua_shd
-        name: { english: "Water Contract with the Directorate", spanish: "Contrato de Agua con el Directorio" }
-        desc: { english: "Fresh water from the aquifer for the Directorate, paid in factories and goodwill.", spanish: "Agua dulce del acuífero para el Directorio, pagada en fábricas y buena voluntad." }
-        icon_prefer: [generic_political_actions, generic_industry]
-        cost: 25
-        cooldown_days: 180
-        visible: { focus: EFE_diplomacia_del_agua }
-        available: { country_exists: SHD }
-        effects:
-          - { effect: add_political_power, value: 75 }
-          - { effect: build, building: industrial_complex, level: 1 }
-        ai_factor: 5
+    - id: EFE_proyecto_cubas_profundas
+      name: {english: Deep Vats Project, spanish: Proyecto de Cubas Profundas}
+      desc: {english: A new vat complex under the Pampa., spanish: Un complejo nuevo de cubas bajo la Pampa.}
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 90
+      visible: {focus: EFE_autarquia_del_bioacero}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: 2}
+      ai_factor: 5
+    - id: EFE_proyecto_bosque_fabrica
+      name: {english: Forest-Factory Project, spanish: Proyecto Bosque-Fábrica}
+      desc:
+        english: Three units of BioSteel grow a factory where a forest used to be.
+        spanish: Tres unidades de Bioacero hacen crecer una fábrica donde había un bosque.
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 25
+      cooldown_days: 120
+      visible: {focus: EFE_autarquia_del_bioacero}
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 3}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 3
+    - id: EFE_contrato_de_agua_asc
+      name: {english: Water Contract with the Commune, spanish: Contrato de Agua con la Comuna}
+      desc:
+        english: Fresh water from the aquifer for the Commune, paid in factories and goodwill.
+        spanish: Agua dulce del acuífero para la Comuna, pagada en fábricas y buena voluntad.
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 25
+      cooldown_days: 180
+      visible: {focus: EFE_diplomacia_del_agua}
+      available: {country_exists: ASC}
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+    - id: EFE_contrato_de_agua_apf
+      name: {english: Water Contract with the Federation, spanish: Contrato de Agua con la Federación}
+      desc:
+        english: Fresh water from the aquifer for the Federation, paid in factories and goodwill.
+        spanish: Agua dulce del acuífero para la Federación, pagada en fábricas y buena voluntad.
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 25
+      cooldown_days: 180
+      visible: {focus: EFE_diplomacia_del_agua}
+      available: {country_exists: APF}
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+    - id: EFE_contrato_de_agua_shd
+      name: {english: Water Contract with the Directorate, spanish: Contrato de Agua con el Directorio}
+      desc:
+        english: Fresh water from the aquifer for the Directorate, paid in factories and goodwill.
+        spanish: Agua dulce del acuífero para el Directorio, pagada en fábricas y buena voluntad.
+      icon_prefer:
+      - generic_political_actions
+      - generic_industry
+      cost: 25
+      cooldown_days: 180
+      visible: {focus: EFE_diplomacia_del_agua}
+      available: {country_exists: SHD}
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai_factor: 5
+    - id: EFE_reforestar_el_amazonas
+      name: {english: Reforest the Amazon, spanish: Reforestar el Amazonas}
+      desc:
+        english: 'The scars of the war are replanted: stability +2%, vat saturation -10.'
+        spanish: 'Las cicatrices de la guerra se replantan: estabilidad +2%, saturación -10.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 120
+      effects:
+      - {effect: add_stability, value: 0.02}
+      - {effect: add_variable, var: EFE_saturacion, value: -10}
+      ai_factor: 5
+      visible: {flag: EFE_conquista_proteger}
+    - id: EFE_extraer_la_madera_viva
+      name: {english: Harvest the Living Wood, spanish: Extraer la Madera Viva}
+      desc:
+        english: 'The oldest trees feed the vats: BioSteel +2, saturation +10, stability -2%.'
+        spanish: 'Los árboles más viejos alimentan las cubas: Bioacero +2, saturación +10, estabilidad -2%.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: 2}
+      - {effect: add_variable, var: EFE_saturacion, value: 10}
+      - {effect: add_stability, value: -0.02}
+      ai_factor: 5
+      visible: {flag: EFE_conquista_explotar}
 
   # ===========================================================================
   # ASC — Poder de Cómputo, el Consejo Sorteado, Plan o Mercado ("Las Ocho Potencias")
@@ -1019,6 +1097,33 @@ categories:
       - {effect: add_variable, var: ASC_computo, value: 4}
       - {effect: add_political_power, value: 25}
       ai_factor: 5
+    - id: ASC_sorteo_de_moscu
+      name: {english: The Moscow Lottery, spanish: El Sorteo de Moscú}
+      desc:
+        english: 'Moscow draws its own council: stability +3%.'
+        spanish: 'Moscú sortea su propio consejo: estabilidad +3%.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 180
+      effects:
+      - {effect: add_stability, value: 0.03}
+      ai_factor: 5
+      visible: {flag: ASC_conquista_proteger}
+    - id: ASC_datacenter_de_moscu
+      name: {english: The Moscow Data Centre, spanish: El Centro de Datos de Moscú}
+      desc: {english: 'Compute +10, heat +10.', spanish: 'Cómputo +10, calor +10.'}
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 0
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: 10}
+      - {effect: add_variable, var: ASC_calor, value: 10}
+      - {effect: run, value: ASC_recalcular_computo}
+      ai_factor: 5
+      fire_only_once: true
+      visible: {flag: ASC_conquista_explotar}
 
   # ===========================================================================
   # HSN — La Cámara de Compensación, Puerto Libre o Peaje ("Las Ocho Potencias")
@@ -1466,6 +1571,29 @@ categories:
       effects:
       - {effect: add_political_power, value: 100}
       ai_factor: 5
+    - id: HSN_puerto_de_ceilan
+      name: {english: Open a Port in Ceylon, spanish: Abrir un Puerto en Ceilán}
+      desc: {english: 'Political power +75, pressure +5.', spanish: 'Poder político +75, presión +5.'}
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 120
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: add_variable, var: HSN_presion, value: 5}
+      ai_factor: 5
+      visible: {flag: HSN_conquista_proteger}
+    - id: HSN_corso_en_el_indico
+      name: {english: Privateering in the Indian Ocean, spanish: Corso en el Índico}
+      desc: {english: Loot +10., spanish: Botín +10.}
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 10}
+      ai_factor: 5
+      visible: {flag: HSN_conquista_explotar}
 
   # ===========================================================================
   # NAS — Inti-Soma, el Qhapaq Ñan, las Tierras Tributarias, Terrazas o Minas
@@ -1912,6 +2040,34 @@ categories:
       - {effect: add_political_power, value: 75}
       - {effect: build, building: industrial_complex, level: 1}
       ai_factor: 5
+    - id: NAS_templo_en_la_selva
+      name: {english: A Temple in the Jungle, spanish: Un Templo en la Selva}
+      desc:
+        english: One more Sun Farm, in the heart of the jungle.
+        spanish: Una Granja del Sol más, en el corazón de la selva.
+      icon_prefer:
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 0
+      effects:
+      - {effect: add_variable, var: NAS_granjas, value: 1}
+      ai_factor: 5
+      fire_only_once: true
+      visible: {flag: NAS_conquista_proteger}
+    - id: NAS_oro_de_la_selva
+      name: {english: Gold of the Jungle, spanish: El Oro de la Selva}
+      desc:
+        english: 'River gold for the treasury: political power +75, stability -2%.'
+        spanish: 'Oro de los ríos para el tesoro: poder político +75, estabilidad -2%.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 120
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: add_stability, value: -0.02}
+      ai_factor: 5
+      visible: {flag: NAS_conquista_explotar}
 
   # ===========================================================================
   # APF — La Integración Federal, Aldea o Corredor ("Las Ocho Potencias")
@@ -2174,6 +2330,32 @@ categories:
         - {effect: build_here, building: infrastructure, level: 3}
       - {effect: build, building: industrial_complex, level: 1}
       ai_factor: 5
+    - id: APF_consejos_del_golfo
+      name: {english: Councils of the Gulf, spanish: Consejos del Golfo}
+      desc:
+        english: 'The Gulf elects its councils: tension -10, stability +2%.'
+        spanish: 'El Golfo elige sus consejos: tensión -10, estabilidad +2%.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: APF_tension, value: -10}
+      - {effect: add_stability, value: 0.02}
+      ai_factor: 5
+      visible: {flag: APF_conquista_proteger}
+    - id: APF_contratos_petroleros
+      name: {english: Oil Contracts, spanish: Contratos Petroleros}
+      desc: {english: 'Political power +100, tension +5.', spanish: 'Poder político +100, tensión +5.'}
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 150
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: add_variable, var: APF_tension, value: 5}
+      ai_factor: 5
+      visible: {flag: APF_conquista_explotar}
 
   # ===========================================================================
   # SHD — Los Tres Caudales, los Distritos Armónicos, Obras o Precisión
@@ -2505,6 +2687,32 @@ categories:
       effects:
       - {effect: timed_idea, idea: SHD_red_electrica, days: 90}
       ai_factor: 5
+    - id: SHD_ingenieros_al_indostan
+      name: {english: Engineers to Hindustan, spanish: Ingenieros al Indostán}
+      desc: {english: 'Order +5, Production +5.', spanish: 'Orden +5, Producción +5.'}
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: SHD_orden, value: 5}
+      - {effect: add_variable, var: SHD_produccion, value: 5}
+      - {effect: run, value: SHD_recalcular_caudales}
+      ai_factor: 5
+      visible: {flag: SHD_conquista_proteger}
+    - id: SHD_reclutar_en_el_indostan
+      name: {english: Recruit in Hindustan, spanish: Reclutar en el Indostán}
+      desc: {english: '50,000 men, People +5.', spanish: '50.000 hombres, Pueblo +5.'}
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 120
+      effects:
+      - {effect: add_manpower, value: 50000}
+      - {effect: add_variable, var: SHD_pueblo, value: 5}
+      - {effect: run, value: SHD_recalcular_caudales}
+      ai_factor: 5
+      visible: {flag: SHD_conquista_explotar}
 
   # ===========================================================================
   # NRE — Las Legiones, las Provincias, Annona o Tributo
@@ -2942,6 +3150,39 @@ categories:
         - {effect: build_here, building: infrastructure, level: 2}
       ai_factor: 5
       visible: {focus: NRE_las_vias_imperiales}
+    - id: NRE_colonia_en_persia
+      name: {english: A Veteran Colony in Persia, spanish: Una Colonia de Veteranos en Persia}
+      desc:
+        english: 'Land for the veterans: Auctoritas +5, stability +2%.'
+        spanish: 'Tierra para los veteranos: Auctoritas +5, estabilidad +2%.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: 5}
+      - {effect: add_stability, value: 0.02}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai_factor: 5
+      visible: {flag: NRE_conquista_proteger}
+    - id: NRE_triunfo_de_oriente
+      name: {english: The Triumph of the East, spanish: El Triunfo de Oriente}
+      desc:
+        english: A triumph in Rome with the treasures of Persia.
+        spanish: Un triunfo en Roma con los tesoros de Persia.
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 0
+      effects:
+      - {effect: add_variable, var: NRE_prestigio_italica, value: 10}
+      - {effect: add_variable, var: NRE_prestigio_macedonica, value: 10}
+      - {effect: add_variable, var: NRE_prestigio_fulminata, value: 10}
+      - {effect: add_war_support, value: 0.05}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai_factor: 5
+      fire_only_once: true
+      visible: {flag: NRE_conquista_explotar}
 
 scripted_effects:
 
@@ -3417,6 +3658,21 @@ scripted_effects:
             effects:
             - {effect: flag, value: EFE_plaga_reciente, days: 120}
             - {effect: event, id: meganations_efe.22, days: 1}
+    - effect: if
+      when:
+        not_flag: EFE_conquista_hecha
+        controls_state:
+        - Rio de Janeiro
+      then:
+      - {effect: flag, value: EFE_conquista_hecha}
+      - {effect: event, id: meganations_efe.30, days: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: EFE_biosteel, value: 15}
+        not_flag: EFE_hito_hecho
+      then:
+      - {effect: flag, value: EFE_hito_hecho}
+      - {effect: event, id: meganations_efe.31, days: 1}
   - id: FCU_pulso_del_directorio
     effects:
     - effect: if
@@ -3487,6 +3743,20 @@ scripted_effects:
           effects:
           - {effect: flag, value: FCU_filtracion_reciente, days: 120}
           - {effect: event, id: meganations_fcu.22, days: 1}
+    - effect: if
+      when:
+        not_flag: FCU_conquista_hecha
+        controls_state:
+        - Panamá Canal
+        - Panama Canal
+      then:
+      - {effect: flag, value: FCU_conquista_hecha}
+      - {effect: event, id: meganations_fcu.30, days: 1}
+    - effect: if
+      when: {idea: FCU_sinergia_del_directorio, not_flag: FCU_hito_hecho}
+      then:
+      - {effect: flag, value: FCU_hito_hecho}
+      - {effect: event, id: meganations_fcu.31, days: 1}
   - id: ASC_pulso_de_la_red
     effects:
     - effect: if
@@ -3535,6 +3805,21 @@ scripted_effects:
           effects:
           - {effect: flag, value: ASC_apagon_reciente, days: 120}
           - {effect: event, id: meganations_asc.22, days: 1}
+    - effect: if
+      when:
+        not_flag: ASC_conquista_hecha
+        controls_state:
+        - Moscow
+      then:
+      - {effect: flag, value: ASC_conquista_hecha}
+      - {effect: event, id: meganations_asc.30, days: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: ASC_computo, value: 120}
+        not_flag: ASC_hito_hecho
+      then:
+      - {effect: flag, value: ASC_hito_hecho}
+      - {effect: event, id: meganations_asc.31, days: 1}
   - id: HSN_pulso_de_las_potencias
     effects:
     - effect: if
@@ -3573,6 +3858,21 @@ scripted_effects:
           effects:
           - {effect: flag, value: HSN_exigencia_reciente, days: 150}
           - {effect: event, id: meganations_hsn.22, days: 1}
+    - effect: if
+      when:
+        not_flag: HSN_conquista_hecha
+        controls_state:
+        - Ceylon
+      then:
+      - {effect: flag, value: HSN_conquista_hecha}
+      - {effect: event, id: meganations_hsn.30, days: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: HSN_nodos, value: 6}
+        not_flag: HSN_hito_hecho
+      then:
+      - {effect: flag, value: HSN_hito_hecho}
+      - {effect: event, id: meganations_hsn.31, days: 1}
   - id: NAS_pulso_de_los_templos
     effects:
     - effect: if
@@ -3607,6 +3907,21 @@ scripted_effects:
           effects:
           - {effect: flag, value: NAS_eclipse_reciente, days: 365}
           - {effect: event, id: meganations_nas.22, days: 1}
+    - effect: if
+      when:
+        not_flag: NAS_conquista_hecha
+        controls_state:
+        - Amazonas
+      then:
+      - {effect: flag, value: NAS_conquista_hecha}
+      - {effect: event, id: meganations_nas.30, days: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: NAS_inti, value: 100}
+        not_flag: NAS_hito_hecho
+      then:
+      - {effect: flag, value: NAS_hito_hecho}
+      - {effect: event, id: meganations_nas.31, days: 1}
   - id: SHD_pulso_del_rio
     effects:
     - effect: if
@@ -3640,6 +3955,19 @@ scripted_effects:
           - {effect: flag, value: SHD_crisis_reciente, days: 90}
           - {effect: event, id: meganations_shd.24, days: 1}
     - {effect: run, value: SHD_recalcular_caudales}
+    - effect: if
+      when:
+        not_flag: SHD_conquista_hecha
+        controls_state:
+        - United Provinces
+      then:
+      - {effect: flag, value: SHD_conquista_hecha}
+      - {effect: event, id: meganations_shd.30, days: 1}
+    - effect: if
+      when: {idea: SHD_armonia_perfecta, not_flag: SHD_hito_hecho}
+      then:
+      - {effect: flag, value: SHD_hito_hecho}
+      - {effect: event, id: meganations_shd.31, days: 1}
   - id: APF_pulso_de_los_consejos
     effects:
     - effect: if
@@ -3666,6 +3994,24 @@ scripted_effects:
           effects:
           - {effect: flag, value: APF_levantamiento_reciente, days: 150}
           - {effect: event, id: meganations_apf.22, days: 1}
+    - effect: if
+      when:
+        not_flag: APF_conquista_hecha
+        controls_state:
+        - Nejd
+      then:
+      - {effect: flag, value: APF_conquista_hecha}
+      - {effect: event, id: meganations_apf.30, days: 1}
+    - effect: if
+      when:
+        not:
+          any:
+          - {country_exists: ZET}
+          - {country_exists: ZSA}
+        not_flag: APF_hito_hecho
+      then:
+      - {effect: flag, value: APF_hito_hecho}
+      - {effect: event, id: meganations_apf.31, days: 1}
   - id: NRE_pulso_del_ocio
     effects:
     - effect: if
@@ -3702,3 +4048,28 @@ scripted_effects:
           - {effect: flag, value: NRE_motin_reciente, days: 180}
           - {effect: event, id: meganations_nre.22, days: 1}
     - {effect: run, value: NRE_recalcular_legiones}
+    - effect: if
+      when:
+        not_flag: NRE_conquista_hecha
+        controls_state:
+        - Tehran
+      then:
+      - {effect: flag, value: NRE_conquista_hecha}
+      - {effect: event, id: meganations_nre.30, days: 1}
+    - effect: if
+      when:
+        at_war: true
+        variable_at_least: {var: NRE_auctoritas, value: 80}
+        not_flag: NRE_hito_hecho
+      then:
+      - {effect: flag, value: NRE_hito_hecho}
+      - {effect: event, id: meganations_nre.31, days: 1}
+
+  # La Anarquía resiste (2026-09-26): en guerra, cada mes recluta y rearma.
+  - id: ANARQUIA_levas
+    effects:
+    - effect: if
+      when: {at_war: true}
+      then:
+      - {effect: add_manpower, value: 20000}
+      - {effect: equipment, type: infantry_equipment, amount: 1500}

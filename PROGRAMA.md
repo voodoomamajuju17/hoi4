@@ -37,6 +37,8 @@ elementos también van por importancia.
 - [~] Recursos invariables: mínimos por transferencia, total mundial = vanilla
 - [~] Industria en franja (meganaciones 95-115 IC, satélites hasta 35); la NAS no llega por falta de slots
 - [~] Leyes de reclutamiento según población
+- [~] Población comprimida (2026-09-26): ~15% de la real y achicando la brecha entre potencias (SHD ~35M, NAS ~5M), así el crecimiento queda parejo
+- [~] La Anarquía resiste: 3 milicias por país, espíritus defensivos, levas mensuales en guerra (hombres + fusiles); los Emiratos con "Guerra del Desierto"
 - [~] Ejército inicial mínimo (2 infanterías por meganación, 1 por satélite y por país anárquico), tecnologías base + especialidad, depósitos
 - [~] Armada: solo 3 destructores de la HSN; sin aviones
 - [~] Mundo vivo: reclamos, rivalidades, tensión mundial, 2 guerras al arranque
@@ -132,7 +134,7 @@ eventos con ultimátum e IA con condiciones.
 - [ ] Árbol corto o panel de decisiones para cada satélite (independencia vs lealtad)
 - [ ] Señores de la guerra: eventos de raid, alianzas temporales, reunificación
 - [ ] Liberar países de la Anarquía: qué pasa con una región conquistada
-- [ ] Decisiones de "pacificación" para las meganaciones que conquistan territorio anárquico
+- [~] Conquistas con dilema: cada meganación, al tomar su región clave, elige proteger o explotar (evento + decisiones que se abren); más un evento de hito por mecánica
 
 ## 6. Diplomacia avanzada
 

@@ -394,6 +394,47 @@ namespaces:
           - {effect: add_stability, value: 0.02}
           ai_chance: 50
         src: user_design
+      - id: 30
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Amazon Belongs to the Empire, spanish: El Amazonas es del Imperio}
+        desc:
+          english: 'Rio has fallen and the Amazon Caudillos are fleeing into the jungle. The largest forest on Earth is ours. The court argues: a sanctuary
+            for Gaia, or the greatest vat the world has ever seen?'
+          spanish: 'Río cayó y los Caudillos del Amazonas huyen hacia la selva. El bosque más grande de la Tierra es nuestro. La corte discute: ¿un
+            santuario para Gaia, o la cuba más grande que vio el mundo?'
+        options:
+        - name: {english: A Sanctuary for Gaia., spanish: Un Santuario para Gaia.}
+          effects:
+          - {effect: flag, value: EFE_conquista_proteger}
+          - {effect: add_ideas, value: EFE_santuario_amazonico}
+          - {effect: add_variable, var: EFE_saturacion, value: -20}
+          ai_chance: 50
+        - name: {english: The Productive Jungle., spanish: La Selva Productiva.}
+          effects:
+          - {effect: flag, value: EFE_conquista_explotar}
+          - {effect: add_ideas, value: EFE_selva_explotada}
+          - {effect: add_variable, var: EFE_biosteel, value: 5}
+          - {effect: add_variable, var: EFE_saturacion, value: 15}
+          ai_chance: 50
+        src: user_design
+      - id: 31
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The First Living Legion, spanish: La Primera Legión Viviente}
+        desc:
+          english: The first division of the Green Guard marches in armour grown, not forged. The crowd in Gaia goes silent when the armour breathes.
+          spanish: La primera división de la Guardia Verde marcha con blindaje cultivado, no forjado. La multitud de Gaia se queda en silencio cuando
+            el blindaje respira.
+        options:
+        - name: {english: To the front., spanish: Al frente.}
+          effects:
+          - {effect: army_experience, value: 50}
+        - name: {english: To the parade., spanish: Al desfile.}
+          effects:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_stability, value: 0.03}
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -653,6 +694,62 @@ namespaces:
           - {effect: add_war_support, value: 0.03}
           ai_chance: 40
         src: user_design
+      - id: 30
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Canal, spanish: El Canal}
+        desc:
+          english: The Panama Canal is under corporate management again. Every ship between two oceans now pays the Union; the only question is how
+            much.
+          spanish: El Canal de Panamá vuelve a estar bajo administración corporativa. Cada barco entre dos océanos le paga a la Unión; la única pregunta
+            es cuánto.
+        options:
+        - name: {english: 'An open canal, a fair toll.', spanish: 'Un canal abierto, un peaje justo.'}
+          effects:
+          - {effect: flag, value: FCU_conquista_proteger}
+          - {effect: add_ideas, value: FCU_canal_abierto}
+          ai_chance: 50
+        - name: {english: A corporate canal., spanish: Un canal corporativo.}
+          effects:
+          - {effect: flag, value: FCU_conquista_explotar}
+          - {effect: add_variable, var: FCU_meridian, value: 10}
+          - {effect: add_variable, var: FCU_escandalo, value: 15}
+          - effect: states
+            pick: random
+            effects:
+            - {effect: build_here, building: dockyard, level: 1}
+            when: {coastal: true}
+          - effect: states
+            pick: random
+            effects:
+            - {effect: build_here, building: dockyard, level: 1}
+            when: {coastal: true}
+          - {effect: run, value: FCU_recalcular_directorio}
+          ai_chance: 50
+        src: user_design
+      - id: 31
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Board in Harmony, spanish: El Directorio en Armonía}
+        desc:
+          english: For the first time in a decade the four corporations agree on something. The markets celebrate; the lawyers are nervous.
+          spanish: Por primera vez en una década las cuatro corporaciones están de acuerdo en algo. Los mercados festejan; los abogados están nerviosos.
+        options:
+        - name: {english: Pay a dividend., spanish: Pagar un dividendo.}
+          effects:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_stability, value: 0.05}
+        - name: {english: Reinvest it., spanish: Reinvertirlo.}
+          effects:
+          - effect: states
+            pick: random
+            effects:
+            - {effect: build_here, building: industrial_complex, level: 1}
+          - effect: states
+            pick: random
+            effects:
+            - {effect: build_here, building: industrial_complex, level: 1}
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -845,6 +942,51 @@ namespaces:
           effects:
           - {effect: add_political_power, value: 25}
           ai_chance: 40
+        src: user_design
+      - id: 30
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Ports of the Indian Ocean, spanish: Los Puertos del Índico}
+        desc:
+          english: 'Ceylon is ours: the key to the Indian Ocean. The captains vote: a free port for everyone, or a nest for our privateers?'
+          spanish: 'Ceilán es nuestro: la llave del Índico. Los capitanes votan: ¿un puerto franco para todos, o un nido para nuestros corsarios?'
+        options:
+        - name: {english: A free port., spanish: Un puerto franco.}
+          effects:
+          - {effect: flag, value: HSN_conquista_proteger}
+          - {effect: add_political_power, value: 100}
+          - {effect: add_variable, var: HSN_presion, value: 5}
+          ai_chance: 50
+        - name: {english: A privateers' nest., spanish: Un nido de corsarios.}
+          effects:
+          - {effect: flag, value: HSN_conquista_explotar}
+          - {effect: add_variable, var: HSN_botin, value: 20}
+          - {effect: navy_experience, value: 25}
+          ai_chance: 50
+        src: user_design
+      - id: 31
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Lords of the Straits, spanish: Señores de los Estrechos}
+        desc:
+          english: Six straits, one flag. Every captain in Asia now plans their route around the Nation's toll books.
+          spanish: Seis estrechos, una bandera. Cada capitán de Asia ahora planea su ruta según los libros de peaje de la Nación.
+        options:
+        - name: {english: Celebrate in every port., spanish: Festejar en cada puerto.}
+          effects:
+          - {effect: add_political_power, value: 150}
+        - name: {english: Build more docks., spanish: Construir más diques.}
+          effects:
+          - effect: states
+            pick: random
+            effects:
+            - {effect: build_here, building: dockyard, level: 1}
+            when: {coastal: true}
+          - effect: states
+            pick: random
+            effects:
+            - {effect: build_here, building: dockyard, level: 1}
+            when: {coastal: true}
         src: user_design
   # ===========================================================================
   meganations_asc:
@@ -1042,6 +1184,56 @@ namespaces:
         - {effect: run, value: ASC_recalcular_computo}
         ai_chance: 50
       src: user_design
+    - id: 30
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Moscow Liberated, spanish: Moscú Liberada}
+      desc:
+        english: 'The Commune''s drones fly over the Kremlin. Moscow''s workers ask what comes next: a council of their own, or a place in the Plan.'
+        spanish: 'Los drones de la Comuna sobrevuelan el Kremlin. Los trabajadores de Moscú preguntan qué sigue: un consejo propio, o un lugar en
+          el Plan.'
+      options:
+      - name: {english: Workers' councils in Moscow., spanish: Consejos obreros en Moscú.}
+        effects:
+        - {effect: flag, value: ASC_conquista_proteger}
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 100}
+        ai_chance: 50
+      - name: {english: Moscow joins the Plan., spanish: Moscú se suma al Plan.}
+        effects:
+        - {effect: flag, value: ASC_conquista_explotar}
+        - {effect: add_variable, var: ASC_computo, value: 20}
+        - {effect: add_variable, var: ASC_calor, value: 10}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      src: user_design
+    - id: 31
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Machine Dreams, spanish: La Máquina Sueña}
+      desc:
+        english: 'At three in the morning the planning grid produced something no one asked for: a poem, a proof and a map of a city that does not
+          exist.'
+        spanish: 'A las tres de la mañana la red de planificación produjo algo que nadie pidió: un poema, una demostración y el mapa de una ciudad
+          que no existe.'
+      options:
+      - name: {english: Listen to it., spanish: Escucharla.}
+        effects:
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 2}
+      - name: {english: Shut it down., spanish: Apagarla.}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: -20}
+        - {effect: add_stability, value: 0.05}
+        - {effect: run, value: ASC_recalcular_computo}
+      src: user_design
   meganations_apf:
     country: APF
     events:
@@ -1183,6 +1375,50 @@ namespaces:
         - {effect: timed_idea, idea: APF_consejos_en_rebeldia, days: 60}
         ai_chance: 40
       src: user_design
+    - id: 30
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Federation Crosses the Red Sea, spanish: La Federación Cruza el Mar Rojo}
+      desc:
+        english: For the first time the Federation governs beyond Africa. The councils of the Gulf ask to be heard; the engineers ask for the oil.
+        spanish: Por primera vez la Federación gobierna más allá de África. Los consejos del Golfo piden ser escuchados; los ingenieros piden el petróleo.
+      options:
+      - name: {english: Councils of the Gulf., spanish: Consejos del Golfo.}
+        effects:
+        - {effect: flag, value: APF_conquista_proteger}
+        - {effect: add_variable, var: APF_tension, value: -10}
+        - {effect: add_political_power, value: 50}
+        ai_chance: 50
+      - name: {english: Oil for the Federation., spanish: Petróleo para la Federación.}
+        effects:
+        - {effect: flag, value: APF_conquista_explotar}
+        - {effect: add_variable, var: APF_tension, value: 10}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        ai_chance: 50
+      src: user_design
+    - id: 31
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Whole Federation, spanish: La Federación Completa}
+      desc:
+        english: The Highlands and the Cape now vote in Lagos like any other council. The map of the Federation has no more holes.
+        spanish: Las Tierras Altas y el Cabo ya votan en Lagos como cualquier otro consejo. El mapa de la Federación no tiene más huecos.
+      options:
+      - name: {english: A continental holiday., spanish: Un feriado continental.}
+        effects:
+        - {effect: add_stability, value: 0.1}
+      - name: {english: A continental army., spanish: Un ejército continental.}
+        effects:
+        - {effect: add_manpower, value: 200000}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -1313,6 +1549,49 @@ namespaces:
         - {effect: add_variable, var: NAS_inti, value: -30}
         - {effect: add_stability, value: -0.05}
         ai_chance: 50
+      src: user_design
+    - id: 30
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Jungle of the Sun, spanish: La Selva del Sol}
+      desc:
+        english: The Children of the Sun have come down from the mountains into the green sea. The priests want temples; the miners want gold.
+        spanish: Los Hijos del Sol bajaron de las montañas al mar verde. Los sacerdotes quieren templos; los mineros quieren oro.
+      options:
+      - name: {english: Temples in the jungle., spanish: Templos en la selva.}
+        effects:
+        - {effect: flag, value: NAS_conquista_proteger}
+        - {effect: add_variable, var: NAS_inti, value: 30}
+        ai_chance: 50
+      - name: {english: Gold for the Sun., spanish: Oro para el Sol.}
+        effects:
+        - {effect: flag, value: NAS_conquista_explotar}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        ai_chance: 50
+      src: user_design
+    - id: 31
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Sun at its Zenith, spanish: El Sol en su Cenit}
+      desc:
+        english: The temples overflow with light. For one day the whole Empire works in silence, looking at the sky.
+        spanish: Los templos rebosan de luz. Por un día todo el Imperio trabaja en silencio, mirando el cielo.
+      options:
+      - name: {english: A crusade of light., spanish: Una cruzada de luz.}
+        effects:
+        - {effect: add_war_support, value: 0.1}
+        - {effect: add_variable, var: NAS_inti, value: -20}
+      - name: {english: A day of rest., spanish: Un día de descanso.}
+        effects:
+        - {effect: add_stability, value: 0.08}
+        - {effect: add_variable, var: NAS_inti, value: -20}
       src: user_design
   meganations_shd:
     country: SHD
@@ -1477,6 +1756,47 @@ namespaces:
         - {effect: add_variable, var: SHD_produccion, value: 4}
         - {effect: run, value: SHD_recalcular_caudales}
         ai_chance: 50
+      src: user_design
+    - id: 30
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Flood Reaches the Ganges, spanish: La Crecida Llega al Ganges}
+      desc:
+        english: The warlords of Hindustan have lost their capital. Four hundred million new people wait to see which flow they belong to.
+        spanish: Los señores de la guerra del Indostán perdieron su capital. Cuatrocientos millones de personas esperan saber a qué caudal pertenecen.
+      options:
+      - name: {english: A Harmonious District., spanish: Un Distrito Armónico.}
+        effects:
+        - {effect: flag, value: SHD_conquista_proteger}
+        - {effect: add_variable, var: SHD_orden, value: 10}
+        - {effect: add_variable, var: SHD_pueblo, value: -5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: The flood of the south., spanish: La crecida del sur.}
+        effects:
+        - {effect: flag, value: SHD_conquista_explotar}
+        - {effect: add_variable, var: SHD_pueblo, value: 15}
+        - {effect: add_manpower, value: 100000}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      src: user_design
+    - id: 31
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Perfect Flow, spanish: El Caudal Perfecto}
+      desc:
+        english: Production, Order and People within five points of each other. The Directorate's engineers stay up all night watching the numbers
+          not move.
+        spanish: Producción, Orden y Pueblo a cinco puntos uno del otro. Los ingenieros del Directorio se quedan toda la noche mirando cómo los números
+          no se mueven.
+      options:
+      - name: {english: Publish the numbers., spanish: Publicar los números.}
+        effects:
+        - {effect: add_political_power, value: 150}
+        - {effect: add_stability, value: 0.05}
+      - name: {english: Keep it quiet., spanish: Guardar silencio.}
+        effects:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 2}
       src: user_design
   # ===========================================================================
   meganations_nre:
@@ -1718,3 +2038,113 @@ namespaces:
         - {effect: run, value: NRE_recalcular_legiones}
         ai_chance: 40
       src: user_design
+    - id: 30
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Persia at Rome's Feet, spanish: Persia a los Pies de Roma}
+      desc:
+        english: The eagles fly over Tehran, where no legion ever stood. The legates want loot; the Senate wants a province.
+        spanish: Las águilas vuelan sobre Teherán, donde ninguna legión estuvo nunca. Los legados quieren botín; el Senado quiere una provincia.
+      options:
+      - name: {english: Provincia Persia., spanish: Provincia Persia.}
+        effects:
+        - {effect: flag, value: NRE_conquista_proteger}
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_variable, var: NRE_auctoritas, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 50
+      - name: {english: The loot of the East., spanish: El botín de Oriente.}
+        effects:
+        - {effect: flag, value: NRE_conquista_explotar}
+        - {effect: add_political_power, value: 200}
+        - {effect: add_variable, var: NRE_prestigio_italica, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_macedonica, value: 10}
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: 10}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 50
+      src: user_design
+    - id: 31
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Legions Ask for a Triumph, spanish: Las Legiones Piden un Triunfo}
+      desc:
+        english: The officers have Auctoritas to spare and victories to show. They want to march through Rome, and they will not ask twice.
+        spanish: Los oficiales tienen Auctoritas de sobra y victorias para mostrar. Quieren desfilar por Roma, y no lo van a pedir dos veces.
+      options:
+      - name: {english: Grant the triumph., spanish: Conceder el triunfo.}
+        effects:
+        - {effect: add_variable, var: NRE_auctoritas, value: -30}
+        - {effect: add_war_support, value: 0.1}
+        - {effect: add_stability, value: 0.05}
+        - {effect: run, value: NRE_recalcular_legiones}
+      - name: {english: Not while the war lasts., spanish: No mientras dure la guerra.}
+        effects:
+        - {effect: add_variable, var: NRE_auctoritas, value: -10}
+        - {effect: add_stability, value: -0.05}
+        - {effect: run, value: NRE_recalcular_legiones}
+      src: user_design
+  # ===========================================================================
+  meganations_zwe:
+    country: ZWE
+    events:
+    - id: 1
+      trigger: on_startup
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords Recruit, spanish: Los Señores Reclutan}
+      desc: {english: Monthly levy of the warlords., spanish: Leva mensual de los señores de la guerra.}
+      options:
+      - name: {english: March., spanish: Marchar.}
+        effects:
+        - {effect: run, value: ANARQUIA_levas}
+        - {effect: event, id: meganations_zwe.1, days: 30}
+      src: user_decision
+  # ===========================================================================
+  meganations_zwi:
+    country: ZWI
+    events:
+    - id: 1
+      trigger: on_startup
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords Recruit, spanish: Los Señores Reclutan}
+      desc: {english: Monthly levy of the warlords., spanish: Leva mensual de los señores de la guerra.}
+      options:
+      - name: {english: March., spanish: Marchar.}
+        effects:
+        - {effect: run, value: ANARQUIA_levas}
+        - {effect: event, id: meganations_zwi.1, days: 30}
+      src: user_decision
+  # ===========================================================================
+  meganations_zwm:
+    country: ZWM
+    events:
+    - id: 1
+      trigger: on_startup
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords Recruit, spanish: Los Señores Reclutan}
+      desc: {english: Monthly levy of the warlords., spanish: Leva mensual de los señores de la guerra.}
+      options:
+      - name: {english: March., spanish: Marchar.}
+        effects:
+        - {effect: run, value: ANARQUIA_levas}
+        - {effect: event, id: meganations_zwm.1, days: 30}
+      src: user_decision
+  # ===========================================================================
+  meganations_zwb:
+    country: ZWB
+    events:
+    - id: 1
+      trigger: on_startup
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords Recruit, spanish: Los Señores Reclutan}
+      desc: {english: Monthly levy of the warlords., spanish: Leva mensual de los señores de la guerra.}
+      options:
+      - name: {english: March., spanish: Marchar.}
+        effects:
+        - {effect: run, value: ANARQUIA_levas}
+        - {effect: event, id: meganations_zwb.1, days: 30}
+      src: user_decision
