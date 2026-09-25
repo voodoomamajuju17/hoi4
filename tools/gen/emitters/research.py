@@ -67,13 +67,38 @@ def emit(ctx: BuildContext) -> None:
             ctx.loc.define_and_reference(key, en=names["en"], es=names["es"],
                                          file="replace/meganations_research", origin=f"research:{key}")
             done[kind] += 1
-    # Los equipos tienen además un nombre corto (_short) en la ventana de producción.
-    shorts = ctx.vanilla.localisation("english", {f"{k}_short" for k in (spec.get("equipment") or {}) if k in equipment})
+    # Nombres cortos (_short): la ventana de producción y las casillas del
+    # árbol usan éstos ("1934 ligero"). Si la entrada trae short_en/short_es se
+    # usan; si no, el nombre completo.
+    techs = spec.get("techs") or {}
+    equip = spec.get("equipment") or {}
+    wanted = {f"{k}_short" for k in equip if k in equipment} | {f"{k}_short" for k in techs if k in tree}
+    shorts = ctx.vanilla.localisation("english", wanted)
     for key in sorted(shorts):
         base = key[:-len("_short")]
-        names = spec["equipment"][base]
-        ctx.loc.define_and_reference(key, en=names["en"], es=names["es"],
+        names = techs.get(base) or equip.get(base)
+        ctx.loc.define_and_reference(key, en=names.get("short_en", names["en"]), es=names.get("short_es", names["es"]),
                                      file="replace/meganations_research", origin=f"research:{key}")
+    # Lo que no tiene nombre de 2100 pero lleva un año escrito ("Casco de
+    # crucero (1936)", "1934 ligero"): se corre el año igual que en los archivos.
+    if offset:
+        renamed = set(techs) | set(equip) | {f"{k}_short" for k in list(techs) + list(equip)}
+        keys = {k for k in list(tree) + list(equipment) if k not in renamed}
+        keys |= {f"{k}_short" for k in keys}
+        keys -= renamed
+        en_txt = ctx.vanilla.localisation("english", keys)
+        es_txt = ctx.vanilla.localisation("spanish", keys)
+        year = re.compile(r"\b(19[0-5]\d)\b")
+        shifted_names = 0
+        for key in sorted(set(en_txt) | set(es_txt)):
+            en, es = en_txt.get(key) or es_txt.get(key), es_txt.get(key) or en_txt.get(key)
+            if not (year.search(en) or year.search(es)):
+                continue
+            bump = lambda t: year.sub(lambda m: str(int(m.group(1)) + offset), t)  # noqa: E731
+            ctx.loc.define_and_reference(key, en=bump(en), es=bump(es),
+                                         file="replace/meganations_research", origin=f"research:year:{key}")
+            shifted_names += 1
+        ctx.note(f"investigacion: {shifted_names} nombres del juego con año escrito corridos a 2100+")
     unnamed = sum(1 for t, info in tree.items() if t not in (spec.get("techs") or {}) and info["eligible"])
     ctx.note(f"investigacion: {done['tecnologias']} tecnologias y {done['equipo']} equipos renombrados; "
              f"{unnamed} tecnologias conservan el nombre vanilla")

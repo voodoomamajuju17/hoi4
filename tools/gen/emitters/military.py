@@ -143,11 +143,21 @@ def _specialties(ctx: BuildContext, research: dict) -> dict[str, list[str]]:
     out: dict[str, list[str]] = {}
     lines = []
     for tag, cat in (research.get("specialty") or {}).items():
-        prefixes = (research.get("folders") or {}).get(cat)
-        if not prefixes:
+        options = (research.get("folders") or {}).get(cat)
+        if not options:
             raise SpecError(f"research: la especialidad '{cat}' de {tag} no esta en folders", where=SOURCE)
-        folders = {f for f in all_folders if "doctrine" not in f.lower()
-                   and any(f.lower().startswith(p) for p in prefixes)}
+        # Lista de alternativas: la primera que exista gana. Así se prefieren las
+        # pestañas de los DLC (nsb_armour, bba_air, mtgnaval...) sobre las viejas,
+        # que con esos DLC ni se muestran.
+        if all(isinstance(o, str) for o in options):
+            options = [options]
+        folders: set[str] = set()
+        prefixes: list[str] = []
+        for prefixes in options:
+            folders = {f for f in all_folders if "doctrine" not in f.lower()
+                       and any(f.lower().startswith(p) for p in prefixes)}
+            if folders:
+                break
         if not folders:
             ctx.warn(f"investigacion: ninguna pestaña del juego empieza con {prefixes} ({tag}); "
                      f"pestañas: {', '.join(all_folders)}")

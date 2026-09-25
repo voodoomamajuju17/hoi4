@@ -20,15 +20,19 @@ research:
   # Lo mínimo para todos (meganaciones, satélites y Anarquía): fabricar
   # equipo de infantería y de apoyo. Se validan contra el árbol del juego.
   base_techs: [infantry_weapons, tech_support]
-  folders:            # especialidad -> prefijos de las pestañas del juego
-    infantry: [infantry]
-    support: [support]
-    armor: [armour, armor]
-    artillery: [artillery]
-    naval: [naval]
-    air: [air]
-    engineering: [electronics, engineering]
-    industry: [industry]
+  # especialidad -> alternativas de prefijos de pestaña; gana la primera que
+  # exista. Las de los DLC primero (el reporte 2026-09-25 mostró que las
+  # pestañas viejas armour_folder, air_techs_folder y naval_folder siguen en
+  # los archivos pero no se ven con No Step Back, By Blood Alone y Man the Guns).
+  folders:
+    infantry: [[infantry]]
+    support: [[support]]
+    armor: [[nsb_armour], [armour, armor]]
+    artillery: [[artillery]]
+    naval: [[mtgnaval], [naval]]
+    air: [[bba_air], [air]]
+    engineering: [[electronics, engineering]]
+    industry: [[industry]]
   specialty:
     NRE: infantry      # las legiones
     APF: support       # milicias, ingenieros, logística del corredor

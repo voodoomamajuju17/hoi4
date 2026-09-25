@@ -1099,6 +1099,10 @@ def test_ai() -> None:
         check("el equipo tambien corre de año", "year = 19" not in eq)
         names = (mod / "localisation/spanish/replace/meganations_research_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("tecnologias con nombre de 2100", 'infantry_weapons:0 "Fusiles de Fibra de Carbono"' in names, names[:300])
+        check("nombre corto de la casilla renombrado (no '1942 rifle')",
+              'infantry_weapons2_short:0 "Fusiles de Bobina Mejorados"' in names, names[:600])
+        check("un nombre del juego con año escrito corre a 2100+",
+              'other_tech:0 "Tech of 2100"' in names and 'other_tech_short:0 "2100 tech"' in names, names)
         check("sin espiritus vanilla que sacar en el fixture: no se escribe la limpieza",
               not (mod / "events/meganations_limpieza.txt").exists())
         gfx = (mod / "interface/meganations_NRE_goals.gfx").read_text()
