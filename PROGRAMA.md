@@ -27,7 +27,7 @@ elementos también van por importancia.
   - [~] decisiones nacionales vanilla de países que no existen (China, Congo...): archivos vaciados
   - [ ] "AI tried to post an invalid command: unlock_trait_command"
 - [~] Culturas gráficas por región (Q013): sudamericana, asiática, africana, Commonwealth, Europa oriental, Medio Oriente
-- [ ] Fondo del menú principal: en 1.19 hay un selector ("Cambiar fondo"); el reporte trae un diagnóstico para encontrar dónde se define
+- [x] Fondo del menú principal: se pisan todas las pantallas de carga grandes (confirmado por el usuario)
 - [ ] Rendimiento: medir días por segundo con 29 países + guerras activas
 
 ## 2. Mundo y balance global
@@ -35,16 +35,16 @@ elementos también van por importancia.
 - [x] Reparto del mundo: 8 meganaciones, 16 satélites, la Anarquía
 - [~] La Anarquía en 5 señores de la guerra unidos en una facción
 - [~] Recursos invariables: mínimos por transferencia, total mundial = vanilla
-- [~] Industrialización de EFE, NAS y APF; penalización de la ASC
+- [~] Industria en franja (meganaciones 95-115 IC, satélites hasta 35); la NAS no llega por falta de slots
 - [~] Leyes de reclutamiento según población
-- [~] Ejército inicial (piso 20 para meganaciones), tecnologías por nivel, depósitos
-- [~] Armada y aviación heredadas de 1936 según la base, recortadas al 10% (flota solo HSN, FCU, NRE y ASC)
+- [~] Ejército inicial mínimo (2 infanterías por meganación, 1 por satélite y por país anárquico), tecnologías base + especialidad, depósitos
+- [~] Armada: solo 3 destructores de la HSN; sin aviones
 - [~] Mundo vivo: reclamos, rivalidades, tensión mundial, 2 guerras al arranque
 - [~] 9 facciones: cada meganación con sus 2 satélites, más la Anarquía
 - [~] Congo: dueños dentro de bloques condicionales borrados + red de seguridad al arrancar
 - [ ] Ajustar con los números reales de `balance.txt` (objetivos de IC, pisos, tropas)
 - [ ] Decidir si la FCU necesita una penalización propia (hoy es la más fuerte en la práctica)
-- [ ] IA: estrategias por meganación (`common/ai_strategy`): a quién atacar, a quién aliarse, qué construir
+- [~] IA: estrategias por meganación (a quién atacar y proteger: hecho); falta qué construir y plantillas
 - [ ] IA de la Anarquía: que se defienda sin atacar a lo loco
 - [ ] Satélites: nivel de autonomía por bloque y cómo se liberan o anexan
 - [ ] Revisar capitales provisorias de los satélites (hoy: la región con más población)
@@ -68,7 +68,7 @@ eventos con ultimátum e IA con condiciones.
 - [~] **ASC** — árbol de 55 focos: Poder de Cómputo (capacidad + una prioridad,
   30 días para cambiarla, 3 niveles), Consejo Sorteado (3 rasgos al azar por año),
   PLAN-41, Plan Total vs Mercado de Cómputo, ultimátum a la APF
-- [ ] Íconos propios de los focos (pack de 96 del usuario, 12 por meganación): cargar cuando se pida
+- [x] Íconos propios de los focos (pack de 96 del usuario, 12 por meganación)
 - [~] **HSN** — árbol de 50 focos: 8 nodos reales del mapa (conteo mensual, 2/4/6/8,
   perder uno duele), Aldana (seguros, arbitraje, Bloqueo Legal a la FCU) vs Inés
   Tavake (sin peajes: Botín, patentes de corso), Puerto Libre vs Peaje
@@ -142,8 +142,9 @@ eventos con ultimátum e IA con condiciones.
 - [x] Retratos de los líderes de las 7 meganaciones (arte del usuario)
 - [~] Banderas de las 8 meganaciones (arte del usuario)
 - [x] Banderas de los 16 satélites y los 5 señores de la guerra (arte del usuario)
-- [ ] Retratos de los satélites, Marcus Rourke y Anahí Quiroga
-- [ ] Íconos de foco propios: el pack de 96 ya está; falta conectarlo
+- [ ] Retratos de los satélites y de Irina Vasilescu y Kerem Aydın (NRE, hoy provisorios)
+- [x] Íconos de foco propios: el pack de 96, conectado
+- [ ] Íconos de los espíritus nacionales propios (hoy muchos salen con "?")
 - [ ] Imágenes de eventos propias
 - [ ] Íconos de los paneles de decisiones
 - [ ] Pantallas de carga
