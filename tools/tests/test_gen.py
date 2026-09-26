@@ -748,7 +748,20 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("13 rasgos propios", len(body.keys()) == 13, str(body.keys()))
+        check("53 rasgos propios (13 de lideres, 40 de ministros)", len(body.keys()) == 53, str(len(body.keys())))
+        efe_chars = pdx.parse((mod / "common/characters/EFE_characters.txt").read_text()).get("characters")
+        mins = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None]
+        check("5 ministros por meganacion (EFE)", len(mins) == 5, str(mins))
+        adv = efe_chars.get(mins[0]).get("advisor")
+        check("ministro: puesto, token, rasgo propio y costo", pdx.text(adv.get("slot")) == "political_advisor"
+              and pdx.text(adv.get("idea_token")) == mins[0] and pdx.text(adv.get("cost")) == "150", pdx.render(adv))
+        gens = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("corps_commander") is not None]
+        check("generales propios (EFE: 3 + su mariscal)", len(gens) == 3, str(gens))
+        hsn_chars = pdx.parse((mod / "common/characters/HSN_characters.txt").read_text()).get("characters")
+        adm = [k for k, v in hsn_chars.entries if isinstance(v, pdx.Block) and v.get("navy_leader") is not None]
+        check("la HSN tiene almirantes", len(adm) == 2, str(adm))
+        efe_hist = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
+        check("los ministros y generales se reclutan en la historia", f"recruit_character = {mins[0]}" in efe_hist)
         check("rasgos no aleatorios", all(pdx.text(v.get("random")) == "no" for _, v in body.entries))
         efe = (mod / "common/characters/EFE_characters.txt").read_text()
         check("Aurelio con su rasgo", "efe_custodian_of_the_earth" in efe)

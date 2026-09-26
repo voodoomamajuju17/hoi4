@@ -387,6 +387,23 @@ class Vanilla:
                 continue
         return words
 
+    def unit_leader_traits(self) -> set[str] | None:
+        """Rasgos de generales y almirantes (common/unit_leader/*.txt -> leader_traits).
+        None si la carpeta no existe."""
+        folder = self.root / "common" / "unit_leader"
+        if not folder.is_dir():
+            return None
+        out: set[str] = set()
+        for path in sorted(folder.glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("leader_traits")
+            if isinstance(block, pdx.Block):
+                out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block))
+        return out
+
     def ai_strategy_ids(self) -> dict[str, set[str]] | None:
         """Por tipo de ai_strategy, los `id` que el juego usa con ese tipo
         (role_ratio -> infantry, armor...). Sirve para no inventar ids."""

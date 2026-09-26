@@ -814,6 +814,920 @@ characters:
 # Rasgos de líder propios del mod -> common/country_leader/
 # Todos inventados. Los valores son de balance provisorio.
 # =============================================================================
+
+  # Ministros (5 por meganación) y comandantes, 2026-09-28. Retratos genéricos del juego.
+  - id: EFE_min_arriagada_1
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: Minister of Waters Celeste Arriagada, spanish: Ministra de Aguas Celeste Arriagada}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_min_keeper_of_the_aquifers
+  - id: EFE_min_vidal_2
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: Vat Master Ramiro Vidal, spanish: Maestro de Cubas Ramiro Vidal}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_min_master_of_the_vats
+  - id: EFE_min_pereira_3
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: Chief Ranger Yara Pereira, spanish: Jefa de Guardaparques Yara Pereira}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_min_voice_of_the_rangers
+  - id: EFE_min_lujan_4
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: Chancellor Octavio Luján, spanish: Canciller Octavio Luján}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_min_chancellor_of_the_empire
+  - id: EFE_min_kaltenbach_5
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: Doctor Sofía Kaltenbach, spanish: Doctora Sofía Kaltenbach}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - efe_min_war_biologist
+  - id: FCU_min_whitmore_1
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: Compliance Director Harold Whitmore, spanish: Director de Cumplimiento Harold Whitmore}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_min_board_fixer
+  - id: FCU_min_okafor_2
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: Logistics VP Dana Okafor, spanish: Vicepresidenta de Logística Dana Okafor}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_min_just_in_time
+  - id: FCU_min_voss_3
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: Chief Risk Officer Leonard Voss, spanish: Jefe de Riesgo Leonard Voss}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_min_risk_manager
+  - id: FCU_min_marchetti_4
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: PR Director Chloe Marchetti, spanish: Directora de Prensa Chloe Marchetti}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_min_spin_doctor
+  - id: FCU_min_raman_5
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: Head of R&D Priya Raman, spanish: Jefa de I+D Priya Raman}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - fcu_min_patent_hunter
+  - id: ASC_min_brandt_1
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: Delegate Anneliese Brandt, spanish: Delegada Anneliese Brandt}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_min_drawn_by_lot_loved_by_all
+  - id: ASC_min_wolski_2
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: Plan Engineer Tomasz Wolski, spanish: Ingeniero del Plan Tomasz Wolski}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_min_optimiser
+  - id: ASC_min_rousseau_3
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: Grid Warden Émile Rousseau, spanish: Guardián de la Red Émile Rousseau}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_min_grid_warden
+  - id: ASC_min_solberg_4
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: Allocation Auditor Ingrid Solberg, spanish: Auditora de Asignación Ingrid Solberg}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_min_fair_allocator
+  - id: ASC_min_varga_5
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: Algorithm Architect Nikolai Varga, spanish: Arquitecto de Algoritmos Nikolai Varga}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - asc_min_algorithm_architect
+  - id: HSN_min_sato_lee_1
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Harbourmaster Rahim Sato-Lee, spanish: Capitán de Puerto Rahim Sato-Lee}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_min_master_of_the_harbours
+  - id: HSN_min_faleolo_2
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Insurance Broker Mele Faleolo, spanish: Aseguradora Mele Faleolo}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_min_underwriter
+  - id: HSN_min_mehta_3
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Shipwright Arjun Mehta, spanish: Constructor Naval Arjun Mehta}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_min_master_shipwright
+  - id: HSN_min_xiao_4
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Strait Consul Lin Xiao, spanish: Cónsul de los Estrechos Lin Xiao}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_min_consul_of_the_straits
+  - id: HSN_min_reyes_5
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Navigator-Scholar Ana Reyes, spanish: Navegante y Sabia Ana Reyes}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - hsn_min_chart_maker
+  - id: NAS_min_mamani_1
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: High Priest Tupac Mamani, spanish: Sumo Sacerdote Túpac Mamani}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_min_voice_of_inti
+  - id: NAS_min_huaman_2
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: Keeper of Terraces Killa Huaman, spanish: Guardiana de las Terrazas Killa Huamán}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_min_terrace_keeper
+  - id: NAS_min_condori_3
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: Lord of the Roads Yupanqui Condori, spanish: Señor de los Caminos Yupanqui Condori}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_min_lord_of_the_qhapaq_nan
+  - id: NAS_min_apaza_4
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: Treasurer of the Sun Micaela Apaza, spanish: Tesorera del Sol Micaela Apaza}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_min_treasurer_of_the_sun
+  - id: NAS_min_quispe_5
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: Astronomer Sayri Quispe, spanish: Astrónomo Sayri Quispe}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - nas_min_reader_of_the_stars
+  - id: SHD_min_hao_1
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: Engineer-Minister Chen Hao, spanish: Ministro Ingeniero Chen Hao}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_min_engineer_of_the_state
+  - id: SHD_min_jing_2
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: Director of Order Wu Jing, spanish: Directora del Orden Wu Jing}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_min_guardian_of_order
+  - id: SHD_min_na_3
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: Minister of Canals Li Na, spanish: Ministra de Canales Li Na}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_min_canal_builder
+  - id: SHD_min_wei_4
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: Tribune of the People Zhang Wei, spanish: Tribuno del Pueblo Zhang Wei}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_min_voice_of_the_people
+  - id: SHD_min_mei_5
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: Hydraulic Theorist Guo Mei, spanish: Teórica Hidráulica Guo Mei}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - shd_min_hydraulic_theorist
+  - id: APF_min_adeyemi_1
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: Councillor Ngozi Adeyemi, spanish: Consejera Ngozi Adeyemi}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_min_speaker_of_the_councils
+  - id: APF_min_otieno_2
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: Corridor Builder Samuel Otieno, spanish: Constructor del Corredor Samuel Otieno}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_min_corridor_builder
+  - id: APF_min_diop_3
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: Minister of Harvests Fatou Diop, spanish: Ministra de Cosechas Fatou Diop}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_min_mother_of_harvests
+  - id: APF_min_moyo_4
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: Militia Organiser Tendai Moyo, spanish: Organizador de Milicias Tendai Moyo}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_min_militia_organiser
+  - id: APF_min_mensah_5
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: Professor Abena Mensah, spanish: Profesora Abena Mensah}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - apf_min_federal_scholar
+  - id: NRE_min_dima_1
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Consul Marcus Dima, spanish: Cónsul Marcus Dima}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_min_consul_of_rome
+  - id: NRE_min_serrano_2
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Praefectus Annonae Livia Serrano, spanish: Prefecta de la Annona Livia Serrano}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_min_keeper_of_the_grain
+  - id: NRE_min_rusu_3
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Curator Viarum Tiberius Rusu, spanish: Curador de las Vías Tiberius Rusu}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_min_builder_of_roads
+  - id: NRE_min_demir_4
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Tribune Cassia Demir, spanish: Tribuna Cassia Demir}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_min_tribune_of_the_legions
+  - id: NRE_min_stamate_5
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Philosopher Gaius Stamate, spanish: Filósofo Gaius Stamate}
+    roles:
+      advisor:
+        slot: theorist
+        cost: 100
+        traits:
+        - nre_min_stoic_strategist
+  - id: EFE_gen_quinones_1
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: General Lautaro Quiñones, spanish: General Lautaro Quiñones}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 2
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - offensive_doctrine
+        - jungle_rat
+  - id: EFE_gen_rojas_2
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: General Matilde Rojas, spanish: General Matilde Rojas}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 2
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - defensive_doctrine
+        - hill_fighter
+  - id: EFE_gen_ferrero_3
+    country: EFE
+    src: user_request
+    name:
+      regnal: {english: General Joaquín Ferrero, spanish: General Joaquín Ferrero}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 2
+        logistics_skill: 4
+        traits:
+        - logistics_wizard
+  - id: FCU_gen_harrington_1
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: Field Marshal Douglas Harrington, spanish: Mariscal Douglas Harrington}
+    roles:
+      field_marshal:
+        skill: 5
+        attack_skill: 4
+        defense_skill: 4
+        planning_skill: 5
+        logistics_skill: 4
+        traits:
+        - organizer
+        - logistics_wizard
+  - id: FCU_gen_kowalski_2
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: General Grace Kowalski, spanish: General Grace Kowalski}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - panzer_leader
+  - id: FCU_gen_salinas_3
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: General Mateo Salinas, spanish: General Mateo Salinas}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - desert_fox
+  - id: FCU_gen_brooks_4
+    country: FCU
+    src: user_request
+    name:
+      regnal: {english: General Everett Brooks, spanish: General Everett Brooks}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 2
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - defensive_doctrine
+  - id: ASC_gen_kraus_1
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: Marshal Wilhelmina Kraus, spanish: Mariscala Wilhelmina Kraus}
+    roles:
+      field_marshal:
+        skill: 5
+        attack_skill: 4
+        defense_skill: 4
+        planning_skill: 5
+        logistics_skill: 4
+        traits:
+        - brilliant_strategist
+        - organizer
+  - id: ASC_gen_novak_2
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: General Jan Novák, spanish: General Jan Novák}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - panzer_leader
+  - id: ASC_gen_fabre_3
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: General Élodie Fabre, spanish: General Élodie Fabre}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 4
+        logistics_skill: 2
+        traits:
+        - trickster
+  - id: ASC_gen_mazur_4
+    country: ASC
+    src: user_request
+    name:
+      regnal: {english: General Stanisław Mazur, spanish: General Stanisław Mazur}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 2
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - winter_specialist
+  - id: HSN_gen_arakawa_1
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Marshal Kenji Arakawa, spanish: Mariscal Kenji Arakawa}
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 4
+        logistics_skill: 4
+        traits:
+        - organizer
+  - id: HSN_gen_lan_2
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: General Nguyen Thi Lan, spanish: General Nguyen Thi Lan}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - jungle_rat
+  - id: HSN_gen_santoso_3
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: General Rizal Santoso, spanish: General Rizal Santoso}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - naval_invader
+  - id: HSN_gen_walker_4
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: General Hemi Walker, spanish: General Hemi Walker}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 2
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - commando
+  - id: HSN_adm_tupou_5
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Admiral Sione Tupou, spanish: Almirante Sione Tupou}
+    roles:
+      navy_leader:
+        skill: 5
+        attack_skill: 5
+        defense_skill: 4
+        maneuvering_skill: 4
+        coordination_skill: 4
+        traits:
+        - blue_water_expert
+        - superior_tactician
+  - id: HSN_adm_tan_6
+    country: HSN
+    src: user_request
+    name:
+      regnal: {english: Admiral Mei Ling Tan, spanish: Almirante Mei Ling Tan}
+    roles:
+      navy_leader:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 4
+        maneuvering_skill: 4
+        coordination_skill: 5
+        traits:
+        - spotter
+  - id: NAS_gen_rimac_1
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: Marshal Tupac Yupanqui Rimac, spanish: Mariscal Túpac Yupanqui Rímac}
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 5
+        planning_skill: 4
+        logistics_skill: 3
+        traits:
+        - defensive_doctrine
+        - organizer
+  - id: NAS_gen_choque_2
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: General Illa Choque, spanish: General Illa Choque}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - hill_fighter
+  - id: NAS_gen_soto_3
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: General Mayta Capac Soto, spanish: General Mayta Cápac Soto}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 4
+        defense_skill: 2
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - mountaineer
+        - offensive_doctrine
+  - id: NAS_gen_quispe_4
+    country: NAS
+    src: user_request
+    name:
+      regnal: {english: General Rosa Quispe, spanish: General Rosa Quispe}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - jungle_rat
+  - id: SHD_gen_yunfeng_1
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: Marshal Zhao Yunfeng, spanish: Mariscal Zhao Yunfeng}
+    roles:
+      field_marshal:
+        skill: 5
+        attack_skill: 4
+        defense_skill: 5
+        planning_skill: 4
+        logistics_skill: 4
+        traits:
+        - defensive_doctrine
+        - organizer
+  - id: SHD_gen_qiang_2
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: General Liu Qiang, spanish: General Liu Qiang}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - infantry_leader
+  - id: SHD_gen_lihua_3
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: General Sun Lihua, spanish: General Sun Lihua}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 4
+        logistics_skill: 3
+        traits:
+        - engineer_officer
+  - id: SHD_gen_jun_4
+    country: SHD
+    src: user_request
+    name:
+      regnal: {english: General Ma Jun, spanish: General Ma Jun}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 4
+        planning_skill: 2
+        logistics_skill: 3
+        traits:
+        - hill_fighter
+  - id: APF_gen_bello_1
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: Marshal Oluwaseun Bello, spanish: Mariscal Oluwaseun Bello}
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 4
+        planning_skill: 4
+        logistics_skill: 3
+        traits:
+        - organizer
+  - id: APF_gen_njoroge_2
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: General Amani Njoroge, spanish: General Amani Njoroge}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - desert_fox
+  - id: APF_gen_asante_3
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: General Kofi Asante, spanish: General Kofi Asante}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - jungle_rat
+  - id: APF_gen_dlamini_4
+    country: APF
+    src: user_request
+    name:
+      regnal: {english: General Zanele Dlamini, spanish: General Zanele Dlamini}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 2
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 4
+        traits:
+        - defensive_doctrine
+  - id: NRE_gen_constantin_1
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Legatus Flavius Constantin, spanish: Legado Flavio Constantin}
+    roles:
+      field_marshal:
+        skill: 5
+        attack_skill: 5
+        defense_skill: 4
+        planning_skill: 4
+        logistics_skill: 4
+        traits:
+        - offensive_doctrine
+        - brilliant_strategist
+  - id: NRE_gen_petrescu_2
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Legatus Aelia Petrescu, spanish: Legada Aelia Petrescu}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - infantry_leader
+  - id: NRE_gen_yildiz_3
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Legatus Mehmet Yildiz, spanish: Legado Mehmet Yıldız}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - desert_fox
+  - id: NRE_gen_popa_4
+    country: NRE
+    src: user_request
+    name:
+      regnal: {english: Legatus Andrei Popa, spanish: Legado Andrei Popa}
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 4
+        traits:
+        - logistics_wizard
+
 leader_traits:
   - id: efe_heredero_de_la_tierra
     name: { english: "Heir of the Earth", spanish: "Heredero de la Tierra" }
@@ -903,6 +1817,169 @@ leader_traits:
     src: invented
 
 # =============================================================================
+
+  # Rasgos de los ministros (2026-09-28)
+  - id: efe_min_keeper_of_the_aquifers
+    name: {english: Keeper of the Aquifers, spanish: Guardiana de los Acuíferos}
+    modifiers: {stability_factor: 0.05, consumer_goods_factor: -0.03}
+    src: user_request
+  - id: efe_min_master_of_the_vats
+    name: {english: Master of the Vats, spanish: Maestro de las Cubas}
+    modifiers: {production_speed_arms_factory_factor: 0.1, industrial_capacity_factory: 0.05}
+    src: user_request
+  - id: efe_min_voice_of_the_rangers
+    name: {english: Voice of the Rangers, spanish: Voz de los Guardaparques}
+    modifiers: {war_support_factor: 0.05, army_defence_factor: 0.03}
+    src: user_request
+  - id: efe_min_chancellor_of_the_empire
+    name: {english: Chancellor of the Empire, spanish: Canciller del Imperio}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: efe_min_war_biologist
+    name: {english: War Biologist, spanish: Bióloga de la Guerra}
+    modifiers: {research_speed_factor: 0.05}
+    src: user_request
+  - id: fcu_min_board_fixer
+    name: {english: Board Fixer, spanish: Operador del Directorio}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: fcu_min_just_in_time
+    name: {english: Just in Time, spanish: Justo a Tiempo}
+    modifiers: {production_speed_buildings_factor: 0.1}
+    src: user_request
+  - id: fcu_min_risk_manager
+    name: {english: Risk Manager, spanish: Gestor de Riesgos}
+    modifiers: {stability_factor: 0.05, war_support_factor: 0.03}
+    src: user_request
+  - id: fcu_min_spin_doctor
+    name: {english: Spin Doctor, spanish: Maquilladora de Noticias}
+    modifiers: {war_support_factor: 0.05, stability_factor: 0.03}
+    src: user_request
+  - id: fcu_min_patent_hunter
+    name: {english: Patent Hunter, spanish: Cazadora de Patentes}
+    modifiers: {research_speed_factor: 0.06}
+    src: user_request
+  - id: asc_min_drawn_by_lot_loved_by_all
+    name: {english: 'Drawn by Lot, Loved by All', spanish: Sorteada y Querida}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: asc_min_optimiser
+    name: {english: Optimiser, spanish: Optimizador}
+    modifiers: {industrial_capacity_factory: 0.05, production_speed_buildings_factor: 0.05}
+    src: user_request
+  - id: asc_min_grid_warden
+    name: {english: Grid Warden, spanish: Guardián de la Red}
+    modifiers: {consumer_goods_factor: -0.05}
+    src: user_request
+  - id: asc_min_fair_allocator
+    name: {english: Fair Allocator, spanish: Asignadora Justa}
+    modifiers: {stability_factor: 0.05}
+    src: user_request
+  - id: asc_min_algorithm_architect
+    name: {english: Algorithm Architect, spanish: Arquitecto de Algoritmos}
+    modifiers: {research_speed_factor: 0.07}
+    src: user_request
+  - id: hsn_min_master_of_the_harbours
+    name: {english: Master of the Harbours, spanish: Señor de los Puertos}
+    modifiers: {trade_opinion_factor: 0.15, political_power_gain: 0.05}
+    src: user_request
+  - id: hsn_min_underwriter
+    name: {english: Underwriter, spanish: Suscriptora de Riesgos}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: hsn_min_master_shipwright
+    name: {english: Master Shipwright, spanish: Maestro Constructor Naval}
+    modifiers: {industrial_capacity_dockyard: 0.1}
+    src: user_request
+  - id: hsn_min_consul_of_the_straits
+    name: {english: Consul of the Straits, spanish: Cónsul de los Estrechos}
+    modifiers: {stability_factor: 0.05}
+    src: user_request
+  - id: hsn_min_chart_maker
+    name: {english: Chart Maker, spanish: Cartógrafa}
+    modifiers: {research_speed_factor: 0.05}
+    src: user_request
+  - id: nas_min_voice_of_inti
+    name: {english: Voice of Inti, spanish: Voz de Inti}
+    modifiers: {stability_factor: 0.07}
+    src: user_request
+  - id: nas_min_terrace_keeper
+    name: {english: Terrace Keeper, spanish: Guardiana de las Terrazas}
+    modifiers: {production_speed_buildings_factor: 0.08}
+    src: user_request
+  - id: nas_min_lord_of_the_qhapaq_nan
+    name: {english: Lord of the Qhapaq Ñan, spanish: Señor del Qhapaq Ñan}
+    modifiers: {production_speed_infrastructure_factor: 0.2}
+    src: user_request
+  - id: nas_min_treasurer_of_the_sun
+    name: {english: Treasurer of the Sun, spanish: Tesorera del Sol}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: nas_min_reader_of_the_stars
+    name: {english: Reader of the Stars, spanish: Lector de Estrellas}
+    modifiers: {research_speed_factor: 0.06}
+    src: user_request
+  - id: shd_min_engineer_of_the_state
+    name: {english: Engineer of the State, spanish: Ingeniero del Estado}
+    modifiers: {industrial_capacity_factory: 0.05, political_power_gain: 0.05}
+    src: user_request
+  - id: shd_min_guardian_of_order
+    name: {english: Guardian of Order, spanish: Guardiana del Orden}
+    modifiers: {stability_factor: 0.07}
+    src: user_request
+  - id: shd_min_canal_builder
+    name: {english: Canal Builder, spanish: Constructora de Canales}
+    modifiers: {production_speed_infrastructure_factor: 0.15, production_speed_buildings_factor: 0.05}
+    src: user_request
+  - id: shd_min_voice_of_the_people
+    name: {english: Voice of the People, spanish: Voz del Pueblo}
+    modifiers: {war_support_factor: 0.05, recruitable_population_factor: 0.05}
+    src: user_request
+  - id: shd_min_hydraulic_theorist
+    name: {english: Hydraulic Theorist, spanish: Teórica Hidráulica}
+    modifiers: {research_speed_factor: 0.06}
+    src: user_request
+  - id: apf_min_speaker_of_the_councils
+    name: {english: Speaker of the Councils, spanish: Portavoz de los Consejos}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: apf_min_corridor_builder
+    name: {english: Corridor Builder, spanish: Constructor del Corredor}
+    modifiers: {production_speed_buildings_factor: 0.1}
+    src: user_request
+  - id: apf_min_mother_of_harvests
+    name: {english: Mother of Harvests, spanish: Madre de las Cosechas}
+    modifiers: {stability_factor: 0.05, consumer_goods_factor: -0.03}
+    src: user_request
+  - id: apf_min_militia_organiser
+    name: {english: Militia Organiser, spanish: Organizador de Milicias}
+    modifiers: {recruitable_population_factor: 0.08, war_support_factor: 0.03}
+    src: user_request
+  - id: apf_min_federal_scholar
+    name: {english: Federal Scholar, spanish: Sabia Federal}
+    modifiers: {research_speed_factor: 0.06}
+    src: user_request
+  - id: nre_min_consul_of_rome
+    name: {english: Consul of Rome, spanish: Cónsul de Roma}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: nre_min_keeper_of_the_grain
+    name: {english: Keeper of the Grain, spanish: Guardiana del Grano}
+    modifiers: {stability_factor: 0.05, consumer_goods_factor: -0.03}
+    src: user_request
+  - id: nre_min_builder_of_roads
+    name: {english: Builder of Roads, spanish: Constructor de Vías}
+    modifiers: {production_speed_infrastructure_factor: 0.15, production_speed_buildings_factor: 0.05}
+    src: user_request
+  - id: nre_min_tribune_of_the_legions
+    name: {english: Tribune of the Legions, spanish: Tribuna de las Legiones}
+    modifiers: {war_support_factor: 0.07}
+    src: user_request
+  - id: nre_min_stoic_strategist
+    name: {english: Stoic Strategist, spanish: Estratega Estoico}
+    modifiers: {research_speed_factor: 0.04, army_org_factor: 0.03}
+    src: user_request
+
 technical_notes:
   - id: TN003
     text: >

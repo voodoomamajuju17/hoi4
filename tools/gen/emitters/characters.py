@@ -26,6 +26,9 @@ from ..pdx import Block, Quoted
 SOURCE = "spec/03_leaders.yaml"
 LOC_FILE = "meganations_characters"
 
+LAND_SKILLS = ("skill", "attack_skill", "defense_skill", "planning_skill", "logistics_skill")
+NAVY_SKILLS = ("skill", "attack_skill", "defense_skill", "maneuvering_skill", "coordination_skill")
+
 # Tamaño estándar de retrato de líder en HOI4.
 PORTRAIT_SIZE = (156, 210)
 
@@ -81,6 +84,7 @@ def _emit_traits(ctx: BuildContext) -> set[str]:
 
 def emit(ctx: BuildContext) -> None:
     known_traits = _emit_traits(ctx)
+    unit_traits = ctx.vanilla.unit_leader_traits() if ctx.vanilla else None
     types, _ = ctx.spec.ideology_index()
     by_country: dict[str, list[dict]] = {}
     for ch in defined_characters(ctx):
@@ -137,18 +141,42 @@ def emit(ctx: BuildContext) -> None:
                 role.add("traits", traits)
                 body.add("country_leader", role)
 
-            marshal = (ch.get("roles") or {}).get("field_marshal")
-            if isinstance(marshal, dict):
-                fm = Block()
+            roles = ch.get("roles") or {}
+            for role, keys in (("field_marshal", LAND_SKILLS), ("corps_commander", LAND_SKILLS),
+                               ("navy_leader", NAVY_SKILLS)):
+                spec_role = roles.get(role)
+                if not isinstance(spec_role, dict):
+                    continue
+                rb = Block()
                 traits = Block()
-                for trait in marshal.get("traits") or []:
+                for trait in spec_role.get("traits") or []:
+                    if unit_traits is not None and trait not in unit_traits:
+                        ctx.warn(f"{cid}: el rasgo '{trait}' no existe en common/unit_leader/; se omite.")
+                        continue
                     traits.add(None, trait)
-                fm.add("traits", traits)
-                for key in ("skill", "attack_skill", "defense_skill", "planning_skill", "logistics_skill"):
-                    if key not in marshal:
-                        raise SpecError(f"{cid}: field_marshal sin {key}", where="03_leaders.yaml")
-                    fm.add(key, int(marshal[key]))
-                body.add("field_marshal", fm)
+                rb.add("traits", traits)
+                for key in keys:
+                    if key not in spec_role:
+                        raise SpecError(f"{cid}: {role} sin {key}", where="03_leaders.yaml")
+                    rb.add(key, int(spec_role[key]))
+                body.add(role, rb)
+
+            advisor = roles.get("advisor")
+            if isinstance(advisor, dict):
+                ab = Block()
+                ab.add("slot", advisor.get("slot", "political_advisor"))
+                ab.add("idea_token", cid)
+                ab.add("allowed", Block([("original_tag", tag)]))
+                traits = Block()
+                for trait in advisor.get("traits") or []:
+                    if trait not in known_traits:
+                        raise SpecError(f"{cid}: el rasgo de ministro '{trait}' no esta en leader_traits",
+                                        where="03_leaders.yaml")
+                    traits.add(None, trait)
+                ab.add("traits", traits)
+                ab.add("cost", int(advisor.get("cost", 150)))
+                ab.add("ai_will_do", Block([("factor", float(advisor.get("ai_factor", 1)))]))
+                body.add("advisor", ab)
 
             characters.add(cid, body)
 
