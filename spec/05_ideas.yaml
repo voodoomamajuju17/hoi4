@@ -856,37 +856,28 @@ countries:
       desc:
         english: 'Two or more nodes: convoys insured, routes secured.'
         spanish: 'Dos nodos o más: convoyes asegurados, rutas protegidas.'
-      modifiers: {trade_opinion_factor: 0.1, industrial_capacity_dockyard: 0.05}
+      modifiers: {trade_opinion_factor: 0.15, industrial_capacity_dockyard: 0.1, political_power_gain: 0.1}
       src: user_design
     - id: HSN_red_nodos_2
       name: {english: The Node Network II, spanish: La Red de Nodos II}
       desc:
         english: 'Four or more nodes: tolls pay for factories nobody has to build.'
         spanish: 'Cuatro nodos o más: los peajes pagan fábricas que nadie tiene que construir.'
-      modifiers: {trade_opinion_factor: 0.15, industrial_capacity_dockyard: 0.1, industrial_capacity_factory: 0.05}
+      modifiers: {trade_opinion_factor: 0.2, industrial_capacity_dockyard: 0.15, industrial_capacity_factory: 0.1, political_power_gain: 0.15}
       src: user_design
     - id: HSN_red_nodos_3
       name: {english: The Node Network III, spanish: La Red de Nodos III}
       desc:
         english: 'Six or more nodes: every cargo manifest in Asia crosses the clearing house.'
         spanish: 'Seis nodos o más: cada manifiesto de carga de Asia pasa por la cámara de compensación.'
-      modifiers:
-        trade_opinion_factor: 0.2
-        industrial_capacity_dockyard: 0.1
-        industrial_capacity_factory: 0.1
-        research_speed_factor: 0.05
+      modifiers: {trade_opinion_factor: 0.3, industrial_capacity_dockyard: 0.2, industrial_capacity_factory: 0.15, research_speed_factor: 0.05, political_power_gain: 0.2}
       src: user_design
     - id: HSN_camara_mundial
       name: {english: The World Clearing House, spanish: La Cámara Mundial de Compensación}
       desc:
         english: All eight nodes. Half the world's cargo pays the High Seas before it arrives.
         spanish: Los ocho nodos. La mitad de la carga del mundo le paga a la Alta Mar antes de llegar.
-      modifiers:
-        trade_opinion_factor: 0.3
-        industrial_capacity_dockyard: 0.15
-        industrial_capacity_factory: 0.1
-        research_speed_factor: 0.05
-        political_power_gain: 0.1
+      modifiers: {trade_opinion_factor: 0.4, industrial_capacity_dockyard: 0.25, industrial_capacity_factory: 0.2, research_speed_factor: 0.1, political_power_gain: 0.3}
       src: user_design
     - id: HSN_nodo_perdido
       name: {english: A Node Lost, spanish: Un Nodo Perdido}

@@ -3425,9 +3425,13 @@ trees:
           - Malaya
           - Kuala Lumpur
           effects:
-          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: infrastructure, level: 2}
+          - {effect: build_here, building: dockyard, level: 1}
           - {effect: build_here, building: air_base, level: 1}
         - {effect: run, value: HSN_recalcular_nodos}
+        - {effect: navy_experience, value: 15}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_presion, value: -5}
       - id: HSN_nodo_sunda
         name: {english: 'Node: Sunda', spanish: 'Nodo: Sunda'}
         days: 49
@@ -3442,9 +3446,13 @@ trees:
           - Banten
           - Batavia
           effects:
-          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: infrastructure, level: 2}
+          - {effect: build_here, building: dockyard, level: 1}
           - {effect: build_here, building: air_base, level: 1}
         - {effect: run, value: HSN_recalcular_nodos}
+        - {effect: navy_experience, value: 15}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_presion, value: -5}
       - id: HSN_nodo_manila
         name: {english: 'Node: Manila', spanish: 'Nodo: Manila'}
         days: 49
@@ -3460,9 +3468,13 @@ trees:
           - Manila
           - Luzon
           effects:
-          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: infrastructure, level: 2}
+          - {effect: build_here, building: dockyard, level: 1}
           - {effect: build_here, building: air_base, level: 1}
         - {effect: run, value: HSN_recalcular_nodos}
+        - {effect: navy_experience, value: 15}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_presion, value: -5}
       - id: HSN_nodo_taiwan
         name: {english: 'Node: Taiwan', spanish: 'Nodo: Taiwán'}
         days: 49
@@ -3477,9 +3489,13 @@ trees:
           state:
           - Taiwan
           effects:
-          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: infrastructure, level: 2}
+          - {effect: build_here, building: dockyard, level: 1}
           - {effect: build_here, building: air_base, level: 1}
         - {effect: run, value: HSN_recalcular_nodos}
+        - {effect: navy_experience, value: 15}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_presion, value: -5}
       - id: HSN_nodo_hong_kong
         name: {english: 'Node: Hong Kong', spanish: 'Nodo: Hong Kong'}
         days: 49
@@ -3495,8 +3511,19 @@ trees:
           - Hong Kong
           effects:
           - {effect: claim, value: HSN}
+        - effect: if
+          when: {country_exists: ZWI}
+          then:
+          - effect: wargoal
+            target: ZWI
+            type: take_state
+            states:
+            - - Hong Kong
         - {effect: run, value: HSN_recalcular_nodos}
         - {effect: add_political_power, value: 25}
+        - {effect: navy_experience, value: 15}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_presion, value: -5}
       - id: HSN_nodo_okinawa
         name: {english: 'Node: Okinawa', spanish: 'Nodo: Okinawa'}
         days: 49
@@ -3512,9 +3539,13 @@ trees:
           - Okinawa
           - Ryukyu
           effects:
-          - {effect: build_here, building: infrastructure, level: 1}
+          - {effect: build_here, building: infrastructure, level: 2}
+          - {effect: build_here, building: dockyard, level: 1}
           - {effect: build_here, building: air_base, level: 1}
         - {effect: run, value: HSN_recalcular_nodos}
+        - {effect: navy_experience, value: 15}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_presion, value: -5}
       - id: HSN_la_red_de_alta_mar
         name: {english: The High Seas Network, spanish: La Red de Alta Mar}
         days: 105
@@ -3529,10 +3560,9 @@ trees:
         - {effect: add_political_power, value: 100}
         - {effect: add_research_slot, value: 1}
         - {effect: run, value: HSN_recalcular_nodos}
-    - id: diplomacia_del_mar
-      name: {english: The Diplomacy of the Sea, spanish: La Diplomacia del Mar}
-      ai_factor: 1.5
-      focuses:
+        - {effect: navy_experience, value: 15}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_presion, value: -5}
       - id: HSN_consulados_navales
         name: {english: Naval Consulates, spanish: Consulados Navales}
         days: 49

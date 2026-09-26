@@ -1200,6 +1200,18 @@ def test_ai() -> None:
         zwi_ev = " ".join((mod / "events/meganations_zwi.txt").read_text().split())
         check("Indostan: si cae Bagdad entra en las guerras de los Emiratos",
               "add_to_faction = ZWM" in zwi_ev and "add_to_war = { targeted_alliance = ZWM enemy = PREV }" in zwi_ev, zwi_ev[:600])
+        dm_hsn = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text()).get("HSN_mod_nodos")
+        check("HSN: cada nodo da comercio, astilleros, fabricas y poder politico",
+              all(dm_hsn.get(k) is not None for k in ("trade_opinion_factor", "industrial_capacity_dockyard", "industrial_capacity_factory", "political_power_gain")))
+        dec_hk = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        hk = dec_hk[dec_hk.index("HSN_reclamar_hong_kong = {"):][:800]
+        check("HSN: decision Reclamar Hong Kong da el casus belli", "create_wargoal = { type = take_state target = ZWI" in hk, hk)
+        hsn_tree = " ".join((mod / "common/national_focus/HSN_focus.txt").read_text().split())
+        mal = hsn_tree[hsn_tree.index("id = HSN_malaca"):][:1500]
+        check("HSN: la rama de nodos da experiencia naval, poder politico y baja la presion",
+              "navy_experience = 15" in mal and "var = HSN_presion value = -5" in mal, mal[:600])
+        check("HSN: y construye astilleros en el nodo (spec; en el fixture la region no existe)",
+              "building: dockyard" in (REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8").split("- id: HSN_malaca")[1][:900])
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
