@@ -37,7 +37,7 @@ from __future__ import annotations
 import unicodedata
 
 from ..errors import SpecError
-from ..pdx import Block
+from ..pdx import Block, Quoted
 
 # Regiones por nombre (lo carga cada emisor desde el reparto del territorio).
 # Un nombre que no está en el juego se reemplaza por algo que nunca se cumple
@@ -188,6 +188,11 @@ def render_effects(owner: str, items: list[dict], known,
                                     where=where)
                 inner.add("type", kind)
                 inner.add("target", target)
+                if item.get("states"):
+                    ids = [resolve_state(n) for n in item["states"]]
+                    ids = [i for i in ids if i is not None]
+                    if ids:
+                        inner.add("generator", Block([(None, i) for i in ids]))
                 block.add("create_wargoal", inner)
                 effects_used.setdefault("create_wargoal", owner)
             continue
@@ -439,6 +444,73 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("if", guard)
             ec.triggers_used.setdefault("has_dynamic_modifier", owner)
             effects_used.setdefault("add_dynamic_modifier", owner)
+            continue
+        if effect == "fortify":
+            # fuertes en todas las regiones propias (edificio de provincia, en las fronteras)
+            building = item.get("building", "bunker")
+            if ec.buildings and building not in ec.buildings:
+                if ec.warn:
+                    ec.warn(f"{owner}: el edificio '{building}' no existe en este juego; no se fortifica.")
+                continue
+            prov = Block([("all_provinces", True)])
+            if item.get("border_only", True):
+                prov.add("limit_to_border", True)
+            construction = Block([("type", building), ("level", int(item.get("level", 1))),
+                                  ("province", prov), ("instant_build", True)])
+            block.add("every_owned_state", Block([("add_building_construction", construction)]))
+            effects_used.setdefault("every_owned_state", owner)
+            effects_used.setdefault("add_building_construction", owner)
+            continue
+        if effect == "division_template":
+            regs = Block()
+            for i, r in enumerate(item["regiments"]):
+                regs.add(r, Block([("x", i // 5), ("y", i % 5)]))
+            tpl = Block([("name", Quoted(item["name"])), ("regiments", regs)])
+            if item.get("support"):
+                sup = Block()
+                for i, r in enumerate(item["support"]):
+                    sup.add(r, Block([("x", 0), ("y", i)]))
+                tpl.add("support", sup)
+            block.add("division_template", tpl)
+            effects_used.setdefault("division_template", owner)
+            continue
+        if effect == "create_units":
+            for i in range(int(item["count"])):
+                div = (f'name = "{item["name"]} {i + 1}" division_template = "{item["template"]}" '
+                       f'start_experience_factor = {float(item.get("experience", 0.3))}')
+                block.add("create_unit", Block([("division", Quoted(div)), ("owner", "ROOT")]))
+            effects_used.setdefault("create_unit", owner)
+            continue
+        if effect == "white_peace_all":
+            # Paz blanca con todos los enemigos; antes, cada uno se queda con lo
+            # que controla (lo propio ocupado pasa al ocupante y al revés).
+            block.add("every_owned_state", Block([
+                ("limit", Block([("NOT", Block([("is_controlled_by", "ROOT")]))])),
+                ("CONTROLLER", Block([("transfer_state", "PREV")]))]))
+            block.add("every_state", Block([
+                ("limit", Block([("is_controlled_by", "ROOT"), ("NOT", Block([("is_owned_by", "ROOT")]))])),
+                ("ROOT", Block([("transfer_state", "PREV")]))]))
+            block.add("every_enemy_country", Block([("white_peace", "ROOT")]))
+            for k in ("every_owned_state", "every_state", "every_enemy_country", "transfer_state", "white_peace"):
+                effects_used.setdefault(k, owner)
+            ec.triggers_used.setdefault("is_controlled_by", owner)
+            ec.triggers_used.setdefault("is_owned_by", owner)
+            continue
+        if effect == "add_to_war_of":
+            # `who` entra en todas las guerras que tiene `ally` (contra sus enemigos)
+            ally, who = item["ally"], item.get("who", "ROOT")
+            block.add(ally, Block([("every_enemy_country", Block([
+                (who, Block([("add_to_war", Block([("targeted_alliance", ally), ("enemy", "PREV")]))]))]))]))
+            effects_used.setdefault("every_enemy_country", owner)
+            effects_used.setdefault("add_to_war", owner)
+            continue
+        if effect == "create_faction":
+            block.add("create_faction", Quoted(item["value"]))
+            effects_used.setdefault("create_faction", owner)
+            continue
+        if effect == "add_to_faction":
+            block.add("add_to_faction", item["value"])
+            effects_used.setdefault("add_to_faction", owner)
             continue
         if effect == "equipment":
             # equipo al depósito (arquetipo o variante): add_equipment_to_stockpile

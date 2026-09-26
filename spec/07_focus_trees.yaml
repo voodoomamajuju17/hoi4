@@ -6650,6 +6650,748 @@ trees:
 
 
 # =============================================================================
+
+  # ===========================================================================
+  # Árboles de la Anarquía (2026-09-28): una sola rama, 7 focos, cada uno
+  # disponible cuanto más sobreviven. El 7mo es la culminación.
+  # ===========================================================================
+  ZWB:
+    id: zwb_focus_tree
+    default: false
+    src: user_request
+    branches:
+    - id: la_selva
+      name: {english: The Jungle, spanish: La Selva}
+      focuses:
+      - id: ZWB_foco_1_we_survived
+        name: {english: We Survived, spanish: Sobrevivimos}
+        days: 35
+        icon: GFX_goal_generic_defence
+        desc:
+          english: Half a year and the Caudillos still hold the rivers. Available after half a year of survival.
+          spanish: Medio año y los caudillos todavía tienen los ríos. Disponible después de medio año de sobrevivir.
+        reward:
+        - {effect: add_ideas, value: ZWB_resistencia_1}
+        src: user_request
+        available: {date_after: 2100.7.1}
+      - id: ZWB_foco_2_the_river_paths
+        name: {english: The River Paths, spanish: Los Caminos del Río}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: Only we know which channel leads where. Available after one year of survival.
+          spanish: Solo nosotros sabemos qué canal lleva a dónde. Disponible después de un año de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWB_resistencia_1, add: ZWB_resistencia_2}
+        - {effect: add_manpower, value: 20000}
+        src: user_request
+        available: {date_after: 2101.1.1}
+        prerequisites:
+        - ZWB_foco_1_we_survived
+      - id: ZWB_foco_3_poisoned_trails
+        name: {english: Poisoned Trails, spanish: Senderos Envenenados}
+        days: 35
+        icon: GFX_goal_generic_defence
+        desc:
+          english: Every trail an ambush, every tree a sniper. Available after a year and a half of survival.
+          spanish: Cada sendero una emboscada, cada árbol un tirador. Disponible después de un año y medio de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWB_resistencia_2, add: ZWB_resistencia_3}
+        - {effect: equipment, type: infantry_equipment, amount: 1500}
+        src: user_request
+        available: {date_after: 2101.7.1}
+        prerequisites:
+        - ZWB_foco_2_the_river_paths
+      - id: ZWB_foco_4_the_villages_rise
+        name: {english: The Villages Rise, spanish: Los Pueblos se Levantan}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        desc:
+          english: The river villages give us their sons. Available after two years of survival.
+          spanish: Los pueblos del río nos dan a sus hijos. Disponible después de dos años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWB_resistencia_3, add: ZWB_resistencia_4}
+        - {effect: add_manpower, value: 40000}
+        src: user_request
+        available: {date_after: 2102.1.1}
+        prerequisites:
+        - ZWB_foco_3_poisoned_trails
+      - id: ZWB_foco_5_masters_of_the_canopy
+        name: {english: Masters of the Canopy, spanish: Dueños del Dosel}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: We fight from above, and the enemy never sees us. Available after three years of survival.
+          spanish: Peleamos desde arriba, y el enemigo nunca nos ve. Disponible después de tres años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWB_resistencia_4, add: ZWB_resistencia_5}
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        src: user_request
+        available: {date_after: 2103.1.1}
+        prerequisites:
+        - ZWB_foco_4_the_villages_rise
+      - id: ZWB_foco_6_the_green_wall
+        name: {english: The Green Wall, spanish: El Muro Verde}
+        days: 35
+        icon: GFX_goal_generic_defence
+        desc:
+          english: The jungle itself has become our fortress. Available after four years of survival.
+          spanish: La selva misma se volvió nuestra fortaleza. Disponible después de cuatro años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWB_resistencia_5, add: ZWB_resistencia_6}
+        - {effect: fortify, level: 1}
+        src: user_request
+        available: {date_after: 2104.1.1}
+        prerequisites:
+        - ZWB_foco_5_masters_of_the_canopy
+      - id: ZWB_foco_7_the_jungle_closes_its_gates
+        name: {english: The Jungle Closes Its Gates, spanish: La Selva Cierra sus Puertas}
+        days: 35
+        icon: GFX_goal_generic_defence
+        desc:
+          english: 'Five years. Whoever still fights us signs a white peace today: they keep what they hold, we keep what we hold. And after this,
+            nobody will dare to come in again. Available after five years of survival.'
+          spanish: 'Cinco años. Quien todavía nos pelee firma hoy una paz blanca: se queda con lo que tiene, nosotros con lo nuestro. Y después
+            de esto, nadie se va a animar a entrar otra vez. Disponible después de cinco años de sobrevivir.'
+        reward:
+        - {effect: white_peace_all}
+        - {effect: flag, value: ZWB_intocable}
+        - {effect: remove_idea, value: ZWB_resistencia_6}
+        - {effect: add_ideas, value: ZWB_la_selva_inviolable}
+        src: user_request
+        available: {date_after: 2105.1.1}
+        prerequisites:
+        - ZWB_foco_6_the_green_wall
+  ZWE:
+    id: zwe_focus_tree
+    default: false
+    src: user_request
+    branches:
+    - id: resistir
+      name: {english: Endure, spanish: Resistir}
+      focuses:
+      - id: ZWE_foco_1_we_survived
+        name: {english: We Survived, spanish: Sobrevivimos}
+        days: 35
+        icon: GFX_goal_generic_defence
+        desc:
+          english: Half a year, and the Commune has not broken us. Available after half a year of survival.
+          spanish: Medio año, y la Comuna no nos rompió. Disponible después de medio año de sobrevivir.
+        reward:
+        - {effect: add_ideas, value: ZWE_resistencia_1}
+        - {effect: add_manpower, value: 40000}
+        - {effect: equipment, type: infantry_equipment, amount: 1000}
+        - {effect: equipment, type: support_equipment, amount: 150}
+        src: user_request
+        available: {date_after: 2100.7.1}
+      - id: ZWE_foco_2_the_atamans_council
+        name: {english: The Atamans' Council, spanish: El Consejo de los Atamanes}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        desc:
+          english: 'The atamans agree on one thing: nobody takes the steppe. Available after one year of survival.'
+          spanish: 'Los atamanes están de acuerdo en una sola cosa: nadie se lleva la estepa. Disponible después de un año de sobrevivir.'
+        reward:
+        - {effect: swap_ideas, remove: ZWE_resistencia_1, add: ZWE_resistencia_2}
+        - {effect: add_manpower, value: 80000}
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - {effect: equipment, type: support_equipment, amount: 300}
+        src: user_request
+        available: {date_after: 2101.1.1}
+        prerequisites:
+        - ZWE_foco_1_we_survived
+      - id: ZWE_foco_3_grain_and_rifles
+        name: {english: Grain and Rifles, spanish: Trigo y Fusiles}
+        days: 35
+        icon: GFX_goal_generic_production
+        desc:
+          english: The granaries of the Dnieper feed the bands. Available after a year and a half of survival.
+          spanish: Los graneros del Dniéper alimentan a las bandas. Disponible después de un año y medio de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWE_resistencia_2, add: ZWE_resistencia_3}
+        - {effect: add_manpower, value: 120000}
+        - {effect: equipment, type: infantry_equipment, amount: 3000}
+        - {effect: equipment, type: support_equipment, amount: 450}
+        src: user_request
+        available: {date_after: 2101.7.1}
+        prerequisites:
+        - ZWE_foco_2_the_atamans_council
+      - id: ZWE_foco_4_the_rail_raiders
+        name: {english: The Rail Raiders, spanish: Los Asaltantes del Tren}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        desc:
+          english: Every train that crosses the steppe pays, in cargo or in blood. Available after two years of survival.
+          spanish: Cada tren que cruza la estepa paga, en carga o en sangre. Disponible después de dos años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWE_resistencia_3, add: ZWE_resistencia_4}
+        - {effect: add_manpower, value: 160000}
+        - {effect: equipment, type: infantry_equipment, amount: 4000}
+        - {effect: equipment, type: support_equipment, amount: 600}
+        src: user_request
+        available: {date_after: 2102.1.1}
+        prerequisites:
+        - ZWE_foco_3_grain_and_rifles
+      - id: ZWE_foco_5_the_winter_host
+        name: {english: The Winter Host, spanish: La Hueste del Invierno}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: We fight best when the others freeze. Available after three years of survival.
+          spanish: Peleamos mejor cuando los demás se congelan. Disponible después de tres años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWE_resistencia_4, add: ZWE_resistencia_5}
+        - {effect: add_manpower, value: 200000}
+        - {effect: equipment, type: infantry_equipment, amount: 5000}
+        - {effect: equipment, type: support_equipment, amount: 750}
+        src: user_request
+        available: {date_after: 2103.1.1}
+        prerequisites:
+        - ZWE_foco_4_the_rail_raiders
+      - id: ZWE_foco_6_the_great_muster
+        name: {english: The Great Muster, spanish: La Gran Leva}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        desc:
+          english: Every village sends its riders. Available after four years of survival.
+          spanish: Cada aldea manda a sus jinetes. Disponible después de cuatro años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWE_resistencia_5, add: ZWE_resistencia_6}
+        - {effect: add_manpower, value: 240000}
+        - {effect: equipment, type: infantry_equipment, amount: 6000}
+        - {effect: equipment, type: support_equipment, amount: 900}
+        src: user_request
+        available: {date_after: 2104.1.1}
+        prerequisites:
+        - ZWE_foco_5_the_winter_host
+      - id: ZWE_foco_7_the_eternal_horde
+        name: {english: The Eternal Horde, spanish: La Horda Eterna}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: 'Five years of war have forged the bands into a single horde. It no longer defends the steppe: it rides out of it. Available
+            after five years of survival.'
+          spanish: 'Cinco años de guerra forjaron a las bandas en una sola horda. Ya no defiende la estepa: sale de ella. Disponible después de
+            cinco años de sobrevivir.'
+        reward:
+        - effect: division_template
+          name: Hueste
+          regiments:
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+        - {effect: remove_idea, value: ZWE_resistencia_6}
+        - {effect: add_ideas, value: ZWE_la_culminacion}
+        - {effect: add_manpower, value: 500000}
+        - {effect: equipment, type: infantry_equipment, amount: 6000}
+        - {effect: create_units, template: Hueste, name: Horda de la Estepa, count: 6, experience: 0.5}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: wargoal, target: ASC, type: annex_everything}
+        - effect: if
+          when: {country_exists: NRE}
+          then:
+          - {effect: wargoal, target: NRE, type: annex_everything}
+        src: user_request
+        available: {date_after: 2105.1.1}
+        prerequisites:
+        - ZWE_foco_6_the_great_muster
+  ZWI:
+    id: zwi_focus_tree
+    default: false
+    src: user_request
+    branches:
+    - id: resistir
+      name: {english: Endure, spanish: Resistir}
+      focuses:
+      - id: ZWI_foco_1_we_survived
+        name: {english: We Survived, spanish: Sobrevivimos}
+        days: 35
+        icon: GFX_goal_generic_defence
+        desc:
+          english: Half a year, and the princes still rule their valleys. Available after half a year of survival.
+          spanish: Medio año, y los príncipes todavía gobiernan sus valles. Disponible después de medio año de sobrevivir.
+        reward:
+        - {effect: add_ideas, value: ZWI_resistencia_1}
+        - {effect: add_manpower, value: 40000}
+        - {effect: equipment, type: infantry_equipment, amount: 1000}
+        - {effect: equipment, type: support_equipment, amount: 150}
+        src: user_request
+        available: {date_after: 2100.7.1}
+      - id: ZWI_foco_2_the_durbar_of_warlords
+        name: {english: The Durbar of Warlords, spanish: El Durbar de los Señores}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        desc:
+          english: The warlords meet in the old palace, armed. Available after one year of survival.
+          spanish: Los señores se reúnen en el viejo palacio, armados. Disponible después de un año de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWI_resistencia_1, add: ZWI_resistencia_2}
+        - {effect: add_manpower, value: 80000}
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - {effect: equipment, type: support_equipment, amount: 300}
+        src: user_request
+        available: {date_after: 2101.1.1}
+        prerequisites:
+        - ZWI_foco_1_we_survived
+      - id: ZWI_foco_3_monsoon_armies
+        name: {english: Monsoon Armies, spanish: Ejércitos del Monzón}
+        days: 35
+        icon: GFX_goal_generic_production
+        desc:
+          english: The rains are our allies. Available after a year and a half of survival.
+          spanish: Las lluvias son nuestras aliadas. Disponible después de un año y medio de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWI_resistencia_2, add: ZWI_resistencia_3}
+        - {effect: add_manpower, value: 120000}
+        - {effect: equipment, type: infantry_equipment, amount: 3000}
+        - {effect: equipment, type: support_equipment, amount: 450}
+        src: user_request
+        available: {date_after: 2101.7.1}
+        prerequisites:
+        - ZWI_foco_2_the_durbar_of_warlords
+      - id: ZWI_foco_4_the_countless_levy
+        name: {english: The Countless Levy, spanish: La Leva Incontable}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        desc:
+          english: Hundreds of millions of people, and every one of them can hold a rifle. Available after two years of survival.
+          spanish: Cientos de millones de personas, y cada una puede sostener un fusil. Disponible después de dos años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWI_resistencia_3, add: ZWI_resistencia_4}
+        - {effect: add_manpower, value: 160000}
+        - {effect: equipment, type: infantry_equipment, amount: 4000}
+        - {effect: equipment, type: support_equipment, amount: 600}
+        src: user_request
+        available: {date_after: 2102.1.1}
+        prerequisites:
+        - ZWI_foco_3_monsoon_armies
+      - id: ZWI_foco_5_fortress_temples
+        name: {english: Fortress Temples, spanish: Templos Fortaleza}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: Every temple a bastion. Available after three years of survival.
+          spanish: Cada templo un bastión. Disponible después de tres años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWI_resistencia_4, add: ZWI_resistencia_5}
+        - {effect: add_manpower, value: 200000}
+        - {effect: equipment, type: infantry_equipment, amount: 5000}
+        - {effect: equipment, type: support_equipment, amount: 750}
+        src: user_request
+        available: {date_after: 2103.1.1}
+        prerequisites:
+        - ZWI_foco_4_the_countless_levy
+      - id: ZWI_foco_6_the_rivers_of_india
+        name: {english: The Rivers of India, spanish: Los Ríos de la India}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        desc:
+          english: The Ganges and the Indus carry our supplies. Available after four years of survival.
+          spanish: El Ganges y el Indo llevan nuestros suministros. Disponible después de cuatro años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWI_resistencia_5, add: ZWI_resistencia_6}
+        - {effect: add_manpower, value: 240000}
+        - {effect: equipment, type: infantry_equipment, amount: 6000}
+        - {effect: equipment, type: support_equipment, amount: 900}
+        src: user_request
+        available: {date_after: 2104.1.1}
+        prerequisites:
+        - ZWI_foco_5_fortress_temples
+      - id: ZWI_foco_7_the_raj_of_a_thousand_kings
+        name: {english: The Raj of a Thousand Kings, spanish: El Raj de los Mil Reyes}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: 'The subcontinent answers to one court at last. It will not be conquered: it is too big, too crowded, too proud. Available after
+            five years of survival.'
+          spanish: 'El subcontinente por fin responde a una sola corte. No lo van a conquistar: es demasiado grande, demasiado poblado, demasiado
+            orgulloso. Disponible después de cinco años de sobrevivir.'
+        reward:
+        - effect: division_template
+          name: Hueste
+          regiments:
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+        - {effect: remove_idea, value: ZWI_resistencia_6}
+        - {effect: add_ideas, value: ZWI_la_culminacion}
+        - {effect: add_manpower, value: 1000000}
+        - {effect: equipment, type: infantry_equipment, amount: 8000}
+        - {effect: create_units, template: Hueste, name: Guardia del Raj, count: 8, experience: 0.4}
+        src: user_request
+        available: {date_after: 2105.1.1}
+        prerequisites:
+        - ZWI_foco_6_the_rivers_of_india
+  ZWM:
+    id: zwm_focus_tree
+    default: false
+    src: user_request
+    branches:
+    - id: resistir
+      name: {english: Endure, spanish: Resistir}
+      focuses:
+      - id: ZWM_foco_1_we_survived
+        name: {english: We Survived, spanish: Sobrevivimos}
+        days: 35
+        icon: GFX_goal_generic_defence
+        desc:
+          english: Half a year, and the sand still swallows armies. Available after half a year of survival.
+          spanish: Medio año, y la arena todavía se traga ejércitos. Disponible después de medio año de sobrevivir.
+        reward:
+        - {effect: add_ideas, value: ZWM_resistencia_1}
+        - {effect: add_manpower, value: 40000}
+        - {effect: equipment, type: infantry_equipment, amount: 1000}
+        - {effect: equipment, type: support_equipment, amount: 150}
+        src: user_request
+        available: {date_after: 2100.7.1}
+      - id: ZWM_foco_2_the_oases_council
+        name: {english: The Oases Council, spanish: El Consejo de los Oasis}
+        days: 35
+        icon: GFX_goal_generic_political_pressure
+        desc:
+          english: Whoever holds the wells holds the desert. Available after one year of survival.
+          spanish: Quien tiene los pozos tiene el desierto. Disponible después de un año de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWM_resistencia_1, add: ZWM_resistencia_2}
+        - {effect: add_manpower, value: 80000}
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - {effect: equipment, type: support_equipment, amount: 300}
+        src: user_request
+        available: {date_after: 2101.1.1}
+        prerequisites:
+        - ZWM_foco_1_we_survived
+      - id: ZWM_foco_3_oil_for_rifles
+        name: {english: Oil for Rifles, spanish: Petróleo por Fusiles}
+        days: 35
+        icon: GFX_goal_generic_production
+        desc:
+          english: Every barrel buys a rifle. Available after a year and a half of survival.
+          spanish: Cada barril compra un fusil. Disponible después de un año y medio de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWM_resistencia_2, add: ZWM_resistencia_3}
+        - {effect: add_manpower, value: 120000}
+        - {effect: equipment, type: infantry_equipment, amount: 3000}
+        - {effect: equipment, type: support_equipment, amount: 450}
+        src: user_request
+        available: {date_after: 2101.7.1}
+        prerequisites:
+        - ZWM_foco_2_the_oases_council
+      - id: ZWM_foco_4_the_dune_riders
+        name: {english: The Dune Riders, spanish: Los Jinetes de las Dunas}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        desc:
+          english: Fast, light, and gone before the enemy knows. Available after two years of survival.
+          spanish: Rápidos, livianos, y lejos antes de que el enemigo se entere. Disponible después de dos años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWM_resistencia_3, add: ZWM_resistencia_4}
+        - {effect: add_manpower, value: 160000}
+        - {effect: equipment, type: infantry_equipment, amount: 4000}
+        - {effect: equipment, type: support_equipment, amount: 600}
+        src: user_request
+        available: {date_after: 2102.1.1}
+        prerequisites:
+        - ZWM_foco_3_oil_for_rifles
+      - id: ZWM_foco_5_mirage_warfare
+        name: {english: Mirage Warfare, spanish: La Guerra del Espejismo}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: Where the enemy sees an army, there is nothing. Where it sees nothing, we are waiting. Available after three years of survival.
+          spanish: Donde el enemigo ve un ejército, no hay nada. Donde no ve nada, estamos esperando. Disponible después de tres años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWM_resistencia_4, add: ZWM_resistencia_5}
+        - {effect: add_manpower, value: 200000}
+        - {effect: equipment, type: infantry_equipment, amount: 5000}
+        - {effect: equipment, type: support_equipment, amount: 750}
+        src: user_request
+        available: {date_after: 2103.1.1}
+        prerequisites:
+        - ZWM_foco_4_the_dune_riders
+      - id: ZWM_foco_6_the_sandstorm_levy
+        name: {english: The Sandstorm Levy, spanish: La Leva de la Tormenta}
+        days: 35
+        icon: GFX_goal_generic_allies_build_infantry
+        desc:
+          english: Every tribe rides. Available after four years of survival.
+          spanish: Cabalgan todas las tribus. Disponible después de cuatro años de sobrevivir.
+        reward:
+        - {effect: swap_ideas, remove: ZWM_resistencia_5, add: ZWM_resistencia_6}
+        - {effect: add_manpower, value: 240000}
+        - {effect: equipment, type: infantry_equipment, amount: 6000}
+        - {effect: equipment, type: support_equipment, amount: 900}
+        src: user_request
+        available: {date_after: 2104.1.1}
+        prerequisites:
+        - ZWM_foco_5_mirage_warfare
+      - id: ZWM_foco_7_the_caliphate_of_the_sands
+        name: {english: The Caliphate of the Sands, spanish: El Califato de las Arenas}
+        days: 35
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: The emirs have crowned a single ruler over the desert. The sand itself fights for him. Available after five years of survival.
+          spanish: Los emires coronaron a un solo soberano del desierto. La arena misma pelea por él. Disponible después de cinco años de sobrevivir.
+        reward:
+        - effect: division_template
+          name: Hueste
+          regiments:
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+        - {effect: remove_idea, value: ZWM_resistencia_6}
+        - {effect: add_ideas, value: ZWM_la_culminacion}
+        - {effect: add_manpower, value: 400000}
+        - {effect: equipment, type: infantry_equipment, amount: 8000}
+        - {effect: create_units, template: Hueste, name: Guardia del Califa, count: 8, experience: 0.5}
+        src: user_request
+        available: {date_after: 2105.1.1}
+        prerequisites:
+        - ZWM_foco_6_the_sandstorm_levy
+  ZAN:
+    id: zan_focus_tree
+    default: false
+    src: user_request
+    branches:
+    - id: la_frontera
+      name: {english: The Frontier, spanish: La Frontera}
+      focuses:
+      - id: ZAN_foco_1_the_frontier_counts_itself
+        name: {english: The Frontier Counts Itself, spanish: La Frontera se Cuenta}
+        days: 364
+        icon: GFX_goal_generic_construct_civ_factory
+        desc:
+          english: 'The first census of the Lawless Lands: more people, more rifles and more hands than anyone thought.'
+          spanish: 'El primer censo de las Tierras Sin Ley: más gente, más fusiles y más manos de lo que nadie pensaba.'
+        reward:
+        - {effect: add_manpower, value: 350000}
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - {effect: equipment, type: support_equipment, amount: 1500}
+        - {effect: equipment, type: train_equipment_1, amount: 20}
+        - {effect: equipment, type: convoy, amount: 50}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 100}
+        src: user_request
+      - id: ZAN_foco_2_frontier_towns
+        name: {english: Frontier Towns, spanish: Pueblos de Frontera}
+        days: 364
+        icon: GFX_goal_generic_production
+        desc:
+          english: Trading posts become towns, towns become factories.
+          spanish: Los puestos de comercio se vuelven pueblos, los pueblos se vuelven fábricas.
+        reward:
+        - {effect: add_manpower, value: 350000}
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - {effect: equipment, type: support_equipment, amount: 1500}
+        - {effect: equipment, type: train_equipment_1, amount: 20}
+        - {effect: equipment, type: convoy, amount: 50}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 100}
+        src: user_request
+        prerequisites:
+        - ZAN_foco_1_the_frontier_counts_itself
+      - id: ZAN_foco_3_the_frontier_pact
+        name: {english: The Frontier Pact, spanish: El Pacto de la Frontera}
+        days: 364
+        icon: GFX_goal_generic_political_pressure
+        desc:
+          english: 'Sheriffs, chiefs and wardens sign a pact: nobody else will decide for the frontier.'
+          spanish: 'Sheriffs, caciques y guardianes firman un pacto: nadie más va a decidir por la frontera.'
+        reward:
+        - {effect: add_manpower, value: 500000}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_war_support, value: 0.1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 200}
+        src: user_request
+        prerequisites:
+        - ZAN_foco_2_frontier_towns
+      - id: ZAN_foco_4_forts_on_every_road
+        name: {english: Forts on Every Road, spanish: Fuertes en Cada Camino}
+        days: 364
+        icon: GFX_goal_generic_defence
+        desc:
+          english: Every road, pass and river crossing is fortified. And the Frontier Guard is born.
+          spanish: Cada camino, paso y cruce de río se fortifica. Y nace la Guardia de la Frontera.
+        reward:
+        - {effect: fortify, level: 3, border_only: false}
+        - effect: states
+          pick: every
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+        - {effect: add_manpower, value: 250000}
+        - effect: division_template
+          name: Guardia de la Frontera
+          regiments:
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+        - effect: create_units
+          template: Guardia de la Frontera
+          name: Guardia de la Frontera
+          count: 10
+          experience: 0.6
+        src: user_request
+        prerequisites:
+        - ZAN_foco_3_the_frontier_pact
+      - id: ZAN_foco_5_settle_the_score_with_the_un
+        name: {english: Settle the Score with the Union, spanish: Ajustar Cuentas con la Unión}
+        days: 364
+        icon: GFX_goal_generic_army_doctrines
+        desc:
+          english: The Union took our lands for a century. Now the frontier comes for them.
+          spanish: La Unión nos quitó las tierras durante un siglo. Ahora la frontera va por ellos.
+        reward:
+        - effect: if
+          when: {country_exists: FCU}
+          then:
+          - {effect: wargoal, target: FCU, type: annex_everything}
+        - {effect: timed_idea, idea: ZAN_la_gran_ofensiva, days: 91}
+        - {effect: equipment, type: infantry_equipment, amount: 5000}
+        - {effect: equipment, type: support_equipment, amount: 1500}
+        - {effect: equipment, type: train_equipment_1, amount: 20}
+        src: user_request
+        prerequisites:
+        - ZAN_foco_4_forts_on_every_road
+      - id: ZAN_foco_6_against_the_world
+        name: {english: Against the World, spanish: Contra el Mundo}
+        days: 364
+        icon: GFX_goal_generic_political_pressure
+        desc:
+          english: Every great power has wronged the frontier. Every one of them will pay.
+          spanish: Todas las grandes potencias le hicieron daño a la frontera. Todas van a pagar.
+        reward:
+        - effect: if
+          when: {country_exists: EFE}
+          then:
+          - {effect: wargoal, target: EFE, type: annex_everything}
+        - effect: if
+          when: {country_exists: FCU}
+          then:
+          - {effect: wargoal, target: FCU, type: annex_everything}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: wargoal, target: ASC, type: annex_everything}
+        - effect: if
+          when: {country_exists: HSN}
+          then:
+          - {effect: wargoal, target: HSN, type: annex_everything}
+        - effect: if
+          when: {country_exists: NAS}
+          then:
+          - {effect: wargoal, target: NAS, type: annex_everything}
+        - effect: if
+          when: {country_exists: SHD}
+          then:
+          - {effect: wargoal, target: SHD, type: annex_everything}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: wargoal, target: APF, type: annex_everything}
+        - effect: if
+          when: {country_exists: NRE}
+          then:
+          - {effect: wargoal, target: NRE, type: annex_everything}
+        - {effect: timed_idea, idea: ZAN_contra_el_mundo, days: 364}
+        src: user_request
+        prerequisites:
+        - ZAN_foco_5_settle_the_score_with_the_un
+      - id: ZAN_foco_7_the_triumphant_frontier
+        name: {english: The Triumphant Frontier, spanish: La Frontera Triunfante}
+        days: 364
+        icon: GFX_goal_generic_production
+        desc:
+          english: Seven years after the collapse, the lands nobody wanted are the richest on Earth. Rifles, trains and ships fall like rain.
+          spanish: Siete años después del colapso, las tierras que nadie quería son las más ricas de la Tierra. Fusiles, trenes y barcos caen como
+            lluvia.
+        reward:
+        - {effect: equipment, type: infantry_equipment, amount: 20000}
+        - {effect: equipment, type: support_equipment, amount: 5000}
+        - {effect: equipment, type: train_equipment_1, amount: 50}
+        - {effect: equipment, type: convoy, amount: 200}
+        - {effect: add_ideas, value: ZAN_la_frontera_triunfante}
+        - {effect: add_manpower, value: 500000}
+        src: user_request
+        prerequisites:
+        - ZAN_foco_6_against_the_world
+
 technical_notes:
   - id: TN008
     text: >

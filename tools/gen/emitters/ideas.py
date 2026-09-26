@@ -71,7 +71,7 @@ _KEYWORDS = [
 def _generic_picture(modifiers: dict, idea_sprites: list[str]) -> str | None:
     if not idea_sprites:
         return None
-    key = max(modifiers, key=lambda k: abs(float(modifiers[k])))
+    key = max(modifiers, key=lambda k: abs(float(modifiers[k]))).lstrip("?")
     for prefixes, words in _KEYWORDS:
         if any(key.startswith(p) or p in key for p in prefixes):
             for word in words:
@@ -123,6 +123,15 @@ def emit(ctx: BuildContext) -> None:
                 body.add("removal_cost", -1)
             mod = Block()
             for key, value in modifiers.items():
+                if key.startswith("?"):
+                    # modificador opcional: si el juego no lo documenta, se saltea con aviso
+                    key = key[1:]
+                    if ctx.vanilla is not None and ctx.vanilla.documented_keys("modifiers") is not None \
+                            and not ctx.vanilla.is_documented("modifiers", key):
+                        ctx.warn(f"{iid}: el modificador '{key}' no existe en este juego; se omite.")
+                        continue
+                    mod.add(key, float(value))
+                    continue
                 mod.add(key, float(value))
                 modifiers_used.setdefault(key, iid)
             body.add("modifier", mod)

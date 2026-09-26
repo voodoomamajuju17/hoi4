@@ -564,11 +564,11 @@ def test_territory() -> None:
 
         units = pdx.parse((mod / "history/units/ZWI_2100.txt").read_text())
         divs = units.get("units").get_all("division")
-        check("3 milicias por pais de la Anarquia (2026-09-26)", len(divs) == 3, str(len(divs)))
+        check("5 milicias en el Indostan (2026-09-28: anarquias mas fuertes)", len(divs) == 5, str(len(divs)))
         locs = sorted(pdx.text(d.get("location")) for d in divs)
         check("en el territorio mas poblado (India, no Ceilan)", set(locs) <= {"18", "19", "20", "21"} and "18" in locs, str(locs))
         zwe = pdx.parse((mod / "history/units/ZWE_2100.txt").read_text()).get("units").get_all("division")
-        check("3 milicias en Europa (Moscu)", len(zwe) == 3 and pdx.text(zwe[0].get("location")) == "22", str(len(zwe)))
+        check("5 milicias en Europa (Moscu)", len(zwe) == 5 and pdx.text(zwe[0].get("location")) == "22", str(len(zwe)))
 
         section("la Anarquia no es una faccion (2026-09-25)")
         lh = next(p for p in (mod / "history/countries").glob("ZWI - *.txt")).read_text()
@@ -578,7 +578,7 @@ def test_territory() -> None:
         check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
-        check("balance cuenta las milicias", any(l.startswith("ZWI") and " 3 " in l for l in bal.splitlines()), bal[:800])
+        check("balance cuenta las milicias", any(l.startswith("ZWI") and " 5 " in l for l in bal.splitlines()), bal[:800])
         check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 5" in bal)
         check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
 
@@ -1175,6 +1175,24 @@ def test_ai() -> None:
               and "set_variable = { var = HSN_nodo_hong_kong value = 0 }" in hsn_rec, hsn_rec[:500])
         es_dec = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("HSN: el panel explica que es un nodo y lista los 8", "¿QUÉ ES?" in es_dec and "Hong Kong: [?HSN_nodo_hong_kong]" in es_dec)
+        zwe_tree = " ".join((mod / "common/national_focus/ZWE_focus.txt").read_text().split())
+        check("Anarquia: arbol de 7 focos", zwe_tree.count("focus = { id = ZWE_foco_") == 7, str(zwe_tree.count("focus = { id = ZWE_foco_")))
+        check("Anarquia: cuanto mas sobrevive, mas focos (fecha)", "available = { date > 2100.7.1 }" in zwe_tree and "date > 2105.1.1" in zwe_tree)
+        check("Anarquia: cada foco sube el espiritu (swap)", "swap_ideas = { remove_idea = ZWE_resistencia_1 add_idea = ZWE_resistencia_2 }" in zwe_tree)
+        check("Anarquia: la culminacion crea divisiones", "create_unit = { division =" in zwe_tree and "division_template = { name = \"Hueste\"" in zwe_tree)
+        zwb_tree = " ".join((mod / "common/national_focus/ZWB_focus.txt").read_text().split())
+        check("Amazonas: el 7mo foco firma paz blanca con todos y se queda lo que controla",
+              "every_enemy_country = { white_peace = ROOT }" in zwb_tree and "CONTROLLER = { transfer_state = PREV }" in zwb_tree
+              and "set_country_flag = ZWB_intocable" in zwb_tree)
+        zan_tree = " ".join((mod / "common/national_focus/ZAN_focus.txt").read_text().split())
+        check("Tierras Sin Ley: un foco por año", zan_tree.count("cost = 52") == 7 or zan_tree.count("cost = 52.0") == 7, zan_tree[:300])
+        check("Tierras Sin Ley: 350.000 hombres, trenes y convoyes", "add_manpower = 350000" in zan_tree
+              and "type = train_equipment_1 amount = 20" in zan_tree and "type = convoy amount = 50" in zan_tree)
+        check("Tierras Sin Ley: casus belli contra la FCU y contra todos", "create_wargoal = { type = annex_everything target = FCU }" in zan_tree
+              and "target = SHD" in zan_tree)
+        ideas_zwb = (mod / "common/ideas/ZWB_ideas.txt").read_text()
+        check("Amazonas: modificador opcional que el juego no conoce se omite con aviso",
+              any("attrition" in w for w in ctx.warnings) or "attrition" in ideas_zwb)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
@@ -1497,7 +1515,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1507,7 +1525,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

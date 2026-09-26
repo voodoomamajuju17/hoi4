@@ -1630,7 +1630,7 @@ countries:
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.25, army_org_factor: 0.15, recruitable_population_factor: 0.5}
+      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.1, recruitable_population_factor: 0.6, stability_factor: 0.1, war_support_factor: 0.1}
       src: user_design
     focus_ideas:
     - id: ZWE_caudillo_supremo
@@ -1654,15 +1654,111 @@ countries:
         spanish: Todo el país marcha contra la codicia de Roma.
       modifiers: {army_org_factor: 0.05, war_support_factor: 0.15}
       src: user_design
+    - id: ZWE_resistencia_1
+      name: {english: The Steppe Holds I, spanish: La Estepa Aguanta I}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.05
+        war_support_factor: 0.05
+        recruitable_population_factor: 0.08
+        army_defence_factor: 0.04
+        army_org_factor: 0.025
+        army_attack_factor: 0.02
+        ?supply_consumption_factor: -0.03
+      src: user_design
+    - id: ZWE_resistencia_2
+      name: {english: The Steppe Holds II, spanish: La Estepa Aguanta II}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        recruitable_population_factor: 0.16
+        army_defence_factor: 0.08
+        army_org_factor: 0.05
+        army_attack_factor: 0.04
+        ?supply_consumption_factor: -0.06
+      src: user_design
+    - id: ZWE_resistencia_3
+      name: {english: The Steppe Holds III, spanish: La Estepa Aguanta III}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.15
+        recruitable_population_factor: 0.24
+        army_defence_factor: 0.12
+        army_org_factor: 0.075
+        army_attack_factor: 0.06
+        ?supply_consumption_factor: -0.09
+      src: user_design
+    - id: ZWE_resistencia_4
+      name: {english: The Steppe Holds IV, spanish: La Estepa Aguanta IV}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.2
+        war_support_factor: 0.2
+        recruitable_population_factor: 0.32
+        army_defence_factor: 0.16
+        army_org_factor: 0.1
+        army_attack_factor: 0.08
+        ?supply_consumption_factor: -0.12
+      src: user_design
+    - id: ZWE_resistencia_5
+      name: {english: The Steppe Holds V, spanish: La Estepa Aguanta V}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.25
+        war_support_factor: 0.25
+        recruitable_population_factor: 0.4
+        army_defence_factor: 0.2
+        army_org_factor: 0.125
+        army_attack_factor: 0.1
+        ?supply_consumption_factor: -0.15
+      src: user_design
+    - id: ZWE_resistencia_6
+      name: {english: The Steppe Holds VI, spanish: La Estepa Aguanta VI}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.3
+        war_support_factor: 0.3
+        recruitable_population_factor: 0.48
+        army_defence_factor: 0.24
+        army_org_factor: 0.15
+        army_attack_factor: 0.12
+        ?supply_consumption_factor: -0.18
+      src: user_design
+    - id: ZWE_la_culminacion
+      name: {english: The Eternal Horde, spanish: La Horda Eterna}
+      desc:
+        english: 'Five years of war have forged the bands into a single horde. It no longer defends the steppe: it rides out of it.'
+        spanish: 'Cinco años de guerra forjaron a las bandas en una sola horda. Ya no defiende la estepa: sale de ella.'
+      modifiers:
+        army_attack_factor: 0.2
+        army_org_factor: 0.15
+        war_support_factor: 0.2
+        recruitable_population_factor: 0.3
+        ?supply_consumption_factor: -0.15
+      src: user_design
   ZWI:
-    coverage: user_decision   # 2026-09-26: que la Anarquía resista más
+    coverage: user_decision
     starting_ideas:
     - id: ZWI_senores_de_la_guerra
       name: {english: The Hindustani Warlords, spanish: Los Señores de la Guerra del Indostán}
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.25, army_org_factor: 0.15, recruitable_population_factor: 0.5}
+      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.05, recruitable_population_factor: 0.7, stability_factor: 0.1, war_support_factor: 0.1}
       src: user_design
     focus_ideas:
     - id: ZWI_caudillo_supremo
@@ -1679,15 +1775,106 @@ countries:
         spanish: Viejos enemigos comparten trincheras contra el invasor.
       modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1}
       src: user_design
+    - id: ZWI_resistencia_1
+      name: {english: The Thousand Kings I, spanish: Los Mil Reyes I}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.05
+        war_support_factor: 0.05
+        recruitable_population_factor: 0.08
+        army_defence_factor: 0.04
+        army_org_factor: 0.025
+        ?supply_consumption_factor: -0.03
+      src: user_design
+    - id: ZWI_resistencia_2
+      name: {english: The Thousand Kings II, spanish: Los Mil Reyes II}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        recruitable_population_factor: 0.16
+        army_defence_factor: 0.08
+        army_org_factor: 0.05
+        ?supply_consumption_factor: -0.06
+      src: user_design
+    - id: ZWI_resistencia_3
+      name: {english: The Thousand Kings III, spanish: Los Mil Reyes III}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.15
+        recruitable_population_factor: 0.24
+        army_defence_factor: 0.12
+        army_org_factor: 0.075
+        ?supply_consumption_factor: -0.09
+      src: user_design
+    - id: ZWI_resistencia_4
+      name: {english: The Thousand Kings IV, spanish: Los Mil Reyes IV}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.2
+        war_support_factor: 0.2
+        recruitable_population_factor: 0.32
+        army_defence_factor: 0.16
+        army_org_factor: 0.1
+        ?supply_consumption_factor: -0.12
+      src: user_design
+    - id: ZWI_resistencia_5
+      name: {english: The Thousand Kings V, spanish: Los Mil Reyes V}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.25
+        war_support_factor: 0.25
+        recruitable_population_factor: 0.4
+        army_defence_factor: 0.2
+        army_org_factor: 0.125
+        ?supply_consumption_factor: -0.15
+      src: user_design
+    - id: ZWI_resistencia_6
+      name: {english: The Thousand Kings VI, spanish: Los Mil Reyes VI}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.3
+        war_support_factor: 0.3
+        recruitable_population_factor: 0.48
+        army_defence_factor: 0.24
+        army_org_factor: 0.15
+        ?supply_consumption_factor: -0.18
+      src: user_design
+    - id: ZWI_la_culminacion
+      name: {english: The Raj of a Thousand Kings, spanish: El Raj de los Mil Reyes}
+      desc:
+        english: 'The subcontinent answers to one court at last. It will not be conquered: it is too big, too crowded, too proud.'
+        spanish: 'El subcontinente por fin responde a una sola corte. No lo van a conquistar: es demasiado grande, demasiado poblado, demasiado
+          orgulloso.'
+      modifiers:
+        recruitable_population_factor: 0.4
+        army_defence_factor: 0.2
+        stability_factor: 0.2
+        industrial_capacity_factory: 0.15
+        monthly_population: 0.2
+      src: user_design
   ZWM:
-    coverage: user_decision   # 2026-09-26: que la Anarquía resista más
+    coverage: user_decision
     starting_ideas:
     - id: ZWM_senores_de_la_guerra
       name: {english: The Desert Warlords, spanish: Los Señores de la Guerra del Desierto}
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.25, army_org_factor: 0.15, recruitable_population_factor: 0.5}
+      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.1, recruitable_population_factor: 0.6, stability_factor: 0.1, war_support_factor: 0.15}
       src: user_design
     - id: ZWM_guerra_del_desierto
       name: {english: The Desert War, spanish: La Guerra del Desierto}
@@ -1711,15 +1898,111 @@ countries:
         spanish: Viejos enemigos comparten trincheras contra el invasor.
       modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1}
       src: user_design
+    - id: ZWM_resistencia_1
+      name: {english: The Desert Endures I, spanish: El Desierto Aguanta I}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.05
+        war_support_factor: 0.05
+        recruitable_population_factor: 0.08
+        army_defence_factor: 0.04
+        army_org_factor: 0.025
+        army_attack_factor: 0.02
+        ?supply_consumption_factor: -0.03
+      src: user_design
+    - id: ZWM_resistencia_2
+      name: {english: The Desert Endures II, spanish: El Desierto Aguanta II}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        recruitable_population_factor: 0.16
+        army_defence_factor: 0.08
+        army_org_factor: 0.05
+        army_attack_factor: 0.04
+        ?supply_consumption_factor: -0.06
+      src: user_design
+    - id: ZWM_resistencia_3
+      name: {english: The Desert Endures III, spanish: El Desierto Aguanta III}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.15
+        recruitable_population_factor: 0.24
+        army_defence_factor: 0.12
+        army_org_factor: 0.075
+        army_attack_factor: 0.06
+        ?supply_consumption_factor: -0.09
+      src: user_design
+    - id: ZWM_resistencia_4
+      name: {english: The Desert Endures IV, spanish: El Desierto Aguanta IV}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.2
+        war_support_factor: 0.2
+        recruitable_population_factor: 0.32
+        army_defence_factor: 0.16
+        army_org_factor: 0.1
+        army_attack_factor: 0.08
+        ?supply_consumption_factor: -0.12
+      src: user_design
+    - id: ZWM_resistencia_5
+      name: {english: The Desert Endures V, spanish: El Desierto Aguanta V}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.25
+        war_support_factor: 0.25
+        recruitable_population_factor: 0.4
+        army_defence_factor: 0.2
+        army_org_factor: 0.125
+        army_attack_factor: 0.1
+        ?supply_consumption_factor: -0.15
+      src: user_design
+    - id: ZWM_resistencia_6
+      name: {english: The Desert Endures VI, spanish: El Desierto Aguanta VI}
+      desc:
+        english: The longer the warlords survive, the harder they are to break.
+        spanish: Cuanto más sobreviven los señores de la guerra, más difíciles son de romper.
+      modifiers:
+        stability_factor: 0.3
+        war_support_factor: 0.3
+        recruitable_population_factor: 0.48
+        army_defence_factor: 0.24
+        army_org_factor: 0.15
+        army_attack_factor: 0.12
+        ?supply_consumption_factor: -0.18
+      src: user_design
+    - id: ZWM_la_culminacion
+      name: {english: The Caliphate of the Sands, spanish: El Califato de las Arenas}
+      desc:
+        english: The emirs have crowned a single ruler over the desert. The sand itself fights for him.
+        spanish: Los emires coronaron a un solo soberano del desierto. La arena misma pelea por él.
+      modifiers:
+        army_defence_factor: 0.3
+        army_attack_factor: 0.15
+        army_org_factor: 0.15
+        stability_factor: 0.2
+        ?attrition: -0.2
+      src: user_design
   ZWB:
-    coverage: user_decision   # 2026-09-26: que la Anarquía resista más
+    coverage: user_decision
     starting_ideas:
     - id: ZWB_senores_de_la_guerra
       name: {english: The Amazon Warlords, spanish: Los Señores de la Guerra del Amazonas}
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.25, army_org_factor: 0.15, recruitable_population_factor: 0.5}
+      modifiers: {army_defence_factor: 0.15, army_org_factor: 0.05, recruitable_population_factor: 0.3}
       src: user_design
     focus_ideas:
     - id: ZWB_caudillo_supremo
@@ -1736,6 +2019,75 @@ countries:
         spanish: Viejos enemigos comparten trincheras contra el invasor.
       modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1}
       src: user_design
+    - id: ZWB_resistencia_1
+      name: {english: The Jungle Endures I, spanish: La Selva Resiste I}
+      desc:
+        english: Every month the warlords survive, the jungle fights harder for them.
+        spanish: Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
+      modifiers: {army_defence_factor: 0.05, stability_factor: 0.05}
+      src: user_design
+    - id: ZWB_resistencia_2
+      name: {english: The Jungle Endures II, spanish: La Selva Resiste II}
+      desc:
+        english: Every month the warlords survive, the jungle fights harder for them.
+        spanish: Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
+      modifiers: {army_defence_factor: 0.08, stability_factor: 0.08, '?attrition': -0.05}
+      src: user_design
+    - id: ZWB_resistencia_3
+      name: {english: The Jungle Endures III, spanish: La Selva Resiste III}
+      desc:
+        english: Every month the warlords survive, the jungle fights harder for them.
+        spanish: Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
+      modifiers: {army_defence_factor: 0.1, army_org_factor: 0.05, stability_factor: 0.1, '?attrition': -0.05}
+      src: user_design
+    - id: ZWB_resistencia_4
+      name: {english: The Jungle Endures IV, spanish: La Selva Resiste IV}
+      desc:
+        english: Every month the warlords survive, the jungle fights harder for them.
+        spanish: Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
+      modifiers:
+        army_defence_factor: 0.12
+        army_org_factor: 0.05
+        stability_factor: 0.12
+        recruitable_population_factor: 0.1
+        ?attrition: -0.08
+      src: user_design
+    - id: ZWB_resistencia_5
+      name: {english: The Jungle Endures V, spanish: La Selva Resiste V}
+      desc:
+        english: Every month the warlords survive, the jungle fights harder for them.
+        spanish: Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
+      modifiers:
+        army_defence_factor: 0.15
+        army_org_factor: 0.08
+        stability_factor: 0.15
+        recruitable_population_factor: 0.15
+        ?attrition: -0.1
+      src: user_design
+    - id: ZWB_resistencia_6
+      name: {english: The Jungle Endures VI, spanish: La Selva Resiste VI}
+      desc:
+        english: Every month the warlords survive, the jungle fights harder for them.
+        spanish: Cada mes que los caudillos sobreviven, la selva pelea más por ellos.
+      modifiers:
+        army_defence_factor: 0.18
+        army_org_factor: 0.1
+        stability_factor: 0.15
+        recruitable_population_factor: 0.2
+        war_support_factor: 0.1
+        ?attrition: -0.1
+      src: user_design
+    - id: ZWB_la_selva_inviolable
+      name: {english: The Inviolable Jungle, spanish: La Selva Inviolable}
+      desc:
+        english: Nobody who entered the jungle came back to tell of it. Nobody wants to try again.
+        spanish: Nadie que entró a la selva volvió para contarlo. Nadie quiere volver a probar.
+      modifiers:
+        army_defence_factor: 0.25
+        army_org_factor: 0.1
+        stability_factor: 0.2
+        ?enemy_justify_war_goal_time: 4.0
+      src: user_design
   ZST:
     coverage: user_decision
     focus_ideas:
@@ -1745,6 +2097,36 @@ countries:
         english: The whole country marches against Rome's greed.
         spanish: Todo el país marcha contra la codicia de Roma.
       modifiers: {army_org_factor: 0.05, war_support_factor: 0.15}
+      src: user_design
+  ZAN:
+    coverage: user_decision
+    focus_ideas:
+    - id: ZAN_la_gran_ofensiva
+      name: {english: The Great Offensive, spanish: La Gran Ofensiva}
+      desc:
+        english: Ninety days in which the Lawless Lands hit like a great power.
+        spanish: Noventa días en que las Tierras Sin Ley pegan como una gran potencia.
+      modifiers: {army_attack_factor: 0.3, army_org_factor: 0.25, '?army_morale_factor': 0.2, army_defence_factor: 0.1}
+      src: user_design
+    - id: ZAN_contra_el_mundo
+      name: {english: Against the World, spanish: Contra el Mundo}
+      desc:
+        english: A year in which the frontier believes it can beat everyone.
+        spanish: Un año en que la frontera cree que le puede ganar a todos.
+      modifiers:
+        army_attack_factor: 0.25
+        army_defence_factor: 0.25
+        army_org_factor: 0.2
+        war_support_factor: 0.25
+        industrial_capacity_factory: 0.2
+        recruitable_population_factor: 0.3
+      src: user_design
+    - id: ZAN_la_frontera_triunfante
+      name: {english: The Triumphant Frontier, spanish: La Frontera Triunfante}
+      desc:
+        english: The lands nobody wanted are now the most productive in the world.
+        spanish: Las tierras que nadie quería ahora son las más productivas del mundo.
+      modifiers: {research_speed_factor: 0.25, production_speed_buildings_factor: 0.25}
       src: user_design
   PTA: { coverage: unknown, starting_ideas: unknown, see: Q012 }
   YYG: { coverage: unknown, starting_ideas: unknown, see: Q012 }
