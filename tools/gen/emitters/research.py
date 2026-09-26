@@ -36,9 +36,14 @@ def emit(ctx: BuildContext) -> None:
     if offset:
         for rel, pattern, kind in (("common/technologies", _START, "tecnologias"),
                                    ("common/units/equipment", _YEAR, "equipo")):
+            weights = _ai_weights(ctx) if kind == "tecnologias" else {}
             for path in sorted((root / rel).glob("*.txt")):
                 text = path.read_text(encoding="utf-8-sig", errors="replace")
                 new, n = pattern.subn(lambda m: f"{m.group(1)}{int(m.group(2)) + offset}", text)
+                if weights:
+                    new, w = _inject_weights(new, weights)
+                    shifted["ia"] = shifted.get("ia", 0) + w
+                    n += w
                 if n:
                     ctx.write_text(f"{rel}/{path.name}", banner_for(SOURCE + f" (+ {rel}/{path.name} vanilla)") + new)
                     shifted[kind] += n
@@ -51,6 +56,8 @@ def emit(ctx: BuildContext) -> None:
             if n:
                 ctx.write_text(path.relative_to(root).as_posix(), banner_for(SOURCE) + new)
                 shifted["interfaz"] += n
+        if shifted.get("ia"):
+            ctx.note(f"investigacion: la IA prioriza {shifted['ia']} tecnologias (su especialidad y lo naval)")
         ctx.note(f"investigacion: años +{offset} en {shifted['tecnologias']} tecnologias, "
                  f"{shifted['equipo']} equipos y {shifted['interfaz']} textos de la pantalla de investigacion")
 
@@ -106,3 +113,68 @@ def emit(ctx: BuildContext) -> None:
         shown = sorted(missing)
         ctx.note(f"investigacion: {len(shown)} ids que este juego no tiene (se ignoran): {', '.join(shown[:40])}"
                  + (" ..." if len(shown) > 40 else ""))
+
+
+def _ai_weights(ctx: BuildContext) -> dict[str, list[tuple[str, float]]]:
+    """Qué tecnologías prioriza la IA de cada meganación (16_ai.yaml ->
+    military): las que siguen en su especialidad y lo naval básico.
+    El juego no tiene una estrategia de IA para investigar (el reporte del
+    2026-09-27 descartó `research_tech`), así que se suma un modificador al
+    ai_will_do de cada tecnología: factor = 1 + valor/20, solo para ese país."""
+    mil = (ctx.spec.raw.get("ai") or {}).get("military") or {}
+    out: dict[str, list[tuple[str, float]]] = {}
+    value = mil.get("research_value")
+    if value:
+        for tag, techs in (ctx.data.get("specialty_next") or {}).items():
+            for t in techs:
+                out.setdefault(t, []).append((tag, 1 + float(value) / 20))
+    naval = mil.get("naval_research") or {}
+    majors = [c.tag for c in ctx.spec.countries if c.is_major]
+    for tag in majors:
+        v = (naval.get("by_country") or {}).get(tag, naval.get("value"))
+        if v:
+            for t in naval.get("techs") or []:
+                out.setdefault(t, []).append((tag, 1 + float(v) / 20))
+    return out
+
+
+def _block_end(text: str, start: int) -> int:
+    """Índice de la llave que cierra el bloque cuya llave abre en `start`."""
+    depth = 0
+    i = start
+    while i < len(text):
+        c = text[i]
+        if c == "#":
+            nl = text.find("\n", i)
+            i = len(text) if nl == -1 else nl
+            continue
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return -1
+
+
+def _inject_weights(text: str, weights: dict[str, list[tuple[str, float]]]) -> tuple[str, int]:
+    count = 0
+    for tech, pairs in weights.items():
+        m = re.search(rf"(?m)^[ \t]*{re.escape(tech)}\s*=\s*\{{", text)
+        if not m:
+            continue
+        open_at = m.end() - 1
+        end = _block_end(text, open_at)
+        if end == -1:
+            continue
+        mods = "".join(f"\n\t\t\tmodifier = {{ factor = {f:g} original_tag = {tag} }}  # 2100 Meganations" for tag, f in pairs)
+        body = text[open_at:end]
+        a = re.search(r"\bai_will_do\s*=\s*\{", body)
+        if a:
+            at = open_at + a.end()
+            text = text[:at] + mods + text[at:]
+        else:
+            text = text[:open_at + 1] + f"\n\t\tai_will_do = {{ factor = 1{mods}\n\t\t}}" + text[open_at + 1:]
+        count += 1
+    return text, count

@@ -1190,9 +1190,12 @@ def test_ai() -> None:
         milr = " ".join(pdx.render(mil).split()) if mil is not None else ""
         check("IA militar: el EFE arma blindados", "type = role_ratio id = armor value = 25" in milr, milr[:600])
         check("IA militar: pone industria en armas (tipo sin id)", "type = added_military_to_civilian_factory_ratio value = 25" in milr)
-        nre = " ".join(pdx.render(root.get("MEGANATIONS_NRE_militar")).split())
-        check("IA militar: investiga lo que sigue en su especialidad (NRE: infanteria)",
-              "type = research_tech id = night_vision_fixture value = 60" in nre, nre[:800])
+        inf = (mod / "common/technologies/infantry.txt").read_text()
+        nv = inf[inf.index("night_vision_fixture = {"):]
+        nv = nv[:nv.index("folder")]
+        check("IA militar: investiga lo que sigue en su especialidad (ai_will_do de la tecnologia, solo NRE)",
+              "modifier = { factor = 4 original_tag = NRE }" in nv, nv)
+        check("IA militar: sin research_tech (el juego no lo conoce)", "research_tech" not in ai)
         hsn = " ".join(pdx.render(root.get("MEGANATIONS_HSN_militar")).split())
         check("IA militar: un id que el juego no usa se omite (marines en el fixture)", "marines" not in hsn, hsn[:400])
         check("IA militar: el aviso lo dice", any("role_ratio:marines" in w for w in ctx.warnings))
