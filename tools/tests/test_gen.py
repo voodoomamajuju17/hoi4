@@ -1136,7 +1136,12 @@ def test_ai() -> None:
         check("tooltips: toda variable que se suma tiene nombre (o hidden)", not missing, str(missing))
         cap = " ".join((mod / "common/on_actions/03_meganations_capitulation.txt").read_text().split())
         check("Emiratos: cuando capitulan en guerra con Roma, Roma decide", "on_capitulation" in cap
-              and "tag = ZWM NRE = { has_war_with = ZWM }" in cap and "country_event = meganations_nre.50" in cap, cap[-400:])
+              and "ZWM = { has_capitulated = yes } NRE = { has_war_with = ZWM" in cap and "country_event = meganations_nre.50" in cap
+              and "set_country_flag = NRE_capitulacion_zwm" in cap, cap[-400:])
+        nre_log = (mod / "events/meganations_nre.txt").read_text()
+        check("eventos: cada evento visible deja rastro en game.log", 'log = "[GetDateText] MEGANATIONS evento meganations_nre.50 para [Root.GetTag]"' in nre_log)
+        check("Emiratos: respaldo si el tratado de paz ya los borro (pulso de Roma)",
+              "NRE_capitulacion_zwm" in (mod / "common/scripted_effects/meganations_effects.txt").read_text())
         nre_ev = " ".join((mod / "events/meganations_nre.txt").read_text().split())
         e50 = nre_ev[nre_ev.index("id = meganations_nre.50 title"):][:2500]
         check("Emiratos: anexar, provincia cliente o tomar la costa", "annex_country" in e50 and "puppet = ZWM" in e50
@@ -1154,13 +1159,13 @@ def test_ai() -> None:
                   "SHD_pulso_del_rio": 2, "NAS_pulso_de_los_templos": 2, "APF_pulso_de_los_consejos": 1, "HSN_pulso_de_las_potencias": 1}
         total = sum(se_c.count(f"has_country_flag = {p.split('_')[0]}_cadena_") for p in pulses)
         check("16 cadenas de eventos, cada una chequeada una vez en el pulso de quien la empieza", total == 16, str(total))
-        for needle, what in (("num_of_factories > 119", "industria (ASC 120 fabricas)"),
+        for needle, what in (("num_of_factories > 129", "industria (ASC 130 fabricas)"),
                              ("has_tech = improved_computing_machine", "tecnologia"),
-                             ("has_manpower > 999999", "manpower"),
-                             ("has_war_support > 0.8", "apoyo belico"),
-                             ("has_equipment = { infantry_equipment > 14999 }", "equipo"),
-                             ("has_army_size = { size > 39 }", "divisiones ajenas"),
-                             ("date > 2104.1.1", "fecha"),
+                             ("has_manpower > 399999", "manpower"),
+                             ("has_war_support > 0.6", "apoyo belico"),
+                             ("has_equipment = { infantry_equipment > 7999 }", "equipo"),
+                             ("has_army_size = { size > 23 }", "divisiones ajenas"),
+                             ("date > 2102.1.1", "fecha"),
                              ("NRE = { has_completed_focus = NRE_hispania_provincia }", "foco ajeno"),
                              ("has_completed_focus = SHD_el_caudal_perfecto", "foco propio"),
                              ("has_stability < 0.3", "estabilidad")):
@@ -1487,7 +1492,8 @@ def test_vanilla_validation() -> None:
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
-            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment\n"
+            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

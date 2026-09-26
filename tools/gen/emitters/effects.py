@@ -640,6 +640,14 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("controls_state", sid)
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "controls_any_of":
+            # controla al menos una región de las que `value` tenía al arranque
+            ids = sorted(sid for sid, tag in _TERRITORY.items() if tag == value)
+            if not ids:
+                block.add("always", False)
+            else:
+                block.add("OR", Block([("controls_state", i) for i in ids]))
+                triggers_used.setdefault("controls_state", owner)
         elif key == "war_with":
             block.add("has_war_with", value)
             triggers_used.setdefault("has_war_with", owner)

@@ -128,6 +128,11 @@ def _emit(ctx: BuildContext) -> None:
             else:
                 ctx.warn(f"{eid}: la imagen '{picture}' no existe en el juego; el evento sale sin imagen.")
         b.add("is_triggered_only", True)
+        if not ev.get("hidden"):
+            # Rastro en game.log (Documentos/Paradox Interactive/Hearts of Iron IV/logs):
+            # así se puede ver qué eventos saltaron en una partida.
+            b.add("immediate", Block([("log", Quoted(f"[GetDateText] MEGANATIONS evento {eid} para [Root.GetTag]"))]))
+            effects_used.setdefault("log", eid)
         if ev.get("hidden"):
             b.add("hidden", True)  # evento de mantenimiento: corre sin ventana (hide_window no existe en HOI4)
 
@@ -204,11 +209,18 @@ def _emit_capitulations(ctx: BuildContext, items: list[tuple[str, str, str]], tr
             return
     effect = Block()
     for loser, owner, eid in items:
-        cond = Block([("tag", loser), (owner, Block([("has_war_with", loser)]))])
-        body = Block([("limit", cond), (owner, Block([("country_event", eid)]))])
+        # No se depende de si ROOT es el que capitula o el que gana (el usuario
+        # no vio saltar la cadena de los Emiratos): basta con que `loser` haya
+        # capitulado y el dueño esté en guerra con él. Una sola vez (bandera).
+        flag = f"{owner}_capitulacion_{loser.lower()}"
+        cond = Block([(loser, Block([("has_capitulated", True)])),
+                      (owner, Block([("has_war_with", loser),
+                                     ("NOT", Block([("has_country_flag", flag)]))]))])
+        body = Block([("limit", cond), (owner, Block([("set_country_flag", flag), ("country_event", eid)]))])
         effect.add("if", body)
-    triggers_used.setdefault("tag", "on_capitulation")
+    triggers_used.setdefault("has_capitulated", "on_capitulation")
     triggers_used.setdefault("has_war_with", "on_capitulation")
+    triggers_used.setdefault("has_country_flag", "on_capitulation")
     root = Block([("on_actions", Block([("on_capitulation", Block([("effect", effect)]))]))])
     ctx.write_script("common/on_actions/03_meganations_capitulation.txt", root, source=SOURCE)
 

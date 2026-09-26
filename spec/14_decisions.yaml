@@ -5697,7 +5697,7 @@ scripted_effects:
     - {effect: run, value: EFE_pulso_satelites}
     - effect: if
       when:
-        variable_at_least: {var: EFE_biosteel, value: 12}
+        variable_at_least: {var: EFE_biosteel, value: 9}
         not_flag: EFE_cadena_1
       then:
       - {effect: flag, value: EFE_cadena_1}
@@ -5712,7 +5712,7 @@ scripted_effects:
       - {effect: flag, value: EFE_cadena_9}
       - {effect: event, id: meganations_efe.120, days: 1}
     - effect: if
-      when: {date_after: 2106.1.1, not_flag: EFE_cadena_16}
+      when: {date_after: 2103.6.1, not_flag: EFE_cadena_16}
       then:
       - {effect: flag, value: EFE_cadena_16}
       - {effect: event, id: meganations_efe.140, days: 1}
@@ -5778,7 +5778,7 @@ scripted_effects:
       - {effect: event, id: meganations_fcu.31, days: 1}
     - {effect: run, value: FCU_pulso_satelites}
     - effect: if
-      when: {date_after: 2104.1.1, not_flag: FCU_cadena_8}
+      when: {date_after: 2102.1.1, not_flag: FCU_cadena_8}
       then:
       - {effect: flag, value: FCU_cadena_8}
       - {effect: event, id: meganations_fcu.110, days: 1}
@@ -5857,7 +5857,7 @@ scripted_effects:
       - {effect: event, id: meganations_asc.31, days: 1}
     - {effect: run, value: ASC_pulso_satelites}
     - effect: if
-      when: {factories_at_least: 120, not_flag: ASC_cadena_2}
+      when: {factories_at_least: 130, not_flag: ASC_cadena_2}
       then:
       - {effect: flag, value: ASC_cadena_2}
       - {effect: event, id: meganations_asc.100, days: 1}
@@ -5926,7 +5926,7 @@ scripted_effects:
         country:
           tag: SHD
           when:
-            variable_below: {var: SHD_lealtad_zkr, value: 30}
+            variable_below: {var: SHD_lealtad_zkr, value: 45}
         not_flag: HSN_cadena_14
       then:
       - {effect: flag, value: HSN_cadena_14}
@@ -5986,14 +5986,14 @@ scripted_effects:
       when:
         country:
           tag: EFE
-          when: {divisions_at_least: 40}
+          when: {divisions_at_least: 24}
         not_flag: NAS_cadena_6
       then:
       - {effect: flag, value: NAS_cadena_6}
       - {effect: event, id: meganations_nas.100, days: 1}
     - effect: if
       when:
-        variable_at_least: {var: NAS_inti, value: 90}
+        variable_at_least: {var: NAS_inti, value: 70}
         not_flag: NAS_cadena_13
       then:
       - {effect: flag, value: NAS_cadena_13}
@@ -6046,7 +6046,7 @@ scripted_effects:
       - {effect: event, id: meganations_shd.31, days: 1}
     - {effect: run, value: SHD_pulso_satelites}
     - effect: if
-      when: {manpower_at_least: 1000000, not_flag: SHD_cadena_4}
+      when: {manpower_at_least: 400000, not_flag: SHD_cadena_4}
       then:
       - {effect: flag, value: SHD_cadena_4}
       - {effect: event, id: meganations_shd.100, days: 1}
@@ -6171,13 +6171,13 @@ scripted_effects:
     - {effect: run, value: NRE_pulso_satelites}
     - effect: if
       when:
-        equipment_at_least: {type: infantry_equipment, amount: 15000}
+        equipment_at_least: {type: infantry_equipment, amount: 8000}
         not_flag: NRE_cadena_3
       then:
       - {effect: flag, value: NRE_cadena_3}
       - {effect: event, id: meganations_nre.100, days: 1}
     - effect: if
-      when: {war_support_at_least: 0.8, at_war: false, not_flag: NRE_cadena_5}
+      when: {war_support_at_least: 0.6, at_war: false, not_flag: NRE_cadena_5}
       then:
       - {effect: flag, value: NRE_cadena_5}
       - {effect: event, id: meganations_nre.110, days: 1}
@@ -6185,11 +6185,19 @@ scripted_effects:
       when:
         country:
           tag: APF
-          when: {factories_at_least: 80}
+          when: {factories_at_least: 125}
         not_flag: NRE_cadena_15
       then:
       - {effect: flag, value: NRE_cadena_15}
       - {effect: event, id: meganations_nre.130, days: 1}
+    - effect: if
+      when:
+        not: {country_exists: ZWM}
+        not_flag: NRE_capitulacion_zwm
+        controls_any_of: ZWM
+      then:
+      - {effect: flag, value: NRE_capitulacion_zwm}
+      - {effect: event, id: meganations_nre.50, days: 1}
 
   # La Anarquía resiste (2026-09-26): en guerra, cada mes recluta y rearma.
   - id: ANARQUIA_levas
