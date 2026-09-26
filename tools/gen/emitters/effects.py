@@ -727,5 +727,9 @@ def dynamic_modifier_ids(spec_raw: dict) -> set[str]:
     return {m["id"] for m in (spec_raw.get("decisions") or {}).get("dynamic_modifiers") or []}
 
 
+# efectos que escribe el generador mismo (no están en 14_decisions.yaml)
+GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli"}
+
+
 def scripted_effect_ids(spec_raw: dict) -> set[str]:
-    return {e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []}
+    return {e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED

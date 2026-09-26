@@ -94,6 +94,8 @@ def emit(ctx: BuildContext) -> None:
         effects["create_wargoal"] = SOURCE
         ctx.note(f"justificacion al arranque: {holder} contra {target}")
 
+    _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods)
+
     tension = spec.get("world_tension")
     if isinstance(tension, dict) and tension.get("threat"):
         host = ctx.spec.raw["scenario"]["bookmark"]["default_country"]
@@ -109,3 +111,65 @@ def emit(ctx: BuildContext) -> None:
 
     ctx.data["diplomacy_history"] = dict(out)
     ctx.verify_keys("effects", effects)
+
+
+HOSTILITY_EFFECT = "MEGANATIONS_renovar_casus_belli"
+
+
+def anarchy_pairs(ctx: BuildContext) -> list[tuple[str, str]]:
+    """(meganación, anarquía) que se tocan en el mapa: sale de los reclamos
+    (territory.py) — un state de la Anarquía reclamado por una meganación es
+    frontera entre las dos. Las excluidas (04_diplomacy -> anarchy_hostility.exclude) no cuentan."""
+    spec = (ctx.spec.raw["diplomacy"].get("anarchy_hostility") or {})
+    if not spec:
+        return []
+    exclude = set(spec.get("exclude") or [])
+    territory = ctx.data.get("territory") or {}
+    pairs = set()
+    for sid, who in (ctx.data.get("claims") or {}).items():
+        owner = territory.get(sid)
+        if owner is None or owner in exclude:
+            continue
+        for mega in who:
+            pairs.add((mega, owner))
+    return sorted(pairs)
+
+
+def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> None:
+    """Todos arrancan en paz, pero cada meganación que toca una anarquía tiene
+    un casus belli contra ella que no vence (se renueva cada mes si se perdió)
+    y se odian (opinión en los dos sentidos). Pedido del usuario, 2026-09-28."""
+    hs = spec.get("anarchy_hostility") or {}
+    if not hs:
+        return
+    kind = hs.get("wargoal", "annex_everything")
+    if wargoals and kind not in wargoals:
+        raise SpecError(f"anarchy_hostility: wargoal '{kind}' no existe en common/wargoals/", where=SOURCE)
+    mod = hs.get("opinion")
+    if mod and mod not in known_mods:
+        raise SpecError(f"anarchy_hostility: modificador '{mod}' no definido", where=SOURCE)
+    pairs = [(m, a) for m, a in anarchy_pairs(ctx) if m in alive and a in alive]
+    renew = Block()
+    for mega, anar in pairs:
+        cw = Block([("type", kind), ("target", anar)])
+        out[mega].append(("create_wargoal", cw))
+        if mod:
+            out[mega].append(("add_opinion_modifier", Block([("target", anar), ("modifier", mod)])))
+            out[anar].append(("add_opinion_modifier", Block([("target", mega), ("modifier", mod)])))
+        cond = Block([("tag", mega),
+                      (anar, Block([("exists", True), ("NOT", Block([("has_country_flag", f"{anar}_intocable")]))])),
+                      ("NOT", Block([("has_war_with", anar)])),
+                      ("NOT", Block([("has_wargoal_against", anar)]))])
+        renew.add("if", Block([("limit", cond), ("create_wargoal", Block([("type", kind), ("target", anar)]))]))
+    # el archivo se escribe siempre: los pulsos de 14_decisions lo llaman
+    ctx.write_script("common/scripted_effects/meganations_casus_belli.txt", Block([(HOSTILITY_EFFECT, renew)]),
+                     source=SOURCE + " -> anarchy_hostility")
+    if not pairs:
+        return
+    effects["create_wargoal"] = SOURCE
+    if mod:
+        effects["add_opinion_modifier"] = SOURCE
+    ctx.verify_keys("triggers", {"has_wargoal_against": SOURCE, "exists": SOURCE, "has_war_with": SOURCE,
+                                 "has_country_flag": SOURCE, "tag": SOURCE})
+    ctx.data["anarchy_pairs"] = pairs
+    ctx.note("casus belli permanentes contra la Anarquia: " + ", ".join(f"{m}->{a}" for m, a in pairs))

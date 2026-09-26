@@ -60,6 +60,10 @@ def emit(ctx: BuildContext) -> None:
         law = _conscription_law(ctx, c.tag)
         if law:
             starting.append(law)
+        starting += [x for x in _kind_laws(ctx, c) if x not in starting]
+        pp = ((ctx.spec.raw.get("balance") or {}).get("starting_political_power") or {}).get(_kind(c))
+        if pp:
+            b.add("add_political_power", int(pp))
         if starting:
             ideas = Block()
             for iid in starting:
@@ -230,6 +234,28 @@ def _conscription_law(ctx: BuildContext, tag: str) -> str | None:
         ctx.warn(f"reclutamiento: la ley '{law}' no existe en common/ideas/; {tag} arranca con la de defecto.")
         return None
     return law
+
+
+def _kind(c) -> str:
+    return "meganation" if c.is_major else "satellite" if c.is_subject else "anarchy"
+
+
+def _kind_laws(ctx: BuildContext, c) -> list[str]:
+    """Leyes de arranque por tipo de país (15_balance.yaml -> starting_laws):
+    economía y comercio. Pedido del usuario (2026-09-28): todos arrancaban en
+    economía civil. Cada ley se verifica contra common/ideas/ del juego."""
+    spec = (ctx.spec.raw.get("balance") or {}).get("starting_laws") or {}
+    wanted = list((spec.get("overrides") or {}).get(c.tag) or spec.get(_kind(c)) or [])
+    if not wanted or ctx.vanilla is None:
+        return []
+    known = _idea_cache.setdefault(id(ctx), ctx.vanilla.idea_names())
+    out = []
+    for law in wanted:
+        if known and law not in known:
+            ctx.warn(f"leyes: '{law}' no existe en common/ideas/; {c.tag} arranca con la de defecto.")
+            continue
+        out.append(law)
+    return out
 
 
 def _capital(ctx: BuildContext, c) -> int | None:

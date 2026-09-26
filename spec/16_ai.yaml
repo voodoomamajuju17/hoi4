@@ -59,6 +59,30 @@ military:
     APF:    # milicias populares
     - {type: role_ratio, id: infantry, value: 70}
 
+# -----------------------------------------------------------------------------
+# Guerras contra la Anarquía vecina (2026-09-28: "todos comienzan en paz" y
+# "más conflicto, sin battle royale en un año"). Cada meganación que toca una
+# anarquía la quiere conquistar y se prepara desde el día uno; declara desde su
+# fecha, con 12 divisiones o más y sin otra guerra abierta. Las fechas van
+# escalonadas: primero las que ya peleaban (Roma, la Comuna), al final la FCU.
+# -----------------------------------------------------------------------------
+anarchy_wars:
+  src: user_request
+  conquer: 150
+  prepare: 120
+  antagonize: 60
+  declare: 120
+  divisions: 12
+  declare_after:
+    NRE: 2100.2.1
+    ASC: 2100.3.1
+    EFE: 2100.8.1
+    APF: 2101.1.1
+    SHD: 2101.4.1
+    HSN: 2101.8.1
+    NAS: 2102.1.1
+    FCU: 2102.6.1
+
 plans:
 - id: EFE_el_amazonas
   country: EFE

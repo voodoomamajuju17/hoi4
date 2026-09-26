@@ -56,6 +56,28 @@ conscription:
     NAS: extensive_conscription
 
 # -----------------------------------------------------------------------------
+# Leyes de economía y comercio de arranque (2026-09-28: "estaban todos en
+# economía civil"). Las meganaciones arrancan con movilización parcial, los
+# satélites con la baja y la Anarquía en economía de guerra. Se verifican
+# contra common/ideas/ del juego.
+# -----------------------------------------------------------------------------
+starting_laws:
+  src: user_request
+  meganation: [partial_economic_mobilisation, limited_exports]
+  satellite: [low_economic_mobilisation, export_focus]
+  anarchy: [war_economy, closed_economy]
+  overrides:
+    ZAN: [low_economic_mobilisation, limited_exports]   # las Tierras Sin Ley arrancan en paz
+
+# Poder político de arranque (2026-09-28: "falta PP"). Además cada líder de
+# meganación suma poder político por día con su rasgo (03_leaders.yaml).
+starting_political_power:
+  src: user_request
+  meganation: 200
+  satellite: 50
+  anarchy: 50
+
+# -----------------------------------------------------------------------------
 # Mínimo de recursos estratégicos por meganación, por TRANSFERENCIA.
 # Donantes: states de meganaciones y satélites con excedente (nunca la
 # Anarquía), empezando por el país que más tiene de ese recurso y, dentro de

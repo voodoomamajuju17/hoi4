@@ -123,6 +123,7 @@ def emit(ctx: BuildContext) -> None:
                          [{"type": "antagonize", "target": y, "value": riv.get("antagonize", 30)}])
 
     _military_plans(ctx, spec.get("military") or {}, add_plan)
+    _anarchy_war_plans(ctx, spec.get("anarchy_wars") or {}, add_plan)
 
     for p in spec.get("plans", []) or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
@@ -161,3 +162,25 @@ def _military_plans(ctx: BuildContext, mil: dict, add_plan) -> None:
                          abort={"at_war": False})
         elif not c.is_subject and mil.get("anarchy"):
             add_plan(f"{c.tag}_defensa", c.tag, list(mil["anarchy"]))
+
+
+def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
+    """Guerras contra la Anarquía vecina (2026-09-28): todos arrancan en paz
+    con un casus belli permanente (04_diplomacy -> anarchy_hostility). La IA
+    se prepara desde el día uno y declara a partir de su fecha
+    (declare_after, escalonada para que no sea todos contra todos el primer
+    año), con un ejército mínimo y sin otra guerra abierta."""
+    if not wars:
+        return
+    after = wars.get("declare_after") or {}
+    for mega, anar in ctx.data.get("anarchy_pairs") or []:
+        add_plan(f"{mega}_contra_{anar}", mega, [
+            {"type": "conquer", "target": anar, "value": wars.get("conquer", 150)},
+            {"type": "prepare_for_war", "target": anar, "value": wars.get("prepare", 100)},
+            {"type": "antagonize", "target": anar, "value": wars.get("antagonize", 50)},
+        ])
+        enable = {"divisions_at_least": int(wars.get("divisions", 12)), "at_war": False}
+        if after.get(mega):
+            enable["date_after"] = str(after[mega])
+        add_plan(f"{mega}_declara_a_{anar}", mega,
+                 [{"type": "declare_war", "target": anar, "value": wars.get("declare", 100)}], enable=enable)

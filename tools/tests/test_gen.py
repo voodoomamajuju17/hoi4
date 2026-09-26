@@ -1208,6 +1208,11 @@ def test_ai() -> None:
         check("IA militar: en guerra, mas industria a las armas", war is not None
               and "has_war = yes" in pdx.render(war.get("enable")) and "value = 75" in pdx.render(war))
         check("la Anarquia no recibe plan militar de meganacion", "MEGANATIONS_ZWI_militar" not in ai)
+        dz = root.get("MEGANATIONS_NRE_declara_a_ZWE")
+        dzr = " ".join(pdx.render(dz).split()) if dz is not None else ""
+        check("guerras contra la Anarquia: Roma declara desde su fecha, con ejercito y sin otra guerra",
+              "type = declare_war id = ZWE" in dzr and "date > 2100.2.1" in dzr and "size > 11" in dzr and "has_war = no" in dzr, dzr)
+        check("y se prepara desde el dia uno", "type = prepare_for_war id = ZWE" in " ".join(pdx.render(root.get("MEGANATIONS_NRE_contra_ZWE")).split()))
         from tools.gen.emitters.effects import render_conditions
         cond = " ".join(pdx.render(render_conditions("t", {"divisions_at_least": 12}, {}, where="t")).split())
         check("declarar la guerra puede pedir un ejercito minimo", "has_army_size = { size > 11 }" in cond, cond)
@@ -1445,12 +1450,21 @@ def test_diplomacy() -> None:
         check("rivalidad con un pais sin territorio no se escribe (FCU)", "target = FCU" not in efe)
         check("tension mundial en el pais por defecto", "add_named_threat" in efe and "threat = 30" in efe)
         asc = next((mod / "history/countries").glob("ASC - *.txt")).read_text()
-        check("la ASC arranca en guerra con Eurasia", "declare_war_on" in asc and "target = ZWE" in asc, asc[-600:])
-        check("guerra contra un pais sin territorio no se declara (ZWM)", "target = ZWM" not in nre)
-        # en el fixture ZWB no tiene territorio: se avisa en vez de escribirla
-        check("el EFE arranca con la justificacion contra los Caudillos del Amazonas (o avisa si no existen)",
-              ("create_wargoal" in efe and "target = ZWB" in efe)
-              or any("justificacion EFE -> ZWB" in w for w in ctx.warnings))
+        check("todos arrancan en paz (2026-09-28): la ASC no declara la guerra", "declare_war_on" not in asc, asc[-600:])
+        check("leyes de arranque: meganacion en movilizacion parcial y exportaciones limitadas",
+              "partial_economic_mobilisation" in nre and "limited_exports" in nre, nre[:900])
+        zwe_h = next((mod / "history/countries").glob("ZWE - *.txt")).read_text()
+        check("leyes de arranque: la Anarquia en economia de guerra", "war_economy" in zwe_h and "closed_economy" in zwe_h)
+        check("poder politico de arranque (200 las meganaciones)", "add_political_power = 200" in nre)
+        check("Roma tiene casus belli permanente contra Eurasia, su vecina en el fixture", "create_wargoal" in nre and "target = ZWE" in nre, nre[-800:])
+        check("y se odian (en los dos sentidos)", "meganations_odio_anarquia" in nre
+              and "target = NRE" in next((mod / "history/countries").glob("ZWE - *.txt")).read_text())
+        cb = " ".join((mod / "common/scripted_effects/meganations_casus_belli.txt").read_text().split())
+        check("el casus belli se renueva si se pierde", "MEGANATIONS_renovar_casus_belli" in cb and "tag = NRE ZWE = { exists = yes" in cb
+              and "NOT = { has_wargoal_against = ZWE }" in cb, cb[-600:])
+        check("las Tierras Sin Ley no reciben casus belli (en paz con todos)", "target = ZAN" not in cb)
+        check("el pulso de cada potencia renueva los casus belli",
+              "MEGANATIONS_renovar_casus_belli = yes" in (mod / "common/scripted_effects/meganations_effects.txt").read_text())
         check("la justificacion no declara la guerra", "declare_war_on" not in efe)
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance: tabla de valor de los arboles", "VALOR DE LOS ARBOLES" in bal and "\nEFE " in bal[bal.index("VALOR DE LOS ARBOLES"):])
@@ -1483,7 +1497,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
