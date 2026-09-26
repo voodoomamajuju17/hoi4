@@ -422,7 +422,51 @@ territories:
 
   ZAN:
     src: user_decision
+    lore: >
+      Las Tierras Sin Ley (2026-09-28): los huecos que ninguna potencia puede
+      sostener. Alaska y el norte de Canadá, el Midwest americano, el noroeste
+      de México, Guatemala y Nicaragua, el oeste del África subsahariana y
+      Kiev. En paz con todos al arranque. Si un nombre no existe en tu versión,
+      el reporte avisa con los parecidos.
     resolve:
+      # Alaska
+      - { state: ["Alaska"] }
+      - { state: ["Aleutian Islands", "Aleutians"] }
+      - { state: ["Alaskan Panhandle", "Juneau"] }
+      # norte de Canadá
+      - { state: ["N.W Territories", "Northwest Territories"] }
+      - { state: ["Yukon", "Yukon Territory"] }
+      - { state: ["Nunavut", "Keewatin"] }
+      - { state: ["Franklin", "Baffin Island"] }
+      - { state: ["Victoria Island", "Ellesmere Island"] }
+      # Midwest
+      - { state: ["North Dakota"] }
+      - { state: ["South Dakota"] }
+      - { state: ["Nebraska"] }
+      - { state: ["Kansas"] }
+      - { state: ["Iowa"] }
+      - { state: ["Minnesota"] }
+      # noroeste de México
+      - { state: ["Baja California"] }
+      - { state: ["Sonora"] }
+      - { state: ["Chihuahua"] }
+      - { state: ["Sinaloa"] }
+      # Centroamérica
+      - { state: ["Guatemala"] }
+      - { state: ["Nicaragua"] }
+      # oeste de África
+      - { state: ["Senegal", "Dakar"] }
+      - { state: ["Gambia"] }
+      - { state: ["Guinea", "French Guinea"] }
+      - { state: ["Portuguese Guinea"] }
+      - { state: ["Sierra Leone"] }
+      - { state: ["Liberia"] }
+      - { state: ["Ivory Coast", "Cote d'Ivoire"] }
+      - { state: ["French Sudan", "Mali"] }
+      - { state: ["Mauritania"] }
+      - { state: ["Upper Volta"] }
+      # Kiev
+      - { state: ["Kiev", "Kyiv"] }
       - { remainder: true }
     militia:
       one_division_per: contiguous_territory
