@@ -179,7 +179,8 @@ def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
             {"type": "prepare_for_war", "target": anar, "value": wars.get("prepare", 100)},
             {"type": "antagonize", "target": anar, "value": wars.get("antagonize", 50)},
         ])
-        enable = {"divisions_at_least": int(wars.get("divisions", 12)), "at_war": False}
+        enable = {"divisions_at_least": int(wars.get("divisions", 12)), "at_war": False,
+                  "country": {"tag": anar, "when": {"not_flag": f"{anar}_intocable"}}}
         if after.get(mega):
             enable["date_after"] = str(after[mega])
         add_plan(f"{mega}_declara_a_{anar}", mega,

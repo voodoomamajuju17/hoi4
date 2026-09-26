@@ -1193,6 +1193,13 @@ def test_ai() -> None:
         ideas_zwb = (mod / "common/ideas/ZWB_ideas.txt").read_text()
         check("Amazonas: modificador opcional que el juego no conoce se omite con aviso",
               any("attrition" in w for w in ctx.warnings) or "attrition" in ideas_zwb)
+        zwe_ev = " ".join((mod / "events/meganations_zwe.txt").read_text().split())
+        check("Eurasia: la Union de los Senores (crea la faccion y convoca a las demas)",
+              'create_faction = "La Unión de los Señores de la Guerra"' in zwe_ev and "id = meganations_zwe.11" in zwe_ev
+              and "ZWE = { add_to_faction = ROOT }" in zwe_ev, zwe_ev[:500])
+        zwi_ev = " ".join((mod / "events/meganations_zwi.txt").read_text().split())
+        check("Indostan: si cae Bagdad entra en las guerras de los Emiratos",
+              "add_to_faction = ZWM" in zwi_ev and "add_to_war = { targeted_alliance = ZWM enemy = PREV }" in zwi_ev, zwi_ev[:600])
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)

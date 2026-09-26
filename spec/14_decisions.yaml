@@ -7542,6 +7542,19 @@ scripted_effects:
           effects:
           - {effect: flag, value: ZWE_tregua_reciente, days: 245}
           - {effect: event, id: meganations_zwe.6, days: 1}
+    - effect: if
+      when:
+        not_flag: ZWE_union_convocada
+        any:
+        - controls_state:
+          - Berlin
+          - Brandenburg
+        - controls_state:
+          - London
+          - Home Counties
+      then:
+      - {effect: flag, value: ZWE_union_convocada}
+      - {effect: event, id: meganations_zwe.10, days: 1}
   - id: ZWM_pulso_caudillos
     effects:
     - effect: if
@@ -7617,6 +7630,22 @@ scripted_effects:
           effects:
           - {effect: flag, value: ZWI_tregua_reciente, days: 245}
           - {effect: event, id: meganations_zwi.6, days: 1}
+    - effect: if
+      when:
+        not_flag: ZWI_pacto_del_rio
+        country:
+          tag: ZWM
+          when:
+            at_war: true
+            not:
+              controls_state:
+              - Baghdad
+        not:
+          controls_state:
+          - Baghdad
+      then:
+      - {effect: flag, value: ZWI_pacto_del_rio}
+      - {effect: event, id: meganations_zwi.10, days: 1}
 
 dynamic_modifiers:
   - id: FCU_mod_directorio

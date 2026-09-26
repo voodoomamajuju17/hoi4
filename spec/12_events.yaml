@@ -4143,6 +4143,89 @@ namespaces:
         effects:
         - {effect: timed_idea, idea: ZWE_tregua_de_caudillos, days: 91}
       src: user_design
+    - id: 10
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Great Capital Has Fallen, spanish: Cayó la Gran Capital}
+      desc:
+        english: Our bands ride through the streets of one of the old capitals of Europe. For the first time the warlords of the world look at Eurasia
+          as something more than a rabble.
+        spanish: Nuestras bandas cabalgan por las calles de una de las viejas capitales de Europa. Por primera vez los señores de la guerra del mundo
+          miran a Eurasia como algo más que una chusma.
+      options:
+      - name:
+          english: Call every warlord of the world to a Union.
+          spanish: Convocar a todos los señores de la guerra del mundo a una Unión.
+        effects:
+        - {effect: create_faction, value: La Unión de los Señores de la Guerra}
+        - effect: if
+          when: {country_exists: ZWI}
+          then:
+          - {effect: event, id: meganations_zwe.11, days: 3, target: ZWI}
+        - effect: if
+          when: {country_exists: ZWM}
+          then:
+          - {effect: event, id: meganations_zwe.11, days: 3, target: ZWM}
+        - effect: if
+          when: {country_exists: ZWB}
+          then:
+          - {effect: event, id: meganations_zwe.11, days: 3, target: ZWB}
+        - effect: if
+          when: {country_exists: ZAN}
+          then:
+          - {effect: event, id: meganations_zwe.11, days: 3, target: ZAN}
+        ai_chance: 90
+      - name: {english: Eurasia needs no one., spanish: Eurasia no necesita a nadie.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 10
+      src: user_design
+    - id: 11
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Eurasia Proposes a Union, spanish: Eurasia Propone una Unión}
+      desc:
+        english: 'The Atamans of Eurasia hold a great capital of Europe and call every warlord of the world to a Union: whoever touches one of us,
+          touches all of us.'
+        spanish: 'Los atamanes de Eurasia tienen una gran capital de Europa y llaman a todos los señores de la guerra del mundo a una Unión: quien
+          toca a uno, nos toca a todos.'
+      options:
+      - name: {english: 'Yes: join the Union.', spanish: 'Sí: sumarse a la Unión.'}
+        effects:
+        - effect: scope
+          target: ZWE
+          effects:
+          - {effect: add_to_faction, value: ROOT}
+        - {effect: event, id: meganations_zwe.12, days: 1, target: ZWE}
+        ai_chance: 70
+      - name: {english: 'No: we answer to no one.', spanish: 'No: no respondemos ante nadie.'}
+        effects:
+        - {effect: event, id: meganations_zwe.13, days: 1, target: ZWE}
+        ai_chance: 30
+      src: user_design
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Another Warlord Joins, spanish: Otro Señor se Suma}
+      desc:
+        english: Another warlord has joined the Union. The great powers will have to fight all of us.
+        spanish: Otro señor de la guerra se sumó a la Unión. Las grandes potencias van a tener que pelear contra todos nosotros.
+      options:
+      - name: {english: Brothers in arms., spanish: Hermanos de armas.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+      src: user_design
+    - id: 13
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Warlord Refuses, spanish: Un Señor se Niega}
+      desc:
+        english: One of the warlords refused the Union. Proud, or afraid.
+        spanish: Uno de los señores rechazó la Unión. Por orgullo, o por miedo.
+      options:
+      - name: {english: His loss., spanish: Él se lo pierde.}
+        effects: []
+      src: user_design
   # ===========================================================================
   meganations_zwi:
     country: ZWI
@@ -4260,6 +4343,33 @@ namespaces:
       - name: {english: 'For now, we are brothers.', spanish: 'Por ahora, somos hermanos.'}
         effects:
         - {effect: timed_idea, idea: ZWI_tregua_de_caudillos, days: 91}
+      src: user_design
+    - id: 10
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Baghdad Has Fallen, spanish: Cayó Bagdad}
+      desc:
+        english: 'A foreign army holds Baghdad. If the Emirates fall, we are next. The princes do not deliberate: they march.'
+        spanish: 'Un ejército extranjero tiene Bagdad. Si caen los Emiratos, los que siguen somos nosotros. Los príncipes no deliberan: marchan.'
+      options:
+      - name: {english: The Pact of the Desert and the River., spanish: El Pacto del Desierto y el Río.}
+        effects:
+        - {effect: create_faction, value: El Pacto del Desierto y el Río}
+        - {effect: add_to_faction, value: ZWM}
+        - {effect: add_to_war_of, ally: ZWM}
+        - {effect: event, id: meganations_zwi.11, days: 1, target: ZWM}
+      src: user_design
+    - id: 11
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Hindustan Marches With Us, spanish: El Indostán Marcha con Nosotros}
+      desc:
+        english: The princes of Hindustan have sworn the Pact of the Desert and the River. Their armies are coming.
+        spanish: Los príncipes del Indostán juraron el Pacto del Desierto y el Río. Sus ejércitos están en camino.
+      options:
+      - name: {english: 'Welcome, brothers.', spanish: Bienvenidos sean.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
       src: user_design
   # ===========================================================================
   meganations_zwm:
