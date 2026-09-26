@@ -1225,6 +1225,14 @@ def test_ai() -> None:
               "navy_experience = 15" in mal and "var = HSN_presion value = -5" in mal, mal[:600])
         check("HSN: y construye astilleros en el nodo (spec; en el fixture la region no existe)",
               "building: dockyard" in (REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8").split("- id: HSN_malaca")[1][:900])
+        efe_h2 = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
+        check("debuffs: el EFE arranca con Ciudades Sedientas, Corte Dividida y Guardia Mal Equipada",
+              all(x in efe_h2 for x in ("EFE_ciudades_sedientas", "EFE_corte_dividida", "EFE_guardia_mal_equipada")))
+        efe_t2 = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text().split())
+        corte = efe_t2[efe_t2.index("id = EFE_la_corte_de_los_bosques"):][:3000]
+        check("debuffs: un foco los saca", "remove_ideas = EFE_corte_dividida" in corte)
+        check("debuffs: o un objetivo (20 divisiones) en el pulso", "has_idea = EFE_guardia_mal_equipada" in se_c
+              and "remove_ideas = EFE_guardia_mal_equipada" in se_c)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
@@ -1287,7 +1295,8 @@ def test_ai() -> None:
                     idea = pdx.text(blk.get("remove_ideas"))
                     lim = pdx.render(blk.get("limit"))
                     # quitar una idea solo porque la tiene (y despues volver a ponerla) ensucia el tooltip
-                    if lim.strip().splitlines() and "NOT" not in lim and f"has_idea = {idea}" in lim:
+                    rest = " ".join(lim.replace(f"has_idea = {idea}", "").replace("limit", "").split()).strip("{} =")
+                    if lim.strip().splitlines() and "NOT" not in lim and f"has_idea = {idea}" in lim and not rest:
                         bad.append(f"{name}:{idea}")
         check("tooltips: ninguna recalculacion quita una idea solo para volver a ponerla", not bad, str(bad))
         tech = (mod / "common/technologies/infantry.txt").read_text()

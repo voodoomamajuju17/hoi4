@@ -25,467 +25,407 @@ countries:
   EFE:
     coverage: derived_from_prose
     starting_ideas:
+    - id: EFE_mandato_verde
+      name: {english: The Green Mandate, spanish: El Mandato Verde}
+      name_src: invented
+      concept_src: canon
+      doc_basis: '§3.2 — "La legitimidad del régimen proviene de presentar la supervivencia ecológica como un mandato superior a los derechos individuales
+        y a la política convencional."
 
-      - id: EFE_mandato_verde
-        name:
-          english: "The Green Mandate"
-          spanish: "El Mandato Verde"
-        name_src: invented
-        concept_src: canon
-        doc_basis: >
-          §3.2 — "La legitimidad del régimen proviene de presentar la
-          supervivencia ecológica como un mandato superior a los derechos
-          individuales y a la política convencional."
-        desc:
-          english: >
-            Ecological survival is proclaimed above individual rights and
-            conventional politics. Obedience is not asked for; it is assumed.
-          spanish: >
-            La supervivencia ecológica se proclama por encima de los derechos
-            individuales y de la política convencional. La obediencia no se
-            pide; se da por supuesta.
-        modifiers:
-          political_power_gain: 0.10
-          stability_factor: 0.05
-          democratic_drift: -0.02
-        modifiers_src: invented
-        removable: false
+        '
+      desc:
+        english: 'Ecological survival is proclaimed above individual rights and conventional politics. Obedience is not asked for; it is assumed.
 
-      - id: EFE_cubas_de_la_pampa
-        name:
-          english: "The Vats of the Pampas"
-          spanish: "Las Cubas de la Pampa"
-        name_src: invented
-        desc:
-          english: "The Empire is small next to the Union or the Commune. What it lacks in factories it makes up with the vats: every workshop grows its own tools, every depot its own walls."
-          spanish: "El Imperio es chico al lado de la Unión o de la Comuna. Lo que le falta en fábricas lo compensa con las cubas: cada taller cultiva sus propias herramientas, cada depósito sus propias paredes."
-        modifiers:
-          industrial_capacity_factory: 0.15
-          production_speed_buildings_factor: 0.15
-        modifiers_src: invented
-        why: >
-          Compensación industrial: en 1.19.3 el EFE arranca con 2,9% de la IC
-          del mundo contra 12,3% de la FCU (balance.txt). Ver 13_military.yaml.
-        removable: false
+          '
+        spanish: 'La supervivencia ecológica se proclama por encima de los derechos individuales y de la política convencional. La obediencia no
+          se pide; se da por supuesta.
 
-    # Las tres de abajo NO arrancan puestas: las dan los focos de Restauración
-    # Total (cambio aprobado con Q031). Antes el foco "otorgaba" una idea que el
-    # país ya tenía desde el día uno.
+          '
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05, democratic_drift: -0.02}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_cubas_de_la_pampa
+      name: {english: The Vats of the Pampas, spanish: Las Cubas de la Pampa}
+      name_src: invented
+      desc:
+        english: 'The Empire is small next to the Union or the Commune. What it lacks in factories it makes up with the vats: every workshop grows
+          its own tools, every depot its own walls.'
+        spanish: 'El Imperio es chico al lado de la Unión o de la Comuna. Lo que le falta en fábricas lo compensa con las cubas: cada taller cultiva
+          sus propias herramientas, cada depósito sus propias paredes.'
+      modifiers: {industrial_capacity_factory: 0.15, production_speed_buildings_factor: 0.15}
+      modifiers_src: invented
+      why: 'Compensación industrial: en 1.19.3 el EFE arranca con 2,9% de la IC del mundo contra 12,3% de la FCU (balance.txt). Ver 13_military.yaml.
+
+        '
+      removable: false
+    - id: EFE_ciudades_sedientas
+      name: {english: Thirsty Cities, spanish: Ciudades Sedientas}
+      desc:
+        english: The vats drink the water the cities need. Removed by the focus 'Ministry of Restoration' or 'Water Diplomacy'.
+        spanish: Las cubas se toman el agua que necesitan las ciudades. Se va con el foco «Ministerio de la Restauración» o «La Diplomacia del Agua».
+      modifiers: {stability_factor: -0.05, consumer_goods_factor: 0.05}
+      src: user_request
+    - id: EFE_corte_dividida
+      name: {english: A Divided Court, spanish: Una Corte Dividida}
+      desc:
+        english: Courtiers and rangers sabotage each other's decrees. Removed by the focus 'The Court of the Forests' or 'The Forest Rises'.
+        spanish: Cortesanos y guardaparques se sabotean los decretos. Se va con el foco «La Corte de los Bosques» o «El Monte se Levanta».
+      modifiers: {political_power_gain: -0.15}
+      src: user_request
+    - id: EFE_guardia_mal_equipada
+      name: {english: An Ill-Equipped Guard, spanish: Una Guardia Mal Equipada}
+      desc:
+        english: The Green Guard parades well and fights badly. Removed by the focus 'The Green Guard Mobilised', or having 20 divisions.
+        spanish: La Guardia Verde desfila bien y pelea mal. Se va con el foco «La Guardia Verde Movilizada», o tener 20 divisiones.
+      modifiers: {army_org_factor: -0.08, army_attack_factor: -0.05}
+      src: user_request
     focus_ideas:
-      - id: EFE_santuario_amazonico
-        name: {english: The Amazon Sanctuary, spanish: El Santuario Amazónico}
-        desc:
-          english: The forest is closed to axes and open to the Guard.
-          spanish: La selva está cerrada a las hachas y abierta a la Guardia.
-        modifiers: {stability_factor: 0.05, army_defence_factor: 0.05}
-        src: user_design
-      - id: EFE_selva_explotada
-        name: {english: The Exploited Jungle, spanish: La Selva Explotada}
-        desc:
-          english: Every tree has a price, and the Empire is collecting.
-          spanish: Cada árbol tiene un precio, y el Imperio lo cobra.
-        modifiers: {industrial_capacity_factory: 0.1, stability_factor: -0.05}
-        src: user_design
-      - id: EFE_espiritu_bioacero_domesticado
-        name: {english: Tamed BioSteel, spanish: El Bioacero Domesticado}
-        desc: {english: The living metal obeys., spanish: El metal vivo obedece.}
-        modifiers: {production_speed_arms_factory_factor: 0.1, army_armor_defence_factor: 0.05}
-        src: user_design
-      - id: EFE_espiritu_selva_de_acero
-        name: {english: The Steel Jungle, spanish: La Selva de Acero}
-        desc: {english: Forests that grow armour., spanish: Bosques que crían blindaje.}
-        modifiers:
-          army_armor_attack_factor: 0.1
-          army_armor_defence_factor: 0.1
-          production_speed_arms_factory_factor: 0.05
-        src: user_design
-      - id: EFE_cubas_forzadas
-        name: {english: Forced Vats, spanish: Cubas Forzadas}
-        desc:
-          english: The vats run past their limit. More armour, angrier workers.
-          spanish: Las cubas trabajan por encima de su límite. Más blindaje, obreros más enojados.
-        modifiers: {production_speed_arms_factory_factor: 0.05, stability_factor: -0.05}
-        src: user_design
-      - id: EFE_fiebre_de_las_cubas
-        name: {english: Vat Fever, spanish: Fiebre de las Cubas}
-        desc:
-          english: The living metal grows faster than anyone can shape it. Halls are sealed; people get sick.
-          spanish: El metal vivo crece más rápido de lo que se lo puede moldear. Se sellan naves; la gente se enferma.
-        modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.1}
-        src: user_design
-      - id: EFE_plaga_del_micelio
-        name: {english: The Mycelium Blight, spanish: La Plaga del Micelio}
-        desc:
-          english: A blight in the vats. Whole halls must be burned before it reaches the forests.
-          spanish: Una plaga en las cubas. Hay que quemar naves enteras antes de que llegue a los bosques.
-        modifiers: {industrial_capacity_factory: -0.15, production_speed_arms_factory_factor: -0.1}
-        src: user_design
-      - id: EFE_rotacion_de_cultivos
-        name: {english: Crop Rotation, spanish: Rotación de Cultivos}
-        desc:
-          english: The vats rest by turns, like fields.
-          spanish: Las cubas descansan por turnos, como los campos.
-        modifiers: {stability_factor: 0.05, production_speed_buildings_factor: 0.05}
-        src: user_design
+    - id: EFE_santuario_amazonico
+      name: {english: The Amazon Sanctuary, spanish: El Santuario Amazónico}
+      desc:
+        english: The forest is closed to axes and open to the Guard.
+        spanish: La selva está cerrada a las hachas y abierta a la Guardia.
+      modifiers: {stability_factor: 0.05, army_defence_factor: 0.05}
+      src: user_design
+    - id: EFE_selva_explotada
+      name: {english: The Exploited Jungle, spanish: La Selva Explotada}
+      desc:
+        english: Every tree has a price, and the Empire is collecting.
+        spanish: Cada árbol tiene un precio, y el Imperio lo cobra.
+      modifiers: {industrial_capacity_factory: 0.1, stability_factor: -0.05}
+      src: user_design
+    - id: EFE_espiritu_bioacero_domesticado
+      name: {english: Tamed BioSteel, spanish: El Bioacero Domesticado}
+      desc: {english: The living metal obeys., spanish: El metal vivo obedece.}
+      modifiers: {production_speed_arms_factory_factor: 0.1, army_armor_defence_factor: 0.05}
+      src: user_design
+    - id: EFE_espiritu_selva_de_acero
+      name: {english: The Steel Jungle, spanish: La Selva de Acero}
+      desc: {english: Forests that grow armour., spanish: Bosques que crían blindaje.}
+      modifiers:
+        army_armor_attack_factor: 0.1
+        army_armor_defence_factor: 0.1
+        production_speed_arms_factory_factor: 0.05
+      src: user_design
+    - id: EFE_cubas_forzadas
+      name: {english: Forced Vats, spanish: Cubas Forzadas}
+      desc:
+        english: The vats run past their limit. More armour, angrier workers.
+        spanish: Las cubas trabajan por encima de su límite. Más blindaje, obreros más enojados.
+      modifiers: {production_speed_arms_factory_factor: 0.05, stability_factor: -0.05}
+      src: user_design
+    - id: EFE_fiebre_de_las_cubas
+      name: {english: Vat Fever, spanish: Fiebre de las Cubas}
+      desc:
+        english: The living metal grows faster than anyone can shape it. Halls are sealed; people get sick.
+        spanish: El metal vivo crece más rápido de lo que se lo puede moldear. Se sellan naves; la gente se enferma.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.1}
+      src: user_design
+    - id: EFE_plaga_del_micelio
+      name: {english: The Mycelium Blight, spanish: La Plaga del Micelio}
+      desc:
+        english: A blight in the vats. Whole halls must be burned before it reaches the forests.
+        spanish: Una plaga en las cubas. Hay que quemar naves enteras antes de que llegue a los bosques.
+      modifiers: {industrial_capacity_factory: -0.15, production_speed_arms_factory_factor: -0.1}
+      src: user_design
+    - id: EFE_rotacion_de_cultivos
+      name: {english: Crop Rotation, spanish: Rotación de Cultivos}
+      desc:
+        english: The vats rest by turns, like fields.
+        spanish: Las cubas descansan por turnos, como los campos.
+      modifiers: {stability_factor: 0.05, production_speed_buildings_factor: 0.05}
+      src: user_design
+    - id: EFE_conservacion_coercitiva
+      granted_by: EFE_reforestacion_obligatoria
+      name: {english: Coercive Conservation, spanish: Conservación Coercitiva}
+      name_src: inferred
+      name_note: '''conservación coercitiva'' es literal del doc; el título es mío.'
+      concept_src: canon
+      doc_basis: '§3.2 — "Reforestación y restauración ambiental aplicadas de forma obligatoria" + "Militarización de la protección de recursos
+        y territorios."
 
-      - id: EFE_conservacion_coercitiva
-        granted_by: EFE_reforestacion_obligatoria
-        name:
-          english: "Coercive Conservation"
-          spanish: "Conservación Coercitiva"
-        name_src: inferred
-        name_note: "'conservación coercitiva' es literal del doc; el título es mío."
-        concept_src: canon
-        doc_basis: >
-          §3.2 — "Reforestación y restauración ambiental aplicadas de forma
-          obligatoria" + "Militarización de la protección de recursos y
-          territorios."
-        desc:
-          english: >
-            Reforestation and ecological restoration are compulsory labour.
-            The Green Guard enforces the treeline as it would a border.
-          spanish: >
-            La reforestación y la restauración ecológica son trabajo obligatorio.
-            La Guardia Verde custodia la línea de árboles como si fuera una frontera.
-        modifiers:
-          production_speed_infrastructure_factor: 0.10
-          consumer_goods_factor: 0.05
-        modifiers_src: invented
-        removable: false
-        note: >
-          El coste en bienes de consumo es intencional: el doc insiste en que
-          cada sistema debe crear "ventajas claras y también cuellos de botella
-          propios" (§1).
+        '
+      desc:
+        english: 'Reforestation and ecological restoration are compulsory labour. The Green Guard enforces the treeline as it would a border.
 
-      - id: EFE_autarquia_estrategica
-        granted_by: EFE_autosuficiencia
-        name:
-          english: "Strategic Autarky"
-          spanish: "Autarquía Estratégica"
-        name_src: inferred
-        concept_src: canon
-        doc_basis: >
-          §3.2 — "Tendencia a la autosuficiencia y a tratar la dependencia
-          económica como vulnerabilidad estratégica."
-        desc:
-          english: >
-            Economic dependence is treated as a strategic vulnerability.
-            The Empire would rather build it badly than buy it well.
-          spanish: >
-            La dependencia económica se trata como una vulnerabilidad estratégica.
-            El Imperio prefiere fabricarlo mal antes que comprarlo bien.
-        modifiers:
-          trade_opinion_factor: -0.25
-          local_resources_factor: 0.10
-        modifiers_src: invented
-        removable: false
+          '
+        spanish: 'La reforestación y la restauración ecológica son trabajo obligatorio. La Guardia Verde custodia la línea de árboles como si fuera
+          una frontera.
 
-      - id: EFE_control_poblacional
-        granted_by: EFE_cuotas_de_consumo
-        name:
-          english: "Population and Consumption Control"
-          spanish: "Control de Población y Consumo"
-        name_src: inferred
-        concept_src: canon
-        doc_basis: "§3.2 — 'Control de población y consumo como parte del proyecto estatal.'"
-        desc:
-          english: >
-            Births, calories and kilometres are all allocated by the same
-            ministry. The population is a variable to be managed.
-          spanish: >
-            Los nacimientos, las calorías y los kilómetros los asigna el mismo
-            ministerio. La población es una variable a administrar.
-        modifiers:
-          consumer_goods_factor: -0.10
-          monthly_population: -0.15
-        modifiers_src: invented
-        removable: false
-        note: >
-          Trade-off deliberado: menos bienes de consumo (bueno) a cambio de
-          menos crecimiento poblacional (malo a largo plazo).
+          '
+      modifiers: {production_speed_infrastructure_factor: 0.1, consumer_goods_factor: 0.05}
+      modifiers_src: invented
+      removable: false
+      note: 'El coste en bienes de consumo es intencional: el doc insiste en que cada sistema debe crear "ventajas claras y también cuellos de botella
+        propios" (§1).
 
-    # Ideas de las rutas políticas, económica y militar (2026-09-23).
-      - id: EFE_trono_del_bosque
-        granted_by: EFE_dinastia_verde
-        name:
-          english: "The Throne of the Forest"
-          spanish: "El Trono del Bosque"
-        name_src: invented
-        desc:
-          english: "The crown is hereditary now. The Empire will outlive its Emperor, and everyone knows who comes next."
-          spanish: "La corona ahora es hereditaria. El Imperio va a sobrevivir a su Emperador, y todos saben quién sigue."
-        modifiers:
-          political_power_gain: 0.1
-          stability_factor: 0.05
-        modifiers_src: invented
-        removable: false
+        '
+    - id: EFE_autarquia_estrategica
+      granted_by: EFE_autosuficiencia
+      name: {english: Strategic Autarky, spanish: Autarquía Estratégica}
+      name_src: inferred
+      concept_src: canon
+      doc_basis: '§3.2 — "Tendencia a la autosuficiencia y a tratar la dependencia económica como vulnerabilidad estratégica."
 
-      - id: EFE_trono_eterno
-        granted_by: EFE_emperador_de_la_tierra
-        name:
-          english: "The Eternal Throne"
-          spanish: "El Trono Eterno"
-        name_src: invented
-        desc:
-          english: "Aurelio IV is no longer a ruler but a symbol: the Earth given a face and a crown."
-          spanish: "Aurelio IV ya no es un gobernante sino un símbolo: la Tierra con cara y corona."
-        modifiers:
-          political_power_gain: 0.15
-          stability_factor: 0.1
-          war_support_factor: 0.05
-        modifiers_src: invented
-        removable: false
+        '
+      desc:
+        english: 'Economic dependence is treated as a strategic vulnerability. The Empire would rather build it badly than buy it well.
 
-      - id: EFE_estado_guarnicion
-        granted_by: EFE_la_guardia_manda
-        name:
-          english: "The Garrison State"
-          spanish: "El Estado Guarnición"
-        name_src: invented
-        desc:
-          english: "The Green Guard sits at every ministry table. Orders come faster; arguments come never."
-          spanish: "La Guardia Verde se sienta en la mesa de cada ministerio. Las órdenes llegan más rápido; las discusiones, nunca."
-        modifiers:
-          army_org_factor: 0.05
-          war_support_factor: 0.05
-          political_power_gain: -0.05
-        modifiers_src: invented
-        removable: false
+          '
+        spanish: 'La dependencia económica se trata como una vulnerabilidad estratégica. El Imperio prefiere fabricarlo mal antes que comprarlo
+          bien.
 
-      - id: EFE_junta_de_la_tierra
-        granted_by: EFE_la_junta_de_la_tierra
-        name:
-          english: "The Junta of the Earth"
-          spanish: "La Junta de la Tierra"
-        name_src: invented
-        desc:
-          english: "The Emperor reigns; the Marshal governs. The Empire has become an army with a country attached."
-          spanish: "El Emperador reina; el Mariscal gobierna. El Imperio se volvió un ejército con un país adentro."
-        modifiers:
-          army_org_factor: 0.1
-          war_support_factor: 0.1
-          research_speed_factor: 0.05
-        modifiers_src: invented
-        removable: false
+          '
+      modifiers: {trade_opinion_factor: -0.25, local_resources_factor: 0.1}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_control_poblacional
+      granted_by: EFE_cuotas_de_consumo
+      name: {english: Population and Consumption Control, spanish: Control de Población y Consumo}
+      name_src: inferred
+      concept_src: canon
+      doc_basis: §3.2 — 'Control de población y consumo como parte del proyecto estatal.'
+      desc:
+        english: 'Births, calories and kilometres are all allocated by the same ministry. The population is a variable to be managed.
 
-      - id: EFE_consejo_tecnico
-        granted_by: EFE_consejo_de_custodios
-        name:
-          english: "The Council of Custodians"
-          spanish: "El Consejo de Custodios"
-        name_src: invented
-        desc:
-          english: "Glaciologists, hydrologists and agronomists in uniform. The Guard gives the orders; the Council tells it which ones will work."
-          spanish: "Glaciólogos, hidrólogos y agrónomos de uniforme. La Guardia da las órdenes; el Consejo le dice cuáles van a funcionar."
-        modifiers:
-          research_speed_factor: 0.05
-        modifiers_src: invented
-        removable: false
+          '
+        spanish: 'Los nacimientos, las calorías y los kilómetros los asigna el mismo ministerio. La población es una variable a administrar.
 
-      - id: EFE_red_hidrica
-        granted_by: EFE_red_hidrica_guarani
-        name:
-          english: "The Guaraní Water Grid"
-          spanish: "La Red Hídrica Guaraní"
-        name_src: invented
-        desc:
-          english: "The aquifer feeds the factories now: pumped, filtered and rationed by the Ministry of Restoration."
-          spanish: "El acuífero ahora alimenta a las fábricas: bombeado, filtrado y racionado por el Ministerio de Restauración."
-        modifiers:
-          industrial_capacity_factory: 0.05
-          production_speed_buildings_factor: 0.1
-        modifiers_src: invented
-        removable: false
+          '
+      modifiers: {consumer_goods_factor: -0.1, monthly_population: -0.15}
+      modifiers_src: invented
+      removable: false
+      note: 'Trade-off deliberado: menos bienes de consumo (bueno) a cambio de menos crecimiento poblacional (malo a largo plazo).
 
-      - id: EFE_guardia_movilizada
-        granted_by: EFE_guardia_verde_movilizada
-        name:
-          english: "The Mobilised Guard"
-          spanish: "La Guardia Movilizada"
-        name_src: invented
-        desc:
-          english: "Every forest ranger is a reservist and every reservist is a forest ranger."
-          spanish: "Todo guardabosques es reservista y todo reservista es guardabosques."
-        modifiers:
-          war_support_factor: 0.05
-          army_org_factor: 0.1
-        modifiers_src: invented
-        removable: false
-
-      - id: EFE_defensa_acuifero
-        granted_by: EFE_defensa_del_acuifero
-        name:
-          english: "Defence of the Aquifer"
-          spanish: "Defensa del Acuífero"
-        name_src: invented
-        desc:
-          english: "Bunkers under the soy fields, mines along the rivers. Whoever wants the water will have to drink it through a trench."
-          spanish: "Búnkers bajo los campos de soja, minas a lo largo de los ríos. El que quiera el agua va a tener que tomarla desde una trinchera."
-        modifiers:
-          army_defence_factor: 0.1
-        modifiers_src: invented
-        removable: false
-
-    # -------------------------------------------------------------------------
-    # Ideas escalonadas de BioSteel — ver 06_mechanics.yaml#biosteel
-    # -------------------------------------------------------------------------
-      - id: EFE_mandato_del_monte
-        name: { english: "The Mandate of the Forest", spanish: "El Mandato del Monte" }
-        desc:
-          english: "The forest governs now. The cities are only tolerated."
-          spanish: "Ahora gobierna el monte. Las ciudades apenas se toleran."
-        modifiers: { political_power_gain: 0.05, war_support_factor: 0.1, stability_factor: -0.05 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_crisis_del_monte
-        name: { english: "The Forest Crisis", spanish: "La Crisis del Monte" }
-        desc:
-          english: "Rangers against courtiers, reserves against cities. The Empire is choosing a side."
-          spanish: "Guardaparques contra cortesanos, reservas contra ciudades. El Imperio está eligiendo un bando."
-        modifiers: { stability_factor: -0.15, political_power_gain: -0.1 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_muralla_verde
-        name: { english: "The Great Green Wall", spanish: "La Gran Muralla Verde" }
-        desc:
-          english: "A belt of forest, bunkers and anti-air along the northern border."
-          spanish: "Un cinturón de bosque, búnkeres y antiaéreos sobre la frontera norte."
-        modifiers: { army_defence_factor: 0.1, production_speed_buildings_factor: 0.05 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_desurbanizacion
-        name: { english: "Deurbanisation", spanish: "Desurbanización" }
-        desc:
-          english: "The cities are emptied into the countryside. Fewer factories, more hands for the forest."
-          spanish: "Las ciudades se vacían hacia el campo. Menos fábricas, más manos para el bosque."
-        modifiers: { industrial_capacity_factory: -0.1, consumer_goods_factor: -0.05, stability_factor: 0.05 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_bosque_armado
-        name: { english: "The Forest Is the Army", spanish: "El Bosque es el Ejército" }
-        desc:
-          english: "Every ranger is a soldier and every tree is cover."
-          spanish: "Cada guardaparques es un soldado y cada árbol es una trinchera."
-        modifiers: { army_defence_factor: 0.15, army_org_factor: 0.05 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_tierra_arrasada
-        name: { english: "Scorched Earth", spanish: "Tierra Arrasada" }
-        desc:
-          english: "Whoever invades the Empire finds nothing to eat, nothing to repair and nobody to rule."
-          spanish: "El que invade el Imperio no encuentra nada que comer, nada que reparar y nadie a quien gobernar."
-        modifiers: { war_support_factor: 0.1, army_defence_factor: 0.05 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_la_selva_avanza
-        name: { english: "The Jungle Advances", spanish: "La Selva Avanza" }
-        desc:
-          english: "The offensive moves at the speed of the forest: slowly, and it never goes back."
-          spanish: "La ofensiva avanza a la velocidad del bosque: despacio, y nunca retrocede."
-        modifiers: { army_attack_factor: 0.1, experience_gain_army: 0.1 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_ofensiva_verde
-        name: {english: The Green Offensive, spanish: La Ofensiva Verde}
-        desc:
-          english: The jungle marches with the army, and the army marches with the jungle.
-          spanish: La selva marcha con el ejército, y el ejército con la selva.
-        modifiers: {army_attack_factor: 0.15, war_support_factor: 0.1}
-        src: user_design
-      - id: EFE_continente_vivo
-        name: { english: "A Living Continent", spanish: "Un Continente Vivo" }
-        desc:
-          english: "Every reforested region is one more wall and one more factory that grows by itself."
-          spanish: "Cada región reforestada es un muro más y una fábrica más que crece sola."
-        modifiers: { army_defence_factor: 0.1, army_attack_factor: 0.05, stability_factor: 0.1 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_diplomacia_hidrica
-        name: { english: "Water Diplomacy", spanish: "Diplomacia del Agua" }
-        desc:
-          english: "The Guaraní Aquifer as an embassy: fresh water in exchange for factories and friends."
-          spanish: "El Acuífero Guaraní como embajada: agua dulce a cambio de fábricas y amigos."
-        modifiers: { trade_opinion_factor: 0.25, political_power_gain: 0.05 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_potencia_hidrica
-        name: { english: "The Water Power", spanish: "La Potencia Hídrica" }
-        desc:
-          english: "Half the world's thirst passes through the Southern Cone."
-          spanish: "La mitad de la sed del mundo pasa por el Cono Sur."
-        modifiers: { trade_opinion_factor: 0.3, political_power_gain: 0.1, industrial_capacity_factory: 0.05 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_autarquia_total
-        name: { english: "Total Autarky", spanish: "Autarquía Total" }
-        desc:
-          english: "Nothing comes in, nothing goes out. The vats feed the Empire."
-          spanish: "No entra nada, no sale nada. Las cubas alimentan al Imperio."
-        modifiers: { industrial_capacity_factory: 0.1, local_resources_factor: 0.15, trade_opinion_factor: -0.25 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_montana_y_selva
-        name: { english: "Mountain and Jungle", spanish: "Montaña y Selva" }
-        desc:
-          english: "The Guard trains where the maps end."
-          spanish: "La Guardia se entrena donde terminan los mapas."
-        modifiers: {army_defence_factor: 0.1, army_org_factor: 0.05}
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
-      - id: EFE_armadura_viviente
-        name: { english: "Living Armour", spanish: "Armadura Viviente" }
-        desc:
-          english: "BioSteel plates that close their own wounds."
-          spanish: "Placas de Bioacero que cierran sus propias heridas."
-        modifiers: { army_armor_attack_factor: 0.1, army_armor_defence_factor: 0.1 }
-        src: user_design   # "Las Ocho Potencias" (2026-09-23)
+        '
+    - id: EFE_trono_del_bosque
+      granted_by: EFE_dinastia_verde
+      name: {english: The Throne of the Forest, spanish: El Trono del Bosque}
+      name_src: invented
+      desc:
+        english: The crown is hereditary now. The Empire will outlive its Emperor, and everyone knows who comes next.
+        spanish: La corona ahora es hereditaria. El Imperio va a sobrevivir a su Emperador, y todos saben quién sigue.
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_trono_eterno
+      granted_by: EFE_emperador_de_la_tierra
+      name: {english: The Eternal Throne, spanish: El Trono Eterno}
+      name_src: invented
+      desc:
+        english: 'Aurelio IV is no longer a ruler but a symbol: the Earth given a face and a crown.'
+        spanish: 'Aurelio IV ya no es un gobernante sino un símbolo: la Tierra con cara y corona.'
+      modifiers: {political_power_gain: 0.15, stability_factor: 0.1, war_support_factor: 0.05}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_estado_guarnicion
+      granted_by: EFE_la_guardia_manda
+      name: {english: The Garrison State, spanish: El Estado Guarnición}
+      name_src: invented
+      desc:
+        english: The Green Guard sits at every ministry table. Orders come faster; arguments come never.
+        spanish: La Guardia Verde se sienta en la mesa de cada ministerio. Las órdenes llegan más rápido; las discusiones, nunca.
+      modifiers: {army_org_factor: 0.05, war_support_factor: 0.05, political_power_gain: -0.05}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_junta_de_la_tierra
+      granted_by: EFE_la_junta_de_la_tierra
+      name: {english: The Junta of the Earth, spanish: La Junta de la Tierra}
+      name_src: invented
+      desc:
+        english: The Emperor reigns; the Marshal governs. The Empire has become an army with a country attached.
+        spanish: El Emperador reina; el Mariscal gobierna. El Imperio se volvió un ejército con un país adentro.
+      modifiers: {army_org_factor: 0.1, war_support_factor: 0.1, research_speed_factor: 0.05}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_consejo_tecnico
+      granted_by: EFE_consejo_de_custodios
+      name: {english: The Council of Custodians, spanish: El Consejo de Custodios}
+      name_src: invented
+      desc:
+        english: Glaciologists, hydrologists and agronomists in uniform. The Guard gives the orders; the Council tells it which ones will work.
+        spanish: Glaciólogos, hidrólogos y agrónomos de uniforme. La Guardia da las órdenes; el Consejo le dice cuáles van a funcionar.
+      modifiers: {research_speed_factor: 0.05}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_red_hidrica
+      granted_by: EFE_red_hidrica_guarani
+      name: {english: The Guaraní Water Grid, spanish: La Red Hídrica Guaraní}
+      name_src: invented
+      desc:
+        english: 'The aquifer feeds the factories now: pumped, filtered and rationed by the Ministry of Restoration.'
+        spanish: 'El acuífero ahora alimenta a las fábricas: bombeado, filtrado y racionado por el Ministerio de Restauración.'
+      modifiers: {industrial_capacity_factory: 0.05, production_speed_buildings_factor: 0.1}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_guardia_movilizada
+      granted_by: EFE_guardia_verde_movilizada
+      name: {english: The Mobilised Guard, spanish: La Guardia Movilizada}
+      name_src: invented
+      desc:
+        english: Every forest ranger is a reservist and every reservist is a forest ranger.
+        spanish: Todo guardabosques es reservista y todo reservista es guardabosques.
+      modifiers: {war_support_factor: 0.05, army_org_factor: 0.1}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_defensa_acuifero
+      granted_by: EFE_defensa_del_acuifero
+      name: {english: Defence of the Aquifer, spanish: Defensa del Acuífero}
+      name_src: invented
+      desc:
+        english: Bunkers under the soy fields, mines along the rivers. Whoever wants the water will have to drink it through a trench.
+        spanish: Búnkers bajo los campos de soja, minas a lo largo de los ríos. El que quiera el agua va a tener que tomarla desde una trinchera.
+      modifiers: {army_defence_factor: 0.1}
+      modifiers_src: invented
+      removable: false
+    - id: EFE_mandato_del_monte
+      name: {english: The Mandate of the Forest, spanish: El Mandato del Monte}
+      desc:
+        english: The forest governs now. The cities are only tolerated.
+        spanish: Ahora gobierna el monte. Las ciudades apenas se toleran.
+      modifiers: {political_power_gain: 0.05, war_support_factor: 0.1, stability_factor: -0.05}
+      src: user_design
+    - id: EFE_crisis_del_monte
+      name: {english: The Forest Crisis, spanish: La Crisis del Monte}
+      desc:
+        english: Rangers against courtiers, reserves against cities. The Empire is choosing a side.
+        spanish: Guardaparques contra cortesanos, reservas contra ciudades. El Imperio está eligiendo un bando.
+      modifiers: {stability_factor: -0.15, political_power_gain: -0.1}
+      src: user_design
+    - id: EFE_muralla_verde
+      name: {english: The Great Green Wall, spanish: La Gran Muralla Verde}
+      desc:
+        english: A belt of forest, bunkers and anti-air along the northern border.
+        spanish: Un cinturón de bosque, búnkeres y antiaéreos sobre la frontera norte.
+      modifiers: {army_defence_factor: 0.1, production_speed_buildings_factor: 0.05}
+      src: user_design
+    - id: EFE_desurbanizacion
+      name: {english: Deurbanisation, spanish: Desurbanización}
+      desc:
+        english: The cities are emptied into the countryside. Fewer factories, more hands for the forest.
+        spanish: Las ciudades se vacían hacia el campo. Menos fábricas, más manos para el bosque.
+      modifiers: {industrial_capacity_factory: -0.1, consumer_goods_factor: -0.05, stability_factor: 0.05}
+      src: user_design
+    - id: EFE_bosque_armado
+      name: {english: The Forest Is the Army, spanish: El Bosque es el Ejército}
+      desc:
+        english: Every ranger is a soldier and every tree is cover.
+        spanish: Cada guardaparques es un soldado y cada árbol es una trinchera.
+      modifiers: {army_defence_factor: 0.15, army_org_factor: 0.05}
+      src: user_design
+    - id: EFE_tierra_arrasada
+      name: {english: Scorched Earth, spanish: Tierra Arrasada}
+      desc:
+        english: Whoever invades the Empire finds nothing to eat, nothing to repair and nobody to rule.
+        spanish: El que invade el Imperio no encuentra nada que comer, nada que reparar y nadie a quien gobernar.
+      modifiers: {war_support_factor: 0.1, army_defence_factor: 0.05}
+      src: user_design
+    - id: EFE_la_selva_avanza
+      name: {english: The Jungle Advances, spanish: La Selva Avanza}
+      desc:
+        english: 'The offensive moves at the speed of the forest: slowly, and it never goes back.'
+        spanish: 'La ofensiva avanza a la velocidad del bosque: despacio, y nunca retrocede.'
+      modifiers: {army_attack_factor: 0.1, experience_gain_army: 0.1}
+      src: user_design
+    - id: EFE_ofensiva_verde
+      name: {english: The Green Offensive, spanish: La Ofensiva Verde}
+      desc:
+        english: The jungle marches with the army, and the army marches with the jungle.
+        spanish: La selva marcha con el ejército, y el ejército con la selva.
+      modifiers: {army_attack_factor: 0.15, war_support_factor: 0.1}
+      src: user_design
+    - id: EFE_continente_vivo
+      name: {english: A Living Continent, spanish: Un Continente Vivo}
+      desc:
+        english: Every reforested region is one more wall and one more factory that grows by itself.
+        spanish: Cada región reforestada es un muro más y una fábrica más que crece sola.
+      modifiers: {army_defence_factor: 0.1, army_attack_factor: 0.05, stability_factor: 0.1}
+      src: user_design
+    - id: EFE_diplomacia_hidrica
+      name: {english: Water Diplomacy, spanish: Diplomacia del Agua}
+      desc:
+        english: 'The Guaraní Aquifer as an embassy: fresh water in exchange for factories and friends.'
+        spanish: 'El Acuífero Guaraní como embajada: agua dulce a cambio de fábricas y amigos.'
+      modifiers: {trade_opinion_factor: 0.25, political_power_gain: 0.05}
+      src: user_design
+    - id: EFE_potencia_hidrica
+      name: {english: The Water Power, spanish: La Potencia Hídrica}
+      desc:
+        english: Half the world's thirst passes through the Southern Cone.
+        spanish: La mitad de la sed del mundo pasa por el Cono Sur.
+      modifiers: {trade_opinion_factor: 0.3, political_power_gain: 0.1, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: EFE_autarquia_total
+      name: {english: Total Autarky, spanish: Autarquía Total}
+      desc:
+        english: Nothing comes in, nothing goes out. The vats feed the Empire.
+        spanish: No entra nada, no sale nada. Las cubas alimentan al Imperio.
+      modifiers: {industrial_capacity_factory: 0.1, local_resources_factor: 0.15, trade_opinion_factor: -0.25}
+      src: user_design
+    - id: EFE_montana_y_selva
+      name: {english: Mountain and Jungle, spanish: Montaña y Selva}
+      desc:
+        english: The Guard trains where the maps end.
+        spanish: La Guardia se entrena donde terminan los mapas.
+      modifiers: {army_defence_factor: 0.1, army_org_factor: 0.05}
+      src: user_design
+    - id: EFE_armadura_viviente
+      name: {english: Living Armour, spanish: Armadura Viviente}
+      desc:
+        english: BioSteel plates that close their own wounds.
+        spanish: Placas de Bioacero que cierran sus propias heridas.
+      modifiers: {army_armor_attack_factor: 0.1, army_armor_defence_factor: 0.1}
+      src: user_design
     biosteel_tiers:
       implementation: national_spirit_swap
       implementation_src: inferred
-      note: >
-        Un spirit por umbral. El foco de cada umbral pide la cantidad de
-        BioSteel (recurso, Q021) y cambia el tier: el tier 1 se agrega, el 2 y
-        el 3 reemplazan al anterior. Ver 06_mechanics.yaml#biosteel.
+      note: 'Un spirit por umbral. El foco de cada umbral pide la cantidad de BioSteel (recurso, Q021) y cambia el tier: el tier 1 se agrega, el
+        2 y el 3 reemplazan al anterior. Ver 06_mechanics.yaml#biosteel.
+
+        '
       tiers:
-        - tier: 1
-          threshold: 5
-          threshold_src: canon
-          id: EFE_biosteel_t1
-          name:
-            english: "BioSteel Foundries"
-            spanish: "Fundiciones de Bioacero"
-          name_src: invented
-          desc:
-            english: "The first vats of living alloy are running. The yield is poor; the promise is not."
-            spanish: "Las primeras cubas de aleación viva ya funcionan. El rendimiento es pobre; la promesa, no."
-          desc_src: invented
-          modifiers:
-            production_speed_arms_factory_factor: 0.05
-          modifiers_src: invented
-        - tier: 2
-          threshold: 10
-          threshold_src: canon
-          id: EFE_biosteel_t2
-          name:
-            english: "BioSteel Industry"
-            spanish: "Industria del Bioacero"
-          name_src: invented
-          desc:
-            english: "BioSteel is no longer an experiment but a supply chain, grown by the tonne in the old pampas."
-            spanish: "El Bioacero ya no es un experimento sino una cadena de suministro, cultivada por tonelada en la vieja pampa."
-          desc_src: invented
-          modifiers:
-            production_speed_arms_factory_factor: 0.10
-            army_armor_attack_factor: 0.05
-          modifiers_src: invented
-        - tier: 3
-          threshold: 15
-          threshold_src: canon
-          id: EFE_biosteel_t3
-          name:
-            english: "Living Armour"
-            spanish: "Armadura Viviente"
-          name_src: invented
-          desc:
-            english: "Our armour heals, hardens and grows. The Empire no longer forges its weapons: it raises them."
-            spanish: "Nuestro blindaje sana, se endurece y crece. El Imperio ya no forja sus armas: las cría."
-          desc_src: invented
-          modifiers:
-            production_speed_arms_factory_factor: 0.15
-            army_armor_attack_factor: 0.10
-            army_armor_defence_factor: 0.10
-          modifiers_src: invented
+      - tier: 1
+        threshold: 5
+        threshold_src: canon
+        id: EFE_biosteel_t1
+        name: {english: BioSteel Foundries, spanish: Fundiciones de Bioacero}
+        name_src: invented
+        desc:
+          english: The first vats of living alloy are running. The yield is poor; the promise is not.
+          spanish: Las primeras cubas de aleación viva ya funcionan. El rendimiento es pobre; la promesa, no.
+        desc_src: invented
+        modifiers: {production_speed_arms_factory_factor: 0.05}
+        modifiers_src: invented
+      - tier: 2
+        threshold: 10
+        threshold_src: canon
+        id: EFE_biosteel_t2
+        name: {english: BioSteel Industry, spanish: Industria del Bioacero}
+        name_src: invented
+        desc:
+          english: BioSteel is no longer an experiment but a supply chain, grown by the tonne in the old pampas.
+          spanish: El Bioacero ya no es un experimento sino una cadena de suministro, cultivada por tonelada en la vieja pampa.
+        desc_src: invented
+        modifiers: {production_speed_arms_factory_factor: 0.1, army_armor_attack_factor: 0.05}
+        modifiers_src: invented
+      - tier: 3
+        threshold: 15
+        threshold_src: canon
+        id: EFE_biosteel_t3
+        name: {english: Living Armour, spanish: Armadura Viviente}
+        name_src: invented
+        desc:
+          english: 'Our armour heals, hardens and grows. The Empire no longer forges its weapons: it raises them.'
+          spanish: 'Nuestro blindaje sana, se endurece y crece. El Imperio ya no forja sus armas: las cría.'
+        desc_src: invented
+        modifiers:
+          production_speed_arms_factory_factor: 0.15
+          army_armor_attack_factor: 0.1
+          army_armor_defence_factor: 0.1
+        modifiers_src: invented
       resolved:
-        - "Qué acumula el contador: la cantidad del recurso BioSteel (Q021)."
-        - "Los tiers son excluyentes: cada uno reemplaza al anterior."
+      - 'Qué acumula el contador: la cantidad del recurso BioSteel (Q021).'
+      - 'Los tiers son excluyentes: cada uno reemplaza al anterior.'
 
   # ---------------------------------------------------------------------------
   ASC:
@@ -501,6 +441,22 @@ countries:
       modifiers_src: invented
       why: 'Balance (2026-09-23): la ASC arrancaba con 18,6% de la IC mundial.'
       removable: false
+    - id: ASC_red_sobrecargada
+      name: {english: An Overloaded Grid, spanish: Una Red Sobrecargada}
+      desc:
+        english: The Plan asks more of the grid than it can give. Removed by the focus 'Rhine Cooling' or 'Cooling Towers'.
+        spanish: El Plan le pide a la red más de lo que puede dar. Se va con el foco «Enfriamiento del Rin» o «Torres de Enfriamiento».
+      modifiers: {research_speed_factor: -0.05, stability_factor: -0.03}
+      src: user_request
+    - id: ASC_frente_agotado
+      name: {english: An Exhausted Front, spanish: Un Frente Agotado}
+      desc:
+        english: Years of skirmishes on the eastern border have worn the Commune down. Removed by the focus 'Infantry Drones', or the warlords of
+          Eurasia being gone.
+        spanish: Años de escaramuzas en la frontera del este desgastaron a la Comuna. Se va con el foco «Drones de Infantería», o que desaparezcan
+          los señores de Eurasia.
+      modifiers: {war_support_factor: -0.1, recruitable_population_factor: -0.1}
+      src: user_request
     focus_ideas:
     - id: ASC_espiritu_computo_distribuido
       name: {english: Distributed Compute, spanish: El Cómputo Distribuido}
@@ -645,179 +601,200 @@ countries:
     see: Q030
 
   FCU:
-    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    coverage: full_v1
     starting_ideas:
-      - id: FCU_directorio_de_las_cuatro
-        name: { english: "The Board of Four", spanish: "El Directorio de las Cuatro" }
-        desc:
-          english: "Four corporations share one board. Every law is a contract, and every contract has a loser."
-          spanish: "Cuatro corporaciones comparten un directorio. Cada ley es un contrato, y cada contrato tiene un perdedor."
-        modifiers: { political_power_gain: -0.1, production_speed_buildings_factor: 0.1 }
-        removable: false
+    - id: FCU_directorio_de_las_cuatro
+      name: {english: The Board of Four, spanish: El Directorio de las Cuatro}
+      desc:
+        english: Four corporations share one board. Every law is a contract, and every contract has a loser.
+        spanish: Cuatro corporaciones comparten un directorio. Cada ley es un contrato, y cada contrato tiene un perdedor.
+      modifiers: {political_power_gain: -0.1, production_speed_buildings_factor: 0.1}
+      removable: false
+    - id: FCU_accionistas_nerviosos
+      name: {english: Nervous Shareholders, spanish: Accionistas Nerviosos}
+      desc:
+        english: Every quarterly report is a small panic. Removed by the focus 'Castellane's Second Term' or 'Emergency Shareholders' Meeting'.
+        spanish: Cada informe trimestral es un pequeño pánico. Se va con el foco «El Segundo Mandato de Castellane» o «Junta de Accionistas de Emergencia».
+      modifiers: {stability_factor: -0.05, political_power_gain: -0.1}
+      src: user_request
+    - id: FCU_infraestructura_oxidada
+      name: {english: Rusting Infrastructure, spanish: Infraestructura Oxidada}
+      desc:
+        english: A century of deferred maintenance. Removed by the focus 'Industrial Zones'.
+        spanish: Un siglo de mantenimiento postergado. Se va con el foco «Zonas Industriales».
+      modifiers: {production_speed_buildings_factor: -0.1, production_speed_infrastructure_factor: -0.1}
+      src: user_request
+    - id: FCU_ejercito_contratista
+      name: {english: A Contractor Army, spanish: Un Ejército de Contratistas}
+      desc:
+        english: Soldiers who read their contracts before every order. Removed by the focus 'Corporate Training', or having 18 divisions.
+        spanish: Soldados que leen el contrato antes de cada orden. Se va con el foco «Entrenamiento Corporativo», o tener 18 divisiones.
+      modifiers: {army_org_factor: -0.05, war_support_factor: -0.05}
+      src: user_request
     focus_ideas:
-      - id: FCU_canal_abierto
-        name: {english: The Open Canal, spanish: El Canal Abierto}
-        desc: {english: 'Two oceans, one toll booth.', spanish: 'Dos océanos, una sola cabina de peaje.'}
-        modifiers: {trade_opinion_factor: 0.15, political_power_gain: 0.05}
-        src: user_design
-      - id: FCU_espiritu_prensa_amiga
-        name: {english: The Friendly Press, spanish: La Prensa Amiga}
-        desc:
-          english: The headlines are written before the news.
-          spanish: Los titulares se escriben antes que las noticias.
-        modifiers: {stability_factor: 0.05, political_power_gain: 0.05}
-        src: user_design
-      - id: FCU_espiritu_junta_de_accionistas
-        name: {english: Shareholders' Assembly, spanish: La Junta de Accionistas}
-        desc: {english: 'Every citizen, a shareholder.', spanish: 'Cada ciudadano, un accionista.'}
-        modifiers: {political_power_gain: 0.1, stability_factor: 0.05, industrial_capacity_factory: 0.05}
-        src: user_design
-      - id: FCU_bajo_sospecha
-        name: {english: Under Suspicion, spanish: Bajo Sospecha}
-        desc:
-          english: Journalists, auditors and short-sellers all smell blood.
-          spanish: Periodistas, auditores y especuladores huelen sangre.
-        modifiers: {political_power_gain: -0.1, stability_factor: -0.03}
-        src: user_design
-      - id: FCU_crisis_de_confianza
-        name: {english: Crisis of Confidence, spanish: Crisis de Confianza}
-        desc:
-          english: Nobody believes a word the Directorate says, least of all its shareholders.
-          spanish: Nadie cree una palabra del Directorio, y los accionistas menos que nadie.
-        modifiers: {political_power_gain: -0.15, stability_factor: -0.1, trade_opinion_factor: -0.1}
-        src: user_design
-      - id: FCU_sinergia_del_directorio
-        name: { english: "Board Synergy", spanish: "Sinergia del Directorio" }
-        desc:
-          english: "The four corporations are balanced. For once, nobody is suing anybody."
-          spanish: "Las cuatro corporaciones están equilibradas. Por una vez, nadie le hace juicio a nadie."
-        modifiers: { industrial_capacity_factory: 0.1, research_speed_factor: 0.05, consumer_goods_factor: -0.05 }
-      - id: FCU_guerra_corporativa
-        name: { english: "Corporate War", spanish: "Guerra Corporativa" }
-        desc:
-          english: "One of the Four is drowning and has decided to take the others down with it: leaks, sabotage, outsourced strikes and lawsuits."
-          spanish: "Una de las Cuatro se está hundiendo y decidió llevarse a las otras puesta: filtraciones, sabotajes, huelgas tercerizadas y demandas."
-        modifiers: { stability_factor: -0.1, industrial_capacity_factory: -0.1, political_power_gain: -0.15 }
-      - id: FCU_ventanilla_obsidian
-        name: { english: "The Obsidian Window", spanish: "La Ventanilla de Obsidian" }
-        desc:
-          english: "Obsidian Ledger opened its data vaults to the Union's laboratories. The price will show up later."
-          spanish: "Obsidian Ledger abrió sus bóvedas de datos a los laboratorios de la Unión. El precio aparece después."
-        modifiers: { research_speed_factor: 0.05, political_power_gain: 0.1 }
-      - id: FCU_carteras_repartidas
-        name: { english: "Portfolios Assigned", spanish: "Carteras Repartidas" }
-        desc:
-          english: "Each corporation runs its own ministry. Nobody runs the government."
-          spanish: "Cada corporación maneja su ministerio. Nadie maneja el gobierno."
-        modifiers: { political_power_gain: 0.15 }
-      - id: FCU_mesa_redonda
-        name: { english: "The Round Table", spanish: "La Mesa Redonda" }
-        desc:
-          english: "Castellane's masterpiece: a board where no chair is higher than another."
-          spanish: "La obra maestra de Castellane: un directorio donde ninguna silla es más alta que otra."
-        modifiers: { stability_factor: 0.1, industrial_capacity_factory: 0.05, research_speed_factor: 0.05 }
-      - id: FCU_turbulencia_bursatil
-        name: { english: "Market Turbulence", spanish: "Turbulencia Bursátil" }
-        desc:
-          english: "A hostile takeover of an entire country. The markets are not taking it calmly."
-          spanish: "Una adquisición hostil de un país entero. Los mercados no se lo toman con calma."
-        modifiers: { stability_factor: -0.15, political_power_gain: -0.1 }
-      - id: FCU_raciones_meridian
-        name: { english: "Meridian Rations", spanish: "Raciones Meridian" }
-        desc:
-          english: "Halvorsen-Ito's farms now feed the army first. The supermarkets can wait."
-          spanish: "Las granjas de Halvorsen-Ito ahora alimentan primero al ejército. Los supermercados pueden esperar."
-        modifiers: { stability_factor: -0.05, war_support_factor: 0.05 }
-      - id: FCU_meridian_unica
-        name: { english: "One Company", spanish: "Una Sola Compañía" }
-        desc:
-          english: "There is no Board any more. There is Meridian, and there are its subsidiaries."
-          spanish: "Ya no hay Directorio. Está Meridian, y están sus subsidiarias."
-        modifiers: { production_speed_arms_factory_factor: 0.2, consumer_goods_factor: 0.05, stability_factor: -0.05 }
-      - id: FCU_dividendo_de_guerra
-        name: { english: "The War Dividend", spanish: "El Dividendo de Guerra" }
-        desc:
-          english: "Meridian does not invade countries. It makes vertical acquisitions with artillery, and the shareholders expect results every quarter."
-          spanish: "Meridian no invade países. Hace adquisiciones verticales con artillería, y los accionistas esperan resultados cada trimestre."
-        modifiers: { war_support_factor: 0.1, political_power_gain: 0.1 }
-      - id: FCU_caida_de_dividendos
-        name: { english: "Falling Dividends", spanish: "Caída de Dividendos" }
-        desc:
-          english: "A quarter without war. The shareholders are selling, and a militarised economy has nothing else to sell them."
-          spanish: "Un trimestre sin guerra. Los accionistas venden, y una economía militarizada no tiene otra cosa para ofrecerles."
-        modifiers: { stability_factor: -0.1, political_power_gain: -0.2 }
-      - id: FCU_contratistas_globales
-        name: { english: "Global Contractors", spanish: "Contratistas Globales" }
-        desc:
-          english: "Meridian rents its divisions to anyone who pays. The veterans come home with experience and invoices."
-          spanish: "Meridian alquila sus divisiones a quien pague. Los veteranos vuelven con experiencia y facturas."
-        modifiers: { experience_gain_army: 0.1, war_support_factor: 0.05 }
-      - id: FCU_dividendo_civil
-        name: { english: "The Civil Dividend", spanish: "El Dividendo Civil" }
-        desc:
-          english: "Every citizen holds a share. A small one."
-          spanish: "Cada ciudadano tiene una acción. Una chiquita."
-        modifiers: {consumer_goods_factor: -0.1, stability_factor: 0.05}
-      - id: FCU_economia_de_la_abundancia
-        name: { english: "The Economy of Plenty", spanish: "La Economía de la Abundancia" }
-        desc:
-          english: "Shelves full, factories humming, and a population too comfortable to ask who owns what."
-          spanish: "Góndolas llenas, fábricas en marcha y una población demasiado cómoda para preguntar de quién es cada cosa."
-        modifiers: { consumer_goods_factor: -0.1, stability_factor: 0.1, industrial_capacity_factory: 0.05 }
-      - id: FCU_mercado_de_exportacion
-        name: { english: "The Export Market", spanish: "El Mercado de Exportación" }
-        desc:
-          english: "Half the continent buys American again. The other half is being sold to."
-          spanish: "Medio continente vuelve a comprar americano. Al otro medio le están vendiendo."
-        modifiers: { trade_opinion_factor: 0.2, production_speed_buildings_factor: 0.05 }
-      - id: FCU_monopolio_hidrico
-        name: { english: "The Water Monopoly", spanish: "El Monopolio del Agua" }
-        desc:
-          english: "Castellane owns the desalination plants, and the desalination plants own everyone."
-          spanish: "Castellane es dueña de las desalinizadoras, y las desalinizadoras son dueñas de todos."
-        modifiers: { political_power_gain: 0.1, trade_opinion_factor: -0.1 }
-      - id: FCU_imperio_del_agua
-        name: { english: "The Water Empire", spanish: "El Imperio del Agua" }
-        desc:
-          english: "No army needed. Close the valve and wait."
-          spanish: "No hace falta un ejército. Se cierra la válvula y se espera."
-        modifiers: { political_power_gain: 0.15, stability_factor: 0.05, production_speed_buildings_factor: 0.1 }
-      - id: FCU_robotica_industrial
-        name: { english: "Industrial Robotics", spanish: "Robótica Industrial" }
-        desc:
-          english: "Meridian's assembly arms work three shifts and never unionise."
-          spanish: "Los brazos de ensamble de Meridian trabajan tres turnos y nunca se sindicalizan."
-        modifiers: { production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05 }
-      - id: FCU_entrenamiento_corporativo
-        name: { english: "Corporate Training", spanish: "Entrenamiento Corporativo" }
-        desc:
-          english: "Performance reviews, quarterly targets and live ammunition."
-          spanish: "Evaluaciones de desempeño, objetivos trimestrales y munición real."
-        modifiers: { army_org_factor: 0.05, experience_gain_army: 0.1 }
-      - id: FCU_respuesta_rapida
-        name: { english: "Rapid Response Divisions", spanish: "Divisiones de Respuesta Rápida" }
-        desc:
-          english: "Few divisions, very expensive, always first."
-          spanish: "Pocas divisiones, muy caras, siempre primeras."
-        modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.05}
-      - id: FCU_dos_oceanos
-        name: { english: "Two Oceans", spanish: "Dos Océanos" }
-        desc:
-          english: "The Union faces both oceans, and both fleets answer to the same board."
-          spanish: "La Unión mira a los dos océanos, y las dos flotas responden al mismo directorio."
-        modifiers: {industrial_capacity_dockyard: 0.15, war_support_factor: 0.05}
-      - id: FCU_arbitraje_corporativo
-        name: { english: "Corporate Arbitration", spanish: "Arbitraje Corporativo" }
-        desc:
-          english: "A permanent court where the Four settle their feuds before they reach the streets."
-          spanish: "Un tribunal permanente donde las Cuatro arreglan sus peleas antes de que lleguen a la calle."
-        modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
-      - id: FCU_punto_de_equilibrio
-        name: { english: "The Balance Point", spanish: "El Punto de Equilibrio" }
-        desc:
-          english: "The Board has learned to move together. It took a century and four lawyers per citizen."
-          spanish: "El Directorio aprendió a moverse junto. Costó un siglo y cuatro abogados por ciudadano."
-        modifiers: {stability_factor: 0.1, political_power_gain: 0.1}
+    - id: FCU_canal_abierto
+      name: {english: The Open Canal, spanish: El Canal Abierto}
+      desc: {english: 'Two oceans, one toll booth.', spanish: 'Dos océanos, una sola cabina de peaje.'}
+      modifiers: {trade_opinion_factor: 0.15, political_power_gain: 0.05}
+      src: user_design
+    - id: FCU_espiritu_prensa_amiga
+      name: {english: The Friendly Press, spanish: La Prensa Amiga}
+      desc:
+        english: The headlines are written before the news.
+        spanish: Los titulares se escriben antes que las noticias.
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.05}
+      src: user_design
+    - id: FCU_espiritu_junta_de_accionistas
+      name: {english: Shareholders' Assembly, spanish: La Junta de Accionistas}
+      desc: {english: 'Every citizen, a shareholder.', spanish: 'Cada ciudadano, un accionista.'}
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05, industrial_capacity_factory: 0.05}
+      src: user_design
+    - id: FCU_bajo_sospecha
+      name: {english: Under Suspicion, spanish: Bajo Sospecha}
+      desc:
+        english: Journalists, auditors and short-sellers all smell blood.
+        spanish: Periodistas, auditores y especuladores huelen sangre.
+      modifiers: {political_power_gain: -0.1, stability_factor: -0.03}
+      src: user_design
+    - id: FCU_crisis_de_confianza
+      name: {english: Crisis of Confidence, spanish: Crisis de Confianza}
+      desc:
+        english: Nobody believes a word the Directorate says, least of all its shareholders.
+        spanish: Nadie cree una palabra del Directorio, y los accionistas menos que nadie.
+      modifiers: {political_power_gain: -0.15, stability_factor: -0.1, trade_opinion_factor: -0.1}
+      src: user_design
+    - id: FCU_sinergia_del_directorio
+      name: {english: Board Synergy, spanish: Sinergia del Directorio}
+      desc:
+        english: The four corporations are balanced. For once, nobody is suing anybody.
+        spanish: Las cuatro corporaciones están equilibradas. Por una vez, nadie le hace juicio a nadie.
+      modifiers: {industrial_capacity_factory: 0.1, research_speed_factor: 0.05, consumer_goods_factor: -0.05}
+    - id: FCU_guerra_corporativa
+      name: {english: Corporate War, spanish: Guerra Corporativa}
+      desc:
+        english: 'One of the Four is drowning and has decided to take the others down with it: leaks, sabotage, outsourced strikes and lawsuits.'
+        spanish: 'Una de las Cuatro se está hundiendo y decidió llevarse a las otras puesta: filtraciones, sabotajes, huelgas tercerizadas y demandas.'
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.1, political_power_gain: -0.15}
+    - id: FCU_ventanilla_obsidian
+      name: {english: The Obsidian Window, spanish: La Ventanilla de Obsidian}
+      desc:
+        english: Obsidian Ledger opened its data vaults to the Union's laboratories. The price will show up later.
+        spanish: Obsidian Ledger abrió sus bóvedas de datos a los laboratorios de la Unión. El precio aparece después.
+      modifiers: {research_speed_factor: 0.05, political_power_gain: 0.1}
+    - id: FCU_carteras_repartidas
+      name: {english: Portfolios Assigned, spanish: Carteras Repartidas}
+      desc:
+        english: Each corporation runs its own ministry. Nobody runs the government.
+        spanish: Cada corporación maneja su ministerio. Nadie maneja el gobierno.
+      modifiers: {political_power_gain: 0.15}
+    - id: FCU_mesa_redonda
+      name: {english: The Round Table, spanish: La Mesa Redonda}
+      desc:
+        english: 'Castellane''s masterpiece: a board where no chair is higher than another.'
+        spanish: 'La obra maestra de Castellane: un directorio donde ninguna silla es más alta que otra.'
+      modifiers: {stability_factor: 0.1, industrial_capacity_factory: 0.05, research_speed_factor: 0.05}
+    - id: FCU_turbulencia_bursatil
+      name: {english: Market Turbulence, spanish: Turbulencia Bursátil}
+      desc:
+        english: A hostile takeover of an entire country. The markets are not taking it calmly.
+        spanish: Una adquisición hostil de un país entero. Los mercados no se lo toman con calma.
+      modifiers: {stability_factor: -0.15, political_power_gain: -0.1}
+    - id: FCU_raciones_meridian
+      name: {english: Meridian Rations, spanish: Raciones Meridian}
+      desc:
+        english: Halvorsen-Ito's farms now feed the army first. The supermarkets can wait.
+        spanish: Las granjas de Halvorsen-Ito ahora alimentan primero al ejército. Los supermercados pueden esperar.
+      modifiers: {stability_factor: -0.05, war_support_factor: 0.05}
+    - id: FCU_meridian_unica
+      name: {english: One Company, spanish: Una Sola Compañía}
+      desc:
+        english: There is no Board any more. There is Meridian, and there are its subsidiaries.
+        spanish: Ya no hay Directorio. Está Meridian, y están sus subsidiarias.
+      modifiers: {production_speed_arms_factory_factor: 0.2, consumer_goods_factor: 0.05, stability_factor: -0.05}
+    - id: FCU_dividendo_de_guerra
+      name: {english: The War Dividend, spanish: El Dividendo de Guerra}
+      desc:
+        english: Meridian does not invade countries. It makes vertical acquisitions with artillery, and the shareholders expect results every quarter.
+        spanish: Meridian no invade países. Hace adquisiciones verticales con artillería, y los accionistas esperan resultados cada trimestre.
+      modifiers: {war_support_factor: 0.1, political_power_gain: 0.1}
+    - id: FCU_caida_de_dividendos
+      name: {english: Falling Dividends, spanish: Caída de Dividendos}
+      desc:
+        english: A quarter without war. The shareholders are selling, and a militarised economy has nothing else to sell them.
+        spanish: Un trimestre sin guerra. Los accionistas venden, y una economía militarizada no tiene otra cosa para ofrecerles.
+      modifiers: {stability_factor: -0.1, political_power_gain: -0.2}
+    - id: FCU_contratistas_globales
+      name: {english: Global Contractors, spanish: Contratistas Globales}
+      desc:
+        english: Meridian rents its divisions to anyone who pays. The veterans come home with experience and invoices.
+        spanish: Meridian alquila sus divisiones a quien pague. Los veteranos vuelven con experiencia y facturas.
+      modifiers: {experience_gain_army: 0.1, war_support_factor: 0.05}
+    - id: FCU_dividendo_civil
+      name: {english: The Civil Dividend, spanish: El Dividendo Civil}
+      desc:
+        english: Every citizen holds a share. A small one.
+        spanish: Cada ciudadano tiene una acción. Una chiquita.
+      modifiers: {consumer_goods_factor: -0.1, stability_factor: 0.05}
+    - id: FCU_economia_de_la_abundancia
+      name: {english: The Economy of Plenty, spanish: La Economía de la Abundancia}
+      desc:
+        english: Shelves full, factories humming, and a population too comfortable to ask who owns what.
+        spanish: Góndolas llenas, fábricas en marcha y una población demasiado cómoda para preguntar de quién es cada cosa.
+      modifiers: {consumer_goods_factor: -0.1, stability_factor: 0.1, industrial_capacity_factory: 0.05}
+    - id: FCU_mercado_de_exportacion
+      name: {english: The Export Market, spanish: El Mercado de Exportación}
+      desc:
+        english: Half the continent buys American again. The other half is being sold to.
+        spanish: Medio continente vuelve a comprar americano. Al otro medio le están vendiendo.
+      modifiers: {trade_opinion_factor: 0.2, production_speed_buildings_factor: 0.05}
+    - id: FCU_monopolio_hidrico
+      name: {english: The Water Monopoly, spanish: El Monopolio del Agua}
+      desc:
+        english: Castellane owns the desalination plants, and the desalination plants own everyone.
+        spanish: Castellane es dueña de las desalinizadoras, y las desalinizadoras son dueñas de todos.
+      modifiers: {political_power_gain: 0.1, trade_opinion_factor: -0.1}
+    - id: FCU_imperio_del_agua
+      name: {english: The Water Empire, spanish: El Imperio del Agua}
+      desc:
+        english: No army needed. Close the valve and wait.
+        spanish: No hace falta un ejército. Se cierra la válvula y se espera.
+      modifiers: {political_power_gain: 0.15, stability_factor: 0.05, production_speed_buildings_factor: 0.1}
+    - id: FCU_robotica_industrial
+      name: {english: Industrial Robotics, spanish: Robótica Industrial}
+      desc:
+        english: Meridian's assembly arms work three shifts and never unionise.
+        spanish: Los brazos de ensamble de Meridian trabajan tres turnos y nunca se sindicalizan.
+      modifiers: {production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05}
+    - id: FCU_entrenamiento_corporativo
+      name: {english: Corporate Training, spanish: Entrenamiento Corporativo}
+      desc:
+        english: Performance reviews, quarterly targets and live ammunition.
+        spanish: Evaluaciones de desempeño, objetivos trimestrales y munición real.
+      modifiers: {army_org_factor: 0.05, experience_gain_army: 0.1}
+    - id: FCU_respuesta_rapida
+      name: {english: Rapid Response Divisions, spanish: Divisiones de Respuesta Rápida}
+      desc:
+        english: Few divisions, very expensive, always first.
+        spanish: Pocas divisiones, muy caras, siempre primeras.
+      modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.05}
+    - id: FCU_dos_oceanos
+      name: {english: Two Oceans, spanish: Dos Océanos}
+      desc:
+        english: The Union faces both oceans, and both fleets answer to the same board.
+        spanish: La Unión mira a los dos océanos, y las dos flotas responden al mismo directorio.
+      modifiers: {industrial_capacity_dockyard: 0.15, war_support_factor: 0.05}
+    - id: FCU_arbitraje_corporativo
+      name: {english: Corporate Arbitration, spanish: Arbitraje Corporativo}
+      desc:
+        english: A permanent court where the Four settle their feuds before they reach the streets.
+        spanish: Un tribunal permanente donde las Cuatro arreglan sus peleas antes de que lleguen a la calle.
+      modifiers: {political_power_gain: 0.1, stability_factor: 0.05}
+    - id: FCU_punto_de_equilibrio
+      name: {english: The Balance Point, spanish: El Punto de Equilibrio}
+      desc:
+        english: The Board has learned to move together. It took a century and four lawyers per citizen.
+        spanish: El Directorio aprendió a moverse junto. Costó un siglo y cuatro abogados por ciudadano.
+      modifiers: {stability_factor: 0.1, political_power_gain: 0.1}
     see: Q030
   HSN:
     coverage: full_v1
@@ -863,21 +840,35 @@ countries:
       desc:
         english: 'Four or more nodes: tolls pay for factories nobody has to build.'
         spanish: 'Cuatro nodos o más: los peajes pagan fábricas que nadie tiene que construir.'
-      modifiers: {trade_opinion_factor: 0.2, industrial_capacity_dockyard: 0.15, industrial_capacity_factory: 0.1, political_power_gain: 0.15}
+      modifiers:
+        trade_opinion_factor: 0.2
+        industrial_capacity_dockyard: 0.15
+        industrial_capacity_factory: 0.1
+        political_power_gain: 0.15
       src: user_design
     - id: HSN_red_nodos_3
       name: {english: The Node Network III, spanish: La Red de Nodos III}
       desc:
         english: 'Six or more nodes: every cargo manifest in Asia crosses the clearing house.'
         spanish: 'Seis nodos o más: cada manifiesto de carga de Asia pasa por la cámara de compensación.'
-      modifiers: {trade_opinion_factor: 0.3, industrial_capacity_dockyard: 0.2, industrial_capacity_factory: 0.15, research_speed_factor: 0.05, political_power_gain: 0.2}
+      modifiers:
+        trade_opinion_factor: 0.3
+        industrial_capacity_dockyard: 0.2
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.05
+        political_power_gain: 0.2
       src: user_design
     - id: HSN_camara_mundial
       name: {english: The World Clearing House, spanish: La Cámara Mundial de Compensación}
       desc:
         english: All eight nodes. Half the world's cargo pays the High Seas before it arrives.
         spanish: Los ocho nodos. La mitad de la carga del mundo le paga a la Alta Mar antes de llegar.
-      modifiers: {trade_opinion_factor: 0.4, industrial_capacity_dockyard: 0.25, industrial_capacity_factory: 0.2, research_speed_factor: 0.1, political_power_gain: 0.3}
+      modifiers:
+        trade_opinion_factor: 0.4
+        industrial_capacity_dockyard: 0.25
+        industrial_capacity_factory: 0.2
+        research_speed_factor: 0.1
+        political_power_gain: 0.3
       src: user_design
     - id: HSN_nodo_perdido
       name: {english: A Node Lost, spanish: Un Nodo Perdido}
@@ -971,6 +962,21 @@ countries:
       modifiers: {political_power_gain: 0.1, trade_opinion_factor: 0.1}
       src: user_design
     see: Q030
+    starting_ideas:
+    - id: HSN_flota_envejecida
+      name: {english: An Ageing Fleet, spanish: Una Flota Envejecida}
+      desc:
+        english: Half the fleet is older than its captains. Removed by the focus 'Floating Shipyards'.
+        spanish: La mitad de la flota es más vieja que sus capitanes. Se va con el foco «Astilleros Flotantes».
+      modifiers: {industrial_capacity_dockyard: -0.1, '?navy_org_factor': -0.1}
+      src: user_request
+    - id: HSN_capitanes_rivales
+      name: {english: Rival Captains, spanish: Capitanes Rivales}
+      desc:
+        english: Every captain thinks he should be running the Nation. Removed by the focus 'The Captains' Assembly'.
+        spanish: Cada capitán cree que él debería gobernar la Nación. Se va con el foco «La Junta de Capitanes».
+      modifiers: {political_power_gain: -0.15, stability_factor: -0.03}
+      src: user_request
   NAS:
     coverage: full_v1
     focus_ideas:
@@ -1127,8 +1133,23 @@ countries:
       modifiers: {army_defence_factor: 0.15}
       src: user_design
     see: Q030
+    starting_ideas:
+    - id: NAS_montanas_aisladas
+      name: {english: Isolated Mountains, spanish: Montañas Aisladas}
+      desc:
+        english: Half the valleys are a week from the nearest road. Removed by the focus 'The Qhapaq Ñan' or 'Workshops of the Heights'.
+        spanish: La mitad de los valles están a una semana del camino más cercano. Se va con el foco «El Qhapaq Ñan» o «Talleres de Altura».
+      modifiers: {production_speed_buildings_factor: -0.1, consumer_goods_factor: 0.05}
+      src: user_request
+    - id: NAS_ejercito_de_ceremonia
+      name: {english: A Ceremonial Army, spanish: Un Ejército de Ceremonia}
+      desc:
+        english: Beautiful uniforms, very little practice. Removed by the focus 'Warriors of the Puna', or having 15 divisions.
+        spanish: Uniformes hermosos, muy poca práctica. Se va con el foco «Guerreros de la Puna», o tener 15 divisiones.
+      modifiers: {army_attack_factor: -0.1, army_org_factor: -0.05}
+      src: user_request
   SHD:
-    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    coverage: full_v1
     focus_ideas:
     - id: SHD_espiritu_sensores
       name: {english: Flow Sensors, spanish: Sensores del Caudal}
@@ -1294,6 +1315,21 @@ countries:
       modifiers: {stability_factor: 0.05, army_defence_factor: 0.05}
       src: user_design
     see: Q030
+    starting_ideas:
+    - id: SHD_burocracia_del_caudal
+      name: {english: The Flow Bureaucracy, spanish: La Burocracia del Caudal}
+      desc:
+        english: Every decision needs forty stamps. Removed by the focus 'The Control Room' or 'Open the Floodgates'.
+        spanish: Cada decisión necesita cuarenta sellos. Se va con el foco «La Sala de Control» o «Abrir las Compuertas».
+      modifiers: {political_power_gain: -0.15}
+      src: user_request
+    - id: SHD_ejercito_de_papel
+      name: {english: A Paper Army, spanish: Un Ejército de Papel}
+      desc:
+        english: Millions on the rolls, few in the barracks. Removed by the focus 'Mass Infantry', or having 24 divisions.
+        spanish: Millones en las listas, pocos en los cuarteles. Se va con el foco «Infantería de Masa», o tener 24 divisiones.
+      modifiers: {army_org_factor: -0.08, army_attack_factor: -0.05}
+      src: user_request
   APF:
     coverage: full_v1
     focus_ideas:
@@ -1432,8 +1468,30 @@ countries:
       modifiers: {army_org_factor: 0.05, war_support_factor: 0.15}
       src: user_design
     see: Q030
+    starting_ideas:
+    - id: APF_consejos_desorganizados
+      name: {english: Disorganised Councils, spanish: Consejos Desorganizados}
+      desc:
+        english: A thousand councils, a thousand agendas. Removed by the focus 'The Lagos Assembly' or 'The Councils Take Up Arms'.
+        spanish: Mil consejos, mil agendas. Se va con el foco «La Asamblea de Lagos» o «Los Consejos se Arman».
+      modifiers: {political_power_gain: -0.15, stability_factor: -0.05}
+      src: user_request
+    - id: APF_rutas_rotas
+      name: {english: Broken Routes, spanish: Rutas Rotas}
+      desc:
+        english: Nothing reaches the ports on time. Removed by the focus 'The Continental Corridor' or 'The Lagos Hub'.
+        spanish: Nada llega a tiempo a los puertos. Se va con el foco «El Corredor Continental» o «El Polo de Lagos».
+      modifiers: {production_speed_buildings_factor: -0.1, local_resources_factor: -0.1}
+      src: user_request
+    - id: APF_milicias_sin_fusiles
+      name: {english: Militias Without Rifles, spanish: Milicias sin Fusiles}
+      desc:
+        english: Brave volunteers armed with whatever they found. Removed by the focus 'Regular Militias', or having 8,000 rifles in store.
+        spanish: Voluntarios valientes armados con lo que encontraron. Se va con el foco «Milicias Regulares», o tener 8.000 fusiles en depósito.
+      modifiers: {army_org_factor: -0.1}
+      src: user_request
   NRE:
-    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    coverage: full_v1
     focus_ideas:
     - id: NRE_espiritu_colonias_veteranos
       name: {english: Veteran Colonies, spanish: Colonias de Veteranos}
@@ -1613,6 +1671,28 @@ countries:
       modifiers: {stability_factor: -0.05}
       src: user_design
     see: Q030
+    starting_ideas:
+    - id: NRE_senado_corrupto
+      name: {english: A Corrupt Senate, spanish: Un Senado Corrupto}
+      desc:
+        english: Senators sell their votes, and the price keeps rising. Removed by the focus 'The Senate Restored' or 'The Legion Decides'.
+        spanish: Los senadores venden su voto, y el precio sube. Se va con el foco «El Senado Restaurado» o «La Legión Decide».
+      modifiers: {political_power_gain: -0.15}
+      src: user_request
+    - id: NRE_graneros_vacios
+      name: {english: Empty Granaries, spanish: Graneros Vacíos}
+      desc:
+        english: Rome eats more than it grows. Removed by the focus 'The Annona'.
+        spanish: Roma come más de lo que cosecha. Se va con el foco «La Annona».
+      modifiers: {stability_factor: -0.05, consumer_goods_factor: 0.05}
+      src: user_request
+    - id: NRE_legiones_indisciplinadas
+      name: {english: Undisciplined Legions, spanish: Legiones Indisciplinadas}
+      desc:
+        english: The legions obey their legates first and Rome second. Removed by the focus 'Iron Discipline', or reaching 60 Auctoritas.
+        spanish: Las legiones obedecen primero a sus legados y después a Roma. Se va con el foco «Disciplina de Hierro», o llegar a 60 de Auctoritas.
+      modifiers: {army_org_factor: -0.05, war_support_factor: -0.03}
+      src: user_request
   ZWE:
     coverage: user_decision
     starting_ideas:
