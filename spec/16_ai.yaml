@@ -27,6 +27,13 @@ military:
   - {type: added_military_to_civilian_factory_ratio, value: 25}
   war:
   - {type: added_military_to_civilian_factory_ratio, value: 75}
+  # 2026-09-27: "nadie investiga barcos". Todas investigan lo básico naval; la
+  # HSN mucho más.
+  naval_research:
+    value: 25
+    by_country: {HSN: 80, FCU: 40, NRE: 35}
+    techs: [early_ship_hull_light, basic_ship_hull_light, basic_battery, basic_torpedo, improved_ship_hull_light,
+            basic_ship_hull_submarine, basic_ship_hull_cruiser, basic_light_battery]
   by_country:
     EFE:    # blindados de Bioacero
     - {type: role_ratio, id: armor, value: 25}

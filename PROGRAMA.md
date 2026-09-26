@@ -40,7 +40,7 @@ elementos también van por importancia.
 - [~] Población comprimida (2026-09-26): ~15% de la real y achicando la brecha entre potencias (SHD ~35M, NAS ~5M), así el crecimiento queda parejo
 - [~] La Anarquía resiste: 3 milicias por país, espíritus defensivos, levas mensuales en guerra (hombres + fusiles); los Emiratos con "Guerra del Desierto"
 - [~] Ejército inicial mínimo (2 infanterías por meganación, 1 por satélite y por país anárquico), tecnologías base + especialidad, depósitos
-- [~] Armada: solo 3 destructores de la HSN; sin aviones
+- [~] Armada: destructores heredados (HSN hasta 6, otras hasta 2), casco y artillería naval básicos para todas las meganaciones, IA que investiga lo naval; sin aviones
 - [~] Mundo vivo: reclamos, rivalidades, tensión mundial, 2 guerras al arranque
 - [~] 9 facciones: cada meganación con sus 2 satélites, más la Anarquía
 - [~] Congo: dueños dentro de bloques condicionales borrados + red de seguridad al arrancar
@@ -135,6 +135,8 @@ eventos con ultimátum e IA con condiciones.
 - [~] Señores de la guerra: saqueos a los vecinos, un Caudillo Supremo que unifica, tregua de caudillos en guerra (2026-09-27)
 - [ ] Liberar países de la Anarquía: qué pasa con una región conquistada
 - [~] Mecánicas v3 (2026-09-27): espíritus vivos con el bonus del momento, FCU y SHD de suma fija, APF más lenta y con tensión real, paneles que explican qué ganás, IA que corrige en vez de subir todo
+- [~] Emiratos (2026-09-27): más duros; al caer ante Roma, cadena de exigencias de los vecinos con guerra si Roma se niega
+- [~] 16 cadenas de eventos entre potencias con gatillos variados (focos, industria, tecnología, manpower, apoyo bélico, equipo, divisiones, hitos, fechas)
 - [~] Conquistas con dilema: cada meganación, al tomar su región clave, elige proteger o explotar (evento + decisiones que se abren); más un evento de hito por mecánica
 
 ## 6. Diplomacia avanzada

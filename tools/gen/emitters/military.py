@@ -66,7 +66,11 @@ def emit(ctx: BuildContext) -> None:
         year = int(spec["stockpile_year"][kind])
         ctx.data["techs"][c.tag] = specialty.get(c.tag, [])
 
-        base = [t for t in (spec.get("research") or {}).get("base_techs", []) if t in tree]
+        research = spec.get("research") or {}
+        base = [t for t in research.get("base_techs", []) if t in tree]
+        if kind == "meganation":
+            # lo mínimo para botar un barco (2026-09-27: "nadie tiene marina")
+            base += [t for t in research.get("meganation_techs", []) if t in tree]
         ctx.data["techs"][c.tag] = list(dict.fromkeys(base + specialty.get(c.tag, [])))
 
         if kind == "anarchy":

@@ -56,7 +56,10 @@ def emit(ctx: BuildContext) -> None:
     navies = set(cut["navies"]) if "navies" in cut else receivers
     min_planes = int(cut.get("min_planes", 0))
     ship_definition = cut.get("ship_definition")      # p.ej. destroyer: solo ese tipo de barco
-    max_ships = int(cut.get("max_ships", 0) or 0)       # tope por país
+    raw_max = cut.get("max_ships", 0) or 0              # tope por país (número o {TAG: n, default: n})
+    max_of = (lambda t: int(raw_max.get(t, raw_max.get("default", 0)) or 0)) if isinstance(raw_max, dict) \
+        else (lambda t: int(raw_max))
+    max_ships = any(max_of(t) for t in navies)
     with_air = bool(cut.get("air", True))
     unknown = navies - receivers
     if unknown:
@@ -157,7 +160,7 @@ def emit(ctx: BuildContext) -> None:
 
     if ship_definition or max_ships:
         for tag in list(fleets):
-            fleets[tag] = _pick_ships(fleets[tag], ship_definition, max_ships)
+            fleets[tag] = _pick_ships(fleets[tag], ship_definition, max_of(tag))
             ships[tag] = _count(fleets[tag], "ship")
             if not ships[tag]:
                 del fleets[tag], ships[tag]

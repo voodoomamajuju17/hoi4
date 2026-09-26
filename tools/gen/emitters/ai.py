@@ -159,6 +159,10 @@ def _military_plans(ctx: BuildContext, mil: dict, add_plan) -> None:
             value = mil.get("research_value")
             if value:
                 strategies += [{"type": "research_tech", "id": t, "value": value} for t in nxt.get(c.tag, [])]
+            naval = mil.get("naval_research") or {}
+            nval = (naval.get("by_country") or {}).get(c.tag, naval.get("value"))
+            if nval:
+                strategies += [{"type": "research_tech", "id": t, "value": nval} for t in naval.get("techs") or []]
             add_plan(f"{c.tag}_militar", c.tag, strategies)
             if mil.get("war"):
                 add_plan(f"{c.tag}_militar_en_guerra", c.tag, list(mil["war"]), enable={"at_war": True},

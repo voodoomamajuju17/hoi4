@@ -639,6 +639,27 @@ namespaces:
           - {effect: add_war_support, value: 0.03}
           ai_chance: 50
         src: user_design
+      - id: 29
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: How to Play, spanish: Cómo se Juega}
+        desc:
+          english: 'The Ecofascist Empire rules South America in the name of Gaia. Emperor Aurelio IV holds the court; in the forests, the rangers of
+            Anahí Quiroga wait. Your enemies: the Union to the north, Rome across the sea, the Amazon warlords next door.\n\nTHE BIOSTEEL RACE\n\nThe
+            vats of the Plain grow living metal: BioSteel. The tiers of the Race (5, 10 and 15) unlock the Empire''s best armour, and the decisions
+            of the BioSteel Race panel grow it.\n\nBut every harvest saturates the vats. Saturation falls by 3 per month; at 40 the vats are forced,
+            at 70 the Fever arrives and the Mycelium Blight can break out. And the living metal does not keep: above 15 it rots.\n\nGrow, spend, purge.
+            In that order.'
+          spanish: 'El Imperio Ecofascista gobierna Sudamérica en nombre de Gaia. El emperador Aurelio IV sostiene la corte; en los bosques esperan
+            los guardaparques de Anahí Quiroga. Tus enemigos: la Unión al norte, Roma del otro lado del mar, los caudillos del Amazonas al lado.\n\nLA
+            CARRERA DEL BIOACERO\n\nLas cubas de la Llanura cultivan metal vivo: el Bioacero. Los niveles de la Carrera (5, 10 y 15) abren el mejor
+            blindaje del Imperio, y las decisiones del panel La Carrera del Bioacero lo hacen crecer.\n\nPero cada cosecha satura las cubas. La saturación
+            baja 3 por mes; en 40 las cubas se fuerzan, en 70 llega la Fiebre y puede estallar la Plaga del Micelio. Y el metal vivo no se guarda: por
+            encima de 15 se pudre.\n\nCultivar, gastar, purgar. En ese orden.'
+        options:
+        - name: {english: Understood., spanish: Entendido.}
+          effects: []
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -1114,6 +1135,26 @@ namespaces:
           - {effect: run, value: FCU_recalcular_directorio}
           ai_chance: 50
         src: user_design
+      - id: 29
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: How to Play, spanish: Cómo se Juega}
+        desc:
+          english: 'The Free Corporative Capital Union is North America run as a company: four corporations share the Directorate. Keep them balanced
+            and the Union prospers; let one win and it may swallow the rest.\n\nTHE BOARD OF FOUR\n\nFour corporations own the Union: Castellane (water),
+            Halvorsen-Ito (food), Meridian (arms) and Obsidian (finance). The contracts of the Board panel favour one and hurt the others.\n\nKeep all
+            four between 40 and 60 and the Board works as one. Let one fall below 15 and they go to war with each other. And the strong get stronger
+            on their own every month.\n\nEvery contract leaves a trail: scandal. Audits and public relations clean it; ignore it and the Leak will come.'
+          spanish: 'La Unión Corporativa de Capital Libre es Norteamérica administrada como una empresa: cuatro corporaciones se reparten el Directorio.
+            Mantenelas equilibradas y la Unión prospera; dejá ganar a una y se puede tragar al resto.\n\nEL DIRECTORIO DE LAS CUATRO\n\nCuatro corporaciones
+            son dueñas de la Unión: Castellane (agua), Halvorsen-Ito (comida), Meridian (armas) y Obsidian (finanzas). Los contratos del panel del Directorio
+            favorecen a una y perjudican a las otras.\n\nCon las cuatro entre 40 y 60 el Directorio funciona como uno. Si una cae por debajo de 15,
+            entran en guerra entre ellas. Y cada mes el fuerte se hace más fuerte solo.\n\nCada contrato deja rastro: escándalo. Las auditorías y las
+            relaciones públicas lo limpian; si lo ignorás, llega la Filtración.'
+        options:
+        - name: {english: Understood., spanish: Entendido.}
+          effects: []
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -1512,6 +1553,23 @@ namespaces:
         - name: {english: 'Another node, almost.', spanish: 'Otro nodo, casi.'}
           effects:
           - {effect: add_political_power, value: 75}
+        src: user_design
+      - id: 29
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: How to Play, spanish: Cómo se Juega}
+        desc:
+          english: 'The High Seas Nation is a trading republic of islands and straits in Asia and the Pacific. You live on the sea lanes: hold the nodes,
+            keep the powers calm, and sell insurance to those who fight.\n\nTHE NODE NETWORK\n\nThe Nation lives on straits and ports: the nodes. Holding
+            2, 4, 6 or all of them strengthens the Network, and every month the Network counts them.\n\nThe great powers are counting too. With 4 or
+            more nodes their pressure rises every month; at 40 they watch us, at 70 they demand a strait. Port diplomacy keeps them calm, for a price.'
+          spanish: 'La Nación de Alta Mar es una república comerciante de islas y estrechos en Asia y el Pacífico. Vivís de las rutas del mar: sostené
+            los nodos, mantené tranquilas a las potencias y vendeles seguros a los que pelean.\n\nLA RED DE NODOS\n\nLa Nación vive de estrechos y puertos:
+            los nodos. Tener 2, 4, 6 o todos refuerza la Red, y cada mes la Red los cuenta.\n\nLas grandes potencias también cuentan. Con 4 nodos o
+            más su presión sube cada mes; en 40 nos vigilan, en 70 exigen un estrecho. La diplomacia de puertos las calma, por un precio.'
+        options:
+        - name: {english: Understood., spanish: Entendido.}
+          effects: []
         src: user_design
   # ===========================================================================
   meganations_asc:
@@ -1928,6 +1986,25 @@ namespaces:
           - {effect: event, id: meganations_apf.122, days: 1, target: APF}
         ai_chance: 50
       src: user_design
+    - id: 29
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: How to Play, spanish: Cómo se Juega}
+      desc:
+        english: 'The Automated Socialist Commune is Europe governed by the Plan and its computers. A council chosen by lot decides; the machines
+          do the rest. You are already at war with the warlords of Eurasia.\n\nCOMPUTE POWER\n\nThe Commune plans everything with its compute. The
+          Compute panel assigns it to ONE priority (economy, research, logistics or war), and more compute means stronger bonuses.\n\nBut compute
+          needs upkeep and it heats the grid: from 60 compute the grid warms, from 100 it burns. Cool the data centres before Thermal Rationing, or
+          before the blackout.'
+        spanish: 'La Comuna Socialista Automatizada es Europa gobernada por el Plan y sus computadoras. Decide un consejo sorteado; las máquinas hacen
+          el resto. Ya estás en guerra con los señores de Eurasia.\n\nPODER DE CÓMPUTO\n\nLa Comuna planifica todo con su cómputo. El panel de Cómputo
+          lo asigna a UNA prioridad (economía, investigación, logística o guerra), y más cómputo da bonos más fuertes.\n\nPero el cómputo pide mantenimiento
+          y calienta la red: desde 60 la red se entibia, desde 100 arde. Enfriá los centros de datos antes del Racionamiento Térmico, o antes del
+          apagón.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects: []
+      src: user_design
   meganations_apf:
     country: APF
     events:
@@ -2314,6 +2391,26 @@ namespaces:
         - {effect: add_stability, value: -0.02}
         ai_chance: 40
       src: user_design
+    - id: 29
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: How to Play, spanish: Cómo se Juega}
+      desc:
+        english: 'The African Peoples'' Federation is a union of councils from the Sahel to the Cape. Two federations still have to join: invest in
+          them first, then integrate them. North of you, the desert Emirates.\n\nTHE FEDERAL INTEGRATION\n\nThe Federation grows by bringing its members
+          in: the Highlands and the Cape. In the Integration panel, Invest raises a member''s Development from day one; Integrate (opened by the Federation
+          focus) raises its Integration. At 100 the member joins the Federation.\n\nBut integrating faster than developing raises regional tension.
+          At 50 the councils grow restless; at 75 they can rise. The Assembly of the Councils listens to them.'
+        spanish: 'La Federación de los Pueblos Africanos es una unión de consejos del Sahel al Cabo. Todavía faltan dos federaciones por sumarse:
+          primero se invierte en ellas y después se integran. Al norte, los Emiratos del desierto.\n\nLA INTEGRACIÓN FEDERAL\n\nLa Federación crece
+          sumando a sus miembros: las Tierras Altas y el Cabo. En el panel de Integración, Invertir sube el Desarrollo de un miembro desde el día
+          1; Integrar (lo abre el foco de la Federación) sube su Integración. En 100 el miembro se suma a la Federación.\n\nPero integrar más rápido
+          de lo que se desarrolla sube la tensión regional. En 50 los consejos se inquietan; en 75 pueden levantarse. La Asamblea de los Consejos
+          los escucha.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects: []
+      src: user_design
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -2628,6 +2725,24 @@ namespaces:
       - name: {english: They will see., spanish: Ya van a ver.}
         effects:
         - {effect: add_war_support, value: 0.03}
+      src: user_design
+    - id: 29
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: How to Play, spanish: Cómo se Juega}
+      desc:
+        english: The Neo-Andean Sun Kingdom rules the Andes from temples full of solar light. The priests of Inti want the old Tawantinsuyu back;
+          the jungle below is full of warlords, and the Green Empire watches.\n\nTHE INTI-SOMA\n\nThe Sun Farms fill the temples with sacred light,
+          the Inti-Soma, which is spent on ceremonies (Inti panel). The Qhapaq Ñan road, opened by the focus tree, carries the Empire to new valleys.\n\nThe
+          temples burn 3 light per month. Empty temples mean a Hungry Sun; overflowing ones, Solar Fervour. And sometimes the Sun goes dark.
+        spanish: 'El Reino Neoandino del Sol gobierna los Andes desde templos llenos de luz solar. Los sacerdotes de Inti quieren recuperar el viejo
+          Tawantinsuyu; la selva de abajo está llena de caudillos, y el Imperio Verde mira.\n\nEL INTI-SOMA\n\nLas Granjas del Sol llenan los templos
+          de luz sagrada, el Inti-Soma, que se gasta en ceremonias (panel del Inti). El Qhapaq Ñan, que abre el árbol de focos, lleva el Imperio a
+          nuevos valles.\n\nLos templos queman 3 de luz por mes. Templos vacíos: el Sol Hambriento. Rebosantes: Fervor Solar. Y a veces el Sol se
+          oscurece.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects: []
       src: user_design
   meganations_shd:
     country: SHD
@@ -3026,6 +3141,25 @@ namespaces:
         - {effect: add_variable, var: SHD_pueblo, value: -5}
         - {effect: run, value: SHD_recalcular_caudales}
         ai_chance: 50
+      src: user_design
+    - id: 29
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: How to Play, spanish: Cómo se Juega}
+      desc:
+        english: 'The Sino-Harmonious Directorate is China run by engineers: production, order and the people are three rivers that must flow in balance.
+          To the south, the warlords of Hindustan.\n\nTHE THREE FLOWS\n\nThe Directorate measures society in three numbers: Production, Order and
+          People. You can see them in the Three Flows panel.\n\nThe goal is harmony: all three between 45 and 55 give Perfect Harmony; between 35
+          and 65, Partial. If any falls below 20, the system overflows.\n\nThe river moves by itself: every month Production +2, People +1, Order
+          -1. Each decision says in its name how much it moves each flow. Floods, strikes and booms will push you off course.'
+        spanish: 'El Directorio Sino-Armónico es China gobernada por ingenieros: la producción, el orden y el pueblo son tres ríos que tienen que
+          correr en equilibrio. Al sur, los señores del Indostán.\n\nLOS TRES CAUDALES\n\nEl Directorio mide la sociedad con tres números: Producción,
+          Orden y Pueblo. Se ven en el panel Los Tres Caudales.\n\nEl objetivo es la armonía: los tres entre 45 y 55 dan Armonía Perfecta; entre 35
+          y 65, Parcial. Si alguno cae por debajo de 20, el sistema se desborda.\n\nEl río se mueve solo: cada mes Producción +2, Pueblo +1, Orden
+          -1. Cada decisión dice en su nombre cuánto mueve cada caudal. Crecidas, huelgas y booms te van a sacar del rumbo.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects: []
       src: user_design
   # ===========================================================================
   meganations_nre:
@@ -3873,6 +4007,25 @@ namespaces:
           then:
           - {effect: event, id: meganations_apf.131, days: 1, target: APF}
         ai_chance: 50
+      src: user_design
+    - id: 29
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: How to Play, spanish: Cómo se Juega}
+      desc:
+        english: 'The Neo-Roman Empire rules the Mediterranean with named legions. Glory is its currency: the legions want war, the Senate wants order.
+          You are already at war with the desert Emirates.\n\nTHE LEGIONS\n\nThree named legions carry Rome: Legio I Italica, V Macedonica and XII
+          Fulminata. Their prestige grows in war and with triumphs. Auctoritas Militaris is the currency of the officers: promotions, new legions,
+          praetorians and donatives.\n\nA famous legion is a strong one, and a dangerous one. In peace the legions get bored and Auctoritas drains
+          away; with little Auctoritas, a legion above 70 can mutiny.'
+        spanish: 'El Imperio Neorromano gobierna el Mediterráneo con legiones con nombre. La gloria es su moneda: las legiones quieren guerra, el
+          Senado quiere orden. Ya estás en guerra con los Emiratos del desierto.\n\nLAS LEGIONES\n\nTres legiones con nombre sostienen a Roma: la
+          Legio I Italica, la V Macedonica y la XII Fulminata. Su prestigio crece en la guerra y con los triunfos. La Auctoritas Militaris es la moneda
+          de los oficiales: ascensos, legiones nuevas, pretorianos y donativos.\n\nUna legión famosa es fuerte, y peligrosa. En paz las legiones se
+          aburren y la Auctoritas se escurre; con poca Auctoritas, una legión por encima de 70 puede amotinarse.'
+      options:
+      - name: {english: Understood., spanish: Entendido.}
+        effects: []
       src: user_design
   # ===========================================================================
   meganations_zwe:

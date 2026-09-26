@@ -501,7 +501,11 @@ def test_phase3_content() -> None:
         check("icono elegido entre los vanilla", pdx.text(cat.get("icon")) == "generic_industry")
         decs_raw = (mod / "common/decisions/meganations_decisions.txt").read_text()
         decs = pdx.parse(decs_raw).get("EFE_biosteel_category")
-        check("5 decisiones (con Purgar las Cubas)", len(decs.keys()) == 5, str(decs.keys()))
+        check("6 decisiones (con Purgar las Cubas y Como se Juega)", len(decs.keys()) == 6, str(decs.keys()))
+        guia = decs.get("EFE_como_se_juega")
+        check("Como se Juega: gratis, la IA no la usa, muestra la bienvenida", pdx.text(guia.get("cost")) == "0"
+              and "meganations_efe.29" in pdx.render(guia.get("complete_effect"))
+              and pdx.text(guia.get("ai_will_do").get("factor")) == "0")
         ampliar = decs.get("EFE_ampliar_las_cubas")
         check("ampliar: cuesta 50 y tiene espera", pdx.text(ampliar.get("cost")) == "50"
               and pdx.text(ampliar.get("days_re_enable")) == "45")
@@ -698,7 +702,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("30 eventos del EFE (pulso, explicacion, plaga, oferta de la ASC, conquista, hito, 2 rebeliones, 7 de cadenas)", len(events) == 30, str(len(events)))
+        check("31 eventos del EFE (pulso, explicacion, guia, plaga, oferta de la ASC, conquista, hito, 2 rebeliones, 7 de cadenas)", len(events) == 31, str(len(events)))
         conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
         check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
         check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
@@ -1161,6 +1165,11 @@ def test_ai() -> None:
                              ("has_completed_focus = SHD_el_caudal_perfecto", "foco propio"),
                              ("has_stability < 0.3", "estabilidad")):
             check(f"cadenas: gatillo por {what}", needle in se_c, needle)
+        hsn_rec = se_c[se_c.index("HSN_recalcular_nodos = {"):][:3000]
+        check("HSN: cada nodo tiene su 0/1 para el panel", "set_variable = { var = HSN_nodo_kanto value = 1 }" in hsn_rec
+              and "set_variable = { var = HSN_nodo_hong_kong value = 0 }" in hsn_rec, hsn_rec[:500])
+        es_dec = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("HSN: el panel explica que es un nodo y lista los 8", "¿QUÉ ES?" in es_dec and "Hong Kong: [?HSN_nodo_hong_kong]" in es_dec)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)

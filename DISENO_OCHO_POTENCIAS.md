@@ -348,3 +348,40 @@ llega a 100 al toque y la tensión nunca sube".
   aguantar); 3% por mes de un Caudillo Supremo (idea permanente: org,
   ataque, estabilidad; avisa a los vecinos); en guerra 10% de Tregua de
   Caudillos (90 días de defensa).
+
+## Lote Emiratos (2026-09-27)
+
+- **Arreglo del lector**: los archivos del juego que el mod reescribe
+  (regiones, tecnologías, equipo) perdían los operadores de comparación
+  (`x < 16` quedaba `x = 16`; `==` rompía el archivo). Ahora se conservan.
+- **Doctrina Monroe**: además del evento semanal que la saca, los scripts
+  genéricos del juego que reparten espíritus de países vanilla se copian sin
+  esos `add_ideas`. El reporte dice de qué archivo salía.
+- **Tooltips**: toda variable con nombre (`variable_names`) muestra su cambio
+  ("Granjas del Sol: +1"); los focos ya no dicen "no tiene efecto".
+- **Emiratos**: 7 milicias, Guerra del Desierto +30% defensa, +15% ataque,
+  +10% organización, levas propias y 20% de tregua por mes en guerra.
+  Al capitular ante Roma (on_capitulation, eventos nre.50-83): anexar,
+  provincia cliente (vasallo) o tomar la costa. Si anexa, 30-39 días
+  después la Estepa (equipo), la Comuna (guerra contra Eurasia), la
+  Federación (dos regiones) y Eurasia (tributo) exigen su precio. Si Roma
+  paga: opinión +40. Si se niega: declaran la guerra por el territorio de
+  los Emiratos con ¡Liberar los Emiratos! (+5% org., +15% apoyo bélico, 182
+  días). Eventos desde cada punto de vista.
+- **16 cadenas** (eventos 100-140 de cada potencia), cada una chequeada una
+  vez por mes en el pulso de quien la empieza: Bioacero 12 (EFE→FCU→EFE),
+  120 fábricas (ASC→APF→ASC), 15.000 fusiles (NRE→APF), 1.000.000 de
+  hombres (SHD→Estepa→SHD), apoyo bélico 80% (NRE→ASC→NRE), 40 divisiones
+  del EFE (NAS→EFE→NAS), máquina de cómputo mejorada (ASC→APF), elecciones
+  de 2104 (FCU→HSN), Hispania provincia (EFE→NRE→EFE), Caudal Perfecto
+  (SHD→HSN→SHD), 4 nodos de la HSN (FCU→HSN), estabilidad bajo 30%
+  (APF→ASC→APF), luz 90 (NAS→EFE→NAS), lealtad de Corea bajo 30
+  (HSN→SHD→HSN), 80 fábricas de la APF (NRE→APF), la Gran Sequía de 2106
+  (EFE→FCU y SHD).
+- **HSN**: el panel explica qué es un nodo, lista los 8 (1 = tuyo), qué da
+  cada nivel, el precio (presión) y el botín.
+- **Cómo se Juega**: decisión gratis en el panel principal de cada potencia
+  que vuelve a mostrar la bienvenida (evento .29).
+- **Marinas**: destructores heredados para HSN (hasta 6), FCU, NRE, ASC, EFE,
+  SHD y APF (hasta 2); todas las meganaciones arrancan con el casco y la
+  artillería naval básicos; la IA investiga lo naval (HSN mucho más).

@@ -39,6 +39,18 @@ categories:
         de que ellas te purguen a vos.'
     src: invented
     decisions:
+    - id: EFE_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_efe.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: EFE_ampliar_las_cubas
       name: {english: Expand the Vats, spanish: Ampliar las Cubas}
       desc:
@@ -185,6 +197,18 @@ categories:
     after_effects:
     - {effect: run, value: FCU_recalcular_directorio}
     decisions:
+    - id: FCU_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_fcu.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: FCU_contrato_ferroviario
       name:
         english: Automated Railway Contract (M+10 H-10)
@@ -836,6 +860,18 @@ categories:
     after_effects:
     - {effect: run, value: ASC_recalcular_computo}
     decisions:
+    - id: ASC_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_asc.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: ASC_asignar_economia
       name: {english: Assign Compute to the Economy, spanish: Asignar Cómputo a la Economía}
       desc: {english: Production and construction first., spanish: Primero la producción y la construcción.}
@@ -1179,18 +1215,41 @@ categories:
     - generic_political_actions
     name: {english: The Clearing House, spanish: La Cámara de Compensación}
     desc:
-      english: 'Nodes under control: [?HSN_nodos] of 8  ->  trade +[?HSN_ef_nodos_ver]%\nPressure from the powers: [?HSN_presion] / 100  ->  stability
-        [?HSN_ef_presion_ver]%\nPlunder in the holds: [?HSN_botin]\n\nEvery strait you hold is money and influence (spirit ''The Node Network'');
-        2, 4 and 6 nodes also strengthen the Node Network, and all 8 open the World Clearing House. Losing one hurts.\nBUT the more you hold, the
-        more the powers push: +3 per month with 4 nodes, +6 with 6; it falls 3 with fewer. 40 or more: Under Watch. 70 or more: the powers demand
-        a strait. Port Diplomacy lowers it.'
-      spanish: 'Nodos bajo control: [?HSN_nodos] de 8  ->  comercio +[?HSN_ef_nodos_ver]%\nPresión de las potencias: [?HSN_presion] / 100  ->  estabilidad
-        [?HSN_ef_presion_ver]%\nBotín en las bodegas: [?HSN_botin]\n\nCada estrecho que controlás es plata e influencia (espíritu «La Red de Nodos»);
-        con 2, 4 y 6 nodos además se refuerza la Red de Nodos, y con los 8 se abre la Cámara Mundial de Compensación. Perder uno duele.\nPERO cuantos
-        más tenés, más presionan las potencias: +3 por mes con 4 nodos, +6 con 6; baja 3 con menos. 40 o más: Bajo Vigilancia. 70 o más: las potencias
-        exigen un estrecho. La Diplomacia de Puertos la baja.'
+      english: 'THE NODE NETWORK - WHAT IS IT?\nThe High Seas Nation lives on the trade that passes through 8 points of the sea. Every one you control
+        is a NODE (1 = yours, 0 = not yours):\nMalacca (Singapore): [?HSN_nodo_malaca]\nSunda (Java): [?HSN_nodo_sunda]\nKanto (Tokyo): [?HSN_nodo_kanto]\nManila:
+        [?HSN_nodo_manila]\nTaiwan: [?HSN_nodo_taiwan]\nHong Kong: [?HSN_nodo_hong_kong]\nOkinawa: [?HSN_nodo_okinawa]\nKyushu: [?HSN_nodo_kyushu]\n\nNodes
+        today: [?HSN_nodos] of 8  ->  trade +[?HSN_ef_nodos_ver]% (spirit ''The Node Network'').\nYou start with almost all of them. Hong Kong is
+        held by the warlords: a focus claims it.\n\nWHAT THEY GIVE (spirits):\n2 nodes: Network I (+10% trade, +5% dockyards). 4: Network II (+15%
+        trade, +10% dockyards, +5% factories). 6: Network III (+20% trade, +10% dockyards and factories, +5% research). All 8: World Clearing House
+        (+30% trade, +15% dockyards, +10% factories, +5% research, +0.1 political power).\nLosing a node: ''A Node Lost'' for 180 days (-10% stability,
+        -0.15 political power).\n\nTHE PRICE: pressure from the powers [?HSN_presion] / 100  ->  stability [?HSN_ef_presion_ver]%. It rises 3 per
+        month with 4+ nodes and 6 with 6+; it falls 3 with fewer. 40: Under Watch. 70: the powers demand a strait. Port Diplomacy lowers it by 20.\n\nPLUNDER
+        (only under Tavake): [?HSN_botin]. Letters of marque and war give it; spend it on repairs, resources, equipment and marines.'
+      spanish: 'LA RED DE NODOS - ¿QUÉ ES?\nLa Nación de Alta Mar vive del comercio que pasa por 8 puntos del mar. Cada uno que controlás es un
+        NODO (1 = tuyo, 0 = ajeno):\nMalaca (Singapur): [?HSN_nodo_malaca]\nSunda (Java): [?HSN_nodo_sunda]\nKanto (Tokio): [?HSN_nodo_kanto]\nManila:
+        [?HSN_nodo_manila]\nTaiwán: [?HSN_nodo_taiwan]\nHong Kong: [?HSN_nodo_hong_kong]\nOkinawa: [?HSN_nodo_okinawa]\nKyushu: [?HSN_nodo_kyushu]\n\nNodos
+        hoy: [?HSN_nodos] de 8  ->  comercio +[?HSN_ef_nodos_ver]% (espíritu «La Red de Nodos»).\nArrancás con casi todos. Hong Kong está en manos
+        de los señores de la guerra: un foco lo reclama.\n\nQUÉ TE DAN (espíritus):\n2 nodos: Red I (+10% comercio, +5% astilleros). 4: Red II (+15%
+        comercio, +10% astilleros, +5% fábricas). 6: Red III (+20% comercio, +10% astilleros y fábricas, +5% investigación). Los 8: Cámara Mundial
+        de Compensación (+30% comercio, +15% astilleros, +10% fábricas, +5% investigación, +0,1 de poder político).\nPerder un nodo: «Un Nodo Perdido»
+        por 180 días (-10% estabilidad, -0,15 de poder político).\n\nEL PRECIO: presión de las potencias [?HSN_presion] / 100  ->  estabilidad [?HSN_ef_presion_ver]%.
+        Sube 3 por mes con 4 nodos o más y 6 con 6 o más; baja 3 con menos. 40: Bajo Vigilancia. 70: las potencias te exigen un estrecho. La Diplomacia
+        de Puertos la baja 20.\n\nBOTÍN (solo con Tavake): [?HSN_botin]. Lo dan las patentes de corso y la guerra; se gasta en reparaciones, recursos,
+        equipo y marines.'
     src: user_design
     decisions:
+    - id: HSN_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_hsn.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: HSN_diplomacia_de_puertos
       name: {english: Port Diplomacy, spanish: Diplomacia de Puertos}
       desc:
@@ -1665,6 +1724,18 @@ categories:
         el Sol Hambriento. 90 o más: Fervor Solar. Un templo sobrecargado brilla más, hasta La Noche del Sol. Hay eclipses.'
     src: user_design
     decisions:
+    - id: NAS_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_nas.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: NAS_ceremonia_raymi
       name: {english: The Raymi, spanish: El Raymi}
       desc:
@@ -2163,6 +2234,18 @@ categories:
         la Asamblea de los Consejos.\n50 o más: Consejos Inquietos. 75 o más: los consejos pueden levantarse.'
     src: user_design
     decisions:
+    - id: APF_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_apf.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: APF_invertir_zet
       name:
         english: Invest in Highlands Federation (Development +10)
@@ -2500,6 +2583,18 @@ categories:
     after_effects:
     - {effect: run, value: SHD_recalcular_caudales}
     decisions:
+    - id: SHD_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_shd.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: SHD_aumentar_cuotas
       name: {english: Raise Quotas (P+10 Pu-10), spanish: Aumentar Cuotas (P+10 Pu-10)}
       desc: {english: 'Production +10, Order +3, People -8.', spanish: 'Producción +10, Orden +3, Pueblo -8.'}
@@ -2933,6 +3028,18 @@ categories:
     after_effects:
     - {effect: run, value: NRE_recalcular_legiones}
     decisions:
+    - id: NRE_como_se_juega
+      name: {english: How to Play (welcome), spanish: Cómo se Juega (bienvenida)}
+      desc:
+        english: 'Shows the welcome screen again: who you are and how this panel works. Free, as often as you like.'
+        spanish: 'Vuelve a mostrar la pantalla de bienvenida: quién sos y cómo funciona este panel. Gratis, todas las veces que quieras.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      effects:
+      - {effect: event, id: meganations_nre.29}
+      ai: {factor: 0}
+      src: user_decision
     - id: NRE_triunfo_italica
       name: {english: Triumph of the Legio I Italica, spanish: Triunfo de la Legio I Italica}
       desc:
@@ -4998,6 +5105,32 @@ scripted_effects:
     effects:
     - {effect: set_variable, var: HSN_nodos_prev, value: HSN_nodos}
     - {effect: set_variable, var: HSN_nodos, value: 0}
+    - effect: math
+      ops:
+      - - set
+        - HSN_nodo_malaca
+        - 0
+      - - set
+        - HSN_nodo_sunda
+        - 0
+      - - set
+        - HSN_nodo_kanto
+        - 0
+      - - set
+        - HSN_nodo_manila
+        - 0
+      - - set
+        - HSN_nodo_taiwan
+        - 0
+      - - set
+        - HSN_nodo_hong_kong
+        - 0
+      - - set
+        - HSN_nodo_okinawa
+        - 0
+      - - set
+        - HSN_nodo_kyushu
+        - 0
     - effect: if
       when:
         controls_state:
@@ -5007,6 +5140,7 @@ scripted_effects:
         - Kuala Lumpur
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_malaca, value: 1}
     - effect: if
       when:
         controls_state:
@@ -5015,12 +5149,14 @@ scripted_effects:
         - Batavia
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_sunda, value: 1}
     - effect: if
       when:
         controls_state:
         - Kanto
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_kanto, value: 1}
     - effect: if
       when:
         controls_state:
@@ -5028,18 +5164,21 @@ scripted_effects:
         - Luzon
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_manila, value: 1}
     - effect: if
       when:
         controls_state:
         - Taiwan
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_taiwan, value: 1}
     - effect: if
       when:
         controls_state:
         - Hong Kong
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_hong_kong, value: 1}
     - effect: if
       when:
         controls_state:
@@ -5047,6 +5186,7 @@ scripted_effects:
         - Ryukyu
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_okinawa, value: 1}
     - effect: if
       when:
         controls_state:
@@ -5056,6 +5196,7 @@ scripted_effects:
         - Fukuoka
       then:
       - {effect: add_variable, var: HSN_nodos, value: 1}
+      - {effect: set_variable, var: HSN_nodo_kyushu, value: 1}
     - effect: idea_tiers
       tiers:
       - idea: HSN_camara_mundial
