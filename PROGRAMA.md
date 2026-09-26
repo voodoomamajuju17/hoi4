@@ -41,13 +41,13 @@ elementos también van por importancia.
 - [~] La Anarquía resiste: 3 milicias por país, espíritus defensivos, levas mensuales en guerra (hombres + fusiles); los Emiratos con "Guerra del Desierto"
 - [~] Ejército inicial mínimo (2 infanterías por meganación, 1 por satélite y por país anárquico), tecnologías base + especialidad, depósitos
 - [~] Armada: destructores heredados (HSN hasta 6, otras hasta 2), casco y artillería naval básicos para todas las meganaciones, IA que investiga lo naval; sin aviones
-- [~] Mundo vivo: reclamos, rivalidades, tensión mundial, 2 guerras al arranque
+- [~] Mundo vivo: reclamos, rivalidades, tensión mundial; todos en paz al arranque con casus belli permanente contra la Anarquía vecina
 - [~] 9 facciones: cada meganación con sus 2 satélites, más la Anarquía
 - [~] Congo: dueños dentro de bloques condicionales borrados + red de seguridad al arrancar
 - [ ] Ajustar con los números reales de `balance.txt` (objetivos de IC, pisos, tropas)
 - [ ] Decidir si la FCU necesita una penalización propia (hoy es la más fuerte en la práctica)
 - [~] IA: estrategias por meganación (a quién atacar y proteger); IA militar 2026-09-27: tropas según especialidad, investigación de su especialidad, industria en armas (más en guerra), declarar guerra solo con 12-16 divisiones
-- [ ] IA de la Anarquía: que se defienda sin atacar a lo loco
+- [~] Anarquía (2026-09-28): árboles de 7 focos por supervivencia, más milicias, uniones (Eurasia, Indostán-Emiratos), Tierras Sin Ley con territorio; paz armada con casus belli permanente
 - [~] Satélites: lealtad 0-100 por satélite con panel del señor (Ayuda / Tributo), espíritu vivo y rebeliones (2026-09-27); falta que se liberen
 - [ ] Revisar capitales provisorias de los satélites (hoy: la región con más población)
 

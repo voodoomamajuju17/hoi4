@@ -385,3 +385,36 @@ llega a 100 al toque y la tensión nunca sube".
 - **Marinas**: destructores heredados para HSN (hasta 6), FCU, NRE, ASC, EFE,
   SHD y APF (hasta 2); todas las meganaciones arrancan con el casco y la
   artillería naval básicos; la IA investiga lo naval (HSN mucho más).
+
+## Lote Anarquías (2026-09-28)
+
+- **Eventos**: cada evento visible escribe `MEGANATIONS evento <id> para <TAG>`
+  en game.log, para ver qué saltó en una partida. La cadena de los Emiratos
+  salta cuando ZWM capitula y Roma está en guerra con ellos (sin depender de
+  ROOT/FROM), y hay respaldo en el pulso de Roma si el tratado de paz ya los
+  borró. Gatillos de las cadenas más alcanzables.
+- **Paz armada**: nadie arranca en guerra. Cada meganación que toca una
+  anarquía (salvo las Tierras Sin Ley) tiene un casus belli que no vence
+  (`MEGANATIONS_renovar_casus_belli`, cada mes) y Frontera de sangre (−150).
+  La IA se prepara desde el día uno y declara desde su fecha
+  (`16_ai.yaml -> anarchy_wars`), con 12 divisiones y sin otra guerra.
+- **Leyes y PP**: movilización parcial (meganaciones), baja (satélites),
+  economía de guerra (Anarquía); 200 PP de arranque y +0,5 a +0,85 por día en
+  los rasgos de los líderes.
+- **Tierras Sin Ley**: Alaska, norte de Canadá, Midwest, noroeste de México,
+  Guatemala, Nicaragua, oeste de África y Kiev (por nombre de región; el
+  reporte avisa si alguno no existe).
+- **Árboles de la Anarquía**: una rama de 7 focos; cada uno se habilita al
+  sobrevivir (medio año, 1, 1,5, 2, 3, 4 y 5 años) y sube el espíritu
+  Resistencia. Amazonas: solo defensa; el 7mo firma paz blanca con todos
+  (cada uno se queda con lo que controla) y lo vuelve intocable. Tierras Sin
+  Ley: un foco por año con los premios pedidos.
+- **Uniones**: Eurasia en Berlín o Londres convoca la Unión de los Señores
+  de la Guerra (cada anarquía responde); si un tercero toma Bagdad, el
+  Indostán forma el Pacto del Desierto y el Río y entra en las guerras de
+  los Emiratos.
+- **HSN**: cada nodo suma comercio, astilleros, fábricas y PP; niveles más
+  fuertes; la rama de nodos construye de verdad; Reclamar Hong Kong.
+- **Ministros y comandantes**: 5 ministros por meganación con rasgos
+  propios; un mariscal y tres generales (dos almirantes en la HSN).
+- **Debuffs**: 2-3 por meganación, se van con un foco o un objetivo.
