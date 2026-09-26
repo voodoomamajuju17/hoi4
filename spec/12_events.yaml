@@ -489,6 +489,156 @@ namespaces:
           - {effect: run, value: EFE_recalcular_satelites}
           ai_chance: 40
         src: user_design
+      - id: 100
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The World Watches the Vats, spanish: El Mundo Mira las Cubas}
+        desc:
+          english: Twelve units of living metal in the vats. Foreign attachés ask for tours; foreign spies do not ask.
+          spanish: Doce unidades de metal vivo en las cubas. Los agregados extranjeros piden visitas; los espías extranjeros no piden nada.
+        options:
+        - name: {english: Show the BioSteel off in Buenos Aires., spanish: Exhibir el Bioacero en Buenos Aires.}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {country_exists: FCU}
+            then:
+            - {effect: event, id: meganations_fcu.100, days: 1, target: FCU}
+          ai_chance: 60
+        - name: {english: Keep the secret., spanish: Guardar el secreto.}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 40
+        src: user_design
+      - id: 101
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Spies in the Vats, spanish: Espías en las Cubas}
+        desc:
+          english: A Meridian Kinetics team was caught photographing the vats of the Pampa. Two samples are missing.
+          spanish: Atraparon a un equipo de Meridian Kinetics fotografiando las cubas de la Pampa. Faltan dos muestras.
+        options:
+        - name: {english: Reprisals., spanish: Represalias.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: opinion, target: FCU, modifier: meganations_afrenta}
+          ai_chance: 60
+        - name: {english: 'Silence: we cannot prove it.', spanish: 'Silencio: no lo podemos probar.'}
+          effects:
+          - {effect: add_variable, var: EFE_biosteel, value: -2}
+          ai_chance: 40
+        src: user_design
+      - id: 110
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Sun Proposes a Pact, spanish: El Sol Propone un Pacto}
+        desc:
+          english: 'The Sun Kingdom offers a pact of non-aggression. The court is divided: the Andes are not ours yet.'
+          spanish: 'El Reino del Sol ofrece un pacto de no agresión. La corte está dividida: los Andes todavía no son nuestros.'
+        options:
+        - name: {english: Accept., spanish: Aceptar.}
+          effects:
+          - {effect: opinion, target: NAS, modifier: meganations_concesion}
+          - {effect: add_political_power, value: 50}
+          - effect: if
+            when: {country_exists: NAS}
+            then:
+            - {effect: event, id: meganations_nas.101, days: 1, target: NAS}
+          ai_chance: 50
+        - name: {english: Refuse., spanish: Rechazar.}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {country_exists: NAS}
+            then:
+            - {effect: event, id: meganations_nas.102, days: 1, target: NAS}
+          ai_chance: 50
+        src: user_design
+      - id: 120
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Rome in Hispania, spanish: Roma en Hispania}
+        desc:
+          english: Rome has made Hispania a province. The old forests of Iberia will be cut for roads, as Rome always does.
+          spanish: Roma hizo de Hispania una provincia. Los bosques viejos de Iberia van a caer para hacer caminos, como hace siempre Roma.
+        options:
+        - name: {english: A formal protest., spanish: Una protesta formal.}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - {effect: opinion, target: NRE, modifier: meganations_afrenta}
+          ai_chance: 50
+        - name: {english: Send green sowers to Hispania., spanish: Mandar sembradores verdes a Hispania.}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - effect: if
+            when: {country_exists: NRE}
+            then:
+            - {effect: event, id: meganations_nre.120, days: 1, target: NRE}
+          ai_chance: 50
+        src: user_design
+      - id: 121
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: 'Our Sowers, Expelled', spanish: 'Nuestros Sembradores, Expulsados'}
+        desc:
+          english: Rome put our sowers on a ship home. The saplings stayed behind, trampled.
+          spanish: Roma subió a nuestros sembradores a un barco de vuelta. Los plantines quedaron pisoteados.
+        options:
+        - name: {english: This will not be forgotten., spanish: Esto no se olvida.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
+      - id: 130
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Temples of the Sun Offer Light, spanish: Los Templos del Sol Ofrecen Luz}
+        desc:
+          english: 'The Sun Kingdom offers solar light for our vats: it would clean them like a summer.'
+          spanish: 'El Reino del Sol ofrece luz solar para nuestras cubas: las limpiaría como un verano.'
+        options:
+        - name: {english: Buy the light., spanish: Comprar la luz.}
+          effects:
+          - {effect: add_variable, var: EFE_saturacion, value: -15}
+          - effect: if
+            when: {country_exists: NAS}
+            then:
+            - {effect: event, id: meganations_nas.111, days: 1, target: NAS}
+          ai_chance: 60
+        - name: {english: Heresy., spanish: Herejía.}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {country_exists: NAS}
+            then:
+            - {effect: event, id: meganations_nas.112, days: 1, target: NAS}
+          ai_chance: 40
+        src: user_design
+      - id: 140
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Great Drought, spanish: La Gran Sequía}
+        desc:
+          english: The rains failed across three continents. The Empire's aquifers are full. Everyone is looking south.
+          spanish: Las lluvias fallaron en tres continentes. Los acuíferos del Imperio están llenos. Todos miran al sur.
+        options:
+        - name: {english: Sell water to the world., spanish: Venderle agua al mundo.}
+          effects:
+          - {effect: add_political_power, value: 100}
+          - effect: if
+            when: {country_exists: FCU}
+            then:
+            - {effect: event, id: meganations_fcu.130, days: 1, target: FCU}
+          - effect: if
+            when: {country_exists: SHD}
+            then:
+            - {effect: event, id: meganations_shd.130, days: 1, target: SHD}
+          ai_chance: 50
+        - name: {english: Water is sacred., spanish: El agua es sagrada.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -858,6 +1008,112 @@ namespaces:
           - {effect: run, value: FCU_recalcular_satelites}
           ai_chance: 40
         src: user_design
+      - id: 100
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Empire's BioSteel, spanish: El Bioacero del Imperio}
+        desc:
+          english: The Empire paraded living armour through Buenos Aires. Meridian wants a sample; Castellane wants a contract.
+          spanish: El Imperio hizo desfilar blindaje vivo por Buenos Aires. Meridian quiere una muestra; Castellane quiere un contrato.
+        options:
+        - name: {english: Industrial espionage., spanish: Espionaje industrial.}
+          effects:
+          - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 1}
+          - effect: if
+            when: {country_exists: EFE}
+            then:
+            - {effect: event, id: meganations_efe.101, days: 14, target: EFE}
+          ai_chance: 60
+        - name: {english: Defence contracts at home., spanish: Contratos de defensa en casa.}
+          effects:
+          - {effect: add_variable, var: FCU_meridian, value: 10}
+          - {effect: run, value: FCU_recalcular_directorio}
+          ai_chance: 40
+        src: user_design
+      - id: 110
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Directorate Elections, spanish: Elecciones del Directorio}
+        desc:
+          english: Every four years the shareholders elect the chair of the Directorate. This year the vote is close.
+          spanish: Cada cuatro años los accionistas eligen la presidencia del Directorio. Este año la votación está peleada.
+        options:
+        - name: {english: Castellane takes the chair., spanish: Castellane se queda con la presidencia.}
+          effects:
+          - {effect: add_variable, var: FCU_castellane, value: 15}
+          - {effect: run, value: FCU_recalcular_directorio}
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_hsn.100, days: 7, target: HSN}
+          ai_chance: 35
+        - name: {english: Meridian takes the chair., spanish: Meridian se queda con la presidencia.}
+          effects:
+          - {effect: add_variable, var: FCU_meridian, value: 15}
+          - {effect: run, value: FCU_recalcular_directorio}
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_hsn.100, days: 7, target: HSN}
+          ai_chance: 35
+        - name: {english: Obsidian takes the chair., spanish: Obsidian se queda con la presidencia.}
+          effects:
+          - {effect: add_variable, var: FCU_obsidian, value: 15}
+          - {effect: run, value: FCU_recalcular_directorio}
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_hsn.100, days: 7, target: HSN}
+          ai_chance: 30
+        src: user_design
+      - id: 120
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Fleet Holds the Pacific, spanish: La Flota Controla el Pacífico}
+        desc:
+          english: The Sea Nation now holds four straits. Every Union ship to Asia pays them.
+          spanish: La Nación del Mar ya controla cuatro estrechos. Cada barco de la Unión que va a Asia les paga.
+        options:
+        - name: {english: A contract with the fleet., spanish: Un contrato con la flota.}
+          effects:
+          - {effect: add_political_power, value: 25}
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_hsn.102, days: 1, target: HSN}
+          ai_chance: 50
+        - name: {english: A containment blockade., spanish: Un bloqueo de contención.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: add_variable, var: FCU_meridian, value: 10}
+          - {effect: run, value: FCU_recalcular_directorio}
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_hsn.103, days: 1, target: HSN}
+          ai_chance: 50
+        src: user_design
+      - id: 130
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Empire's Water, spanish: El Agua del Imperio}
+        desc:
+          english: The Empire sells water. Castellane says we can desalinate our own; the cities say they are thirsty now.
+          spanish: El Imperio vende agua. Castellane dice que podemos desalinizar la nuestra; las ciudades dicen que tienen sed ahora.
+        options:
+        - name: {english: Buy., spanish: Comprar.}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_variable, var: FCU_castellane, value: -10}
+          - {effect: run, value: FCU_recalcular_directorio}
+          ai_chance: 50
+        - name: {english: Desalinate., spanish: Desalinizar.}
+          effects:
+          - {effect: add_variable, var: FCU_castellane, value: 10}
+          - {effect: run, value: FCU_recalcular_directorio}
+          ai_chance: 50
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -1149,6 +1405,113 @@ namespaces:
             - {effect: add_stability, value: -0.1}
           - {effect: run, value: HSN_recalcular_satelites}
           ai_chance: 40
+        src: user_design
+      - id: 100
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: Directorate Bonds, spanish: Bonos del Directorio}
+        desc:
+          english: The new chair of the Directorate offers us bonds at a friendly rate. Money makes friends; debt makes hostages.
+          spanish: La nueva presidencia del Directorio nos ofrece bonos a tasa amiga. La plata hace amigos; la deuda hace rehenes.
+        options:
+        - name: {english: Buy the bonds., spanish: Comprar los bonos.}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: timed_idea, idea: HSN_bonos_del_directorio, days: 364}
+          ai_chance: 60
+        - name: {english: Refuse., spanish: Rechazar.}
+          effects: []
+          ai_chance: 40
+        src: user_design
+      - id: 101
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Directorate Offers a Treaty, spanish: El Directorio Ofrece un Tratado}
+        desc:
+          english: 'The Harmonious Directorate offers a treaty: our ships in their rivers, their engineers in our ports.'
+          spanish: 'El Directorio Armónico ofrece un tratado: nuestros barcos en sus ríos, sus ingenieros en nuestros puertos.'
+        options:
+        - name: {english: Sign., spanish: Firmar.}
+          effects:
+          - {effect: opinion, target: SHD, modifier: meganations_concesion}
+          - {effect: add_political_power, value: 50}
+          - effect: if
+            when: {country_exists: SHD}
+            then:
+            - {effect: event, id: meganations_shd.111, days: 1, target: SHD}
+          ai_chance: 60
+        - name: {english: Do not sign., spanish: No firmar.}
+          effects: []
+          ai_chance: 40
+        src: user_design
+      - id: 102
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Union Proposes Business, spanish: La Unión Propone Negocios}
+        desc:
+          english: The Union wants a shipping contract. Business is business.
+          spanish: La Unión quiere un contrato de fletes. Negocios son negocios.
+        options:
+        - name: {english: Accept., spanish: Aceptar.}
+          effects:
+          - {effect: add_political_power, value: 50}
+          - {effect: opinion, target: FCU, modifier: meganations_concesion}
+          - {effect: add_variable, var: HSN_presion, value: -10}
+          ai_chance: 60
+        - name: {english: Refuse., spanish: Rechazar.}
+          effects:
+          - {effect: add_variable, var: HSN_presion, value: 10}
+          ai_chance: 40
+        src: user_design
+      - id: 103
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Union Blockades Us, spanish: La Unión nos Bloquea}
+        desc:
+          english: Union warships are escorting convoys around our straits, paying nobody.
+          spanish: Buques de la Unión escoltan convoyes alrededor de nuestros estrechos, sin pagarle a nadie.
+        options:
+        - name: {english: Pay for insurance., spanish: Pagar seguros.}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: add_variable, var: HSN_presion, value: -10}
+          ai_chance: 40
+        - name: {english: Board their convoys., spanish: Abordar sus convoyes.}
+          effects:
+          - {effect: navy_experience, value: 25}
+          - {effect: add_variable, var: HSN_botin, value: 5}
+          ai_chance: 60
+        src: user_design
+      - id: 110
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Korea Hesitates, spanish: Corea Duda}
+        desc:
+          english: Our agents in Busan report that Korea is tired of the Directorate. A friend at sea could change a lot.
+          spanish: Nuestros agentes en Busan dicen que Corea está harta del Directorio. Un amigo en el mar podría cambiar mucho.
+        options:
+        - name: {english: Offer Korea protection., spanish: Ofrecerle protección a Corea.}
+          effects:
+          - effect: if
+            when: {country_exists: SHD}
+            then:
+            - {effect: event, id: meganations_shd.120, days: 1, target: SHD}
+          ai_chance: 60
+        - name: {english: Stay out of it., spanish: No meterse.}
+          effects: []
+          ai_chance: 40
+        src: user_design
+      - id: 111
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Ports in Korea, spanish: Puertos en Corea}
+        desc:
+          english: The Directorate yielded two Korean ports to our fleet.
+          spanish: El Directorio le cedió dos puertos coreanos a nuestra flota.
+        options:
+        - name: {english: 'Another node, almost.', spanish: 'Otro nodo, casi.'}
+          effects:
+          - {effect: add_political_power, value: 75}
         src: user_design
   # ===========================================================================
   meganations_asc:
@@ -1450,6 +1813,121 @@ namespaces:
         - {effect: run, value: ASC_recalcular_satelites}
         ai_chance: 40
       src: user_design
+    - id: 100
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Plan Beats the Quota, spanish: El Plan Supera la Cuota}
+      desc:
+        english: A hundred and twenty factories answer to the Plan. The machines are building machines faster than anyone can use them.
+        spanish: Ciento veinte fábricas responden al Plan. Las máquinas construyen máquinas más rápido de lo que nadie las puede usar.
+      options:
+      - name: {english: Machines for Africa., spanish: Máquinas para África.}
+        effects:
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_apf.100, days: 1, target: APF}
+        ai_chance: 50
+      - name: {english: More data centres., spanish: Más datacenters.}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - {effect: add_variable, var: ASC_calor, value: 10}
+        ai_chance: 50
+      src: user_design
+    - id: 101
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Africa Accepts, spanish: África Acepta}
+      desc:
+        english: The Federation took the machines. The Plan counts one more partner.
+        spanish: La Federación aceptó las máquinas. El Plan suma un socio más.
+      options:
+      - name: {english: Good., spanish: Bien.}
+        effects:
+        - {effect: opinion, target: APF, modifier: meganations_concesion}
+        - {effect: add_political_power, value: 50}
+      src: user_design
+    - id: 102
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Africa Refuses, spanish: África Rechaza}
+      desc:
+        english: The councils sent the machines back unopened.
+        spanish: Los consejos devolvieron las máquinas sin abrir.
+      options:
+      - name: {english: Their loss., spanish: Ellos se lo pierden.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+      src: user_design
+    - id: 110
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Legions Look North, spanish: Las Legiones Miran al Norte}
+      desc:
+        english: Rome is preparing to march on Eurasia. Our front. Our war.
+        spanish: Roma se prepara para marchar sobre Eurasia. Nuestro frente. Nuestra guerra.
+      options:
+      - name: {english: A common front., spanish: Un frente común.}
+        effects:
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+        - effect: if
+          when: {country_exists: NRE}
+          then:
+          - {effect: event, id: meganations_nre.111, days: 1, target: NRE}
+        ai_chance: 50
+      - name: {english: Mobilise the border., spanish: Movilizar la frontera.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 15}
+        ai_chance: 50
+      src: user_design
+    - id: 120
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Machine that Thinks, spanish: La Máquina que Piensa}
+      desc:
+        english: The new computers do not just calculate. They propose. The Council asks whether to connect them to the Plan.
+        spanish: Las computadoras nuevas no solo calculan. Proponen. El Consejo pregunta si conectarlas al Plan.
+      options:
+      - name: {english: Connect it to the Plan., spanish: Conectarla al Plan.}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 15}
+        - {effect: add_variable, var: ASC_calor, value: 10}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_apf.110, days: 1, target: APF}
+        ai_chance: 60
+      - name: {english: Switch it off., spanish: Apagarla.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        ai_chance: 40
+      src: user_design
+    - id: 130
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Federation Asks for Help, spanish: La Federación Pide Ayuda}
+      desc:
+        english: The African councils are breaking apart and ask us for help.
+        spanish: Los consejos africanos se están rompiendo y nos piden ayuda.
+      options:
+      - name: {english: Send aid., spanish: Mandar ayuda.}
+        effects:
+        - {effect: send_equipment, type: infantry_equipment, amount: 2000, target: APF}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_apf.121, days: 1, target: APF}
+        ai_chance: 50
+      - name: {english: Demand that they assign Africa to the Plan., spanish: Exigir que asignen África al Plan.}
+        effects:
+        - {effect: add_war_support, value: 0.02}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_apf.122, days: 1, target: APF}
+        ai_chance: 50
+      src: user_design
   meganations_apf:
     country: APF
     events:
@@ -1689,6 +2167,153 @@ namespaces:
         - {effect: run, value: APF_recalcular_satelites}
         ai_chance: 40
       src: user_design
+    - id: 100
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Machines from the Commune, spanish: Máquinas de la Comuna}
+      desc:
+        english: 'A train of Commune machines waits at the border: two factories, ready to run. The councils argue: help, or a leash?'
+        spanish: 'Un tren de máquinas de la Comuna espera en la frontera: dos fábricas listas para andar. Los consejos discuten: ¿ayuda o correa?'
+      options:
+      - name: {english: Accept them., spanish: Aceptarlas.}
+        effects:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: opinion, target: ASC, modifier: meganations_concesion}
+        - {effect: add_variable, var: APF_tension, value: 5}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: event, id: meganations_asc.101, days: 1, target: ASC}
+        ai_chance: 60
+      - name: {english: Against the Machine!, spanish: ¡Contra la Máquina!}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: event, id: meganations_asc.102, days: 1, target: ASC}
+        ai_chance: 40
+      src: user_design
+    - id: 101
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Sells Arms, spanish: Roma Vende Armas}
+      desc:
+        english: Roman merchants offer rifles at a good price. The same rifles, perhaps, that will one day point at us.
+        spanish: Mercaderes romanos ofrecen fusiles a buen precio. Los mismos fusiles, quizás, que un día nos van a apuntar.
+      options:
+      - name: {english: Buy., spanish: Comprar.}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: equipment, type: infantry_equipment, amount: 3000}
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+        ai_chance: 60
+      - name: {english: Protest., spanish: Protestar.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 40
+      src: user_design
+    - id: 110
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Man Against the Machine, Again', spanish: 'El Hombre contra la Máquina, Otra Vez'}
+      desc:
+        english: The Commune has connected a thinking machine to its Plan. Our councils meet all night.
+        spanish: La Comuna conectó una máquina que piensa a su Plan. Nuestros consejos se reúnen toda la noche.
+      options:
+      - name: {english: Councils on alert., spanish: Consejos en alerta.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 50
+      - name: {english: Study the machine., spanish: Estudiar la máquina.}
+        effects:
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+        ai_chance: 50
+      src: user_design
+    - id: 120
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Councils Break, spanish: Los Consejos se Rompen}
+      desc:
+        english: Stability is collapsing. Half the councils refuse to meet; the other half meet only to shout.
+        spanish: La estabilidad se derrumba. La mitad de los consejos no se quiere reunir; la otra mitad se reúne solo para gritar.
+      options:
+      - name: {english: An emergency assembly., spanish: Una asamblea de emergencia.}
+        effects:
+        - {effect: add_variable, var: APF_tension, value: -30}
+        - {effect: add_political_power, value: -100}
+        ai_chance: 50
+      - name: {english: Ask the Commune for help., spanish: Pedirle ayuda a la Comuna.}
+        effects:
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: event, id: meganations_asc.130, days: 1, target: ASC}
+        ai_chance: 50
+      src: user_design
+    - id: 121
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Help Arrives, spanish: Llega la Ayuda}
+      desc:
+        english: Commune trains, full of rifles and food.
+        spanish: Trenes de la Comuna, llenos de fusiles y comida.
+      options:
+      - name: {english: Thank them., spanish: Agradecer.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: opinion, target: ASC, modifier: meganations_concesion}
+      src: user_design
+    - id: 122
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Commune Demands, spanish: La Comuna Exige}
+      desc:
+        english: The Commune will help, if Africa is 'assigned' to the Plan.
+        spanish: La Comuna va a ayudar, si África se 'asigna' al Plan.
+      options:
+      - name: {english: Never., spanish: Nunca.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 130
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Rome Proposes Trade, spanish: Roma Propone Comerciar}
+      desc:
+        english: Rome offers a trade agreement between equals.
+        spanish: Roma ofrece un acuerdo comercial entre iguales.
+      options:
+      - name: {english: Between equals., spanish: Entre iguales.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+      src: user_design
+    - id: 131
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Rome Closes the Sea, spanish: Roma nos Cierra el Mar}
+      desc:
+        english: An imperial tariff on everything we sell across the Mediterranean.
+        spanish: Un arancel imperial a todo lo que vendemos por el Mediterráneo.
+      options:
+      - name: {english: Reprisals., spanish: Represalias.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: opinion, target: NRE, modifier: meganations_afrenta}
+        ai_chance: 60
+      - name: {english: Endure it., spanish: Aguantar.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 40
+      src: user_design
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -1916,6 +2541,93 @@ namespaces:
           - {effect: add_stability, value: -0.1}
         - {effect: run, value: NAS_recalcular_satelites}
         ai_chance: 40
+      src: user_design
+    - id: 100
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Green Empire Arms, spanish: El Imperio Verde se Arma}
+      desc:
+        english: Forty divisions of the Green Guard stand on the plains. The priests of Inti ask whether they are looking at us.
+        spanish: Cuarenta divisiones de la Guardia Verde están en los llanos. Los sacerdotes de Inti preguntan si nos están mirando a nosotros.
+      options:
+      - name: {english: Propose a pact., spanish: Proponer un pacto.}
+        effects:
+        - effect: if
+          when: {country_exists: EFE}
+          then:
+          - {effect: event, id: meganations_efe.110, days: 1, target: EFE}
+        ai_chance: 50
+      - name: {english: Fortify the Puna., spanish: Fortificar la Puna.}
+        effects:
+        - {effect: timed_idea, idea: NAS_la_puna_en_armas, days: 182}
+        ai_chance: 50
+      src: user_design
+    - id: 101
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Pact with the Empire, spanish: Pacto con el Imperio}
+      desc:
+        english: The Emperor accepted. The mountains and the forest will not fight. For now.
+        spanish: El Emperador aceptó. La montaña y la selva no van a pelear. Por ahora.
+      options:
+      - name: {english: Glory to Inti., spanish: Gloria a Inti.}
+        effects:
+        - {effect: opinion, target: EFE, modifier: meganations_concesion}
+      src: user_design
+    - id: 102
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Empire Refuses, spanish: El Imperio Rechaza}
+      desc: {english: The Emperor did not even read our letter., spanish: El Emperador ni leyó nuestra carta.}
+      options:
+      - name: {english: Then we prepare., spanish: Entonces nos preparamos.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 110
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Sun Shines over the Andes, spanish: El Sol Brilla sobre los Andes}
+      desc:
+        english: The temples overflow with light. The priests propose sharing it, for a price.
+        spanish: Los templos desbordan de luz. Los sacerdotes proponen compartirla, por un precio.
+      options:
+      - name: {english: Offer light to the Green Empire., spanish: Ofrecerle luz al Imperio Verde.}
+        effects:
+        - effect: if
+          when: {country_exists: EFE}
+          then:
+          - {effect: event, id: meganations_efe.130, days: 1, target: EFE}
+        ai_chance: 50
+      - name: {english: Keep it., spanish: Guardarla.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 111
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Empire Pays, spanish: El Imperio Paga}
+      desc:
+        english: Gold for light. The priests are pleased.
+        spanish: Oro por luz. Los sacerdotes están contentos.
+      options:
+      - name: {english: Inti provides., spanish: Inti provee.}
+        effects:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: NAS_inti, value: -20}
+      src: user_design
+    - id: 112
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Heresy, Says the Empire', spanish: 'Herejía, Dice el Imperio'}
+      desc:
+        english: The Green Empire called our temples a heresy.
+        spanish: El Imperio Verde llamó herejía a nuestros templos.
+      options:
+      - name: {english: They will see., spanish: Ya van a ver.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
       src: user_design
   meganations_shd:
     country: SHD
@@ -2177,6 +2889,143 @@ namespaces:
           - {effect: add_stability, value: -0.1}
         - {effect: run, value: SHD_recalcular_satelites}
         ai_chance: 40
+      src: user_design
+    - id: 100
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A River of Men, spanish: Un Río de Hombres}
+      desc:
+        english: A million men wait for orders. The Directorate can send them to farm the Steppe, or to drill.
+        spanish: Un millón de hombres espera órdenes. El Directorio los puede mandar a cultivar la Estepa, o a entrenar.
+      options:
+      - name: {english: Settlers for the Steppe., spanish: Colonos a la Estepa.}
+        effects:
+        - {effect: add_manpower, value: -200000}
+        - {effect: add_variable, var: SHD_lealtad_zst, value: 15}
+        - effect: if
+          when: {country_exists: ZST}
+          then:
+          - {effect: event, id: meganations_shd.101, days: 1, target: ZST}
+        ai_chance: 50
+      - name: {english: The Army of the Flow., spanish: El Ejército del Caudal.}
+        effects:
+        - {effect: army_experience, value: 25}
+        - {effect: add_variable, var: SHD_pueblo, value: 10}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      src: user_design
+    - id: 101
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Settlers Arrive, spanish: Llegan los Colonos}
+      desc:
+        english: Two hundred thousand settlers from the south, with tools and orders. Our herders were not asked.
+        spanish: Doscientos mil colonos del sur, con herramientas y órdenes. A nuestros pastores nadie les preguntó.
+      options:
+      - name: {english: Welcome them., spanish: Recibirlos.}
+        effects:
+        - {effect: add_manpower, value: 100000}
+        ai_chance: 60
+      - name: {english: Protest to the Directorate., spanish: Protestar ante el Directorio.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        - effect: if
+          when: {country_exists: SHD}
+          then:
+          - {effect: event, id: meganations_shd.102, days: 1, target: SHD}
+        ai_chance: 40
+      src: user_design
+    - id: 102
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Steppe Protests, spanish: La Estepa Protesta}
+      desc:
+        english: The Steppe Directorate complains about our settlers. Politely, for now.
+        spanish: El Directorio de la Estepa se queja de nuestros colonos. Con educación, por ahora.
+      options:
+      - name: {english: Pull the settlers back., spanish: Retirar a los colonos.}
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zst, value: 10}
+        ai_chance: 50
+      - name: {english: Ignore them., spanish: Ignorarlos.}
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zst, value: -15}
+        ai_chance: 50
+      src: user_design
+    - id: 110
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Harmony Dazzles, spanish: La Armonía Deslumbra}
+      desc:
+        english: The Perfect Flow works. Delegations from half the world come to see the dams.
+        spanish: El Caudal Perfecto funciona. Delegaciones de medio mundo vienen a ver las represas.
+      options:
+      - name: {english: Engineers for Korea., spanish: Ingenieros para Corea.}
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: 15}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 50
+      - name: {english: Invite the Sea Nation., spanish: Invitar a la Nación del Mar.}
+        effects:
+        - effect: if
+          when: {country_exists: HSN}
+          then:
+          - {effect: event, id: meganations_hsn.101, days: 1, target: HSN}
+        ai_chance: 50
+      src: user_design
+    - id: 111
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Sea Nation Signs, spanish: La Nación del Mar Firma}
+      desc: {english: A treaty of ports and rivers., spanish: Un tratado de puertos y ríos.}
+      options:
+      - name: {english: Harmony spreads., spanish: La armonía se expande.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        - {effect: opinion, target: HSN, modifier: meganations_concesion}
+      src: user_design
+    - id: 120
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Sea Nation Courts Korea, spanish: La Nación del Mar Corteja a Corea}
+      desc:
+        english: The Sea Nation is offering Korea 'protection'. Korea is listening.
+        spanish: La Nación del Mar le ofrece 'protección' a Corea. Corea escucha.
+      options:
+      - name: {english: Reinforce the garrison., spanish: Reforzar la guarnición.}
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: 20}
+        - {effect: add_political_power, value: -50}
+        ai_chance: 50
+      - name: {english: Yield some ports to the fleet., spanish: Cederle algunos puertos a la flota.}
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: 10}
+        - {effect: opinion, target: HSN, modifier: meganations_concesion}
+        - effect: if
+          when: {country_exists: HSN}
+          then:
+          - {effect: event, id: meganations_hsn.111, days: 1, target: HSN}
+        ai_chance: 50
+      src: user_design
+    - id: 130
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Water from the South, spanish: Agua del Sur}
+      desc:
+        english: The Green Empire offers to sell water while our rivers run low.
+        spanish: El Imperio Verde ofrece vendernos agua mientras bajan nuestros ríos.
+      options:
+      - name: {english: Buy., spanish: Comprar.}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: SHD_pueblo, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: The flow provides., spanish: El caudal provee.}
+        effects:
+        - {effect: add_variable, var: SHD_pueblo, value: -5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
       src: user_design
   # ===========================================================================
   meganations_nre:
@@ -2908,6 +3757,122 @@ namespaces:
         effects:
         - {effect: add_stability, value: -0.03}
         ai_chance: 10
+      src: user_design
+    - id: 100
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Arsenals Overflow, spanish: Los Arsenales Rebosan}
+      desc:
+        english: Fifteen thousand sets of arms in the depots of Rome. The quartermasters ask what to do with the surplus.
+        spanish: Quince mil equipos en los depósitos de Roma. Los intendentes preguntan qué hacer con lo que sobra.
+      options:
+      - name: {english: Arm the provinces., spanish: Armar a las provincias.}
+        effects:
+        - effect: if
+          when: {country_exists: ZHI}
+          then:
+          - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: ZHI}
+          - {effect: add_variable, var: NRE_lealtad_zhi, value: 10}
+        - effect: if
+          when: {country_exists: ZDA}
+          then:
+          - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: ZDA}
+          - {effect: add_variable, var: NRE_lealtad_zda, value: 10}
+        ai_chance: 50
+      - name: {english: Sell to the highest bidder., spanish: Vender al mejor postor.}
+        effects:
+        - {effect: add_political_power, value: 100}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_apf.101, days: 1, target: APF}
+        ai_chance: 50
+      src: user_design
+    - id: 110
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Demands War, spanish: Roma Pide Guerra}
+      desc:
+        english: The crowds in the Forum chant for the legions. Peace, they say, is for Greeks.
+        spanish: La multitud del Foro canta por las legiones. La paz, dicen, es cosa de griegos.
+      options:
+      - name: {english: March on Eurasia., spanish: Marchar sobre Eurasia.}
+        effects:
+        - effect: if
+          when: {country_exists: ZWE}
+          then:
+          - {effect: wargoal, target: ZWE, type: annex_everything}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: event, id: meganations_asc.110, days: 1, target: ASC}
+        ai_chance: 60
+      - name: {english: Bread and circuses., spanish: Pan y circo.}
+        effects:
+        - {effect: add_war_support, value: -0.1}
+        - {effect: add_stability, value: 0.05}
+        ai_chance: 40
+      src: user_design
+    - id: 111
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Commune Joins In, spanish: La Comuna se Suma}
+      desc:
+        english: The Commune proposes a common front against the warlords of Eurasia.
+        spanish: La Comuna propone un frente común contra los señores de Eurasia.
+      options:
+      - name: {english: 'Together, then.', spanish: 'Juntos, entonces.'}
+        effects:
+        - {effect: add_political_power, value: 50}
+        - {effect: opinion, target: ASC, modifier: meganations_concesion}
+      src: user_design
+    - id: 120
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Trees in Hispania, spanish: Árboles en Hispania}
+      desc:
+        english: Green-robed sowers from the Empire are planting forests along our new roads in Hispania.
+        spanish: Sembradores de verde del Imperio están plantando bosques a lo largo de nuestros caminos nuevos en Hispania.
+      options:
+      - name: {english: Tolerate them., spanish: Tolerarlos.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        - {effect: opinion, target: EFE, modifier: meganations_concesion}
+        ai_chance: 40
+      - name: {english: Expel them., spanish: Expulsarlos.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        - effect: if
+          when: {country_exists: EFE}
+          then:
+          - {effect: event, id: meganations_efe.121, days: 1, target: EFE}
+        ai_chance: 60
+      src: user_design
+    - id: 130
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Africa Is No Longer a Market, spanish: África ya no es un Mercado}
+      desc:
+        english: The Federation has eighty factories. It no longer buys what Rome sells; it sells it.
+        spanish: 'La Federación tiene ochenta fábricas. Ya no compra lo que Roma vende: lo vende.'
+      options:
+      - name: {english: A trade agreement., spanish: Un acuerdo comercial.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        - {effect: opinion, target: APF, modifier: meganations_concesion}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_apf.130, days: 1, target: APF}
+        ai_chance: 50
+      - name: {english: An imperial tariff., spanish: Un arancel imperial.}
+        effects:
+        - {effect: add_political_power, value: 75}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_apf.131, days: 1, target: APF}
+        ai_chance: 50
       src: user_design
   # ===========================================================================
   meganations_zwe:

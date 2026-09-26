@@ -5554,6 +5554,27 @@ scripted_effects:
       - {effect: event, id: meganations_efe.31, days: 1}
     - {effect: run, value: EFE_espiritu_vivo}
     - {effect: run, value: EFE_pulso_satelites}
+    - effect: if
+      when:
+        variable_at_least: {var: EFE_biosteel, value: 12}
+        not_flag: EFE_cadena_1
+      then:
+      - {effect: flag, value: EFE_cadena_1}
+      - {effect: event, id: meganations_efe.100, days: 1}
+    - effect: if
+      when:
+        country:
+          tag: NRE
+          when: {focus: NRE_hispania_provincia}
+        not_flag: EFE_cadena_9
+      then:
+      - {effect: flag, value: EFE_cadena_9}
+      - {effect: event, id: meganations_efe.120, days: 1}
+    - effect: if
+      when: {date_after: 2106.1.1, not_flag: EFE_cadena_16}
+      then:
+      - {effect: flag, value: EFE_cadena_16}
+      - {effect: event, id: meganations_efe.140, days: 1}
   - id: FCU_pulso_del_directorio
     effects:
     - effect: if
@@ -5615,6 +5636,21 @@ scripted_effects:
       - {effect: flag, value: FCU_hito_hecho}
       - {effect: event, id: meganations_fcu.31, days: 1}
     - {effect: run, value: FCU_pulso_satelites}
+    - effect: if
+      when: {date_after: 2104.1.1, not_flag: FCU_cadena_8}
+      then:
+      - {effect: flag, value: FCU_cadena_8}
+      - {effect: event, id: meganations_fcu.110, days: 1}
+    - effect: if
+      when:
+        country:
+          tag: HSN
+          when:
+            variable_at_least: {var: HSN_nodos, value: 4}
+        not_flag: FCU_cadena_11
+      then:
+      - {effect: flag, value: FCU_cadena_11}
+      - {effect: event, id: meganations_fcu.120, days: 1}
   - id: ASC_pulso_de_la_red
     effects:
     - effect: if
@@ -5679,6 +5715,16 @@ scripted_effects:
       - {effect: flag, value: ASC_hito_hecho}
       - {effect: event, id: meganations_asc.31, days: 1}
     - {effect: run, value: ASC_pulso_satelites}
+    - effect: if
+      when: {factories_at_least: 120, not_flag: ASC_cadena_2}
+      then:
+      - {effect: flag, value: ASC_cadena_2}
+      - {effect: event, id: meganations_asc.100, days: 1}
+    - effect: if
+      when: {tech: improved_computing_machine, not_flag: ASC_cadena_7}
+      then:
+      - {effect: flag, value: ASC_cadena_7}
+      - {effect: event, id: meganations_asc.120, days: 1}
   - id: HSN_pulso_de_las_potencias
     effects:
     - effect: if
@@ -5734,6 +5780,16 @@ scripted_effects:
       - {effect: event, id: meganations_hsn.31, days: 1}
     - {effect: run, value: HSN_espiritu_vivo}
     - {effect: run, value: HSN_pulso_satelites}
+    - effect: if
+      when:
+        country:
+          tag: SHD
+          when:
+            variable_below: {var: SHD_lealtad_zkr, value: 30}
+        not_flag: HSN_cadena_14
+      then:
+      - {effect: flag, value: HSN_cadena_14}
+      - {effect: event, id: meganations_hsn.110, days: 1}
   - id: NAS_pulso_de_los_templos
     effects:
     - effect: if
@@ -5785,6 +5841,22 @@ scripted_effects:
       - {effect: event, id: meganations_nas.31, days: 1}
     - {effect: run, value: NAS_espiritu_vivo}
     - {effect: run, value: NAS_pulso_satelites}
+    - effect: if
+      when:
+        country:
+          tag: EFE
+          when: {divisions_at_least: 40}
+        not_flag: NAS_cadena_6
+      then:
+      - {effect: flag, value: NAS_cadena_6}
+      - {effect: event, id: meganations_nas.100, days: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: NAS_inti, value: 90}
+        not_flag: NAS_cadena_13
+      then:
+      - {effect: flag, value: NAS_cadena_13}
+      - {effect: event, id: meganations_nas.110, days: 1}
   - id: SHD_pulso_del_rio
     effects:
     - effect: if
@@ -5832,6 +5904,16 @@ scripted_effects:
       - {effect: flag, value: SHD_hito_hecho}
       - {effect: event, id: meganations_shd.31, days: 1}
     - {effect: run, value: SHD_pulso_satelites}
+    - effect: if
+      when: {manpower_at_least: 1000000, not_flag: SHD_cadena_4}
+      then:
+      - {effect: flag, value: SHD_cadena_4}
+      - {effect: event, id: meganations_shd.100, days: 1}
+    - effect: if
+      when: {focus: SHD_el_caudal_perfecto, not_flag: SHD_cadena_10}
+      then:
+      - {effect: flag, value: SHD_cadena_10}
+      - {effect: event, id: meganations_shd.110, days: 1}
   - id: APF_pulso_de_los_consejos
     effects:
     - effect: if
@@ -5888,6 +5970,11 @@ scripted_effects:
       - {effect: event, id: meganations_apf.31, days: 1}
     - {effect: run, value: APF_espiritu_vivo}
     - {effect: run, value: APF_pulso_satelites}
+    - effect: if
+      when: {stability_below: 0.3, not_flag: APF_cadena_12}
+      then:
+      - {effect: flag, value: APF_cadena_12}
+      - {effect: event, id: meganations_apf.120, days: 1}
   - id: NRE_pulso_del_ocio
     effects:
     - effect: if
@@ -5941,6 +6028,27 @@ scripted_effects:
       - {effect: flag, value: NRE_hito_hecho}
       - {effect: event, id: meganations_nre.31, days: 1}
     - {effect: run, value: NRE_pulso_satelites}
+    - effect: if
+      when:
+        equipment_at_least: {type: infantry_equipment, amount: 15000}
+        not_flag: NRE_cadena_3
+      then:
+      - {effect: flag, value: NRE_cadena_3}
+      - {effect: event, id: meganations_nre.100, days: 1}
+    - effect: if
+      when: {war_support_at_least: 0.8, at_war: false, not_flag: NRE_cadena_5}
+      then:
+      - {effect: flag, value: NRE_cadena_5}
+      - {effect: event, id: meganations_nre.110, days: 1}
+    - effect: if
+      when:
+        country:
+          tag: APF
+          when: {factories_at_least: 80}
+        not_flag: NRE_cadena_15
+      then:
+      - {effect: flag, value: NRE_cadena_15}
+      - {effect: event, id: meganations_nre.130, days: 1}
 
   # La Anarquía resiste (2026-09-26): en guerra, cada mes recluta y rearma.
   - id: ANARQUIA_levas

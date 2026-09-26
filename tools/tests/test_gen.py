@@ -698,7 +698,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("23 eventos del EFE (pulso, explicacion, plaga, oferta de la ASC, conquista, hito, 2 rebeliones de satelites)", len(events) == 23, str(len(events)))
+        check("30 eventos del EFE (pulso, explicacion, plaga, oferta de la ASC, conquista, hito, 2 rebeliones, 7 de cadenas)", len(events) == 30, str(len(events)))
         conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
         check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
         check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
@@ -1145,6 +1145,22 @@ def test_ai() -> None:
               "declare_war_on = { target = NRE type = take_state" in e82 and "APF_liberar_los_emiratos days = 182" in e82, e82)
         e61 = nre_ev[nre_ev.index("id = meganations_nre.61 title"):][:900]
         check("Emiratos: la Comuna pide que Roma marche contra Eurasia", "declare_war_on = { target = ZWE" in e61, e61)
+        se_c = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
+        pulses = {"EFE_pulso_de_las_cubas": 3, "FCU_pulso_del_directorio": 2, "ASC_pulso_de_la_red": 2, "NRE_pulso_del_ocio": 3,
+                  "SHD_pulso_del_rio": 2, "NAS_pulso_de_los_templos": 2, "APF_pulso_de_los_consejos": 1, "HSN_pulso_de_las_potencias": 1}
+        total = sum(se_c.count(f"has_country_flag = {p.split('_')[0]}_cadena_") for p in pulses)
+        check("16 cadenas de eventos, cada una chequeada una vez en el pulso de quien la empieza", total == 16, str(total))
+        for needle, what in (("num_of_factories > 119", "industria (ASC 120 fabricas)"),
+                             ("has_tech = improved_computing_machine", "tecnologia"),
+                             ("has_manpower > 999999", "manpower"),
+                             ("has_war_support > 0.8", "apoyo belico"),
+                             ("has_equipment = { infantry_equipment > 14999 }", "equipo"),
+                             ("has_army_size = { size > 39 }", "divisiones ajenas"),
+                             ("date > 2104.1.1", "fecha"),
+                             ("NRE = { has_completed_focus = NRE_hispania_provincia }", "foco ajeno"),
+                             ("has_completed_focus = SHD_el_caudal_perfecto", "foco propio"),
+                             ("has_stability < 0.3", "estabilidad")):
+            check(f"cadenas: gatillo por {what}", needle in se_c, needle)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
