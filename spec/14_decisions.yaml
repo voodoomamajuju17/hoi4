@@ -7306,12 +7306,17 @@ scripted_effects:
       then:
       - effect: random
         options:
-        - weight: 90
+        - weight: 80
           effects: []
-        - weight: 10
+        - weight: 20
           effects:
           - {effect: flag, value: ZWM_tregua_reciente, days: 245}
           - {effect: event, id: meganations_zwm.6, days: 1}
+    - effect: if
+      when: {at_war: true}
+      then:
+      - {effect: add_manpower, value: 15000}
+      - {effect: equipment, type: infantry_equipment, amount: 1500}
   - id: ZWI_pulso_caudillos
     effects:
     - effect: if

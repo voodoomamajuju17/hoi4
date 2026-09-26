@@ -491,19 +491,16 @@ countries:
   ASC:
     coverage: balance_only
     starting_ideas:
-      - id: ASC_cuello_de_botella
-        name:
-          english: "The Council Bottleneck"
-          spanish: "El Cuello de Botella del Consejo"
-        name_src: invented
-        desc:
-          english: "Every factory order passes through the Allocation Council's planning system. It never makes mistakes; it just takes its time."
-          spanish: "Cada orden de fábrica pasa por el sistema de planificación del Consejo de Asignación. Nunca se equivoca; solo se toma su tiempo."
-        modifiers:
-          industrial_capacity_factory: -0.15
-        modifiers_src: invented
-        why: "Balance (2026-09-23): la ASC arrancaba con 18,6% de la IC mundial."
-        removable: false
+    - id: ASC_cuello_de_botella
+      name: {english: The Council Bottleneck, spanish: El Cuello de Botella del Consejo}
+      name_src: invented
+      desc:
+        english: Every factory order passes through the Allocation Council's planning system. It never makes mistakes; it just takes its time.
+        spanish: Cada orden de fábrica pasa por el sistema de planificación del Consejo de Asignación. Nunca se equivoca; solo se toma su tiempo.
+      modifiers: {industrial_capacity_factory: -0.15}
+      modifiers_src: invented
+      why: 'Balance (2026-09-23): la ASC arrancaba con 18,6% de la IC mundial.'
+      removable: false
     focus_ideas:
     - id: ASC_espiritu_computo_distribuido
       name: {english: Distributed Compute, spanish: El Cómputo Distribuido}
@@ -637,6 +634,13 @@ countries:
         english: The datacenters run hot. Everything is faster, until something melts.
         spanish: Los datacenters funcionan al rojo. Todo va más rápido, hasta que algo se funde.
       modifiers: {research_speed_factor: 0.1, production_speed_buildings_factor: 0.1, stability_factor: -0.05}
+      src: user_design
+    - id: ASC_liberar_los_emiratos
+      name: {english: Free the Emirates!, spanish: ¡Liberar los Emiratos!}
+      desc:
+        english: The whole country marches against Rome's greed.
+        spanish: Todo el país marcha contra la codicia de Roma.
+      modifiers: {army_org_factor: 0.05, war_support_factor: 0.15}
       src: user_design
     see: Q030
 
@@ -1286,7 +1290,7 @@ countries:
       src: user_design
     see: Q030
   APF:
-    coverage: full_v1   # "Las Ocho Potencias" (2026-09-23)
+    coverage: full_v1
     focus_ideas:
     - id: APF_espiritu_radios_comunitarias
       name: {english: Community Radio, spanish: Radios Comunitarias}
@@ -1414,6 +1418,13 @@ countries:
       name: {english: One People, spanish: Un Solo Pueblo}
       desc: {english: 'From the Cape to Cairo, one people.', spanish: 'Del Cabo al Cairo, un solo pueblo.'}
       modifiers: {stability_factor: 0.2, political_power_gain: 0.15, research_speed_factor: 0.05}
+      src: user_design
+    - id: APF_liberar_los_emiratos
+      name: {english: Free the Emirates!, spanish: ¡Liberar los Emiratos!}
+      desc:
+        english: The whole country marches against Rome's greed.
+        spanish: Todo el país marcha contra la codicia de Roma.
+      modifiers: {army_org_factor: 0.05, war_support_factor: 0.15}
       src: user_design
     see: Q030
   NRE:
@@ -1598,7 +1609,7 @@ countries:
       src: user_design
     see: Q030
   ZWE:
-    coverage: user_decision   # 2026-09-26: que la Anarquía resista más
+    coverage: user_decision
     starting_ideas:
     - id: ZWE_senores_de_la_guerra
       name: {english: The Eurasian Warlords, spanish: Los Señores de la Guerra Euroasiáticos}
@@ -1621,6 +1632,13 @@ countries:
         english: Old enemies share trenches against the invader.
         spanish: Viejos enemigos comparten trincheras contra el invasor.
       modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1}
+      src: user_design
+    - id: ZWE_liberar_los_emiratos
+      name: {english: Free the Emirates!, spanish: ¡Liberar los Emiratos!}
+      desc:
+        english: The whole country marches against Rome's greed.
+        spanish: Todo el país marcha contra la codicia de Roma.
+      modifiers: {army_org_factor: 0.05, war_support_factor: 0.15}
       src: user_design
   ZWI:
     coverage: user_decision   # 2026-09-26: que la Anarquía resista más
@@ -1662,7 +1680,7 @@ countries:
       desc:
         english: 'Sand, heat and no roads: the Emirates fight where nobody else can.'
         spanish: 'Arena, calor y ningún camino: los Emiratos pelean donde nadie más puede.'
-      modifiers: {army_defence_factor: 0.2, army_attack_factor: 0.1}
+      modifiers: {army_defence_factor: 0.3, army_attack_factor: 0.15, army_org_factor: 0.1}
       src: user_design
     focus_ideas:
     - id: ZWM_caudillo_supremo
@@ -1703,6 +1721,16 @@ countries:
         english: Old enemies share trenches against the invader.
         spanish: Viejos enemigos comparten trincheras contra el invasor.
       modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1}
+      src: user_design
+  ZST:
+    coverage: user_decision
+    focus_ideas:
+    - id: ZST_liberar_los_emiratos
+      name: {english: Free the Emirates!, spanish: ¡Liberar los Emiratos!}
+      desc:
+        english: The whole country marches against Rome's greed.
+        spanish: Todo el país marcha contra la codicia de Roma.
+      modifiers: {army_org_factor: 0.05, war_support_factor: 0.15}
       src: user_design
   PTA: { coverage: unknown, starting_ideas: unknown, see: Q012 }
   YYG: { coverage: unknown, starting_ideas: unknown, see: Q012 }

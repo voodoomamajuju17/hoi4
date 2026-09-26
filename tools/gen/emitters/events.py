@@ -24,7 +24,8 @@ from .effects import EffectContext, scripted_effect_ids, render_conditions, rend
 
 SOURCE = "spec/12_events.yaml"
 LOC_FILE = "meganations_events"
-OPTION_LETTERS = "abcdefgh"
+# sin "d" ni "t": son las claves del texto y el título (<id>.d, <id>.t)
+OPTION_LETTERS = "abcefghi"
 
 
 def _events(ctx: BuildContext):
@@ -60,10 +61,12 @@ def emit(ctx: BuildContext) -> None:
 def _emit(ctx: BuildContext) -> None:
     effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     effects_mod.use_variable_names(ctx.spec.raw)
+    effects_mod.use_territory(ctx.data.get("territory"))
     known_ideas = ideas_mod.all_idea_ids(ctx)
     icons = ctx.vanilla.gfx_names() if ctx.vanilla else None
     effects_used: dict[str, str] = {}
     startup: list[tuple[str, str]] = []  # (tag, id)
+    capitulations: list[tuple[str, str, str]] = []  # (quien capitula, dueño del evento, id)
     by_ns: dict[str, Block] = {}
     seen: set[str] = set()
     own_sprites = Block()
@@ -89,6 +92,11 @@ def _emit(ctx: BuildContext) -> None:
             startup.append((tag, eid))
         elif trig == "effect":
             pass  # lo dispara el efecto `event` de un foco, decisión u otro evento
+        elif isinstance(trig, dict) and "capitulation" in trig:
+            # on_capitulation: cuando `loser` capitula y el dueño del evento está en guerra con él
+            loser = trig["capitulation"]["loser"]
+            ctx.spec.country(loser)
+            capitulations.append((loser, tag, eid))
         elif isinstance(trig, dict) and "focus" in trig:
             if trig["focus"] not in focus_ids:
                 raise SpecError(f"{eid}: el foco '{trig['focus']}' no existe", where="12_events.yaml")
@@ -153,6 +161,9 @@ def _emit(ctx: BuildContext) -> None:
     if startup:
         _emit_on_actions(ctx, startup)
         effects_used.setdefault("country_event", "on_startup")
+    if capitulations:
+        _emit_capitulations(ctx, capitulations, effect_ctx.triggers_used)
+        effects_used.setdefault("country_event", "on_capitulation")
     ctx.verify_keys("effects", effects_used)
     ctx.verify_keys("triggers", effect_ctx.triggers_used)
 
@@ -178,6 +189,28 @@ def _emit_on_actions(ctx: BuildContext, startup: list[tuple[str, str]]) -> None:
     root = Block()
     root.add("on_actions", actions)
     ctx.write_script("common/on_actions/00_meganations_on_actions.txt", root, source=SOURCE)
+
+
+def _emit_capitulations(ctx: BuildContext, items: list[tuple[str, str, str]], triggers_used: dict) -> None:
+    """on_capitulation: ROOT es el país que capitula. El evento le llega al
+    dueño si en ese momento está en guerra con él."""
+    if ctx.vanilla is not None:
+        found = any(
+            "on_capitulation" in p.read_text(encoding="utf-8-sig", errors="replace")
+            for p in (ctx.vanilla.root / "common" / "on_actions").glob("*.txt")
+        )
+        if not found:
+            ctx.warn("on_capitulation no aparece en common/on_actions/ del juego: los eventos de capitulacion no se conectan.")
+            return
+    effect = Block()
+    for loser, owner, eid in items:
+        cond = Block([("tag", loser), (owner, Block([("has_war_with", loser)]))])
+        body = Block([("limit", cond), (owner, Block([("country_event", eid)]))])
+        effect.add("if", body)
+    triggers_used.setdefault("tag", "on_capitulation")
+    triggers_used.setdefault("has_war_with", "on_capitulation")
+    root = Block([("on_actions", Block([("on_capitulation", Block([("effect", effect)]))]))])
+    ctx.write_script("common/on_actions/03_meganations_capitulation.txt", root, source=SOURCE)
 
 
 def _all_focus_ids(ctx: BuildContext) -> set[str]:

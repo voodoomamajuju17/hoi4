@@ -51,6 +51,16 @@ def use_states(mapping: dict[str, int] | None) -> None:
     _STATES = mapping
 
 
+_TERRITORY: dict[int, str] = {}
+
+
+def use_territory(mapping: dict | None) -> None:
+    """state id -> dueño al arranque (08_territory): para objetivos de guerra
+    sobre "el territorio de los Emiratos" sin escribir ids a mano."""
+    global _TERRITORY
+    _TERRITORY = {int(k): v for k, v in (mapping or {}).items()}
+
+
 # Nombres legibles de las variables (14_decisions.yaml -> variable_names).
 # HOI4 no muestra add_to_variable en los tooltips: un foco que solo suma una
 # variable decía "Este enfoque no tiene efecto". Cada add_variable con nombre
@@ -314,6 +324,51 @@ def render_effects(owner: str, items: list[dict], known,
             block.add(key, inner)
             effects_used.setdefault(key, owner)
             continue
+        if effect == "transfer_to":
+            # en una región: se la entrega al país (TAG = { transfer_state = PREV })
+            target = item["value"]
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: transfer_to '{target}' no es un pais del mod", where=where)
+            block.add(target, Block([("transfer_state", "PREV")]))
+            effects_used.setdefault("transfer_state", owner)
+            continue
+        if effect in ("puppet", "white_peace"):
+            target = item["value"]
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: {effect} '{target}' no es un pais del mod", where=where)
+            block.add(effect, target)
+            effects_used.setdefault(effect, owner)
+            continue
+        if effect == "declare_war":
+            target = item["target"]
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: declare_war contra '{target}', que no es un pais del mod", where=where)
+            kind = item.get("type", "annex_everything")
+            if ec.wargoals and kind not in ec.wargoals:
+                raise SpecError(f"{owner}: tipo de wargoal '{kind}' no existe en common/wargoals/", where=where)
+            inner = Block([("target", target), ("type", kind)])
+            region = item.get("territory_of")
+            if region:
+                ids = sorted(sid for sid, tag in _TERRITORY.items() if tag == region)
+                if ids:
+                    inner.add("generator", Block([(None, i) for i in ids]))
+            block.add("declare_war_on", inner)
+            effects_used.setdefault("declare_war_on", owner)
+            continue
+        if effect == "send_equipment":
+            target = item["target"]
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: send_equipment a '{target}', que no es un pais del mod", where=where)
+            block.add("send_equipment", Block([("type", item["type"]), ("amount", int(item["amount"])), ("target", target)]))
+            effects_used.setdefault("send_equipment", owner)
+            continue
+        if effect == "opinion":
+            target = item["target"]
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: opinion hacia '{target}', que no es un pais del mod", where=where)
+            block.add("add_opinion_modifier", Block([("target", target), ("modifier", item["modifier"])]))
+            effects_used.setdefault("add_opinion_modifier", owner)
+            continue
         if effect in ("add_core", "state_flag", "clear_state_flag"):
             key = {"add_core": "add_core_of", "state_flag": "set_state_flag", "clear_state_flag": "clr_state_flag"}[effect]
             if effect == "add_core" and ec.tags and item["value"] not in ec.tags:
@@ -490,6 +545,13 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       state_flag_days: { flag, days }     -> has_state_flag = { flag days > N }
       stability_below: 0.4                -> has_stability < 0.4
       divisions_at_least: 12              -> has_army_size = { size > 11 }
+      factories_at_least: 60              -> num_of_factories > 59
+      tech: X                             -> has_tech = X (validada contra el árbol)
+      manpower_at_least: 500000           -> has_manpower > 499999
+      war_support_at_least: 0.6           -> has_war_support > 0.6
+      equipment_at_least: {type, amount}  -> has_equipment = { type > amount-1 }
+      date_after: "2105.1.1"              -> date > 2105.1.1
+      capitulated: true                   -> has_capitulated
       controls_state: [nombres]           -> controls_state (región por nombre)
       war_with: TAG                       -> has_war_with
       controls_all: [[nombres], ..]       -> controla todas esas regiones
@@ -598,6 +660,27 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "coastal":
             block.add("is_coastal", bool(value))
             triggers_used.setdefault("is_coastal", owner)
+        elif key == "factories_at_least":
+            block.add("num_of_factories", Compare(">", int(value) - 1))
+            triggers_used.setdefault("num_of_factories", owner)
+        elif key == "tech":
+            block.add("has_tech", value)
+            triggers_used.setdefault("has_tech", owner)
+        elif key == "manpower_at_least":
+            block.add("has_manpower", Compare(">", int(value) - 1))
+            triggers_used.setdefault("has_manpower", owner)
+        elif key == "war_support_at_least":
+            block.add("has_war_support", Compare(">", float(value)))
+            triggers_used.setdefault("has_war_support", owner)
+        elif key == "equipment_at_least":
+            block.add("has_equipment", Block([(value["type"], Compare(">", int(value["amount"]) - 1))]))
+            triggers_used.setdefault("has_equipment", owner)
+        elif key == "date_after":
+            block.add("date", Compare(">", str(value)))
+            triggers_used.setdefault("date", owner)
+        elif key == "capitulated":
+            block.add("has_capitulated", bool(value))
+            triggers_used.setdefault("has_capitulated", owner)
         elif key == "divisions_at_least":
             # has_army_size = { size > N-1 }: cuenta divisiones de tierra
             block.add("has_army_size", Block([("size", Compare(">", int(value) - 1))]))

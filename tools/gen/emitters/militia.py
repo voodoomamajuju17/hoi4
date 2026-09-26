@@ -65,7 +65,7 @@ def emit(ctx: BuildContext) -> None:
         placed = 0
         mil = (ctx.spec.raw.get("military") or {}).get("militia", {}) or {}
         per = float(mil.get("states_per_division", 0) or 0)
-        per_country = int(mil.get("per_country", 0) or 0)
+        per_country = int((mil.get("per_country_overrides") or {}).get(tag, mil.get("per_country", 0)) or 0)
         if per_country:
             # Una cantidad fija por país, en el territorio más poblado.
             blobs = [max(blobs, key=lambda b: sum(by_state[sid].manpower for sid in b))]

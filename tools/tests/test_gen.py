@@ -1130,6 +1130,21 @@ def test_ai() -> None:
             walk(yaml.safe_load(f.read_text(encoding="utf-8")))
         missing = sorted(used - set(raw_dec["variable_names"]))
         check("tooltips: toda variable que se suma tiene nombre (o hidden)", not missing, str(missing))
+        cap = " ".join((mod / "common/on_actions/03_meganations_capitulation.txt").read_text().split())
+        check("Emiratos: cuando capitulan en guerra con Roma, Roma decide", "on_capitulation" in cap
+              and "tag = ZWM NRE = { has_war_with = ZWM }" in cap and "country_event = meganations_nre.50" in cap, cap[-400:])
+        nre_ev = " ".join((mod / "events/meganations_nre.txt").read_text().split())
+        e50 = nre_ev[nre_ev.index("id = meganations_nre.50 title"):][:2500]
+        check("Emiratos: anexar, provincia cliente o tomar la costa", "annex_country" in e50 and "puppet = ZWM" in e50
+              and "APF" not in e50[:0] and "NRE = { transfer_state = PREV }" in e50, e50[:800])
+        check("Emiratos: anexar dispara las exigencias 30 dias despues", "id = meganations_nre.51 days = 30" in e50
+              and "id = meganations_nre.54 days = 39" in e50)
+        check("Emiratos: opcion que no choca con la clave del texto (.d)", "name = meganations_nre.50.d" not in e50)
+        e82 = nre_ev[nre_ev.index("id = meganations_nre.82 title"):][:900]
+        check("Emiratos: si Roma se niega, el vecino declara la guerra y se envalentona",
+              "declare_war_on = { target = NRE type = take_state" in e82 and "APF_liberar_los_emiratos days = 182" in e82, e82)
+        e61 = nre_ev[nre_ev.index("id = meganations_nre.61 title"):][:900]
+        check("Emiratos: la Comuna pide que Roma marche contra Eurasia", "declare_war_on = { target = ZWE" in e61, e61)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
@@ -1435,7 +1450,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1444,7 +1459,7 @@ def test_vanilla_validation() -> None:
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
-            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip\n"
+            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

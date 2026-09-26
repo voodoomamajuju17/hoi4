@@ -2518,6 +2518,397 @@ namespaces:
         - {effect: run, value: NRE_recalcular_satelites}
         ai_chance: 40
       src: user_design
+    - id: 50
+      trigger:
+        capitulation: {loser: ZWM}
+      picture: GFX_report_event_generic_rally
+      title: {english: The Emirates Have Fallen, spanish: Cayeron los Emiratos}
+      desc:
+        english: 'The last emir has surrendered his sword to a centurion. The desert is silent, and the Senate asks the only question that matters:
+          what does Rome do with it?'
+        spanish: 'El último emir le entregó su espada a un centurión. El desierto está en silencio, y el Senado hace la única pregunta que importa:
+          ¿qué hace Roma con él?'
+      options:
+      - name: {english: Annex it all. The desert is Roman., spanish: Anexarlo todo. El desierto es romano.}
+        effects:
+        - {effect: annex, target: ZWM}
+        - {effect: flag, value: NRE_emiratos_anexados}
+        - effect: if
+          when: {country_exists: ZST}
+          then:
+          - {effect: event, id: meganations_nre.51, days: 30, target: ZST}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: event, id: meganations_nre.52, days: 33, target: ASC}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_nre.53, days: 36, target: APF}
+        - effect: if
+          when: {country_exists: ZWE}
+          then:
+          - {effect: event, id: meganations_nre.54, days: 39, target: ZWE}
+        when: {country_exists: ZWM}
+        ai_chance: 55
+      - name:
+          english: 'A client province: they rule, we collect.'
+          spanish: 'Una provincia cliente: ellos gobiernan, nosotros cobramos.'
+        effects:
+        - {effect: white_peace, value: ZWM}
+        - {effect: puppet, value: ZWM}
+        - {effect: add_stability, value: 0.03}
+        when: {country_exists: ZWM}
+        ai_chance: 30
+      - name: {english: Take the coast and sign the peace., spanish: Tomar la costa y firmar la paz.}
+        effects:
+        - effect: scope
+          target: ZWM
+          effects:
+          - effect: states
+            pick: every
+            when: {coastal: true}
+            effects:
+            - {effect: transfer_to, value: NRE}
+        - {effect: white_peace, value: ZWM}
+        when: {country_exists: ZWM}
+        ai_chance: 15
+      - name:
+          english: The peace treaty already gave us the desert.
+          spanish: El tratado de paz ya nos dio el desierto.
+        effects:
+        - {effect: flag, value: NRE_emiratos_anexados}
+        - effect: if
+          when: {country_exists: ZST}
+          then:
+          - {effect: event, id: meganations_nre.51, days: 30, target: ZST}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: event, id: meganations_nre.52, days: 33, target: ASC}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_nre.53, days: 36, target: APF}
+        - effect: if
+          when: {country_exists: ZWE}
+          then:
+          - {effect: event, id: meganations_nre.54, days: 39, target: ZWE}
+        when:
+          not: {country_exists: ZWM}
+        ai_chance: 100
+      src: user_design
+    - id: 51
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Swallows the Emirates, spanish: Roma se Tragó los Emiratos}
+      desc:
+        english: 'The Roman eagle now flies from the Gulf to the Caucasus. Our council says Rome cannot be allowed to take everything for free. The
+          Steppe wants rifles: 3,000 sets of infantry equipment, now.'
+        spanish: 'El águila romana vuela ahora del Golfo al Cáucaso. Nuestro consejo dice que no se puede dejar que Roma se lleve todo gratis. La
+          Estepa quiere fusiles: 3.000 equipos de infantería, ya.'
+      options:
+      - name: {english: 'Demand our price, or war.', spanish: 'Exigir nuestro precio, o la guerra.'}
+        effects:
+        - {effect: event, id: meganations_nre.60, days: 1, target: NRE}
+        ai_chance: 85
+      - name: {english: Let Rome choke on the sand., spanish: Que Roma se atragante con la arena.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 15
+      src: user_design
+    - id: 60
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: The Steppe Directorate Demands Concessions
+        spanish: El Directorio de la Estepa Exige Concesiones
+      desc:
+        english: 'An envoy has arrived with a list and a deadline. The Steppe wants rifles: 3,000 sets of infantry equipment, now. Refuse, and they
+          march ''to free the Emirates''.'
+        spanish: 'Llegó un enviado con una lista y un plazo. La Estepa quiere fusiles: 3.000 equipos de infantería, ya. Si nos negamos, marchan ''para
+          liberar los Emiratos''.'
+      options:
+      - name: {english: Pay. Peace is cheaper than war., spanish: Pagar. La paz sale más barata que la guerra.}
+        effects:
+        - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: ZST}
+        - {effect: opinion, target: ZST, modifier: meganations_concesion}
+        - {effect: event, id: meganations_nre.70, days: 1, target: ZST}
+        ai_chance: 55
+      - name: {english: Rome pays no one. Let them come., spanish: Roma no le paga a nadie. Que vengan.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: event, id: meganations_nre.80, days: 1, target: ZST}
+        ai_chance: 45
+      src: user_design
+    - id: 70
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Pays, spanish: Roma Paga}
+      desc:
+        english: The Senate has agreed to our terms. The legions stay in their camps, and so do we. For now.
+        spanish: El Senado aceptó nuestras condiciones. Las legiones se quedan en sus campamentos, y nosotros en los nuestros. Por ahora.
+      options:
+      - name: {english: A good deal., spanish: Un buen trato.}
+        effects:
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+        - {effect: add_stability, value: 0.02}
+      src: user_design
+    - id: 80
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Refuses, spanish: Roma se Niega}
+      desc:
+        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+      options:
+      - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
+        effects:
+        - {effect: declare_war, target: NRE, type: take_state, territory_of: ZWM}
+        - {effect: timed_idea, idea: ZST_liberar_los_emiratos, days: 182}
+        ai_chance: 90
+      - name: {english: We cannot afford another war., spanish: No podemos pagar otra guerra.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 10
+      src: user_design
+    - id: 52
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Swallows the Emirates, spanish: Roma se Tragó los Emiratos}
+      desc:
+        english: The Roman eagle now flies from the Gulf to the Caucasus. Our council says Rome cannot be allowed to take everything for free. The
+          Commune wants Rome's legions in Eurasia, fighting the warlords at its side.
+        spanish: El águila romana vuela ahora del Golfo al Cáucaso. Nuestro consejo dice que no se puede dejar que Roma se lleve todo gratis. La Comuna
+          quiere a las legiones de Roma en Eurasia, peleando contra los señores de la guerra a su lado.
+      options:
+      - name: {english: 'Demand our price, or war.', spanish: 'Exigir nuestro precio, o la guerra.'}
+        effects:
+        - {effect: event, id: meganations_nre.61, days: 1, target: NRE}
+        ai_chance: 85
+      - name: {english: Let Rome choke on the sand., spanish: Que Roma se atragante con la arena.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 15
+      src: user_design
+    - id: 61
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: The Automated Commune Demands Concessions
+        spanish: La Comuna Automatizada Exige Concesiones
+      desc:
+        english: An envoy has arrived with a list and a deadline. The Commune wants Rome's legions in Eurasia, fighting the warlords at its side.
+          Refuse, and they march 'to free the Emirates'.
+        spanish: Llegó un enviado con una lista y un plazo. La Comuna quiere a las legiones de Roma en Eurasia, peleando contra los señores de la
+          guerra a su lado. Si nos negamos, marchan 'para liberar los Emiratos'.
+      options:
+      - name: {english: Pay. Peace is cheaper than war., spanish: Pagar. La paz sale más barata que la guerra.}
+        effects:
+        - effect: if
+          when: {country_exists: ZWE}
+          then:
+          - {effect: declare_war, target: ZWE, type: annex_everything}
+          else:
+          - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: ASC}
+        - {effect: opinion, target: ASC, modifier: meganations_concesion}
+        - {effect: event, id: meganations_nre.71, days: 1, target: ASC}
+        ai_chance: 55
+      - name: {english: Rome pays no one. Let them come., spanish: Roma no le paga a nadie. Que vengan.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: event, id: meganations_nre.81, days: 1, target: ASC}
+        ai_chance: 45
+      src: user_design
+    - id: 71
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Pays, spanish: Roma Paga}
+      desc:
+        english: The Senate has agreed to our terms. The legions stay in their camps, and so do we. For now.
+        spanish: El Senado aceptó nuestras condiciones. Las legiones se quedan en sus campamentos, y nosotros en los nuestros. Por ahora.
+      options:
+      - name: {english: A good deal., spanish: Un buen trato.}
+        effects:
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+        - {effect: add_stability, value: 0.02}
+      src: user_design
+    - id: 81
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Refuses, spanish: Roma se Niega}
+      desc:
+        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+      options:
+      - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
+        effects:
+        - {effect: declare_war, target: NRE, type: take_state, territory_of: ZWM}
+        - {effect: timed_idea, idea: ASC_liberar_los_emiratos, days: 182}
+        ai_chance: 90
+      - name: {english: We cannot afford another war., spanish: No podemos pagar otra guerra.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 10
+      src: user_design
+    - id: 53
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Swallows the Emirates, spanish: Roma se Tragó los Emiratos}
+      desc:
+        english: 'The Roman eagle now flies from the Gulf to the Caucasus. Our council says Rome cannot be allowed to take everything for free. The
+          Federation wants its share of the desert: two regions of the old Emirates.'
+        spanish: 'El águila romana vuela ahora del Golfo al Cáucaso. Nuestro consejo dice que no se puede dejar que Roma se lleve todo gratis. La
+          Federación quiere su parte del desierto: dos regiones de los viejos Emiratos.'
+      options:
+      - name: {english: 'Demand our price, or war.', spanish: 'Exigir nuestro precio, o la guerra.'}
+        effects:
+        - {effect: event, id: meganations_nre.62, days: 1, target: NRE}
+        ai_chance: 85
+      - name: {english: Let Rome choke on the sand., spanish: Que Roma se atragante con la arena.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 15
+      src: user_design
+    - id: 62
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: The African Peoples' Federation Demands Concessions
+        spanish: La Federación de los Pueblos Africanos Exige Concesiones
+      desc:
+        english: 'An envoy has arrived with a list and a deadline. The Federation wants its share of the desert: two regions of the old Emirates.
+          Refuse, and they march ''to free the Emirates''.'
+        spanish: 'Llegó un enviado con una lista y un plazo. La Federación quiere su parte del desierto: dos regiones de los viejos Emiratos. Si nos
+          negamos, marchan ''para liberar los Emiratos''.'
+      options:
+      - name: {english: Pay. Peace is cheaper than war., spanish: Pagar. La paz sale más barata que la guerra.}
+        effects:
+        - effect: states
+          pick: random
+          when: {core_of: ZWM}
+          effects:
+          - {effect: transfer_to, value: APF}
+        - effect: states
+          pick: random
+          when: {core_of: ZWM}
+          effects:
+          - {effect: transfer_to, value: APF}
+        - {effect: opinion, target: APF, modifier: meganations_concesion}
+        - {effect: event, id: meganations_nre.72, days: 1, target: APF}
+        ai_chance: 55
+      - name: {english: Rome pays no one. Let them come., spanish: Roma no le paga a nadie. Que vengan.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: event, id: meganations_nre.82, days: 1, target: APF}
+        ai_chance: 45
+      src: user_design
+    - id: 72
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Pays, spanish: Roma Paga}
+      desc:
+        english: The Senate has agreed to our terms. The legions stay in their camps, and so do we. For now.
+        spanish: El Senado aceptó nuestras condiciones. Las legiones se quedan en sus campamentos, y nosotros en los nuestros. Por ahora.
+      options:
+      - name: {english: A good deal., spanish: Un buen trato.}
+        effects:
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+        - {effect: add_stability, value: 0.02}
+      src: user_design
+    - id: 82
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Refuses, spanish: Roma se Niega}
+      desc:
+        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+      options:
+      - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
+        effects:
+        - {effect: declare_war, target: NRE, type: take_state, territory_of: ZWM}
+        - {effect: timed_idea, idea: APF_liberar_los_emiratos, days: 182}
+        ai_chance: 90
+      - name: {english: We cannot afford another war., spanish: No podemos pagar otra guerra.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 10
+      src: user_design
+    - id: 54
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Swallows the Emirates, spanish: Roma se Tragó los Emiratos}
+      desc:
+        english: 'The Roman eagle now flies from the Gulf to the Caucasus. Our council says Rome cannot be allowed to take everything for free. The
+          warlords of the north want tribute: 2,000 sets of equipment and gold for their silence.'
+        spanish: 'El águila romana vuela ahora del Golfo al Cáucaso. Nuestro consejo dice que no se puede dejar que Roma se lleve todo gratis. Los
+          señores del norte quieren tributo: 2.000 equipos y oro por su silencio.'
+      options:
+      - name: {english: 'Demand our price, or war.', spanish: 'Exigir nuestro precio, o la guerra.'}
+        effects:
+        - {effect: event, id: meganations_nre.63, days: 1, target: NRE}
+        ai_chance: 85
+      - name: {english: Let Rome choke on the sand., spanish: Que Roma se atragante con la arena.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 15
+      src: user_design
+    - id: 63
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: The Warlords of Eurasia Demands Concessions
+        spanish: Los Señores de la Guerra de Eurasia Exige Concesiones
+      desc:
+        english: 'An envoy has arrived with a list and a deadline. The warlords of the north want tribute: 2,000 sets of equipment and gold for their
+          silence. Refuse, and they march ''to free the Emirates''.'
+        spanish: 'Llegó un enviado con una lista y un plazo. Los señores del norte quieren tributo: 2.000 equipos y oro por su silencio. Si nos negamos,
+          marchan ''para liberar los Emiratos''.'
+      options:
+      - name: {english: Pay. Peace is cheaper than war., spanish: Pagar. La paz sale más barata que la guerra.}
+        effects:
+        - {effect: send_equipment, type: infantry_equipment, amount: 2000, target: ZWE}
+        - {effect: add_political_power, value: -50}
+        - {effect: opinion, target: ZWE, modifier: meganations_concesion}
+        - {effect: event, id: meganations_nre.73, days: 1, target: ZWE}
+        ai_chance: 55
+      - name: {english: Rome pays no one. Let them come., spanish: Roma no le paga a nadie. Que vengan.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: event, id: meganations_nre.83, days: 1, target: ZWE}
+        ai_chance: 45
+      src: user_design
+    - id: 73
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Pays, spanish: Roma Paga}
+      desc:
+        english: The Senate has agreed to our terms. The legions stay in their camps, and so do we. For now.
+        spanish: El Senado aceptó nuestras condiciones. Las legiones se quedan en sus campamentos, y nosotros en los nuestros. Por ahora.
+      options:
+      - name: {english: A good deal., spanish: Un buen trato.}
+        effects:
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+        - {effect: add_stability, value: 0.02}
+      src: user_design
+    - id: 83
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Refuses, spanish: Roma se Niega}
+      desc:
+        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+      options:
+      - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
+        effects:
+        - {effect: declare_war, target: NRE, type: take_state, territory_of: ZWM}
+        - {effect: timed_idea, idea: ZWE_liberar_los_emiratos, days: 182}
+        ai_chance: 90
+      - name: {english: We cannot afford another war., spanish: No podemos pagar otra guerra.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 10
+      src: user_design
   # ===========================================================================
   meganations_zwe:
     country: ZWE
