@@ -1108,6 +1108,28 @@ def test_ai() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
+        nas_tree = " ".join((mod / "common/national_focus/NAS_focus.txt").read_text().split())
+        chicha = nas_tree[nas_tree.index("id = NAS_la_chicha_del_sol"):][:900]
+        check("tooltips: un foco que solo suma variables muestra que suma", "custom_effect_tooltip = MN_tt_NAS_granjas_p1" in chicha, chicha)
+        tips = (mod / "localisation/spanish/meganations_tooltips_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("tooltips: con nombre legible", 'MN_tt_NAS_granjas_p1:0 "§YGranjas del Sol§!: +1"' in tips, tips[:300])
+        check("tooltips: el Control del Monte sigue secreto", "EFE_control_del_monte" not in tips)
+        import yaml
+        raw_dec = yaml.safe_load((REPO_ROOT / "spec/14_decisions.yaml").read_text(encoding="utf-8"))
+        used = set()
+        def walk(x):
+            if isinstance(x, dict):
+                if x.get("effect") == "add_variable":
+                    used.add(x["var"])
+                for v in x.values():
+                    walk(v)
+            elif isinstance(x, list):
+                for v in x:
+                    walk(v)
+        for f in (REPO_ROOT / "spec").glob("*.yaml"):
+            walk(yaml.safe_load(f.read_text(encoding="utf-8")))
+        missing = sorted(used - set(raw_dec["variable_names"]))
+        check("tooltips: toda variable que se suma tiene nombre (o hidden)", not missing, str(missing))
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
@@ -1422,7 +1444,7 @@ def test_vanilla_validation() -> None:
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
-            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country\n"
+            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

@@ -51,6 +51,40 @@ def use_states(mapping: dict[str, int] | None) -> None:
     _STATES = mapping
 
 
+# Nombres legibles de las variables (14_decisions.yaml -> variable_names).
+# HOI4 no muestra add_to_variable en los tooltips: un foco que solo suma una
+# variable decía "Este enfoque no tiene efecto". Cada add_variable con nombre
+# lleva un custom_effect_tooltip "Granjas del Sol: +1".
+_VAR_NAMES: dict[str, dict] = {}
+TOOLTIPS: dict[str, tuple[str, str]] = {}
+
+
+def use_variable_names(spec_raw: dict) -> None:
+    global _VAR_NAMES
+    _VAR_NAMES = (spec_raw.get("decisions") or {}).get("variable_names") or {}
+
+
+def _variable_tooltip(var: str, value) -> str | None:
+    name = _VAR_NAMES.get(var)
+    if not name or name.get("hidden") or not isinstance(value, (int, float)) or isinstance(value, bool):
+        return None
+    num = float(value)
+    shown = f"{num:+g}".replace(".", ",")
+    key = f"MN_tt_{var}_{'m' if num < 0 else 'p'}{abs(num):g}".replace(".", "_")
+    TOOLTIPS[key] = (f"§Y{name['english']}§!: {f'{num:+g}'}", f"§Y{name['spanish']}§!: {shown}")
+    return key
+
+
+def flush_tooltips(ctx) -> None:
+    """Define la localisation de los tooltips usados hasta ahora (una vez cada uno)."""
+    done = ctx.data.setdefault("tooltips_defined", set())
+    for key, (en, es) in sorted(TOOLTIPS.items()):
+        if key in done:
+            continue
+        ctx.loc.define_and_reference(key, en=en, es=es, file="meganations_tooltips", origin="tooltips")
+        done.add(key)
+
+
 def _norm(name: str) -> str:
     text = unicodedata.normalize("NFKD", name)
     text = "".join(ch for ch in text if not unicodedata.combining(ch))
@@ -168,6 +202,11 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("add_building_construction", owner)
             continue
         if effect in ("add_variable", "set_variable"):
+            if effect == "add_variable":
+                tip = _variable_tooltip(item["var"], item["value"])
+                if tip:
+                    block.add("custom_effect_tooltip", tip)
+                    effects_used.setdefault("custom_effect_tooltip", owner)
             inner = Block()
             inner.add("var", item["var"])
             inner.add("value", item["value"])

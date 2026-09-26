@@ -31,7 +31,13 @@ CATEGORY_FIELDS = ("icon", "allowed")
 
 
 def emit(ctx: BuildContext) -> None:
+    _emit(ctx)
+    effects_mod.flush_tooltips(ctx)
+
+
+def _emit(ctx: BuildContext) -> None:
     effects_mod.use_states(ctx.data.get("state_ids_by_name"))
+    effects_mod.use_variable_names(ctx.spec.raw)
     categories = (ctx.spec.raw.get("decisions") or {}).get("categories") or []
     scripted = (ctx.spec.raw.get("decisions") or {}).get("scripted_effects") or []
     if not categories and not scripted:

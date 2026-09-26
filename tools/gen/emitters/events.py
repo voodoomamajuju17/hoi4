@@ -53,7 +53,13 @@ def all_event_ids(ctx: BuildContext) -> set[str]:
 
 
 def emit(ctx: BuildContext) -> None:
+    _emit(ctx)
+    effects_mod.flush_tooltips(ctx)
+
+
+def _emit(ctx: BuildContext) -> None:
     effects_mod.use_states(ctx.data.get("state_ids_by_name"))
+    effects_mod.use_variable_names(ctx.spec.raw)
     known_ideas = ideas_mod.all_idea_ids(ctx)
     icons = ctx.vanilla.gfx_names() if ctx.vanilla else None
     effects_used: dict[str, str] = {}
