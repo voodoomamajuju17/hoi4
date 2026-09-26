@@ -71,6 +71,8 @@ def text(value) -> str | None:
     """Desenvuelve un valor a str plano, venga entrecomillado o no."""
     if value is None:
         return None
+    if isinstance(value, Compare):
+        return text(value.value)
     if isinstance(value, Quoted):
         return str(value.text)
     if isinstance(value, Block):
@@ -215,7 +217,7 @@ _TOKEN_RE = re.compile(
       \#[^\n]*                 # comentario
     | "(?:[^"\\]|\\.)*"        # string entre comillas
     | [{}]                     # llaves
-    | [<>!]?=|<|>              # operadores
+    | ==|[<>!]?=|<|>           # operadores
     | [^\s{}=<>#"]+            # token pelado
     """,
     re.VERBOSE,
@@ -229,9 +231,10 @@ def tokenize(text: str) -> list[str]:
 def parse(text: str) -> Block:
     """Parsea Paradox script a un Block.
 
-    Deliberadamente tolerante: acepta los operadores de comparación (`<`, `>=`)
-    tratándolos como `=`, porque no necesitamos evaluarlos, solo preservarlos al
-    releer archivos vanilla.
+    Los operadores de comparación (`<`, `>=`, `==`...) se conservan como
+    Compare: al reescribir un archivo vanilla la condición tiene que quedar
+    igual (antes se volvían `=` y `==` rompía el archivo: error.log 2026-09-26,
+    "Malformed token: 16" en history/states/282-Japan.txt).
     """
     tokens = tokenize(text)
     pos = 0
@@ -269,9 +272,14 @@ def parse(text: str) -> Block:
                 pos += 2
                 if pos >= len(tokens):
                     raise ValueError(f"'{key} =' sin valor")
+                op = tokens[pos - 1]
                 if tokens[pos] == "{":
                     pos += 1
                     b.add(key, parse_block(depth + 1))
+                elif op != "=":
+                    # se conserva el operador: `date > 2100.1.1` no es `date = 2100.1.1`
+                    b.add(key, Compare(op, unquote(tokens[pos])))
+                    pos += 1
                 else:
                     b.add(key, unquote(tokens[pos]))
                     pos += 1

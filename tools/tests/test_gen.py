@@ -51,6 +51,11 @@ def section(title: str) -> None:
 
 def test_pdx_roundtrip() -> None:
     section("pdx: parse y render")
+    for src, want in (("a = { b < 16 }", "b < 16"), ("a = { b == 16 }", "b == 16"),
+                      ("a = { date > 1936.1.1 }", "date > 1936.1.1"), ("a = { x >= 2 y <= 3 z != 4 }", "x >= 2")):
+        out = pdx.render(pdx.parse(src))
+        check(f"el operador sobrevive: {src}", want in out, out)
+    check("text() de una comparacion da el valor", pdx.text(pdx.parse("b < 16").get("b")) == "16")
 
     text = """
     # comentario
@@ -1103,6 +1108,11 @@ def test_ai() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
+        mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
+        check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
+        check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
+        check("Monroe: el evento de limpieza corre cada semana", "days = 7" in (mod / "events/meganations_limpieza.txt").read_text())
+        check("Monroe: el reporte dice de donde salia", any("01_monroe_fixture" in n for n in ctx.notes), str(ctx.notes[-5:]))
         ai = (mod / "common/ai_strategy/meganations_ai.txt").read_text()
         root = pdx.parse(ai)
         plan = root.get("MEGANATIONS_ASC_la_guerra_del_este")
@@ -1167,8 +1177,8 @@ def test_ai() -> None:
               'infantry_weapons2_short:0 "Fusiles de Bobina Mejorados"' in names, names[:600])
         check("un nombre del juego con año escrito corre a 2100+",
               'other_tech:0 "Tech of 2100"' in names and 'other_tech_short:0 "2100 tech"' in names, names)
-        check("sin espiritus vanilla que sacar en el fixture: no se escribe la limpieza",
-              not (mod / "events/meganations_limpieza.txt").exists())
+        check("el fixture reparte la Doctrina Monroe: se escribe la limpieza",
+              (mod / "events/meganations_limpieza.txt").exists())
         gfx = (mod / "interface/meganations_NRE_goals.gfx").read_text()
         check("iconos del pack registrados con brillo",
               "GFX_focus_2100_nre_09_legio_i_italica" in gfx and "GFX_focus_2100_nre_09_legio_i_italica_shine" in gfx)
@@ -1403,7 +1413,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1412,7 +1422,7 @@ def test_vanilla_validation() -> None:
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
-            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable\n"
+            "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

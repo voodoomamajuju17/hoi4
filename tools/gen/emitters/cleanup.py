@@ -50,6 +50,7 @@ def emit_spirits(ctx: BuildContext) -> None:
     spirits = sorted(ctx.vanilla.country_spirits() & ctx.vanilla.ideas_given_by_scripts())
     if not spirits:
         return
+    _neutralize_scripts(ctx, spirits)
     eff = Block()
     for idea in spirits:
         b = Block()
@@ -68,7 +69,7 @@ def emit_spirits(ctx: BuildContext) -> None:
     imm.add("MEGANATIONS_quitar_espiritus_vanilla", True)
     again = Block()
     again.add("id", "meganations_limpieza.1")
-    again.add("days", 30)
+    again.add("days", 7)
     imm.add("country_event", again)
     ev.add("immediate", imm)
     events = Block()
@@ -99,3 +100,43 @@ def emit_spirits(ctx: BuildContext) -> None:
 
 
 SOURCE_SPIRITS = "espiritus vanilla que el juego reparte por region o continente"
+
+
+def _neutralize_scripts(ctx: BuildContext, spirits: list[str]) -> None:
+    """Sacar el espíritu una vez por semana no alcanza si un script del juego
+    lo vuelve a dar (el usuario siguió viendo la Doctrina Monroe). Acá se
+    copian los scripts genéricos del juego (on_actions, scripted_effects) sin
+    los add_ideas / add_timed_idea de esos espíritus, con el mismo nombre de
+    archivo para que pisen al original. En events/ solo se tocan los que dan
+    la Doctrina Monroe (los demás eventos son de países que en 2100 no existen)."""
+    names = "|".join(re.escape(s) for s in spirits)
+    single = re.compile(rf"\badd_ideas\s*=\s*(?:{names})\b")
+    timed = re.compile(rf"\badd_timed_idea\s*=\s*\{{[^{{}}]*?\bidea\s*=\s*(?:{names})\b[^{{}}]*\}}")
+    group = re.compile(r"\badd_ideas\s*=\s*\{([^{}]*)\}")
+    token = re.compile(rf"(?<![A-Za-z0-9_.])(?:{names})(?![A-Za-z0-9_.])")
+    written = {p.resolve() for p in ctx.written}
+    touched, monroe_files = [], []
+    for folder in ("common/on_actions", "common/scripted_effects", "events"):
+        for path in sorted((ctx.vanilla.root / folder).glob("*.txt")):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            if folder == "events" and "monroe" not in text.lower():
+                continue
+            new = single.sub("", text)
+            new = timed.sub("", new)
+            new = group.sub(lambda m: "add_ideas = {" + token.sub("", m.group(1)) + "}", new)
+            if new == text:
+                continue
+            rel = f"{folder}/{path.name}"
+            if (ctx.mod_root / rel).resolve() in written:
+                continue
+            if "monroe" in text.lower():
+                monroe_files.append(rel)
+            ctx.write_text(rel, banner_for(f"copia de {rel} del juego sin los espiritus de paises que en 2100 no existen") + new)
+            touched.append(rel)
+    if touched:
+        ctx.note(f"limpieza: {len(touched)} scripts del juego ya no reparten espiritus vanilla"
+                 + (f" (la Doctrina Monroe salia de: {', '.join(monroe_files)})" if monroe_files else ""))
+

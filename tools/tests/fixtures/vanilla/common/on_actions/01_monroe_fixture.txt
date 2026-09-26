@@ -1,0 +1,10 @@
+# fixture: un script generico del juego que reparte la Doctrina Monroe
+on_actions = {
+	on_monthly = {
+		effect = {
+			if = { limit = { is_in_americas = yes } add_ideas = USA_monroe_doctrine_idea }
+			add_timed_idea = { idea = USA_monroe_doctrine_idea days = 30 }
+			add_ideas = { USA_monroe_doctrine_idea other_generic_idea }
+		}
+	}
+}
