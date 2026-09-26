@@ -11,6 +11,47 @@
 defaults:
   satellites: {protect: 150, befriend: 100, support: 100}
   rivals: {antagonize: 30}
+# -----------------------------------------------------------------------------
+# IA militar (2026-09-27). Todos arrancan con 2 divisiones y sin investigar:
+# la IA del juego base no sabe qué hacer en ese mundo. Acá se le dice qué
+# tropas armar según la especialidad de cada potencia (13_military), qué
+# investigar (las tecnologías que siguen en su especialidad) y cuánta
+# industria poner en armas. Los tipos y los ids (infantry, armor...) se
+# validan contra los que usa el juego instalado; los que no existen se omiten
+# con aviso en el reporte.
+# -----------------------------------------------------------------------------
+military:
+  src: user_decision
+  research_value: 60
+  peace:
+  - {type: added_military_to_civilian_factory_ratio, value: 25}
+  war:
+  - {type: added_military_to_civilian_factory_ratio, value: 75}
+  by_country:
+    EFE:    # blindados de Bioacero
+    - {type: role_ratio, id: armor, value: 25}
+    - {type: equipment_production_factor, id: armor, value: 25}
+    NRE:    # legiones de infantería con artillería
+    - {type: role_ratio, id: infantry, value: 60}
+    - {type: equipment_production_factor, id: artillery, value: 20}
+    SHD:    # la masa y la artillería del río
+    - {type: role_ratio, id: infantry, value: 65}
+    - {type: equipment_production_factor, id: artillery, value: 30}
+    HSN:    # infantería de marina y flota
+    - {type: role_ratio, id: marines, value: 25}
+    - {type: dockyard_to_military_factory_ratio, value: 60}
+    NAS:    # montaña y cóndores
+    - {type: role_ratio, id: mountaineers, value: 25}
+    - {type: equipment_production_factor, id: fighter, value: 20}
+    ASC:    # ejército móvil del Plan
+    - {type: role_ratio, id: mobile, value: 25}
+    - {type: equipment_production_factor, id: motorized, value: 20}
+    FCU:    # contratistas motorizados
+    - {type: role_ratio, id: mobile, value: 20}
+    - {type: equipment_production_factor, id: motorized, value: 20}
+    APF:    # milicias populares
+    - {type: role_ratio, id: infantry, value: 70}
+
 plans:
 - id: EFE_el_amazonas
   country: EFE
@@ -18,6 +59,11 @@ plans:
   strategies:
   - {type: conquer, target: ZWB, value: 200}
   - {type: prepare_for_war, target: ZWB, value: 100}
+- id: EFE_el_amazonas_declarar
+  country: EFE
+  lore: 'Declara solo con un ejército de verdad (2026-09-27): con 2 divisiones no se invade el Amazonas.'
+  enable: {divisions_at_least: 12}
+  strategies:
   - {type: declare_war, target: ZWB, value: 100}
 - id: ASC_la_guerra_del_este
   country: ASC
@@ -50,6 +96,11 @@ plans:
   enable: {flag: SHD_zhou}
   strategies:
   - {type: conquer, target: ZWI, value: 200}
+  - {type: prepare_for_war, target: ZWI, value: 100}
+- id: SHD_la_crecida_declarar
+  country: SHD
+  enable: {flag: SHD_zhou, divisions_at_least: 16}
+  strategies:
   - {type: declare_war, target: ZWI, value: 100}
 - id: APF_los_emiratos
   country: APF
@@ -61,6 +112,11 @@ plans:
   enable: {flag: APF_diallo}
   strategies:
   - {type: conquer, target: ZWM, value: 200}
+  - {type: prepare_for_war, target: ZWM, value: 100}
+- id: APF_la_marcha_declarar
+  country: APF
+  enable: {flag: APF_diallo, divisions_at_least: 12}
+  strategies:
   - {type: declare_war, target: ZWM, value: 100}
 - id: NAS_la_selva_del_sol
   country: NAS

@@ -12,3 +12,17 @@ FIXTURE_strategy = {
 	ai_strategy = { type = befriend id = ITA value = 100 }
 	ai_strategy = { type = support id = ITA value = 100 }
 }
+
+# fixture: estrategias militares (roles y equipo con sus ids reales)
+FIXTURE_military = {
+	allowed = { original_tag = GER }
+	enable = { always = yes }
+	abort = { always = no }
+	ai_strategy = { type = role_ratio id = infantry value = 50 }
+	ai_strategy = { type = role_ratio id = armor value = 20 }
+	ai_strategy = { type = role_ratio id = mobile value = 20 }
+	ai_strategy = { type = equipment_production_factor id = armor value = 25 }
+	ai_strategy = { type = equipment_production_factor id = artillery value = 25 }
+	ai_strategy = { type = added_military_to_civilian_factory_ratio value = 50 }
+	ai_strategy = { type = research_tech id = infantry_weapons value = 50 }
+}

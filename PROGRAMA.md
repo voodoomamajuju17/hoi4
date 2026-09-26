@@ -46,9 +46,9 @@ elementos también van por importancia.
 - [~] Congo: dueños dentro de bloques condicionales borrados + red de seguridad al arrancar
 - [ ] Ajustar con los números reales de `balance.txt` (objetivos de IC, pisos, tropas)
 - [ ] Decidir si la FCU necesita una penalización propia (hoy es la más fuerte en la práctica)
-- [~] IA: estrategias por meganación (a quién atacar y proteger: hecho); falta qué construir y plantillas
+- [~] IA: estrategias por meganación (a quién atacar y proteger); IA militar 2026-09-27: tropas según especialidad, investigación de su especialidad, industria en armas (más en guerra), declarar guerra solo con 12-16 divisiones
 - [ ] IA de la Anarquía: que se defienda sin atacar a lo loco
-- [ ] Satélites: nivel de autonomía por bloque y cómo se liberan o anexan
+- [~] Satélites: lealtad 0-100 por satélite con panel del señor (Ayuda / Tributo), espíritu vivo y rebeliones (2026-09-27); falta que se liberen
 - [ ] Revisar capitales provisorias de los satélites (hoy: la región con más población)
 
 ## 3. Identidad de las ocho meganaciones
@@ -131,8 +131,8 @@ eventos con ultimátum e IA con condiciones.
 
 ## 5. Satélites y Anarquía como gameplay
 
-- [ ] Árbol corto o panel de decisiones para cada satélite (independencia vs lealtad)
-- [ ] Señores de la guerra: eventos de raid, alianzas temporales, reunificación
+- [~] Panel de lealtad de los satélites (del lado del señor); falta el lado del satélite si se lo juega
+- [~] Señores de la guerra: saqueos a los vecinos, un Caudillo Supremo que unifica, tregua de caudillos en guerra (2026-09-27)
 - [ ] Liberar países de la Anarquía: qué pasa con una región conquistada
 - [~] Mecánicas v3 (2026-09-27): espíritus vivos con el bonus del momento, FCU y SHD de suma fija, APF más lenta y con tensión real, paneles que explican qué ganás, IA que corrige en vez de subir todo
 - [~] Conquistas con dilema: cada meganación, al tomar su región clave, elige proteger o explotar (evento + decisiones que se abren); más un evento de hito por mecánica

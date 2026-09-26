@@ -326,3 +326,25 @@ llega a 100 al toque y la tensión nunca sube".
   guerra, Economía con poco cómputo e Investigación con mucho; la APF deja de
   invertir con tensión alta; el NAS guarda luz; los Triunfos se usan en paz
   cuando falta Auctoritas.
+
+## IA militar, satélites y Anarquía (2026-09-27)
+
+- **IA militar** (`16_ai.yaml -> military`): cada meganación tiene un plan en
+  paz (25 de industria militar sobre civil, sus roles de división y la
+  investigación de lo que sigue en su especialidad: `ai_next_techs` de
+  `13_military`) y otro en guerra (75). Roles: EFE blindados, NRE y SHD
+  infantería con artillería, HSN marina y astilleros, NAS montaña y cazas,
+  ASC y FCU móviles, APF infantería. Tipos e ids se validan contra el juego
+  instalado. Declarar la guerra va en un plan aparte que pide 12-16
+  divisiones (`divisions_at_least`); prepararse, no.
+- **Lealtad de los satélites** (`14_decisions.yaml -> <TAG>_satelites_category`):
+  cada meganación guarda la lealtad de sus dos satélites (arranca en 60).
+  Cada mes −1 (−2 en guerra), +1 con estabilidad 60%+. 75+: +0,10 de poder
+  político por satélite; menos de 25: −0,10 y −3% de estabilidad, y 25% por
+  mes de *Descontento* (evento .40/.41: concesiones o mano dura). Ayuda
+  (+15, una fábrica en el satélite) y Tributo (−20; +60 PP y 15.000 hombres).
+- **Caudillos** (`<TAG>_pulso_caudillos`, eventos .2-.6 de cada Anarquía):
+  en paz 8% por mes de saqueo a un vecino (que elige perseguirlos o
+  aguantar); 3% por mes de un Caudillo Supremo (idea permanente: org,
+  ataque, estabilidad; avisa a los vecinos); en guerra 10% de Tregua de
+  Caudillos (90 días de defensa).

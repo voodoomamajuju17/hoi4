@@ -3394,6 +3394,1172 @@ categories:
       fire_only_once: true
       visible: {flag: NRE_conquista_explotar}
 
+  # Nuestros Satélites (2026-09-27): lealtad de cada satélite.
+  - id: EFE_satelites_category
+    country: EFE
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nSouthern Patagonia: [?EFE_lealtad_pta]\nYvytu Ykua Guasu: [?EFE_lealtad_yyg]\n\nRight now: political
+        power [?EFE_ef_sat_pp_ver] per day, stability [?EFE_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty falls 1 (2 if
+        you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power (+0.10 per
+        day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and builds them
+        a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nPatagonia Austral: [?EFE_lealtad_pta]\nYvytu Ykua Guasu: [?EFE_lealtad_yyg]\n\nEfecto ahora: poder
+        político [?EFE_ef_sat_pp_ver] por día, estabilidad [?EFE_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad baja 1 (2
+        si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10 por día
+        cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye una
+        fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: EFE_recalcular_satelites}
+    decisions:
+    - id: EFE_ayuda_pta
+      name: {english: Aid to Southern Patagonia (Loyalty +15), spanish: Ayuda a Patagonia Austral (Lealtad +15)}
+      desc:
+        english: Money, engineers and a new factory for Southern Patagonia. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Patagonia Austral. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: PTA}
+      effects:
+      - {effect: add_variable, var: EFE_lealtad_pta, value: 15}
+      - effect: scope
+        target: PTA
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: EFE_lealtad_pta, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: EFE_lealtad_pta, value: 70}
+      src: user_design
+    - id: EFE_tributo_pta
+      name:
+        english: Demand Tribute from Southern Patagonia (Loyalty -20)
+        spanish: Exigir Tributo a Patagonia Austral (Lealtad -20)
+      desc:
+        english: 'Southern Patagonia pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Patagonia Austral paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: PTA}
+      available:
+        variable_at_least: {var: EFE_lealtad_pta, value: 30}
+      effects:
+      - {effect: add_variable, var: EFE_lealtad_pta, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: PTA
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_lealtad_pta, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: EFE_lealtad_pta, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: EFE_ayuda_yyg
+      name: {english: Aid to Yvytu Ykua Guasu (Loyalty +15), spanish: Ayuda a Yvytu Ykua Guasu (Lealtad +15)}
+      desc:
+        english: Money, engineers and a new factory for Yvytu Ykua Guasu. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Yvytu Ykua Guasu. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: YYG}
+      effects:
+      - {effect: add_variable, var: EFE_lealtad_yyg, value: 15}
+      - effect: scope
+        target: YYG
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: EFE_lealtad_yyg, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: EFE_lealtad_yyg, value: 70}
+      src: user_design
+    - id: EFE_tributo_yyg
+      name:
+        english: Demand Tribute from Yvytu Ykua Guasu (Loyalty -20)
+        spanish: Exigir Tributo a Yvytu Ykua Guasu (Lealtad -20)
+      desc:
+        english: 'Yvytu Ykua Guasu pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Yvytu Ykua Guasu paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: YYG}
+      available:
+        variable_at_least: {var: EFE_lealtad_yyg, value: 30}
+      effects:
+      - {effect: add_variable, var: EFE_lealtad_yyg, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: YYG
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_lealtad_yyg, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: EFE_lealtad_yyg, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+  - id: FCU_satelites_category
+    country: FCU
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nNorthern Resource Zone: [?FCU_lealtad_znr]\nSouthern Economic Zone: [?FCU_lealtad_zse]\n\nRight
+        now: political power [?FCU_ef_sat_pp_ver] per day, stability [?FCU_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty
+        falls 1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power
+        (+0.10 per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and
+        builds them a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nZona de Recursos Boreal: [?FCU_lealtad_znr]\nZona Económica del Sur: [?FCU_lealtad_zse]\n\nEfecto
+        ahora: poder político [?FCU_ef_sat_pp_ver] por día, estabilidad [?FCU_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad
+        baja 1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10
+        por día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
+        una fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: FCU_recalcular_satelites}
+    decisions:
+    - id: FCU_ayuda_znr
+      name:
+        english: Aid to Northern Resource Zone (Loyalty +15)
+        spanish: Ayuda a Zona de Recursos Boreal (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Northern Resource Zone. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Zona de Recursos Boreal. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZNR}
+      effects:
+      - {effect: add_variable, var: FCU_lealtad_znr, value: 15}
+      - effect: scope
+        target: ZNR
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: FCU_lealtad_znr, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: FCU_lealtad_znr, value: 70}
+      src: user_design
+    - id: FCU_tributo_znr
+      name:
+        english: Demand Tribute from Northern Resource Zone (Loyalty -20)
+        spanish: Exigir Tributo a Zona de Recursos Boreal (Lealtad -20)
+      desc:
+        english: 'Northern Resource Zone pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Zona de Recursos Boreal paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZNR}
+      available:
+        variable_at_least: {var: FCU_lealtad_znr, value: 30}
+      effects:
+      - {effect: add_variable, var: FCU_lealtad_znr, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZNR
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: FCU_lealtad_znr, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: FCU_lealtad_znr, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: FCU_ayuda_zse
+      name:
+        english: Aid to Southern Economic Zone (Loyalty +15)
+        spanish: Ayuda a Zona Económica del Sur (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Southern Economic Zone. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Zona Económica del Sur. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZSE}
+      effects:
+      - {effect: add_variable, var: FCU_lealtad_zse, value: 15}
+      - effect: scope
+        target: ZSE
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: FCU_lealtad_zse, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: FCU_lealtad_zse, value: 70}
+      src: user_design
+    - id: FCU_tributo_zse
+      name:
+        english: Demand Tribute from Southern Economic Zone (Loyalty -20)
+        spanish: Exigir Tributo a Zona Económica del Sur (Lealtad -20)
+      desc:
+        english: 'Southern Economic Zone pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Zona Económica del Sur paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZSE}
+      available:
+        variable_at_least: {var: FCU_lealtad_zse, value: 30}
+      effects:
+      - {effect: add_variable, var: FCU_lealtad_zse, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZSE
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: FCU_lealtad_zse, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: FCU_lealtad_zse, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+  - id: ASC_satelites_category
+    country: ASC
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nBaltic Commune: [?ASC_lealtad_zbc]\nAlbion Workers'' Republic: [?ASC_lealtad_zal]\n\nRight now:
+        political power [?ASC_ef_sat_pp_ver] per day, stability [?ASC_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty falls
+        1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power (+0.10
+        per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and builds
+        them a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nComuna Báltica: [?ASC_lealtad_zbc]\nRepública Obrera de Albión: [?ASC_lealtad_zal]\n\nEfecto ahora:
+        poder político [?ASC_ef_sat_pp_ver] por día, estabilidad [?ASC_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad baja
+        1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10 por
+        día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
+        una fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: ASC_recalcular_satelites}
+    decisions:
+    - id: ASC_ayuda_zbc
+      name: {english: Aid to Baltic Commune (Loyalty +15), spanish: Ayuda a Comuna Báltica (Lealtad +15)}
+      desc:
+        english: Money, engineers and a new factory for Baltic Commune. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Comuna Báltica. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZBC}
+      effects:
+      - {effect: add_variable, var: ASC_lealtad_zbc, value: 15}
+      - effect: scope
+        target: ZBC
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: ASC_lealtad_zbc, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: ASC_lealtad_zbc, value: 70}
+      src: user_design
+    - id: ASC_tributo_zbc
+      name:
+        english: Demand Tribute from Baltic Commune (Loyalty -20)
+        spanish: Exigir Tributo a Comuna Báltica (Lealtad -20)
+      desc:
+        english: 'Baltic Commune pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Comuna Báltica paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZBC}
+      available:
+        variable_at_least: {var: ASC_lealtad_zbc, value: 30}
+      effects:
+      - {effect: add_variable, var: ASC_lealtad_zbc, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZBC
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: ASC_lealtad_zbc, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: ASC_lealtad_zbc, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: ASC_ayuda_zal
+      name:
+        english: Aid to Albion Workers' Republic (Loyalty +15)
+        spanish: Ayuda a República Obrera de Albión (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Albion Workers' Republic. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para República Obrera de Albión. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZAL}
+      effects:
+      - {effect: add_variable, var: ASC_lealtad_zal, value: 15}
+      - effect: scope
+        target: ZAL
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: ASC_lealtad_zal, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: ASC_lealtad_zal, value: 70}
+      src: user_design
+    - id: ASC_tributo_zal
+      name:
+        english: Demand Tribute from Albion Workers' Republic (Loyalty -20)
+        spanish: Exigir Tributo a República Obrera de Albión (Lealtad -20)
+      desc:
+        english: 'Albion Workers'' Republic pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'República Obrera de Albión paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZAL}
+      available:
+        variable_at_least: {var: ASC_lealtad_zal, value: 30}
+      effects:
+      - {effect: add_variable, var: ASC_lealtad_zal, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZAL
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: ASC_lealtad_zal, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: ASC_lealtad_zal, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+  - id: HSN_satelites_category
+    country: HSN
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nAntillean Free Ports: [?HSN_lealtad_zaf]\nAustral Sea Compact: [?HSN_lealtad_zas]\n\nRight now:
+        political power [?HSN_ef_sat_pp_ver] per day, stability [?HSN_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty falls
+        1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power (+0.10
+        per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and builds
+        them a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nPuertos Libres Antillanos: [?HSN_lealtad_zaf]\nPacto del Mar Austral: [?HSN_lealtad_zas]\n\nEfecto
+        ahora: poder político [?HSN_ef_sat_pp_ver] por día, estabilidad [?HSN_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad
+        baja 1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10
+        por día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
+        una fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: HSN_recalcular_satelites}
+    decisions:
+    - id: HSN_ayuda_zaf
+      name:
+        english: Aid to Antillean Free Ports (Loyalty +15)
+        spanish: Ayuda a Puertos Libres Antillanos (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Antillean Free Ports. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Puertos Libres Antillanos. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZAF}
+      effects:
+      - {effect: add_variable, var: HSN_lealtad_zaf, value: 15}
+      - effect: scope
+        target: ZAF
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: HSN_lealtad_zaf, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: HSN_lealtad_zaf, value: 70}
+      src: user_design
+    - id: HSN_tributo_zaf
+      name:
+        english: Demand Tribute from Antillean Free Ports (Loyalty -20)
+        spanish: Exigir Tributo a Puertos Libres Antillanos (Lealtad -20)
+      desc:
+        english: 'Antillean Free Ports pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Puertos Libres Antillanos paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZAF}
+      available:
+        variable_at_least: {var: HSN_lealtad_zaf, value: 30}
+      effects:
+      - {effect: add_variable, var: HSN_lealtad_zaf, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZAF
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: HSN_lealtad_zaf, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: HSN_lealtad_zaf, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: HSN_ayuda_zas
+      name:
+        english: Aid to Austral Sea Compact (Loyalty +15)
+        spanish: Ayuda a Pacto del Mar Austral (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Austral Sea Compact. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Pacto del Mar Austral. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZAS}
+      effects:
+      - {effect: add_variable, var: HSN_lealtad_zas, value: 15}
+      - effect: scope
+        target: ZAS
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: HSN_lealtad_zas, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: HSN_lealtad_zas, value: 70}
+      src: user_design
+    - id: HSN_tributo_zas
+      name:
+        english: Demand Tribute from Austral Sea Compact (Loyalty -20)
+        spanish: Exigir Tributo a Pacto del Mar Austral (Lealtad -20)
+      desc:
+        english: 'Austral Sea Compact pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Pacto del Mar Austral paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZAS}
+      available:
+        variable_at_least: {var: HSN_lealtad_zas, value: 30}
+      effects:
+      - {effect: add_variable, var: HSN_lealtad_zas, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZAS
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: HSN_lealtad_zas, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: HSN_lealtad_zas, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+  - id: NAS_satelites_category
+    country: NAS
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nNew Granada: [?NAS_lealtad_zng]\nFree Plains of the Orinoco: [?NAS_lealtad_zll]\n\nRight now:
+        political power [?NAS_ef_sat_pp_ver] per day, stability [?NAS_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty falls
+        1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power (+0.10
+        per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and builds
+        them a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nNueva Granada: [?NAS_lealtad_zng]\nLlanos Libres del Orinoco: [?NAS_lealtad_zll]\n\nEfecto ahora:
+        poder político [?NAS_ef_sat_pp_ver] por día, estabilidad [?NAS_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad baja
+        1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10 por
+        día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
+        una fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: NAS_recalcular_satelites}
+    decisions:
+    - id: NAS_ayuda_zng
+      name: {english: Aid to New Granada (Loyalty +15), spanish: Ayuda a Nueva Granada (Lealtad +15)}
+      desc:
+        english: Money, engineers and a new factory for New Granada. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Nueva Granada. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZNG}
+      effects:
+      - {effect: add_variable, var: NAS_lealtad_zng, value: 15}
+      - effect: scope
+        target: ZNG
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: NAS_lealtad_zng, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: NAS_lealtad_zng, value: 70}
+      src: user_design
+    - id: NAS_tributo_zng
+      name:
+        english: Demand Tribute from New Granada (Loyalty -20)
+        spanish: Exigir Tributo a Nueva Granada (Lealtad -20)
+      desc:
+        english: 'New Granada pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Nueva Granada paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZNG}
+      available:
+        variable_at_least: {var: NAS_lealtad_zng, value: 30}
+      effects:
+      - {effect: add_variable, var: NAS_lealtad_zng, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZNG
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: NAS_lealtad_zng, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: NAS_lealtad_zng, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: NAS_ayuda_zll
+      name:
+        english: Aid to Free Plains of the Orinoco (Loyalty +15)
+        spanish: Ayuda a Llanos Libres del Orinoco (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Free Plains of the Orinoco. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Llanos Libres del Orinoco. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZLL}
+      effects:
+      - {effect: add_variable, var: NAS_lealtad_zll, value: 15}
+      - effect: scope
+        target: ZLL
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: NAS_lealtad_zll, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: NAS_lealtad_zll, value: 70}
+      src: user_design
+    - id: NAS_tributo_zll
+      name:
+        english: Demand Tribute from Free Plains of the Orinoco (Loyalty -20)
+        spanish: Exigir Tributo a Llanos Libres del Orinoco (Lealtad -20)
+      desc:
+        english: 'Free Plains of the Orinoco pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Llanos Libres del Orinoco paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZLL}
+      available:
+        variable_at_least: {var: NAS_lealtad_zll, value: 30}
+      effects:
+      - {effect: add_variable, var: NAS_lealtad_zll, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZLL
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: NAS_lealtad_zll, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: NAS_lealtad_zll, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+  - id: SHD_satelites_category
+    country: SHD
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nHarmonious Protectorate of Korea: [?SHD_lealtad_zkr]\nSteppe Directorate: [?SHD_lealtad_zst]\n\nRight
+        now: political power [?SHD_ef_sat_pp_ver] per day, stability [?SHD_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty
+        falls 1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power
+        (+0.10 per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and
+        builds them a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nProtectorado Armónico de Corea: [?SHD_lealtad_zkr]\nDirectorio de la Estepa: [?SHD_lealtad_zst]\n\nEfecto
+        ahora: poder político [?SHD_ef_sat_pp_ver] por día, estabilidad [?SHD_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad
+        baja 1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10
+        por día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
+        una fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: SHD_recalcular_satelites}
+    decisions:
+    - id: SHD_ayuda_zkr
+      name:
+        english: Aid to Harmonious Protectorate of Korea (Loyalty +15)
+        spanish: Ayuda a Protectorado Armónico de Corea (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Harmonious Protectorate of Korea. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Protectorado Armónico de Corea. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZKR}
+      effects:
+      - {effect: add_variable, var: SHD_lealtad_zkr, value: 15}
+      - effect: scope
+        target: ZKR
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: SHD_lealtad_zkr, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: SHD_lealtad_zkr, value: 70}
+      src: user_design
+    - id: SHD_tributo_zkr
+      name:
+        english: Demand Tribute from Harmonious Protectorate of Korea (Loyalty -20)
+        spanish: Exigir Tributo a Protectorado Armónico de Corea (Lealtad -20)
+      desc:
+        english: 'Harmonious Protectorate of Korea pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Protectorado Armónico de Corea paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZKR}
+      available:
+        variable_at_least: {var: SHD_lealtad_zkr, value: 30}
+      effects:
+      - {effect: add_variable, var: SHD_lealtad_zkr, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZKR
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: SHD_lealtad_zkr, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: SHD_lealtad_zkr, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: SHD_ayuda_zst
+      name:
+        english: Aid to Steppe Directorate (Loyalty +15)
+        spanish: Ayuda a Directorio de la Estepa (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Steppe Directorate. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Directorio de la Estepa. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZST}
+      effects:
+      - {effect: add_variable, var: SHD_lealtad_zst, value: 15}
+      - effect: scope
+        target: ZST
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: SHD_lealtad_zst, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: SHD_lealtad_zst, value: 70}
+      src: user_design
+    - id: SHD_tributo_zst
+      name:
+        english: Demand Tribute from Steppe Directorate (Loyalty -20)
+        spanish: Exigir Tributo a Directorio de la Estepa (Lealtad -20)
+      desc:
+        english: 'Steppe Directorate pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Directorio de la Estepa paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZST}
+      available:
+        variable_at_least: {var: SHD_lealtad_zst, value: 30}
+      effects:
+      - {effect: add_variable, var: SHD_lealtad_zst, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZST
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: SHD_lealtad_zst, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: SHD_lealtad_zst, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+  - id: APF_satelites_category
+    country: APF
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nHighlands Federation: [?APF_lealtad_zet]\nCape Federation: [?APF_lealtad_zsa]\n\nRight now:
+        political power [?APF_ef_sat_pp_ver] per day, stability [?APF_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty falls
+        1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power (+0.10
+        per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and builds
+        them a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nFederación de las Tierras Altas: [?APF_lealtad_zet]\nFederación del Cabo: [?APF_lealtad_zsa]\n\nEfecto
+        ahora: poder político [?APF_ef_sat_pp_ver] por día, estabilidad [?APF_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad
+        baja 1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10
+        por día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
+        una fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: APF_recalcular_satelites}
+    decisions:
+    - id: APF_ayuda_zet
+      name:
+        english: Aid to Highlands Federation (Loyalty +15)
+        spanish: Ayuda a Federación de las Tierras Altas (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Highlands Federation. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Federación de las Tierras Altas. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZET}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zet, value: 15}
+      - effect: scope
+        target: ZET
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: APF_lealtad_zet, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_lealtad_zet, value: 70}
+      src: user_design
+    - id: APF_tributo_zet
+      name:
+        english: Demand Tribute from Highlands Federation (Loyalty -20)
+        spanish: Exigir Tributo a Federación de las Tierras Altas (Lealtad -20)
+      desc:
+        english: 'Highlands Federation pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Federación de las Tierras Altas paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZET}
+      available:
+        variable_at_least: {var: APF_lealtad_zet, value: 30}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zet, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZET
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: APF_lealtad_zet, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: APF_lealtad_zet, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: APF_ayuda_zsa
+      name: {english: Aid to Cape Federation (Loyalty +15), spanish: Ayuda a Federación del Cabo (Lealtad +15)}
+      desc:
+        english: Money, engineers and a new factory for Cape Federation. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Federación del Cabo. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZSA}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zsa, value: 15}
+      - effect: scope
+        target: ZSA
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: APF_lealtad_zsa, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_lealtad_zsa, value: 70}
+      src: user_design
+    - id: APF_tributo_zsa
+      name:
+        english: Demand Tribute from Cape Federation (Loyalty -20)
+        spanish: Exigir Tributo a Federación del Cabo (Lealtad -20)
+      desc:
+        english: 'Cape Federation pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Federación del Cabo paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZSA}
+      available:
+        variable_at_least: {var: APF_lealtad_zsa, value: 30}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zsa, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZSA
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: APF_lealtad_zsa, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: APF_lealtad_zsa, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+  - id: NRE_satelites_category
+    country: NRE
+    icon_prefer:
+    - generic_political_actions
+    - generic_formable_nations
+    name: {english: Our Satellites, spanish: Nuestros Satélites}
+    desc:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nProvince of Hispania: [?NRE_lealtad_zhi]\nProvince of Dacia: [?NRE_lealtad_zda]\n\nRight now:
+        political power [?NRE_ef_sat_pp_ver] per day, stability [?NRE_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty falls
+        1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power (+0.10
+        per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and builds
+        them a factory; tribute gives you political power and men, but lowers loyalty.'
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nProvincia de Hispania: [?NRE_lealtad_zhi]\nProvincia de Dacia: [?NRE_lealtad_zda]\n\nEfecto ahora:
+        poder político [?NRE_ef_sat_pp_ver] por día, estabilidad [?NRE_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad baja
+        1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10 por
+        día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
+        una fábrica; el Tributo te da poder político y hombres, pero baja la lealtad.'
+    src: user_design
+    after_effects:
+    - {effect: run, value: NRE_recalcular_satelites}
+    decisions:
+    - id: NRE_ayuda_zhi
+      name:
+        english: Aid to Province of Hispania (Loyalty +15)
+        spanish: Ayuda a Provincia de Hispania (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Province of Hispania. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Provincia de Hispania. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZHI}
+      effects:
+      - {effect: add_variable, var: NRE_lealtad_zhi, value: 15}
+      - effect: scope
+        target: ZHI
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: NRE_lealtad_zhi, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: NRE_lealtad_zhi, value: 70}
+      src: user_design
+    - id: NRE_tributo_zhi
+      name:
+        english: Demand Tribute from Province of Hispania (Loyalty -20)
+        spanish: Exigir Tributo a Provincia de Hispania (Lealtad -20)
+      desc:
+        english: 'Province of Hispania pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Provincia de Hispania paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZHI}
+      available:
+        variable_at_least: {var: NRE_lealtad_zhi, value: 30}
+      effects:
+      - {effect: add_variable, var: NRE_lealtad_zhi, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZHI
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: NRE_lealtad_zhi, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: NRE_lealtad_zhi, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: NRE_ayuda_zda
+      name: {english: Aid to Province of Dacia (Loyalty +15), spanish: Ayuda a Provincia de Dacia (Lealtad +15)}
+      desc:
+        english: Money, engineers and a new factory for Province of Dacia. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Provincia de Dacia. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZDA}
+      effects:
+      - {effect: add_variable, var: NRE_lealtad_zda, value: 15}
+      - effect: scope
+        target: ZDA
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: NRE_lealtad_zda, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: NRE_lealtad_zda, value: 70}
+      src: user_design
+    - id: NRE_tributo_zda
+      name:
+        english: Demand Tribute from Province of Dacia (Loyalty -20)
+        spanish: Exigir Tributo a Provincia de Dacia (Lealtad -20)
+      desc:
+        english: 'Province of Dacia pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Provincia de Dacia paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZDA}
+      available:
+        variable_at_least: {var: NRE_lealtad_zda, value: 30}
+      effects:
+      - {effect: add_variable, var: NRE_lealtad_zda, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZDA
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: NRE_lealtad_zda, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: NRE_lealtad_zda, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -4387,6 +5553,7 @@ scripted_effects:
       - {effect: flag, value: EFE_hito_hecho}
       - {effect: event, id: meganations_efe.31, days: 1}
     - {effect: run, value: EFE_espiritu_vivo}
+    - {effect: run, value: EFE_pulso_satelites}
   - id: FCU_pulso_del_directorio
     effects:
     - effect: if
@@ -4447,6 +5614,7 @@ scripted_effects:
       then:
       - {effect: flag, value: FCU_hito_hecho}
       - {effect: event, id: meganations_fcu.31, days: 1}
+    - {effect: run, value: FCU_pulso_satelites}
   - id: ASC_pulso_de_la_red
     effects:
     - effect: if
@@ -4510,6 +5678,7 @@ scripted_effects:
       then:
       - {effect: flag, value: ASC_hito_hecho}
       - {effect: event, id: meganations_asc.31, days: 1}
+    - {effect: run, value: ASC_pulso_satelites}
   - id: HSN_pulso_de_las_potencias
     effects:
     - effect: if
@@ -4564,6 +5733,7 @@ scripted_effects:
       - {effect: flag, value: HSN_hito_hecho}
       - {effect: event, id: meganations_hsn.31, days: 1}
     - {effect: run, value: HSN_espiritu_vivo}
+    - {effect: run, value: HSN_pulso_satelites}
   - id: NAS_pulso_de_los_templos
     effects:
     - effect: if
@@ -4614,6 +5784,7 @@ scripted_effects:
       - {effect: flag, value: NAS_hito_hecho}
       - {effect: event, id: meganations_nas.31, days: 1}
     - {effect: run, value: NAS_espiritu_vivo}
+    - {effect: run, value: NAS_pulso_satelites}
   - id: SHD_pulso_del_rio
     effects:
     - effect: if
@@ -4660,6 +5831,7 @@ scripted_effects:
       then:
       - {effect: flag, value: SHD_hito_hecho}
       - {effect: event, id: meganations_shd.31, days: 1}
+    - {effect: run, value: SHD_pulso_satelites}
   - id: APF_pulso_de_los_consejos
     effects:
     - effect: if
@@ -4715,6 +5887,7 @@ scripted_effects:
       - {effect: flag, value: APF_hito_hecho}
       - {effect: event, id: meganations_apf.31, days: 1}
     - {effect: run, value: APF_espiritu_vivo}
+    - {effect: run, value: APF_pulso_satelites}
   - id: NRE_pulso_del_ocio
     effects:
     - effect: if
@@ -4767,6 +5940,7 @@ scripted_effects:
       then:
       - {effect: flag, value: NRE_hito_hecho}
       - {effect: event, id: meganations_nre.31, days: 1}
+    - {effect: run, value: NRE_pulso_satelites}
 
   # La Anarquía resiste (2026-09-26): en guerra, cada mes recluta y rearma.
   - id: ANARQUIA_levas
@@ -4951,6 +6125,1229 @@ scripted_effects:
 # panel de espíritus nacionales lo que da EN ESTE MOMENTO. Cada valor es una
 # variable que calcula el pulso mensual (effect: math).
 # =============================================================================
+
+  # Satélites (lealtad) y Anarquía (caudillos), 2026-09-27.
+  - id: EFE_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - EFE_ef_sat_pp
+        - 0
+      - - set
+        - EFE_ef_sat_estab
+        - 0
+    - {effect: clamp, var: EFE_lealtad_pta, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: PTA
+        variable_at_least: {var: EFE_lealtad_pta, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - EFE_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: PTA
+        variable_below: {var: EFE_lealtad_pta, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - EFE_ef_sat_pp
+          - 0.1
+        - - sub
+          - EFE_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: EFE_lealtad_yyg, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: YYG
+        variable_at_least: {var: EFE_lealtad_yyg, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - EFE_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: YYG
+        variable_below: {var: EFE_lealtad_yyg, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - EFE_ef_sat_pp
+          - 0.1
+        - - sub
+          - EFE_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - EFE_ef_sat_pp_ver
+        - EFE_ef_sat_pp
+      - - mul
+        - EFE_ef_sat_pp_ver
+        - 100
+      - - round
+        - EFE_ef_sat_pp_ver
+        - null
+      - - div
+        - EFE_ef_sat_pp_ver
+        - 100
+      - - set
+        - EFE_ef_sat_estab_ver
+        - EFE_ef_sat_estab
+      - - mul
+        - EFE_ef_sat_estab_ver
+        - 100
+      - - round
+        - EFE_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: EFE_mod_satelites}
+  - id: EFE_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: PTA}
+      then:
+      - {effect: add_variable, var: EFE_lealtad_pta, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: EFE_lealtad_pta, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: EFE_lealtad_pta, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: EFE_lealtad_pta, value: 25}
+          not_flag: EFE_rebelion_pta_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: EFE_rebelion_pta_reciente, days: 182}
+            - {effect: event, id: meganations_efe.40, days: 1}
+    - effect: if
+      when: {country_exists: YYG}
+      then:
+      - {effect: add_variable, var: EFE_lealtad_yyg, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: EFE_lealtad_yyg, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: EFE_lealtad_yyg, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: EFE_lealtad_yyg, value: 25}
+          not_flag: EFE_rebelion_yyg_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: EFE_rebelion_yyg_reciente, days: 182}
+            - {effect: event, id: meganations_efe.41, days: 1}
+    - {effect: run, value: EFE_recalcular_satelites}
+  - id: FCU_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - FCU_ef_sat_pp
+        - 0
+      - - set
+        - FCU_ef_sat_estab
+        - 0
+    - {effect: clamp, var: FCU_lealtad_znr, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZNR
+        variable_at_least: {var: FCU_lealtad_znr, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - FCU_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZNR
+        variable_below: {var: FCU_lealtad_znr, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - FCU_ef_sat_pp
+          - 0.1
+        - - sub
+          - FCU_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: FCU_lealtad_zse, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZSE
+        variable_at_least: {var: FCU_lealtad_zse, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - FCU_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZSE
+        variable_below: {var: FCU_lealtad_zse, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - FCU_ef_sat_pp
+          - 0.1
+        - - sub
+          - FCU_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - FCU_ef_sat_pp_ver
+        - FCU_ef_sat_pp
+      - - mul
+        - FCU_ef_sat_pp_ver
+        - 100
+      - - round
+        - FCU_ef_sat_pp_ver
+        - null
+      - - div
+        - FCU_ef_sat_pp_ver
+        - 100
+      - - set
+        - FCU_ef_sat_estab_ver
+        - FCU_ef_sat_estab
+      - - mul
+        - FCU_ef_sat_estab_ver
+        - 100
+      - - round
+        - FCU_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: FCU_mod_satelites}
+  - id: FCU_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: ZNR}
+      then:
+      - {effect: add_variable, var: FCU_lealtad_znr, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: FCU_lealtad_znr, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: FCU_lealtad_znr, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: FCU_lealtad_znr, value: 25}
+          not_flag: FCU_rebelion_znr_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: FCU_rebelion_znr_reciente, days: 182}
+            - {effect: event, id: meganations_fcu.40, days: 1}
+    - effect: if
+      when: {country_exists: ZSE}
+      then:
+      - {effect: add_variable, var: FCU_lealtad_zse, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: FCU_lealtad_zse, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: FCU_lealtad_zse, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: FCU_lealtad_zse, value: 25}
+          not_flag: FCU_rebelion_zse_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: FCU_rebelion_zse_reciente, days: 182}
+            - {effect: event, id: meganations_fcu.41, days: 1}
+    - {effect: run, value: FCU_recalcular_satelites}
+  - id: ASC_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - ASC_ef_sat_pp
+        - 0
+      - - set
+        - ASC_ef_sat_estab
+        - 0
+    - {effect: clamp, var: ASC_lealtad_zbc, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZBC
+        variable_at_least: {var: ASC_lealtad_zbc, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - ASC_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZBC
+        variable_below: {var: ASC_lealtad_zbc, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - ASC_ef_sat_pp
+          - 0.1
+        - - sub
+          - ASC_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: ASC_lealtad_zal, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZAL
+        variable_at_least: {var: ASC_lealtad_zal, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - ASC_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZAL
+        variable_below: {var: ASC_lealtad_zal, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - ASC_ef_sat_pp
+          - 0.1
+        - - sub
+          - ASC_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - ASC_ef_sat_pp_ver
+        - ASC_ef_sat_pp
+      - - mul
+        - ASC_ef_sat_pp_ver
+        - 100
+      - - round
+        - ASC_ef_sat_pp_ver
+        - null
+      - - div
+        - ASC_ef_sat_pp_ver
+        - 100
+      - - set
+        - ASC_ef_sat_estab_ver
+        - ASC_ef_sat_estab
+      - - mul
+        - ASC_ef_sat_estab_ver
+        - 100
+      - - round
+        - ASC_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: ASC_mod_satelites}
+  - id: ASC_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: ZBC}
+      then:
+      - {effect: add_variable, var: ASC_lealtad_zbc, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: ASC_lealtad_zbc, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: ASC_lealtad_zbc, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: ASC_lealtad_zbc, value: 25}
+          not_flag: ASC_rebelion_zbc_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: ASC_rebelion_zbc_reciente, days: 182}
+            - {effect: event, id: meganations_asc.40, days: 1}
+    - effect: if
+      when: {country_exists: ZAL}
+      then:
+      - {effect: add_variable, var: ASC_lealtad_zal, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: ASC_lealtad_zal, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: ASC_lealtad_zal, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: ASC_lealtad_zal, value: 25}
+          not_flag: ASC_rebelion_zal_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: ASC_rebelion_zal_reciente, days: 182}
+            - {effect: event, id: meganations_asc.41, days: 1}
+    - {effect: run, value: ASC_recalcular_satelites}
+  - id: HSN_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - HSN_ef_sat_pp
+        - 0
+      - - set
+        - HSN_ef_sat_estab
+        - 0
+    - {effect: clamp, var: HSN_lealtad_zaf, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZAF
+        variable_at_least: {var: HSN_lealtad_zaf, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - HSN_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZAF
+        variable_below: {var: HSN_lealtad_zaf, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - HSN_ef_sat_pp
+          - 0.1
+        - - sub
+          - HSN_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: HSN_lealtad_zas, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZAS
+        variable_at_least: {var: HSN_lealtad_zas, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - HSN_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZAS
+        variable_below: {var: HSN_lealtad_zas, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - HSN_ef_sat_pp
+          - 0.1
+        - - sub
+          - HSN_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - HSN_ef_sat_pp_ver
+        - HSN_ef_sat_pp
+      - - mul
+        - HSN_ef_sat_pp_ver
+        - 100
+      - - round
+        - HSN_ef_sat_pp_ver
+        - null
+      - - div
+        - HSN_ef_sat_pp_ver
+        - 100
+      - - set
+        - HSN_ef_sat_estab_ver
+        - HSN_ef_sat_estab
+      - - mul
+        - HSN_ef_sat_estab_ver
+        - 100
+      - - round
+        - HSN_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: HSN_mod_satelites}
+  - id: HSN_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: ZAF}
+      then:
+      - {effect: add_variable, var: HSN_lealtad_zaf, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: HSN_lealtad_zaf, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: HSN_lealtad_zaf, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: HSN_lealtad_zaf, value: 25}
+          not_flag: HSN_rebelion_zaf_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: HSN_rebelion_zaf_reciente, days: 182}
+            - {effect: event, id: meganations_hsn.40, days: 1}
+    - effect: if
+      when: {country_exists: ZAS}
+      then:
+      - {effect: add_variable, var: HSN_lealtad_zas, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: HSN_lealtad_zas, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: HSN_lealtad_zas, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: HSN_lealtad_zas, value: 25}
+          not_flag: HSN_rebelion_zas_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: HSN_rebelion_zas_reciente, days: 182}
+            - {effect: event, id: meganations_hsn.41, days: 1}
+    - {effect: run, value: HSN_recalcular_satelites}
+  - id: NAS_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - NAS_ef_sat_pp
+        - 0
+      - - set
+        - NAS_ef_sat_estab
+        - 0
+    - {effect: clamp, var: NAS_lealtad_zng, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZNG
+        variable_at_least: {var: NAS_lealtad_zng, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - NAS_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZNG
+        variable_below: {var: NAS_lealtad_zng, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - NAS_ef_sat_pp
+          - 0.1
+        - - sub
+          - NAS_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: NAS_lealtad_zll, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZLL
+        variable_at_least: {var: NAS_lealtad_zll, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - NAS_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZLL
+        variable_below: {var: NAS_lealtad_zll, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - NAS_ef_sat_pp
+          - 0.1
+        - - sub
+          - NAS_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - NAS_ef_sat_pp_ver
+        - NAS_ef_sat_pp
+      - - mul
+        - NAS_ef_sat_pp_ver
+        - 100
+      - - round
+        - NAS_ef_sat_pp_ver
+        - null
+      - - div
+        - NAS_ef_sat_pp_ver
+        - 100
+      - - set
+        - NAS_ef_sat_estab_ver
+        - NAS_ef_sat_estab
+      - - mul
+        - NAS_ef_sat_estab_ver
+        - 100
+      - - round
+        - NAS_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: NAS_mod_satelites}
+  - id: NAS_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: ZNG}
+      then:
+      - {effect: add_variable, var: NAS_lealtad_zng, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: NAS_lealtad_zng, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: NAS_lealtad_zng, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: NAS_lealtad_zng, value: 25}
+          not_flag: NAS_rebelion_zng_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: NAS_rebelion_zng_reciente, days: 182}
+            - {effect: event, id: meganations_nas.40, days: 1}
+    - effect: if
+      when: {country_exists: ZLL}
+      then:
+      - {effect: add_variable, var: NAS_lealtad_zll, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: NAS_lealtad_zll, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: NAS_lealtad_zll, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: NAS_lealtad_zll, value: 25}
+          not_flag: NAS_rebelion_zll_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: NAS_rebelion_zll_reciente, days: 182}
+            - {effect: event, id: meganations_nas.41, days: 1}
+    - {effect: run, value: NAS_recalcular_satelites}
+  - id: SHD_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - SHD_ef_sat_pp
+        - 0
+      - - set
+        - SHD_ef_sat_estab
+        - 0
+    - {effect: clamp, var: SHD_lealtad_zkr, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZKR
+        variable_at_least: {var: SHD_lealtad_zkr, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - SHD_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZKR
+        variable_below: {var: SHD_lealtad_zkr, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - SHD_ef_sat_pp
+          - 0.1
+        - - sub
+          - SHD_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: SHD_lealtad_zst, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZST
+        variable_at_least: {var: SHD_lealtad_zst, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - SHD_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZST
+        variable_below: {var: SHD_lealtad_zst, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - SHD_ef_sat_pp
+          - 0.1
+        - - sub
+          - SHD_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - SHD_ef_sat_pp_ver
+        - SHD_ef_sat_pp
+      - - mul
+        - SHD_ef_sat_pp_ver
+        - 100
+      - - round
+        - SHD_ef_sat_pp_ver
+        - null
+      - - div
+        - SHD_ef_sat_pp_ver
+        - 100
+      - - set
+        - SHD_ef_sat_estab_ver
+        - SHD_ef_sat_estab
+      - - mul
+        - SHD_ef_sat_estab_ver
+        - 100
+      - - round
+        - SHD_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: SHD_mod_satelites}
+  - id: SHD_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: ZKR}
+      then:
+      - {effect: add_variable, var: SHD_lealtad_zkr, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: SHD_lealtad_zkr, value: 25}
+          not_flag: SHD_rebelion_zkr_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: SHD_rebelion_zkr_reciente, days: 182}
+            - {effect: event, id: meganations_shd.40, days: 1}
+    - effect: if
+      when: {country_exists: ZST}
+      then:
+      - {effect: add_variable, var: SHD_lealtad_zst, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: SHD_lealtad_zst, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: SHD_lealtad_zst, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: SHD_lealtad_zst, value: 25}
+          not_flag: SHD_rebelion_zst_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: SHD_rebelion_zst_reciente, days: 182}
+            - {effect: event, id: meganations_shd.41, days: 1}
+    - {effect: run, value: SHD_recalcular_satelites}
+  - id: APF_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - APF_ef_sat_pp
+        - 0
+      - - set
+        - APF_ef_sat_estab
+        - 0
+    - {effect: clamp, var: APF_lealtad_zet, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZET
+        variable_at_least: {var: APF_lealtad_zet, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - APF_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZET
+        variable_below: {var: APF_lealtad_zet, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - APF_ef_sat_pp
+          - 0.1
+        - - sub
+          - APF_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: APF_lealtad_zsa, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZSA
+        variable_at_least: {var: APF_lealtad_zsa, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - APF_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZSA
+        variable_below: {var: APF_lealtad_zsa, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - APF_ef_sat_pp
+          - 0.1
+        - - sub
+          - APF_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - APF_ef_sat_pp_ver
+        - APF_ef_sat_pp
+      - - mul
+        - APF_ef_sat_pp_ver
+        - 100
+      - - round
+        - APF_ef_sat_pp_ver
+        - null
+      - - div
+        - APF_ef_sat_pp_ver
+        - 100
+      - - set
+        - APF_ef_sat_estab_ver
+        - APF_ef_sat_estab
+      - - mul
+        - APF_ef_sat_estab_ver
+        - 100
+      - - round
+        - APF_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: APF_mod_satelites}
+  - id: APF_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: ZET}
+      then:
+      - {effect: add_variable, var: APF_lealtad_zet, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zet, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zet, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: APF_lealtad_zet, value: 25}
+          not_flag: APF_rebelion_zet_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: APF_rebelion_zet_reciente, days: 182}
+            - {effect: event, id: meganations_apf.40, days: 1}
+    - effect: if
+      when: {country_exists: ZSA}
+      then:
+      - {effect: add_variable, var: APF_lealtad_zsa, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zsa, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zsa, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: APF_lealtad_zsa, value: 25}
+          not_flag: APF_rebelion_zsa_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: APF_rebelion_zsa_reciente, days: 182}
+            - {effect: event, id: meganations_apf.41, days: 1}
+    - {effect: run, value: APF_recalcular_satelites}
+  - id: NRE_recalcular_satelites
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - NRE_ef_sat_pp
+        - 0
+      - - set
+        - NRE_ef_sat_estab
+        - 0
+    - {effect: clamp, var: NRE_lealtad_zhi, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZHI
+        variable_at_least: {var: NRE_lealtad_zhi, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - NRE_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZHI
+        variable_below: {var: NRE_lealtad_zhi, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - NRE_ef_sat_pp
+          - 0.1
+        - - sub
+          - NRE_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: NRE_lealtad_zda, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZDA
+        variable_at_least: {var: NRE_lealtad_zda, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - NRE_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZDA
+        variable_below: {var: NRE_lealtad_zda, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - NRE_ef_sat_pp
+          - 0.1
+        - - sub
+          - NRE_ef_sat_estab
+          - 0.03
+    - effect: math
+      ops:
+      - - set
+        - NRE_ef_sat_pp_ver
+        - NRE_ef_sat_pp
+      - - mul
+        - NRE_ef_sat_pp_ver
+        - 100
+      - - round
+        - NRE_ef_sat_pp_ver
+        - null
+      - - div
+        - NRE_ef_sat_pp_ver
+        - 100
+      - - set
+        - NRE_ef_sat_estab_ver
+        - NRE_ef_sat_estab
+      - - mul
+        - NRE_ef_sat_estab_ver
+        - 100
+      - - round
+        - NRE_ef_sat_estab_ver
+        - null
+    - {effect: dynamic_modifier, id: NRE_mod_satelites}
+  - id: NRE_pulso_satelites
+    effects:
+    - effect: if
+      when: {country_exists: ZHI}
+      then:
+      - {effect: add_variable, var: NRE_lealtad_zhi, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: NRE_lealtad_zhi, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: NRE_lealtad_zhi, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: NRE_lealtad_zhi, value: 25}
+          not_flag: NRE_rebelion_zhi_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: NRE_rebelion_zhi_reciente, days: 182}
+            - {effect: event, id: meganations_nre.40, days: 1}
+    - effect: if
+      when: {country_exists: ZDA}
+      then:
+      - {effect: add_variable, var: NRE_lealtad_zda, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: NRE_lealtad_zda, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: NRE_lealtad_zda, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: NRE_lealtad_zda, value: 25}
+          not_flag: NRE_rebelion_zda_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: NRE_rebelion_zda_reciente, days: 182}
+            - {effect: event, id: meganations_nre.41, days: 1}
+    - {effect: run, value: NRE_recalcular_satelites}
+  - id: ZWB_pulso_caudillos
+    effects:
+    - effect: if
+      when: {at_war: false, not_flag: ZWB_saqueo_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 92
+          effects: []
+        - weight: 8
+          effects:
+          - {effect: flag, value: ZWB_saqueo_reciente, days: 119}
+          - {effect: event, id: meganations_zwb.2, days: 1}
+    - effect: if
+      when: {not_flag: ZWB_caudillo_hecho}
+      then:
+      - effect: random
+        options:
+        - weight: 97
+          effects: []
+        - weight: 3
+          effects:
+          - {effect: flag, value: ZWB_caudillo_hecho}
+          - {effect: event, id: meganations_zwb.4, days: 1}
+    - effect: if
+      when: {at_war: true, not_flag: ZWB_tregua_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 90
+          effects: []
+        - weight: 10
+          effects:
+          - {effect: flag, value: ZWB_tregua_reciente, days: 245}
+          - {effect: event, id: meganations_zwb.6, days: 1}
+  - id: ZWE_pulso_caudillos
+    effects:
+    - effect: if
+      when: {at_war: false, not_flag: ZWE_saqueo_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 92
+          effects: []
+        - weight: 8
+          effects:
+          - {effect: flag, value: ZWE_saqueo_reciente, days: 119}
+          - {effect: event, id: meganations_zwe.2, days: 1}
+    - effect: if
+      when: {not_flag: ZWE_caudillo_hecho}
+      then:
+      - effect: random
+        options:
+        - weight: 97
+          effects: []
+        - weight: 3
+          effects:
+          - {effect: flag, value: ZWE_caudillo_hecho}
+          - {effect: event, id: meganations_zwe.4, days: 1}
+    - effect: if
+      when: {at_war: true, not_flag: ZWE_tregua_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 90
+          effects: []
+        - weight: 10
+          effects:
+          - {effect: flag, value: ZWE_tregua_reciente, days: 245}
+          - {effect: event, id: meganations_zwe.6, days: 1}
+  - id: ZWM_pulso_caudillos
+    effects:
+    - effect: if
+      when: {at_war: false, not_flag: ZWM_saqueo_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 92
+          effects: []
+        - weight: 8
+          effects:
+          - {effect: flag, value: ZWM_saqueo_reciente, days: 119}
+          - {effect: event, id: meganations_zwm.2, days: 1}
+    - effect: if
+      when: {not_flag: ZWM_caudillo_hecho}
+      then:
+      - effect: random
+        options:
+        - weight: 97
+          effects: []
+        - weight: 3
+          effects:
+          - {effect: flag, value: ZWM_caudillo_hecho}
+          - {effect: event, id: meganations_zwm.4, days: 1}
+    - effect: if
+      when: {at_war: true, not_flag: ZWM_tregua_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 90
+          effects: []
+        - weight: 10
+          effects:
+          - {effect: flag, value: ZWM_tregua_reciente, days: 245}
+          - {effect: event, id: meganations_zwm.6, days: 1}
+  - id: ZWI_pulso_caudillos
+    effects:
+    - effect: if
+      when: {at_war: false, not_flag: ZWI_saqueo_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 92
+          effects: []
+        - weight: 8
+          effects:
+          - {effect: flag, value: ZWI_saqueo_reciente, days: 119}
+          - {effect: event, id: meganations_zwi.2, days: 1}
+    - effect: if
+      when: {not_flag: ZWI_caudillo_hecho}
+      then:
+      - effect: random
+        options:
+        - weight: 97
+          effects: []
+        - weight: 3
+          effects:
+          - {effect: flag, value: ZWI_caudillo_hecho}
+          - {effect: event, id: meganations_zwi.4, days: 1}
+    - effect: if
+      when: {at_war: true, not_flag: ZWI_tregua_reciente}
+      then:
+      - effect: random
+        options:
+        - weight: 90
+          effects: []
+        - weight: 10
+          effects:
+          - {effect: flag, value: ZWI_tregua_reciente, days: 245}
+          - {effect: event, id: meganations_zwi.6, days: 1}
+
 dynamic_modifiers:
   - id: FCU_mod_directorio
     country: FCU
@@ -5029,3 +7426,59 @@ dynamic_modifiers:
       english: Every strait is a toll and a friend. Every strait is also a target.
       spanish: Cada estrecho es un peaje y un amigo. Cada estrecho también es un blanco.
     modifiers: {trade_opinion_factor: HSN_ef_nodos, stability_factor: HSN_ef_presion}
+  - id: EFE_mod_satelites
+    country: EFE
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: EFE_ef_sat_pp, stability_factor: EFE_ef_sat_estab}
+  - id: FCU_mod_satelites
+    country: FCU
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: FCU_ef_sat_pp, stability_factor: FCU_ef_sat_estab}
+  - id: ASC_mod_satelites
+    country: ASC
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: ASC_ef_sat_pp, stability_factor: ASC_ef_sat_estab}
+  - id: HSN_mod_satelites
+    country: HSN
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: HSN_ef_sat_pp, stability_factor: HSN_ef_sat_estab}
+  - id: NAS_mod_satelites
+    country: NAS
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: NAS_ef_sat_pp, stability_factor: NAS_ef_sat_estab}
+  - id: SHD_mod_satelites
+    country: SHD
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: SHD_ef_sat_pp, stability_factor: SHD_ef_sat_estab}
+  - id: APF_mod_satelites
+    country: APF
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: APF_ef_sat_pp, stability_factor: APF_ef_sat_estab}
+  - id: NRE_mod_satelites
+    country: NRE
+    name: {english: The Satellites, spanish: Los Satélites}
+    desc:
+      english: Loyal satellites send men, money and votes; restless ones cost more than they give.
+      spanish: Los satélites leales mandan hombres, plata y votos; los inquietos cuestan más de lo que dan.
+    modifiers: {political_power_gain: NRE_ef_sat_pp, stability_factor: NRE_ef_sat_estab}

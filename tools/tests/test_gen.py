@@ -693,7 +693,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("21 eventos del EFE (pulso, explicacion, plaga, oferta de la ASC, conquista, hito)", len(events) == 21, str(len(events)))
+        check("23 eventos del EFE (pulso, explicacion, plaga, oferta de la ASC, conquista, hito, 2 rebeliones de satelites)", len(events) == 23, str(len(events)))
         conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
         check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
         check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
@@ -920,7 +920,29 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("8 espiritus vivos, uno por potencia", len(dm.entries) == 8, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos: la mecanica y los satelites de cada potencia", len(dm.entries) == 16, str([k for k, _ in dm.entries]))
+        sat = dm.get("EFE_mod_satelites")
+        check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
+        se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
+        ps = se_all[se_all.index("EFE_pulso_satelites = {"):]
+        ps = ps[:ps.index("EFE_recalcular_satelites = yes }") + 40]
+        check("satelites: la lealtad baja cada mes y mas en guerra", "var = EFE_lealtad_pta value = -1" in ps and "has_war = yes" in ps, ps[:600])
+        check("satelites: con poca lealtad puede haber rebelion", "id = meganations_efe.40" in ps)
+        check("satelites: el pulso de la potencia corre el de sus satelites", "EFE_pulso_satelites = yes" in se_all)
+        hist = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
+        check("satelites: la lealtad arranca en 60", "var = EFE_lealtad_pta" in " ".join(hist.split()) and "value = 60" in hist)
+        dec_all = (mod / "common/decisions/meganations_decisions.txt").read_text()
+        check("satelites: ayuda y tributo por satelite", "EFE_ayuda_pta = {" in dec_all and "EFE_tributo_yyg = {" in dec_all)
+        zwi = (mod / "events/meganations_zwi.txt").read_text()
+        check("Anarquia: el pulso corre los caudillos", "ZWI_pulso_caudillos = yes" in zwi)
+        for n in (2, 3, 4, 5, 6):
+            check(f"Anarquia: evento meganations_zwi.{n}", f"id = meganations_zwi.{n}" in zwi)
+        cz = se_all[se_all.index("ZWI_pulso_caudillos = {"):][:1500]
+        check("Anarquia: el saqueo le llega a un vecino (SHD o HSN)", "id = meganations_zwi.2" in cz)
+        raid = " ".join(zwi[zwi.index("id = meganations_zwi.2"):zwi.index("title = meganations_zwi.3.t")].split())
+        check("Anarquia: el saqueo apunta a los vecinos", "SHD = { country_event" in raid and "HSN = { country_event" in raid, raid[:600])
+        ideas_zwi = (mod / "common/ideas/ZWI_ideas.txt").read_text()
+        check("Anarquia: caudillo supremo y tregua", "ZWI_caudillo_supremo" in ideas_zwi and "ZWI_tregua_de_caudillos" in ideas_zwi)
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         check("reasignar deja 30 dias de espera", "flag = ASC_reasignando" in decs and "days = 30" in decs)
         check("cada decision de la ASC recalcula", decs.count("ASC_recalcular_computo = yes") >= 6)
@@ -1092,6 +1114,29 @@ def test_ai() -> None:
         check("el satelite apoya a su senor", "MEGANATIONS_PTA_apoya_EFE" in ai)
         check("las rivalidades se antagonizan", "MEGANATIONS_EFE_rivaliza_con_NRE" in ai)
         check("no hay planes contra paises sin territorio (ZWB en el fixture)", "id = ZWB" not in ai)
+        mil = root.get("MEGANATIONS_EFE_militar")
+        milr = " ".join(pdx.render(mil).split()) if mil is not None else ""
+        check("IA militar: el EFE arma blindados", "type = role_ratio id = armor value = 25" in milr, milr[:600])
+        check("IA militar: pone industria en armas (tipo sin id)", "type = added_military_to_civilian_factory_ratio value = 25" in milr)
+        nre = " ".join(pdx.render(root.get("MEGANATIONS_NRE_militar")).split())
+        check("IA militar: investiga lo que sigue en su especialidad (NRE: infanteria)",
+              "type = research_tech id = night_vision_fixture value = 60" in nre, nre[:800])
+        hsn = " ".join(pdx.render(root.get("MEGANATIONS_HSN_militar")).split())
+        check("IA militar: un id que el juego no usa se omite (marines en el fixture)", "marines" not in hsn, hsn[:400])
+        check("IA militar: el aviso lo dice", any("role_ratio:marines" in w for w in ctx.warnings))
+        war = root.get("MEGANATIONS_EFE_militar_en_guerra")
+        check("IA militar: en guerra, mas industria a las armas", war is not None
+              and "has_war = yes" in pdx.render(war.get("enable")) and "value = 75" in pdx.render(war))
+        check("la Anarquia no recibe plan militar de meganacion", "MEGANATIONS_ZWI_militar" not in ai)
+        from tools.gen.emitters.effects import render_conditions
+        cond = " ".join(pdx.render(render_conditions("t", {"divisions_at_least": 12}, {}, where="t")).split())
+        check("declarar la guerra puede pedir un ejercito minimo", "has_army_size = { size > 11 }" in cond, cond)
+        import yaml
+        spec_ai = yaml.safe_load((REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"))
+        decl = [p for p in spec_ai["plans"] if any(st["type"] == "declare_war" for st in p["strategies"])]
+        check("todo plan que declara guerra pide ejercito o ya esta en guerra",
+              all("divisions_at_least" in str(p.get("enable")) for p in decl), str([p["id"] for p in decl]))
+        check("prepararse va aparte de declarar", all(len(p["strategies"]) == 1 for p in decl))
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         cuotas = decs[decs.index("SHD_aumentar_cuotas = {"):]
         cuotas = cuotas[cuotas.index("ai_will_do"):cuotas.index("ai_will_do") + 900]
@@ -1358,7 +1403,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "

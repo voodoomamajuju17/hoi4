@@ -450,6 +450,7 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       state_flag / not_state_flag: X      -> has_state_flag (en regiones)
       state_flag_days: { flag, days }     -> has_state_flag = { flag days > N }
       stability_below: 0.4                -> has_stability < 0.4
+      divisions_at_least: 12              -> has_army_size = { size > 11 }
       controls_state: [nombres]           -> controls_state (región por nombre)
       war_with: TAG                       -> has_war_with
       controls_all: [[nombres], ..]       -> controla todas esas regiones
@@ -558,6 +559,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "coastal":
             block.add("is_coastal", bool(value))
             triggers_used.setdefault("is_coastal", owner)
+        elif key == "divisions_at_least":
+            # has_army_size = { size > N-1 }: cuenta divisiones de tierra
+            block.add("has_army_size", Block([("size", Compare(">", int(value) - 1))]))
+            triggers_used.setdefault("has_army_size", owner)
         elif key == "stability_below":
             block.add("has_stability", Compare("<", float(value)))
             triggers_used.setdefault("has_stability", owner)

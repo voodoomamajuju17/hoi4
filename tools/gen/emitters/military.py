@@ -165,7 +165,10 @@ def _specialties(ctx: BuildContext, research: dict) -> dict[str, list[str]]:
         pool = {k: v for k, v in tree.items() if v["folder"] in folders and v["eligible"]}
         picked: list[str] = []
         blocked: set[str] = set()
-        while len(picked) < n:
+        # se sigue de largo: las que vienen después de las N de arranque son
+        # las que la IA prioriza investigar (16_ai.yaml -> military)
+        ahead = int(research.get("ai_next_techs", 8))
+        while len(picked) < n + ahead:
             cands = [t for t in pool if t not in picked and t not in blocked
                      and all(p in picked for p in parents.get(t, ()) if p in pool)]
             if not cands:
@@ -174,6 +177,8 @@ def _specialties(ctx: BuildContext, research: dict) -> dict[str, list[str]]:
             chosen = cands[0]
             picked.append(chosen)
             blocked.update(pool[chosen]["xor"])
+        ctx.data.setdefault("specialty_next", {})[tag] = picked[n:]
+        picked = picked[:n]
         out[tag] = picked
         lines.append(f"{tag} {cat} ({', '.join(sorted(folders))}): {', '.join(picked)}")
     ctx.note("investigacion de arranque (el resto del mundo, nada):\n      " + "\n      ".join(lines))

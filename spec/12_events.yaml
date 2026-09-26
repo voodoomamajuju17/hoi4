@@ -435,6 +435,60 @@ namespaces:
           - {effect: add_political_power, value: 100}
           - {effect: add_stability, value: 0.03}
         src: user_design
+      - id: 40
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Unrest in Southern Patagonia, spanish: Descontento en Patagonia Austral}
+        desc:
+          english: Crowds in the streets of Southern Patagonia are burning our flags. The local government says it can no longer answer for order, and
+            asks, politely, what we intend to do.
+          spanish: En las calles de Patagonia Austral queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y pregunta,
+            con mucha educación, qué pensamos hacer.
+        options:
+        - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: EFE_lealtad_pta, value: 30}
+          - {effect: run, value: EFE_recalcular_satelites}
+          ai_chance: 60
+        - name: {english: A firm hand., spanish: Mano dura.}
+          effects:
+          - {effect: add_variable, var: EFE_lealtad_pta, value: 15}
+          - {effect: add_stability, value: -0.03}
+          - effect: scope
+            target: PTA
+            effects:
+            - {effect: add_stability, value: -0.1}
+          - {effect: run, value: EFE_recalcular_satelites}
+          ai_chance: 40
+        src: user_design
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Unrest in Yvytu Ykua Guasu, spanish: Descontento en Yvytu Ykua Guasu}
+        desc:
+          english: Crowds in the streets of Yvytu Ykua Guasu are burning our flags. The local government says it can no longer answer for order, and
+            asks, politely, what we intend to do.
+          spanish: En las calles de Yvytu Ykua Guasu queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y pregunta,
+            con mucha educación, qué pensamos hacer.
+        options:
+        - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: EFE_lealtad_yyg, value: 30}
+          - {effect: run, value: EFE_recalcular_satelites}
+          ai_chance: 60
+        - name: {english: A firm hand., spanish: Mano dura.}
+          effects:
+          - {effect: add_variable, var: EFE_lealtad_yyg, value: 15}
+          - {effect: add_stability, value: -0.03}
+          - effect: scope
+            target: YYG
+            effects:
+            - {effect: add_stability, value: -0.1}
+          - {effect: run, value: EFE_recalcular_satelites}
+          ai_chance: 40
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -750,6 +804,60 @@ namespaces:
             effects:
             - {effect: build_here, building: industrial_complex, level: 1}
         src: user_design
+      - id: 40
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Unrest in Northern Resource Zone, spanish: Descontento en Zona de Recursos Boreal}
+        desc:
+          english: Crowds in the streets of Northern Resource Zone are burning our flags. The local government says it can no longer answer for order,
+            and asks, politely, what we intend to do.
+          spanish: En las calles de Zona de Recursos Boreal queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden
+            y pregunta, con mucha educación, qué pensamos hacer.
+        options:
+        - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: FCU_lealtad_znr, value: 30}
+          - {effect: run, value: FCU_recalcular_satelites}
+          ai_chance: 60
+        - name: {english: A firm hand., spanish: Mano dura.}
+          effects:
+          - {effect: add_variable, var: FCU_lealtad_znr, value: 15}
+          - {effect: add_stability, value: -0.03}
+          - effect: scope
+            target: ZNR
+            effects:
+            - {effect: add_stability, value: -0.1}
+          - {effect: run, value: FCU_recalcular_satelites}
+          ai_chance: 40
+        src: user_design
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Unrest in Southern Economic Zone, spanish: Descontento en Zona Económica del Sur}
+        desc:
+          english: Crowds in the streets of Southern Economic Zone are burning our flags. The local government says it can no longer answer for order,
+            and asks, politely, what we intend to do.
+          spanish: En las calles de Zona Económica del Sur queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y
+            pregunta, con mucha educación, qué pensamos hacer.
+        options:
+        - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: FCU_lealtad_zse, value: 30}
+          - {effect: run, value: FCU_recalcular_satelites}
+          ai_chance: 60
+        - name: {english: A firm hand., spanish: Mano dura.}
+          effects:
+          - {effect: add_variable, var: FCU_lealtad_zse, value: 15}
+          - {effect: add_stability, value: -0.03}
+          - effect: scope
+            target: ZSE
+            effects:
+            - {effect: add_stability, value: -0.1}
+          - {effect: run, value: FCU_recalcular_satelites}
+          ai_chance: 40
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -987,6 +1095,60 @@ namespaces:
             effects:
             - {effect: build_here, building: dockyard, level: 1}
             when: {coastal: true}
+        src: user_design
+      - id: 40
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Unrest in Antillean Free Ports, spanish: Descontento en Puertos Libres Antillanos}
+        desc:
+          english: Crowds in the streets of Antillean Free Ports are burning our flags. The local government says it can no longer answer for order,
+            and asks, politely, what we intend to do.
+          spanish: En las calles de Puertos Libres Antillanos queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden
+            y pregunta, con mucha educación, qué pensamos hacer.
+        options:
+        - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: HSN_lealtad_zaf, value: 30}
+          - {effect: run, value: HSN_recalcular_satelites}
+          ai_chance: 60
+        - name: {english: A firm hand., spanish: Mano dura.}
+          effects:
+          - {effect: add_variable, var: HSN_lealtad_zaf, value: 15}
+          - {effect: add_stability, value: -0.03}
+          - effect: scope
+            target: ZAF
+            effects:
+            - {effect: add_stability, value: -0.1}
+          - {effect: run, value: HSN_recalcular_satelites}
+          ai_chance: 40
+        src: user_design
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Unrest in Austral Sea Compact, spanish: Descontento en Pacto del Mar Austral}
+        desc:
+          english: Crowds in the streets of Austral Sea Compact are burning our flags. The local government says it can no longer answer for order,
+            and asks, politely, what we intend to do.
+          spanish: En las calles de Pacto del Mar Austral queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y
+            pregunta, con mucha educación, qué pensamos hacer.
+        options:
+        - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: HSN_lealtad_zas, value: 30}
+          - {effect: run, value: HSN_recalcular_satelites}
+          ai_chance: 60
+        - name: {english: A firm hand., spanish: Mano dura.}
+          effects:
+          - {effect: add_variable, var: HSN_lealtad_zas, value: 15}
+          - {effect: add_stability, value: -0.03}
+          - effect: scope
+            target: ZAS
+            effects:
+            - {effect: add_stability, value: -0.1}
+          - {effect: run, value: HSN_recalcular_satelites}
+          ai_chance: 40
         src: user_design
   # ===========================================================================
   meganations_asc:
@@ -1234,6 +1396,60 @@ namespaces:
         - {effect: add_stability, value: 0.05}
         - {effect: run, value: ASC_recalcular_computo}
       src: user_design
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Baltic Commune, spanish: Descontento en Comuna Báltica}
+      desc:
+        english: Crowds in the streets of Baltic Commune are burning our flags. The local government says it can no longer answer for order, and asks,
+          politely, what we intend to do.
+        spanish: En las calles de Comuna Báltica queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y pregunta,
+          con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: ASC_lealtad_zbc, value: 30}
+        - {effect: run, value: ASC_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: ASC_lealtad_zbc, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZBC
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: ASC_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Albion Workers' Republic, spanish: Descontento en República Obrera de Albión}
+      desc:
+        english: Crowds in the streets of Albion Workers' Republic are burning our flags. The local government says it can no longer answer for order,
+          and asks, politely, what we intend to do.
+        spanish: En las calles de República Obrera de Albión queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden
+          y pregunta, con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: ASC_lealtad_zal, value: 30}
+        - {effect: run, value: ASC_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: ASC_lealtad_zal, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZAL
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: ASC_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
   meganations_apf:
     country: APF
     events:
@@ -1419,6 +1635,60 @@ namespaces:
         - {effect: add_manpower, value: 200000}
         - {effect: add_war_support, value: 0.05}
       src: user_design
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Highlands Federation, spanish: Descontento en Federación de las Tierras Altas}
+      desc:
+        english: Crowds in the streets of Highlands Federation are burning our flags. The local government says it can no longer answer for order,
+          and asks, politely, what we intend to do.
+        spanish: En las calles de Federación de las Tierras Altas queman nuestras banderas. El gobierno local dice que ya no puede responder por el
+          orden y pregunta, con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: APF_lealtad_zet, value: 30}
+        - {effect: run, value: APF_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zet, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZET
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: APF_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Cape Federation, spanish: Descontento en Federación del Cabo}
+      desc:
+        english: Crowds in the streets of Cape Federation are burning our flags. The local government says it can no longer answer for order, and
+          asks, politely, what we intend to do.
+        spanish: En las calles de Federación del Cabo queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y pregunta,
+          con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: APF_lealtad_zsa, value: 30}
+        - {effect: run, value: APF_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zsa, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZSA
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: APF_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -1592,6 +1862,60 @@ namespaces:
         effects:
         - {effect: add_stability, value: 0.08}
         - {effect: add_variable, var: NAS_inti, value: -20}
+      src: user_design
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in New Granada, spanish: Descontento en Nueva Granada}
+      desc:
+        english: Crowds in the streets of New Granada are burning our flags. The local government says it can no longer answer for order, and asks,
+          politely, what we intend to do.
+        spanish: En las calles de Nueva Granada queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y pregunta,
+          con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: NAS_lealtad_zng, value: 30}
+        - {effect: run, value: NAS_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: NAS_lealtad_zng, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZNG
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: NAS_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Free Plains of the Orinoco, spanish: Descontento en Llanos Libres del Orinoco}
+      desc:
+        english: Crowds in the streets of Free Plains of the Orinoco are burning our flags. The local government says it can no longer answer for
+          order, and asks, politely, what we intend to do.
+        spanish: En las calles de Llanos Libres del Orinoco queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden
+          y pregunta, con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: NAS_lealtad_zll, value: 30}
+        - {effect: run, value: NAS_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: NAS_lealtad_zll, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZLL
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: NAS_recalcular_satelites}
+        ai_chance: 40
       src: user_design
   meganations_shd:
     country: SHD
@@ -1797,6 +2121,62 @@ namespaces:
       - name: {english: Keep it quiet., spanish: Guardar silencio.}
         effects:
         - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 2}
+      src: user_design
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Unrest in Harmonious Protectorate of Korea
+        spanish: Descontento en Protectorado Armónico de Corea
+      desc:
+        english: Crowds in the streets of Harmonious Protectorate of Korea are burning our flags. The local government says it can no longer answer
+          for order, and asks, politely, what we intend to do.
+        spanish: En las calles de Protectorado Armónico de Corea queman nuestras banderas. El gobierno local dice que ya no puede responder por el
+          orden y pregunta, con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: 30}
+        - {effect: run, value: SHD_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZKR
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: SHD_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Steppe Directorate, spanish: Descontento en Directorio de la Estepa}
+      desc:
+        english: Crowds in the streets of Steppe Directorate are burning our flags. The local government says it can no longer answer for order, and
+          asks, politely, what we intend to do.
+        spanish: En las calles de Directorio de la Estepa queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden
+          y pregunta, con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: SHD_lealtad_zst, value: 30}
+        - {effect: run, value: SHD_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zst, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZST
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: SHD_recalcular_satelites}
+        ai_chance: 40
       src: user_design
   # ===========================================================================
   meganations_nre:
@@ -2084,6 +2464,60 @@ namespaces:
         - {effect: add_stability, value: -0.05}
         - {effect: run, value: NRE_recalcular_legiones}
       src: user_design
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Province of Hispania, spanish: Descontento en Provincia de Hispania}
+      desc:
+        english: Crowds in the streets of Province of Hispania are burning our flags. The local government says it can no longer answer for order,
+          and asks, politely, what we intend to do.
+        spanish: En las calles de Provincia de Hispania queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y
+          pregunta, con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: NRE_lealtad_zhi, value: 30}
+        - {effect: run, value: NRE_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: NRE_lealtad_zhi, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZHI
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: NRE_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Unrest in Province of Dacia, spanish: Descontento en Provincia de Dacia}
+      desc:
+        english: Crowds in the streets of Province of Dacia are burning our flags. The local government says it can no longer answer for order, and
+          asks, politely, what we intend to do.
+        spanish: En las calles de Provincia de Dacia queman nuestras banderas. El gobierno local dice que ya no puede responder por el orden y pregunta,
+          con mucha educación, qué pensamos hacer.
+      options:
+      - name: {english: 'Concessions: they will have their say.', spanish: 'Concesiones: van a tener voz.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_variable, var: NRE_lealtad_zda, value: 30}
+        - {effect: run, value: NRE_recalcular_satelites}
+        ai_chance: 60
+      - name: {english: A firm hand., spanish: Mano dura.}
+        effects:
+        - {effect: add_variable, var: NRE_lealtad_zda, value: 15}
+        - {effect: add_stability, value: -0.03}
+        - effect: scope
+          target: ZDA
+          effects:
+          - {effect: add_stability, value: -0.1}
+        - {effect: run, value: NRE_recalcular_satelites}
+        ai_chance: 40
+      src: user_design
   # ===========================================================================
   meganations_zwe:
     country: ZWE
@@ -2098,8 +2532,108 @@ namespaces:
       - name: {english: March., spanish: Marchar.}
         effects:
         - {effect: run, value: ANARQUIA_levas}
+        - {effect: run, value: ZWE_pulso_caudillos}
         - {effect: event, id: meganations_zwe.1, days: 30}
       src: user_decision
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Raiders Ride Out, spanish: Salen los Saqueadores}
+      desc:
+        english: The warlords need loot to keep their men.
+        spanish: Los señores de la guerra necesitan botín para mantener a sus hombres.
+      options:
+      - name: {english: Ride., spanish: Cabalgar.}
+        effects:
+        - {effect: add_manpower, value: 5000}
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: ASC}
+              then:
+              - {effect: event, id: meganations_zwe.3, days: 1, target: ASC}
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: NRE}
+              then:
+              - {effect: event, id: meganations_zwe.3, days: 1, target: NRE}
+      src: user_design
+      hidden: true
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Raid from the Eurasian Warlords, spanish: Saqueo de los Señores de la Guerra de Eurasia}
+      desc:
+        english: Warbands of the Eurasian Warlords crossed the border last night. Three villages burned, a depot emptied, and the raiders were gone
+          before dawn.
+        spanish: Bandas de los Señores de la Guerra de Eurasia cruzaron la frontera anoche. Tres pueblos quemados, un depósito vaciado, y los saqueadores
+          se fueron antes del amanecer.
+      options:
+      - name: {english: Hunt them down to their lairs., spanish: Perseguirlos hasta sus guaridas.}
+        effects:
+        - {effect: army_experience, value: 10}
+        - {effect: add_war_support, value: 0.02}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 50
+      - name: {english: Reinforce the border and move on., spanish: Reforzar la frontera y seguir.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 50
+      src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Warlord Rises, spanish: Se Alza un Caudillo}
+      desc:
+        english: One warlord has beaten, bought or buried all the others. For the first time in a generation, the region answers to a single voice.
+        spanish: Un caudillo les ganó, los compró o los enterró a todos los demás. Por primera vez en una generación, la región responde a una sola
+          voz.
+      options:
+      - name: {english: Hail the Warlord!, spanish: ¡Viva el Caudillo!}
+        effects:
+        - {effect: add_ideas, value: ZWE_caudillo_supremo}
+        - effect: if
+          when: {country_exists: ASC}
+          then:
+          - {effect: event, id: meganations_zwe.5, days: 3, target: ASC}
+        - effect: if
+          when: {country_exists: NRE}
+          then:
+          - {effect: event, id: meganations_zwe.5, days: 3, target: NRE}
+      src: user_design
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: One Warlord to Rule Them, spanish: Un Solo Caudillo}
+      desc:
+        english: Our agents report that the Eurasian Warlords now obey a single warlord. The chaos next door was our advantage. It is ending.
+        spanish: Nuestros agentes informan que los Señores de la Guerra de Eurasia ahora obedecen a un solo caudillo. El caos del vecino era nuestra
+          ventaja. Se está terminando.
+      options:
+      - name: {english: We must act before it is too late., spanish: Hay que actuar antes de que sea tarde.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 70
+      - name: {english: Let them tire themselves out., spanish: Que se cansen solos.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 30
+      src: user_design
+    - id: 6
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords' Truce, spanish: La Tregua de los Caudillos}
+      desc:
+        english: With a foreign army on their land, the warlords stop killing each other. For a while.
+        spanish: Con un ejército extranjero en su tierra, los señores de la guerra dejan de matarse entre ellos. Por un tiempo.
+      options:
+      - name: {english: 'For now, we are brothers.', spanish: 'Por ahora, somos hermanos.'}
+        effects:
+        - {effect: timed_idea, idea: ZWE_tregua_de_caudillos, days: 91}
+      src: user_design
   # ===========================================================================
   meganations_zwi:
     country: ZWI
@@ -2114,8 +2648,110 @@ namespaces:
       - name: {english: March., spanish: Marchar.}
         effects:
         - {effect: run, value: ANARQUIA_levas}
+        - {effect: run, value: ZWI_pulso_caudillos}
         - {effect: event, id: meganations_zwi.1, days: 30}
       src: user_decision
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Raiders Ride Out, spanish: Salen los Saqueadores}
+      desc:
+        english: The warlords need loot to keep their men.
+        spanish: Los señores de la guerra necesitan botín para mantener a sus hombres.
+      options:
+      - name: {english: Ride., spanish: Cabalgar.}
+        effects:
+        - {effect: add_manpower, value: 5000}
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: SHD}
+              then:
+              - {effect: event, id: meganations_zwi.3, days: 1, target: SHD}
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: HSN}
+              then:
+              - {effect: event, id: meganations_zwi.3, days: 1, target: HSN}
+      src: user_design
+      hidden: true
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Raid from the Warlords of Hindustan
+        spanish: Saqueo de los Señores de la Guerra del Indostán
+      desc:
+        english: Warbands of the Warlords of Hindustan crossed the border last night. Three villages burned, a depot emptied, and the raiders were
+          gone before dawn.
+        spanish: Bandas de los Señores de la Guerra del Indostán cruzaron la frontera anoche. Tres pueblos quemados, un depósito vaciado, y los saqueadores
+          se fueron antes del amanecer.
+      options:
+      - name: {english: Hunt them down to their lairs., spanish: Perseguirlos hasta sus guaridas.}
+        effects:
+        - {effect: army_experience, value: 10}
+        - {effect: add_war_support, value: 0.02}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 50
+      - name: {english: Reinforce the border and move on., spanish: Reforzar la frontera y seguir.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 50
+      src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Warlord Rises, spanish: Se Alza un Caudillo}
+      desc:
+        english: One warlord has beaten, bought or buried all the others. For the first time in a generation, the region answers to a single voice.
+        spanish: Un caudillo les ganó, los compró o los enterró a todos los demás. Por primera vez en una generación, la región responde a una sola
+          voz.
+      options:
+      - name: {english: Hail the Warlord!, spanish: ¡Viva el Caudillo!}
+        effects:
+        - {effect: add_ideas, value: ZWI_caudillo_supremo}
+        - effect: if
+          when: {country_exists: SHD}
+          then:
+          - {effect: event, id: meganations_zwi.5, days: 3, target: SHD}
+        - effect: if
+          when: {country_exists: HSN}
+          then:
+          - {effect: event, id: meganations_zwi.5, days: 3, target: HSN}
+      src: user_design
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: One Warlord to Rule Them, spanish: Un Solo Caudillo}
+      desc:
+        english: Our agents report that the Warlords of Hindustan now obey a single warlord. The chaos next door was our advantage. It is ending.
+        spanish: Nuestros agentes informan que los Señores de la Guerra del Indostán ahora obedecen a un solo caudillo. El caos del vecino era nuestra
+          ventaja. Se está terminando.
+      options:
+      - name: {english: We must act before it is too late., spanish: Hay que actuar antes de que sea tarde.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 70
+      - name: {english: Let them tire themselves out., spanish: Que se cansen solos.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 30
+      src: user_design
+    - id: 6
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords' Truce, spanish: La Tregua de los Caudillos}
+      desc:
+        english: With a foreign army on their land, the warlords stop killing each other. For a while.
+        spanish: Con un ejército extranjero en su tierra, los señores de la guerra dejan de matarse entre ellos. Por un tiempo.
+      options:
+      - name: {english: 'For now, we are brothers.', spanish: 'Por ahora, somos hermanos.'}
+        effects:
+        - {effect: timed_idea, idea: ZWI_tregua_de_caudillos, days: 91}
+      src: user_design
   # ===========================================================================
   meganations_zwm:
     country: ZWM
@@ -2130,8 +2766,108 @@ namespaces:
       - name: {english: March., spanish: Marchar.}
         effects:
         - {effect: run, value: ANARQUIA_levas}
+        - {effect: run, value: ZWM_pulso_caudillos}
         - {effect: event, id: meganations_zwm.1, days: 30}
       src: user_decision
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Raiders Ride Out, spanish: Salen los Saqueadores}
+      desc:
+        english: The warlords need loot to keep their men.
+        spanish: Los señores de la guerra necesitan botín para mantener a sus hombres.
+      options:
+      - name: {english: Ride., spanish: Cabalgar.}
+        effects:
+        - {effect: add_manpower, value: 5000}
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: NRE}
+              then:
+              - {effect: event, id: meganations_zwm.3, days: 1, target: NRE}
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: APF}
+              then:
+              - {effect: event, id: meganations_zwm.3, days: 1, target: APF}
+      src: user_design
+      hidden: true
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Raid from the Desert Emirates, spanish: Saqueo de los Emiratos del Desierto}
+      desc:
+        english: Warbands of the Desert Emirates crossed the border last night. Three villages burned, a depot emptied, and the raiders were gone
+          before dawn.
+        spanish: Bandas de los Emiratos del Desierto cruzaron la frontera anoche. Tres pueblos quemados, un depósito vaciado, y los saqueadores se
+          fueron antes del amanecer.
+      options:
+      - name: {english: Hunt them down to their lairs., spanish: Perseguirlos hasta sus guaridas.}
+        effects:
+        - {effect: army_experience, value: 10}
+        - {effect: add_war_support, value: 0.02}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 50
+      - name: {english: Reinforce the border and move on., spanish: Reforzar la frontera y seguir.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 50
+      src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Warlord Rises, spanish: Se Alza un Caudillo}
+      desc:
+        english: One warlord has beaten, bought or buried all the others. For the first time in a generation, the region answers to a single voice.
+        spanish: Un caudillo les ganó, los compró o los enterró a todos los demás. Por primera vez en una generación, la región responde a una sola
+          voz.
+      options:
+      - name: {english: Hail the Warlord!, spanish: ¡Viva el Caudillo!}
+        effects:
+        - {effect: add_ideas, value: ZWM_caudillo_supremo}
+        - effect: if
+          when: {country_exists: NRE}
+          then:
+          - {effect: event, id: meganations_zwm.5, days: 3, target: NRE}
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_zwm.5, days: 3, target: APF}
+      src: user_design
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: One Warlord to Rule Them, spanish: Un Solo Caudillo}
+      desc:
+        english: Our agents report that the Desert Emirates now obey a single warlord. The chaos next door was our advantage. It is ending.
+        spanish: Nuestros agentes informan que los Emiratos del Desierto ahora obedecen a un solo caudillo. El caos del vecino era nuestra ventaja.
+          Se está terminando.
+      options:
+      - name: {english: We must act before it is too late., spanish: Hay que actuar antes de que sea tarde.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 70
+      - name: {english: Let them tire themselves out., spanish: Que se cansen solos.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 30
+      src: user_design
+    - id: 6
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords' Truce, spanish: La Tregua de los Caudillos}
+      desc:
+        english: With a foreign army on their land, the warlords stop killing each other. For a while.
+        spanish: Con un ejército extranjero en su tierra, los señores de la guerra dejan de matarse entre ellos. Por un tiempo.
+      options:
+      - name: {english: 'For now, we are brothers.', spanish: 'Por ahora, somos hermanos.'}
+        effects:
+        - {effect: timed_idea, idea: ZWM_tregua_de_caudillos, days: 91}
+      src: user_design
   # ===========================================================================
   meganations_zwb:
     country: ZWB
@@ -2146,5 +2882,115 @@ namespaces:
       - name: {english: March., spanish: Marchar.}
         effects:
         - {effect: run, value: ANARQUIA_levas}
+        - {effect: run, value: ZWB_pulso_caudillos}
         - {effect: event, id: meganations_zwb.1, days: 30}
       src: user_decision
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Raiders Ride Out, spanish: Salen los Saqueadores}
+      desc:
+        english: The warlords need loot to keep their men.
+        spanish: Los señores de la guerra necesitan botín para mantener a sus hombres.
+      options:
+      - name: {english: Ride., spanish: Cabalgar.}
+        effects:
+        - {effect: add_manpower, value: 5000}
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: EFE}
+              then:
+              - {effect: event, id: meganations_zwb.3, days: 1, target: EFE}
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: NAS}
+              then:
+              - {effect: event, id: meganations_zwb.3, days: 1, target: NAS}
+          - weight: 1
+            effects:
+            - effect: if
+              when: {country_exists: FCU}
+              then:
+              - {effect: event, id: meganations_zwb.3, days: 1, target: FCU}
+      src: user_design
+      hidden: true
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Raid from the Amazon Caudillos, spanish: Saqueo de los Caudillos del Amazonas}
+      desc:
+        english: Warbands of the Amazon Caudillos crossed the border last night. Three villages burned, a depot emptied, and the raiders were gone
+          before dawn.
+        spanish: Bandas de los Caudillos del Amazonas cruzaron la frontera anoche. Tres pueblos quemados, un depósito vaciado, y los saqueadores se
+          fueron antes del amanecer.
+      options:
+      - name: {english: Hunt them down to their lairs., spanish: Perseguirlos hasta sus guaridas.}
+        effects:
+        - {effect: army_experience, value: 10}
+        - {effect: add_war_support, value: 0.02}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 50
+      - name: {english: Reinforce the border and move on., spanish: Reforzar la frontera y seguir.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 50
+      src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Warlord Rises, spanish: Se Alza un Caudillo}
+      desc:
+        english: One warlord has beaten, bought or buried all the others. For the first time in a generation, the region answers to a single voice.
+        spanish: Un caudillo les ganó, los compró o los enterró a todos los demás. Por primera vez en una generación, la región responde a una sola
+          voz.
+      options:
+      - name: {english: Hail the Warlord!, spanish: ¡Viva el Caudillo!}
+        effects:
+        - {effect: add_ideas, value: ZWB_caudillo_supremo}
+        - effect: if
+          when: {country_exists: EFE}
+          then:
+          - {effect: event, id: meganations_zwb.5, days: 3, target: EFE}
+        - effect: if
+          when: {country_exists: NAS}
+          then:
+          - {effect: event, id: meganations_zwb.5, days: 3, target: NAS}
+        - effect: if
+          when: {country_exists: FCU}
+          then:
+          - {effect: event, id: meganations_zwb.5, days: 3, target: FCU}
+      src: user_design
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: One Warlord to Rule Them, spanish: Un Solo Caudillo}
+      desc:
+        english: Our agents report that the Amazon Caudillos now obey a single warlord. The chaos next door was our advantage. It is ending.
+        spanish: Nuestros agentes informan que los Caudillos del Amazonas ahora obedecen a un solo caudillo. El caos del vecino era nuestra ventaja.
+          Se está terminando.
+      options:
+      - name: {english: We must act before it is too late., spanish: Hay que actuar antes de que sea tarde.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 70
+      - name: {english: Let them tire themselves out., spanish: Que se cansen solos.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 30
+      src: user_design
+    - id: 6
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Warlords' Truce, spanish: La Tregua de los Caudillos}
+      desc:
+        english: With a foreign army on their land, the warlords stop killing each other. For a while.
+        spanish: Con un ejército extranjero en su tierra, los señores de la guerra dejan de matarse entre ellos. Por un tiempo.
+      options:
+      - name: {english: 'For now, we are brothers.', spanish: 'Por ahora, somos hermanos.'}
+        effects:
+        - {effect: timed_idea, idea: ZWB_tregua_de_caudillos, days: 91}
+      src: user_design

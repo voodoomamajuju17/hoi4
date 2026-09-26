@@ -387,6 +387,23 @@ class Vanilla:
                 continue
         return words
 
+    def ai_strategy_ids(self) -> dict[str, set[str]] | None:
+        """Por tipo de ai_strategy, los `id` que el juego usa con ese tipo
+        (role_ratio -> infantry, armor...). Sirve para no inventar ids."""
+        folder = self.root / "common" / "ai_strategy"
+        if not folder.is_dir():
+            return None
+        out: dict[str, set[str]] = {}
+        pat = re.compile(r"\btype\s*=\s*([a-z_]+)\s+id\s*=\s*\"?([A-Za-z0-9_]+)")
+        for path in folder.rglob("*.txt"):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            for kind, ident in pat.findall(text):
+                out.setdefault(kind, set()).add(ident)
+        return out
+
     def wargoal_types(self) -> set[str]:
         words: set[str] = set()
         for path in (self.root / "common" / "wargoals").glob("*.txt"):

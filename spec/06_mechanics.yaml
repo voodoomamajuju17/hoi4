@@ -452,6 +452,33 @@ mechanics:
     target_experience_src: canon
 
 # =============================================================================
+
+  # ===========================================================================
+  - id: lealtad_de_los_satelites
+    country: EFE
+    definition_status: implementable
+    src: user_decision
+    name: {english: Satellite Loyalty, spanish: Lealtad de los Satélites}
+    design: 'Cada meganación guarda la lealtad (0-100) de sus dos satélites. Baja 1 por mes (2 en guerra), sube 1 con estabilidad 60%+. 75+: poder
+      político; menos de 25: resta poder político y estabilidad y puede haber rebelión. Ayuda (+15, fábrica) y Tributo (-20, PP y hombres).'
+    variables:
+    - {name: EFE_lealtad_pta, start: 60, country: EFE}
+    - {name: EFE_lealtad_yyg, start: 60, country: EFE}
+    - {name: FCU_lealtad_znr, start: 60, country: FCU}
+    - {name: FCU_lealtad_zse, start: 60, country: FCU}
+    - {name: ASC_lealtad_zbc, start: 60, country: ASC}
+    - {name: ASC_lealtad_zal, start: 60, country: ASC}
+    - {name: HSN_lealtad_zaf, start: 60, country: HSN}
+    - {name: HSN_lealtad_zas, start: 60, country: HSN}
+    - {name: NAS_lealtad_zng, start: 60, country: NAS}
+    - {name: NAS_lealtad_zll, start: 60, country: NAS}
+    - {name: SHD_lealtad_zkr, start: 60, country: SHD}
+    - {name: SHD_lealtad_zst, start: 60, country: SHD}
+    - {name: APF_lealtad_zet, start: 60, country: APF}
+    - {name: APF_lealtad_zsa, start: 60, country: APF}
+    - {name: NRE_lealtad_zhi, start: 60, country: NRE}
+    - {name: NRE_lealtad_zda, start: 60, country: NRE}
+
 summary:
   implementable: [compute_power]
   partial: [biosteel, civil_military_balance, trade_nodes, regional_integration]
