@@ -184,14 +184,20 @@ def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
         return
     after = wars.get("declare_after") or {}
     for mega, anar in ctx.data.get("anarchy_pairs") or []:
+        # Si la anarquía pasa a ser satélite de otro (una conferencia de paz),
+        # declararle es declararle a su señor: la partida de 2026-09-29 tuvo a
+        # Roma en guerra con la Comuna porque Eurasia era satélite de la ASC.
+        free = {"country": {"tag": anar, "when": {"subject": False}}}
+        gone = {"any": [{"not": {"country_exists": anar}},
+                        {"country": {"tag": anar, "when": {"subject": True}}}]}
         add_plan(f"{mega}_contra_{anar}", mega, [
             {"type": "conquer", "target": anar, "value": wars.get("conquer", 150)},
             {"type": "prepare_for_war", "target": anar, "value": wars.get("prepare", 100)},
             {"type": "antagonize", "target": anar, "value": wars.get("antagonize", 50)},
-        ])
+        ], enable=free, abort=gone)
         enable = {"divisions_at_least": int(wars.get("divisions", 12)), "at_war": False,
-                  "country": {"tag": anar, "when": {"not_flag": f"{anar}_intocable"}}}
+                  "country": {"tag": anar, "when": {"not_flag": f"{anar}_intocable", "subject": False}}}
         if after.get(mega):
             enable["date_after"] = str(after[mega])
         add_plan(f"{mega}_declara_a_{anar}", mega,
-                 [{"type": "declare_war", "target": anar, "value": wars.get("declare", 100)}], enable=enable)
+                 [{"type": "declare_war", "target": anar, "value": wars.get("declare", 100)}], enable=enable, abort=gone)

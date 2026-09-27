@@ -19,7 +19,9 @@ research:
   techs_per_specialty: 5
   # Lo mínimo para todos (meganaciones, satélites y Anarquía): fabricar
   # equipo de infantería y de apoyo. Se validan contra el árbol del juego.
-  base_techs: [infantry_weapons, tech_support]
+  # 2026-09-29 (pedido del usuario): todos arrancan con trenes y camiones
+  # (basic_train: equipo de tren 1; tech_trucks: camiones).
+  base_techs: [infantry_weapons, tech_support, basic_train, tech_trucks]
   # Las meganaciones además pueden botar un destructor básico (se validan
   # contra el árbol; las que no existen en este juego se ignoran).
   meganation_techs: [early_ship_hull_light, basic_ship_hull_light, basic_battery]

@@ -61,7 +61,7 @@ _COUNTRY_ONLY = {"add_political_power", "add_stability", "add_war_support", "arm
                  "has_war", "has_idea", "has_completed_focus", "controls_state", "has_war_with", "has_army_size",
                  "has_capitulated", "num_of_factories", "has_tech", "has_manpower", "has_war_support", "has_equipment",
                  "exists", "has_wargoal_against", "is_in_faction_with", "surrender_progress", "is_ai", "capital_scope",
-                 "set_truce", "is_subject_of"}
+                 "set_truce", "is_subject_of", "is_subject"}
 _TO_STATE = {"capital_scope", "random_owned_state", "random_owned_controlled_state", "every_owned_state", "every_state",
              "random_state", "any_state", "any_owned_state", "every_controlled_state", "random_controlled_state",
              "any_neighbor_state", "random_neighbor_state", "every_neighbor_state", "CAPITAL"}
@@ -720,12 +720,12 @@ def test_territory() -> None:
         section("arranque militar: tecnologias, ejercito, equipo")
         efe_h = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
         check("el EFE (blindados) solo tiene lo basico: en el fixture no hay pestaña de blindados",
-              set(pdx.parse(efe_h).get("set_technology").keys()) - {"popup"} == {"infantry_weapons", "tech_support"})
+              set(pdx.parse(efe_h).get("set_technology").keys()) - {"popup"} == {"infantry_weapons", "tech_support", "basic_train", "tech_trucks"})
         check("avisa la pestaña que falta y lista las que hay",
               any("investigacion" in w and "infantry_folder" in w for w in ctx.warnings))
         nre_h = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
         techs = pdx.parse(nre_h).get("set_technology")
-        keys = set(techs.keys()) - {"popup", "tech_support"}
+        keys = set(techs.keys()) - {"popup", "tech_support", "basic_train", "tech_trucks"}
         check("NRE (infanteria): las 5 primeras de la pestaña, en orden de arbol",
               keys == {"infantry_weapons", "either_or_tech", "infantry_weapons1", "infantry_weapons2",
                        "improved_infantry_weapons"}, str(keys))
@@ -734,9 +734,12 @@ def test_territory() -> None:
         check("no toma techs de otra pestaña", "basic_ship_hull_heavy" not in keys)
         check("sin popup", pdx.text(techs.get("popup")) == "no")
         pta_h = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
-        check("satelite: solo lo basico", set(pdx.parse(pta_h).get("set_technology").keys()) - {"popup"} <= {"infantry_weapons", "tech_support"})
+        check("satelite: solo lo basico", set(pdx.parse(pta_h).get("set_technology").keys()) - {"popup"} <= {"infantry_weapons", "tech_support", "basic_train", "tech_trucks"})
         zwi_h = next((mod / "history/countries").glob("ZWI - *.txt")).read_text()
-        check("anarquia: solo lo basico", set(pdx.parse(zwi_h).get("set_technology").keys()) - {"popup"} <= {"infantry_weapons", "tech_support"})
+        check("anarquia: solo lo basico", set(pdx.parse(zwi_h).get("set_technology").keys()) - {"popup"} <= {"infantry_weapons", "tech_support", "basic_train", "tech_trucks"})
+        # 2026-09-29 (pedido del usuario): todos arrancan con trenes y camiones.
+        check("trenes y camiones para todos (meganacion, satelite y anarquia)",
+              all({"basic_train", "tech_trucks"} <= set(pdx.parse(h).get("set_technology").keys()) for h in (efe_h, pta_h, zwi_h)))
 
         oob = pdx.parse((mod / "history/units/EFE_2100.txt").read_text())
         tpls = [pdx.text(tpl.get("name")) for tpl in oob.get_all("division_template")]
@@ -1648,6 +1651,15 @@ def test_ai() -> None:
         check("guerras contra la Anarquia: Roma declara desde su fecha, con ejercito y sin otra guerra",
               "type = declare_war id = ZWE" in dzr and "date > 2100.2.1" in dzr and "size > 11" in dzr and "has_war = no" in dzr, dzr)
         check("y se prepara desde el dia uno", "type = prepare_for_war id = ZWE" in " ".join(pdx.render(root.get("MEGANATIONS_NRE_contra_ZWE")).split()))
+        # Partida 2026-09-29: Eurasia quedó satélite de la Comuna y Roma, con el plan de
+        # siempre, le declaró a Eurasia... y con eso a la Comuna entera.
+        nz = " ".join(pdx.render(root.get("MEGANATIONS_NRE_contra_ZWE")).split())
+        check("guerras contra la Anarquia: si la anarquia es satelite de alguien, no se le declara (seria declararle al senor)",
+              "ZWE = { NOT = { has_country_flag = ZWE_intocable } is_subject = no }" in dzr
+              and "ZWE = { is_subject = no }" in nz, dzr + " || " + nz)
+        check("guerras contra la Anarquia: el plan se abandona si pasa a ser satelite",
+              "abort = { OR = { NOT = { country_exists = ZWE } ZWE = { is_subject = yes } } }" in dzr
+              and "abort = { OR = { NOT = { country_exists = ZWE } ZWE = { is_subject = yes } } }" in nz, dzr)
         from tools.gen.emitters.effects import render_conditions
         cond = " ".join(pdx.render(render_conditions("t", {"divisions_at_least": 12}, {}, where="t")).split())
         check("declarar la guerra puede pedir un ejercito minimo", "has_army_size = { size > 11 }" in cond, cond)
@@ -1950,7 +1962,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "

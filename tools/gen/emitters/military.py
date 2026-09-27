@@ -68,6 +68,10 @@ def emit(ctx: BuildContext) -> None:
 
         research = spec.get("research") or {}
         base = [t for t in research.get("base_techs", []) if t in tree]
+        missing = [t for t in research.get("base_techs", []) if t not in tree]
+        if missing and not ctx.data.get("base_techs_warned"):
+            ctx.data["base_techs_warned"] = True
+            ctx.warn(f"investigacion de arranque: {', '.join(missing)} no existe en este juego; se ignora.")
         if kind == "meganation":
             # lo mínimo para botar un barco (2026-09-27: "nadie tiene marina")
             base += [t for t in research.get("meganation_techs", []) if t in tree]

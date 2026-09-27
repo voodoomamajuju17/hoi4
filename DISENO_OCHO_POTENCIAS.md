@@ -550,3 +550,8 @@ llega a 100 al toque y la tensión nunca sube".
   sigue en Nueva Granada); la República Checa y Danzig pasan a la ASC
   (Eslovaquia y la Rutenia se quedan en la Comuna Báltica). Un nombre
   explícito le gana al reparto por dueño.
+- **Guerras contra la Anarquía**: si una anarquía pasa a ser satélite de otra
+  potencia (por una conferencia de paz), la IA deja de prepararle la guerra y
+  de declararle: declararle era declararle a su señor (partida 2026-09-29:
+  Eurasia quedó satélite de la ASC y Roma terminó en guerra con la Comuna).
+- **Trenes y camiones**: todos arrancan con `basic_train` y `tech_trucks`.

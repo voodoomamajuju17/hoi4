@@ -880,6 +880,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             # el lado del satélite (2026-09-29): sigue siendo satélite de `value`
             block.add("is_subject_of", value)
             triggers_used.setdefault("is_subject_of", owner)
+        elif key == "subject":
+            # es satélite de alguien (cualquiera)
+            block.add("is_subject", bool(value))
+            triggers_used.setdefault("is_subject", owner)
         elif key == "neighbor_state_flag":
             block.add("any_neighbor_state", Block([("has_state_flag", value)]))
             triggers_used.setdefault("any_neighbor_state", owner)
