@@ -820,7 +820,19 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("62 eventos del EFE (con la guerra limitada y los 5 menores)", len(events) == 62, str(len(events)))
+        check("66 eventos del EFE (guerra limitada, 5 menores y la independencia de sus satelites)", len(events) == 66, str(len(events)))
+        # El lado del satélite (2026-09-29): su panel, la independencia y el aviso al señor.
+        cats_s = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text().split())
+        check("satelite: panel propio visible mientras sea satelite",
+              "PTA_independencia_category = {" in cats_s and "is_subject_of = EFE" in cats_s, cats_s[:300])
+        decs_s = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        ind = decs_s[decs_s.index("PTA_declarar_la_independencia = {"):][:1800]
+        check("satelite: declarar la independencia con lealtad baja y el senor en guerra o perdiendo",
+              "var = EFE_lealtad_pta value = 20 compare = less_than" in ind and "surrender_progress > 0.2" in ind, ind[:900])
+        check("satelite: el senor lo suelta (end_puppet) y recibe la noticia",
+              "EFE = { end_puppet = PTA country_event = { id = meganations_efe.44 days = 1 } }" in ind, ind[:1200])
+        loc_d = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("satelite: el panel muestra la lealtad guardada en el senor", "[?EFE.EFE_lealtad_pta]" in loc_d)
         se_raw = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
         se_all = " ".join(se_raw.split())
         pulso = " ".join(pdx.render(pdx.parse(se_raw).get("EFE_pulso_de_las_cubas")).split())
@@ -1855,7 +1867,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

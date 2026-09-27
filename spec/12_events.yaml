@@ -1309,6 +1309,68 @@ namespaces:
           - {effect: add_stability, value: 0.02}
           ai_chance: 40
         src: user_design
+      - id: 44
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Southern Patagonia Declares Independence
+          spanish: Patagonia Austral Declara la Independencia
+        desc:
+          english: Southern Patagonia tore up the treaty this morning. Its flag flies alone over its capital.
+          spanish: Patagonia Austral rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+        options:
+        - name: {english: Let them go., spanish: Que se vayan.}
+          effects:
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 40
+        - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+          effects:
+          - {effect: declare_war, target: PTA, type: annex_everything}
+          ai_chance: 60
+        src: user_design
+      - id: 46
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Independence!, spanish: ¡Independencia!}
+        desc:
+          english: We are no longer a satellite of Ecofascist Empire. What comes next is ours to decide.
+          spanish: Ya no somos un satélite de Imperio Ecofascista. Lo que venga lo decidimos nosotros.
+        options:
+        - name: {english: Free., spanish: Libres.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
+      - id: 45
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Yvytu Ykua Guasu Declares Independence, spanish: Yvytu Ykua Guasu Declara la Independencia}
+        desc:
+          english: Yvytu Ykua Guasu tore up the treaty this morning. Its flag flies alone over its capital.
+          spanish: Yvytu Ykua Guasu rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+        options:
+        - name: {english: Let them go., spanish: Que se vayan.}
+          effects:
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 40
+        - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+          effects:
+          - {effect: declare_war, target: YYG, type: annex_everything}
+          ai_chance: 60
+        src: user_design
+      - id: 47
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Independence!, spanish: ¡Independencia!}
+        desc:
+          english: We are no longer a satellite of Ecofascist Empire. What comes next is ours to decide.
+          spanish: Ya no somos un satélite de Imperio Ecofascista. Lo que venga lo decidimos nosotros.
+        options:
+        - name: {english: Free., spanish: Libres.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -2437,6 +2499,70 @@ namespaces:
           - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
           ai_chance: 60
         src: user_design
+      - id: 44
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Northern Resource Zone Declares Independence
+          spanish: Zona de Recursos Boreal Declara la Independencia
+        desc:
+          english: Northern Resource Zone tore up the treaty this morning. Its flag flies alone over its capital.
+          spanish: Zona de Recursos Boreal rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+        options:
+        - name: {english: Let them go., spanish: Que se vayan.}
+          effects:
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 40
+        - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+          effects:
+          - {effect: declare_war, target: ZNR, type: annex_everything}
+          ai_chance: 60
+        src: user_design
+      - id: 46
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Independence!, spanish: ¡Independencia!}
+        desc:
+          english: We are no longer a satellite of Free Corporative Capital Union. What comes next is ours to decide.
+          spanish: Ya no somos un satélite de Unión Libre de Capital Corporativo. Lo que venga lo decidimos nosotros.
+        options:
+        - name: {english: Free., spanish: Libres.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
+      - id: 45
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Southern Economic Zone Declares Independence
+          spanish: Zona Económica del Sur Declara la Independencia
+        desc:
+          english: Southern Economic Zone tore up the treaty this morning. Its flag flies alone over its capital.
+          spanish: Zona Económica del Sur rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+        options:
+        - name: {english: Let them go., spanish: Que se vayan.}
+          effects:
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 40
+        - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+          effects:
+          - {effect: declare_war, target: ZSE, type: annex_everything}
+          ai_chance: 60
+        src: user_design
+      - id: 47
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Independence!, spanish: ¡Independencia!}
+        desc:
+          english: We are no longer a satellite of Free Corporative Capital Union. What comes next is ours to decide.
+          spanish: Ya no somos un satélite de Unión Libre de Capital Corporativo. Lo que venga lo decidimos nosotros.
+        options:
+        - name: {english: Free., spanish: Libres.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -3489,6 +3615,70 @@ namespaces:
           - {effect: add_stability, value: 0.01}
           ai_chance: 50
         src: user_design
+      - id: 44
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Antillean Free Ports Declares Independence
+          spanish: Puertos Libres Antillanos Declara la Independencia
+        desc:
+          english: Antillean Free Ports tore up the treaty this morning. Its flag flies alone over its capital.
+          spanish: Puertos Libres Antillanos rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+        options:
+        - name: {english: Let them go., spanish: Que se vayan.}
+          effects:
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 40
+        - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+          effects:
+          - {effect: declare_war, target: ZAF, type: annex_everything}
+          ai_chance: 60
+        src: user_design
+      - id: 46
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Independence!, spanish: ¡Independencia!}
+        desc:
+          english: We are no longer a satellite of High Seas Market Nation. What comes next is ours to decide.
+          spanish: Ya no somos un satélite de Nación de Mercado de Alta Mar. Lo que venga lo decidimos nosotros.
+        options:
+        - name: {english: Free., spanish: Libres.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
+      - id: 45
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Austral Sea Compact Declares Independence
+          spanish: Pacto del Mar Austral Declara la Independencia
+        desc:
+          english: Austral Sea Compact tore up the treaty this morning. Its flag flies alone over its capital.
+          spanish: Pacto del Mar Austral rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+        options:
+        - name: {english: Let them go., spanish: Que se vayan.}
+          effects:
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 40
+        - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+          effects:
+          - {effect: declare_war, target: ZAS, type: annex_everything}
+          ai_chance: 60
+        src: user_design
+      - id: 47
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Independence!, spanish: ¡Independencia!}
+        desc:
+          english: We are no longer a satellite of High Seas Market Nation. What comes next is ours to decide.
+          spanish: Ya no somos un satélite de Nación de Mercado de Alta Mar. Lo que venga lo decidimos nosotros.
+        options:
+        - name: {english: Free., spanish: Libres.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_war_support, value: 0.05}
+        src: user_design
   # ===========================================================================
   meganations_asc:
     country: ASC
@@ -4484,6 +4674,68 @@ namespaces:
         - {effect: add_political_power, value: 30}
         ai_chance: 50
       src: user_design
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Baltic Commune Declares Independence, spanish: Comuna Báltica Declara la Independencia}
+      desc:
+        english: Baltic Commune tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Comuna Báltica rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZBC, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 46
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of Automated Socialist Commune. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Comuna Socialista Automatizada. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Albion Workers' Republic Declares Independence
+        spanish: República Obrera de Albión Declara la Independencia
+      desc:
+        english: Albion Workers' Republic tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: República Obrera de Albión rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZAL, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 47
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of Automated Socialist Commune. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Comuna Socialista Automatizada. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
   meganations_apf:
     country: APF
     events:
@@ -5449,6 +5701,70 @@ namespaces:
         - {effect: add_stability, value: 0.03}
         ai_chance: 50
       src: user_design
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Highlands Federation Declares Independence
+        spanish: Federación de las Tierras Altas Declara la Independencia
+      desc:
+        english: Highlands Federation tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Federación de las Tierras Altas rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZET, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 46
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of African People's Federation. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Federación de los Pueblos Africanos. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Cape Federation Declares Independence
+        spanish: Federación del Cabo Declara la Independencia
+      desc:
+        english: Cape Federation tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Federación del Cabo rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZSA, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 47
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of African People's Federation. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Federación de los Pueblos Africanos. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -6343,6 +6659,68 @@ namespaces:
         effects:
         - {effect: add_stability, value: 0.03}
         ai_chance: 50
+      src: user_design
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: New Granada Declares Independence, spanish: Nueva Granada Declara la Independencia}
+      desc:
+        english: New Granada tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Nueva Granada rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZNG, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 46
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of NeoAndean Sky Kingdom. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Reino Celeste Neoandino. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Free Plains of the Orinoco Declares Independence
+        spanish: Llanos Libres del Orinoco Declara la Independencia
+      desc:
+        english: Free Plains of the Orinoco tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Llanos Libres del Orinoco rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZLL, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 47
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of NeoAndean Sky Kingdom. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Reino Celeste Neoandino. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
       src: user_design
   meganations_shd:
     country: SHD
@@ -7374,6 +7752,70 @@ namespaces:
         effects:
         - {effect: add_political_power, value: 40}
         ai_chance: 40
+      src: user_design
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Harmonious Protectorate of Korea Declares Independence
+        spanish: Protectorado Armónico de Corea Declara la Independencia
+      desc:
+        english: Harmonious Protectorate of Korea tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Protectorado Armónico de Corea rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZKR, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 46
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of Sino-Harmonious Directorate. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Directorio Sino-Armónico. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Steppe Directorate Declares Independence
+        spanish: Directorio de la Estepa Declara la Independencia
+      desc:
+        english: Steppe Directorate tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Directorio de la Estepa rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZST, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 47
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of Sino-Harmonious Directorate. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Directorio Sino-Armónico. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
       src: user_design
   # ===========================================================================
   meganations_nre:
@@ -8879,6 +9321,70 @@ namespaces:
         - {effect: add_political_power, value: -20}
         - {effect: add_stability, value: 0.02}
         ai_chance: 50
+      src: user_design
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Province of Hispania Declares Independence
+        spanish: Provincia de Hispania Declara la Independencia
+      desc:
+        english: Province of Hispania tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Provincia de Hispania rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZHI, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 46
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of Neo Roman Empire. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Neo Imperio Romano. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Province of Dacia Declares Independence
+        spanish: Provincia de Dacia Declara la Independencia
+      desc:
+        english: Province of Dacia tore up the treaty this morning. Its flag flies alone over its capital.
+        spanish: Provincia de Dacia rompió el tratado esta mañana. Su bandera flamea sola sobre su capital.
+      options:
+      - name: {english: Let them go., spanish: Que se vayan.}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 40
+      - name: {english: Bring them back by force., spanish: Recuperarlos por la fuerza.}
+        effects:
+        - {effect: declare_war, target: ZDA, type: annex_everything}
+        ai_chance: 60
+      src: user_design
+    - id: 47
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Independence!, spanish: ¡Independencia!}
+      desc:
+        english: We are no longer a satellite of Neo Roman Empire. What comes next is ours to decide.
+        spanish: Ya no somos un satélite de Neo Imperio Romano. Lo que venga lo decidimos nosotros.
+      options:
+      - name: {english: Free., spanish: Libres.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_war_support, value: 0.05}
       src: user_design
   # ===========================================================================
   meganations_zwe:

@@ -27,6 +27,7 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: states, pick: random|every, when: {..}, effects: [..] }
                                                   -> random_owned_controlled_state / every_owned_state
   { effect: global_flag, value: X }                -> set_global_flag (condiciones global_flag / not_global_flag)
+  { effect: end_puppet, value: TAG }               -> end_puppet (en el scope del señor: TAG se independiza)
   { effect: every_country, when: {..}, effects: [..] } -> every_country (eventos mundiales)
   En regiones: { effect: add_core, value: TAG } / { effect: state_flag, value: X }
                { effect: clear_state_flag, value: X }
@@ -278,6 +279,14 @@ def render_effects(owner: str, items: list[dict], known,
             else:
                 block.add("country_event", inner)
             effects_used.setdefault("country_event", owner)
+            continue
+        if effect == "end_puppet":
+            # el país del scope deja de tener a `value` como satélite (la independencia)
+            target = item["value"]
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: end_puppet de '{target}', que no es un pais del mod", where=where)
+            block.add("end_puppet", target)
+            effects_used.setdefault("end_puppet", owner)
             continue
         if effect == "global_flag":
             # marca de todo el mundo (eventos mundiales: salen una sola vez aunque
@@ -836,6 +845,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "major":
             block.add("is_major", bool(value))
             triggers_used.setdefault("is_major", owner)
+        elif key == "subject_of":
+            # el lado del satélite (2026-09-29): sigue siendo satélite de `value`
+            block.add("is_subject_of", value)
+            triggers_used.setdefault("is_subject_of", owner)
         elif key == "neighbor_state_flag":
             block.add("any_neighbor_state", Block([("has_state_flag", value)]))
             triggers_used.setdefault("any_neighbor_state", owner)

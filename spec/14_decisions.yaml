@@ -4800,6 +4800,1856 @@ categories:
             variable_at_least: {var: MEGANATIONS_senal, value: 3}
       src: user_request
 
+  # El lado del satélite (2026-09-29): su lealtad, cooperar, agitar y la independencia.
+  - id: PTA_independencia_category
+    country: PTA
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: EFE}
+    name: {english: Our Place under Ecofascist Empire, spanish: Nuestro Lugar bajo Imperio Ecofascista}
+    desc:
+      english: 'LOYALTY TO ECOFASCIST EMPIRE: [?EFE.EFE_lealtad_pta] / 100\n\nEvery month it drops by 1 (2 if Ecofascist Empire is at war) and rises
+        by 1 if they are stable. Below 25 there is unrest; below 20, if Ecofascist Empire is at war or losing, or below 10 anyway, you can declare
+        independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A IMPERIO ECOFASCISTA: [?EFE.EFE_lealtad_pta] / 100\n\nCada mes baja 1 (2 si Imperio Ecofascista está en guerra) y sube
+        1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Imperio Ecofascista está en guerra o perdiendo, o por debajo
+        de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: PTA_cooperar_con_el_senor
+      name:
+        english: Cooperate with Ecofascist Empire (Loyalty +8)
+        spanish: Cooperar con Imperio Ecofascista (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: add_variable, var: EFE_lealtad_pta, value: 8}
+        - {effect: clamp, var: EFE_lealtad_pta, min: 0, max: 100}
+        - {effect: run, value: EFE_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: EFE
+              when:
+                variable_below: {var: EFE_lealtad_pta, value: 40}
+      src: user_request
+    - id: PTA_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: add_variable, var: EFE_lealtad_pta, value: -10}
+        - {effect: clamp, var: EFE_lealtad_pta, min: 0, max: 100}
+        - {effect: run, value: EFE_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: EFE
+                when:
+                  variable_below: {var: EFE_lealtad_pta, value: 40}
+            - country:
+                tag: EFE
+                when: {at_war: true}
+      src: user_request
+    - id: PTA_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Ecofascist Empire cannot hold us.'
+        spanish: 'Ahora o nunca: Imperio Ecofascista no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: EFE
+            when:
+              variable_below: {var: EFE_lealtad_pta, value: 20}
+        - any:
+          - country:
+              tag: EFE
+              when: {at_war: true}
+          - country:
+              tag: EFE
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: EFE
+              when:
+                variable_below: {var: EFE_lealtad_pta, value: 10}
+      effects:
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: end_puppet, value: PTA}
+        - {effect: event, id: meganations_efe.44, days: 1}
+      - {effect: event, id: meganations_efe.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: YYG_independencia_category
+    country: YYG
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: EFE}
+    name: {english: Our Place under Ecofascist Empire, spanish: Nuestro Lugar bajo Imperio Ecofascista}
+    desc:
+      english: 'LOYALTY TO ECOFASCIST EMPIRE: [?EFE.EFE_lealtad_yyg] / 100\n\nEvery month it drops by 1 (2 if Ecofascist Empire is at war) and rises
+        by 1 if they are stable. Below 25 there is unrest; below 20, if Ecofascist Empire is at war or losing, or below 10 anyway, you can declare
+        independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A IMPERIO ECOFASCISTA: [?EFE.EFE_lealtad_yyg] / 100\n\nCada mes baja 1 (2 si Imperio Ecofascista está en guerra) y sube
+        1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Imperio Ecofascista está en guerra o perdiendo, o por debajo
+        de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: YYG_cooperar_con_el_senor
+      name:
+        english: Cooperate with Ecofascist Empire (Loyalty +8)
+        spanish: Cooperar con Imperio Ecofascista (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: add_variable, var: EFE_lealtad_yyg, value: 8}
+        - {effect: clamp, var: EFE_lealtad_yyg, min: 0, max: 100}
+        - {effect: run, value: EFE_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: EFE
+              when:
+                variable_below: {var: EFE_lealtad_yyg, value: 40}
+      src: user_request
+    - id: YYG_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: add_variable, var: EFE_lealtad_yyg, value: -10}
+        - {effect: clamp, var: EFE_lealtad_yyg, min: 0, max: 100}
+        - {effect: run, value: EFE_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: EFE
+                when:
+                  variable_below: {var: EFE_lealtad_yyg, value: 40}
+            - country:
+                tag: EFE
+                when: {at_war: true}
+      src: user_request
+    - id: YYG_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Ecofascist Empire cannot hold us.'
+        spanish: 'Ahora o nunca: Imperio Ecofascista no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: EFE
+            when:
+              variable_below: {var: EFE_lealtad_yyg, value: 20}
+        - any:
+          - country:
+              tag: EFE
+              when: {at_war: true}
+          - country:
+              tag: EFE
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: EFE
+              when:
+                variable_below: {var: EFE_lealtad_yyg, value: 10}
+      effects:
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: end_puppet, value: YYG}
+        - {effect: event, id: meganations_efe.45, days: 1}
+      - {effect: event, id: meganations_efe.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZNG_independencia_category
+    country: ZNG
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: NAS}
+    name: {english: Our Place under NeoAndean Sky Kingdom, spanish: Nuestro Lugar bajo Reino Celeste Neoandino}
+    desc:
+      english: 'LOYALTY TO NEOANDEAN SKY KINGDOM: [?NAS.NAS_lealtad_zng] / 100\n\nEvery month it drops by 1 (2 if NeoAndean Sky Kingdom is at war)
+        and rises by 1 if they are stable. Below 25 there is unrest; below 20, if NeoAndean Sky Kingdom is at war or losing, or below 10 anyway,
+        you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A REINO CELESTE NEOANDINO: [?NAS.NAS_lealtad_zng] / 100\n\nCada mes baja 1 (2 si Reino Celeste Neoandino está en guerra)
+        y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Reino Celeste Neoandino está en guerra o perdiendo,
+        o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZNG_cooperar_con_el_senor
+      name:
+        english: Cooperate with NeoAndean Sky Kingdom (Loyalty +8)
+        spanish: Cooperar con Reino Celeste Neoandino (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: add_variable, var: NAS_lealtad_zng, value: 8}
+        - {effect: clamp, var: NAS_lealtad_zng, min: 0, max: 100}
+        - {effect: run, value: NAS_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: NAS
+              when:
+                variable_below: {var: NAS_lealtad_zng, value: 40}
+      src: user_request
+    - id: ZNG_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: add_variable, var: NAS_lealtad_zng, value: -10}
+        - {effect: clamp, var: NAS_lealtad_zng, min: 0, max: 100}
+        - {effect: run, value: NAS_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: NAS
+                when:
+                  variable_below: {var: NAS_lealtad_zng, value: 40}
+            - country:
+                tag: NAS
+                when: {at_war: true}
+      src: user_request
+    - id: ZNG_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: NeoAndean Sky Kingdom cannot hold us.'
+        spanish: 'Ahora o nunca: Reino Celeste Neoandino no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: NAS
+            when:
+              variable_below: {var: NAS_lealtad_zng, value: 20}
+        - any:
+          - country:
+              tag: NAS
+              when: {at_war: true}
+          - country:
+              tag: NAS
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: NAS
+              when:
+                variable_below: {var: NAS_lealtad_zng, value: 10}
+      effects:
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: end_puppet, value: ZNG}
+        - {effect: event, id: meganations_nas.44, days: 1}
+      - {effect: event, id: meganations_nas.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZLL_independencia_category
+    country: ZLL
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: NAS}
+    name: {english: Our Place under NeoAndean Sky Kingdom, spanish: Nuestro Lugar bajo Reino Celeste Neoandino}
+    desc:
+      english: 'LOYALTY TO NEOANDEAN SKY KINGDOM: [?NAS.NAS_lealtad_zll] / 100\n\nEvery month it drops by 1 (2 if NeoAndean Sky Kingdom is at war)
+        and rises by 1 if they are stable. Below 25 there is unrest; below 20, if NeoAndean Sky Kingdom is at war or losing, or below 10 anyway,
+        you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A REINO CELESTE NEOANDINO: [?NAS.NAS_lealtad_zll] / 100\n\nCada mes baja 1 (2 si Reino Celeste Neoandino está en guerra)
+        y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Reino Celeste Neoandino está en guerra o perdiendo,
+        o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZLL_cooperar_con_el_senor
+      name:
+        english: Cooperate with NeoAndean Sky Kingdom (Loyalty +8)
+        spanish: Cooperar con Reino Celeste Neoandino (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: add_variable, var: NAS_lealtad_zll, value: 8}
+        - {effect: clamp, var: NAS_lealtad_zll, min: 0, max: 100}
+        - {effect: run, value: NAS_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: NAS
+              when:
+                variable_below: {var: NAS_lealtad_zll, value: 40}
+      src: user_request
+    - id: ZLL_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: add_variable, var: NAS_lealtad_zll, value: -10}
+        - {effect: clamp, var: NAS_lealtad_zll, min: 0, max: 100}
+        - {effect: run, value: NAS_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: NAS
+                when:
+                  variable_below: {var: NAS_lealtad_zll, value: 40}
+            - country:
+                tag: NAS
+                when: {at_war: true}
+      src: user_request
+    - id: ZLL_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: NeoAndean Sky Kingdom cannot hold us.'
+        spanish: 'Ahora o nunca: Reino Celeste Neoandino no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: NAS
+            when:
+              variable_below: {var: NAS_lealtad_zll, value: 20}
+        - any:
+          - country:
+              tag: NAS
+              when: {at_war: true}
+          - country:
+              tag: NAS
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: NAS
+              when:
+                variable_below: {var: NAS_lealtad_zll, value: 10}
+      effects:
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: end_puppet, value: ZLL}
+        - {effect: event, id: meganations_nas.45, days: 1}
+      - {effect: event, id: meganations_nas.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZNR_independencia_category
+    country: ZNR
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: FCU}
+    name:
+      english: Our Place under Free Corporative Capital Union
+      spanish: Nuestro Lugar bajo Unión Libre de Capital Corporativo
+    desc:
+      english: 'LOYALTY TO FREE CORPORATIVE CAPITAL UNION: [?FCU.FCU_lealtad_znr] / 100\n\nEvery month it drops by 1 (2 if Free Corporative Capital
+        Union is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if Free Corporative Capital Union is at war or losing,
+        or below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A UNIÓN LIBRE DE CAPITAL CORPORATIVO: [?FCU.FCU_lealtad_znr] / 100\n\nCada mes baja 1 (2 si Unión Libre de Capital Corporativo
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Unión Libre de Capital Corporativo
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZNR_cooperar_con_el_senor
+      name:
+        english: Cooperate with Free Corporative Capital Union (Loyalty +8)
+        spanish: Cooperar con Unión Libre de Capital Corporativo (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: add_variable, var: FCU_lealtad_znr, value: 8}
+        - {effect: clamp, var: FCU_lealtad_znr, min: 0, max: 100}
+        - {effect: run, value: FCU_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: FCU
+              when:
+                variable_below: {var: FCU_lealtad_znr, value: 40}
+      src: user_request
+    - id: ZNR_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: add_variable, var: FCU_lealtad_znr, value: -10}
+        - {effect: clamp, var: FCU_lealtad_znr, min: 0, max: 100}
+        - {effect: run, value: FCU_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: FCU
+                when:
+                  variable_below: {var: FCU_lealtad_znr, value: 40}
+            - country:
+                tag: FCU
+                when: {at_war: true}
+      src: user_request
+    - id: ZNR_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Free Corporative Capital Union cannot hold us.'
+        spanish: 'Ahora o nunca: Unión Libre de Capital Corporativo no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: FCU
+            when:
+              variable_below: {var: FCU_lealtad_znr, value: 20}
+        - any:
+          - country:
+              tag: FCU
+              when: {at_war: true}
+          - country:
+              tag: FCU
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: FCU
+              when:
+                variable_below: {var: FCU_lealtad_znr, value: 10}
+      effects:
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: end_puppet, value: ZNR}
+        - {effect: event, id: meganations_fcu.44, days: 1}
+      - {effect: event, id: meganations_fcu.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZSE_independencia_category
+    country: ZSE
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: FCU}
+    name:
+      english: Our Place under Free Corporative Capital Union
+      spanish: Nuestro Lugar bajo Unión Libre de Capital Corporativo
+    desc:
+      english: 'LOYALTY TO FREE CORPORATIVE CAPITAL UNION: [?FCU.FCU_lealtad_zse] / 100\n\nEvery month it drops by 1 (2 if Free Corporative Capital
+        Union is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if Free Corporative Capital Union is at war or losing,
+        or below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A UNIÓN LIBRE DE CAPITAL CORPORATIVO: [?FCU.FCU_lealtad_zse] / 100\n\nCada mes baja 1 (2 si Unión Libre de Capital Corporativo
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Unión Libre de Capital Corporativo
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZSE_cooperar_con_el_senor
+      name:
+        english: Cooperate with Free Corporative Capital Union (Loyalty +8)
+        spanish: Cooperar con Unión Libre de Capital Corporativo (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: add_variable, var: FCU_lealtad_zse, value: 8}
+        - {effect: clamp, var: FCU_lealtad_zse, min: 0, max: 100}
+        - {effect: run, value: FCU_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: FCU
+              when:
+                variable_below: {var: FCU_lealtad_zse, value: 40}
+      src: user_request
+    - id: ZSE_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: add_variable, var: FCU_lealtad_zse, value: -10}
+        - {effect: clamp, var: FCU_lealtad_zse, min: 0, max: 100}
+        - {effect: run, value: FCU_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: FCU
+                when:
+                  variable_below: {var: FCU_lealtad_zse, value: 40}
+            - country:
+                tag: FCU
+                when: {at_war: true}
+      src: user_request
+    - id: ZSE_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Free Corporative Capital Union cannot hold us.'
+        spanish: 'Ahora o nunca: Unión Libre de Capital Corporativo no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: FCU
+            when:
+              variable_below: {var: FCU_lealtad_zse, value: 20}
+        - any:
+          - country:
+              tag: FCU
+              when: {at_war: true}
+          - country:
+              tag: FCU
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: FCU
+              when:
+                variable_below: {var: FCU_lealtad_zse, value: 10}
+      effects:
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: end_puppet, value: ZSE}
+        - {effect: event, id: meganations_fcu.45, days: 1}
+      - {effect: event, id: meganations_fcu.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZAF_independencia_category
+    country: ZAF
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: HSN}
+    name:
+      english: Our Place under High Seas Market Nation
+      spanish: Nuestro Lugar bajo Nación de Mercado de Alta Mar
+    desc:
+      english: 'LOYALTY TO HIGH SEAS MARKET NATION: [?HSN.HSN_lealtad_zaf] / 100\n\nEvery month it drops by 1 (2 if High Seas Market Nation is at
+        war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if High Seas Market Nation is at war or losing, or below 10
+        anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A NACIÓN DE MERCADO DE ALTA MAR: [?HSN.HSN_lealtad_zaf] / 100\n\nCada mes baja 1 (2 si Nación de Mercado de Alta Mar está
+        en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Nación de Mercado de Alta Mar está en
+        guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZAF_cooperar_con_el_senor
+      name:
+        english: Cooperate with High Seas Market Nation (Loyalty +8)
+        spanish: Cooperar con Nación de Mercado de Alta Mar (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: add_variable, var: HSN_lealtad_zaf, value: 8}
+        - {effect: clamp, var: HSN_lealtad_zaf, min: 0, max: 100}
+        - {effect: run, value: HSN_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: HSN
+              when:
+                variable_below: {var: HSN_lealtad_zaf, value: 40}
+      src: user_request
+    - id: ZAF_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: add_variable, var: HSN_lealtad_zaf, value: -10}
+        - {effect: clamp, var: HSN_lealtad_zaf, min: 0, max: 100}
+        - {effect: run, value: HSN_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: HSN
+                when:
+                  variable_below: {var: HSN_lealtad_zaf, value: 40}
+            - country:
+                tag: HSN
+                when: {at_war: true}
+      src: user_request
+    - id: ZAF_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: High Seas Market Nation cannot hold us.'
+        spanish: 'Ahora o nunca: Nación de Mercado de Alta Mar no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: HSN
+            when:
+              variable_below: {var: HSN_lealtad_zaf, value: 20}
+        - any:
+          - country:
+              tag: HSN
+              when: {at_war: true}
+          - country:
+              tag: HSN
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: HSN
+              when:
+                variable_below: {var: HSN_lealtad_zaf, value: 10}
+      effects:
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: end_puppet, value: ZAF}
+        - {effect: event, id: meganations_hsn.44, days: 1}
+      - {effect: event, id: meganations_hsn.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZAS_independencia_category
+    country: ZAS
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: HSN}
+    name:
+      english: Our Place under High Seas Market Nation
+      spanish: Nuestro Lugar bajo Nación de Mercado de Alta Mar
+    desc:
+      english: 'LOYALTY TO HIGH SEAS MARKET NATION: [?HSN.HSN_lealtad_zas] / 100\n\nEvery month it drops by 1 (2 if High Seas Market Nation is at
+        war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if High Seas Market Nation is at war or losing, or below 10
+        anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A NACIÓN DE MERCADO DE ALTA MAR: [?HSN.HSN_lealtad_zas] / 100\n\nCada mes baja 1 (2 si Nación de Mercado de Alta Mar está
+        en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Nación de Mercado de Alta Mar está en
+        guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZAS_cooperar_con_el_senor
+      name:
+        english: Cooperate with High Seas Market Nation (Loyalty +8)
+        spanish: Cooperar con Nación de Mercado de Alta Mar (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: add_variable, var: HSN_lealtad_zas, value: 8}
+        - {effect: clamp, var: HSN_lealtad_zas, min: 0, max: 100}
+        - {effect: run, value: HSN_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: HSN
+              when:
+                variable_below: {var: HSN_lealtad_zas, value: 40}
+      src: user_request
+    - id: ZAS_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: add_variable, var: HSN_lealtad_zas, value: -10}
+        - {effect: clamp, var: HSN_lealtad_zas, min: 0, max: 100}
+        - {effect: run, value: HSN_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: HSN
+                when:
+                  variable_below: {var: HSN_lealtad_zas, value: 40}
+            - country:
+                tag: HSN
+                when: {at_war: true}
+      src: user_request
+    - id: ZAS_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: High Seas Market Nation cannot hold us.'
+        spanish: 'Ahora o nunca: Nación de Mercado de Alta Mar no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: HSN
+            when:
+              variable_below: {var: HSN_lealtad_zas, value: 20}
+        - any:
+          - country:
+              tag: HSN
+              when: {at_war: true}
+          - country:
+              tag: HSN
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: HSN
+              when:
+                variable_below: {var: HSN_lealtad_zas, value: 10}
+      effects:
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: end_puppet, value: ZAS}
+        - {effect: event, id: meganations_hsn.45, days: 1}
+      - {effect: event, id: meganations_hsn.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZBC_independencia_category
+    country: ZBC
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: ASC}
+    name:
+      english: Our Place under Automated Socialist Commune
+      spanish: Nuestro Lugar bajo Comuna Socialista Automatizada
+    desc:
+      english: 'LOYALTY TO AUTOMATED SOCIALIST COMMUNE: [?ASC.ASC_lealtad_zbc] / 100\n\nEvery month it drops by 1 (2 if Automated Socialist Commune
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if Automated Socialist Commune is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A COMUNA SOCIALISTA AUTOMATIZADA: [?ASC.ASC_lealtad_zbc] / 100\n\nCada mes baja 1 (2 si Comuna Socialista Automatizada está
+        en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Comuna Socialista Automatizada está en
+        guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZBC_cooperar_con_el_senor
+      name:
+        english: Cooperate with Automated Socialist Commune (Loyalty +8)
+        spanish: Cooperar con Comuna Socialista Automatizada (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: add_variable, var: ASC_lealtad_zbc, value: 8}
+        - {effect: clamp, var: ASC_lealtad_zbc, min: 0, max: 100}
+        - {effect: run, value: ASC_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: ASC
+              when:
+                variable_below: {var: ASC_lealtad_zbc, value: 40}
+      src: user_request
+    - id: ZBC_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: add_variable, var: ASC_lealtad_zbc, value: -10}
+        - {effect: clamp, var: ASC_lealtad_zbc, min: 0, max: 100}
+        - {effect: run, value: ASC_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: ASC
+                when:
+                  variable_below: {var: ASC_lealtad_zbc, value: 40}
+            - country:
+                tag: ASC
+                when: {at_war: true}
+      src: user_request
+    - id: ZBC_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Automated Socialist Commune cannot hold us.'
+        spanish: 'Ahora o nunca: Comuna Socialista Automatizada no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: ASC
+            when:
+              variable_below: {var: ASC_lealtad_zbc, value: 20}
+        - any:
+          - country:
+              tag: ASC
+              when: {at_war: true}
+          - country:
+              tag: ASC
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: ASC
+              when:
+                variable_below: {var: ASC_lealtad_zbc, value: 10}
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: end_puppet, value: ZBC}
+        - {effect: event, id: meganations_asc.44, days: 1}
+      - {effect: event, id: meganations_asc.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZAL_independencia_category
+    country: ZAL
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: ASC}
+    name:
+      english: Our Place under Automated Socialist Commune
+      spanish: Nuestro Lugar bajo Comuna Socialista Automatizada
+    desc:
+      english: 'LOYALTY TO AUTOMATED SOCIALIST COMMUNE: [?ASC.ASC_lealtad_zal] / 100\n\nEvery month it drops by 1 (2 if Automated Socialist Commune
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if Automated Socialist Commune is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A COMUNA SOCIALISTA AUTOMATIZADA: [?ASC.ASC_lealtad_zal] / 100\n\nCada mes baja 1 (2 si Comuna Socialista Automatizada está
+        en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Comuna Socialista Automatizada está en
+        guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZAL_cooperar_con_el_senor
+      name:
+        english: Cooperate with Automated Socialist Commune (Loyalty +8)
+        spanish: Cooperar con Comuna Socialista Automatizada (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: add_variable, var: ASC_lealtad_zal, value: 8}
+        - {effect: clamp, var: ASC_lealtad_zal, min: 0, max: 100}
+        - {effect: run, value: ASC_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: ASC
+              when:
+                variable_below: {var: ASC_lealtad_zal, value: 40}
+      src: user_request
+    - id: ZAL_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: add_variable, var: ASC_lealtad_zal, value: -10}
+        - {effect: clamp, var: ASC_lealtad_zal, min: 0, max: 100}
+        - {effect: run, value: ASC_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: ASC
+                when:
+                  variable_below: {var: ASC_lealtad_zal, value: 40}
+            - country:
+                tag: ASC
+                when: {at_war: true}
+      src: user_request
+    - id: ZAL_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Automated Socialist Commune cannot hold us.'
+        spanish: 'Ahora o nunca: Comuna Socialista Automatizada no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: ASC
+            when:
+              variable_below: {var: ASC_lealtad_zal, value: 20}
+        - any:
+          - country:
+              tag: ASC
+              when: {at_war: true}
+          - country:
+              tag: ASC
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: ASC
+              when:
+                variable_below: {var: ASC_lealtad_zal, value: 10}
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: end_puppet, value: ZAL}
+        - {effect: event, id: meganations_asc.45, days: 1}
+      - {effect: event, id: meganations_asc.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZKR_independencia_category
+    country: ZKR
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: SHD}
+    name:
+      english: Our Place under Sino-Harmonious Directorate
+      spanish: Nuestro Lugar bajo Directorio Sino-Armónico
+    desc:
+      english: 'LOYALTY TO SINO-HARMONIOUS DIRECTORATE: [?SHD.SHD_lealtad_zkr] / 100\n\nEvery month it drops by 1 (2 if Sino-Harmonious Directorate
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if Sino-Harmonious Directorate is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A DIRECTORIO SINO-ARMÓNICO: [?SHD.SHD_lealtad_zkr] / 100\n\nCada mes baja 1 (2 si Directorio Sino-Armónico está en guerra)
+        y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Directorio Sino-Armónico está en guerra o perdiendo,
+        o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZKR_cooperar_con_el_senor
+      name:
+        english: Cooperate with Sino-Harmonious Directorate (Loyalty +8)
+        spanish: Cooperar con Directorio Sino-Armónico (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: 8}
+        - {effect: clamp, var: SHD_lealtad_zkr, min: 0, max: 100}
+        - {effect: run, value: SHD_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: SHD
+              when:
+                variable_below: {var: SHD_lealtad_zkr, value: 40}
+      src: user_request
+    - id: ZKR_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zkr, value: -10}
+        - {effect: clamp, var: SHD_lealtad_zkr, min: 0, max: 100}
+        - {effect: run, value: SHD_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: SHD
+                when:
+                  variable_below: {var: SHD_lealtad_zkr, value: 40}
+            - country:
+                tag: SHD
+                when: {at_war: true}
+      src: user_request
+    - id: ZKR_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Sino-Harmonious Directorate cannot hold us.'
+        spanish: 'Ahora o nunca: Directorio Sino-Armónico no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: SHD
+            when:
+              variable_below: {var: SHD_lealtad_zkr, value: 20}
+        - any:
+          - country:
+              tag: SHD
+              when: {at_war: true}
+          - country:
+              tag: SHD
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: SHD
+              when:
+                variable_below: {var: SHD_lealtad_zkr, value: 10}
+      effects:
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: end_puppet, value: ZKR}
+        - {effect: event, id: meganations_shd.44, days: 1}
+      - {effect: event, id: meganations_shd.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZST_independencia_category
+    country: ZST
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: SHD}
+    name:
+      english: Our Place under Sino-Harmonious Directorate
+      spanish: Nuestro Lugar bajo Directorio Sino-Armónico
+    desc:
+      english: 'LOYALTY TO SINO-HARMONIOUS DIRECTORATE: [?SHD.SHD_lealtad_zst] / 100\n\nEvery month it drops by 1 (2 if Sino-Harmonious Directorate
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if Sino-Harmonious Directorate is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A DIRECTORIO SINO-ARMÓNICO: [?SHD.SHD_lealtad_zst] / 100\n\nCada mes baja 1 (2 si Directorio Sino-Armónico está en guerra)
+        y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Directorio Sino-Armónico está en guerra o perdiendo,
+        o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZST_cooperar_con_el_senor
+      name:
+        english: Cooperate with Sino-Harmonious Directorate (Loyalty +8)
+        spanish: Cooperar con Directorio Sino-Armónico (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zst, value: 8}
+        - {effect: clamp, var: SHD_lealtad_zst, min: 0, max: 100}
+        - {effect: run, value: SHD_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: SHD
+              when:
+                variable_below: {var: SHD_lealtad_zst, value: 40}
+      src: user_request
+    - id: ZST_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: add_variable, var: SHD_lealtad_zst, value: -10}
+        - {effect: clamp, var: SHD_lealtad_zst, min: 0, max: 100}
+        - {effect: run, value: SHD_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: SHD
+                when:
+                  variable_below: {var: SHD_lealtad_zst, value: 40}
+            - country:
+                tag: SHD
+                when: {at_war: true}
+      src: user_request
+    - id: ZST_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Sino-Harmonious Directorate cannot hold us.'
+        spanish: 'Ahora o nunca: Directorio Sino-Armónico no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: SHD
+            when:
+              variable_below: {var: SHD_lealtad_zst, value: 20}
+        - any:
+          - country:
+              tag: SHD
+              when: {at_war: true}
+          - country:
+              tag: SHD
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: SHD
+              when:
+                variable_below: {var: SHD_lealtad_zst, value: 10}
+      effects:
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: end_puppet, value: ZST}
+        - {effect: event, id: meganations_shd.45, days: 1}
+      - {effect: event, id: meganations_shd.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZET_independencia_category
+    country: ZET
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: APF}
+    name:
+      english: Our Place under African People's Federation
+      spanish: Nuestro Lugar bajo Federación de los Pueblos Africanos
+    desc:
+      english: 'LOYALTY TO AFRICAN PEOPLE''S FEDERATION: [?APF.APF_lealtad_zet] / 100\n\nEvery month it drops by 1 (2 if African People''s Federation
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if African People''s Federation is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A FEDERACIÓN DE LOS PUEBLOS AFRICANOS: [?APF.APF_lealtad_zet] / 100\n\nCada mes baja 1 (2 si Federación de los Pueblos Africanos
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Federación de los Pueblos Africanos
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZET_cooperar_con_el_senor
+      name:
+        english: Cooperate with African People's Federation (Loyalty +8)
+        spanish: Cooperar con Federación de los Pueblos Africanos (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zet, value: 8}
+        - {effect: clamp, var: APF_lealtad_zet, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zet, value: 40}
+      src: user_request
+    - id: ZET_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zet, value: -10}
+        - {effect: clamp, var: APF_lealtad_zet, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: APF
+                when:
+                  variable_below: {var: APF_lealtad_zet, value: 40}
+            - country:
+                tag: APF
+                when: {at_war: true}
+      src: user_request
+    - id: ZET_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: African People''s Federation cannot hold us.'
+        spanish: 'Ahora o nunca: Federación de los Pueblos Africanos no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: APF
+            when:
+              variable_below: {var: APF_lealtad_zet, value: 20}
+        - any:
+          - country:
+              tag: APF
+              when: {at_war: true}
+          - country:
+              tag: APF
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zet, value: 10}
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: end_puppet, value: ZET}
+        - {effect: event, id: meganations_apf.44, days: 1}
+      - {effect: event, id: meganations_apf.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZSA_independencia_category
+    country: ZSA
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: APF}
+    name:
+      english: Our Place under African People's Federation
+      spanish: Nuestro Lugar bajo Federación de los Pueblos Africanos
+    desc:
+      english: 'LOYALTY TO AFRICAN PEOPLE''S FEDERATION: [?APF.APF_lealtad_zsa] / 100\n\nEvery month it drops by 1 (2 if African People''s Federation
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if African People''s Federation is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A FEDERACIÓN DE LOS PUEBLOS AFRICANOS: [?APF.APF_lealtad_zsa] / 100\n\nCada mes baja 1 (2 si Federación de los Pueblos Africanos
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Federación de los Pueblos Africanos
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZSA_cooperar_con_el_senor
+      name:
+        english: Cooperate with African People's Federation (Loyalty +8)
+        spanish: Cooperar con Federación de los Pueblos Africanos (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zsa, value: 8}
+        - {effect: clamp, var: APF_lealtad_zsa, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zsa, value: 40}
+      src: user_request
+    - id: ZSA_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zsa, value: -10}
+        - {effect: clamp, var: APF_lealtad_zsa, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: APF
+                when:
+                  variable_below: {var: APF_lealtad_zsa, value: 40}
+            - country:
+                tag: APF
+                when: {at_war: true}
+      src: user_request
+    - id: ZSA_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: African People''s Federation cannot hold us.'
+        spanish: 'Ahora o nunca: Federación de los Pueblos Africanos no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: APF
+            when:
+              variable_below: {var: APF_lealtad_zsa, value: 20}
+        - any:
+          - country:
+              tag: APF
+              when: {at_war: true}
+          - country:
+              tag: APF
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zsa, value: 10}
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: end_puppet, value: ZSA}
+        - {effect: event, id: meganations_apf.45, days: 1}
+      - {effect: event, id: meganations_apf.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZHI_independencia_category
+    country: ZHI
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: NRE}
+    name: {english: Our Place under Neo Roman Empire, spanish: Nuestro Lugar bajo Neo Imperio Romano}
+    desc:
+      english: 'LOYALTY TO NEO ROMAN EMPIRE: [?NRE.NRE_lealtad_zhi] / 100\n\nEvery month it drops by 1 (2 if Neo Roman Empire is at war) and rises
+        by 1 if they are stable. Below 25 there is unrest; below 20, if Neo Roman Empire is at war or losing, or below 10 anyway, you can declare
+        independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A NEO IMPERIO ROMANO: [?NRE.NRE_lealtad_zhi] / 100\n\nCada mes baja 1 (2 si Neo Imperio Romano está en guerra) y sube 1
+        si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Neo Imperio Romano está en guerra o perdiendo, o por debajo
+        de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZHI_cooperar_con_el_senor
+      name:
+        english: Cooperate with Neo Roman Empire (Loyalty +8)
+        spanish: Cooperar con Neo Imperio Romano (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: add_variable, var: NRE_lealtad_zhi, value: 8}
+        - {effect: clamp, var: NRE_lealtad_zhi, min: 0, max: 100}
+        - {effect: run, value: NRE_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: NRE
+              when:
+                variable_below: {var: NRE_lealtad_zhi, value: 40}
+      src: user_request
+    - id: ZHI_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: add_variable, var: NRE_lealtad_zhi, value: -10}
+        - {effect: clamp, var: NRE_lealtad_zhi, min: 0, max: 100}
+        - {effect: run, value: NRE_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: NRE
+                when:
+                  variable_below: {var: NRE_lealtad_zhi, value: 40}
+            - country:
+                tag: NRE
+                when: {at_war: true}
+      src: user_request
+    - id: ZHI_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Neo Roman Empire cannot hold us.'
+        spanish: 'Ahora o nunca: Neo Imperio Romano no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: NRE
+            when:
+              variable_below: {var: NRE_lealtad_zhi, value: 20}
+        - any:
+          - country:
+              tag: NRE
+              when: {at_war: true}
+          - country:
+              tag: NRE
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: NRE
+              when:
+                variable_below: {var: NRE_lealtad_zhi, value: 10}
+      effects:
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: end_puppet, value: ZHI}
+        - {effect: event, id: meganations_nre.44, days: 1}
+      - {effect: event, id: meganations_nre.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZDA_independencia_category
+    country: ZDA
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: NRE}
+    name: {english: Our Place under Neo Roman Empire, spanish: Nuestro Lugar bajo Neo Imperio Romano}
+    desc:
+      english: 'LOYALTY TO NEO ROMAN EMPIRE: [?NRE.NRE_lealtad_zda] / 100\n\nEvery month it drops by 1 (2 if Neo Roman Empire is at war) and rises
+        by 1 if they are stable. Below 25 there is unrest; below 20, if Neo Roman Empire is at war or losing, or below 10 anyway, you can declare
+        independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A NEO IMPERIO ROMANO: [?NRE.NRE_lealtad_zda] / 100\n\nCada mes baja 1 (2 si Neo Imperio Romano está en guerra) y sube 1
+        si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Neo Imperio Romano está en guerra o perdiendo, o por debajo
+        de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu gente.'
+    src: user_request
+    decisions:
+    - id: ZDA_cooperar_con_el_senor
+      name:
+        english: Cooperate with Neo Roman Empire (Loyalty +8)
+        spanish: Cooperar con Neo Imperio Romano (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: add_variable, var: NRE_lealtad_zda, value: 8}
+        - {effect: clamp, var: NRE_lealtad_zda, min: 0, max: 100}
+        - {effect: run, value: NRE_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: NRE
+              when:
+                variable_below: {var: NRE_lealtad_zda, value: 40}
+      src: user_request
+    - id: ZDA_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: add_variable, var: NRE_lealtad_zda, value: -10}
+        - {effect: clamp, var: NRE_lealtad_zda, min: 0, max: 100}
+        - {effect: run, value: NRE_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: NRE
+                when:
+                  variable_below: {var: NRE_lealtad_zda, value: 40}
+            - country:
+                tag: NRE
+                when: {at_war: true}
+      src: user_request
+    - id: ZDA_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: Neo Roman Empire cannot hold us.'
+        spanish: 'Ahora o nunca: Neo Imperio Romano no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: NRE
+            when:
+              variable_below: {var: NRE_lealtad_zda, value: 20}
+        - any:
+          - country:
+              tag: NRE
+              when: {at_war: true}
+          - country:
+              tag: NRE
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: NRE
+              when:
+                variable_below: {var: NRE_lealtad_zda, value: 10}
+      effects:
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: end_puppet, value: ZDA}
+        - {effect: event, id: meganations_nre.45, days: 1}
+      - {effect: event, id: meganations_nre.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
