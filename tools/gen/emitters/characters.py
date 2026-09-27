@@ -85,6 +85,7 @@ def _emit_traits(ctx: BuildContext) -> set[str]:
 
 def emit(ctx: BuildContext) -> None:
     known_traits = _emit_traits(ctx)
+    xp_rules = {k: v for k, v in (ctx.spec.raw["leaders"].get("advisor_experience") or {}).items() if k != "src"}
     unit_traits = ctx.vanilla.unit_leader_traits() if ctx.vanilla else None
     types, _ = ctx.spec.ideology_index()
     by_country: dict[str, list[dict]] = {}
@@ -188,7 +189,14 @@ def emit(ctx: BuildContext) -> None:
                     ab.add("ledger", advisor["ledger"])
                 ab.add("allowed", Block([("original_tag", tag)]))
                 traits = Block()
-                for trait in advisor.get("traits") or []:
+                wanted_traits = list(advisor.get("traits") or [])
+                # experiencia por cargo (03_leaders.yaml -> advisor_experience)
+                xp = xp_rules.get(advisor.get("slot", "political_advisor"))
+                if isinstance(xp, dict):
+                    xp = xp.get(advisor.get("ledger") or "army")
+                if isinstance(xp, str) and xp not in wanted_traits:
+                    wanted_traits.append(xp)
+                for trait in wanted_traits:
                     if trait not in known_traits:
                         raise SpecError(f"{cid}: el rasgo de ministro '{trait}' no esta en leader_traits",
                                         where="03_leaders.yaml")

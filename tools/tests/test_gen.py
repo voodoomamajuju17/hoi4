@@ -813,6 +813,20 @@ def test_territory() -> None:
         check("el satelite conserva su carbon", pdx.text(par.get("resources").get("coal")) == "5")
         check("el satelite no tiene BioSteel", "biosteel" not in par.get("resources").keys())
         check("archivo con comparaciones no se reescribe", not (states / "907-Fixture.txt").exists())
+        # 2026-09-29: "casi no se puede construir" y "el NAS no tiene astilleros"
+        lazio_h = pdx.parse((states / "909-Fixture.txt").read_text()).get("state").get("history")
+        check("construccion: espacios extra en cada region (meganacion +3)",
+              pdx.text(lazio_h.get("add_extra_state_shared_building_slots")) == "3", pdx.render(lazio_h)[:500])
+        check("construccion: los espacios extra van antes que los edificios",
+              [k for k, _ in lazio_h.entries].index("add_extra_state_shared_building_slots")
+              < [k for k, _ in lazio_h.entries].index("buildings"))
+        check("astilleros: la region con costa de Roma recibe astilleros",
+              int(pdx.text(lazio_h.get("buildings").get("dockyard")) or 0) >= 1, pdx.render(lazio_h.get("buildings")))
+        check("astilleros: el reporte dice cuantos", any(n.startswith("astilleros: NRE") for n in ctx.notes))
+        pta_s = pdx.parse((states / "901-Fixture.txt").read_text()).get("state").get("history")
+        check("construccion: satelite +2", pdx.text(pta_s.get("add_extra_state_shared_building_slots")) == "2")
+        check("astilleros: sin costa no se inventan (Buenos Aires del fixture no tiene costa)",
+              "dockyard" not in pdx.render(pdx.parse((states / "900-Fixture.txt").read_text())).replace("dockyard = 0", ""))
         check("avisa del archivo con comparaciones", any("907-Fixture" in w for w in ctx.warnings), str(ctx.warnings))
 
         check("avisa lo que no encontro con parecidos",
@@ -1017,7 +1031,24 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("74 rasgos propios (14 de lideres, 40 de ministros, 20 del alto mando)", len(body.keys()) == 74, str(len(body.keys())))
+        check("80 rasgos propios (14 de lideres, 40 de ministros, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 80, str(len(body.keys())))
+        # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
+        efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
+        chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
+        check("experiencia: el jefe del ejercito da experiencia de ejercito",
+              "mn_xp_jefe_ejercito" in chief and "mn_mando_maniobra" in chief, chief)
+        check("experiencia: el rasgo da experiencia diaria",
+              "experience_gain_army = 0.25" in " ".join(pdx.render(body.get("mn_xp_jefe_ejercito")).split()))
+        efe_chars = pdx.parse((mod / "common/characters/EFE_characters.txt").read_text()).get("characters")
+        advisors = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None]
+        hc_raw = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None
+                  and pdx.text(v.get("advisor").get("slot")) == "high_command"]
+        check("experiencia: el alto mando da experiencia de su rama",
+              all(any(t in pdx.render(efe_chars.get(k).get("advisor").get("traits"))
+                      for t in ("mn_xp_mando_ejercito", "mn_xp_mando_marina", "mn_xp_mando_aire")) for k in hc_raw) and hc_raw,
+              str(hc_raw))
+        check("experiencia: los ministros politicos no reciben rasgo de experiencia",
+              "mn_xp_" not in pdx.render(efe_chars.get(next(k for k in advisors if "_min_" in k))))
         efe_chars = pdx.parse((mod / "common/characters/EFE_characters.txt").read_text()).get("characters")
         advisors = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None]
         mins = [k for k in advisors if "_min_" in k]

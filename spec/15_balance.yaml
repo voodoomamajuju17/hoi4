@@ -31,6 +31,17 @@ industrialization:
   building: industrial_complex
 
 # -----------------------------------------------------------------------------
+# Construcción (2026-09-29, pedido del usuario): "casi no se puede construir" y
+# "el NAS no tiene astilleros". Espacios de construcción extra en cada región
+# de los países del mod, y un mínimo de astilleros en regiones con costa.
+# -----------------------------------------------------------------------------
+construction:
+  src: user_request
+  extra_slots: {meganation: 3, satellite: 2, anarchy: 1}
+  dockyards_min: {meganation: 10, satellite: 2}
+  dockyard: dockyard
+
+# -----------------------------------------------------------------------------
 # Población (manpower de los states), 2026-09-26: el usuario pidió bajarla al
 # 15% y que crezca pareja. Objetivo por país = factor x T^compress x R^(1-compress)
 # (T su total, R la mediana de su tipo): con compress 0.5 el SHD (465M) queda

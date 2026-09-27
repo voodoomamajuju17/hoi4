@@ -2969,7 +2969,45 @@ characters:
       description: 'High Custodian Yara Tupinambá, born 2061: an indigenous forest ranger in her forties, green and brown ceremonial ranger coat,
         jungle behind her. Leader of Gaia''s Sanctuary, year 2100.'
 
+# Experiencia de los jefes militares (2026-09-29, pedido del usuario: "deberían
+# dar experiencia según corresponda, como en el juego vainilla; si no, conseguir
+# experiencia se vuelve ridículamente lento"). El generador le suma a cada
+# asesor el rasgo de su cargo; el alto mando, el de su rama (ledger).
+advisor_experience:
+  src: user_request
+  army_chief: mn_xp_jefe_ejercito
+  navy_chief: mn_xp_jefe_marina
+  air_chief: mn_xp_jefe_aire
+  high_command:
+    army: mn_xp_mando_ejercito
+    navy: mn_xp_mando_marina
+    air: mn_xp_mando_aire
+
 leader_traits:
+  - id: mn_xp_jefe_ejercito
+    name: { english: "Army Training Command", spanish: "Mando de Instrucción del Ejército" }
+    modifiers: { experience_gain_army: 0.25 }
+    src: user_request
+  - id: mn_xp_jefe_marina
+    name: { english: "Fleet Exercises", spanish: "Ejercicios de la Flota" }
+    modifiers: { experience_gain_navy: 0.25 }
+    src: user_request
+  - id: mn_xp_jefe_aire
+    name: { english: "Flight School", spanish: "Escuela de Vuelo" }
+    modifiers: { experience_gain_air: 0.25 }
+    src: user_request
+  - id: mn_xp_mando_ejercito
+    name: { english: "Field Maneuvers", spanish: "Maniobras de Campaña" }
+    modifiers: { experience_gain_army: 0.1 }
+    src: user_request
+  - id: mn_xp_mando_marina
+    name: { english: "Naval Drills", spanish: "Simulacros Navales" }
+    modifiers: { experience_gain_navy: 0.1 }
+    src: user_request
+  - id: mn_xp_mando_aire
+    name: { english: "Air Drills", spanish: "Simulacros Aéreos" }
+    modifiers: { experience_gain_air: 0.1 }
+    src: user_request
   - id: efe_heredero_de_la_tierra
     name: { english: "Heir of the Earth", spanish: "Heredero de la Tierra" }
     modifiers:

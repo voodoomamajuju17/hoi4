@@ -148,7 +148,7 @@ def emit(ctx: BuildContext) -> None:
             continue
         _rewrite(ctx, s, new_owner, deposits.get(s.id, {}),
                  resource_delta.get(s.id, {}), added.get(s.id, {}), claims.get(s.id, ()),
-                 manpower_new.get(s.id), forts.get(s.id))
+                 manpower_new.get(s.id), forts.get(s.id), (ctx.data.get("extra_slots") or {}).get(s.id, 0))
     _startup_ownership(ctx, assignment)
 
 
@@ -559,7 +559,8 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
 
 def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int],
              resource_delta: dict | None = None, add_buildings: dict | None = None,
-             claims=(), manpower: int | None = None, bunkers: dict[int, int] | None = None) -> bool:
+             claims=(), manpower: int | None = None, bunkers: dict[int, int] | None = None,
+             extra_slots: int = 0) -> bool:
     if _unsafe(info):
         return False
     root = parse_file(info.path)
@@ -606,6 +607,15 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resource
             level = int(float(str(getattr(old, "text", old)))) if old is not None else 0
             buildings.entries = [(k, v) for k, v in buildings.entries if k != key]
             buildings.entries.insert(0, (key, level + n))
+
+    if extra_slots:
+        # Espacios de construcción extra (15_balance -> construction), antes
+        # que los edificios para que los astilleros nuevos entren.
+        history = state.get("history")
+        if not isinstance(history, Block):
+            history = Block()
+            state.add("history", history)
+        history.entries.insert(0, ("add_extra_state_shared_building_slots", int(extra_slots)))
 
     if bunkers:
         # Línea de fuertes: búnker por provincia (el bloque `<provincia> = { bunker = N }`

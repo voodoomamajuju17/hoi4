@@ -278,6 +278,21 @@ class Vanilla:
         self._definition_cache = out
         return out
 
+    def coastal_provinces(self) -> set[int]:
+        """Provincias de tierra con costa (map/definition.csv, columna 6 = true)."""
+        if getattr(self, "_coastal", None) is not None:
+            return self._coastal
+        out: set[int] = set()
+        definition = self.root / "map" / "definition.csv"
+        if definition.exists():
+            for line in definition.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+                parts = line.split(";")
+                if len(parts) >= 6 and parts[0].isdigit() and parts[4].strip() == "land" \
+                        and parts[5].strip().lower() == "true":
+                    out.add(int(parts[0]))
+        self._coastal = out
+        return out
+
     def land_provinces(self) -> set[int]:
         return {p for p, (_, kind, _) in self._definition().items() if kind == "land"}
 

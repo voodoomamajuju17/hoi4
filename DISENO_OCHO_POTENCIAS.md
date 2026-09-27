@@ -555,3 +555,10 @@ llega a 100 al toque y la tensión nunca sube".
   de declararle: declararle era declararle a su señor (partida 2026-09-29:
   Eurasia quedó satélite de la ASC y Roma terminó en guerra con la Comuna).
 - **Trenes y camiones**: todos arrancan con `basic_train` y `tech_trucks`.
+- **Construcción**: cada región arranca con espacios extra (meganaciones +3,
+  satélites +2, Anarquía +1) y cada potencia con al menos 10 astilleros (los
+  satélites 2) en sus regiones con costa: el NAS y la Federación no tenían.
+- **Experiencia**: jefes de ejército, marina y aire dan +0,25 de experiencia
+  diaria de su rama; el alto mando +0,1 de la suya.
+- **Pantallas de carga**: nueve imágenes propias reparten las pantallas de
+  carga del juego; el fondo del menú queda aparte.

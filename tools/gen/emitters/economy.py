@@ -32,7 +32,61 @@ def plan(ctx: BuildContext, assignment: dict[int, str], capitals: dict[str, int]
         _resource_floor(ctx, spec["resource_floor"], assignment, capitals, by_state, kinds, resource_delta)
     if spec.get("industrialization"):
         _industrialize(ctx, spec["industrialization"], assignment, by_state, added)
+    if spec.get("construction"):
+        _construction(ctx, spec["construction"], assignment, by_state, added)
     return resource_delta, added
+
+
+def _construction(ctx, spec, assignment, by_state, added) -> None:
+    """2026-09-29 (pedido del usuario): "casi no se puede construir" y "el NAS
+    no tiene astilleros". Cada región de un país del mod arranca con espacios
+    de construcción extra (extra_slots por tipo de país) y cada país tiene un
+    mínimo de astilleros (dockyards_min) en sus regiones con costa: primero en
+    los espacios libres, después en los extra."""
+    kind = {c.tag: ("meganation" if c.is_major else "satellite" if c.is_subject else "anarchy")
+            for c in ctx.spec.countries}
+    slots_by_cat = ctx.vanilla.state_category_slots()
+    shared = ctx.vanilla.shared_slot_buildings()
+    extra_by_kind = spec.get("extra_slots") or {}
+    extra: dict[int, int] = {}
+    for sid, tag in assignment.items():
+        n = int(extra_by_kind.get(kind.get(tag), 0))
+        if n > 0 and sid in by_state:
+            extra[sid] = n
+    ctx.data["extra_slots"] = extra
+    if extra:
+        ctx.note(f"construccion: {sum(extra.values())} espacios extra en {len(extra)} regiones "
+                 f"({', '.join(f'{k} +{v}' for k, v in sorted(extra_by_kind.items()))})")
+
+    mins = spec.get("dockyards_min") or {}
+    building = spec.get("dockyard", "dockyard")
+    coastal = ctx.vanilla.coastal_provinces()
+    for c in ctx.spec.countries:
+        want = int(mins.get(kind[c.tag], 0))
+        owned = [by_state[sid] for sid, t in assignment.items() if t == c.tag and sid in by_state]
+        if want <= 0 or not owned:
+            continue
+        have = sum((s.buildings or {}).get(building, 0) + added[s.id].get(building, 0) for s in owned)
+        need = want - have
+        if need <= 0:
+            continue
+        shore = sorted((s for s in owned if any(p in coastal for p in s.provinces)), key=lambda s: (-s.manpower, s.id))
+        if not shore:
+            ctx.note(f"astilleros: {c.tag} no tiene regiones con costa")
+            continue
+        room = {s.id: (_free_slots(s, slots_by_cat, shared) - sum(added[s.id].values())
+                       + extra.get(s.id, 0)) for s in shore}
+        placed = 0
+        while placed < need and any(v > 0 for v in room.values()):
+            for s in shore:
+                if placed >= need:
+                    break
+                if room[s.id] > 0:
+                    added[s.id][building] += 1
+                    room[s.id] -= 1
+                    placed += 1
+        ctx.note(f"astilleros: {c.tag} {have} -> {have + placed}"
+                 + (f" (faltan {need - placed}: sin espacio en la costa)" if placed < need else ""))
 
 
 # ---------------------------------------------------------------------------
