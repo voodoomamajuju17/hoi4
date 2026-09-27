@@ -666,7 +666,7 @@ def test_territory() -> None:
         locs = sorted(pdx.text(d.get("location")) for d in divs)
         check("en el territorio mas poblado (India, no Ceilan)", set(locs) <= {"18", "19", "20", "21"} and "18" in locs, str(locs))
         zwe = pdx.parse((mod / "history/units/ZWE_2100.txt").read_text()).get("units").get_all("division")
-        check("5 milicias en Europa (Moscu)", len(zwe) == 5 and pdx.text(zwe[0].get("location")) == "22", str(len(zwe)))
+        check("7 milicias en Europa (Moscu): Eurasia mas fuerte (2026-09-29)", len(zwe) == 7 and pdx.text(zwe[0].get("location")) == "22", str(len(zwe)))
 
         section("la Anarquia no es una faccion (2026-09-25)")
         lh = next(p for p in (mod / "history/countries").glob("ZWI - *.txt")).read_text()

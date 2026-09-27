@@ -1815,7 +1815,8 @@ countries:
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.1, recruitable_population_factor: 0.6, stability_factor: 0.1, war_support_factor: 0.1}
+      # 2026-09-29: "fortalecé un poco Eurasia": +5% defensa, +5% organización, +10% reclutables, y el invierno no los frena
+      modifiers: {army_defence_factor: 0.35, army_org_factor: 0.2, army_attack_factor: 0.1, recruitable_population_factor: 0.7, stability_factor: 0.1, war_support_factor: 0.1, '?winter_attrition_factor': -0.25}
       src: user_design
     focus_ideas:
     - id: ZWE_caudillo_supremo
@@ -2187,7 +2188,8 @@ countries:
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.15, army_org_factor: 0.05, recruitable_population_factor: 0.3}
+      # 2026-09-29: "fortalecé un poco Amazonas" (sigue siendo solo defensivo): +5% defensa, +5% organización, +10% reclutables
+      modifiers: {army_defence_factor: 0.2, army_org_factor: 0.1, recruitable_population_factor: 0.4, '?attrition': -0.1}
       src: user_design
     focus_ideas:
     - id: ZWB_caudillo_supremo
