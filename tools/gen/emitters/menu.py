@@ -44,6 +44,21 @@ def emit(ctx: BuildContext) -> None:
     if not targets:
         ctx.warn("menu: no encontre el sprite de fondo del menu principal en interface/; no se cambia.")
         return
+    # Pantallas de carga del usuario (2026-09-29): las pantallas de carga del
+    # juego se reparten entre ellas; el fondo del menú queda solo en las
+    # texturas que usa el menú.
+    loading_dir = spec.get("loading_screens")
+    screens = sorted((ctx.spec.root.parent / loading_dir).glob("*.dds")) if loading_dir else []
+    if screens:
+        loading = sorted(t for t in targets if t.startswith("gfx/loadingscreens/") and t not in _frontend_textures(ctx))
+        for i, texture in enumerate(loading):
+            dest = ctx.mod_root / texture
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(screens[i % len(screens)].read_bytes())
+            ctx.track(dest)
+        targets = targets - set(loading)
+        if loading:
+            ctx.note(f"pantallas de carga: {len(screens)} imagenes del mod en {len(loading)} pantallas del juego")
     src = (ctx.spec.root.parent / spec["background"]).read_bytes()
     width, height = _dims(src)
     for texture in sorted(targets):
@@ -172,6 +187,31 @@ def _diagnose_deep(root) -> list[str]:
             if found >= 60:
                 out.append("      ... (hay mas imagenes grandes)")
                 break
+    return out
+
+
+def _frontend_textures(ctx: BuildContext) -> set[str]:
+    """Las texturas que usa el menú mismo (por nombre de sprite o por las .gui
+    del menú), sin las pantallas de carga que solo aparecen en el selector."""
+    if "frontend" in ctx.data:
+        return ctx.data["frontend"]
+    sprites: dict[str, str] = {}
+    for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for name, texture in _SPRITE.findall(text):
+            sprites.setdefault(name, texture.replace("\\", "/"))
+    out = {t for n, t in sprites.items() if t.lower().endswith(".dds") and _NAME.search(n)}
+    for pattern in ("frontend*.gui", "mainmenu*.gui", "main_menu*.gui"):
+        for path in (ctx.vanilla.root / "interface").glob(f"**/{pattern}"):
+            try:
+                names = _GUI_SPRITE.findall(path.read_text(encoding="utf-8-sig", errors="replace"))
+            except OSError:
+                continue
+            out.update(sprites[n] for n in names if n in sprites and sprites[n].lower().endswith(".dds"))
+    ctx.data["frontend"] = out
     return out
 
 

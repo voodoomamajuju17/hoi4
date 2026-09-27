@@ -1150,6 +1150,11 @@ def test_balance() -> None:
         lar = mod / "gfx/loadingscreens/load_prueba.dds"
         check("pisa las pantallas de carga grandes de las expansiones (selector de fondos)",
               lar.exists() and _st.unpack_from("<II", lar.read_bytes(), 12) == (1440, 1920))
+        # Pantallas de carga del usuario (2026-09-29)
+        shots = {p.read_bytes() for p in (REPO_ROOT / "assets/menu/loading").glob("*.dds")}
+        check("pantallas de carga: las del juego llevan las imagenes del mod", lar.read_bytes() in shots)
+        check("pantallas de carga: el fondo del menu queda en la textura del menu", raw not in shots)
+        check("pantallas de carga: el reporte lo dice", any(n.startswith("pantallas de carga:") for n in ctx.notes))
 
         efe_c = (mod / "common/countries/Ecofascist_Empire.txt").read_text()
         check("EFE con cultura grafica sudamericana", "southamerican_gfx" in efe_c and "southamerican_2d" in efe_c, efe_c)
