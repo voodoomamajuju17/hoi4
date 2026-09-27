@@ -215,3 +215,25 @@ plans:
   enable: {flag: HSN_contra_SHD, at_war: false, divisions_at_least: 20}
   strategies:
   - {type: declare_war, target: SHD, value: 80}
+
+# 2026-09-29: la FCU y la Federación contra las Tierras Sin Ley, cuando justificaron la guerra
+- id: FCU_contra_tierras_sin_ley
+  country: FCU
+  enable: {flag: FCU_contra_ZAN}
+  strategies:
+  - {type: prepare_for_war, target: ZAN, value: 100}
+- id: FCU_declara_a_tierras_sin_ley
+  country: FCU
+  enable: {flag: FCU_contra_ZAN, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: ZAN, value: 80}
+- id: APF_contra_tierras_sin_ley
+  country: APF
+  enable: {flag: APF_contra_ZAN}
+  strategies:
+  - {type: prepare_for_war, target: ZAN, value: 100}
+- id: APF_declara_a_tierras_sin_ley
+  country: APF
+  enable: {flag: APF_contra_ZAN, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: ZAN, value: 80}

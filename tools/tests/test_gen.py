@@ -629,6 +629,23 @@ def test_territory() -> None:
                               {(1, 6), (2, 3), (4, 6), (5, 7)}, {"owner": "NRE", "facing": "ASC", "near": "ITA", "level": 5})
     check("fuertes: la region italiana y la vecina, solo en las provincias que tocan a la ASC",
           got == {1: {1: 5}, 2: {4: 5}}, str(got))
+    # 2026-09-29 (pedido del usuario): Panamá y Puerto Rico a la FCU; Chequia y Danzig a la ASC.
+    import yaml as _yt
+    from tools.gen.emitters.territory import _resolve, normalize as _tnorm
+    terr_spec = _yt.safe_load((REPO_ROOT / "spec/08_territory.yaml").read_text(encoding="utf-8"))["territories"]
+    wanted = {t: v for t, v in terr_spec.items() if isinstance(v, dict) and isinstance(v.get("resolve"), list)}
+    rows = [(1, "CZE", "Bohemia", "europe"), (2, "CZE", "Slovakia", "europe"), (3, "CZE", "Carpathian Ruthenia", "europe"),
+            (4, "DNZ", "Danzig", "europe"), (5, "PAN", "Panama", "north_america"),
+            # Puerto Rico en otro continente: lo toma el nombre, no el dueño
+            (6, "USA", "Puerto Rico", "south_america"), (7, "COL", "Bogota", "south_america"), (8, "POL", "Warsaw", "europe")]
+    rstates = [_S(id=i, owner=o, cores=[o], name_key=f"S{i}", file_label=n) for i, o, n, _ in rows]
+    rctx = _S(vanilla=_S(state_continents=lambda: {i: c for i, _, _, c in rows}),
+              spec=_S(country=lambda t: None), warn=lambda m: None)
+    got = _resolve(rctx, wanted, rstates, {}, {_tnorm(s.file_label): [s] for s in rstates})
+    check("territorio: Chequia y Danzig a la ASC; Eslovaquia y Rutenia quedan en ZBC",
+          (got[1], got[2], got[3], got[4], got[8]) == ("ASC", "ZBC", "ZBC", "ASC", "ZBC"), str(got))
+    check("territorio: el canal de Panama y Puerto Rico a la FCU; Colombia sigue en ZNG",
+          (got[5], got[6], got[7]) == ("FCU", "FCU", "ZNG"), str(got))
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         import shutil as _shf
@@ -839,6 +856,47 @@ def test_events() -> None:
         zsg_h = next((mod / "history/countries").glob("ZSG - *.txt")).read_text()
         check("Santuario: neutral, con su espiritu y leyes de paz",
               "ZSG_santuario_de_gaia" in zsg_h and "civilian_economy" in zsg_h and "volunteer_only" in zsg_h, zsg_h[-700:])
+        # La FCU y la Federación contra las Tierras Sin Ley (2026-09-29): cuando ZAN
+        # termina su tercer foco, cada una puede justificar la guerra por lo que ocupa.
+        import yaml as _ye
+        zan_sel = _ye.safe_load((REPO_ROOT / "spec/08_territory.yaml").read_text(encoding="utf-8"))["territories"]["ZAN"]["resolve"]
+        zan_names = [sel["state"] for sel in zan_sel if "state" in sel]
+        spec_ns = _ye.safe_load((REPO_ROOT / "spec/12_events.yaml").read_text(encoding="utf-8"))["namespaces"]
+        spec_plans = _ye.safe_load((REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"))["plans"]
+        pulses = pdx.parse(se_raw_s)
+        for tag_, ns_, pulse_, zev in (("FCU", "meganations_fcu", "FCU_pulso_del_directorio", 2),
+                                       ("APF", "meganations_apf", "APF_pulso_de_los_consejos", 3)):
+            evs_ = " ".join((mod / f"events/{ns_}.txt").read_text().split())
+            e210 = evs_[evs_.index(f"id = {ns_}.210 title"):][:1500]
+            check(f"Tierras Sin Ley: la {tag_} justifica una guerra para tomar regiones de ZAN",
+                  "create_wargoal = { type = take_state_focus target = ZAN" in e210 and f"set_country_flag = {tag_}_contra_ZAN" in e210, e210[:900])
+            check(f"Tierras Sin Ley: ZAN se entera de lo de la {tag_}",
+                  f"ZAN = {{ country_event = {{ id = meganations_zan.{zev} days = 1 }} }}" in e210, e210[:900])
+            pz = " ".join(pdx.render(pulses.get(pulse_)).split())
+            check(f"Tierras Sin Ley: a la {tag_} le llega cuando ZAN termina su tercer foco (una vez)",
+                  f"NOT = {{ has_country_flag = {tag_}_tierras_sin_ley }} country_exists = ZAN "
+                  f"ZAN = {{ has_completed_focus = ZAN_foco_3_the_frontier_pact }} }} set_country_flag = {tag_}_tierras_sin_ley "
+                  f"country_event = {{ id = {ns_}.210 days = 1 }}" in pz, pz[-700:])
+            wg = next(x for x in next(e for e in spec_ns[ns_]["events"] if e["id"] == 210)["options"][0]["effects"]
+                      if x.get("effect") == "wargoal")
+            check(f"Tierras Sin Ley: la {tag_} reclama solo regiones que ocupa ZAN",
+                  len(wg["states"]) >= 10 and all(n in zan_names for n in wg["states"]), str(wg["states"]))
+            plan = next((p for p in spec_plans if p["id"] == f"{tag_}_declara_a_tierras_sin_ley"), None)
+            check(f"Tierras Sin Ley: la IA de la {tag_} declara con la justificacion hecha",
+                  plan is not None and plan["enable"].get("flag") == f"{tag_}_contra_ZAN"
+                  and plan["strategies"] == [{"type": "declare_war", "target": "ZAN", "value": 80}], str(plan))
+        from tools.gen.emitters import effects as _effm
+        saved_states, saved_unres = _effm._STATES, set(_effm.UNRESOLVED)
+        try:
+            _effm.use_states({"alaska": 501, "kansas": 502})
+            wg_r = " ".join(pdx.render(_effm.render_effects("FCU", [dict(wg, states=[["Alaska"], ["Kansas"], ["Atlantis"]])],
+                                                             set(), {}, where="t")).split())
+        finally:
+            _effm.use_states(saved_states)
+            _effm.UNRESOLVED.clear()
+            _effm.UNRESOLVED.update(saved_unres)
+        check("Tierras Sin Ley: el objetivo lista las regiones que existen (generator)",
+              "generator = { 501 502 }" in wg_r, wg_r)
         # El lado del satélite (2026-09-29): su panel, la independencia y el aviso al señor.
         cats_s = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text().split())
         check("satelite: panel propio visible mientras sea satelite",

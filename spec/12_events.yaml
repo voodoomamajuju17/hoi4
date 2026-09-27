@@ -2646,6 +2646,52 @@ namespaces:
           - {effect: add_stability, value: 0.05}
           - {effect: add_war_support, value: 0.05}
         src: user_design
+      - id: 210
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Frontier Arms Itself, spanish: La Frontera se Arma}
+        desc:
+          english: 'The Lawless Lands signed the Frontier Pact: Alaska, the northern plains and half of Mexico now answer to warlords with factories,
+            manpower and a treaty. The Directorate has a word for land that used to be the Union: stolen.\n\nThe general staff can justify a war to
+            take back every occupied state of North America.'
+          spanish: 'Las Tierras Sin Ley firmaron el Pacto de la Frontera: Alaska, las llanuras del norte y medio México responden hoy a caudillos con
+            fábricas, hombres y un tratado. El Directorio tiene una palabra para la tierra que fue de la Unión: robada.\n\nEl estado mayor puede justificar
+            una guerra para recuperar cada región ocupada de Norteamérica.'
+        options:
+        - name: {english: Take back what is ours., spanish: Recuperar lo que es nuestro.}
+          effects:
+          - effect: wargoal
+            target: ZAN
+            type: take_state_focus
+            states:
+            - - Alaska
+            - - N.W Territories
+              - Northwest Territories
+            - - Yukon
+              - Yukon Territory
+            - - Nunavut
+              - Keewatin
+            - - North Dakota
+            - - South Dakota
+            - - Nebraska
+            - - Kansas
+            - - Iowa
+            - - Minnesota
+            - - Baja California
+            - - Sonora
+            - - Chihuahua
+            - - Sinaloa
+            - - Guatemala
+            - - Nicaragua
+          - {effect: flag, value: FCU_contra_ZAN}
+          - {effect: add_war_support, value: 0.05}
+          - {effect: event, id: meganations_zan.2, days: 1, target: ZAN}
+          ai_chance: 85
+        - name: {english: 'Not yet: the Frontier can wait.', spanish: 'Todavía no: la Frontera puede esperar.'}
+          effects:
+          - {effect: add_political_power, value: 50}
+          ai_chance: 15
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -5847,6 +5893,47 @@ namespaces:
         effects:
         - {effect: add_stability, value: 0.05}
         - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 210
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The West Is Not Lawless, spanish: El Oeste no es Tierra de Nadie}
+      desc:
+        english: The Lawless Lands signed the Frontier Pact, and the warlords of West Africa signed it too. From Dakar to the Upper Volta, the councils
+          that should be part of the Federation obey men with rifles.\n\nThe Federal Council can justify a war to bring every occupied region of the
+          West back into the Federation.
+        spanish: Las Tierras Sin Ley firmaron el Pacto de la Frontera, y los caudillos del África occidental también. De Dakar al Alto Volta, los
+          consejos que deberían ser parte de la Federación obedecen a hombres con fusiles.\n\nEl Consejo Federal puede justificar una guerra para
+          devolver a la Federación cada región ocupada del Oeste.
+      options:
+      - name: {english: The Federation reaches the Atlantic., spanish: La Federación llega al Atlántico.}
+        effects:
+        - effect: wargoal
+          target: ZAN
+          type: take_state_focus
+          states:
+          - - Senegal
+            - Dakar
+          - - Gambia
+          - - Guinea
+            - French Guinea
+          - - Portuguese Guinea
+          - - Sierra Leone
+          - - Liberia
+          - - Ivory Coast
+            - Cote d'Ivoire
+          - - French Sudan
+            - Mali
+          - - Mauritania
+          - - Upper Volta
+        - {effect: flag, value: APF_contra_ZAN}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: event, id: meganations_zan.3, days: 1, target: ZAN}
+        ai_chance: 85
+      - name: {english: 'Not yet: we still have work at home.', spanish: 'Todavía no: tenemos trabajo en casa.'}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 15
       src: user_design
   # ===========================================================================
   meganations_nas:
@@ -10073,6 +10160,30 @@ namespaces:
       src: user_decision
 
   # Eventos mundiales (2026-09-29): los recibe cada país; sin país dueño.
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Union Wants the Frontier Back, spanish: La Unión Quiere la Frontera de Vuelta}
+      desc:
+        english: The Directorate justified a war to take back the northern plains and Alaska. The Pact will have to hold.
+        spanish: El Directorio justificó una guerra para recuperar las llanuras del norte y Alaska. El Pacto va a tener que aguantar.
+      options:
+      - name: {english: Let them come., spanish: Que vengan.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Federation Looks West, spanish: La Federación Mira al Oeste}
+      desc:
+        english: The African Federation justified a war to take the West. The Pact will have to hold there too.
+        spanish: La Federación Africana justificó una guerra para quedarse con el Oeste. El Pacto va a tener que aguantar ahí también.
+      options:
+      - name: {english: Let them come., spanish: Que vengan.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+      src: user_design
   meganations_mundo:
     country: null
     events:

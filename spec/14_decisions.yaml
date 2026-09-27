@@ -7927,6 +7927,16 @@ scripted_effects:
       - {effect: flag, value: FCU_menor_204}
       - {effect: event, id: meganations_fcu.204, days: 1}
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
+    - effect: if
+      when:
+        not_flag: FCU_tierras_sin_ley
+        country_exists: ZAN
+        country:
+          tag: ZAN
+          when: {focus: ZAN_foco_3_the_frontier_pact}
+      then:
+      - {effect: flag, value: FCU_tierras_sin_ley}
+      - {effect: event, id: meganations_fcu.210, days: 1}
   - id: ASC_pulso_de_la_red
     effects:
     - effect: if
@@ -8483,6 +8493,16 @@ scripted_effects:
       - {effect: flag, value: APF_menor_204}
       - {effect: event, id: meganations_apf.204, days: 1}
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
+    - effect: if
+      when:
+        not_flag: APF_tierras_sin_ley
+        country_exists: ZAN
+        country:
+          tag: ZAN
+          when: {focus: ZAN_foco_3_the_frontier_pact}
+      then:
+      - {effect: flag, value: APF_tierras_sin_ley}
+      - {effect: event, id: meganations_apf.210, days: 1}
   - id: NRE_pulso_del_ocio
     effects:
     - effect: if
