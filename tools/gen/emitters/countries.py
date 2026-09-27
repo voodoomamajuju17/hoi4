@@ -97,6 +97,7 @@ def _emit_flags(ctx: BuildContext) -> None:
 
 
 def _emit_localisation(ctx: BuildContext) -> None:
+    _, groups = ctx.spec.ideology_index()
     for c in ctx.spec.countries:
         # Fallback: se usa cuando no hay clave para la ideologia actual.
         ctx.loc.define_and_reference(
@@ -120,6 +121,23 @@ def _emit_localisation(ctx: BuildContext) -> None:
             file=LOC_FILE,
             origin=f"countries:{c.tag}",
         )
+        # El juego nombra al país por el GRUPO de su ideología (TAG_<grupo>) y,
+        # si falta, por TAG a secas. Sin esas claves, un país que cambia de
+        # gobierno o el bando rebelde de una guerra civil salía sin nombre
+        # (game.log 2026-09-29: "... is declaring war on "). Con otra ideología
+        # que la de arranque, el nombre lleva el grupo entre paréntesis.
+        for key, en, es in ((c.tag, c.name_en, c.name_es), (f"{c.tag}_ADJ", c.adj_en, c.adj_es)):
+            ctx.loc.define_and_reference(key, en=en, es=es, file=LOC_FILE, origin=f"countries:{c.tag}")
+        for group, gdef in groups.items():
+            gname = gdef.get("loc") or {}
+            if group == c.ideology_group:
+                en, es = c.name_en, c.name_es
+            else:
+                en = f"{c.name_en} ({gname.get('english', group)})"
+                es = f"{c.name_es} ({gname.get('spanish', group)})"
+            for suffix, (ven, ves) in (("", (en, es)), ("_DEF", (en, es)), ("_ADJ", (c.adj_en, c.adj_es))):
+                ctx.loc.define_and_reference(f"{c.tag}_{group}{suffix}", en=ven, es=ves,
+                                             file=LOC_FILE, origin=f"countries:{c.tag}")
 
 
 def country_name_key(c: Country) -> str:

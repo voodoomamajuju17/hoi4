@@ -475,3 +475,10 @@ llega a 100 al toque y la tensión nunca sube".
   genérico del juego.
 - **Prueba de scopes**: cada efecto y condición del mod se revisa contra su
   scope (país o región) según las reglas de CWTools.
+- **Nombres por ideología**: cada país tiene nombre para los cuatro grupos
+  ideológicos y a secas (con otro grupo que el de arranque, el nombre lleva
+  el grupo entre paréntesis). En julio de 2101 tres facciones le declararon
+  la guerra a un país sin nombre: el bando rebelde de una guerra civil en la
+  Anarquía, que no tenía nombre para su ideología.
+- **Arte compartido**: los 168 eventos de armisticio usan tres imágenes
+  (`art` en el evento, `shared_art` en 12_events.yaml).

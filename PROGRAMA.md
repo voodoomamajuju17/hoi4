@@ -31,6 +31,7 @@ elementos también van por importancia.
   - [ ] `Icon definition "_small"`: miles de avisos desde que empiezan los combates (cosmético, sin causa
     encontrada todavía)
 - [~] Prueba de scopes: cada efecto y condición en su scope (país o región) según las reglas de CWTools
+- [~] Nombres de país para las 4 ideologías (un bando rebelde salía sin nombre en el game.log)
 - [~] Culturas gráficas por región (Q013): sudamericana, asiática, africana, Commonwealth, Europa oriental, Medio Oriente
 - [x] Fondo del menú principal: se pisan todas las pantallas de carga grandes (confirmado por el usuario)
 - [ ] Rendimiento: medir días por segundo con 29 países + guerras activas

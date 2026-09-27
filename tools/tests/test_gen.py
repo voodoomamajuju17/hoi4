@@ -889,6 +889,11 @@ def test_balance() -> None:
         check("YYG y PTA con guarnicion reforzada",
               ctx.data["division_count"].get("YYG") == 4 and ctx.data["division_count"].get("PTA") == 3,
               str(ctx.data["division_count"]))
+        names = (mod / "localisation/spanish/meganations_countries_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("nombre de pais para las 4 ideologias y a secas (game.log: guerra contra un pais sin nombre)",
+              all(f" {k}:0 " in names for k in ("ZWE", "ZWE_ADJ", "ZWE_neutrality", "ZWE_communism", "ZWE_fascism",
+                                                  "ZWE_democratic", "EFE_communism_DEF"))
+              and ' ZWE_communism:0 "Señores de la Guerra de Eurasia (Colectivismo)"' in names, names[:400])
         check("YYG y PTA con meta de industrializacion",
               any(n.startswith("industrializacion: YYG") for n in ctx.notes)
               and any(n.startswith("industrializacion: PTA") for n in ctx.notes))
