@@ -24,12 +24,11 @@ elementos también van por importancia.
 - [~] Listas de nombres de personajes para los 29 países
 - [ ] Limpiar el ruido de error.log:
   - [ ] on_actions vanilla que apuntan a eventos que ya no cargan (evaluar `replace_path` de `common/on_actions` conservando los esenciales)
-  - [~] decisiones nacionales vanilla de países que no existen (China, Congo...): archivos vaciados
+  - [~] decisiones nacionales vanilla de países que no existen (China, Congo...): cáscaras inertes, sin "Invalid decision" (2026-09-29)
   - [ ] "AI tried to post an invalid command: unlock_trait_command"
   - [~] Divisiones regaladas a nivel país (`create_unit` sin región) y prioridades de investigación que
     rompían `electronic_mechanical_engineering.txt` (2026-09-29)
-  - [ ] `Icon definition "_small"`: miles de avisos desde que empiezan los combates (cosmético, sin causa
-    encontrada todavía)
+  - [~] `Icon definition "_small"`: retratos sin versión chica; ahora cada retrato la trae (2026-09-29)
 - [~] Prueba de scopes: cada efecto y condición en su scope (país o región) según las reglas de CWTools
 - [~] Nombres de país para las 4 ideologías (un bando rebelde salía sin nombre en el game.log)
 - [~] Culturas gráficas por región (Q013): sudamericana, asiática, africana, Commonwealth, Europa oriental, Medio Oriente
@@ -56,6 +55,9 @@ elementos también van por importancia.
 - [~] Anarquía (2026-09-28): árboles de 7 focos por supervivencia, más milicias, uniones (Eurasia, Indostán-Emiratos), Tierras Sin Ley con territorio; paz armada con casus belli permanente
 - [~] Satélites: lealtad 0-100 por satélite con panel del señor (Ayuda / Tributo), espíritu vivo y rebeliones (2026-09-27); falta que se liberen
 - [~] Satélites del EFE más fuertes (2026-09-29): YYG 22 de IC, PTA 10, 4 y 3 divisiones, ideas propias
+- [~] El lado del satélite (2026-09-29): panel propio, cooperar, agitar e independencia
+- [~] Colores de mapa bien distintos, leyes por ideología, doctrinas de arranque por bloque, altos mandos para todos (2026-09-29)
+- [~] Roma: línea de fuertes en los Alpes frente a la ASC; Eurasia y Amazonas más fuertes (2026-09-29)
 - [~] Guerra limitada (2026-09-29): hasta 2104, al 40% de rendición de una potencia, armisticio de bando
   contra bando (cada uno se queda con lo que ocupa, tregua de un año, Revancha); después elige el ganador
 - [~] La IA construye (2026-09-29): infraestructura donde falta y espacios de construcción, cada mes
@@ -102,6 +104,7 @@ eventos con ultimátum e IA con condiciones.
   Armonía Perfecta/Parcial y Desborde, Lin (integración de Corea y la Estepa, ultimátum
   al NAS) vs Zhou (la Gran Crecida: el Pueblo hasta 130), Grandes Obras vs Precisión.
   Caudales v4 (2026-09-29): pronóstico del río, racha de armonía con premios, Cerrar las Compuertas
+- [~] Bioacero v2 (2026-09-29): el metal vivo come, los focos saturan, se pudre desde 13
 - [~] **NRE** — árbol de 53 focos con la tabla nueva: tres legiones con prestigio,
   Auctoritas Militaris como moneda, Varro (Senado, Vías, Hispania y Dacia en tres etapas,
   Pax Romana, ultimátum al EFE) vs Arbogast (AVE IMPERATOR cambia el líder entre cuatro
@@ -154,6 +157,8 @@ eventos con ultimátum e IA con condiciones.
 
 ## 6. Diplomacia avanzada
 
+- [~] Democracias sin el tope de 100% de tensión para justificar (2026-09-29)
+- [~] El Santuario de Gaia: nación neutral si el EFE protege el Amazonas, garantizada por el EFE y codiciada por FCU, NAS, ASC y ZAF
 - [ ] Facciones por bloque ideológico: cuándo se forman y quién entra
 - [ ] Eventos de tensión mundial ligados al Gran Desarme
 - [ ] Mecánica de acuerdos entre meganaciones (agua, rutas, cómputo)
@@ -166,6 +171,7 @@ eventos con ultimátum e IA con condiciones.
 - [~] Banderas de las 8 meganaciones (arte del usuario)
 - [x] Banderas de los 16 satélites y los 5 señores de la guerra (arte del usuario)
 - [ ] Retratos de los satélites y de Irina Vasilescu y Kerem Aydın (NRE, hoy provisorios)
+- [~] 39 retratos pedidos de mariscales, generales, jefes y ministros (sin provisorio); retratos chicos 65x67 (2026-09-29)
 - [x] Íconos de foco propios: el pack de 96, conectado
 - [ ] Íconos de los espíritus nacionales propios (hoy muchos salen con "?")
 - [x] Circuito de arte con ChatGPT (tools/arte): pedidos ASSET_REQUEST en arte/pedidos/, importador
@@ -178,12 +184,13 @@ eventos con ultimátum e IA con condiciones.
 ## 8. Texto y localización
 
 - [ ] Revisar todo el texto en español e inglés (tono, consistencia de nombres)
-- [ ] Nombres de 2100 para las regiones de las otras meganaciones
+- [~] Nombres de 2100 para las regiones de las otras meganaciones (6 por potencia, 2026-09-29)
 - [ ] Nombres de ciudades (puntos de victoria) de las capitales
 - [ ] Listas de nombres de divisiones y barcos por facción
 
 ## 9. Flavor
 
+- [~] 5 eventos mundiales y 5 menores por potencia (2026-09-29); la Señal de Próxima (sorpresa)
 - [ ] Eventos de noticias del mundo de 2100 (el Invierno de Ceniza, las cubas, la Alta Mar)
 - [ ] Textos de ayuda con lore en ideologías, ideas y decisiones
 - [ ] Música del menú o de facción (si se consigue)

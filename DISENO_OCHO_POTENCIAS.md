@@ -482,3 +482,53 @@ llega a 100 al toque y la tensión nunca sube".
   Anarquía, que no tenía nombre para su ideología.
 - **Arte compartido**: los 168 eventos de armisticio usan tres imágenes
   (`art` en el evento, `shared_art` en 12_events.yaml).
+
+## Lote Doctrinas, Santuario y Satélites (2026-09-29)
+
+- **Colores del mapa**: paleta de 30 colores con la máxima distancia visual
+  (CIEDE2000): mínimo ~15 entre cualquier par y ~30 entre vecinos; cada
+  potencia con el color de su identidad (NRE pasa a púrpura imperial).
+- **Leyes por ideología**: los fascistas (EFE, Roma) en economía de guerra;
+  la FCU y la HSN con libre comercio; la ASC planificada y cerrada; el Sol
+  y la Federación exportando; los satélites un escalón debajo de su señor;
+  la Anarquía en guerra con levas.
+- **Doctrinas de arranque** (sistema 1.17+, `common/doctrines/` del juego):
+  gran doctrina + subdoctrina con 100 de maestría por bloque (el señor y sus
+  satélites). EFE movimiento/blindados, Roma asalto en masa/choque, SHD y FCU
+  potencia de fuego (artillería / apoyo autopropulsado), ASC y APF plan de
+  batalla (operaciones / antitanque), HSN corsaria, NAS aire, Anarquía
+  infiltración. Se eligen por nombre o palabra clave; el reporte lista las
+  doctrinas del juego.
+- **Roma**: búnker 5 en cada provincia que toca a la ASC en los Alpes (las
+  regiones que eran italianas y las propias que las tocan).
+- **Eurasia y Amazonas**: 7 y 5 milicias, +5% defensa y organización, +10%
+  reclutables, menos desgaste.
+- **Bioacero v2**: el metal vivo come (la saturación sube la mitad del
+  Bioacero guardado cada mes), los focos que dan Bioacero saturan, se pudre
+  desde 13, cultivar satura más y la Plaga es más probable cuanto más llenas
+  estén las cubas.
+- **Altos mandos**: jefes de ejército, marina y aire y dos del alto mando
+  por potencia; jefe de ejército y un alto mando por satélite y anarquía
+  (82 personajes, 20 rasgos propios `mn_mando_*`).
+- **Retratos chicos**: cada retrato con su versión de 65x67 explícita (sin
+  ella el juego armaba "<grande>_small" y, con archivos, quedaba vacío: los
+  miles de avisos del error.log). 39 retratos pedidos sin provisorio.
+- **Democracias**: el Orden de Mercado justifica guerras sin esperar 100% de
+  tensión y contra cualquiera (`rule_overrides` / `modifier_overrides`).
+- **Eventos**: 5 menores por potencia (por fecha, 2100-2103) y 5 mundiales
+  (eclipse, juegos de Ginebra, tormenta solar, gripe gris, cometa) que el
+  pulso de cualquier potencia dispara una vez para todos.
+- **La sorpresa: la Señal de Próxima** (12/4/2102): un panel compartido por
+  las ocho potencias para descifrar 5 fragmentos; la primera escucha el
+  mensaje (el Disco de Oro de las Voyager devuelto con TE ESCUCHAMOS) y gana
+  La Voz de la Tierra (dos años); las demás reciben la noticia.
+- **El lado del satélite**: panel propio con su lealtad; cooperar (+8),
+  agitar (-10) y declarar la independencia (lealtad < 20 y el señor en
+  guerra o perdiendo, o < 10); el señor la acepta o va a la guerra.
+- **El Santuario de Gaia (ZSG)**: si el EFE protege el Amazonas, las regiones
+  de la selva que ya son suyas forman una nación neutral con recursos extra
+  y guardaparques, garantizada por el EFE para siempre y objetivo de guerra
+  de la FCU, la NAS, la ASC y ZAF.
+- **Nombres de 2100**: seis regiones clave por potencia fuera de Sudamérica.
+- **error.log**: las decisiones de países vanilla quedan como cáscaras
+  inertes (otros scripts las nombran).

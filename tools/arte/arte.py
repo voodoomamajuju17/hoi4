@@ -220,9 +220,24 @@ def pedidos() -> None:
                             + "\n".join(_request(i) for i in group), encoding="utf-8")
             summary.append(f"{path.name}: {len(group)}")
     (OUT / "0_LEEME.txt").write_text(_readme(summary), encoding="utf-8")
-    print(f"{len(items)} pedidos en {OUT}")
+    _zip_pedidos()
+    print(f"{len(items)} pedidos en {OUT} (y {ZIP.relative_to(REPO)})")
     for line in summary:
         print("  " + line)
+
+
+ZIP = REPO / "arte" / "pedidos.zip"
+
+
+def _zip_pedidos() -> None:
+    """Todos los pedidos en un zip, para bajarlos con un solo link
+    (2026-09-29: "pasame link para mod y para arte"). Fechas fijas: el zip
+    solo cambia si cambian los pedidos."""
+    with zipfile.ZipFile(ZIP, "w", zipfile.ZIP_DEFLATED) as z:
+        for path in sorted(OUT.glob("*.txt")):
+            info = zipfile.ZipInfo(f"pedidos/{path.name}", date_time=(2026, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, path.read_bytes())
 
 
 def _readme(summary: list[str]) -> str:
