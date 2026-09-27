@@ -113,6 +113,7 @@ trees:
         reward:
         - {effect: leader_trait, value: efe_heredero_de_la_tierra}
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_variable, var: EFE_saturacion, value: 6}
       - id: EFE_las_misiones_guaranies
         name: {english: The Guaraní Missions, spanish: Las Misiones Guaraníes}
         days: 63
@@ -197,6 +198,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: EFE_trono_del_bosque, add: EFE_trono_eterno}
         - {effect: add_variable, var: EFE_biosteel, value: 3}
+        - {effect: add_variable, var: EFE_saturacion, value: 9}
     - id: el_monte
       name: {english: The Forest Rises, spanish: El Monte se Levanta}
       focuses:
@@ -253,6 +255,7 @@ trees:
         reward:
         - {effect: add_ideas, value: EFE_desurbanizacion}
         - {effect: add_variable, var: EFE_biosteel, value: 3}
+        - {effect: add_variable, var: EFE_saturacion, value: 9}
         - {effect: add_manpower, value: 30000}
       - id: EFE_el_bosque_es_el_ejercito
         name: {english: The Forest Is the Army, spanish: El Bosque es el Ejército}
@@ -289,6 +292,7 @@ trees:
           spanish: 'La tierra conquistada se replanta: ocupada, en reforestación, núcleo ecológico. Abre las decisiones de reforestación.'
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_variable, var: EFE_saturacion, value: 6}
         - effect: states
           pick: random
           effects:
@@ -381,6 +385,7 @@ trees:
         reward:
         - {effect: add_ideas, value: EFE_autarquia_estrategica}
         - {effect: add_variable, var: EFE_biosteel, value: 1}
+        - {effect: add_variable, var: EFE_saturacion, value: 3}
       - id: EFE_cubas_profundas
         name: {english: Deep Vats, spanish: Cubas Profundas}
         days: 49
@@ -392,6 +397,7 @@ trees:
           spanish: Las cubas se van bajo tierra, donde no llegan los bombarderos.
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_variable, var: EFE_saturacion, value: 6}
         - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
       - id: EFE_bosques_fabrica
         name: {english: Forest-Factories, spanish: Bosques-Fábrica}
@@ -423,6 +429,7 @@ trees:
           spanish: Nada se desperdicia. Todo vuelve a las cubas.
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_variable, var: EFE_saturacion, value: 6}
         - {effect: add_political_power, value: 100}
       - id: EFE_la_autarquia_total
         name: {english: Total Autarky, spanish: La Autarquía Total}
@@ -531,6 +538,7 @@ trees:
         desc: {english: 'Faster cultures, deeper vats.', spanish: 'Cultivos más rápidos, cubas más hondas.'}
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_variable, var: EFE_saturacion, value: 6}
         - effect: states
           pick: random
           effects:
@@ -790,6 +798,7 @@ trees:
         desc: {english: The first vats of the century are opened., spanish: Se abren las primeras cubas del siglo.}
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 1}
+        - {effect: add_variable, var: EFE_saturacion, value: 3}
       - id: EFE_biosteel_umbral_1
         name: {english: 'BioSteel Race: Tier 1', spanish: 'Carrera del Bioacero: Nivel 1'}
         days: 63
@@ -814,6 +823,7 @@ trees:
           spanish: Un cultivo que resiste la helada y el fuego.
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_variable, var: EFE_saturacion, value: 6}
         - {effect: add_political_power, value: 50}
       - id: EFE_biosteel_umbral_2
         name: {english: 'BioSteel Race: Tier 2', spanish: 'Carrera del Bioacero: Nivel 2'}
@@ -862,6 +872,7 @@ trees:
           spanish: El Bioacero ya crece solo. A las cubas solo hay que alimentarlas.
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 5}
+        - {effect: add_variable, var: EFE_saturacion, value: 15}
         - {effect: add_research_slot, value: 1}
     - id: cubas_sanas
       name: {english: The Healthy Vats, spanish: Las Cubas Sanas}

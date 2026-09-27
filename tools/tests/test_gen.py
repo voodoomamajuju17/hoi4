@@ -804,6 +804,18 @@ def test_events() -> None:
         se_raw = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
         se_all = " ".join(se_raw.split())
         pulso = " ".join(pdx.render(pdx.parse(se_raw).get("EFE_pulso_de_las_cubas")).split())
+        # Bioacero v2 (2026-09-29): "llega a 15 sin consecuencias ni saturacion".
+        check("Bioacero v2: el metal vivo come (la saturacion sube la mitad del Bioacero guardado)",
+              "set_variable = { var = EFE_hambre_del_metal value = EFE_biosteel }" in pulso
+              and "divide_variable = { var = EFE_hambre_del_metal value = 2 }" in pulso
+              and "add_to_variable = { var = EFE_saturacion value = EFE_hambre_del_metal }" in pulso, pulso[:900])
+        check("Bioacero v2: se pudre desde 13", "var = EFE_biosteel value = 13 compare = greater_than_or_equals" in pulso)
+        check("Bioacero v2: la plaga, mas probable cuanto mas llenas las cubas",
+              "var = EFE_saturacion value = 85 compare = greater_than_or_equals" in pulso)
+        efe_tree_b = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text().split())
+        metal = efe_tree_b[efe_tree_b.index("id = EFE_el_metal_que_crece"):][:2500]
+        check("Bioacero v2: el que dan los focos tambien satura",
+              "var = EFE_biosteel value = 5" in metal and "var = EFE_saturacion value = 15" in metal, metal[:800])
         check("eventos menores: salen por fecha, una sola vez",
               "limit = { date > 2100.3.20 NOT = { has_country_flag = EFE_menor_200 } } set_country_flag = EFE_menor_200 "
               "country_event = { id = meganations_efe.200 days = 1 }" in pulso, pulso[:300])

@@ -28,15 +28,18 @@ categories:
     desc:
       english: 'BioSteel in the vats: [?EFE_biosteel]  ->  armour +[?EFE_ef_blindaje_ver]%, defence +[?EFE_ef_defensa_ver]%\nVat saturation: [?EFE_saturacion]
         / 100  ->  stability [?EFE_ef_saturacion_ver]%\n\nStored BioSteel is living armour (spirit ''The Living Metal''), and the BioSteel Race
-        tiers need 5, 10 and 15. Spending it buys something now; keeping it keeps the bonus.\nEvery harvest raises the saturation of the vats; it
-        falls by 3 per month on its own.\n40+: Forced Vats (more arms production, less stability). 70+: Vat Fever, and every month a chance of the
-        Mycelium Blight.\nAbove 15 BioSteel the living metal rots: -1 per month. Purge the vats before they purge you.'
+        tiers need 5, 10 and 15. Spending it buys something now; keeping it keeps the bonus.\nTHE LIVING METAL EATS: every month saturation rises
+        by half the stored BioSteel (with [?EFE_biosteel] it rises [?EFE_hambre_del_metal]) and drops by 3 on its own. Every harvest and every focus
+        that gives BioSteel raises it more.\n40+: Forced Vats (more military production, less stability). 70+: Vat Fever and a 25% monthly chance
+        of the Mycelium Blight; 85+, 50%; 95, certain.\nFrom 13 BioSteel the metal rots: -1 per month (from 16, -2). Purge the vats before they
+        purge you.'
       spanish: 'Bioacero en las cubas: [?EFE_biosteel]  ->  blindaje +[?EFE_ef_blindaje_ver]%, defensa +[?EFE_ef_defensa_ver]%\nSaturación de las
         cubas: [?EFE_saturacion] / 100  ->  estabilidad [?EFE_ef_saturacion_ver]%\n\nEl Bioacero guardado es blindaje vivo (espíritu «El Metal Vivo»),
-        y los niveles de la Carrera del Bioacero piden 5, 10 y 15. Gastarlo compra algo ya; guardarlo mantiene el bonus.\nCada cosecha sube la saturación
-        de las cubas; baja sola 3 por mes.\n40 o más: Cubas Forzadas (más producción militar, menos estabilidad). 70 o más: Fiebre de las Cubas,
-        y cada mes puede aparecer la Plaga del Micelio.\nPor encima de 15 de Bioacero el metal vivo se pudre: -1 por mes. Purgá las cubas antes
-        de que ellas te purguen a vos.'
+        y los niveles de la Carrera del Bioacero piden 5, 10 y 15. Gastarlo compra algo ya; guardarlo mantiene el bonus.\nEL METAL VIVO COME: cada
+        mes la saturación sube la mitad del Bioacero guardado (con [?EFE_biosteel] suben [?EFE_hambre_del_metal]) y baja sola 3. Cada cosecha y
+        cada foco que da Bioacero la sube más.\n40 o más: Cubas Forzadas (más producción militar, menos estabilidad). 70 o más: Fiebre de las Cubas
+        y 25% por mes de Plaga del Micelio; 85 o más, 50%; 95, segura.\nDesde 13 de Bioacero el metal se pudre: -1 por mes (desde 16, -2). Purgá
+        las cubas antes de que ellas te purguen a vos.'
     src: invented
     decisions:
     - id: EFE_como_se_juega
@@ -63,7 +66,7 @@ categories:
       cooldown_days: 45
       effects:
       - {effect: add_variable, var: EFE_biosteel, value: 1}
-      - {effect: add_variable, var: EFE_saturacion, value: 6}
+      - {effect: add_variable, var: EFE_saturacion, value: 8}
       ai_factor: 10
       ai:
         factor: 10
@@ -88,7 +91,7 @@ categories:
       effects:
       - {effect: add_variable, var: EFE_biosteel, value: 2}
       - {effect: add_stability, value: -0.05}
-      - {effect: add_variable, var: EFE_saturacion, value: 12}
+      - {effect: add_variable, var: EFE_saturacion, value: 14}
       ai_factor: 5
       ai:
         factor: 5
@@ -114,7 +117,7 @@ categories:
       - {effect: add_variable, var: EFE_biosteel, value: 4}
       - {effect: add_stability, value: -0.15}
       - {effect: add_war_support, value: -0.05}
-      - {effect: add_variable, var: EFE_saturacion, value: 15}
+      - {effect: add_variable, var: EFE_saturacion, value: 18}
       ai_factor: 1
       ai:
         factor: 1
@@ -5769,10 +5772,27 @@ scripted_effects:
   - id: EFE_pulso_de_las_cubas
     effects:
     - {effect: add_variable, var: EFE_saturacion, value: -3}
+    - effect: math
+      ops:
+      - - set
+        - EFE_hambre_del_metal
+        - EFE_biosteel
+      - - div
+        - EFE_hambre_del_metal
+        - 2
+      - - round
+        - EFE_hambre_del_metal
+        - null
+    - {effect: add_variable, var: EFE_saturacion, value: EFE_hambre_del_metal}
     - effect: if
       when: {focus: EFE_rotar_los_cultivos}
       then:
       - {effect: add_variable, var: EFE_saturacion, value: -3}
+    - effect: if
+      when:
+        variable_at_least: {var: EFE_biosteel, value: 13}
+      then:
+      - {effect: add_variable, var: EFE_biosteel, value: -1}
     - effect: if
       when:
         variable_at_least: {var: EFE_biosteel, value: 16}
@@ -5798,16 +5818,30 @@ scripted_effects:
       - effect: if
         when:
           not_flag: EFE_plaga_reciente
-          variable_at_least: {var: EFE_saturacion, value: 70}
+          variable_at_least: {var: EFE_saturacion, value: 85}
         then:
         - effect: random
           options:
-          - weight: 75
+          - weight: 50
             effects: []
-          - weight: 25
+          - weight: 50
             effects:
             - {effect: flag, value: EFE_plaga_reciente, days: 120}
             - {effect: event, id: meganations_efe.22, days: 1}
+        else:
+        - effect: if
+          when:
+            not_flag: EFE_plaga_reciente
+            variable_at_least: {var: EFE_saturacion, value: 70}
+          then:
+          - effect: random
+            options:
+            - weight: 75
+              effects: []
+            - weight: 25
+              effects:
+              - {effect: flag, value: EFE_plaga_reciente, days: 120}
+              - {effect: event, id: meganations_efe.22, days: 1}
     - effect: if
       when:
         not_flag: EFE_conquista_hecha
@@ -9845,3 +9879,4 @@ variable_names:
   NRE_lealtad_zda: {english: "Loyalty of Province of Dacia", spanish: "Lealtad de Provincia de Dacia"}
   SHD_racha: {english: "Harmony streak", spanish: "Racha de armonía"}
   MEGANATIONS_senal: {english: "Fragments of the Signal", spanish: "Fragmentos de la Señal"}
+  EFE_hambre_del_metal: {english: "Hunger of the living metal", spanish: "Hambre del metal vivo"}
