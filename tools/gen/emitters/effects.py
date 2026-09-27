@@ -520,6 +520,11 @@ def render_effects(owner: str, items: list[dict], known,
                 effects_used.setdefault(k, owner)
             ec.triggers_used.setdefault("is_controlled_by", owner)
             continue
+        if effect == "add_slot":
+            # en una región: un espacio de construcción compartido más
+            block.add("add_extra_state_shared_building_slots", int(item.get("value", 1)))
+            effects_used.setdefault("add_extra_state_shared_building_slots", owner)
+            continue
         if effect == "leave_faction":
             block.add("leave_faction", True)
             effects_used.setdefault("leave_faction", owner)
@@ -745,6 +750,13 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("OR", Block([("controls_state", i) for i in ids]))
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "is_ai":
+            block.add("is_ai", bool(value))
+            triggers_used.setdefault("is_ai", owner)
+        elif key == "infrastructure_below":
+            # en una región: nivel de infraestructura
+            block.add("infrastructure", Compare("<", int(value)))
+            triggers_used.setdefault("infrastructure", owner)
         elif key == "surrender_at_least":
             block.add("surrender_progress", Compare(">", float(value)))
             triggers_used.setdefault("surrender_progress", owner)

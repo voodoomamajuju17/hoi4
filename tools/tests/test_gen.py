@@ -1265,6 +1265,9 @@ def test_ai() -> None:
         dec_s = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
         check("SHD v4: Cerrar las Compuertas anula el proximo empuje", "SHD_cerrar_las_compuertas = {" in dec_s
               and "set_country_flag = SHD_compuertas" in dec_s)
+        ob = se_c[se_c.index("MEGANATIONS_obras_de_la_ia = {"):][:1500]
+        check("IA: cada mes infraestructura donde falta y a veces un espacio de construccion",
+              "is_ai = yes" in ob and "infrastructure < 5" in ob and "add_extra_state_shared_building_slots = 1" in ob, ob[:700])
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)

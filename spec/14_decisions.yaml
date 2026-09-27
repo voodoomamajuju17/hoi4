@@ -5799,6 +5799,7 @@ scripted_effects:
       then:
       - {effect: flag, value: EFE_crisis_1}
       - {effect: event, id: meganations_efe.150, days: 1}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
   - id: FCU_pulso_del_directorio
     effects:
     - effect: if
@@ -5893,6 +5894,7 @@ scripted_effects:
       then:
       - {effect: flag, value: FCU_crisis_3}
       - {effect: event, id: meganations_fcu.150, days: 1}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
   - id: ASC_pulso_de_la_red
     effects:
     - effect: if
@@ -5975,6 +5977,7 @@ scripted_effects:
         idea: ASC_frente_agotado
       then:
       - {effect: remove_idea, value: ASC_frente_agotado}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
   - id: HSN_pulso_de_las_potencias
     effects:
     - effect: if
@@ -6053,6 +6056,7 @@ scripted_effects:
       then:
       - {effect: flag, value: HSN_crisis_4}
       - {effect: event, id: meganations_hsn.150, days: 1}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
   - id: NAS_pulso_de_los_templos
     effects:
     - effect: if
@@ -6128,6 +6132,7 @@ scripted_effects:
       when: {divisions_at_least: 15, idea: NAS_ejercito_de_ceremonia}
       then:
       - {effect: remove_idea, value: NAS_ejercito_de_ceremonia}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
   - id: SHD_pulso_del_rio
     effects:
     - effect: if
@@ -6245,6 +6250,7 @@ scripted_effects:
       when: {divisions_at_least: 24, idea: SHD_ejercito_de_papel}
       then:
       - {effect: remove_idea, value: SHD_ejercito_de_papel}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
   - id: APF_pulso_de_los_consejos
     effects:
     - effect: if
@@ -6314,6 +6320,7 @@ scripted_effects:
         idea: APF_milicias_sin_fusiles
       then:
       - {effect: remove_idea, value: APF_milicias_sin_fusiles}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
   - id: NRE_pulso_del_ocio
     effects:
     - effect: if
@@ -6415,6 +6422,7 @@ scripted_effects:
       then:
       - {effect: flag, value: NRE_crisis_2}
       - {effect: event, id: meganations_nre.150, days: 1}
+    - {effect: run, value: MEGANATIONS_obras_de_la_ia}
 
   # La Anarquía resiste (2026-09-26): en guerra, cada mes recluta y rearma.
   - id: ANARQUIA_levas
@@ -9272,6 +9280,34 @@ scripted_effects:
       then:
       - {effect: flag, value: NRE_armisticio_apf, days: 364}
       - {effect: event, id: meganations_nre.185, days: 1}
+
+  # La IA no construye infraestructura y deja la cola quieta (2026-09-29): cada mes, a la IA, dos niveles de infraestructura y a veces un espacio de construcción
+  - id: MEGANATIONS_obras_de_la_ia
+    effects:
+    - effect: if
+      when: {is_ai: true}
+      then:
+      - effect: states
+        pick: random
+        when: {infrastructure_below: 5}
+        effects:
+        - {effect: build_here, building: infrastructure, level: 1}
+      - effect: states
+        pick: random
+        when: {infrastructure_below: 5}
+        effects:
+        - {effect: build_here, building: infrastructure, level: 1}
+      - effect: random
+        options:
+        - weight: 50
+          effects: []
+        - weight: 50
+          effects:
+          - effect: states
+            pick: random
+            effects:
+            - {effect: add_slot, value: 1}
+
 
 
 
