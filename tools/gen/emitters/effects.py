@@ -767,9 +767,12 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             block.add("is_ai", bool(value))
             triggers_used.setdefault("is_ai", owner)
         elif key == "infrastructure_below":
-            # en una región: nivel de infraestructura
-            block.add("infrastructure", Compare("<", int(value)))
-            triggers_used.setdefault("infrastructure", owner)
+            # en una región: todavía hay lugar para infraestructura (el máximo es
+            # 5). Es la condición del foco genérico infrastructure_effort.
+            block.add("free_building_slots", Block([
+                ("building", "infrastructure"), ("size", Compare(">", max(0, 5 - int(value)))),
+                ("include_locked", True)]))
+            triggers_used.setdefault("free_building_slots", owner)
         elif key == "surrender_at_least":
             block.add("surrender_progress", Compare(">", float(value)))
             triggers_used.setdefault("surrender_progress", owner)

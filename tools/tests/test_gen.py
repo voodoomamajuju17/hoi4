@@ -46,6 +46,67 @@ def section(title: str) -> None:
     print(f"\n-- {title}")
 
 
+# Scopes de CWTools (cwtools-hoi4-config, effects.cwt / triggers.cwt) de lo que
+# usa el mod. El error.log de 2026-09-29 mostró create_unit a nivel país.
+_STATE_ONLY = {"create_unit", "add_building_construction", "add_extra_state_shared_building_slots", "add_core_of",
+               "set_state_flag", "clr_state_flag", "add_claim_by", "is_owned_by", "is_core_of", "has_state_flag",
+               "is_controlled_by", "any_neighbor_state", "is_coastal", "free_building_slots"}
+_COUNTRY_ONLY = {"add_political_power", "add_stability", "add_war_support", "army_experience", "add_ideas", "swap_ideas",
+                 "set_autonomy", "country_event", "annex_country", "create_wargoal", "add_research_slot", "set_technology",
+                 "add_equipment_to_stockpile", "create_faction", "add_to_faction", "add_opinion_modifier", "declare_war_on",
+                 "add_named_threat", "transfer_state", "add_timed_idea", "remove_ideas", "set_country_flag",
+                 "clr_country_flag", "add_country_leader_trait", "random_owned_controlled_state", "every_owned_state",
+                 "add_tech_bonus", "puppet", "white_peace", "send_equipment", "division_template", "add_to_war",
+                 "every_enemy_country", "leave_faction", "diplomatic_relation", "has_stability", "has_country_flag",
+                 "has_war", "has_idea", "has_completed_focus", "controls_state", "has_war_with", "has_army_size",
+                 "has_capitulated", "num_of_factories", "has_tech", "has_manpower", "has_war_support", "has_equipment",
+                 "exists", "has_wargoal_against", "is_in_faction_with", "surrender_progress", "is_ai", "capital_scope"}
+_TO_STATE = {"capital_scope", "random_owned_state", "random_owned_controlled_state", "every_owned_state", "every_state",
+             "random_state", "any_state", "any_owned_state", "every_controlled_state", "random_controlled_state",
+             "any_neighbor_state", "random_neighbor_state", "every_neighbor_state", "CAPITAL"}
+_TO_COUNTRY = {"owner", "controller", "OWNER", "CONTROLLER", "ROOT", "FROM", "every_country", "random_country",
+               "any_country", "every_other_country", "any_other_country", "every_enemy_country", "any_enemy_country",
+               "random_enemy_country", "every_subject_country", "any_subject_country", "overlord"}
+_FLOW = {"if", "else", "else_if", "limit", "hidden_effect", "AND", "OR", "NOT", "NOR", "NAND", "random_list", "random",
+         "effect_tooltip", "custom_trigger_tooltip", "hidden_trigger", "count_triggers", "modifier"}
+
+
+def _scope_errors(mod: Path) -> list[str]:
+    """Efectos y condiciones de país usados en un state, o al revés."""
+    import re as _re
+    tag = _re.compile(r"^[A-Z]{3}$|^[A-Z][0-9]{2}$")
+    errors: list[str] = []
+
+    def walk(block, scopes: list[str], parent: str, where: str) -> None:
+        scope = scopes[-1]
+        for key, value in block.entries:
+            k = str(key)
+            if (k in _STATE_ONLY and scope != "state") or (k in _COUNTRY_ONLY and scope != "country"):
+                errors.append(f"{where}: {k} en {scope} (dentro de {parent})")
+            if not isinstance(value, pdx.Block):
+                continue
+            if k in _FLOW:
+                nxt = scope
+            elif k in _TO_STATE or (k.isdigit() and parent not in ("random_list", "random_events")):
+                nxt = "state"
+            elif k in _TO_COUNTRY or (tag.match(k) and k not in _FLOW):
+                nxt = "country"
+            elif k == "PREV":
+                nxt = scopes[-2] if len(scopes) > 1 else "country"
+            elif (k in _STATE_ONLY or k in _COUNTRY_ONLY) and parent:
+                continue    # bloque de parámetros del efecto (arriba de todo es un evento)
+            else:
+                nxt = scope
+            walk(value, scopes + [nxt], k, where)
+
+    for sub in ("common/national_focus", "common/decisions", "events", "common/scripted_effects"):
+        for f in sorted((mod / sub).glob("*.txt")):
+            text = f.read_text(encoding="utf-8-sig", errors="replace")
+            if "ARCHIVO GENERADO" in text[:600]:
+                walk(pdx.parse(text), ["country"], "", f"{sub}/{f.name}")
+    return errors
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -1217,6 +1278,8 @@ def test_ai() -> None:
             for f in sorted((mod / sub).glob("*.txt")):
                 _walk(pdx.parse(f.read_text(encoding="utf-8-sig")), None, f.name)
         check("create_unit siempre dentro de un state (capital o state propio)", not loose, "; ".join(loose[:5]))
+        wrong = _scope_errors(mod)
+        check("cada efecto y condicion en su scope (pais o state, reglas de CWTools)", not wrong, "; ".join(wrong[:5]))
         zwb_tree = " ".join((mod / "common/national_focus/ZWB_focus.txt").read_text().split())
         check("Amazonas: el 7mo foco firma paz blanca con todos y se queda lo que controla",
               "every_enemy_country = { white_peace = ROOT }" in zwb_tree and "CONTROLLER = { transfer_state = PREV }" in zwb_tree
@@ -1291,7 +1354,7 @@ def test_ai() -> None:
               and "set_country_flag = SHD_compuertas" in dec_s)
         ob = se_c[se_c.index("MEGANATIONS_obras_de_la_ia = {"):][:1500]
         check("IA: cada mes infraestructura donde falta y a veces un espacio de construccion",
-              "is_ai = yes" in ob and "infrastructure < 5" in ob and "add_extra_state_shared_building_slots = 1" in ob, ob[:700])
+              "is_ai = yes" in ob and "free_building_slots = { building = infrastructure size > 0 include_locked = yes }" in ob and "add_extra_state_shared_building_slots = 1" in ob, ob[:700])
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
@@ -1628,7 +1691,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### infrastructure\n### free_building_slots\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
