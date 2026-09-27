@@ -141,7 +141,8 @@ def _emit_dynamic_modifiers(ctx: BuildContext) -> None:
     if not mods:
         return
     gfx = ctx.vanilla.gfx_names() if ctx.vanilla else None
-    idea_sprites = sorted(n for n in (gfx or ()) if n.startswith("GFX_idea_"))
+    idea_sprites = ideas_mod.generic_candidates(gfx or (), ctx.vanilla.gfx_textures() if ctx.vanilla else None,
+                                                ctx.vanilla.root if ctx.vanilla else None)
     repo = ctx.spec.root.parent
     root = Block()
     sprites = Block()

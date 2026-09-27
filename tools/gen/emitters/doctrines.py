@@ -73,6 +73,9 @@ def emit(ctx: BuildContext) -> None:
     ctx.note("doctrinas del juego: " + " | ".join(
         f"{f}: {', '.join(sorted(k for k, v in catalog['grand'].items() if v['folder'] == f))}" for f in folders))
     ctx.note(f"subdoctrinas del juego ({len(catalog['sub'])}): " + ", ".join(sorted(catalog["sub"])))
+    bad = getattr(ctx.vanilla, "unparsed_doctrines", [])
+    if bad:
+        ctx.warn(f"doctrinas: archivos del juego que no se pudieron leer: {', '.join(bad)}")
 
     owners = set((ctx.data.get("territory") or {}).values())
     mastery = int(spec.get("mastery", 100))

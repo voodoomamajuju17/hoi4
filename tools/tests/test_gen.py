@@ -1751,6 +1751,17 @@ def test_arte() -> None:
         body = shd[shd.index("SHD_boom_exportador = {"):]   # sin dibujo todavia
         check("un espiritu sin dibujo toma un icono generico del juego segun su efecto (sin '?')",
               "picture = generic_production_bonus" in body[:300], body[:300])
+        # Partida 2026-09-29: los espíritus sin dibujo mostraban un asesor con un papel o un avión.
+        all_pics = " ".join((ctx.mod_root / "common/ideas").joinpath(f).read_text()
+                            for f in [p.name for p in (ctx.mod_root / "common/ideas").glob("*.txt")])
+        check("iconos genericos: nunca uno de asesor, de aviacion, de un pais o sin archivo",
+              not any(b in all_pics for b in ("army_chief_defensive_1", "air_army_support", "GER_army_generic_bonus",
+                                              "generic_army_zzz_missing")), "")
+        check("iconos genericos: el ejercito usa el generico del ejercito", "picture = generic_army_support" in all_pics)
+        from tools.gen.emitters.ideas import _generic_picture
+        check("iconos genericos: sin tema reconocible, un generico en vez de '?'",
+              _generic_picture({"odd_modifier": 1}, ["GFX_idea_generic_production_bonus"]) == "generic_production_bonus")
+        check("iconos genericos: el reporte lista los que uso", any("iconos genericos usados" in n for n in ctx.notes))
 
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)

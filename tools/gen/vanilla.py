@@ -413,6 +413,7 @@ class Vanilla:
         if not folder.is_dir():
             return None
         out: dict[str, dict[str, dict]] = {"grand": {}, "sub": {}}
+        self.unparsed_doctrines: list[str] = []
 
         def names(value) -> list[str]:
             if isinstance(value, pdx.Block):
@@ -420,10 +421,13 @@ class Vanilla:
             return [pdx.text(value)] if value is not None else []
 
         for kind, sub in (("grand", "grand_doctrines"), ("sub", "subdoctrines")):
-            for path in sorted((folder / sub).glob("*.txt")):
+            # 1.19.3 (reporte 2026-09-29: "subdoctrinas del juego (0)"): las
+            # subdoctrinas viven en subcarpetas (land/, naval/, air/...).
+            for path in sorted((folder / sub).rglob("*.txt")):
                 try:
                     root = pdx.parse_file(path)
                 except ValueError:
+                    self.unparsed_doctrines.append(str(path.relative_to(self.root)))
                     continue
                 for key, body in root.entries:
                     if not key or not isinstance(body, pdx.Block) or str(key).startswith("@"):
@@ -874,6 +878,26 @@ class Vanilla:
                 continue
         self._gfx = names
         return names
+
+    def gfx_textures(self) -> dict[str, str]:
+        """Sprite -> texturefile, de interface/**/*.gfx (el primero que aparece)."""
+        if getattr(self, "_gfx_tex", None) is not None:
+            return self._gfx_tex
+        out: dict[str, str] = {}
+        block = re.compile(r"spriteType\s*=\s*\{([^{}]*)\}", re.I)
+        name = re.compile(r'\bname\s*=\s*"?(GFX_[A-Za-z0-9_]+)')
+        tex = re.compile(r'\btexturefile\s*=\s*"([^"]+)"', re.I)
+        for path in sorted((self.root / "interface").glob("**/*.gfx")):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            for body in block.findall(text):
+                n, t = name.search(body), tex.search(body)
+                if n and t:
+                    out.setdefault(n.group(1), t.group(1).replace("\\", "/"))
+        self._gfx_tex = out
+        return out
 
     def loc_keys_with_text(self, wanted: str) -> list[str]:
         """Claves de la localisation inglesa cuyo texto es exactamente `wanted`.

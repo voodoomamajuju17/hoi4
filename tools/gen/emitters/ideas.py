@@ -16,6 +16,8 @@ política, solo entran por historia o por efecto. Las no removibles llevan
 
 from __future__ import annotations
 
+import re
+
 from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block, Quoted
@@ -68,10 +70,43 @@ _KEYWORDS = [
 ]
 
 
+# Sprites GFX_idea_* que NO son íconos de espíritu genéricos: asesores y
+# jefes (salen como un señor con un papel), retratos, aviones, y los de un
+# país puntual (GFX_idea_GER_...). Partida 2026-09-29: "no están cargando los
+# iconos de los spirits en la mayoría de los casos".
+_NOT_GENERIC = ("advisor", "chief", "theorist", "commander", "designer", "manufacturer", "concern",
+                "minister", "portrait", "leader", "head_of", "air", "plane", "fighter", "bomber",
+                "carrier", "rocket", "nuke", "nuclear")
+_TAG_SPRITE = re.compile(r"^GFX_idea_[A-Z][A-Z0-9]{2}_")
+
+
+def generic_candidates(sprites, textures: dict[str, str] | None = None, root=None) -> list[str]:
+    """Los GFX_idea_* que sirven como ícono genérico: no son de un país, ni de
+    asesores, y (si se conoce) su textura está en gfx/interface/ideas/ y existe."""
+    out = []
+    for n in sorted(sprites):
+        if not n.startswith("GFX_idea_") or _TAG_SPRITE.match(n):
+            continue
+        low = n.lower()
+        if any(w in low for w in _NOT_GENERIC):
+            continue
+        if textures is not None:
+            tex = textures.get(n)
+            if not tex or "/ideas/" not in tex.lower():
+                continue
+            if root is not None and not (root / tex).exists():
+                continue
+        out.append(n)
+    if not out and root is not None:
+        # si ninguna textura se encontró en disco (instalación rara), no se exige
+        return generic_candidates(sprites, textures, None)
+    return out
+
+
 def _generic_picture(modifiers: dict, idea_sprites: list[str]) -> str | None:
     if not idea_sprites:
         return None
-    key = max(modifiers, key=lambda k: abs(float(modifiers[k]))).lstrip("?")
+    key = max(modifiers, key=lambda k: abs(float(modifiers[k]))).lstrip("?") if modifiers else ""
     for prefixes, words in _KEYWORDS:
         if any(key.startswith(p) or p in key for p in prefixes):
             for word in words:
@@ -79,14 +114,18 @@ def _generic_picture(modifiers: dict, idea_sprites: list[str]) -> str | None:
                 generic = [n for n in hits if "generic" in n.lower()]
                 if generic or hits:
                     return (generic or hits)[0][len("GFX_idea_"):]
-    return None
+    # sin tema reconocible: un genérico cualquiera antes que el "?"
+    fallback = [n for n in idea_sprites if "generic" in n.lower()] or idea_sprites
+    return fallback[0][len("GFX_idea_"):]
 
 
 def emit(ctx: BuildContext) -> None:
     modifiers_used: dict[str, str] = {}
     seen: set[str] = set()
     gfx = ctx.vanilla.gfx_names() if ctx.vanilla else None
-    idea_sprites = sorted(n for n in (gfx or ()) if n.startswith("GFX_idea_"))
+    idea_sprites = generic_candidates(gfx or (), ctx.vanilla.gfx_textures() if ctx.vanilla else None,
+                                      ctx.vanilla.root if ctx.vanilla else None)
+    picked: dict[str, int] = {}
     repo = ctx.spec.root.parent
     sprites = Block()
     pictures = {"propia": 0, "generica": 0, "ninguna": 0}
@@ -151,6 +190,7 @@ def emit(ctx: BuildContext) -> None:
                 if generic:
                     body.entries.insert(0, ("picture", generic))
                     pictures["generica"] += 1
+                    picked[generic] = picked.get(generic, 0) + 1
                 else:
                     pictures["ninguna"] += 1
             group.add(ctx.loc.reference(iid, f"ideas:{iid}"), body)
@@ -177,4 +217,6 @@ def emit(ctx: BuildContext) -> None:
         ctx.write_script("interface/meganations_ideas.gfx", root, source=SOURCE)
     ctx.note(f"ideas: dibujo propio {pictures['propia']}, icono generico del juego {pictures['generica']}, "
              f"sin dibujo {pictures['ninguna']}")
+    if picked:
+        ctx.note("ideas: iconos genericos usados: " + ", ".join(f"{k} ({v})" for k, v in sorted(picked.items())))
     ctx.verify_keys("modifiers", modifiers_used)
