@@ -532,3 +532,21 @@ llega a 100 al toque y la tensión nunca sube".
 - **Nombres de 2100**: seis regiones clave por potencia fuera de Sudamérica.
 - **error.log**: las decisiones de países vanilla quedan como cáscaras
   inertes (otros scripts las nombran).
+
+## Lote Tierras Sin Ley y fronteras (2026-09-29)
+
+- **La FCU y la Federación contra las Tierras Sin Ley**: cuando ZAN termina
+  su tercer foco (El Pacto de la Frontera), el pulso mensual le manda a cada
+  una un evento, una sola vez. La FCU ("La Frontera se Arma") puede
+  justificar la guerra para recuperar lo que ZAN ocupa en Norteamérica
+  (Alaska, el norte de Canadá, el Midwest, el noroeste de México, Guatemala
+  y Nicaragua); la Federación ("El Oeste no es Tierra de Nadie"), lo que
+  ocupa en el África occidental (de Senegal al Alto Volta). El objetivo de
+  guerra es "tomar regiones" y lista solo las regiones de ZAN de ese
+  continente (las mismas que le da 08_territory.yaml). ZAN recibe el aviso.
+  La otra opción da 50 de poder político. La IA acepta casi siempre, se
+  prepara y declara cuando tiene 20 divisiones y no está en otra guerra.
+- **Fronteras**: el canal de Panamá y Puerto Rico pasan a la FCU (Colombia
+  sigue en Nueva Granada); la República Checa y Danzig pasan a la ASC
+  (Eslovaquia y la Rutenia se quedan en la Comuna Báltica). Un nombre
+  explícito le gana al reparto por dueño.

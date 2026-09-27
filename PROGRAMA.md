@@ -159,6 +159,9 @@ eventos con ultimátum e IA con condiciones.
 
 - [~] Democracias sin el tope de 100% de tensión para justificar (2026-09-29)
 - [~] El Santuario de Gaia: nación neutral si el EFE protege el Amazonas, garantizada por el EFE y codiciada por FCU, NAS, ASC y ZAF
+- [~] La FCU y la Federación pueden justificar la guerra contra las Tierras Sin Ley por lo que ocupan en su continente,
+  desde que ZAN termina su tercer foco (2026-09-29)
+- [~] Fronteras: canal de Panamá y Puerto Rico a la FCU; República Checa y Danzig a la ASC (2026-09-29)
 - [ ] Facciones por bloque ideológico: cuándo se forman y quién entra
 - [ ] Eventos de tensión mundial ligados al Gran Desarme
 - [ ] Mecánica de acuerdos entre meganaciones (agua, rutas, cómputo)
