@@ -263,6 +263,7 @@ def _rename_states(ctx: BuildContext, by_name) -> None:
     """Nombres de 2100: pisan STATE_<id> desde localisation/<idioma>/replace/."""
     renames = (ctx.spec.raw["territory"].get("state_names") or {}).get("renames") or []
     done = 0
+    named: dict[int, str] = {}   # state id -> el primer nombre de la lista que lo tomó
     for entry in renames:
         options = entry["state"]
         found = next((by_name[normalize(o)] for o in options if normalize(o) in by_name), None)
@@ -272,6 +273,13 @@ def _rename_states(ctx: BuildContext, by_name) -> None:
         for s in found:
             if not s.name_key:
                 continue
+            # Dos nombres de la lista pueden ser la misma región en el juego
+            # (1.19.3: "Suez" es el mismo state que "Cairo"): gana el primero.
+            if s.id in named:
+                ctx.warn(f"nombres: {options[0]} es la misma region que {named[s.id]} en este juego; "
+                         f"queda el nombre de {named[s.id]}.")
+                continue
+            named[s.id] = options[0]
             ctx.loc.define_and_reference(
                 s.name_key, en=entry["name"]["english"], es=entry["name"]["spanish"],
                 file="replace/meganations_states", origin=f"state_names:{options[0]}",

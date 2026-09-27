@@ -646,6 +646,28 @@ def test_territory() -> None:
           (got[1], got[2], got[3], got[4], got[8]) == ("ASC", "ZBC", "ZBC", "ASC", "ZBC"), str(got))
     check("territorio: el canal de Panama y Puerto Rico a la FCU; Colombia sigue en ZNG",
           (got[5], got[6], got[7]) == ("FCU", "FCU", "ZNG"), str(got))
+    # reporte 2026-09-29: "clave de localisation duplicada: STATE_446" (en 1.19.3
+    # "Suez" y "Cairo" son la misma región). Gana el primer nombre y se avisa.
+    from tools.gen.emitters.territory import _rename_states
+    defined, rwarn = {}, []
+
+    def _define(key, en, es, file, origin):
+        if key in defined:
+            raise AssertionError(f"clave duplicada {key}")
+        defined[key] = es
+    egypt = _S(id=446, name_key="STATE_446", vp_provinces=[])
+    nctx = _S(spec=_S(raw={"territory": {"state_names": {"renames": [
+                  {"state": ["Cairo"], "name": {"english": "Council of the Nile", "spanish": "Consejo del Nilo"}},
+                  {"state": ["Suez"], "name": {"english": "Federal Canal", "spanish": "Canal Federal"}}]}}}),
+              loc=_S(define_and_reference=_define), data={"state_names": {}}, warn=rwarn.append, note=lambda m: None)
+    try:
+        _rename_states(nctx, {"cairo": [egypt], "suez": [egypt]})
+        dup_ok = defined == {"STATE_446": "Consejo del Nilo"}
+    except AssertionError as exc:
+        dup_ok = False
+        rwarn.append(str(exc))
+    check("nombres: dos nombres para la misma region no frenan el generador (queda el primero y se avisa)",
+          dup_ok and any("Suez" in w and "Cairo" in w for w in rwarn), str(defined) + str(rwarn))
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         import shutil as _shf
