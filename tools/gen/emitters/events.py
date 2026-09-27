@@ -70,6 +70,7 @@ def _emit(ctx: BuildContext) -> None:
     by_ns: dict[str, Block] = {}
     seen: set[str] = set()
     own_sprites = Block()
+    own_sprite_names: set[str] = set()
     focus_ids = _all_focus_ids(ctx)
     from .focus_trees import character_ids
     effect_ctx = EffectContext(
@@ -108,15 +109,19 @@ def _emit(ctx: BuildContext) -> None:
         b.add("title", _loc(ctx, f"{eid}.t", ev["title"]))
         b.add("desc", _loc(ctx, f"{eid}.d", ev["desc"]))
         picture = ev.get("picture")
-        own = ctx.spec.root.parent / "assets" / "events" / f"{eid}.dds"
+        # `art`: la imagen es compartida por varios eventos (p. ej. los 168 armisticios)
+        art = ev.get("art") or eid
+        own = ctx.spec.root.parent / "assets" / "events" / f"{art}.dds"
         if own.exists():
             # convención de arte (tools/arte): assets/events/<id>.dds reemplaza la imagen genérica
-            sprite_name = f"GFX_{eid.replace('.', '_')}"
-            ctx.copy_asset(f"assets/events/{eid}.dds", f"gfx/event_pictures/meganations/{eid}.dds")
-            sp = Block()
-            sp.add("name", Quoted(sprite_name))
-            sp.add("texturefile", Quoted(f"gfx/event_pictures/meganations/{eid}.dds"))
-            own_sprites.add("spriteType", sp)
+            sprite_name = f"GFX_{art.replace('.', '_')}"
+            if sprite_name not in own_sprite_names:
+                own_sprite_names.add(sprite_name)
+                ctx.copy_asset(f"assets/events/{art}.dds", f"gfx/event_pictures/meganations/{art}.dds")
+                sp = Block()
+                sp.add("name", Quoted(sprite_name))
+                sp.add("texturefile", Quoted(f"gfx/event_pictures/meganations/{art}.dds"))
+                own_sprites.add("spriteType", sp)
             b.add("picture", sprite_name)
             picture = None
         if picture:

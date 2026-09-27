@@ -59,6 +59,9 @@ STYLE = {
     "APF": "African peoples' federation: village councils, savanna and rising industry, "
            "kente-like patterns, earth red, yellow and green",
     "NRE": "neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold",
+    # imágenes que comparten varias potencias (eventos con `art`): sin colores de nadie
+    "COMPARTIDOS": "the 2100 world of rival megastates: officers of different armies, maps, borders and "
+                   "flags without symbols, neutral grey and ochre palette",
 }
 
 
@@ -120,17 +123,26 @@ def catalog() -> list[dict]:
             "description": f"{regnal.get('english', ch['id'])}, born {ch.get('born', '?')}: "
                            f"{_one_line(ch.get('lore'))} Head-and-shoulders portrait, facing the viewer.",
         })
-    events = _load("12_events.yaml")["namespaces"]
-    for ns, block in events.items():
+    spec_events = _load("12_events.yaml")
+    shared = spec_events.get("shared_art") or {}
+    asked: set[str] = set()
+    for ns, block in spec_events["namespaces"].items():
         tag = block.get("country")
         for ev in block.get("events") or []:
             if ev.get("hidden"):
                 continue
-            eid = f"{ns}.{ev['id']}"
+            # `art`: varios eventos casi iguales comparten una sola imagen (2026-09-29)
+            art = ev.get("art")
+            eid = art or f"{ns}.{ev['id']}"
+            if eid in asked:
+                continue
+            asked.add(eid)
             dest = REPO / "assets" / "events" / f"{eid}.dds"
+            desc = (f"{ev['title']['english']}: {_one_line(ev['desc']['english'])}" if not art
+                    else _one_line(shared.get(art, ev['desc']['english'])))
             items.append({
-                "type": "event_picture", "tag": tag, "id": eid, "dest": dest, "done": dest.exists(),
-                "description": f"{ev['title']['english']}: {_one_line(ev['desc']['english'])}",
+                "type": "event_picture", "tag": "COMPARTIDOS" if art else tag, "id": eid, "dest": dest,
+                "done": dest.exists(), "description": desc,
             })
     return items
 

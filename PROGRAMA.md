@@ -26,6 +26,11 @@ elementos también van por importancia.
   - [ ] on_actions vanilla que apuntan a eventos que ya no cargan (evaluar `replace_path` de `common/on_actions` conservando los esenciales)
   - [~] decisiones nacionales vanilla de países que no existen (China, Congo...): archivos vaciados
   - [ ] "AI tried to post an invalid command: unlock_trait_command"
+  - [~] Divisiones regaladas a nivel país (`create_unit` sin región) y prioridades de investigación que
+    rompían `electronic_mechanical_engineering.txt` (2026-09-29)
+  - [ ] `Icon definition "_small"`: miles de avisos desde que empiezan los combates (cosmético, sin causa
+    encontrada todavía)
+- [~] Prueba de scopes: cada efecto y condición en su scope (país o región) según las reglas de CWTools
 - [~] Culturas gráficas por región (Q013): sudamericana, asiática, africana, Commonwealth, Europa oriental, Medio Oriente
 - [x] Fondo del menú principal: se pisan todas las pantallas de carga grandes (confirmado por el usuario)
 - [ ] Rendimiento: medir días por segundo con 29 países + guerras activas
@@ -49,6 +54,12 @@ elementos también van por importancia.
 - [~] IA: estrategias por meganación (a quién atacar y proteger); IA militar 2026-09-27: tropas según especialidad, investigación de su especialidad, industria en armas (más en guerra), declarar guerra solo con 12-16 divisiones
 - [~] Anarquía (2026-09-28): árboles de 7 focos por supervivencia, más milicias, uniones (Eurasia, Indostán-Emiratos), Tierras Sin Ley con territorio; paz armada con casus belli permanente
 - [~] Satélites: lealtad 0-100 por satélite con panel del señor (Ayuda / Tributo), espíritu vivo y rebeliones (2026-09-27); falta que se liberen
+- [~] Satélites del EFE más fuertes (2026-09-29): YYG 22 de IC, PTA 10, 4 y 3 divisiones, ideas propias
+- [~] Guerra limitada (2026-09-29): hasta 2104, al 40% de rendición de una potencia, armisticio de bando
+  contra bando (cada uno se queda con lo que ocupa, tregua de un año, Revancha); después elige el ganador
+- [~] La IA construye (2026-09-29): infraestructura donde falta y espacios de construcción, cada mes
+- [~] Crisis entre potencias (2026-09-28): 4 ultimátums entre vecinas que terminan en casus belli
+- [~] Ventaja de terreno (~10%) para NAS, EFE, APF y HSN (2026-09-28)
 - [ ] Revisar capitales provisorias de los satélites (hoy: la región con más población)
 
 ## 3. Identidad de las ocho meganaciones
@@ -88,7 +99,8 @@ eventos con ultimátum e IA con condiciones.
   Aldea vs Corredor, ultimátum a la ASC
 - [~] **SHD** — árbol de 51 focos con la tabla nueva: Producción, Orden y Pueblo con
   Armonía Perfecta/Parcial y Desborde, Lin (integración de Corea y la Estepa, ultimátum
-  al NAS) vs Zhou (la Gran Crecida: el Pueblo hasta 130), Grandes Obras vs Precisión
+  al NAS) vs Zhou (la Gran Crecida: el Pueblo hasta 130), Grandes Obras vs Precisión.
+  Caudales v4 (2026-09-29): pronóstico del río, racha de armonía con premios, Cerrar las Compuertas
 - [~] **NRE** — árbol de 53 focos con la tabla nueva: tres legiones con prestigio,
   Auctoritas Militaris como moneda, Varro (Senado, Vías, Hispania y Dacia en tres etapas,
   Pax Romana, ultimátum al EFE) vs Arbogast (AVE IMPERATOR cambia el líder entre cuatro

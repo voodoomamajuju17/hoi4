@@ -13,6 +13,12 @@
 # ({ effect, value }), validados contra documentation/ del juego.
 # =============================================================================
 
+# Imágenes compartidas (`art` en un evento): un solo dibujo para varios eventos casi iguales.
+shared_art:
+  meganations_armisticio: "Armistice signed in a field tent: two generals of rival megastates at a folding table with a map, each side keeps the ground it holds; tired soldiers outside."
+  meganations_pide_armisticio: "An envoy under a white flag crosses a ruined front line to ask for terms; the winning army's officers watch from a command post."
+  meganations_paz_humillante: "A defeated army withdraws from a border region while the enemy raises its flag over it; civilians watch in silence."
+
 namespaces:
   meganations_efe:
     country: EFE
@@ -740,6 +746,7 @@ namespaces:
           ai_chance: 55
         src: user_design
       - id: 160
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -763,6 +770,7 @@ namespaces:
           - {effect: event, id: meganations_efe.162, days: 1, target: FCU}
         src: user_design
       - id: 161
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -791,6 +799,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 162
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -804,6 +813,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 164
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -827,6 +837,7 @@ namespaces:
           - {effect: event, id: meganations_efe.166, days: 1, target: ASC}
         src: user_design
       - id: 165
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -855,6 +866,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 166
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -868,6 +880,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 168
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -891,6 +904,7 @@ namespaces:
           - {effect: event, id: meganations_efe.170, days: 1, target: HSN}
         src: user_design
       - id: 169
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -919,6 +933,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 170
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -932,6 +947,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 172
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
@@ -953,6 +969,7 @@ namespaces:
           - {effect: event, id: meganations_efe.174, days: 1, target: NAS}
         src: user_design
       - id: 173
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -980,6 +997,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 174
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -993,6 +1011,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 176
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1016,6 +1035,7 @@ namespaces:
           - {effect: event, id: meganations_efe.178, days: 1, target: SHD}
         src: user_design
       - id: 177
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1044,6 +1064,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 178
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1057,6 +1078,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 180
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1080,6 +1102,7 @@ namespaces:
           - {effect: event, id: meganations_efe.182, days: 1, target: APF}
         src: user_design
       - id: 181
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1108,6 +1131,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 182
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1121,6 +1145,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 184
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
@@ -1142,6 +1167,7 @@ namespaces:
           - {effect: event, id: meganations_efe.186, days: 1, target: NRE}
         src: user_design
       - id: 185
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
@@ -1166,6 +1192,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 186
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1762,6 +1789,7 @@ namespaces:
           ai_chance: 55
         src: user_design
       - id: 160
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
@@ -1783,6 +1811,7 @@ namespaces:
           - {effect: event, id: meganations_fcu.162, days: 1, target: EFE}
         src: user_design
       - id: 161
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
@@ -1807,6 +1836,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 162
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1820,6 +1850,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 164
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1843,6 +1874,7 @@ namespaces:
           - {effect: event, id: meganations_fcu.166, days: 1, target: ASC}
         src: user_design
       - id: 165
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1871,6 +1903,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 166
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1884,6 +1917,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 168
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1907,6 +1941,7 @@ namespaces:
           - {effect: event, id: meganations_fcu.170, days: 1, target: HSN}
         src: user_design
       - id: 169
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1935,6 +1970,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 170
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1948,6 +1984,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 172
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
@@ -1969,6 +2006,7 @@ namespaces:
           - {effect: event, id: meganations_fcu.174, days: 1, target: NAS}
         src: user_design
       - id: 173
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -1996,6 +2034,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 174
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2009,6 +2048,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 176
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2032,6 +2072,7 @@ namespaces:
           - {effect: event, id: meganations_fcu.178, days: 1, target: SHD}
         src: user_design
       - id: 177
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2060,6 +2101,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 178
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2073,6 +2115,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 180
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2096,6 +2139,7 @@ namespaces:
           - {effect: event, id: meganations_fcu.182, days: 1, target: APF}
         src: user_design
       - id: 181
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2124,6 +2168,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 182
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2137,6 +2182,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 184
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
@@ -2158,6 +2204,7 @@ namespaces:
           - {effect: event, id: meganations_fcu.186, days: 1, target: NRE}
         src: user_design
       - id: 185
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
@@ -2182,6 +2229,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 186
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2702,6 +2750,7 @@ namespaces:
           ai_chance: 55
         src: user_design
       - id: 160
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
@@ -2723,6 +2772,7 @@ namespaces:
           - {effect: event, id: meganations_hsn.162, days: 1, target: EFE}
         src: user_design
       - id: 161
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
@@ -2747,6 +2797,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 162
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2760,6 +2811,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 164
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2783,6 +2835,7 @@ namespaces:
           - {effect: event, id: meganations_hsn.166, days: 1, target: FCU}
         src: user_design
       - id: 165
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2811,6 +2864,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 166
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2824,6 +2878,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 168
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2847,6 +2902,7 @@ namespaces:
           - {effect: event, id: meganations_hsn.170, days: 1, target: ASC}
         src: user_design
       - id: 169
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2875,6 +2931,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 170
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2888,6 +2945,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 172
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
@@ -2909,6 +2967,7 @@ namespaces:
           - {effect: event, id: meganations_hsn.174, days: 1, target: NAS}
         src: user_design
       - id: 173
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2936,6 +2995,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 174
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2949,6 +3009,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 176
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -2972,6 +3033,7 @@ namespaces:
           - {effect: event, id: meganations_hsn.178, days: 1, target: SHD}
         src: user_design
       - id: 177
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -3000,6 +3062,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 178
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -3013,6 +3076,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 180
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -3036,6 +3100,7 @@ namespaces:
           - {effect: event, id: meganations_hsn.182, days: 1, target: APF}
         src: user_design
       - id: 181
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -3064,6 +3129,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 182
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -3077,6 +3143,7 @@ namespaces:
           effects: []
         src: user_design
       - id: 184
+        art: meganations_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
@@ -3098,6 +3165,7 @@ namespaces:
           - {effect: event, id: meganations_hsn.186, days: 1, target: NRE}
         src: user_design
       - id: 185
+        art: meganations_pide_armisticio
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
@@ -3122,6 +3190,7 @@ namespaces:
           ai_chance: 50
         src: user_design
       - id: 186
+        art: meganations_paz_humillante
         trigger: effect
         picture: GFX_report_event_generic_rally
         title:
@@ -3583,6 +3652,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 160
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
@@ -3604,6 +3674,7 @@ namespaces:
         - {effect: event, id: meganations_asc.162, days: 1, target: EFE}
       src: user_design
     - id: 161
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
@@ -3628,6 +3699,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 162
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3641,6 +3713,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 164
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3664,6 +3737,7 @@ namespaces:
         - {effect: event, id: meganations_asc.166, days: 1, target: FCU}
       src: user_design
     - id: 165
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3692,6 +3766,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 166
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3705,6 +3780,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 168
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3728,6 +3804,7 @@ namespaces:
         - {effect: event, id: meganations_asc.170, days: 1, target: HSN}
       src: user_design
     - id: 169
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3756,6 +3833,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 170
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3769,6 +3847,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 172
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
@@ -3790,6 +3869,7 @@ namespaces:
         - {effect: event, id: meganations_asc.174, days: 1, target: NAS}
       src: user_design
     - id: 173
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3817,6 +3897,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 174
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3830,6 +3911,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 176
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3853,6 +3935,7 @@ namespaces:
         - {effect: event, id: meganations_asc.178, days: 1, target: SHD}
       src: user_design
     - id: 177
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3881,6 +3964,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 178
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3894,6 +3978,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 180
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3917,6 +4002,7 @@ namespaces:
         - {effect: event, id: meganations_asc.182, days: 1, target: APF}
       src: user_design
     - id: 181
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3945,6 +4031,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 182
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -3958,6 +4045,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 184
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
@@ -3979,6 +4067,7 @@ namespaces:
         - {effect: event, id: meganations_asc.186, days: 1, target: NRE}
       src: user_design
     - id: 185
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
@@ -4003,6 +4092,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 186
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4436,6 +4526,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 160
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
@@ -4457,6 +4548,7 @@ namespaces:
         - {effect: event, id: meganations_apf.162, days: 1, target: EFE}
       src: user_design
     - id: 161
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
@@ -4481,6 +4573,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 162
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4494,6 +4587,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 164
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4517,6 +4611,7 @@ namespaces:
         - {effect: event, id: meganations_apf.166, days: 1, target: FCU}
       src: user_design
     - id: 165
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4545,6 +4640,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 166
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4558,6 +4654,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 168
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4581,6 +4678,7 @@ namespaces:
         - {effect: event, id: meganations_apf.170, days: 1, target: ASC}
       src: user_design
     - id: 169
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4609,6 +4707,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 170
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4622,6 +4721,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 172
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4645,6 +4745,7 @@ namespaces:
         - {effect: event, id: meganations_apf.174, days: 1, target: HSN}
       src: user_design
     - id: 173
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4673,6 +4774,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 174
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4686,6 +4788,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 176
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
@@ -4707,6 +4810,7 @@ namespaces:
         - {effect: event, id: meganations_apf.178, days: 1, target: NAS}
       src: user_design
     - id: 177
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4734,6 +4838,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 178
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4747,6 +4852,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 180
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4770,6 +4876,7 @@ namespaces:
         - {effect: event, id: meganations_apf.182, days: 1, target: SHD}
       src: user_design
     - id: 181
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4798,6 +4905,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 182
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -4811,6 +4919,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 184
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
@@ -4832,6 +4941,7 @@ namespaces:
         - {effect: event, id: meganations_apf.186, days: 1, target: NRE}
       src: user_design
     - id: 185
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
@@ -4856,6 +4966,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 186
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5216,6 +5327,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 160
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
@@ -5237,6 +5349,7 @@ namespaces:
         - {effect: event, id: meganations_nas.162, days: 1, target: EFE}
       src: user_design
     - id: 161
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
@@ -5261,6 +5374,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 162
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5274,6 +5388,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 164
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5297,6 +5412,7 @@ namespaces:
         - {effect: event, id: meganations_nas.166, days: 1, target: FCU}
       src: user_design
     - id: 165
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5325,6 +5441,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 166
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5338,6 +5455,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 168
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5361,6 +5479,7 @@ namespaces:
         - {effect: event, id: meganations_nas.170, days: 1, target: ASC}
       src: user_design
     - id: 169
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5389,6 +5508,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 170
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5402,6 +5522,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 172
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5425,6 +5546,7 @@ namespaces:
         - {effect: event, id: meganations_nas.174, days: 1, target: HSN}
       src: user_design
     - id: 173
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5453,6 +5575,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 174
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5466,6 +5589,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 176
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5489,6 +5613,7 @@ namespaces:
         - {effect: event, id: meganations_nas.178, days: 1, target: SHD}
       src: user_design
     - id: 177
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5517,6 +5642,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 178
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5530,6 +5656,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 180
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5553,6 +5680,7 @@ namespaces:
         - {effect: event, id: meganations_nas.182, days: 1, target: APF}
       src: user_design
     - id: 181
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5581,6 +5709,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 182
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -5594,6 +5723,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 184
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
@@ -5615,6 +5745,7 @@ namespaces:
         - {effect: event, id: meganations_nas.186, days: 1, target: NRE}
       src: user_design
     - id: 185
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
@@ -5639,6 +5770,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 186
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6083,6 +6215,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 160
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
@@ -6104,6 +6237,7 @@ namespaces:
         - {effect: event, id: meganations_shd.162, days: 1, target: EFE}
       src: user_design
     - id: 161
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
@@ -6128,6 +6262,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 162
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6141,6 +6276,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 164
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6164,6 +6300,7 @@ namespaces:
         - {effect: event, id: meganations_shd.166, days: 1, target: FCU}
       src: user_design
     - id: 165
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6192,6 +6329,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 166
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6205,6 +6343,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 168
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6228,6 +6367,7 @@ namespaces:
         - {effect: event, id: meganations_shd.170, days: 1, target: ASC}
       src: user_design
     - id: 169
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6256,6 +6396,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 170
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6269,6 +6410,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 172
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6292,6 +6434,7 @@ namespaces:
         - {effect: event, id: meganations_shd.174, days: 1, target: HSN}
       src: user_design
     - id: 173
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6320,6 +6463,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 174
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6333,6 +6477,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 176
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
@@ -6354,6 +6499,7 @@ namespaces:
         - {effect: event, id: meganations_shd.178, days: 1, target: NAS}
       src: user_design
     - id: 177
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6381,6 +6527,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 178
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6394,6 +6541,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 180
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6417,6 +6565,7 @@ namespaces:
         - {effect: event, id: meganations_shd.182, days: 1, target: APF}
       src: user_design
     - id: 181
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6445,6 +6594,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 182
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -6458,6 +6608,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 184
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
@@ -6479,6 +6630,7 @@ namespaces:
         - {effect: event, id: meganations_shd.186, days: 1, target: NRE}
       src: user_design
     - id: 185
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
@@ -6503,6 +6655,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 186
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7526,6 +7679,7 @@ namespaces:
         ai_chance: 55
       src: user_design
     - id: 160
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
@@ -7547,6 +7701,7 @@ namespaces:
         - {effect: event, id: meganations_nre.162, days: 1, target: EFE}
       src: user_design
     - id: 161
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
@@ -7571,6 +7726,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 162
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7584,6 +7740,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 164
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7607,6 +7764,7 @@ namespaces:
         - {effect: event, id: meganations_nre.166, days: 1, target: FCU}
       src: user_design
     - id: 165
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7635,6 +7793,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 166
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7648,6 +7807,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 168
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7671,6 +7831,7 @@ namespaces:
         - {effect: event, id: meganations_nre.170, days: 1, target: ASC}
       src: user_design
     - id: 169
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7699,6 +7860,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 170
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7712,6 +7874,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 172
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7735,6 +7898,7 @@ namespaces:
         - {effect: event, id: meganations_nre.174, days: 1, target: HSN}
       src: user_design
     - id: 173
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7763,6 +7927,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 174
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7776,6 +7941,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 176
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
@@ -7797,6 +7963,7 @@ namespaces:
         - {effect: event, id: meganations_nre.178, days: 1, target: NAS}
       src: user_design
     - id: 177
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7824,6 +7991,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 178
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7837,6 +8005,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 180
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7860,6 +8029,7 @@ namespaces:
         - {effect: event, id: meganations_nre.182, days: 1, target: SHD}
       src: user_design
     - id: 181
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7888,6 +8058,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 182
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7901,6 +8072,7 @@ namespaces:
         effects: []
       src: user_design
     - id: 184
+      art: meganations_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7924,6 +8096,7 @@ namespaces:
         - {effect: event, id: meganations_nre.186, days: 1, target: APF}
       src: user_design
     - id: 185
+      art: meganations_pide_armisticio
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:
@@ -7952,6 +8125,7 @@ namespaces:
         ai_chance: 50
       src: user_design
     - id: 186
+      art: meganations_paz_humillante
       trigger: effect
       picture: GFX_report_event_generic_rally
       title:

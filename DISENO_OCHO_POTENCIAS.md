@@ -418,3 +418,60 @@ llega a 100 al toque y la tensión nunca sube".
 - **Ministros y comandantes**: 5 ministros por meganación con rasgos
   propios; un mariscal y tres generales (dos almirantes en la HSN).
 - **Debuffs**: 2-3 por meganación, se van con un foco o un objetivo.
+
+## Lote Crisis y Terreno (2026-09-28)
+
+- **Crisis entre potencias**: cuatro ultimátums entre vecinas (el EFE le
+  exige Arequipa al Sol, Roma le exige tributo a África, la FCU quiere
+  entrar en las aseguradoras de la HSN, la HSN quiere comprarle Taiwán al
+  Directorio). Si el otro se niega: casus belli, y la IA se prepara y
+  declara con 20 divisiones (eventos .150-.153 de quien exige).
+- **Terreno**: ~10% para las cuatro más débiles: Reino del Sol (montaña),
+  EFE (selva), Federación Africana (sabana y calor) y HSN (islas). Las
+  claves que el juego no conozca se omiten con aviso.
+- **La Anarquía recluta**: una milicia por mes (dos en guerra) hasta 40
+  divisiones, con fusiles para equiparlas; su IA casi no producía.
+- **HSN**: Taiwán pasa al Directorio, Okinawa y Kyushu a Corea; arranca con
+  4 nodos de 8 y los focos de los que le faltan dan reclamos.
+- **Correcciones del game.log**: las cadenas tienen una fecha mínima
+  escalonada (varias saltaban el 2 de enero de 2100); la Anarquía sale cada
+  mes de toda facción de meganaciones o satélites y le sacan las garantías
+  (los Caudillos del Amazonas habían terminado en la facción de la FCU);
+  Londres es "Greater London Area"; se sacan regiones y un rasgo de general
+  que en 1.19.3 no existen.
+
+## Lote Guerra Limitada (2026-09-29)
+
+- **Guerra limitada** (`<TAG>_guerra_limitada`, revisada cada semana por el
+  evento .159): hasta el 1/1/2104, cuando una meganación rival llega al 40%
+  de rendición salta el armisticio (evento .160+4k). Firman todos los de un
+  bando con todos los del otro (la potencia, sus satélites y su facción),
+  cada uno se queda con lo que ocupa, `set_truce` impide volver a declarar
+  durante un año y el perdedor recibe Revancha (+10% apoyo bélico, +5%
+  organización, un año). Desde 2104 el ganador elige: firmar o ir hasta la
+  capital (evento .161+4k). El perdedor ve su propio evento (.162+4k).
+- **Caudales v4 (SHD)**: pronóstico del río (el panel dice qué caudal va a
+  empujar +6 el mes que viene: Producción 40%, Orden 30%, Pueblo 30%);
+  racha de armonía (+1 por mes en Armonía Perfecta, la Parcial la mantiene,
+  salir la pierde) con premios a los 3 meses (100 PP), 6 (dos fábricas), 12
+  (El Mandato del Cielo) y 24 (La Era de la Armonía y una casilla de
+  investigación); decisión Cerrar las Compuertas (50 PP, cada 91 días)
+  que anula el próximo empuje.
+- **La IA construye** (`MEGANATIONS_obras_de_la_ia`, en el pulso de cada
+  meganación, solo si la maneja la IA): dos niveles de infraestructura por
+  mes donde falte y, la mitad de los meses, un espacio de construcción más,
+  para que la cola no quede quieta.
+- **Satélites del EFE**: Yvytu Ykua Guasu apunta a 22 de IC y la Patagonia
+  Austral a 10 (hasta donde den los espacios libres), 4 y 3 divisiones de
+  guarnición, e ideas propias (Protegidos del Imperio, Guardianes del
+  Hielo) con defensa, organización, reclutamiento y construcción.
+- **Correcciones del error.log**: `create_unit` solo vale dentro de una
+  región: las divisiones de los focos de la Anarquía y las levas se creaban
+  a nivel país y el juego las rechazaba (ahora salen en la capital, o en una
+  región propia si está ocupada). La prioridad de investigación de la IA
+  dejaba sin cerrar un bloque cuando la tecnología traía `ai_will_do` en un
+  renglón, y desarmaba el resto de `electronic_mechanical_engineering.txt`.
+  La condición de infraestructura usa `free_building_slots`, como el foco
+  genérico del juego.
+- **Prueba de scopes**: cada efecto y condición del mod se revisa contra su
+  scope (país o región) según las reglas de CWTools.

@@ -1494,6 +1494,7 @@ def test_arte() -> None:
         art.write_dds(root / "assets/NRE/ideas/NRE_senado.dds", 1, 1, px)
         art.write_dds(root / "assets/NRE/leaders/irina_vasilescu.dds", 1, 1, px)
         art.write_dds(root / "assets/events/meganations_nre.3.dds", 1, 1, px)
+        art.write_dds(root / "assets/events/meganations_armisticio.dds", 1, 1, px)
         ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
         mod = ctx.mod_root
         tree = (mod / "common/national_focus/NRE_focus.txt").read_text()
@@ -1507,6 +1508,16 @@ def test_arte() -> None:
         ev = (mod / "events/meganations_nre.txt").read_text()
         check("evento: assets/events/<id>.dds reemplaza la imagen generica", "picture = GFX_meganations_nre_3" in ev)
         check("sprite del evento registrado", "GFX_meganations_nre_3" in (mod / "interface/meganations_events.gfx").read_text())
+        efe_ev = " ".join((mod / "events/meganations_efe.txt").read_text().split())
+        shared = [efe_ev[efe_ev.index(f"id = meganations_efe.{n} "):][:400] for n in (160, 164, 184)]
+        check("arte compartido: los armisticios usan una sola imagen",
+              all("picture = GFX_meganations_armisticio " in e for e in shared), shared[0][:300])
+        gfx = (mod / "interface/meganations_events.gfx").read_text()
+        check("arte compartido: el sprite se registra una vez", gfx.count('"GFX_meganations_armisticio"') == 1)
+        from tools.arte import arte as arte_tool
+        cat = [i["id"] for i in arte_tool.catalog() if i["type"] == "event_picture"]
+        check("arte compartido: un solo pedido por imagen, no uno por evento",
+              cat.count("meganations_armisticio") == 1 and "meganations_efe.160" not in cat)
 
     import shutil as _sh
     from tools.gen.errors import SpecError as _SpecError
