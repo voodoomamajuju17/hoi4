@@ -140,14 +140,64 @@ def emit(ctx: BuildContext) -> None:
     ctx.data["added_buildings"] = added
     manpower_new = economy_mod.population_plan(ctx, assignment)
     ctx.data["manpower_new"] = manpower_new
+    forts = _fort_lines(ctx, assignment, states, names)
+    ctx.data["fort_lines"] = forts
     for s in states:
         new_owner = assignment.get(s.id)
         if new_owner is None and s.id not in deposits:
             continue
         _rewrite(ctx, s, new_owner, deposits.get(s.id, {}),
                  resource_delta.get(s.id, {}), added.get(s.id, {}), claims.get(s.id, ()),
-                 manpower_new.get(s.id))
+                 manpower_new.get(s.id), forts.get(s.id))
     _startup_ownership(ctx, assignment)
+
+
+def fort_line_provinces(assignment: dict[int, str], states, adjacency, line: dict) -> dict[int, dict[int, int]]:
+    """Provincias de `owner` que tocan a `facing`, solo en la zona de `near`:
+    regiones que en el juego eran de `near` y las propias que las tocan.
+    Devuelve {state: {provincia: nivel de búnker}}."""
+    owner, facing, near = line["owner"], line["facing"], line.get("near")
+    level = int(line.get("level", 5))
+    prov_state = {p: s.id for s in states for p in s.provinces}
+    vanilla_owner = {s.id: s.owner for s in states}
+    neigh: dict[int, set[int]] = defaultdict(set)
+    for a, b in adjacency:
+        neigh[a].add(b)
+        neigh[b].add(a)
+    mine = {sid for sid, t in assignment.items() if t == owner}
+    zone = {sid for sid in mine if near is None or vanilla_owner.get(sid) == near}
+    if near is not None:
+        by_id = {s.id: s for s in states}
+        zone |= {prov_state.get(q) for sid in zone for p in by_id[sid].provinces
+                 for q in neigh.get(p, ()) if prov_state.get(q) in mine}
+    out: dict[int, dict[int, int]] = defaultdict(dict)
+    for s in states:
+        if s.id not in zone:
+            continue
+        for p in s.provinces:
+            if any(assignment.get(prov_state.get(q)) == facing for q in neigh.get(p, ())):
+                out[s.id][p] = level
+    return dict(out)
+
+
+def _fort_lines(ctx: BuildContext, assignment: dict[int, str], states, names) -> dict[int, dict[int, int]]:
+    """Líneas de búnkeres de arranque (13_military.yaml -> fort_lines)."""
+    lines = (ctx.spec.raw.get("military") or {}).get("fort_lines") or []
+    if not lines:
+        return {}
+    adjacency = ctx.vanilla.province_adjacency(ctx.out_root / ".cache")
+    total: dict[int, dict[int, int]] = defaultdict(dict)
+    by_id = {s.id: s for s in states}
+    for line in lines:
+        got = fort_line_provinces(assignment, states, adjacency, line)
+        for sid, provs in got.items():
+            for p, lv in provs.items():
+                total[sid][p] = max(lv, total[sid].get(p, 0))
+        shown = ", ".join(f"{display_name(by_id[sid], names)} ({len(p)})" for sid, p in sorted(got.items()))
+        ctx.note(f"linea de fuertes {line['owner']} frente a {line['facing']}: "
+                 f"{sum(len(p) for p in got.values())} provincias con bunker {line.get('level', 5)}"
+                 f"{' en ' + shown if shown else ' (no se tocan en este mapa)'}")
+    return dict(total)
 
 
 def _startup_ownership(ctx: BuildContext, assignment: dict[int, str]) -> None:
@@ -501,7 +551,7 @@ def _fix_vanilla_capitals(ctx: BuildContext, assignment: dict[int, str], names) 
 
 def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resources: dict[str, int],
              resource_delta: dict | None = None, add_buildings: dict | None = None,
-             claims=(), manpower: int | None = None) -> bool:
+             claims=(), manpower: int | None = None, bunkers: dict[int, int] | None = None) -> bool:
     if _unsafe(info):
         return False
     root = parse_file(info.path)
@@ -548,6 +598,26 @@ def _rewrite(ctx: BuildContext, info: StateInfo, owner: str | None, add_resource
             level = int(float(str(getattr(old, "text", old)))) if old is not None else 0
             buildings.entries = [(k, v) for k, v in buildings.entries if k != key]
             buildings.entries.insert(0, (key, level + n))
+
+    if bunkers:
+        # Línea de fuertes: búnker por provincia (el bloque `<provincia> = { bunker = N }`
+        # del juego); si la provincia ya tenía uno, queda el más alto.
+        history = state.get("history")
+        if not isinstance(history, Block):
+            history = Block()
+            state.add("history", history)
+        buildings = history.get("buildings")
+        if not isinstance(buildings, Block):
+            buildings = Block()
+            history.add("buildings", buildings)
+        for prov, level in sorted(bunkers.items()):
+            slot = buildings.get(str(prov))
+            if not isinstance(slot, Block):
+                slot = Block()
+                buildings.add(str(prov), slot)
+            old = slot.get("bunker")
+            have = int(float(str(getattr(old, "text", old)))) if old is not None else 0
+            slot.entries = [(k, v) for k, v in slot.entries if k != "bunker"] + [("bunker", max(have, level))]
 
     if owner is not None:
         history = state.get("history")

@@ -156,3 +156,13 @@ doctrines:
     NAS: {folder: air, grand: [battlefield_support], grand_kw: [battlefield, support], track: support, sub_kw: [close_air, ground, cas]}
     # La Anarquía: bandas, infiltración y oleadas
     anarchy: {folder: land, grand: [mass_assault], grand_kw: [mass], track: infantry, sub_kw: [infiltration, guerrilla, human_wave, wave]}
+
+# -----------------------------------------------------------------------------
+# Líneas de fuertes de arranque (2026-09-29): "fuertes en el NRE tipo línea
+# Maginot con la ASC, pero solo una parte (lo más cercano a Italia)". Búnker
+# en cada provincia de `owner` que toca a `facing`, solo en las regiones que
+# en el juego eran de `near` y en las propias que las tocan (los Alpes: de
+# Saboya a Eslovenia; la frontera con Alemania y Bélgica queda sin fuertes).
+# -----------------------------------------------------------------------------
+fort_lines:
+  - {owner: NRE, facing: ASC, near: ITA, level: 5, src: user_request}

@@ -600,6 +600,27 @@ def test_phase3_content() -> None:
 
 def test_territory() -> None:
     section("territorio: reparto sobre states vanilla")
+    # Línea de fuertes (2026-09-29): solo la zona de Italia, solo frente a la ASC.
+    from types import SimpleNamespace as _S
+    from tools.gen.emitters.territory import fort_line_provinces
+    fake = [_S(id=1, owner="ITA", provinces=[1, 2]), _S(id=2, owner="FRA", provinces=[3, 4]),
+            _S(id=3, owner="FRA", provinces=[5]), _S(id=4, owner="SWI", provinces=[6]), _S(id=5, owner="GER", provinces=[7])]
+    got = fort_line_provinces({1: "NRE", 2: "NRE", 3: "NRE", 4: "ASC", 5: "ASC"}, fake,
+                              {(1, 6), (2, 3), (4, 6), (5, 7)}, {"owner": "NRE", "facing": "ASC", "near": "ITA", "level": 5})
+    check("fuertes: la region italiana y la vecina, solo en las provincias que tocan a la ASC",
+          got == {1: {1: 5}, 2: {4: 5}}, str(got))
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        import shutil as _shf
+        _shf.copytree(REPO_ROOT / "spec", root / "spec")
+        (root / "assets").symlink_to(REPO_ROOT / "assets")
+        mil = (root / "spec/13_military.yaml").read_text(encoding="utf-8")
+        (root / "spec/13_military.yaml").write_text(
+            mil.replace("{owner: NRE, facing: ASC, near: ITA, level: 5", "{owner: NRE, facing: ZWE, near: ITA, level: 5"),
+            encoding="utf-8")
+        fctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
+        st = " ".join((fctx.mod_root / "history/states/909-Fixture.txt").read_text().split())
+        check("fuertes: el bunker queda escrito en la provincia del state", "13 = { bunker = 5 }" in st, st[-500:])
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
