@@ -95,6 +95,23 @@ def _merge(ctx: BuildContext, vanilla: Block, groups_spec: list[dict]) -> Block:
         if color:
             _replace(target, "color", Block([(None, c) for c in color]))
 
+        # Reglas y modificadores del grupo que el mod cambia (2026-09-29: las
+        # democracias necesitaban 100% de tensión mundial para justificar una
+        # guerra y solo contra países que generan amenaza).
+        for field, key_ in (("rules", "rule_overrides"), ("modifiers", "modifier_overrides")):
+            wanted = group.get(key_) or {}
+            if not wanted:
+                continue
+            block = target.get(field)
+            if not isinstance(block, Block):
+                block = Block()
+                target.add(field, block)
+            for name, value in wanted.items():
+                before = block.get(name)
+                _replace(block, name, value)
+                ctx.note(f"ideologias: {key}.{field}.{name}: "
+                         f"{'(no estaba)' if before is None else getattr(before, 'text', before)} -> {value}")
+
     return vanilla
 
 

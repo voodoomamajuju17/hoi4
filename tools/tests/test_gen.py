@@ -323,6 +323,16 @@ def test_ideology_merge() -> None:
         check("democratic recibe corporate_union", "corporate_union" in merged.get("democratic").get("types").keys())
         check("communism recibe automated_socialism", "automated_socialism" in merged.get("communism").get("types").keys())
         check("neutrality recibe solar_monarchism", "solar_monarchism" in merged.get("neutrality").get("types").keys())
+        # 2026-09-29: las democracias justifican guerras sin esperar 100% de tensión.
+        demo = merged.get("democratic")
+        check("democracia: justifica sin 100% de tension",
+              pdx.text(demo.get("modifiers").get("generate_wargoal_tension")) in ("0.0", "0"), pdx.render(demo.get("modifiers")))
+        check("democracia: justifica contra cualquiera, no solo contra quien genera amenaza",
+              pdx.text(demo.get("rules").get("can_only_justify_war_on_threat_country")) == "no", pdx.render(demo.get("rules")))
+        check("democracia: el resto de sus modificadores queda como en el juego",
+              pdx.text(demo.get("modifiers").get("join_faction_tension")) == "0.60")
+        check("el reporte dice que cambio", any("democratic.modifiers.generate_wargoal_tension: 1.00 -> 0.0" in n for n in ctx.notes),
+              str([n for n in ctx.notes if n.startswith("ideologias")]))
 
 
 def test_full_build() -> None:

@@ -133,6 +133,13 @@ groups:
       spanish: "La legitimidad viene del contrato. Todo el que tiene una participación vota, en proporción a esa participación. El colapso fue una falla de mercado; la respuesta es un mercado mejor."
     color_rgb: [212, 168, 52]
     src: invented
+    # 2026-09-29: "las naciones con ideología que viene de la democracia no pueden
+    # declarar guerras al menos que la tensión sea 100". En el juego base el grupo
+    # democrático necesita 100% de tensión mundial para justificar una guerra y
+    # solo contra países que generan amenaza. El Orden de Mercado no es pacifista:
+    # la FCU y la HSN justifican como cualquier potencia.
+    rule_overrides: {can_only_justify_war_on_threat_country: false}
+    modifier_overrides: {generate_wargoal_tension: 0.0}
     types:
       - key: corporate_union
         used_by: [FCU]
