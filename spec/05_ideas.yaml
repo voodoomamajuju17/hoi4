@@ -2313,8 +2313,25 @@ countries:
         spanish: Las tierras que nadie quería ahora son las más productivas del mundo.
       modifiers: {research_speed_factor: 0.25, production_speed_buildings_factor: 0.25}
       src: user_design
-  PTA: { coverage: unknown, starting_ideas: unknown, see: Q012 }
-  YYG: { coverage: unknown, starting_ideas: unknown, see: Q012 }
+  PTA:
+    coverage: user_request
+    starting_ideas:
+    - id: PTA_guardianes_del_hielo
+      name: {english: Keepers of the Ice, spanish: Guardianes del Hielo}
+      desc: {english: 'The Empire arms its southern wardens: few, tough, and very far from help.', spanish: 'El Imperio arma a sus guardianes del
+          sur: pocos, duros y muy lejos de cualquier ayuda.'}
+      modifiers: {army_defence_factor: 0.2, army_org_factor: 0.1, recruitable_population_factor: 0.5, production_speed_buildings_factor: 0.15, stability_factor: 0.1}
+      src: user_request
+  YYG:
+    coverage: user_request
+    starting_ideas:
+    - id: YYG_protegidos_del_imperio
+      name: {english: Protected by the Empire, spanish: Protegidos del Imperio}
+      desc: {english: 'The Empire invests in its northern shield: dams, rifles and engineers.', spanish: 'El Imperio invierte en su escudo del norte:
+          represas, fusiles e ingenieros.'}
+      modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1, recruitable_population_factor: 0.3, production_speed_buildings_factor: 0.15,
+        industrial_capacity_factory: 0.1, stability_factor: 0.1}
+      src: user_request
 
 # =============================================================================
 technical_notes:

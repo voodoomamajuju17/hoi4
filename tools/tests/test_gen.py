@@ -820,6 +820,16 @@ def test_balance() -> None:
         check("Polonia pasa a la Comuna Baltica", ctx.data["territory"].get(918) == "ZBC")
         asc = (mod / "history/countries/ASC - Automated Socialist Commune.txt").read_text()
         check("la ASC arranca con el Cuello de Botella", "ASC_cuello_de_botella" in asc)
+        # Satélites del EFE más fuertes (2026-09-29): fábricas, guarnición e idea propia.
+        yyg = next((mod / "history/countries").glob("YYG - *.txt")).read_text()
+        pta = next((mod / "history/countries").glob("PTA - *.txt")).read_text()
+        check("YYG y PTA arrancan con su idea", "YYG_protegidos_del_imperio" in yyg and "PTA_guardianes_del_hielo" in pta)
+        check("YYG y PTA con guarnicion reforzada",
+              ctx.data["division_count"].get("YYG") == 4 and ctx.data["division_count"].get("PTA") == 3,
+              str(ctx.data["division_count"]))
+        check("YYG y PTA con meta de industrializacion",
+              any(n.startswith("industrializacion: YYG") for n in ctx.notes)
+              and any(n.startswith("industrializacion: PTA") for n in ctx.notes))
         bal = (Path(tmp) / "balance.txt").read_text()
         check("el balance muestra los totales mundiales OK", "TOTAL MUNDIAL" in bal and "DISTINTO" not in bal, bal)
 
