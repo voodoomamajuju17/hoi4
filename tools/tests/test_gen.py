@@ -60,7 +60,8 @@ _COUNTRY_ONLY = {"add_political_power", "add_stability", "add_war_support", "arm
                  "every_enemy_country", "leave_faction", "diplomatic_relation", "has_stability", "has_country_flag",
                  "has_war", "has_idea", "has_completed_focus", "controls_state", "has_war_with", "has_army_size",
                  "has_capitulated", "num_of_factories", "has_tech", "has_manpower", "has_war_support", "has_equipment",
-                 "exists", "has_wargoal_against", "is_in_faction_with", "surrender_progress", "is_ai", "capital_scope"}
+                 "exists", "has_wargoal_against", "is_in_faction_with", "surrender_progress", "is_ai", "capital_scope",
+                 "set_truce", "is_subject_of"}
 _TO_STATE = {"capital_scope", "random_owned_state", "random_owned_controlled_state", "every_owned_state", "every_state",
              "random_state", "any_state", "any_owned_state", "every_controlled_state", "random_controlled_state",
              "any_neighbor_state", "random_neighbor_state", "every_neighbor_state", "CAPITAL"}
@@ -89,8 +90,8 @@ def _scope_errors(mod: Path) -> list[str]:
                 nxt = scope
             elif k in _TO_STATE or (k.isdigit() and parent not in ("random_list", "random_events")):
                 nxt = "state"
-            elif k in _TO_COUNTRY or (tag.match(k) and k not in _FLOW):
-                nxt = "country"
+            elif k in _TO_COUNTRY or k.startswith("event_target:") or (tag.match(k) and k not in _FLOW):
+                nxt = "country"     # los event_target que guarda el mod son todos países
             elif k == "PREV":
                 nxt = scopes[-2] if len(scopes) > 1 else "country"
             elif (k in _STATE_ONLY or k in _COUNTRY_ONLY) and parent:
@@ -1338,10 +1339,18 @@ def test_ai() -> None:
         check("guerra limitada: hasta 2104, al 40% de rendicion del rival salta el armisticio",
               "has_war_with = FCU" in gl and "FCU = { surrender_progress > 0.4 }" in gl and "date > 2104.1.1" in gl, gl[:700])
         efe_ev2 = " ".join((mod / "events/meganations_efe.txt").read_text().split())
-        arm = efe_ev2[efe_ev2.index("id = meganations_efe.160 title"):][:1500]
+        arm = efe_ev2[efe_ev2.index("id = meganations_efe.160 title"):][:2500]
+        check("armisticio: firma todo el bando del rival (el, sus satelites y su faccion)",
+              "every_country = { limit = { OR = { tag = FCU is_subject_of = FCU is_in_faction_with = FCU } }"
+              " save_event_target_as = meganations_armisticio_x" in arm, arm[:900])
+        check("armisticio: con todo el bando propio que este en guerra con el",
+              "every_enemy_country = { limit = { OR = { tag = ROOT is_subject_of = ROOT is_in_faction_with = ROOT } }" in arm)
         check("armisticio: cada uno se queda lo que ocupa y paz blanca",
-              "FCU = { every_owned_state = { limit = { is_controlled_by = ROOT } ROOT = { transfer_state = PREV } } }" in arm
-              and "white_peace = FCU" in arm and "FCU_revancha" in arm, arm[:900])
+              "event_target:meganations_armisticio_x = { every_owned_state = { limit = { is_controlled_by = "
+              "event_target:meganations_armisticio_a } event_target:meganations_armisticio_a = { transfer_state = PREV } } }" in arm
+              and "white_peace = event_target:meganations_armisticio_x" in arm and "FCU_revancha" in arm, arm[:1200])
+        check("armisticio: tregua de un ano de verdad (set_truce)",
+              "set_truce = { target = event_target:meganations_armisticio_x days = 364 }" in arm, arm[:1500])
         check("guerra limitada: se revisa cada semana", "id = meganations_efe.159 days = 7" in efe_ev2)
         rio = se_c[se_c.index("SHD_pulso_del_rio = {"):][:6000]
         check("SHD v4: el rio empuja lo pronosticado y pronostica el proximo mes",
@@ -1691,7 +1700,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1701,7 +1710,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

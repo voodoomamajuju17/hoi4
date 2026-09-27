@@ -518,20 +518,40 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("add_to_war", owner)
             continue
         if effect == "armistice":
-            # Paz con `value`: cada uno se queda con lo que ocupa del otro.
+            # Paz con `value` y los suyos: cada país de su bando (él, sus
+            # satélites, su facción) firma con cada país del bando de ROOT que
+            # esté en guerra con él, y cada uno se queda con lo que ocupa del
+            # otro. Firmar solo entre las dos potencias dejaba a los satélites
+            # peleando y la guerra seguía (revisión 2026-09-29).
             other = item["value"]
             if ec.tags and other not in ec.tags:
                 raise SpecError(f"{owner}: armistice con '{other}', que no es un pais del mod", where=where)
-            block.add(other, Block([("every_owned_state", Block([
-                ("limit", Block([("is_controlled_by", "ROOT")])),
-                ("ROOT", Block([("transfer_state", "PREV")]))]))]))
-            block.add("every_owned_state", Block([
-                ("limit", Block([("is_controlled_by", other)])),
-                (other, Block([("transfer_state", "PREV")]))]))
-            block.add("white_peace", other)
-            for k in ("every_owned_state", "transfer_state", "white_peace"):
+            x, a = "event_target:meganations_armisticio_x", "event_target:meganations_armisticio_a"
+
+            def side(leader: str) -> Block:
+                return Block([("OR", Block([("tag", leader), ("is_subject_of", leader),
+                                            ("is_in_faction_with", leader)]))])
+            pair = Block([
+                ("limit", side("ROOT")),
+                ("save_event_target_as", "meganations_armisticio_a"),
+                (x, Block([("every_owned_state", Block([
+                    ("limit", Block([("is_controlled_by", a)])),
+                    (a, Block([("transfer_state", "PREV")]))]))])),
+                ("every_owned_state", Block([
+                    ("limit", Block([("is_controlled_by", x)])),
+                    (x, Block([("transfer_state", "PREV")]))])),
+                ("white_peace", x),
+                # tregua de verdad: el juego no deja volver a declarar en ese plazo
+                ("set_truce", Block([("target", x), ("days", int(item.get("truce_days", 364)))]))])
+            block.add("every_country", Block([
+                ("limit", side(other)),
+                ("save_event_target_as", "meganations_armisticio_x"),
+                ("every_enemy_country", pair)]))
+            for k in ("every_country", "every_enemy_country", "save_event_target_as", "every_owned_state",
+                      "transfer_state", "white_peace", "set_truce"):
                 effects_used.setdefault(k, owner)
-            ec.triggers_used.setdefault("is_controlled_by", owner)
+            for k in ("tag", "is_subject_of", "is_in_faction_with", "is_controlled_by"):
+                ec.triggers_used.setdefault(k, owner)
             continue
         if effect == "add_slot":
             # en una región: un espacio de construcción compartido más
