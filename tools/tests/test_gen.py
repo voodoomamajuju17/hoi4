@@ -1685,8 +1685,14 @@ def test_diplomacy() -> None:
         check("tension mundial en el pais por defecto", "add_named_threat" in efe and "threat = 30" in efe)
         asc = next((mod / "history/countries").glob("ASC - *.txt")).read_text()
         check("todos arrancan en paz (2026-09-28): la ASC no declara la guerra", "declare_war_on" not in asc, asc[-600:])
-        check("leyes de arranque: meganacion en movilizacion parcial y exportaciones limitadas",
-              "partial_economic_mobilisation" in nre and "limited_exports" in nre, nre[:900])
+        check("leyes de arranque por ideologia: Roma (fascista) en economia de guerra y servicio obligatorio",
+              "war_economy" in nre and "limited_exports" in nre and "service_by_requirement" in nre, nre[:900])
+        fcu_h = next((mod / "history/countries").glob("FCU - *.txt")).read_text()
+        check("leyes de arranque por ideologia: la FCU con libre comercio", "free_trade" in fcu_h, fcu_h[:900])
+        asc_l = next((mod / "history/countries").glob("ASC - *.txt")).read_text()
+        check("una sola ley por categoria (sin reclutamiento repetido)",
+              sum(asc_l.count(x) for x in ("volunteer_only", "limited_conscription", "extensive_conscription",
+                                           "service_by_requirement")) == 1, asc_l[:900])
         zwe_h = next((mod / "history/countries").glob("ZWE - *.txt")).read_text()
         check("leyes de arranque: la Anarquia en economia de guerra", "war_economy" in zwe_h and "closed_economy" in zwe_h)
         check("poder politico de arranque (200 las meganaciones)", "add_political_power = 200" in nre)

@@ -49,12 +49,9 @@ population:
 # -----------------------------------------------------------------------------
 conscription:
   src: invented
-  laws:
-    SHD: volunteer_only
-    APF: volunteer_only
-    HSN: volunteer_only
-    EFE: extensive_conscription
-    NAS: extensive_conscription
+  # 2026-09-29: el reclutamiento pasó a starting_laws -> overrides, junto con
+  # la economía y el comercio de cada país (una sola fuente por país).
+  laws: {}
 
 # -----------------------------------------------------------------------------
 # Leyes de economía y comercio de arranque (2026-09-28: "estaban todos en
@@ -66,9 +63,43 @@ starting_laws:
   src: user_request
   meganation: [partial_economic_mobilisation, limited_exports]
   satellite: [low_economic_mobilisation, export_focus]
-  anarchy: [war_economy, closed_economy]
+  anarchy: [war_economy, closed_economy, extensive_conscription]
+  # 2026-09-29 ("un estado fascista debería tener movilización, la FCU libre
+  # mercado"): economía, comercio y reclutamiento según la ideología de cada
+  # país. Los gigantes en población (SHD, APF) siguen con voluntarios; los
+  # chicos (NAS, EFE), con reclutamiento extensivo. Los satélites siguen la
+  # línea de su señor un escalón más abajo y le exportan.
   overrides:
-    ZAN: [low_economic_mobilisation, limited_exports]   # las Tierras Sin Ley arrancan en paz
+    # Restauración (fascismo): movilizados de entrada
+    EFE: [war_economy, limited_exports, extensive_conscription]        # imperio verde en armas
+    NRE: [war_economy, limited_exports, service_by_requirement]        # las legiones primero
+    PTA: [partial_economic_mobilisation, export_focus, extensive_conscription]
+    YYG: [partial_economic_mobilisation, export_focus, extensive_conscription]
+    ZHI: [partial_economic_mobilisation, export_focus, extensive_conscription]
+    ZDA: [partial_economic_mobilisation, export_focus, extensive_conscription]
+    # Orden de Mercado (democracia de mercado): libre comercio, ejército profesional
+    FCU: [low_economic_mobilisation, free_trade, limited_conscription]  # el Directorio vende de todo
+    HSN: [civilian_economy, free_trade, volunteer_only]                 # el mar es un mercado
+    ZNR: [low_economic_mobilisation, free_trade, volunteer_only]
+    ZSE: [low_economic_mobilisation, free_trade, volunteer_only]
+    ZAF: [civilian_economy, free_trade, volunteer_only]
+    ZAS: [civilian_economy, free_trade, volunteer_only]
+    # Colectivismo: economía planificada, se exporta poco
+    ASC: [partial_economic_mobilisation, closed_economy, limited_conscription]   # la red lo produce todo
+    APF: [low_economic_mobilisation, export_focus, volunteer_only]              # federación en desarrollo
+    ZBC: [low_economic_mobilisation, limited_exports, limited_conscription]
+    ZAL: [low_economic_mobilisation, limited_exports, limited_conscription]
+    ZET: [low_economic_mobilisation, export_focus, limited_conscription]
+    ZSA: [low_economic_mobilisation, export_focus, limited_conscription]
+    # Mandato Trascendente: el Directorio dirige; el Sol consagra
+    SHD: [partial_economic_mobilisation, limited_exports, volunteer_only]
+    NAS: [low_economic_mobilisation, export_focus, extensive_conscription]
+    ZKR: [low_economic_mobilisation, export_focus, limited_conscription]
+    ZST: [low_economic_mobilisation, export_focus, limited_conscription]
+    ZNG: [low_economic_mobilisation, export_focus, limited_conscription]
+    ZLL: [low_economic_mobilisation, export_focus, limited_conscription]
+    # La Anarquía: economía de guerra y levas (tipo anarchy). Las Tierras Sin Ley arrancan en paz.
+    ZAN: [low_economic_mobilisation, limited_exports, extensive_conscription]
 
 # Poder político de arranque (2026-09-28: "falta PP"). Además cada líder de
 # meganación suma poder político por día con su rasgo (03_leaders.yaml).
