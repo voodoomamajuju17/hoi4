@@ -562,3 +562,15 @@ llega a 100 al toque y la tensión nunca sube".
   diaria de su rama; el alto mando +0,1 de la suya.
 - **Pantallas de carga**: nueve imágenes propias reparten las pantallas de
   carga del juego; el fondo del menú queda aparte.
+- **Estado de Emergencia**: tres decisiones para cada potencia y anarquía,
+  una sola vez por partida. I (150 PP): 4 divisiones de infantería, 10.000
+  hombres, 1.000 fusiles, -5% estabilidad y apoyo a la guerra. II (200 PP): 6
+  divisiones, 15.000 hombres, 1.200 fusiles. III (250 PP): 8 de infantería y
+  6 de milicia, 20.000 hombres, 1.000 fusiles y 1.000 de equipo de apoyo. La
+  IA las usa en guerra (la II desde 10% de rendición, la III desde 25%).
+- **Tierras Sin Ley**: arrancan con La Frontera Armada y sus milicias se
+  reparten en cada territorio (2 como mínimo, una más cada 2 regiones).
+- **ASC, el Ejército de Máquinas**: el juego no tiene costo de hombres por
+  unidad para un solo país; en su lugar, +35% reclutables, +1500 hombres por
+  semana, 30% de las bajas vuelven, aviones y barcos con la mitad de
+  tripulación.

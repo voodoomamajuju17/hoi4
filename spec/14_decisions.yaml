@@ -6650,6 +6650,175 @@ categories:
         modifiers: []
       src: user_request
 
+  # 2026-09-29 (pedido del usuario): decisiones de emergencia 1, 2 y 3 para cada
+  # meganación y anarquía; cada una, una sola vez por partida.
+  - id: MEGANATIONS_emergencia_category
+    country:
+    - EFE
+    - FCU
+    - ASC
+    - HSN
+    - NAS
+    - SHD
+    - APF
+    - NRE
+    - ZWE
+    - ZWI
+    - ZWM
+    - ZWB
+    - ZAN
+    name:
+      english: State of Emergency
+      spanish: Estado de Emergencia
+    desc:
+      english: Three last resorts, each usable only once per game. Every one raises new divisions at the capital, with the men and the rifles to fill them.
+      spanish: Tres recursos extremos, cada uno se puede usar una sola vez en toda la partida. Cada uno levanta divisiones nuevas en la capital, con los hombres
+        y los fusiles para llenarlas.
+    icon_prefer:
+    - generic_prepare_civil_war
+    - generic_military
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_emergencia_1
+      name:
+        english: 'Emergency I: Call to Arms'
+        spanish: 'Emergencia I: Llamado a las Armas'
+      desc:
+        english: 4 infantry divisions, 10,000 manpower and 1,000 infantry equipment. Stability and war support -5%. Only once.
+        spanish: 4 divisiones de infantería, 10.000 de mano de obra y 1.000 de equipo de infantería. Estabilidad y apoyo a la guerra -5%. Una sola vez.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_military
+      - generic_army_support
+      cost: 150
+      visible:
+        not_flag: MEGANATIONS_emergencia_1_usada
+      effects:
+      - effect: flag
+        value: MEGANATIONS_emergencia_1_usada
+      - effect: add_manpower
+        value: 10000
+      - effect: equipment
+        type: infantry_equipment
+        amount: 1000
+      - effect: add_stability
+        value: -0.05
+      - effect: add_war_support
+        value: -0.05
+      - effect: division_template
+        name: Leva de Emergencia I
+        regiments: &id001
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+      - effect: create_units
+        template: Leva de Emergencia I
+        name: Leva de Emergencia I
+        count: 4
+        experience: 0.1
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            not:
+              at_war: true
+      src: user_request
+    - id: MEGANATIONS_emergencia_2
+      name:
+        english: 'Emergency II: General Mobilisation'
+        spanish: 'Emergencia II: Movilización General'
+      desc:
+        english: 6 infantry divisions, 15,000 manpower and 1,200 infantry equipment. Only once.
+        spanish: 6 divisiones de infantería, 15.000 de mano de obra y 1.200 de equipo de infantería. Una sola vez.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_military
+      - generic_army_support
+      cost: 200
+      visible:
+        not_flag: MEGANATIONS_emergencia_2_usada
+      effects:
+      - effect: flag
+        value: MEGANATIONS_emergencia_2_usada
+      - effect: add_manpower
+        value: 15000
+      - effect: equipment
+        type: infantry_equipment
+        amount: 1200
+      - effect: division_template
+        name: Leva de Emergencia II
+        regiments: *id001
+      - effect: create_units
+        template: Leva de Emergencia II
+        name: Leva de Emergencia II
+        count: 6
+        experience: 0.1
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            not:
+              at_war: true
+              surrender_at_least: 0.1
+      src: user_request
+    - id: MEGANATIONS_emergencia_3
+      name:
+        english: 'Emergency III: Everyone to the Front'
+        spanish: 'Emergencia III: Todos al Frente'
+      desc:
+        english: 8 infantry divisions and 6 militia divisions, 20,000 manpower, 1,000 infantry equipment and 1,000 support equipment. Only once.
+        spanish: 8 divisiones de infantería y 6 de milicia, 20.000 de mano de obra, 1.000 de equipo de infantería y 1.000 de equipo de apoyo. Una sola vez.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_military
+      - generic_army_support
+      cost: 250
+      visible:
+        not_flag: MEGANATIONS_emergencia_3_usada
+      effects:
+      - effect: flag
+        value: MEGANATIONS_emergencia_3_usada
+      - effect: add_manpower
+        value: 20000
+      - effect: equipment
+        type: infantry_equipment
+        amount: 1000
+      - effect: equipment
+        type: support_equipment
+        amount: 1000
+      - effect: division_template
+        name: Leva de Emergencia III
+        regiments: *id001
+      - effect: division_template
+        name: Milicia de Emergencia
+        regiments:
+        - infantry
+        - infantry
+      - effect: create_units
+        template: Leva de Emergencia III
+        name: Leva de Emergencia III
+        count: 8
+        experience: 0.1
+      - effect: create_units
+        template: Milicia de Emergencia
+        name: Milicia de Emergencia
+        count: 6
+        experience: 0.05
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            not:
+              at_war: true
+              surrender_at_least: 0.25
+      src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.

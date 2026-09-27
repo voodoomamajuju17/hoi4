@@ -66,13 +66,19 @@ def emit(ctx: BuildContext) -> None:
         mil = (ctx.spec.raw.get("military") or {}).get("militia", {}) or {}
         per = float(mil.get("states_per_division", 0) or 0)
         per_country = int((mil.get("per_country_overrides") or {}).get(tag, mil.get("per_country", 0)) or 0)
+        per_territory = (mil.get("per_territory_overrides") or {}).get(tag)
+        if per_territory:
+            # Repartidas: cada territorio contiguo con su guarnición (2026-09-29, ZAN)
+            per_country = 0
+            per = float(per_territory.get("states_per_division", per) or 0)
         if per_country:
             # Una cantidad fija por país, en el territorio más poblado.
             blobs = [max(blobs, key=lambda b: sum(by_state[sid].manpower for sid in b))]
         for blob in blobs:
             # Una cada `per` states del territorio (mínimo una), en sus states
             # más poblados. Sin `per`: una por territorio.
-            count = per_country or (max(1, round(len(blob) / per)) if per > 0 else 1)
+            floor = int(per_territory.get("min", 1)) if per_territory else 1
+            count = per_country or (max(floor, round(len(blob) / per)) if per > 0 else floor)
             spots = sorted(blob, key=lambda sid: (-by_state[sid].manpower, sid))
             for i in range(count):
                 sid = spots[i % len(spots)]

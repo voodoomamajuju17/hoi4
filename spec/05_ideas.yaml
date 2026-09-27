@@ -456,6 +456,17 @@ countries:
   ASC:
     coverage: balance_only
     starting_ideas:
+    # 2026-09-29 (pedido del usuario): "en la ASC todo debería costar menos manpower,
+    # es mucho drone/robot/automático". El juego no tiene un modificador de costo
+    # de hombres por unidad para un solo país: esto hace lo mismo por otro lado
+    # (más reclutables, bajas que vuelven, aviones y barcos con menos tripulación).
+    - id: ASC_ejercito_de_maquinas
+      name: {english: The Machine Army, spanish: El Ejército de Máquinas}
+      desc:
+        english: Drones walk the front line, turrets hold the trenches and a single operator commands a whole platoon. The Commune spends machines, not people.
+        spanish: Los drones caminan la primera línea, las torretas sostienen las trincheras y un solo operador comanda un pelotón entero. La Comuna gasta máquinas, no personas.
+      modifiers: {conscription_factor: 0.35, weekly_manpower: 1500, '?casualty_trickleback': 0.3, '?air_manpower_requirement_factor': -0.5, '?navy_casualty_on_hit': -0.5, '?navy_casualty_on_sink': -0.5}
+      src: user_request
     - id: ASC_cuello_de_botella
       name: {english: The Council Bottleneck, spanish: El Cuello de Botella del Consejo}
       name_src: invented
@@ -2294,6 +2305,15 @@ countries:
       src: user_design
   ZAN:
     coverage: user_decision
+    # 2026-09-29 (pedido del usuario): "la tierra sin ley carece de tropas; fortalecer esta facción"
+    starting_ideas:
+    - id: ZAN_la_frontera_armada
+      name: {english: The Armed Frontier, spanish: La Frontera Armada}
+      desc:
+        english: Every ranch has a rifle rack and every town a militia roll. Whoever comes for the frontier fights the whole frontier.
+        spanish: Cada rancho tiene un armero y cada pueblo su lista de milicianos. El que viene por la frontera pelea contra toda la frontera.
+      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.1, recruitable_population_factor: 0.6, stability_factor: 0.1, war_support_factor: 0.1, '?attrition': -0.1}
+      src: user_request
     focus_ideas:
     - id: ZAN_la_gran_ofensiva
       name: {english: The Great Offensive, spanish: La Gran Ofensiva}

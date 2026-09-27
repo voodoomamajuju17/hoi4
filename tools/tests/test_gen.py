@@ -681,6 +681,23 @@ def test_territory() -> None:
         fctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
         st = " ".join((fctx.mod_root / "history/states/909-Fixture.txt").read_text().split())
         check("fuertes: el bunker queda escrito en la provincia del state", "13 = { bunker = 5 }" in st, st[-500:])
+    # 2026-09-29: las milicias de las Tierras Sin Ley quedaban todas en un solo territorio.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        import shutil as _shm
+        _shm.copytree(REPO_ROOT / "spec", root / "spec")
+        (root / "assets").symlink_to(REPO_ROOT / "assets")
+        mil = (root / "spec/13_military.yaml").read_text(encoding="utf-8")
+        (root / "spec/13_military.yaml").write_text(
+            mil.replace("    ZAN: {min: 2, states_per_division: 2}", "    ZWI: {min: 2, states_per_division: 2}"), encoding="utf-8")
+        mctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
+        zwi_u = pdx.parse((mctx.mod_root / "history/units/ZWI_2100.txt").read_text()).get("units").get_all("division")
+        locs = [pdx.text(d.get("location")) for d in zwi_u]
+        check("milicias repartidas: cada territorio contiguo con su minimo (India y Ceilan, 2 y 2)",
+              len(zwi_u) == 4 and any(l in {"18", "19", "20", "21"} for l in locs) and len(set(locs)) >= 2,
+              str(locs))
+    ideas_raw = (REPO_ROOT / "spec/05_ideas.yaml").read_text(encoding="utf-8")
+    check("Tierras Sin Ley: arrancan con La Frontera Armada", "id: ZAN_la_frontera_armada" in ideas_raw)
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
@@ -939,6 +956,20 @@ def test_events() -> None:
               "generator = { 501 502 }" in wg_r, wg_r)
         # El lado del satélite (2026-09-29): su panel, la independencia y el aviso al señor.
         cats_s = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text().split())
+        # 2026-09-29: decisiones de emergencia 1, 2 y 3, una sola vez por partida
+        decs_e = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        e3 = decs_e[decs_e.index("MEGANATIONS_emergencia_3 = {"):][:9000]
+        check("emergencia: la 3 cuesta 250, se usa una vez y da 8 de infanteria y 6 de milicia",
+              "cost = 250" in e3 and "NOT = { has_country_flag = MEGANATIONS_emergencia_3_usada }" in e3
+              and "set_country_flag = MEGANATIONS_emergencia_3_usada" in e3
+              and e3.count('Leva de Emergencia III 8\\"') >= 1 and e3.count('Milicia de Emergencia 6\\"') >= 1
+              and "add_manpower = 20000" in e3 and "type = support_equipment amount = 1000" in e3, e3[:1500])
+        e1 = decs_e[decs_e.index("MEGANATIONS_emergencia_1 = {"):][:3000]
+        check("emergencia: la 1 baja estabilidad y apoyo a la guerra 5%",
+              "cost = 150" in e1 and "add_stability = -0.05" in e1 and "add_war_support = -0.05" in e1)
+        check("emergencia: para las meganaciones y las anarquias, no para los satelites",
+              "original_tag = ZAN" in cats_s and "original_tag = NRE" in cats_s
+              and "original_tag = PTA" not in cats_s[cats_s.index("MEGANATIONS_emergencia_category"):][:600])
         check("satelite: panel propio visible mientras sea satelite",
               "PTA_independencia_category = {" in cats_s and "is_subject_of = EFE" in cats_s, cats_s[:300])
         decs_s = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
