@@ -504,6 +504,15 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("every_enemy_country", owner)
             effects_used.setdefault("add_to_war", owner)
             continue
+        if effect == "leave_faction":
+            block.add("leave_faction", True)
+            effects_used.setdefault("leave_faction", owner)
+            continue
+        if effect == "end_guarantee":
+            # el país del scope deja de garantizar a `value`
+            block.add("diplomatic_relation", Block([("country", item["value"]), ("relation", "guarantee"), ("active", False)]))
+            effects_used.setdefault("diplomatic_relation", owner)
+            continue
         if effect == "create_faction":
             block.add("create_faction", Quoted(item["value"]))
             effects_used.setdefault("create_faction", owner)
@@ -720,6 +729,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("OR", Block([("controls_state", i) for i in ids]))
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "in_faction_with":
+            block.add("is_in_faction_with", value)
+            triggers_used.setdefault("is_in_faction_with", owner)
         elif key == "war_with":
             block.add("has_war_with", value)
             triggers_used.setdefault("has_war_with", owner)

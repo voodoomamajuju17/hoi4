@@ -4916,3 +4916,19 @@ namespaces:
         effects:
         - {effect: timed_idea, idea: ZWB_tregua_de_caudillos, days: 91}
       src: user_design
+  # ===========================================================================
+  meganations_zan:
+    country: ZAN
+    events:
+    - id: 1
+      trigger: on_startup
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: The Frontier Keeps to Itself, spanish: La Frontera se Cuida Sola}
+      desc: {english: Monthly check of the Lawless Lands., spanish: Chequeo mensual de las Tierras Sin Ley.}
+      options:
+      - name: {english: Carry on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: ANARQUIA_sin_alianzas}
+        - {effect: event, id: meganations_zan.1, days: 30}
+      src: user_decision

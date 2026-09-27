@@ -114,6 +114,16 @@ def emit(ctx: BuildContext) -> None:
                 add_plan(f"{c.tag}_apoya_{c.overlord}", c.tag,
                          [{"type": "befriend", "target": c.overlord, "value": sat.get("befriend", 100)},
                           {"type": "support", "target": c.overlord, "value": sat.get("support", 100)}])
+    # Nadie se alía con la Anarquía ni la garantiza (2026-09-29: una
+    # partida mostró a los Caudillos del Amazonas dentro de la facción de la FCU).
+    pariah = defaults.get("anarchy_pariah") or {}
+    if pariah:
+        anarchies = [c.tag for c in ctx.spec.countries if not c.is_major and not c.is_subject]
+        for c in ctx.spec.countries:
+            if c.tag in anarchies:
+                continue
+            add_plan(f"{c.tag}_no_se_alia_con_la_anarquia", c.tag,
+                     [{"type": kind, "target": a, "value": int(v)} for a in anarchies for kind, v in pariah.items()])
     riv = defaults.get("rivals") or {}
     if riv:
         for r in ctx.spec.raw["diplomacy"].get("rivalries", []) or []:

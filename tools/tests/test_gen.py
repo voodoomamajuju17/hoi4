@@ -1172,10 +1172,10 @@ def test_ai() -> None:
                   "SHD_pulso_del_rio": 2, "NAS_pulso_de_los_templos": 2, "APF_pulso_de_los_consejos": 1, "HSN_pulso_de_las_potencias": 1}
         total = sum(se_c.count(f"has_country_flag = {p.split('_')[0]}_cadena_") for p in pulses)
         check("16 cadenas de eventos, cada una chequeada una vez en el pulso de quien la empieza", total == 16, str(total))
-        for needle, what in (("num_of_factories > 129", "industria (ASC 130 fabricas)"),
+        for needle, what in (("num_of_factories > 149", "industria (ASC 150 fabricas)"),
                              ("has_tech = improved_computing_machine", "tecnologia"),
                              ("has_manpower > 399999", "manpower"),
-                             ("has_war_support > 0.6", "apoyo belico"),
+                             ("has_war_support > 0.7", "apoyo belico"),
                              ("has_equipment = { infantry_equipment > 7999 }", "equipo"),
                              ("has_army_size = { size > 23 }", "divisiones ajenas"),
                              ("date > 2102.1.1", "fecha"),
@@ -1242,6 +1242,11 @@ def test_ai() -> None:
         e153 = efe_ev[efe_ev.index("id = meganations_efe.153 title"):][:600]
         check("crisis: si el otro se niega, casus belli y la IA se prepara", "create_wargoal = { type = annex_everything target = NAS }" in e153
               and "EFE_contra_NAS" in e153 and "EFE_crisis_entre_potencias_NAS" in (REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"), e153)
+        sa = se_c[se_c.index("ANARQUIA_sin_alianzas = {"):][:2500]
+        check("Anarquia: sale de las facciones de las potencias y pierde sus garantias",
+              "is_in_faction_with = FCU" in sa and "leave_faction = yes" in sa
+              and "FCU = { diplomatic_relation = { country = ROOT relation = guarantee active = no } }" in sa, sa[:600])
+        check("cadenas: con fecha minima (no saltan todas el dia 2)", "date > 2101.1.1" in se_c and "date > 2100.9.1" in se_c)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
@@ -1565,7 +1570,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### infrastructure\n### free_building_slots\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1575,7 +1580,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
