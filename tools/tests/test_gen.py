@@ -1256,6 +1256,15 @@ def test_ai() -> None:
               "FCU = { every_owned_state = { limit = { is_controlled_by = ROOT } ROOT = { transfer_state = PREV } } }" in arm
               and "white_peace = FCU" in arm and "FCU_revancha" in arm, arm[:900])
         check("guerra limitada: se revisa cada semana", "id = meganations_efe.159 days = 7" in efe_ev2)
+        rio = se_c[se_c.index("SHD_pulso_del_rio = {"):][:6000]
+        check("SHD v4: el rio empuja lo pronosticado y pronostica el proximo mes",
+              "var = SHD_produccion value = SHD_prox_p" in rio and "set_variable = { var = SHD_prox_o value = 6 }" in rio, rio[:900])
+        check("SHD v4: racha de armonia con premios", "var = SHD_racha" in rio and "meganations_shd.192" in rio)
+        shd_ev = (mod / "events/meganations_shd.txt").read_text()
+        check("SHD v4: el Mandato del Cielo", "id = meganations_shd.192" in shd_ev and "SHD_mandato_del_cielo" in shd_ev)
+        dec_s = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        check("SHD v4: Cerrar las Compuertas anula el proximo empuje", "SHD_cerrar_las_compuertas = {" in dec_s
+              and "set_country_flag = SHD_compuertas" in dec_s)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)

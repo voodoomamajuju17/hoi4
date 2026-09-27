@@ -2603,16 +2603,20 @@ categories:
         [?SHD_ef_produccion_ver]%\nOrder (O): [?SHD_orden]  ->  stability [?SHD_ef_orden_ver]%\nPeople (Pu): [?SHD_pueblo]  ->  recruitable population
         [?SHD_ef_pueblo_ver]%\n\nA flow above 50 gives its bonus and below 50 subtracts it (see the spirit ''The Three Flows'').\nTHE GOAL: all
         three between 45 and 55 -> Perfect Harmony (+10% construction, +5% factories, stability and research). Between 35 and 65 -> Partial Harmony.
-        One below 20 -> Overflow.\nEVERY MONTH Production grows on its own (+2) and eats the other two: correct it with the decisions below (the
-        name says what each one moves).\nWith the Great Flood (Zhou) the People rise +5 per month up to 130: at 80, 100 and 120 the army grows more
-        brutal, but production and order sink.'
+        One below 20 -> Overflow.\nRIVER FORECAST: next month the river pushes Production +[?SHD_prox_p], Order +[?SHD_prox_o], People +[?SHD_prox_pu].
+        Correct before it arrives, or close the floodgates.\nHARMONY STREAK: [?SHD_racha] months. Every month in Perfect Harmony adds 1; Partial
+        keeps it; leaving harmony loses it. Rewards: 3 months (100 political power), 6 (two factories), 12 (The Mandate of Heaven), 24 (The Age
+        of Harmony and a research slot).\nWith the Great Flood (Zhou) the People rise +5 per month up to 130: at 80, 100 and 120 the army grows
+        more brutal, but production and order sink.'
       spanish: 'LOS TRES CAUDALES SUMAN SIEMPRE 150: subir uno baja los otros dos.\n\nProducción (P): [?SHD_produccion]  ->  producción de fábricas
         [?SHD_ef_produccion_ver]%\nOrden (O): [?SHD_orden]  ->  estabilidad [?SHD_ef_orden_ver]%\nPueblo (Pu): [?SHD_pueblo]  ->  población reclutable
         [?SHD_ef_pueblo_ver]%\n\nUn caudal por encima de 50 da su bonus y por debajo de 50 lo resta (mirá el espíritu «Los Tres Caudales»).\nLA
         META: los tres entre 45 y 55 -> Armonía Perfecta (+10% construcción, +5% fábricas, estabilidad e investigación). Entre 35 y 65 -> Armonía
-        Parcial. Alguno por debajo de 20 -> Desborde.\nCADA MES la Producción crece sola (+2) y se come a los otros dos: hay que corregirla con
-        las decisiones de abajo (el nombre dice cuánto mueve cada una).\nCon la Gran Crecida (Zhou) el Pueblo sube +5 por mes hasta 130: en 80,
-        100 y 120 el ejército se vuelve más brutal, pero la producción y el orden se hunden.'
+        Parcial. Alguno por debajo de 20 -> Desborde.\nPRONÓSTICO DEL RÍO: el mes que viene empuja Producción +[?SHD_prox_p], Orden +[?SHD_prox_o],
+        Pueblo +[?SHD_prox_pu]. Corregí antes de que llegue, o cerrá las compuertas.\nRACHA DE ARMONÍA: [?SHD_racha] meses. Cada mes en Armonía
+        Perfecta suma 1; la Parcial la mantiene; salir de la armonía la pierde. Premios: 3 meses (100 de poder político), 6 (dos fábricas), 12 (El
+        Mandato del Cielo), 24 (La Era de la Armonía y una casilla de investigación).\nCon la Gran Crecida (Zhou) el Pueblo sube +5 por mes hasta
+        130: en 80, 100 y 120 el ejército se vuelve más brutal, pero la producción y el orden se hunden.'
     src: user_design
     after_effects:
     - {effect: run, value: SHD_recalcular_caudales}
@@ -2790,6 +2794,34 @@ categories:
           when:
             variable_below: {var: SHD_pueblo, value: 45}
       src: user_design
+    - id: SHD_cerrar_las_compuertas
+      name:
+        english: Close the Floodgates (cancel the next surge)
+        spanish: Cerrar las Compuertas (anula el próximo empuje)
+      desc:
+        english: The dams hold back next month's surge. Expensive, but the harmony survives.
+        spanish: Las represas frenan el empuje del mes que viene. Caro, pero la armonía sobrevive.
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 50
+      cooldown_days: 91
+      visible: {not_flag: SHD_zhou}
+      effects:
+      - {effect: flag, value: SHD_compuertas}
+      - {effect: set_variable, var: SHD_prox_p, value: 0}
+      - {effect: set_variable, var: SHD_prox_o, value: 0}
+      - {effect: set_variable, var: SHD_prox_pu, value: 0}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 6
+          when:
+            idea: SHD_armonia_perfecta
+            variable_at_least: {var: SHD_racha, value: 2}
+        - factor: 0
+          when: {not_idea: SHD_armonia_perfecta}
+      src: user_request
     - id: SHD_ajuste_tecnico
       name: {english: Technical Adjustment (all 5 towards 50), spanish: Ajuste Técnico (los tres 5 hacia 50)}
       desc: {english: Each flow moves 5 toward 50., spanish: Cada caudal se mueve 5 hacia 50.}
@@ -6106,9 +6138,27 @@ scripted_effects:
     - effect: if
       when: {not_flag: SHD_zhou}
       then:
-      - {effect: add_variable, var: SHD_produccion, value: 2}
-      - {effect: add_variable, var: SHD_orden, value: -1}
-      - {effect: add_variable, var: SHD_pueblo, value: -1}
+      - {effect: add_variable, var: SHD_produccion, value: SHD_prox_p}
+      - {effect: add_variable, var: SHD_orden, value: SHD_prox_o}
+      - {effect: add_variable, var: SHD_pueblo, value: SHD_prox_pu}
+      - {effect: set_variable, var: SHD_prox_p, value: 0}
+      - {effect: set_variable, var: SHD_prox_o, value: 0}
+      - {effect: set_variable, var: SHD_prox_pu, value: 0}
+      - effect: if
+        when: {not_flag: SHD_compuertas}
+        then:
+        - effect: random
+          options:
+          - weight: 40
+            effects:
+            - {effect: set_variable, var: SHD_prox_p, value: 6}
+          - weight: 30
+            effects:
+            - {effect: set_variable, var: SHD_prox_o, value: 6}
+          - weight: 30
+            effects:
+            - {effect: set_variable, var: SHD_prox_pu, value: 6}
+      - {effect: clear_flag, value: SHD_compuertas}
     - effect: if
       when: {not_flag: SHD_crisis_reciente}
       then:
@@ -6129,6 +6179,43 @@ scripted_effects:
           - {effect: flag, value: SHD_crisis_reciente, days: 90}
           - {effect: event, id: meganations_shd.24, days: 1}
     - {effect: run, value: SHD_recalcular_caudales}
+    - effect: if
+      when: {idea: SHD_armonia_perfecta}
+      then:
+      - {effect: add_variable, var: SHD_racha, value: 1}
+      else:
+      - effect: if
+        when: {not_idea: SHD_armonia_parcial}
+        then:
+        - {effect: set_variable, var: SHD_racha, value: 0}
+    - effect: if
+      when:
+        not_flag: SHD_racha_3
+        variable_at_least: {var: SHD_racha, value: 3}
+      then:
+      - {effect: flag, value: SHD_racha_3}
+      - {effect: event, id: meganations_shd.190, days: 1}
+    - effect: if
+      when:
+        not_flag: SHD_racha_6
+        variable_at_least: {var: SHD_racha, value: 6}
+      then:
+      - {effect: flag, value: SHD_racha_6}
+      - {effect: event, id: meganations_shd.191, days: 1}
+    - effect: if
+      when:
+        not_flag: SHD_racha_12
+        variable_at_least: {var: SHD_racha, value: 12}
+      then:
+      - {effect: flag, value: SHD_racha_12}
+      - {effect: event, id: meganations_shd.192, days: 1}
+    - effect: if
+      when:
+        not_flag: SHD_racha_24
+        variable_at_least: {var: SHD_racha, value: 24}
+      then:
+      - {effect: flag, value: SHD_racha_24}
+      - {effect: event, id: meganations_shd.193, days: 1}
     - effect: if
       when:
         not_flag: SHD_conquista_hecha
@@ -9390,3 +9477,4 @@ variable_names:
   APF_lealtad_zsa: {english: "Loyalty of Cape Federation", spanish: "Lealtad de Federación del Cabo"}
   NRE_lealtad_zhi: {english: "Loyalty of Province of Hispania", spanish: "Lealtad de Provincia de Hispania"}
   NRE_lealtad_zda: {english: "Loyalty of Province of Dacia", spanish: "Lealtad de Provincia de Dacia"}
+  SHD_racha: {english: "Harmony streak", spanish: "Racha de armonía"}

@@ -6529,6 +6529,63 @@ namespaces:
         - {effect: event, id: meganations_shd.159, days: 7}
       src: user_design
       hidden: true
+    - id: 190
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Three Months of Harmony, spanish: Tres Meses de Armonía}
+      desc:
+        english: Three months with the three flows in balance. The engineers are proud; the Directorate rewards them.
+        spanish: Tres meses con los tres caudales en equilibrio. Los ingenieros están orgullosos; el Directorio los premia.
+      options:
+      - name: {english: Well done., spanish: Bien hecho.}
+        effects:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_stability, value: 0.03}
+      src: user_design
+    - id: 191
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Half a Year of Harmony, spanish: Medio Año de Armonía}
+      desc:
+        english: Six months in harmony. The Plan has room to build.
+        spanish: Seis meses en armonía. El Plan tiene margen para construir.
+      options:
+      - name: {english: Build., spanish: A construir.}
+        effects:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+      src: user_design
+    - id: 192
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Mandate of Heaven, spanish: El Mandato del Cielo}
+      desc:
+        english: A full year of perfect harmony. In the villages they say the Directorate has the Mandate of Heaven.
+        spanish: Un año entero de armonía perfecta. En las aldeas dicen que el Directorio tiene el Mandato del Cielo.
+      options:
+      - name: {english: The river obeys., spanish: El río obedece.}
+        effects:
+        - {effect: add_ideas, value: SHD_mandato_del_cielo}
+      src: user_design
+    - id: 193
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Age of Harmony, spanish: La Era de la Armonía}
+      desc:
+        english: Two years without an overflow. The Directorate has done what no dynasty managed.
+        spanish: Dos años sin un desborde. El Directorio hizo lo que ninguna dinastía logró.
+      options:
+      - name: {english: An age of harmony., spanish: Una era de armonía.}
+        effects:
+        - {effect: add_ideas, value: SHD_era_de_la_armonia}
+        - {effect: add_research_slot, value: 1}
+      src: user_design
   # ===========================================================================
   meganations_nre:
     country: NRE
