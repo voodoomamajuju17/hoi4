@@ -1219,6 +1219,93 @@ namespaces:
           - {effect: event, id: meganations_efe.159, days: 7}
         src: user_design
         hidden: true
+      - id: 200
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Pampas Harvest, spanish: La Cosecha de la Pampa}
+        desc:
+          english: The autumn harvest in the Pampas is the best in a decade. The Custodians ask where the surplus should go.
+          spanish: La cosecha de otoño en la Pampa es la mejor en una década. Los Custodios preguntan adónde va el excedente.
+        options:
+        - name: {english: Feed the Green Legions., spanish: Alimentar a las Legiones Verdes.}
+          effects:
+          - {effect: add_manpower, value: 4000}
+          ai_chance: 60
+        - name: {english: Sell it to the Andes., spanish: Vendérsela a los Andes.}
+          effects:
+          - {effect: add_political_power, value: 50}
+          ai_chance: 40
+        src: user_design
+      - id: 201
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: A Jaguar in the Palace, spanish: Un Jaguar en el Palacio}
+        desc:
+          english: At dawn a jaguar walked out of the imperial gardens and lay down on the steps of the throne room. The priests call it an omen.
+          spanish: Al amanecer un jaguar salió de los jardines imperiales y se echó en la escalinata del salón del trono. Los sacerdotes dicen que es
+            un presagio.
+        options:
+        - name: {english: Let it go back to the forest., spanish: Que vuelva al monte.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        - name: {english: The legions have a new mascot., spanish: Las legiones tienen mascota nueva.}
+          effects:
+          - {effect: add_war_support, value: 0.02}
+          ai_chance: 50
+        src: user_design
+      - id: 202
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Festival of the Trees, spanish: La Fiesta de los Árboles}
+        desc:
+          english: Every citizen plants a tree on the day of the Mandate. This year there are more trees than citizens.
+          spanish: Cada ciudadano planta un árbol el día del Mandato. Este año hay más árboles que ciudadanos.
+        options:
+        - name: {english: A day of rest., spanish: Un día de descanso.}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 50
+        - name: {english: A day of work., spanish: Un día de trabajo.}
+          effects:
+          - {effect: add_political_power, value: 40}
+          ai_chance: 50
+        src: user_design
+      - id: 203
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: A Cracked Vat, spanish: Una Cuba Rajada}
+        desc:
+          english: One of the BioSteel vats in Rosario has cracked. The living metal is leaking into the river.
+          spanish: Se rajó una de las cubas de Bioacero de Rosario. El metal vivo se filtra al río.
+        options:
+        - name: {english: 'Repair it, whatever it costs.', spanish: 'Repararla, cueste lo que cueste.'}
+          effects:
+          - {effect: add_political_power, value: -30}
+          ai_chance: 60
+        - name: {english: Seal it and write it off., spanish: Sellarla y darla por perdida.}
+          effects:
+          - {effect: add_variable, var: EFE_biosteel, value: -1}
+          - {effect: clamp, var: EFE_biosteel, min: 0, max: 20}
+          ai_chance: 40
+        src: user_design
+      - id: 204
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Forest Rangers, spanish: Los Guardaparques}
+        desc:
+          english: The rangers of the Great Forest volunteer as scouts. They know every path the enemy does not.
+          spanish: Los guardaparques del Gran Monte se ofrecen como exploradores. Conocen cada sendero que el enemigo no conoce.
+        options:
+        - name: {english: Scouts for the legions., spanish: Exploradores para las legiones.}
+          effects:
+          - {effect: army_experience, value: 10}
+          ai_chance: 60
+        - name: {english: Guards for the forest., spanish: Guardianes del monte.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -2256,6 +2343,97 @@ namespaces:
           - {effect: event, id: meganations_fcu.159, days: 7}
         src: user_design
         hidden: true
+      - id: 200
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: Shareholders' Day, spanish: El Día del Accionista}
+        desc:
+          english: 'The Directorate''s annual report is a hit: record profits, record buybacks, record fireworks over Chicago.'
+          spanish: 'El informe anual del Directorio es un éxito: ganancias récord, recompras récord, fuegos artificiales récord sobre Chicago.'
+        options:
+        - name: {english: Pay the dividend., spanish: Pagar el dividendo.}
+          effects:
+          - {effect: add_political_power, value: 60}
+          ai_chance: 50
+        - name: {english: Reinvest in the plants., spanish: Reinvertir en las plantas.}
+          effects:
+          - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+          ai_chance: 50
+        src: user_design
+      - id: 201
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Detroit Strike, spanish: La Huelga de Detroit}
+        desc:
+          english: The technicians who maintain the assembly robots in Detroit went on strike. The robots are fine; nobody can fix them.
+          spanish: Los técnicos que mantienen los robots de montaje de Detroit se fueron a la huelga. Los robots están bien; nadie los puede arreglar.
+        options:
+        - name: {english: Pay them., spanish: Pagarles.}
+          effects:
+          - {effect: add_political_power, value: -40}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 50
+        - name: {english: Replace them., spanish: Reemplazarlos.}
+          effects:
+          - {effect: add_stability, value: -0.02}
+          - {effect: add_political_power, value: 30}
+          ai_chance: 50
+        src: user_design
+      - id: 202
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Advertising on the Moon, spanish: Publicidad en la Luna}
+        desc:
+          english: Obsidian Media wants to project a logo on the face of the Moon for one night. The churches are furious; the ratings are not.
+          spanish: Obsidian Media quiere proyectar un logo sobre la cara de la Luna durante una noche. Las iglesias están furiosas; el rating, no.
+        options:
+        - name: {english: The sky is a market., spanish: El cielo es un mercado.}
+          effects:
+          - {effect: add_political_power, value: 40}
+          - {effect: add_stability, value: -0.01}
+          ai_chance: 60
+        - name: {english: Some things are not for sale., spanish: Hay cosas que no se venden.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        src: user_design
+      - id: 203
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Merger of the Century, spanish: La Fusión del Siglo}
+        desc:
+          english: Two of the ten biggest corporations of the Union want to merge. The Directorate must sign.
+          spanish: Dos de las diez corporaciones más grandes de la Unión quieren fusionarse. El Directorio tiene que firmar.
+        options:
+        - name: {english: Approve it., spanish: Aprobarla.}
+          effects:
+          - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+          ai_chance: 60
+        - name:
+            english: 'Block it: competition keeps us sharp.'
+            spanish: 'Bloquearla: la competencia nos mantiene despiertos.'
+          effects:
+          - {effect: add_stability, value: 0.02}
+          - {effect: add_political_power, value: 20}
+          ai_chance: 40
+        src: user_design
+      - id: 204
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Eleven Minutes, spanish: Once Minutos}
+        desc:
+          english: A lone hacker stopped the exchange for eleven minutes. The Directorate lost a fortune; he left a signature and a CV.
+          spanish: Un hacker solitario paró la bolsa durante once minutos. El Directorio perdió una fortuna; él dejó una firma y un currículum.
+        options:
+        - name: {english: Hunt him down., spanish: Cazarlo.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        - name: {english: Hire him., spanish: Contratarlo.}
+          effects:
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          ai_chance: 60
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -3217,6 +3395,97 @@ namespaces:
           - {effect: event, id: meganations_hsn.159, days: 7}
         src: user_design
         hidden: true
+      - id: 200
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Typhoon in the Straits, spanish: Tifón en los Estrechos}
+        desc:
+          english: A typhoon closes the straits for a week. The captains want to wait; the insurers want them at sea.
+          spanish: Un tifón cierra los estrechos durante una semana. Los capitanes quieren esperar; los aseguradores los quieren en el mar.
+        options:
+        - name: {english: Wait in port., spanish: Esperar en puerto.}
+          effects:
+          - {effect: add_political_power, value: -20}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        - name: {english: Sail through., spanish: Cruzar igual.}
+          effects:
+          - {effect: add_political_power, value: 40}
+          - {effect: navy_experience, value: 5}
+          ai_chance: 50
+        src: user_design
+      - id: 201
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Auction of a Port, spanish: La Subasta de un Puerto}
+        desc:
+          english: The concession of a free port is up for auction. Three chartered companies are bidding.
+          spanish: La concesión de un puerto libre sale a subasta. Tres compañías con carta pujan por ella.
+        options:
+        - name: {english: Sell to the highest bidder., spanish: Vendérsela al mejor postor.}
+          effects:
+          - {effect: add_political_power, value: 60}
+          ai_chance: 60
+        - name: {english: The port stays ours., spanish: El puerto sigue siendo nuestro.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        src: user_design
+      - id: 202
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Repentant Pirates, spanish: Piratas Arrepentidos}
+        desc:
+          english: Forty pirates of the Sulu Sea ask for amnesty. They offer their ships and their knowledge of every hidden cove.
+          spanish: Cuarenta piratas del mar de Joló piden amnistía. Ofrecen sus barcos y lo que saben de cada caleta escondida.
+        options:
+        - name: {english: Pardon them and sign them on., spanish: Indultarlos y enrolarlos.}
+          effects:
+          - {effect: navy_experience, value: 15}
+          ai_chance: 60
+        - name: {english: The law is the law., spanish: La ley es la ley.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          - {effect: add_war_support, value: 0.02}
+          ai_chance: 40
+        src: user_design
+      - id: 203
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Regatta of the Seven Seas, spanish: La Regata de los Siete Mares}
+        desc:
+          english: The Nation hosts the great regatta. Every node wants the finish line in its harbour.
+          spanish: La Nación organiza la gran regata. Cada nodo quiere la llegada en su puerto.
+        options:
+        - name: {english: A festival for the people., spanish: Una fiesta para la gente.}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          - {effect: add_political_power, value: -20}
+          ai_chance: 50
+        - name: {english: Sell the sponsorships., spanish: Vender los auspicios.}
+          effects:
+          - {effect: add_political_power, value: 50}
+          ai_chance: 50
+        src: user_design
+      - id: 204
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Cut Cable, spanish: El Cable Cortado}
+        desc:
+          english: An undersea cable between two nodes has been cut. Accident, sabotage or a very hungry shark.
+          spanish: Cortaron un cable submarino entre dos nodos. Accidente, sabotaje o un tiburón con mucha hambre.
+        options:
+        - name: {english: Repair it and investigate., spanish: Repararlo e investigar.}
+          effects:
+          - {effect: add_political_power, value: -30}
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          ai_chance: 50
+        - name: {english: Reroute the traffic., spanish: Desviar el tráfico.}
+          effects:
+          - {effect: add_variable, var: HSN_presion, value: 3}
+          - {effect: add_stability, value: 0.01}
+          ai_chance: 50
+        src: user_design
   # ===========================================================================
   meganations_asc:
     country: ASC
@@ -4119,6 +4388,99 @@ namespaces:
         - {effect: event, id: meganations_asc.159, days: 7}
       src: user_design
       hidden: true
+    - id: 200
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: An Automated May Day, spanish: Un Primero de Mayo Automatizado}
+      desc:
+        english: The robots marched with the workers this year. Nobody knows who invited them.
+        spanish: Este año los robots marcharon con los trabajadores. Nadie sabe quién los invitó.
+      options:
+      - name: {english: Solidarity has no chassis., spanish: La solidaridad no tiene chasis.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 50
+      - name: {english: 'Back to work, all of them.', spanish: 'A trabajar, todos.'}
+        effects:
+        - {effect: add_political_power, value: 40}
+        ai_chance: 50
+      src: user_design
+    - id: 201
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Network Dreams, spanish: La Red Sueña}
+      desc:
+        english: At night, idle data centres have started to compose music. It is strange, and people love it.
+        spanish: De noche, los datacenters ociosos empezaron a componer música. Es rara, y a la gente le encanta.
+      options:
+      - name: {english: Let it sing., spanish: Que cante.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        - {effect: add_variable, var: ASC_calor, value: 3}
+        - {effect: clamp, var: ASC_calor, min: 0, max: 100}
+        ai_chance: 50
+      - name: {english: Cool it down., spanish: Enfriarla.}
+        effects:
+        - {effect: add_variable, var: ASC_calor, value: -5}
+        - {effect: clamp, var: ASC_calor, min: 0, max: 100}
+        ai_chance: 50
+      src: user_design
+    - id: 202
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Beekeeper of the Council, spanish: La Apicultora del Consejo}
+      desc:
+        english: The Sortition drew a beekeeper from Lyon to the Council. She is asking hard questions about the Plan.
+        spanish: El Sorteo llevó al Consejo a una apicultora de Lyon. Está haciendo preguntas difíciles sobre el Plan.
+      options:
+      - name: {english: Listen to her., spanish: Escucharla.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        - {effect: add_political_power, value: 20}
+        ai_chance: 60
+      - name: {english: Draw again., spanish: Volver a sortear.}
+        effects:
+        - {effect: add_political_power, value: -20}
+        ai_chance: 40
+      src: user_design
+    - id: 203
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Four Million Left Shoes, spanish: Cuatro Millones de Zapatos Izquierdos}
+      desc:
+        english: A bug in the Plan ordered four million left shoes. The warehouses are full and the jokes are everywhere.
+        spanish: Un error del Plan encargó cuatro millones de zapatos izquierdos. Los depósitos están llenos y los chistes, por todos lados.
+      options:
+      - name: {english: Fix the code., spanish: Arreglar el código.}
+        effects:
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+        ai_chance: 50
+      - name: {english: Recycle them., spanish: Reciclarlos.}
+        effects:
+        - {effect: add_political_power, value: 30}
+        ai_chance: 50
+      src: user_design
+    - id: 204
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Heatwave in the Data Centres, spanish: Ola de Calor en los Datacenters}
+      desc:
+        english: A heatwave over Europe pushes the network to its limit. Engineers want to shut down half of it for a week.
+        spanish: Una ola de calor sobre Europa lleva la red al límite. Los ingenieros quieren apagar la mitad durante una semana.
+      options:
+      - name: {english: Shut it down., spanish: Apagarla.}
+        effects:
+        - {effect: add_variable, var: ASC_calor, value: -8}
+        - {effect: clamp, var: ASC_calor, min: 0, max: 100}
+        - {effect: add_political_power, value: -20}
+        ai_chance: 50
+      - name: {english: Keep it running., spanish: Que siga.}
+        effects:
+        - {effect: add_variable, var: ASC_calor, value: 6}
+        - {effect: clamp, var: ASC_calor, min: 0, max: 100}
+        - {effect: add_political_power, value: 30}
+        ai_chance: 50
+      src: user_design
   meganations_apf:
     country: APF
     events:
@@ -4993,6 +5355,97 @@ namespaces:
         - {effect: event, id: meganations_apf.159, days: 7}
       src: user_design
       hidden: true
+    - id: 200
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Africa Day, spanish: El Día de África}
+      desc:
+        english: The Federation celebrates its founding day. Every council sends a delegation to Addis Ababa.
+        spanish: La Federación celebra el día de su fundación. Cada consejo manda una delegación a Adís Abeba.
+      options:
+      - name: {english: A celebration of unity., spanish: Una fiesta de la unidad.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 50
+      - name: {english: A military parade., spanish: Un desfile militar.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 201
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Great Market of Lagos, spanish: El Gran Mercado de Lagos}
+      desc:
+        english: The Lagos market has doubled in a year. The councils want a share.
+        spanish: El mercado de Lagos se duplicó en un año. Los consejos quieren su parte.
+      options:
+      - name: {english: Tax it., spanish: Cobrarle impuestos.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 50
+      - name: {english: Let it grow., spanish: Dejarlo crecer.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        - {effect: add_variable, var: APF_tension, value: -2}
+        - {effect: clamp, var: APF_tension, min: 0, max: 100}
+        ai_chance: 50
+      src: user_design
+    - id: 202
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Transcontinental Marathon, spanish: La Maratón Transcontinental}
+      desc:
+        english: Runners from forty councils cross the continent from Dakar to Mombasa, one relay at a time.
+        spanish: Corredores de cuarenta consejos cruzan el continente de Dakar a Mombasa, posta por posta.
+      options:
+      - name: {english: Sponsor it., spanish: Auspiciarla.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        - {effect: add_political_power, value: -20}
+        ai_chance: 60
+      - name: {english: Let the councils pay., spanish: Que la paguen los consejos.}
+        effects:
+        - {effect: add_political_power, value: 20}
+        ai_chance: 40
+      src: user_design
+    - id: 203
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Early Rains in the Sahel, spanish: Lluvias Tempranas en el Sahel}
+      desc:
+        english: The rains came early to the Sahel. For once, the problem is too much water.
+        spanish: Las lluvias llegaron temprano al Sahel. Por una vez, el problema es que sobra agua.
+      options:
+      - name: {english: Build channels and roads., spanish: Hacer canales y caminos.}
+        effects:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+        ai_chance: 50
+      - name: {english: Store the grain., spanish: Guardar el grano.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 50
+      src: user_design
+    - id: 204
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Timbuktu Reopens, spanish: Tombuctú Reabre}
+      desc:
+        english: The old university of Timbuktu reopens its doors after a century. Scholars from every council apply.
+        spanish: La vieja universidad de Tombuctú vuelve a abrir sus puertas después de un siglo. Se anotan estudiantes de todos los consejos.
+      options:
+      - name: {english: Fund the sciences., spanish: Financiar las ciencias.}
+        effects:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+        ai_chance: 50
+      - name: {english: Fund the humanities., spanish: Financiar las humanidades.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 50
+      src: user_design
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -5797,6 +6250,97 @@ namespaces:
         - {effect: event, id: meganations_nas.159, days: 7}
       src: user_design
       hidden: true
+    - id: 200
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Inti Raymi, spanish: Inti Raymi}
+      desc:
+        english: The festival of the Sun fills Cusco. The high priests want a feast worthy of the century.
+        spanish: La fiesta del Sol llena el Cusco. Los sumos sacerdotes quieren una celebración a la altura del siglo.
+      options:
+      - name: {english: A great feast., spanish: Una gran fiesta.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 60
+      - name: {english: A modest one., spanish: Una fiesta modesta.}
+        effects:
+        - {effect: add_political_power, value: 25}
+        ai_chance: 40
+      src: user_design
+    - id: 201
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Condor over Cusco, spanish: Un Cóndor sobre el Cusco}
+      desc:
+        english: A condor circled the Temple of the Sun three times and flew north. Everyone has an interpretation.
+        spanish: Un cóndor dio tres vueltas sobre el Templo del Sol y voló hacia el norte. Todos tienen una interpretación.
+      options:
+      - name: {english: A sign of victory., spanish: Una señal de victoria.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      - name: {english: 'A warning: stay home.', spanish: 'Una advertencia: quedarse en casa.'}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 50
+      src: user_design
+    - id: 202
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: New Terraces, spanish: Terrazas Nuevas}
+      desc:
+        english: Engineers and farmers propose to rebuild the old Inca terraces on the slopes with solar pumps.
+        spanish: Ingenieros y campesinos proponen reconstruir las viejas terrazas incas de las laderas con bombas solares.
+      options:
+      - name: {english: Build roads to the terraces., spanish: Hacer caminos hasta las terrazas.}
+        effects:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: infrastructure, level: 1}
+        ai_chance: 50
+      - name: {english: Plant them now., spanish: Sembrarlas ya.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        - {effect: add_political_power, value: 20}
+        ai_chance: 50
+      src: user_design
+    - id: 203
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Digital Chasqui, spanish: El Chasqui Digital}
+      desc:
+        english: The old messenger network of the Qhapaq Ñan is now a mesh of relays on every peak.
+        spanish: La vieja red de mensajeros del Qhapaq Ñan hoy es una malla de repetidoras en cada cumbre.
+      options:
+      - name: {english: Expand it., spanish: Ampliarla.}
+        effects:
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+        ai_chance: 60
+      - name: {english: Tax the messages., spanish: Cobrar los mensajes.}
+        effects:
+        - {effect: add_political_power, value: 40}
+        ai_chance: 40
+      src: user_design
+    - id: 204
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Deep Silver Mine, spanish: La Mina de Plata Profunda}
+      desc:
+        english: Miners found a silver vein under a sacred mountain. The priests say no; the treasury says yes.
+        spanish: Los mineros encontraron una veta de plata bajo una montaña sagrada. Los sacerdotes dicen que no; el tesoro dice que sí.
+      options:
+      - name: {english: Mine it., spanish: Explotarla.}
+        effects:
+        - {effect: add_political_power, value: 60}
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 50
+      - name: {english: The mountain is sacred., spanish: La montaña es sagrada.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 50
+      src: user_design
   meganations_shd:
     country: SHD
     events:
@@ -6738,6 +7282,95 @@ namespaces:
         effects:
         - {effect: add_ideas, value: SHD_era_de_la_armonia}
         - {effect: add_research_slot, value: 1}
+      src: user_design
+    - id: 200
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Qingming at the Dams, spanish: Qingming en las Represas}
+      desc:
+        english: On the day of the dead, families sweep the tombs and the engineers sweep the spillways. Both are traditions now.
+        spanish: El día de los muertos, las familias barren las tumbas y los ingenieros barren los aliviaderos. Las dos cosas ya son tradición.
+      options:
+      - name: {english: A day of remembrance., spanish: Un día de recuerdo.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 50
+      - name: {english: A day of inspection., spanish: Un día de inspección.}
+        effects:
+        - {effect: add_political_power, value: 30}
+        ai_chance: 50
+      src: user_design
+    - id: 201
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Carp Jumps the Dam, spanish: La Carpa Salta la Represa}
+      desc:
+        english: A carp jumped the Three Gorges dam in front of a thousand witnesses. In the old tale, it becomes a dragon.
+        spanish: Una carpa saltó la represa de las Tres Gargantas delante de mil testigos. En la vieja leyenda, se convierte en dragón.
+      options:
+      - name: {english: An omen of promotion., spanish: Un presagio de ascenso.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 50
+      - name: {english: Build it a shrine., spanish: Levantarle un santuario.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 50
+      src: user_design
+    - id: 202
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Engineers Want a Raise, spanish: Los Ingenieros Piden Aumento}
+      desc:
+        english: The hydraulic engineers remind the Directorate that the river does not regulate itself.
+        spanish: Los ingenieros hidráulicos le recuerdan al Directorio que el río no se regula solo.
+      options:
+      - name: {english: Grant it., spanish: Concederlo.}
+        effects:
+        - {effect: add_political_power, value: -30}
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 60
+      - name: {english: Refuse., spanish: Negarlo.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        - {effect: add_political_power, value: 20}
+        ai_chance: 40
+      src: user_design
+    - id: 203
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: Smog over the Delta, spanish: Niebla Tóxica en el Delta}
+      desc:
+        english: A grey fog covers the Pearl River delta. The factories want to keep working.
+        spanish: Una niebla gris cubre el delta del río de las Perlas. Las fábricas quieren seguir trabajando.
+      options:
+      - name: {english: Stop the factories for a week., spanish: Parar las fábricas una semana.}
+        effects:
+        - {effect: add_political_power, value: -20}
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 50
+      - name: {english: Keep working., spanish: Seguir trabajando.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        - {effect: add_political_power, value: 30}
+        ai_chance: 50
+      src: user_design
+    - id: 204
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Lunar New Year, spanish: El Año Nuevo Lunar}
+      desc:
+        english: The first New Year in which the three flows are in harmony, according to the Ministry. The people want fireworks.
+        spanish: El primer Año Nuevo con los tres caudales en armonía, según el Ministerio. La gente quiere fuegos artificiales.
+      options:
+      - name: {english: Fireworks over every river., spanish: Fuegos artificiales sobre cada río.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 60
+      - name: {english: Austerity., spanish: Austeridad.}
+        effects:
+        - {effect: add_political_power, value: 40}
+        ai_chance: 40
       src: user_design
   # ===========================================================================
   meganations_nre:
@@ -8152,6 +8785,98 @@ namespaces:
         - {effect: event, id: meganations_nre.159, days: 7}
       src: user_design
       hidden: true
+    - id: 200
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Natalis Romae, spanish: Natalis Romae}
+      desc:
+        english: Rome turns two thousand eight hundred and fifty-three. The Imperator must decide how to celebrate.
+        spanish: Roma cumple dos mil ochocientos cincuenta y tres años. El Imperator tiene que decidir cómo festejarlo.
+      options:
+      - name: {english: Games in the Colosseum., spanish: Juegos en el Coliseo.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 50
+      - name: {english: A triumph of the legions., spanish: Un triunfo de las legiones.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 201
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Vesuvius Smokes, spanish: El Vesubio Humea}
+      desc:
+        english: On the anniversary of Pompeii, Vesuvius is smoking again. The scientists want an evacuation.
+        spanish: En el aniversario de Pompeya, el Vesubio vuelve a humear. Los científicos quieren evacuar.
+      options:
+      - name: {english: Evacuate the bay., spanish: Evacuar la bahía.}
+        effects:
+        - {effect: add_political_power, value: -30}
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 60
+      - name: {english: Rome does not flee., spanish: Roma no huye.}
+        effects:
+        - {effect: add_political_power, value: 20}
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 40
+      src: user_design
+    - id: 202
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Lupercalia, spanish: Lupercalia}
+      desc:
+        english: The young legionaries want to revive the Lupercalia. The Senate is scandalised.
+        spanish: Los legionarios jóvenes quieren revivir las Lupercales. El Senado está escandalizado.
+      options:
+      - name: {english: Let them run., spanish: Que corran.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        - {effect: add_war_support, value: 0.01}
+        ai_chance: 50
+      - name: {english: Ban it., spanish: Prohibirlas.}
+        effects:
+        - {effect: add_political_power, value: 30}
+        ai_chance: 50
+      src: user_design
+    - id: 203
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: An Eagle in the Forum, spanish: Un Águila en el Foro}
+      desc:
+        english: Archaeologists found a legionary eagle buried under the Forum. Two thousand years old, and still gold.
+        spanish: Los arqueólogos encontraron un águila legionaria enterrada bajo el Foro. Dos mil años, y sigue siendo de oro.
+      options:
+      - name: {english: Give it to the XII Fulminata., spanish: Dársela a la XII Fulminata.}
+        effects:
+        - {effect: add_variable, var: NRE_prestigio_fulminata, value: 5}
+        - {effect: clamp, var: NRE_prestigio_fulminata, min: 0, max: 100}
+        ai_chance: 60
+      - name: {english: To the museum., spanish: Al museo.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 40
+      src: user_design
+    - id: 204
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Ides of March, spanish: Los Idus de Marzo}
+      desc:
+        english: 'On the Ides of March a rumour runs through the Senate: someone is sharpening a knife.'
+        spanish: 'En los Idus de Marzo corre un rumor por el Senado: alguien está afilando un cuchillo.'
+      options:
+      - name: {english: Purge the conspirators., spanish: Purgar a los conspiradores.}
+        effects:
+        - {effect: add_political_power, value: 40}
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 50
+      - name: {english: Double the guard., spanish: Duplicar la guardia.}
+        effects:
+        - {effect: add_political_power, value: -20}
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 50
+      src: user_design
   # ===========================================================================
   meganations_zwe:
     country: ZWE
@@ -8754,3 +9479,133 @@ namespaces:
         - {effect: run, value: ANARQUIA_sin_alianzas}
         - {effect: event, id: meganations_zan.1, days: 30}
       src: user_decision
+
+  # Eventos mundiales (2026-09-29): los recibe cada país; sin país dueño.
+  meganations_mundo:
+    country: null
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Eclipse of the Century, spanish: El Eclipse del Siglo}
+      desc:
+        english: A total eclipse crosses three continents. For four minutes, the whole world looks up at the same sky.
+        spanish: Un eclipse total cruza tres continentes. Durante cuatro minutos, el mundo entero mira el mismo cielo.
+      options:
+      - name: {english: Look up., spanish: Mirar al cielo.}
+        effects:
+        - {effect: add_stability, value: 0.01}
+      src: user_design
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Games of the New Century, spanish: Los Juegos del Nuevo Siglo}
+      desc:
+        english: For the first time since the Great Disarmament, athletes of every power meet in the same stadium, in neutral Geneva.
+        spanish: Por primera vez desde el Gran Desarme, atletas de todas las potencias se encuentran en el mismo estadio, en la Ginebra neutral.
+      options:
+      - name: {english: Send our best., spanish: Mandar a los mejores.}
+        effects:
+        - {effect: add_stability, value: 0.01}
+        - {effect: add_war_support, value: 0.01}
+        ai_chance: 70
+      - name: {english: Boycott., spanish: Boicot.}
+        effects:
+        - {effect: add_political_power, value: 15}
+        ai_chance: 30
+      src: user_design
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Solar Storm, spanish: La Tormenta Solar}
+      desc:
+        english: A solar storm knocks out half of the satellites in orbit. For a week, the world navigates by the stars again.
+        spanish: Una tormenta solar apaga la mitad de los satélites en órbita. Durante una semana, el mundo vuelve a navegar por las estrellas.
+      options:
+      - name: {english: Repair what we can., spanish: Reparar lo que se pueda.}
+        effects:
+        - {effect: add_political_power, value: -15}
+        ai_chance: 60
+      - name: {english: Wait it out., spanish: Esperar a que pase.}
+        effects:
+        - {effect: add_stability, value: -0.01}
+        ai_chance: 40
+      src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Grey Flu, spanish: La Gripe Gris}
+      desc:
+        english: A mild but very contagious flu travels the trade routes. Nobody dies of it; everybody catches it.
+        spanish: Una gripe leve pero muy contagiosa viaja por las rutas comerciales. Nadie se muere de eso; todos se contagian.
+      options:
+      - name: {english: Quarantine the ports., spanish: Cuarentena en los puertos.}
+        effects:
+        - {effect: add_political_power, value: -10}
+        - {effect: add_stability, value: 0.01}
+        ai_chance: 50
+      - name: {english: Life goes on., spanish: La vida sigue.}
+        effects:
+        - {effect: add_stability, value: -0.01}
+        ai_chance: 50
+      src: user_design
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A New Comet, spanish: Un Cometa Nuevo}
+      desc:
+        english: 'A bright comet appears in the evening sky. Astronomers named it after the century: Twenty-One Hundred.'
+        spanish: 'Un cometa brillante aparece en el cielo del atardecer. Los astrónomos le pusieron el nombre del siglo: Dos Mil Cien.'
+      options:
+      - name: {english: A good omen., spanish: Un buen presagio.}
+        effects:
+        - {effect: add_stability, value: 0.01}
+      src: user_design
+    - id: 10
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Signal from Proxima, spanish: Una Señal desde Próxima}
+      desc:
+        english: 'The radio telescopes of the Atacama picked up a structured signal from Proxima Centauri, four point two light years away. It repeats
+          every eleven minutes. It is not natural.\n\nEvery power with a Directorate, a Council or a Senate wants to be the first to read it. A
+          new panel is open: THE SIGNAL. Each fragment decoded brings us closer; the first to decode five hears the message.'
+        spanish: 'Los radiotelescopios de Atacama captaron una señal estructurada desde Próxima Centauri, a cuatro coma dos años luz. Se repite
+          cada once minutos. No es natural.\n\nTodas las potencias que tienen un Directorio, un Consejo o un Senado quieren ser las primeras en
+          leerla. Se abrió un panel nuevo: LA SEÑAL. Cada fragmento descifrado nos acerca; la primera que descifre cinco escucha el mensaje.'
+      options:
+      - name: {english: Point every antenna at the sky., spanish: Apuntar todas las antenas al cielo.}
+        effects:
+        - {effect: add_political_power, value: 10}
+      src: user_design
+    - id: 11
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Message, spanish: El Mensaje}
+      desc:
+        english: 'Our cryptographers decoded the fifth fragment, and the whole signal opened at once. It is not a message from Proxima. It is ours.\n\nIt
+          is the Golden Record of the Voyager probes, launched in 1977: whale songs, a baby crying, Bach, a greeting in fifty-five languages. Something
+          out there received it, copied it, and sent it back, a hundred and twenty-five years later, with a single line added at the end in perfect
+          mathematics: WE HEARD YOU.\n\nThe world has not been this quiet since the Great Disarmament.'
+        spanish: 'Nuestros criptógrafos descifraron el quinto fragmento y la señal entera se abrió de golpe. No es un mensaje de Próxima. Es nuestro.\n\nEs
+          el Disco de Oro de las sondas Voyager, lanzado en 1977: cantos de ballenas, el llanto de un bebé, Bach, un saludo en cincuenta y cinco
+          idiomas. Algo allá afuera lo recibió, lo copió y lo mandó de vuelta, ciento veinticinco años después, con una sola línea agregada al final
+          en matemática perfecta: TE ESCUCHAMOS.\n\nEl mundo no estaba tan callado desde el Gran Desarme.'
+      options:
+      - name: {english: We are not alone., spanish: No estamos solos.}
+        effects:
+        - {effect: timed_idea, idea: EFE_la_voz_de_la_tierra, days: 730}
+      src: user_design
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Someone Heard Us, spanish: Alguien nos Escuchó}
+      desc:
+        english: 'Another power decoded the Signal from Proxima first. It was the Golden Record of the Voyager probes, sent back to Earth with one
+          line added: WE HEARD YOU.\n\nFor a few days, nobody talks about borders.'
+        spanish: 'Otra potencia descifró primero la Señal de Próxima. Era el Disco de Oro de las sondas Voyager, devuelto a la Tierra con una línea
+          agregada: TE ESCUCHAMOS.\n\nDurante unos días, nadie habla de fronteras.'
+      options:
+      - name: {english: We are not alone., spanish: No estamos solos.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+      src: user_design

@@ -26,6 +26,8 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: capital, effects: [...] }             -> capital_scope
   { effect: states, pick: random|every, when: {..}, effects: [..] }
                                                   -> random_owned_controlled_state / every_owned_state
+  { effect: global_flag, value: X }                -> set_global_flag (condiciones global_flag / not_global_flag)
+  { effect: every_country, when: {..}, effects: [..] } -> every_country (eventos mundiales)
   En regiones: { effect: add_core, value: TAG } / { effect: state_flag, value: X }
                { effect: clear_state_flag, value: X }
 Los efectos se validan contra documentation/ del juego (verify_keys) y los
@@ -276,6 +278,21 @@ def render_effects(owner: str, items: list[dict], known,
             else:
                 block.add("country_event", inner)
             effects_used.setdefault("country_event", owner)
+            continue
+        if effect == "global_flag":
+            # marca de todo el mundo (eventos mundiales: salen una sola vez aunque
+            # los pulsen varias potencias)
+            block.add("set_global_flag", item["value"])
+            effects_used.setdefault("set_global_flag", owner)
+            continue
+        if effect == "every_country":
+            # a cada país que cumpla `when` (eventos mundiales, 2026-09-29)
+            inner = Block()
+            if item.get("when"):
+                inner.add("limit", render_conditions(owner, item["when"], ec.triggers_used, where=where))
+            inner.entries.extend(render_effects(owner, item.get("effects") or [], ec, effects_used, where=where).entries)
+            block.add("every_country", inner)
+            effects_used.setdefault("every_country", owner)
             continue
         if effect == "scope":
             target = item.get("target")
@@ -732,6 +749,15 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("NOT", Block([("has_country_flag", value)]))
             triggers_used.setdefault("has_country_flag", owner)
+        elif key in ("global_flag", "not_global_flag"):
+            if key == "global_flag":
+                block.add("has_global_flag", value)
+            else:
+                block.add("NOT", Block([("has_global_flag", value)]))
+            triggers_used.setdefault("has_global_flag", owner)
+        elif key == "exists":
+            block.add("exists", bool(value))
+            triggers_used.setdefault("exists", owner)
         elif key == "at_war":
             block.add("has_war", bool(value))
             triggers_used.setdefault("has_war", owner)
@@ -804,6 +830,12 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             triggers_used.setdefault("has_war_with", owner)
         elif key == "country":
             block.add(value["tag"], render_conditions(owner, value["when"], triggers_used, where=where))
+        elif key == "tag":
+            block.add("tag", value)
+            triggers_used.setdefault("tag", owner)
+        elif key == "major":
+            block.add("is_major", bool(value))
+            triggers_used.setdefault("is_major", owner)
         elif key == "neighbor_state_flag":
             block.add("any_neighbor_state", Block([("has_state_flag", value)]))
             triggers_used.setdefault("any_neighbor_state", owner)

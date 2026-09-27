@@ -82,13 +82,16 @@ def _emit(ctx: BuildContext) -> None:
     )
 
     for ns, tag, ev in _events(ctx):
-        ctx.spec.country(tag)
+        if tag is not None:          # sin país: eventos mundiales (los recibe cualquiera)
+            ctx.spec.country(tag)
         eid = event_id(ns, ev)
         if eid in seen:
             raise SpecError(f"evento duplicado: {eid}", where="12_events.yaml")
         seen.add(eid)
 
         trig = ev.get("trigger")
+        if tag is None and trig != "effect":
+            raise SpecError(f"{eid}: un evento mundial (sin country) solo puede dispararse por efecto", where="12_events.yaml")
         if trig == "on_startup":
             startup.append((tag, eid))
         elif trig == "effect":

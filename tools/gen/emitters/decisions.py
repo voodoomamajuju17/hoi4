@@ -65,13 +65,20 @@ def _emit(ctx: BuildContext) -> None:
     for cat in categories:
         cid = cat["id"]
         tag = cat["country"]
-        ctx.spec.country(tag)
+        tags = tag if isinstance(tag, list) else [tag]   # panel compartido (la Señal, 2026-09-29)
+        for t_ in tags:
+            ctx.spec.country(t_)
         cb = Block()
         cb.add("icon", _icon(ctx, vanilla["category_icons"], cat.get("icon_prefer", [])))
         allowed = Block()
-        allowed.add("original_tag", tag)
+        if len(tags) == 1:
+            allowed.add("original_tag", tags[0])
+        else:
+            allowed.add("OR", Block([("original_tag", t_) for t_ in tags]))
         cb.add("allowed", allowed)
         triggers_used.setdefault("original_tag", cid)
+        if cat.get("visible"):
+            cb.add("visible", render_conditions(cid, cat["visible"], triggers_used, where=SOURCE))
         cats.add(ctx.loc.reference(cid, f"decisions:{cid}"), cb)
         _loc(ctx, cid, cat["name"], define_only=True)
         _loc(ctx, f"{cid}_desc", cat["desc"])

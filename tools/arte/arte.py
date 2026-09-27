@@ -141,7 +141,7 @@ def catalog() -> list[dict]:
             desc = (f"{ev['title']['english']}: {_one_line(ev['desc']['english'])}" if not art
                     else _one_line(shared.get(art, ev['desc']['english'])))
             items.append({
-                "type": "event_picture", "tag": "COMPARTIDOS" if art else tag, "id": eid, "dest": dest,
+                "type": "event_picture", "tag": "COMPARTIDOS" if art or tag is None else tag, "id": eid, "dest": dest,
                 "done": dest.exists(), "description": desc,
             })
     return items

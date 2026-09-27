@@ -800,7 +800,33 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("57 eventos del EFE (con la crisis de los Andes y la guerra limitada)", len(events) == 57, str(len(events)))
+        check("62 eventos del EFE (con la guerra limitada y los 5 menores)", len(events) == 62, str(len(events)))
+        se_raw = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        se_all = " ".join(se_raw.split())
+        pulso = " ".join(pdx.render(pdx.parse(se_raw).get("EFE_pulso_de_las_cubas")).split())
+        check("eventos menores: salen por fecha, una sola vez",
+              "limit = { date > 2100.3.20 NOT = { has_country_flag = EFE_menor_200 } } set_country_flag = EFE_menor_200 "
+              "country_event = { id = meganations_efe.200 days = 1 }" in pulso, pulso[:300])
+        mundo = " ".join((mod / "events/meganations_mundo.txt").read_text().split())
+        check("eventos mundiales: namespace propio con 5 eventos y la Senal",
+              "add_namespace = meganations_mundo" in mundo and all(f"id = meganations_mundo.{n} " in mundo for n in (1, 2, 3, 4, 5, 10, 11, 12)))
+        clock = se_all[se_all.index("MEGANATIONS_eventos_mundiales = {"):][:4000]
+        check("eventos mundiales: una bandera global y a todos los paises",
+              "NOT = { has_global_flag = MEGANATIONS_mundo_1 }" in clock and "set_global_flag = MEGANATIONS_mundo_1" in clock
+              and "every_country = { country_event = { id = meganations_mundo.1 days = 1 } }" in clock, clock[:600])
+        check("eventos mundiales: los corre el pulso de cada potencia", pulso.count("MEGANATIONS_eventos_mundiales = yes") == 1
+              and se_all.count("MEGANATIONS_eventos_mundiales = yes") == 8)
+        check("la Senal: solo las potencias reciben el aviso",
+              "every_country = { limit = { OR = { tag = EFE tag = FCU" in clock and "country_event = { id = meganations_mundo.10 days = 1 }" in clock)
+        cats = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text().split())
+        check("la Senal: panel compartido por las ocho potencias y visible solo mientras dura",
+              "MEGANATIONS_senal_category = {" in cats and "OR = { original_tag = EFE" in cats
+              and "has_global_flag = MEGANATIONS_senal_activa" in cats and "NOT = { has_global_flag = MEGANATIONS_senal_resuelta }" in cats, cats[-700:])
+        decs = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        frag = decs[decs.index("MEGANATIONS_descifrar_fragmento = {"):][:1500]
+        check("la Senal: el quinto fragmento da el mensaje al ganador y la noticia a los demas",
+              "set_global_flag = MEGANATIONS_senal_resuelta" in frag and "meganations_mundo.11" in frag
+              and "NOT = { tag = ROOT } }" in frag and "OR = { tag = EFE" in frag, frag[:900])
         conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
         check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
         check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
@@ -1776,7 +1802,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### has_global_flag\n### is_major\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -1786,7 +1812,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
