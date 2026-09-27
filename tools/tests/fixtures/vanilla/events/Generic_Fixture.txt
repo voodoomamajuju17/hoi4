@@ -1,0 +1,21 @@
+add_namespace = election
+add_namespace = usa
+
+country_event = {
+	id = election.2
+	title = election.2.t
+	is_triggered_only = yes
+	option = {
+		name = election.2.a
+	}
+}
+
+country_event = {
+	id = usa.6
+	title = usa.6.t
+	fire_only_once = yes
+	trigger = { date > 1938.1.1 }
+	option = {
+		name = usa.6.a
+	}
+}

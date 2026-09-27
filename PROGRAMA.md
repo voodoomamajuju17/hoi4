@@ -23,7 +23,9 @@ elementos también van por importancia.
 - [x] Colores, ideologías y localisation en replace/
 - [~] Listas de nombres de personajes para los 29 países
 - [ ] Limpiar el ruido de error.log:
-  - [ ] on_actions vanilla que apuntan a eventos que ya no cargan (evaluar `replace_path` de `common/on_actions` conservando los esenciales)
+  - [~] on_actions vanilla que apuntan a eventos que ya no cargan: se conservan los genéricos del juego
+    (elecciones, avisos de justificación de guerra, ases, bomba; `keep_vanilla_events`, 2026-09-29).
+    Los de países de 1936 (usa, spain...) siguen apagados a propósito
   - [~] decisiones nacionales vanilla de países que no existen (China, Congo...): cáscaras inertes, sin "Invalid decision" (2026-09-29)
   - [ ] "AI tried to post an invalid command: unlock_trait_command"
   - [~] Divisiones regaladas a nivel país (`create_unit` sin región) y prioridades de investigación que

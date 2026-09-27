@@ -45,6 +45,19 @@ project:
     - common/bookmarks
     - events
 
+  # Eventos genéricos del juego que los on_actions vanilla siguen llamando
+  # (error.log 2026-09-29: "Malformed token: war_justification.1"): avisos de
+  # justificación de guerra, elecciones, ases y la bomba. Se copian del juego.
+  keep_vanilla_events:
+    - war_justification
+    - election
+    - ace_promoted
+    - aces_killed_each_other
+    - ace_killed_by_ace
+    - ace_killed_other_ace
+    - ace_died
+    - nuke_dropped
+
   tags_used:
     - map
     - national_focus

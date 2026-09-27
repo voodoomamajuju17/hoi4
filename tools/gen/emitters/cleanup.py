@@ -154,7 +154,12 @@ def _neutralize_scripts(ctx: BuildContext, spirits: list[str]) -> None:
     token = re.compile(rf"(?<![A-Za-z0-9_.])(?:{names})(?![A-Za-z0-9_.])")
     written = {p.resolve() for p in ctx.written}
     touched, monroe_files = [], []
-    for folder in ("common/on_actions", "common/scripted_effects", "events"):
+    folders = ["common/on_actions", "common/scripted_effects"]
+    # Con events/ reemplazado (replace_path) los eventos vanilla ya no cargan:
+    # copiarlos acá los volvía a cargar enteros (MTG_USA, WUW_Germany...).
+    if "events" not in (ctx.spec.project.get("replace_paths") or []):
+        folders.append("events")
+    for folder in folders:
         for path in sorted((ctx.vanilla.root / folder).glob("*.txt")):
             try:
                 text = path.read_text(encoding="utf-8-sig", errors="replace")
@@ -178,3 +183,58 @@ def _neutralize_scripts(ctx: BuildContext, spirits: list[str]) -> None:
         ctx.note(f"limpieza: {len(touched)} scripts del juego ya no reparten espiritus vanilla"
                  + (f" (la Doctrina Monroe salia de: {', '.join(monroe_files)})" if monroe_files else ""))
 
+
+
+SOURCE_EVENTS = "eventos genericos del juego que siguen haciendo falta (00_project.yaml -> keep_vanilla_events)"
+_NAMESPACE = re.compile(r"^\s*add_namespace\s*=\s*([A-Za-z0-9_]+)", re.M)
+
+
+def emit_kept_events(ctx: BuildContext) -> None:
+    """events/ se reemplaza entero (replace_path), pero los on_actions del juego
+    siguen llamando a eventos genéricos: elecciones, avisos de justificación de
+    guerra, ases, bomba nuclear. Sin ellos el error.log los marca ("Malformed
+    token: war_justification.1") y esos avisos no aparecen. Se copian los
+    archivos del juego que solo declaran esos namespaces; de un archivo mixto
+    se copian solo los eventos de esos namespaces."""
+    if ctx.vanilla is None:
+        return
+    keep = set(ctx.spec.project.get("keep_vanilla_events") or [])
+    if not keep or "events" not in (ctx.spec.project.get("replace_paths") or []):
+        return
+    from .. import pdx
+    copied, found = [], set()
+    for path in sorted((ctx.vanilla.root / "events").glob("*.txt")):
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        spaces = set(_NAMESPACE.findall(text))
+        hit = spaces & keep
+        if not hit:
+            continue
+        rel = f"events/{path.name}"
+        if spaces <= keep:
+            ctx.write_text(rel, banner_for(SOURCE_EVENTS) + text)
+        else:
+            try:
+                root = pdx.parse(text)
+            except Exception as exc:  # noqa: BLE001 - un archivo del juego que no parsea se avisa
+                ctx.warn(f"eventos del juego: {rel} no parsea ({exc}); no se recuperan {', '.join(sorted(hit))}.")
+                continue
+            out = Block()
+            for key, value in root.entries:
+                if key == "add_namespace":
+                    if pdx.text(value) in keep:
+                        out.add(key, value)
+                    continue
+                if isinstance(value, Block) and value.get("id") is not None:
+                    if pdx.text(value.get("id")).split(".")[0] in keep:
+                        out.add(key, value)
+            ctx.write_text(rel, banner_for(SOURCE_EVENTS) + render(out))
+        found |= hit
+        copied.append(path.name)
+    if copied:
+        ctx.note(f"eventos del juego que se conservan ({', '.join(sorted(found))}): {', '.join(copied)}")
+    missing = keep - found
+    if missing:
+        ctx.warn(f"eventos del juego: no se encontraron los namespaces {', '.join(sorted(missing))}.")

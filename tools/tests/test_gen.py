@@ -1588,6 +1588,18 @@ def test_ai() -> None:
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
+        # error.log 2026-09-29: con events/ reemplazado, copiar un evento vanilla lo volvía a cargar entero.
+        check("Monroe: los eventos del juego no se copian (events/ esta reemplazado)",
+              not (mod / "events/MTG_USA.txt").exists())
+        # ...y los on_actions del juego seguían llamando a eventos genéricos que ya no cargaban.
+        wj = mod / "events/WarJustification.txt"
+        check("eventos genericos: el aviso de justificacion de guerra vuelve",
+              wj.exists() and "id = war_justification.1" in wj.read_text())
+        gen_ev = (mod / "events/Generic_Fixture.txt").read_text() if (mod / "events/Generic_Fixture.txt").exists() else ""
+        check("eventos genericos: de un archivo mixto, solo las elecciones (no el evento de 1938 de EEUU)",
+              "id = election.2" in gen_ev and "usa.6" not in gen_ev and "add_namespace = usa" not in gen_ev, gen_ev)
+        check("eventos genericos: los que faltan en el juego se avisan",
+              any("ace_died" in w for w in ctx.warnings), str(ctx.warnings[-5:]))
         check("Monroe: el evento de limpieza corre cada semana", "days = 7" in (mod / "events/meganations_limpieza.txt").read_text())
         check("Monroe: el reporte dice de donde salia", any("01_monroe_fixture" in n for n in ctx.notes), str(ctx.notes[-5:]))
         ai = (mod / "common/ai_strategy/meganations_ai.txt").read_text()

@@ -71,6 +71,7 @@ EMITTERS = [
     ("decisions", em_decisions.emit),
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
     ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)
+    ("vanilla_events", em_cleanup.emit_kept_events),  # elecciones, justificacion de guerra, ases
     ("diplomacy", em_diplomacy.emit),
     ("ai", em_ai.emit),                 # estrategias de IA: despues de territory (quien existe)   # antes que history: opiniones, guerras, tension
     ("history", em_history.emit),
