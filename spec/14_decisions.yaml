@@ -7922,6 +7922,1278 @@ scripted_effects:
       effects:
       - {effect: end_guarantee, value: ROOT}
 
+  # Guerra limitada EFE (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: EFE_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: EFE_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: EFE_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_efe.160, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: EFE_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: EFE_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_efe.161, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: EFE_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: EFE_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_efe.164, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: EFE_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: EFE_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_efe.165, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: EFE_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: EFE_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_efe.168, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: EFE_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: EFE_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_efe.169, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: EFE_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: EFE_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_efe.172, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: EFE_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: EFE_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_efe.173, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: EFE_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: EFE_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_efe.176, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: EFE_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: EFE_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_efe.177, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: EFE_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: EFE_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_efe.180, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: EFE_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: EFE_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_efe.181, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: EFE_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: EFE_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_efe.184, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: EFE_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: EFE_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_efe.185, days: 1}
+
+  # Guerra limitada FCU (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: FCU_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: FCU_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: FCU_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_fcu.160, days: 1}
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: FCU_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: FCU_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_fcu.161, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: FCU_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: FCU_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_fcu.164, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: FCU_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: FCU_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_fcu.165, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: FCU_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: FCU_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_fcu.168, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: FCU_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: FCU_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_fcu.169, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: FCU_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: FCU_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_fcu.172, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: FCU_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: FCU_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_fcu.173, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: FCU_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: FCU_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_fcu.176, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: FCU_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: FCU_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_fcu.177, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: FCU_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: FCU_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_fcu.180, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: FCU_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: FCU_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_fcu.181, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: FCU_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: FCU_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_fcu.184, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: FCU_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: FCU_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_fcu.185, days: 1}
+
+  # Guerra limitada ASC (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: ASC_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: ASC_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: ASC_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_asc.160, days: 1}
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: ASC_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: ASC_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_asc.161, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: ASC_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: ASC_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_asc.164, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: ASC_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: ASC_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_asc.165, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: ASC_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: ASC_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_asc.168, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: ASC_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: ASC_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_asc.169, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: ASC_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: ASC_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_asc.172, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: ASC_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: ASC_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_asc.173, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: ASC_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: ASC_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_asc.176, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: ASC_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: ASC_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_asc.177, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: ASC_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: ASC_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_asc.180, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: ASC_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: ASC_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_asc.181, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: ASC_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: ASC_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_asc.184, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: ASC_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: ASC_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_asc.185, days: 1}
+
+  # Guerra limitada HSN (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: HSN_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: HSN_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: HSN_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_hsn.160, days: 1}
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: HSN_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: HSN_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_hsn.161, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: HSN_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: HSN_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_hsn.164, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: HSN_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: HSN_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_hsn.165, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: HSN_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: HSN_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_hsn.168, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: HSN_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: HSN_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_hsn.169, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: HSN_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: HSN_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_hsn.172, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: HSN_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: HSN_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_hsn.173, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: HSN_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: HSN_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_hsn.176, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: HSN_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: HSN_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_hsn.177, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: HSN_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: HSN_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_hsn.180, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: HSN_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: HSN_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_hsn.181, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: HSN_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: HSN_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_hsn.184, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: HSN_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: HSN_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_hsn.185, days: 1}
+
+  # Guerra limitada NAS (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: NAS_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: NAS_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NAS_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_nas.160, days: 1}
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: NAS_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NAS_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_nas.161, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: NAS_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NAS_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_nas.164, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: NAS_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NAS_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_nas.165, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: NAS_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NAS_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_nas.168, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: NAS_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NAS_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_nas.169, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: NAS_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NAS_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_nas.172, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: NAS_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NAS_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_nas.173, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: NAS_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NAS_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_nas.176, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: NAS_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NAS_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_nas.177, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: NAS_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NAS_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_nas.180, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: NAS_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NAS_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_nas.181, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: NAS_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NAS_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_nas.184, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: NAS_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NAS_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_nas.185, days: 1}
+
+  # Guerra limitada SHD (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: SHD_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: SHD_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: SHD_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_shd.160, days: 1}
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: SHD_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: SHD_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_shd.161, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: SHD_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: SHD_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_shd.164, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: SHD_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: SHD_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_shd.165, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: SHD_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: SHD_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_shd.168, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: SHD_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: SHD_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_shd.169, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: SHD_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: SHD_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_shd.172, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: SHD_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: SHD_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_shd.173, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: SHD_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: SHD_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_shd.176, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: SHD_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: SHD_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_shd.177, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: SHD_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: SHD_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_shd.180, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: SHD_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: SHD_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_shd.181, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: SHD_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: SHD_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_shd.184, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: SHD_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: SHD_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_shd.185, days: 1}
+
+  # Guerra limitada APF (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: APF_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: APF_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: APF_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_apf.160, days: 1}
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: APF_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: APF_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_apf.161, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: APF_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: APF_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_apf.164, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: APF_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: APF_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_apf.165, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: APF_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: APF_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_apf.168, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: APF_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: APF_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_apf.169, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: APF_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: APF_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_apf.172, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: APF_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: APF_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_apf.173, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: APF_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: APF_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_apf.176, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: APF_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: APF_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_apf.177, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: APF_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: APF_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_apf.180, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: APF_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: APF_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_apf.181, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: APF_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: APF_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_apf.184, days: 1}
+    - effect: if
+      when:
+        war_with: NRE
+        not_flag: APF_armisticio_nre
+        country:
+          tag: NRE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: APF_armisticio_nre, days: 364}
+      - {effect: event, id: meganations_apf.185, days: 1}
+
+  # Guerra limitada NRE (2026-09-29): hasta 2104.1.1 las guerras entre potencias terminan en armisticio
+  - id: NRE_guerra_limitada
+    effects:
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: NRE_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NRE_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_nre.160, days: 1}
+    - effect: if
+      when:
+        war_with: EFE
+        not_flag: NRE_armisticio_efe
+        country:
+          tag: EFE
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NRE_armisticio_efe, days: 364}
+      - {effect: event, id: meganations_nre.161, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: NRE_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NRE_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_nre.164, days: 1}
+    - effect: if
+      when:
+        war_with: FCU
+        not_flag: NRE_armisticio_fcu
+        country:
+          tag: FCU
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NRE_armisticio_fcu, days: 364}
+      - {effect: event, id: meganations_nre.165, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: NRE_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NRE_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_nre.168, days: 1}
+    - effect: if
+      when:
+        war_with: ASC
+        not_flag: NRE_armisticio_asc
+        country:
+          tag: ASC
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NRE_armisticio_asc, days: 364}
+      - {effect: event, id: meganations_nre.169, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: NRE_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NRE_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_nre.172, days: 1}
+    - effect: if
+      when:
+        war_with: HSN
+        not_flag: NRE_armisticio_hsn
+        country:
+          tag: HSN
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NRE_armisticio_hsn, days: 364}
+      - {effect: event, id: meganations_nre.173, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: NRE_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NRE_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_nre.176, days: 1}
+    - effect: if
+      when:
+        war_with: NAS
+        not_flag: NRE_armisticio_nas
+        country:
+          tag: NAS
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NRE_armisticio_nas, days: 364}
+      - {effect: event, id: meganations_nre.177, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: NRE_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NRE_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_nre.180, days: 1}
+    - effect: if
+      when:
+        war_with: SHD
+        not_flag: NRE_armisticio_shd
+        country:
+          tag: SHD
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NRE_armisticio_shd, days: 364}
+      - {effect: event, id: meganations_nre.181, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: NRE_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        not: {date_after: 2104.1.1}
+      then:
+      - {effect: flag, value: NRE_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_nre.184, days: 1}
+    - effect: if
+      when:
+        war_with: APF
+        not_flag: NRE_armisticio_apf
+        country:
+          tag: APF
+          when: {surrender_at_least: 0.4}
+        date_after: 2104.1.1
+      then:
+      - {effect: flag, value: NRE_armisticio_apf, days: 364}
+      - {effect: event, id: meganations_nre.185, days: 1}
+
+
+
+
+
+
+
+
+
 
 dynamic_modifiers:
   - id: FCU_mod_directorio

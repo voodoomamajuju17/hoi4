@@ -739,6 +739,459 @@ namespaces:
             - {effect: event, id: meganations_efe.153, days: 1, target: EFE}
           ai_chance: 55
         src: user_design
+      - id: 160
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Free Corporative Capital Union
+          spanish: Armisticio con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+            an armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Unión Libre de Capital Corporativo está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+            generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: FCU}
+          - {effect: flag, value: EFE_tregua_fcu, days: 364}
+          - effect: scope
+            target: FCU
+            effects:
+            - {effect: flag, value: FCU_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: FCU_revancha, days: 364}
+          - {effect: event, id: meganations_efe.162, days: 1, target: FCU}
+        src: user_design
+      - id: 161
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Free Corporative Capital Union Asks for an Armistice
+          spanish: Unión Libre de Capital Corporativo Pide un Armisticio
+        desc:
+          english: 'Free Corporative Capital Union is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+            them off.'
+          spanish: 'Unión Libre de Capital Corporativo se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: FCU}
+          - {effect: flag, value: EFE_tregua_fcu, days: 364}
+          - effect: scope
+            target: FCU
+            effects:
+            - {effect: flag, value: FCU_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: FCU_revancha, days: 364}
+          - {effect: event, id: meganations_efe.162, days: 1, target: FCU}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 162
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Ecofascist Empire
+          spanish: Una Paz Humillante con Imperio Ecofascista
+        desc:
+          english: 'Ecofascist Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Imperio Ecofascista dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 164
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Automated Socialist Commune
+          spanish: Armisticio con Comuna Socialista Automatizada
+        desc:
+          english: 'Automated Socialist Commune is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+            armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Comuna Socialista Automatizada está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: ASC}
+          - {effect: flag, value: EFE_tregua_asc, days: 364}
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: flag, value: ASC_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: ASC_revancha, days: 364}
+          - {effect: event, id: meganations_efe.166, days: 1, target: ASC}
+        src: user_design
+      - id: 165
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Automated Socialist Commune Asks for an Armistice
+          spanish: Comuna Socialista Automatizada Pide un Armisticio
+        desc:
+          english: 'Automated Socialist Commune is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Comuna Socialista Automatizada se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: ASC}
+          - {effect: flag, value: EFE_tregua_asc, days: 364}
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: flag, value: ASC_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: ASC_revancha, days: 364}
+          - {effect: event, id: meganations_efe.166, days: 1, target: ASC}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 166
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Ecofascist Empire
+          spanish: Una Paz Humillante con Imperio Ecofascista
+        desc:
+          english: 'Ecofascist Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Imperio Ecofascista dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 168
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with High Seas Market Nation
+          spanish: Armisticio con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Nación de Mercado de Alta Mar está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: HSN}
+          - {effect: flag, value: EFE_tregua_hsn, days: 364}
+          - effect: scope
+            target: HSN
+            effects:
+            - {effect: flag, value: HSN_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: HSN_revancha, days: 364}
+          - {effect: event, id: meganations_efe.170, days: 1, target: HSN}
+        src: user_design
+      - id: 169
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: High Seas Market Nation Asks for an Armistice
+          spanish: Nación de Mercado de Alta Mar Pide un Armisticio
+        desc:
+          english: 'High Seas Market Nation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Nación de Mercado de Alta Mar se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: HSN}
+          - {effect: flag, value: EFE_tregua_hsn, days: 364}
+          - effect: scope
+            target: HSN
+            effects:
+            - {effect: flag, value: HSN_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: HSN_revancha, days: 364}
+          - {effect: event, id: meganations_efe.170, days: 1, target: HSN}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 170
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Ecofascist Empire
+          spanish: Una Paz Humillante con Imperio Ecofascista
+        desc:
+          english: 'Ecofascist Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Imperio Ecofascista dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 172
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
+        desc:
+          english: 'NeoAndean Sky Kingdom is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Reino Celeste Neoandino está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: NAS}
+          - {effect: flag, value: EFE_tregua_nas, days: 364}
+          - effect: scope
+            target: NAS
+            effects:
+            - {effect: flag, value: NAS_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: NAS_revancha, days: 364}
+          - {effect: event, id: meganations_efe.174, days: 1, target: NAS}
+        src: user_design
+      - id: 173
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: NeoAndean Sky Kingdom Asks for an Armistice
+          spanish: Reino Celeste Neoandino Pide un Armisticio
+        desc:
+          english: 'NeoAndean Sky Kingdom is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Reino Celeste Neoandino se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+            ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: NAS}
+          - {effect: flag, value: EFE_tregua_nas, days: 364}
+          - effect: scope
+            target: NAS
+            effects:
+            - {effect: flag, value: NAS_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: NAS_revancha, days: 364}
+          - {effect: event, id: meganations_efe.174, days: 1, target: NAS}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 174
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Ecofascist Empire
+          spanish: Una Paz Humillante con Imperio Ecofascista
+        desc:
+          english: 'Ecofascist Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Imperio Ecofascista dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 176
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Sino-Harmonious Directorate
+          spanish: Armisticio con Directorio Sino-Armónico
+        desc:
+          english: 'Sino-Harmonious Directorate is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+            armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Directorio Sino-Armónico está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: SHD}
+          - {effect: flag, value: EFE_tregua_shd, days: 364}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: flag, value: SHD_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: SHD_revancha, days: 364}
+          - {effect: event, id: meganations_efe.178, days: 1, target: SHD}
+        src: user_design
+      - id: 177
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Sino-Harmonious Directorate Asks for an Armistice
+          spanish: Directorio Sino-Armónico Pide un Armisticio
+        desc:
+          english: 'Sino-Harmonious Directorate is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Directorio Sino-Armónico se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+            ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: SHD}
+          - {effect: flag, value: EFE_tregua_shd, days: 364}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: flag, value: SHD_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: SHD_revancha, days: 364}
+          - {effect: event, id: meganations_efe.178, days: 1, target: SHD}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 178
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Ecofascist Empire
+          spanish: Una Paz Humillante con Imperio Ecofascista
+        desc:
+          english: 'Ecofascist Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Imperio Ecofascista dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 180
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with African People's Federation
+          spanish: Armisticio con Federación de los Pueblos Africanos
+        desc:
+          english: 'African People''s Federation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+            an armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Federación de los Pueblos Africanos está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+            generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: APF}
+          - {effect: flag, value: EFE_tregua_apf, days: 364}
+          - effect: scope
+            target: APF
+            effects:
+            - {effect: flag, value: APF_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: APF_revancha, days: 364}
+          - {effect: event, id: meganations_efe.182, days: 1, target: APF}
+        src: user_design
+      - id: 181
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: African People's Federation Asks for an Armistice
+          spanish: Federación de los Pueblos Africanos Pide un Armisticio
+        desc:
+          english: 'African People''s Federation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+            them off.'
+          spanish: 'Federación de los Pueblos Africanos se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: APF}
+          - {effect: flag, value: EFE_tregua_apf, days: 364}
+          - effect: scope
+            target: APF
+            effects:
+            - {effect: flag, value: APF_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: APF_revancha, days: 364}
+          - {effect: event, id: meganations_efe.182, days: 1, target: APF}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 182
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Ecofascist Empire
+          spanish: Una Paz Humillante con Imperio Ecofascista
+        desc:
+          english: 'Ecofascist Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Imperio Ecofascista dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 184
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
+        desc:
+          english: 'Neo Roman Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Neo Imperio Romano está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+            un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: NRE}
+          - {effect: flag, value: EFE_tregua_nre, days: 364}
+          - effect: scope
+            target: NRE
+            effects:
+            - {effect: flag, value: NRE_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: NRE_revancha, days: 364}
+          - {effect: event, id: meganations_efe.186, days: 1, target: NRE}
+        src: user_design
+      - id: 185
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
+        desc:
+          english: 'Neo Roman Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Neo Imperio Romano se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: NRE}
+          - {effect: flag, value: EFE_tregua_nre, days: 364}
+          - effect: scope
+            target: NRE
+            effects:
+            - {effect: flag, value: NRE_tregua_efe, days: 364}
+            - {effect: timed_idea, idea: NRE_revancha, days: 364}
+          - {effect: event, id: meganations_efe.186, days: 1, target: NRE}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 186
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Ecofascist Empire
+          spanish: Una Paz Humillante con Imperio Ecofascista
+        desc:
+          english: 'Ecofascist Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Imperio Ecofascista dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 159
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+        desc:
+          english: Weekly review of the wars between great powers.
+          spanish: Revisión semanal de las guerras entre potencias.
+        options:
+        - name: {english: Carry on., spanish: Seguir.}
+          effects:
+          - {effect: run, value: EFE_guerra_limitada}
+          - {effect: event, id: meganations_efe.159, days: 7}
+        src: user_design
+        hidden: true
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -1308,6 +1761,453 @@ namespaces:
             - {effect: event, id: meganations_fcu.153, days: 1, target: FCU}
           ai_chance: 55
         src: user_design
+      - id: 160
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
+        desc:
+          english: 'Ecofascist Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Imperio Ecofascista está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+            un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: EFE}
+          - {effect: flag, value: FCU_tregua_efe, days: 364}
+          - effect: scope
+            target: EFE
+            effects:
+            - {effect: flag, value: EFE_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: EFE_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.162, days: 1, target: EFE}
+        src: user_design
+      - id: 161
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
+        desc:
+          english: 'Ecofascist Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Imperio Ecofascista se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: EFE}
+          - {effect: flag, value: FCU_tregua_efe, days: 364}
+          - effect: scope
+            target: EFE
+            effects:
+            - {effect: flag, value: EFE_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: EFE_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.162, days: 1, target: EFE}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 162
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Free Corporative Capital Union
+          spanish: Una Paz Humillante con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Unión Libre de Capital Corporativo dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 164
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Automated Socialist Commune
+          spanish: Armisticio con Comuna Socialista Automatizada
+        desc:
+          english: 'Automated Socialist Commune is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+            armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Comuna Socialista Automatizada está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: ASC}
+          - {effect: flag, value: FCU_tregua_asc, days: 364}
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: flag, value: ASC_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: ASC_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.166, days: 1, target: ASC}
+        src: user_design
+      - id: 165
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Automated Socialist Commune Asks for an Armistice
+          spanish: Comuna Socialista Automatizada Pide un Armisticio
+        desc:
+          english: 'Automated Socialist Commune is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Comuna Socialista Automatizada se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: ASC}
+          - {effect: flag, value: FCU_tregua_asc, days: 364}
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: flag, value: ASC_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: ASC_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.166, days: 1, target: ASC}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 166
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Free Corporative Capital Union
+          spanish: Una Paz Humillante con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Unión Libre de Capital Corporativo dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 168
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with High Seas Market Nation
+          spanish: Armisticio con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Nación de Mercado de Alta Mar está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: HSN}
+          - {effect: flag, value: FCU_tregua_hsn, days: 364}
+          - effect: scope
+            target: HSN
+            effects:
+            - {effect: flag, value: HSN_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: HSN_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.170, days: 1, target: HSN}
+        src: user_design
+      - id: 169
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: High Seas Market Nation Asks for an Armistice
+          spanish: Nación de Mercado de Alta Mar Pide un Armisticio
+        desc:
+          english: 'High Seas Market Nation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Nación de Mercado de Alta Mar se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: HSN}
+          - {effect: flag, value: FCU_tregua_hsn, days: 364}
+          - effect: scope
+            target: HSN
+            effects:
+            - {effect: flag, value: HSN_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: HSN_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.170, days: 1, target: HSN}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 170
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Free Corporative Capital Union
+          spanish: Una Paz Humillante con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Unión Libre de Capital Corporativo dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 172
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
+        desc:
+          english: 'NeoAndean Sky Kingdom is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Reino Celeste Neoandino está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: NAS}
+          - {effect: flag, value: FCU_tregua_nas, days: 364}
+          - effect: scope
+            target: NAS
+            effects:
+            - {effect: flag, value: NAS_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: NAS_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.174, days: 1, target: NAS}
+        src: user_design
+      - id: 173
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: NeoAndean Sky Kingdom Asks for an Armistice
+          spanish: Reino Celeste Neoandino Pide un Armisticio
+        desc:
+          english: 'NeoAndean Sky Kingdom is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Reino Celeste Neoandino se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+            ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: NAS}
+          - {effect: flag, value: FCU_tregua_nas, days: 364}
+          - effect: scope
+            target: NAS
+            effects:
+            - {effect: flag, value: NAS_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: NAS_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.174, days: 1, target: NAS}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 174
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Free Corporative Capital Union
+          spanish: Una Paz Humillante con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Unión Libre de Capital Corporativo dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 176
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Sino-Harmonious Directorate
+          spanish: Armisticio con Directorio Sino-Armónico
+        desc:
+          english: 'Sino-Harmonious Directorate is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+            armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Directorio Sino-Armónico está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: SHD}
+          - {effect: flag, value: FCU_tregua_shd, days: 364}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: flag, value: SHD_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: SHD_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.178, days: 1, target: SHD}
+        src: user_design
+      - id: 177
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Sino-Harmonious Directorate Asks for an Armistice
+          spanish: Directorio Sino-Armónico Pide un Armisticio
+        desc:
+          english: 'Sino-Harmonious Directorate is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Directorio Sino-Armónico se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+            ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: SHD}
+          - {effect: flag, value: FCU_tregua_shd, days: 364}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: flag, value: SHD_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: SHD_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.178, days: 1, target: SHD}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 178
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Free Corporative Capital Union
+          spanish: Una Paz Humillante con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Unión Libre de Capital Corporativo dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 180
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with African People's Federation
+          spanish: Armisticio con Federación de los Pueblos Africanos
+        desc:
+          english: 'African People''s Federation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+            an armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Federación de los Pueblos Africanos está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+            generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: APF}
+          - {effect: flag, value: FCU_tregua_apf, days: 364}
+          - effect: scope
+            target: APF
+            effects:
+            - {effect: flag, value: APF_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: APF_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.182, days: 1, target: APF}
+        src: user_design
+      - id: 181
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: African People's Federation Asks for an Armistice
+          spanish: Federación de los Pueblos Africanos Pide un Armisticio
+        desc:
+          english: 'African People''s Federation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+            them off.'
+          spanish: 'Federación de los Pueblos Africanos se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: APF}
+          - {effect: flag, value: FCU_tregua_apf, days: 364}
+          - effect: scope
+            target: APF
+            effects:
+            - {effect: flag, value: APF_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: APF_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.182, days: 1, target: APF}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 182
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Free Corporative Capital Union
+          spanish: Una Paz Humillante con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Unión Libre de Capital Corporativo dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 184
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
+        desc:
+          english: 'Neo Roman Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Neo Imperio Romano está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+            un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: NRE}
+          - {effect: flag, value: FCU_tregua_nre, days: 364}
+          - effect: scope
+            target: NRE
+            effects:
+            - {effect: flag, value: NRE_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: NRE_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.186, days: 1, target: NRE}
+        src: user_design
+      - id: 185
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
+        desc:
+          english: 'Neo Roman Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Neo Imperio Romano se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: NRE}
+          - {effect: flag, value: FCU_tregua_nre, days: 364}
+          - effect: scope
+            target: NRE
+            effects:
+            - {effect: flag, value: NRE_tregua_fcu, days: 364}
+            - {effect: timed_idea, idea: NRE_revancha, days: 364}
+          - {effect: event, id: meganations_fcu.186, days: 1, target: NRE}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 186
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with Free Corporative Capital Union
+          spanish: Una Paz Humillante con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Unión Libre de Capital Corporativo dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 159
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+        desc:
+          english: Weekly review of the wars between great powers.
+          spanish: Revisión semanal de las guerras entre potencias.
+        options:
+        - name: {english: Carry on., spanish: Seguir.}
+          effects:
+          - {effect: run, value: FCU_guerra_limitada}
+          - {effect: event, id: meganations_fcu.159, days: 7}
+        src: user_design
+        hidden: true
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -1801,6 +2701,453 @@ namespaces:
             - {effect: event, id: meganations_hsn.153, days: 1, target: HSN}
           ai_chance: 55
         src: user_design
+      - id: 160
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
+        desc:
+          english: 'Ecofascist Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Imperio Ecofascista está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+            un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: EFE}
+          - {effect: flag, value: HSN_tregua_efe, days: 364}
+          - effect: scope
+            target: EFE
+            effects:
+            - {effect: flag, value: EFE_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: EFE_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.162, days: 1, target: EFE}
+        src: user_design
+      - id: 161
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
+        desc:
+          english: 'Ecofascist Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Imperio Ecofascista se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: EFE}
+          - {effect: flag, value: HSN_tregua_efe, days: 364}
+          - effect: scope
+            target: EFE
+            effects:
+            - {effect: flag, value: EFE_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: EFE_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.162, days: 1, target: EFE}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 162
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with High Seas Market Nation
+          spanish: Una Paz Humillante con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Nación de Mercado de Alta Mar dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 164
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Free Corporative Capital Union
+          spanish: Armisticio con Unión Libre de Capital Corporativo
+        desc:
+          english: 'Free Corporative Capital Union is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+            an armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Unión Libre de Capital Corporativo está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+            generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: FCU}
+          - {effect: flag, value: HSN_tregua_fcu, days: 364}
+          - effect: scope
+            target: FCU
+            effects:
+            - {effect: flag, value: FCU_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: FCU_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.166, days: 1, target: FCU}
+        src: user_design
+      - id: 165
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Free Corporative Capital Union Asks for an Armistice
+          spanish: Unión Libre de Capital Corporativo Pide un Armisticio
+        desc:
+          english: 'Free Corporative Capital Union is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+            them off.'
+          spanish: 'Unión Libre de Capital Corporativo se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: FCU}
+          - {effect: flag, value: HSN_tregua_fcu, days: 364}
+          - effect: scope
+            target: FCU
+            effects:
+            - {effect: flag, value: FCU_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: FCU_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.166, days: 1, target: FCU}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 166
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with High Seas Market Nation
+          spanish: Una Paz Humillante con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Nación de Mercado de Alta Mar dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 168
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Automated Socialist Commune
+          spanish: Armisticio con Comuna Socialista Automatizada
+        desc:
+          english: 'Automated Socialist Commune is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+            armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Comuna Socialista Automatizada está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: ASC}
+          - {effect: flag, value: HSN_tregua_asc, days: 364}
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: flag, value: ASC_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: ASC_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.170, days: 1, target: ASC}
+        src: user_design
+      - id: 169
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Automated Socialist Commune Asks for an Armistice
+          spanish: Comuna Socialista Automatizada Pide un Armisticio
+        desc:
+          english: 'Automated Socialist Commune is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Comuna Socialista Automatizada se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: ASC}
+          - {effect: flag, value: HSN_tregua_asc, days: 364}
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: flag, value: ASC_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: ASC_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.170, days: 1, target: ASC}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 170
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with High Seas Market Nation
+          spanish: Una Paz Humillante con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Nación de Mercado de Alta Mar dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 172
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
+        desc:
+          english: 'NeoAndean Sky Kingdom is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Reino Celeste Neoandino está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: NAS}
+          - {effect: flag, value: HSN_tregua_nas, days: 364}
+          - effect: scope
+            target: NAS
+            effects:
+            - {effect: flag, value: NAS_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: NAS_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.174, days: 1, target: NAS}
+        src: user_design
+      - id: 173
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: NeoAndean Sky Kingdom Asks for an Armistice
+          spanish: Reino Celeste Neoandino Pide un Armisticio
+        desc:
+          english: 'NeoAndean Sky Kingdom is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Reino Celeste Neoandino se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+            ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: NAS}
+          - {effect: flag, value: HSN_tregua_nas, days: 364}
+          - effect: scope
+            target: NAS
+            effects:
+            - {effect: flag, value: NAS_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: NAS_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.174, days: 1, target: NAS}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 174
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with High Seas Market Nation
+          spanish: Una Paz Humillante con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Nación de Mercado de Alta Mar dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 176
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with Sino-Harmonious Directorate
+          spanish: Armisticio con Directorio Sino-Armónico
+        desc:
+          english: 'Sino-Harmonious Directorate is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+            armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Directorio Sino-Armónico está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+            firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: SHD}
+          - {effect: flag, value: HSN_tregua_shd, days: 364}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: flag, value: SHD_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: SHD_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.178, days: 1, target: SHD}
+        src: user_design
+      - id: 177
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Sino-Harmonious Directorate Asks for an Armistice
+          spanish: Directorio Sino-Armónico Pide un Armisticio
+        desc:
+          english: 'Sino-Harmonious Directorate is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+            off.'
+          spanish: 'Directorio Sino-Armónico se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+            ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: SHD}
+          - {effect: flag, value: HSN_tregua_shd, days: 364}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: flag, value: SHD_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: SHD_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.178, days: 1, target: SHD}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 178
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with High Seas Market Nation
+          spanish: Una Paz Humillante con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Nación de Mercado de Alta Mar dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 180
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Armistice with African People's Federation
+          spanish: Armisticio con Federación de los Pueblos Africanos
+        desc:
+          english: 'African People''s Federation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+            an armistice: each side keeps what it holds, and the war ends here.'
+          spanish: 'Federación de los Pueblos Africanos está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+            generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: APF}
+          - {effect: flag, value: HSN_tregua_apf, days: 364}
+          - effect: scope
+            target: APF
+            effects:
+            - {effect: flag, value: APF_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: APF_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.182, days: 1, target: APF}
+        src: user_design
+      - id: 181
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: African People's Federation Asks for an Armistice
+          spanish: Federación de los Pueblos Africanos Pide un Armisticio
+        desc:
+          english: 'African People''s Federation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+            them off.'
+          spanish: 'Federación de los Pueblos Africanos se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+            con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: APF}
+          - {effect: flag, value: HSN_tregua_apf, days: 364}
+          - effect: scope
+            target: APF
+            effects:
+            - {effect: flag, value: APF_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: APF_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.182, days: 1, target: APF}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 182
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with High Seas Market Nation
+          spanish: Una Paz Humillante con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Nación de Mercado de Alta Mar dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 184
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
+        desc:
+          english: 'Neo Roman Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+            each side keeps what it holds, and the war ends here.'
+          spanish: 'Neo Imperio Romano está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+            un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+        options:
+        - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+          effects:
+          - {effect: armistice, value: NRE}
+          - {effect: flag, value: HSN_tregua_nre, days: 364}
+          - effect: scope
+            target: NRE
+            effects:
+            - {effect: flag, value: NRE_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: NRE_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.186, days: 1, target: NRE}
+        src: user_design
+      - id: 185
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
+        desc:
+          english: 'Neo Roman Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+          spanish: 'Neo Imperio Romano se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+        options:
+        - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+          effects:
+          - {effect: armistice, value: NRE}
+          - {effect: flag, value: HSN_tregua_nre, days: 364}
+          - effect: scope
+            target: NRE
+            effects:
+            - {effect: flag, value: NRE_tregua_hsn, days: 364}
+            - {effect: timed_idea, idea: NRE_revancha, days: 364}
+          - {effect: event, id: meganations_hsn.186, days: 1, target: NRE}
+          ai_chance: 50
+        - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_design
+      - id: 186
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Humiliating Peace with High Seas Market Nation
+          spanish: Una Paz Humillante con Nación de Mercado de Alta Mar
+        desc:
+          english: 'High Seas Market Nation dictated an armistice: they keep everything they occupied. The country will not forget.'
+          spanish: 'Nación de Mercado de Alta Mar dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+        options:
+        - name: {english: We will be back., spanish: Vamos a volver.}
+          effects: []
+        src: user_design
+      - id: 159
+        trigger: on_startup
+        picture: GFX_report_event_generic_rally
+        title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+        desc:
+          english: Weekly review of the wars between great powers.
+          spanish: Revisión semanal de las guerras entre potencias.
+        options:
+        - name: {english: Carry on., spanish: Seguir.}
+          effects:
+          - {effect: run, value: HSN_guerra_limitada}
+          - {effect: event, id: meganations_hsn.159, days: 7}
+        src: user_design
+        hidden: true
   # ===========================================================================
   meganations_asc:
     country: ASC
@@ -2235,6 +3582,453 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_design
+    - id: 160
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
+      desc:
+        english: 'Ecofascist Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Imperio Ecofascista está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: ASC_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_asc.162, days: 1, target: EFE}
+      src: user_design
+    - id: 161
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
+      desc:
+        english: 'Ecofascist Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Imperio Ecofascista se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: ASC_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_asc.162, days: 1, target: EFE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 162
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Automated Socialist Commune
+        spanish: Una Paz Humillante con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Comuna Socialista Automatizada dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 164
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Free Corporative Capital Union
+        spanish: Armisticio con Unión Libre de Capital Corporativo
+      desc:
+        english: 'Free Corporative Capital Union is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Unión Libre de Capital Corporativo está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: ASC_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_asc.166, days: 1, target: FCU}
+      src: user_design
+    - id: 165
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Free Corporative Capital Union Asks for an Armistice
+        spanish: Unión Libre de Capital Corporativo Pide un Armisticio
+      desc:
+        english: 'Free Corporative Capital Union is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Unión Libre de Capital Corporativo se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: ASC_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_asc.166, days: 1, target: FCU}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 166
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Automated Socialist Commune
+        spanish: Una Paz Humillante con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Comuna Socialista Automatizada dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 168
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with High Seas Market Nation
+        spanish: Armisticio con Nación de Mercado de Alta Mar
+      desc:
+        english: 'High Seas Market Nation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Nación de Mercado de Alta Mar está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: ASC_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_asc.170, days: 1, target: HSN}
+      src: user_design
+    - id: 169
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: High Seas Market Nation Asks for an Armistice
+        spanish: Nación de Mercado de Alta Mar Pide un Armisticio
+      desc:
+        english: 'High Seas Market Nation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Nación de Mercado de Alta Mar se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: ASC_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_asc.170, days: 1, target: HSN}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 170
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Automated Socialist Commune
+        spanish: Una Paz Humillante con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Comuna Socialista Automatizada dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 172
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
+      desc:
+        english: 'NeoAndean Sky Kingdom is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Reino Celeste Neoandino está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: ASC_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_asc.174, days: 1, target: NAS}
+      src: user_design
+    - id: 173
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: NeoAndean Sky Kingdom Asks for an Armistice
+        spanish: Reino Celeste Neoandino Pide un Armisticio
+      desc:
+        english: 'NeoAndean Sky Kingdom is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Reino Celeste Neoandino se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: ASC_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_asc.174, days: 1, target: NAS}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 174
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Automated Socialist Commune
+        spanish: Una Paz Humillante con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Comuna Socialista Automatizada dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 176
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Sino-Harmonious Directorate
+        spanish: Armisticio con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Directorio Sino-Armónico está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: ASC_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_asc.178, days: 1, target: SHD}
+      src: user_design
+    - id: 177
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Sino-Harmonious Directorate Asks for an Armistice
+        spanish: Directorio Sino-Armónico Pide un Armisticio
+      desc:
+        english: 'Sino-Harmonious Directorate is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Directorio Sino-Armónico se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: ASC_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_asc.178, days: 1, target: SHD}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 178
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Automated Socialist Commune
+        spanish: Una Paz Humillante con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Comuna Socialista Automatizada dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 180
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with African People's Federation
+        spanish: Armisticio con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Federación de los Pueblos Africanos está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: ASC_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_asc.182, days: 1, target: APF}
+      src: user_design
+    - id: 181
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: African People's Federation Asks for an Armistice
+        spanish: Federación de los Pueblos Africanos Pide un Armisticio
+      desc:
+        english: 'African People''s Federation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Federación de los Pueblos Africanos se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: ASC_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_asc.182, days: 1, target: APF}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 182
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Automated Socialist Commune
+        spanish: Una Paz Humillante con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Comuna Socialista Automatizada dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 184
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
+      desc:
+        english: 'Neo Roman Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Neo Imperio Romano está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: ASC_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_asc.186, days: 1, target: NRE}
+      src: user_design
+    - id: 185
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
+      desc:
+        english: 'Neo Roman Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Neo Imperio Romano se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: ASC_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_asc, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_asc.186, days: 1, target: NRE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 186
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Automated Socialist Commune
+        spanish: Una Paz Humillante con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Comuna Socialista Automatizada dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 159
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+      desc:
+        english: Weekly review of the wars between great powers.
+        spanish: Revisión semanal de las guerras entre potencias.
+      options:
+      - name: {english: Carry on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: ASC_guerra_limitada}
+        - {effect: event, id: meganations_asc.159, days: 7}
+      src: user_design
+      hidden: true
   meganations_apf:
     country: APF
     events:
@@ -2641,6 +4435,453 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_design
+    - id: 160
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
+      desc:
+        english: 'Ecofascist Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Imperio Ecofascista está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: APF_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_apf.162, days: 1, target: EFE}
+      src: user_design
+    - id: 161
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
+      desc:
+        english: 'Ecofascist Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Imperio Ecofascista se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: APF_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_apf.162, days: 1, target: EFE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 162
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with African People's Federation
+        spanish: Una Paz Humillante con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Federación de los Pueblos Africanos dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 164
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Free Corporative Capital Union
+        spanish: Armisticio con Unión Libre de Capital Corporativo
+      desc:
+        english: 'Free Corporative Capital Union is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Unión Libre de Capital Corporativo está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: APF_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_apf.166, days: 1, target: FCU}
+      src: user_design
+    - id: 165
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Free Corporative Capital Union Asks for an Armistice
+        spanish: Unión Libre de Capital Corporativo Pide un Armisticio
+      desc:
+        english: 'Free Corporative Capital Union is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Unión Libre de Capital Corporativo se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: APF_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_apf.166, days: 1, target: FCU}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 166
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with African People's Federation
+        spanish: Una Paz Humillante con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Federación de los Pueblos Africanos dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 168
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Automated Socialist Commune
+        spanish: Armisticio con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Comuna Socialista Automatizada está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: APF_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_apf.170, days: 1, target: ASC}
+      src: user_design
+    - id: 169
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Automated Socialist Commune Asks for an Armistice
+        spanish: Comuna Socialista Automatizada Pide un Armisticio
+      desc:
+        english: 'Automated Socialist Commune is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Comuna Socialista Automatizada se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: APF_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_apf.170, days: 1, target: ASC}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 170
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with African People's Federation
+        spanish: Una Paz Humillante con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Federación de los Pueblos Africanos dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 172
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with High Seas Market Nation
+        spanish: Armisticio con Nación de Mercado de Alta Mar
+      desc:
+        english: 'High Seas Market Nation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Nación de Mercado de Alta Mar está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: APF_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_apf.174, days: 1, target: HSN}
+      src: user_design
+    - id: 173
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: High Seas Market Nation Asks for an Armistice
+        spanish: Nación de Mercado de Alta Mar Pide un Armisticio
+      desc:
+        english: 'High Seas Market Nation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Nación de Mercado de Alta Mar se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: APF_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_apf.174, days: 1, target: HSN}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 174
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with African People's Federation
+        spanish: Una Paz Humillante con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Federación de los Pueblos Africanos dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 176
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
+      desc:
+        english: 'NeoAndean Sky Kingdom is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Reino Celeste Neoandino está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: APF_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_apf.178, days: 1, target: NAS}
+      src: user_design
+    - id: 177
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: NeoAndean Sky Kingdom Asks for an Armistice
+        spanish: Reino Celeste Neoandino Pide un Armisticio
+      desc:
+        english: 'NeoAndean Sky Kingdom is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Reino Celeste Neoandino se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: APF_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_apf.178, days: 1, target: NAS}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 178
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with African People's Federation
+        spanish: Una Paz Humillante con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Federación de los Pueblos Africanos dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 180
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Sino-Harmonious Directorate
+        spanish: Armisticio con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Directorio Sino-Armónico está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: APF_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_apf.182, days: 1, target: SHD}
+      src: user_design
+    - id: 181
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Sino-Harmonious Directorate Asks for an Armistice
+        spanish: Directorio Sino-Armónico Pide un Armisticio
+      desc:
+        english: 'Sino-Harmonious Directorate is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Directorio Sino-Armónico se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: APF_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_apf.182, days: 1, target: SHD}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 182
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with African People's Federation
+        spanish: Una Paz Humillante con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Federación de los Pueblos Africanos dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 184
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
+      desc:
+        english: 'Neo Roman Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Neo Imperio Romano está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: APF_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_apf.186, days: 1, target: NRE}
+      src: user_design
+    - id: 185
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
+      desc:
+        english: 'Neo Roman Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Neo Imperio Romano se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: APF_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_apf, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_apf.186, days: 1, target: NRE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 186
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with African People's Federation
+        spanish: Una Paz Humillante con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Federación de los Pueblos Africanos dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 159
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+      desc:
+        english: Weekly review of the wars between great powers.
+        spanish: Revisión semanal de las guerras entre potencias.
+      options:
+      - name: {english: Carry on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: APF_guerra_limitada}
+        - {effect: event, id: meganations_apf.159, days: 7}
+      src: user_design
+      hidden: true
   # ===========================================================================
   meganations_nas:
     country: NAS
@@ -2974,6 +5215,456 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_design
+    - id: 160
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
+      desc:
+        english: 'Ecofascist Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Imperio Ecofascista está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: NAS_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_nas.162, days: 1, target: EFE}
+      src: user_design
+    - id: 161
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
+      desc:
+        english: 'Ecofascist Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Imperio Ecofascista se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: NAS_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_nas.162, days: 1, target: EFE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 162
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with NeoAndean Sky Kingdom
+        spanish: Una Paz Humillante con Reino Celeste Neoandino
+      desc:
+        english: 'NeoAndean Sky Kingdom dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Reino Celeste Neoandino dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 164
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Free Corporative Capital Union
+        spanish: Armisticio con Unión Libre de Capital Corporativo
+      desc:
+        english: 'Free Corporative Capital Union is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Unión Libre de Capital Corporativo está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: NAS_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_nas.166, days: 1, target: FCU}
+      src: user_design
+    - id: 165
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Free Corporative Capital Union Asks for an Armistice
+        spanish: Unión Libre de Capital Corporativo Pide un Armisticio
+      desc:
+        english: 'Free Corporative Capital Union is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Unión Libre de Capital Corporativo se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: NAS_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_nas.166, days: 1, target: FCU}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 166
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with NeoAndean Sky Kingdom
+        spanish: Una Paz Humillante con Reino Celeste Neoandino
+      desc:
+        english: 'NeoAndean Sky Kingdom dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Reino Celeste Neoandino dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 168
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Automated Socialist Commune
+        spanish: Armisticio con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Comuna Socialista Automatizada está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: NAS_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_nas.170, days: 1, target: ASC}
+      src: user_design
+    - id: 169
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Automated Socialist Commune Asks for an Armistice
+        spanish: Comuna Socialista Automatizada Pide un Armisticio
+      desc:
+        english: 'Automated Socialist Commune is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Comuna Socialista Automatizada se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: NAS_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_nas.170, days: 1, target: ASC}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 170
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with NeoAndean Sky Kingdom
+        spanish: Una Paz Humillante con Reino Celeste Neoandino
+      desc:
+        english: 'NeoAndean Sky Kingdom dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Reino Celeste Neoandino dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 172
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with High Seas Market Nation
+        spanish: Armisticio con Nación de Mercado de Alta Mar
+      desc:
+        english: 'High Seas Market Nation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Nación de Mercado de Alta Mar está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: NAS_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_nas.174, days: 1, target: HSN}
+      src: user_design
+    - id: 173
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: High Seas Market Nation Asks for an Armistice
+        spanish: Nación de Mercado de Alta Mar Pide un Armisticio
+      desc:
+        english: 'High Seas Market Nation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Nación de Mercado de Alta Mar se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: NAS_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_nas.174, days: 1, target: HSN}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 174
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with NeoAndean Sky Kingdom
+        spanish: Una Paz Humillante con Reino Celeste Neoandino
+      desc:
+        english: 'NeoAndean Sky Kingdom dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Reino Celeste Neoandino dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 176
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Sino-Harmonious Directorate
+        spanish: Armisticio con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Directorio Sino-Armónico está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: NAS_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_nas.178, days: 1, target: SHD}
+      src: user_design
+    - id: 177
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Sino-Harmonious Directorate Asks for an Armistice
+        spanish: Directorio Sino-Armónico Pide un Armisticio
+      desc:
+        english: 'Sino-Harmonious Directorate is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Directorio Sino-Armónico se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: NAS_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_nas.178, days: 1, target: SHD}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 178
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with NeoAndean Sky Kingdom
+        spanish: Una Paz Humillante con Reino Celeste Neoandino
+      desc:
+        english: 'NeoAndean Sky Kingdom dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Reino Celeste Neoandino dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 180
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with African People's Federation
+        spanish: Armisticio con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Federación de los Pueblos Africanos está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: NAS_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_nas.182, days: 1, target: APF}
+      src: user_design
+    - id: 181
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: African People's Federation Asks for an Armistice
+        spanish: Federación de los Pueblos Africanos Pide un Armisticio
+      desc:
+        english: 'African People''s Federation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Federación de los Pueblos Africanos se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: NAS_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_nas.182, days: 1, target: APF}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 182
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with NeoAndean Sky Kingdom
+        spanish: Una Paz Humillante con Reino Celeste Neoandino
+      desc:
+        english: 'NeoAndean Sky Kingdom dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Reino Celeste Neoandino dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 184
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
+      desc:
+        english: 'Neo Roman Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Neo Imperio Romano está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: NAS_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_nas.186, days: 1, target: NRE}
+      src: user_design
+    - id: 185
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
+      desc:
+        english: 'Neo Roman Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Neo Imperio Romano se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: NAS_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_nas, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_nas.186, days: 1, target: NRE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 186
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with NeoAndean Sky Kingdom
+        spanish: Una Paz Humillante con Reino Celeste Neoandino
+      desc:
+        english: 'NeoAndean Sky Kingdom dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Reino Celeste Neoandino dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 159
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+      desc:
+        english: Weekly review of the wars between great powers.
+        spanish: Revisión semanal de las guerras entre potencias.
+      options:
+      - name: {english: Carry on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: NAS_guerra_limitada}
+        - {effect: event, id: meganations_nas.159, days: 7}
+      src: user_design
+      hidden: true
   meganations_shd:
     country: SHD
     events:
@@ -3391,6 +6082,453 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_design
+    - id: 160
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
+      desc:
+        english: 'Ecofascist Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Imperio Ecofascista está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: SHD_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_shd.162, days: 1, target: EFE}
+      src: user_design
+    - id: 161
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
+      desc:
+        english: 'Ecofascist Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Imperio Ecofascista se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: SHD_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_shd.162, days: 1, target: EFE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 162
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Sino-Harmonious Directorate
+        spanish: Una Paz Humillante con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Directorio Sino-Armónico dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 164
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Free Corporative Capital Union
+        spanish: Armisticio con Unión Libre de Capital Corporativo
+      desc:
+        english: 'Free Corporative Capital Union is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Unión Libre de Capital Corporativo está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: SHD_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_shd.166, days: 1, target: FCU}
+      src: user_design
+    - id: 165
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Free Corporative Capital Union Asks for an Armistice
+        spanish: Unión Libre de Capital Corporativo Pide un Armisticio
+      desc:
+        english: 'Free Corporative Capital Union is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Unión Libre de Capital Corporativo se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: SHD_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_shd.166, days: 1, target: FCU}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 166
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Sino-Harmonious Directorate
+        spanish: Una Paz Humillante con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Directorio Sino-Armónico dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 168
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Automated Socialist Commune
+        spanish: Armisticio con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Comuna Socialista Automatizada está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: SHD_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_shd.170, days: 1, target: ASC}
+      src: user_design
+    - id: 169
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Automated Socialist Commune Asks for an Armistice
+        spanish: Comuna Socialista Automatizada Pide un Armisticio
+      desc:
+        english: 'Automated Socialist Commune is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Comuna Socialista Automatizada se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: SHD_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_shd.170, days: 1, target: ASC}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 170
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Sino-Harmonious Directorate
+        spanish: Una Paz Humillante con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Directorio Sino-Armónico dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 172
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with High Seas Market Nation
+        spanish: Armisticio con Nación de Mercado de Alta Mar
+      desc:
+        english: 'High Seas Market Nation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Nación de Mercado de Alta Mar está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: SHD_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_shd.174, days: 1, target: HSN}
+      src: user_design
+    - id: 173
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: High Seas Market Nation Asks for an Armistice
+        spanish: Nación de Mercado de Alta Mar Pide un Armisticio
+      desc:
+        english: 'High Seas Market Nation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Nación de Mercado de Alta Mar se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: SHD_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_shd.174, days: 1, target: HSN}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 174
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Sino-Harmonious Directorate
+        spanish: Una Paz Humillante con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Directorio Sino-Armónico dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 176
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
+      desc:
+        english: 'NeoAndean Sky Kingdom is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Reino Celeste Neoandino está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: SHD_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_shd.178, days: 1, target: NAS}
+      src: user_design
+    - id: 177
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: NeoAndean Sky Kingdom Asks for an Armistice
+        spanish: Reino Celeste Neoandino Pide un Armisticio
+      desc:
+        english: 'NeoAndean Sky Kingdom is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Reino Celeste Neoandino se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: SHD_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_shd.178, days: 1, target: NAS}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 178
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Sino-Harmonious Directorate
+        spanish: Una Paz Humillante con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Directorio Sino-Armónico dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 180
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with African People's Federation
+        spanish: Armisticio con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Federación de los Pueblos Africanos está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: SHD_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_shd.182, days: 1, target: APF}
+      src: user_design
+    - id: 181
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: African People's Federation Asks for an Armistice
+        spanish: Federación de los Pueblos Africanos Pide un Armisticio
+      desc:
+        english: 'African People''s Federation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Federación de los Pueblos Africanos se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: SHD_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_shd.182, days: 1, target: APF}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 182
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Sino-Harmonious Directorate
+        spanish: Una Paz Humillante con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Directorio Sino-Armónico dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 184
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Neo Roman Empire, spanish: Armisticio con Neo Imperio Romano}
+      desc:
+        english: 'Neo Roman Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Neo Imperio Romano está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: SHD_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_shd.186, days: 1, target: NRE}
+      src: user_design
+    - id: 185
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Neo Roman Empire Asks for an Armistice, spanish: Neo Imperio Romano Pide un Armisticio}
+      desc:
+        english: 'Neo Roman Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Neo Imperio Romano se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NRE}
+        - {effect: flag, value: SHD_tregua_nre, days: 364}
+        - effect: scope
+          target: NRE
+          effects:
+          - {effect: flag, value: NRE_tregua_shd, days: 364}
+          - {effect: timed_idea, idea: NRE_revancha, days: 364}
+        - {effect: event, id: meganations_shd.186, days: 1, target: NRE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 186
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Sino-Harmonious Directorate
+        spanish: Una Paz Humillante con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Directorio Sino-Armónico dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 159
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+      desc:
+        english: Weekly review of the wars between great powers.
+        spanish: Revisión semanal de las guerras entre potencias.
+      options:
+      - name: {english: Carry on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: SHD_guerra_limitada}
+        - {effect: event, id: meganations_shd.159, days: 7}
+      src: user_design
+      hidden: true
   # ===========================================================================
   meganations_nre:
     country: NRE
@@ -4330,6 +7468,459 @@ namespaces:
           - {effect: event, id: meganations_nre.153, days: 1, target: NRE}
         ai_chance: 55
       src: user_design
+    - id: 160
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with Ecofascist Empire, spanish: Armisticio con Imperio Ecofascista}
+      desc:
+        english: 'Ecofascist Empire is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Imperio Ecofascista está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales firman
+          un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: NRE_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_nre.162, days: 1, target: EFE}
+      src: user_design
+    - id: 161
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Ecofascist Empire Asks for an Armistice, spanish: Imperio Ecofascista Pide un Armisticio}
+      desc:
+        english: 'Ecofascist Empire is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Imperio Ecofascista se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: EFE}
+        - {effect: flag, value: NRE_tregua_efe, days: 364}
+        - effect: scope
+          target: EFE
+          effects:
+          - {effect: flag, value: EFE_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: EFE_revancha, days: 364}
+        - {effect: event, id: meganations_nre.162, days: 1, target: EFE}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 162
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Neo Roman Empire
+        spanish: Una Paz Humillante con Neo Imperio Romano
+      desc:
+        english: 'Neo Roman Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Neo Imperio Romano dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 164
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Free Corporative Capital Union
+        spanish: Armisticio con Unión Libre de Capital Corporativo
+      desc:
+        english: 'Free Corporative Capital Union is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Unión Libre de Capital Corporativo está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: NRE_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_nre.166, days: 1, target: FCU}
+      src: user_design
+    - id: 165
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Free Corporative Capital Union Asks for an Armistice
+        spanish: Unión Libre de Capital Corporativo Pide un Armisticio
+      desc:
+        english: 'Free Corporative Capital Union is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Unión Libre de Capital Corporativo se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: FCU}
+        - {effect: flag, value: NRE_tregua_fcu, days: 364}
+        - effect: scope
+          target: FCU
+          effects:
+          - {effect: flag, value: FCU_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: FCU_revancha, days: 364}
+        - {effect: event, id: meganations_nre.166, days: 1, target: FCU}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 166
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Neo Roman Empire
+        spanish: Una Paz Humillante con Neo Imperio Romano
+      desc:
+        english: 'Neo Roman Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Neo Imperio Romano dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 168
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Automated Socialist Commune
+        spanish: Armisticio con Comuna Socialista Automatizada
+      desc:
+        english: 'Automated Socialist Commune is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Comuna Socialista Automatizada está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: NRE_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_nre.170, days: 1, target: ASC}
+      src: user_design
+    - id: 169
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Automated Socialist Commune Asks for an Armistice
+        spanish: Comuna Socialista Automatizada Pide un Armisticio
+      desc:
+        english: 'Automated Socialist Commune is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Comuna Socialista Automatizada se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: ASC}
+        - {effect: flag, value: NRE_tregua_asc, days: 364}
+        - effect: scope
+          target: ASC
+          effects:
+          - {effect: flag, value: ASC_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: ASC_revancha, days: 364}
+        - {effect: event, id: meganations_nre.170, days: 1, target: ASC}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 170
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Neo Roman Empire
+        spanish: Una Paz Humillante con Neo Imperio Romano
+      desc:
+        english: 'Neo Roman Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Neo Imperio Romano dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 172
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with High Seas Market Nation
+        spanish: Armisticio con Nación de Mercado de Alta Mar
+      desc:
+        english: 'High Seas Market Nation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Nación de Mercado de Alta Mar está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: NRE_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_nre.174, days: 1, target: HSN}
+      src: user_design
+    - id: 173
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: High Seas Market Nation Asks for an Armistice
+        spanish: Nación de Mercado de Alta Mar Pide un Armisticio
+      desc:
+        english: 'High Seas Market Nation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Nación de Mercado de Alta Mar se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: HSN}
+        - {effect: flag, value: NRE_tregua_hsn, days: 364}
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: flag, value: HSN_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: HSN_revancha, days: 364}
+        - {effect: event, id: meganations_nre.174, days: 1, target: HSN}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 174
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Neo Roman Empire
+        spanish: Una Paz Humillante con Neo Imperio Romano
+      desc:
+        english: 'Neo Roman Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Neo Imperio Romano dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 176
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Armistice with NeoAndean Sky Kingdom, spanish: Armisticio con Reino Celeste Neoandino}
+      desc:
+        english: 'NeoAndean Sky Kingdom is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an armistice:
+          each side keeps what it holds, and the war ends here.'
+        spanish: 'Reino Celeste Neoandino está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: NRE_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_nre.178, days: 1, target: NAS}
+      src: user_design
+    - id: 177
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: NeoAndean Sky Kingdom Asks for an Armistice
+        spanish: Reino Celeste Neoandino Pide un Armisticio
+      desc:
+        english: 'NeoAndean Sky Kingdom is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them off.'
+        spanish: 'Reino Celeste Neoandino se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: NAS}
+        - {effect: flag, value: NRE_tregua_nas, days: 364}
+        - effect: scope
+          target: NAS
+          effects:
+          - {effect: flag, value: NAS_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: NAS_revancha, days: 364}
+        - {effect: event, id: meganations_nre.178, days: 1, target: NAS}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 178
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Neo Roman Empire
+        spanish: Una Paz Humillante con Neo Imperio Romano
+      desc:
+        english: 'Neo Roman Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Neo Imperio Romano dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 180
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with Sino-Harmonious Directorate
+        spanish: Armisticio con Directorio Sino-Armónico
+      desc:
+        english: 'Sino-Harmonious Directorate is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign an
+          armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Directorio Sino-Armónico está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los generales
+          firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: NRE_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_nre.182, days: 1, target: SHD}
+      src: user_design
+    - id: 181
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Sino-Harmonious Directorate Asks for an Armistice
+        spanish: Directorio Sino-Armónico Pide un Armisticio
+      desc:
+        english: 'Sino-Harmonious Directorate is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish them
+          off.'
+        spanish: 'Directorio Sino-Armónico se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar con
+          ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: SHD}
+        - {effect: flag, value: NRE_tregua_shd, days: 364}
+        - effect: scope
+          target: SHD
+          effects:
+          - {effect: flag, value: SHD_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: SHD_revancha, days: 364}
+        - {effect: event, id: meganations_nre.182, days: 1, target: SHD}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 182
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Neo Roman Empire
+        spanish: Una Paz Humillante con Neo Imperio Romano
+      desc:
+        english: 'Neo Roman Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Neo Imperio Romano dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 184
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: Armistice with African People's Federation
+        spanish: Armisticio con Federación de los Pueblos Africanos
+      desc:
+        english: 'African People''s Federation is on the verge of collapse, but the world of 2100 cannot afford total wars yet. The generals sign
+          an armistice: each side keeps what it holds, and the war ends here.'
+        spanish: 'Federación de los Pueblos Africanos está a punto de caer, pero el mundo de 2100 todavía no se puede permitir guerras totales. Los
+          generales firman un armisticio: cada uno se queda con lo que ocupa, y la guerra termina acá.'
+      options:
+      - name: {english: 'Sign: this province is ours.', spanish: 'Firmar: esta provincia es nuestra.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: NRE_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_nre.186, days: 1, target: APF}
+      src: user_design
+    - id: 185
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: African People's Federation Asks for an Armistice
+        spanish: Federación de los Pueblos Africanos Pide un Armisticio
+      desc:
+        english: 'African People''s Federation is collapsing and asks for terms: each side keeps what it holds. The general staff wants to finish
+          them off.'
+        spanish: 'Federación de los Pueblos Africanos se derrumba y pide condiciones: cada uno se queda con lo que ocupa. El estado mayor quiere terminar
+          con ellos.'
+      options:
+      - name: {english: 'Accept: take what we hold.', spanish: 'Aceptar: quedarnos con lo que ocupamos.'}
+        effects:
+        - {effect: armistice, value: APF}
+        - {effect: flag, value: NRE_tregua_apf, days: 364}
+        - effect: scope
+          target: APF
+          effects:
+          - {effect: flag, value: APF_tregua_nre, days: 364}
+          - {effect: timed_idea, idea: APF_revancha, days: 364}
+        - {effect: event, id: meganations_nre.186, days: 1, target: APF}
+        ai_chance: 50
+      - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 50
+      src: user_design
+    - id: 186
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title:
+        english: A Humiliating Peace with Neo Roman Empire
+        spanish: Una Paz Humillante con Neo Imperio Romano
+      desc:
+        english: 'Neo Roman Empire dictated an armistice: they keep everything they occupied. The country will not forget.'
+        spanish: 'Neo Imperio Romano dictó un armisticio: se queda con todo lo que ocupó. El país no lo va a olvidar.'
+      options:
+      - name: {english: We will be back., spanish: Vamos a volver.}
+        effects: []
+      src: user_design
+    - id: 159
+      trigger: on_startup
+      picture: GFX_report_event_generic_rally
+      title: {english: The General Staff Reviews the Fronts, spanish: El Estado Mayor Revisa los Frentes}
+      desc:
+        english: Weekly review of the wars between great powers.
+        spanish: Revisión semanal de las guerras entre potencias.
+      options:
+      - name: {english: Carry on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: NRE_guerra_limitada}
+        - {effect: event, id: meganations_nre.159, days: 7}
+      src: user_design
+      hidden: true
   # ===========================================================================
   meganations_zwe:
     country: ZWE

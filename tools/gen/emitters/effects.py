@@ -504,6 +504,22 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("every_enemy_country", owner)
             effects_used.setdefault("add_to_war", owner)
             continue
+        if effect == "armistice":
+            # Paz con `value`: cada uno se queda con lo que ocupa del otro.
+            other = item["value"]
+            if ec.tags and other not in ec.tags:
+                raise SpecError(f"{owner}: armistice con '{other}', que no es un pais del mod", where=where)
+            block.add(other, Block([("every_owned_state", Block([
+                ("limit", Block([("is_controlled_by", "ROOT")])),
+                ("ROOT", Block([("transfer_state", "PREV")]))]))]))
+            block.add("every_owned_state", Block([
+                ("limit", Block([("is_controlled_by", other)])),
+                (other, Block([("transfer_state", "PREV")]))]))
+            block.add("white_peace", other)
+            for k in ("every_owned_state", "transfer_state", "white_peace"):
+                effects_used.setdefault(k, owner)
+            ec.triggers_used.setdefault("is_controlled_by", owner)
+            continue
         if effect == "leave_faction":
             block.add("leave_faction", True)
             effects_used.setdefault("leave_faction", owner)
@@ -729,6 +745,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("OR", Block([("controls_state", i) for i in ids]))
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "surrender_at_least":
+            block.add("surrender_progress", Compare(">", float(value)))
+            triggers_used.setdefault("surrender_progress", owner)
         elif key == "in_faction_with":
             block.add("is_in_faction_with", value)
             triggers_used.setdefault("is_in_faction_with", owner)

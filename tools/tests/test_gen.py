@@ -702,7 +702,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("35 eventos del EFE (con los 4 de la crisis de los Andes)", len(events) == 35, str(len(events)))
+        check("57 eventos del EFE (con la crisis de los Andes y la guerra limitada)", len(events) == 57, str(len(events)))
         conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
         check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
         check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
@@ -1247,6 +1247,15 @@ def test_ai() -> None:
               "is_in_faction_with = FCU" in sa and "leave_faction = yes" in sa
               and "FCU = { diplomatic_relation = { country = ROOT relation = guarantee active = no } }" in sa, sa[:600])
         check("cadenas: con fecha minima (no saltan todas el dia 2)", "date > 2101.1.1" in se_c and "date > 2100.9.1" in se_c)
+        gl = se_c[se_c.index("EFE_guerra_limitada = {"):][:1500]
+        check("guerra limitada: hasta 2104, al 40% de rendicion del rival salta el armisticio",
+              "has_war_with = FCU" in gl and "FCU = { surrender_progress > 0.4 }" in gl and "date > 2104.1.1" in gl, gl[:700])
+        efe_ev2 = " ".join((mod / "events/meganations_efe.txt").read_text().split())
+        arm = efe_ev2[efe_ev2.index("id = meganations_efe.160 title"):][:1500]
+        check("armisticio: cada uno se queda lo que ocupa y paz blanca",
+              "FCU = { every_owned_state = { limit = { is_controlled_by = ROOT } ROOT = { transfer_state = PREV } } }" in arm
+              and "white_peace = FCU" in arm and "FCU_revancha" in arm, arm[:900])
+        check("guerra limitada: se revisa cada semana", "id = meganations_efe.159 days = 7" in efe_ev2)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)
