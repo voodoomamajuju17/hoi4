@@ -412,11 +412,14 @@ namespaces:
           spanish: 'Río cayó y los Caudillos del Amazonas huyen hacia la selva. El bosque más grande de la Tierra es nuestro. La corte discute: ¿un
             santuario para Gaia, o la cuba más grande que vio el mundo?'
         options:
-        - name: {english: A Sanctuary for Gaia., spanish: Un Santuario para Gaia.}
+        - name:
+            english: A Sanctuary for Gaia (a new neutral nation in the heart of the forest)
+            spanish: Un Santuario para Gaia (una nación neutral nueva en el corazón de la selva)
           effects:
           - {effect: flag, value: EFE_conquista_proteger}
           - {effect: add_ideas, value: EFE_santuario_amazonico}
           - {effect: add_variable, var: EFE_saturacion, value: -20}
+          - {effect: flag, value: EFE_santuario_pendiente}
           ai_chance: 50
         - name: {english: The Productive Jungle., spanish: La Selva Productiva.}
           effects:
@@ -1370,6 +1373,86 @@ namespaces:
           effects:
           - {effect: add_stability, value: 0.05}
           - {effect: add_war_support, value: 0.05}
+        src: user_design
+      - id: 32
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Gaia's Sanctuary, spanish: El Santuario de Gaia}
+        desc:
+          english: 'The heart of the forest is no longer ours, and it never will be again: it belongs to itself. The Custodians raised a green flag
+            over the rivers. The Empire guarantees the Sanctuary for as long as there is an Empire.\n\nThe Union, the Andes, the Commune and the Antilles
+            are already looking at the rubber.'
+          spanish: 'El corazón de la selva ya no es nuestro, y no va a volver a serlo: es de sí mismo. Los Custodios izaron una bandera verde sobre
+            los ríos. El Imperio garantiza el Santuario mientras exista el Imperio.\n\nLa Unión, los Andes, la Comuna y las Antillas ya están mirando
+            el caucho.'
+        options:
+        - name: {english: 'For Gaia, forever.', spanish: 'Por Gaia, para siempre.'}
+          effects:
+          - {effect: guarantee, value: ZSG}
+          - {effect: add_stability, value: 0.05}
+          - {effect: opinion, target: ZSG, modifier: meganations_concesion}
+          - {effect: event, id: meganations_efe.33, days: 1, target: ZSG}
+          - effect: if
+            when: {country_exists: FCU}
+            then:
+            - effect: scope
+              target: FCU
+              effects:
+              - {effect: wargoal, target: ZSG, type: annex_everything}
+            - {effect: event, id: meganations_efe.34, days: 2, target: FCU}
+          - effect: if
+            when: {country_exists: NAS}
+            then:
+            - effect: scope
+              target: NAS
+              effects:
+              - {effect: wargoal, target: ZSG, type: annex_everything}
+            - {effect: event, id: meganations_efe.34, days: 2, target: NAS}
+          - effect: if
+            when: {country_exists: ASC}
+            then:
+            - effect: scope
+              target: ASC
+              effects:
+              - {effect: wargoal, target: ZSG, type: annex_everything}
+            - {effect: event, id: meganations_efe.34, days: 2, target: ASC}
+          - effect: if
+            when: {country_exists: ZAF}
+            then:
+            - effect: scope
+              target: ZAF
+              effects:
+              - {effect: wargoal, target: ZSG, type: annex_everything}
+            - {effect: event, id: meganations_efe.34, days: 2, target: ZAF}
+        src: user_design
+      - id: 33
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: A Flag over the Rivers, spanish: Una Bandera sobre los Ríos}
+        desc:
+          english: 'We exist. Not as a province, not as a warlord''s fief: as a sanctuary. The Empire swore to defend us; the rest of the world swore
+            nothing.'
+          spanish: 'Existimos. No como provincia, no como feudo de un caudillo: como santuario. El Imperio juró defendernos; el resto del mundo no juró
+            nada.'
+        options:
+        - name: {english: The forest decides., spanish: La selva decide.}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_political_power, value: 50}
+        src: user_design
+      - id: 34
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Rubber of the Sanctuary, spanish: El Caucho del Santuario}
+        desc:
+          english: 'The Ecofascist Empire turned the heart of the Amazon into a ''sanctuary'' and guarantees it with its legions. The richest forest
+            on Earth, locked away. Our strategists have a word for a treasure nobody may touch: a target.'
+          spanish: 'El Imperio Ecofascista convirtió el corazón del Amazonas en un ''santuario'' y lo garantiza con sus legiones. La selva más rica
+            de la Tierra, bajo llave. Nuestros estrategas tienen una palabra para un tesoro que nadie puede tocar: objetivo.'
+        options:
+        - name: {english: One day it will be ours., spanish: Algún día va a ser nuestro.}
+          effects:
+          - {effect: add_war_support, value: 0.02}
         src: user_design
   # ===========================================================================
   meganations_fcu:

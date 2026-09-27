@@ -2949,6 +2949,26 @@ characters:
         traits:
         - mn_mando_guerrilla
 
+  # El Santuario de Gaia (2026-09-29)
+  - id: ZSG_yara_tupinamba
+    country: ZSG
+    src: user_request
+    name:
+      regnal: {english: High Custodian Yara Tupinambá, spanish: Custodia Mayor Yara Tupinambá}
+    born: 2061
+    lore: Guardaparques del Alto Río Negro. Condujo a los Custodios durante la guerra de los Caudillos y convenció al Emperador de no talar.
+    roles:
+      country_leader:
+        ideology: climate_theocracy
+        traits:
+        - zsg_voz_de_la_selva
+    portrait:
+      path: gfx/leaders/ZSG/yara_tupinamba.dds
+      role: civilian
+      placeholder: false
+      description: 'High Custodian Yara Tupinambá, born 2061: an indigenous forest ranger in her forties, green and brown ceremonial ranger coat,
+        jungle behind her. Leader of Gaia''s Sanctuary, year 2100.'
+
 leader_traits:
   - id: efe_heredero_de_la_tierra
     name: { english: "Heir of the Earth", spanish: "Heredero de la Tierra" }
@@ -3281,6 +3301,10 @@ leader_traits:
   - id: mn_mando_guerrilla
     name: {english: Guerrilla Warfare, spanish: Guerra de Guerrillas}
     modifiers: {attrition: -0.1, army_core_defence_factor: 0.05}
+    src: user_request
+  - id: zsg_voz_de_la_selva
+    name: {english: Voice of the Forest, spanish: Voz de la Selva}
+    modifiers: {political_power_gain: 0.3, stability_factor: 0.05}
     src: user_request
 
 technical_notes:

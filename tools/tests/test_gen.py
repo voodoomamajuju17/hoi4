@@ -173,7 +173,7 @@ def test_pdx_roundtrip() -> None:
 def test_spec_loads() -> None:
     section("spec")
     spec = specload.load(REPO_ROOT / "spec")
-    check("29 paises (8 meganaciones + 16 satelites + 5 de la Anarquia)", len(spec.countries) == 29, f"hay {len(spec.countries)}")
+    check("30 paises (8 meganaciones + 16 satelites + 5 de la Anarquia + el Santuario de Gaia)", len(spec.countries) == 30, f"hay {len(spec.countries)}")
     check("todos los TAG de 3 letras", all(len(c.tag) == 3 for c in spec.countries))
     tags = {c.tag for c in spec.countries}
     for expected in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "PTA", "YYG"):
@@ -820,7 +820,25 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("66 eventos del EFE (guerra limitada, 5 menores y la independencia de sus satelites)", len(events) == 66, str(len(events)))
+        check("69 eventos del EFE (guerra limitada, 5 menores, independencias y el Santuario)", len(events) == 69, str(len(events)))
+        # El Santuario de Gaia (2026-09-29): proteger el Amazonas crea una nación neutral.
+        efe_ev2 = " ".join((mod / "events/meganations_efe.txt").read_text().split())
+        e30 = efe_ev2[efe_ev2.index("id = meganations_efe.30 title"):][:1500]
+        check("Santuario: proteger lo deja pendiente", "set_country_flag = EFE_santuario_pendiente" in e30, e30[:600])
+        e32 = efe_ev2[efe_ev2.index("id = meganations_efe.32 title"):][:3000]
+        check("Santuario: el EFE lo garantiza",
+              "diplomatic_relation = { country = ZSG relation = guarantee active = yes }" in e32, e32[:700])
+        check("Santuario: objetivo de guerra de la FCU, la NAS, la ASC y ZAF",
+              all(f"{t_} = {{ create_wargoal = {{ type = annex_everything target = ZSG }} }}" in e32 for t_ in ("FCU", "NAS", "ASC", "ZAF")), e32[:1500])
+        se_raw_s = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
+        pulso_s = " ".join(pdx.render(pdx.parse(se_raw_s).get("EFE_pulso_de_las_cubas")).split())
+        check("Santuario: nace cuando el EFE ya tiene regiones de la selva",
+              "has_country_flag = EFE_santuario_pendiente" in pulso_s and "EFE_crear_santuario = yes" in pulso_s)
+        check("Santuario: garantia para siempre (si se cae, vuelve)",
+              "NOT = { has_guaranteed = ZSG }" in pulso_s, pulso_s[-800:])
+        zsg_h = next((mod / "history/countries").glob("ZSG - *.txt")).read_text()
+        check("Santuario: neutral, con su espiritu y leyes de paz",
+              "ZSG_santuario_de_gaia" in zsg_h and "civilian_economy" in zsg_h and "volunteer_only" in zsg_h, zsg_h[-700:])
         # El lado del satélite (2026-09-29): su panel, la independencia y el aviso al señor.
         cats_s = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text().split())
         check("satelite: panel propio visible mientras sea satelite",
@@ -916,7 +934,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("73 rasgos propios (13 de lideres, 40 de ministros, 20 del alto mando)", len(body.keys()) == 73, str(len(body.keys())))
+        check("74 rasgos propios (14 de lideres, 40 de ministros, 20 del alto mando)", len(body.keys()) == 74, str(len(body.keys())))
         efe_chars = pdx.parse((mod / "common/characters/EFE_characters.txt").read_text()).get("characters")
         advisors = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None]
         mins = [k for k in advisors if "_min_" in k]
@@ -1862,7 +1880,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### has_global_flag\n### is_major\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "

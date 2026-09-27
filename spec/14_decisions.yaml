@@ -7774,6 +7774,38 @@ scripted_effects:
       - {effect: flag, value: EFE_menor_204}
       - {effect: event, id: meganations_efe.204, days: 1}
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
+    - effect: if
+      when:
+        flag: EFE_santuario_pendiente
+        not_flag: EFE_santuario_creado
+        any:
+        - owns_state:
+          - Amazonas
+        - owns_state:
+          - Pará
+          - Para
+        - owns_state:
+          - Acre
+        - owns_state:
+          - Roraima
+          - Rio Branco
+        - owns_state:
+          - Amapá
+          - Amapa
+        - owns_state:
+          - Rondônia
+          - Rondonia
+          - Guaporé
+          - Guapore
+      then:
+      - {effect: run, value: EFE_crear_santuario}
+    - effect: if
+      when:
+        flag: EFE_santuario_creado
+        country_exists: ZSG
+        not: {guarantees: ZSG}
+      then:
+      - {effect: guarantee, value: ZSG}
   - id: FCU_pulso_del_directorio
     effects:
     - effect: if
@@ -11520,6 +11552,106 @@ scripted_effects:
           - {tag: SHD}
           - {tag: APF}
           - {tag: NRE}
+
+  # El Santuario de Gaia (2026-09-29): las regiones de la selva que el EFE ya tiene pasan al Santuario, con recursos extra
+  - id: EFE_crear_santuario
+    effects:
+    - effect: in_state
+      state:
+      - Amazonas
+      effects:
+      - effect: if
+        when: {owned_by: EFE}
+        then:
+        - {effect: transfer_to, value: ZSG}
+        - {effect: resource_here, resource: rubber, amount: 12}
+        - {effect: resource_here, resource: aluminium, amount: 4}
+        - {effect: resource_here, resource: oil, amount: 4}
+    - effect: in_state
+      state:
+      - Pará
+      - Para
+      effects:
+      - effect: if
+        when: {owned_by: EFE}
+        then:
+        - {effect: transfer_to, value: ZSG}
+        - {effect: resource_here, resource: rubber, amount: 12}
+        - {effect: resource_here, resource: aluminium, amount: 4}
+        - {effect: resource_here, resource: oil, amount: 4}
+    - effect: in_state
+      state:
+      - Acre
+      effects:
+      - effect: if
+        when: {owned_by: EFE}
+        then:
+        - {effect: transfer_to, value: ZSG}
+        - {effect: resource_here, resource: rubber, amount: 12}
+        - {effect: resource_here, resource: aluminium, amount: 4}
+        - {effect: resource_here, resource: oil, amount: 4}
+    - effect: in_state
+      state:
+      - Roraima
+      - Rio Branco
+      effects:
+      - effect: if
+        when: {owned_by: EFE}
+        then:
+        - {effect: transfer_to, value: ZSG}
+        - {effect: resource_here, resource: rubber, amount: 12}
+        - {effect: resource_here, resource: aluminium, amount: 4}
+        - {effect: resource_here, resource: oil, amount: 4}
+    - effect: in_state
+      state:
+      - Amapá
+      - Amapa
+      effects:
+      - effect: if
+        when: {owned_by: EFE}
+        then:
+        - {effect: transfer_to, value: ZSG}
+        - {effect: resource_here, resource: rubber, amount: 12}
+        - {effect: resource_here, resource: aluminium, amount: 4}
+        - {effect: resource_here, resource: oil, amount: 4}
+    - effect: in_state
+      state:
+      - Rondônia
+      - Rondonia
+      - Guaporé
+      - Guapore
+      effects:
+      - effect: if
+        when: {owned_by: EFE}
+        then:
+        - {effect: transfer_to, value: ZSG}
+        - {effect: resource_here, resource: rubber, amount: 12}
+        - {effect: resource_here, resource: aluminium, amount: 4}
+        - {effect: resource_here, resource: oil, amount: 4}
+    - effect: if
+      when: {country_exists: ZSG}
+      then:
+      - effect: scope
+        target: ZSG
+        effects:
+        - effect: division_template
+          name: Guardaparques del Santuario
+          regiments:
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - effect: create_units
+          template: Guardaparques del Santuario
+          name: Guardaparques
+          count: 4
+          experience: 0.3
+    - {effect: flag, value: EFE_santuario_creado}
+    - {effect: event, id: meganations_efe.32, days: 1}
+
 
 
 

@@ -28,6 +28,9 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
                                                   -> random_owned_controlled_state / every_owned_state
   { effect: global_flag, value: X }                -> set_global_flag (condiciones global_flag / not_global_flag)
   { effect: end_puppet, value: TAG }               -> end_puppet (en el scope del señor: TAG se independiza)
+  { effect: guarantee, value: TAG }                -> diplomatic_relation guarantee (condición guarantees: TAG)
+  En regiones: { effect: resource_here, resource: X, amount: N } -> add_resource en esa región
+  Condiciones: owns_state: [nombres] (país), owned_by: TAG (región)
   { effect: every_country, when: {..}, effects: [..] } -> every_country (eventos mundiales)
   En regiones: { effect: add_core, value: TAG } / { effect: state_flag, value: X }
                { effect: clear_state_flag, value: X }
@@ -588,6 +591,19 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("leave_faction", True)
             effects_used.setdefault("leave_faction", owner)
             continue
+        if effect == "guarantee":
+            # el país del scope garantiza a `value` (el Santuario de Gaia, 2026-09-29)
+            block.add("diplomatic_relation", Block([("country", item["value"]), ("relation", "guarantee"), ("active", True)]))
+            effects_used.setdefault("diplomatic_relation", owner)
+            continue
+        if effect == "resource_here":
+            # en una región: suma un recurso a ESA región
+            resource = item["resource"]
+            if ec.resources and resource not in ec.resources:
+                raise SpecError(f"{owner}: recurso '{resource}' desconocido", where=where)
+            block.add("add_resource", Block([("type", resource), ("amount", int(item.get("amount", 1)))]))
+            effects_used.setdefault("add_resource", owner)
+            continue
         if effect == "end_guarantee":
             # el país del scope deja de garantizar a `value`
             block.add("diplomatic_relation", Block([("country", item["value"]), ("relation", "guarantee"), ("active", False)]))
@@ -810,6 +826,21 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("controls_state", sid)
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "owns_state":
+            # es dueño de la región (nombres alternativos de UNA región)
+            sid = resolve_state(value)
+            if sid is None:
+                block.add("always", False)
+            else:
+                block.add("owns_state", sid)
+                triggers_used.setdefault("owns_state", owner)
+        elif key == "owned_by":
+            # en una región: su dueño es `value`
+            block.add("is_owned_by", value)
+            triggers_used.setdefault("is_owned_by", owner)
+        elif key == "guarantees":
+            block.add("has_guaranteed", value)
+            triggers_used.setdefault("has_guaranteed", owner)
         elif key == "controls_any_of":
             # controla al menos una región de las que `value` tenía al arranque
             ids = sorted(sid for sid, tag in _TERRITORY.items() if tag == value)
