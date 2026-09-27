@@ -904,6 +904,24 @@ def test_balance() -> None:
         check("YYG y PTA con guarnicion reforzada",
               ctx.data["division_count"].get("YYG") == 4 and ctx.data["division_count"].get("PTA") == 3,
               str(ctx.data["division_count"]))
+        # Doctrinas de arranque (2026-09-29): cada bloque la suya, ya iniciada.
+        doc = " ".join((mod / "common/on_actions/01_meganations_doctrines.txt").read_text().split())
+        check("doctrina: el EFE con guerra de movimiento y blindados, ya iniciada",
+              "EFE = { set_grand_doctrine = mobile_warfare set_sub_doctrine = rapid_dominance "
+              "add_mastery = { amount = 100 sub_doctrine = rapid_dominance } }" in doc, doc[:600])
+        check("doctrina: sus satelites comparten la del senor",
+              "PTA = { set_grand_doctrine = mobile_warfare set_sub_doctrine = rapid_dominance" in doc
+              and "YYG = { set_grand_doctrine = mobile_warfare" in doc)
+        check("doctrina: Roma con asalto en masa e infanteria de choque",
+              "NRE = { set_grand_doctrine = mass_assault set_sub_doctrine = shock_infantry" in doc)
+        check("doctrina: la Anarquia comparte una (infiltracion)",
+              "ZWE = { set_grand_doctrine = mass_assault set_sub_doctrine = infiltration_tactics" in doc
+              and "ZWI = { set_grand_doctrine = mass_assault set_sub_doctrine = infiltration_tactics" in doc)
+        check("doctrina: la HSN naval (corsarios) y la APF antitanque (palabra clave en otro track)",
+              "HSN = { set_grand_doctrine = trade_interdiction set_sub_doctrine = destroyer_hunters" in doc
+              and "APF = { set_grand_doctrine = grand_battleplan set_sub_doctrine = anti_tank_forces" in doc)
+        check("doctrina: solo si el pais existe", "if = { limit = { country_exists = EFE } EFE = {" in doc)
+        check("doctrina: el reporte lista las del juego", any(n.startswith("doctrinas del juego:") for n in ctx.notes))
         names = (mod / "localisation/spanish/meganations_countries_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("nombre de pais para las 4 ideologias y a secas (game.log: guerra contra un pais sin nombre)",
               all(f" {k}:0 " in names for k in ("ZWE", "ZWE_ADJ", "ZWE_neutrality", "ZWE_communism", "ZWE_fascism",
@@ -1747,7 +1765,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

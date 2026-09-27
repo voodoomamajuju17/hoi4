@@ -30,6 +30,7 @@ from .emitters import countries as em_countries
 from .emitters import decisions as em_decisions
 from .emitters import descriptor as em_descriptor
 from .emitters import diplomacy as em_diplomacy
+from .emitters import doctrines as em_doctrines
 from .emitters import events as em_events
 from .emitters import focus_trees as em_focus_trees
 from .emitters import forces as em_forces
@@ -60,6 +61,7 @@ EMITTERS = [
     ("militia", em_militia.emit),       # antes que history: define el oob
     ("military", em_military.emit),     # despues de militia: tecnologias, ejercito, equipo
     ("forces", em_forces.emit),         # armada y aviacion heredadas de 1936
+    ("doctrines", em_doctrines.emit),   # despues de territory: doctrina de arranque por bloque
     ("research", em_research.emit),     # la investigacion de 2100: años y nombres
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),

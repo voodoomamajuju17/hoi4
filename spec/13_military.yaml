@@ -123,3 +123,36 @@ stockpile:
 # EFE_cubas_de_la_pampa), no con fábricas regaladas: las fábricas extra no
 # entran en los slots de los states.
 # -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# Doctrinas de arranque (2026-09-29, pedido del usuario): cada meganación
+# arranca con una gran doctrina y una subdoctrina ya activas y algo de
+# maestría; sus satélites comparten la del señor; la Anarquía comparte una.
+# Sistema de doctrinas de 1.17+: los nombres se buscan en common/doctrines/
+# del juego instalado. Para cada bloque se prueba `grand` y después las
+# palabras de `grand_kw` dentro de `folder`; la subdoctrina sale de `sub`, o
+# del track que contenga `track` y las palabras de `sub_kw`. El reporte lista
+# las doctrinas del juego y cuál quedó para cada uno.
+# -----------------------------------------------------------------------------
+doctrines:
+  src: user_request
+  mastery: 100          # "ya iniciada": maestría de arranque en su subdoctrina
+  blocs:
+    # El Imperio Verde: guerra de movimiento con blindados (su especialidad)
+    EFE: {folder: land, grand: [mobile_warfare], grand_kw: [mobile], track: armor, sub_kw: [blitz, armor, armour, tank]}
+    # Roma: las legiones, infantería de choque en masa
+    NRE: {folder: land, grand: [mass_assault], grand_kw: [mass], track: infantry, sub_kw: [shock, assault, legion]}
+    # El Directorio: la artillería del río, fuego medido
+    SHD: {folder: land, grand: [superior_firepower], grand_kw: [firepower], track: artillery, sub_kw: [siege, artillery, gun]}
+    # La FCU: potencia de fuego comprada, apoyo motorizado
+    FCU: {folder: land, grand: [superior_firepower], grand_kw: [firepower], track: support, sub_kw: [self_propelled, motor, support]}
+    # La Comuna: el plan calculado por la red
+    ASC: {folder: land, grand: [grand_battleplan, grand_battle_plan], grand_kw: [battle, plan], track: operation, sub_kw: [recon, plan, operation]}
+    # La Federación: defensa en profundidad del continente
+    APF: {folder: land, grand: [grand_battleplan, grand_battle_plan], grand_kw: [battle, plan], track: artillery, sub_kw: [anti_tank, defen, trench]}
+    # La HSN: corsarios y cazadores de convoyes
+    HSN: {folder: naval, grand: [trade_interdiction], grand_kw: [trade, interdiction, raid], track: screen, sub_kw: [raid, hunter, destroyer, screen]}
+    # El Sol: el cielo de los Andes (aviación, su especialidad)
+    NAS: {folder: air, grand: [battlefield_support], grand_kw: [battlefield, support], track: support, sub_kw: [close_air, ground, cas]}
+    # La Anarquía: bandas, infiltración y oleadas
+    anarchy: {folder: land, grand: [mass_assault], grand_kw: [mass], track: infantry, sub_kw: [infiltration, guerrilla, human_wave, wave]}

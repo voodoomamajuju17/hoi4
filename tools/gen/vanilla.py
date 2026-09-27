@@ -404,6 +404,39 @@ class Vanilla:
                 out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block))
         return out
 
+    def doctrines(self) -> dict[str, dict[str, dict]] | None:
+        """Doctrinas del sistema nuevo (1.17+), de common/doctrines/:
+        {"grand": {clave: {"folder": f, "tracks": [...]}},
+         "sub": {clave: {"tracks": [...], "xp_type": x}}}.
+        None si el juego no tiene la carpeta (versión vieja)."""
+        folder = self.root / "common" / "doctrines"
+        if not folder.is_dir():
+            return None
+        out: dict[str, dict[str, dict]] = {"grand": {}, "sub": {}}
+
+        def names(value) -> list[str]:
+            if isinstance(value, pdx.Block):
+                return [str(v if k is None else k) for k, v in value.entries]
+            return [pdx.text(value)] if value is not None else []
+
+        for kind, sub in (("grand", "grand_doctrines"), ("sub", "subdoctrines")):
+            for path in sorted((folder / sub).glob("*.txt")):
+                try:
+                    root = pdx.parse_file(path)
+                except ValueError:
+                    continue
+                for key, body in root.entries:
+                    if not key or not isinstance(body, pdx.Block) or str(key).startswith("@"):
+                        continue
+                    if kind == "grand":
+                        out["grand"][str(key)] = {"folder": pdx.text(body.get("folder")) if body.get("folder") is not None else "",
+                                                  "tracks": names(body.get("tracks"))}
+                    else:
+                        tracks = [t for k, v in body.entries if k == "track" for t in names(v)]
+                        out["sub"][str(key)] = {"tracks": tracks,
+                                                "xp_type": pdx.text(body.get("xp_type")) if body.get("xp_type") is not None else ""}
+        return out
+
     def ai_strategy_ids(self) -> dict[str, set[str]] | None:
         """Por tipo de ai_strategy, los `id` que el juego usa con ese tipo
         (role_ratio -> infantry, armor...). Sirve para no inventar ids."""
