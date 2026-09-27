@@ -635,7 +635,7 @@ def test_territory() -> None:
     terr_spec = _yt.safe_load((REPO_ROOT / "spec/08_territory.yaml").read_text(encoding="utf-8"))["territories"]
     wanted = {t: v for t, v in terr_spec.items() if isinstance(v, dict) and isinstance(v.get("resolve"), list)}
     rows = [(1, "CZE", "Bohemia", "europe"), (2, "CZE", "Slovakia", "europe"), (3, "CZE", "Carpathian Ruthenia", "europe"),
-            (4, "DNZ", "Danzig", "europe"), (5, "PAN", "Panama", "north_america"),
+            (4, "DNZ", "Danzig", "europe"), (5, "PAN", "Panama", "north_america"), (9, "POL", "Gdynia", "europe"),
             # Puerto Rico en otro continente: lo toma el nombre, no el dueño
             (6, "USA", "Puerto Rico", "south_america"), (7, "COL", "Bogota", "south_america"), (8, "POL", "Warsaw", "europe")]
     rstates = [_S(id=i, owner=o, cores=[o], name_key=f"S{i}", file_label=n) for i, o, n, _ in rows]
@@ -644,6 +644,7 @@ def test_territory() -> None:
     got = _resolve(rctx, wanted, rstates, {}, {_tnorm(s.file_label): [s] for s in rstates})
     check("territorio: Chequia y Danzig a la ASC; Eslovaquia y Rutenia quedan en ZBC",
           (got[1], got[2], got[3], got[4], got[8]) == ("ASC", "ZBC", "ZBC", "ASC", "ZBC"), str(got))
+    check("territorio: Gdynia (la region entera) a la ASC aunque era polaca", got[9] == "ASC", str(got))
     check("territorio: el canal de Panama y Puerto Rico a la FCU; Colombia sigue en ZNG",
           (got[5], got[6], got[7]) == ("FCU", "FCU", "ZNG"), str(got))
     # reporte 2026-09-29: "clave de localisation duplicada: STATE_446" (en 1.19.3
