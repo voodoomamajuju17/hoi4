@@ -660,6 +660,85 @@ namespaces:
         - name: {english: Understood., spanish: Entendido.}
           effects: []
         src: user_design
+      - id: 150
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Andean Border, spanish: La Frontera de los Andes}
+        desc:
+          english: 'The Sun Kingdom sits on the passes of the Andes, over our northern flank. The court wants Arequipa: a buffer, or a pretext.'
+          spanish: 'El Reino del Sol está sentado sobre los pasos de los Andes, encima de nuestro flanco norte. La corte quiere Arequipa: un colchón,
+            o una excusa.'
+        options:
+        - name: {english: Demand Arequipa., spanish: Exigir Arequipa.}
+          effects:
+          - effect: if
+            when: {country_exists: NAS}
+            then:
+            - {effect: event, id: meganations_efe.151, days: 1, target: NAS}
+          ai_chance: 70
+        - name: {english: Leave the mountains in peace., spanish: Dejar la montaña en paz.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 30
+        src: user_design
+      - id: 152
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Sun Yields Arequipa, spanish: El Sol Cede Arequipa}
+        desc:
+          english: The priests handed over Arequipa without a shot.
+          spanish: Los sacerdotes entregaron Arequipa sin un disparo.
+        options:
+        - name: {english: Good., spanish: Bien.}
+          effects:
+          - {effect: add_political_power, value: 50}
+          - {effect: opinion, target: NAS, modifier: meganations_concesion}
+        src: user_design
+      - id: 153
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Sun Refuses, spanish: El Sol se Niega}
+        desc:
+          english: The Sun Kingdom refused. The Green Guard has its casus belli.
+          spanish: El Reino del Sol se negó. La Guardia Verde tiene su casus belli.
+        options:
+        - name: {english: Then it is war., spanish: Entonces es la guerra.}
+          effects:
+          - {effect: wargoal, target: NAS, type: annex_everything}
+          - {effect: add_war_support, value: 0.05}
+          - {effect: flag, value: EFE_contra_NAS}
+        src: user_design
+      - id: 151
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Empire Demands Arequipa, spanish: El Imperio Exige Arequipa}
+        desc:
+          english: The Green Empire demands Arequipa 'to secure the Andes'. Refuse, and the Green Guard will come for it.
+          spanish: El Imperio Verde exige Arequipa 'para asegurar los Andes'. Si nos negamos, la Guardia Verde viene a buscarla.
+        options:
+        - name: {english: Give them Arequipa., spanish: Entregar Arequipa.}
+          effects:
+          - effect: in_state
+            state:
+            - Arequipa
+            effects:
+            - {effect: transfer_to, value: EFE}
+          - {effect: add_stability, value: -0.05}
+          - effect: if
+            when: {country_exists: EFE}
+            then:
+            - {effect: event, id: meganations_efe.152, days: 1, target: EFE}
+          - {effect: opinion, target: EFE, modifier: meganations_concesion}
+          ai_chance: 45
+        - name: {english: The Sun yields nothing., spanish: El Sol no cede nada.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - effect: if
+            when: {country_exists: EFE}
+            then:
+            - {effect: event, id: meganations_efe.153, days: 1, target: EFE}
+          ai_chance: 55
+        src: user_design
   # ===========================================================================
   meganations_fcu:
     country: FCU
@@ -1155,6 +1234,80 @@ namespaces:
         - name: {english: Understood., spanish: Entendido.}
           effects: []
         src: user_design
+      - id: 150
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Insurance War, spanish: La Guerra de las Aseguradoras}
+        desc:
+          english: The Sea Nation's insurers now set the price of every cargo that crosses the Pacific. The Directorate wants a seat on their board.
+          spanish: Las aseguradoras de la Nación del Mar ya ponen el precio de cada carga que cruza el Pacífico. El Directorio quiere un asiento en
+            su directorio.
+        options:
+        - name: {english: Demand a seat on their board., spanish: Exigir un asiento en su directorio.}
+          effects:
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_fcu.151, days: 1, target: HSN}
+          ai_chance: 70
+        - name: {english: Business can wait., spanish: Los negocios pueden esperar.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 30
+        src: user_design
+      - id: 152
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Sea Nation Sells, spanish: La Nación del Mar Vende}
+        desc:
+          english: We have a seat on the board of the sea.
+          spanish: Tenemos un asiento en el directorio del mar.
+        options:
+        - name: {english: Good., spanish: Bien.}
+          effects:
+          - {effect: add_political_power, value: 50}
+          - {effect: opinion, target: HSN, modifier: meganations_concesion}
+        src: user_design
+      - id: 153
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Sea Nation Refuses, spanish: La Nación del Mar se Niega}
+        desc: {english: They laughed at our offer., spanish: Se rieron de nuestra oferta.}
+        options:
+        - name: {english: Then it is war., spanish: Entonces es la guerra.}
+          effects:
+          - {effect: wargoal, target: HSN, type: annex_everything}
+          - {effect: add_war_support, value: 0.05}
+          - {effect: flag, value: FCU_contra_HSN}
+        src: user_design
+      - id: 151
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Union Wants In, spanish: La Unión Quiere Entrar}
+        desc:
+          english: The Union demands shares in our insurers and free passage for its convoys. Refuse, and its fleets will come.
+          spanish: La Unión exige acciones de nuestras aseguradoras y paso libre para sus convoyes. Si nos negamos, vienen sus flotas.
+        options:
+        - name: {english: Sell them the shares., spanish: Venderles las acciones.}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: HSN_presion, value: -15}
+          - effect: if
+            when: {country_exists: FCU}
+            then:
+            - {effect: event, id: meganations_fcu.152, days: 1, target: FCU}
+          - {effect: opinion, target: FCU, modifier: meganations_concesion}
+          ai_chance: 45
+        - name: {english: The sea is not for sale., spanish: El mar no está en venta.}
+          effects:
+          - {effect: add_variable, var: HSN_presion, value: 10}
+          - {effect: add_war_support, value: 0.05}
+          - effect: if
+            when: {country_exists: FCU}
+            then:
+            - {effect: event, id: meganations_fcu.153, days: 1, target: FCU}
+          ai_chance: 55
+        src: user_design
   # ===========================================================================
   meganations_hsn:
     country: HSN
@@ -1570,6 +1723,83 @@ namespaces:
         options:
         - name: {english: Understood., spanish: Entendido.}
           effects: []
+        src: user_design
+      - id: 150
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Taiwan Node, spanish: El Nodo de Taiwán}
+        desc:
+          english: Taiwan belongs to the Directorate, and our network is missing a node. The captains propose buying it. Or taking it.
+          spanish: Taiwán es del Directorio, y a nuestra red le falta un nodo. Los capitanes proponen comprarlo. O tomarlo.
+        options:
+        - name: {english: Offer to buy Taiwan., spanish: Ofrecer comprar Taiwán.}
+          effects:
+          - effect: if
+            when: {country_exists: SHD}
+            then:
+            - {effect: event, id: meganations_hsn.151, days: 1, target: SHD}
+          ai_chance: 70
+        - name: {english: The network can wait., spanish: La red puede esperar.}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 30
+        src: user_design
+      - id: 152
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Taiwan Is Ours, spanish: Taiwán es Nuestro}
+        desc:
+          english: The Directorate sold. The fifth node is ours.
+          spanish: El Directorio vendió. El quinto nodo es nuestro.
+        options:
+        - name: {english: Good., spanish: Bien.}
+          effects:
+          - {effect: add_political_power, value: 50}
+          - {effect: opinion, target: SHD, modifier: meganations_concesion}
+        src: user_design
+      - id: 153
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Directorate Refuses, spanish: El Directorio se Niega}
+        desc: {english: The Directorate will not sell Taiwan., spanish: El Directorio no va a vender Taiwán.}
+        options:
+        - name: {english: Then it is war., spanish: Entonces es la guerra.}
+          effects:
+          - {effect: wargoal, target: SHD, type: annex_everything}
+          - {effect: add_war_support, value: 0.05}
+          - {effect: flag, value: HSN_contra_SHD}
+        src: user_design
+      - id: 151
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Sea Nation Wants Taiwan, spanish: La Nación del Mar Quiere Taiwán}
+        desc:
+          english: The Sea Nation offers to buy Taiwan. Its captains make it clear that they will not ask twice.
+          spanish: La Nación del Mar ofrece comprar Taiwán. Sus capitanes dejan claro que no van a preguntar dos veces.
+        options:
+        - name: {english: Sell Taiwan., spanish: Vender Taiwán.}
+          effects:
+          - effect: in_state
+            state:
+            - Taiwan
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - {effect: add_political_power, value: 150}
+          - {effect: add_stability, value: -0.03}
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_hsn.152, days: 1, target: HSN}
+          - {effect: opinion, target: HSN, modifier: meganations_concesion}
+          ai_chance: 45
+        - name: {english: Taiwan is not for sale., spanish: Taiwán no está en venta.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - effect: if
+            when: {country_exists: HSN}
+            then:
+            - {effect: event, id: meganations_hsn.153, days: 1, target: HSN}
+          ai_chance: 55
         src: user_design
   # ===========================================================================
   meganations_asc:
@@ -4026,6 +4256,79 @@ namespaces:
       options:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
+      src: user_design
+    - id: 150
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The African Shore, spanish: La Orilla Africana}
+      desc:
+        english: The Federation's factories now face ours across the Mediterranean. The Senate says Africa must pay Rome's tribute, as it once did.
+        spanish: Las fábricas de la Federación ya miran a las nuestras del otro lado del Mediterráneo. El Senado dice que África tiene que pagarle
+          tributo a Roma, como antes.
+      options:
+      - name: {english: Demand tribute from Africa., spanish: Exigirle tributo a África.}
+        effects:
+        - effect: if
+          when: {country_exists: APF}
+          then:
+          - {effect: event, id: meganations_nre.151, days: 1, target: APF}
+        ai_chance: 70
+      - name: {english: Rome needs no tribute., spanish: Roma no necesita tributos.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 30
+      src: user_design
+    - id: 152
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Africa Pays, spanish: África Paga}
+      desc: {english: The Federation paid the tribute., spanish: La Federación pagó el tributo.}
+      options:
+      - name: {english: Good., spanish: Bien.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        - {effect: opinion, target: APF, modifier: meganations_concesion}
+      src: user_design
+    - id: 153
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Africa Refuses, spanish: África se Niega}
+      desc:
+        english: The councils sent the legate back with nothing.
+        spanish: Los consejos devolvieron al legado con las manos vacías.
+      options:
+      - name: {english: Then it is war., spanish: Entonces es la guerra.}
+        effects:
+        - {effect: wargoal, target: APF, type: annex_everything}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: flag, value: NRE_contra_APF}
+      src: user_design
+    - id: 151
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Rome Demands Tribute, spanish: Roma Exige Tributo}
+      desc:
+        english: 'Rome demands tribute: rifles and money, every year, ''for the peace of the Mediterranean''.'
+        spanish: 'Roma exige tributo: fusiles y plata, todos los años, ''por la paz del Mediterráneo''.'
+      options:
+      - name: {english: Pay., spanish: Pagar.}
+        effects:
+        - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: NRE}
+        - {effect: add_political_power, value: -100}
+        - effect: if
+          when: {country_exists: NRE}
+          then:
+          - {effect: event, id: meganations_nre.152, days: 1, target: NRE}
+        - {effect: opinion, target: NRE, modifier: meganations_concesion}
+        ai_chance: 45
+      - name: {english: Africa pays no one., spanish: África no le paga a nadie.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - effect: if
+          when: {country_exists: NRE}
+          then:
+          - {effect: event, id: meganations_nre.153, days: 1, target: NRE}
+        ai_chance: 55
       src: user_design
   # ===========================================================================
   meganations_zwe:

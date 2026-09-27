@@ -79,6 +79,17 @@ countries:
         spanish: La Guardia Verde desfila bien y pelea mal. Se va con el foco «La Guardia Verde Movilizada», o tener 20 divisiones.
       modifiers: {army_org_factor: -0.08, army_attack_factor: -0.05}
       src: user_request
+    - id: EFE_la_selva_es_nuestra
+      name: {english: The Forest Is Ours, spanish: La Selva es Nuestra}
+      desc:
+        english: Every ranger knows every trail from the Chaco to Patagonia.
+        spanish: Cada guardaparque conoce cada sendero, del Chaco a la Patagonia.
+      modifiers:
+        army_defence_factor: 0.03
+        ?army_core_defence_factor: 0.1
+        ?heat_attrition_factor: -0.1
+        ?attrition: -0.05
+      src: user_design
     focus_ideas:
     - id: EFE_santuario_amazonico
       name: {english: The Amazon Sanctuary, spanish: El Santuario Amazónico}
@@ -977,6 +988,17 @@ countries:
         spanish: Cada capitán cree que él debería gobernar la Nación. Se va con el foco «La Junta de Capitanes».
       modifiers: {political_power_gain: -0.15, stability_factor: -0.03}
       src: user_request
+    - id: HSN_gente_de_islas
+      name: {english: Island People, spanish: Gente de Islas}
+      desc:
+        english: Every beach is a harbour and every harbour a fortress.
+        spanish: Cada playa es un puerto y cada puerto una fortaleza.
+      modifiers:
+        army_defence_factor: 0.03
+        ?army_core_defence_factor: 0.1
+        ?amphibious_invasion: 0.1
+        ?amphibious_invasion_defence: 0.1
+      src: user_design
   NAS:
     coverage: full_v1
     focus_ideas:
@@ -1148,6 +1170,17 @@ countries:
         spanish: Uniformes hermosos, muy poca práctica. Se va con el foco «Guerreros de la Puna», o tener 15 divisiones.
       modifiers: {army_attack_factor: -0.1, army_org_factor: -0.05}
       src: user_request
+    - id: NAS_hijos_de_la_montana
+      name: {english: Children of the Mountain, spanish: Hijos de la Montaña}
+      desc:
+        english: Born at four thousand metres. Whoever comes up after us fights the altitude first.
+        spanish: Nacidos a cuatro mil metros. El que sube a buscarnos primero pelea contra la altura.
+      modifiers:
+        army_defence_factor: 0.03
+        ?army_core_defence_factor: 0.1
+        ?winter_attrition_factor: -0.1
+        ?acclimatization_cold_climate_gain_factor: 0.25
+      src: user_design
   SHD:
     coverage: full_v1
     focus_ideas:
@@ -1490,6 +1523,17 @@ countries:
         spanish: Voluntarios valientes armados con lo que encontraron. Se va con el foco «Milicias Regulares», o tener 8.000 fusiles en depósito.
       modifiers: {army_org_factor: -0.1}
       src: user_request
+    - id: APF_hijos_de_la_sabana
+      name: {english: Children of the Savanna, spanish: Hijos de la Sabana}
+      desc:
+        english: The heat that kills invaders is home to us.
+        spanish: El calor que mata a los invasores para nosotros es casa.
+      modifiers:
+        army_defence_factor: 0.03
+        ?army_core_defence_factor: 0.1
+        ?heat_attrition_factor: -0.25
+        ?acclimatization_hot_climate_gain_factor: 0.25
+      src: user_design
   NRE:
     coverage: full_v1
     focus_ideas:

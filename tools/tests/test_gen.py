@@ -702,7 +702,7 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("31 eventos del EFE (pulso, explicacion, guia, plaga, oferta de la ASC, conquista, hito, 2 rebeliones, 7 de cadenas)", len(events) == 31, str(len(events)))
+        check("35 eventos del EFE (con los 4 de la crisis de los Andes)", len(events) == 35, str(len(events)))
         conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
         check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
         check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
@@ -1233,6 +1233,15 @@ def test_ai() -> None:
         check("debuffs: un foco los saca", "remove_ideas = EFE_corte_dividida" in corte)
         check("debuffs: o un objetivo (20 divisiones) en el pulso", "has_idea = EFE_guardia_mal_equipada" in se_c
               and "remove_ideas = EFE_guardia_mal_equipada" in se_c)
+        lev = se_c[se_c.index("ANARQUIA_levas = {"):][:1500]
+        check("Anarquia: recluta una milicia por mes hasta 40 divisiones", "create_unit" in lev and "Milicia" in lev and "size > 39" in lev, lev[:500])
+        efe_h3 = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
+        check("ventaja de terreno para los mas debiles (EFE)", "EFE_la_selva_es_nuestra" in efe_h3)
+        check("crisis entre potencias: el EFE le exige Arequipa al Sol", "EFE_crisis_1" in se_c and "meganations_efe.150" in se_c)
+        efe_ev = " ".join((mod / "events/meganations_efe.txt").read_text().split())
+        e153 = efe_ev[efe_ev.index("id = meganations_efe.153 title"):][:600]
+        check("crisis: si el otro se niega, casus belli y la IA se prepara", "create_wargoal = { type = annex_everything target = NAS }" in e153
+              and "EFE_contra_NAS" in e153 and "EFE_crisis_entre_potencias_NAS" in (REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"), e153)
         mon = (mod / "common/on_actions/01_monroe_fixture.txt").read_text()
         check("Monroe: el script del juego que la reparte se pisa sin ella", "USA_monroe_doctrine_idea" not in mon.split("\n", 1)[1], mon)
         check("Monroe: el resto del script queda", "other_generic_idea" in mon and "is_in_americas" in mon)

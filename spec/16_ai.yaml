@@ -172,3 +172,45 @@ plans:
   country: HSN
   strategies:
   - {type: contain, target: FCU, value: 50}
+
+# crisis entre potencias (2026-09-29): si el otro se negó al ultimátum, preparar y declarar
+- id: EFE_crisis_entre_potencias_NAS
+  country: EFE
+  enable: {flag: EFE_contra_NAS}
+  strategies:
+  - {type: prepare_for_war, target: NAS, value: 100}
+- id: EFE_crisis_declara_NAS
+  country: EFE
+  enable: {flag: EFE_contra_NAS, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: NAS, value: 80}
+- id: NRE_crisis_entre_potencias_APF
+  country: NRE
+  enable: {flag: NRE_contra_APF}
+  strategies:
+  - {type: prepare_for_war, target: APF, value: 100}
+- id: NRE_crisis_declara_APF
+  country: NRE
+  enable: {flag: NRE_contra_APF, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: APF, value: 80}
+- id: FCU_crisis_entre_potencias_HSN
+  country: FCU
+  enable: {flag: FCU_contra_HSN}
+  strategies:
+  - {type: prepare_for_war, target: HSN, value: 100}
+- id: FCU_crisis_declara_HSN
+  country: FCU
+  enable: {flag: FCU_contra_HSN, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: HSN, value: 80}
+- id: HSN_crisis_entre_potencias_SHD
+  country: HSN
+  enable: {flag: HSN_contra_SHD}
+  strategies:
+  - {type: prepare_for_war, target: SHD, value: 100}
+- id: HSN_crisis_declara_SHD
+  country: HSN
+  enable: {flag: HSN_contra_SHD, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: SHD, value: 80}

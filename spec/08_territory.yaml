@@ -294,6 +294,9 @@ territories:
       - { owner: SIK }
       - { owner: MAN }
       - { owner: TIB }
+      # 2026-09-28: la HSN arranca con 4 nodos, no 7. Taiwán quedó del lado
+      # del Directorio y Okinawa y Kyushu, de Corea: los tiene que ganar.
+      - { state: ["Taiwan"] }
     capital_state: ["Beijing", "Peking", "Hebei"]
 
   ZKR:
@@ -301,6 +304,8 @@ territories:
     lore: >
       La península de Corea.
     resolve:
+      - { state: ["Okinawa", "Ryukyu"] }
+      - { state: ["Kitakyūshū", "Kitakyushu", "Kyushu", "Fukuoka"] }
       - { core: KOR }
 
   ZST:
