@@ -475,11 +475,24 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("division_template", owner)
             continue
         if effect == "create_units":
-            for i in range(int(item["count"])):
-                div = (f'name = "{item["name"]} {i + 1}" division_template = "{item["template"]}" '
-                       f'start_experience_factor = {float(item.get("experience", 0.3))}')
-                block.add("create_unit", Block([("division", Quoted(div)), ("owner", "ROOT")]))
-            effects_used.setdefault("create_unit", owner)
+            # create_unit solo vale en scope de state (error.log 2026-09-29:
+            # "create_unit -- invalid scope state" en los focos de la Anarquía):
+            # las divisiones salen en la capital, o en cualquier state propio
+            # controlado si la capital está ocupada. PREV es el país.
+            def units() -> Block:
+                out = Block()
+                for i in range(int(item["count"])):
+                    div = (f'name = "{item["name"]} {i + 1}" division_template = "{item["template"]}" '
+                           f'start_experience_factor = {float(item.get("experience", 0.3))}')
+                    out.add("create_unit", Block([("division", Quoted(div)), ("owner", "PREV")]))
+                return out
+            block.add("if", Block([
+                ("limit", Block([("capital_scope", Block([("is_controlled_by", "PREV")]))])),
+                ("capital_scope", units())]))
+            block.add("else", Block([("random_owned_controlled_state", units())]))
+            for k in ("create_unit", "random_owned_controlled_state"):
+                effects_used.setdefault(k, owner)
+            ec.triggers_used.setdefault("is_controlled_by", owner)
             continue
         if effect == "white_peace_all":
             # Paz blanca con todos los enemigos; antes, cada uno se queda con lo

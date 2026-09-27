@@ -138,16 +138,27 @@ def _ai_weights(ctx: BuildContext) -> dict[str, list[tuple[str, float]]]:
     return out
 
 
+def _skip(text: str, i: int, hi: int) -> int | None:
+    """Si en `i` empieza un comentario o un texto entre comillas, dónde sigue."""
+    if text[i] == "#":
+        nl = text.find("\n", i)
+        return hi if nl == -1 else nl
+    if text[i] == '"':
+        q = text.find('"', i + 1)
+        return hi if q == -1 else q + 1
+    return None
+
+
 def _block_end(text: str, start: int) -> int:
     """Índice de la llave que cierra el bloque cuya llave abre en `start`."""
     depth = 0
     i = start
     while i < len(text):
-        c = text[i]
-        if c == "#":
-            nl = text.find("\n", i)
-            i = len(text) if nl == -1 else nl
+        nxt = _skip(text, i, len(text))
+        if nxt is not None:
+            i = nxt
             continue
+        c = text[i]
         if c == "{":
             depth += 1
         elif c == "}":
@@ -158,23 +169,53 @@ def _block_end(text: str, start: int) -> int:
     return -1
 
 
+_KEY = re.compile(r"([A-Za-z0-9_@.:\-]+)\s*=\s*\{")
+
+
+def _children(text: str, lo: int, hi: int) -> list[tuple[str, int, int]]:
+    """Los bloques `clave = { ... }` que cuelgan directo de text[lo:hi]:
+    (clave, llave que abre, llave que cierra). Lo anidado no cuenta."""
+    out = []
+    i = lo
+    while i < hi:
+        nxt = _skip(text, i, hi)
+        if nxt is not None:
+            i = nxt
+            continue
+        if text[i] == "{":
+            end = _block_end(text, i)
+            i = hi if end == -1 else end + 1
+            continue
+        m = _KEY.match(text, i)
+        if m and m.end() <= hi and (i == 0 or not (text[i - 1].isalnum() or text[i - 1] in "_@.:-")):
+            open_at = m.end() - 1
+            end = _block_end(text, open_at)
+            if end == -1:
+                break
+            out.append((m.group(1), open_at, end))
+            i = end + 1
+            continue
+        i += 1
+    return out
+
+
 def _inject_weights(text: str, weights: dict[str, list[tuple[str, float]]]) -> tuple[str, int]:
-    count = 0
-    for tech, pairs in weights.items():
-        m = re.search(rf"(?m)^[ \t]*{re.escape(tech)}\s*=\s*\{{", text)
-        if not m:
-            continue
-        open_at = m.end() - 1
-        end = _block_end(text, open_at)
-        if end == -1:
-            continue
-        mods = "".join(f"\n\t\t\tmodifier = {{ factor = {f:g} original_tag = {tag} }}  # 2100 Meganations" for tag, f in pairs)
-        body = text[open_at:end]
-        a = re.search(r"\bai_will_do\s*=\s*\{", body)
-        if a:
-            at = open_at + a.end()
-            text = text[:at] + mods + text[at:]
+    # Solo las tecnologías de verdad: hijas directas de `technologies = { }`, y
+    # su propio ai_will_do (error.log 2026-09-29: "Unexpected token: ai_will_do"
+    # en electronic_mechanical_engineering.txt; buscar la clave en cualquier
+    # renglón podía caer en otro bloque con el mismo nombre).
+    places = []
+    for key, open_at, end in _children(text, 0, len(text)):
+        if key == "technologies":
+            places += [(o, e, tech) for tech, o, e in _children(text, open_at + 1, end) if tech in weights]
+    for open_at, end, tech in sorted(places, reverse=True):   # de atrás para adelante: los índices no se corren
+        mods = "".join(f"\n\t\t\tmodifier = {{ factor = {f:g} original_tag = {tag} }}  # 2100 Meganations"
+                       for tag, f in weights[tech])
+        own = next((o for k, o, _ in _children(text, open_at + 1, end) if k == "ai_will_do"), None)
+        if own is not None:
+            # El salto final importa: con `ai_will_do = { factor = 1 }` en un
+            # solo renglón, el comentario se comía el resto (y la llave).
+            text = text[:own + 1] + mods + "\n\t\t\t" + text[own + 1:]
         else:
             text = text[:open_at + 1] + f"\n\t\tai_will_do = {{ factor = 1{mods}\n\t\t}}" + text[open_at + 1:]
-        count += 1
-    return text, count
+    return text, len(places)

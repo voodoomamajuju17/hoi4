@@ -1203,6 +1203,20 @@ def test_ai() -> None:
         check("Anarquia: cuanto mas sobrevive, mas focos (fecha)", "available = { date > 2100.7.1 }" in zwe_tree and "date > 2105.1.1" in zwe_tree)
         check("Anarquia: cada foco sube el espiritu (swap)", "swap_ideas = { remove_idea = ZWE_resistencia_1 add_idea = ZWE_resistencia_2 }" in zwe_tree)
         check("Anarquia: la culminacion crea divisiones", "create_unit = { division =" in zwe_tree and "division_template = { name = \"Hueste\"" in zwe_tree)
+        # error.log 2026-09-29: "create_unit -- invalid scope state". Solo vale en scope de state.
+        state_scopes = {"capital_scope", "random_owned_controlled_state", "every_owned_state", "random_owned_state"}
+        loose = []
+
+        def _walk(block, parent, where):
+            for key, value in block.entries:
+                if key == "create_unit" and parent not in state_scopes:
+                    loose.append(f"{where}: dentro de {parent}")
+                if isinstance(value, pdx.Block):
+                    _walk(value, key, where)
+        for sub in ("common/national_focus", "common/scripted_effects", "common/decisions", "events"):
+            for f in sorted((mod / sub).glob("*.txt")):
+                _walk(pdx.parse(f.read_text(encoding="utf-8-sig")), None, f.name)
+        check("create_unit siempre dentro de un state (capital o state propio)", not loose, "; ".join(loose[:5]))
         zwb_tree = " ".join((mod / "common/national_focus/ZWB_focus.txt").read_text().split())
         check("Amazonas: el 7mo foco firma paz blanca con todos y se queda lo que controla",
               "every_enemy_country = { white_peace = ROOT }" in zwb_tree and "CONTROLLER = { transfer_state = PREV }" in zwb_tree
@@ -1304,6 +1318,19 @@ def test_ai() -> None:
         check("IA militar: investiga lo que sigue en su especialidad (ai_will_do de la tecnologia, solo NRE)",
               "modifier = { factor = 4 original_tag = NRE }" in nv, nv)
         check("IA militar: sin research_tech (el juego no lo conoce)", "research_tech" not in ai)
+        # error.log 2026-09-29: "Unexpected token: ai_will_do". Un bloque anidado con el
+        # nombre de la tecnología no se toca; el ai_will_do es el de la tecnología.
+        from tools.gen.emitters.research import _inject_weights
+        trap = ("technologies = {\n\tother = {\n\t\tsub = {\n\t\t\tradio = { dummy = yes }\n\t\t}\n"
+                "\t\tname = \"llave } y # en texto\"\n\t}\n\tradio = {\n\t\ton_research_complete = { if = { "
+                "ai_will_do = { factor = 9 } } }\n\t\tai_will_do = { factor = 1 }\n\t}\n}\n")
+        out, n = _inject_weights(trap, {"radio": [("ASC", 4.0)]})
+        techs = pdx.parse(out).get("technologies")
+        radio = techs.get("radio")
+        check("IA militar: el peso va a la tecnologia, no a un bloque anidado con su nombre",
+              n == 1 and "ai_will_do" not in pdx.render(techs.get("other").get("sub"))
+              and sum(1 for k, _ in radio.entries if k == "ai_will_do") == 1
+              and "original_tag = ASC" in pdx.render(radio.get("ai_will_do")), out)
         hsn = " ".join(pdx.render(root.get("MEGANATIONS_HSN_militar")).split())
         check("IA militar: un id que el juego no usa se omite (marines en el fixture)", "marines" not in hsn, hsn[:400])
         check("IA militar: el aviso lo dice", any("role_ratio:marines" in w for w in ctx.warnings))
