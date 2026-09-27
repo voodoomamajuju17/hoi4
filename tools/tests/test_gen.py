@@ -185,6 +185,21 @@ def test_spec_loads() -> None:
     for c in spec.countries:
         check(f"{c.tag} apunta a ideologia existente", c.ideology in types)
 
+    # Colores de mapa bien distintos (2026-09-29): distancia en Lab (CIE76) entre cualquier par.
+    def _lab(rgb):
+        def lin(c):
+            c /= 255
+            return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+        r, g, b = (lin(float(c)) for c in rgb)
+        xyz = ((0.4124 * r + 0.3576 * g + 0.1805 * b) / 0.95047, 0.2126 * r + 0.7152 * g + 0.0722 * b,
+               (0.0193 * r + 0.1192 * g + 0.9505 * b) / 1.08883)
+        fx, fy, fz = (t ** (1 / 3) if t > 0.008856 else 7.787 * t + 16 / 116 for t in xyz)
+        return (116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz))
+    import math as _math
+    labs = {c.tag: _lab(c.color) for c in spec.countries}
+    closest = min((_math.dist(labs[a], labs[b]), a, b) for i, a in enumerate(labs) for b in list(labs)[i + 1:])
+    check("colores de mapa: ningun par de paises se parece (Lab >= 15)", closest[0] >= 15, str(closest))
+
     efe = spec.country("EFE")
     check("capital del EFE es Buenos Aires", efe.capital == "Buenos Aires")
     check("EFE es major", efe.is_major)
@@ -336,8 +351,8 @@ def test_full_build() -> None:
         check("history/ todavia no se reemplaza (Q042)", 'replace_path = "history' not in descriptor, descriptor)
 
         colors = (mod / "common/countries/colors.txt").read_text()
-        check("color en una linea: rgb { r g b }", "color = rgb { 45 84 41 }" in colors, colors[400:700])
-        check("color_ui en una linea", "color_ui = rgb { 45 84 41 }" in colors)
+        check("color en una linea: rgb { r g b }", "color = rgb { 42 132 54 }" in colors, colors[400:700])
+        check("color_ui en una linea", "color_ui = rgb { 42 132 54 }" in colors)
         tags_text = (mod / "common/country_tags/00_meganations.txt").read_text()
         for tag in ("EFE", "ASC", "FCU", "NAS", "PTA", "YYG"):
             check(f"tag {tag} registrado", f"{tag} = " in tags_text)
@@ -1486,7 +1501,7 @@ def test_arte() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         shd = (ctx.mod_root / "common/ideas/SHD_ideas.txt").read_text()
-        body = shd[shd.index("SHD_precision = {"):]
+        body = shd[shd.index("SHD_boom_exportador = {"):]   # sin dibujo todavia
         check("un espiritu sin dibujo toma un icono generico del juego segun su efecto (sin '?')",
               "picture = generic_production_bonus" in body[:300], body[:300])
 
