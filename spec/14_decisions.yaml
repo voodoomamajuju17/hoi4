@@ -6732,8 +6732,8 @@ categories:
         english: 'Emergency II: General Mobilisation'
         spanish: 'Emergencia II: Movilización General'
       desc:
-        english: 6 infantry divisions, 15,000 manpower and 1,200 infantry equipment. Only once.
-        spanish: 6 divisiones de infantería, 15.000 de mano de obra y 1.200 de equipo de infantería. Una sola vez.
+        english: 6 infantry divisions, 15,000 manpower and 1,200 infantry equipment. Stability and war support -5%. Only once.
+        spanish: 6 divisiones de infantería, 15.000 de mano de obra y 1.200 de equipo de infantería. Estabilidad y apoyo a la guerra -5%. Una sola vez.
       icon_prefer:
       - generic_prepare_civil_war
       - generic_military
@@ -6749,6 +6749,10 @@ categories:
       - effect: equipment
         type: infantry_equipment
         amount: 1200
+      - effect: add_stability
+        value: -0.05
+      - effect: add_war_support
+        value: -0.05
       - effect: division_template
         name: Leva de Emergencia II
         regiments: *id001
@@ -6771,8 +6775,8 @@ categories:
         english: 'Emergency III: Everyone to the Front'
         spanish: 'Emergencia III: Todos al Frente'
       desc:
-        english: 8 infantry divisions and 6 militia divisions, 20,000 manpower, 1,000 infantry equipment and 1,000 support equipment. Only once.
-        spanish: 8 divisiones de infantería y 6 de milicia, 20.000 de mano de obra, 1.000 de equipo de infantería y 1.000 de equipo de apoyo. Una sola vez.
+        english: 8 infantry divisions and 6 militia divisions, 20,000 manpower, 1,000 infantry equipment and 1,000 support equipment. Stability and war support -10%. Only once.
+        spanish: 8 divisiones de infantería y 6 de milicia, 20.000 de mano de obra, 1.000 de equipo de infantería y 1.000 de equipo de apoyo. Estabilidad y apoyo a la guerra -10%. Una sola vez.
       icon_prefer:
       - generic_prepare_civil_war
       - generic_military
@@ -6791,6 +6795,10 @@ categories:
       - effect: equipment
         type: support_equipment
         amount: 1000
+      - effect: add_stability
+        value: -0.1
+      - effect: add_war_support
+        value: -0.1
       - effect: division_template
         name: Leva de Emergencia III
         regiments: *id001
@@ -6818,6 +6826,554 @@ categories:
               at_war: true
               surrender_at_least: 0.25
       src: user_request
+
+  # 2026-09-29 (pedido del usuario): la forma final de cada meganación
+  - id: EFE_destino_category
+    country: EFE
+    name: {english: 'The Destiny: The Dominion of Gaia', spanish: 'El Destino: El Dominio de Gaia'}
+    desc:
+      english: 'The last stage of the megastate. Control Lima, La Paz, the Amazon, São Paulo, Rio de Janeiro, Bogotá (Cundinamarca) and Caracas
+        (Miranda); have 45 divisions, 8 BioSteel stored and 50% stability, and proclaim The Dominion of Gaia: a new name, a new flag, cores on every
+        owned region and a great national spirit.'
+      spanish: 'La última etapa de la meganación. Controlar Lima, La Paz, el Amazonas, São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas
+        (Miranda); tener 45 divisiones, 8 de Bioacero guardado y 50% de estabilidad, y proclamar El Dominio de Gaia: nombre y bandera nuevos, núcleos
+        en cada región propia y un gran espíritu nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: EFE_destino_abierto}
+    decisions:
+    - id: EFE_proclamar_la_forma_final
+      name: {english: Proclaim The Dominion of Gaia, spanish: Proclamar El Dominio de Gaia}
+      desc:
+        english: From the Caribbean to Cape Horn one forest, one law, one Empress of the living Earth.\nRequires controlling Lima, La Paz, the Amazon,
+          São Paulo, Rio de Janeiro, Bogotá (Cundinamarca) and Caracas (Miranda), 45 divisions and 50% stability.
+        spanish: Del Caribe al Cabo de Hornos, un solo bosque, una ley, un imperio de la Tierra viva.\nPide controlar Lima, La Paz, el Amazonas,
+          São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas (Miranda), 45 divisiones y 50% de estabilidad.
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: EFE_destino_abierto, not_flag: EFE_forma_final}
+      available:
+        controls_all:
+        - - Lima
+        - - La Paz
+        - - Amazonas
+        - - São Paulo
+        - - Rio de Janeiro
+        - - Cundinamarca
+        - - Miranda
+        divisions_at_least: 45
+        stability_at_least: 0.5
+        all:
+        - variable_at_least: {var: EFE_biosteel, value: 8}
+      effects:
+      - {effect: flag, value: EFE_forma_final}
+      - {effect: cosmetic_tag, value: EFE_GAIA}
+      - {effect: add_ideas, value: EFE_dominio_de_gaia}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: EFE}
+        effects:
+        - {effect: add_core, value: EFE}
+      - {effect: event, id: meganations_efe.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: FCU}
+          - {tag: ASC}
+          - {tag: HSN}
+          - {tag: NAS}
+          - {tag: SHD}
+          - {tag: APF}
+          - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_efe.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+  - id: FCU_destino_category
+    country: FCU
+    name: {english: 'The Destiny: The Americas Corporation', spanish: 'El Destino: La Corporación de las Américas'}
+    desc:
+      english: 'The last stage of the megastate. Control the Frontier (Minnesota and Kansas), Havana (Cuba), Lima, Buenos Aires and Bogotá (Cundinamarca);
+        have 50 divisions, Scandal below 30 and 50% stability, and proclaim The Americas Corporation: a new name, a new flag, cores on every owned
+        region and a great national spirit.'
+      spanish: 'La última etapa de la meganación. Controlar la Frontera (Minnesota y Kansas), La Habana (Cuba), Lima, Buenos Aires y Bogotá (Cundinamarca);
+        tener 50 divisiones, Escándalo por debajo de 30 y 50% de estabilidad, y proclamar La Corporación de las Américas: nombre y bandera nuevos,
+        núcleos en cada región propia y un gran espíritu nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: FCU_destino_abierto}
+    decisions:
+    - id: FCU_proclamar_la_forma_final
+      name: {english: Proclaim The Americas Corporation, spanish: Proclamar La Corporación de las Américas}
+      desc:
+        english: Two continents, one balance sheet. Every citizen is a shareholder of the hemisphere.\nRequires controlling the Frontier (Minnesota
+          and Kansas), Havana (Cuba), Lima, Buenos Aires and Bogotá (Cundinamarca), 50 divisions and 50% stability.
+        spanish: Dos continentes, un solo balance. Cada ciudadano es accionista del hemisferio.\nPide controlar la Frontera (Minnesota y Kansas),
+          La Habana (Cuba), Lima, Buenos Aires y Bogotá (Cundinamarca), 50 divisiones y 50% de estabilidad.
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: FCU_destino_abierto, not_flag: FCU_forma_final}
+      available:
+        controls_all:
+        - - Minnesota
+        - - Kansas
+        - - Cuba
+        - - Lima
+        - - Buenos Aires
+        - - Cundinamarca
+        divisions_at_least: 50
+        stability_at_least: 0.5
+        all:
+        - variable_below: {var: FCU_escandalo, value: 30}
+      effects:
+      - {effect: flag, value: FCU_forma_final}
+      - {effect: cosmetic_tag, value: FCU_AMERICAS}
+      - {effect: add_ideas, value: FCU_corporacion_de_las_americas}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: FCU}
+        effects:
+        - {effect: add_core, value: FCU}
+      - {effect: event, id: meganations_fcu.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: ASC}
+          - {tag: HSN}
+          - {tag: NAS}
+          - {tag: SHD}
+          - {tag: APF}
+          - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_fcu.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+  - id: ASC_destino_category
+    country: ASC
+    name: {english: 'The Destiny: The Continental Commune', spanish: 'El Destino: La Comuna Continental'}
+    desc:
+      english: 'The last stage of the megastate. Control Paris (Ile de France), Rome (Lazio), Madrid, Leningrad, Crimea and Kiev; have 60 divisions,
+        100 Computing Power and 50% stability, and proclaim The Continental Commune: a new name, a new flag, cores on every owned region and a great
+        national spirit.'
+      spanish: 'La última etapa de la meganación. Controlar París (Ile de France), Roma (Lacio), Madrid, Leningrado, Crimea y Kiev; tener 60 divisiones,
+        100 de Poder de Cómputo y 50% de estabilidad, y proclamar La Comuna Continental: nombre y bandera nuevos, núcleos en cada región propia
+        y un gran espíritu nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: ASC_destino_abierto}
+    decisions:
+    - id: ASC_proclamar_la_forma_final
+      name: {english: Proclaim The Continental Commune, spanish: Proclamar La Comuna Continental}
+      desc:
+        english: From Lisbon to the Urals the machines work and nobody is surplus.\nRequires controlling Paris (Ile de France), Rome (Lazio), Madrid,
+          Leningrad, Crimea and Kiev, 60 divisions and 50% stability.
+        spanish: De Lisboa a los Urales trabajan las máquinas y nadie sobra.\nPide controlar París (Ile de France), Roma (Lacio), Madrid, Leningrado,
+          Crimea y Kiev, 60 divisiones y 50% de estabilidad.
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: ASC_destino_abierto, not_flag: ASC_forma_final}
+      available:
+        controls_all:
+        - - Ile de France
+        - - Lazio
+        - - Madrid
+        - - Leningrad
+        - - Crimea
+        - - Kiev
+        divisions_at_least: 60
+        stability_at_least: 0.5
+        all:
+        - variable_at_least: {var: ASC_computo, value: 100}
+      effects:
+      - {effect: flag, value: ASC_forma_final}
+      - {effect: cosmetic_tag, value: ASC_CONTINENTAL}
+      - {effect: add_ideas, value: ASC_comuna_continental}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: ASC}
+        effects:
+        - {effect: add_core, value: ASC}
+      - {effect: event, id: meganations_asc.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: HSN}
+          - {tag: NAS}
+          - {tag: SHD}
+          - {tag: APF}
+          - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_asc.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+  - id: HSN_destino_category
+    country: HSN
+    name:
+      english: 'The Destiny: The Thalassocracy of the Seven Seas'
+      spanish: 'El Destino: La Talasocracia de los Siete Mares'
+    desc:
+      english: 'The last stage of the megastate. Control Hong Kong, Guangzhou, Suez, Panama, Gibraltar and the Cape; have 30 divisions, 7 nodes
+        and 50% stability, and proclaim The Thalassocracy of the Seven Seas: a new name, a new flag, cores on every owned region and a great national
+        spirit.'
+      spanish: 'La última etapa de la meganación. Controlar Hong Kong, Cantón, Suez, Panamá, Gibraltar y el Cabo; tener 30 divisiones, 7 nodos y
+        50% de estabilidad, y proclamar La Talasocracia de los Siete Mares: nombre y bandera nuevos, núcleos en cada región propia y un gran espíritu
+        nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: HSN_destino_abierto}
+    decisions:
+    - id: HSN_proclamar_la_forma_final
+      name:
+        english: Proclaim The Thalassocracy of the Seven Seas
+        spanish: Proclamar La Talasocracia de los Siete Mares
+      desc:
+        english: 'Every strait, every canal, every cape: whoever sails, pays the Market.\nRequires controlling Hong Kong, Guangzhou, Suez, Panama,
+          Gibraltar and the Cape, 30 divisions and 50% stability.'
+        spanish: 'Cada estrecho, cada canal, cada cabo: el que navega le paga al Mercado.\nPide controlar Hong Kong, Cantón, Suez, Panamá, Gibraltar
+          y el Cabo, 30 divisiones y 50% de estabilidad.'
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: HSN_destino_abierto, not_flag: HSN_forma_final}
+      available:
+        controls_all:
+        - - Hong Kong
+        - - Guangzhou
+        - - Suez
+        - - Panamá
+        - - Gibraltar
+        - - Cape
+        divisions_at_least: 30
+        stability_at_least: 0.5
+        all:
+        - variable_at_least: {var: HSN_nodos, value: 7}
+      effects:
+      - {effect: flag, value: HSN_forma_final}
+      - {effect: cosmetic_tag, value: HSN_SIETE_MARES}
+      - {effect: add_ideas, value: HSN_talasocracia_de_los_siete_mares}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: HSN}
+        effects:
+        - {effect: add_core, value: HSN}
+      - {effect: event, id: meganations_hsn.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: ASC}
+          - {tag: NAS}
+          - {tag: SHD}
+          - {tag: APF}
+          - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_hsn.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+  - id: NAS_destino_category
+    country: NAS
+    name: {english: 'The Destiny: The Empire of the Eternal Sun', spanish: 'El Destino: El Imperio del Sol Eterno'}
+    desc:
+      english: 'The last stage of the megastate. Control Buenos Aires, Santiago, São Paulo, the Amazon, Bogotá (Cundinamarca) and Caracas (Miranda);
+        have 35 divisions, 60 Inti-Soma and 50% stability, and proclaim The Empire of the Eternal Sun: a new name, a new flag, cores on every owned
+        region and a great national spirit.'
+      spanish: 'La última etapa de la meganación. Controlar Buenos Aires, Santiago, São Paulo, el Amazonas, Bogotá (Cundinamarca) y Caracas (Miranda);
+        tener 35 divisiones, 60 de Inti-Soma y 50% de estabilidad, y proclamar El Imperio del Sol Eterno: nombre y bandera nuevos, núcleos en cada
+        región propia y un gran espíritu nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: NAS_destino_abierto}
+    decisions:
+    - id: NAS_proclamar_la_forma_final
+      name: {english: Proclaim The Empire of the Eternal Sun, spanish: Proclamar El Imperio del Sol Eterno}
+      desc:
+        english: The four quarters are now the whole south. The Sun has no more borders to cross.\nRequires controlling Buenos Aires, Santiago,
+          São Paulo, the Amazon, Bogotá (Cundinamarca) and Caracas (Miranda), 35 divisions and 50% stability.
+        spanish: Los cuatro suyus ya son todo el sur. El Sol no tiene más fronteras que cruzar.\nPide controlar Buenos Aires, Santiago, São Paulo,
+          el Amazonas, Bogotá (Cundinamarca) y Caracas (Miranda), 35 divisiones y 50% de estabilidad.
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: NAS_destino_abierto, not_flag: NAS_forma_final}
+      available:
+        controls_all:
+        - - Buenos Aires
+        - - Santiago
+        - - São Paulo
+        - - Amazonas
+        - - Cundinamarca
+        - - Miranda
+        divisions_at_least: 35
+        stability_at_least: 0.5
+        all:
+        - variable_at_least: {var: NAS_inti, value: 60}
+      effects:
+      - {effect: flag, value: NAS_forma_final}
+      - {effect: cosmetic_tag, value: NAS_SOL_ETERNO}
+      - {effect: add_ideas, value: NAS_imperio_del_sol_eterno}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: NAS}
+        effects:
+        - {effect: add_core, value: NAS}
+      - {effect: event, id: meganations_nas.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: ASC}
+          - {tag: HSN}
+          - {tag: SHD}
+          - {tag: APF}
+          - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_nas.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+  - id: SHD_destino_category
+    country: SHD
+    name: {english: 'The Destiny: The Celestial Harmony', spanish: 'El Destino: La Armonía Celeste'}
+    desc:
+      english: 'The last stage of the megastate. Control Tokyo (Kanto), Hong Kong, Madras, Manila, Java and Kabul; have 60 divisions, Order at 60
+        and 50% stability, and proclaim The Celestial Harmony: a new name, a new flag, cores on every owned region and a great national spirit.'
+      spanish: 'La última etapa de la meganación. Controlar Tokio (Kanto), Hong Kong, Madrás, Manila, Java y Kabul; tener 60 divisiones, Orden en
+        60 y 50% de estabilidad, y proclamar La Armonía Celeste: nombre y bandera nuevos, núcleos en cada región propia y un gran espíritu nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: SHD_destino_abierto}
+    decisions:
+    - id: SHD_proclamar_la_forma_final
+      name: {english: Proclaim The Celestial Harmony, spanish: Proclamar La Armonía Celeste}
+      desc:
+        english: Every river of Asia runs through one control room.\nRequires controlling Tokyo (Kanto), Hong Kong, Madras, Manila, Java and Kabul,
+          60 divisions and 50% stability.
+        spanish: Cada río de Asia pasa por una sola sala de control.\nPide controlar Tokio (Kanto), Hong Kong, Madrás, Manila, Java y Kabul, 60
+          divisiones y 50% de estabilidad.
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: SHD_destino_abierto, not_flag: SHD_forma_final}
+      available:
+        controls_all:
+        - - Kanto
+        - - Hong Kong
+        - - Southern Madras
+        - - Manila
+        - - West Java
+        - - Kabul
+        divisions_at_least: 60
+        stability_at_least: 0.5
+        all:
+        - variable_at_least: {var: SHD_orden, value: 60}
+      effects:
+      - {effect: flag, value: SHD_forma_final}
+      - {effect: cosmetic_tag, value: SHD_ARMONIA_CELESTE}
+      - {effect: add_ideas, value: SHD_armonia_celeste}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: SHD}
+        effects:
+        - {effect: add_core, value: SHD}
+      - {effect: event, id: meganations_shd.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: ASC}
+          - {tag: HSN}
+          - {tag: NAS}
+          - {tag: APF}
+          - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_shd.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+  - id: APF_destino_category
+    country: APF
+    name: {english: 'The Destiny: The Original Human Empire', spanish: 'El Destino: El Imperio Humano Original'}
+    desc:
+      english: 'The last stage of the megastate. Control all of Africa (Addis Ababa, the Cape, Transvaal, Senegal, Liberia), the Middle East (Baghdad,
+        Tehran, Nejd) and southern Europe (Rome, Madrid, Sofia); have 60 divisions and 50% stability, and proclaim The Original Human Empire: a
+        new name, a new flag, cores on every owned region and a great national spirit.'
+      spanish: 'La última etapa de la meganación. Controlar toda África (Adís Abeba, el Cabo, Transvaal, Senegal, Liberia), Medio Oriente (Bagdad,
+        Teherán, Néyed) y el sur de Europa (Roma, Madrid, Sofía); tener 60 divisiones y 50% de estabilidad, y proclamar El Imperio Humano Original:
+        nombre y bandera nuevos, núcleos en cada región propia y un gran espíritu nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: APF_destino_abierto}
+    decisions:
+    - id: APF_proclamar_la_forma_final
+      name: {english: Proclaim The Original Human Empire, spanish: Proclamar El Imperio Humano Original}
+      desc:
+        english: Humanity was born here. Now its homeland reaches the Mediterranean and the rivers of Mesopotamia again.\nRequires controlling all
+          of Africa (Addis Ababa, the Cape, Transvaal, Senegal, Liberia), the Middle East (Baghdad, Tehran, Nejd) and southern Europe (Rome, Madrid,
+          Sofia), 60 divisions and 50% stability.
+        spanish: La humanidad nació acá. Ahora su tierra natal vuelve a llegar al Mediterráneo y a los ríos de Mesopotamia.\nPide controlar toda
+          África (Adís Abeba, el Cabo, Transvaal, Senegal, Liberia), Medio Oriente (Bagdad, Teherán, Néyed) y el sur de Europa (Roma, Madrid, Sofía),
+          60 divisiones y 50% de estabilidad.
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: APF_destino_abierto, not_flag: APF_forma_final}
+      available:
+        controls_all:
+        - - Shewa
+        - - Cape
+        - - Transvaal
+        - - Senegal
+        - - Liberia
+        - - Baghdad
+        - - Tehran
+        - - Nejd
+        - - Lazio
+        - - Madrid
+        - - Sofia
+        divisions_at_least: 60
+        stability_at_least: 0.5
+      effects:
+      - {effect: flag, value: APF_forma_final}
+      - {effect: cosmetic_tag, value: APF_HUMANO_ORIGINAL}
+      - {effect: add_ideas, value: APF_imperio_humano_original}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: APF}
+        effects:
+        - {effect: add_core, value: APF}
+      - {effect: event, id: meganations_apf.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: ASC}
+          - {tag: HSN}
+          - {tag: NAS}
+          - {tag: SHD}
+          - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_apf.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+  - id: NRE_destino_category
+    country: NRE
+    name: {english: 'The Destiny: The Eternal Roman Empire', spanish: 'El Destino: El Imperio Romano Eterno'}
+    desc:
+      english: 'The last stage of the megastate. Control Hispania (Madrid, Lisbon), Egypt (Alexandria, Suez), Tripoli, Britannia (London), Crimea
+        and Sofia; have 70 divisions, 50 Auctoritas and 50% stability, and proclaim The Eternal Roman Empire: a new name, a new flag, cores on every
+        owned region and a great national spirit.'
+      spanish: 'La última etapa de la meganación. Controlar Hispania (Madrid, Lisboa), Egipto (Alejandría, Suez), Trípoli, Britania (Londres), Crimea
+        y Sofía; tener 70 divisiones, 50 de Auctoritas y 50% de estabilidad, y proclamar El Imperio Romano Eterno: nombre y bandera nuevos, núcleos
+        en cada región propia y un gran espíritu nacional.'
+    icon_prefer:
+    - generic_formable_nations
+    - generic_political_actions
+    visible: {flag: NRE_destino_abierto}
+    decisions:
+    - id: NRE_proclamar_la_forma_final
+      name: {english: Proclaim The Eternal Roman Empire, spanish: Proclamar El Imperio Romano Eterno}
+      desc:
+        english: Mare Nostrum is ours again, from the pillars of Hercules to the Nile.\nRequires controlling Hispania (Madrid, Lisbon), Egypt (Alexandria,
+          Suez), Tripoli, Britannia (London), Crimea and Sofia, 70 divisions and 50% stability.
+        spanish: El Mare Nostrum vuelve a ser nuestro, de las columnas de Hércules al Nilo.\nPide controlar Hispania (Madrid, Lisboa), Egipto (Alejandría,
+          Suez), Trípoli, Britania (Londres), Crimea y Sofía, 70 divisiones y 50% de estabilidad.
+      icon_prefer:
+      - generic_formable_nations
+      - generic_political_actions
+      cost: 150
+      visible: {flag: NRE_destino_abierto, not_flag: NRE_forma_final}
+      available:
+        controls_all:
+        - - Madrid
+        - - Lisbon
+        - - Alexandria
+        - - Tripoli
+        - - Suez
+        - - Greater London Area
+        - - Crimea
+        - - Sofia
+        divisions_at_least: 70
+        stability_at_least: 0.5
+        all:
+        - variable_at_least: {var: NRE_auctoritas, value: 50}
+      effects:
+      - {effect: flag, value: NRE_forma_final}
+      - {effect: cosmetic_tag, value: NRE_ROMA_AETERNA}
+      - {effect: add_ideas, value: NRE_imperio_eterno}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: NRE}
+        effects:
+        - {effect: add_core, value: NRE}
+      - {effect: event, id: meganations_nre.230, days: 1}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: ASC}
+          - {tag: HSN}
+          - {tag: NAS}
+          - {tag: SHD}
+          - {tag: APF}
+        effects:
+        - {effect: event, id: meganations_nre.231, days: 2}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
 
 scripted_effects:
 
@@ -8215,6 +8771,18 @@ scripted_effects:
       - {effect: flag, value: ASC_menor_204}
       - {effect: event, id: meganations_asc.204, days: 1}
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
+    - effect: if
+      when:
+        not_flag: ASC_plan41
+        at_war: false
+        date_after: 2101.6.1
+        all:
+        - variable_at_least: {var: ASC_computo, value: 100}
+        - variable_at_least: {var: ASC_calor, value: 50}
+        not: {flag: ASC_guerra_civil_hecha}
+      then:
+      - {effect: flag, value: ASC_guerra_civil_hecha}
+      - {effect: event, id: meganations_asc.220, days: 1}
   - id: HSN_pulso_de_las_potencias
     effects:
     - effect: if
@@ -8566,6 +9134,17 @@ scripted_effects:
       - {effect: flag, value: SHD_menor_204}
       - {effect: event, id: meganations_shd.204, days: 1}
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
+    - effect: if
+      when:
+        not_flag: SHD_zhou
+        at_war: false
+        date_after: 2101.1.1
+        variable_at_least: {var: SHD_pueblo, value: 80}
+        variable_below: {var: SHD_orden, value: 31}
+        not: {flag: SHD_guerra_civil_hecha}
+      then:
+      - {effect: flag, value: SHD_guerra_civil_hecha}
+      - {effect: event, id: meganations_shd.220, days: 1}
   - id: APF_pulso_de_los_consejos
     effects:
     - effect: if

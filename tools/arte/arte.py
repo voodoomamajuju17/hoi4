@@ -36,6 +36,9 @@ KINDS = {
     "national_spirit_icon": {"size": (64, 64), "transparent": True, "fit": "contain"},
     "leader_portrait": {"size": (156, 210), "transparent": False, "fit": "cover"},
     "event_picture": {"size": (210, 176), "transparent": False, "fit": "cover"},
+    # banderas de las identidades nuevas (guerras civiles y formas finales): TGA
+    # grande 82x52, mediana 41x26 y chica 10x7 en assets/<TAG>/flags/
+    "country_flag": {"size": (82, 52), "transparent": False, "fit": "cover"},
 }
 
 COMMON_STYLE = (
@@ -159,6 +162,15 @@ def catalog() -> list[dict]:
                             if ch.get("lore") else _one_line(portrait.get("description") or regnal.get("english", ch["id"])))
                            + " Head-and-shoulders portrait, facing the viewer.",
         })
+    for ct in _load("02_countries.yaml").get("cosmetic_tags") or []:
+        tag = ct["parent"]
+        dest = REPO / "assets" / tag / "flags" / f"{ct['id']}.tga"
+        items.append({
+            "type": "country_flag", "tag": tag, "id": ct["id"], "dest": dest, "done": dest.exists(),
+            "description": f"National flag of {ct['name']['english']}: {_one_line(ct.get('art', ''))} "
+                           "Flat flag design, simple bold shapes and 2-4 colours, readable when tiny, "
+                           "fills the whole rectangle, no border, no text.",
+        })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
     asked: set[str] = set()
@@ -183,31 +195,65 @@ def catalog() -> list[dict]:
     return items
 
 
+FLAG_STYLE = ("flat national flag for Hearts of Iron IV, vexillology, clean flat shapes, no gradients, "
+              "no painterly texture, no text, no letters, no watermark")
+
+
 def _request(item: dict) -> str:
     kind = KINDS[item["type"]]
     w, h = kind["size"]
     style = STYLE.get(item["tag"] or "", "a ruined, fragmented 2100 world: improvised flags, bunkers, "
                                           "warlord or client-state officials, muted colours")
+    common = FLAG_STYLE if item["type"] == "country_flag" else COMMON_STYLE
     return "\n".join([
         "ASSET_REQUEST",
         f"type: {item['type']}",
         f"id: {item['id']}",
         f"filename: {item['id']}.png",
         f"size: {w}x{h} (o más grande con la misma proporción)",
-        f"style: {COMMON_STYLE}; {style}",
+        f"style: {common}; {style}",
         f"description: {item['description']}",
         f"transparent_background: {'true' if kind['transparent'] else 'false'}",
         "",
     ])
 
 
+NEW_FILE = "0_NUEVOS_de_este_lote.txt"
+
+
+def _previous_ids() -> set[str] | None:
+    """Los ids que ya estaban pedidos en el zip anterior (para separar lo nuevo)."""
+    if not ZIP.exists():
+        return None
+    ids: set[str] = set()
+    with zipfile.ZipFile(ZIP) as z:
+        for name in z.namelist():
+            if name.endswith(NEW_FILE):
+                continue
+            for line in z.read(name).decode("utf-8").splitlines():
+                if line.startswith("id: "):
+                    ids.add(line[4:].strip())
+    return ids
+
+
 def pedidos() -> None:
     items = [i for i in catalog() if not i["done"]]
     OUT.mkdir(parents=True, exist_ok=True)
+    before = _previous_ids()
+    old_new = (OUT / NEW_FILE).read_text(encoding="utf-8") if (OUT / NEW_FILE).exists() else None
     for old in OUT.glob("*.txt"):
         old.unlink()
+    # Lo pedido por primera vez en esta corrida, junto en un archivo aparte
+    # (2026-09-29: "hacer el txt para el pedido a chatgpt de las imágenes").
+    fresh = [i for i in items if before is not None and i["id"] not in before]
+    if fresh:
+        (OUT / NEW_FILE).write_text(f"# {len(fresh)} pedidos nuevos de este lote (también están en los archivos por potencia)\n\n"
+                                    + "\n".join(_request(i) for i in fresh), encoding="utf-8")
+    elif old_new:
+        (OUT / NEW_FILE).write_text(old_new, encoding="utf-8")
     order = [("leader_portrait", "1_retratos"), ("national_spirit_icon", "2_espiritus"),
-             ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos")]
+             ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
+             ("country_flag", "5_banderas")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -256,7 +302,8 @@ def _readme(summary: list[str]) -> str:
         "Para devolver: juntar las imágenes en un .zip y pasárselo a Claude, que las",
         "convierte (tools/arte) y quedan conectadas solas en el próximo build.",
         "",
-        "Orden sugerido: 1 retratos, 2 espíritus, 3 focos, 4 eventos.",
+        "Orden sugerido: 1 retratos, 2 espíritus, 3 focos, 4 eventos, 5 banderas.",
+        f"Lo nuevo de la última tanda está junto en {NEW_FILE}.",
         "",
         "Archivos:",
         *("  " + s for s in summary),
@@ -302,6 +349,15 @@ def importar(source: str) -> None:
             canvas = Image.new("RGBA", (w, h), (0, 0, 0, 0))
             canvas.paste(img, ((w - img.width) // 2, (h - img.height) // 2), img)
             img = canvas
+        if item["type"] == "country_flag":
+            # TGA en tres tamaños, junto a la bandera del país
+            for sub, (fw, fh) in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
+                flag = img.convert("RGB").resize((fw, fh), Image.LANCZOS)
+                raw = flag.tobytes()
+                art.write_tga(item["dest"].parent / sub / item["dest"].name, fw, fh,
+                              [tuple(raw[k:k + 3]) for k in range(0, len(raw), 3)])
+            done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
+            continue
         raw = img.tobytes()
         pixels = [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)]
         if not kind["transparent"]:

@@ -894,7 +894,51 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
-        check("69 eventos del EFE (guerra limitada, 5 menores, independencias y el Santuario)", len(events) == 69, str(len(events)))
+        check("73 eventos del EFE (guerra limitada, 5 menores, independencias, el Santuario, guerra civil y destino)", len(events) == 73, str(len(events)))
+        # 2026-09-29: guerras civiles (elegir bando), rama política extendida y forma final
+        efe_cw = " ".join((mod / "events/meganations_efe.txt").read_text().split())
+        e220 = efe_cw[efe_cw.index("id = meganations_efe.220 title"):][:4000]
+        opa, opb = e220.split("name = meganations_efe.220.b")[0], e220.split("name = meganations_efe.220.b")[1]
+        check("guerra civil: con el Monte, se separa la Dinastia con Aurelio IV",
+              "start_civil_war = { ideology = fascism size = 0.35 }" in opa
+              and "random_country = { limit = { original_tag = EFE NOT = { tag = EFE } has_civil_war = yes } set_cosmetic_tag = EFE_DINASTIA" in opa
+              and "set_country_leader_portrait = { portrait = GFX_portrait_mn_Aurelio_IV }" in opa
+              and "set_global_flag = EFE_guerra_civil" in opa, opa[:1500])
+        check("guerra civil: se puede elegir el otro bando (vuelve Aurelio IV, se separa el Monte con Anahi)",
+              "promote_character = EFE_aurelio_iv" in opb and "set_cosmetic_tag = EFE_MONTE" in opb
+              and "GFX_portrait_mn_anahi_quiroga" in opb, opb[:1500])
+        efe_tree_cw = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text().split())
+        monte = efe_tree_cw[efe_tree_cw.index("id = EFE_el_monte_se_levanta"):][:2500]
+        check("guerra civil del EFE: la dispara la rama de cambiar lider", "id = meganations_efe.220" in monte, monte[:1200])
+        cwo = " ".join((mod / "common/on_actions/04_meganations_civil_war.txt").read_text().split())
+        check("guerra civil: al terminar, el ganador (sea quien sea) recibe su premio",
+              "on_civil_war_end = { effect = { if = { limit = { original_tag = EFE has_global_flag = EFE_guerra_civil } "
+              "clr_global_flag = EFE_guerra_civil country_event = meganations_efe.221 }" in cwo, cwo[:600])
+        check("guerra civil: el premio es un espiritu nacional", "add_ideas = EFE_la_paz_verde" in efe_cw)
+        gfx_cw = (mod / "interface/meganations_civil_war_portraits.gfx").read_text()
+        check("guerra civil: el retrato del lider rebelde es un sprite del mod",
+              'name = "GFX_portrait_mn_Aurelio_IV"' in gfx_cw and 'texturefile = "gfx/leaders/EFE/Aurelio_IV.dds"' in gfx_cw)
+        pulses_cw = pdx.parse((mod / "common/scripted_effects/meganations_effects.txt").read_text())
+        asc_p = " ".join(pdx.render(pulses_cw.get("ASC_pulso_de_la_red")).split())
+        check("guerra civil de la ASC: por condiciones (computo y calor altos, sin guerra), una vez",
+              "var = ASC_computo value = 100 compare = greater_than_or_equals" in asc_p
+              and "set_country_flag = ASC_guerra_civil_hecha" in asc_p and "id = meganations_asc.220" in asc_p, asc_p[-900:])
+        shd_p = " ".join(pdx.render(pulses_cw.get("SHD_pulso_del_rio")).split())
+        check("guerra civil de la SHD: por condiciones (el pueblo desborda y el orden cae)",
+              "var = SHD_pueblo value = 80" in shd_p and "id = meganations_shd.220" in shd_p, shd_p[-900:])
+        dest = efe_tree_cw[efe_tree_cw.index("id = EFE_el_destino_de_gaia"):][:1500]
+        check("destino: el foco destraba la forma final", "set_country_flag = EFE_destino_abierto" in dest, dest[:600])
+        decs_d = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        pf = decs_d[decs_d.index("EFE_proclamar_la_forma_final = {"):][:3000]
+        check("forma final: nombre y bandera nuevos, nucleos y espiritu, con condiciones de tropas",
+              "set_cosmetic_tag = EFE_GAIA" in pf and "add_ideas = EFE_dominio_de_gaia" in pf
+              and "has_army_size = { size > 44 }" in pf and "add_core_of = EFE" in pf, pf[:1500])
+        names_ct = (mod / "localisation/spanish/meganations_countries_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("forma final: el nombre nuevo en todos los gobiernos",
+              ' EFE_GAIA:0 "El Dominio de Gaia"' in names_ct and ' EFE_GAIA_fascism:0 "El Dominio de Gaia"' in names_ct
+              and " EFE_GAIA_ADJ:0 " in names_ct, names_ct[-800:])
+        check("forma final: bandera (la del pais mientras no llegue la propia)",
+              (mod / "gfx/flags/EFE_GAIA.tga").exists() and (mod / "gfx/flags/small/EFE_GAIA.tga").exists())
         # El Santuario de Gaia (2026-09-29): proteger el Amazonas crea una nación neutral.
         efe_ev2 = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         e30 = efe_ev2[efe_ev2.index("id = meganations_efe.30 title"):][:1500]
@@ -2063,7 +2107,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -2073,7 +2117,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

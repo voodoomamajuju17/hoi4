@@ -36,6 +36,7 @@ def emit(ctx: BuildContext) -> None:
     _emit_country_files(ctx)
     _emit_colors(ctx)
     _emit_flags(ctx)
+    _emit_cosmetic_tags(ctx)
     _emit_localisation(ctx)
 
 
@@ -94,6 +95,40 @@ def _emit_flags(ctx: BuildContext) -> None:
             continue
         for path in write_country_flags(gfx_root, c.tag, c.color):
             ctx.track(path)
+
+
+def cosmetic_tags(ctx: BuildContext) -> list[dict]:
+    """Identidades nuevas de un país (02_countries.yaml -> cosmetic_tags): el
+    bando que se separa en una guerra civil o la forma final de una potencia.
+    set_cosmetic_tag les cambia nombre y bandera."""
+    return list(ctx.spec.raw["countries"].get("cosmetic_tags") or [])
+
+
+def _emit_cosmetic_tags(ctx: BuildContext) -> None:
+    _, groups = ctx.spec.ideology_index()
+    gfx_root = ctx.mod_root / "gfx"
+    repo = ctx.spec.root.parent
+    for ct in cosmetic_tags(ctx):
+        cid, parent = ct["id"], ctx.spec.country(ct["parent"])
+        name, adj = ct["name"], ct["adjective"]
+        keys = [(cid, name), (f"{cid}_DEF", name), (f"{cid}_ADJ", adj)]
+        for group in groups:
+            keys += [(f"{cid}_{group}", name), (f"{cid}_{group}_DEF", name), (f"{cid}_{group}_ADJ", adj)]
+        for key, text in keys:
+            ctx.loc.define_and_reference(key, en=text["english"], es=text["spanish"], file=LOC_FILE,
+                                         origin=f"cosmetic_tags:{cid}")
+        # Bandera: la del usuario (assets/<padre>/flags/<ID>.tga); mientras no
+        # llegue, la del país padre.
+        own = repo / "assets" / parent.tag / "flags" / f"{cid}.tga"
+        asset = parent.raw.get("flag_asset")
+        for variant in ("", "medium/", "small/"):
+            if own.exists():
+                ctx.copy_asset(f"assets/{parent.tag}/flags/{variant}{cid}.tga", f"gfx/flags/{variant}{cid}.tga")
+            elif asset:
+                ctx.copy_asset(f"{asset}/{variant}{parent.tag}.tga", f"gfx/flags/{variant}{cid}.tga")
+        if not own.exists() and not asset:
+            for path in write_country_flags(gfx_root, cid, parent.color):
+                ctx.track(path)
 
 
 def _emit_localisation(ctx: BuildContext) -> None:

@@ -401,6 +401,39 @@ countries:
         spanish: Algo allá afuera nos escuchó. Por un tiempo, todo el país mira hacia arriba.
       modifiers: {research_speed_factor: 0.15, stability_factor: 0.1, political_power_gain: 0.1}
       src: user_design
+    - id: EFE_ley_de_la_semilla
+      name: {english: The Seed Law, spanish: La Ley de la Semilla}
+      desc:
+        english: Every citizen plants, every harvest is registered, every seed belongs to Gaia.
+        spanish: Cada ciudadano planta, cada cosecha se registra, cada semilla es de Gaia.
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.15, war_support_factor: 0.05}
+      src: user_request
+    - id: EFE_la_paz_verde
+      name: {english: The Green Peace, spanish: La Paz Verde}
+      desc:
+        english: The forest and the throne fought, and one of them won. Gaia does not remember the loser's name.
+        spanish: El monte y el trono pelearon, y uno ganó. Gaia no recuerda el nombre del que perdió.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.1
+        political_power_gain: 0.4
+        army_org_factor: 0.1
+        industrial_capacity_factory: 0.1
+      src: user_request
+    - id: EFE_dominio_de_gaia
+      name: {english: The Dominion of Gaia, spanish: El Dominio de Gaia}
+      desc:
+        english: From the Caribbean to Cape Horn one forest, one law, one Empress of the living Earth.
+        spanish: Del Caribe al Cabo de Hornos, un solo bosque, una ley, un imperio de la Tierra viva.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     biosteel_tiers:
       implementation: national_spirit_swap
       implementation_src: inferred
@@ -458,14 +491,21 @@ countries:
     starting_ideas:
     # 2026-09-29 (pedido del usuario): "en la ASC todo debería costar menos manpower,
     # es mucho drone/robot/automático". El juego no tiene un modificador de costo
-    # de hombres por unidad para un solo país: esto hace lo mismo por otro lado
-    # (más reclutables, bajas que vuelven, aviones y barcos con menos tripulación).
+    # de hombres por unidad para un solo país: esto hace lo mismo por otro lado.
     - id: ASC_ejercito_de_maquinas
       name: {english: The Machine Army, spanish: El Ejército de Máquinas}
       desc:
-        english: Drones walk the front line, turrets hold the trenches and a single operator commands a whole platoon. The Commune spends machines, not people.
-        spanish: Los drones caminan la primera línea, las torretas sostienen las trincheras y un solo operador comanda un pelotón entero. La Comuna gasta máquinas, no personas.
-      modifiers: {conscription_factor: 0.35, weekly_manpower: 1500, '?casualty_trickleback': 0.3, '?air_manpower_requirement_factor': -0.5, '?navy_casualty_on_hit': -0.5, '?navy_casualty_on_sink': -0.5}
+        english: Drones walk the front line, turrets hold the trenches and a single operator commands a whole platoon. The Commune spends machines,
+          not people.
+        spanish: Los drones caminan la primera línea, las torretas sostienen las trincheras y un solo operador comanda un pelotón entero. La Comuna
+          gasta máquinas, no personas.
+      modifiers:
+        conscription_factor: 0.35
+        weekly_manpower: 1500
+        ?casualty_trickleback: 0.3
+        ?air_manpower_requirement_factor: -0.5
+        ?navy_casualty_on_hit: -0.5
+        ?navy_casualty_on_sink: -0.5
       src: user_request
     - id: ASC_cuello_de_botella
       name: {english: The Council Bottleneck, spanish: El Cuello de Botella del Consejo}
@@ -641,6 +681,39 @@ countries:
         spanish: Perdimos una provincia, no la guerra. La próxima va a ser distinta.
       modifiers: {war_support_factor: 0.1, army_org_factor: 0.05}
       src: user_design
+    - id: ASC_plan_de_silicio
+      name: {english: The Silicon Plan, spanish: El Plan de Silicio}
+      desc:
+        english: 'Five-year plans are obsolete: the plan is recalculated every five minutes.'
+        spanish: 'Los planes quinquenales son cosa del pasado: el plan se recalcula cada cinco minutos.'
+      modifiers: {research_speed_factor: 0.05, political_power_gain: 0.15, stability_factor: 0.03}
+      src: user_request
+    - id: ASC_el_plan_unificado
+      name: {english: The Unified Plan, spanish: El Plan Unificado}
+      desc:
+        english: Human or machine, the Commune has one plan again, and nobody wants to argue with it.
+        spanish: Humano o máquina, la Comuna vuelve a tener un solo plan, y nadie quiere discutirle.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.1
+        political_power_gain: 0.4
+        army_org_factor: 0.1
+        industrial_capacity_factory: 0.1
+      src: user_request
+    - id: ASC_comuna_continental
+      name: {english: The Continental Commune, spanish: La Comuna Continental}
+      desc:
+        english: From Lisbon to the Urals the machines work and nobody is surplus.
+        spanish: De Lisboa a los Urales trabajan las máquinas y nadie sobra.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     see: Q030
 
   FCU:
@@ -845,6 +918,27 @@ countries:
         spanish: Perdimos una provincia, no la guerra. La próxima va a ser distinta.
       modifiers: {war_support_factor: 0.1, army_org_factor: 0.05}
       src: user_design
+    - id: FCU_constitucion_corporativa
+      name: {english: The Corporate Constitution, spanish: La Constitución Corporativa}
+      desc:
+        english: The charter is the constitution; the shareholders' meeting is the parliament.
+        spanish: El estatuto es la constitución; la asamblea de accionistas, el parlamento.
+      modifiers: {political_power_gain: 0.15, consumer_goods_factor: -0.05, stability_factor: 0.03}
+      src: user_request
+    - id: FCU_corporacion_de_las_americas
+      name: {english: The Americas Corporation, spanish: La Corporación de las Américas}
+      desc:
+        english: Two continents, one balance sheet. Every citizen is a shareholder of the hemisphere.
+        spanish: Dos continentes, un solo balance. Cada ciudadano es accionista del hemisferio.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     see: Q030
   HSN:
     coverage: full_v1
@@ -1018,6 +1112,27 @@ countries:
         spanish: Perdimos una provincia, no la guerra. La próxima va a ser distinta.
       modifiers: {war_support_factor: 0.1, army_org_factor: 0.05}
       src: user_design
+    - id: HSN_carta_de_los_puertos
+      name: {english: The Charter of Ports, spanish: La Carta de los Puertos}
+      desc:
+        english: Every port that signs the Charter trades under the Market's flag and its law.
+        spanish: Cada puerto que firma la Carta comercia bajo la bandera y la ley del Mercado.
+      modifiers: {political_power_gain: 0.15, stability_factor: 0.03, consumer_goods_factor: -0.05}
+      src: user_request
+    - id: HSN_talasocracia_de_los_siete_mares
+      name: {english: The Thalassocracy of the Seven Seas, spanish: La Talasocracia de los Siete Mares}
+      desc:
+        english: 'Every strait, every canal, every cape: whoever sails, pays the Market.'
+        spanish: 'Cada estrecho, cada canal, cada cabo: el que navega le paga al Mercado.'
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     see: Q030
     starting_ideas:
     - id: HSN_flota_envejecida
@@ -1207,6 +1322,27 @@ countries:
         spanish: Perdimos una provincia, no la guerra. La próxima va a ser distinta.
       modifiers: {war_support_factor: 0.1, army_org_factor: 0.05}
       src: user_design
+    - id: NAS_ley_del_ayni
+      name: {english: The Law of Ayni, spanish: La Ley del Ayni}
+      desc:
+        english: 'Today for you, tomorrow for me: reciprocity as the law of the Sun.'
+        spanish: 'Hoy por ti, mañana por mí: la reciprocidad como ley del Sol.'
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.15, recruitable_population_factor: 0.05}
+      src: user_request
+    - id: NAS_imperio_del_sol_eterno
+      name: {english: The Empire of the Eternal Sun, spanish: El Imperio del Sol Eterno}
+      desc:
+        english: The four quarters are now the whole south. The Sun has no more borders to cross.
+        spanish: Los cuatro suyus ya son todo el sur. El Sol no tiene más fronteras que cruzar.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     see: Q030
     starting_ideas:
     - id: NAS_montanas_aisladas
@@ -1421,6 +1557,39 @@ countries:
         spanish: Dos años sin un solo desborde. El río y el Estado se mueven como uno.
       modifiers: {research_speed_factor: 0.1, production_speed_buildings_factor: 0.1, political_power_gain: 0.25}
       src: user_design
+    - id: SHD_ley_del_caudal
+      name: {english: The Law of the Flow, spanish: La Ley del Caudal}
+      desc:
+        english: 'Every decision is a valve: opened, closed or regulated by the engineers of harmony.'
+        spanish: 'Cada decisión es una válvula: se abre, se cierra o se regula por los ingenieros de la armonía.'
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.15, production_speed_buildings_factor: 0.05}
+      src: user_request
+    - id: SHD_el_caudal_reunido
+      name: {english: The Reunited Flow, spanish: El Caudal Reunido}
+      desc:
+        english: The river left its bed and came back. Every channel answers to one directorate again.
+        spanish: El río salió de su cauce y volvió. Cada canal responde otra vez a un solo directorio.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.1
+        political_power_gain: 0.4
+        army_org_factor: 0.1
+        industrial_capacity_factory: 0.1
+      src: user_request
+    - id: SHD_armonia_celeste
+      name: {english: The Celestial Harmony, spanish: La Armonía Celeste}
+      desc:
+        english: Every river of Asia runs through one control room.
+        spanish: Cada río de Asia pasa por una sola sala de control.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     see: Q030
     starting_ideas:
     - id: SHD_burocracia_del_caudal
@@ -1581,6 +1750,39 @@ countries:
         spanish: Perdimos una provincia, no la guerra. La próxima va a ser distinta.
       modifiers: {war_support_factor: 0.1, army_org_factor: 0.05}
       src: user_design
+    - id: APF_carta_de_ubuntu
+      name: {english: The Ubuntu Charter, spanish: La Carta de Ubuntu}
+      desc:
+        english: 'I am because we are: the continental charter written from the village up.'
+        spanish: 'Soy porque somos: la carta continental escrita desde la aldea hacia arriba.'
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.15, war_support_factor: 0.05}
+      src: user_request
+    - id: APF_la_gran_reconciliacion
+      name: {english: The Great Reconciliation, spanish: La Gran Reconciliación}
+      desc:
+        english: Congress and councils buried their dead together. The Federation is one again.
+        spanish: El Congreso y los consejos enterraron juntos a sus muertos. La Federación vuelve a ser una.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.1
+        political_power_gain: 0.4
+        army_org_factor: 0.1
+        industrial_capacity_factory: 0.1
+      src: user_request
+    - id: APF_imperio_humano_original
+      name: {english: The Original Human Empire, spanish: El Imperio Humano Original}
+      desc:
+        english: Humanity was born here. Now its homeland reaches the Mediterranean and the rivers of Mesopotamia again.
+        spanish: La humanidad nació acá. Ahora su tierra natal vuelve a llegar al Mediterráneo y a los ríos de Mesopotamia.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     see: Q030
     starting_ideas:
     - id: APF_consejos_desorganizados
@@ -1802,6 +2004,39 @@ countries:
         spanish: Perdimos una provincia, no la guerra. La próxima va a ser distinta.
       modifiers: {war_support_factor: 0.1, army_org_factor: 0.05}
       src: user_design
+    - id: NRE_culto_imperial
+      name: {english: The Imperial Cult, spanish: El Culto Imperial}
+      desc:
+        english: Incense before the Genius of the Imperator in every forum from Lutetia to Dacia.
+        spanish: Incienso ante el Genio del Imperator en cada foro, de Lutecia a Dacia.
+      modifiers: {stability_factor: 0.05, political_power_gain: 0.15, war_support_factor: 0.05}
+      src: user_request
+    - id: NRE_pax_victoris
+      name: {english: The Victor's Peace, spanish: La Paz del Vencedor}
+      desc:
+        english: Rome bled Rome, and Rome survived. The legions march behind one standard again.
+        spanish: Roma desangró a Roma, y Roma sobrevivió. Las legiones marchan otra vez detrás de un solo estandarte.
+      modifiers:
+        stability_factor: 0.15
+        war_support_factor: 0.1
+        political_power_gain: 0.4
+        army_org_factor: 0.1
+        industrial_capacity_factory: 0.1
+      src: user_request
+    - id: NRE_imperio_eterno
+      name: {english: The Eternal Roman Empire, spanish: El Imperio Romano Eterno}
+      desc:
+        english: Mare Nostrum is ours again, from the pillars of Hercules to the Nile.
+        spanish: El Mare Nostrum vuelve a ser nuestro, de las columnas de Hércules al Nilo.
+      modifiers:
+        stability_factor: 0.1
+        war_support_factor: 0.1
+        political_power_gain: 0.5
+        industrial_capacity_factory: 0.15
+        research_speed_factor: 0.1
+        army_org_factor: 0.1
+        recruitable_population_factor: 0.15
+      src: user_request
     see: Q030
     starting_ideas:
     - id: NRE_senado_corrupto

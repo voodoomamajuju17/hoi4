@@ -67,6 +67,7 @@ def _emit(ctx: BuildContext) -> None:
     effects_used: dict[str, str] = {}
     startup: list[tuple[str, str]] = []  # (tag, id)
     capitulations: list[tuple[str, str, str]] = []  # (quien capitula, dueño del evento, id)
+    civil_wars: list[tuple[str, str, str]] = []  # (país, bandera global de la guerra, id)
     by_ns: dict[str, Block] = {}
     seen: set[str] = set()
     own_sprites = Block()
@@ -101,6 +102,12 @@ def _emit(ctx: BuildContext) -> None:
             loser = trig["capitulation"]["loser"]
             ctx.spec.country(loser)
             capitulations.append((loser, tag, eid))
+        elif isinstance(trig, dict) and "civil_war_end" in trig:
+            # on_civil_war_end: ROOT es el que ganó (el país original o el bando
+            # que se separó); el evento le llega al ganador, sea cual sea.
+            cw = trig["civil_war_end"]
+            ctx.spec.country(cw["tag"])
+            civil_wars.append((cw["tag"], cw["flag"], eid))
         elif isinstance(trig, dict) and "focus" in trig:
             if trig["focus"] not in focus_ids:
                 raise SpecError(f"{eid}: el foco '{trig['focus']}' no existe", where="12_events.yaml")
@@ -177,6 +184,19 @@ def _emit(ctx: BuildContext) -> None:
     if capitulations:
         _emit_capitulations(ctx, capitulations, effect_ctx.triggers_used)
         effects_used.setdefault("country_event", "on_capitulation")
+    if civil_wars:
+        effect = Block()
+        for tag, flag, eid in civil_wars:
+            effect.add("if", Block([
+                ("limit", Block([("original_tag", tag), ("has_global_flag", flag)])),
+                ("clr_global_flag", flag),
+                ("country_event", eid)]))
+        root = Block([("on_actions", Block([("on_civil_war_end", Block([("effect", effect)]))]))])
+        ctx.write_script("common/on_actions/04_meganations_civil_war.txt", root, source=SOURCE)
+        effects_used.setdefault("clr_global_flag", "on_civil_war_end")
+        effects_used.setdefault("country_event", "on_civil_war_end")
+        effect_ctx.triggers_used.setdefault("original_tag", "on_civil_war_end")
+        effect_ctx.triggers_used.setdefault("has_global_flag", "on_civil_war_end")
     ctx.verify_keys("effects", effects_used)
     ctx.verify_keys("triggers", effect_ctx.triggers_used)
 

@@ -40,6 +40,7 @@ ids de idea contra 05_ideas.yaml.
 
 from __future__ import annotations
 
+import re
 import unicodedata
 
 from ..errors import SpecError
@@ -91,6 +92,18 @@ def _variable_tooltip(var: str, value) -> str | None:
     return key
 
 
+# Guerras civiles (2026-09-29): el líder del bando rebelde se renombra y toma
+# el retrato del personaje. set_country_leader_portrait pide un sprite: cada
+# retrato usado se declara acá (ruta -> nombre del sprite).
+PORTRAIT_SPRITES: dict[str, str] = {}
+
+
+def portrait_sprite(path: str) -> str:
+    name = "GFX_portrait_mn_" + re.sub(r"[^A-Za-z0-9_]", "_", path.rsplit("/", 1)[-1].rsplit(".", 1)[0])
+    PORTRAIT_SPRITES[path] = name
+    return name
+
+
 def flush_tooltips(ctx) -> None:
     """Define la localisation de los tooltips usados hasta ahora (una vez cada uno)."""
     done = ctx.data.setdefault("tooltips_defined", set())
@@ -99,6 +112,12 @@ def flush_tooltips(ctx) -> None:
             continue
         ctx.loc.define_and_reference(key, en=en, es=es, file="meganations_tooltips", origin="tooltips")
         done.add(key)
+    if PORTRAIT_SPRITES:
+        sprites = Block()
+        for path, name in sorted(PORTRAIT_SPRITES.items()):
+            sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(path))]))
+        ctx.write_script("interface/meganations_civil_war_portraits.gfx", Block([("spriteTypes", sprites)]),
+                         source="guerras civiles: retratos de los lideres rebeldes")
 
 
 def _norm(name: str) -> str:
@@ -523,6 +542,44 @@ def render_effects(owner: str, items: list[dict], known,
                 effects_used.setdefault(k, owner)
             ec.triggers_used.setdefault("is_controlled_by", owner)
             continue
+        if effect == "civil_war":
+            # Guerra civil (2026-09-29). El país que juega es siempre el bando
+            # que eligió: el otro bando es el que se separa (start_civil_war).
+            # El que se separa toma nombre y bandera propios (cosmetic tag) y su
+            # líder se renombra con el retrato del personaje.
+            tag = item["tag"]
+            inner = Block([("ideology", item["ideology"]), ("size", float(item.get("size", 0.35)))])
+            block.add("start_civil_war", inner)
+            rebels = item.get("rebels") or {}
+            rb = Block([("limit", Block([("original_tag", tag), ("NOT", Block([("tag", tag)])),
+                                         ("has_civil_war", True)]))])
+            if rebels.get("cosmetic_tag"):
+                rb.add("set_cosmetic_tag", rebels["cosmetic_tag"])
+            leader = rebels.get("leader") or {}
+            if leader.get("name"):
+                key = f"{rebels.get('cosmetic_tag', tag)}_leader"
+                TOOLTIPS[key] = (leader["name"]["english"], leader["name"]["spanish"])
+                # efectos 1.12+: no se verifican contra documentation/ (si faltaran, el
+                # juego solo lo anota en error.log; la guerra civil sale igual)
+                rb.add("set_country_leader_name", Block([("name", key)]))
+            if leader.get("portrait"):
+                rb.add("set_country_leader_portrait", Block([("portrait", portrait_sprite(leader["portrait"]))]))
+            if rebels.get("effects"):
+                rb.entries.extend(render_effects(owner, rebels["effects"], ec, effects_used, where=where).entries)
+            block.add("random_country", rb)
+            if item.get("global_flag"):
+                block.add("set_global_flag", item["global_flag"])
+                effects_used.setdefault("set_global_flag", owner)
+            for k in ("start_civil_war", "random_country", "set_cosmetic_tag"):
+                effects_used.setdefault(k, owner)
+            for k in ("original_tag", "tag", "has_civil_war"):
+                ec.triggers_used.setdefault(k, owner)
+            continue
+        if effect == "cosmetic_tag":
+            # nombre y bandera nuevos (02_countries.yaml -> cosmetic_tags)
+            block.add("set_cosmetic_tag", item["value"])
+            effects_used.setdefault("set_cosmetic_tag", owner)
+            continue
         if effect == "white_peace_all":
             # Paz blanca con todos los enemigos; antes, cada uno se queda con lo
             # que controla (lo propio ocupado pasa al ocupante y al revés).
@@ -880,6 +937,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             # el lado del satélite (2026-09-29): sigue siendo satélite de `value`
             block.add("is_subject_of", value)
             triggers_used.setdefault("is_subject_of", owner)
+        elif key == "civil_war":
+            block.add("has_civil_war", bool(value))
+            triggers_used.setdefault("has_civil_war", owner)
         elif key == "subject":
             # es satélite de alguien (cualquiera)
             block.add("is_subject", bool(value))

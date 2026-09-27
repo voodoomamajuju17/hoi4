@@ -243,6 +243,7 @@ trees:
         - {effect: flag, value: EFE_monte_levantado}
         - {effect: swap_ideas, remove: EFE_mandato_verde, add: EFE_mandato_del_monte}
         - {effect: remove_idea, value: EFE_corte_dividida}
+        - {effect: event, id: meganations_efe.220, days: 3}
       - id: EFE_desurbanizar
         name: {english: Deurbanise, spanish: Desurbanizar}
         days: 49
@@ -342,6 +343,60 @@ trees:
           spanish: Cada región reforestada es un muro más.
         reward:
         - {effect: add_ideas, value: EFE_continente_vivo}
+    - id: destino
+      name: {english: The Destiny of Gaia, spanish: El Destino de Gaia}
+      focuses:
+      - id: EFE_el_concilio_verde
+        name: {english: The Green Council, spanish: El Concilio Verde}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: 'Druids, generals and engineers of the vats at one table: the Empire governs as one forest.'
+          spanish: 'Druidas, generales e ingenieros de las cubas en una misma mesa: el Imperio gobierna como un solo bosque.'
+        prerequisites_any:
+        - EFE_la_corte_de_los_bosques
+        - EFE_desurbanizar
+      - id: EFE_la_ley_de_la_semilla
+        name: {english: The Seed Law, spanish: La Ley de la Semilla}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: EFE_ley_de_la_semilla}
+        desc:
+          english: Every seed is registered and every harvest belongs to Gaia.
+          spanish: Cada semilla se registra y cada cosecha es de Gaia.
+        prerequisites:
+        - EFE_el_concilio_verde
+      - id: EFE_los_guardianes_del_bosque
+        name: {english: The Forest Guardians, spanish: Los Guardianes del Bosque}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc:
+          english: 'The Green Guard swears a new oath: the forest before the throne.'
+          spanish: 'La Guardia Verde jura un nuevo voto: el bosque antes que el trono.'
+        prerequisites:
+        - EFE_la_ley_de_la_semilla
+      - id: EFE_el_destino_de_gaia
+        name: {english: The Destiny of Gaia, spanish: El Destino de Gaia}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - EFE_los_guardianes_del_bosque
+        desc:
+          english: Unlocks the decision to proclaim The Dominion of Gaia. Requires controlling Lima, La Paz, the Amazon, São Paulo, Rio de Janeiro,
+            Bogotá (Cundinamarca) and Caracas (Miranda); 45 divisions, 8 BioSteel stored and 50% stability.
+          spanish: Destraba la decisión de proclamar El Dominio de Gaia. Pide controlar Lima, La Paz, el Amazonas, São Paulo, Río de Janeiro, Bogotá
+            (Cundinamarca) y Caracas (Miranda); 45 divisiones, 8 de Bioacero guardado y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: EFE_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: autarquia
       ai_factor: 1.5
       name: {english: The BioSteel Autarky, spanish: La Autarquía del Bioacero}
@@ -1203,6 +1258,60 @@ trees:
         reward:
         - {effect: event, id: meganations_apf.1, target: APF}
         - {effect: add_war_support, value: 0.05}
+    - id: destino
+      name: {english: The Destiny of the Commune, spanish: El Destino de la Comuna}
+      focuses:
+      - id: ASC_la_asamblea_de_los_datos
+        name: {english: The Data Assembly, spanish: La Asamblea de los Datos}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: Every citizen votes every day on every allocation. The servers count the votes.
+          spanish: Cada ciudadano vota cada día cada asignación. Los servidores cuentan los votos.
+        prerequisites_any:
+        - ASC_el_sorteo_del_ano
+        - ASC_la_singularidad_del_plan
+      - id: ASC_el_plan_de_silicio
+        name: {english: The Silicon Plan, spanish: El Plan de Silicio}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: ASC_plan_de_silicio}
+        desc:
+          english: The plan is recalculated every five minutes.
+          spanish: El plan se recalcula cada cinco minutos.
+        prerequisites:
+        - ASC_la_asamblea_de_los_datos
+      - id: ASC_la_abundancia_armada
+        name: {english: Armed Abundance, spanish: La Abundancia Armada}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc:
+          english: A commune without scarcity still needs an army to defend it.
+          spanish: Una comuna sin escasez igual necesita un ejército que la defienda.
+        prerequisites:
+        - ASC_el_plan_de_silicio
+      - id: ASC_el_destino_de_la_comuna
+        name: {english: The Destiny of the Commune, spanish: El Destino de la Comuna}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - ASC_la_abundancia_armada
+        desc:
+          english: Unlocks the decision to proclaim The Continental Commune. Requires controlling Paris (Ile de France), Rome (Lazio), Madrid, Leningrad,
+            Crimea and Kiev; 60 divisions, 100 Computing Power and 50% stability.
+          spanish: Destraba la decisión de proclamar La Comuna Continental. Pide controlar París (Ile de France), Roma (Lacio), Madrid, Leningrado,
+            Crimea y Kiev; 60 divisiones, 100 de Poder de Cómputo y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: ASC_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: plan_total
       ai_factor: 1.5
       name: {english: The Total Plan, spanish: El Plan Total}
@@ -2114,6 +2223,56 @@ trees:
         reward:
         - {effect: event, id: meganations_hsn.2, days: 1, target: HSN}
         - {effect: add_war_support, value: 0.05}
+    - id: destino
+      name: {english: Manifest Destiny, spanish: El Destino Manifiesto}
+      focuses:
+      - id: FCU_la_asamblea_de_accionistas
+        name: {english: The Shareholders' Assembly, spanish: La Asamblea de Accionistas}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: The first general meeting of the Union with every citizen holding a share.
+          spanish: La primera asamblea general de la Unión con cada ciudadano como accionista.
+        prerequisites_any:
+        - FCU_segundo_mandato
+        - FCU_absorber_a_halvorsen
+      - id: FCU_la_constitucion_corporativa
+        name: {english: The Corporate Constitution, spanish: La Constitución Corporativa}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: FCU_constitucion_corporativa}
+        desc: {english: The charter becomes the constitution., spanish: El estatuto pasa a ser la constitución.}
+        prerequisites:
+        - FCU_la_asamblea_de_accionistas
+      - id: FCU_el_dividendo_de_la_nacion
+        name: {english: The Nation's Dividend, spanish: El Dividendo de la Nación}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc: {english: Profits are paid out as patriotism., spanish: Las ganancias se pagan como patriotismo.}
+        prerequisites:
+        - FCU_la_constitucion_corporativa
+      - id: FCU_el_destino_manifiesto
+        name: {english: Manifest Destiny, spanish: El Destino Manifiesto}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - FCU_el_dividendo_de_la_nacion
+        desc:
+          english: Unlocks the decision to proclaim The Americas Corporation. Requires controlling the Frontier (Minnesota and Kansas), Havana (Cuba),
+            Lima, Buenos Aires and Bogotá (Cundinamarca); 50 divisions, Scandal below 30 and 50% stability.
+          spanish: Destraba la decisión de proclamar La Corporación de las Américas. Pide controlar la Frontera (Minnesota y Kansas), La Habana (Cuba),
+            Lima, Buenos Aires y Bogotá (Cundinamarca); 50 divisiones, Escándalo por debajo de 30 y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: FCU_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: economia_dividendo
       ai_factor: 1.5
       name: {english: The Civil Dividend, spanish: El Dividendo Civil}
@@ -3020,6 +3179,60 @@ trees:
         reward:
         - {effect: wargoal, target: FCU, type: annex_everything}
         - {effect: add_war_support, value: 0.1}
+    - id: destino
+      name: {english: The Destiny of the Seas, spanish: El Destino de los Mares}
+      focuses:
+      - id: HSN_el_almirantazgo_mercante
+        name: {english: The Merchant Admiralty, spanish: El Almirantazgo Mercante}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: Captains and clearing houses under one admiralty.
+          spanish: Capitanes y cámaras de compensación bajo un mismo almirantazgo.
+        prerequisites_any:
+        - HSN_el_libro_de_fletes
+        - HSN_capitanes_electos
+      - id: HSN_la_carta_de_los_puertos
+        name: {english: The Charter of Ports, spanish: La Carta de los Puertos}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: HSN_carta_de_los_puertos}
+        desc:
+          english: Every port that signs trades under the Market's law.
+          spanish: Cada puerto que firma comercia bajo la ley del Mercado.
+        prerequisites:
+        - HSN_el_almirantazgo_mercante
+      - id: HSN_la_ley_del_mar
+        name: {english: The Law of the Sea, spanish: La Ley del Mar}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc:
+          english: On the high seas there is only one law, and we wrote it.
+          spanish: En alta mar hay una sola ley, y la escribimos nosotros.
+        prerequisites:
+        - HSN_la_carta_de_los_puertos
+      - id: HSN_el_destino_de_los_mares
+        name: {english: The Destiny of the Seas, spanish: El Destino de los Mares}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - HSN_la_ley_del_mar
+        desc:
+          english: Unlocks the decision to proclaim The Thalassocracy of the Seven Seas. Requires controlling Hong Kong, Guangzhou, Suez, Panama,
+            Gibraltar and the Cape; 30 divisions, 7 nodes and 50% stability.
+          spanish: Destraba la decisión de proclamar La Talasocracia de los Siete Mares. Pide controlar Hong Kong, Cantón, Suez, Panamá, Gibraltar
+            y el Cabo; 30 divisiones, 7 nodos y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: HSN_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: puerto_libre
       ai_factor: 1.5
       name: {english: The Free Port, spanish: El Puerto Libre}
@@ -3989,6 +4202,58 @@ trees:
         reward:
         - {effect: add_ideas, value: NAS_tawantinsuyu}
         - {effect: add_research_slot, value: 1}
+    - id: destino
+      name: {english: The Destiny of the Sun, spanish: El Destino del Sol}
+      focuses:
+      - id: NAS_el_consejo_de_los_cuatro_suyus
+        name: {english: The Council of the Four Suyus, spanish: El Consejo de los Cuatro Suyus}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: The governors of the four quarters meet in Cusco for the first time in five centuries.
+          spanish: Los gobernadores de los cuatro suyus se reúnen en Cusco por primera vez en cinco siglos.
+        prerequisites_any:
+        - NAS_la_coronacion_renovada
+        - NAS_el_qhapaq_nan
+      - id: NAS_la_ley_del_ayni
+        name: {english: The Law of Ayni, spanish: La Ley del Ayni}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: NAS_ley_del_ayni}
+        desc: {english: Reciprocity as the law of the Sun., spanish: La reciprocidad como ley del Sol.}
+        prerequisites:
+        - NAS_el_consejo_de_los_cuatro_suyus
+      - id: NAS_el_hijo_del_sol
+        name: {english: The Son of the Sun, spanish: El Hijo del Sol}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc:
+          english: 'The Sapa Inti is not a king: he is the Sun that walks among us.'
+          spanish: 'El Sapa Inti no es un rey: es el Sol que camina entre nosotros.'
+        prerequisites:
+        - NAS_la_ley_del_ayni
+      - id: NAS_el_destino_del_sol
+        name: {english: The Destiny of the Sun, spanish: El Destino del Sol}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - NAS_el_hijo_del_sol
+        desc:
+          english: Unlocks the decision to proclaim The Empire of the Eternal Sun. Requires controlling Buenos Aires, Santiago, São Paulo, the Amazon,
+            Bogotá (Cundinamarca) and Caracas (Miranda); 35 divisions, 60 Inti-Soma and 50% stability.
+          spanish: Destraba la decisión de proclamar El Imperio del Sol Eterno. Pide controlar Buenos Aires, Santiago, São Paulo, el Amazonas, Bogotá
+            (Cundinamarca) y Caracas (Miranda); 35 divisiones, 60 de Inti-Soma y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: NAS_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: terrazas
       ai_factor: 1.5
       name: {english: The Terraces, spanish: Las Terrazas}
@@ -4702,6 +4967,58 @@ trees:
         reward:
         - {effect: add_ideas, value: SHD_espiritu_el_rio_desbordado}
         - {effect: add_research_slot, value: 1}
+    - id: destino
+      name: {english: The Destiny of Heaven, spanish: El Destino del Cielo}
+      focuses:
+      - id: SHD_el_gran_consejo_tecnico
+        name: {english: The Great Technical Council, spanish: El Gran Consejo Técnico}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: Every province sends its best engineer; the Council decides by measurement, not by vote.
+          spanish: Cada provincia manda a su mejor ingeniero; el Consejo decide midiendo, no votando.
+        prerequisites_any:
+        - SHD_ajuste_tecnico_n_1
+        - SHD_el_pueblo_es_el_caudal
+      - id: SHD_la_ley_del_caudal
+        name: {english: The Law of the Flow, spanish: La Ley del Caudal}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: SHD_ley_del_caudal}
+        desc: {english: Every decision is a valve., spanish: Cada decisión es una válvula.}
+        prerequisites:
+        - SHD_el_gran_consejo_tecnico
+      - id: SHD_el_mandato_armonioso
+        name: {english: The Harmonious Mandate, spanish: El Mandato Armonioso}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc:
+          english: Heaven's mandate, measured in cubic metres per second.
+          spanish: El mandato del cielo, medido en metros cúbicos por segundo.
+        prerequisites:
+        - SHD_la_ley_del_caudal
+      - id: SHD_el_destino_del_cielo
+        name: {english: The Destiny of Heaven, spanish: El Destino del Cielo}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - SHD_el_mandato_armonioso
+        desc:
+          english: Unlocks the decision to proclaim The Celestial Harmony. Requires controlling Tokyo (Kanto), Hong Kong, Madras, Manila, Java and
+            Kabul; 60 divisions, Order at 60 and 50% stability.
+          spanish: Destraba la decisión de proclamar La Armonía Celeste. Pide controlar Tokio (Kanto), Hong Kong, Madrás, Manila, Java y Kabul; 60
+            divisiones, Orden en 60 y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: SHD_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: grandes_obras
       ai_factor: 1.5
       name: {english: The Great Works, spanish: Las Grandes Obras}
@@ -5356,6 +5673,7 @@ trees:
         - {effect: flag, value: APF_integracion_abierta}
         - {effect: event, id: meganations_apf.4, days: 1}
         - {effect: remove_idea, value: APF_consejos_desorganizados}
+        - {effect: event, id: meganations_apf.220, days: 3}
       - id: APF_milicia_popular
         name: {english: The People's Militia, spanish: La Milicia Popular}
         days: 49
@@ -5416,6 +5734,56 @@ trees:
         reward:
         - {effect: add_ideas, value: APF_federacion_sin_fronteras}
         - {effect: add_research_slot, value: 1}
+    - id: destino
+      name: {english: The Destiny of the Origin, spanish: El Destino del Origen}
+      focuses:
+      - id: APF_la_asamblea_de_los_pueblos
+        name: {english: The Parliament of Peoples, spanish: El Parlamento de los Pueblos}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: A thousand languages in one hall, and simultaneous translation for all of them.
+          spanish: Mil idiomas en una sola sala, y traducción simultánea para todos.
+        prerequisites_any:
+        - APF_mil_consejos
+        - APF_milicia_popular
+      - id: APF_la_carta_de_ubuntu
+        name: {english: The Ubuntu Charter, spanish: La Carta de Ubuntu}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: APF_carta_de_ubuntu}
+        desc: {english: I am because we are., spanish: Soy porque somos.}
+        prerequisites:
+        - APF_la_asamblea_de_los_pueblos
+      - id: APF_la_moneda_continental
+        name: {english: The Continental Currency, spanish: La Moneda Continental}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc: {english: One currency from Cairo to the Cape., spanish: Una sola moneda del Cairo al Cabo.}
+        prerequisites:
+        - APF_la_carta_de_ubuntu
+      - id: APF_el_destino_del_origen
+        name: {english: The Destiny of the Origin, spanish: El Destino del Origen}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - APF_la_moneda_continental
+        desc:
+          english: Unlocks the decision to proclaim The Original Human Empire. Requires controlling all of Africa (Addis Ababa, the Cape, Transvaal,
+            Senegal, Liberia), the Middle East (Baghdad, Tehran, Nejd) and southern Europe (Rome, Madrid, Sofia); 60 divisions and 50% stability.
+          spanish: Destraba la decisión de proclamar El Imperio Humano Original. Pide controlar toda África (Adís Abeba, el Cabo, Transvaal, Senegal,
+            Liberia), Medio Oriente (Bagdad, Teherán, Néyed) y el sur de Europa (Roma, Madrid, Sofía); 60 divisiones y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: APF_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: aldea
       ai_factor: 1.5
       name: {english: The Self-Sufficient Village, spanish: La Aldea Autosuficiente}
@@ -6091,6 +6459,7 @@ trees:
         - {effect: event, id: meganations_nre.1, days: 1}
         - {effect: run, value: NRE_recalcular_legiones}
         - {effect: remove_idea, value: NRE_senado_corrupto}
+        - {effect: event, id: meganations_nre.220, days: 3}
       - id: NRE_la_guardia_pretoriana
         name: {english: The Praetorian Guard, spanish: La Guardia Pretoriana}
         days: 63
@@ -6171,6 +6540,60 @@ trees:
         - {effect: swap_ideas, remove: NRE_ano_de_los_cuatro, add: NRE_imperio_de_las_legiones}
         - {effect: add_variable, var: NRE_auctoritas, value: 20}
         - {effect: run, value: NRE_recalcular_legiones}
+    - id: destino
+      name: {english: The Destiny of Rome, spanish: El Destino de Roma}
+      focuses:
+      - id: NRE_la_lex_imperii
+        name: {english: The Lex Imperii, spanish: La Lex Imperii}
+        days: 70
+        icon: GFX_goal_generic_political_pressure
+        reward:
+        - {effect: add_political_power, value: 120}
+        - {effect: add_stability, value: 0.05}
+        desc:
+          english: The law that makes the Imperator's word the law.
+          spanish: La ley que hace de la palabra del Imperator la ley.
+        prerequisites_any:
+        - NRE_el_senado_restaurado
+        - NRE_la_guardia_pretoriana
+      - id: NRE_el_culto_imperial
+        name: {english: The Imperial Cult, spanish: El Culto Imperial}
+        days: 70
+        icon: GFX_goal_generic_national_unity
+        reward:
+        - {effect: add_ideas, value: NRE_culto_imperial}
+        desc:
+          english: Incense before the Genius of the Imperator in every forum.
+          spanish: Incienso ante el Genio del Imperator en cada foro.
+        prerequisites:
+        - NRE_la_lex_imperii
+      - id: NRE_los_juegos_de_la_victoria
+        name: {english: The Victory Games, spanish: Los Juegos de la Victoria}
+        days: 70
+        icon: GFX_goal_generic_propaganda
+        reward:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 25}
+        desc:
+          english: Bread, circuses and recruitment offices at the gates of the arena.
+          spanish: Pan, circo y oficinas de reclutamiento en las puertas de la arena.
+        prerequisites:
+        - NRE_el_culto_imperial
+      - id: NRE_el_destino_de_roma
+        name: {english: The Destiny of Rome, spanish: El Destino de Roma}
+        days: 105
+        icon: GFX_goal_generic_major_war
+        prerequisites:
+        - NRE_los_juegos_de_la_victoria
+        desc:
+          english: Unlocks the decision to proclaim The Eternal Roman Empire. Requires controlling Hispania (Madrid, Lisbon), Egypt (Alexandria, Suez),
+            Tripoli, Britannia (London), Crimea and Sofia; 70 divisions, 50 Auctoritas and 50% stability.
+          spanish: Destraba la decisión de proclamar El Imperio Romano Eterno. Pide controlar Hispania (Madrid, Lisboa), Egipto (Alejandría, Suez),
+            Trípoli, Britania (Londres), Crimea y Sofía; 70 divisiones, 50 de Auctoritas y 50% de estabilidad.
+        reward:
+        - {effect: flag, value: NRE_destino_abierto}
+        - {effect: add_political_power, value: 50}
+      src: user_request
     - id: erario
       ai_factor: 1.5
       name: {english: The Treasury, spanish: El Erario}

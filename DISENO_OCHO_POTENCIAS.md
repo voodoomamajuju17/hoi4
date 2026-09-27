@@ -574,3 +574,45 @@ llega a 100 al toque y la tensión nunca sube".
   unidad para un solo país; en su lugar, +35% reclutables, +1500 hombres por
   semana, 30% de las bajas vuelven, aviones y barcos con la mitad de
   tripulación.
+
+## Guerras civiles, rama política extendida y forma final (2026-09-29)
+
+- **Guerras civiles (5)**. Se elige bando: el país que se juega es siempre el
+  bando elegido y el otro se separa (`start_civil_war`), con nombre y bandera
+  propios (cosmetic tag) y su líder con nombre y retrato. Quien gane, sea el
+  país original o el que se separó, recibe un espíritu (+15% estabilidad, +10%
+  apoyo a la guerra, +0,4 PP, +10% organización, +10% producción).
+  - Por foco (la rama de cambiar líder): EFE (El Monte se Levanta: Anahí contra
+    la Dinastía de Aurelio IV), NRE (La Legión Decide: Arbogast contra el
+    Senado de Varro), APF (Los Consejos se Arman: Diallo contra el Congreso de
+    Amara).
+  - Por condiciones, aunque no se siga la rama: ASC (PLAN-41 se desconecta si
+    el Consejo gobierna con Cómputo ≥ 100 y Calor ≥ 50, sin guerra, desde
+    2101.6) y SHD (Zhou se levanta si Lin gobierna con Pueblo ≥ 80 y Orden
+    ≤ 30, sin guerra, desde 2101).
+- **Rama política extendida**: rama "El Destino de ..." en las 8 potencias:
+  tres focos políticos (consolidación, una ley con espíritu propio, el
+  ejército) y el foco del destino, que destraba la forma final. Se llega
+  desde cualquiera de las dos ramas políticas.
+- **La forma final** (decisión, 150 PP): nombre y bandera nuevos, núcleos en
+  todas las regiones propias y un gran espíritu nacional. Condiciones:
+  - EFE, El Dominio de Gaia: Lima, La Paz, Amazonas, São Paulo, Río, Bogotá y
+    Caracas; 45 divisiones; 8 de Bioacero.
+  - ASC, La Comuna Continental: París, Roma, Madrid, Leningrado, Crimea y
+    Kiev; 60 divisiones; 100 de Cómputo.
+  - FCU, La Corporación de las Américas: Minnesota, Kansas, Cuba, Lima,
+    Buenos Aires y Bogotá; 50 divisiones; Escándalo < 30.
+  - HSN, La Talasocracia de los Siete Mares: Hong Kong, Cantón, Suez, Panamá,
+    Gibraltar y el Cabo; 30 divisiones; 7 nodos.
+  - NAS, El Imperio del Sol Eterno: Buenos Aires, Santiago, São Paulo,
+    Amazonas, Bogotá y Caracas; 35 divisiones; 60 de Inti-Soma.
+  - SHD, La Armonía Celeste: Tokio, Hong Kong, Madrás, Manila, Java y Kabul;
+    60 divisiones; Orden 60.
+  - APF, El Imperio Humano Original: toda África (Adís Abeba, el Cabo,
+    Transvaal, Senegal, Liberia), Medio Oriente (Bagdad, Teherán, Néyed) y el
+    sur de Europa (Roma, Madrid, Sofía); 60 divisiones.
+  - NRE, El Imperio Romano Eterno: Madrid, Lisboa, Alejandría, Trípoli, Suez,
+    Londres, Crimea y Sofía; 70 divisiones; 50 de Auctoritas.
+  Todas piden además 50% de estabilidad.
+- **Arte**: banderas de las 18 identidades nuevas (arte/pedidos 5_banderas;
+  hasta que lleguen, la del país) y un archivo con lo nuevo de cada lote.
