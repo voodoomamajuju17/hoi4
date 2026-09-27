@@ -523,6 +523,16 @@ def test_phase3_content() -> None:
               (mod / "gfx/leaders/EFE/Aurelio_IV.dds").read_bytes()
               == (REPO_ROOT / "assets/EFE/leaders/Aurelio_IV.dds").read_bytes())
         check("mariscal con retrato de ejercito", "army = {" in chars and "field_marshal = {" in chars, chars)
+        # error.log 2026-09-29 (Icon definition "_small"): cada retrato con su versión chica.
+        chars_s = " ".join(chars.split())
+        check("retrato: grande y chico explicitos",
+              'large = "gfx/leaders/EFE/Aurelio_IV.dds" small = "gfx/leaders/EFE/small/Aurelio_IV.dds"' in chars_s, chars_s[:600])
+        check("retrato chico copiado del arte (65x67)",
+              (mod / "gfx/leaders/EFE/small/Aurelio_IV.dds").read_bytes()
+              == (REPO_ROOT / "assets/EFE/leaders/small/Aurelio_IV.dds").read_bytes())
+        check("retrato pedido y todavia sin dibujo: el juego usa el generico (sin provisorio)",
+              "EFE_bruno_etchegaray" in chars_s and not (mod / "gfx/leaders/EFE/EFE_mando_beltran_1.dds").exists()
+              and "EFE_mando_beltran_1.dds" not in chars_s)
         check("bandera del usuario", (mod / "gfx/flags/EFE.tga").read_bytes()
               == (REPO_ROOT / "assets/EFE/flags/EFE.tga").read_bytes())
         check("los demas siguen con bandera placeholder", (mod / "gfx/flags/ASC.tga").exists())
@@ -884,10 +894,21 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("53 rasgos propios (13 de lideres, 40 de ministros)", len(body.keys()) == 53, str(len(body.keys())))
+        check("73 rasgos propios (13 de lideres, 40 de ministros, 20 del alto mando)", len(body.keys()) == 73, str(len(body.keys())))
         efe_chars = pdx.parse((mod / "common/characters/EFE_characters.txt").read_text()).get("characters")
-        mins = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None]
+        advisors = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None]
+        mins = [k for k in advisors if "_min_" in k]
         check("5 ministros por meganacion (EFE)", len(mins) == 5, str(mins))
+        # Altos mandos (2026-09-29): jefes de ejército, marina y aire y dos del alto mando.
+        mandos = {pdx.text(efe_chars.get(k).get("advisor").get("slot")) for k in advisors if "_mando_" in k}
+        check("alto mando del EFE: jefes de ejercito, marina y aire y alto mando",
+              mandos == {"army_chief", "navy_chief", "air_chief", "high_command"}, str(mandos))
+        jefe = efe_chars.get("EFE_mando_beltran_1").get("advisor")
+        check("alto mando: en el panel militar (ledger) con su rasgo",
+              pdx.text(jefe.get("ledger")) == "army" and "mn_mando_maniobra" in pdx.render(jefe.get("traits")), pdx.render(jefe))
+        zwe_chars = pdx.parse(next((mod / "common/characters").glob("ZWE_characters.txt")).read_text()).get("characters")
+        check("alto mando tambien para la Anarquia (un atamán y un jefe de guerrilla)",
+              zwe_chars.get("ZWE_mando_voronov_1") is not None and zwe_chars.get("ZWE_mando_kozlova_2") is not None)
         adv = efe_chars.get(mins[0]).get("advisor")
         check("ministro: puesto, token, rasgo propio y costo", pdx.text(adv.get("slot")) == "political_advisor"
               and pdx.text(adv.get("idea_token")) == mins[0] and pdx.text(adv.get("cost")) == "150", pdx.render(adv))

@@ -31,6 +31,7 @@ NAVY_SKILLS = ("skill", "attack_skill", "defense_skill", "maneuvering_skill", "c
 
 # Tamaño estándar de retrato de líder en HOI4.
 PORTRAIT_SIZE = (156, 210)
+SMALL_PORTRAIT_SIZE = (65, 67)   # casilla de asesor y alto mando (como un ícono de idea)
 
 
 def defined_characters(ctx: BuildContext) -> list[dict]:
@@ -101,20 +102,36 @@ def emit(ctx: BuildContext) -> None:
             portrait = ch.get("portrait") or {}
             portrait_path = portrait.get("path")
             if portrait_path:
-                own = f"assets/{country.tag}/leaders/{portrait_path.rsplit('/', 1)[-1]}"
-                if portrait.get("asset"):
-                    ctx.copy_asset(portrait["asset"], portrait_path)
-                elif (ctx.spec.root.parent / own).exists():
-                    # convención de arte (tools/arte): el retrato llegó después
-                    ctx.copy_asset(own, portrait_path)
-                else:
-                    _write_portrait(ctx, portrait_path, country.color)
-                large = Block()
-                large.add("large", Quoted(portrait_path))
-                portraits = Block()
-                # civilian para lideres de pais, army para militares
-                portraits.add(portrait.get("role", "civilian"), large)
-                body.add("portraits", portraits)
+                repo = ctx.spec.root.parent
+                name = portrait_path.rsplit('/', 1)[-1]
+                own = f"assets/{country.tag}/leaders/{name}"
+                small_rel = f"{portrait_path.rsplit('/', 1)[0]}/small/{name}"
+                src = portrait.get("asset") or (own if (repo / own).exists() else None)
+                if src is None and portrait.get("placeholder", True) is False:
+                    # pedido al generador de imágenes (2026-09-29): hasta que llegue,
+                    # el juego usa su retrato genérico, no un provisorio del mod
+                    src = "skip"
+                if src != "skip":
+                    if src:
+                        # convención de arte (tools/arte): el retrato llegó después
+                        ctx.copy_asset(src, portrait_path)
+                        small_src = f"{src.rsplit('/', 1)[0]}/small/{name}"
+                        if (repo / small_src).exists():
+                            ctx.copy_asset(small_src, small_rel)
+                        else:
+                            _write_portrait(ctx, small_rel, country.color, SMALL_PORTRAIT_SIZE)
+                    else:
+                        _write_portrait(ctx, portrait_path, country.color)
+                        _write_portrait(ctx, small_rel, country.color, SMALL_PORTRAIT_SIZE)
+                    sizes = Block()
+                    sizes.add("large", Quoted(portrait_path))
+                    # el chico explícito: sin él el juego arma "<grande>_small" y, con un
+                    # archivo, queda vacío (error.log: Icon definition "_small")
+                    sizes.add("small", Quoted(small_rel))
+                    portraits = Block()
+                    # civilian para lideres de pais, army para militares
+                    portraits.add(portrait.get("role", "civilian"), sizes)
+                    body.add("portraits", portraits)
 
             leader = (ch.get("roles") or {}).get("country_leader")
             if isinstance(leader, dict):
@@ -166,6 +183,9 @@ def emit(ctx: BuildContext) -> None:
                 ab = Block()
                 ab.add("slot", advisor.get("slot", "political_advisor"))
                 ab.add("idea_token", cid)
+                if advisor.get("ledger"):
+                    # alto mando (2026-09-29): ejército, marina o aire en el panel militar
+                    ab.add("ledger", advisor["ledger"])
                 ab.add("allowed", Block([("original_tag", tag)]))
                 traits = Block()
                 for trait in advisor.get("traits") or []:
@@ -191,12 +211,13 @@ def emit(ctx: BuildContext) -> None:
         ctx.write_script(f"common/characters/{tag}_characters.txt", root, source=SOURCE)
 
 
-def _write_portrait(ctx: BuildContext, relative: str, color: tuple[int, int, int]) -> None:
+def _write_portrait(ctx: BuildContext, relative: str, color: tuple[int, int, int],
+                    size: tuple[int, int] | None = None) -> None:
     """Retrato placeholder: fondo liso del color del país, con un marco claro.
 
     Se lee como placeholder a propósito (regla de arte del proyecto).
     """
-    w, h = PORTRAIT_SIZE
+    w, h = size or PORTRAIT_SIZE
     frame = tuple(min(255, int(c * 1.5) + 40) for c in color)
     pixels = [
         frame if x < 4 or y < 4 or x >= w - 4 or y >= h - 4 else color

@@ -65,6 +65,41 @@ STYLE = {
 }
 
 
+SMALL_PORTRAIT = (65, 67)   # el retrato chico (casilla de asesor / alto mando), como un ícono de idea
+
+
+def small_path(large: Path) -> Path:
+    """assets/<TAG>/leaders/x.dds -> assets/<TAG>/leaders/small/x.dds"""
+    return large.parent / "small" / large.name
+
+
+def _small_portrait(img, dest: Path) -> None:
+    """Versión chica del retrato: la cabeza (parte de arriba, cuadrada) a 65x67.
+    Sin ella el juego arma el nombre de la chica solo y, con retratos que son
+    archivos, queda vacío (error.log: Icon definition "_small", 2026-09-29)."""
+    from PIL import Image
+    sys.path.insert(0, str(REPO))
+    from tools.gen import art
+    w, h = SMALL_PORTRAIT
+    side = min(img.width, round(img.width * h / w))
+    head = img.crop((0, 0, img.width, min(img.height, side))).resize((w, h), Image.LANCZOS).convert("RGBA")
+    raw = head.tobytes()
+    art.write_dds(dest, w, h, [(raw[k], raw[k + 1], raw[k + 2], 255) for k in range(0, len(raw), 4)])
+
+
+def chicos() -> None:
+    """Genera el retrato chico de cada retrato grande que ya está en assets/."""
+    from PIL import Image
+    made = 0
+    for large in sorted(REPO.glob("assets/*/leaders/*.dds")):
+        dest = small_path(large)
+        if dest.exists():
+            continue
+        _small_portrait(Image.open(large), dest)
+        made += 1
+    print(f"{made} retratos chicos generados")
+
+
 def _load(name: str) -> dict:
     return yaml.safe_load((SPEC / name).read_text(encoding="utf-8"))
 
@@ -120,8 +155,9 @@ def catalog() -> list[dict]:
         items.append({
             "type": "leader_portrait", "tag": tag, "id": ch["id"], "dest": dest,
             "done": bool(portrait.get("asset")) or dest.exists(),
-            "description": f"{regnal.get('english', ch['id'])}, born {ch.get('born', '?')}: "
-                           f"{_one_line(ch.get('lore'))} Head-and-shoulders portrait, facing the viewer.",
+            "description": (f"{regnal.get('english', ch['id'])}, born {ch.get('born', '?')}: {_one_line(ch.get('lore'))}"
+                            if ch.get("lore") else _one_line(portrait.get("description") or regnal.get("english", ch["id"])))
+                           + " Head-and-shoulders portrait, facing the viewer.",
         })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
@@ -256,6 +292,8 @@ def importar(source: str) -> None:
         if not kind["transparent"]:
             pixels = [(r, g, b, 255) for r, g, b, _ in pixels]
         art.write_dds(item["dest"], w, h, pixels)
+        if item["type"] == "leader_portrait":
+            _small_portrait(img, small_path(item["dest"]))
         done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
     print(f"{len(done)} imagenes importadas")
     for line in done:
@@ -271,5 +309,7 @@ if __name__ == "__main__":
         pedidos()
     elif len(sys.argv) >= 3 and sys.argv[1] == "importar":
         importar(sys.argv[2])
+    elif len(sys.argv) >= 2 and sys.argv[1] == "chicos":
+        chicos()
     else:
         print(__doc__)
