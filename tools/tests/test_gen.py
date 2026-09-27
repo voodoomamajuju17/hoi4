@@ -1069,8 +1069,13 @@ def test_balance() -> None:
         check("bandera del usuario para la ASC", (mod / "gfx/flags/small/ASC.tga").exists()
               and (mod / "gfx/flags/ASC.tga").read_bytes() == (REPO_ROOT / "assets/ASC/flags/ASC.tga").read_bytes())
 
-        check("vacia las decisiones nacionales de un pais vanilla (GER)",
-              "GER_example" not in (mod / "common/decisions/GER.txt").read_text())
+        ger_dec = " ".join((mod / "common/decisions/GER.txt").read_text().split())
+        check("vacia las decisiones nacionales de un pais vanilla (GER): quedan cascaras inertes",
+              "GER_example = { allowed = { always = no } available = { always = no } }" in ger_dec
+              and "has_idea = GER_does_not_exist" not in ger_dec, ger_dec[-400:])
+        check("una mision vaciada sigue siendo mision (otros scripts la nombran)",
+              "GER_example_mission = { allowed = { always = no } activation = { always = no } days_mission_timeout = 30" in ger_dec
+              and "timeout_effect" not in ger_dec, ger_dec[-400:])
         check("no toca las decisiones genericas", not (mod / "common/decisions/economy.txt").exists())
 
 

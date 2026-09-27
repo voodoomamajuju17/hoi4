@@ -29,15 +29,53 @@ def emit(ctx: BuildContext) -> None:
     ours = {c.tag for c in ctx.spec.countries}
     vanilla_tags = (ctx.vanilla.country_tags() | set(ctx.vanilla.country_history_files())) - ours
     silenced = []
+    stubs = 0
     for path in sorted((ctx.vanilla.root / "common" / "decisions").glob("*.txt")):
         m = _TAG_FILE.match(path.name)
         if m and m.group(1) in vanilla_tags:
+            stub, n = _stub_decisions(path)
             ctx.write_text(f"common/decisions/{path.name}",
-                           banner_for(SOURCE) + "# Vaciado a proposito: el pais no existe en 2100.\n")
+                           banner_for(SOURCE) + "# Vaciado a proposito: el pais no existe en 2100.\n"
+                           + (stub if stub else ""))
+            stubs += n
             silenced.append(m.group(1))
     if silenced:
         ctx.note(f"limpieza: {len(silenced)} archivos de decisiones de paises vanilla vaciados "
-                 f"({', '.join(sorted(set(silenced))[:12])}{'...' if len(set(silenced)) > 12 else ''})")
+                 f"({', '.join(sorted(set(silenced))[:12])}{'...' if len(set(silenced)) > 12 else ''}); "
+                 f"{stubs} decisiones quedan como cascaras inertes")
+
+
+def _stub_decisions(path) -> tuple[str, int]:
+    """Las decisiones del archivo vaciado, como cáscaras que nunca se cargan.
+
+    Otros scripts del juego las siguen nombrando (has_active_mission,
+    has_decision...) y, si no existen, error.log se llena de "Invalid decision"
+    (2026-09-29). Cada una queda con allowed = no (ningún país la carga) y, si
+    era una misión, con su duración, para que siga contando como misión."""
+    from ..pdx import parse_file
+    try:
+        root = parse_file(path)
+    except (ValueError, OSError):
+        return "", 0
+    out = Block()
+    n = 0
+    for cat, body in root.entries:
+        if not cat or not isinstance(body, Block):
+            continue
+        cb = Block()
+        for did, dec in body.entries:
+            if not did or not isinstance(dec, Block) or str(did).startswith("@"):
+                continue
+            db = Block([("allowed", Block([("always", False)]))])
+            if dec.get("days_mission_timeout") is not None:
+                db.add("activation", Block([("always", False)]))
+                db.add("days_mission_timeout", 30)
+            db.add("available", Block([("always", False)]))
+            cb.add(did, db)
+            n += 1
+        if cb.entries:
+            out.add(cat, cb)
+    return (render(out) if out.entries else ""), n
 
 
 def emit_spirits(ctx: BuildContext) -> None:
