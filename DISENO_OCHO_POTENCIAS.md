@@ -664,3 +664,9 @@ llega a 100 al toque y la tensión nunca sube".
   obligatorio anterior; ahora da +5% apoyo a la guerra.
 - **Chequeo automático** (tools/tests: test_focus_idea_consistency): ningún
   foco saca un espíritu que ya sacó otro foco obligatorio de la misma cadena.
+- **La guerra civil ya no borra los espíritus** (2026-09-30): el EFE terminó la
+  guerra del Monte con solo La Paz Verde. Al empezar una guerra civil se anotan
+  los espíritus del país y las variables de su mecánica; al terminar, el
+  ganador recupera los espíritus que le falten (y, si el que ganó es el otro
+  bando, también las variables). No vuelven los temporales ni los que un
+  recálculo pone y saca solo.

@@ -949,8 +949,17 @@ def test_events() -> None:
         check("73 eventos del EFE (guerra limitada, 5 menores, independencias, el Santuario, guerra civil y destino)", len(events) == 73, str(len(events)))
         # 2026-09-29: guerras civiles (elegir bando), rama política extendida y forma final
         efe_cw = " ".join((mod / "events/meganations_efe.txt").read_text().split())
-        e220 = efe_cw[efe_cw.index("id = meganations_efe.220 title"):][:4000]
+        e220 = efe_cw[efe_cw.index("id = meganations_efe.220 title"):][:30000]
         opa, opb = e220.split("name = meganations_efe.220.b")[0], e220.split("name = meganations_efe.220.b")[1]
+        check("guerra civil: antes de empezar se anotan los espiritus y las variables del pais",
+              "if = { limit = { has_idea = EFE_mandato_verde } set_global_flag = MN_cw_EFE_mandato_verde }" in opa
+              and "set_variable = { var = global.MN_cw_EFE_biosteel value = EFE_biosteel }" in opa
+              and opa.index("MN_cw_EFE_mandato_verde") < opa.index("start_civil_war"))
+        e221 = efe_cw[efe_cw.index("id = meganations_efe.221 title"):][:30000]
+        check("guerra civil: el ganador recupera los espiritus que le faltan",
+              "if = { limit = { has_global_flag = MN_cw_EFE_mandato_verde NOT = { has_idea = EFE_mandato_verde } } "
+              "add_ideas = EFE_mandato_verde }" in e221
+              and "set_variable = { var = EFE_biosteel value = global.MN_cw_EFE_biosteel }" in e221, e221[:800])
         check("guerra civil: con el Monte, se separa la Dinastia con Aurelio IV",
               "start_civil_war = { ideology = fascism size = 0.35 }" in opa
               and "random_country = { limit = { original_tag = EFE NOT = { tag = EFE } has_civil_war = yes } set_cosmetic_tag = EFE_DINASTIA" in opa

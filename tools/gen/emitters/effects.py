@@ -79,6 +79,43 @@ TOOLTIPS: dict[str, tuple[str, str]] = {}
 def use_variable_names(spec_raw: dict) -> None:
     global _VAR_NAMES
     _VAR_NAMES = (spec_raw.get("decisions") or {}).get("variable_names") or {}
+    _use_civil_war_memory(spec_raw)
+
+
+# Guerra civil: lo que el país tenía al empezarla (2026-09-30). El ganador
+# terminaba sin la mayoría de sus espíritus; al empezar se anota cada espíritu
+# y cada variable de la mecánica, y al terminar el ganador recupera lo que le
+# falte (civil_war_restore). Quedan afuera los espíritus temporales y los que
+# un efecto de recálculo pone y saca solo.
+_CW_IDEAS: dict[str, list[str]] = {}
+_CW_VARS: dict[str, list[str]] = {}
+
+
+def _use_civil_war_memory(spec_raw: dict) -> None:
+    def walk(o):
+        if isinstance(o, dict):
+            yield o
+            for v in o.values():
+                yield from walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                yield from walk(v)
+
+    dec = spec_raw.get("decisions") or {}
+    managed = {e.get("value") for e in walk(dec.get("scripted_effects")) if e.get("effect") == "remove_idea"}
+    managed |= {e.get("remove") for e in walk(dec.get("scripted_effects")) if e.get("effect") == "swap_ideas"}
+    managed |= {e.get("idea") for e in walk(spec_raw) if e.get("effect") == "timed_idea"}
+    _CW_IDEAS.clear()
+    for tag, groups in ((spec_raw.get("ideas") or {}).get("countries") or {}).items():
+        ids = [i["id"] for g in ("starting_ideas", "focus_ideas") for i in (groups or {}).get(g) or []
+               if isinstance(i, dict) and i.get("id") and i["id"] not in managed]
+        _CW_IDEAS[tag] = ids
+    names = set(_VAR_NAMES)
+    for mech in (spec_raw.get("mechanics") or {}).get("mechanics") or []:
+        names |= {v["name"] for v in mech.get("variables") or [] if isinstance(v, dict) and v.get("name")}
+    _CW_VARS.clear()
+    for n in sorted(names):
+        _CW_VARS.setdefault(n.split("_", 1)[0], []).append(n)
 
 
 def _variable_tooltip(var: str, value) -> str | None:
@@ -548,6 +585,16 @@ def render_effects(owner: str, items: list[dict], known,
             # El que se separa toma nombre y bandera propios (cosmetic tag) y su
             # líder se renombra con el retrato del personaje.
             tag = item["tag"]
+            # memoria de lo que el país tiene al empezar (ver civil_war_restore)
+            for idea in _CW_IDEAS.get(tag, []):
+                block.add("if", Block([("limit", Block([("has_idea", idea)])),
+                                       ("set_global_flag", f"MN_cw_{idea}")]))
+            for var in _CW_VARS.get(tag, []):
+                block.add("set_variable", Block([("var", f"global.MN_cw_{var}"), ("value", var)]))
+            block.add("set_country_flag", f"{tag}_cw_origen")
+            for k in ("set_global_flag", "set_variable", "set_country_flag"):
+                effects_used.setdefault(k, owner)
+            ec.triggers_used.setdefault("has_idea", owner)
             inner = Block([("ideology", item["ideology"]), ("size", float(item.get("size", 0.35)))])
             block.add("start_civil_war", inner)
             rebels = item.get("rebels") or {}
@@ -573,6 +620,26 @@ def render_effects(owner: str, items: list[dict], known,
             for k in ("start_civil_war", "random_country", "set_cosmetic_tag"):
                 effects_used.setdefault(k, owner)
             for k in ("original_tag", "tag", "has_civil_war"):
+                ec.triggers_used.setdefault(k, owner)
+            continue
+        if effect == "civil_war_restore":
+            # El ganador recupera los espíritus que el país tenía al empezar la
+            # guerra y le faltan; si el ganador es el otro bando (no tiene la
+            # bandera de origen), también las variables de la mecánica.
+            tag = item["tag"]
+            for idea in _CW_IDEAS.get(tag, []):
+                block.add("if", Block([("limit", Block([("has_global_flag", f"MN_cw_{idea}"),
+                                                        ("NOT", Block([("has_idea", idea)]))])),
+                                       ("add_ideas", idea)]))
+                block.add("clr_global_flag", f"MN_cw_{idea}")
+            if _CW_VARS.get(tag):
+                sets = Block([("limit", Block([("NOT", Block([("has_country_flag", f"{tag}_cw_origen")]))]))])
+                for var in _CW_VARS[tag]:
+                    sets.add("set_variable", Block([("var", var), ("value", f"global.MN_cw_{var}")]))
+                block.add("if", sets)
+            for k in ("add_ideas", "clr_global_flag", "set_variable"):
+                effects_used.setdefault(k, owner)
+            for k in ("has_global_flag", "has_idea", "has_country_flag"):
                 ec.triggers_used.setdefault(k, owner)
             continue
         if effect == "cosmetic_tag":
