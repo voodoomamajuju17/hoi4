@@ -298,3 +298,68 @@ def _resize(src: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
         row = body[sy * w * 4:(sy + 1) * w * 4]
         rows.append(b"".join(row[x:x + 4] for x in xs))
     return bytes(header) + b"".join(rows)
+
+
+# ---------------------------------------------------------------------------
+# Fondos de las pestañas (2026-09-30)
+# ---------------------------------------------------------------------------
+_TAB_GUI = re.compile(r"(?i)(politic|government|techtree|research|production|construction|trade|logistic|"
+                      r"decision|intelligence|agency|diplomac|equipment|focus|recruit|deploy|military|navy|air)"
+                      r"[^/]*\.gui$")
+_BG_BLOCK = re.compile(r'background\s*=\s*\{[^{}]*?(?:spriteType|quadTextureSprite)\s*=\s*"?(GFX_[A-Za-z0-9_]+)', re.S)
+_MIN_TAB_BG = 300
+
+
+def emit_tabs(ctx: BuildContext) -> None:
+    spec = (ctx.spec.raw.get("scenario") or {}).get("tab_backgrounds")
+    if not spec or ctx.vanilla is None:
+        return
+    textures = spec.get("textures") or {}
+    if not textures:
+        _diagnose_tabs(ctx)
+        return
+    for texture, image in sorted(textures.items()):
+        src = (ctx.spec.root.parent / image).read_bytes()
+        w, h = _dims(src)
+        vw, vh = _texture_dims(ctx, texture)
+        data = _resize(src, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else src
+        dest = ctx.mod_root / texture
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+        ctx.track(dest)
+    ctx.note(f"fondos de pestanas: {len(textures)} texturas reemplazadas")
+
+
+def _diagnose_tabs(ctx: BuildContext) -> None:
+    """Para el reporte: qué fondos (texturas grandes) usa cada pestaña."""
+    sprites: dict[str, str] = {}
+    for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for name, texture in _SPRITE.findall(text):
+            sprites.setdefault(name, texture.replace("\\", "/"))
+    used: dict[str, set[str]] = {}
+    for path in sorted((ctx.vanilla.root / "interface").glob("**/*.gui")):
+        if not _TAB_GUI.search(path.name):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        names = set(_BG_BLOCK.findall(text)) | set(_GUI_SPRITE.findall(text))
+        for n in names:
+            tex = sprites.get(n)
+            if tex and tex.lower().endswith(".dds"):
+                used.setdefault(tex, set()).add(path.stem)
+    rows = []
+    for tex, guis in used.items():
+        w, h = _texture_dims(ctx, tex)
+        if max(w, h) >= _MIN_TAB_BG:
+            rows.append((-(w * h), tex, w, h, sorted(guis)))
+    rows.sort()
+    for _, tex, w, h, guis in rows[:60]:
+        more = f" y {len(guis) - 4} mas" if len(guis) > 4 else ""
+        ctx.note(f"fondo de pestana: {tex} ({w}x{h}) en {', '.join(guis[:4])}{more}")
+    ctx.note(f"fondos de pestanas: {len(rows)} texturas grandes en las pestanas (se listan hasta 60)")

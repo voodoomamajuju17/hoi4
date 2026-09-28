@@ -960,6 +960,26 @@ def test_events() -> None:
               "if = { limit = { has_global_flag = MN_cw_EFE_mandato_verde NOT = { has_idea = EFE_mandato_verde } } "
               "add_ideas = EFE_mandato_verde }" in e221
               and "set_variable = { var = EFE_biosteel value = global.MN_cw_EFE_biosteel }" in e221, e221[:800])
+        # La Guerra en las Sombras (2026-09-30)
+        ops = " ".join((mod / "common/operations/meganations_operations.txt").read_text().split())
+        check("sombras: 48 operaciones (6 por meganacion objetivo)", ops.count(" name = mn_op_") == 48)
+        check("sombras: la estructura se copia de una operacion del juego (fases y equipo)",
+              "infiltration_steal_tech_a = { base = 1 }" in ops and "infantry_equipment = 50" in ops
+              and "steal_tech_modifier" not in ops and "cipher_token" not in ops)
+        golpe = ops[ops.index("mn_op_golpe_mecanica_ASC = {"):][:6000]
+        check("sombras: el golpe a la ASC pide 50 de infiltracion y le sube el calor",
+              "var = MN_inf_ASC value = 50 compare = greater_than_or_equals" in golpe
+              and "FROM = {" in golpe and "var = ASC_calor value = 15" in golpe
+              and "has_country_flag = MN_vigilado_por_ASC" in golpe, golpe[:1500])
+        check("sombras: solo contra esa potencia", "visible = { FROM = { tag = ASC } OR = { tag = EFE" in golpe)
+        decs_all = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
+        check("sombras: la defensa es de a 4 y vence sola cada 3 meses",
+              "EFE_blindarse_contra_NRE" in decs_all and "var = MN_escudos value = 4 compare = less_than" in decs_all
+              and "var = MN_ciclo_sombras value = 3 compare = greater_than_or_equals" in se_all
+              and "clr_country_flag = MN_escudo_NRE" in se_all)
+        efe_ev = " ".join((mod / "events/meganations_efe.txt").read_text().split())
+        check("sombras: el pulso mensual corre la contrainteligencia", "EFE_sombras_mes = yes" in efe_ev)
         check("guerra civil: con el Monte, se separa la Dinastia con Aurelio IV",
               "start_civil_war = { ideology = fascism size = 0.35 }" in opa
               and "random_country = { limit = { original_tag = EFE NOT = { tag = EFE } has_civil_war = yes } set_cosmetic_tag = EFE_DINASTIA" in opa

@@ -104,3 +104,17 @@ main_menu:
   # Pantallas de carga del usuario (2026-09-29): se reparten entre las del juego.
   loading_screens: assets/menu/loading
   src: user_art
+
+# -----------------------------------------------------------------------------
+# Fondos de las pestañas (2026-09-30, pedido del usuario: "cómo hacemos para ir
+# cambiando los fondos de todas las pestañas"). Igual que el menú: nuestra
+# imagen se escribe en la MISMA ruta de textura del juego (reescalada a su
+# tamaño), sin tocar la interfaz.
+#   textures: ruta de la textura del juego -> imagen nuestra (.dds en assets/)
+# Mientras esté vacío, el generador solo anota en el reporte qué fondos usa
+# cada pestaña (política, investigación, producción, inteligencia...), con su
+# tamaño, para pedir las imágenes con el tamaño justo.
+# -----------------------------------------------------------------------------
+tab_backgrounds:
+  src: user_request
+  textures: {}

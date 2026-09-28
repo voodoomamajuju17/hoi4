@@ -670,3 +670,29 @@ llega a 100 al toque y la tensión nunca sube".
   ganador recupera los espíritus que le falten (y, si el que ganó es el otro
   bando, también las variables). No vuelven los temporales ni los que un
   recálculo pone y saca solo.
+
+## La Guerra en las Sombras (2026-09-30)
+
+- **Operaciones en la pantalla de inteligencia** (spec/18_intelligence.yaml,
+  tools/gen/emitters/intelligence.py): 6 por meganación objetivo, contra
+  cualquier otra meganación donde tengas red de espías. La estructura (fases,
+  riesgo, equipo) se copia de una operación del juego instalado.
+- **Infiltración por pareja (0-100)**: cada operación pide un mínimo y la sube.
+  Infiltrar (0, +12) · Robo de Tecnología (20: +8% investigación 6 meses) ·
+  Sabotaje Industrial (35: -10% fábricas, -15% construcción 3 meses) · Golpe
+  al Corazón (50: pega en la mecánica: calor de la ASC, escándalo de la FCU,
+  cubas del EFE, presión del HSN, Inti-Soma del NAS, Pueblo/Orden del SHD,
+  tensión de la APF, auctoritas del NRE) · Desestabilización (70) · Encender
+  la Rebelión (90: gasta 45; -20 de lealtad en sus dos satélites, evento de
+  levantamiento, y en la ASC/SHD acerca su guerra civil).
+- **Riesgo**: 10% de que te descubran (35% si se blindaron contra vos): -15 de
+  infiltración, -25 PP y el otro se entera.
+- **Contrainteligencia** (decisiones): hasta 4 blindajes por ciclo de 3 meses;
+  contra quien te blindás, sus operaciones suben la mitad y su infiltración
+  baja 4 por mes. Purga Interna (-20 a todos, -5% estabilidad) y Pacto de
+  Sombras (-30 de cada lado y un año sin operaciones).
+- **Fondos de las pestañas**: 11_scenario -> tab_backgrounds. Por ahora el
+  generador lista en el reporte qué texturas usa cada pestaña y su tamaño;
+  con eso se piden las imágenes y se completan las rutas.
+- **Balance**: anarquías -5% en sus espíritus de combate (ataque, defensa,
+  organización, reclutables); FCU con tope de 108 IC y -8% organización.

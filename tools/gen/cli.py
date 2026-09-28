@@ -37,6 +37,7 @@ from .emitters import forces as em_forces
 from .emitters import history as em_history
 from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
+from .emitters import intelligence as em_intelligence
 from .emitters import military as em_military
 from .emitters import menu as em_menu
 from .emitters import militia as em_militia
@@ -69,6 +70,7 @@ EMITTERS = [
     ("focus_trees", em_focus_trees.emit),
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
+    ("intelligence", em_intelligence.emit),  # operaciones de inteligencia (18_intelligence)
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
     ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)
     ("vanilla_events", em_cleanup.emit_kept_events),  # elecciones, justificacion de guerra, ases
@@ -77,6 +79,7 @@ EMITTERS = [
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
     ("menu", em_menu.emit),
+    ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
     ("balance", em_balance.emit),       # ultimo: resume lo que quedo
 ]
 

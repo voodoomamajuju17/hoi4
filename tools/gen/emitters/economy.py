@@ -165,10 +165,12 @@ def _industrialize(ctx, spec, assignment, by_state, added) -> None:
     kind = {c.tag: ("meganation" if c.is_major else "satellite" if c.is_subject else "anarchy")
             for c in ctx.spec.countries}
     targets = dict(spec.get("targets") or {})
+    caps = spec.get("caps") or {}   # tope propio de un país (2026-09-30: la FCU)
     for tag, k in kind.items():
         if k not in band:
             continue
         low, high = band[k]
+        high = min(high, caps.get(tag, high))
         owned = [by_state[sid] for sid, t in assignment.items() if t == tag and sid in by_state]
         if not owned:
             continue

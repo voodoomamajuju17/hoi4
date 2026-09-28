@@ -335,6 +335,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: EFE_pulso_de_las_cubas}
+          - {effect: run, value: EFE_sombras_mes}
           - {effect: event, id: meganations_efe.20, days: 30}
         src: user_design
         hidden: true
@@ -1701,6 +1702,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: FCU_pulso_del_directorio}
+          - {effect: run, value: FCU_sombras_mes}
           - {effect: event, id: meganations_fcu.20, days: 30}
         src: user_design
         hidden: true
@@ -2932,6 +2934,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: HSN_pulso_de_las_potencias}
+          - {effect: run, value: HSN_sombras_mes}
           - {effect: event, id: meganations_hsn.20, days: 30}
         src: user_design
         hidden: true
@@ -4098,6 +4101,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: ASC_pulso_de_la_red}
+        - {effect: run, value: ASC_sombras_mes}
         - {effect: event, id: meganations_asc.20, days: 30}
       src: user_design
       hidden: true
@@ -5183,6 +5187,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: APF_pulso_de_los_consejos}
+        - {effect: run, value: APF_sombras_mes}
         - {effect: event, id: meganations_apf.20, days: 30}
       src: user_design
       hidden: true
@@ -6331,6 +6336,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: NAS_pulso_de_los_templos}
+        - {effect: run, value: NAS_sombras_mes}
         - {effect: event, id: meganations_nas.20, days: 30}
       src: user_design
       hidden: true
@@ -7298,6 +7304,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: SHD_pulso_del_rio}
+        - {effect: run, value: SHD_sombras_mes}
         - {effect: event, id: meganations_shd.20, days: 30}
       src: user_design
       hidden: true
@@ -8593,6 +8600,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: NRE_pulso_del_ocio}
+        - {effect: run, value: NRE_sombras_mes}
         - {effect: event, id: meganations_nre.20, days: 30}
       src: user_design
       hidden: true
@@ -10679,6 +10687,130 @@ namespaces:
       - name: {english: Let them come., spanish: Que vengan.}
         effects:
         - {effect: add_war_support, value: 0.05}
+      src: user_design
+  # La Guerra en las Sombras (2026-09-30): 18_intelligence.yaml y la contrainteligencia de 14_decisions
+  meganations_sombras:
+    country: null
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Counter-intelligence Priorities, spanish: Prioridades de Contrainteligencia}
+      desc:
+        english: 'THE WAR IN THE SHADOWS\n\nEvery power spies on every other. Their operations appear in the intelligence screen: the deeper their
+          network in us, the worse the damage, up to open rebellion.\n\nEvery 3 months we choose up to 4 powers to guard against (decisions: Counter-intelligence).
+          Against those, their infiltration falls every month, their operations advance half as fast and they get caught more often. The rest can
+          work freely.\n\nThe guards have just expired. Choose again.'
+        spanish: 'LA GUERRA EN LAS SOMBRAS\n\nTodas las potencias se espían entre sí. Sus operaciones están en la pantalla de inteligencia: cuanto
+          más profunda su red en nosotros, peor el daño, hasta la rebelión abierta.\n\nCada 3 meses elegimos hasta 4 potencias de las que nos blindamos
+          (decisiones: Contrainteligencia). Contra esas, su infiltración baja todos los meses, sus operaciones avanzan a la mitad y las descubrimos
+          más seguido. Las demás trabajan libres.\n\nLos blindajes acaban de vencer. Hay que volver a elegir.'
+      options:
+      - name: {english: To work., spanish: A trabajar.}
+        effects: []
+      src: user_design
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Spy Ring Uncovered, spanish: Una Red de Espías Desbaratada}
+      desc:
+        english: 'Our counter-intelligence rolled up a foreign network: safe houses, radios and a list of names. Whoever sent them will have to
+          start again.'
+        spanish: 'Nuestra contrainteligencia desbarató una red extranjera: casas seguras, radios y una lista de nombres. Quien los mandó va a tener
+          que empezar de nuevo.'
+      options:
+      - name: {english: Make an example of them., spanish: Que sirva de ejemplo.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        - {effect: add_war_support, value: 0.02}
+        ai_chance: 50
+      - name: {english: Turn them quietly., spanish: Darlos vuelta en silencio.}
+        effects:
+        - {effect: add_political_power, value: 30}
+        ai_chance: 50
+      src: user_design
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Uprising, spanish: El Levantamiento}
+      desc:
+        english: 'Foreign weapons, foreign money and a local cause: the provinces are burning and our satellites are listening to the other side.'
+        spanish: 'Armas extranjeras, plata extranjera y una causa local: las provincias arden y nuestros satélites escuchan al otro lado.'
+      options:
+      - name: {english: Crush it., spanish: Aplastarlo.}
+        effects:
+        - {effect: add_manpower, value: -15000}
+        - {effect: add_stability, value: -0.03}
+        - {effect: army_experience, value: 5}
+        - effect: if
+          when: {tag: EFE}
+          then:
+          - {effect: timed_idea, idea: EFE_insurreccion, days: 60}
+        - effect: if
+          when: {tag: FCU}
+          then:
+          - {effect: timed_idea, idea: FCU_insurreccion, days: 60}
+        - effect: if
+          when: {tag: ASC}
+          then:
+          - {effect: timed_idea, idea: ASC_insurreccion, days: 60}
+        - effect: if
+          when: {tag: HSN}
+          then:
+          - {effect: timed_idea, idea: HSN_insurreccion, days: 60}
+        - effect: if
+          when: {tag: NAS}
+          then:
+          - {effect: timed_idea, idea: NAS_insurreccion, days: 60}
+        - effect: if
+          when: {tag: SHD}
+          then:
+          - {effect: timed_idea, idea: SHD_insurreccion, days: 60}
+        - effect: if
+          when: {tag: APF}
+          then:
+          - {effect: timed_idea, idea: APF_insurreccion, days: 60}
+        - effect: if
+          when: {tag: NRE}
+          then:
+          - {effect: timed_idea, idea: NRE_insurreccion, days: 60}
+        ai_chance: 60
+      - name: {english: Negotiate., spanish: Negociar.}
+        effects:
+        - {effect: add_political_power, value: -80}
+        - effect: if
+          when: {tag: EFE}
+          then:
+          - {effect: timed_idea, idea: EFE_insurreccion, days: 120}
+        - effect: if
+          when: {tag: FCU}
+          then:
+          - {effect: timed_idea, idea: FCU_insurreccion, days: 120}
+        - effect: if
+          when: {tag: ASC}
+          then:
+          - {effect: timed_idea, idea: ASC_insurreccion, days: 120}
+        - effect: if
+          when: {tag: HSN}
+          then:
+          - {effect: timed_idea, idea: HSN_insurreccion, days: 120}
+        - effect: if
+          when: {tag: NAS}
+          then:
+          - {effect: timed_idea, idea: NAS_insurreccion, days: 120}
+        - effect: if
+          when: {tag: SHD}
+          then:
+          - {effect: timed_idea, idea: SHD_insurreccion, days: 120}
+        - effect: if
+          when: {tag: APF}
+          then:
+          - {effect: timed_idea, idea: APF_insurreccion, days: 120}
+        - effect: if
+          when: {tag: NRE}
+          then:
+          - {effect: timed_idea, idea: NRE_insurreccion, days: 120}
+        ai_chance: 40
       src: user_design
   meganations_mundo:
     country: null

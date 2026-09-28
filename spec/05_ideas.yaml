@@ -463,6 +463,34 @@ countries:
         war_support_factor: -0.1
         local_resources_factor: -0.05
       src: user_request
+    - id: EFE_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: EFE_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: EFE_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: EFE_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     biosteel_tiers:
       implementation: national_spirit_swap
       implementation_src: inferred
@@ -518,9 +546,6 @@ countries:
   ASC:
     coverage: balance_only
     starting_ideas:
-    # 2026-09-29 (pedido del usuario): "en la ASC todo debería costar menos manpower,
-    # es mucho drone/robot/automático". El juego no tiene un modificador de costo
-    # de hombres por unidad para un solo país: esto hace lo mismo por otro lado.
     - id: ASC_ejercito_de_maquinas
       name: {english: The Machine Army, spanish: El Ejército de Máquinas}
       desc:
@@ -774,6 +799,34 @@ countries:
         political_power_gain: -0.1
         stability_factor: -0.05
       src: user_request
+    - id: ASC_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: ASC_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: ASC_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: ASC_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     see: Q030
 
   FCU:
@@ -805,7 +858,7 @@ countries:
       desc:
         english: Soldiers who read their contracts before every order. Removed by the focus 'Corporate Training', or having 18 divisions.
         spanish: Soldados que leen el contrato antes de cada orden. Se va con el foco «Entrenamiento Corporativo», o tener 18 divisiones.
-      modifiers: {army_org_factor: -0.05, war_support_factor: -0.05}
+      modifiers: {army_org_factor: -0.08, war_support_factor: -0.05}
       src: user_request
     focus_ideas:
     - id: FCU_canal_abierto
@@ -1023,6 +1076,34 @@ countries:
         trade_opinion_factor: -0.3
         stability_factor: -0.05
       src: user_request
+    - id: FCU_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: FCU_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: FCU_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: FCU_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     see: Q030
   HSN:
     coverage: full_v1
@@ -1241,6 +1322,34 @@ countries:
         trade_opinion_factor: -0.35
         stability_factor: -0.05
       src: user_request
+    - id: HSN_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: HSN_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: HSN_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: HSN_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     see: Q030
     starting_ideas:
     - id: HSN_flota_envejecida
@@ -1476,6 +1585,34 @@ countries:
         stability_factor: -0.1
         recruitable_population_factor: -0.05
       src: user_request
+    - id: NAS_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: NAS_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: NAS_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: NAS_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     see: Q030
     starting_ideas:
     - id: NAS_montanas_aisladas
@@ -1748,6 +1885,34 @@ countries:
         production_speed_buildings_factor: -0.1
         political_power_gain: -0.05
       src: user_request
+    - id: SHD_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: SHD_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: SHD_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: SHD_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     see: Q030
     starting_ideas:
     - id: SHD_burocracia_del_caudal
@@ -1967,6 +2132,34 @@ countries:
         stability_factor: -0.1
         consumer_goods_factor: 0.05
       src: user_request
+    - id: APF_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: APF_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: APF_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: APF_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     see: Q030
     starting_ideas:
     - id: APF_consejos_desorganizados
@@ -2245,6 +2438,34 @@ countries:
         stability_factor: -0.1
         consumer_goods_factor: 0.05
       src: user_request
+    - id: NRE_planos_robados
+      name: {english: Stolen Blueprints, spanish: Planos Robados}
+      desc:
+        english: Somebody else's laboratories are working for us.
+        spanish: Los laboratorios de otro trabajan para nosotros.
+      modifiers: {research_speed_factor: 0.08}
+      src: user_design
+    - id: NRE_sabotaje_industrial
+      name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+      desc:
+        english: Fires, strikes and corrupted firmware. Somebody is doing this on purpose.
+        spanish: Incendios, huelgas y firmware corrupto. Alguien lo está haciendo a propósito.
+      modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.15}
+      src: user_design
+    - id: NRE_agentes_enemigos
+      name: {english: Enemy Agents, spanish: Agentes Enemigos}
+      desc:
+        english: Leaks, rumours and bought newspapers. The government no longer trusts its own people.
+        spanish: Filtraciones, rumores y diarios comprados. El gobierno ya no confía en su propia gente.
+      modifiers: {political_power_gain: -0.2, stability_factor: -0.05, war_support_factor: -0.03}
+      src: user_design
+    - id: NRE_insurreccion
+      name: {english: Insurrection, spanish: Insurrección}
+      desc:
+        english: Foreign money and foreign weapons in the hands of everyone who already hated us.
+        spanish: Plata y armas extranjeras en manos de todos los que ya nos odiaban.
+      modifiers: {stability_factor: -0.1, industrial_capacity_factory: -0.05, recruitable_population_factor: -0.1}
+      src: user_design
     see: Q030
     starting_ideas:
     - id: NRE_senado_corrupto
@@ -2277,7 +2498,7 @@ countries:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
       # 2026-09-29: "fortalecé un poco Eurasia": +5% defensa, +5% organización, +10% reclutables, y el invierno no los frena
-      modifiers: {army_defence_factor: 0.35, army_org_factor: 0.2, army_attack_factor: 0.1, recruitable_population_factor: 0.7, stability_factor: 0.1, war_support_factor: 0.1, '?winter_attrition_factor': -0.25}
+      modifiers: {army_defence_factor: 0.282, army_org_factor: 0.14, army_attack_factor: 0.045, recruitable_population_factor: 0.615, stability_factor: 0.1, war_support_factor: 0.1, '?winter_attrition_factor': -0.25}
       src: user_design
     focus_ideas:
     - id: ZWE_caudillo_supremo
@@ -2405,7 +2626,7 @@ countries:
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.05, recruitable_population_factor: 0.7, stability_factor: 0.1, war_support_factor: 0.1}
+      modifiers: {army_defence_factor: 0.235, army_org_factor: 0.092, army_attack_factor: 0.0, recruitable_population_factor: 0.615, stability_factor: 0.1, war_support_factor: 0.1}
       src: user_design
     focus_ideas:
     - id: ZWI_caudillo_supremo
@@ -2521,14 +2742,14 @@ countries:
       desc:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
-      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.1, recruitable_population_factor: 0.6, stability_factor: 0.1, war_support_factor: 0.15}
+      modifiers: {army_defence_factor: 0.235, army_org_factor: 0.092, army_attack_factor: 0.045, recruitable_population_factor: 0.52, stability_factor: 0.1, war_support_factor: 0.15}
       src: user_design
     - id: ZWM_guerra_del_desierto
       name: {english: The Desert War, spanish: La Guerra del Desierto}
       desc:
         english: 'Sand, heat and no roads: the Emirates fight where nobody else can.'
         spanish: 'Arena, calor y ningún camino: los Emiratos pelean donde nadie más puede.'
-      modifiers: {army_defence_factor: 0.3, army_attack_factor: 0.15, army_org_factor: 0.1}
+      modifiers: {army_defence_factor: 0.235, army_attack_factor: 0.092, army_org_factor: 0.045}
       src: user_design
     focus_ideas:
     - id: ZWM_caudillo_supremo
@@ -2650,7 +2871,7 @@ countries:
         english: Every village is a fortress and every warlord a general. Conquering them is easy; holding them is not.
         spanish: Cada aldea es una fortaleza y cada señor de la guerra, un general. Conquistarlos es fácil; retenerlos, no.
       # 2026-09-29: "fortalecé un poco Amazonas" (sigue siendo solo defensivo): +5% defensa, +5% organización, +10% reclutables
-      modifiers: {army_defence_factor: 0.2, army_org_factor: 0.1, recruitable_population_factor: 0.4, '?attrition': -0.1}
+      modifiers: {army_defence_factor: 0.14, army_org_factor: 0.045, recruitable_population_factor: 0.33, '?attrition': -0.1}
       src: user_design
     focus_ideas:
     - id: ZWB_caudillo_supremo
@@ -2755,7 +2976,7 @@ countries:
       desc:
         english: Every ranch has a rifle rack and every town a militia roll. Whoever comes for the frontier fights the whole frontier.
         spanish: Cada rancho tiene un armero y cada pueblo su lista de milicianos. El que viene por la frontera pelea contra toda la frontera.
-      modifiers: {army_defence_factor: 0.3, army_org_factor: 0.15, army_attack_factor: 0.1, recruitable_population_factor: 0.6, stability_factor: 0.1, war_support_factor: 0.1, '?attrition': -0.1}
+      modifiers: {army_defence_factor: 0.235, army_org_factor: 0.092, army_attack_factor: 0.045, recruitable_population_factor: 0.52, stability_factor: 0.1, war_support_factor: 0.1, '?attrition': -0.1}
       src: user_request
     focus_ideas:
     - id: ZAN_la_gran_ofensiva

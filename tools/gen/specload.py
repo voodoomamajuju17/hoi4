@@ -34,6 +34,7 @@ SPEC_FILES = {
     "balance": "15_balance.yaml",
     "ai": "16_ai.yaml",
     "research_look": "17_research.yaml",
+    "intelligence": "18_intelligence.yaml",
     "questions": "99_open_questions.yaml",
 }
 

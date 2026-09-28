@@ -880,6 +880,19 @@ class Vanilla:
                 out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block))
         return out
 
+    def operations(self) -> dict[str, pdx.Block]:
+        """Operaciones de inteligencia del juego (common/operations, La Résistance)."""
+        out: dict[str, pdx.Block] = {}
+        for path in sorted((self.root / "common" / "operations").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            for key, value in root.entries:
+                if key and isinstance(value, pdx.Block):
+                    out.setdefault(key, value)
+        return out
+
     def gfx_names(self) -> set[str]:
         """Todos los sprites declarados en interface/**/*.gfx."""
         if self._gfx is not None:

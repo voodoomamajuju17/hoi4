@@ -1,0 +1,32 @@
+# Fixture: forma de una operacion de La Resistance (resumida).
+operation_steal_tech = {
+	name = operation_steal_tech
+	desc = operation_steal_tech_desc
+	icon = GFX_operations_steal_tech
+	map_icon = GFX_operations_steal_tech_map
+	priority = 10
+	days = 60
+	network_strength = 40
+	operatives = 2
+	risk_chance = 0.05
+	experience = 1
+	cost_multiplier = 1
+	return_on_complete = yes
+	visible = { always = yes }
+	available = { always = yes }
+	equipment = { infantry_equipment = 50 }
+	outcome_execute = { add_political_power = 10 }
+	outcome_modifiers = { steal_tech_modifier }
+	phases = {
+		{
+			infiltration_steal_tech_a = { base = 1 }
+			infiltration_steal_tech_b = { base = 2 }
+		}
+	}
+	ai_will_do = { factor = 1 }
+}
+operation_capture_cipher = {
+	name = operation_capture_cipher
+	awarded_tokens = cipher_token
+	phases = { { cipher_phase = { base = 1 } } }
+}

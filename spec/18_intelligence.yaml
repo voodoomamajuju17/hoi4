@@ -1,0 +1,176 @@
+# =============================================================================
+# 2100 Meganations — La Guerra en las Sombras (2026-09-30)
+# =============================================================================
+# Pedido: "operaciones de inteligencia/sabotaje en otras meganaciones, con
+# puntaje progresivo hasta causar cada vez más daño, incluso rebeliones. Los
+# otros se tienen que defender: cada X tiempo eligen defenderse de máximo 4...
+# otra opción para desescalar. Tenés que poner espías para actuar en esa
+# nación." Y después: "¿no se puede sacar de decisiones a inteligencia? Las
+# operaciones ya existen." -> las operaciones van a la pantalla de
+# inteligencia del juego (common/operations); la defensa y la desescalada son
+# decisiones (14_decisions: <TAG>_contrainteligencia_category).
+#
+# Cómo se arma cada operación (tools/gen/emitters/intelligence.py):
+#   - una por potencia objetivo (8 x 6 = 48); el que la lanza es cualquier
+#     otra meganación. ROOT = el que la lanza, FROM = el objetivo.
+#   - la estructura (fases, riesgo, equipo) se copia de una operación del
+#     juego instalado; acá solo se definen nombre, texto, requisitos y efectos.
+#   - puntaje: variable MN_inf_<OBJETIVO> en el país que espía (0-100). Cada
+#     operación pide un mínimo y suma `gain` (la mitad si el objetivo se blindó
+#     contra vos: bandera MN_vigilado_por_<OBJETIVO> en el que espía).
+#   - descubrimiento: `discovery` % de chance (blindado / abierto); el que
+#     espía pierde `penalty` de puntaje y 25 de poder político, y el objetivo
+#     se entera (evento).
+#   - {T} = la potencia objetivo; los efectos de `target` corren en ella.
+#     `attacker` corre en el que espía; {A} = su tag.
+# =============================================================================
+megas: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+max_shields: 4
+cycle_months: 3
+shield_decay: 4          # por mes, el puntaje de quien está bloqueado baja esto
+discovery: {shielded: 35, open: 10, penalty: 15}
+rivals:
+  - [EFE, NRE]
+  - [ASC, APF]
+  - [FCU, HSN]
+  - [EFE, FCU]
+events:
+  discovered: meganations_sombras.2
+  uprising: meganations_sombras.3
+
+operations:
+  - id: infiltrar
+    name: {english: Deep Infiltration, spanish: Infiltración Profunda}
+    desc:
+      english: Place sleepers in the ministries, the ports and the factories. Nothing happens yet; that is the point.
+      spanish: Instalar agentes dormidos en los ministerios, los puertos y las fábricas. Todavía no pasa nada; de eso se trata.
+    min: 0
+    gain: 12
+    days: 30
+    network_strength: 20
+    operatives: 1
+    attacker: []
+    target: []
+
+  - id: robo_tecnologico
+    name: {english: Stolen Blueprints, spanish: Robo de Tecnología}
+    desc:
+      english: Copy their laboratories' work before it is finished. Our scientists will pretend they thought of it.
+      spanish: Copiar el trabajo de sus laboratorios antes de que lo terminen. Nuestros científicos van a fingir que se les ocurrió a ellos.
+    min: 20
+    gain: 8
+    days: 45
+    network_strength: 30
+    operatives: 1
+    attacker:
+      - {effect: timed_idea, idea: "{A}_planos_robados", days: 180}
+    target: []
+
+  - id: sabotaje_industrial
+    name: {english: Industrial Sabotage, spanish: Sabotaje Industrial}
+    desc:
+      english: Corrupted firmware in the assembly lines, a fire in the right warehouse, a strike nobody can explain.
+      spanish: Firmware corrupto en las líneas de montaje, un incendio en el depósito justo, una huelga que nadie sabe explicar.
+    min: 35
+    gain: 10
+    days: 45
+    network_strength: 40
+    operatives: 2
+    attacker: []
+    target:
+      - {effect: timed_idea, idea: "{T}_sabotaje_industrial", days: 90}
+
+  - id: golpe_mecanica
+    name: {english: Strike at the Heart, spanish: Golpe al Corazón}
+    desc:
+      english: Every power has one thing that holds it together. Find it and break it.
+      spanish: Cada potencia tiene una cosa que la mantiene en pie. Encontrarla y romperla.
+    min: 50
+    gain: 10
+    days: 60
+    network_strength: 50
+    operatives: 2
+    attacker: []
+    target: [mechanic]      # se reemplaza por mechanic_hits[T]
+
+  - id: desestabilizar
+    name: {english: Destabilisation, spanish: Desestabilización}
+    desc:
+      english: Rumours, leaks, bought newspapers and a few well-placed bombs. The government stops trusting its own people.
+      spanish: Rumores, filtraciones, diarios comprados y algunas bombas bien puestas. El gobierno deja de confiar en su propia gente.
+    min: 70
+    gain: 10
+    days: 60
+    network_strength: 60
+    operatives: 3
+    attacker: []
+    target:
+      - {effect: add_stability, value: -0.06}
+      - {effect: add_war_support, value: -0.04}
+      - {effect: timed_idea, idea: "{T}_agentes_enemigos", days: 180}
+
+  - id: rebelion
+    name: {english: Fan the Rebellion, spanish: Encender la Rebelión}
+    desc:
+      english: Weapons, money and a cause for everyone who already hates them. It spends most of the network.
+      spanish: Armas, plata y una causa para todos los que ya los odian. Gasta casi toda la red.
+    min: 90
+    gain: -45
+    days: 90
+    network_strength: 70
+    operatives: 3
+    attacker: []
+    target: [rebellion]     # se reemplaza por rebellion_hits[T] + el evento del levantamiento
+
+# El golpe a la mecánica de cada potencia (nivel 50).
+mechanic_hits:
+  EFE:
+    - {effect: add_variable, var: EFE_saturacion, value: 12}
+  FCU:
+    - {effect: add_variable, var: FCU_escandalo, value: 10}
+  ASC:
+    - {effect: add_variable, var: ASC_calor, value: 15}
+  HSN:
+    - {effect: add_variable, var: HSN_presion, value: 10}
+  NAS:
+    - {effect: add_variable, var: NAS_inti, value: -15}
+  SHD:
+    - {effect: add_variable, var: SHD_pueblo, value: 10}
+    - {effect: add_variable, var: SHD_orden, value: -10}
+  APF:
+    - {effect: add_variable, var: APF_tension, value: 12}
+  NRE:
+    - {effect: add_variable, var: NRE_auctoritas, value: -10}
+
+# La rebelión (nivel 90): los satélites se alejan del señor, y en la ASC y el
+# SHD además empuja las condiciones de su guerra civil.
+rebellion_hits:
+  EFE:
+    - {effect: add_variable, var: EFE_lealtad_pta, value: -20}
+    - {effect: add_variable, var: EFE_lealtad_yyg, value: -20}
+    - {effect: add_variable, var: EFE_control_del_monte, value: 15}
+  FCU:
+    - {effect: add_variable, var: FCU_lealtad_znr, value: -20}
+    - {effect: add_variable, var: FCU_lealtad_zse, value: -20}
+  ASC:
+    - {effect: add_variable, var: ASC_lealtad_zbc, value: -20}
+    - {effect: add_variable, var: ASC_lealtad_zal, value: -20}
+    - {effect: add_variable, var: ASC_calor, value: 20}
+  HSN:
+    - {effect: add_variable, var: HSN_lealtad_zaf, value: -20}
+    - {effect: add_variable, var: HSN_lealtad_zas, value: -20}
+  NAS:
+    - {effect: add_variable, var: NAS_lealtad_zng, value: -20}
+    - {effect: add_variable, var: NAS_lealtad_zll, value: -20}
+  SHD:
+    - {effect: add_variable, var: SHD_lealtad_zkr, value: -20}
+    - {effect: add_variable, var: SHD_lealtad_zst, value: -20}
+    - {effect: add_variable, var: SHD_pueblo, value: 15}
+    - {effect: add_variable, var: SHD_orden, value: -15}
+  APF:
+    - {effect: add_variable, var: APF_lealtad_zet, value: -20}
+    - {effect: add_variable, var: APF_lealtad_zsa, value: -20}
+    - {effect: add_variable, var: APF_tension, value: 15}
+  NRE:
+    - {effect: add_variable, var: NRE_lealtad_zhi, value: -20}
+    - {effect: add_variable, var: NRE_lealtad_zda, value: -20}
