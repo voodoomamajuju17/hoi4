@@ -9135,13 +9135,21 @@ scripted_effects:
       - {effect: event, id: meganations_shd.204, days: 1}
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
     - effect: if
+      when: {idea: SHD_desborde}
+      then:
+      - {effect: add_variable, var: SHD_meses_desborde, value: 1}
+      else:
+      - {effect: set_variable, var: SHD_meses_desborde, value: 0}
+    - effect: if
       when:
         not_flag: SHD_zhou
         at_war: false
         date_after: 2101.1.1
-        variable_at_least: {var: SHD_pueblo, value: 80}
-        variable_below: {var: SHD_orden, value: 31}
         not: {flag: SHD_guerra_civil_hecha}
+        any:
+        - variable_at_least: {var: SHD_pueblo, value: 70}
+          variable_below: {var: SHD_orden, value: 36}
+        - variable_at_least: {var: SHD_meses_desborde, value: 3}
       then:
       - {effect: flag, value: SHD_guerra_civil_hecha}
       - {effect: event, id: meganations_shd.220, days: 1}
@@ -12630,3 +12638,4 @@ variable_names:
   SHD_racha: {english: "Harmony streak", spanish: "Racha de armonía"}
   MEGANATIONS_senal: {english: "Fragments of the Signal", spanish: "Fragmentos de la Señal"}
   EFE_hambre_del_metal: {english: "Hunger of the living metal", spanish: "Hambre del metal vivo"}
+  SHD_meses_desborde: {english: "Months of overflow", spanish: "Meses de desborde", hidden: true}

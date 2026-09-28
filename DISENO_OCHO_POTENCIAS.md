@@ -588,8 +588,10 @@ llega a 100 al toque y la tensión nunca sube".
     Amara).
   - Por condiciones, aunque no se siga la rama: ASC (PLAN-41 se desconecta si
     el Consejo gobierna con Cómputo ≥ 100 y Calor ≥ 50, sin guerra, desde
-    2101.6) y SHD (Zhou se levanta si Lin gobierna con Pueblo ≥ 80 y Orden
-    ≤ 30, sin guerra, desde 2101).
+    2101.6; con el Cómputo en 100 el Calor sube solo) y SHD (Zhou se levanta
+    si Lin gobierna y el Pueblo llega a 70 con el Orden en 35 o menos, o tras
+    3 meses seguidos de Desborde; sin guerra, desde 2101. Los tres caudales
+    suman 150: la versión anterior, Pueblo 80 y Orden 30, casi no se daba).
 - **Rama política extendida**: rama "El Destino de ..." en las 8 potencias:
   tres focos políticos (consolidación, una ley con espíritu propio, el
   ejército) y el foco del destino, que destraba la forma final. Se llega

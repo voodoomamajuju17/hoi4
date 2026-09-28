@@ -924,8 +924,11 @@ def test_events() -> None:
               "var = ASC_computo value = 100 compare = greater_than_or_equals" in asc_p
               and "set_country_flag = ASC_guerra_civil_hecha" in asc_p and "id = meganations_asc.220" in asc_p, asc_p[-900:])
         shd_p = " ".join(pdx.render(pulses_cw.get("SHD_pulso_del_rio")).split())
-        check("guerra civil de la SHD: por condiciones (el pueblo desborda y el orden cae)",
-              "var = SHD_pueblo value = 80" in shd_p and "id = meganations_shd.220" in shd_p, shd_p[-900:])
+        check("guerra civil de la SHD: por condiciones alcanzables (los caudales suman 150): Pueblo 70 y Orden 35, o 3 meses de desborde",
+              "var = SHD_pueblo value = 70 compare = greater_than_or_equals" in shd_p
+              and "var = SHD_orden value = 36 compare = less_than" in shd_p
+              and "var = SHD_meses_desborde value = 3" in shd_p
+              and "has_idea = SHD_desborde" in shd_p and "id = meganations_shd.220" in shd_p, shd_p[-1500:])
         dest = efe_tree_cw[efe_tree_cw.index("id = EFE_el_destino_de_gaia"):][:1500]
         check("destino: el foco destraba la forma final", "set_country_flag = EFE_destino_abierto" in dest, dest[:600])
         decs_d = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
