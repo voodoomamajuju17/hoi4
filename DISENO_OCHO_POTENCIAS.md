@@ -623,3 +623,44 @@ llega a 100 al toque y la tensión nunca sube".
   declare_after); el jugador, desde el primer pulso. Prepararse sí desde el
   día uno; conquistar, desde la fecha (la Federación declaraba a los Emiratos
   en febrero de 2100 aunque su fecha era 2101).
+
+## Caminos económicos con pros y contras (2026-09-29)
+
+- **Ciudades Sedientas (EFE)**: la saca solo el Ministerio de Restauración,
+  el foco que abre la rama. Diplomacia del Agua ya no la vuelve a sacar (antes
+  las dos la sacaban y una dependía de la otra).
+- **Dos focos más por lado** en la rama económica de las 8 potencias (32
+  focos). El último cambia el espíritu del camino por uno de tercer nivel, con
+  ventajas fuertes y un costo claro:
+  - EFE: La Fortaleza Verde (recursos, fábricas; comercio −50%, investigación)
+    / El Agua de la Vida (estabilidad, población, PP, comercio; apoyo a la
+    guerra −10%, recursos).
+  - ASC: El Plan Absoluto (construcción +20%, fábricas; investigación,
+    estabilidad, comercio) / El Mercado Total de Datos (investigación +15%,
+    comercio; PP, estabilidad).
+  - FCU: El Sueño Corporativo (bienes de consumo −15%, estabilidad; apoyo a la
+    guerra, reclutables) / El Cártel del Agua (PP +25%, construcción,
+    recursos; comercio −30%, estabilidad).
+  - HSN: La Bolsa del Mundo (comercio +40%, fábricas; apoyo a la guerra, PP)
+    / El Imperio del Peaje (PP +25%, apoyo a la guerra, astilleros; comercio
+    −35%, estabilidad).
+  - NAS: El Granero del Mundo (estabilidad +20%, construcción, reclutables;
+    fábricas, investigación) / La Montaña que Devora (recursos +35%, fábricas;
+    estabilidad −10%, reclutables).
+  - SHD: El País como Obra (construcción +35%; bienes de consumo, estabilidad)
+    / La Economía Exacta (fábricas +25%, investigación +15%; construcción −10%,
+    PP).
+  - APF: La Federación de Aldeas (estabilidad, defensa +15%, reclutables;
+    fábricas −10%, construcción) / El Continente Conectado (construcción +25%,
+    recursos, fábricas; estabilidad −10%, bienes de consumo).
+  - NRE: La Ciudad Alimentada (estabilidad, población, bienes de consumo −10%;
+    fábricas, apoyo a la guerra) / El Tesoro de Saturno (PP +25%, fábricas;
+    estabilidad −10%, bienes de consumo). El Nuevo Aureus se abre desde
+    cualquiera de los dos finales.
+- **El primer espíritu de cada camino** ahora también tiene un costo chico
+  (antes eran solo ventajas).
+- **Inconsistencias corregidas**: además de Ciudades Sedientas, Los Consejos se
+  Arman (APF) sacaba Consejos Desorganizados, que ya había sacado un foco
+  obligatorio anterior; ahora da +5% apoyo a la guerra.
+- **Chequeo automático** (tools/tests: test_focus_idea_consistency): ningún
+  foco saca un espíritu que ya sacó otro foco obligatorio de la misma cadena.

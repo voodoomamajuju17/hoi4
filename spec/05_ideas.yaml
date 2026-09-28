@@ -357,7 +357,7 @@ countries:
       desc:
         english: 'The Guaraní Aquifer as an embassy: fresh water in exchange for factories and friends.'
         spanish: 'El Acuífero Guaraní como embajada: agua dulce a cambio de fábricas y amigos.'
-      modifiers: {trade_opinion_factor: 0.25, political_power_gain: 0.05}
+      modifiers: {trade_opinion_factor: 0.25, political_power_gain: 0.05, war_support_factor: -0.05}
       src: user_design
     - id: EFE_potencia_hidrica
       name: {english: The Water Power, spanish: La Potencia Hídrica}
@@ -433,6 +433,35 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: EFE_fortaleza_verde
+      name: {english: The Green Fortress, spanish: La Fortaleza Verde}
+      desc:
+        english: 'Total self-sufficiency: every resource and every factory at home, at the price of isolation and research.'
+        spanish: 'Autosuficiencia total: cada recurso y cada fábrica en casa, al precio del aislamiento y la investigación.'
+      modifiers:
+        local_resources_factor: 0.2
+        industrial_capacity_factory: 0.15
+        production_speed_buildings_factor: 0.05
+        trade_opinion_factor: -0.5
+        research_speed_factor: -0.05
+        consumer_goods_factor: 0.05
+      src: user_request
+    - id: EFE_agua_de_la_vida
+      name: {english: The Water of Life, spanish: El Agua de la Vida}
+      desc:
+        english: 'Water is the Empire''s diplomacy and its health: growing cities, clean vats and grateful neighbours. The Guard, however, gets
+          soft.'
+        spanish: 'El agua es la diplomacia y la salud del Imperio: ciudades que crecen, cubas limpias y vecinos agradecidos. La Guardia, en cambio,
+          se ablanda.'
+      modifiers:
+        stability_factor: 0.1
+        monthly_population: 0.15
+        consumer_goods_factor: -0.05
+        trade_opinion_factor: 0.35
+        political_power_gain: 0.15
+        war_support_factor: -0.1
+        local_resources_factor: -0.05
       src: user_request
     biosteel_tiers:
       implementation: national_spirit_swap
@@ -623,14 +652,21 @@ countries:
       desc:
         english: Every factory, every quota, every hour, planned.
         spanish: Cada fábrica, cada cuota, cada hora, planificada.
-      modifiers: {production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05}
+      modifiers:
+        production_speed_buildings_factor: 0.1
+        industrial_capacity_factory: 0.05
+        research_speed_factor: -0.03
       src: user_design
     - id: ASC_mercado_de_computo
       name: {english: The Compute Credit Market, spanish: El Mercado de Créditos de Cómputo}
       desc:
         english: Compute credits circulate like money. The Commune trades in thought.
         spanish: Los créditos de cómputo circulan como dinero. La Comuna comercia con pensamiento.
-      modifiers: {research_speed_factor: 0.05, consumer_goods_factor: -0.05, trade_opinion_factor: 0.15}
+      modifiers:
+        research_speed_factor: 0.05
+        consumer_goods_factor: -0.05
+        trade_opinion_factor: 0.15
+        stability_factor: -0.03
       src: user_design
     - id: ASC_fabricas_a_oscuras
       name: {english: Lights-Out Factories, spanish: Fábricas a Oscuras}
@@ -713,6 +749,30 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: ASC_plan_absoluto
+      name: {english: The Absolute Plan, spanish: El Plan Absoluto}
+      desc:
+        english: 'The plan builds faster than anyone, but it does not improvise: research slows and the Council grows restless.'
+        spanish: 'El plan construye más rápido que nadie, pero no improvisa: la investigación se frena y el Consejo se inquieta.'
+      modifiers:
+        production_speed_buildings_factor: 0.2
+        industrial_capacity_factory: 0.15
+        research_speed_factor: -0.05
+        stability_factor: -0.05
+        trade_opinion_factor: -0.2
+      src: user_request
+    - id: ASC_mercado_total
+      name: {english: The Total Data Market, spanish: El Mercado Total de Datos}
+      desc:
+        english: Research and trade boom, but a commune that sells everything loses its politics and its calm.
+        spanish: La investigación y el comercio explotan, pero una comuna que vende todo pierde la política y la calma.
+      modifiers:
+        research_speed_factor: 0.15
+        trade_opinion_factor: 0.3
+        consumer_goods_factor: -0.1
+        political_power_gain: -0.1
+        stability_factor: -0.05
       src: user_request
     see: Q030
 
@@ -850,7 +910,7 @@ countries:
       desc:
         english: Every citizen holds a share. A small one.
         spanish: Cada ciudadano tiene una acción. Una chiquita.
-      modifiers: {consumer_goods_factor: -0.1, stability_factor: 0.05}
+      modifiers: {consumer_goods_factor: -0.1, stability_factor: 0.05, war_support_factor: -0.05}
     - id: FCU_economia_de_la_abundancia
       name: {english: The Economy of Plenty, spanish: La Economía de la Abundancia}
       desc:
@@ -938,6 +998,30 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: FCU_sueno_corporativo
+      name: {english: The Corporate Dream, spanish: El Sueño Corporativo}
+      desc:
+        english: The richest society in history, and the least willing to go to war.
+        spanish: La sociedad más rica de la historia, y la que menos ganas tiene de ir a la guerra.
+      modifiers:
+        consumer_goods_factor: -0.15
+        stability_factor: 0.15
+        industrial_capacity_factory: 0.1
+        war_support_factor: -0.1
+        recruitable_population_factor: -0.1
+      src: user_request
+    - id: FCU_cartel_del_agua
+      name: {english: The Water Cartel, spanish: El Cártel del Agua}
+      desc:
+        english: 'Water as power: huge political leverage and resources, and a hemisphere that hates us.'
+        spanish: 'El agua como poder: una palanca política enorme y recursos, y un hemisferio que nos odia.'
+      modifiers:
+        political_power_gain: 0.25
+        production_speed_buildings_factor: 0.1
+        local_resources_factor: 0.1
+        trade_opinion_factor: -0.3
+        stability_factor: -0.05
       src: user_request
     see: Q030
   HSN:
@@ -1068,7 +1152,7 @@ countries:
       desc:
         english: No tariffs, only volume. Everything passes through the High Seas.
         spanish: Sin aranceles, solo volumen. Todo pasa por la Alta Mar.
-      modifiers: {trade_opinion_factor: 0.25, industrial_capacity_factory: 0.05}
+      modifiers: {trade_opinion_factor: 0.25, industrial_capacity_factory: 0.05, war_support_factor: -0.05}
       src: user_design
     - id: HSN_peaje_estrechos
       name: {english: The Straits Toll, spanish: El Peaje de los Estrechos}
@@ -1132,6 +1216,30 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: HSN_bolsa_del_mundo
+      name: {english: The World Exchange, spanish: La Bolsa del Mundo}
+      desc:
+        english: Everyone trades with us and everyone is our client; nobody wants to die for a clearing house.
+        spanish: Todos comercian con nosotros y todos son clientes; nadie quiere morir por una cámara de compensación.
+      modifiers:
+        trade_opinion_factor: 0.4
+        industrial_capacity_factory: 0.1
+        consumer_goods_factor: -0.05
+        war_support_factor: -0.1
+        political_power_gain: -0.05
+      src: user_request
+    - id: HSN_imperio_del_peaje
+      name: {english: The Toll Empire, spanish: El Imperio del Peaje}
+      desc:
+        english: The straits pay for the fleet and the war, and the whole world resents us for it.
+        spanish: Los estrechos pagan la flota y la guerra, y el mundo entero nos lo cobra en rencor.
+      modifiers:
+        political_power_gain: 0.25
+        war_support_factor: 0.1
+        industrial_capacity_dockyard: 0.1
+        trade_opinion_factor: -0.35
+        stability_factor: -0.05
       src: user_request
     see: Q030
     starting_ideas:
@@ -1270,7 +1378,7 @@ countries:
       desc:
         english: The mountainsides feed the kingdom, terrace by terrace.
         spanish: Las laderas alimentan al reino, terraza por terraza.
-      modifiers: {stability_factor: 0.1, production_speed_buildings_factor: 0.1}
+      modifiers: {stability_factor: 0.1, production_speed_buildings_factor: 0.1, industrial_capacity_factory: -0.03}
       src: user_design
     - id: NAS_terrazas_2
       name: {english: The Terrace Kingdom, spanish: El Reino de las Terrazas}
@@ -1282,7 +1390,7 @@ countries:
       desc:
         english: Lithium and tungsten from the highest mines in the world, sold to whoever pays.
         spanish: Litio y tungsteno de las minas más altas del mundo, vendidos a quien pague.
-      modifiers: {local_resources_factor: 0.15, trade_opinion_factor: 0.15}
+      modifiers: {local_resources_factor: 0.15, trade_opinion_factor: 0.15, stability_factor: -0.05}
       src: user_design
     - id: NAS_mineria_2
       name: {english: The Silver Mountain, spanish: La Montaña de Plata}
@@ -1342,6 +1450,31 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: NAS_granero
+      name: {english: The Granary of the World, spanish: El Granero del Mundo}
+      desc:
+        english: A fed and loyal kingdom with men to spare, but a rural economy that industrialises slowly.
+        spanish: Un reino alimentado y leal, con hombres de sobra, pero una economía rural que se industrializa despacio.
+      modifiers:
+        stability_factor: 0.2
+        production_speed_buildings_factor: 0.15
+        political_power_gain: 0.1
+        recruitable_population_factor: 0.1
+        industrial_capacity_factory: -0.05
+        research_speed_factor: -0.05
+      src: user_request
+    - id: NAS_mineria_3
+      name: {english: The Mountain That Devours, spanish: La Montaña que Devora}
+      desc:
+        english: Enormous wealth from the mountain, paid in unrest and in the lives of the miners.
+        spanish: Una riqueza enorme de la montaña, pagada con malestar y con la vida de los mineros.
+      modifiers:
+        local_resources_factor: 0.35
+        industrial_capacity_factory: 0.15
+        trade_opinion_factor: 0.2
+        stability_factor: -0.1
+        recruitable_population_factor: -0.05
       src: user_request
     see: Q030
     starting_ideas:
@@ -1498,7 +1631,7 @@ countries:
       desc:
         english: Dams, canals and railways on a scale no one has seen since the old empires.
         spanish: Represas, canales y ferrocarriles a una escala que no se veía desde los viejos imperios.
-      modifiers: {production_speed_buildings_factor: 0.15}
+      modifiers: {production_speed_buildings_factor: 0.15, consumer_goods_factor: 0.03}
       src: user_design
     - id: SHD_grandes_obras_2
       name: {english: The Age of Works, spanish: La Era de las Obras}
@@ -1510,7 +1643,10 @@ countries:
       desc:
         english: Fewer factories, every one of them measured to the second.
         spanish: Menos fábricas, cada una medida al segundo.
-      modifiers: {industrial_capacity_factory: 0.1, research_speed_factor: 0.05}
+      modifiers:
+        industrial_capacity_factory: 0.1
+        research_speed_factor: 0.05
+        production_speed_buildings_factor: -0.05
       src: user_design
     - id: SHD_precision_2
       name: {english: The Calibrated Economy, spanish: La Economía Calibrada}
@@ -1589,6 +1725,28 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: SHD_grandes_obras_3
+      name: {english: The Country as a Work Site, spanish: El País como Obra}
+      desc:
+        english: The Directorate builds faster than anyone on Earth, and the people live in the dust of the works.
+        spanish: El Directorio construye más rápido que nadie en la Tierra, y el pueblo vive en el polvo de las obras.
+      modifiers:
+        production_speed_buildings_factor: 0.35
+        industrial_capacity_factory: 0.1
+        consumer_goods_factor: 0.05
+        stability_factor: -0.05
+      src: user_request
+    - id: SHD_precision_3
+      name: {english: The Exact Economy, spanish: La Economía Exacta}
+      desc:
+        english: The most efficient factories and laboratories in Asia; building anything new takes forever to calibrate.
+        spanish: Las fábricas y los laboratorios más eficientes de Asia; construir algo nuevo tarda una eternidad en calibrarse.
+      modifiers:
+        industrial_capacity_factory: 0.25
+        research_speed_factor: 0.15
+        production_speed_buildings_factor: -0.1
+        political_power_gain: -0.05
       src: user_request
     see: Q030
     starting_ideas:
@@ -1681,7 +1839,7 @@ countries:
       desc:
         english: Every village feeds itself and guards itself.
         spanish: Cada aldea se alimenta y se defiende sola.
-      modifiers: {stability_factor: 0.1, army_defence_factor: 0.05}
+      modifiers: {stability_factor: 0.1, army_defence_factor: 0.05, industrial_capacity_factory: -0.05}
       src: user_design
     - id: APF_aldea_2
       name: {english: The Village Continent, spanish: El Continente de Aldeas}
@@ -1695,7 +1853,7 @@ countries:
       desc:
         english: Railways and industrial hubs from Dakar to Dar es Salaam.
         spanish: Ferrocarriles y polos industriales de Dakar a Dar es Salaam.
-      modifiers: {production_speed_buildings_factor: 0.1, local_resources_factor: 0.1}
+      modifiers: {production_speed_buildings_factor: 0.1, local_resources_factor: 0.1, stability_factor: -0.05}
       src: user_design
     - id: APF_corredor_2
       name: {english: The Logistics Giant, spanish: El Gigante Logístico}
@@ -1782,6 +1940,32 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: APF_aldea_3
+      name: {english: The Federation of Villages, spanish: La Federación de Aldeas}
+      desc:
+        english: An unbreakable, self-sufficient continent that is very hard to conquer and very slow to industrialise.
+        spanish: Un continente autosuficiente e irrompible, muy difícil de conquistar y muy lento para industrializarse.
+      modifiers:
+        stability_factor: 0.2
+        army_defence_factor: 0.15
+        political_power_gain: 0.1
+        recruitable_population_factor: 0.1
+        industrial_capacity_factory: -0.1
+        production_speed_buildings_factor: -0.05
+      src: user_request
+    - id: APF_corredor_3
+      name: {english: The Connected Continent, spanish: El Continente Conectado}
+      desc:
+        english: The richest logistics in the world, built on displaced villages that do not forget.
+        spanish: La logística más rica del mundo, construida sobre aldeas desplazadas que no olvidan.
+      modifiers:
+        production_speed_buildings_factor: 0.25
+        local_resources_factor: 0.2
+        industrial_capacity_factory: 0.15
+        trade_opinion_factor: 0.1
+        stability_factor: -0.1
+        consumer_goods_factor: 0.05
       src: user_request
     see: Q030
     starting_ideas:
@@ -1918,7 +2102,7 @@ countries:
       desc:
         english: The provinces pay Rome in money, steel and men.
         spanish: Las provincias le pagan a Roma en dinero, acero y hombres.
-      modifiers: {political_power_gain: 0.1, industrial_capacity_factory: 0.05}
+      modifiers: {political_power_gain: 0.1, industrial_capacity_factory: 0.05, stability_factor: -0.05}
       src: user_design
     - id: NRE_fisco
       name: {english: The Imperial Fiscus, spanish: El Fisco Imperial}
@@ -2036,6 +2220,30 @@ countries:
         research_speed_factor: 0.1
         army_org_factor: 0.1
         recruitable_population_factor: 0.15
+      src: user_request
+    - id: NRE_annona_3
+      name: {english: The Fed City, spanish: La Ciudad Alimentada}
+      desc:
+        english: A content and growing people, and a legion that recruits less and spends more.
+        spanish: Un pueblo contento y que crece, y una legión que recluta menos y gasta más.
+      modifiers:
+        stability_factor: 0.15
+        consumer_goods_factor: -0.1
+        monthly_population: 0.15
+        political_power_gain: 0.05
+        industrial_capacity_factory: -0.05
+        war_support_factor: -0.05
+      src: user_request
+    - id: NRE_fisco_2
+      name: {english: The Treasury of Saturn, spanish: El Tesoro de Saturno}
+      desc:
+        english: Rome grows rich from the provinces; the provinces grumble.
+        spanish: Roma se enriquece con las provincias; las provincias refunfuñan.
+      modifiers:
+        political_power_gain: 0.25
+        industrial_capacity_factory: 0.15
+        stability_factor: -0.1
+        consumer_goods_factor: 0.05
       src: user_request
     see: Q030
     starting_ideas:

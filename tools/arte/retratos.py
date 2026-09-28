@@ -63,7 +63,8 @@ OTHER = ("a client state or warlord faction of the ruined 2100 world",
 
 
 # ya hechos en el estilo nuevo (no se vuelven a pedir)
-DONE_V2 = {"SHD_lin_wenzhao", "SHD_zhou_mingyuan"}
+DONE_V2 = {"SHD_lin_wenzhao", "SHD_zhou_mingyuan", "ASC_plan_41", "ASC_allocation_council", "EFE_aurelio_iv",
+           "EFE_bruno_etchegaray", "EFE_anahi_quiroga", "FCU_valeria_castellane"}
 
 
 def _load(name: str) -> dict:

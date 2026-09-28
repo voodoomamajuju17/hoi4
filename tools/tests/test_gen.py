@@ -472,7 +472,7 @@ def test_phase3_content() -> None:
         tree = focus.get("focus_tree")
         focuses = tree.get_all("focus")
         ids = [pdx.text(f.get("id")) for f in focuses]
-        check("arbol del EFE de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
+        check("arbol del EFE de 55-75 focos (+4 del destino y +4 de los caminos economicos, 2026-09-29)", 55 <= len(focuses) <= 75, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         aurelio = by["EFE_el_mandato_renovado"].get("mutually_exclusive")
         monte = by["EFE_los_incendios_de_gaia"].get("mutually_exclusive")
@@ -885,6 +885,44 @@ def test_scenario() -> None:
               (ctx.mod_root / "common/bookmarks/meganations_2100.txt").exists())
 
 
+def test_focus_idea_consistency() -> None:
+    section("arboles: ningun espiritu se saca dos veces en la misma linea (2026-09-29)")
+    import yaml
+    trees = yaml.safe_load((REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8"))["trees"]
+    bad = []
+    for tag, tree in trees.items():
+        if not isinstance(tree, dict):
+            continue
+        focs = {f["id"]: f for b in tree["branches"] for f in b["focuses"]}
+
+        def removes(f):
+            out = set()
+            for e in f.get("reward") or []:
+                if e.get("effect") == "remove_idea":
+                    out.add(e["value"])
+                if e.get("effect") == "swap_ideas":
+                    out.add(e["remove"])
+            return out
+
+        def must(fid, seen=None):
+            f = focs[fid]
+            res = set()
+            for p in f.get("prerequisites") or []:
+                if p in focs:
+                    res |= {p} | must(p)
+            anyp = [p for p in (f.get("prerequisites_any") or []) if p in focs]
+            if anyp:
+                res |= set.intersection(*[{p} | must(p) for p in anyp])
+            return res
+
+        for fid, f in focs.items():
+            for i in removes(f):
+                for a in must(fid):
+                    if i in removes(focs[a]):
+                        bad.append(f"{fid} saca {i}, que ya saco {a}")
+    check("ningun foco saca un espiritu que ya saco un foco del que depende", not bad, "; ".join(bad))
+
+
 def test_events() -> None:
     section("eventos y on_actions")
     with tempfile.TemporaryDirectory() as tmp:
@@ -894,6 +932,17 @@ def test_events() -> None:
         root = pdx.parse(raw)
         check("namespace declarado", pdx.text(root.get("add_namespace")) == "meganations_efe")
         events = root.get_all("country_event")
+        # 2026-09-29: los caminos economicos, mas largos y con pros y contras
+        efe_c = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text().split())
+        dip = efe_c[efe_c.index("id = EFE_diplomacia_del_agua"):][:1500]
+        check("EFE: Ciudades Sedientas la saca solo el Ministerio (no la Diplomacia del Agua, que depende de el)",
+              "EFE_ciudades_sedientas" not in dip.split("ai_will_do")[0], dip[:700])
+        agua = efe_c[efe_c.index("id = EFE_el_agua_de_la_vida"):][:1500]
+        check("EFE: el camino del agua termina en un espiritu del agua",
+              "swap_ideas = { remove_idea = EFE_potencia_hidrica add_idea = EFE_agua_de_la_vida }" in agua, agua[:700])
+        ideas_efe = " ".join((mod / "common/ideas/EFE_ideas.txt").read_text().split())
+        adv = ideas_efe[ideas_efe.index("EFE_agua_de_la_vida = {"):][:900]
+        check("EFE: el espiritu final tiene pros y contras", "monthly_population = 0.15" in adv and "war_support_factor = -0.1" in adv, adv)
         check("73 eventos del EFE (guerra limitada, 5 menores, independencias, el Santuario, guerra civil y destino)", len(events) == 73, str(len(events)))
         # 2026-09-29: guerras civiles (elegir bando), rama política extendida y forma final
         efe_cw = " ".join((mod / "events/meganations_efe.txt").read_text().split())
@@ -1348,7 +1397,7 @@ def test_asc() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/ASC_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la ASC de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
+        check("arbol de la ASC de 55-75 focos (+4 del destino y +4 de los caminos economicos, 2026-09-29)", 55 <= len(focuses) <= 75, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         for fid in ("ASC_el_sorteo_del_ano", "ASC_transparencia_del_plan", "ASC_el_derecho_a_no_trabajar",
                     "ASC_el_silencio_del_consejo", "ASC_la_singularidad_del_plan", "ASC_el_mercado_de_creditos_de_computo",
@@ -1417,7 +1466,7 @@ def test_hsn() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/HSN_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la HSN de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
+        check("arbol de la HSN de 55-75 focos (+4 del destino y +4 de los caminos economicos, 2026-09-29)", 55 <= len(focuses) <= 75, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("Aldana y Tavake se excluyen", "HSN_el_motin_de_kanto" in pdx.render(by["HSN_el_libro_de_fletes"].get("mutually_exclusive")))
         check("el motin asciende a Tavake", "promote_character = HSN_ines_tavake" in pdx.render(by["HSN_el_motin_de_kanto"].get("completion_reward")))
@@ -1448,7 +1497,7 @@ def test_nas() -> None:
         raw = (mod / "common/national_focus/NAS_focus.txt").read_text()
         root = pdx.parse(raw).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la NAS de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
+        check("arbol de la NAS de 55-75 focos (+4 del destino y +4 de los caminos economicos, 2026-09-29)", 55 <= len(focuses) <= 75, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         tropas = pdx.render(by["NAS_guerreros_de_la_puna"].get("completion_reward"))
         check("tabla nueva: bono de investigacion con categoria del juego",
@@ -1480,7 +1529,7 @@ def test_apf() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/APF_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol de la APF de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
+        check("arbol de la APF de 55-75 focos (+4 del destino y +4 de los caminos economicos, 2026-09-29)", 55 <= len(focuses) <= 75, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("Diallo asciende con su retrato", "promote_character = APF_kwame_diallo"
               in pdx.render(by["APF_los_consejos_se_arman"].get("completion_reward")))
@@ -1506,7 +1555,7 @@ def test_shd() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/SHD_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol del SHD de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
+        check("arbol del SHD de 55-75 focos (+4 del destino y +4 de los caminos economicos, 2026-09-29)", 55 <= len(focuses) <= 75, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("Zhou asciende con la Gran Crecida", "promote_character = SHD_zhou_mingyuan"
               in pdx.render(by["SHD_abrir_las_compuertas"].get("completion_reward")))
@@ -1527,7 +1576,7 @@ def test_nre() -> None:
         mod = ctx.mod_root
         root = pdx.parse((mod / "common/national_focus/NRE_focus.txt").read_text()).get("focus_tree")
         focuses = root.get_all("focus")
-        check("arbol del NRE de 50-66 focos (6 nuevos, 2026-09-26)", 50 <= len(focuses) <= 66, str(len(focuses)))
+        check("arbol del NRE de 55-75 focos (+4 del destino y +4 de los caminos economicos, 2026-09-29)", 55 <= len(focuses) <= 75, str(len(focuses)))
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("ids alineados con los iconos", all(i in by for i in (
             "NRE_la_aclamacion_confirmada", "NRE_el_senado_restaurado", "NRE_las_vias_imperiales",
@@ -2193,6 +2242,7 @@ def main() -> int:
         test_territory,
         test_scenario,
         test_events,
+        test_focus_idea_consistency,
         test_leaders_and_ideologies,
         test_balance,
         test_fcu,

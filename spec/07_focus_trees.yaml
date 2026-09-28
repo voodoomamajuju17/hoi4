@@ -496,6 +496,40 @@ trees:
         desc: {english: The Empire needs nobody., spanish: El Imperio no necesita a nadie.}
         reward:
         - {effect: swap_ideas, remove: EFE_autarquia_estrategica, add: EFE_autarquia_total}
+      - id: EFE_el_bioacero_soberano
+        name: {english: Sovereign BioSteel, spanish: El Bioacero Soberano}
+        days: 77
+        icon: GFX_goal_generic_construct_mil_factory
+        prerequisites:
+        - EFE_la_autarquia_total
+        desc:
+          english: Every weapon grown at home. The vats run hot and the ration books get thinner.
+          spanish: Cada arma crece en casa. Las cubas trabajan a pleno y las libretas de racionamiento adelgazan.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - {effect: add_variable, var: EFE_biosteel, value: 2}
+        - {effect: add_variable, var: EFE_saturacion, value: 6}
+        - {effect: add_stability, value: -0.05}
+        src: user_request
+      - id: EFE_la_fortaleza_verde
+        name: {english: The Green Fortress, spanish: La Fortaleza Verde}
+        days: 98
+        icon: GFX_goal_generic_defence
+        prerequisites:
+        - EFE_el_bioacero_soberano
+        desc:
+          english: The Empire needs nobody. Nobody wants to trade with the Empire either.
+          spanish: El Imperio no necesita a nadie. Y nadie quiere comerciar con el Imperio.
+        reward:
+        - {effect: swap_ideas, remove: EFE_autarquia_total, add: EFE_fortaleza_verde}
+        src: user_request
     - id: diplomacia_agua
       ai_factor: 1.5
       name: {english: Water Diplomacy, spanish: La Diplomacia del Agua}
@@ -518,7 +552,6 @@ trees:
           spanish: El Acuífero Guaraní como embajada. Abre los contratos de agua.
         reward:
         - {effect: add_ideas, value: EFE_diplomacia_hidrica}
-        - {effect: remove_idea, value: EFE_ciudades_sedientas}
       - id: EFE_bancos_de_semillas
         name: {english: Seed Banks, spanish: Bancos de Semillas}
         days: 49
@@ -579,6 +612,39 @@ trees:
           spanish: La mitad de la sed del mundo pasa por el Cono Sur.
         reward:
         - {effect: swap_ideas, remove: EFE_diplomacia_hidrica, add: EFE_potencia_hidrica}
+      - id: EFE_los_acueductos_del_continente
+        name: {english: The Continental Aqueducts, spanish: Los Acueductos del Continente}
+        days: 77
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - EFE_la_potencia_hidrica
+        desc:
+          english: Pipelines from the Guaraní aquifer to every neighbour that signs.
+          spanish: Acueductos del acuífero Guaraní hacia cada vecino que firma.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 50}
+        src: user_request
+      - id: EFE_el_agua_de_la_vida
+        name: {english: The Water of Life, spanish: El Agua de la Vida}
+        days: 98
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - EFE_los_acueductos_del_continente
+        desc:
+          english: The thirsty cities drink, the vats are washed clean and the continent owes us its water.
+          spanish: Las ciudades sedientas beben, las cubas se lavan y el continente nos debe su agua.
+        reward:
+        - {effect: swap_ideas, remove: EFE_potencia_hidrica, add: EFE_agua_de_la_vida}
+        - {effect: add_variable, var: EFE_saturacion, value: -10}
+        src: user_request
     - id: cubas
       ai_factor: 2
       name: {english: The Pampa Vats, spanish: Las Cubas de la Pampa}
@@ -1422,6 +1488,38 @@ trees:
           pick: random
           effects:
           - {effect: build_here, building: industrial_complex, level: 1}
+      - id: ASC_las_granjas_automaticas
+        name: {english: The Automated Farms, spanish: Las Granjas Automáticas}
+        days: 77
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - ASC_la_economia_sin_precios
+        desc:
+          english: Harvesters that never sleep feed the Commune; the farmers become engineers.
+          spanish: Cosechadoras que no duermen alimentan a la Comuna; los campesinos pasan a ser ingenieros.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_variable, var: ASC_computo, value: 5}
+        src: user_request
+      - id: ASC_el_plan_absoluto
+        name: {english: The Absolute Plan, spanish: El Plan Absoluto}
+        days: 98
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - ASC_las_granjas_automaticas
+        desc:
+          english: Every screw is planned. Nothing unplanned happens, not even ideas.
+          spanish: Cada tornillo está planificado. No pasa nada fuera del plan, ni siquiera las ideas.
+        reward:
+        - {effect: swap_ideas, remove: ASC_plan_total, add: ASC_plan_absoluto}
+        src: user_request
     - id: mercado_computo
       ai_factor: 1.5
       name: {english: The Compute Market, spanish: El Mercado de Cómputo}
@@ -1503,6 +1601,32 @@ trees:
           spanish: El recurso más escaso ya no es el acero. Es el pensamiento.
         reward:
         - {effect: add_research_slot, value: 1}
+      - id: ASC_los_derivados_de_computo
+        name: {english: Compute Derivatives, spanish: Los Derivados de Cómputo}
+        days: 77
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - ASC_la_economia_de_la_atencion
+        desc:
+          english: Futures on processor cycles. The grid overheats with speculation.
+          spanish: Futuros sobre ciclos de procesador. La red se recalienta de especulación.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - {effect: add_variable, var: ASC_calor, value: 10}
+        src: user_request
+      - id: ASC_el_mercado_total_de_datos
+        name: {english: The Total Data Market, spanish: El Mercado Total de Datos}
+        days: 98
+        icon: GFX_goal_generic_research
+        prerequisites:
+        - ASC_los_derivados_de_computo
+        desc:
+          english: Everything is data and every datum has a price.
+          spanish: Todo es dato y cada dato tiene precio.
+        reward:
+        - {effect: swap_ideas, remove: ASC_mercado_de_computo, add: ASC_mercado_total}
+        src: user_request
     - id: fabricas_a_oscuras
       ai_factor: 2
       name: {english: Lights-Out Factories, spanish: Fábricas a Oscuras}
@@ -2369,6 +2493,31 @@ trees:
         desc: {english: The Dividend becomes the system., spanish: El Dividendo se vuelve el sistema.}
         reward:
         - {effect: swap_ideas, remove: FCU_dividendo_civil, add: FCU_economia_de_la_abundancia}
+      - id: FCU_la_clase_accionista
+        name: {english: The Shareholder Class, spanish: La Clase Accionista}
+        days: 77
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - FCU_hacia_la_abundancia
+        desc:
+          english: Every family owns a slice of the Union. Nobody wants to break what pays them.
+          spanish: Cada familia es dueña de un pedazo de la Unión. Nadie quiere romper lo que le paga.
+        reward:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 50}
+        src: user_request
+      - id: FCU_el_sueno_corporativo
+        name: {english: The Corporate Dream, spanish: El Sueño Corporativo}
+        days: 98
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - FCU_la_clase_accionista
+        desc:
+          english: Comfort, dividends and a very long weekend.
+          spanish: Comodidad, dividendos y un fin de semana muy largo.
+        reward:
+        - {effect: swap_ideas, remove: FCU_economia_de_la_abundancia, add: FCU_sueno_corporativo}
+        src: user_request
     - id: economia_agua
       ai_factor: 1.5
       name: {english: The Water Monopoly, spanish: El Monopolio del Agua}
@@ -2453,6 +2602,36 @@ trees:
           spanish: No hace falta un ejército. Se cierra la válvula y se espera.
         reward:
         - {effect: swap_ideas, remove: FCU_monopolio_hidrico, add: FCU_imperio_del_agua}
+      - id: FCU_las_acciones_del_rio
+        name: {english: River Shares, spanish: Las Acciones del Río}
+        days: 77
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - FCU_el_imperio_del_agua
+        desc: {english: The Mississippi is listed on the exchange., spanish: El Mississippi cotiza en bolsa.}
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 100}
+        src: user_request
+      - id: FCU_el_cartel_del_agua
+        name: {english: The Water Cartel, spanish: El Cártel del Agua}
+        days: 98
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - FCU_las_acciones_del_rio
+        desc:
+          english: Whoever drinks, pays. Whoever cannot pay, does not drink.
+          spanish: El que bebe, paga. El que no puede pagar, no bebe.
+        reward:
+        - {effect: swap_ideas, remove: FCU_imperio_del_agua, add: FCU_cartel_del_agua}
+        src: user_request
     - id: industria
       ai_factor: 2
       name: {english: The Meridian Parks, spanish: Los Parques de Meridian}
@@ -3321,6 +3500,37 @@ trees:
           pick: random
           effects:
           - {effect: build_here, building: industrial_complex, level: 1}
+      - id: HSN_el_puerto_de_los_mil_barcos
+        name: {english: The Port of a Thousand Ships, spanish: El Puerto de los Mil Barcos}
+        days: 77
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_el_mercado_del_pacifico
+        desc:
+          english: Berths for every flag, shipyards that never close.
+          spanish: Amarras para todas las banderas, astilleros que no cierran.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+        src: user_request
+      - id: HSN_la_bolsa_del_mundo
+        name: {english: The World Exchange, spanish: La Bolsa del Mundo}
+        days: 98
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - HSN_el_puerto_de_los_mil_barcos
+        desc:
+          english: Every cargo in the world is priced in our clearing houses.
+          spanish: Cada carga del mundo se cotiza en nuestras cámaras de compensación.
+        reward:
+        - {effect: swap_ideas, remove: HSN_puerto_libre, add: HSN_bolsa_del_mundo}
+        src: user_request
     - id: peaje
       ai_factor: 1.5
       name: {english: The Straits Toll, spanish: El Peaje de los Estrechos}
@@ -3392,6 +3602,30 @@ trees:
           pick: random
           effects:
           - {effect: build_here, building: arms_factory, level: 1}
+      - id: HSN_la_flota_aduanera
+        name: {english: The Customs Fleet, spanish: La Flota Aduanera}
+        days: 77
+        icon: GFX_goal_generic_navy_doctrines_tactics
+        prerequisites:
+        - HSN_los_estrechos_cerrados
+        desc: {english: Frigates that collect before they ask., spanish: Fragatas que cobran antes de preguntar.}
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+        - {effect: navy_experience, value: 25}
+        src: user_request
+      - id: HSN_el_imperio_del_peaje
+        name: {english: The Toll Empire, spanish: El Imperio del Peaje}
+        days: 98
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - HSN_la_flota_aduanera
+        desc: {english: Every strait is a till., spanish: Cada estrecho es una caja registradora.}
+        reward:
+        - {effect: swap_ideas, remove: HSN_peaje_estrechos, add: HSN_imperio_del_peaje}
+        src: user_request
     - id: astilleros
       ai_factor: 2
       name: {english: Floating Shipyards, spanish: Astilleros Flotantes}
@@ -4312,6 +4546,34 @@ trees:
         desc: {english: Self-sufficient to the last potato., spanish: Autosuficiente hasta la última papa.}
         reward:
         - {effect: swap_ideas, remove: NAS_terrazas, add: NAS_terrazas_2}
+      - id: NAS_los_andenes_del_sol
+        name: {english: The Terraces of the Sun, spanish: Los Andenes del Sol}
+        days: 77
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NAS_el_reino_de_las_terrazas
+        desc:
+          english: New terraces climb every slope from Quito to Potosí.
+          spanish: Andenes nuevos suben por cada ladera de Quito a Potosí.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_stability, value: 0.05}
+        src: user_request
+      - id: NAS_el_granero_del_mundo
+        name: {english: The Granary of the World, spanish: El Granero del Mundo}
+        days: 98
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NAS_los_andenes_del_sol
+        desc:
+          english: The Andes feed half a continent. The factories can wait.
+          spanish: Los Andes alimentan medio continente. Las fábricas pueden esperar.
+        reward:
+        - {effect: swap_ideas, remove: NAS_terrazas_2, add: NAS_granero}
+        src: user_request
     - id: mineria
       ai_factor: 1.5
       name: {english: Sky Mining, spanish: La Minería del Cielo}
@@ -4366,6 +4628,37 @@ trees:
         desc: {english: 'Potosí again, without the slaves.', spanish: 'Potosí otra vez, sin esclavos.'}
         reward:
         - {effect: swap_ideas, remove: NAS_mineria, add: NAS_mineria_2}
+      - id: NAS_los_socavones_profundos
+        name: {english: The Deep Shafts, spanish: Los Socavones Profundos}
+        days: 77
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - NAS_la_montana_de_plata
+        desc:
+          english: The mines go deeper than the Spanish ever dared.
+          spanish: Las minas bajan más hondo de lo que jamás se animaron los españoles.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        src: user_request
+      - id: NAS_la_montana_que_devora
+        name: {english: The Mountain That Devours, spanish: La Montaña que Devora}
+        days: 98
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - NAS_los_socavones_profundos
+        desc:
+          english: Silver and lithium pour out; the mountain takes its tribute in men.
+          spanish: Salen la plata y el litio; la montaña cobra su tributo en hombres.
+        reward:
+        - {effect: swap_ideas, remove: NAS_mineria_2, add: NAS_mineria_3}
+        src: user_request
     - id: talleres
       ai_factor: 2
       name: {english: Workshops of the Heights, spanish: Talleres de Altura}
@@ -5085,6 +5378,37 @@ trees:
         desc: {english: The country is one construction site., spanish: El país es una sola obra.}
         reward:
         - {effect: swap_ideas, remove: SHD_grandes_obras, add: SHD_grandes_obras_2}
+      - id: SHD_la_segunda_gran_presa
+        name: {english: The Second Great Dam, spanish: La Segunda Gran Presa}
+        days: 77
+        icon: GFX_goal_generic_construct_civ_factory
+        prerequisites:
+        - SHD_la_era_de_las_obras
+        desc:
+          english: A dam larger than the Three Gorges, finished in half the time.
+          spanish: Una presa más grande que las Tres Gargantas, terminada en la mitad del tiempo.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        src: user_request
+      - id: SHD_el_pais_como_obra
+        name: {english: The Country as a Work Site, spanish: El País como Obra}
+        days: 98
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - SHD_la_segunda_gran_presa
+        desc:
+          english: Every province is a construction site.
+          spanish: Cada provincia es una obra en construcción.
+        reward:
+        - {effect: swap_ideas, remove: SHD_grandes_obras_2, add: SHD_grandes_obras_3}
+        src: user_request
     - id: precision
       ai_factor: 1.5
       name: {english: The Precision Economy, spanish: La Economía de Precisión}
@@ -5136,6 +5460,31 @@ trees:
         desc: {english: 'Nothing wasted, nothing late.', spanish: 'Nada desperdiciado, nada tarde.'}
         reward:
         - {effect: swap_ideas, remove: SHD_precision, add: SHD_precision_2}
+      - id: SHD_sensores_en_todo
+        name: {english: Sensors Everywhere, spanish: Sensores en Todo}
+        days: 77
+        icon: GFX_goal_generic_research
+        prerequisites:
+        - SHD_la_economia_calibrada
+        desc:
+          english: Every machine reports its tolerance in real time.
+          spanish: Cada máquina reporta su tolerancia en tiempo real.
+        reward:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+        - {effect: add_political_power, value: 50}
+        src: user_request
+      - id: SHD_la_economia_exacta
+        name: {english: The Exact Economy, spanish: La Economía Exacta}
+        days: 98
+        icon: GFX_goal_generic_research
+        prerequisites:
+        - SHD_sensores_en_todo
+        desc:
+          english: Zero waste, zero margin, zero improvisation.
+          spanish: Cero desperdicio, cero margen, cero improvisación.
+        reward:
+        - {effect: swap_ideas, remove: SHD_precision_2, add: SHD_precision_3}
+        src: user_request
     - id: represas
       ai_factor: 2
       name: {english: The Yangtze Dams, spanish: Las Represas del Yangtsé}
@@ -5672,8 +6021,8 @@ trees:
         - {effect: flag, value: APF_diallo}
         - {effect: flag, value: APF_integracion_abierta}
         - {effect: event, id: meganations_apf.4, days: 1}
-        - {effect: remove_idea, value: APF_consejos_desorganizados}
         - {effect: event, id: meganations_apf.220, days: 3}
+        - {effect: add_war_support, value: 0.05}
       - id: APF_milicia_popular
         name: {english: The People's Militia, spanish: La Milicia Popular}
         days: 49
@@ -5851,6 +6200,31 @@ trees:
           spanish: Una federación que no se puede matar de hambre.
         reward:
         - {effect: swap_ideas, remove: APF_aldea, add: APF_aldea_2}
+      - id: APF_las_milicias_de_aldea
+        name: {english: Village Militias, spanish: Las Milicias de Aldea}
+        days: 77
+        icon: GFX_goal_generic_allies_build_infantry
+        prerequisites:
+        - APF_el_continente_de_aldeas
+        desc:
+          english: Every village keeps its rifles and its drills.
+          spanish: Cada aldea guarda sus fusiles y sus ejercicios.
+        reward:
+        - {effect: add_manpower, value: 30000}
+        - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+        src: user_request
+      - id: APF_la_federacion_de_aldeas
+        name: {english: The Federation of Villages, spanish: La Federación de Aldeas}
+        days: 98
+        icon: GFX_goal_generic_national_unity
+        prerequisites:
+        - APF_las_milicias_de_aldea
+        desc:
+          english: Power stays in the village. So does industry.
+          spanish: El poder se queda en la aldea. La industria también.
+        reward:
+        - {effect: swap_ideas, remove: APF_aldea_2, add: APF_aldea_3}
+        src: user_request
     - id: corredor
       ai_factor: 1.5
       name: {english: The Continental Corridor, spanish: El Corredor Continental}
@@ -5904,6 +6278,37 @@ trees:
           spanish: El continente se mueve como una sola máquina.
         reward:
         - {effect: swap_ideas, remove: APF_corredor, add: APF_corredor_2}
+      - id: APF_los_puertos_del_corredor
+        name: {english: The Corridor Ports, spanish: Los Puertos del Corredor}
+        days: 77
+        icon: GFX_goal_generic_trade
+        prerequisites:
+        - APF_el_gigante_logistico
+        desc:
+          english: From Lagos to Mombasa, the railway ends in a harbour.
+          spanish: De Lagos a Mombasa, el ferrocarril termina en un puerto.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: dockyard, level: 1}
+        src: user_request
+      - id: APF_el_continente_conectado
+        name: {english: The Connected Continent, spanish: El Continente Conectado}
+        days: 98
+        icon: GFX_goal_generic_production
+        prerequisites:
+        - APF_los_puertos_del_corredor
+        desc:
+          english: Every mine, every port, every city on one network. Whole villages are moved out of its way.
+          spanish: Cada mina, cada puerto, cada ciudad en una sola red. Aldeas enteras se mudan para dejarle paso.
+        reward:
+        - {effect: swap_ideas, remove: APF_corredor_2, add: APF_corredor_3}
+        src: user_request
     - id: polos
       ai_factor: 2
       name: {english: The Sahel Hubs, spanish: Los Polos del Sahel}
@@ -6700,13 +7105,69 @@ trees:
         days: 105
         icon: GFX_goal_generic_trade
         prerequisites_any:
-        - NRE_los_graneros_imperiales
-        - NRE_el_fisco_imperial
+        - NRE_la_ciudad_alimentada
+        - NRE_el_tesoro_de_saturno
         desc:
           english: A gold coin with an eagle on one side and the Imperator on the other.
           spanish: Una moneda de oro con un águila de un lado y el Imperator del otro.
         reward:
         - {effect: add_ideas, value: NRE_aureus}
+      - id: NRE_los_acueductos_de_roma
+        name: {english: The Aqueducts of Rome, spanish: Los Acueductos de Roma}
+        days: 77
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NRE_los_graneros_imperiales
+        desc:
+          english: Water and bread for the Urbs, as in the days of Trajan.
+          spanish: Agua y pan para la Urbe, como en tiempos de Trajano.
+        reward:
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        - {effect: add_stability, value: 0.05}
+        src: user_request
+      - id: NRE_la_ciudad_alimentada
+        name: {english: The Fed City, spanish: La Ciudad Alimentada}
+        days: 98
+        icon: GFX_goal_generic_consumer_goods
+        prerequisites:
+        - NRE_los_acueductos_de_roma
+        desc:
+          english: Nobody in the Empire goes hungry. Nobody wants to leave the city for the legions either.
+          spanish: Nadie en el Imperio pasa hambre. Nadie quiere dejar la ciudad por las legiones, tampoco.
+        reward:
+        - {effect: swap_ideas, remove: NRE_annona_2, add: NRE_annona_3}
+        src: user_request
+      - id: NRE_los_publicanos
+        name: {english: The Publicani, spanish: Los Publicanos}
+        days: 77
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NRE_el_fisco_imperial
+        desc:
+          english: Tax farmers in every province, and their cut in every coin.
+          spanish: Recaudadores en cada provincia, y su parte en cada moneda.
+        reward:
+        - {effect: add_political_power, value: 100}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        src: user_request
+      - id: NRE_el_tesoro_de_saturno
+        name: {english: The Treasury of Saturn, spanish: El Tesoro de Saturno}
+        days: 98
+        icon: GFX_goal_generic_political_pressure
+        prerequisites:
+        - NRE_los_publicanos
+        desc:
+          english: The temple of Saturn is full again. The provinces are empty.
+          spanish: El templo de Saturno vuelve a estar lleno. Las provincias, vacías.
+        reward:
+        - {effect: swap_ideas, remove: NRE_fisco, add: NRE_fisco_2}
+        src: user_request
     - id: forjas
       ai_factor: 2
       name: {english: The Imperial Forges, spanish: Las Forjas Imperiales}
