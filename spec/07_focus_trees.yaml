@@ -234,7 +234,12 @@ trees:
         icon_asset: assets/EFE/goals/EFE_reforest_patagonia.dds
         prerequisites:
         - EFE_los_incendios_de_gaia
-        available: {flag: EFE_monte_listo}
+        available:
+          explained:
+            id: EFE_monte_listo
+            english: "The rangers control the reserves (the §YThe Forest Rises§! decisions: Back the Rangers, Militarise the Reserves, Evacuate the City Centres)"
+            spanish: "Los guardaparques controlan las reservas (decisiones §YEl Monte se Levanta§!: Apoyar a los Guardaparques, Militarizar las Reservas, Evacuar los Centros Urbanos)"
+            when: {flag: EFE_monte_listo}
         desc:
           english: Needs the rangers' control of the reserves (60). Aurelio falls; Anahí Quiroga speaks for the forest.
           spanish: Pide el control de las reservas por los guardaparques (60). Cae Aurelio; Anahí Quiroga habla por el monte.

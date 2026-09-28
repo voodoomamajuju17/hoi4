@@ -793,6 +793,8 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       country: { tag, when: {..} }        -> TAG = { .. }
       any: [ {..}, {..} ]                 -> OR
       not: { .. }                         -> NOT (no se cumplen todas juntas)
+      explained: { id, english, spanish, when: {..} } -> custom_trigger_tooltip
+                                          (el requisito se lee con ese texto, no con el nombre de la bandera)
     Varias condiciones en el mismo bloque se cumplen todas (AND).
     """
     from ..pdx import Compare
@@ -1006,6 +1008,11 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             inner = render_conditions(owner, value, triggers_used, where=where)
             # NOT = { A B } en HOI4 es "ninguna"; "no se cumplen todas" es NOT = { AND = {A B} }.
             block.add("NOT", inner if len(inner.entries) == 1 else Block([("AND", inner)]))
+        elif key == "explained":
+            tip = f"MN_tt_req_{value['id']}"
+            TOOLTIPS[tip] = (value["english"], value["spanish"])
+            inner = render_conditions(owner, value["when"], triggers_used, where=where)
+            block.add("custom_trigger_tooltip", Block([("tooltip", tip)] + inner.entries))
         elif key == "stability_at_least":
             block.add("has_stability", Compare(">", float(value)))
             triggers_used.setdefault("has_stability", owner)

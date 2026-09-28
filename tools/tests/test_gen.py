@@ -480,6 +480,9 @@ def test_phase3_content() -> None:
         check("Aurelio y el Monte se excluyen (vuelta)", pdx.text(monte.get("focus")) == "EFE_el_mandato_renovado")
         golpe = by["EFE_el_monte_se_levanta"]
         check("el golpe pide el control del monte", "has_country_flag = EFE_monte_listo" in pdx.render(golpe.get("available")))
+        check("el requisito del golpe se explica (no muestra el nombre de la bandera)",
+              "custom_trigger_tooltip" in pdx.render(golpe.get("available"))
+              and "MN_tt_req_EFE_monte_listo" in pdx.render(golpe.get("available")))
         check("el golpe asciende a Anahi", "promote_character = EFE_anahi_quiroga" in pdx.render(golpe.get("completion_reward")))
         check("el golpe dura 21 dias (3 semanas; +50% desde 2026-09-26)", pdx.text(golpe.get("cost")) == "3")
         agua = by["EFE_el_agua_no_se_vende"]
