@@ -1787,7 +1787,10 @@ def test_ai() -> None:
         dzr = " ".join(pdx.render(dz).split()) if dz is not None else ""
         check("guerras contra la Anarquia: Roma declara desde su fecha, con ejercito y sin otra guerra",
               "type = declare_war id = ZWE" in dzr and "date > 2100.2.1" in dzr and "size > 11" in dzr and "has_war = no" in dzr, dzr)
-        check("y se prepara desde el dia uno", "type = prepare_for_war id = ZWE" in " ".join(pdx.render(root.get("MEGANATIONS_NRE_contra_ZWE")).split()))
+        check("y se prepara desde el dia uno", "type = prepare_for_war id = ZWE" in " ".join(pdx.render(root.get("MEGANATIONS_NRE_se_prepara_contra_ZWE")).split()))
+        nzc = " ".join(pdx.render(root.get("MEGANATIONS_NRE_contra_ZWE")).split())
+        check("pero conquistar, recien desde su fecha (no declara solo antes)",
+              "type = conquer id = ZWE" in nzc and "date > 2100.2.1" in nzc and "prepare_for_war" not in nzc, nzc)
         # Partida 2026-09-29: Eurasia quedó satélite de la Comuna y Roma, con el plan de
         # siempre, le declaró a Eurasia... y con eso a la Comuna entera.
         nz = " ".join(pdx.render(root.get("MEGANATIONS_NRE_contra_ZWE")).split())
@@ -2069,12 +2072,17 @@ def test_diplomacy() -> None:
         zwe_h = next((mod / "history/countries").glob("ZWE - *.txt")).read_text()
         check("leyes de arranque: la Anarquia en economia de guerra", "war_economy" in zwe_h and "closed_economy" in zwe_h)
         check("poder politico de arranque (200 las meganaciones)", "add_political_power = 200" in nre)
-        check("Roma tiene casus belli permanente contra Eurasia, su vecina en el fixture", "create_wargoal" in nre and "target = ZWE" in nre, nre[-800:])
+        # 2026-09-29: con el casus belli desde el día uno la IA declaraba en 2100 aunque su plan
+        # esperara (la Federación contra los Emiratos). Roma tiene fecha (2100.2.1): el casus
+        # belli le llega con el pulso, al jugador enseguida y a la IA desde esa fecha.
+        check("Roma: sin casus belli en la historia (tiene fecha de guerra); lo da el pulso", "target = ZWE" not in nre.split("add_opinion_modifier")[0] or "create_wargoal" not in nre, nre[-800:])
         check("y se odian (en los dos sentidos)", "meganations_odio_anarquia" in nre
               and "target = NRE" in next((mod / "history/countries").glob("ZWE - *.txt")).read_text())
         cb = " ".join((mod / "common/scripted_effects/meganations_casus_belli.txt").read_text().split())
         check("el casus belli se renueva si se pierde", "MEGANATIONS_renovar_casus_belli" in cb and "tag = NRE ZWE = { exists = yes" in cb
               and "NOT = { has_wargoal_against = ZWE }" in cb, cb[-600:])
+        check("el casus belli: el jugador enseguida, la IA desde su fecha de guerra",
+              "OR = { is_ai = no date > 2100.2.1 }" in cb, cb[-600:])
         check("las Tierras Sin Ley no reciben casus belli (en paz con todos)", "target = ZAN" not in cb)
         check("el pulso de cada potencia renueva los casus belli",
               "MEGANATIONS_renovar_casus_belli = yes" in (mod / "common/scripted_effects/meganations_effects.txt").read_text())

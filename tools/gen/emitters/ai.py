@@ -190,11 +190,17 @@ def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
         free = {"country": {"tag": anar, "when": {"subject": False}}}
         gone = {"any": [{"not": {"country_exists": anar}},
                         {"country": {"tag": anar, "when": {"subject": True}}}]}
-        add_plan(f"{mega}_contra_{anar}", mega, [
-            {"type": "conquer", "target": anar, "value": wars.get("conquer", 150)},
+        # prepararse sí desde el día uno; conquistar, recién desde su fecha
+        add_plan(f"{mega}_se_prepara_contra_{anar}", mega, [
             {"type": "prepare_for_war", "target": anar, "value": wars.get("prepare", 100)},
             {"type": "antagonize", "target": anar, "value": wars.get("antagonize", 50)},
         ], enable=free, abort=gone)
+        conquer_enable = dict(free)
+        if after.get(mega):
+            conquer_enable["date_after"] = str(after[mega])
+        add_plan(f"{mega}_contra_{anar}", mega, [
+            {"type": "conquer", "target": anar, "value": wars.get("conquer", 150)},
+        ], enable=conquer_enable, abort=gone)
         enable = {"divisions_at_least": int(wars.get("divisions", 12)), "at_war": False,
                   "country": {"tag": anar, "when": {"not_flag": f"{anar}_intocable", "subject": False}}}
         if after.get(mega):

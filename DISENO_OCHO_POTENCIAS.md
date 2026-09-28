@@ -618,3 +618,8 @@ llega a 100 al toque y la tensión nunca sube".
   Todas piden además 50% de estabilidad.
 - **Arte**: banderas de las 18 identidades nuevas (arte/pedidos 5_banderas;
   hasta que lleguen, la del país) y un archivo con lo nuevo de cada lote.
+- **Guerras contra la Anarquía, sin apuro**: la IA recibe el casus belli
+  contra su anarquía vecina recién en su fecha de guerra (16_ai.yaml ->
+  declare_after); el jugador, desde el primer pulso. Prepararse sí desde el
+  día uno; conquistar, desde la fecha (la Federación declaraba a los Emiratos
+  en febrero de 2100 aunque su fecha era 2101).

@@ -100,11 +100,13 @@ plans:
 - id: ASC_la_guerra_del_este
   country: ASC
   lore: 'Ya en guerra con Eurasia: empujar hasta el final.'
+  enable: {date_after: 2100.3.1}   # 2026-09-29: no antes de su fecha de guerra
   strategies:
   - {type: conquer, target: ZWE, value: 200}
 - id: NRE_la_reconquista_de_oriente
   country: NRE
   lore: Ya en guerra con los Emiratos.
+  enable: {date_after: 2100.2.1}   # 2026-09-29: no antes de su fecha de guerra
   strategies:
   - {type: conquer, target: ZWM, value: 200}
 - id: NRE_la_marcha_al_norte
@@ -120,6 +122,7 @@ plans:
 - id: SHD_el_indostan
   country: SHD
   lore: El Directorio quiere el Indostán; con Zhou lo quiere ya.
+  enable: {date_after: 2101.4.1}   # 2026-09-29: no antes de su fecha de guerra
   strategies:
   - {type: conquer, target: ZWI, value: 100}
   - {type: prepare_for_war, target: ZWI, value: 50}
@@ -137,6 +140,7 @@ plans:
 - id: APF_los_emiratos
   country: APF
   lore: 'Del Sahel al Golfo: compite con Roma por los Emiratos.'
+  enable: {date_after: 2101.1.1}   # 2026-09-29: no antes de su fecha de guerra
   strategies:
   - {type: conquer, target: ZWM, value: 75}
 - id: APF_la_marcha_de_los_consejos
@@ -153,6 +157,7 @@ plans:
 - id: NAS_la_selva_del_sol
   country: NAS
   lore: 'El Sol también quiere el Amazonas: compite con el EFE.'
+  enable: {date_after: 2102.1.1}   # 2026-09-29: no antes de su fecha de guerra
   strategies:
   - {type: conquer, target: ZWB, value: 75}
 - id: FCU_el_canal

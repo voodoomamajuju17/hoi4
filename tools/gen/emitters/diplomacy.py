@@ -19,7 +19,7 @@ from collections import defaultdict
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block
+from ..pdx import Block, Compare
 
 SOURCE = "spec/04_diplomacy.yaml"
 LOC_FILE = "meganations_diplomacy"
@@ -149,10 +149,16 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     if mod and mod not in known_mods:
         raise SpecError(f"anarchy_hostility: modificador '{mod}' no definido", where=SOURCE)
     pairs = [(m, a) for m, a in anarchy_pairs(ctx) if m in alive and a in alive]
+    # Fecha desde la que la IA puede ir a la guerra (16_ai.yaml -> anarchy_wars.declare_after).
+    # Con el casus belli desde el día uno la IA declaraba sola en 2100 aunque su plan
+    # esperara (2026-09-29: "Panáfrica le declara la guerra demasiado rápido a los
+    # Emiratos"). El jugador lo tiene desde el primer pulso; la IA, desde su fecha.
+    after = ((ctx.spec.raw.get("ai") or {}).get("anarchy_wars") or {}).get("declare_after") or {}
     renew = Block()
     for mega, anar in pairs:
         cw = Block([("type", kind), ("target", anar)])
-        out[mega].append(("create_wargoal", cw))
+        if not after.get(mega):
+            out[mega].append(("create_wargoal", cw))
         if mod:
             out[mega].append(("add_opinion_modifier", Block([("target", anar), ("modifier", mod)])))
             out[anar].append(("add_opinion_modifier", Block([("target", mega), ("modifier", mod)])))
@@ -160,6 +166,9 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
                       (anar, Block([("exists", True), ("NOT", Block([("has_country_flag", f"{anar}_intocable")]))])),
                       ("NOT", Block([("has_war_with", anar)])),
                       ("NOT", Block([("has_wargoal_against", anar)]))])
+        if after.get(mega):
+            y, m, d = (int(x) for x in str(after[mega]).split(".")[:3])
+            cond.add("OR", Block([("is_ai", False), ("date", Compare(">", f"{y}.{m}.{d}"))]))
         renew.add("if", Block([("limit", cond), ("create_wargoal", Block([("type", kind), ("target", anar)]))]))
     # el archivo se escribe siempre: los pulsos de 14_decisions lo llaman
     ctx.write_script("common/scripted_effects/meganations_casus_belli.txt", Block([(HOSTILITY_EFFECT, renew)]),
@@ -170,6 +179,6 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     if mod:
         effects["add_opinion_modifier"] = SOURCE
     ctx.verify_keys("triggers", {"has_wargoal_against": SOURCE, "exists": SOURCE, "has_war_with": SOURCE,
-                                 "has_country_flag": SOURCE, "tag": SOURCE})
+                                 "has_country_flag": SOURCE, "tag": SOURCE, "is_ai": SOURCE, "date": SOURCE})
     ctx.data["anarchy_pairs"] = pairs
     ctx.note("casus belli permanentes contra la Anarquia: " + ", ".join(f"{m}->{a}" for m, a in pairs))
