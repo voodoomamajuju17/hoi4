@@ -960,6 +960,11 @@ def test_events() -> None:
               "if = { limit = { has_global_flag = MN_cw_EFE_mandato_verde NOT = { has_idea = EFE_mandato_verde } } "
               "add_ideas = EFE_mandato_verde }" in e221
               and "set_variable = { var = EFE_biosteel value = global.MN_cw_EFE_biosteel }" in e221, e221[:800])
+        efe_hist = " ".join(next((mod / "history/countries").glob("EFE - *.txt")).read_text().split())
+        check("tanques: las meganaciones arrancan con un diseño de tanque del juego base",
+              'if = { limit = { has_dlc = "No Step Back" } set_technology = {' in efe_hist
+              and "create_equipment_variant = { name = \"Blindado" in efe_hist
+              and "type = light_tank_chassis_1" in efe_hist, efe_hist[-900:])
         # OIM propias y zonas desmilitarizadas (2026-09-30)
         mio_dir = mod / "common/military_industrial_organization/organizations"
         mio_own = " ".join((mio_dir / "meganations_mio.txt").read_text().split())

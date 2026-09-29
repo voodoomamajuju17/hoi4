@@ -18,6 +18,8 @@ set_autonomy, una sola vez por par.
 
 from __future__ import annotations
 
+import copy
+
 from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block, Quoted
@@ -89,6 +91,27 @@ def emit(ctx: BuildContext) -> None:
                 tb.add(tech, 1)
             tb.add("popup", False)
             b.add("set_technology", tb)
+
+        # Diseño de tanque (2026-09-30: "ni siquiera el EFE produce tanques").
+        # Con No Step Back no se produce un chasis sin diseño; las meganaciones
+        # arrancan con el del juego base (y las tecnologías que ese diseño pide).
+        if c.is_major:
+            design = _tank_design(ctx)
+            if design:
+                wrap, extra_techs, variants = design
+                tb2 = Block([(t, 1) for t in extra_techs if t not in (techs or [])] + [("popup", False)])
+                designs = []
+                for i, v in enumerate(variants, start=1):
+                    d = copy.deepcopy(v)
+                    # nombre de 2100 en vez del de 1936 ("Panzer I")
+                    d.entries = [(k, Quoted(f"Blindado {c.name_es.split()[0]} {i}") if k == "name" else x)
+                                 for k, x in d.entries]
+                    designs.append(("create_equipment_variant", d))
+                inner = Block([("set_technology", tb2)] + designs)
+                if wrap is not None:
+                    b.add("if", Block([("limit", copy.deepcopy(wrap))] + inner.entries))
+                else:
+                    b.entries.extend(inner.entries)
 
         for item, amount in (ctx.data.get("stockpile") or {}).get(c.tag, []):
             eq = Block()
@@ -275,3 +298,49 @@ def _popularities(ruling: str, share: int) -> Block:
             b.add(g, base + (1 if extra > 0 else 0))
             extra -= 1 if extra > 0 else 0
     return b
+
+
+def _tank_design(ctx: BuildContext):
+    """El primer diseño de tanque ligero de la historia del juego base
+    (create_equipment_variant con un tipo light_tank_chassis), el `limit` del
+    if que lo envuelve (has_dlc = "No Step Back") y las tecnologías que ese
+    mismo bloque le da al país. None si el juego no tiene ninguno."""
+    if "tank_design" in ctx.data:
+        return ctx.data["tank_design"]
+    ctx.data["tank_design"] = None
+    if ctx.vanilla is None:
+        return None
+    from ..pdx import parse_file
+
+    def walk(block, parent):
+        for k, v in block.entries:
+            if isinstance(v, Block):
+                if k == "create_equipment_variant" and "light_tank_chassis" in str(v.get("type") or ""):
+                    return parent, v
+                found = walk(v, v)
+                if found:
+                    return found
+        return None
+
+    for path in sorted((ctx.vanilla.root / "history" / "countries").glob("*.txt")):
+        try:
+            root = parse_file(path)
+        except ValueError:
+            continue
+        found = walk(root, root)
+        if not found:
+            continue
+        parent, _ = found
+        variants = [v for k, v in parent.entries if k == "create_equipment_variant"
+                    and "tank_chassis" in str(v.get("type") or "")]
+        techs = [t for k, v in parent.entries if k == "set_technology" and isinstance(v, Block)
+                 for t in v.keys() if t != "popup"]
+        if parent is root:
+            techs = [t for t in techs if any(w in t for w in ("tank", "armor", "engine", "suspension", "gun"))]
+        wrap = parent.get("limit") if parent is not root else None
+        ctx.data["tank_design"] = (wrap, techs, variants)
+        ctx.note(f"tanques: diseño de arranque copiado de {path.name} ({len(variants)} diseños, "
+                 f"{len(techs)} tecnologias: {', '.join(techs[:12])})")
+        return ctx.data["tank_design"]
+    ctx.warn("tanques: no encontre un diseño de tanque ligero en history/countries del juego.")
+    return None
