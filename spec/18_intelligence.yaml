@@ -28,7 +28,7 @@ megas: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
 # Operación del juego que sirve de molde (fases, riesgo, equipo). Vacío: la
 # elige el generador (1.19.3 eligió operation_capture_cipher); el reporte
 # lista todas las del juego con sus claves propias para elegir con datos.
-template: null
+template: operation_collaboration_government   # 2026-09-30: generica, contra un pais, sin fichas ni region (capture_cipher marcaba is_captured_cipher)
 max_shields: 4
 cycle_months: 3
 shield_decay: 4          # por mes, el puntaje de quien está bloqueado baja esto
@@ -178,3 +178,28 @@ rebellion_hits:
   NRE:
     - {effect: add_variable, var: NRE_lealtad_zhi, value: -20}
     - {effect: add_variable, var: NRE_lealtad_zda, value: -20}
+
+# Mejoras de la agencia (2026-09-30, "cambiá las mejoras de inteligencia"):
+# nombres de 2100 en lugar de los de los años 40. Se buscan por el texto que
+# el juego muestra hoy en español (`was`), así no se adivina ninguna clave.
+# El ícono: arte/pedidos (agency_upgrade_icon) -> assets/agency/<id>.dds; el
+# generador lo escribe sobre la textura que usa esa mejora.
+agency_upgrades:
+  - {id: agencia_inteligencia_economica, was: "Economía/civil", english: "Economic Intelligence", spanish: "Inteligencia Económica", art: "a stock ticker and a factory seen through a magnifying lens"}
+  - {id: agencia_contravigilancia, was: "Defensa pasiva", english: "Counter-surveillance", spanish: "Contravigilancia", art: "a camera lens being covered by a hand, signal-jammer antenna"}
+  - {id: agencia_contrainsurgencia, was: "Antipartisanos", english: "Counter-insurgency", spanish: "Contrainsurgencia", art: "a drone hovering over a ruined street, targeting reticle"}
+  - {id: agencia_extraccion_de_datos, was: "Robo de planos", english: "Data Extraction", spanish: "Extracción de Datos", art: "a hand pulling a glowing data chip out of a server rack"}
+  - {id: agencia_comunicadores_subdermicos, was: "Radios portátiles", english: "Subdermal Comms", spanish: "Comunicadores Subdérmicos", art: "an ear with a tiny glowing implant behind it"}
+  - {id: agencia_mensajeria_efimera, was: "Tinta invisible", english: "Ephemeral Encryption", spanish: "Mensajería Efímera", art: "a holographic message dissolving into pixels"}
+  - {id: agencia_nanoexplosivos, was: "Explosivos plásticos", english: "Nano-explosives", spanish: "Nanoexplosivos", art: "a tiny glowing capsule with a warning glyph, sparks"}
+  - {id: agencia_borrado_neural, was: "Pastillas de suicidio", english: "Neural Wipe Protocol", spanish: "Protocolo de Borrado Neural", art: "a silhouette of a head with a brain pattern fading out"}
+  - {id: agencia_simuladores, was: "Centros de entrenamiento localizados", english: "Training Simulators", spanish: "Simuladores de Entrenamiento", art: "an agent wearing a VR visor in a wireframe room"}
+  - {id: agencia_exoesqueletos, was: "Entrenamiento de comando", english: "Exosuit Commandos", spanish: "Comandos con Exoesqueleto", art: "a commando in a light exoskeleton climbing a wall"}
+  - {id: agencia_interrogatorio_ia, was: "Técnicas de interrogatorio", english: "AI-Assisted Interrogation", spanish: "Interrogatorio Asistido por IA", art: "an interrogation table with a floating AI waveform"}
+  - {id: agencia_ingenieria_social, was: "Entrenamiento diplomático", english: "Social Engineering", spanish: "Ingeniería Social", art: "two masks, one smiling, in front of a network graph"}
+  - {id: agencia_desinformacion, was: "Guerra psicológica", english: "Disinformation Warfare", spanish: "Guerra de Desinformación", art: "a phone screen flooding with identical fake news icons"}
+  - {id: agencia_direccion_cibernetica, was: "Formar departamento", english: "Found the Cyber Directorate", spanish: "Fundar la Dirección Cibernética", art: "a secure building with a glowing circuit emblem"}
+  - {id: agencia_interceptacion_de_senales, was: "Grupo de interceptación de radio", english: "Signals Interception Grid", spanish: "Red de Interceptación de Señales", art: "a field of antennas and satellite dishes under stars"}
+  - {id: agencia_criptoanalisis_cuantico, was: "Decodificación asistida", english: "Quantum Cryptanalysis", spanish: "Criptoanálisis Cuántico", art: "a quantum processor with a cracked padlock"}
+  - {id: agencia_academia_de_criptografia, was: "Escuela de cifrado del gobierno", english: "Cryptography Academy", spanish: "Academia de Criptografía", art: "a lecture hall with equations on a holographic board"}
+  - {id: agencia_cifrado_poscuantico, was: "Codificación asistida", english: "Post-quantum Encryption", spanish: "Cifrado Poscuántico", art: "a lattice-shaped shield around a key"}

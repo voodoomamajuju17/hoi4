@@ -41,6 +41,7 @@ from .emitters import intelligence as em_intelligence
 from .emitters import military as em_military
 from .emitters import menu as em_menu
 from .emitters import militia as em_militia
+from .emitters import mio as em_mio
 from .emitters import names as em_names
 from .emitters import research as em_research
 from .emitters import resources as em_resources
@@ -71,6 +72,7 @@ EMITTERS = [
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
     ("intelligence", em_intelligence.emit),  # operaciones de inteligencia (18_intelligence)
+    ("mio", em_mio.emit),                  # OIM propias por meganacion (13_military -> mio)
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
     ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)
     ("vanilla_events", em_cleanup.emit_kept_events),  # elecciones, justificacion de guerra, ases

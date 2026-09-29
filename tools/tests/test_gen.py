@@ -960,6 +960,16 @@ def test_events() -> None:
               "if = { limit = { has_global_flag = MN_cw_EFE_mandato_verde NOT = { has_idea = EFE_mandato_verde } } "
               "add_ideas = EFE_mandato_verde }" in e221
               and "set_variable = { var = EFE_biosteel value = global.MN_cw_EFE_biosteel }" in e221, e221[:800])
+        # OIM propias y zonas desmilitarizadas (2026-09-30)
+        mio_dir = mod / "common/military_industrial_organization/organizations"
+        mio_own = " ".join((mio_dir / "meganations_mio.txt").read_text().split())
+        mio_gen = " ".join((mio_dir / "00_generic_organization.txt").read_text().split())
+        check("OIM: una propia por meganacion, con su nombre", "EFE_tank_organization = { allowed = { original_tag = EFE }" in mio_own
+              and mio_own.count("_tank_organization = {") == 8 and "generic_repair" not in mio_own, mio_own[:400])
+        check("OIM: la generica ya no esta para las meganaciones",
+              "NOT = { OR = { original_tag = EFE original_tag = FCU" in mio_gen)
+        states_txt = "".join(p.read_text() for p in (mod / "history/states").glob("*.txt"))
+        check("sin zonas desmilitarizadas de 1936 (el Rin, los Estrechos)", "set_demilitarized_zone" not in states_txt)
         # La Guerra en las Sombras (2026-09-30)
         ops = " ".join((mod / "common/operations/meganations_operations.txt").read_text().split())
         check("sombras: 48 operaciones (6 por meganacion objetivo)", ops.count(" name = mn_op_") == 48)
@@ -2222,7 +2232,8 @@ def test_vanilla_validation() -> None:
         ctx = build(out, vanilla_path=str(van), quiet=True)
         check("con todo documentado no hay avisos de validacion",
               not any("no se validaron" in w for w in ctx.warnings), str(ctx.warnings))
-        focus = (ctx.mod_root / "common/national_focus/EFE_focus.txt").read_text()
+        # todos los árboles: el del EFE ya tiene íconos propios en todos sus focos (2026-09-30)
+        focus = "".join(p.read_text() for p in (ctx.mod_root / "common/national_focus").glob("*_focus.txt"))
         check("icono existente se conserva", "GFX_goal_generic_political_pressure" in focus)
         check("icono inexistente cae a GFX_goal_unknown", "GFX_goal_unknown" in focus)
         check("avisa del icono reemplazado", any("no existe en el juego" in w for w in ctx.warnings))

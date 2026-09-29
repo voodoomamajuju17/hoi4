@@ -34,7 +34,7 @@ AVOID_KEYS = ("selection_target_state", "selection_target", "awarded_tokens", "r
 # Lo que la operación del molde conserva (además de sus valores sueltos).
 KEEP_BLOCKS = ("phases", "equipment")
 # Lo que ponemos nosotros (se saca del molde).
-OURS = ("name", "desc", "priority", "days", "network_strength", "operatives", "visible", "available",
+OURS = ("is_captured_cipher", "is_staged_coup", "on_start", "name", "desc", "priority", "days", "network_strength", "operatives", "visible", "available",
         "outcome_execute", "outcome_potential", "outcome_modifiers", "ai_will_do", "target_weight",
         "will_lead_to_war_with")
 
@@ -120,6 +120,8 @@ def emit(ctx: BuildContext) -> None:
     if not spec:
         return
     _emit(ctx, spec)
+    if ctx.vanilla is not None:
+        _agency_upgrades(ctx, spec.get("agency_upgrades") or [])
     effects_mod.flush_tooltips(ctx)
 
 
@@ -152,6 +154,7 @@ def _emit(ctx: BuildContext, spec: dict) -> None:
     base = Block([(k, v) for k, v in tpl.entries
                   if k not in OURS and (not isinstance(v, Block) or k in KEEP_BLOCKS)])
 
+    op_icons = _operation_icons(ctx, spec, tpl)
     out = Block()
     for t in megas:
         country = ctx.spec.country(t)
@@ -163,6 +166,9 @@ def _emit(ctx: BuildContext, spec: dict) -> None:
             b.add("name", oid)
             b.add("desc", f"{oid}_desc")
             b.entries.extend(copy.deepcopy(base.entries))
+            own_icon = op_icons.get(op["id"])
+            if own_icon:
+                b.entries = [(k, own_icon if k == "icon" else v) for k, v in b.entries]
             b.add("priority", 10 + level)
             b.add("days", int(op["days"]))
             b.add("network_strength", int(op["network_strength"]))
@@ -253,3 +259,94 @@ def _emit(ctx: BuildContext, spec: dict) -> None:
     ctx.verify_keys("triggers", triggers_used)
     ctx.note(f"operaciones de inteligencia: {len(out)} (6 por meganación objetivo)")
 
+
+
+def _operation_icons(ctx: BuildContext, spec: dict, tpl: Block) -> dict[str, str]:
+    """assets/intelligence/ops/<id>.dds -> sprite propio, al tamaño del ícono del molde."""
+    from .menu import _dims, _resize, _texture_dims
+    from ..pdx import Quoted
+    repo = ctx.spec.root.parent
+    size = (0, 0)
+    if ctx.vanilla is not None:
+        tex = ctx.vanilla.gfx_textures().get(str(tpl.get("icon") or ""))
+        if tex:
+            size = _texture_dims(ctx, tex)
+    sprites = Block()
+    out: dict[str, str] = {}
+    for op in spec["operations"]:
+        src = repo / "assets" / "intelligence" / "ops" / f"{op['id']}.dds"
+        if not src.exists():
+            continue
+        data = src.read_bytes()
+        w, h = _dims(data)
+        if size[0] and size[1] and (w, h) != size:
+            data = _resize(data, w, h, size[0], size[1])
+        rel = f"gfx/interface/operations/meganations/{op['id']}.dds"
+        dest = ctx.mod_root / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+        ctx.track(dest)
+        name = f"GFX_mn_op_{op['id']}"
+        sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(rel))]))
+        out[op["id"]] = name
+    if sprites.entries:
+        ctx.write_script("interface/meganations_operations.gfx", Block([("spriteTypes", sprites)]), source=SOURCE)
+        ctx.note(f"operaciones de inteligencia: {len(out)} iconos propios")
+    return out
+
+
+def _agency_upgrades(ctx: BuildContext, items: list[dict]) -> None:
+    """Nombres de 2100 para las mejoras de la agencia (se buscan por el texto que
+    muestra el juego en español) y, si llegó el dibujo, su ícono."""
+    import re
+    from .menu import _dims, _resize, _texture_dims
+    repo = ctx.spec.root.parent
+    files = sorted((ctx.vanilla.root / "common" / "intelligence_agency_upgrades").glob("*.txt"))
+    texts = []
+    for f in files:
+        try:
+            texts.append(f.read_text(encoding="utf-8-sig", errors="replace"))
+        except OSError:
+            continue
+    blob = "\n".join(texts)
+    textures = ctx.vanilla.gfx_textures()
+    renamed, icons, missing = 0, 0, []
+    for it in items:
+        keys = ctx.vanilla.loc_keys_with_text_in(it["was"], "spanish")
+        # solo las claves de la agencia (el mismo texto puede estar en otro lado)
+        keys = [k for k in keys if re.search(r"(?i)upgrade|agency|branch|intel|crypt|operative|defen", k)] or keys[:1]
+        if not keys:
+            missing.append(it["was"])
+            continue
+        for k in keys:
+            ctx.loc.define_and_reference(k, en=it["english"], es=it["spanish"],
+                                         file="replace/meganations_intelligence", origin=f"agency:{it['id']}")
+        renamed += 1
+        # ícono: la primera referencia GFX_ cerca de la clave en common/intelligence_agency_upgrades
+        sprite = None
+        for k in keys:
+            m = re.search(rf"\b{re.escape(k)}\b", blob)
+            if m:
+                g = re.search(r"GFX_[A-Za-z0-9_]+", blob[m.end():m.end() + 800])
+                if g:
+                    sprite = g.group(0)
+                    break
+        own = repo / "assets" / "agency" / f"{it['id']}.dds"
+        tex = textures.get(sprite or "")
+        if sprite is None or tex is None:
+            ctx.note(f"agencia: '{it['was']}' -> claves {', '.join(keys[:3])}; icono sin ubicar")
+            continue
+        if not own.exists():
+            continue
+        data = own.read_bytes()
+        w, h = _dims(data)
+        vw, vh = _texture_dims(ctx, tex)
+        if vw and vh and (w, h) != (vw, vh):
+            data = _resize(data, w, h, vw, vh)
+        dest = ctx.mod_root / tex
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+        ctx.track(dest)
+        icons += 1
+    ctx.note(f"agencia: {renamed} mejoras con nombre de 2100, {icons} iconos propios"
+             + (f"; no encontre: {', '.join(missing)}" if missing else ""))

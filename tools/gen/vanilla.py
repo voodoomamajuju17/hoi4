@@ -927,6 +927,23 @@ class Vanilla:
         self._gfx_tex = out
         return out
 
+    def loc_keys_with_text_in(self, wanted: str, lang: str) -> list[str]:
+        """Como loc_keys_with_text, en otro idioma (ej. el texto que se ve en español)."""
+        out: set[str] = set()
+        loc_dir = self.root / "localisation" / lang
+        if not loc_dir.is_dir():
+            loc_dir = self.root / "localisation"
+        for path in loc_dir.glob(f"**/*_l_{lang}.yml"):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            for line in text.splitlines():
+                m = _LOC_LINE.match(line)
+                if m and m.group(2).strip().lower() == wanted.strip().lower():
+                    out.add(m.group(1))
+        return sorted(out)
+
     def loc_keys_with_text(self, wanted: str) -> list[str]:
         """Claves de la localisation inglesa cuyo texto es exactamente `wanted`.
 

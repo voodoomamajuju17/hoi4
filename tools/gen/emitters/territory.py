@@ -47,10 +47,12 @@ SOURCE = "spec/08_territory.yaml (sobre history/states/ vanilla)"
 # Del bloque history de un state reasignado se sacan el dueño, el
 # controlador y los cores vanilla (se ponen los nuestros), y lo que apunta a
 # países que en 2100 no existen: resistencia y reclamos. En 1.19.3
-# Dalmatia tiraba "start_resistance ... is not a core".
+# Dalmatia tiraba "start_resistance ... is not a core". Las zonas
+# desmilitarizadas de 1936 (el Rin, los Estrechos) tampoco existen en 2100.
 _DROP_FROM_HISTORY = {
     "owner", "controller", "add_core_of", "add_claim_by",
     "start_resistance", "add_resistance", "add_resistance_target",
+    "set_demilitarized_zone",
 }
 
 _DATE_KEY = re.compile(r"^\d{1,4}\.\d{1,2}\.\d{1,2}(\.\d{1,2})?$")

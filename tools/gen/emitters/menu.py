@@ -256,6 +256,21 @@ def _menu_textures(ctx: BuildContext) -> set[str]:
                 continue
             if w >= _MIN_BG_WIDTH:
                 out.add(f"gfx/loadingscreens/{path.name}")
+    # 2026-09-30 ("sacá las pantallas de carga que no sean del mod"): muchas
+    # expansiones traen las suyas dentro de un .zip; también se pisan.
+    import zipfile
+    for archive in sorted((ctx.vanilla.root / "dlc").glob("*/*.zip")):
+        try:
+            with zipfile.ZipFile(archive) as z:
+                for entry in z.namelist():
+                    low = entry.replace("\\", "/").lower()
+                    if low.startswith("gfx/loadingscreens/") and low.endswith(".dds") and "/" not in low[19:]:
+                        with z.open(entry) as fh:
+                            w, _h = _dims(fh.read(128))
+                        if w >= _MIN_BG_WIDTH:
+                            out.add(entry.replace("\\", "/"))
+        except (OSError, zipfile.BadZipFile):
+            continue
     if small:
         ctx.note("menu principal: imagenes medianas del menu que NO se tocan: " + ", ".join(small[:15]))
     return out
@@ -325,6 +340,10 @@ def emit_tabs(ctx: BuildContext) -> None:
     ctx.note(f"fondos de pestanas: {len(textures)} texturas reemplazadas")
 
 
+# name y texturefile del mismo sprite aunque haya bloques en el medio (los
+# corneredTileSpriteType tienen size = { } y borderSize = { }).
+_ANY_SPRITE = re.compile(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)"?(?:(?!\bname\s*=).){0,400}?texture[Ff]ile\s*=\s*"([^"]+)"',
+                         re.S)
 _MAIN_VIEW = re.compile(r"(?i)^(country\w*view|nationalfocusview|\w*techtree\w*|\w*agency\w*)$")
 _BACKGROUND_REF = re.compile(r'background\s*=\s*\{([^{}]*)\}', re.S)
 _REF_SPRITE = re.compile(r'(?:spriteType|quadTextureSprite)\s*=\s*"?(GFX_[A-Za-z0-9_]+)')
@@ -340,7 +359,7 @@ def _diagnose_tabs(ctx: BuildContext) -> None:
             text = path.read_text(encoding="utf-8-sig", errors="replace")
         except OSError:
             continue
-        for name, texture in _SPRITE.findall(text):
+        for name, texture in _ANY_SPRITE.findall(text):
             sprites.setdefault(name, texture.replace("\\", "/"))
     users: dict[str, set[str]] = {}
     views: dict[str, list[str]] = {}

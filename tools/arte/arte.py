@@ -39,6 +39,10 @@ KINDS = {
     # banderas de las identidades nuevas (guerras civiles y formas finales): TGA
     # grande 82x52, mediana 41x26 y chica 10x7 en assets/<TAG>/flags/
     "country_flag": {"size": (82, 52), "transparent": False, "fit": "cover"},
+    # La Guerra en las Sombras (2026-09-30): íconos de las mejoras de la agencia
+    # y de las 6 operaciones propias; el generador los lleva al tamaño del juego
+    "agency_upgrade_icon": {"size": (128, 128), "transparent": True, "fit": "contain"},
+    "operation_icon": {"size": (160, 150), "transparent": False, "fit": "cover"},
 }
 
 COMMON_STYLE = (
@@ -171,6 +175,20 @@ def catalog() -> list[dict]:
                            "Flat flag design, simple bold shapes and 2-4 colours, readable when tiny, "
                            "fills the whole rectangle, no border, no text.",
         })
+    intel = _load("18_intelligence.yaml")
+    for up in intel.get("agency_upgrades") or []:
+        dest = REPO / "assets" / "agency" / f"{up['id']}.dds"
+        items.append({
+            "type": "agency_upgrade_icon", "tag": "INTELIGENCIA", "id": up["id"], "dest": dest, "done": dest.exists(),
+            "description": f"Intelligence agency upgrade icon, round badge: {up['english']}: {up['art']}.",
+        })
+    for op in intel.get("operations") or []:
+        dest = REPO / "assets" / "intelligence" / "ops" / f"{op['id']}.dds"
+        items.append({
+            "type": "operation_icon", "tag": "INTELIGENCIA", "id": op["id"], "dest": dest, "done": dest.exists(),
+            "description": f"Spy operation card picture, sepia dossier photo style: {op['name']['english']}: "
+                           f"{_one_line(op['desc']['english'])}",
+        })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
     asked: set[str] = set()
@@ -202,7 +220,8 @@ FLAG_STYLE = ("flat national flag for Hearts of Iron IV, vexillology, clean flat
 def _request(item: dict) -> str:
     kind = KINDS[item["type"]]
     w, h = kind["size"]
-    style = STYLE.get(item["tag"] or "", "a ruined, fragmented 2100 world: improvised flags, bunkers, "
+    style = STYLE.get(item["tag"] or "", "shadowy espionage of the year 2100: dark teal and brass, dossiers, "
+                      "circuitry and surveillance" if item["tag"] == "INTELIGENCIA" else "a ruined, fragmented 2100 world: improvised flags, bunkers, "
                                           "warlord or client-state officials, muted colours")
     common = FLAG_STYLE if item["type"] == "country_flag" else COMMON_STYLE
     return "\n".join([
@@ -253,13 +272,15 @@ def pedidos() -> None:
         (OUT / NEW_FILE).write_text(old_new, encoding="utf-8")
     order = [("leader_portrait", "1_retratos"), ("national_spirit_icon", "2_espiritus"),
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
-             ("country_flag", "5_banderas")]
+             ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
+             ("operation_icon", "6_operaciones")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
         for i in items:
             if i["type"] == kind:
-                by_tag.setdefault(i["tag"] if i["tag"] in STYLE else "SATELITES_Y_ANARQUIA", []).append(i)
+                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] == "INTELIGENCIA"
+                                  else "SATELITES_Y_ANARQUIA", []).append(i)
         for tag, group in sorted(by_tag.items()):
             path = OUT / f"{prefix}_{tag}.txt"
             path.write_text(f"# {len(group)} pedidos - {kind} - {tag}\n\n"

@@ -175,3 +175,34 @@ doctrines:
 # -----------------------------------------------------------------------------
 fort_lines:
   - {owner: NRE, facing: ASC, near: ITA, level: 5, src: user_request}
+
+# -----------------------------------------------------------------------------
+# Organizaciones industriales militares (OIM) propias (2026-09-30, pedido del
+# usuario: "personalizalas"). tools/gen/emitters/mio.py copia cada OIM
+# genérica del juego (tanques, artillería, infantería, vehículos, barcos,
+# aviones) con el nombre de la potencia y la saca de las genéricas para las 8
+# meganaciones: mismos rasgos, otro nombre. La categoría se reconoce por el id
+# de la OIM genérica; las que no encajan quedan genéricas.
+# Los 4 puntos de arranque: el reporte lista de dónde salen (diagnóstico).
+# -----------------------------------------------------------------------------
+mio:
+  src: user_request
+  categories:            # palabra en el id de la OIM genérica -> categoría
+    tank: [tank, armor]
+    artillery: [artillery]
+    infantry: [infantry, small_arms, weapon]
+    motorized: [motor, vehicle, truck, mechanized]
+    submarine: [submarine]
+    capital: [capital, heavy_ship, battleship, carrier]
+    escort: [escort, screen, destroyer, light_ship, ship]
+    heavy_air: [heavy_air, heavy_aircraft, bomber, heavy]
+    light_air: [light_air, fighter, aircraft, air]
+  names:
+    EFE: {tank: Bioforjas de la Pampa, artillery: Cañones del Monte, infantry: Arsenal Verde de Gaia, motorized: Rodados Pampeanos, escort: Astilleros del Plata, capital: Astilleros Imperiales de Bahía Blanca, submarine: Sumergibles del Atlántico Sur, light_air: Aeroforjas Cóndor, heavy_air: Bombarderos del Chaco}
+    FCU: {tank: Meridian Armor Systems, artillery: Meridian Ordnance, infantry: Halvorsen-Ito Small Arms, motorized: Castellane Mobility, escort: Obsidian Coastal Yards, capital: Great Lakes Capital Yards, submarine: Deepwater Contractors, light_air: Skyline Aerospace, heavy_air: Obsidian Heavy Aero}
+    ASC: {tank: Kombinat Panzerwerk 7, artillery: Kombinat de Artillería del Ruhr, infantry: Arsenal Colectivo de Lieja, motorized: Autofabrik Kollektiv, escort: Astillero Popular de Gdansk, capital: Astilleros del Báltico Rojo, submarine: Sumergibles del Mar del Norte, light_air: Aerokombinat Automático, heavy_air: Bombarderos del Plan}
+    HSN: {tank: Kaiyo Armor Works, artillery: Straits Ordnance, infantry: Harbor Arms, motorized: Port Logistics Vehicles, escort: Singapore Escort Yards, capital: Yokosuka Capital Yards, submarine: Malacca Deepworks, light_air: Pacific Wing, heavy_air: Typhoon Heavy Aero}
+    NAS: {tank: Forjas del Inti, artillery: Cañones de la Cordillera, infantry: Armería de Cusco, motorized: Rodados del Altiplano, escort: Astillero del Callao, capital: Astilleros de Guayaquil, submarine: Sumergibles del Pacífico Sur, light_air: Cóndores del Sol, heavy_air: Aeronaves del Titicaca}
+    SHD: {tank: Talleres del Río Amarillo, artillery: Artillería de las Compuertas, infantry: Armería del Directorio, motorized: Vehículos del Gran Canal, escort: Astilleros de Shanghái, capital: Astilleros de Dalian, submarine: Sumergibles del Mar de China, light_air: Alas de Jade, heavy_air: Bombarderos del Yangtsé}
+    APF: {tank: Blindados de Katanga, artillery: Artillería del Sahel, infantry: Armería de los Consejos, motorized: Vehículos Transafricanos, escort: Astilleros de Dakar, capital: Astilleros de Durban, submarine: Sumergibles del Golfo de Guinea, light_air: Cazas del Sahel, heavy_air: Aeronaves del Rift}
+    NRE: {tank: Blindados Legio, artillery: Tormenta de Marte, infantry: Armería Pretoriana, motorized: Carros de Vulcano, escort: Astilleros de Ostia, capital: Astilleros de Tarento, submarine: Sumergibles de Neptuno, light_air: Águilas de Júpiter, heavy_air: Rayos de Júpiter}

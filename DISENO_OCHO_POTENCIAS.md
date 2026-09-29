@@ -707,3 +707,16 @@ llega a 100 al toque y la tensión nunca sube".
   +30%, cifrado), APF Redes de la Diáspora (+2, inteligencia civil), NRE
   Frumentarii (+1, inteligencia militar, redes +10%). Los modificadores de
   inteligencia son opcionales: si el juego no tiene alguno, se omite con aviso.
+- **Lote OIM, agencia y mapa** (2026-09-30):
+  - OIM propias: cada OIM genérica del juego se copia por meganación con su
+    nombre (13_military -> mio) y la genérica deja de estar para las 8. Los 4
+    puntos de arranque: el reporte muestra de dónde salen (diagnóstico).
+  - Mejoras de la agencia con nombres de 2100 (se buscan por el texto en
+    español que muestra el juego) y pedidos de íconos (6_agencia); íconos
+    propios para las 6 operaciones (6_operaciones). Molde de las operaciones:
+    operation_collaboration_government.
+  - Sin zonas desmilitarizadas de 1936 (Rin, Estrechos).
+  - Pantallas de carga: también se pisan las de las expansiones que vienen
+    dentro de un .zip.
+  - Fondos de pestañas: el diagnóstico ahora resuelve las texturas de los
+    mosaicos (corneredTileSpriteType).
