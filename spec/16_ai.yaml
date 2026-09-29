@@ -39,10 +39,14 @@ military:
   # tanque básico e investigan los blindados; el EFE mucho más. Los ids que
   # no existen en el juego se ignoran (con y sin No Step Back).
   armor_research:
-    value: 20
-    by_country: {EFE: 80, ASC: 35, FCU: 35, NRE: 30}
-    techs: [gwtank_chassis, basic_light_tank_chassis, improved_light_tank_chassis, basic_medium_tank_chassis,
-            gwtank, basic_light_tank, improved_light_tank, basic_medium_tank]
+    # 2026-09-30 (partida a 2104: "tampoco investigan la rama de blindados"):
+    # factor x4 para todas, x11 el EFE, x7 ASC/FCU/NRE (factor = 1 + valor/20)
+    value: 60
+    by_country: {EFE: 200, ASC: 120, FCU: 120, NRE: 120}
+    techs: [gwtank_chassis, basic_light_tank_chassis, improved_light_tank_chassis, advanced_light_tank_chassis,
+            basic_medium_tank_chassis, improved_medium_tank_chassis, basic_heavy_tank_chassis,
+            gwtank, basic_light_tank, improved_light_tank, basic_medium_tank, improved_medium_tank,
+            motorised_infantry, mechanised_infantry]
   by_country:
     EFE:    # blindados de Bioacero
     - {type: role_ratio, id: armor, value: 25}
