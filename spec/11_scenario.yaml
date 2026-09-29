@@ -117,4 +117,21 @@ main_menu:
 # -----------------------------------------------------------------------------
 tab_backgrounds:
   src: user_request
-  textures: {}
+  # 2026-09-30, del reporte de 1.19.3: casi todas las pestañas usan los mismos
+  # mosaicos (tiled_*), que el juego repite; cambiarlos cambia el estilo de
+  # todas las ventanas. Algunas tienen fondo propio. `seamless`: el dibujo se
+  # repite en mosaico, los bordes tienen que empalmar.
+  # El dibujo llega por arte/pedidos (7_fondos) a assets/ui/<id>.dds y el
+  # generador lo escribe sobre la textura del juego, a su tamaño.
+  items:
+    - {id: fondo_focos, texture: gfx/interface/tiles/tiled_focus_bg.dds, size: [998, 1031], seamless: false, where: "árbol de focos nacionales", art: "a vast dark blueprint of a 2100 continent-spanning state, faint circuit lines, map grid and laurels, very dark and low contrast so focus icons stay readable"}
+    - {id: fondo_investigacion, texture: gfx/interface/tiles/tiled_research_bg.dds, size: [94, 94], seamless: true, where: "árbol de investigación", art: "dark teal technical grid with faint schematic lines, seamless tile, very low contrast"}
+    - {id: fondo_ventanas, texture: gfx/interface/tiles/tiled_bg.dds, size: [192, 192], seamless: true, where: "fondo de 23 ventanas (diplomacia, facciones, comercio, inteligencia, ejército...)", art: "dark graphite brushed metal with a faint hexagonal pattern, seamless tile, very low contrast"}
+    - {id: fondo_liso, texture: gfx/interface/tiles/tiled_plain_bg.dds, size: [190, 190], seamless: true, where: "fondo liso de 42 ventanas (política, producción, investigación...)", art: "very dark slate with subtle noise and faint scanlines, seamless tile, almost flat"}
+    - {id: fondo_liso_2, texture: gfx/interface/tiles/tiled_plain_bg2.dds, size: [182, 186], seamless: true, where: "fondo de focos e investigación", art: "very dark slate blue with subtle noise, seamless tile, almost flat"}
+    - {id: fondo_papel_agencia, texture: gfx/interface/tiles/tiled_paper_bg.dds, size: [192, 192], seamless: true, where: "papeles de la agencia de inteligencia", art: "dark classified dossier paper with faint redaction bars and a subtle grid, seamless tile"}
+    - {id: fondo_superpuesto, texture: gfx/interface/tiles/tiled_generic_overlay_bg1.dds, size: [549, 600], seamless: false, where: "fondo de logística, producción, despliegue y oficiales", art: "faint holographic overlay of a world map with data lines, dark and transparent-looking"}
+    - {id: fondo_superpuesto_chico, texture: gfx/interface/tiles/tiled_generic_overlay_bg1_small.dds, size: [290, 310], seamless: false, where: "fondo de construcción, comercio, mercado y facciones", art: "faint holographic overlay of a world map with data lines, dark"}
+    - {id: cabecera_produccion, texture: gfx/interface/production_win_top.dds, size: [550, 253], seamless: false, where: "cabecera de la pestaña de producción", art: "automated 2100 factory floor with robotic arms and drones, dark industrial palette"}
+    - {id: cabecera_oficiales, texture: gfx/interface/officer_corp/officer_corp_bg_army.dds, size: [516, 242], seamless: false, where: "cuerpo de oficiales (ejército)", art: "a 2100 command room with a holographic battle map and officers in silhouette"}
+    - {id: cabecera_agencia, texture: gfx/interface/operatives/intelligence_agency_header4.dds, size: [519, 109], seamless: false, where: "cabecera de la agencia de inteligencia", art: "a dark operations room with screens of surveillance feeds, wide banner"}

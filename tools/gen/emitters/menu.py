@@ -324,7 +324,8 @@ def emit_tabs(ctx: BuildContext) -> None:
     spec = (ctx.spec.raw.get("scenario") or {}).get("tab_backgrounds")
     if not spec or ctx.vanilla is None:
         return
-    textures = spec.get("textures") or {}
+    textures = {it["texture"]: f"assets/ui/{it['id']}.dds" for it in spec.get("items") or []
+                if (ctx.spec.root.parent / "assets" / "ui" / f"{it['id']}.dds").exists()}
     if not textures:
         _diagnose_tabs(ctx)
         return

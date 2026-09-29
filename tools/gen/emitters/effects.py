@@ -44,7 +44,7 @@ import re
 import unicodedata
 
 from ..errors import SpecError
-from ..pdx import Block, Quoted
+from ..pdx import Block, Compare, Quoted
 
 # Regiones por nombre (lo carga cada emisor desde el reparto del territorio).
 # Un nombre que no está en el juego se reemplaza por algo que nunca se cumple
@@ -641,6 +641,23 @@ def render_effects(owner: str, items: list[dict], known,
                 effects_used.setdefault(k, owner)
             for k in ("has_global_flag", "has_idea", "has_country_flag"):
                 ec.triggers_used.setdefault(k, owner)
+            continue
+        if effect == "mio_reset":
+            # OIM (2026-09-30): common/on_actions/09_aat_on_actions.txt les suma
+            # tamaño al arrancar según la fecha (add_mio_size = 3 y 4), y en 2100
+            # todas arrancaban con 4 puntos. Una sola vez, para todos los países,
+            # se las baja de a uno hasta 1. Sintaxis de documentation/ (1.19.3):
+            # add_mio_size y has_mio_size en scope de la OIM; no se verifican
+            # contra la lista (si faltaran, lo dice error.log sin romper el mod).
+            steps = Block()
+            for _ in range(int(item.get("steps", 6))):
+                steps.add("if", Block([("limit", Block([("has_mio_size", Compare(">", 1))])),
+                                       ("add_mio_size", -1)]))
+            block.add("if", Block([
+                ("limit", Block([("NOT", Block([("has_global_flag", "MN_mio_reset")]))])),
+                ("set_global_flag", "MN_mio_reset"),
+                ("every_country", Block([("every_military_industrial_organization", steps)])),
+            ]))
             continue
         if effect == "intelligence_agency":
             # La Guerra en las Sombras (2026-09-30): todas las meganaciones

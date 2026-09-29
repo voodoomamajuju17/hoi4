@@ -43,6 +43,9 @@ KINDS = {
     # y de las 6 operaciones propias; el generador los lleva al tamaño del juego
     "agency_upgrade_icon": {"size": (128, 128), "transparent": True, "fit": "contain"},
     "operation_icon": {"size": (160, 150), "transparent": False, "fit": "cover"},
+    # fondos de las pestañas (11_scenario -> tab_backgrounds): el tamaño es el
+    # de la textura del juego, que va en cada pedido
+    "ui_background": {"size": (192, 192), "transparent": False, "fit": "cover"},
 }
 
 COMMON_STYLE = (
@@ -189,6 +192,16 @@ def catalog() -> list[dict]:
             "description": f"Spy operation card picture, sepia dossier photo style: {op['name']['english']}: "
                            f"{_one_line(op['desc']['english'])}",
         })
+    for bg in ((_load("11_scenario.yaml").get("tab_backgrounds") or {}).get("items") or []):
+        dest = REPO / "assets" / "ui" / f"{bg['id']}.dds"
+        tile = (" SEAMLESS TILE: the left edge must continue the right edge and the top the bottom."
+                if bg.get("seamless") else "")
+        items.append({
+            "type": "ui_background", "tag": "INTERFAZ", "id": bg["id"], "dest": dest, "done": dest.exists(),
+            "size": tuple(bg["size"]),
+            "description": f"User interface background for Hearts of Iron IV ({bg['where']}): {bg['art']}. "
+                           f"No text, no icons, no buttons; it sits behind the interface.{tile}",
+        })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
     asked: set[str] = set()
@@ -213,17 +226,23 @@ def catalog() -> list[dict]:
     return items
 
 
+UI_STYLE = ("game user-interface background texture, subtle and low contrast so text and buttons stay readable, "
+            "no text, no letters, no logos, no watermark, no frame")
+
 FLAG_STYLE = ("flat national flag for Hearts of Iron IV, vexillology, clean flat shapes, no gradients, "
               "no painterly texture, no text, no letters, no watermark")
 
 
 def _request(item: dict) -> str:
     kind = KINDS[item["type"]]
-    w, h = kind["size"]
+    w, h = item.get("size") or kind["size"]
     style = STYLE.get(item["tag"] or "", "shadowy espionage of the year 2100: dark teal and brass, dossiers, "
-                      "circuitry and surveillance" if item["tag"] == "INTELIGENCIA" else "a ruined, fragmented 2100 world: improvised flags, bunkers, "
+                      "circuitry and surveillance" if item["tag"] == "INTELIGENCIA" else
+                      "clean dark user-interface texture for a 2100 grand strategy game, muted teal, graphite and brass"
+                      if item["tag"] == "INTERFAZ" else "a ruined, fragmented 2100 world: improvised flags, bunkers, "
                                           "warlord or client-state officials, muted colours")
-    common = FLAG_STYLE if item["type"] == "country_flag" else COMMON_STYLE
+    common = (FLAG_STYLE if item["type"] == "country_flag"
+              else UI_STYLE if item["type"] == "ui_background" else COMMON_STYLE)
     return "\n".join([
         "ASSET_REQUEST",
         f"type: {item['type']}",
@@ -273,13 +292,13 @@ def pedidos() -> None:
     order = [("leader_portrait", "1_retratos"), ("national_spirit_icon", "2_espiritus"),
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
-             ("operation_icon", "6_operaciones")]
+             ("operation_icon", "6_operaciones"), ("ui_background", "7_fondos")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
         for i in items:
             if i["type"] == kind:
-                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] == "INTELIGENCIA"
+                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ")
                                   else "SATELITES_Y_ANARQUIA", []).append(i)
         for tag, group in sorted(by_tag.items()):
             path = OUT / f"{prefix}_{tag}.txt"
@@ -358,7 +377,7 @@ def importar(source: str) -> None:
             unknown.append(path.name)
             continue
         kind = KINDS[item["type"]]
-        w, h = kind["size"]
+        w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
         if kind["fit"] == "cover":
             scale = max(w / img.width, h / img.height)

@@ -720,3 +720,11 @@ llega a 100 al toque y la tensión nunca sube".
     dentro de un .zip.
   - Fondos de pestañas: el diagnóstico ahora resuelve las texturas de los
     mosaicos (corneredTileSpriteType).
+- **OIM desde cero** (2026-09-30): el juego (09_aat_on_actions) les suma
+  tamaño al arrancar según la fecha y en 2100 arrancaban con 4. A los 2 días
+  de partida, una sola vez, todas las OIM del mundo bajan a tamaño 1
+  (meganations_sombras.4, efecto mio_reset).
+- **Fondos**: 11 pedidos (arte/pedidos 7_fondos) con el tamaño real de cada
+  textura: fondo del árbol de focos, de investigación, los mosaicos comunes
+  (23 y 42 ventanas), el papel de la agencia y las cabeceras de producción,
+  oficiales y agencia. Cuando llegan, reemplazan la textura del juego.

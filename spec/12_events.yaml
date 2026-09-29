@@ -335,6 +335,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: EFE_pulso_de_las_cubas}
+          - {effect: event, id: meganations_sombras.4, days: 2}
           - {effect: intelligence_agency}
           - {effect: run, value: EFE_sombras_mes}
           - {effect: event, id: meganations_efe.20, days: 30}
@@ -1703,6 +1704,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: FCU_pulso_del_directorio}
+          - {effect: event, id: meganations_sombras.4, days: 2}
           - {effect: intelligence_agency}
           - {effect: run, value: FCU_sombras_mes}
           - {effect: event, id: meganations_fcu.20, days: 30}
@@ -2936,6 +2938,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: HSN_pulso_de_las_potencias}
+          - {effect: event, id: meganations_sombras.4, days: 2}
           - {effect: intelligence_agency}
           - {effect: run, value: HSN_sombras_mes}
           - {effect: event, id: meganations_hsn.20, days: 30}
@@ -4104,6 +4107,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: ASC_pulso_de_la_red}
+        - {effect: event, id: meganations_sombras.4, days: 2}
         - {effect: intelligence_agency}
         - {effect: run, value: ASC_sombras_mes}
         - {effect: event, id: meganations_asc.20, days: 30}
@@ -5191,6 +5195,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: APF_pulso_de_los_consejos}
+        - {effect: event, id: meganations_sombras.4, days: 2}
         - {effect: intelligence_agency}
         - {effect: run, value: APF_sombras_mes}
         - {effect: event, id: meganations_apf.20, days: 30}
@@ -6341,6 +6346,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: NAS_pulso_de_los_templos}
+        - {effect: event, id: meganations_sombras.4, days: 2}
         - {effect: intelligence_agency}
         - {effect: run, value: NAS_sombras_mes}
         - {effect: event, id: meganations_nas.20, days: 30}
@@ -7310,6 +7316,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: SHD_pulso_del_rio}
+        - {effect: event, id: meganations_sombras.4, days: 2}
         - {effect: intelligence_agency}
         - {effect: run, value: SHD_sombras_mes}
         - {effect: event, id: meganations_shd.20, days: 30}
@@ -8607,6 +8614,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: NRE_pulso_del_ocio}
+        - {effect: event, id: meganations_sombras.4, days: 2}
         - {effect: intelligence_agency}
         - {effect: run, value: NRE_sombras_mes}
         - {effect: event, id: meganations_nre.20, days: 30}
@@ -10820,6 +10828,17 @@ namespaces:
           - {effect: timed_idea, idea: NRE_insurreccion, days: 120}
         ai_chance: 40
       src: user_design
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Industrial Organisations, spanish: Organizaciones Industriales}
+      desc: {english: The industrial organisations of 2100 start from scratch., spanish: Las organizaciones industriales de 2100 arrancan de cero.}
+      options:
+      - name: {english: Go on., spanish: Seguir.}
+        effects:
+        - {effect: mio_reset}
+      src: user_request
+      hidden: true
   meganations_mundo:
     country: null
     events:
