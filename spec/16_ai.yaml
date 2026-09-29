@@ -35,29 +35,50 @@ military:
     by_country: {HSN: 80, FCU: 40, NRE: 35}
     techs: [early_ship_hull_light, basic_ship_hull_light, basic_battery, basic_torpedo, improved_ship_hull_light,
             basic_ship_hull_submarine, basic_ship_hull_cruiser, basic_light_battery]
+  # 2026-09-30: "nadie está construyendo tanques". Todas arrancan con el
+  # tanque básico e investigan los blindados; el EFE mucho más. Los ids que
+  # no existen en el juego se ignoran (con y sin No Step Back).
+  armor_research:
+    value: 20
+    by_country: {EFE: 80, ASC: 35, FCU: 35, NRE: 30}
+    techs: [gwtank_chassis, basic_light_tank_chassis, improved_light_tank_chassis, basic_medium_tank_chassis,
+            gwtank, basic_light_tank, improved_light_tank, basic_medium_tank]
   by_country:
     EFE:    # blindados de Bioacero
     - {type: role_ratio, id: armor, value: 25}
     - {type: equipment_production_factor, id: armor, value: 25}
     NRE:    # legiones de infantería con artillería
+    - {type: equipment_production_factor, id: armor, value: 10}
+    - {type: role_ratio, id: armor, value: 10}
     - {type: role_ratio, id: infantry, value: 60}
     - {type: equipment_production_factor, id: artillery, value: 20}
     SHD:    # la masa y la artillería del río
+    - {type: equipment_production_factor, id: fighter, value: 10}
+    - {type: role_ratio, id: armor, value: 10}
     - {type: role_ratio, id: infantry, value: 65}
     - {type: equipment_production_factor, id: artillery, value: 30}
     HSN:    # infantería de marina y flota
+    - {type: equipment_production_factor, id: fighter, value: 10}
+    - {type: role_ratio, id: armor, value: 5}
     - {type: role_ratio, id: marines, value: 25}
     - {type: dockyard_to_military_factory_ratio, value: 60}
     NAS:    # montaña y cóndores
+    - {type: role_ratio, id: armor, value: 8}
     - {type: role_ratio, id: mountaineers, value: 25}
     - {type: equipment_production_factor, id: fighter, value: 20}
     ASC:    # ejército móvil del Plan
+    - {type: equipment_production_factor, id: armor, value: 15}
+    - {type: role_ratio, id: armor, value: 15}
     - {type: role_ratio, id: mobile, value: 25}
     - {type: equipment_production_factor, id: motorized, value: 20}
     FCU:    # contratistas motorizados
+    - {type: equipment_production_factor, id: armor, value: 15}
+    - {type: role_ratio, id: armor, value: 15}
     - {type: role_ratio, id: mobile, value: 20}
     - {type: equipment_production_factor, id: motorized, value: 20}
     APF:    # milicias populares
+    - {type: equipment_production_factor, id: motorized, value: 10}
+    - {type: role_ratio, id: armor, value: 8}
     - {type: role_ratio, id: infantry, value: 70}
 
 # -----------------------------------------------------------------------------

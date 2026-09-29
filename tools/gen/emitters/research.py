@@ -128,13 +128,15 @@ def _ai_weights(ctx: BuildContext) -> dict[str, list[tuple[str, float]]]:
         for tag, techs in (ctx.data.get("specialty_next") or {}).items():
             for t in techs:
                 out.setdefault(t, []).append((tag, 1 + float(value) / 20))
-    naval = mil.get("naval_research") or {}
     majors = [c.tag for c in ctx.spec.countries if c.is_major]
-    for tag in majors:
-        v = (naval.get("by_country") or {}).get(tag, naval.get("value"))
-        if v:
-            for t in naval.get("techs") or []:
-                out.setdefault(t, []).append((tag, 1 + float(v) / 20))
+    # lo naval (2026-09-27) y los blindados (2026-09-30), por país
+    for key in ("naval_research", "armor_research"):
+        block = mil.get(key) or {}
+        for tag in majors:
+            v = (block.get("by_country") or {}).get(tag, block.get("value"))
+            if v:
+                for t in block.get("techs") or []:
+                    out.setdefault(t, []).append((tag, 1 + float(v) / 20))
     return out
 
 

@@ -24,7 +24,11 @@ research:
   base_techs: [infantry_weapons, tech_support, basic_train, tech_trucks]
   # Las meganaciones además pueden botar un destructor básico (se validan
   # contra el árbol; las que no existen en este juego se ignoran).
-  meganation_techs: [early_ship_hull_light, basic_ship_hull_light, basic_battery]
+  meganation_techs: [early_ship_hull_light, basic_ship_hull_light, basic_battery,
+                     # 2026-09-30: "nadie construye tanques": el tanque básico (con y sin No Step Back)
+                     gwtank_chassis, gwtank,
+                     # y el vehículo motorizado y el caza básico (sin BBA / con BBA)
+                     motorised_infantry, early_fighter, iw_small_airframe]
   # especialidad -> alternativas de prefijos de pestaña; gana la primera que
   # exista. Las de los DLC primero (el reporte 2026-09-25 mostró que las
   # pestañas viejas armour_folder, air_techs_folder y naval_folder siguen en
