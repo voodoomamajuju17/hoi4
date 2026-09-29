@@ -39,8 +39,27 @@ OURS = ("name", "desc", "priority", "days", "network_strength", "operatives", "v
         "will_lead_to_war_with")
 
 
+_COMMON_KEYS = {"name", "desc", "icon", "map_icon", "priority", "days", "network_strength", "operatives",
+                "visible", "available", "outcome_execute", "outcome_potential", "ai_will_do", "phases", "equipment"}
+
+
+def _diagnose(ctx: BuildContext, ops: dict[str, Block]) -> None:
+    """Para el reporte: las operaciones del juego y sus claves propias, para
+    elegir el molde con datos (18_intelligence.yaml -> template)."""
+    for name in sorted(ops):
+        extra = [k for k in ops[name].keys() if k not in _COMMON_KEYS]
+        ctx.note(f"operacion del juego: {name} ({len(ops[name])} claves): {', '.join(extra) or '-'}")
+
+
 def _template(ctx: BuildContext) -> tuple[str, Block]:
     ops = ctx.vanilla.operations() if ctx.vanilla else {}
+    if ops:
+        _diagnose(ctx, ops)
+    wanted = (ctx.spec.raw.get("intelligence") or {}).get("template")
+    if wanted and wanted in ops:
+        return wanted, ops[wanted]
+    if wanted:
+        ctx.warn(f"operaciones de inteligencia: el molde '{wanted}' no existe en este juego; elijo otro.")
     usable = {n: b for n, b in ops.items() if "phases" in b and not any(k in b for k in AVOID_KEYS)
               and str(b.get("will_lead_to_war_with") or "no") != "yes"}
     for name in PREFERRED_TEMPLATES:

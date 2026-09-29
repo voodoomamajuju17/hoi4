@@ -303,11 +303,6 @@ def _resize(src: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
 # ---------------------------------------------------------------------------
 # Fondos de las pestañas (2026-09-30)
 # ---------------------------------------------------------------------------
-_TAB_GUI = re.compile(r"(?i)(politic|government|techtree|research|production|construction|trade|logistic|"
-                      r"decision|intelligence|agency|diplomac|equipment|focus|recruit|deploy|military|navy|air)"
-                      r"[^/]*\.gui$")
-_BG_BLOCK = re.compile(r'background\s*=\s*\{[^{}]*?(?:spriteType|quadTextureSprite)\s*=\s*"?(GFX_[A-Za-z0-9_]+)', re.S)
-_MIN_TAB_BG = 300
 
 
 def emit_tabs(ctx: BuildContext) -> None:
@@ -330,8 +325,15 @@ def emit_tabs(ctx: BuildContext) -> None:
     ctx.note(f"fondos de pestanas: {len(textures)} texturas reemplazadas")
 
 
+_MAIN_VIEW = re.compile(r"(?i)^(country\w*view|nationalfocusview|\w*techtree\w*|\w*agency\w*)$")
+_BACKGROUND_REF = re.compile(r'background\s*=\s*\{([^{}]*)\}', re.S)
+_REF_SPRITE = re.compile(r'(?:spriteType|quadTextureSprite)\s*=\s*"?(GFX_[A-Za-z0-9_]+)')
+
+
 def _diagnose_tabs(ctx: BuildContext) -> None:
-    """Para el reporte: qué fondos (texturas grandes) usa cada pestaña."""
+    """Para el reporte: el fondo de cada pestaña principal (los primeros
+    `background` de su .gui, sin importar el tamaño: muchos son mosaicos
+    que el juego repite), y quién más usa esa misma textura."""
     sprites: dict[str, str] = {}
     for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
         try:
@@ -340,26 +342,27 @@ def _diagnose_tabs(ctx: BuildContext) -> None:
             continue
         for name, texture in _SPRITE.findall(text):
             sprites.setdefault(name, texture.replace("\\", "/"))
-    used: dict[str, set[str]] = {}
+    users: dict[str, set[str]] = {}
+    views: dict[str, list[str]] = {}
     for path in sorted((ctx.vanilla.root / "interface").glob("**/*.gui")):
-        if not _TAB_GUI.search(path.name):
-            continue
         try:
             text = path.read_text(encoding="utf-8-sig", errors="replace")
         except OSError:
             continue
-        names = set(_BG_BLOCK.findall(text)) | set(_GUI_SPRITE.findall(text))
-        for n in names:
-            tex = sprites.get(n)
-            if tex and tex.lower().endswith(".dds"):
-                used.setdefault(tex, set()).add(path.stem)
-    rows = []
-    for tex, guis in used.items():
-        w, h = _texture_dims(ctx, tex)
-        if max(w, h) >= _MIN_TAB_BG:
-            rows.append((-(w * h), tex, w, h, sorted(guis)))
-    rows.sort()
-    for _, tex, w, h, guis in rows[:60]:
-        more = f" y {len(guis) - 4} mas" if len(guis) > 4 else ""
-        ctx.note(f"fondo de pestana: {tex} ({w}x{h}) en {', '.join(guis[:4])}{more}")
-    ctx.note(f"fondos de pestanas: {len(rows)} texturas grandes en las pestanas (se listan hasta 60)")
+        refs = []
+        for body in _BACKGROUND_REF.findall(text):
+            m = _REF_SPRITE.search(body)
+            if m and m.group(1) not in refs:
+                refs.append(m.group(1))
+        for r in refs:
+            users.setdefault(r, set()).add(path.stem)
+        if _MAIN_VIEW.search(path.stem):
+            views[path.stem] = refs[:4]
+    for view, refs in sorted(views.items()):
+        parts = []
+        for r in refs:
+            tex = sprites.get(r, "?")
+            w, h = _texture_dims(ctx, tex) if tex != "?" else (0, 0)
+            parts.append(f"{r} -> {tex} ({w}x{h}; {len(users.get(r, ()))} pantallas)")
+        ctx.note(f"fondo de pestana: {view}: " + (" | ".join(parts) or "sin background"))
+    ctx.note(f"fondos de pestanas: {len(views)} pestanas principales revisadas")
