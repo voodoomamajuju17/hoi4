@@ -642,6 +642,14 @@ def render_effects(owner: str, items: list[dict], known,
             for k in ("has_global_flag", "has_idea", "has_country_flag"):
                 ec.triggers_used.setdefault(k, owner)
             continue
+        if effect == "intelligence_agency":
+            # La Guerra en las Sombras (2026-09-30): todas las meganaciones
+            # arrancan con su agencia (La Résistance), una sola vez.
+            block.add("if", Block([("limit", Block([("NOT", Block([("has_intelligence_agency", True)]))])),
+                                   ("create_intelligence_agency", True)]))
+            effects_used.setdefault("create_intelligence_agency", owner)
+            ec.triggers_used.setdefault("has_intelligence_agency", owner)
+            continue
         if effect == "cosmetic_tag":
             # nombre y bandera nuevos (02_countries.yaml -> cosmetic_tags)
             block.add("set_cosmetic_tag", item["value"])

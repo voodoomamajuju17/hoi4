@@ -63,14 +63,16 @@ OTHER = ("a client state or warlord faction of the ruined 2100 world",
 
 
 # ya hechos en el estilo nuevo (no se vuelven a pedir)
-DONE_V2 = {"APF_amara_nwosu", "APF_kwame_diallo", "ASC_allocation_council", "ASC_min_brandt_1",
-           "ASC_min_wolski_2", "ASC_plan_41", "EFE_anahi_quiroga", "EFE_aurelio_iv", "EFE_bruno_etchegaray",
-           "EFE_min_arriagada_1", "EFE_min_vidal_2", "FCU_marcus_rourke", "FCU_min_okafor_2",
-           "FCU_min_whitmore_1", "FCU_valeria_castellane", "HSN_gen_arakawa_1", "HSN_gen_lan_2",
-           "HSN_ines_tavake", "HSN_kofi_aldana", "HSN_min_faleolo_2", "HSN_min_sato_lee_1", "NAS_amaru_inca",
-           "NAS_amaru_quispe", "NAS_gen_rimac_1", "NAS_min_huaman_2", "NAS_min_mamani_1",
-           "NRE_irina_vasilescu", "NRE_kerem_aydin", "NRE_legado_arbogast", "NRE_lucius_varro",
-           "SHD_lin_wenzhao", "SHD_min_hao_1", "SHD_min_jing_2", "SHD_zhou_mingyuan"}
+DONE_V2 = {"APF_amara_nwosu", "APF_gen_bello_1", "APF_gen_njoroge_2", "APF_kwame_diallo",
+           "ASC_allocation_council", "ASC_min_brandt_1", "ASC_min_wolski_2", "ASC_plan_41",
+           "EFE_anahi_quiroga", "EFE_aurelio_iv", "EFE_bruno_etchegaray", "EFE_min_arriagada_1",
+           "EFE_min_vidal_2", "FCU_marcus_rourke", "FCU_min_okafor_2", "FCU_min_whitmore_1",
+           "FCU_valeria_castellane", "HSN_gen_arakawa_1", "HSN_gen_lan_2", "HSN_ines_tavake",
+           "HSN_kofi_aldana", "HSN_min_faleolo_2", "HSN_min_sato_lee_1", "NAS_amaru_inca", "NAS_amaru_quispe",
+           "NAS_gen_choque_2", "NAS_gen_rimac_1", "NAS_min_huaman_2", "NAS_min_mamani_1",
+           "NRE_gen_constantin_1", "NRE_gen_petrescu_2", "NRE_irina_vasilescu", "NRE_kerem_aydin",
+           "NRE_legado_arbogast", "NRE_lucius_varro", "SHD_gen_yunfeng_1", "SHD_lin_wenzhao", "SHD_min_hao_1",
+           "SHD_min_jing_2", "SHD_zhou_mingyuan"}
 
 
 def _load(name: str) -> dict:

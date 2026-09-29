@@ -1191,7 +1191,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("80 rasgos propios (14 de lideres, 40 de ministros, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 80, str(len(body.keys())))
+        check("88 rasgos propios (14 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 88, str(len(body.keys())))
         # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
         efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
         chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
@@ -1212,7 +1212,7 @@ def test_leaders_and_ideologies() -> None:
         efe_chars = pdx.parse((mod / "common/characters/EFE_characters.txt").read_text()).get("characters")
         advisors = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("advisor") is not None]
         mins = [k for k in advisors if "_min_" in k]
-        check("5 ministros por meganacion (EFE)", len(mins) == 5, str(mins))
+        check("6 ministros por meganacion (EFE; el sexto, de inteligencia)", len(mins) == 6 and "EFE_min_inteligencia_6" in mins, str(mins))
         # Altos mandos (2026-09-29): jefes de ejército, marina y aire y dos del alto mando.
         mandos = {pdx.text(efe_chars.get(k).get("advisor").get("slot")) for k in advisors if "_mando_" in k}
         check("alto mando del EFE: jefes de ejercito, marina y aire y alto mando",
@@ -2199,7 +2199,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -2209,7 +2209,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

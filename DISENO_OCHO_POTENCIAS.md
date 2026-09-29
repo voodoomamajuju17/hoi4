@@ -696,3 +696,14 @@ llega a 100 al toque y la tensión nunca sube".
   con eso se piden las imágenes y se completan las rutas.
 - **Balance**: anarquías -5% en sus espíritus de combate (ataque, defensa,
   organización, reclutables); FCU con tope de 108 IC y -8% organización.
+- **Espías equilibrados** (2026-09-30): las 8 arrancan con su agencia de
+  inteligencia (pulso de arranque, `create_intelligence_agency`) y el espíritu
+  Servicio de Inteligencia (+2 espacios de agente; con el de la agencia, 3).
+  Un sexto ministro por potencia, el de inteligencia, suma espacios y un bonus
+  propio: EFE Ojos del Monte (+1, redes +25%), FCU Inteligencia Privada (+2,
+  inteligencia civil, -5% PP), ASC Vigilancia Algorítmica (+1, descifrado,
+  detecta agentes), HSN Informantes de los Puertos (+2, redes +10%), NAS Los
+  Chasquis (+1, redes +15%, cifrado), SHD Censo Total (+1, detecta agentes
+  +30%, cifrado), APF Redes de la Diáspora (+2, inteligencia civil), NRE
+  Frumentarii (+1, inteligencia militar, redes +10%). Los modificadores de
+  inteligencia son opcionales: si el juego no tiene alguno, se omite con aviso.

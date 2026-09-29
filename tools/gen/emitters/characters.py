@@ -71,6 +71,16 @@ def _emit_traits(ctx: BuildContext) -> set[str]:
         tb = Block()
         tb.add("random", False)
         for key, value in (trait.get("modifiers") or {}).items():
+            if key.startswith("?"):
+                # modificador opcional (los de inteligencia son de La Résistance):
+                # si el juego no lo documenta, se saltea con aviso
+                key = key[1:]
+                if ctx.vanilla is not None and ctx.vanilla.documented_keys("modifiers") is not None \
+                        and not ctx.vanilla.is_documented("modifiers", key):
+                    ctx.warn(f"{tid}: el modificador '{key}' no existe en este juego; se omite.")
+                    continue
+                tb.add(key, float(value))
+                continue
             tb.add(key, float(value))
             modifiers_used.setdefault(key, tid)
         body.add(ctx.loc.reference(tid, f"traits:{tid}"), tb)
