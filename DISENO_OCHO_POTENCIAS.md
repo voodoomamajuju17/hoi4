@@ -728,3 +728,8 @@ llega a 100 al toque y la tensión nunca sube".
   textura: fondo del árbol de focos, de investigación, los mosaicos comunes
   (23 y 42 ventanas), el papel de la agencia y las cabeceras de producción,
   oficiales y agencia. Cuando llegan, reemplazan la textura del juego.
+- **Interfaz** (2026-09-30): el reporte lista las piezas de estilo del juego
+  (barra superior, marcos de ventana con su borde, botones, logos, ventanas
+  de eventos y decisiones) con el tamaño de su textura. Se cambian igual que
+  los fondos: 11_scenario -> tab_backgrounds -> items (cualquier textura).
+  Sin tocar los .gui (la disposición): eso se rompe con cada parche.

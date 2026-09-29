@@ -326,6 +326,7 @@ def emit_tabs(ctx: BuildContext) -> None:
         return
     textures = {it["texture"]: f"assets/ui/{it['id']}.dds" for it in spec.get("items") or []
                 if (ctx.spec.root.parent / "assets" / "ui" / f"{it['id']}.dds").exists()}
+    _diagnose_ui(ctx)
     if not textures:
         _diagnose_tabs(ctx)
         return
@@ -386,3 +387,44 @@ def _diagnose_tabs(ctx: BuildContext) -> None:
             parts.append(f"{r} -> {tex} ({w}x{h}; {len(users.get(r, ()))} pantallas)")
         ctx.note(f"fondo de pestana: {view}: " + (" | ".join(parts) or "sin background"))
     ctx.note(f"fondos de pestanas: {len(views)} pestanas principales revisadas")
+
+
+# ---------------------------------------------------------------------------
+# Inventario de la interfaz (2026-09-30: "fijate cómo cambiar los menús, la UI
+# y todo eso"). Para el reporte: las piezas que definen el estilo (barra
+# superior, marcos de ventana, botones, logo del menú), con el tamaño de su
+# textura y el borde que el juego respeta al estirarlas, para pedir las
+# imágenes justas. Reemplazarlas usa el mismo camino que los fondos.
+# ---------------------------------------------------------------------------
+_UI_PIECES = re.compile(r"(?i)^GFX_(top_?bar\w*|tiled_window\w*|button_\d+x\d+\w*|\w*logo\w*|"
+                        r"\w*_frame\w*|decision_\w*_bg|event_window\w*|news_event\w*_bg|tiled_bg\w*)$")
+_CORNERED = re.compile(r'corneredTileSpriteType\s*=\s*\{(.*?)\n\s*\}', re.S)
+_BORDER = re.compile(r'borderSize\s*=\s*\{\s*x\s*=\s*(\d+)\s*y\s*=\s*(\d+)', re.S)
+
+
+def _diagnose_ui(ctx: BuildContext) -> None:
+    textures: dict[str, str] = {}
+    borders: dict[str, str] = {}
+    for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for name, texture in _ANY_SPRITE.findall(text):
+            textures.setdefault(name, texture.replace("\\", "/").replace("//", "/"))
+        for body in _CORNERED.findall(text):
+            n = re.search(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)', body)
+            b = _BORDER.search(body)
+            if n and b:
+                borders.setdefault(n.group(1), f"borde {b.group(1)}x{b.group(2)}")
+    rows = []
+    for name, tex in sorted(textures.items()):
+        if not _UI_PIECES.match(name) or not tex.lower().endswith(".dds"):
+            continue
+        w, h = _texture_dims(ctx, tex)
+        if not w:
+            continue
+        rows.append(f"{name} -> {tex} ({w}x{h}{'; ' + borders[name] if name in borders else ''})")
+    for r in rows[:80]:
+        ctx.note(f"interfaz: {r}")
+    ctx.note(f"interfaz: {len(rows)} piezas de estilo encontradas (se listan hasta 80)")
