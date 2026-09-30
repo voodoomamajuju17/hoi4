@@ -394,10 +394,15 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("random_list", owner)
             continue
         if effect == "tech_bonus":
-            cat = item["category"]
-            if ec.tech_categories and cat not in ec.tech_categories:
+            # category puede ser una lista de alternativas: gana la primera que
+            # el juego tenga (2026-09-30: el nombre de la categoría de apoyo no
+            # se pudo confirmar sin el juego instalado)
+            cats = item["category"] if isinstance(item["category"], list) else [item["category"]]
+            cat = next((c for c in cats if not ec.tech_categories or c in ec.tech_categories), None)
+            if cat is None:
                 if ec.warn:
-                    ec.warn(f"{owner}: la categoria de investigacion '{cat}' no existe en este juego; se omite el bono.")
+                    ec.warn(f"{owner}: la categoria de investigacion '{' / '.join(cats)}' no existe en este juego; "
+                            f"se omite el bono.")
                 continue
             inner = Block()
             inner.add("name", owner)
