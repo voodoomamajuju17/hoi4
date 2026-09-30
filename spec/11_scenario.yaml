@@ -129,9 +129,33 @@ tab_backgrounds:
     - {id: fondo_ventanas, texture: gfx/interface/tiles/tiled_bg.dds, size: [192, 192], seamless: true, where: "fondo de 23 ventanas (diplomacia, facciones, comercio, inteligencia, ejército...)", art: "dark graphite brushed metal with a faint hexagonal pattern, seamless tile, very low contrast"}
     - {id: fondo_liso, texture: gfx/interface/tiles/tiled_plain_bg.dds, size: [190, 190], seamless: true, where: "fondo liso de 42 ventanas (política, producción, investigación...)", art: "very dark slate with subtle noise and faint scanlines, seamless tile, almost flat"}
     - {id: fondo_liso_2, texture: gfx/interface/tiles/tiled_plain_bg2.dds, size: [182, 186], seamless: true, where: "fondo de focos e investigación", art: "very dark slate blue with subtle noise, seamless tile, almost flat"}
-    - {id: fondo_papel_agencia, texture: gfx/interface/tiles/tiled_paper_bg.dds, size: [192, 192], seamless: true, where: "papeles de la agencia de inteligencia", art: "dark classified dossier paper with faint redaction bars and a subtle grid, seamless tile"}
+    # 2026-09-30: tiled_paper_bg también es el papel de las fichas de
+    # tecnología, con texto oscuro encima; el papel oscuro lo volvía ilegible.
+    # Pedido de nuevo en tono claro (el anterior, fondo_papel_agencia, se borró).
+    - {id: fondo_papel_claro, texture: gfx/interface/tiles/tiled_paper_bg.dds, size: [192, 192], seamless: true, where: "papel de la agencia de inteligencia y de las fichas de tecnología: lleva texto oscuro encima", art: "light aged parchment, pale beige-grey with a faint technical grid and very subtle redaction marks, LIGHT enough for dark text to stay readable, seamless tile"}
     - {id: fondo_superpuesto, texture: gfx/interface/tiles/tiled_generic_overlay_bg1.dds, size: [549, 600], seamless: false, where: "fondo de logística, producción, despliegue y oficiales", art: "faint holographic overlay of a world map with data lines, dark and transparent-looking"}
     - {id: fondo_superpuesto_chico, texture: gfx/interface/tiles/tiled_generic_overlay_bg1_small.dds, size: [290, 310], seamless: false, where: "fondo de construcción, comercio, mercado y facciones", art: "faint holographic overlay of a world map with data lines, dark"}
     - {id: cabecera_produccion, texture: gfx/interface/production_win_top.dds, size: [550, 253], seamless: false, where: "cabecera de la pestaña de producción", art: "automated 2100 factory floor with robotic arms and drones, dark industrial palette"}
     - {id: cabecera_oficiales, texture: gfx/interface/officer_corp/officer_corp_bg_army.dds, size: [516, 242], seamless: false, where: "cuerpo de oficiales (ejército)", art: "a 2100 command room with a holographic battle map and officers in silhouette"}
     - {id: cabecera_agencia, texture: gfx/interface/operatives/intelligence_agency_header4.dds, size: [519, 109], seamless: false, where: "cabecera de la agencia de inteligencia", art: "a dark operations room with screens of surveillance feeds, wide banner"}
+
+# -----------------------------------------------------------------------------
+# Fondos de cada rama de investigación (2026-09-30, pedido del usuario: "faltan
+# las imágenes para cada fondo de investigación, cada rama"). Cada pestaña del
+# árbol dibuja GFX_<rama>_techtree_bg; el generador busca su textura y tamaño en
+# el juego instalado y pone encima assets/ui/investigacion/<id>.dds, recortada
+# para cubrirla. El reporte lista las ramas del juego que no tienen imagen.
+# El vanilla es una foto en blanco y negro que se funde a negro a la derecha y
+# abajo, donde van los íconos: las nuestras siguen esa regla.
+# -----------------------------------------------------------------------------
+research_backgrounds:
+  src: user_request
+  items:
+    - {id: investigacion_infanteria, sprite: GFX_infantry_techtree_bg, where: "rama de infantería", art: "2100 infantry in powered exoskeletons and smart rifles marching through a ruined megacity"}
+    - {id: investigacion_apoyo, sprite: GFX_support_techtree_bg, where: "rama de equipos de apoyo", art: "combat engineers, field hospital drones and recon robots supporting a 2100 frontline"}
+    - {id: investigacion_blindados, sprite: GFX_armor_techtree_bg, where: "rama de blindados", art: "a column of hover tanks and railgun armored vehicles on a dusty plain, 2100"}
+    - {id: investigacion_artilleria, sprite: GFX_artillery_techtree_bg, where: "rama de artillería", art: "a battery of electromagnetic railgun artillery firing at night, 2100"}
+    - {id: investigacion_naval, sprite: GFX_naval_techtree_bg, where: "rama naval", art: "a 2100 drydock with a stealth destroyer and autonomous submarines under construction"}
+    - {id: investigacion_aerea, sprite: GFX_air_techtree_bg, where: "rama aérea", art: "a hangar of 2100 scramjet fighters and drone swarms on an airbase at dawn"}
+    - {id: investigacion_industria, sprite: GFX_industry_techtree_bg, where: "rama de industria y construcción", art: "an automated 2100 megafactory with robotic arms, fusion reactors and synthetic fuel towers"}
+    - {id: investigacion_electronica, sprite: GFX_engineering_techtree_bg, where: "rama de electrónica e ingeniería", art: "a 2100 quantum computing lab with engineers in front of holographic circuit boards"}
