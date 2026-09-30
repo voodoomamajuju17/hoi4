@@ -47,6 +47,7 @@ from .emitters import research as em_research
 from .emitters import resources as em_resources
 from .emitters import scenario as em_scenario
 from .emitters import territory as em_territory
+from .emitters import unit_names as em_unit_names
 from .errors import GenError
 from .loc import LocRegistry
 
@@ -72,6 +73,7 @@ EMITTERS = [
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
     ("intelligence", em_intelligence.emit),  # operaciones de inteligencia (18_intelligence)
+    ("unit_names", em_unit_names.emit),  # nombres de divisiones y barcos (19_unit_names)
     ("mio", em_mio.emit),                  # OIM propias por meganacion (13_military -> mio)
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
     ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)
