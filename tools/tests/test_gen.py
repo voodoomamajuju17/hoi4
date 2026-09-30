@@ -1940,12 +1940,12 @@ def test_ai() -> None:
               'other_tech:0 "Tech of 2100"' in names and 'other_tech_short:0 "2100 tech"' in names, names)
         check("el fixture reparte la Doctrina Monroe: se escribe la limpieza",
               (mod / "events/meganations_limpieza.txt").exists())
-        gfx = (mod / "interface/meganations_NRE_goals.gfx").read_text()
-        check("iconos del pack registrados con brillo",
-              "GFX_focus_2100_nre_09_legio_i_italica" in gfx and "GFX_focus_2100_nre_09_legio_i_italica_shine" in gfx)
-        check("icono copiado al mod", (mod / "gfx/interface/goals/focus_2100_nre_09_legio_i_italica.dds").exists())
-        nre = (mod / "common/national_focus/NRE_focus.txt").read_text()
-        check("el foco usa el icono", "icon = GFX_focus_2100_nre_09_legio_i_italica" in nre)
+        gfx = (mod / "interface/meganations_EFE_goals.gfx").read_text()
+        check("iconos propios registrados con brillo",
+              "GFX_focus_EFE_custodio_de_la_tierra" in gfx and "GFX_focus_EFE_custodio_de_la_tierra_shine" in gfx)
+        check("icono copiado al mod", (mod / "gfx/interface/goals/EFE_custodio_de_la_tierra.dds").exists())
+        efe = (mod / "common/national_focus/EFE_focus.txt").read_text()
+        check("el foco usa el icono", "icon = GFX_focus_EFE_custodio_de_la_tierra" in efe)
 
     with tempfile.TemporaryDirectory() as tmp:
         van = Path(tmp) / "vanilla"
