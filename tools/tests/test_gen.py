@@ -2136,6 +2136,53 @@ def test_forces() -> None:
               all(int(float(pdx.text(v))) >= 0 for k, v in ba.entries if k in ("industrial_complex", "arms_factory")), str(ba))
 
 
+def test_unit_names() -> None:
+    section("nombres de divisiones y barcos por faccion (19_unit_names)")
+    import yaml
+    import copy
+    from tools.gen.emitters import unit_names as un
+    from tools.gen.pdx import Block
+    from tools.gen.errors import SpecError
+    spec = yaml.safe_load((REPO_ROOT / "spec/19_unit_names.yaml").read_text(encoding="utf-8"))["unit_names"]
+    div, ships, loc, _ = un.build_blocks(spec, None, None)
+    megas = ["EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE"]
+    for tag in megas:
+        check(f"{tag}: lista de infanteria o su especialidad", any(k.startswith(f"{tag}_DIV_") for k in div.keys()))
+        check(f"{tag}: los cinco tipos de barco", all(f"{tag}_SHIP_{t}" in ships.keys()
+              for t in ("SCREEN", "SUBMARINE", "CRUISER", "CAPITAL", "CARRIER")))
+    check("especialidades: marines HSN, montaña NAS, blindados EFE, artilleria SHD",
+          all(k in div.keys() for k in ("HSN_DIV_MARINES", "NAS_DIV_MOUNTAIN", "EFE_DIV_ARMOR", "SHD_DIV_ARTILLERY")))
+    nre = div.get("NRE_DIV_INFANTRY").get("ordered")
+    check("legiones con numero romano", pdx.text(nre.get("9").entries[0][1]) == "Legio IX Hispana",
+          pdx.text(nre.get("9").entries[0][1]))
+    fcu = pdx.text(div.get("FCU_DIV_INFANTRY").get("ordered").get("2").entries[0][1])
+    check("ordinal ingles", fcu.startswith("2nd "), fcu)
+    check("cada lista tiene su nombre en EN y ES", len(loc) == len(div) + len(ships))
+    rendered = pdx.render(div) + pdx.render(ships)
+    check("el archivo se vuelve a leer", len(pdx.parse(rendered)) == len(div) + len(ships))
+    check("satelites: una lista para todas las tropas", "ZNG_DIV_ALL" in div.keys()
+          and '"mountaineers"' in pdx.render(Block([("x", div.get("ZNG_DIV_ALL"))])))
+    # validacion contra el juego: los ids que no existen se omiten
+    div2, ships2, _, report = un.build_blocks(spec, {"infantry"}, {"ship_hull_light"})
+    check("sin el batallon en el juego, la lista no se escribe", "EFE_DIV_ARMOR" not in div2.keys()
+          and "EFE_DIV_INFANTRY" in div2.keys())
+    check("se omite el id que no existe", pdx.render(Block([("x", div2.get("EFE_DIV_INFANTRY"))])).count("bicycle") == 0)
+    check("reporta los ids que faltan", "marine" in report["division_types"][0] and "destroyer" in report["ship_types"][0])
+    bad = copy.deepcopy(spec)
+    bad["ships"]["EFE"]["carrier"]["names"].append("Paraná")
+    try:
+        un.build_blocks(bad, None, None)
+        check("un barco repetido en el mismo pais falla", False)
+    except SpecError:
+        check("un barco repetido en el mismo pais falla", True)
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        f = ctx.mod_root / un.DIVISIONS_FILE
+        check("se escribe names_divisions", f.exists())
+        check("con el juego del fixture: solo los batallones que existen",
+              f.exists() and '"marine"' not in f.read_text(encoding="utf-8") and "HSN_DIV_INFANTRY" in f.read_text(encoding="utf-8"))
+
+
 def test_diplomacy() -> None:
     section("diplomacia: reclamos, rivalidades, guerras, tension")
     with tempfile.TemporaryDirectory() as tmp:
@@ -2306,6 +2353,7 @@ def main() -> int:
         test_arte,
         test_mecanicas_v2,
         test_forces,
+        test_unit_names,
         test_diplomacy,
         test_vanilla_validation,
     ):

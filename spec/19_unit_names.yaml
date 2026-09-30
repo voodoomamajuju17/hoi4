@@ -1,0 +1,751 @@
+# =============================================================================
+# 19_unit_names.yaml — Nombres de divisiones y de barcos por facción
+# =============================================================================
+# Pedido del usuario (2026-09-30): "investigar y generar nombres para las
+# divisiones a reclutar por cada facción, según tipo de tropa. Mismo con
+# barcos." Todo es INVENTADO a partir de la identidad de cada potencia
+# (02_countries, 13_military -> specialty, 16_ai -> tropas que pide la IA,
+# DISENO_OCHO_POTENCIAS.md).
+#
+# tools/gen/emitters/unit_names.py escribe:
+#   common/units/names_divisions/meganations_names_divisions.txt
+#   common/units/names_ships/meganations_names_ships.txt
+#
+# Divisiones: HOI4 elige la lista según el batallón principal de la plantilla
+# (`division_types`). `pattern` arma cada nombre: {n} = número, {roman} =
+# número romano, {name} = el apodo de la lista. Cuando se acaban los nombres
+# se usa `fallback` (%d = número).
+# Barcos: una lista por tipo de casco (`ship_types`); sin nombres libres, el
+# juego usa `fallback`.
+# Los ids de batallones y cascos se validan contra el juego instalado; los que
+# no existen se omiten con aviso en el reporte.
+# =============================================================================
+
+unit_names:
+  src: user_request
+
+  # tipo de tropa -> batallones del juego que lo definen
+  division_types:
+    infantry:  [infantry, bicycle_battalion]
+    militia:   [militia]
+    mountain:  [mountaineers]
+    marines:   [marine]
+    airborne:  [paratrooper]
+    cavalry:   [cavalry, camelry]
+    mobile:    [motorized, mechanized, amphibious_mechanized]
+    armor:     [light_armor, medium_armor, heavy_armor, modern_armor, super_heavy_armor]
+    artillery: [artillery_brigade, motorized_artillery_brigade, rocket_artillery_brigade]
+  # todas juntas (satélites y Anarquía: una sola lista)
+  all_divisions: [infantry, militia, mountain, marines, airborne, cavalry, mobile, armor, artillery]
+
+  # tipo de barco -> equipos/arquetipos del juego (con y sin Man the Guns)
+  ship_types:
+    screen:    [destroyer, ship_hull_light]
+    submarine: [submarine, ship_hull_submarine]
+    cruiser:   [light_cruiser, heavy_cruiser, ship_hull_cruiser]
+    capital:   [battle_cruiser, battleship, SH_battleship, ship_hull_heavy, ship_hull_super_heavy, ship_hull_pre_dreadnought]
+    carrier:   [carrier, ship_hull_carrier]
+  all_ships: [screen, submarine, cruiser, capital, carrier]
+
+  # ---------------------------------------------------------------------------
+  # DIVISIONES
+  # ---------------------------------------------------------------------------
+  divisions:
+
+    # El Imperio Verde: Bioacero, la Guardia Verde, el Monte, los Cóndores.
+    EFE:
+      infantry:
+        group: {en: "Green Guard Divisions", es: "Divisiones de la Guardia Verde"}
+        pattern: "{n}.ª División Verde «{name}»"
+        fallback: "%d.ª División Verde"
+        names: [Quebracho, Ñandubay, Ceibo, Algarrobo, Lapacho, Timbó, Urunday, Caldén,
+                Palo Santo, Tala, Espinillo, Jacarandá, Guayacán, Cedro Misionero, Pindó, Chañar]
+      armor:     # la especialidad
+        group: {en: "BioSteel Armored Divisions", es: "Divisiones Acorazadas de Bioacero"}
+        pattern: "{n}.ª Acorazada de Bioacero «{name}»"
+        fallback: "%d.ª División Acorazada de Bioacero"
+        names: [Yaguareté, Tatú Carreta, Pampero, Aguará Guazú, Puma, Yacaré, Zonda, Sudestada,
+                Huemul, Guanaco, Ñandú, Tormenta de Santa Rosa, Oso Hormiguero, Tapir, Pecarí, Viento Blanco,
+                Corona de Gaia, Raíz de Hierro, Savia Negra, Corteza Viva]
+      mobile:
+        group: {en: "Pampas Motorized Columns", es: "Columnas Motorizadas Pampeanas"}
+        pattern: "{n}.ª Columna Motorizada «{name}»"
+        fallback: "%d.ª Columna Motorizada"
+        names: [Baqueano, Rastreador, Resero, Tropero, Domador, Arriero, Payador, Boleador,
+                Chacarero, Puestero]
+      mountain:
+        group: {en: "Andean Divisions", es: "Divisiones Andinas"}
+        pattern: "{n}.ª División Andina «{name}»"
+        fallback: "%d.ª División Andina"
+        names: [Aconcagua, Tupungato, Lanín, Fitz Roy, Tronador, Mercedario]
+      marines:
+        group: {en: "River Plate Marines", es: "Infantería de Marina del Plata"}
+        pattern: "{n}.ª de Infantería de Marina «{name}»"
+        fallback: "%d.ª División de Infantería de Marina"
+        names: [Río de la Plata, Delta del Paraná, Martín García, Riachuelo, Samborombón, Punta Indio]
+      airborne:
+        group: {en: "Condor Hunters", es: "Cazadores Cóndor"}
+        pattern: "{n}.ª de Cazadores Cóndor «{name}»"
+        fallback: "%d.ª División de Cazadores Cóndor"
+        names: [Cóndor Real, Carancho, Halcón Peregrino, Águila Mora, Caburé, Ñacurutú]
+      cavalry:
+        group: {en: "Forest Grenadiers", es: "Granaderos del Monte"}
+        pattern: "{n}.º de Granaderos del Monte «{name}»"
+        fallback: "%d.º Regimiento de Granaderos del Monte"
+        names: [Criollo, Tobiano, Overo, Zaino, Picazo, Bayo]
+      militia:
+        group: {en: "Park Rangers", es: "Guardaparques"}
+        pattern: "{n}.ª Brigada de Guardaparques «{name}»"
+        fallback: "%d.ª Brigada de Guardaparques"
+        names: [Iberá, El Impenetrable, Yungas, Selva Paranaense, Esteros del Bermejo, Talampaya,
+                Quebrada del Condorito, Los Alerces]
+
+    # La Comuna: el Plan, el Cómputo, el Consejo Sorteado, los Kombinat.
+    ASC:
+      infantry:
+        group: {en: "Communard Divisions", es: "Divisiones Comunales"}
+        pattern: "{n}.ª División Comunal «{name}»"
+        fallback: "%d.ª División Comunal"
+        names: [Comuna de París, Espartaco, Rosa Luxemburgo, Clara Zetkin, Karl Liebknecht, Consejo de Kiel,
+                Ruhr Rojo, Lieja, Gdansk, Consejo de Múnich, Primero de Mayo, Jornada de Ocho Horas,
+                Asamblea Permanente, Quórum, Sorteo, Mandato Revocable]
+      mobile:    # la IA de la ASC pide ejército móvil
+        group: {en: "Plan Mobile Divisions", es: "Divisiones Móviles del Plan"}
+        pattern: "{n}.ª División Móvil «{name}»"
+        fallback: "%d.ª División Móvil del Plan"
+        names: [Zuse, Turing, Lovelace, Babbage, Von Neumann, Shannon, Wiener, Glushkov,
+                Cybersyn, OGAS, Kantoróvich, Hollerith, Boole, Leibniz, PLAN-41, Nodo Central]
+      armor:
+        group: {en: "Kombinat Armored Divisions", es: "Divisiones Blindadas del Kombinat"}
+        pattern: "{n}.ª Blindada del Kombinat «{name}»"
+        fallback: "%d.ª División Blindada del Kombinat"
+        names: [Martillo, Yunque, Prensa, Torno, Fresadora, Laminadora, Alto Horno, Engranaje,
+                Pistón, Turbina, Remachadora, Forja Automática]
+      airborne:  # el enjambre de drones (v2 del diseño)
+        group: {en: "Swarm Divisions", es: "Divisiones Enjambre"}
+        pattern: "{n}.ª División Enjambre «{name}»"
+        fallback: "Enjambre %d"
+        names: [Colmena, Bandada, Cardumen, Enjambre Rojo, Red Neuronal, Señal Portadora]
+      marines:
+        group: {en: "Red Baltic Marines", es: "Infantería del Báltico Rojo"}
+        pattern: "{n}.ª de Infantería del Báltico Rojo «{name}»"
+        fallback: "%d.ª División de Infantería del Báltico"
+        names: [Rostock, Kiel, Frisia, Rügen, Heligoland, Jutlandia]
+      mountain:
+        group: {en: "Communard Mountain Divisions", es: "Divisiones Comunales de Montaña"}
+        pattern: "{n}.ª de Montaña «{name}»"
+        fallback: "%d.ª División de Montaña"
+        names: [Harz, Selva Negra, Sudetes, Ardenas, Eifel, Tatras]
+      militia:
+        group: {en: "Workers' Militias", es: "Milicias Obreras"}
+        pattern: "{n}.ª Milicia Obrera «{name}»"
+        fallback: "%d.ª Milicia Obrera de Barrio"
+        names: [Cooperativa, Sindicato, Comité de Fábrica, Consejo de Barrio, Huelga General, Ateneo Obrero]
+      cavalry:
+        group: {en: "Collective Farm Riders", es: "Jinetes del Koljós"}
+        pattern: "{n}.º de Jinetes «{name}»"
+        fallback: "%d.º Regimiento de Jinetes del Koljós"
+        names: [Espiga, Centeno, Arado, Trilladora]
+
+    # La Unión: cuatro corporaciones, contratistas motorizados.
+    FCU:
+      infantry:
+        group: {en: "Contract Divisions", es: "Divisiones Contratadas"}
+        pattern: "{nth} Contract Division '{name}'"
+        fallback: "Contract Division %d"
+        names: [Blue Chip, Dividend, Equity, Bull Market, Venture, Leverage, Merger, Liquidity,
+                Portfolio, Hedge, Futures, Capital Gain, Fiduciary, Prime Rate, Net Worth, Growth Stock]
+      mobile:    # los contratistas
+        group: {en: "Rapid Response Contractors", es: "Contratistas de Respuesta Rápida"}
+        pattern: "{nth} Rapid Response Group '{name}'"
+        fallback: "Rapid Response Group %d"
+        names: [Castellane Security, Halvorsen-Ito Escort, Meridian Motor, Obsidian Convoy, Sentinel, Overwatch,
+                Quick Reaction, Express Delivery, Bottom Line, Due Diligence, Hard Asset, Hostile Bid]
+      armor:
+        group: {en: "Meridian Armored Divisions", es: "Divisiones Blindadas Meridian"}
+        pattern: "{nth} Armored Division '{name}'"
+        fallback: "Meridian Armored Division %d"
+        names: [Meridian Bulwark, Meridian Paladin, Meridian Titan, Meridian Monarch, Meridian Sovereign,
+                Meridian Magnate, Meridian Tycoon, Meridian Baron, Meridian Mogul, Meridian Chairman,
+                Meridian Majority, Meridian Monopoly]
+      airborne:
+        group: {en: "Skyline Airborne", es: "Aerotransportados Skyline"}
+        pattern: "{nth} Skyline Airborne '{name}'"
+        fallback: "Skyline Airborne Division %d"
+        names: [Golden Parachute, Skyrocket, Air Rights, High Yield, Penthouse, Cloud Service]
+      marines:
+        group: {en: "Obsidian Coastal Security", es: "Seguridad Costera Obsidian"}
+        pattern: "{nth} Coastal Security Division '{name}'"
+        fallback: "Coastal Security Division %d"
+        names: [Two Oceans, Gulf Coast, Great Lakes, Chesapeake, Puget Sound, Cape Cod]
+      mountain:
+        group: {en: "Mountain Contractors", es: "Contratistas de Montaña"}
+        pattern: "{nth} Mountain Division '{name}'"
+        fallback: "Mountain Division %d"
+        names: [Rockies, Appalachia, Sierra Nevada, Cascades, Ozarks, Yellowstone]
+      cavalry:
+        group: {en: "Rangers", es: "Rangers"}
+        pattern: "{nth} Ranger Regiment '{name}'"
+        fallback: "Ranger Regiment %d"
+        names: [Mustang, Bronco, Stallion, Pinto]
+      militia:
+        group: {en: "Private Watch", es: "Vigilancia Privada"}
+        pattern: "{nth} Private Watch '{name}'"
+        fallback: "Private Watch %d"
+        names: [Gated Community, Homeowners, Neighborhood Plan, Premium Tier, Shareholders, Franchise]
+
+    # La Alta Mar: nodos, estrechos, seguros (Aldana) y corsarios (Tavake).
+    HSN:
+      marines:   # la especialidad: la IA pide 25% de marines
+        group: {en: "Straits Marine Divisions", es: "Divisiones de Marines de los Estrechos"}
+        pattern: "{nth} Straits Marine Division '{name}'"
+        fallback: "Straits Marine Division %d"
+        names: [Malacca, Sunda, Kanto, Manila, Taiwan, Hong Kong, Okinawa, Tsushima,
+                Lombok, Makassar, Luzon, Mindanao, Borneo, Java, Sumatra, Celebes,
+                Palawan, Ryukyu, Bali, Timor, Letter of Marque, Boarding Party, Salvage Right, Free Port]
+      infantry:
+        group: {en: "Harbor Guard Divisions", es: "Divisiones de la Guardia de Puerto"}
+        pattern: "{nth} Harbor Guard Division '{name}'"
+        fallback: "Harbor Guard Division %d"
+        names: [Singapore, Yokohama, Kobe, Surabaya, Cebu, Davao, Kaohsiung, Keelung,
+                Naha, Nagasaki, Penang, Jakarta]
+      mobile:
+        group: {en: "Port Logistics Divisions", es: "Divisiones de Logística Portuaria"}
+        pattern: "{nth} Port Logistics Division '{name}'"
+        fallback: "Port Logistics Division %d"
+        names: [Container, Gantry Crane, Bill of Lading, Freight Forward, Customs Seal, Transshipment]
+      armor:
+        group: {en: "Kaiyo Armored Divisions", es: "Divisiones Blindadas Kaiyo"}
+        pattern: "{nth} Kaiyo Armored Division '{name}'"
+        fallback: "Kaiyo Armored Division %d"
+        names: [Hammerhead, Barracuda, Orca, Manta, Moray, Marlin, Swordfish, Stingray]
+      airborne:
+        group: {en: "Boarding Divisions", es: "Divisiones de Abordaje"}
+        pattern: "{nth} Boarding Division '{name}'"
+        fallback: "Boarding Division %d"
+        names: [Grappling Hook, Cutlass, Privateer, Freebooter, Plunder, Prize Crew]
+      mountain:
+        group: {en: "Volcano Divisions", es: "Divisiones de los Volcanes"}
+        pattern: "{nth} Volcano Division '{name}'"
+        fallback: "Mountain Division %d"
+        names: [Fuji, Mayon, Pinatubo, Krakatoa, Merapi, Kinabalu]
+      militia:
+        group: {en: "Dock Militias", es: "Milicias de los Muelles"}
+        pattern: "{nth} Dock Militia '{name}'"
+        fallback: "Dock Militia %d"
+        names: [Stevedores, Longshoremen, Pier Nine, Dry Dock, Night Shift, Harbor Pilots]
+
+    # El Reino del Sol: montaña, cóndores, Qhapaq Ñan, los cuatro Suyus.
+    NAS:
+      mountain:  # la IA pide 25% de montaña
+        group: {en: "Sun Mountain Divisions", es: "Divisiones de Montaña del Sol"}
+        pattern: "{n}.ª División de Montaña «{name}»"
+        fallback: "%d.ª División de Montaña del Sol"
+        names: [Huascarán, Illimani, Chimborazo, Cotopaxi, Ausangate, Salcantay, Sajama, Illampu,
+                Yerupajá, Coropuna, Misti, Ampato, Alpamayo, Huayna Potosí, Licancabur, Parinacota,
+                Cayambe, Tungurahua, Antisana, Wakay Willka]
+      infantry:
+        group: {en: "Mit'a Divisions", es: "Divisiones de la Mit'a"}
+        pattern: "{n}.ª División de la Mit'a «{name}»"
+        fallback: "%d.ª División de la Mit'a"
+        names: [Cuntisuyu, Chinchaysuyu, Antisuyu, Collasuyu, Cusco, Vilcabamba, Sacsayhuamán, Ollantaytambo,
+                Machu Picchu, Pachacútec, Túpac Yupanqui, Huayna Cápac, Manco Inca, Túpac Amaru,
+                Mama Ocllo, Manco Cápac]
+      airborne:  # el cielo, la especialidad aérea
+        group: {en: "Sky Condors", es: "Cóndores del Sol"}
+        pattern: "{n}.ª de Cóndores del Sol «{name}»"
+        fallback: "%d.ª División de Cóndores del Sol"
+        names: [Kuntur, Anka, Waman, Allqamari, Pillco, Wakcha Kuntur, Inti Kuntur, Hanan Pacha]
+      armor:
+        group: {en: "Inti Forge Divisions", es: "Divisiones de las Forjas del Inti"}
+        pattern: "{n}.ª Blindada del Inti «{name}»"
+        fallback: "%d.ª División Blindada del Inti"
+        names: [Puma, Otorongo, Amaru, Illapa, Ukumari, Taruca, Wayra, Pachacuti]
+      mobile:
+        group: {en: "Chasqui Divisions", es: "Divisiones Chasqui"}
+        pattern: "{n}.ª División Chasqui «{name}»"
+        fallback: "%d.ª División Chasqui"
+        names: [Qhapaq Ñan, Tambo, Apachita, Chaka, Quipu, Suyu]
+      cavalry:
+        group: {en: "Puna Riders", es: "Jinetes de la Puna"}
+        pattern: "{n}.º de Jinetes de la Puna «{name}»"
+        fallback: "%d.º Regimiento de Jinetes de la Puna"
+        names: [Vicuña, Alpaca, Llama, Guanaco Andino]
+      marines:
+        group: {en: "Callao Marines", es: "Infantería de Marina del Callao"}
+        pattern: "{n}.ª de Infantería de Marina «{name}»"
+        fallback: "%d.ª División de Infantería de Marina"
+        names: [Callao, Titicaca, Paracas, Guayaquil, Chincha, Islas del Sol]
+      militia:
+        group: {en: "Ayllu Militias", es: "Milicias del Ayllu"}
+        pattern: "{n}.ª Milicia del Ayllu «{name}»"
+        fallback: "%d.ª Milicia del Ayllu"
+        names: [Hatun Ayllu, Minka, Ayni, Kamayoq, Llaqta, Marka]
+
+    # El Directorio: la masa, la artillería del río, los tres caudales.
+    SHD:
+      infantry:  # la masa: la IA pide 65% de infantería
+        group: {en: "Harmonious Divisions", es: "Divisiones Armónicas"}
+        pattern: "{n}.ª División Armónica «{name}»"
+        fallback: "%d.ª División Armónica"
+        names: [Río Amarillo, Yangtsé, Huai, Han, Río de las Perlas, Min, Gan, Xiang,
+                Liao, Songhua, Wei, Luo, Jing, Fen, Qiantang, Gran Canal,
+                Producción, Orden, Pueblo, Caudal Corregido]
+      artillery: # la especialidad
+        group: {en: "Directorate Fire Divisions", es: "Divisiones de Fuego del Directorio"}
+        pattern: "{n}.ª División de Fuego «{name}»"
+        fallback: "%d.ª División de Fuego del Directorio"
+        names: [Compuerta, Esclusa, Dique, Trueno, Crecida, Aluvión, Presa, Rompeolas,
+                Tres Gargantas, Cauce, Desborde, Marea Alta]
+      armor:
+        group: {en: "Yellow River Armored Divisions", es: "Divisiones Blindadas del Río Amarillo"}
+        pattern: "{n}.ª Blindada «{name}»"
+        fallback: "%d.ª División Blindada del Directorio"
+        names: [Tigre Blanco, Dragón Azul, Tortuga Negra, Fénix Rojo, Qilin, Bixie, Pixiu, Taotie]
+      mobile:
+        group: {en: "Grand Canal Divisions", es: "Divisiones del Gran Canal"}
+        pattern: "{n}.ª División del Canal «{name}»"
+        fallback: "%d.ª División Móvil del Gran Canal"
+        names: [Hangzhou, Suzhou, Yangzhou, Huai'an, Jining, Tianjin]
+      mountain:
+        group: {en: "Directorate Mountain Divisions", es: "Divisiones de Montaña del Directorio"}
+        pattern: "{n}.ª de Montaña «{name}»"
+        fallback: "%d.ª División de Montaña"
+        names: [Kunlun, Tianshan, Qinling, Taishan, Huangshan, Emei]
+      marines:
+        group: {en: "China Sea Marines", es: "Infantería del Mar de China"}
+        pattern: "{n}.ª de Infantería de Marina «{name}»"
+        fallback: "%d.ª División de Infantería de Marina"
+        names: [Bohai, Mar Amarillo, Zhoushan, Hainan, Chusan, Estrecho de Qiongzhou]
+      airborne:
+        group: {en: "Crane Divisions", es: "Divisiones Grulla"}
+        pattern: "{n}.ª División Grulla «{name}»"
+        fallback: "%d.ª División Aerotransportada"
+        names: [Grulla Blanca, Grulla Coronada, Garza Real, Oca Salvaje]
+      cavalry:
+        group: {en: "Northern Riders", es: "Jinetes del Norte"}
+        pattern: "{n}.º de Jinetes del Norte «{name}»"
+        fallback: "%d.º Regimiento de Jinetes del Norte"
+        names: [Caballo Celeste, Ferghana, Viento del Norte, Estepa Dorada]
+      militia:
+        group: {en: "People's Current Militias", es: "Milicias del Caudal del Pueblo"}
+        pattern: "{n}.ª Milicia del Pueblo «{name}»"
+        fallback: "%d.ª Milicia del Pueblo"
+        names: [Aldea del Dique, Arrozal, Terraza, Molino, Pozo, Barca]
+
+    # La Federación: milicias populares, consejos, logística del corredor.
+    APF:
+      infantry:  # la IA pide 70% de infantería
+        group: {en: "Federal Divisions", es: "Divisiones Federales"}
+        pattern: "{n}.ª División Federal «{name}»"
+        fallback: "%d.ª División Federal"
+        names: [Malí, Songhai, Ghana, Kanem, Benín, Oyo, Kongo, Gran Zimbabue,
+                Kush, Mapungubwe, Asante, Dahomey, Sokoto, Monomotapa, Buganda, Luba]
+      militia:   # su identidad: las milicias de los consejos
+        group: {en: "Council Militias", es: "Milicias de los Consejos"}
+        pattern: "{n}.ª Milicia del Consejo de {name}"
+        fallback: "%d.ª Milicia de los Consejos"
+        names: [Bamako, Kano, Lagos, Accra, Kinsasa, Lubumbashi, Nairobi, Dar es Salaam,
+                Kampala, Lusaka, Harare, Luanda, Abiyán, Uagadugú, Niamey, Yamena]
+      mobile:
+        group: {en: "Trans-African Divisions", es: "Divisiones Transafricanas"}
+        pattern: "{n}.ª División Transafricana «{name}»"
+        fallback: "%d.ª División Transafricana"
+        names: [Transahariana, Caravana, Harmattan, Corredor de Lobito, Ruta del Cobre, Gran Rift]
+      armor:
+        group: {en: "Katanga Armored Divisions", es: "Divisiones Blindadas de Katanga"}
+        pattern: "{n}.ª Blindada de Katanga «{name}»"
+        fallback: "%d.ª División Blindada de Katanga"
+        names: [Búfalo, Rinoceronte, Elefante, León, Leopardo, Hipopótamo, Mamba, Cocodrilo]
+      mountain:
+        group: {en: "Highland Divisions", es: "Divisiones de las Montañas"}
+        pattern: "{n}.ª de Montaña «{name}»"
+        fallback: "%d.ª División de Montaña"
+        names: [Ruwenzori, Kilimanjaro, Monte Kenia, Elgon, Virunga, Fouta Djallon]
+      marines:
+        group: {en: "Gulf of Guinea Marines", es: "Infantería del Golfo de Guinea"}
+        pattern: "{n}.ª de Infantería de Marina «{name}»"
+        fallback: "%d.ª División de Infantería de Marina"
+        names: [Golfo de Guinea, Bioko, Delta del Níger, Gorée, Zanzíbar, Cabo Verde]
+      airborne:
+        group: {en: "Rift Falcons", es: "Halcones del Rift"}
+        pattern: "{n}.ª de Halcones del Rift «{name}»"
+        fallback: "%d.ª División Aerotransportada"
+        names: [Águila Pescadora, Secretario, Marabú, Cálao]
+      cavalry:
+        group: {en: "Sahel Riders", es: "Jinetes del Sahel"}
+        pattern: "{n}.º de Jinetes del Sahel «{name}»"
+        fallback: "%d.º Regimiento de Jinetes del Sahel"
+        names: [Tombuctú, Agadez, Gao, Djenné, Tamanrasset, Aïr]
+
+    # El Imperio: las legiones, la Tormenta de Marte, las Vías.
+    NRE:
+      infantry:  # la especialidad: las legiones (nombres de las legiones históricas)
+        group: {en: "Legions", es: "Legiones"}
+        pattern: "Legio {roman} {name}"
+        fallback: "Legio %d"
+        names: [Italica, Augusta, Gallica, Macedonica, Alaudae, Victrix, Claudia, Augusta Pia,
+                Hispana, Gemina, Claudia Pia Fidelis, Fulminata, Gemina Pia, Martia Victrix, Apollinaris,
+                Flavia Firma, Teutoburgiensis, Germanica, Valeria, Valeria Victrix, Rapax, Primigenia,
+                Traiana, Parthica, Adiutrix, Minervia, Antoniniana, Ulpia, Dacica, Pretoriana]
+      artillery: # la Tormenta de Marte
+        group: {en: "Storm of Mars", es: "Tormenta de Marte"}
+        pattern: "Tormentum {roman} «{name}»"
+        fallback: "Tormentum %d"
+        names: [Ballista, Onager, Scorpio, Catapulta, Carroballista, Fulmen, Tonitrus, Polybolos]
+      armor:
+        group: {en: "Cataphract Divisions", es: "Divisiones Catafractas"}
+        pattern: "Cataphracta {roman} «{name}»"
+        fallback: "Cataphracta %d"
+        names: [Testudo, Aries, Clibanaria, Ferrata, Invicta, Adamantina, Leonina, Aurelia]
+      mobile:
+        group: {en: "Road Vexillations", es: "Vexillationes de las Vías"}
+        pattern: "Vexillatio {roman} «{name}»"
+        fallback: "Vexillatio %d"
+        names: [Via Appia, Via Aurelia, Via Flaminia, Via Aemilia, Via Egnatia, Via Domitia,
+                Via Augusta, Via Traiana]
+      mountain:
+        group: {en: "Alpine Cohorts", es: "Cohortes Alpinas"}
+        pattern: "Cohors Alpina {roman} «{name}»"
+        fallback: "Cohors Alpina %d"
+        names: [Alpes Poeninae, Alpes Cottiae, Alpes Maritimae, Alpes Graiae, Apenninus, Carpathia]
+      marines:
+        group: {en: "Classiarii", es: "Classiarii"}
+        pattern: "Classiarii {roman} «{name}»"
+        fallback: "Classiarii %d"
+        names: [Misenenses, Ravennates, Mare Nostrum, Sicula, Tyrrhena, Adriatica]
+      airborne:
+        group: {en: "Eagles of Jupiter", es: "Águilas de Júpiter"}
+        pattern: "Aquila {roman} «{name}»"
+        fallback: "Aquila %d"
+        names: [Iovis, Victrix, Fulminata, Aurea]
+      cavalry:
+        group: {en: "Alae", es: "Alas de caballería"}
+        pattern: "Ala {roman} «{name}»"
+        fallback: "Ala %d"
+        names: [Equites Singulares, Hispanorum, Gallorum, Numidarum, Thracum, Pannoniorum]
+      militia:
+        group: {en: "Vigiles", es: "Vigiles"}
+        pattern: "Cohors Vigilum {roman} «{name}»"
+        fallback: "Cohors Vigilum %d"
+        names: [Urbana, Suburbana, Ostiensis, Portuensis]
+
+    # --- Satélites: una lista para todas las tropas --------------------------
+    PTA:
+      all:
+        group: {en: "Patagonian Divisions", es: "Divisiones Patagónicas"}
+        pattern: "{n}.ª División Patagónica «{name}»"
+        fallback: "%d.ª División Patagónica"
+        names: [Tierra del Fuego, Magallanes, Santa Cruz, Chubut, Nahuel Huapi, Perito Moreno,
+                Torres del Paine, Viento Austral, Estepa, Canal Beagle]
+    YYG:
+      all:
+        group: {en: "Guaraní Divisions", es: "Divisiones Guaraníes"}
+        pattern: "{n}.ª División «{name}»"
+        fallback: "%d.ª División Guaraní"
+        names: [Mbaracayá, Tupã, Arandu, Ñandutí, Ka'aguy, Mborevi, Tatu, Guyra, Mbói, Yvytu]
+    ZNG:
+      all:
+        group: {en: "Granadine Divisions", es: "Divisiones Granadinas"}
+        pattern: "{n}.ª División Granadina «{name}»"
+        fallback: "%d.ª División Granadina"
+        names: [Chocó, Magdalena, Cauca, Sierra Nevada, Darién, Tequendama, Bochica, Bachué, Guatavita, Zipa]
+    ZLL:
+      all:
+        group: {en: "Llanero Divisions", es: "Divisiones Llaneras"}
+        pattern: "{n}.ª División Llanera «{name}»"
+        fallback: "%d.ª División Llanera"
+        names: [Orinoco, Apure, Arauca, Catatumbo, Roraima, Auyantepui, Canaima, Morichal, Guárico, Barinas]
+    ZNR:
+      all:
+        group: {en: "Boreal Divisions", es: "Divisiones Boreales"}
+        pattern: "{nth} Boreal Division '{name}'"
+        fallback: "Boreal Division %d"
+        names: [Timberline, Bedrock, Tundra, Caribou, Muskeg, Canadian Shield, Yukon, Klondike, Athabasca, Permafrost]
+    ZSE:
+      all:
+        group: {en: "Charter City Divisions", es: "Divisiones de las Ciudades-Carta"}
+        pattern: "{n}.ª División de Carta «{name}»"
+        fallback: "%d.ª División de Carta"
+        names: [Monterrey, Tijuana, Querétaro, Guadalajara, Mérida, Puebla, Tegucigalpa, San Pedro Sula,
+                Ciudad Juárez, Saltillo]
+    ZAF:
+      all:
+        group: {en: "Antillean Divisions", es: "Divisiones Antillanas"}
+        pattern: "{n}.ª División Antillana «{name}»"
+        fallback: "%d.ª División Antillana"
+        names: [La Habana, Sierra Maestra, Escambray, Cibao, Macandal, Toussaint, Dessalines, Anacaona,
+                Hatuey, Enriquillo]
+    ZAS:
+      all:
+        group: {en: "Austral Pact Divisions", es: "Divisiones del Pacto Austral"}
+        pattern: "{nth} Austral Division '{name}'"
+        fallback: "Austral Division %d"
+        names: [Outback, Kakadu, Uluru, Kimberley, Pilbara, Nullarbor, Aoraki, Waikato, Canterbury, Southern Cross]
+    ZBC:
+      all:
+        group: {en: "Baltic Commune Divisions", es: "Divisiones de la Comuna Báltica"}
+        pattern: "{n}.ª División Báltica «{name}»"
+        fallback: "%d.ª División Báltica"
+        names: [Karelia, Laponia, Saimaa, Vilna, Riga, Tallin, Kaunas, Tartu, Sisu, Kalevala]
+    ZAL:
+      all:
+        group: {en: "Albion Workers' Divisions", es: "Divisiones Obreras de Albión"}
+        pattern: "{nth} Workers' Division '{name}'"
+        fallback: "Workers' Division %d"
+        names: [Ned Ludd, Captain Swing, Tolpuddle, Peterloo, Levellers, Diggers, Chartists, Wat Tyler,
+                Rochdale Pioneers, Jack Cade]
+    ZKR:
+      all:
+        group: {en: "Korean Protectorate Divisions", es: "Divisiones del Protectorado"}
+        pattern: "{n}.ª División «{name}»"
+        fallback: "%d.ª División del Protectorado"
+        names: [Paektu, Halla, Kumgang, Taebaek, Jiri, Han, Taedong, Nakdong, Hwarang, Goguryeo]
+    ZST:
+      all:
+        group: {en: "Steppe Divisions", es: "Divisiones de la Estepa"}
+        pattern: "{n}.ª División de la Estepa «{name}»"
+        fallback: "%d.ª División de la Estepa"
+        names: [Khangai, Altái, Gobi, Orjón, Kerulen, Selenga, Tuvá, Jentii, Tengri, Karakórum]
+    ZET:
+      all:
+        group: {en: "Highland Federation Divisions", es: "Divisiones de las Tierras Altas"}
+        pattern: "{n}.ª División de las Tierras Altas «{name}»"
+        fallback: "%d.ª División de las Tierras Altas"
+        names: [Simien, Aksum, Lalibela, Gondar, Harar, Tana, Nilo Azul, Ras Dashen, Adua, Banco de Semillas]
+    ZSA:
+      all:
+        group: {en: "Cape Federation Divisions", es: "Divisiones del Cabo"}
+        pattern: "{n}.ª División del Cabo «{name}»"
+        fallback: "%d.ª División del Cabo"
+        names: [Drakensberg, Karoo, Highveld, Limpopo, Mil Consejos, Kalahari, Namaqualand, Zululand,
+                Montaña de la Mesa, Cabo de las Tormentas]
+    ZHI:
+      all:
+        group: {en: "Hispanic Legions", es: "Legiones de Hispania"}
+        pattern: "Legio Hispanica {roman} «{name}»"
+        fallback: "Legio Hispanica %d"
+        names: [Tarraconensis, Baetica, Lusitania, Gallaecia, Carthaginensis, Numantia, Saguntum, Viriatus,
+                Emerita Augusta, Caesaraugusta]
+    ZDA:
+      all:
+        group: {en: "Dacian Legions", es: "Legiones de Dacia"}
+        pattern: "Legio Dacica {roman} «{name}»"
+        fallback: "Legio Dacica %d"
+        names: [Sarmizegetusa, Decebalus, Burebista, Carpathica, Danubiana, Transilvana, Pannonica, Moesica,
+                Thracica, Bunker]
+
+    # --- La Anarquía --------------------------------------------------------
+    ZWE:
+      all:
+        group: {en: "Eurasian Warbands", es: "Bandas de Eurasia"}
+        pattern: "{name}"
+        fallback: "Banda %d de Eurasia"
+        names: [Horda de los Urales, Banda del Volga, Lobos de Siberia, Los del Transiberiano,
+                Cosacos del Don, Banda del Ob, Estepa Negra, Hermandad del Tren]
+    ZWI:
+      all:
+        group: {en: "Hindustan Warbands", es: "Bandas del Indostán"}
+        pattern: "{name}"
+        fallback: "Banda %d del Indostán"
+        names: [Banda del Ganges, Señores del Decán, Tigres de Bengala, Hijos del Monzón,
+                Los del Punyab, Jinetes del Thar, Banda del Indo, Guardia de Benarés]
+    ZWM:
+      all:
+        group: {en: "Desert Emirate Bands", es: "Bandas de los Emiratos"}
+        pattern: "{name}"
+        fallback: "Banda %d del Desierto"
+        names: [Halcones del Nafud, Espadas del Rub al-Jali, Jinetes del Siroco, Banda del Éufrates,
+                Guardia del Pozo, Lanzas de Nejd, Hijos del Simún, Escorpiones del Golfo]
+    ZWB:
+      all:
+        group: {en: "Amazon Caudillo Bands", es: "Bandas de los Caudillos"}
+        pattern: "{name}"
+        fallback: "Banda %d del Amazonas"
+        names: [Banda del Río Negro, Caucheros, Garimpeiros, Hijos del Boto, Los del Xingu,
+                Anacondas, Guardia del Tapajós, Pirañas]
+    ZAN:
+      all:
+        group: {en: "Lawless Bands", es: "Bandas Sin Ley"}
+        pattern: "{name}"
+        fallback: "Banda %d Sin Ley"
+        names: [Pueblo Amurallado, Los Sin Bandera, Banda del Desarme, Caravana Perdida,
+                Hijos del Polvo, Los Últimos, Milicia del Cruce, Carroñeros]
+    ZSG:
+      all:
+        group: {en: "Sanctuary Wardens", es: "Custodios del Santuario"}
+        pattern: "{name}"
+        fallback: "%d.ª Brigada de Guardaparques"
+        names: [Guardaparques del Santuario, Chamanes del Río, Custodios de la Madera Viva, Guardia del Caucho,
+                Vigías del Dosel, Hermandad de la Ceiba, Guardianes del Agua Dulce, Centinelas del Musgo]
+
+  # ---------------------------------------------------------------------------
+  # BARCOS
+  # ---------------------------------------------------------------------------
+  ships:
+
+    EFE:
+      screen:    {group: {en: "Rivers", es: "Ríos"}, fallback: "Destructor %d",
+                  names: [Paraná, Uruguay, Pilcomayo, Bermejo, Salado, Colorado, Río Negro, Chubut, Deseado,
+                          Iguazú, Limay, Neuquén, Atuel, Gualeguay, Carcarañá, Río Dulce, Luján, Tercero]}
+      submarine: {group: {en: "River Fish", es: "Peces del río"}, fallback: "Sumergible %d",
+                  names: [Surubí, Dorado, Pacú, Manduví, Tararira, Boga, Patí, Sábalo, Pejerrey, Moncholo, Armado, Bagre]}
+      cruiser:   {group: {en: "Regions", es: "Regiones"}, fallback: "Crucero %d",
+                  names: [Pampa, Chaco, Mesopotamia, Litoral, Cuyo, Misiones, Patagonia, Comahue, Delta, Iberá]}
+      capital:   {group: {en: "The Green Crown", es: "La Corona Verde"}, fallback: "Acorazado %d",
+                  names: [Corona de Gaia, Aurelio IV, Madre Tierra, Bosque Eterno, Raíz del Mundo, Árbol de la Vida,
+                          Selva Invicta, Monte Sagrado, Mandato Verde]}
+      carrier:   {group: {en: "Birds of the Pampas", es: "Aves de la Pampa"}, fallback: "Portaaviones %d",
+                  names: [Cóndor, Hornero, Chajá, Benteveo, Tero, Jabirú, Flamenco, Calandria]}
+
+    ASC:
+      screen:    {group: {en: "Council Words", es: "Palabras del Consejo"}, fallback: "Destructor %d",
+                  names: [Igualdad, Solidaridad, Quórum, Sorteo, Asamblea, Consenso, Plenario, Mandato, Delegado,
+                          Cooperativa, Sindicato, Huelga, Jornada, Plusvalía, Dialéctica, Autogestión]}
+      submarine: {group: {en: "Algorithms", es: "Algoritmos"}, fallback: "Sumergible %d",
+                  names: [Algoritmo, Heurística, Recursión, Bucle, Paridad, Checksum, Compilador, Núcleo, Caché,
+                          Protocolo, Cifrado, Enrutador]}
+      cruiser:   {group: {en: "Commune Cities", es: "Ciudades de la Comuna"}, fallback: "Crucero %d",
+                  names: [Rostock, Kiel, Róterdam, Amberes, Szczecin, Essen, Dortmund, Leipzig, Dresde, Bremen, Hamburgo, Lübeck]}
+      capital:   {group: {en: "The Plan", es: "El Plan"}, fallback: "Acorazado %d",
+                  names: [Karl Marx, Friedrich Engels, Rosa Luxemburgo, Comuna de París, Espartaco, PLAN-41,
+                          Consejo Sorteado, Quórum Humano]}
+      carrier:   {group: {en: "Datacenters", es: "Centros de datos"}, fallback: "Portaaviones %d",
+                  names: [Servidor Central, Red Total, Nube Roja, Mainframe, Cybersyn, OGAS, Colmena, Enjambre]}
+
+    FCU:
+      screen:    {group: {en: "Corporate Values", es: "Valores corporativos"}, fallback: "Destroyer %d",
+                  names: [Compliance, Synergy, Due Diligence, Leverage, Liquidity, Arbitrage, Acquisition, Stakeholder,
+                          Dividend, Buyback, Quarterly Report, Fiscal Year, Audit, Profit Margin, Premium, Surplus, Collateral, Asset]}
+      submarine: {group: {en: "Hostile Finance", es: "Finanzas hostiles"}, fallback: "Submarine %d",
+                  names: [Short Seller, Insider, Hostile Takeover, Poison Pill, Junk Bond, Margin Call, Bear Raid,
+                          Dark Pool, Shell Company, Offshore, Tax Haven, Loophole]}
+      cruiser:   {group: {en: "Union Cities", es: "Ciudades de la Unión"}, fallback: "Cruiser %d",
+                  names: [Chicago, Detroit, Houston, Seattle, Pittsburgh, Boston, Atlanta, Denver, Phoenix, Baltimore,
+                          Cleveland, San Diego]}
+      capital:   {group: {en: "The Board", es: "El Directorio"}, fallback: "Battleship %d",
+                  names: [Castellane, Halvorsen-Ito, Meridian, Obsidian Ledger, Invisible Hand, Free Market,
+                          Majority Stake, Board of Directors, Rourke]}
+      carrier:   {group: {en: "Brands", es: "Marcas"}, fallback: "Carrier %d",
+                  names: [Skyline, Horizon Capital, Enterprise, Fortune, Prosperity, Opportunity, Growth, Venture Capital]}
+
+    HSN:         # la potencia naval: las listas más largas
+      screen:    {group: {en: "Marine Insurance", es: "Seguros marítimos"}, fallback: "Escort %d",
+                  names: [Underwriter, Indemnity, Premium, General Average, Bill of Lading, Free Port, Toll, Tariff,
+                          Arbitrage, Armed Neutrality, Manifest, Charter Party, Demurrage, Freight, Cargo, Ballast,
+                          Bottomry, Salvage, Laytime, Consignee, Clearance, Policy, Claim, Deductible,
+                          Reinsurance, Hull and Machinery, Warranty, Surveyor]}
+      submarine: {group: {en: "Corsairs", es: "Corsarios"}, fallback: "Raider %d",
+                  names: [Letter of Marque, Corsair, Privateer, Boarding Party, Plunder, Cutlass, Buccaneer, Freebooter,
+                          Sea Wolf, Bounty, Contraband, Smuggler, Tavake's Due, Black Flag, Prize Money, No Quarter,
+                          Kanto Mutiny, Ninety Days]}
+      cruiser:   {group: {en: "Nodes and Straits", es: "Nodos y estrechos"}, fallback: "Cruiser %d",
+                  names: [Malacca, Sunda, Kanto, Manila, Taiwan, Hong Kong, Okinawa, Tsushima, Lombok, Makassar,
+                          Luzon Strait, Bashi Channel, Karimata, Balabac, San Bernardino, Surigao, Tsugaru, Kanmon]}
+      capital:   {group: {en: "The Open Sea", es: "El mar abierto"}, fallback: "Capital Ship %d",
+                  names: [Mare Liberum, World Clearing House, Kofi Aldana, Inés Tavake, High Seas, Open Ocean,
+                          Kuroshio, Ring of Fire, Sovereign Current, Freedom of the Seas, Grotius, Neutral Flag]}
+      carrier:   {group: {en: "Winds and Seabirds", es: "Vientos y aves marinas"}, fallback: "Carrier %d",
+                  names: [Monsoon, Tradewind, Amihan, Habagat, Albatross, Frigatebird, Petrel, Shearwater,
+                          Booby, Tern, Kingfisher, Sea Eagle]}
+
+    NAS:
+      screen:    {group: {en: "Andean Rivers", es: "Ríos andinos"}, fallback: "Destructor %d",
+                  names: [Urubamba, Apurímac, Marañón, Ucayali, Vilcanota, Mantaro, Huallaga, Rímac, Chira, Santa,
+                          Napo, Madre de Dios, Desaguadero, Loa]}
+      submarine: {group: {en: "The Underworld", es: "El Uku Pacha"}, fallback: "Sumergible %d",
+                  names: [Uku Pacha, Mama Qucha, Yakumama, Challwa, Yaku, Paqarina, Supay, Cochamama, Pachamama, Unu Pacha]}
+      cruiser:   {group: {en: "Cities of the Sun", es: "Ciudades del Sol"}, fallback: "Crucero %d",
+                  names: [Lima, Cusco, Arequipa, Quito, La Paz, Trujillo, Tacna, Cajamarca, Huamanga, Potosí,
+                          Sucre, Iquique, Antofagasta]}
+      capital:   {group: {en: "Gods and Kings", es: "Dioses y reyes"}, fallback: "Acorazado %d",
+                  names: [Inti, Viracocha, Pachacámac, Mama Killa, Illapa, Sapa Inca, Pachacútec, Tawantinsuyu,
+                          Inti Raymi, Amaru]}
+      carrier:   {group: {en: "Andean Birds", es: "Aves andinas"}, fallback: "Portaaviones %d",
+                  names: [Kuntur, Anka, Waman, Tuku, Qinti, Pariwana, Kusi Kuyllur, Chiwaku]}
+
+    SHD:
+      screen:    {group: {en: "Virtues", es: "Virtudes"}, fallback: "Destructor %d",
+                  names: [Armonía, Equilibrio, Orden, Mesura, Concordia, Rectitud, Benevolencia, Justicia, Ritual,
+                          Sabiduría, Lealtad, Confianza, Moderación, Serenidad, Paciencia, Piedad Filial]}
+      submarine: {group: {en: "Sea Dragons", es: "Dragones del mar"}, fallback: "Sumergible %d",
+                  names: [Jiaolong, Kun, Ao, Longwang, Chiwen, Bixi, Pulao, Suanni, Yazi, Baxia]}
+      cruiser:   {group: {en: "Directorate Cities", es: "Ciudades del Directorio"}, fallback: "Crucero %d",
+                  names: [Shanghái, Dalian, Tianjin, Qingdao, Ningbo, Fuzhou, Xiamen, Cantón, Wuhan, Nankín,
+                          Chongqing, Xi'an, Pekín, Harbin]}
+      capital:   {group: {en: "The Three Currents", es: "Los tres caudales"}, fallback: "Acorazado %d",
+                  names: [Caudal Corregido, Armonía Perfecta, Tres Caudales, Producción, Orden Celeste, Pueblo,
+                          Mandato del Cielo, Gran Canal, Tres Gargantas, Zhou]}
+      carrier:   {group: {en: "Birds of Heaven", es: "Aves del cielo"}, fallback: "Portaaviones %d",
+                  names: [Fénix, Grulla, Garza, Golondrina, Martín Pescador, Urraca, Oca Salvaje, Mandarín]}
+
+    APF:
+      screen:    {group: {en: "Words of the Federation", es: "Palabras de la Federación"}, fallback: "Destructor %d",
+                  names: [Uhuru, Umoja, Harambee, Ujamaa, Ubuntu, Amani, Imani, Nguvu, Haki, Heshima, Tumaini,
+                          Jamhuri, Maendeleo, Uzalendo, Sankofa, Teranga]}
+      submarine: {group: {en: "Water Spirits", es: "Espíritus del agua"}, fallback: "Sumergible %d",
+                  names: [Mami Wata, Ninki Nanka, Inkanyamba, Mamlambo, Grootslang, Nyami Nyami, Kishi, Nommo]}
+      cruiser:   {group: {en: "Federal Ports", es: "Puertos federales"}, fallback: "Crucero %d",
+                  names: [Dakar, Durban, Lagos, Accra, Abiyán, Luanda, Mombasa, Dar es Salaam, Maputo, Conakry,
+                          Freetown, Monrovia, Zanzíbar, Lomé]}
+      capital:   {group: {en: "Gods and Founders", es: "Dioses y fundadores"}, fallback: "Acorazado %d",
+                  names: [Olokun, Yemayá, Shangó, Mansa Musa, Sundiata, Federación, Consejo de los Pueblos,
+                          Kilimanjaro, Gran Rift]}
+      carrier:   {group: {en: "African Birds", es: "Aves de África"}, fallback: "Portaaviones %d",
+                  names: [Grulla Coronada, Águila Pescadora, Ibis, Secretario, Cálao, Pelícano, Marabú, Turaco]}
+
+    NRE:
+      screen:    {group: {en: "Roman Virtues", es: "Virtudes romanas"}, fallback: "Liburna %d",
+                  names: [Virtus, Pietas, Fides, Gravitas, Dignitas, Clementia, Constantia, Disciplina, Honos,
+                          Iustitia, Prudentia, Fortitudo, Concordia, Pax, Spes, Salus, Pudicitia, Severitas]}
+      submarine: {group: {en: "Neptune's Court", es: "La corte de Neptuno"}, fallback: "Submersa %d",
+                  names: [Triton, Nereus, Proteus, Glaucus, Scylla, Charybdis, Portunus, Palaemon, Phorcys, Thetis]}
+      cruiser:   {group: {en: "Cities of the Empire", es: "Ciudades del Imperio"}, fallback: "Trireme %d",
+                  names: [Ostia, Tarentum, Ravenna, Misenum, Brundisium, Massilia, Genua, Neapolis, Syracusae,
+                          Aquileia, Lugdunum, Narbo]}
+      capital:   {group: {en: "Emperors", es: "Emperadores"}, fallback: "Quinquereme %d",
+                  names: [Augustus, Traianus, Hadrianus, Marcus Aurelius, Vespasianus, Aurelianus, Constantinus,
+                          Iulius Caesar, SPQR, Ave Imperator, Auctoritas, Mare Nostrum]}
+      carrier:   {group: {en: "Gods of Rome", es: "Dioses de Roma"}, fallback: "Aquilifera %d",
+                  names: [Iuppiter, Minerva, Mars Ultor, Apollo, Victoria, Fortuna, Iuno, Mercurius]}
+
+    # --- Satélites: una lista para todos los cascos (ZST no tiene costa) ------
+    PTA: {all: {group: {en: "Austral Seas", es: "Mares australes"}, fallback: "Nave Austral %d",
+                names: [Beagle, Magallanes, Cabo de Hornos, Ushuaia, Punta Arenas, Chiloé, Ballena Franca,
+                        Elefante Marino, Pingüino Rey, Albatros, Petrel Gigante, Isla de los Estados]}}
+    YYG: {all: {group: {en: "Guaraní Waters", es: "Aguas guaraníes"}, fallback: "Cañonera %d",
+                names: [Ypacaraí, Ypoá, Tebicuary, Aquidabán, Jejuí, Ypané, Acaray, Monday, Itaipú, Yacyretá,
+                        Humaitá, Curupayty]}}
+    ZNG: {all: {group: {en: "Isthmus Ports", es: "Puertos del istmo"}, fallback: "Nave %d",
+                names: [Panamá, Cartagena, Buenaventura, Colón, Barú, Urabá, Tumaco, Gorgona, Malpelo, San Andrés, Portobelo]}}
+    ZLL: {all: {group: {en: "Caribbean Coast", es: "Costa caribe"}, fallback: "Nave %d",
+                names: [Maracaibo, Margarita, Paria, Cumaná, La Guaira, Coro, Tortuga, Los Roques, Paraguaná, Cubagua]}}
+    ZNR: {all: {group: {en: "Boreal Coasts", es: "Costas boreales"}, fallback: "Vessel %d",
+                names: [Halifax, Vancouver, Churchill, Esquimalt, Labrador, Hudson Bay, Baffin, Fundy, Nootka,
+                        Saint Lawrence, Newfoundland, Haida Gwaii]}}
+    ZSE: {all: {group: {en: "Southern Ports", es: "Puertos del sur"}, fallback: "Nave %d",
+                names: [Veracruz, Tampico, Acapulco, Manzanillo, Mazatlán, Lázaro Cárdenas, Progreso, Puerto Cortés,
+                        Corinto, Limón, Ensenada, Cozumel]}}
+    ZAF: {all: {group: {en: "Free Ports", es: "Puertos libres"}, fallback: "Balandra %d",
+                names: [Tortuga, Contrabando, Aduana Libre, Ron, Caña, Sotavento, Barlovento, Caimán, Barracuda,
+                        Manatí, Carey, Flamenco Rosado]}}
+    ZAS: {all: {group: {en: "Austral Pact", es: "Pacto Austral"}, fallback: "Vessel %d",
+                names: [Sydney, Melbourne, Perth, Darwin, Brisbane, Hobart, Auckland, Wellington, Tasman, Coral Sea,
+                        Great Barrier, Freshwater]}}
+    ZBC: {all: {group: {en: "Baltic Shores", es: "Costas bálticas"}, fallback: "Nave %d",
+                names: [Ilmarinen, Väinämöinen, Kalev, Lembitu, Hiiumaa, Saaremaa, Åland, Ahti, Turku, Klaipėda,
+                        Ventspils, Kotka]}}
+    ZAL: {all: {group: {en: "Rivers of Albion", es: "Ríos de Albión"}, fallback: "Vessel %d",
+                names: [Mersey, Clyde, Tyne, Thames, Severn, Humber, Shannon, Liffey, Forth, Tay, Solway, Orkney]}}
+    ZKR: {all: {group: {en: "Korean Coasts", es: "Costas coreanas"}, fallback: "Nave %d",
+                names: [Busan, Incheon, Wonsan, Ulsan, Mokpo, Jeju, Ulleung, Geobukseon, Yi Sun-sin, Gangneung]}}
+    ZET: {all: {group: {en: "Red Sea", es: "Mar Rojo"}, fallback: "Nave %d",
+                names: [Massawa, Assab, Dahlak, Danakil, Bab el-Mandeb, Adulis]}}
+    ZSA: {all: {group: {en: "Cape Waters", es: "Aguas del Cabo"}, fallback: "Vessel %d",
+                names: [Agulhas, Benguela, False Bay, Simon's Town, Gqeberha, East London, Saldanha, Knysna,
+                        Mossel Bay, Robben Island, Protea, Springbok]}}
+    ZHI: {all: {group: {en: "Hispanic Ports", es: "Puertos de Hispania"}, fallback: "Navis %d",
+                names: [Gades, Carthago Nova, Hispalis, Malaca Hispana, Portus Cale, Barcino, Valentia, Tarraco,
+                        Baleares, Finisterrae, Olisipo, Emporion]}}
+    ZDA: {all: {group: {en: "Black Sea", es: "Mar Negro"}, fallback: "Navis %d",
+                names: [Tomis, Danubius, Pontus Euxinus, Histria, Callatis, Odessos, Mesembria, Sulina, Mangalia, Varna]}}
