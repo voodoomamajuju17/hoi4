@@ -47,7 +47,8 @@ def emit(ctx: BuildContext) -> None:
                     n += w
                 if kind == "tecnologias" and ctx.data.get("tech_locks"):
                     # unidades únicas (20_unique_units.yaml): solo un país las investiga
-                    new, locked = unique_units_mod.lock_techs(new, ctx.data["tech_locks"])
+                    new, locked = unique_units_mod.lock_techs(new, ctx.data["tech_locks"],
+                                                                ctx.data.get("tech_locks_visible") or set())
                     n += locked
                 if n:
                     ctx.write_text(f"{rel}/{path.name}", banner_for(SOURCE + f" (+ {rel}/{path.name} vanilla)") + new)

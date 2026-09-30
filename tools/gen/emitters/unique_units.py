@@ -3,13 +3,16 @@
 Produce:
   common/scripted_effects/meganations_unique_units.txt   <id>_desbloqueo
   common/ideas/meganations_unique_units.txt              el espíritu de cada unidad
-y deja para research.py:
-  ctx.data["tech_locks"]   tech -> TAG: solo ese país la investiga (allow y
-                           allow_branch con original_tag; ver lock_techs)
+y deja para otros emisores:
+  ctx.data["tech_locks"]        tech -> TAG: solo ese país la investiga (research.py
+                                la bloquea con allow/allow_branch; ver lock_techs)
+  ctx.data["unique_ai_plans"]   planes de IA que se activan con el desbloqueo (ai.py)
+Además saca de las tecnologías de arranque de cada país (military.py) las
+que son únicas de otro.
 
-Nada se escribe de memoria: el chasis, sus casillas, las piezas y las
-tecnologías que las habilitan se leen de la instalación. Una preferencia del
-spec que no existe se saltea; lo que quedó en cada casilla va al reporte.
+Nada se escribe de memoria: el chasis, sus casillas, las piezas, el equipo y
+las tecnologías que los habilitan se leen de la instalación. Una preferencia
+del spec que no existe se saltea; lo que quedó va al reporte.
 """
 
 from __future__ import annotations
@@ -18,6 +21,7 @@ from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block, Quoted, parse_file, text
 from . import ideas as ideas_mod
+from .effects import EffectContext, render_effects
 
 SOURCE = "spec/20_unique_units.yaml"
 LOC_FILE = "replace/meganations_unique_units"
@@ -34,86 +38,146 @@ def emit(ctx: BuildContext) -> None:
     equip = _equipment_blocks(ctx.vanilla.root)
     modules = _module_blocks(ctx.vanilla.root)
     sub_units = ctx.vanilla.sub_units()
-    renamed = set((ctx.spec.raw.get("research_look") or {}).get("techs") or {})
+    look = ctx.spec.raw.get("research_look") or {}
+    renamed = set(look.get("techs") or {}) | set(look.get("equipment") or {})
     gfx = ctx.vanilla.gfx_names()
     idea_sprites = ideas_mod.generic_candidates(gfx or (), ctx.vanilla.gfx_textures(), ctx.vanilla.root)
+    enabled_by: dict[str, str] = {}
+    for t, info in sorted(tree.items(), key=lambda kv: (kv[1]["year"], kv[0])):
+        for e in info["enables"]:
+            enabled_by.setdefault(e, t)
 
     locks: dict[str, str] = ctx.data.setdefault("tech_locks", {})
+    visible: set[str] = ctx.data.setdefault("tech_locks_visible", set())
+    plans: list[dict] = ctx.data.setdefault("unique_ai_plans", [])
     effects = Block()
     ideas = Block()
     effects_used: dict[str, str] = {}
+    modifiers_used: dict[str, str] = {}
+    ec = EffectContext(set(), {c.tag for c in ctx.spec.countries})
     for u in units:
         uid, tag = u["id"], u["country"]
         ctx.spec.country(tag)
         if not uid.startswith(f"{tag}_"):
             raise SpecError(f"la unidad '{uid}' de {tag} no empieza con '{tag}_'", where=SOURCE)
 
-        # 1. Bloqueo de la investigación
+        # 1. Bloqueo de la investigación. Explícitas (las que existan) y las
+        # que SOLO habilitan cosas con alguna de las palabras de `enables`.
         lock = u.get("lock") or {}
         words = lock.get("enables") or []
         locked = [t for t in lock.get("techs") or [] if t in tree]
-        locked += [t for t, info in tree.items() if t not in locked and info["enables"]
+        locked += [t for t, info in tree.items() if t not in locked and words and info["enables"]
                    and all(any(w in e for w in words) for e in info["enables"])]
         for t in locked:
             if locks.get(t, tag) != tag:
                 raise SpecError(f"{uid}: la tecnologia '{t}' ya es unica de {locks[t]}", where=SOURCE)
             locks[t] = tag
+            if lock.get("hide_branch") is False:
+                visible.add(t)
         if not locked:
             ctx.warn(f"{uid}: ninguna tecnologia para bloquear en este juego; la unidad no es unica.")
 
-        # 2. El diseño
+        # 2. El equipo de la unidad: un diseño armado o un equipo fijo
         design = u.get("design") or {}
-        variant, grant = _design(ctx, uid, design, equip, modules, tree)
-        for t in locked:
-            # la tecnología del chasis y lo que cuelga de ella en la misma línea
-            if variant is not None and text(variant.get("type")) in tree[t]["enables"]:
-                grant.insert(0, t)
+        grant: list[str] = []
+        variant, version = None, None
+        if design:
+            variant, grant = _design(ctx, uid, design, equip, modules, tree, enabled_by)
+            eq_type = text(variant.get("type")) if variant is not None else None
+            version = design["name"] if variant is not None else None
+        else:
+            eq_type = _fixed_equipment(u.get("equipment") or [], equip, enabled_by)
+            if u.get("equipment") and not eq_type:
+                ctx.warn(f"{uid}: el juego no tiene equipo para {u['equipment']}")
+        if eq_type and eq_type in enabled_by:
+            grant.insert(0, enabled_by[eq_type])
+        g = u.get("grant") or {}
+        grant = [t for t in g.get("techs") or [] if t in tree] + grant
+        for word in g.get("techs_enabling") or []:
+            hit = next((t for e, t in sorted(enabled_by.items(), key=lambda kv: (tree[kv[1]]["year"], kv[0]))
+                        if word in e), None)
+            if hit:
+                grant.append(hit)
+        grant = list(dict.fromkeys(grant))
 
         body = Block()
         if grant:
-            tb = Block([(t, 1) for t in dict.fromkeys(grant)] + [("popup", False)])
-            body.add("set_technology", tb)
+            body.add("set_technology", Block([(t, 1) for t in grant] + [("popup", False)]))
             effects_used.setdefault("set_technology", uid)
         if variant is not None:
             body.add("create_equipment_variant", variant)
             effects_used.setdefault("create_equipment_variant", uid)
-            amount = int((u.get("grant") or {}).get("equipment", 0))
-            if amount:
-                body.add("add_equipment_to_stockpile", Block([
-                    ("type", text(variant.get("type"))), ("amount", amount), ("producer", tag),
-                    ("variant_name", Quoted(design["name"]))]))
-                effects_used.setdefault("add_equipment_to_stockpile", uid)
-        tpl = u.get("template")
-        if tpl:
-            bad = [r for r in tpl["regiments"] + (tpl.get("support") or []) if r not in sub_units]
-            if bad:
-                raise SpecError(f"{uid}: batallones que el juego no tiene: {', '.join(bad)}", where=SOURCE)
-            regs = Block()
-            for i, r in enumerate(tpl["regiments"]):
-                regs.add(r, Block([("x", i // 5), ("y", i % 5)]))
-            tb = Block([("name", Quoted(tpl["name"])), ("regiments", regs)])
-            if tpl.get("support"):
-                sup = Block()
-                for i, r in enumerate(tpl["support"]):
-                    sup.add(r, Block([("x", 0), ("y", i)]))
-                tb.add("support", sup)
-            body.add("division_template", tb)
-            effects_used.setdefault("division_template", uid)
+        stock = [(eq_type, int(g.get("equipment", 0)), version)] if eq_type and g.get("equipment") else []
+        for extra in g.get("extra_equipment") or []:
+            t = _fixed_equipment([extra["like"]], equip, enabled_by)
+            if t:
+                stock.append((t, int(extra["amount"]), None))
+        for t, amount, ver in stock:
+            sb = Block([("type", t), ("amount", amount), ("producer", tag)])
+            if ver:
+                sb.add("variant_name", Quoted(ver))
+            body.add("add_equipment_to_stockpile", sb)
+            effects_used.setdefault("add_equipment_to_stockpile", uid)
 
-        # 3. El espíritu (equipment_bonus sobre el arquetipo del chasis)
+        # plantilla y divisiones de arranque (el DSL de focos/eventos: el
+        # nombre sale como una sola palabra, create_unit lo necesita así)
+        tpl = u.get("template")
+        dsl: list[dict] = [{"effect": "flag", "value": f"{uid}_desbloqueado"}]
+        bad = [r for r in (tpl or {}).get("regiments", []) + ((tpl or {}).get("support") or []) if r not in sub_units]
+        if bad:
+            ctx.warn(f"{uid}: batallones que el juego no tiene ({', '.join(bad)}): sin plantilla ni divisiones")
+        if tpl and not bad:
+            dsl.append({"effect": "division_template", "name": tpl["name"], "regiments": tpl["regiments"],
+                        "support": tpl.get("support") or []})
+            if int(u.get("divisions", 0) or 0):
+                dsl.append({"effect": "create_units", "template": tpl["name"], "count": int(u["divisions"]),
+                            "experience": 0.3})
+        body.entries.extend(render_effects(uid, dsl, ec, effects_used, where=SOURCE).entries)
+
+        # cola de producción: arranca fabricándola (jugador e IA)
+        prod = u.get("production")
+        if prod and eq_type:
+            eb = Block([("type", eq_type), ("creator", Quoted(tag))])
+            if version:
+                eb.add("version_name", Quoted(version))
+            body.add("add_equipment_production", Block([
+                ("equipment", eb), ("requested_factories", int(prod.get("factories", 1))),
+                ("progress", float(prod.get("progress", 0))), ("amount", int(prod.get("amount", 1)))]))
+            effects_used.setdefault("add_equipment_production", uid)
+
+        # 3. El espíritu
         spirit = u.get("spirit")
-        if spirit and variant is not None:
+        if spirit and not eq_type and not spirit.get("modifiers"):
+            ctx.warn(f"{uid}: sin equipo en este juego, el espiritu {spirit['id']} no se crea")
+            spirit = None
+        if spirit:
             sid = spirit["id"]
-            chassis = equip.get(text(variant.get("type"))) or Block()
-            archetype = text(chassis.get("archetype")) or text(variant.get("type"))
-            bonus = Block([(k, float(v)) for k, v in spirit["equipment_bonus"].items()] + [("instant", True)])
             idea = Block()
             picture = _picture(idea_sprites, spirit.get("picture_prefer") or [])
             if picture:
                 idea.add("picture", picture)
             idea.add("allowed", Block([("always", False)]))
             idea.add("removal_cost", -1)
-            idea.add("equipment_bonus", Block([(archetype, bonus)]))
+            mods = Block()
+            for key, value in (spirit.get("modifiers") or {}).items():
+                if key.startswith("?"):
+                    key = key[1:]
+                    if ctx.vanilla.documented_keys("modifiers") is not None \
+                            and not ctx.vanilla.is_documented("modifiers", key):
+                        ctx.warn(f"{sid}: el modificador '{key}' no existe en este juego; se omite.")
+                        continue
+                else:
+                    modifiers_used.setdefault(key, sid)
+                mods.add(key, float(value))
+            if mods.entries:
+                idea.add("modifier", mods)
+            if spirit.get("equipment_bonus") and eq_type:
+                chassis = equip.get(eq_type) or Block()
+                archetype = text(chassis.get("archetype")) or eq_type
+                bonus = Block([(k, float(v)) for k, v in spirit["equipment_bonus"].items()] + [("instant", True)])
+                idea.add("equipment_bonus", Block([(archetype, bonus)]))
+            if not mods.entries and idea.get("equipment_bonus") is None:
+                idea.add("modifier", Block([("army_org_factor", 0.0)]))   # el juego no acepta una idea vacía
             ideas.add(ctx.loc.reference(sid, f"unique:{sid}"), idea)
             ctx.loc.define(sid, en=spirit["name"]["english"], es=spirit["name"]["spanish"],
                            file="meganations_unique_units", origin=f"unique:{sid}")
@@ -124,7 +188,12 @@ def emit(ctx: BuildContext) -> None:
 
         effects.add(f"{uid}_desbloqueo", body)
 
-        # 4. Nombres: el batallón (pisa el del juego) y las tecnologías bloqueadas
+        # 4. IA: después del desbloqueo, que la fabrique (sin exagerar)
+        if u.get("ai"):
+            plans.append({"id": f"{uid}_produccion", "country": tag, "strategies": list(u["ai"]),
+                          "enable": {"flag": f"{uid}_desbloqueado"}})
+
+        # 5. Nombres: el batallón (pisa el del juego) y las tecnologías bloqueadas
         names = {}
         if u.get("sub_unit"):
             names[u["sub_unit"]] = u["sub_unit_name"]
@@ -132,6 +201,9 @@ def emit(ctx: BuildContext) -> None:
         for t, n in (u.get("tech_names") or {}).items():
             if t in locked and t not in renamed:
                 names[t] = {"english": n["en"], "spanish": n["es"]}
+        for key, n in (u.get("names") or {}).items():
+            if key not in renamed:
+                names[key] = {"english": n["en"], "spanish": n["es"]}
         have = ctx.vanilla.localisation("english", set(names))
         for key in sorted(have):
             n = names[key]
@@ -139,21 +211,37 @@ def emit(ctx: BuildContext) -> None:
                                          origin=f"unique:{uid}")
 
         ctx.note(f"unidad unica {uid} ({tag}): {len(locked)} tecnologias bloqueadas para el resto "
-                 f"({', '.join(sorted(locked)[:10])}); el desbloqueo da {', '.join(dict.fromkeys(grant)) or 'nada'}")
+                 f"({', '.join(sorted(locked)[:10])}); equipo {eq_type or 'ninguno'}; "
+                 f"el desbloqueo da {', '.join(grant) or 'nada'}")
+
+    # Nadie arranca con la tecnología única de otro (las especialidades de
+    # 13_military eligen por pestaña y podían caer en una).
+    for tag, techs in (ctx.data.get("techs") or {}).items():
+        gone = [t for t in techs if locks.get(t, tag) != tag]
+        if gone:
+            techs[:] = [t for t in techs if t not in gone]
+            ctx.note(f"unidades unicas: {tag} ya no arranca con {', '.join(gone)} (son de otra potencia)")
 
     ctx.write_script("common/scripted_effects/meganations_unique_units.txt", effects, source=SOURCE)
     if ideas.entries:
         ctx.write_script("common/ideas/meganations_unique_units.txt",
                          Block([("ideas", Block([("country", ideas)]))]), source=SOURCE)
     ctx.verify_keys("effects", effects_used)
+    ctx.verify_keys("modifiers", modifiers_used)
     ctx.verify_keys("triggers", {"original_tag": "unique_units"})
 
 
+def _fixed_equipment(words: list[str], equip: dict[str, Block], enabled_by: dict[str, str]) -> str | None:
+    """El equipo más viejo (no arquetipo) cuyo id tenga alguna de las palabras,
+    prefiriendo los que habilita una tecnología."""
+    hits = [(n not in enabled_by, _year(b), n) for n, b in equip.items()
+            if any(w in n for w in words) and text(b.get("is_archetype")) != "yes"]
+    return sorted(hits)[0][2] if hits else None
+
+
 def _design(ctx, uid: str, design: dict, equip: dict[str, Block], modules: dict[str, Block],
-            tree: dict[str, dict]) -> tuple[Block | None, list[str]]:
+            tree: dict[str, dict], enabled_by: dict[str, str]) -> tuple[Block | None, list[str]]:
     """El diseño armado con las piezas del juego y las tecnologías que pide."""
-    if not design:
-        return None, []
     words = design.get("chassis") or []
     by_year = sorted((_year(b), name) for name, b in equip.items()
                      if any(w in name for w in words) and text(b.get("is_archetype")) != "yes"
@@ -165,33 +253,42 @@ def _design(ctx, uid: str, design: dict, equip: dict[str, Block], modules: dict[
     block = equip[chassis]
     slots = _inherited(block, equip, "module_slots")
     defaults = _inherited(block, equip, "default_modules")
-    enabled_by = {}
-    for t, info in sorted(tree.items(), key=lambda kv: (kv[1]["year"], kv[0])):
-        for e in info["enables"]:
-            enabled_by.setdefault(e, t)
+    max_year = design.get("max_module_year")
+
+    def year_of(m: str) -> int:
+        return tree.get(enabled_by.get(m, ""), {}).get("year", 0)
 
     chosen: dict[str, str] = {}
     picked_from: dict[str, str] = {}
     prefs = design.get("modules") or {}
-    slot_names = [k for k in prefs if k in slots.keys()] + [k for k in slots.keys() if k not in prefs]
-    for slot in slot_names:
+
+    def prefs_for(slot: str) -> list[str]:
+        if slot in prefs:
+            return prefs[slot]
+        return next((v for k, v in prefs.items() if k in slot), [])
+
+    order = [k for k in prefs if k in slots.keys()]
+    order += [k for k in slots.keys() if k not in order]
+    for slot in order:
         sb = slots.get(slot)
         if not isinstance(sb, Block):
             continue
         cats = sb.get("allowed_module_categories")
         allowed = {text(v) for _, v in cats.entries} if isinstance(cats, Block) else set()
-        fits = {m: b for m, b in modules.items() if text(b.get("category")) in allowed}
+        fits = {m: b for m, b in modules.items() if text(b.get("category")) in allowed
+                and (max_year is None or year_of(m) <= int(max_year))
+                and not _conflicts(m, b, chosen, modules)}
         pick = None
-        for want in prefs.get(slot) or []:
-            hits = [m for m in fits if m == want] or sorted(
-                (m for m in fits if want in m),
-                key=lambda m: (tree.get(enabled_by.get(m, ""), {}).get("year", 0), m))
-            hits = [m for m in hits if not _conflicts(m, fits[m], chosen, modules)]
+        for want in prefs_for(slot):
+            hits = [m for m in fits if m == want] or sorted((m for m in fits if want in m), key=lambda m: (year_of(m), m))
             if hits:
                 pick, picked_from[slot] = hits[0], want
                 break
         if pick is None and isinstance(defaults, Block) and text(defaults.get(slot)) in fits:
             pick, picked_from[slot] = text(defaults.get(slot)), "por defecto"
+        if pick is None and text(sb.get("required")) == "yes" and fits:
+            pick = sorted(fits, key=lambda m: (year_of(m), m))[0]
+            picked_from[slot] = "la primera que entra"
         if pick is not None:
             chosen[slot] = pick
         elif text(sb.get("required")) == "yes":
@@ -288,11 +385,12 @@ def _picture(idea_sprites: list[str], words: list[str]) -> str | None:
     return idea_sprites[0][len("GFX_idea_"):] if idea_sprites else None
 
 
-def lock_techs(src: str, locks: dict[str, str]) -> tuple[str, int]:
+def lock_techs(src: str, locks: dict[str, str], visible: set[str] | frozenset = frozenset()) -> tuple[str, int]:
     """Suma `original_tag = TAG` al `allow` y al `allow_branch` de cada
     tecnología única (los crea si no están). allow: nadie más la investiga;
-    allow_branch: nadie más la ve en el árbol. Si ya tenían condiciones (un
-    DLC), la nuestra se suma a ellas (todas tienen que cumplirse)."""
+    allow_branch: nadie más la ve en el árbol (salvo las de `visible`, que
+    se ven pero no se pueden investigar: una línea de la que cuelgan otras).
+    Si ya tenían condiciones (un DLC), la nuestra se suma a ellas."""
     from .research import _children
     inserts: list[tuple[int, str]] = []
     count = 0
@@ -305,7 +403,8 @@ def lock_techs(src: str, locks: dict[str, str]) -> tuple[str, int]:
                 continue
             count += 1
             own = {k: o for k, o, _ in _children(src, t_open + 1, t_end)}
-            for field in ("allow", "allow_branch"):
+            fields = ("allow",) if tech in visible else ("allow", "allow_branch")
+            for field in fields:
                 if field in own:
                     inserts.append((own[field] + 1, f"\n\t\t\toriginal_tag = {tag}  # 2100 unidad unica\n\t\t\t"))
                 else:

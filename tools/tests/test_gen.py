@@ -2290,7 +2290,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -2342,7 +2342,7 @@ def test_vanilla_validation() -> None:
 
 
 def test_unique_units() -> None:
-    section("unidades unicas (20_unique_units): el Gliptodonte del EFE")
+    section("unidades unicas (20_unique_units): una por meganacion")
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         root = ctx.mod_root
@@ -2381,6 +2381,29 @@ def test_unique_units() -> None:
               and "super_heavy_tank_chassis" in ideas and "maximum_speed" in ideas)
         dec = (root / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8")
         check("la decision del EFE corre el desbloqueo", "EFE_gliptodonte_desbloqueo" in dec)
+        check("cada potencia tiene la decision de su unidad",
+              all(f"{u}_desbloqueo" in dec for u in ("SHD_dragon_del_canal", "HSN_leviatan", "NAS_hijos_del_condor",
+                  "NRE_onagro", "ASC_centinela", "APF_kiboko", "FCU_ala_de_obsidiana")))
+        check("cola de produccion del Gliptodonte", body.get("add_equipment_production") is not None)
+        check("marca de desbloqueo", pdx.text(body.get("set_country_flag")) == "EFE_gliptodonte_desbloqueado",
+              str(body.get("set_country_flag")))
+        # los paracaidistas del NAS: equipo fijo (tiltrotor), plantilla y una división
+        nas = eff.get("NAS_hijos_del_condor_desbloqueo")
+        st = nas.get("set_technology")
+        check("NAS: paracaidistas y transporte", all(t in st.keys() for t in ("paratroopers", "transport_plane_fixture_tech")),
+              str(st.keys()))
+        check("NAS: bloqueo de la linea de paracaidistas",
+              all(ctx.data["tech_locks"].get(t) == "NAS" for t in ("paratroopers", "paratroopers2")))
+        tpl = nas.get("division_template")
+        check("NAS: plantilla de una sola palabra", tpl is not None and pdx.text(tpl.get("name")) == "Condores",
+              str(tpl))
+        check("NAS: una division de arranque", "create_unit" in pdx.render(nas))
+        check("NAS: sin plantilla si falta el batallon (Onagros)", eff.get("NRE_onagro_desbloqueo").get("division_template") is None)
+        ai = (root / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8")
+        check("IA: plan de los Kiboko que se activa con el desbloqueo (solo los ids que el juego usa)",
+              "MEGANATIONS_APF_kiboko_produccion" in ai and "APF_kiboko_desbloqueado" in ai
+              and "id = amphibious_mechanized" not in ai)
+        check("IA: sin plan si ningun id existe (SHD)", "MEGANATIONS_SHD_dragon_del_canal_produccion" not in ai)
 
 
 def main() -> int:
