@@ -1874,6 +1874,23 @@ def test_ai() -> None:
               n == 1 and "ai_will_do" not in pdx.render(techs.get("other").get("sub"))
               and sum(1 for k, _ in radio.entries if k == "ai_will_do") == 1
               and "original_tag = ASC" in pdx.render(radio.get("ai_will_do")), out)
+        # 2026-09-30 ("la HSN no investiga barcos"): el peso va al final del
+        # ai_will_do, después de un `factor = 0` del juego, y trae un piso (add).
+        zero = ("technologies = {\n\tbasic_ship_hull_light = {\n\t\tai_will_do = {\n\t\t\tfactor = 1\n"
+                "\t\t\tmodifier = { factor = 0 has_navy_size = { size < 5 } }\n\t\t}\n\t}\n}\n")
+        out, n = _inject_weights(zero, {"basic_ship_hull_light": [("HSN", 16.0)]})
+        aw = pdx.render(pdx.parse(out).get("technologies").get("basic_ship_hull_light").get("ai_will_do"))
+        aw1 = " ".join(aw.split())
+        check("IA naval: el peso de la potencia va despues del factor = 0 del juego",
+              n == 1 and aw1.index("factor = 0") < aw1.index("original_tag = HSN"), aw)
+        check("IA naval: con piso (add) para que el juego no la deje en cero",
+              "modifier = { add = 16 original_tag = HSN }" in aw1, aw)
+        inv = root.get("MEGANATIONS_EFE_investigacion")
+        invr = " ".join(pdx.render(inv).split()) if inv is not None else ""
+        check("IA: research_weight_factor para las tecnologias del arbol (documentado, aunque el juego no lo use)",
+              "type = research_weight_factor" in invr and "original_tag = EFE" in invr, invr[:400] or ai[:400])
+        check("IA: research_weight_factor con ids que el juego no tiene se omite",
+              "research_weight_factor id = advanced_ship_hull_light" not in " ".join(ai.split()))
         hsn = " ".join(pdx.render(root.get("MEGANATIONS_HSN_militar")).split())
         check("IA militar: un id que el juego no usa se omite (marines en el fixture)", "marines" not in hsn, hsn[:400])
         check("IA militar: el aviso lo dice", any("role_ratio:marines" in w for w in ctx.warnings))

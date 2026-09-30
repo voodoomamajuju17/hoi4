@@ -810,6 +810,7 @@ trees:
           english: BioSteel plates that close their own wounds. Needs BioSteel tier 2; spends 3.
           spanish: Placas de Bioacero que cierran sus propias heridas. Pide Bioacero nivel 2; gasta 3.
         reward:
+        - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}   # 2026-09-30: la especialidad del EFE son los blindados
         - {effect: add_ideas, value: EFE_armadura_viviente}
         - {effect: add_variable, var: EFE_biosteel, value: -3}
     - id: condores
@@ -1057,6 +1058,7 @@ trees:
         - EFE_el_bioacero_domesticado
         desc: {english: Forests that grow armour., spanish: Bosques que crían blindaje.}
         reward:
+        - {effect: tech_bonus, category: armor, bonus: 0.75, uses: 1}
         - {effect: add_ideas, value: EFE_espiritu_selva_de_acero}
 
   # ===========================================================================
@@ -2631,6 +2633,7 @@ trees:
           english: Meridian's biggest arms complex.
           spanish: El complejo de armamento más grande de Meridian.
         reward:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
         - {effect: add_variable, var: FCU_meridian, value: 5}
         - {effect: run, value: FCU_recalcular_directorio}
         - effect: states
@@ -2651,6 +2654,7 @@ trees:
           english: Assembly arms that work three shifts and never unionise.
           spanish: Brazos de ensamble que trabajan tres turnos y nunca se sindicalizan.
         reward:
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 2}   # 2026-09-30: la especialidad de la FCU es la industria
         - {effect: add_ideas, value: FCU_robotica_industrial}
         - {effect: add_variable, var: FCU_meridian, value: 5}
         - {effect: run, value: FCU_recalcular_directorio}
@@ -6161,6 +6165,7 @@ trees:
           english: Railways from Dakar to Dar es Salaam. Opens corridor sections.
           spanish: Ferrocarriles de Dakar a Dar es Salaam. Abre los tramos del corredor.
         reward:
+        - {effect: tech_bonus, category: [support_tech, support], bonus: 0.5, uses: 2}   # 2026-09-30: la especialidad de la APF es el apoyo
         - {effect: add_ideas, value: APF_corredor}
         - {effect: remove_idea, value: APF_rutas_rotas}
       - id: APF_el_ferrocarril_transafricano
@@ -6318,6 +6323,7 @@ trees:
           english: Veterans teach villagers to be soldiers.
           spanish: Los veteranos les enseñan a los aldeanos a ser soldados.
         reward:
+        - {effect: tech_bonus, category: [support_tech, support], bonus: 0.5, uses: 1}
         - {effect: add_ideas, value: APF_espiritu_instructores}
       - id: APF_guerra_de_movimiento
         name: {english: War of Movement, spanish: Guerra de Movimiento}
