@@ -601,7 +601,7 @@ def test_phase3_content() -> None:
         check("icono elegido entre los vanilla", pdx.text(cat.get("icon")) == "generic_industry")
         decs_raw = (mod / "common/decisions/meganations_decisions.txt").read_text()
         decs = pdx.parse(decs_raw).get("EFE_biosteel_category")
-        check("6 decisiones (con Purgar las Cubas y Como se Juega)", len(decs.keys()) == 6, str(decs.keys()))
+        check("7 decisiones (con Purgar las Cubas, Como se Juega y el Gliptodonte)", len(decs.keys()) == 7, str(decs.keys()))
         guia = decs.get("EFE_como_se_juega")
         check("Como se Juega: gratis, la IA no la usa, muestra la bienvenida", pdx.text(guia.get("cost")) == "0"
               and "meganations_efe.29" in pdx.render(guia.get("complete_effect"))
