@@ -29,6 +29,20 @@ research:
                      gwtank_chassis, gwtank,
                      # y el vehículo motorizado y el caza básico (sin BBA / con BBA)
                      motorised_infantry, early_fighter, iw_small_airframe]
+  # 2026-09-30 ("que investiguen, fabriquen y creen unidades según su
+  # individualidad"): lo que cada una necesita para armar SUS tropas. La IA
+  # pide infantería de marina a la HSN y montaña al NAS (16_ai.yaml); sin la
+  # tecnología no las podía crear. Ids con y sin DLC; los que no existen se
+  # ignoran.
+  country_techs:
+    HSN: [marines, tech_marines, marines2]
+    NAS: [tech_mountaineers, mountaineers, tech_mountaineers2]
+    NRE: [tech_engineers, tech_recon, gw_artillery, interwar_artillery]
+    SHD: [gw_artillery, interwar_artillery, interwar_antiair, interwar_antitank]
+    APF: [tech_engineers, tech_military_police, tech_recon]
+    EFE: [basic_light_tank_chassis, armor_tech_1, engine_tech_1]
+    ASC: [mechanised_infantry, tech_signal_company, tech_recon]
+    FCU: [tech_field_hospital, tech_logistics_company, mechanised_infantry]
   # especialidad -> alternativas de prefijos de pestaña; gana la primera que
   # exista. Las de los DLC primero (el reporte 2026-09-25 mostró que las
   # pestañas viejas armour_folder, air_techs_folder y naval_folder siguen en

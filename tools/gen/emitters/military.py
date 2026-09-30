@@ -75,6 +75,7 @@ def emit(ctx: BuildContext) -> None:
         if kind == "meganation":
             # lo mínimo para botar un barco (2026-09-27: "nadie tiene marina")
             base += [t for t in research.get("meganation_techs", []) if t in tree]
+            base += [t for t in (research.get("country_techs") or {}).get(c.tag, []) if t in tree]
         ctx.data["techs"][c.tag] = list(dict.fromkeys(base + specialty.get(c.tag, [])))
 
         if kind == "anarchy":

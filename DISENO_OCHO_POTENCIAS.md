@@ -733,3 +733,12 @@ llega a 100 al toque y la tensión nunca sube".
   de eventos y decisiones) con el tamaño de su textura. Se cambian igual que
   los fondos: 11_scenario -> tab_backgrounds -> items (cualquier textura).
   Sin tocar los .gui (la disposición): eso se rompe con cada parche.
+- **Individualidad militar** (2026-09-30): además de su rama de especialidad,
+  cada potencia arranca con lo que necesitan SUS tropas (13_military ->
+  research.country_techs): marina para la HSN, montaña para el NAS,
+  ingenieros/reconocimiento/artillería para NRE, SHD y APF, mecanizada para
+  ASC y FCU, y el EFE su tanque. La IA (16_ai) arma y produce según eso.
+- **Arte** (2026-09-30): 11 fondos de interfaz, 55 focos de la FCU, 18 íconos
+  de la agencia, 6 de operaciones y 5 pantallas de carga nuevas (14 en total).
+  arte/focos_faltantes.txt: solo los focos que faltan de las naciones que ya
+  tienen íconos.
