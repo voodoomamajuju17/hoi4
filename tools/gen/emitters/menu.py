@@ -327,19 +327,125 @@ def emit_tabs(ctx: BuildContext) -> None:
     textures = {it["texture"]: f"assets/ui/{it['id']}.dds" for it in spec.get("items") or []
                 if (ctx.spec.root.parent / "assets" / "ui" / f"{it['id']}.dds").exists()}
     _diagnose_ui(ctx)
+    _emit_research(ctx)
     if not textures:
         _diagnose_tabs(ctx)
         return
+    # 2026-09-30 (captura del usuario: rayas en el árbol de focos y columnas en
+    # Construcciones): un corneredTileSpriteType sin tilingCenter ESTIRA la
+    # franja del centro. El vanilla la pinta lisa; un dibujo con textura se
+    # vuelve rayas. Esas texturas no se reemplazan.
+    stretched = _stretched_textures(ctx)
+    done = 0
     for texture, image in sorted(textures.items()):
+        vw, vh = _texture_dims(ctx, texture)
+        why = stretched.get(texture.lower())
+        if why and vw and vh and (vw - 2 * why[1] < vw / 2 or vh - 2 * why[2] < vh / 2):
+            ctx.warn(f"fondos de pestanas: {image} no se usa: {why[0]} estira el centro de {texture} "
+                     f"({vw}x{vh}, borde {why[1]}x{why[2]}) y el dibujo sale en rayas")
+            continue
         src = (ctx.spec.root.parent / image).read_bytes()
         w, h = _dims(src)
-        vw, vh = _texture_dims(ctx, texture)
         data = _resize(src, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else src
         dest = ctx.mod_root / texture
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(data)
         ctx.track(dest)
-    ctx.note(f"fondos de pestanas: {len(textures)} texturas reemplazadas")
+        done += 1
+    ctx.note(f"fondos de pestanas: {done} texturas reemplazadas")
+
+
+_TILING_CENTER = re.compile(r'tilingCenter\s*=\s*(yes|no)', re.I)
+
+
+def _stretched_textures(ctx: BuildContext) -> dict[str, tuple[str, int, int]]:
+    """textura (minúsculas) -> (sprite, borde x, borde y) de los corneredTile
+    con borde que estiran el centro en vez de repetirlo."""
+    out: dict[str, tuple[str, int, int]] = {}
+    for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for body in _CORNERED.findall(text):
+            n = re.search(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)', body)
+            t = re.search(r'texture[Ff]ile\s*=\s*"([^"]+)"', body)
+            b = _BORDER.search(body)
+            tiling = _TILING_CENTER.search(body)
+            if not (n and t and b) or (tiling and tiling.group(1).lower() == "yes"):
+                continue
+            bx, by = int(b.group(1)), int(b.group(2))
+            if bx or by:
+                tex = re.sub(r"/+", "/", t.group(1).replace("\\", "/")).lower()
+                out.setdefault(tex, (n.group(1), bx, by))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Fondos de cada rama de investigación (2026-09-30: "faltan las imágenes para
+# cada fondo de investigación, cada rama"). Cada pestaña del árbol dibuja un
+# iconType con GFX_<rama>_techtree_bg (countrytechtreeview.gui). La textura y
+# su tamaño se leen del juego instalado; nuestra imagen la cubre sin deformarse.
+# ---------------------------------------------------------------------------
+_TECHTREE_BG = re.compile(r"^GFX_(\w+)_techtree_bg$")
+
+
+def _emit_research(ctx: BuildContext) -> None:
+    spec = (ctx.spec.raw.get("scenario") or {}).get("research_backgrounds")
+    if not spec:
+        return
+    sprites: dict[str, str] = {}
+    for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for name, texture in _ANY_SPRITE.findall(text):
+            if _TECHTREE_BG.match(name):
+                sprites.setdefault(name, re.sub(r"/+", "/", texture.replace("\\", "/")))
+    wanted = {it["sprite"] for it in spec.get("items") or []}
+    for name in sorted(set(sprites) - wanted):
+        ctx.note(f"fondos de investigacion: {name} -> {sprites[name]} no tiene imagen pedida")
+    done = 0
+    for it in spec.get("items") or []:
+        texture = sprites.get(it["sprite"])
+        if not texture:
+            ctx.warn(f"fondos de investigacion: {it['sprite']} no existe en el juego; "
+                     f"los que hay: {', '.join(sorted(sprites)) or 'ninguno'}")
+            continue
+        image = ctx.spec.root.parent / "assets" / "ui" / "investigacion" / f"{it['id']}.dds"
+        vw, vh = _texture_dims(ctx, texture)
+        ctx.note(f"fondos de investigacion: {it['sprite']} -> {texture} ({vw}x{vh})"
+                 + ("" if image.exists() else ", falta la imagen"))
+        if not image.exists():
+            continue
+        src = image.read_bytes()
+        w, h = _dims(src)
+        data = _cover(src, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else src
+        dest = ctx.mod_root / texture
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+        ctx.track(dest)
+        done += 1
+    ctx.note(f"fondos de investigacion: {done} de {len(spec.get('items') or [])} ramas con imagen propia")
+
+
+def _cover(src: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
+    """Reescala un DDS A8R8G8B8 para CUBRIR nw x nh sin deformarlo: escala al
+    lado que falte y recorta el sobrante, centrado."""
+    body = src[128:]
+    header = bytearray(src[:128])
+    struct.pack_into("<III", header, 12, nh, nw, nw * 4)
+    scale = max(nw / w, nh / h)
+    ox = (w * scale - nw) / 2
+    oy = (h * scale - nh) / 2
+    xs = [min(w - 1, int((x + ox) / scale)) * 4 for x in range(nw)]
+    rows = []
+    for y in range(nh):
+        sy = min(h - 1, int((y + oy) / scale))
+        row = body[sy * w * 4:(sy + 1) * w * 4]
+        rows.append(b"".join(row[x:x + 4] for x in xs))
+    return bytes(header) + b"".join(rows)
 
 
 # name y texturefile del mismo sprite aunque haya bloques en el medio (los

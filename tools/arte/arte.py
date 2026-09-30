@@ -46,6 +46,9 @@ KINDS = {
     # fondos de las pestañas (11_scenario -> tab_backgrounds): el tamaño es el
     # de la textura del juego, que va en cada pedido
     "ui_background": {"size": (192, 192), "transparent": False, "fit": "cover"},
+    # fondos de cada rama de investigación (11_scenario -> research_backgrounds):
+    # el generador los recorta al tamaño del juego
+    "research_background": {"size": (1024, 1024), "transparent": False, "fit": "cover"},
 }
 
 COMMON_STYLE = (
@@ -202,6 +205,15 @@ def catalog() -> list[dict]:
             "description": f"User interface background for Hearts of Iron IV ({bg['where']}): {bg['art']}. "
                            f"No text, no icons, no buttons; it sits behind the interface.{tile}",
         })
+    for bg in ((_load("11_scenario.yaml").get("research_backgrounds") or {}).get("items") or []):
+        dest = REPO / "assets" / "ui" / "investigacion" / f"{bg['id']}.dds"
+        items.append({
+            "type": "research_background", "tag": "INTERFAZ", "id": bg["id"], "dest": dest, "done": dest.exists(),
+            "description": f"Background of a Hearts of Iron IV technology tab ({bg['where']}): {bg['art']}. "
+                           "Black-and-white photograph look like the vanilla tech tree, detailed on the upper "
+                           "left and fading smoothly to pure black towards the right and bottom edges, where "
+                           "technology icons sit. No text, no icons, no frame.",
+        })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
     asked: set[str] = set()
@@ -242,7 +254,7 @@ def _request(item: dict) -> str:
                       if item["tag"] == "INTERFAZ" else "a ruined, fragmented 2100 world: improvised flags, bunkers, "
                                           "warlord or client-state officials, muted colours")
     common = (FLAG_STYLE if item["type"] == "country_flag"
-              else UI_STYLE if item["type"] == "ui_background" else COMMON_STYLE)
+              else UI_STYLE if item["type"] in ("ui_background", "research_background") else COMMON_STYLE)
     return "\n".join([
         "ASSET_REQUEST",
         f"type: {item['type']}",
@@ -292,7 +304,8 @@ def pedidos() -> None:
     order = [("leader_portrait", "1_retratos"), ("national_spirit_icon", "2_espiritus"),
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
-             ("operation_icon", "6_operaciones"), ("ui_background", "7_fondos")]
+             ("operation_icon", "6_operaciones"), ("ui_background", "7_fondos"),
+             ("research_background", "8_investigacion")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}

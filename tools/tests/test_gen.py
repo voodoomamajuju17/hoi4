@@ -1363,6 +1363,28 @@ def test_balance() -> None:
         check("pantallas de carga: las del juego llevan las imagenes del mod", lar.read_bytes() in shots)
         check("pantallas de carga: el fondo del menu queda en la textura del menu", raw not in shots)
         check("pantallas de carga: el reporte lo dice", any(n.startswith("pantallas de carga:") for n in ctx.notes))
+        # Fondos que el juego estira (2026-09-30: rayas en focos y Construcciones)
+        check("fondos: no pisa un corneredTile que estira el centro",
+              not (mod / "gfx/interface/tiles/tiled_plain_bg2.dds").exists())
+        check("fondos: avisa cual salteo y por que",
+              any("tiled_plain_bg2" in w and "rayas" in w for w in ctx.warnings), str(ctx.warnings))
+        check("fondos: el papel oscuro ya no se usa (texto oscuro de las tecnologias)",
+              not (REPO_ROOT / "assets/ui/fondo_papel_agencia.dds").exists()
+              and not (mod / "gfx/interface/tiles/tiled_paper_bg.dds").exists())
+        # Fondos de cada rama de investigación (2026-09-30)
+        check("investigacion: el reporte da textura y tamano de cada rama",
+              any("GFX_industry_techtree_bg -> gfx/interface/techtree/industry_bg.dds (12x8)" in n for n in ctx.notes),
+              "\n".join(n for n in ctx.notes if "investigacion" in n))
+        check("investigacion: avisa la rama que el juego no tiene",
+              any("GFX_armor_techtree_bg no existe" in w for w in ctx.warnings))
+        from tools.gen.emitters.menu import _cover
+        src = bytearray(128) + bytes(range(4 * 4 * 2)) * 1
+        struct_src = bytearray(src)
+        _st.pack_into("<III", struct_src, 12, 2, 4, 16)
+        cov = _cover(bytes(struct_src), 4, 2, 2, 2)
+        check("investigacion: _cover recorta al centro sin deformar",
+              _st.unpack_from("<II", cov, 12) == (2, 2) and len(cov) == 128 + 2 * 2 * 4
+              and cov[128:132] == bytes(struct_src[128 + 4:128 + 8]), cov[128:].hex())
 
         efe_c = (mod / "common/countries/Ecofascist_Empire.txt").read_text()
         check("EFE con cultura grafica sudamericana", "southamerican_gfx" in efe_c and "southamerican_2d" in efe_c, efe_c)
