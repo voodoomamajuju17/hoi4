@@ -1140,4 +1140,5 @@ GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli"}
 
 
 def scripted_effect_ids(spec_raw: dict) -> set[str]:
-    return {e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED
+    unique = {f"{u['id']}_desbloqueo" for u in (spec_raw.get("unique_units") or {}).get("units") or []}
+    return {e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED | unique

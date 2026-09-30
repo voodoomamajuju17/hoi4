@@ -16,6 +16,7 @@ import re
 
 from ..context import BuildContext
 from ..pdx import banner_for
+from . import unique_units as unique_units_mod
 
 SOURCE = "spec/17_research.yaml"
 _START = re.compile(r"(\bstart_year\s*=\s*)(1[89]\d\d)\b")
@@ -44,6 +45,10 @@ def emit(ctx: BuildContext) -> None:
                     new, w = _inject_weights(new, weights)
                     shifted["ia"] = shifted.get("ia", 0) + w
                     n += w
+                if kind == "tecnologias" and ctx.data.get("tech_locks"):
+                    # unidades únicas (20_unique_units.yaml): solo un país las investiga
+                    new, locked = unique_units_mod.lock_techs(new, ctx.data["tech_locks"])
+                    n += locked
                 if n:
                     ctx.write_text(f"{rel}/{path.name}", banner_for(SOURCE + f" (+ {rel}/{path.name} vanilla)") + new)
                     shifted[kind] += n

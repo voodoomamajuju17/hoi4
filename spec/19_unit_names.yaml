@@ -33,10 +33,12 @@ unit_names:
     airborne:  [paratrooper]
     cavalry:   [cavalry, camelry]
     mobile:    [motorized, mechanized, amphibious_mechanized]
-    armor:     [light_armor, medium_armor, heavy_armor, modern_armor, super_heavy_armor]
+    armor:     [light_armor, medium_armor, heavy_armor, modern_armor]
+    # 2026-09-30: el superpesado es la unidad única del EFE (20_unique_units.yaml)
+    superheavy: [super_heavy_armor]
     artillery: [artillery_brigade, motorized_artillery_brigade, rocket_artillery_brigade]
   # todas juntas (satélites y Anarquía: una sola lista)
-  all_divisions: [infantry, militia, mountain, marines, airborne, cavalry, mobile, armor, artillery]
+  all_divisions: [infantry, militia, mountain, marines, airborne, cavalry, mobile, armor, superheavy, artillery]
 
   # tipo de barco -> equipos/arquetipos del juego (con y sin Man the Guns)
   ship_types:
@@ -67,6 +69,12 @@ unit_names:
         names: [Yaguareté, Tatú Carreta, Pampero, Aguará Guazú, Puma, Yacaré, Zonda, Sudestada,
                 Huemul, Guanaco, Ñandú, Tormenta de Santa Rosa, Oso Hormiguero, Tapir, Pecarí, Viento Blanco,
                 Corona de Gaia, Raíz de Hierro, Savia Negra, Corteza Viva]
+      superheavy:  # el Gliptodonte (20_unique_units.yaml): la megafauna de la Pampa
+        group: {en: "Glyptodon Herds", es: "Rebaños de Gliptodontes"}
+        pattern: "{n}.º Rebaño Gliptodonte «{name}»"
+        fallback: "%d.º Rebaño Gliptodonte"
+        names: [Doedicurus, Panochthus, Hoplophorus, Neosclerocalyptus, Megaterio, Toxodonte,
+                Macrauquenia, Lestodonte, Milodonte, Esmilodonte, Escelidoterio, Glossoterio]
       mobile:
         group: {en: "Pampas Motorized Columns", es: "Columnas Motorizadas Pampeanas"}
         pattern: "{n}.ª Columna Motorizada «{name}»"

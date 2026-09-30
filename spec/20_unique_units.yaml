@@ -1,0 +1,95 @@
+# =============================================================================
+# 20_unique_units.yaml — Unidades únicas (pedido del usuario, 2026-09-30)
+# =============================================================================
+# "Elegí una unidad que NO se use frecuentemente, sobre todo por la IA, fijate
+# si se puede evitar que se investigue excepto para UNA nación y convertila en
+# unidad única. Que llegue a ser producida sin esperar demasiado (+5 años es
+# mucho)."
+#
+# Cómo funciona (tools/gen/emitters/unique_units.py):
+#   1. Bloqueo: cada tecnología de `lock.techs`, y toda tecnología que
+#      habilite un equipo o módulo cuyo id contenga alguna palabra de
+#      `lock.enables`, recibe `original_tag = <país>` en su `allow` y su
+#      `allow_branch` (se agregan si no están; si están, se suma la condición
+#      a la que ya tienen). Nadie más la puede investigar ni la ve en el árbol.
+#      Robar la tecnología con espías o capturar el equipo sigue siendo
+#      posible: es parte del juego.
+#   2. Desbloqueo rápido: el efecto `<id>_desbloqueo` (lo corre una decisión
+#      de 14_decisions.yaml) da la tecnología del chasis sin pasar por sus
+#      requisitos, las de los módulos del diseño, el diseño armado, una
+#      plantilla de división, equipo de arranque y el espíritu de la unidad.
+#   3. Diseño: se arma con las piezas del juego instalado. Para cada casilla
+#      del chasis se prueba `design.modules.<casilla>` en orden (id exacto o
+#      palabra dentro del id); si nada encaja, queda la pieza por defecto del
+#      chasis. El reporte dice qué quedó en cada casilla.
+#   4. Espíritu: `equipment_bonus` sobre el arquetipo del chasis.
+# =============================================================================
+
+units:
+  - id: EFE_gliptodonte
+    country: EFE
+    src: user_request
+    name: {english: Glyptodon, spanish: Gliptodonte}
+    lore:
+      english: >-
+        Ten thousand years ago an armadillo the size of a car walked the Pampa.
+        The Gaia Laboratory rebuilt its shell out of BioSteel: a hull grown in
+        one piece in the vats, covered in hexagonal plates that close their own
+        wounds. It weighs as much as a land fortress and runs like a medium
+        tank, on electric drive and living muscle. Only the Green Empire knows
+        how to grow one; everyone else can only capture them.
+      spanish: >-
+        Hace diez mil años un armadillo del tamaño de un auto caminaba por la
+        Pampa. El Laboratorio de Gaia rehízo su caparazón en Bioacero: un casco
+        cultivado de una sola pieza en las cubas, cubierto de placas hexagonales
+        que cierran sus propias heridas. Pesa como una fortaleza terrestre y
+        corre como un tanque medio, con tracción eléctrica y músculo vivo. Solo
+        el Imperio Verde sabe cultivarlo; los demás solo pueden capturarlo.
+    # Nombre del batallón en la pantalla de divisiones (pisa el del juego:
+    # la unidad es única, nadie más la tiene).
+    sub_unit: super_heavy_armor
+    sub_unit_name: {english: Glyptodon Battalion, spanish: Batallón Gliptodonte}
+    lock:
+      # Ids con y sin No Step Back; los que este juego no tiene se ignoran.
+      techs: [super_heavy_tank_chassis, super_heavy_tank_chassis_2, super_heavy_tank, super_heavy_tank2,
+              super_heavy_tank_destroyer, super_heavy_tank_destroyer2, super_heavy_tank_artillery]
+      enables: [super_heavy]
+    # Nombres de 2100 para las tecnologías bloqueadas (las que existan).
+    tech_names:
+      super_heavy_tank_chassis: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
+      super_heavy_tank_chassis_2: {en: Glyptodon Second Strain, es: Gliptodonte de Segunda Cepa}
+      super_heavy_tank: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
+      super_heavy_tank2: {en: Glyptodon Second Strain, es: Gliptodonte de Segunda Cepa}
+    design:
+      name: Gliptodonte
+      # el chasis: el primer equipo (por año) cuyo id contenga alguna palabra
+      # y tenga casillas de módulos (No Step Back).
+      chassis: [super_heavy_tank_chassis]
+      # "¿Un superpesado rápido?": la velocidad sale del motor mejorado y del
+      # espíritu; el blindaje fundido es el casco cultivado de una pieza.
+      modules:
+        main_armament_slot: [tank_heavy_cannon_1, heavy_cannon, high_velocity_cannon, medium_cannon]
+        turret_type_slot: [super_heavy, three_man, 3_man, two_man, 2_man]
+        suspension_type_slot: [christie, torsion_bar, bogie]
+        armor_type_slot: [cast_armor, cast, welded_armor, welded]
+        engine_type_slot: [petrol_electric, diesel, gasoline]
+        special_type_slot_1: [radio]
+        special_type_slot_2: [smoke_launcher, smoke]
+        special_type_slot_3: [extra_ammo, ammo_storage, wet_ammo]
+        special_type_slot_4: [sloped_armor, sloped, armor_skirts, skirt]
+      # niveles de mejora por palabra (se buscan en las `upgrades` del chasis)
+      upgrades: {engine: 6, armor: 4}
+    grant:
+      equipment: 24        # el primer rebaño: dos batallones (ver el reporte)
+    template:
+      name: Gliptodontes de la Guardia
+      regiments: [super_heavy_armor, super_heavy_armor, motorized, motorized, motorized, motorized]
+      support: []
+    spirit:
+      id: EFE_el_rebano_de_gliptodontes
+      name: {english: The Glyptodon Herd, spanish: El Rebaño de Gliptodontes}
+      desc:
+        english: 'Living armour at the speed of a medium tank. Glyptodon: +40% speed, +25% reliability, +10% armour, -15% production cost.'
+        spanish: 'Blindaje vivo a la velocidad de un tanque medio. Gliptodonte: +40% velocidad, +25% fiabilidad, +10% blindaje, -15% costo de producción.'
+      equipment_bonus: {maximum_speed: 0.4, reliability: 0.25, armor_value: 0.1, build_cost_ic: -0.15}
+      picture_prefer: [tank, armor, armour]
