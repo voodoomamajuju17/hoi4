@@ -1105,7 +1105,9 @@ def test_events() -> None:
         check("emergencia: la 3 cuesta 250, se usa una vez y da 8 de infanteria y 6 de milicia",
               "cost = 250" in e3 and "NOT = { has_country_flag = MEGANATIONS_emergencia_3_usada }" in e3
               and "set_country_flag = MEGANATIONS_emergencia_3_usada" in e3
-              and e3.count('Leva de Emergencia III 8\\"') >= 1 and e3.count('Milicia de Emergencia 6\\"') >= 1
+              # create_unit sin comillas internas (error.log 2026-09-30: "Malformed token")
+              and e3.count('"division_template = Leva_de_Emergencia_III ') == 16
+              and e3.count('"division_template = Milicia_de_Emergencia ') == 12
               and "add_manpower = 20000" in e3 and "type = support_equipment amount = 1000" in e3, e3[:1500])
         e1 = decs_e[decs_e.index("MEGANATIONS_emergencia_1 = {"):][:3000]
         check("emergencia: la 1 baja estabilidad y apoyo a la guerra 5%",

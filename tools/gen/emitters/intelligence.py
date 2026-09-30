@@ -221,13 +221,10 @@ def _emit(ctx: BuildContext, spec: dict) -> None:
                 execute.add("FROM", render_effects(oid, target, effect_ctx, effects_used, where=where))
             b.add("outcome_execute", execute)
 
-            ai = Block([("factor", 1)])
-            if rivals[t]:
-                ai.add("modifier", Block([("factor", 3), ("OR", Block([("tag", r) for r in sorted(rivals[t])]))]))
-            ai.add("modifier", Block([("factor", 3), ("has_war_with", "FROM")]))
-            b.add("ai_will_do", ai)
-            for k in ("tag", "has_war_with"):
-                triggers_used.setdefault(k, oid)
+            # error.log 2026-09-30: "Invalid scope type for trigger tag" en
+            # ai_will_do (no corre en el país): la IA elige por su cuenta, sin
+            # condiciones; el rival pesa por el orden de la lista.
+            b.add("ai_will_do", Block([("factor", 3 if rivals[t] else 1)]))
             out.add(oid, b)
 
             en_t, es_t = country.name_en, country.name_es

@@ -31,10 +31,19 @@ military:
   # 2026-09-27: "nadie investiga barcos". Todas investigan lo básico naval; la
   # HSN mucho más.
   naval_research:
-    value: 25
-    by_country: {HSN: 80, FCU: 40, NRE: 35}
-    techs: [early_ship_hull_light, basic_ship_hull_light, basic_battery, basic_torpedo, improved_ship_hull_light,
-            basic_ship_hull_submarine, basic_ship_hull_cruiser, basic_light_battery]
+    # 2026-09-30 (partida a 2107: "la HSN no investiga barcos"): la lista era
+    # solo lo del arranque. Todos los cascos, del I al IV; la HSN x16.
+    value: 40
+    by_country: {HSN: 300, FCU: 100, NRE: 80, SHD: 60, ASC: 60}
+    techs: [early_ship_hull_light, basic_ship_hull_light, improved_ship_hull_light, advanced_ship_hull_light,
+            early_ship_hull_cruiser, basic_ship_hull_cruiser, improved_ship_hull_cruiser, advanced_ship_hull_cruiser,
+            early_ship_hull_heavy, basic_ship_hull_heavy, improved_ship_hull_heavy, advanced_ship_hull_heavy,
+            early_ship_hull_carrier, basic_ship_hull_carrier, improved_ship_hull_carrier, advanced_ship_hull_carrier,
+            early_ship_hull_submarine, basic_ship_hull_submarine, improved_ship_hull_submarine, advanced_ship_hull_submarine,
+            basic_battery, improved_battery, basic_light_battery, improved_light_battery, basic_medium_battery,
+            basic_torpedo, improved_ship_torpedo_launcher, basic_depth_charges, improved_depth_charges,
+            basic_naval_mines, improved_airplane_launcher, basic_fire_control_system, improved_fire_control_system,
+            basic_heavy_armor_scheme, basic_cruiser_armor_scheme, basic_dp_light_battery]
   # 2026-09-30: "nadie está construyendo tanques". Todas arrancan con el
   # tanque básico e investigan los blindados; el EFE mucho más. Los ids que
   # no existen en el juego se ignoran (con y sin No Step Back).

@@ -157,6 +157,15 @@ def flush_tooltips(ctx) -> None:
                          source="guerras civiles: retratos de los lideres rebeldes")
 
 
+def template_token(name: str) -> str:
+    """Nombre de plantilla de división como una sola palabra ASCII: create_unit
+    no leía las comillas de adentro (error.log 2026-09-30: "Malformed token:
+    Milicia"). "Leva de Emergencia I" -> "Leva_de_Emergencia_I"."""
+    text = unicodedata.normalize("NFKD", str(name))
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    return re.sub(r"[^A-Za-z0-9_]+", "_", text).strip("_")
+
+
 def _norm(name: str) -> str:
     text = unicodedata.normalize("NFKD", name)
     text = "".join(ch for ch in text if not unicodedata.combining(ch))
@@ -550,7 +559,7 @@ def render_effects(owner: str, items: list[dict], known,
             regs = Block()
             for i, r in enumerate(item["regiments"]):
                 regs.add(r, Block([("x", i // 5), ("y", i % 5)]))
-            tpl = Block([("name", Quoted(item["name"])), ("regiments", regs)])
+            tpl = Block([("name", Quoted(template_token(item["name"]))), ("regiments", regs)])
             if item.get("support"):
                 sup = Block()
                 for i, r in enumerate(item["support"]):
@@ -567,8 +576,12 @@ def render_effects(owner: str, items: list[dict], known,
             def units() -> Block:
                 out = Block()
                 for i in range(int(item["count"])):
-                    div = (f'name = "{item["name"]} {i + 1}" division_template = "{item["template"]}" '
-                           f'start_experience_factor = {float(item.get("experience", 0.3))}')
+                    # error.log 2026-09-30: "Malformed token: Milicia" / "division
+                    # string was not parsed correctly" con las comillas internas.
+                    # Si el nombre de la plantilla es una sola palabra va sin
+                    # comillas y sin nombre de división (el juego le pone uno).
+                    xp = float(item.get("experience", 0.3))
+                    div = f"division_template = {template_token(item['template'])} start_experience_factor = {xp}"
                     out.add("create_unit", Block([("division", Quoted(div)), ("owner", "PREV")]))
                 return out
             block.add("if", Block([
