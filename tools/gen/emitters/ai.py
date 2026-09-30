@@ -144,6 +144,9 @@ def emit(ctx: BuildContext) -> None:
 
     for p in spec.get("plans", []) or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
+    # unidades únicas (20_unique_units.yaml): se activan con su desbloqueo
+    for p in ctx.data.get("unique_ai_plans") or []:
+        add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
 
     if dropped_ids:
         ctx.warn(f"ia: ids que el juego no usa con ese tipo, se omiten: {', '.join(sorted(dropped_ids))}")

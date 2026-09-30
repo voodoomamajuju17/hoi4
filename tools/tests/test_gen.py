@@ -601,7 +601,7 @@ def test_phase3_content() -> None:
         check("icono elegido entre los vanilla", pdx.text(cat.get("icon")) == "generic_industry")
         decs_raw = (mod / "common/decisions/meganations_decisions.txt").read_text()
         decs = pdx.parse(decs_raw).get("EFE_biosteel_category")
-        check("6 decisiones (con Purgar las Cubas y Como se Juega)", len(decs.keys()) == 6, str(decs.keys()))
+        check("7 decisiones (con Purgar las Cubas, Como se Juega y el Gliptodonte)", len(decs.keys()) == 7, str(decs.keys()))
         guia = decs.get("EFE_como_se_juega")
         check("Como se Juega: gratis, la IA no la usa, muestra la bienvenida", pdx.text(guia.get("cost")) == "0"
               and "meganations_efe.29" in pdx.render(guia.get("complete_effect"))
@@ -2290,7 +2290,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -2341,6 +2341,71 @@ def test_vanilla_validation() -> None:
 # ---------------------------------------------------------------------------
 
 
+def test_unique_units() -> None:
+    section("unidades unicas (20_unique_units): una por meganacion")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        root = ctx.mod_root
+        check("bloqueo: el chasis superpesado es solo del EFE",
+              ctx.data.get("tech_locks", {}).get("super_heavy_tank_chassis") == "EFE", str(ctx.data.get("tech_locks")))
+        check("bloqueo: la tecnologia de un modulo compartido no se bloquea",
+              "heavy_cannon_fixture_tech" not in ctx.data.get("tech_locks", {}))
+        techs = (root / "common/technologies/super_heavy_fixture.txt").read_text(encoding="utf-8")
+        sh = None
+        for k, v in pdx.parse(techs).entries:
+            if k == "technologies":
+                sh = v.get("super_heavy_tank_chassis")
+        check("allow nuevo con original_tag", sh is not None and pdx.text(sh.get("allow").get("original_tag")) == "EFE",
+              techs)
+        ab = sh.get("allow_branch") if sh is not None else None
+        check("allow_branch conserva el DLC y suma original_tag",
+              ab is not None and ab.get("has_dlc") is not None and pdx.text(ab.get("original_tag")) == "EFE", techs)
+        eff = pdx.parse((root / "common/scripted_effects/meganations_unique_units.txt").read_text(encoding="utf-8"))
+        body = eff.get("EFE_gliptodonte_desbloqueo")
+        check("efecto de desbloqueo", body is not None)
+        st = body.get("set_technology")
+        check("da el chasis y las piezas", all(t in st.keys() for t in
+              ("super_heavy_tank_chassis", "heavy_cannon_fixture_tech", "cast_armor_fixture_tech")), str(st.keys()))
+        var = body.get("create_equipment_variant")
+        mods = var.get("modules")
+        check("diseño: cañón pesado, blindaje fundido, motor por defecto",
+              pdx.text(mods.get("main_armament_slot")) == "tank_heavy_cannon_1"
+              and pdx.text(mods.get("armor_type_slot")) == "tank_cast_armor"
+              and pdx.text(mods.get("engine_type_slot")) == "tank_gasoline_engine", str(mods.entries))
+        check("diseño: una pieza que prohibe el cañon no entra", mods.get("special_type_slot_1") is None)
+        check("diseño: mejoras de motor", pdx.text(var.get("upgrades").get("tank_nsb_engine_upgrade")) == "6")
+        check("plantilla y equipo de arranque", body.get("division_template") is not None
+              and body.get("add_equipment_to_stockpile") is not None)
+        ideas = (root / "common/ideas/meganations_unique_units.txt").read_text(encoding="utf-8")
+        check("espiritu con equipment_bonus sobre el arquetipo", "equipment_bonus" in ideas
+              and "super_heavy_tank_chassis" in ideas and "maximum_speed" in ideas)
+        dec = (root / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8")
+        check("la decision del EFE corre el desbloqueo", "EFE_gliptodonte_desbloqueo" in dec)
+        check("cada potencia tiene la decision de su unidad",
+              all(f"{u}_desbloqueo" in dec for u in ("SHD_dragon_del_canal", "HSN_leviatan", "NAS_hijos_del_condor",
+                  "NRE_onagro", "ASC_centinela", "APF_kiboko", "FCU_ala_de_obsidiana")))
+        check("cola de produccion del Gliptodonte", body.get("add_equipment_production") is not None)
+        check("marca de desbloqueo", pdx.text(body.get("set_country_flag")) == "EFE_gliptodonte_desbloqueado",
+              str(body.get("set_country_flag")))
+        # los paracaidistas del NAS: equipo fijo (tiltrotor), plantilla y una división
+        nas = eff.get("NAS_hijos_del_condor_desbloqueo")
+        st = nas.get("set_technology")
+        check("NAS: paracaidistas y transporte", all(t in st.keys() for t in ("paratroopers", "transport_plane_fixture_tech")),
+              str(st.keys()))
+        check("NAS: bloqueo de la linea de paracaidistas",
+              all(ctx.data["tech_locks"].get(t) == "NAS" for t in ("paratroopers", "paratroopers2")))
+        tpl = nas.get("division_template")
+        check("NAS: plantilla de una sola palabra", tpl is not None and pdx.text(tpl.get("name")) == "Condores",
+              str(tpl))
+        check("NAS: una division de arranque", "create_unit" in pdx.render(nas))
+        check("NAS: sin plantilla si falta el batallon (Onagros)", eff.get("NRE_onagro_desbloqueo").get("division_template") is None)
+        ai = (root / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8")
+        check("IA: plan de los Kiboko que se activa con el desbloqueo (solo los ids que el juego usa)",
+              "MEGANATIONS_APF_kiboko_produccion" in ai and "APF_kiboko_desbloqueado" in ai
+              and "id = amphibious_mechanized" not in ai)
+        check("IA: sin plan si ningun id existe (SHD)", "MEGANATIONS_SHD_dragon_del_canal_produccion" not in ai)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -2371,6 +2436,7 @@ def main() -> int:
         test_mecanicas_v2,
         test_forces,
         test_unit_names,
+        test_unique_units,
         test_diplomacy,
         test_vanilla_validation,
     ):

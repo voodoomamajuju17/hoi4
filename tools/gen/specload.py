@@ -36,6 +36,7 @@ SPEC_FILES = {
     "research_look": "17_research.yaml",
     "intelligence": "18_intelligence.yaml",
     "unit_names": "19_unit_names.yaml",
+    "unique_units": "20_unique_units.yaml",
     "questions": "99_open_questions.yaml",
 }
 

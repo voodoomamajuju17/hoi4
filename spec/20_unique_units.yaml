@@ -1,0 +1,428 @@
+# =============================================================================
+# 20_unique_units.yaml — Unidades únicas (pedido del usuario, 2026-09-30)
+# =============================================================================
+# "Elegí una unidad que NO se use frecuentemente, sobre todo por la IA, fijate
+# si se puede evitar que se investigue excepto para UNA nación y convertila en
+# unidad única. Que llegue a ser producida sin esperar demasiado (+5 años es
+# mucho)." Y después: "Hacé las unidades para las 7 facciones que faltan,
+# asegurate de que la IA las produzca, sin exagerar."
+#
+# Una por meganación, según su especialidad (13_military -> specialty):
+#   EFE blindados   -> Gliptodonte: tanque superpesado rápido
+#   SHD artillería  -> Dragón del Gran Canal: cañón ferroviario sobre maglev
+#   HSN naval       -> Leviatán: acorazado superpesado de los estrechos
+#   NAS aire        -> Hijos del Cóndor: paracaidistas en tiltrotor
+#   NRE infantería  -> Onagro: artillería de cohetes de las legiones
+#   ASC cómputo     -> Centinela: vehículo blindado autónomo (auto blindado)
+#   APF apoyo       -> Kiboko: vehículo anfibio de los grandes ríos
+#   FCU industria   -> Ala de Obsidiana: avión pesado de alcance global
+#
+# Cómo funciona (tools/gen/emitters/unique_units.py):
+#   1. Bloqueo: cada tecnología de `lock.techs`, y toda tecnología que SOLO
+#      habilite equipo o piezas con alguna palabra de `lock.enables`, recibe
+#      `original_tag = <país>` en su `allow` y su `allow_branch` (se suma a lo
+#      que ya tengan). Nadie más la investiga ni la ve en el árbol
+#      (`hide_branch: false`: se ve pero no se investiga). Robarla con espías
+#      o capturar el equipo sigue siendo posible. Nadie ARRANCA con la
+#      tecnología única de otro.
+#   2. Desbloqueo rápido: el efecto `<id>_desbloqueo` (una decisión de
+#      14_decisions.yaml, una sola vez) da las tecnologías sin pasar por sus
+#      requisitos, el diseño armado, equipo, una plantilla y una división,
+#      pone la unidad en la cola de producción y da el espíritu.
+#   3. Diseño (tanques, barcos, aviones): se arma con las piezas del juego
+#      instalado. Para cada casilla se prueba `design.modules` en orden (id
+#      exacto o palabra dentro del id; la clave puede ser una parte del nombre
+#      de la casilla). Si nada encaja queda la pieza por defecto, y si la
+#      casilla es obligatoria, la primera que entra. `max_module_year` evita
+#      regalar piezas de tecnologías muy avanzadas. El reporte dice qué quedó.
+#   4. IA "sin exagerar": toma la decisión apenas le alcanza (ai_factor 20),
+#      arranca con una división y la unidad en producción, y un plan de IA
+#      chico (`ai`) que se activa con el desbloqueo. Los ids de IA que el juego
+#      no usa se omiten con aviso.
+#   5. Espíritu: `equipment_bonus` sobre el arquetipo del equipo de la unidad
+#      y/o `modifiers` (con "?" delante: se omite si el juego no lo documenta).
+# =============================================================================
+
+units:
+  # ---------------------------------------------------------------------------
+  - id: EFE_gliptodonte
+    country: EFE
+    src: user_request
+    name: {english: Glyptodon, spanish: Gliptodonte}
+    lore:
+      english: >-
+        Ten thousand years ago an armadillo the size of a car walked the Pampa.
+        The Gaia Laboratory rebuilt its shell out of BioSteel: a hull grown in
+        one piece in the vats, covered in hexagonal plates that close their own
+        wounds. It weighs as much as a land fortress and runs like a medium
+        tank, on electric drive and living muscle. Only the Green Empire knows
+        how to grow one; everyone else can only capture them.
+      spanish: >-
+        Hace diez mil años un armadillo del tamaño de un auto caminaba por la
+        Pampa. El Laboratorio de Gaia rehízo su caparazón en Bioacero: un casco
+        cultivado de una sola pieza en las cubas, cubierto de placas hexagonales
+        que cierran sus propias heridas. Pesa como una fortaleza terrestre y
+        corre como un tanque medio, con tracción eléctrica y músculo vivo. Solo
+        el Imperio Verde sabe cultivarlo; los demás solo pueden capturarlo.
+    # Nombre del batallón en la pantalla de divisiones (pisa el del juego:
+    # la unidad es única, nadie más la tiene).
+    sub_unit: super_heavy_armor
+    sub_unit_name: {english: Glyptodon Battalion, spanish: Batallón Gliptodonte}
+    lock:
+      # Ids con y sin No Step Back; los que este juego no tiene se ignoran.
+      techs: [super_heavy_tank_chassis, super_heavy_tank_chassis_2, super_heavy_tank, super_heavy_tank2,
+              super_heavy_tank_destroyer, super_heavy_tank_destroyer2, super_heavy_tank_artillery]
+      enables: [super_heavy_tank, tank_super_heavy]
+    tech_names:
+      super_heavy_tank_chassis: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
+      super_heavy_tank_chassis_2: {en: Glyptodon Second Strain, es: Gliptodonte de Segunda Cepa}
+      super_heavy_tank: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
+      super_heavy_tank2: {en: Glyptodon Second Strain, es: Gliptodonte de Segunda Cepa}
+    design:
+      name: Gliptodonte
+      chassis: [super_heavy_tank_chassis]
+      # "¿Un superpesado rápido?": la velocidad sale del motor mejorado y del
+      # espíritu; el blindaje fundido es el casco cultivado de una pieza.
+      modules:
+        main_armament_slot: [tank_heavy_cannon_1, heavy_cannon, high_velocity_cannon, medium_cannon]
+        turret_type_slot: [super_heavy, three_man, 3_man, two_man, 2_man]
+        suspension_type_slot: [christie, torsion_bar, bogie]
+        armor_type_slot: [cast_armor, cast, welded_armor, welded]
+        engine_type_slot: [petrol_electric, diesel, gasoline]
+        special_type_slot_1: [radio]
+        special_type_slot_2: [smoke_launcher, smoke]
+        special_type_slot_3: [extra_ammo, ammo_storage, wet_ammo]
+        special_type_slot_4: [sloped_armor, sloped, armor_skirts, skirt]
+      upgrades: {engine: 6, armor: 4}
+    grant:
+      equipment: 40
+      extra_equipment:
+      - {like: motorized_equipment, amount: 150}
+    template:
+      name: Gliptodontes
+      regiments: [super_heavy_armor, super_heavy_armor, motorized, motorized, motorized, motorized]
+    divisions: 1
+    production: {amount: 20, factories: 3, progress: 0}
+    ai: []     # el EFE ya prioriza blindados (16_ai.yaml); alcanza con la cola de producción
+    spirit:
+      id: EFE_el_rebano_de_gliptodontes
+      name: {english: The Glyptodon Herd, spanish: El Rebaño de Gliptodontes}
+      desc:
+        english: 'Living armour at the speed of a medium tank. Glyptodon: +40% speed, +25% reliability, +10% armour, -15% production cost.'
+        spanish: 'Blindaje vivo a la velocidad de un tanque medio. Gliptodonte: +40% velocidad, +25% fiabilidad, +10% blindaje, -15% costo de producción.'
+      equipment_bonus: {maximum_speed: 0.4, reliability: 0.25, armor_value: 0.1, build_cost_ic: -0.15}
+      picture_prefer: [tank, armor, armour]
+
+  # ---------------------------------------------------------------------------
+  - id: SHD_dragon_del_canal
+    country: SHD
+    src: user_request
+    name: {english: Dragon of the Grand Canal, spanish: Dragón del Gran Canal}
+    lore:
+      english: >-
+        The Directorate never tore up the Grand Canal: it laid a maglev beside
+        it. On those rails sleep the Dragons, guns the length of a barge that
+        glide without touching the track and fire from four hundred kilometres
+        away. The river corrects its course; so do they.
+      spanish: >-
+        El Directorio nunca levantó el Gran Canal: le tendió un maglev al lado.
+        Sobre esas vías duermen los Dragones, cañones del largo de una barcaza
+        que se deslizan sin tocar el riel y disparan desde cuatrocientos
+        kilómetros. El río corrige su curso; ellos también.
+    lock:
+      techs: [railway_gun, railway_gun2, railway_gun3, railway_gun_2, railway_gun_3, improved_railway_gun,
+              advanced_railway_gun]
+      enables: [railway_gun]
+      hide_branch: false     # se ve pero solo esta potencia la investiga (por si otras cuelgan de ella)
+    names:
+      railway_gun_equipment_1: {en: Grand Canal Dragon, es: Dragón del Gran Canal}
+      railway_gun_equipment_2: {en: Grand Canal Dragon II, es: Dragón del Gran Canal II}
+      railway_gun_equipment_3: {en: Grand Canal Dragon III, es: Dragón del Gran Canal III}
+    equipment: [railway_gun]
+    grant:
+      equipment: 2
+    production: {amount: 2, factories: 3, progress: 0.2}
+    ai:
+    - {type: equipment_production_factor, id: railway_gun, value: 10}
+    spirit:
+      id: SHD_los_dragones_del_canal
+      name: {english: The Dragons of the Canal, spanish: Los Dragones del Canal}
+      desc:
+        english: 'Maglev railway guns. Dragon: +50% speed, +20% reliability, -20% production cost.'
+        spanish: 'Cañones ferroviarios sobre maglev. Dragón: +50% velocidad, +20% fiabilidad, -20% costo de producción.'
+      equipment_bonus: {maximum_speed: 0.5, reliability: 0.2, build_cost_ic: -0.2}
+      picture_prefer: [artillery, gun]
+
+  # ---------------------------------------------------------------------------
+  - id: HSN_leviatan
+    country: HSN
+    src: user_request
+    name: {english: Leviathan of Malacca, spanish: Leviatán de Malaca}
+    lore:
+      english: >-
+        A free port with guns. The Leviathan anchors at the mouth of a strait
+        and the strait becomes a toll: it carries its own customs office, its
+        own insurance desk and eighteen-inch railguns to settle the claims.
+        The High Seas Market builds them one at a time, and names them after
+        the storms that sank its rivals.
+      spanish: >-
+        Un puerto libre con cañones. El Leviatán fondea en la boca de un
+        estrecho y el estrecho pasa a ser un peaje: lleva su propia aduana, su
+        propia oficina de seguros y cañones de riel de dieciocho pulgadas para
+        resolver los reclamos. El Mercado de Alta Mar los construye de a uno y
+        les pone el nombre de las tormentas que hundieron a sus rivales.
+    lock:
+      techs: [super_heavy_ship_hull, ship_hull_super_heavy, basic_ship_hull_super_heavy, super_heavy_battleship]
+      enables: [ship_hull_super_heavy, super_heavy_battery, shbb]
+    names:
+      ship_hull_super_heavy_1: {en: Leviathan Hull, es: Casco Leviatán}
+    design:
+      name: Leviatan
+      chassis: [ship_hull_super_heavy]
+      max_module_year: 1941
+      modules:
+        fixed_ship_battery_slot: [super_heavy_battery, heavy_battery]
+        fixed_ship_anti_air_slot: [anti_air]
+        fixed_ship_fire_control_system_slot: [fire_control]
+        fixed_ship_radar_slot: [radar]
+        fixed_ship_engine_slot: [heavy_ship_engine, ship_engine, engine]
+        fixed_ship_secondaries_slot: [dp_secondary, secondaries, secondary]
+        fixed_ship_armor_slot: [shbb, super_heavy, heavy_armor, armor]
+        front_1_custom_slot: [super_heavy_battery, heavy_battery]
+        mid_1_custom_slot: [dp_secondary, anti_air]
+        mid_2_custom_slot: [anti_air]
+        rear_1_custom_slot: [super_heavy_battery, heavy_battery]
+      upgrades: {engine: 3, armor: 3, reliability: 2}
+    production: {amount: 1, factories: 3, progress: 0.25}
+    ai:
+    - {type: equipment_production_factor, id: capital_ship, value: 10}
+    spirit:
+      id: HSN_la_clase_leviatan
+      name: {english: The Leviathan Class, spanish: La Clase Leviatán}
+      desc:
+        english: 'Floating fortresses of the straits. Leviathan: +15% speed, +25% anti-air, +20% reliability, -10% production cost.'
+        spanish: 'Fortalezas flotantes de los estrechos. Leviatán: +15% velocidad, +25% antiaérea, +20% fiabilidad, -10% costo de producción.'
+      equipment_bonus: {naval_speed: 0.15, anti_air_attack: 0.25, reliability: 0.2, build_cost_ic: -0.1}
+      picture_prefer: [navy, naval, ship]
+
+  # ---------------------------------------------------------------------------
+  - id: NAS_hijos_del_condor
+    country: NAS
+    src: user_request
+    name: {english: Sons of the Condor, spanish: Hijos del Cóndor}
+    lore:
+      english: >-
+        They are born in the high valleys and learn to breathe thin air before
+        they learn to read. The tiltrotors of the Sun drop them on the other
+        side of any range: they fall silent from six thousand metres, cut the
+        road and are gone before the enemy understands where the mountain
+        ended.
+      spanish: >-
+        Nacen en los valles altos y aprenden a respirar aire fino antes que a
+        leer. Los tiltrotores del Sol los dejan del otro lado de cualquier
+        cordillera: caen en silencio desde seis mil metros, cortan el camino y
+        se van antes de que el enemigo entienda dónde terminaba la montaña.
+    sub_unit: paratrooper
+    sub_unit_name: {english: Sons of the Condor, spanish: Hijos del Cóndor}
+    lock:
+      techs: [paratroopers, paratroopers2, paratroopers3]
+    equipment: [transport_plane]     # los tiltrotores: no se bloquean, se regalan
+    grant:
+      techs: [paratroopers]
+      techs_enabling: [transport_plane]
+      equipment: 30
+    template:
+      name: Condores
+      regiments: [paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper]
+    divisions: 1
+    production: {amount: 20, factories: 1, progress: 0}
+    ai:
+    - {type: role_ratio, id: paratroopers, value: 8}
+    spirit:
+      id: NAS_los_hijos_del_condor
+      name: {english: The Sons of the Condor, spanish: Los Hijos del Cóndor}
+      desc:
+        english: 'Andean airborne troops. Special forces: +10% attack and defence. Tiltrotors: +50% range, +20% reliability.'
+        spanish: 'Tropas aerotransportadas andinas. Fuerzas especiales: +10% ataque y defensa. Tiltrotores: +50% alcance, +20% fiabilidad.'
+      modifiers: {'?special_forces_attack_factor': 0.1, '?special_forces_defence_factor': 0.1}
+      equipment_bonus: {air_range: 0.5, reliability: 0.2}
+      picture_prefer: [paratroop, air, special]
+
+  # ---------------------------------------------------------------------------
+  - id: NRE_onagro
+    country: NRE
+    src: user_request
+    name: {english: Onager, spanish: Onagro}
+    lore:
+      english: >-
+        The legions named it after the siege engine that kicked like a wild
+        ass. Each Onager battery fires a hundred and twenty rockets in nine
+        seconds and moves before the answer arrives: the Storm of Mars that
+        opens the way for the cohorts. Only Rome builds them; only Rome needs
+        that much thunder.
+      spanish: >-
+        Las legiones le pusieron el nombre de la máquina de asedio que pateaba
+        como un asno salvaje. Cada batería Onagro dispara ciento veinte cohetes
+        en nueve segundos y se mueve antes de que llegue la respuesta: la
+        Tormenta de Marte que abre el camino a las cohortes. Solo Roma los
+        construye; solo Roma necesita tanto trueno.
+    sub_unit: rocket_artillery_brigade
+    sub_unit_name: {english: Onager Battery, spanish: Batería Onagro}
+    lock:
+      techs: [rocket_artillery, rocket_artillery2, rocket_artillery3, rocket_artillery4, motorized_rocket_unit]
+      enables: [rocket_artillery, motorized_rocket]
+      hide_branch: false     # se ve pero solo esta potencia la investiga (por si otras cuelgan de ella)
+    equipment: [rocket_artillery_equipment]
+    grant:
+      equipment: 60
+    template:
+      name: Onagros
+      regiments: [infantry, infantry, infantry, infantry, infantry, infantry, rocket_artillery_brigade, rocket_artillery_brigade]
+    divisions: 1
+    production: {amount: 60, factories: 2, progress: 0}
+    ai:
+    - {type: equipment_production_factor, id: rocket_artillery, value: 10}
+    spirit:
+      id: NRE_la_tormenta_de_marte
+      name: {english: The Storm of Mars, spanish: La Tormenta de Marte}
+      desc:
+        english: 'The rocket batteries of the legions. Onager: +15% soft attack, +15% reliability, -10% production cost.'
+        spanish: 'Las baterías de cohetes de las legiones. Onagro: +15% ataque suave, +15% fiabilidad, -10% costo de producción.'
+      equipment_bonus: {soft_attack: 0.15, reliability: 0.15, build_cost_ic: -0.1}
+      picture_prefer: [artillery, rocket]
+
+  # ---------------------------------------------------------------------------
+  - id: ASC_centinela
+    country: ASC
+    src: user_request
+    name: {english: Sentinel, spanish: Centinela}
+    lore:
+      english: >-
+        No crew, no seats, no fear. The Sentinels are armoured cars that share
+        a single mind with the datacenters of the Ruhr: what one sees, the
+        Plan sees. They patrol in packs of forty, never sleep and never ask
+        why. The Commune says it freed the soldier from the scout's job;
+        the scout never asked.
+      spanish: >-
+        Sin tripulación, sin asientos, sin miedo. Los Centinelas son autos
+        blindados que comparten una sola mente con los datacenters del Ruhr:
+        lo que ve uno, lo ve el Plan. Patrullan en manadas de cuarenta, no
+        duermen y no preguntan por qué. La Comuna dice que liberó al soldado
+        del trabajo de explorador; el explorador nunca lo pidió.
+    sub_unit: armored_car
+    sub_unit_name: {english: Sentinel Pack, spanish: Manada de Centinelas}
+    lock:
+      techs: [armored_car1, armored_car2, armored_car3]
+      enables: [armored_car]
+      hide_branch: false     # se ve pero solo esta potencia la investiga (por si otras cuelgan de ella)
+    equipment: [armored_car_equipment, armored_car]
+    grant:
+      equipment: 150
+      extra_equipment:
+      - {like: motorized_equipment, amount: 100}
+    template:
+      name: Centinelas
+      regiments: [armored_car, armored_car, armored_car, armored_car, motorized, motorized]
+    divisions: 1
+    production: {amount: 100, factories: 2, progress: 0}
+    ai:
+    - {type: equipment_production_factor, id: armored_car, value: 10}
+    spirit:
+      id: ASC_la_red_de_centinelas
+      name: {english: The Sentinel Network, spanish: La Red de Centinelas}
+      desc:
+        english: 'Crewless armoured cars linked to the Plan. Sentinel: +20% speed, +25% reliability, +10% soft attack.'
+        spanish: 'Autos blindados sin tripulación conectados al Plan. Centinela: +20% velocidad, +25% fiabilidad, +10% ataque suave.'
+      equipment_bonus: {maximum_speed: 0.2, reliability: 0.25, soft_attack: 0.1}
+      picture_prefer: [recon, motor, mechan]
+
+  # ---------------------------------------------------------------------------
+  - id: APF_kiboko
+    country: APF
+    src: user_request
+    name: {english: Kiboko, spanish: Kiboko}
+    lore:
+      english: >-
+        Kiboko means hippopotamus in Swahili, and like the animal it spends the
+        day in the water and comes out at night. The Federation's rivers were
+        its borders; the Kiboko turned them into roads. Congo, Niger, Zambezi,
+        the Nile and the great lakes: where the others need a bridge, the
+        councils send a Kiboko.
+      spanish: >-
+        Kiboko quiere decir hipopótamo en suajili, y como el animal pasa el día
+        en el agua y sale de noche. Los ríos de la Federación eran sus
+        fronteras; los Kiboko los volvieron caminos. Congo, Níger, Zambeze, el
+        Nilo y los grandes lagos: donde los demás necesitan un puente, los
+        consejos mandan un Kiboko.
+    sub_unit: amphibious_mechanized
+    sub_unit_name: {english: Kiboko Battalion, spanish: Batallón Kiboko}
+    lock:
+      techs: [amphibious_mechanized_infantry, amphibious_mechanized_infantry_2]
+      enables: [amphibious_mechanized]
+    equipment: [amphibious_mechanized_equipment]
+    grant:
+      equipment: 160
+    template:
+      name: Kiboko
+      regiments: [amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, infantry, infantry]
+    divisions: 1
+    production: {amount: 100, factories: 2, progress: 0}
+    ai:
+    - {type: role_ratio, id: mobile, value: 8}
+    - {type: equipment_production_factor, id: amphibious_mechanized, value: 10}
+    spirit:
+      id: APF_los_kiboko
+      name: {english: The Kiboko, spanish: Los Kiboko}
+      desc:
+        english: 'Amphibious vehicles of the great rivers. Kiboko: +15% speed, +20% reliability, +10% defence.'
+        spanish: 'Vehículos anfibios de los grandes ríos. Kiboko: +15% velocidad, +20% fiabilidad, +10% defensa.'
+      equipment_bonus: {maximum_speed: 0.15, reliability: 0.2, defense: 0.1}
+      picture_prefer: [amphib, marine, naval]
+
+  # ---------------------------------------------------------------------------
+  - id: FCU_ala_de_obsidiana
+    country: FCU
+    src: user_request
+    name: {english: Obsidian Wing, spanish: Ala de Obsidiana}
+    lore:
+      english: >-
+        Obsidian Heavy Aero sells one product: arrival. The Obsidian Wing takes
+        off from the Great Lakes and lands, forty hours later, wherever the
+        contract says, anywhere in the world. Four engines, a hold that fits a
+        warehouse and a clause that bills the target for the fuel.
+      spanish: >-
+        Obsidian Heavy Aero vende un solo producto: la llegada. El Ala de
+        Obsidiana despega de los Grandes Lagos y aterriza, cuarenta horas
+        después, donde diga el contrato, en cualquier lugar del mundo. Cuatro
+        motores, una bodega donde entra un depósito y una cláusula que le
+        cobra el combustible al objetivo.
+    lock:
+      techs: [iw_large_airframe, basic_large_airframe, improved_large_airframe, advanced_large_airframe,
+              strategic_bomber1, strategic_bomber2, strategic_bomber3]
+      enables: [large_plane]
+      hide_branch: false     # la línea pesada se ve (de ella cuelgan otras); solo la FCU la investiga
+    design:
+      name: Ala de Obsidiana
+      chassis: [large_plane_airframe]
+      max_module_year: 1940
+      modules:
+        fixed_main_weapon_slot: [heavy_bomb, large_bomb, bomb_bay, bomb]
+        fixed_auxiliary_weapon_slot_1: [defense_turret, defensive, heavy_mg, turret]
+        fixed_auxiliary_weapon_slot_2: [defense_turret, defensive, heavy_mg]
+        engine_type_slot: [engine_4x, 4x, engine]
+        special_type_slot_1: [drop_tank, fuel_tank, range]
+        special_type_slot_2: [self_sealing, armor]
+        special_type_slot_3: [radio, navigation]
+    grant:
+      equipment: 20
+    production: {amount: 20, factories: 3, progress: 0}
+    ai:
+    - {type: equipment_production_factor, id: strategic_bomber, value: 10}
+    spirit:
+      id: FCU_alcance_global
+      name: {english: Global Reach, spanish: Alcance Global}
+      desc:
+        english: 'Anywhere in the world, as per contract. Obsidian Wing: +50% range, +15% reliability, -10% production cost.'
+        spanish: 'A cualquier lugar del mundo, según contrato. Ala de Obsidiana: +50% alcance, +15% fiabilidad, -10% costo de producción.'
+      equipment_bonus: {air_range: 0.5, reliability: 0.15, build_cost_ic: -0.1}
+      picture_prefer: [bomber, air]
