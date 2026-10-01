@@ -1413,8 +1413,10 @@ def test_balance() -> None:
         check("fondos: avisa cual salteo y por que",
               any("tiled_plain_bg2" in w and "rayas" in w for w in ctx.warnings), str(ctx.warnings))
         check("fondos: el papel oscuro ya no se usa (texto oscuro de las tecnologias)",
-              not (REPO_ROOT / "assets/ui/fondo_papel_agencia.dds").exists()
-              and not (mod / "gfx/interface/tiles/tiled_paper_bg.dds").exists())
+              not (REPO_ROOT / "assets/ui/fondo_papel_agencia.dds").exists())
+        check("fondos: el papel de las tecnologias es el claro, si ya llego",
+              (mod / "gfx/interface/tiles/tiled_paper_bg.dds").exists()
+              == (REPO_ROOT / "assets/ui/fondo_papel_claro.dds").exists())
         # Fondos de cada rama de investigación (2026-09-30)
         check("investigacion: el reporte da textura y tamano de cada rama",
               any("GFX_industry_techtree_bg -> gfx/interface/techtree/industry_bg.dds (12x8)" in n for n in ctx.notes),
