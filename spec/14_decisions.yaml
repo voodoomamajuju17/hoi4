@@ -148,22 +148,24 @@ categories:
     - id: EFE_despertar_al_gliptodonte
       name: {english: Wake the Glyptodon, spanish: Despertar al Gliptodonte}
       desc:
-        english: 'The Gaia Laboratory asks for 4 BioSteel to grow the first hull of the Glyptodon: a modern tank with living armour that only
-          the Empire can build, and on whose chassis it also mounts anti-air, tank destroyers and self-propelled guns. Unlocks it without researching
-          the whole armour line, a ready design, the division "Glyptodons" already in the field and the first batch on the production lines.'
-        spanish: 'El Laboratorio de Gaia pide 4 de Bioacero para cultivar el primer casco del Gliptodonte: un tanque moderno de blindaje vivo
-          que solo el Imperio sabe construir, y sobre cuyo chasis también monta antiaéreos, cazacarros y artillería autopropulsada. Lo desbloquea
-          sin investigar toda la línea blindada, con un diseño listo, la división «Gliptodontes» ya en el frente y la primera tanda en las líneas
-          de producción.'
+        english: 'The Gaia Laboratory asks for 4 BioSteel to grow the first hull of the Glyptodon: a modern tank with living armour that only the
+          Empire can build, and on whose chassis it also mounts anti-air, tank destroyers and self-propelled guns. Unlocks it without researching
+          the whole armour line, a ready design, the division "Glyptodons" already in the field and the first batch on the production lines. Needs
+          6 BioSteel; spends 4 and raises vat saturation by 10.'
+        spanish: 'El Laboratorio de Gaia pide 4 de Bioacero para cultivar el primer casco del Gliptodonte: un tanque moderno de blindaje vivo que
+          solo el Imperio sabe construir, y sobre cuyo chasis también monta antiaéreos, cazacarros y artillería autopropulsada. Lo desbloquea sin
+          investigar toda la línea blindada, con un diseño listo, la división «Gliptodontes» ya en el frente y la primera tanda en las líneas de producción.
+          Pide 6 de Bioacero; gasta 4 y sube 10 la saturación de las cubas.'
       icon_prefer:
       - generic_army_support
       - generic_industry
-      cost: 100
+      cost: 175
       fire_only_once: true
       available:
         variable_at_least: {var: EFE_biosteel, value: 6}
       effects:
       - {effect: add_variable, var: EFE_biosteel, value: -4}
+      - {effect: add_variable, var: EFE_saturacion, value: 10}
       - {effect: run, value: EFE_gliptodonte_desbloqueo}
       ai_factor: 20
       src: user_request
@@ -505,20 +507,26 @@ categories:
     # 2026-09-30 (pedido del usuario): unidad única (20_unique_units.yaml). Temprano a
     # propósito; la IA la toma apenas le alcanzan los puntos.
     - id: FCU_contrato_ala_de_obsidiana
-      name: {english: 'Obsidian Wing Contract', spanish: 'Contrato del Ala de Obsidiana'}
+      name: {english: Obsidian Wing Contract, spanish: Contrato del Ala de Obsidiana}
       desc:
-        english: 'Obsidian Heavy Aero delivers a four-engine aircraft that reaches anywhere in the world: only the Union buys it. Unlocks heavy aircraft without research. Obsidian +10.'
-        spanish: 'Obsidian Heavy Aero entrega un cuatrimotor que llega a cualquier lugar del mundo: solo la Unión lo compra. Desbloquea los aviones pesados sin investigar. Obsidian +10.'
+        english: 'Obsidian Heavy Aero delivers a four-engine aircraft that reaches anywhere in the world: only the Union buys it. Unlocks heavy aircraft
+          without research. Needs Obsidian at 55; the contract costs Obsidian 10 and adds 10 Scandal.'
+        spanish: 'Obsidian Heavy Aero entrega un cuatrimotor que llega a cualquier lugar del mundo: solo la Unión lo compra. Desbloquea los aviones
+          pesados sin investigar. Pide Obsidian en 55; el contrato le cuesta 10 a Obsidian y suma 10 de Escándalo.'
       icon_prefer:
       - generic_army_support
       - generic_industry
-      cost: 100
+      cost: 175
       fire_only_once: true
       effects:
-      - {effect: add_variable, var: FCU_obsidian, value: 10}
+      - {effect: add_variable, var: FCU_obsidian, value: -10}
+      - {effect: add_variable, var: FCU_escandalo, value: 10}
+      - {effect: run, value: FCU_recalcular_directorio}
       - {effect: run, value: FCU_ala_de_obsidiana_desbloqueo}
       ai_factor: 20
       src: user_request
+      available:
+        variable_at_least: {var: FCU_obsidian, value: 55}
 
   # ===========================================================================
   # EFE — El Monte, la integración, la reforestación y la economía
@@ -1253,19 +1261,26 @@ categories:
     # 2026-09-30 (pedido del usuario): unidad única (20_unique_units.yaml). Temprano a
     # propósito; la IA la toma apenas le alcanzan los puntos.
     - id: ASC_activar_los_centinelas
-      name: {english: 'Activate the Sentinels', spanish: 'Activar los Centinelas'}
+      name: {english: Activate the Sentinels, spanish: Activar los Centinelas}
       desc:
-        english: 'Crewless armoured cars linked to the Plan: only the Commune builds them. Unlocks them without research, and the first pack goes out on patrol.'
-        spanish: 'Autos blindados sin tripulación conectados al Plan: solo la Comuna los construye. Los desbloquea sin investigar, y la primera manada sale a patrullar.'
+        english: 'Crewless armoured cars linked to the Plan: only the Commune builds them. Unlocks them without research, and the first pack goes
+          out on patrol. Needs 60 Compute; spends 20 and the grid heats up by 10.'
+        spanish: 'Autos blindados sin tripulación conectados al Plan: solo la Comuna los construye. Los desbloquea sin investigar, y la primera manada
+          sale a patrullar. Pide 60 de Cómputo; gasta 20 y la red se calienta 10.'
       icon_prefer:
       - generic_army_support
       - generic_industry
       cost: 100
       fire_only_once: true
       effects:
+      - {effect: add_variable, var: ASC_computo, value: -20}
+      - {effect: add_variable, var: ASC_calor, value: 10}
+      - {effect: run, value: ASC_recalcular_computo}
       - {effect: run, value: ASC_centinela_desbloqueo}
       ai_factor: 20
       src: user_request
+      available:
+        variable_at_least: {var: ASC_computo, value: 60}
 
   # ===========================================================================
   # HSN — La Cámara de Compensación, Puerto Libre o Peaje ("Las Ocho Potencias")
@@ -1802,19 +1817,24 @@ categories:
     # 2026-09-30 (pedido del usuario): unidad única (20_unique_units.yaml). Temprano a
     # propósito; la IA la toma apenas le alcanzan los puntos.
     - id: HSN_encargar_el_leviatan
-      name: {english: 'Commission the Leviathan', spanish: 'Encargar el Leviatán'}
+      name: {english: Commission the Leviathan, spanish: Encargar el Leviatán}
       desc:
-        english: 'A super-heavy battleship that turns a strait into a toll: only the High Seas Market builds them. Unlocks the hull and a ready design, and lays down the first one.'
-        spanish: 'Un acorazado superpesado que convierte un estrecho en un peaje: solo el Mercado de Alta Mar los construye. Desbloquea el casco y un diseño listo, y pone la quilla del primero.'
+        english: 'A super-heavy battleship that turns a strait into a toll: only the High Seas Market builds them. Unlocks the hull and a ready design,
+          and lays down the first one. Needs 4 nodes; spends 6 Plunder.'
+        spanish: 'Un acorazado superpesado que convierte un estrecho en un peaje: solo el Mercado de Alta Mar los construye. Desbloquea el casco y
+          un diseño listo, y pone la quilla del primero. Pide 4 nodos; gasta 6 de Botín.'
       icon_prefer:
       - generic_army_support
       - generic_industry
-      cost: 100
+      cost: 150
       fire_only_once: true
       effects:
+      - {effect: add_variable, var: HSN_botin, value: -6}
       - {effect: run, value: HSN_leviatan_desbloqueo}
       ai_factor: 20
       src: user_request
+      available:
+        variable_at_least: {var: HSN_nodos, value: 4}
 
   # ===========================================================================
   # NAS — Inti-Soma, el Qhapaq Ñan, las Tierras Tributarias, Terrazas o Minas
@@ -2322,19 +2342,24 @@ categories:
     # 2026-09-30 (pedido del usuario): unidad única (20_unique_units.yaml). Temprano a
     # propósito; la IA la toma apenas le alcanzan los puntos.
     - id: NAS_llamar_a_los_hijos_del_condor
-      name: {english: 'Call the Sons of the Condor', spanish: 'Llamar a los Hijos del Cóndor'}
+      name: {english: Call the Sons of the Condor, spanish: Llamar a los Hijos del Cóndor}
       desc:
-        english: 'Andean airborne troops dropped by tiltrotor: only the Sun trains them. Unlocks paratroopers and transport aircraft, and the first division is ready.'
-        spanish: 'Tropas aerotransportadas andinas que bajan en tiltrotor: solo el Sol las entrena. Desbloquea paracaidistas y aviones de transporte, y la primera división queda lista.'
+        english: 'Andean airborne troops dropped by tiltrotor: only the Sun trains them. Unlocks paratroopers and transport aircraft, and the first
+          division is ready. Needs 35 Sacred Light; spends 25.'
+        spanish: 'Tropas aerotransportadas andinas que bajan en tiltrotor: solo el Sol las entrena. Desbloquea paracaidistas y aviones de transporte,
+          y la primera división queda lista. Pide 35 de Luz Sagrada; gasta 25.'
       icon_prefer:
       - generic_army_support
       - generic_industry
       cost: 100
       fire_only_once: true
       effects:
+      - {effect: add_variable, var: NAS_inti, value: -25}
       - {effect: run, value: NAS_hijos_del_condor_desbloqueo}
       ai_factor: 20
       src: user_request
+      available:
+        variable_at_least: {var: NAS_inti, value: 35}
 
   # ===========================================================================
   # APF — La Integración Federal, Aldea o Corredor ("Las Ocho Potencias")
@@ -2686,19 +2711,24 @@ categories:
     # 2026-09-30 (pedido del usuario): unidad única (20_unique_units.yaml). Temprano a
     # propósito; la IA la toma apenas le alcanzan los puntos.
     - id: APF_botar_los_kiboko
-      name: {english: 'Launch the Kiboko', spanish: 'Botar los Kiboko'}
+      name: {english: Launch the Kiboko, spanish: Botar los Kiboko}
       desc:
-        english: 'Amphibious vehicles that turn the great rivers into roads: only the Federation builds them. Unlocks them without research, and the first battalion crosses the Congo.'
-        spanish: 'Vehículos anfibios que vuelven caminos los grandes ríos: solo la Federación los construye. Los desbloquea sin investigar, y el primer batallón cruza el Congo.'
+        english: 'Amphibious vehicles that turn the great rivers into roads: only the Federation builds them. Unlocks them without research, and the
+          first battalion crosses the Congo. Needs regional tension below 50; arming the rivers raises it by 15.'
+        spanish: 'Vehículos anfibios que vuelven caminos los grandes ríos: solo la Federación los construye. Los desbloquea sin investigar, y el primer
+          batallón cruza el Congo. Pide tensión regional por debajo de 50; armar los ríos la sube 15.'
       icon_prefer:
       - generic_army_support
       - generic_industry
-      cost: 100
+      cost: 110
       fire_only_once: true
       effects:
+      - {effect: add_variable, var: APF_tension, value: 15}
       - {effect: run, value: APF_kiboko_desbloqueo}
       ai_factor: 20
       src: user_request
+      available:
+        variable_below: {var: APF_tension, value: 50}
 
   # ===========================================================================
   # SHD — Los Tres Caudales, los Distritos Armónicos, Obras o Precisión
@@ -3179,19 +3209,26 @@ categories:
     # 2026-09-30 (pedido del usuario): unidad única (20_unique_units.yaml). Temprano a
     # propósito; la IA la toma apenas le alcanzan los puntos.
     - id: SHD_despertar_a_los_dragones
-      name: {english: 'Wake the Canal Dragons', spanish: 'Despertar a los Dragones del Canal'}
+      name: {english: Wake the Canal Dragons, spanish: Despertar a los Dragones del Canal}
       desc:
-        english: 'Maglev railway guns along the Grand Canal: only the Directorate builds them. Unlocks them without research, gives two and puts two more on the lines.'
-        spanish: 'Cañones ferroviarios sobre maglev a lo largo del Gran Canal: solo el Directorio los construye. Los desbloquea sin investigar, da dos y pone dos más en las líneas.'
+        english: 'Maglev railway guns along the Grand Canal: only the Directorate builds them. Unlocks them without research, gives two and puts two
+          more on the lines. Needs Production at 50; 10 Production is diverted to Order (the guard of the line).'
+        spanish: 'Cañones ferroviarios sobre maglev a lo largo del Gran Canal: solo el Directorio los construye. Los desbloquea sin investigar, da
+          dos y pone dos más en las líneas. Pide Producción en 50; 10 de Producción pasan al Orden (la guardia de la línea).'
       icon_prefer:
       - generic_army_support
       - generic_industry
-      cost: 100
+      cost: 125
       fire_only_once: true
       effects:
+      - {effect: add_variable, var: SHD_produccion, value: -10}
+      - {effect: add_variable, var: SHD_orden, value: 10}
+      - {effect: run, value: SHD_recalcular_caudales}
       - {effect: run, value: SHD_dragon_del_canal_desbloqueo}
       ai_factor: 20
       src: user_request
+      available:
+        variable_at_least: {var: SHD_produccion, value: 50}
 
   # ===========================================================================
   # NRE — Las Legiones, las Provincias, Annona o Tributo
@@ -3695,19 +3732,24 @@ categories:
     # 2026-09-30 (pedido del usuario): unidad única (20_unique_units.yaml). Temprano a
     # propósito; la IA la toma apenas le alcanzan los puntos.
     - id: NRE_forjar_los_onagros
-      name: {english: 'Forge the Onagers', spanish: 'Forjar los Onagros'}
+      name: {english: Forge the Onagers, spanish: Forjar los Onagros}
       desc:
-        english: 'Rocket batteries for the legions, the Storm of Mars: only Rome builds them. Unlocks rocket artillery without research, and the first legion with Onagers takes the field.'
-        spanish: 'Baterías de cohetes para las legiones, la Tormenta de Marte: solo Roma las construye. Desbloquea la artillería de cohetes sin investigar, y la primera legión con Onagros sale al campo.'
+        english: 'Rocket batteries for the legions, the Storm of Mars: only Rome builds them. Unlocks rocket artillery without research, and the first
+          legion with Onagers takes the field. Needs Auctoritas 35; spends 15.'
+        spanish: 'Baterías de cohetes para las legiones, la Tormenta de Marte: solo Roma las construye. Desbloquea la artillería de cohetes sin investigar,
+          y la primera legión con Onagros sale al campo. Pide Auctoritas 35; gasta 15.'
       icon_prefer:
       - generic_army_support
       - generic_industry
-      cost: 100
+      cost: 125
       fire_only_once: true
       effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
       - {effect: run, value: NRE_onagro_desbloqueo}
       ai_factor: 20
       src: user_request
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 35}
 
   # Nuestros Satélites (2026-09-27): lealtad de cada satélite.
   - id: EFE_satelites_category

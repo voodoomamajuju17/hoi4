@@ -751,3 +751,10 @@ llega a 100 al toque y la tensión nunca sube".
     si la IA la borra (las "Milicia" fallaban).
   - Emergencias: el castigo es la Leva Forzosa (modificador con duración):
     6, 9 y 12 meses; se suman si se usan varias.
+- **Unidades únicas: costo según poder y mecánica propia** (2026-10-01):
+  EFE Gliptodonte 175 PP (Bioacero 6, gasta 4, +10 saturación); FCU Ala de
+  Obsidiana 175 (Obsidian 55, −10 Obsidian, +10 Escándalo); HSN Leviatán 150
+  (4 nodos, −6 Botín); NRE Onagro 125 (Auctoritas 35, −15); SHD Dragón 125
+  (Producción 50, 10 pasan al Orden); APF Kiboko 110 (tensión < 50, +15);
+  ASC Centinela 100 (Cómputo 60, −20, +10 calor); NAS Hijos del Cóndor 100
+  (Luz 35, −25).
