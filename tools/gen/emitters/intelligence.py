@@ -10,6 +10,8 @@ los requisitos y los efectos. Sin el juego instalado se usa una estructura de
 respaldo y se avisa.
 
 Alcance (operaciones del juego): ROOT es el país que la lanza, FROM el objetivo.
+En outcome_execute el alcance por defecto es la operación, no un país: lo del
+que la lanza va dentro de ROOT = { } y lo del objetivo dentro de FROM = { }.
 La defensa y la desescalada son decisiones (14_decisions.yaml).
 """
 
@@ -217,9 +219,16 @@ def _emit(ctx: BuildContext, spec: dict) -> None:
                     target.append({"effect": "event", "id": ev["uprising"]})
                 else:
                     target.append(_sub(item, {"T": t}))
+            # error.log 2026-10-01: "Invalid scope type" para has_country_flag (48),
+            # add_political_power (96), tag (56) y add_timed_idea (56): una por
+            # cada efecto suelto en outcome_execute, cuyo alcance es la
+            # operación. Los efectos dentro de FROM no daban error. Lo del que
+            # la lanza va en ROOT; sin eso la infiltración (MN_inf_*) no
+            # quedaba guardada en el país.
+            outcome = Block([("ROOT", execute)])
             if target:
-                execute.add("FROM", render_effects(oid, target, effect_ctx, effects_used, where=where))
-            b.add("outcome_execute", execute)
+                outcome.add("FROM", render_effects(oid, target, effect_ctx, effects_used, where=where))
+            b.add("outcome_execute", outcome)
 
             # error.log 2026-09-30: "Invalid scope type for trigger tag" en
             # ai_will_do (no corre en el país): la IA elige por su cuenta, sin
