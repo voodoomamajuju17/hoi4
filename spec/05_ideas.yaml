@@ -2684,11 +2684,13 @@ countries:
         english: 'Five years of war have forged the bands into a single horde. It no longer defends the steppe: it rides out of it.'
         spanish: 'Cinco años de guerra forjaron a las bandas en una sola horda. Ya no defiende la estepa: sale de ella.'
       modifiers:
-        army_attack_factor: 0.2
-        army_org_factor: 0.15
-        war_support_factor: 0.2
-        recruitable_population_factor: 0.3
-        ?supply_consumption_factor: -0.15
+        stability_factor: 0.35
+        war_support_factor: 0.35
+        recruitable_population_factor: 0.53
+        army_defence_factor: 0.29
+        army_org_factor: 0.2
+        army_attack_factor: 0.25
+        ?supply_consumption_factor: -0.2
       src: user_design
   ZWI:
     coverage: user_decision
@@ -2797,14 +2799,16 @@ countries:
       name: {english: The Raj of a Thousand Kings, spanish: El Raj de los Mil Reyes}
       desc:
         english: 'The subcontinent answers to one court at last. It will not be conquered: it is too big, too crowded, too proud.'
-        spanish: 'El subcontinente por fin responde a una sola corte. No lo van a conquistar: es demasiado grande, demasiado poblado, demasiado
-          orgulloso.'
+        spanish: 'El subcontinente por fin responde a una sola corte. No lo van a conquistar: es demasiado grande, demasiado poblado, demasiado orgulloso.'
       modifiers:
-        recruitable_population_factor: 0.4
-        army_defence_factor: 0.2
-        stability_factor: 0.2
-        industrial_capacity_factory: 0.15
-        monthly_population: 0.2
+        stability_factor: 0.35
+        war_support_factor: 0.35
+        recruitable_population_factor: 0.53
+        army_defence_factor: 0.29
+        army_org_factor: 0.2
+        ?supply_consumption_factor: -0.2
+        industrial_capacity_factory: 0.2
+        monthly_population: 0.25
       src: user_design
   ZWM:
     coverage: user_decision
@@ -2928,11 +2932,14 @@ countries:
         english: The emirs have crowned a single ruler over the desert. The sand itself fights for him.
         spanish: Los emires coronaron a un solo soberano del desierto. La arena misma pelea por él.
       modifiers:
-        army_defence_factor: 0.3
-        army_attack_factor: 0.15
-        army_org_factor: 0.15
-        stability_factor: 0.2
-        ?attrition: -0.2
+        stability_factor: 0.35
+        war_support_factor: 0.35
+        recruitable_population_factor: 0.53
+        army_defence_factor: 0.35
+        army_org_factor: 0.2
+        army_attack_factor: 0.2
+        ?supply_consumption_factor: -0.2
+        ?attrition: -0.22
       src: user_design
   ZWB:
     coverage: user_decision
@@ -3024,10 +3031,13 @@ countries:
         english: Nobody who entered the jungle came back to tell of it. Nobody wants to try again.
         spanish: Nadie que entró a la selva volvió para contarlo. Nadie quiere volver a probar.
       modifiers:
-        army_defence_factor: 0.25
-        army_org_factor: 0.1
-        stability_factor: 0.2
-        ?enemy_justify_war_goal_time: 4.0
+        army_defence_factor: 0.3
+        army_org_factor: 0.15
+        stability_factor: 0.25
+        recruitable_population_factor: 0.25
+        war_support_factor: 0.15
+        ?attrition: -0.12
+        ?enemy_justify_war_goal_time: 4.05
       src: user_design
   ZST:
     coverage: user_decision

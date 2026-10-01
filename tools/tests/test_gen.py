@@ -888,6 +888,39 @@ def test_scenario() -> None:
               (ctx.mod_root / "common/bookmarks/meganations_2100.txt").exists())
 
 
+def test_anarchy_upgrades() -> None:
+    section("anarquias: el espiritu nuevo no es peor que el que reemplaza (2026-10-01)")
+    import yaml
+    trees = yaml.safe_load((REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8"))["trees"]
+    ideas_all = yaml.safe_load((REPO_ROOT / "spec/05_ideas.yaml").read_text(encoding="utf-8"))["countries"]
+    worse = []
+    for tag, tree in trees.items():
+        if not tag.startswith("Z") or not isinstance(tree, dict):
+            continue
+        mods = {i["id"]: i.get("modifiers") or {} for g in ("starting_ideas", "focus_ideas")
+                for i in (ideas_all.get(tag) or {}).get(g) or []}
+        for b in tree["branches"]:
+            for f in b["focuses"]:
+                rw = f.get("reward") or []
+                gone = [e["value"] for e in rw if e.get("effect") == "remove_idea"]
+                new = [e["value"] for e in rw if e.get("effect") == "add_ideas"]
+                for old_id in gone:
+                    for new_id in new:
+                        o, n = mods.get(old_id, {}), mods.get(new_id, {})
+                        for k, v in o.items():
+                            nv = n.get(k)
+                            if nv is None or (v >= 0 and nv < v) or (v < 0 and nv > v):
+                                worse.append(f"{f['id']}: {new_id}.{k}={nv} < {old_id}.{k}={v}")
+    check("ningun foco de anarquia cambia un espiritu por uno con menos de algo", not worse, "; ".join(worse[:5]))
+    import collections
+    dup = []
+    for tag, tree in trees.items():
+        if isinstance(tree, dict):
+            c = collections.Counter(f["name"]["spanish"] for b in tree["branches"] for f in b["focuses"])
+            dup += [f"{tag}: {n}" for n, k in c.items() if k > 1]
+    check("ningun arbol tiene dos focos con el mismo nombre", not dup, "; ".join(dup))
+
+
 def test_focus_idea_consistency() -> None:
     section("arboles: ningun espiritu se saca dos veces en la misma linea (2026-09-29)")
     import yaml
@@ -2293,6 +2326,7 @@ def main() -> int:
         test_scenario,
         test_events,
         test_focus_idea_consistency,
+        test_anarchy_upgrades,
         test_leaders_and_ideologies,
         test_balance,
         test_fcu,
