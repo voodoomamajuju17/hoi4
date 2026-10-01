@@ -32,6 +32,8 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   En regiones: { effect: resource_here, resource: X, amount: N } -> add_resource en esa región
   Condiciones: owns_state: [nombres] (país), owned_by: TAG (región)
   { effect: every_country, when: {..}, effects: [..] } -> every_country (eventos mundiales)
+  { effect: or_cores, country: TAG, kind: anarchy|satellite, then: [..], gone: [..], spare: [TAGS] }
+      -> si TAG sigue como se espera, `then`; si no, núcleos en lo propio de su tierra y reclamos en el resto
   En regiones: { effect: add_core, value: TAG } / { effect: state_flag, value: X }
                { effect: clear_state_flag, value: X }
 Los efectos se validan contra documentation/ del juego (verify_keys) y los
@@ -722,6 +724,52 @@ def render_effects(owner: str, items: list[dict], known,
                 effects_used.setdefault(k, owner)
             ec.triggers_used.setdefault("is_controlled_by", owner)
             ec.triggers_used.setdefault("is_owned_by", owner)
+            continue
+        if effect == "or_cores":
+            # Análisis 2026-10-01: un foco que pide que exista una anarquía o un
+            # satélite quedaba gris para siempre si otro se lo comía antes. Ahora
+            # el foco se toma igual: si el país sigue como se espera, `then`; si
+            # no, núcleos en lo que ya es tuyo de su tierra y reclamos sobre el
+            # resto (y si es satélite tuyo, se anexa primero).
+            #   kind: anarchy   -> "sigue" = existe y no es satélite de nadie
+            #   kind: satellite -> "sigue" = existe y es satélite de ROOT
+            target, kind = item["country"], item.get("kind", "anarchy")
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: or_cores sobre '{target}', que no es un pais del mod", where=where)
+            if kind not in ("anarchy", "satellite"):
+                raise SpecError(f"{owner}: or_cores.kind '{kind}' (anarchy o satellite)", where=where)
+            alive = Block([("country_exists", target)])
+            alive.add(target, Block([("is_subject", False)]) if kind == "anarchy"
+                      else Block([("is_subject_of", "ROOT")]))
+            gone = Block()
+            if kind == "anarchy":
+                gone.add("if", Block([
+                    ("limit", Block([("country_exists", target), (target, Block([("is_subject_of", "ROOT")]))])),
+                    ("annex_country", Block([("target", target), ("transfer_troops", True)]))]))
+                effects_used.setdefault("annex_country", owner)
+            gone.add("every_owned_state", Block([
+                ("limit", Block([("is_core_of", target)])), ("add_core_of", "ROOT")]))
+            # spare: países cuyas regiones no se reclaman (el Santuario que el EFE juró proteger)
+            spare = list(item.get("spare") or [])
+            for t in spare:
+                if ec.tags and t not in ec.tags:
+                    raise SpecError(f"{owner}: or_cores.spare '{t}' no es un pais del mod", where=where)
+            gone.add("every_state", Block([
+                ("limit", Block([("is_core_of", target),
+                                 ("NOT", Block([("is_owned_by", t) for t in ["ROOT"] + spare]))])),
+                ("add_claim_by", "ROOT")]))
+            gone.entries.extend(render_effects(owner, item.get("gone") or [], ec, effects_used, where=where).entries)
+            then = render_effects(owner, item.get("then") or [], ec, effects_used, where=where)
+            if then.entries:
+                block.add("if", Block([("limit", alive)] + then.entries))
+                block.add("else", gone)
+            else:
+                # sin premio normal: solo el camino alternativo
+                block.add("if", Block([("limit", Block([("NOT", Block([("AND", alive)]))]))] + gone.entries))
+            for k in ("every_owned_state", "every_state", "add_core_of", "add_claim_by"):
+                effects_used.setdefault(k, owner)
+            for k in ("country_exists", "is_subject", "is_subject_of", "is_core_of", "is_owned_by"):
+                ec.triggers_used.setdefault(k, owner)
             continue
         if effect == "add_to_war_of":
             # `who` entra en todas las guerras que tiene `ally` (contra sus enemigos)

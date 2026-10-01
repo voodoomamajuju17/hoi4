@@ -758,3 +758,22 @@ llega a 100 al toque y la tensión nunca sube".
   (Producción 50, 10 pasan al Orden); APF Kiboko 110 (tensión < 50, +15);
   ASC Centinela 100 (Cómputo 60, −20, +10 calor); NAS Hijos del Cóndor 100
   (Luz 35, −25).
+- **Rutas sin callejones** (2026-10-01, análisis de rutas y flow, prioridades 1 a 5):
+  1. La IA hace lo político temprano: las dos ramas políticas pesan 5 y la de
+     destino 4 (antes 1, contra 1,5 a 2 de economía e industria). El peso de
+     la rama multiplica el del foco, así la elección statu quo/revolución
+     mantiene su proporción (el Mandato Renovado del EFE: 3 x 5 = 15).
+  2. Los 6 focos que pedían una anarquía viva (Ofensiva Verde, Bajada de la
+     Montaña, Liberación del Este, Marcha al Norte, Río se Desborda, Liberar
+     el Sinaí) se toman siempre. Si la anarquía sigue libre: objetivo de
+     guerra. Si cayó o es satélite de alguien: núcleos en lo que ya es tuyo
+     de su tierra y reclamos sobre el resto; si es tu satélite, se anexa.
+     Efecto `or_cores` (kind anarchy); la descripción del foco lo explica.
+  3. Los Emiratos Caen: también si los Emiratos son satélite de alguien (la
+     provincia cliente de Roma) o si la Federación controla Suez y Bagdad.
+  4. El Dominio de Gaia: en vez del Amazonas acepta que el Santuario exista
+     bajo garantía del EFE. La Ofensiva Verde no reclama tierra del Santuario.
+  5. Los 10 focos de satélites (Misiones, Patagonia, Nueva Granada, Llanos,
+     Corea, Estepa, Cabo, Tierras Altas, Hispania, Dacia) se toman siempre:
+     con el satélite propio, lo de siempre; si ya no es tuyo, núcleos y
+     reclamos (`or_cores` kind satellite).

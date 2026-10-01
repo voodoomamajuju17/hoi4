@@ -921,6 +921,63 @@ def test_anarchy_upgrades() -> None:
     check("ningun arbol tiene dos focos con el mismo nombre", not dup, "; ".join(dup))
 
 
+def test_routes() -> None:
+    section("rutas: la IA hace lo politico temprano y ningun final depende de un pais vivo (2026-10-01)")
+    import yaml
+    trees = yaml.safe_load((REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8"))["trees"]
+    megas = ["EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE"]
+    low = [f"{t}.{b['id']}" for t in megas for b in trees[t]["branches"][:3]
+           if (b.get("ai_factor") or 1) < 4]
+    check("ramas politicas y de destino pesan 4 o mas para la IA", not low, ", ".join(low))
+    dead = []
+    for t in megas:
+        for b in trees[t]["branches"]:
+            for f in b["focuses"]:
+                tag = (f.get("available") or {}).get("country_exists", "")
+                if tag and tag not in megas:
+                    dead.append(f["id"])
+    check("ningun foco de meganacion pide que exista una anarquia o un satelite", not dead, ", ".join(dead))
+    alt = [f["id"] for t in megas for b in trees[t]["branches"] for f in b["focuses"]
+           if any(r.get("effect") == "or_cores" for r in f.get("reward") or [])]
+    check("16 focos con camino alternativo (6 anarquias, 10 satelites)", len(alt) == 16, str(alt))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+
+        def focus(tag, fid):
+            tree = pdx.parse((mod / f"common/national_focus/{tag}_focus.txt").read_text(encoding="utf-8-sig"))
+            return next(f for k, f in tree.get("focus_tree").entries
+                        if k == "focus" and pdx.text(f.get("id")) == fid)
+
+        mandato = focus("EFE", "EFE_el_mandato_renovado")
+        check("el peso de la rama multiplica el del foco (3 x 5)",
+              pdx.text(mandato.get("ai_will_do").get("factor")) == "15", pdx.render(mandato.get("ai_will_do")))
+        lib = " ".join(pdx.render(focus("ASC", "ASC_la_liberacion_del_este").get("completion_reward")).split())
+        check("anarquia viva: objetivo de guerra; caida o satelite: nucleos y reclamos",
+              "is_subject = no" in lib and "create_wargoal" in lib and "else = {" in lib
+              and "add_core_of = ROOT" in lib and "add_claim_by = ROOT" in lib
+              and "is_subject_of = ROOT" in lib and "annex_country" in lib, lib)
+        ofe = focus("EFE", "EFE_la_ofensiva_verde")
+        rew = " ".join(pdx.render(ofe.get("completion_reward")).split())
+        check("la Ofensiva Verde se toma sin el Amazonas y no reclama el Santuario",
+              ofe.get("available") is None and "is_owned_by = ZSG" in rew and "else" not in rew, rew)
+        dacia = " ".join(pdx.render(focus("NRE", "NRE_dacia_provincia").get("completion_reward")).split())
+        check("satelite: el premio normal solo si sigue siendo satelite propio",
+              "ZDA = { is_subject_of = ROOT }" in dacia and "annex_country" not in dacia, dacia)
+        loc_text = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*focus*.yml"))
+        check("la descripcion explica el camino alternativo",
+              "Si ya no es tu satélite: núcleos" in loc_text and "Si ya cayeron o son satélite de alguien" in loc_text)
+        caen = " ".join(pdx.render(focus("APF", "APF_los_emiratos_caen").get("available")).split())
+        check("Los Emiratos Caen: tambien si son satelite de alguien o con Suez y Bagdad",
+              "custom_trigger_tooltip" in caen and "ZWM = { is_subject = yes }" in caen
+              and "NOT = { country_exists = ZWM }" in caen, caen)
+        decs = pdx.parse((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig"))
+        gaia = " ".join(pdx.render(decs.get("EFE_destino_category").get("EFE_proclamar_la_forma_final")
+                                   .get("available")).split())
+        check("el Dominio de Gaia acepta el Santuario garantizado en vez del Amazonas",
+              "has_guaranteed = ZSG" in gaia and "country_exists = ZSG" in gaia, gaia)
+
+
 def test_focus_idea_consistency() -> None:
     section("arboles: ningun espiritu se saca dos veces en la misma linea (2026-09-29)")
     import yaml
@@ -2496,6 +2553,7 @@ def main() -> int:
         test_events,
         test_focus_idea_consistency,
         test_anarchy_upgrades,
+        test_routes,
         test_leaders_and_ideologies,
         test_balance,
         test_fcu,

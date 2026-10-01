@@ -194,8 +194,7 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             effects_used.setdefault("country_event", fid)
         fb.add("completion_reward", completion)
 
-        fb.add("ai_will_do", _ai(fid, f.get("ai") or ({"factor": branch_ai[bid]} if bid in branch_ai else None),
-                                 triggers_used))
+        fb.add("ai_will_do", _ai(fid, _branch_weighted(f.get("ai"), branch_ai.get(bid)), triggers_used))
         body.add("focus", fb)
 
         desc = f.get("desc")
@@ -203,8 +202,10 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             raise SpecError(f"{fid}: falta desc en EN y ES (TN010)", where="07_focus_trees.yaml")
         ctx.loc.define(fid, en=f["name"]["english"], es=f["name"]["spanish"],
                        file=LOC_FILE, origin=f"focus:{fid}")
-        ctx.loc.define_and_reference(f"{fid}_desc", en=desc["english"], es=desc["spanish"],
-                                     file=LOC_FILE, origin=f"focus:{fid}")
+        en, es = desc["english"], desc["spanish"]
+        for alt in _or_cores(reward):
+            en, es = f"{en}\\n\\n{_OR_CORES_TEXT[alt][0]}", f"{es}\\n\\n{_OR_CORES_TEXT[alt][1]}"
+        ctx.loc.define_and_reference(f"{fid}_desc", en=en, es=es, file=LOC_FILE, origin=f"focus:{fid}")
 
     ctx.verify_keys("effects", effects_used)
     ctx.verify_keys("triggers", triggers_used)
@@ -359,6 +360,35 @@ def _cost(f: dict) -> int:
             raise SpecError(f"{f['id']}: days={days} no es multiplo de 7", where="07_focus_trees.yaml")
         return days // 7
     return int(f.get("cost", 10))
+
+
+# El camino alternativo de or_cores, dicho en la descripción del foco (el
+# tooltip del juego solo muestra la rama del `if` que vale hoy).
+_OR_CORES_TEXT = {
+    "anarchy": ("If they have already fallen or are someone's satellite: cores on their land you hold and claims on "
+                "the rest (if they are your satellite, they are annexed first).",
+                "Si ya cayeron o son satélite de alguien: núcleos en lo que tengas de su tierra y reclamos sobre el "
+                "resto (si son tu satélite, primero se anexan)."),
+    "satellite": ("If it is no longer your satellite: cores on its land you hold and claims on the rest.",
+                  "Si ya no es tu satélite: núcleos en lo que tengas de su tierra y reclamos sobre el resto."),
+}
+
+
+def _or_cores(reward: list) -> list[str]:
+    return [r.get("kind", "anarchy") for r in reward if isinstance(r, dict) and r.get("effect") == "or_cores"]
+
+
+def _branch_weighted(spec: dict | None, branch_factor: float | None) -> dict | None:
+    """El peso de la rama multiplica el del foco (análisis 2026-10-01: la rama
+    política pesaba 1 y la IA la hacía al final; un foco con `ai` propio
+    ignoraba el peso de su rama). Las proporciones entre focos de una misma
+    rama (statu quo contra revolución) no cambian."""
+    if branch_factor is None:
+        return spec
+    if not spec:
+        return {"factor": branch_factor}
+    factor = round(float(spec.get("factor", 1)) * float(branch_factor), 2)
+    return dict(spec, factor=int(factor) if factor == int(factor) else factor)
 
 
 def _ai(fid: str, spec: dict | None, triggers_used: dict[str, str]) -> Block:

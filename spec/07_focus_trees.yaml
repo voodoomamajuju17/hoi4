@@ -46,6 +46,7 @@ trees:
     - Satélites Patagonia Austral y Yvytu Ykua Guasu (§3.1)
     branches:
     - id: dinastia_verde
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Green Dynasty, spanish: La Dinastía Verde}
       focuses:
       - id: EFE_custodio_de_la_tierra
@@ -117,12 +118,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - EFE_la_corte_de_los_bosques
-        available: {country_exists: YYG}
         desc:
           english: Yvytu Ykua Guasu will be integrated, step by step, governor by governor. Opens the integration decisions.
           spanish: Yvytu Ykua Guasu va a ser integrada, paso a paso, gobernador por gobernador. Abre las decisiones de integración.
         reward:
-        - {effect: flag, value: EFE_integracion_yyg_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: YYG
+          kind: satellite
+          then:
+          - {effect: flag, value: EFE_integracion_yyg_abierta}
         - {effect: add_political_power, value: 100}
       - id: EFE_integrar_la_patagonia
         name: {english: Integrate Southern Patagonia, spanish: Integrar la Patagonia Austral}
@@ -130,12 +134,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - EFE_las_misiones_guaranies
-        available: {country_exists: PTA}
         desc:
           english: Autonomy, then garrisons, then cores. The glaciers will be imperial. Opens the integration decisions.
           spanish: Autonomía, después guarniciones, después núcleos. Los glaciares van a ser imperiales. Abre las decisiones de integración.
         reward:
-        - {effect: flag, value: EFE_integracion_pta_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: PTA
+          kind: satellite
+          then:
+          - {effect: flag, value: EFE_integracion_pta_abierta}
         - {effect: add_political_power, value: 100}
       - id: EFE_la_gran_muralla_verde
         name: {english: The Great Green Wall, spanish: La Gran Muralla Verde}
@@ -194,6 +201,7 @@ trees:
         - {effect: add_variable, var: EFE_biosteel, value: 3}
         - {effect: add_variable, var: EFE_saturacion, value: 9}
     - id: el_monte
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Forest Rises, spanish: El Monte se Levanta}
       focuses:
       - id: EFE_los_incendios_de_gaia
@@ -320,13 +328,13 @@ trees:
         icon: GFX_goal_generic_major_war
         prerequisites:
         - EFE_que_avance_la_selva
-        available: {country_exists: ZWB}
         desc:
           english: The Amazon warlords burn the forest to sell the land. The forest answers.
           spanish: Los Caudillos del Amazonas queman la selva para vender la tierra. La selva contesta.
         reward:
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
         - {effect: add_ideas, value: EFE_ofensiva_verde}
+        - {effect: or_cores, country: ZWB, spare: [ZSG]}   # si los Caudillos ya cayeron (análisis 2026-10-01)
       - id: EFE_un_continente_vivo
         name: {english: A Living Continent, spanish: Un Continente Vivo}
         days: 84
@@ -339,6 +347,7 @@ trees:
         reward:
         - {effect: add_ideas, value: EFE_continente_vivo}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: The Destiny of Gaia, spanish: El Destino de Gaia}
       focuses:
       - id: EFE_el_concilio_verde
@@ -384,9 +393,9 @@ trees:
         prerequisites:
         - EFE_los_guardianes_del_bosque
         desc:
-          english: Unlocks the decision to proclaim The Dominion of Gaia. Requires controlling Lima, La Paz, the Amazon, São Paulo, Rio de Janeiro,
+          english: Unlocks the decision to proclaim The Dominion of Gaia. Requires controlling Lima, La Paz, the Amazon (or the Sanctuary under its guarantee), São Paulo, Rio de Janeiro,
             Bogotá (Cundinamarca) and Caracas (Miranda); 45 divisions, 8 BioSteel stored and 50% stability.
-          spanish: Destraba la decisión de proclamar El Dominio de Gaia. Pide controlar Lima, La Paz, el Amazonas, São Paulo, Río de Janeiro, Bogotá
+          spanish: Destraba la decisión de proclamar El Dominio de Gaia. Pide controlar Lima, La Paz, el Amazonas (o el Santuario bajo su garantía), São Paulo, Río de Janeiro, Bogotá
             (Cundinamarca) y Caracas (Miranda); 45 divisiones, 8 de Bioacero guardado y 50% de estabilidad.
         reward:
         - {effect: flag, value: EFE_destino_abierto}
@@ -1070,6 +1079,7 @@ trees:
       con el pack de íconos del usuario (focus_2100_asc_NN_*), todavía sin cargar.'
     branches:
     - id: consejo_sorteado
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Lottery Council, spanish: El Consejo Sorteado}
       focuses:
       - id: ASC_el_ano_del_plan
@@ -1159,12 +1169,14 @@ trees:
         icon: GFX_goal_generic_major_war
         prerequisites:
         - ASC_la_paz_de_la_abundancia
-        available: {country_exists: ZWE}
         desc:
           english: The Eurasian warlords hold the silos of the Dnieper. The Commune will feed the East, whether it wants it or not.
           spanish: Los señores de la guerra de Eurasia tienen los silos del Dniéper. La Comuna va a alimentar al Este, quiera o no.
         reward:
-        - {effect: wargoal, target: ZWE, type: annex_everything}
+        - effect: or_cores       # si la anarquía ya cayó o es satélite de alguien (análisis 2026-10-01)
+          country: ZWE
+          then:
+          - {effect: wargoal, target: ZWE, type: annex_everything}
         - {effect: add_war_support, value: 0.05}
       - id: ASC_la_comuna_de_los_humanos
         name: {english: The Commune of Humans, spanish: La Comuna de los Humanos}
@@ -1176,6 +1188,7 @@ trees:
         reward:
         - {effect: swap_ideas, remove: ASC_transparencia, add: ASC_comuna_de_los_humanos}
     - id: plan_41
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Singularity of the Plan, spanish: La Singularidad del Plan}
       focuses:
       - id: ASC_el_silencio_del_consejo
@@ -1306,6 +1319,7 @@ trees:
         - {effect: event, id: meganations_apf.1, target: APF}
         - {effect: add_war_support, value: 0.05}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: The Destiny of the Commune, spanish: El Destino de la Comuna}
       focuses:
       - id: ASC_la_asamblea_de_los_datos
@@ -2033,6 +2047,7 @@ trees:
       Versión 1 sin interfaz propia.'
     branches:
     - id: politica_castellane
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Board of Four, spanish: El Directorio de las Cuatro}
       focuses:
       - id: FCU_ano_fiscal
@@ -2207,6 +2222,7 @@ trees:
         - {effect: event, id: meganations_hsn.1, days: 1, target: HSN}
         - {effect: add_war_support, value: 0.05}
     - id: politica_rourke
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Hostile Takeover, spanish: La OPA Hostil}
       focuses:
       - id: FCU_junta_de_emergencia
@@ -2318,6 +2334,7 @@ trees:
         - {effect: event, id: meganations_hsn.2, days: 1, target: HSN}
         - {effect: add_war_support, value: 0.05}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: Manifest Destiny, spanish: El Destino Manifiesto}
       focuses:
       - id: FCU_la_asamblea_de_accionistas
@@ -3089,6 +3106,7 @@ trees:
       físicos del mapa. Ids alineados con el pack de íconos.'
     branches:
     - id: aldana
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Clearing House, spanish: La Cámara de Compensación}
       focuses:
       - id: HSN_el_libro_de_fletes_2100
@@ -3214,6 +3232,7 @@ trees:
         reward:
         - {effect: event, id: meganations_fcu.8, target: FCU}
     - id: tavake
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Brotherhood of the Deck, spanish: La Hermandad de la Cubierta}
       focuses:
       - id: HSN_el_motin_de_kanto
@@ -3318,6 +3337,7 @@ trees:
         - {effect: wargoal, target: FCU, type: annex_everything}
         - {effect: add_war_support, value: 0.1}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: The Destiny of the Seas, spanish: El Destino de los Mares}
       focuses:
       - id: HSN_el_almirantazgo_mercante
@@ -4066,6 +4086,7 @@ trees:
       Ids alineados con el pack de íconos.'
     branches:
     - id: corte_del_sol
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Court of the Sun, spanish: La Corte del Sol}
       focuses:
       - id: NAS_el_sol_de_2100
@@ -4135,12 +4156,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - NAS_los_sacerdotes_del_sol
-        available: {country_exists: ZNG}
         desc:
           english: Opens the integration of New Granada in three stages.
           spanish: Abre la integración de Nueva Granada en tres etapas.
         reward:
-        - {effect: flag, value: NAS_integracion_zng_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZNG
+          kind: satellite
+          then:
+          - {effect: flag, value: NAS_integracion_zng_abierta}
         - {effect: add_political_power, value: 50}
       - id: NAS_los_llanos_tributarios
         name: {english: The Tributary Plains, spanish: Los Llanos Tributarios}
@@ -4148,12 +4172,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - NAS_nueva_granada_leal
-        available: {country_exists: ZLL}
         desc:
           english: Opens the integration of the Free Plains in three stages.
           spanish: Abre la integración de los Llanos Libres en tres etapas.
         reward:
-        - {effect: flag, value: NAS_integracion_zll_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZLL
+          kind: satellite
+          then:
+          - {effect: flag, value: NAS_integracion_zll_abierta}
         - {effect: add_political_power, value: 50}
       - id: NAS_el_invierno_nunca_mas
         name: {english: Never Another Winter, spanish: El Invierno Nunca Más}
@@ -4197,6 +4224,7 @@ trees:
         - {effect: swap_ideas, remove: NAS_sacerdotes, add: NAS_trono_del_sol}
         - {effect: add_research_slot, value: 1}
     - id: tawantinsuyu
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Tawantinsuyu Reborn, spanish: El Tawantinsuyu Renace}
       focuses:
       - id: NAS_el_inca_rompe_el_silencio
@@ -4361,12 +4389,14 @@ trees:
         icon: GFX_goal_generic_major_war
         prerequisites:
         - NAS_el_collasuyu
-        available: {country_exists: ZWB}
         desc:
           english: The Amazon warlords burn the forest; the Inca's roads will cross it.
           spanish: Los Caudillos del Amazonas queman la selva; los caminos del Inca la van a cruzar.
         reward:
-        - {effect: wargoal, target: ZWB, type: annex_everything}
+        - effect: or_cores       # si la anarquía ya cayó o es satélite de alguien (análisis 2026-10-01)
+          country: ZWB
+          then:
+          - {effect: wargoal, target: ZWB, type: annex_everything}
         - {effect: add_war_support, value: 0.1}
         - {effect: army_experience, value: 50}
       - id: NAS_el_tawantinsuyu
@@ -4384,6 +4414,7 @@ trees:
         - {effect: add_ideas, value: NAS_tawantinsuyu}
         - {effect: add_research_slot, value: 1}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: The Destiny of the Sun, spanish: El Destino del Sol}
       focuses:
       - id: NAS_el_consejo_de_los_cuatro_suyus
@@ -4973,6 +5004,7 @@ trees:
       Tres caudales. Ids alineados con el pack de íconos.'
     branches:
     - id: caudal_corregido
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Corrected Flow, spanish: El Caudal Corregido}
       focuses:
       - id: SHD_el_directorio_de_2100
@@ -5047,12 +5079,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - SHD_los_ingenieros_del_orden
-        available: {country_exists: ZKR}
         desc:
           english: Opens the integration of Korea in three stages.
           spanish: Abre la integración de Corea en tres etapas.
         reward:
-        - {effect: flag, value: SHD_integracion_zkr_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZKR
+          kind: satellite
+          then:
+          - {effect: flag, value: SHD_integracion_zkr_abierta}
         - {effect: add_political_power, value: 50}
       - id: SHD_la_estepa_irrigada
         name: {english: The Irrigated Steppe, spanish: La Estepa Irrigada}
@@ -5060,12 +5095,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - SHD_vigilancia_hidraulica
-        available: {country_exists: ZST}
         desc:
           english: Opens the integration of the Steppe in three stages.
           spanish: Abre la integración de la Estepa en tres etapas.
         reward:
-        - {effect: flag, value: SHD_integracion_zst_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZST
+          kind: satellite
+          then:
+          - {effect: flag, value: SHD_integracion_zst_abierta}
         - {effect: add_political_power, value: 50}
       - id: SHD_el_caudal_perfecto
         name: {english: The Perfect Flow, spanish: El Caudal Perfecto}
@@ -5098,6 +5136,7 @@ trees:
         - {effect: event, id: meganations_nas.5, target: NAS}
         - {effect: add_war_support, value: 0.05}
     - id: gran_crecida
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Great Flood, spanish: La Gran Crecida}
       focuses:
       - id: SHD_abrir_las_compuertas
@@ -5178,12 +5217,14 @@ trees:
         icon: GFX_goal_generic_major_war
         prerequisites:
         - SHD_la_crecida_del_norte
-        available: {country_exists: ZWI}
         desc:
           english: The Indostan warlords are next.
           spanish: Los Señores de la Guerra del Indostán son los próximos.
         reward:
-        - {effect: wargoal, target: ZWI, type: annex_everything}
+        - effect: or_cores       # si la anarquía ya cayó o es satélite de alguien (análisis 2026-10-01)
+          country: ZWI
+          then:
+          - {effect: wargoal, target: ZWI, type: annex_everything}
         - {effect: add_war_support, value: 0.1}
       - id: SHD_el_rio_desbordado
         name: {english: The River Unleashed, spanish: El Río Desbordado}
@@ -5196,6 +5237,7 @@ trees:
         - {effect: add_ideas, value: SHD_espiritu_el_rio_desbordado}
         - {effect: add_research_slot, value: 1}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: The Destiny of Heaven, spanish: El Destino del Cielo}
       focuses:
       - id: SHD_el_gran_consejo_tecnico
@@ -5808,6 +5850,7 @@ trees:
       los Consejos). Integración federal por miembro. Ids alineados con el pack de íconos.'
     branches:
     - id: congreso
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Continental Congress, spanish: El Congreso Continental}
       focuses:
       - id: APF_el_congreso_de_2100
@@ -5859,13 +5902,16 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - APF_mil_consejos
-        available: {country_exists: ZSA}
         desc:
           english: 'The Cape''s councils vote to join: +20 Development and +20 Integration.'
           spanish: 'Los consejos del Cabo votan sumarse: +20 de Desarrollo y +20 de Integración.'
         reward:
-        - {effect: add_variable, var: APF_desarrollo_zsa, value: 20}
-        - {effect: add_variable, var: APF_integracion_zsa, value: 20}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZSA
+          kind: satellite
+          then:
+          - {effect: add_variable, var: APF_desarrollo_zsa, value: 20}
+          - {effect: add_variable, var: APF_integracion_zsa, value: 20}
         - {effect: add_political_power, value: 50}
       - id: APF_las_tierras_altas_se_suman
         name: {english: The Highlands Join, spanish: Las Tierras Altas se Suman}
@@ -5873,13 +5919,16 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - APF_mil_consejos
-        available: {country_exists: ZET}
         desc:
           english: 'The plateau opens its seed banks: +20 Development and +20 Integration.'
           spanish: 'La meseta abre sus bancos de semillas: +20 de Desarrollo y +20 de Integración.'
         reward:
-        - {effect: add_variable, var: APF_desarrollo_zet, value: 20}
-        - {effect: add_variable, var: APF_integracion_zet, value: 20}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZET
+          kind: satellite
+          then:
+          - {effect: add_variable, var: APF_desarrollo_zet, value: 20}
+          - {effect: add_variable, var: APF_integracion_zet, value: 20}
         - {effect: add_political_power, value: 50}
       - id: APF_la_constitucion_continental
         name: {english: The Continental Constitution, spanish: La Constitución Continental}
@@ -5920,6 +5969,7 @@ trees:
         - {effect: swap_ideas, remove: APF_espiritu_mil_consejos, add: APF_federacion_plena}
         - {effect: add_research_slot, value: 1}
     - id: marcha
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The March of the Councils, spanish: La Marcha de los Consejos}
       focuses:
       - id: APF_los_consejos_se_arman
@@ -5975,12 +6025,14 @@ trees:
         icon: GFX_goal_generic_major_war
         prerequisites:
         - APF_la_marcha_al_este
-        available: {country_exists: ZWM}
         desc:
           english: The Desert Emirates hold the road east.
           spanish: Los Emiratos del Desierto tienen el camino al este.
         reward:
-        - {effect: wargoal, target: ZWM, type: annex_everything}
+        - effect: or_cores       # si la anarquía ya cayó o es satélite de alguien (análisis 2026-10-01)
+          country: ZWM
+          then:
+          - {effect: wargoal, target: ZWM, type: annex_everything}
         - {effect: add_war_support, value: 0.1}
       - id: APF_los_emiratos_caen
         name: {english: The Emirates Fall, spanish: Los Emiratos Caen}
@@ -5989,8 +6041,16 @@ trees:
         prerequisites:
         - APF_liberar_el_sinai
         available:
-          not: {country_exists: ZWM}
-        desc: {english: Needs the Desert Emirates gone., spanish: Pide que los Emiratos del Desierto hayan caído.}
+          explained:       # análisis 2026-10-01: Roma los dejaba como provincia cliente y la rama quedaba trabada
+            id: APF_emiratos_caen
+            english: The Desert Emirates have fallen, are someone's satellite, or the Federation controls Suez and Baghdad
+            spanish: Los Emiratos del Desierto cayeron, son satélite de alguien, o la Federación controla Suez y Bagdad
+            when:
+              any:
+              - not: {country_exists: ZWM}
+              - country: {tag: ZWM, when: {subject: true}}
+              - controls_all: [[Suez], [Baghdad]]
+        desc: {english: 'Needs the Desert Emirates gone, made into a satellite, or Suez and Baghdad in Federation hands.', spanish: 'Pide que los Emiratos del Desierto hayan caído, sean satélite de alguien, o que la Federación controle Suez y Bagdad.'}
         reward:
         - {effect: add_political_power, value: 150}
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
@@ -6007,6 +6067,7 @@ trees:
         - {effect: add_ideas, value: APF_federacion_sin_fronteras}
         - {effect: add_research_slot, value: 1}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: The Destiny of the Origin, spanish: El Destino del Origen}
       focuses:
       - id: APF_la_asamblea_de_los_pueblos
@@ -6592,6 +6653,7 @@ trees:
       Legiones con prestigio y Auctoritas Militaris. Ids alineados con el pack de íconos.'
     branches:
     - id: principado
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Principate, spanish: El Principado}
       focuses:
       - id: NRE_la_aclamacion_confirmada
@@ -6677,12 +6739,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - NRE_las_vias_imperiales
-        available: {country_exists: ZHI}
         desc:
           english: Opens the provincialisation of Hispania in three stages.
           spanish: Abre la provincialización de Hispania en tres etapas.
         reward:
-        - {effect: flag, value: NRE_provincia_zhi_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZHI
+          kind: satellite
+          then:
+          - {effect: flag, value: NRE_provincia_zhi_abierta}
         - {effect: add_political_power, value: 100}
       - id: NRE_dacia_provincia
         name: {english: Dacia Provincia, spanish: Dacia Provincia}
@@ -6690,12 +6755,15 @@ trees:
         icon: GFX_goal_generic_political_pressure
         prerequisites:
         - NRE_el_cursus_honorum
-        available: {country_exists: ZDA}
         desc:
           english: Opens the provincialisation of Dacia in three stages.
           spanish: Abre la provincialización de Dacia en tres etapas.
         reward:
-        - {effect: flag, value: NRE_provincia_zda_abierta}
+        - effect: or_cores       # si ya no es su satélite (análisis 2026-10-01)
+          country: ZDA
+          kind: satellite
+          then:
+          - {effect: flag, value: NRE_provincia_zda_abierta}
         - {effect: add_political_power, value: 100}
       - id: NRE_el_equilibrio_de_varro
         name: {english: Varro's Balance, spanish: El Equilibrio de Varro}
@@ -6741,6 +6809,7 @@ trees:
         - {effect: event, id: meganations_efe.14, target: EFE}
         - {effect: add_war_support, value: 0.05}
     - id: cuatro_imperatores
+      ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Year of the Four Imperatores, spanish: El Año de los Cuatro Imperatores}
       focuses:
       - id: NRE_la_legion_decide
@@ -6836,13 +6905,15 @@ trees:
         icon: GFX_goal_generic_major_war
         prerequisites:
         - NRE_el_ano_de_los_cuatro
-        available: {country_exists: ZWE}
         ai: {factor: 2}
         desc:
           english: The legions want land. The Eurasian warlords have plenty.
           spanish: Las legiones quieren tierras. Los señores de la guerra euroasiáticos tienen de sobra.
         reward:
-        - {effect: wargoal, target: ZWE, type: annex_everything}
+        - effect: or_cores       # si la anarquía ya cayó o es satélite de alguien (análisis 2026-10-01)
+          country: ZWE
+          then:
+          - {effect: wargoal, target: ZWE, type: annex_everything}
         - {effect: add_variable, var: NRE_auctoritas, value: 10}
         - {effect: run, value: NRE_recalcular_legiones}
       - id: NRE_el_imperio_de_las_legiones
@@ -6859,6 +6930,7 @@ trees:
         - {effect: add_variable, var: NRE_auctoritas, value: 20}
         - {effect: run, value: NRE_recalcular_legiones}
     - id: destino
+      ai_factor: 4        # la IA vive su destino apenas se abre (análisis 2026-10-01)
       name: {english: The Destiny of Rome, spanish: El Destino de Roma}
       focuses:
       - id: NRE_la_lex_imperii

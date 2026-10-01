@@ -7010,10 +7010,10 @@ categories:
     country: EFE
     name: {english: 'The Destiny: The Dominion of Gaia', spanish: 'El Destino: El Dominio de Gaia'}
     desc:
-      english: 'The last stage of the megastate. Control Lima, La Paz, the Amazon, São Paulo, Rio de Janeiro, Bogotá (Cundinamarca) and Caracas
+      english: 'The last stage of the megastate. Control Lima, La Paz, the Amazon (or the Sanctuary under its guarantee), São Paulo, Rio de Janeiro, Bogotá (Cundinamarca) and Caracas
         (Miranda); have 45 divisions, 8 BioSteel stored and 50% stability, and proclaim The Dominion of Gaia: a new name, a new flag, cores on every
         owned region and a great national spirit.'
-      spanish: 'La última etapa de la meganación. Controlar Lima, La Paz, el Amazonas, São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas
+      spanish: 'La última etapa de la meganación. Controlar Lima, La Paz, el Amazonas (o el Santuario bajo su garantía), São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas
         (Miranda); tener 45 divisiones, 8 de Bioacero guardado y 50% de estabilidad, y proclamar El Dominio de Gaia: nombre y bandera nuevos, núcleos
         en cada región propia y un gran espíritu nacional.'
     icon_prefer:
@@ -7024,9 +7024,9 @@ categories:
     - id: EFE_proclamar_la_forma_final
       name: {english: Proclaim The Dominion of Gaia, spanish: Proclamar El Dominio de Gaia}
       desc:
-        english: From the Caribbean to Cape Horn one forest, one law, one Empress of the living Earth.\nRequires controlling Lima, La Paz, the Amazon,
+        english: From the Caribbean to Cape Horn one forest, one law, one Empress of the living Earth.\nRequires controlling Lima, La Paz, the Amazon (or the Sanctuary under its guarantee),
           São Paulo, Rio de Janeiro, Bogotá (Cundinamarca) and Caracas (Miranda), 45 divisions and 50% stability.
-        spanish: Del Caribe al Cabo de Hornos, un solo bosque, una ley, un imperio de la Tierra viva.\nPide controlar Lima, La Paz, el Amazonas,
+        spanish: Del Caribe al Cabo de Hornos, un solo bosque, una ley, un imperio de la Tierra viva.\nPide controlar Lima, La Paz, el Amazonas (o el Santuario bajo su garantía),
           São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas (Miranda), 45 divisiones y 50% de estabilidad.
       icon_prefer:
       - generic_formable_nations
@@ -7037,7 +7037,6 @@ categories:
         controls_all:
         - - Lima
         - - La Paz
-        - - Amazonas
         - - São Paulo
         - - Rio de Janeiro
         - - Cundinamarca
@@ -7046,6 +7045,16 @@ categories:
         stability_at_least: 0.5
         all:
         - variable_at_least: {var: EFE_biosteel, value: 8}
+        # análisis 2026-10-01: el Santuario se queda con el Amazonas y el EFE lo
+        # garantiza para siempre; esa promesa cuenta como tener la selva
+        - explained:
+            id: EFE_amazonas_o_santuario
+            english: Controls the Amazon, or the Sanctuary of Gaia exists under our guarantee
+            spanish: Controla el Amazonas, o el Santuario de Gaia existe bajo nuestra garantía
+            when:
+              any:
+              - controls_state: [Amazonas]
+              - {country_exists: ZSG, guarantees: ZSG}
       effects:
       - {effect: flag, value: EFE_forma_final}
       - {effect: cosmetic_tag, value: EFE_GAIA}
