@@ -2403,39 +2403,38 @@ def test_unique_units() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         root = ctx.mod_root
-        check("bloqueo: el chasis superpesado es solo del EFE",
-              ctx.data.get("tech_locks", {}).get("super_heavy_tank_chassis") == "EFE", str(ctx.data.get("tech_locks")))
+        # 2026-10-01: el Gliptodonte es el TANQUE MODERNO (modular, libre en el
+        # diseñador y en las divisiones), no el superpesado
+        check("bloqueo: el tanque moderno es solo del EFE",
+              ctx.data.get("tech_locks", {}).get("main_battle_tank_chassis") == "EFE", str(ctx.data.get("tech_locks")))
+        check("el superpesado vuelve a ser de todos", "super_heavy_tank_chassis" not in ctx.data.get("tech_locks", {}))
         check("bloqueo: la tecnologia de un modulo compartido no se bloquea",
               "heavy_cannon_fixture_tech" not in ctx.data.get("tech_locks", {}))
         techs = (root / "common/technologies/super_heavy_fixture.txt").read_text(encoding="utf-8")
-        sh = None
+        mbt = None
         for k, v in pdx.parse(techs).entries:
             if k == "technologies":
-                sh = v.get("super_heavy_tank_chassis")
-        check("allow nuevo con original_tag", sh is not None and pdx.text(sh.get("allow").get("original_tag")) == "EFE",
+                mbt = v.get("main_battle_tank_chassis")
+        check("allow nuevo con original_tag", mbt is not None and pdx.text(mbt.get("allow").get("original_tag")) == "EFE",
               techs)
-        ab = sh.get("allow_branch") if sh is not None else None
-        check("allow_branch conserva el DLC y suma original_tag",
-              ab is not None and ab.get("has_dlc") is not None and pdx.text(ab.get("original_tag")) == "EFE", techs)
+        check("sigue habilitando el batallon moderno (se usa libre en las divisiones)",
+              mbt is not None and mbt.get("enable_subunits") is not None)
         eff = pdx.parse((root / "common/scripted_effects/meganations_unique_units.txt").read_text(encoding="utf-8"))
         body = eff.get("EFE_gliptodonte_desbloqueo")
         check("efecto de desbloqueo", body is not None)
         st = body.get("set_technology")
-        check("da el chasis y las piezas", all(t in st.keys() for t in
-              ("super_heavy_tank_chassis", "heavy_cannon_fixture_tech", "cast_armor_fixture_tech")), str(st.keys()))
+        check("da el chasis moderno y las piezas", all(t in st.keys() for t in
+              ("main_battle_tank_chassis", "heavy_cannon_fixture_tech", "cast_armor_fixture_tech")), str(st.keys()))
         var = body.get("create_equipment_variant")
-        mods = var.get("modules")
-        check("diseño: cañón pesado, blindaje fundido, motor por defecto",
-              pdx.text(mods.get("main_armament_slot")) == "tank_heavy_cannon_1"
-              and pdx.text(mods.get("armor_type_slot")) == "tank_cast_armor"
-              and pdx.text(mods.get("engine_type_slot")) == "tank_gasoline_engine", str(mods.entries))
-        check("diseño: una pieza que prohibe el cañon no entra", mods.get("special_type_slot_1") is None)
-        check("diseño: mejoras de motor", pdx.text(var.get("upgrades").get("tank_nsb_engine_upgrade")) == "6")
-        check("plantilla y equipo de arranque", body.get("division_template") is not None
-              and body.get("add_equipment_to_stockpile") is not None)
+        check("diseño sobre el chasis moderno", pdx.text(var.get("type")) == "modern_tank_chassis_1", str(var))
+        tpl = body.get("division_template")
+        check("plantilla con batallones modernos (de linea, no de apoyo)",
+              tpl is not None and "modern_armor" in tpl.get("regiments").keys(), str(tpl))
         ideas = (root / "common/ideas/meganations_unique_units.txt").read_text(encoding="utf-8")
-        check("espiritu con equipment_bonus sobre el arquetipo", "equipment_bonus" in ideas
-              and "super_heavy_tank_chassis" in ideas and "maximum_speed" in ideas)
+        check("espiritu: +10% velocidad y blindaje, +8% ataque duro sobre el arquetipo moderno",
+              "modern_tank_chassis" in ideas and "maximum_speed = 0.1" in ideas and "hard_attack = 0.08" in ideas, ideas[:600])
+        units = (root / "common/units/super_heavy_fixture.txt").read_text(encoding="utf-8")
+        check("el batallon usa 5% mas de suministros", "supply_consumption = 0.21" in units, units)
         dec = (root / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8")
         check("la decision del EFE corre el desbloqueo", "EFE_gliptodonte_desbloqueo" in dec)
         check("cada potencia tiene la decision de su unidad",

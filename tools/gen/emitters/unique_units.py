@@ -198,6 +198,12 @@ def emit(ctx: BuildContext) -> None:
 
         effects.add(f"{uid}_desbloqueo", body)
 
+        # Estadísticas del batallón que no son del equipo (ej. uso de
+        # suministros): se cambia la definición del juego (solo la tiene esta
+        # potencia). Factor: 1.05 = +5%.
+        if u.get("sub_unit_stats"):
+            _sub_unit_stats(ctx, uid, u["sub_unit_stats"])
+
         # 4. IA: después del desbloqueo, que la fabrique (sin exagerar)
         if u.get("ai"):
             plans.append({"id": f"{uid}_produccion", "country": tag, "strategies": list(u["ai"]),
@@ -422,3 +428,35 @@ def lock_techs(src: str, locks: dict[str, str], visible: set[str] | frozenset = 
     for at, snippet in sorted(inserts, key=lambda x: x[0], reverse=True):
         src = src[:at] + snippet + src[at:]
     return src, count
+
+
+def _sub_unit_stats(ctx: BuildContext, uid: str, wanted: dict) -> None:
+    """Multiplica estadísticas de batallones del juego (common/units), en una
+    copia del archivo con el mismo nombre (pisa al original)."""
+    from ..pdx import text as ptext
+    for path in sorted((ctx.vanilla.root / "common" / "units").glob("*.txt")):
+        try:
+            root = parse_file(path)
+        except ValueError:
+            continue
+        subs = root.get("sub_units")
+        if not isinstance(subs, Block):
+            continue
+        changed = []
+        for key, body in subs.entries:
+            if key not in wanted or not isinstance(body, Block):
+                continue
+            for stat, factor in wanted[key].items():
+                old = body.get(stat)
+                try:
+                    val = float(ptext(old))
+                except (TypeError, ValueError):
+                    ctx.warn(f"{uid}: el batallon {key} no tiene '{stat}' en el juego; no se cambia.")
+                    continue
+                new = round(val * float(factor), 4)
+                body.entries = [(k, new if k == stat else v) for k, v in body.entries]
+                changed.append(f"{key}.{stat} {val:g} -> {new:g}")
+        if changed:
+            ctx.write_script(f"common/units/{path.name}", root,
+                             source=f"{path.name} del juego con {', '.join(changed)} ({SOURCE})")
+            ctx.note(f"{uid}: {', '.join(changed)}")

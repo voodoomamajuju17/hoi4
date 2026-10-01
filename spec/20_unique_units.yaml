@@ -49,68 +49,72 @@ units:
     country: EFE
     src: user_request
     name: {english: Glyptodon, spanish: Gliptodonte}
+    # 2026-10-01 (pedido del usuario): ya no es el superpesado (que el juego
+    # trata como compañía de apoyo) sino el TANQUE MODERNO, bloqueado para el
+    # resto y mejor que el del juego. Es modular: sobre el mismo chasis el EFE
+    # arma antiaéreos, cazacarros y artillería autopropulsada en el diseñador.
     lore:
       english: >-
         Ten thousand years ago an armadillo the size of a car walked the Pampa.
-        The Gaia Laboratory rebuilt its shell out of BioSteel: a hull grown in
-        one piece in the vats, covered in hexagonal plates that close their own
-        wounds. It weighs as much as a land fortress and runs like a medium
-        tank, on electric drive and living muscle. Only the Green Empire knows
-        how to grow one; everyone else can only capture them.
+        The Gaia Laboratory rebuilt its shell out of BioSteel: a modern battle
+        tank grown in one piece in the vats, covered in hexagonal plates that
+        close their own wounds. On the same living hull the Empire mounts guns,
+        anti-air turrets or rocket racks. Only the Green Empire knows how to
+        grow one; everyone else can only capture them.
       spanish: >-
         Hace diez mil años un armadillo del tamaño de un auto caminaba por la
-        Pampa. El Laboratorio de Gaia rehízo su caparazón en Bioacero: un casco
-        cultivado de una sola pieza en las cubas, cubierto de placas hexagonales
-        que cierran sus propias heridas. Pesa como una fortaleza terrestre y
-        corre como un tanque medio, con tracción eléctrica y músculo vivo. Solo
-        el Imperio Verde sabe cultivarlo; los demás solo pueden capturarlo.
+        Pampa. El Laboratorio de Gaia rehízo su caparazón en Bioacero: un tanque
+        moderno cultivado de una sola pieza en las cubas, cubierto de placas
+        hexagonales que cierran sus propias heridas. Sobre el mismo casco vivo
+        el Imperio monta cañones, torretas antiaéreas o lanzacohetes. Solo el
+        Imperio Verde sabe cultivarlo; los demás solo pueden capturarlo.
     # Nombre del batallón en la pantalla de divisiones (pisa el del juego:
-    # la unidad es única, nadie más la tiene).
-    sub_unit: super_heavy_armor
+    # el tanque moderno es solo del EFE).
+    sub_unit: modern_armor
     sub_unit_name: {english: Glyptodon Battalion, spanish: Batallón Gliptodonte}
+    # +5% de uso de suministros: es del batallón, no del equipo; se cambia en
+    # la definición del juego (solo el EFE lo tiene).
+    sub_unit_stats:
+      modern_armor: {supply_consumption: 1.05}
     lock:
       # Ids con y sin No Step Back; los que este juego no tiene se ignoran.
-      techs: [super_heavy_tank_chassis, super_heavy_tank_chassis_2, super_heavy_tank, super_heavy_tank2,
-              super_heavy_tank_destroyer, super_heavy_tank_destroyer2, super_heavy_tank_artillery]
-      enables: [super_heavy_tank, tank_super_heavy]
+      techs: [main_battle_tank_chassis, main_battle_tank]
+      enables: [modern_tank, main_battle_tank, modern_armor]
     tech_names:
-      super_heavy_tank_chassis: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
-      super_heavy_tank_chassis_2: {en: Glyptodon Second Strain, es: Gliptodonte de Segunda Cepa}
-      super_heavy_tank: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
-      super_heavy_tank2: {en: Glyptodon Second Strain, es: Gliptodonte de Segunda Cepa}
+      main_battle_tank_chassis: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
+      main_battle_tank: {en: Glyptodon Vats, es: Cubas del Gliptodonte}
     design:
       name: Gliptodonte
-      chassis: [super_heavy_tank_chassis]
-      # "¿Un superpesado rápido?": la velocidad sale del motor mejorado y del
-      # espíritu; el blindaje fundido es el casco cultivado de una pieza.
+      chassis: [modern_tank_chassis, main_battle_tank]
       modules:
-        main_armament_slot: [tank_heavy_cannon_1, heavy_cannon, high_velocity_cannon, medium_cannon]
-        turret_type_slot: [super_heavy, three_man, 3_man, two_man, 2_man]
-        suspension_type_slot: [christie, torsion_bar, bogie]
-        armor_type_slot: [cast_armor, cast, welded_armor, welded]
-        engine_type_slot: [petrol_electric, diesel, gasoline]
+        main_armament_slot: [high_velocity_cannon, medium_cannon, heavy_cannon]
+        turret_type_slot: [modern, three_man, 3_man, two_man, 2_man]
+        suspension_type_slot: [torsion_bar, christie, bogie]
+        armor_type_slot: [welded_armor, welded, cast_armor, cast]
+        engine_type_slot: [diesel, petrol_electric, gasoline]
         special_type_slot_1: [radio]
         special_type_slot_2: [smoke_launcher, smoke]
         special_type_slot_3: [extra_ammo, ammo_storage, wet_ammo]
         special_type_slot_4: [sloped_armor, sloped, armor_skirts, skirt]
-      upgrades: {engine: 6, armor: 4}
+      upgrades: {engine: 4, armor: 4}
     grant:
-      equipment: 40
+      equipment: 60
       extra_equipment:
       - {like: motorized_equipment, amount: 150}
     template:
       name: Gliptodontes
-      regiments: [super_heavy_armor, super_heavy_armor, motorized, motorized, motorized, motorized]
+      regiments: [modern_armor, modern_armor, modern_armor, motorized, motorized, motorized]
     divisions: 1
-    production: {amount: 20, factories: 3, progress: 0}
+    production: {amount: 30, factories: 3, progress: 0}
     ai: []     # el EFE ya prioriza blindados (16_ai.yaml); alcanza con la cola de producción
     spirit:
       id: EFE_el_rebano_de_gliptodontes
       name: {english: The Glyptodon Herd, spanish: El Rebaño de Gliptodontes}
       desc:
-        english: 'Living armour at the speed of a medium tank. Glyptodon: +40% speed, +25% reliability, +10% armour, -15% production cost.'
-        spanish: 'Blindaje vivo a la velocidad de un tanque medio. Gliptodonte: +40% velocidad, +25% fiabilidad, +10% blindaje, -15% costo de producción.'
-      equipment_bonus: {maximum_speed: 0.4, reliability: 0.25, armor_value: 0.1, build_cost_ic: -0.15}
+        english: 'Living armour on a modern hull. Glyptodon (and every variant on its chassis), compared with a modern tank: speed +10%, armour +10%, fuel capacity +5%, defence +4%, soft attack +6%, hard attack +8%. The battalion uses 5% more supply.'
+        spanish: 'Blindaje vivo sobre un casco moderno. Gliptodonte (y toda variante sobre su chasis), frente a un tanque moderno: velocidad +10%, blindaje +10%, capacidad de combustible +5%, defensa +4%, ataque blando +6%, ataque duro +8%. El batallón usa 5% más de suministros.'
+      equipment_bonus: {maximum_speed: 0.1, armor_value: 0.1, fuel_capacity: 0.05, defense: 0.04, soft_attack: 0.06,
+                        hard_attack: 0.08}
       picture_prefer: [tank, armor, armour]
 
   # ---------------------------------------------------------------------------
