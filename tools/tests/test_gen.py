@@ -1020,6 +1020,16 @@ def test_events() -> None:
               and "FROM = {" in golpe and "var = ASC_calor value = 15" in golpe
               and "has_country_flag = MN_vigilado_por_ASC" in golpe, golpe[:1500])
         check("sombras: solo contra esa potencia", "visible = { FROM = { tag = ASC } OR = { tag = EFE" in golpe)
+        # error.log 2026-10-01: en outcome_execute el alcance es la operación;
+        # todo efecto va dentro de ROOT (el que la lanza) o FROM (el objetivo).
+        ops_root = pdx.parse((mod / "common/operations/meganations_operations.txt").read_text())
+        sueltos = sorted({k for _, op in ops_root.entries if isinstance(op, pdx.Block)
+                          for k in op.get("outcome_execute").keys() if k not in ("ROOT", "FROM")})
+        check("sombras: outcome_execute solo tiene ROOT y FROM (nada suelto en la operacion)", not sueltos, str(sueltos))
+        robo = ops[ops.index("mn_op_robo_tecnologico_EFE = {"):][:6000]
+        check("sombras: la infiltracion y los planos robados van al pais que la lanza",
+              "outcome_execute = { ROOT = { if = { limit = { has_country_flag = MN_vigilado_por_EFE }" in robo
+              and "if = { limit = { tag = FCU } add_timed_idea = { idea = FCU_planos_robados" in robo, robo[:1500])
         decs_all = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
         check("sombras: la defensa es de a 4 y vence sola cada 3 meses",
