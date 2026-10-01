@@ -742,3 +742,12 @@ llega a 100 al toque y la tensión nunca sube".
   de la agencia, 6 de operaciones y 5 pantallas de carga nuevas (14 en total).
   arte/focos_faltantes.txt: solo los focos que faltan de las naciones que ya
   tienen íconos.
+- **Revisión de unidades únicas y logs** (2026-10-01):
+  - El superpesado es compañía de apoyo en 1.19.3: la plantilla del
+    Gliptodonte lo pone en `support` (fallaba: "Subunit is of support type").
+  - OIM: el juego no deja restar tamaño; se saca `add_mio_size` de los
+    on_actions del juego (el que les daba 3-4 al arrancar).
+  - Levas de la Anarquía: plantilla propia "Leva_Anarquica", que se recrea
+    si la IA la borra (las "Milicia" fallaban).
+  - Emergencias: el castigo es la Leva Forzosa (modificador con duración):
+    6, 9 y 12 meses; se suman si se usan varias.

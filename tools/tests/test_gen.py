@@ -1143,8 +1143,9 @@ def test_events() -> None:
               and e3.count('"division_template = Milicia_de_Emergencia ') == 12
               and "add_manpower = 20000" in e3 and "type = support_equipment amount = 1000" in e3, e3[:1500])
         e1 = decs_e[decs_e.index("MEGANATIONS_emergencia_1 = {"):][:3000]
-        check("emergencia: la 1 baja estabilidad y apoyo a la guerra 5%",
-              "cost = 150" in e1 and "add_stability = -0.05" in e1 and "add_war_support = -0.05" in e1)
+        check("emergencia: la 1 baja estabilidad y apoyo a la guerra 5% por 6 meses (Leva Forzosa, 2026-10-01)",
+              "cost = 150" in e1 and "add_dynamic_modifier = { modifier = MEGANATIONS_leva_forzosa_1 days = 180 }" in e1
+              and "add_stability = -0.05" not in e1)
         check("emergencia: para las meganaciones y las anarquias, no para los satelites",
               "original_tag = ZAN" in cats_s and "original_tag = NRE" in cats_s
               and "original_tag = PTA" not in cats_s[cats_s.index("MEGANATIONS_emergencia_category"):][:600])
@@ -1528,7 +1529,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos: la mecanica y los satelites de cada potencia", len(dm.entries) == 16, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia) y 3 de la Leva Forzosa",
+              len(dm.entries) == 19 and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -1836,7 +1838,7 @@ def test_ai() -> None:
         check("debuffs: o un objetivo (20 divisiones) en el pulso", "has_idea = EFE_guardia_mal_equipada" in se_c
               and "remove_ideas = EFE_guardia_mal_equipada" in se_c)
         lev = se_c[se_c.index("ANARQUIA_levas = {"):][:1500]
-        check("Anarquia: recluta una milicia por mes hasta 40 divisiones", "create_unit" in lev and "Milicia" in lev and "size > 39" in lev, lev[:500])
+        check("Anarquia: recluta una milicia por mes hasta 40 divisiones", "create_unit" in lev and "Leva_Anarquica" in lev and 'NOT = { has_template = "Leva_Anarquica" }' in lev and "size > 39" in lev, lev[:500])
         efe_h3 = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
         check("ventaja de terreno para los mas debiles (EFE)", "EFE_la_selva_es_nuestra" in efe_h3)
         check("crisis entre potencias: el EFE le exige Arequipa al Sol", "EFE_crisis_1" in se_c and "meganations_efe.150" in se_c)

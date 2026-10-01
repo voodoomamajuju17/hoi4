@@ -537,6 +537,11 @@ def render_effects(owner: str, items: list[dict], known,
             if ec.dynamic_modifiers is not None and mid not in ec.dynamic_modifiers:
                 raise SpecError(f"{owner}: dynamic_modifier '{mid}' no esta en 14_decisions.yaml -> dynamic_modifiers",
                                 where=where)
+            if item.get("days"):
+                # con duración (2026-10-01, Leva Forzosa): se va solo
+                block.add("add_dynamic_modifier", Block([("modifier", mid), ("days", int(item["days"]))]))
+                effects_used.setdefault("add_dynamic_modifier", owner)
+                continue
             guard = Block()
             guard.add("limit", Block([("NOT", Block([("has_dynamic_modifier", Block([("modifier", mid)]))]))]))
             guard.add("add_dynamic_modifier", Block([("modifier", mid)]))
@@ -571,6 +576,19 @@ def render_effects(owner: str, items: list[dict], known,
                     sup.add(r, Block([("x", 0), ("y", i)]))
                 tpl.add("support", sup)
             block.add("division_template", tpl)
+            effects_used.setdefault("division_template", owner)
+            continue
+        if effect == "ensure_template":
+            # La plantilla, solo si el país ya no la tiene (error.log 2026-10-01:
+            # la IA borra o renombra "Milicia" y las levas fallaban). has_template
+            # no se verifica contra la documentación: si faltara, lo dice error.log.
+            regs = Block()
+            for i, r in enumerate(item["regiments"]):
+                regs.add(r, Block([("x", i // 5), ("y", i % 5)]))
+            name = template_token(item["name"])
+            block.add("if", Block([
+                ("limit", Block([("NOT", Block([("has_template", Quoted(name))]))])),
+                ("division_template", Block([("name", Quoted(name)), ("regiments", regs)]))]))
             effects_used.setdefault("division_template", owner)
             continue
         if effect == "create_units":

@@ -150,7 +150,11 @@ def _emit_dynamic_modifiers(ctx: BuildContext) -> None:
     for m in mods:
         mid = m["id"]
         tag = m["country"]
-        ctx.spec.country(tag)
+        if tag is not None:
+            ctx.spec.country(tag)
+        # sin país (2026-10-01): sirve para cualquiera (ej. la Leva Forzosa de
+        # las emergencias, que usan meganaciones y anarquías)
+        tag = tag or "MEGANATIONS"
         if not mid.startswith(f"{tag}_"):
             raise SpecError(f"dynamic_modifier '{mid}' no empieza con '{tag}_'", where=SOURCE)
         values = m.get("modifiers") or {}
@@ -177,8 +181,12 @@ def _emit_dynamic_modifiers(ctx: BuildContext) -> None:
                 body.add("icon", f"GFX_idea_{generic}")
         body.add("enable", Block([("always", True)]))
         for key, var in values.items():
+            if isinstance(var, (int, float)) and not isinstance(var, bool):
+                body.add(key, float(var))      # valor fijo (modificador con duración)
+                used.setdefault(key, mid)
+                continue
             if not isinstance(var, str):
-                raise SpecError(f"{mid}.{key}: tiene que ser el nombre de una variable", where=SOURCE)
+                raise SpecError(f"{mid}.{key}: tiene que ser el nombre de una variable o un número", where=SOURCE)
             body.add(key, var)
             used.setdefault(key, mid)
         root.add(ctx.loc.reference(mid, f"dynamic_modifiers:{mid}"), body)

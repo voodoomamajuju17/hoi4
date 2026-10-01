@@ -127,8 +127,18 @@ def emit(ctx: BuildContext) -> None:
         if bad:
             ctx.warn(f"{uid}: batallones que el juego no tiene ({', '.join(bad)}): sin plantilla ni divisiones")
         if tpl and not bad:
-            dsl.append({"effect": "division_template", "name": tpl["name"], "regiments": tpl["regiments"],
-                        "support": tpl.get("support") or []})
+            # lo que el juego trata como apoyo va en `support` aunque el spec lo
+            # ponga como batallón (el superpesado es apoyo en 1.19.3)
+            support_type = ctx.vanilla.support_sub_units()
+            regs = [r for r in tpl["regiments"] if r not in support_type]
+            sup = list(tpl.get("support") or []) + [r for r in tpl["regiments"] if r in support_type]
+            if len(sup) > 5:
+                ctx.warn(f"{uid}: mas de 5 compañias de apoyo; se dejan 5")
+                sup = sup[:5]
+            if not regs:
+                regs = ["infantry"]
+            dsl.append({"effect": "division_template", "name": tpl["name"], "regiments": regs,
+                        "support": sup})
             if int(u.get("divisions", 0) or 0):
                 dsl.append({"effect": "create_units", "template": tpl["name"], "count": int(u["divisions"]),
                             "experience": 0.3})

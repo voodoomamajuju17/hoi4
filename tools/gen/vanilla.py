@@ -783,6 +783,22 @@ class Vanilla:
                 out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block))
         return out
 
+    def support_sub_units(self) -> set[str]:
+        """Batallones que el juego trata como compañía de apoyo (`group = support`):
+        en una plantilla van en `support`, no en `regiments` (error.log 2026-10-01:
+        "Subunit is of support type: super_heavy_armor")."""
+        out: set[str] = set()
+        for path in (self.root / "common" / "units").glob("*.txt"):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("sub_units")
+            if isinstance(block, pdx.Block):
+                out.update(k for k, v in block.entries if k and isinstance(v, pdx.Block)
+                           and pdx.text(v.get("group")) == "support")
+        return out
+
     def state_category_slots(self) -> dict[str, int]:
         """categoría de state -> local_building_slots (common/state_category/)."""
         out: dict[str, int] = {}

@@ -152,7 +152,7 @@ def catalog() -> list[dict]:
                     "done": dest.exists(), "description": f"{name}: {_one_line(desc)}",
                 })
     for dm in _load("14_decisions.yaml").get("dynamic_modifiers") or []:
-        tag = dm["country"]
+        tag = dm["country"] or "MEGANATIONS"   # sin país: sirve para todos (Leva Forzosa)
         dest = REPO / "assets" / tag / "ideas" / f"{dm['id']}.dds"
         items.append({
             "type": "national_spirit_icon", "tag": tag, "id": dm["id"], "dest": dest, "done": dest.exists(),

@@ -152,6 +152,7 @@ def _neutralize_scripts(ctx: BuildContext, spirits: list[str]) -> None:
     timed = re.compile(rf"\badd_timed_idea\s*=\s*\{{[^{{}}]*?\bidea\s*=\s*(?:{names})\b[^{{}}]*\}}")
     group = re.compile(r"\badd_ideas\s*=\s*\{([^{}]*)\}")
     token = re.compile(rf"(?<![A-Za-z0-9_.])(?:{names})(?![A-Za-z0-9_.])")
+    mio_size = re.compile(r"\badd_mio_size\s*=\s*\d+(?:\.\d+)?")
     written = {p.resolve() for p in ctx.written}
     touched, monroe_files = [], []
     folders = ["common/on_actions", "common/scripted_effects"]
@@ -170,6 +171,12 @@ def _neutralize_scripts(ctx: BuildContext, spirits: list[str]) -> None:
             new = single.sub("", text)
             new = timed.sub("", new)
             new = group.sub(lambda m: "add_ideas = {" + token.sub("", m.group(1)) + "}", new)
+            if folder == "common/on_actions":
+                # OIM (2026-10-01): 09_aat_on_actions les suma tamaño al arrancar
+                # según la fecha (add_mio_size = 3 y 4) y en 2100 todas arrancaban
+                # con 4. El juego no deja restarlo después ("value for
+                # add_mio_size is negative"): se saca acá, en el origen.
+                new = mio_size.sub("", new)
             if new == text:
                 continue
             rel = f"{folder}/{path.name}"

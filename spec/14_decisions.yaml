@@ -6822,8 +6822,8 @@ categories:
         english: 'Emergency I: Call to Arms'
         spanish: 'Emergencia I: Llamado a las Armas'
       desc:
-        english: 4 infantry divisions, 10,000 manpower and 1,000 infantry equipment. Stability and war support -5%. Only once.
-        spanish: 4 divisiones de infantería, 10.000 de mano de obra y 1.000 de equipo de infantería. Estabilidad y apoyo a la guerra -5%. Una sola vez.
+        english: 4 infantry divisions, 10,000 manpower and 1,000 infantry equipment. Forced Levy, stability and war support -5% for 6 months. Only once.
+        spanish: 4 divisiones de infantería, 10.000 de mano de obra y 1.000 de equipo de infantería. Leva Forzosa, estabilidad y apoyo a la guerra -5% durante 6 meses. Una sola vez.
       icon_prefer:
       - generic_prepare_civil_war
       - generic_military
@@ -6839,10 +6839,9 @@ categories:
       - effect: equipment
         type: infantry_equipment
         amount: 1000
-      - effect: add_stability
-        value: -0.05
-      - effect: add_war_support
-        value: -0.05
+      - effect: dynamic_modifier
+        id: MEGANATIONS_leva_forzosa_1
+        days: 180
       - effect: division_template
         name: Leva de Emergencia I
         regiments: &id001
@@ -6870,8 +6869,8 @@ categories:
         english: 'Emergency II: General Mobilisation'
         spanish: 'Emergencia II: Movilización General'
       desc:
-        english: 6 infantry divisions, 15,000 manpower and 1,200 infantry equipment. Stability and war support -5%. Only once.
-        spanish: 6 divisiones de infantería, 15.000 de mano de obra y 1.200 de equipo de infantería. Estabilidad y apoyo a la guerra -5%. Una sola vez.
+        english: 6 infantry divisions, 15,000 manpower and 1,200 infantry equipment. Forced Levy, stability and war support -5% for 9 months. Only once.
+        spanish: 6 divisiones de infantería, 15.000 de mano de obra y 1.200 de equipo de infantería. Leva Forzosa, estabilidad y apoyo a la guerra -5% durante 9 meses. Una sola vez.
       icon_prefer:
       - generic_prepare_civil_war
       - generic_military
@@ -6887,10 +6886,9 @@ categories:
       - effect: equipment
         type: infantry_equipment
         amount: 1200
-      - effect: add_stability
-        value: -0.05
-      - effect: add_war_support
-        value: -0.05
+      - effect: dynamic_modifier
+        id: MEGANATIONS_leva_forzosa_2
+        days: 270
       - effect: division_template
         name: Leva de Emergencia II
         regiments: *id001
@@ -6913,8 +6911,8 @@ categories:
         english: 'Emergency III: Everyone to the Front'
         spanish: 'Emergencia III: Todos al Frente'
       desc:
-        english: 8 infantry divisions and 6 militia divisions, 20,000 manpower, 1,000 infantry equipment and 1,000 support equipment. Stability and war support -10%. Only once.
-        spanish: 8 divisiones de infantería y 6 de milicia, 20.000 de mano de obra, 1.000 de equipo de infantería y 1.000 de equipo de apoyo. Estabilidad y apoyo a la guerra -10%. Una sola vez.
+        english: 8 infantry divisions and 6 militia divisions, 20,000 manpower, 1,000 infantry equipment and 1,000 support equipment. Forced Levy, stability and war support -10% for 12 months. Only once.
+        spanish: 8 divisiones de infantería y 6 de milicia, 20.000 de mano de obra, 1.000 de equipo de infantería y 1.000 de equipo de apoyo. Leva Forzosa, estabilidad y apoyo a la guerra -10% durante 12 meses. Una sola vez.
       icon_prefer:
       - generic_prepare_civil_war
       - generic_military
@@ -6933,10 +6931,9 @@ categories:
       - effect: equipment
         type: support_equipment
         amount: 1000
-      - effect: add_stability
-        value: -0.1
-      - effect: add_war_support
-        value: -0.1
+      - effect: dynamic_modifier
+        id: MEGANATIONS_leva_forzosa_3
+        days: 365
       - effect: division_template
         name: Leva de Emergencia III
         regiments: *id001
@@ -14549,12 +14546,14 @@ scripted_effects:
       when:
         not: {divisions_at_least: 40}
       then:
-      - {effect: create_units, template: Milicia, name: Leva, count: 1, experience: 0.2}
+      # 2026-10-01: plantilla propia de las levas (la IA borraba o renombraba "Milicia")
+      - {effect: ensure_template, name: Leva Anarquica, regiments: [infantry, infantry, infantry, infantry]}
+      - {effect: create_units, template: Leva Anarquica, name: Leva, count: 1, experience: 0.2}
       - {effect: equipment, type: infantry_equipment, amount: 600}
       - effect: if
         when: {at_war: true}
         then:
-        - {effect: create_units, template: Milicia, name: Leva de Guerra, count: 1, experience: 0.1}
+        - {effect: create_units, template: Leva Anarquica, name: Leva de Guerra, count: 1, experience: 0.1}
 
   # Las Ocho Potencias v3 (2026-09-27): espíritus vivos (sus números salen de las variables).
   - id: APF_espiritu_vivo
@@ -18400,6 +18399,24 @@ scripted_effects:
 
 
 dynamic_modifiers:
+  # 2026-10-01 ("las emergencias ponelas como dijiste"): el castigo de las
+  # emergencias ya no es para siempre; dura 6, 9 o 12 meses y se suma si se
+  # usan varias. Sin país: sirve para meganaciones y anarquías.
+  - id: MEGANATIONS_leva_forzosa_1
+    country: null
+    name: {english: 'Forced Levy I', spanish: 'Leva Forzosa I'}
+    desc: {english: 'Emergency I took the young from the fields. It wears off in 6 months.', spanish: 'La Emergencia I sacó a los jóvenes del campo. Se va en 6 meses.'}
+    modifiers: {stability_factor: -0.05, war_support_factor: -0.05}
+  - id: MEGANATIONS_leva_forzosa_2
+    country: null
+    name: {english: 'Forced Levy II', spanish: 'Leva Forzosa II'}
+    desc: {english: 'Emergency II emptied the factories. It wears off in 9 months.', spanish: 'La Emergencia II vació las fábricas. Se va en 9 meses.'}
+    modifiers: {stability_factor: -0.05, war_support_factor: -0.05}
+  - id: MEGANATIONS_leva_forzosa_3
+    country: null
+    name: {english: 'Forced Levy III', spanish: 'Leva Forzosa III'}
+    desc: {english: 'Emergency III armed everyone who could stand. It wears off in 12 months.', spanish: 'La Emergencia III armó a todo el que se tenía en pie. Se va en 12 meses.'}
+    modifiers: {stability_factor: -0.1, war_support_factor: -0.1}
   - id: FCU_mod_directorio
     country: FCU
     name: {english: The Directorate, spanish: El Directorio}
