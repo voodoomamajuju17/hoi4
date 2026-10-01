@@ -47,6 +47,8 @@ from .emitters import research as em_research
 from .emitters import resources as em_resources
 from .emitters import scenario as em_scenario
 from .emitters import territory as em_territory
+from .emitters import unique_units as em_unique_units
+from .emitters import unit_names as em_unit_names
 from .errors import GenError
 from .loc import LocRegistry
 
@@ -64,6 +66,7 @@ EMITTERS = [
     ("military", em_military.emit),     # despues de militia: tecnologias, ejercito, equipo
     ("forces", em_forces.emit),         # armada y aviacion heredadas de 1936
     ("doctrines", em_doctrines.emit),   # despues de territory: doctrina de arranque por bloque
+    ("unique_units", em_unique_units.emit),  # antes que research (bloqueos) y decisiones (efectos)
     ("research", em_research.emit),     # la investigacion de 2100: años y nombres
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
@@ -72,6 +75,7 @@ EMITTERS = [
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
     ("intelligence", em_intelligence.emit),  # operaciones de inteligencia (18_intelligence)
+    ("unit_names", em_unit_names.emit),  # nombres de divisiones y barcos (19_unit_names)
     ("mio", em_mio.emit),                  # OIM propias por meganacion (13_military -> mio)
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
     ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)

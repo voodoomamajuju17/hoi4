@@ -85,6 +85,17 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             if not f.get("icon_asset") and own.exists():
                 f["icon_asset"] = f"assets/{tag}/goals/{f['id']}.dds"
                 f["icon"] = f"GFX_focus_{f['id']}"
+    # Un icono propio es de un solo foco: repetirlo está prohibido.
+    owner: dict[str, str] = {}
+    for branch in tree["branches"]:
+        for f in branch.get("focuses", []) or []:
+            asset = f.get("icon_asset")
+            if not asset:
+                continue
+            if asset in owner:
+                raise SpecError(f"{f['id']}: el icono '{asset}' ya es de {owner[asset]}; "
+                                "cada foco lleva su propio icono", where="07_focus_trees.yaml")
+            owner[asset] = f["id"]
     focuses: list[tuple[str, dict]] = []  # (rama, foco)
     branch_ai: dict[str, float] = {}
     for branch in tree["branches"]:

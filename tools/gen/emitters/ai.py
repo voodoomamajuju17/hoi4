@@ -26,6 +26,13 @@ SOURCE = "spec/16_ai.yaml"
 # tipos cuyo `id` no es un país sino un rol o un tipo de equipo: se validan
 # contra los ids que el juego usa con ese mismo tipo
 ID_CHECKED = {"role_ratio", "unit_ratio", "equipment_production_factor", "equipment_variant_production_factor"}
+# tipos cuyo `id` es una tecnología: se validan contra el árbol instalado
+TECH_IDS = {"research_tech", "research_weight_factor"}
+# tipos documentados (hoi4.paradoxwikis.com/AI_modding) que el juego base puede
+# no usar en sus propios planes: se aceptan aunque no aparezcan en common/ai_strategy/.
+# research_weight_factor = { id = <tecnología> value = <% de más> } (2026-09-30:
+# "la HSN no investiga barcos"; research_tech no existe, éste sí).
+DOCUMENTED = {"research_weight_factor"}
 
 
 def emit(ctx: BuildContext) -> None:
@@ -54,7 +61,7 @@ def emit(ctx: BuildContext) -> None:
         targets = []
         for st in strategies:
             kind = st["type"]
-            if known is not None and kind not in known:
+            if known is not None and kind not in known and kind not in DOCUMENTED:
                 dropped.add(kind)
                 continue
             target = st.get("target")
@@ -67,8 +74,8 @@ def emit(ctx: BuildContext) -> None:
             ident = target if target is not None else st.get("id")
             if target is None and ident is not None:
                 # ids de rol/equipo: solo los que el juego usa con ese tipo;
-                # research_tech: una tecnología del árbol instalado
-                if kind == "research_tech":
+                # research_weight_factor: una tecnología del árbol instalado
+                if kind in TECH_IDS:
                     if techs is not None and ident not in techs:
                         dropped_ids.add(f"{kind}:{ident}")
                         continue
@@ -137,6 +144,9 @@ def emit(ctx: BuildContext) -> None:
 
     for p in spec.get("plans", []) or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
+    # unidades únicas (20_unique_units.yaml): se activan con su desbloqueo
+    for p in ctx.data.get("unique_ai_plans") or []:
+        add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
 
     if dropped_ids:
         ctx.warn(f"ia: ids que el juego no usa con ese tipo, se omiten: {', '.join(sorted(dropped_ids))}")
@@ -167,11 +177,31 @@ def _military_plans(ctx: BuildContext, mil: dict, add_plan) -> None:
         if c.is_major:
             strategies = list(mil.get("peace") or []) + list(per.get(c.tag) or [])
             add_plan(f"{c.tag}_militar", c.tag, strategies)
+            research = _research_weights(mil, c.tag)
+            if research:
+                add_plan(f"{c.tag}_investigacion", c.tag, research)
             if mil.get("war"):
                 add_plan(f"{c.tag}_militar_en_guerra", c.tag, list(mil["war"]), enable={"at_war": True},
                          abort={"at_war": False})
         elif not c.is_subject and mil.get("anarchy"):
             add_plan(f"{c.tag}_defensa", c.tag, list(mil["anarchy"]))
+
+
+def _research_weights(mil: dict, tag: str) -> list[dict]:
+    """naval_research y armor_research (2026-09-30: "la HSN no investiga
+    barcos"): además del ai_will_do de cada tecnología (research.py), una
+    estrategia research_weight_factor por tecnología con el valor del país
+    (value = 300 es +300%). Si una tecnología está en los dos bloques, gana
+    el valor más alto."""
+    best: dict[str, int] = {}
+    for key in ("naval_research", "armor_research"):
+        block = mil.get(key) or {}
+        v = (block.get("by_country") or {}).get(tag, block.get("value"))
+        if not v:
+            continue
+        for t in block.get("techs") or []:
+            best[t] = max(best.get(t, 0), int(v))
+    return [{"type": "research_weight_factor", "id": t, "value": v} for t, v in best.items()]
 
 
 def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:

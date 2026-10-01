@@ -601,7 +601,7 @@ def test_phase3_content() -> None:
         check("icono elegido entre los vanilla", pdx.text(cat.get("icon")) == "generic_industry")
         decs_raw = (mod / "common/decisions/meganations_decisions.txt").read_text()
         decs = pdx.parse(decs_raw).get("EFE_biosteel_category")
-        check("6 decisiones (con Purgar las Cubas y Como se Juega)", len(decs.keys()) == 6, str(decs.keys()))
+        check("7 decisiones (con Purgar las Cubas, Como se Juega y el Gliptodonte)", len(decs.keys()) == 7, str(decs.keys()))
         guia = decs.get("EFE_como_se_juega")
         check("Como se Juega: gratis, la IA no la usa, muestra la bienvenida", pdx.text(guia.get("cost")) == "0"
               and "meganations_efe.29" in pdx.render(guia.get("complete_effect"))
@@ -1396,6 +1396,28 @@ def test_balance() -> None:
         check("pantallas de carga: las del juego llevan las imagenes del mod", lar.read_bytes() in shots)
         check("pantallas de carga: el fondo del menu queda en la textura del menu", raw not in shots)
         check("pantallas de carga: el reporte lo dice", any(n.startswith("pantallas de carga:") for n in ctx.notes))
+        # Fondos que el juego estira (2026-09-30: rayas en focos y Construcciones)
+        check("fondos: no pisa un corneredTile que estira el centro",
+              not (mod / "gfx/interface/tiles/tiled_plain_bg2.dds").exists())
+        check("fondos: avisa cual salteo y por que",
+              any("tiled_plain_bg2" in w and "rayas" in w for w in ctx.warnings), str(ctx.warnings))
+        check("fondos: el papel oscuro ya no se usa (texto oscuro de las tecnologias)",
+              not (REPO_ROOT / "assets/ui/fondo_papel_agencia.dds").exists()
+              and not (mod / "gfx/interface/tiles/tiled_paper_bg.dds").exists())
+        # Fondos de cada rama de investigación (2026-09-30)
+        check("investigacion: el reporte da textura y tamano de cada rama",
+              any("GFX_industry_techtree_bg -> gfx/interface/techtree/industry_bg.dds (12x8)" in n for n in ctx.notes),
+              "\n".join(n for n in ctx.notes if "investigacion" in n))
+        check("investigacion: avisa la rama que el juego no tiene",
+              any("GFX_armor_techtree_bg no existe" in w for w in ctx.warnings))
+        from tools.gen.emitters.menu import _cover
+        src = bytearray(128) + bytes(range(4 * 4 * 2)) * 1
+        struct_src = bytearray(src)
+        _st.pack_into("<III", struct_src, 12, 2, 4, 16)
+        cov = _cover(bytes(struct_src), 4, 2, 2, 2)
+        check("investigacion: _cover recorta al centro sin deformar",
+              _st.unpack_from("<II", cov, 12) == (2, 2) and len(cov) == 128 + 2 * 2 * 4
+              and cov[128:132] == bytes(struct_src[128 + 4:128 + 8]), cov[128:].hex())
 
         efe_c = (mod / "common/countries/Ecofascist_Empire.txt").read_text()
         check("EFE con cultura grafica sudamericana", "southamerican_gfx" in efe_c and "southamerican_2d" in efe_c, efe_c)
@@ -1907,6 +1929,23 @@ def test_ai() -> None:
               n == 1 and "ai_will_do" not in pdx.render(techs.get("other").get("sub"))
               and sum(1 for k, _ in radio.entries if k == "ai_will_do") == 1
               and "original_tag = ASC" in pdx.render(radio.get("ai_will_do")), out)
+        # 2026-09-30 ("la HSN no investiga barcos"): el peso va al final del
+        # ai_will_do, después de un `factor = 0` del juego, y trae un piso (add).
+        zero = ("technologies = {\n\tbasic_ship_hull_light = {\n\t\tai_will_do = {\n\t\t\tfactor = 1\n"
+                "\t\t\tmodifier = { factor = 0 has_navy_size = { size < 5 } }\n\t\t}\n\t}\n}\n")
+        out, n = _inject_weights(zero, {"basic_ship_hull_light": [("HSN", 16.0)]})
+        aw = pdx.render(pdx.parse(out).get("technologies").get("basic_ship_hull_light").get("ai_will_do"))
+        aw1 = " ".join(aw.split())
+        check("IA naval: el peso de la potencia va despues del factor = 0 del juego",
+              n == 1 and aw1.index("factor = 0") < aw1.index("original_tag = HSN"), aw)
+        check("IA naval: con piso (add) para que el juego no la deje en cero",
+              "modifier = { add = 16 original_tag = HSN }" in aw1, aw)
+        inv = root.get("MEGANATIONS_EFE_investigacion")
+        invr = " ".join(pdx.render(inv).split()) if inv is not None else ""
+        check("IA: research_weight_factor para las tecnologias del arbol (documentado, aunque el juego no lo use)",
+              "type = research_weight_factor" in invr and "original_tag = EFE" in invr, invr[:400] or ai[:400])
+        check("IA: research_weight_factor con ids que el juego no tiene se omite",
+              "research_weight_factor id = advanced_ship_hull_light" not in " ".join(ai.split()))
         hsn = " ".join(pdx.render(root.get("MEGANATIONS_HSN_militar")).split())
         check("IA militar: un id que el juego no usa se omite (marines en el fixture)", "marines" not in hsn, hsn[:400])
         check("IA militar: el aviso lo dice", any("role_ratio:marines" in w for w in ctx.warnings))
@@ -1973,12 +2012,12 @@ def test_ai() -> None:
               'other_tech:0 "Tech of 2100"' in names and 'other_tech_short:0 "2100 tech"' in names, names)
         check("el fixture reparte la Doctrina Monroe: se escribe la limpieza",
               (mod / "events/meganations_limpieza.txt").exists())
-        gfx = (mod / "interface/meganations_NRE_goals.gfx").read_text()
-        check("iconos del pack registrados con brillo",
-              "GFX_focus_2100_nre_09_legio_i_italica" in gfx and "GFX_focus_2100_nre_09_legio_i_italica_shine" in gfx)
-        check("icono copiado al mod", (mod / "gfx/interface/goals/focus_2100_nre_09_legio_i_italica.dds").exists())
-        nre = (mod / "common/national_focus/NRE_focus.txt").read_text()
-        check("el foco usa el icono", "icon = GFX_focus_2100_nre_09_legio_i_italica" in nre)
+        gfx = (mod / "interface/meganations_EFE_goals.gfx").read_text()
+        check("iconos propios registrados con brillo",
+              "GFX_focus_EFE_custodio_de_la_tierra" in gfx and "GFX_focus_EFE_custodio_de_la_tierra_shine" in gfx)
+        check("icono copiado al mod", (mod / "gfx/interface/goals/EFE_custodio_de_la_tierra.dds").exists())
+        efe = (mod / "common/national_focus/EFE_focus.txt").read_text()
+        check("el foco usa el icono", "icon = GFX_focus_EFE_custodio_de_la_tierra" in efe)
 
     with tempfile.TemporaryDirectory() as tmp:
         van = Path(tmp) / "vanilla"
@@ -2169,6 +2208,53 @@ def test_forces() -> None:
               all(int(float(pdx.text(v))) >= 0 for k, v in ba.entries if k in ("industrial_complex", "arms_factory")), str(ba))
 
 
+def test_unit_names() -> None:
+    section("nombres de divisiones y barcos por faccion (19_unit_names)")
+    import yaml
+    import copy
+    from tools.gen.emitters import unit_names as un
+    from tools.gen.pdx import Block
+    from tools.gen.errors import SpecError
+    spec = yaml.safe_load((REPO_ROOT / "spec/19_unit_names.yaml").read_text(encoding="utf-8"))["unit_names"]
+    div, ships, loc, _ = un.build_blocks(spec, None, None)
+    megas = ["EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE"]
+    for tag in megas:
+        check(f"{tag}: lista de infanteria o su especialidad", any(k.startswith(f"{tag}_DIV_") for k in div.keys()))
+        check(f"{tag}: los cinco tipos de barco", all(f"{tag}_SHIP_{t}" in ships.keys()
+              for t in ("SCREEN", "SUBMARINE", "CRUISER", "CAPITAL", "CARRIER")))
+    check("especialidades: marines HSN, montaña NAS, blindados EFE, artilleria SHD",
+          all(k in div.keys() for k in ("HSN_DIV_MARINES", "NAS_DIV_MOUNTAIN", "EFE_DIV_ARMOR", "SHD_DIV_ARTILLERY")))
+    nre = div.get("NRE_DIV_INFANTRY").get("ordered")
+    check("legiones con numero romano", pdx.text(nre.get("9").entries[0][1]) == "Legio IX Hispana",
+          pdx.text(nre.get("9").entries[0][1]))
+    fcu = pdx.text(div.get("FCU_DIV_INFANTRY").get("ordered").get("2").entries[0][1])
+    check("ordinal ingles", fcu.startswith("2nd "), fcu)
+    check("cada lista tiene su nombre en EN y ES", len(loc) == len(div) + len(ships))
+    rendered = pdx.render(div) + pdx.render(ships)
+    check("el archivo se vuelve a leer", len(pdx.parse(rendered)) == len(div) + len(ships))
+    check("satelites: una lista para todas las tropas", "ZNG_DIV_ALL" in div.keys()
+          and '"mountaineers"' in pdx.render(Block([("x", div.get("ZNG_DIV_ALL"))])))
+    # validacion contra el juego: los ids que no existen se omiten
+    div2, ships2, _, report = un.build_blocks(spec, {"infantry"}, {"ship_hull_light"})
+    check("sin el batallon en el juego, la lista no se escribe", "EFE_DIV_ARMOR" not in div2.keys()
+          and "EFE_DIV_INFANTRY" in div2.keys())
+    check("se omite el id que no existe", pdx.render(Block([("x", div2.get("EFE_DIV_INFANTRY"))])).count("bicycle") == 0)
+    check("reporta los ids que faltan", "marine" in report["division_types"][0] and "destroyer" in report["ship_types"][0])
+    bad = copy.deepcopy(spec)
+    bad["ships"]["EFE"]["carrier"]["names"].append("Paraná")
+    try:
+        un.build_blocks(bad, None, None)
+        check("un barco repetido en el mismo pais falla", False)
+    except SpecError:
+        check("un barco repetido en el mismo pais falla", True)
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        f = ctx.mod_root / un.DIVISIONS_FILE
+        check("se escribe names_divisions", f.exists())
+        check("con el juego del fixture: solo los batallones que existen",
+              f.exists() and '"marine"' not in f.read_text(encoding="utf-8") and "HSN_DIV_INFANTRY" in f.read_text(encoding="utf-8"))
+
+
 def test_diplomacy() -> None:
     section("diplomacia: reclamos, rivalidades, guerras, tension")
     with tempfile.TemporaryDirectory() as tmp:
@@ -2259,7 +2345,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -2310,6 +2396,71 @@ def test_vanilla_validation() -> None:
 # ---------------------------------------------------------------------------
 
 
+def test_unique_units() -> None:
+    section("unidades unicas (20_unique_units): una por meganacion")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        root = ctx.mod_root
+        check("bloqueo: el chasis superpesado es solo del EFE",
+              ctx.data.get("tech_locks", {}).get("super_heavy_tank_chassis") == "EFE", str(ctx.data.get("tech_locks")))
+        check("bloqueo: la tecnologia de un modulo compartido no se bloquea",
+              "heavy_cannon_fixture_tech" not in ctx.data.get("tech_locks", {}))
+        techs = (root / "common/technologies/super_heavy_fixture.txt").read_text(encoding="utf-8")
+        sh = None
+        for k, v in pdx.parse(techs).entries:
+            if k == "technologies":
+                sh = v.get("super_heavy_tank_chassis")
+        check("allow nuevo con original_tag", sh is not None and pdx.text(sh.get("allow").get("original_tag")) == "EFE",
+              techs)
+        ab = sh.get("allow_branch") if sh is not None else None
+        check("allow_branch conserva el DLC y suma original_tag",
+              ab is not None and ab.get("has_dlc") is not None and pdx.text(ab.get("original_tag")) == "EFE", techs)
+        eff = pdx.parse((root / "common/scripted_effects/meganations_unique_units.txt").read_text(encoding="utf-8"))
+        body = eff.get("EFE_gliptodonte_desbloqueo")
+        check("efecto de desbloqueo", body is not None)
+        st = body.get("set_technology")
+        check("da el chasis y las piezas", all(t in st.keys() for t in
+              ("super_heavy_tank_chassis", "heavy_cannon_fixture_tech", "cast_armor_fixture_tech")), str(st.keys()))
+        var = body.get("create_equipment_variant")
+        mods = var.get("modules")
+        check("diseño: cañón pesado, blindaje fundido, motor por defecto",
+              pdx.text(mods.get("main_armament_slot")) == "tank_heavy_cannon_1"
+              and pdx.text(mods.get("armor_type_slot")) == "tank_cast_armor"
+              and pdx.text(mods.get("engine_type_slot")) == "tank_gasoline_engine", str(mods.entries))
+        check("diseño: una pieza que prohibe el cañon no entra", mods.get("special_type_slot_1") is None)
+        check("diseño: mejoras de motor", pdx.text(var.get("upgrades").get("tank_nsb_engine_upgrade")) == "6")
+        check("plantilla y equipo de arranque", body.get("division_template") is not None
+              and body.get("add_equipment_to_stockpile") is not None)
+        ideas = (root / "common/ideas/meganations_unique_units.txt").read_text(encoding="utf-8")
+        check("espiritu con equipment_bonus sobre el arquetipo", "equipment_bonus" in ideas
+              and "super_heavy_tank_chassis" in ideas and "maximum_speed" in ideas)
+        dec = (root / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8")
+        check("la decision del EFE corre el desbloqueo", "EFE_gliptodonte_desbloqueo" in dec)
+        check("cada potencia tiene la decision de su unidad",
+              all(f"{u}_desbloqueo" in dec for u in ("SHD_dragon_del_canal", "HSN_leviatan", "NAS_hijos_del_condor",
+                  "NRE_onagro", "ASC_centinela", "APF_kiboko", "FCU_ala_de_obsidiana")))
+        check("cola de produccion del Gliptodonte", body.get("add_equipment_production") is not None)
+        check("marca de desbloqueo", pdx.text(body.get("set_country_flag")) == "EFE_gliptodonte_desbloqueado",
+              str(body.get("set_country_flag")))
+        # los paracaidistas del NAS: equipo fijo (tiltrotor), plantilla y una división
+        nas = eff.get("NAS_hijos_del_condor_desbloqueo")
+        st = nas.get("set_technology")
+        check("NAS: paracaidistas y transporte", all(t in st.keys() for t in ("paratroopers", "transport_plane_fixture_tech")),
+              str(st.keys()))
+        check("NAS: bloqueo de la linea de paracaidistas",
+              all(ctx.data["tech_locks"].get(t) == "NAS" for t in ("paratroopers", "paratroopers2")))
+        tpl = nas.get("division_template")
+        check("NAS: plantilla de una sola palabra", tpl is not None and pdx.text(tpl.get("name")) == "Condores",
+              str(tpl))
+        check("NAS: una division de arranque", "create_unit" in pdx.render(nas))
+        check("NAS: sin plantilla si falta el batallon (Onagros)", eff.get("NRE_onagro_desbloqueo").get("division_template") is None)
+        ai = (root / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8")
+        check("IA: plan de los Kiboko que se activa con el desbloqueo (solo los ids que el juego usa)",
+              "MEGANATIONS_APF_kiboko_produccion" in ai and "APF_kiboko_desbloqueado" in ai
+              and "id = amphibious_mechanized" not in ai)
+        check("IA: sin plan si ningun id existe (SHD)", "MEGANATIONS_SHD_dragon_del_canal_produccion" not in ai)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -2340,6 +2491,8 @@ def main() -> int:
         test_arte,
         test_mecanicas_v2,
         test_forces,
+        test_unit_names,
+        test_unique_units,
         test_diplomacy,
         test_vanilla_validation,
     ):

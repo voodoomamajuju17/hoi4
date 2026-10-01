@@ -16,6 +16,7 @@ import re
 
 from ..context import BuildContext
 from ..pdx import banner_for
+from . import unique_units as unique_units_mod
 
 SOURCE = "spec/17_research.yaml"
 _START = re.compile(r"(\bstart_year\s*=\s*)(1[89]\d\d)\b")
@@ -44,6 +45,11 @@ def emit(ctx: BuildContext) -> None:
                     new, w = _inject_weights(new, weights)
                     shifted["ia"] = shifted.get("ia", 0) + w
                     n += w
+                if kind == "tecnologias" and ctx.data.get("tech_locks"):
+                    # unidades únicas (20_unique_units.yaml): solo un país las investiga
+                    new, locked = unique_units_mod.lock_techs(new, ctx.data["tech_locks"],
+                                                                ctx.data.get("tech_locks_visible") or set())
+                    n += locked
                 if n:
                     ctx.write_text(f"{rel}/{path.name}", banner_for(SOURCE + f" (+ {rel}/{path.name} vanilla)") + new)
                     shifted[kind] += n
@@ -118,9 +124,10 @@ def emit(ctx: BuildContext) -> None:
 def _ai_weights(ctx: BuildContext) -> dict[str, list[tuple[str, float]]]:
     """Qué tecnologías prioriza la IA de cada meganación (16_ai.yaml ->
     military): las que siguen en su especialidad y lo naval básico.
-    El juego no tiene una estrategia de IA para investigar (el reporte del
-    2026-09-27 descartó `research_tech`), así que se suma un modificador al
-    ai_will_do de cada tecnología: factor = 1 + valor/20, solo para ese país."""
+    Se suma un modificador al ai_will_do de cada tecnología: factor = 1 +
+    valor/20, solo para ese país (el reporte del 2026-09-27 descartó
+    `research_tech`, que el juego no conoce). Las navales y los blindados
+    además llevan `research_weight_factor` en la estrategia de IA (ai.py)."""
     mil = (ctx.spec.raw.get("ai") or {}).get("military") or {}
     out: dict[str, list[tuple[str, float]]] = {}
     value = mil.get("research_value")
@@ -211,13 +218,20 @@ def _inject_weights(text: str, weights: dict[str, list[tuple[str, float]]]) -> t
         if key == "technologies":
             places += [(o, e, tech) for tech, o, e in _children(text, open_at + 1, end) if tech in weights]
     for open_at, end, tech in sorted(places, reverse=True):   # de atrás para adelante: los índices no se corren
+        # 2026-09-30 ("la HSN no investiga barcos"): el peso va AL FINAL del
+        # ai_will_do. Al principio, un `factor = 0` o un `base =` del juego que
+        # venga después lo anulaba (16 x 0 = 0). Además del factor, un `add`
+        # del mismo tamaño: aunque el juego la haya dejado en cero, la
+        # tecnología conserva un peso propio para esa potencia.
         mods = "".join(f"\n\t\t\tmodifier = {{ factor = {f:g} original_tag = {tag} }}  # 2100 Meganations"
+                       f"\n\t\t\tmodifier = {{ add = {f:g} original_tag = {tag} }}  # 2100 Meganations"
                        for tag, f in weights[tech])
-        own = next((o for k, o, _ in _children(text, open_at + 1, end) if k == "ai_will_do"), None)
+        own = next(((o, e) for k, o, e in _children(text, open_at + 1, end) if k == "ai_will_do"), None)
         if own is not None:
-            # El salto final importa: con `ai_will_do = { factor = 1 }` en un
-            # solo renglón, el comentario se comía el resto (y la llave).
-            text = text[:own + 1] + mods + "\n\t\t\t" + text[own + 1:]
+            # El salto antes de la llave importa: con `ai_will_do = { factor = 1 }`
+            # en un solo renglón, la llave queda en su propio renglón.
+            close = own[1]
+            text = text[:close] + mods + "\n\t\t" + text[close:]
         else:
             text = text[:open_at + 1] + f"\n\t\tai_will_do = {{ factor = 1{mods}\n\t\t}}" + text[open_at + 1:]
     return text, len(places)
