@@ -2265,6 +2265,11 @@ def test_unit_names() -> None:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         f = ctx.mod_root / un.DIVISIONS_FILE
         check("se escribe names_divisions", f.exists())
+        fs = ctx.mod_root / un.SHIPS_FILE
+        ships_txt = " ".join(fs.read_text(encoding="utf-8").split()) if fs.exists() else ""
+        # reporte 2026-10-01: destroyer, battleship... se descartaban (se validaban solo contra el equipo)
+        check("nombres de barcos: un tipo de barco del juego (destroyer) vale como ship_types",
+              "HSN_SHIP_SCREEN" in ships_txt and "ship_types = { destroyer }" in ships_txt, ships_txt[:400])
         check("con el juego del fixture: solo los batallones que existen",
               f.exists() and '"marine"' not in f.read_text(encoding="utf-8") and "HSN_DIV_INFANTRY" in f.read_text(encoding="utf-8"))
 

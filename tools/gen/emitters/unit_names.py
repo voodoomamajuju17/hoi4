@@ -142,7 +142,10 @@ def emit(ctx: BuildContext) -> None:
     known_units = known_ships = None
     if ctx.vanilla is not None:
         known_units = ctx.vanilla.sub_units() or None
-        known_ships = set(ctx.vanilla.equipment()) or None
+        # ship_types acepta cascos (ship_hull_light) y tipos de barco
+        # (destroyer, SH_battleship), como los nombres del juego. Solo con el
+        # equipo, el reporte 2026-10-01 descartaba destroyer, battleship...
+        known_ships = (set(ctx.vanilla.equipment()) | ctx.vanilla.sub_units()) or None
     divisions, ships, loc, report = build_blocks(spec, known_units, known_ships)
     for section, (ids, empty) in report.items():
         if ids:
