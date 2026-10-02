@@ -10805,9 +10805,10 @@ namespaces:
         # 2026-10-02 (pedido del usuario): cada año, 5 divisiones en cada una de
         # sus zonas (en la primera región de la zona que todavía controlen)
         - effect: if
-          when: {date_after: 2100.12.31, not_flag: ZAN_refuerzo_anual}
+          when: {date_after: 2100.12.31, any: [{not_flag: ZAN_refuerzo_anual}, {flag_older: {flag: ZAN_refuerzo_anual, days: 340}}]}
           then:
-          - {effect: flag, value: ZAN_refuerzo_anual, days: 365}
+          - {effect: clear_flag, value: ZAN_refuerzo_anual}
+          - {effect: flag, value: ZAN_refuerzo_anual}
           - {effect: ensure_template, name: Leva Anarquica, regiments: [infantry, infantry, infantry, infantry]}
           - effect: create_units
             template: Leva Anarquica

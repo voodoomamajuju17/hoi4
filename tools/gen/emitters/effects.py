@@ -319,7 +319,10 @@ def render_effects(owner: str, items: list[dict], known,
             key = "set_country_flag" if effect == "flag" else "clr_country_flag"
             if effect == "flag" and item.get("days"):
                 # bandera que vence sola: sirve como espera compartida entre decisiones
-                block.add(key, Block([("flag", item["value"]), ("days", int(item["days"]))]))
+                # game.log 2026-10-02: sin `value` la bandera no frenaba nada (las
+                # elecciones de la Unión salían todos los meses). El juego escribe
+                # siempre { flag value = 1 days }.
+                block.add(key, Block([("flag", item["value"]), ("value", 1), ("days", int(item["days"]))]))
             else:
                 block.add(key, item["value"])
             effects_used.setdefault(key, owner)
@@ -368,9 +371,12 @@ def render_effects(owner: str, items: list[dict], known,
             # los pulsen varias potencias). Con days vence sola (las crisis del
             # siglo, 2026-10-02: una cada tantos meses).
             if item.get("days"):
-                block.add("set_global_flag", Block([("flag", item["value"]), ("days", int(item["days"]))]))
-            else:
-                block.add("set_global_flag", item["value"])
+                # game.log 2026-10-02: el juego no hace vencer las banderas globales
+                # (las crisis del siglo salían todos los meses). Usar flag con days
+                # en cada país que tenga que esperar.
+                raise SpecError(f"{owner}: global_flag con days no vence en el juego; "
+                                "usar {effect: flag, days} en los países", where=where)
+            block.add("set_global_flag", item["value"])
             effects_used.setdefault("set_global_flag", owner)
             continue
         if effect == "every_country":
@@ -549,8 +555,13 @@ def render_effects(owner: str, items: list[dict], known,
                 raise SpecError(f"{owner}: dynamic_modifier '{mid}' no esta en 14_decisions.yaml -> dynamic_modifiers",
                                 where=where)
             if item.get("days"):
-                # con duración (2026-10-01, Leva Forzosa): se va solo
-                block.add("add_dynamic_modifier", Block([("modifier", mid), ("days", int(item["days"]))]))
+                # con duración (2026-10-01, Leva Forzosa): se va solo. Nunca dos
+                # veces el mismo (crash 2026-10-03: las crisis del siglo lo
+                # apilaban 8 veces por mes).
+                block.add("if", Block([
+                    ("limit", Block([("NOT", Block([("has_dynamic_modifier", Block([("modifier", mid)]))]))])),
+                    ("add_dynamic_modifier", Block([("modifier", mid), ("days", int(item["days"]))]))]))
+                ec.triggers_used.setdefault("has_dynamic_modifier", owner)
                 effects_used.setdefault("add_dynamic_modifier", owner)
                 continue
             guard = Block()
@@ -1094,6 +1105,11 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("NOT", Block([("has_state_flag", value)]))
             triggers_used.setdefault("has_state_flag", owner)
+        elif key == "flag_older":
+            # has_country_flag = { flag = X days > N }: la bandera se puso hace más
+            # de N días (freno de repetición que no depende de que la bandera venza)
+            block.add("has_country_flag", Block([("flag", value["flag"]), ("days", Compare(">", int(value["days"])))]))
+            triggers_used.setdefault("has_country_flag", owner)
         elif key == "state_flag_days":
             inner = Block()
             inner.add("flag", value["flag"])

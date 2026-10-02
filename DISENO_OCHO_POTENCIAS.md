@@ -843,3 +843,15 @@ llega a 100 al toque y la tensión nunca sube".
   Canadá, Midwest, noroeste de México, Centroamérica, oeste de África y Kiev.
   Salen en la primera región de la zona que todavía controlen; zona perdida,
   no hay refuerzo ahí. Generador: create_units con `zones`.
+- **Logs y crash del 2026-10-03**:
+  - Las banderas con vencimiento no frenaban (sin `value = 1`): las
+    elecciones de la Unión salían todos los meses, la Asamblea también y las
+    crisis del siglo 64 veces por mes. Crash en noviembre de 2106, con
+    modificadores de crisis apilados 8 veces. El generador ahora escribe
+    { flag value = 1 days } (502 usos: treguas, pactos, esperas).
+  - Además, elecciones, Asamblea, crisis y refuerzo de las Tierras Sin Ley
+    usan un freno que no depende del vencimiento: bandera permanente que se
+    reemplaza y condición has_country_flag = { flag days > N }.
+  - Un modificador con duración nunca se agrega si ya está.
+  - El Dragón del Gran Canal ya no se regala al depósito (el juego no acepta
+    cañones ferroviarios ahí); sale de la producción.
