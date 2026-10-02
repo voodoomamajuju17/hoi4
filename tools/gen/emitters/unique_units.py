@@ -220,7 +220,21 @@ def emit(ctx: BuildContext) -> None:
         for key, n in (u.get("names") or {}).items():
             if key not in renamed:
                 names[key] = {"english": n["en"], "spanish": n["es"]}
+        # 2026-10-02 (captura del usuario: "Tanque moderno Mk2"): el juego le
+        # pone a cada diseño nuevo el nombre del ARQUETIPO + Mk N. Si el equipo
+        # es solo de esta potencia (bloqueado al resto), el arquetipo lleva el
+        # nombre de la unidad única: "Gliptodonte Mk2".
+        arche = None
+        if eq_type and enabled_by.get(eq_type) in locked:
+            arche = text((equip.get(eq_type) or Block()).get("archetype")) or eq_type
+            if arche in names or arche in renamed:
+                arche = None
+            else:
+                ctx.note(f"unidad unica {uid}: los disenos nuevos se llaman '{u['name']['spanish']} MkN' ({arche})")
         have = ctx.vanilla.localisation("english", set(names))
+        if arche:
+            names[arche] = u["name"]
+            have = set(have) | {arche}   # aunque el juego de prueba no lo tenga
         for key in sorted(have):
             n = names[key]
             ctx.loc.define_and_reference(key, en=n["english"], es=n["spanish"], file=LOC_FILE,

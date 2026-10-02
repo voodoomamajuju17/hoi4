@@ -833,3 +833,8 @@ llega a 100 al toque y la tensión nunca sube".
   3. Con los dos hechos, los dos reciben El Mandato Compartido (+5%
      investigación, +5% PP, +3% estabilidad).
   Si el otro ya no existe, el foco igual se toma (no traba El Trono del Sol).
+- **Nombre de las UU al rediseñarlas** (2026-10-02): el juego nombra cada
+  diseño nuevo con el arquetipo + Mk N ("Tanque moderno Mk2"). Si el equipo de
+  la UU está bloqueado para el resto, el arquetipo lleva el nombre de la UU
+  ("Gliptodonte Mk2", "Leviatán Mk2"...). Los equipos compartidos (los
+  tiltrotores del NAS) no se renombran.

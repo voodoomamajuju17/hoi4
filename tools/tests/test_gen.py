@@ -2562,6 +2562,12 @@ def test_unique_units() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         root = ctx.mod_root
+        # 2026-10-02 (captura: "Tanque moderno Mk2"): los diseños nuevos llevan el nombre de la UU
+        loc_es = "".join(p.read_text(encoding="utf-8-sig") for p in (root / "localisation").rglob("*.yml"))
+        check("UU: el arquetipo del equipo bloqueado lleva el nombre de la unidad (Gliptodonte MkN)",
+              'modern_tank_chassis:0 "Gliptodonte"' in loc_es)
+        check("UU: un equipo que no es exclusivo no se renombra (tiltrotores del NAS)",
+              not any("Hijos del Cóndor MkN" in n for n in ctx.notes))
         # 2026-10-01: el Gliptodonte es el TANQUE MODERNO (modular, libre en el
         # diseñador y en las divisiones), no el superpesado
         check("bloqueo: el tanque moderno es solo del EFE",
