@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block
+from ..pdx import Block, Compare
 from .effects import render_conditions
 
 SOURCE = "spec/16_ai.yaml"
@@ -156,6 +156,63 @@ def emit(ctx: BuildContext) -> None:
         ctx.write_script("common/ai_strategy/meganations_ai.txt", root, source=SOURCE)
         ctx.note(f"ia: {written} planes de estrategia")
     ctx.verify_keys("triggers", triggers_used)
+    _naval_cap(ctx, spec.get("naval_cap") or {})
+
+
+NAVAL_CAP = "MEGANATIONS_tope_naval"
+NAVAL_CAP_FILE = "common/dynamic_modifiers/meganations_tope_naval.txt"
+NAVAL_CAP_ON_ACTIONS = "common/on_actions/05_meganations_tope_naval.txt"
+
+
+def _naval_cap(ctx: BuildContext, cap: dict) -> None:
+    """Tope de flota de la IA (2026-10-02: el EFE con 710 barcos en 2106).
+
+    Un modificador dinámico que se da a todos los países al arrancar y solo
+    pesa cuando el país es IA y tiene más barcos que su tope
+    (has_navy_size): sus astilleros pierden la producción hasta que baje.
+
+      naval_cap: {default: 25, by_country: {TAG: n}, modifiers: {...}, name: {english, spanish}}
+    """
+    if not cap:
+        return
+    mods = cap.get("modifiers") or {}
+    if not mods:
+        raise SpecError("naval_cap: sin modificadores", where=SOURCE)
+    if ctx.vanilla is not None and ctx.vanilla.is_documented("triggers", "has_navy_size") is False:
+        ctx.warn("ia: el juego no tiene has_navy_size; no se escribe el tope de flota de la IA.")
+        return
+    tags = {c.tag for c in ctx.spec.countries}
+    per = {t: int(n) for t, n in (cap.get("by_country") or {}).items()}
+    unknown = sorted(set(per) - tags)
+    if unknown:
+        raise SpecError(f"naval_cap.by_country: paises que no existen: {', '.join(unknown)}", where=SOURCE)
+    default = int(cap.get("default", 25))
+
+    def navy_over(n: int) -> Block:
+        return Block([("size", Compare(">", n))])
+
+    over_cap = Block()
+    for t, n in sorted(per.items()):
+        over_cap.add("AND", Block([("original_tag", t), ("has_navy_size", navy_over(n))]))
+    rest = Block([("NOT", Block([("original_tag", t) for t in sorted(per)]))]) if per else Block()
+    rest.add("has_navy_size", navy_over(default))
+    over_cap.add("AND", rest)
+    body = Block([("enable", Block([("is_ai", True), ("OR", over_cap)]))])
+    for key, value in mods.items():
+        body.add(key, float(value))
+    name = cap.get("name") or {}
+    ref = ctx.loc.define_and_reference(NAVAL_CAP, en=name.get("english", "Fleet at Capacity"),
+                                       es=name.get("spanish", "Flota completa"), file="meganations_ai",
+                                       origin="naval_cap")
+    ctx.write_script(NAVAL_CAP_FILE, Block([(ref, body)]), source=SOURCE)
+    effect = Block([("every_country", Block([("add_dynamic_modifier", Block([("modifier", NAVAL_CAP)]))]))])
+    root = Block([("on_actions", Block([("on_startup", Block([("effect", effect)]))]))])
+    ctx.write_script(NAVAL_CAP_ON_ACTIONS, root, source=SOURCE)
+    ctx.verify_keys("modifiers", {k: "naval_cap" for k in mods})
+    ctx.verify_keys("effects", {"add_dynamic_modifier": "naval_cap", "every_country": "naval_cap"})
+    ctx.verify_keys("triggers", {"has_navy_size": "naval_cap", "is_ai": "naval_cap", "original_tag": "naval_cap"})
+    caps = ", ".join(f"{t} {n}" for t, n in sorted(per.items()))
+    ctx.note(f"ia: tope de flota para la IA ({caps}; el resto {default}): pasado el tope, astilleros {mods}")
 
 
 def _military_plans(ctx: BuildContext, mil: dict, add_plan) -> None:
