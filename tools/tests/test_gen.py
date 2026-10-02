@@ -927,8 +927,8 @@ def test_routes() -> None:
     trees = yaml.safe_load((REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8"))["trees"]
     megas = ["EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE"]
     low = [f"{t}.{b['id']}" for t in megas for b in trees[t]["branches"][:3]
-           if (b.get("ai_factor") or 1) < 4]
-    check("ramas politicas y de destino pesan 4 o mas para la IA", not low, ", ".join(low))
+           if not 2 <= (b.get("ai_factor") or 1) <= 3]
+    check("ramas politicas y de destino pesan entre 2 y 3 para la IA (5 era demasiado, 2026-10-02)", not low, ", ".join(low))
     dead = []
     for t in megas:
         for b in trees[t]["branches"]:
@@ -950,8 +950,8 @@ def test_routes() -> None:
                         if k == "focus" and pdx.text(f.get("id")) == fid)
 
         mandato = focus("EFE", "EFE_el_mandato_renovado")
-        check("el peso de la rama multiplica el del foco (3 x 5)",
-              pdx.text(mandato.get("ai_will_do").get("factor")) == "15", pdx.render(mandato.get("ai_will_do")))
+        check("el peso de la rama multiplica el del foco (3 x 3)",
+              pdx.text(mandato.get("ai_will_do").get("factor")) == "9", pdx.render(mandato.get("ai_will_do")))
         lib = " ".join(pdx.render(focus("ASC", "ASC_la_liberacion_del_este").get("completion_reward")).split())
         check("anarquia viva: objetivo de guerra; caida o satelite: nucleos y reclamos",
               "is_subject = no" in lib and "create_wargoal" in lib and "else = {" in lib

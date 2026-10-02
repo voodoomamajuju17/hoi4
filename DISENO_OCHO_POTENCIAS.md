@@ -759,8 +759,8 @@ llega a 100 al toque y la tensión nunca sube".
   ASC Centinela 100 (Cómputo 60, −20, +10 calor); NAS Hijos del Cóndor 100
   (Luz 35, −25).
 - **Rutas sin callejones** (2026-10-01, análisis de rutas y flow, prioridades 1 a 5):
-  1. La IA hace lo político temprano: las dos ramas políticas pesan 5 y la de
-     destino 4 (antes 1, contra 1,5 a 2 de economía e industria). El peso de
+  1. La IA hace lo político temprano: las dos ramas políticas pesan 3 y la de
+     destino 2,5 (antes 1, contra 1,5 a 2 de economía e industria; 5 y 4 fueron demasiado, 2026-10-02). El peso de
      la rama multiplica el del foco, así la elección statu quo/revolución
      mantiene su proporción (el Mandato Renovado del EFE: 3 x 5 = 15).
   2. Los 6 focos que pedían una anarquía viva (Ofensiva Verde, Bajada de la
