@@ -1006,7 +1006,8 @@ def test_routes() -> None:
         # prioridad 12: segunda etapa
         mw = " ".join(se[se.index("MEGANATIONS_eventos_mundiales = {"):].split())[:4000]
         check("crisis del siglo: desde 2106, una cada 240 dias entre 8",
-              "date > 2106.1.1" in mw and "set_global_flag = { flag = MEGANATIONS_crisis_tardia days = 240 }" in mw
+              "date > 2106.1.1" in mw and "has_country_flag = { flag = MEGANATIONS_crisis_tardia days > 235 }" in mw
+              and "clr_country_flag = MEGANATIONS_crisis_tardia" in mw
               and all(f"meganations_mundo.{i}" in mw for i in range(20, 28)), mw[:800])
         dtxt = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
         pacto = dtxt[dtxt.index("MEGANATIONS_pacto_con_EFE = {"):][:700]
@@ -1022,9 +1023,9 @@ def test_routes() -> None:
               and "has_country_flag = NRE_forma_final" in dtxt)
         fcu_s = se[se.index("FCU_pulso"):]
         check("elecciones de la Union cada cuatro anos",
-              "set_country_flag = { flag = FCU_eleccion_reciente days = 1460 }" in fcu_s)
+              "has_country_flag = { flag = FCU_eleccion_marca days > 1455 }" in fcu_s)
         check("Asamblea de Armadores de la Alta Mar cada cuatro anos",
-              "set_country_flag = { flag = HSN_asamblea_reciente days = 1460 }" in se and "meganations_hsn.240" in se)
+              "has_country_flag = { flag = HSN_asamblea_marca days > 1455 }" in se and "meganations_hsn.240" in se)
         check("cada ultimatum rechazado entre potencias tiene su plan de IA para declarar",
               len(flags) >= 10 and not missing, f"{len(flags)} banderas, sin plan: {missing}")
 
@@ -1910,7 +1911,7 @@ def test_ai() -> None:
                   "SHD_pulso_del_rio": 2, "NAS_pulso_de_los_templos": 2, "APF_pulso_de_los_consejos": 1, "HSN_pulso_de_las_potencias": 1}
         total = sum(se_c.count(f"has_country_flag = {p.split('_')[0]}_cadena_") for p in pulses)
         # la elección de la Unión (cadena 8) se repite cada 4 años desde 2026-10-02: la chequea su propia bandera
-        total += se_c.count("NOT = { has_country_flag = FCU_eleccion_reciente }")
+        total += se_c.count("NOT = { has_country_flag = FCU_eleccion_marca }")
         check("16 cadenas de eventos, cada una chequeada una vez en el pulso de quien la empieza", total == 16, str(total))
         for needle, what in (("num_of_factories > 149", "industria (ASC 150 fabricas)"),
                              ("has_tech = improved_computing_machine", "tecnologia"),
@@ -2026,6 +2027,8 @@ def test_ai() -> None:
               and "white_peace = event_target:meganations_armisticio_x" in arm and "FCU_revancha" in arm, arm[:1200])
         check("armisticio: tregua de un ano de verdad (set_truce)",
               "set_truce = { target = event_target:meganations_armisticio_x days = 364 }" in arm, arm[:1500])
+        check("banderas con vencimiento: llevan value = 1 (game.log 2026-10-02: sin eso no frenaban)",
+              "value = 1 days =" in se_c and "set_country_flag = { flag = SHD_crisis_reciente value = 1 days = 90 }" in se_c)
         check("guerra limitada: se revisa cada semana", "id = meganations_efe.159 days = 7" in efe_ev2)
         rio = se_c[se_c.index("SHD_pulso_del_rio = {"):][:6000]
         check("SHD v4: el rio empuja lo pronosticado y pronostica el proximo mes",
@@ -2569,6 +2572,26 @@ def test_unique_units() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         root = ctx.mod_root
+        # 2026-10-02 (captura: "Tanque moderno Mk2"): los diseños nuevos llevan el nombre de la UU
+        loc_es = "".join(p.read_text(encoding="utf-8-sig") for p in (root / "localisation").rglob("*.yml"))
+        zan = " ".join((root / "events/meganations_zan.txt").read_text(encoding="utf-8-sig").split())
+        check("Tierras Sin Ley: cada ano, 5 divisiones por zona en una region que sigan controlando",
+              "has_country_flag = { flag = ZAN_refuerzo_anual days > 340 }" in zan and "Leva_Anarquica" in zan, zan[-900:])
+        from tools.gen.emitters import effects as _E
+        _old = _E._STATES
+        _E.use_states({"alaska": 1, "kansas": 2, "iowa": 3})
+        try:
+            _z = " ".join(pdx.render(_E.render_effects("t", [{"effect": "create_units", "template": "Leva Anarquica",
+                          "count": 5, "zones": [[["Alaska"]], [["Kansas"], ["Iowa"]]]}],
+                          _E.EffectContext(set(), set()), {}, where="t")).split())
+        finally:
+            _E.use_states(_old)
+        check("zonas: 5 por zona, y si se perdio la primera region va a la siguiente de la zona",
+              _z.count("create_unit =") == 15 and "else = { if = { limit = { 3 = { is_controlled_by = ROOT" in _z, _z[:500])
+        check("UU: el arquetipo del equipo bloqueado lleva el nombre de la unidad (Gliptodonte MkN)",
+              'modern_tank_chassis:0 "Gliptodonte"' in loc_es)
+        check("UU: un equipo que no es exclusivo no se renombra (tiltrotores del NAS)",
+              not any("Hijos del Cóndor MkN" in n for n in ctx.notes))
         # 2026-10-01: el Gliptodonte es el TANQUE MODERNO (modular, libre en el
         # diseñador y en las divisiones), no el superpesado
         check("bloqueo: el tanque moderno es solo del EFE",

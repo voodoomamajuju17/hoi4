@@ -14261,10 +14261,11 @@ scripted_effects:
     - {effect: run, value: FCU_pulso_satelites}
     - effect: if
       # análisis 2026-10-01: "cada cuatro años" de verdad (2102, 2106, 2110...)
-      when: {date_after: 2102.1.1, not_flag: FCU_eleccion_reciente}
+      when: {date_after: 2102.1.1, any: [{not_flag: FCU_eleccion_marca}, {flag_older: {flag: FCU_eleccion_marca, days: 1455}}]}
       then:
       - {effect: flag, value: FCU_cadena_8}
-      - {effect: flag, value: FCU_eleccion_reciente, days: 1460}
+      - {effect: clear_flag, value: FCU_eleccion_marca}
+      - {effect: flag, value: FCU_eleccion_marca}
       - {effect: event, id: meganations_fcu.110, days: 1}
     - effect: if
       when:
@@ -14463,9 +14464,10 @@ scripted_effects:
   - id: HSN_pulso_de_las_potencias
     effects:
     - effect: if       # la Asamblea de Armadores, cada cuatro años desde 2104
-      when: {date_after: 2104.6.1, not_flag: HSN_asamblea_reciente}
+      when: {date_after: 2104.6.1, any: [{not_flag: HSN_asamblea_marca}, {flag_older: {flag: HSN_asamblea_marca, days: 1455}}]}
       then:
-      - {effect: flag, value: HSN_asamblea_reciente, days: 1460}
+      - {effect: clear_flag, value: HSN_asamblea_marca}
+      - {effect: flag, value: HSN_asamblea_marca}
       - {effect: event, id: meganations_hsn.240, days: 1}
     - effect: if
       when: {focus: HSN_seguros_para_las_potencias}
@@ -18000,11 +18002,26 @@ scripted_effects:
           - {effect: event, id: meganations_shd.240, days: 1, target: SHD}
   - id: MEGANATIONS_eventos_mundiales
     effects:
-    # Crisis del siglo (análisis 2026-10-01, prioridad 12): desde 2106, una cada ~8 meses
+    # Crisis del siglo (análisis 2026-10-01, prioridad 12): desde 2106, una cada ~8 meses.
+    # game.log 2026-10-02: la bandera GLOBAL con vencimiento no frena nada (salían
+    # 64 por mes). La espera es una bandera de PAÍS con vencimiento en las 8 potencias.
     - effect: if
-      when: {date_after: 2106.1.1, not_global_flag: MEGANATIONS_crisis_tardia}
+      when: {date_after: 2106.1.1, any: [{not_flag: MEGANATIONS_crisis_tardia}, {flag_older: {flag: MEGANATIONS_crisis_tardia, days: 235}}]}
       then:
-      - {effect: global_flag, value: MEGANATIONS_crisis_tardia, days: 240}
+      - effect: every_country
+        when:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: ASC}
+          - {tag: HSN}
+          - {tag: NAS}
+          - {tag: SHD}
+          - {tag: APF}
+          - {tag: NRE}
+        effects:
+        - {effect: clear_flag, value: MEGANATIONS_crisis_tardia}
+        - {effect: flag, value: MEGANATIONS_crisis_tardia}
       - effect: random
         options:
         - weight: 1

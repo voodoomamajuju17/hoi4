@@ -143,8 +143,9 @@ units:
       railway_gun_equipment_2: {en: Grand Canal Dragon II, es: Dragón del Gran Canal II}
       railway_gun_equipment_3: {en: Grand Canal Dragon III, es: Dragón del Gran Canal III}
     equipment: [railway_gun]
-    grant:
-      equipment: 2
+    # error.log 2026-10-02: los cañones ferroviarios no van al depósito
+    # (add_equipment_to_stockpile no los acepta): salen de la producción.
+    grant: {}
     production: {amount: 2, factories: 3, progress: 0.2}
     ai:
     - {type: equipment_production_factor, id: railway_gun, value: 10}

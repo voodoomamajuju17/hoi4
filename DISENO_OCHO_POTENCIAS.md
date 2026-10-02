@@ -833,3 +833,25 @@ llega a 100 al toque y la tensión nunca sube".
   3. Con los dos hechos, los dos reciben El Mandato Compartido (+5%
      investigación, +5% PP, +3% estabilidad).
   Si el otro ya no existe, el foco igual se toma (no traba El Trono del Sol).
+- **Nombre de las UU al rediseñarlas** (2026-10-02): el juego nombra cada
+  diseño nuevo con el arquetipo + Mk N ("Tanque moderno Mk2"). Si el equipo de
+  la UU está bloqueado para el resto, el arquetipo lleva el nombre de la UU
+  ("Gliptodonte Mk2", "Leviatán Mk2"...). Los equipos compartidos (los
+  tiltrotores del NAS) no se renombran.
+- **Tierras Sin Ley: refuerzo anual** (2026-10-02): desde 2101, cada año 5
+  divisiones (Leva Anárquica, 4 infanterías) en cada zona: Alaska, norte de
+  Canadá, Midwest, noroeste de México, Centroamérica, oeste de África y Kiev.
+  Salen en la primera región de la zona que todavía controlen; zona perdida,
+  no hay refuerzo ahí. Generador: create_units con `zones`.
+- **Logs y crash del 2026-10-03**:
+  - Las banderas con vencimiento no frenaban (sin `value = 1`): las
+    elecciones de la Unión salían todos los meses, la Asamblea también y las
+    crisis del siglo 64 veces por mes. Crash en noviembre de 2106, con
+    modificadores de crisis apilados 8 veces. El generador ahora escribe
+    { flag value = 1 days } (502 usos: treguas, pactos, esperas).
+  - Además, elecciones, Asamblea, crisis y refuerzo de las Tierras Sin Ley
+    usan un freno que no depende del vencimiento: bandera permanente que se
+    reemplaza y condición has_country_flag = { flag days > N }.
+  - Un modificador con duración nunca se agrega si ya está.
+  - El Dragón del Gran Canal ya no se regala al depósito (el juego no acepta
+    cañones ferroviarios ahí); sale de la producción.

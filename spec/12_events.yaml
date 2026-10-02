@@ -10802,6 +10802,26 @@ namespaces:
       - name: {english: Carry on., spanish: Seguir.}
         effects:
         - {effect: run, value: ANARQUIA_sin_alianzas}
+        # 2026-10-02 (pedido del usuario): cada año, 5 divisiones en cada una de
+        # sus zonas (en la primera región de la zona que todavía controlen)
+        - effect: if
+          when: {date_after: 2100.12.31, any: [{not_flag: ZAN_refuerzo_anual}, {flag_older: {flag: ZAN_refuerzo_anual, days: 340}}]}
+          then:
+          - {effect: clear_flag, value: ZAN_refuerzo_anual}
+          - {effect: flag, value: ZAN_refuerzo_anual}
+          - {effect: ensure_template, name: Leva Anarquica, regiments: [infantry, infantry, infantry, infantry]}
+          - effect: create_units
+            template: Leva Anarquica
+            count: 5
+            experience: 0.2
+            zones:
+            - [[Alaska]]
+            - [[Yukon, Yukon Territory], [N.W Territories, Northwest Territories], [Nunavut, Keewatin]]
+            - [[Kansas], [Nebraska], [Iowa], [Minnesota], [South Dakota], [North Dakota]]
+            - [[Chihuahua], [Sonora], [Sinaloa], [Baja California]]
+            - [[Guatemala], [Nicaragua]]
+            - [[Senegal, Dakar], [French Sudan, Mali], [Guinea, French Guinea], [Liberia], [Ivory Coast, "Cote d'Ivoire"], [Mauritania], [Sierra Leone]]
+            - [[Kiev, Kyiv]]
         - {effect: event, id: meganations_zan.1, days: 30}
       src: user_decision
 
