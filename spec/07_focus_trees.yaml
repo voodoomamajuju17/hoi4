@@ -439,10 +439,13 @@ trees:
           - factor: 2
             when: {at_war: true}
         desc:
-          english: Nothing comes in, nothing goes out. Opens the BioSteel projects.
-          spanish: No entra nada, no sale nada. Abre los proyectos de Bioacero.
+          english: Nothing comes in, nothing goes out. Opens the BioSteel projects. One civilian factory and 150 political power.
+          spanish: No entra nada, no sale nada. Abre los proyectos de Bioacero. Una fábrica civil y 150 de poder político.
         reward:
         - {effect: add_ideas, value: EFE_autarquia_estrategica}
+        # balance de disyuntivas (2026-10-02): quedaba 970 contra 1265 (x1.3); ahora ~1240 (x1.02)
+        - {effect: build, building: industrial_complex, level: 1}
+        - {effect: add_political_power, value: 150}
         - {effect: add_variable, var: EFE_biosteel, value: 1}
         - {effect: add_variable, var: EFE_saturacion, value: 3}
       - id: EFE_cubas_profundas

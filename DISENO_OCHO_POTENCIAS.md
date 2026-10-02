@@ -855,3 +855,9 @@ llega a 100 al toque y la tensión nunca sube".
   - Un modificador con duración nunca se agrega si ya está.
   - El Dragón del Gran Canal ya no se regala al depósito (el juego no acepta
     cañones ferroviarios ahí); sale de la producción.
+- **Balance de disyuntivas, revisión** (2026-10-02): los cambios de
+  balance_disyuntivas.md ya estaban todos (commit 035d5a9). La única que
+  quedaba fuera de rango, EFE Autarquía del Bioacero / Diplomacia del Agua
+  (x1.3), suma una fábrica civil y 150 PP en el foco de entrada (~x1.02).
+  Slots de investigación alcanzables con un solo camino político: ASC 4, NAS 3,
+  SHD 3, APF 2, NRE 2, EFE 2, FCU 2, HSN 2 (más los 3 de arranque).
