@@ -235,7 +235,7 @@ countries:
       desc:
         english: 'Aurelio IV is no longer a ruler but a symbol: the Earth given a face and a crown.'
         spanish: 'Aurelio IV ya no es un gobernante sino un símbolo: la Tierra con cara y corona.'
-      modifiers: {political_power_gain: 0.15, stability_factor: 0.1, war_support_factor: 0.05}
+      modifiers: {political_power_gain: 0.15, stability_factor: 0.1, war_support_factor: 0.05, industrial_capacity_factory: 0.1}
       modifiers_src: invented
       removable: false
     - id: EFE_estado_guarnicion
@@ -380,7 +380,7 @@ countries:
       desc:
         english: Nothing comes in, nothing goes out. The vats feed the Empire.
         spanish: No entra nada, no sale nada. Las cubas alimentan al Imperio.
-      modifiers: {industrial_capacity_factory: 0.1, local_resources_factor: 0.15, trade_opinion_factor: -0.25}
+      modifiers: {industrial_capacity_factory: 0.15, local_resources_factor: 0.15, trade_opinion_factor: -0.25}
       src: user_design
     - id: EFE_montana_y_selva
       name: {english: Mountain and Jungle, spanish: Montaña y Selva}
@@ -451,10 +451,9 @@ countries:
       modifiers:
         local_resources_factor: 0.2
         industrial_capacity_factory: 0.15
-        production_speed_buildings_factor: 0.05
+        production_speed_buildings_factor: 0.1
         trade_opinion_factor: -0.5
         research_speed_factor: -0.05
-        consumer_goods_factor: 0.05
       src: user_request
     - id: EFE_agua_de_la_vida
       name: {english: The Water of Life, spanish: El Agua de la Vida}
@@ -649,7 +648,7 @@ countries:
       desc:
         english: The machines work. The citizens may, if they want to.
         spanish: Las máquinas trabajan. Los ciudadanos pueden, si quieren.
-      modifiers: {stability_factor: 0.1, consumer_goods_factor: 0.05}
+      modifiers: {stability_factor: 0.1}
       src: user_design
     - id: ASC_paz_de_la_abundancia
       name: {english: The Peace of Plenty, spanish: La Paz de la Abundancia}
@@ -698,7 +697,6 @@ countries:
       modifiers:
         production_speed_buildings_factor: 0.1
         industrial_capacity_factory: 0.05
-        research_speed_factor: -0.03
       src: user_design
     - id: ASC_mercado_de_computo
       name: {english: The Compute Credit Market, spanish: El Mercado de Créditos de Cómputo}
@@ -800,7 +798,7 @@ countries:
         spanish: 'El plan construye más rápido que nadie, pero no improvisa: la investigación se frena y el Consejo se inquieta.'
       modifiers:
         production_speed_buildings_factor: 0.2
-        industrial_capacity_factory: 0.15
+        industrial_capacity_factory: 0.25
         research_speed_factor: -0.05
         stability_factor: -0.05
         trade_opinion_factor: -0.2
@@ -811,7 +809,7 @@ countries:
         english: Research and trade boom, but a commune that sells everything loses its politics and its calm.
         spanish: La investigación y el comercio explotan, pero una comuna que vende todo pierde la política y la calma.
       modifiers:
-        research_speed_factor: 0.15
+        research_speed_factor: 0.1
         trade_opinion_factor: 0.3
         consumer_goods_factor: -0.1
         political_power_gain: -0.1
@@ -966,13 +964,13 @@ countries:
       desc:
         english: There is no Board any more. There is Meridian, and there are its subsidiaries.
         spanish: Ya no hay Directorio. Está Meridian, y están sus subsidiarias.
-      modifiers: {production_speed_arms_factory_factor: 0.2, consumer_goods_factor: 0.05, stability_factor: -0.05}
+      modifiers: {production_speed_arms_factory_factor: 0.2, stability_factor: -0.05, industrial_capacity_factory: 0.1}
     - id: FCU_dividendo_de_guerra
       name: {english: The War Dividend, spanish: El Dividendo de Guerra}
       desc:
         english: Meridian does not invade countries. It makes vertical acquisitions with artillery, and the shareholders expect results every quarter.
         spanish: Meridian no invade países. Hace adquisiciones verticales con artillería, y los accionistas esperan resultados cada trimestre.
-      modifiers: {war_support_factor: 0.1, political_power_gain: 0.1}
+      modifiers: {war_support_factor: 0.1, political_power_gain: 0.1, army_attack_factor: 0.1}
     - id: FCU_caida_de_dividendos
       name: {english: Falling Dividends, spanish: Caída de Dividendos}
       desc:
@@ -984,7 +982,7 @@ countries:
       desc:
         english: Meridian rents its divisions to anyone who pays. The veterans come home with experience and invoices.
         spanish: Meridian alquila sus divisiones a quien pague. Los veteranos vuelven con experiencia y facturas.
-      modifiers: {experience_gain_army: 0.1, war_support_factor: 0.05}
+      modifiers: {experience_gain_army: 0.1, war_support_factor: 0.05, army_org_factor: 0.1}
     - id: FCU_dividendo_civil
       name: {english: The Civil Dividend, spanish: El Dividendo Civil}
       desc:
@@ -1607,7 +1605,6 @@ countries:
         political_power_gain: 0.1
         recruitable_population_factor: 0.1
         industrial_capacity_factory: -0.05
-        research_speed_factor: -0.05
       src: user_request
     - id: NAS_mineria_3
       name: {english: The Mountain That Devours, spanish: La Montaña que Devora}
@@ -1916,7 +1913,6 @@ countries:
       modifiers:
         production_speed_buildings_factor: 0.35
         industrial_capacity_factory: 0.1
-        consumer_goods_factor: 0.05
         stability_factor: -0.05
       src: user_request
     - id: SHD_precision_3
@@ -1926,7 +1922,7 @@ countries:
         spanish: Las fábricas y los laboratorios más eficientes de Asia; construir algo nuevo tarda una eternidad en calibrarse.
       modifiers:
         industrial_capacity_factory: 0.25
-        research_speed_factor: 0.15
+        research_speed_factor: 0.1
         production_speed_buildings_factor: -0.1
         political_power_gain: -0.05
       src: user_request
@@ -2058,7 +2054,7 @@ countries:
       desc:
         english: Every village feeds itself and guards itself.
         spanish: Cada aldea se alimenta y se defiende sola.
-      modifiers: {stability_factor: 0.1, army_defence_factor: 0.05, industrial_capacity_factory: -0.05}
+      modifiers: {stability_factor: 0.1, army_defence_factor: 0.05}
       src: user_design
     - id: APF_aldea_2
       name: {english: The Village Continent, spanish: El Continente de Aldeas}
@@ -2171,7 +2167,6 @@ countries:
         political_power_gain: 0.1
         recruitable_population_factor: 0.1
         industrial_capacity_factory: -0.1
-        production_speed_buildings_factor: -0.05
       src: user_request
     - id: APF_corredor_3
       name: {english: The Connected Continent, spanish: El Continente Conectado}
@@ -2337,7 +2332,7 @@ countries:
       desc:
         english: Rome has no armed forces. The armed forces have Rome.
         spanish: Roma no tiene fuerzas armadas. Las fuerzas armadas tienen Roma.
-      modifiers: {army_attack_factor: 0.2, army_org_factor: 0.1, war_support_factor: 0.1}
+      modifiers: {army_attack_factor: 0.2, army_org_factor: 0.1, war_support_factor: 0.1, army_defence_factor: 0.1}
       src: user_design
     - id: NRE_annona
       name: {english: The Annona, spanish: La Annona}
@@ -2498,8 +2493,7 @@ countries:
       modifiers:
         political_power_gain: 0.25
         industrial_capacity_factory: 0.15
-        stability_factor: -0.1
-        consumer_goods_factor: 0.05
+        stability_factor: -0.05
       src: user_request
     - id: NRE_planos_robados
       name: {english: Stolen Blueprints, spanish: Planos Robados}

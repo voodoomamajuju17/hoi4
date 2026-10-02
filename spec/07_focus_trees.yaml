@@ -112,6 +112,7 @@ trees:
         - {effect: leader_trait, value: efe_heredero_de_la_tierra}
         - {effect: add_variable, var: EFE_biosteel, value: 2}
         - {effect: add_variable, var: EFE_saturacion, value: 6}
+        - {effect: add_political_power, value: 100}
       - id: EFE_las_misiones_guaranies
         name: {english: The Guaraní Missions, spanish: Las Misiones Guaraníes}
         days: 63
@@ -456,7 +457,7 @@ trees:
         reward:
         - {effect: add_variable, var: EFE_biosteel, value: 2}
         - {effect: add_variable, var: EFE_saturacion, value: 6}
-        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+        - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 2}
       - id: EFE_bosques_fabrica
         name: {english: Forest-Factories, spanish: Bosques-Fábrica}
         days: 49
@@ -1178,6 +1179,7 @@ trees:
           then:
           - {effect: wargoal, target: ZWE, type: annex_everything}
         - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 50}
       - id: ASC_la_comuna_de_los_humanos
         name: {english: The Commune of Humans, spanish: La Comuna de los Humanos}
         days: 84
@@ -1187,6 +1189,7 @@ trees:
         desc: {english: The Council kept the keys., spanish: El Consejo se quedó con las llaves.}
         reward:
         - {effect: swap_ideas, remove: ASC_transparencia, add: ASC_comuna_de_los_humanos}
+        - {effect: add_research_slot, value: 1}
     - id: plan_41
       ai_factor: 3        # rama política: la IA la hacía al final (2026-10-01); 5 era demasiado (2026-10-02)
       name: {english: The Singularity of the Plan, spanish: La Singularidad del Plan}
@@ -2282,6 +2285,7 @@ trees:
         - {effect: set_variable, var: FCU_obsidian, value: 0}
         - {effect: add_variable, var: FCU_meridian, value: 10}
         - {effect: add_political_power, value: 150}
+        - {effect: build, building: arms_factory, level: 2}
       - id: FCU_castellane_firma
         name: {english: Castellane Signs, spanish: Castellane Firma}
         days: 63
@@ -2333,6 +2337,8 @@ trees:
         reward:
         - {effect: event, id: meganations_hsn.2, days: 1, target: HSN}
         - {effect: add_war_support, value: 0.05}
+        - {effect: states, pick: random, when: {coastal: true}, effects: [{effect: build_here, building: dockyard, level: 1}]}
+        - {effect: states, pick: random, when: {coastal: true}, effects: [{effect: build_here, building: dockyard, level: 1}]}
     - id: destino
       ai_factor: 2.5      # la IA vive su destino apenas se abre (2026-10-01); 4 era demasiado (2026-10-02)
       name: {english: Manifest Destiny, spanish: El Destino Manifiesto}
@@ -5125,6 +5131,7 @@ trees:
           spanish: Una sociedad que se corrige antes de que alguien lo note.
         reward:
         - {effect: swap_ideas, remove: SHD_vigilancia, add: SHD_caudal_perfecto}
+        - {effect: add_research_slot, value: 1}
       - id: SHD_corregir_el_sol
         name: {english: Engineers for the Sun, spanish: Ingenieros para el Sol}
         days: 105
@@ -6170,6 +6177,8 @@ trees:
         reward:
         - {effect: add_political_power, value: 100}
         - {effect: add_stability, value: 0.05}
+        - {effect: states, pick: random, effects: [{effect: build_here, building: industrial_complex, level: 1}]}
+        - {effect: states, pick: random, effects: [{effect: build_here, building: industrial_complex, level: 1}]}
       - id: APF_defensa_comunal
         name: {english: Communal Defence, spanish: Defensa Comunal}
         days: 49
@@ -6202,8 +6211,9 @@ trees:
           english: Every village keeps its rifles and its drills.
           spanish: Cada aldea guarda sus fusiles y sus ejercicios.
         reward:
-        - {effect: add_manpower, value: 30000}
+        - {effect: add_manpower, value: 100000}
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+        - {effect: army_experience, value: 50}
         src: user_request
       - id: APF_la_federacion_de_aldeas
         name: {english: The Federation of Villages, spanish: La Federación de Aldeas}
@@ -6216,6 +6226,8 @@ trees:
           spanish: El poder se queda en la aldea. La industria también.
         reward:
         - {effect: swap_ideas, remove: APF_aldea_2, add: APF_aldea_3}
+        - {effect: add_political_power, value: 150}
+        - {effect: add_stability, value: 0.05}
         src: user_request
     - id: corredor
       ai_factor: 1.5
@@ -6896,7 +6908,7 @@ trees:
           english: Gold for the legions. Opens donatives to cool them down.
           spanish: Oro para las legiones. Abre los donativos para calmarlas.
         reward:
-        - {effect: add_political_power, value: 100}
+        - {effect: add_political_power, value: 150}
         - {effect: add_stability, value: 0.03}
       - id: NRE_ave_imperator
         name: {english: Ave Imperator, spanish: Ave Imperator}
@@ -6911,8 +6923,9 @@ trees:
         reward:
         - {effect: add_variable, var: NRE_auctoritas, value: 15}
         - {effect: add_war_support, value: 0.05}
-        - {effect: add_manpower, value: 100000}
+        - {effect: add_manpower, value: 200000}
         - {effect: run, value: NRE_recalcular_legiones}
+        - {effect: army_experience, value: 50}
       - id: NRE_el_ano_de_los_cuatro
         name: {english: The Year of the Four, spanish: El Año de los Cuatro}
         days: 84
@@ -6941,6 +6954,7 @@ trees:
           - {effect: wargoal, target: ZWE, type: annex_everything}
         - {effect: add_variable, var: NRE_auctoritas, value: 10}
         - {effect: run, value: NRE_recalcular_legiones}
+        - {effect: army_experience, value: 50}
       - id: NRE_el_imperio_de_las_legiones
         name: {english: The Empire of the Legions, spanish: El Imperio de las Legiones}
         days: 105
@@ -6954,6 +6968,7 @@ trees:
         - {effect: swap_ideas, remove: NRE_ano_de_los_cuatro, add: NRE_imperio_de_las_legiones}
         - {effect: add_variable, var: NRE_auctoritas, value: 20}
         - {effect: run, value: NRE_recalcular_legiones}
+        - {effect: add_research_slot, value: 1}
     - id: destino
       ai_factor: 2.5      # la IA vive su destino apenas se abre (2026-10-01); 4 era demasiado (2026-10-02)
       name: {english: The Destiny of Rome, spanish: El Destino de Roma}
