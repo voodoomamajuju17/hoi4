@@ -196,11 +196,14 @@ plans:
   enable: {date_after: 2102.1.1}   # 2026-09-29: no antes de su fecha de guerra
   strategies:
   - {type: conquer, target: ZWB, value: 75}
-- id: FCU_el_canal
+- id: FCU_la_frontera
   country: FCU
-  lore: El Canal de Panamá está en manos de caudillos. Mal negocio.
+  lore: 'Análisis 2026-10-01: el viejo plan apuntaba al Amazonas por el Canal, que ya es de la Unión. Su presa es la Frontera:
+    se prepara desde 2101 y declara cuando tenga el casus belli (FCU_contra_tierras_sin_ley).'
+  enable: {date_after: 2101.1.1}
   strategies:
-  - {type: conquer, target: ZWB, value: 60}
+  - {type: conquer, target: ZAN, value: 100}
+  - {type: prepare_for_war, target: ZAN, value: 60}
 - id: HSN_las_costas_del_indostan
   country: HSN
   lore: Puertos del Índico para la red de nodos.
@@ -226,6 +229,17 @@ plans:
   enable: {flag: EFE_contra_NAS, at_war: false, divisions_at_least: 20}
   strategies:
   - {type: declare_war, target: NAS, value: 80}
+- id: NAS_crisis_entre_potencias_EFE
+  country: NAS
+  lore: 'Crisis de los Salares (2026-10-01): el Imperio no entregó Antofagasta.'
+  enable: {flag: NAS_contra_EFE}
+  strategies:
+  - {type: prepare_for_war, target: EFE, value: 100}
+- id: NAS_crisis_declara_EFE
+  country: NAS
+  enable: {flag: NAS_contra_EFE, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: EFE, value: 80}
 - id: NRE_crisis_entre_potencias_APF
   country: NRE
   enable: {flag: NRE_contra_APF}
@@ -256,6 +270,105 @@ plans:
   enable: {flag: HSN_contra_SHD, at_war: false, divisions_at_least: 20}
   strategies:
   - {type: declare_war, target: SHD, value: 80}
+
+# Ultimátums de foco rechazados (análisis 2026-10-01): daban objetivo de guerra pero ningún plan
+# los usaba. Las rivalidades de bloque no son vecinas: la IA se prepara (y desembarca) igual.
+- id: EFE_ultimatum_FCU
+  country: EFE
+  lore: 'El Agua no se Vende: FCU se negó.'
+  enable: {flag: EFE_contra_FCU}
+  strategies:
+  - {type: prepare_for_war, target: FCU, value: 100}
+  - {type: antagonize, target: FCU, value: 50}
+- id: EFE_ultimatum_declara_FCU
+  country: EFE
+  enable: {flag: EFE_contra_FCU, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: FCU, value: 80}
+- id: FCU_ultimatum_EFE
+  country: FCU
+  lore: 'La Adquisición del Sur: EFE se negó.'
+  enable: {flag: FCU_contra_EFE}
+  strategies:
+  - {type: prepare_for_war, target: EFE, value: 100}
+  - {type: antagonize, target: EFE, value: 50}
+- id: FCU_ultimatum_declara_EFE
+  country: FCU
+  enable: {flag: FCU_contra_EFE, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: EFE, value: 80}
+- id: ASC_ultimatum_APF
+  country: ASC
+  lore: 'La Asignación de África: APF se negó.'
+  enable: {flag: ASC_contra_APF}
+  strategies:
+  - {type: prepare_for_war, target: APF, value: 100}
+  - {type: antagonize, target: APF, value: 50}
+- id: ASC_ultimatum_declara_APF
+  country: ASC
+  enable: {flag: ASC_contra_APF, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: APF, value: 80}
+- id: APF_ultimatum_ASC
+  country: APF
+  lore: 'Contra la Máquina: ASC se negó.'
+  enable: {flag: APF_contra_ASC}
+  strategies:
+  - {type: prepare_for_war, target: ASC, value: 100}
+  - {type: antagonize, target: ASC, value: 50}
+- id: APF_ultimatum_declara_ASC
+  country: APF
+  enable: {flag: APF_contra_ASC, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: ASC, value: 80}
+- id: HSN_ultimatum_FCU
+  country: HSN
+  lore: 'El Bloqueo Legal: FCU se negó.'
+  enable: {flag: HSN_contra_FCU}
+  strategies:
+  - {type: prepare_for_war, target: FCU, value: 100}
+  - {type: antagonize, target: FCU, value: 50}
+- id: HSN_ultimatum_declara_FCU
+  country: HSN
+  enable: {flag: HSN_contra_FCU, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: FCU, value: 80}
+- id: NAS_ultimatum_SHD
+  country: NAS
+  lore: 'El Sol contra el Directorio: SHD se negó.'
+  enable: {flag: NAS_contra_SHD}
+  strategies:
+  - {type: prepare_for_war, target: SHD, value: 100}
+  - {type: antagonize, target: SHD, value: 50}
+- id: NAS_ultimatum_declara_SHD
+  country: NAS
+  enable: {flag: NAS_contra_SHD, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: SHD, value: 80}
+- id: SHD_ultimatum_NAS
+  country: SHD
+  lore: 'Corregir el Sol: NAS se negó.'
+  enable: {flag: SHD_contra_NAS}
+  strategies:
+  - {type: prepare_for_war, target: NAS, value: 100}
+  - {type: antagonize, target: NAS, value: 50}
+- id: SHD_ultimatum_declara_NAS
+  country: SHD
+  enable: {flag: SHD_contra_NAS, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: NAS, value: 80}
+- id: NRE_ultimatum_EFE
+  country: NRE
+  lore: 'Roma contra la Tierra: EFE se negó.'
+  enable: {flag: NRE_contra_EFE}
+  strategies:
+  - {type: prepare_for_war, target: EFE, value: 100}
+  - {type: antagonize, target: EFE, value: 50}
+- id: NRE_ultimatum_declara_EFE
+  country: NRE
+  enable: {flag: NRE_contra_EFE, at_war: false, divisions_at_least: 20}
+  strategies:
+  - {type: declare_war, target: EFE, value: 80}
 
 # 2026-09-29: la FCU y la Federación contra las Tierras Sin Ley, cuando justificaron la guerra
 - id: FCU_contra_tierras_sin_ley

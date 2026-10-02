@@ -2124,8 +2124,8 @@ categories:
     - id: NAS_completar_collasuyu
       name: {english: Complete the Collasuyu, spanish: Completar el Collasuyu}
       desc:
-        english: Control every region of the south and the Collasuyu is whole again.
-        spanish: Controlar todas las regiones de el sur y el Collasuyu vuelve a estar entero.
+        english: Control La Paz, Santa Cruz and the Salt Flats of Antofagasta (the Ecofascist Empire's) and the Collasuyu is whole again.
+        spanish: Controlar La Paz, Santa Cruz y los Salares de Antofagasta (del Imperio Ecofascista) y el Collasuyu vuelve a estar entero.
       icon_prefer:
       - generic_political_actions
       cost: 50
@@ -13853,9 +13853,13 @@ scripted_effects:
       when:
         not_flag: FCU_tierras_sin_ley
         country_exists: ZAN
-        country:
-          tag: ZAN
-          when: {focus: ZAN_foco_3_the_frontier_pact}
+        # análisis 2026-10-01: la Unión no tenía contra quién pelear hasta 2103;
+        # la Frontera se arma con el Pacto o, a más tardar, a mediados de 2101
+        any:
+        - country:
+            tag: ZAN
+            when: {focus: ZAN_foco_3_the_frontier_pact}
+        - date_after: 2101.6.1
       then:
       - {effect: flag, value: FCU_tierras_sin_ley}
       - {effect: event, id: meganations_fcu.210, days: 1}
@@ -13973,7 +13977,11 @@ scripted_effects:
         not_flag: ASC_plan41
         at_war: false
         date_after: 2101.6.1
+        # análisis 2026-10-01: la forma final pide Cómputo 100, justo lo que
+        # derrocaba al Consejo. Con la rama de destino abierta el Consejo ya
+        # ganó: PLAN-41 no se desconecta.
         all:
+        - not: {flag: ASC_destino_abierto}
         - variable_at_least: {var: ASC_computo, value: 100}
         - variable_at_least: {var: ASC_calor, value: 50}
         not: {flag: ASC_guerra_civil_hecha}
@@ -14206,37 +14214,60 @@ scripted_effects:
       - effect: if
         when: {not_flag: SHD_compuertas}
         then:
+        # análisis 2026-10-01: la IA juntaba 24 meses de Armonía en 29; el río empuja 8, no 6
         - effect: random
           options:
           - weight: 40
             effects:
-            - {effect: set_variable, var: SHD_prox_p, value: 6}
+            - {effect: set_variable, var: SHD_prox_p, value: 8}
           - weight: 30
             effects:
-            - {effect: set_variable, var: SHD_prox_o, value: 6}
+            - {effect: set_variable, var: SHD_prox_o, value: 8}
           - weight: 30
             effects:
-            - {effect: set_variable, var: SHD_prox_pu, value: 6}
+            - {effect: set_variable, var: SHD_prox_pu, value: 8}
       - {effect: clear_flag, value: SHD_compuertas}
     - effect: if
       when: {not_flag: SHD_crisis_reciente}
       then:
-      - effect: random
-        options:
-        - weight: 80
-          effects: []
-        - weight: 7
-          effects:
-          - {effect: flag, value: SHD_crisis_reciente, days: 90}
-          - {effect: event, id: meganations_shd.22, days: 1}
-        - weight: 7
-          effects:
-          - {effect: flag, value: SHD_crisis_reciente, days: 90}
-          - {effect: event, id: meganations_shd.23, days: 1}
-        - weight: 6
-          effects:
-          - {effect: flag, value: SHD_crisis_reciente, days: 90}
-          - {effect: event, id: meganations_shd.24, days: 1}
+      # con 6 meses o más de racha, el río se pone nervioso: crisis 30% en vez de 20%
+      - effect: if
+        when:
+          variable_at_least: {var: SHD_racha, value: 6}
+        then:
+        - effect: random
+          options:
+          - weight: 70
+            effects: []
+          - weight: 10
+            effects:
+            - {effect: flag, value: SHD_crisis_reciente, days: 90}
+            - {effect: event, id: meganations_shd.22, days: 1}
+          - weight: 10
+            effects:
+            - {effect: flag, value: SHD_crisis_reciente, days: 90}
+            - {effect: event, id: meganations_shd.23, days: 1}
+          - weight: 10
+            effects:
+            - {effect: flag, value: SHD_crisis_reciente, days: 90}
+            - {effect: event, id: meganations_shd.24, days: 1}
+        else:
+        - effect: random
+          options:
+          - weight: 80
+            effects: []
+          - weight: 7
+            effects:
+            - {effect: flag, value: SHD_crisis_reciente, days: 90}
+            - {effect: event, id: meganations_shd.22, days: 1}
+          - weight: 7
+            effects:
+            - {effect: flag, value: SHD_crisis_reciente, days: 90}
+            - {effect: event, id: meganations_shd.23, days: 1}
+          - weight: 6
+            effects:
+            - {effect: flag, value: SHD_crisis_reciente, days: 90}
+            - {effect: event, id: meganations_shd.24, days: 1}
     - {effect: run, value: SHD_recalcular_caudales}
     - effect: if
       when: {idea: SHD_armonia_perfecta}
@@ -18611,6 +18642,14 @@ dynamic_modifiers:
 # hidden: a propósito no se muestra (el Control del Monte es secreto).
 # =============================================================================
 variable_names:
+  MN_inf_EFE: {english: "Infiltration in the Ecofascist Empire", spanish: "Infiltración en el Imperio Ecofascista"}
+  MN_inf_FCU: {english: "Infiltration in the Union", spanish: "Infiltración en la Unión"}
+  MN_inf_ASC: {english: "Infiltration in the Commune", spanish: "Infiltración en la Comuna"}
+  MN_inf_HSN: {english: "Infiltration in the High Seas", spanish: "Infiltración en la Alta Mar"}
+  MN_inf_NAS: {english: "Infiltration in the Sun Kingdom", spanish: "Infiltración en el Reino del Sol"}
+  MN_inf_SHD: {english: "Infiltration in the Directorate", spanish: "Infiltración en el Directorio"}
+  MN_inf_APF: {english: "Infiltration in the Federation", spanish: "Infiltración en la Federación"}
+  MN_inf_NRE: {english: "Infiltration in Rome", spanish: "Infiltración en Roma"}
   APF_desarrollo_zet: {english: "Highlands Development", spanish: "Desarrollo de las Tierras Altas"}
   APF_desarrollo_zsa: {english: "Cape Development", spanish: "Desarrollo del Cabo"}
   APF_integracion_zet: {english: "Highlands Integration", spanish: "Integración de las Tierras Altas"}
@@ -18667,7 +18706,7 @@ variable_names:
   MEGANATIONS_senal: {english: "Fragments of the Signal", spanish: "Fragmentos de la Señal"}
   EFE_hambre_del_metal: {english: "Hunger of the living metal", spanish: "Hambre del metal vivo"}
   SHD_meses_desborde: {english: "Months of overflow", spanish: "Meses de desborde", hidden: true}
-  MN_inf_EFE: {english: "Infiltration in Ecofascist Empire", spanish: "Infiltración en Imperio Ecofascista"}
+  MN_inf_EFE: {english: "Infiltration in the Ecofascist Empire", spanish: "Infiltración en Imperio Ecofascista"}
   MN_inf_FCU: {english: "Infiltration in Free Corporative Capital Union", spanish: "Infiltración en Unión Libre de Capital Corporativo"}
   MN_inf_ASC: {english: "Infiltration in Automated Socialist Commune", spanish: "Infiltración en Comuna Socialista Automatizada"}
   MN_inf_HSN: {english: "Infiltration in High Seas Market Nation", spanish: "Infiltración en Nación de Mercado de Alta Mar"}

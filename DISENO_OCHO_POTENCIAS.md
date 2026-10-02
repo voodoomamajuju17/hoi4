@@ -777,3 +777,20 @@ llega a 100 al toque y la tensión nunca sube".
      Corea, Estepa, Cabo, Tierras Altas, Hispania, Dacia) se toman siempre:
      con el satélite propio, lo de siempre; si ya no es tuyo, núcleos y
      reclamos (`or_cores` kind satellite).
+- **Rutas, prioridades 6 a 11** (2026-10-02):
+  6. Collasuyu: Antofagasta sigue siendo del EFE, pero ahora se dice. El foco
+     abre la Crisis de los Salares (meganations_nas.240-242): el Imperio cede
+     (35%) o se niega y el Sol recibe objetivo de guerra por Antofagasta; la
+     IA del Sol se prepara y declara (NAS_contra_EFE).
+  7. Pax Romana: 70% de estabilidad y paz con las otras meganaciones; la
+     guerra contra anarquías ya no la rompe.
+  8. La Unión: el plan viejo apuntaba al Amazonas por el Canal (que ya es
+     suyo). Ahora se prepara contra la Frontera desde 2101, y La Frontera se
+     Arma (casus belli contra ZAN) llega con el Pacto o el 1/6/2101.
+  9. PLAN-41 no se desconecta con la rama de destino de la Comuna abierta (la
+     forma final pide Cómputo 100, lo que antes derrocaba al Consejo).
+  10. Armonía: el río empuja 8 en vez de 6, y con 6+ meses de racha las crisis
+      del río pasan de 20% a 30% por mes.
+  11. Ultimátums rechazados entre potencias (9): el que exigía recibe la
+      bandera <A>_contra_<B> (planes de IA: prepararse, enemistarse y declarar
+      con 20 divisiones) y +20 de infiltración contra el que se negó.

@@ -131,6 +131,8 @@ namespaces:
             ai_chance: 80
             effects:
               - { effect: add_war_support, value: 0.15 }
+              # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+              - {effect: scope, target: FCU, effects: [{effect: flag, value: FCU_contra_EFE}, {effect: add_variable, var: MN_inf_EFE, value: 20}, {effect: clamp, var: MN_inf_EFE, min: 0, max: 100}]}
               - { effect: scope, target: FCU, effects: [ { effect: wargoal, target: EFE, type: annex_everything } ] }
         src: invented
 
@@ -300,6 +302,8 @@ namespaces:
           ai_chance: 75
           effects:
           - {effect: add_war_support, value: 0.1}
+          # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+          - {effect: scope, target: NRE, effects: [{effect: flag, value: NRE_contra_EFE}, {effect: add_variable, var: MN_inf_EFE, value: 20}, {effect: clamp, var: MN_inf_EFE, min: 0, max: 100}]}
           - effect: scope
             target: NRE
             effects:
@@ -1663,6 +1667,8 @@ namespaces:
             ai_chance: 70
             effects:
               - { effect: add_war_support, value: 0.10 }
+              # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+              - {effect: scope, target: EFE, effects: [{effect: flag, value: EFE_contra_FCU}, {effect: add_variable, var: MN_inf_FCU, value: 20}, {effect: clamp, var: MN_inf_FCU, min: 0, max: 100}]}
               - { effect: scope, target: EFE, effects: [ { effect: wargoal, target: FCU, type: annex_everything } ] }
               - { effect: event, id: meganations_hsn.3, target: HSN }
         src: user_design
@@ -1688,6 +1694,8 @@ namespaces:
           ai_chance: 60
           effects:
           - {effect: add_war_support, value: 0.1}
+          # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+          - {effect: scope, target: HSN, effects: [{effect: flag, value: HSN_contra_FCU}, {effect: add_variable, var: MN_inf_FCU, value: 20}, {effect: clamp, var: MN_inf_FCU, min: 0, max: 100}]}
           - effect: scope
             target: HSN
             effects:
@@ -2738,11 +2746,11 @@ namespaces:
         picture: GFX_report_event_generic_rally
         title: {english: The Frontier Arms Itself, spanish: La Frontera se Arma}
         desc:
-          english: 'The Lawless Lands signed the Frontier Pact: Alaska, the northern plains and half of Mexico now answer to warlords with factories,
-            manpower and a treaty. The Directorate has a word for land that used to be the Union: stolen.\n\nThe general staff can justify a war to
-            take back every occupied state of North America.'
-          spanish: 'Las Tierras Sin Ley firmaron el Pacto de la Frontera: Alaska, las llanuras del norte y medio México responden hoy a caudillos con
-            fábricas, hombres y un tratado. El Directorio tiene una palabra para la tierra que fue de la Unión: robada.\n\nEl estado mayor puede justificar
+          english: 'Alaska, the northern plains and half of Mexico answer to the warlords of the Lawless Lands, who arm themselves with factories,
+            manpower and, sooner or later, a treaty. The Directorate has a word for land that used to be the Union: stolen.\n\nThe general staff can
+            justify a war to take back every occupied state of North America.'
+          spanish: 'Alaska, las llanuras del norte y medio México responden a los caudillos de las Tierras Sin Ley, que se arman con fábricas, hombres
+            y, tarde o temprano, un tratado. El Directorio tiene una palabra para la tierra que fue de la Unión: robada.\n\nEl estado mayor puede justificar
             una guerra para recuperar cada región ocupada de Norteamérica.'
         options:
         - name: {english: Take back what is ours., spanish: Recuperar lo que es nuestro.}
@@ -2859,6 +2867,8 @@ namespaces:
             ai_chance: 70
             effects:
               - { effect: add_war_support, value: 0.15 }
+              # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+              - {effect: scope, target: FCU, effects: [{effect: flag, value: FCU_contra_HSN}, {effect: add_variable, var: MN_inf_HSN, value: 20}, {effect: clamp, var: MN_inf_HSN, min: 0, max: 100}]}
               - { effect: scope, target: FCU, effects: [ { effect: wargoal, target: HSN, type: annex_everything } ] }
         src: invented
 
@@ -4089,6 +4099,8 @@ namespaces:
         ai_chance: 70
         effects:
         - {effect: add_war_support, value: 0.1}
+        # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+        - {effect: scope, target: APF, effects: [{effect: flag, value: APF_contra_ASC}, {effect: add_variable, var: MN_inf_ASC, value: 20}, {effect: clamp, var: MN_inf_ASC, min: 0, max: 100}]}
         - effect: scope
           target: APF
           effects:
@@ -5119,6 +5131,8 @@ namespaces:
         ai_chance: 80
         effects:
         - {effect: add_war_support, value: 0.15}
+        # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+        - {effect: scope, target: ASC, effects: [{effect: flag, value: ASC_contra_APF}, {effect: add_variable, var: MN_inf_APF, value: 20}, {effect: clamp, var: MN_inf_APF, min: 0, max: 100}]}
         - effect: scope
           target: ASC
           effects:
@@ -6326,6 +6340,8 @@ namespaces:
         ai_chance: 70
         effects:
         - {effect: add_war_support, value: 0.1}
+        # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+        - {effect: scope, target: SHD, effects: [{effect: flag, value: SHD_contra_NAS}, {effect: add_variable, var: MN_inf_NAS, value: 20}, {effect: clamp, var: MN_inf_NAS, min: 0, max: 100}]}
         - effect: scope
           target: SHD
           effects:
@@ -7234,6 +7250,72 @@ namespaces:
         effects:
         - {effect: add_war_support, value: 0.03}
       src: user_design
+    # Crisis de los Salares (análisis 2026-10-01): el Collasuyu pide Antofagasta, que es del EFE.
+    # Igual que la de Arequipa, al revés: el Sol exige, el Imperio cede o hay guerra.
+    - id: 240
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Sun Demands the Salt Flats, spanish: El Sol Exige los Salares}
+      desc:
+        english: 'The Sapa Inca claims the Salt Flats of Antofagasta: "the Collasuyu ends at the sea". The priests say it politely. The army
+          on the passes does not.'
+        spanish: 'El Sapa Inca reclama los Salares de Antofagasta: "el Collasuyu termina en el mar". Los sacerdotes lo dicen con cortesía. El
+          ejército en los pasos, no.'
+      options:
+      - name: {english: Give them the salt., spanish: Entregar los salares.}
+        effects:
+        - effect: in_state
+          state:
+          - Antofagasta
+          effects:
+          - {effect: transfer_to, value: NAS}
+        - {effect: add_stability, value: -0.03}
+        - effect: if
+          when: {country_exists: NAS}
+          then:
+          - {effect: event, id: meganations_nas.241, days: 1, target: NAS}
+        - {effect: opinion, target: NAS, modifier: meganations_concesion}
+        ai_chance: 35
+      - name: {english: Not one grain of salt., spanish: Ni un grano de sal.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        - effect: if
+          when: {country_exists: NAS}
+          then:
+          - {effect: event, id: meganations_nas.242, days: 1, target: NAS}
+        ai_chance: 65
+      src: user_design
+    - id: 241
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Empire Yields the Salt Flats, spanish: El Imperio Cede los Salares}
+      desc:
+        english: The Green Empire handed over Antofagasta. The Collasuyu reaches the sea.
+        spanish: El Imperio Verde entregó Antofagasta. El Collasuyu llega al mar.
+      options:
+      - name: {english: The Sun is patient., spanish: El Sol es paciente.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        - {effect: opinion, target: EFE, modifier: meganations_concesion}
+      src: user_design
+    - id: 242
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Empire Refuses, spanish: El Imperio se Niega}
+      desc:
+        english: The Green Empire keeps the salt. The Sapa Inca has his casus belli for Antofagasta.
+        spanish: El Imperio Verde se queda con la sal. El Sapa Inca tiene su casus belli por Antofagasta.
+      options:
+      - name: {english: The mountain comes down to the sea., spanish: La montaña baja al mar.}
+        effects:
+        - effect: wargoal
+          target: EFE
+          type: take_state_focus
+          states:
+          - - Antofagasta
+        - {effect: add_war_support, value: 0.05}
+        - {effect: flag, value: NAS_contra_EFE}
+      src: user_design
   meganations_shd:
     country: SHD
     events:
@@ -7256,6 +7338,8 @@ namespaces:
         ai_chance: 60
         effects:
         - {effect: add_war_support, value: 0.1}
+        # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
+        - {effect: scope, target: NAS, effects: [{effect: flag, value: NAS_contra_SHD}, {effect: add_variable, var: MN_inf_SHD, value: 20}, {effect: clamp, var: MN_inf_SHD, min: 0, max: 100}]}
         - effect: scope
           target: NAS
           effects:

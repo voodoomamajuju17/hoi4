@@ -1366,9 +1366,9 @@ trees:
         - ASC_la_abundancia_armada
         desc:
           english: Unlocks the decision to proclaim The Continental Commune. Requires controlling Paris (Ile de France), Rome (Lazio), Madrid, Leningrad,
-            Crimea and Kiev; 60 divisions, 100 Computing Power and 50% stability.
+            Crimea and Kiev; 60 divisions, 100 Computing Power and 50% stability. With the destiny open, PLAN-41 no longer disconnects.
           spanish: Destraba la decisión de proclamar La Comuna Continental. Pide controlar París (Ile de France), Roma (Lacio), Madrid, Leningrado,
-            Crimea y Kiev; 60 divisiones, 100 de Poder de Cómputo y 50% de estabilidad.
+            Crimea y Kiev; 60 divisiones, 100 de Poder de Cómputo y 50% de estabilidad. Con el destino abierto, PLAN-41 ya no se desconecta.
         reward:
         - {effect: flag, value: ASC_destino_abierto}
         - {effect: add_political_power, value: 50}
@@ -4364,8 +4364,10 @@ trees:
         prerequisites:
         - NAS_el_antisuyu
         desc:
-          english: The south, down to the Atacama. The Ecofascist Empire will not like it.
-          spanish: El sur, hasta Atacama. Al Imperio Ecofascista no le va a gustar.
+          english: 'The south, down to the Atacama. The Salt Flats of Antofagasta belong to the Ecofascist Empire: the Sun demands them, and if
+            the Empire refuses, the Collasuyu is won by war.'
+          spanish: 'El sur, hasta Atacama. Los Salares de Antofagasta son del Imperio Ecofascista: el Sol se los exige, y si el Imperio se niega,
+            el Collasuyu se gana en guerra.'
         reward:
         - effect: in_state
           state:
@@ -4383,6 +4385,11 @@ trees:
           effects:
           - {effect: claim, value: NAS}
         - {effect: add_war_support, value: 0.05}
+        # análisis 2026-10-01: Antofagasta es del EFE; la crisis de los Salares lo dice y da la guerra
+        - effect: if
+          when: {country: {tag: EFE, when: {owns_state: [Antofagasta]}}}
+          then:
+          - {effect: event, id: meganations_nas.240, days: 1, target: EFE}
       - id: NAS_la_bajada_de_la_montana
         name: {english: Down from the Mountain, spanish: La Bajada de la Montaña}
         days: 105
@@ -6783,10 +6790,27 @@ trees:
         icon: GFX_goal_generic_national_unity
         prerequisites:
         - NRE_el_equilibrio_de_varro
-        available: {stability_at_least: 0.7, at_war: false}
+        available:
+          stability_at_least: 0.7
+          # análisis 2026-10-01: Roma vive en guerra con los Emiratos y los que reclaman su parte;
+          # la Pax prohíbe la guerra con otra potencia, no contra anarquías
+          explained:
+            id: NRE_pax_sin_potencias
+            english: Not at war with another megastate (wars against the anarchies do not count)
+            spanish: No estar en guerra con otra meganación (las guerras contra las anarquías no cuentan)
+            when:
+              not:
+                any:
+                - {war_with: EFE}
+                - {war_with: FCU}
+                - {war_with: ASC}
+                - {war_with: HSN}
+                - {war_with: NAS}
+                - {war_with: SHD}
+                - {war_with: APF}
         desc:
-          english: Needs 70% stability and peace. Then it is worth it.
-          spanish: Pide 70% de estabilidad y paz. Después vale la pena.
+          english: Needs 70% stability and peace with the other megastates (a war against the anarchies does not break it). Then it is worth it.
+          spanish: Pide 70% de estabilidad y paz con las otras meganaciones (una guerra contra las anarquías no la rompe). Después vale la pena.
         reward:
         - {effect: add_research_slot, value: 1}
         - {effect: add_ideas, value: NRE_espiritu_pax_romana}

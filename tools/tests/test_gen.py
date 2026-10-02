@@ -976,6 +976,35 @@ def test_routes() -> None:
                                    .get("available")).split())
         check("el Dominio de Gaia acepta el Santuario garantizado en vez del Amazonas",
               "has_guaranteed = ZSG" in gaia and "country_exists = ZSG" in gaia, gaia)
+        # prioridades 6 a 11
+        colla = " ".join(pdx.render(focus("NAS", "NAS_el_collasuyu").get("completion_reward")).split())
+        check("el Collasuyu abre la crisis de los Salares si Antofagasta es del EFE",
+              # el juego de prueba no tiene Antofagasta: ahí la condición queda en always = no
+              ("EFE = { owns_state" in colla or "EFE = { always = no }" in colla) and "meganations_nas.240" in colla, colla)
+        nas_ev = " ".join((mod / "events/meganations_nas.txt").read_text(encoding="utf-8-sig").split())
+        e242 = nas_ev[nas_ev.index("id = meganations_nas.242"):][:900]
+        check("si el Imperio se niega: objetivo de guerra por Antofagasta y plan de IA",
+              "type = take_state_focus target = EFE" in e242 and "set_country_flag = NAS_contra_EFE" in e242, e242)
+        pax = " ".join(pdx.render(focus("NRE", "NRE_pax_romana").get("available")).split())
+        check("la Pax Romana solo prohibe la guerra con otra potencia",
+              "has_war = no" not in pax and "has_war_with = EFE" in pax and "NOT = { OR =" in pax, pax)
+        ai_spec = yaml.safe_load((REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"))
+        fcu_targets = {s["target"] for p in ai_spec["plans"] if p["country"] == "FCU" for s in p["strategies"]}
+        check("la Union ya no apunta al Amazonas y se prepara contra la Frontera",
+              "ZWB" not in fcu_targets and "ZAN" in fcu_targets, str(fcu_targets))
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        red = se[se.index("ASC_pulso_de_la_red = {"):]
+        red = red[red.index("ASC_guerra_civil_hecha") - 600:red.index("ASC_guerra_civil_hecha")]
+        check("PLAN-41 no se desconecta con el destino de la Comuna abierto",
+              "NOT = { has_country_flag = ASC_destino_abierto }" in red, red)
+        import re as _re
+        ev_text = (REPO_ROOT / "spec/12_events.yaml").read_text(encoding="utf-8")
+        flags = set(_re.findall(r"value: ((EFE|FCU|ASC|HSN|NAS|SHD|APF|NRE)_contra_(EFE|FCU|ASC|HSN|NAS|SHD|APF|NRE))\b", ev_text))
+        declares = {(p["country"], s["target"]) for p in ai_spec["plans"] for s in p["strategies"]
+                    if s["type"] == "declare_war" and f"{p['country']}_contra_{s['target']}" in str(p.get("enable"))}
+        missing = sorted(f for f, a, b in flags if (a, b) not in declares)
+        check("cada ultimatum rechazado entre potencias tiene su plan de IA para declarar",
+              len(flags) >= 10 and not missing, f"{len(flags)} banderas, sin plan: {missing}")
 
 
 def test_focus_idea_consistency() -> None:
@@ -1173,9 +1202,12 @@ def test_events() -> None:
             check(f"Tierras Sin Ley: ZAN se entera de lo de la {tag_}",
                   f"ZAN = {{ country_event = {{ id = meganations_zan.{zev} days = 1 }} }}" in e210, e210[:900])
             pz = " ".join(pdx.render(pulses.get(pulse_)).split())
+            # analisis 2026-10-01: a la Union le llega tambien por fecha (no tenia guerra hasta 2103)
+            when_ = ("OR = { ZAN = { has_completed_focus = ZAN_foco_3_the_frontier_pact } date > 2101.6.1 }"
+                     if tag_ == "FCU" else "ZAN = { has_completed_focus = ZAN_foco_3_the_frontier_pact }")
             check(f"Tierras Sin Ley: a la {tag_} le llega cuando ZAN termina su tercer foco (una vez)",
                   f"NOT = {{ has_country_flag = {tag_}_tierras_sin_ley }} country_exists = ZAN "
-                  f"ZAN = {{ has_completed_focus = ZAN_foco_3_the_frontier_pact }} }} set_country_flag = {tag_}_tierras_sin_ley "
+                  f"{when_} }} set_country_flag = {tag_}_tierras_sin_ley "
                   f"country_event = {{ id = {ns_}.210 days = 1 }}" in pz, pz[-700:])
             wg = next(x for x in next(e for e in spec_ns[ns_]["events"] if e["id"] == 210)["options"][0]["effects"]
                       if x.get("effect") == "wargoal")
@@ -1939,7 +1971,9 @@ def test_ai() -> None:
         check("guerra limitada: se revisa cada semana", "id = meganations_efe.159 days = 7" in efe_ev2)
         rio = se_c[se_c.index("SHD_pulso_del_rio = {"):][:6000]
         check("SHD v4: el rio empuja lo pronosticado y pronostica el proximo mes",
-              "var = SHD_produccion value = SHD_prox_p" in rio and "set_variable = { var = SHD_prox_o value = 6 }" in rio, rio[:900])
+              "var = SHD_produccion value = SHD_prox_p" in rio and "set_variable = { var = SHD_prox_o value = 8 }" in rio, rio[:900])
+        check("SHD: con racha de 6 o mas, crisis del rio mas seguidas (analisis 2026-10-01)",
+              "var = SHD_racha value = 6" in rio and "70 = { }" in rio, rio[:1500])
         check("SHD v4: racha de armonia con premios", "var = SHD_racha" in rio and "meganations_shd.192" in rio)
         shd_ev = (mod / "events/meganations_shd.txt").read_text()
         check("SHD v4: el Mandato del Cielo", "id = meganations_shd.192" in shd_ev and "SHD_mandato_del_cielo" in shd_ev)
