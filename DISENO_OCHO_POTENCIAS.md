@@ -838,3 +838,8 @@ llega a 100 al toque y la tensión nunca sube".
   la UU está bloqueado para el resto, el arquetipo lleva el nombre de la UU
   ("Gliptodonte Mk2", "Leviatán Mk2"...). Los equipos compartidos (los
   tiltrotores del NAS) no se renombran.
+- **Tierras Sin Ley: refuerzo anual** (2026-10-02): desde 2101, cada año 5
+  divisiones (Leva Anárquica, 4 infanterías) en cada zona: Alaska, norte de
+  Canadá, Midwest, noroeste de México, Centroamérica, oeste de África y Kiev.
+  Salen en la primera región de la zona que todavía controlen; zona perdida,
+  no hay refuerzo ahí. Generador: create_units con `zones`.

@@ -618,6 +618,35 @@ def render_effects(owner: str, items: list[dict], known,
                     div = f"division_template = {template_token(item['template'])} start_experience_factor = {xp}"
                     out.add("create_unit", Block([("division", Quoted(div)), ("owner", "PREV")]))
                 return out
+            if item.get("zones"):
+                # 2026-10-02 (Tierras Sin Ley): en cada zona, en la primera de
+                # sus regiones que el país todavía controle; zona perdida, nada.
+                for zone in item["zones"]:
+                    ids = [i for i in (resolve_state(n) for n in zone) if i is not None]
+                    if not ids:
+                        continue
+                    def branch(rest: list[int]) -> Block:
+                        i = rest[0]
+                        b = Block([("limit", Block([(str(i), Block([("is_controlled_by", "ROOT"),
+                                                                    ("is_owned_by", "ROOT")]))])),
+                                   (str(i), units())])
+                        return b
+                    out = None
+                    for i in reversed(ids):
+                        b = branch([i])
+                        if out is not None:
+                            b_else = Block([("if", out[0])] + ([("else", out[1])] if out[1] is not None else []))
+                            out = (b, b_else)
+                        else:
+                            out = (b, None)
+                    block.add("if", out[0])
+                    if out[1] is not None:
+                        block.add("else", out[1])
+                for k in ("create_unit",):
+                    effects_used.setdefault(k, owner)
+                ec.triggers_used.setdefault("is_controlled_by", owner)
+                ec.triggers_used.setdefault("is_owned_by", owner)
+                continue
             block.add("if", Block([
                 ("limit", Block([("capital_scope", Block([("is_controlled_by", "PREV")]))])),
                 ("capital_scope", units())]))

@@ -2564,6 +2564,20 @@ def test_unique_units() -> None:
         root = ctx.mod_root
         # 2026-10-02 (captura: "Tanque moderno Mk2"): los diseños nuevos llevan el nombre de la UU
         loc_es = "".join(p.read_text(encoding="utf-8-sig") for p in (root / "localisation").rglob("*.yml"))
+        zan = " ".join((root / "events/meganations_zan.txt").read_text(encoding="utf-8-sig").split())
+        check("Tierras Sin Ley: cada ano, 5 divisiones por zona en una region que sigan controlando",
+              "set_country_flag = { flag = ZAN_refuerzo_anual days = 365 }" in zan and "Leva_Anarquica" in zan, zan[-900:])
+        from tools.gen.emitters import effects as _E
+        _old = _E._STATES
+        _E.use_states({"alaska": 1, "kansas": 2, "iowa": 3})
+        try:
+            _z = " ".join(pdx.render(_E.render_effects("t", [{"effect": "create_units", "template": "Leva Anarquica",
+                          "count": 5, "zones": [[["Alaska"]], [["Kansas"], ["Iowa"]]]}],
+                          _E.EffectContext(set(), set()), {}, where="t")).split())
+        finally:
+            _E.use_states(_old)
+        check("zonas: 5 por zona, y si se perdio la primera region va a la siguiente de la zona",
+              _z.count("create_unit =") == 15 and "else = { if = { limit = { 3 = { is_controlled_by = ROOT" in _z, _z[:500])
         check("UU: el arquetipo del equipo bloqueado lleva el nombre de la unidad (Gliptodonte MkN)",
               'modern_tank_chassis:0 "Gliptodonte"' in loc_es)
         check("UU: un equipo que no es exclusivo no se renombra (tiltrotores del NAS)",
