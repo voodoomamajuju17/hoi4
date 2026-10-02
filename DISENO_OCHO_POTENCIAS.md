@@ -794,3 +794,22 @@ llega a 100 al toque y la tensión nunca sube".
   11. Ultimátums rechazados entre potencias (9): el que exigía recibe la
       bandera <A>_contra_<B> (planes de IA: prepararse, enemistarse y declarar
       con 20 divisiones) y +20 de infiltración contra el que se negó.
+- **Segunda etapa, prioridad 12** (2026-10-02):
+  - Crisis del siglo: desde 2106, cada 240 días, una de 8 crisis mundiales al
+    azar (Sequía, Pandemia del Micelio, Tormenta Solar, Éxodo Climático, Marea
+    Negra, Gran Crac, Cumbre de las Ocho, Carrera Orbital) a las 8 potencias:
+    pagar para evitarla o comerse un modificador temporal (meganations_mundo.20-27).
+  - Elecciones: las del Directorio de la Unión se repiten cada 4 años (2102,
+    2106...); la Alta Mar tiene la Asamblea de Armadores cada 4 años desde 2104
+    (meganations_hsn.240).
+  - La Diplomacia de las Potencias (panel compartido desde 2106): Pacto con X
+    (no agresión + garantía mutua; nunca con el rival de bloque) y Ofrecer la
+    Paz a X (paz blanca si acepta). Eventos meganations_mundo.40-45.
+  - La Era de la Hegemonía (tras la forma final): Integrar lo Conquistado
+    (núcleos, una vez por año), La Gran Obra (+10% fábricas, +15% construcción)
+    y Hegemonía Mundial (250 fábricas y 100 divisiones; solo una potencia;
+    meganations_mundo.50 a las demás).
+  - Generador: global_flag con days, efecto relation (diplomatic_relation) y
+    FROM/ROOT/PREV como destino de eventos y alcances.
+- **Enciclopedia** (2026-10-02): costos nuevos de las unidades únicas, el
+  Gliptodonte como tanque moderno y las elecciones de la Unión (2102 y cada 4 años).

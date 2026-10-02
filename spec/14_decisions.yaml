@@ -4981,6 +4981,478 @@ categories:
             variable_at_least: {var: MEGANATIONS_senal, value: 3}
       src: user_request
 
+  # Segunda etapa (análisis 2026-10-01, prioridad 12): diplomacia entre potencias y la Era de la Hegemonía
+  - id: MEGANATIONS_diplomacia_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+    icon_prefer: [generic_political_actions]
+    visible: {date_after: 2106.1.1}
+    name: {english: The Diplomacy of the Powers, spanish: La Diplomacia de las Potencias}
+    desc: {english: From 2106 the powers can sign pacts with one another (non-aggression and mutual guarantee) and offer peace to an enemy power.,
+      spanish: Desde 2106 las potencias pueden firmar pactos entre sí (no agresión y garantía mutua) y ofrecerle la paz a una potencia enemiga.}
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_pacto_con_EFE
+      name: {english: Pact with the Ecofascist Empire, spanish: Pacto con el Imperio Ecofascista}
+      desc: {english: Offer the Ecofascist Empire a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle
+          a el Imperio Ecofascista un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: EFE
+        not:
+          any:
+          - {tag: EFE}
+          - {tag: FCU}
+          - {tag: NRE}
+      available:
+        all:
+        - not: {war_with: EFE}
+        - not: {guarantees: EFE}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: EFE}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_EFE
+      name: {english: Offer Peace to the Ecofascist Empire, spanish: Ofrecerle la Paz a el Imperio Ecofascista}
+      desc: {english: Offer the Ecofascist Empire to end the war where it stands., spanish: Ofrecerle a el Imperio Ecofascista terminar la guerra
+          donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: EFE}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: EFE}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+    - id: MEGANATIONS_pacto_con_FCU
+      name: {english: Pact with the Union, spanish: Pacto con la Unión}
+      desc: {english: Offer the Union a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a la Unión un
+          pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: FCU
+        not:
+          any:
+          - {tag: FCU}
+          - {tag: EFE}
+          - {tag: HSN}
+      available:
+        all:
+        - not: {war_with: FCU}
+        - not: {guarantees: FCU}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: FCU}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_FCU
+      name: {english: Offer Peace to the Union, spanish: Ofrecerle la Paz a la Unión}
+      desc: {english: Offer the Union to end the war where it stands., spanish: Ofrecerle a la Unión terminar la guerra donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: FCU}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: FCU}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+    - id: MEGANATIONS_pacto_con_ASC
+      name: {english: Pact with the Commune, spanish: Pacto con la Comuna}
+      desc: {english: Offer the Commune a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a la Comuna
+          un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: ASC
+        not:
+          any:
+          - {tag: ASC}
+          - {tag: APF}
+      available:
+        all:
+        - not: {war_with: ASC}
+        - not: {guarantees: ASC}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: ASC}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_ASC
+      name: {english: Offer Peace to the Commune, spanish: Ofrecerle la Paz a la Comuna}
+      desc: {english: Offer the Commune to end the war where it stands., spanish: Ofrecerle a la Comuna terminar la guerra donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: ASC}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: ASC}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+    - id: MEGANATIONS_pacto_con_HSN
+      name: {english: Pact with the High Seas, spanish: Pacto con la Alta Mar}
+      desc: {english: Offer the High Seas a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a la Alta
+          Mar un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: HSN
+        not:
+          any:
+          - {tag: HSN}
+          - {tag: FCU}
+      available:
+        all:
+        - not: {war_with: HSN}
+        - not: {guarantees: HSN}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: HSN}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_HSN
+      name: {english: Offer Peace to the High Seas, spanish: Ofrecerle la Paz a la Alta Mar}
+      desc: {english: Offer the High Seas to end the war where it stands., spanish: Ofrecerle a la Alta Mar terminar la guerra donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: HSN}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: HSN}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+    - id: MEGANATIONS_pacto_con_NAS
+      name: {english: Pact with the Sun Kingdom, spanish: Pacto con el Reino del Sol}
+      desc: {english: Offer the Sun Kingdom a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a el Reino
+          del Sol un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: NAS
+        not:
+          any:
+          - {tag: NAS}
+          - {tag: SHD}
+      available:
+        all:
+        - not: {war_with: NAS}
+        - not: {guarantees: NAS}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: NAS}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_NAS
+      name: {english: Offer Peace to the Sun Kingdom, spanish: Ofrecerle la Paz a el Reino del Sol}
+      desc: {english: Offer the Sun Kingdom to end the war where it stands., spanish: Ofrecerle a el Reino del Sol terminar la guerra donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: NAS}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: NAS}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+    - id: MEGANATIONS_pacto_con_SHD
+      name: {english: Pact with the Directorate, spanish: Pacto con el Directorio}
+      desc: {english: Offer the Directorate a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a el Directorio
+          un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: SHD
+        not:
+          any:
+          - {tag: SHD}
+          - {tag: NAS}
+      available:
+        all:
+        - not: {war_with: SHD}
+        - not: {guarantees: SHD}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: SHD}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_SHD
+      name: {english: Offer Peace to the Directorate, spanish: Ofrecerle la Paz a el Directorio}
+      desc: {english: Offer the Directorate to end the war where it stands., spanish: Ofrecerle a el Directorio terminar la guerra donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: SHD}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: SHD}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+    - id: MEGANATIONS_pacto_con_APF
+      name: {english: Pact with the Federation, spanish: Pacto con la Federación}
+      desc: {english: Offer the Federation a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a la Federación
+          un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: APF
+        not:
+          any:
+          - {tag: APF}
+          - {tag: ASC}
+      available:
+        all:
+        - not: {war_with: APF}
+        - not: {guarantees: APF}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: APF}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_APF
+      name: {english: Offer Peace to the Federation, spanish: Ofrecerle la Paz a la Federación}
+      desc: {english: Offer the Federation to end the war where it stands., spanish: Ofrecerle a la Federación terminar la guerra donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: APF}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: APF}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+    - id: MEGANATIONS_pacto_con_NRE
+      name: {english: Pact with Rome, spanish: Pacto con Roma}
+      desc: {english: Offer Rome a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a Roma un pacto de
+          no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      visible:
+        country_exists: NRE
+        not:
+          any:
+          - {tag: NRE}
+          - {tag: EFE}
+      available:
+        all:
+        - not: {war_with: NRE}
+        - not: {guarantees: NRE}
+      effects:
+      - {effect: event, id: meganations_mundo.40, days: 1, target: NRE}
+      ai:
+        factor: 0.3
+        modifiers:
+        - factor: 5
+          when: {at_war: true}
+      src: user_request
+    - id: MEGANATIONS_paz_con_NRE
+      name: {english: Offer Peace to Rome, spanish: Ofrecerle la Paz a Roma}
+      desc: {english: Offer Rome to end the war where it stands., spanish: Ofrecerle a Roma terminar la guerra donde está.}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {war_with: NRE}
+      effects:
+      - {effect: event, id: meganations_mundo.43, days: 1, target: NRE}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 5
+          when: {surrender_at_least: 0.3}
+      src: user_request
+  - id: MEGANATIONS_hegemonia_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+    icon_prefer: [generic_formable_nations, generic_political_actions]
+    visible:
+      any:
+      - {flag: EFE_forma_final}
+      - {flag: FCU_forma_final}
+      - {flag: ASC_forma_final}
+      - {flag: HSN_forma_final}
+      - {flag: NAS_forma_final}
+      - {flag: SHD_forma_final}
+      - {flag: APF_forma_final}
+      - {flag: NRE_forma_final}
+    name: {english: The Age of Hegemony, spanish: La Era de la Hegemonía}
+    desc: {english: 'The final form is proclaimed. What is left: hold what was taken, build what no one else can, and become the first power of
+        the world.', spanish: 'La forma final está proclamada. Lo que queda: sostener lo conquistado, construir lo que nadie más puede y ser la
+        primera potencia del mundo.'}
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_integrar_lo_conquistado
+      name: {english: Integrate the Conquered, spanish: Integrar lo Conquistado}
+      desc: {english: Cores on every owned region that is not yet ours. Once a year., spanish: Núcleos en cada región propia que todavía no lo es.
+          Una vez por año.}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 365
+      effects:
+      - effect: if
+        when: {tag: EFE}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: EFE}
+          effects:
+          - {effect: add_core, value: EFE}
+      - effect: if
+        when: {tag: FCU}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: FCU}
+          effects:
+          - {effect: add_core, value: FCU}
+      - effect: if
+        when: {tag: ASC}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: ASC}
+          effects:
+          - {effect: add_core, value: ASC}
+      - effect: if
+        when: {tag: HSN}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: HSN}
+          effects:
+          - {effect: add_core, value: HSN}
+      - effect: if
+        when: {tag: NAS}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: NAS}
+          effects:
+          - {effect: add_core, value: NAS}
+      - effect: if
+        when: {tag: SHD}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: SHD}
+          effects:
+          - {effect: add_core, value: SHD}
+      - effect: if
+        when: {tag: APF}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: APF}
+          effects:
+          - {effect: add_core, value: APF}
+      - effect: if
+        when: {tag: NRE}
+        then:
+        - effect: states
+          pick: every
+          when: {not_core_of: NRE}
+          effects:
+          - {effect: add_core, value: NRE}
+      ai:
+        factor: 3
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_la_gran_obra
+      name: {english: The Great Work, spanish: La Gran Obra}
+      desc: {english: 'A megaproject only a megastate can build: +10% factory output, +15% construction speed, forever.', spanish: 'Un megaproyecto
+          que solo una meganación puede construir: +10% de producción de fábricas y +15% de velocidad de construcción, para siempre.'}
+      icon_prefer: [generic_construction, generic_industry]
+      cost: 250
+      fire_only_once: true
+      effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_gran_obra}
+      ai:
+        factor: 5
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_hegemonia_mundial
+      name: {english: World Hegemony, spanish: Hegemonía Mundial}
+      desc: {english: Requires 250 factories and 100 divisions. Only one power can be first; the others are told., spanish: Pide 250 fábricas y
+          100 divisiones. Solo una potencia puede ser la primera; a las demás se les avisa.}
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 300
+      fire_only_once: true
+      available: {factories_at_least: 250, divisions_at_least: 100, not_global_flag: MEGANATIONS_hegemonia}
+      effects:
+      - {effect: global_flag, value: MEGANATIONS_hegemonia}
+      - {effect: dynamic_modifier, id: MEGANATIONS_hegemonia}
+      - effect: every_country
+        when:
+          all:
+          - any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+          - not: {tag: ROOT}
+        effects:
+        - {effect: event, id: meganations_mundo.50, days: 1}
+      ai:
+        factor: 10
+        modifiers: []
+      src: user_request
+
   # El lado del satélite (2026-09-29): su lealtad, cooperar, agitar y la independencia.
   - id: PTA_independencia_category
     country: PTA
@@ -13790,9 +14262,11 @@ scripted_effects:
       - {effect: event, id: meganations_fcu.31, days: 1}
     - {effect: run, value: FCU_pulso_satelites}
     - effect: if
-      when: {date_after: 2102.1.1, not_flag: FCU_cadena_8}
+      # análisis 2026-10-01: "cada cuatro años" de verdad (2102, 2106, 2110...)
+      when: {date_after: 2102.1.1, not_flag: FCU_eleccion_reciente}
       then:
       - {effect: flag, value: FCU_cadena_8}
+      - {effect: flag, value: FCU_eleccion_reciente, days: 1460}
       - {effect: event, id: meganations_fcu.110, days: 1}
     - effect: if
       when:
@@ -13990,6 +14464,11 @@ scripted_effects:
       - {effect: event, id: meganations_asc.220, days: 1}
   - id: HSN_pulso_de_las_potencias
     effects:
+    - effect: if       # la Asamblea de Armadores, cada cuatro años desde 2104
+      when: {date_after: 2104.6.1, not_flag: HSN_asamblea_reciente}
+      then:
+      - {effect: flag, value: HSN_asamblea_reciente, days: 1460}
+      - {effect: event, id: meganations_hsn.240, days: 1}
     - effect: if
       when: {focus: HSN_seguros_para_las_potencias}
       then:
@@ -17505,6 +17984,133 @@ scripted_effects:
   # Eventos mundiales (2026-09-29): el primer pulso de cualquier meganación después de la fecha los dispara para todos
   - id: MEGANATIONS_eventos_mundiales
     effects:
+    # Crisis del siglo (análisis 2026-10-01, prioridad 12): desde 2106, una cada ~8 meses
+    - effect: if
+      when: {date_after: 2106.1.1, not_global_flag: MEGANATIONS_crisis_tardia}
+      then:
+      - {effect: global_flag, value: MEGANATIONS_crisis_tardia, days: 240}
+      - effect: random
+        options:
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.20, days: 1}
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.21, days: 1}
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.22, days: 1}
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.23, days: 1}
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.24, days: 1}
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.25, days: 1}
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.26, days: 1}
+        - weight: 1
+          effects:
+          - effect: every_country
+            when:
+              any:
+              - {tag: EFE}
+              - {tag: FCU}
+              - {tag: ASC}
+              - {tag: HSN}
+              - {tag: NAS}
+              - {tag: SHD}
+              - {tag: APF}
+              - {tag: NRE}
+            effects:
+            - {effect: event, id: meganations_mundo.27, days: 1}
     - effect: if
       when: {date_after: 2100.7.20, not_global_flag: MEGANATIONS_mundo_1}
       then:
@@ -18482,6 +19088,57 @@ scripted_effects:
 
 
 dynamic_modifiers:
+  # Segunda etapa (análisis 2026-10-01, prioridad 12): crisis del siglo, la Gran Obra y la Hegemonía
+  - id: MEGANATIONS_sequia
+    country: null
+    name: {english: The Great Drought, spanish: La Gran Sequía}
+    desc: {english: 'Rivers low, harvests lost. It passes in 6 months.', spanish: 'Ríos bajos, cosechas perdidas. Se va en 6 meses.'}
+    modifiers: {stability_factor: -0.05, monthly_population: -0.2}
+  - id: MEGANATIONS_pandemia
+    country: null
+    name: {english: The Mycelium Pandemic, spanish: La Pandemia del Micelio}
+    desc: {english: Field hospitals in every city. It passes in 6 months., spanish: Hospitales de campaña en cada ciudad. Se va en 6 meses.}
+    modifiers: {recruitable_population_factor: -0.1, stability_factor: -0.03}
+  - id: MEGANATIONS_tormenta_solar
+    country: null
+    name: {english: Solar Storm Blackout, spanish: Apagón de la Tormenta Solar}
+    desc: {english: Satellites and grids are down. It passes in 4 months., spanish: Satélites y redes caídos. Se va en 4 meses.}
+    modifiers: {research_speed_factor: -0.1, production_speed_buildings_factor: -0.1}
+  - id: MEGANATIONS_exodo
+    country: null
+    name: {english: Climate Exodus, spanish: Éxodo Climático}
+    desc: {english: Millions on the roads. It passes in 6 months., spanish: Millones en los caminos. Se va en 6 meses.}
+    modifiers: {stability_factor: -0.05, weekly_manpower: 500}
+  - id: MEGANATIONS_marea_negra
+    country: null
+    name: {english: The Black Tide, spanish: La Marea Negra}
+    desc: {english: 'Dead seas, closed ports. It passes in 6 months.', spanish: 'Mares muertos, puertos cerrados. Se va en 6 meses.'}
+    modifiers: {industrial_capacity_dockyard: -0.15, consumer_goods_factor: 0.03}
+  - id: MEGANATIONS_crac
+    country: null
+    name: {english: The Great Crash, spanish: El Gran Crac}
+    desc: {english: Markets in free fall. It passes in 6 months., spanish: Mercados en caída libre. Se va en 6 meses.}
+    modifiers: {consumer_goods_factor: 0.05, political_power_gain: -0.1}
+  - id: MEGANATIONS_acuerdo_cumbre
+    country: null
+    name: {english: The Summit Accord, spanish: El Acuerdo de la Cumbre}
+    desc: {english: A year of signed promises., spanish: Un año de promesas firmadas.}
+    modifiers: {stability_factor: 0.05, war_support_factor: -0.05}
+  - id: MEGANATIONS_carrera_orbital
+    country: null
+    name: {english: The Orbital Race, spanish: La Carrera Orbital}
+    desc: {english: Every lab works for the launch. It lasts a year., spanish: Cada laboratorio trabaja para el lanzamiento. Dura un año.}
+    modifiers: {research_speed_factor: 0.07, consumer_goods_factor: 0.03}
+  - id: MEGANATIONS_gran_obra
+    country: null
+    name: {english: The Great Work, spanish: La Gran Obra}
+    desc: {english: The megastate builds what no one else can., spanish: La meganación construye lo que nadie más puede.}
+    modifiers: {industrial_capacity_factory: 0.1, production_speed_buildings_factor: 0.15}
+  - id: MEGANATIONS_hegemonia
+    country: null
+    name: {english: World Hegemony, spanish: Hegemonía Mundial}
+    desc: {english: The first power of the world of 2100., spanish: La primera potencia del mundo de 2100.}
+    modifiers: {political_power_gain: 0.25, stability_factor: 0.1, war_support_factor: 0.1}
   # 2026-10-01 ("las emergencias ponelas como dijiste"): el castigo de las
   # emergencias ya no es para siempre; dura 6, 9 o 12 meses y se suma si se
   # usan varias. Sin país: sirve para meganaciones y anarquías.

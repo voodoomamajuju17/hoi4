@@ -3963,6 +3963,30 @@ namespaces:
           - {effect: add_war_support, value: 0.03}
         src: user_design
   # ===========================================================================
+      # Elecciones periódicas (análisis 2026-10-01, prioridad 12)
+      - id: 240
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Assembly of Shipowners, spanish: La Asamblea de Armadores}
+        desc: {english: 'Every four years the shipowners, the insurers and the crews elect who speaks for the Market. The fleet votes too.', spanish: 'Cada
+            cuatro años los armadores, las aseguradoras y las tripulaciones eligen quién habla por el Mercado. La flota también vota.'}
+        options:
+        - name: {english: 'The insurers: order and premiums.', spanish: 'Las aseguradoras: orden y primas.'}
+          effects:
+          - {effect: add_political_power, value: 75}
+          - {effect: add_variable, var: HSN_presion, value: -10}
+          - {effect: clamp, var: HSN_presion, min: 0, max: 100}
+          ai_chance: 40
+        - name: {english: 'The crews: the sea is taken, not bought.', spanish: 'Las tripulaciones: el mar se toma, no se compra.'}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: navy_experience, value: 25}
+          ai_chance: 35
+        - name: {english: 'The free ports: open trade.', spanish: 'Los puertos libres: comercio abierto.'}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          ai_chance: 25
+        src: user_request
   meganations_asc:
     country: ASC
     events:
@@ -11032,3 +11056,234 @@ namespaces:
         effects:
         - {effect: add_stability, value: 0.02}
       src: user_design
+    # Segunda etapa (análisis 2026-10-01, prioridad 12)
+    - id: 20
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Great Drought, spanish: La Gran Sequía}
+      desc: {english: Three summers without rain. The great rivers of the world run low and the harvests fail on four continents., spanish: Tres veranos
+          sin lluvia. Los grandes ríos del mundo bajan y las cosechas se pierden en cuatro continentes.}
+      options:
+      - name: {english: 'Ration and import, whatever it costs.', spanish: 'Racionar e importar, cueste lo que cueste.'}
+        effects:
+        - {effect: add_political_power, value: -100}
+        ai_chance: 50
+      - name: {english: The people will endure., spanish: El pueblo va a aguantar.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_sequia, days: 182}
+        ai_chance: 50
+      src: user_request
+    - id: 21
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Mycelium Pandemic, spanish: La Pandemia del Micelio}
+      desc: {english: A fungus born in the vats of the south jumps to humans. No border stops spores., spanish: Un hongo nacido en las cubas del sur
+          salta a los humanos. Ninguna frontera para las esporas.}
+      options:
+      - name: {english: Quarantine the cities., spanish: Cuarentena en las ciudades.}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_manpower, value: -20000}
+        ai_chance: 50
+      - name: {english: Keep the factories running., spanish: Que las fábricas sigan.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_pandemia, days: 182}
+        ai_chance: 50
+      src: user_request
+    - id: 22
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Solar Storm, spanish: La Tormenta Solar}
+      desc: {english: 'The worst solar storm in two centuries burns satellites, grids and data centres in a single night.', spanish: 'La peor tormenta
+          solar en dos siglos quema satélites, redes y centros de datos en una sola noche.'}
+      options:
+      - name: {english: Rebuild at full speed., spanish: Reconstruir a toda velocidad.}
+        effects:
+        - {effect: add_political_power, value: -80}
+        ai_chance: 50
+      - name: {english: Work by hand until it is fixed., spanish: Trabajar a mano hasta que se arregle.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_tormenta_solar, days: 120}
+        ai_chance: 50
+      src: user_request
+    - id: 23
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Climate Exodus, spanish: El Éxodo Climático}
+      desc: {english: The drowned coasts empty. Millions walk inland and knock on our borders., spanish: Las costas ahogadas se vacían. Millones caminan
+          tierra adentro y golpean nuestras fronteras.}
+      options:
+      - name: {english: 'Open the borders: hands and soldiers.', spanish: 'Abrir las fronteras: manos y soldados.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_exodo, days: 182}
+        ai_chance: 60
+      - name: {english: Close the borders., spanish: Cerrar las fronteras.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 40
+      src: user_request
+    - id: 24
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Black Tide, spanish: La Marea Negra}
+      desc: {english: An algae bloom kills the warm seas. Shipyards stop and the fishing fleets do not return., spanish: Una floración de algas mata
+          los mares cálidos. Los astilleros paran y las flotas pesqueras no vuelven.}
+      options:
+      - name: {english: Clean the ports., spanish: Limpiar los puertos.}
+        effects:
+        - {effect: add_political_power, value: -75}
+        ai_chance: 50
+      - name: {english: Wait for the sea., spanish: Esperar al mar.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_marea_negra, days: 182}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Great Crash, spanish: El Gran Crac}
+      desc: {english: The futures market on water and lithium collapses in an afternoon. Every treasury bleeds., spanish: El mercado de futuros del
+          agua y el litio se desploma en una tarde. Todos los tesoros sangran.}
+      options:
+      - name: {english: Bail out the banks., spanish: Rescatar a los bancos.}
+        effects:
+        - {effect: add_political_power, value: -120}
+        ai_chance: 40
+      - name: {english: Let it burn., spanish: Que se queme.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_crac, days: 182}
+        ai_chance: 60
+      src: user_request
+    - id: 26
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Summit of the Eight, spanish: La Cumbre de las Ocho}
+      desc: {english: 'For the first time since 2100 the eight powers sit at the same table, in neutral Geneva. The accord is fragile; walking out
+          is easy.', spanish: 'Por primera vez desde 2100 las ocho potencias se sientan a la misma mesa, en la Ginebra neutral. El acuerdo es frágil;
+          levantarse es fácil.'}
+      options:
+      - name: {english: Sign the accord., spanish: Firmar el acuerdo.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_acuerdo_cumbre, days: 365}
+        ai_chance: 50
+      - name: {english: Walk out., spanish: Levantarse de la mesa.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Orbital Race, spanish: La Carrera Orbital}
+      desc: {english: 'Someone will put the first permanent station in orbit since the collapse. Whoever does, owns the sky.', spanish: 'Alguien va
+          a poner la primera estación permanente en órbita desde el colapso. El que lo logre, es dueño del cielo.'}
+      options:
+      - name: {english: Join the race., spanish: Entrar en la carrera.}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: dynamic_modifier, id: MEGANATIONS_carrera_orbital, days: 365}
+        ai_chance: 60
+      - name: {english: Leave the sky to others., spanish: Dejarles el cielo a otros.}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 40
+      src: user_request
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Pact Is Offered, spanish: Nos Ofrecen un Pacto}
+      desc: {english: '[From.GetName] offers a pact: non-aggression, and each guarantees the other. In the world of 2100 a signature is worth as much
+          as the army behind it.', spanish: '[From.GetName] nos ofrece un pacto: no agresión, y cada uno garantiza al otro. En el mundo de 2100 una
+          firma vale lo que el ejército que tiene atrás.'}
+      options:
+      - name: {english: Sign., spanish: Firmar.}
+        effects:
+        - {effect: relation, value: FROM, type: non_aggression_pact}
+        - {effect: guarantee, value: FROM}
+        - effect: scope
+          target: FROM
+          effects:
+          - {effect: guarantee, value: ROOT}
+        - {effect: event, id: meganations_mundo.41, days: 1, target: FROM}
+        ai_chance: 55
+      - name: {english: We need no one., spanish: No necesitamos a nadie.}
+        effects:
+        - {effect: event, id: meganations_mundo.42, days: 1, target: FROM}
+        ai_chance: 45
+      src: user_request
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Pact Is Signed, spanish: Se Firma el Pacto}
+      desc: {english: '[From.GetName] signed. Two powers, one guarantee.', spanish: '[From.GetName] firmó. Dos potencias, una garantía.'}
+      options:
+      - name: {english: Good., spanish: Bien.}
+        effects:
+        - {effect: add_stability, value: 0.02}
+      src: user_request
+    - id: 42
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Pact Is Refused, spanish: Rechazan el Pacto}
+      desc: {english: '[From.GetName] will not sign.', spanish: '[From.GetName] no va a firmar.'}
+      options:
+      - name: {english: Their loss., spanish: Ellos se lo pierden.}
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      src: user_request
+    - id: 43
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Peace Is Offered, spanish: Nos Ofrecen la Paz}
+      desc: {english: '[From.GetName] offers to end the war where it stands: no annexations, no reparations.', spanish: '[From.GetName] ofrece terminar
+          la guerra donde está: sin anexiones, sin reparaciones.'}
+      options:
+      - name: {english: Accept the peace., spanish: Aceptar la paz.}
+        effects:
+        - {effect: white_peace, value: FROM}
+        - {effect: event, id: meganations_mundo.44, days: 1, target: FROM}
+        ai_chance: 40
+      - name: {english: The war goes on., spanish: La guerra sigue.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        - {effect: event, id: meganations_mundo.45, days: 1, target: FROM}
+        ai_chance: 60
+      src: user_request
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Peace Accepted, spanish: Aceptan la Paz}
+      desc: {english: '[From.GetName] accepted. The guns fall silent.', spanish: '[From.GetName] aceptó. Los cañones se callan.'}
+      options:
+      - name: {english: At last., spanish: Por fin.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+      src: user_request
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Peace Refused, spanish: Rechazan la Paz}
+      desc: {english: '[From.GetName] wants to finish this on the battlefield.', spanish: '[From.GetName] quiere terminar esto en el campo de batalla.'}
+      options:
+      - name: {english: Then we fight., spanish: Entonces peleamos.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+      src: user_request
+    - id: 50
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Hegemon Rises, spanish: Surge una Hegemonía}
+      desc: {english: '[From.GetName] has become the first power of the world: more factories and more divisions than any rival. Everyone measures
+          themselves against it now.', spanish: '[From.GetName] se convirtió en la primera potencia del mundo: más fábricas y más divisiones que cualquier
+          rival. Ahora todos se miden contra ella.'}
+      options:
+      - name: {english: We will not bow., spanish: No nos vamos a inclinar.}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 60
+      - name: {english: Seek their favour., spanish: Buscar su favor.}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 40
+      src: user_request

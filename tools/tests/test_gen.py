@@ -1003,6 +1003,28 @@ def test_routes() -> None:
         declares = {(p["country"], s["target"]) for p in ai_spec["plans"] for s in p["strategies"]
                     if s["type"] == "declare_war" and f"{p['country']}_contra_{s['target']}" in str(p.get("enable"))}
         missing = sorted(f for f, a, b in flags if (a, b) not in declares)
+        # prioridad 12: segunda etapa
+        mw = " ".join(se[se.index("MEGANATIONS_eventos_mundiales = {"):].split())[:4000]
+        check("crisis del siglo: desde 2106, una cada 240 dias entre 8",
+              "date > 2106.1.1" in mw and "set_global_flag = { flag = MEGANATIONS_crisis_tardia days = 240 }" in mw
+              and all(f"meganations_mundo.{i}" in mw for i in range(20, 28)), mw[:800])
+        dtxt = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
+        pacto = dtxt[dtxt.index("MEGANATIONS_pacto_con_EFE = {"):][:700]
+        check("pactos entre potencias desde 2106, nunca con el rival de bloque",
+              "tag = NRE" in pacto and "tag = FCU" in pacto and "meganations_mundo.40" in pacto, pacto)
+        mundo = " ".join((mod / "events/meganations_mundo.txt").read_text(encoding="utf-8-sig").split())
+        e40 = mundo[mundo.index("id = meganations_mundo.40"):][:900]
+        check("aceptar el pacto: no agresion y garantia mutua",
+              "relation = non_aggression_pact" in e40 and "FROM = { diplomatic_relation = { country = ROOT relation = guarantee" in e40, e40)
+        check("ofrecer la paz termina en paz blanca si se acepta", "white_peace = FROM" in mundo)
+        check("la Era de la Hegemonia: tras la forma final",
+              "MEGANATIONS_la_gran_obra = {" in dtxt and "MEGANATIONS_hegemonia_mundial = {" in dtxt
+              and "has_country_flag = NRE_forma_final" in dtxt)
+        fcu_s = se[se.index("FCU_pulso"):]
+        check("elecciones de la Union cada cuatro anos",
+              "set_country_flag = { flag = FCU_eleccion_reciente days = 1460 }" in fcu_s)
+        check("Asamblea de Armadores de la Alta Mar cada cuatro anos",
+              "set_country_flag = { flag = HSN_asamblea_reciente days = 1460 }" in se and "meganations_hsn.240" in se)
         check("cada ultimatum rechazado entre potencias tiene su plan de IA para declarar",
               len(flags) >= 10 and not missing, f"{len(flags)} banderas, sin plan: {missing}")
 
@@ -1630,8 +1652,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia) y 3 de la Leva Forzosa",
-              len(dm.entries) == 19 and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa y 10 de la segunda etapa",
+              len(dm.entries) == 29 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -1860,6 +1882,8 @@ def test_ai() -> None:
         pulses = {"EFE_pulso_de_las_cubas": 3, "FCU_pulso_del_directorio": 2, "ASC_pulso_de_la_red": 2, "NRE_pulso_del_ocio": 3,
                   "SHD_pulso_del_rio": 2, "NAS_pulso_de_los_templos": 2, "APF_pulso_de_los_consejos": 1, "HSN_pulso_de_las_potencias": 1}
         total = sum(se_c.count(f"has_country_flag = {p.split('_')[0]}_cadena_") for p in pulses)
+        # la elección de la Unión (cadena 8) se repite cada 4 años desde 2026-10-02: la chequea su propia bandera
+        total += se_c.count("NOT = { has_country_flag = FCU_eleccion_reciente }")
         check("16 cadenas de eventos, cada una chequeada una vez en el pulso de quien la empieza", total == 16, str(total))
         for needle, what in (("num_of_factories > 149", "industria (ASC 150 fabricas)"),
                              ("has_tech = improved_computing_machine", "tecnologia"),

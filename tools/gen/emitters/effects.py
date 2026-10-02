@@ -189,6 +189,11 @@ def resolve_state(names) -> int | None:
     UNRESOLVED.add(" / ".join(str(n) for n in names))
     return None
 
+# Alcances del juego que valen donde se pide un país (eventos de respuesta:
+# FROM es el que mandó el evento).
+SCOPES = {"ROOT", "FROM", "PREV"}
+RELATIONS = {"guarantee", "non_aggression_pact", "military_access", "docking_rights"}
+
 # Efectos cuyo valor es un número o un id suelto: `efecto = valor`.
 MATH_OPS = {
     "set": "set_variable",
@@ -343,7 +348,7 @@ def render_effects(owner: str, items: list[dict], known,
             inner.add("days", int(item.get("days", 1)))
             target = item.get("target")
             if target:
-                if ec.tags and target not in ec.tags:
+                if ec.tags and target not in ec.tags and target not in SCOPES:
                     raise SpecError(f"{owner}: evento para '{target}', que no es un pais del mod", where=where)
                 block.add(target, Block([("country_event", inner)]))
             else:
@@ -360,8 +365,12 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "global_flag":
             # marca de todo el mundo (eventos mundiales: salen una sola vez aunque
-            # los pulsen varias potencias)
-            block.add("set_global_flag", item["value"])
+            # los pulsen varias potencias). Con days vence sola (las crisis del
+            # siglo, 2026-10-02: una cada tantos meses).
+            if item.get("days"):
+                block.add("set_global_flag", Block([("flag", item["value"]), ("days", int(item["days"]))]))
+            else:
+                block.add("set_global_flag", item["value"])
             effects_used.setdefault("set_global_flag", owner)
             continue
         if effect == "every_country":
@@ -375,7 +384,7 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "scope":
             target = item.get("target")
-            if ec.tags and target not in ec.tags:
+            if ec.tags and target not in ec.tags and target not in SCOPES:
                 raise SpecError(f"{owner}: 'scope' apunta a '{target}', que no es un pais del mod", where=where)
             block.add(target, render_effects(owner, item.get("effects") or [], ec, effects_used, where=where))
             continue
@@ -440,7 +449,7 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect in ("puppet", "white_peace"):
             target = item["value"]
-            if ec.tags and target not in ec.tags:
+            if ec.tags and target not in ec.tags and target not in SCOPES:
                 raise SpecError(f"{owner}: {effect} '{target}' no es un pais del mod", where=where)
             block.add(effect, target)
             effects_used.setdefault(effect, owner)
@@ -824,9 +833,17 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("leave_faction", True)
             effects_used.setdefault("leave_faction", owner)
             continue
-        if effect == "guarantee":
-            # el país del scope garantiza a `value` (el Santuario de Gaia, 2026-09-29)
-            block.add("diplomatic_relation", Block([("country", item["value"]), ("relation", "guarantee"), ("active", True)]))
+        if effect in ("guarantee", "relation"):
+            # el país del scope garantiza a `value` (el Santuario de Gaia, 2026-09-29);
+            # relation: otra relación (non_aggression_pact, military_access) con
+            # `value` (los pactos entre potencias, 2026-10-02)
+            target = item["value"]
+            if ec.tags and target not in ec.tags and target not in SCOPES:
+                raise SpecError(f"{owner}: {effect} con '{target}', que no es un pais del mod", where=where)
+            kind = "guarantee" if effect == "guarantee" else item["type"]
+            if kind not in RELATIONS:
+                raise SpecError(f"{owner}: relation.type '{kind}' ({', '.join(sorted(RELATIONS))})", where=where)
+            block.add("diplomatic_relation", Block([("country", target), ("relation", kind), ("active", True)]))
             effects_used.setdefault("diplomatic_relation", owner)
             continue
         if effect == "resource_here":
