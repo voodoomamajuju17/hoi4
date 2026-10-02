@@ -1519,10 +1519,17 @@ def test_balance() -> None:
         check("pantallas de carga: el fondo del menu queda en la textura del menu", raw not in shots)
         check("pantallas de carga: el reporte lo dice", any(n.startswith("pantallas de carga:") for n in ctx.notes))
         # Fondos que el juego estira (2026-09-30: rayas en focos y Construcciones)
-        check("fondos: no pisa un corneredTile que estira el centro",
-              not (mod / "gfx/interface/tiles/tiled_plain_bg2.dds").exists())
-        check("fondos: avisa cual salteo y por que",
-              any("tiled_plain_bg2" in w and "rayas" in w for w in ctx.warnings), str(ctx.warnings))
+        # 2026-10-02: ya no se descarta: el dibujo va en las esquinas y la cruz del centro queda lisa
+        bg2 = mod / "gfx/interface/tiles/tiled_plain_bg2.dds"
+        check("fondos: un corneredTile que estira el centro se usa igual, sin rayas",
+              bg2.exists() and not any("tiled_plain_bg2" in w and "rayas" in w for w in ctx.warnings)
+              and any("centro estirado queda liso" in n for n in ctx.notes), str(ctx.warnings)[:400])
+        from tools.gen.emitters.menu import _cornered
+        px = bytearray(128) + bytes([10, 20, 30, 255] * 4 + [250, 250, 250, 255] * 4 + [10, 20, 30, 255] * 8)
+        out = _cornered(bytes(px), 4, 4, 1, 1, ramp=1)
+        cross = {out[128 + (y * 4 + x) * 4:128 + (y * 4 + x) * 4 + 4] for y in range(4) for x in range(4)
+                 if 1 <= x < 3 or 1 <= y < 3}
+        check("fondos: la cruz que el juego estira queda de un solo color", len(cross) == 1, str(cross))
         check("fondos: el papel oscuro ya no se usa (texto oscuro de las tecnologias)",
               not (REPO_ROOT / "assets/ui/fondo_papel_agencia.dds").exists())
         check("fondos: el papel de las tecnologias es el claro, si ya llego",

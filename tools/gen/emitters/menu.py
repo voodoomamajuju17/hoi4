@@ -340,13 +340,16 @@ def emit_tabs(ctx: BuildContext) -> None:
     for texture, image in sorted(textures.items()):
         vw, vh = _texture_dims(ctx, texture)
         why = stretched.get(texture.lower())
-        if why and vw and vh and (vw - 2 * why[1] < vw / 2 or vh - 2 * why[2] < vh / 2):
-            ctx.warn(f"fondos de pestanas: {image} no se usa: {why[0]} estira el centro de {texture} "
-                     f"({vw}x{vh}, borde {why[1]}x{why[2]}) y el dibujo sale en rayas")
-            continue
         src = (ctx.spec.root.parent / image).read_bytes()
         w, h = _dims(src)
         data = _resize(src, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else src
+        if why and vw and vh and (vw - 2 * why[1] < vw / 2 or vh - 2 * why[2] < vh / 2):
+            # 2026-10-02: en vez de descartarla, el dibujo queda en las cuatro
+            # esquinas (que el juego no estira) y se funde en un color liso en
+            # la cruz del centro (que sí estira): sin rayas.
+            data = _cornered(data, vw, vh, why[1], why[2])
+            ctx.note(f"fondos de pestanas: {image} va en las esquinas de {why[0]} "
+                     f"(borde {why[1]}x{why[2]}); el centro estirado queda liso")
         dest = ctx.mod_root / texture
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(data)
@@ -356,6 +359,27 @@ def emit_tabs(ctx: BuildContext) -> None:
 
 
 _TILING_CENTER = re.compile(r'tilingCenter\s*=\s*(yes|no)', re.I)
+
+
+def _cornered(src: bytes, w: int, h: int, bx: int, by: int, ramp: int = 160) -> bytes:
+    """DDS A8R8G8B8 para un corneredTile que estira el centro: la cruz central
+    (x en [bx, w-bx) o y en [by, h-by)) pasa a un color liso (el promedio del
+    dibujo) y el dibujo se funde hacia ese color en `ramp` píxeles."""
+    body = bytearray(src[128:128 + w * h * 4])
+    n = w * h
+    avg = [sum(body[c::4]) // n for c in range(4)]
+    for y in range(h):
+        dy = 0 if by <= y < h - by else (by - 1 - y if y < by else y - (h - by))
+        for x in range(w):
+            dx = 0 if bx <= x < w - bx else (bx - 1 - x if x < bx else x - (w - bx))
+            d = min(dx, dy)
+            if d >= ramp:
+                continue
+            t = d / ramp
+            i = (y * w + x) * 4
+            for c in range(4):
+                body[i + c] = int(avg[c] * (1 - t) + body[i + c] * t)
+    return src[:128] + bytes(body)
 
 
 def _stretched_textures(ctx: BuildContext) -> dict[str, tuple[str, int, int]]:
@@ -409,6 +433,11 @@ def _emit_research(ctx: BuildContext) -> None:
     done = 0
     for it in spec.get("items") or []:
         texture = sprites.get(it["sprite"])
+        if not texture and it.get("search"):
+            found = _branch_sprite(ctx, it["search"])
+            if found:
+                ctx.note(f"fondos de investigacion: {it['sprite']} no existe; la pestaña usa {found[0]} -> {found[1]}")
+                texture = found[1]
         if not texture:
             ctx.warn(f"fondos de investigacion: {it['sprite']} no existe en el juego; "
                      f"los que hay: {', '.join(sorted(sprites)) or 'ninguno'}")
@@ -428,6 +457,44 @@ def _emit_research(ctx: BuildContext) -> None:
         ctx.track(dest)
         done += 1
     ctx.note(f"fondos de investigacion: {done} de {len(spec.get('items') or [])} ramas con imagen propia")
+
+
+def _branch_sprite(ctx: BuildContext, words: list[str]) -> tuple[str, str] | None:
+    """2026-10-02: la pestaña de blindados de 1.19 no usa GFX_armor_techtree_bg.
+    Se busca en los .gui de investigación la ventana cuyo nombre tiene una de
+    `words` y, entre los sprites que dibuja, el de textura más grande."""
+    allsprites: dict[str, str] = {}
+    for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
+        try:
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for name, texture in _ANY_SPRITE.findall(text):
+            allsprites.setdefault(name, re.sub(r"/+", "/", texture.replace("\\", "/")))
+    best: tuple[int, str, str] | None = None
+    seen: list[str] = []
+    for gui in (ctx.vanilla.root / "interface").glob("**/*.gui"):
+        if "tech" not in gui.name.lower():
+            continue
+        try:
+            text = gui.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for m in re.finditer(r'name\s*=\s*"?([A-Za-z0-9_]+)"?', text):
+            if not any(w in m.group(1).lower() for w in words):
+                continue
+            for ref in _REF_SPRITE.findall(text[m.end():m.end() + 4000]):
+                tex = allsprites.get(ref)
+                if not tex or not tex.lower().endswith(".dds"):
+                    continue
+                vw, vh = _texture_dims(ctx, tex)
+                seen.append(f"{ref} ({vw}x{vh})")
+                if vw >= 500 and vh >= 400 and (best is None or vw * vh > best[0]):
+                    best = (vw * vh, ref, tex)
+    if best is None:
+        ctx.note(f"fondos de investigacion: buscando {words}: candidatos {', '.join(sorted(set(seen))[:12]) or 'ninguno'}")
+        return None
+    return best[1], best[2]
 
 
 def _cover(src: bytes, w: int, h: int, nw: int, nh: int) -> bytes:

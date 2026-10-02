@@ -813,3 +813,11 @@ llega a 100 al toque y la tensión nunca sube".
     FROM/ROOT/PREV como destino de eventos y alcances.
 - **Enciclopedia** (2026-10-02): costos nuevos de las unidades únicas, el
   Gliptodonte como tanque moderno y las elecciones de la Unión (2102 y cada 4 años).
+- **Avisos del reporte** (2026-10-02):
+  - Fondos que el juego estira (árbol de focos, fondo liso 2): ya no se
+    descartan. El dibujo queda en las cuatro esquinas, que no se estiran, y se
+    funde en un color liso en la cruz del centro: sin rayas.
+  - Fondo de blindados: 1.19 no tiene GFX_armor_techtree_bg; el generador
+    busca en los .gui de investigación la ventana de blindados y usa el
+    sprite más grande que dibuja (search: armor/armour/tank). Si no lo
+    encuentra, el reporte lista los candidatos.
