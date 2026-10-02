@@ -400,6 +400,25 @@ trees:
             (Cundinamarca) y Caracas (Miranda); 45 divisiones, 8 de Bioacero guardado y 50% de estabilidad.
         reward:
         - {effect: flag, value: EFE_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Lima], effects: [{effect: claim, value: EFE}]}
+        - {effect: in_state, state: [La Paz], effects: [{effect: claim, value: EFE}]}
+        - {effect: in_state, state: [São Paulo], effects: [{effect: claim, value: EFE}]}
+        - {effect: in_state, state: [Rio de Janeiro], effects: [{effect: claim, value: EFE}]}
+        - {effect: in_state, state: [Cundinamarca], effects: [{effect: claim, value: EFE}]}
+        - {effect: in_state, state: [Miranda], effects: [{effect: claim, value: EFE}]}
+        - {effect: in_state, state: [Amazonas], effects: [{effect: claim, value: EFE}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Lima]
+          - [La Paz]
+          - [São Paulo]
+          - [Rio de Janeiro]
+          - [Cundinamarca]
+          - [Miranda]
+          - [Amazonas]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: autarquia
@@ -1377,6 +1396,23 @@ trees:
             Crimea y Kiev; 60 divisiones, 100 de Poder de Cómputo y 50% de estabilidad. Con el destino abierto, PLAN-41 ya no se desconecta.
         reward:
         - {effect: flag, value: ASC_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Ile de France], effects: [{effect: claim, value: ASC}]}
+        - {effect: in_state, state: [Lazio], effects: [{effect: claim, value: ASC}]}
+        - {effect: in_state, state: [Madrid], effects: [{effect: claim, value: ASC}]}
+        - {effect: in_state, state: [Leningrad], effects: [{effect: claim, value: ASC}]}
+        - {effect: in_state, state: [Crimea], effects: [{effect: claim, value: ASC}]}
+        - {effect: in_state, state: [Kiev], effects: [{effect: claim, value: ASC}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Ile de France]
+          - [Lazio]
+          - [Madrid]
+          - [Leningrad]
+          - [Crimea]
+          - [Kiev]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: plan_total
@@ -2391,6 +2427,23 @@ trees:
             Lima, Buenos Aires y Bogotá (Cundinamarca); 50 divisiones, Escándalo por debajo de 30 y 50% de estabilidad.
         reward:
         - {effect: flag, value: FCU_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Minnesota], effects: [{effect: claim, value: FCU}]}
+        - {effect: in_state, state: [Kansas], effects: [{effect: claim, value: FCU}]}
+        - {effect: in_state, state: [Cuba], effects: [{effect: claim, value: FCU}]}
+        - {effect: in_state, state: [Lima], effects: [{effect: claim, value: FCU}]}
+        - {effect: in_state, state: [Buenos Aires], effects: [{effect: claim, value: FCU}]}
+        - {effect: in_state, state: [Cundinamarca], effects: [{effect: claim, value: FCU}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Minnesota]
+          - [Kansas]
+          - [Cuba]
+          - [Lima]
+          - [Buenos Aires]
+          - [Cundinamarca]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: economia_dividendo
@@ -3398,6 +3451,23 @@ trees:
             y el Cabo; 30 divisiones, 7 nodos y 50% de estabilidad.
         reward:
         - {effect: flag, value: HSN_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Hong Kong], effects: [{effect: claim, value: HSN}]}
+        - {effect: in_state, state: [Guangzhou], effects: [{effect: claim, value: HSN}]}
+        - {effect: in_state, state: [Suez], effects: [{effect: claim, value: HSN}]}
+        - {effect: in_state, state: [Panamá], effects: [{effect: claim, value: HSN}]}
+        - {effect: in_state, state: [Gibraltar], effects: [{effect: claim, value: HSN}]}
+        - {effect: in_state, state: [Cape], effects: [{effect: claim, value: HSN}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Hong Kong]
+          - [Guangzhou]
+          - [Suez]
+          - [Panamá]
+          - [Gibraltar]
+          - [Cape]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: puerto_libre
@@ -4481,6 +4551,23 @@ trees:
             (Cundinamarca) y Caracas (Miranda); 35 divisiones, 60 de Inti-Soma y 50% de estabilidad.
         reward:
         - {effect: flag, value: NAS_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Buenos Aires], effects: [{effect: claim, value: NAS}]}
+        - {effect: in_state, state: [Santiago], effects: [{effect: claim, value: NAS}]}
+        - {effect: in_state, state: [São Paulo], effects: [{effect: claim, value: NAS}]}
+        - {effect: in_state, state: [Amazonas], effects: [{effect: claim, value: NAS}]}
+        - {effect: in_state, state: [Cundinamarca], effects: [{effect: claim, value: NAS}]}
+        - {effect: in_state, state: [Miranda], effects: [{effect: claim, value: NAS}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Buenos Aires]
+          - [Santiago]
+          - [São Paulo]
+          - [Amazonas]
+          - [Cundinamarca]
+          - [Miranda]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: terrazas
@@ -5305,6 +5392,23 @@ trees:
             divisiones, Orden en 60 y 50% de estabilidad.
         reward:
         - {effect: flag, value: SHD_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Kanto], effects: [{effect: claim, value: SHD}]}
+        - {effect: in_state, state: [Hong Kong], effects: [{effect: claim, value: SHD}]}
+        - {effect: in_state, state: [Southern Madras], effects: [{effect: claim, value: SHD}]}
+        - {effect: in_state, state: [Manila], effects: [{effect: claim, value: SHD}]}
+        - {effect: in_state, state: [West Java], effects: [{effect: claim, value: SHD}]}
+        - {effect: in_state, state: [Kabul], effects: [{effect: claim, value: SHD}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Kanto]
+          - [Hong Kong]
+          - [Southern Madras]
+          - [Manila]
+          - [West Java]
+          - [Kabul]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: grandes_obras
@@ -6133,6 +6237,33 @@ trees:
             Liberia), Medio Oriente (Bagdad, Teherán, Néyed) y el sur de Europa (Roma, Madrid, Sofía); 60 divisiones y 50% de estabilidad.
         reward:
         - {effect: flag, value: APF_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Shewa], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Cape], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Transvaal], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Senegal], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Liberia], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Baghdad], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Tehran], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Nejd], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Lazio], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Madrid], effects: [{effect: claim, value: APF}]}
+        - {effect: in_state, state: [Sofia], effects: [{effect: claim, value: APF}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Shewa]
+          - [Cape]
+          - [Transvaal]
+          - [Senegal]
+          - [Liberia]
+          - [Baghdad]
+          - [Tehran]
+          - [Nejd]
+          - [Lazio]
+          - [Madrid]
+          - [Sofia]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: aldea
@@ -7025,6 +7156,27 @@ trees:
             Trípoli, Britania (Londres), Crimea y Sofía; 70 divisiones, 50 de Auctoritas y 50% de estabilidad.
         reward:
         - {effect: flag, value: NRE_destino_abierto}
+        # 2026-10-02 (pedido del usuario): la forma final trae sus medios. Reclamos
+        # en cada región que pide y objetivos de guerra contra quien la tenga.
+        - {effect: in_state, state: [Madrid], effects: [{effect: claim, value: NRE}]}
+        - {effect: in_state, state: [Lisbon], effects: [{effect: claim, value: NRE}]}
+        - {effect: in_state, state: [Alexandria], effects: [{effect: claim, value: NRE}]}
+        - {effect: in_state, state: [Tripoli], effects: [{effect: claim, value: NRE}]}
+        - {effect: in_state, state: [Suez], effects: [{effect: claim, value: NRE}]}
+        - {effect: in_state, state: [Greater London Area], effects: [{effect: claim, value: NRE}]}
+        - {effect: in_state, state: [Crimea], effects: [{effect: claim, value: NRE}]}
+        - {effect: in_state, state: [Sofia], effects: [{effect: claim, value: NRE}]}
+        - effect: wargoal_holders
+          type: take_state
+          states:
+          - [Madrid]
+          - [Lisbon]
+          - [Alexandria]
+          - [Tripoli]
+          - [Suez]
+          - [Greater London Area]
+          - [Crimea]
+          - [Sofia]
         - {effect: add_political_power, value: 50}
       src: user_request
     - id: erario

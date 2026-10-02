@@ -4,6 +4,9 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: swap_ideas, remove, add }
   { effect: annex, target: TAG }                 -> annex_country
   { effect: wargoal, target: TAG, type: X }      -> create_wargoal
+  { effect: wargoal_holders, states: [[nombres]], type: take_state }
+      -> objetivo de guerra contra quien tenga cada región ahora (no ROOT, sus
+         satélites, su facción ni los que garantiza)
   { effect: build, building: X, level: N }       -> en la capital, con slots
   { effect: add_resource, resource: X, amount: N } -> en la capital (id resuelto en el build)
   { effect: add_variable, var: X, value: N }      -> add_to_variable
@@ -519,6 +522,27 @@ def render_effects(owner: str, items: list[dict], known,
                 effects_used.setdefault("add_extra_state_shared_building_slots", owner)
             block.add("add_building_construction", construction)
             effects_used.setdefault("add_building_construction", owner)
+            continue
+        if effect == "wargoal_holders":
+            # 2026-10-02 (pedido del usuario): la forma final pide regiones que
+            # cambian de dueño en la partida; el objetivo va contra el dueño
+            # de cada una en el momento de tomar la decisión.
+            kind = item.get("type", "take_state")
+            if ec.wargoals and kind not in ec.wargoals:
+                raise SpecError(f"{owner}: tipo de wargoal '{kind}' no existe en common/wargoals/", where=where)
+            for names in item.get("states") or []:
+                sid = resolve_state(names)
+                if sid is None:
+                    continue
+                friendly = Block([("tag", "ROOT"), ("is_subject_of", "ROOT"), ("is_in_faction_with", "ROOT"),
+                                  ("ROOT", Block([("has_guaranteed", "PREV")]))])
+                limit = Block([("NOT", Block([("is_controlled_by", "ROOT")])),
+                               ("OWNER", Block([("NOT", Block([("OR", friendly)]))]))])
+                goal = Block([("type", kind), ("target", "PREV"), ("generator", Block([(None, sid)]))])
+                take = Block([("limit", limit),
+                              ("OWNER", Block([("ROOT", Block([("create_wargoal", goal)]))]))])
+                block.add(str(sid), Block([("if", take)]))
+            effects_used.setdefault("create_wargoal", owner)
             continue
         if effect == "claim":
             block.add("add_claim_by", item["value"])

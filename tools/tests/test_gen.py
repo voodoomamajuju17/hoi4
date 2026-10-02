@@ -1928,6 +1928,35 @@ def test_ai() -> None:
         check("HSN: cada nodo tiene su 0/1 para el panel", "set_variable = { var = HSN_nodo_kanto value = 1 }" in hsn_rec
               and "set_variable = { var = HSN_nodo_hong_kong value = 0 }" in hsn_rec, hsn_rec[:500])
         es_dec = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
+        from tools.gen.emitters import effects as fx
+        from tools.gen import pdx as _pdx
+        saved = fx._STATES
+        fx.use_states({fx._norm("Lima"): 282})
+        try:
+            wg = " ".join(_pdx.render(fx.render_effects("EFE", [{"effect": "wargoal_holders", "type": "take_state",
+                                                                 "states": [["Lima"]]}], None, {}, where="t")).split())
+        finally:
+            fx.use_states(saved)
+        check("forma final: objetivo de guerra contra quien tenga la region, no aliados",
+              "282 = { if = { limit = { NOT = { is_controlled_by = ROOT }" in wg and "is_subject_of = ROOT" in wg
+              and "is_in_faction_with = ROOT" in wg
+              and "OWNER = { ROOT = { create_wargoal = { type = take_state target = PREV generator = { 282 }" in wg, wg)
+        raw_focus = yaml.safe_load((REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8"))
+        holders = []
+        def find_holders(x):
+            if isinstance(x, dict):
+                if x.get("effect") == "wargoal_holders":
+                    holders.append(x)
+                for v in x.values():
+                    find_holders(v)
+            elif isinstance(x, list):
+                for v in x:
+                    find_holders(v)
+        find_holders(raw_focus)
+        check("forma final: las 8 potencias reciben objetivos de guerra al abrir el Destino", len(holders) == 8, str(len(holders)))
+        dec_ids = [d.get("id") for c in raw_dec.get("categories", []) for d in (c.get("decisions") or [])] if isinstance(raw_dec, dict) else []
+        check("forma final: decision para renovar los objetivos en las 8",
+              sum(1 for i in dec_ids if str(i).endswith("_reclamar_el_destino")) == 8, str([i for i in dec_ids if "destino" in str(i)]))
         cap = " ".join((mod / "common/dynamic_modifiers/meganations_tope_naval.txt").read_text().split())
         check("tope naval: solo la IA, la HSN 120 y el resto 25",
               "is_ai = yes" in cap and "original_tag = HSN has_navy_size = { size > 120 }" in cap

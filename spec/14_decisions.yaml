@@ -7491,6 +7491,37 @@ categories:
     - generic_political_actions
     visible: {flag: EFE_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: EFE_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Dominion of Gaia needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide El Dominio de Gaia y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: EFE_destino_abierto, not_flag: EFE_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Lima]
+        - [La Paz]
+        - [São Paulo]
+        - [Rio de Janeiro]
+        - [Cundinamarca]
+        - [Miranda]
+        - [Amazonas]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: EFE_proclamar_la_forma_final
       name: {english: Proclaim The Dominion of Gaia, spanish: Proclamar El Dominio de Gaia}
       desc:
@@ -7568,6 +7599,36 @@ categories:
     - generic_political_actions
     visible: {flag: FCU_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: FCU_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Americas Corporation needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide La Corporación de las Américas y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: FCU_destino_abierto, not_flag: FCU_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Minnesota]
+        - [Kansas]
+        - [Cuba]
+        - [Lima]
+        - [Buenos Aires]
+        - [Cundinamarca]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: FCU_proclamar_la_forma_final
       name: {english: Proclaim The Americas Corporation, spanish: Proclamar La Corporación de las Américas}
       desc:
@@ -7635,6 +7696,36 @@ categories:
     - generic_political_actions
     visible: {flag: ASC_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: ASC_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Continental Commune needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide La Comuna Continental y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: ASC_destino_abierto, not_flag: ASC_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Ile de France]
+        - [Lazio]
+        - [Madrid]
+        - [Leningrad]
+        - [Crimea]
+        - [Kiev]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: ASC_proclamar_la_forma_final
       name: {english: Proclaim The Continental Commune, spanish: Proclamar La Comuna Continental}
       desc:
@@ -7704,6 +7795,36 @@ categories:
     - generic_political_actions
     visible: {flag: HSN_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: HSN_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Thalassocracy of the Seven Seas needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide La Talasocracia de los Siete Mares y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: HSN_destino_abierto, not_flag: HSN_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Hong Kong]
+        - [Guangzhou]
+        - [Suez]
+        - [Panamá]
+        - [Gibraltar]
+        - [Cape]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: HSN_proclamar_la_forma_final
       name:
         english: Proclaim The Thalassocracy of the Seven Seas
@@ -7773,6 +7894,36 @@ categories:
     - generic_political_actions
     visible: {flag: NAS_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: NAS_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Empire of the Eternal Sun needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide El Imperio del Sol Eterno y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: NAS_destino_abierto, not_flag: NAS_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Buenos Aires]
+        - [Santiago]
+        - [São Paulo]
+        - [Amazonas]
+        - [Cundinamarca]
+        - [Miranda]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: NAS_proclamar_la_forma_final
       name: {english: Proclaim The Empire of the Eternal Sun, spanish: Proclamar El Imperio del Sol Eterno}
       desc:
@@ -7838,6 +7989,36 @@ categories:
     - generic_political_actions
     visible: {flag: SHD_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: SHD_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Celestial Harmony needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide La Armonía Celeste y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: SHD_destino_abierto, not_flag: SHD_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Kanto]
+        - [Hong Kong]
+        - [Southern Madras]
+        - [Manila]
+        - [West Java]
+        - [Kabul]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: SHD_proclamar_la_forma_final
       name: {english: Proclaim The Celestial Harmony, spanish: Proclamar La Armonía Celeste}
       desc:
@@ -7905,6 +8086,41 @@ categories:
     - generic_political_actions
     visible: {flag: APF_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: APF_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Original Human Empire needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide El Imperio Humano Original y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: APF_destino_abierto, not_flag: APF_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Shewa]
+        - [Cape]
+        - [Transvaal]
+        - [Senegal]
+        - [Liberia]
+        - [Baghdad]
+        - [Tehran]
+        - [Nejd]
+        - [Lazio]
+        - [Madrid]
+        - [Sofia]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: APF_proclamar_la_forma_final
       name: {english: Proclaim The Original Human Empire, spanish: Proclamar El Imperio Humano Original}
       desc:
@@ -7977,6 +8193,38 @@ categories:
     - generic_political_actions
     visible: {flag: NRE_destino_abierto}
     decisions:
+    # 2026-10-02 (pedido del usuario): poder declarar las guerras que dan el
+    # territorio de la forma final, contra quien tenga cada región en ese momento
+    - id: NRE_reclamar_el_destino
+      name: {english: Claim the Lands of Destiny, spanish: Reclamar las tierras del Destino}
+      desc:
+        english: 'Every region The Eternal Roman Empire needs that is still in foreign hands becomes a war goal against whoever holds it now (not our satellites,
+          our faction or those we guarantee).'
+        spanish: 'Cada región que pide El Imperio Romano Eterno y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: NRE_destino_abierto, not_flag: NRE_forma_final}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        states:
+        - [Madrid]
+        - [Lisbon]
+        - [Alexandria]
+        - [Tripoli]
+        - [Suez]
+        - [Greater London Area]
+        - [Crimea]
+        - [Sofia]
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0.3
+          when: {at_war: true}
+      src: user_request
     - id: NRE_proclamar_la_forma_final
       name: {english: Proclaim The Eternal Roman Empire, spanish: Proclamar El Imperio Romano Eterno}
       desc:
