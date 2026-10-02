@@ -4193,23 +4193,24 @@ trees:
         reward:
         - {effect: add_ideas, value: NAS_invierno_nunca_mas}
       - id: NAS_el_sol_contra_el_directorio
-        name: {english: The Sun against the Directorate, spanish: El Sol contra el Directorio}
+        name: {english: The Pact of the Mandate, spanish: El Pacto del Mandato}
         days: 105
-        icon: GFX_goal_generic_major_war
+        icon: GFX_goal_generic_political_pressure
         prerequisites:
         - NAS_el_invierno_nunca_mas
-        available: {country_exists: SHD}
-        ai:
-          factor: 1
-          modifiers:
-          - factor: 0
-            when: {at_war: true}
+        # 2026-10-02 (pedido del usuario): el Sol y el Directorio son aliados del
+        # Mandato Trascendente, no rivales. Primer paso de la alianza.
         desc:
-          english: 'An ultimatum to the Directorate: out of the Andes. War only if it refuses.'
-          spanish: 'Un ultimátum al Directorio: fuera de los Andes. Guerra solo si se niega.'
+          english: 'An embassy to the Directorate: Andean lithium for Harmonious engineers, and a pact between the two thrones above politics.
+            Non-aggression and mutual guarantee if they sign.'
+          spanish: 'Una embajada al Directorio: litio de los Andes a cambio de ingenieros armónicos, y un pacto entre los dos tronos que están
+            por encima de la política. No agresión y garantía mutua si firman.'
         reward:
-        - {effect: event, id: meganations_shd.1, target: SHD}
-        - {effect: add_war_support, value: 0.05}
+        - effect: if
+          when: {country_exists: SHD}
+          then:
+          - {effect: event, id: meganations_shd.1, target: SHD}
+        - {effect: add_political_power, value: 50}
       - id: NAS_el_trono_del_sol
         name: {english: The Throne of the Sun, spanish: El Trono del Sol}
         days: 84
@@ -5125,23 +5126,23 @@ trees:
         reward:
         - {effect: swap_ideas, remove: SHD_vigilancia, add: SHD_caudal_perfecto}
       - id: SHD_corregir_el_sol
-        name: {english: Correct the Sun, spanish: Corregir el Sol}
+        name: {english: Engineers for the Sun, spanish: Ingenieros para el Sol}
         days: 105
-        icon: GFX_goal_generic_major_war
+        icon: GFX_goal_generic_trade
         prerequisites:
         - SHD_el_caudal_perfecto
-        available: {country_exists: NAS}
-        ai:
-          factor: 1
-          modifiers:
-          - factor: 0
-            when: {at_war: true}
+        # 2026-10-02: segundo paso de la alianza del Mandato (antes era un ultimátum)
         desc:
-          english: 'An ultimatum to the Sky Kingdom: harmonious standards or war.'
-          spanish: 'Un ultimátum al Reino Celeste: estándares armónicos o guerra.'
+          english: 'The Directorate sends its hydraulic engineers to the Sky Kingdom: corrected terraces, mines in order, and the Mandate shared
+            from the Yellow River to the Andes.'
+          spanish: 'El Directorio manda a sus ingenieros hidráulicos al Reino Celeste: terrazas corregidas, minas en orden, y el Mandato compartido
+            del Río Amarillo a los Andes.'
         reward:
-        - {effect: event, id: meganations_nas.5, target: NAS}
-        - {effect: add_war_support, value: 0.05}
+        - effect: if
+          when: {country_exists: NAS}
+          then:
+          - {effect: event, id: meganations_nas.5, target: NAS}
+        - {effect: add_political_power, value: 50}
     - id: gran_crecida
       ai_factor: 5        # rama política: la IA la hacía al final (análisis 2026-10-01)
       name: {english: The Great Flood, spanish: La Gran Crecida}

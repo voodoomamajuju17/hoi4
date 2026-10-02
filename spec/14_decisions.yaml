@@ -4994,7 +4994,7 @@ categories:
     - id: MEGANATIONS_pacto_con_EFE
       name: {english: Pact with the Ecofascist Empire, spanish: Pacto con el Imperio Ecofascista}
       desc: {english: Offer the Ecofascist Empire a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle
-          a el Imperio Ecofascista un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
+          al Imperio Ecofascista un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
       icon_prefer: [generic_political_actions]
       cost: 100
       cooldown_days: 365
@@ -5018,8 +5018,8 @@ categories:
           when: {at_war: true}
       src: user_request
     - id: MEGANATIONS_paz_con_EFE
-      name: {english: Offer Peace to the Ecofascist Empire, spanish: Ofrecerle la Paz a el Imperio Ecofascista}
-      desc: {english: Offer the Ecofascist Empire to end the war where it stands., spanish: Ofrecerle a el Imperio Ecofascista terminar la guerra
+      name: {english: Offer Peace to the Ecofascist Empire, spanish: Ofrecerle la Paz al Imperio Ecofascista}
+      desc: {english: Offer the Ecofascist Empire to end the war where it stands., spanish: Ofrecerle al Imperio Ecofascista terminar la guerra
           donde está.}
       icon_prefer: [generic_political_actions]
       cost: 75
@@ -5156,7 +5156,7 @@ categories:
       src: user_request
     - id: MEGANATIONS_pacto_con_NAS
       name: {english: Pact with the Sun Kingdom, spanish: Pacto con el Reino del Sol}
-      desc: {english: Offer the Sun Kingdom a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a el Reino
+      desc: {english: Offer the Sun Kingdom a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle al Reino
           del Sol un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
       icon_prefer: [generic_political_actions]
       cost: 100
@@ -5166,7 +5166,6 @@ categories:
         not:
           any:
           - {tag: NAS}
-          - {tag: SHD}
       available:
         all:
         - not: {war_with: NAS}
@@ -5180,8 +5179,8 @@ categories:
           when: {at_war: true}
       src: user_request
     - id: MEGANATIONS_paz_con_NAS
-      name: {english: Offer Peace to the Sun Kingdom, spanish: Ofrecerle la Paz a el Reino del Sol}
-      desc: {english: Offer the Sun Kingdom to end the war where it stands., spanish: Ofrecerle a el Reino del Sol terminar la guerra donde está.}
+      name: {english: Offer Peace to the Sun Kingdom, spanish: Ofrecerle la Paz al Reino del Sol}
+      desc: {english: Offer the Sun Kingdom to end the war where it stands., spanish: Ofrecerle al Reino del Sol terminar la guerra donde está.}
       icon_prefer: [generic_political_actions]
       cost: 75
       cooldown_days: 180
@@ -5196,7 +5195,7 @@ categories:
       src: user_request
     - id: MEGANATIONS_pacto_con_SHD
       name: {english: Pact with the Directorate, spanish: Pacto con el Directorio}
-      desc: {english: Offer the Directorate a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle a el Directorio
+      desc: {english: Offer the Directorate a non-aggression pact and a mutual guarantee. Not offered to bloc rivals., spanish: Ofrecerle al Directorio
           un pacto de no agresión y una garantía mutua. No se ofrece a los rivales de bloque.}
       icon_prefer: [generic_political_actions]
       cost: 100
@@ -5206,7 +5205,6 @@ categories:
         not:
           any:
           - {tag: SHD}
-          - {tag: NAS}
       available:
         all:
         - not: {war_with: SHD}
@@ -5220,8 +5218,8 @@ categories:
           when: {at_war: true}
       src: user_request
     - id: MEGANATIONS_paz_con_SHD
-      name: {english: Offer Peace to the Directorate, spanish: Ofrecerle la Paz a el Directorio}
-      desc: {english: Offer the Directorate to end the war where it stands., spanish: Ofrecerle a el Directorio terminar la guerra donde está.}
+      name: {english: Offer Peace to the Directorate, spanish: Ofrecerle la Paz al Directorio}
+      desc: {english: Offer the Directorate to end the war where it stands., spanish: Ofrecerle al Directorio terminar la guerra donde está.}
       icon_prefer: [generic_political_actions]
       cost: 75
       cooldown_days: 180
@@ -17982,6 +17980,24 @@ scripted_effects:
             - {effect: add_slot, value: 1}
 
   # Eventos mundiales (2026-09-29): el primer pulso de cualquier meganación después de la fecha los dispara para todos
+  # 2026-10-02: el Sol y el Directorio, con el pacto y los ingenieros, comparten el Mandato
+  - id: MEGANATIONS_mandato_compartido
+    effects:
+    - effect: if
+      when: {global_flag: MEGANATIONS_mandato_pacto, not_global_flag: MEGANATIONS_mandato_hecho}
+      then:
+      - effect: if
+        when: {global_flag: MEGANATIONS_mandato_ingenieros}
+        then:
+        - {effect: global_flag, value: MEGANATIONS_mandato_hecho}
+        - effect: if
+          when: {country_exists: NAS}
+          then:
+          - {effect: event, id: meganations_nas.243, days: 1, target: NAS}
+        - effect: if
+          when: {country_exists: SHD}
+          then:
+          - {effect: event, id: meganations_shd.240, days: 1, target: SHD}
   - id: MEGANATIONS_eventos_mundiales
     effects:
     # Crisis del siglo (análisis 2026-10-01, prioridad 12): desde 2106, una cada ~8 meses
@@ -19088,6 +19104,11 @@ scripted_effects:
 
 
 dynamic_modifiers:
+  - id: MEGANATIONS_mandato_compartido
+    country: null
+    name: {english: 'The Shared Mandate', spanish: 'El Mandato Compartido'}
+    desc: {english: 'Sun and Harmony share archives and patents.', spanish: 'El Sol y la Armonía comparten archivos y patentes.'}
+    modifiers: {research_speed_factor: 0.05, political_power_gain: 0.05, stability_factor: 0.03}
   # Segunda etapa (análisis 2026-10-01, prioridad 12): crisis del siglo, la Gran Obra y la Hegemonía
   - id: MEGANATIONS_sequia
     country: null

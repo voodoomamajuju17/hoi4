@@ -821,3 +821,15 @@ llega a 100 al toque y la tensión nunca sube".
     busca en los .gui de investigación la ventana de blindados y usa el
     sprite más grande que dibuja (search: armor/armour/tank). Si no lo
     encuentra, el reporte lista los candidatos.
+- **El Sol y el Directorio, aliados del Mandato** (2026-10-02, pedido del
+  usuario: la rivalidad cruzando el Pacífico no tenía sentido). Se saca la
+  rivalidad de bloque y los planes de guerra entre ellos. La cadena es ahora
+  una alianza en tres pasos:
+  1. El Pacto del Mandato (foco del NAS, antes El Sol contra el Directorio):
+     el Directorio firma (85%) no agresión + garantía mutua + "Aliados del
+     Mandato" (+80 de opinión).
+  2. Ingenieros para el Sol (foco del SHD, antes Corregir el Sol): el Sol
+     recibe ingenieros (80%): estabilidad, PP e Inti.
+  3. Con los dos hechos, los dos reciben El Mandato Compartido (+5%
+     investigación, +5% PP, +3% estabilidad).
+  Si el otro ya no existe, el foco igual se toma (no traba El Trono del Sol).

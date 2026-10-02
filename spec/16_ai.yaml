@@ -333,30 +333,6 @@ plans:
   enable: {flag: HSN_contra_FCU, at_war: false, divisions_at_least: 20}
   strategies:
   - {type: declare_war, target: FCU, value: 80}
-- id: NAS_ultimatum_SHD
-  country: NAS
-  lore: 'El Sol contra el Directorio: SHD se negó.'
-  enable: {flag: NAS_contra_SHD}
-  strategies:
-  - {type: prepare_for_war, target: SHD, value: 100}
-  - {type: antagonize, target: SHD, value: 50}
-- id: NAS_ultimatum_declara_SHD
-  country: NAS
-  enable: {flag: NAS_contra_SHD, at_war: false, divisions_at_least: 20}
-  strategies:
-  - {type: declare_war, target: SHD, value: 80}
-- id: SHD_ultimatum_NAS
-  country: SHD
-  lore: 'Corregir el Sol: NAS se negó.'
-  enable: {flag: SHD_contra_NAS}
-  strategies:
-  - {type: prepare_for_war, target: NAS, value: 100}
-  - {type: antagonize, target: NAS, value: 50}
-- id: SHD_ultimatum_declara_NAS
-  country: SHD
-  enable: {flag: SHD_contra_NAS, at_war: false, divisions_at_least: 20}
-  strategies:
-  - {type: declare_war, target: NAS, value: 80}
 - id: NRE_ultimatum_EFE
   country: NRE
   lore: 'Roma contra la Tierra: EFE se negó.'

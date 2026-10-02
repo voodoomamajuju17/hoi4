@@ -6333,45 +6333,42 @@ namespaces:
     - id: 4
       trigger: effect
       picture: GFX_report_event_generic_factory
-      title: {english: The Directorate Bows, spanish: El Directorio se Inclina}
+      title: {english: The Directorate Signs the Pact, spanish: El Directorio Firma el Pacto}
       desc:
-        english: The Sino-Harmonious Directorate has recognised the Sun's sovereignty over the Pacific coast and its metals. A technical adjustment,
-          their communiqué says.
-        spanish: El Directorio Sino-Armónico reconoció la soberanía del Sol sobre la costa del Pacífico y sus metales. Un ajuste técnico, dice su
-          comunicado.
+        english: 'The Sino-Harmonious Directorate signed the Pact of the Mandate: non-aggression, mutual guarantee and lithium for engineers. The Sun
+          and the Harmony, across the Pacific.'
+        spanish: 'El Directorio Sino-Armónico firmó el Pacto del Mandato: no agresión, garantía mutua y litio por ingenieros. El Sol y la Armonía,
+          de los dos lados del Pacífico.'
       options:
       - name: {english: The Sun shines on everyone., spanish: El Sol brilla para todos.}
         effects:
-        - {effect: add_political_power, value: 150}
-        - {effect: add_variable, var: NAS_inti, value: 25}
-      src: user_design
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: NAS_inti, value: 15}
+        - {effect: global_flag, value: MEGANATIONS_mandato_pacto}
+        - {effect: run, value: MEGANATIONS_mandato_compartido}
+      src: user_request
     - id: 5
       trigger: effect
       picture: GFX_report_event_generic_factory
-      title: {english: Correcting the Sun, spanish: Corregir el Sol}
+      title: {english: Engineers for the Sun, spanish: Ingenieros para el Sol}
       desc:
-        english: The Sino-Harmonious Directorate demands that the Sky Kingdom adopt its 'harmonious standards' for mining and ports, which means Directorate
-          inspectors in every mine of the altiplano.
-        spanish: El Directorio Sino-Armónico exige que el Reino Celeste adopte sus 'estándares armónicos' de minería y puertos, lo que significa inspectores
-          del Directorio en cada mina del altiplano.
+        english: The Directorate offers its hydraulic engineers for our terraces and mines. They measure everything and explain nothing, but the
+          water reaches the highest fields.
+        spanish: El Directorio ofrece a sus ingenieros hidráulicos para nuestras terrazas y minas. Miden todo y no explican nada, pero el agua llega
+          a los campos más altos.
       options:
-      - name: {english: Accept the inspectors., spanish: Aceptar a los inspectores.}
-        ai_chance: 30
+      - name: {english: Welcome the engineers., spanish: Recibir a los ingenieros.}
+        ai_chance: 80
         effects:
-        - {effect: add_stability, value: -0.1}
+        - {effect: add_political_power, value: 50}
+        - {effect: add_stability, value: 0.03}
+        - {effect: add_variable, var: NAS_inti, value: 10}
         - {effect: event, id: meganations_shd.4, target: SHD}
-      - name: {english: The Sun is not inspected., spanish: Al Sol no se lo inspecciona.}
-        ai_chance: 70
+      - name: {english: The Sun builds its own terraces., spanish: El Sol construye sus propias terrazas.}
+        ai_chance: 20
         effects:
-        - {effect: add_war_support, value: 0.1}
-        # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
-        - {effect: scope, target: SHD, effects: [{effect: flag, value: SHD_contra_NAS}, {effect: add_variable, var: MN_inf_NAS, value: 20}, {effect: clamp, var: MN_inf_NAS, min: 0, max: 100}]}
-        - effect: scope
-          target: SHD
-          effects:
-          - {effect: wargoal, target: NAS, type: annex_everything}
-      src: user_design
-
+        - {effect: add_war_support, value: 0.02}
+      src: user_request
     - id: 20
       trigger: on_startup
       picture: GFX_report_event_generic_rally
@@ -7340,36 +7337,49 @@ namespaces:
         - {effect: add_war_support, value: 0.05}
         - {effect: flag, value: NAS_contra_EFE}
       src: user_design
+    - id: 243
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Shared Mandate, spanish: El Mandato Compartido}
+      desc:
+        english: 'Pact signed, engineers at work: the Sun and the Harmony now share archives, observatories and patents. Two thrones above
+          politics, and one research programme.'
+        spanish: 'Pacto firmado, ingenieros trabajando: el Sol y la Armonía ya comparten archivos, observatorios y patentes. Dos tronos por encima
+          de la política, y un solo programa de investigación.'
+      options:
+      - name: {english: One Mandate., spanish: Un solo Mandato.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_mandato_compartido}
+      src: user_request
   meganations_shd:
     country: SHD
     events:
+    # 2026-10-02 (pedido del usuario): el Sol y el Directorio son aliados del Mandato
     - id: 1
       trigger: effect
       picture: GFX_report_event_generic_factory
-      title: {english: The Sun against the Directorate, spanish: El Sol contra el Directorio}
+      title: {english: The Pact of the Mandate, spanish: El Pacto del Mandato}
       desc:
-        english: 'The Neo-Andean Sky Kingdom demands that the Directorate withdraw its mining concessions from the Andes and recognise the Sun''s
-          sovereignty over the Pacific coast. The Director reads the demand as a flow reading: too high.'
-        spanish: 'El Reino Celeste Neoandino exige que el Directorio retire sus concesiones mineras de los Andes y reconozca la soberanía del Sol
-          sobre la costa del Pacífico. El Director lee la exigencia como una lectura de caudal: demasiado alta.'
+        english: 'An embassy of the Sky Kingdom arrives with lithium samples and a proposal: two thrones above politics, one Mandate. Non-aggression,
+          mutual guarantee, Andean lithium for our engineers. The Director reads it as a flow reading: favourable.'
+        spanish: 'Llega una embajada del Reino Celeste con muestras de litio y una propuesta: dos tronos por encima de la política, un solo Mandato.
+          No agresión, garantía mutua, litio de los Andes a cambio de nuestros ingenieros. El Director lo lee como una lectura de caudal: favorable.'
       options:
-      - name: {english: Adjust. The Andes are far., spanish: Ajustar. Los Andes quedan lejos.}
-        ai_chance: 40
+      - name: {english: 'Sign: the Mandate is not divided.', spanish: 'Firmar: el Mandato no se divide.'}
+        ai_chance: 85
         effects:
-        - {effect: add_political_power, value: -100}
+        - {effect: relation, value: NAS, type: non_aggression_pact}
+        - {effect: guarantee, value: NAS}
+        - {effect: scope, target: NAS, effects: [{effect: guarantee, value: SHD}]}
+        - {effect: opinion, target: NAS, modifier: meganations_mandato}
+        - {effect: scope, target: NAS, effects: [{effect: opinion, target: SHD, modifier: meganations_mandato}]}
+        - {effect: add_political_power, value: 50}
         - {effect: event, id: meganations_nas.4, target: NAS}
-      - name: {english: Harmony does not bow to the Sun., spanish: La Armonía no se inclina ante el Sol.}
-        ai_chance: 60
+      - name: {english: The Directorate stands alone., spanish: El Directorio se sostiene solo.}
+        ai_chance: 15
         effects:
-        - {effect: add_war_support, value: 0.1}
-        # análisis 2026-10-01: el rechazo abre la rivalidad (planes de IA) y la guerra en las sombras
-        - {effect: scope, target: NAS, effects: [{effect: flag, value: NAS_contra_SHD}, {effect: add_variable, var: MN_inf_SHD, value: 20}, {effect: clamp, var: MN_inf_SHD, min: 0, max: 100}]}
-        - effect: scope
-          target: NAS
-          effects:
-          - {effect: wargoal, target: SHD, type: annex_everything}
-      src: user_design
-
+        - {effect: add_political_power, value: 25}
+      src: user_request
     - id: 2
       trigger: on_startup
       hidden: true
@@ -7399,16 +7409,18 @@ namespaces:
     - id: 4
       trigger: effect
       picture: GFX_report_event_generic_factory
-      title: {english: The Sun Bows, spanish: El Sol se Inclina}
+      title: {english: The Sun Welcomes the Engineers, spanish: El Sol Recibe a los Ingenieros}
       desc:
-        english: 'The Sky Kingdom has accepted the Directorate''s terms: its mines and ports will run on harmonious standards.'
-        spanish: 'El Reino Celeste aceptó las condiciones del Directorio: sus minas y puertos van a funcionar con estándares armónicos.'
+        english: 'Our engineers are already correcting the rivers of the altiplano. The Mandate reaches the Andes.'
+        spanish: 'Nuestros ingenieros ya corrigen los ríos del altiplano. El Mandato llega a los Andes.'
       options:
       - name: {english: The flow is corrected., spanish: El caudal está corregido.}
         effects:
-        - {effect: add_political_power, value: 150}
+        - {effect: add_political_power, value: 100}
         - {effect: add_variable, var: SHD_orden, value: 5}
-      src: user_design
+        - {effect: global_flag, value: MEGANATIONS_mandato_ingenieros}
+        - {effect: run, value: MEGANATIONS_mandato_compartido}
+      src: user_request
     - id: 20
       trigger: on_startup
       picture: GFX_report_event_generic_rally
@@ -8522,6 +8534,20 @@ namespaces:
         - {effect: add_war_support, value: 0.03}
       src: user_design
   # ===========================================================================
+    - id: 240
+      trigger: effect
+      picture: GFX_report_event_generic_factory
+      title: {english: The Shared Mandate, spanish: El Mandato Compartido}
+      desc:
+        english: 'Pact signed, engineers at work: the Sun and the Harmony now share archives, observatories and patents. Two thrones above
+          politics, and one research programme.'
+        spanish: 'Pacto firmado, ingenieros trabajando: el Sol y la Armonía ya comparten archivos, observatorios y patentes. Dos tronos por encima
+          de la política, y un solo programa de investigación.'
+      options:
+      - name: {english: One Mandate., spanish: Un solo Mandato.}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_mandato_compartido}
+      src: user_request
   meganations_nre:
     country: NRE
     events:

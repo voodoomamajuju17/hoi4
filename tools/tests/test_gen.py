@@ -1665,8 +1665,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa y 10 de la segunda etapa",
-              len(dm.entries) == 29 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa y el Mandato Compartido",
+              len(dm.entries) == 30 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -1801,8 +1801,22 @@ def test_shd() -> None:
         by = {pdx.text(f.get("id")): f for f in focuses}
         check("Zhou asciende con la Gran Crecida", "promote_character = SHD_zhou_mingyuan"
               in pdx.render(by["SHD_abrir_las_compuertas"].get("completion_reward")))
-        check("Corregir el Sol es un ultimatum al NAS",
-              "meganations_nas.5" in pdx.render(by["SHD_corregir_el_sol"].get("completion_reward")))
+        # 2026-10-02 (pedido del usuario): el Sol y el Directorio son aliados del Mandato
+        ing = " ".join(pdx.render(by["SHD_corregir_el_sol"].get("completion_reward")).split())
+        check("Ingenieros para el Sol: oferta al NAS, sin guerra",
+              "meganations_nas.5" in ing and "add_war_support" not in ing, ing)
+        nas_ev = " ".join((mod / "events/meganations_nas.txt").read_text(encoding="utf-8-sig").split())
+        shd_ev = " ".join((mod / "events/meganations_shd.txt").read_text(encoding="utf-8-sig").split())
+        e1 = shd_ev[shd_ev.index("id = meganations_shd.1 "):][:1500]
+        check("el Pacto del Mandato: no agresion y garantia mutua, nunca objetivo de guerra",
+              "relation = non_aggression_pact" in e1 and "create_wargoal" not in e1, e1)
+        check("los dos pasos abren el Mandato Compartido",
+              "MEGANATIONS_mandato_compartido" in nas_ev and "MEGANATIONS_mandato_compartido" in shd_ev
+              and "id = meganations_nas.243" in nas_ev and "id = meganations_shd.240" in shd_ev)
+        import yaml as _y
+        _dip = _y.safe_load((REPO_ROOT / "spec/04_diplomacy.yaml").read_text(encoding="utf-8"))
+        check("el Sol y el Directorio ya no son rivales",
+              not any(set(r["between"]) == {"SHD", "NAS"} for r in _dip["rivalries"]))
         eff = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
         check("la armonia se recalcula", "SHD_recalcular_caudales" in eff and "SHD_armonia_perfecta" in eff
               and "SHD_desborde" in eff)
