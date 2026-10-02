@@ -1927,6 +1927,13 @@ def test_ai() -> None:
         check("HSN: cada nodo tiene su 0/1 para el panel", "set_variable = { var = HSN_nodo_kanto value = 1 }" in hsn_rec
               and "set_variable = { var = HSN_nodo_hong_kong value = 0 }" in hsn_rec, hsn_rec[:500])
         es_dec = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
+        cap = " ".join((mod / "common/dynamic_modifiers/meganations_tope_naval.txt").read_text().split())
+        check("tope naval: solo la IA, la HSN 120 y el resto 25",
+              "is_ai = yes" in cap and "original_tag = HSN has_navy_size = { size > 120 }" in cap
+              and "has_navy_size = { size > 25 }" in cap and "industrial_capacity_dockyard = -2.0" in cap, cap[:600])
+        cap_on = " ".join((mod / "common/on_actions/05_meganations_tope_naval.txt").read_text().split())
+        check("tope naval: se da a todos al arrancar",
+              "on_startup = { effect = { every_country = { add_dynamic_modifier = { modifier = MEGANATIONS_tope_naval" in cap_on, cap_on)
         check("HSN: el panel explica que es un nodo y lista los 8", "¿QUÉ ES?" in es_dec and "Hong Kong: [?HSN_nodo_hong_kong]" in es_dec)
         zwe_tree = " ".join((mod / "common/national_focus/ZWE_focus.txt").read_text().split())
         check("Anarquia: arbol de 7 focos", zwe_tree.count("focus = { id = ZWE_foco_") == 7, str(zwe_tree.count("focus = { id = ZWE_foco_")))

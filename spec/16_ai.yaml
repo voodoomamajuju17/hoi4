@@ -97,6 +97,22 @@ military:
     - {type: role_ratio, id: infantry, value: 70}
 
 # -----------------------------------------------------------------------------
+# Tope de flota de la IA (2026-10-02, partida a 2106: "esta cantidad de barcos
+# construidos es ridícula"; el EFE tenía 710 y el SHD 678, casi todos
+# destructores). La IA del juego llena todos los astilleros que tiene (el
+# mínimo de 15_balance les da 10) y nunca para. Cuando una IA pasa su tope de
+# barcos, sus astilleros pierden casi toda la producción hasta que baje.
+# El jugador no tiene tope.
+# -----------------------------------------------------------------------------
+naval_cap:
+  src: user_request
+  default: 25
+  by_country: {HSN: 120, FCU: 60, NRE: 50, ASC: 50}
+  # -2 y no -1: las ideas y la industria les suman bonos de astillero
+  modifiers: {industrial_capacity_dockyard: -2.0}
+  name: {english: "Fleet at Capacity", spanish: "Flota completa"}
+
+# -----------------------------------------------------------------------------
 # Guerras contra la Anarquía vecina (2026-09-28: "todos comienzan en paz" y
 # "más conflicto, sin battle royale en un año"). Cada meganación que toca una
 # anarquía la quiere conquistar y se prepara desde el día uno; declara desde su
