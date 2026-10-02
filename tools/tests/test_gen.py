@@ -1540,7 +1540,10 @@ def test_balance() -> None:
               any("GFX_industry_techtree_bg -> gfx/interface/techtree/industry_bg.dds (12x8)" in n for n in ctx.notes),
               "\n".join(n for n in ctx.notes if "investigacion" in n))
         check("investigacion: avisa la rama que el juego no tiene",
-              any("GFX_armor_techtree_bg no existe" in w for w in ctx.warnings))
+              any("GFX_naval_techtree_bg no existe" in w for w in ctx.warnings), str(ctx.warnings))
+        check("investigacion: el fondo de una expansion (blindados) tambien lleva la imagen",
+              (mod / "gfx/interface/techtree/armor_nsb_bg.dds").exists()
+              and not any("GFX_armor_techtree_bg no existe" in w for w in ctx.warnings))
         from tools.gen.emitters.menu import _cover
         src = bytearray(128) + bytes(range(4 * 4 * 2)) * 1
         struct_src = bytearray(src)
@@ -1549,6 +1552,9 @@ def test_balance() -> None:
         check("investigacion: _cover recorta al centro sin deformar",
               _st.unpack_from("<II", cov, 12) == (2, 2) and len(cov) == 128 + 2 * 2 * 4
               and cov[128:132] == bytes(struct_src[128 + 4:128 + 8]), cov[128:].hex())
+        cov = _cover(bytes(struct_src), 4, 2, 2, 2, anchor="top_left")
+        check("investigacion: el fondo de rama se recorta desde arriba a la izquierda (ahi va la foto)",
+              cov[128:132] == bytes(struct_src[128:132]), cov[128:].hex())
 
         efe_c = (mod / "common/countries/Ecofascist_Empire.txt").read_text()
         check("EFE con cultura grafica sudamericana", "southamerican_gfx" in efe_c and "southamerican_2d" in efe_c, efe_c)

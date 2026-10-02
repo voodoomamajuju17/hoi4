@@ -48,7 +48,9 @@ KINDS = {
     "ui_background": {"size": (192, 192), "transparent": False, "fit": "cover"},
     # fondos de cada rama de investigación (11_scenario -> research_backgrounds):
     # el generador los recorta al tamaño del juego
-    "research_background": {"size": (1024, 1024), "transparent": False, "fit": "cover"},
+    # Lo negro se vuelve transparente (ver _fundir): si no, el juego dibuja un
+    # rectángulo negro con borde duro sobre el fondo gris de la ventana.
+    "research_background": {"size": (1024, 1024), "transparent": True, "fit": "cover"},
 }
 
 COMMON_STYLE = (
@@ -367,6 +369,25 @@ def _readme(summary: list[str]) -> str:
 # ---------------------------------------------------------------------------
 
 
+def _fundir(img):
+    """Fondo de rama de investigación: el negro pasa a transparente y los
+    bordes derecho e inferior se desvanecen del todo, así la foto se funde con
+    el fondo de la ventana en vez de terminar en un rectángulo negro."""
+    from PIL import Image, ImageChops, ImageFilter
+    img = img.convert("RGBA")
+    w, h = img.size
+    luz = img.convert("L").filter(ImageFilter.GaussianBlur(max(2, w // 128)))
+    alpha = luz.point(lambda v: min(255, v * 5))
+    # rampa geométrica: el último 20% del ancho y del alto llega a cero
+    ramp_x = Image.linear_gradient("L").rotate(90, expand=True).transpose(Image.FLIP_LEFT_RIGHT).resize((w, h))
+    ramp_x = ramp_x.point(lambda v: min(255, v * 5))
+    ramp_y = Image.linear_gradient("L").transpose(Image.FLIP_TOP_BOTTOM).resize((w, h))
+    ramp_y = ramp_y.point(lambda v: min(255, v * 5))
+    alpha = ImageChops.multiply(ImageChops.multiply(alpha, ramp_x), ramp_y)
+    img.putalpha(alpha)
+    return img
+
+
 def importar(source: str) -> None:
     from PIL import Image  # solo acá: el instalador del usuario no lo necesita
 
@@ -411,6 +432,8 @@ def importar(source: str) -> None:
                               [tuple(raw[k:k + 3]) for k in range(0, len(raw), 3)])
             done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
             continue
+        if item["type"] == "research_background":
+            img = _fundir(img)
         raw = img.tobytes()
         pixels = [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)]
         if not kind["transparent"]:

@@ -412,51 +412,97 @@ def _stretched_textures(ctx: BuildContext) -> dict[str, tuple[str, int, int]]:
 # su tamaño se leen del juego instalado; nuestra imagen la cubre sin deformarse.
 # ---------------------------------------------------------------------------
 _TECHTREE_BG = re.compile(r"^GFX_(\w+)_techtree_bg$")
+# Otros nombres con que el juego o una expansión puede llamar a la misma rama.
+_BRANCH_ALIASES = {"armor": ("armor", "armour", "tank"), "air": ("air", "plane"), "naval": ("naval", "navy", "ship")}
 
 
 def _emit_research(ctx: BuildContext) -> None:
     spec = (ctx.spec.raw.get("scenario") or {}).get("research_backgrounds")
     if not spec:
         return
-    sprites: dict[str, str] = {}
-    for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
-        try:
-            text = path.read_text(encoding="utf-8-sig", errors="replace")
-        except OSError:
-            continue
-        for name, texture in _ANY_SPRITE.findall(text):
-            if _TECHTREE_BG.match(name):
-                sprites.setdefault(name, re.sub(r"/+", "/", texture.replace("\\", "/")))
-    wanted = {it["sprite"] for it in spec.get("items") or []}
-    for name in sorted(set(sprites) - wanted):
-        ctx.note(f"fondos de investigacion: {name} -> {sprites[name]} no tiene imagen pedida")
+    sprites, dims = _techtree_sprites(ctx)
+    items = spec.get("items") or []
+    # Una rama puede tener más de un sprite: las expansiones cambian algunos
+    # árboles (2026-10-02: el de blindados del diseñador de tanques mostraba la
+    # foto vieja). Cada imagen va a todo sprite *_techtree_bg cuyo nombre
+    # contenga la rama del pedido (armor -> GFX_armor_techtree_bg y cualquier
+    # variante con "armor").
+    covered: set[str] = set()
     done = 0
-    for it in spec.get("items") or []:
-        texture = sprites.get(it["sprite"])
-        if not texture and it.get("search"):
+    for it in items:
+        key = _TECHTREE_BG.match(it["sprite"]).group(1) if _TECHTREE_BG.match(it["sprite"]) else it["sprite"]
+        keys = _BRANCH_ALIASES.get(key, (key,))
+        names = sorted(n for n in sprites
+                       if n == it["sprite"] or any(k in _TECHTREE_BG.match(n).group(1) for k in keys))
+        if not names and it.get("search"):
+            # respaldo (2026-10-02): la ventana de la rama en los .gui y su sprite más grande
             found = _branch_sprite(ctx, it["search"])
             if found:
-                ctx.note(f"fondos de investigacion: {it['sprite']} no existe; la pestaña usa {found[0]} -> {found[1]}")
-                texture = found[1]
-        if not texture:
+                sprites[found[0]] = found[1]
+                names = [found[0]]
+        if not names:
             ctx.warn(f"fondos de investigacion: {it['sprite']} no existe en el juego; "
                      f"los que hay: {', '.join(sorted(sprites)) or 'ninguno'}")
             continue
         image = ctx.spec.root.parent / "assets" / "ui" / "investigacion" / f"{it['id']}.dds"
-        vw, vh = _texture_dims(ctx, texture)
-        ctx.note(f"fondos de investigacion: {it['sprite']} -> {texture} ({vw}x{vh})"
-                 + ("" if image.exists() else ", falta la imagen"))
-        if not image.exists():
+        for name in names:
+            texture = sprites[name]
+            covered.add(name)
+            vw, vh = _texture_dims(ctx, texture)
+            if not (vw and vh):
+                vw, vh = dims.get(texture, (0, 0))
+            ctx.note(f"fondos de investigacion: {name} -> {texture} ({vw}x{vh})"
+                     + ("" if image.exists() else ", falta la imagen"))
+            if not image.exists():
+                continue
+            src = image.read_bytes()
+            w, h = _dims(src)
+            # Arriba a la izquierda: ahí está la foto; lo que sobra es el fundido.
+            data = _cover(src, w, h, vw, vh, anchor="top_left") if vw and vh and (vw, vh) != (w, h) else src
+            dest = ctx.mod_root / texture
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(data)
+            ctx.track(dest)
+        if image.exists():
+            done += 1
+    for name in sorted(set(sprites) - covered):
+        ctx.note(f"fondos de investigacion: {name} -> {sprites[name]} no tiene imagen pedida")
+    ctx.note(f"fondos de investigacion: {done} de {len(items)} ramas con imagen propia")
+
+
+def _techtree_sprites(ctx: BuildContext) -> tuple[dict[str, str], dict[str, tuple[int, int]]]:
+    """Todos los GFX_*_techtree_bg del juego y de las expansiones (carpetas y
+    .zip de dlc/), con su textura. Para las texturas que solo están dentro de
+    un .zip devuelve también el tamaño, que _texture_dims no puede leer."""
+    import zipfile
+    sprites: dict[str, str] = {}
+    dims: dict[str, tuple[int, int]] = {}
+
+    def scan(text: str) -> None:
+        for name, texture in _ANY_SPRITE.findall(text):
+            if _TECHTREE_BG.match(name):
+                sprites.setdefault(name, re.sub(r"/+", "/", texture.replace("\\", "/")))
+
+    root = ctx.vanilla.root
+    for base in [root] + sorted((root / "dlc").glob("*/")):
+        for path in (base / "interface").glob("**/*.gfx"):
+            try:
+                scan(path.read_text(encoding="utf-8-sig", errors="replace"))
+            except OSError:
+                continue
+    for archive in sorted((root / "dlc").glob("*/*.zip")):
+        try:
+            with zipfile.ZipFile(archive) as z:
+                for info in z.infolist():
+                    if info.filename.startswith("interface/") and info.filename.endswith(".gfx"):
+                        scan(z.read(info).decode("utf-8-sig", errors="replace"))
+                wanted = set(sprites.values())
+                for info in z.infolist():
+                    if info.filename in wanted:
+                        dims.setdefault(info.filename, _dims(z.read(info)[:128]))
+        except (OSError, zipfile.BadZipFile):
             continue
-        src = image.read_bytes()
-        w, h = _dims(src)
-        data = _cover(src, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else src
-        dest = ctx.mod_root / texture
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_bytes(data)
-        ctx.track(dest)
-        done += 1
-    ctx.note(f"fondos de investigacion: {done} de {len(spec.get('items') or [])} ramas con imagen propia")
+    return sprites, dims
 
 
 def _branch_sprite(ctx: BuildContext, words: list[str]) -> tuple[str, str] | None:
@@ -497,15 +543,16 @@ def _branch_sprite(ctx: BuildContext, words: list[str]) -> tuple[str, str] | Non
     return best[1], best[2]
 
 
-def _cover(src: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
+def _cover(src: bytes, w: int, h: int, nw: int, nh: int, anchor: str = "center") -> bytes:
     """Reescala un DDS A8R8G8B8 para CUBRIR nw x nh sin deformarlo: escala al
-    lado que falte y recorta el sobrante, centrado."""
+    lado que falte y recorta el sobrante, centrado o desde arriba a la
+    izquierda (anchor="top_left")."""
     body = src[128:]
     header = bytearray(src[:128])
     struct.pack_into("<III", header, 12, nh, nw, nw * 4)
     scale = max(nw / w, nh / h)
-    ox = (w * scale - nw) / 2
-    oy = (h * scale - nh) / 2
+    ox = 0 if anchor == "top_left" else (w * scale - nw) / 2
+    oy = 0 if anchor == "top_left" else (h * scale - nh) / 2
     xs = [min(w - 1, int((x + ox) / scale)) * 4 for x in range(nw)]
     rows = []
     for y in range(nh):
