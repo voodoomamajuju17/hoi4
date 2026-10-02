@@ -921,6 +921,32 @@ def test_anarchy_upgrades() -> None:
     check("ningun arbol tiene dos focos con el mismo nombre", not dup, "; ".join(dup))
 
 
+def test_research_bg_fallback() -> None:
+    section("fondos de investigacion: el respaldo de blindados no rompe las otras ramas (reporte 2026-10-03)")
+    from tools.gen.emitters import menu as _menu
+    orig, orig_ts = _menu._branch_sprite, _menu._techtree_sprites
+    _menu._branch_sprite = lambda ctx, words: ("GFX_tank_designer_background", "gfx/interface/techtree/armor_bg.dds")
+
+    def _sin_blindados(ctx):
+        sp, dims = orig_ts(ctx)
+        return {k: v for k, v in sp.items() if "armo" not in k}, dims
+    _menu._techtree_sprites = _sin_blindados
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            try:
+                ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+                ok, detail = True, ""
+            except Exception as exc:  # noqa: BLE001
+                ok, detail, ctx = False, repr(exc), None
+            check("el generador no explota con un sprite de nombre no estandar", ok, detail)
+            if ctx:
+                check("la rama de blindados usa el sprite encontrado",
+                      any("GFX_tank_designer_background ->" in n for n in ctx.notes),
+                      "\n".join(n for n in ctx.notes if "investigacion" in n))
+    finally:
+        _menu._branch_sprite, _menu._techtree_sprites = orig, orig_ts
+
+
 def test_routes() -> None:
     section("rutas: la IA hace lo politico temprano y ningun final depende de un pais vivo (2026-10-01)")
     import yaml
@@ -2669,6 +2695,7 @@ def main() -> int:
         test_focus_idea_consistency,
         test_anarchy_upgrades,
         test_routes,
+        test_research_bg_fallback,
         test_leaders_and_ideologies,
         test_balance,
         test_fcu,

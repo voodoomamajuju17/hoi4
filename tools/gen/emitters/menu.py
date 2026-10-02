@@ -432,13 +432,17 @@ def _emit_research(ctx: BuildContext) -> None:
     for it in items:
         key = _TECHTREE_BG.match(it["sprite"]).group(1) if _TECHTREE_BG.match(it["sprite"]) else it["sprite"]
         keys = _BRANCH_ALIASES.get(key, (key,))
+        # reporte 2026-10-03: "'NoneType' object has no attribute 'group'": un
+        # sprite que no se llama GFX_*_techtree_bg no se compara por rama
         names = sorted(n for n in sprites
-                       if n == it["sprite"] or any(k in _TECHTREE_BG.match(n).group(1) for k in keys))
+                       if n == it["sprite"] or (_TECHTREE_BG.match(n) and
+                                                any(k in _TECHTREE_BG.match(n).group(1) for k in keys)))
+        extra: dict[str, str] = {}
         if not names and it.get("search"):
             # respaldo (2026-10-02): la ventana de la rama en los .gui y su sprite más grande
             found = _branch_sprite(ctx, it["search"])
             if found:
-                sprites[found[0]] = found[1]
+                extra[found[0]] = found[1]   # solo para esta rama, no en la lista compartida
                 names = [found[0]]
         if not names:
             ctx.warn(f"fondos de investigacion: {it['sprite']} no existe en el juego; "
@@ -446,7 +450,7 @@ def _emit_research(ctx: BuildContext) -> None:
             continue
         image = ctx.spec.root.parent / "assets" / "ui" / "investigacion" / f"{it['id']}.dds"
         for name in names:
-            texture = sprites[name]
+            texture = sprites.get(name) or extra[name]
             covered.add(name)
             vw, vh = _texture_dims(ctx, texture)
             if not (vw and vh):
