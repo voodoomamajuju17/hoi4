@@ -291,55 +291,58 @@ unit_names:
         names: [Hatun Ayllu, Minka, Ayni, Kamayoq, Llaqta, Marka]
 
     # El Directorio: la masa, la artillería del río, los tres caudales.
+    # 2026-10-03 (pedido del usuario): el SHD, todo en mandarín. Pinyin sin
+    # tonos: la fuente del juego no tiene caracteres chinos. "Di N ... Shi" =
+    # 第N…师 (la N-ésima división).
     SHD:
       infantry:  # la masa: la IA pide 65% de infantería
-        group: {en: "Harmonious Divisions", es: "Divisiones Armónicas"}
-        pattern: "{n}.ª División Armónica «{name}»"
-        fallback: "%d.ª División Armónica"
-        names: [Río Amarillo, Yangtsé, Huai, Han, Río de las Perlas, Min, Gan, Xiang,
-                Liao, Songhua, Wei, Luo, Jing, Fen, Qiantang, Gran Canal,
-                Producción, Orden, Pueblo, Caudal Corregido]
+        group: {en: "Hexie Shi (Harmonious Divisions)", es: "Hexie Shi (Divisiones Armónicas)"}
+        pattern: "Di {n} Hexie Shi «{name}»"
+        fallback: "Di %d Hexie Shi"
+        names: [Huanghe, Changjiang, Huaihe, Hanshui, Zhujiang, Minjiang, Ganjiang, Xiangjiang,
+                Liaohe, Songhuajiang, Weihe, Luohe, Jinghe, Fenhe, Qiantangjiang, Da Yunhe,
+                Shengchan, Zhixu, Renmin, Jiaozheng Liu]
       artillery: # la especialidad
-        group: {en: "Directorate Fire Divisions", es: "Divisiones de Fuego del Directorio"}
-        pattern: "{n}.ª División de Fuego «{name}»"
-        fallback: "%d.ª División de Fuego del Directorio"
-        names: [Compuerta, Esclusa, Dique, Trueno, Crecida, Aluvión, Presa, Rompeolas,
-                Tres Gargantas, Cauce, Desborde, Marea Alta]
+        group: {en: "Huoli Shi (Directorate Fire Divisions)", es: "Huoli Shi (Divisiones de Fuego)"}
+        pattern: "Di {n} Huoli Shi «{name}»"
+        fallback: "Di %d Huoli Shi"
+        names: [Zhamen, Chuanzha, Diba, Leiting, Hongshui, Chongji, Shuiba, Fangboti,
+                Sanxia, Hedao, Fanlan, Gaochao]
       armor:
-        group: {en: "Yellow River Armored Divisions", es: "Divisiones Blindadas del Río Amarillo"}
-        pattern: "{n}.ª Blindada «{name}»"
-        fallback: "%d.ª División Blindada del Directorio"
-        names: [Tigre Blanco, Dragón Azul, Tortuga Negra, Fénix Rojo, Qilin, Bixie, Pixiu, Taotie]
+        group: {en: "Tiejia Shi (Armored Divisions)", es: "Tiejia Shi (Divisiones Blindadas)"}
+        pattern: "Di {n} Tiejia Shi «{name}»"
+        fallback: "Di %d Tiejia Shi"
+        names: [Baihu, Qinglong, Xuanwu, Zhuque, Qilin, Bixie, Pixiu, Taotie]
       mobile:
-        group: {en: "Grand Canal Divisions", es: "Divisiones del Gran Canal"}
-        pattern: "{n}.ª División del Canal «{name}»"
-        fallback: "%d.ª División Móvil del Gran Canal"
+        group: {en: "Yunhe Shi (Grand Canal Divisions)", es: "Yunhe Shi (Divisiones del Gran Canal)"}
+        pattern: "Di {n} Yunhe Shi «{name}»"
+        fallback: "Di %d Yunhe Shi"
         names: [Hangzhou, Suzhou, Yangzhou, Huai'an, Jining, Tianjin]
       mountain:
-        group: {en: "Directorate Mountain Divisions", es: "Divisiones de Montaña del Directorio"}
-        pattern: "{n}.ª de Montaña «{name}»"
-        fallback: "%d.ª División de Montaña"
-        names: [Kunlun, Tianshan, Qinling, Taishan, Huangshan, Emei]
+        group: {en: "Shandi Shi (Mountain Divisions)", es: "Shandi Shi (Divisiones de Montaña)"}
+        pattern: "Di {n} Shandi Shi «{name}»"
+        fallback: "Di %d Shandi Shi"
+        names: [Kunlun, Tianshan, Qinling, Taishan, Huangshan, Emeishan]
       marines:
-        group: {en: "China Sea Marines", es: "Infantería del Mar de China"}
-        pattern: "{n}.ª de Infantería de Marina «{name}»"
-        fallback: "%d.ª División de Infantería de Marina"
-        names: [Bohai, Mar Amarillo, Zhoushan, Hainan, Chusan, Estrecho de Qiongzhou]
+        group: {en: "Haijun Luzhan Shi (Marines)", es: "Haijun Luzhan Shi (Infantería de Marina)"}
+        pattern: "Di {n} Haijun Luzhan Shi «{name}»"
+        fallback: "Di %d Haijun Luzhan Shi"
+        names: [Bohai, Huanghai, Zhoushan, Hainan, Donghai, Qiongzhou Haixia]
       airborne:
-        group: {en: "Crane Divisions", es: "Divisiones Grulla"}
-        pattern: "{n}.ª División Grulla «{name}»"
-        fallback: "%d.ª División Aerotransportada"
-        names: [Grulla Blanca, Grulla Coronada, Garza Real, Oca Salvaje]
+        group: {en: "Xianhe Shi (Crane Divisions)", es: "Xianhe Shi (Divisiones Grulla)"}
+        pattern: "Di {n} Xianhe Shi «{name}»"
+        fallback: "Di %d Kongjiang Shi"
+        names: [Baihe, Danding He, Cangying, Yanque]
       cavalry:
-        group: {en: "Northern Riders", es: "Jinetes del Norte"}
-        pattern: "{n}.º de Jinetes del Norte «{name}»"
-        fallback: "%d.º Regimiento de Jinetes del Norte"
-        names: [Caballo Celeste, Ferghana, Viento del Norte, Estepa Dorada]
+        group: {en: "Beifang Qibing (Northern Riders)", es: "Beifang Qibing (Jinetes del Norte)"}
+        pattern: "Di {n} Beifang Qibing Tuan «{name}»"
+        fallback: "Di %d Beifang Qibing Tuan"
+        names: [Tianma, Hanxue Ma, Beifeng, Jin Caoyuan]
       militia:
-        group: {en: "People's Current Militias", es: "Milicias del Caudal del Pueblo"}
-        pattern: "{n}.ª Milicia del Pueblo «{name}»"
-        fallback: "%d.ª Milicia del Pueblo"
-        names: [Aldea del Dique, Arrozal, Terraza, Molino, Pozo, Barca]
+        group: {en: "Renmin Minbing (People's Militias)", es: "Renmin Minbing (Milicias del Pueblo)"}
+        pattern: "Di {n} Renmin Minbing «{name}»"
+        fallback: "Di %d Renmin Minbing"
+        names: [Dibian Cun, Daotian, Titian, Mofang, Shuijing, Muchuan]
 
     # La Federación: milicias populares, consejos, logística del corredor.
     APF:
@@ -651,8 +654,8 @@ unit_names:
                   names: [Malacca, Sunda, Kanto, Manila, Taiwan, Hong Kong, Okinawa, Tsushima, Lombok, Makassar,
                           Luzon Strait, Bashi Channel, Karimata, Balabac, San Bernardino, Surigao, Tsugaru, Kanmon]}
       capital:   {group: {en: "The Open Sea", es: "El mar abierto"}, fallback: "Capital Ship %d",
-                  names: [Mare Liberum, World Clearing House, Kofi Aldana, Inés Tavake, High Seas, Open Ocean,
-                          Kuroshio, Ring of Fire, Sovereign Current, Freedom of the Seas, Grotius, Neutral Flag]}
+                  names: [Sovereign Current, World Clearing House, Kofi Aldana, Inés Tavake, High Seas, Open Ocean,
+                          Kuroshio, Ring of Fire, Freedom of the Seas, Pacific Exchange, Free Port Charter, Neutral Flag]}
       carrier:   {group: {en: "Winds and Seabirds", es: "Vientos y aves marinas"}, fallback: "Carrier %d",
                   names: [Monsoon, Tradewind, Amihan, Habagat, Albatross, Frigatebird, Petrel, Shearwater,
                           Booby, Tern, Kingfisher, Sea Eagle]}
@@ -672,20 +675,20 @@ unit_names:
       carrier:   {group: {en: "Andean Birds", es: "Aves andinas"}, fallback: "Portaaviones %d",
                   names: [Kuntur, Anka, Waman, Tuku, Qinti, Pariwana, Kusi Kuyllur, Chiwaku]}
 
-    SHD:
-      screen:    {group: {en: "Virtues", es: "Virtudes"}, fallback: "Destructor %d",
-                  names: [Armonía, Equilibrio, Orden, Mesura, Concordia, Rectitud, Benevolencia, Justicia, Ritual,
-                          Sabiduría, Lealtad, Confianza, Moderación, Serenidad, Paciencia, Piedad Filial]}
-      submarine: {group: {en: "Sea Dragons", es: "Dragones del mar"}, fallback: "Sumergible %d",
+    SHD:         # 2026-10-03: todo en mandarín (pinyin sin tonos)
+      screen:    {group: {en: "Meide (Virtues)", es: "Meide (Virtudes)"}, fallback: "Quzhujian %d",
+                  names: [Hexie, Pingheng, Zhixu, Jiezhi, Hehe, Zhengzhi, Ren, Yi, Li,
+                          Zhi, Zhong, Xin, Zhongyong, Ningjing, Rennai, Xiao]}
+      submarine: {group: {en: "Hai Long (Sea Dragons)", es: "Hai Long (Dragones del mar)"}, fallback: "Qianting %d",
                   names: [Jiaolong, Kun, Ao, Longwang, Chiwen, Bixi, Pulao, Suanni, Yazi, Baxia]}
-      cruiser:   {group: {en: "Directorate Cities", es: "Ciudades del Directorio"}, fallback: "Crucero %d",
-                  names: [Shanghái, Dalian, Tianjin, Qingdao, Ningbo, Fuzhou, Xiamen, Cantón, Wuhan, Nankín,
-                          Chongqing, Xi'an, Pekín, Harbin]}
-      capital:   {group: {en: "The Three Currents", es: "Los tres caudales"}, fallback: "Acorazado %d",
-                  names: [Caudal Corregido, Armonía Perfecta, Tres Caudales, Producción, Orden Celeste, Pueblo,
-                          Mandato del Cielo, Gran Canal, Tres Gargantas, Zhou]}
-      carrier:   {group: {en: "Birds of Heaven", es: "Aves del cielo"}, fallback: "Portaaviones %d",
-                  names: [Fénix, Grulla, Garza, Golondrina, Martín Pescador, Urraca, Oca Salvaje, Mandarín]}
+      cruiser:   {group: {en: "Chengshi (Directorate Cities)", es: "Chengshi (Ciudades del Directorio)"}, fallback: "Xunyangjian %d",
+                  names: [Shanghai, Dalian, Tianjin, Qingdao, Ningbo, Fuzhou, Xiamen, Guangzhou, Wuhan, Nanjing,
+                          Chongqing, Xi'an, Beijing, Ha'erbin]}
+      capital:   {group: {en: "San Liu (The Three Currents)", es: "San Liu (Los tres caudales)"}, fallback: "Zhanliejian %d",
+                  names: [Jiaozheng Liu, Wanmei Hexie, San Liu, Shengchan, Tianxu, Renmin,
+                          Tianming, Da Yunhe, Sanxia, Zhou]}
+      carrier:   {group: {en: "Tian Niao (Birds of Heaven)", es: "Tian Niao (Aves del cielo)"}, fallback: "Hangmu %d",
+                  names: [Fenghuang, Xianhe, Lu, Yan, Cuiniao, Xique, Hongyan, Yuanyang]}
 
     APF:
       screen:    {group: {en: "Words of the Federation", es: "Palabras de la Federación"}, fallback: "Destructor %d",
