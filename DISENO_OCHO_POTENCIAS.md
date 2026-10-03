@@ -930,3 +930,4 @@ llega a 100 al toque y la tensión nunca sube".
   por país (claves GER_..., sprites GFX_GER_..._medium) para confirmarlo.
 - 52 íconos de foco nuevos (APF, ASC, FCU) importados.
 - 64 íconos de foco de la HSN importados: ya no quedan focos sin ícono.
+- 38 imágenes de armas por facción (EFE y NAS, 19 cada una) importadas.
