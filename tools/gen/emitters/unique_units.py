@@ -209,6 +209,10 @@ def emit(ctx: BuildContext) -> None:
             plans.append({"id": f"{uid}_produccion", "country": tag, "strategies": list(u["ai"]),
                           "enable": {"flag": f"{uid}_desbloqueado"}})
 
+        # Para el arte (faction_tech): su ícono en el equipo y las tecnologías propias
+        ctx.data.setdefault("uu_art", []).append({"id": uid, "tag": tag, "equipment": eq_type,
+                                                   "techs": sorted(locked)})
+
         # 5. Nombres: el batallón (pisa el del juego) y las tecnologías bloqueadas
         names = {}
         if u.get("sub_unit"):

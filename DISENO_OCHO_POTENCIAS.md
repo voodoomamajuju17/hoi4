@@ -961,3 +961,8 @@ llega a 100 al toque y la tensión nunca sube".
   consumen los robots) y +25% de penalización si le faltan recursos.
 - **El carbón se llama Torio** (en inglés Thorium): en 2100 la energía de las
   fábricas sale de reactores. Se renombra en todos los textos del juego.
+- **Imagen propia de las unidades únicas** (2026-10-03, "¿no hay imagen única
+  para el Gliptodonte y otras tecnologías únicas?"): 8 pedidos
+  arma_<id_unidad> (con su historia y la filosofía de la facción); la imagen
+  va a assets/<TAG>/armas/<id>.dds y el generador la pone en el equipo de la
+  unidad y en sus tecnologías bloqueadas, solo para el dueño.

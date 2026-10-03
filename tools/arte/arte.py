@@ -256,6 +256,20 @@ def catalog() -> list[dict]:
                     "Single object, three-quarter or side view, centred, fills most of the frame, transparent "
                     "background, no text, no letters, no numbers."),
             })
+    # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
+    # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
+    for u in _load("20_unique_units.yaml").get("units") or []:
+        tag = u["country"]
+        dest = REPO / "assets" / tag / "armas" / f"{u['id']}.dds"
+        items.append({
+            "type": "weapon_icon", "tag": tag, "id": f"arma_{u['id']}", "dest": dest, "done": dest.exists(),
+            "description": (
+                f"WHAT: the UNIQUE unit of this faction, the {u['name']['english']} ({u['name']['spanish']}); nobody "
+                f"else in the world has it, it must look legendary and one of a kind. LORE: {_one_line(u['lore']['english'])} "
+                f"FACTION {_one_line(detail['looks'].get(tag, ''))} "
+                "Show the machine itself (not soldiers posing), heroic three-quarter view, centred, fills most of the "
+                "frame, transparent background, no text, no letters, no numbers."),
+        })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
     asked: set[str] = set()

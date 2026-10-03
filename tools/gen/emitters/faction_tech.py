@@ -103,6 +103,19 @@ def emit(ctx: BuildContext) -> None:
                         sprites.add("spriteType", Block([("name", Quoted(f"GFX_{tag}_{target}_medium")),
                                                          ("texturefile", Quoted(rel))]))
                         counts["sprites"] += 1
+    # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte?"):
+    # assets/<TAG>/armas/<id>.dds -> su equipo y sus tecnologías bloqueadas,
+    # para el país dueño (y nadie más, son solo suyas).
+    for uu in ctx.data.get("uu_art") or []:
+        art = repo / "assets" / uu["tag"] / "armas" / f"{uu['id']}.dds"
+        if not art.exists():
+            continue
+        targets = ([uu["equipment"]] if uu.get("equipment") else []) + list(uu.get("techs") or [])
+        for target in targets:
+            rel = _texture(ctx, art, uu["tag"], uu["id"], sizes.of(target), written)
+            sprites.add("spriteType", Block([("name", Quoted(f"GFX_{uu['tag']}_{target}_medium")),
+                                             ("texturefile", Quoted(rel))]))
+            counts["sprites"] += 1
     if sprites.entries:
         ctx.write_script(GFX_FILE, Block([("spriteTypes", sprites)]), source=SOURCE)
     ctx.note(f"armas por faccion: {counts['nombres']} nombres de equipo y {counts['tecnologias']} de tecnologia "

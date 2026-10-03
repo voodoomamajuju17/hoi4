@@ -2768,6 +2768,7 @@ def test_faction_tech() -> None:
         shutil.copytree(REPO_ROOT / "assets", root / "assets")
         art.write_dds(root / "assets/EFE/tech/rifle.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         art.write_dds(root / "assets/EFE/tech/capital.dds", 4, 4, [(10, 20, 30, 255)] * 16)
+        art.write_dds(root / "assets/EFE/armas/EFE_gliptodonte.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
         mod = ctx.mod_root
         es = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*faction_tech*spanish*"))
@@ -2782,6 +2783,10 @@ def test_faction_tech() -> None:
         check("con imagen: icono propio del equipo y de la tecnologia para la faccion y sus satelites",
               'GFX_EFE_infantry_equipment_1_medium' in gfx and 'GFX_EFE_basic_ship_hull_heavy_medium' in gfx
               and 'GFX_PTA_infantry_equipment_1_medium' in gfx and "GFX_SHD_" not in gfx, gfx[:400])
+        uu = [u for u in ctx.data.get("uu_art") or [] if u["id"] == "EFE_gliptodonte"]
+        check("unidad unica: su imagen va a su equipo y a sus tecnologias, solo para el EFE",
+              bool(uu) and all(f"GFX_EFE_{t}_medium" in gfx for t in ([uu[0]["equipment"]] if uu[0]["equipment"] else [])
+                               + uu[0]["techs"]) and "EFE_gliptodonte_" in gfx, str(uu)[:300])
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
 
 
