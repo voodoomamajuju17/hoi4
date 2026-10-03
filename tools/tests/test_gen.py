@@ -959,6 +959,9 @@ def test_intros() -> None:
                 found[v["country"]] = d
     check("las 8 meganaciones tienen introduccion al arranque", sorted(found) == sorted(
         ["EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"]), str(sorted(found)))
+    anar = {v["country"] for ns, v in ev.items() for e in v["events"]
+            if e.get("trigger") == "on_startup" and "LOS QUE VIENEN POR NOSOTROS" in (e.get("desc") or {}).get("spanish", "")}
+    check("las 5 anarquias tambien tienen introduccion", anar == {"ZWE", "ZWI", "ZWM", "ZWB", "ZAN"}, str(anar))
     check("cada introduccion explica el mundo, quienes son, como llegaron, que esta en juego y sus rivales",
           all(all(h in d for h in ("EL MUNDO EN 2100", "CÓMO LLEGAMOS ACÁ", "LO QUE ESTÁ EN JUEGO", "VECINOS Y RIVALES"))
               for d in found.values()))

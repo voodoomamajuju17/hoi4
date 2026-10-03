@@ -872,3 +872,12 @@ llega a 100 al toque y la tensión nunca sube".
   caminos políticos y la forma final) y Vecinos y rivales. Sale de la
   Enciclopedia y las Crónicas. Después llega el evento de la mecánica. La
   descripción de cada país en la pantalla de selección también se reescribió.
+- **Introducciones de las anarquías** (2026-10-03): Eurasia, Indostán,
+  Emiratos, Amazonas y Tierras Sin Ley arrancan con su evento (<ns>.250):
+  el mundo en 2100, quiénes somos, cómo llegamos acá, cómo sobrevivir (su
+  árbol de focos) y los que vienen por nosotros.
+- **IA que entrena y cancela** (2026-10-03): ponía divisiones a entrenar,
+  se quedaba sin equipo, las cancelaba y las volvía a poner. Ahora cada
+  meganación arranca con al menos 20 fábricas militares (satélites 5; se
+  convierten civiles, misma IC, nunca más de la mitad), 10000 fusiles, 800 de
+  apoyo y 600 de artillería, y en paz la IA pone 40% en industria militar.
