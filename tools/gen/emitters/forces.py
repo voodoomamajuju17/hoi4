@@ -33,6 +33,7 @@ país que hereda algo de ese archivo. owner y creator pasan al país nuevo.
 
 from __future__ import annotations
 
+import copy
 import re
 from collections import defaultdict
 
@@ -88,6 +89,7 @@ def emit(ctx: BuildContext) -> None:
     planes = defaultdict(int)
     dropped = 0
     moved = 0
+    capital_pool: list[tuple[Block, list]] = []   # buques capitales de 1936, de cualquier dueño
 
     for path in naval_files:
         root = _safe_parse(ctx, path)
@@ -97,6 +99,10 @@ def emit(ctx: BuildContext) -> None:
         if not isinstance(units, Block):
             continue
         used_by: set[str] = set()
+        file_variants = _variants(root)
+        for ship in _ships_in(units):
+            if _text(ship.get("definition")) in CAPITALS:
+                capital_pool.append((copy.deepcopy(ship), file_variants))
         for key, fleet in units.entries:
             if key != "fleet" or not isinstance(fleet, Block):
                 continue
@@ -170,6 +176,29 @@ def emit(ctx: BuildContext) -> None:
     pride = cut.get("pride_of_the_fleet")
     if pride:
         xp = float(pride.get("experience", 1.0)) if isinstance(pride, dict) else 1.0
+        if isinstance(pride, dict) and pride.get("capital"):
+            # 2026-10-03 ("que sea un buque capital"): la flota que no tiene uno
+            # recibe un acorazado de 1936 (el casco más nuevo primero, uno
+            # distinto por país) con su variante; se llama como el primer
+            # capital de su lista de nombres (19_unit_names).
+            names = (((ctx.spec.raw.get("unit_names") or {}).get("unit_names") or {}).get("ships") or {})
+            pool = sorted(capital_pool, key=lambda e: -_hull_level(e[0]))
+            for i, tag in enumerate(sorted(fleets)):
+                if not pool or any(_text(sh.get("definition")) in CAPITALS for sh in _ships_in(fleets[tag])):
+                    continue
+                ship, file_variants = pool[i % len(pool)]
+                ship = copy.deepcopy(ship)
+                _retag(ship, tag)
+                own = ((names.get(tag) or {}).get("capital") or {}).get("names") or []
+                if own:
+                    _set_name(ship, own[0])
+                tf = _first_task_force(fleets[tag])
+                if tf is None:
+                    continue
+                tf.add("ship", ship)
+                ships[tag] += 1
+                variants["naval"][tag].extend(file_variants)
+                ctx.note(f"armada: {tag} recibe el buque capital {_text(ship.get('name'))}")
         for tag, block in fleets.items():
             name = _crown_pride(block, xp)
             if name:
@@ -323,6 +352,49 @@ def _pick_ships(fleets: Block, definition: str | None, limit: int) -> Block:
         return out
 
     return pick(fleets)
+
+
+CAPITALS = ("battleship", "battle_cruiser")
+
+
+def _ships_in(block: Block) -> list[Block]:
+    out: list[Block] = []
+    for k, v in block.entries:
+        if k == "ship" and isinstance(v, Block):
+            out.append(v)
+        elif isinstance(v, Block):
+            out.extend(_ships_in(v))
+    return out
+
+
+def _first_task_force(block: Block) -> Block | None:
+    for k, v in block.entries:
+        if k == "task_force" and isinstance(v, Block):
+            return v
+        if isinstance(v, Block):
+            found = _first_task_force(v)
+            if found is not None:
+                return found
+    return None
+
+
+def _hull_level(ship: Block) -> int:
+    """Nivel del casco (ship_hull_heavy_2 -> 2); 0 si no se sabe."""
+    eq = ship.get("equipment")
+    if isinstance(eq, Block):
+        for k, _ in eq.entries:
+            m = re.search(r"_(\d+)$", str(k))
+            if m:
+                return int(m.group(1))
+    return 0
+
+
+def _set_name(ship: Block, name: str) -> None:
+    for i, (k, _) in enumerate(ship.entries):
+        if k == "name":
+            ship.entries[i] = ("name", Quoted(name))
+            return
+    ship.entries.insert(0, ("name", Quoted(name)))
 
 
 # del más grande al más chico: el orgullo de la flota es el primero que haya

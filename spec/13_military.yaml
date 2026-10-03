@@ -139,8 +139,9 @@ forces:
   ship_definition: destroyer
   max_ships: {HSN: 6, default: 2}
   # 2026-10-03 (pedido del usuario): cada flota arranca con su orgullo de la
-  # flota (el barco más grande), con experiencia máxima.
-  pride_of_the_fleet: {experience: 1.0}
+  # flota, con experiencia máxima, y es un buque capital: la que no tiene uno
+  # recibe un acorazado (aparte del tope de max_ships).
+  pride_of_the_fleet: {experience: 1.0, capital: true}
   air: false
 
 stockpile:

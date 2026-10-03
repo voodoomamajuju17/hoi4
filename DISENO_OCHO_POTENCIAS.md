@@ -904,3 +904,10 @@ llega a 100 al toque y la tensión nunca sube".
   arranque marca su barco más grande como orgullo de la flota, con
   experiencia máxima (start_experience_factor 1.0). Hoy todas arrancan con
   destructores, así que es un destructor veterano.
+- **El orgullo de la flota es un buque capital** (2026-10-03, pedido del
+  usuario). Cada flota de arranque que no tiene uno recibe un acorazado de
+  1936 (el casco más nuevo primero, uno distinto por potencia, con su
+  diseño), con el primer nombre de capital de su lista (Corona de Gaia, Karl
+  Marx, Castellane, Mare Liberum, Caudal Corregido, Olokun, Augustus),
+  experiencia máxima y la marca de orgullo de la flota. Va aparte del tope de
+  destructores; las tecnologías del casco y sus módulos se dan solas.

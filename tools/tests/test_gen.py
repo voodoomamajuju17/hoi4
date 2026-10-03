@@ -2431,7 +2431,12 @@ def test_forces() -> None:
         check("armada: todas arrancan con crucero y submarino, no solo destructores (2026-10-03)",
               {"early_ship_hull_cruiser", "early_ship_hull_submarine"} <= set(mil_spec["meganation_techs"])
               and "early_ship_hull_heavy" in mil_spec["country_techs"]["HSN"])
-        check("la Anarquia no tiene barcos",not any(t in ctx.data["ships"] for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")))
+        apf_nav = (mod / "history/units/APF_2100_naval.txt").read_text()
+        check("armada: el orgullo de la flota es un buque capital con nombre propio (2026-10-03)",
+              'name = "Olokun" definition = battleship start_experience_factor = 1.0 pride_of_the_fleet = yes'
+              in " ".join(apf_nav.split()) and apf_nav.count("pride_of_the_fleet") == 1
+              and "Classe Littorio" in apf_nav, apf_nav[-900:])
+        check("la Anarquia no tiene barcos", not any(t in ctx.data["ships"] for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")))
 
     # Con una copia del spec: el NRE con flota, solo acorazados, uno solo; y
     # una franja de industria que obliga a la ASC a bajar.
