@@ -2630,8 +2630,17 @@ def test_vanilla_validation() -> None:
               not any("no se validaron" in w for w in ctx.warnings), str(ctx.warnings))
         # todos los árboles: el del EFE ya tiene íconos propios en todos sus focos (2026-09-30)
         focus = "".join(p.read_text() for p in (ctx.mod_root / "common/national_focus").glob("*_focus.txt"))
-        check("icono existente se conserva", "GFX_goal_generic_political_pressure" in focus)
-        check("icono inexistente cae a GFX_goal_unknown", "GFX_goal_unknown" in focus)
+        # 2026-10-03: todos los focos ya tienen ícono propio. Cada ícono tiene que
+        # ser un sprite del mod o del juego (o caer a GFX_goal_unknown).
+        import re as _re
+        own = set(_re.findall(r'name\s*=\s*"?(GFX_\w+)', "".join(
+            p.read_text(errors="replace") for p in (ctx.mod_root / "interface").glob("*.gfx"))))
+        used = set(_re.findall(r"icon = (GFX_\w+)", focus))
+        vanilla_used = used - own
+        check("icono existente se conserva",
+              vanilla_used <= {"GFX_goal_generic_political_pressure", "GFX_goal_unknown"}, str(sorted(vanilla_used)[:10]))
+        check("icono inexistente cae a GFX_goal_unknown", used <= own | {"GFX_goal_generic_political_pressure", "GFX_goal_unknown"},
+              str(sorted(used - own)[:10]))
         check("avisa del icono reemplazado", any("no existe en el juego" in w for w in ctx.warnings))
 
         # Caso real (reporte del usuario): la documentacion lista estos con
