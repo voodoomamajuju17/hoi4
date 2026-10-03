@@ -947,6 +947,23 @@ def test_research_bg_fallback() -> None:
         _menu._branch_sprite, _menu._techtree_sprites = orig, orig_ts
 
 
+def test_intros() -> None:
+    section("introducciones: cada potencia arranca sabiendo quien es y que paso (2026-10-03)")
+    import yaml
+    ev = yaml.safe_load((REPO_ROOT / "spec/12_events.yaml").read_text(encoding="utf-8"))["namespaces"]
+    found = {}
+    for ns, v in ev.items():
+        for e in v["events"]:
+            d = (e.get("desc") or {}).get("spanish", "")
+            if e.get("trigger") == "on_startup" and "QUIÉNES SOMOS" in d:
+                found[v["country"]] = d
+    check("las 8 meganaciones tienen introduccion al arranque", sorted(found) == sorted(
+        ["EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"]), str(sorted(found)))
+    check("cada introduccion explica el mundo, quienes son, como llegaron, que esta en juego y sus rivales",
+          all(all(h in d for h in ("EL MUNDO EN 2100", "CÓMO LLEGAMOS ACÁ", "LO QUE ESTÁ EN JUEGO", "VECINOS Y RIVALES"))
+              for d in found.values()))
+
+
 def test_routes() -> None:
     section("rutas: la IA hace lo politico temprano y ningun final depende de un pais vivo (2026-10-01)")
     import yaml
@@ -2724,6 +2741,7 @@ def main() -> int:
         test_focus_idea_consistency,
         test_anarchy_upgrades,
         test_routes,
+        test_intros,
         test_research_bg_fallback,
         test_leaders_and_ideologies,
         test_balance,

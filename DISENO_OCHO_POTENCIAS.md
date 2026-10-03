@@ -864,3 +864,11 @@ llega a 100 al toque y la tensión nunca sube".
 - **Contrainteligencia: blindaje de un año** (2026-10-03, pedido del usuario:
   3 meses era muy poco). Los blindajes vencen cada 12 meses; textos de las
   decisiones, del panel y del evento actualizados.
+- **Introducciones** (2026-10-03, pedido del usuario: "alguien tiene que abrir
+  el juego y entender qué pasó, quiénes son y por qué"). Cada meganación
+  arranca con un evento (EFE: el 1, antes "Año Cero del Mandato"; el resto:
+  <ns>.250) en cinco partes: El mundo en 2100 (el Gran Desarme, común a
+  todos), Quiénes somos, Cómo llegamos acá, Lo que está en juego (los dos
+  caminos políticos y la forma final) y Vecinos y rivales. Sale de la
+  Enciclopedia y las Crónicas. Después llega el evento de la mecánica. La
+  descripción de cada país en la pantalla de selección también se reescribió.
