@@ -488,3 +488,278 @@ equipment:
   heavy_tank_chassis_3: {en: Heavy Combat Chassis IV, es: Chasis de Combate Pesado IV}
   modern_tank_chassis_1: {en: Main Battle Chassis, es: Chasis de Combate Principal}
   super_heavy_tank_chassis_1: {en: Land Fortress Chassis, es: Chasis de Fortaleza Terrestre}
+
+# -----------------------------------------------------------------------------
+# Armas y tecnologías con nombre e imagen propios por facción (2026-10-03,
+# pedido del usuario: "para cada meganación y anarquía hay distintas imágenes,
+# y las armas y ciertas tecnologías se tienen que llamar distinto, aunque sean
+# lo mismo en el fondo"). El equipo es el mismo para todos; cambia lo que ve
+# cada país:
+#   - nombre: <TAG>_<equipo> (el juego usa el nombre por país si existe) y
+#     <TAG>_<tecnología> para la tecnología que lo habilita. "Fusil Espina II":
+#     el número es la generación dentro de la familia.
+#   - imagen: assets/<TAG>/tech/<familia>.dds (pedido de arte tech_<TAG>_<familia>)
+#     -> GFX_<TAG>_<equipo>_medium y GFX_<TAG>_<tecnología>_medium, al tamaño del
+#     ícono del juego. Sin imagen, queda la del juego.
+# Satélites: los de su señor. El Santuario de Gaia: los del EFE. Las anarquías
+# no tienen flota: sus barcos conservan el nombre común. Lo que es de una
+# unidad única (20_unique_units) no se toca.
+# -----------------------------------------------------------------------------
+by_faction:
+  inherit: {ZSG: EFE}
+  families:
+    rifle:       {match: ['^infantry_equipment_(\d+)$'], art: "the faction's standard infantry rifle, side view"}
+    support:     {match: ['^support_equipment_(\d+)$'], art: "a squad support kit: drone, tools and radio laid out together"}
+    artillery:   {match: ['^artillery_equipment_(\d+)$'], art: "a towed guided howitzer, three-quarter view"}
+    anti_air:    {match: ['^anti_air_equipment_(\d+)$'], art: "an air-defence weapon aiming at the sky"}
+    anti_tank:   {match: ['^anti_tank_equipment_(\d+)$'], art: "a shoulder or tripod anti-armour missile launcher"}
+    rocket:      {match: ['^rocket_artillery_equipment_(\d+)$'], art: "a multiple rocket / missile-swarm launcher vehicle"}
+    motorized:   {match: ['^motorized_equipment_(\d+)$'], art: "a wheeled troop transport vehicle"}
+    mechanized:  {match: ['^mechanized_equipment_(\d+)$'], art: "a tracked armoured infantry fighting vehicle"}
+    amphibious:  {match: ['^amphibious_mechanized_equipment_(\d+)$'], art: "an amphibious armoured vehicle coming out of the water"}
+    light_tank:  {match: ['^light_tank_(?:chassis|equipment)_(\d+)$'], art: "a light, fast scout tank"}
+    medium_tank: {match: ['^medium_tank_(?:chassis|equipment)_(\d+)$'], art: "a medium battle tank"}
+    heavy_tank:  {match: ['^heavy_tank_(?:chassis|equipment)_(\d+)$'], art: "a heavy, thickly armoured tank"}
+    modern_tank: {match: ['^modern_tank_(?:chassis|equipment)_(\d+)$'], art: "a sleek main battle tank of the year 2100"}
+    super_heavy: {match: ['^super_heavy_tank_(?:chassis|equipment)_(\d+)$'], art: "a colossal land fortress on tracks"}
+    destroyer:   {match: ['^ship_hull_light_(\d+)$', '^destroyer_(\d+)$'], art: "a destroyer at sea, side view"}
+    cruiser:     {match: ['^ship_hull_cruiser_(\d+)$', '^(?:light|heavy)_cruiser_(\d+)$'], art: "a missile cruiser at sea, side view"}
+    capital:     {match: ['^ship_hull_heavy_(\d+)$', '^(?:battleship|battle_cruiser)_(\d+)$'], art: "a huge capital ship with railguns, side view"}
+    carrier:     {match: ['^ship_hull_carrier_(\d+)$', '^carrier_(\d+)$'], art: "a drone carrier with a flat deck, side view"}
+    submarine:   {match: ['^ship_hull_submarine_(\d+)$', '^submarine_(\d+)$'], art: "a submarine surfacing"}
+  names:
+    EFE:
+      rifle:       {en: Thorn Rifle, es: Fusil Espina}
+      support:     {en: Root Kit, es: Equipo Raíz}
+      artillery:   {en: Quebracho Howitzer, es: Obús Quebracho}
+      anti_air:    {en: Hummingbird Laser, es: Láser Colibrí}
+      anti_tank:   {en: Horsefly Launcher, es: Lanzador Tábano}
+      rocket:      {en: Wasp Swarm, es: Enjambre Avispa}
+      motorized:   {en: Rhea Carrier, es: Transporte Ñandú}
+      mechanized:  {en: Capybara Carrier, es: Blindado Carpincho}
+      amphibious:  {en: Caiman Drone, es: Dron Yacaré}
+      light_tank:  {en: Fox Tank, es: Tanque Zorro}
+      medium_tank: {en: Jaguar Tank, es: Tanque Yaguareté}
+      heavy_tank:  {en: Tapir Tank, es: Tanque Tapir}
+      modern_tank: {en: Puma Tank, es: Tanque Puma}
+      super_heavy: {en: Megatherium Fortress, es: Fortaleza Megaterio}
+      destroyer:   {en: River-class Destroyer, es: Destructor clase Río}
+      cruiser:     {en: Pampa-class Cruiser, es: Crucero clase Pampa}
+      capital:     {en: Crown-class Battleship, es: Acorazado clase Corona}
+      carrier:     {en: Condor-class Drone Carrier, es: Portadrones clase Cóndor}
+      submarine:   {en: Surubí-class Submarine, es: Sumergible clase Surubí}
+    ASC:
+      rifle:       {en: Commune Rifle, es: Fusil Comuna}
+      support:     {en: Cooperative Kit, es: Equipo Cooperativo}
+      artillery:   {en: Plenary Howitzer, es: Obús Plenario}
+      anti_air:    {en: Sentinel Laser, es: Láser Vigía}
+      anti_tank:   {en: Strike Launcher, es: Lanzador Huelga}
+      rocket:      {en: Assembly Swarm, es: Enjambre Asamblea}
+      motorized:   {en: Brigade Carrier, es: Transporte Brigada}
+      mechanized:  {en: Combat Automaton, es: Autómata de Combate}
+      amphibious:  {en: Amphibious Automaton, es: Autómata Anfibio}
+      light_tank:  {en: Delegate Tank, es: Tanque Delegado}
+      medium_tank: {en: Council Tank, es: Tanque Consejo}
+      heavy_tank:  {en: Five-Year-Plan Tank, es: Tanque Plan Quinquenal}
+      modern_tank: {en: Algorithm Tank, es: Tanque Algoritmo}
+      super_heavy: {en: Dialectic Fortress, es: Fortaleza Dialéctica}
+      destroyer:   {en: Equality-class Destroyer, es: Destructor clase Igualdad}
+      cruiser:     {en: Solidarity-class Cruiser, es: Crucero clase Solidaridad}
+      capital:     {en: Karl Marx-class Battleship, es: Acorazado clase Karl Marx}
+      carrier:     {en: Rosa Luxemburg-class Drone Carrier, es: Portadrones clase Rosa Luxemburgo}
+      submarine:   {en: Self-Management-class Submarine, es: Sumergible clase Autogestión}
+    FCU:
+      rifle:       {en: Liberty Rifle, es: Fusil Liberty}
+      support:     {en: Contractor Kit, es: Equipo Contractor}
+      artillery:   {en: Dividend Howitzer, es: Obús Dividend}
+      anti_air:    {en: Skyshield Laser, es: Láser Skyshield}
+      anti_tank:   {en: Hostile Takeover Launcher, es: Lanzador Hostile Takeover}
+      rocket:      {en: Bull Market Swarm, es: Enjambre Bull Market}
+      motorized:   {en: Fleetline Carrier, es: Transporte Fleetline}
+      mechanized:  {en: Patriot Carrier, es: Blindado Patriot}
+      amphibious:  {en: Bayou Drone, es: Dron Bayou}
+      light_tank:  {en: Mustang Tank, es: Tanque Mustang}
+      medium_tank: {en: Bison Tank, es: Tanque Bison}
+      heavy_tank:  {en: Grizzly Tank, es: Tanque Grizzly}
+      modern_tank: {en: Apex Tank, es: Tanque Apex}
+      super_heavy: {en: Monopoly Fortress, es: Fortaleza Monopoly}
+      destroyer:   {en: Ledger-class Destroyer, es: Destructor clase Ledger}
+      cruiser:     {en: Merger-class Cruiser, es: Crucero clase Merger}
+      capital:     {en: Castellane-class Battleship, es: Acorazado clase Castellane}
+      carrier:     {en: Meridian-class Carrier, es: Portaaviones clase Meridian}
+      submarine:   {en: Silent Partner-class Submarine, es: Sumergible clase Silent Partner}
+    HSN:
+      rifle:       {en: Monsoon Rifle, es: Fusil Monzón}
+      support:     {en: Deck Kit, es: Equipo de Cubierta}
+      artillery:   {en: Typhoon Howitzer, es: Obús Tifón}
+      anti_air:    {en: Lighthouse Laser, es: Láser Faro}
+      anti_tank:   {en: Harpoon Launcher, es: Lanzador Arpón}
+      rocket:      {en: Jellyfish Swarm, es: Enjambre Medusa}
+      motorized:   {en: Stevedore Carrier, es: Transporte Estibador}
+      mechanized:  {en: Container Carrier, es: Blindado Contenedor}
+      amphibious:  {en: Crab Drone, es: Dron Cangrejo}
+      light_tank:  {en: Barracuda Tank, es: Tanque Barracuda}
+      medium_tank: {en: Orca Tank, es: Tanque Orca}
+      heavy_tank:  {en: Hammerhead Tank, es: Tanque Tiburón Martillo}
+      modern_tank: {en: Manta Tank, es: Tanque Manta}
+      super_heavy: {en: Kraken Fortress, es: Fortaleza Kraken}
+      destroyer:   {en: Underwriter-class Escort, es: Escolta clase Asegurador}
+      cruiser:     {en: Strait-class Cruiser, es: Crucero clase Estrecho}
+      capital:     {en: Sovereign Current-class Capital Ship, es: Buque Capital clase Corriente Soberana}
+      carrier:     {en: Tradewind-class Carrier, es: Portaaviones clase Alisio}
+      submarine:   {en: Corsair-class Raider, es: Sumergible clase Corsario}
+    NAS:
+      rifle:       {en: Inti Rifle, es: Fusil Inti}
+      support:     {en: Ayllu Kit, es: Equipo Ayllu}
+      artillery:   {en: Illapa Howitzer, es: Obús Illapa}
+      anti_air:    {en: Intihuatana Laser, es: Láser Intihuatana}
+      anti_tank:   {en: Waraka Launcher, es: Lanzador Waraka}
+      rocket:      {en: Chaski Swarm, es: Enjambre Chaski}
+      motorized:   {en: Llama Carrier, es: Transporte Llama}
+      mechanized:  {en: Vicuña Carrier, es: Blindado Vicuña}
+      amphibious:  {en: Titicaca Drone, es: Dron Titicaca}
+      light_tank:  {en: Vizcacha Tank, es: Tanque Vizcacha}
+      medium_tank: {en: Uturunku Tank, es: Tanque Uturunku}
+      heavy_tank:  {en: Apu Tank, es: Tanque Apu}
+      modern_tank: {en: Kuntur Tank, es: Tanque Kuntur}
+      super_heavy: {en: Sacsayhuamán Fortress, es: Fortaleza Sacsayhuamán}
+      destroyer:   {en: Chaski-class Destroyer, es: Destructor clase Chaski}
+      cruiser:     {en: Pachacuti-class Cruiser, es: Crucero clase Pachacútec}
+      capital:     {en: Inti-class Battleship, es: Acorazado clase Inti}
+      carrier:     {en: Huaman-class Carrier, es: Portaaviones clase Huamán}
+      submarine:   {en: Mama Qucha-class Submarine, es: Sumergible clase Mama Cocha}
+    SHD:   # en mandarín (pinyin sin tonos), como sus barcos y divisiones
+      rifle:       {en: Hexie Rifle, es: Fusil Hexie}
+      support:     {en: Tongxin Kit, es: Equipo Tongxin}
+      artillery:   {en: Leiting Howitzer, es: Obús Leiting}
+      anti_air:    {en: Tianwang Laser, es: Láser Tianwang}
+      anti_tank:   {en: Pojia Launcher, es: Lanzador Pojia}
+      rocket:      {en: Fengqun Swarm, es: Enjambre Fengqun}
+      motorized:   {en: Yunhe Carrier, es: Transporte Yunhe}
+      mechanized:  {en: Changcheng Carrier, es: Blindado Changcheng}
+      amphibious:  {en: Jiaolong Drone, es: Dron Jiaolong}
+      light_tank:  {en: Baihu Tank, es: Tanque Baihu}
+      medium_tank: {en: Qinglong Tank, es: Tanque Qinglong}
+      heavy_tank:  {en: Xuanwu Tank, es: Tanque Xuanwu}
+      modern_tank: {en: Qilin Tank, es: Tanque Qilin}
+      super_heavy: {en: Taishan Fortress, es: Fortaleza Taishan}
+      destroyer:   {en: Meide-class Destroyer, es: Quzhujian clase Meide}
+      cruiser:     {en: Chengshi-class Cruiser, es: Xunyangjian clase Chengshi}
+      capital:     {en: Jiaozheng Liu-class Battleship, es: Zhanliejian clase Jiaozheng Liu}
+      carrier:     {en: Fenghuang-class Carrier, es: Hangmu clase Fenghuang}
+      submarine:   {en: Hai Long-class Submarine, es: Qianting clase Hai Long}
+    APF:
+      rifle:       {en: Uhuru Rifle, es: Fusil Uhuru}
+      support:     {en: Harambee Kit, es: Equipo Harambee}
+      artillery:   {en: Kilimanjaro Howitzer, es: Obús Kilimanjaro}
+      anti_air:    {en: Jicho Laser, es: Láser Jicho}
+      anti_tank:   {en: Nyati Launcher, es: Lanzador Nyati}
+      rocket:      {en: Nzige Swarm, es: Enjambre Nzige}
+      motorized:   {en: Safari Carrier, es: Transporte Safari}
+      mechanized:  {en: Tembo Carrier, es: Blindado Tembo}
+      amphibious:  {en: Kiboko Drone, es: Dron Kiboko}
+      light_tank:  {en: Duma Tank, es: Tanque Duma}
+      medium_tank: {en: Simba Tank, es: Tanque Simba}
+      heavy_tank:  {en: Faru Tank, es: Tanque Faru}
+      modern_tank: {en: Ogun Tank, es: Tanque Ogun}
+      super_heavy: {en: Great Zimbabwe Fortress, es: Fortaleza Gran Zimbabue}
+      destroyer:   {en: Shujaa-class Destroyer, es: Destructor clase Shujaa}
+      cruiser:     {en: Ubuntu-class Cruiser, es: Crucero clase Ubuntu}
+      capital:     {en: Olokun-class Battleship, es: Acorazado clase Olokun}
+      carrier:     {en: Ndege-class Carrier, es: Portaaviones clase Ndege}
+      submarine:   {en: Mamba-class Submarine, es: Sumergible clase Mamba}
+    NRE:
+      rifle:       {en: Pilum Rifle, es: Fusil Pilum}
+      support:     {en: Contubernium Kit, es: Equipo Contubernium}
+      artillery:   {en: Onager Howitzer, es: Obús Onager}
+      anti_air:    {en: Aquila Laser, es: Láser Aquila}
+      anti_tank:   {en: Scorpio Launcher, es: Lanzador Scorpio}
+      rocket:      {en: Ballista Swarm, es: Enjambre Ballista}
+      motorized:   {en: Cursus Carrier, es: Transporte Cursus}
+      mechanized:  {en: Testudo Carrier, es: Blindado Testudo}
+      amphibious:  {en: Triton Drone, es: Dron Tritón}
+      light_tank:  {en: Veles Tank, es: Tanque Vélite}
+      medium_tank: {en: Legionary Tank, es: Tanque Legionario}
+      heavy_tank:  {en: Triarius Tank, es: Tanque Triario}
+      modern_tank: {en: Praetorian Tank, es: Tanque Pretoriano}
+      super_heavy: {en: Castrum Fortress, es: Fortaleza Castrum}
+      destroyer:   {en: Liburna-class Destroyer, es: Destructor clase Liburna}
+      cruiser:     {en: Trireme-class Cruiser, es: Crucero clase Trirreme}
+      capital:     {en: Augustus-class Battleship, es: Acorazado clase Augustus}
+      carrier:     {en: Victoria-class Carrier, es: Portaaviones clase Victoria}
+      submarine:   {en: Neptunus-class Submarine, es: Sumergible clase Neptuno}
+    ZWE:   # Señores de la Guerra de Eurasia: material de saqueo
+      rifle:       {en: Ataman Rifle, es: Fusil Atamán}
+      support:     {en: Looter's Kit, es: Equipo de Saqueo}
+      artillery:   {en: Steppe Howitzer, es: Obús Estepa}
+      anti_air:    {en: Cossack Flak, es: Antiaéreo Cosaco}
+      anti_tank:   {en: Kurgan Launcher, es: Lanzador Kurgán}
+      rocket:      {en: Organ Rocket Launcher, es: Lanzacohetes Órgano}
+      motorized:   {en: Steppe Technical, es: Técnica de la Estepa}
+      mechanized:  {en: Patched Carrier, es: Blindado Remendado}
+      amphibious:  {en: Armoured Raft, es: Balsa Blindada}
+      light_tank:  {en: Wolf Tank, es: Tanque Lobo}
+      medium_tank: {en: Bear Tank, es: Tanque Oso}
+      heavy_tank:  {en: Mammoth Tank, es: Tanque Mamut}
+      modern_tank: {en: Looted Tank, es: Tanque Saqueado}
+      super_heavy: {en: Hetman's Rolling Fortress, es: Fortaleza Rodante del Hetman}
+    ZWI:   # Indostán
+      rifle:       {en: Talwar Rifle, es: Fusil Talwar}
+      support:     {en: Bazaar Kit, es: Equipo Bazar}
+      artillery:   {en: Ganges Howitzer, es: Obús Ganges}
+      anti_air:    {en: Garuda Flak, es: Antiaéreo Garuda}
+      anti_tank:   {en: Chakra Launcher, es: Lanzador Chakra}
+      rocket:      {en: Mysorean Rockets, es: Cohetes de Mysore}
+      motorized:   {en: Armoured Tuk-Tuk, es: Tuk-Tuk Blindado}
+      mechanized:  {en: Rajput Carrier, es: Blindado Rajput}
+      amphibious:  {en: Gharial Drone, es: Dron Gavial}
+      light_tank:  {en: Cobra Tank, es: Tanque Cobra}
+      medium_tank: {en: War Elephant Tank, es: Tanque Elefante de Guerra}
+      heavy_tank:  {en: Maharaja Tank, es: Tanque Maharajá}
+      modern_tank: {en: Rani Tank, es: Tanque Rani}
+      super_heavy: {en: Rajgarh Fortress, es: Fortaleza Rajgarh}
+    ZWM:   # Emiratos
+      rifle:       {en: Jambiya Rifle, es: Fusil Jambiya}
+      support:     {en: Caravan Kit, es: Equipo Caravana}
+      artillery:   {en: Simoom Howitzer, es: Obús Simún}
+      anti_air:    {en: Falcon Flak, es: Antiaéreo Halcón}
+      anti_tank:   {en: Asp Launcher, es: Lanzador Áspid}
+      rocket:      {en: Desert Locust Swarm, es: Enjambre Langosta del Desierto}
+      motorized:   {en: Dune Technical, es: Técnica de Duna}
+      mechanized:  {en: Oasis Carrier, es: Blindado Oasis}
+      amphibious:  {en: Dhow Drone, es: Dron Dhow}
+      light_tank:  {en: Gazelle Tank, es: Tanque Gacela}
+      medium_tank: {en: Oryx Tank, es: Tanque Órix}
+      heavy_tank:  {en: Emir Tank, es: Tanque Emir}
+      modern_tank: {en: Sultan Tank, es: Tanque Sultán}
+      super_heavy: {en: Wellhead Fortress, es: Fortaleza del Pozo}
+    ZWB:   # Caudillos del Amazonas
+      rifle:       {en: Prospector Rifle, es: Fusil Garimpeiro}
+      support:     {en: Jungle Kit, es: Equipo de Selva}
+      artillery:   {en: Sawmill Howitzer, es: Obús Aserradero}
+      anti_air:    {en: Harpy Flak, es: Antiaéreo Harpía}
+      anti_tank:   {en: Anaconda Launcher, es: Lanzador Anaconda}
+      rocket:      {en: Piranha Swarm, es: Enjambre Piraña}
+      motorized:   {en: Garimpo Technical, es: Técnica Garimpo}
+      mechanized:  {en: Bulldozer Carrier, es: Blindado Topadora}
+      amphibious:  {en: Boto Drone, es: Dron Boto}
+      light_tank:  {en: Coati Tank, es: Tanque Coatí}
+      medium_tank: {en: Onça Tank, es: Tanque Onça}
+      heavy_tank:  {en: Peccary Tank, es: Tanque Pecarí}
+      modern_tank: {en: Colonel Tank, es: Tanque Coronel}
+      super_heavy: {en: Sumaúma Fortress, es: Fortaleza Sumaúma}
+    ZAN:   # Tierras Sin Ley: chatarra y robo
+      rifle:       {en: Frontier Rifle, es: Fusil de Frontera}
+      support:     {en: Scavenger Kit, es: Equipo de Carroñero}
+      artillery:   {en: Patchwork Howitzer, es: Obús Remendado}
+      anti_air:    {en: Rooftop Flak, es: Antiaéreo de Techo}
+      anti_tank:   {en: Pipe Launcher, es: Lanzador de Caño}
+      rocket:      {en: Homemade Rockets, es: Cohetes Caseros}
+      motorized:   {en: Rusted Technical, es: Técnica Oxidada}
+      mechanized:  {en: Frankenstein Carrier, es: Blindado Frankenstein}
+      amphibious:  {en: Pirate Raft, es: Balsa Pirata}
+      light_tank:  {en: Hyena Tank, es: Tanque Hiena}
+      medium_tank: {en: Vulture Tank, es: Tanque Buitre}
+      heavy_tank:  {en: Junker Tank, es: Tanque Chatarrero}
+      modern_tank: {en: Stolen Tank, es: Tanque Robado}
+      super_heavy: {en: Junkyard Fortress, es: Fortaleza Basurero}

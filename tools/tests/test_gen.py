@@ -2750,6 +2750,32 @@ def test_unique_units() -> None:
         check("IA: sin plan si ningun id existe (SHD)", "MEGANATIONS_SHD_dragon_del_canal_produccion" not in ai)
 
 
+def test_faction_tech() -> None:
+    section("armas por faccion (17_research -> by_faction, 2026-10-03)")
+    import shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        shutil.copytree(REPO_ROOT / "spec", root / "spec")
+        shutil.copytree(REPO_ROOT / "assets", root / "assets")
+        art.write_dds(root / "assets/EFE/tech/rifle.dds", 4, 4, [(10, 20, 30, 255)] * 16)
+        art.write_dds(root / "assets/EFE/tech/capital.dds", 4, 4, [(10, 20, 30, 255)] * 16)
+        ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
+        mod = ctx.mod_root
+        es = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*faction_tech*spanish*"))
+        check("el mismo fusil se llama distinto en cada faccion", 'EFE_infantry_equipment_1:0 "Fusil Espina II"' in es
+              and 'SHD_infantry_equipment_1:0 "Fusil Hexie II"' in es and 'ZAN_infantry_equipment_1:0 "Fusil de Frontera II"' in es,
+              es[:400])
+        check("los satelites usan los nombres de su senor", 'PTA_infantry_equipment_1:0 "Fusil Espina II"' in es)
+        check("la tecnologia que habilita el arma lleva su nombre",
+              'EFE_basic_ship_hull_heavy:0 "Acorazado clase Corona I"' in es
+              and "ZAN_basic_ship_hull_heavy" not in es, es[:400])
+        gfx = (mod / "interface/meganations_faction_tech.gfx").read_text()
+        check("con imagen: icono propio del equipo y de la tecnologia para la faccion y sus satelites",
+              'GFX_EFE_infantry_equipment_1_medium' in gfx and 'GFX_EFE_basic_ship_hull_heavy_medium' in gfx
+              and 'GFX_PTA_infantry_equipment_1_medium' in gfx and "GFX_SHD_" not in gfx, gfx[:400])
+        check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -2785,6 +2811,7 @@ def main() -> int:
         test_forces,
         test_unit_names,
         test_unique_units,
+        test_faction_tech,
         test_diplomacy,
         test_vanilla_validation,
     ):

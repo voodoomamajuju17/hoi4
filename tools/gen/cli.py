@@ -35,6 +35,7 @@ from .emitters import events as em_events
 from .emitters import focus_trees as em_focus_trees
 from .emitters import forces as em_forces
 from .emitters import history as em_history
+from .emitters import faction_tech as em_faction_tech
 from .emitters import ideas as em_ideas
 from .emitters import ideologies as em_ideologies
 from .emitters import intelligence as em_intelligence
@@ -68,6 +69,7 @@ EMITTERS = [
     ("doctrines", em_doctrines.emit),   # despues de territory: doctrina de arranque por bloque
     ("unique_units", em_unique_units.emit),  # antes que research (bloqueos) y decisiones (efectos)
     ("research", em_research.emit),     # la investigacion de 2100: años y nombres
+    ("faction_tech", em_faction_tech.emit),  # armas y tecnologias con nombre e imagen de cada faccion
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
     ("names", em_names.emit),

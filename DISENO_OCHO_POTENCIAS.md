@@ -911,3 +911,21 @@ llega a 100 al toque y la tensión nunca sube".
   Marx, Castellane, Mare Liberum, Caudal Corregido, Olokun, Augustus),
   experiencia máxima y la marca de orgullo de la flota. Va aparte del tope de
   destructores; las tecnologías del casco y sus módulos se dan solas.
+- **Nombres de barcos** (2026-10-03): el SHD, todo en mandarín (pinyin sin
+  tonos, la fuente del juego no tiene caracteres chinos): barcos y divisiones
+  ("Di 3 Hexie Shi «Huanghe»", acorazado "Jiaozheng Liu"). La HSN deja los
+  nombres en latín (Mare Liberum, Grotius): su orgullo de la flota es
+  "Sovereign Current".
+- **Armas por facción** (2026-10-03, 17_research.yaml -> by_faction). Mismo
+  equipo y misma tecnología para todos, pero cada meganación y cada anarquía
+  ve su propio nombre e imagen: 19 familias (fusil, apoyo, artillería,
+  antiaéreo, antitanque, cohetes, motorizado, mecanizado, anfibio, cinco
+  tanques y cinco barcos; las anarquías sin barcos). "Fusil Espina II" para el
+  EFE, "Fusil Hexie II" para el SHD, "Fusil de Frontera II" para las Tierras
+  Sin Ley; la tecnología que lo habilita lleva el mismo nombre. Satélites: los
+  de su señor; el Santuario: los del EFE. Lo de las unidades únicas no se toca.
+  Imágenes: 234 pedidos tech_<TAG>_<familia> (arte/pedidos/9_armas_*.txt);
+  cuando llegan, el generador hace los íconos del equipo y de la tecnología al
+  tamaño del juego. El reporte dice si el juego instalado usa nombres e íconos
+  por país (claves GER_..., sprites GFX_GER_..._medium) para confirmarlo.
+- 52 íconos de foco nuevos (APF, ASC, FCU) importados.

@@ -51,6 +51,10 @@ KINDS = {
     # Lo negro se vuelve transparente (ver _fundir): si no, el juego dibuja un
     # rectángulo negro con borde duro sobre el fondo gris de la ventana.
     "research_background": {"size": (1024, 1024), "transparent": True, "fit": "cover"},
+    # armas por facción (17_research -> by_faction, 2026-10-03): una imagen por
+    # familia y facción; el generador la lleva al tamaño de cada ícono de
+    # equipo y de tecnología del juego
+    "tech_icon": {"size": (300, 200), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -74,6 +78,16 @@ STYLE = {
     "APF": "African peoples' federation: village councils, savanna and rising industry, "
            "kente-like patterns, earth red, yellow and green",
     "NRE": "neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold",
+    # anarquías (2026-10-03: armas propias de cada una)
+    "ZWE": "Eurasian warlords: looted Soviet-style steel, cossack and steppe motifs, scrap and rust, "
+           "grey, olive and faded red",
+    "ZWI": "Hindustan warlord realms: monsoon, temples and bazaars, improvised armour with ornate brass, "
+           "saffron, crimson and dusty white",
+    "ZWM": "desert emirates: dunes, oil wells, falcons and daggers, sand camouflage, ochre, black and gold",
+    "ZWB": "Amazon warlords: jungle rivers, illegal gold mines and sawmills, mud and rubber, "
+           "dark green, brown and orange",
+    "ZAN": "the lawless lands: scavenged junk, welded scrap, raider graffiti without letters, "
+           "rust, black and hazard yellow",
     # imágenes que comparten varias potencias (eventos con `art`): sin colores de nadie
     "COMPARTIDOS": "the 2100 world of rival megastates: officers of different armies, maps, borders and "
                    "flags without symbols, neutral grey and ochre palette",
@@ -216,6 +230,18 @@ def catalog() -> list[dict]:
                            "left and fading smoothly to pure black towards the right and bottom edges, where "
                            "technology icons sit. No text, no icons, no frame.",
         })
+    look = (_load("17_research.yaml").get("by_faction") or {})
+    fams = look.get("families") or {}
+    for tag, entries in (look.get("names") or {}).items():
+        for fam, n in entries.items():
+            dest = REPO / "assets" / tag / "tech" / f"{fam}.dds"
+            items.append({
+                "type": "tech_icon", "tag": tag, "id": f"tech_{tag}_{fam}", "dest": dest, "done": dest.exists(),
+                "description": f"Equipment / technology icon like the Hearts of Iron IV production and research "
+                               f"screens: {fams.get(fam, {}).get('art', fam)}. It is the {n['en']} ({n['es']}) of this "
+                               "faction, designed in its own style and clearly different from other factions' "
+                               "version of the same weapon. Single object, centred, no background, no text.",
+            })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
     asked: set[str] = set()
@@ -307,7 +333,7 @@ def pedidos() -> None:
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
              ("operation_icon", "6_operaciones"), ("ui_background", "7_fondos"),
-             ("research_background", "8_investigacion")]
+             ("research_background", "8_investigacion"), ("tech_icon", "9_armas")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -357,7 +383,7 @@ def _readme(summary: list[str]) -> str:
         "Para devolver: juntar las imágenes en un .zip y pasárselo a Claude, que las",
         "convierte (tools/arte) y quedan conectadas solas en el próximo build.",
         "",
-        "Orden sugerido: 1 retratos, 2 espíritus, 3 focos, 4 eventos, 5 banderas.",
+        "Orden sugerido: 1 retratos, 2 espíritus, 3 focos, 4 eventos, 5 banderas, 9 armas por facción.",
         f"Lo nuevo de la última tanda está junto en {NEW_FILE}.",
         "",
         "Archivos:",
