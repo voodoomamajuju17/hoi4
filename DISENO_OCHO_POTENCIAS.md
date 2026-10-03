@@ -900,3 +900,7 @@ llega a 100 al toque y la tensión nunca sube".
   Confirmó el diagnóstico: el aviso del blindaje salía cada 3 meses (ya es 1
   año) y nadie fue descubierto espiando (ya corre MN_sombras_ia). Las
   tecnologías de barcos nuevas existen todas en 1.19.3.
+- **Orgullo de la flota** (2026-10-03, pedido del usuario): cada flota de
+  arranque marca su barco más grande como orgullo de la flota, con
+  experiencia máxima (start_experience_factor 1.0). Hoy todas arrancan con
+  destructores, así que es un destructor veterano.

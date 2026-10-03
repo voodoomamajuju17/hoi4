@@ -165,6 +165,16 @@ def emit(ctx: BuildContext) -> None:
             if not ships[tag]:
                 del fleets[tag], ships[tag]
 
+    # 2026-10-03 (pedido del usuario): cada flota de arranque tiene su orgullo
+    # de la flota, el barco más grande, con experiencia máxima.
+    pride = cut.get("pride_of_the_fleet")
+    if pride:
+        xp = float(pride.get("experience", 1.0)) if isinstance(pride, dict) else 1.0
+        for tag, block in fleets.items():
+            name = _crown_pride(block, xp)
+            if name:
+                ctx.note(f"armada: orgullo de la flota de {tag}: {name} (experiencia {xp:g})")
+
     ctx.data["naval_oob"] = {}
     ctx.data["air_oob"] = {}
     ctx.data["ship_equipment"] = {}
@@ -313,6 +323,38 @@ def _pick_ships(fleets: Block, definition: str | None, limit: int) -> Block:
         return out
 
     return pick(fleets)
+
+
+# del más grande al más chico: el orgullo de la flota es el primero que haya
+PRIDE_ORDER = ("battleship", "battle_cruiser", "carrier", "heavy_cruiser", "light_cruiser", "destroyer", "submarine")
+
+
+def _crown_pride(fleets: Block, xp: float) -> str | None:
+    """Marca un barco como orgullo de la flota (pride_of_the_fleet) con
+    start_experience_factor = xp. Devuelve su nombre."""
+    ships: list[Block] = []
+
+    def walk(block: Block) -> None:
+        for k, v in block.entries:
+            if k == "ship" and isinstance(v, Block):
+                ships.append(v)
+            elif isinstance(v, Block):
+                walk(v)
+
+    walk(fleets)
+    if not ships:
+        return None
+
+    def rank(ship: Block) -> int:
+        d = _text(ship.get("definition"))
+        return PRIDE_ORDER.index(d) if d in PRIDE_ORDER else len(PRIDE_ORDER)
+
+    best = min(ships, key=rank)
+    entries = [(k, v) for k, v in best.entries if k not in ("pride_of_the_fleet", "start_experience_factor")]
+    at = next((i + 1 for i, (k, _) in enumerate(entries) if k == "definition"), len(entries))
+    entries[at:at] = [("start_experience_factor", xp), ("pride_of_the_fleet", True)]
+    best.entries[:] = entries
+    return _text(best.get("name"))
 
 
 def _version_names(block: Block) -> set[str]:

@@ -2449,6 +2449,8 @@ def test_forces() -> None:
         raw = (mod / "history/units/NRE_2100_naval.txt").read_text()
         check("solo el tipo pedido (acorazado), hasta el tope", "Roma" in raw and "Zara" not in raw, raw)
         check("owner pasa a NRE", "owner = NRE" in raw and "owner = ITA" not in raw)
+        check("orgullo de la flota con experiencia maxima, uno solo (2026-10-03)",
+              raw.count("pride_of_the_fleet = yes") == 1 and "start_experience_factor = 1.0" in raw, raw[:600])
         check("usa la version de DLC (mtg), no la legacy", "Vecchia" not in raw)
         variants = pdx.parse(raw).get("instant_effect").get_all("create_equipment_variant")
         check("solo las variantes que usan los barcos que quedan", [pdx.text(v.get("name")) for v in variants] == ["Classe Littorio"],
