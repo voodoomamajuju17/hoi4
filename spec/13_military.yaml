@@ -138,7 +138,8 @@ stockpile:
   # Equipo en depósito por tipo de país (variante más nueva del arquetipo
   # hasta stockpile_year). No se puede fabricar sin la tecnología, pero sirve.
   per_kind:
-    meganation: { infantry_equipment: 4000, support_equipment: 300 }
+    # 2026-10-03: con 4000 la IA ponía divisiones a entrenar sin equipo y las cancelaba
+    meganation: { infantry_equipment: 10000, support_equipment: 800, artillery_equipment: 600 }
     satellite:  { infantry_equipment: 1200, support_equipment: 100 }
   # Convoyes: base + por IC, para que el comercio funcione desde el día uno.
   convoys: { equipment: convoy, base: 20, per_ic: 1.0 }

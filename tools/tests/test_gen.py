@@ -796,7 +796,7 @@ def test_territory() -> None:
         stock = {pdx.text(b.get("type")): int(pdx.text(b.get("amount")))
                  for b in pdx.parse(efe_h).get_all("add_equipment_to_stockpile")}
         check("fusiles: la variante mas nueva hasta 1942", "infantry_equipment_3" in stock, str(stock))
-        check("fusiles: 4000 en deposito para una meganacion", stock.get("infantry_equipment_3") == 4000, str(stock))
+        check("fusiles: 10000 en deposito para una meganacion (2026-10-03)", stock.get("infantry_equipment_3") == 10000, str(stock))
         check("convoyes", "convoy_1" in stock)
 
         section("nombres de 2100 y compensacion industrial")
@@ -1491,10 +1491,14 @@ def test_balance() -> None:
         check("la Anarquia no dona ni recibe", all(not any(delta.get(sid, {}).values()) for sid in zan_states))
 
         added = ctx.data["added_buildings"]
+        # +4 civiles en slots libres (city 6 - 2 usados); despues 3 de las 6 pasan a
+        # militares (2026-10-03: mínimo de fábricas militares, nunca más de la mitad)
         check("industrializacion: fabricas en slots libres del EFE (city 6 - 2 usados = 4)",
-              added.get(900, {}).get("industrial_complex") == 4, str(dict(added.get(900, {}))))
+              added.get(900, {}).get("industrial_complex") == 1 and added.get(900, {}).get("arms_factory") == 3,
+              str(dict(added.get(900, {}))))
         ba = pdx.parse((mod / "history/states/900-Fixture.txt").read_text()).get("state").get("history").get("buildings")
-        check("la fabrica queda escrita en el state", pdx.text(ba.get("industrial_complex")) == "6", str(ba))
+        check("la fabrica queda escrita en el state", pdx.text(ba.get("industrial_complex")) == "3"
+              and pdx.text(ba.get("arms_factory")) == "3", str(ba))
         check("la Anarquia no recibe fabricas", not any(added.get(sid) for sid in zan_states))
 
         efe = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
@@ -2147,7 +2151,7 @@ def test_ai() -> None:
         mil = root.get("MEGANATIONS_EFE_militar")
         milr = " ".join(pdx.render(mil).split()) if mil is not None else ""
         check("IA militar: el EFE arma blindados", "type = role_ratio id = armor value = 25" in milr, milr[:600])
-        check("IA militar: pone industria en armas (tipo sin id)", "type = added_military_to_civilian_factory_ratio value = 25" in milr)
+        check("IA militar: pone industria en armas (tipo sin id)", "type = added_military_to_civilian_factory_ratio value = 40" in milr)
         inf = (mod / "common/technologies/infantry.txt").read_text()
         nv = inf[inf.index("night_vision_fixture = {"):]
         nv = nv[:nv.index("folder")]

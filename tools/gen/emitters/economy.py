@@ -199,6 +199,40 @@ def _industrialize(ctx, spec, assignment, by_state, added) -> None:
         if placed < need:
             msg += f"; faltan {need - placed}: no hay mas slots libres"
         ctx.note(msg)
+    _militarize(ctx, spec, assignment, by_state, added, kind)
+
+
+def _militarize(ctx, spec, assignment, by_state, added, kind) -> None:
+    """2026-10-03 (la IA ponía divisiones a entrenar y las cancelaba): varias
+    meganaciones arrancaban con 1 a 7 fábricas militares para equipar un
+    ejército entero. Se pasan fábricas civiles a militares (misma IC) hasta el
+    mínimo de su tipo, empezando por los states con más civiles."""
+    mins = spec.get("military_min") or {}
+    for tag, k in kind.items():
+        need_total = int(mins.get(k, 0))
+        if not need_total:
+            continue
+        owned = [by_state[sid] for sid, t in assignment.items() if t == tag and sid in by_state]
+        if not owned:
+            continue
+        def have(s, b):
+            return (s.buildings or {}).get(b, 0) + added[s.id].get(b, 0)
+        mil = sum(have(s, "arms_factory") for s in owned)
+        civ = sum(have(s, "industrial_complex") for s in owned)
+        # nunca más de la mitad de las civiles: sin ellas no se construye nada
+        need = min(need_total - mil, civ // 2)
+        if need <= 0:
+            continue
+        moved = 0
+        for s in sorted(owned, key=lambda s: (-have(s, "industrial_complex"), s.id)):
+            while need > moved and have(s, "industrial_complex") > 0:
+                added[s.id]["industrial_complex"] -= 1
+                added[s.id]["arms_factory"] += 1
+                moved += 1
+            if moved >= need:
+                break
+        ctx.note(f"industrializacion: {tag} {mil} -> {mil + moved} fabricas militares "
+                 f"({moved} civiles pasan a militares, misma IC)")
 
 
 def _deindustrialize(ctx, tag, owned, excess, added) -> None:
