@@ -70,13 +70,17 @@ def emit(ctx: BuildContext) -> None:
 
     repo = ctx.spec.root.parent
     textures = ctx.vanilla.gfx_textures()
+    sizes = _Sizes(ctx, textures, equipment, tree)
     sprites = Block()
     written: dict[tuple[str, str, int, int], str] = {}
     counts = {"nombres": 0, "tecnologias": 0, "sprites": 0}
     for tag, style in sorted(style_of.items()):
         named_techs: set[str] = set()
         for fam, entry in names[style].items():
-            art = repo / "assets" / style / "tech" / f"{fam}.dds"
+            # v2 (arte/armas_descripciones.yaml) primero; si no, la primera tanda
+            art = repo / "assets" / style / "armas" / f"{fam}.dds"
+            if not art.exists():
+                art = repo / "assets" / style / "tech" / f"{fam}.dds"
             for eq, gen in members.get(fam, []):
                 if enabled_by.get(eq) and not free(eq):
                     continue      # de una unidad única
@@ -95,7 +99,7 @@ def emit(ctx: BuildContext) -> None:
                     targets.append(t)
                 if art.exists():
                     for target in targets:
-                        rel = _texture(ctx, art, style, fam, textures.get(f"GFX_{target}_medium"), written)
+                        rel = _texture(ctx, art, style, fam, sizes.of(target), written)
                         sprites.add("spriteType", Block([("name", Quoted(f"GFX_{tag}_{target}_medium")),
                                                          ("texturefile", Quoted(rel))]))
                         counts["sprites"] += 1
@@ -129,19 +133,109 @@ def family_members(families: dict, equipment: dict) -> dict[str, list[tuple[str,
     return out
 
 
-def _texture(ctx: BuildContext, art, style: str, fam: str, vanilla_tex: str | None,
+# 2026-10-03 (captura del usuario: "algunas imágenes son gigantes"): sin la
+# medida del ícono del juego la imagen quedaba en 300x200 y tapaba la fila de
+# al lado. Si el sprite exacto no se puede leer (muchos están dentro de los zip
+# de las expansiones), se usa la medida más común de los íconos de equipo o de
+# tecnología del juego, y si tampoco, una fija.
+FALLBACK_EQUIPMENT = (128, 64)
+FALLBACK_TECH = (64, 48)
+
+
+class _Sizes:
+    def __init__(self, ctx: BuildContext, textures: dict, equipment: dict, tree: dict):
+        from .menu import _texture_dims
+        self.ctx, self.textures, self.tree = ctx, textures, tree
+        self.archetype = {e: a for e, (a, _) in equipment.items() if a}
+        self._dims = _texture_dims
+        self._cache: dict[str, tuple[int, int]] = {}
+        eq_keys = set(equipment) | {a for a in self.archetype.values()}
+        pat = re.compile(r"^GFX_(?:[A-Z]{3}_)?(\w+?)_medium$")
+        eq_sizes, tech_sizes = [], []
+        for name, tex in textures.items():
+            m = pat.match(name)
+            if not m or m.group(1) not in eq_keys and m.group(1) not in tree:
+                continue
+            d = self._read(tex)
+            if d[0] and d[1]:
+                (eq_sizes if m.group(1) in eq_keys else tech_sizes).append(d)
+        self.default_eq = _most_common(eq_sizes) or FALLBACK_EQUIPMENT
+        self.default_tech = _most_common(tech_sizes) or FALLBACK_TECH
+        ctx.note(f"armas por faccion: tamano de los iconos {self.default_eq[0]}x{self.default_eq[1]} (equipo, "
+                 f"{len(eq_sizes)} del juego) y {self.default_tech[0]}x{self.default_tech[1]} (tecnologia, "
+                 f"{len(tech_sizes)} del juego)")
+
+    def _read(self, tex: str) -> tuple[int, int]:
+        if tex not in self._cache:
+            self._cache[tex] = self._dims(self.ctx, tex)
+        return self._cache[tex]
+
+    def of(self, target: str) -> tuple[int, int]:
+        names = [f"GFX_{target}_medium"]
+        names += sorted(n for n in self.textures if n.endswith(f"_{target}_medium") and n.startswith("GFX_"))
+        if target in self.archetype:
+            names.append(f"GFX_{self.archetype[target]}_medium")
+        for n in names:
+            if n in self.textures:
+                d = self._read(self.textures[n])
+                if d[0] and d[1]:
+                    return d
+        return self.default_tech if target in self.tree and target not in self.archetype else self.default_eq
+
+
+def _most_common(sizes: list[tuple[int, int]]) -> tuple[int, int] | None:
+    if not sizes:
+        return None
+    from collections import Counter
+    return Counter(sizes).most_common(1)[0][0]
+
+
+def _fit(data: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
+    """Encaja la imagen entera en nw x nh (sin cortar), centrada, con fondo
+    transparente; promedia los píxeles al achicar. DDS A8R8G8B8 sin comprimir
+    (el que escribe art.write_dds)."""
+    import struct
+    body = data[128:128 + w * h * 4]
+    scale = min(nw / w, nh / h)
+    sw, sh = max(1, round(w * scale)), max(1, round(h * scale))
+    ox, oy = (nw - sw) // 2, (nh - sh) // 2
+    out = bytearray(nw * nh * 4)
+    for y in range(sh):
+        y0, y1 = y * h // sh, max(y * h // sh + 1, (y + 1) * h // sh)
+        for x in range(sw):
+            x0, x1 = x * w // sw, max(x * w // sw + 1, (x + 1) * w // sw)
+            acc = [0, 0, 0, 0]
+            n = 0
+            for yy in range(y0, y1):
+                row = yy * w * 4
+                for xx in range(x0, x1):
+                    i = row + xx * 4
+                    a = body[i + 3]
+                    acc[0] += body[i] * a
+                    acc[1] += body[i + 1] * a
+                    acc[2] += body[i + 2] * a
+                    acc[3] += a
+                    n += 1
+            o = ((y + oy) * nw + x + ox) * 4
+            if acc[3]:
+                out[o:o + 4] = bytes((acc[0] // acc[3], acc[1] // acc[3], acc[2] // acc[3], acc[3] // n))
+    header = bytearray(data[:128])
+    struct.pack_into("<III", header, 12, nh, nw, nw * 4)
+    return bytes(header) + bytes(out)
+
+
+def _texture(ctx: BuildContext, art, style: str, fam: str, size: tuple[int, int],
              written: dict[tuple[str, str, int, int], str]) -> str:
     """La imagen de la familia al tamaño del ícono del juego (una por tamaño)."""
-    from .menu import _dims, _resize, _texture_dims
-    data = art.read_bytes()
-    w, h = _dims(data)
-    size = _texture_dims(ctx, vanilla_tex) if vanilla_tex else (0, 0)
-    nw, nh = size if size[0] and size[1] else (w, h)
+    from .menu import _dims
+    nw, nh = size
     key = (style, fam, nw, nh)
     if key in written:
         return written[key]
+    data = art.read_bytes()
+    w, h = _dims(data)
     if (nw, nh) != (w, h) and w and h:
-        data = _resize(data, w, h, nw, nh)
+        data = _fit(data, w, h, nw, nh)
     rel = f"{TEX_DIR}/{style}_{fam}_{nw}x{nh}.dds"
     dest = ctx.mod_root / rel
     dest.parent.mkdir(parents=True, exist_ok=True)

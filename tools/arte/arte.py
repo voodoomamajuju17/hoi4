@@ -52,9 +52,9 @@ KINDS = {
     # rectángulo negro con borde duro sobre el fondo gris de la ventana.
     "research_background": {"size": (1024, 1024), "transparent": True, "fit": "cover"},
     # armas por facción (17_research -> by_faction, 2026-10-03): una imagen por
-    # familia y facción; el generador la lleva al tamaño de cada ícono de
-    # equipo y de tecnología del juego
-    "tech_icon": {"size": (300, 200), "transparent": True, "fit": "contain"},
+    # familia y facción, con descripción extensa (arte/armas_descripciones.yaml);
+    # el generador la lleva al tamaño de cada ícono de equipo y de tecnología
+    "weapon_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -230,17 +230,31 @@ def catalog() -> list[dict]:
                            "left and fading smoothly to pure black towards the right and bottom edges, where "
                            "technology icons sit. No text, no icons, no frame.",
         })
+    # Armas por facción, v2 (2026-10-03: "son lo mismo con distinto skin;
+    # tienen que diferenciarse mucho más"). Cada pedido lleva la filosofía de
+    # diseño de la facción, la descripción detallada del arma y cómo la hacen
+    # las otras (para que no salga el mismo objeto con otra pintura).
     look = (_load("17_research.yaml").get("by_faction") or {})
     fams = look.get("families") or {}
+    detail = yaml.safe_load((REPO / "arte" / "armas_descripciones.yaml").read_text(encoding="utf-8"))
     for tag, entries in (look.get("names") or {}).items():
         for fam, n in entries.items():
-            dest = REPO / "assets" / tag / "tech" / f"{fam}.dds"
+            dest = REPO / "assets" / tag / "armas" / f"{fam}.dds"
+            own = _one_line((detail["art"].get(tag) or {}).get(fam, ""))
+            others = "; ".join(f"{t}: {_one_line(v[fam])[:90]}..." for t, v in detail["art"].items()
+                               if t != tag and fam in v)
             items.append({
-                "type": "tech_icon", "tag": tag, "id": f"tech_{tag}_{fam}", "dest": dest, "done": dest.exists(),
-                "description": f"Equipment / technology icon like the Hearts of Iron IV production and research "
-                               f"screens: {fams.get(fam, {}).get('art', fam)}. It is the {n['en']} ({n['es']}) of this "
-                               "faction, designed in its own style and clearly different from other factions' "
-                               "version of the same weapon. Single object, centred, no background, no text.",
+                "type": "weapon_icon", "tag": tag, "id": f"arma_{tag}_{fam}", "dest": dest, "done": dest.exists(),
+                "description": (
+                    f"WHAT: {fams.get(fam, {}).get('art', fam)} - the {n['en']} ({n['es']}). "
+                    f"EXACT DESIGN: {own} "
+                    f"FACTION {_one_line(detail['looks'].get(tag, ''))} "
+                    "MUST BE UNMISTAKABLE: a player has to recognise the faction from the silhouette alone, without "
+                    "colour. Do NOT draw a generic modern weapon with a different paint job; change the shape, the "
+                    "materials, the mechanism and the proportions. For contrast, other factions build the same weapon "
+                    f"like this (do NOT look like them): {others} "
+                    "Single object, three-quarter or side view, centred, fills most of the frame, transparent "
+                    "background, no text, no letters, no numbers."),
             })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
@@ -333,7 +347,7 @@ def pedidos() -> None:
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
              ("operation_icon", "6_operaciones"), ("ui_background", "7_fondos"),
-             ("research_background", "8_investigacion"), ("tech_icon", "9_armas")]
+             ("research_background", "8_investigacion"), ("weapon_icon", "9_armas")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}

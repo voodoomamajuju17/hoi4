@@ -931,3 +931,20 @@ llega a 100 al toque y la tensión nunca sube".
 - 52 íconos de foco nuevos (APF, ASC, FCU) importados.
 - 64 íconos de foco de la HSN importados: ya no quedan focos sin ícono.
 - 38 imágenes de armas por facción (EFE y NAS, 19 cada una) importadas.
+- **Armas por facción, segunda tanda de pedidos** (2026-10-03: "son lo mismo
+  con distinto skin"). arte/armas_descripciones.yaml: una filosofía de diseño
+  por facción (el EFE cultiva armas vivas con forma de animal, la ASC hace
+  robots sin tripulación, la FCU productos de lujo, la HSN todo sale de barcos
+  y contenedores, el NAS solar y de montaña con piedra inca, el SHD producción
+  hidráulica en masa, la APF tecnología rústica y reparable, Roma la legión
+  renacida; las anarquías, chatarra con su tema) y una descripción extensa de
+  cada arma. Cada pedido (arma_<TAG>_<familia>, 600x400) lleva además cómo
+  hacen la misma arma las otras facciones, para no parecerse. Las imágenes
+  nuevas van a assets/<TAG>/armas/ y pisan a las de la primera tanda.
+- **Tamaño de los íconos de armas** (captura del usuario: "algunas imágenes son
+  gigantes"): el ícono del juego no se pudo leer (está en los zip de las
+  expansiones) y la imagen quedaba en 300x200, tapando la fila de al lado. Ahora
+  se usa la medida exacta si se puede leer, si no la más común de los íconos
+  del juego (o 128x64 equipo / 64x48 tecnología), y la imagen se encaja entera
+  con fondo transparente. Las capturas confirmaron que el juego sí muestra
+  nombres e íconos por país.

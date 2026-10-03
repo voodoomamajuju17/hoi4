@@ -1,0 +1,891 @@
+# =============================================================================
+# Descripciones de arte de las armas por facción (pedido del usuario,
+# 2026-10-03: "tienen que diferenciarse mucho más, son lo mismo con distinto
+# skin; describilas extensamente y con lujo de detalles").
+#
+# Cada facción tiene una FILOSOFÍA de diseño distinta (no solo colores): cómo
+# fabrica, con qué materiales, quién lo opera, qué forma tiene. Cada arma se
+# describe entera: silueta, mecanismo, materiales, detalles y paleta, para que
+# dos facciones nunca den el mismo objeto con otra pintura.
+# Lo usa tools/arte (pedidos tipo weapon_icon, id arma_<TAG>_<familia>).
+# =============================================================================
+
+looks:
+  EFE: >-
+    DESIGN PHILOSOPHY - GROWN, NOT BUILT. The Ecofascist Empire does not manufacture weapons, it cultivates them in
+    bio-forges: every object is partly alive, made of "bio-steel", a dark green-bronze material that looks like
+    lacquered hardwood fused with insect chitin, with visible growth rings, veins and knots. No straight lines, no
+    bolts, no welds: surfaces flow like roots and shells, joints are sinew-like tendons, cooling is done by living
+    leaves or gills, and glowing amber sap runs in translucent veins. Metal appears only as small gold imperial laurel
+    inlays. Silhouettes are animal-like (the weapons are named after South American fauna and really resemble them).
+    Palette: deep forest green, bark brown, chitin bronze, amber sap glow, small gold accents.
+  ASC: >-
+    DESIGN PHILOSOPHY - NO HUMANS NEEDED. The Automated Socialist Commune builds crewless machines designed by
+    planning algorithms: everything is a robot or a drone, with no seats, no hatches, no windows, no handles for human
+    hands. Shapes are pure constructivist geometry: hexagonal and triangular prisms, flat panels, exposed modular
+    blocks that clip together like construction toys, rows of identical sensor eyes, visible serial numbers as
+    geometric markings (no letters), red indicator lights. White ceramic armour with red structural frames and black
+    sensor glass, like a clean factory robot that went to war. Multiple legs or tracks are common; nothing looks
+    handcrafted, everything looks printed in a series of thousands.
+  FCU: >-
+    DESIGN PHILOSOPHY - PREMIUM CONTRACTOR PRODUCT. The Corporate Union fields weapons as luxury commercial products
+    sold by competing corporations: over-engineered, glossy, expensive, with too many features. Sleek aerodynamic
+    supercar shapes, polished chrome and dark navy carbon fibre, smoked-glass panels, LED strips, holographic targeting
+    projections, gold-plated trim, modular "subscription" attachments, sponsor-style logo badges (abstract shapes, no
+    letters) and barcode panels. Everything looks like it came out of a showroom, with comfort features for the
+    paid crew. Palette: navy blue, silver chrome, white, small gold and cyan LED accents.
+  HSN: >-
+    DESIGN PHILOSOPHY - EVERYTHING COMES FROM THE SEA TRADE. The High Seas Market Nation converts merchant-marine
+    technology into weapons: hulls are shipping containers and boat hulls, mounts are dock cranes and winches, armour is
+    riveted ship plate with hazard stripes and anti-fouling red paint below the "waterline", and almost every land
+    vehicle is amphibious with propellers, rudders, bilge pumps and life-raft canisters. Nautical details everywhere:
+    portholes, cleats, coiled ropes, anchors, signal flags without letters, compass roses, brass fittings, container
+    corner castings. Palette: petrol teal, rust orange, container blue and red, brass, white hull numbers as shapes.
+  NAS: >-
+    DESIGN PHILOSOPHY - SOLAR AND MOUNTAIN. The Neo-Andean Sun Kingdom builds light, high-altitude, sun-powered
+    weapons: every vehicle and gun carries folding golden solar panels shaped like sun rays or condor feathers, frames
+    are lightweight alloy over carved stone-like ceramic plates with Inca stepped (chakana) geometry, and machines are
+    tall, narrow and long-legged to climb Andean slopes. Woven textile patterns (aguayo stripes) decorate armour,
+    turquoise crystal lenses replace glass, and many weapons use gravity or wind (gliders, slings, rails). Palette:
+    gold, turquoise, terracotta red, alpaca white and stone grey.
+  SHD: >-
+    DESIGN PHILOSOPHY - HYDRAULIC MASS PRODUCTION. The Sino-Harmonious Directorate designs simple, standardized,
+    rugged machines that can be produced by the million: boxy, symmetrical, heavy, with no decoration except
+    regulation markings. Everything is water-cooled and hydraulically driven: thick pipes, pistons, radiators,
+    pressure gauges, water tanks and dam-like sluice armour plates; heavy weapons use water-pressure or steam-assisted
+    launchers. The look is orderly and identical, like a parade of equal units: concrete-grey and jade-green paint,
+    stencilled geometric unit codes (no letters), small red star-like harmony emblems (a circle with flowing waves).
+  APF: >-
+    DESIGN PHILOSOPHY - RUGGED, REPAIRABLE, PEOPLE'S TECHNOLOGY. The African Peoples' Federation builds tough, simple,
+    modern machines that any village council can maintain: open frames, big wheels, huge ground clearance, exposed
+    easy-to-replace parts, civilian and agricultural origins (tractor, truck and mining machinery DNA), solar and
+    biofuel power, lots of external storage, water jerrycans and spare tyres. Armour is painted with bright kente-like
+    geometric bands; mobility and range matter more than heavy armour. Palette: earth red, savanna ochre, deep green,
+    bright yellow and black geometric patterns.
+  NRE: >-
+    DESIGN PHILOSOPHY - THE LEGION REBORN. The Neo-Roman Empire builds massive, imposing, ceremonial war machines that
+    translate Roman legion equipment into 2100 technology: huge curved scutum-like shield plates, segmented lorica
+    armour bands, crested helmet-like turrets with red plumes of cables or fins, eagle (aquila) standards and laurel
+    wreaths in gold, marble-white and crimson colours, rows of rivets like a phalanx. Weapons are heavy, slow,
+    overbuilt and theatrical; projectiles and shapes recall the pilum, the gladius, the ballista and the testudo.
+    Palette: crimson, imperial purple, polished gold, marble white, bronze.
+  ZWE: >-
+    DESIGN PHILOSOPHY - LOOTED AND WELDED. The Eurasian warlords use old 20th/21st-century Soviet and European steel
+    found in depots and rebuilt by blacksmith-mechanics: crude welded seams, mismatched plates from different vehicles,
+    cossack ornaments hammered into the metal, horse-tail standards, felt and fur padding, painted-over old markings.
+    Palette: faded olive, rust, grey steel, dirty red, horsehair black.
+  ZWI: >-
+    DESIGN PHILOSOPHY - ORNATE IMPROVISATION. The Hindustan warlord realms rebuild civilian machines into war machines
+    and decorate them lavishly like festival trucks: painted floral and paisley panels, brass bells, chains and
+    tassels, marigold garlands, temple-like canopies, elephant and tiger motifs, mixed with cheap welded armour.
+    Palette: saffron, crimson, turquoise, polished brass, dusty white.
+  ZWM: >-
+    DESIGN PHILOSOPHY - DESERT OIL MONEY. The desert emirates mount expensive imported weapons on desert-adapted
+    platforms: high-mounted fat sand tyres, sun canopies, falcon and dagger emblems in gold, sand-camouflage over
+    luxurious gold trim, oil-drum fuel tanks and wellhead-like pumps. Palette: sand ochre, black, gold, white.
+  ZWB: >-
+    DESIGN PHILOSOPHY - JUNGLE MINER AND LOGGER GEAR. The Amazon warlords convert illegal mining and logging machinery
+    into weapons: chainsaw blades, bulldozer blades, dredge pumps, rubber-tapped tyres, mud-caked tracks, tarps, vines
+    growing over everything, river-boat parts. Palette: mud brown, dark jungle green, rust orange, yellow machinery
+    paint scratched off.
+  ZAN: >-
+    DESIGN PHILOSOPHY - SCRAPYARD MONSTERS. The lawless lands build weapons from pure junk: car doors, washing
+    machines, road signs (with no letters), shopping carts, pipes, chains and spikes, everything welded randomly,
+    leaking, smoking and patched; skulls and raider tags painted without letters. Palette: rust, soot black, hazard
+    yellow, faded mismatched colours.
+
+art:
+  EFE:
+    rifle: >-
+      A long organic rifle that looks grown from a single thorny branch: the stock is polished bark-brown wood with
+      visible growth rings, the barrel is a straight chitin spine covered in short sharp thorns along the top, and the
+      projectiles are hardened thorns fed from a bulbous seed-pod magazine under the grip that pulses faintly amber.
+      A living vine wraps the fore-grip like a sling, two small leaves act as the rear sight, and a single gold laurel
+      inlay sits on the stock. No metal receiver, no screws: it is a weapon-plant.
+    support: >-
+      A support kit laid out on a woven leaf mat: a living scout drone shaped like a large green beetle with folded
+      translucent wings, a bio-steel machete with a root-like handle, a sap-filled healing gourd with amber glow, a
+      coiled vine rope and a bark-covered radio that is a hollow seed with antenna-like tendrils. Everything organic,
+      green-bronze and amber.
+    artillery: >-
+      A towed howitzer whose barrel is the hollowed trunk of a quebracho tree hardened into bio-steel, with knots and
+      growth rings, mounted on a carriage of curling roots that act as legs and spade anchors. A giant seed-shell loads
+      at the breech; leaf-shaped heat fins along the barrel; amber sap veins glowing near the muzzle. Looks like a felled
+      sacred tree turned into a cannon.
+    anti_air: >-
+      A slender anti-aircraft emitter shaped like a hummingbird's beak and head on a tall flower-stem mast: the "beak"
+      is a long thin crystal lens tube that fires a green-amber laser, iridescent feather-like solar petals fan out
+      around the base to power it, and the base is a bulb rooted into the ground. Elegant, delicate, alive.
+    anti_tank: >-
+      A shoulder-fired launcher shaped like the abdomen of a giant horsefly: a segmented chitin tube with translucent
+      wing-like fins, compound-eye targeting lenses at the front, and the missile is a living stinger-larva that pokes out
+      of the rear. Held by a vine strap, bronze-green and amber.
+    rocket: >-
+      A vehicle-mounted living nest: a huge papery wasp-hive made of bio-steel paper layers mounted on a six-legged beetle
+      walker; dozens of hexagonal cells open on top, each containing a small winged missile-wasp ready to swarm out.
+      Amber glow inside the cells, yellow and black warning stripes on the hive like a real wasp.
+    motorized: >-
+      A tall, long-legged troop carrier bred from a rhea (ñandú): an organic grey-green body like a feathered beetle
+      shell carried on two powerful bird legs, with a cabin pod on its back covered by a translucent leaf canopy,
+      small vestigial wings used as side doors. Fast and running, not rolling.
+    mechanized: >-
+      A squat, rounded armoured carrier modelled on a capybara: a heavy brown bio-steel body with fur-like fibrous
+      texture, short thick legs ending in wide webbed feet, a blunt snout with sensor eyes, and a rear "mouth" ramp
+      for infantry. Calm, sturdy, amphibious-looking, with a gold laurel on the flank.
+    amphibious: >-
+      A low armoured drone shaped like a caiman (yacaré): long scaled chitin body, eyes and nostril-sensors on top so it
+      can lurk half-submerged, a powerful tail used as propulsion, and a back of bony scutes that hide a small turret.
+      Shown crawling out of murky water, green-bronze scales with amber eyes.
+    light_tank: >-
+      A small, fast tank shaped like a pampas fox: a narrow pointed bio-steel hull, four running legs instead of tracks,
+      two tall ear-like sensor fins and a short thorn cannon as the snout, bushy tail-like antenna. Rusty-brown and green,
+      sleek and alert.
+    medium_tank: >-
+      A powerful medium tank modelled on a jaguar (yaguareté): muscular low hull of golden-tan bio-steel with dark
+      rosette spots, four clawed legs crouched to pounce, a turret shaped like the jaguar's head with the main gun
+      emerging from the jaws and two glowing amber eyes as optics. The pride of the Bioacero.
+    heavy_tank: >-
+      A heavy tank grown like a tapir: a massive barrel-shaped dark grey-brown body with thick hide-plates, short
+      columnar legs, a long flexible prehensile snout that is actually a flamethrower/cannon, small sensor eyes and ears.
+      Slow, huge, unstoppable jungle beast.
+    modern_tank: >-
+      A sleek modern battle tank shaped like a puma in full stride: smooth tawny bio-steel without spots, long low body on
+      four legs, tail-shaped stabiliser antenna, a streamlined head-turret with a long railgun "tongue". The most refined
+      and elegant living machine of the empire, gold laurel crown on the turret.
+    super_heavy: >-
+      A colossal land fortress modelled on the extinct giant ground sloth (megatherium): a towering shaggy fibre-covered
+      bio-steel body walking on huge clawed limbs, several thorn-cannon turrets growing from its back like tree stumps,
+      moss and small trees growing on top, amber sap glowing through cracks. A walking mountain of the Pampa.
+    destroyer: >-
+      A sleek river destroyer whose hull is a giant hollowed seed-pod of green bio-steel with leaf-shaped fins along the
+      sides, a mast like a palm tree trunk, thorn-cannon turrets and an amber-glowing gill vent at the stern; shown
+      cutting through brown river water (Paraná).
+    cruiser: >-
+      A missile cruiser grown like a floating island: a long hull covered in grass and small trees on top of green
+      bio-steel, vertical launch cells shaped like seed cones among the vegetation, a bridge tower like a giant termite
+      mound with amber windows. Looks like a piece of Pampa that sails.
+    capital: >-
+      A huge battleship shaped like a living crown of trees: the hull is dark bronze chitin with growth rings, three
+      enormous railgun barrels made of hardened tree trunks, a superstructure formed by intertwined roots rising like a
+      cathedral of branches topped by a golden laurel crown, amber sap lights along the sides. The Corona de Gaia.
+    carrier: >-
+      A drone carrier shaped like a giant condor with spread wings: the flight deck is the flat wing surface made of
+      feather-like overlapping bio-steel plates, the bridge is the condor's head with a white ruff, and the drones are
+      small living birds perched on the deck ready to take off. Black, white and bronze.
+    submarine: >-
+      A submarine shaped exactly like a surubí catfish: long spotted grey-brown body, whisker-like sensor barbels around
+      the mouth, fins for steering, a mouth that opens for torpedo-eels. Shown surfacing in dark river water with bubbles.
+  ASC:
+    rifle: >-
+      Not a rifle carried by a soldier: a compact robotic rifle-arm module with no stock, no trigger and no grip,
+      meant to be clipped onto a combat robot. A hexagonal white ceramic barrel housing, a red skeletal frame, a row of
+      three black sensor eyes along the top, cable ports and a magnetic mounting plate at the rear. Looks like an
+      industrial robot tool.
+    support: >-
+      A modular support package: a white cube-shaped mother-unit that unfolds into three small hexapod repair drones, a
+      quadcopter sensor drone, a cable spool and a field fabricator that prints spare parts. All clean white panels, red
+      frames and black glass, laid out like an exploded technical diagram.
+    artillery: >-
+      A self-propelled, crewless howitzer robot on four articulated spider legs: the gun barrel is a long hexagonal
+      prism, the body is a white box covered with sensor domes, an automatic loading arm feeds shells from a magazine
+      cube, and stabiliser feet dig into the ground. No crew compartment at all.
+    anti_air: >-
+      An air-defence robot like a tall white tripod tower with a rotating red geometric head made of stacked rings; six
+      laser emitters arranged in a hexagon, a radar panel shaped as a flat triangle. Clean constructivist look, like a
+      lighthouse built by an algorithm.
+    anti_tank: >-
+      A small four-legged anti-armour robot the size of a dog, carrying a triangular missile pod on its back with three
+      missiles visible; a single big black sensor eye in front, red joints, white shell. It hunts tanks alone.
+    rocket: >-
+      A crewless launcher vehicle: a flat white truck chassis with no cabin (just a sensor nose), carrying a rectangular
+      grid of 36 square missile cells that open like a honeycomb of red lids; a radar mast and a communication array.
+      Perfectly geometric, like a factory machine.
+    motorized: >-
+      An autonomous electric transport pod on six small wheels: a smooth white capsule with no windshield and no driver,
+      a red band with sensor eyes all around, sliding side doors showing rows of identical robot soldiers folded inside.
+    mechanized: >-
+      A combat automaton instead of an armoured car: a heavy six-legged walking robot with a box-shaped body, a small
+      autocannon turret on top, red frames, white plates, and a rear compartment that carries drones rather than
+      people.
+    amphibious: >-
+      An amphibious automaton shaped like a geometric crab: a hexagonal white hull, six jointed legs with paddle feet,
+      two manipulator arms, sensor stalks; shown walking out of grey water with red warning lights blinking.
+    light_tank: >-
+      A small crewless tank drone, low and flat, on two narrow tracks, with a turret that is a simple hexagonal prism and
+      a single machine-cannon; sensor strip instead of hatches, red triangle markings. Light, cheap, built by the
+      thousand.
+    medium_tank: >-
+      A medium crewless tank with a perfectly symmetrical angular hull, a turret made of stacked triangular plates, twin
+      guns, many sensor eyes and antenna masts; tracks covered by modular white skirts with red frames. Clinical and
+      cold.
+    heavy_tank: >-
+      A heavy tank that looks like a moving factory block: a huge rectangular white hull on four separate track units,
+      two turrets, exposed cooling fins and robotic loader arms, conveyor belts carrying ammunition visible through
+      windows. The Five-Year Plan made machine.
+    modern_tank: >-
+      The algorithmic main battle tank: an impossible-looking faceted hull designed by AI, made of many small triangular
+      white facets like a 3D polygon model, a red glowing core visible through gaps, a long rail cannon, no human
+      features at all.
+    super_heavy: >-
+      A colossal walking factory-fortress on eight legs: a city-block-sized white structure with smokestacks, cranes,
+      radar dishes and many turrets, assembling drones in its belly and releasing them; red constructivist banners
+      without letters.
+    destroyer: >-
+      A crewless destroyer: a low, wedge-shaped white hull with no bridge windows, only sensor domes and antenna masts,
+      hexagonal gun turrets, a red stripe along the hull and drone launch tubes; geometric and stealthy.
+    cruiser: >-
+      A crewless missile cruiser: a long angular hull with a tall triangular mast of sensors, a deck covered with a grid
+      of square missile lids, small drone helicopters parked on the stern; white and red, perfectly clean.
+    capital: >-
+      A massive automated battleship: a huge geometric hull made of stacked rectangular blocks like a skyline of data
+      centres, three triangular railgun turrets, a cooling tower in the middle venting steam, rows of red lights. No
+      deck crew anywhere.
+    carrier: >-
+      A drone mother-ship: a broad flat white hull covered by a hexagonal launch grid where hundreds of tiny drones sit
+      in cells, robotic arms that load them, a small sensor island; looks like a floating printed circuit board.
+    submarine: >-
+      A crewless underwater drone-submarine: smooth white teardrop hull with a red ring, no conning tower, only a sensor
+      fin, four hexagonal ducted propellers, launching smaller drone torpedoes from side hatches.
+  FCU:
+    rifle: >-
+      A premium smart rifle sold like a luxury product: sleek bullpup body in glossy navy carbon fibre and polished
+      chrome, a holographic scope projecting a cyan reticle in the air, LED strip along the barrel, gold-plated trigger
+      and muzzle brake, modular rail with "subscription" attachments (laser, drone launcher), a small abstract corporate
+      logo badge. Looks like a showroom item.
+    support: >-
+      A contractor's premium kit in an open hard-shell aluminium case with foam cut-outs: a folding quadcopter drone
+      with chrome arms, a tablet with holographic map, a medical auto-injector, a tactical earpiece, gold-trimmed
+      multitool and a branded energy-drink-like power cell. Everything glossy and expensive.
+    artillery: >-
+      A self-propelled premium howitzer on a luxury truck chassis: aerodynamic navy and chrome body like a supercar
+      truck, a smooth enclosed gun barrel with LED rings, a smoked-glass air-conditioned cabin, automated loading,
+      holographic firing display above it.
+    anti_air: >-
+      A sleek air-defence system shaped like a sports-car on a turntable: curved chrome housing with four slim laser
+      emitters, a rotating radar disc with cyan LED ring, corporate logo badge, gold trim; very clean and expensive.
+    anti_tank: >-
+      A high-end shoulder-fired missile launcher shaped like a luxury golf-bag/telescope: navy carbon tube with chrome
+      ends, flip-up holographic sight, a guided missile with gold tip, ergonomic padded grip; branded.
+    rocket: >-
+      A launcher truck that looks like a corporate product launch: a glossy navy articulated truck with a chrome box of
+      missiles that rises on hydraulic arms, LED displays on the side showing an abstract upward stock-market graph
+      (no numbers or letters), gold trim.
+    motorized: >-
+      A luxury armoured SUV-transport: long, low, aerodynamic navy body with tinted windows, chrome grille, LED light
+      bars, comfortable leather seats visible, run-flat chrome wheels; mercenary contractors ride in comfort.
+    mechanized: >-
+      A premium infantry fighting vehicle: angular stealth-car styling in navy and silver, a remote turret with
+      holographic sight, smoked glass vision blocks, cyan LED accents, gold-plated corporate badge; looks like a concept
+      car at an arms fair.
+    amphibious: >-
+      A luxury amphibious vehicle like a speedboat with wheels: glossy white and navy hull, chrome rails, tinted canopy,
+      water-jet nozzles at the stern, small turret; shown skimming over a bayou with a spray of water.
+    light_tank: >-
+      A fast light tank styled like a muscle car: long chrome-trimmed navy hull with racing stripes, aggressive LED
+      headlights, low turret with a short cannon, oversized exhaust-like heat vents. The Mustang.
+    medium_tank: >-
+      A medium tank with brutal premium styling: thick sloped navy armour with chrome edges, a heavy front "grille"
+      armour like a pickup truck, cyan LED optics, gold horn-like antenna mounts evoking a bison, holographic commander
+      display.
+    heavy_tank: >-
+      A heavy tank like an armoured luxury truck: massive rounded navy body with silver plating, giant chrome tracks,
+      bear-claw shaped dozer blade, smoked-glass commander dome, multiple remote weapon pods; expensive brute force.
+    modern_tank: >-
+      The flagship main battle tank: a perfect aerodynamic hull like a hypercar, seamless navy and chrome surfaces, a
+      long railgun with glowing cyan rings, active camouflage panels shimmering, a gold "apex" emblem. Pure marketing.
+    super_heavy: >-
+      A colossal mobile corporate headquarters: a land fortress shaped like a glass skyscraper lying on giant tracks,
+      chrome and navy, with a helipad, boardroom windows, many turrets and giant screens showing abstract logos.
+    destroyer: >-
+      A stealth destroyer like a luxury yacht: sleek white and navy hull, smoked-glass bridge, chrome railings, a hidden
+      gun that rises from the deck, a helipad, LED strip at the waterline; owned by a corporation.
+    cruiser: >-
+      A missile cruiser like a mega-yacht: multi-level glass superstructure, swimming-pool-like launch bays, chrome
+      missile cells, radar domes, corporate flag without letters.
+    capital: >-
+      A battleship as corporate flagship: enormous navy hull with chrome superstructure shaped like a glass office tower,
+      three railgun turrets with gold rings, giant holographic logo projected above. The Castellane.
+    carrier: >-
+      A supercarrier like a floating airport and shopping mall: wide deck with sleek drones, a glass control tower,
+      chrome edges, LED runway lights, corporate livery.
+    submarine: >-
+      A luxury stealth submarine: smooth black and navy hull with chrome accents, a glass observation dome, quiet pump-jet
+      propulsor, a small gold corporate badge; looks like a billionaire's private submarine with torpedoes.
+  HSN:
+    rifle: >-
+      A marine's rifle built from ship hardware: brass fittings, a barrel wrapped in tarred rope for grip, a stock made
+      of a piece of teak deck planking, a magazine like a small cargo container with corner castings, a compass mounted
+      on top as sight, weather-resistant teal paint with salt stains.
+    support: >-
+      A deck crew kit: a coiled rope, a boat hook, a life vest, a waterproof radio buoy, a small seagull-shaped drone,
+      a brass spyglass and a toolbox painted container-blue with hazard stripes, all on a wet steel deck.
+    artillery: >-
+      A howitzer mounted on a converted dock crane base: a short naval gun turret on a rotating yellow crane pedestal
+      with hydraulic outriggers, winch cables, hazard stripes, salt rust; it can be moved by forklift.
+    anti_air: >-
+      An air-defence laser mounted on top of a lighthouse-shaped tower: white and red striped column, a rotating lamp
+      room with laser lenses instead of a lamp, a gallery railing, radar dish on top; set on a container base.
+    anti_tank: >-
+      A harpoon launcher: a heavy brass and teal harpoon gun on a swivel tripod like a whaling cannon, firing a rocket
+      harpoon with a barbed explosive tip and a cable reel; ship rope and cleats on the mount.
+    rocket: >-
+      A rocket launcher hidden inside a standard 40-foot shipping container on a truck: the container roof opens and
+      dozens of missiles rise like jellyfish tentacles of smoke trails; container blue with corrugated walls and
+      corner castings.
+    motorized: >-
+      A troop transport built from a port straddle-carrier/stevedore truck: tall yellow frame on big wheels carrying a
+      container-cabin with portholes, ladders, hazard stripes; amphibious with a small propeller at the back.
+    mechanized: >-
+      An armoured carrier made from a shipping container on tracks: corrugated red container walls reinforced with ship
+      plate, portholes as firing ports, a small gun turret on the roof, container doors as the rear ramp, propellers for
+      water.
+    amphibious: >-
+      An amphibious drone shaped like a mangrove crab made of ship parts: orange-red riveted shell, eight legs ending in
+      pontoons, two claws that are grapple winches, life-raft canister on the back; walking out of surf.
+    light_tank: >-
+      A light amphibious tank shaped like a barracuda: long thin hull like a speedboat with tracks, sharp nose with a
+      pointed gun, fins, water-jets, petrol teal and silver with a white hull number shape.
+    medium_tank: >-
+      A medium amphibious tank like an orca: black and white rounded hull, a tall dorsal-fin turret, flippers that fold
+      into tracks, propellers, a gun emerging from the "mouth".
+    heavy_tank: >-
+      A heavy tank shaped like a hammerhead shark: wide T-shaped front hull with sensor "eyes" at both ends, thick riveted
+      grey ship armour, a turret like a dorsal fin, propeller tail; amphibious and fearsome.
+    modern_tank: >-
+      A sleek modern hover-tank shaped like a manta ray: flat wide wing-like hull skimming over water and land on an air
+      cushion, small turret in the centre, tail antenna; petrol teal and white.
+    super_heavy: >-
+      A colossal amphibious fortress that is a whole container ship on giant tracks: stacked colourful containers with
+      turrets, gantry cranes as weapons, a kraken figurehead with tentacle-like cable arms at the bow.
+    destroyer: >-
+      An escort destroyer converted from a fast container feeder ship: tall bridge at the stern, a few containers on deck
+      hiding missile launchers, a gun on the bow, hazard stripes, rust streaks, red anti-fouling paint at the waterline.
+    cruiser: >-
+      A cruiser built on a car-carrier hull: tall boxy white hull with rows of portholes hiding launch cells, big radar on
+      top, cranes, teal stripes; the guardian of the straits.
+    capital: >-
+      A huge capital ship converted from an ultra-large container ship: kilometre-long hull with mountains of colourful
+      containers that open to reveal railguns, a tall white bridge tower, gantry cranes, a brass compass-rose emblem.
+    carrier: >-
+      A carrier converted from an oil tanker: flat red and black hull with a wide flight deck built on top, a small
+      island, pipelines and valves still visible, drones ready on the deck.
+    submarine: >-
+      A raider submarine built from a cargo hull: rusty teal hull with riveted plates, a conning tower like a ship's
+      funnel, a black pirate-style flag without symbols, mine racks and torpedo tubes.
+  NAS:
+    rifle: >-
+      A long, light solar rifle: a slim golden alloy barrel with a fan of small golden solar petals around the receiver
+      like sun rays, a stock of carved terracotta ceramic with stepped Inca patterns, a turquoise crystal scope, and an
+      aguayo-striped woven sling. It fires concentrated sunlight pulses.
+    support: >-
+      An ayllu (community) support kit: a woven aguayo cloth bundle unfolding to show a small condor-shaped glider drone,
+      a solar charger shaped like a golden sun disc, coca-leaf medicine pouch, a quipu-like knotted cord data recorder
+      and stone tools with gold inlays.
+    artillery: >-
+      A mountain howitzer on a tall, narrow, long-legged carriage that can climb slopes: golden barrel with stepped
+      ceramic rings, solar panels folded like wings, the shell loaded by gravity from a stone hopper; named after the
+      thunder god Illapa, lightning patterns on the barrel.
+    anti_air: >-
+      An air-defence device shaped like the Intihuatana sun-stone: a carved stone pillar with a golden mirror array on
+      top that concentrates sunlight into a beam, turquoise lenses, terraced base; ancient and futuristic at once.
+    anti_tank: >-
+      A giant electromagnetic sling (waraka): a tall golden frame with braided cable arms that spins and hurls a heavy
+      stone-ceramic dart; turquoise energy at the rotation hub, aguayo stripes on the base.
+    rocket: >-
+      A launcher of messenger-rockets (chaski): a high-altitude truck with stepped terraced racks of slim golden rockets
+      with condor-feather fins, each with a small woven ribbon, solar panels shading the rack.
+    motorized: >-
+      A tall, slender walking carrier shaped like a llama: long neck with sensor head, four thin legs with padded feet
+      for mountains, a cargo-cabin on its back covered by a colourful woven blanket, golden solar ears.
+    mechanized: >-
+      An armoured walker shaped like a vicuña: elegant thin-legged body with fine golden armour plates like fleece, a
+      small turret on the back, turquoise eye-optics, very light and fast on rocky slopes.
+    amphibious: >-
+      An amphibious drone made like a totora-reed boat: a woven golden reed hull shaped like a puma head at the bow
+      (as on Lake Titicaca), with propellers and a small turret; floating on a high blue lake under snowy peaks.
+    light_tank: >-
+      A light tank shaped like a vizcacha (mountain rodent): small, round, with long ear-like antennas, hopping legs
+      for rocks, grey-gold fur-textured armour, a tiny gun; agile among boulders.
+    medium_tank: >-
+      A medium tank like the uturunku (Andean jaguar spirit): golden armour with turquoise spots, stepped Inca relief on
+      the hull, a turret shaped like a stylised feline head as in Tiwanaku stone carvings, solar mane around the turret.
+    heavy_tank: >-
+      A heavy tank conceived as a walking mountain deity (apu): a massive stepped body like a terraced mountain with
+      snow-white top, carved stone-ceramic plates, golden sun disc on the front, short thick legs, heavy cannon from a
+      cave-like opening.
+    modern_tank: >-
+      A modern tank-glider hybrid inspired by the condor (kuntur): low golden hull with huge folding solar wings for
+      gliding between valleys, a sharp beak-shaped gun, white feather ruff around the turret, black and gold.
+    super_heavy: >-
+      A colossal fortress like the Sacsayhuamán walls on legs: zigzag walls of giant perfectly fitted stone blocks, golden
+      gates, sun-temple tower on top emitting light beams, terraces with turrets, walking on stone pillars.
+    destroyer: >-
+      A light destroyer for Lake Titicaca and the Pacific: a slender golden hull with a puma-head prow of woven reed
+      motif, solar sails like sun rays, a small turret, turquoise accents.
+    cruiser: >-
+      A cruiser named after the emperor Pachacútec: a stepped-pyramid superstructure like a sun temple on a long white
+      hull, golden sun disc on the bow, missile cells in terraces, aguayo stripes along the side.
+    capital: >-
+      A battleship as a floating sun temple: an immense hull crowned with a golden Coricancha temple, giant golden sun
+      disc mirror array that focuses solar beams, railguns mounted on stone terraces, condor figurehead.
+    carrier: >-
+      A carrier shaped like a falcon (huamán) with spread wings: the flight deck is a golden feather pattern, the island
+      is a stylised falcon head, glider drones like small birds.
+    submarine: >-
+      A submarine inspired by Mama Qucha, the sea mother: a smooth turquoise and gold hull shaped like a large fish with
+      wave patterns, a crystal dome eye, golden fins.
+  SHD:
+    rifle: >-
+      A simple, standardized mass-produced rifle: a straight boxy stamped-steel body, identical to millions of others,
+      a water-cooling jacket around the barrel with a small coolant tank, a folding wire stock, jade-green paint, a
+      stencilled geometric serial code and a small circular wave emblem. Rugged, plain, reliable.
+    support: >-
+      A standard-issue support crate opened to show identical, neatly arranged tools: a hydraulic pump, a water filter,
+      a field telephone, a simple boxy drone, ration tins and a shovel, all in jade green with stencilled codes.
+    artillery: >-
+      A heavy howitzer driven by hydraulics: a thick barrel with a large water-jacket and pipes, massive pistons for
+      recoil, a boxy armoured shield like a sluice gate, a water tank on the trail; produced in rows of identical guns.
+    anti_air: >-
+      An anti-aircraft battery of four identical boxy laser emitters on a square hydraulic mount, each cooled by water
+      pipes and radiators, a simple grid radar; concrete grey and jade, orderly.
+    anti_tank: >-
+      A water-pressure anti-armour launcher: a thick cylindrical tube on a tripod connected by hoses to a pressure tank,
+      firing a dart by hydraulic burst; gauges and valves, very utilitarian.
+    rocket: >-
+      A rocket launcher on a simple six-wheel truck: a rectangular rack of identical rockets in perfect rows, hydraulic
+      lifting arms, water spray nozzles to cool the launch; dozens of identical trucks implied.
+    motorized: >-
+      A standardized troop truck: a boxy jade-green cab, a canvas-covered cargo bed with benches, big simple wheels, a
+      water tank on the side; plain and mass-produced.
+    mechanized: >-
+      An armoured carrier like a moving section of the Great Wall: a long boxy grey hull with battlements on top, a small
+      turret, hydraulic suspension pistons visible, tracks; stencilled codes.
+    amphibious: >-
+      An amphibious carrier shaped like a river dragon (jiaolong) in a disciplined, simplified form: a boxy segmented hull
+      with a dragon-head bow and water-jet nozzles, jade armour plates like scales.
+    light_tank: >-
+      A light tank, white tiger (baihu) in name: a small boxy hull with simple angled plates, a short gun, white and jade
+      paint with faint tiger stripes made of geometric stencils; identical units in a row.
+    medium_tank: >-
+      A medium tank, the azure dragon (qinglong): a rugged boxy hull with hydraulic suspension, a turret with a long gun,
+      jade-blue paint, a stylised dragon emblem in a circle, water-cooling radiators on the rear deck.
+    heavy_tank: >-
+      A heavy tank, the black tortoise (xuanwu): a huge dome-shaped turret and hull like a turtle shell made of thick
+      hexagonal armour plates, short sturdy tracks, a snake-like secondary gun; almost indestructible.
+    modern_tank: >-
+      A modern main battle tank inspired by the qilin: still standardized but refined, angular jade hull with geometric
+      scale pattern, a long gun, hydraulic active suspension, a small horn-like sensor mast.
+    super_heavy: >-
+      A colossal fortress like a moving section of the Three Gorges dam: a gigantic concrete-grey wall-shaped vehicle with
+      sluice gates that open to fire, water pouring from its sides, rows of turrets, crawling on dozens of tracks.
+    destroyer: >-
+      A standardized destroyer: a plain grey-jade hull, a boxy superstructure, a simple gun forward and a missile box aft,
+      a large hull number shape; one of a long line of identical ships.
+    cruiser: >-
+      A missile cruiser: a boxy, symmetrical superstructure with square radar panels on four sides, vertical launch cells
+      in a strict grid, jade and grey, wave emblem.
+    capital: >-
+      A massive battleship named Jiaozheng Liu: an enormous hull with superstructure shaped like a hydroelectric dam, water
+      flowing over sluices, three railgun turrets cooled by visible water pipes, red harmony emblem.
+    carrier: >-
+      A large carrier shaped like a phoenix (fenghuang) in disciplined form: a wide grey deck with neat rows of identical
+      drones, the island decorated with a small phoenix emblem.
+    submarine: >-
+      A submarine shaped like a sea dragon: long black hull with a dragon-head bow, ridged back, water-jet propulsion,
+      jade details.
+  APF:
+    rifle: >-
+      A rugged, simple rifle meant to be repaired in a village: an AK-like reliable shape updated to 2100, wooden stock
+      painted with bright kente-like geometric bands, a big easy-to-clean receiver, a solar charging strip on the
+      handguard, spare magazines taped together.
+    support: >-
+      A harambee (pull together) kit: a big canvas backpack with a solar panel on top, a water jerrycan, a repair toolkit,
+      a shortwave radio, a simple wing drone made from plastic and bamboo, colourful woven straps.
+    artillery: >-
+      A howitzer built on a big agricultural tractor: huge rear tyres, an exposed diesel engine, a rotating gun
+      platform bolted on the back, a solar-panel canopy over the driver, spare tyres and jerrycans strapped
+      everywhere, earth red and yellow geometric bands painted on the mudguards. Simple to fix in any village.
+    anti_air: >-
+      An air-defence laser on the back of a rugged pickup: a solar-panel canopy, big off-road tyres, a simple
+      rotating turntable with the laser and a small radar, a large eye symbol (Jicho, the eye) painted on the
+      doors in yellow and black kente bands.
+    anti_tank: >-
+      A twin-tube missile launcher shaped like the horns of a cape buffalo (nyati): two curved tubes on a light
+      bipod, a buffalo head emblem, colourful woven carrying straps, matte earth-red paint.
+    rocket: >-
+      A locust swarm launcher: a heavy mining truck with a high cab carrying a large rack of many small, cheap
+      rockets with yellow and green striped bodies, locust wings painted along the sides, dust and red earth on
+      the wheels.
+    motorized: >-
+      A rugged long-range safari troop truck: very high ground clearance, big knobbly wheels, a roll cage, a
+      roof rack piled with luggage, jerrycans and a spare wheel, solar panels on top, open sides with benches,
+      bright painted bands.
+    mechanized: >-
+      An armoured carrier shaped like an elephant (tembo): a huge tall grey hull on six big wheels, a trunk-like
+      crane arm in front, big ear-shaped side armour flaps, a small turret on top, kente-pattern stripes on the
+      flanks.
+    amphibious: >-
+      An amphibious vehicle like a hippo (kiboko): a fat rounded grey-pink hull wallowing half-submerged in a
+      river, small eyes and ears on top as sensors, a wide mouth-shaped front ramp, water jets behind.
+    light_tank: >-
+      A fast wheeled light tank like a cheetah (duma): a slim, low hull on long-travel suspension, tan with
+      black spots, tear-line markings on the front, a small long gun, racing across the savanna.
+    medium_tank: >-
+      A medium tank like a lion (simba): golden-tan hull, a mane-like ring of spare tracks, logs and armour
+      plates around the turret, big off-road tracks, a lion head emblem.
+    heavy_tank: >-
+      A heavy tank like a rhinoceros (faru): a thick grey hull with skin-like folded armour plates, a huge horn-
+      shaped ram on the front, a small turret, very high ground clearance for rough land.
+    modern_tank: >-
+      A modern tank dedicated to Ogun, the orisha of iron: a sleek dark-iron hull with forged hammer-marked
+      surfaces, red and yellow geometric patterns, solar strips, a long gun, a symbolic machete emblem.
+    super_heavy: >-
+      A colossal fortress inspired by Great Zimbabwe: curved dry-stone walls on huge wheels, a conical stone
+      tower, soapstone bird statues standing on the walls, turrets set among the stones.
+    destroyer: >-
+      A destroyer built from a fishing trawler: a high bow, nets and cranes still on deck, a gun on the bow,
+      bright painted geometric bands on the hull, solar panels on the bridge roof.
+    cruiser: >-
+      A Federation cruiser: a broad, sturdy hull with a tall bridge decorated with geometric patterns, missile
+      boxes on deck, and a big Ubuntu emblem of people holding hands in a circle.
+    capital: >-
+      The Olokun battleship (named for the Yoruba sea deity): an immense deep-blue hull with flowing white wave
+      patterns, a superstructure shaped like a crowned figure, coral-like decorations, three heavy railguns.
+    carrier: >-
+      A Ndege (bird) carrier: a long flight deck with painted wing patterns, a tall island shaped like a bird
+      head, drones.
+    submarine: >-
+      A Mamba submarine: very long, thin, dark green-black hull, a narrow coffin-shaped head, fast and lethal.
+  NRE:
+    rifle: >-
+      A heavy, ceremonial legionary rifle shaped like a pilum: an unusually long slim barrel that ends in a
+      pointed iron spear-tip muzzle, a marble-white segmented stock like lorica bands, a crimson leather-wrapped
+      grip, a small golden aquila eagle perched on the receiver as the rear sight, laurel engravings along the
+      barrel and a short red horsehair plume tied below the muzzle. Heavy, theatrical and imposing.
+    support: >-
+      A contubernium kit laid out like a legionary's marching pack on a crimson cloak: a rolled leather tent, a
+      gladius-shaped multitool, a small drone shaped like a curved scutum shield with a golden boss, a bronze
+      galea helmet with a glowing sensor visor and red crest, a furca carrying pole with tools, and a miniature
+      eagle standard.
+    artillery: >-
+      A huge onager-style self-propelled howitzer: a massive bronze barrel with gold laurel rings on a heavy
+      wheeled carriage, protected by an enormous curved red scutum shield with a golden lightning-bolt boss,
+      wooden-looking beams with iron bands echoing a siege engine, an eagle standard on the back and slaves of
+      robotic loaders. Slow, monumental, Roman siege engineering reborn.
+    anti_air: >-
+      An air-defence laser shaped like a giant aquila legion standard: a crimson-and-gold pole as tall as a
+      tower, at the top a golden eagle with spread wings whose eyes and beak are laser emitters, a laurel wreath
+      ring around it, hanging purple banners without letters, set on a marble plinth on wheels.
+    anti_tank: >-
+      A scorpio, the Roman bolt-thrower, reborn as an anti-armour launcher: a crossbow-like frame on a tripod
+      where the torsion springs are replaced by glowing electromagnetic coils, firing a huge missile-bolt with
+      bronze fins, crimson wood-like body with iron fittings and a small eagle on top.
+    rocket: >-
+      A ballista-swarm launcher: a heavy armoured chariot-like vehicle pulled on big bronze-hubbed wheels,
+      carrying rows of missiles arranged in tight ranks like a legion cohort, protected by a curved wall of
+      overlapping shields at the front, a gold eagle on the prow, crimson and bronze.
+    motorized: >-
+      A troop transport like a modern war chariot: a crimson and gold armoured cabin with curved scutum-like
+      side walls, two huge wheels with bronze scythe hubs, a small legion standard on the roof, legionaries in
+      crested helmets visible inside.
+    mechanized: >-
+      An armoured carrier in testudo formation: its roof and sides are covered by overlapping curved rectangular
+      shield-plates exactly like a legion's tortoise formation, crimson with gold rims and bosses, a small
+      turret peeking out between two shields, tracks hidden below.
+    amphibious: >-
+      An amphibious assault vehicle shaped like a Roman trireme on wheels: a bronze ram at the bow, oar-like
+      propeller arms on both sides, round shields along the gunwales, an eye painted on the prow, a crimson
+      sail-shaped fin.
+    light_tank: >-
+      A light tank for velites (skirmishers): small and agile, with a low turret shaped like a light open-faced
+      helmet topped by a short red crest, round parma shields along the sides, fast tracks, crimson and bronze.
+    medium_tank: >-
+      A legionary medium tank: the hull covered in segmented lorica segmentata armour bands, a turret shaped
+      like a Roman galea helmet with cheek guards and a tall transverse red crest, a large curved scutum front
+      plate with a golden lightning emblem, gladius-shaped gun barrel.
+    heavy_tank: >-
+      A triarius heavy tank (the veterans of the last line): massive, slow, rectangular, with a front wall of
+      three overlapping tower shields, a spear-like extremely long gun, a turret with a tall crest, laurel
+      wreaths and a gold eagle on the hull.
+    modern_tank: >-
+      A praetorian main battle tank: sleek but ceremonial, imperial purple with gold trim, a scorpion emblem of
+      the praetorian guard on the turret, an ornate crested turret, marble-white details and polished bronze
+      tracks guards.
+    super_heavy: >-
+      A colossal walking castrum: a complete fortified Roman camp on tracks — square palisade walls of armour,
+      corner towers with turrets, a fortified gate in the front, legion standards and eagles flying above, tents
+      and a command praetorium in the middle.
+    destroyer: >-
+      A liburna destroyer: a slim fast hull with a bronze ram at the waterline, a crimson sail-shaped radar
+      panel, rows of shield-shaped armour plates along the sides, a small eagle figurehead, oar-like
+      stabilisers.
+    cruiser: >-
+      A trireme cruiser: three tiers of oar-like missile launchers along each side, a heavy bronze ram, a raised
+      curved stern with a golden eagle, crimson hull with marble-white superstructure.
+    capital: >-
+      The Augustus battleship: an immense hull whose superstructure is a white marble temple with columns and a
+      pediment, three enormous railgun turrets shaped like ballistae, a giant gold eagle on the bow, crimson
+      banners and laurel garlands.
+    carrier: >-
+      The Victoria carrier: a long purple and gold flight deck, the island tower crowned by a statue of winged
+      Victory holding a laurel wreath, drones lined up like legionaries.
+    submarine: >-
+      A Neptunus submarine: a dark bronze hull with a trident emblem on the sail, a conning tower shaped like a
+      sea god's crown, dolphin-like fins, sea-green patina.
+  ZWE:
+    rifle: >-
+      A Soviet-era bolt-action or Kalashnikov-type rifle dug out of a depot and rebuilt in a steppe forge: the original
+      receiver is pitted with rust, a newer, slightly crooked barrel has been welded on with a thick visible seam, the
+      wooden stock is hand-carved with cossack sun and horse ornaments and reinforced with copper wire, a horse-tail
+      tassel hangs from the sling swivel, and a scope taken from a hunting rifle is tied on with leather straps.
+      Faded olive and raw steel, crude but loved.
+    support: >-
+      A looter's kit spread on a worn fur cloak: heavy bolt cutters, a stolen military radio with half the paint
+      scraped off, an old Soviet gas mask, a crude drone made from a toy quadcopter with a grenade taped underneath,
+      a vodka bottle, a sack of looted watches and medals, a felt-wrapped knife. Grey, olive, rust and fur brown.
+    artillery: >-
+      A mid-20th-century towed howitzer restored by warlord mechanics: the gun shield has been replaced with a welded
+      truck door still showing its window frame, one wheel is a wooden cart wheel and the other a tractor tyre, sandbags
+      and fur pelts hang from the trail, and a tall pole with a horse-tail standard (bunchuk) rises from it. Steppe dust
+      everywhere.
+    anti_air: >-
+      A towed twin-barrel anti-aircraft gun from an old depot, rebuilt with mismatched barrels of different lengths, a
+      gunner seat padded with sheepskin, a shield hammered with cossack ornaments, ammunition belts draped like
+      bandoliers, and a red rag tied to the barrel tip. Rust, olive and dirty red.
+    anti_tank: >-
+      A crude but effective anti-tank tube made from a thick water pipe: a welded pistol grip from a power drill, a
+      trigger worked by a bicycle chain, a sight made of bent nails, the rocket itself a mix of old RPG warheads, and a
+      kurgan burial-mound symbol painted in white on the tube. Held together by wire and pride.
+    rocket: >-
+      An "organ" rocket launcher: two rows of mismatched rocket tubes of different calibres and lengths welded onto the
+      bed of an old Soviet truck with a cracked windscreen, cables running everywhere, a car battery as igniter, felt
+      blankets on the cab roof, and a horse-tail banner flying from the cab. Smoke stains on every tube.
+    motorized: >-
+      A steppe technical: an old boxy Soviet off-road truck with a heavy machine gun on a pintle in the back, extra fuel
+      drums strapped to the sides, sheepskin-covered seats, carpets hung as armour, cossack ornaments painted on the
+      doors, and a spare wheel tied to the bonnet. Dusty olive.
+    mechanized: >-
+      A patched armoured carrier: an eight-wheeled Soviet-style APC whose hull has been patched with plates cut from
+      three other vehicles in different colours, old national markings painted over with crude warlord sigils, cage
+      armour made of bed frames, and sandbags on the roof. Every weld is visible.
+    amphibious: >-
+      An armoured raft: a platform of rusty oil drums lashed together with chains, carrying a welded steel cabin with
+      firing slits, an outboard motor from a fishing boat, a heavy machine gun on top, and a felt windbreak. Floating on
+      a grey river.
+    light_tank: >-
+      A light tank styled as a steppe wolf: an old light tank with a snarling wolf head painted on the turret front,
+      strips of wolf fur hanging from the antenna, crude add-on armour boxes, and tracks with missing links replaced by
+      chains. Grey and rust.
+    medium_tank: >-
+      A medium tank as a bear: a bulky old Soviet-pattern tank with a real bear skull bolted on the turret, brown fur
+      skins draped over the engine deck, mismatched road wheels from different tank models, and logs strapped to the
+      sides. Massive and shabby.
+    heavy_tank: >-
+      A heavy tank called the mammoth: an ancient heavy tank with two huge curved tusks made of steel girders welded to
+      the front, layers of rusty plates stacked on the hull like geological strata, a thick shaggy covering of fur and
+      rope, slow and terrifying.
+    modern_tank: >-
+      A looted modern tank: a sleek high-tech main battle tank captured from a megastate, its original glossy paint
+      scraped and scratched, covered with crude warlord sigils, fur pelts and loot bags, extra machine guns welded on
+      the turret. A thing that does not belong to the people driving it.
+    super_heavy: >-
+      The hetman's rolling fortress: an armoured-train-like land fortress on gigantic tracks, built from several railway
+      wagons welded together, an onion-dome turret on top, cannons from every era of the 20th century bristling from
+      the sides, horse-tail standards and banners without letters, smoke pouring from a locomotive chimney.
+  ZWI:
+    rifle: >-
+      An old rifle turned into a festival object: brass inlays hammered into the wooden stock in floral and paisley
+      patterns, the metal parts painted saffron and turquoise, a curved talwar-like bayonet, red and gold tassels
+      hanging from the barrel, small bells on the sling. Beautiful and deadly.
+    support: >-
+      A bazaar kit wrapped in a bright cloth: a cheap smartphone, a brass water pot, a roll of tools, a small drone with
+      painted eyes on its body, a marigold garland, a tin of chai and a block of incense. Saffron, crimson and brass.
+    artillery: >-
+      A howitzer pulled by a decorated festival truck: the truck has painted panels with peacocks and flowers, mirrors,
+      chains, bells and a tasselled fringe, and the gun behind it has a brass-trimmed shield with a lotus painted on it.
+      Colourful chaos with a big gun.
+    anti_air: >-
+      An anti-aircraft gun under a small temple-like canopy with a curved dome roof, a golden garuda bird emblem on the
+      front, brass bells hanging from the corners, saffron flags and a gunner seat with a cushion. Ornate and improvised.
+    anti_tank: >-
+      A missile launcher decorated with chakra wheel symbols: a saffron tube with brass rings, a spoked wheel painted on
+      the back, a tripod wrapped in red cloth. Simple machinery made sacred.
+    rocket: >-
+      Mysorean rockets reborn: large racks of iron-cased rockets on bamboo frames carried on an ox-cart-like trailer, a
+      direct homage to the historical rockets of Tipu Sultan, with tiger-stripe paint and brass caps.
+    motorized: >-
+      An armoured tuk-tuk: a three-wheeled auto-rickshaw with welded steel plates over its canopy, bright yellow and green
+      paint, painted eyes on the front, a machine gun poking out of the roof hatch, tassels and a horn.
+    mechanized: >-
+      A Rajput carrier: a truck-based armoured vehicle with crenellated top like a Rajasthani fort, turquoise and
+      crimson floral painting on its plates, brass ornaments and a small turret shaped like a chhatri pavilion.
+    amphibious: >-
+      An amphibious drone shaped like a gharial crocodile: an extremely long narrow snout with a gun barrel inside,
+      painted green scales, a body made of an old river boat, small propellers. Gliding in the Ganges.
+    light_tank: >-
+      A cobra light tank: a small fast tank whose turret has a flared hood like a king cobra, painted with eye-like
+      markings, a long thin gun as the fang.
+    medium_tank: >-
+      A war-elephant tank: a medium tank wearing a decorated elephant caparison cloth of red and gold, an elephant head
+      with tusks mounted on the front, a howdah-shaped turret with a canopy and tassels.
+    heavy_tank: >-
+      A maharaja tank: an enormous tank with a golden palace-like turret with domes and arches, a royal umbrella
+      (chhatra) over the commander, jewels and mirrors set into the armour.
+    modern_tank: >-
+      A rani tank: a sleek modern tank painted deep crimson with gold jewellery-like trim along the edges, a warrior
+      queen emblem with a sword on the turret, saffron pennants.
+    super_heavy: >-
+      The Rajgarh fortress: a moving palace-fort with domed towers, scalloped arches, jharokha balconies and crenellated
+      walls of pink sandstone, rolling on dozens of tracks, cannons in every window.
+  ZWM:
+    rifle: >-
+      An expensive imported smart rifle with gold-plated parts, a jambiya-curved dagger as bayonet, wrapped in
+      sand-coloured cloth against the sun, with a falcon emblem engraved in gold on the receiver. Luxury meets desert.
+    support: >-
+      A caravan kit: a leather camel saddlebag holding a satellite phone, goatskin water bags, a falcon-shaped drone
+      perched on a leather glove, a gold-handled dagger and prayer beads. Sand, leather brown and gold.
+    artillery: >-
+      A self-propelled howitzer built on an imported luxury desert truck: high suspension on four enormous
+      balloon sand tyres, a white fabric sun canopy stretched over the crew platform, the gun barrel wrapped in
+      sand-coloured cloth with gold bands at the muzzle, a gold falcon emblem on the shield, rows of oil drums
+      used as extra fuel tanks, and a small prayer rug rolled behind the cab. Expensive gun, improvised desert
+      life around it.
+    anti_air: >-
+      An air-defence vehicle shaped like a hunting falcon with spread wings: two large curved radar panels form
+      the wings, the laser emitter is the hooked beak, a golden hood like a falconer's cap covers the sensor
+      head, all mounted on a long-wheelbase desert truck with fat sand tyres; sand camouflage with polished gold
+      edges.
+    anti_tank: >-
+      A sleek, very expensive imported missile launcher whose tube is wrapped by a golden asp snake sculpture
+      coiling from the grip to the muzzle, the snake's head forming the sight; sand-coloured body, black leather
+      padding, a jewelled trigger guard, carried in a decorated sling.
+    rocket: >-
+      A desert locust launcher: a white luxury pickup with gold-rimmed wheels carrying a dense rack of forty
+      small rockets, a painted swarm of brown locusts flowing across the doors and bonnet, sand-camouflage net
+      over the rack, a black flag without symbols on a whip antenna.
+    motorized: >-
+      A dune technical: a top-of-the-range luxury pickup lifted on enormous sand tyres, gold-plated grille and
+      wheel rims, a row of roof spotlights, a heavy machine gun on a pedestal in the bed, leather-covered gunner
+      seat, jerrycans and a tied camel-hair blanket, dust plume behind.
+    mechanized: >-
+      An oasis armoured carrier: an expensive imported IFV draped in a palm-frond camouflage net, gold detailing
+      along its edges, a cylindrical water tank shaped like a stone well on the rear, small turret with a falcon
+      emblem, sand tyres for dunes.
+    amphibious: >-
+      An amphibious drone shaped like a traditional Gulf dhow: a curved wooden-looking hull with carved prow and
+      stern, a tall triangular lateen-sail fin that is actually a radar panel, a small gun turret in the middle,
+      water jets, gliding over turquoise Gulf water.
+    light_tank: >-
+      A gazelle light tank: a slim, light, fast hull on six road wheels, sand coloured with white belly paint,
+      two long gracefully curved horn-like antennas rising from the turret, a short gun, leaping over a dune.
+    medium_tank: >-
+      An oryx medium tank: a long, straight-sided sand hull with the oryx's black and white face-mask pattern
+      painted on the front, two very long straight lance-like antennas on the turret, a long gun, desert dust
+      skirts.
+    heavy_tank: >-
+      An emir heavy tank: a massive imported heavy tank covered in gold trim along every edge, a huge curved
+      jambiya dagger emblem on the front plate, a royal canopy of white fabric over the commander hatch, carpets
+      hanging on the side skirts.
+    modern_tank: >-
+      A sultan modern tank: the most luxurious tank in the world, glossy black paint with gold inlaid lines, a
+      crescent emblem, smoked-glass vision blocks, a gold-ringed railgun and white leather inside visible
+      through an open hatch.
+    super_heavy: >-
+      The wellhead fortress: a moving oil platform the size of a refinery crawling across the dunes on dozens of
+      giant sand tyres: nodding pumpjacks, burning flare stacks, tangles of pipelines, storage tanks, and gun
+      turrets on every level.
+  ZWB:
+    rifle: >-
+      A prospector's rifle: an old hunting rifle whose wooden stock is caked in dried red mud, the barrel
+      wrapped in electrical tape and rubber strips cut from tyres, a gold nugget charm and a jaguar tooth
+      hanging from the sling, a machete strapped under the barrel with zip ties, rust spots everywhere. Humid,
+      dirty, deadly.
+    support: >-
+      A jungle kit spread on a muddy tarp: a machete, a camouflage hammock, a mosquito net, a mining pan with
+      gold nuggets and mercury drops, a rusty drone repaired with zip ties and a plastic bottle, a chainsaw
+      chain coiled like a snake, a bottle of cachaça.
+    artillery: >-
+      A howitzer built from sawmill machinery: two huge circular saw blades welded on as armour shields, the
+      barrel mounted on a logging truck's flatbed among tree trunks, sawdust and red mud everywhere, a tarp roof
+      against the rain.
+    anti_air: >-
+      An anti-aircraft gun mounted on a rusty river barge with a carved harpy eagle head on the prow, tarps
+      stretched on poles, vines growing over the railings, crates of ammunition, the gun barrel painted with
+      feathers.
+    anti_tank: >-
+      A very long improvised launcher tube painted with green and black anaconda scales, carried by two fighters
+      on their shoulders, mud dripping from it, a snake head painted at the muzzle.
+    rocket: >-
+      A piranha swarm launcher: a wooden river boat with an outboard motor carrying a rack of small rockets,
+      each one painted silver and red with rows of sharp teeth, splashing through brown water.
+    motorized: >-
+      A garimpo technical: a mining truck completely covered in red mud, with dredge pipes, a water pump and a
+      hose on the bed next to a heavy machine gun, tarp roof, tyres wrapped in chains for the mud.
+    mechanized: >-
+      A bulldozer carrier: an armoured logging bulldozer with a giant scraping blade raised as a shield, a cage
+      cabin crammed with fighters, smoke stacks, tree trunks crushed under its tracks.
+    amphibious: >-
+      An amphibious drone shaped like a pink Amazon river dolphin (boto): rounded pink-grey body, long thin beak
+      with a gun, a small turret on its back, surfacing in muddy water among floating logs.
+    light_tank: >-
+      A coati light tank: a small, quick tank with a pointed snout-like gun, a long tall ringed-tail antenna
+      striped brown and black, mud-caked tracks, vines draped on it.
+    medium_tank: >-
+      An onça medium tank: a medium tank painted with rough jaguar spots over mud, vines and leaves growing on
+      the turret, a jaguar skull on the front, tracks thick with jungle mud.
+    heavy_tank: >-
+      A peccary heavy tank: a stocky armoured hull covered with steel bristles like a wild boar, two curved
+      tusk-like rams at the front made of bulldozer teeth, small eyes for optics.
+    modern_tank: >-
+      A colonel tank: a captured modern main battle tank covered in mud, with a warlord's flag on the antenna,
+      gold chains hanging from the turret, a plastic chair bolted on top for the colonel.
+    super_heavy: >-
+      The Sumaúma fortress: a gigantic mobile fortress shaped like the colossal Amazon sumaúma tree, with huge
+      buttress roots acting as walking legs, a trunk of armoured plates, gun turrets and lookouts in the
+      branches, hanging vines.
+  ZAN:
+    rifle: >-
+      A frontier rifle assembled from plumbing pipes and scrap: a galvanised pipe barrel, an elbow joint as
+      receiver, a bent wire stock, a broken broom handle as grip, spikes welded along the barrel for melee, a
+      tin can as suppressor, a bottle cap as front sight. Ugly, improvised and dangerous.
+    support: >-
+      A scavenger kit on a dirty blanket: assorted scrap metal pieces, a broken radio with exposed wires, a gas
+      mask with cracked lenses, a flying drone made from a vacuum cleaner motor and a ceiling fan, a can of
+      beans, a crowbar.
+    artillery: >-
+      A patchwork howitzer: a large sewer pipe as barrel, mounted on the rear axle of a scrapped car with
+      mismatched wheels, a car seat bolted on for the gunner, a shopping cart full of homemade shells,
+      everything held with chains.
+    anti_air: >-
+      A rooftop flak gun: four different machine guns welded together on top of an old satellite dish that
+      rotates, sitting on the roof of a ruined building with laundry lines and a water tank.
+    anti_tank: >-
+      A pipe launcher: a drainpipe wrapped in silver duct tape, a toy-gun pistol grip, a hand-drawn crosshair on
+      a piece of plastic, a rocket made of a fire extinguisher.
+    rocket: >-
+      Homemade rockets: fireworks and gas bottles taped together into rockets, resting on an old metal bed frame
+      tilted on bricks, wires running to a car battery, smoke and sparks.
+    motorized: >-
+      A rusted technical: an old sedan with its roof cut off, spikes on the bumper, chains on the doors, a big
+      gun in the back seat and a painted skull on the bonnet, smoke from the exhaust.
+    mechanized: >-
+      A Frankenstein carrier: an old school bus with welded steel plates in different colours, spikes, skulls,
+      barbed wire on the windows, a turret made from a water tank on the roof.
+    amphibious: >-
+      A pirate raft: tyres and plastic barrels lashed together, a shack on top with a machine gun, a black flag
+      without symbols, an outboard motor smoking.
+    light_tank: >-
+      A hyena light tank: a small crude tank built from a car chassis on improvised tracks, spikes all over, a
+      mismatched turret, painted hyena teeth.
+    medium_tank: >-
+      A vulture medium tank: an old tank with large wing-like scrap metal plates on the sides, a hooked beak-
+      shaped ram on the front, a bald vulture head painted on the turret.
+    heavy_tank: >-
+      A junker heavy tank: a rolling mass of scrap — car bodies, fridges and washing machines welded onto a
+      heavy track base, several guns sticking out of the junk, leaking oil.
+    modern_tank: >-
+      A stolen modern tank: a high-tech main battle tank taken from a megastate, now covered in graffiti symbols
+      without letters, junk, tyres and spikes, its sensors smashed and replaced with car mirrors.
+    super_heavy: >-
+      The junkyard fortress: a mountain of scrap metal on a huge track base, with car-crusher jaws, a crane with
+      an electro magnet lifting a car, turrets made from boilers, smoke and sparks everywhere.
