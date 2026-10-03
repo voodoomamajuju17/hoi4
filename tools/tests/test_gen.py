@@ -955,7 +955,7 @@ def test_intros() -> None:
     for ns, v in ev.items():
         for e in v["events"]:
             d = (e.get("desc") or {}).get("spanish", "")
-            if e.get("trigger") == "on_startup" and "QUIÉNES SOMOS" in d:
+            if e.get("trigger") == "on_startup" and "QUIÉNES SOMOS" in d and "LO QUE ESTÁ EN JUEGO" in d:
                 found[v["country"]] = d
     check("las 8 meganaciones tienen introduccion al arranque", sorted(found) == sorted(
         ["EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"]), str(sorted(found)))
