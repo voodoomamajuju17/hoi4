@@ -929,3 +929,4 @@ llega a 100 al toque y la tensión nunca sube".
   tamaño del juego. El reporte dice si el juego instalado usa nombres e íconos
   por país (claves GER_..., sprites GFX_GER_..._medium) para confirmarlo.
 - 52 íconos de foco nuevos (APF, ASC, FCU) importados.
+- 64 íconos de foco de la HSN importados: ya no quedan focos sin ícono.
