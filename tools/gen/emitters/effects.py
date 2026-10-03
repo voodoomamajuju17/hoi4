@@ -1288,7 +1288,7 @@ def dynamic_modifier_ids(spec_raw: dict) -> set[str]:
 
 
 # efectos que escribe el generador mismo (no están en 14_decisions.yaml)
-GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli"}
+GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MN_sombras_ia"}  # MN_sombras_ia: intelligence.py (2026-10-03)
 
 
 def scripted_effect_ids(spec_raw: dict) -> set[str]:

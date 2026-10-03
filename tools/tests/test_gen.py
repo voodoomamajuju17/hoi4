@@ -1193,6 +1193,14 @@ def test_events() -> None:
               and "clr_country_flag = MN_escudo_NRE" in se_all)
         efe_ev = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         check("sombras: el pulso mensual corre la contrainteligencia", "EFE_sombras_mes = yes" in efe_ev)
+        # 2026-10-03: la IA no armaba redes y nadie pasaba de 0 de infiltracion
+        ia = " ".join((mod / "common/scripted_effects/meganations_sombras_ia.txt").read_text().split())
+        check("sombras IA: cada potencia IA espia todos los meses y corre la operacion mas alta primero",
+              "MN_sombras_ia = { if = { limit = { is_ai = yes" in ia and "NOT = { has_country_flag = MN_pacto_NRE }" in ia
+              and ia.index("var = MN_inf_EFE value = 90") < ia.index("var = MN_inf_EFE value = 20")
+              and "meganations_sombras.2" in ia
+              and "EFE_sombras_mes = { add_to_variable = { var = MN_ciclo_sombras value = 1 } MN_sombras_ia = yes" in se_all,
+              ia[:800])
         check("guerra civil: con el Monte, se separa la Dinastia con Aurelio IV",
               "start_civil_war = { ideology = fascism size = 0.35 }" in opa
               and "random_country = { limit = { original_tag = EFE NOT = { tag = EFE } has_civil_war = yes } set_cosmetic_tag = EFE_DINASTIA" in opa
@@ -2418,7 +2426,12 @@ def test_forces() -> None:
         mod = ctx.mod_root
         check("nadie tiene aviones (2026-09-25)", not list((mod / "history/units").glob("*_air.txt")))
         check("el NRE no esta en navies: sin flota", not (mod / "history/units/NRE_2100_naval.txt").exists())
-        check("la Anarquia no tiene barcos", not any(t in ctx.data["ships"] for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")))
+        import yaml
+        mil_spec = yaml.safe_load((REPO_ROOT / "spec/13_military.yaml").read_text(encoding="utf-8"))["research"]
+        check("armada: todas arrancan con crucero y submarino, no solo destructores (2026-10-03)",
+              {"early_ship_hull_cruiser", "early_ship_hull_submarine"} <= set(mil_spec["meganation_techs"])
+              and "early_ship_hull_heavy" in mil_spec["country_techs"]["HSN"])
+        check("la Anarquia no tiene barcos",not any(t in ctx.data["ships"] for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")))
 
     # Con una copia del spec: el NRE con flota, solo acorazados, uno solo; y
     # una franja de industria que obliga a la ASC a bajar.

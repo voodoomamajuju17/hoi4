@@ -24,7 +24,12 @@ research:
   base_techs: [infantry_weapons, tech_support, basic_train, tech_trucks]
   # Las meganaciones además pueden botar un destructor básico (se validan
   # contra el árbol; las que no existen en este juego se ignoran).
+  # 2026-10-03 ("las armadas que crean son todas destructores"): con solo el
+  # casco ligero la IA no podía diseñar otra cosa, y llenaba su tope de flota
+  # con destructores antes de investigar otro casco. Todas arrancan además con
+  # crucero y submarino (y el torpedo para armarlo).
   meganation_techs: [early_ship_hull_light, basic_ship_hull_light, basic_battery,
+                     early_ship_hull_cruiser, early_ship_hull_submarine, basic_torpedo,
                      # 2026-09-30: "nadie construye tanques": el tanque básico (con y sin No Step Back)
                      gwtank_chassis, gwtank,
                      # y el vehículo motorizado y el caza básico (sin BBA / con BBA)
@@ -34,15 +39,17 @@ research:
   # pide infantería de marina a la HSN y montaña al NAS (16_ai.yaml); sin la
   # tecnología no las podía crear. Ids con y sin DLC; los que no existen se
   # ignoran.
+  # 2026-10-03: las cuatro con flota de verdad (HSN, NRE, FCU, ASC) arrancan
+  # también con el buque capital (casco pesado y batería pesada).
   country_techs:
-    HSN: [marines, tech_marines, marines2]
+    HSN: [marines, tech_marines, marines2, early_ship_hull_heavy, basic_heavy_battery, basic_ship_hull_cruiser, basic_ship_hull_submarine]
     NAS: [tech_mountaineers, mountaineers, tech_mountaineers2]
-    NRE: [tech_engineers, tech_recon, gw_artillery, interwar_artillery]
+    NRE: [tech_engineers, tech_recon, gw_artillery, interwar_artillery, early_ship_hull_heavy, basic_heavy_battery]
     SHD: [gw_artillery, interwar_artillery, interwar_antiair, interwar_antitank]
     APF: [tech_engineers, tech_military_police, tech_recon]
     EFE: [basic_light_tank_chassis, armor_tech_1, engine_tech_1]
-    ASC: [mechanised_infantry, tech_signal_company, tech_recon]
-    FCU: [tech_field_hospital, tech_logistics_company, mechanised_infantry]
+    ASC: [mechanised_infantry, tech_signal_company, tech_recon, early_ship_hull_heavy, basic_heavy_battery]
+    FCU: [tech_field_hospital, tech_logistics_company, mechanised_infantry, early_ship_hull_heavy, basic_heavy_battery]
   # especialidad -> alternativas de prefijos de pestaña; gana la primera que
   # exista. Las de los DLC primero (el reporte 2026-09-25 mostró que las
   # pestañas viejas armour_folder, air_techs_folder y naval_folder siguen en

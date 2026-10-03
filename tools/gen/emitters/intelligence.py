@@ -261,10 +261,84 @@ def _emit(ctx: BuildContext, spec: dict) -> None:
                 file=LOC_FILE, origin="operations")
 
     ctx.write_script("common/operations/meganations_operations.txt", out, source=SOURCE)
+    _ai_pulse(ctx, spec, megas, rivals, disc, ev, effect_ctx, effects_used)
     ctx.verify_keys("effects", effects_used)
     ctx.verify_keys("triggers", triggers_used)
     ctx.note(f"operaciones de inteligencia: {len(out)} (6 por meganación objetivo)")
 
+
+
+def _ai_pulse(ctx, spec, megas, rivals, disc, ev, effect_ctx, effects_used) -> None:
+    """2026-10-03 ("no hay infiltración: o no funciona o no la usan"): la
+    primera operación pide red 20 en el objetivo y la IA casi nunca arma redes,
+    así que nadie pasaba de 0. MN_sombras_ia corre cada mes en las IA (desde
+    <TAG>_sombras_mes): elige una potencia al azar, sube la infiltración (la
+    mitad si se blindó contra nosotros, nada si hay pacto) y, con suerte, hace
+    la operación más alta que su infiltración permite, con el mismo efecto y el
+    mismo riesgo de que la descubran que las del jugador."""
+    ai = spec.get("ai_pulse") or {}
+    gain_open, gain_guarded = int(ai.get("gain", 4)), int(ai.get("gain_guarded", 2))
+    chance = int(ai.get("op_chance", 15))
+    options = []
+    for t in megas:
+        var = f"MN_inf_{t}"
+        discovered = [{"effect": "add_variable", "var": var, "value": -int(disc["penalty"])},
+                      {"effect": "add_political_power", "value": -25},
+                      {"effect": "event", "id": ev["discovered"], "target": t}]
+
+        def roll(pct, discovered=discovered):
+            return {"effect": "random", "options": [{"weight": pct, "effects": discovered},
+                                                     {"weight": 100 - pct, "effects": []}]}
+        # la operación más alta posible: se arma de abajo hacia arriba, así la
+        # de mayor mínimo queda afuera y se prueba primero. "infiltrar" (sin
+        # efectos) no se repite: ya la cubre la suba mensual.
+        chain = None
+        for op in spec["operations"]:
+            if not (op.get("attacker") or op.get("target")):
+                continue
+            target = []
+            for item in op.get("target") or []:
+                if item == "mechanic":
+                    target.extend((spec.get("mechanic_hits") or {}).get(t) or [])
+                elif item == "rebellion":
+                    target.extend((spec.get("rebellion_hits") or {}).get(t) or [])
+                    target.append({"effect": "event", "id": ev["uprising"]})
+                else:
+                    target.append(_sub(item, {"T": t}))
+            run = []
+            if int(op["gain"]):
+                run.append({"effect": "add_variable", "var": var, "value": int(op["gain"])})
+            for a in megas:
+                if a == t:
+                    continue
+                eff = _sub(op.get("attacker") or [], {"A": a, "T": t})
+                if eff:
+                    run.append({"effect": "if", "when": {"tag": a}, "then": eff})
+            if target:
+                run.append({"effect": "scope", "target": t, "effects": target})
+            run.append({"effect": "if", "when": {"flag": f"MN_vigilado_por_{t}"},
+                        "then": [roll(disc["shielded"])], "else": [roll(disc["open"])]})
+            step = {"effect": "if", "when": {"variable_at_least": {"var": var, "value": int(op["min"])}},
+                    "then": [{"effect": "random", "options": [{"weight": chance, "effects": run},
+                                                              {"weight": 100 - chance, "effects": []}]}]}
+            if chain is not None:
+                step["else"] = [chain]
+            chain = step
+        body = [{"effect": "if", "when": {"flag": f"MN_vigilado_por_{t}"},
+                 "then": [{"effect": "add_variable", "var": var, "value": gain_guarded}],
+                 "else": [{"effect": "add_variable", "var": var, "value": gain_open}]},
+                chain,
+                {"effect": "clamp", "var": var, "min": 0, "max": 100}]
+        weight = 3 if rivals.get(t) else 1
+        options.append({"weight": weight, "effects": [{"effect": "if", "when": {
+            "all": [{"not": {"tag": t}}, {"not_flag": f"MN_pacto_{t}"}, {"country_exists": t}]}, "then": body}]})
+    effects = [{"effect": "if", "when": {"is_ai": True, "any": [{"tag": t} for t in megas]},
+                "then": [{"effect": "random", "options": options}]}]
+    block = render_effects("MN_sombras_ia", effects, effect_ctx, effects_used, where="18_intelligence.yaml:ai_pulse")
+    ctx.write_script("common/scripted_effects/meganations_sombras_ia.txt", Block([("MN_sombras_ia", block)]),
+                     source=SOURCE)
+    ctx.note(f"inteligencia: la IA infiltra cada mes (+{gain_open}, +{gain_guarded} si se blindaron) "
+             f"y hace una operacion con {chance}% de chance")
 
 
 def _operation_icons(ctx: BuildContext, spec: dict, tpl: Block) -> dict[str, str]:

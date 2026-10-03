@@ -881,3 +881,16 @@ llega a 100 al toque y la tensión nunca sube".
   meganación arranca con al menos 20 fábricas militares (satélites 5; se
   convierten civiles, misma IC, nunca más de la mitad), 10000 fusiles, 800 de
   apoyo y 600 de artillería, y en paz la IA pone 40% en industria militar.
+- **Inteligencia de la IA** (2026-10-03: "no hay infiltración: o no funciona
+  o no la usan"). La primera operación pedía red 20 y la IA casi nunca armaba
+  redes, así que nadie pasaba de 0. Ahora cada potencia IA, todos los meses
+  (MN_sombras_ia, desde <TAG>_sombras_mes), elige una potencia al azar (los
+  rivales x3), sube +4 de infiltración (+2 si se blindaron contra ella, nada
+  con pacto) y con 15% de chance hace la operación más alta que le permite su
+  infiltración, con los mismos efectos y el mismo riesgo de ser descubierta
+  (35% blindado / 10% abierto) que las del jugador.
+- **Armadas que no son solo destructores** (2026-10-03). Todas arrancaban con
+  el casco ligero solo: la IA no podía diseñar otra cosa y llenaba su tope de
+  flota con destructores. Ahora todas arrancan además con crucero, submarino y
+  torpedo; HSN, NRE, FCU y ASC también con el buque capital (casco pesado y
+  batería pesada); la HSN con crucero y submarino mejorados.
