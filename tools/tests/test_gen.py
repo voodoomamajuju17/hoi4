@@ -1167,9 +1167,9 @@ def test_events() -> None:
               and "if = { limit = { tag = FCU } add_timed_idea = { idea = FCU_planos_robados" in robo, robo[:1500])
         decs_all = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
-        check("sombras: la defensa es de a 4 y vence sola cada 3 meses",
+        check("sombras: la defensa es de a 4 y vence sola cada ano (antes 3 meses, 2026-10-03)",
               "EFE_blindarse_contra_NRE" in decs_all and "var = MN_escudos value = 4 compare = less_than" in decs_all
-              and "var = MN_ciclo_sombras value = 3 compare = greater_than_or_equals" in se_all
+              and "var = MN_ciclo_sombras value = 12 compare = greater_than_or_equals" in se_all
               and "clr_country_flag = MN_escudo_NRE" in se_all)
         efe_ev = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         check("sombras: el pulso mensual corre la contrainteligencia", "EFE_sombras_mes = yes" in efe_ev)

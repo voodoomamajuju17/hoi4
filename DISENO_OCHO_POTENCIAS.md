@@ -861,3 +861,6 @@ llega a 100 al toque y la tensión nunca sube".
   (x1.3), suma una fábrica civil y 150 PP en el foco de entrada (~x1.02).
   Slots de investigación alcanzables con un solo camino político: ASC 4, NAS 3,
   SHD 3, APF 2, NRE 2, EFE 2, FCU 2, HSN 2 (más los 3 de arranque).
+- **Contrainteligencia: blindaje de un año** (2026-10-03, pedido del usuario:
+  3 meses era muy poco). Los blindajes vencen cada 12 meses; textos de las
+  decisiones, del panel y del evento actualizados.
