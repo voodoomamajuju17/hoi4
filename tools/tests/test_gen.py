@@ -2785,6 +2785,22 @@ def test_faction_tech() -> None:
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
 
 
+def test_vanilla_terms() -> None:
+    section("textos del juego con las ideologias viejas (2026-10-03)")
+    from tools.gen.emitters.vanilla_terms import _compile, rewrite
+    es, en = _compile("spanish"), _compile("english")
+    check("fascista -> restauracionista, con el genero de los articulos",
+          rewrite("Apoyo fascista diario; el fascismo; la democracia", es)
+          == "Apoyo restauracionista diario; la Restauración; el Orden de Mercado")
+    check("no toca lo que va entre $ $ ni [ ]", rewrite("$fascism$ [GetFascist] comunista", es)
+          == "$fascism$ [GetFascist] colectivista")
+    check("ingles", rewrite("Daily Fascist Support, communist party", en) == "Daily Restorationist Support, collectivist party")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        txt = "".join(p.read_text(encoding="utf-8-sig") for p in ctx.mod_root.glob("localisation/spanish/replace/*ideology_terms*"))
+        check("el texto vanilla se reescribe en replace/", "Apoyo restauracionista diario y la Restauración de $fascism$" in txt, txt[:300])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -2821,6 +2837,7 @@ def main() -> int:
         test_unit_names,
         test_unique_units,
         test_faction_tech,
+        test_vanilla_terms,
         test_diplomacy,
         test_vanilla_validation,
     ):

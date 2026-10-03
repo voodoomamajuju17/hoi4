@@ -533,6 +533,24 @@ class Vanilla:
                         out[m.group(1)] = m.group(2)
         return out
 
+    def all_localisation(self, lang: str) -> dict[str, str]:
+        """Todas las claves vanilla de un idioma (juego base y expansiones)."""
+        out: dict[str, str] = {}
+        roots = [self.root / "localisation"] + sorted((self.root / "dlc").glob("*/localisation"))
+        for base in roots:
+            if not base.is_dir():
+                continue
+            for path in sorted(base.glob(f"**/*_l_{lang}.yml")):
+                try:
+                    text = path.read_text(encoding="utf-8-sig", errors="replace")
+                except OSError:
+                    continue
+                for line in text.splitlines():
+                    m = _LOC_LINE.match(line)
+                    if m and m.group(1) not in out:
+                        out[m.group(1)] = m.group(2)
+        return out
+
     # -- validación contra el juego -----------------------------------------
 
     def documented_keys(self, kind: str) -> set[str] | None:

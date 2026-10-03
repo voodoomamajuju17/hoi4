@@ -50,6 +50,7 @@ from .emitters import scenario as em_scenario
 from .emitters import territory as em_territory
 from .emitters import unique_units as em_unique_units
 from .emitters import unit_names as em_unit_names
+from .emitters import vanilla_terms as em_vanilla_terms
 from .errors import GenError
 from .loc import LocRegistry
 
@@ -88,6 +89,7 @@ EMITTERS = [
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
     ("menu", em_menu.emit),
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
+    ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)
     ("balance", em_balance.emit),       # ultimo: resume lo que quedo
 ]
 

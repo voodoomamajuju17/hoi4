@@ -948,3 +948,9 @@ llega a 100 al toque y la tensión nunca sube".
   del juego (o 128x64 equipo / 64x48 tecnología), y la imagen se encaja entera
   con fondo transparente. Las capturas confirmaron que el juego sí muestra
   nombres e íconos por país.
+- **Textos del juego con las ideologías viejas** (2026-10-03, captura del
+  usuario: "Entrenamiento paramilitar" decía "Apoyo fascista diario"). Todos
+  los textos vanilla que nombran fascista/comunista/democrático/no alineado se
+  reescriben con los grupos del mod (restauracionista, colectivista, mercantil,
+  trascendente; "la democracia" -> "el Orden de Mercado"), en español e
+  inglés, sin tocar lo que el mod ya define ni las variables del juego.
