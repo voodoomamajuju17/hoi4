@@ -907,7 +907,14 @@ def render_effects(owner: str, items: list[dict], known,
             kind = "guarantee" if effect == "guarantee" else item["type"]
             if kind not in RELATIONS:
                 raise SpecError(f"{owner}: relation.type '{kind}' ({', '.join(sorted(RELATIONS))})", where=where)
-            block.add("diplomatic_relation", Block([("country", target), ("relation", kind), ("active", True)]))
+            rel = Block([("country", target), ("relation", kind), ("active", True)])
+            if kind == "guarantee" and target not in SCOPES:
+                # error.log 2026-10-03: "The relation(guarantee) already exists"
+                block.add("if", Block([("limit", Block([("NOT", Block([("has_guaranteed", target)]))])),
+                                       ("diplomatic_relation", rel)]))
+                ec.triggers_used.setdefault("has_guaranteed", owner)
+            else:
+                block.add("diplomatic_relation", rel)
             effects_used.setdefault("diplomatic_relation", owner)
             continue
         if effect == "resource_here":

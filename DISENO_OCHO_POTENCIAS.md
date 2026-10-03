@@ -894,3 +894,9 @@ llega a 100 al toque y la tensión nunca sube".
   flota con destructores. Ahora todas arrancan además con crucero, submarino y
   torpedo; HSN, NRE, FCU y ASC también con el buque capital (casco pesado y
   batería pesada); la HSN con crucero y submarino mejorados.
+- **error.log de la partida a 2113** (2026-10-03, versión anterior a la
+  inteligencia de la IA): sin errores del mod salvo garantías repetidas (el
+  EFE garantizaba otra vez al Santuario): ahora solo si no lo garantiza ya.
+  Confirmó el diagnóstico: el aviso del blindaje salía cada 3 meses (ya es 1
+  año) y nadie fue descubierto espiando (ya corre MN_sombras_ia). Las
+  tecnologías de barcos nuevas existen todas en 1.19.3.
