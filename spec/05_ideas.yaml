@@ -567,16 +567,23 @@ countries:
       name: {english: The Machine Army, spanish: El Ejército de Máquinas}
       desc:
         english: Drones walk the front line, turrets hold the trenches and a single operator commands a whole platoon. The Commune spends machines,
-          not people.
+          not people, and the machines are recovered from the field and sent back. But every robot drinks power from the reactors, and the
+          war machine burns thorium day and night.
         spanish: Los drones caminan la primera línea, las torretas sostienen las trincheras y un solo operador comanda un pelotón entero. La Comuna
-          gasta máquinas, no personas.
+          gasta máquinas, no personas, y las que caen se recuperan del campo y vuelven al frente. Pero cada robot bebe energía de los reactores,
+          y la máquina de guerra quema torio día y noche.
+      # 2026-10-03 (pedido del usuario): "mejorar el trickleback y todo lo que
+      # simula usar menos manpower; aumentar costos en recursos o mejor aún
+      # carbón" (el carbón ahora se llama Torio, ver vanilla_terms).
       modifiers:
-        conscription_factor: 0.35
-        weekly_manpower: 1500
-        ?casualty_trickleback: 0.3
-        ?air_manpower_requirement_factor: -0.5
-        ?navy_casualty_on_hit: -0.5
-        ?navy_casualty_on_sink: -0.5
+        conscription_factor: 0.5
+        weekly_manpower: 2500
+        ?casualty_trickleback: 0.6
+        ?air_manpower_requirement_factor: -0.6
+        ?navy_casualty_on_hit: -0.6
+        ?navy_casualty_on_sink: -0.6
+        ?country_resource_coal: -24
+        ?production_lack_of_resource_penalty_factor: 0.25
       src: user_request
     - id: ASC_cuello_de_botella
       name: {english: The Council Bottleneck, spanish: El Cuello de Botella del Consejo}

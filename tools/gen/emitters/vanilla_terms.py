@@ -5,7 +5,8 @@ Los cuatro grupos vanilla del mod se renombraron (01_ideologies: Restauración,
 Colectivismo, Orden de Mercado, Mandato Trascendente), pero muchos textos del
 juego que siguen en uso (decisiones e ideas genéricas, modificadores, asesores,
 tooltips) nombran "fascista", "comunista", "democrático" o "no alineado"
-escritos a mano. Acá se recorren todos los textos vanilla y se reescriben con
+escritos a mano. También el carbón, que en 2100 se llama Torio (combustible de
+los reactores que alimentan las fábricas). Acá se recorren todos los textos vanilla y se reescriben con
 los nombres del mod (localisation/<idioma>/replace/). Lo que el mod ya define
 no se toca, ni lo que va entre $...$, [...] o £...£.
 """
@@ -38,6 +39,8 @@ TERMS = {
         (r"no alineados", "trascendentes"), (r"no alineadas", "trascendentes"),
         (r"no alineado", "trascendente"), (r"no alineada", "trascendente"),
         (r"no alineamiento", "Mandato Trascendente"),
+        # el carbón (energía de las fábricas desde 1.17) en 2100 es torio de reactor
+        (r"carbones", "torio"), (r"carbón", "torio"), (r"carbon(?=\b)", "torio"),
     ],
     "english": [
         (r"fascism", "Restoration"), (r"fascists", "Restorationists"), (r"fascist", "Restorationist"),
@@ -45,6 +48,7 @@ TERMS = {
         (r"democracies", "market orders"), (r"democracy", "Market Order"),
         (r"democratic", "Market"), (r"democrats", "Marketists"), (r"democrat", "Marketist"),
         (r"non-aligned", "Transcendent"), (r"non aligned", "Transcendent"),
+        (r"coal", "thorium"),
     ],
 }
 

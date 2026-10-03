@@ -954,3 +954,10 @@ llega a 100 al toque y la tensión nunca sube".
   reescriben con los grupos del mod (restauracionista, colectivista, mercantil,
   trascendente; "la democracia" -> "el Orden de Mercado"), en español e
   inglés, sin tocar lo que el mod ya define ni las variables del juego.
+- **ASC, El Ejército de Máquinas más fuerte y con costo** (2026-10-03, pedido
+  del usuario). Reclutamiento +50% (antes +35%), +2500 de personal por semana
+  (antes 1500), recuperación de bajas (trickleback) +60% (antes +30%), aviones
+  y barcos piden/pierden 60% menos de personal. Costo: -24 de torio (lo que
+  consumen los robots) y +25% de penalización si le faltan recursos.
+- **El carbón se llama Torio** (en inglés Thorium): en 2100 la energía de las
+  fábricas sale de reactores. Se renombra en todos los textos del juego.
