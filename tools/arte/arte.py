@@ -256,7 +256,9 @@ def catalog() -> list[dict]:
             "type": "weapon_icon", "tag": tag, "id": f"arma_{u['id']}", "dest": dest, "done": dest.exists(),
             "description": (
                 f"WHAT: the UNIQUE unit of this faction, the {u['name']['english']} ({u['name']['spanish']}); nobody "
-                f"else in the world has it, it must look legendary and one of a kind. LORE: {_one_line(u['lore']['english'])} "
+                f"else in the world has it, it must look legendary and one of a kind. "
+                f"{_one_line((detail.get('unique') or {}).get(u['id'], ''))} "
+                f"LORE: {_one_line(u['lore']['english'])} "
                 f"FACTION {_one_line(detail['looks'].get(tag, ''))} "
                 "Show the machine itself (not soldiers posing), heroic three-quarter view, centred, fills most of the "
                 "frame, transparent background, no text, no letters, no numbers."),

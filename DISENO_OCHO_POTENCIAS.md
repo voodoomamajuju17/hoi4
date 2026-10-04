@@ -980,3 +980,4 @@ llega a 100 al toque y la tensión nunca sube".
   eventos meganations_sombras. Queda el espionaje del juego base: cada
   meganación arranca con su agencia y las mejoras de la agencia mantienen sus
   nombres de 2100.
+- **Unidades únicas con el diseño de las pantallas de carga** (2026-10-04): el Gliptodonte ya existía como tanque de domo hexagonal (pantalla 16); los 8 pedidos de unidades únicas copian el diseño que ya muestran las pantallas de carga 16-19 (arte/armas_descripciones.yaml -> unique).
