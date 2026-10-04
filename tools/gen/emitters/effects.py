@@ -771,8 +771,8 @@ def render_effects(owner: str, items: list[dict], known,
             ]))
             continue
         if effect == "intelligence_agency":
-            # La Guerra en las Sombras (2026-09-30): todas las meganaciones
-            # arrancan con su agencia (La Résistance), una sola vez.
+            # todas las meganaciones arrancan con su agencia de inteligencia
+            # (La Résistance), una sola vez.
             block.add("if", Block([("limit", Block([("NOT", Block([("has_intelligence_agency", True)]))])),
                                    ("create_intelligence_agency", True)]))
             effects_used.setdefault("create_intelligence_agency", owner)
@@ -1295,7 +1295,7 @@ def dynamic_modifier_ids(spec_raw: dict) -> set[str]:
 
 
 # efectos que escribe el generador mismo (no están en 14_decisions.yaml)
-GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MN_sombras_ia"}  # MN_sombras_ia: intelligence.py (2026-10-03)
+GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli"}
 
 
 def scripted_effect_ids(spec_raw: dict) -> set[str]:

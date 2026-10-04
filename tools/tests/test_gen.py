@@ -1163,44 +1163,12 @@ def test_events() -> None:
               "NOT = { OR = { original_tag = EFE original_tag = FCU" in mio_gen)
         states_txt = "".join(p.read_text() for p in (mod / "history/states").glob("*.txt"))
         check("sin zonas desmilitarizadas de 1936 (el Rin, los Estrechos)", "set_demilitarized_zone" not in states_txt)
-        # La Guerra en las Sombras (2026-09-30)
-        ops = " ".join((mod / "common/operations/meganations_operations.txt").read_text().split())
-        check("sombras: 48 operaciones (6 por meganacion objetivo)", ops.count(" name = mn_op_") == 48)
-        check("sombras: la estructura se copia de una operacion del juego (fases y equipo)",
-              "infiltration_steal_tech_a = { base = 1 }" in ops and "infantry_equipment = 50" in ops
-              and "steal_tech_modifier" not in ops and "cipher_token" not in ops)
-        golpe = ops[ops.index("mn_op_golpe_mecanica_ASC = {"):][:6000]
-        check("sombras: el golpe a la ASC pide 50 de infiltracion y le sube el calor",
-              "var = MN_inf_ASC value = 50 compare = greater_than_or_equals" in golpe
-              and "FROM = {" in golpe and "var = ASC_calor value = 15" in golpe
-              and "has_country_flag = MN_vigilado_por_ASC" in golpe, golpe[:1500])
-        check("sombras: solo contra esa potencia", "visible = { FROM = { tag = ASC } OR = { tag = EFE" in golpe)
-        # error.log 2026-10-01: en outcome_execute el alcance es la operación;
-        # todo efecto va dentro de ROOT (el que la lanza) o FROM (el objetivo).
-        ops_root = pdx.parse((mod / "common/operations/meganations_operations.txt").read_text())
-        sueltos = sorted({k for _, op in ops_root.entries if isinstance(op, pdx.Block)
-                          for k in op.get("outcome_execute").keys() if k not in ("ROOT", "FROM")})
-        check("sombras: outcome_execute solo tiene ROOT y FROM (nada suelto en la operacion)", not sueltos, str(sueltos))
-        robo = ops[ops.index("mn_op_robo_tecnologico_EFE = {"):][:6000]
-        check("sombras: la infiltracion y los planos robados van al pais que la lanza",
-              "outcome_execute = { ROOT = { if = { limit = { has_country_flag = MN_vigilado_por_EFE }" in robo
-              and "if = { limit = { tag = FCU } add_timed_idea = { idea = FCU_planos_robados" in robo, robo[:1500])
-        decs_all = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
-        se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
-        check("sombras: la defensa es de a 4 y vence sola cada ano (antes 3 meses, 2026-10-03)",
-              "EFE_blindarse_contra_NRE" in decs_all and "var = MN_escudos value = 4 compare = less_than" in decs_all
-              and "var = MN_ciclo_sombras value = 12 compare = greater_than_or_equals" in se_all
-              and "clr_country_flag = MN_escudo_NRE" in se_all)
-        efe_ev = " ".join((mod / "events/meganations_efe.txt").read_text().split())
-        check("sombras: el pulso mensual corre la contrainteligencia", "EFE_sombras_mes = yes" in efe_ev)
-        # 2026-10-03: la IA no armaba redes y nadie pasaba de 0 de infiltracion
-        ia = " ".join((mod / "common/scripted_effects/meganations_sombras_ia.txt").read_text().split())
-        check("sombras IA: cada potencia IA espia todos los meses y corre la operacion mas alta primero",
-              "MN_sombras_ia = { if = { limit = { is_ai = yes" in ia and "NOT = { has_country_flag = MN_pacto_NRE }" in ia
-              and ia.index("var = MN_inf_EFE value = 90") < ia.index("var = MN_inf_EFE value = 20")
-              and "meganations_sombras.2" in ia
-              and "EFE_sombras_mes = { add_to_variable = { var = MN_ciclo_sombras value = 1 } MN_sombras_ia = yes" in se_all,
-              ia[:800])
+        # La Guerra en las Sombras se sacó el 2026-10-04 (pedido del usuario: "abortar")
+        check("sombras: sin operaciones propias, contrainteligencia ni pulso de la IA",
+              not (mod / "common/operations/meganations_operations.txt").exists()
+              and not (mod / "common/scripted_effects/meganations_sombras_ia.txt").exists()
+              and "contrainteligencia" not in (mod / "common/decisions/meganations_decisions.txt").read_text()
+              and "MN_inf_" not in (mod / "common/scripted_effects/meganations_effects.txt").read_text())
         check("guerra civil: con el Monte, se separa la Dinastia con Aurelio IV",
               "start_civil_war = { ideology = fascism size = 0.35 }" in opa
               and "random_country = { limit = { original_tag = EFE NOT = { tag = EFE } has_civil_war = yes } set_cosmetic_tag = EFE_DINASTIA" in opa

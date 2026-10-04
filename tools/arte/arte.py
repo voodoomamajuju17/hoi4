@@ -39,10 +39,8 @@ KINDS = {
     # banderas de las identidades nuevas (guerras civiles y formas finales): TGA
     # grande 82x52, mediana 41x26 y chica 10x7 en assets/<TAG>/flags/
     "country_flag": {"size": (82, 52), "transparent": False, "fit": "cover"},
-    # La Guerra en las Sombras (2026-09-30): íconos de las mejoras de la agencia
-    # y de las 6 operaciones propias; el generador los lleva al tamaño del juego
+    # íconos de las mejoras de la agencia; el generador los lleva al tamaño del juego
     "agency_upgrade_icon": {"size": (128, 128), "transparent": True, "fit": "contain"},
-    "operation_icon": {"size": (160, 150), "transparent": False, "fit": "cover"},
     # fondos de las pestañas (11_scenario -> tab_backgrounds): el tamaño es el
     # de la textura del juego, que va en cada pedido
     "ui_background": {"size": (192, 192), "transparent": False, "fit": "cover"},
@@ -204,13 +202,6 @@ def catalog() -> list[dict]:
             "type": "agency_upgrade_icon", "tag": "INTELIGENCIA", "id": up["id"], "dest": dest, "done": dest.exists(),
             "description": f"Intelligence agency upgrade icon, round badge: {up['english']}: {up['art']}.",
         })
-    for op in intel.get("operations") or []:
-        dest = REPO / "assets" / "intelligence" / "ops" / f"{op['id']}.dds"
-        items.append({
-            "type": "operation_icon", "tag": "INTELIGENCIA", "id": op["id"], "dest": dest, "done": dest.exists(),
-            "description": f"Spy operation card picture, sepia dossier photo style: {op['name']['english']}: "
-                           f"{_one_line(op['desc']['english'])}",
-        })
     for bg in ((_load("11_scenario.yaml").get("tab_backgrounds") or {}).get("items") or []):
         dest = REPO / "assets" / "ui" / f"{bg['id']}.dds"
         tile = (" SEAMLESS TILE: the left edge must continue the right edge and the top the bottom."
@@ -360,7 +351,7 @@ def pedidos() -> None:
     order = [("leader_portrait", "1_retratos"), ("national_spirit_icon", "2_espiritus"),
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
-             ("operation_icon", "6_operaciones"), ("ui_background", "7_fondos"),
+("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas")]
     summary = []
     for kind, prefix in order:

@@ -972,3 +972,11 @@ llega a 100 al toque y la tensión nunca sube".
   primero y se perdía el resto. Ahora se filtran uno por uno (y con eso también
   se dan las tecnologías de sus módulos). La IA ya espía: el game.log muestra
   una operación descubierta (meganations_sombras.2).
+- **La Guerra en las Sombras, eliminada** (2026-10-04, pedido del usuario:
+  "abortar"; la infiltración del jugador quedaba siempre en 0 porque pedía la
+  red de espías del juego base, no se entendía y no era divertida). Se sacaron
+  las 48 operaciones propias, las decisiones de contrainteligencia (blindarse,
+  pactos de sombras, purga), el pulso mensual, el espionaje de la IA y los
+  eventos meganations_sombras. Queda el espionaje del juego base: cada
+  meganación arranca con su agencia y las mejoras de la agencia mantienen sus
+  nombres de 2100.
