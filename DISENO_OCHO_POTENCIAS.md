@@ -966,3 +966,9 @@ llega a 100 al toque y la tensión nunca sube".
   arma_<id_unidad> (con su historia y la filosofía de la facción); la imagen
   va a assets/<TAG>/armas/<id>.dds y el generador la pone en el equipo de la
   unidad y en sus tecnologías bloqueadas, solo para el dueño.
+- **error.log 2026-10-04**: el acorazado del orgullo de la flota no se creaba
+  en el EFE, el SHD y la APF ("Could not find proper equipment variant"). Los
+  diseños de barco del juego vienen juntos en un bloque; se miraba solo el
+  primero y se perdía el resto. Ahora se filtran uno por uno (y con eso también
+  se dan las tecnologías de sus módulos). La IA ya espía: el game.log muestra
+  una operación descubierta (meganations_sombras.2).

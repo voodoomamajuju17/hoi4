@@ -213,7 +213,7 @@ def emit(ctx: BuildContext) -> None:
         used = _version_names(block)
         # Solo las variantes que usan los barcos que quedaron: el resto serían
         # diseños "basura" en el diseñador.
-        _add_variants(root, [(k, v) for k, v in variants["naval"][tag] if _variant_name(v) in used])
+        _add_variants(root, _used_variants(variants["naval"][tag], used))
         ctx.data["ship_equipment"][tag] = _equipment_of(root)
         name = f"{tag}_2100_naval"
         ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(root))
@@ -436,6 +436,35 @@ def _version_names(block: Block) -> set[str]:
             out.add(_text(v))
         elif isinstance(v, Block):
             out |= _version_names(v)
+    return out
+
+
+def _used_variants(entries: list[tuple[str, Block]], used: set[str]) -> list[tuple[str, Block]]:
+    """Solo las variantes que usan los barcos. Las que vienen juntas dentro de
+    un bloque (if = { limit = { has_dlc } ... muchas variantes }) se filtran una
+    por una: antes se miraba solo la primera y, si no se usaba, se perdía el
+    bloque entero (error.log 2026-10-04: "Could not find proper equipment
+    variant" en el acorazado del EFE, el SHD y la APF)."""
+    out = []
+    for k, v in entries:
+        if k == "create_equipment_variant":
+            if _variant_name(v) in used:
+                out.append((k, v))
+            continue
+        if not isinstance(v, Block):
+            continue
+        kept = Block()
+        found = False
+        for kk, vv in v.entries:
+            if kk == "create_equipment_variant" or (isinstance(vv, Block) and _has(vv, "create_equipment_variant")):
+                sub = _used_variants([(kk, vv)], used)
+                if sub:
+                    found = True
+                    kept.entries.extend(sub)
+            else:
+                kept.add(kk, vv)
+        if found:
+            out.append((k, kept))
     return out
 
 
