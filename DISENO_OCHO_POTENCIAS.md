@@ -981,3 +981,12 @@ llega a 100 al toque y la tensión nunca sube".
   meganación arranca con su agencia y las mejoras de la agencia mantienen sus
   nombres de 2100.
 - **Unidades únicas con el diseño de las pantallas de carga** (2026-10-04): el Gliptodonte ya existía como tanque de domo hexagonal (pantalla 16); los 8 pedidos de unidades únicas copian el diseño que ya muestran las pantallas de carga 16-19 (arte/armas_descripciones.yaml -> unique).
+- **Aviones por facción** (2026-10-06, pedido del usuario). Tres familias más en
+  17_research -> by_faction: avión liviano (fuselaje chico: caza/apoyo/naval),
+  mediano (bombardero táctico/caza pesado) y de portaaviones; las anarquías,
+  liviano y mediano. El fuselaje pesado es el Ala de Obsidiana de la FCU (único).
+  Nombres propios (Volador Harpía, Interceptor Enjambre, Caza Eagle Prime, Caza
+  Petrel, Caza-Planeador Kuntur, Caza Yan, Caza Tai, Caza Aquila...) y 34
+  pedidos de arte con descripción extensa. Los pedidos de unidades únicas y de
+  aviones van cada uno en un solo archivo: 10_unidades_unicas.txt y
+  11_aviones.txt.

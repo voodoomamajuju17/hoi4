@@ -53,6 +53,10 @@ KINDS = {
     # familia y facción, con descripción extensa (arte/armas_descripciones.yaml);
     # el generador la lleva al tamaño de cada ícono de equipo y de tecnología
     "weapon_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
+    # 2026-10-06 ("pasame un txt solo con las unidades únicas; también los aviones
+    # por cada facción"): mismo formato, cada uno en su propio archivo
+    "unique_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
+    "plane_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -235,7 +239,8 @@ def catalog() -> list[dict]:
             others = "; ".join(f"{t}: {_one_line(v[fam])[:90]}..." for t, v in detail["art"].items()
                                if t != tag and fam in v)
             items.append({
-                "type": "weapon_icon", "tag": tag, "id": f"arma_{tag}_{fam}", "dest": dest, "done": dest.exists(),
+                "type": "plane_icon" if fam in PLANE_FAMILIES else "weapon_icon", "tag": tag,
+                "id": f"arma_{tag}_{fam}", "dest": dest, "done": dest.exists(),
                 "description": (
                     f"WHAT: {fams.get(fam, {}).get('art', fam)} - the {n['en']} ({n['es']}). "
                     f"EXACT DESIGN: {own} "
@@ -253,7 +258,7 @@ def catalog() -> list[dict]:
         tag = u["country"]
         dest = REPO / "assets" / tag / "armas" / f"{u['id']}.dds"
         items.append({
-            "type": "weapon_icon", "tag": tag, "id": f"arma_{u['id']}", "dest": dest, "done": dest.exists(),
+            "type": "unique_icon", "tag": tag, "id": f"arma_{u['id']}", "dest": dest, "done": dest.exists(),
             "description": (
                 f"WHAT: the UNIQUE unit of this faction, the {u['name']['english']} ({u['name']['spanish']}); nobody "
                 f"else in the world has it, it must look legendary and one of a kind. "
@@ -286,6 +291,9 @@ def catalog() -> list[dict]:
             })
     return items
 
+
+PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
+SINGLE_FILE = {"unique_icon", "plane_icon"}
 
 UI_STYLE = ("game user-interface background texture, subtle and low contrast so text and buttons stay readable, "
             "no text, no letters, no logos, no watermark, no frame")
@@ -354,7 +362,8 @@ def pedidos() -> None:
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
 ("ui_background", "7_fondos"),
-             ("research_background", "8_investigacion"), ("weapon_icon", "9_armas")]
+             ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
+             ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -362,9 +371,12 @@ def pedidos() -> None:
             if i["type"] == kind:
                 by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ")
                                   else "SATELITES_Y_ANARQUIA", []).append(i)
+        if kind in SINGLE_FILE and by_tag:
+            # un solo archivo, ordenado por facción
+            by_tag = {"": [i for _, g in sorted(by_tag.items()) for i in g]}
         for tag, group in sorted(by_tag.items()):
-            path = OUT / f"{prefix}_{tag}.txt"
-            path.write_text(f"# {len(group)} pedidos - {kind} - {tag}\n\n"
+            path = OUT / (f"{prefix}.txt" if not tag else f"{prefix}_{tag}.txt")
+            path.write_text(f"# {len(group)} pedidos - {kind} - {tag or 'todas las facciones'}\n\n"
                             + "\n".join(_request(i) for i in group), encoding="utf-8")
             summary.append(f"{path.name}: {len(group)}")
     (OUT / "0_LEEME.txt").write_text(_readme(summary), encoding="utf-8")

@@ -527,6 +527,16 @@ by_faction:
     capital:     {match: ['^ship_hull_heavy_(\d+)$', '^(?:battleship|battle_cruiser)_(\d+)$'], art: "a huge capital ship with railguns, side view"}
     carrier:     {match: ['^ship_hull_carrier_(\d+)$', '^carrier_(\d+)$'], art: "a drone carrier with a flat deck, side view"}
     submarine:   {match: ['^ship_hull_submarine_(\d+)$', '^submarine_(\d+)$'], art: "a submarine surfacing"}
+    # Aviones (2026-10-06, pedido del usuario: "también los aviones por cada
+    # facción"). Con By Blood Alone el avión es el fuselaje; el rol (caza,
+    # apoyo, naval) sale del diseñador. El fuselaje pesado es la unidad única
+    # de la FCU (Ala de Obsidiana): nadie más lo investiga, no lleva familia.
+    light_plane:   {match: ['^small_plane_airframe_(\d+)$', '^fighter_equipment_(\d+)$', '^jet_fighter_equipment_(\d+)$'],
+                    art: "a light single-seat combat aircraft (fighter / ground attack), three-quarter view in flight"}
+    medium_plane:  {match: ['^medium_plane_airframe_(\d+)$', '^tac_bomber_equipment_(\d+)$', '^jet_tac_bomber_equipment_(\d+)$'],
+                    art: "a twin-engine medium combat aircraft (tactical bomber / heavy fighter), three-quarter view in flight"}
+    carrier_plane: {match: ['^cv_small_plane_airframe_(\d+)$', '^cv_fighter_equipment_(\d+)$'],
+                    art: "a carrier-borne aircraft or drone with folding wings and an arrestor hook"}
   names:
     EFE:
       rifle:       {en: Thorn Rifle, es: Fusil Espina}
@@ -548,6 +558,9 @@ by_faction:
       capital:     {en: Crown-class Battleship, es: Acorazado clase Corona}
       carrier:     {en: Condor-class Drone Carrier, es: Portadrones clase Cóndor}
       submarine:   {en: Surubí-class Submarine, es: Sumergible clase Surubí}
+      light_plane: {en: Harpy Flyer, es: Volador Harpía}
+      medium_plane: {en: Hornero Bomber, es: Bombardero Hornero}
+      carrier_plane: {en: Frigatebird Drone, es: Dron Fragata}
     ASC:
       rifle:       {en: Commune Rifle, es: Fusil Comuna}
       support:     {en: Cooperative Kit, es: Equipo Cooperativo}
@@ -568,6 +581,9 @@ by_faction:
       capital:     {en: Karl Marx-class Battleship, es: Acorazado clase Karl Marx}
       carrier:     {en: Rosa Luxemburg-class Drone Carrier, es: Portadrones clase Rosa Luxemburgo}
       submarine:   {en: Self-Management-class Submarine, es: Sumergible clase Autogestión}
+      light_plane: {en: Swarm Interceptor, es: Interceptor Enjambre}
+      medium_plane: {en: Plenum Bomber, es: Bombardero Pleno}
+      carrier_plane: {en: Relay Drone, es: Dron Relé}
     FCU:
       rifle:       {en: Liberty Rifle, es: Fusil Liberty}
       support:     {en: Contractor Kit, es: Equipo Contractor}
@@ -588,6 +604,9 @@ by_faction:
       capital:     {en: Castellane-class Battleship, es: Acorazado clase Castellane}
       carrier:     {en: Meridian-class Carrier, es: Portaaviones clase Meridian}
       submarine:   {en: Silent Partner-class Submarine, es: Sumergible clase Silent Partner}
+      light_plane: {en: Eagle Prime Fighter, es: Caza Eagle Prime}
+      medium_plane: {en: Blue Chip Bomber, es: Bombardero Blue Chip}
+      carrier_plane: {en: Seahawk Executive, es: Seahawk Ejecutivo}
     HSN:
       rifle:       {en: Monsoon Rifle, es: Fusil Monzón}
       support:     {en: Deck Kit, es: Equipo de Cubierta}
@@ -608,6 +627,9 @@ by_faction:
       capital:     {en: Sovereign Current-class Capital Ship, es: Buque Capital clase Corriente Soberana}
       carrier:     {en: Tradewind-class Carrier, es: Portaaviones clase Alisio}
       submarine:   {en: Corsair-class Raider, es: Sumergible clase Corsario}
+      light_plane: {en: Petrel Fighter, es: Caza Petrel}
+      medium_plane: {en: Albatross Bomber, es: Bombardero Albatros}
+      carrier_plane: {en: Shearwater Drone, es: Dron Pardela}
     NAS:
       rifle:       {en: Inti Rifle, es: Fusil Inti}
       support:     {en: Ayllu Kit, es: Equipo Ayllu}
@@ -628,6 +650,9 @@ by_faction:
       capital:     {en: Inti-class Battleship, es: Acorazado clase Inti}
       carrier:     {en: Huaman-class Carrier, es: Portaaviones clase Huamán}
       submarine:   {en: Mama Qucha-class Submarine, es: Sumergible clase Mama Cocha}
+      light_plane: {en: Kuntur Glider-Fighter, es: Caza-Planeador Kuntur}
+      medium_plane: {en: Inti Solar Bomber, es: Bombardero Solar Inti}
+      carrier_plane: {en: Huaman Drone, es: Dron Huamán}
     SHD:   # en mandarín (pinyin sin tonos), como sus barcos y divisiones
       rifle:       {en: Hexie Rifle, es: Fusil Hexie}
       support:     {en: Tongxin Kit, es: Equipo Tongxin}
@@ -648,6 +673,9 @@ by_faction:
       capital:     {en: Jiaozheng Liu-class Battleship, es: Zhanliejian clase Jiaozheng Liu}
       carrier:     {en: Fenghuang-class Carrier, es: Hangmu clase Fenghuang}
       submarine:   {en: Hai Long-class Submarine, es: Qianting clase Hai Long}
+      light_plane: {en: Yan Fighter, es: Caza Yan}
+      medium_plane: {en: Hongyan Bomber, es: Bombardero Hongyan}
+      carrier_plane: {en: Haiou Drone, es: Dron Haiou}
     APF:
       rifle:       {en: Uhuru Rifle, es: Fusil Uhuru}
       support:     {en: Harambee Kit, es: Equipo Harambee}
@@ -668,6 +696,9 @@ by_faction:
       capital:     {en: Olokun-class Battleship, es: Acorazado clase Olokun}
       carrier:     {en: Ndege-class Carrier, es: Portaaviones clase Ndege}
       submarine:   {en: Mamba-class Submarine, es: Sumergible clase Mamba}
+      light_plane: {en: Tai Fighter, es: Caza Tai}
+      medium_plane: {en: Mbuni Bomber, es: Bombardero Mbuni}
+      carrier_plane: {en: Korongo Drone, es: Dron Korongo}
     NRE:
       rifle:       {en: Pilum Rifle, es: Fusil Pilum}
       support:     {en: Contubernium Kit, es: Equipo Contubernium}
@@ -688,6 +719,9 @@ by_faction:
       capital:     {en: Augustus-class Battleship, es: Acorazado clase Augustus}
       carrier:     {en: Victoria-class Carrier, es: Portaaviones clase Victoria}
       submarine:   {en: Neptunus-class Submarine, es: Sumergible clase Neptuno}
+      light_plane: {en: Aquila Fighter, es: Caza Aquila}
+      medium_plane: {en: Jupiter Bomber, es: Bombardero Júpiter}
+      carrier_plane: {en: Mercurius Drone, es: Dron Mercurio}
     ZWE:   # Señores de la Guerra de Eurasia: material de saqueo
       rifle:       {en: Ataman Rifle, es: Fusil Atamán}
       support:     {en: Looter's Kit, es: Equipo de Saqueo}
@@ -703,6 +737,8 @@ by_faction:
       heavy_tank:  {en: Mammoth Tank, es: Tanque Mamut}
       modern_tank: {en: Looted Tank, es: Tanque Saqueado}
       super_heavy: {en: Hetman's Rolling Fortress, es: Fortaleza Rodante del Hetman}
+      light_plane: {en: Hawk Biplane, es: Biplano Halcón}
+      medium_plane: {en: Bomber Crow, es: Bombardero Cuervo}
     ZWI:   # Indostán
       rifle:       {en: Talwar Rifle, es: Fusil Talwar}
       support:     {en: Bazaar Kit, es: Equipo Bazar}
@@ -718,6 +754,8 @@ by_faction:
       heavy_tank:  {en: Maharaja Tank, es: Tanque Maharajá}
       modern_tank: {en: Rani Tank, es: Tanque Rani}
       super_heavy: {en: Rajgarh Fortress, es: Fortaleza Rajgarh}
+      light_plane: {en: Kite Fighter, es: Caza Milano}
+      medium_plane: {en: Garuda Bomber, es: Bombardero Garuda}
     ZWM:   # Emiratos
       rifle:       {en: Jambiya Rifle, es: Fusil Jambiya}
       support:     {en: Caravan Kit, es: Equipo Caravana}
@@ -733,6 +771,8 @@ by_faction:
       heavy_tank:  {en: Emir Tank, es: Tanque Emir}
       modern_tank: {en: Sultan Tank, es: Tanque Sultán}
       super_heavy: {en: Wellhead Fortress, es: Fortaleza del Pozo}
+      light_plane: {en: Saker Fighter, es: Caza Sacre}
+      medium_plane: {en: Simoom Bomber, es: Bombardero Simún}
     ZWB:   # Caudillos del Amazonas
       rifle:       {en: Prospector Rifle, es: Fusil Garimpeiro}
       support:     {en: Jungle Kit, es: Equipo de Selva}
@@ -748,6 +788,8 @@ by_faction:
       heavy_tank:  {en: Peccary Tank, es: Tanque Pecarí}
       modern_tank: {en: Colonel Tank, es: Tanque Coronel}
       super_heavy: {en: Sumaúma Fortress, es: Fortaleza Sumaúma}
+      light_plane: {en: Crop-duster Fighter, es: Caza Fumigador}
+      medium_plane: {en: Smuggler Bomber, es: Bombardero Contrabandista}
     ZAN:   # Tierras Sin Ley: chatarra y robo
       rifle:       {en: Frontier Rifle, es: Fusil de Frontera}
       support:     {en: Scavenger Kit, es: Equipo de Carroñero}
@@ -763,3 +805,5 @@ by_faction:
       heavy_tank:  {en: Junker Tank, es: Tanque Chatarrero}
       modern_tank: {en: Stolen Tank, es: Tanque Robado}
       super_heavy: {en: Junkyard Fortress, es: Fortaleza Basurero}
+      light_plane: {en: Junk Kite, es: Cometa de Chatarra}
+      medium_plane: {en: Scrap Bomber, es: Bombardero de Desguace}
