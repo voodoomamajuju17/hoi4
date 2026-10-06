@@ -994,3 +994,4 @@ llega a 100 al toque y la tensión nunca sube".
   chica"). Se recorta el borde transparente de cada imagen antes de encajarla
   y la medida de respaldo pasa a 160x72 (equipo) y 100x50 (tecnología).
   17_research -> by_faction.icon_size la deja ajustar (equipment, tech, scale).
+- **Asesores sin retrato** (2026-10-06, captura de un ministro con "?"): los asesores sin retrato propio llevan una silueta en el color de su país (grande y chica) hasta que llegue el arte. Era el error.log Icon definition "_small".

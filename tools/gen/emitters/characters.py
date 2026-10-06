@@ -144,6 +144,18 @@ def emit(ctx: BuildContext) -> None:
                     portraits.add(portrait.get("role", "civilian"), sizes)
                     body.add("portraits", portraits)
 
+            # 2026-10-06 (captura: un ministro con "?" en la casilla de asesores;
+            # error.log: Icon definition "_small"): los asesores sin retrato
+            # propio no reciben uno genérico del juego. Llevan una silueta en el
+            # color de su país hasta que llegue el arte.
+            if body.get("portraits") is None and "advisor" in (ch.get("roles") or {}):
+                large = f"gfx/leaders/{country.tag}/mn_silueta.dds"
+                small = f"gfx/leaders/{country.tag}/small/mn_silueta.dds"
+                if not (ctx.mod_root / large).exists():
+                    _write_silhouette(ctx, large, country.color, PORTRAIT_SIZE)
+                    _write_silhouette(ctx, small, country.color, SMALL_PORTRAIT_SIZE)
+                body.add("portraits", Block([("civilian", Block([("large", Quoted(large)), ("small", Quoted(small))]))]))
+
             leader = (ch.get("roles") or {}).get("country_leader")
             if isinstance(leader, dict):
                 ideology = leader.get("ideology")
@@ -227,6 +239,27 @@ def emit(ctx: BuildContext) -> None:
         root = Block()
         root.add("characters", characters)
         ctx.write_script(f"common/characters/{tag}_characters.txt", root, source=SOURCE)
+
+
+def _write_silhouette(ctx: BuildContext, relative: str, color: tuple[int, int, int],
+                      size: tuple[int, int]) -> None:
+    """Silueta de cabeza y hombros sobre un fondo oscuro del color del país."""
+    w, h = size
+    dark = tuple(int(c * 0.35) for c in color)
+    light = tuple(min(255, int(c * 0.6) + 70) for c in color)
+    cx, head_y, head_r = w / 2, h * 0.38, min(w, h) * 0.2
+    sh_y, sh_rx, sh_ry = h * 0.95, w * 0.42, h * 0.32
+    pixels = []
+    for y in range(h):
+        for x in range(w):
+            in_head = (x - cx) ** 2 + (y - head_y) ** 2 <= head_r ** 2
+            in_body = y >= h * 0.62 and ((x - cx) / sh_rx) ** 2 + ((y - sh_y) / sh_ry) ** 2 <= 1
+            shade = 1 - 0.35 * y / h
+            base = tuple(int(c * shade) for c in dark)
+            pixels.append(light if in_head or in_body else base)
+    path = ctx.mod_root / relative
+    write_dds(path, w, h, pixels)
+    ctx.track(path)
 
 
 def _write_portrait(ctx: BuildContext, relative: str, color: tuple[int, int, int],
