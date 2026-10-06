@@ -176,20 +176,33 @@ def catalog() -> list[dict]:
             "type": "national_spirit_icon", "tag": tag, "id": dm["id"], "dest": dest, "done": dest.exists(),
             "description": f"{dm['name']['english']}: {_one_line(dm['desc']['english'])}",
         })
+    # Retratos (2026-10-06: "pasame un txt con pedidos de retratos de generales,
+    # mariscales, ministros"): todos los personajes sin retrato, también los que
+    # no tienen `portrait` en el spec; el generador conecta solo
+    # assets/<TAG>/leaders/<id>.dds. Los de arte/retratos_descripciones.yaml
+    # llevan el pedido detallado (encuadre, luz, ropa y fondo).
+    looks = yaml.safe_load((REPO / "arte" / "retratos_descripciones.yaml").read_text(encoding="utf-8"))
+    traits = _load("03_leaders.yaml").get("leader_traits") or {}
+    traits = traits if isinstance(traits, dict) else {t["id"]: t for t in traits}
     for ch in _load("03_leaders.yaml").get("characters") or []:
-        portrait = (ch.get("portrait") or {}) if isinstance(ch, dict) else {}
-        if not portrait.get("path"):
+        if not isinstance(ch, dict):
             continue
+        portrait = ch.get("portrait") or {}
         tag = ch["country"]
-        dest = REPO / "assets" / tag / "leaders" / Path(portrait["path"]).name
+        name = Path(portrait["path"]).name if portrait.get("path") else f"{ch['id']}.dds"
+        dest = REPO / "assets" / tag / "leaders" / name
         regnal = (ch.get("name") or {}).get("regnal") or {}
-        items.append({
+        item = {
             "type": "leader_portrait", "tag": tag, "id": ch["id"], "dest": dest,
-            "done": bool(portrait.get("asset")) or dest.exists(),
+            "done": bool(portrait.get("asset") and (REPO / portrait["asset"]).exists()) or dest.exists(),
             "description": (f"{regnal.get('english', ch['id'])}, born {ch.get('born', '?')}: {_one_line(ch.get('lore'))}"
                             if ch.get("lore") else _one_line(portrait.get("description") or regnal.get("english", ch["id"])))
                            + " Head-and-shoulders portrait, facing the viewer.",
-        })
+        }
+        if ch["id"] in (looks.get("characters") or {}) and tag in (looks.get("looks") or {}):
+            item["description"] = _portrait(ch, looks["looks"][tag], looks["characters"][ch["id"]], traits)
+            item["style"] = PORTRAIT_STYLE
+        items.append(item)
     for ct in _load("02_countries.yaml").get("cosmetic_tags") or []:
         tag = ct["parent"]
         dest = REPO / "assets" / tag / "flags" / f"{ct['id']}.tga"
@@ -292,6 +305,71 @@ def catalog() -> list[dict]:
     return items
 
 
+PORTRAIT_STYLE = (
+    "photorealistic painted portrait matching the existing leader portraits of this Hearts of Iron IV mod: "
+    "realistic skin pores, hair and fabric weave, subtle painterly softness, rich but natural colour grading, "
+    "cinematic and believable near-future clothing of the year 2100 (not a sci-fi costume), no helmet or mask "
+    "covering the face, no text, no letters, no numbers, no logos with words, no watermark, no frame, no border")
+
+# el vestuario según el cargo (03_leaders -> roles)
+_KIND = {"corps_commander": "army", "field_marshal": "army", "navy_leader": "navy",
+         "army_chief": "army", "high_command": "army", "navy_chief": "navy", "air_chief": "air"}
+
+# lo que lleva encima según su rasgo, para los que no tienen un detalle propio
+_TRAIT_DETAIL = {
+    "Master of Manoeuvre": "a leather map case on a strap and a riding crop held in one gloved hand",
+    "Defence in Depth": "field glasses hanging at the chest and a folded map in one hand",
+    "Flawless Organisation": "a slim folder of orders under the arm and a fountain pen in the breast pocket",
+    "Iron Morale": "a ceremonial sword held upright with the hilt at shoulder height and a row of medals on the chest",
+    "Rigorous Drill": "a whistle on a lanyard and white gloves held in one hand",
+    "Relentless Offensive": "a pistol in a shoulder holster and dust on the face and collar",
+    "Fortification Engineer": "an engineer's hard hat under the arm and concrete dust on the sleeves",
+    "Logistician": "a clipboard of supply lists and a pencil behind the ear",
+    "Elite Infantry": "a beret with an elite unit badge and the sling of a rifle on the shoulder",
+    "Reserves and Replacements": "a thick roster folder held against the chest",
+    "King of Artillery": "ear defenders hanging around the neck and a brass shell casing in one hand",
+    "General Staff": "a folder of staff plans and reading glasses on a cord",
+    "Guerrilla Warfare": "a scarf wrapped high around the neck and the sling of a carbine over the shoulder",
+}
+
+
+def _portrait(ch: dict, look: dict, me: dict, traits: dict) -> str:
+    """Pedido detallado de un retrato: cara, ropa del cargo, encuadre, luz y fondo."""
+    roles = {k: v for k, v in (ch.get("roles") or {}).items() if v}
+    kind = me.get("kind")
+    trait_names = []
+    for role, body in roles.items():
+        body = body if isinstance(body, dict) else {}
+        kind = kind or _KIND.get(body.get("slot") or role)
+        trait_names += [((traits.get(t) or {}).get("name") or {}).get("english", t.replace("_", " "))
+                        for t in body.get("traits") or []]
+    wear = look.get(kind or "civil") or look.get("army") or look.get("civil")
+    regnal = (ch.get("name") or {}).get("regnal") or {}
+    who = regnal.get("english") or ch["id"]
+    detail = me.get("detail") or next((_TRAIT_DETAIL[t] for t in trait_names if t in _TRAIT_DETAIL), "")
+    # que no miren todos hacia el mismo lado
+    side, other = ("left", "right") if sum(map(ord, ch["id"])) % 2 else ("right", "left")
+    parts = [
+        f"WHO: {who} ({regnal.get('spanish', who)}), {look['nation']}.",
+        f"Known for: {', '.join(trait_names)}." if trait_names else "",
+        f"Lore: {ch['lore']}" if ch.get("lore") else "",
+        f"PERSON: a {me['age']}-year-old {me['g']} ({look['faces']}): {me['face']}. "
+        f"Expression: {me['expr']}.",
+        f"CLOTHING: {wear}.",
+        f"DETAIL: {detail}." if detail else "",
+        "FRAMING: vertical 3:4 bust portrait (for example 624x840). The frame cuts at mid-chest; the top of the head "
+        "sits about 7% below the top edge; the eyes are on the upper-third line; the person is centred and the "
+        "shoulders fill about 70% of the width. Anything held stays inside the frame at chest height.",
+        f"CAMERA: eye level, 85mm portrait lens at f/2.8; the body turned about 25 degrees to the {side}, the face "
+        "turned back almost to the camera, the eyes looking straight into the lens.",
+        f"LIGHT: soft key light from the upper {other} at 45 degrees, a gentle fill from the opposite side and a thin "
+        f"rim light separating the hair and shoulders from the background; {look['light']}.",
+        f"BACKGROUND: {me.get('bg') or look['background']}; recognisable but softer than the face (moderate depth of "
+        "field), filling the space around the head and shoulders, in the colours of the nation.",
+    ]
+    return " ".join(_one_line(x) for x in parts if x)
+
+
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
 SINGLE_FILE = {"unique_icon", "plane_icon"}
 
@@ -318,7 +396,7 @@ def _request(item: dict) -> str:
         f"id: {item['id']}",
         f"filename: {item['id']}.png",
         f"size: {w}x{h} (o más grande con la misma proporción)",
-        f"style: {common}; {style}",
+        f"style: {item['style'] if item.get('style') else common + '; ' + style}",
         f"description: {item['description']}",
         f"transparent_background: {'true' if kind['transparent'] else 'false'}",
         "",

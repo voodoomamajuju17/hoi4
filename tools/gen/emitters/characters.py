@@ -112,6 +112,14 @@ def emit(ctx: BuildContext) -> None:
 
             portrait = ch.get("portrait") or {}
             portrait_path = portrait.get("path")
+            if not portrait_path and (ctx.spec.root.parent / f"assets/{country.tag}/leaders/{cid}.dds").exists():
+                # 2026-10-06: el retrato pedido por tools/arte llega con el id del
+                # personaje y se conecta solo, aunque el spec no tenga `portrait`
+                portrait_path = f"gfx/leaders/{country.tag}/{cid}.dds"
+                roles = {k for k, v in (ch.get("roles") or {}).items() if v}
+                portrait = {"path": portrait_path,
+                            "role": "navy" if "navy_leader" in roles
+                            else "army" if roles & {"corps_commander", "field_marshal"} else "civilian"}
             if portrait_path:
                 repo = ctx.spec.root.parent
                 name = portrait_path.rsplit('/', 1)[-1]
