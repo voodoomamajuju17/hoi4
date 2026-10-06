@@ -565,7 +565,7 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
-        if item["type"] == "weapon_icon":
+        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon"):
             img = _recortar(img)
         if kind["fit"] == "cover":
             scale = max(w / img.width, h / img.height)
