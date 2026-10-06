@@ -990,3 +990,7 @@ llega a 100 al toque y la tensión nunca sube".
   pedidos de arte con descripción extensa. Los pedidos de unidades únicas y de
   aviones van cada uno en un solo archivo: 10_unidades_unicas.txt y
   11_aviones.txt.
+- **Íconos de armas más grandes** (2026-10-06, captura: "la escala es un poco
+  chica"). Se recorta el borde transparente de cada imagen antes de encajarla
+  y la medida de respaldo pasa a 160x72 (equipo) y 100x50 (tecnología).
+  17_research -> by_faction.icon_size la deja ajustar (equipment, tech, scale).

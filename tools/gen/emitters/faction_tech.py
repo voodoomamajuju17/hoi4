@@ -151,8 +151,12 @@ def family_members(families: dict, equipment: dict) -> dict[str, list[tuple[str,
 # al lado. Si el sprite exacto no se puede leer (muchos están dentro de los zip
 # de las expansiones), se usa la medida más común de los íconos de equipo o de
 # tecnología del juego, y si tampoco, una fija.
-FALLBACK_EQUIPMENT = (128, 64)
-FALLBACK_TECH = (64, 48)
+# 2026-10-06 (captura: "las imágenes están perfectas pero la escala es un poco
+# chica"): respaldo más grande y se recorta el borde transparente de la imagen
+# antes de encajarla. 17_research -> by_faction.icon_size pisa estos valores y
+# `scale` agranda o achica todo.
+FALLBACK_EQUIPMENT = (160, 72)
+FALLBACK_TECH = (100, 50)
 
 
 class _Sizes:
@@ -172,8 +176,10 @@ class _Sizes:
             d = self._read(tex)
             if d[0] and d[1]:
                 (eq_sizes if m.group(1) in eq_keys else tech_sizes).append(d)
-        self.default_eq = _most_common(eq_sizes) or FALLBACK_EQUIPMENT
-        self.default_tech = _most_common(tech_sizes) or FALLBACK_TECH
+        conf = ((ctx.spec.raw.get("research_look") or {}).get("by_faction") or {}).get("icon_size") or {}
+        self.scale = float(conf.get("scale", 1.0))
+        self.default_eq = tuple(conf.get("equipment") or ()) or _most_common(eq_sizes) or FALLBACK_EQUIPMENT
+        self.default_tech = tuple(conf.get("tech") or ()) or _most_common(tech_sizes) or FALLBACK_TECH
         ctx.note(f"armas por faccion: tamano de los iconos {self.default_eq[0]}x{self.default_eq[1]} (equipo, "
                  f"{len(eq_sizes)} del juego) y {self.default_tech[0]}x{self.default_tech[1]} (tecnologia, "
                  f"{len(tech_sizes)} del juego)")
@@ -184,6 +190,10 @@ class _Sizes:
         return self._cache[tex]
 
     def of(self, target: str) -> tuple[int, int]:
+        w, h = self._of(target)
+        return max(1, round(w * self.scale)), max(1, round(h * self.scale))
+
+    def _of(self, target: str) -> tuple[int, int]:
         names = [f"GFX_{target}_medium"]
         names += sorted(n for n in self.textures if n.endswith(f"_{target}_medium") and n.startswith("GFX_"))
         if target in self.archetype:
@@ -209,6 +219,20 @@ def _fit(data: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
     (el que escribe art.write_dds)."""
     import struct
     body = data[128:128 + w * h * 4]
+    # recorte del borde transparente: el arma llena el ícono
+    xs0, ys0, xs1, ys1 = w, h, -1, -1
+    for y in range(0, h):
+        row = body[y * w * 4:(y + 1) * w * 4]
+        alphas = row[3::4]
+        if max(alphas) > 16:
+            ys0, ys1 = min(ys0, y), y
+            first = next(i for i, a in enumerate(alphas) if a > 16)
+            last = len(alphas) - 1 - next(i for i, a in enumerate(reversed(alphas)) if a > 16)
+            xs0, xs1 = min(xs0, first), max(xs1, last)
+    if xs1 >= xs0 and ys1 >= ys0 and (xs1 - xs0 + 1, ys1 - ys0 + 1) != (w, h):
+        cw, ch = xs1 - xs0 + 1, ys1 - ys0 + 1
+        body = b"".join(body[(y * w + xs0) * 4:(y * w + xs1 + 1) * 4] for y in range(ys0, ys1 + 1))
+        w, h = cw, ch
     scale = min(nw / w, nh / h)
     sw, sh = max(1, round(w * scale)), max(1, round(h * scale))
     ox, oy = (nw - sw) // 2, (nh - sh) // 2
