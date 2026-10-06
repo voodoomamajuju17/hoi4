@@ -2737,6 +2737,8 @@ def test_faction_tech() -> None:
         art.write_dds(root / "assets/EFE/tech/rifle.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         art.write_dds(root / "assets/EFE/tech/capital.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         art.write_dds(root / "assets/EFE/armas/EFE_gliptodonte.dds", 4, 4, [(10, 20, 30, 255)] * 16)
+        for sub in ("armas", "tech"):      # una faccion sin imagenes: queda el icono del juego
+            shutil.rmtree(root / "assets/SHD" / sub, ignore_errors=True)
         ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
         mod = ctx.mod_root
         es = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*faction_tech*spanish*"))

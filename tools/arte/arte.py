@@ -447,6 +447,21 @@ def _fundir(img):
     return img
 
 
+def _recortar(img, umbral=16, margen=0.03):
+    """Recorta el aire transparente alrededor del arma.
+
+    Cada imagen trae el arma con un margen distinto (un fusil fino ocupa el 40%
+    del cuadro, un tanque el 95%); sin recortar, en el juego unas se ven
+    diminutas y otras llenan el ícono. Recortado, todas llenan su ranura igual.
+    """
+    caja = img.getchannel("A").point(lambda a: 255 if a > umbral else 0).getbbox()
+    if not caja:
+        return img
+    l, t, r, b = caja
+    m = round(max(r - l, b - t) * margen)
+    return img.crop((max(0, l - m), max(0, t - m), min(img.width, r + m), min(img.height, b + m)))
+
+
 def importar(source: str) -> None:
     from PIL import Image  # solo acá: el instalador del usuario no lo necesita
 
@@ -472,13 +487,17 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
+        if item["type"] == "weapon_icon":
+            img = _recortar(img)
         if kind["fit"] == "cover":
             scale = max(w / img.width, h / img.height)
             img = img.resize((max(w, round(img.width * scale)), max(h, round(img.height * scale))), Image.LANCZOS)
             left, top = (img.width - w) // 2, (img.height - h) // 2
             img = img.crop((left, top, left + w, top + h))
         else:
-            img.thumbnail((w, h), Image.LANCZOS)
+            # también agranda: un arma recortada puede quedar más chica que la ranura
+            scale = min(w / img.width, h / img.height)
+            img = img.resize((max(1, round(img.width * scale)), max(1, round(img.height * scale))), Image.LANCZOS)
             canvas = Image.new("RGBA", (w, h), (0, 0, 0, 0))
             canvas.paste(img, ((w - img.width) // 2, (h - img.height) // 2), img)
             img = canvas
