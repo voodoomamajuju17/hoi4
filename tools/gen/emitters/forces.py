@@ -237,6 +237,9 @@ def emit(ctx: BuildContext) -> None:
             techs.extend(t for t in need if t not in techs)
             if need:
                 ctx.note(f"armada: {tag} recibe {', '.join(need)} para sus barcos")
+            else:
+                # diagnóstico (2026-10-06): qué piden sus barcos y no se encontró
+                ctx.note(f"armada: {tag} no recibe tecnologias para sus barcos; equipo: {', '.join(sorted(eq)[:12])}")
     ctx.data["ships"] = dict(ships)
     ctx.data["planes"] = dict(planes)
     if fleets or wings:

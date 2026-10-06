@@ -104,6 +104,9 @@ def emit(ctx: BuildContext) -> None:
         es = langs.get("spanish") or texts["spanish"].get(key) or en
         if not (en and es and en.strip() and es.strip()):
             continue
+        # error.log 2026-10-06 ("Illegal break character (utf32=39)"): las
+        # comillas escapadas del juego (\") quedaban como \' al normalizar
+        en, es = en.replace('\\"', '"'), es.replace('\\"', '"')
         ctx.loc.define_and_reference(key, en=en, es=es, file=FILE, origin="vanilla_terms")
         done += 1
     ctx.note(f"textos del juego: {done} con fascista/comunista/democratico/no alineado reescritos "

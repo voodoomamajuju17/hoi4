@@ -178,8 +178,9 @@ class _Sizes:
                 (eq_sizes if m.group(1) in eq_keys else tech_sizes).append(d)
         conf = ((ctx.spec.raw.get("research_look") or {}).get("by_faction") or {}).get("icon_size") or {}
         self.scale = float(conf.get("scale", 1.0))
-        self.default_eq = tuple(conf.get("equipment") or ()) or _most_common(eq_sizes) or FALLBACK_EQUIPMENT
-        self.default_tech = tuple(conf.get("tech") or ()) or _most_common(tech_sizes) or FALLBACK_TECH
+        # la medida del juego manda (reporte 2026-10-06: 146x54); icon_size es el respaldo
+        self.default_eq = _most_common(eq_sizes) or tuple(conf.get("equipment") or ()) or FALLBACK_EQUIPMENT
+        self.default_tech = _most_common(tech_sizes) or tuple(conf.get("tech") or ()) or FALLBACK_TECH
         ctx.note(f"armas por faccion: tamano de los iconos {self.default_eq[0]}x{self.default_eq[1]} (equipo, "
                  f"{len(eq_sizes)} del juego) y {self.default_tech[0]}x{self.default_tech[1]} (tecnologia, "
                  f"{len(tech_sizes)} del juego)")

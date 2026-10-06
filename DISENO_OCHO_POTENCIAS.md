@@ -995,3 +995,12 @@ llega a 100 al toque y la tensión nunca sube".
   y la medida de respaldo pasa a 160x72 (equipo) y 100x50 (tecnología).
   17_research -> by_faction.icon_size la deja ajustar (equipment, tech, scale).
 - **Asesores sin retrato** (2026-10-06, captura de un ministro con "?"): los asesores sin retrato propio llevan una silueta en el color de su país (grande y chica) hasta que llegue el arte. Era el error.log Icon definition "_small".
+- **Reporte/error.log 2026-10-06**:
+  - "Illegal break character" en los textos de ideologías: las comillas
+    escapadas del juego (\") quedaban como \' al normalizar. Se desescapan.
+  - El acorazado seguía sin crearse en el EFE, el SHD y la APF: las cuatro que
+    sí lo tenían arrancaban con casco pesado y batería pesada. Ahora todas las
+    meganaciones arrancan con esas dos; el reporte dice qué tecnologías recibe
+    cada flota (o qué equipo no encontró).
+  - Íconos: el juego usa 146x54. La medida del juego manda; icon_size es solo
+    el respaldo. Con el recorte del borde vacío el arma llena el ícono.

@@ -2774,6 +2774,8 @@ def test_vanilla_terms() -> None:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         txt = "".join(p.read_text(encoding="utf-8-sig") for p in ctx.mod_root.glob("localisation/spanish/replace/*ideology_terms*"))
         check("el texto vanilla se reescribe en replace/", "Apoyo restauracionista diario y la Restauración de $fascism$" in txt, txt[:300])
+        check("sin comillas escapadas rotas (error.log 2026-10-06: Illegal break character)",
+              "\\'" not in txt and "Dijo 'basta' el restauracionista" in txt, txt[-300:])
 
 
 def main() -> int:
