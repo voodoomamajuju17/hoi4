@@ -2280,6 +2280,8 @@ def test_arte() -> None:
         art.write_dds(root / "assets/NRE/goals/NRE_el_consilium.dds", 1, 1, px)
         art.write_dds(root / "assets/NRE/ideas/NRE_senado.dds", 1, 1, px)
         art.write_dds(root / "assets/NRE/leaders/irina_vasilescu.dds", 1, 1, px)
+        art.write_dds(root / "assets/EFE/leaders/EFE_min_pereira_3.dds", 1, 1, px)
+        art.write_dds(root / "assets/HSN/leaders/HSN_adm_tupou_5.dds", 1, 1, px)
         art.write_dds(root / "assets/events/meganations_nre.3.dds", 1, 1, px)
         art.write_dds(root / "assets/events/meganations_armisticio.dds", 1, 1, px)
         ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
@@ -2292,6 +2294,15 @@ def test_arte() -> None:
         check("sprite del espiritu registrado", "GFX_idea_NRE_senado" in (mod / "interface/meganations_ideas.gfx").read_text())
         port = mod / "gfx/leaders/NRE/irina_vasilescu.dds"
         check("retrato: reemplaza al provisorio", port.exists() and port.read_bytes() == (root / "assets/NRE/leaders/irina_vasilescu.dds").read_bytes())
+        efe_chars = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
+        pereira = efe_chars[efe_chars.index("EFE_min_pereira_3 = {"):]
+        pereira = pereira[:pereira.index("advisor = {")]
+        check("retrato sin `portrait` en el spec: assets/<TAG>/leaders/<id>.dds se conecta solo",
+              'large = "gfx/leaders/EFE/EFE_min_pereira_3.dds"' in pereira and "mn_silueta" not in pereira
+              and (mod / "gfx/leaders/EFE/EFE_min_pereira_3.dds").exists(), pereira)
+        hsn_chars = " ".join((mod / "common/characters/HSN_characters.txt").read_text().split())
+        check("almirante: retrato de marina",
+              'navy = { large = "gfx/leaders/HSN/HSN_adm_tupou_5.dds"' in hsn_chars, hsn_chars[:300])
         ev = (mod / "events/meganations_nre.txt").read_text()
         check("evento: assets/events/<id>.dds reemplaza la imagen generica", "picture = GFX_meganations_nre_3" in ev)
         check("sprite del evento registrado", "GFX_meganations_nre_3" in (mod / "interface/meganations_events.gfx").read_text())

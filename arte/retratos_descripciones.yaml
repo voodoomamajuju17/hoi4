@@ -1,0 +1,1282 @@
+# =============================================================================
+# Descripciones de los retratos de personajes (pedido del usuario, 2026-10-06:
+# "pasame un txt con pedidos de retratos de generales, mariscales, ministros").
+#
+# Los pedidos tienen que ser muy detallados (encuadre, ángulo, luz, ropa,
+# fondo), como los de las pantallas de carga. Cada nación tiene su vestuario
+# por tipo de cargo (civil, ejército, marina, aviación), su fondo y su luz,
+# sacados de los retratos que ya están en el juego, para que los nuevos se
+# vean de la misma serie. Cada personaje suma su cara, edad, gesto, un detalle
+# propio y lo que se ve detrás.
+# Lo usa tools/arte (pedidos tipo leader_portrait). Un personaje que no está
+# acá recibe el pedido corto de siempre.
+# =============================================================================
+
+looks:
+  EFE:
+    nation: Ecofascist Empire (South America, capital Buenos Aires), year 2100
+    faces: Latin American (Argentine, Brazilian, Andean mestizo)
+    civil: >-
+      tailored high-collared jacket in deep forest green, gold thread embroidery of laurel leaves running along the
+      collar and cuffs, a small gold seedling pin on the left chest
+    army: >-
+      deep forest-green high-collared field tunic with gold oak-and-laurel embroidery on the collar tabs, a bark-brown
+      leather cross-strap over the right shoulder, rank shown as small gold leaves on the shoulder boards, a small
+      insignia of dark green-bronze bio-steel shaped like a leaf with a faint amber glow in its veins
+    navy: >-
+      green-black double-breasted naval coat with gold buttons shaped like seeds, gold laurel embroidery on the shoulder
+      boards and cuffs, white shirt and dark green tie
+    air: >-
+      olive-green flight jacket with a brown leather collar, a gold badge of wings made of leaves on the chest, flight
+      gloves tucked in the epaulette
+    background: >-
+      the overgrown imperial capital: glass greenhouse domes and towers wrapped in jungle vines and hanging gardens,
+      palm crowns and banners in green and gold
+    light: warm humid daylight filtered green through leaves, soft and golden on the face
+  FCU:
+    nation: Free Corporative Capital Union (North America, a state run by four corporations), year 2100
+    faces: North American, of any origin
+    civil: >-
+      impeccably tailored navy-blue three-piece suit, crisp white shirt, silver silk tie, an abstract silver corporate
+      lapel pin (a simple geometric shape, no letters), an expensive steel watch visible at the cuff
+    army: >-
+      navy-blue dress uniform of a private military contractor, silver piping on the lapels, minimalist silver rank
+      chevrons on the collar, a small corporate shoulder patch (abstract shape, no letters), white shirt and navy tie
+    navy: >-
+      white-and-navy naval dress uniform with silver braid on the cuffs, an abstract silver corporate crest on the cap
+      badge (cap held under the arm or out of frame), white shirt and navy tie
+    air: >-
+      navy leather flight jacket with silver zips and a sheepskin collar, a silver wing badge, mirrored aviator glasses
+      folded in the chest pocket
+    background: >-
+      a corporate tower interior: floor-to-ceiling glass walls overlooking a skyline of glass skyscrapers, soft blue
+      holographic market charts floating in the air (no readable text)
+    light: cool clean daylight through glass, slight blue tint, glossy reflections on fabric and skin
+  ASC:
+    nation: Automated Socialist Commune (Europe, an economy run by planning algorithms and robots), year 2100
+    faces: European (Central, Northern and Eastern European)
+    civil: >-
+      charcoal-grey high-collared work jacket with a single vertical red stripe down the left side and a white chest
+      panel, a small red geometric pin (a triangle inside a hexagon)
+    army: >-
+      charcoal-grey field uniform with white shoulder panels and red constructivist chevrons, high mandarin collar,
+      a red triangle rank badge on the collar
+    navy: >-
+      dark grey naval tunic with red piping, high collar, a white geometric anchor badge made of straight lines
+    air: >-
+      grey flight suit with a high collar, a red badge of two triangles forming wings, a white harness strap across
+      the chest
+    background: >-
+      a white automated hall: rows of white robot arms on assembly lines, red indicator lights, a wall of abstract
+      graphs and node networks (no readable text)
+    light: even, cool white overhead light with clean soft shadows and small red accent lights
+  HSN:
+    nation: High Seas Market Nation (Asia-Pacific, a trading league of ports and islands), year 2100
+    faces: Asia-Pacific (Southeast Asian, Pacific Islander, East Asian, South Asian)
+    civil: >-
+      dark teal double-breasted coat with brass buttons, cut like a modern merchant captain's coat, over a white
+      high-collared shirt, a small brass compass-rose pin
+    army: >-
+      dark teal marine-infantry tunic with brass buttons, braided rope cords on the right shoulder, a brass anchor
+      badge on the collar
+    navy: >-
+      dark teal double-breasted naval officer's coat with gold anchor-and-compass buttons, gold braid on the cuffs and
+      shoulder boards, white shirt and black tie
+    air: >-
+      teal flight jacket with a brass compass-rose badge, a white silk scarf, a headset resting around the neck
+    background: >-
+      a vast megaport: container cranes, stacks of coloured containers, merchant ships and grey warships at anchor on
+      calm water
+    light: golden sunset over the sea, warm side light, light sea haze
+  NAS:
+    nation: Neo-Andean Sun Empire (Andes, a restored Inca empire, Tawantinsuyu), year 2100
+    faces: Andean Indigenous (Quechua and Aymara)
+    civil: >-
+      modern jacket covered with woven tocapu textile panels (small square geometric patterns) in teal, cobalt blue,
+      gold and cream, a gold sun-disc pin on the chest
+    army: >-
+      dark blue field tunic with tocapu-patterned woven bands on the collar and across the chest, a short woven
+      shoulder mantle, a gold sun insignia on the collar
+    navy: >-
+      dark blue naval coat with woven Andean bands on the cuffs and collar, gold sun buttons
+    air: >-
+      blue flight jacket with a woven Andean collar and a gold badge of condor wings
+    background: >-
+      snowy Andes peaks under a deep blue sky, green terraced hillsides and a stone citadel with a gold-plated sun
+      temple
+    light: crisp high-altitude daylight, sharp and clear, cool sky with warm sun on the face
+  SHD:
+    nation: Socialist Hydraulic Directorate (China, a state built around dams and canals), year 2100
+    faces: Chinese
+    civil: >-
+      modern dark green or slate-grey Zhongshan-style high-collared tunic with four covered pockets, a small jade pin
+      shaped like a wave
+    army: >-
+      dark green high-collared field uniform with grey shoulder boards, a small jade wave insignia on the collar
+    navy: >-
+      dark grey-blue naval tunic with a high collar and silver wave insignia on the shoulder boards
+    air: >-
+      grey-green flight jacket with a jade wing badge and a high knitted collar
+    background: >-
+      a colossal dam with roaring white spillways, a misty river gorge, the locks of the Grand Canal and hydraulic
+      control rooms with green screens
+    light: soft overcast light and drifting mist, cool green-grey tones
+  APF:
+    nation: African Peoples' Federation (a continental federation of councils), year 2100
+    faces: African
+    civil: >-
+      tailored modern jacket in deep red or ochre with a woven kente-pattern stole in red, gold and green over the
+      shoulders
+    army: >-
+      olive-khaki field uniform with a woven kente-pattern band across the chest, a gold star badge on the collar
+    navy: >-
+      white-and-dark-green naval uniform with kente-pattern bands on the cuffs, a gold anchor-and-star badge
+    air: >-
+      olive flight jacket with a kente collar and a gold badge of a sun with wings
+    background: >-
+      an African megacity at golden hour: new towers, fields of solar panels, an elevated railway corridor and the
+      savanna beyond
+    light: warm golden-hour sunlight with fine dust in the air
+  NRE:
+    nation: Neo-Roman Empire (Italy, the Balkans and the Mediterranean, a restored Rome), year 2100
+    faces: Mediterranean and Southeast European (Italian, Romanian, Turkish, Greek, French, Serbian)
+    civil: >-
+      dark modern tunic with a crimson toga-like sash draped over the left shoulder, held by a gold laurel fibula
+    army: >-
+      dark burgundy uniform with modern segmented ballistic plates shaped like a lorica on the chest, a crimson cloak
+      pinned at the right shoulder with a gold eagle fibula
+    navy: >-
+      dark navy-purple naval tunic with a gold trireme-prow badge, a crimson half-cloak over one shoulder
+    air: >-
+      dark leather flight jacket with a gold eagle-wings badge and a crimson scarf
+    background: >-
+      a marble forum with columns, crimson banners with gold eagles (no letters) and legion standards topped by eagles
+    light: warm golden-hour Mediterranean light, stone glowing amber
+  PTA:
+    nation: Southern Patagonia, ecofascist province allied to the Ecofascist Empire, year 2100
+    faces: Patagonian (Argentine of Welsh, Spanish and Mapuche descent)
+    army: >-
+      deep forest-green field coat of the Empire with a thick sheepskin collar, gold laurel collar tabs, a woollen
+      scarf
+    background: windswept Patagonian steppe, blue glaciers and moss-covered wind turbines
+    light: cold bright southern light under fast clouds
+  YYG:
+    nation: Yvytu Ykua Guasu, Guaraní satellite of the Ecofascist Empire (Paraguay and Iguazú), year 2100
+    faces: Guaraní and Paraguayan
+    army: >-
+      forest-green field uniform with a band of Guaraní ñandutí lace-like pattern on the collar, gold leaf insignia
+    background: the Iguazú falls and red-earth jungle, mist rising from the water
+    light: humid warm light with spray in the air
+  ZNG:
+    nation: New Granada, climate theocracy allied to the Sun Empire (Colombia), year 2100
+    faces: Colombian
+    army: >-
+      white and teal uniform cut like a vestment, a sun-and-rain sigil embroidered in gold on the chest, a teal
+      stole
+    background: cloud forest of the Colombian Andes and a flooded colonial cathedral
+    light: soft misty light with a halo of sun through clouds
+  ZLL:
+    nation: Free Plains of the Orinoco, solar monarchy allied to the Sun Empire (Venezuela), year 2100
+    faces: Venezuelan llanero
+    army: >-
+      sky-blue uniform with gold sun epaulettes, a gold sun emblem on the chest, a broad leather belt
+    background: the flat llanos with endless solar panel fields and herds of cattle
+    light: hard bright tropical sun, heat shimmer
+  ZNR:
+    nation: Northern Resource Zone, corporate satellite of the Corporate Union (Canada and the Arctic), year 2100
+    faces: Canadian, including Inuit
+    army: >-
+      navy-blue parka of a private military contractor with a fur-lined hood down on the shoulders, silver rank
+      chevrons, an abstract corporate patch (no letters)
+    background: arctic open-pit mines, drilling rigs and snow
+    light: low pale arctic sun, cold blue shadows
+  ZSE:
+    nation: Southern Economic Zone, charter freehold of the Corporate Union (Gulf Coast and Mexico border), year 2100
+    faces: Southern United States and Mexican-American
+    army: >-
+      navy-and-tan contractor uniform with rolled sleeves, a silver corporate patch (no letters), a utility vest
+    background: Gulf Coast refineries, flare stacks and a hurricane wall
+    light: hot humid afternoon light, orange haze
+  ZAF:
+    nation: Antillean Free Ports, charter freehold of the Sea Nation (Caribbean), year 2100
+    faces: Caribbean (Haitian, Dominican, Cuban)
+    army: >-
+      white and turquoise uniform with brass buttons, a turquoise sash, a brass compass badge
+    background: a Caribbean free port with turquoise water, colourful houses and container ships
+    light: bright tropical sun and sea reflections
+  ZAS:
+    nation: Austral Sea Compact, shareholder republic of the Sea Nation (Australia and New Zealand), year 2100
+    faces: Australian and Māori
+    army: >-
+      dark teal field uniform with brass buttons and a slouch-hat badge style emblem of a southern cross (stars, no
+      letters)
+    background: a southern harbour with a modern bridge, naval docks and red earth hills
+    light: bright clean southern sun
+  ZBC:
+    nation: Baltic Commune, agrarian commune allied to the Socialist Commune (Baltic states, Finland, Poland), year 2100
+    faces: Baltic, Finnish and Polish
+    army: >-
+      grey-green wool uniform with a red enamel pin, linen collar, hand-stitched rank bars
+    background: Baltic farmland, birch forests and wooden windmills
+    light: pale northern light, long soft shadows
+  ZAL:
+    nation: Albion Workers' Republic, revolutionary luddite republic allied to the Socialist Commune (Britain and Ireland), year 2100
+    faces: British and Irish
+    army: >-
+      hand-sewn wool and tweed uniform without any electronics, a red armband, brass buttons, a knitted scarf
+    background: smashed factories and dead server halls on a grey moor, brick terraces and smoke
+    light: grey rainy daylight
+  ZKR:
+    nation: Harmonious Protectorate of Korea, under the Hydraulic Directorate, year 2100
+    faces: Korean
+    army: >-
+      dark green high-collared field uniform of the Directorate with grey shoulder boards and a small jade wave
+      insignia, a Korean taegeuk-like circular emblem (no letters)
+    background: misty mountains, a river dam and modern towers
+    light: soft morning mist and cool light
+  ZST:
+    nation: Steppe Directorate, climate theocracy under the Hydraulic Directorate (Kazakhstan and Central Asia), year 2100
+    faces: Kazakh and Central Asian
+    army: >-
+      felt-lined long coat in the cut of a deel, dark green with grey trim, a silver wave insignia, a fur hat held at
+      the side or worn high
+    background: endless steppe, white yurts, wind farms and an irrigation canal
+    light: big open sky, clear dry light
+  ZET:
+    nation: Highlands Federation, agrarian commune in the African Federation (Ethiopia and Eritrea), year 2100
+    faces: Ethiopian and Eritrean
+    army: >-
+      khaki field uniform with a white shamma scarf with a coloured border draped over the shoulders, a gold star badge
+    background: green highland terraces, eucalyptus trees and rock-hewn churches
+    light: clear high-altitude light, green and gold
+  ZSA:
+    nation: Cape Federation, member of the African Federation (South Africa), year 2100
+    faces: South African, of any origin
+    army: >-
+      olive-khaki field uniform with a kente-pattern band and a gold star badge, a beret
+    background: Table Mountain, the harbour of Cape Town and naval docks
+    light: bright windy southern light
+  ZHI:
+    nation: Province of Hispania, ruin-nationalist province of the Neo-Roman Empire (Spain and Portugal), year 2100
+    faces: Spanish and Portuguese
+    army: >-
+      crimson-and-black uniform of the Empire, worn and dusty, with segmented chest plates and a short crimson cloak
+    background: a Roman aqueduct over a ruined Iberian city, dry hills
+    light: hot dusty afternoon light
+  ZDA:
+    nation: Province of Dacia, bunker junta of the Neo-Roman Empire (Romania, Hungary and the Carpathians), year 2100
+    faces: Romanian and Hungarian
+    army: >-
+      concrete-grey field uniform with a crimson cloak and a gold eagle fibula, a heavy collar
+    background: concrete bunkers dug into the Carpathian mountains, pine forests
+    light: cold overcast mountain light
+  ZWE:
+    nation: Eurasian Warlords, warlord bands of the former Russia, year 2100
+    faces: Russian and Slavic
+    army: >-
+      mismatched gear: fur-collared greatcoat over scavenged body armour, ammunition belts, an old medal or two
+    background: a ruined Siberian town, smoke and a broken railway bridge
+    light: cold smoky light, low sun
+  ZWI:
+    nation: Warlords of Hindustan, warlord bands of the former India, year 2100
+    faces: Indian
+    army: >-
+      scavenged khaki and saffron gear, a turban or a scarf wrapped around the head and neck, a bandolier
+    background: a ruined Indian city under monsoon clouds, flooded streets and temple towers
+    light: heavy monsoon light, wet reflections
+  ZWM:
+    nation: Desert Emirates, warlord emirates of the former Middle East, year 2100
+    faces: Arab
+    army: >-
+      desert robes and a keffiyeh over modern body armour, a curved dagger tucked into a chest strap
+    background: burning oil fields and dunes
+    light: harsh desert sun with orange smoke
+  ZWB:
+    nation: Amazon Caudillos, warlords of the burned Amazon, year 2100
+    faces: Brazilian (Amazonian, caboclo, Indigenous)
+    army: >-
+      jungle camouflage with rolled sleeves, a bandolier, a red bandana
+    background: a burned rainforest clearing and armed river boats on a brown river
+    light: hazy smoky tropical light
+  ZAN:
+    nation: The Lawless Lands, warlord territories with no state, year 2100
+    faces: of any origin
+    army: >-
+      mismatched scavenged gear: an old officer's coat over body armour, patches from armies that no longer exist
+    background: a ruined town with burned cars and a water tower
+    light: dusty grey light
+  ZSG:
+    nation: Gaia's Sanctuary, climate theocracy of forest guardians (upper Rio Negro, Amazon), year 2100
+    faces: Amazonian Indigenous
+    civil: >-
+      ranger robes of woven bark fibre and green cloth, a necklace of seeds, a few macaw feathers in the hair
+    background: the deep rainforest of the upper Rio Negro, giant trees and black water
+    light: green filtered jungle light with shafts of sun
+
+# Cada personaje: g (hombre/mujer), age, face (rasgos), expr (gesto), detail
+# (algo propio que se ve en el cuadro), bg (lo que se ve detrás; si falta, el
+# fondo de la nación). kind fuerza el vestuario (civil/army/navy/air).
+characters:
+  # --- EFE ------------------------------------------------------------------
+  EFE_min_pereira_3:
+    g: woman
+    age: 48
+    face: sun-tanned skin, dark hair in a thick practical braid, small scar on the chin, strong cheekbones
+    expr: calm, watchful, the half-smile of someone who lives outdoors
+    kind: civil
+    detail: >-
+      instead of the jacket she wears the ranger's field version, a green canvas coat with the gold laurel
+      embroidery, a pair of old binoculars hanging on a leather strap at her chest
+    bg: a ranger watchtower above the canopy, morning mist over the jungle
+  EFE_min_lujan_4:
+    g: man
+    age: 63
+    face: silver hair combed back, trimmed grey beard, deep lines, heavy-lidded eyes
+    expr: composed, diplomatic, slightly superior
+    detail: a heavy gold chain of office with a laurel medallion over the green jacket, a folded document in one hand
+    bg: a grand chancellery hall with green marble columns wrapped in living vines
+  EFE_min_kaltenbach_5:
+    g: woman
+    age: 41
+    face: pale skin, ash-blonde hair cut short, thin rimless glasses, sharp features
+    expr: cold, curious, analytical
+    detail: >-
+      a white lab coat worn open over the green jacket, a small sealed glass vial with glowing amber liquid held
+      between two fingers near her chest
+    bg: a bio-laboratory with rows of glass vats where dark green bio-steel grows like coral
+  EFE_gen_quinones_1:
+    g: man
+    age: 52
+    face: brown skin, black hair shaved at the sides, a jungle scar across one eyebrow, broad jaw
+    expr: aggressive confidence, ready to attack
+    detail: >-
+      sleeves of the tunic rolled up, jungle mud on the leather strap, the handle of a machete in a leaf-tooled
+      sheath strapped high on the chest harness
+    bg: a dense jungle front line with green-bronze armoured vehicles shaped like animals among the trees
+  EFE_gen_rojas_2:
+    g: woman
+    age: 55
+    face: weathered olive skin, grey-streaked black hair tied low, narrow eyes, firm mouth
+    expr: stubborn, patient, immovable
+    detail: a woollen poncho in green and brown over the tunic, a pair of field glasses in one gloved hand
+    bg: rocky Andean foothills with entrenched positions camouflaged with living plants
+  EFE_gen_ferrero_3:
+    g: man
+    age: 46
+    face: light olive skin, neat dark moustache, receding hairline, attentive eyes
+    expr: busy, precise, a man who counts everything
+    detail: a data tablet in a green leather case under his arm, a pencil behind the ear
+    bg: a supply depot with columns of green trucks and crates marked only with leaf symbols
+  EFE_mando_beltran_1:
+    g: man
+    age: 59
+    face: tanned skin, white close-cropped hair, hawk nose, deep-set eyes
+    expr: commanding, calm authority
+    detail: a gold-embroidered green cape over one shoulder, many ribbon bars on the chest, white gloves in one hand
+    bg: a map room with a living moss relief map of South America on a table
+  EFE_mando_ocampo_2:
+    g: woman
+    age: 50
+    face: light skin with freckles, red-brown hair pulled into a tight bun, grey-green eyes
+    expr: alert, protective
+    kind: navy
+    detail: binoculars hanging at her chest, a sea-salt-stained collar
+    bg: the estuary of the Río de la Plata with a convoy of green-hulled cargo ships escorted by warships
+  EFE_mando_lagos_3:
+    g: man
+    age: 44
+    face: tanned skin, short black curly hair, a thin moustache, laugh lines
+    expr: bold, relaxed, a pilot's grin
+    kind: air
+    detail: a flight helmet decorated with a gold leaf held under the arm
+    bg: a jungle airstrip with green ground-attack aircraft shaped like birds of prey
+  EFE_mando_sosa_4:
+    g: woman
+    age: 43
+    face: dark brown skin, black hair in short twists, strong brows, a small gold earring
+    expr: intense, energetic
+    detail: a tanker's padded headset around her neck, a smear of oil on the cheek
+    bg: a tank park with heavy armoured vehicles of green-bronze bio-steel shaped like armadillos
+  EFE_mando_ferreyra_5:
+    g: man
+    age: 61
+    face: pale skin, bald head, round glasses, white goatee
+    expr: patient, meticulous
+    detail: a small notebook full of figures in his hand, reading glasses on a chain
+    bg: a river port on the Paraná with barges loaded with supplies
+  EFE_min_inteligencia_6:
+    g: woman
+    age: 52
+    face: tanned skin, grey-streaked dark hair cut at the jaw, narrow watchful eyes, thin lips
+    expr: still, unreadable, listening
+    kind: civil
+    detail: >-
+      a dark green ranger's coat with a high collar turned up, a small earpiece in one ear, a leaf-shaped gold brooch
+      that is also a microphone
+    bg: a hidden ranger station in the jungle at dusk, antennas disguised as tree branches
+
+  # --- FCU ------------------------------------------------------------------
+  FCU_min_voss_3:
+    g: man
+    age: 57
+    face: pale skin, thinning grey hair combed back, rimless glasses, thin lips
+    expr: cold, calculating, faintly bored
+    detail: a slim tablet showing a red-and-green risk heat map (no readable text) held against the chest
+    bg: a dim risk-control room with walls of red and blue data
+  FCU_min_marchetti_4:
+    g: woman
+    age: 38
+    face: olive skin, glossy dark brown hair in a sleek blow-out, perfect makeup, bright white smile
+    expr: charming, camera-ready, a little too perfect
+    detail: a navy dress suit with a silver brooch, a small earpiece, studio lights reflected in her eyes
+    bg: a press briefing room with a navy backdrop of abstract corporate shapes and cameras out of focus
+  FCU_min_raman_5:
+    g: woman
+    age: 45
+    face: South Asian, brown skin, black hair in a low bun with a few grey strands, gold-rimmed glasses
+    expr: sharp, hungry, curious
+    detail: a navy blazer over a black turtleneck, a holographic blueprint of a machine floating above her open palm
+    bg: a clean white research lab with prototypes under glass
+  FCU_gen_harrington_1:
+    g: man
+    age: 64
+    face: ruddy pale skin, white hair cut very short, square jaw, heavy brows
+    expr: unshakeable, paternal sternness
+    detail: >-
+      many ribbon bars, a silver field marshal's baton with an abstract corporate head held across the chest, a
+      silver aiguillette on the right shoulder
+    bg: a logistics command centre with a wall-size map of North America and moving blue supply lines
+  FCU_gen_kowalski_2:
+    g: woman
+    age: 47
+    face: pale skin, platinum-blonde hair in a short undercut, ice-blue eyes, a strong jaw
+    expr: fearless, impatient
+    detail: a tanker's coverall jacket over the uniform with silver piping, gloves tucked into the belt
+    bg: sleek navy-blue tanks with chrome trim and LED strips on a highway at dusk
+  FCU_gen_salinas_3:
+    g: man
+    age: 50
+    face: Mexican-American, tan skin, short black hair, salt-and-pepper stubble, sun creases
+    expr: cunning, amused
+    detail: desert-tan scarf around the neck, sunglasses pushed up on the head
+    bg: Sonoran desert with saguaro cacti and fast armoured cars raising dust
+  FCU_gen_brooks_4:
+    g: man
+    age: 58
+    face: Black American, dark skin, shaved head, grey moustache, broad shoulders
+    expr: solid, unimpressed
+    detail: a heavy navy greatcoat with a silver-fur collar, hands clasped behind the back
+    bg: a fortified line of concrete and steel walls in snowy hills
+  FCU_mando_harlan_1:
+    g: man
+    age: 61
+    face: pale freckled skin, sandy grey hair parted on the side, small blue eyes, thin smile
+    expr: efficient, satisfied
+    detail: a silver pen in the breast pocket, a slim folder with the corporate crest under the arm
+    bg: a board meeting room with generals and executives seated, slightly out of focus
+  FCU_mando_holloway_2:
+    g: woman
+    age: 54
+    face: pale skin, grey hair in a precise short cut, strong nose, grey eyes
+    expr: daring, resolute
+    detail: the hilt of a dress sword resting against her shoulder, gold and silver braid on the cuffs
+    bg: the bridge of a sleek navy-and-silver supercarrier, a battle fleet on the horizon
+  FCU_mando_walsh_3:
+    g: man
+    age: 46
+    face: Japanese-American, light skin, black hair with a neat side part, angular face
+    expr: cool, precise, confident
+    detail: a pilot's helmet with a mirrored visor under the arm
+    bg: an airbase with sleek navy stealth fighters with chrome edges
+  FCU_mando_oyelaran_4:
+    g: man
+    age: 53
+    face: Nigerian-American, dark skin, trimmed grey beard, rectangular glasses
+    expr: analytical, methodical
+    detail: a tablet with supply-chain graphs (no readable text), a corporate ID badge clipped to the pocket
+    bg: an automated warehouse with drones carrying crates
+  FCU_mando_carver_5:
+    g: woman
+    age: 49
+    face: pale skin, dark auburn hair in a short bob, a small scar under the left eye
+    expr: blunt, hard
+    detail: ear defenders around the neck, a brass shell casing turned into a desk ornament in her hand
+    bg: a battery of long-barrelled self-propelled guns on a ridge, firing at dusk
+  FCU_min_inteligencia_6:
+    g: man
+    age: 55
+    face: tan skin, dark hair with grey temples, clean-shaven, heavy-lidded eyes
+    expr: polite, transactional, dangerous
+    detail: a dark navy overcoat over the suit, a black glove on one hand, a small silver earpiece
+    bg: a private security operations floor with screens of surveillance feeds (no readable text)
+
+  # --- ASC ------------------------------------------------------------------
+  ASC_min_rousseau_3:
+    g: man
+    age: 44
+    face: French, pale skin, curly brown hair, stubble, dark circles under the eyes
+    expr: tired, vigilant
+    detail: a headset with a single red light, a tool belt over the jacket
+    bg: a power-grid control hall with a huge glowing network map of Europe in red lines
+  ASC_min_solberg_4:
+    g: woman
+    age: 51
+    face: Norwegian, pale skin, straight silver-blonde hair to the shoulders, light eyes
+    expr: fair, stern, incorruptible
+    detail: a white data slate held flat like a ledger, a red pencil behind the ear
+    bg: a distribution centre where robots sort identical grey crates into perfect rows
+  ASC_min_varga_5:
+    g: man
+    age: 37
+    face: Hungarian, pale skin, unruly black hair, thin beard, intense dark eyes
+    expr: brilliant, distracted, obsessive
+    detail: thin glasses with a faint red projection on the lenses, sleeves pushed up, lines of light code reflected on his face
+    bg: a server cathedral with towers of black machines and red lights receding into the distance
+  ASC_gen_kraus_1:
+    g: woman
+    age: 60
+    face: German, pale skin, iron-grey hair in a tight bun, thin nose, piercing blue eyes
+    expr: cerebral, cold brilliance
+    detail: a red sash across the chest, a marshal's baton made of white ceramic with red bands
+    bg: a strategic planning room with a white floor-projected map of Europe and drone formations
+  ASC_gen_novak_2:
+    g: man
+    age: 48
+    face: Czech, pale skin, short fair hair, broad face, light stubble
+    expr: steady, practical
+    detail: a padded crew headset around the neck, grease on the fingers
+    bg: white robot tanks on many legs and tracks lined up in a factory yard
+  ASC_gen_fabre_3:
+    g: woman
+    age: 42
+    face: French, olive-pale skin, short black pixie cut, mischievous dark eyes
+    expr: sly, amused, keeping a secret
+    detail: a small white drone resting on her shoulder like a pet bird
+    bg: a forest at dusk with decoy drones and holographic fake vehicles
+  ASC_gen_mazur_4:
+    g: man
+    age: 56
+    face: Polish, ruddy skin, thick grey moustache, bushy eyebrows, frost on the stubble
+    expr: enduring, grim humour
+    detail: a white winter parka over the grey uniform, fur hat, frost on the shoulders
+    bg: a snowfield with white robot walkers advancing through a blizzard
+  ASC_mando_brandt_1:
+    g: woman
+    age: 57
+    face: Danish, pale skin, short white hair, strong jaw, pale grey eyes
+    expr: strict, demanding
+    detail: a drill instructor's whistle on a red lanyard, white gloves
+    bg: a parade ground with perfectly aligned ranks of identical white robots
+  ASC_mando_eklund_2:
+    g: man
+    age: 52
+    face: Swedish, pale weathered skin, blond-grey beard, blue eyes
+    expr: protective, patient
+    kind: navy
+    detail: a dark grey naval duffel coat, binoculars at the chest
+    bg: the grey Baltic sea with a convoy of crewless white cargo ships escorted by angular frigates
+  ASC_mando_weber_3:
+    g: man
+    age: 49
+    face: German, pale skin, neat brown hair, square glasses, careful eyes
+    expr: careful, responsible
+    detail: a white clipboard tablet with a checklist (no readable text), a pen in the flight-suit pocket
+    bg: a hangar with white drones on maintenance stands and red warning lights
+  ASC_mando_vries_4:
+    g: woman
+    age: 50
+    face: Dutch, pale skin, tall, ash-brown hair in a bob, light freckles
+    expr: organised, thoughtful
+    detail: a red folder under the arm, reading glasses on a cord
+    bg: a staff room with officers working at white consoles, an abstract organisation chart on the wall
+  ASC_mando_kessler_5:
+    g: man
+    age: 58
+    face: Austrian, pale skin, grey crew cut, heavy jaw, weathered face
+    expr: stubborn, earthy
+    detail: a white hard hat under the arm, concrete dust on the sleeves
+    bg: robots pouring concrete for bunkers and anti-tank walls in an Alpine valley
+  ASC_min_inteligencia_6:
+    g: man
+    age: 46
+    face: Swedish, pale skin, light blond hair shaved very short, pale blue eyes, no expression lines
+    expr: blank, observing, unsettling
+    detail: a thin red line of light at the edge of his glasses, a small camera lens pin on the lapel
+    bg: a wall of hundreds of small surveillance screens showing abstract silhouettes and data
+
+  # --- HSN ------------------------------------------------------------------
+  HSN_min_mehta_3:
+    g: man
+    age: 58
+    face: Indian, brown skin, white beard trimmed close, a navy turban, strong hands
+    expr: proud, craftsman's pride
+    detail: a rolled ship blueprint under the arm, sawdust and metal filings on the coat sleeves
+    bg: a giant dry dock with the half-built hull of a warship and welding sparks
+  HSN_min_xiao_4:
+    g: woman
+    age: 46
+    face: Chinese-Singaporean, light skin, black hair in a sleek low bun, jade earrings
+    expr: shrewd, diplomatic
+    detail: a jade-handled fan closed in one hand, a teal silk scarf
+    bg: the Strait of Malacca with a lighthouse and an endless line of ships
+  HSN_min_reyes_5:
+    g: woman
+    age: 39
+    face: Filipino, brown skin, wavy black hair to the shoulders, a pencil stuck in her hair
+    expr: curious, enthusiastic
+    detail: a brass navigation compass on a chain, ink on her fingers, rolled sea charts under the arm
+    bg: a chart room with old maps and holographic ocean currents
+  HSN_gen_santoso_3:
+    g: man
+    age: 47
+    face: Indonesian, brown skin, short black hair, a thin moustache, wiry build
+    expr: daring, focused
+    detail: a life vest over the marine tunic, sea spray on the face
+    bg: landing craft hitting a tropical beach under smoke
+  HSN_gen_walker_4:
+    g: man
+    age: 41
+    face: Māori, brown skin, a traditional tā moko tattoo on the chin, black hair tied back
+    expr: fierce, silent
+    detail: a commando knife on the chest harness, a dark green beret with a brass anchor badge
+    bg: a dark coastline at night with commandos climbing cliffs from small boats
+  HSN_adm_tupou_5:
+    g: man
+    age: 59
+    face: Tongan, brown skin, broad face, grey-streaked black hair, heavy shoulders
+    expr: calm mastery, a navigator's patience
+    detail: a band of woven Tongan ta'ovala matting worn as a sash over one shoulder of the naval coat
+    bg: the open Pacific with a battle fleet in formation under towering clouds
+  HSN_adm_tan_6:
+    g: woman
+    age: 48
+    face: Malaysian Chinese, light skin, black hair in a tight bun, sharp eyes
+    expr: sharp-eyed, alert
+    detail: large naval binoculars raised slightly in her hands, a radio headset around the neck
+    bg: the bridge of a destroyer, radar screens and the sea through the windows
+  HSN_mando_santos_1:
+    g: man
+    age: 56
+    face: Filipino, brown skin, grey-black hair combed back, round face, small moustache
+    expr: orderly, competent
+    detail: a teal folder of orders, a brass pen
+    bg: a harbour command post with officers at desks
+  HSN_mando_takeda_2:
+    g: woman
+    age: 51
+    face: Japanese, light skin, short black hair with a grey streak, narrow eyes
+    expr: predatory, patient
+    detail: a dark teal submariner's sweater under the open coat
+    bg: a submarine pen with a black submarine surfacing at dusk
+  HSN_mando_wibowo_3:
+    g: man
+    age: 45
+    face: Javanese Indonesian, brown skin, neat black hair, round glasses
+    expr: careful, kind
+    detail: a pilot's checklist tablet, a brass compass-rose badge
+    bg: a seaplane base with teal flying boats on a lagoon
+  HSN_mando_taufa_4:
+    g: woman
+    age: 47
+    face: Tongan, brown skin, thick black curly hair in a bun, warm eyes
+    expr: practical, warm
+    detail: a flower behind the ear, a clipboard of cargo manifests
+    bg: container cranes loading military supplies onto ships
+  HSN_mando_wei_lun_5:
+    g: man
+    age: 60
+    face: Taiwanese, light skin, grey hair cut short, thick black-rimmed glasses
+    expr: stoic, reliable
+    detail: a thick binder of personnel files under the arm
+    bg: a training camp by the sea with recruits drilling on the beach
+  HSN_min_inteligencia_6:
+    g: woman
+    age: 57
+    face: Japanese, light skin, silver hair in a loose knot, laugh lines, sharp eyes
+    expr: friendly on the surface, knowing
+    kind: civil
+    detail: a dock worker's teal jacket over a silk blouse, a cup of tea in her hand, a small brass whistle on a chain
+    bg: a night harbour market with lanterns, fishermen and smugglers
+
+  # --- NAS ------------------------------------------------------------------
+  NAS_min_condori_3:
+    g: man
+    age: 54
+    face: Aymara, deep brown skin, wide face, black hair with grey, wind-burned cheeks
+    expr: steady, proud
+    detail: a knotted quipu of coloured cords hanging from the belt, a walking staff with a gold sun tip
+    bg: a stone Inca road with a suspension bridge of woven grass over a canyon
+  NAS_min_apaza_4:
+    g: woman
+    age: 49
+    face: Aymara, brown skin, two long black braids, a small bowler hat
+    expr: shrewd, careful
+    detail: rings of gold on her fingers, a ledger bound in woven cloth held against the chest
+    bg: a treasury vault with gold sun discs and stacked silver bars
+  NAS_min_quispe_5:
+    g: man
+    age: 66
+    face: Quechua, brown skin deeply lined, long white hair tied back, gentle eyes
+    expr: serene, wise
+    detail: a brass astrolabe-like instrument with Andean star symbols in his hands
+    bg: an observatory on a mountain top at twilight with the Milky Way rising
+  NAS_gen_soto_3:
+    g: man
+    age: 45
+    face: Quechua mestizo, brown skin, strong nose, short black hair, a scar on the cheek
+    expr: fierce, eager
+    detail: a gold condor-head buckle on the cross belt
+    bg: Andean troops charging down a mountain slope under banners
+  NAS_gen_quispe_4:
+    g: woman
+    age: 40
+    face: Quechua, brown skin, black hair in a single braid under a woven chullo cap, steady eyes
+    expr: determined, patient
+    detail: jungle camouflage cape over the tunic, leaves in the cap
+    bg: the edge of the Amazon cloud forest with river mist
+  NAS_mando_quispe_1:
+    g: man
+    age: 58
+    face: Quechua, brown skin, grey-black hair, square face, broad nose
+    expr: grave, protective
+    detail: a heavy woven poncho in tocapu pattern over the tunic, a gold sun on the chest
+    bg: layered stone fortresses on mountain passes
+  NAS_mando_mamani_2:
+    g: woman
+    age: 52
+    face: Aymara, brown skin, grey-streaked black braids, round face
+    expr: watchful, motherly sternness
+    kind: navy
+    detail: binoculars, a woven scarf blowing in the wind
+    bg: Lake Titicaca with reed-prowed patrol boats and the Pacific fleet's grey ships beyond
+  NAS_mando_condori_3:
+    g: man
+    age: 44
+    face: Quechua, brown skin, lean face, short black hair, sharp dark eyes
+    expr: keen, hawk-like
+    kind: air
+    detail: a flight helmet painted with a condor feather pattern under the arm
+    bg: a high mountain airfield with blue ground-attack aircraft and a condor flying overhead
+  NAS_mando_huaman_4:
+    g: woman
+    age: 43
+    face: Quechua, brown skin, short black hair, high cheekbones, athletic
+    expr: confident, tough
+    detail: a gold armband of an elite unit, a sling of an infantry rifle on the shoulder
+    bg: elite mountain troops on a ridge with ropes and woven banners
+  NAS_mando_yupanqui_5:
+    g: man
+    age: 61
+    face: Quechua, brown weathered skin, white hair cut short, big hands
+    expr: patient, stubborn
+    detail: a stone mason's chisel tucked into the belt, stone dust on the sleeves
+    bg: engineers fitting huge stone blocks into a modern fortress wall
+  NAS_min_inteligencia_6:
+    g: man
+    age: 38
+    face: Quechua, brown skin, lean runner's face, long black hair tied back, a woven headband
+    expr: alert, quick
+    kind: civil
+    detail: a relay runner's woven bag across the chest, a conch shell trumpet hanging from the strap
+    bg: a mountain trail with a stone relay hut and runners in the distance
+
+  # --- SHD ------------------------------------------------------------------
+  SHD_min_na_3:
+    g: woman
+    age: 53
+    face: light skin, short black hair with grey streaks, round face, square glasses
+    expr: practical, proud
+    detail: a rolled canal blueprint, a white hard hat under the arm
+    bg: the Grand Canal locks with barges and massive lock gates
+  SHD_min_wei_4:
+    g: man
+    age: 47
+    face: light skin, short black hair, warm open face, rolled-up sleeves
+    expr: earnest, approachable
+    detail: a simple grey tunic, a small red ribbon pin, a microphone held low
+    bg: a crowded public square with people listening under red banners (no letters)
+  SHD_min_mei_5:
+    g: woman
+    age: 44
+    face: light skin, long black hair tied in a low ponytail, thin glasses
+    expr: thoughtful, absorbed
+    detail: a slim tablet showing water flow diagrams (no readable text)
+    bg: a hydraulic laboratory with scale models of river basins and flowing water
+  SHD_gen_qiang_2:
+    g: man
+    age: 51
+    face: light skin, short black hair, weathered square face, deep frown lines
+    expr: firm, earnest
+    detail: a soldier's canvas map case on a strap across the chest, dried mud on the sleeves
+    bg: infantry columns marching along a canal embankment
+  SHD_gen_lihua_3:
+    g: woman
+    age: 46
+    face: light skin, black hair cut short, strong features, sun creases
+    expr: focused, practical
+    detail: a field engineer's yellow helmet held in the hand
+    bg: pontoon bridges laid across a wide river by engineers
+  SHD_gen_jun_4:
+    g: man
+    age: 54
+    face: light skin, black hair with grey, lean weathered face from mountain sun
+    expr: tough, quiet
+    detail: a quilted mountain jacket over the uniform
+    bg: steep misty karst mountains with troops on narrow paths
+  SHD_mando_jian_1:
+    g: man
+    age: 60
+    face: light skin, grey hair, heavy brows, broad face
+    expr: unyielding, grave
+    detail: many ribbon bars, a jade-handled ceremonial sword held upright with the hilt at shoulder height
+    bg: a dam wall turned into a fortress with gun emplacements
+  SHD_mando_mei_2:
+    g: woman
+    age: 50
+    face: light skin, black hair in a neat bun, high cheekbones
+    expr: calm, protective
+    kind: navy
+    detail: binoculars, a grey naval scarf
+    bg: the Yangtze estuary with convoys of river barges escorted by grey warships
+  SHD_mando_hao_3:
+    g: man
+    age: 45
+    face: light skin, short black hair, sharp jaw, confident eyes
+    expr: confident, proud
+    kind: air
+    detail: a flight helmet with a jade stripe under the arm
+    bg: an air base with jet fighters taking off over mist
+  SHD_mando_lei_4:
+    g: man
+    age: 57
+    face: light skin, shaved head, heavy jaw, a few powder burns on the hands
+    expr: blunt, hard
+    detail: ear defenders around the neck
+    bg: rail guns on tracks along a canal firing into the distance
+  SHD_mando_ying_5:
+    g: woman
+    age: 49
+    face: light skin, black hair in a short bob, thin face, observant eyes
+    expr: intelligent, reserved
+    detail: a slim folder of staff plans, a pen in the hand
+    bg: a staff room with officers at green screens and a big map of China
+  SHD_min_inteligencia_6:
+    g: woman
+    age: 58
+    face: light skin, grey hair cut very short, thin lips, small eyes behind thin glasses
+    expr: patient, unforgiving
+    kind: civil
+    detail: a thick paper census ledger and a digital tablet, both held against her chest
+    bg: an endless archive of filing shelves and screens with rows of faces (blurred, no text)
+
+  # --- APF ------------------------------------------------------------------
+  APF_min_adeyemi_1:
+    g: woman
+    age: 56
+    face: Nigerian (Yoruba), dark skin, grey hair in a tall gele headwrap in ochre and gold, gold earrings
+    expr: commanding, warm
+    detail: a carved wooden speaker's staff held upright beside her
+    bg: a round council chamber with tiered seats and delegates
+  APF_min_otieno_2:
+    g: man
+    age: 50
+    face: Kenyan (Luo), dark skin, short grey hair, rectangular glasses, broad smile
+    expr: energetic, optimistic
+    detail: a high-visibility vest over the jacket, a rolled railway map
+    bg: a high-speed railway corridor under construction across the savanna
+  APF_min_diop_3:
+    g: woman
+    age: 59
+    face: Senegalese, deep dark skin, headwrap in green and gold, laugh lines
+    expr: kind, determined
+    detail: a sheaf of millet held in one arm, soil on the hands
+    bg: irrigated green fields and grain silos at harvest time
+  APF_min_moyo_4:
+    g: man
+    age: 45
+    face: Zimbabwean, dark skin, shaved head, short beard, strong neck
+    expr: rousing, fiery
+    kind: army
+    detail: a red beret, a megaphone hanging from the shoulder
+    bg: a village square with volunteers drilling with rifles
+  APF_min_mensah_5:
+    g: woman
+    age: 62
+    face: Ghanaian (Akan), dark skin, grey cropped hair, round gold glasses
+    expr: wise, patient, amused
+    detail: a stack of books with woven covers in her arms
+    bg: a modern university library with tall shelves and students
+  APF_gen_asante_3:
+    g: man
+    age: 48
+    face: Ghanaian, dark skin, short black hair, scar along the jaw, lean
+    expr: alert, cunning
+    detail: jungle camouflage cape over the tunic, a machete handle strapped high on the chest harness
+    bg: the Congo rainforest with troops moving through mist
+  APF_gen_dlamini_4:
+    g: woman
+    age: 52
+    face: Swazi, dark skin, black hair in tight braids, high cheekbones
+    expr: steady, unbending
+    detail: a heavy greatcoat, field glasses
+    bg: trenches and bunkers in red earth hills
+  APF_mando_asante_1:
+    g: man
+    age: 63
+    face: Ghanaian, dark skin, white beard, deep lines, heavy eyelids
+    expr: grave, fatherly
+    detail: many ribbon bars and a gold star, both hands resting on the carved lion head of a tall walking staff at chest height
+    bg: a fortified ridge above a river valley
+  APF_mando_dlamini_2:
+    g: woman
+    age: 55
+    face: South African (Zulu), dark skin, grey-black hair cropped short, wide nose, strong jaw
+    expr: calm, protective
+    kind: navy
+    detail: binoculars, beaded collar under the uniform
+    bg: Durban harbour with a convoy of cargo ships escorted by green warships
+  APF_mando_bekele_3:
+    g: man
+    age: 47
+    face: Ethiopian, brown skin, slim face, short curly hair, thin moustache
+    expr: proud, sharp
+    kind: air
+    detail: a flight helmet under the arm
+    bg: ground-attack aircraft taking off from a red dirt airstrip
+  APF_mando_okafor_4:
+    g: man
+    age: 54
+    face: Nigerian (Igbo), dark skin, round face, grey stubble
+    expr: practical, cheerful
+    detail: an engineer's hard hat under the arm, a pencil behind the ear
+    bg: concrete bunker lines being built along a river
+  APF_mando_ndiaye_5:
+    g: woman
+    age: 51
+    face: Senegalese, very dark skin, short natural hair, small gold nose ring
+    expr: organised, firm
+    detail: a tablet with rosters of reserve units (no readable text)
+    bg: a recruitment depot with trucks and new recruits lining up
+  APF_min_inteligencia_6:
+    g: woman
+    age: 44
+    face: Ghanaian-British, dark brown skin, short locs, gold hoop earrings
+    expr: friendly, knowing
+    kind: civil
+    detail: three phones in a woven bag on the shoulder, a kente stole
+    bg: an airport terminal crowded with travellers from every continent
+
+  # --- NRE ------------------------------------------------------------------
+  NRE_min_dima_1:
+    g: man
+    age: 58
+    face: Romanian, olive skin, grey hair combed back, strong Roman nose
+    expr: dignified, ambitious
+    detail: a folded white toga sash with a purple border, an ivory consular staff
+    bg: the Senate house with marble benches and senators in crimson
+  NRE_min_serrano_2:
+    g: woman
+    age: 47
+    face: Italian, olive skin, dark hair in a braided crown, dark eyes
+    expr: careful, generous
+    detail: a sheaf of golden wheat held in the arm, a gold fibula
+    bg: grain ships unloading at Ostia with granaries
+  NRE_min_rusu_3:
+    g: man
+    age: 52
+    face: Romanian, olive skin, short brown hair, square face, sun creases
+    expr: practical, proud
+    detail: a surveyor's brass instrument in one hand
+    bg: a new Roman road of stone and steel cutting through hills with milestones
+  NRE_min_demir_4:
+    g: woman
+    age: 42
+    face: Turkish, olive skin, dark wavy hair to the shoulders, strong brows
+    expr: passionate, loyal
+    kind: army
+    detail: a tribune's crimson sash, a gold legion badge
+    bg: legionaries cheering in a camp with standards
+  NRE_min_stamate_5:
+    g: man
+    age: 67
+    face: Romanian, pale olive skin, long grey beard, bald crown, kind eyes
+    expr: serene, stoic
+    detail: a worn leather-bound book of Marcus Aurelius in one hand
+    bg: a quiet colonnade with a garden and a philosopher's bust
+  NRE_gen_yildiz_3:
+    g: man
+    age: 49
+    face: Turkish, tanned skin, black hair with grey, thick moustache, sun creases
+    expr: cunning, bold
+    detail: a desert scarf wrapped around the neck, goggles on the forehead
+    bg: North African desert with armoured legion columns and a ruined Roman arch
+  NRE_gen_popa_4:
+    g: man
+    age: 55
+    face: Romanian, pale skin, receding grey hair, round face, small glasses
+    expr: methodical, calm
+    detail: a supply ledger and a stylus-like pen
+    bg: a legion supply camp with mules and trucks side by side
+  NRE_mando_rinaldi_1:
+    g: man
+    age: 62
+    face: Italian, olive skin, white close-cropped hair, hard features, a deep scar on the cheek
+    expr: iron discipline
+    detail: a vine staff (vitis) of a centurion held across the body, many phalerae medals on the chest plates
+    bg: a legion in formation with eagle standards on the Campus Martius
+  NRE_mando_stavrou_2:
+    g: woman
+    age: 50
+    face: Greek, olive skin, black hair with silver streaks, aquiline nose
+    expr: bold, decisive
+    detail: a gold trireme-prow badge, sea wind in the hair
+    bg: the Mediterranean with a war fleet with bronze rams on the prows
+  NRE_mando_demir_3:
+    g: man
+    age: 45
+    face: Turkish, olive skin, short black hair, trimmed beard, sharp eyes
+    expr: confident, proud
+    kind: air
+    detail: a flight helmet with a gold eagle under the arm
+    bg: fighters flying over the Colosseum
+  NRE_mando_moreau_4:
+    g: man
+    age: 48
+    face: French, pale skin, brown hair cut short, a broken nose
+    expr: tough, proud
+    detail: a crimson plume of a parade helmet held at the side
+    bg: praetorian guards in segmented armour on palace steps
+  NRE_mando_petrovic_5:
+    g: man
+    age: 53
+    face: Serbian, pale skin, dark hair with grey, heavy brows, strong chin
+    expr: dutiful, firm
+    detail: a roster tablet, a crimson cloak
+    bg: recruits taking the oath before an eagle standard
+  NRE_min_inteligencia_6:
+    g: man
+    age: 51
+    face: Italian, olive skin, thin face, dark hair receding, small dark eyes
+    expr: courteous, sly
+    kind: civil
+    detail: a courier's leather satchel and a sealed letter with a wax eagle seal
+    bg: a dark corridor of the palace with half-open doors
+
+  # --- Satélites -------------------------------------------------------------
+  PTA_mando_jones_1:
+    g: man
+    age: 55
+    face: Welsh-Argentine, ruddy skin, red-grey beard, blue eyes
+    expr: bold, energetic
+  PTA_mando_catriel_2:
+    g: man
+    age: 50
+    face: Mapuche, brown skin, black hair with grey to the shoulders, a woven trarilonko headband
+    expr: patient, stubborn
+  YYG_mando_benitez_1:
+    g: woman
+    age: 46
+    face: Guaraní, brown skin, black hair tied back, high cheekbones
+    expr: quick, determined
+  YYG_mando_cabral_2:
+    g: man
+    age: 52
+    face: Guaraní-Paraguayan, brown skin, round face, grey stubble
+    expr: practical, calm
+  ZNG_mando_uribe_1:
+    g: man
+    age: 58
+    face: Colombian, light olive skin, grey hair, thick moustache
+    expr: devout, stern
+  ZNG_mando_mejia_2:
+    g: woman
+    age: 41
+    face: Colombian, brown skin, black curly hair tied up
+    expr: fierce, faithful
+  ZLL_mando_arvelo_1:
+    g: man
+    age: 57
+    face: Venezuelan llanero, tan skin, white moustache, a llanero hat held in the hand
+    expr: stubborn, proud
+  ZLL_mando_perez_2:
+    g: woman
+    age: 44
+    face: Venezuelan, brown skin, long dark hair in a braid
+    expr: tireless, firm
+  ZNR_mando_tremblay_1:
+    g: man
+    age: 54
+    face: French-Canadian, pale skin, grey beard, ice-blue eyes
+    expr: organised, cold
+  ZNR_mando_qillaq_2:
+    g: man
+    age: 48
+    face: Inuit, light brown skin, black hair cut short, wide face, weather-burned cheeks
+    expr: calm, resourceful
+  ZSE_mando_delgado_1:
+    g: woman
+    age: 51
+    face: Mexican-American, tan skin, black hair in a tight bun, small scar on the lip
+    expr: efficient, tough
+  ZSE_mando_thibodeaux_2:
+    g: man
+    age: 56
+    face: Cajun, pale ruddy skin, reddish-grey hair, thick neck
+    expr: loud, cheerful, dangerous
+  ZAF_mando_joseph_1:
+    g: man
+    age: 59
+    face: Haitian, dark skin, white close-cropped hair, a thin white moustache
+    expr: dignified, orderly
+  ZAF_mando_ortiz_2:
+    g: woman
+    age: 45
+    face: Dominican, brown skin, dark curly hair, gold earrings
+    expr: sharp, energetic
+  ZAS_mando_o_connell_1:
+    g: man
+    age: 53
+    face: Irish-Australian, freckled sun-tanned skin, sandy hair, squint lines
+    expr: laconic, competent
+  ZAS_mando_ngata_2:
+    g: woman
+    age: 47
+    face: Māori, brown skin, a traditional moko kauae chin tattoo, black hair tied back
+    expr: calm, strong
+  ZBC_mando_nowak_1:
+    g: woman
+    age: 55
+    face: Polish, pale skin, light brown hair in a braid around the head, blue eyes
+    expr: strict, earthy
+  ZBC_mando_virtanen_2:
+    g: man
+    age: 58
+    face: Finnish, pale skin, blond-white beard, heavy brows
+    expr: silent, stubborn
+  ZAL_mando_kelly_1:
+    g: woman
+    age: 49
+    face: Irish, pale freckled skin, red hair cut short, green eyes
+    expr: fiery, strict
+  ZAL_mando_pritchard_2:
+    g: man
+    age: 61
+    face: Welsh, pale skin, grey hair, bushy eyebrows, pipe in the hand
+    expr: thoughtful, dry
+  ZKR_mando_ji_hoon_1:
+    g: man
+    age: 57
+    face: Korean, light skin, grey hair cut short, rectangular face
+    expr: grave, steady
+  ZKR_mando_soo_ah_2:
+    g: woman
+    age: 46
+    face: Korean, light skin, black hair in a short bob, sharp eyes
+    expr: precise, cool
+  ZST_mando_abenov_1:
+    g: man
+    age: 50
+    face: Kazakh, tan skin, wide cheekbones, thin black moustache
+    expr: bold, restless
+  ZST_mando_sadykova_2:
+    g: woman
+    age: 44
+    face: Kazakh, light tan skin, black hair in two braids, almond eyes
+    expr: practical, patient
+  ZET_mando_haile_1:
+    g: man
+    age: 60
+    face: Ethiopian, brown skin, white curly hair and beard, thin face
+    expr: dignified, patient
+  ZET_mando_tesfaye_2:
+    g: woman
+    age: 45
+    face: Eritrean, brown skin, black hair in fine braids, sharp features
+    expr: resolute, cautious
+  ZSA_mando_nkosi_1:
+    g: man
+    age: 56
+    face: Zulu, dark skin, shaved head, grey beard
+    expr: grave, unshakeable
+  ZSA_mando_wyk_2:
+    g: woman
+    age: 50
+    face: Afrikaner, pale sun-weathered skin, blonde-grey hair in a ponytail
+    expr: brisk, organised
+  ZHI_mando_albornoz_1:
+    g: man
+    age: 59
+    face: Spanish, olive skin, grey hair, sharp nose, deep-set eyes
+    expr: proud, bitter
+  ZHI_mando_carvalho_2:
+    g: woman
+    age: 43
+    face: Portuguese, olive skin, dark hair cut at the jaw, dark eyes
+    expr: fierce, loyal
+  ZDA_mando_radu_1:
+    g: man
+    age: 62
+    face: Romanian, pale skin, grey crew cut, heavy jaw, a scar through one eyebrow
+    expr: paranoid, hard
+  ZDA_mando_kovacs_2:
+    g: woman
+    age: 48
+    face: Hungarian, pale skin, brown hair in a tight bun, thin lips
+    expr: meticulous, cold
+  ZWE_mando_voronov_1:
+    g: man
+    age: 54
+    face: Russian, pale weathered skin, thick grey beard, a fur papakha hat
+    expr: brutal, charismatic
+  ZWE_mando_kozlova_2:
+    g: woman
+    age: 39
+    face: Russian, pale skin, dirty blonde hair cut short, cold grey eyes, a smudge of soot
+    expr: cold, hunting
+  ZWI_mando_rathore_1:
+    g: man
+    age: 55
+    face: Rajput, brown skin, a big curled moustache, a saffron turban
+    expr: proud, regal
+  ZWI_mando_nair_2:
+    g: woman
+    age: 42
+    face: Malayali, dark brown skin, black hair in a long braid, a small nose stud
+    expr: cunning, determined
+  ZWM_mando_al_hashimi_1:
+    g: man
+    age: 51
+    face: Arab, tan skin, black beard with grey, dark eyes lined with kohl
+    expr: fierce, aggressive
+  ZWM_mando_haddad_2:
+    g: woman
+    age: 40
+    face: Lebanese, olive skin, dark hair under a scarf, sharp eyes
+    expr: calm, dangerous
+  ZWB_mando_moraes_1:
+    g: man
+    age: 58
+    face: Brazilian caboclo, brown skin, grey stubble, a gold tooth
+    expr: menacing, stubborn
+  ZWB_mando_tapajos_2:
+    g: woman
+    age: 37
+    face: Amazonian Indigenous, brown skin, black hair with a straight fringe, red urucum paint lines on the cheeks
+    expr: fierce, silent
+  ZAN_mando_dalloway_1:
+    g: man
+    age: 63
+    face: American, pale weathered skin, white crew cut, a missing ear lobe
+    expr: harsh, drill-sergeant
+  ZAN_mando_obi_2:
+    g: woman
+    age: 44
+    face: Nigerian, dark skin, short natural hair, a scar on the forehead
+    expr: cunning, steady
+  ZSG_yara_tupinamba:
+    g: woman
+    age: 57
+    face: Amazonian Indigenous (Tupinambá), brown skin, long grey-black hair, black genipap paint lines on the face
+    expr: serene, unbending, motherly
+    detail: a carved wooden staff topped with a seed pod, a ranger's old badge pinned on the robe
+    bg: a giant kapok tree in the rainforest, rangers in the shade behind her
