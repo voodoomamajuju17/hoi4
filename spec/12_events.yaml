@@ -10949,6 +10949,14 @@ namespaces:
       - name: {english: Carry on., spanish: Seguir.}
         effects:
         - {effect: run, value: ANARQUIA_sin_alianzas}
+        # 2026-10-07 ("no puede reforzar ni abastecer a sus tropas"): sin
+        # convoyes, las zonas separadas por mar no reciben suministro ni
+        # refuerzos. Arranca con 200 y recibe 50 por año.
+        - effect: if
+          when: {not_flag: ZAN_convoyes}
+          then:
+          - {effect: flag, value: ZAN_convoyes}
+          - {effect: equipment, type: convoy, amount: 200}
         # 2026-10-02 (pedido del usuario): cada año, 5 divisiones en cada una de
         # sus zonas (en la primera región de la zona que todavía controlen)
         - effect: if
@@ -10957,6 +10965,25 @@ namespaces:
           - {effect: clear_flag, value: ZAN_refuerzo_anual}
           - {effect: flag, value: ZAN_refuerzo_anual}
           - {effect: ensure_template, name: Leva Anarquica, regiments: [infantry, infantry, infantry, infantry]}
+          - {effect: equipment, type: convoy, amount: 50}
+          - {effect: add_manpower, value: 60000}
+          - {effect: equipment, type: infantry_equipment, amount: 3000}
+          # 2026-10-07: desde 2103, 6 divisiones por zona en vez de 5
+          - effect: if
+            when: {date_after: 2102.12.31}
+            then:
+            - effect: create_units
+              template: Leva Anarquica
+              count: 1
+              experience: 0.2
+              zones:
+              - [[Alaska]]
+              - [[Yukon, Yukon Territory], [N.W Territories, Northwest Territories], [Nunavut, Keewatin]]
+              - [[Kansas], [Nebraska], [Iowa], [Minnesota], [South Dakota], [North Dakota]]
+              - [[Chihuahua], [Sonora], [Sinaloa], [Baja California]]
+              - [[Guatemala], [Nicaragua]]
+              - [[Senegal, Dakar], [French Sudan, Mali], [Guinea, French Guinea], [Liberia], [Ivory Coast, "Cote d'Ivoire"], [Mauritania], [Sierra Leone]]
+              - [[Kiev, Kyiv]]
           - effect: create_units
             template: Leva Anarquica
             count: 5

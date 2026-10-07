@@ -3057,9 +3057,12 @@ countries:
     - id: ZAN_la_frontera_armada
       name: {english: The Armed Frontier, spanish: La Frontera Armada}
       desc:
-        english: Every ranch has a rifle rack and every town a militia roll. Whoever comes for the frontier fights the whole frontier.
-        spanish: Cada rancho tiene un armero y cada pueblo su lista de milicianos. El que viene por la frontera pelea contra toda la frontera.
-      modifiers: {army_defence_factor: 0.235, army_org_factor: 0.092, army_attack_factor: 0.045, recruitable_population_factor: 0.52, stability_factor: 0.1, war_support_factor: 0.1, '?attrition': -0.1}
+        english: Every ranch has a rifle rack and every town a militia roll. Whoever comes for the frontier fights the whole frontier. Each zone lives off its own land and needs no supply line.
+        spanish: Cada rancho tiene un armero y cada pueblo su lista de milicianos. El que viene por la frontera pelea contra toda la frontera. Cada zona vive de su propia tierra y no necesita línea de suministro.
+      # 2026-10-07 ("no puede reforzar ni abastecer a sus tropas"): sus siete
+      # zonas no están conectadas a la capital. Cada zona vive de lo que tiene:
+      # consumen menos, aguantan sin suministro y sacan comida del lugar.
+      modifiers: {army_defence_factor: 0.235, army_org_factor: 0.092, army_attack_factor: 0.045, recruitable_population_factor: 0.52, stability_factor: 0.1, war_support_factor: 0.1, '?attrition': -0.3, '?supply_consumption_factor': -0.4, '?out_of_supply_factor': -0.5, '?local_supplies': 1.0}
       src: user_request
     focus_ideas:
     - id: ZAN_la_gran_ofensiva

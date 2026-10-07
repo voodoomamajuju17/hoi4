@@ -1012,3 +1012,10 @@ llega a 100 al toque y la tensión nunca sube".
   (antes 48%), organización 18% (antes 15%); culminación: ataque 33% (antes
   25%). El tiempo de justificación enemiga del Amazonas no se toca (no es %).
   Las Tierras Sin Ley no tienen focos por fecha: sin cambios.
+- **Tierras Sin Ley: suministro y refuerzos** (2026-10-07, "no puede reforzar
+  ni abastecer a sus tropas"). Sus siete zonas no se conectan con la capital.
+  La Frontera Armada ahora suma: -40% consumo de suministro, -30% desgaste,
+  -50% de penalización por estar sin suministro y suministro local (+1). Arranca
+  con 200 convoyes (para mandar suministro y refuerzos por mar) y cada año
+  recibe 50 más, 60.000 de personal y 3.000 fusiles. Desde 2103, 6 divisiones
+  nuevas por zona por año (antes 5).
