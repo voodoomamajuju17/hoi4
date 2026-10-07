@@ -159,3 +159,112 @@ research_backgrounds:
     - {id: investigacion_aerea, sprite: GFX_air_techtree_bg, where: "rama aérea", art: "a hangar of 2100 scramjet fighters and drone swarms on an airbase at dawn"}
     - {id: investigacion_industria, sprite: GFX_industry_techtree_bg, where: "rama de industria y construcción", art: "an automated 2100 megafactory with robotic arms, fusion reactors and synthetic fuel towers"}
     - {id: investigacion_electronica, sprite: GFX_engineering_techtree_bg, where: "rama de electrónica e ingeniería", art: "a 2100 quantum computing lab with engineers in front of holographic circuit boards"}
+
+# -----------------------------------------------------------------------------
+# Frases de la pantalla de carga (2026-10-07, pedido del usuario: "en la
+# pantalla de carga aparecen estas frases, ¿las podemos cambiar?"). Reemplazan
+# las citas del juego (Patton, Churchill...) por voces de 2100. El generador
+# busca las claves de las citas en el juego instalado y las pisa todas,
+# repitiendo esta lista en orden.
+# -----------------------------------------------------------------------------
+loading_quotes:
+  src: user_request
+  # autor en inglés cuando cambia
+  authors_en:
+    Emperador Aurelio IV: Emperor Aurelio IV
+    El Consejo de Asignación: The Allocation Council
+    Presidenta Valeria Castellane: President Valeria Castellane
+    Sapa Inti Amaru Quispe II: Sapa Inti Amaru Quispe II
+    Imperator Lucius Varro: Imperator Lucius Varro
+    Legado Flavius Arbogast: Legate Flavius Arbogast
+    Legada Irina Vasilescu: Legate Irina Vasilescu
+    Atamán Oleksandr Grigorenko: Ataman Oleksandr Grigorenko
+    Coronel Tiago Barbosa: Colonel Tiago Barbosa
+    Los Señores de la Guerra: The Warlords
+    Crónicas del Gran Desarme: Chronicles of the Great Disarmament
+    Manual del Soldado de 2100: Soldier's Handbook, 2100
+    Proverbio de la Frontera: Frontier proverb
+    Proverbio de los puertos: Harbour proverb
+    Proverbio de las anarquías: Proverb of the anarchies
+  # 2026-10-07: también fragmentos, curiosidades y citas del "Archivo del
+  # Gran Desarme" (los ocho documentos de cada meganación).
+  quotes:
+  - {author: Emperador Aurelio IV, es: "El bosque no pide permiso para crecer. Nosotros tampoco.", en: "The forest does not ask permission to grow. Neither do we."}
+  - {author: Emperador Aurelio IV, es: "Cada árbol que plantamos es un soldado que nunca deserta.", en: "Every tree we plant is a soldier that never deserts."}
+  - {author: Anahí Quiroga, es: "El Monte no se conquista. Se pide prestado, y se devuelve con intereses.", en: "The Forest is not conquered. It is borrowed, and repaid with interest."}
+  - {author: El Consejo de Asignación, es: "Ningún error humano fue registrado este año. Ningún humano fue consultado.", en: "No human error was recorded this year. No human was consulted."}
+  - {author: PLAN-41, es: "La abundancia es una ecuación resuelta. La guerra es un redondeo.", en: "Abundance is a solved equation. War is a rounding error."}
+  - {author: El Consejo de Asignación, es: "Una fábrica que espera a un operario ya llegó tarde.", en: "A factory that waits for a worker is already late."}
+  - {author: Presidenta Valeria Castellane, es: "La libertad tiene precio. Por suerte, nosotros fijamos los precios.", en: "Freedom has a price. Fortunately, we set the prices."}
+  - {author: Marcus Rourke, es: "No hacemos la guerra. Facturamos la paz por adelantado.", en: "We do not wage war. We invoice peace in advance."}
+  - {author: Presidenta Valeria Castellane, es: "Un contrato bien escrito vale más que diez divisiones.", en: "A well-written contract is worth ten divisions."}
+  - {author: Kofi Aldana, es: "El mar no tiene dueño. Tiene peaje.", en: "The sea has no owner. It has a toll."}
+  - {author: Inés Tavake, es: "Quien controla los estrechos no necesita controlar las capitales.", en: "Whoever holds the straits does not need to hold the capitals."}
+  - {author: Kofi Aldana, es: "Todo barco que pasa paga, en carga o en silencio.", en: "Every ship that passes pays, in cargo or in silence."}
+  - {author: Sapa Inti Amaru Quispe II, es: "El sol sale para todos. Pero amanece primero en los Andes.", en: "The sun rises for everyone. But it dawns first in the Andes."}
+  - {author: Sapa Inti Amaru Quispe II, es: "Los cóndores no pelean en el valle. Esperan a que el valle suba.", en: "Condors do not fight in the valley. They wait for the valley to climb."}
+  - {author: Lin Wenzhao, es: "El río no discute con la piedra. La rodea, y un día la piedra ya no está.", en: "The river does not argue with the stone. It goes around it, and one day the stone is gone."}
+  - {author: Lin Wenzhao, es: "La armonía no es la ausencia de conflicto. Es el conflicto bien administrado.", en: "Harmony is not the absence of conflict. It is conflict well managed."}
+  - {author: Zhou Mingyuan, es: "Las compuertas se abren una sola vez. Elegí bien hacia dónde.", en: "The floodgates open only once. Choose well where they point."}
+  - {author: Amara Nwosu-Keïta, es: "Una aldea sola es una presa. Mil aldeas juntas son un continente.", en: "One village alone is prey. A thousand villages together are a continent."}
+  - {author: Kwame Diallo, es: "Nos dejaron los mapas viejos. Nosotros dibujamos rutas nuevas.", en: "They left us the old maps. We draw new roads."}
+  - {author: Amara Nwosu-Keïta, es: "El consejo habla despacio, pero cuando decide, decide para siempre.", en: "The council speaks slowly, but when it decides, it decides forever."}
+  - {author: Imperator Lucius Varro, es: "Roma no cayó. Se tomó dos mil años de descanso.", en: "Rome did not fall. It took a two-thousand-year rest."}
+  - {author: Legado Flavius Arbogast, es: "La legión no cuenta enemigos. Cuenta pasos hasta la próxima frontera.", en: "The legion does not count enemies. It counts steps to the next frontier."}
+  - {author: Legada Irina Vasilescu, es: "Toda provincia empieza como una conquista y termina como una costumbre.", en: "Every province begins as a conquest and ends as a habit."}
+  - {author: Atamán Oleksandr Grigorenko, es: "Nadie se lleva la estepa. La estepa se lleva a todos.", en: "Nobody takes the steppe. The steppe takes everyone."}
+  - {author: Rani Devika Rathore, es: "Mil reyes no hacen un imperio. Pero mil reyes no se rinden juntos.", en: "A thousand kings do not make an empire. But a thousand kings do not surrender together."}
+  - {author: Emir Khalid al-Rashid, es: "El petróleo se acabó. La arena no.", en: "The oil ran out. The sand did not."}
+  - {author: Coronel Tiago Barbosa, es: "En la selva no hay frentes. Hay árboles, y detrás de cada árbol, uno de los nuestros.", en: "In the jungle there are no fronts. There are trees, and behind every tree, one of ours."}
+  - {author: Los Señores de la Guerra, es: "La ley llegó hasta acá una vez. Todavía estamos buscando su cuerpo.", en: "The law came out here once. We are still looking for the body."}
+  - {author: Crónicas del Gran Desarme, es: "Los Estados no cayeron en una guerra. Se deshicieron, porque dejaron de poder alimentar a su gente.", en: "The states did not fall in a war. They came apart, because they could no longer feed their people."}
+  - {author: Crónicas del Gran Desarme, es: "En 2100 la pregunta ya no es quién gobierna, sino de dónde saca el derecho a mandar.", en: "In 2100 the question is no longer who governs, but where the right to rule comes from."}
+  - {author: Crónicas del Gran Desarme, es: "Ocho potencias, una sola certeza cada una, y ninguna dispuesta a compartirla.", en: "Eight powers, one certainty each, and none willing to share it."}
+  - {author: Manual del Soldado de 2100, es: "El dron ve primero. El soldado decide. El que dude, pierde las dos cosas.", en: "The drone sees first. The soldier decides. Whoever hesitates loses both."}
+  - {author: Manual del Soldado de 2100, es: "Un ejército sin suministro es una idea con botas.", en: "An army without supply is an idea in boots."}
+  - {author: Proverbio de la Frontera, es: "Un mapa dice dónde termina un país. El hambre dice dónde empieza la guerra.", en: "A map tells you where a country ends. Hunger tells you where the war begins."}
+  - {author: Proverbio de los puertos, es: "La paz es el tiempo que tarda en cargarse un barco.", en: "Peace is the time it takes to load a ship."}
+  - {author: Proverbio de las anarquías, es: "Las potencias tienen planes. Nosotros tenemos tiempo.", en: "The powers have plans. We have time."}
+  - {author: "Memorándum sobre los tres caudales, Wuhan, 2074", author_en: "Memorandum on the Three Currents, Wuhan, 2074", es: "El que decide quién riega gobierna, aunque lo llame mantenimiento.", en: "Whoever decides who gets water governs, even if he calls it maintenance."}
+  - {author: "Memorándum sobre los tres caudales, Wuhan, 2074", author_en: "Memorandum on the Three Currents, Wuhan, 2074", es: "Un exceso de Orden es una presa sin aliviadero. No es más segura. Solo es más alta.", en: "Too much Order is a dam without a spillway. It is not safer. It is only taller."}
+  - {author: "Memorándum sobre los tres caudales, Wuhan, 2074", author_en: "Memorandum on the Three Currents, Wuhan, 2074", es: "Toda represión es un cierre brusco. Por eso el Pueblo no se cierra: se regula, de a poco, antes de que haga falta.", en: "Every crackdown is a sudden shut-off. That is why the People are not shut off: they are regulated, little by little, before it is needed."}
+  - {author: "Memorándum sobre los tres caudales, Wuhan, 2074", author_en: "Memorandum on the Three Currents, Wuhan, 2074", es: "La gente no tiene que enterarse de que hubo una crecida. Tiene que enterarse de que no se inundó.", en: "People should not learn that there was a flood. They should learn that nothing drowned."}
+  - {author: "Memorándum sobre los tres caudales, Wuhan, 2074", author_en: "Memorandum on the Three Currents, Wuhan, 2074", es: "Una ley firmada la tiene que defender su autor, y un autor que defiende su ley ya no está mirando el río.", en: "A signed law must be defended by its author, and an author defending his law is no longer watching the river."}
+  - {author: "Nota a lápiz en la copia 9 del Memorándum", author_en: "Pencil note on copy 9 of the Memorandum", es: "¿Y quién decide cuándo hace falta?", en: "And who decides when it is needed?"}
+  - {author: "Instrucciones para plantar en un agujero, 2081", author_en: "Instructions for Planting in a Hole, 2081", es: "Elegí el agujero. No hace falta buscarlo: el siglo dejó de sobra.", en: "Choose the hole. No need to look for one: the century left plenty."}
+  - {author: "Instrucciones para plantar en un agujero, 2081", author_en: "Instructions for Planting in a Hole, 2081", es: "Apretá la tierra con los dedos, no con la pala. La pala no sabe cuánto es demasiado.", en: "Press the soil with your fingers, not the shovel. The shovel does not know how much is too much."}
+  - {author: "Instrucciones para plantar en un agujero, 2081", author_en: "Instructions for Planting in a Hole, 2081", es: "Regá una sola vez. Lo que necesita que lo rieguen todos los días no es de acá.", en: "Water it only once. Whatever needs watering every day does not belong here."}
+  - {author: "Instrucciones para plantar en un agujero, 2081", author_en: "Instructions for Planting in a Hole, 2081", es: "El monte no discute: espera, y un día crece encima de todos los que tenían razón.", en: "The forest does not argue: it waits, and one day it grows over everyone who was right."}
+  - {author: "Discurso de Ostia, Lucius Varro, 2084", author_en: "The Ostia Speech, Lucius Varro, 2084", es: "Con este escudo no empezó ningún imperio. Con este escudo se terminaron varios.", en: "No empire ever began on this shield. Several ended on it."}
+  - {author: "Discurso de Ostia, Lucius Varro, 2084", author_en: "The Ostia Speech, Lucius Varro, 2084", es: "Un ejército con hambre no es un ejército: es una multitud con armas.", en: "A hungry army is not an army: it is a crowd with weapons."}
+  - {author: "Discurso de Ostia, Lucius Varro, 2084", author_en: "The Ostia Speech, Lucius Varro, 2084", es: "No les prometo nada que no se pueda contar.", en: "I promise you nothing that cannot be counted."}
+  - {author: "Discurso de Ostia, Lucius Varro, 2084", author_en: "The Ostia Speech, Lucius Varro, 2084", es: "La piedra del molino no tiene que llegar a ningún lado. Tiene que dar vueltas con trigo en el medio.", en: "The millstone does not have to get anywhere. It has to turn with grain in between."}
+  - {author: "Discurso de Ostia, Lucius Varro, 2084", author_en: "The Ostia Speech, Lucius Varro, 2084", es: "Ustedes me hicieron. Ustedes me pueden deshacer.", en: "You made me. You can unmake me."}
+  - {author: "Archivo del Gran Desarme", author_en: "Archive of the Great Disarmament", es: "¿Sabías que...? La voz joven que pregunta «¿Y después?» en el Discurso de Ostia es la de Flavius Arbogast, entonces centurión de veintitrés años.", en: "Did you know? The young voice asking \"And then?\" in the Ostia Speech belongs to Flavius Arbogast, then a 23-year-old centurion."}
+  - {author: "La pared oeste, Tillabéri, 2086", author_en: "The West Wall, Tillabéri, 2086", es: "El pozo es de los que toman de él.", en: "The well belongs to those who drink from it."}
+  - {author: "La pared oeste, Tillabéri, 2086", author_en: "The West Wall, Tillabéri, 2086", es: "Nadie vende un balde.", en: "Nobody sells a bucket."}
+  - {author: "La pared oeste, Tillabéri, 2086", author_en: "The West Wall, Tillabéri, 2086", es: "El que venga de afuera a cambiarlo, primero viene un viernes y habla.", en: "Whoever comes from outside to change it first comes on a Friday and speaks."}
+  - {author: "La pared oeste, letra de un chico", author_en: "The West Wall, a child's handwriting", es: "los chicos tambien ablamos", en: "kids talk to"}
+  - {author: "La pared oeste, en fulfulde", author_en: "The West Wall, in Fulfulde", es: "Las vacas no saben cuándo es lunes.", en: "The cows do not know when it is Monday."}
+  - {author: "Archivo del Gran Desarme", author_en: "Archive of the Great Disarmament", es: "¿Sabías que...? El primer artículo de la Constitución Continental de la Federación sale de una pared de escuela en Tillabéri, escrita con tiza.", en: "Did you know? The first article of the Federation's Continental Constitution comes from a chalk-written school wall in Tillabéri."}
+  - {author: "Póliza del Hotu Matu'a, cláusula 1", author_en: "Hotu Matu'a Policy, clause 1", es: "El mar no es de nadie. Lo que pasa encima del mar está asegurado o no está asegurado.", en: "The sea belongs to no one. What happens on it is either insured or not insured."}
+  - {author: "Póliza del Hotu Matu'a, cláusula 7", author_en: "Hotu Matu'a Policy, clause 7", es: "Mientras la Cámara no la reconozca, ninguna guerra existe para esta póliza.", en: "Until the Chamber recognises it, no war exists for this policy."}
+  - {author: "Póliza del Hotu Matu'a, cláusula 9", author_en: "Hotu Matu'a Policy, clause 9", es: "La Nación no tiene enemigos; tiene asegurados.", en: "The Nation has no enemies; it has policyholders."}
+  - {author: "Inés Tavake, al pie de su póliza", author_en: "Inés Tavake, at the foot of her policy", es: "Cuarenta minutos para contestar. El Hotu Matu'a tardó siete en darse vuelta. Sacamos a los veintidós.", en: "Forty minutes to reply. The Hotu Matu'a took seven to capsize. We got all twenty-two out."}
+  - {author: "Póliza del Hotu Matu'a, cláusula 20", author_en: "Hotu Matu'a Policy, clause 20", es: "Contra lo que resuelva la Cámara no hay recurso, porque no hay nada por encima del mar.", en: "There is no appeal against the Chamber, because there is nothing above the sea."}
+  - {author: "Factores de riesgo, informe anual de la FCU, 2099", author_en: "Risk Factors, FCU annual report, 2099", es: "Nuestros ciudadanos son accionistas, y los accionistas pueden vender.", en: "Our citizens are shareholders, and shareholders can sell."}
+  - {author: "Factores de riesgo, informe anual de la FCU, 2099", author_en: "Risk Factors, FCU annual report, 2099", es: "Nuestras fuerzas armadas son un contrato. Un contrato puede no renovarse.", en: "Our armed forces are a contract. A contract may not be renewed."}
+  - {author: "Factores de riesgo, informe anual de la FCU, 2099", author_en: "Risk Factors, FCU annual report, 2099", es: "El mar sube, y no logramos ponerle precio.", en: "The sea is rising, and we cannot put a price on it."}
+  - {author: "Factores de riesgo, informe anual de la FCU, 2099", author_en: "Risk Factors, FCU annual report, 2099", es: "Tenemos un enemigo que no acepta precio.", en: "We have an enemy that does not accept a price."}
+  - {author: "Factores de riesgo, informe anual de la FCU, 2099", author_en: "Risk Factors, FCU annual report, 2099", es: "Hay un escándalo en curso. Casi siempre lo hay.", en: "There is a scandal under way. There almost always is."}
+  - {author: "Archivo del Gran Desarme", author_en: "Archive of the Great Disarmament", es: "¿Sabías que...? En 2098, un millón cien mil ciudadanos de la Unión vendieron su acción y se fueron a vivir a las Tierras Sin Ley.", en: "Did you know? In 2098, 1.1 million Union citizens sold their share and moved to the Lawless Lands."}
+  - {author: "Archivo del Gran Desarme", author_en: "Archive of the Great Disarmament", es: "¿Sabías que...? El 71% del agua potable de la Unión sale de catorce desalinizadoras de una sola empresa.", en: "Did you know? 71% of the Union's drinking water comes from fourteen desalination plants run by a single company."}
+  - {author: "Lectura de un quipu, Cusco, 2099", author_en: "Reading of a Quipu, Cusco, 2099", es: "En el código de los chasquis, una cuerda torcida al revés no cuenta cosas. Cuenta gente.", en: "In the chasqui code, a cord twisted backwards does not count things. It counts people."}
+  - {author: "Lectura de un quipu, Cusco, 2099", author_en: "Reading of a Quipu, Cusco, 2099", es: "Una cuerda sola al final del quipu es una pregunta. Si vuelve con el nudo, es sí. Si vuelve desatada, es no.", en: "A lone cord at the end of a quipu is a question. If it returns knotted, it is yes. If it returns untied, it is no."}
+  - {author: "El Sapa Inti, ante el quipu", author_en: "The Sapa Inti, before the quipu", es: "Mi padre contaba papas.", en: "My father counted potatoes."}
+  - {author: "Lectura de un quipu, Cusco, 2099", author_en: "Reading of a Quipu, Cusco, 2099", es: "Antisuyu, 96 kilómetros: la selva se come lo que se le pone encima.", en: "Antisuyu, 96 kilometres: the jungle eats whatever is laid on it."}
+  - {author: "Asignación individual, Plan 2100", author_en: "Individual Allocation, Plan 2100", es: "Ocupación: ninguna requerida.", en: "Occupation: none required."}
+  - {author: "Asignación individual, Plan 2100", author_en: "Individual Allocation, Plan 2100", es: "Para calcular el costo de un desacuerdo hacen falta desacuerdos, y la Comuna produce muy pocos.", en: "To measure the cost of a disagreement you need disagreements, and the Commune produces very few."}
+  - {author: "Asignación individual, Plan 2100", author_en: "Individual Allocation, Plan 2100", es: "El Plan le recomienda que siga votando según su criterio. El Plan no puede recomendarle cuál es su criterio.", en: "The Plan recommends that you keep voting by your own judgement. The Plan cannot recommend what your judgement is."}
+  - {author: "Anneliese Brandt, a lápiz", author_en: "Anneliese Brandt, in pencil", es: "Diez horas. Lo que tardo en leer una novela. Me cobran una novela por año.", en: "Ten hours. As long as it takes me to read a novel. They charge me a novel a year."}
+  - {author: "Anneliese Brandt, a lápiz", author_en: "Anneliese Brandt, in pencil", es: "Voté que no dos veces. En la segunda no estuve sola.", en: "I voted no twice. The second time I was not alone."}

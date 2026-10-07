@@ -37,6 +37,7 @@ from .emitters import forces as em_forces
 from .emitters import history as em_history
 from .emitters import faction_tech as em_faction_tech
 from .emitters import ideas as em_ideas
+from .emitters import loading_quotes as em_loading_quotes
 from .emitters import ideologies as em_ideologies
 from .emitters import intelligence as em_intelligence
 from .emitters import military as em_military
@@ -89,6 +90,7 @@ EMITTERS = [
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
     ("menu", em_menu.emit),
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
+    ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)
     ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)
     ("balance", em_balance.emit),       # ultimo: resume lo que quedo
 ]

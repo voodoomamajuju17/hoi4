@@ -1019,3 +1019,13 @@ llega a 100 al toque y la tensión nunca sube".
   con 200 convoyes (para mandar suministro y refuerzos por mar) y cada año
   recibe 50 más, 60.000 de personal y 3.000 fusiles. Desde 2103, 6 divisiones
   nuevas por zona por año (antes 5).
+- **Frases de la pantalla de carga** (2026-10-07, pedido del usuario). Las
+  citas del juego (Patton, Churchill...) se reemplazan por 79 textos de 2100
+  (11_scenario.yaml -> loading_quotes): frases de los líderes, fragmentos de
+  los ocho documentos del "Archivo del Gran Desarme" (Memorándum de los tres
+  caudales, Instrucciones para plantar en un agujero, Discurso de Ostia, La
+  pared oeste, Póliza del Hotu Matu'a, Factores de riesgo, Lectura de un
+  quipu, Asignación individual), curiosidades ("¿Sabías que...?") y
+  proverbios. El generador busca en el juego instalado las claves de las
+  citas (con "loading"/"quote" en el nombre y firma "- Autor") y las pisa
+  todas; el reporte dice cuántas.

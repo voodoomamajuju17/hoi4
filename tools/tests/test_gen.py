@@ -2771,6 +2771,15 @@ def test_faction_tech() -> None:
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
 
 
+def test_loading_quotes() -> None:
+    section("frases de la pantalla de carga (2026-10-07)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        es = "".join(p.read_text(encoding="utf-8-sig") for p in ctx.mod_root.glob("localisation/spanish/replace/*loading_quotes*"))
+        check("la cita de Patton se reemplaza por una de 2100", "LOADING_QUOTE_FIXTURE_1:0" in es and "Patton" not in es
+              and "\\n- " in es, es[:300])
+
+
 def test_vanilla_terms() -> None:
     section("textos del juego con las ideologias viejas (2026-10-03)")
     from tools.gen.emitters.vanilla_terms import _compile, rewrite
@@ -2826,6 +2835,7 @@ def main() -> int:
         test_unique_units,
         test_faction_tech,
         test_vanilla_terms,
+        test_loading_quotes,
         test_diplomacy,
         test_vanilla_validation,
     ):
