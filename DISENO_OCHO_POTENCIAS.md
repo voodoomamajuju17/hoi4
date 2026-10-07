@@ -1004,3 +1004,11 @@ llega a 100 al toque y la tensión nunca sube".
     cada flota (o qué equipo no encontró).
   - Íconos: el juego usa 146x54. La medida del juego manda; icon_size es solo
     el respaldo. Con el recorte del borde vacío el arma llena el ícono.
+- **Anarquías más fuertes desde 2103** (2026-10-07, pedido del usuario). En
+  Eurasia, Indostán, Emiratos y Amazonas, lo que suma cada foco desde 2103
+  (niveles 5 y 6 de la resistencia y la culminación) se reforzó: aumentos de
+  1-3% pasan a 4%, 4% a 6%, 5% a 7%, 6% a 8%, 7-8% a 10% y los mayores +4
+  puntos. Ej. Eurasia nivel 6: estabilidad 34% (antes 30%), reclutable 52%
+  (antes 48%), organización 18% (antes 15%); culminación: ataque 33% (antes
+  25%). El tiempo de justificación enemiga del Amazonas no se toca (no es %).
+  Las Tierras Sin Ley no tienen focos por fecha: sin cambios.
