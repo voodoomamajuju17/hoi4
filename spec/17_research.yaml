@@ -541,6 +541,11 @@ by_faction:
                     art: "a twin-engine medium combat aircraft (tactical bomber / heavy fighter), three-quarter view in flight"}
     carrier_plane: {match: ['^cv_small_plane_airframe_(\d+)$', '^cv_fighter_equipment_(\d+)$'],
                     art: "a carrier-borne aircraft or drone with folding wings and an arrestor hook"}
+  # Equipo con una sola imagen para todos los países (2026-10-07, captura del
+  # usuario con la locomotora vieja: "uno común para todos"). La imagen va en
+  # assets/COMUN/armas/<familia>.dds; los nombres siguen saliendo de `equipment`.
+  shared:
+    train: {match: ['^train_equipment_(\d+)$'], art: "a maglev freight train of the year 2100"}
   names:
     EFE:
       rifle:       {en: Thorn Rifle, es: Fusil Espina}

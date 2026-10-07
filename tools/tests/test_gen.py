@@ -2748,6 +2748,7 @@ def test_faction_tech() -> None:
         art.write_dds(root / "assets/EFE/tech/rifle.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         art.write_dds(root / "assets/EFE/tech/capital.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         art.write_dds(root / "assets/EFE/armas/EFE_gliptodonte.dds", 4, 4, [(10, 20, 30, 255)] * 16)
+        art.write_dds(root / "assets/COMUN/armas/train.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         for sub in ("armas", "tech"):      # una faccion sin imagenes: queda el icono del juego
             shutil.rmtree(root / "assets/SHD" / sub, ignore_errors=True)
         ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
@@ -2763,11 +2764,14 @@ def test_faction_tech() -> None:
         gfx = (mod / "interface/meganations_faction_tech.gfx").read_text()
         check("con imagen: icono propio del equipo y de la tecnologia para la faccion y sus satelites",
               'GFX_EFE_infantry_equipment_1_medium' in gfx and 'GFX_EFE_basic_ship_hull_heavy_medium' in gfx
-              and 'GFX_PTA_infantry_equipment_1_medium' in gfx and "GFX_SHD_" not in gfx, gfx[:400])
+              and 'GFX_PTA_infantry_equipment_1_medium' in gfx and "GFX_SHD_infantry_equipment_1_medium" not in gfx, gfx[:400])
         uu = [u for u in ctx.data.get("uu_art") or [] if u["id"] == "EFE_gliptodonte"]
         check("unidad unica: su imagen va a su equipo y a sus tecnologias, solo para el EFE",
               bool(uu) and all(f"GFX_EFE_{t}_medium" in gfx for t in ([uu[0]["equipment"]] if uu[0]["equipment"] else [])
                                + uu[0]["techs"]) and "EFE_gliptodonte_" in gfx, str(uu)[:300])
+        check("equipo comun: el tren usa la misma imagen en todos los paises, satelites y anarquias incluidos",
+              all(f"GFX_{t}_train_equipment_1_medium" in gfx for t in ("EFE", "SHD", "PTA", "ZAN"))
+              and "COMUN_train_" in gfx)
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
 
 

@@ -116,6 +116,21 @@ def emit(ctx: BuildContext) -> None:
             sprites.add("spriteType", Block([("name", Quoted(f"GFX_{uu['tag']}_{target}_medium")),
                                              ("texturefile", Quoted(rel))]))
             counts["sprites"] += 1
+    # Equipo común (by_faction.shared, 2026-10-07: el tren): una imagen,
+    # assets/COMUN/armas/<familia>.dds, para el equipo y sus tecnologías en
+    # todos los países.
+    shared = spec.get("shared") or {}
+    for fam, members_of in family_members(shared, equipment).items():
+        art = repo / "assets" / "COMUN" / "armas" / f"{fam}.dds"
+        if not art.exists():
+            continue
+        targets = [t for eq, _ in members_of for t in [eq] + free(eq)]
+        for target in dict.fromkeys(targets):
+            rel = _texture(ctx, art, "COMUN", fam, sizes.of(target), written)
+            for c in ctx.spec.countries:
+                sprites.add("spriteType", Block([("name", Quoted(f"GFX_{c.tag}_{target}_medium")),
+                                                 ("texturefile", Quoted(rel))]))
+                counts["sprites"] += 1
     if sprites.entries:
         ctx.write_script(GFX_FILE, Block([("spriteTypes", sprites)]), source=SOURCE)
     ctx.note(f"armas por faccion: {counts['nombres']} nombres de equipo y {counts['tecnologias']} de tecnologia "

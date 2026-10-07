@@ -57,6 +57,8 @@ KINDS = {
     # por cada facción"): mismo formato, cada uno en su propio archivo
     "unique_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
     "plane_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
+    # equipo con una sola imagen para todos (17_research -> by_faction.shared)
+    "shared_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -265,6 +267,15 @@ def catalog() -> list[dict]:
                     "Single object, three-quarter or side view, centred, fills most of the frame, transparent "
                     "background, no text, no letters, no numbers."),
             })
+    # Equipo común (2026-10-07: "hace falta el pedido para la imagen del tren,
+    # uno común para todos"): una imagen para todos los países.
+    for fam, f in (look.get("shared") or {}).items():
+        dest = REPO / "assets" / "COMUN" / "armas" / f"{fam}.dds"
+        items.append({
+            "type": "shared_icon", "tag": "COMUN", "id": f"arma_COMUN_{fam}", "dest": dest, "done": dest.exists(),
+            "description": _one_line((detail.get("shared") or {}).get(fam) or f.get("art", fam)),
+            "style": SHARED_STYLE,
+        })
     # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
     # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
     for u in _load("20_unique_units.yaml").get("units") or []:
@@ -371,7 +382,12 @@ def _portrait(ch: dict, look: dict, me: dict, traits: dict) -> str:
 
 
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
-SINGLE_FILE = {"unique_icon", "plane_icon"}
+SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
+
+SHARED_STYLE = (
+    "photorealistic 3D-rendered equipment icon matching the weapon icons of this Hearts of Iron IV mod: realistic "
+    "materials, weathering and reflections, crisp detail that still reads at 150x55 pixels, neutral design that "
+    "belongs to no faction (no national colours, no emblems), no text, no letters, no numbers, no watermark")
 
 UI_STYLE = ("game user-interface background texture, subtle and low contrast so text and buttons stay readable, "
             "no text, no letters, no logos, no watermark, no frame")
@@ -441,7 +457,7 @@ def pedidos() -> None:
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
 ("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
-             ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones")]
+             ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -565,7 +581,7 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
-        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon"):
+        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon"):
             img = _recortar(img)
         if kind["fit"] == "cover":
             scale = max(w / img.width, h / img.height)
