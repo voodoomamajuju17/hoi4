@@ -42,9 +42,6 @@ def emit(ctx: BuildContext) -> None:
         oob = (ctx.data.get("oob") or {}).get(c.tag)
         if oob:
             b.add("oob", Quoted(oob))
-        naval = (ctx.data.get("naval_oob") or {}).get(c.tag)
-        if naval:
-            b.add("set_naval_oob", Quoted(naval))
         air = (ctx.data.get("air_oob") or {}).get(c.tag)
         if air:
             b.add("set_air_oob", Quoted(air))
@@ -113,6 +110,15 @@ def emit(ctx: BuildContext) -> None:
                 else:
                     b.entries.extend(inner.entries)
 
+        # Flota: primero los diseños de sus barcos (tomados del juego), después
+        # la flota. 2026-10-08: sin diseño el juego armaba el casco pelado
+        # ("el acorazado orgullo de la flota esta vacio").
+        naval = (ctx.data.get("naval_oob") or {}).get(c.tag)
+        if naval:
+            for v in (ctx.data.get("naval_designs") or {}).get(c.tag, []):
+                b.add("create_equipment_variant", copy.deepcopy(v))
+            b.add("set_naval_oob", Quoted(naval))
+
         for item, amount in (ctx.data.get("stockpile") or {}).get(c.tag, []):
             eq = Block()
             eq.add("type", item)
@@ -160,6 +166,8 @@ def emit(ctx: BuildContext) -> None:
     used = {"set_autonomy": "04_diplomacy.yaml"} if _any_subjects(ctx) else {}
     if ctx.data.get("naval_oob"):
         used["set_naval_oob"] = "forces.py"
+    if any((ctx.data.get("naval_designs") or {}).values()):
+        used["create_equipment_variant"] = "forces.py"
     if ctx.data.get("air_oob"):
         used["set_air_oob"] = "forces.py"
     if faction_plan(ctx):

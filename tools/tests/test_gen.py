@@ -2440,16 +2440,30 @@ def test_forces() -> None:
         ctx = build(Path(tmp) / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=spec)
         mod = ctx.mod_root
         raw = (mod / "history/units/NRE_2100_naval.txt").read_text()
+        nre_h0 = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
         check("solo el tipo pedido (acorazado), hasta el tope", "Roma" in raw and "Zara" not in raw, raw)
         check("owner pasa a NRE", "owner = NRE" in raw and "owner = ITA" not in raw)
         check("orgullo de la flota con experiencia maxima, uno solo (2026-10-03)",
               raw.count("pride_of_the_fleet = yes") == 1 and "start_experience_factor = 1.0" in raw, raw[:600])
         check("usa la version de DLC (mtg), no la legacy", "Vecchia" not in raw)
-        variants = pdx.parse(raw).get("instant_effect").get_all("create_equipment_variant")
+        # los diseños van en la historia del país, antes de set_naval_oob (como en el juego)
+        variants = pdx.parse(nre_h0).get_all("create_equipment_variant")
+        variants = [v for v in variants if str(pdx.text(v.get("type"))).startswith("ship_hull")]
         check("solo las variantes que usan los barcos que quedan", [pdx.text(v.get("name")) for v in variants] == ["Classe Littorio"],
               str([pdx.text(v.get("name")) for v in variants]))
+        check("los diseños de barcos van antes de cargar la flota",
+              nre_h0.index('name = "Classe Littorio"') < nre_h0.index("set_naval_oob") and "create_equipment_variant" not in raw,
+              nre_h0[:600])
         check("no copia otros efectos del instant_effect", "add_political_power" not in raw)
-        nre_h = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
+        # 2026-10-08 ("el acorazado orgullo de la flota esta vacio"): el juego
+        # guarda los diseños en la historia del país; sin diseño sale el casco pelado
+        lit = variants[0] if variants else None
+        check("el diseño se busca tambien en la historia del pais (con modulos)",
+              lit is not None and pdx.text(lit.get("modules").get("fixed_ship_battery_slot")) == "ship_heavy_battery_1", nre_h0[:900])
+        check("el diseño es del mismo casco que el barco (no el legacy) y sin name_group del juego",
+              "battleship_1" not in nre_h0 and "ITA_BB_HISTORICAL" not in nre_h0, nre_h0[:900])
+        check("recibe la tecnologia de los modulos de su diseño", "fixture_heavy_battery_tech" in nre_h0, nre_h0[-900:])
+        nre_h = nre_h0
         check("la historia carga la armada", 'set_naval_oob = "NRE_2100_naval"' in nre_h)
         check("recibe la tecnologia del casco de sus barcos", "basic_ship_hull_heavy" in nre_h)
         added = ctx.data["added_buildings"]

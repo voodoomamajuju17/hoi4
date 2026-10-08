@@ -1050,3 +1050,20 @@ llega a 100 al toque y la tensión nunca sube".
   jugador. Se salva el títere buscado a propósito: cuando Roma conquista los
   Emiratos y elige "provincia cliente" (meganations_nre.50), la anarquía
   lleva la bandera `MEGANATIONS_titere_buscado` y no se anexa.
+- **Barcos de arranque con su diseño completo** (2026-10-08, "el acorazado
+  orgullo de la flota está vacío"). El generador buscaba los diseños de los
+  barcos de 1936 (create_equipment_variant) en el instant_effect de los
+  archivos de flota, pero el juego los define en la historia de cada país
+  (dentro del bloque de Man the Guns). No encontraba ninguno (el reporte
+  decía "equipo:" vacío) y el juego armaba cada barco con el casco pelado.
+  Ahora:
+  - Busca el diseño de cada barco (su version_name, del mismo casco) en los
+    archivos de flota y en la historia de todos los países; prefiere el que
+    tiene módulos y saca el name_group (es del país original).
+  - Los diseños van en la historia de la meganación, antes de set_naval_oob,
+    como en el juego.
+  - El buque capital que se regala prefiere uno cuyo diseño se encontró.
+  - La meganación recibe las tecnologías del casco y de los módulos de esos
+    diseños, así la IA también puede diseñar barcos completos.
+  - El reporte dice cuántos diseños copió cada flota ("armada: EFE: N
+    disenos...") y avisa si algún barco quedó sin diseño.

@@ -26,9 +26,11 @@ se recorren en orden y se queda uno de cada 1/keep (así se mantiene la mezcla
 de tipos); los task_force y flotas vacíos desaparecen. Solo los países de
 `navies` tienen flota. Aviones: cada cantidad se multiplica por keep; si un
 país queda con menos de `min_planes`, su entrada más grande se sube hasta
-ese piso (sin pasar lo que tenía en 1936). Las variantes que usa
-cada archivo (create_equipment_variant en su instant_effect) se copian a cada
-país que hereda algo de ese archivo. owner y creator pasan al país nuevo.
+ese piso (sin pasar lo que tenía en 1936). Aviones: las variantes del
+instant_effect de cada archivo se copian a cada país que hereda algo de él.
+Barcos: el diseño de cada barco (su version_name) se busca en todo el juego
+(archivos de flota e historia de los países) y se copia sin name_group.
+owner y creator pasan al país nuevo.
 """
 
 from __future__ import annotations
@@ -82,14 +84,18 @@ def emit(ctx: BuildContext) -> None:
         return tag if tag in receivers else None
 
     naval_files, air_files = _vanilla_oob_files(ctx)
+    # 2026-10-08 ("el acorazado orgullo de la flota esta vacio"): los diseños
+    # de barcos no estaban en el instant_effect de los archivos de flota; sin
+    # diseño el juego arma el casco pelado. Se buscan en todos lados.
+    ship_variants = _ship_variant_index(ctx, naval_files)
     fleets: dict[str, Block] = defaultdict(Block)
     wings: dict[str, dict[int, Block]] = defaultdict(dict)
-    variants: dict[str, dict[str, list]] = {"naval": defaultdict(list), "air": defaultdict(list)}
+    air_variants: dict[str, list] = defaultdict(list)
     ships = defaultdict(int)
     planes = defaultdict(int)
     dropped = 0
     moved = 0
-    capital_pool: list[tuple[Block, list]] = []   # buques capitales de 1936, de cualquier dueño
+    capital_pool: list[Block] = []   # buques capitales de 1936, de cualquier dueño
 
     for path in naval_files:
         root = _safe_parse(ctx, path)
@@ -98,11 +104,9 @@ def emit(ctx: BuildContext) -> None:
         units = root.get("units")
         if not isinstance(units, Block):
             continue
-        used_by: set[str] = set()
-        file_variants = _variants(root)
         for ship in _ships_in(units):
             if _text(ship.get("definition")) in CAPITALS:
-                capital_pool.append((copy.deepcopy(ship), file_variants))
+                capital_pool.append(copy.deepcopy(ship))
         for key, fleet in units.entries:
             if key != "fleet" or not isinstance(fleet, Block):
                 continue
@@ -117,9 +121,6 @@ def emit(ctx: BuildContext) -> None:
             _retag(fleet, tag)
             fleets[tag].add("fleet", fleet)
             ships[tag] += _count(fleet, "ship")
-            used_by.add(tag)
-        for tag in used_by:
-            variants["naval"][tag].extend(_variants(root))
 
     for path in (air_files if with_air else []):
         root = _safe_parse(ctx, path)
@@ -149,7 +150,7 @@ def emit(ctx: BuildContext) -> None:
             planes[tag] += _sum_amounts(wing)
             used_by.add(tag)
         for tag in used_by:
-            variants["air"][tag].extend(_variants(root))
+            air_variants[tag].extend(_variants(root))
 
     before = (sum(ships.values()), sum(planes.values()))
     if keep < 1.0:
@@ -182,12 +183,13 @@ def emit(ctx: BuildContext) -> None:
             # distinto por país) con su variante; se llama como el primer
             # capital de su lista de nombres (19_unit_names).
             names = (((ctx.spec.raw.get("unit_names") or {}).get("unit_names") or {}).get("ships") or {})
-            pool = sorted(capital_pool, key=lambda e: -_hull_level(e[0]))
+            # primero los que tienen diseño en el juego (si no, el barco sale vacío)
+            pool = sorted(capital_pool, key=lambda sh: (bool(_ship_designs(Block([("ship", sh)]), ship_variants)[1]),
+                                                        -_hull_level(sh)))
             for i, tag in enumerate(sorted(fleets)):
                 if not pool or any(_text(sh.get("definition")) in CAPITALS for sh in _ships_in(fleets[tag])):
                     continue
-                ship, file_variants = pool[i % len(pool)]
-                ship = copy.deepcopy(ship)
+                ship = copy.deepcopy(pool[i % len(pool)])
                 _retag(ship, tag)
                 own = ((names.get(tag) or {}).get("capital") or {}).get("names") or []
                 if own:
@@ -197,7 +199,6 @@ def emit(ctx: BuildContext) -> None:
                     continue
                 tf.add("ship", ship)
                 ships[tag] += 1
-                variants["naval"][tag].extend(file_variants)
                 ctx.note(f"armada: {tag} recibe el buque capital {_text(ship.get('name'))}")
         for tag, block in fleets.items():
             name = _crown_pride(block, xp)
@@ -207,14 +208,22 @@ def emit(ctx: BuildContext) -> None:
     ctx.data["naval_oob"] = {}
     ctx.data["air_oob"] = {}
     ctx.data["ship_equipment"] = {}
+    ctx.data["naval_designs"] = {}
     for tag, block in fleets.items():
         root = Block()
         root.add("units", block)
-        used = _version_names(block)
         # Solo las variantes que usan los barcos que quedaron: el resto serían
         # diseños "basura" en el diseñador.
-        _add_variants(root, _used_variants(variants["naval"][tag], used))
-        ctx.data["ship_equipment"][tag] = _equipment_of(root)
+        # Los diseños van en la historia del país, antes de set_naval_oob, como
+        # en el juego (history.py): así existen cuando se crean los barcos.
+        designs, missing = _ship_designs(block, ship_variants)
+        ctx.data["naval_designs"][tag] = designs
+        ctx.data["ship_equipment"][tag] = _equipment_of(Block([("create_equipment_variant", v) for v in designs]))
+        names = sorted({_text(v.get("name")) for v in designs})
+        ctx.note(f"armada: {tag}: {len(names)} disenos de barco del juego ({', '.join(names[:6])}"
+                 f"{'...' if len(names) > 6 else ''})" + (f"; SIN DISENO: {', '.join(missing)}" if missing else ""))
+        if missing:
+            ctx.warn(f"armada: {tag}: no encontre el diseno de {', '.join(missing)}; esos barcos salen sin modulos.")
         name = f"{tag}_2100_naval"
         ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(root))
         ctx.data["naval_oob"][tag] = name
@@ -224,7 +233,7 @@ def emit(ctx: BuildContext) -> None:
             block.add(str(sid), by_state[sid])
         root = Block()
         root.add("air_wings", block)
-        _add_variants(root, variants["air"][tag])
+        _add_variants(root, air_variants[tag])
         name = f"{tag}_2100_air"
         ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(root))
         ctx.data["air_oob"][tag] = name
@@ -313,6 +322,61 @@ def _variants(root: Block) -> list[tuple[str, Block]]:
         if k == "create_equipment_variant" or (isinstance(v, Block) and _has(v, "create_equipment_variant")):
             out.append((k, v))
     return out
+
+
+def _ship_variant_index(ctx: BuildContext, naval_files) -> dict[str, list[Block]]:
+    """nombre -> diseños (create_equipment_variant) del juego. Se buscan en los
+    archivos de flota (instant_effect o donde sea) y en la historia de cada
+    país (el juego los define ahí, dentro de if = { limit = { has_dlc = "Man
+    the Guns" } }). Los de bloques con fecha (1939...) van al final."""
+    found: list[tuple[int, int, str, Block]] = []
+
+    def walk(block: Block, dated: int) -> None:
+        for k, v in block.entries:
+            if not isinstance(v, Block):
+                continue
+            if k == "create_equipment_variant":
+                if v.get("name") is not None and v.get("type") is not None:
+                    found.append((dated, len(found), _text(v.get("name")), v))
+            else:
+                walk(v, dated or int(bool(_DATE_KEY.match(str(k)))))
+
+    paths = list(naval_files) + list(ctx.vanilla.country_history_files().values())
+    for path in paths:
+        try:
+            root = parse_file(path)
+        except (ValueError, OSError):
+            continue
+        walk(root, 0)
+    index: dict[str, list[Block]] = defaultdict(list)
+    for _, _, name, v in sorted(found, key=lambda e: (e[0], e[1])):
+        index[name].append(v)
+    return index
+
+
+def _ship_designs(block: Block, index: dict[str, list[Block]]) -> tuple[list[Block], list[str]]:
+    """Diseños que necesitan los barcos de `block` (uno por nombre, del mismo
+    casco que el barco y, si hay, con módulos) y los nombres que no aparecen."""
+    out: dict[str, Block] = {}
+    missing: list[str] = []
+    for ship in _ships_in(block):
+        eq = ship.get("equipment")
+        if not isinstance(eq, Block):
+            continue
+        for hull, spec in eq.entries:
+            if not isinstance(spec, Block) or spec.get("version_name") is None:
+                continue
+            name = _text(spec.get("version_name"))
+            if name in out or name in missing:
+                continue
+            same = [v for v in index.get(name, []) if _text(v.get("type")) == str(hull)]
+            if not same:
+                missing.append(name)
+                continue
+            best = next((v for v in same if isinstance(v.get("modules"), Block)), same[0])
+            # sin name_group: los grupos de nombres del juego son de otro país
+            out[name] = Block([(k, v) for k, v in best.entries if k != "name_group"])
+    return list(out.values()), missing
 
 
 def _has(block: Block, key: str) -> bool:
@@ -430,61 +494,6 @@ def _crown_pride(fleets: Block, xp: float) -> str | None:
     entries[at:at] = [("start_experience_factor", xp), ("pride_of_the_fleet", True)]
     best.entries[:] = entries
     return _text(best.get("name"))
-
-
-def _version_names(block: Block) -> set[str]:
-    out: set[str] = set()
-    for k, v in block.entries:
-        if k == "version_name":
-            out.add(_text(v))
-        elif isinstance(v, Block):
-            out |= _version_names(v)
-    return out
-
-
-def _used_variants(entries: list[tuple[str, Block]], used: set[str]) -> list[tuple[str, Block]]:
-    """Solo las variantes que usan los barcos. Las que vienen juntas dentro de
-    un bloque (if = { limit = { has_dlc } ... muchas variantes }) se filtran una
-    por una: antes se miraba solo la primera y, si no se usaba, se perdía el
-    bloque entero (error.log 2026-10-04: "Could not find proper equipment
-    variant" en el acorazado del EFE, el SHD y la APF)."""
-    out = []
-    for k, v in entries:
-        if k == "create_equipment_variant":
-            if _variant_name(v) in used:
-                out.append((k, v))
-            continue
-        if not isinstance(v, Block):
-            continue
-        kept = Block()
-        found = False
-        for kk, vv in v.entries:
-            if kk == "create_equipment_variant" or (isinstance(vv, Block) and _has(vv, "create_equipment_variant")):
-                sub = _used_variants([(kk, vv)], used)
-                if sub:
-                    found = True
-                    kept.entries.extend(sub)
-            else:
-                kept.add(kk, vv)
-        if found:
-            out.append((k, kept))
-    return out
-
-
-def _variant_name(v) -> str | None:
-    """Nombre de la variante que define una entrada de instant_effect."""
-    if not isinstance(v, Block):
-        return None
-    if v.get("name") is not None and v.get("type") is not None:
-        return _text(v.get("name"))
-    for k, sub in v.entries:
-        if k == "create_equipment_variant" and isinstance(sub, Block):
-            return _text(sub.get("name"))
-        if isinstance(sub, Block):
-            n = _variant_name(sub)
-            if n:
-                return n
-    return None
 
 
 def _equipment_of(root: Block) -> set[str]:
