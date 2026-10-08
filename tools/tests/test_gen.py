@@ -543,9 +543,17 @@ def test_phase3_content() -> None:
         check("retrato chico copiado del arte (65x67)",
               (mod / "gfx/leaders/EFE/small/Aurelio_IV.dds").read_bytes()
               == (REPO_ROOT / "assets/EFE/leaders/small/Aurelio_IV.dds").read_bytes())
-        check("retrato pedido y todavia sin dibujo: el juego usa el generico (sin provisorio)",
-              "EFE_bruno_etchegaray" in chars_s and not (mod / "gfx/leaders/EFE/EFE_mando_beltran_1.dds").exists()
-              and "EFE_mando_beltran_1.dds" not in chars_s)
+        # un retrato pedido que todavía no llegó (2026-10-08: ya llegaron casi
+        # todos; se busca cualquiera que falte): sin provisorio del mod
+        import yaml
+        pending = [c for c in yaml.safe_load((REPO_ROOT / "spec/03_leaders.yaml").read_text(encoding="utf-8"))["characters"]
+                   if (c.get("portrait") or {}).get("placeholder") is False
+                   and not (REPO_ROOT / f"assets/{c['country']}/leaders/{c['portrait']['path'].rsplit('/', 1)[-1]}").exists()]
+        for c in pending[:1]:
+            name = c["portrait"]["path"].rsplit("/", 1)[-1]
+            other = " ".join((mod / f"common/characters/{c['country']}_characters.txt").read_text().split())
+            check("retrato pedido y todavia sin dibujo: sin provisorio del mod",
+                  c["id"] in other and not (mod / c["portrait"]["path"]).exists() and name not in other, c["id"])
         check("bandera del usuario", (mod / "gfx/flags/EFE.tga").read_bytes()
               == (REPO_ROOT / "assets/EFE/flags/EFE.tga").read_bytes())
         check("los demas siguen con bandera placeholder", (mod / "gfx/flags/ASC.tga").exists())
