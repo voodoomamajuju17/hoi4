@@ -858,34 +858,32 @@ def render_effects(owner: str, items: list[dict], known,
             # esté en guerra con él, y cada uno se queda con lo que ocupa del
             # otro. Firmar solo entre las dos potencias dejaba a los satélites
             # peleando y la guerra seguía (revisión 2026-09-29).
+            # 2026-10-08: el traspaso iba por event_target guardados dentro de
+            # los bucles y en la partida no pasaba nada (el EFE le ganaba a la
+            # NAS y volvían al status quo). Ahora se recorre cada state y se le
+            # entrega a quien lo controla (OWNER/CONTROLLER), sin event_target.
             other = item["value"]
-            if ec.tags and other not in ec.tags:
+            if ec.tags and other not in ec.tags and other not in SCOPES:
                 raise SpecError(f"{owner}: armistice con '{other}', que no es un pais del mod", where=where)
-            x, a = "event_target:meganations_armisticio_x", "event_target:meganations_armisticio_a"
 
             def side(leader: str) -> Block:
                 return Block([("OR", Block([("tag", leader), ("is_subject_of", leader),
                                             ("is_in_faction_with", leader)]))])
-            pair = Block([
-                ("limit", side("ROOT")),
-                ("save_event_target_as", "meganations_armisticio_a"),
-                (x, Block([("every_owned_state", Block([
-                    ("limit", Block([("is_controlled_by", a)])),
-                    (a, Block([("transfer_state", "PREV")]))]))])),
-                ("every_owned_state", Block([
-                    ("limit", Block([("is_controlled_by", x)])),
-                    (x, Block([("transfer_state", "PREV")]))])),
-                ("white_peace", x),
-                # tregua de verdad: el juego no deja volver a declarar en ese plazo
-                ("set_truce", Block([("target", x), ("days", int(item.get("truce_days", 364)))]))])
+            for holder, loser in (("ROOT", other), (other, "ROOT")):
+                block.add("every_state", Block([
+                    ("limit", Block([("OWNER", side(loser)), ("CONTROLLER", side(holder))])),
+                    ("CONTROLLER", Block([("transfer_state", "PREV")]))]))
             block.add("every_country", Block([
                 ("limit", side(other)),
-                ("save_event_target_as", "meganations_armisticio_x"),
-                ("every_enemy_country", pair)]))
-            for k in ("every_country", "every_enemy_country", "save_event_target_as", "every_owned_state",
-                      "transfer_state", "white_peace", "set_truce"):
+                ("every_enemy_country", Block([
+                    ("limit", side("ROOT")),
+                    ("white_peace", "PREV"),
+                    # tregua de verdad: el juego no deja volver a declarar en ese plazo
+                    ("set_truce", Block([("target", "PREV"), ("days", int(item.get("truce_days", 364)))]))]))]))
+            for k in ("every_state", "every_country", "every_enemy_country", "transfer_state", "white_peace",
+                      "set_truce"):
                 effects_used.setdefault(k, owner)
-            for k in ("tag", "is_subject_of", "is_in_faction_with", "is_controlled_by"):
+            for k in ("tag", "is_subject_of", "is_in_faction_with"):
                 ec.triggers_used.setdefault(k, owner)
             continue
         if effect == "add_slot":

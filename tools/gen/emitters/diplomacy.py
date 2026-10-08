@@ -114,6 +114,7 @@ def emit(ctx: BuildContext) -> None:
 
 
 HOSTILITY_EFFECT = "MEGANATIONS_renovar_casus_belli"
+ANNEX_EFFECT = "MEGANATIONS_anexar_anarquias_titere"
 
 
 def anarchy_pairs(ctx: BuildContext) -> list[tuple[str, str]]:
@@ -133,6 +134,39 @@ def anarchy_pairs(ctx: BuildContext) -> list[tuple[str, str]]:
         for mega in who:
             pairs.add((mega, owner))
     return sorted(pairs)
+
+
+def _annex_anarchy_puppets(ctx: BuildContext, hs: dict, effects: dict) -> Block | None:
+    """Una anarquía que quedó como títere de un país de la IA pasa a ser
+    suya del todo (annex_country). La conferencia de paz de la IA elegía
+    títere demasiado seguido (pedido del usuario, 2026-10-08). Corre en el
+    pulso mensual; el jugador decide solo; `keep_flag` en la anarquía la salva."""
+    ap = hs.get("annex_puppets") or {}
+    if not ap:
+        return None
+    tags = {c.tag for c in ctx.spec.countries}
+    anarchies = list(ap.get("tags") or [])
+    for a in anarchies:
+        if a not in tags:
+            raise SpecError(f"anarchy_hostility.annex_puppets: '{a}' no es un pais del mod", where=SOURCE)
+    keep = ap.get("keep_flag")
+    overlords = [c.tag for c in ctx.spec.countries if c.tag not in anarchies]
+    body = Block()
+    for a in anarchies:
+        cond = Block([("exists", True), ("is_subject", True)])
+        if keep:
+            cond.add("NOT", Block([("has_country_flag", keep)]))
+        inner = Block([("limit", Block([(a, cond)]))])
+        for i, o in enumerate(overlords):
+            inner.add("if" if i == 0 else "else_if", Block([
+                ("limit", Block([(a, Block([("is_subject_of", o)])), (o, Block([("is_ai", True)]))])),
+                (o, Block([("annex_country", Block([("target", a), ("transfer_troops", True)]))]))]))
+        body.add("if", inner)
+    effects["annex_country"] = SOURCE
+    ctx.verify_keys("triggers", {"exists": SOURCE, "is_subject": SOURCE, "is_subject_of": SOURCE,
+                                 "has_country_flag": SOURCE, "is_ai": SOURCE})
+    ctx.note(f"anarquias titere de la IA se anexan: {', '.join(anarchies)} ({len(overlords)} posibles senores)")
+    return body
 
 
 def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> None:
@@ -170,8 +204,14 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
             y, m, d = (int(x) for x in str(after[mega]).split(".")[:3])
             cond.add("OR", Block([("is_ai", False), ("date", Compare(">", f"{y}.{m}.{d}"))]))
         renew.add("if", Block([("limit", cond), ("create_wargoal", Block([("type", kind), ("target", anar)]))]))
+    annex = _annex_anarchy_puppets(ctx, hs, effects)
+    if annex is not None:
+        renew.add(ANNEX_EFFECT, True)
     # el archivo se escribe siempre: los pulsos de 14_decisions lo llaman
-    ctx.write_script("common/scripted_effects/meganations_casus_belli.txt", Block([(HOSTILITY_EFFECT, renew)]),
+    # el que se llama va primero: el juego lee los scripted_effects en orden
+    script = Block([(ANNEX_EFFECT, annex)] if annex is not None else [])
+    script.add(HOSTILITY_EFFECT, renew)
+    ctx.write_script("common/scripted_effects/meganations_casus_belli.txt", script,
                      source=SOURCE + " -> anarchy_hostility")
     if not pairs:
         return

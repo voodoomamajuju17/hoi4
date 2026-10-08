@@ -1029,3 +1029,24 @@ llega a 100 al toque y la tensión nunca sube".
   proverbios. El generador busca en el juego instalado las claves de las
   citas (con "loading"/"quote" en el nombre y firma "- Autor") y las pisa
   todas; el reporte dice cuántas.
+- **Las paces entre potencias ya no devuelven lo ocupado** (2026-10-08, "cuando
+  hay guerra entre NAS y EFE y gana el EFE, siempre vuelven a status quo").
+  Había dos causas:
+  - El armisticio (eventos .160+4k, el efecto `armistice`) pasaba los estados
+    ocupados con `event_target` guardados dentro de los bucles, y en la
+    partida no pasaba ninguno. Ahora recorre cada estado: si es del bando
+    perdedor y lo controla el bando ganador (o al revés), pasa a quien lo
+    controla (`OWNER`/`CONTROLLER`). Después cada país de un bando firma con
+    cada país del otro y hay tregua de un año, como antes.
+  - "Nos Ofrecen la Paz" (meganations_mundo.43, lo que pide el que va
+    perdiendo) hacía una paz blanca y devolvía todo. Ahora es el mismo
+    armisticio: cada uno se queda con lo que ocupa.
+- **Las anarquías conquistadas se anexan** (2026-10-08, "demasiado seguido se
+  lo convierte en títere"). Si Eurasia, Indostán, los Emiratos, el Amazonas o
+  las Tierras Sin Ley quedan como títere de un país de la IA, en el pulso
+  mensual ese país la anexa entera, con sus tropas
+  (`MEGANATIONS_anexar_anarquias_titere`, 04_diplomacy.yaml ->
+  anarchy_hostility.annex_puppets). Si el títere es del jugador, decide el
+  jugador. Se salva el títere buscado a propósito: cuando Roma conquista los
+  Emiratos y elige "provincia cliente" (meganations_nre.50), la anarquía
+  lleva la bandera `MEGANATIONS_titere_buscado` y no se anexa.

@@ -149,6 +149,15 @@ anarchy_hostility:
   wargoal: annex_everything
   opinion: meganations_odio_anarquia
   exclude: [ZAN]
+  # 2026-10-08: "Cuando se conquista una anarquia, demasiado seguido se lo
+  # convierte en titere. Deberian anexarse." Si una anarquía queda como títere
+  # de un país de la IA (la conferencia de paz la eligió así), ese país la
+  # anexa en el próximo pulso mensual. El jugador decide solo. Se salva el
+  # títere buscado a propósito (bandera en la anarquía: la provincia cliente
+  # de Roma, meganations_nre.50).
+  annex_puppets:
+    tags: [ZWE, ZWI, ZWM, ZWB, ZAN]
+    keep_flag: MEGANATIONS_titere_buscado
 
 rivalries:
   - { between: [EFE, NRE], modifier: meganations_bloc_rival, lore: "Dos Restauraciones: la Tierra o Roma." }

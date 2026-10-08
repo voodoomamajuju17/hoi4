@@ -1063,7 +1063,12 @@ def test_routes() -> None:
         e40 = mundo[mundo.index("id = meganations_mundo.40"):][:900]
         check("aceptar el pacto: no agresion y garantia mutua",
               "relation = non_aggression_pact" in e40 and "FROM = { diplomatic_relation = { country = ROOT relation = guarantee" in e40, e40)
-        check("ofrecer la paz termina en paz blanca si se acepta", "white_peace = FROM" in mundo)
+        e43 = mundo[mundo.index("id = meganations_mundo.43"):][:2500]
+        # 2026-10-08: la paz blanca devolvía todo lo ocupado (el EFE le ganaba a la NAS y volvían al status quo)
+        check("ofrecer la paz: si se acepta, cada uno se queda con lo que ocupa (armisticio, no paz blanca)",
+              "every_state = { limit = { OWNER = { OR = { tag = FROM is_subject_of = FROM is_in_faction_with = FROM } } "
+              "CONTROLLER = { OR = { tag = ROOT" in e43 and "white_peace = PREV" in e43
+              and "white_peace = FROM" not in e43, e43[:900])
         check("la Era de la Hegemonia: tras la forma final",
               "MEGANATIONS_la_gran_obra = {" in dtxt and "MEGANATIONS_hegemonia_mundial = {" in dtxt
               and "has_country_flag = NRE_forma_final" in dtxt)
@@ -2070,18 +2075,22 @@ def test_ai() -> None:
         check("guerra limitada: hasta 2104, al 40% de rendicion del rival salta el armisticio",
               "has_war_with = FCU" in gl and "FCU = { surrender_progress > 0.4 }" in gl and "date > 2104.1.1" in gl, gl[:700])
         efe_ev2 = " ".join((mod / "events/meganations_efe.txt").read_text().split())
-        arm = efe_ev2[efe_ev2.index("id = meganations_efe.160 title"):][:2500]
-        check("armisticio: firma todo el bando del rival (el, sus satelites y su faccion)",
-              "every_country = { limit = { OR = { tag = FCU is_subject_of = FCU is_in_faction_with = FCU } }"
-              " save_event_target_as = meganations_armisticio_x" in arm, arm[:900])
-        check("armisticio: con todo el bando propio que este en guerra con el",
-              "every_enemy_country = { limit = { OR = { tag = ROOT is_subject_of = ROOT is_in_faction_with = ROOT } }" in arm)
-        check("armisticio: cada uno se queda lo que ocupa y paz blanca",
-              "event_target:meganations_armisticio_x = { every_owned_state = { limit = { is_controlled_by = "
-              "event_target:meganations_armisticio_a } event_target:meganations_armisticio_a = { transfer_state = PREV } } }" in arm
-              and "white_peace = event_target:meganations_armisticio_x" in arm and "FCU_revancha" in arm, arm[:1200])
+        arm = efe_ev2[efe_ev2.index("id = meganations_efe.160 title"):][:3000]
+        check("armisticio: lo ocupado del bando rival pasa a quien lo controla (sin event_target)",
+              "every_state = { limit = { OWNER = { OR = { tag = FCU is_subject_of = FCU is_in_faction_with = FCU } } "
+              "CONTROLLER = { OR = { tag = ROOT is_subject_of = ROOT is_in_faction_with = ROOT } } } "
+              "CONTROLLER = { transfer_state = PREV } }" in arm
+              and "meganations_armisticio_x" not in arm and "save_event_target_as" not in arm, arm[:1200])
+        check("armisticio: y lo propio que ocupa el rival pasa al rival",
+              "every_state = { limit = { OWNER = { OR = { tag = ROOT is_subject_of = ROOT is_in_faction_with = ROOT } } "
+              "CONTROLLER = { OR = { tag = FCU is_subject_of = FCU is_in_faction_with = FCU } } } "
+              "CONTROLLER = { transfer_state = PREV } }" in arm, arm[:1200])
+        check("armisticio: firma todo el bando del rival con todo el bando propio en guerra con el",
+              "every_country = { limit = { OR = { tag = FCU is_subject_of = FCU is_in_faction_with = FCU } } "
+              "every_enemy_country = { limit = { OR = { tag = ROOT is_subject_of = ROOT is_in_faction_with = ROOT } } "
+              "white_peace = PREV" in arm and "FCU_revancha" in arm, arm[:1500])
         check("armisticio: tregua de un ano de verdad (set_truce)",
-              "set_truce = { target = event_target:meganations_armisticio_x days = 364 }" in arm, arm[:1500])
+              "set_truce = { target = PREV days = 364 }" in arm, arm[:1500])
         check("banderas con vencimiento: llevan value = 1 (game.log 2026-10-02: sin eso no frenaban)",
               "value = 1 days =" in se_c and "set_country_flag = { flag = SHD_crisis_reciente value = 1 days = 90 }" in se_c)
         check("guerra limitada: se revisa cada semana", "id = meganations_efe.159 days = 7" in efe_ev2)
@@ -2549,7 +2558,20 @@ def test_diplomacy() -> None:
               and "NOT = { has_wargoal_against = ZWE }" in cb, cb[-600:])
         check("el casus belli: el jugador enseguida, la IA desde su fecha de guerra",
               "OR = { is_ai = no date > 2100.2.1 }" in cb, cb[-600:])
-        check("las Tierras Sin Ley no reciben casus belli (en paz con todos)", "target = ZAN" not in cb)
+        renew = cb[cb.index("MEGANATIONS_renovar_casus_belli = {"):]
+        check("las Tierras Sin Ley no reciben casus belli (en paz con todos)", "target = ZAN" not in renew)
+        # 2026-10-08: "Cuando se conquista una anarquia, demasiado seguido se lo convierte en titere."
+        anx = cb[cb.index("MEGANATIONS_anexar_anarquias_titere = {"):cb.index("MEGANATIONS_renovar_casus_belli = {")]
+        check("anarquia titere de la IA: su senor la anexa (salvo el titere buscado)",
+              "ZWB = { exists = yes is_subject = yes NOT = { has_country_flag = MEGANATIONS_titere_buscado } }" in anx
+              and "limit = { ZWB = { is_subject_of = EFE } EFE = { is_ai = yes } } EFE = { annex_country = { target = ZWB transfer_troops = yes } }" in anx
+              and all(f"{a} = {{ exists = yes" in anx for a in ("ZWE", "ZWI", "ZWM", "ZAN")), anx[:900])
+        check("anarquia titere: se revisa en el pulso mensual (y se define antes de usarse)",
+              "MEGANATIONS_anexar_anarquias_titere = yes" in renew
+              and cb.index("MEGANATIONS_anexar_anarquias_titere = {") < cb.index("MEGANATIONS_renovar_casus_belli = {"), cb[:300])
+        check("Los Emiratos Caen: la provincia cliente es un titere buscado (no se anexa sola)",
+              "ZWM = { set_country_flag = MEGANATIONS_titere_buscado } puppet = ZWM" in
+              " ".join((mod / "events/meganations_nre.txt").read_text(encoding="utf-8-sig").split()))
         check("el pulso de cada potencia renueva los casus belli",
               "MEGANATIONS_renovar_casus_belli = yes" in (mod / "common/scripted_effects/meganations_effects.txt").read_text())
         check("la justificacion no declara la guerra", "declare_war_on" not in efe)

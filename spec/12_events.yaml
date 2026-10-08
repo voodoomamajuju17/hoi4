@@ -9014,6 +9014,11 @@ namespaces:
           spanish: 'Una provincia cliente: ellos gobiernan, nosotros cobramos.'
         effects:
         - {effect: white_peace, value: ZWM}
+        # títere buscado: el pulso mensual no lo anexa (04_diplomacy -> annex_puppets)
+        - effect: scope
+          target: ZWM
+          effects:
+          - {effect: flag, value: MEGANATIONS_titere_buscado}
         - {effect: puppet, value: ZWM}
         - {effect: add_stability, value: 0.03}
         when: {country_exists: ZWM}
@@ -11344,12 +11349,14 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Peace Is Offered, spanish: Nos Ofrecen la Paz}
-      desc: {english: '[From.GetName] offers to end the war where it stands: no annexations, no reparations.', spanish: '[From.GetName] ofrece terminar
-          la guerra donde está: sin anexiones, sin reparaciones.'}
+      desc: {english: '[From.GetName] offers to end the war where it stands: each side keeps what it holds, and no one takes anything else.',
+        spanish: '[From.GetName] ofrece terminar la guerra donde está: cada uno se queda con lo que ocupa y nadie se lleva nada más.'}
       options:
-      - name: {english: Accept the peace., spanish: Aceptar la paz.}
+      - name: {english: 'Accept the peace: what we hold is ours.', spanish: 'Aceptar la paz: lo que ocupamos es nuestro.'}
         effects:
-        - {effect: white_peace, value: FROM}
+        # 2026-10-08: era una paz blanca y devolvía todo lo ocupado (el EFE le
+        # ganaba a la NAS y volvían al status quo). Ahora es un armisticio.
+        - {effect: armistice, value: FROM}
         - {effect: event, id: meganations_mundo.44, days: 1, target: FROM}
         ai_chance: 40
       - name: {english: The war goes on., spanish: La guerra sigue.}
@@ -11362,7 +11369,7 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Peace Accepted, spanish: Aceptan la Paz}
-      desc: {english: '[From.GetName] accepted. The guns fall silent.', spanish: '[From.GetName] aceptó. Los cañones se callan.'}
+      desc: {english: '[From.GetName] accepted. The guns fall silent, and each side keeps what it held.', spanish: '[From.GetName] aceptó. Los cañones se callan y cada uno se queda con lo que ocupaba.'}
       options:
       - name: {english: At last., spanish: Por fin.}
         effects:
