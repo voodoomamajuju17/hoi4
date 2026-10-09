@@ -1114,3 +1114,16 @@ llega a 100 al toque y la tensión nunca sube".
   Directorio a la HSN, los Salares del Imperio al Sol): solo arrancan si el
   otro sigue siendo dueño, la opción de pedir no aparece si ya no lo es, y la
   de entregar solo aparece si la región es propia.
+- **Levas de emergencia más fuertes y más caras** (2026-10-09, pedido del
+  usuario: "triplicar el manpower, duplicar los malus, mantener la
+  duración"). Mano de obra: Emergencia I 30.000 (antes 10.000), II 45.000
+  (antes 15.000), III 60.000 (antes 20.000). Leva Forzosa: estabilidad y
+  apoyo a la guerra -10% (I y II, antes -5%) y -20% (III, antes -10%).
+  Duración igual: 6, 9 y 12 meses. Divisiones y equipo sin cambios.
+- **El ícono va en el diseño** (2026-10-09, captura: "Gliptodonte Mk4" con el
+  tanque del juego). Los tanques, barcos y aviones diseñados muestran el
+  ícono que lleva su diseño (`icon`), no la imagen del equipo. Ahora llevan
+  el ícono propio: el diseño del Gliptodonte (y por lo tanto sus versiones
+  Mk2, Mk3...), los diseños de tanque con que arranca cada meganación y los
+  diseños de barco copiados del juego, si su facción tiene imagen para ese
+  chasis o casco.

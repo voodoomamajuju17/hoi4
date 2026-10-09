@@ -85,6 +85,13 @@ def emit(ctx: BuildContext) -> None:
             variant, grant = _design(ctx, uid, design, equip, modules, tree, enabled_by)
             eq_type = text(variant.get("type")) if variant is not None else None
             version = design["name"] if variant is not None else None
+            # 2026-10-09 (captura: "Gliptodonte Mk4" con el tanque del juego): los
+            # tanques, aviones y barcos diseñados muestran el ícono que lleva el
+            # diseño, no el del equipo. Con su imagen (faction_tech la registra
+            # como GFX_<TAG>_<equipo>_medium), el diseño la lleva.
+            if eq_type and (ctx.spec.root.parent / "assets" / tag / "armas" / f"{uid}.dds").exists():
+                variant.entries = [(k, v) for k, v in variant.entries if k != "icon"]
+                variant.add("icon", Quoted(f"GFX_{tag}_{eq_type}_medium"))
         else:
             eq_type = _fixed_equipment(u.get("equipment") or [], equip, enabled_by)
             if u.get("equipment") and not eq_type:

@@ -22,7 +22,7 @@ import copy
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block, Quoted
+from ..pdx import Block, Quoted, text as pdx_text
 from . import characters as characters_mod
 from . import ideas as ideas_mod
 
@@ -98,11 +98,17 @@ def emit(ctx: BuildContext) -> None:
                 wrap, extra_techs, variants = design
                 tb2 = Block([(t, 1) for t in extra_techs if t not in (techs or [])] + [("popup", False)])
                 designs = []
+                own_sprites = ctx.data.get("faction_sprites") or set()
                 for i, v in enumerate(variants, start=1):
                     d = copy.deepcopy(v)
                     # nombre de 2100 en vez del de 1936 ("Panzer I")
                     d.entries = [(k, Quoted(f"Blindado {c.name_es.split()[0]} {i}") if k == "name" else x)
                                  for k, x in d.entries]
+                    # el ícono propio de su chasis (2026-10-09: el diseño muestra
+                    # su `icon`, no la imagen del equipo)
+                    sprite = f"GFX_{c.tag}_{pdx_text(d.get('type'))}_medium"
+                    if sprite in own_sprites:
+                        d.entries = [(k, x) for k, x in d.entries if k != "icon"] + [("icon", Quoted(sprite))]
                     designs.append(("create_equipment_variant", d))
                 inner = Block([("set_technology", tb2)] + designs)
                 if wrap is not None:
@@ -115,8 +121,13 @@ def emit(ctx: BuildContext) -> None:
         # ("el acorazado orgullo de la flota esta vacio").
         naval = (ctx.data.get("naval_oob") or {}).get(c.tag)
         if naval:
+            own_sprites = ctx.data.get("faction_sprites") or set()
             for v in (ctx.data.get("naval_designs") or {}).get(c.tag, []):
-                b.add("create_equipment_variant", copy.deepcopy(v))
+                d = copy.deepcopy(v)
+                sprite = f"GFX_{c.tag}_{pdx_text(d.get('type'))}_medium"
+                if sprite in own_sprites:      # el ícono propio de su casco
+                    d.entries = [(k, x) for k, x in d.entries if k != "icon"] + [("icon", Quoted(sprite))]
+                b.add("create_equipment_variant", d)
             b.add("set_naval_oob", Quoted(naval))
 
         for item, amount in (ctx.data.get("stockpile") or {}).get(c.tag, []):

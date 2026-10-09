@@ -1298,11 +1298,24 @@ def test_events() -> None:
               # create_unit sin comillas internas (error.log 2026-09-30: "Malformed token")
               and e3.count('"division_template = Leva_de_Emergencia_III ') == 16
               and e3.count('"division_template = Milicia_de_Emergencia ') == 12
-              and "add_manpower = 20000" in e3 and "type = support_equipment amount = 1000" in e3, e3[:1500])
+              and "add_manpower = 60000" in e3 and "type = support_equipment amount = 1000" in e3, e3[:1500])
         e1 = decs_e[decs_e.index("MEGANATIONS_emergencia_1 = {"):][:3000]
-        check("emergencia: la 1 baja estabilidad y apoyo a la guerra 5% por 6 meses (Leva Forzosa, 2026-10-01)",
+        check("emergencia: la 1 baja estabilidad y apoyo a la guerra por 6 meses (Leva Forzosa, 2026-10-01)",
               "cost = 150" in e1 and "add_dynamic_modifier = { modifier = MEGANATIONS_leva_forzosa_1 days = 180 }" in e1
               and "add_stability = -0.05" not in e1)
+        # 2026-10-09: "triplicar el manpower de las levas de emergencia, duplicar los malus, mantener la duracion"
+        e2 = decs_e[decs_e.index("MEGANATIONS_emergencia_2 = {"):][:3000]
+        check("emergencia: mano de obra x3 (30.000 / 45.000 / 60.000)",
+              "add_manpower = 30000" in e1 and "add_manpower = 45000" in e2 and "add_manpower = 60000" in e3)
+        dyn = " ".join((mod / "common/dynamic_modifiers").joinpath(
+            next(p.name for p in (mod / "common/dynamic_modifiers").glob("*.txt"))).read_text().split()) \
+            if (mod / "common/dynamic_modifiers").exists() else ""
+        lev = {i: dyn[dyn.index(f"MEGANATIONS_leva_forzosa_{i} = {{"):][:220] for i in (1, 2, 3)} if "leva_forzosa_3" in dyn else {}
+        check("emergencia: Leva Forzosa x2 (-10% / -10% / -20%), misma duracion",
+              bool(lev) and "stability_factor = -0.1 war_support_factor = -0.1 }" in lev[1]
+              and "stability_factor = -0.1 war_support_factor = -0.1 }" in lev[2]
+              and "stability_factor = -0.2 war_support_factor = -0.2 }" in lev[3]
+              and "MEGANATIONS_leva_forzosa_2 days = 270" in e2 and "MEGANATIONS_leva_forzosa_3 days = 365" in e3, dyn[:600])
         check("emergencia: para las meganaciones y las anarquias, no para los satelites",
               "original_tag = ZAN" in cats_s and "original_tag = NRE" in cats_s
               and "original_tag = PTA" not in cats_s[cats_s.index("MEGANATIONS_emergencia_category"):][:600])
@@ -2825,6 +2838,12 @@ def test_faction_tech() -> None:
               bool(uu) and all(f"GFX_EFE_{t}_medium" in gfx for t in ([uu[0]["equipment"]] if uu[0]["equipment"] else [])
                                + uu[0]["techs"]) and "EFE_gliptodonte_" in gfx, str(uu)[:300])
         import re as _re
+        # 2026-10-09 (captura: "Gliptodonte Mk4" con el tanque del juego): el diseño lleva su ícono
+        efe_dec = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/scripted_effects").glob("*.txt"))
+        efe_dec = " ".join(efe_dec.split())
+        gl = efe_dec[efe_dec.index("EFE_gliptodonte_desbloqueo = {"):][:3000] if "EFE_gliptodonte_desbloqueo = {" in efe_dec else ""
+        check("unidad unica: el diseño del Gliptodonte lleva su icono propio",
+              bool(uu) and not uu[0]["equipment"] or f'icon = "GFX_EFE_{uu[0]["equipment"]}_medium"' in gl, gl[:800])
         names = _re.findall(r'name = "(GFX_[^"]+)"', gfx)
         check("unidad unica: le gana a la imagen de la familia (un solo sprite por nombre)",
               len(names) == len(set(names)), str([n for n in set(names) if names.count(n) > 1])[:300])

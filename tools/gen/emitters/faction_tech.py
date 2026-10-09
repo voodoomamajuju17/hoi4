@@ -135,6 +135,8 @@ def emit(ctx: BuildContext) -> None:
                 sprites.add("spriteType", Block([("name", Quoted(f"GFX_{c.tag}_{target}_medium")),
                                                  ("texturefile", Quoted(rel))]))
                 counts["sprites"] += 1
+    # los diseños de arranque (history.py) llevan el ícono propio si existe
+    ctx.data["faction_sprites"] = {_text(v.get("name")) for _, v in sprites.entries if isinstance(v, Block)}
     if sprites.entries:
         ctx.write_script(GFX_FILE, Block([("spriteTypes", sprites)]), source=SOURCE)
         _designer_icons(ctx, sorted(style_of), sprites, equipment)
