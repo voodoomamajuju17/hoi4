@@ -1067,3 +1067,14 @@ llega a 100 al toque y la tensión nunca sube".
     diseños, así la IA también puede diseñar barcos completos.
   - El reporte dice cuántos diseños copió cada flota ("armada: EFE: N
     disenos...") y avisa si algún barco quedó sin diseño.
+- **Íconos de las unidades únicas** (2026-10-09, "no veo el ícono del
+  gliptodonte o otras unidades únicas"). El mod estaba listo para usarlos
+  (assets/<TAG>/armas/<id>.dds), pero las imágenes nunca llegaron. Ahora se
+  recortan de las pantallas de carga 16-19, que muestran las ocho unidades,
+  y se separan del fondo (tools/arte/recortar_unidades_unicas.py):
+  Gliptodonte, Hijos del Cóndor, Kiboko, Onagro, Centinela, Ala de
+  Obsidiana, Dragón del Gran Canal y Leviatán de Malaca. Cada una va al
+  equipo y a las tecnologías propias de su potencia; si comparte equipo con
+  una familia (el Gliptodonte es el tanque moderno del EFE), le gana a la
+  imagen de la familia. El pedido de arte 10_unidades_unicas.txt sigue por si
+  se quiere un ícono dibujado a medida.

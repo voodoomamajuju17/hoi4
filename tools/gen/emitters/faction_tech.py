@@ -19,7 +19,7 @@ from __future__ import annotations
 import re
 
 from ..context import BuildContext
-from ..pdx import Block, Quoted
+from ..pdx import Block, Quoted, text as _text
 from .unit_names import roman
 
 SOURCE = "spec/17_research.yaml -> by_faction"
@@ -113,8 +113,12 @@ def emit(ctx: BuildContext) -> None:
         targets = ([uu["equipment"]] if uu.get("equipment") else []) + list(uu.get("techs") or [])
         for target in targets:
             rel = _texture(ctx, art, uu["tag"], uu["id"], sizes.of(target), written)
-            sprites.add("spriteType", Block([("name", Quoted(f"GFX_{uu['tag']}_{target}_medium")),
-                                             ("texturefile", Quoted(rel))]))
+            name = f"GFX_{uu['tag']}_{target}_medium"
+            # la unidad única le gana a la imagen de la familia (el Gliptodonte
+            # es el tanque moderno del EFE): un solo sprite con ese nombre
+            sprites.entries = [(k, v) for k, v in sprites.entries
+                               if not (isinstance(v, Block) and _text(v.get("name")) == name)]
+            sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(rel))]))
             counts["sprites"] += 1
     # Equipo común (by_faction.shared, 2026-10-07: el tren): una imagen,
     # assets/COMUN/armas/<familia>.dds, para el equipo y sus tecnologías en

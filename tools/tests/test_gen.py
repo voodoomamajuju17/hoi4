@@ -2813,6 +2813,14 @@ def test_faction_tech() -> None:
         check("unidad unica: su imagen va a su equipo y a sus tecnologias, solo para el EFE",
               bool(uu) and all(f"GFX_EFE_{t}_medium" in gfx for t in ([uu[0]["equipment"]] if uu[0]["equipment"] else [])
                                + uu[0]["techs"]) and "EFE_gliptodonte_" in gfx, str(uu)[:300])
+        import re as _re
+        names = _re.findall(r'name = "(GFX_[^"]+)"', gfx)
+        check("unidad unica: le gana a la imagen de la familia (un solo sprite por nombre)",
+              len(names) == len(set(names)), str([n for n in set(names) if names.count(n) > 1])[:300])
+        check("las 8 unidades unicas tienen su imagen (recortada de las pantallas de carga 16-19)",
+              all((REPO_ROOT / "assets" / u.split("_")[0] / "armas" / f"{u}.dds").exists() for u in (
+                  "EFE_gliptodonte", "NAS_hijos_del_condor", "APF_kiboko", "NRE_onagro", "ASC_centinela",
+                  "FCU_ala_de_obsidiana", "SHD_dragon_del_canal", "HSN_leviatan")))
         check("equipo comun: el tren usa la misma imagen en todos los paises, satelites y anarquias incluidos",
               all(f"GFX_{t}_train_equipment_1_medium" in gfx for t in ("EFE", "SHD", "PTA", "ZAN"))
               and "COMUN_train_" in gfx)
