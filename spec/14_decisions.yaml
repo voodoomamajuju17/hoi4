@@ -9372,7 +9372,9 @@ scripted_effects:
         date_after: 2102.6.1
         country:
           tag: NAS
-          when: {stability_below: 0.8}
+          # 2026-10-09: "si ya tengo Arequipa con el EFE, ¿por qué me sale el
+          # evento de pedirla?": solo si Arequipa sigue siendo del Sol
+          when: {stability_below: 0.8, owns_state: [Arequipa]}
         not_flag: EFE_crisis_1
       then:
       - {effect: flag, value: EFE_crisis_1}
@@ -9779,6 +9781,8 @@ scripted_effects:
         not:
           controls_state:
           - Taiwan
+        # solo si Taiwán sigue siendo del Directorio (2026-10-09, como Arequipa)
+        country: {tag: SHD, when: {owns_state: [Taiwan]}}
         not_flag: HSN_crisis_4
       then:
       - {effect: flag, value: HSN_crisis_4}

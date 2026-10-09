@@ -686,6 +686,7 @@ namespaces:
             o una excusa.'
         options:
         - name: {english: Demand Arequipa., spanish: Exigir Arequipa.}
+          when: {country: {tag: NAS, when: {owns_state: [Arequipa]}}}   # si ya no es del Sol, no se pide
           effects:
           - effect: if
             when: {country_exists: NAS}
@@ -733,6 +734,7 @@ namespaces:
           spanish: El Imperio Verde exige Arequipa 'para asegurar los Andes'. Si nos negamos, la Guardia Verde viene a buscarla.
         options:
         - name: {english: Give them Arequipa., spanish: Entregar Arequipa.}
+          when: {owns_state: [Arequipa]}   # solo se entrega lo propio
           effects:
           - effect: in_state
             state:
@@ -3263,6 +3265,7 @@ namespaces:
           spanish: Taiwán es del Directorio, y a nuestra red le falta un nodo. Los capitanes proponen comprarlo. O tomarlo.
         options:
         - name: {english: Offer to buy Taiwan., spanish: Ofrecer comprar Taiwán.}
+          when: {country: {tag: SHD, when: {owns_state: [Taiwan]}}}
           effects:
           - effect: if
             when: {country_exists: SHD}
@@ -3308,6 +3311,7 @@ namespaces:
           spanish: La Nación del Mar ofrece comprar Taiwán. Sus capitanes dejan claro que no van a preguntar dos veces.
         options:
         - name: {english: Sell Taiwan., spanish: Vender Taiwán.}
+          when: {owns_state: [Taiwan]}
           effects:
           - effect: in_state
             state:
@@ -7349,6 +7353,7 @@ namespaces:
           ejército en los pasos, no.'
       options:
       - name: {english: Give them the salt., spanish: Entregar los salares.}
+        when: {owns_state: [Antofagasta]}
         effects:
         - effect: in_state
           state:
