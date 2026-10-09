@@ -19,7 +19,7 @@ from __future__ import annotations
 import re
 
 from ..context import BuildContext
-from ..pdx import Block, Quoted, text as _text
+from ..pdx import Block, Quoted, parse_file, text as _text
 from .unit_names import roman
 
 SOURCE = "spec/17_research.yaml -> by_faction"
@@ -137,10 +137,126 @@ def emit(ctx: BuildContext) -> None:
                 counts["sprites"] += 1
     if sprites.entries:
         ctx.write_script(GFX_FILE, Block([("spriteTypes", sprites)]), source=SOURCE)
+        _designer_icons(ctx, sorted(style_of), sprites, equipment)
     ctx.note(f"armas por faccion: {counts['nombres']} nombres de equipo y {counts['tecnologias']} de tecnologia "
              f"para {len(style_of)} paises ({len(names)} estilos); {counts['sprites']} iconos propios "
              f"({len(written)} imagenes)")
     _probe(ctx, members, enabled_by)
+
+
+GRAPHIC_DB = ("gfx", "interface", "equipmentdesigner", "graphic_db")
+_PICTURE = re.compile(r"^GFX_|\.(dds|tga|png)$", re.IGNORECASE)
+
+
+def _designer_icons(ctx: BuildContext, tags: list[str], sprites: Block, equipment: dict) -> None:
+    """Las imágenes propias, elegibles en los diseñadores (2026-10-09: "la
+    imagen de los aviones aparece en el diseño de arranque pero no se mantiene
+    si lo actualizás, y no hay forma de elegirla"). El diseñador toma sus
+    íconos de la base de imágenes del juego (graphic_db), por país. Se copia
+    el bloque de un país del juego como plantilla, se le pone el TAG de cada
+    país del mod y, en cada lista de íconos cuya categoría es un arquetipo o
+    un equipo con imagen propia (small_plane_airframe, light_tank_chassis...),
+    las nuestras van primero. El resto de la plantilla queda igual."""
+    import copy
+    folder = ctx.vanilla.root.joinpath(*GRAPHIC_DB)
+    files = sorted(folder.glob("*.txt")) if folder.is_dir() else []
+    if not files:
+        ctx.note("disenadores: el juego no tiene " + "/".join(GRAPHIC_DB) + "; los iconos propios no se pueden elegir")
+        return
+    # sprite propio -> textura, y por país: categoría (arquetipo, equipo o raíz) -> sprites
+    own: dict[str, dict[str, list[tuple[str, str]]]] = {}
+    for _, sp in sprites.entries:
+        if not isinstance(sp, Block):
+            continue
+        name, tex = _text(sp.get("name")), _text(sp.get("texturefile"))
+        m = re.match(r"^GFX_([A-Z][A-Z0-9]{2})_(.+)_medium$", name)
+        if not m or m.group(2) not in equipment:
+            continue
+        tag, eq = m.group(1), m.group(2)
+        archetype = equipment[eq][0] or eq
+        for cat in {archetype, eq, re.sub(r"_\d+$", "", eq)}:
+            lst = own.setdefault(tag, {}).setdefault(cat, [])
+            if tex not in {t for _, t in lst}:     # una por imagen (las generaciones la comparten)
+                lst.append((name, tex))
+    tag_rx = re.compile(r"^[A-Z][A-Z0-9]{2}$")
+    vanilla_tags = {t for t in ctx.vanilla.country_tags() if t not in tags}
+
+    def is_tag(k) -> bool:
+        return isinstance(k, str) and k not in tags and (k in vanilla_tags or bool(tag_rx.match(k)))
+
+    report = []
+    for path in files:
+        try:
+            parsed = parse_file(path)
+        except ValueError:
+            report.append(f"{path.name}: no se pudo leer")
+            continue
+        # los bloques por país pueden estar arriba o dentro de un envoltorio
+        wrapper, holder = None, parsed
+        if not any(is_tag(k) for k, v in parsed.entries if isinstance(v, Block)):
+            for k, v in parsed.entries:
+                if isinstance(v, Block) and any(is_tag(kk) for kk, vv in v.entries if isinstance(vv, Block)):
+                    wrapper, holder = k, v
+                    break
+        candidates = [(k, v) for k, v in holder.entries if isinstance(v, Block) and is_tag(k)]
+        if not candidates:
+            keys = sorted({str(k) for k, _ in parsed.entries})[:8]
+            report.append(f"{path.name}: sin bloques por pais (arriba: {', '.join(keys)})")
+            continue
+        # plantilla: el país con más íconos
+        template_tag, template = max(candidates, key=lambda kv: _count_pictures(kv[1]))
+        out = Block()
+        lists = 0
+        for tag in tags:
+            mine = own.get(tag) or {}
+            if not mine:
+                continue
+            block = copy.deepcopy(template)
+            n = _add_own(block, mine, [])
+            if n:
+                out.add(tag, block)
+                lists += n
+        cats = sorted({str(k) for k, v in template.entries if isinstance(v, Block)})[:10]
+        if out.entries:
+            body = Block([(wrapper, out)]) if wrapper else out
+            ctx.write_script("/".join(GRAPHIC_DB) + f"/meganations_{path.name}", body, source=SOURCE)
+        report.append(f"{path.name}: plantilla {template_tag} ({', '.join(cats)}); "
+                      f"{len(out.entries)} paises con iconos propios en {lists} listas")
+    ctx.note("disenadores (iconos elegibles): " + " | ".join(report))
+
+
+def _count_pictures(block: Block) -> int:
+    n = 0
+    for k, v in block.entries:
+        if isinstance(v, Block):
+            n += _count_pictures(v)
+        elif k is None and _PICTURE.search(_text(v)):
+            n += 1
+    return n
+
+
+def _add_own(block: Block, mine: dict, path: list[str]) -> int:
+    """En cada lista de íconos de `block`, las imágenes propias de su
+    categoría (la clave más cercana que sea un arquetipo o equipo) primero."""
+    n = 0
+    items = [v for k, v in block.entries if k is None]
+    if items and len(items) == len(block.entries) and any(_PICTURE.search(_text(v)) for v in items):
+        cat = next((c for c in reversed(path) if c in mine), None)
+        if cat:
+            textures = any(_text(v).lower().endswith((".dds", ".tga", ".png")) for v in items)
+            quoted = any(isinstance(v, Quoted) for v in items)
+            new = []
+            for name, tex in mine[cat]:
+                val = tex if textures else name
+                new.append((None, Quoted(val) if quoted else val))
+            have = {_text(v) for v in items}
+            block.entries[:0] = [e for e in new if _text(e[1]) not in have]
+            return 1
+        return 0
+    for k, v in block.entries:
+        if isinstance(v, Block):
+            n += _add_own(v, mine, path + [str(k)])
+    return n
 
 
 def family_members(families: dict, equipment: dict) -> dict[str, list[tuple[str, int]]]:

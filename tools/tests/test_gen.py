@@ -2072,7 +2072,18 @@ def test_ai() -> None:
         check("crisis entre potencias: el EFE le exige Arequipa al Sol", "EFE_crisis_1" in se_c and "meganations_efe.150" in se_c)
         efe_ev = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         e153 = efe_ev[efe_ev.index("id = meganations_efe.153 title"):][:600]
-        check("crisis: si el otro se niega, casus belli y la IA se prepara", "create_wargoal = { type = annex_everything target = NAS }" in e153
+        # 2026-10-09: "si ya tengo Arequipa con el EFE, ¿por qué me sale el evento de pedirla?"
+        crisis = se_c[se_c.index("EFE_crisis_1") - 400:se_c.index("EFE_crisis_1")]
+        # (en el fixture no hay región Arequipa: la condición sale como always = no)
+        check("crisis de Arequipa: solo si Arequipa sigue siendo del Sol",
+              "NAS = { has_stability < 0.8 owns_state = " in crisis or "NAS = { has_stability < 0.8 always = no }" in crisis, crisis)
+        e151 = efe_ev[efe_ev.index("id = meganations_efe.151 title"):][:900]
+        check("crisis de Arequipa: el Sol solo puede entregar Arequipa si es suya",
+              "meganations_efe.151.a trigger = { owns_state = " in e151 or "meganations_efe.151.a trigger = { always = no }" in e151, e151[:500])
+        e150 = efe_ev[efe_ev.index("id = meganations_efe.150 title"):][:900]
+        check("crisis de Arequipa: el Imperio no la exige si ya no es del Sol",
+              "trigger = { NAS = { owns_state = " in e150 or "trigger = { NAS = { always = no } }" in e150, e150[:500])
+        check("crisis de Arequipa: si el otro se niega, casus belli y la IA se prepara", "create_wargoal = { type = annex_everything target = NAS }" in e153
               and "EFE_contra_NAS" in e153 and "EFE_crisis_entre_potencias_NAS" in (REPO_ROOT / "spec/16_ai.yaml").read_text(encoding="utf-8"), e153)
         sa = se_c[se_c.index("ANARQUIA_sin_alianzas = {"):][:2500]
         check("Anarquia: sale de las facciones de las potencias y pierde sus garantias",
@@ -2825,6 +2836,19 @@ def test_faction_tech() -> None:
               all(f"GFX_{t}_train_equipment_1_medium" in gfx for t in ("EFE", "SHD", "PTA", "ZAN"))
               and "COMUN_train_" in gfx)
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
+        # 2026-10-09: "la imagen de los aviones aparece en el diseño de arranque pero no se mantiene
+        # si lo actualizás, y no hay forma de elegirla" -> base de imágenes del diseñador
+        db = mod / "gfx/interface/equipmentdesigner/graphic_db/meganations_00_icons_fixture.txt"
+        dbt = " ".join(db.read_text(encoding="utf-8-sig").split()) if db.exists() else ""
+        check("disenador: cada faccion con imagen tiene su bloque en la base de imagenes (copiado de un pais del juego)",
+              _re.search(r'EFE = \{ infantry_equipment = \{ icons = \{ "GFX_EFE_infantry_equipment_\d_medium" "GFX_GER_', dbt)
+              and "GER_rifle_entity" in dbt, dbt[:500])
+        check("disenador: la propia va primero, una por imagen, y quedan las del juego como alternativa",
+              dbt.count('"GFX_EFE_infantry_equipment_') == 1 and '"GFX_GER_infantry_equipment_1_medium" }' in dbt, dbt[:500])
+        check("disenador: sin imagen propia no se agrega bloque (SHD queda con las del juego)",
+              "SHD = {" not in dbt and "western_european" not in dbt, dbt[:300])
+        check("disenador: el reporte dice que plantilla uso", any("iconos elegibles" in n and "plantilla GER" in n for n in ctx.notes),
+              str([n for n in ctx.notes if "disenadores" in n]))
 
 
 def test_loading_quotes() -> None:

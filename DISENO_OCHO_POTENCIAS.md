@@ -1093,3 +1093,24 @@ llega a 100 al toque y la tensión nunca sube".
   así el árbol y el diseñador dicen lo mismo. `modules` permite pisar un
   módulo puntual. El juego no tiene nombres de módulo por país: valen para
   todos. El reporte dice cuántos módulos cambiaron y cuáles no.
+- **Íconos propios elegibles en los diseñadores** (2026-10-09, "la imagen de
+  los aviones aparece en el diseño de arranque pero no se mantiene si lo
+  actualizás, y no hay forma de elegirla"). El diseño de arranque usa
+  GFX_<TAG>_<equipo>_medium, pero el diseñador (aviones, tanques, barcos)
+  toma sus íconos de la base de imágenes del juego
+  (gfx/interface/equipmentdesigner/graphic_db), por país. El generador lee
+  esos archivos del juego instalado, copia el bloque de un país del juego
+  como plantilla (el que más íconos tiene), le pone el TAG de cada país del
+  mod y, en cada lista de íconos cuya categoría es un arquetipo o un equipo
+  con imagen propia, pone la nuestra primero (una por imagen); las del juego
+  quedan como alternativa. Se escribe como meganations_<archivo>.txt (no
+  pisa los del juego). El reporte dice qué plantilla y categorías encontró
+  ("disenadores (iconos elegibles)"); si el juego usa otras categorías, ahí
+  se ve.
+- **Crisis que pedían territorio propio** (2026-10-09, "si ya tengo Arequipa
+  con el EFE, ¿por qué me sale el evento de pedirla?"). La crisis de
+  Arequipa solo miraba la fecha y la estabilidad del Sol. Ahora, en las tres
+  crisis que piden una región (Arequipa del Sol al Imperio, Taiwán del
+  Directorio a la HSN, los Salares del Imperio al Sol): solo arrancan si el
+  otro sigue siendo dueño, la opción de pedir no aparece si ya no lo es, y la
+  de entregar solo aparece si la región es propia.
