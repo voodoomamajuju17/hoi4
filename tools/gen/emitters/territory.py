@@ -133,6 +133,7 @@ def emit(ctx: BuildContext) -> None:
     ctx.data["capitals"] = capitals
 
     _rename_states(ctx, by_name)
+    _rename_cities(ctx, by_name, by_state, capitals)
     deposits = _starting_deposits(ctx, capitals)
     ctx.data["deposits"] = deposits
     claims = _claims(ctx, assignment, states)
@@ -299,6 +300,63 @@ def _rename_states(ctx: BuildContext, by_name) -> None:
             done += 1
     if done:
         ctx.note(f"nombres de 2100: {done} states renombrados")
+
+
+def _rename_cities(ctx: BuildContext, by_name, by_state, capitals) -> None:
+    """Capitales y ciudades de 2100 (city_names, 2026-10-09). En el mapa la
+    ciudad es el punto de victoria: VICTORY_POINTS_<provincia>. Se busca por
+    su nombre en inglés en el juego instalado; si el nombre se repite, gana el
+    punto de victoria más grande de su región (o el de la región de `state`).
+    Después, la ciudad principal de la capital de cada país que siga con el
+    nombre del juego recibe el de `capitals`. Lo ya renombrado no se toca."""
+    spec = ctx.spec.raw["territory"].get("city_names") or {}
+    if not spec or ctx.vanilla is None:
+        return
+    vp_name = {}
+    for key, text in ctx.vanilla.all_localisation("english").items():
+        if key.startswith("VICTORY_POINTS_") and key[15:].isdigit():
+            vp_name[int(key[15:])] = text
+    rank: dict[int, tuple[int, int]] = {}      # provincia -> (puesto en su región, región)
+    for st in by_state.values():
+        for i, prov in enumerate(st.vp_provinces):
+            rank[prov] = (i, st.id)
+    index: dict[str, list[int]] = defaultdict(list)
+    for prov, name in vp_name.items():
+        index[normalize(name)].append(prov)
+    taken = set(getattr(ctx.loc, "_defined", {}))
+    done, missing = 0, []
+    for entry in spec.get("cities") or []:
+        provs = {p for o in entry["city"] for p in index.get(normalize(o), [])}
+        if entry.get("state"):
+            sids = {st.id for o in entry["state"] for st in by_name.get(normalize(o), [])}
+            provs = {p for p in provs if rank.get(p, (99, None))[1] in sids}
+        if not provs:
+            missing.append(entry["city"][0])
+            continue
+        best = min(provs, key=lambda p: (rank.get(p, (99, None))[0], p))
+        key = f"VICTORY_POINTS_{best}"
+        if key in taken:
+            continue
+        ctx.loc.define_and_reference(key, en=entry["name"]["english"], es=entry["name"]["spanish"],
+                                     file="replace/meganations_states", origin=f"city_names:{entry['city'][0]}")
+        taken.add(key)
+        done += 1
+    caps = []
+    for tag, name in (spec.get("capitals") or {}).items():
+        st = by_state.get(capitals.get(tag))
+        if st is None or not st.vp_provinces:
+            continue
+        key = f"VICTORY_POINTS_{st.vp_provinces[0]}"
+        if key in taken:
+            continue
+        ctx.loc.define_and_reference(key, en=name["english"], es=name["spanish"],
+                                     file="replace/meganations_states", origin=f"city_names:capital:{tag}")
+        taken.add(key)
+        caps.append(f"{tag} ({vp_name.get(st.vp_provinces[0], '?')} -> {name['spanish']})")
+    ctx.note(f"ciudades de 2100: {done} renombradas por nombre"
+             + (f"; capitales con nombre de respaldo: {', '.join(caps)}" if caps else "")
+             + (f"; no estan en este juego ({len(missing)}): {', '.join(missing[:60])}"
+                + (" ..." if len(missing) > 60 else "") if missing else ""))
 
 
 def capital_of(ctx, tag, assignment, names, by_state) -> int | None:

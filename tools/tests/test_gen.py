@@ -714,6 +714,16 @@ def test_territory() -> None:
         mod = ctx.mod_root
         terr = ctx.data["territory"]
         check("Buenos Aires (ARG) -> EFE", terr.get(900) == "EFE", str(terr))
+        # 2026-10-09: "cambiá los nombres a todas las capitales y ciudades más importantes, excepto Roma y Gaia"
+        st_es = "".join(p.read_text(encoding="utf-8-sig") for p in mod.glob("localisation/spanish/replace/*states*"))
+        check("ciudades de 2100: por su nombre en el juego (Moscow -> Moscu Fortaleza)",
+              'VICTORY_POINTS_22:0 "Moscú Fortaleza"' in st_es, st_es[-400:])
+        check("ciudades de 2100: la capital que sigue con el nombre del juego recibe el de su pais (ASC)",
+              'VICTORY_POINTS_9:0 "Kommune Berlin"' in st_es, st_es[-400:])
+        check("ciudades de 2100: Gaia sigue siendo Gaia y Roma no se toca",
+              'VICTORY_POINTS_1:0 "Gaia"' in st_es and "VICTORY_POINTS_13:" not in st_es, st_es[-400:])
+        check("ciudades de 2100: el reporte dice cuantas y cuales faltan",
+              any("ciudades de 2100: 1 renombradas" in n and "ASC (Essen -> Kommune Berlin)" in n for n in ctx.notes))
         check("Cordoba (ARG) -> EFE", terr.get(902) == "EFE")
         check("Formosa queda en el EFE (decision del usuario)", terr.get(903) == "EFE", str(terr))
         check("Magallanes -> PTA", terr.get(901) == "PTA")

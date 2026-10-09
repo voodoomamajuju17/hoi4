@@ -598,6 +598,216 @@ state_names:
     - { state: ["Bouches-du-Rhône"], name: { english: "Massilia", spanish: "Masilia" } }
 
 # =============================================================================
+# Capitales y ciudades de 2100 (2026-10-09, pedido del usuario: "cambiá los
+# nombres a todas las capitales y ciudades más importantes, excepto Roma y Gaia
+# que ya están"). En el mapa la ciudad es el punto de victoria
+# (VICTORY_POINTS_<provincia>): se busca por su nombre en inglés en el juego
+# instalado (city: alternativas; state: pista si el nombre se repite) y se pisa
+# en localisation/<idioma>/replace/. Después, la ciudad principal de la capital
+# de cada país que todavía tenga el nombre del juego recibe el de `capitals`.
+# Lo que ya tiene nombre (Gaia, Puerto Custodio) no se toca; Roma no está.
+# =============================================================================
+city_names:
+  src: user_request
+  cities:
+    # Imperio Ecofascista y satélites (Gaia y Puerto Custodio ya estaban)
+    - { city: ["Santiago"], name: { english: "Santiago of the Alerces", spanish: "Santiago de los Alerces" }, state: ["Santiago"] }
+    - { city: ["Valparaíso", "Valparaiso"], name: { english: "Port of the Kelp Forests", spanish: "Puerto de los Bosques de Algas" } }
+    - { city: ["Rosario"], name: { english: "Rosario of the Vats", spanish: "Rosario de las Cubas" } }
+    - { city: ["Mendoza"], name: { english: "New Mendoza", spanish: "Nueva Mendoza" }, state: ["Mendoza"] }
+    - { city: ["Porto Alegre"], name: { english: "Porto Gaia", spanish: "Porto Gaia" } }
+    - { city: ["Asunción", "Asuncion"], name: { english: "Asunción of the Waters", spanish: "Asunción de las Aguas" } }
+    - { city: ["Punta Arenas"], name: { english: "Port of the World's End", spanish: "Puerto del Fin del Mundo" } }
+    # Reino del Sol y satélites: nombres andinos
+    - { city: ["Lima"], name: { english: "Rimaq", spanish: "Rimaq" }, state: ["Lima"] }
+    - { city: ["La Paz"], name: { english: "Chuquiago", spanish: "Chuquiago" } }
+    - { city: ["Quito"], name: { english: "Kitu", spanish: "Kitu" } }
+    - { city: ["Cusco", "Cuzco"], name: { english: "Qosqo", spanish: "Qosqo" } }
+    - { city: ["Arequipa"], name: { english: "White City", spanish: "Ciudad Blanca" } }
+    - { city: ["Guayaquil"], name: { english: "Port of the Sun", spanish: "Puerto del Sol" } }
+    - { city: ["Bogotá", "Bogota"], name: { english: "Bacatá", spanish: "Bacatá" } }
+    - { city: ["Caracas"], name: { english: "Caracas of the Sun", spanish: "Caracas del Sol" } }
+    - { city: ["Panama", "Panamá", "Panama City"], name: { english: "Gate of Two Seas", spanish: "Puerta de los Dos Mares" } }
+    # La Unión: ciudades corporativas
+    - { city: ["New York", "New York City"], name: { english: "Greater Manhattan", spanish: "Gran Manhattan" } }
+    - { city: ["Washington", "Washington D.C.", "Washington DC"], name: { english: "Washington Holdings", spanish: "Washington Holdings" } }
+    - { city: ["Philadelphia"], name: { english: "Steel Trust Philadelphia", spanish: "Filadelfia del Trust" } }
+    - { city: ["Boston"], name: { english: "Boston-Meridian", spanish: "Boston-Meridian" } }
+    - { city: ["Chicago"], name: { english: "Castellane Chicago", spanish: "Chicago Castellane" } }
+    - { city: ["Detroit"], name: { english: "Automata Detroit", spanish: "Detroit Autómata" } }
+    - { city: ["Pittsburgh"], name: { english: "Ferropolis", spanish: "Ferrópolis" } }
+    - { city: ["Atlanta"], name: { english: "Obsidian Atlanta", spanish: "Atlanta Obsidian" } }
+    - { city: ["Miami"], name: { english: "Drowned Miami", spanish: "Miami Anegada" } }
+    - { city: ["New Orleans"], name: { english: "Floating New Orleans", spanish: "Nueva Orleans Flotante" } }
+    - { city: ["Houston"], name: { english: "Houston Offshore", spanish: "Houston Offshore" } }
+    - { city: ["Los Angeles"], name: { english: "Angelopolis", spanish: "Angelópolis" } }
+    - { city: ["San Francisco"], name: { english: "Fog Bay", spanish: "Bahía de la Niebla" } }
+    - { city: ["Seattle"], name: { english: "Puget Arcology", spanish: "Arcología Puget" } }
+    - { city: ["Toronto"], name: { english: "Toronto Charter", spanish: "Carta de Toronto" } }
+    - { city: ["Montreal", "Montréal"], name: { english: "Montreal Free Port", spanish: "Puerto Franco de Montreal" } }
+    - { city: ["Ottawa"], name: { english: "Ottawa Holdings", spanish: "Ottawa Holdings" } }
+    - { city: ["Vancouver"], name: { english: "Cascadia Station", spanish: "Estación Cascadia" } }
+    - { city: ["Mexico City", "Mexico", "Ciudad de México"], name: { english: "Mexico Charter City", spanish: "Ciudad Carta de México" } }
+    - { city: ["Guadalajara"], name: { english: "Guadalajara Free Zone", spanish: "Zona Franca de Guadalajara" } }
+    - { city: ["Monterrey"], name: { english: "Monterrey Foundry", spanish: "Fundidora de Monterrey" } }
+    # La Nación del Mar y satélites: puertos libres
+    - { city: ["Singapore"], name: { english: "Node Zero", spanish: "Nodo Cero" } }
+    - { city: ["Tokyo"], name: { english: "Free Tokyo", spanish: "Tokio Libre" } }
+    - { city: ["Osaka"], name: { english: "Osaka Exchange", spanish: "Bolsa de Osaka" } }
+    - { city: ["Batavia", "Jakarta", "Djakarta"], name: { english: "Floating Jakarta", spanish: "Yakarta Flotante" } }
+    - { city: ["Manila"], name: { english: "Charter Port", spanish: "Puerto Carta" } }
+    - { city: ["Saigon"], name: { english: "Merchant Saigon", spanish: "Saigón Mercante" } }
+    - { city: ["Bangkok"], name: { english: "Drowned Bangkok", spanish: "Bangkok Anegada" } }
+    - { city: ["Havana", "La Habana"], name: { english: "Free Havana", spanish: "La Habana Franca" } }
+    - { city: ["Sydney"], name: { english: "Sydney Charter", spanish: "Carta de Sídney" } }
+    - { city: ["Melbourne"], name: { english: "Port Melbourne", spanish: "Puerto Melbourne" } }
+    - { city: ["Canberra"], name: { english: "Canberra Holdings", spanish: "Canberra Holdings" } }
+    - { city: ["Wellington"], name: { english: "Free Wellington", spanish: "Wellington Franca" } }
+    - { city: ["Auckland"], name: { english: "Auckland Docks", spanish: "Muelles de Auckland" } }
+    # La Comuna y satélites: comunas y máquinas
+    - { city: ["Berlin"], name: { english: "Kommune Berlin", spanish: "Kommune Berlin" } }
+    - { city: ["Hamburg"], name: { english: "Automated Hamburg", spanish: "Hamburgo Autómata" } }
+    - { city: ["Munich", "München"], name: { english: "Red Munich", spanish: "Múnich Roja" } }
+    - { city: ["Vienna", "Wien"], name: { english: "Council Vienna", spanish: "Viena del Consejo" } }
+    - { city: ["Prague", "Praha"], name: { english: "Workers' Prague", spanish: "Praga Obrera" } }
+    - { city: ["Amsterdam"], name: { english: "Polder Amsterdam", spanish: "Ámsterdam de los Pólderes" } }
+    - { city: ["Brussels", "Bruxelles"], name: { english: "Brussels Data Hub", spanish: "Nodo Bruselas" } }
+    - { city: ["Copenhagen"], name: { english: "Communal Copenhagen", spanish: "Copenhague Comunal" } }
+    - { city: ["Stockholm"], name: { english: "Common Stockholm", spanish: "Estocolmo Común" } }
+    - { city: ["Oslo"], name: { english: "Communal Oslo", spanish: "Oslo Comunal" } }
+    - { city: ["Warsaw", "Warszawa"], name: { english: "Warsaw of the Fields", spanish: "Varsovia de los Campos" } }
+    - { city: ["Kraków", "Krakow", "Cracow"], name: { english: "Agrarian Kraków", spanish: "Cracovia Agraria" } }
+    - { city: ["Riga"], name: { english: "Communal Riga", spanish: "Riga Comunal" } }
+    - { city: ["London"], name: { english: "Unplugged London", spanish: "Londres Desenchufada" } }
+    - { city: ["Edinburgh"], name: { english: "Edinburgh of the Looms", spanish: "Edimburgo de los Telares" } }
+    - { city: ["Manchester"], name: { english: "Machineless Manchester", spanish: "Manchester sin Máquinas" } }
+    - { city: ["Birmingham"], name: { english: "Artisan Birmingham", spanish: "Birmingham Artesana" } }
+    - { city: ["Glasgow"], name: { english: "Glasgow of the Machine-Breakers", spanish: "Glasgow de los Rompemáquinas" } }
+    - { city: ["Dublin"], name: { english: "Free Dublin", spanish: "Dublín Libre" } }
+    # El Directorio y satélites: nombres en pinyin (los históricos donde los hay)
+    - { city: ["Beijing", "Peking", "Peiping", "Beiping"], name: { english: "Hexie Jing", spanish: "Hexie Jing" } }
+    - { city: ["Shanghai"], name: { english: "Hu Shuicheng", spanish: "Hu Shuicheng" } }
+    - { city: ["Canton", "Guangzhou"], name: { english: "Yangcheng", spanish: "Yangcheng" } }
+    - { city: ["Chungking", "Chongqing"], name: { english: "Yuzhou", spanish: "Yuzhou" } }
+    - { city: ["Nanking", "Nanjing"], name: { english: "Jinling", spanish: "Jinling" } }
+    - { city: ["Tientsin", "Tianjin"], name: { english: "Jinmen", spanish: "Jinmen" } }
+    - { city: ["Hankow", "Wuhan"], name: { english: "Jiangcheng", spanish: "Jiangcheng" } }
+    - { city: ["Sian", "Xi'an", "Xian"], name: { english: "Chang'an", spanish: "Chang'an" } }
+    - { city: ["Mukden", "Shenyang"], name: { english: "Shengjing", spanish: "Shengjing" } }
+    - { city: ["Taihoku", "Taipei"], name: { english: "Taibei Jian", spanish: "Taibei Jian" } }
+    - { city: ["Keijo", "Keijō", "Seoul"], name: { english: "Hanyang", spanish: "Hanyang" } }
+    - { city: ["Heijo", "Heijō", "Pyongyang"], name: { english: "Ryugyong", spanish: "Ryugyong" } }
+    - { city: ["Vladivostok"], name: { english: "Haishenwai", spanish: "Haishenwai" } }
+    - { city: ["Kazan"], name: { english: "Kazan Sanctuary", spanish: "Santuario de Kazán" } }
+    - { city: ["Kuybyshev", "Kuibyshev", "Samara"], name: { english: "Holy Samara", spanish: "Samara Santa" } }
+    - { city: ["Sverdlovsk", "Yekaterinburg"], name: { english: "Celestial Yekaterinburg", spanish: "Ekaterimburgo Celeste" } }
+    - { city: ["Novosibirsk"], name: { english: "Permafrost City", spanish: "Ciudad del Permafrost" } }
+    # La Federación y satélites: los nombres propios de cada ciudad
+    - { city: ["Lagos"], name: { english: "Èkó", spanish: "Èkó" } }
+    - { city: ["Cairo"], name: { english: "Council Cairo", spanish: "El Cairo del Consejo" } }
+    - { city: ["Alexandria"], name: { english: "Alexandria of the Lighthouse", spanish: "Alejandría del Faro" } }
+    - { city: ["Léopoldville", "Leopoldville", "Kinshasa"], name: { english: "Kinshasa", spanish: "Kinshasa" } }
+    - { city: ["Elisabethville", "Élisabethville"], name: { english: "Lubumbashi", spanish: "Lubumbashi" } }
+    - { city: ["Stanleyville"], name: { english: "Kisangani", spanish: "Kisangani" } }
+    - { city: ["Accra"], name: { english: "Accra of the Commons", spanish: "Accra de los Comunes" } }
+    - { city: ["Nairobi"], name: { english: "Federal Nairobi", spanish: "Nairobi Federal" } }
+    - { city: ["Khartoum"], name: { english: "Khartoum of the Nile", spanish: "Jartum del Nilo" } }
+    - { city: ["Salisbury"], name: { english: "Harare", spanish: "Harare" } }
+    - { city: ["Lourenço Marques", "Lourenco Marques"], name: { english: "Maputo", spanish: "Maputo" } }
+    - { city: ["Casablanca"], name: { english: "Dar al-Bayda", spanish: "Dar al-Bayda" } }
+    - { city: ["Algiers", "Alger"], name: { english: "Federal Algiers", spanish: "Argel Federal" } }
+    - { city: ["Addis Ababa", "Addis Abeba"], name: { english: "Finfinne", spanish: "Finfinne" } }
+    - { city: ["Pretoria"], name: { english: "Tshwane", spanish: "Tshwane" } }
+    - { city: ["Johannesburg"], name: { english: "Egoli", spanish: "Egoli" } }
+    - { city: ["Cape Town"], name: { english: "iKapa", spanish: "iKapa" } }
+    - { city: ["Durban"], name: { english: "eThekwini", spanish: "eThekwini" } }
+    # Roma y satélites: nombres latinos (Roma queda como está)
+    - { city: ["Paris"], name: { english: "Lutetia", spanish: "Lutecia" } }
+    - { city: ["Milan", "Milano"], name: { english: "Mediolanum", spanish: "Mediolanum" } }
+    - { city: ["Turin", "Torino"], name: { english: "Augusta Taurinorum", spanish: "Augusta Taurinorum" } }
+    - { city: ["Lyon", "Lyons"], name: { english: "Lugdunum", spanish: "Lugdunum" } }
+    - { city: ["Marseille", "Marseilles"], name: { english: "Massilia", spanish: "Masilia" } }
+    - { city: ["Naples", "Napoli"], name: { english: "Neapolis", spanish: "Neápolis" } }
+    - { city: ["Venice", "Venezia"], name: { english: "Venetia", spanish: "Venecia Romana" } }
+    - { city: ["Florence", "Firenze"], name: { english: "Florentia", spanish: "Florentia" } }
+    - { city: ["Genoa", "Genova"], name: { english: "Genua", spanish: "Génova Romana" } }
+    - { city: ["Palermo"], name: { english: "Panormus", spanish: "Panormo" } }
+    - { city: ["Bordeaux"], name: { english: "Burdigala", spanish: "Burdigala" } }
+    - { city: ["Toulouse"], name: { english: "Tolosa", spanish: "Tolosa" } }
+    - { city: ["Strasbourg"], name: { english: "Argentoratum", spanish: "Argentorato" } }
+    - { city: ["Madrid"], name: { english: "Matritum", spanish: "Matritum" } }
+    - { city: ["Barcelona"], name: { english: "Barcino", spanish: "Barcino" } }
+    - { city: ["Lisbon", "Lisboa"], name: { english: "Olisipo", spanish: "Olisipo" } }
+    - { city: ["Seville", "Sevilla"], name: { english: "Hispalis", spanish: "Híspalis" } }
+    - { city: ["Valencia"], name: { english: "Valentia", spanish: "Valentia" }, state: ["Valencia"] }
+    - { city: ["Saragossa", "Zaragoza"], name: { english: "Caesaraugusta", spanish: "Cesaraugusta" } }
+    - { city: ["Porto", "Oporto"], name: { english: "Portus Cale", spanish: "Portus Cale" } }
+    - { city: ["Bucharest", "Bucuresti", "București"], name: { english: "Bunker Bucharest", spanish: "Bucarest Búnker" } }
+    - { city: ["Budapest"], name: { english: "Aquincum", spanish: "Aquincum" } }
+    - { city: ["Sofia"], name: { english: "Serdica", spanish: "Sérdica" } }
+    - { city: ["Belgrade", "Beograd"], name: { english: "Singidunum", spanish: "Singidunum" } }
+    - { city: ["Athens"], name: { english: "Athenae", spanish: "Atenas Romana" } }
+    # Las anarquías
+    - { city: ["Moscow"], name: { english: "Fortress Moscow", spanish: "Moscú Fortaleza" } }
+    - { city: ["Leningrad", "Saint Petersburg", "St. Petersburg"], name: { english: "Piter", spanish: "Píter" } }
+    - { city: ["Stalingrad", "Tsaritsyn"], name: { english: "Tsaritsyn", spanish: "Tsaritsyn" } }
+    - { city: ["Minsk"], name: { english: "Warlords' Minsk", spanish: "Minsk de los Señores" } }
+    - { city: ["Odessa", "Odesa"], name: { english: "Pirate Odessa", spanish: "Odesa Pirata" } }
+    - { city: ["Kiev", "Kyiv"], name: { english: "Kyiv of Ashes", spanish: "Kiev de las Cenizas" } }
+    - { city: ["Istanbul", "Constantinople"], name: { english: "Istanbul of the Straits", spanish: "Estambul de los Estrechos" } }
+    - { city: ["Delhi", "New Delhi"], name: { english: "Indraprastha", spanish: "Indraprastha" } }
+    - { city: ["Bombay", "Mumbai"], name: { english: "Mumbai", spanish: "Mumbai" } }
+    - { city: ["Calcutta", "Kolkata"], name: { english: "Kolkata", spanish: "Calcuta de los Señores" } }
+    - { city: ["Madras", "Chennai"], name: { english: "Chennai", spanish: "Chennai" } }
+    - { city: ["Karachi"], name: { english: "Kolachi", spanish: "Kolachi" } }
+    - { city: ["Bangalore", "Bengaluru"], name: { english: "Bengaluru", spanish: "Bengaluru" } }
+    - { city: ["Rangoon", "Yangon"], name: { english: "Yangon", spanish: "Yangón" } }
+    - { city: ["Kabul"], name: { english: "Kingless Kabul", spanish: "Kabul sin Rey" } }
+    - { city: ["Hong Kong"], name: { english: "Hong Kong Pirate Port", spanish: "Puerto Pirata de Hong Kong" } }
+    - { city: ["Tehran", "Teheran"], name: { english: "Emirs' Tehran", spanish: "Teherán de los Emires" } }
+    - { city: ["Baghdad"], name: { english: "Madinat al-Salam", spanish: "Madinat al-Salam" } }
+    - { city: ["Riyadh"], name: { english: "Riyadh of the Sandstorm", spanish: "Riad de la Tormenta" } }
+    - { city: ["Damascus"], name: { english: "Dimashq", spanish: "Dimashq" } }
+    - { city: ["Rio de Janeiro"], name: { english: "Drowned Rio", spanish: "Río Anegado" } }
+    - { city: ["São Paulo", "Sao Paulo"], name: { english: "Sampa of the Caudillos", spanish: "Sampa de los Caudillos" } }
+    - { city: ["Manaus"], name: { english: "Heart of the Jungle", spanish: "Corazón de la Selva" } }
+    - { city: ["Recife"], name: { english: "Drowned Recife", spanish: "Recife Anegada" } }
+    - { city: ["Dakar"], name: { english: "Lawless Dakar", spanish: "Dakar Sin Ley" } }
+    - { city: ["Monrovia"], name: { english: "Lawless Monrovia", spanish: "Monrovia Sin Ley" } }
+    - { city: ["Kansas City"], name: { english: "Kansas Free-for-All", spanish: "Kansas Tierra de Nadie" } }
+    - { city: ["Minneapolis"], name: { english: "Frozen Minneapolis", spanish: "Minneapolis Helada" } }
+    - { city: ["Denver"], name: { english: "Lawless Denver", spanish: "Denver Sin Ley" } }
+  capitals:
+    PTA: { english: "Port of the World's End", spanish: "Puerto del Fin del Mundo" }
+    YYG: { english: "Asunción of the Waters", spanish: "Asunción de las Aguas" }
+    NAS: { english: "Qosqo", spanish: "Qosqo" }
+    ZNG: { english: "Bacatá", spanish: "Bacatá" }
+    ZLL: { english: "Solar Court", spanish: "Corte Solar" }
+    FCU: { english: "Greater Manhattan", spanish: "Gran Manhattan" }
+    ZNR: { english: "Northern Charter", spanish: "Carta del Norte" }
+    ZSE: { english: "Charter City", spanish: "Ciudad Carta" }
+    HSN: { english: "Node Zero", spanish: "Nodo Cero" }
+    ZAF: { english: "Caribbean Free Port", spanish: "Puerto Franco del Caribe" }
+    ZAS: { english: "Southern Exchange", spanish: "Bolsa del Sur" }
+    ASC: { english: "Kommune Berlin", spanish: "Kommune Berlin" }
+    ZBC: { english: "Commune of the Fields", spanish: "Comuna de los Campos" }
+    ZAL: { english: "City of Looms", spanish: "Ciudad de los Telares" }
+    SHD: { english: "Hexie Jing", spanish: "Hexie Jing" }
+    ZKR: { english: "Hanyang", spanish: "Hanyang" }
+    ZST: { english: "Steppe Sanctuary", spanish: "Santuario de la Estepa" }
+    APF: { english: "Èkó", spanish: "Èkó" }
+    ZET: { english: "Finfinne", spanish: "Finfinne" }
+    ZSA: { english: "Tshwane", spanish: "Tshwane" }
+    ZHI: { english: "Matritum", spanish: "Matritum" }
+    ZDA: { english: "Bunker City", spanish: "Ciudad Búnker" }
+    ZWE: { english: "Warlords' Citadel", spanish: "Ciudadela de los Señores" }
+    ZWI: { english: "Throne of the Rajas", spanish: "Trono de los Rajás" }
+    ZWM: { english: "Court of the Emirs", spanish: "Corte de los Emires" }
+    ZWB: { english: "Caudillo's Fort", spanish: "Fortín del Caudillo" }
+    ZAN: { english: "Lawless Fort", spanish: "Fuerte Sin Ley" }
+    ZSG: { english: "Heart of Gaia", spanish: "Corazón de Gaia" }
+
+# =============================================================================
 capital_fallback:
   rule: "Si el país no tiene capital en el spec, el state propio con más manpower."
   src: invented

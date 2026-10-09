@@ -1127,3 +1127,31 @@ llega a 100 al toque y la tensión nunca sube".
   Mk2, Mk3...), los diseños de tanque con que arranca cada meganación y los
   diseños de barco copiados del juego, si su facción tiene imagen para ese
   chasis o casco.
+- **Capitales y ciudades de 2100** (2026-10-09, "cambiá los nombres a todas
+  las capitales y ciudades más importantes, excepto Roma y Gaia").
+  08_territory.yaml -> city_names. En el mapa la ciudad es el punto de
+  victoria (VICTORY_POINTS_<provincia>): se busca por su nombre en inglés en
+  el juego instalado y se pisa. 158 ciudades, con nombres según quién las
+  gobierna:
+  - Imperio: Santiago de los Alerces, Rosario de las Cubas, Porto Gaia,
+    Asunción de las Aguas, Puerto del Fin del Mundo.
+  - Reino del Sol (andinos): Rimaq (Lima), Chuquiago (La Paz), Kitu (Quito),
+    Qosqo (Cusco), Bacatá (Bogotá).
+  - Unión (corporativas): Gran Manhattan, Washington Holdings, Chicago
+    Castellane, Ferrópolis (Pittsburgh), Ciudad Carta de México.
+  - Nación del Mar (puertos libres): Nodo Cero (Singapur), Tokio Libre,
+    Bolsa de Osaka, Yakarta Flotante.
+  - Comuna: Kommune Berlin, Viena del Consejo, Londres Desenchufada.
+  - Directorio (pinyin e históricos): Hexie Jing (Pekín), Hu Shuicheng
+    (Shanghái), Jinling (Nankín), Chang'an (Xi'an), Hanyang (Seúl).
+  - Federación (nombres propios): Èkó (Lagos), Kinshasa, Tshwane
+    (Pretoria), Egoli (Johannesburgo), Finfinne (Adís Abeba).
+  - Roma (latinos): Lutecia (París), Mediolanum (Milán), Lugdunum (Lyon),
+    Matritum (Madrid), Barcino, Olisipo, Aquincum (Budapest), Singidunum.
+  - Anarquías: Moscú Fortaleza, Píter, Indraprastha (Delhi), Madinat
+    al-Salam (Bagdad), Río Anegado, Corazón de la Selva (Manaos).
+  Después, la ciudad principal de la capital de cada país que siga con el
+  nombre del juego recibe uno propio (`capitals`: Nodo Cero, Corte de los
+  Emires, Ciudadela de los Señores...). Gaia y Puerto Custodio no se tocan;
+  Roma no está. El reporte dice cuántas cambiaron, qué capitales usaron el
+  nombre de respaldo y qué ciudades de la lista no existen en el juego.
