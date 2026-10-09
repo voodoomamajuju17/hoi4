@@ -789,6 +789,23 @@ class Vanilla:
                 out[name] = (archetype, int(year_text) if year_text.isdigit() else 1936)
         return out
 
+    def equipment_modules(self) -> dict[str, str]:
+        """módulo -> categoría, de common/units/equipment/modules/ (los del
+        diseñador de tanques, barcos y aviones)."""
+        out: dict[str, str] = {}
+        for path in sorted((self.root / "common" / "units" / "equipment" / "modules").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            block = root.get("equipment_modules")
+            if not isinstance(block, pdx.Block):
+                continue
+            for name, mod in block.entries:
+                if name and isinstance(mod, pdx.Block):
+                    out[name] = pdx.text(mod.get("category")) if mod.get("category") is not None else ""
+        return out
+
     def sub_units(self) -> set[str]:
         out: set[str] = set()
         for path in (self.root / "common" / "units").glob("*.txt"):

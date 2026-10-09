@@ -94,24 +94,33 @@ def emit(ctx: BuildContext) -> None:
                                      file="replace/meganations_research", origin=f"research:{key}")
     # Lo que no tiene nombre de 2100 pero lleva un año escrito ("Casco de
     # crucero (1936)", "1934 ligero"): se corre el año igual que en los archivos.
-    if offset:
+    # Y los términos de module_terms (2026-10-09): "Batería ligera básica" ->
+    # "Batería de riel ligera básica", como el módulo en el diseñador.
+    terms = _module_terms(spec)
+    year = re.compile(r"\b(19[0-5]\d)\b")
+
+    def bump(t: str) -> str:
+        return year.sub(lambda m: str(int(m.group(1)) + offset), t) if offset else t
+
+    if offset or terms:
         renamed = set(techs) | set(equip) | {f"{k}_short" for k in list(techs) + list(equip)}
         keys = {k for k in list(tree) + list(equipment) if k not in renamed}
         keys |= {f"{k}_short" for k in keys}
         keys -= renamed
         en_txt = ctx.vanilla.localisation("english", keys)
         es_txt = ctx.vanilla.localisation("spanish", keys)
-        year = re.compile(r"\b(19[0-5]\d)\b")
         shifted_names = 0
         for key in sorted(set(en_txt) | set(es_txt)):
             en, es = en_txt.get(key) or es_txt.get(key), es_txt.get(key) or en_txt.get(key)
-            if not (year.search(en) or year.search(es)):
+            new_en, new_es = bump(_terms(en, terms, "english")), bump(_terms(es, terms, "spanish"))
+            if (new_en, new_es) == (en, es):
                 continue
-            bump = lambda t: year.sub(lambda m: str(int(m.group(1)) + offset), t)  # noqa: E731
-            ctx.loc.define_and_reference(key, en=bump(en), es=bump(es),
+            ctx.loc.define_and_reference(key, en=new_en, es=new_es,
                                          file="replace/meganations_research", origin=f"research:year:{key}")
             shifted_names += 1
-        ctx.note(f"investigacion: {shifted_names} nombres del juego con año escrito corridos a 2100+")
+        ctx.note(f"investigacion: {shifted_names} nombres del juego sin nombre propio actualizados "
+                 "(año escrito corrido a 2100+ o terminos de module_terms)")
+    _modules(ctx, spec, terms)
     unnamed = sum(1 for t, info in tree.items() if t not in (spec.get("techs") or {}) and info["eligible"])
     ctx.note(f"investigacion: {done['tecnologias']} tecnologias y {done['equipo']} equipos renombrados; "
              f"{unnamed} tecnologias conservan el nombre vanilla")
@@ -119,6 +128,74 @@ def emit(ctx: BuildContext) -> None:
         shown = sorted(missing)
         ctx.note(f"investigacion: {len(shown)} ids que este juego no tiene (se ignoran): {', '.join(shown[:40])}"
                  + (" ..." if len(shown) > 40 else ""))
+
+
+def _module_terms(spec: dict) -> dict[str, list]:
+    """module_terms (17_research.yaml) compilados por idioma, como vanilla_terms."""
+    out = {}
+    for lang, pairs in (spec.get("module_terms") or {}).items():
+        out[lang] = [(re.compile(rf"(?<![\w$]){re.escape(str(a))}(?!\w)", re.IGNORECASE), str(b))
+                     for a, b in pairs or []]
+    return out
+
+
+def _terms(text: str, terms: dict, lang: str) -> str:
+    """Aplica los términos fuera de $...$, [...] y £...£. Mayúsculas: si el
+    original va en mayúscula de título ("Heavy Machine Guns") el reemplazo
+    también ("Pulse Guns"); si solo empieza en mayúscula, solo la primera."""
+    rules = terms.get(lang)
+    if not rules or not text:
+        return text
+    from .vanilla_terms import _PROTECTED
+
+    words = re.findall(r"[^\W\d_]+", text)
+    title = len(words) > 1 and sum(w[:1].isupper() for w in words) / len(words) >= 0.6
+
+    def case(src: str, new: str) -> str:
+        if title and src[:1].isupper():
+            return re.sub(r"(^|[\s-])(\w)", lambda m: m.group(1) + m.group(2).upper(), new)
+        if src[:1].isupper():
+            return new[:1].upper() + new[1:]
+        return new
+
+    parts = _PROTECTED.split(text)
+    for i, part in enumerate(parts):
+        if i % 2:
+            continue
+        for rx, repl in rules:
+            part = rx.sub(lambda m: case(m.group(0), repl), part)
+        parts[i] = part
+    return "".join(parts)
+
+
+def _modules(ctx: BuildContext, spec: dict, terms: dict) -> None:
+    """Módulos de los diseñadores de tanques, barcos y aviones (2026-10-09):
+    el nombre de 2100 de `modules` o, si no hay, el del juego con module_terms.
+    El juego no tiene nombres de módulo por país: valen para todos."""
+    modules = ctx.vanilla.equipment_modules()
+    if not modules:
+        return
+    own = spec.get("modules") or {}
+    en_txt = ctx.vanilla.localisation("english", set(modules))
+    es_txt = ctx.vanilla.localisation("spanish", set(modules))
+    done, same = 0, []
+    for key in sorted(modules):
+        if key in own:
+            en, es = own[key]["en"], own[key]["es"]
+        else:
+            old_en, old_es = en_txt.get(key) or es_txt.get(key), es_txt.get(key) or en_txt.get(key)
+            if not old_en:
+                continue
+            en, es = _terms(old_en, terms, "english"), _terms(old_es, terms, "spanish")
+            if (en, es) == (old_en, old_es):
+                same.append(key)
+                continue
+        ctx.loc.define_and_reference(key, en=en, es=es, file="replace/meganations_research",
+                                     origin=f"research:module:{key}")
+        done += 1
+    ctx.note(f"modulos de los disenadores: {done} de {len(modules)} con nombre de 2100"
+             + (f"; sin cambio ({len(same)}): {', '.join(same[:30])}{' ...' if len(same) > 30 else ''}"
+                if same else ""))
 
 
 def _ai_weights(ctx: BuildContext) -> dict[str, list[tuple[str, float]]]:

@@ -2852,6 +2852,16 @@ def test_vanilla_terms() -> None:
         check("el texto vanilla se reescribe en replace/", "Apoyo restauracionista diario y la Restauración de $fascism$" in txt, txt[:300])
         check("sin comillas escapadas rotas (error.log 2026-10-06: Illegal break character)",
               "\\'" not in txt and "Dijo 'basta' el restauracionista" in txt, txt[-300:])
+        # 2026-10-09 (captura del diseñador de aviones: "2 ametralladoras pesadas")
+        res_es = "".join(p.read_text(encoding="utf-8-sig") for p in ctx.mod_root.glob("localisation/spanish/replace/*research*"))
+        res_en = "".join(p.read_text(encoding="utf-8-sig") for p in ctx.mod_root.glob("localisation/english/replace/*research*"))
+        check("modulos del disenador con nombre de 2100, respetando el genero",
+              'heavy_mg_2x:0 "2 armas de pulso pesadas"' in res_es and 'tank_riveted_armor:0 "Blindaje cerámico"' in res_es
+              and 'tank_radio_1:0 "Enlace de datos"' in res_es, res_es[-600:])
+        check("modulos en ingles, con mayusculas de titulo",
+              'heavy_mg_2x:0 "2x Heavy Pulse Guns"' in res_en and 'tank_riveted_armor:0 "Ceramic Armor"' in res_en, res_en[-600:])
+        check("el reporte dice cuantos modulos se renombraron", any("modulos de los disenadores: 3 de 6" in n for n in ctx.notes),
+              str([n for n in ctx.notes if "modulos" in n]))
 
 
 def main() -> int:

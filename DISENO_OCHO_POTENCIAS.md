@@ -1078,3 +1078,18 @@ llega a 100 al toque y la tensión nunca sube".
   una familia (el Gliptodonte es el tanque moderno del EFE), le gana a la
   imagen de la familia. El pedido de arte 10_unidades_unicas.txt sigue por si
   se quiere un ícono dibujado a medida.
+- **Módulos de los diseñadores con nombre de 2100** (2026-10-09, captura del
+  diseñador de aviones: "los nombres de las tecnologías en los diseñadores no
+  cambiaron"; seguía "2 ametralladoras pesadas"). Los módulos de tanques,
+  barcos y aviones nunca se habían renombrado. Ahora el generador lee todos
+  los módulos del juego instalado y reescribe sus nombres con los términos de
+  17_research.yaml -> module_terms, en español y en inglés: ametralladoras ->
+  armas de pulso, cañón -> cañón de riel, batería -> batería de riel, motor
+  diésel -> motor de pila de combustible, blindaje soldado -> blindaje
+  compuesto, radio -> enlace de datos, torpedo -> torpedo supercavitante,
+  cohetes -> misiles, etc. En español se respeta el género ("2 armas de pulso
+  pesadas"); en inglés, las mayúsculas de título. Los mismos términos se
+  aplican a las tecnologías y equipos que no tienen nombre propio de 2100,
+  así el árbol y el diseñador dicen lo mismo. `modules` permite pisar un
+  módulo puntual. El juego no tiene nombres de módulo por país: valen para
+  todos. El reporte dice cuántos módulos cambiaron y cuáles no.
