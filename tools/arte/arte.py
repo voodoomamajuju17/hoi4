@@ -20,6 +20,7 @@ Necesita Pillow (solo quien importa; el instalador del usuario no).
 
 from __future__ import annotations
 
+import re
 import sys
 import tempfile
 import zipfile
@@ -59,6 +60,8 @@ KINDS = {
     "plane_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
     # equipo con una sola imagen para todos (17_research -> by_faction.shared)
     "shared_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
+    # tecnologías comunes a todos (arte/tecnologias_descripciones.yaml, 2026-10-10)
+    "tech_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -276,6 +279,10 @@ def catalog() -> list[dict]:
             "description": _one_line((detail.get("shared") or {}).get(fam) or f.get("art", fam)),
             "style": SHARED_STYLE,
         })
+    # Tecnologías comunes (2026-10-10: "hacé el pedido para las imágenes de
+    # todas las otras tecnologías que se comparten en común"): una imagen por
+    # tecnología, la misma para todos los países.
+    items += _tech_items()
     # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
     # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
     for u in _load("20_unique_units.yaml").get("units") or []:
@@ -381,8 +388,42 @@ def _portrait(ch: dict, look: dict, me: dict, traits: dict) -> str:
     return " ".join(_one_line(x) for x in parts if x)
 
 
+def _tech_line(tech: str) -> str:
+    """La línea de una tecnología: concentrated_industry3 -> concentrated_industry,
+    improved_machine_tools -> machine_tools."""
+    return re.sub(r"\d+$", "", re.sub(r"^(basic|improved|advanced)_", "", tech))
+
+
+def _tech_items() -> list[dict]:
+    path = REPO / "arte" / "tecnologias_descripciones.yaml"
+    if not path.exists():
+        return []
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    names = _load("17_research.yaml").get("techs") or {}
+    style, comp = _one_line(data["style"]), _one_line(data["composition"])
+    items = []
+    for group, g in (data.get("groups") or {}).items():
+        own = {t: d for t, d in (g.get("techs") or {}).items() if isinstance(d, str)}
+        for tech, desc in own.items():
+            n = names.get(tech) or {"en": tech, "es": tech}
+            siblings = [names.get(t, {}).get("en", t) for t in own
+                        if t != tech and _tech_line(t) == _tech_line(tech)]
+            other = (f"OTHER ICONS OF THE SAME LINE (each one is a separate image; this one must look clearly "
+                     f"different from all of them, never the same object again): {', '.join(siblings)}. "
+                     if siblings else "")
+            dest = REPO / "assets" / "COMUN" / "tecnologias" / f"{tech}.dds"
+            items.append({
+                "type": "tech_icon", "tag": group, "id": f"tec_{tech}", "dest": dest, "done": dest.exists(),
+                "description": (f"WHAT: icon of the technology {n['en']} ({n['es']}), {_one_line(g['intro'])}. "
+                                f"EXACT SUBJECT: {_one_line(desc)} {other}{comp}"),
+                "style": style,
+            })
+    return items
+
+
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
 SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
+TECH_GROUPS = ("INDUSTRIA", "CONSTRUCCION", "ELECTRONICA", "INFANTERIA", "BLINDADOS", "AVIACION", "NAVAL")
 
 SHARED_STYLE = (
     "photorealistic 3D-rendered equipment icon matching the weapon icons of this Hearts of Iron IV mod: realistic "
@@ -457,13 +498,14 @@ def pedidos() -> None:
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
 ("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
-             ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun")]
+             ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
+             ("tech_icon", "13_tecnologias")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
         for i in items:
             if i["type"] == kind:
-                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ")
+                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ") + TECH_GROUPS
                                   else "SATELITES_Y_ANARQUIA", []).append(i)
         if kind in SINGLE_FILE and by_tag:
             # un solo archivo, ordenado por facción
@@ -581,7 +623,7 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
-        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon"):
+        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon", "tech_icon"):
             img = _recortar(img)
         if kind["fit"] == "cover":
             scale = max(w / img.width, h / img.height)

@@ -2387,6 +2387,14 @@ def test_arte() -> None:
         check("iconos genericos: sin tema reconocible, un generico en vez de '?'",
               _generic_picture({"odd_modifier": 1}, ["GFX_idea_generic_production_bonus"]) == "generic_production_bonus")
         check("iconos genericos: el reporte lista los que uso", any("iconos genericos usados" in n for n in ctx.notes))
+        # 2026-10-10: "hacé el pedido para las imágenes de todas las otras tecnologías que se comparten en común"
+        from tools.arte import arte as _arte
+        tec = [i for i in _arte.catalog() if i["type"] == "tech_icon"]
+        mc = next((i for i in tec if i["id"] == "tec_concentrated_industry3"), None)
+        check("tecnologias comunes: un pedido distinto por tecnologia, con nombre y sus hermanas de linea",
+              len(tec) > 200 and len({i["description"] for i in tec}) == len(tec)
+              and mc is not None and "Megafactories III" in mc["description"]
+              and "Megafactories IV" in mc["description"], str(len(tec)))
 
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -2892,6 +2900,12 @@ def test_faction_tech() -> None:
         art.write_dds(root / "assets/EFE/tech/capital.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         art.write_dds(root / "assets/EFE/armas/EFE_gliptodonte.dds", 4, 4, [(10, 20, 30, 255)] * 16)
         art.write_dds(root / "assets/COMUN/armas/train.dds", 4, 4, [(10, 20, 30, 255)] * 16)
+        # tecnologías comunes (2026-10-10): una existe en el árbol, otra no, y un alias
+        art.write_dds(root / "assets/COMUN/tecnologias/tech_support.dds", 4, 4, [(40, 50, 60, 255)] * 16)
+        art.write_dds(root / "assets/COMUN/tecnologias/basic_machine_tools.dds", 4, 4, [(40, 50, 60, 255)] * 16)
+        (root / "arte").mkdir()
+        (root / "arte/tecnologias_descripciones.yaml").write_text(
+            "groups:\n  X:\n    techs:\n      tech_trucks: {same_as: tech_support}\n", encoding="utf-8")
         for sub in ("armas", "tech"):      # una faccion sin imagenes: queda el icono del juego
             shutil.rmtree(root / "assets/SHD" / sub, ignore_errors=True)
         ctx = build(root / "out", vanilla_path=str(FIXTURE_VANILLA), quiet=True, spec_dir=root / "spec")
@@ -2929,6 +2943,9 @@ def test_faction_tech() -> None:
         check("equipo comun: el tren usa la misma imagen en todos los paises, satelites y anarquias incluidos",
               all(f"GFX_{t}_train_equipment_1_medium" in gfx for t in ("EFE", "SHD", "PTA", "ZAN"))
               and "COMUN_train_" in gfx)
+        check("tecnologias comunes: la misma imagen en todos los paises; el alias la reusa; nada si no esta en el arbol",
+              all(f"GFX_{t}_{x}_medium" in gfx for t in ("EFE", "SHD", "PTA", "ZAN") for x in ("tech_support", "tech_trucks"))
+              and "COMUN_tec_tech_support_" in gfx and "basic_machine_tools" not in gfx, gfx[-600:])
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
         # 2026-10-09: "la imagen de los aviones aparece en el diseño de arranque pero no se mantiene
         # si lo actualizás, y no hay forma de elegirla" -> base de imágenes del diseñador

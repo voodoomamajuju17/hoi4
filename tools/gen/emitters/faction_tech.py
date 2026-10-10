@@ -135,6 +135,29 @@ def emit(ctx: BuildContext) -> None:
                 sprites.add("spriteType", Block([("name", Quoted(f"GFX_{c.tag}_{target}_medium")),
                                                  ("texturefile", Quoted(rel))]))
                 counts["sprites"] += 1
+    # Tecnologías comunes (2026-10-10, arte/tecnologias_descripciones.yaml):
+    # assets/COMUN/tecnologias/<tecnología>.dds, la misma para todos los
+    # países; `same_as` reusa la de otra. No pisa una imagen propia.
+    techs_dir = repo / "assets" / "COMUN" / "tecnologias"
+    if techs_dir.is_dir():
+        have = {_text(v.get("name")) for _, v in sprites.entries if isinstance(v, Block)}
+        arts = {p.stem: p for p in sorted(techs_dir.glob("*.dds"))}
+        for alias, base in _tech_aliases(repo).items():
+            if base in arts:
+                arts.setdefault(alias, arts[base])
+        n_techs = 0
+        for tech, art in sorted(arts.items()):
+            if tech not in tree:
+                continue
+            rel = _texture(ctx, art, "COMUN", f"tec_{art.stem}", sizes.of(tech), written)
+            n_techs += 1
+            for c in ctx.spec.countries:
+                name = f"GFX_{c.tag}_{tech}_medium"
+                if name in have:
+                    continue
+                sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(rel))]))
+                counts["sprites"] += 1
+        ctx.note(f"tecnologias comunes: {n_techs} con imagen ({len(arts)} en assets/COMUN/tecnologias)")
     # los diseños de arranque (history.py) llevan el ícono propio si existe
     ctx.data["faction_sprites"] = {_text(v.get("name")) for _, v in sprites.entries if isinstance(v, Block)}
     if sprites.entries:
@@ -144,6 +167,16 @@ def emit(ctx: BuildContext) -> None:
              f"para {len(style_of)} paises ({len(names)} estilos); {counts['sprites']} iconos propios "
              f"({len(written)} imagenes)")
     _probe(ctx, members, enabled_by)
+
+
+def _tech_aliases(repo) -> dict[str, str]:
+    """arte/tecnologias_descripciones.yaml: tecnología -> la que le presta la
+    imagen (`same_as`, la variante de otra expansión)."""
+    import yaml
+    path = repo / "arte" / "tecnologias_descripciones.yaml"
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else {}
+    return {t: d["same_as"] for g in ((data or {}).get("groups") or {}).values()
+            for t, d in (g.get("techs") or {}).items() if isinstance(d, dict) and d.get("same_as")}
 
 
 GRAPHIC_DB = ("gfx", "interface", "equipmentdesigner", "graphic_db")
