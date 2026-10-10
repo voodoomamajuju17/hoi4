@@ -1474,7 +1474,8 @@ def test_leaders_and_ideologies() -> None:
         check("ministro: puesto, token, rasgo propio y costo", pdx.text(adv.get("slot")) == "political_advisor"
               and pdx.text(adv.get("idea_token")) == mins[0] and pdx.text(adv.get("cost")) == "150", pdx.render(adv))
         gens = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("corps_commander") is not None]
-        check("generales propios (EFE: 3 + su mariscal)", len(gens) == 3, str(gens))
+        check("generales propios (EFE: 3 + su mariscal, y el general de la junta del 2026-10-11)",
+              len(gens) == 4 and "EFE_gen_junta" in gens, str(gens))
         hsn_chars = pdx.parse((mod / "common/characters/HSN_characters.txt").read_text()).get("characters")
         adm = [k for k, v in hsn_chars.entries if isinstance(v, pdx.Block) and v.get("navy_leader") is not None]
         check("la HSN tiene almirantes", len(adm) == 2, str(adm))
@@ -1744,8 +1745,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion y 4 del lider",
-              len(dm.entries) == 85 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider y 12 de la junta",
+              len(dm.entries) == 97 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2735,7 +2736,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -3311,7 +3312,7 @@ def test_decisiones_del_lider() -> None:
         ev = flat(mod / "events/meganations_lider.txt")
         eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
         ids = [int(x) for x in _re.findall(r"id = meganations_lider\.(\d+) title", ev)]
-        check("lider: 20 decisiones, el ultimatum y el desplome", sorted(ids) == list(range(1, 23)), str(ids))
+        check("lider: 20 decisiones, el ultimatum y el desplome", sorted(ids)[:22] == list(range(1, 23)), str(ids))
         bodies = {i: ev[ev.index(f"id = meganations_lider.{i} title"):ev.index(f"id = meganations_lider.{i + 1} title")] for i in range(1, 21)}
         four = all(b.count("option = {") == 4 for b in bodies.values())
         check("lider: cada decision tiene 4 respuestas", four)
@@ -3343,6 +3344,101 @@ def test_decisiones_del_lider() -> None:
               gc.count("start_civil_war = {") == 8 and "ideology = neutrality" in gc and "ideology = fascism" in gc)
         loc = (mod / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("lider: los textos nombran al lider", "[Root.GetLeader]" in loc[loc.index("meganations_lider.1."):])
+
+
+def test_junta_militar() -> None:
+    section("junta militar: arbol con hitos, foco secreto, fin de la guerra civil (2026-10-11)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
+        eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
+        rec = eff[eff.index("MEGANATIONS_lider_recalcular = {"):][:2500]
+        check("lider: Carisma 2%, Astucia 0,1 PP, Prestigio 3% por punto",
+              "var = MEGANATIONS_lider_ef_carisma value = 0.02" in rec and "var = MEGANATIONS_lider_ef_astucia value = 0.1" in rec
+              and "var = MEGANATIONS_lider_ef_prestigio value = 0.03" in rec, rec[:900])
+        ev = flat(mod / "events/meganations_lider.txt")
+        e22 = ev[ev.index("id = meganations_lider.22 title"):ev.index("id = meganations_lider.30 title")]
+        check("lider: el desplome cuesta -15% de estabilidad y -100 PP", "add_stability = -0.15" in e22 and "add_political_power = -100" in e22, e22)
+        tree = flat(mod / "common/national_focus/JUNTA_focus.txt")
+        check("junta: arbol propio sin pais (lo carga un efecto)", "id = meganations_junta_focus country = { factor = 0 } default = no" in tree, tree[:400])
+        ids = [f for f in ("estado_de_sitio", "fabricas_del_cuartel", "el_orden_de_hierro", "la_nacion_en_armas", "la_fortaleza_inexpugnable",
+                           "el_ejercito_manda", "los_arsenales_abiertos", "la_leva_de_los_generales", "blindados_al_frente",
+                           "el_golpe_de_gracia", "el_mando_supremo") if f"id = JUNTA_{f} " in tree]
+        check("junta: 10 focos en 2 ramas de 5 y el secreto", len(ids) == 11, str(ids))
+        check("junta: las ramas no se excluyen", "mutually_exclusive" not in tree)
+        d1 = tree[tree.index("id = JUNTA_estado_de_sitio "):tree.index("id = JUNTA_fabricas_del_cuartel ")]
+        check("junta: el primer foco anota las fabricas (meta: 50% mas) y da defensa y tropas",
+              "else_if = { limit = { num_of_factories > 9 } set_country_flag = MN_hito_junta_d2_15" in d1
+              and "modifier = MEGANATIONS_junta_sitio" in d1 and d1.count("create_unit = {") == 2 * 3, d1[:600])
+        d2 = tree[tree.index("id = JUNTA_fabricas_del_cuartel "):tree.index("id = JUNTA_el_orden_de_hierro ")]
+        check("junta: el segundo se destraba con las fabricas +50% (10 -> 15)",
+              "custom_trigger_tooltip = { tooltip = MN_tt_hito_junta_d2 OR = {" in d2
+              and "AND = { has_country_flag = MN_hito_junta_d2_15 num_of_factories > 14 }" in d2
+              and "set_country_flag = MN_hito_junta_d3_" in d2 and d2.count("create_unit = {") == 2 * 5, d2[:500])
+        d3 = tree[tree.index("id = JUNTA_el_orden_de_hierro "):tree.index("id = JUNTA_la_nacion_en_armas ")]
+        check("junta: el tercero, estabilidad +15 (de 40% a 55%)", "AND = { has_country_flag = MN_hito_junta_d3_55 has_stability > 0.549 }" in d3, d3[:500])
+        d4 = tree[tree.index("id = JUNTA_la_nacion_en_armas "):tree.index("id = JUNTA_la_fortaleza_inexpugnable ")]
+        check("junta: el cuarto, apoyo a la guerra +15", "has_war_support > " in d4 and "MN_hito_junta_d4_" in d4)
+        d5 = tree[tree.index("id = JUNTA_la_fortaleza_inexpugnable "):tree.index("id = JUNTA_el_ejercito_manda ")]
+        check("junta: tropas cada vez mayores (3, 5, 7, 9, 12; cada una escrita para la capital y para si cayo)",
+              d5.count("create_unit = {") == 2 * 12 and d4.count("create_unit = {") == 2 * 9 and d3.count("create_unit = {") == 2 * 7)
+        o5 = tree[tree.index("id = JUNTA_el_golpe_de_gracia "):tree.index("id = JUNTA_el_mando_supremo ")]
+        o3 = tree[tree.index("id = JUNTA_la_leva_de_los_generales "):tree.index("id = JUNTA_blindados_al_frente ")]
+        check("junta: la ofensiva da superbonus de unos meses", "modifier = MEGANATIONS_junta_furia days = 90" in o3
+              and "modifier = MEGANATIONS_junta_golpe days = 120" in o5 and "add_manpower = 150000" in o3)
+        s_ = tree[tree.index("id = JUNTA_el_mando_supremo "):]
+        check("junta: el foco secreto aparece con las dos ramas terminadas",
+              "allow_branch = { has_completed_focus = JUNTA_la_fortaleza_inexpugnable has_completed_focus = JUNTA_el_golpe_de_gracia }" in s_
+              and "mark_focus_tree_layout_dirty = yes" in d5 and "mark_focus_tree_layout_dirty = yes" in o5, s_[:500])
+        check("junta: megabonus de un año, medio millon de personas y el equipo pedido",
+              "modifier = MEGANATIONS_junta_mando_supremo days = 365" in s_ and "add_manpower = 500000" in s_
+              and "type = infantry_equipment amount = 25000" in s_ and "type = artillery_equipment amount = 25000" in s_
+              and "type = motorized_equipment amount = 20000" in s_ and "type = support_equipment amount = 10000" in s_
+              and "MEGANATIONS_junta_ale = yes" in s_, s_[:900])
+        ale = eff[eff.index("MEGANATIONS_junta_ale = {"):][:1500]
+        check("junta: ALE, 3.000 del ultimo modelo de cada tipo", ale.count("amount = 3000") >= 8, ale[:400])
+        gc = eff[eff.index("MEGANATIONS_lider_guerra_civil = {"):eff.index("MEGANATIONS_lider_pulso = {")]
+        check("junta: los rebeldes del ultimatum son la junta, con su arbol, su nombre y su general",
+              gc.count("load_focus_tree = { tree = meganations_junta_focus keep_completed = no }") == 8
+              and "set_cosmetic_tag = FCU_GENERALES" in gc and "set_country_flag = MEGANATIONS_junta" in gc
+              and "portrait = GFX_portrait_mn_FCU_gen_junta" in gc and "set_global_flag = MEGANATIONS_junta_FCU" in gc, gc[:900])
+        e31 = ev[ev.index("id = meganations_lider.31 title"):ev.index("id = meganations_lider.32 title")]
+        oa = flat(mod / "common/on_actions/04_meganations_civil_war.txt")
+        check("fin de la guerra: el evento le llega al que gano", "original_tag = FCU has_global_flag = MEGANATIONS_junta_FCU }" in oa
+              and "country_event = meganations_lider.31" in oa, oa[:400])
+        check("fin de la guerra: si gana la junta, nombre nuevo y a conquistar; si gana el gobierno, la rebelion aplastada",
+              "trigger = { has_country_flag = MEGANATIONS_junta } MEGANATIONS_junta_victoria = yes" in e31
+              and "modifier = MEGANATIONS_rebelion_aplastada days = 365" in e31, e31)
+        vic = eff[eff.index("MEGANATIONS_junta_victoria = {"):eff.index("MEGANATIONS_junta_marchar = {")]
+        check("junta victoriosa: nombre segun el pais, objetivos de guerra y su pulso",
+              "original_tag = FCU } set_cosmetic_tag = FCU_JUNTA" in vic and "MEGANATIONS_junta_marchar = yes" in vic
+              and "id = meganations_lider.38 days = 30" in vic, vic[:600])
+        mar = eff[eff.index("MEGANATIONS_junta_marchar = {"):eff.index("MEGANATIONS_junta_pulso = {")]
+        check("junta victoriosa: anexion contra las potencias vecinas", "is_neighbor_of = ROOT" in mar
+              and "ROOT = { create_wargoal = { type = annex_everything target = PREV } }" in mar, mar)
+        pul = eff[eff.index("MEGANATIONS_junta_pulso = {"):][:3000]
+        check("junta victoriosa: sus titeres pasan a ser juntas", "is_subject_of = ROOT" in pul and "set_cosmetic_tag = EFE_JUNTA_TITERE" in pul, pul[:500])
+        dec = flat(mod / "common/decisions/meganations_decisions.txt")
+        lib = dec[dec.index("MEGANATIONS_junta_liberar_EFE = {"):][:1500]
+        check("junta victoriosa: libera a los vencidos como junta titere",
+              "NOT = { original_tag = EFE }" in lib and "any_owned_state = { is_core_of = EFE }" in lib
+              and "release_puppet = EFE" in lib and "EFE = { set_country_flag = MEGANATIONS_junta_titere set_cosmetic_tag = EFE_JUNTA_TITERE" in lib, lib)
+        dm = flat(mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt")
+        ap = dm[dm.index("MEGANATIONS_rebelion_aplastada = {"):][:400]
+        check("aplastar la rebelion: +estabilidad, -organizacion y -apoyo a la guerra por un año",
+              "stability_factor = 0.15" in ap and "army_org_factor = -0.15" in ap and "war_support_factor = -0.15" in ap, ap)
+        loc = (mod / "localisation/spanish/meganations_countries_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("nombres: el bando rebelde, la junta y la junta titere",
+              'NRE_GENERALES:0 "Los Pretorianos"' in loc and 'NRE_JUNTA:0 "La Dictadura Pretoriana del Mediterráneo"' in loc
+              and 'EFE_JUNTA_TITERE:0 "La Junta Militar de Gaia"' in loc, "")
+        ai = flat(mod / "common/ai_strategy/meganations_ai.txt")
+        check("ia: la junta victoriosa quiere conquistar a las otras potencias",
+              "MEGANATIONS_EFE_junta_contra_ASC = { allowed = { original_tag = EFE } enable = { has_country_flag = MEGANATIONS_junta_victoriosa }" in ai)
+        gen = (mod / "common/characters").glob("*.txt")
+        chars = " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in gen)
+        check("generales de las juntas, con retrato", "FCU_gen_junta = {" in chars
+              and (mod / "gfx/leaders/FCU/FCU_gen_junta.dds").exists())
 
 
 def main() -> int:
@@ -3389,6 +3485,7 @@ def main() -> int:
         test_repoblacion,
         test_nombre_unico_vs_anio,
         test_decisiones_del_lider,
+        test_junta_militar,
         test_vanilla_validation,
     ):
         test()

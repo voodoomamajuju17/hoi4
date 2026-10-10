@@ -254,7 +254,7 @@ def render_effects(owner: str, items: list[dict], known,
         effect = item.get("effect")
         if effect in ("annex", "wargoal"):
             target = item.get("target")
-            if ec.tags and target not in ec.tags:
+            if ec.tags and target not in ec.tags and target not in SCOPES:
                 raise SpecError(f"{owner}: {effect} contra '{target}', que no es un pais del mod", where=where)
             inner = Block()
             if effect == "annex":
@@ -437,6 +437,43 @@ def render_effects(owner: str, items: list[dict], known,
             inner.add("category", cat)
             block.add("add_tech_bonus", inner)
             effects_used.setdefault("add_tech_bonus", owner)
+            continue
+        if effect == "milestone_snapshot":
+            # 2026-10-11 (juntas militares): anota dónde está el país hoy (fábricas,
+            # estabilidad o apoyo a la guerra) como una bandera con la meta del
+            # próximo hito; la condición `milestone` la mira (ver milestone_plan)
+            mid, measure = item["id"], item["measure"]
+            plan = milestone_plan(measure, item)
+            chain = None
+            for snap, target in reversed(plan):          # del más alto al más bajo
+                body = Block([("limit", Block([_measure_trigger(measure, snap)]))] if snap > 0 else [])
+                body.add("set_country_flag", f"MN_hito_{mid}_{target}")
+                body.add("set_variable", Block([("var", f"MN_hito_{mid}"), ("value", target)]))
+                if chain is None:
+                    block.add("if", body)
+                    chain = True
+                else:
+                    block.add("else_if" if snap > 0 else "else", body)
+            effects_used.setdefault("set_country_flag", owner)
+            effects_used.setdefault("set_variable", owner)
+            ec.triggers_used.setdefault(_MEASURE_TRIGGER[measure], owner)
+            continue
+        if effect == "focus_tree":
+            # 2026-10-11: árbol de foco propio para un país que nace en la partida
+            # (la junta militar). Efecto 1.6+, no se verifica contra documentation/.
+            block.add("load_focus_tree", Block([("tree", item["value"]), ("keep_completed", False)]))
+            continue
+        if effect == "release_puppet":
+            target = item["value"]
+            if ec.tags and target not in ec.tags:
+                raise SpecError(f"{owner}: release_puppet '{target}', que no es un pais del mod", where=where)
+            block.add("release_puppet", target)
+            effects_used.setdefault("release_puppet", owner)
+            continue
+        if effect == "refresh_focus_tree":
+            # vuelve a mirar los allow_branch del árbol (el foco secreto de la
+            # junta aparece al terminar las dos ramas). Efecto 1.9+, no se verifica.
+            block.add("mark_focus_tree_layout_dirty", True)
             continue
         if effect == "retire_leader":
             # 2026-10-11 (decisiones del líder): derrocamiento. Como los efectos
@@ -1233,6 +1270,28 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             # es satélite de alguien (cualquiera)
             block.add("is_subject", bool(value))
             triggers_used.setdefault("is_subject", owner)
+        elif key == "milestone":
+            # se cumple cuando el país llegó a la meta anotada por milestone_snapshot
+            mid, measure = value["id"], value["measure"]
+            alts = Block()
+            for target in sorted({t for _, t in milestone_plan(measure, value)}):
+                alts.add("AND", Block([("has_country_flag", f"MN_hito_{mid}_{target}"),
+                                       _measure_trigger(measure, target)]))
+            tip = f"MN_tt_hito_{mid}"
+            TOOLTIPS[tip] = (value["english"], value["spanish"])
+            block.add("custom_trigger_tooltip", Block([("tooltip", tip), ("OR", alts)]))
+            triggers_used.setdefault("has_country_flag", owner)
+            triggers_used.setdefault(_MEASURE_TRIGGER[measure], owner)
+        elif key == "original_tag":
+            block.add("original_tag", value)
+            triggers_used.setdefault("original_tag", owner)
+        elif key == "owns_core_of":
+            block.add("any_owned_state", Block([("is_core_of", value)]))
+            triggers_used.setdefault("any_owned_state", owner)
+            triggers_used.setdefault("is_core_of", owner)
+        elif key == "neighbor_of":
+            block.add("is_neighbor_of", value)
+            triggers_used.setdefault("is_neighbor_of", owner)
         elif key == "neighbor_state_flag":
             block.add("any_neighbor_state", Block([("has_state_flag", value)]))
             triggers_used.setdefault("any_neighbor_state", owner)
@@ -1306,6 +1365,33 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         else:
             raise SpecError(f"{owner}: condicion desconocida '{key}'", where=where)
     return block
+
+
+_MEASURE_TRIGGER = {"factories": "num_of_factories", "stability": "has_stability", "war_support": "has_war_support"}
+
+
+def milestone_plan(measure: str, cfg: dict) -> list[tuple[int, int]]:
+    """Hitos de las juntas (2026-10-11): (lo que el país tiene al anotar, la
+    meta). Fábricas de a 5 hasta 500, meta = x `factor` (al menos +5);
+    estabilidad y apoyo a la guerra en % de a 5, meta = + `add` (tope 90)."""
+    if measure not in _MEASURE_TRIGGER:
+        raise SpecError(f"milestone: medida '{measure}' (factories, stability, war_support)")
+    out = []
+    if measure == "factories":
+        factor = float(cfg.get("factor", 1.5))
+        for snap in range(0, 501, 5):
+            out.append((snap, max(snap + 5, -(-int(snap * factor * 100) // 100))))
+    else:
+        add = int(cfg.get("add", 15))
+        for snap in range(0, 101, 5):
+            out.append((snap, max(min(snap + add, 90), snap)))
+    return out
+
+
+def _measure_trigger(measure: str, value: int):
+    if measure == "factories":
+        return ("num_of_factories", Compare(">", value - 1))
+    return (_MEASURE_TRIGGER[measure], Compare(">", round(value / 100 - 0.001, 3)))
 
 
 def dynamic_modifier_ids(spec_raw: dict) -> set[str]:

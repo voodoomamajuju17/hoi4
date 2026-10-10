@@ -18,6 +18,7 @@ shared_art:
   meganations_armisticio: "Armistice signed in a field tent: two generals of rival megastates at a folding table with a map, each side keeps the ground it holds; tired soldiers outside."
   meganations_pide_armisticio: "An envoy under a white flag crosses a ruined front line to ask for terms; the winning army's officers watch from a command post."
   meganations_paz_humillante: "A defeated army withdraws from a border region while the enemy raises its flag over it; civilians watch in silence."
+  meganations_fin_guerra_generales: "The end of a military coup's civil war: tanks parked in front of a damaged presidential palace at dawn, a general's flag being raised or torn down, exhausted soldiers and civilians in the square."
 
 namespaces:
   meganations_efe:
@@ -13671,13 +13672,209 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Leader Collapses', spanish: 'El Líder se Desploma'}
       desc:
-        english: '[Root.GetLeader] collapsed in the middle of a cabinet meeting. The doctors demand weeks of rest; the country holds its breath (-5% stability, -50 political power; Health goes back up to 3).'
-        spanish: '[Root.GetLeader] se desplomó en medio de una reunión de gabinete. Los médicos exigen semanas de reposo; el país contiene la respiración (-5% de estabilidad, -50 de poder político; la Salud vuelve a 3).'
+        english: '[Root.GetLeader] collapsed in the middle of a cabinet meeting. The doctors demand weeks of rest; the country holds its breath (-15% stability, -100 political power; Health goes back up to 3).'
+        spanish: '[Root.GetLeader] se desplomó en medio de una reunión de gabinete. Los médicos exigen semanas de reposo; el país contiene la respiración (-15% de estabilidad, -100 de poder político; la Salud vuelve a 3).'
       options:
       - name: {english: 'Rest, at last.', spanish: 'Descansar, por fin.'}
         effects:
         - {effect: set_variable, var: MEGANATIONS_lider_salud, value: 3}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: -0.05}
-        - {effect: add_political_power, value: -50}
+        - {effect: add_stability, value: -0.15}
+        - {effect: add_political_power, value: -100}
+      src: user_request
+    - id: 30
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: EFE, flag: MEGANATIONS_junta_EFE}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The Military Junta of the Plata is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta Militar del Plata y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The Military Junta of the Plata rules.', spanish: 'Gobierna La Junta Militar del Plata.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 31
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: FCU, flag: MEGANATIONS_junta_FCU}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The North American Security Junta is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta de Seguridad de Norteamérica y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The North American Security Junta rules.', spanish: 'Gobierna La Junta de Seguridad de Norteamérica.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 32
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: ASC, flag: MEGANATIONS_junta_ASC}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The Military Directorate of Europe is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace El Directorio Militar de Europa y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The Military Directorate of Europe rules.', spanish: 'Gobierna El Directorio Militar de Europa.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 33
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: HSN, flag: MEGANATIONS_junta_HSN}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The Supreme Admiralty of the Pacific is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace El Almirantazgo Supremo del Pacífico y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The Supreme Admiralty of the Pacific rules.', spanish: 'Gobierna El Almirantazgo Supremo del Pacífico.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 34
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: NAS, flag: MEGANATIONS_junta_NAS}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The Junta of the Andes is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta de los Andes y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The Junta of the Andes rules.', spanish: 'Gobierna La Junta de los Andes.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 35
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: SHD, flag: MEGANATIONS_junta_SHD}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The Supreme Command of the Great Plain is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace El Mando Supremo de la Gran Llanura y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The Supreme Command of the Great Plain rules.', spanish: 'Gobierna El Mando Supremo de la Gran Llanura.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 36
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: APF, flag: MEGANATIONS_junta_APF}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The Pan-African Military Junta is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta Militar Panafricana y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The Pan-African Military Junta rules.', spanish: 'Gobierna La Junta Militar Panafricana.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 37
+      art: meganations_fin_guerra_generales
+      trigger:
+        civil_war_end: {tag: NRE, flag: MEGANATIONS_junta_NRE}
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      desc:
+        english: 'The guns are silent. If the generals won, The Praetorian Dictatorship of the Mediterranean is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
+        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Dictadura Pretoriana del Mediterráneo y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+      options:
+      - name: {english: 'The Praetorian Dictatorship of the Mediterranean rules.', spanish: 'Gobierna La Dictadura Pretoriana del Mediterráneo.'}
+        when: {flag: MEGANATIONS_junta}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_victoria}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_political_power, value: 150}
+      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
+        when: {not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+      src: user_request
+    - id: 38
+      trigger: effect
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Junta pulse', spanish: 'Pulso de la junta'}
+      desc: {english: 'Monthly update of the victorious junta.', spanish: 'Actualización mensual de la junta victoriosa.'}
+      options:
+      - name: {english: Go on., spanish: Seguir.}
+        effects:
+        - {effect: run, value: MEGANATIONS_junta_pulso}
+        - {effect: event, id: meganations_lider.38, days: 30}
       src: user_request

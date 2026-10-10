@@ -191,6 +191,15 @@ def _emit_dynamic_modifiers(ctx: BuildContext) -> None:
                 body.add("icon", f"GFX_idea_{generic}")
         body.add("enable", Block([("always", True)]))
         for key, var in values.items():
+            if key.startswith("?"):
+                # opcional (2026-10-11): si el juego no lo documenta, se saltea con aviso
+                key = key[1:]
+                if ctx.vanilla is not None and ctx.vanilla.documented_keys("modifiers") is not None \
+                        and not ctx.vanilla.is_documented("modifiers", key):
+                    ctx.warn(f"{mid}: el modificador '{key}' no existe en este juego; se omite.")
+                    continue
+                body.add(key, float(var))
+                continue
             if isinstance(var, (int, float)) and not isinstance(var, bool):
                 body.add(key, float(var))      # valor fijo (modificador con duración)
                 used.setdefault(key, mid)

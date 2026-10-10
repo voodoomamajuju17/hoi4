@@ -3120,6 +3120,160 @@ characters:
 # dar experiencia según corresponda, como en el juego vainilla; si no, conseguir
 # experiencia se vuelve ridículamente lento"). El generador le suma a cada
 # asesor el rasgo de su cargo; el alto mando, el de su rama (ledger).
+  # 2026-10-11: los generales que encabezan la junta militar si el líder resiste el ultimátum
+  - id: EFE_gen_junta
+    country: EFE
+    src: user_request
+    born: 2041
+    lore: 'Commander of the Green Guard''s armoured school at Rosario; he never believed in the Forest, only in the tanks that defended it.'
+    name:
+      regnal: {english: 'General Bruno Ocampo Valdivieso', spanish: 'General Bruno Ocampo Valdivieso'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/EFE/EFE_gen_junta.dds
+      role: army
+  - id: FCU_gen_junta
+    country: FCU
+    src: user_request
+    born: 2046
+    lore: 'Head of the Union''s contracted armies; she decided the shareholders were the last people who should own a war.'
+    name:
+      regnal: {english: 'General Dana Kessler', spanish: 'General Dana Kessler'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/FCU/FCU_gen_junta.dds
+      role: army
+  - id: ASC_gen_junta
+    country: ASC
+    src: user_request
+    born: 2044
+    lore: 'The last human general of the Commune, commander of the drone corps; she unplugged the Plan for a night and never plugged it back.'
+    name:
+      regnal: {english: 'General Ilse Brandauer', spanish: 'General Ilse Brandauer'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - defensive_doctrine
+    portrait:
+      path: gfx/leaders/ASC/ASC_gen_junta.dds
+      role: army
+  - id: HSN_gen_junta
+    country: HSN
+    src: user_request
+    born: 2043
+    lore: 'Commander of the escort fleets; he grew tired of protecting convoys for captains who voted on whether to pay him.'
+    name:
+      regnal: {english: 'Admiral Kenji Moraes', spanish: 'Almirante Kenji Moraes'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/HSN/HSN_gen_junta.dds
+      role: army
+  - id: NAS_gen_junta
+    country: NAS
+    src: user_request
+    born: 2045
+    lore: 'Commander of the Puna Warriors; he says the Sun rises for soldiers too, and that priests have been forgetting it.'
+    name:
+      regnal: {english: 'General Huáscar Mamani', spanish: 'General Huáscar Mamani'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/NAS/NAS_gen_junta.dds
+      role: army
+  - id: SHD_gen_junta
+    country: SHD
+    src: user_request
+    born: 2042
+    lore: 'Commander of the northern river armies; for him, harmony is what an army imposes on a flood.'
+    name:
+      regnal: {english: 'General Wei Zhenhai', spanish: 'General Wei Zhenhai'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - defensive_doctrine
+    portrait:
+      path: gfx/leaders/SHD/SHD_gen_junta.dds
+      role: army
+  - id: APF_gen_junta
+    country: APF
+    src: user_request
+    born: 2040
+    lore: 'Veteran of the Sinai campaign; he says a thousand councils cannot hold a front line, and one general can.'
+    name:
+      regnal: {english: 'General Kwame Adeyemi-Sow', spanish: 'General Kwame Adeyemi-Sow'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/APF/APF_gen_junta.dds
+      role: army
+  - id: NRE_gen_junta
+    country: NRE
+    src: user_request
+    born: 2039
+    lore: 'Prefect of the Praetorian Guard; the Guard has made and unmade emperors for two thousand years, and he remembers it.'
+    name:
+      regnal: {english: 'Prefect Decimus Rufo', spanish: 'Prefecto Decimus Rufo'}
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/NRE/NRE_gen_junta.dds
+      role: army
+
 advisor_experience:
   src: user_request
   army_chief: mn_xp_jefe_ejercito

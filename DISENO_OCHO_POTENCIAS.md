@@ -1356,9 +1356,9 @@ lleva a otro evento de 2 respuestas: derrocamiento instantáneo o guerra civil".
 
 - **Stats del líder** (variables de 0 a 10, arrancan en 5): Carisma, Astucia,
   Salud y Prestigio. Mueven el espíritu "El Líder": cada punto de Carisma sobre o
-  bajo 5 es 1% de estabilidad, de Astucia 0,04 PP por día, de Prestigio 1% de
-  apoyo a la guerra (como mucho ±5%). Con la Salud en 0 el líder se desploma
-  (meganations_lider.22: -5% estabilidad, -50 PP, la Salud vuelve a 3).
+  bajo 5 es 2% de estabilidad, de Astucia 0,1 PP por día, de Prestigio 3% de
+  apoyo a la guerra (ajuste del usuario, 2026-10-11). Con la Salud en 0 el líder
+  se desploma (meganations_lider.22: -15% estabilidad, -100 PP, la Salud vuelve a 3).
 - **20 decisiones** (namespace meganations_lider, eventos 1-20): banquete,
   final del Mundial, la hija rebelde, el diagnóstico, el filósofo, la amante del
   ministro, el aniversario, los generales, el amigo de la infancia, la
@@ -1374,3 +1374,55 @@ lleva a otro evento de 2 respuestas: derrocamiento instantáneo o guerra civil".
   (evento 21): renunciar (el líder deja el poder en el acto, stats en 5, -10%
   estabilidad, +5% apoyo a la guerra) o resistir (guerra civil del 30% del país:
   junta militar, o caudillos en el Imperio Ecofascista y Roma).
+
+## La junta militar (2026-10-11)
+
+Pedido: árbol de 10 focos para la junta (2 ramas de 5, no excluyentes), una que
+se atrinchera y se destraba con hitos, otra ofensiva con superbonus, y un foco
+secreto con un megabonus; aplastar la rebelión cuesta un año; si gana la junta,
+cambia de nombre y conquista a los demás para liberarlos como juntas títere.
+
+- **Quién es la junta**: el bando rebelde de la guerra civil del ultimátum de
+  los generales (meganations_lider.21, resistir). Nace con nombre propio
+  (<TAG>_GENERALES: Los Generales de la Pampa, El Mando de Defensa Continental,
+  El Comité de Salvación del Ejército, El Almirantazgo Rebelde, Los Generales de
+  la Puna, El Consejo Militar del Norte, El Comité Militar de Salvación, Los
+  Pretorianos), su general (03_leaders, <TAG>_gen_junta, con retrato pedido) y
+  carga el árbol meganations_junta_focus (load_focus_tree; 07_focus_trees ->
+  JUNTA, árbol `shared` sin país).
+- **Rama Atrincherarse** (cada foco se destraba con un hito medido desde el foco
+  anterior; milestone_snapshot / milestone en effects.py, con la meta a la vista
+  en el tooltip): Estado de Sitio (+10% defensa, 3 divisiones de la Guardia de
+  la Junta) -> Las Fábricas del Cuartel (fábricas x1,5; +10% defensa, +5%
+  fábricas, 5 divisiones) -> El Orden de Hierro (estabilidad +15; +10% defensa,
+  +5% estabilidad, 7) -> La Nación en Armas (apoyo a la guerra +15; +10%
+  defensa, +5% reclutable, 50.000 hombres, 9) -> La Fortaleza Inexpugnable
+  (fábricas x1,5 otra vez; +15% defensa, +10% organización, 12).
+- **Rama La Ofensiva**: El Ejército Manda (+10% ataque, 2.000 camiones, 3
+  Columnas de Asalto) -> Los Arsenales Abiertos (equipo y experiencia) -> La Leva
+  de los Generales (150.000 hombres, la Furia 3 meses: +20% ataque, +10%
+  organización) -> Blindados al Frente (+15% ataque de blindados, camiones,
+  mecanizados, 4 Columnas) -> El Golpe de Gracia (el Golpe 4 meses: +25% ataque,
+  +15% organización, +10% apoyo a la guerra; 100.000 hombres, 6 Columnas).
+- **El Mando Supremo** (secreto: allow_branch, aparece con las dos ramas
+  terminadas): un año de +25% ataque y defensa, +20% fábricas, +10% estabilidad,
+  +15% apoyo a la guerra; 500.000 hombres; 25.000 de equipo de infantería,
+  25.000 de artillería, 20.000 camiones, 10.000 de equipo de apoyo y 3.000 del
+  último modelo de cada tipo de equipo que no necesita diseño (MEGANATIONS_junta_ale).
+- **Fin de la guerra** (meganations_lider.30-37, on_civil_war_end, le llega al
+  ganador): si ganó el gobierno, La Rebelión Aplastada por un año (+15%
+  estabilidad, -15% organización, -15% apoyo a la guerra, peor moral y más
+  guarniciones si el juego tiene esos modificadores) y +1 Prestigio del líder.
+  Si ganó la junta, nombre nuevo (<TAG>_JUNTA: La Junta Militar del Plata, La
+  Junta de Seguridad de Norteamérica, El Directorio Militar de Europa, El
+  Almirantazgo Supremo del Pacífico, La Junta de los Andes, El Mando Supremo de
+  la Gran Llanura, La Junta Militar Panafricana, La Dictadura Pretoriana del
+  Mediterráneo), un año de +10% ataque y apoyo a la guerra, objetivos de anexión
+  contra las potencias vecinas, la IA se arma para conquistarlas a todas
+  (16_ai -> junta_wars) y el panel La Cruzada de los Generales: marchar sobre
+  los vecinos otra vez y liberar a cada potencia vencida como junta títere
+  (release_puppet + <TAG>_JUNTA_TITERE, con 4 divisiones). Su pulso mensual
+  (meganations_lider.38) convierte en junta a cualquier títere suyo.
+- **Arte**: pedidos de los 8 retratos de los generales, las 24 banderas, los 11
+  íconos de foco, los espíritus nuevos y las imágenes de las decisiones del
+  líder (las 8 del fin de la guerra comparten una).

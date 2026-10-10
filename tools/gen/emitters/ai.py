@@ -143,6 +143,7 @@ def emit(ctx: BuildContext) -> None:
     _anarchy_war_plans(ctx, spec.get("anarchy_wars") or {}, add_plan)
     _destiny_war_plans(ctx, spec.get("destiny_wars") or {}, add_plan)
     _coalition_plans(ctx, spec.get("coalition") or {}, add_plan)
+    _junta_plans(ctx, spec.get("junta_wars") or {}, add_plan)
 
     for p in spec.get("plans", []) or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
@@ -388,3 +389,28 @@ def _coalition_plans(ctx: BuildContext, cfg: dict, add_plan) -> None:
                 {"type": "conquer", "target": b, "value": cfg.get("conquer", 120)},
             ], enable=enable, abort={"any": [{"not": {"country_exists": b}}, {"subject_of": b}]})
     ctx.note(f"ia: coalicion de Ginebra lista para {len(tags)} potencias")
+
+
+def _junta_plans(ctx: BuildContext, cfg: dict, add_plan) -> None:
+    """La junta que ganó la guerra civil del ultimátum (2026-10-11): conquistar
+    a las otras potencias para liberarlas como juntas títere. La junta conserva
+    el original_tag de su país, así que el plan es de ese país y se activa con la
+    bandera MEGANATIONS_junta_victoriosa."""
+    if not cfg:
+        return
+    tags = (ctx.spec.raw["diplomacy"].get("race") or {}).get("tags") or []
+    on = {"flag": "MEGANATIONS_junta_victoriosa"}
+    for a in tags:
+        add_plan(f"{a}_junta_se_arma", a, [
+            {"type": "added_military_to_civilian_factory_ratio", "value": int(cfg.get("military_ratio", 60))}], enable=on)
+        for b in tags:
+            if a == b:
+                continue
+            gone = {"any": [{"not": {"country_exists": b}}, {"subject_of": a}]}
+            add_plan(f"{a}_junta_contra_{b}", a, [
+                {"type": "prepare_for_war", "target": b, "value": cfg.get("prepare", 150)},
+                {"type": "conquer", "target": b, "value": cfg.get("conquer", 250)},
+                {"type": "antagonize", "target": b, "value": cfg.get("antagonize", 80)},
+                {"type": "declare_war", "target": b, "value": cfg.get("declare", 150)},
+            ], enable=dict(on), abort=gone)
+    ctx.note(f"ia: juntas militares listas para {len(tags)} potencias")

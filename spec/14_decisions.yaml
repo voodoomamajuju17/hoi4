@@ -8942,6 +8942,218 @@ categories:
       src: user_request
     src: user_request
 
+  # ---------------------------------------------------------------------------
+  # La Cruzada de los Generales (2026-10-11): la junta que ganó la guerra civil
+  # conquista a las otras potencias y las libera como juntas títere.
+  # ---------------------------------------------------------------------------
+  - id: MEGANATIONS_junta_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+    icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+    visible: {flag: MEGANATIONS_junta_victoriosa}
+    name: {english: The Generals' Crusade, spanish: La Cruzada de los Generales}
+    desc:
+      english: 'The junta won. Its goal: conquer the other powers and free them as military juntas under our command.'
+      spanish: 'La junta ganó. Su objetivo: conquistar a las otras potencias y liberarlas como juntas militares bajo nuestro mando.'
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_junta_marchar_decision
+      name: {english: March on the Neighbours, spanish: Marchar sobre los Vecinos}
+      desc: {english: 'War goals (annexation) against every neighbouring power that is not already ours.', spanish: 'Objetivos de guerra (anexión) contra cada potencia vecina que todavía no es nuestra.'}
+      icon_prefer: [generic_prepare_civil_war]
+      cost: 50
+      cooldown_days: 365
+      effects:
+      - {effect: run, value: MEGANATIONS_junta_marchar}
+      ai:
+        factor: 10
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_EFE
+      name: {english: 'Free The Military Junta of Gaia', spanish: 'Liberar La Junta Militar de Gaia'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: EFE}
+        - not: {country_exists: EFE}
+        - owns_core_of: EFE
+      effects:
+      - {effect: release_puppet, value: EFE}
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: EFE_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_FCU
+      name: {english: 'Free The Military Junta of the Union', spanish: 'Liberar La Junta Militar de la Unión'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: FCU}
+        - not: {country_exists: FCU}
+        - owns_core_of: FCU
+      effects:
+      - {effect: release_puppet, value: FCU}
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: FCU_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_ASC
+      name: {english: 'Free The Military Junta of the Commune', spanish: 'Liberar La Junta Militar de la Comuna'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: ASC}
+        - not: {country_exists: ASC}
+        - owns_core_of: ASC
+      effects:
+      - {effect: release_puppet, value: ASC}
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: ASC_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_HSN
+      name: {english: 'Free The Naval Junta of the High Seas', spanish: 'Liberar La Junta Naval de Alta Mar'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: HSN}
+        - not: {country_exists: HSN}
+        - owns_core_of: HSN
+      effects:
+      - {effect: release_puppet, value: HSN}
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: HSN_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_NAS
+      name: {english: 'Free The Military Junta of the Sun', spanish: 'Liberar La Junta Militar del Sol'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: NAS}
+        - not: {country_exists: NAS}
+        - owns_core_of: NAS
+      effects:
+      - {effect: release_puppet, value: NAS}
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: NAS_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_SHD
+      name: {english: 'Free The Military Junta of the Directorate', spanish: 'Liberar La Junta Militar del Directorio'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: SHD}
+        - not: {country_exists: SHD}
+        - owns_core_of: SHD
+      effects:
+      - {effect: release_puppet, value: SHD}
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: SHD_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_APF
+      name: {english: 'Free The Military Junta of the Federation', spanish: 'Liberar La Junta Militar de la Federación'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: APF}
+        - not: {country_exists: APF}
+        - owns_core_of: APF
+      effects:
+      - {effect: release_puppet, value: APF}
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: APF_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_junta_liberar_NRE
+      name: {english: 'Free The Praetorian Junta of Rome', spanish: 'Liberar La Junta Pretoriana de Roma'}
+      desc: {english: 'We hold its old lands: it returns as our puppet, under a junta of officers loyal to us, with 4 Junta Guard divisions.', spanish: 'Tenemos sus viejas tierras: vuelve como títere nuestro, con una junta de oficiales leales, y 4 divisiones de la Guardia de la Junta.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      visible:
+        all:
+        - not: {original_tag: NRE}
+        - not: {country_exists: NRE}
+        - owns_core_of: NRE
+      effects:
+      - {effect: release_puppet, value: NRE}
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: flag, value: MEGANATIONS_junta_titere}
+        - {effect: cosmetic_tag, value: NRE_JUNTA_TITERE}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 4, experience: 0.3}
+      ai:
+        factor: 50
+        modifiers: []
+      src: user_request
+    src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -14354,8 +14566,8 @@ scripted_effects:
   # -------------------------------------------------------------------------
   # Las decisiones del líder (2026-10-11). Stats de 0 a 10 (arrancan en 5):
   # Carisma -> estabilidad, Astucia -> poder político, Prestigio -> apoyo a la
-  # guerra (cada punto sobre o bajo 5: 1%, 0,04 PP/día, 1%), Salud en 0 -> el
-  # líder se desploma (meganations_lider.22).
+  # guerra (cada punto sobre o bajo 5: 2%, 0,1 PP/día, 3%; ajuste del usuario
+  # 2026-10-11), Salud en 0 -> el líder se desploma (meganations_lider.22).
   # -------------------------------------------------------------------------
   - id: MEGANATIONS_lider_recalcular
     effects:
@@ -14367,13 +14579,13 @@ scripted_effects:
       ops:
       - [set, MEGANATIONS_lider_ef_carisma, MEGANATIONS_lider_carisma]
       - [sub, MEGANATIONS_lider_ef_carisma, 5]
-      - [mul, MEGANATIONS_lider_ef_carisma, 0.01]
+      - [mul, MEGANATIONS_lider_ef_carisma, 0.02]
       - [set, MEGANATIONS_lider_ef_astucia, MEGANATIONS_lider_astucia]
       - [sub, MEGANATIONS_lider_ef_astucia, 5]
-      - [mul, MEGANATIONS_lider_ef_astucia, 0.04]
+      - [mul, MEGANATIONS_lider_ef_astucia, 0.1]
       - [set, MEGANATIONS_lider_ef_prestigio, MEGANATIONS_lider_prestigio]
       - [sub, MEGANATIONS_lider_ef_prestigio, 5]
-      - [mul, MEGANATIONS_lider_ef_prestigio, 0.01]
+      - [mul, MEGANATIONS_lider_ef_prestigio, 0.03]
     - {effect: dynamic_modifier, id: MEGANATIONS_el_lider}
     - effect: if
       when:
@@ -14400,6 +14612,16 @@ scripted_effects:
         tag: EFE
         ideology: neutrality
         size: 0.3
+        global_flag: MEGANATIONS_junta_EFE
+        rebels:
+          cosmetic_tag: EFE_GENERALES
+          leader:
+            name: {english: 'General Bruno Ocampo Valdivieso', spanish: 'General Bruno Ocampo Valdivieso'}
+            portrait: gfx/leaders/EFE/EFE_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
     - effect: if
       when: {tag: FCU}
       then:
@@ -14407,6 +14629,16 @@ scripted_effects:
         tag: FCU
         ideology: fascism
         size: 0.3
+        global_flag: MEGANATIONS_junta_FCU
+        rebels:
+          cosmetic_tag: FCU_GENERALES
+          leader:
+            name: {english: 'General Dana Kessler', spanish: 'General Dana Kessler'}
+            portrait: gfx/leaders/FCU/FCU_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
     - effect: if
       when: {tag: ASC}
       then:
@@ -14414,6 +14646,16 @@ scripted_effects:
         tag: ASC
         ideology: fascism
         size: 0.3
+        global_flag: MEGANATIONS_junta_ASC
+        rebels:
+          cosmetic_tag: ASC_GENERALES
+          leader:
+            name: {english: 'General Ilse Brandauer', spanish: 'General Ilse Brandauer'}
+            portrait: gfx/leaders/ASC/ASC_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
     - effect: if
       when: {tag: HSN}
       then:
@@ -14421,6 +14663,16 @@ scripted_effects:
         tag: HSN
         ideology: fascism
         size: 0.3
+        global_flag: MEGANATIONS_junta_HSN
+        rebels:
+          cosmetic_tag: HSN_GENERALES
+          leader:
+            name: {english: 'Admiral Kenji Moraes', spanish: 'Almirante Kenji Moraes'}
+            portrait: gfx/leaders/HSN/HSN_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
     - effect: if
       when: {tag: NAS}
       then:
@@ -14428,6 +14680,16 @@ scripted_effects:
         tag: NAS
         ideology: fascism
         size: 0.3
+        global_flag: MEGANATIONS_junta_NAS
+        rebels:
+          cosmetic_tag: NAS_GENERALES
+          leader:
+            name: {english: 'General Huáscar Mamani', spanish: 'General Huáscar Mamani'}
+            portrait: gfx/leaders/NAS/NAS_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
     - effect: if
       when: {tag: SHD}
       then:
@@ -14435,6 +14697,16 @@ scripted_effects:
         tag: SHD
         ideology: fascism
         size: 0.3
+        global_flag: MEGANATIONS_junta_SHD
+        rebels:
+          cosmetic_tag: SHD_GENERALES
+          leader:
+            name: {english: 'General Wei Zhenhai', spanish: 'General Wei Zhenhai'}
+            portrait: gfx/leaders/SHD/SHD_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
     - effect: if
       when: {tag: APF}
       then:
@@ -14442,6 +14714,16 @@ scripted_effects:
         tag: APF
         ideology: fascism
         size: 0.3
+        global_flag: MEGANATIONS_junta_APF
+        rebels:
+          cosmetic_tag: APF_GENERALES
+          leader:
+            name: {english: 'General Kwame Adeyemi-Sow', spanish: 'General Kwame Adeyemi-Sow'}
+            portrait: gfx/leaders/APF/APF_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
     - effect: if
       when: {tag: NRE}
       then:
@@ -14449,6 +14731,16 @@ scripted_effects:
         tag: NRE
         ideology: neutrality
         size: 0.3
+        global_flag: MEGANATIONS_junta_NRE
+        rebels:
+          cosmetic_tag: NRE_GENERALES
+          leader:
+            name: {english: 'Prefect Decimus Rufo', spanish: 'Prefecto Decimus Rufo'}
+            portrait: gfx/leaders/NRE/NRE_gen_junta.dds
+          effects:
+          - {effect: flag, value: MEGANATIONS_junta}
+          - {effect: focus_tree, value: meganations_junta_focus}
+          - {effect: add_political_power, value: 100}
   - id: MEGANATIONS_lider_pulso
     effects:
     - effect: if
@@ -14586,6 +14878,117 @@ scripted_effects:
           effects:
           - {effect: flag, value: MEGANATIONS_lider_visto_20}
           - {effect: event, id: meganations_lider.20, days: 1}
+
+  # -------------------------------------------------------------------------
+  # La junta militar (2026-10-11). ALE: 3.000 del último modelo de cada tipo de
+  # equipo que no necesita diseño (con el arquetipo, el juego da el más nuevo).
+  # -------------------------------------------------------------------------
+  - id: MEGANATIONS_junta_ale
+    effects:
+    - {effect: equipment, type: infantry_equipment, amount: 3000}
+    - {effect: equipment, type: support_equipment, amount: 3000}
+    - {effect: equipment, type: artillery_equipment, amount: 3000}
+    - {effect: equipment, type: anti_tank_equipment, amount: 3000}
+    - {effect: equipment, type: anti_air_equipment, amount: 3000}
+    - {effect: equipment, type: rocket_artillery_equipment, amount: 3000}
+    - {effect: equipment, type: motorized_equipment, amount: 3000}
+    - {effect: equipment, type: mechanized_equipment, amount: 3000}
+    - {effect: equipment, type: motorized_rocket_equipment, amount: 3000}
+    - {effect: equipment, type: amphibious_mechanized_equipment, amount: 3000}
+  # la junta que ganó: nombre nuevo, objetivos de guerra contra las potencias vecinas y su pulso
+  - id: MEGANATIONS_junta_victoria
+    effects:
+    - effect: if
+      when: {original_tag: EFE}
+      then:
+      - {effect: cosmetic_tag, value: EFE_JUNTA}
+    - effect: if
+      when: {original_tag: FCU}
+      then:
+      - {effect: cosmetic_tag, value: FCU_JUNTA}
+    - effect: if
+      when: {original_tag: ASC}
+      then:
+      - {effect: cosmetic_tag, value: ASC_JUNTA}
+    - effect: if
+      when: {original_tag: HSN}
+      then:
+      - {effect: cosmetic_tag, value: HSN_JUNTA}
+    - effect: if
+      when: {original_tag: NAS}
+      then:
+      - {effect: cosmetic_tag, value: NAS_JUNTA}
+    - effect: if
+      when: {original_tag: SHD}
+      then:
+      - {effect: cosmetic_tag, value: SHD_JUNTA}
+    - effect: if
+      when: {original_tag: APF}
+      then:
+      - {effect: cosmetic_tag, value: APF_JUNTA}
+    - effect: if
+      when: {original_tag: NRE}
+      then:
+      - {effect: cosmetic_tag, value: NRE_JUNTA}
+    - {effect: flag, value: MEGANATIONS_junta_victoriosa}
+    - {effect: dynamic_modifier, id: MEGANATIONS_junta_triunfante, days: 365}
+    - {effect: run, value: MEGANATIONS_junta_marchar}
+    - {effect: event, id: meganations_lider.38, days: 30}
+  - id: MEGANATIONS_junta_marchar
+    effects:
+    - effect: every_country
+      when:
+        all:
+        - any: [{tag: EFE}, {tag: FCU}, {tag: ASC}, {tag: HSN}, {tag: NAS}, {tag: SHD}, {tag: APF}, {tag: NRE}]
+        - neighbor_of: ROOT
+        - not: {subject_of: ROOT}
+        - not: {flag: MEGANATIONS_junta_victoriosa}
+      effects:
+      - effect: scope
+        target: ROOT
+        effects:
+        - {effect: wargoal, target: PREV, type: annex_everything}
+  # cada mes, en la junta que ganó: sus títeres pasan a ser juntas
+  - id: MEGANATIONS_junta_pulso
+    effects:
+    - effect: every_country
+      when:
+        subject_of: ROOT
+        not_flag: MEGANATIONS_junta_titere
+      effects:
+      - {effect: flag, value: MEGANATIONS_junta_titere}
+      - effect: if
+        when: {tag: EFE}
+        then:
+        - {effect: cosmetic_tag, value: EFE_JUNTA_TITERE}
+      - effect: if
+        when: {tag: FCU}
+        then:
+        - {effect: cosmetic_tag, value: FCU_JUNTA_TITERE}
+      - effect: if
+        when: {tag: ASC}
+        then:
+        - {effect: cosmetic_tag, value: ASC_JUNTA_TITERE}
+      - effect: if
+        when: {tag: HSN}
+        then:
+        - {effect: cosmetic_tag, value: HSN_JUNTA_TITERE}
+      - effect: if
+        when: {tag: NAS}
+        then:
+        - {effect: cosmetic_tag, value: NAS_JUNTA_TITERE}
+      - effect: if
+        when: {tag: SHD}
+        then:
+        - {effect: cosmetic_tag, value: SHD_JUNTA_TITERE}
+      - effect: if
+        when: {tag: APF}
+        then:
+        - {effect: cosmetic_tag, value: APF_JUNTA_TITERE}
+      - effect: if
+        when: {tag: NRE}
+        then:
+        - {effect: cosmetic_tag, value: NRE_JUNTA_TITERE}
 
 dynamic_modifiers:
   - id: MEGANATIONS_mandato_compartido
@@ -15087,6 +15490,68 @@ dynamic_modifiers:
     name: {english: 'Fireworks in Every City', spanish: 'Fuegos en Todas las Ciudades'}
     desc: {english: 'Nobody forgets the night of the gala.', spanish: 'Nadie se olvida de la noche de la gala.'}
     modifiers: {stability_factor: 0.05}
+
+  # 2026-10-11: la junta militar y el fin de su guerra civil
+  - id: MEGANATIONS_junta_sitio
+    country: null
+    name: {english: 'State of Siege', spanish: 'Estado de Sitio'}
+    desc: {english: 'Curfew and checkpoints.', spanish: 'Toque de queda y retenes.'}
+    modifiers: {army_defence_factor: 0.1}
+  - id: MEGANATIONS_junta_cuartel
+    country: null
+    name: {english: 'The Barracks Factories', spanish: 'Las Fábricas del Cuartel'}
+    desc: {english: 'Every workshop answers to a colonel.', spanish: 'Cada taller responde a un coronel.'}
+    modifiers: {army_defence_factor: 0.1, industrial_capacity_factory: 0.05}
+  - id: MEGANATIONS_junta_orden
+    country: null
+    name: {english: 'The Iron Order', spanish: 'El Orden de Hierro'}
+    desc: {english: 'Nobody asks why.', spanish: 'Nadie pregunta por qué.'}
+    modifiers: {army_defence_factor: 0.1, stability_factor: 0.05}
+  - id: MEGANATIONS_junta_nacion
+    country: null
+    name: {english: 'The Nation in Arms', spanish: 'La Nación en Armas'}
+    desc: {english: 'Every school a barracks.', spanish: 'Cada escuela un cuartel.'}
+    modifiers: {army_defence_factor: 0.1, recruitable_population_factor: 0.05}
+  - id: MEGANATIONS_junta_fortaleza
+    country: null
+    name: {english: 'The Impregnable Fortress', spanish: 'La Fortaleza Inexpugnable'}
+    desc: {english: 'Stone by stone.', spanish: 'Piedra por piedra.'}
+    modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1}
+  - id: MEGANATIONS_junta_ofensiva
+    country: null
+    name: {english: 'The Army Commands', spanish: 'El Ejército Manda'}
+    desc: {english: 'Orders come from the general staff.', spanish: 'Las órdenes vienen del estado mayor.'}
+    modifiers: {army_attack_factor: 0.1}
+  - id: MEGANATIONS_junta_furia
+    country: null
+    name: {english: 'The Fury', spanish: 'La Furia'}
+    desc: {english: 'Three months of fury.', spanish: 'Tres meses de furia.'}
+    modifiers: {army_attack_factor: 0.2, army_org_factor: 0.1}
+  - id: MEGANATIONS_junta_blindados
+    country: null
+    name: {english: 'Armour to the Front', spanish: 'Blindados al Frente'}
+    desc: {english: 'The tanks leave the parade ground.', spanish: 'Los tanques dejan el desfile.'}
+    modifiers: {army_armor_attack_factor: 0.15}
+  - id: MEGANATIONS_junta_golpe
+    country: null
+    name: {english: 'The Coup de Grâce', spanish: 'El Golpe de Gracia'}
+    desc: {english: 'Everything at once.', spanish: 'Todo junto, ahora.'}
+    modifiers: {army_attack_factor: 0.25, army_org_factor: 0.15, war_support_factor: 0.1}
+  - id: MEGANATIONS_junta_mando_supremo
+    country: null
+    name: {english: 'The Supreme Command', spanish: 'El Mando Supremo'}
+    desc: {english: 'The junta becomes a state.', spanish: 'La junta se vuelve un Estado.'}
+    modifiers: {army_attack_factor: 0.25, army_defence_factor: 0.25, industrial_capacity_factory: 0.2, stability_factor: 0.1, war_support_factor: 0.15}
+  - id: MEGANATIONS_junta_triunfante
+    country: null
+    name: {english: 'The Victorious Junta', spanish: 'La Junta Victoriosa'}
+    desc: {english: 'The generals won the civil war.', spanish: 'Los generales ganaron la guerra civil.'}
+    modifiers: {army_attack_factor: 0.1, war_support_factor: 0.1}
+  - id: MEGANATIONS_rebelion_aplastada
+    country: null
+    name: {english: 'The Rebellion Crushed', spanish: 'La Rebelión Aplastada'}
+    desc: {english: 'Order returned, but the army bled and the barracks still whisper.', spanish: 'Volvió el orden, pero el ejército sangró y en los cuarteles todavía se murmura.'}
+    modifiers: {stability_factor: 0.15, army_org_factor: -0.15, war_support_factor: -0.15, '?army_morale_factor': -0.15, '?required_garrison_factor': 0.25}
 
 variable_names:
   MEGANATIONS_lider_carisma: {english: "Leader's Charisma", spanish: "Carisma del líder"}

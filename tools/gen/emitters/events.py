@@ -91,7 +91,9 @@ def _emit(ctx: BuildContext) -> None:
         seen.add(eid)
 
         trig = ev.get("trigger")
-        if tag is None and trig != "effect":
+        # civil_war_end trae su propio país (2026-10-11: el fin de la guerra de
+        # los generales, igual para las 8 potencias)
+        if tag is None and trig != "effect" and not (isinstance(trig, dict) and "civil_war_end" in trig):
             raise SpecError(f"{eid}: un evento mundial (sin country) solo puede dispararse por efecto", where="12_events.yaml")
         if trig == "on_startup":
             startup.append((tag, eid))

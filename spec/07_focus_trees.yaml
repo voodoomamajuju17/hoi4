@@ -8515,6 +8515,198 @@ trees:
         prerequisites:
         - ZAN_foco_6_against_the_world
 
+  # ===========================================================================
+  # La junta militar (2026-10-11, pedido del usuario): la carga el bando rebelde
+  # de la guerra civil del ultimátum de los generales (MEGANATIONS_lider_guerra_civil,
+  # load_focus_tree). Dos ramas de 5 que no se excluyen: atrincherarse (cada foco
+  # se destraba con un hito: +50% de fábricas, +15% de estabilidad, +15% de apoyo
+  # a la guerra, +50% de fábricas otra vez, medidos desde el foco anterior) y la
+  # ofensiva (ataque, equipo, gente, tropas y superbonus de unos meses). Con las
+  # dos terminadas aparece el foco secreto.
+  # ===========================================================================
+  JUNTA:
+    id: meganations_junta_focus
+    default: false
+    shared: true
+    src: user_request
+    branches:
+    - id: atrincherarse
+      ai_factor: 1.5
+      name: {english: Entrench, spanish: Atrincherarse}
+      focuses:
+      - id: JUNTA_estado_de_sitio
+        name: {english: 'State of Siege', spanish: 'Estado de Sitio'}
+        desc:
+          english: 'Curfew, checkpoints, every bridge mined. The junta survives the first week. +10% defence and 3 Junta Guard divisions. The next focus needs 50% more factories than we have when this one ends.'
+          spanish: 'Toque de queda, retenes, cada puente minado. La junta sobrevive la primera semana. +10% de defensa y 3 divisiones de la Guardia de la Junta. El próximo foco pide 50% más de fábricas que las que tengamos al terminar este.'
+        icon: GFX_goal_generic_defence
+        days: 35
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_sitio}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 3, experience: 0.3}
+        - {effect: milestone_snapshot, id: junta_d2, measure: factories, factor: 1.5}
+        src: user_request
+      - id: JUNTA_fabricas_del_cuartel
+        name: {english: 'The Barracks Factories', spanish: 'Las Fábricas del Cuartel'}
+        desc:
+          english: 'Every workshop now answers to a colonel. +10% defence, +5% factory output and 5 Junta Guard divisions. The next focus needs 15% more stability than when this one ends.'
+          spanish: 'Cada taller responde ahora a un coronel. +10% de defensa, +5% de producción de fábricas y 5 divisiones de la Guardia de la Junta. El próximo foco pide 15% más de estabilidad que al terminar este.'
+        icon: GFX_goal_generic_construct_mil_factory
+        days: 35
+        prerequisites: [JUNTA_estado_de_sitio]
+        available:
+          milestone: {id: junta_d2, measure: factories, factor: 1.5, english: 'Have [?MN_hito_junta_d2|0] factories (50% more than when State of Siege ended)', spanish: 'Tener [?MN_hito_junta_d2|0] fábricas (50% más que al terminar Estado de Sitio)'}
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_cuartel}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 5, experience: 0.3}
+        - {effect: milestone_snapshot, id: junta_d3, measure: stability, add: 15}
+        src: user_request
+      - id: JUNTA_el_orden_de_hierro
+        name: {english: 'The Iron Order', spanish: 'El Orden de Hierro'}
+        desc:
+          english: 'The streets are quiet. Nobody asks why. +10% defence, +5% stability and 7 Junta Guard divisions. The next focus needs 15% more war support than when this one ends.'
+          spanish: 'Las calles están en silencio. Nadie pregunta por qué. +10% de defensa, +5% de estabilidad y 7 divisiones de la Guardia de la Junta. El próximo foco pide 15% más de apoyo a la guerra que al terminar este.'
+        icon: GFX_goal_generic_political_pressure
+        days: 35
+        prerequisites: [JUNTA_fabricas_del_cuartel]
+        available:
+          milestone: {id: junta_d3, measure: stability, add: 15, english: 'Have [?MN_hito_junta_d3|0]% stability (15 more than when The Barracks Factories ended)', spanish: 'Tener [?MN_hito_junta_d3|0]% de estabilidad (15 más que al terminar Las Fábricas del Cuartel)'}
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_orden}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 7, experience: 0.3}
+        - {effect: milestone_snapshot, id: junta_d4, measure: war_support, add: 15}
+        src: user_request
+      - id: JUNTA_la_nacion_en_armas
+        name: {english: 'The Nation in Arms', spanish: 'La Nación en Armas'}
+        desc:
+          english: 'Every citizen a reservist, every school a barracks. +10% defence, +5% recruitable population, 50,000 men and 9 Junta Guard divisions. The next focus needs 50% more factories than when this one ends.'
+          spanish: 'Cada ciudadano un reservista, cada escuela un cuartel. +10% de defensa, +5% de población reclutable, 50.000 hombres y 9 divisiones de la Guardia de la Junta. El próximo foco pide 50% más de fábricas que al terminar este.'
+        icon: GFX_goal_generic_allies_build_infantry
+        days: 35
+        prerequisites: [JUNTA_el_orden_de_hierro]
+        available:
+          milestone: {id: junta_d4, measure: war_support, add: 15, english: 'Have [?MN_hito_junta_d4|0]% war support (15 more than when The Iron Order ended)', spanish: 'Tener [?MN_hito_junta_d4|0]% de apoyo a la guerra (15 más que al terminar El Orden de Hierro)'}
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_nacion}
+        - {effect: add_manpower, value: 50000}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 9, experience: 0.3}
+        - {effect: milestone_snapshot, id: junta_d5, measure: factories, factor: 1.5}
+        src: user_request
+      - id: JUNTA_la_fortaleza_inexpugnable
+        name: {english: 'The Impregnable Fortress', spanish: 'La Fortaleza Inexpugnable'}
+        desc:
+          english: 'Whoever wants this country will have to dig it out stone by stone. +15% defence, +10% organization and 12 Junta Guard divisions.'
+          spanish: 'El que quiera este país lo va a tener que sacar piedra por piedra. +15% de defensa, +10% de organización y 12 divisiones de la Guardia de la Junta.'
+        icon: GFX_goal_generic_defence
+        days: 35
+        prerequisites: [JUNTA_la_nacion_en_armas]
+        available:
+          milestone: {id: junta_d5, measure: factories, factor: 1.5, english: 'Have [?MN_hito_junta_d5|0] factories (50% more than when The Nation in Arms ended)', spanish: 'Tener [?MN_hito_junta_d5|0] fábricas (50% más que al terminar La Nación en Armas)'}
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_fortaleza}
+        - {effect: ensure_template, name: Guardia de la Junta, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+        - {effect: create_units, template: Guardia de la Junta, name: Guardia de la Junta, count: 12, experience: 0.3}
+        - {effect: refresh_focus_tree}
+        src: user_request
+    - id: ofensiva
+      name: {english: Offensive, spanish: La Ofensiva}
+      focuses:
+      - id: JUNTA_el_ejercito_manda
+        name: {english: 'The Army Commands', spanish: 'El Ejército Manda'}
+        desc:
+          english: 'No more committees: orders come from the general staff. +10% attack, 2,000 trucks and 3 Assault Column divisions.'
+          spanish: 'Se acabaron los comités: las órdenes vienen del estado mayor. +10% de ataque, 2.000 camiones y 3 divisiones de Columna de Asalto.'
+        icon: GFX_goal_generic_army_doctrines
+        days: 35
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_ofensiva}
+        - {effect: equipment, type: motorized_equipment, amount: 2000}
+        - {effect: ensure_template, name: Columna de Asalto, regiments: [motorized, motorized, motorized, motorized, motorized, motorized, artillery_brigade]}
+        - {effect: create_units, template: Columna de Asalto, name: Columna de Asalto, count: 3, experience: 0.4}
+        src: user_request
+      - id: JUNTA_los_arsenales_abiertos
+        name: {english: 'The Arsenals Open', spanish: 'Los Arsenales Abiertos'}
+        desc:
+          english: 'The reserve depots, sealed since the Unravelling, are opened. 8,000 infantry equipment, 3,000 artillery, 2,000 support equipment, 1,000 anti-tank guns and 30 army experience.'
+          spanish: 'Se abren los depósitos de reserva, sellados desde el Desarme. 8.000 de equipo de infantería, 3.000 de artillería, 2.000 de equipo de apoyo, 1.000 antitanques y 30 de experiencia del ejército.'
+        icon: GFX_goal_generic_production
+        days: 35
+        prerequisites: [JUNTA_el_ejercito_manda]
+        reward:
+        - {effect: equipment, type: infantry_equipment, amount: 8000}
+        - {effect: equipment, type: artillery_equipment, amount: 3000}
+        - {effect: equipment, type: support_equipment, amount: 2000}
+        - {effect: equipment, type: anti_tank_equipment, amount: 1000}
+        - {effect: army_experience, value: 30}
+        src: user_request
+      - id: JUNTA_la_leva_de_los_generales
+        name: {english: 'The Generals'' Levy', spanish: 'La Leva de los Generales'}
+        desc:
+          english: 'Every man between sixteen and sixty. 150,000 men and, for 3 months, the Fury: +20% attack and +10% organization.'
+          spanish: 'Todos los hombres de dieciséis a sesenta. 150.000 hombres y, por 3 meses, la Furia: +20% de ataque y +10% de organización.'
+        icon: GFX_goal_generic_allies_build_infantry
+        days: 35
+        prerequisites: [JUNTA_los_arsenales_abiertos]
+        reward:
+        - {effect: add_manpower, value: 150000}
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_furia, days: 90}
+        src: user_request
+      - id: JUNTA_blindados_al_frente
+        name: {english: 'Armour to the Front', spanish: 'Blindados al Frente'}
+        desc:
+          english: 'The tanks leave the parade ground for the front. +15% armour attack, 3,000 trucks, 1,000 mechanised vehicles and 4 Assault Column divisions.'
+          spanish: 'Los tanques dejan el desfile y van al frente. +15% de ataque de blindados, 3.000 camiones, 1.000 vehículos mecanizados y 4 divisiones de Columna de Asalto.'
+        icon: GFX_goal_generic_army_tanks
+        days: 35
+        prerequisites: [JUNTA_la_leva_de_los_generales]
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_blindados}
+        - {effect: equipment, type: motorized_equipment, amount: 3000}
+        - {effect: equipment, type: mechanized_equipment, amount: 1000}
+        - {effect: ensure_template, name: Columna de Asalto, regiments: [motorized, motorized, motorized, motorized, motorized, motorized, artillery_brigade]}
+        - {effect: create_units, template: Columna de Asalto, name: Columna de Asalto, count: 4, experience: 0.4}
+        src: user_request
+      - id: JUNTA_el_golpe_de_gracia
+        name: {english: 'The Coup de Grâce', spanish: 'El Golpe de Gracia'}
+        desc:
+          english: 'Everything at once, now. For 4 months, the Coup: +25% attack, +15% organization and +10% war support; 100,000 men and 6 Assault Column divisions.'
+          spanish: 'Todo junto, ahora. Por 4 meses, el Golpe: +25% de ataque, +15% de organización y +10% de apoyo a la guerra; 100.000 hombres y 6 divisiones de Columna de Asalto.'
+        icon: GFX_goal_generic_major_war
+        days: 35
+        prerequisites: [JUNTA_blindados_al_frente]
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_golpe, days: 120}
+        - {effect: add_manpower, value: 100000}
+        - {effect: ensure_template, name: Columna de Asalto, regiments: [motorized, motorized, motorized, motorized, motorized, motorized, artillery_brigade]}
+        - {effect: create_units, template: Columna de Asalto, name: Columna de Asalto, count: 6, experience: 0.4}
+        - {effect: refresh_focus_tree}
+        src: user_request
+    - id: mando_supremo
+      name: {english: Supreme Command, spanish: El Mando Supremo}
+      focuses:
+      - id: JUNTA_el_mando_supremo
+        name: {english: 'The Supreme Command', spanish: 'El Mando Supremo'}
+        desc:
+          english: 'The fortress held and the army struck. Now the junta becomes a state. For a year: +25% attack and defence, +20% factory output, +10% stability and +15% war support. Half a million men; 25,000 infantry equipment, 25,000 artillery, 20,000 trucks, 10,000 support equipment, and 3,000 of the latest model of every kind of equipment.'
+          spanish: 'La fortaleza aguantó y el ejército golpeó. Ahora la junta se vuelve un Estado. Por un año: +25% de ataque y de defensa, +20% de producción de fábricas, +10% de estabilidad y +15% de apoyo a la guerra. Medio millón de hombres; 25.000 de equipo de infantería, 25.000 de artillería, 20.000 camiones, 10.000 de equipo de apoyo y 3.000 del último modelo de cada tipo de equipo.'
+        icon: GFX_goal_generic_secret_weapon
+        days: 70
+        prerequisites: [JUNTA_la_fortaleza_inexpugnable, JUNTA_el_golpe_de_gracia]
+        hidden_until_prereqs: true
+        reward:
+        - {effect: dynamic_modifier, id: MEGANATIONS_junta_mando_supremo, days: 365}
+        - {effect: add_manpower, value: 500000}
+        - {effect: equipment, type: infantry_equipment, amount: 25000}
+        - {effect: equipment, type: artillery_equipment, amount: 25000}
+        - {effect: equipment, type: motorized_equipment, amount: 20000}
+        - {effect: equipment, type: support_equipment, amount: 10000}
+        - {effect: run, value: MEGANATIONS_junta_ale}
+        src: user_request
+
 technical_notes:
   - id: TN008
     text: >

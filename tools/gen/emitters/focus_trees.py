@@ -72,7 +72,10 @@ def _emit(ctx: BuildContext) -> None:
     for tag, tree in trees.items():
         if not isinstance(tree, dict) or "branches" not in tree:
             continue  # not_started: sin árbol, el país usa el genérico
-        ctx.spec.country(tag)  # falla si el TAG no existe
+        if not tree.get("shared"):
+            ctx.spec.country(tag)  # falla si el TAG no existe
+        # shared (2026-10-11, la junta militar): sin país; lo carga un efecto
+        # (load_focus_tree) en el país que nace en la partida
         _emit_tree(ctx, tag, tree)
 
 
@@ -142,10 +145,11 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     body.add("id", tree["id"])
     country = Block()
     country.add("factor", 0)
-    modifier = Block()
-    modifier.add("add", 10)
-    modifier.add("tag", tag)
-    country.add("modifier", modifier)
+    if not tree.get("shared"):
+        modifier = Block()
+        modifier.add("add", 10)
+        modifier.add("tag", tag)
+        country.add("modifier", modifier)
     body.add("country", country)
     body.add("default", bool(tree.get("default", False)))
     # El panel de enfoques continuos va debajo del último foco. En su lugar
@@ -175,6 +179,11 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             for pre in f["prerequisites_any"]:
                 p.add("focus", pre)
             fb.add("prerequisite", p)
+        if f.get("hidden_until_prereqs"):
+            # foco secreto: no se ve hasta tener todos sus prerequisitos
+            ab = Block([("has_completed_focus", pre) for pre in f.get("prerequisites") or []])
+            fb.add("allow_branch", ab)
+            triggers_used.setdefault("has_completed_focus", fid)
         if exclusive.get(fid):
             me = Block()
             for other in sorted(exclusive[fid]):
