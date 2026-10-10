@@ -1293,3 +1293,29 @@ Pedido: "Pensá bien qué podrías ajustar o agregar para hacerlo más divertido
    capitula ante nosotros, Venganza Cumplida (150 PP, +10% estabilidad, 2 años
    de +10% fábricas y experiencia) y el vencido recibe la Humillación (2 años
    de +15% apoyo a la guerra, +5% ataque, -10% estabilidad).
+
+## Capitales tomadas: algo del vencido, para siempre (2026-10-10)
+
+Pedido: "cuando se captura una capital extranjera se absorba un pequeño bonus
+en relación a la nación ex dueña". Una meganación que en guerra controla la
+capital de arranque de otro país (`_capital_absorb`, diplomacy.py, en el pulso
+mensual junto al botín de capital) recibe mundo.130 y un espíritu permanente
+MEGANATIONS_botin_<TAG> (14_decisions -> dynamic_modifiers), una vez por país:
+
+| País | Espíritu | Bonus |
+|---|---|---|
+| Imperio Ecofascista (Gaia) | El Bioacero de Gaia | +5% ataque y defensa de blindados |
+| Unión (FCU) | Las Patentes de la Unión | +5% producción de fábricas |
+| Comuna (ASC) | Los Núcleos de Cómputo | +5% velocidad de investigación |
+| Nación de Alta Mar | Los Astilleros de Alta Mar | +10% producción de astilleros |
+| Reino Celeste | Las Minas del Sol | +5% recursos |
+| Directorio | Los Archivos de la Armonía | +5% estabilidad |
+| Federación Africana | Los Consejos del Pueblo | +5% población reclutable |
+| Roma | La Disciplina de las Legiones | +5% organización, +3% ataque |
+| Eurasia | Las Hordas de la Estepa | +3% ataque |
+| Indostán | Los Graneros del Indostán | +5% crecimiento de población |
+| Emiratos | Los Pozos del Desierto | +3% recursos |
+| Amazonas | Los Senderos de la Selva | -5% desgaste |
+| Tierras Sin Ley | Las Armas de las Tierras Sin Ley | +3% defensa |
+| Santuario de Gaia | Las Semillas del Santuario | +2% estabilidad, +3% población |
+| Cada satélite | El Botín de ... | la mitad del de su señor |

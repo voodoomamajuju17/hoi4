@@ -206,6 +206,48 @@ def _capital_capture(ctx: BuildContext, anarchies: list[str], effects: dict) -> 
     return body
 
 
+ABSORB_EFFECT = "MEGANATIONS_absorber_capital"
+ABSORB_EVENT = "meganations_mundo.130"
+ABSORB_TARGET = "meganations_capital_absorbida"
+
+
+def _capital_absorb(ctx: BuildContext, effects: dict) -> tuple[Block | None, Block | None]:
+    """Capital tomada, algo suyo absorbido (2026-10-10, pedido del usuario: "cuando
+    se captura una capital extranjera se absorba un pequeño bonus en relación a
+    la nación ex dueña"). Cada país con espíritu MEGANATIONS_botin_<TAG>
+    (14_decisions -> dynamic_modifiers; un satélite da la mitad del de su señor):
+    la meganación que en guerra controla su capital de ARRANQUE lo recibe para
+    siempre, una vez por país (mundo.130 lo anuncia y lo aplica, así el texto
+    muestra el bonus exacto)."""
+    from .effects import dynamic_modifier_ids
+    mods = dynamic_modifier_ids(ctx.spec.raw)
+    capitals = ctx.data.get("capitals") or {}
+    targets = sorted(t for t in capitals if f"MEGANATIONS_botin_{t}" in mods)
+    if not targets:
+        return None, None
+    check = Block()
+    apply = Block()
+    for t in targets:
+        flag = f"MEGANATIONS_absorbido_{t}"
+        check.add("if", Block([
+            ("limit", Block([("NOT", Block([("tag", t)])), ("has_war_with", t), ("controls_state", capitals[t]),
+                             ("NOT", Block([("has_country_flag", flag)]))])),
+            ("set_country_flag", flag),
+            (t, Block([("save_event_target_as", ABSORB_TARGET)])),
+            ("country_event", Block([("id", ABSORB_EVENT), ("days", 1)]))]))
+        mod = f"MEGANATIONS_botin_{t}"
+        apply.add("if", Block([
+            ("limit", Block([("has_country_flag", flag),
+                             ("NOT", Block([("has_dynamic_modifier", Block([("modifier", mod)]))]))])),
+            ("add_dynamic_modifier", Block([("modifier", mod)]))]))
+    for k in ("set_country_flag", "save_event_target_as", "country_event", "add_dynamic_modifier"):
+        effects[k] = SOURCE
+    ctx.verify_keys("triggers", {"has_war_with": SOURCE, "controls_state": SOURCE, "has_country_flag": SOURCE,
+                                 "tag": SOURCE, "has_dynamic_modifier": SOURCE})
+    ctx.note(f"capitales tomadas: bonus absorbible de {len(targets)} paises ({', '.join(targets)})")
+    return check, apply
+
+
 def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> None:
     """Todos arrancan en paz, pero cada meganación que toca una anarquía tiene
     un casus belli contra ella que no vence (se renueva cada mes si se perdió)
@@ -245,6 +287,10 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     if annex is not None:
         renew.add(ANNEX_EFFECT, True)
     capture = _capital_capture(ctx, list((hs.get("annex_puppets") or {}).get("tags") or []), effects)
+    absorb, absorb_effect = _capital_absorb(ctx, effects)
+    if absorb is not None:
+        capture = capture if capture is not None else Block()
+        capture.entries.extend(absorb.entries)
     if capture is not None:
         renew.add(CAPTURE_EFFECT, True)
     # el archivo se escribe siempre: los pulsos de 14_decisions lo llaman
@@ -253,6 +299,7 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     if capture is not None:
         script.add(CAPTURE_EFFECT, capture)
     script.add(HOSTILITY_EFFECT, renew)
+    script.add(ABSORB_EFFECT, absorb_effect if absorb_effect is not None else Block())
     ctx.write_script("common/scripted_effects/meganations_casus_belli.txt", script,
                      source=SOURCE + " -> anarchy_hostility")
     if not pairs:

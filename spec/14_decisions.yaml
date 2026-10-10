@@ -14653,6 +14653,159 @@ dynamic_modifiers:
     desc: {english: 'Back from the ruins, with a grudge.', spanish: 'De vuelta de las ruinas, con rencor.'}
     modifiers: {army_attack_factor: 0.15, army_defence_factor: 0.2, recruitable_population_factor: 0.1}
 
+  # 2026-10-10 (pedido del usuario): tomar la capital de otro país absorbe algo suyo, para siempre
+  # (MEGANATIONS_absorber_capital, diplomacy.py). Un satélite da la mitad del de su señor.
+  - id: MEGANATIONS_botin_EFE
+    country: null
+    name: {english: 'The Biosteel of Gaia', spanish: 'El Bioacero de Gaia'}
+    desc: {english: 'Absorbed when we took the capital of the Ecofascist Empire: +5% armor attack, +5% armor defence.', spanish: 'Absorbido al tomar la capital de el Imperio Ecofascista: +5% de ataque de blindados, +5% de defensa de blindados.'}
+    modifiers: {army_armor_attack_factor: 0.05, army_armor_defence_factor: 0.05}
+  - id: MEGANATIONS_botin_FCU
+    country: null
+    name: {english: 'The Patents of the Union', spanish: 'Las Patentes de la Unión'}
+    desc: {english: 'Absorbed when we took the capital of the Union: +5% factory output.', spanish: 'Absorbido al tomar la capital de la Unión: +5% de producción de fábricas.'}
+    modifiers: {industrial_capacity_factory: 0.05}
+  - id: MEGANATIONS_botin_ASC
+    country: null
+    name: {english: 'The Computing Cores', spanish: 'Los Núcleos de Cómputo'}
+    desc: {english: 'Absorbed when we took the capital of the Commune: +5% research speed.', spanish: 'Absorbido al tomar la capital de la Comuna: +5% de velocidad de investigación.'}
+    modifiers: {research_speed_factor: 0.05}
+  - id: MEGANATIONS_botin_HSN
+    country: null
+    name: {english: 'The High-Sea Shipyards', spanish: 'Los Astilleros de Alta Mar'}
+    desc: {english: 'Absorbed when we took the capital of the High-Sea Nation: +10% dockyard output.', spanish: 'Absorbido al tomar la capital de la Nación de Alta Mar: +10% de producción de astilleros.'}
+    modifiers: {industrial_capacity_dockyard: 0.1}
+  - id: MEGANATIONS_botin_NAS
+    country: null
+    name: {english: 'The Mines of the Sun', spanish: 'Las Minas del Sol'}
+    desc: {english: 'Absorbed when we took the capital of the Celestial Kingdom: +5% resources.', spanish: 'Absorbido al tomar la capital de el Reino Celeste: +5% de recursos.'}
+    modifiers: {local_resources_factor: 0.05}
+  - id: MEGANATIONS_botin_SHD
+    country: null
+    name: {english: 'The Archives of Harmony', spanish: 'Los Archivos de la Armonía'}
+    desc: {english: 'Absorbed when we took the capital of the Directorate: +5% stability.', spanish: 'Absorbido al tomar la capital de el Directorio: +5% de estabilidad.'}
+    modifiers: {stability_factor: 0.05}
+  - id: MEGANATIONS_botin_APF
+    country: null
+    name: {english: 'The People''s Councils', spanish: 'Los Consejos del Pueblo'}
+    desc: {english: 'Absorbed when we took the capital of the Federation: +5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Federación: +5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.05}
+  - id: MEGANATIONS_botin_NRE
+    country: null
+    name: {english: 'The Discipline of the Legions', spanish: 'La Disciplina de las Legiones'}
+    desc: {english: 'Absorbed when we took the capital of Rome: +5% organization, +3% attack.', spanish: 'Absorbido al tomar la capital de Roma: +5% de organización, +3% de ataque.'}
+    modifiers: {army_org_factor: 0.05, army_attack_factor: 0.03}
+  - id: MEGANATIONS_botin_ZWE
+    country: null
+    name: {english: 'The Hordes of the Steppe', spanish: 'Las Hordas de la Estepa'}
+    desc: {english: 'Absorbed when we took the capital of the Eurasian Warlords: +3% attack.', spanish: 'Absorbido al tomar la capital de los Señores de la Guerra de Eurasia: +3% de ataque.'}
+    modifiers: {army_attack_factor: 0.03}
+  - id: MEGANATIONS_botin_ZWI
+    country: null
+    name: {english: 'The Granaries of Hindustan', spanish: 'Los Graneros del Indostán'}
+    desc: {english: 'Absorbed when we took the capital of the Hindustan Warlords: +5% population growth.', spanish: 'Absorbido al tomar la capital de los Señores de la Guerra del Indostán: +5% de crecimiento de población.'}
+    modifiers: {monthly_population: 0.05}
+  - id: MEGANATIONS_botin_ZWM
+    country: null
+    name: {english: 'The Wells of the Desert', spanish: 'Los Pozos del Desierto'}
+    desc: {english: 'Absorbed when we took the capital of the Desert Emirates: +3% resources.', spanish: 'Absorbido al tomar la capital de los Emiratos del Desierto: +3% de recursos.'}
+    modifiers: {local_resources_factor: 0.03}
+  - id: MEGANATIONS_botin_ZWB
+    country: null
+    name: {english: 'The Jungle Trails', spanish: 'Los Senderos de la Selva'}
+    desc: {english: 'Absorbed when we took the capital of the Amazon Caudillos: -5% attrition.', spanish: 'Absorbido al tomar la capital de los Caudillos del Amazonas: -5% de desgaste.'}
+    modifiers: {attrition: -0.05}
+  - id: MEGANATIONS_botin_ZAN
+    country: null
+    name: {english: 'The Arms of the Lawless Lands', spanish: 'Las Armas de las Tierras Sin Ley'}
+    desc: {english: 'Absorbed when we took the capital of the Lawless Lands: +3% defence.', spanish: 'Absorbido al tomar la capital de las Tierras Sin Ley: +3% de defensa.'}
+    modifiers: {army_defence_factor: 0.03}
+  - id: MEGANATIONS_botin_ZSG
+    country: null
+    name: {english: 'The Seeds of the Sanctuary', spanish: 'Las Semillas del Santuario'}
+    desc: {english: 'Absorbed when we took the capital of the Sanctuary of Gaia: +2% stability, +3% population growth.', spanish: 'Absorbido al tomar la capital de el Santuario de Gaia: +2% de estabilidad, +3% de crecimiento de población.'}
+    modifiers: {stability_factor: 0.02, monthly_population: 0.03}
+  - id: MEGANATIONS_botin_PTA
+    country: null
+    name: {english: 'The Spoils of Southern Patagonia', spanish: 'El Botín de la Patagonia Austral'}
+    desc: {english: 'Absorbed when we took the capital of Southern Patagonia: +2.5% armor attack, +2.5% armor defence.', spanish: 'Absorbido al tomar la capital de la Patagonia Austral: +2,5% de ataque de blindados, +2,5% de defensa de blindados.'}
+    modifiers: {army_armor_attack_factor: 0.025, army_armor_defence_factor: 0.025}
+  - id: MEGANATIONS_botin_YYG
+    country: null
+    name: {english: 'The Spoils of Yvytu Ykua Guasu', spanish: 'El Botín de Yvytu Ykua Guasu'}
+    desc: {english: 'Absorbed when we took the capital of Yvytu Ykua Guasu: +2.5% armor attack, +2.5% armor defence.', spanish: 'Absorbido al tomar la capital de Yvytu Ykua Guasu: +2,5% de ataque de blindados, +2,5% de defensa de blindados.'}
+    modifiers: {army_armor_attack_factor: 0.025, army_armor_defence_factor: 0.025}
+  - id: MEGANATIONS_botin_ZNG
+    country: null
+    name: {english: 'The Spoils of New Granada', spanish: 'El Botín de Nueva Granada'}
+    desc: {english: 'Absorbed when we took the capital of New Granada: +2.5% resources.', spanish: 'Absorbido al tomar la capital de Nueva Granada: +2,5% de recursos.'}
+    modifiers: {local_resources_factor: 0.025}
+  - id: MEGANATIONS_botin_ZLL
+    country: null
+    name: {english: 'The Spoils of The Free Plains of the Orinoco', spanish: 'El Botín de los Llanos Libres del Orinoco'}
+    desc: {english: 'Absorbed when we took the capital of the Free Plains of the Orinoco: +2.5% resources.', spanish: 'Absorbido al tomar la capital de los Llanos Libres del Orinoco: +2,5% de recursos.'}
+    modifiers: {local_resources_factor: 0.025}
+  - id: MEGANATIONS_botin_ZNR
+    country: null
+    name: {english: 'The Spoils of The Boreal Resource Zone', spanish: 'El Botín de la Zona de Recursos Boreal'}
+    desc: {english: 'Absorbed when we took the capital of the Boreal Resource Zone: +2.5% factory output.', spanish: 'Absorbido al tomar la capital de la Zona de Recursos Boreal: +2,5% de producción de fábricas.'}
+    modifiers: {industrial_capacity_factory: 0.025}
+  - id: MEGANATIONS_botin_ZSE
+    country: null
+    name: {english: 'The Spoils of The Southern Economic Zone', spanish: 'El Botín de la Zona Económica del Sur'}
+    desc: {english: 'Absorbed when we took the capital of the Southern Economic Zone: +2.5% factory output.', spanish: 'Absorbido al tomar la capital de la Zona Económica del Sur: +2,5% de producción de fábricas.'}
+    modifiers: {industrial_capacity_factory: 0.025}
+  - id: MEGANATIONS_botin_ZAF
+    country: null
+    name: {english: 'The Spoils of The Free Ports of the Antilles', spanish: 'El Botín de los Puertos Libres Antillanos'}
+    desc: {english: 'Absorbed when we took the capital of the Free Ports of the Antilles: +5% dockyard output.', spanish: 'Absorbido al tomar la capital de los Puertos Libres Antillanos: +5% de producción de astilleros.'}
+    modifiers: {industrial_capacity_dockyard: 0.05}
+  - id: MEGANATIONS_botin_ZAS
+    country: null
+    name: {english: 'The Spoils of The Southern Sea Pact', spanish: 'El Botín del Pacto del Mar Austral'}
+    desc: {english: 'Absorbed when we took the capital of the Southern Sea Pact: +5% dockyard output.', spanish: 'Absorbido al tomar la capital de el Pacto del Mar Austral: +5% de producción de astilleros.'}
+    modifiers: {industrial_capacity_dockyard: 0.05}
+  - id: MEGANATIONS_botin_ZBC
+    country: null
+    name: {english: 'The Spoils of The Baltic Commune', spanish: 'El Botín de la Comuna Báltica'}
+    desc: {english: 'Absorbed when we took the capital of the Baltic Commune: +2.5% research speed.', spanish: 'Absorbido al tomar la capital de la Comuna Báltica: +2,5% de velocidad de investigación.'}
+    modifiers: {research_speed_factor: 0.025}
+  - id: MEGANATIONS_botin_ZAL
+    country: null
+    name: {english: 'The Spoils of The Workers'' Republic of Albion', spanish: 'El Botín de la República Obrera de Albión'}
+    desc: {english: 'Absorbed when we took the capital of the Workers'' Republic of Albion: +2.5% research speed.', spanish: 'Absorbido al tomar la capital de la República Obrera de Albión: +2,5% de velocidad de investigación.'}
+    modifiers: {research_speed_factor: 0.025}
+  - id: MEGANATIONS_botin_ZKR
+    country: null
+    name: {english: 'The Spoils of The Harmonic Protectorate of Korea', spanish: 'El Botín del Protectorado Armónico de Corea'}
+    desc: {english: 'Absorbed when we took the capital of the Harmonic Protectorate of Korea: +2.5% stability.', spanish: 'Absorbido al tomar la capital de el Protectorado Armónico de Corea: +2,5% de estabilidad.'}
+    modifiers: {stability_factor: 0.025}
+  - id: MEGANATIONS_botin_ZST
+    country: null
+    name: {english: 'The Spoils of The Steppe Directorate', spanish: 'El Botín del Directorio de la Estepa'}
+    desc: {english: 'Absorbed when we took the capital of the Steppe Directorate: +2.5% stability.', spanish: 'Absorbido al tomar la capital de el Directorio de la Estepa: +2,5% de estabilidad.'}
+    modifiers: {stability_factor: 0.025}
+  - id: MEGANATIONS_botin_ZET
+    country: null
+    name: {english: 'The Spoils of The Highlands Federation', spanish: 'El Botín de la Federación de las Tierras Altas'}
+    desc: {english: 'Absorbed when we took the capital of the Highlands Federation: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Federación de las Tierras Altas: +2,5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.025}
+  - id: MEGANATIONS_botin_ZSA
+    country: null
+    name: {english: 'The Spoils of The Cape Federation', spanish: 'El Botín de la Federación del Cabo'}
+    desc: {english: 'Absorbed when we took the capital of the Cape Federation: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Federación del Cabo: +2,5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.025}
+  - id: MEGANATIONS_botin_ZHI
+    country: null
+    name: {english: 'The Spoils of The Province of Hispania', spanish: 'El Botín de la Provincia de Hispania'}
+    desc: {english: 'Absorbed when we took the capital of the Province of Hispania: +2.5% organization, +1.5% attack.', spanish: 'Absorbido al tomar la capital de la Provincia de Hispania: +2,5% de organización, +1,5% de ataque.'}
+    modifiers: {army_org_factor: 0.025, army_attack_factor: 0.015}
+  - id: MEGANATIONS_botin_ZDA
+    country: null
+    name: {english: 'The Spoils of The Province of Dacia', spanish: 'El Botín de la Provincia de Dacia'}
+    desc: {english: 'Absorbed when we took the capital of the Province of Dacia: +2.5% organization, +1.5% attack.', spanish: 'Absorbido al tomar la capital de la Provincia de Dacia: +2,5% de organización, +1,5% de ataque.'}
+    modifiers: {army_org_factor: 0.025, army_attack_factor: 0.015}
+
 variable_names:
   APF_desarrollo_zet: {english: "Highlands Development", spanish: "Desarrollo de las Tierras Altas"}
   APF_desarrollo_zsa: {english: "Cape Development", spanish: "Desarrollo del Cabo"}

@@ -1744,8 +1744,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido y 17 del lote diversion",
-              len(dm.entries) == 47 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion y 30 de capitales tomadas",
+              len(dm.entries) == 77 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -3204,6 +3204,25 @@ def _diversion_checks(ctx) -> None:
     evloc = (mod / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
     check("rivales: el texto nombra al rival", "[meganations_rival_jurado.GetName]" in evloc and "[meganations_vengador.GetName]" in evloc)
     check("el reporte resume la carrera", any(n.startswith("carrera del destino:") for n in ctx.notes))
+    # capital extranjera tomada: algo del dueño, para siempre (2026-10-10)
+    cb = flat(mod / "common/scripted_effects/meganations_casus_belli.txt")
+    cap = cb[cb.index("MEGANATIONS_capitales_tomadas = {"):cb.index("MEGANATIONS_renovar_casus_belli = {")]
+    check("capital tomada: en guerra con su dueño, su capital de arranque, una vez por pais",
+          "NOT = { tag = EFE } has_war_with = EFE controls_state = 900 NOT = { has_country_flag = MEGANATIONS_absorbido_EFE } } "
+          "set_country_flag = MEGANATIONS_absorbido_EFE EFE = { save_event_target_as = meganations_capital_absorbida } "
+          "country_event = { id = meganations_mundo.130 days = 1 }" in cap, cap[-900:])
+    absorb = cb[cb.index("MEGANATIONS_absorber_capital = {"):]
+    check("capital tomada: el evento suma el espiritu del dueño para siempre (sin vencimiento)",
+          "has_country_flag = MEGANATIONS_absorbido_EFE NOT = { has_dynamic_modifier = { modifier = MEGANATIONS_botin_EFE } } } "
+          "add_dynamic_modifier = { modifier = MEGANATIONS_botin_EFE }" in absorb and "days" not in absorb, absorb[:600])
+    e130 = mundo[mundo.index("id = meganations_mundo.130 title"):][:700]
+    check("capital tomada: el evento corre el efecto", "MEGANATIONS_absorber_capital = yes" in e130, e130)
+    dmods = flat(mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt")
+    efe_b = dmods[dmods.index("MEGANATIONS_botin_EFE = {"):][:400]
+    pta_b = dmods[dmods.index("MEGANATIONS_botin_PTA = {"):][:400]
+    check("capital tomada: la de Gaia da blindaje; un satelite, la mitad del de su señor",
+          "army_armor_attack_factor = 0.05 " in efe_b and "army_armor_defence_factor = 0.05 " in efe_b
+          and "army_armor_attack_factor = 0.025" in pta_b, efe_b + " | " + pta_b)
 
 
 def main() -> int:

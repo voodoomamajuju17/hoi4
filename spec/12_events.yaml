@@ -12952,3 +12952,18 @@ namespaces:
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_humillacion, days: 730}
       src: user_request
+    # 2026-10-10 (pedido del usuario): tomar una capital extranjera absorbe algo
+    # del país vencido, para siempre (MEGANATIONS_capitales_tomadas lo dispara;
+    # el bonus de cada país es su espíritu MEGANATIONS_botin_<TAG>, 14_decisions)
+    - id: 130
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'What [meganations_capital_absorbida.GetName] Leaves Behind', spanish: 'Lo que Deja [meganations_capital_absorbida.GetName]'}
+      desc:
+        english: 'Our troops hold the capital of [meganations_capital_absorbida.GetName]. Its workshops, archives and veterans now work for us: we absorb what made them strong. It is a national spirit of our own, forever, and it does not go away if we lose the city again.'
+        spanish: 'Nuestras tropas tienen la capital de [meganations_capital_absorbida.GetName]. Sus talleres, archivos y veteranos ahora trabajan para nosotros: absorbemos lo que los hacía fuertes. Es un espíritu nacional propio, para siempre, y no se pierde aunque volvamos a perder la ciudad.'
+      options:
+      - name: {english: 'What was theirs is ours.', spanish: 'Lo que era suyo es nuestro.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_absorber_capital}
+      src: user_request
