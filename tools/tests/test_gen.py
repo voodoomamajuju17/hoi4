@@ -1376,7 +1376,7 @@ def test_events() -> None:
         mundo = " ".join((mod / "events/meganations_mundo.txt").read_text().split())
         check("eventos mundiales: namespace propio con 5 eventos y la Senal",
               "add_namespace = meganations_mundo" in mundo and all(f"id = meganations_mundo.{n} " in mundo for n in (1, 2, 3, 4, 5, 10, 11, 12)))
-        clock = se_all[se_all.index("MEGANATIONS_eventos_mundiales = {"):][:4000]
+        clock = se_all[se_all.index("MEGANATIONS_eventos_mundiales = {"):][:12000]
         check("eventos mundiales: una bandera global y a todos los paises",
               "NOT = { has_global_flag = MEGANATIONS_mundo_1 }" in clock and "set_global_flag = MEGANATIONS_mundo_1" in clock
               and "every_country = { country_event = { id = meganations_mundo.1 days = 1 } }" in clock, clock[:600])
@@ -1744,8 +1744,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa y el Mandato Compartido",
-              len(dm.entries) == 30 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido y 17 del lote diversion",
+              len(dm.entries) == 47 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2737,7 +2737,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production release release_puppet\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -3063,6 +3063,149 @@ def test_capitales_y_rebeliones() -> None:
               for t in ("EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE")), str(ct))
 
 
+def test_diversion() -> None:
+    section("lote diversion: carrera, coalicion, misiones, años del mundo, exilio, caudillos, rivales (2026-10-10)")
+    import re as _re
+    import yaml
+    from tools.gen.emitters import carrera
+    old_min = carrera.MIN_REGIONS
+    carrera.MIN_REGIONS = 1          # el mapa de prueba tiene una sola región clave por potencia
+    tmpd = tempfile.TemporaryDirectory()
+    try:
+        ctx = build(Path(tmpd.name), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        _diversion_checks(ctx)
+    finally:
+        carrera.MIN_REGIONS = old_min
+        tmpd.cleanup()
+
+
+def _diversion_checks(ctx) -> None:
+    import re as _re
+    import yaml
+    mod = ctx.mod_root
+    flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
+    car = flat(mod / "common/scripted_effects/meganations_carrera.txt")
+    pulse = car[car.index("MEGANATIONS_carrera_pulso = {"):car.index("MEGANATIONS_frenar_EFE = {")]
+    # 2. el marcador y la alarma
+    check("carrera: el marcador cuenta las regiones clave de cada potencia",
+          "set_variable = { var = global.MEGANATIONS_carrera_FCU value = 0 }" in pulse
+          and "is_controlled_by = FCU } } add_to_variable = { var = global.MEGANATIONS_carrera_FCU value = 1 }" in pulse, pulse[:600])
+    check("carrera: a una region, una vez, aviso a los demas (evento oculto en el que llega, FROM = el)",
+          "has_country_flag = FCU_destino_abierto NOT = { has_country_flag = FCU_forma_final }" in pulse
+          and "set_global_flag = MEGANATIONS_alarma_FCU FCU = { country_event = { id = meganations_mundo.90 days = 1 } }" in pulse, pulse[:1500])
+    mundo = flat(mod / "events/meganations_mundo.txt")
+    e90 = mundo[mundo.index("id = meganations_mundo.90 title"):][:900]
+    check("carrera: el 90 es oculto y avisa a las otras potencias, no a sus satelites",
+          "hidden = yes" in e90 and "is_subject_of = ROOT" in e90 and "country_event = { id = meganations_mundo.91" in e90, e90)
+    e91 = mundo[mundo.index("id = meganations_mundo.91 title"):][:2500]
+    check("carrera: frenarla da objetivos de guerra contra FROM; ganarse su favor le manda armas",
+          "MEGANATIONS_frenar_FROM = yes" in e91 and "send_equipment = { type = infantry_equipment amount = 1000 target = FROM }" in e91, e91[:900])
+    fren = car[car.index("MEGANATIONS_frenar_FCU = {"):car.index("MEGANATIONS_frenar_ASC = {")]
+    check("frenar: take_state contra la potencia por cada region clave que ya es suya",
+          "is_owned_by = FCU" in fren and "create_wargoal = { type = take_state target = FCU generator = { 900 } }" in fren, fren)
+    check("frenar: FROM se resuelve a la potencia que corresponde",
+          "MEGANATIONS_frenar_FROM = { if = { limit = { FROM = { tag = EFE } } MEGANATIONS_frenar_EFE = yes }" in car)
+    dec = flat(mod / "common/decisions/meganations_decisions.txt")
+    loc = (mod / "localisation/spanish/meganations_decisions_l_spanish.yml").read_text(encoding="utf-8-sig")
+    raw = yaml.safe_load((REPO_ROOT / "spec/14_decisions.yaml").read_text(encoding="utf-8"))
+    need = {}
+    for cat_ in raw["categories"]:
+        for d in cat_.get("decisions") or []:
+            if d["id"].endswith("_proclamar_la_forma_final"):
+                need[d["id"][:3]] = len(d["available"]["controls_all"])
+    board = loc[loc.index(" MEGANATIONS_carrera_category_desc:"):].split("\n", 1)[0]
+    check("marcador: el panel muestra las 8 potencias con su total de regiones clave",
+          all(f"[?global.MEGANATIONS_carrera_{t}|0] de {n}" in board for t, n in need.items()) and len(need) == 8, board)
+    fa = dec[dec.index("MEGANATIONS_frenar_a_NRE = {"):][:1200]
+    check("frenar a un rival: visible con su destino abierto y a dos regiones, no contra el señor ni la faccion",
+          f"var = global.MEGANATIONS_carrera_NRE value = {need['NRE'] - 2}" in fa and "NRE = { has_country_flag = NRE_destino_abierto" in fa
+          and "is_subject_of = NRE" in fa and "is_in_faction_with = NRE" in fa and "MEGANATIONS_frenar_NRE = yes" in fa, fa)
+    # 4. misiones con reloj
+    m1 = dec[dec.index("FCU_mision_primer_ano = {"):][:1200]
+    check("misiones: un año para tomar 2 regiones clave mas (meta anotada al abrir el destino)",
+          "days_mission_timeout = 365" in m1 and "has_country_flag = MEGANATIONS_carrera_inicio" in m1
+          and "var = global.MEGANATIONS_carrera_FCU value = MEGANATIONS_carrera_meta compare = greater_than_or_equals" in m1
+          and "timeout_effect = { add_stability = -0.05 add_political_power = -50 }" in m1, m1)
+    check("misiones: la meta = regiones del dia + 2, con tope en el total",
+          "set_country_flag = MEGANATIONS_carrera_inicio set_variable = { var = MEGANATIONS_carrera_meta value = global.MEGANATIONS_carrera_FCU }" in pulse
+          and "add_to_variable = { var = MEGANATIONS_carrera_meta value = 2 }" in pulse, pulse[:200])
+    m2 = dec[dec.index("NRE_mision_destino = {"):][:1200]
+    check("misiones: tres años para proclamar la forma final",
+          "days_mission_timeout = 1095" in m2 and "available = { has_country_flag = NRE_forma_final }" in m2
+          and "MEGANATIONS_destino_postergado" in m2, m2)
+    check("misiones: 16 (dos por potencia)", len(_re.findall(r"\b[A-Z]{3}_mision_(?:primer_ano|destino) = \{", dec)) == 16)
+    # 1 y 3. la Coalicion de Ginebra y el precio de la forma final
+    efe = flat(mod / "events/meganations_efe.txt")
+    e231 = efe[efe.index("id = meganations_efe.231 title"):][:2500]
+    check("coalicion: los demas eligen unirse (no el satelite ni la faccion), pagar tributo (no en guerra) o mirar",
+          "MEGANATIONS_coalicion_unirse = yes" in e231 and "MEGANATIONS_coalicion_tributo = yes" in e231
+          and "trigger = { NOT = { OR = { is_subject_of = FROM is_in_faction_with = FROM } } }" in e231
+          and "trigger = { NOT = { has_war_with = FROM } }" in e231, e231)
+    eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
+    co = eff[eff.index("MEGANATIONS_coalicion_unirse = {"):eff.index("MEGANATIONS_coalicion_tributo = {")]
+    check("coalicion: objetivos de guerra, espiritu de 5 años y garantia mutua con los demas miembros",
+          "MEGANATIONS_frenar_FROM = yes" in co and "modifier = MEGANATIONS_coalicion_ginebra days = 1825" in co
+          and "has_country_flag = MEGANATIONS_en_coalicion NOT = { tag = ROOT }" in co
+          and "diplomatic_relation = { country = ROOT relation = guarantee active = yes }" in co
+          and "ROOT = { diplomatic_relation = { country = PREV relation = guarantee active = yes } }" in co, co)
+    tr = eff[eff.index("MEGANATIONS_coalicion_tributo = {"):][:700]
+    check("tributo: pacto de no agresion con el fuerte, que cobra 50 PP",
+          "diplomatic_relation = { country = FROM relation = non_aggression_pact active = yes }" in tr
+          and "FROM = { add_political_power = 50" in tr, tr)
+    e230 = efe[efe.index("id = meganations_efe.230 title"):][:900]
+    pre = eff[eff.index("MEGANATIONS_forma_final_precio = {"):][:700]
+    check("forma final: el que proclama paga el precio (2 años de malus y tres levantamientos)",
+          "MEGANATIONS_forma_final_precio = yes" in e230 and pre.count("id = meganations_mundo.95") == 3
+          and "modifier = MEGANATIONS_provincias_nuevas days = 730" in pre, pre)
+    e50 = mundo[mundo.index("id = meganations_mundo.50 title"):][:2000]
+    check("hegemonia: el mundo.50 ofrece la coalicion y el tributo", "MEGANATIONS_coalicion_unirse = yes" in e50
+          and "MEGANATIONS_coalicion_tributo = yes" in e50)
+    check("hegemonia: marca a su dueño para la IA de la coalicion", "set_country_flag = MEGANATIONS_hegemon" in dec)
+    ai = flat(mod / "common/ai_strategy/meganations_ai.txt")
+    pl = ai[ai.index("MEGANATIONS_EFE_coalicion_contra_ASC = {"):][:900]
+    check("ia: el que se une a la coalicion se prepara contra la forma final o la hegemonia",
+          "has_country_flag = MEGANATIONS_en_coalicion" in pl and "ASC = { OR = { has_country_flag = ASC_forma_final has_country_flag = MEGANATIONS_hegemon } }" in pl
+          and "type = prepare_for_war id = ASC" in pl, pl)
+    # 5. los años del mundo
+    mw = eff[eff.index("MEGANATIONS_eventos_mundiales = {"):][:4000]
+    check("años del mundo: uno al azar entre cinco, una vez, para todos los paises",
+          "MEGANATIONS_carrera_pulso = yes" in mw and "set_global_flag = MEGANATIONS_ano_del_mundo" in mw
+          and all(f"id = meganations_mundo.{i} " in mw for i in range(110, 115)), mw[:1500])
+    e114 = mundo[mundo.index("id = meganations_mundo.114 title"):][:900]
+    check("años del mundo: el de los caudillos fortalece a las anarquias",
+          "modifier = MEGANATIONS_ano_caudillos_anarquia" in e114 and "tag = ZWE" in e114, e114)
+    # 6. el exilio
+    check("exilio: perder la capital de arranque en guerra abre la decision; recuperarla, el regreso",
+          "has_war = yes NOT = { controls_state = 900 } NOT = { has_country_flag = MEGANATIONS_capital_perdida } } set_country_flag = MEGANATIONS_capital_perdida" in pulse
+          and "clr_country_flag = MEGANATIONS_en_exilio country_event = { id = meganations_mundo.97" in pulse, pulse[:300])
+    ex = dec[dec.index("MEGANATIONS_gobierno_en_exilio = {"):][:900]
+    check("exilio: la decision da tropas, experiencia y el espiritu del exilio",
+          "has_country_flag = MEGANATIONS_capital_perdida" in ex and "add_manpower = 100000" in ex
+          and "modifier = MEGANATIONS_exilio days = 730" in ex, ex)
+    # 7. los caudillos vuelven
+    check("caudillos: su capital en nuestras manos, desde 2102, en guerra o inestables, 4% por mes, una vez",
+          "NOT = { country_exists = ZWE }" in pulse and "has_stability < 0.4" in pulse
+          and "random_list = { 4 = { set_global_flag = MEGANATIONS_caudillo_ZWE country_event = { id = meganations_mundo.100" in pulse, pulse[-3000:])
+    tit = car[car.index("MEGANATIONS_caudillo_ZWE_titere = {"):][:400]
+    lib = car[car.index("MEGANATIONS_caudillo_ZWE_libre = {"):car.index("MEGANATIONS_caudillo_ZWI_titere = {")]
+    check("caudillos: como satelite (no se anexa solo) o libre, con ejercito, y en guerra",
+          "release_puppet = ZWE" in tit and "set_country_flag = MEGANATIONS_titere_buscado" in tit
+          and "release = ZWE" in lib and "declare_war_on = { target = PREV type = annex_everything }" in lib
+          and lib.count("create_unit = {") == 6, lib[-800:])
+    # 8. los rivales jurados
+    opin = flat(mod / "common/opinion_modifiers/meganations_opinion_modifiers.txt")
+    check("rivales: opinion de rival jurado", "meganations_rival_jurado = { value = -75 }" in opin)
+    nem = pulse[pulse.index("tag = EFE country_exists = NAS"):][:2500]
+    check("rivales: aviso, guerra jurada, y venganza cuando el rival capitula (el vencido recibe la humillacion)",
+          "NAS = { save_event_target_as = meganations_rival_jurado }" in nem
+          and "id = meganations_mundo.120" in nem and "has_war_with = NAS NOT = { has_country_flag = MEGANATIONS_guerra_jurada }" in nem
+          and "NAS = { has_capitulated = yes }" in nem and "save_event_target_as = meganations_vengador" in nem
+          and "NAS = { country_event = { id = meganations_mundo.123" in nem, nem)
+    evloc = (mod / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
+    check("rivales: el texto nombra al rival", "[meganations_rival_jurado.GetName]" in evloc and "[meganations_vengador.GetName]" in evloc)
+    check("el reporte resume la carrera", any(n.startswith("carrera del destino:") for n in ctx.notes))
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -3103,6 +3246,7 @@ def main() -> int:
         test_loading_quotes,
         test_diplomacy,
         test_capitales_y_rebeliones,
+        test_diversion,
         test_vanilla_validation,
     ):
         test()

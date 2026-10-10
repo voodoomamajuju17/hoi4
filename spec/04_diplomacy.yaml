@@ -164,6 +164,11 @@ rivalries:
   - { between: [ASC, APF], modifier: meganations_bloc_rival, lore: "Máquinas o consejos: dos colectivismos." }
   - { between: [FCU, HSN], modifier: meganations_bloc_rival, lore: "La corporación contra la flota." }
   - { between: [EFE, FCU], modifier: meganations_natural_enemy, lore: "El agua no se vende." }
+  # 2026-10-10 (rivales jurados, ver race.nemesis): los que piden las mismas tierras
+  - { between: [EFE, NAS], modifier: meganations_rival_jurado, lore: "Dos imperios para una sola selva." }
+  - { between: [HSN, SHD], modifier: meganations_rival_jurado, lore: "Hong Kong no se comparte." }
+  - { between: [ASC, NRE], modifier: meganations_rival_jurado, lore: "La línea de fuertes de Italia." }
+  - { between: [APF, NRE], modifier: meganations_rival_jurado, lore: "Roma o el Imperio Humano Original." }
 
 opinion_modifiers:
   - id: meganations_mandato
@@ -184,6 +189,9 @@ opinion_modifiers:
   - id: meganations_natural_enemy
     value: -100
     name: { english: "Natural enemy", spanish: "Enemigo natural" }
+  - id: meganations_rival_jurado
+    value: -75
+    name: { english: "Sworn rival", spanish: "Rival jurado" }
 
 claims:
   # Cada meganación reclama los states de la Anarquía que tocan su territorio
@@ -240,3 +248,32 @@ technical_notes:
       de los autonomy_state y qué campos acepta `set_autonomy` cambiaron entre
       versiones (y con La Résistance / Waking the Tiger). Confirmame la versión
       del juego (Q004) y el nivel deseado (Q019) antes de generar esta parte.
+
+# -----------------------------------------------------------------------------
+# La carrera del destino (2026-10-10, pedido del usuario: "pensá qué podrías
+# agregar para hacerlo más divertido" -> "hacé todas"). Lo que necesita el mapa
+# lo arma tools/gen/emitters/carrera.py; los textos están en 12_events
+# (meganations_mundo.90-123) y 14_decisions (La Carrera del Destino, el exilio).
+#   tags                  las que corren la carrera (marcador, alarma, frenar)
+#   mission_extra_regions la misión del primer año del destino: tomar estas más
+#   caudillos             una anarquía conquistada puede volver: su capital de
+#                         arranque en manos de una potencia, desde `after`, con
+#                         guerra o estabilidad < stability_below, `chance`% por
+#                         mes; una vez por anarquía
+#   nemesis               el rival jurado de cada potencia (los que piden las
+#                         mismas tierras)
+# -----------------------------------------------------------------------------
+race:
+  src: user_request
+  tags: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+  mission_extra_regions: 2
+  caudillos:
+    anarchies: [ZWE, ZWI, ZWM, ZWB]
+    after: 2102.1.1
+    chance: 4
+    stability_below: 0.4
+    divisions: 6
+    equipment: 4000
+    manpower: 60000
+  nemesis_from: 2100.2.1
+  nemesis: {EFE: NAS, NAS: EFE, HSN: SHD, SHD: HSN, ASC: NRE, NRE: ASC, FCU: EFE, APF: NRE}

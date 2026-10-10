@@ -402,3 +402,15 @@ plans:
   enable: {flag: APF_contra_ZAN, at_war: false, divisions_at_least: 20}
   strategies:
   - {type: declare_war, target: ZAN, value: 80}
+
+# -----------------------------------------------------------------------------
+# La Coalición de Ginebra (2026-10-10): quien se une (evento .231 de cada forma
+# final o la Hegemonía, mundo.50) hostiga, se prepara y quiere conquistar a la
+# potencia que proclamó su forma final o tiene la Hegemonía.
+# -----------------------------------------------------------------------------
+coalition:
+  src: user_request
+  antagonize: 80
+  prepare: 100
+  conquer: 120
+

@@ -1233,3 +1233,63 @@ llega a 100 al toque y la tensión nunca sube".
   de poder político por día y -5% de apoyo a la guerra, más 50 de poder
   político. Levantarse: +5% de apoyo a la guerra, y las otras siete potencias
   le bajan 40 de opinión (meganations_afrenta).
+
+## Lote diversión: la carrera, la Coalición y el mundo vivo (2026-10-10)
+
+Pedido: "Pensá bien qué podrías ajustar o agregar para hacerlo más divertido"
+-> "Dale, hacé todas". Lo que necesita el mapa está en
+`tools/gen/emitters/carrera.py` (04_diplomacy -> race); los textos, en
+12_events (meganations_mundo.90-123) y 14_decisions.
+
+1. **La Coalición de Ginebra.** Cuando una potencia proclama su forma final
+   (los .231 de cada una) o toma la Hegemonía Mundial (mundo.50), cada una de
+   las otras elige:
+   - unirse (no si es su satélite o su facción): objetivos de guerra por cada
+     región clave que el fuerte ya tiene (MEGANATIONS_frenar_FROM), 5 años de
+     +10% apoyo a la guerra, +5% fábricas y +5% defensa, garantía mutua con los
+     demás miembros y -40 de opinión del fuerte; la IA se prepara contra él
+     (16_ai -> coalition);
+   - pagar tributo (no si están en guerra): -50 PP y 2 años de -10% fábricas y
+     -0,1 PP/día, a cambio de un pacto de no agresión; el fuerte cobra 50 PP;
+   - mirar: +3% apoyo a la guerra.
+2. **El marcador de la carrera.** Panel "La Carrera del Destino" (las 8): cada
+   mes, cuántas regiones de su forma final controla cada potencia
+   (global.MEGANATIONS_carrera_<TAG>). A dos regiones, las demás pueden
+   "Frenar a X" (50 PP: objetivos de guerra por lo que ya tomó). A una región,
+   aviso a todas (mundo.91): frenarla, ganarse su favor (le mandan 1000 de
+   equipo, devuelve 50 PP) o dejar que se desgaste.
+3. **El precio de la forma final.** El que la proclama: 2 años de -10%
+   estabilidad y -0,25 PP/día, y las provincias nuevas se levantan tres veces
+   (a los 4, 10 y 16 meses, mundo.95): aplastar (20.000 hombres y 1000 de
+   equipo) o negociar (75 PP y -3% estabilidad).
+4. **Misiones con reloj** (en el panel de la carrera, dos por potencia):
+   "Un Año para el Destino" (desde que se abre: 2 regiones clave más en 365
+   días; +100 PP y un año de +10% fábricas y +5% organización, o -5%
+   estabilidad y -50 PP) y "El Destino no Espera" (proclamar en 3 años; +200
+   PP y 100 de experiencia, o un año de -10% estabilidad y -10% apoyo a la
+   guerra).
+5. **Los años del mundo.** Al arrancar, uno al azar de cinco, para todos los
+   países y por 2 años: Ríos Secos (-10% fábricas, -3% estabilidad), Invierno
+   Volcánico (+10% desgaste, -15% construcción), Fiebre del Litio (+10%
+   investigación, +5% fábricas, -5% estabilidad), Paz Armada (-15% apoyo a la
+   guerra, +0,2 PP/día, +10% construcción) y Año de los Caudillos (anarquías
+   +15% ataque y defensa; el resto +5% apoyo a la guerra).
+6. **El gobierno en el exilio.** En guerra y sin la capital de arranque, en
+   el Estado de Emergencia: 25 PP por 100.000 hombres, 50 de experiencia y 2
+   años de +15% apoyo a la guerra, +15% defensa, +10% población reclutable y
+   -5% estabilidad. Al recuperar la capital, "El Gobierno Vuelve a Casa"
+   (+10% estabilidad).
+7. **Los caudillos vuelven.** Una anarquía conquistada (Eurasia, Indostán,
+   Emiratos, Amazonas) puede volver una vez: desde 2102, su capital de
+   arranque en manos de una potencia en guerra o con menos de 40% de
+   estabilidad, 4% por mes. La potencia elige: aplastarlo (30.000 hombres,
+   2000 de equipo, 25 PP), satélite propio (release_puppet, no se anexa solo)
+   o que venga (vuelve libre con las regiones que fueron suyas, 6 divisiones y
+   declara la guerra).
+8. **Rivales jurados.** EFE y NAS, HSN y SHD, ASC y Roma; la FCU jura al EFE
+   y la APF a Roma (-75 de opinión). Aviso al arrancar (mundo.120); al entrar
+   en guerra con él, "todo por la venganza" (+10% ataque y apoyo a la guerra,
+   -5% estabilidad) o "cabeza fría" (+10% defensa, +0,1 PP/día) por un año; si
+   capitula ante nosotros, Venganza Cumplida (150 PP, +10% estabilidad, 2 años
+   de +10% fábricas y experiencia) y el vencido recibe la Humillación (2 años
+   de +15% apoyo a la guerra, +5% ataque, -10% estabilidad).

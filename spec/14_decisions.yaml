@@ -5431,6 +5431,7 @@ categories:
       effects:
       - {effect: global_flag, value: MEGANATIONS_hegemonia}
       - {effect: dynamic_modifier, id: MEGANATIONS_hegemonia}
+      - {effect: flag, value: MEGANATIONS_hegemon}
       - effect: every_country
         when:
           all:
@@ -7330,6 +7331,26 @@ categories:
     - generic_military
     src: user_request
     decisions:
+    # 2026-10-10: el gobierno en el exilio (la bandera la pone MEGANATIONS_carrera_pulso
+    # cuando en guerra se pierde la capital de arranque; al recuperarla, mundo.97)
+    - id: MEGANATIONS_gobierno_en_exilio
+      name: {english: The Government in Exile, spanish: El Gobierno en el Exilio}
+      desc:
+        english: 'The capital has fallen, not the country. The government moves to [Root.Capital.GetName] and calls everyone to arms: 100,000 men, 50 army experience, +5% war support and, for two years, +15% war support, +15% defence, +10% recruitable population and -5% stability. When we retake the capital, we come home.'
+        spanish: 'Cayó la capital, no el país. El gobierno se instala en [Root.Capital.GetName] y llama a todos a las armas: 100.000 hombres, 50 de experiencia del ejército, +5% de apoyo a la guerra y, por dos años, +15% de apoyo a la guerra, +15% de defensa, +10% de población reclutable y -5% de estabilidad. Cuando recuperemos la capital, volvemos a casa.'
+      icon_prefer: [generic_prepare_civil_war, generic_military]
+      cost: 25
+      visible: {flag: MEGANATIONS_capital_perdida, not_flag: MEGANATIONS_en_exilio}
+      effects:
+      - {effect: flag, value: MEGANATIONS_en_exilio}
+      - {effect: dynamic_modifier, id: MEGANATIONS_exilio, days: 730}
+      - {effect: add_manpower, value: 100000}
+      - {effect: army_experience, value: 50}
+      - {effect: add_war_support, value: 0.05}
+      ai:
+        factor: 100
+        modifiers: []
+      src: user_request
     - id: MEGANATIONS_emergencia_1
       name:
         english: 'Emergency I: Call to Arms'
@@ -8276,6 +8297,647 @@ categories:
         - {effect: event, id: meganations_nre.231, days: 2}
       ai:
         factor: 100
+        modifiers: []
+      src: user_request
+    src: user_request
+
+  # ---------------------------------------------------------------------------
+  # La Carrera del Destino (2026-10-10, "pensá qué podrías agregar para hacerlo
+  # más divertido" -> "hacé todas"). El marcador lo calcula cada mes
+  # MEGANATIONS_carrera_pulso (tools/gen/emitters/carrera.py): cuántas regiones de
+  # su forma final (controls_all de <TAG>_proclamar_la_forma_final) controla cada
+  # potencia. Frenar: cuando un rival con el destino abierto está a dos regiones,
+  # objetivos de guerra por las que ya tomó. Misiones con reloj: un año para
+  # tomar 2 regiones clave más, tres años para proclamar la forma final.
+  # ---------------------------------------------------------------------------
+  - id: MEGANATIONS_carrera_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+    icon_prefer: [generic_formable_nations, generic_political_actions]
+    name: {english: The Race for Destiny, spanish: La Carrera del Destino}
+    desc:
+      english: 'Key regions of its final form that each power controls (updated every month):\n[EFE.GetName]: [?global.MEGANATIONS_carrera_EFE|0] of 6\n[FCU.GetName]: [?global.MEGANATIONS_carrera_FCU|0] of 6\n[ASC.GetName]: [?global.MEGANATIONS_carrera_ASC|0] of 6\n[HSN.GetName]: [?global.MEGANATIONS_carrera_HSN|0] of 6\n[NAS.GetName]: [?global.MEGANATIONS_carrera_NAS|0] of 6\n[SHD.GetName]: [?global.MEGANATIONS_carrera_SHD|0] of 6\n[APF.GetName]: [?global.MEGANATIONS_carrera_APF|0] of 11\n[NRE.GetName]: [?global.MEGANATIONS_carrera_NRE|0] of 8\n\nWhen a power with its destiny open is two regions away, the others can stop it. When it is one away, everyone is warned.'
+      spanish: 'Regiones clave de su forma final que controla cada potencia (se actualiza cada mes):\n[EFE.GetName]: [?global.MEGANATIONS_carrera_EFE|0] de 6\n[FCU.GetName]: [?global.MEGANATIONS_carrera_FCU|0] de 6\n[ASC.GetName]: [?global.MEGANATIONS_carrera_ASC|0] de 6\n[HSN.GetName]: [?global.MEGANATIONS_carrera_HSN|0] de 6\n[NAS.GetName]: [?global.MEGANATIONS_carrera_NAS|0] de 6\n[SHD.GetName]: [?global.MEGANATIONS_carrera_SHD|0] de 6\n[APF.GetName]: [?global.MEGANATIONS_carrera_APF|0] de 11\n[NRE.GetName]: [?global.MEGANATIONS_carrera_NRE|0] de 8\n\nCuando a una potencia con el destino abierto le faltan dos regiones, las demás pueden frenarla. Cuando le falta una, todos reciben el aviso.'
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_carrera_marcador
+      name: {english: The Scoreboard, spanish: El Marcador}
+      desc:
+        english: 'Key regions controlled:\n[EFE.GetName]: [?global.MEGANATIONS_carrera_EFE|0] of 6\n[FCU.GetName]: [?global.MEGANATIONS_carrera_FCU|0] of 6\n[ASC.GetName]: [?global.MEGANATIONS_carrera_ASC|0] of 6\n[HSN.GetName]: [?global.MEGANATIONS_carrera_HSN|0] of 6\n[NAS.GetName]: [?global.MEGANATIONS_carrera_NAS|0] of 6\n[SHD.GetName]: [?global.MEGANATIONS_carrera_SHD|0] of 6\n[APF.GetName]: [?global.MEGANATIONS_carrera_APF|0] of 11\n[NRE.GetName]: [?global.MEGANATIONS_carrera_NRE|0] of 8'
+        spanish: 'Regiones clave controladas:\n[EFE.GetName]: [?global.MEGANATIONS_carrera_EFE|0] de 6\n[FCU.GetName]: [?global.MEGANATIONS_carrera_FCU|0] de 6\n[ASC.GetName]: [?global.MEGANATIONS_carrera_ASC|0] de 6\n[HSN.GetName]: [?global.MEGANATIONS_carrera_HSN|0] de 6\n[NAS.GetName]: [?global.MEGANATIONS_carrera_NAS|0] de 6\n[SHD.GetName]: [?global.MEGANATIONS_carrera_SHD|0] de 6\n[APF.GetName]: [?global.MEGANATIONS_carrera_APF|0] de 11\n[NRE.GetName]: [?global.MEGANATIONS_carrera_NRE|0] de 8'
+      icon_prefer: [generic_political_actions]
+      cost: 0
+      available: {always: false}
+      effects: []
+      ai:
+        factor: 0
+        modifiers: []
+      src: user_request
+    - id: MEGANATIONS_frenar_a_EFE
+      name: {english: 'Stop [EFE.GetName]', spanish: 'Frenar a [EFE.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_EFE|0] of the 6 key regions of its final form. War goals against [EFE.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_EFE|0] de las 6 regiones clave de su forma final. Objetivos de guerra contra [EFE.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: EFE}
+        - country: {tag: EFE, when: {flag: EFE_destino_abierto, not_flag: EFE_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_EFE, value: 4}
+      available:
+        all:
+        - not: {subject_of: EFE}
+        - not: {in_faction_with: EFE}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_EFE}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: EFE
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: EFE}
+      src: user_request
+    - id: MEGANATIONS_frenar_a_FCU
+      name: {english: 'Stop [FCU.GetName]', spanish: 'Frenar a [FCU.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_FCU|0] of the 6 key regions of its final form. War goals against [FCU.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_FCU|0] de las 6 regiones clave de su forma final. Objetivos de guerra contra [FCU.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: FCU}
+        - country: {tag: FCU, when: {flag: FCU_destino_abierto, not_flag: FCU_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_FCU, value: 4}
+      available:
+        all:
+        - not: {subject_of: FCU}
+        - not: {in_faction_with: FCU}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_FCU}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: FCU
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: FCU}
+      src: user_request
+    - id: MEGANATIONS_frenar_a_ASC
+      name: {english: 'Stop [ASC.GetName]', spanish: 'Frenar a [ASC.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_ASC|0] of the 6 key regions of its final form. War goals against [ASC.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_ASC|0] de las 6 regiones clave de su forma final. Objetivos de guerra contra [ASC.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: ASC}
+        - country: {tag: ASC, when: {flag: ASC_destino_abierto, not_flag: ASC_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_ASC, value: 4}
+      available:
+        all:
+        - not: {subject_of: ASC}
+        - not: {in_faction_with: ASC}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_ASC}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: ASC}
+      src: user_request
+    - id: MEGANATIONS_frenar_a_HSN
+      name: {english: 'Stop [HSN.GetName]', spanish: 'Frenar a [HSN.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_HSN|0] of the 6 key regions of its final form. War goals against [HSN.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_HSN|0] de las 6 regiones clave de su forma final. Objetivos de guerra contra [HSN.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: HSN}
+        - country: {tag: HSN, when: {flag: HSN_destino_abierto, not_flag: HSN_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_HSN, value: 4}
+      available:
+        all:
+        - not: {subject_of: HSN}
+        - not: {in_faction_with: HSN}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_HSN}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: HSN}
+      src: user_request
+    - id: MEGANATIONS_frenar_a_NAS
+      name: {english: 'Stop [NAS.GetName]', spanish: 'Frenar a [NAS.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_NAS|0] of the 6 key regions of its final form. War goals against [NAS.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_NAS|0] de las 6 regiones clave de su forma final. Objetivos de guerra contra [NAS.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: NAS}
+        - country: {tag: NAS, when: {flag: NAS_destino_abierto, not_flag: NAS_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_NAS, value: 4}
+      available:
+        all:
+        - not: {subject_of: NAS}
+        - not: {in_faction_with: NAS}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_NAS}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: NAS
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: NAS}
+      src: user_request
+    - id: MEGANATIONS_frenar_a_SHD
+      name: {english: 'Stop [SHD.GetName]', spanish: 'Frenar a [SHD.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_SHD|0] of the 6 key regions of its final form. War goals against [SHD.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_SHD|0] de las 6 regiones clave de su forma final. Objetivos de guerra contra [SHD.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: SHD}
+        - country: {tag: SHD, when: {flag: SHD_destino_abierto, not_flag: SHD_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_SHD, value: 4}
+      available:
+        all:
+        - not: {subject_of: SHD}
+        - not: {in_faction_with: SHD}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_SHD}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: SHD}
+      src: user_request
+    - id: MEGANATIONS_frenar_a_APF
+      name: {english: 'Stop [APF.GetName]', spanish: 'Frenar a [APF.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_APF|0] of the 11 key regions of its final form. War goals against [APF.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_APF|0] de las 11 regiones clave de su forma final. Objetivos de guerra contra [APF.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: APF}
+        - country: {tag: APF, when: {flag: APF_destino_abierto, not_flag: APF_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_APF, value: 9}
+      available:
+        all:
+        - not: {subject_of: APF}
+        - not: {in_faction_with: APF}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_APF}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: APF}
+      src: user_request
+    - id: MEGANATIONS_frenar_a_NRE
+      name: {english: 'Stop [NRE.GetName]', spanish: 'Frenar a [NRE.GetName]'}
+      desc:
+        english: 'It already holds [?global.MEGANATIONS_carrera_NRE|0] of the 8 key regions of its final form. War goals against [NRE.GetName] for every key region that is already theirs (no justification needed); +3% war support. It will not like us.'
+        spanish: 'Ya tiene [?global.MEGANATIONS_carrera_NRE|0] de las 8 regiones clave de su forma final. Objetivos de guerra contra [NRE.GetName] por cada región clave que ya es suya (sin justificar); +3% de apoyo a la guerra. No le va a gustar.'
+      icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible:
+        all:
+        - not: {tag: NRE}
+        - country: {tag: NRE, when: {flag: NRE_destino_abierto, not_flag: NRE_forma_final}}
+        - variable_at_least: {var: global.MEGANATIONS_carrera_NRE, value: 6}
+      available:
+        all:
+        - not: {subject_of: NRE}
+        - not: {in_faction_with: NRE}
+      effects:
+      - {effect: run, value: MEGANATIONS_frenar_NRE}
+      - {effect: add_war_support, value: 0.03}
+      - effect: scope
+        target: NRE
+        effects:
+        - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 5
+          when: {flag: MEGANATIONS_en_coalicion}
+        - factor: 3
+          when: {war_with: NRE}
+      src: user_request
+    - id: EFE_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_EFE|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_EFE|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: EFE, flag: MEGANATIONS_carrera_inicio, not_flag: EFE_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_EFE, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: EFE_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: EFE, flag: EFE_destino_abierto, not_flag: EFE_forma_final}
+      available: {flag: EFE_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: FCU_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_FCU|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_FCU|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: FCU, flag: MEGANATIONS_carrera_inicio, not_flag: FCU_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_FCU, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: FCU_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: FCU, flag: FCU_destino_abierto, not_flag: FCU_forma_final}
+      available: {flag: FCU_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: ASC_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_ASC|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_ASC|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: ASC, flag: MEGANATIONS_carrera_inicio, not_flag: ASC_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_ASC, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: ASC_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: ASC, flag: ASC_destino_abierto, not_flag: ASC_forma_final}
+      available: {flag: ASC_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: HSN_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_HSN|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_HSN|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: HSN, flag: MEGANATIONS_carrera_inicio, not_flag: HSN_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_HSN, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: HSN_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: HSN, flag: HSN_destino_abierto, not_flag: HSN_forma_final}
+      available: {flag: HSN_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: NAS_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_NAS|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_NAS|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: NAS, flag: MEGANATIONS_carrera_inicio, not_flag: NAS_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_NAS, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: NAS_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: NAS, flag: NAS_destino_abierto, not_flag: NAS_forma_final}
+      available: {flag: NAS_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: SHD_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_SHD|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_SHD|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: SHD, flag: MEGANATIONS_carrera_inicio, not_flag: SHD_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_SHD, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: SHD_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: SHD, flag: SHD_destino_abierto, not_flag: SHD_forma_final}
+      available: {flag: SHD_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: APF_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_APF|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_APF|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: APF, flag: MEGANATIONS_carrera_inicio, not_flag: APF_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_APF, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: APF_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: APF, flag: APF_destino_abierto, not_flag: APF_forma_final}
+      available: {flag: APF_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: NRE_mision_primer_ano
+      name: {english: A Year for Destiny, spanish: Un Año para el Destino}
+      desc:
+        english: 'Since the destiny opened: take 2 more key regions of the final form within a year ([?global.MEGANATIONS_carrera_NRE|0] now, goal [?MEGANATIONS_carrera_meta|0]). Done: 100 political power and, for a year, +10% factory output and +5% organization. Expired: -5% stability and -50 political power.'
+        spanish: 'Desde que se abrió el destino: tomar 2 regiones clave más de la forma final en un año (hoy [?global.MEGANATIONS_carrera_NRE|0], meta [?MEGANATIONS_carrera_meta|0]). Cumplida: 100 de poder político y, por un año, +10% de producción de fábricas y +5% de organización. Vencida: -5% de estabilidad y -50 de poder político.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 365
+        activation: {tag: NRE, flag: MEGANATIONS_carrera_inicio, not_flag: NRE_forma_final}
+      available:
+        variable_at_least: {var: global.MEGANATIONS_carrera_NRE, value: MEGANATIONS_carrera_meta}
+      effects:
+      - {effect: add_political_power, value: 100}
+      - {effect: dynamic_modifier, id: MEGANATIONS_impulso_destino, days: 365}
+      timeout_effects:
+      - {effect: add_stability, value: -0.05}
+      - {effect: add_political_power, value: -50}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+    - id: NRE_mision_destino
+      name: {english: Destiny Does Not Wait, spanish: El Destino no Espera}
+      desc:
+        english: 'Proclaim the final form within three years of opening the destiny. Done: 200 political power and 100 army experience. Expired: for a year, -10% stability and -10% war support.'
+        spanish: 'Proclamar la forma final antes de tres años desde que se abrió el destino. Cumplida: 200 de poder político y 100 de experiencia del ejército. Vencida: por un año, -10% de estabilidad y -10% de apoyo a la guerra.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 0
+      fire_only_once: true
+      mission:
+        days: 1095
+        activation: {tag: NRE, flag: NRE_destino_abierto, not_flag: NRE_forma_final}
+      available: {flag: NRE_forma_final}
+      effects:
+      - {effect: add_political_power, value: 200}
+      - {effect: army_experience, value: 100}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_destino_postergado, days: 365}
+      ai:
+        factor: 1
         modifiers: []
       src: user_request
     src: user_request
@@ -13260,6 +13922,45 @@ scripted_effects:
           - {effect: event, id: meganations_shd.240, days: 1, target: SHD}
   - id: MEGANATIONS_eventos_mundiales
     effects:
+    # 2026-10-10: la carrera del destino, el exilio, los caudillos y los rivales jurados
+    - {effect: run, value: MEGANATIONS_carrera_pulso}
+    # 2026-10-10: el año del mundo, uno al azar al arrancar, para todos los países
+    - effect: if
+      when: {not_global_flag: MEGANATIONS_ano_del_mundo}
+      then:
+      - {effect: global_flag, value: MEGANATIONS_ano_del_mundo}
+      - effect: random
+        options:
+        - weight: 1
+          effects:
+          - {effect: global_flag, value: MEGANATIONS_ano_rios_secos}
+          - effect: every_country
+            effects:
+            - {effect: event, id: meganations_mundo.110, days: 1}
+        - weight: 1
+          effects:
+          - {effect: global_flag, value: MEGANATIONS_ano_invierno}
+          - effect: every_country
+            effects:
+            - {effect: event, id: meganations_mundo.111, days: 1}
+        - weight: 1
+          effects:
+          - {effect: global_flag, value: MEGANATIONS_ano_litio}
+          - effect: every_country
+            effects:
+            - {effect: event, id: meganations_mundo.112, days: 1}
+        - weight: 1
+          effects:
+          - {effect: global_flag, value: MEGANATIONS_ano_paz_armada}
+          - effect: every_country
+            effects:
+            - {effect: event, id: meganations_mundo.113, days: 1}
+        - weight: 1
+          effects:
+          - {effect: global_flag, value: MEGANATIONS_ano_caudillos}
+          - effect: every_country
+            effects:
+            - {effect: event, id: meganations_mundo.114, days: 1}
     # Crisis del siglo (análisis 2026-10-01, prioridad 12): desde 2106, una cada ~8 meses.
     # game.log 2026-10-02: la bandera GLOBAL con vencimiento no frena nada (salían
     # 64 por mes). La espera es una bandera de PAÍS con vencimiento en las 8 potencias.
@@ -13608,6 +14309,46 @@ scripted_effects:
     - {effect: flag, value: EFE_santuario_creado}
     - {effect: event, id: meganations_efe.32, days: 1}
 
+  # -------------------------------------------------------------------------
+  # La Coalición de Ginebra y el precio de la forma final (2026-10-10). FROM es
+  # la potencia que proclamó su forma final (los .231) o la Hegemonía (mundo.50).
+  # -------------------------------------------------------------------------
+  - id: MEGANATIONS_coalicion_unirse
+    effects:
+    - {effect: flag, value: MEGANATIONS_en_coalicion}
+    - {effect: dynamic_modifier, id: MEGANATIONS_coalicion_ginebra, days: 1825}
+    - {effect: run, value: MEGANATIONS_frenar_FROM}
+    - effect: every_country
+      when:
+        flag: MEGANATIONS_en_coalicion
+        not: {tag: ROOT}
+      effects:
+      - {effect: guarantee, value: ROOT}
+      - effect: scope
+        target: ROOT
+        effects:
+        - {effect: guarantee, value: PREV}
+    - effect: scope
+      target: FROM
+      effects:
+      - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+  - id: MEGANATIONS_coalicion_tributo
+    effects:
+    - {effect: add_political_power, value: -50}
+    - {effect: dynamic_modifier, id: MEGANATIONS_tributo, days: 730}
+    - {effect: relation, type: non_aggression_pact, value: FROM}
+    - effect: scope
+      target: FROM
+      effects:
+      - {effect: add_political_power, value: 50}
+      - {effect: opinion, target: ROOT, modifier: meganations_concesion}
+  - id: MEGANATIONS_forma_final_precio
+    effects:
+    - {effect: dynamic_modifier, id: MEGANATIONS_provincias_nuevas, days: 730}
+    - {effect: event, id: meganations_mundo.95, days: 120}
+    - {effect: event, id: meganations_mundo.95, days: 300}
+    - {effect: event, id: meganations_mundo.95, days: 480}
+
 dynamic_modifiers:
   - id: MEGANATIONS_mandato_compartido
     country: null
@@ -13825,6 +14566,93 @@ dynamic_modifiers:
 # efecto"). Cada add_variable de una variable con nombre lleva su tooltip.
 # hidden: a propósito no se muestra (el Control del Monte es secreto).
 # =============================================================================
+  # 2026-10-10: la carrera del destino, la Coalición, el exilio, los años del mundo y los rivales jurados
+  - id: MEGANATIONS_coalicion_ginebra
+    country: null
+    name: {english: 'The Geneva Coalition', spanish: 'La Coalición de Ginebra'}
+    desc: {english: 'Every power against the strongest one.', spanish: 'Todas las potencias contra la más fuerte.'}
+    modifiers: {war_support_factor: 0.1, industrial_capacity_factory: 0.05, army_defence_factor: 0.05}
+  - id: MEGANATIONS_tributo
+    country: null
+    name: {english: 'Tribute to the Strongest', spanish: 'Tributo al Más Fuerte'}
+    desc: {english: 'We pay so that it does not come.', spanish: 'Pagamos para que no venga.'}
+    modifiers: {industrial_capacity_factory: -0.1, political_power_gain: -0.1}
+  - id: MEGANATIONS_provincias_nuevas
+    country: null
+    name: {english: 'The New Provinces', spanish: 'Las Provincias Nuevas'}
+    desc: {english: 'Proclaimed, not yet held.', spanish: 'Proclamadas, todavía no sostenidas.'}
+    modifiers: {stability_factor: -0.1, political_power_gain: -0.25}
+  - id: MEGANATIONS_exilio
+    country: null
+    name: {english: 'The Government in Exile', spanish: 'El Gobierno en el Exilio'}
+    desc: {english: 'The capital fell, not the country.', spanish: 'Cayó la capital, no el país.'}
+    modifiers: {war_support_factor: 0.15, army_defence_factor: 0.15, recruitable_population_factor: 0.1, stability_factor: -0.05}
+  - id: MEGANATIONS_impulso_destino
+    country: null
+    name: {english: 'The Momentum of Destiny', spanish: 'El Impulso del Destino'}
+    desc: {english: 'A year that went as planned.', spanish: 'Un año que salió como se planeó.'}
+    modifiers: {industrial_capacity_factory: 0.1, army_org_factor: 0.05}
+  - id: MEGANATIONS_destino_postergado
+    country: null
+    name: {english: 'Destiny Postponed', spanish: 'El Destino Postergado'}
+    desc: {english: 'Three years of promises.', spanish: 'Tres años de promesas.'}
+    modifiers: {stability_factor: -0.1, war_support_factor: -0.1}
+  - id: MEGANATIONS_ano_rios_secos
+    country: null
+    name: {english: 'The Year of the Dry Rivers', spanish: 'El Año de los Ríos Secos'}
+    desc: {english: 'Half the water, half the turbines.', spanish: 'La mitad del agua, la mitad de las turbinas.'}
+    modifiers: {industrial_capacity_factory: -0.1, stability_factor: -0.03}
+  - id: MEGANATIONS_ano_invierno
+    country: null
+    name: {english: 'The Volcanic Winter', spanish: 'El Invierno Volcánico'}
+    desc: {english: 'Ash on every road.', spanish: 'Ceniza en cada camino.'}
+    modifiers: {attrition: 0.1, production_speed_buildings_factor: -0.15}
+  - id: MEGANATIONS_ano_litio
+    country: null
+    name: {english: 'The Lithium Fever', spanish: 'La Fiebre del Litio'}
+    desc: {english: 'New salt flats, new fortunes.', spanish: 'Salares nuevos, fortunas nuevas.'}
+    modifiers: {research_speed_factor: 0.1, industrial_capacity_factory: 0.05, stability_factor: -0.05}
+  - id: MEGANATIONS_ano_paz_armada
+    country: null
+    name: {english: 'The Armed Peace', spanish: 'La Paz Armada'}
+    desc: {english: 'Everyone builds, nobody shoots first.', spanish: 'Todos construyen, nadie dispara primero.'}
+    modifiers: {war_support_factor: -0.15, political_power_gain: 0.2, production_speed_buildings_factor: 0.1}
+  - id: MEGANATIONS_ano_caudillos
+    country: null
+    name: {english: 'The Year of the Warlords', spanish: 'El Año de los Caudillos'}
+    desc: {english: 'Every power arms itself.', spanish: 'Todas las potencias se arman.'}
+    modifiers: {war_support_factor: 0.05, recruitable_population_factor: 0.05}
+  - id: MEGANATIONS_ano_caudillos_anarquia
+    country: null
+    name: {english: 'The Year of the Warlords', spanish: 'El Año de los Caudillos'}
+    desc: {english: 'The ruins breed leaders.', spanish: 'Las ruinas crían jefes.'}
+    modifiers: {army_attack_factor: 0.15, army_defence_factor: 0.15, recruitable_population_factor: 0.1}
+  - id: MEGANATIONS_guerra_jurada
+    country: null
+    name: {english: 'All for Revenge', spanish: 'Todo por la Venganza'}
+    desc: {english: 'The sworn war.', spanish: 'La guerra jurada.'}
+    modifiers: {army_attack_factor: 0.1, war_support_factor: 0.1, stability_factor: -0.05}
+  - id: MEGANATIONS_cabeza_fria
+    country: null
+    name: {english: 'Cold Blood', spanish: 'Cabeza Fría'}
+    desc: {english: 'The sworn war, fought patiently.', spanish: 'La guerra jurada, peleada con paciencia.'}
+    modifiers: {army_defence_factor: 0.1, political_power_gain: 0.1}
+  - id: MEGANATIONS_venganza
+    country: null
+    name: {english: 'Revenge Fulfilled', spanish: 'Venganza Cumplida'}
+    desc: {english: 'Our sworn rival capitulated.', spanish: 'Nuestro rival jurado capituló.'}
+    modifiers: {industrial_capacity_factory: 0.1, experience_gain_army: 0.1}
+  - id: MEGANATIONS_humillacion
+    country: null
+    name: {english: 'The Humiliation', spanish: 'La Humillación'}
+    desc: {english: 'We capitulated before our sworn rival.', spanish: 'Capitulamos ante nuestro rival jurado.'}
+    modifiers: {war_support_factor: 0.15, army_attack_factor: 0.05, stability_factor: -0.1}
+  - id: MEGANATIONS_caudillo_vuelve
+    country: null
+    name: {english: 'The Warlord Returns', spanish: 'El Caudillo Vuelve'}
+    desc: {english: 'Back from the ruins, with a grudge.', spanish: 'De vuelta de las ruinas, con rencor.'}
+    modifiers: {army_attack_factor: 0.15, army_defence_factor: 0.2, recruitable_population_factor: 0.1}
+
 variable_names:
   APF_desarrollo_zet: {english: "Highlands Development", spanish: "Desarrollo de las Tierras Altas"}
   APF_desarrollo_zsa: {english: "Cape Development", spanish: "Desarrollo del Cabo"}

@@ -142,6 +142,7 @@ def emit(ctx: BuildContext) -> None:
     _military_plans(ctx, spec.get("military") or {}, add_plan)
     _anarchy_war_plans(ctx, spec.get("anarchy_wars") or {}, add_plan)
     _destiny_war_plans(ctx, spec.get("destiny_wars") or {}, add_plan)
+    _coalition_plans(ctx, spec.get("coalition") or {}, add_plan)
 
     for p in spec.get("plans", []) or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
@@ -363,3 +364,27 @@ def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
             enable["date_after"] = str(after[mega])
         add_plan(f"{mega}_declara_a_{anar}", mega,
                  [{"type": "declare_war", "target": anar, "value": wars.get("declare", 100)}], enable=enable, abort=gone)
+
+
+def _coalition_plans(ctx: BuildContext, cfg: dict, add_plan) -> None:
+    """La Coalición de Ginebra (2026-10-10): quien se unió (bandera
+    MEGANATIONS_en_coalicion) se prepara contra cada potencia que proclamó su
+    forma final o tiene la Hegemonía Mundial, salvo la propia, su señor o su
+    facción."""
+    if not cfg:
+        return
+    tags = (ctx.spec.raw["diplomacy"].get("race") or {}).get("tags") or []
+    for a in tags:
+        for b in tags:
+            if a == b:
+                continue
+            enable = {"flag": "MEGANATIONS_en_coalicion",
+                      "country": {"tag": b, "when": {"any": [{"flag": f"{b}_forma_final"},
+                                                            {"flag": "MEGANATIONS_hegemon"}]}},
+                      "not": {"any": [{"subject_of": b}, {"in_faction_with": b}]}}
+            add_plan(f"{a}_coalicion_contra_{b}", a, [
+                {"type": "antagonize", "target": b, "value": cfg.get("antagonize", 80)},
+                {"type": "prepare_for_war", "target": b, "value": cfg.get("prepare", 100)},
+                {"type": "conquer", "target": b, "value": cfg.get("conquer", 120)},
+            ], enable=enable, abort={"any": [{"not": {"country_exists": b}}, {"subject_of": b}]})
+    ctx.note(f"ia: coalicion de Ginebra lista para {len(tags)} potencias")

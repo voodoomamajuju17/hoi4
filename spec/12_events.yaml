@@ -1564,26 +1564,64 @@ namespaces:
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: The Dominion of Gaia, spanish: El Dominio de Gaia}
-        desc:
-          english: From the Caribbean to Cape Horn one forest, one law, one Empress of the living Earth.
-          spanish: Del Caribe al Cabo de Hornos, un solo bosque, una ley, un imperio de la Tierra viva.
+        desc: {english: 'From the Caribbean to Cape Horn one forest, one law, one Empress of the living Earth.\n\nTHE PRICE: for two years, -10% stability
+            and -0.25 political power a day, and the new provinces will rise three times. The other powers decide whether to join the Geneva Coalition
+            against us.', spanish: 'Del Caribe al Cabo de Hornos, un solo bosque, una ley, un imperio de la Tierra viva.\n\nEL PRECIO: por dos años,
+            -10% de estabilidad y -0,25 de poder político por día, y las provincias nuevas se van a levantar tres veces. Las otras potencias deciden
+            si se unen a la Coalición de Ginebra contra nosotros.'}
         options:
         - name: {english: A new era begins., spanish: Empieza una nueva era.}
           effects:
           - {effect: add_stability, value: 0.05}
           - {effect: add_war_support, value: 0.05}
+          - {effect: run, value: MEGANATIONS_forma_final_precio}
         src: user_design
       - id: 231
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: The Dominion of Gaia Is Proclaimed, spanish: Se Proclama El Dominio de Gaia}
-        desc:
-          english: 'A megastate has reached its final form: The Dominion of Gaia. The balance of the world of 2100 will never be the same.'
-          spanish: 'Una meganación alcanzó su forma final: El Dominio de Gaia. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+        desc: {english: 'A megastate has reached its final form: The Dominion of Gaia. The balance of the world of 2100 will never be the same.\n\nWHAT
+            NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10% war support, +5%
+            factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY TRIBUTE: -50
+            political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+            +3% war support.', spanish: 'Una meganación alcanzó su forma final: El Dominio de Gaia. El equilibrio del mundo de 2100 ya no va a ser el
+            mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por cada región clave
+            de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía mutua con los demás
+            miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de fábricas y -0,1 de poder
+            político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
         options:
-        - name: {english: We are watching., spanish: Tomamos nota.}
+        - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+          when:
+            not:
+              any:
+              - {subject_of: FROM}
+              - {in_faction_with: FROM}
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_unirse}
+          ai_chance:
+            base: 50
+            modifiers:
+            - factor: 2
+              when: {war_with: FROM}
+            - factor: 1.5
+              when: {flag: MEGANATIONS_en_coalicion}
+        - name: {english: Pay tribute., spanish: Pagarle tributo.}
+          when:
+            not: {war_with: FROM}
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_tributo}
+          ai_chance:
+            base: 20
+            modifiers:
+            - factor: 3
+              when:
+                not: {divisions_at_least: 40}
+            - factor: 3
+              when: {in_faction_with: FROM}
+        - name: {english: We are watching., spanish: Mirar desde lejos.}
           effects:
           - {effect: add_war_support, value: 0.03}
+          ai_chance: 20
         src: user_design
   # ===========================================================================
       # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
@@ -2890,28 +2928,64 @@ namespaces:
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: The Americas Corporation, spanish: La Corporación de las Américas}
-        desc:
-          english: Two continents, one balance sheet. Every citizen is a shareholder of the hemisphere.
-          spanish: Dos continentes, un solo balance. Cada ciudadano es accionista del hemisferio.
+        desc: {english: 'Two continents, one balance sheet. Every citizen is a shareholder of the hemisphere.\n\nTHE PRICE: for two years, -10% stability
+            and -0.25 political power a day, and the new provinces will rise three times. The other powers decide whether to join the Geneva Coalition
+            against us.', spanish: 'Dos continentes, un solo balance. Cada ciudadano es accionista del hemisferio.\n\nEL PRECIO: por dos años, -10%
+            de estabilidad y -0,25 de poder político por día, y las provincias nuevas se van a levantar tres veces. Las otras potencias deciden si se
+            unen a la Coalición de Ginebra contra nosotros.'}
         options:
         - name: {english: A new era begins., spanish: Empieza una nueva era.}
           effects:
           - {effect: add_stability, value: 0.05}
           - {effect: add_war_support, value: 0.05}
+          - {effect: run, value: MEGANATIONS_forma_final_precio}
         src: user_design
       - id: 231
         trigger: effect
         picture: GFX_report_event_generic_rally
-        title:
-          english: The Americas Corporation Is Proclaimed
-          spanish: Se Proclama La Corporación de las Américas
-        desc:
-          english: 'A megastate has reached its final form: The Americas Corporation. The balance of the world of 2100 will never be the same.'
-          spanish: 'Una meganación alcanzó su forma final: La Corporación de las Américas. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+        title: {english: The Americas Corporation Is Proclaimed, spanish: Se Proclama La Corporación de las Américas}
+        desc: {english: 'A megastate has reached its final form: The Americas Corporation. The balance of the world of 2100 will never be the same.\n\nWHAT
+            NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10% war support, +5%
+            factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY TRIBUTE: -50
+            political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+            +3% war support.', spanish: 'Una meganación alcanzó su forma final: La Corporación de las Américas. El equilibrio del mundo de 2100 ya no
+            va a ser el mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por cada
+            región clave de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía mutua
+            con los demás miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de fábricas
+            y -0,1 de poder político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
         options:
-        - name: {english: We are watching., spanish: Tomamos nota.}
+        - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+          when:
+            not:
+              any:
+              - {subject_of: FROM}
+              - {in_faction_with: FROM}
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_unirse}
+          ai_chance:
+            base: 50
+            modifiers:
+            - factor: 2
+              when: {war_with: FROM}
+            - factor: 1.5
+              when: {flag: MEGANATIONS_en_coalicion}
+        - name: {english: Pay tribute., spanish: Pagarle tributo.}
+          when:
+            not: {war_with: FROM}
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_tributo}
+          ai_chance:
+            base: 20
+            modifiers:
+            - factor: 3
+              when:
+                not: {divisions_at_least: 40}
+            - factor: 3
+              when: {in_faction_with: FROM}
+        - name: {english: We are watching., spanish: Mirar desde lejos.}
           effects:
           - {effect: add_war_support, value: 0.03}
+          ai_chance: 20
         src: user_design
   # ===========================================================================
 
@@ -4195,29 +4269,64 @@ namespaces:
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: The Thalassocracy of the Seven Seas, spanish: La Talasocracia de los Siete Mares}
-        desc:
-          english: 'Every strait, every canal, every cape: whoever sails, pays the Market.'
-          spanish: 'Cada estrecho, cada canal, cada cabo: el que navega le paga al Mercado.'
+        desc: {english: 'Every strait, every canal, every cape: whoever sails, pays the Market.\n\nTHE PRICE: for two years, -10% stability and -0.25
+            political power a day, and the new provinces will rise three times. The other powers decide whether to join the Geneva Coalition against
+            us.', spanish: 'Cada estrecho, cada canal, cada cabo: el que navega le paga al Mercado.\n\nEL PRECIO: por dos años, -10% de estabilidad
+            y -0,25 de poder político por día, y las provincias nuevas se van a levantar tres veces. Las otras potencias deciden si se unen a la Coalición
+            de Ginebra contra nosotros.'}
         options:
         - name: {english: A new era begins., spanish: Empieza una nueva era.}
           effects:
           - {effect: add_stability, value: 0.05}
           - {effect: add_war_support, value: 0.05}
+          - {effect: run, value: MEGANATIONS_forma_final_precio}
         src: user_design
       - id: 231
         trigger: effect
         picture: GFX_report_event_generic_rally
-        title:
-          english: The Thalassocracy of the Seven Seas Is Proclaimed
-          spanish: Se Proclama La Talasocracia de los Siete Mares
-        desc:
-          english: 'A megastate has reached its final form: The Thalassocracy of the Seven Seas. The balance of the world of 2100 will never be the
-            same.'
-          spanish: 'Una meganación alcanzó su forma final: La Talasocracia de los Siete Mares. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+        title: {english: The Thalassocracy of the Seven Seas Is Proclaimed, spanish: Se Proclama La Talasocracia de los Siete Mares}
+        desc: {english: 'A megastate has reached its final form: The Thalassocracy of the Seven Seas. The balance of the world of 2100 will never be
+            the same.\n\nWHAT NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10%
+            war support, +5% factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY
+            TRIBUTE: -50 political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+            +3% war support.', spanish: 'Una meganación alcanzó su forma final: La Talasocracia de los Siete Mares. El equilibrio del mundo de 2100
+            ya no va a ser el mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por
+            cada región clave de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía
+            mutua con los demás miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de
+            fábricas y -0,1 de poder político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
         options:
-        - name: {english: We are watching., spanish: Tomamos nota.}
+        - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+          when:
+            not:
+              any:
+              - {subject_of: FROM}
+              - {in_faction_with: FROM}
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_unirse}
+          ai_chance:
+            base: 50
+            modifiers:
+            - factor: 2
+              when: {war_with: FROM}
+            - factor: 1.5
+              when: {flag: MEGANATIONS_en_coalicion}
+        - name: {english: Pay tribute., spanish: Pagarle tributo.}
+          when:
+            not: {war_with: FROM}
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_tributo}
+          ai_chance:
+            base: 20
+            modifiers:
+            - factor: 3
+              when:
+                not: {divisions_at_least: 40}
+            - factor: 3
+              when: {in_faction_with: FROM}
+        - name: {english: We are watching., spanish: Mirar desde lejos.}
           effects:
           - {effect: add_war_support, value: 0.03}
+          ai_chance: 20
         src: user_design
   # ===========================================================================
       # Elecciones periódicas (análisis 2026-10-01, prioridad 12)
@@ -5527,26 +5636,63 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Continental Commune, spanish: La Comuna Continental}
-      desc:
-        english: From Lisbon to the Urals the machines work and nobody is surplus.
-        spanish: De Lisboa a los Urales trabajan las máquinas y nadie sobra.
+      desc: {english: 'From Lisbon to the Urals the machines work and nobody is surplus.\n\nTHE PRICE: for two years, -10% stability and -0.25 political
+          power a day, and the new provinces will rise three times. The other powers decide whether to join the Geneva Coalition against us.', spanish: 'De
+          Lisboa a los Urales trabajan las máquinas y nadie sobra.\n\nEL PRECIO: por dos años, -10% de estabilidad y -0,25 de poder político por día,
+          y las provincias nuevas se van a levantar tres veces. Las otras potencias deciden si se unen a la Coalición de Ginebra contra nosotros.'}
       options:
       - name: {english: A new era begins., spanish: Empieza una nueva era.}
         effects:
         - {effect: add_stability, value: 0.05}
         - {effect: add_war_support, value: 0.05}
+        - {effect: run, value: MEGANATIONS_forma_final_precio}
       src: user_design
     - id: 231
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Continental Commune Is Proclaimed, spanish: Se Proclama La Comuna Continental}
-      desc:
-        english: 'A megastate has reached its final form: The Continental Commune. The balance of the world of 2100 will never be the same.'
-        spanish: 'Una meganación alcanzó su forma final: La Comuna Continental. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+      desc: {english: 'A megastate has reached its final form: The Continental Commune. The balance of the world of 2100 will never be the same.\n\nWHAT
+          NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10% war support, +5%
+          factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY TRIBUTE: -50
+          political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+          +3% war support.', spanish: 'Una meganación alcanzó su forma final: La Comuna Continental. El equilibrio del mundo de 2100 ya no va a ser
+          el mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por cada región
+          clave de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía mutua con
+          los demás miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de fábricas y
+          -0,1 de poder político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
       options:
-      - name: {english: We are watching., spanish: Tomamos nota.}
+      - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+        when:
+          not:
+            any:
+            - {subject_of: FROM}
+            - {in_faction_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_unirse}
+        ai_chance:
+          base: 50
+          modifiers:
+          - factor: 2
+            when: {war_with: FROM}
+          - factor: 1.5
+            when: {flag: MEGANATIONS_en_coalicion}
+      - name: {english: Pay tribute., spanish: Pagarle tributo.}
+        when:
+          not: {war_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_tributo}
+        ai_chance:
+          base: 20
+          modifiers:
+          - factor: 3
+            when:
+              not: {divisions_at_least: 40}
+          - factor: 3
+            when: {in_faction_with: FROM}
+      - name: {english: We are watching., spanish: Mirar desde lejos.}
         effects:
         - {effect: add_war_support, value: 0.03}
+        ai_chance: 20
       src: user_design
     # 2026-10-03 (pedido del usuario): introducción, quiénes somos, qué pasó y por qué
     - id: 250
@@ -6753,26 +6899,64 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Original Human Empire, spanish: El Imperio Humano Original}
-      desc:
-        english: Humanity was born here. Now its homeland reaches the Mediterranean and the rivers of Mesopotamia again.
-        spanish: La humanidad nació acá. Ahora su tierra natal vuelve a llegar al Mediterráneo y a los ríos de Mesopotamia.
+      desc: {english: 'Humanity was born here. Now its homeland reaches the Mediterranean and the rivers of Mesopotamia again.\n\nTHE PRICE: for two
+          years, -10% stability and -0.25 political power a day, and the new provinces will rise three times. The other powers decide whether to join
+          the Geneva Coalition against us.', spanish: 'La humanidad nació acá. Ahora su tierra natal vuelve a llegar al Mediterráneo y a los ríos
+          de Mesopotamia.\n\nEL PRECIO: por dos años, -10% de estabilidad y -0,25 de poder político por día, y las provincias nuevas se van a levantar
+          tres veces. Las otras potencias deciden si se unen a la Coalición de Ginebra contra nosotros.'}
       options:
       - name: {english: A new era begins., spanish: Empieza una nueva era.}
         effects:
         - {effect: add_stability, value: 0.05}
         - {effect: add_war_support, value: 0.05}
+        - {effect: run, value: MEGANATIONS_forma_final_precio}
       src: user_design
     - id: 231
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Original Human Empire Is Proclaimed, spanish: Se Proclama El Imperio Humano Original}
-      desc:
-        english: 'A megastate has reached its final form: The Original Human Empire. The balance of the world of 2100 will never be the same.'
-        spanish: 'Una meganación alcanzó su forma final: El Imperio Humano Original. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+      desc: {english: 'A megastate has reached its final form: The Original Human Empire. The balance of the world of 2100 will never be the same.\n\nWHAT
+          NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10% war support, +5%
+          factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY TRIBUTE: -50
+          political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+          +3% war support.', spanish: 'Una meganación alcanzó su forma final: El Imperio Humano Original. El equilibrio del mundo de 2100 ya no va
+          a ser el mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por cada región
+          clave de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía mutua con
+          los demás miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de fábricas y
+          -0,1 de poder político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
       options:
-      - name: {english: We are watching., spanish: Tomamos nota.}
+      - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+        when:
+          not:
+            any:
+            - {subject_of: FROM}
+            - {in_faction_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_unirse}
+        ai_chance:
+          base: 50
+          modifiers:
+          - factor: 2
+            when: {war_with: FROM}
+          - factor: 1.5
+            when: {flag: MEGANATIONS_en_coalicion}
+      - name: {english: Pay tribute., spanish: Pagarle tributo.}
+        when:
+          not: {war_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_tributo}
+        ai_chance:
+          base: 20
+          modifiers:
+          - factor: 3
+            when:
+              not: {divisions_at_least: 40}
+          - factor: 3
+            when: {in_faction_with: FROM}
+      - name: {english: We are watching., spanish: Mirar desde lejos.}
         effects:
         - {effect: add_war_support, value: 0.03}
+        ai_chance: 20
       src: user_design
   # ===========================================================================
     # 2026-10-03 (pedido del usuario): introducción, quiénes somos, qué pasó y por qué
@@ -7805,28 +7989,64 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Empire of the Eternal Sun, spanish: El Imperio del Sol Eterno}
-      desc:
-        english: The four quarters are now the whole south. The Sun has no more borders to cross.
-        spanish: Los cuatro suyus ya son todo el sur. El Sol no tiene más fronteras que cruzar.
+      desc: {english: 'The four quarters are now the whole south. The Sun has no more borders to cross.\n\nTHE PRICE: for two years, -10% stability
+          and -0.25 political power a day, and the new provinces will rise three times. The other powers decide whether to join the Geneva Coalition
+          against us.', spanish: 'Los cuatro suyus ya son todo el sur. El Sol no tiene más fronteras que cruzar.\n\nEL PRECIO: por dos años, -10%
+          de estabilidad y -0,25 de poder político por día, y las provincias nuevas se van a levantar tres veces. Las otras potencias deciden si se
+          unen a la Coalición de Ginebra contra nosotros.'}
       options:
       - name: {english: A new era begins., spanish: Empieza una nueva era.}
         effects:
         - {effect: add_stability, value: 0.05}
         - {effect: add_war_support, value: 0.05}
+        - {effect: run, value: MEGANATIONS_forma_final_precio}
       src: user_design
     - id: 231
       trigger: effect
       picture: GFX_report_event_generic_rally
-      title:
-        english: The Empire of the Eternal Sun Is Proclaimed
-        spanish: Se Proclama El Imperio del Sol Eterno
-      desc:
-        english: 'A megastate has reached its final form: The Empire of the Eternal Sun. The balance of the world of 2100 will never be the same.'
-        spanish: 'Una meganación alcanzó su forma final: El Imperio del Sol Eterno. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+      title: {english: The Empire of the Eternal Sun Is Proclaimed, spanish: Se Proclama El Imperio del Sol Eterno}
+      desc: {english: 'A megastate has reached its final form: The Empire of the Eternal Sun. The balance of the world of 2100 will never be the same.\n\nWHAT
+          NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10% war support, +5%
+          factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY TRIBUTE: -50
+          political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+          +3% war support.', spanish: 'Una meganación alcanzó su forma final: El Imperio del Sol Eterno. El equilibrio del mundo de 2100 ya no va
+          a ser el mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por cada región
+          clave de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía mutua con
+          los demás miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de fábricas y
+          -0,1 de poder político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
       options:
-      - name: {english: We are watching., spanish: Tomamos nota.}
+      - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+        when:
+          not:
+            any:
+            - {subject_of: FROM}
+            - {in_faction_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_unirse}
+        ai_chance:
+          base: 50
+          modifiers:
+          - factor: 2
+            when: {war_with: FROM}
+          - factor: 1.5
+            when: {flag: MEGANATIONS_en_coalicion}
+      - name: {english: Pay tribute., spanish: Pagarle tributo.}
+        when:
+          not: {war_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_tributo}
+        ai_chance:
+          base: 20
+          modifiers:
+          - factor: 3
+            when:
+              not: {divisions_at_least: 40}
+          - factor: 3
+            when: {in_faction_with: FROM}
+      - name: {english: We are watching., spanish: Mirar desde lejos.}
         effects:
         - {effect: add_war_support, value: 0.03}
+        ai_chance: 20
       src: user_design
     # Crisis de los Salares (análisis 2026-10-01): el Collasuyu pide Antofagasta, que es del EFE.
     # Igual que la de Arequipa, al revés: el Sol exige, el Imperio cede o hay guerra.
@@ -9139,26 +9359,63 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Celestial Harmony, spanish: La Armonía Celeste}
-      desc:
-        english: Every river of Asia runs through one control room.
-        spanish: Cada río de Asia pasa por una sola sala de control.
+      desc: {english: 'Every river of Asia runs through one control room.\n\nTHE PRICE: for two years, -10% stability and -0.25 political power a
+          day, and the new provinces will rise three times. The other powers decide whether to join the Geneva Coalition against us.', spanish: 'Cada
+          río de Asia pasa por una sola sala de control.\n\nEL PRECIO: por dos años, -10% de estabilidad y -0,25 de poder político por día, y las
+          provincias nuevas se van a levantar tres veces. Las otras potencias deciden si se unen a la Coalición de Ginebra contra nosotros.'}
       options:
       - name: {english: A new era begins., spanish: Empieza una nueva era.}
         effects:
         - {effect: add_stability, value: 0.05}
         - {effect: add_war_support, value: 0.05}
+        - {effect: run, value: MEGANATIONS_forma_final_precio}
       src: user_design
     - id: 231
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Celestial Harmony Is Proclaimed, spanish: Se Proclama La Armonía Celeste}
-      desc:
-        english: 'A megastate has reached its final form: The Celestial Harmony. The balance of the world of 2100 will never be the same.'
-        spanish: 'Una meganación alcanzó su forma final: La Armonía Celeste. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+      desc: {english: 'A megastate has reached its final form: The Celestial Harmony. The balance of the world of 2100 will never be the same.\n\nWHAT
+          NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10% war support, +5%
+          factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY TRIBUTE: -50
+          political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+          +3% war support.', spanish: 'Una meganación alcanzó su forma final: La Armonía Celeste. El equilibrio del mundo de 2100 ya no va a ser el
+          mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por cada región clave
+          de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía mutua con los demás
+          miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de fábricas y -0,1 de poder
+          político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
       options:
-      - name: {english: We are watching., spanish: Tomamos nota.}
+      - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+        when:
+          not:
+            any:
+            - {subject_of: FROM}
+            - {in_faction_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_unirse}
+        ai_chance:
+          base: 50
+          modifiers:
+          - factor: 2
+            when: {war_with: FROM}
+          - factor: 1.5
+            when: {flag: MEGANATIONS_en_coalicion}
+      - name: {english: Pay tribute., spanish: Pagarle tributo.}
+        when:
+          not: {war_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_tributo}
+        ai_chance:
+          base: 20
+          modifiers:
+          - factor: 3
+            when:
+              not: {divisions_at_least: 40}
+          - factor: 3
+            when: {in_faction_with: FROM}
+      - name: {english: We are watching., spanish: Mirar desde lejos.}
         effects:
         - {effect: add_war_support, value: 0.03}
+        ai_chance: 20
       src: user_design
   # ===========================================================================
     - id: 240
@@ -10882,26 +11139,64 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Eternal Roman Empire, spanish: El Imperio Romano Eterno}
-      desc:
-        english: Mare Nostrum is ours again, from the pillars of Hercules to the Nile.
-        spanish: El Mare Nostrum vuelve a ser nuestro, de las columnas de Hércules al Nilo.
+      desc: {english: 'Mare Nostrum is ours again, from the pillars of Hercules to the Nile.\n\nTHE PRICE: for two years, -10% stability and -0.25
+          political power a day, and the new provinces will rise three times. The other powers decide whether to join the Geneva Coalition against
+          us.', spanish: 'El Mare Nostrum vuelve a ser nuestro, de las columnas de Hércules al Nilo.\n\nEL PRECIO: por dos años, -10% de estabilidad
+          y -0,25 de poder político por día, y las provincias nuevas se van a levantar tres veces. Las otras potencias deciden si se unen a la Coalición
+          de Ginebra contra nosotros.'}
       options:
       - name: {english: A new era begins., spanish: Empieza una nueva era.}
         effects:
         - {effect: add_stability, value: 0.05}
         - {effect: add_war_support, value: 0.05}
+        - {effect: run, value: MEGANATIONS_forma_final_precio}
       src: user_design
     - id: 231
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Eternal Roman Empire Is Proclaimed, spanish: Se Proclama El Imperio Romano Eterno}
-      desc:
-        english: 'A megastate has reached its final form: The Eternal Roman Empire. The balance of the world of 2100 will never be the same.'
-        spanish: 'Una meganación alcanzó su forma final: El Imperio Romano Eterno. El equilibrio del mundo de 2100 ya no va a ser el mismo.'
+      desc: {english: 'A megastate has reached its final form: The Eternal Roman Empire. The balance of the world of 2100 will never be the same.\n\nWHAT
+          NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of its final form, +10% war support, +5%
+          factory output and +5% defence for five years, and a mutual guarantee with every other member. It will not like us.\n\nPAY TRIBUTE: -50
+          political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange, a non-aggression pact.\n\nWATCH:
+          +3% war support.', spanish: 'Una meganación alcanzó su forma final: El Imperio Romano Eterno. El equilibrio del mundo de 2100 ya no va a
+          ser el mismo.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A LA COALICIÓN DE GINEBRA: objetivos de guerra por cada región
+          clave de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas y +5% de defensa por cinco años, y garantía mutua con
+          los demás miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora y, por dos años, -10% de producción de fábricas y
+          -0,1 de poder político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo a la guerra.'}
       options:
-      - name: {english: We are watching., spanish: Tomamos nota.}
+      - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+        when:
+          not:
+            any:
+            - {subject_of: FROM}
+            - {in_faction_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_unirse}
+        ai_chance:
+          base: 50
+          modifiers:
+          - factor: 2
+            when: {war_with: FROM}
+          - factor: 1.5
+            when: {flag: MEGANATIONS_en_coalicion}
+      - name: {english: Pay tribute., spanish: Pagarle tributo.}
+        when:
+          not: {war_with: FROM}
+        effects:
+        - {effect: run, value: MEGANATIONS_coalicion_tributo}
+        ai_chance:
+          base: 20
+          modifiers:
+          - factor: 3
+            when:
+              not: {divisions_at_least: 40}
+          - factor: 3
+            when: {in_faction_with: FROM}
+      - name: {english: We are watching., spanish: Mirar desde lejos.}
         effects:
         - {effect: add_war_support, value: 0.03}
+        ai_chance: 20
       src: user_design
   # ===========================================================================
     # 2026-10-03 (pedido del usuario): introducción, quiénes somos, qué pasó y por qué
@@ -12041,17 +12336,48 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: A Hegemon Rises, spanish: Surge una Hegemonía}
       desc: {english: '[From.GetName] has become the first power of the world: more factories and more divisions than any rival. Everyone measures
-          themselves against it now.', spanish: '[From.GetName] se convirtió en la primera potencia del mundo: más fábricas y más divisiones que cualquier
-          rival. Ahora todos se miden contra ella.'}
+          themselves against it now.\n\nWHAT NOW: every power decides on its own.\n\nJOIN THE GENEVA COALITION: war goals for every key region of
+          its final form, +10% war support, +5% factory output and +5% defence for five years, and a mutual guarantee with every other member. It
+          will not like us.\n\nPAY TRIBUTE: -50 political power now and, for two years, -10% factory output and -0.1 political power a day; in exchange,
+          a non-aggression pact.\n\nWATCH: +3% war support.', spanish: '[From.GetName] se convirtió en la primera potencia del mundo: más fábricas
+          y más divisiones que cualquier rival. Ahora todos se miden contra ella.\n\nQUÉ HACEMOS: cada potencia decide por su cuenta.\n\nUNIRNOS A
+          LA COALICIÓN DE GINEBRA: objetivos de guerra por cada región clave de su forma final, +10% de apoyo a la guerra, +5% de producción de fábricas
+          y +5% de defensa por cinco años, y garantía mutua con los demás miembros. No le va a gustar.\n\nPAGARLE TRIBUTO: -50 de poder político ahora
+          y, por dos años, -10% de producción de fábricas y -0,1 de poder político por día; a cambio, un pacto de no agresión.\n\nMIRAR: +3% de apoyo
+          a la guerra.'}
       options:
-      - name: {english: We will not bow., spanish: No nos vamos a inclinar.}
+      - name: {english: Join the Geneva Coalition., spanish: Unirnos a la Coalición de Ginebra.}
+        when:
+          not:
+            any:
+            - {subject_of: FROM}
+            - {in_faction_with: FROM}
         effects:
-        - {effect: add_war_support, value: 0.05}
-        ai_chance: 60
-      - name: {english: Seek their favour., spanish: Buscar su favor.}
+        - {effect: run, value: MEGANATIONS_coalicion_unirse}
+        ai_chance:
+          base: 50
+          modifiers:
+          - factor: 2
+            when: {war_with: FROM}
+          - factor: 1.5
+            when: {flag: MEGANATIONS_en_coalicion}
+      - name: {english: Pay tribute., spanish: Pagarle tributo.}
+        when:
+          not: {war_with: FROM}
         effects:
-        - {effect: add_stability, value: 0.03}
-        ai_chance: 40
+        - {effect: run, value: MEGANATIONS_coalicion_tributo}
+        ai_chance:
+          base: 20
+          modifiers:
+          - factor: 3
+            when:
+              not: {divisions_at_least: 40}
+          - factor: 3
+            when: {in_faction_with: FROM}
+      - name: {english: We are watching., spanish: Mirar desde lejos.}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 20
       src: user_request
     # -------------------------------------------------------------------------
     # Cadenas de equipamiento (2026-10-10, pedido del usuario: "cadenas de eventos
@@ -12304,4 +12630,325 @@ namespaces:
         effects:
         - {effect: add_stability, value: -0.02}
         - {effect: add_political_power, value: 25}
+      src: user_request
+    # -------------------------------------------------------------------------
+    # La carrera del destino (2026-10-10, "pensá qué podrías agregar para hacerlo
+    # más divertido" -> "hacé todas"). Los dispara MEGANATIONS_carrera_pulso
+    # (tools/gen/emitters/carrera.py), la Coalición (los .231 de cada potencia y
+    # el 50) y la forma final (los .230).
+    # -------------------------------------------------------------------------
+    # Evento oculto en el que está a una región de su forma final: así FROM es él en el 91.
+    - id: 90
+      trigger: effect
+      hidden: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Race: One Step Left', spanish: 'La Carrera: a un Paso'}
+      desc:
+        english: 'Internal: warns the other powers.'
+        spanish: 'Interno: les avisa a las otras potencias.'
+      options:
+      - name: {english: 'Continue.', spanish: 'Seguir.'}
+        effects:
+        - effect: every_country
+          when:
+            any: [{tag: EFE}, {tag: FCU}, {tag: ASC}, {tag: HSN}, {tag: NAS}, {tag: SHD}, {tag: APF}, {tag: NRE}]
+            not:
+              any: [{tag: ROOT}, {subject_of: ROOT}]
+          effects:
+          - {effect: event, id: meganations_mundo.91, days: 1}
+      src: user_request
+    - id: 91
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: '[From.GetName] Is One Step from Its Destiny', spanish: '[From.GetName] Está a un Paso de su Destino'}
+      desc:
+        english: '[From.GetName] holds almost every region its final form demands: only one is missing. If it proclaims it, it becomes the strongest power in the world, and all of us will have to choose between facing it or paying it.\n\nSTOP IT: 50 political power; we get war goals for every key region that is already theirs (no justification needed).\n\nWIN THEIR FAVOUR: we send them 1,000 infantry equipment; they pay us back 50 political power and like us better.\n\nLET THEM BLEED: +2% war support.\n\nThe panel «The Race for Destiny» shows how many key regions each power holds.'
+        spanish: '[From.GetName] controla casi todas las regiones que pide su forma final: le falta una sola. Si la proclama, pasa a ser la potencia más fuerte del mundo, y todos vamos a tener que elegir entre enfrentarla o pagarle.\n\nFRENARLA: 50 de poder político; recibimos objetivos de guerra por cada región clave que ya es suya (sin justificar).\n\nGANARNOS SU FAVOR: le mandamos 1.000 de equipo de infantería; nos devuelve 50 de poder político y nos mira mejor.\n\nQUE SE DESGASTE SOLA: +2% de apoyo a la guerra.\n\nEl panel «La Carrera del Destino» muestra cuántas regiones clave tiene cada potencia.'
+      options:
+      - name: {english: 'Stop it: claim what it already took.', spanish: 'Frenarla: reclamar lo que ya tomó.'}
+        when: {not: {any: [{subject_of: FROM}, {in_faction_with: FROM}]}}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: run, value: MEGANATIONS_frenar_FROM}
+        - {effect: add_war_support, value: 0.03}
+        - effect: scope
+          target: FROM
+          effects:
+          - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
+        ai_chance:
+          base: 40
+          modifiers:
+          - {factor: 2, when: {war_with: FROM}}
+          - {factor: 2, when: {flag: MEGANATIONS_en_coalicion}}
+      - name: {english: 'Win their favour: send them arms.', spanish: 'Ganarnos su favor: mandarle armas.'}
+        when: {not: {war_with: FROM}}
+        effects:
+        - {effect: send_equipment, type: infantry_equipment, amount: 1000, target: FROM}
+        - {effect: add_political_power, value: 50}
+        - effect: scope
+          target: FROM
+          effects:
+          - {effect: opinion, target: ROOT, modifier: meganations_concesion}
+        ai_chance:
+          base: 30
+          modifiers:
+          - {factor: 4, when: {in_faction_with: FROM}}
+      - name: {english: 'Let them bleed on their own.', spanish: 'Que se desgaste sola.'}
+        effects:
+        - {effect: add_war_support, value: 0.02}
+        ai_chance: 30
+      src: user_request
+    - id: 95
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The New Provinces Rise', spanish: 'Las Provincias Nuevas se Levantan'}
+      desc:
+        english: 'The final form is proclaimed, but in the regions taken last nobody voted for it. Militias, strikes and sabotage: an empire has to be held, not only proclaimed. It will happen three times in the next year and a half.\n\nCRUSH THEM: we lose 20,000 men and 1,000 infantry equipment, but order returns (+2% war support).\n\nNEGOTIATE: 75 political power and -3% stability.'
+        spanish: 'La forma final está proclamada, pero en las regiones tomadas al final nadie la votó. Milicias, huelgas y sabotajes: un imperio hay que sostenerlo, no solo proclamarlo. Va a pasar tres veces en el próximo año y medio.\n\nAPLASTARLOS: perdemos 20.000 hombres y 1.000 de equipo de infantería, pero vuelve el orden (+2% de apoyo a la guerra).\n\nNEGOCIAR: 75 de poder político y -3% de estabilidad.'
+      options:
+      - name: {english: 'Crush them.', spanish: 'Aplastarlos.'}
+        effects:
+        - {effect: add_manpower, value: -20000}
+        - {effect: equipment, type: infantry_equipment, amount: -1000}
+        - {effect: add_war_support, value: 0.02}
+        ai_chance: 50
+      - name: {english: 'Negotiate with the local councils.', spanish: 'Negociar con los consejos locales.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 50
+      src: user_request
+    - id: 97
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Government Comes Home', spanish: 'El Gobierno Vuelve a Casa'}
+      desc:
+        english: 'Our flag flies again over the capital. The government in exile returns through streets that still smell of smoke, and the crowd has not forgotten who stayed.'
+        spanish: 'Nuestra bandera vuelve a flamear sobre la capital. El gobierno en el exilio regresa por calles que todavía huelen a humo, y la gente no se olvidó de quién se quedó.'
+      options:
+      - name: {english: 'We never really left.', spanish: 'Nunca nos fuimos del todo.'}
+        effects:
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_war_support, value: 0.05}
+      src: user_request
+    # Los caudillos vuelven (race.caudillos).
+    - id: 100
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Warlord Returns to Eurasia', spanish: 'Un Señor de la Guerra Vuelve a Eurasia'}
+      desc:
+        english: 'In the steppe, the old banners of the Eurasian Warlords are flying again. The war and the disorder gave them room. If we do nothing, they will take back every region that was theirs and that we hold.\n\nCRUSH IT NOW: 30,000 men, 2,000 infantry equipment and 25 political power.\n\nOFFER A THRONE UNDER OUR FLAG: it returns as our satellite, with the regions that were its own that we hold, its own army and a loyal warlord.\n\nLET IT COME: it returns independent, with those regions, 6 divisions, and declares war on us.'
+        spanish: 'En la estepa vuelven a flamear las banderas viejas de los Señores de la Guerra de Eurasia. La guerra y el desorden les dieron lugar. Si no hacemos nada, se van a quedar con cada región que fue suya y que hoy tenemos nosotros.\n\nAPLASTARLO YA: 30.000 hombres, 2.000 de equipo de infantería y 25 de poder político.\n\nOFRECERLE UN TRONO BAJO NUESTRA BANDERA: vuelve como satélite nuestro, con las regiones que fueron suyas y tenemos nosotros, su propio ejército y un caudillo leal.\n\nQUE VENGA: vuelve independiente, con esas regiones y 6 divisiones, y nos declara la guerra.'
+      options:
+      - name: {english: 'Crush it before it grows.', spanish: 'Aplastarlo antes de que crezca.'}
+        effects:
+        - {effect: add_manpower, value: -30000}
+        - {effect: equipment, type: infantry_equipment, amount: -2000}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 55
+      - name: {english: 'Offer a throne under our flag.', spanish: 'Ofrecerle un trono bajo nuestra bandera.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWE_titere}
+        ai_chance: 35
+      - name: {english: 'Let it come.', spanish: 'Que venga.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWE_libre}
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 10
+      src: user_request
+    - id: 101
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Raj Rises in Hindustan', spanish: 'Un Raj se Alza en el Indostán'}
+      desc:
+        english: 'In the river towns of Hindustan, a warlord crowns himself Raj and the villages answer. The war and the disorder gave them room. If we do nothing, they will take back every region that was theirs and that we hold.\n\nCRUSH IT NOW: 30,000 men, 2,000 infantry equipment and 25 political power.\n\nOFFER A THRONE UNDER OUR FLAG: it returns as our satellite, with the regions that were its own that we hold, its own army and a loyal warlord.\n\nLET IT COME: it returns independent, with those regions, 6 divisions, and declares war on us.'
+        spanish: 'En las ciudades del río del Indostán un señor de la guerra se corona Raj y las aldeas le responden. La guerra y el desorden les dieron lugar. Si no hacemos nada, se van a quedar con cada región que fue suya y que hoy tenemos nosotros.\n\nAPLASTARLO YA: 30.000 hombres, 2.000 de equipo de infantería y 25 de poder político.\n\nOFRECERLE UN TRONO BAJO NUESTRA BANDERA: vuelve como satélite nuestro, con las regiones que fueron suyas y tenemos nosotros, su propio ejército y un caudillo leal.\n\nQUE VENGA: vuelve independiente, con esas regiones y 6 divisiones, y nos declara la guerra.'
+      options:
+      - name: {english: 'Crush it before it grows.', spanish: 'Aplastarlo antes de que crezca.'}
+        effects:
+        - {effect: add_manpower, value: -30000}
+        - {effect: equipment, type: infantry_equipment, amount: -2000}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 55
+      - name: {english: 'Offer a throne under our flag.', spanish: 'Ofrecerle un trono bajo nuestra bandera.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWI_titere}
+        ai_chance: 35
+      - name: {english: 'Let it come.', spanish: 'Que venga.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWI_libre}
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 10
+      src: user_request
+    - id: 102
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Emir Returns to the Desert', spanish: 'El Emir Vuelve al Desierto'}
+      desc:
+        english: 'The caravans of the Desert Emirates ride again, and the oases close their doors to us. The war and the disorder gave them room. If we do nothing, they will take back every region that was theirs and that we hold.\n\nCRUSH IT NOW: 30,000 men, 2,000 infantry equipment and 25 political power.\n\nOFFER A THRONE UNDER OUR FLAG: it returns as our satellite, with the regions that were its own that we hold, its own army and a loyal warlord.\n\nLET IT COME: it returns independent, with those regions, 6 divisions, and declares war on us.'
+        spanish: 'Las caravanas de los Emiratos del Desierto vuelven a cabalgar y los oasis nos cierran las puertas. La guerra y el desorden les dieron lugar. Si no hacemos nada, se van a quedar con cada región que fue suya y que hoy tenemos nosotros.\n\nAPLASTARLO YA: 30.000 hombres, 2.000 de equipo de infantería y 25 de poder político.\n\nOFRECERLE UN TRONO BAJO NUESTRA BANDERA: vuelve como satélite nuestro, con las regiones que fueron suyas y tenemos nosotros, su propio ejército y un caudillo leal.\n\nQUE VENGA: vuelve independiente, con esas regiones y 6 divisiones, y nos declara la guerra.'
+      options:
+      - name: {english: 'Crush it before it grows.', spanish: 'Aplastarlo antes de que crezca.'}
+        effects:
+        - {effect: add_manpower, value: -30000}
+        - {effect: equipment, type: infantry_equipment, amount: -2000}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 55
+      - name: {english: 'Offer a throne under our flag.', spanish: 'Ofrecerle un trono bajo nuestra bandera.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWM_titere}
+        ai_chance: 35
+      - name: {english: 'Let it come.', spanish: 'Que venga.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWM_libre}
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 10
+      src: user_request
+    - id: 103
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Caudillo Returns to the Amazon', spanish: 'Un Caudillo Vuelve al Amazonas'}
+      desc:
+        english: 'Along the rivers of the Amazon, a caudillo gathers the old bands under one flag. The war and the disorder gave them room. If we do nothing, they will take back every region that was theirs and that we hold.\n\nCRUSH IT NOW: 30,000 men, 2,000 infantry equipment and 25 political power.\n\nOFFER A THRONE UNDER OUR FLAG: it returns as our satellite, with the regions that were its own that we hold, its own army and a loyal warlord.\n\nLET IT COME: it returns independent, with those regions, 6 divisions, and declares war on us.'
+        spanish: 'Por los ríos del Amazonas un caudillo junta a las bandas viejas bajo una sola bandera. La guerra y el desorden les dieron lugar. Si no hacemos nada, se van a quedar con cada región que fue suya y que hoy tenemos nosotros.\n\nAPLASTARLO YA: 30.000 hombres, 2.000 de equipo de infantería y 25 de poder político.\n\nOFRECERLE UN TRONO BAJO NUESTRA BANDERA: vuelve como satélite nuestro, con las regiones que fueron suyas y tenemos nosotros, su propio ejército y un caudillo leal.\n\nQUE VENGA: vuelve independiente, con esas regiones y 6 divisiones, y nos declara la guerra.'
+      options:
+      - name: {english: 'Crush it before it grows.', spanish: 'Aplastarlo antes de que crezca.'}
+        effects:
+        - {effect: add_manpower, value: -30000}
+        - {effect: equipment, type: infantry_equipment, amount: -2000}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 55
+      - name: {english: 'Offer a throne under our flag.', spanish: 'Ofrecerle un trono bajo nuestra bandera.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWB_titere}
+        ai_chance: 35
+      - name: {english: 'Let it come.', spanish: 'Que venga.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_caudillo_ZWB_libre}
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 10
+      src: user_request
+    # Los años del mundo (uno al azar al arrancar, MEGANATIONS_eventos_mundiales).
+    - id: 110
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Year of the Dry Rivers', spanish: 'El Año de los Ríos Secos'}
+      desc:
+        english: 'The great rivers carry half their water. Turbines stop, harvests fail.\n\nFor two years, for everyone: -10% factory output and -3% stability.\n\nEvery game of 2100 starts with one of five years of the world, at random.'
+        spanish: 'Los grandes ríos llevan la mitad de agua. Las turbinas se paran y las cosechas se pierden.\n\nPor dos años, para todos: -10% de producción de fábricas y -3% de estabilidad.\n\nCada partida de 2100 arranca con uno de cinco años del mundo, al azar.'
+      options:
+      - name: {english: 'That is the world we got.', spanish: 'Es el mundo que nos tocó.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_ano_rios_secos, days: 730}
+      src: user_request
+    - id: 111
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Volcanic Winter', spanish: 'El Invierno Volcánico'}
+      desc:
+        english: 'Three volcanoes in one season. Ash covers the sky and the roads freeze in summer.\n\nFor two years, for everyone: +10% attrition and -15% construction speed.\n\nEvery game of 2100 starts with one of five years of the world, at random.'
+        spanish: 'Tres volcanes en una sola estación. La ceniza tapa el cielo y los caminos se congelan en verano.\n\nPor dos años, para todos: +10% de desgaste y -15% de velocidad de construcción.\n\nCada partida de 2100 arranca con uno de cinco años del mundo, al azar.'
+      options:
+      - name: {english: 'That is the world we got.', spanish: 'Es el mundo que nos tocó.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_ano_invierno, days: 730}
+      src: user_request
+    - id: 112
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Lithium Fever', spanish: 'La Fiebre del Litio'}
+      desc:
+        english: 'New salt flats, new batteries, new fortunes. Laboratories boom; the streets envy them.\n\nFor two years, for everyone: +10% research speed, +5% factory output and -5% stability.\n\nEvery game of 2100 starts with one of five years of the world, at random.'
+        spanish: 'Salares nuevos, baterías nuevas, fortunas nuevas. Los laboratorios explotan de trabajo; la calle los envidia.\n\nPor dos años, para todos: +10% de velocidad de investigación, +5% de producción de fábricas y -5% de estabilidad.\n\nCada partida de 2100 arranca con uno de cinco años del mundo, al azar.'
+      options:
+      - name: {english: 'That is the world we got.', spanish: 'Es el mundo que nos tocó.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_ano_litio, days: 730}
+      src: user_request
+    - id: 113
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Armed Peace', spanish: 'La Paz Armada'}
+      desc:
+        english: 'Everyone builds, nobody shoots first. Diplomats are busy and generals impatient.\n\nFor two years, for everyone: -15% war support, +0.2 political power a day and +10% construction speed.\n\nEvery game of 2100 starts with one of five years of the world, at random.'
+        spanish: 'Todos construyen, nadie dispara primero. Los diplomáticos no dan abasto y los generales se impacientan.\n\nPor dos años, para todos: -15% de apoyo a la guerra, +0,2 de poder político por día y +10% de velocidad de construcción.\n\nCada partida de 2100 arranca con uno de cinco años del mundo, al azar.'
+      options:
+      - name: {english: 'That is the world we got.', spanish: 'Es el mundo que nos tocó.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_ano_paz_armada, days: 730}
+      src: user_request
+    - id: 114
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Year of the Warlords', spanish: 'El Año de los Caudillos'}
+      desc:
+        english: 'The ruins breed leaders. The Anarchy gets stronger and every power arms itself.\n\nFor two years: the anarchies +15% attack and defence and +10% recruitable population; everyone else +5% war support and +5% recruitable population.\n\nEvery game of 2100 starts with one of five years of the world, at random.'
+        spanish: 'Las ruinas crían jefes. La Anarquía se fortalece y todas las potencias se arman.\n\nPor dos años: las anarquías +15% de ataque y defensa y +10% de población reclutable; todos los demás +5% de apoyo a la guerra y +5% de población reclutable.\n\nCada partida de 2100 arranca con uno de cinco años del mundo, al azar.'
+      options:
+      - name: {english: 'That is the world we got.', spanish: 'Es el mundo que nos tocó.'}
+        effects:
+        - effect: if
+          when:
+            any: [{tag: ZWE}, {tag: ZWI}, {tag: ZWM}, {tag: ZWB}, {tag: ZAN}]
+          then:
+          - {effect: dynamic_modifier, id: MEGANATIONS_ano_caudillos_anarquia, days: 730}
+          else:
+          - {effect: dynamic_modifier, id: MEGANATIONS_ano_caudillos, days: 730}
+      src: user_request
+    # El rival jurado (race.nemesis): aviso, guerra jurada, venganza y humillación.
+    - id: 120
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Our Sworn Rival: [meganations_rival_jurado.GetName]', spanish: 'Nuestro Rival Jurado: [meganations_rival_jurado.GetName]'}
+      desc:
+        english: 'Every power has an enemy that wants the same lands. Ours is [meganations_rival_jurado.GetName].\n\nIF WE GO TO WAR WITH THEM: we choose how to fight it (all in, or cold blood).\n\nIF THEY CAPITULATE BEFORE US: Revenge Fulfilled: 150 political power, +10% stability, +5% war support and +10% factory output for two years.\n\nIF WE CAPITULATE BEFORE THEM: the Humiliation.'
+        spanish: 'Cada potencia tiene un enemigo que quiere las mismas tierras. El nuestro es [meganations_rival_jurado.GetName].\n\nSI VAMOS A LA GUERRA CON ELLOS: elegimos cómo pelearla (todo por la venganza, o cabeza fría).\n\nSI CAPITULAN ANTE NOSOTROS: Venganza Cumplida: 150 de poder político, +10% de estabilidad, +5% de apoyo a la guerra y +10% de producción de fábricas por dos años.\n\nSI CAPITULAMOS NOSOTROS: la Humillación.'
+      options:
+      - name: {english: 'They will never forget.', spanish: 'Que nunca lo olviden.'}
+        effects:
+        - {effect: add_war_support, value: 0.02}
+      src: user_request
+    - id: 121
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Sworn War', spanish: 'La Guerra Jurada'}
+      desc:
+        english: 'We are at war with [meganations_rival_jurado.GetName], our sworn rival. How do we fight it?\n\nALL FOR REVENGE: for a year, +10% attack and +10% war support, -5% stability.\n\nCOLD BLOOD: for a year, +10% defence and +0.1 political power a day.'
+        spanish: 'Estamos en guerra con [meganations_rival_jurado.GetName], nuestro rival jurado. ¿Cómo la peleamos?\n\nTODO POR LA VENGANZA: por un año, +10% de ataque y +10% de apoyo a la guerra, -5% de estabilidad.\n\nCABEZA FRÍA: por un año, +10% de defensa y +0,1 de poder político por día.'
+      options:
+      - name: {english: 'All for revenge.', spanish: 'Todo por la venganza.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_guerra_jurada, days: 365}
+        ai_chance: 60
+      - name: {english: 'Cold blood.', spanish: 'Cabeza fría.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_cabeza_fria, days: 365}
+        ai_chance: 40
+      src: user_request
+    - id: 122
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Revenge Fulfilled', spanish: 'Venganza Cumplida'}
+      desc:
+        english: '[meganations_rival_jurado.GetName], our sworn rival, has capitulated before us. Generations will sing it.\n\n150 political power, +10% stability, +5% war support and, for two years, +10% factory output and +10% army experience.'
+        spanish: '[meganations_rival_jurado.GetName], nuestro rival jurado, capituló ante nosotros. Lo van a cantar generaciones.\n\n150 de poder político, +10% de estabilidad, +5% de apoyo a la guerra y, por dos años, +10% de producción de fábricas y +10% de experiencia del ejército.'
+      options:
+      - name: {english: 'It is done.', spanish: 'Está hecho.'}
+        effects:
+        - {effect: add_political_power, value: 150}
+        - {effect: add_stability, value: 0.1}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: dynamic_modifier, id: MEGANATIONS_venganza, days: 730}
+      src: user_request
+    - id: 123
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Humiliation', spanish: 'La Humillación'}
+      desc:
+        english: 'We capitulated before [meganations_vengador.GetName], our sworn rival. Nobody will let us forget it, and nobody here wants to.\n\nFor two years: +15% war support, +5% attack, -10% stability.'
+        spanish: 'Capitulamos ante [meganations_vengador.GetName], nuestro rival jurado. Nadie nos lo va a dejar olvidar, y acá nadie quiere olvidarlo.\n\nPor dos años: +15% de apoyo a la guerra, +5% de ataque, -10% de estabilidad.'
+      options:
+      - name: {english: 'One day.', spanish: 'Algún día.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_humillacion, days: 730}
       src: user_request

@@ -24,6 +24,7 @@ from . import specload, vanilla as vanilla_mod
 from .context import BuildContext
 from .emitters import ai as em_ai
 from .emitters import balance as em_balance
+from .emitters import carrera as em_carrera
 from .emitters import cleanup as em_cleanup
 from .emitters import characters as em_characters
 from .emitters import countries as em_countries
@@ -85,6 +86,7 @@ EMITTERS = [
     ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)
     ("vanilla_events", em_cleanup.emit_kept_events),  # elecciones, justificacion de guerra, ases
     ("diplomacy", em_diplomacy.emit),
+    ("carrera", em_carrera.emit),       # carrera del destino, exilio, caudillos y rivales (04_diplomacy -> race)
     ("ai", em_ai.emit),                 # estrategias de IA: despues de territory (quien existe)   # antes que history: opiniones, guerras, tension
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states

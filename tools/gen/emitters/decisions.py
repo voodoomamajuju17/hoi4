@@ -102,6 +102,16 @@ def _emit(ctx: BuildContext) -> None:
                 used_optional.add("fire_only_once")
             if d.get("available"):
                 db.add("available", render_conditions(did, d["available"], triggers_used, where=SOURCE))
+            if d.get("mission"):
+                # misión con reloj (2026-10-10): se activa sola con `activation`,
+                # se cumple cuando `available` da sí y si vence el plazo corre
+                # `timeout_effects`
+                m = d["mission"]
+                db.add("days_mission_timeout", int(m["days"]))
+                db.add("activation", render_conditions(did, m["activation"], triggers_used, where=SOURCE))
+                db.add("timeout_effect", render_effects(did, list(d.get("timeout_effects") or []), effect_ctx,
+                                                        effects_used, where=SOURCE))
+                used_optional.update({"days_mission_timeout", "activation", "timeout_effect"})
             db.add("complete_effect", render_effects(did, list(d["effects"]) + list(after), effect_ctx,
                                                      effects_used, where=SOURCE))
             ai = Block()

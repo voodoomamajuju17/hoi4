@@ -481,7 +481,7 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "send_equipment":
             target = item["target"]
-            if ec.tags and target not in ec.tags:
+            if ec.tags and target not in ec.tags and target not in SCOPES:
                 raise SpecError(f"{owner}: send_equipment a '{target}', que no es un pais del mod", where=where)
             block.add("send_equipment", Block([("type", item["type"]), ("amount", int(item["amount"])), ("target", target)]))
             effects_used.setdefault("send_equipment", owner)
@@ -1307,4 +1307,6 @@ GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MEGANATIONS_flota_pira
 def scripted_effect_ids(spec_raw: dict) -> set[str]:
     units = (spec_raw.get("unique_units") or {}).get("units") or []
     unique = {f"{u['id']}_desbloqueo" for u in units} | {f"{u['id']}_botin" for u in units if u.get("capital_spoils")}
-    return {e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED | unique
+    from .carrera import scripted_ids as race_ids
+    return ({e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED
+            | unique | race_ids(spec_raw))
