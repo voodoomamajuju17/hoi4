@@ -423,7 +423,7 @@ def _tech_items() -> list[dict]:
 
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
 SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
-TECH_GROUPS = ("INDUSTRIA", "CONSTRUCCION", "ELECTRONICA", "INFANTERIA", "BLINDADOS", "AVIACION", "NAVAL")
+TECH_GROUPS = ("INFANTERIA", "APOYO", "BLINDADOS", "ARTILLERIA", "NAVAL", "AVIACION", "INGENIERIA", "INDUSTRIA")
 
 SHARED_STYLE = (
     "photorealistic 3D-rendered equipment icon matching the weapon icons of this Hearts of Iron IV mod: realistic "
