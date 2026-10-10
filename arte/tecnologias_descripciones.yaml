@@ -10,6 +10,8 @@
 # el MISMO tema que va evolucionando (nunca la misma imagen dos veces): cada
 # pedido nombra a sus hermanos para que no salgan iguales.
 #
+# Cada grupo es una pestaña del árbol de investigación del juego (2026-10-10:
+# el usuario contó a mano la de blindados del NAS: son 16).
 # Lo usa tools/arte (pedidos tipo tech_icon, id tec_<tecnología>).
 # `same_as`: la variante de otra expansión de la misma tecnología (en el juego
 # se ve una sola) usa la misma imagen.
@@ -30,274 +32,91 @@ composition: >-
   rim light separating the silhouette. BACKGROUND: fully transparent PNG, no ground plane, no cast shadow on a floor,
   no scenery. Strong, simple silhouette that reads when tiny. No text, no letters, no numbers.
 
+
 groups:
-  INDUSTRIA:
-    intro: industry and production of a nation in the year 2100
-    techs:
-      basic_machine_tools: >-
-        an industrial 3D printer the size of a car: an open steel gantry frame with a single heavy print head on rails,
-        laying down a half-finished engine block layer by layer, a faint orange glow at the nozzle.
-      improved_machine_tools: >-
-        additive manufacturing cell: three robotic arms around a round build platform printing a complex metal turbine
-        part at the same time, cyan laser lines fusing powder, metal dust glittering.
-      advanced_machine_tools: >-
-        nanofabrication: a sealed glass sphere on a polished steel pedestal, inside it a shimmering cloud of tiny
-        particles assembling a small perfect gear out of nothing, soft violet-blue glow.
-      concentrated_industry: >-
-        megafactories, first level: one huge windowless factory block of grey concrete with a sawtooth roof and two
-        tall exhaust stacks, a single loading bay lit amber.
-      concentrated_industry2: >-
-        megafactories, second level: two massive factory blocks joined by an enclosed sky bridge, conveyor tubes
-        running between them, rooftop cooling fans.
-      concentrated_industry3: >-
-        megafactories, third level: a stepped industrial ziggurat of stacked factory floors, each level with its own
-        glowing production line visible through long window bands.
-      concentrated_industry4: >-
-        megafactories, fourth level: a circular arcology factory, a ring of production halls around a central tower
-        with a crane on top, maglev freight lines entering at the base.
-      concentrated_industry5: >-
-        megafactories, fifth level: a colossal single-structure industrial city, a dark monolith several hundred metres
-        tall covered in pipes and lights, tiny cargo drones swarming around it like insects.
-      dispersed_industry: >-
-        distributed microfactories, first level: one shipping-container-sized microfactory with its side panels open,
-        showing a small robotic arm and a printer inside, solar panel on the roof.
-      dispersed_industry2: >-
-        distributed microfactories, second level: three container microfactories side by side connected by thin cables,
-        each with a different machine visible through its open doors.
-      dispersed_industry3: >-
-        distributed microfactories, third level: a cluster of small hexagonal factory pods arranged like a honeycomb on
-        a concrete pad, delivery drones landing on their roofs.
-      dispersed_industry4: >-
-        distributed microfactories, fourth level: microfactory pods mounted on autonomous trucks driving in a convoy,
-        each one still producing parts as it moves.
-      dispersed_industry5: >-
-        distributed microfactories, fifth level: a floating holographic map of glowing nodes connecting dozens of tiny
-        factory pods spread on a stylised landscape tile, like a living network.
-      assembly_line_production: >-
-        lights-out assembly: a dark factory aisle with a line of identical robot arms assembling vehicle chassis in
-        perfect rhythm, only their status lights glowing, no humans at all.
-      flexible_line: >-
-        reconfigurable factories: a factory floor of modular square tiles, robotic workstations sliding on the tiles
-        into a new layout, arrows of light on the floor showing the new paths.
-      streamlined_line: >-
-        streamlined robotic lines: a long sleek conveyor tunnel of white ceramic, parts flowing through it so fast they
-        blur, a single robotic arm at the exit placing a finished drone on a stack.
-      improved_equipment_conversion: >-
-        modular retrofit lines: an older armoured vehicle on a lift with its turret removed, robotic arms fitting a new
-        modular weapon module in its place.
-      advanced_equipment_conversion: >-
-        adaptive retrofit lines: a vehicle chassis inside a ring-shaped scanning gantry, a hologram of the upgraded
-        design projected over it while arms swap whole sections at once.
-  CONSTRUCCION:
-    intro: construction, mining and resource extraction in the year 2100
-    techs:
-      construction1: >-
-        robotic construction, first level: a single tracked construction robot laying prefabricated concrete blocks on
-        a low wall, amber warning light on its mast.
-      construction2: >-
-        robotic construction, second level: a giant concrete 3D printer gantry printing the curved walls of a building,
-        a fresh grey layer still wet at the top.
-      construction3: >-
-        robotic construction, third level: a mobile tower crane walking on four legs, lifting a whole prefabricated
-        apartment module into place on a half-built tower.
-      construction4: >-
-        robotic construction, fourth level: a swarm of flying construction drones carrying steel beams and welding a
-        bridge span in mid-air.
-      construction5: >-
-        robotic construction, fifth level: a self-assembling arcology block, structural modules unfolding and locking
-        themselves together, cranes built into the building itself.
-      excavation1: >-
-        autonomous mining, first level: a single autonomous excavator digging into a rock face, a pile of ore beside it
-        with a few metallic glints.
-      excavation2: >-
-        autonomous mining, second level: an autonomous drilling rig with a long diamond drill bit boring into the ground,
-        rock chips flying, a small lamp mast.
-      excavation3: >-
-        autonomous mining, third level: a giant bucket-wheel excavator robot biting into a terraced open-pit wall,
-        conveyor belt carrying ore away.
-      excavation4: >-
-        autonomous mining, fourth level: a tunnel boring machine with a rotating cutter head bursting out of rock, its
-        segmented body glowing with service lights.
-      excavation5: >-
-        autonomous mining, fifth level: a deep-crust mining tower, a tall drill derrick of white ceramic over a glowing
-        shaft, ore capsules rising in a vertical maglev tube.
-      fuel_silos: >-
-        hydrogen storage: three white spherical high-pressure tanks on steel legs connected by insulated pipes, frost on
-        the valves, a blue hazard light.
-      fuel_refining: >-
-        biofuel refining, first level: a small refinery unit with one fermentation tank full of green liquid and a
-        distillation column, a barrel of amber fuel in front.
-      fuel_refining2: >-
-        biofuel refining, second level: two tall distillation columns linked by catwalks, green bioreactor tubes coiled
-        around their base.
-      fuel_refining3: >-
-        biofuel refining, third level: a refinery block of glass bioreactor panels glowing green, pipes leading to a
-        golden-amber fuel storage tank.
-      fuel_refining4: >-
-        biofuel refining, fourth level: a compact modular refinery on a hovering platform, catalytic towers venting
-        clean white steam.
-      fuel_refining5: >-
-        biofuel refining, fifth level: a fully automated bio-refinery dome, a transparent cupola full of green algae
-        columns, robotic arms tending valves.
-      synth_oil_experiments: >-
-        synthetic fuels: a laboratory bench with a glass reactor vessel turning clear gas into dark fuel, a single drop
-        falling from a nozzle into a beaker.
-      oil_processing: >-
-        hydrocarbon synthesis: a squat chemical reactor of steel with pressure gauges and a pipe dripping black synthetic
-        oil into a steel drum.
-      improved_oil_processing: >-
-        improved hydrocarbon synthesis: a pair of tall reactor towers with heat exchangers, a pipeline leaving them with
-        a flow meter glowing amber.
-      advanced_oil_processing: >-
-        carbon-capture fuels: a wall of large fans pulling air into a capture unit, a pipe carrying the captured carbon
-        into a reactor that fills a fuel tank.
-      modern_oil_processing: >-
-        algae fuel synthesis: long transparent tubes full of bright green algae bundled into a reactor, a valve filling
-        a canister with golden fuel.
-      rubber_processing: >-
-        synthetic elastomers, first level: a vat of white liquid polymer with a mixing paddle, a sheet of black rubber
-        coming out of a roller.
-      improved_rubber_processing: >-
-        synthetic elastomers, second level: a rubber extrusion machine pushing out a long black profile, a stack of
-        finished tyres beside it.
-      advanced_rubber_processing: >-
-        synthetic elastomers, third level: a robotic arm lifting a freshly moulded heavy vehicle tyre out of a glowing
-        press.
-      modern_rubber_processing: >-
-        synthetic elastomers, fourth level: an airless honeycomb tyre of advanced polymer on a test rig, a laser
-        scanning its tread.
-  ELECTRONICA:
-    intro: electronics, computing, sensors and nuclear technology in the year 2100
-    techs:
-      electronic_mechanical_engineering: >-
-        photonic engineering: an open circuit module where beams of light run through glass channels instead of
-        wires, tiny prisms splitting a cyan beam.
-      radio: >-
-        quantum field networks: a slim communications mast with a crystal node on top emitting faint concentric rings of
-        blue light.
-      improved_radio: >-
-        mesh battle networks: four small portable relay nodes on tripods linked by glowing lines into a square mesh.
-      advanced_radio: >-
-        satellite battle networks: a small communications satellite with folded solar wings above a ground antenna dish,
-        a beam of light linking them.
-      radio_detection: >-
-        plasma sensors: a sensor pod with a glowing plasma chamber in a glass window, three thin receiver spikes on top.
-      decimetric_radar: >-
-        AESA radar: a flat square radar panel made of hundreds of small tiles on a rotating pedestal, a few tiles lit.
-      improved_decimetric_radar: >-
-        improved AESA radar: three flat radar panels arranged as a triangular tower, each one sweeping a faint green
-        fan of light.
-      centimetric_radar: >-
-        quantum radar: a cryogenic radar emitter with a frosted cylindrical core and a dish of gold mesh, cold vapour
-        around it.
-      improved_centimetric_radar: >-
-        improved quantum radar: twin cryogenic emitters on a mobile trailer, a holographic return blip floating above.
-      advanced_centimetric_radar: >-
-        orbital sensor grid: a ring of small sensor satellites around a stylised blue globe segment, thin lines of light
-        connecting them.
-      cavity_magnatron: >-
-        gallium nitride emitters: a close-up of a radar emitter chip of dark crystal on a heat sink, glowing pale blue,
-        held in a small gold clamp.
-      phased_array: >-
-        conformal phased arrays: a curved radar skin wrapped around the nose of a drone, its tiles shimmering like
-        scales.
-      monopulse_radar: >-
-        multistatic radar: three separate small radar towers forming a triangle, their beams meeting at one bright point
-        above the centre.
-      mechanical_computing: >-
-        neuromorphic computing: a brain-shaped processor of layered silicon wafers in a transparent case, synapse-like
-        light pulses running through it.
-      computing_machine: >-
-        quantum computers: a golden chandelier-shaped cryostat of a quantum computer hanging inside an open white
-        cylinder, frost at the bottom.
-      improved_computing_machine: >-
-        fault-tolerant quantum computers: two golden cryostats side by side linked by thick cables, a stable steady glow
-        at their cores.
-      advanced_computing_machine: >-
-        planetary compute grid: a tall black server monolith with rows of blue lights, glowing data lines leaving it in
-        every direction.
-      basic_encryption: >-
-        post-quantum encryption: a heavy steel data vault door with a lattice-patterned lock glowing cyan.
-      improved_encryption: >-
-        lattice encryption: a cube made of a glowing three-dimensional lattice of lines, a small data crystal sealed in
-        its centre.
-      advanced_encryption: >-
-        adaptive AI encryption: a black orb whose surface patterns constantly rearrange, half covered by moving hexagonal
-        shields.
-      basic_decryption: >-
-        quantum cryptanalysis: a cracked steel padlock hovering over a quantum chip, its pieces separating in light.
-      improved_decryption: >-
-        AI cryptanalysis: a server rack whose front panel shows an eye made of lines of light, a key forming in front of
-        it.
-      advanced_decryption: >-
-        total signals intelligence: a huge listening dish array of several dishes on one structure, all pointing at the
-        same spot, waves of signals converging.
-      atomic_research: >-
-        experimental fusion: a small tokamak test chamber, a doughnut-shaped vessel with a violet plasma ring visible
-        through a window.
-      nuclear_reactor: >-
-        fusion reactor: a full fusion reactor core, a large torus wrapped in superconducting magnets and pipes, the
-        plasma ring glowing bright white-blue.
-      nukes: >-
-        fusion weapons: a sleek warhead casing of white ceramic on a cradle in a vault, yellow-and-black hazard bands and
-        a single red status light.
-      sp_shock_hardening_techniques: >-
-        shock-hardened electronics: a circuit board in a rugged sealed casing being struck by a shock wave and an electric
-        arc, completely unharmed.
-  INFANTERIA:
-    intro: infantry, special forces and support companies in the year 2100
+  INFANTERIA:     # pestaña de infantería
+    intro: infantry and special forces in the year 2100
     techs:
       tech_mountaineers: >-
-        alpine exosuits, first level: a pair of lightweight leg exoskeleton braces with crampon boots and an ice axe
-        clipped to them, standing on a snowy rock.
+        alpine exosuits, first level: a pair of lightweight leg exoskeleton braces with crampon boots and an ice
+        axe clipped to them, standing on a snowy rock.
       tech_mountaineers2: >-
-        alpine exosuits, second level: a full-body mountain exosuit on a soldier seen from behind, climbing rope and a
-        grappling launcher on the back.
+        alpine exosuits, second level: a full-body mountain exosuit on a soldier seen from behind, climbing rope
+        and a grappling launcher on the back.
       tech_mountaineers3: >-
-        alpine exosuits, third level: a soldier in a heavy insulated exosuit with a heated white shell standing on a snow
-        ridge, a jump pack for steep slopes.
+        alpine exosuits, third level: a soldier in a heavy insulated exosuit with a heated white shell standing
+        on a snow ridge, a jump pack for steep slopes.
       marines: >-
-        autonomous littoral infantry, first level: an amphibious infantry robot with waterproof plating stepping out of
-        shallow surf.
+        autonomous littoral infantry, first level: an amphibious infantry robot with waterproof plating stepping
+        out of shallow surf.
       marines2: >-
-        autonomous littoral infantry, second level: two littoral robots carrying a heavy assault rifle each, climbing a
-        rocky shore with water dripping off them.
+        autonomous littoral infantry, second level: two littoral robots carrying a heavy assault rifle each,
+        climbing a rocky shore with water dripping off them.
       marines3: >-
-        autonomous littoral infantry, third level: a squad of littoral robots launching from a small hover pod onto a
-        beach, one of them firing a grappling line.
+        autonomous littoral infantry, third level: a squad of littoral robots launching from a small hover pod
+        onto a beach, one of them firing a grappling line.
       night_vision: >-
-        integrated thermal vision, first level: a combat helmet with a single thermal lens flipped down, glowing faint
-        orange.
+        integrated thermal vision, first level: a combat helmet with a single thermal lens flipped down, glowing
+        faint orange.
       night_vision2: >-
-        integrated thermal vision, second level: a full-face combat visor showing a thermal image of a target on its
-        inner surface, four sensor eyes on the front.
+        integrated thermal vision, second level: a full-face combat visor showing a thermal image of a target on
+        its inner surface, four sensor eyes on the front.
       tech_special_forces: >-
-        augmented special forces, first level: a special forces operator in dark armour, a neural interface port at the
-        temple, holding a suppressed carbine.
-      advanced_special_forces: >-
-        augmented special forces, second level: an operator with a light active-camouflage suit half blending into the
-        air, only the outline and the visor visible.
+        augmented special forces, first level: a special forces operator in dark armour, a neural interface port
+        at the temple, holding a suppressed carbine.
       improved_special_forces: >-
-        augmented special forces, third level: an operator with cybernetic arms holding a heavy rifle one-handed, a
-        hovering recon drone at the shoulder.
+        augmented special forces, third level: an operator with cybernetic arms holding a heavy rifle one-
+        handed, a hovering recon drone at the shoulder.
+      advanced_special_forces: >-
+        augmented special forces, second level: an operator with a light active-camouflage suit half blending
+        into the air, only the outline and the visor visible.
       extreme_environment_training: >-
-        augmented special forces, fourth level: an operator in an environmental suit half covered in desert sand on one
-        side and frost on the other.
+        augmented special forces, fourth level: an operator in an environmental suit half covered in desert sand
+        on one side and frost on the other.
+      survival_training: >-
+        extreme survival conditioning: a survival kit laid out: a compact water purifier, a thermal blanket, a
+        knife and a ration pack, on a rock.
+      elite_forces: >-
+        genetically screened elites: a DNA double helix of light rising from a test vial beside an elite
+        soldier's helmet with a gold stripe.
+      rangers_tech: >-
+        recon commandos, first level: a commando in a ghillie-like adaptive cloak crouching with a long rifle.
+      rangers_tech2: >-
+        recon commandos, second level: two commandos rappelling down a cliff with silent ascender devices.
+      rangers_tech3: >-
+        recon commandos, third level: a commando team leader with a recon drone launcher on the forearm,
+        binocular visor raised.
+      infantry_at: >-
+        squad anti-armour missiles, first level: a shoulder-fired missile launcher tube with a top-attack
+        seeker, resting on a crate.
+      infantry_at2: >-
+        squad anti-armour missiles, second level: a two-person anti-armour missile team weapon on a tripod with
+        a drone seeker launching.
+      tech_trucks: >-
+        hydrogen supply trucks, first level: a boxy hydrogen fuel-cell supply truck with a blue tank behind the
+        cab.
+      tech_trucks2: >-
+        hydrogen supply trucks, second level: a heavy autonomous hydrogen truck without a cab, a long cargo bed
+        of crates.
+  APOYO:     # pestaña de apoyo
+    intro: support companies and logistics of an army in the year 2100
+    techs:
       tech_support: >-
-        modular support doctrine: a rack of modular support kits (drone case, medical kit, tool case, radio) clipped onto
-        one carrying frame.
+        modular support doctrine: a rack of modular support kits (drone case, medical kit, tool case, radio)
+        clipped onto one carrying frame.
       tech_engineers: >-
-        drone engineers, first level: a small tracked engineering drone with a dozer blade pushing a pile of earth.
+        drone engineers, first level: a small tracked engineering drone with a dozer blade pushing a pile of
+        earth.
       tech_engineers2: >-
         drone engineers, second level: an engineering drone laying a folding assault bridge across a gap.
       tech_engineers3: >-
         drone engineers, third level: a heavy engineering robot with a mine-clearing roller and a crane arm.
       tech_engineers4: >-
-        drone engineers, fourth level: a spider-legged engineering robot building a fortified bunker out of sandbags and
-        printed concrete.
+        drone engineers, fourth level: a spider-legged engineering robot building a fortified bunker out of
+        sandbags and printed concrete.
       sp_armored_engineer_tech: >-
-        armoured engineering drones: a heavily armoured bulldozer robot with a reinforced plough and slat armour, sparks
-        on its blade.
+        armoured engineering drones: a heavily armoured bulldozer robot with a reinforced plough and slat
+        armour, sparks on its blade.
       tech_recon: >-
         swarm reconnaissance, first level: a single palm-sized quadcopter drone with a camera ball underneath.
       tech_recon2: >-
@@ -307,238 +126,146 @@ groups:
       tech_recon4: >-
         swarm reconnaissance, fourth level: a carrier drone releasing a cloud of insect-sized micro drones.
       sp_helicopter_artillery_observers_tech: >-
-        VTOL spotter drones: a ducted-fan spotter drone with a long-range optical turret and a laser designator beam.
+        VTOL spotter drones: a ducted-fan spotter drone with a long-range optical turret and a laser designator
+        beam.
       tech_military_police: >-
-        biometric military police, first level: a military police helmet with a face-recognition camera and a white
-        armband.
+        biometric military police, first level: a military police helmet with a face-recognition camera and a
+        white armband.
       tech_military_police2: >-
-        biometric military police, second level: a handheld biometric scanner reading a glowing fingerprint and an iris.
+        biometric military police, second level: a handheld biometric scanner reading a glowing fingerprint and
+        an iris.
       tech_military_police3: >-
-        biometric military police, third level: a checkpoint gate frame with a biometric scanning arch glowing green.
+        biometric military police, third level: a checkpoint gate frame with a biometric scanning arch glowing
+        green.
       tech_military_police4: >-
-        biometric military police, fourth level: a patrol robot with a white helmet-like head and scanning eyes holding a
-        riot shield.
+        biometric military police, fourth level: a patrol robot with a white helmet-like head and scanning eyes
+        holding a riot shield.
       sp_armored_motorized_military_police_tech: >-
-        motorised biometric police: a light armoured patrol car with a scanning light bar on the roof and a mounted
-        camera turret.
+        motorised biometric police: a light armoured patrol car with a scanning light bar on the roof and a
+        mounted camera turret.
       tech_maintenance_company: >-
         predictive maintenance, first level: a mechanic's tool chest on wheels with a diagnostic tablet on top.
       tech_maintenance_company2: >-
-        predictive maintenance, second level: a robotic arm with a wrench head tightening a bolt on a vehicle engine
-        while a sensor reads it.
+        predictive maintenance, second level: a robotic arm with a wrench head tightening a bolt on a vehicle
+        engine while a sensor reads it.
       tech_maintenance_company3: >-
-        predictive maintenance, third level: a vehicle engine with a hologram showing a worn part in red before it fails.
+        predictive maintenance, third level: a vehicle engine with a hologram showing a worn part in red before
+        it fails.
       tech_maintenance_company4: >-
-        predictive maintenance, fourth level: a mobile maintenance truck with its sides open into a full workshop, a
-        crane lifting a power pack.
+        predictive maintenance, fourth level: a mobile maintenance truck with its sides open into a full
+        workshop, a crane lifting a power pack.
       sp_armored_maintenance_tech: >-
-        armoured repair drones: an armoured recovery robot towing a disabled vehicle with a heavy hook and welding arm.
+        armoured repair drones: an armoured recovery robot towing a disabled vehicle with a heavy hook and
+        welding arm.
       tech_field_hospital: >-
-        robotic field hospitals, first level: a field medical case open, a white robotic arm with a syringe and bandages.
+        robotic field hospitals, first level: a field medical case open, a white robotic arm with a syringe and
+        bandages.
       tech_field_hospital2: >-
-        robotic field hospitals, second level: a surgical robot with four slender arms over an operating table in a tent.
+        robotic field hospitals, second level: a surgical robot with four slender arms over an operating table
+        in a tent.
       tech_field_hospital3: >-
-        robotic field hospitals, third level: a mobile hospital module on a truck, its side unfolded showing two medical
-        pods.
+        robotic field hospitals, third level: a mobile hospital module on a truck, its side unfolded showing two
+        medical pods.
       tech_field_hospital4: >-
-        robotic field hospitals, fourth level: a regeneration pod of glass filled with pale blue fluid on a stand, a
-        robotic doctor beside it.
+        robotic field hospitals, fourth level: a regeneration pod of glass filled with pale blue fluid on a
+        stand, a robotic doctor beside it.
       sp_helicopter_med_evac_tech: >-
-        autonomous med-evac: a white ducted-fan ambulance drone carrying a stretcher pod underneath, red cross shape
-        replaced by a plain red band.
+        autonomous med-evac: a white ducted-fan ambulance drone carrying a stretcher pod underneath, red cross
+        shape replaced by a plain red band.
       tech_logistics_company: >-
         autonomous logistics, first level: a four-wheeled autonomous cargo mule carrying ammunition crates.
       tech_logistics_company2: >-
         autonomous logistics, second level: three autonomous cargo mules following each other in a line.
       tech_logistics_company3: >-
-        autonomous logistics, third level: a heavy autonomous supply truck with a robotic loader arm stacking pallets.
+        autonomous logistics, third level: a heavy autonomous supply truck with a robotic loader arm stacking
+        pallets.
       tech_logistics_company4: >-
-        autonomous logistics, fourth level: cargo drones dropping supply pods with small parachutes onto a marked zone.
+        autonomous logistics, fourth level: cargo drones dropping supply pods with small parachutes onto a
+        marked zone.
       sp_helicopter_transport_pods_tech: >-
         VTOL cargo pods: a large tiltrotor lifting a sealed cargo container pod by cables.
       tech_signal_company: >-
-        quantum battle networks, first level: a backpack radio with a short antenna and a quantum node glowing on it.
+        quantum battle networks, first level: a backpack radio with a short antenna and a quantum node glowing
+        on it.
       tech_signal_company2: >-
-        quantum battle networks, second level: a portable command terminal unfolded on a tripod showing a tactical map.
+        quantum battle networks, second level: a portable command terminal unfolded on a tripod showing a
+        tactical map.
       tech_signal_company3: >-
-        quantum battle networks, third level: a vehicle-mounted communications mast extended high with a dish and
-        several nodes.
+        quantum battle networks, third level: a vehicle-mounted communications mast extended high with a dish
+        and several nodes.
       tech_signal_company4: >-
-        quantum battle networks, fourth level: a field command centre container with a holographic battlefield map
-        projected above it.
+        quantum battle networks, fourth level: a field command centre container with a holographic battlefield
+        map projected above it.
       sp_armored_signal_tech: >-
-        armoured quantum relay: an armoured tracked relay vehicle with a retractable antenna mast and shielded dishes.
-      tech_trucks: >-
-        hydrogen supply trucks, first level: a boxy hydrogen fuel-cell supply truck with a blue tank behind the cab.
-      tech_trucks2: >-
-        hydrogen supply trucks, second level: a heavy autonomous hydrogen truck without a cab, a long cargo bed of crates.
-      rangers_tech: >-
-        recon commandos, first level: a commando in a ghillie-like adaptive cloak crouching with a long rifle.
-      rangers_tech2: >-
-        recon commandos, second level: two commandos rappelling down a cliff with silent ascender devices.
-      rangers_tech3: >-
-        recon commandos, third level: a commando team leader with a recon drone launcher on the forearm, binocular
-        visor raised.
-      infantry_at: >-
-        squad anti-armour missiles, first level: a shoulder-fired missile launcher tube with a top-attack seeker, resting
-        on a crate.
-      infantry_at2: >-
-        squad anti-armour missiles, second level: a two-person anti-armour missile team weapon on a tripod with a drone
-        seeker launching.
-      survival_training: >-
-        extreme survival conditioning: a survival kit laid out: a compact water purifier, a thermal blanket, a knife and
-        a ration pack, on a rock.
-      elite_forces: >-
-        genetically screened elites: a DNA double helix of light rising from a test vial beside an elite soldier's
-        helmet with a gold stripe.
-  BLINDADOS:
-    intro: armour, artillery and land vehicles in the year 2100
+        armoured quantum relay: an armoured tracked relay vehicle with a retractable antenna mast and shielded
+        dishes.
+      armored_train: >-
+        armoured maglev trains: an armoured maglev war wagon with sloped plates and two gun turrets, hovering
+        over a guideway.
+  BLINDADOS:     # pestaña de blindados
+    intro: armoured vehicles in the year 2100
     techs:
-      engine_tech_1: >-
-        electric drivetrains, first level: an electric motor block for a tank with thick copper windings visible in a
-        cut-away.
-      engine_tech_2: >-
-        electric drivetrains, second level: a pair of in-hub electric motors mounted on a track sprocket assembly.
-      engine_tech_3: >-
-        electric drivetrains, third level: a compact power pack with a fuel cell stack and battery modules on a lifting
-        frame.
-      engine_tech_4: >-
-        electric drivetrains, fourth level: a tiny fusion micro-cell glowing inside a heavily shielded drive unit.
       armor_tech_1: >-
         composite armour, first level: a thick slab of armour cut in half showing layers of steel and ceramic.
       armor_tech_2: >-
         composite armour, second level: an armour plate with reactive explosive tiles bolted on its face.
       armor_tech_3: >-
-        composite armour, third level: an armour panel of hexagonal ceramic tiles with a shell crater stopped on its
-        surface.
+        composite armour, third level: an armour panel of hexagonal ceramic tiles with a shell crater stopped on
+        its surface.
       armor_tech_4: >-
-        composite armour, fourth level: a self-healing armour plate whose crack is closing with glowing liquid metal.
+        composite armour, fourth level: a self-healing armour plate whose crack is closing with glowing liquid
+        metal.
+      engine_tech_1: >-
+        electric drivetrains, first level: an electric motor block for a tank with thick copper windings visible
+        in a cut-away.
+      engine_tech_2: >-
+        electric drivetrains, second level: a pair of in-hub electric motors mounted on a track sprocket
+        assembly.
+      engine_tech_3: >-
+        electric drivetrains, third level: a compact power pack with a fuel cell stack and battery modules on a
+        lifting frame.
+      engine_tech_4: >-
+        electric drivetrains, fourth level: a tiny fusion micro-cell glowing inside a heavily shielded drive
+        unit.
+      amphibious_tank_chassis: >-
+        amphibious combat chassis: a boat-shaped armoured tank chassis without turret, half in water, a bow wave
+        at its nose.
       amphibious_drive: >-
         hydrojet drive: a pair of hydrojet nozzles on the rear of an armoured hull pushing a jet of white water.
-      amphibious_tank_chassis: >-
-        amphibious combat chassis: a boat-shaped armoured tank chassis without turret, half in water, a bow wave at its
-        nose.
-      armored_train: >-
-        armoured maglev trains: an armoured maglev war wagon with sloped plates and two gun turrets, hovering over a
-        guideway.
       sp_armored_advanced_flamethrower_tech: >-
-        plasma projectors: a vehicle-mounted plasma projector nozzle releasing a short burst of violet-white plasma.
+        plasma projectors: a vehicle-mounted plasma projector nozzle releasing a short burst of violet-white
+        plasma.
       sp_armored_lc_naval_engine_conversion_tech: >-
-        marine turbine conversion: a ship's turbine engine being lowered by a crane into the open hull of a heavy tank.
+        marine turbine conversion: a ship's turbine engine being lowered by a crane into the open hull of a
+        heavy tank.
       sp_armored_lc_transmission_improvements_tech: >-
-        adaptive transmissions: an exposed gearbox of shining gears with a small AI control module attached on top.
-      sp_armored_lc_specialized_field_manuals_tech: >-
-        AI crew manuals: a tank commander's tablet projecting a hologram of a tank with highlighted parts and a small AI
-        assistant icon (an abstract glowing shape).
+        adaptive transmissions: an exposed gearbox of shining gears with a small AI control module attached on
+        top.
       sp_armored_lc_high_impact_obliterator_cannon_tech: >-
-        obliterator railgun: a huge railgun barrel with twin rails and capacitor banks mounted on a turret ring, an
-        electric arc between the rails.
+        obliterator railgun: a huge railgun barrel with twin rails and capacitor banks mounted on a turret ring,
+        an electric arc between the rails.
       sp_armored_lc_weapon_fire_control_tech: >-
-        integrated fire control: a tank gunner's sight unit with a targeting reticle projected in front of it locking
-        onto a small target silhouette.
-      sp_artillery_purpose_built_gun_motor_carriages_tech: >-
-        autonomous gun platforms: a driverless self-propelled howitzer on six wheels, its long barrel raised, no crew
-        cabin.
-      sp_artillery_rocket_assisted_projectiles_tech: >-
-        ramjet shells: a long artillery shell with an air intake ring and fins, a small flame at its tail as it flies.
-      sp_variable_time_fuze_shells: >-
-        smart airburst shells: an artillery shell with a glowing sensor ring at its nose, bursting into a cloud of
-        fragments in the air.
-      sp_advance_sabot_shells: >-
-        hypervelocity penetrators: a long dart penetrator leaving its discarded sabot petals behind, flying at extreme
-        speed with a shock cone.
-      basic_fortification_tech: >-
-        smart fortifications: a concrete bunker with a retractable gun cupola and sensor masts, sandbags around.
-      land_fort_tech_1: >-
-        hardened land bastions, first level: a thick angular concrete bastion with a heavy gun casemate and anti-tank
-        teeth in front.
-      land_fort_tech_2: >-
-        hardened land bastions, second level: an underground fortress entrance in a hillside with blast doors and
-        layered armoured turrets.
-      coastal_fort_tech_1: >-
-        coastal defence grids, first level: a coastal gun turret on a concrete cliff emplacement facing the sea.
-      coastal_fort_tech_2: >-
-        coastal defence grids, second level: a coastal missile battery with a radar mast and launch tubes raised, waves
-        breaking below.
-  AVIACION:
-    intro: aircraft technology in the year 2100
+        integrated fire control: a tank gunner's sight unit with a targeting reticle projected in front of it
+        locking onto a small target silhouette.
+      sp_armored_lc_specialized_field_manuals_tech: >-
+        AI crew manuals: a tank commander's tablet projecting a hologram of a tank with highlighted parts and a
+        small AI assistant icon (an abstract glowing shape).
+  ARTILLERIA:     # pestaña de artillería
+    intro: artillery in the year 2100
     techs:
-      jet_engines: >-
-        scramjet engines: a sleek scramjet engine with a long intake ramp and no moving parts, heat glow at the exhaust.
-      improved_jet_engines: >-
-        improved scramjets: a scramjet engine with cooling channels glowing orange along its body and a blue shock diamond
-        exhaust.
-      sp_centrifugal_jet_tech: >-
-        centrifugal scramjet: a jet engine with a visible centrifugal compressor disc in a cut-away, spinning with light
-        streaks.
-      experimental_rockets: >-
-        hypersonic rocketry: an experimental hypersonic test rocket on a small launch rail, frost on its tank.
-      rocket_engines: >-
-        hypersonic engines: a rocket engine bell with a bright blue flame and visible shock diamonds.
-      improved_rocket_engines: >-
-        improved hypersonic engines: a cluster of three rocket engines on one thrust frame firing together.
-      advanced_rocket_engines: >-
-        orbital launch engines: a giant aerospike engine firing a wide golden flame, a launch tower in the background.
-      engines_1: >-
-        hybrid aero engines, first level: an aircraft engine combining an electric fan and a small turbine core in a
-        cut-away nacelle.
-      engines_2: >-
-        hybrid aero engines, second level: a pair of hybrid engines mounted under a wing section, fans spinning.
-      engines_3: >-
-        hybrid aero engines, third level: a variable-cycle engine with its nozzle petals opening and closing.
-      engines_4: >-
-        hybrid aero engines, fourth level: a compact hybrid engine with a glowing fuel-cell core and vectoring nozzle.
-      aa_lmg: >-
-        light point-defence guns: a small rotary gun turret for an aircraft, six thin barrels, spent casings flying.
-      aa_hmg: >-
-        heavy point-defence guns: a twin heavy cannon pod under an aircraft wing, muzzle flash.
-      aa_cannon_1: >-
-        air-to-air railguns, first level: a compact railgun pod on a wing pylon with a blue spark between its rails.
-      aa_cannon_2: >-
-        large air-to-air railguns: a long railgun mounted along an aircraft spine, capacitor rings glowing.
-      aa_cannon_3: >-
-        air-to-air railguns, second level: a pair of advanced railguns in an internal bay, the bay doors open.
-      early_bombs: >-
-        guided glide bombs: a glide bomb with folding wings and tail fins released from a pylon, small guidance camera at
-        the nose.
-      armor_piercing_bombs: >-
-        bunker-busting munitions: a long hardened penetrator bomb with a pointed tungsten nose plunging downward.
-      heavy_bombs: >-
-        heavy thermobaric bombs: a fat heavy bomb casing with hazard bands, a faint heat shimmer around it.
-      air_torpedoe_1: >-
-        air-launched anti-ship missiles, first level: a sea-skimming missile with folding wings under an aircraft pylon.
-      air_torpedoe_2: >-
-        air-launched anti-ship missiles, second level: an anti-ship missile flying low just above the waves.
-      air_torpedoe_3: >-
-        air-launched anti-ship missiles, third level: a hypersonic anti-ship missile with a glowing heat shield nose.
-      photo_reconnaisance: >-
-        hyperspectral reconnaissance: a reconnaissance camera pod with several lenses of different colours on an aircraft
-        belly.
-      bba_early_transport_plane: >-
-        cargo tiltrotors: a medium tiltrotor aircraft with rotors tilted up, a cargo ramp open at the rear.
-      bba_improved_transport_plane: >-
-        heavy cargo tiltrotors: a large four-rotor tiltrotor carrying a light vehicle in its open cargo bay.
-      bba_strategic_airlifter: >-
-        strategic airships: a huge rigid cargo airship with a long grey hull, engine pods and a cargo gondola.
-      aircraft_construction: >-
-        robotic aircraft assembly: robotic arms riveting the fuselage of a fighter on an assembly jig.
-      range_improvements: >-
-        long-range fuel cells: a conformal fuel-cell tank fitted along an aircraft fuselage, a cable feeding power.
-      survivability_studies: >-
-        survivability modelling: a hologram of an aircraft with heat-map colours showing damaged areas and armour zones.
-      reinforced_wings_mothership: >-
-        drone mothership wings: a large wing section with drone docking clamps under it, small drones attached.
-      miniature_fighters: >-
-        parasite drone fighters: a tiny fighter drone detaching from the belly of a larger aircraft.
-      aerial_hangars: >-
-        stratospheric hangars: a high-altitude carrier airship with an open hangar deck and small aircraft landing.
-      sp_rockets_improved_guidance: >-
-        AI terminal guidance: a missile seeker head with a glowing camera eye and a targeting reticle in front.
-      sp_rockets_dual_chamber_rocket_engine_1: >-
-        dual-pulse motors, first level: a cut-away missile motor with two separate propellant chambers.
-      sp_rockets_dual_chamber_rocket_engine_2: >-
-        dual-pulse motors, second level: a missile in flight firing its second pulse, two distinct flame rings.
-  NAVAL:
+      sp_artillery_purpose_built_gun_motor_carriages_tech: >-
+        autonomous gun platforms: a driverless self-propelled howitzer on six wheels, its long barrel raised, no
+        crew cabin.
+      sp_artillery_rocket_assisted_projectiles_tech: >-
+        ramjet shells: a long artillery shell with an air intake ring and fins, a small flame at its tail as it
+        flies.
+      sp_variable_time_fuze_shells: >-
+        smart airburst shells: an artillery shell with a glowing sensor ring at its nose, bursting into a cloud
+        of fragments in the air.
+      sp_advance_sabot_shells: >-
+        hypervelocity penetrators: a long dart penetrator leaving its discarded sabot petals behind, flying at
+        extreme speed with a shock cone.
+  NAVAL:     # las dos pestañas navales
     intro: naval technology in the year 2100
     techs:
       sonar: >-
@@ -556,27 +283,31 @@ groups:
       improved_heavy_armor_scheme: >-
         layered ceramic armour: a massive armour block of ceramic layers on a capital-ship hull section.
       smoke_generator: >-
-        multispectral obscurants: a warship stern releasing a thick grey-white cloud that sparkles with reflective
-        particles.
+        multispectral obscurants: a warship stern releasing a thick grey-white cloud that sparkles with
+        reflective particles.
       basic_depth_charges: >-
         anti-submarine drones, first level: a small hunter drone with fins dropping from a ship's launcher.
       improved_depth_charges: >-
-        anti-submarine drones, second level: a pair of anti-submarine drones diving with sonar rings around them.
+        anti-submarine drones, second level: a pair of anti-submarine drones diving with sonar rings around
+        them.
       advanced_depth_charges: >-
-        anti-submarine drones, third level: a launcher rack firing a salvo of anti-submarine rockets into the sea.
+        anti-submarine drones, third level: a launcher rack firing a salvo of anti-submarine rockets into the
+        sea.
       modern_depth_charges: >-
         anti-submarine drones, fourth level: a swarm of small underwater hunter drones converging on a target.
       basic_submarine_snorkel: >-
-        fuel-cell endurance, first level: a submarine fuel-cell module of stacked plates in a cylindrical pressure hull.
+        fuel-cell endurance, first level: a submarine fuel-cell module of stacked plates in a cylindrical
+        pressure hull.
       improved_submarine_snorkel: >-
-        fuel-cell endurance, second level: a large submarine fuel-cell bank with cooling pipes and status lights.
+        fuel-cell endurance, second level: a large submarine fuel-cell bank with cooling pipes and status
+        lights.
       sp_aip_engine_improved_tech: >-
         lithium AIP engines: a submarine battery room with racks of lithium cells glowing green.
       sp_aip_engine_advanced_tech: >-
         hydrogen AIP engines: a submarine hydrogen engine with spherical tanks and a power converter.
       sp_refined_pykrete: >-
-        graphene floating platforms: a large dark floating platform of graphene panels on calm water, aircraft parked on
-        it.
+        graphene floating platforms: a large dark floating platform of graphene panels on calm water, aircraft
+        parked on it.
       sp_ice_composite_runawayas: >-
         composite sea runways: a long floating runway made of interlocking composite segments.
       basic_battery: >-
@@ -604,15 +335,18 @@ groups:
       improved_naval_mines: >-
         smart sea mines, second level: a sea mine anchored on a cable with a sonar sensor and lights.
       advanced_naval_mines: >-
-        smart sea mines, third level: a mobile mine shaped like a small torpedo resting on the seabed, sensors lit.
+        smart sea mines, third level: a mobile mine shaped like a small torpedo resting on the seabed, sensors
+        lit.
       basic_torpedo: >-
-        supercavitating torpedoes: a torpedo surrounded by a bubble of gas cavity, moving at high speed underwater.
+        supercavitating torpedoes: a torpedo surrounded by a bubble of gas cavity, moving at high speed
+        underwater.
       improved_ship_torpedo_launcher: >-
         torpedo launch systems, first level: a ship's triple torpedo tube launcher on a deck.
       advanced_ship_torpedo_launcher: >-
         torpedo launch systems, second level: a vertical launch cell opening with a torpedo rocket rising.
       modern_ship_torpedo_launcher: >-
-        torpedo launch systems, third level: an internal torpedo launcher bay with an automatic loader moving torpedoes.
+        torpedo launch systems, third level: an internal torpedo launcher bay with an automatic loader moving
+        torpedoes.
       magnetic_detonator: >-
         AI proximity detonators: a torpedo nose cone with a glowing sensor ring and a small AI chip.
       homing_torpedo: >-
@@ -628,18 +362,21 @@ groups:
       improved_submarine_mine_laying: >-
         minelaying drones, second level: two minelaying drones placing a line of mines on the seabed.
       damage_control_1: >-
-        automated damage control, first level: a ship's corridor with automatic fire suppression nozzles spraying foam.
+        automated damage control, first level: a ship's corridor with automatic fire suppression nozzles
+        spraying foam.
       damage_control_2: >-
         automated damage control, second level: small repair robots welding a breach in a hull wall.
       damage_control_3: >-
         automated damage control, third level: a self-sealing hull section closing a hole with expanding foam.
       fire_control_methods_1: >-
-        predictive fire solutions, first level: a ship fire-control director with a rangefinder and a radar dish.
+        predictive fire solutions, first level: a ship fire-control director with a rangefinder and a radar
+        dish.
       fire_control_methods_2: >-
-        predictive fire solutions, second level: a holographic sea map with a predicted target track and a firing
-        solution line.
+        predictive fire solutions, second level: a holographic sea map with a predicted target track and a
+        firing solution line.
       fire_control_methods_3: >-
-        predictive fire solutions, third level: an AI fire-control console linking several turrets with glowing lines.
+        predictive fire solutions, third level: an AI fire-control console linking several turrets with glowing
+        lines.
       basic_light_shell: >-
         light guided projectiles, first level: a guided naval shell with small canards near the nose.
       improved_light_shell: >-
@@ -647,23 +384,350 @@ groups:
       basic_heavy_shell: >-
         heavy guided projectiles, first level: a large guided railgun slug with a pointed tungsten tip.
       improved_heavy_shell: >-
-        heavy guided projectiles, second level: a heavy guided projectile with fins glowing from atmospheric heat.
+        heavy guided projectiles, second level: a heavy guided projectile with fins glowing from atmospheric
+        heat.
       degaussing: >-
-        active signature masking: a ship hull wrapped in glowing coil cables, a faint distortion field around it.
+        active signature masking: a ship hull wrapped in glowing coil cables, a faint distortion field around
+        it.
       sp_multi_product_supply_ships: >-
         autonomous supply ships: a crewless supply ship with multiple cargo modules and fuel tanks on deck.
       airsweep_mines: >-
-        drone minesweeping: a flying drone towing a sweep sensor over the water, a mine detonating harmlessly below.
-      airsweep_mines_bba:
-        same_as: airsweep_mines
+        drone minesweeping: a flying drone towing a sweep sensor over the water, a mine detonating harmlessly
+        below.
+      airsweep_mines_bba: {same_as: airsweep_mines}
       airdrop_mines: >-
         aerial mine drones: an aircraft dropping sea mines with small parachutes into the sea.
-      airdrop_mines_bba:
-        same_as: airdrop_mines
+      airdrop_mines_bba: {same_as: airdrop_mines}
       sp_improved_support_ship: >-
         improved support ships: a support ship with a helicopter deck and cranes lifting supplies.
       sp_improved_repair_ship: >-
         floating repair docks: a floating dry dock with a damaged warship inside and robotic welders.
       sp_standard_tenshioned_replenishment_alongside_method: >-
-        autonomous underway replenishment: two ships sailing side by side linked by a tensioned cable carrying a cargo
-        pod.
+        autonomous underway replenishment: two ships sailing side by side linked by a tensioned cable carrying a
+        cargo pod.
+      basic_fire_control_system: >-
+        AI fire control, first level: a compact armoured fire-control computer box for a warship, cooling fins
+        on its sides and a thick bundle of armoured cables running out of it, small green status lights.
+      improved_fire_control_system: >-
+        AI fire control, second level: a mast-top sensor fusion pod, a white spherical radome with dark lidar
+        windows around its equator, mounted on a short lattice mast stub.
+      advanced_fire_control_system: >-
+        AI fire control, third level: a sealed cylindrical targeting core held in a shock-absorbing cradle, thin
+        blue light lines running around it, frost on its cooling jacket.
+  AVIACION:     # pestaña de aviación
+    intro: aircraft technology in the year 2100
+    techs:
+      jet_engines: >-
+        scramjet engines: a sleek scramjet engine with a long intake ramp and no moving parts, heat glow at the
+        exhaust.
+      improved_jet_engines: >-
+        improved scramjets: a scramjet engine with cooling channels glowing orange along its body and a blue
+        shock diamond exhaust.
+      sp_centrifugal_jet_tech: >-
+        centrifugal scramjet: a jet engine with a visible centrifugal compressor disc in a cut-away, spinning
+        with light streaks.
+      experimental_rockets: >-
+        hypersonic rocketry: an experimental hypersonic test rocket on a small launch rail, frost on its tank.
+      rocket_engines: >-
+        hypersonic engines: a rocket engine bell with a bright blue flame and visible shock diamonds.
+      improved_rocket_engines: >-
+        improved hypersonic engines: a cluster of three rocket engines on one thrust frame firing together.
+      advanced_rocket_engines: >-
+        orbital launch engines: a giant aerospike engine firing a wide golden flame, a launch tower in the
+        background.
+      engines_1: >-
+        hybrid aero engines, first level: an aircraft engine combining an electric fan and a small turbine core
+        in a cut-away nacelle.
+      engines_2: >-
+        hybrid aero engines, second level: a pair of hybrid engines mounted under a wing section, fans spinning.
+      engines_3: >-
+        hybrid aero engines, third level: a variable-cycle engine with its nozzle petals opening and closing.
+      engines_4: >-
+        hybrid aero engines, fourth level: a compact hybrid engine with a glowing fuel-cell core and vectoring
+        nozzle.
+      aa_lmg: >-
+        light point-defence guns: a small rotary gun turret for an aircraft, six thin barrels, spent casings
+        flying.
+      aa_hmg: >-
+        heavy point-defence guns: a twin heavy cannon pod under an aircraft wing, muzzle flash.
+      aa_cannon_1: >-
+        air-to-air railguns, first level: a compact railgun pod on a wing pylon with a blue spark between its
+        rails.
+      aa_cannon_2: >-
+        large air-to-air railguns: a long railgun mounted along an aircraft spine, capacitor rings glowing.
+      aa_cannon_3: >-
+        air-to-air railguns, second level: a pair of advanced railguns in an internal bay, the bay doors open.
+      early_bombs: >-
+        guided glide bombs: a glide bomb with folding wings and tail fins released from a pylon, small guidance
+        camera at the nose.
+      armor_piercing_bombs: >-
+        bunker-busting munitions: a long hardened penetrator bomb with a pointed tungsten nose plunging
+        downward.
+      heavy_bombs: >-
+        heavy thermobaric bombs: a fat heavy bomb casing with hazard bands, a faint heat shimmer around it.
+      air_torpedoe_1: >-
+        air-launched anti-ship missiles, first level: a sea-skimming missile with folding wings under an
+        aircraft pylon.
+      air_torpedoe_2: >-
+        air-launched anti-ship missiles, second level: an anti-ship missile flying low just above the waves.
+      air_torpedoe_3: >-
+        air-launched anti-ship missiles, third level: a hypersonic anti-ship missile with a glowing heat shield
+        nose.
+      photo_reconnaisance: >-
+        hyperspectral reconnaissance: a reconnaissance camera pod with several lenses of different colours on an
+        aircraft belly.
+      bba_early_transport_plane: >-
+        cargo tiltrotors: a medium tiltrotor aircraft with rotors tilted up, a cargo ramp open at the rear.
+      bba_improved_transport_plane: >-
+        heavy cargo tiltrotors: a large four-rotor tiltrotor carrying a light vehicle in its open cargo bay.
+      bba_strategic_airlifter: >-
+        strategic airships: a huge rigid cargo airship with a long grey hull, engine pods and a cargo gondola.
+      aircraft_construction: >-
+        robotic aircraft assembly: robotic arms riveting the fuselage of a fighter on an assembly jig.
+      range_improvements: >-
+        long-range fuel cells: a conformal fuel-cell tank fitted along an aircraft fuselage, a cable feeding
+        power.
+      survivability_studies: >-
+        survivability modelling: a hologram of an aircraft with heat-map colours showing damaged areas and
+        armour zones.
+      reinforced_wings_mothership: >-
+        drone mothership wings: a large wing section with drone docking clamps under it, small drones attached.
+      miniature_fighters: >-
+        parasite drone fighters: a tiny fighter drone detaching from the belly of a larger aircraft.
+      aerial_hangars: >-
+        stratospheric hangars: a high-altitude carrier airship with an open hangar deck and small aircraft
+        landing.
+      sp_rockets_improved_guidance: >-
+        AI terminal guidance: a missile seeker head with a glowing camera eye and a targeting reticle in front.
+      sp_rockets_dual_chamber_rocket_engine_1: >-
+        dual-pulse motors, first level: a cut-away missile motor with two separate propellant chambers.
+      sp_rockets_dual_chamber_rocket_engine_2: >-
+        dual-pulse motors, second level: a missile in flight firing its second pulse, two distinct flame rings.
+  INGENIERIA:     # pestaña de ingeniería
+    intro: electronics, computing, sensors, fortifications and nuclear technology in the year 2100
+    techs:
+      electronic_mechanical_engineering: >-
+        photonic engineering: an open circuit module where beams of light run through glass channels instead of
+        wires, tiny prisms splitting a cyan beam.
+      radio: >-
+        quantum field networks: a slim communications mast with a crystal node on top emitting faint concentric
+        rings of blue light.
+      improved_radio: >-
+        mesh battle networks: four small portable relay nodes on tripods linked by glowing lines into a square
+        mesh.
+      advanced_radio: >-
+        satellite battle networks: a small communications satellite with folded solar wings above a ground
+        antenna dish, a beam of light linking them.
+      radio_detection: >-
+        plasma sensors: a sensor pod with a glowing plasma chamber in a glass window, three thin receiver spikes
+        on top.
+      decimetric_radar: >-
+        AESA radar: a flat square radar panel made of hundreds of small tiles on a rotating pedestal, a few
+        tiles lit.
+      improved_decimetric_radar: >-
+        improved AESA radar: three flat radar panels arranged as a triangular tower, each one sweeping a faint
+        green fan of light.
+      centimetric_radar: >-
+        quantum radar: a cryogenic radar emitter with a frosted cylindrical core and a dish of gold mesh, cold
+        vapour around it.
+      improved_centimetric_radar: >-
+        improved quantum radar: twin cryogenic emitters on a mobile trailer, a holographic return blip floating
+        above.
+      advanced_centimetric_radar: >-
+        orbital sensor grid: a ring of small sensor satellites around a stylised blue globe segment, thin lines
+        of light connecting them.
+      cavity_magnatron: >-
+        gallium nitride emitters: a close-up of a radar emitter chip of dark crystal on a heat sink, glowing
+        pale blue, held in a small gold clamp.
+      phased_array: >-
+        conformal phased arrays: a curved radar skin wrapped around the nose of a drone, its tiles shimmering
+        like scales.
+      monopulse_radar: >-
+        multistatic radar: three separate small radar towers forming a triangle, their beams meeting at one
+        bright point above the centre.
+      mechanical_computing: >-
+        neuromorphic computing: a brain-shaped processor of layered silicon wafers in a transparent case,
+        synapse-like light pulses running through it.
+      computing_machine: >-
+        quantum computers: a golden chandelier-shaped cryostat of a quantum computer hanging inside an open
+        white cylinder, frost at the bottom.
+      improved_computing_machine: >-
+        fault-tolerant quantum computers: two golden cryostats side by side linked by thick cables, a stable
+        steady glow at their cores.
+      advanced_computing_machine: >-
+        planetary compute grid: a tall black server monolith with rows of blue lights, glowing data lines
+        leaving it in every direction.
+      basic_encryption: >-
+        post-quantum encryption: a heavy steel data vault door with a lattice-patterned lock glowing cyan.
+      improved_encryption: >-
+        lattice encryption: a cube made of a glowing three-dimensional lattice of lines, a small data crystal
+        sealed in its centre.
+      advanced_encryption: >-
+        adaptive AI encryption: a black orb whose surface patterns constantly rearrange, half covered by moving
+        hexagonal shields.
+      basic_decryption: >-
+        quantum cryptanalysis: a cracked steel padlock hovering over a quantum chip, its pieces separating in
+        light.
+      improved_decryption: >-
+        AI cryptanalysis: a server rack whose front panel shows an eye made of lines of light, a key forming in
+        front of it.
+      advanced_decryption: >-
+        total signals intelligence: a huge listening dish array of several dishes on one structure, all pointing
+        at the same spot, waves of signals converging.
+      atomic_research: >-
+        experimental fusion: a small tokamak test chamber, a doughnut-shaped vessel with a violet plasma ring
+        visible through a window.
+      nuclear_reactor: >-
+        fusion reactor: a full fusion reactor core, a large torus wrapped in superconducting magnets and pipes,
+        the plasma ring glowing bright white-blue.
+      nukes: >-
+        fusion weapons: a sleek warhead casing of white ceramic on a cradle in a vault, yellow-and-black hazard
+        bands and a single red status light.
+      sp_shock_hardening_techniques: >-
+        shock-hardened electronics: a circuit board in a rugged sealed casing being struck by a shock wave and
+        an electric arc, completely unharmed.
+      basic_fortification_tech: >-
+        smart fortifications: a concrete bunker with a retractable gun cupola and sensor masts, sandbags around.
+      land_fort_tech_1: >-
+        hardened land bastions, first level: a thick angular concrete bastion with a heavy gun casemate and
+        anti-tank teeth in front.
+      land_fort_tech_2: >-
+        hardened land bastions, second level: an underground fortress entrance in a hillside with blast doors
+        and layered armoured turrets.
+      coastal_fort_tech_1: >-
+        coastal defence grids, first level: a coastal gun turret on a concrete cliff emplacement facing the sea.
+      coastal_fort_tech_2: >-
+        coastal defence grids, second level: a coastal missile battery with a radar mast and launch tubes
+        raised, waves breaking below.
+  INDUSTRIA:     # pestaña de industria
+    intro: industry, construction and resources of a nation in the year 2100
+    techs:
+      basic_machine_tools: >-
+        an industrial 3D printer the size of a car: an open steel gantry frame with a single heavy print head on
+        rails, laying down a half-finished engine block layer by layer, a faint orange glow at the nozzle.
+      improved_machine_tools: >-
+        additive manufacturing cell: three robotic arms around a round build platform printing a complex metal
+        turbine part at the same time, cyan laser lines fusing powder, metal dust glittering.
+      advanced_machine_tools: >-
+        nanofabrication: a sealed glass sphere on a polished steel pedestal, inside it a shimmering cloud of
+        tiny particles assembling a small perfect gear out of nothing, soft violet-blue glow.
+      concentrated_industry: >-
+        megafactories, first level: one huge windowless factory block of grey concrete with a sawtooth roof and
+        two tall exhaust stacks, a single loading bay lit amber.
+      concentrated_industry2: >-
+        megafactories, second level: two massive factory blocks joined by an enclosed sky bridge, conveyor tubes
+        running between them, rooftop cooling fans.
+      concentrated_industry3: >-
+        megafactories, third level: a stepped industrial ziggurat of stacked factory floors, each level with its
+        own glowing production line visible through long window bands.
+      concentrated_industry4: >-
+        megafactories, fourth level: a circular arcology factory, a ring of production halls around a central
+        tower with a crane on top, maglev freight lines entering at the base.
+      concentrated_industry5: >-
+        megafactories, fifth level: a colossal single-structure industrial city, a dark monolith several hundred
+        metres tall covered in pipes and lights, tiny cargo drones swarming around it like insects.
+      dispersed_industry: >-
+        distributed microfactories, first level: one shipping-container-sized microfactory with its side panels
+        open, showing a small robotic arm and a printer inside, solar panel on the roof.
+      dispersed_industry2: >-
+        distributed microfactories, second level: three container microfactories side by side connected by thin
+        cables, each with a different machine visible through its open doors.
+      dispersed_industry3: >-
+        distributed microfactories, third level: a cluster of small hexagonal factory pods arranged like a
+        honeycomb on a concrete pad, delivery drones landing on their roofs.
+      dispersed_industry4: >-
+        distributed microfactories, fourth level: microfactory pods mounted on autonomous trucks driving in a
+        convoy, each one still producing parts as it moves.
+      dispersed_industry5: >-
+        distributed microfactories, fifth level: a floating holographic map of glowing nodes connecting dozens
+        of tiny factory pods spread on a stylised landscape tile, like a living network.
+      assembly_line_production: >-
+        lights-out assembly: a dark factory aisle with a line of identical robot arms assembling vehicle chassis
+        in perfect rhythm, only their status lights glowing, no humans at all.
+      flexible_line: >-
+        reconfigurable factories: a factory floor of modular square tiles, robotic workstations sliding on the
+        tiles into a new layout, arrows of light on the floor showing the new paths.
+      streamlined_line: >-
+        streamlined robotic lines: a long sleek conveyor tunnel of white ceramic, parts flowing through it so
+        fast they blur, a single robotic arm at the exit placing a finished drone on a stack.
+      improved_equipment_conversion: >-
+        modular retrofit lines: an older armoured vehicle on a lift with its turret removed, robotic arms
+        fitting a new modular weapon module in its place.
+      advanced_equipment_conversion: >-
+        adaptive retrofit lines: a vehicle chassis inside a ring-shaped scanning gantry, a hologram of the
+        upgraded design projected over it while arms swap whole sections at once.
+      construction1: >-
+        robotic construction, first level: a single tracked construction robot laying prefabricated concrete
+        blocks on a low wall, amber warning light on its mast.
+      construction2: >-
+        robotic construction, second level: a giant concrete 3D printer gantry printing the curved walls of a
+        building, a fresh grey layer still wet at the top.
+      construction3: >-
+        robotic construction, third level: a mobile tower crane walking on four legs, lifting a whole
+        prefabricated apartment module into place on a half-built tower.
+      construction4: >-
+        robotic construction, fourth level: a swarm of flying construction drones carrying steel beams and
+        welding a bridge span in mid-air.
+      construction5: >-
+        robotic construction, fifth level: a self-assembling arcology block, structural modules unfolding and
+        locking themselves together, cranes built into the building itself.
+      excavation1: >-
+        autonomous mining, first level: a single autonomous excavator digging into a rock face, a pile of ore
+        beside it with a few metallic glints.
+      excavation2: >-
+        autonomous mining, second level: an autonomous drilling rig with a long diamond drill bit boring into
+        the ground, rock chips flying, a small lamp mast.
+      excavation3: >-
+        autonomous mining, third level: a giant bucket-wheel excavator robot biting into a terraced open-pit
+        wall, conveyor belt carrying ore away.
+      excavation4: >-
+        autonomous mining, fourth level: a tunnel boring machine with a rotating cutter head bursting out of
+        rock, its segmented body glowing with service lights.
+      excavation5: >-
+        autonomous mining, fifth level: a deep-crust mining tower, a tall drill derrick of white ceramic over a
+        glowing shaft, ore capsules rising in a vertical maglev tube.
+      fuel_silos: >-
+        hydrogen storage: three white spherical high-pressure tanks on steel legs connected by insulated pipes,
+        frost on the valves, a blue hazard light.
+      fuel_refining: >-
+        biofuel refining, first level: a small refinery unit with one fermentation tank full of green liquid and
+        a distillation column, a barrel of amber fuel in front.
+      fuel_refining2: >-
+        biofuel refining, second level: two tall distillation columns linked by catwalks, green bioreactor tubes
+        coiled around their base.
+      fuel_refining3: >-
+        biofuel refining, third level: a refinery block of glass bioreactor panels glowing green, pipes leading
+        to a golden-amber fuel storage tank.
+      fuel_refining4: >-
+        biofuel refining, fourth level: a compact modular refinery on a hovering platform, catalytic towers
+        venting clean white steam.
+      fuel_refining5: >-
+        biofuel refining, fifth level: a fully automated bio-refinery dome, a transparent cupola full of green
+        algae columns, robotic arms tending valves.
+      synth_oil_experiments: >-
+        synthetic fuels: a laboratory bench with a glass reactor vessel turning clear gas into dark fuel, a
+        single drop falling from a nozzle into a beaker.
+      oil_processing: >-
+        hydrocarbon synthesis: a squat chemical reactor of steel with pressure gauges and a pipe dripping black
+        synthetic oil into a steel drum.
+      improved_oil_processing: >-
+        improved hydrocarbon synthesis: a pair of tall reactor towers with heat exchangers, a pipeline leaving
+        them with a flow meter glowing amber.
+      advanced_oil_processing: >-
+        carbon-capture fuels: a wall of large fans pulling air into a capture unit, a pipe carrying the captured
+        carbon into a reactor that fills a fuel tank.
+      modern_oil_processing: >-
+        algae fuel synthesis: long transparent tubes full of bright green algae bundled into a reactor, a valve
+        filling a canister with golden fuel.
+      rubber_processing: >-
+        synthetic elastomers, first level: a vat of white liquid polymer with a mixing paddle, a sheet of black
+        rubber coming out of a roller.
+      improved_rubber_processing: >-
+        synthetic elastomers, second level: a rubber extrusion machine pushing out a long black profile, a stack
+        of finished tyres beside it.
+      advanced_rubber_processing: >-
+        synthetic elastomers, third level: a robotic arm lifting a freshly moulded heavy vehicle tyre out of a
+        glowing press.
+      modern_rubber_processing: >-
+        synthetic elastomers, fourth level: an airless honeycomb tyre of advanced polymer on a test rig, a laser
+        scanning its tread.
