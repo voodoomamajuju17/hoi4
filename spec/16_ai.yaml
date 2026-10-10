@@ -137,6 +137,24 @@ anarchy_wars:
     NAS: 2102.1.1
     FCU: 2102.6.1
 
+# -----------------------------------------------------------------------------
+# Guerras del destino (2026-10-10, pedido del usuario: "que la IA persiga más
+# agresivamente sus objetivos finales"). Con el destino abierto y hasta
+# proclamar la forma final: +50 de fábricas militares sobre civiles, y contra
+# cada dueño de arranque de las regiones que pide la forma final (las de
+# <TAG>_reclamar_el_destino): prepararse, conquistar, hostigar y declarar con
+# 30 divisiones o más (sin otra guerra abierta, o con 50 o más).
+# -----------------------------------------------------------------------------
+destiny_wars:
+  src: user_request
+  military_ratio: 50
+  prepare: 150
+  conquer: 250
+  antagonize: 60
+  declare: 200
+  divisions: 30
+  divisions_two_fronts: 50
+
 plans:
 - id: EFE_el_amazonas
   country: EFE

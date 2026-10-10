@@ -162,7 +162,19 @@ def _emit(ctx: BuildContext) -> None:
                 ob.entries.insert(1, ("trigger", render_conditions(
                     eid, opt["when"], effect_ctx.triggers_used, where="12_events.yaml")))
             if "ai_chance" in opt:
-                ob.add("ai_chance", Block([("factor", opt["ai_chance"])]))
+                ac = opt["ai_chance"]
+                if isinstance(ac, dict):
+                    # base + modificadores con condición (2026-10-10: la IA con el
+                    # destino abierto sigue la guerra en vez de firmar)
+                    acb = Block([("base", ac.get("base", 1))])
+                    for m in ac.get("modifiers") or []:
+                        mb = Block([("factor", m["factor"])])
+                        mb.entries.extend(render_conditions(eid, m["when"], effect_ctx.triggers_used,
+                                                            where="12_events.yaml").entries)
+                        acb.add("modifier", mb)
+                    ob.add("ai_chance", acb)
+                else:
+                    ob.add("ai_chance", Block([("factor", ac)]))
             b.add("option", ob)
 
         by_ns.setdefault(ns, Block()).add("country_event", b)

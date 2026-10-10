@@ -488,7 +488,7 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "opinion":
             target = item["target"]
-            if ec.tags and target not in ec.tags:
+            if ec.tags and target not in ec.tags and target not in SCOPES:
                 raise SpecError(f"{owner}: opinion hacia '{target}', que no es un pais del mod", where=where)
             block.add("add_opinion_modifier", Block([("target", target), ("modifier", item["modifier"])]))
             effects_used.setdefault("add_opinion_modifier", owner)

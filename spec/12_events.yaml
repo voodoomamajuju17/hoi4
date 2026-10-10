@@ -804,11 +804,17 @@ namespaces:
             - {effect: flag, value: FCU_tregua_efe, days: 364}
             - {effect: timed_idea, idea: FCU_revancha, days: 364}
           - {effect: event, id: meganations_efe.162, days: 1, target: FCU}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: EFE_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: EFE_destino_abierto}}
         src: user_design
       - id: 162
         art: meganations_paz_humillante
@@ -871,11 +877,17 @@ namespaces:
             - {effect: flag, value: ASC_tregua_efe, days: 364}
             - {effect: timed_idea, idea: ASC_revancha, days: 364}
           - {effect: event, id: meganations_efe.166, days: 1, target: ASC}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: EFE_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: EFE_destino_abierto}}
         src: user_design
       - id: 166
         art: meganations_paz_humillante
@@ -938,11 +950,17 @@ namespaces:
             - {effect: flag, value: HSN_tregua_efe, days: 364}
             - {effect: timed_idea, idea: HSN_revancha, days: 364}
           - {effect: event, id: meganations_efe.170, days: 1, target: HSN}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: EFE_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: EFE_destino_abierto}}
         src: user_design
       - id: 170
         art: meganations_paz_humillante
@@ -1002,11 +1020,17 @@ namespaces:
             - {effect: flag, value: NAS_tregua_efe, days: 364}
             - {effect: timed_idea, idea: NAS_revancha, days: 364}
           - {effect: event, id: meganations_efe.174, days: 1, target: NAS}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: EFE_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: EFE_destino_abierto}}
         src: user_design
       - id: 174
         art: meganations_paz_humillante
@@ -1069,11 +1093,17 @@ namespaces:
             - {effect: flag, value: SHD_tregua_efe, days: 364}
             - {effect: timed_idea, idea: SHD_revancha, days: 364}
           - {effect: event, id: meganations_efe.178, days: 1, target: SHD}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: EFE_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: EFE_destino_abierto}}
         src: user_design
       - id: 178
         art: meganations_paz_humillante
@@ -1136,11 +1166,17 @@ namespaces:
             - {effect: flag, value: APF_tregua_efe, days: 364}
             - {effect: timed_idea, idea: APF_revancha, days: 364}
           - {effect: event, id: meganations_efe.182, days: 1, target: APF}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: EFE_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: EFE_destino_abierto}}
         src: user_design
       - id: 182
         art: meganations_paz_humillante
@@ -1197,11 +1233,17 @@ namespaces:
             - {effect: flag, value: NRE_tregua_efe, days: 364}
             - {effect: timed_idea, idea: NRE_revancha, days: 364}
           - {effect: event, id: meganations_efe.186, days: 1, target: NRE}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: EFE_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: EFE_destino_abierto}}
         src: user_design
       - id: 186
         art: meganations_paz_humillante
@@ -2174,11 +2216,17 @@ namespaces:
             - {effect: flag, value: EFE_tregua_fcu, days: 364}
             - {effect: timed_idea, idea: EFE_revancha, days: 364}
           - {effect: event, id: meganations_fcu.162, days: 1, target: EFE}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: FCU_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: FCU_destino_abierto}}
         src: user_design
       - id: 162
         art: meganations_paz_humillante
@@ -2241,11 +2289,17 @@ namespaces:
             - {effect: flag, value: ASC_tregua_fcu, days: 364}
             - {effect: timed_idea, idea: ASC_revancha, days: 364}
           - {effect: event, id: meganations_fcu.166, days: 1, target: ASC}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: FCU_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: FCU_destino_abierto}}
         src: user_design
       - id: 166
         art: meganations_paz_humillante
@@ -2308,11 +2362,17 @@ namespaces:
             - {effect: flag, value: HSN_tregua_fcu, days: 364}
             - {effect: timed_idea, idea: HSN_revancha, days: 364}
           - {effect: event, id: meganations_fcu.170, days: 1, target: HSN}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: FCU_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: FCU_destino_abierto}}
         src: user_design
       - id: 170
         art: meganations_paz_humillante
@@ -2372,11 +2432,17 @@ namespaces:
             - {effect: flag, value: NAS_tregua_fcu, days: 364}
             - {effect: timed_idea, idea: NAS_revancha, days: 364}
           - {effect: event, id: meganations_fcu.174, days: 1, target: NAS}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: FCU_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: FCU_destino_abierto}}
         src: user_design
       - id: 174
         art: meganations_paz_humillante
@@ -2439,11 +2505,17 @@ namespaces:
             - {effect: flag, value: SHD_tregua_fcu, days: 364}
             - {effect: timed_idea, idea: SHD_revancha, days: 364}
           - {effect: event, id: meganations_fcu.178, days: 1, target: SHD}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: FCU_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: FCU_destino_abierto}}
         src: user_design
       - id: 178
         art: meganations_paz_humillante
@@ -2506,11 +2578,17 @@ namespaces:
             - {effect: flag, value: APF_tregua_fcu, days: 364}
             - {effect: timed_idea, idea: APF_revancha, days: 364}
           - {effect: event, id: meganations_fcu.182, days: 1, target: APF}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: FCU_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: FCU_destino_abierto}}
         src: user_design
       - id: 182
         art: meganations_paz_humillante
@@ -2567,11 +2645,17 @@ namespaces:
             - {effect: flag, value: NRE_tregua_fcu, days: 364}
             - {effect: timed_idea, idea: NRE_revancha, days: 364}
           - {effect: event, id: meganations_fcu.186, days: 1, target: NRE}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: FCU_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: FCU_destino_abierto}}
         src: user_design
       - id: 186
         art: meganations_paz_humillante
@@ -3483,11 +3567,17 @@ namespaces:
             - {effect: flag, value: EFE_tregua_hsn, days: 364}
             - {effect: timed_idea, idea: EFE_revancha, days: 364}
           - {effect: event, id: meganations_hsn.162, days: 1, target: EFE}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: HSN_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: HSN_destino_abierto}}
         src: user_design
       - id: 162
         art: meganations_paz_humillante
@@ -3550,11 +3640,17 @@ namespaces:
             - {effect: flag, value: FCU_tregua_hsn, days: 364}
             - {effect: timed_idea, idea: FCU_revancha, days: 364}
           - {effect: event, id: meganations_hsn.166, days: 1, target: FCU}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: HSN_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: HSN_destino_abierto}}
         src: user_design
       - id: 166
         art: meganations_paz_humillante
@@ -3617,11 +3713,17 @@ namespaces:
             - {effect: flag, value: ASC_tregua_hsn, days: 364}
             - {effect: timed_idea, idea: ASC_revancha, days: 364}
           - {effect: event, id: meganations_hsn.170, days: 1, target: ASC}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: HSN_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: HSN_destino_abierto}}
         src: user_design
       - id: 170
         art: meganations_paz_humillante
@@ -3681,11 +3783,17 @@ namespaces:
             - {effect: flag, value: NAS_tregua_hsn, days: 364}
             - {effect: timed_idea, idea: NAS_revancha, days: 364}
           - {effect: event, id: meganations_hsn.174, days: 1, target: NAS}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: HSN_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: HSN_destino_abierto}}
         src: user_design
       - id: 174
         art: meganations_paz_humillante
@@ -3748,11 +3856,17 @@ namespaces:
             - {effect: flag, value: SHD_tregua_hsn, days: 364}
             - {effect: timed_idea, idea: SHD_revancha, days: 364}
           - {effect: event, id: meganations_hsn.178, days: 1, target: SHD}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: HSN_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: HSN_destino_abierto}}
         src: user_design
       - id: 178
         art: meganations_paz_humillante
@@ -3815,11 +3929,17 @@ namespaces:
             - {effect: flag, value: APF_tregua_hsn, days: 364}
             - {effect: timed_idea, idea: APF_revancha, days: 364}
           - {effect: event, id: meganations_hsn.182, days: 1, target: APF}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: HSN_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: HSN_destino_abierto}}
         src: user_design
       - id: 182
         art: meganations_paz_humillante
@@ -3876,11 +3996,17 @@ namespaces:
             - {effect: flag, value: NRE_tregua_hsn, days: 364}
             - {effect: timed_idea, idea: NRE_revancha, days: 364}
           - {effect: event, id: meganations_hsn.186, days: 1, target: NRE}
-          ai_chance: 50
+          ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+            base: 50
+            modifiers:
+            - {factor: 0.25, when: {flag: HSN_destino_abierto}}
         - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
           effects:
           - {effect: add_war_support, value: 0.03}
-          ai_chance: 50
+          ai_chance:
+            base: 50
+            modifiers:
+            - {factor: 4, when: {flag: HSN_destino_abierto}}
         src: user_design
       - id: 186
         art: meganations_paz_humillante
@@ -4716,11 +4842,17 @@ namespaces:
           - {effect: flag, value: EFE_tregua_asc, days: 364}
           - {effect: timed_idea, idea: EFE_revancha, days: 364}
         - {effect: event, id: meganations_asc.162, days: 1, target: EFE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: ASC_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: ASC_destino_abierto}}
       src: user_design
     - id: 162
       art: meganations_paz_humillante
@@ -4783,11 +4915,17 @@ namespaces:
           - {effect: flag, value: FCU_tregua_asc, days: 364}
           - {effect: timed_idea, idea: FCU_revancha, days: 364}
         - {effect: event, id: meganations_asc.166, days: 1, target: FCU}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: ASC_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: ASC_destino_abierto}}
       src: user_design
     - id: 166
       art: meganations_paz_humillante
@@ -4850,11 +4988,17 @@ namespaces:
           - {effect: flag, value: HSN_tregua_asc, days: 364}
           - {effect: timed_idea, idea: HSN_revancha, days: 364}
         - {effect: event, id: meganations_asc.170, days: 1, target: HSN}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: ASC_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: ASC_destino_abierto}}
       src: user_design
     - id: 170
       art: meganations_paz_humillante
@@ -4914,11 +5058,17 @@ namespaces:
           - {effect: flag, value: NAS_tregua_asc, days: 364}
           - {effect: timed_idea, idea: NAS_revancha, days: 364}
         - {effect: event, id: meganations_asc.174, days: 1, target: NAS}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: ASC_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: ASC_destino_abierto}}
       src: user_design
     - id: 174
       art: meganations_paz_humillante
@@ -4981,11 +5131,17 @@ namespaces:
           - {effect: flag, value: SHD_tregua_asc, days: 364}
           - {effect: timed_idea, idea: SHD_revancha, days: 364}
         - {effect: event, id: meganations_asc.178, days: 1, target: SHD}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: ASC_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: ASC_destino_abierto}}
       src: user_design
     - id: 178
       art: meganations_paz_humillante
@@ -5048,11 +5204,17 @@ namespaces:
           - {effect: flag, value: APF_tregua_asc, days: 364}
           - {effect: timed_idea, idea: APF_revancha, days: 364}
         - {effect: event, id: meganations_asc.182, days: 1, target: APF}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: ASC_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: ASC_destino_abierto}}
       src: user_design
     - id: 182
       art: meganations_paz_humillante
@@ -5109,11 +5271,17 @@ namespaces:
           - {effect: flag, value: NRE_tregua_asc, days: 364}
           - {effect: timed_idea, idea: NRE_revancha, days: 364}
         - {effect: event, id: meganations_asc.186, days: 1, target: NRE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: ASC_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: ASC_destino_abierto}}
       src: user_design
     - id: 186
       art: meganations_paz_humillante
@@ -5858,11 +6026,17 @@ namespaces:
           - {effect: flag, value: EFE_tregua_apf, days: 364}
           - {effect: timed_idea, idea: EFE_revancha, days: 364}
         - {effect: event, id: meganations_apf.162, days: 1, target: EFE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: APF_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: APF_destino_abierto}}
       src: user_design
     - id: 162
       art: meganations_paz_humillante
@@ -5925,11 +6099,17 @@ namespaces:
           - {effect: flag, value: FCU_tregua_apf, days: 364}
           - {effect: timed_idea, idea: FCU_revancha, days: 364}
         - {effect: event, id: meganations_apf.166, days: 1, target: FCU}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: APF_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: APF_destino_abierto}}
       src: user_design
     - id: 166
       art: meganations_paz_humillante
@@ -5992,11 +6172,17 @@ namespaces:
           - {effect: flag, value: ASC_tregua_apf, days: 364}
           - {effect: timed_idea, idea: ASC_revancha, days: 364}
         - {effect: event, id: meganations_apf.170, days: 1, target: ASC}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: APF_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: APF_destino_abierto}}
       src: user_design
     - id: 170
       art: meganations_paz_humillante
@@ -6059,11 +6245,17 @@ namespaces:
           - {effect: flag, value: HSN_tregua_apf, days: 364}
           - {effect: timed_idea, idea: HSN_revancha, days: 364}
         - {effect: event, id: meganations_apf.174, days: 1, target: HSN}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: APF_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: APF_destino_abierto}}
       src: user_design
     - id: 174
       art: meganations_paz_humillante
@@ -6123,11 +6315,17 @@ namespaces:
           - {effect: flag, value: NAS_tregua_apf, days: 364}
           - {effect: timed_idea, idea: NAS_revancha, days: 364}
         - {effect: event, id: meganations_apf.178, days: 1, target: NAS}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: APF_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: APF_destino_abierto}}
       src: user_design
     - id: 178
       art: meganations_paz_humillante
@@ -6190,11 +6388,17 @@ namespaces:
           - {effect: flag, value: SHD_tregua_apf, days: 364}
           - {effect: timed_idea, idea: SHD_revancha, days: 364}
         - {effect: event, id: meganations_apf.182, days: 1, target: SHD}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: APF_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: APF_destino_abierto}}
       src: user_design
     - id: 182
       art: meganations_paz_humillante
@@ -6251,11 +6455,17 @@ namespaces:
           - {effect: flag, value: NRE_tregua_apf, days: 364}
           - {effect: timed_idea, idea: NRE_revancha, days: 364}
         - {effect: event, id: meganations_apf.186, days: 1, target: NRE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: APF_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: APF_destino_abierto}}
       src: user_design
     - id: 186
       art: meganations_paz_humillante
@@ -6966,11 +7176,17 @@ namespaces:
           - {effect: flag, value: EFE_tregua_nas, days: 364}
           - {effect: timed_idea, idea: EFE_revancha, days: 364}
         - {effect: event, id: meganations_nas.162, days: 1, target: EFE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NAS_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NAS_destino_abierto}}
       src: user_design
     - id: 162
       art: meganations_paz_humillante
@@ -7033,11 +7249,17 @@ namespaces:
           - {effect: flag, value: FCU_tregua_nas, days: 364}
           - {effect: timed_idea, idea: FCU_revancha, days: 364}
         - {effect: event, id: meganations_nas.166, days: 1, target: FCU}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NAS_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NAS_destino_abierto}}
       src: user_design
     - id: 166
       art: meganations_paz_humillante
@@ -7100,11 +7322,17 @@ namespaces:
           - {effect: flag, value: ASC_tregua_nas, days: 364}
           - {effect: timed_idea, idea: ASC_revancha, days: 364}
         - {effect: event, id: meganations_nas.170, days: 1, target: ASC}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NAS_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NAS_destino_abierto}}
       src: user_design
     - id: 170
       art: meganations_paz_humillante
@@ -7167,11 +7395,17 @@ namespaces:
           - {effect: flag, value: HSN_tregua_nas, days: 364}
           - {effect: timed_idea, idea: HSN_revancha, days: 364}
         - {effect: event, id: meganations_nas.174, days: 1, target: HSN}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NAS_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NAS_destino_abierto}}
       src: user_design
     - id: 174
       art: meganations_paz_humillante
@@ -7234,11 +7468,17 @@ namespaces:
           - {effect: flag, value: SHD_tregua_nas, days: 364}
           - {effect: timed_idea, idea: SHD_revancha, days: 364}
         - {effect: event, id: meganations_nas.178, days: 1, target: SHD}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NAS_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NAS_destino_abierto}}
       src: user_design
     - id: 178
       art: meganations_paz_humillante
@@ -7301,11 +7541,17 @@ namespaces:
           - {effect: flag, value: APF_tregua_nas, days: 364}
           - {effect: timed_idea, idea: APF_revancha, days: 364}
         - {effect: event, id: meganations_nas.182, days: 1, target: APF}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NAS_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NAS_destino_abierto}}
       src: user_design
     - id: 182
       art: meganations_paz_humillante
@@ -7362,11 +7608,17 @@ namespaces:
           - {effect: flag, value: NRE_tregua_nas, days: 364}
           - {effect: timed_idea, idea: NRE_revancha, days: 364}
         - {effect: event, id: meganations_nas.186, days: 1, target: NRE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NAS_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NAS_destino_abierto}}
       src: user_design
     - id: 186
       art: meganations_paz_humillante
@@ -8147,11 +8399,17 @@ namespaces:
           - {effect: flag, value: EFE_tregua_shd, days: 364}
           - {effect: timed_idea, idea: EFE_revancha, days: 364}
         - {effect: event, id: meganations_shd.162, days: 1, target: EFE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: SHD_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: SHD_destino_abierto}}
       src: user_design
     - id: 162
       art: meganations_paz_humillante
@@ -8214,11 +8472,17 @@ namespaces:
           - {effect: flag, value: FCU_tregua_shd, days: 364}
           - {effect: timed_idea, idea: FCU_revancha, days: 364}
         - {effect: event, id: meganations_shd.166, days: 1, target: FCU}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: SHD_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: SHD_destino_abierto}}
       src: user_design
     - id: 166
       art: meganations_paz_humillante
@@ -8281,11 +8545,17 @@ namespaces:
           - {effect: flag, value: ASC_tregua_shd, days: 364}
           - {effect: timed_idea, idea: ASC_revancha, days: 364}
         - {effect: event, id: meganations_shd.170, days: 1, target: ASC}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: SHD_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: SHD_destino_abierto}}
       src: user_design
     - id: 170
       art: meganations_paz_humillante
@@ -8348,11 +8618,17 @@ namespaces:
           - {effect: flag, value: HSN_tregua_shd, days: 364}
           - {effect: timed_idea, idea: HSN_revancha, days: 364}
         - {effect: event, id: meganations_shd.174, days: 1, target: HSN}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: SHD_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: SHD_destino_abierto}}
       src: user_design
     - id: 174
       art: meganations_paz_humillante
@@ -8412,11 +8688,17 @@ namespaces:
           - {effect: flag, value: NAS_tregua_shd, days: 364}
           - {effect: timed_idea, idea: NAS_revancha, days: 364}
         - {effect: event, id: meganations_shd.178, days: 1, target: NAS}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: SHD_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: SHD_destino_abierto}}
       src: user_design
     - id: 178
       art: meganations_paz_humillante
@@ -8479,11 +8761,17 @@ namespaces:
           - {effect: flag, value: APF_tregua_shd, days: 364}
           - {effect: timed_idea, idea: APF_revancha, days: 364}
         - {effect: event, id: meganations_shd.182, days: 1, target: APF}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: SHD_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: SHD_destino_abierto}}
       src: user_design
     - id: 182
       art: meganations_paz_humillante
@@ -8540,11 +8828,17 @@ namespaces:
           - {effect: flag, value: NRE_tregua_shd, days: 364}
           - {effect: timed_idea, idea: NRE_revancha, days: 364}
         - {effect: event, id: meganations_shd.186, days: 1, target: NRE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: SHD_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: SHD_destino_abierto}}
       src: user_design
     - id: 186
       art: meganations_paz_humillante
@@ -9894,11 +10188,17 @@ namespaces:
           - {effect: flag, value: EFE_tregua_nre, days: 364}
           - {effect: timed_idea, idea: EFE_revancha, days: 364}
         - {effect: event, id: meganations_nre.162, days: 1, target: EFE}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NRE_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NRE_destino_abierto}}
       src: user_design
     - id: 162
       art: meganations_paz_humillante
@@ -9961,11 +10261,17 @@ namespaces:
           - {effect: flag, value: FCU_tregua_nre, days: 364}
           - {effect: timed_idea, idea: FCU_revancha, days: 364}
         - {effect: event, id: meganations_nre.166, days: 1, target: FCU}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NRE_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NRE_destino_abierto}}
       src: user_design
     - id: 166
       art: meganations_paz_humillante
@@ -10028,11 +10334,17 @@ namespaces:
           - {effect: flag, value: ASC_tregua_nre, days: 364}
           - {effect: timed_idea, idea: ASC_revancha, days: 364}
         - {effect: event, id: meganations_nre.170, days: 1, target: ASC}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NRE_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NRE_destino_abierto}}
       src: user_design
     - id: 170
       art: meganations_paz_humillante
@@ -10095,11 +10407,17 @@ namespaces:
           - {effect: flag, value: HSN_tregua_nre, days: 364}
           - {effect: timed_idea, idea: HSN_revancha, days: 364}
         - {effect: event, id: meganations_nre.174, days: 1, target: HSN}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NRE_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NRE_destino_abierto}}
       src: user_design
     - id: 174
       art: meganations_paz_humillante
@@ -10159,11 +10477,17 @@ namespaces:
           - {effect: flag, value: NAS_tregua_nre, days: 364}
           - {effect: timed_idea, idea: NAS_revancha, days: 364}
         - {effect: event, id: meganations_nre.178, days: 1, target: NAS}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NRE_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NRE_destino_abierto}}
       src: user_design
     - id: 178
       art: meganations_paz_humillante
@@ -10226,11 +10550,17 @@ namespaces:
           - {effect: flag, value: SHD_tregua_nre, days: 364}
           - {effect: timed_idea, idea: SHD_revancha, days: 364}
         - {effect: event, id: meganations_nre.182, days: 1, target: SHD}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NRE_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NRE_destino_abierto}}
       src: user_design
     - id: 182
       art: meganations_paz_humillante
@@ -10293,11 +10623,17 @@ namespaces:
           - {effect: flag, value: APF_tregua_nre, days: 364}
           - {effect: timed_idea, idea: APF_revancha, days: 364}
         - {effect: event, id: meganations_nre.186, days: 1, target: APF}
-        ai_chance: 50
+        ai_chance:  # 2026-10-10: con el destino abierto la IA no firma: sigue la guerra
+          base: 50
+          modifiers:
+          - {factor: 0.25, when: {flag: NRE_destino_abierto}}
       - name: {english: 'No: all the way to their capital.', spanish: 'No: hasta su capital.'}
         effects:
         - {effect: add_war_support, value: 0.03}
-        ai_chance: 50
+        ai_chance:
+          base: 50
+          modifiers:
+          - {factor: 4, when: {flag: NRE_destino_abierto}}
       src: user_design
     - id: 186
       art: meganations_paz_humillante
@@ -11561,17 +11897,43 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: The Summit of the Eight, spanish: La Cumbre de las Ocho}
-      desc: {english: 'For the first time since 2100 the eight powers sit at the same table, in neutral Geneva. The accord is fragile; walking out
-          is easy.', spanish: 'Por primera vez desde 2100 las ocho potencias se sientan a la misma mesa, en la Ginebra neutral. El acuerdo es frágil;
-          levantarse es fácil.'}
+      # 2026-10-10 ("aparece un evento de congreso de las meganaciones pero no se
+      # entiende qué es ni para qué"): ahora dice qué se negocia y qué da cada opción.
+      desc:
+        english: 'For the first time since 2100, the eight meganations sit at the same table, in neutral Geneva. On the table: the water of the
+          great rivers, free passage for convoys, and what to do with the anarchies.\n\nWHAT IT IS: a one-year accord between the powers that
+          sign it. Every power receives this same invitation and decides on its own.\n\nIF WE SIGN: for a year, +5% stability and +0.15 political
+          power a day, but -5% war support (the people believe in peace), and 50 political power now for the prestige of the signature.\n\nIF WE
+          WALK OUT: +5% war support, but the other seven powers take it as an affront and like us less (-40 opinion).'
+        spanish: 'Por primera vez desde 2100, las ocho meganaciones se sientan a la misma mesa, en la Ginebra neutral. Sobre la mesa: el agua de
+          los grandes ríos, el paso libre de los convoyes y qué hacer con las anarquías.\n\nQUÉ ES: un acuerdo de un año entre las potencias que
+          lo firman. Cada potencia recibe esta misma invitación y decide por su cuenta.\n\nSI FIRMAMOS: durante un año, +5% de estabilidad y +0,15
+          de poder político por día, pero -5% de apoyo a la guerra (el pueblo cree en la paz), y 50 de poder político ahora por el prestigio de la
+          firma.\n\nSI NOS LEVANTAMOS: +5% de apoyo a la guerra, pero las otras siete potencias lo toman como una afrenta y nos miran peor (-40 de
+          opinión).'
       options:
-      - name: {english: Sign the accord., spanish: Firmar el acuerdo.}
+      - name: {english: 'Sign the Geneva accord (stability and political power for a year).', spanish: 'Firmar el acuerdo de Ginebra (estabilidad y poder político por un año).'}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_acuerdo_cumbre, days: 365}
+        - {effect: add_political_power, value: 50}
         ai_chance: 50
-      - name: {english: Walk out., spanish: Levantarse de la mesa.}
+      - name: {english: 'Walk out: we answer to no one.', spanish: 'Levantarse de la mesa: no le respondemos a nadie.'}
         effects:
         - {effect: add_war_support, value: 0.05}
+        - effect: every_country
+          when:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+            not: {tag: ROOT}
+          effects:
+          - {effect: opinion, target: ROOT, modifier: meganations_afrenta}
         ai_chance: 50
       src: user_request
     - id: 27

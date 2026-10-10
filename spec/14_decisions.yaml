@@ -7517,10 +7517,10 @@ categories:
         - [Miranda]
         - [Amazonas]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: EFE_proclamar_la_forma_final
       name: {english: Proclaim The Dominion of Gaia, spanish: Proclamar El Dominio de Gaia}
@@ -7624,10 +7624,10 @@ categories:
         - [Buenos Aires]
         - [Cundinamarca]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: FCU_proclamar_la_forma_final
       name: {english: Proclaim The Americas Corporation, spanish: Proclamar La Corporación de las Américas}
@@ -7721,10 +7721,10 @@ categories:
         - [Crimea]
         - [Kiev]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: ASC_proclamar_la_forma_final
       name: {english: Proclaim The Continental Commune, spanish: Proclamar La Comuna Continental}
@@ -7820,10 +7820,10 @@ categories:
         - [Gibraltar]
         - [Cape]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: HSN_proclamar_la_forma_final
       name:
@@ -7919,10 +7919,10 @@ categories:
         - [Cundinamarca]
         - [Miranda]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: NAS_proclamar_la_forma_final
       name: {english: Proclaim The Empire of the Eternal Sun, spanish: Proclamar El Imperio del Sol Eterno}
@@ -8014,10 +8014,10 @@ categories:
         - [West Java]
         - [Kabul]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: SHD_proclamar_la_forma_final
       name: {english: Proclaim The Celestial Harmony, spanish: Proclamar La Armonía Celeste}
@@ -8116,10 +8116,10 @@ categories:
         - [Madrid]
         - [Sofia]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: APF_proclamar_la_forma_final
       name: {english: Proclaim The Original Human Empire, spanish: Proclamar El Imperio Humano Original}
@@ -8220,10 +8220,10 @@ categories:
         - [Crimea]
         - [Sofia]
       ai:
-        factor: 5
-        modifiers:
-        - factor: 0.3
-          when: {at_war: true}
+        # 2026-10-10 ("que persiga más agresivamente sus objetivos finales"):
+        # prioridad alta, también en guerra (antes 5, y x0,3 en guerra)
+        factor: 25
+        modifiers: []
       src: user_request
     - id: NRE_proclamar_la_forma_final
       name: {english: Proclaim The Eternal Roman Empire, spanish: Proclamar El Imperio Romano Eterno}
@@ -13648,8 +13648,9 @@ dynamic_modifiers:
   - id: MEGANATIONS_acuerdo_cumbre
     country: null
     name: {english: The Summit Accord, spanish: El Acuerdo de la Cumbre}
-    desc: {english: A year of signed promises., spanish: Un año de promesas firmadas.}
-    modifiers: {stability_factor: 0.05, war_support_factor: -0.05}
+    desc: {english: 'We signed in Geneva: a year of promised peace. It wears off in a year.', spanish: 'Firmamos en Ginebra: un año de paz prometida.
+        Se va en un año.'}
+    modifiers: {stability_factor: 0.05, political_power_gain: 0.15, war_support_factor: -0.05}
   - id: MEGANATIONS_carrera_orbital
     country: null
     name: {english: The Orbital Race, spanish: La Carrera Orbital}

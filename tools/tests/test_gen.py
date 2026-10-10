@@ -2307,6 +2307,54 @@ def test_ai() -> None:
         check("icono copiado al mod", (mod / "gfx/interface/goals/EFE_custodio_de_la_tierra.dds").exists())
         efe = (mod / "common/national_focus/EFE_focus.txt").read_text()
         check("el foco usa el icono", "icon = GFX_focus_EFE_custodio_de_la_tierra" in efe)
+        # 2026-10-10: la IA persigue su forma final
+        import re as _re
+        ai = " ".join((mod / "common/ai_strategy/meganations_ai.txt").read_text().split())
+        arma = ai[ai.index("MEGANATIONS_APF_destino_se_arma = {"):][:500]
+        check("destino: con el destino abierto (y hasta proclamarlo) la IA sube fabricas militares",
+              "has_country_flag = APF_destino_abierto NOT = { has_country_flag = APF_forma_final }" in arma
+              and "type = added_military_to_civilian_factory_ratio value = 50" in arma, arma)
+        contra = ai[ai.index("MEGANATIONS_APF_destino_contra_NRE = {"):][:900]
+        check("destino: contra quien tiene sus regiones, prepararse, conquistar y hostigar",
+              "type = prepare_for_war id = NRE value = 150" in contra and "type = conquer id = NRE value = 250" in contra
+              and "type = antagonize id = NRE" in contra
+              and "NRE = { is_subject_of = APF }" in contra and "NOT = { country_exists = NRE }" in contra, contra)
+        decl = ai[ai.index("MEGANATIONS_APF_destino_declara_a_NRE = {"):][:900]
+        check("destino: declara con un ejercito de verdad (sin otra guerra, o uno muy grande)",
+              "type = declare_war id = NRE value = 200" in decl and "NOT = { has_war_with = NRE }" in decl
+              and "OR = { has_war = no has_army_size = { size > 49 } }" in decl
+              and "has_army_size = { size > 29 }" in decl, decl)
+        check("destino: nunca contra si mismo, sus satelites ni su faccion",
+              "destino_contra_APF" not in ai.split("MEGANATIONS_APF_destino_se_arma")[1].split("MEGANATIONS_ASC_destino_se_arma")[0]
+              and not _re.search(r"MEGANATIONS_(\w{3})_destino_contra_\1 ", ai))
+        check("destino: lo dice el reporte", any(n.startswith("ia: guerras del destino:") for n in ctx.notes))
+        apf = " ".join((mod / "events/meganations_apf.txt").read_text().split())
+        arm = apf[apf.index("id = meganations_apf.161 title"):][:4000]
+        check("destino: con el destino abierto la IA rechaza el armisticio y va hasta la capital",
+              "ai_chance = { base = 50 modifier = { factor = 0.25 has_country_flag = APF_destino_abierto } }" in arm
+              and "ai_chance = { base = 50 modifier = { factor = 4 has_country_flag = APF_destino_abierto } }" in arm, arm[-700:])
+        decs = " ".join(p.read_text() for p in (mod / "common/decisions").glob("*.txt")).split()
+        decs = " ".join(decs)
+        recl = decs[decs.index("EFE_reclamar_el_destino = {"):][:3000]
+        check("destino: reclamar el destino tiene mas peso para la IA",
+              "ai_will_do = { factor = 25 }" in recl, recl[-600:])
+        # La Cumbre de las Ocho (2106) explicada y con consecuencias
+        mundo = " ".join((mod / "events/meganations_mundo.txt").read_text().split())
+        e26 = mundo[mundo.index("id = meganations_mundo.26 title"):][:1500]
+        check("cumbre: firmar da el acuerdo y poder politico",
+              "modifier = MEGANATIONS_acuerdo_cumbre days = 365" in e26 and "add_political_power = 50" in e26, e26)
+        check("cumbre: levantarse ofende a las otras siete",
+              "add_war_support = 0.05" in e26 and "NOT = { tag = ROOT }" in e26
+              and "add_opinion_modifier = { target = ROOT modifier = meganations_afrenta }" in e26, e26)
+        evloc = (mod / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
+        d26 = evloc[evloc.index("meganations_mundo.26.d:"):].split("\n")[0]
+        check("cumbre: el texto dice que es y que da cada opcion",
+              "QUÉ ES" in d26 and "SI FIRMAMOS" in d26 and "SI NOS LEVANTAMOS" in d26, d26)
+        dm = " ".join((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text().split())
+        acu = dm[dm.index("MEGANATIONS_acuerdo_cumbre = {"):][:300]
+        check("cumbre: el acuerdo coincide con el texto (+5% estabilidad, +0,15 PP, -5% apoyo a la guerra)",
+              "stability_factor = 0.05" in acu and "political_power_gain = 0.15" in acu
+              and "war_support_factor = -0.05" in acu, acu)
 
     with tempfile.TemporaryDirectory() as tmp:
         van = Path(tmp) / "vanilla"

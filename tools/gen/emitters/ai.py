@@ -141,6 +141,7 @@ def emit(ctx: BuildContext) -> None:
 
     _military_plans(ctx, spec.get("military") or {}, add_plan)
     _anarchy_war_plans(ctx, spec.get("anarchy_wars") or {}, add_plan)
+    _destiny_war_plans(ctx, spec.get("destiny_wars") or {}, add_plan)
 
     for p in spec.get("plans", []) or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
@@ -259,6 +260,74 @@ def _research_weights(mil: dict, tag: str) -> list[dict]:
         for t in block.get("techs") or []:
             best[t] = max(best.get(t, 0), int(v))
     return [{"type": "research_weight_factor", "id": t, "value": v} for t, v in best.items()]
+
+
+def destiny_targets(ctx: BuildContext) -> dict[str, list[str]]:
+    """Meganación -> quiénes tienen al arrancar las regiones que pide su forma
+    final (las de <TAG>_reclamar_el_destino, 14_decisions), sin ella misma,
+    sus satélites ni su facción."""
+    from .territory import normalize
+    ids = ctx.data.get("state_ids_by_name") or {}
+    territory = ctx.data.get("territory") or {}
+    subjects = {c.tag: c.overlord for c in ctx.spec.countries if c.is_subject}
+    faction_of = {}
+    for f in (ctx.spec.raw["diplomacy"].get("factions") or []):
+        for m in f.get("members") or []:
+            faction_of[m] = f["id"]
+    out: dict[str, list[str]] = {}
+    for cat in (ctx.spec.raw.get("decisions") or {}).get("categories") or []:
+        for d in cat.get("decisions") or []:
+            if not str(d.get("id", "")).endswith("_reclamar_el_destino"):
+                continue
+            tag = d["id"].split("_")[0]
+            holders: list[str] = []
+            for e in d.get("effects") or []:
+                if e.get("effect") != "wargoal_holders":
+                    continue
+                for names in e.get("states") or []:
+                    sid = next((ids[normalize(n)] for n in names if normalize(n) in ids), None)
+                    who = territory.get(sid)
+                    if (who and who != tag and subjects.get(who) != tag
+                            and not (faction_of.get(who) and faction_of.get(who) == faction_of.get(tag))
+                            and who not in holders):
+                        holders.append(who)
+            out[tag] = holders
+    return out
+
+
+def _destiny_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
+    """La IA persigue su forma final (2026-10-10, pedido del usuario: "que
+    persiga más agresivamente sus objetivos finales"). Con el destino abierto
+    (<TAG>_destino_abierto) y hasta proclamarla: más fábricas militares, y
+    contra cada dueño de arranque de sus regiones: prepararse, conquistar,
+    hostigar y declarar con un ejército de verdad (sin otra guerra, o con uno
+    muy grande)."""
+    if not wars:
+        return
+    targets = destiny_targets(ctx)
+    lines = []
+    for tag, holders in sorted(targets.items()):
+        open_ = {"flag": f"{tag}_destino_abierto", "not_flag": f"{tag}_forma_final"}
+        done = {"flag": f"{tag}_forma_final"}
+        if wars.get("military_ratio"):
+            add_plan(f"{tag}_destino_se_arma", tag,
+                     [{"type": "added_military_to_civilian_factory_ratio", "value": int(wars["military_ratio"])}],
+                     enable=open_, abort=done)
+        for t in holders:
+            gone = {"any": [done, {"not": {"country_exists": t}}, {"country": {"tag": t, "when": {"subject_of": tag}}}]}
+            add_plan(f"{tag}_destino_contra_{t}", tag, [
+                {"type": "prepare_for_war", "target": t, "value": wars.get("prepare", 150)},
+                {"type": "conquer", "target": t, "value": wars.get("conquer", 250)},
+                {"type": "antagonize", "target": t, "value": wars.get("antagonize", 60)},
+            ], enable=open_, abort=gone)
+            declare = dict(open_)
+            declare["not"] = {"war_with": t}
+            declare["any"] = [{"at_war": False}, {"divisions_at_least": int(wars.get("divisions_two_fronts", 50))}]
+            declare["divisions_at_least"] = int(wars.get("divisions", 30))
+            add_plan(f"{tag}_destino_declara_a_{t}", tag,
+                     [{"type": "declare_war", "target": t, "value": wars.get("declare", 200)}], enable=declare, abort=gone)
+        lines.append(f"{tag} contra {', '.join(holders) or '-'}")
+    ctx.note("ia: guerras del destino: " + "; ".join(lines))
 
 
 def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:

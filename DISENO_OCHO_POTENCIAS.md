@@ -1211,3 +1211,25 @@ llega a 100 al toque y la tensión nunca sube".
   reacción -> scramjet, tanque superpesado -> acorazado terrestre...); los
   mismos términos alcanzan a sus tecnologías (sp_...). El reporte lista los
   que no cambiaron; `special_projects` pisa uno puntual.
+
+## IA del destino y la Cumbre de las Ocho (2026-10-10)
+
+- **La IA persigue su forma final** (16_ai -> destiny_wars). Desde que se
+  abre el destino (<TAG>_destino_abierto) y hasta proclamar la forma final
+  (<TAG>_forma_final):
+  - más fábricas militares (added_military_to_civilian_factory_ratio 50);
+  - contra cada país que al arrancar tiene una región que pide su forma
+    final (las de <TAG>_reclamar_el_destino, sin ella misma, sus satélites
+    ni su facción): prepararse para la guerra (150), conquistar (250) y
+    hostigar (60). El plan se cae si el rival desaparece o ya es su satélite;
+  - declarar la guerra (200) con un ejército de verdad: 30 divisiones, y si
+    ya está en otra guerra, 50;
+  - reclamar el destino pesa 25 (antes 5, y x0,3 en guerra), y en los 56
+    armisticios entre potencias, con el destino abierto, la IA acepta 4 veces
+    menos y elige "hasta su capital" 4 veces más (ai_chance con modifier en
+    12_events).
+- **La Cumbre de las Ocho** (mundo.26, 2106) ahora dice qué es y qué da cada
+  opción. Firmar el acuerdo de Ginebra: un año de +5% de estabilidad, +0,15
+  de poder político por día y -5% de apoyo a la guerra, más 50 de poder
+  político. Levantarse: +5% de apoyo a la guerra, y las otras siete potencias
+  le bajan 40 de opinión (meganations_afrenta).
