@@ -138,3 +138,32 @@ resource_floor:
   src: invented
   per_meganation: 20
   resources: [oil, steel, aluminium, rubber, tungsten, chromium]
+
+# -----------------------------------------------------------------------------
+# Repoblación (2026-10-10, pedido del usuario: "en las regiones con menos
+# manpower agregá una buena inyección de gente, crecimiento o población
+# reclutable, con focos que ya existen"). Se mide al armar el mod, con la
+# población ya comprimida (population, arriba): cada meganación con menos de
+# `below` x la mediana de las meganaciones recibe la ayuda en dos focos suyos
+# que se pueden hacer siempre (no dependen de una rama excluyente); con menos de
+# `strong_below`, la ayuda fuerte. El reporte dice a quién le tocó.
+# -----------------------------------------------------------------------------
+manpower_relief:
+  src: user_request
+  below: 0.8
+  strong_below: 0.5
+  focuses:            # [inyección de gente, crecimiento]
+    EFE: [legiones_de_iguazu, la_ley_de_la_semilla]
+    FCU: [seguro_de_vida, el_dividendo_de_la_nacion]
+    ASC: [la_abundancia_armada, computo_para_la_tierra]
+    HSN: [marines_de_alta_mar, ciudades_flotantes]
+    NAS: [guerreros_de_la_puna, nuevas_granjas_del_sol]
+    SHD: [infanteria_de_masa, el_mandato_armonioso]
+    APF: [milicias_regulares, un_solo_pueblo]
+    NRE: [las_legiones, colonias_de_veteranos]
+  normal:
+    first: {manpower: 100000, modifier: MEGANATIONS_repoblacion_1}
+    second: {manpower: 150000, modifier: MEGANATIONS_repoblacion_2}
+  strong:
+    first: {manpower: 200000, modifier: MEGANATIONS_repoblacion_fuerte_1}
+    second: {manpower: 300000, modifier: MEGANATIONS_repoblacion_fuerte_2}

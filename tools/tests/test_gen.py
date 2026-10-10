@@ -1744,8 +1744,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion y 30 de capitales tomadas",
-              len(dm.entries) == 77 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas y 4 de repoblacion",
+              len(dm.entries) == 81 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -3225,6 +3225,45 @@ def _diversion_checks(ctx) -> None:
           and "army_armor_attack_factor = 0.025" in pta_b, efe_b + " | " + pta_b)
 
 
+def test_repoblacion() -> None:
+    section("repoblacion: las meganaciones con menos gente reciben ayuda en focos que ya existen (2026-10-10)")
+    from tools.gen.emitters import manpower_relief
+    import yaml
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        check("repoblacion: el reporte dice a quien le toca", any(n.startswith("repoblacion:") for n in ctx.notes))
+    manpower_relief.FORCE = {"below": 1000, "strong_below": 1000}   # todos por debajo, ayuda fuerte
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+            mod = ctx.mod_root
+            efe = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text().split())
+            f1 = efe[efe.index("id = EFE_legiones_de_iguazu "):][:700]
+            f2 = efe[efe.index("id = EFE_la_ley_de_la_semilla "):][:1500]
+            check("repoblacion: el primer foco da gente y el espiritu de repoblacion, sin perder lo que ya daba",
+                  "add_manpower = 200000" in f1 and "modifier = MEGANATIONS_repoblacion_fuerte_1" in f1
+                  and "add_manpower = 50000" in f1 and "category = artillery" in f1, f1)
+            check("repoblacion: el segundo, mas gente y crecimiento", "add_manpower = 300000" in f2
+                  and "modifier = MEGANATIONS_repoblacion_fuerte_2" in f2, f2)
+            dm = " ".join((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text().split())
+            rep = dm[dm.index("MEGANATIONS_repoblacion_fuerte_1 = {"):][:300]
+            check("repoblacion: crecimiento y poblacion reclutable", "monthly_population = 0.25" in rep
+                  and "recruitable_population_factor = 0.1" in rep, rep)
+            check("repoblacion: el reporte lo lista", any("EFE" in n and n.startswith("repoblacion:") for n in ctx.notes))
+    finally:
+        manpower_relief.FORCE = None
+    raw = yaml.safe_load((REPO_ROOT / "spec/15_balance.yaml").read_text(encoding="utf-8"))["manpower_relief"]
+    trees = yaml.safe_load((REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8"))["trees"]
+    bad = []
+    for tag, ids in raw["focuses"].items():
+        fs = {f["id"]: f for b in trees[tag]["branches"] for f in b["focuses"]}
+        excl = {k for k, f in fs.items() if f.get("mutually_exclusive")} | {m for f in fs.values() for m in f.get("mutually_exclusive") or []}
+        def risky(k, seen=()):
+            return k in excl or any(risky(p, seen + (k,)) for p in fs[k].get("prerequisites") or [] if p in fs and p not in seen)
+        bad += [f"{tag}_{i}" for i in ids if f"{tag}_{i}" not in fs or risky(f"{tag}_{i}")]
+    check("repoblacion: los focos elegidos existen y no dependen de una rama excluyente", not bad, str(bad))
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -3266,6 +3305,7 @@ def main() -> int:
         test_diplomacy,
         test_capitales_y_rebeliones,
         test_diversion,
+        test_repoblacion,
         test_vanilla_validation,
     ):
         test()

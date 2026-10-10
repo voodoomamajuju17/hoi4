@@ -1319,3 +1319,30 @@ MEGANATIONS_botin_<TAG> (14_decisions -> dynamic_modifiers), una vez por país:
 | Tierras Sin Ley | Las Armas de las Tierras Sin Ley | +3% defensa |
 | Santuario de Gaia | Las Semillas del Santuario | +2% estabilidad, +3% población |
 | Cada satélite | El Botín de ... | la mitad del de su señor |
+
+## Repoblación de las meganaciones con menos gente (2026-10-10)
+
+Pedido: "En las regiones con menos manpower, agregá una buena inyección de
+gente, crecimiento o población reclutable, con focos que ya existen"
+(15_balance -> manpower_relief, `tools/gen/emitters/manpower_relief.py`). Al
+armar el mod se mide la población de cada meganación (ya comprimida): por
+debajo del 80% de la mediana recibe ayuda; por debajo del 50%, la fuerte. La
+ayuda va al final de la recompensa de dos focos suyos que se pueden hacer
+siempre (no dependen de una rama excluyente):
+
+| Potencia | Inyección de gente | Crecimiento |
+|---|---|---|
+| EFE | Las Legiones de Iguazú | La Ley de la Semilla |
+| FCU | Seguro de Vida | El Dividendo de la Nación |
+| ASC | La Abundancia Armada | Cómputo para la Tierra |
+| HSN | Marines de Alta Mar | Ciudades Flotantes |
+| NAS | Guerreros de la Puna | Nuevas Granjas del Sol |
+| SHD | Infantería de Masa | El Mandato Armonioso |
+| APF | Milicias Regulares | Un Solo Pueblo |
+| NRE | Las Legiones | Colonias de Veteranos |
+
+Normal: 100.000 hombres y La Repoblación (+15% crecimiento, +5% reclutable),
+después 150.000 y Las Cunas Llenas (+10% crecimiento, +5% reclutable). Fuerte:
+200.000 y La Gran Repoblación (+25%, +10%), después 300.000 y Las Cunas
+Desbordadas (+20%, +10%). Espíritus permanentes. El reporte dice a quién le
+tocó ("repoblacion: ...").

@@ -14806,6 +14806,28 @@ dynamic_modifiers:
     desc: {english: 'Absorbed when we took the capital of the Province of Dacia: +2.5% organization, +1.5% attack.', spanish: 'Absorbido al tomar la capital de la Provincia de Dacia: +2,5% de organización, +1,5% de ataque.'}
     modifiers: {army_org_factor: 0.025, army_attack_factor: 0.015}
 
+  # 2026-10-10: repoblación de las meganaciones con menos gente (15_balance -> manpower_relief)
+  - id: MEGANATIONS_repoblacion_1
+    country: null
+    name: {english: 'Repopulation', spanish: 'La Repoblación'}
+    desc: {english: 'Settlers, clinics and land for whoever comes: +15% population growth, +5% recruitable population.', spanish: 'Colonos, clínicas y tierra para el que venga: +15% de crecimiento de población, +5% de población reclutable.'}
+    modifiers: {monthly_population: 0.15, recruitable_population_factor: 0.05}
+  - id: MEGANATIONS_repoblacion_2
+    country: null
+    name: {english: 'Full Cradles', spanish: 'Las Cunas Llenas'}
+    desc: {english: 'A generation that grew up fed: +10% population growth, +5% recruitable population.', spanish: 'Una generación que creció comiendo: +10% de crecimiento de población, +5% de población reclutable.'}
+    modifiers: {monthly_population: 0.1, recruitable_population_factor: 0.05}
+  - id: MEGANATIONS_repoblacion_fuerte_1
+    country: null
+    name: {english: 'The Great Repopulation', spanish: 'La Gran Repoblación'}
+    desc: {english: 'Every empty valley gets a village: +25% population growth, +10% recruitable population.', spanish: 'Cada valle vacío recibe una aldea: +25% de crecimiento de población, +10% de población reclutable.'}
+    modifiers: {monthly_population: 0.25, recruitable_population_factor: 0.1}
+  - id: MEGANATIONS_repoblacion_fuerte_2
+    country: null
+    name: {english: 'The Overflowing Cradles', spanish: 'Las Cunas Desbordadas'}
+    desc: {english: 'Schools, granaries and pensions for large families: +20% population growth, +10% recruitable population.', spanish: 'Escuelas, graneros y pensiones para las familias grandes: +20% de crecimiento de población, +10% de población reclutable.'}
+    modifiers: {monthly_population: 0.2, recruitable_population_factor: 0.1}
+
 variable_names:
   APF_desarrollo_zet: {english: "Highlands Development", spanish: "Desarrollo de las Tierras Altas"}
   APF_desarrollo_zsa: {english: "Cape Development", spanish: "Desarrollo del Cabo"}
