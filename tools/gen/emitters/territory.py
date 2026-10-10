@@ -139,6 +139,12 @@ def emit(ctx: BuildContext) -> None:
     claims = _claims(ctx, assignment, states)
     ctx.data["claims"] = claims
     resource_delta, added = economy_mod.plan(ctx, assignment, capitals)
+    # Infraestructura y centros de suministro de 2100 (logistics.py, 2026-10-10)
+    from . import logistics as logistics_mod
+    for sid, delta in logistics_mod.infrastructure_plan(ctx, assignment, capitals, by_state).items():
+        added.setdefault(sid, {})
+        added[sid]["infrastructure"] = added[sid].get("infrastructure", 0) + delta
+    logistics_mod.supply_plan(ctx, assignment, capitals, states)
     ctx.data["resource_delta"] = resource_delta
     ctx.data["added_buildings"] = added
     manpower_new = economy_mod.population_plan(ctx, assignment)

@@ -205,6 +205,47 @@ def emit(ctx: BuildContext) -> None:
 
         effects.add(f"{uid}_desbloqueo", body)
 
+        # Botín de capital (2026-10-10): al tomar la capital de un enemigo
+        # (meganación o anarquía) el evento corre <id>_botin: si la unidad no
+        # estaba desbloqueada se desbloquea, llega su equipo (o se encarga, si
+        # es un barco) y 3 divisiones gigantes salen en la capital propia.
+        spoils = u.get("capital_spoils")
+        if spoils:
+            loot = Block([("if", Block([
+                ("limit", Block([("NOT", Block([("has_country_flag", f"{uid}_desbloqueado")]))])),
+                (f"{uid}_desbloqueo", True)]))])
+            if eq_type and spoils.get("equipment"):
+                sb = Block([("type", eq_type), ("amount", int(spoils["equipment"])), ("producer", tag)])
+                if version:
+                    sb.add("variant_name", Quoted(version))
+                loot.add("add_equipment_to_stockpile", sb)
+            if eq_type and spoils.get("production"):
+                pr = spoils["production"]
+                eb = Block([("type", eq_type), ("creator", Quoted(tag))])
+                if version:
+                    eb.add("version_name", Quoted(version))
+                loot.add("add_equipment_production", Block([
+                    ("equipment", eb), ("requested_factories", int(pr.get("factories", 1))),
+                    ("progress", float(pr.get("progress", 0))), ("amount", int(pr.get("amount", 1)))]))
+                effects_used.setdefault("add_equipment_production", uid)
+            stpl = spoils.get("template") or {}
+            regs = [r if r in sub_units else "infantry" for r in stpl.get("regiments") or []]
+            missing = sorted({r for r in stpl.get("regiments") or [] if r not in sub_units})
+            if missing:
+                ctx.warn(f"{uid}: botin de capital con batallones que el juego no tiene ({', '.join(missing)}): van de infanteria")
+            if regs:
+                support_type = ctx.vanilla.support_sub_units()
+                line = [r for r in regs if r not in support_type][:25] or ["infantry"]
+                sup = [r for r in regs if r in support_type][:5]
+                loot_dsl = [{"effect": "division_template", "name": stpl["name"], "regiments": line, "support": sup},
+                            {"effect": "create_units", "template": stpl["name"], "count": int(spoils.get("divisions", 3)),
+                             "experience": float(spoils.get("experience", 0.5))}]
+                loot.entries.extend(render_effects(uid, loot_dsl, ec, effects_used, where=SOURCE).entries)
+            effects.add(f"{uid}_botin", loot)
+            ctx.data.setdefault("capital_spoils", {})[tag] = spoils["event"]
+            ctx.note(f"botin de capital {uid}: {spoils.get('equipment') or spoils.get('production')} "
+                     f"de {eq_type or '-'} y {spoils.get('divisions', 3)} divisiones '{stpl.get('name')}' de {len(line) if regs else 0} batallones")
+
         # Estadísticas del batallón que no son del equipo (ej. uso de
         # suministros): se cambia la definición del juego (solo la tiene esta
         # potencia). Factor: 1.05 = +5%.

@@ -106,6 +106,16 @@ units:
       regiments: [modern_armor, modern_armor, modern_armor, motorized, motorized, motorized]
     divisions: 1
     production: {amount: 30, factories: 3, progress: 0}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_efe.300
+      equipment: 1000
+      template: {name: Rebaño Colosal, regiments: [modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, modern_armor, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized]}
+      divisions: 3
+      experience: 0.5
     ai: []     # el EFE ya prioriza blindados (16_ai.yaml); alcanza con la cola de producción
     spirit:
       id: EFE_el_rebano_de_gliptodontes
@@ -147,6 +157,16 @@ units:
     # (add_equipment_to_stockpile no los acepta): salen de la producción.
     grant: {}
     production: {amount: 2, factories: 3, progress: 0.2}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_shd.300
+      equipment: 6
+      template: {name: Ejército del Gran Canal, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, anti_air_brigade, anti_air_brigade]}
+      divisions: 3
+      experience: 0.5
     ai:
     - {type: equipment_production_factor, id: railway_gun, value: 10}
     spirit:
@@ -199,6 +219,16 @@ units:
         rear_1_custom_slot: [super_heavy_battery, heavy_battery]
       upgrades: {engine: 3, armor: 3, reliability: 2}
     production: {amount: 1, factories: 3, progress: 0.25}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_hsn.300
+      production: {amount: 2, factories: 5, progress: 0.9}
+      template: {name: Infantería del Leviatán, regiments: [marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, marine, infantry, infantry, infantry, infantry, infantry]}
+      divisions: 3
+      experience: 0.5
     ai:
     - {type: equipment_production_factor, id: capital_ship, value: 10}
     spirit:
@@ -241,6 +271,16 @@ units:
       regiments: [paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper]
     divisions: 1
     production: {amount: 20, factories: 1, progress: 0}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_nas.300
+      equipment: 300
+      template: {name: Bandada del Cóndor, regiments: [paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, paratrooper, mountaineers, mountaineers, mountaineers, mountaineers, mountaineers, mountaineers, mountaineers, mountaineers, mountaineers, mountaineers]}
+      divisions: 3
+      experience: 0.5
     ai:
     - {type: role_ratio, id: paratroopers, value: 8}
     spirit:
@@ -285,6 +325,16 @@ units:
       regiments: [infantry, infantry, infantry, infantry, infantry, infantry, rocket_artillery_brigade, rocket_artillery_brigade]
     divisions: 1
     production: {amount: 60, factories: 2, progress: 0}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_nre.300
+      equipment: 1200
+      template: {name: Legión Onagra, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, rocket_artillery_brigade, rocket_artillery_brigade, rocket_artillery_brigade, rocket_artillery_brigade, rocket_artillery_brigade, rocket_artillery_brigade, rocket_artillery_brigade, rocket_artillery_brigade, artillery_brigade, artillery_brigade]}
+      divisions: 3
+      experience: 0.5
     ai:
     - {type: equipment_production_factor, id: rocket_artillery, value: 10}
     spirit:
@@ -330,6 +380,16 @@ units:
       regiments: [armored_car, armored_car, armored_car, armored_car, motorized, motorized]
     divisions: 1
     production: {amount: 100, factories: 2, progress: 0}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_asc.300
+      equipment: 1500
+      template: {name: Enjambre Centinela, regiments: [armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, armored_car, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized]}
+      divisions: 3
+      experience: 0.5
     ai:
     - {type: equipment_production_factor, id: armored_car, value: 10}
     spirit:
@@ -372,6 +432,16 @@ units:
       regiments: [amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, infantry, infantry]
     divisions: 1
     production: {amount: 100, factories: 2, progress: 0}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_apf.300
+      equipment: 1200
+      template: {name: Manada Kiboko, regiments: [amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, amphibious_mechanized, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry]}
+      divisions: 3
+      experience: 0.5
     ai:
     - {type: role_ratio, id: mobile, value: 8}
     - {type: equipment_production_factor, id: amphibious_mechanized, value: 10}
@@ -421,6 +491,16 @@ units:
     grant:
       equipment: 20
     production: {amount: 20, factories: 3, progress: 0}
+    # 2026-10-10 (pedido del usuario): al tomar la capital de una meganación o
+    # de una anarquía enemiga, el evento `event` da el botín: el equipo de la
+    # unidad (si todavía no estaba desbloqueada, se desbloquea) y 3 divisiones
+    # gigantes en la capital propia. Una vez por cada enemigo.
+    capital_spoils:
+      event: meganations_fcu.300
+      equipment: 150
+      template: {name: Guardia Obsidiana, regiments: [mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, mechanized, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized, motorized]}
+      divisions: 3
+      experience: 0.5
     ai:
     - {type: equipment_production_factor, id: strategic_bomber, value: 10}
     spirit:

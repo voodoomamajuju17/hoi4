@@ -1544,6 +1544,22 @@ namespaces:
           - {effect: add_war_support, value: 0.03}
         src: user_design
   # ===========================================================================
+      # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+      # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+      - id: 300
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Capital Falls to the Forest", spanish: "La Capital Cae ante el Monte"}
+        desc:
+          english: "The Green Guard has entered the capital of [meganations_capital_caida.GetName]. In the vats of the Plain, the Gaia Laboratory answers with one harvest: a thousand Glyptodon hulls, and three Colossal Herds marching out of our capital. If the Glyptodon was not yet in service, it is now."
+          spanish: "La Guardia Verde entró en la capital de [meganations_capital_caida.GetName]. En las cubas de la Llanura, el Laboratorio de Gaia responde con una sola cosecha: mil cascos de Gliptodonte y tres Rebaños Colosales que salen de nuestra capital. Si el Gliptodonte todavía no estaba en servicio, ahora lo está."
+        options:
+        - name: {english: "Let the earth remember them.", spanish: "Que la tierra los recuerde."}
+          effects:
+          - {effect: run, value: EFE_gliptodonte_botin}
+          - {effect: add_war_support, value: 0.05}
+        src: user_request
+
   meganations_fcu:
     country: FCU
     events:
@@ -2838,6 +2854,97 @@ namespaces:
           effects: []
 
         src: user_request
+      # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+      # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+      - id: 300
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Hostile Takeover", spanish: "Adquisición Hostil"}
+        desc:
+          english: "The capital of [meganations_capital_caida.GetName] has been acquired. The Board books the profit: a hundred and fifty Obsidian Wings and three divisions of the Obsidian Guard, delivered to our capital. If the Obsidian Wing was not yet in service, it is now."
+          spanish: "La capital de [meganations_capital_caida.GetName] fue adquirida. El Directorio registra la ganancia: ciento cincuenta Alas de Obsidiana y tres divisiones de la Guardia Obsidiana, entregadas en nuestra capital. Si el Ala de Obsidiana todavía no estaba en servicio, ahora lo está."
+        options:
+        - name: {english: "Close the deal.", spanish: "Cerrar el trato."}
+          effects:
+          - {effect: run, value: FCU_ala_de_obsidiana_botin}
+          - {effect: add_war_support, value: 0.05}
+        src: user_request
+      # 2026-10-10 (pedido del usuario): una corporación se rebela y se alía con las Tierras Sin Ley
+      - id: 310
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Meridian Stops Paying, spanish: Meridian Deja de Pagar}
+        desc:
+          english: 'Meridian Water & Power, the corporation that lost the southern water at Iguazú, has stopped paying its share to the Directorate. Its
+            security divisions are moving into the Midwest, where the Lawless Lands sell fuel and men to anyone who pays.'
+          spanish: 'Meridian Water & Power, la corporación que perdió el agua del sur en Iguazú, dejó de pagarle su parte al Directorio. Sus divisiones
+            de seguridad se están mudando al Medio Oeste, donde las Tierras Sin Ley le venden combustible y hombres a quien pague.'
+        options:
+        - name: {english: Buy back their loyalty., spanish: Comprarles la lealtad.}
+          effects:
+          - {effect: add_political_power, value: -150}
+          - {effect: event, id: meganations_fcu.311, days: 120}
+          ai_chance: 40
+        - name: {english: Freeze their accounts., spanish: Intervenir sus cuentas.}
+          effects:
+          - {effect: add_stability, value: -0.02}
+          - {effect: event, id: meganations_fcu.311, days: 30}
+          ai_chance: 60
+        src: user_request
+      - id: 311
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Meridian Militias, spanish: Las Milicias de Meridian}
+        desc:
+          english: 'The money only bought time. Meridian armed its security divisions, and its envoys were seen at the ranches of the Lawless warlords.
+            The board of Meridian talks about a free company, with no Directorate above it.'
+          spanish: 'La plata solo compró tiempo. Meridian armó a sus divisiones de seguridad y a sus enviados los vieron en los ranchos de los caudillos
+            Sin Ley. El directorio de Meridian habla de una compañía libre, sin Directorio por encima.'
+        options:
+        - name: {english: One last offer., spanish: Una última oferta.}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: event, id: meganations_fcu.312, days: 30}
+          ai_chance: 40
+        - name: {english: Strike first., spanish: Golpear primero.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: event, id: meganations_fcu.312, days: 7}
+          ai_chance: 60
+        src: user_request
+      - id: 312
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Meridian Secession, spanish: La Secesión de Meridian}
+        desc:
+          english: 'Meridian has declared itself the Meridian Free Company, sovereign over its pipelines, dams and shareholders. The Lawless Lands answered
+            the same night: the frontier stands with Meridian.'
+          spanish: 'Meridian se declaró la Compañía Libre Meridian, soberana de sus acueductos, sus represas y sus accionistas. Las Tierras Sin Ley contestaron
+            esa misma noche: la frontera está con Meridian.'
+        options:
+        - name: {english: Then the market will decide., spanish: Entonces que decida el mercado.}
+          effects:
+          - effect: civil_war
+            tag: FCU
+            ideology: neutrality
+            size: 0.25
+            global_flag: FCU_secesion_meridian
+            rebels:
+              cosmetic_tag: FCU_MERIDIAN
+              leader:
+                name: {english: 'Ezra Vance, Director-General of Meridian', spanish: 'Ezra Vance, Director General de Meridian'}
+              effects:
+              - {effect: run, value: MEGANATIONS_hermandad_sin_ley}
+          - effect: scope
+            target: ZAN
+            effects:
+            - effect: if
+              when: {not: {war_with: FCU}}
+              then:
+              - {effect: declare_war, target: FCU, type: annex_everything}
+          - {effect: add_war_support, value: 0.05}
+        src: user_request
+
   meganations_hsn:
     country: HSN
     events:
@@ -4035,6 +4142,103 @@ namespaces:
           effects: []
 
         src: user_request
+      # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+      # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+      - id: 300
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Market Buys a Capital", spanish: "El Mercado Compra una Capital"}
+        desc:
+          english: "The capital of [meganations_capital_caida.GetName] has fallen, and the insurers are already pricing it. The yards rush two Leviathans to the water and three divisions of Leviathan Marines come ashore at our capital. If the Leviathan was not yet in service, it is now."
+          spanish: "La capital de [meganations_capital_caida.GetName] cayó, y las aseguradoras ya le están poniendo precio. Los astilleros apuran dos Leviatanes y tres divisiones de Infantería del Leviatán desembarcan en nuestra capital. Si el Leviatán todavía no estaba en servicio, ahora lo está."
+        options:
+        - name: {english: "Everything has a price.", spanish: "Todo tiene un precio."}
+          effects:
+          - {effect: run, value: HSN_leviatan_botin}
+          - {effect: add_war_support, value: 0.05}
+        src: user_request
+      # 2026-10-10 (pedido del usuario): el satélite australiano se rebela y se vuelve república pirata
+      - id: 310
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Southern Captains Grumble, spanish: Los Capitanes del Sur Murmuran}
+        desc:
+          english: 'The captains of the Australian charter are tired of paying the Toll on routes they sail themselves. In the taverns of Sydney they say
+            the sea belongs to whoever sails it.'
+          spanish: 'Los capitanes de la carta australiana están cansados de pagar el Peaje en rutas que navegan ellos mismos. En las tabernas de Sídney
+            dicen que el mar es de quien lo navega.'
+        options:
+        - name: {english: Lower their toll., spanish: Bajarles el peaje.}
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: event, id: meganations_hsn.311, days: 120}
+          ai_chance: 40
+        - name: {english: They pay like everyone else., spanish: Que paguen como todos.}
+          effects:
+          - {effect: event, id: meganations_hsn.311, days: 30}
+          ai_chance: 60
+        src: user_request
+      - id: 311
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Sydney Closes the Port, spanish: Sídney Cierra el Puerto}
+        desc:
+          english: 'The harbour master of Sydney has chained the port shut to our ships. The charter fleet is taking on guns, and nobody there answers
+            our cables any more.'
+          spanish: 'El capitán del puerto de Sídney cerró el puerto con cadenas para nuestros barcos. La flota de la carta está cargando cañones, y allá
+            ya nadie contesta nuestros cables.'
+        options:
+        - name: {english: Send the fleet to open it., spanish: Mandar la flota a abrirlo.}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: event, id: meganations_hsn.312, days: 7}
+          ai_chance: 60
+        - name: {english: Wait for them to see reason., spanish: Esperar a que entren en razón.}
+          effects:
+          - {effect: add_stability, value: -0.02}
+          - {effect: event, id: meganations_hsn.312, days: 45}
+          ai_chance: 40
+        src: user_request
+      - id: 312
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Pirate Republic Is Born, spanish: Nace la República Pirata}
+        desc:
+          english: 'Australia has torn up its charter. Every captain votes, every prize is shared, and the black flag with the Southern Cross flies over
+            Sydney. The Pirate Republic of the Southern Sea is at war with us, with a fleet three times what the charter had and an army raised in a
+            week. The Lawless Lands call them brothers.'
+          spanish: 'Australia rompió su carta. Cada capitán vota, cada presa se reparte y la bandera negra con la Cruz del Sur flamea sobre Sídney. La República
+            Pirata del Mar del Sur está en guerra con nosotros, con una flota tres veces más grande que la de la carta y un ejército levantado en una
+            semana. Las Tierras Sin Ley los llaman hermanos.'
+        options:
+        - name: {english: Sink them all., spanish: Hundirlos a todos.}
+          effects:
+          - {effect: end_puppet, value: ZAS}
+          - effect: scope
+            target: ZAS
+            effects:
+            - {effect: leave_faction}
+            - {effect: cosmetic_tag, value: ZAS_PIRATA}
+            - {effect: add_ideas, value: ZAS_republica_pirata}
+            - {effect: add_manpower, value: 250000}
+            - {effect: equipment, type: infantry_equipment, amount: 12000}
+            - {effect: equipment, type: support_equipment, amount: 2000}
+            - {effect: equipment, type: artillery_equipment, amount: 1500}
+            - {effect: build, building: dockyard, level: 8}
+            - {effect: run, value: MEGANATIONS_flota_pirata_ZAS}
+            - effect: division_template
+              name: Abordaje Pirata
+              regiments: [infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry]
+            - {effect: create_units, template: Abordaje Pirata, count: 18, experience: 0.4}
+            - effect: division_template
+              name: Guardia de la Costa
+              regiments: [infantry, infantry, infantry, infantry, infantry, infantry]
+            - {effect: create_units, template: Guardia de la Costa, count: 10, experience: 0.2}
+            - {effect: run, value: MEGANATIONS_hermandad_sin_ley}
+            - {effect: declare_war, target: HSN, type: annex_everything}
+          - {effect: add_war_support, value: 0.05}
+        src: user_request
+
   meganations_asc:
     country: ASC
     events:
@@ -5188,6 +5392,22 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_request
+    # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+    # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+    - id: 300
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: "The Commune Takes a Capital", spanish: "La Comuna Toma una Capital"}
+      desc:
+        english: "The capital of [meganations_capital_caida.GetName] belongs to the councils now. The machine halls work three shifts: fifteen hundred Sentinels and three Sentinel Swarms leave our capital. If the Sentinel was not yet in service, it is now."
+        spanish: "La capital de [meganations_capital_caida.GetName] ahora es de los consejos. Las naves de máquinas trabajan a tres turnos: mil quinientos Centinelas y tres Enjambres Centinela salen de nuestra capital. Si el Centinela todavía no estaba en servicio, ahora lo está."
+      options:
+      - name: {english: "The machines serve the people.", spanish: "Las máquinas sirven al pueblo."}
+        effects:
+        - {effect: run, value: ASC_centinela_botin}
+        - {effect: add_war_support, value: 0.05}
+      src: user_request
+
   meganations_apf:
     country: APF
     events:
@@ -6357,6 +6577,22 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_request
+    # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+    # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+    - id: 300
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: "The Councils Enter a Capital", spanish: "Los Consejos Entran en una Capital"}
+      desc:
+        english: "The capital of [meganations_capital_caida.GetName] has fallen to the Federation. From the river yards come twelve hundred Kiboko, and three Kiboko Herds gather in our capital. If the Kiboko was not yet in service, it is now."
+        spanish: "La capital de [meganations_capital_caida.GetName] cayó ante la Federación. De los astilleros del río salen mil doscientos Kiboko y tres Manadas Kiboko se reúnen en nuestra capital. Si el Kiboko todavía no estaba en servicio, ahora lo está."
+      options:
+      - name: {english: "Where one council rises, all rise.", spanish: "Donde se levanta un consejo, se levantan todos."}
+        effects:
+        - {effect: run, value: APF_kiboko_botin}
+        - {effect: add_war_support, value: 0.05}
+      src: user_request
+
   meganations_nas:
     country: NAS
     events:
@@ -7433,6 +7669,22 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_request
+    # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+    # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+    - id: 300
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: "The Sun Over Another Capital", spanish: "El Sol sobre Otra Capital"}
+      desc:
+        english: "The capital of [meganations_capital_caida.GetName] has fallen to the Sun. The priests bless three hundred aircraft of the Children of the Condor, and three Condor Flocks gather in our capital. If the Children of the Condor were not yet in service, they are now."
+        spanish: "La capital de [meganations_capital_caida.GetName] cayó ante el Sol. Los sacerdotes bendicen trescientos aviones de los Hijos del Cóndor y tres Bandadas del Cóndor se reúnen en nuestra capital. Si los Hijos del Cóndor todavía no estaban en servicio, ahora lo están."
+      options:
+      - name: {english: "Inti sees everything.", spanish: "Inti lo ve todo."}
+        effects:
+        - {effect: run, value: NAS_hijos_del_condor_botin}
+        - {effect: add_war_support, value: 0.05}
+      src: user_request
+
   meganations_shd:
     country: SHD
     events:
@@ -8641,6 +8893,22 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_request
+    # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+    # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+    - id: 300
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: "Harmony Reaches Another Capital", spanish: "La Armonía Llega a Otra Capital"}
+      desc:
+        english: "Our banners fly over the capital of [meganations_capital_caida.GetName]. The Directorate orders six Dragons of the Grand Canal onto the rails and raises three Armies of the Grand Canal in our capital. If the Dragon was not yet in service, it is now."
+        spanish: "Nuestras banderas ondean sobre la capital de [meganations_capital_caida.GetName]. El Directorio pone seis Dragones del Gran Canal sobre los rieles y levanta tres Ejércitos del Gran Canal en nuestra capital. Si el Dragón todavía no estaba en servicio, ahora lo está."
+      options:
+      - name: {english: "The river flows where we say.", spanish: "El río corre por donde decimos."}
+        effects:
+        - {effect: run, value: SHD_dragon_del_canal_botin}
+        - {effect: add_war_support, value: 0.05}
+      src: user_request
+
   meganations_nre:
     country: NRE
     events:
@@ -10312,6 +10580,22 @@ namespaces:
       - name: {english: Understood., spanish: Entendido.}
         effects: []
       src: user_request
+    # 2026-10-10 (pedido del usuario): botín al tomar una capital enemiga
+    # (lo dispara MEGANATIONS_capitales_tomadas; 20_unique_units -> capital_spoils)
+    - id: 300
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: "A Triumph for Rome", spanish: "Un Triunfo para Roma"}
+      desc:
+        english: "The capital of [meganations_capital_caida.GetName] is ours. Rome celebrates a Triumph: twelve hundred Onagers parade on the Via Sacra and three Onager Legions are raised in the capital. If the Onager was not yet in service, it is now."
+        spanish: "La capital de [meganations_capital_caida.GetName] es nuestra. Roma celebra un Triunfo: mil doscientos Onagros desfilan por la Vía Sacra y se levantan tres Legiones Onagras en la capital. Si el Onagro todavía no estaba en servicio, ahora lo está."
+      options:
+      - name: {english: "Vae victis.", spanish: "Vae victis."}
+        effects:
+        - {effect: run, value: NRE_onagro_botin}
+        - {effect: add_war_support, value: 0.05}
+      src: user_request
+
   meganations_zwe:
     country: ZWE
     events:
@@ -11406,4 +11690,256 @@ namespaces:
         effects:
         - {effect: add_stability, value: 0.03}
         ai_chance: 40
+      src: user_request
+    # -------------------------------------------------------------------------
+    # Cadenas de equipamiento (2026-10-10, pedido del usuario: "cadenas de eventos
+    # que llevan a pérdida o ganancia de equipamiento"). Las dispara
+    # MEGANATIONS_eventos_mundiales (14_decisions) para cada potencia.
+    # -------------------------------------------------------------------------
+    # 1. El arsenal enterrado: expedición -> arsenal intacto o trampa
+    - id: 70
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Bunker from the Unravelling, spanish: Un Búnker del Desarme}
+      desc:
+        english: 'A patrol found a sealed door in a hillside, with the stencil of an army that no longer exists. The old registries speak of arsenals
+          that nobody opened after 2041. Some were full. Some were traps.'
+        spanish: 'Una patrulla encontró una puerta sellada en una ladera, con el estarcido de un ejército que ya no existe. Los registros viejos hablan
+          de arsenales que nadie abrió después de 2041. Algunos estaban llenos. Algunos eran trampas.'
+      options:
+      - name: {english: Send the engineers in., spanish: Mandar a los ingenieros.}
+        effects:
+        - {effect: add_political_power, value: -40}
+        - effect: random
+          options:
+          - weight: 65
+            effects:
+            - {effect: event, id: meganations_mundo.71, days: 20}
+          - weight: 35
+            effects:
+            - {effect: event, id: meganations_mundo.72, days: 20}
+        ai_chance: 70
+      - name: {english: Sell the coordinates to the highest bidder., spanish: Vender las coordenadas al mejor postor.}
+        effects:
+        - {effect: add_political_power, value: 60}
+        ai_chance: 30
+      src: user_request
+    - id: 71
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Arsenal Was Intact, spanish: El Arsenal Estaba Intacto}
+      desc:
+        english: 'Sixty years in the dark and the grease still shines. Racks of rifles, crates of shells, guns still in their wraps: an army that never
+          marched, waiting for us.'
+        spanish: 'Sesenta años en la oscuridad y la grasa todavía brilla. Armeros llenos de fusiles, cajas de proyectiles, cañones todavía envueltos:
+          un ejército que nunca marchó, esperándonos.'
+      options:
+      - name: {english: To the depots., spanish: Al depósito.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: 3000}
+        - {effect: equipment, type: support_equipment, amount: 600}
+        - {effect: equipment, type: artillery_equipment, amount: 400}
+        - {effect: equipment, type: anti_tank_equipment, amount: 300}
+      src: user_request
+    - id: 72
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: A Trap of the Unravelling, spanish: Una Trampa del Desarme}
+      desc:
+        english: 'The door was wired. The charge was older than any of the engineers, and it still worked. We lost the team, their trucks and everything
+          they had brought with them.'
+        spanish: 'La puerta tenía cables. La carga era más vieja que cualquiera de los ingenieros, y todavía funcionaba. Perdimos al equipo, sus camiones
+          y todo lo que habían llevado.'
+      options:
+      - name: {english: Seal it forever., spanish: Sellarlo para siempre.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: -800}
+        - {effect: equipment, type: support_equipment, amount: -300}
+        - {effect: equipment, type: motorized_equipment, amount: -100}
+        - {effect: add_manpower, value: -3000}
+      src: user_request
+    # 2. Óxido en los depósitos: invertir a tiempo, o perder y fundir lo que queda
+    - id: 75
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Damp in the Depots, spanish: Humedad en los Depósitos}
+      desc:
+        english: 'The climate of 2100 does not forgive steel. The quartermasters report rust in the lower depots: if nothing is done, half a year from
+          now we will be counting scrap.'
+        spanish: 'El clima de 2100 no perdona al acero. Los intendentes informan óxido en los depósitos bajos: si no se hace nada, en medio año vamos
+          a estar contando chatarra.'
+      options:
+      - name: {english: Climate-controlled depots., spanish: Depósitos climatizados.}
+        effects:
+        - {effect: add_political_power, value: -75}
+        ai_chance: 50
+      - name: {english: It can wait., spanish: Puede esperar.}
+        effects:
+        - {effect: event, id: meganations_mundo.76, days: 30}
+        ai_chance: 50
+      src: user_request
+    - id: 76
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Rust, spanish: El Óxido}
+      desc:
+        english: 'It could not wait. Whole racks of rifles crumble in the hand, the gun breeches are fused. The quartermasters ask what to do with the
+          rest.'
+        spanish: 'No podía esperar. Armeros enteros de fusiles se deshacen en la mano, los cierres de los cañones están soldados por el óxido. Los intendentes
+          preguntan qué hacer con el resto.'
+      options:
+      - name: {english: Melt what is left down and rebuild., spanish: Fundir lo que queda y rearmar.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: -2000}
+        - {effect: equipment, type: artillery_equipment, amount: -500}
+        - {effect: equipment, type: support_equipment, amount: -400}
+        - {effect: add_political_power, value: -25}
+        - {effect: event, id: meganations_mundo.77, days: 25}
+        ai_chance: 60
+      - name: {english: Write it off., spanish: Darlo por perdido.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: -2000}
+        - {effect: equipment, type: artillery_equipment, amount: -500}
+        - {effect: equipment, type: support_equipment, amount: -400}
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 40
+      src: user_request
+    - id: 77
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Useful Scrap, spanish: Chatarra Útil}
+      desc:
+        english: 'The foundries took the rust and gave back steel. Not everything is recovered, but the depots are full again.'
+        spanish: 'Las fundiciones se llevaron el óxido y devolvieron acero. No se recupera todo, pero los depósitos vuelven a estar llenos.'
+      options:
+      - name: {english: Better than nothing., spanish: Mejor que nada.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: 1200}
+        - {effect: equipment, type: artillery_equipment, amount: 300}
+      src: user_request
+    # 3. Contrabandistas: comprar (llega o estafa) o hundirlos (botín)
+    - id: 78
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Arms Smugglers, spanish: Contrabandistas de Armas}
+      desc:
+        english: 'A convoy flying no flag offers a full cargo of weapons: rifles, guns and anti-air, no questions asked. They want payment in advance.'
+        spanish: 'Un convoy sin bandera ofrece un cargamento completo de armas: fusiles, cañones y antiaéreos, sin preguntas. Quieren el pago por adelantado.'
+      options:
+      - name: {english: Buy the cargo., spanish: Comprar el cargamento.}
+        effects:
+        - {effect: add_political_power, value: -100}
+        - effect: random
+          options:
+          - weight: 70
+            effects:
+            - {effect: event, id: meganations_mundo.79, days: 14}
+          - weight: 30
+            effects:
+            - {effect: event, id: meganations_mundo.80, days: 14}
+        ai_chance: 60
+      - name: {english: Sink them and take the cargo., spanish: Hundirlos y quedarse con la carga.}
+        effects:
+        - {effect: event, id: meganations_mundo.81, days: 7}
+        ai_chance: 40
+      src: user_request
+    - id: 79
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Cargo Arrives, spanish: Llega el Cargamento}
+      desc:
+        english: 'They kept their word. The crates are full and the serial numbers have been filed off.'
+        spanish: 'Cumplieron. Las cajas están llenas y los números de serie, limados.'
+      options:
+      - name: {english: Money well spent., spanish: Plata bien gastada.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - {effect: equipment, type: artillery_equipment, amount: 500}
+        - {effect: equipment, type: anti_air_equipment, amount: 300}
+      src: user_request
+    - id: 80
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Swindled, spanish: Estafados}
+      desc:
+        english: 'The convoy never arrived. The escort we sent to meet it came back with empty trucks and a story about pirates.'
+        spanish: 'El convoy nunca llegó. La escolta que mandamos a recibirlo volvió con los camiones vacíos y una historia de piratas.'
+      options:
+      - name: {english: Never again., spanish: Nunca más.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: -400}
+        - {effect: add_stability, value: -0.02}
+      src: user_request
+    - id: 81
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Patrol's Prize, spanish: El Botín de la Patrulla}
+      desc:
+        english: 'The smugglers fought back, but not for long. Half the cargo went down with their ship; the other half is ours.'
+        spanish: 'Los contrabandistas se defendieron, pero no por mucho. La mitad de la carga se hundió con su barco; la otra mitad es nuestra.'
+      options:
+      - name: {english: Crime does not pay., spanish: El crimen no paga.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: 900}
+        - {effect: equipment, type: artillery_equipment, amount: 200}
+        - {effect: add_war_support, value: 0.02}
+      src: user_request
+    # 4. Sabotaje: se pierde en el acto; buscar culpables puede recuperar algo
+    - id: 82
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Explosion at the Arsenal, spanish: Explosión en el Arsenal}
+      desc:
+        english: 'At three in the morning the main arsenal went up. Two blocks of depots are gone. Sabotage, say the guards. Negligence, say the engineers.'
+        spanish: 'A las tres de la mañana voló el arsenal principal. Dos manzanas de depósitos ya no existen. Sabotaje, dicen los guardias. Negligencia,
+          dicen los ingenieros.'
+      options:
+      - name: {english: Find whoever did it., spanish: Encontrar a los culpables.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: -1500}
+        - {effect: equipment, type: artillery_equipment, amount: -300}
+        - {effect: add_political_power, value: -50}
+        - effect: random
+          options:
+          - weight: 60
+            effects:
+            - {effect: event, id: meganations_mundo.83, days: 21}
+          - weight: 40
+            effects:
+            - {effect: event, id: meganations_mundo.84, days: 21}
+        ai_chance: 65
+      - name: {english: Keep it quiet., spanish: Que no se sepa.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: -1500}
+        - {effect: equipment, type: artillery_equipment, amount: -300}
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 35
+      src: user_request
+    - id: 83
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Saboteurs Are Caught, spanish: Atrapan a los Saboteadores}
+      desc:
+        english: 'A cell of the enemy, with a warehouse full of what they had stolen before blowing up the rest. We take it back, with interest.'
+        spanish: 'Una célula del enemigo, con un galpón lleno de lo que robaron antes de volar el resto. Lo recuperamos, con intereses.'
+      options:
+      - name: {english: Make an example of them., spanish: Que sirva de ejemplo.}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: 1100}
+        - {effect: equipment, type: artillery_equipment, amount: 200}
+        - {effect: add_war_support, value: 0.03}
+      src: user_request
+    - id: 84
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: It Was Negligence, spanish: Fue un Descuido}
+      desc:
+        english: 'No saboteurs: a forgotten stove, a leaking fuel line and nobody on watch. The investigation embarrassed half the general staff.'
+        spanish: 'No hubo saboteadores: una estufa olvidada, una línea de combustible que perdía y nadie de guardia. La investigación avergonzó a medio
+          estado mayor.'
+      options:
+      - name: {english: Heads will roll., spanish: Van a rodar cabezas.}
+        effects:
+        - {effect: add_stability, value: -0.02}
+        - {effect: add_political_power, value: 25}
       src: user_request

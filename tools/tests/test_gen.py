@@ -377,8 +377,12 @@ def test_full_build() -> None:
               not any("SIN IDEOLOGIAS" in w for w in ctx.warnings))
         check("nada bloqueado por Q035", not any(s.question == "Q035" for s in ctx.skipped))
 
-        # Todo archivo generado lleva el banner de no-editar.
+        # Todo archivo generado lleva el banner de no-editar, menos los del mapa
+        # (map/supply_nodes.txt, map/railways.txt: listas de números del juego,
+        # sin comentarios para no arriesgar la lectura).
         for path in mod.rglob("*.txt"):
+            if path.parent.name == "map":
+                continue
             check(f"banner en {path.name}", "NO EDITAR A MANO" in path.read_text(), str(path))
 
         section("build: determinismo")
@@ -722,6 +726,18 @@ def test_territory() -> None:
               'VICTORY_POINTS_9:0 "Kommune Berlin"' in st_es, st_es[-400:])
         check("ciudades de 2100: Gaia sigue siendo Gaia y Roma no se toca",
               'VICTORY_POINTS_1:0 "Gaia"' in st_es and "VICTORY_POINTS_13:" not in st_es, st_es[-400:])
+        # 2026-10-10: suministro e infraestructura de 2100 (logistics.py)
+        sn = (mod / "map/supply_nodes.txt").read_text() if (mod / "map/supply_nodes.txt").exists() else ""
+        rw = (mod / "map/railways.txt").read_text() if (mod / "map/railways.txt").exists() else ""
+        check("suministro: se saca el centro de una region de anarquia sin ciudad (ZWI) y queda el de su capital",
+              "1 19\n" not in sn and "1 18\n" in sn and "1 22\n" in sn, sn)
+        check("suministro: centro nuevo en la ciudad de una meganacion, con su tramo de via hasta la red",
+              "1 13\n" in sn and "1 2 13 22\n" in rw and rw.startswith("1 2 18 19\n1 2 22 23\n"), rw)
+        added_b = ctx.data["added_buildings"]
+        check("infraestructura: la capital de una meganacion llega a 5; a una anarquia nunca se le sube",
+              added_b.get(909, {}).get("infrastructure") == 5
+              and all(added_b.get(sid, {}).get("infrastructure", 0) <= 0 for sid in (914, 915, 916, 917)),
+              str({k: dict(v) for k, v in added_b.items()}))
         check("ciudades de 2100: el reporte dice cuantas y cuales faltan",
               any("ciudades de 2100: 1 renombradas" in n and "ASC (Essen -> Kommune Berlin)" in n for n in ctx.notes))
         check("Cordoba (ARG) -> EFE", terr.get(902) == "EFE")
@@ -1157,7 +1173,7 @@ def test_events() -> None:
         ideas_efe = " ".join((mod / "common/ideas/EFE_ideas.txt").read_text().split())
         adv = ideas_efe[ideas_efe.index("EFE_agua_de_la_vida = {"):][:900]
         check("EFE: el espiritu final tiene pros y contras", "monthly_population = 0.15" in adv and "war_support_factor = -0.1" in adv, adv)
-        check("73 eventos del EFE (guerra limitada, 5 menores, independencias, el Santuario, guerra civil y destino)", len(events) == 73, str(len(events)))
+        check("74 eventos del EFE (guerra limitada, 5 menores, independencias, el Santuario, guerra civil, destino y botin de capital)", len(events) == 74, str(len(events)))
         # 2026-09-29: guerras civiles (elegir bando), rama política extendida y forma final
         efe_cw = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         e220 = efe_cw[efe_cw.index("id = meganations_efe.220 title"):][:30000]
@@ -1974,7 +1990,8 @@ def test_ai() -> None:
         total = sum(se_c.count(f"has_country_flag = {p.split('_')[0]}_cadena_") for p in pulses)
         # la elección de la Unión (cadena 8) se repite cada 4 años desde 2026-10-02: la chequea su propia bandera
         total += se_c.count("NOT = { has_country_flag = FCU_eleccion_marca }")
-        check("16 cadenas de eventos, cada una chequeada una vez en el pulso de quien la empieza", total == 16, str(total))
+        # 2026-10-10: + la secesión de Meridian (FCU) y la república pirata (HSN)
+        check("18 cadenas de eventos, cada una chequeada una vez en el pulso de quien la empieza", total == 18, str(total))
         for needle, what in (("num_of_factories > 149", "industria (ASC 150 fabricas)"),
                              ("has_tech = improved_computing_machine", "tecnologia"),
                              ("has_manpower > 399999", "manpower"),
@@ -2661,7 +2678,7 @@ def test_vanilla_validation() -> None:
             mods.update(dm["modifiers"])
         docs = van / "documentation"
         docs.mkdir()
-        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
+        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
             "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
@@ -2915,6 +2932,87 @@ def test_vanilla_terms() -> None:
               'heavy_mg_2x:0 "2x Heavy Pulse Guns"' in res_en and 'tank_riveted_armor:0 "Ceramic Armor"' in res_en, res_en[-600:])
         check("el reporte dice cuantos modulos se renombraron", any("modulos de los disenadores: 3 de 6" in n for n in ctx.notes),
               str([n for n in ctx.notes if "modulos" in n]))
+        # 2026-10-10: "cambiar los nombres a los proyectos de investigación especiales"
+        check("proyectos especiales con nombre de 2100 (reactor nuclear -> de fusion)",
+              'sp_nuclear_reactor_fixture:0 "Reactor de fusión"' in res_es and 'sp_nuclear_reactor_fixture:0 "Fusion Reactor"' in res_en,
+              res_es[-500:])
+        check("proyectos especiales: el reporte lista los que quedaron sin cambio",
+              any("proyectos especiales: 1 de 2" in n and "sp_mystery_fixture (Proyecto misterioso)" in n for n in ctx.notes),
+              str([n for n in ctx.notes if "proyectos" in n]))
+
+
+def test_capitales_y_rebeliones() -> None:
+    section("botin de capital, cadenas de equipo, rebeliones de la FCU y la HSN (2026-10-10)")
+    import re as _re
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
+        cb = flat(mod / "common/scripted_effects/meganations_casus_belli.txt")
+        cap = cb[cb.index("MEGANATIONS_capitales_tomadas = {"):cb.index("MEGANATIONS_renovar_casus_belli = {")]
+        check("botin: se mira la capital de ARRANQUE del enemigo (el juego la muda al caer), una vez por enemigo",
+              "limit = { tag = EFE }" in cap and "has_war_with = NRE controls_state = 909" in cap
+              and "set_country_flag = MEGANATIONS_capital_NRE" in cap
+              and "NRE = { save_event_target_as = meganations_capital_caida }" in cap
+              and "country_event = { id = meganations_efe.300 days = 1 }" in cap, cap[:700])
+        check("botin: tambien las capitales de las anarquias, nunca la propia",
+              "has_war_with = ZWE controls_state = 917" in cap and "has_war_with = EFE controls_state = 900" not in
+              cap[cap.index("limit = { tag = EFE }"):cap.index("limit = { tag = EFE }") + 2500].split("limit = { tag = ")[1], cap[:300])
+        check("botin: el pulso de cada potencia lo revisa",
+              "MEGANATIONS_capitales_tomadas = yes" in cb[cb.index("MEGANATIONS_renovar_casus_belli = {"):])
+        uu = flat(mod / "common/scripted_effects/meganations_unique_units.txt")
+        bot = uu[uu.index("EFE_gliptodonte_botin = {"):][:2500]
+        check("botin del EFE: desbloquea si hacia falta, 1000 Gliptodontes y 3 Rebaños Colosales de 25 batallones",
+              "EFE_gliptodonte_desbloqueo = yes" in bot and "amount = 1000 producer = EFE variant_name = \"Gliptodonte\"" in bot
+              and bot.count("modern_armor = {") == 15 and bot.count("create_unit = {") >= 3, bot[:900])
+        efe = flat(mod / "events/meganations_efe.txt")
+        e300 = efe[efe.index("id = meganations_efe.300 title"):][:600]
+        check("botin: el evento corre el botin", "EFE_gliptodonte_botin = yes" in e300, e300)
+        loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation/spanish").rglob("*events*"))
+        check("botin: el texto nombra al enemigo vencido", "[meganations_capital_caida.GetName]" in loc)
+        # cadenas de equipo
+        dec = flat(mod / "common/scripted_effects/meganations_effects.txt")
+        check("cadenas de equipo: cada potencia, con 10 meses de espera, 15% por mes",
+              "MEGANATIONS_equipo_espera" in dec and "meganations_mundo.70" in dec and "meganations_mundo.82" in dec, "")
+        mundo = flat(mod / "events/meganations_mundo.txt")
+        e71 = mundo[mundo.index("id = meganations_mundo.71 title"):][:700]
+        e76 = mundo[mundo.index("id = meganations_mundo.76 title"):][:900]
+        check("cadenas de equipo: hay ganancia y perdida",
+              "type = infantry_equipment amount = 3000" in e71 and "type = infantry_equipment amount = -2000" in e76, e76[:400])
+        # FCU: la secesion de Meridian
+        fcu = flat(mod / "events/meganations_fcu.txt")
+        e312 = fcu[fcu.index("id = meganations_fcu.312 title"):][:5000]
+        check("FCU: la corporacion se separa (guerra civil) con nombre propio y se une a las Tierras Sin Ley",
+              "start_civil_war = { ideology = neutrality" in e312 and "set_cosmetic_tag = FCU_MERIDIAN" in e312
+              and "MEGANATIONS_hermandad_sin_ley = yes" in e312
+              and "ZAN = { if = { limit = { NOT = { has_war_with = FCU } } declare_war_on = { target = FCU" in e312, e312[:900])
+        her = dec[dec.index("MEGANATIONS_hermandad_sin_ley = {"):][:500]
+        check("la Hermandad Sin Ley: ZAN funda la faccion si no tiene y suma al rebelde",
+              "is_in_faction = no" in her and "create_faction" in her and "is_faction_leader = yes" in her
+              and "add_to_faction = PREV" in her, her)
+        # HSN: la republica pirata
+        hsn = flat(mod / "events/meganations_hsn.txt")
+        e312h = hsn[hsn.index("id = meganations_hsn.312 title"):][:9000]
+        check("HSN: Australia se independiza como republica pirata, con flota, ejercito y astilleros",
+              "end_puppet = ZAS" in e312h and "set_cosmetic_tag = ZAS_PIRATA" in e312h and "add_ideas = ZAS_republica_pirata" in e312h
+              and "MEGANATIONS_flota_pirata_ZAS = yes" in e312h and "add_manpower = 250000" in e312h
+              and "type = dockyard level = 8" in e312h and e312h.count("create_unit = {") >= 28
+              and "declare_war_on = { target = HSN" in e312h, e312h[:900])
+        fp = mod / "common/scripted_effects/meganations_flota_pirata.txt"
+        check("HSN: el efecto de la flota pirata existe siempre (sin barcos en el fixture, vacio)",
+              fp.exists() and "MEGANATIONS_flota_pirata_ZAS = {" in flat(fp))
+        check("disparadores en los pulsos de la FCU y la HSN",
+              "meganations_fcu.310" in dec and "FCU_cadena_meridian" in dec and "meganations_hsn.310" in dec
+              and "ZAS = { is_subject_of = HSN }" in dec, "")
+    import yaml as _y
+    ct = _y.safe_load((REPO_ROOT / "spec/13_military.yaml").read_text(encoding="utf-8"))["research"]["country_techs"]
+    air = {"iw_small_airframe", "iw_medium_airframe", "iw_large_airframe", "basic_small_airframe", "aa_lmg", "early_bombs",
+           "engines_1", "photo_reconnaisance", "air_torpedoe_1"}
+    naval = {"basic_naval_mines", "basic_depth_charges", "early_ship_hull_carrier", "basic_fire_control_system", "mtg_transport",
+             "basic_ship_hull_submarine", "basic_heavy_armor_scheme", "basic_cruiser_armor_scheme"}
+    check("cada meganacion arranca con 2 tecnologias aereas y 2 navales mas (2026-10-10)",
+          all(len(set(ct[t][-4:]) & air) == 2 and len(set(ct[t][-4:]) & naval) == 2
+              for t in ("EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE")), str(ct))
 
 
 def main() -> int:
@@ -2956,6 +3054,7 @@ def main() -> int:
         test_vanilla_terms,
         test_loading_quotes,
         test_diplomacy,
+        test_capitales_y_rebeliones,
         test_vanilla_validation,
     ):
         test()

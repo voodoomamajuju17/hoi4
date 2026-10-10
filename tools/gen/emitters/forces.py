@@ -84,6 +84,11 @@ def emit(ctx: BuildContext) -> None:
         return tag if tag in receivers else None
 
     naval_files, air_files = _vanilla_oob_files(ctx)
+    # Flotas que quedan guardadas para un evento (2026-10-10: la república
+    # pirata de Australia): las de 1936 basadas en su territorio no se
+    # descartan, se guardan aparte y el evento las carga con load_oob.
+    pirates_cfg = cut.get("pirate_fleets") or {}
+    pirate_fleets: dict[str, Block] = defaultdict(Block)
     # 2026-10-08 ("el acorazado orgullo de la flota esta vacio"): los diseños
     # de barcos no estaban en el instant_effect de los archivos de flota; sin
     # diseño el juego arma el casco pelado. Se buscan en todos lados.
@@ -116,6 +121,10 @@ def emit(ctx: BuildContext) -> None:
                 base = tf.get("location") if isinstance(tf, Block) else None
             tag = owner_of_province(_text(base)) if base is not None else None
             if tag is None or tag not in navies:
+                if tag in pirates_cfg:
+                    kept_fleet = copy.deepcopy(fleet)
+                    _retag(kept_fleet, tag)
+                    pirate_fleets[tag].add("fleet", kept_fleet)
                 dropped += 1
                 continue
             _retag(fleet, tag)
@@ -227,6 +236,7 @@ def emit(ctx: BuildContext) -> None:
         name = f"{tag}_2100_naval"
         ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(root))
         ctx.data["naval_oob"][tag] = name
+    _pirate_fleets(ctx, pirates_cfg, pirate_fleets, ship_variants)
     for tag, by_state in wings.items():
         block = Block()
         for sid in sorted(by_state):
@@ -261,6 +271,63 @@ def emit(ctx: BuildContext) -> None:
 
 
 # ---------------------------------------------------------------------------
+
+
+def _pirate_fleets(ctx: BuildContext, cfg: dict, fleets: dict, ship_variants: dict) -> None:
+    """La flota guardada de cada país de `pirate_fleets` (13_military ->
+    forces): sus barcos de 1936, multiplicados (`copies`, con nombre II, III...),
+    en history/units/<name>.txt, y el efecto MEGANATIONS_flota_pirata_<TAG>
+    que el evento corre: tecnologías de sus cascos y módulos, sus diseños y
+    load_oob. Sin barcos, el efecto queda vacío (el evento no falla)."""
+    if not cfg:
+        return
+    tree = ctx.vanilla.tech_tree()
+    script = Block()
+    for tag, opts in sorted(cfg.items()):
+        name = (opts or {}).get("name", f"{tag}_flota_pirata")
+        block = fleets.get(tag) or Block()
+        copies = int((opts or {}).get("copies", 1))
+        for ship in _ships_in(block):      # un orgullo de la flota por país, y no es este
+            ship.entries[:] = [(k, v) for k, v in ship.entries if k not in ("pride_of_the_fleet", "start_experience_factor")]
+        if copies > 1:
+            _multiply_ships(block, copies)
+        designs, missing = _ship_designs(block, ship_variants)
+        eq = _equipment_of(Block([("create_equipment_variant", v) for v in designs]))
+        need = sorted(t for t, info in tree.items() if info.get("enables", set()) & eq)
+        body = Block()
+        n = _count(block, "ship")
+        if n:
+            if need:
+                body.add("set_technology", Block([(t, 1) for t in need] + [("popup", False)]))
+            for v in designs:
+                body.add("create_equipment_variant", copy.deepcopy(v))
+            ctx.write_text(f"history/units/{name}.txt", banner_for(SOURCE) + render(Block([("units", block)])))
+            body.add("load_oob", Quoted(name))
+        script.add(f"MEGANATIONS_flota_pirata_{tag}", body)
+        ctx.note(f"armada guardada de {tag} ({name}): {n} barcos en {_count(block, 'fleet')} flotas, "
+                 f"{len(designs)} disenos" + (f"; sin diseno: {', '.join(missing)}" if missing else ""))
+    ctx.write_script("common/scripted_effects/meganations_flota_pirata.txt", script, source=SOURCE)
+
+
+def _multiply_ships(block: Block, copies: int) -> None:
+    """Cada barco de cada task_force, `copies` veces (los nuevos con II, III...)."""
+    from .unit_names import roman
+    for k, v in block.entries:
+        if not isinstance(v, Block):
+            continue
+        if k == "task_force":
+            extra = []
+            for kk, ship in v.entries:
+                if kk != "ship" or not isinstance(ship, Block):
+                    continue
+                for i in range(2, copies + 1):
+                    clone = copy.deepcopy(ship)
+                    base = _text(clone.get("name"))
+                    _set_name(clone, f"{base} {roman(i)}")
+                    extra.append(("ship", clone))
+            v.entries.extend(extra)
+        else:
+            _multiply_ships(v, copies)
 
 
 def _vanilla_oob_files(ctx: BuildContext):

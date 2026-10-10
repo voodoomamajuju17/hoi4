@@ -502,7 +502,31 @@ equipment:
 # "armas de pulso pesadas"). `modules` pisa el nombre de un módulo puntual.
 # -----------------------------------------------------------------------------
 module_terms:
+  # 2026-10-10 ("cambiar los nombres a los proyectos de investigación
+  # especiales"): también se aplican a los proyectos especiales
+  # (common/special_projects) y a sus tecnologías (sp_...). Las frases van
+  # antes que las palabras sueltas.
   spanish:
+  - [bombas atómicas, bombas de antimateria]
+  - [bomba atómica, bomba de antimateria]
+  - [reactores nucleares, reactores de fusión]
+  - [reactor nuclear, reactor de fusión]
+  - [nuclear, de fusión]
+  - [nucleares, de fusión]
+  - [motores a reacción, motores scramjet]
+  - [motor a reacción, motor scramjet]
+  - [helicópteros, tiltrotores]
+  - [helicóptero, tiltrotor]
+  - [espoletas de proximidad, espoletas inteligentes]
+  - [espoleta de proximidad, espoleta inteligente]
+  - [tanques superpesados, acorazados terrestres]
+  - [tanque superpesado, acorazado terrestre]
+  - [computadoras, computadoras cuánticas]
+  - [computadora, computadora cuántica]
+  - [computación, computación cuántica]
+  - [pykrete, hielo de grafeno]
+  - [Walter, de pila de combustible]
+  - [diésel, de pila de combustible]
   - [ametralladoras, armas de pulso]
   - [ametralladora, arma de pulso]
   - [cañones, cañones de riel]
@@ -530,6 +554,25 @@ module_terms:
   - [tanques de combustible, celdas de combustible]
   - [humo, humo multiespectral]
   english:
+  - [atomic bombs, antimatter bombs]
+  - [atomic bomb, antimatter bomb]
+  - [nuclear reactors, fusion reactors]
+  - [nuclear reactor, fusion reactor]
+  - [nuclear, fusion]
+  - [jet engines, scramjet engines]
+  - [jet engine, scramjet engine]
+  - [helicopters, tiltrotors]
+  - [helicopter, tiltrotor]
+  - [proximity fuzes, smart fuzes]
+  - [proximity fuze, smart fuze]
+  - [super-heavy tanks, land dreadnoughts]
+  - [super-heavy tank, land dreadnought]
+  - [computers, quantum computers]
+  - [computer, quantum computer]
+  - [computing, quantum computing]
+  - [pykrete, graphene ice]
+  - [Walter, fuel-cell]
+  - [diesel, fuel-cell]
   - [machine guns, pulse guns]
   - [machine gun, pulse gun]
   - [MGs, pulse guns]
@@ -563,6 +606,9 @@ module_terms:
   - [fuel tanks, fuel cells]
   - [smoke, multispectral smoke]
 modules: {}
+# Nombre propio de un proyecto especial puntual (id -> {en, es}); el resto sale
+# del juego con module_terms. El reporte lista los que no cambiaron.
+special_projects: {}
 # -----------------------------------------------------------------------------
 # Armas y tecnologías con nombre e imagen propios por facción (2026-10-03,
 # pedido del usuario: "para cada meganación y anarquía hay distintas imágenes,

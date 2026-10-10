@@ -9535,6 +9535,13 @@ scripted_effects:
       then:
       - {effect: flag, value: FCU_crisis_3}
       - {effect: event, id: meganations_fcu.150, days: 1}
+    # La secesión de Meridian (2026-10-10, pedido del usuario: una corporación se
+    # rebela y se alía con las Tierras Sin Ley)
+    - effect: if
+      when: {date_after: 2103.3.1, not_flag: FCU_cadena_meridian, civil_war: false}
+      then:
+      - {effect: flag, value: FCU_cadena_meridian}
+      - {effect: event, id: meganations_fcu.310, days: 1}
     - {effect: run, value: MEGANATIONS_obras_de_la_ia}
     - effect: if
       when: {date_after: 2100.4.2, not_flag: FCU_menor_200}
@@ -9787,6 +9794,15 @@ scripted_effects:
       then:
       - {effect: flag, value: HSN_crisis_4}
       - {effect: event, id: meganations_hsn.150, days: 1}
+    # La república pirata de Australia (2026-10-10, pedido del usuario)
+    - effect: if
+      when:
+        date_after: 2103.6.1
+        not_flag: HSN_cadena_pirata
+        country: {tag: ZAS, when: {subject_of: HSN}}
+      then:
+      - {effect: flag, value: HSN_cadena_pirata}
+      - {effect: event, id: meganations_hsn.310, days: 1}
     - {effect: run, value: MEGANATIONS_obras_de_la_ia}
     - effect: if
       when: {date_after: 2100.3.4, not_flag: HSN_menor_200}
@@ -13439,6 +13455,59 @@ scripted_effects:
           - {tag: SHD}
           - {tag: APF}
           - {tag: NRE}
+    # Cadenas de equipamiento (2026-10-10, pedido del usuario: "cadenas de eventos
+    # que llevan a pérdida o ganancia de equipamiento"). Cada potencia, con
+    # 10 meses de espera entre una y otra: cada mes 15% de que arranque una.
+    - effect: if
+      when:
+        date_after: 2100.5.1
+        any:
+        - {not_flag: MEGANATIONS_equipo_espera}
+        - {flag_older: {flag: MEGANATIONS_equipo_espera, days: 300}}
+      then:
+      - effect: random
+        options:
+        - weight: 85
+          effects: []
+        - weight: 15
+          effects:
+          - {effect: clear_flag, value: MEGANATIONS_equipo_espera}
+          - {effect: flag, value: MEGANATIONS_equipo_espera}
+          - effect: random
+            options:
+            - weight: 1
+              effects:
+              - {effect: event, id: meganations_mundo.70, days: 2}
+            - weight: 1
+              effects:
+              - {effect: event, id: meganations_mundo.75, days: 2}
+            - weight: 1
+              effects:
+              - {effect: event, id: meganations_mundo.78, days: 2}
+            - weight: 1
+              effects:
+              - {effect: event, id: meganations_mundo.82, days: 2}
+
+  # La alianza de las Tierras Sin Ley (2026-10-10): en el scope del rebelde (la
+  # corporación que se separa de la FCU, la república pirata de Australia).
+  # Si las Tierras Sin Ley no tienen facción, fundan La Hermandad Sin Ley; si
+  # la lideran, suman al rebelde (PREV, dentro de ZAN).
+  - id: MEGANATIONS_hermandad_sin_ley
+    effects:
+    - effect: if
+      when: {country_exists: ZAN}
+      then:
+      - effect: scope
+        target: ZAN
+        effects:
+        - effect: if
+          when: {in_faction: false}
+          then:
+          - {effect: create_faction, value: La Hermandad Sin Ley}
+        - effect: if
+          when: {faction_leader: true}
+          then:
+          - {effect: add_to_faction, value: PREV}
 
   # El Santuario de Gaia (2026-09-29): las regiones de la selva que el EFE ya tiene pasan al Santuario, con recursos extra
   - id: EFE_crear_santuario

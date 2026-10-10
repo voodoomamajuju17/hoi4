@@ -44,15 +44,25 @@ research:
   # ignoran.
   # 2026-10-03: las cuatro con flota de verdad (HSN, NRE, FCU, ASC) arrancan
   # también con el buque capital (casco pesado y batería pesada).
+  # 2026-10-09 (pedido del usuario): 2 tecnologías aéreas y 2 navales más por
+  # meganación, según su estilo (las cuatro últimas de cada lista).
   country_techs:
-    HSN: [marines, tech_marines, marines2, early_ship_hull_heavy, basic_heavy_battery, basic_ship_hull_cruiser, basic_ship_hull_submarine]
-    NAS: [tech_mountaineers, mountaineers, tech_mountaineers2]
-    NRE: [tech_engineers, tech_recon, gw_artillery, interwar_artillery, early_ship_hull_heavy, basic_heavy_battery]
-    SHD: [gw_artillery, interwar_artillery, interwar_antiair, interwar_antitank]
-    APF: [tech_engineers, tech_military_police, tech_recon]
-    EFE: [basic_light_tank_chassis, armor_tech_1, engine_tech_1]
-    ASC: [mechanised_infantry, tech_signal_company, tech_recon, early_ship_hull_heavy, basic_heavy_battery]
-    FCU: [tech_field_hospital, tech_logistics_company, mechanised_infantry, early_ship_hull_heavy, basic_heavy_battery]
+    HSN: [marines, tech_marines, marines2, early_ship_hull_heavy, basic_heavy_battery, basic_ship_hull_cruiser, basic_ship_hull_submarine,
+          photo_reconnaisance, air_torpedoe_1, early_ship_hull_carrier, basic_fire_control_system]
+    NAS: [tech_mountaineers, mountaineers, tech_mountaineers2,
+          iw_medium_airframe, basic_small_airframe, basic_naval_mines, mtg_transport]
+    NRE: [tech_engineers, tech_recon, gw_artillery, interwar_artillery, early_ship_hull_heavy, basic_heavy_battery,
+          iw_large_airframe, early_bombs, basic_heavy_armor_scheme, basic_fire_control_system]
+    SHD: [gw_artillery, interwar_artillery, interwar_antiair, interwar_antitank,
+          iw_medium_airframe, aa_lmg, basic_naval_mines, basic_cruiser_armor_scheme]
+    APF: [tech_engineers, tech_military_police, tech_recon,
+          photo_reconnaisance, early_bombs, basic_depth_charges, mtg_transport]
+    EFE: [basic_light_tank_chassis, armor_tech_1, engine_tech_1,
+          iw_medium_airframe, early_bombs, basic_naval_mines, basic_depth_charges]
+    ASC: [mechanised_infantry, tech_signal_company, tech_recon, early_ship_hull_heavy, basic_heavy_battery,
+          iw_medium_airframe, engines_1, basic_ship_hull_submarine, basic_depth_charges]
+    FCU: [tech_field_hospital, tech_logistics_company, mechanised_infantry, early_ship_hull_heavy, basic_heavy_battery,
+          iw_large_airframe, aa_lmg, early_ship_hull_carrier, basic_fire_control_system]
   # especialidad -> alternativas de prefijos de pestaña; gana la primera que
   # exista. Las de los DLC primero (el reporte 2026-09-25 mostró que las
   # pestañas viejas armour_folder, air_techs_folder y naval_folder siguen en
@@ -145,6 +155,11 @@ forces:
   # flota, con experiencia máxima, y es un buque capital: la que no tiene uno
   # recibe un acorazado (aparte del tope de max_ships).
   pride_of_the_fleet: {experience: 1.0, capital: true}
+  # 2026-10-10 (pedido del usuario): la república pirata de Australia. Los
+  # barcos de 1936 de Australia y Nueva Zelanda no se descartan: se guardan
+  # (x3) y los carga el evento de la rebelión (meganations_hsn.312).
+  pirate_fleets:
+    ZAS: {name: ZAS_flota_pirata, copies: 3}
   air: false
 
 stockpile:

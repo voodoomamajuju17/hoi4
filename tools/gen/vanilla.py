@@ -806,6 +806,19 @@ class Vanilla:
                     out[name] = pdx.text(mod.get("category")) if mod.get("category") is not None else ""
         return out
 
+    def special_projects(self) -> list[str]:
+        """Proyectos especiales (Götterdämmerung): las claves de arriba de
+        common/special_projects/projects/*.txt. Vacío si el juego no los tiene."""
+        out: list[str] = []
+        for path in sorted((self.root / "common" / "special_projects" / "projects").glob("*.txt")):
+            try:
+                root = pdx.parse_file(path)
+            except ValueError:
+                continue
+            out.extend(k for k, v in root.entries if isinstance(k, str) and isinstance(v, pdx.Block)
+                       and not k.startswith("@"))
+        return out
+
     def sub_units(self) -> set[str]:
         out: set[str] = set()
         for path in (self.root / "common" / "units").glob("*.txt"):

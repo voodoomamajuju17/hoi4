@@ -1155,3 +1155,59 @@ llega a 100 al toque y la tensión nunca sube".
   Emires, Ciudadela de los Señores...). Gaia y Puerto Custodio no se tocan;
   Roma no está. El reporte dice cuántas cambiaron, qué capitales usaron el
   nombre de respaldo y qué ciudades de la lista no existen en el juego.
+
+## Lote capitales, rebeliones y logística (2026-10-10)
+
+- **Botín al tomar una capital enemiga.** Cuando una meganación controla la
+  capital de arranque de una meganación o anarquía con la que está en guerra
+  (el juego muda la capital apenas cae, por eso se mira la de arranque), le
+  salta su evento (meganations_<tag>.300), una vez por cada enemigo. El texto
+  nombra al vencido (event target meganations_capital_caida). El botín
+  (20_unique_units -> capital_spoils): si la unidad única no estaba en
+  servicio, se desbloquea; llega su equipo y salen 3 divisiones gigantes (25
+  batallones) en la capital propia:
+  | Potencia | Equipo | Divisiones |
+  |---|---|---|
+  | Imperio | 1000 Gliptodontes | Rebaño Colosal (15 Gliptodontes + 10 motorizados) |
+  | Directorio | 6 Dragones del Gran Canal | Ejército del Gran Canal (infantería, artillería, antiaéreos) |
+  | Nación del Mar | 2 Leviatanes al 90% en astillero | Infantería del Leviatán (20 infantes de marina + 5) |
+  | Reino del Sol | 300 aviones de los Hijos del Cóndor | Bandada del Cóndor (15 paracaidistas + 10 de montaña) |
+  | Roma | 1200 Onagros | Legión Onagra (infantería, cohetes, artillería) |
+  | Comuna | 1500 Centinelas | Enjambre Centinela (15 blindados ligeros + 10 motorizados) |
+  | Federación | 1200 Kiboko | Manada Kiboko (15 anfibios + 10 de infantería) |
+  | Unión | 150 Alas de Obsidiana | Guardia Obsidiana (15 mecanizados + 10 motorizados) |
+- **Cadenas de equipamiento** (eventos mundiales 70-84; cada potencia, 10
+  meses de espera entre una y otra, 15% por mes): el búnker del Desarme
+  (arsenal intacto o trampa), humedad en los depósitos (invertir o perder y
+  fundir), contrabandistas (comprar: llega o estafa; hundirlos: botín) y la
+  explosión del arsenal (se pierde y, si se investiga, se recupera parte).
+- **La secesión de Meridian (FCU, desde 2103).** Meridian deja de pagar,
+  arma milicias en el Medio Oeste y se separa: guerra civil (25% del país) de
+  la Compañía Libre Meridian, que se une a la Hermandad Sin Ley (la funda
+  ZAN si no tiene facción); las Tierras Sin Ley le declaran la guerra a la
+  Unión.
+- **La república pirata de Australia (HSN, desde 2103).** Los capitanes del
+  sur se cansan del Peaje, Sídney cierra el puerto y Australia se
+  independiza como la República Pirata del Mar del Sur: idea propia
+  (astilleros, flota y ejército), 250.000 de mano de obra, equipo, 8
+  astilleros, 28 divisiones, se une a la Hermandad Sin Ley y le declara la
+  guerra a la HSN. Su flota: los barcos de 1936 de Australia y Nueva Zelanda,
+  que ya no se descartan sino que se guardan multiplicados por 3
+  (13_military -> forces.pirate_fleets) y el evento carga con load_oob,
+  junto con sus diseños y tecnologías.
+- **Logística de 2100** (08_territory -> logistics). Infraestructura:
+  meganaciones +1 (máximo 5) y capital en 5; satélites mínimo 2 (capital 4);
+  anarquías -1 (mínimo 1, nunca sube, la capital no baja); las Tierras Sin
+  Ley no se tocan. Centros de suministro (map/supply_nodes.txt): se sacan en
+  las regiones de anarquía sin ciudad (menos su capital) y se agregan en las
+  ciudades de meganaciones y satélites que no tienen, cada uno con su tramo
+  de vía hasta la red por provincias propias (map/railways.txt). Si los
+  archivos del mapa no tienen el formato esperado, no se tocan.
+- **2 tecnologías aéreas y 2 navales más por meganación** de arranque, según
+  su estilo (13_military -> country_techs, las cuatro últimas de cada lista).
+- **Proyectos especiales con nombre de 2100.** Se leen del juego
+  (common/special_projects) y se reescriben con los términos de 2100
+  (reactor nuclear -> de fusión, helicópteros -> tiltrotores, motores a
+  reacción -> scramjet, tanque superpesado -> acorazado terrestre...); los
+  mismos términos alcanzan a sus tecnologías (sp_...). El reporte lista los
+  que no cambiaron; `special_projects` pisa uno puntual.

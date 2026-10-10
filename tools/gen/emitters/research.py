@@ -121,6 +121,7 @@ def emit(ctx: BuildContext) -> None:
         ctx.note(f"investigacion: {shifted_names} nombres del juego sin nombre propio actualizados "
                  "(año escrito corrido a 2100+ o terminos de module_terms)")
     _modules(ctx, spec, terms)
+    _special_projects(ctx, spec, terms)
     unnamed = sum(1 for t, info in tree.items() if t not in (spec.get("techs") or {}) and info["eligible"])
     ctx.note(f"investigacion: {done['tecnologias']} tecnologias y {done['equipo']} equipos renombrados; "
              f"{unnamed} tecnologias conservan el nombre vanilla")
@@ -149,12 +150,15 @@ def _terms(text: str, terms: dict, lang: str) -> str:
     from .vanilla_terms import _PROTECTED
 
     words = re.findall(r"[^\W\d_]+", text)
-    title = len(words) > 1 and sum(w[:1].isupper() for w in words) / len(words) >= 0.6
+    # mayúsculas de título solo en inglés (en español "Cañón ligero I" no lo es)
+    title = lang == "english" and len(words) > 1 and sum(w[:1].isupper() for w in words) / len(words) >= 0.6
 
-    def case(src: str, new: str) -> str:
+    def case(src: str, new: str, at_start: bool) -> str:
         if title and src[:1].isupper():
             return re.sub(r"(^|[\s-])(\w)", lambda m: m.group(1) + m.group(2).upper(), new)
-        if src[:1].isupper():
+        # mayúscula inicial solo al principio del nombre ("Motores Walter" ->
+        # "Motores de pila de combustible", no "Motores De pila...")
+        if src[:1].isupper() and at_start:
             return new[:1].upper() + new[1:]
         return new
 
@@ -163,7 +167,7 @@ def _terms(text: str, terms: dict, lang: str) -> str:
         if i % 2:
             continue
         for rx, repl in rules:
-            part = rx.sub(lambda m: case(m.group(0), repl), part)
+            part = rx.sub(lambda m: case(m.group(0), repl, not m.string[:m.start()].strip(" 0-9x")), part)
         parts[i] = part
     return "".join(parts)
 
@@ -195,6 +199,42 @@ def _modules(ctx: BuildContext, spec: dict, terms: dict) -> None:
         done += 1
     ctx.note(f"modulos de los disenadores: {done} de {len(modules)} con nombre de 2100"
              + (f"; sin cambio ({len(same)}): {', '.join(same[:30])}{' ...' if len(same) > 30 else ''}"
+                if same else ""))
+
+
+def _special_projects(ctx: BuildContext, spec: dict, terms: dict) -> None:
+    """Proyectos especiales de investigación (2026-10-10, "cambiar los nombres a
+    los proyectos de investigación especiales"): el nombre de 2100 de
+    `special_projects` o, si no hay, el del juego con module_terms (reactor
+    nuclear -> de fusión, helicópteros -> tiltrotores...). Lo que ya tiene
+    nombre propio del mod no se toca."""
+    projects = ctx.vanilla.special_projects()
+    if not projects:
+        return
+    own = spec.get("special_projects") or {}
+    taken = set(getattr(ctx.loc, "_defined", {}))
+    en_txt = ctx.vanilla.localisation("english", set(projects))
+    es_txt = ctx.vanilla.localisation("spanish", set(projects))
+    done, same = 0, []
+    for key in projects:
+        if key in taken:
+            continue
+        if key in own:
+            en, es = own[key]["en"], own[key]["es"]
+        else:
+            old_en, old_es = en_txt.get(key) or es_txt.get(key), es_txt.get(key) or en_txt.get(key)
+            if not old_en:
+                continue
+            en, es = _terms(old_en, terms, "english"), _terms(old_es, terms, "spanish")
+            if (en, es) == (old_en, old_es):
+                same.append(f"{key} ({old_es})")
+                continue
+        ctx.loc.define_and_reference(key, en=en, es=es, file="replace/meganations_research",
+                                     origin=f"research:special_project:{key}")
+        taken.add(key)
+        done += 1
+    ctx.note(f"proyectos especiales: {done} de {len(projects)} con nombre de 2100"
+             + (f"; sin cambio ({len(same)}): {', '.join(same[:40])}{' ...' if len(same) > 40 else ''}"
                 if same else ""))
 
 

@@ -1055,6 +1055,7 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       country: { tag, when: {..} }        -> TAG = { .. }
       any: [ {..}, {..} ]                 -> OR
       not: { .. }                         -> NOT (no se cumplen todas juntas)
+      in_faction: true|false / faction_leader: true|false -> is_in_faction / is_faction_leader
       explained: { id, english, spanish, when: {..} } -> custom_trigger_tooltip
                                           (el requisito se lee con ese texto, no con el nombre de la bandera)
     Varias condiciones en el mismo bloque se cumplen todas (AND).
@@ -1167,6 +1168,13 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "guarantees":
             block.add("has_guaranteed", value)
             triggers_used.setdefault("has_guaranteed", owner)
+        elif key == "in_faction":
+            # está en alguna facción (2026-10-10: la alianza de las Tierras Sin Ley)
+            block.add("is_in_faction", bool(value))
+            triggers_used.setdefault("is_in_faction", owner)
+        elif key == "faction_leader":
+            block.add("is_faction_leader", bool(value))
+            triggers_used.setdefault("is_faction_leader", owner)
         elif key == "controls_any_of":
             # controla al menos una región de las que `value` tenía al arranque
             ids = sorted(sid for sid, tag in _TERRITORY.items() if tag == value)
@@ -1293,9 +1301,10 @@ def dynamic_modifier_ids(spec_raw: dict) -> set[str]:
 
 
 # efectos que escribe el generador mismo (no están en 14_decisions.yaml)
-GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli"}
+GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MEGANATIONS_flota_pirata_ZAS"}
 
 
 def scripted_effect_ids(spec_raw: dict) -> set[str]:
-    unique = {f"{u['id']}_desbloqueo" for u in (spec_raw.get("unique_units") or {}).get("units") or []}
+    units = (spec_raw.get("unique_units") or {}).get("units") or []
+    unique = {f"{u['id']}_desbloqueo" for u in units} | {f"{u['id']}_botin" for u in units if u.get("capital_spoils")}
     return {e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED | unique

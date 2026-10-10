@@ -3126,6 +3126,20 @@ countries:
       modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1, recruitable_population_factor: 0.3, production_speed_buildings_factor: 0.15,
         industrial_capacity_factory: 0.1, stability_factor: 0.1}
       src: user_request
+  # 2026-10-10 (pedido del usuario): Australia rompe con la HSN y se vuelve
+  # república pirata (meganations_hsn.312), con flota y ejército grandes.
+  ZAS:
+    coverage: user_request
+    focus_ideas:
+    - id: ZAS_republica_pirata
+      name: {english: The Pirate Republic of the Southern Sea, spanish: La República Pirata del Mar del Sur}
+      desc:
+        english: 'No tolls, no charters, no masters: every captain votes and every prize is shared. The shipyards of Sydney never stop.'
+        spanish: 'Sin peajes, sin cartas, sin amos: cada capitán vota y cada presa se reparte. Los astilleros de Sídney no paran nunca.'
+      modifiers: {industrial_capacity_dockyard: 0.3, production_speed_dockyard_factor: 0.3, army_attack_factor: 0.1, army_org_factor: 0.1,
+        recruitable_population_factor: 0.4, war_support_factor: 0.15, '?naval_damage_factor': 0.15, '?naval_speed_factor': 0.1,
+        '?navy_org_factor': 0.15}
+      src: user_request
 
 # =============================================================================
 technical_notes:

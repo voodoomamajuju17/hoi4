@@ -115,6 +115,8 @@ def emit(ctx: BuildContext) -> None:
 
 HOSTILITY_EFFECT = "MEGANATIONS_renovar_casus_belli"
 ANNEX_EFFECT = "MEGANATIONS_anexar_anarquias_titere"
+CAPTURE_EFFECT = "MEGANATIONS_capitales_tomadas"
+CAPTURE_TARGET = "meganations_capital_caida"
 
 
 def anarchy_pairs(ctx: BuildContext) -> list[tuple[str, str]]:
@@ -169,6 +171,41 @@ def _annex_anarchy_puppets(ctx: BuildContext, hs: dict, effects: dict) -> Block 
     return body
 
 
+def _capital_capture(ctx: BuildContext, anarchies: list[str], effects: dict) -> Block | None:
+    """Botín de capital (2026-10-10): cuando una meganación controla la
+    capital de arranque de una meganación o anarquía con la que está en
+    guerra, le salta su evento (20_unique_units -> capital_spoils.event), una
+    vez por cada enemigo. Se mira la capital de ARRANQUE: el juego muda la
+    capital apenas cae, así que la actual nunca está ocupada. El enemigo queda
+    guardado como event target (meganations_capital_caida) para el texto."""
+    spoils = ctx.data.get("capital_spoils") or {}
+    capitals = ctx.data.get("capitals") or {}
+    if not spoils:
+        return None
+    majors = [c.tag for c in ctx.spec.countries if c.is_major]
+    targets = [t for t in majors + anarchies if t in capitals]
+    body = Block()
+    for tag, event in sorted(spoils.items()):
+        checks = Block([("limit", Block([("tag", tag)]))])
+        for t in targets:
+            if t == tag:
+                continue
+            flag = f"MEGANATIONS_capital_{t}"
+            checks.add("if", Block([
+                ("limit", Block([("has_war_with", t), ("controls_state", capitals[t]),
+                                 ("NOT", Block([("has_country_flag", flag)]))])),
+                ("set_country_flag", flag),
+                (t, Block([("save_event_target_as", CAPTURE_TARGET)])),
+                ("country_event", Block([("id", event), ("days", 1)]))]))
+        body.add("if", checks)
+    for k in ("set_country_flag", "save_event_target_as", "country_event"):
+        effects[k] = SOURCE
+    ctx.verify_keys("triggers", {"has_war_with": SOURCE, "controls_state": SOURCE, "has_country_flag": SOURCE,
+                                 "tag": SOURCE})
+    ctx.note(f"botin de capital: {len(spoils)} meganaciones; capitales enemigas vigiladas: {', '.join(targets)}")
+    return body
+
+
 def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> None:
     """Todos arrancan en paz, pero cada meganación que toca una anarquía tiene
     un casus belli contra ella que no vence (se renueva cada mes si se perdió)
@@ -207,9 +244,14 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     annex = _annex_anarchy_puppets(ctx, hs, effects)
     if annex is not None:
         renew.add(ANNEX_EFFECT, True)
+    capture = _capital_capture(ctx, list((hs.get("annex_puppets") or {}).get("tags") or []), effects)
+    if capture is not None:
+        renew.add(CAPTURE_EFFECT, True)
     # el archivo se escribe siempre: los pulsos de 14_decisions lo llaman
     # el que se llama va primero: el juego lee los scripted_effects en orden
     script = Block([(ANNEX_EFFECT, annex)] if annex is not None else [])
+    if capture is not None:
+        script.add(CAPTURE_EFFECT, capture)
     script.add(HOSTILITY_EFFECT, renew)
     ctx.write_script("common/scripted_effects/meganations_casus_belli.txt", script,
                      source=SOURCE + " -> anarchy_hostility")

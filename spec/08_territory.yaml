@@ -808,6 +808,32 @@ city_names:
     ZSG: { english: "Heart of Gaia", spanish: "Corazón de Gaia" }
 
 # =============================================================================
+# Suministro e infraestructura de 2100 (2026-10-10, pedido del usuario:
+# "aumentá los centros de suministro donde tenga sentido para el mundo
+# postapocalíptico renacido del 2100, sacalos donde no tenga sentido, y corregí
+# la infraestructura acorde"). Las meganaciones reconstruyeron sus redes; los
+# satélites, a medias; las anarquías viven entre ruinas. Las Tierras Sin Ley
+# quedan como están (su Frontera Armada ya resuelve su suministro).
+# =============================================================================
+logistics:
+  src: user_request
+  infrastructure:
+    skip: [ZAN]
+    meganation: {add: 1, max: 5, capital_min: 5}
+    satellite: {min: 2, max: 5, capital_min: 4}
+    anarchy: {add: -1, min: 1, keep_capital: true}
+  supply_nodes:
+    skip: [ZAN]
+    # se sacan en las regiones de anarquía sin ciudad (menos su capital)
+    remove_in: [anarchy]
+    keep_victory_points: 5
+    # se agregan en las ciudades de meganaciones y satélites que no tienen uno,
+    # con su tramo de vía hasta la red (por provincias propias, hasta 25)
+    add_in: [meganation, satellite]
+    add_victory_points: 5
+    max_rail_length: 25
+
+# =============================================================================
 capital_fallback:
   rule: "Si el país no tiene capital en el spec, el state propio con más manpower."
   src: invented
