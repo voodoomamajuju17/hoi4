@@ -77,6 +77,8 @@ def emit(ctx: BuildContext) -> None:
             if key not in known:
                 missing.append(key)
                 continue
+            if key in getattr(ctx.loc, "_defined", {}):
+                continue      # ya lo nombró una unidad única
             ctx.loc.define_and_reference(key, en=names["en"], es=names["es"],
                                          file="replace/meganations_research", origin=f"research:{key}")
             done[kind] += 1
@@ -87,7 +89,7 @@ def emit(ctx: BuildContext) -> None:
     equip = spec.get("equipment") or {}
     wanted = {f"{k}_short" for k in equip if k in equipment} | {f"{k}_short" for k in techs if k in tree}
     shorts = ctx.vanilla.localisation("english", wanted)
-    for key in sorted(shorts):
+    for key in sorted(set(shorts) - set(getattr(ctx.loc, "_defined", {}))):
         base = key[:-len("_short")]
         names = techs.get(base) or equip.get(base)
         ctx.loc.define_and_reference(key, en=names.get("short_en", names["en"]), es=names.get("short_es", names["es"]),
@@ -110,7 +112,11 @@ def emit(ctx: BuildContext) -> None:
         en_txt = ctx.vanilla.localisation("english", keys)
         es_txt = ctx.vanilla.localisation("spanish", keys)
         shifted_names = 0
-        for key in sorted(set(en_txt) | set(es_txt)):
+        # reporte 2026-10-11: "clave de localisation duplicada: railway_gun_equipment_1"
+        # (el Dragón del Gran Canal del SHD ya le puso nombre): lo que otro
+        # emisor ya nombró no se vuelve a nombrar acá
+        taken = set(getattr(ctx.loc, "_defined", {}))
+        for key in sorted((set(en_txt) | set(es_txt)) - taken):
             en, es = en_txt.get(key) or es_txt.get(key), es_txt.get(key) or en_txt.get(key)
             new_en, new_es = bump(_terms(en, terms, "english")), bump(_terms(es, terms, "spanish"))
             if (new_en, new_es) == (en, es):
@@ -183,7 +189,8 @@ def _modules(ctx: BuildContext, spec: dict, terms: dict) -> None:
     en_txt = ctx.vanilla.localisation("english", set(modules))
     es_txt = ctx.vanilla.localisation("spanish", set(modules))
     done, same = 0, []
-    for key in sorted(modules):
+    taken = set(getattr(ctx.loc, "_defined", {}))
+    for key in sorted(set(modules) - taken):
         if key in own:
             en, es = own[key]["en"], own[key]["es"]
         else:

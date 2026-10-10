@@ -3264,6 +3264,26 @@ def test_repoblacion() -> None:
     check("repoblacion: los focos elegidos existen y no dependen de una rama excluyente", not bad, str(bad))
 
 
+def test_nombre_unico_vs_anio() -> None:
+    section("un equipo con nombre de unidad unica y año en el juego no se nombra dos veces (reporte 2026-10-11)")
+    import shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        van = Path(tmp) / "vanilla"
+        shutil.copytree(FIXTURE_VANILLA, van)
+        f = van / "localisation/english/techs_fixture_l_english.yml"
+        f.write_text(f.read_text(encoding="utf-8-sig") + ' modern_tank_chassis:0 "Modern Tank Chassis (1945)"\n',
+                     encoding="utf-8-sig")
+        try:
+            ctx = build(Path(tmp) / "out", vanilla_path=str(van), quiet=True)
+            ok, err = True, ""
+        except Exception as exc:   # antes: "clave de localisation duplicada: railway_gun_equipment_1"
+            ok, err = False, str(exc)
+        check("el mod se arma igual", ok, err)
+        if ok:
+            uu = (ctx.mod_root / "localisation/spanish/replace/meganations_unique_units_l_spanish.yml").read_text(encoding="utf-8-sig")
+            check("y gana el nombre de la unidad unica", 'modern_tank_chassis:0 "Gliptodonte"' in uu, uu[:200])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -3306,6 +3326,7 @@ def main() -> int:
         test_capitales_y_rebeliones,
         test_diversion,
         test_repoblacion,
+        test_nombre_unico_vs_anio,
         test_vanilla_validation,
     ):
         test()
