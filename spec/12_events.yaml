@@ -12967,3 +12967,717 @@ namespaces:
         effects:
         - {effect: run, value: MEGANATIONS_absorber_capital}
       src: user_request
+
+  # ===========================================================================
+  # Las decisiones del líder (2026-10-11, pedido del usuario: "1 evento cada 6
+  # meses que sea una decisión del líder, 4 respuestas, tipo Crusader Kings,
+  # que modifique alguna stat del líder y en un 25% de los casos también de la
+  # nación; en una, una respuesta lleva a otro evento con 2 respuestas: una es
+  # un derrocamiento y la otra una guerra civil"). Las saca MEGANATIONS_lider_pulso
+  # (14_decisions), una al azar de las que el país no vio, cada 6 meses. Las
+  # stats (Carisma, Astucia, Salud, Prestigio, de 0 a 10) mueven el espíritu
+  # El Líder (MEGANATIONS_lider_recalcular).
+  # ===========================================================================
+  meganations_lider:
+    country: null
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The State Banquet', spanish: 'El Banquete de Estado'}
+      desc:
+        english: 'A foreign delegation offers [Root.GetLeader] a banquet that will last until dawn. Every toast is a small negotiation.'
+        spanish: 'Una delegación extranjera le ofrece a [Root.GetLeader] un banquete que va a durar hasta el amanecer. Cada brindis es una pequeña negociación.'
+      options:
+      - name: {english: 'Stay until the end and toast with everyone.', spanish: 'Quedarse hasta el final y brindar con todos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Leave early: tomorrow there is work.', spanish: 'Irse temprano: mañana hay que trabajar.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Close deals in the corridors.', spanish: 'Cerrar acuerdos en los pasillos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: 50}
+        ai_chance: 25
+      - name: {english: 'Improvise a speech.', spanish: 'Improvisar un discurso.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The World Cup Final', spanish: 'La Final del Mundial'}
+      desc:
+        english: 'Against every prediction, our team reached the final of the World Cup. The whole country wants to know where [Root.GetLeader] will watch it.'
+        spanish: 'Contra todos los pronósticos, nuestra selección llegó a la final del Mundial. Todo el país quiere saber dónde la va a ver [Root.GetLeader].'
+      options:
+      - name: {english: 'At the stadium, wearing the jersey.', spanish: 'En el estadio, con la camiseta puesta.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'From the office, working.', spanish: 'Desde el despacho, trabajando.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Promise a national holiday if we win.', spanish: 'Prometer feriado nacional si ganamos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 25
+      - name: {english: 'Bet with a rival leader on live TV.', spanish: 'Apostar en vivo con un líder rival.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Rebel Daughter', spanish: 'La Hija Rebelde'}
+      desc:
+        english: 'The eldest daughter of [Root.GetLeader] was photographed leading a protest against the government. Her father''s government.'
+        spanish: 'La hija mayor de [Root.GetLeader] fue fotografiada encabezando una protesta contra el gobierno. El gobierno de su padre.'
+      options:
+      - name: {english: 'Defend her in public.', spanish: 'Defenderla en público.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Send her abroad to study.', spanish: 'Mandarla a estudiar al extranjero.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Talk to her in private, as a father.', spanish: 'Hablar con ella en privado, como padre.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Turn the story into propaganda: "even my family can speak".', spanish: 'Convertirlo en propaganda: "hasta mi familia puede hablar".'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 25
+      src: user_request
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Diagnosis', spanish: 'El Diagnóstico'}
+      desc:
+        english: 'The palace doctors found a heart problem in [Root.GetLeader]. Nothing urgent, they say. Yet.'
+        spanish: 'Los médicos del palacio le encontraron un problema en el corazón a [Root.GetLeader]. Nada urgente, dicen. Todavía.'
+      options:
+      - name: {english: 'Have surgery now and delegate for a month.', spanish: 'Operarse ya y delegar un mes.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 2}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: -50}
+        ai_chance: 25
+      - name: {english: 'Hide it and carry on.', spanish: 'Ocultarlo y seguir.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Try the experimental bio-engineered treatment.', spanish: 'Probar el tratamiento experimental de bioingeniería.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Tell the nation on live broadcast.', spanish: 'Contarlo en cadena nacional.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Palace Philosopher', spanish: 'El Filósofo del Palacio'}
+      desc:
+        english: 'An old philosopher, invited to dinner, asks [Root.GetLeader] in front of everyone: "What is power for?"'
+        spanish: 'Un viejo filósofo, invitado a cenar, le pregunta a [Root.GetLeader] delante de todos: "¿Para qué sirve el poder?"'
+      options:
+      - name: {english: '"To protect."', spanish: '"Para proteger."'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: '"To last."', spanish: '"Para durar."'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: '"To build what I will not see."', spanish: '"Para construir lo que no voy a ver."'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: dynamic_modifier, id: MEGANATIONS_lider_pensamiento, days: 365}
+        ai_chance: 25
+      - name: {english: 'Throw him out of the palace.', spanish: 'Echarlo del palacio.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 6
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Minister''s Lover', spanish: 'La Amante del Ministro'}
+      desc:
+        english: 'A minister was seen leaving the house of a famous singer at four in the morning. The press asks [Root.GetLeader] for an answer.'
+        spanish: 'Un ministro fue visto saliendo a las cuatro de la mañana de la casa de una cantante famosa. La prensa le pide una respuesta a [Root.GetLeader].'
+      options:
+      - name: {english: 'Fire the minister.', spanish: 'Echar al ministro.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Cover for him.', spanish: 'Cubrirlo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Keep the photos for later.', spanish: 'Guardarse las fotos para más adelante.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 2}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Laugh it off at the press conference.', spanish: 'Reírse en la conferencia de prensa.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 25
+      src: user_request
+    - id: 7
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Anniversary', spanish: 'El Aniversario'}
+      desc:
+        english: 'The wedding anniversary of [Root.GetLeader] falls on the same day as a summit that took a year to organise.'
+        spanish: 'El aniversario de casados de [Root.GetLeader] cae el mismo día que una cumbre que llevó un año organizar.'
+      options:
+      - name: {english: 'Cancel the summit: family first.', spanish: 'Cancelar la cumbre: primero la familia.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: -30}
+        ai_chance: 25
+      - name: {english: 'Go to the summit.', spanish: 'Ir a la cumbre.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Bring the spouse to the summit.', spanish: 'Llevar a la pareja a la cumbre.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Send flowers and a hologram.', spanish: 'Mandar flores y un holograma.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 8
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Generals Ask for an Audience', spanish: 'Los Generales Piden Audiencia'}
+      desc:
+        english: 'Five generals ask to see [Root.GetLeader]. They want more budget, more say, and they are not used to being told no.'
+        spanish: 'Cinco generales piden ver a [Root.GetLeader]. Quieren más presupuesto, más voz, y no están acostumbrados a que les digan que no.'
+      options:
+      - name: {english: 'Give them the budget.', spanish: 'Darles el presupuesto.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: -75}
+        - {effect: army_experience, value: 25}
+        ai_chance: 25
+      - name: {english: 'Promise and not deliver.', spanish: 'Prometer y no cumplir.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Retire the loudest ones.', spanish: 'Jubilar a los más ruidosos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Receive them and humiliate them in public.', spanish: 'Recibirlos y humillarlos en público.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 2}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: event, id: meganations_lider.21, days: 7}
+        ai_chance: 5
+      src: user_request
+    - id: 9
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Childhood Friend', spanish: 'El Amigo de la Infancia'}
+      desc:
+        english: 'A childhood friend of [Root.GetLeader] shows up at the palace gate. He lost everything and asks for a job.'
+        spanish: 'Un amigo de la infancia de [Root.GetLeader] aparece en la puerta del palacio. Perdió todo y pide un trabajo.'
+      options:
+      - name: {english: 'Give him a ministry.', spanish: 'Darle un ministerio.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: -0.02}
+        ai_chance: 25
+      - name: {english: 'A modest job, far from the cameras.', spanish: 'Un trabajo modesto, lejos de las cámaras.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Turn him away.', spanish: 'No recibirlo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Help him with your own money, in secret.', spanish: 'Ayudarlo con plata propia, en secreto.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 10
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Charming Ambassador', spanish: 'La Embajadora Encantadora'}
+      desc:
+        english: 'The new ambassador laughs at every joke of [Root.GetLeader] and always sits at the end of the table, closest to him.'
+        spanish: 'La nueva embajadora se ríe de cada chiste de [Root.GetLeader] y siempre se sienta en la punta de la mesa, al lado suyo.'
+      options:
+      - name: {english: 'Play along.', spanish: 'Seguirle el juego.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Keep a cold distance.', spanish: 'Mantener una distancia fría.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Have intelligence look into her.', spanish: 'Que inteligencia la investigue.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Invite her to dinner with the whole family.', spanish: 'Invitarla a cenar con toda la familia.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: 30}
+        ai_chance: 25
+      src: user_request
+    - id: 11
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Storm over the Capital', spanish: 'La Tormenta sobre la Capital'}
+      desc:
+        english: 'A storm floods the poor neighbourhoods of the capital. The cameras wait to see where [Root.GetLeader] appears.'
+        spanish: 'Una tormenta inunda los barrios pobres de la capital. Las cámaras esperan a ver dónde aparece [Root.GetLeader].'
+      options:
+      - name: {english: 'Go in person, into the mud.', spanish: 'Ir en persona, al barro.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 2}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Lead from the bunker.', spanish: 'Dirigir desde el búnker.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Send the army.', spanish: 'Mandar al ejército.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 25
+      - name: {english: 'Blame the local government.', spanish: 'Culpar al gobierno local.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Official Portrait', spanish: 'El Retrato Oficial'}
+      desc:
+        english: 'The official portrait is ready. The painter was honest: [Root.GetLeader] looks tired, older, and very human.'
+        spanish: 'El retrato oficial está listo. El pintor fue honesto: [Root.GetLeader] se ve cansado, más viejo y muy humano.'
+      options:
+      - name: {english: 'Hang it as it is.', spanish: 'Colgarlo así como está.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Have it retouched.', spanish: 'Pedir que lo retoquen.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Order a giant statue instead.', spanish: 'Encargar una estatua gigante en su lugar.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 2}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: -50}
+        ai_chance: 25
+      - name: {english: 'Send the painter to prison.', spanish: 'Mandar al pintor a la cárcel.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 13
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Sleepless Night', spanish: 'La Noche sin Dormir'}
+      desc:
+        english: 'It is four in the morning and [Root.GetLeader] has not slept. The war plans are on the desk. The bed is cold.'
+        spanish: 'Son las cuatro de la mañana y [Root.GetLeader] no durmió. Los planes de guerra están sobre el escritorio. La cama está fría.'
+      options:
+      - name: {english: 'The doctor''s pills.', spanish: 'Las pastillas del médico.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Walk alone through the gardens.', spanish: 'Caminar solo por los jardines.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Work until dawn.', spanish: 'Trabajar hasta el amanecer.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: 40}
+        ai_chance: 25
+      - name: {english: 'Call an old friend.', spanish: 'Llamar a un viejo amigo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 14
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Chess Duel', spanish: 'El Duelo de Ajedrez'}
+      desc:
+        english: 'A rival leader challenges [Root.GetLeader] to a televised game of chess. Half the world will be watching.'
+        spanish: 'Un líder rival desafía a [Root.GetLeader] a una partida de ajedrez televisada. Medio mundo va a estar mirando.'
+      options:
+      - name: {english: 'Accept and play to win.', spanish: 'Aceptar y jugar para ganar.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Let him win, for diplomacy.', spanish: 'Dejarlo ganar, por diplomacia.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Refuse: chess is for idle men.', spanish: 'Rechazar: el ajedrez es cosa de ociosos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Send a champion in your place.', spanish: 'Mandar a un campeón en su lugar.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 25
+      src: user_request
+    - id: 15
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Heir', spanish: 'El Heredero'}
+      desc:
+        english: 'The son of [Root.GetLeader] wants to enlist and go to the front like any other young man.'
+        spanish: 'El hijo de [Root.GetLeader] quiere alistarse e ir al frente como cualquier otro joven.'
+      options:
+      - name: {english: 'Let him go.', spanish: 'Dejarlo ir.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 2}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Forbid it.', spanish: 'Prohibírselo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'A safe post in the general staff.', spanish: 'Un destino seguro en el estado mayor.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Let him go, and let the press follow him.', spanish: 'Que vaya, y que la prensa lo siga.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: dynamic_modifier, id: MEGANATIONS_lider_heredero, days: 365}
+        ai_chance: 25
+      src: user_request
+    - id: 16
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Prophecy', spanish: 'La Profecía'}
+      desc:
+        english: 'A street prophet announces the fall of [Root.GetLeader] "before the next harvest". The video already has millions of views.'
+        spanish: 'Un profeta callejero anuncia la caída de [Root.GetLeader] "antes de la próxima cosecha". El video ya tiene millones de vistas.'
+      options:
+      - name: {english: 'Ignore it.', spanish: 'Ignorarlo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Arrest him.', spanish: 'Arrestarlo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Invite him to the palace.', spanish: 'Invitarlo al palacio.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Turn it into a campaign: "the people choose their destiny".', spanish: 'Convertirlo en campaña: "el pueblo elige su destino".'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 25
+      src: user_request
+    - id: 17
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Incognito', spanish: 'De Incógnito'}
+      desc:
+        english: '[Root.GetLeader] wants to walk the streets in disguise, like the kings of old stories, to hear what people really say.'
+        spanish: '[Root.GetLeader] quiere recorrer las calles disfrazado, como los reyes de los cuentos viejos, para escuchar lo que la gente dice de verdad.'
+      options:
+      - name: {english: 'Alone, without escort.', spanish: 'Solo, sin escolta.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 2}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'With a hidden escort.', spanish: 'Con una escolta escondida.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Better to read the reports.', spanish: 'Mejor leer los informes.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Listen, and change something the next day.', spanish: 'Escuchar, y cambiar algo al día siguiente.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: 0.03}
+        - {effect: add_political_power, value: -25}
+        ai_chance: 25
+      src: user_request
+    - id: 18
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Repentant Rival', spanish: 'El Rival Arrepentido'}
+      desc:
+        english: 'An old political enemy of [Root.GetLeader] asks for forgiveness and offers his support. His followers are many.'
+        spanish: 'Un viejo enemigo político de [Root.GetLeader] pide perdón y ofrece su apoyo. Sus seguidores son muchos.'
+      options:
+      - name: {english: 'Accept him.', spanish: 'Aceptarlo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Humiliate him first.', spanish: 'Humillarlo primero.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Accept, and have him watched.', spanish: 'Aceptarlo, y que lo vigilen.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Give him a real post.', spanish: 'Darle un cargo de verdad.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: 50}
+        ai_chance: 25
+      src: user_request
+    - id: 19
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Nation''s Gala', spanish: 'La Gala de la Nación'}
+      desc:
+        english: 'The national day gala. Everyone expects [Root.GetLeader] to open the dance.'
+        spanish: 'La gala del día de la nación. Todos esperan que [Root.GetLeader] abra el baile.'
+      options:
+      - name: {english: 'Dance all night.', spanish: 'Bailar toda la noche.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'A solemn speech instead.', spanish: 'Un discurso solemne, en cambio.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Do not go: work.', spanish: 'No ir: trabajar.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Pay for fireworks in every city.', spanish: 'Pagar fuegos artificiales en todas las ciudades.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: dynamic_modifier, id: MEGANATIONS_lider_fiesta, days: 180}
+        - {effect: add_political_power, value: -50}
+        ai_chance: 25
+      src: user_request
+    - id: 20
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Anonymous Letter', spanish: 'La Carta Anónima'}
+      desc:
+        english: 'An anonymous letter reaches [Root.GetLeader]: someone knows a secret from his youth and wants money.'
+        spanish: 'Una carta anónima le llega a [Root.GetLeader]: alguien conoce un secreto de su juventud y quiere plata.'
+      options:
+      - name: {english: 'Pay for silence.', spanish: 'Pagar el silencio.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_political_power, value: -50}
+        ai_chance: 25
+      - name: {english: 'Confess it before it comes out.', spanish: 'Confesarlo antes de que salga.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Hunt down the author.', spanish: 'Buscar al autor.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      - name: {english: 'Ignore it.', spanish: 'Ignorarla.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 25
+      src: user_request
+    - id: 21
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Generals'' Ultimatum', spanish: 'El Ultimátum de los Generales'}
+      desc:
+        english: 'The humiliated generals did not forget. Tonight the tanks surround the palace and a colonel brings a letter: [Root.GetLeader] resigns before dawn, or the army decides.\n\nRESIGN: [Root.GetLeader] leaves power at once and the party names someone else (-10% stability, +5% war support).\n\nRESIST: civil war. A part of the army and of the country rises against the government.'
+        spanish: 'Los generales humillados no se olvidaron. Esta noche los tanques rodean el palacio y un coronel trae una carta: [Root.GetLeader] renuncia antes del amanecer, o decide el ejército.\n\nRENUNCIAR: [Root.GetLeader] deja el poder en el acto y el partido nombra a otro (-10% de estabilidad, +5% de apoyo a la guerra).\n\nRESISTIR: guerra civil. Una parte del ejército y del país se levanta contra el gobierno.'
+      options:
+      - name: {english: 'Resign, to avoid the blood.', spanish: 'Renunciar, para evitar la sangre.'}
+        effects:
+        - {effect: run, value: MEGANATIONS_lider_derrocado}
+        - {effect: add_stability, value: -0.1}
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 60
+      - name: {english: 'Resist: let them come.', spanish: 'Resistir: que vengan.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: run, value: MEGANATIONS_lider_guerra_civil}
+        ai_chance: 40
+      src: user_request
+    - id: 22
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Leader Collapses', spanish: 'El Líder se Desploma'}
+      desc:
+        english: '[Root.GetLeader] collapsed in the middle of a cabinet meeting. The doctors demand weeks of rest; the country holds its breath (-5% stability, -50 political power; Health goes back up to 3).'
+        spanish: '[Root.GetLeader] se desplomó en medio de una reunión de gabinete. Los médicos exigen semanas de reposo; el país contiene la respiración (-5% de estabilidad, -50 de poder político; la Salud vuelve a 3).'
+      options:
+      - name: {english: 'Rest, at last.', spanish: 'Descansar, por fin.'}
+        effects:
+        - {effect: set_variable, var: MEGANATIONS_lider_salud, value: 3}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - {effect: add_stability, value: -0.05}
+        - {effect: add_political_power, value: -50}
+      src: user_request

@@ -1744,8 +1744,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas y 4 de repoblacion",
-              len(dm.entries) == 81 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion y 4 del lider",
+              len(dm.entries) == 85 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -3284,6 +3284,50 @@ def test_nombre_unico_vs_anio() -> None:
             check("y gana el nombre de la unidad unica", 'modern_tank_chassis:0 "Gliptodonte"' in uu, uu[:200])
 
 
+def test_decisiones_del_lider() -> None:
+    section("decisiones del lider: una cada 6 meses, 4 respuestas, stats del lider (2026-10-11)")
+    import re as _re
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
+        ev = flat(mod / "events/meganations_lider.txt")
+        eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
+        ids = [int(x) for x in _re.findall(r"id = meganations_lider\.(\d+) title", ev)]
+        check("lider: 20 decisiones, el ultimatum y el desplome", sorted(ids) == list(range(1, 23)), str(ids))
+        bodies = {i: ev[ev.index(f"id = meganations_lider.{i} title"):ev.index(f"id = meganations_lider.{i + 1} title")] for i in range(1, 21)}
+        four = all(b.count("option = {") == 4 for b in bodies.values())
+        check("lider: cada decision tiene 4 respuestas", four)
+        stats = all(o.count("MEGANATIONS_lider_") and "MEGANATIONS_lider_recalcular = yes" in o
+                    for b in bodies.values() for o in b.split("option = {")[1:])
+        check("lider: cada respuesta mueve alguna stat del lider", stats)
+        nat_words = ("add_political_power", "add_stability", "add_war_support", "army_experience", "add_dynamic_modifier")
+        opts = [o for b in bodies.values() for o in b.split("option = {")[1:]]
+        nat = [o for o in opts if any(w in o for w in nat_words)]
+        check("lider: un 25% de las respuestas tambien toca a la nacion", len(nat) == len(opts) // 4, f"{len(nat)} de {len(opts)}")
+        pulse = eff[eff.index("MEGANATIONS_lider_pulso = {"):][:9000]
+        check("lider: cada 6 meses, una al azar de las que no vio",
+              "set_country_flag = { flag = MEGANATIONS_lider_espera value = 1 days = 182 }" in pulse
+              and "random_list = { 1 = { modifier = { factor = 0 has_country_flag = MEGANATIONS_lider_visto_1 } set_country_flag = MEGANATIONS_lider_visto_1 country_event = { id = meganations_lider.1" in pulse, pulse[:1500])
+        check("lider: el pulso mundial lo corre", "MEGANATIONS_lider_pulso = yes" in eff[eff.index("MEGANATIONS_eventos_mundiales = {"):][:800])
+        rec = eff[eff.index("MEGANATIONS_lider_recalcular = {"):][:2000]
+        check("lider: stats de 0 a 10 que mueven el espiritu El Lider; Salud en 0, desplome",
+              "clamp_variable = { var = MEGANATIONS_lider_carisma min = 0 max = 10 }" in rec
+              and "modifier = MEGANATIONS_el_lider" in rec and "id = meganations_lider.22" in rec, rec[:600])
+        e8 = bodies[8]
+        e21 = ev[ev.index("id = meganations_lider.21 title"):ev.index("id = meganations_lider.22 title")]
+        check("lider: humillar a los generales lleva al ultimatum", "country_event = { id = meganations_lider.21 days = 7 }" in e8, e8[-500:])
+        check("lider: el ultimatum tiene 2 respuestas: derrocamiento o guerra civil",
+              e21.count("option = {") == 2 and "MEGANATIONS_lider_derrocado = yes" in e21 and "MEGANATIONS_lider_guerra_civil = yes" in e21, e21)
+        check("lider: el derrocamiento saca al lider en el acto",
+              "MEGANATIONS_lider_derrocado = { retire_country_leader = yes" in eff)
+        gc = eff[eff.index("MEGANATIONS_lider_guerra_civil = {"):eff.index("MEGANATIONS_lider_pulso = {")]
+        check("lider: la guerra civil del ultimatum, para cada potencia (junta militar o caudillos)",
+              gc.count("start_civil_war = {") == 8 and "ideology = neutrality" in gc and "ideology = fascism" in gc)
+        loc = (mod / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("lider: los textos nombran al lider", "[Root.GetLeader]" in loc[loc.index("meganations_lider.1."):])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -3327,6 +3371,7 @@ def main() -> int:
         test_diversion,
         test_repoblacion,
         test_nombre_unico_vs_anio,
+        test_decisiones_del_lider,
         test_vanilla_validation,
     ):
         test()

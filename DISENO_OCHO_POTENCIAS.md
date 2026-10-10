@@ -1346,3 +1346,31 @@ después 150.000 y Las Cunas Llenas (+10% crecimiento, +5% reclutable). Fuerte:
 200.000 y La Gran Repoblación (+25%, +10%), después 300.000 y Las Cunas
 Desbordadas (+20%, +10%). Espíritus permanentes. El reporte dice a quién le
 tocó ("repoblacion: ...").
+
+## Las decisiones del líder (2026-10-11)
+
+Pedido: "1 evento cada 6 meses que sea una decisión del líder, 4 respuestas,
+tipo Crusader Kings, que modifique alguna stat del líder, para bien o para mal,
+sin exagerar; en un 25% de los casos también la nación; en una, una respuesta
+lleva a otro evento de 2 respuestas: derrocamiento instantáneo o guerra civil".
+
+- **Stats del líder** (variables de 0 a 10, arrancan en 5): Carisma, Astucia,
+  Salud y Prestigio. Mueven el espíritu "El Líder": cada punto de Carisma sobre o
+  bajo 5 es 1% de estabilidad, de Astucia 0,04 PP por día, de Prestigio 1% de
+  apoyo a la guerra (como mucho ±5%). Con la Salud en 0 el líder se desploma
+  (meganations_lider.22: -5% estabilidad, -50 PP, la Salud vuelve a 3).
+- **20 decisiones** (namespace meganations_lider, eventos 1-20): banquete,
+  final del Mundial, la hija rebelde, el diagnóstico, el filósofo, la amante del
+  ministro, el aniversario, los generales, el amigo de la infancia, la
+  embajadora, la tormenta, el retrato, la noche sin dormir, el ajedrez, el
+  heredero, la profecía, de incógnito, el rival arrepentido, la gala y la carta
+  anónima. 4 respuestas cada una, todas mueven 1 a 3 stats en ±1 o ±2; 20 de las
+  80 (25%) también tocan a la nación (poder político, estabilidad, apoyo a la
+  guerra, experiencia, o un espíritu de 6 meses a un año).
+- **Cada 6 meses** (MEGANATIONS_lider_pulso, desde abril de 2100): una al azar
+  entre las que el país todavía no vio; vistas las 20, vuelven a salir.
+- **La cadena del golpe**: en "Los Generales Piden Audiencia", humillarlos en
+  público (+2 Prestigio) trae a la semana "El Ultimátum de los Generales"
+  (evento 21): renunciar (el líder deja el poder en el acto, stats en 5, -10%
+  estabilidad, +5% apoyo a la guerra) o resistir (guerra civil del 30% del país:
+  junta militar, o caudillos en el Imperio Ecofascista y Roma).

@@ -13924,6 +13924,8 @@ scripted_effects:
     effects:
     # 2026-10-10: la carrera del destino, el exilio, los caudillos y los rivales jurados
     - {effect: run, value: MEGANATIONS_carrera_pulso}
+    # 2026-10-11: las decisiones del líder, una cada 6 meses
+    - {effect: run, value: MEGANATIONS_lider_pulso}
     # 2026-10-10: el año del mundo, uno al azar al arrancar, para todos los países
     - effect: if
       when: {not_global_flag: MEGANATIONS_ano_del_mundo}
@@ -14348,6 +14350,242 @@ scripted_effects:
     - {effect: event, id: meganations_mundo.95, days: 120}
     - {effect: event, id: meganations_mundo.95, days: 300}
     - {effect: event, id: meganations_mundo.95, days: 480}
+
+  # -------------------------------------------------------------------------
+  # Las decisiones del líder (2026-10-11). Stats de 0 a 10 (arrancan en 5):
+  # Carisma -> estabilidad, Astucia -> poder político, Prestigio -> apoyo a la
+  # guerra (cada punto sobre o bajo 5: 1%, 0,04 PP/día, 1%), Salud en 0 -> el
+  # líder se desploma (meganations_lider.22).
+  # -------------------------------------------------------------------------
+  - id: MEGANATIONS_lider_recalcular
+    effects:
+    - {effect: clamp, var: MEGANATIONS_lider_carisma, min: 0, max: 10}
+    - {effect: clamp, var: MEGANATIONS_lider_astucia, min: 0, max: 10}
+    - {effect: clamp, var: MEGANATIONS_lider_salud, min: 0, max: 10}
+    - {effect: clamp, var: MEGANATIONS_lider_prestigio, min: 0, max: 10}
+    - effect: math
+      ops:
+      - [set, MEGANATIONS_lider_ef_carisma, MEGANATIONS_lider_carisma]
+      - [sub, MEGANATIONS_lider_ef_carisma, 5]
+      - [mul, MEGANATIONS_lider_ef_carisma, 0.01]
+      - [set, MEGANATIONS_lider_ef_astucia, MEGANATIONS_lider_astucia]
+      - [sub, MEGANATIONS_lider_ef_astucia, 5]
+      - [mul, MEGANATIONS_lider_ef_astucia, 0.04]
+      - [set, MEGANATIONS_lider_ef_prestigio, MEGANATIONS_lider_prestigio]
+      - [sub, MEGANATIONS_lider_ef_prestigio, 5]
+      - [mul, MEGANATIONS_lider_ef_prestigio, 0.01]
+    - {effect: dynamic_modifier, id: MEGANATIONS_el_lider}
+    - effect: if
+      when:
+        variable_below: {var: MEGANATIONS_lider_salud, value: 1}
+      then:
+      - {effect: event, id: meganations_lider.22, days: 1}
+  - id: MEGANATIONS_lider_reiniciar
+    effects:
+    - {effect: set_variable, var: MEGANATIONS_lider_carisma, value: 5}
+    - {effect: set_variable, var: MEGANATIONS_lider_astucia, value: 5}
+    - {effect: set_variable, var: MEGANATIONS_lider_salud, value: 5}
+    - {effect: set_variable, var: MEGANATIONS_lider_prestigio, value: 5}
+    - {effect: run, value: MEGANATIONS_lider_recalcular}
+  - id: MEGANATIONS_lider_derrocado
+    effects:
+    - {effect: retire_leader}
+    - {effect: run, value: MEGANATIONS_lider_reiniciar}
+  - id: MEGANATIONS_lider_guerra_civil
+    effects:
+    - effect: if
+      when: {tag: EFE}
+      then:
+      - effect: civil_war
+        tag: EFE
+        ideology: neutrality
+        size: 0.3
+    - effect: if
+      when: {tag: FCU}
+      then:
+      - effect: civil_war
+        tag: FCU
+        ideology: fascism
+        size: 0.3
+    - effect: if
+      when: {tag: ASC}
+      then:
+      - effect: civil_war
+        tag: ASC
+        ideology: fascism
+        size: 0.3
+    - effect: if
+      when: {tag: HSN}
+      then:
+      - effect: civil_war
+        tag: HSN
+        ideology: fascism
+        size: 0.3
+    - effect: if
+      when: {tag: NAS}
+      then:
+      - effect: civil_war
+        tag: NAS
+        ideology: fascism
+        size: 0.3
+    - effect: if
+      when: {tag: SHD}
+      then:
+      - effect: civil_war
+        tag: SHD
+        ideology: fascism
+        size: 0.3
+    - effect: if
+      when: {tag: APF}
+      then:
+      - effect: civil_war
+        tag: APF
+        ideology: fascism
+        size: 0.3
+    - effect: if
+      when: {tag: NRE}
+      then:
+      - effect: civil_war
+        tag: NRE
+        ideology: neutrality
+        size: 0.3
+  - id: MEGANATIONS_lider_pulso
+    effects:
+    - effect: if
+      when: {not_flag: MEGANATIONS_lider_listo}
+      then:
+      - {effect: flag, value: MEGANATIONS_lider_listo}
+      - {effect: run, value: MEGANATIONS_lider_reiniciar}
+    - effect: if
+      when: {date_after: 2100.4.1, not_flag: MEGANATIONS_lider_espera}
+      then:
+      - effect: if
+        when:
+          flags: [MEGANATIONS_lider_visto_1, MEGANATIONS_lider_visto_2, MEGANATIONS_lider_visto_3, MEGANATIONS_lider_visto_4, MEGANATIONS_lider_visto_5, MEGANATIONS_lider_visto_6, MEGANATIONS_lider_visto_7, MEGANATIONS_lider_visto_8, MEGANATIONS_lider_visto_9, MEGANATIONS_lider_visto_10, MEGANATIONS_lider_visto_11, MEGANATIONS_lider_visto_12, MEGANATIONS_lider_visto_13, MEGANATIONS_lider_visto_14, MEGANATIONS_lider_visto_15, MEGANATIONS_lider_visto_16, MEGANATIONS_lider_visto_17, MEGANATIONS_lider_visto_18, MEGANATIONS_lider_visto_19, MEGANATIONS_lider_visto_20]
+        then:
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_1}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_2}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_3}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_4}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_5}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_6}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_7}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_8}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_9}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_10}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_11}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_12}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_13}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_14}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_15}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_16}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_17}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_18}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_19}
+        - {effect: clear_flag, value: MEGANATIONS_lider_visto_20}
+      - {effect: flag, value: MEGANATIONS_lider_espera, days: 182}
+      - effect: random
+        options:
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_1}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_1}
+          - {effect: event, id: meganations_lider.1, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_2}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_2}
+          - {effect: event, id: meganations_lider.2, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_3}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_3}
+          - {effect: event, id: meganations_lider.3, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_4}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_4}
+          - {effect: event, id: meganations_lider.4, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_5}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_5}
+          - {effect: event, id: meganations_lider.5, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_6}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_6}
+          - {effect: event, id: meganations_lider.6, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_7}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_7}
+          - {effect: event, id: meganations_lider.7, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_8}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_8}
+          - {effect: event, id: meganations_lider.8, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_9}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_9}
+          - {effect: event, id: meganations_lider.9, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_10}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_10}
+          - {effect: event, id: meganations_lider.10, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_11}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_11}
+          - {effect: event, id: meganations_lider.11, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_12}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_12}
+          - {effect: event, id: meganations_lider.12, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_13}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_13}
+          - {effect: event, id: meganations_lider.13, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_14}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_14}
+          - {effect: event, id: meganations_lider.14, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_15}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_15}
+          - {effect: event, id: meganations_lider.15, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_16}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_16}
+          - {effect: event, id: meganations_lider.16, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_17}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_17}
+          - {effect: event, id: meganations_lider.17, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_18}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_18}
+          - {effect: event, id: meganations_lider.18, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_19}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_19}
+          - {effect: event, id: meganations_lider.19, days: 1}
+        - weight: 1
+          skip_if: {flag: MEGANATIONS_lider_visto_20}
+          effects:
+          - {effect: flag, value: MEGANATIONS_lider_visto_20}
+          - {effect: event, id: meganations_lider.20, days: 1}
 
 dynamic_modifiers:
   - id: MEGANATIONS_mandato_compartido
@@ -14828,7 +15066,33 @@ dynamic_modifiers:
     desc: {english: 'Schools, granaries and pensions for large families: +20% population growth, +10% recruitable population.', spanish: 'Escuelas, graneros y pensiones para las familias grandes: +20% de crecimiento de población, +10% de población reclutable.'}
     modifiers: {monthly_population: 0.2, recruitable_population_factor: 0.1}
 
+  # 2026-10-11: las decisiones del líder
+  - id: MEGANATIONS_el_lider
+    country: null
+    name: {english: 'The Leader', spanish: 'El Líder'}
+    desc: {english: 'Charisma [?MEGANATIONS_lider_carisma|0] (stability), Cunning [?MEGANATIONS_lider_astucia|0] (political power), Health [?MEGANATIONS_lider_salud|0], Prestige [?MEGANATIONS_lider_prestigio|0] (war support). Out of 10; each point above or below 5 counts. Health at 0: the leader collapses.', spanish: 'Carisma [?MEGANATIONS_lider_carisma|0] (estabilidad), Astucia [?MEGANATIONS_lider_astucia|0] (poder político), Salud [?MEGANATIONS_lider_salud|0], Prestigio [?MEGANATIONS_lider_prestigio|0] (apoyo a la guerra). Sobre 10; cada punto sobre o bajo 5 cuenta. Salud en 0: el líder se desploma.'}
+    modifiers: {stability_factor: MEGANATIONS_lider_ef_carisma, political_power_gain: MEGANATIONS_lider_ef_astucia, war_support_factor: MEGANATIONS_lider_ef_prestigio}
+  - id: MEGANATIONS_lider_pensamiento
+    country: null
+    name: {english: 'Building What We Will Not See', spanish: 'Construir lo que no Veremos'}
+    desc: {english: 'The leader''s answer became a slogan in every laboratory.', spanish: 'La respuesta del líder se volvió consigna en cada laboratorio.'}
+    modifiers: {research_speed_factor: 0.05}
+  - id: MEGANATIONS_lider_heredero
+    country: null
+    name: {english: 'The Heir at the Front', spanish: 'El Heredero en el Frente'}
+    desc: {english: 'If the leader''s son goes, so do ours.', spanish: 'Si va el hijo del líder, van los nuestros.'}
+    modifiers: {war_support_factor: 0.05}
+  - id: MEGANATIONS_lider_fiesta
+    country: null
+    name: {english: 'Fireworks in Every City', spanish: 'Fuegos en Todas las Ciudades'}
+    desc: {english: 'Nobody forgets the night of the gala.', spanish: 'Nadie se olvida de la noche de la gala.'}
+    modifiers: {stability_factor: 0.05}
+
 variable_names:
+  MEGANATIONS_lider_carisma: {english: "Leader's Charisma", spanish: "Carisma del líder"}
+  MEGANATIONS_lider_astucia: {english: "Leader's Cunning", spanish: "Astucia del líder"}
+  MEGANATIONS_lider_salud: {english: "Leader's Health", spanish: "Salud del líder"}
+  MEGANATIONS_lider_prestigio: {english: "Leader's Prestige", spanish: "Prestigio del líder"}
   APF_desarrollo_zet: {english: "Highlands Development", spanish: "Desarrollo de las Tierras Altas"}
   APF_desarrollo_zsa: {english: "Cape Development", spanish: "Desarrollo del Cabo"}
   APF_integracion_zet: {english: "Highlands Integration", spanish: "Integración de las Tierras Altas"}

@@ -408,8 +408,14 @@ def render_effects(owner: str, items: list[dict], known,
         if effect == "random":
             inner = Block()
             for opt in item["options"]:
-                inner.add(str(int(opt.get("weight", 1))),
-                          render_effects(owner, opt.get("effects") or [], ec, effects_used, where=where))
+                body = render_effects(owner, opt.get("effects") or [], ec, effects_used, where=where)
+                if opt.get("skip_if"):
+                    # 2026-10-11 (decisiones del líder): la opción no sale si se
+                    # cumple la condición (peso x0), p. ej. un evento ya visto
+                    mod = Block([("factor", 0)])
+                    mod.entries.extend(render_conditions(owner, opt["skip_if"], ec.triggers_used, where=where).entries)
+                    body.entries.insert(0, ("modifier", mod))
+                inner.add(str(int(opt.get("weight", 1))), body)
             block.add("random_list", inner)
             effects_used.setdefault("random_list", owner)
             continue
@@ -431,6 +437,12 @@ def render_effects(owner: str, items: list[dict], known,
             inner.add("category", cat)
             block.add("add_tech_bonus", inner)
             effects_used.setdefault("add_tech_bonus", owner)
+            continue
+        if effect == "retire_leader":
+            # 2026-10-11 (decisiones del líder): derrocamiento. Como los efectos
+            # de líder de la guerra civil, no se verifica contra documentation/
+            # (si faltara, el juego solo lo anota en error.log).
+            block.add("retire_country_leader", True)
             continue
         if effect == "leader_trait":
             block.add("add_country_leader_trait", item["value"])
