@@ -1426,3 +1426,27 @@ cambia de nombre y conquista a los demás para liberarlos como juntas títere.
 - **Arte**: pedidos de los 8 retratos de los generales, las 24 banderas, los 11
   íconos de foco, los espíritus nuevos y las imágenes de las decisiones del
   líder (las 8 del fin de la guerra comparten una).
+
+## Las rebeliones del ultimátum, una por potencia (2026-10-11, rehecho)
+
+Pedido: "las rebeliones tienen que tener más sentido". Resistir el ultimátum de
+los generales (meganations_lider.21) ya no arma una junta genérica: cada
+potencia se parte a su manera (meganations_lider.40-47; las regiones de Roma y
+de la HSN salen del mapa, tools/gen/emitters/rebeliones.py).
+
+| Potencia | Qué se levanta |
+|---|---|
+| Imperio Ecofascista | La Confederación Liberal del Cono Sur (democracia, 35% del país, Gral. Martín Arregui). La Unión la suma a su facción si la lidera, si no la garantiza, y le manda 3.000 de equipo. |
+| Unión (FCU) | Sin guerra civil: sus zonas (Boreal y del Sur) se pasan a las Tierras Sin Ley (anexión), que reciben un año de +20% ataque y defensa, +10% reclutable y apoyo a la guerra, 150.000 hombres, equipo y 15 divisiones en Norteamérica, y le declaran la guerra. Sin las Tierras Sin Ley, las zonas se independizan y van a la guerra. |
+| Comuna (ASC) | Los Hijos de Odín: la Furia arranca en 30 y sube 12 por mes (18 con menos de 50% de estabilidad); cada mes vuelan fábricas, datacenters (Cómputo -8) o baterías (apagones). Se frena con La Caza de los Hijos de Odín (redadas -8, ley marcial -20, infiltrar ±): muy difícil. En 100, El Reino del Valhalla (fascismo, 35%, Jarl Sven Ragnarsson) con la garantía y las armas del EFE y de Roma; en 0, se terminan (un año de +10% estabilidad). |
+| Nación de Alta Mar | La Armada de la Cruz del Mar (fascismo religioso-militar): el nodo de Malaca y la mitad de la flota (navy_ratio 0,5); se alía con el Indostán si existe. |
+| Reino Celeste | La Junta del Sol Negro, esotérica y paranoica (espíritu de paranoia), con el árbol de la junta (renombrado: la Vigilia del Sol Negro, la Montaña Hueca, la Purga de los Impuros, el Eclipse Total, la Orden del Sol Negro). Si gana, conquista a los demás y los libera como juntas títere. |
+| Directorio (SHD) | La Comuna Roja de la Máquina: vuelven los comunistas de la IA (35%), con la garantía y las armas de la Comuna. |
+| Federación Africana | Movimientos nacionalistas: el Frente Nacionalista Africano (25%) y las Tierras Altas y el Cabo, que se independizan y le declaran la guerra. |
+| Roma | El Cisma de Oriente: el Imperio Romano de Oriente con las regiones del este (capital, la de más puntos de victoria de ese lado). |
+
+Al terminar cada guerra civil (meganations_lider.30-37, menos la Unión): si gana
+la rebelión, un año de +10% estabilidad y apoyo a la guerra (el Sol Negro además
+sale a conquistar); si gana el gobierno, la rebelión aplastada (un año de +15%
+estabilidad, -15% organización y apoyo a la guerra, peor moral, más guarniciones).
+El `else` del DSL ahora va al lado del `if`, como en los scripts del juego.

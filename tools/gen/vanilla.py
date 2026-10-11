@@ -296,6 +296,27 @@ class Vanilla:
     def land_provinces(self) -> set[int]:
         return {p for p, (_, kind, _) in self._definition().items() if kind == "land"}
 
+    def state_positions(self) -> dict[int, float]:
+        """state id -> posición horizontal en el mapa (promedio de las x de sus
+        edificios en map/buildings.txt: "state;edificio;x;y;z;..."). Sin el
+        archivo devuelve {} (2026-10-11: el cisma de Roma entre este y oeste)."""
+        if getattr(self, "_positions", None) is not None:
+            return self._positions
+        sums: dict[int, list[float]] = {}
+        path = self.root / "map" / "buildings.txt"
+        if path.exists():
+            for line in path.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+                parts = line.split(";")
+                if len(parts) < 5:
+                    continue
+                try:
+                    sid, x = int(parts[0]), float(parts[2])
+                except ValueError:
+                    continue
+                sums.setdefault(sid, []).append(x)
+        self._positions = {sid: sum(xs) / len(xs) for sid, xs in sums.items()}
+        return self._positions
+
     def state_continents(self) -> dict[int, str]:
         """state id -> continente mayoritario de sus provincias.
 

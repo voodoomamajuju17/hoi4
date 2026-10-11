@@ -400,7 +400,8 @@ def _junta_plans(ctx: BuildContext, cfg: dict, add_plan) -> None:
         return
     tags = (ctx.spec.raw["diplomacy"].get("race") or {}).get("tags") or []
     on = {"flag": "MEGANATIONS_junta_victoriosa"}
-    for a in tags:
+    # 2026-10-11 (rehecho): la única junta es la del Sol Negro (NAS)
+    for a in cfg.get("tags") or tags:
         add_plan(f"{a}_junta_se_arma", a, [
             {"type": "added_military_to_civilian_factory_ratio", "value": int(cfg.get("military_ratio", 60))}], enable=on)
         for b in tags:
@@ -413,4 +414,4 @@ def _junta_plans(ctx: BuildContext, cfg: dict, add_plan) -> None:
                 {"type": "antagonize", "target": b, "value": cfg.get("antagonize", 80)},
                 {"type": "declare_war", "target": b, "value": cfg.get("declare", 150)},
             ], enable=dict(on), abort=gone)
-    ctx.note(f"ia: juntas militares listas para {len(tags)} potencias")
+    ctx.note(f"ia: junta militar lista para {', '.join(cfg.get('tags') or tags)}")

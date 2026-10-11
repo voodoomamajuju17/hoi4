@@ -835,19 +835,55 @@ independents:
 # la bandera es la del país hasta que llegue el dibujo (arte/pedidos 5_banderas).
 # =============================================================================
 cosmetic_tags:
-  # 2026-10-11: las juntas militares (guerra civil del ultimátum de los generales):
-  # el bando rebelde, la junta que ganó y la junta títere que impone a los vencidos.
-  - id: EFE_GENERALES
+  # 2026-10-11 (rehecho): las rebeliones del ultimátum, una distinta en cada potencia, y las
+  # juntas títere que impone la Junta del Sol Negro si gana (las otras no tienen junta).
+  - id: EFE_LIBERAL
     parent: EFE
-    name: {english: 'The Generals of the Pampa', spanish: 'Los Generales de la Pampa'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of the Ecofascist Empire''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
+    name: {english: 'The Liberal Confederation of the Southern Cone', spanish: 'La Confederación Liberal del Cono Sur'}
+    adjective: {english: 'Liberal', spanish: 'liberal'}
+    art: 'light blue and white horizontal stripes with a golden rising sun inside a ring of stars, the colours of the old River Plate liberal republics.'
     src: user_request
-  - id: EFE_JUNTA
-    parent: EFE
-    name: {english: 'The Military Junta of the Plata', spanish: 'La Junta Militar del Plata'}
-    adjective: {english: 'Plata Junta', spanish: 'de la Junta del Plata'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of the Ecofascist Empire''s old flag along the bottom; stern military regime flag.'
+  - id: ASC_VALHALLA
+    parent: ASC
+    name: {english: 'The Kingdom of Valhalla', spanish: 'El Reino del Valhalla'}
+    adjective: {english: 'Valhallan', spanish: 'del Valhalla'}
+    art: 'black field with a red Nordic cross and a white valknut (three interlocked triangles) at the crossing; harsh, pagan, martial.'
+    src: user_request
+  - id: HSN_CRUZADA
+    parent: HSN
+    name: {english: 'The Armada of the Sea Cross', spanish: 'La Armada de la Cruz del Mar'}
+    adjective: {english: 'Crusader', spanish: 'cruzado'}
+    art: 'deep navy blue field with a large white cross whose lower arm ends in an anchor, a crown of thorns around the crossing.'
+    src: user_request
+  - id: NAS_GENERALES
+    parent: NAS
+    name: {english: 'The Black Sun Junta', spanish: 'La Junta del Sol Negro'}
+    adjective: {english: 'Black Sun', spanish: 'del Sol Negro'}
+    art: 'black field with a black sun disc ringed in dark gold rays and a staring eye in its centre; esoteric, paranoid military order.'
+    src: user_request
+  - id: NAS_JUNTA
+    parent: NAS
+    name: {english: 'The Order of the Black Sun', spanish: 'La Orden del Sol Negro'}
+    adjective: {english: 'Black Sun', spanish: 'del Sol Negro'}
+    art: 'dark gold field with a black eclipsed sun and a stepped Andean cross beneath it; stern esoteric regime flag.'
+    src: user_request
+  - id: SHD_COMUNA_ROJA
+    parent: SHD
+    name: {english: 'The Red Machine Commune', spanish: 'La Comuna Roja de la Máquina'}
+    adjective: {english: 'Red Commune', spanish: 'de la Comuna Roja'}
+    art: 'red field with a yellow star made of circuit traces and a small yellow river wave beneath it.'
+    src: user_request
+  - id: APF_NACIONALISTAS
+    parent: APF
+    name: {english: 'The African Nationalist Front', spanish: 'El Frente Nacionalista Africano'}
+    adjective: {english: 'Nationalist', spanish: 'nacionalista'}
+    art: 'green, gold and red vertical tricolour with a black fist holding a spear in the centre.'
+    src: user_request
+  - id: NRE_ORIENTE
+    parent: NRE
+    name: {english: 'The Eastern Roman Empire', spanish: 'El Imperio Romano de Oriente'}
+    adjective: {english: 'Eastern Roman', spanish: 'de Oriente'}
+    art: 'purple field with a golden double-headed eagle crowned, holding a sword and an orb; Byzantine imperial flag.'
     src: user_request
   - id: EFE_JUNTA_TITERE
     parent: EFE
@@ -855,35 +891,11 @@ cosmetic_tags:
     adjective: {english: 'Junta', spanish: 'de la junta'}
     art: 'the old flag of the Ecofascist Empire with a black canton holding a small white star and sword: a client military junta.'
     src: user_request
-  - id: FCU_GENERALES
-    parent: FCU
-    name: {english: 'The Continental Defence Command', spanish: 'El Mando de Defensa Continental'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of the Union''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
-    src: user_request
-  - id: FCU_JUNTA
-    parent: FCU
-    name: {english: 'The North American Security Junta', spanish: 'La Junta de Seguridad de Norteamérica'}
-    adjective: {english: 'Security Junta', spanish: 'de la Junta de Seguridad'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of the Union''s old flag along the bottom; stern military regime flag.'
-    src: user_request
   - id: FCU_JUNTA_TITERE
     parent: FCU
     name: {english: 'The Military Junta of the Union', spanish: 'La Junta Militar de la Unión'}
     adjective: {english: 'Junta', spanish: 'de la junta'}
     art: 'the old flag of the Union with a black canton holding a small white star and sword: a client military junta.'
-    src: user_request
-  - id: ASC_GENERALES
-    parent: ASC
-    name: {english: 'The Army Salvation Committee', spanish: 'El Comité de Salvación del Ejército'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of the Commune''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
-    src: user_request
-  - id: ASC_JUNTA
-    parent: ASC
-    name: {english: 'The Military Directorate of Europe', spanish: 'El Directorio Militar de Europa'}
-    adjective: {english: 'Directorate', spanish: 'del Directorio Militar'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of the Commune''s old flag along the bottom; stern military regime flag.'
     src: user_request
   - id: ASC_JUNTA_TITERE
     parent: ASC
@@ -891,35 +903,11 @@ cosmetic_tags:
     adjective: {english: 'Junta', spanish: 'de la junta'}
     art: 'the old flag of the Commune with a black canton holding a small white star and sword: a client military junta.'
     src: user_request
-  - id: HSN_GENERALES
-    parent: HSN
-    name: {english: 'The Rebel Admiralty', spanish: 'El Almirantazgo Rebelde'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of the High-Sea Nation''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
-    src: user_request
-  - id: HSN_JUNTA
-    parent: HSN
-    name: {english: 'The Supreme Admiralty of the Pacific', spanish: 'El Almirantazgo Supremo del Pacífico'}
-    adjective: {english: 'Admiralty', spanish: 'del Almirantazgo'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of the High-Sea Nation''s old flag along the bottom; stern military regime flag.'
-    src: user_request
   - id: HSN_JUNTA_TITERE
     parent: HSN
     name: {english: 'The Naval Junta of the High Seas', spanish: 'La Junta Naval de Alta Mar'}
     adjective: {english: 'Junta', spanish: 'de la junta'}
     art: 'the old flag of the High-Sea Nation with a black canton holding a small white star and sword: a client military junta.'
-    src: user_request
-  - id: NAS_GENERALES
-    parent: NAS
-    name: {english: 'The Generals of the Puna', spanish: 'Los Generales de la Puna'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of the Celestial Kingdom''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
-    src: user_request
-  - id: NAS_JUNTA
-    parent: NAS
-    name: {english: 'The Junta of the Andes', spanish: 'La Junta de los Andes'}
-    adjective: {english: 'Andean Junta', spanish: 'de la Junta de los Andes'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of the Celestial Kingdom''s old flag along the bottom; stern military regime flag.'
     src: user_request
   - id: NAS_JUNTA_TITERE
     parent: NAS
@@ -927,53 +915,17 @@ cosmetic_tags:
     adjective: {english: 'Junta', spanish: 'de la junta'}
     art: 'the old flag of the Celestial Kingdom with a black canton holding a small white star and sword: a client military junta.'
     src: user_request
-  - id: SHD_GENERALES
-    parent: SHD
-    name: {english: 'The Northern Military Council', spanish: 'El Consejo Militar del Norte'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of the Directorate''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
-    src: user_request
-  - id: SHD_JUNTA
-    parent: SHD
-    name: {english: 'The Supreme Command of the Great Plain', spanish: 'El Mando Supremo de la Gran Llanura'}
-    adjective: {english: 'Supreme Command', spanish: 'del Mando Supremo'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of the Directorate''s old flag along the bottom; stern military regime flag.'
-    src: user_request
   - id: SHD_JUNTA_TITERE
     parent: SHD
     name: {english: 'The Military Junta of the Directorate', spanish: 'La Junta Militar del Directorio'}
     adjective: {english: 'Junta', spanish: 'de la junta'}
     art: 'the old flag of the Directorate with a black canton holding a small white star and sword: a client military junta.'
     src: user_request
-  - id: APF_GENERALES
-    parent: APF
-    name: {english: 'The Military Salvation Committee', spanish: 'El Comité Militar de Salvación'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of the Federation''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
-    src: user_request
-  - id: APF_JUNTA
-    parent: APF
-    name: {english: 'The Pan-African Military Junta', spanish: 'La Junta Militar Panafricana'}
-    adjective: {english: 'Pan-African Junta', spanish: 'de la Junta Panafricana'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of the Federation''s old flag along the bottom; stern military regime flag.'
-    src: user_request
   - id: APF_JUNTA_TITERE
     parent: APF
     name: {english: 'The Military Junta of the Federation', spanish: 'La Junta Militar de la Federación'}
     adjective: {english: 'Junta', spanish: 'de la junta'}
     art: 'the old flag of the Federation with a black canton holding a small white star and sword: a client military junta.'
-    src: user_request
-  - id: NRE_GENERALES
-    parent: NRE
-    name: {english: 'The Praetorians', spanish: 'Los Pretorianos'}
-    adjective: {english: 'Rebel', spanish: 'rebelde'}
-    art: 'a plain field in the colours of Rome''s flag cut by a black diagonal band, a white sword pointing upward in the canton; austere, military.'
-    src: user_request
-  - id: NRE_JUNTA
-    parent: NRE
-    name: {english: 'The Praetorian Dictatorship of the Mediterranean', spanish: 'La Dictadura Pretoriana del Mediterráneo'}
-    adjective: {english: 'Praetorian', spanish: 'pretoriana'}
-    art: 'dark olive field with a white five-pointed star over two crossed swords, a thin band in the colours of Rome''s old flag along the bottom; stern military regime flag.'
     src: user_request
   - id: NRE_JUNTA_TITERE
     parent: NRE

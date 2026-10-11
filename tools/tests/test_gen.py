@@ -1474,8 +1474,8 @@ def test_leaders_and_ideologies() -> None:
         check("ministro: puesto, token, rasgo propio y costo", pdx.text(adv.get("slot")) == "political_advisor"
               and pdx.text(adv.get("idea_token")) == mins[0] and pdx.text(adv.get("cost")) == "150", pdx.render(adv))
         gens = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("corps_commander") is not None]
-        check("generales propios (EFE: 3 + su mariscal, y el general de la junta del 2026-10-11)",
-              len(gens) == 4 and "EFE_gen_junta" in gens, str(gens))
+        check("generales propios (EFE: 3 + su mariscal, y el lider de su rebelion del 2026-10-11)",
+              len(gens) == 4 and "EFE_lider_rebelde" in gens, str(gens))
         hsn_chars = pdx.parse((mod / "common/characters/HSN_characters.txt").read_text()).get("characters")
         adm = [k for k, v in hsn_chars.entries if isinstance(v, pdx.Block) and v.get("navy_leader") is not None]
         check("la HSN tiene almirantes", len(adm) == 2, str(adm))
@@ -1745,8 +1745,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider y 12 de la junta",
-              len(dm.entries) == 97 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta y 10 de las rebeliones",
+              len(dm.entries) == 107 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -3340,8 +3340,8 @@ def test_decisiones_del_lider() -> None:
         check("lider: el derrocamiento saca al lider en el acto",
               "MEGANATIONS_lider_derrocado = { retire_country_leader = yes" in eff)
         gc = eff[eff.index("MEGANATIONS_lider_guerra_civil = {"):eff.index("MEGANATIONS_lider_pulso = {")]
-        check("lider: la guerra civil del ultimatum, para cada potencia (junta militar o caudillos)",
-              gc.count("start_civil_war = {") == 8 and "ideology = neutrality" in gc and "ideology = fascism" in gc)
+        check("lider: resistir el ultimatum parte cada potencia a su manera (eventos 40-47)",
+              all(f"id = meganations_lider.{40 + k} " in gc for k in range(8)), gc[:400])
         loc = (mod / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("lider: los textos nombran al lider", "[Root.GetLeader]" in loc[loc.index("meganations_lider.1."):])
 
@@ -3398,28 +3398,63 @@ def test_junta_militar() -> None:
               and "MEGANATIONS_junta_ale = yes" in s_, s_[:900])
         ale = eff[eff.index("MEGANATIONS_junta_ale = {"):][:1500]
         check("junta: ALE, 3.000 del ultimo modelo de cada tipo", ale.count("amount = 3000") >= 8, ale[:400])
-        gc = eff[eff.index("MEGANATIONS_lider_guerra_civil = {"):eff.index("MEGANATIONS_lider_pulso = {")]
-        check("junta: los rebeldes del ultimatum son la junta, con su arbol, su nombre y su general",
-              gc.count("load_focus_tree = { tree = meganations_junta_focus keep_completed = no }") == 8
-              and "set_cosmetic_tag = FCU_GENERALES" in gc and "set_country_flag = MEGANATIONS_junta" in gc
-              and "portrait = GFX_portrait_mn_FCU_gen_junta" in gc and "set_global_flag = MEGANATIONS_junta_FCU" in gc, gc[:900])
-        e31 = ev[ev.index("id = meganations_lider.31 title"):ev.index("id = meganations_lider.32 title")]
+        ev = flat(mod / "events/meganations_lider.txt")
+        def evb(n):
+            a = ev.index(f"id = meganations_lider.{n} title")
+            b = ev.find("country_event = { id = meganations_lider.", a + 10)
+            return ev[a:b if b > 0 else None]
+        e40, e41, e42, e43, e44, e45, e46, e47, e48, e49 = (evb(n) for n in range(40, 50))
+        check("EFE: un movimiento liberal del Cono Sur, alineado con la Union (se suma a su faccion o lo garantiza)",
+              "start_civil_war = { ideology = democratic" in e40 and "set_cosmetic_tag = EFE_LIBERAL" in e40
+              and "FCU = { if = { limit = { is_faction_leader = yes } add_to_faction = PREV } else = { diplomatic_relation = { country = PREV relation = guarantee active = yes } }" in e40
+              and "target = PREV" in e40 and "set_global_flag = MEGANATIONS_rebelion_EFE" in e40, e40[-1200:])
+        check("FCU: sus zonas se pasan a las Tierras Sin Ley, con impulso y tropas en Norteamerica",
+              "ZAN = { annex_country = { target = ZNR transfer_troops = yes } }" in e41 and "modifier = MEGANATIONS_tierras_sin_ley_crecen days = 365" in e41
+              and e41.count("create_unit = {") == 2 * 15 and "declare_war_on = { target = FCU" in e41
+              and "end_puppet = ZSE" in e41 and "start_civil_war" not in e41, e41[:900])
+        check("ASC: empiezan los Hijos de Odin (Furia en 30)", "set_variable = { var = ASC_valhalla value = 30 }" in e42
+              and "set_country_flag = ASC_valhalla_crisis" in e42, e42)
+        vp = eff[eff.index("MEGANATIONS_valhalla_pulso = {"):][:1500]
+        check("ASC: la Furia sube cada mes (mas con poca estabilidad); en 100 el Valhalla, en 0 se terminan",
+              "add_to_variable = { var = ASC_valhalla value = 12 }" in vp and "has_stability < 0.5" in vp
+              and "id = meganations_lider.49" in vp and "id = meganations_lider.50" in vp and "id = meganations_lider.48" in vp, vp)
+        check("ASC: bombas en fabricas, datacenters y baterias", "damage_building = { type = industrial_complex" in e48
+              and "var = ASC_computo value = -8" in e48 and "modifier = MEGANATIONS_apagones days = 90" in e48, e48)
+        check("ASC: el Reino del Valhalla, con el apoyo del EFE y de Roma", "set_cosmetic_tag = ASC_VALHALLA" in e49
+              and "EFE = { diplomatic_relation = { country = PREV relation = guarantee active = yes }" in e49
+              and "NRE = { diplomatic_relation = { country = PREV relation = guarantee active = yes }" in e49, e49[-900:])
+        dec = flat(mod / "common/decisions/meganations_decisions.txt")
+        check("ASC: la caza de los Hijos de Odin (muy dificil de frenar)", "ASC_valhalla_redadas = {" in dec
+              and "var = ASC_valhalla value = -8" in dec and "var = ASC_valhalla value = -20" in dec and "ASC_valhalla_infiltrar = {" in dec)
+        check("HSN: la Cruz del Mar se lleva la mitad de la flota y se alia con el Indostan",
+              "navy_ratio = 0.5" in e43 and "set_cosmetic_tag = HSN_CRUZADA" in e43 and 'create_faction = "The Alliance of Sea and Faith"' in e43
+              and "add_to_faction = ZWI" in e43, e43[-800:])
+        check("NAS: la Junta del Sol Negro, esoterica y paranoica, con su arbol",
+              "load_focus_tree = { tree = meganations_junta_focus keep_completed = no }" in e44 and "set_country_flag = MEGANATIONS_junta" in e44
+              and "modifier = MEGANATIONS_paranoia_sol_negro" in e44 and "set_cosmetic_tag = NAS_GENERALES" in e44, e44[-800:])
+        check("SHD: vuelven los comunistas de la IA, con el apoyo de la Comuna",
+              "start_civil_war = { ideology = communism" in e45 and "ASC = { diplomatic_relation = { country = PREV relation = guarantee active = yes }" in e45
+              and "set_cosmetic_tag = SHD_COMUNA_ROJA" in e45, e45[-800:])
+        check("APF: varios pueblos se levantan (el frente nacionalista y los dos satelites)",
+              "set_cosmetic_tag = APF_NACIONALISTAS" in e46 and "end_puppet = ZET" in e46 and "end_puppet = ZSA" in e46
+              and "ZET = { if = {" in e46 and "declare_war_on = { target = APF" in e46, e46[-900:])
+        check("NRE: el cisma de Oriente", "set_cosmetic_tag = NRE_ORIENTE" in e47 and "modifier = MEGANATIONS_cisma" in e47)
+        check("ninguna rebelion es una junta salvo la del Sol Negro",
+              sum(e.count("load_focus_tree") for e in (e40, e41, e43, e45, e46, e47, e49)) == 0)
         oa = flat(mod / "common/on_actions/04_meganations_civil_war.txt")
-        check("fin de la guerra: el evento le llega al que gano", "original_tag = FCU has_global_flag = MEGANATIONS_junta_FCU }" in oa
-              and "country_event = meganations_lider.31" in oa, oa[:400])
-        check("fin de la guerra: si gana la junta, nombre nuevo y a conquistar; si gana el gobierno, la rebelion aplastada",
-              "trigger = { has_country_flag = MEGANATIONS_junta } MEGANATIONS_junta_victoria = yes" in e31
-              and "modifier = MEGANATIONS_rebelion_aplastada days = 365" in e31, e31)
+        check("fin de la guerra: le llega al que gano, en las 7 con guerra civil (la Union no tiene)",
+              all(f"original_tag = {t} has_global_flag = MEGANATIONS_rebelion_{t} }}" in oa for t in ("EFE", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"))
+              and "MEGANATIONS_rebelion_FCU" not in oa, oa[:400])
+        e30 = ev[ev.index("id = meganations_lider.30 title"):ev.index("id = meganations_lider.32 title")]
+        check("fin de la guerra: el Sol Negro conquista, la revolucion triunfa o la rebelion queda aplastada",
+              "trigger = { has_country_flag = MEGANATIONS_junta } MEGANATIONS_junta_victoria = yes" in e30
+              and "modifier = MEGANATIONS_revolucion_triunfante days = 365" in e30 and "modifier = MEGANATIONS_rebelion_aplastada days = 365" in e30, e30)
         vic = eff[eff.index("MEGANATIONS_junta_victoria = {"):eff.index("MEGANATIONS_junta_marchar = {")]
-        check("junta victoriosa: nombre segun el pais, objetivos de guerra y su pulso",
-              "original_tag = FCU } set_cosmetic_tag = FCU_JUNTA" in vic and "MEGANATIONS_junta_marchar = yes" in vic
-              and "id = meganations_lider.38 days = 30" in vic, vic[:600])
+        check("la junta victoriosa es la del Sol Negro", "original_tag = NAS } set_cosmetic_tag = NAS_JUNTA" in vic
+              and "FCU_JUNTA" not in vic and "id = meganations_lider.38 days = 30" in vic, vic[:600])
         mar = eff[eff.index("MEGANATIONS_junta_marchar = {"):eff.index("MEGANATIONS_junta_pulso = {")]
         check("junta victoriosa: anexion contra las potencias vecinas", "is_neighbor_of = ROOT" in mar
               and "ROOT = { create_wargoal = { type = annex_everything target = PREV } }" in mar, mar)
-        pul = eff[eff.index("MEGANATIONS_junta_pulso = {"):][:3000]
-        check("junta victoriosa: sus titeres pasan a ser juntas", "is_subject_of = ROOT" in pul and "set_cosmetic_tag = EFE_JUNTA_TITERE" in pul, pul[:500])
-        dec = flat(mod / "common/decisions/meganations_decisions.txt")
         lib = dec[dec.index("MEGANATIONS_junta_liberar_EFE = {"):][:1500]
         check("junta victoriosa: libera a los vencidos como junta titere",
               "NOT = { original_tag = EFE }" in lib and "any_owned_state = { is_core_of = EFE }" in lib
@@ -3429,17 +3464,34 @@ def test_junta_militar() -> None:
         check("aplastar la rebelion: +estabilidad, -organizacion y -apoyo a la guerra por un año",
               "stability_factor = 0.15" in ap and "army_org_factor = -0.15" in ap and "war_support_factor = -0.15" in ap, ap)
         loc = (mod / "localisation/spanish/meganations_countries_l_spanish.yml").read_text(encoding="utf-8-sig")
-        check("nombres: el bando rebelde, la junta y la junta titere",
-              'NRE_GENERALES:0 "Los Pretorianos"' in loc and 'NRE_JUNTA:0 "La Dictadura Pretoriana del Mediterráneo"' in loc
-              and 'EFE_JUNTA_TITERE:0 "La Junta Militar de Gaia"' in loc, "")
+        check("nombres de las rebeliones",
+              'EFE_LIBERAL:0 "La Confederación Liberal del Cono Sur"' in loc and 'ASC_VALHALLA:0 "El Reino del Valhalla"' in loc
+              and 'NRE_ORIENTE:0 "El Imperio Romano de Oriente"' in loc and 'NAS_GENERALES:0 "La Junta del Sol Negro"' in loc
+              and "FCU_GENERALES" not in loc, "")
         ai = flat(mod / "common/ai_strategy/meganations_ai.txt")
-        check("ia: la junta victoriosa quiere conquistar a las otras potencias",
-              "MEGANATIONS_EFE_junta_contra_ASC = { allowed = { original_tag = EFE } enable = { has_country_flag = MEGANATIONS_junta_victoriosa }" in ai)
-        gen = (mod / "common/characters").glob("*.txt")
-        chars = " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in gen)
-        check("generales de las juntas, con retrato", "FCU_gen_junta = {" in chars
-              and (mod / "gfx/leaders/FCU/FCU_gen_junta.dds").exists())
-
+        check("ia: solo la Junta del Sol Negro sale a conquistar", "_junta_contra_" not in ai.replace("MEGANATIONS_NAS_junta_contra_", ""))
+        chars = " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in (mod / "common/characters").glob("*.txt"))
+        check("lideres de las rebeliones, con retrato", "EFE_lider_rebelde = {" in chars and "FCU_lider_rebelde" not in chars
+              and (mod / "gfx/leaders/EFE/EFE_lider_rebelde.dds").exists())
+    # dónde se levantan: el cisma por el mapa (map/buildings.txt) y el civil_war con región
+    import shutil
+    from tools.gen.emitters import rebeliones, effects as eff_mod
+    with tempfile.TemporaryDirectory() as tmp:
+        van = Path(tmp) / "vanilla"
+        shutil.copytree(FIXTURE_VANILLA, van)
+        (van / "map/buildings.txt").write_text("900;arms_factory;100.0;1;1;0;0\n902;arms_factory;200.0;1;1;0;0\n"
+                                               "903;arms_factory;300.0;1;1;0;0\n905;arms_factory;400.0;1;1;0;0\n", encoding="utf-8")
+        ctx = build(Path(tmp) / "out", vanilla_path=str(van), quiet=True)
+        ctx.spec.raw["diplomacy"]["rebellions"]["regions"] = {"PRUEBA": {"tag": "EFE", "side": "east"}}
+        rebeliones.prepare(ctx)
+        reg = (ctx.data.get("rebellion_regions") or {}).get("PRUEBA")
+        check("rebeliones: el lado este del pais por la posicion en el mapa", reg is not None and reg[1] == [903, 905], str(reg))
+        block = eff_mod.render_effects("prueba", [{"effect": "civil_war", "tag": "EFE", "ideology": "fascism", "size": 0.4,
+                                                   "region": "PRUEBA", "navy_ratio": 0.5}], set(), {}, where="prueba")
+        out = " ".join(pdx.render(block).split())
+        check("rebeliones: la guerra civil sale con su capital, sus regiones y su parte de la flota",
+              f"capital = {reg[0] if reg else 0} states = {{ 903 905 }} navy_ratio = 0.5" in out, out[:600])
+        eff_mod.use_regions({})
 
 def main() -> int:
     for test in (

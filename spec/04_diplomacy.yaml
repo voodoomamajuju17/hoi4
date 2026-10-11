@@ -277,3 +277,19 @@ race:
     manpower: 60000
   nemesis_from: 2100.2.1
   nemesis: {EFE: NAS, NAS: EFE, HSN: SHD, SHD: HSN, ASC: NRE, NRE: ASC, FCU: EFE, APF: NRE}
+
+# -----------------------------------------------------------------------------
+# Las rebeliones del ultimátum (2026-10-11, "las rebeliones tienen que tener más
+# sentido"): dónde se levantan. Lo usa tools/gen/emitters/rebeliones.py.
+#   NRE_oriente  el cisma: las regiones de Roma al este de su mitad (por el mapa)
+#   HSN_nodo     la Cruz del Mar se queda con el nodo de Malaca
+# -----------------------------------------------------------------------------
+rebellions:
+  src: user_request
+  regions:
+    NRE_oriente: {tag: NRE, side: east}
+    HSN_nodo:
+      tag: HSN
+      states:
+      - [Singapore, Straits Settlements, Malaya, Kuala Lumpur]
+

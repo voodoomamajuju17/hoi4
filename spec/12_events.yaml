@@ -13651,8 +13651,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Generals'' Ultimatum', spanish: 'El Ultimátum de los Generales'}
       desc:
-        english: 'The humiliated generals did not forget. Tonight the tanks surround the palace and a colonel brings a letter: [Root.GetLeader] resigns before dawn, or the army decides.\n\nRESIGN: [Root.GetLeader] leaves power at once and the party names someone else (-10% stability, +5% war support).\n\nRESIST: civil war. A part of the army and of the country rises against the government.'
-        spanish: 'Los generales humillados no se olvidaron. Esta noche los tanques rodean el palacio y un coronel trae una carta: [Root.GetLeader] renuncia antes del amanecer, o decide el ejército.\n\nRENUNCIAR: [Root.GetLeader] deja el poder en el acto y el partido nombra a otro (-10% de estabilidad, +5% de apoyo a la guerra).\n\nRESISTIR: guerra civil. Una parte del ejército y del país se levanta contra el gobierno.'
+        english: 'The humiliated generals did not forget. Tonight the tanks surround the palace and a colonel brings a letter: [Root.GetLeader] resigns before dawn, or the army decides.\n\nRESIGN: [Root.GetLeader] leaves power at once and the party names someone else (-10% stability, +5% war support).\n\nRESIST: the country splits, and what rises depends on the country (liberals, nationalists, schismatics, fanatics...).'
+        spanish: 'Los generales humillados no se olvidaron. Esta noche los tanques rodean el palacio y un coronel trae una carta: [Root.GetLeader] renuncia antes del amanecer, o decide el ejército.\n\nRENUNCIAR: [Root.GetLeader] deja el poder en el acto y el partido nombra a otro (-10% de estabilidad, +5% de apoyo a la guerra).\n\nRESISTIR: el país se parte, y lo que se levanta depende de cada potencia (liberales, nacionalistas, cismáticos, fanáticos...).'
       options:
       - name: {english: 'Resign, to avoid the blood.', spanish: 'Renunciar, para evitar la sangre.'}
         effects:
@@ -13685,44 +13685,26 @@ namespaces:
     - id: 30
       art: meganations_fin_guerra_generales
       trigger:
-        civil_war_end: {tag: EFE, flag: MEGANATIONS_junta_EFE}
+        civil_war_end: {tag: EFE, flag: MEGANATIONS_rebelion_EFE}
       picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      title: {english: 'The War of the Southern Cone Is Over', spanish: 'Terminó la Guerra del Cono Sur'}
       desc:
-        english: 'The guns are silent. If the generals won, The Military Junta of the Plata is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta Militar del Plata y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+        english: 'The guns are silent. If the rebellion won, its flag flies over the whole country and it gets a year of +10% stability and war support (the Black Sun Junta also marches on the other powers to free them as juntas under its command). If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed.'
+        spanish: 'Callaron los cañones. Si ganó la rebelión, su bandera flamea sobre todo el país y tiene un año de +10% de estabilidad y de apoyo a la guerra (la Junta del Sol Negro además marcha sobre las otras potencias para liberarlas como juntas bajo su mando). Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones.'
       options:
-      - name: {english: 'The Military Junta of the Plata rules.', spanish: 'Gobierna La Junta Militar del Plata.'}
+      - name: {english: 'The Black Sun rules.', spanish: 'Gobierna el Sol Negro.'}
         when: {flag: MEGANATIONS_junta}
         effects:
         - {effect: run, value: MEGANATIONS_junta_victoria}
         - {effect: add_stability, value: 0.1}
         - {effect: add_political_power, value: 150}
-      - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+      - name: {english: 'The revolution triumphs.', spanish: 'La revolución triunfa.'}
+        when: {flag: MEGANATIONS_rebelde, not_flag: MEGANATIONS_junta}
         effects:
-        - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
-        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
-        - {effect: run, value: MEGANATIONS_lider_recalcular}
-      src: user_request
-    - id: 31
-      art: meganations_fin_guerra_generales
-      trigger:
-        civil_war_end: {tag: FCU, flag: MEGANATIONS_junta_FCU}
-      picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
-      desc:
-        english: 'The guns are silent. If the generals won, The North American Security Junta is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta de Seguridad de Norteamérica y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
-      options:
-      - name: {english: 'The North American Security Junta rules.', spanish: 'Gobierna La Junta de Seguridad de Norteamérica.'}
-        when: {flag: MEGANATIONS_junta}
-        effects:
-        - {effect: run, value: MEGANATIONS_junta_victoria}
-        - {effect: add_stability, value: 0.1}
+        - {effect: dynamic_modifier, id: MEGANATIONS_revolucion_triunfante, days: 365}
         - {effect: add_political_power, value: 150}
       - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+        when: {not_flag: MEGANATIONS_rebelde}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
@@ -13731,21 +13713,26 @@ namespaces:
     - id: 32
       art: meganations_fin_guerra_generales
       trigger:
-        civil_war_end: {tag: ASC, flag: MEGANATIONS_junta_ASC}
+        civil_war_end: {tag: ASC, flag: MEGANATIONS_rebelion_ASC}
       picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      title: {english: 'The War of Valhalla Is Over', spanish: 'Terminó la Guerra del Valhalla'}
       desc:
-        english: 'The guns are silent. If the generals won, The Military Directorate of Europe is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace El Directorio Militar de Europa y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+        english: 'The guns are silent. If the rebellion won, its flag flies over the whole country and it gets a year of +10% stability and war support (the Black Sun Junta also marches on the other powers to free them as juntas under its command). If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed.'
+        spanish: 'Callaron los cañones. Si ganó la rebelión, su bandera flamea sobre todo el país y tiene un año de +10% de estabilidad y de apoyo a la guerra (la Junta del Sol Negro además marcha sobre las otras potencias para liberarlas como juntas bajo su mando). Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones.'
       options:
-      - name: {english: 'The Military Directorate of Europe rules.', spanish: 'Gobierna El Directorio Militar de Europa.'}
+      - name: {english: 'The Black Sun rules.', spanish: 'Gobierna el Sol Negro.'}
         when: {flag: MEGANATIONS_junta}
         effects:
         - {effect: run, value: MEGANATIONS_junta_victoria}
         - {effect: add_stability, value: 0.1}
         - {effect: add_political_power, value: 150}
+      - name: {english: 'The revolution triumphs.', spanish: 'La revolución triunfa.'}
+        when: {flag: MEGANATIONS_rebelde, not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_revolucion_triunfante, days: 365}
+        - {effect: add_political_power, value: 150}
       - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+        when: {not_flag: MEGANATIONS_rebelde}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
@@ -13754,21 +13741,26 @@ namespaces:
     - id: 33
       art: meganations_fin_guerra_generales
       trigger:
-        civil_war_end: {tag: HSN, flag: MEGANATIONS_junta_HSN}
+        civil_war_end: {tag: HSN, flag: MEGANATIONS_rebelion_HSN}
       picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      title: {english: 'The War of the Sea Cross Is Over', spanish: 'Terminó la Guerra de la Cruz del Mar'}
       desc:
-        english: 'The guns are silent. If the generals won, The Supreme Admiralty of the Pacific is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace El Almirantazgo Supremo del Pacífico y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+        english: 'The guns are silent. If the rebellion won, its flag flies over the whole country and it gets a year of +10% stability and war support (the Black Sun Junta also marches on the other powers to free them as juntas under its command). If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed.'
+        spanish: 'Callaron los cañones. Si ganó la rebelión, su bandera flamea sobre todo el país y tiene un año de +10% de estabilidad y de apoyo a la guerra (la Junta del Sol Negro además marcha sobre las otras potencias para liberarlas como juntas bajo su mando). Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones.'
       options:
-      - name: {english: 'The Supreme Admiralty of the Pacific rules.', spanish: 'Gobierna El Almirantazgo Supremo del Pacífico.'}
+      - name: {english: 'The Black Sun rules.', spanish: 'Gobierna el Sol Negro.'}
         when: {flag: MEGANATIONS_junta}
         effects:
         - {effect: run, value: MEGANATIONS_junta_victoria}
         - {effect: add_stability, value: 0.1}
         - {effect: add_political_power, value: 150}
+      - name: {english: 'The revolution triumphs.', spanish: 'La revolución triunfa.'}
+        when: {flag: MEGANATIONS_rebelde, not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_revolucion_triunfante, days: 365}
+        - {effect: add_political_power, value: 150}
       - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+        when: {not_flag: MEGANATIONS_rebelde}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
@@ -13777,21 +13769,26 @@ namespaces:
     - id: 34
       art: meganations_fin_guerra_generales
       trigger:
-        civil_war_end: {tag: NAS, flag: MEGANATIONS_junta_NAS}
+        civil_war_end: {tag: NAS, flag: MEGANATIONS_rebelion_NAS}
       picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      title: {english: 'The War of the Black Sun Is Over', spanish: 'Terminó la Guerra del Sol Negro'}
       desc:
-        english: 'The guns are silent. If the generals won, The Junta of the Andes is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta de los Andes y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+        english: 'The guns are silent. If the rebellion won, its flag flies over the whole country and it gets a year of +10% stability and war support (the Black Sun Junta also marches on the other powers to free them as juntas under its command). If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed.'
+        spanish: 'Callaron los cañones. Si ganó la rebelión, su bandera flamea sobre todo el país y tiene un año de +10% de estabilidad y de apoyo a la guerra (la Junta del Sol Negro además marcha sobre las otras potencias para liberarlas como juntas bajo su mando). Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones.'
       options:
-      - name: {english: 'The Junta of the Andes rules.', spanish: 'Gobierna La Junta de los Andes.'}
+      - name: {english: 'The Black Sun rules.', spanish: 'Gobierna el Sol Negro.'}
         when: {flag: MEGANATIONS_junta}
         effects:
         - {effect: run, value: MEGANATIONS_junta_victoria}
         - {effect: add_stability, value: 0.1}
         - {effect: add_political_power, value: 150}
+      - name: {english: 'The revolution triumphs.', spanish: 'La revolución triunfa.'}
+        when: {flag: MEGANATIONS_rebelde, not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_revolucion_triunfante, days: 365}
+        - {effect: add_political_power, value: 150}
       - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+        when: {not_flag: MEGANATIONS_rebelde}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
@@ -13800,21 +13797,26 @@ namespaces:
     - id: 35
       art: meganations_fin_guerra_generales
       trigger:
-        civil_war_end: {tag: SHD, flag: MEGANATIONS_junta_SHD}
+        civil_war_end: {tag: SHD, flag: MEGANATIONS_rebelion_SHD}
       picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      title: {english: 'The War of the Red Machine Is Over', spanish: 'Terminó la Guerra de la Máquina Roja'}
       desc:
-        english: 'The guns are silent. If the generals won, The Supreme Command of the Great Plain is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace El Mando Supremo de la Gran Llanura y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+        english: 'The guns are silent. If the rebellion won, its flag flies over the whole country and it gets a year of +10% stability and war support (the Black Sun Junta also marches on the other powers to free them as juntas under its command). If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed.'
+        spanish: 'Callaron los cañones. Si ganó la rebelión, su bandera flamea sobre todo el país y tiene un año de +10% de estabilidad y de apoyo a la guerra (la Junta del Sol Negro además marcha sobre las otras potencias para liberarlas como juntas bajo su mando). Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones.'
       options:
-      - name: {english: 'The Supreme Command of the Great Plain rules.', spanish: 'Gobierna El Mando Supremo de la Gran Llanura.'}
+      - name: {english: 'The Black Sun rules.', spanish: 'Gobierna el Sol Negro.'}
         when: {flag: MEGANATIONS_junta}
         effects:
         - {effect: run, value: MEGANATIONS_junta_victoria}
         - {effect: add_stability, value: 0.1}
         - {effect: add_political_power, value: 150}
+      - name: {english: 'The revolution triumphs.', spanish: 'La revolución triunfa.'}
+        when: {flag: MEGANATIONS_rebelde, not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_revolucion_triunfante, days: 365}
+        - {effect: add_political_power, value: 150}
       - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+        when: {not_flag: MEGANATIONS_rebelde}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
@@ -13823,21 +13825,26 @@ namespaces:
     - id: 36
       art: meganations_fin_guerra_generales
       trigger:
-        civil_war_end: {tag: APF, flag: MEGANATIONS_junta_APF}
+        civil_war_end: {tag: APF, flag: MEGANATIONS_rebelion_APF}
       picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      title: {english: 'The War of the Peoples Is Over', spanish: 'Terminó la Guerra de los Pueblos'}
       desc:
-        english: 'The guns are silent. If the generals won, The Pan-African Military Junta is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Junta Militar Panafricana y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+        english: 'The guns are silent. If the rebellion won, its flag flies over the whole country and it gets a year of +10% stability and war support (the Black Sun Junta also marches on the other powers to free them as juntas under its command). If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed.'
+        spanish: 'Callaron los cañones. Si ganó la rebelión, su bandera flamea sobre todo el país y tiene un año de +10% de estabilidad y de apoyo a la guerra (la Junta del Sol Negro además marcha sobre las otras potencias para liberarlas como juntas bajo su mando). Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones.'
       options:
-      - name: {english: 'The Pan-African Military Junta rules.', spanish: 'Gobierna La Junta Militar Panafricana.'}
+      - name: {english: 'The Black Sun rules.', spanish: 'Gobierna el Sol Negro.'}
         when: {flag: MEGANATIONS_junta}
         effects:
         - {effect: run, value: MEGANATIONS_junta_victoria}
         - {effect: add_stability, value: 0.1}
         - {effect: add_political_power, value: 150}
+      - name: {english: 'The revolution triumphs.', spanish: 'La revolución triunfa.'}
+        when: {flag: MEGANATIONS_rebelde, not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_revolucion_triunfante, days: 365}
+        - {effect: add_political_power, value: 150}
       - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+        when: {not_flag: MEGANATIONS_rebelde}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
@@ -13846,21 +13853,26 @@ namespaces:
     - id: 37
       art: meganations_fin_guerra_generales
       trigger:
-        civil_war_end: {tag: NRE, flag: MEGANATIONS_junta_NRE}
+        civil_war_end: {tag: NRE, flag: MEGANATIONS_rebelion_NRE}
       picture: GFX_report_event_generic_rally
-      title: {english: 'The War of the Generals Is Over', spanish: 'Terminó la Guerra de los Generales'}
+      title: {english: 'The Schism Is Over', spanish: 'Terminó el Cisma'}
       desc:
-        english: 'The guns are silent. If the generals won, The Praetorian Dictatorship of the Mediterranean is born and marches on the other powers to free them as juntas under its command. If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed (the barracks still whisper).'
-        spanish: 'Callaron los cañones. Si ganaron los generales, nace La Dictadura Pretoriana del Mediterráneo y marcha sobre las otras potencias para liberarlas como juntas bajo su mando. Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones (en los cuarteles todavía se murmura).'
+        english: 'The guns are silent. If the rebellion won, its flag flies over the whole country and it gets a year of +10% stability and war support (the Black Sun Junta also marches on the other powers to free them as juntas under its command). If the government won, the rebellion is crushed: for a year, +15% stability, but -15% organization, -15% war support, worse morale and more garrisons needed.'
+        spanish: 'Callaron los cañones. Si ganó la rebelión, su bandera flamea sobre todo el país y tiene un año de +10% de estabilidad y de apoyo a la guerra (la Junta del Sol Negro además marcha sobre las otras potencias para liberarlas como juntas bajo su mando). Si ganó el gobierno, la rebelión queda aplastada: por un año, +15% de estabilidad, pero -15% de organización, -15% de apoyo a la guerra, peor moral y más guarniciones.'
       options:
-      - name: {english: 'The Praetorian Dictatorship of the Mediterranean rules.', spanish: 'Gobierna La Dictadura Pretoriana del Mediterráneo.'}
+      - name: {english: 'The Black Sun rules.', spanish: 'Gobierna el Sol Negro.'}
         when: {flag: MEGANATIONS_junta}
         effects:
         - {effect: run, value: MEGANATIONS_junta_victoria}
         - {effect: add_stability, value: 0.1}
         - {effect: add_political_power, value: 150}
+      - name: {english: 'The revolution triumphs.', spanish: 'La revolución triunfa.'}
+        when: {flag: MEGANATIONS_rebelde, not_flag: MEGANATIONS_junta}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_revolucion_triunfante, days: 365}
+        - {effect: add_political_power, value: 150}
       - name: {english: 'The rebellion is crushed.', spanish: 'La rebelión queda aplastada.'}
-        when: {not_flag: MEGANATIONS_junta}
+        when: {not_flag: MEGANATIONS_rebelde}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_rebelion_aplastada, days: 365}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
@@ -13877,4 +13889,351 @@ namespaces:
         effects:
         - {effect: run, value: MEGANATIONS_junta_pulso}
         - {effect: event, id: meganations_lider.38, days: 30}
+      src: user_request
+    # Las rebeliones del ultimátum, una distinta en cada potencia (2026-10-11, rehecho).
+    # Las dispara MEGANATIONS_lider_guerra_civil cuando el líder resiste (meganations_lider.21).
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Southern Cone Rises', spanish: 'El Cono Sur se Levanta'}
+      desc:
+        english: 'The Liberal Movement of the Southern Cone was waiting for this. General Martín Arregui and half the garrisons of the Plata demand elections, free trade and friendship with the Union. The Confederation is born; the Union backs it and may take it into its alliance.'
+        spanish: 'El Movimiento Liberal del Cono Sur estaba esperando esto. El General Martín Arregui y la mitad de las guarniciones del Plata exigen elecciones, libre comercio y amistad con la Unión. Nace la Confederación; la Unión la respalda y puede sumarla a su alianza.'
+      options:
+      - name: {english: 'Let the guns decide.', spanish: 'Que decidan las armas.'}
+        effects:
+        - effect: civil_war
+          tag: EFE
+          ideology: democratic
+          size: 0.35
+          global_flag: MEGANATIONS_rebelion_EFE
+          rebels:
+            cosmetic_tag: EFE_LIBERAL
+            leader:
+              name: {english: 'General Martín Arregui', spanish: 'General Martín Arregui'}
+              portrait: gfx/leaders/EFE/EFE_lider_rebelde.dds
+            effects:
+            - {effect: flag, value: MEGANATIONS_rebelde}
+            - effect: if
+              when: {country_exists: FCU}
+              then:
+              - effect: scope
+                target: FCU
+                effects:
+                - effect: if
+                  when: {faction_leader: true}
+                  then:
+                  - {effect: add_to_faction, value: PREV}
+                  else:
+                  - {effect: guarantee, value: PREV}
+                - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: PREV}
+      src: user_request
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Zones Break with the Union', spanish: 'Las Zonas Rompen con la Unión'}
+      desc:
+        english: 'The resource zones of the north and the south stop paying the Union. Their governors open the borders to the Lawless Lands, which swallow them whole: new territory, a year of momentum (+20% attack and defence, +10% recruitable population and war support), 150,000 men, equipment and 15 divisions in North America. Then they come for us.'
+        spanish: 'Las zonas de recursos del norte y del sur dejan de pagarle a la Unión. Sus gobernadores abren las fronteras a las Tierras Sin Ley, que se las tragan enteras: territorio nuevo, un año de impulso (+20% de ataque y defensa, +10% de población reclutable y de apoyo a la guerra), 150.000 hombres, equipo y 15 divisiones en Norteamérica. Después vienen por nosotros.'
+      options:
+      - name: {english: 'We will take them back.', spanish: 'Las vamos a recuperar.'}
+        effects:
+        - {effect: add_stability, value: -0.1}
+        - effect: if
+          when: {country_exists: ZAN}
+          then:
+          - effect: if
+            when: {country: {tag: ZNR, when: {subject_of: FCU}}}
+            then:
+            - effect: scope
+              target: ZAN
+              effects:
+              - {effect: annex, target: ZNR}
+          - effect: if
+            when: {country: {tag: ZSE, when: {subject_of: FCU}}}
+            then:
+            - effect: scope
+              target: ZAN
+              effects:
+              - {effect: annex, target: ZSE}
+          - effect: scope
+            target: ZAN
+            effects:
+            - {effect: dynamic_modifier, id: MEGANATIONS_tierras_sin_ley_crecen, days: 365}
+            - {effect: add_manpower, value: 150000}
+            - {effect: equipment, type: infantry_equipment, amount: 8000}
+            - {effect: equipment, type: support_equipment, amount: 1500}
+            - {effect: ensure_template, name: Leva Anarquica, regiments: [infantry, infantry, infantry, infantry]}
+            - {effect: create_units, template: Leva Anarquica, name: Leva Anarquica, count: 15, experience: 0.3}
+            - effect: if
+              when:
+                not: {war_with: FCU}
+              then:
+              - {effect: declare_war, target: FCU}
+          else:
+          - effect: if
+            when: {country: {tag: ZNR, when: {subject_of: FCU}}}
+            then:
+            - {effect: end_puppet, value: ZNR}
+            - effect: scope
+              target: ZNR
+              effects:
+              - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+              - {effect: declare_war, target: FCU}
+          - effect: if
+            when: {country: {tag: ZSE, when: {subject_of: FCU}}}
+            then:
+            - {effect: end_puppet, value: ZSE}
+            - effect: scope
+              target: ZSE
+              effects:
+              - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+              - {effect: declare_war, target: FCU}
+      src: user_request
+    - id: 42
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Sons of Odin', spanish: 'Los Hijos de Odín'}
+      desc:
+        english: 'It begins with a bomb in a datacenter in Brandenburg, then a battery park in the Ruhr, then a factory a night. The Sons of Odin, neo-pagan fascists, want to burn the Machine and crown a Kingdom of Valhalla. Their Fury starts at 30 of 100 and rises every month; at 100 they rise in arms, backed by the Ecofascist Empire and Rome. The panel «The Hunt for the Sons of Odin» is all we have to stop them.'
+        spanish: 'Empieza con una bomba en un datacenter de Brandeburgo, después un parque de baterías en el Ruhr, después una fábrica por noche. Los Hijos de Odín, fascistas neopaganos, quieren quemar la Máquina y coronar un Reino del Valhalla. Su Furia arranca en 30 de 100 y sube cada mes; en 100 se levantan en armas, con el apoyo del Imperio Ecofascista y de Roma. El panel «La Caza de los Hijos de Odín» es todo lo que tenemos para frenarlos.'
+      options:
+      - name: {english: 'Hunt them down, whatever it costs.', spanish: 'Cazarlos, cueste lo que cueste.'}
+        effects:
+        - {effect: set_variable, var: ASC_valhalla, value: 30}
+        - {effect: flag, value: ASC_valhalla_crisis}
+      src: user_request
+    - id: 43
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Sea Cross', spanish: 'La Cruz del Mar'}
+      desc:
+        english: 'Admiral Teodoro Salas raises a cross over the Malacca squadron. The religious-military order of the Sea Cross takes the Malacca node and half the fleet, and seeks an alliance with the lords of Hindustan.'
+        spanish: 'El Almirante Teodoro Salas levanta una cruz sobre la escuadra de Malaca. La orden religiosa y militar de la Cruz del Mar se queda con el nodo de Malaca y la mitad de la flota, y busca la alianza de los señores del Indostán.'
+      options:
+      - name: {english: 'Sink the heretics.', spanish: 'Hundir a los herejes.'}
+        effects:
+        - effect: civil_war
+          tag: HSN
+          ideology: fascism
+          size: 0.2
+          region: HSN_nodo
+          navy_ratio: 0.5
+          global_flag: MEGANATIONS_rebelion_HSN
+          rebels:
+            cosmetic_tag: HSN_CRUZADA
+            leader:
+              name: {english: 'Admiral Teodoro Salas', spanish: 'Almirante Teodoro Salas'}
+              portrait: gfx/leaders/HSN/HSN_lider_rebelde.dds
+            effects:
+            - {effect: flag, value: MEGANATIONS_rebelde}
+            - {effect: dynamic_modifier, id: MEGANATIONS_cruz_del_mar, days: 365}
+            - effect: if
+              when: {country_exists: ZWI}
+              then:
+              - {effect: create_faction, value: The Alliance of Sea and Faith}
+              - {effect: add_to_faction, value: ZWI}
+      src: user_request
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Black Sun', spanish: 'El Sol Negro'}
+      desc:
+        english: 'The generals of the Puna were reading the omens. General Huáscar Mamani proclaims the Black Sun Junta: an esoteric, paranoid military order that sees traitors in every temple and promises a new age after the eclipse.'
+        spanish: 'Los generales de la Puna leían los augurios. El General Huáscar Mamani proclama la Junta del Sol Negro: una orden militar esotérica y paranoica que ve traidores en cada templo y promete una nueva era después del eclipse.'
+      options:
+      - name: {english: 'The Sun is not black.', spanish: 'El Sol no es negro.'}
+        effects:
+        - effect: civil_war
+          tag: NAS
+          ideology: fascism
+          size: 0.3
+          global_flag: MEGANATIONS_rebelion_NAS
+          rebels:
+            cosmetic_tag: NAS_GENERALES
+            leader:
+              name: {english: 'General Huáscar Mamani', spanish: 'General Huáscar Mamani'}
+              portrait: gfx/leaders/NAS/NAS_lider_rebelde.dds
+            effects:
+            - {effect: flag, value: MEGANATIONS_rebelde}
+            - {effect: flag, value: MEGANATIONS_junta}
+            - {effect: focus_tree, value: meganations_junta_focus}
+            - {effect: dynamic_modifier, id: MEGANATIONS_paranoia_sol_negro}
+            - {effect: add_political_power, value: 100}
+      src: user_request
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Red Machine', spanish: 'La Máquina Roja'}
+      desc:
+        english: 'The algorithmic communists come back from the server halls. Commissar Lin Xiaoyu proclaims the Red Machine Commune in the river cities, and the Automated Socialist Commune sends weapons and its guarantee.'
+        spanish: 'Los comunistas algorítmicos vuelven de las salas de servidores. La Comisaria Lin Xiaoyu proclama la Comuna Roja de la Máquina en las ciudades del río, y la Comuna Socialista Automatizada le manda armas y su garantía.'
+      options:
+      - name: {english: 'Harmony will be restored.', spanish: 'La Armonía se va a restablecer.'}
+        effects:
+        - effect: civil_war
+          tag: SHD
+          ideology: communism
+          size: 0.35
+          global_flag: MEGANATIONS_rebelion_SHD
+          rebels:
+            cosmetic_tag: SHD_COMUNA_ROJA
+            leader:
+              name: {english: 'Commissar Lin Xiaoyu', spanish: 'Comisaria Lin Xiaoyu'}
+              portrait: gfx/leaders/SHD/SHD_lider_rebelde.dds
+            effects:
+            - {effect: flag, value: MEGANATIONS_rebelde}
+            - {effect: dynamic_modifier, id: MEGANATIONS_red_roja, days: 365}
+            - effect: if
+              when: {country_exists: ASC}
+              then:
+              - effect: scope
+                target: ASC
+                effects:
+                - {effect: guarantee, value: PREV}
+                - {effect: send_equipment, type: infantry_equipment, amount: 4000, target: PREV}
+      src: user_request
+    - id: 46
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Peoples Rise', spanish: 'Los Pueblos se Levantan'}
+      desc:
+        english: 'Each people its own state, not a thousand councils in Lagos. The African Nationalist Front of General Kwame Adeyemi-Sow takes a quarter of the Federation, and the Highlands and the Cape break away and go to war too.'
+        spanish: 'Cada pueblo su propio Estado, no mil consejos en Lagos. El Frente Nacionalista Africano del General Kwame Adeyemi-Sow se queda con un cuarto de la Federación, y las Tierras Altas y el Cabo se separan y también van a la guerra.'
+      options:
+      - name: {english: 'The Federation will not break.', spanish: 'La Federación no se rompe.'}
+        effects:
+        - effect: civil_war
+          tag: APF
+          ideology: fascism
+          size: 0.25
+          global_flag: MEGANATIONS_rebelion_APF
+          rebels:
+            cosmetic_tag: APF_NACIONALISTAS
+            leader:
+              name: {english: 'General Kwame Adeyemi-Sow', spanish: 'General Kwame Adeyemi-Sow'}
+              portrait: gfx/leaders/APF/APF_lider_rebelde.dds
+            effects:
+            - {effect: flag, value: MEGANATIONS_rebelde}
+            - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+        - effect: if
+          when: {country: {tag: ZET, when: {subject_of: APF}}}
+          then:
+          - {effect: end_puppet, value: ZET}
+          - effect: scope
+            target: ZET
+            effects:
+            - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+            - {effect: declare_war, target: APF}
+        - effect: if
+          when: {country: {tag: ZSA, when: {subject_of: APF}}}
+          then:
+          - {effect: end_puppet, value: ZSA}
+          - effect: scope
+            target: ZSA
+            effects:
+            - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+            - {effect: declare_war, target: APF}
+      src: user_request
+    - id: 47
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Schism of the East', spanish: 'El Cisma de Oriente'}
+      desc:
+        english: 'The East will not take orders from the Senate. Constantine Laskaris is crowned Basileus in Constantinople and the eastern provinces follow him: two Romes, one throne.'
+        spanish: 'El Oriente no acepta órdenes del Senado. Constantino Láskaris es coronado Basileus en Constantinopla y las provincias del este lo siguen: dos Romas, un solo trono.'
+      options:
+      - name: {english: 'There is only one Rome.', spanish: 'Hay una sola Roma.'}
+        effects:
+        - effect: civil_war
+          tag: NRE
+          ideology: fascism
+          size: 0.4
+          region: NRE_oriente
+          global_flag: MEGANATIONS_rebelion_NRE
+          rebels:
+            cosmetic_tag: NRE_ORIENTE
+            leader:
+              name: {english: 'Basileus Constantine Laskaris', spanish: 'Basileus Constantino Láskaris'}
+              portrait: gfx/leaders/NRE/NRE_lider_rebelde.dds
+            effects:
+            - {effect: flag, value: MEGANATIONS_rebelde}
+            - {effect: dynamic_modifier, id: MEGANATIONS_cisma, days: 365}
+      src: user_request
+    # La crisis del Valhalla (MEGANATIONS_valhalla_pulso, cada mes).
+    - id: 48
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Another Night of Fire', spanish: 'Otra Noche de Fuego'}
+      desc:
+        english: 'The Sons of Odin struck again. Fury: [?ASC_valhalla|0] of 100. At 100 the Kingdom of Valhalla rises; at 0 they are finished.'
+        spanish: 'Los Hijos de Odín volvieron a atacar. Furia: [?ASC_valhalla|0] de 100. En 100 se levanta el Reino del Valhalla; en 0 se terminan.'
+      options:
+      - name: {english: 'Repair what we can.', spanish: 'Reparar lo que se pueda.'}
+        effects:
+        - effect: random
+          options:
+          - weight: 40
+            effects:
+            - {effect: sabotage_factories}
+          - weight: 30
+            effects:
+            - {effect: add_variable, var: ASC_computo, value: -8}
+            - {effect: run, value: ASC_recalcular_computo}
+          - weight: 30
+            effects:
+            - {effect: dynamic_modifier, id: MEGANATIONS_apagones, days: 90}
+      src: user_request
+    - id: 49
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Kingdom of Valhalla', spanish: 'El Reino del Valhalla'}
+      desc:
+        english: 'The Fury reached its peak. Jarl Sven Ragnarsson is crowned king among the ruins of a datacenter and the Kingdom of Valhalla rises in arms. The Ecofascist Empire and Rome send weapons and their guarantee.'
+        spanish: 'La Furia llegó a su punto más alto. El Jarl Sven Ragnarsson es coronado rey entre las ruinas de un datacenter y el Reino del Valhalla se levanta en armas. El Imperio Ecofascista y Roma le mandan armas y su garantía.'
+      options:
+      - name: {english: 'The Machine will not fall.', spanish: 'La Máquina no va a caer.'}
+        effects:
+        - effect: civil_war
+          tag: ASC
+          ideology: fascism
+          size: 0.35
+          global_flag: MEGANATIONS_rebelion_ASC
+          rebels:
+            cosmetic_tag: ASC_VALHALLA
+            leader:
+              name: {english: 'Jarl Sven Ragnarsson', spanish: 'Jarl Sven Ragnarsson'}
+              portrait: gfx/leaders/ASC/ASC_lider_rebelde.dds
+            effects:
+            - {effect: flag, value: MEGANATIONS_rebelde}
+            - {effect: dynamic_modifier, id: MEGANATIONS_furia_de_odin, days: 365}
+            - effect: if
+              when: {country_exists: EFE}
+              then:
+              - effect: scope
+                target: EFE
+                effects:
+                - {effect: guarantee, value: PREV}
+                - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: PREV}
+            - effect: if
+              when: {country_exists: NRE}
+              then:
+              - effect: scope
+                target: NRE
+                effects:
+                - {effect: guarantee, value: PREV}
+                - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: PREV}
+      src: user_request
+    - id: 50
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Sons of Odin Fall', spanish: 'Los Hijos de Odín Caen'}
+      desc:
+        english: 'The last cell of the Sons of Odin surrendered in a forest of Thuringia. The Machine survives: for a year, +10% stability and +5% research speed, and 100 political power.'
+        spanish: 'La última célula de los Hijos de Odín se rindió en un bosque de Turingia. La Máquina sobrevive: por un año, +10% de estabilidad y +5% de velocidad de investigación, y 100 de poder político.'
+      options:
+      - name: {english: 'The servers hum again.', spanish: 'Los servidores vuelven a zumbar.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_hijos_de_odin_caen, days: 365}
+        - {effect: add_political_power, value: 100}
       src: user_request

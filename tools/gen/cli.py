@@ -47,6 +47,7 @@ from .emitters import militia as em_militia
 from .emitters import manpower_relief as em_manpower_relief
 from .emitters import mio as em_mio
 from .emitters import names as em_names
+from .emitters import rebeliones as em_rebeliones
 from .emitters import research as em_research
 from .emitters import resources as em_resources
 from .emitters import scenario as em_scenario
@@ -77,6 +78,7 @@ EMITTERS = [
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
     ("names", em_names.emit),
+    ("rebeliones", em_rebeliones.prepare),  # dónde se levantan las rebeliones (antes que eventos y decisiones)
     ("manpower_relief", em_manpower_relief.emit),  # repoblacion: antes que los focos (les suma efectos)
     ("focus_trees", em_focus_trees.emit),
     ("events", em_events.emit),

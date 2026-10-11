@@ -9154,6 +9154,63 @@ categories:
       src: user_request
     src: user_request
 
+  # La Caza de los Hijos de Odín (2026-10-11): la Comuna intenta frenar la Furia
+  - id: ASC_valhalla_category
+    country: ASC
+    icon_prefer: [generic_prepare_civil_war, generic_political_actions]
+    visible: {flag: ASC_valhalla_crisis, not_flag: ASC_valhalla_fin}
+    name: {english: The Hunt for the Sons of Odin, spanish: La Caza de los Hijos de Odín}
+    desc:
+      english: 'Fury of the Sons of Odin: [?ASC_valhalla|0] of 100. It rises 12 every month (18 with stability below 50%). At 100 the Kingdom of Valhalla rises in arms, backed by the Ecofascist Empire and Rome; at 0 the Sons of Odin are finished.'
+      spanish: 'Furia de los Hijos de Odín: [?ASC_valhalla|0] de 100. Sube 12 por mes (18 con menos de 50% de estabilidad). En 100 se levanta en armas el Reino del Valhalla, con el apoyo del Imperio Ecofascista y de Roma; en 0 se terminan los Hijos de Odín.'
+    src: user_request
+    decisions:
+    - id: ASC_valhalla_redadas
+      name: {english: Raid the Sacred Groves, spanish: Redadas en los Bosques Sagrados}
+      desc: {english: '-8 Fury.', spanish: '-8 de Furia.'}
+      icon_prefer: [generic_prepare_civil_war]
+      cost: 50
+      cooldown_days: 30
+      effects:
+      - {effect: add_variable, var: ASC_valhalla, value: -8}
+      ai:
+        factor: 10
+        modifiers: []
+      src: user_request
+    - id: ASC_valhalla_ley_marcial
+      name: {english: Martial Law, spanish: Ley Marcial}
+      desc: {english: '-20 Fury, -5% stability.', spanish: '-20 de Furia, -5% de estabilidad.'}
+      icon_prefer: [generic_prepare_civil_war]
+      cost: 100
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: ASC_valhalla, value: -20}
+      - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 8
+        modifiers: []
+      src: user_request
+    - id: ASC_valhalla_infiltrar
+      name: {english: Infiltrate the Sons, spanish: Infiltrar a los Hijos}
+      desc: {english: 'Half the time -15 Fury; the other half the agent is discovered and +5 Fury.', spanish: 'La mitad de las veces -15 de Furia; la otra mitad descubren al agente y +5 de Furia.'}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 60
+      effects:
+      - effect: random
+        options:
+        - weight: 50
+          effects:
+          - {effect: add_variable, var: ASC_valhalla, value: -15}
+        - weight: 50
+          effects:
+          - {effect: add_variable, var: ASC_valhalla, value: 5}
+      ai:
+        factor: 5
+        modifiers: []
+      src: user_request
+    src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -14138,6 +14195,8 @@ scripted_effects:
     - {effect: run, value: MEGANATIONS_carrera_pulso}
     # 2026-10-11: las decisiones del líder, una cada 6 meses
     - {effect: run, value: MEGANATIONS_lider_pulso}
+    # 2026-10-11: los Hijos de Odín (la crisis del Valhalla en la Comuna)
+    - {effect: run, value: MEGANATIONS_valhalla_pulso}
     # 2026-10-10: el año del mundo, uno al azar al arrancar, para todos los países
     - effect: if
       when: {not_global_flag: MEGANATIONS_ano_del_mundo}
@@ -14603,144 +14662,41 @@ scripted_effects:
     effects:
     - {effect: retire_leader}
     - {effect: run, value: MEGANATIONS_lider_reiniciar}
+  # 2026-10-11 (rehecho): cada potencia se parte a su manera (meganations_lider.40-47)
   - id: MEGANATIONS_lider_guerra_civil
     effects:
     - effect: if
       when: {tag: EFE}
       then:
-      - effect: civil_war
-        tag: EFE
-        ideology: neutrality
-        size: 0.3
-        global_flag: MEGANATIONS_junta_EFE
-        rebels:
-          cosmetic_tag: EFE_GENERALES
-          leader:
-            name: {english: 'General Bruno Ocampo Valdivieso', spanish: 'General Bruno Ocampo Valdivieso'}
-            portrait: gfx/leaders/EFE/EFE_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.40, days: 1}
     - effect: if
       when: {tag: FCU}
       then:
-      - effect: civil_war
-        tag: FCU
-        ideology: fascism
-        size: 0.3
-        global_flag: MEGANATIONS_junta_FCU
-        rebels:
-          cosmetic_tag: FCU_GENERALES
-          leader:
-            name: {english: 'General Dana Kessler', spanish: 'General Dana Kessler'}
-            portrait: gfx/leaders/FCU/FCU_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.41, days: 1}
     - effect: if
       when: {tag: ASC}
       then:
-      - effect: civil_war
-        tag: ASC
-        ideology: fascism
-        size: 0.3
-        global_flag: MEGANATIONS_junta_ASC
-        rebels:
-          cosmetic_tag: ASC_GENERALES
-          leader:
-            name: {english: 'General Ilse Brandauer', spanish: 'General Ilse Brandauer'}
-            portrait: gfx/leaders/ASC/ASC_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.42, days: 1}
     - effect: if
       when: {tag: HSN}
       then:
-      - effect: civil_war
-        tag: HSN
-        ideology: fascism
-        size: 0.3
-        global_flag: MEGANATIONS_junta_HSN
-        rebels:
-          cosmetic_tag: HSN_GENERALES
-          leader:
-            name: {english: 'Admiral Kenji Moraes', spanish: 'Almirante Kenji Moraes'}
-            portrait: gfx/leaders/HSN/HSN_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.43, days: 1}
     - effect: if
       when: {tag: NAS}
       then:
-      - effect: civil_war
-        tag: NAS
-        ideology: fascism
-        size: 0.3
-        global_flag: MEGANATIONS_junta_NAS
-        rebels:
-          cosmetic_tag: NAS_GENERALES
-          leader:
-            name: {english: 'General Huáscar Mamani', spanish: 'General Huáscar Mamani'}
-            portrait: gfx/leaders/NAS/NAS_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.44, days: 1}
     - effect: if
       when: {tag: SHD}
       then:
-      - effect: civil_war
-        tag: SHD
-        ideology: fascism
-        size: 0.3
-        global_flag: MEGANATIONS_junta_SHD
-        rebels:
-          cosmetic_tag: SHD_GENERALES
-          leader:
-            name: {english: 'General Wei Zhenhai', spanish: 'General Wei Zhenhai'}
-            portrait: gfx/leaders/SHD/SHD_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.45, days: 1}
     - effect: if
       when: {tag: APF}
       then:
-      - effect: civil_war
-        tag: APF
-        ideology: fascism
-        size: 0.3
-        global_flag: MEGANATIONS_junta_APF
-        rebels:
-          cosmetic_tag: APF_GENERALES
-          leader:
-            name: {english: 'General Kwame Adeyemi-Sow', spanish: 'General Kwame Adeyemi-Sow'}
-            portrait: gfx/leaders/APF/APF_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.46, days: 1}
     - effect: if
       when: {tag: NRE}
       then:
-      - effect: civil_war
-        tag: NRE
-        ideology: neutrality
-        size: 0.3
-        global_flag: MEGANATIONS_junta_NRE
-        rebels:
-          cosmetic_tag: NRE_GENERALES
-          leader:
-            name: {english: 'Prefect Decimus Rufo', spanish: 'Prefecto Decimus Rufo'}
-            portrait: gfx/leaders/NRE/NRE_gen_junta.dds
-          effects:
-          - {effect: flag, value: MEGANATIONS_junta}
-          - {effect: focus_tree, value: meganations_junta_focus}
-          - {effect: add_political_power, value: 100}
+      - {effect: event, id: meganations_lider.47, days: 1}
   - id: MEGANATIONS_lider_pulso
     effects:
     - effect: if
@@ -14899,37 +14855,9 @@ scripted_effects:
   - id: MEGANATIONS_junta_victoria
     effects:
     - effect: if
-      when: {original_tag: EFE}
-      then:
-      - {effect: cosmetic_tag, value: EFE_JUNTA}
-    - effect: if
-      when: {original_tag: FCU}
-      then:
-      - {effect: cosmetic_tag, value: FCU_JUNTA}
-    - effect: if
-      when: {original_tag: ASC}
-      then:
-      - {effect: cosmetic_tag, value: ASC_JUNTA}
-    - effect: if
-      when: {original_tag: HSN}
-      then:
-      - {effect: cosmetic_tag, value: HSN_JUNTA}
-    - effect: if
       when: {original_tag: NAS}
       then:
       - {effect: cosmetic_tag, value: NAS_JUNTA}
-    - effect: if
-      when: {original_tag: SHD}
-      then:
-      - {effect: cosmetic_tag, value: SHD_JUNTA}
-    - effect: if
-      when: {original_tag: APF}
-      then:
-      - {effect: cosmetic_tag, value: APF_JUNTA}
-    - effect: if
-      when: {original_tag: NRE}
-      then:
-      - {effect: cosmetic_tag, value: NRE_JUNTA}
     - {effect: flag, value: MEGANATIONS_junta_victoriosa}
     - {effect: dynamic_modifier, id: MEGANATIONS_junta_triunfante, days: 365}
     - {effect: run, value: MEGANATIONS_junta_marchar}
@@ -14989,6 +14917,38 @@ scripted_effects:
         when: {tag: NRE}
         then:
         - {effect: cosmetic_tag, value: NRE_JUNTA_TITERE}
+
+  # -------------------------------------------------------------------------
+  # Los Hijos de Odín (2026-10-11): en la Comuna, el fascismo neopagano vuela
+  # fábricas, datacenters y baterías. Cada mes la Furia sube 12 (18 con menos de
+  # 50% de estabilidad); en 100 estalla la rebelión del Reino del Valhalla (con el
+  # apoyo del EFE y de Roma), en 0 se terminan. Muy difícil de frenar.
+  # -------------------------------------------------------------------------
+  - id: MEGANATIONS_valhalla_pulso
+    effects:
+    - effect: if
+      when: {tag: ASC, flag: ASC_valhalla_crisis, not_flag: ASC_valhalla_fin}
+      then:
+      - {effect: add_variable, var: ASC_valhalla, value: 12}
+      - effect: if
+        when: {stability_below: 0.5}
+        then:
+        - {effect: add_variable, var: ASC_valhalla, value: 6}
+      - effect: if
+        when:
+          variable_at_least: {var: ASC_valhalla, value: 100}
+        then:
+        - {effect: flag, value: ASC_valhalla_fin}
+        - {effect: event, id: meganations_lider.49, days: 1}
+        else:
+        - effect: if
+          when:
+            variable_below: {var: ASC_valhalla, value: 1}
+          then:
+          - {effect: flag, value: ASC_valhalla_fin}
+          - {effect: event, id: meganations_lider.50, days: 1}
+          else:
+          - {effect: event, id: meganations_lider.48, days: 1}
 
 dynamic_modifiers:
   - id: MEGANATIONS_mandato_compartido
@@ -15494,32 +15454,32 @@ dynamic_modifiers:
   # 2026-10-11: la junta militar y el fin de su guerra civil
   - id: MEGANATIONS_junta_sitio
     country: null
-    name: {english: 'State of Siege', spanish: 'Estado de Sitio'}
+    name: {english: 'The Vigil of the Black Sun', spanish: 'La Vigilia del Sol Negro'}
     desc: {english: 'Curfew and checkpoints.', spanish: 'Toque de queda y retenes.'}
     modifiers: {army_defence_factor: 0.1}
   - id: MEGANATIONS_junta_cuartel
     country: null
-    name: {english: 'The Barracks Factories', spanish: 'Las Fábricas del Cuartel'}
+    name: {english: 'The Workshops of the Hollow Mountain', spanish: 'Los Talleres de la Montaña Hueca'}
     desc: {english: 'Every workshop answers to a colonel.', spanish: 'Cada taller responde a un coronel.'}
     modifiers: {army_defence_factor: 0.1, industrial_capacity_factory: 0.05}
   - id: MEGANATIONS_junta_orden
     country: null
-    name: {english: 'The Iron Order', spanish: 'El Orden de Hierro'}
+    name: {english: 'The Purge of the Impure', spanish: 'La Purga de los Impuros'}
     desc: {english: 'Nobody asks why.', spanish: 'Nadie pregunta por qué.'}
     modifiers: {army_defence_factor: 0.1, stability_factor: 0.05}
   - id: MEGANATIONS_junta_nacion
     country: null
-    name: {english: 'The Nation in Arms', spanish: 'La Nación en Armas'}
+    name: {english: 'The People of the Black Sun in Arms', spanish: 'El Pueblo del Sol Negro en Armas'}
     desc: {english: 'Every school a barracks.', spanish: 'Cada escuela un cuartel.'}
     modifiers: {army_defence_factor: 0.1, recruitable_population_factor: 0.05}
   - id: MEGANATIONS_junta_fortaleza
     country: null
-    name: {english: 'The Impregnable Fortress', spanish: 'La Fortaleza Inexpugnable'}
+    name: {english: 'The Citadel of the Hollow Mountain', spanish: 'La Ciudadela de la Montaña Hueca'}
     desc: {english: 'Stone by stone.', spanish: 'Piedra por piedra.'}
     modifiers: {army_defence_factor: 0.15, army_org_factor: 0.1}
   - id: MEGANATIONS_junta_ofensiva
     country: null
-    name: {english: 'The Army Commands', spanish: 'El Ejército Manda'}
+    name: {english: 'The Army of the Initiates', spanish: 'El Ejército de los Iniciados'}
     desc: {english: 'Orders come from the general staff.', spanish: 'Las órdenes vienen del estado mayor.'}
     modifiers: {army_attack_factor: 0.1}
   - id: MEGANATIONS_junta_furia
@@ -15529,22 +15489,22 @@ dynamic_modifiers:
     modifiers: {army_attack_factor: 0.2, army_org_factor: 0.1}
   - id: MEGANATIONS_junta_blindados
     country: null
-    name: {english: 'Armour to the Front', spanish: 'Blindados al Frente'}
+    name: {english: 'The Chariots of the Eclipse', spanish: 'Los Carros del Eclipse'}
     desc: {english: 'The tanks leave the parade ground.', spanish: 'Los tanques dejan el desfile.'}
     modifiers: {army_armor_attack_factor: 0.15}
   - id: MEGANATIONS_junta_golpe
     country: null
-    name: {english: 'The Coup de Grâce', spanish: 'El Golpe de Gracia'}
+    name: {english: 'The Total Eclipse', spanish: 'El Eclipse Total'}
     desc: {english: 'Everything at once.', spanish: 'Todo junto, ahora.'}
     modifiers: {army_attack_factor: 0.25, army_org_factor: 0.15, war_support_factor: 0.1}
   - id: MEGANATIONS_junta_mando_supremo
     country: null
-    name: {english: 'The Supreme Command', spanish: 'El Mando Supremo'}
+    name: {english: 'The Order of the Black Sun', spanish: 'La Orden del Sol Negro'}
     desc: {english: 'The junta becomes a state.', spanish: 'La junta se vuelve un Estado.'}
     modifiers: {army_attack_factor: 0.25, army_defence_factor: 0.25, industrial_capacity_factory: 0.2, stability_factor: 0.1, war_support_factor: 0.15}
   - id: MEGANATIONS_junta_triunfante
     country: null
-    name: {english: 'The Victorious Junta', spanish: 'La Junta Victoriosa'}
+    name: {english: 'The Eclipse Triumphs', spanish: 'El Eclipse Triunfa'}
     desc: {english: 'The generals won the civil war.', spanish: 'Los generales ganaron la guerra civil.'}
     modifiers: {army_attack_factor: 0.1, war_support_factor: 0.1}
   - id: MEGANATIONS_rebelion_aplastada
@@ -15553,7 +15513,60 @@ dynamic_modifiers:
     desc: {english: 'Order returned, but the army bled and the barracks still whisper.', spanish: 'Volvió el orden, pero el ejército sangró y en los cuarteles todavía se murmura.'}
     modifiers: {stability_factor: 0.15, army_org_factor: -0.15, war_support_factor: -0.15, '?army_morale_factor': -0.15, '?required_garrison_factor': 0.25}
 
+  # 2026-10-11 (rehecho): las rebeliones de cada potencia
+  - id: MEGANATIONS_tierras_sin_ley_crecen
+    country: null
+    name: {english: 'The Lawless Lands Grow', spanish: 'Las Tierras Sin Ley Crecen'}
+    desc: {english: 'The Union''s zones joined us.', spanish: 'Las zonas de la Unión se sumaron a nosotros.'}
+    modifiers: {army_attack_factor: 0.2, army_defence_factor: 0.2, recruitable_population_factor: 0.1, war_support_factor: 0.1}
+  - id: MEGANATIONS_red_roja
+    country: null
+    name: {english: 'The Red Network', spanish: 'La Red Roja'}
+    desc: {english: 'The Commune''s servers think for us.', spanish: 'Los servidores de la Comuna piensan por nosotros.'}
+    modifiers: {research_speed_factor: 0.1, army_org_factor: 0.1}
+  - id: MEGANATIONS_independencia_nacional
+    country: null
+    name: {english: 'National Independence', spanish: 'La Independencia Nacional'}
+    desc: {english: 'Each people its own state.', spanish: 'Cada pueblo su propio Estado.'}
+    modifiers: {army_defence_factor: 0.15, war_support_factor: 0.15}
+  - id: MEGANATIONS_revolucion_triunfante
+    country: null
+    name: {english: 'The Revolution Triumphs', spanish: 'La Revolución Triunfa'}
+    desc: {english: 'We won the civil war.', spanish: 'Ganamos la guerra civil.'}
+    modifiers: {stability_factor: 0.1, war_support_factor: 0.1}
+  - id: MEGANATIONS_paranoia_sol_negro
+    country: null
+    name: {english: 'The Paranoia of the Black Sun', spanish: 'La Paranoia del Sol Negro'}
+    desc: {english: 'Traitors everywhere; purges every week.', spanish: 'Traidores por todas partes; purgas cada semana.'}
+    modifiers: {political_power_gain: -0.1, stability_factor: -0.05, army_org_factor: 0.05}
+  - id: MEGANATIONS_apagones
+    country: null
+    name: {english: 'Blackouts', spanish: 'Los Apagones'}
+    desc: {english: 'The Sons of Odin blew up the energy stores.', spanish: 'Los Hijos de Odín volaron las baterías.'}
+    modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.1}
+  - id: MEGANATIONS_cruz_del_mar
+    country: null
+    name: {english: 'The Sea Cross', spanish: 'La Cruz del Mar'}
+    desc: {english: 'A fleet that prays before it fires.', spanish: 'Una flota que reza antes de disparar.'}
+    modifiers: {army_attack_factor: 0.1, war_support_factor: 0.15, '?naval_damage_factor': 0.1}
+  - id: MEGANATIONS_furia_de_odin
+    country: null
+    name: {english: 'The Fury of Odin', spanish: 'La Furia de Odín'}
+    desc: {english: 'Valhalla awaits the brave.', spanish: 'El Valhalla espera a los valientes.'}
+    modifiers: {army_attack_factor: 0.15, war_support_factor: 0.15}
+  - id: MEGANATIONS_cisma
+    country: null
+    name: {english: 'The Schism', spanish: 'El Cisma'}
+    desc: {english: 'Two Romes, one throne.', spanish: 'Dos Romas, un solo trono.'}
+    modifiers: {army_defence_factor: 0.1, war_support_factor: 0.1}
+  - id: MEGANATIONS_hijos_de_odin_caen
+    country: null
+    name: {english: 'The Sons of Odin Fall', spanish: 'Los Hijos de Odín Caen'}
+    desc: {english: 'The Machine survives.', spanish: 'La Máquina sobrevive.'}
+    modifiers: {stability_factor: 0.1, research_speed_factor: 0.05}
+
 variable_names:
+  ASC_valhalla: {english: "Fury of the Sons of Odin", spanish: "Furia de los Hijos de Odín"}
   MEGANATIONS_lider_carisma: {english: "Leader's Charisma", spanish: "Carisma del líder"}
   MEGANATIONS_lider_astucia: {english: "Leader's Cunning", spanish: "Astucia del líder"}
   MEGANATIONS_lider_salud: {english: "Leader's Health", spanish: "Salud del líder"}

@@ -58,6 +58,16 @@ _STATES: dict[str, int] | None = None
 UNRESOLVED: set[str] = set()
 
 
+# Regiones de las rebeliones (2026-10-11): nombre -> (capital, regiones). Las
+# arma rebeliones.prepare con el mapa; el efecto civil_war las usa con `region`.
+_REGIONS: dict[str, tuple[int, list[int]]] = {}
+
+
+def use_regions(mapping: dict[str, tuple[int, list[int]]] | None) -> None:
+    _REGIONS.clear()
+    _REGIONS.update(mapping or {})
+
+
 def use_states(mapping: dict[str, int] | None) -> None:
     global _STATES
     _STATES = mapping
@@ -470,6 +480,15 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("release_puppet", target)
             effects_used.setdefault("release_puppet", owner)
             continue
+        if effect == "sabotage_factories":
+            # 2026-10-11 (los Hijos de Odín): bombas en las fábricas de una región
+            # al azar. damage_building no se verifica contra documentation/.
+            dmg = Block()
+            for b in ("industrial_complex", "arms_factory"):
+                dmg.add("damage_building", Block([("type", b), ("damage", int(item.get("damage", 1)))]))
+            block.add("random_owned_controlled_state", dmg)
+            effects_used.setdefault("random_owned_controlled_state", owner)
+            continue
         if effect == "refresh_focus_tree":
             # vuelve a mirar los allow_branch del árbol (el foco secreto de la
             # junta aparece al terminar las dos ramas). Efecto 1.9+, no se verifica.
@@ -756,6 +775,16 @@ def render_effects(owner: str, items: list[dict], known,
                 effects_used.setdefault(k, owner)
             ec.triggers_used.setdefault("has_idea", owner)
             inner = Block([("ideology", item["ideology"]), ("size", float(item.get("size", 0.35)))])
+            # 2026-10-11: dónde se levanta (capital y regiones del bando que se
+            # separa, de rebeliones.py) y qué parte del ejército, la flota y la
+            # aviación se lleva
+            region = _REGIONS.get(item.get("region") or "")
+            if region:
+                inner.add("capital", region[0])
+                inner.add("states", Block([(None, sid) for sid in region[1]]))
+            for k in ("army_ratio", "navy_ratio", "air_ratio"):
+                if item.get(k) is not None:
+                    inner.add(k, float(item[k]))
             block.add("start_civil_war", inner)
             rebels = item.get("rebels") or {}
             rb = Block([("limit", Block([("original_tag", tag), ("NOT", Block([("tag", tag)])),
@@ -1027,9 +1056,11 @@ def render_effects(owner: str, items: list[dict], known,
             inner = Block()
             inner.add("limit", render_conditions(owner, item.get("when") or {}, ec.triggers_used, where=where))
             inner.entries.extend(render_effects(owner, item.get("then") or [], ec, effects_used, where=where).entries)
-            if item.get("else"):
-                inner.add("else", render_effects(owner, item["else"], ec, effects_used, where=where))
             block.add("if", inner)
+            if item.get("else"):
+                # 2026-10-11: el `else` va al lado del `if` (como en los scripts del
+                # juego), no adentro
+                block.add("else", render_effects(owner, item["else"], ec, effects_used, where=where))
             continue
         if effect == "add_resource":
             resource = item.get("resource")
