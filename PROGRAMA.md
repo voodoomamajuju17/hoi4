@@ -195,7 +195,7 @@ eventos con ultimátum e IA con condiciones.
 
 ## 9. Flavor
 
-- [~] 5 eventos mundiales y 5 menores por potencia (2026-09-29); la Señal de Próxima (sorpresa)
+- [~] 5 eventos mundiales y 5 menores por potencia (2026-09-29); la Señal de Próxima se sacó (2026-10-11)
 - [ ] Eventos de noticias del mundo de 2100 (el Invierno de Ceniza, las cubas, la Alta Mar)
 - [ ] Textos de ayuda con lore en ideologías, ideas y decisiones
 - [ ] Música del menú o de facción (si se consigue)

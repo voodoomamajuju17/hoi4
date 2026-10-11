@@ -518,10 +518,8 @@ llega a 100 al toque y la tensión nunca sube".
 - **Eventos**: 5 menores por potencia (por fecha, 2100-2103) y 5 mundiales
   (eclipse, juegos de Ginebra, tormenta solar, gripe gris, cometa) que el
   pulso de cualquier potencia dispara una vez para todos.
-- **La sorpresa: la Señal de Próxima** (12/4/2102): un panel compartido por
-  las ocho potencias para descifrar 5 fragmentos; la primera escucha el
-  mensaje (el Disco de Oro de las Voyager devuelto con TE ESCUCHAMOS) y gana
-  La Voz de la Tierra (dos años); las demás reciben la noticia.
+- ~~La sorpresa: la Señal de Próxima~~ (sacada el 2026-10-11: "es muy sosa y
+  no suma ni resta").
 - **El lado del satélite**: panel propio con su lealtad; cooperar (+8),
   agitar (-10) y declarar la independencia (lealtad < 20 y el señor en
   guerra o perdiendo, o < 10); el señor la acepta o va a la guerra.
@@ -1473,3 +1471,20 @@ No se pudo probar en el juego. Si el árbol sigue con imágenes de otro país,
 falta cerrar y volver a abrir el juego al cambiar de país. Si aun así no
 cambia, el arreglo de respaldo es que el árbol use imágenes comunes en vez de
 las de cada facción.
+
+## Lote de la Señal y los logs (2026-10-11)
+
+- **La Señal de Próxima, sacada entera**: el panel, la decisión de descifrar,
+  los eventos mundo.10-12, las banderas, la variable de fragmentos y La Voz de
+  la Tierra.
+- **error.log, misiones con costo**: "Cost for normal missions not
+  implemented" en las 16 misiones con reloj. Ahora las misiones salen sin
+  `cost` (antes iba `cost = 0`).
+- **error.log, equipo por arquetipo**: mundo.79 (Llega el Cargamento) daba
+  antiaéreos a la Unión y a Roma sin ninguna versión investigada, y el juego
+  no entregaba nada. Todo `equipment` del DSL con un arquetipo ahora va con
+  `if has_tech` (la primera tecnología que habilita una versión): con ella,
+  la mejor versión del país; sin ella, esa primera versión. Si se quita y no
+  hay versión, no se quita nada.
+- El resto del error.log es del juego base (on_actions de 1936 que buscan
+  personajes y países que en 2100 no existen) y no rompe nada.

@@ -83,6 +83,38 @@ def use_territory(mapping: dict | None) -> None:
     _TERRITORY = {int(k): v for k, v in (mapping or {}).items()}
 
 
+# Equipo por arquetipo (2026-10-11, error.log: "add_equipment_to_stockpile:
+# adding an archetype equipment without equipment existing in country"): dar
+# "anti_air_equipment" a un país que no investigó ninguna versión falla y no
+# entrega nada. arquetipo -> (primera versión, tecnología que la habilita);
+# con esa tecnología va el arquetipo (la mejor versión del país), sin ella la
+# primera versión. Lo arma use_equipment con el juego instalado.
+_ARCHETYPES: dict[str, tuple[str, str]] = {}
+
+
+def use_equipment(vanilla) -> None:
+    _ARCHETYPES.clear()
+    if vanilla is None:
+        return
+    equipment = vanilla.equipment()
+    enabled_by: dict[str, list[str]] = {}
+    for tech, info in vanilla.tech_tree().items():
+        for eq in info.get("enables") or ():
+            enabled_by.setdefault(eq, []).append(tech)
+    variants: dict[str, list[tuple[int, str]]] = {}
+    for eq, (archetype, year) in equipment.items():
+        if archetype:
+            variants.setdefault(archetype, []).append((year, eq))
+    for archetype, found in variants.items():
+        # la primera versión que habilita una tecnología (infantry_equipment_0
+        # no la habilita ninguna: no se puede dar por sentado que el país la tiene)
+        for _, eq in sorted(found):
+            techs = sorted(enabled_by.get(eq) or ())
+            if techs:
+                _ARCHETYPES[archetype] = (eq, techs[0])
+                break
+
+
 # Nombres legibles de las variables (14_decisions.yaml -> variable_names).
 # HOI4 no muestra add_to_variable en los tooltips: un foco que solo suma una
 # variable decía "Este enfoque no tiene efecto". Cada add_variable con nombre
@@ -1016,10 +1048,24 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "equipment":
             # equipo al depósito (arquetipo o variante): add_equipment_to_stockpile
+            eq_type, amount = item["type"], int(item["amount"])
             inner = Block()
-            inner.add("type", item["type"])
-            inner.add("amount", int(item["amount"]))
-            block.add("add_equipment_to_stockpile", inner)
+            inner.add("type", eq_type)
+            inner.add("amount", amount)
+            if eq_type in _ARCHETYPES:
+                # sin ninguna versión investigada el arquetipo falla: la primera
+                # versión si se da; si se quita, no hay qué quitar
+                first, tech = _ARCHETYPES[eq_type]
+                guarded = Block()
+                guarded.add("limit", Block([("has_tech", tech)]))
+                guarded.add("add_equipment_to_stockpile", inner)
+                block.add("if", guarded)
+                if amount > 0:
+                    block.add("else", Block([("add_equipment_to_stockpile",
+                                              Block([("type", first), ("amount", amount)]))]))
+                ec.triggers_used.setdefault("has_tech", owner)
+            else:
+                block.add("add_equipment_to_stockpile", inner)
             effects_used.setdefault("add_equipment_to_stockpile", owner)
             continue
         if effect == "idea_tiers":

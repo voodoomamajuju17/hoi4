@@ -68,6 +68,7 @@ def _emit(ctx: BuildContext) -> None:
     effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     effects_mod.use_variable_names(ctx.spec.raw)
     effects_mod.use_territory(ctx.data.get("territory"))
+    effects_mod.use_equipment(ctx.vanilla)
     trees = ctx.spec.raw["focus_trees"].get("trees") or {}
     for tag, tree in trees.items():
         if not isinstance(tree, dict) or "branches" not in tree:

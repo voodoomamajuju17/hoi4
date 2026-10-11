@@ -1380,25 +1380,22 @@ def test_events() -> None:
               "limit = { date > 2100.3.20 NOT = { has_country_flag = EFE_menor_200 } } set_country_flag = EFE_menor_200 "
               "country_event = { id = meganations_efe.200 days = 1 }" in pulso, pulso[:300])
         mundo = " ".join((mod / "events/meganations_mundo.txt").read_text().split())
-        check("eventos mundiales: namespace propio con 5 eventos y la Senal",
-              "add_namespace = meganations_mundo" in mundo and all(f"id = meganations_mundo.{n} " in mundo for n in (1, 2, 3, 4, 5, 10, 11, 12)))
+        check("eventos mundiales: namespace propio con 5 eventos",
+              "add_namespace = meganations_mundo" in mundo and all(f"id = meganations_mundo.{n} " in mundo for n in (1, 2, 3, 4, 5)))
+        # 2026-10-11: "la decisión de la señal extraterrestre es muy sosa, sacala totalmente"
+        check("sin la Senal de Proxima", not any(f"id = meganations_mundo.{n} " in mundo for n in (10, 11, 12))
+              and "senal" not in mundo.lower().replace("arsenal", ""), mundo[:200])
         clock = se_all[se_all.index("MEGANATIONS_eventos_mundiales = {"):][:12000]
         check("eventos mundiales: una bandera global y a todos los paises",
               "NOT = { has_global_flag = MEGANATIONS_mundo_1 }" in clock and "set_global_flag = MEGANATIONS_mundo_1" in clock
               and "every_country = { country_event = { id = meganations_mundo.1 days = 1 } }" in clock, clock[:600])
         check("eventos mundiales: los corre el pulso de cada potencia", pulso.count("MEGANATIONS_eventos_mundiales = yes") == 1
               and se_all.count("MEGANATIONS_eventos_mundiales = yes") == 8)
-        check("la Senal: solo las potencias reciben el aviso",
-              "every_country = { limit = { OR = { tag = EFE tag = FCU" in clock and "country_event = { id = meganations_mundo.10 days = 1 }" in clock)
         cats = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text().split())
-        check("la Senal: panel compartido por las ocho potencias y visible solo mientras dura",
-              "MEGANATIONS_senal_category = {" in cats and "OR = { original_tag = EFE" in cats
-              and "has_global_flag = MEGANATIONS_senal_activa" in cats and "NOT = { has_global_flag = MEGANATIONS_senal_resuelta }" in cats, cats[-700:])
         decs = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
-        frag = decs[decs.index("MEGANATIONS_descifrar_fragmento = {"):][:1500]
-        check("la Senal: el quinto fragmento da el mensaje al ganador y la noticia a los demas",
-              "set_global_flag = MEGANATIONS_senal_resuelta" in frag and "meganations_mundo.11" in frag
-              and "NOT = { tag = ROOT } }" in frag and "OR = { tag = EFE" in frag, frag[:900])
+        check("sin la Senal: ni panel, ni decision, ni bandera",
+              "MEGANATIONS_senal" not in cats and "MEGANATIONS_descifrar_fragmento" not in decs
+              and "MEGANATIONS_senal" not in clock)
         conq = next(ev for ev in events if pdx.text(ev.get("id")) == "meganations_efe.30")
         check("la conquista del Amazonas ofrece proteger o explotar", len(conq.get_all("option")) == 2)
         check("el pulso dispara la conquista por control del state", "meganations_efe.30" in (mod / "common/scripted_effects").joinpath(
@@ -3158,6 +3155,11 @@ def _diversion_checks(ctx) -> None:
           "days_mission_timeout = 1095" in m2 and "available = { has_country_flag = NRE_forma_final }" in m2
           and "MEGANATIONS_destino_postergado" in m2, m2)
     check("misiones: 16 (dos por potencia)", len(_re.findall(r"\b[A-Z]{3}_mision_(?:primer_ano|destino) = \{", dec)) == 16)
+    # error.log 2026-10-11: "Cost for normal missions not implemented"
+    blocks = [dec[i:dec.index("ai_will_do", i)] for i in
+              (m.start() for m in _re.finditer(r"\b[A-Z]{3}_mision_(?:primer_ano|destino) = \{", dec))]
+    check("misiones: sin costo (el juego no lo admite en misiones)",
+          len(blocks) == 16 and not any("cost =" in b for b in blocks), next((b for b in blocks if "cost =" in b), ""))
     # 1 y 3. la Coalicion de Ginebra y el precio de la forma final
     efe = flat(mod / "events/meganations_efe.txt")
     e231 = efe[efe.index("id = meganations_efe.231 title"):][:2500]
@@ -3352,6 +3354,45 @@ def test_decisiones_del_lider() -> None:
         check("lider: los textos nombran al lider", "[Root.GetLeader]" in loc[loc.index("meganations_lider.1."):])
 
 
+def test_equipo_por_arquetipo() -> None:
+    section("equipo por arquetipo: sin version investigada va la primera (2026-10-11)")
+    # error.log: "add_equipment_to_stockpile: adding an archetype equipment without
+    # equipment existing in country" (mundo.79 daba antiaereos a quien no tenia)
+    from tools.gen.emitters import effects as eff_mod
+
+    class _Van:
+        def equipment(self):
+            return {"anti_air_equipment": (None, 0), "anti_air_equipment_1": ("anti_air_equipment", 1936),
+                    "anti_air_equipment_2": ("anti_air_equipment", 1940),
+                    "infantry_equipment_0": ("infantry_equipment", 1918),
+                    "infantry_equipment_1": ("infantry_equipment", 1936), "support_equipment_1": ("support_equipment", 1936)}
+
+        def tech_tree(self):
+            return {"interwar_antiair": {"enables": ["anti_air_equipment_1"]},
+                    "antiair2": {"enables": ["anti_air_equipment_2"]},
+                    "infantry_weapons": {"enables": ["infantry_equipment_1"]}}
+
+    eff_mod.use_equipment(_Van())
+    try:
+        out = " ".join(pdx.render(eff_mod.render_effects("prueba", [
+            {"effect": "equipment", "type": "anti_air_equipment", "amount": 300},
+            {"effect": "equipment", "type": "infantry_equipment", "amount": -400},
+            {"effect": "equipment", "type": "support_equipment", "amount": 50},
+            {"effect": "equipment", "type": "anti_air_equipment_2", "amount": 10}], set(), {}, where="prueba")).split())
+    finally:
+        eff_mod.use_equipment(None)
+    check("arquetipo: con la tecnologia, la mejor version del pais; sin ella, la primera",
+          "if = { limit = { has_tech = interwar_antiair } add_equipment_to_stockpile = { type = anti_air_equipment amount = 300 } } "
+          "else = { add_equipment_to_stockpile = { type = anti_air_equipment_1 amount = 300 } }" in out, out)
+    check("arquetipo: la primera version es la que habilita una tecnologia (no infantry_equipment_0)",
+          "has_tech = infantry_weapons } add_equipment_to_stockpile = { type = infantry_equipment amount = -400 } }" in out, out)
+    check("arquetipo: si se quita y no hay version, no se quita nada",
+          "infantry_equipment_1 amount = -400" not in out, out)
+    check("arquetipo: sin tecnologia que lo habilite y versiones concretas quedan como estaban",
+          "add_equipment_to_stockpile = { type = support_equipment amount = 50 }" in out
+          and "add_equipment_to_stockpile = { type = anti_air_equipment_2 amount = 10 }" in out, out)
+
+
 def test_junta_militar() -> None:
     section("junta militar: arbol con hitos, foco secreto, fin de la guerra civil (2026-10-11)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -3544,6 +3585,7 @@ def main() -> int:
         test_nombre_unico_vs_anio,
         test_decisiones_del_lider,
         test_junta_militar,
+        test_equipo_por_arquetipo,
         test_vanilla_validation,
     ):
         test()

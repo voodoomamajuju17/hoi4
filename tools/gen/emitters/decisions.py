@@ -39,6 +39,7 @@ def _emit(ctx: BuildContext) -> None:
     effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     effects_mod.use_variable_names(ctx.spec.raw)
     effects_mod.use_territory(ctx.data.get("territory"))
+    effects_mod.use_equipment(ctx.vanilla)
     categories = (ctx.spec.raw.get("decisions") or {}).get("categories") or []
     scripted = (ctx.spec.raw.get("decisions") or {}).get("scripted_effects") or []
     if not categories and not scripted:
@@ -91,7 +92,10 @@ def _emit(ctx: BuildContext) -> None:
             did = d["id"]
             db = Block()
             db.add("icon", _icon(ctx, vanilla["decision_icons"], d.get("icon_prefer", [])))
-            db.add("cost", int(d.get("cost", 0)))
+            if not d.get("mission"):
+                # error.log 2026-10-11: "Cost for normal missions not implemented"
+                # (las misiones no llevan costo, ni siquiera 0)
+                db.add("cost", int(d.get("cost", 0)))
             if d.get("cooldown_days"):
                 db.add("days_re_enable", int(d["cooldown_days"]))
             if d.get("visible"):

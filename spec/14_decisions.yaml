@@ -4917,70 +4917,6 @@ categories:
           when: {at_war: true}
       src: user_design
 
-  # La sorpresa (2026-09-29): la Señal de Próxima, un panel compartido por las ocho potencias.
-  - id: MEGANATIONS_senal_category
-    country:
-    - EFE
-    - FCU
-    - ASC
-    - HSN
-    - NAS
-    - SHD
-    - APF
-    - NRE
-    icon_prefer:
-    - generic_research
-    - generic_political_actions
-    visible: {global_flag: MEGANATIONS_senal_activa, not_global_flag: MEGANATIONS_senal_resuelta}
-    name: {english: The Signal from Proxima, spanish: La Señal de Próxima}
-    desc:
-      english: 'A structured signal from Proxima Centauri, repeating every eleven minutes. The first power to decode five fragments hears the message.\nFragments
-        decoded: [?MEGANATIONS_senal]/5'
-      spanish: 'Una señal estructurada desde Próxima Centauri, que se repite cada once minutos. La primera potencia que descifre cinco fragmentos
-        escucha el mensaje.\nFragmentos descifrados: [?MEGANATIONS_senal]/5'
-    src: user_request
-    decisions:
-    - id: MEGANATIONS_descifrar_fragmento
-      name: {english: Decode a Fragment, spanish: Descifrar un Fragmento}
-      desc:
-        english: Cryptographers, mathematicians and a very old radio astronomer work for weeks on one piece of the Signal.
-        spanish: Criptógrafos, matemáticos y un radioastrónomo muy viejo trabajan semanas sobre un pedazo de la Señal.
-      icon_prefer:
-      - generic_research
-      - generic_political_actions
-      cost: 35
-      cooldown_days: 45
-      effects:
-      - {effect: add_variable, var: MEGANATIONS_senal, value: 1}
-      - effect: if
-        when:
-          variable_at_least: {var: MEGANATIONS_senal, value: 5}
-          not_global_flag: MEGANATIONS_senal_resuelta
-        then:
-        - {effect: global_flag, value: MEGANATIONS_senal_resuelta}
-        - {effect: event, id: meganations_mundo.11, days: 1}
-        - effect: every_country
-          effects:
-          - {effect: event, id: meganations_mundo.12, days: 2}
-          when:
-            any:
-            - {tag: EFE}
-            - {tag: FCU}
-            - {tag: ASC}
-            - {tag: HSN}
-            - {tag: NAS}
-            - {tag: SHD}
-            - {tag: APF}
-            - {tag: NRE}
-            not: {tag: ROOT}
-      ai:
-        factor: 1
-        modifiers:
-        - factor: 2
-          when:
-            variable_at_least: {var: MEGANATIONS_senal, value: 3}
-      src: user_request
-
   # Segunda etapa (análisis 2026-10-01, prioridad 12): diplomacia entre potencias y la Era de la Hegemonía
   - id: MEGANATIONS_diplomacia_category
     country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
@@ -14411,24 +14347,6 @@ scripted_effects:
       - effect: every_country
         effects:
         - {effect: event, id: meganations_mundo.5, days: 1}
-    - effect: if
-      when: {date_after: 2102.4.12, not_global_flag: MEGANATIONS_mundo_10}
-      then:
-      - {effect: global_flag, value: MEGANATIONS_mundo_10}
-      - {effect: global_flag, value: MEGANATIONS_senal_activa}
-      - effect: every_country
-        effects:
-        - {effect: event, id: meganations_mundo.10, days: 1}
-        when:
-          any:
-          - {tag: EFE}
-          - {tag: FCU}
-          - {tag: ASC}
-          - {tag: HSN}
-          - {tag: NAS}
-          - {tag: SHD}
-          - {tag: APF}
-          - {tag: NRE}
     # Cadenas de equipamiento (2026-10-10, pedido del usuario: "cadenas de eventos
     # que llevan a pérdida o ganancia de equipamiento"). Cada potencia, con
     # 10 meses de espera entre una y otra: cada mes 15% de que arranque una.
@@ -15624,6 +15542,5 @@ variable_names:
   NRE_lealtad_zhi: {english: "Loyalty of Province of Hispania", spanish: "Lealtad de Provincia de Hispania"}
   NRE_lealtad_zda: {english: "Loyalty of Province of Dacia", spanish: "Lealtad de Provincia de Dacia"}
   SHD_racha: {english: "Harmony streak", spanish: "Racha de armonía"}
-  MEGANATIONS_senal: {english: "Fragments of the Signal", spanish: "Fragmentos de la Señal"}
   EFE_hambre_del_metal: {english: "Hunger of the living metal", spanish: "Hambre del metal vivo"}
   SHD_meses_desborde: {english: "Months of overflow", spanish: "Meses de desborde", hidden: true}
