@@ -1488,3 +1488,12 @@ las de cada facción.
   hay versión, no se quita nada.
 - El resto del error.log es del juego base (on_actions de 1936 que buscan
   personajes y países que en 2100 no existen) y no rompe nada.
+
+## Banderas y retratos de las juntas y rebeliones (2026-10-11)
+
+Del zip de 43 se importaron 37: 31 banderas (juntas títere, rebeliones,
+formas finales, la república pirata) y 6 retratos de líderes rebeldes. Seis
+llegaron cortados (el PNG termina a mitad de la imagen) y no se importaron:
+ASC_VALHALLA, EFE_LIBERAL, NAS_SOL_ETERNO, NRE_SENADO, ASC_lider_rebelde y
+SHD_mando_mei_2. Siguen en los pedidos junto con NRE_LEGIONES, que no vino.
+`0_NUEVOS_de_este_lote.txt` ya no lista lo que llegó.

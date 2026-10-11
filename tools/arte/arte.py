@@ -492,7 +492,13 @@ def pedidos() -> None:
         (OUT / NEW_FILE).write_text(f"# {len(fresh)} pedidos nuevos de este lote (también están en los archivos por potencia)\n\n"
                                     + "\n".join(_request(i) for i in fresh), encoding="utf-8")
     elif old_new:
-        (OUT / NEW_FILE).write_text(old_new, encoding="utf-8")
+        # sin pedidos nuevos queda la lista anterior, sin lo que ya llegó
+        # (2026-10-11: seguía listando banderas y retratos ya importados)
+        old_ids = {line[4:].strip() for line in old_new.splitlines() if line.startswith("id: ")}
+        still = [i for i in items if i["id"] in old_ids]
+        if still:
+            (OUT / NEW_FILE).write_text(f"# {len(still)} pedidos nuevos de este lote (también están en los archivos por potencia)\n\n"
+                                        + "\n".join(_request(i) for i in still), encoding="utf-8")
     order = [("leader_portrait", "1_retratos"), ("national_spirit_icon", "2_espiritus"),
              ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
