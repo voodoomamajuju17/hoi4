@@ -24,6 +24,7 @@ SOURCE = "spec/11_scenario.yaml"
 LOC_FILE = "meganations_scenario"
 FALLBACK_PICTURE = "GFX_select_date_1936"
 EMITTED_FIELDS = ("name", "desc", "date", "picture", "default_country")
+NO_COUNTRY = "---"    # ningún país preseleccionado (como el juego base)
 
 
 def emit(ctx: BuildContext) -> None:
@@ -102,7 +103,8 @@ def _emit_bookmark(ctx: BuildContext, spec: dict) -> None:
     picture = template.get("picture") if template is not None else None
     b.add("picture", picture if picture is not None else Quoted(FALLBACK_PICTURE))
     default_country = spec["default_country"]
-    ctx.spec.country(default_country)
+    if default_country != NO_COUNTRY:
+        ctx.spec.country(default_country)
     b.add("default_country", Quoted(default_country))
     # `default` solo si algún bookmark del juego lo usa: en 1.19.3 el reporte
     # mostró que no se puede dar por sentado.
@@ -142,7 +144,8 @@ def _emit_bookmark(ctx: BuildContext, spec: dict) -> None:
     root = Block()
     root.add("bookmarks", bookmarks)
     ctx.write_script("common/bookmarks/meganations_2100.txt", root, source=SOURCE)
-    ctx.note(f"escenario: arranca el {spec['date'].rsplit('.', 1)[0]}, pais por defecto {default_country}")
+    ctx.note(f"escenario: arranca el {spec['date'].rsplit('.', 1)[0]}, "
+             + ("sin pais preseleccionado" if default_country == NO_COUNTRY else f"pais por defecto {default_country}"))
 
 
 def _loc(ctx: BuildContext, key: str, texts: dict) -> str:

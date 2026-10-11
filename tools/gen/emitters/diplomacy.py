@@ -98,7 +98,12 @@ def emit(ctx: BuildContext) -> None:
 
     tension = spec.get("world_tension")
     if isinstance(tension, dict) and tension.get("threat"):
-        host = ctx.spec.raw["scenario"]["bookmark"]["default_country"]
+        # la amenaza la "genera" un país: el elegido en tension.host, si no el
+        # preseleccionado del bookmark, si no la primera meganación destacada
+        bookmark = ctx.spec.raw["scenario"]["bookmark"]
+        host = tension.get("host") or bookmark["default_country"]
+        if host == "---":
+            host = (bookmark.get("featured") or [{}])[0].get("tag") or ctx.spec.countries[0].tag
         key = ctx.loc.define_and_reference(
             "MEGANATIONS_THREAT_COLLAPSE", en=tension["name"]["english"], es=tension["name"]["spanish"],
             file=LOC_FILE, origin="diplomacy:world_tension",

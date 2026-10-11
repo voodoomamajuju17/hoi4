@@ -900,7 +900,13 @@ def test_scenario() -> None:
         root = pdx.parse((mod / "common/bookmarks/meganations_2100.txt").read_text())
         bm = root.get("bookmarks").get("bookmark")
         check("fecha 2100", pdx.text(bm.get("date")) == "2100.1.1.12")
-        check("EFE por defecto", pdx.text(bm.get("default_country")) == "EFE")
+        # reporte 2026-10-11: con un país preseleccionado el árbol de
+        # investigación quedaba con sus nombres e imágenes para todos
+        check("ningun pais preseleccionado", pdx.text(bm.get("default_country")) == "---",
+              pdx.text(bm.get("default_country")))
+        hist = (mod / "history/countries").glob("EFE - *.txt")
+        check("la tension del arranque sigue en el EFE",
+              any("add_named_threat" in h.read_text() for h in hist))
         featured = [k for k in bm.keys() if isinstance(k, str) and len(k) == 3 and k.isupper()]
         check("destaca a todas las meganaciones con territorio", {"EFE", "ASC", "NRE", "HSN", "APF"} <= set(featured), str(featured))
         check("picture copiada de vanilla", pdx.text(bm.get("picture")) == "GFX_select_date_1936")

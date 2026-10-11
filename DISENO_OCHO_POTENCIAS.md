@@ -1450,3 +1450,26 @@ la rebelión, un año de +10% estabilidad y apoyo a la guerra (el Sol Negro adem
 sale a conquistar); si gana el gobierno, la rebelión aplastada (un año de +15%
 estabilidad, -15% organización y apoyo a la guerra, peor moral, más guarniciones).
 El `else` del DSL ahora va al lado del `if`, como en los scripts del juego.
+
+## Pestaña de investigación con el arte de otro país (2026-10-11)
+
+Reporte (capturas): jugando con la Comuna o con Roma, el árbol de investigación
+mostraba los nombres y las imágenes del EFE ("Fusil Espina", el fusil verde).
+El título del detalle también, pero la imagen del equipo en el detalle, la
+ranura de investigación y el aviso de tecnología terminada sí salían con el
+país correcto (el fusil blanco y rojo de la Comuna, "Tanque Vélite III").
+
+Los nombres e íconos por país estaban bien generados para los ocho
+(`<TAG>_<tecnología>`, `GFX_<TAG>_<tecnología>_medium`). Lo que tenía el EFE
+de distinto es que era el país preseleccionado del escenario
+(`default_country`). El árbol se arma con el país elegido al cargar la partida
+y no se rearma al elegir otro, mientras que la ranura y el detalle del equipo
+se calculan cada vez. El juego base no preselecciona ninguno (`"---"`), así
+que ahora el escenario tampoco lo hace. La tensión mundial del arranque sigue
+saliendo del EFE (`world_tension.host`; si no, la primera meganación
+destacada).
+
+No se pudo probar en el juego. Si el árbol sigue con imágenes de otro país,
+falta cerrar y volver a abrir el juego al cambiar de país. Si aun así no
+cambia, el arreglo de respaldo es que el árbol use imágenes comunes en vez de
+las de cada facción.

@@ -31,7 +31,11 @@ bookmark:
     spanish: "2100. Los viejos Estados nacionales ya no existen. Ocho meganaciones se reparten lo que queda del planeta, cada una construida alrededor del recurso, equilibrio o sistema sin el que no puede vivir."
   desc_src: inferred
   desc_basis: "§1 — 'cada mega-nación gira alrededor de un recurso, equilibrio o sistema exclusivo'."
-  default_country: EFE
+  # Sin país preseleccionado, como el juego base ("---"). Reporte 2026-10-11:
+  # con EFE preseleccionado, la pestaña de investigación mostraba los nombres
+  # y las imágenes del EFE a cualquier país (el árbol se arma con el país que
+  # está elegido al cargar la partida y no se actualiza al cambiar).
+  default_country: "---"
 
   # Países destacados arriba en la pantalla de selección: las 8 meganaciones
   # (2026-09-23). Uno sin states no se destaca (no se puede jugar).
