@@ -1491,9 +1491,9 @@ las de cada facción.
 
 ## Banderas y retratos de las juntas y rebeliones (2026-10-11)
 
-Del zip de 43 se importaron 37: 31 banderas (juntas títere, rebeliones,
-formas finales, la república pirata) y 6 retratos de líderes rebeldes. Seis
-llegaron cortados (el PNG termina a mitad de la imagen) y no se importaron:
-ASC_VALHALLA, EFE_LIBERAL, NAS_SOL_ETERNO, NRE_SENADO, ASC_lider_rebelde y
-SHD_mando_mei_2. Siguen en los pedidos junto con NRE_LEGIONES, que no vino.
+Primero llegó un zip con 43: se importaron 37 y seis venían cortadas (el PNG
+terminaba a mitad de la imagen). Después llegó el zip reparado con las 44
+completas: 36 banderas (juntas títere, rebeliones, formas finales, la
+república pirata, las Legiones) y 8 retratos (los 7 líderes rebeldes y el
+segundo de Mei). No queda ningún pedido de banderas ni retratos de este lote.
 `0_NUEVOS_de_este_lote.txt` ya no lista lo que llegó.
