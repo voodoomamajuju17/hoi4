@@ -254,3 +254,34 @@ mio:
     SHD: {tank: Talleres del Río Amarillo, artillery: Artillería de las Compuertas, infantry: Armería del Directorio, motorized: Vehículos del Gran Canal, escort: Astilleros de Shanghái, capital: Astilleros de Dalian, submarine: Sumergibles del Mar de China, light_air: Alas de Jade, heavy_air: Bombarderos del Yangtsé}
     APF: {tank: Blindados de Katanga, artillery: Artillería del Sahel, infantry: Armería de los Consejos, motorized: Vehículos Transafricanos, escort: Astilleros de Dakar, capital: Astilleros de Durban, submarine: Sumergibles del Golfo de Guinea, light_air: Cazas del Sahel, heavy_air: Aeronaves del Rift}
     NRE: {tank: Blindados Legio, artillery: Tormenta de Marte, infantry: Armería Pretoriana, motorized: Carros de Vulcano, escort: Astilleros de Ostia, capital: Astilleros de Tarento, submarine: Sumergibles de Neptuno, light_air: Águilas de Júpiter, heavy_air: Rayos de Júpiter}
+
+# -----------------------------------------------------------------------------
+# Cazas gratis con ciertos focos (2026-10-11, pedido del usuario). Cada potencia
+# recibe su diseño de caza (nombre de su familia light_plane en 17_research ->
+# by_faction) la primera vez, con las tecnologías que pide; el foco suma esa
+# cantidad de aviones al depósito. El fuselaje básico de 2100 (no el de
+# entreguerras ni el de portaaviones) con piezas de hasta "1940".
+# -----------------------------------------------------------------------------
+free_fighters:
+  src: user_request
+  design:
+    chassis: [small_plane_airframe_1]
+    chassis_exclude: [cv_]
+    max_module_year: 1940
+    modules:
+      fixed_main_weapon_slot: [cannon, heavy_mg, mg]
+      fixed_auxiliary_weapon_slot_1: [heavy_mg, mg]
+      engine_type_slot: [engine_1x, 1x, engine]
+      special_type_slot_1: [radio, navigation]
+      special_type_slot_2: [drop_tank, fuel_tank, range]
+  focuses:
+    EFE_alas_del_condor: 50
+    EFE_cazas_de_bioacero: 100
+    ASC_enjambres_aereos: 100
+    FCU_superioridad_aerea: 120
+    HSN_aviacion_naval: 80
+    NAS_alas_del_sol: 100
+    NAS_cazas_del_condor: 200
+    SHD_cazas_del_directorio: 100
+    APF_cazas_del_sahel: 100
+    NRE_las_aguilas_del_cielo: 100

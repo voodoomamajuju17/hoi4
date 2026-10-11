@@ -1682,6 +1682,21 @@ countries:
         ?winter_attrition_factor: -0.1
         ?acclimatization_cold_climate_gain_factor: 0.25
       src: user_design
+    # 2026-10-11 (pedido del usuario: "sumá más bonus al NAS en combate aéreo y
+    # formación de ases")
+    - id: NAS_condores_del_sol
+      name: {english: The Condors of the Sun, spanish: Los Cóndores del Sol}
+      desc:
+        english: The pilots of the Sun learn to fly in the thin air of the Andes; at sea level, their planes feel like they have wings to spare.
+        spanish: Los pilotos del Sol aprenden a volar en el aire fino de los Andes; al nivel del mar, sus aviones parecen tener alas de sobra.
+      modifiers:
+        ?air_ace_generation_chance_factor: 0.5
+        ?air_attack_factor: 0.05
+        ?air_agility_factor: 0.05
+        ?air_ace_bonuses_factor: 0.25
+        ?air_training_xp_gain_factor: 0.25
+        ?air_accidents_factor: -0.2
+      src: user_request
   SHD:
     coverage: full_v1
     focus_ideas:

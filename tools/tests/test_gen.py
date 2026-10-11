@@ -1748,8 +1748,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta y 10 de las rebeliones",
-              len(dm.entries) == 107 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones y 2 del NAS en el aire",
+              len(dm.entries) == 109 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2202,7 +2202,8 @@ def test_ai() -> None:
         mil = root.get("MEGANATIONS_EFE_militar")
         milr = " ".join(pdx.render(mil).split()) if mil is not None else ""
         check("IA militar: el EFE arma blindados", "type = role_ratio id = armor value = 25" in milr, milr[:600])
-        check("IA militar: pone industria en armas (tipo sin id)", "type = added_military_to_civilian_factory_ratio value = 40" in milr)
+        # 2026-10-11 ("mejor preparada"): 50 en paz, 90 en guerra
+        check("IA militar: pone industria en armas (tipo sin id)", "type = added_military_to_civilian_factory_ratio value = 50" in milr)
         inf = (mod / "common/technologies/infantry.txt").read_text()
         nv = inf[inf.index("night_vision_fixture = {"):]
         nv = nv[:nv.index("folder")]
@@ -2244,7 +2245,7 @@ def test_ai() -> None:
         check("IA militar: el aviso lo dice", any("role_ratio:marines" in w for w in ctx.warnings))
         war = root.get("MEGANATIONS_EFE_militar_en_guerra")
         check("IA militar: en guerra, mas industria a las armas", war is not None
-              and "has_war = yes" in pdx.render(war.get("enable")) and "value = 75" in pdx.render(war))
+              and "has_war = yes" in pdx.render(war.get("enable")) and "value = 90" in pdx.render(war))
         check("la Anarquia no recibe plan militar de meganacion", "MEGANATIONS_ZWI_militar" not in ai)
         dz = root.get("MEGANATIONS_NRE_declara_a_ZWE")
         dzr = " ".join(pdx.render(dz).split()) if dz is not None else ""
@@ -2325,7 +2326,9 @@ def test_ai() -> None:
               and "NRE = { is_subject_of = APF }" in contra and "NOT = { country_exists = NRE }" in contra, contra)
         decl = ai[ai.index("MEGANATIONS_APF_destino_declara_a_NRE = {"):][:900]
         check("destino: declara con un ejercito de verdad (sin otra guerra, o uno muy grande)",
-              "type = declare_war id = NRE value = 200" in decl and "NOT = { has_war_with = NRE }" in decl
+              "type = declare_war id = NRE value = 200" in decl
+              # 2026-10-11: ninguna otra guerra con una potencia
+              and "NOT = { OR = { has_war_with = NRE has_war_with = ASC" in decl
               and "OR = { has_war = no has_army_size = { size > 49 } }" in decl
               and "has_army_size = { size > 29 }" in decl, decl)
         check("destino: nunca contra si mismo, sus satelites ni su faccion",
@@ -3393,6 +3396,126 @@ def test_equipo_por_arquetipo() -> None:
           and "add_equipment_to_stockpile = { type = anti_air_equipment_2 amount = 10 }" in out, out)
 
 
+def test_tecnologias_e_ia() -> None:
+    section("tecnologias con el lore, misiles, cazas gratis, NAS aereo e IA (2026-10-11)")
+    import shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        van = Path(tmp) / "vanilla"
+        shutil.copytree(FIXTURE_VANILLA, van)
+        (van / "common/technologies/tweaks_fixture.txt").write_text("""technologies = {
+\tconstruction1 = {
+\t\tproduction_speed_buildings_factor = 0.1
+\t\tresearch_cost = 1.5
+\t\tfolder = { name = industry_folder position = { x = 0 y = 0 } }
+\t}
+\tcomputing_machine = {
+\t\tencryption_factor = 0.05 # nota = 0.5
+\t\ton_research_complete = { add_political_power = 0.5 }
+\t}
+\ttech_field_hospital = {
+\t\tfield_hospital = { max_strength = 0.2 }
+\t\texperience_loss_factor = -0.05
+\t\tpath = { leads_to_tech = x research_cost_coeff = 1.5 }
+\t}
+\tbasic_small_airframe = { enable_equipments = { small_plane_airframe_1 } }
+\tfixture_aircraft_cannon_tech = { enable_equipment_modules = { aircraft_cannon_1 } }
+\tfixture_fighter_engine_tech = { enable_equipment_modules = { engine_1_1x } }
+}
+""", encoding="utf-8")
+        (van / "common/units/equipment/plane_fixture.txt").write_text("""equipments = {
+\tsmall_plane_airframe = {
+\t\tis_archetype = yes
+\t\tmodule_slots = {
+\t\t\tfixed_main_weapon_slot = { required = yes allowed_module_categories = { fighter_weapon } }
+\t\t\tengine_type_slot = { required = yes allowed_module_categories = { fighter_engine } }
+\t\t}
+\t}
+\tsmall_plane_airframe_1 = { archetype = small_plane_airframe year = 1936 module_slots = inherit }
+\tcv_small_plane_airframe_1 = { archetype = small_plane_airframe year = 1936 module_slots = inherit }
+}
+""", encoding="utf-8")
+        mods = van / "common/units/equipment/modules/tank_modules_fixture.txt"
+        mods.write_text(mods.read_text().replace("heavy_mg_2x = { category = fighter_weapon }",
+                        "heavy_mg_2x = { category = fighter_weapon }\n\taircraft_cannon_1 = { category = fighter_weapon }"
+                        "\n\tengine_1_1x = { category = fighter_engine }"), encoding="utf-8")
+        for lang, text in (("english", ' aircraft_cannon_1:0 "Aircraft Cannon I"\n'),
+                           ("spanish", ' aircraft_cannon_1:0 "Cañón de avión I"\n')):
+            lp = van / f"localisation/{lang}/modules_fixture_l_{lang}.yml"
+            lp.write_text(lp.read_text(encoding="utf-8-sig") + text, encoding="utf-8-sig")
+        ctx = build(Path(tmp) / "out", vanilla_path=str(van), quiet=True)
+        mod = ctx.mod_root
+        # 1. efectos de las tecnologías
+        tw = (mod / "common/technologies/tweaks_fixture.txt").read_text()
+        check("tecnologias: la industria x1.2, el computo x1.25, la medicina x1.25 y el combate x1.1",
+              "production_speed_buildings_factor = 0.12" in tw and "encryption_factor = 0.0625" in tw
+              and "experience_loss_factor = -0.0625" in tw and "max_strength = 0.22" in tw, tw[:900])
+        check("tecnologias: costo, camino, comentarios y lo que hace al terminar quedan igual",
+              "research_cost = 1.5" in tw and "research_cost_coeff = 1.5" in tw and "# nota = 0.5" in tw
+              and "add_political_power = 0.5" in tw, tw[:900])
+        check("tecnologias: el reporte dice cuantas se retocaron",
+              any(n.startswith("tecnologias retocadas con el lore de 2100") for n in ctx.notes))
+        # 2. misiles: las techs y los módulos de avión
+        raw = ctx.spec.raw["research_look"]["techs"]
+        check("misiles: Cannons I/II pasan a micromisiles y Large Cannons a misiles hipersonicos",
+              raw["aa_cannon_1"]["es"] == "Micromisiles de Enjambre I" and raw["aa_cannon_3"]["es"] == "Micromisiles de Enjambre II"
+              and "Hipersónicos" in raw["aa_cannon_2"]["es"])
+        res_es = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation/spanish").rglob("*meganations_research*"))
+        res_en = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation/english").rglob("*meganations_research*"))
+        check("misiles: el modulo de canon de avion es un micromisil (y no un canon de riel)",
+              'aircraft_cannon_1:0 "Micromisil de avión I"' in res_es and 'aircraft_cannon_1:0 "Aircraft Micro-Missile I"' in res_en,
+              [ln for ln in res_es.splitlines() if "aircraft_cannon" in ln])
+        # 3. cazas gratis
+        cz = " ".join((mod / "common/scripted_effects/meganations_cazas.txt").read_text().split())
+        nas = " ".join((mod / "common/national_focus/NAS_focus.txt").read_text().split())
+        foc = nas[nas.index("id = NAS_cazas_del_condor"):][:1500]
+        check("cazas: cada potencia con su diseno (una vez) sobre el fuselaje de 2100, no el de portaaviones",
+              "MEGANATIONS_diseno_caza_NAS = { if = { limit = { NOT = { has_country_flag = MEGANATIONS_diseno_caza_hecho } }" in cz
+              and 'name = "Caza-Planeador Kuntur" type = small_plane_airframe_1' in cz and "cv_small" not in cz
+              and "set_technology = { basic_small_airframe = 1" in cz, cz[:700])
+        check("cazas: el foco da 200 aviones de su diseno",
+              "MEGANATIONS_diseno_caza_NAS = yes" in foc and 'add_equipment_to_stockpile = { type = small_plane_airframe_1 amount = 200 '
+              'producer = NAS variant_name = "Caza-Planeador Kuntur" }' in foc, foc)
+        # 4. el NAS en el aire
+        ideas = "".join(p.read_text() for p in (mod / "common/ideas").glob("*.txt"))
+        # los modificadores aéreos son opcionales: el fixture no los documenta
+        check("NAS: espiritu de arranque con ases y combate aereo", "NAS_condores_del_sol" in ideas)
+        check("NAS: la escuela de ases y el cielo cerrado salen de sus focos aereos",
+              "NAS_escuela_de_ases" in foc and "NAS_el_cielo_cerrado" in nas)
+        # 5. IA
+        ai = " ".join((mod / "common/ai_strategy/meganations_ai.txt").read_text().split())
+        def plan_of(name: str) -> str:
+            start = ai.index(f"{name} = {{")
+            nxt = ai.find(" MEGANATIONS_", start + len(name))
+            return ai[start:nxt if nxt != -1 else len(ai)]
+
+        bloc = plan_of("MEGANATIONS_EFE_con_su_bloque")
+        # el fixture no usa `alliance` en sus estrategias (el juego sí): se descarta con aviso
+        knows_alliance = "alliance" in (ctx.vanilla.ai_strategy_types() or set())
+        check("ia: ninguna potencia se alia ni garantiza fuera de su bloque (y si a sus satelites)",
+              "type = protect id = NRE value = -200" in bloc and "id = PTA" not in bloc and "id = YYG" not in bloc
+              and (("type = alliance id = NRE value = -300" in bloc) == knows_alliance), bloc[:600])
+        sat = plan_of("MEGANATIONS_PTA_con_su_bloque")
+        check("ia: los satelites tampoco garantizan a las otras potencias", "type = protect id = ASC value = -200" in sat
+              and "id = EFE value" not in sat, sat[:500])
+        check("ia: la Anarquia no busca aliados ni garantiza", "MEGANATIONS_ZWE_no_busca_aliados" in ai)
+        dec = ai[ai.index("MEGANATIONS_APF_destino_declara_a_NRE"):][:1500]
+        check("ia: guerra del destino solo sin otra guerra con una potencia",
+              "NOT = { OR = { has_war_with = NRE" in dec and "has_war_with = ASC" in dec, dec[:900])
+        edge = " ".join((mod / "common/dynamic_modifiers/meganations_ia_preparada.txt").read_text().split())
+        oa = " ".join((mod / "common/on_actions/05_meganations_ia_preparada.txt").read_text().split())
+        check("ia: mando preparado solo mientras la maneja la IA, para las ocho potencias",
+              "enable = { is_ai = yes }" in edge and "production_factory_efficiency_gain_factor = 0.15" in edge
+              and "original_tag = EFE" in oa and "original_tag = ZWE" not in oa, edge)
+        check("ia: los ids de las unidades unicas se reemplazan por el mas parecido",
+              any("rocket_artillery->artillery" in n for n in ctx.notes))
+        mil = " ".join((mod / "common/ai_strategy/meganations_ai.txt").read_text().split())
+        check("ia: mas industria militar en paz (50) y en guerra (90)",
+              "type = added_military_to_civilian_factory_ratio value = 50" in mil
+              and "type = added_military_to_civilian_factory_ratio value = 90" in mil)
+        check("ia: investigacion de industria con peso (construction1)",
+              "type = research_weight_factor id = construction1" in mil)
+
+
 def test_junta_militar() -> None:
     section("junta militar: arbol con hitos, foco secreto, fin de la guerra civil (2026-10-11)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -3586,6 +3709,7 @@ def main() -> int:
         test_decisiones_del_lider,
         test_junta_militar,
         test_equipo_por_arquetipo,
+        test_tecnologias_e_ia,
         test_vanilla_validation,
     ):
         test()

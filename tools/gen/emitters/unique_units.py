@@ -325,8 +325,10 @@ def _design(ctx, uid: str, design: dict, equip: dict[str, Block], modules: dict[
             tree: dict[str, dict], enabled_by: dict[str, str]) -> tuple[Block | None, list[str]]:
     """El diseño armado con las piezas del juego y las tecnologías que pide."""
     words = design.get("chassis") or []
+    skip = design.get("chassis_exclude") or []
     by_year = sorted((_year(b), name) for name, b in equip.items()
-                     if any(w in name for w in words) and text(b.get("is_archetype")) != "yes"
+                     if any(w in name for w in words) and not any(x in name for x in skip)
+                     and text(b.get("is_archetype")) != "yes"
                      and _inherited(b, equip, "module_slots") is not None)
     if not by_year:
         ctx.warn(f"{uid}: el juego no tiene un chasis con casillas para {words}; sin diseño.")

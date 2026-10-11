@@ -45,6 +45,7 @@ from .emitters import military as em_military
 from .emitters import menu as em_menu
 from .emitters import militia as em_militia
 from .emitters import manpower_relief as em_manpower_relief
+from .emitters import cazas as em_cazas
 from .emitters import mio as em_mio
 from .emitters import names as em_names
 from .emitters import rebeliones as em_rebeliones
@@ -80,6 +81,7 @@ EMITTERS = [
     ("names", em_names.emit),
     ("rebeliones", em_rebeliones.prepare),  # dónde se levantan las rebeliones (antes que eventos y decisiones)
     ("manpower_relief", em_manpower_relief.emit),  # repoblacion: antes que los focos (les suma efectos)
+    ("cazas", em_cazas.prepare),  # cazas gratis: el diseño de cada potencia y los focos que los dan
     ("focus_trees", em_focus_trees.emit),
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),

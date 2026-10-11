@@ -12,6 +12,10 @@ defaults:
   satellites: {protect: 150, befriend: 100, support: 100}
   rivals: {antagonize: 30}
   anarchy_pariah: {alliance: -500, protect: -500}
+  # 2026-10-11 (game.log a 2103): NAS, la Comuna y la APF garantizaban al SHD y
+  # la guerra HSN-SHD metió a cuatro potencias; la Unión siguió el efecto
+  # dominó. Nadie se alía ni garantiza fuera de su bloque (potencia + satélites).
+  great_powers: {alliance: -300, protect: -200}
 # -----------------------------------------------------------------------------
 # IA militar (2026-09-27). Todos arrancan con 2 divisiones y sin investigar:
 # la IA del juego base no sabe qué hacer en ese mundo. Acá se le dice qué
@@ -26,9 +30,40 @@ military:
   research_value: 60
   peace:
   # 2026-10-03: con 25 la industria militar no alcanzaba para equipar lo que entrenaba
-  - {type: added_military_to_civilian_factory_ratio, value: 40}
+  # 2026-10-11 ("mejor preparada"): 50 en paz y 90 en guerra
+  - {type: added_military_to_civilian_factory_ratio, value: 50}
   war:
-  - {type: added_military_to_civilian_factory_ratio, value: 75}
+  - {type: added_military_to_civilian_factory_ratio, value: 90}
+  # 2026-10-11 ("hacela mucho más competente"): la IA del juego descuida la
+  # industria, la electrónica y los cazas en un mundo que arranca sin
+  # investigar. Pesos extra para todas; la especialidad de cada una, más.
+  industry_research:
+    value: 80
+    by_country: {FCU: 140, ASC: 140, SHD: 120}
+    techs: [construction1, construction2, construction3, construction4, construction5,
+            basic_machine_tools, improved_machine_tools, advanced_machine_tools,
+            assembly_line_production, flexible_line, streamlined_line,
+            concentrated_industry, concentrated_industry2, concentrated_industry3, concentrated_industry4,
+            concentrated_industry5, dispersed_industry, dispersed_industry2, dispersed_industry3,
+            dispersed_industry4, dispersed_industry5, excavation1, excavation2, excavation3,
+            fuel_silos, fuel_refining, fuel_refining2, fuel_refining3, synth_oil_experiments,
+            oil_processing, improved_oil_processing, advanced_oil_processing,
+            rubber_processing, improved_rubber_processing, advanced_rubber_processing,
+            improved_equipment_conversion, advanced_equipment_conversion]
+  electronics_research:
+    value: 60
+    by_country: {SHD: 140, ASC: 120, FCU: 100}
+    techs: [electronic_mechanical_engineering, radio, improved_radio, advanced_radio,
+            mechanical_computing, computing_machine, improved_computing_machine, advanced_computing_machine,
+            basic_encryption, basic_decryption, improved_encryption, improved_decryption,
+            advanced_encryption, advanced_decryption, cavity_magnatron, centimetric_radar]
+  air_research:
+    value: 50
+    by_country: {NAS: 220, FCU: 100, HSN: 80, SHD: 70}
+    techs: [aircraft_construction, engines_1, engines_2, engines_3, engines_4,
+            iw_small_airframe, basic_small_airframe, improved_small_airframe, advanced_small_airframe,
+            modern_small_airframe, aa_lmg, aa_hmg, aa_cannon_1, aa_cannon_2, aa_cannon_3,
+            basic_medium_airframe, improved_medium_airframe, survivability_studies, range_improvements]
   # 2026-09-27: "nadie investiga barcos". Todas investigan lo básico naval; la
   # HSN mucho más.
   naval_research:
@@ -63,39 +98,45 @@ military:
     EFE:    # blindados de Bioacero
     - {type: role_ratio, id: armor, value: 25}
     - {type: equipment_production_factor, id: armor, value: 25}
+    - {type: equipment_production_factor, id: fighter, value: 10}
     NRE:    # legiones de infantería con artillería
     - {type: equipment_production_factor, id: armor, value: 10}
+    - {type: equipment_production_factor, id: fighter, value: 10}
     - {type: role_ratio, id: armor, value: 10}
     - {type: role_ratio, id: infantry, value: 60}
     - {type: equipment_production_factor, id: artillery, value: 20}
     SHD:    # la masa y la artillería del río
-    - {type: equipment_production_factor, id: fighter, value: 10}
+    - {type: equipment_production_factor, id: fighter, value: 15}
     - {type: role_ratio, id: armor, value: 10}
     - {type: role_ratio, id: infantry, value: 65}
     - {type: equipment_production_factor, id: artillery, value: 30}
     HSN:    # infantería de marina y flota
-    - {type: equipment_production_factor, id: fighter, value: 10}
+    - {type: equipment_production_factor, id: fighter, value: 15}
     - {type: role_ratio, id: armor, value: 5}
     - {type: role_ratio, id: marines, value: 25}
     - {type: dockyard_to_military_factory_ratio, value: 60}
     NAS:    # montaña y cóndores
     - {type: role_ratio, id: armor, value: 8}
     - {type: role_ratio, id: mountaineers, value: 25}
-    - {type: equipment_production_factor, id: fighter, value: 20}
+    # 2026-10-11: los cóndores son lo suyo (más combate aéreo y ases)
+    - {type: equipment_production_factor, id: fighter, value: 35}
     ASC:    # ejército móvil del Plan
     - {type: equipment_production_factor, id: armor, value: 15}
     - {type: role_ratio, id: armor, value: 15}
     - {type: role_ratio, id: mobile, value: 25}
     - {type: equipment_production_factor, id: motorized, value: 20}
+    - {type: equipment_production_factor, id: fighter, value: 10}
     FCU:    # contratistas motorizados
     - {type: equipment_production_factor, id: armor, value: 15}
     - {type: role_ratio, id: armor, value: 15}
     - {type: role_ratio, id: mobile, value: 20}
     - {type: equipment_production_factor, id: motorized, value: 20}
+    - {type: equipment_production_factor, id: fighter, value: 15}
     APF:    # milicias populares
     - {type: equipment_production_factor, id: motorized, value: 10}
     - {type: role_ratio, id: armor, value: 8}
     - {type: role_ratio, id: infantry, value: 70}
+    - {type: equipment_production_factor, id: fighter, value: 10}
 
 # -----------------------------------------------------------------------------
 # Tope de flota de la IA (2026-10-02, partida a 2106: "esta cantidad de barcos
@@ -112,6 +153,23 @@ naval_cap:
   # -2 y no -1: las ideas y la industria les suman bonos de astillero
   modifiers: {industrial_capacity_dockyard: -2.0}
   name: {english: "Fleet at Capacity", spanish: "Flota completa"}
+
+# -----------------------------------------------------------------------------
+# Mando preparado (2026-10-11, pedido del usuario: "hacela mucho más competente,
+# más desafiante y mejor preparada"). Solo para las ocho potencias y solo
+# mientras las maneja la IA (el jugador no lo tiene): lo que a la IA del juego
+# más le cuesta en 2100, sostener la producción, construir y abastecer
+# ejércitos grandes. Se suma a la dificultad que elija el jugador.
+# -----------------------------------------------------------------------------
+ai_edge:
+  src: user_request
+  modifiers:
+    production_factory_efficiency_gain_factor: 0.15
+    production_factory_max_efficiency_factor: 0.05
+    production_speed_buildings_factor: 0.10
+    supply_consumption_factor: -0.10
+    army_org_factor: 0.05
+  name: {english: "Prepared Command", spanish: "Mando preparado"}
 
 # -----------------------------------------------------------------------------
 # Guerras contra la Anarquía vecina (2026-09-28: "todos comienzan en paz" y

@@ -4906,6 +4906,8 @@ trees:
         reward:
         - {effect: air_experience, value: 50}
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
+        # 2026-10-11: la escuela de ases del cóndor
+        - {effect: dynamic_modifier, id: NAS_escuela_de_ases}
       - id: NAS_transporte_de_montana
         name: {english: Mountain Transport, spanish: Transporte de Montaña}
         days: 49
@@ -4928,6 +4930,7 @@ trees:
         desc: {english: The Sun's sky is closed., spanish: El cielo del Sol está cerrado.}
         reward:
         - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 2}
+        - {effect: dynamic_modifier, id: NAS_el_cielo_cerrado}
       - id: NAS_la_flota_del_pacifico
         name: {english: The Pacific Fleet, spanish: La Flota del Pacífico}
         days: 84

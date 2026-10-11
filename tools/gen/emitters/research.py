@@ -34,13 +34,18 @@ def emit(ctx: BuildContext) -> None:
     offset = int(spec.get("year_offset", 0) or 0)
     root = ctx.vanilla.root
     shifted = {"tecnologias": 0, "equipo": 0, "interfaz": 0}
-    if offset:
+    tweaks = _plan_tweaks(ctx, spec.get("tech_tweaks") or {})
+    if offset or tweaks:
         for rel, pattern, kind in (("common/technologies", _START, "tecnologias"),
                                    ("common/units/equipment", _YEAR, "equipo")):
             weights = _ai_weights(ctx) if kind == "tecnologias" else {}
             for path in sorted((root / rel).glob("*.txt")):
                 text = path.read_text(encoding="utf-8-sig", errors="replace")
-                new, n = pattern.subn(lambda m: f"{m.group(1)}{int(m.group(2)) + offset}", text)
+                new, n = pattern.subn(lambda m: f"{m.group(1)}{int(m.group(2)) + offset}", text) if offset \
+                    else (text, 0)
+                if kind == "tecnologias" and tweaks:
+                    new, tw = _apply_tweaks(new, tweaks)
+                    n += tw
                 if weights:
                     new, w = _inject_weights(new, weights)
                     shifted["ia"] = shifted.get("ia", 0) + w
@@ -137,6 +142,111 @@ def emit(ctx: BuildContext) -> None:
                  + (" ..." if len(shown) > 40 else ""))
 
 
+# -----------------------------------------------------------------------------
+# Efectos de las tecnologías con el lore de 2100 (2026-10-11, pedido del
+# usuario: "tweakeá los efectos de un 50% de las tecnologías para hacerlo más
+# acorde al escenario, sin desnaturalizar el juego"). 17_research.yaml ->
+# tech_tweaks: familias de modificadores (por nombre de clave) con un factor
+# moderado. Se toca solo lo que el juego ya tiene: un número decimal de un
+# modificador dentro de la tecnología, nunca su costo, su año, su lugar en el
+# árbol, el peso de la IA ni lo que hace al terminarla.
+# -----------------------------------------------------------------------------
+_TWEAK_SKIP_BLOCKS = {"ai_will_do", "path", "folder", "allow", "allow_branch", "on_research_complete",
+                      "categories", "xor", "research_cost", "sub_technologies", "dependencies",
+                      "enable_equipments", "enable_equipment_modules", "enable_subunits", "enable_building",
+                      "enable_tactic", "show_effect_as_desc", "special_project_specialization"}
+_NUMBER = re.compile(r"(?<![\w@.])([A-Za-z_][A-Za-z0-9_]*)(\s*=\s*)(-?\d*\.\d+)(?![\w.])")
+
+
+def _tech_blocks(text: str) -> list[tuple[str, int, int]]:
+    out = []
+    for key, open_at, end in _children(text, 0, len(text)):
+        if key == "technologies":
+            out += _children(text, open_at + 1, end)
+    return out
+
+
+def _skip_spans(text: str, lo: int, hi: int) -> list[tuple[int, int]]:
+    spans = []
+    for key, open_at, end in _children(text, lo, hi):
+        if key in _TWEAK_SKIP_BLOCKS:
+            spans.append((open_at, end))
+        else:
+            spans += _skip_spans(text, open_at + 1, end)
+    return spans
+
+
+def _tweakable(text: str, lo: int, hi: int, families: list) -> list[tuple[int, int, str, float, str]]:
+    """(inicio, fin del número, clave, valor, familia) de los decimales que una
+    familia retoca dentro de text[lo:hi]."""
+    spans = _skip_spans(text, lo, hi)
+    out = []
+    for m in _NUMBER.finditer(text, lo, hi):
+        pos = m.start(3)
+        if any(a <= pos <= b for a, b in spans):
+            continue
+        line = text.rfind("\n", 0, m.start()) + 1
+        if "#" in text[line:m.start()]:
+            continue
+        key = m.group(1)
+        fam = next((f for f in families if any(rx.fullmatch(key) for rx in f["keys"])), None)
+        if fam is None:
+            continue
+        out.append((pos, m.end(3), key, float(m.group(3)), fam["id"]))
+    return out
+
+
+def _plan_tweaks(ctx: BuildContext, cfg: dict) -> dict:
+    """Qué tecnologías se retocan: las que tienen algún modificador de una
+    familia, hasta la proporción pedida (`share` del total). Si sobran, van
+    primero las de la familia de más arriba en la lista y después por nombre."""
+    if not cfg or ctx.vanilla is None:
+        return {}
+    families = [{"id": f["id"], "factor": float(f["factor"]),
+                 "keys": [re.compile(k) for k in f["keys"]]} for f in cfg.get("families") or []]
+    if not families:
+        return {}
+    order = {f["id"]: i for i, f in enumerate(families)}
+    total, candidates = 0, {}
+    for path in sorted((ctx.vanilla.root / "common" / "technologies").glob("*.txt")):
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        for tech, open_at, end in _tech_blocks(text):
+            total += 1
+            found = _tweakable(text, open_at + 1, end, families)
+            if found:
+                candidates[tech] = min(order[f] for *_, f in found)
+    want = round(total * float(cfg.get("share", 0.5)))
+    chosen = sorted(candidates, key=lambda tch: (candidates[tch], tch))[:want] if want < len(candidates) \
+        else sorted(candidates)
+    by_family: dict[str, int] = {}
+    for tch in chosen:
+        fam = families[candidates[tch]]["id"]
+        by_family[fam] = by_family.get(fam, 0) + 1
+    if total:
+        ctx.note(f"tecnologias retocadas con el lore de 2100: {len(chosen)} de {total} "
+                 f"({100 * len(chosen) // total}%; con algo retocable: {len(candidates)}); por familia: "
+                 + ", ".join(f"{k} {v}" for k, v in by_family.items())
+                 + (f"; ej. {', '.join(chosen[:12])}" if chosen else ""))
+    return {"families": families, "techs": set(chosen)}
+
+
+def _apply_tweaks(text: str, plan: dict) -> tuple[str, int]:
+    """Multiplica los decimales de las familias en las tecnologías elegidas."""
+    factor = {f["id"]: f["factor"] for f in plan["families"]}
+    edits = []
+    for tech, open_at, end in _tech_blocks(text):
+        if tech not in plan["techs"]:
+            continue
+        for start, stop, _key, value, fam in _tweakable(text, open_at + 1, end, plan["families"]):
+            new = round(value * factor[fam], 4)
+            if new != value:
+                # sin notación científica (0.00005 -> "5e-05" no lo lee el juego)
+                edits.append((start, stop, f"{new:.4f}".rstrip("0").rstrip(".")))
+    for start, stop, val in sorted(edits, reverse=True):
+        text = text[:start] + val + text[stop:]
+    return text, len(edits)
+
+
 def _module_terms(spec: dict) -> dict[str, list]:
     """module_terms (17_research.yaml) compilados por idioma, como vanilla_terms."""
     out = {}
@@ -186,6 +296,11 @@ def _modules(ctx: BuildContext, spec: dict, terms: dict) -> None:
     if not modules:
         return
     own = spec.get("modules") or {}
+    patterns = [(re.compile(r["match"], re.IGNORECASE),
+                 re.compile(r["category"], re.IGNORECASE) if r.get("category") else None,
+                 _module_terms({"module_terms": r.get("terms") or {}}))
+                for r in spec.get("module_patterns") or []]
+    by_pattern: list[str] = []
     en_txt = ctx.vanilla.localisation("english", set(modules))
     es_txt = ctx.vanilla.localisation("spanish", set(modules))
     done, same = 0, []
@@ -197,13 +312,22 @@ def _modules(ctx: BuildContext, spec: dict, terms: dict) -> None:
             old_en, old_es = en_txt.get(key) or es_txt.get(key), es_txt.get(key) or en_txt.get(key)
             if not old_en:
                 continue
-            en, es = _terms(old_en, terms, "english"), _terms(old_es, terms, "spanish")
+            en, es = old_en, old_es
+            for rx, cat, own_terms in patterns:
+                if rx.search(key) and (cat is None or cat.search(modules[key] or "") or cat.search(key)):
+                    en, es = _terms(en, own_terms, "english"), _terms(es, own_terms, "spanish")
+                    by_pattern.append(key)
+                    break
+            en, es = _terms(en, terms, "english"), _terms(es, terms, "spanish")
             if (en, es) == (old_en, old_es):
                 same.append(key)
                 continue
         ctx.loc.define_and_reference(key, en=en, es=es, file="replace/meganations_research",
                                      origin=f"research:module:{key}")
         done += 1
+    if patterns:
+        ctx.note(f"modulos de los disenadores con terminos propios (module_patterns): {len(by_pattern)}"
+                 + (f" ({', '.join(by_pattern[:20])})" if by_pattern else ""))
     ctx.note(f"modulos de los disenadores: {done} de {len(modules)} con nombre de 2100"
              + (f"; sin cambio ({len(same)}): {', '.join(same[:30])}{' ...' if len(same) > 30 else ''}"
                 if same else ""))
@@ -260,8 +384,9 @@ def _ai_weights(ctx: BuildContext) -> dict[str, list[tuple[str, float]]]:
             for t in techs:
                 out.setdefault(t, []).append((tag, 1 + float(value) / 20))
     majors = [c.tag for c in ctx.spec.countries if c.is_major]
-    # lo naval (2026-09-27) y los blindados (2026-09-30), por país
-    for key in ("naval_research", "armor_research"):
+    # lo naval (2026-09-27), los blindados (2026-09-30) y la industria, la
+    # electrónica y los cazas (2026-10-11), por país
+    for key in sorted(k for k in mil if k.endswith("_research")):
         block = mil.get(key) or {}
         for tag in majors:
             v = (block.get("by_country") or {}).get(tag, block.get("value"))

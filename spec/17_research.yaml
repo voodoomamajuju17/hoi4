@@ -281,9 +281,10 @@ techs:
   sp_advance_sabot_shells: {en: Hypervelocity Penetrators, es: Penetradores de Hipervelocidad}
   aa_lmg: {en: Light Point-Defence Guns, es: Cañones Ligeros de Defensa}
   aa_hmg: {en: Heavy Point-Defence Guns, es: Cañones Pesados de Defensa}
-  aa_cannon_1: {en: Air-to-Air Railguns I, es: Railguns Aire-Aire I}
-  aa_cannon_2: {en: Large Air-to-Air Railguns, es: Railguns Aire-Aire Grandes}
-  aa_cannon_3: {en: Air-to-Air Railguns II, es: Railguns Aire-Aire II}
+  # 2026-10-11 (pedido del usuario: "Cannons y Cannons II cambiala por misiles futuristas")
+  aa_cannon_1: {en: Swarm Micro-Missiles I, es: Micromisiles de Enjambre I}
+  aa_cannon_2: {en: Hypersonic Air-to-Air Missiles, es: Misiles Aire-Aire Hipersónicos}
+  aa_cannon_3: {en: Swarm Micro-Missiles II, es: Micromisiles de Enjambre II}
   early_bombs: {en: Guided Glide Bombs, es: Bombas Planeadoras Guiadas}
   armor_piercing_bombs: {en: Bunker-Busting Munitions, es: Munición Antibúnker}
   heavy_bombs: {en: Heavy Thermobaric Bombs, es: Bombas Termobáricas Pesadas}
@@ -606,6 +607,70 @@ module_terms:
   - [fuel tanks, fuel cells]
   - [smoke, multispectral smoke]
 modules: {}
+# -----------------------------------------------------------------------------
+# Efectos de las tecnologías con el lore de 2100 (2026-10-11, pedido del
+# usuario: "tweakeá los efectos de un 50% de las tecnologías para hacerlo más
+# acorde al escenario, contexto y lore, sin desnaturalizar el juego").
+# Se retocan solo los modificadores decimales que la tecnología ya trae (nunca
+# su costo, su año ni lo que habilita), por familia de efecto, con factores
+# moderados. `share`: la proporción del árbol que se toca (si hay más
+# candidatas, van primero las familias de arriba). El reporte dice cuántas.
+# -----------------------------------------------------------------------------
+tech_tweaks:
+  share: 0.5
+  families:
+  - id: computo
+    lore: la IA de investigación y la criptografía cuántica rinden más que las válvulas de 1940
+    factor: 1.25
+    keys: ['research_speed_factor', 'research_time_factor', '.*encryption.*', '.*decryption.*', '.*_intel_.*', '.*intel_factor']
+  - id: industria
+    lore: fábricas robotizadas, impresión aditiva a escala, obras con enjambres de drones
+    factor: 1.2
+    keys: ['production_factory_.*', 'industrial_capacity_.*', 'production_speed_.*', 'line_change_production_efficiency_factor',
+           'equipment_conversion_speed', 'production_lack_of_resource_penalty_factor', 'local_resources_factor',
+           'global_building_slots_factor', 'consumer_goods_factor']
+  - id: combustible
+    lore: después del Gran Desarme el petróleo es escaso; la química sintética y las celdas de hidrógeno valen más
+    factor: 1.25
+    keys: ['fuel_.*', 'max_fuel_factor', '.*synthetic.*', '.*refinery.*', 'oil_.*', 'rubber_.*', '.*_fuel_.*']
+  - id: logistica
+    lore: convoyes autónomos y depósitos predictivos
+    factor: 1.2
+    keys: ['supply_.*', '.*_supply_.*', '.*attrition.*', 'truck_.*', 'train_.*', 'railway_.*', 'motorized_.*']
+  - id: sensores
+    lore: sensores hiperespectrales, radares de apertura sintética, visión nocturna para todos
+    factor: 1.25
+    keys: ['.*detection.*', '.*_night_.*', 'night_.*', 'radar_.*', '.*spotting.*', '.*visibility.*']
+  - id: medicina
+    lore: robots de evacuación, sangre sintética y prótesis neuronales
+    factor: 1.25
+    keys: ['experience_loss_factor', '.*reinforce.*', '.*_recovery.*', '.*casualt.*']
+  - id: aire
+    lore: drones, misiles aire-aire y motores híbridos
+    factor: 1.15
+    keys: ['air_.*', '.*_air_.*', '.*plane.*', '.*fighter.*', '.*bomber.*']
+  - id: naval
+    lore: cascos de grafeno, sonar cuántico y torpedos supercavitantes
+    factor: 1.12
+    keys: ['naval_.*', 'navy_.*', '.*_naval_.*', 'ship_.*', '.*convoy.*', '.*submarine.*', '.*torpedo.*', '.*mines_.*',
+           'positioning', '.*screening.*']
+  - id: combate
+    lore: armas inteligentes y blindajes compuestos; un poco más de lo mismo, sin cambiar la guerra
+    factor: 1.1
+    keys: ['soft_attack', 'hard_attack', 'breakthrough', 'defense', 'defence', 'air_attack', 'ap_attack', 'armor_value',
+           'max_organisation', 'max_strength', 'initiative', 'suppression', 'maximum_speed', 'reliability', 'hardness',
+           'entrenchment', '.*_attack_factor', '.*_defen[cs]e_factor', 'army_.*_factor', 'land_.*']
+
+# Términos para un grupo de módulos (2026-10-11): los cañones de los aviones
+# son micromisiles, no cañones de riel como los de los tanques. Cada regla
+# vale para los módulos cuyo id coincide con `match` y, si hay `category`,
+# cuya categoría o id coincide con ella; va antes que module_terms.
+module_patterns:
+- match: cannon
+  category: fighter|bomber|air|plane|fixed|wing
+  terms:
+    english: [[cannons, micro-missiles], [cannon, micro-missile]]
+    spanish: [[cañones, micromisiles], [cañón, micromisil]]
 # Nombre propio de un proyecto especial puntual (id -> {en, es}); el resto sale
 # del juego con module_terms. El reporte lista los que no cambiaron.
 special_projects: {}

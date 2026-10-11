@@ -1497,3 +1497,58 @@ completas: 36 banderas (juntas títere, rebeliones, formas finales, la
 república pirata, las Legiones) y 8 retratos (los 7 líderes rebeldes y el
 segundo de Mei). No queda ningún pedido de banderas ni retratos de este lote.
 `0_NUEVOS_de_este_lote.txt` ya no lista lo que llegó.
+
+## Tecnologías de 2100, misiles, cazas gratis, el NAS en el aire y la IA (2026-10-11)
+
+- **Misiles**: "Cannons I/II" y "Large Cannons" de la aviación pasan a
+  Micromisiles de Enjambre I/II y Misiles Aire-Aire Hipersónicos. Los módulos
+  de cañón de los aviones en el diseñador también (`module_patterns`: un
+  módulo con "cannon" cuya categoría es de avión se llama micromisil; los de
+  los tanques siguen como cañones de riel). Pedidos de arte actualizados.
+- **Efectos de las tecnologías con el lore** (`tech_tweaks`, research.py): se
+  retoca la mitad del árbol, solo los modificadores decimales que la
+  tecnología ya trae, por familia de efecto:
+  - cómputo x1,25 (investigación con IA, cifrado cuántico);
+  - industria x1,2 (fábricas robotizadas);
+  - combustible sintético x1,25;
+  - logística x1,2 (convoyes autónomos);
+  - sensores x1,25;
+  - medicina x1,25;
+  - aviación x1,15;
+  - armada x1,12;
+  - combate x1,1.
+
+  Nunca cambia el costo, el año, el lugar en el árbol, el peso de la IA ni lo
+  que hace al terminarla. El reporte dice cuántas se retocaron y de qué
+  familia. Si el juego no tiene la mitad con algo retocable, se tocan todas
+  las que sí.
+- **El NAS en el aire**: espíritu de arranque Los Cóndores del Sol (+50%
+  probabilidad de ases, +5% ataque y agilidad, mejores ases, más experiencia
+  de entrenamiento, menos accidentes); Cazas del Cóndor da La Escuela de Ases
+  del Cóndor y Defensa del Cielo da El Cielo Cerrado (defensa, agilidad,
+  eficiencia de superioridad aérea). La IA del NAS produce más cazas (35) e
+  investiga la aviación x12.
+- **Cazas gratis** (13_military -> free_fighters, cazas.py): diez focos aéreos
+  dan entre 50 y 200 cazas. Cada potencia recibe la primera vez su diseño
+  (con el nombre y el ícono de su caza, "Caza-Planeador Kuntur"), sobre el
+  fuselaje básico, con las tecnologías que pide.
+- **IA, análisis del game.log de la partida a 2103**:
+  - *Todos contra todos en dos años.* NAS, la Comuna y la APF garantizaban
+    al SHD (la IA del juego garantiza a quien comparte grupo ideológico);
+    cuando la HSN le declaró la guerra al SHD entraron las tres con sus
+    satélites. Ahora nadie se alía ni garantiza fuera de su bloque
+    (`great_powers`: alliance -300, protect -200, potencias y satélites) y la
+    Anarquía no busca aliados.
+  - *Guerras del destino en cadena.* La Unión le declaró a NAS, al EFE y a la
+    HSN en una semana: el plan permitía declarar con 50 divisiones aunque ya
+    estuviera en guerra. Ahora una guerra del destino solo se declara sin otra
+    guerra abierta con una potencia (contra la Anarquía sí, con más ejército).
+  - *Mejor preparada.* Más industria militar (50 en paz, 90 en guerra), pesos
+    de investigación para la industria, la electrónica y los cazas (todas, más
+    la especialidad de cada una), más cazas en la producción de todas. Los ids
+    de producción de las unidades únicas que el juego no conocía se reemplazan
+    por el más parecido (cohetes y trenes blindados -> artillería, etc.).
+  - *Mando preparado* (solo IA, las ocho potencias): +15% de crecimiento de
+    eficiencia, +5% de eficiencia máxima, +10% de construcción, -10% de
+    consumo de suministros y +5% de organización. El jugador no lo tiene.
+- El resto del error.log de esa partida era del juego base.

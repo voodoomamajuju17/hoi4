@@ -14869,6 +14869,26 @@ scripted_effects:
           - {effect: event, id: meganations_lider.48, days: 1}
 
 dynamic_modifiers:
+  # 2026-10-11 (pedido del usuario: más combate aéreo y ases para el NAS)
+  - id: NAS_escuela_de_ases
+    country: NAS
+    name: {english: The Condor's School of Aces, spanish: La Escuela de Ases del Cóndor}
+    desc: {english: 'The best pilots of every squadron teach at the school of Cusco between missions.', spanish: 'Los mejores pilotos de cada escuadrilla enseñan en la escuela del Cusco entre misión y misión.'}
+    modifiers:
+      '?air_ace_generation_chance_factor': 0.5
+      '?air_attack_factor': 0.05
+      '?air_defence_factor': 0.05
+      '?air_ace_bonuses_factor': 0.25
+      '?experience_gain_air': 0.15
+  - id: NAS_el_cielo_cerrado
+    country: NAS
+    name: {english: The Closed Sky, spanish: El Cielo Cerrado}
+    desc: {english: 'Radars on every peak, fighters on every plateau: the Sun sees everything that flies.', spanish: 'Radares en cada cumbre, cazas en cada meseta: el Sol ve todo lo que vuela.'}
+    modifiers:
+      '?air_defence_factor': 0.1
+      '?air_agility_factor': 0.05
+      '?air_superiority_efficiency': 0.1
+      '?air_interception_detect_factor': 0.15
   - id: MEGANATIONS_mandato_compartido
     country: null
     name: {english: 'The Shared Mandate', spanish: 'El Mandato Compartido'}

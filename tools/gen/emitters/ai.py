@@ -33,6 +33,16 @@ TECH_IDS = {"research_tech", "research_weight_factor"}
 # research_weight_factor = { id = <tecnología> value = <% de más> } (2026-09-30:
 # "la HSN no investiga barcos"; research_tech no existe, éste sí).
 DOCUMENTED = {"research_weight_factor"}
+# 2026-10-11 (reporte: "ids que el juego no usa con ese tipo, se omiten"): los
+# planes de las unidades únicas pedían equipos que la IA del juego no conoce
+# como id; se prueba con el más parecido que sí conoce.
+ID_FALLBACK = {
+    "railway_gun": ["artillery"],
+    "rocket_artillery": ["artillery"],
+    "armored_car": ["motorized"],
+    "amphibious_mechanized": ["mechanized", "motorized"],
+    "capital_ship": ["battleship", "heavy_cruiser"],
+}
 
 
 def emit(ctx: BuildContext) -> None:
@@ -49,6 +59,7 @@ def emit(ctx: BuildContext) -> None:
     root = Block()
     dropped: set[str] = set()
     dropped_ids: set[str] = set()
+    replaced_ids: set[str] = set()
     written = 0
 
     def add_plan(pid: str, country: str, strategies: list[dict], enable=None, abort=None) -> None:
@@ -80,8 +91,12 @@ def emit(ctx: BuildContext) -> None:
                         dropped_ids.add(f"{kind}:{ident}")
                         continue
                 elif kind in ID_CHECKED and known_ids is not None and ident not in known_ids.get(kind, set()):
-                    dropped_ids.add(f"{kind}:{ident}")
-                    continue
+                    alt = next((a for a in ID_FALLBACK.get(ident, []) if a in known_ids.get(kind, set())), None)
+                    if alt is None:
+                        dropped_ids.add(f"{kind}:{ident}")
+                        continue
+                    replaced_ids.add(f"{kind}:{ident}->{alt}")
+                    ident = alt
             b = Block()
             b.add("type", kind)
             if ident is not None:
@@ -125,12 +140,22 @@ def emit(ctx: BuildContext) -> None:
     # partida mostró a los Caudillos del Amazonas dentro de la facción de la FCU).
     pariah = defaults.get("anarchy_pariah") or {}
     if pariah:
-        anarchies = [c.tag for c in ctx.spec.countries if not c.is_major and not c.is_subject]
+        # solo los señores de la guerra: el Santuario de Gaia es independiente
+        # pero lo garantiza el EFE para siempre (2026-10-11: con -500 de
+        # "protect" la IA del EFE podía soltarle la garantía)
+        anarchies = [c.tag for c in ctx.spec.countries
+                     if not c.is_major and not c.is_subject and c.ideology == "warlordism"]
         for c in ctx.spec.countries:
             if c.tag in anarchies:
                 continue
             add_plan(f"{c.tag}_no_se_alia_con_la_anarquia", c.tag,
                      [{"type": kind, "target": a, "value": int(v)} for a in anarchies for kind, v in pariah.items()])
+        # y la Anarquía tampoco busca aliados ni garantiza a nadie (2026-10-11)
+        others = [c.tag for c in ctx.spec.countries if c.tag not in anarchies]
+        for a in anarchies:
+            add_plan(f"{a}_no_busca_aliados", a,
+                     [{"type": kind, "target": o, "value": int(v)} for o in others for kind, v in pariah.items()])
+    _great_power_discipline(ctx, defaults.get("great_powers") or {}, add_plan)
     riv = defaults.get("rivals") or {}
     if riv:
         for r in ctx.spec.raw["diplomacy"].get("rivalries", []) or []:
@@ -151,6 +176,8 @@ def emit(ctx: BuildContext) -> None:
     for p in ctx.data.get("unique_ai_plans") or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
 
+    if replaced_ids:
+        ctx.note(f"ia: ids reemplazados por el mas parecido que usa el juego: {', '.join(sorted(replaced_ids))}")
     if dropped_ids:
         ctx.warn(f"ia: ids que el juego no usa con ese tipo, se omiten: {', '.join(sorted(dropped_ids))}")
     if dropped:
@@ -160,6 +187,75 @@ def emit(ctx: BuildContext) -> None:
         ctx.note(f"ia: {written} planes de estrategia")
     ctx.verify_keys("triggers", triggers_used)
     _naval_cap(ctx, spec.get("naval_cap") or {})
+    _ai_edge(ctx, spec.get("ai_edge") or {})
+
+
+def _great_power_discipline(ctx: BuildContext, cfg: dict, add_plan) -> None:
+    """Cada potencia con su bloque (2026-10-11, game.log de la partida a 2103:
+    NAS, la Comuna y la APF garantizaban al SHD; cuando la HSN le declaró la
+    guerra, entraron las tres con sus satélites y en dos años todos peleaban
+    contra todos). Ninguna potencia busca aliarse con otra ni garantizarla, ni
+    a los satélites de otra; los satélites, igual con las demás potencias.
+    La Coalición de Ginebra y los pactos de 2106 van por eventos y decisiones,
+    no por esto.
+
+      great_powers: {alliance: -300, protect: -200}
+    """
+    if not cfg:
+        return
+    majors = [c.tag for c in ctx.spec.countries if c.is_major]
+    bloc = {c.tag: (c.overlord if c.is_subject else c.tag) for c in ctx.spec.countries
+            if c.is_major or (c.is_subject and c.overlord in majors)}
+    n = 0
+    for who, own in sorted(bloc.items()):
+        strangers = [x for x, b in sorted(bloc.items()) if b != own]
+        if strangers:
+            add_plan(f"{who}_con_su_bloque", who,
+                     [{"type": kind, "target": x, "value": int(v)} for x in strangers for kind, v in cfg.items()])
+            n += 1
+    ctx.note(f"ia: {n} paises no se alian ni garantizan fuera de su bloque ({cfg})")
+
+
+AI_EDGE = "MEGANATIONS_ia_preparada"
+AI_EDGE_FILE = "common/dynamic_modifiers/meganations_ia_preparada.txt"
+AI_EDGE_ON_ACTIONS = "common/on_actions/05_meganations_ia_preparada.txt"
+
+
+def _ai_edge(ctx: BuildContext, cfg: dict) -> None:
+    """La IA de las potencias, mejor preparada (2026-10-11, pedido del usuario:
+    "más competente, más desafiante y mejor preparada"). Un modificador
+    dinámico para las ocho que solo pesa mientras la maneja la IA (is_ai):
+    lo que a la IA del juego más le cuesta en este mundo (sostener la
+    producción, construir y abastecer ejércitos grandes).
+
+      ai_edge: {modifiers: {...}, name: {english, spanish}}
+    """
+    mods = {str(k).lstrip("?"): v for k, v in (cfg.get("modifiers") or {}).items()}
+    # lo que el juego instalado no documenta se saltea con aviso (no frena el mod)
+    missing = [k for k in mods if ctx.vanilla is not None and ctx.vanilla.is_documented("modifiers", k) is False]
+    if missing:
+        ctx.warn(f"ia: el mando preparado saltea modificadores que este juego no tiene: {', '.join(missing)}")
+        mods = {k: v for k, v in mods.items() if k not in missing}
+    if not mods:
+        return
+    body = Block([("enable", Block([("is_ai", True)]))])
+    for key, value in mods.items():
+        body.add(key, float(value))
+    name = cfg.get("name") or {}
+    ref = ctx.loc.define_and_reference(AI_EDGE, en=name.get("english", "Prepared Command"),
+                                       es=name.get("spanish", "Mando preparado"), file="meganations_ai",
+                                       origin="ai_edge")
+    ctx.write_script(AI_EDGE_FILE, Block([(ref, body)]), source=SOURCE)
+    majors = [c.tag for c in ctx.spec.countries if c.is_major]
+    each = Block([("limit", Block([("OR", Block([("original_tag", t) for t in majors]))])),
+                  ("add_dynamic_modifier", Block([("modifier", AI_EDGE)]))])
+    root = Block([("on_actions", Block([("on_startup", Block([("effect",
+                  Block([("every_country", each)]))]))]))])
+    ctx.write_script(AI_EDGE_ON_ACTIONS, root, source=SOURCE)
+    ctx.verify_keys("modifiers", {k: "ai_edge" for k in mods})
+    ctx.verify_keys("effects", {"add_dynamic_modifier": "ai_edge", "every_country": "ai_edge"})
+    ctx.verify_keys("triggers", {"is_ai": "ai_edge", "original_tag": "ai_edge"})
+    ctx.note(f"ia: las potencias de la IA tienen {mods} (no el jugador)")
 
 
 NAVAL_CAP = "MEGANATIONS_tope_naval"
@@ -254,7 +350,8 @@ def _research_weights(mil: dict, tag: str) -> list[dict]:
     (value = 300 es +300%). Si una tecnología está en los dos bloques, gana
     el valor más alto."""
     best: dict[str, int] = {}
-    for key in ("naval_research", "armor_research"):
+    # 2026-10-11: también industry_research, electronics_research y air_research
+    for key in sorted(k for k in mil if k.endswith("_research")):
         block = mil.get(key) or {}
         v = (block.get("by_country") or {}).get(tag, block.get("value"))
         if not v:
@@ -323,7 +420,11 @@ def _destiny_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
                 {"type": "antagonize", "target": t, "value": wars.get("antagonize", 60)},
             ], enable=open_, abort=gone)
             declare = dict(open_)
-            declare["not"] = {"war_with": t}
+            # 2026-10-11 (game.log: la Unión le declaró a NAS, al EFE y a la HSN en
+            # una semana): ninguna otra guerra con una potencia; las guerras
+            # contra la Anarquía no frenan, pero con ellas hace falta más ejército
+            others = [m for m in sorted(targets) if m != tag]
+            declare["not"] = {"any": [{"war_with": t}] + [{"war_with": m} for m in others if m != t]}
             declare["any"] = [{"at_war": False}, {"divisions_at_least": int(wars.get("divisions_two_fronts", 50))}]
             declare["divisions_at_least"] = int(wars.get("divisions", 30))
             add_plan(f"{tag}_destino_declara_a_{t}", tag,

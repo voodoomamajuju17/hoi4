@@ -1052,6 +1052,14 @@ def render_effects(owner: str, items: list[dict], known,
             inner = Block()
             inner.add("type", eq_type)
             inner.add("amount", amount)
+            if item.get("producer"):
+                inner.add("producer", item["producer"])
+            if item.get("variant"):
+                # un diseño puntual (2026-10-11, cazas gratis): "Caza-Planeador Kuntur"
+                inner.add("variant_name", Quoted(item["variant"]))
+                block.add("add_equipment_to_stockpile", inner)
+                effects_used.setdefault("add_equipment_to_stockpile", owner)
+                continue
             if eq_type in _ARCHETYPES:
                 # sin ninguna versión investigada el arquetipo falla: la primera
                 # versión si se da; si se quita, no hay qué quitar
@@ -1483,5 +1491,6 @@ def scripted_effect_ids(spec_raw: dict) -> set[str]:
     units = (spec_raw.get("unique_units") or {}).get("units") or []
     unique = {f"{u['id']}_desbloqueo" for u in units} | {f"{u['id']}_botin" for u in units if u.get("capital_spoils")}
     from .carrera import scripted_ids as race_ids
+    from .cazas import scripted_ids as fighter_ids
     return ({e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED
-            | unique | race_ids(spec_raw))
+            | unique | race_ids(spec_raw) | fighter_ids(spec_raw))
