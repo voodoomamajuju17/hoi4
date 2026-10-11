@@ -3442,8 +3442,15 @@ def test_tecnologias_e_ia() -> None:
                            ("spanish", ' aircraft_cannon_1:0 "Cañón de avión I"\n')):
             lp = van / f"localisation/{lang}/modules_fixture_l_{lang}.yml"
             lp.write_text(lp.read_text(encoding="utf-8-sig") + text, encoding="utf-8-sig")
+        (van / "interface/technologies_fixture.gfx").write_text(
+            'spriteTypes = {\n\tspriteType = { name = "GFX_construction1_medium" '
+            'texturefile = "gfx/interface/technologies/construction1.dds" }\n}\n', encoding="utf-8")
         ctx = build(Path(tmp) / "out", vanilla_path=str(van), quiet=True)
         mod = ctx.mod_root
+        # 0. la imagen común de la tecnología también en el detalle (2026-10-11)
+        check("tecnologias comunes: la imagen nueva reemplaza el archivo del juego (la usa el detalle)",
+              (mod / "gfx/interface/technologies/construction1.dds").exists(),
+              [n for n in ctx.notes if n.startswith("tecnologias comunes")])
         # 1. efectos de las tecnologías
         tw = (mod / "common/technologies/tweaks_fixture.txt").read_text()
         check("tecnologias: la industria x1.2, el computo x1.25, la medicina x1.25 y el combate x1.1",

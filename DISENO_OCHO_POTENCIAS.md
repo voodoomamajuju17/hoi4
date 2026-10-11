@@ -1552,3 +1552,13 @@ segundo de Mei). No queda ningún pedido de banderas ni retratos de este lote.
     eficiencia, +5% de eficiencia máxima, +10% de construcción, -10% de
     consumo de suministros y +5% de organización. El jugador no lo tiene.
 - El resto del error.log de esa partida era del juego base.
+
+## La imagen de la tecnología también en el detalle (2026-10-11)
+
+Captura: Construcción Robotizada I con la imagen nueva en el árbol pero la
+vieja (la viga de 1936) en el panel de detalle. El árbol usa el sprite por
+país (`GFX_<TAG>_<tecnología>_medium`) y el detalle el común
+(`GFX_<tecnología>_medium`). Para las tecnologías comunes, la imagen es la
+misma para todos, así que ahora también se escribe en la ruta del archivo del
+juego (si es .dds) y el detalle la muestra. Las de cada facción (armas) no se
+tocan: el detalle muestra la imagen del equipo del país.

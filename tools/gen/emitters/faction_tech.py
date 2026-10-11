@@ -146,18 +146,35 @@ def emit(ctx: BuildContext) -> None:
             if base in arts:
                 arts.setdefault(alias, arts[base])
         n_techs = 0
+        replaced: list[str] = []
+        not_dds: list[str] = []
         for tech, art in sorted(arts.items()):
             if tech not in tree:
                 continue
             rel = _texture(ctx, art, "COMUN", f"tec_{art.stem}", sizes.of(tech), written)
             n_techs += 1
+            # 2026-10-11 (captura: "en el árbol aparece la imagen nueva pero en
+            # la descripción todavía la vieja"): el detalle usa el sprite común
+            # GFX_<tecnología>_medium. Como la imagen es la misma para todos, se
+            # pisa el archivo del juego en su misma ruta (si es .dds).
+            vanilla_tex = textures.get(f"GFX_{tech}_medium")
+            if vanilla_tex and vanilla_tex.lower().endswith(".dds"):
+                dest = ctx.mod_root / vanilla_tex
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes((ctx.mod_root / rel).read_bytes())
+                ctx.track(dest)
+                replaced.append(tech)
+            elif vanilla_tex:
+                not_dds.append(tech)
             for c in ctx.spec.countries:
                 name = f"GFX_{c.tag}_{tech}_medium"
                 if name in have:
                     continue
                 sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(rel))]))
                 counts["sprites"] += 1
-        ctx.note(f"tecnologias comunes: {n_techs} con imagen ({len(arts)} en assets/COMUN/tecnologias)")
+        ctx.note(f"tecnologias comunes: {n_techs} con imagen ({len(arts)} en assets/COMUN/tecnologias); "
+                 f"{len(replaced)} tambien en el detalle (archivo del juego reemplazado)"
+                 + (f"; sin reemplazo (no es .dds): {', '.join(not_dds[:10])}" if not_dds else ""))
     # los diseños de arranque (history.py) llevan el ícono propio si existe
     ctx.data["faction_sprites"] = {_text(v.get("name")) for _, v in sprites.entries if isinstance(v, Block)}
     if sprites.entries:
