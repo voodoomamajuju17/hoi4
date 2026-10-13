@@ -301,6 +301,10 @@ def catalog() -> list[dict]:
         })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
+    # descripción larga a mano para algunos eventos (2026-10-13: capitales tomadas)
+    long_path = REPO / "arte" / "eventos_descripciones.yaml"
+    long_desc = yaml.safe_load(long_path.read_text(encoding="utf-8")) if long_path.exists() else {}
+    long_events = long_desc.get("events") or {}
     asked: set[str] = set()
     for ns, block in spec_events["namespaces"].items():
         tag = block.get("country")
@@ -316,6 +320,8 @@ def catalog() -> list[dict]:
             dest = REPO / "assets" / "events" / f"{eid}.dds"
             desc = (f"{ev['title']['english']}: {_one_line(ev['desc']['english'])}" if not art
                     else _one_line(shared.get(art, ev['desc']['english'])))
+            if eid in long_events:
+                desc = f"{_one_line(long_events[eid])} {_one_line(long_desc.get('composition', ''))}".strip()
             items.append({
                 "type": "event_picture", "tag": "COMPARTIDOS" if art or tag is None else tag, "id": eid, "dest": dest,
                 "done": dest.exists(), "description": desc,

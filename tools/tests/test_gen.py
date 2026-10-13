@@ -2403,6 +2403,13 @@ def test_arte() -> None:
               len(tec) > 200 and len({i["description"] for i in tec}) == len(tec)
               and mc is not None and "Megafactories III" in mc["description"]
               and "Megafactories IV" in mc["description"], str(len(tec)))
+        # 2026-10-13: "necesito los pedidos para los eventos tipo 'capturó X capital'"
+        ev = {i["id"]: i for i in _arte.catalog() if i["type"] == "event_picture"}
+        caps = [f"meganations_{t}.300" for t in ("efe", "fcu", "hsn", "asc", "apf", "nas", "shd", "nre")]
+        check("capitales tomadas: cada evento de captura tiene su pedido largo (camara, luz) y ninguno se repite",
+              all(c in ev and "CAMERA" in ev[c]["description"] and "LIGHT" in ev[c]["description"] for c in caps)
+              and len({ev[c]["description"] for c in caps}) == len(caps)
+              and "[meganations_capital_caida" not in ev[caps[0]]["description"], "")
 
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
