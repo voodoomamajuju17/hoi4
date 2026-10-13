@@ -1001,3 +1001,186 @@ by_faction:
       super_heavy: {en: Junkyard Fortress, es: Fortaleza Basurero}
       light_plane: {en: Junk Kite, es: Cometa de Chatarra}
       medium_plane: {en: Scrap Bomber, es: Bombardero de Desguace}
+
+# -----------------------------------------------------------------------------
+# Doctrinas con el lore de 2100 (2026-10-13, pedido del usuario: "cambiar las
+# doctrinas por cosas más acordes al lore y el juego, y actualizar las
+# imágenes"). Nombre (y descripción en las grandes) de cada doctrina del
+# sistema de 1.17+ (common/doctrines/ del juego instalado); lo que no está
+# acá sale del juego con module_terms. `art`: qué muestra su ícono (pedido de
+# arte doctrine_icon, assets/COMUN/doctrinas/<doctrina>.dds; al llegar, el mod
+# reemplaza el ícono del juego). Los efectos no cambian.
+# -----------------------------------------------------------------------------
+doctrines:
+  grand:
+    grand_battleplan:
+      en: Algorithmic Master Plan
+      es: Plan Maestro Algorítmico
+      desc_en: 'Every metre of the front is modelled before the first shot. The staff AI plans, entrenches and waits for the perfect moment.'
+      desc_es: 'Cada metro del frente se modela antes del primer disparo. La IA del estado mayor planifica, atrinchera y espera el momento justo.'
+      art: a small planning map pin flag stuck behind a short sandbag wall, one glowing arrow
+    mass_assault:
+      en: Networked Mass Assault
+      es: Asalto de Masas en Red
+      desc_en: 'Millions of soldiers linked by cheap helmets and cheap radios. No single unit matters; the wave does.'
+      desc_es: 'Millones de soldados enlazados por cascos baratos y radios baratas. Ninguna unidad importa; importa la ola.'
+      art: a soldier charging forward with a rifle, two simpler soldier silhouettes right behind him
+    new_mobile_warfare:
+      en: Mobile Swarm Warfare
+      es: Guerra de Enjambre Móvil
+      desc_en: 'Tanks, drones and armoured carriers moving as one swarm, faster than the enemy can redraw his map.'
+      desc_es: 'Tanques, drones y transportes blindados que se mueven como un solo enjambre, más rápido de lo que el enemigo redibuja su mapa.'
+      art: a sleek battle tank with one small drone flying just above it
+    superior_firepower:
+      en: Smart Fire Supremacy
+      es: Supremacía de Fuego Inteligente
+      desc_en: 'Every shell guided, every gun linked to every sensor. The enemy is found, fixed and erased.'
+      desc_es: 'Cada proyectil guiado, cada cañón enlazado a cada sensor. Al enemigo se lo encuentra, se lo fija y se lo borra.'
+      art: a howitzer barrel firing with a big orange muzzle flash
+    new_battlefield_support:
+      domain: air force
+      en: Drone Battlefield Support
+      es: Apoyo de Drones al Frente
+      desc_en: 'The air force lives over the front line: loitering drones, armed tiltrotors and fighters that answer the soldier''s call in seconds.'
+      desc_es: 'La aviación vive sobre la línea del frente: drones merodeadores, tiltrotores armados y cazas que responden al llamado del soldado en segundos.'
+      art: a small attack drone diving at an orange explosion on the ground
+    new_operational_integrity:
+      domain: air force
+      en: Airspace Integrity
+      es: Integridad del Espacio Aéreo
+      desc_en: 'Own the sky first. A network of fighters, radars and interceptor missiles that no one crosses uninvited.'
+      desc_es: 'Primero, el cielo. Una red de cazas, radares e interceptores que nadie cruza sin invitación.'
+      art: a fighter jet flying over a radar dish
+    new_strategic_destruction:
+      domain: air force
+      en: Hypersonic Strategic Destruction
+      es: Destrucción Estratégica Hipersónica
+      desc_en: 'Factories, dams and data centres a continent away, hit before the sirens finish sounding.'
+      desc_es: 'Fábricas, represas y centros de datos a un continente de distancia, alcanzados antes de que terminen de sonar las sirenas.'
+      art: a hypersonic missile diving at a factory chimney, small explosion
+    new_base_strike:
+      en: Over-the-Horizon Strike
+      es: Ataque desde el Horizonte
+      desc_en: 'The fleet never sees the enemy. Carriers and missile ships strike his ports and bases from beyond the curve of the Earth.'
+      desc_es: 'La flota nunca ve al enemigo. Portaaviones y buques misilísticos golpean sus puertos y bases desde más allá de la curva de la Tierra.'
+      art: a flat-deck drone carrier launching one drone
+    new_convoy_raiding:
+      en: Silent Hunter Raiding
+      es: Caza Silenciosa de Convoyes
+      desc_en: 'Autonomous submarines and drone boats strangle the sea lanes. The convoy only learns it was found when the first ship sinks.'
+      desc_es: 'Submarinos autónomos y lanchas drone estrangulan las rutas marítimas. El convoy recién sabe que lo encontraron cuando se hunde el primer barco.'
+      art: a submarine under a sinking cargo ship
+    new_fleet_in_being:
+      en: Distributed Fleet in Being
+      es: Flota en Potencia Distribuida
+      desc_en: 'A fleet spread over a thousand points of the sea, never caught together, always a threat.'
+      desc_es: 'Una flota repartida en mil puntos del mar, nunca reunida, siempre una amenaza.'
+      art: a single warship with a small shield emblem above it
+    special_forces_quality:
+      en: Augmented Elite Operators
+      es: Operadores de Élite Aumentados
+      desc_en: 'Few soldiers, each one a weapon system: neural links, powered armour, years of training.'
+      desc_es: 'Pocos soldados, cada uno un sistema de armas: enlaces neuronales, armadura motorizada, años de entrenamiento.'
+      art: one operator helmet with a glowing visor and a combat knife
+    special_forces_quantity:
+      en: Exoskeleton Battalions
+      es: Batallones de Exoesqueletos
+      desc_en: 'Elite gear for whole battalions. Not as sharp as the operators, but there are thousands of them.'
+      desc_es: 'Equipo de élite para batallones enteros. No tan finos como los operadores, pero son miles.'
+      art: two soldiers in light exoskeletons side by side
+  sub:
+    # tierra: infantería
+    great_war_infantry: {en: Trench Lines of the Collapse, es: Trincheras del Colapso}
+    infiltration_tactics: {en: Stealth Infiltration, es: Infiltración Furtiva}
+    assault_infantry: {en: Exoskeleton Assault Infantry, es: Infantería de Asalto con Exoesqueletos}
+    mobile_infantry: {en: Networked Mobile Infantry, es: Infantería Móvil en Red}
+    mounted_infantry: {en: Drone-Escorted Infantry, es: Infantería Escoltada por Drones}
+    large_unit_tactics: {en: Mega-Formation Tactics, es: Tácticas de Megaformaciones}
+    peoples_war: {en: The People's Total War, es: La Guerra Total del Pueblo}
+    guerilla_war: {en: Network Guerrilla, es: Guerrilla en Red}
+    irregulars: {en: Militia Swarms, es: Enjambres de Milicias}
+    last_stand: {en: The Last Bunker, es: El Último Búnker}
+    defensive_postures: {en: Adaptive Defensive Postures, es: Posturas Defensivas Adaptativas}
+    field_engineering: {en: Robotic Field Engineering, es: Ingeniería de Campaña Robotizada}
+    fire_concentration: {en: Swarm Fire Concentration, es: Concentración de Fuego en Enjambre}
+    grand_assault: {en: The Great Coordinated Assault, es: El Gran Asalto Coordinado}
+    anti_tank_frontline: {en: Missile Anti-Armour Front, es: Frente Antiblindaje de Misiles}
+    commandos: {en: Augmented Commandos, es: Comandos Aumentados}
+    # tierra: blindados
+    armored_cavalry: {en: Armoured Drone Cavalry, es: Caballería Blindada de Drones}
+    armored_cavalry_no_lar: {en: Armoured Drone Cavalry, es: Caballería Blindada de Drones}
+    armored_spearhead: {en: Bio-Steel Spearhead, es: Punta de Lanza de Bioacero}
+    armored_spearhead_no_lar: {en: Bio-Steel Spearhead, es: Punta de Lanza de Bioacero}
+    armored_raiders: {en: Armoured Raiders, es: Incursores Blindados}
+    armored_infantry_support: {en: Armoured Infantry Support, es: Apoyo Blindado a la Infantería}
+    tank_destroyer_force: {en: Hunter-Killer Armour, es: Blindados Cazadores}
+    rapid_domination: {en: Rapid Algorithmic Domination, es: Dominación Algorítmica Rápida}
+    deep_battle: {en: Deep Battle 2100, es: Batalla en Profundidad 2100}
+    deep_battle_no_lar: {en: Deep Battle 2100, es: Batalla en Profundidad 2100}
+    mobile_defense: {en: Mobile Elastic Defence, es: Defensa Elástica Móvil}
+    mobile_recon_and_assault: {en: Drone Recon and Assault, es: Reconocimiento y Asalto con Drones}
+    mobile_recon_and_assault_no_lar: {en: Drone Recon and Assault, es: Reconocimiento y Asalto con Drones}
+    expeditionary_warfare: {en: Expeditionary Strike Groups, es: Grupos de Ataque Expedicionarios}
+    streamlined_deployment: {en: Automated Deployment, es: Despliegue Automatizado}
+    # tierra: artillería
+    siege_artillery: {en: Rail Siege Artillery, es: Artillería de Asedio de Riel}
+    self_propelled_support: {en: Autonomous Gun Platforms, es: Plataformas de Tiro Autónomas}
+    flying_batteries: {en: Airborne Gun Batteries, es: Baterías Volantes}
+    support_integrated_operations: {en: Sensor-Integrated Operations, es: Operaciones Integradas por Sensores}
+    dispersed_operations: {en: Dispersed Swarm Operations, es: Operaciones Dispersas en Enjambre}
+    mission_type_tactics: {en: Autonomous Mission Command, es: Mando por Misión Autónomo}
+    # tierra: operaciones y tropas especiales
+    air_cavalry: {en: Tiltrotor Cavalry, es: Caballería de Tiltrotores, domain: land army}
+    marines_1: {en: Sea-Assault Marines I, es: Infantería de Asalto Marítimo I}
+    marines_2: {en: Sea-Assault Marines II, es: Infantería de Asalto Marítimo II}
+    mountaineers_1: {en: High-Altitude Troops I, es: Tropas de Altura I}
+    mountaineers_2: {en: High-Altitude Troops II, es: Tropas de Altura II}
+    paratroopers_1: {en: Orbital Drop Troops I, es: Tropas de Caída Orbital I}
+    paratroopers_2: {en: Orbital Drop Troops II, es: Tropas de Caída Orbital II}
+    rangers_1: {en: Wasteland Rangers I, es: Exploradores del Páramo I}
+    rangers_2: {en: Wasteland Rangers II, es: Exploradores del Páramo II}
+    # aire
+    air_subdoctrine_aerial_reconnaissance: {en: Hyperspectral Reconnaissance, es: Reconocimiento Hiperespectral}
+    air_subdoctrine_bomber_interception: {en: Hypersonic Interception, es: Intercepción Hipersónica}
+    air_subdoctrine_carpet_bombing: {en: Saturation Strikes, es: Ataques de Saturación}
+    air_subdoctrine_carrier_strikes: {en: Drone Carrier Strikes, es: Ataques desde Portadrones}
+    air_subdoctrine_coastal_air_patrol: {en: Coastal Drone Patrol, es: Patrulla Costera de Drones}
+    air_subdoctrine_deep_air_raids: {en: Deep Hypersonic Raids, es: Incursiones Hipersónicas Profundas}
+    air_subdoctrine_dive_bombers: {en: Kamikaze Drone Swarms, es: Enjambres de Drones Kamikaze}
+    air_subdoctrine_dogfighting_mastery: {en: Dogfight AI Mastery, es: Maestría de la IA de Combate Aéreo}
+    air_subdoctrine_escort_fighter: {en: Loyal Wingman Escort, es: Escolta de Compañeros Leales}
+    air_subdoctrine_fighter_bombers: {en: Multirole Strike Drones, es: Drones de Ataque Polivalentes}
+    air_subdoctrine_fighter_central_field: {en: Central Air Network, es: Red Aérea Central}
+    air_subdoctrine_fighter_homeland_defense: {en: Homeland Air Shield, es: Escudo Aéreo de la Patria}
+    air_subdoctrine_flexible_fire_support: {en: On-Call Fire Support, es: Apoyo de Fuego a Pedido}
+    air_subdoctrine_flying_artillery: {en: Flying Railgun Artillery, es: Artillería de Riel Volante}
+    air_subdoctrine_flying_fortresses: {en: Flying Fortresses 2100, es: Fortalezas Volantes 2100}
+    air_subdoctrine_heavy_aircraft_focus: {en: Heavy Airframe Doctrine, es: Doctrina de Fuselajes Pesados}
+    air_subdoctrine_long_range_escort: {en: Long-Range Drone Escort, es: Escolta de Drones de Largo Alcance}
+    air_subdoctrine_naval_strike_tactics: {en: Anti-Ship Missile Tactics, es: Tácticas de Misiles Antibuque}
+    air_subdoctrine_naval_torpedo_tactics: {en: Supercavitating Torpedo Tactics, es: Tácticas de Torpedos Supercavitantes}
+    air_subdoctrine_night_bombing: {en: Thermal-Vision Night Strikes, es: Ataques Nocturnos con Visión Térmica}
+    air_subdoctrine_open_ocean_air_patrol: {en: Open-Ocean Drone Patrol, es: Patrulla Oceánica de Drones}
+    air_subdoctrine_operational_air_support: {en: Operational Air Support, es: Apoyo Aéreo Operacional}
+    air_subdoctrine_tactical_battlefield_support: {en: Tactical Drone Support, es: Apoyo Táctico de Drones}
+    air_subdoctrine_tactical_flexibility: {en: Adaptive Air Tactics, es: Tácticas Aéreas Adaptativas}
+    air_subdoctrine_theater_interdiction: {en: Theatre Interdiction Net, es: Red de Interdicción del Teatro}
+    # mar
+    anti_aircraft_cruisers: {en: Missile Defence Cruisers, es: Cruceros de Defensa Antimisil}
+    battlecruiser_supremacy: {en: Railgun Battlecruisers, es: Cruceros de Batalla de Riel}
+    battleship_antiair_screen: {en: Dreadnought Point-Defence Screen, es: Pantalla Antimisil de los Acorazados}
+    broad_naval_support: {en: Broad Naval Network, es: Red Naval Amplia}
+    carrier_battlegroups: {en: Drone Carrier Battlegroups, es: Grupos de Batalla de Portadrones}
+    coastal_defence_fleet: {en: Coastal Shield Fleet, es: Flota Escudo Costero}
+    convoy_escort: {en: Autonomous Convoy Escort, es: Escolta Autónoma de Convoyes}
+    escort_carrier_support: {en: Light Drone Carriers, es: Portadrones Ligeros}
+    floating_airfields: {en: Floating Airfields, es: Aeródromos Flotantes}
+    hunter_killers: {en: Autonomous Hunter-Killers, es: Cazadores Autónomos}
+    jeune_ecole: {en: Swarm Boats, es: Lanchas en Enjambre}
+    light_task_forces: {en: Light Strike Groups, es: Grupos de Ataque Ligeros}
+    line_of_battle: {en: Railgun Line of Battle, es: Línea de Batalla de Riel}
+    massed_carrier_fleet: {en: Massed Carrier Fleet, es: Flota Masiva de Portadrones}
+    naval_gunfire_support: {en: Naval Railgun Support, es: Apoyo de Riel desde el Mar}
+    patrol_boats: {en: Drone Patrol Boats, es: Lanchas Patrulla Drone}
+    screen_support_focus: {en: Escort Screen Network, es: Red de Escoltas}
+    torpedo_primacy: {en: Supercavitating Torpedo Primacy, es: Primacía del Torpedo Supercavitante}

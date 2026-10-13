@@ -62,6 +62,9 @@ KINDS = {
     "shared_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
     # tecnologías comunes a todos (arte/tecnologias_descripciones.yaml, 2026-10-10)
     "tech_icon": {"size": (600, 400), "transparent": True, "fit": "contain"},
+    # doctrinas (17_research -> doctrines, 2026-10-13): íconos simples como los
+    # del juego; el generador los lleva al tamaño del ícono de cada doctrina
+    "doctrine_icon": {"size": (256, 256), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -283,6 +286,7 @@ def catalog() -> list[dict]:
     # todas las otras tecnologías que se comparten en común"): una imagen por
     # tecnología, la misma para todos los países.
     items += _tech_items()
+    items += _doctrine_items()
     # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
     # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
     for u in _load("20_unique_units.yaml").get("units") or []:
@@ -421,6 +425,52 @@ def _tech_items() -> list[dict]:
     return items
 
 
+# 2026-10-13 (captura de la pantalla de doctrinas: "fijate cómo son ahora los
+# íconos, no pueden ser muy cargados"): los del juego son glifos simples, uno
+# o dos objetos (un avión y una explosión), pocos colores, sin fondo.
+DOCTRINE_STYLE = (
+    "simple flat-shaded game icon in the exact style of the Hearts of Iron IV doctrine icons: ONE or TWO small "
+    "subjects only (for example an aircraft and an explosion, or a soldier and a shield), bold clean silhouette, "
+    "thin dark outline, soft cel shading, limited palette (blue-grey and steel for machines, orange-red for fire, "
+    "white highlights), the near future of the year 2100 but restrained, NOT busy, no scenery, no background, "
+    "transparent PNG, must read clearly at 48x48 pixels, no text, no letters, no numbers, no watermark"
+)
+_NAVAL_WORDS = ("cruiser", "battleship", "line_of_battle", "carrier", "convoy", "fleet", "boat", "torpedo", "naval",
+                "jeune", "task_force", "screen", "airfield", "hunter_killer", "base_strike")
+
+
+def _doctrine_items() -> list[dict]:
+    spec = _load("17_research.yaml").get("doctrines") or {}
+    items = []
+    for kind, entries in (("grand", spec.get("grand") or {}), ("sub", spec.get("sub") or {})):
+        for key, d in entries.items():
+            if key.endswith("_no_lar"):
+                continue      # la variante sin La Resistance usa la misma imagen
+            if d.get("domain"):
+                domain = d["domain"]
+            elif key.startswith("air_subdoctrine") and not any(w in key for w in ("naval", "ocean", "carrier", "coastal")):
+                domain = "air force"
+            elif key.startswith("air_subdoctrine"):
+                domain = "naval air arm"
+            elif any(w in key for w in _NAVAL_WORDS):
+                domain = "navy"
+            elif key.startswith("special_forces"):
+                domain = "special forces"
+            else:
+                domain = "land army"
+            subject = d.get("art") or f"a simple emblem that shows the idea of '{d['en']}' for a {domain} of the year 2100"
+            dest = REPO / "assets" / "COMUN" / "doctrinas" / f"{key}.dds"
+            items.append({
+                "type": "doctrine_icon", "tag": "DOCTRINAS", "id": f"doc_{key}", "dest": dest, "done": dest.exists(),
+                "description": (f"WHAT: icon of the {'grand ' if kind == 'grand' else ''}military doctrine "
+                                f"{d['en']} ({d['es']}), {domain}. EXACT SUBJECT: {subject}. Keep it as simple as "
+                                f"the game's own doctrine icons: at most two objects, centred, filling about 80% "
+                                f"of the canvas."),
+                "style": DOCTRINE_STYLE,
+            })
+    return items
+
+
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
 SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
 TECH_GROUPS = ("INFANTERIA", "APOYO", "BLINDADOS", "ARTILLERIA", "NAVAL", "AVIACION", "INGENIERIA", "INDUSTRIA")
@@ -505,13 +555,13 @@ def pedidos() -> None:
 ("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
-             ("tech_icon", "13_tecnologias")]
+             ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
         for i in items:
             if i["type"] == kind:
-                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ") + TECH_GROUPS
+                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ", "DOCTRINAS") + TECH_GROUPS
                                   else "SATELITES_Y_ANARQUIA", []).append(i)
         if kind in SINGLE_FILE and by_tag:
             # un solo archivo, ordenado por facción
@@ -629,7 +679,7 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
-        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon", "tech_icon"):
+        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon", "tech_icon", "doctrine_icon"):
             img = _recortar(img)
         if kind["fit"] == "cover":
             scale = max(w / img.width, h / img.height)

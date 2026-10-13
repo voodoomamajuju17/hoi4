@@ -100,6 +100,11 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
                 raise SpecError(f"{f['id']}: el icono '{asset}' ya es de {owner[asset]}; "
                                 "cada foco lleva su propio icono", where="07_focus_trees.yaml")
             owner[asset] = f["id"]
+    # las potencias, la Anarquía (y el Santuario) y los árboles compartidos se
+    # frenan con señor; los satélites de arranque no (nacen satélites)
+    country = None if tree.get("shared") else next((c for c in ctx.spec.countries if c.tag == tag), None)
+    freeze = bool((ctx.spec.raw["focus_trees"].get("policy") or {}).get("freeze_when_subject")) and (
+        country is None or not country.is_subject)
     focuses: list[tuple[str, dict]] = []  # (rama, foco)
     branch_ai: dict[str, float] = {}
     for branch in tree["branches"]:
@@ -192,8 +197,13 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             fb.add("mutually_exclusive", me)
 
         available = f.get("available")
-        if isinstance(available, dict):
-            fb.add("available", _available(ctx, tag, fid, available, triggers_used))
+        block = _available(ctx, tag, fid, available, triggers_used) if isinstance(available, dict) else Block()
+        if freeze:
+            # 2026-10-13: con señor, el árbol se frena (títere o satélite)
+            block.entries.extend(render_conditions(fid, {"subject": False}, triggers_used,
+                                                   where="07_focus_trees.yaml").entries)
+        if block.entries:
+            fb.add("available", block)
 
         reward = f.get("reward")
         if not isinstance(reward, list) or not reward:

@@ -468,12 +468,13 @@ class Vanilla:
                 for key, body in root.entries:
                     if not key or not isinstance(body, pdx.Block) or str(key).startswith("@"):
                         continue
+                    icon = pdx.text(body.get("icon")) if body.get("icon") is not None else ""
                     if kind == "grand":
                         out["grand"][str(key)] = {"folder": pdx.text(body.get("folder")) if body.get("folder") is not None else "",
-                                                  "tracks": names(body.get("tracks"))}
+                                                  "tracks": names(body.get("tracks")), "icon": icon}
                     else:
                         tracks = [t for k, v in body.entries if k == "track" for t in names(v)]
-                        out["sub"][str(key)] = {"tracks": tracks,
+                        out["sub"][str(key)] = {"tracks": tracks, "icon": icon,
                                                 "xp_type": pdx.text(body.get("xp_type")) if body.get("xp_type") is not None else ""}
         return out
 

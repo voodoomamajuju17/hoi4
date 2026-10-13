@@ -1046,7 +1046,9 @@ def test_routes() -> None:
         ofe = focus("EFE", "EFE_la_ofensiva_verde")
         rew = " ".join(pdx.render(ofe.get("completion_reward")).split())
         check("la Ofensiva Verde se toma sin el Amazonas y no reclama el Santuario",
-              ofe.get("available") is None and "is_owned_by = ZSG" in rew and "else" not in rew, rew)
+              # 2026-10-13: el único requisito es no tener señor (árbol frenado con señor)
+              [(k, pdx.text(v)) for k, v in ofe.get("available").entries] == [("is_subject", "no")]
+              and "is_owned_by = ZSG" in rew and "else" not in rew, rew)
         dacia = " ".join(pdx.render(focus("NRE", "NRE_dacia_provincia").get("completion_reward")).split())
         check("satelite: el premio normal solo si sigue siendo satelite propio",
               "ZDA = { is_subject_of = ROOT }" in dacia and "annex_country" not in dacia, dacia)
@@ -2051,7 +2053,8 @@ def test_ai() -> None:
         check("HSN: el panel explica que es un nodo y lista los 8", "¿QUÉ ES?" in es_dec and "Hong Kong: [?HSN_nodo_hong_kong]" in es_dec)
         zwe_tree = " ".join((mod / "common/national_focus/ZWE_focus.txt").read_text().split())
         check("Anarquia: arbol de 7 focos", zwe_tree.count("focus = { id = ZWE_foco_") == 7, str(zwe_tree.count("focus = { id = ZWE_foco_")))
-        check("Anarquia: cuanto mas sobrevive, mas focos (fecha)", "available = { date > 2100.7.1 }" in zwe_tree and "date > 2105.1.1" in zwe_tree)
+        check("Anarquia: cuanto mas sobrevive, mas focos (fecha)",
+              "available = { date > 2100.7.1 is_subject = no }" in zwe_tree and "date > 2105.1.1" in zwe_tree)
         check("Anarquia: cada foco sube el espiritu (swap)", "swap_ideas = { remove_idea = ZWE_resistencia_1 add_idea = ZWE_resistencia_2 }" in zwe_tree)
         check("Anarquia: la culminacion crea divisiones", "create_unit = { division =" in zwe_tree and "division_template = { name = \"Hueste\"" in zwe_tree)
         # error.log 2026-09-29: "create_unit -- invalid scope state". Solo vale en scope de state.
@@ -3524,6 +3527,42 @@ def test_tecnologias_e_ia() -> None:
               "type = research_weight_factor id = construction1" in mil)
 
 
+def test_doctrinas_y_titeres() -> None:
+    section("doctrinas con el lore de 2100 y arboles frenados con senor (2026-10-13)")
+    import shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        van = Path(tmp) / "vanilla"
+        shutil.copytree(FIXTURE_VANILLA, van)
+        for lang, text in (("english", ' DOCTRINE_mass_assault:0 "Mass Assault"\n DOCTRINE_mass_assault_desc:0 "Charge."\n'
+                                        ' siege_artillery:0 "Siege Artillery"\n'),
+                           ("spanish", ' DOCTRINE_mass_assault:0 "Asalto en masa"\n DOCTRINE_mass_assault_desc:0 "Carga."\n'
+                                        ' siege_artillery:0 "Artillería de asedio"\n')):
+            (van / f"localisation/{lang}/doctrines_fixture_l_{lang}.yml").write_text(f"l_{lang}:\n{text}", encoding="utf-8-sig")
+        ctx = build(Path(tmp) / "out", vanilla_path=str(van), quiet=True)
+        mod = ctx.mod_root
+        loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation/spanish").rglob("*doctrines*"))
+        check("doctrinas: la clave del juego (aunque no sea el id pelado) lleva el nombre de 2100",
+              'DOCTRINE_mass_assault:0 "Asalto de Masas en Red"' in loc and "DOCTRINE_mass_assault_desc:0" in loc
+              and 'siege_artillery:0 "Artillería de Asedio de Riel"' in loc, loc[:800])
+        check("doctrinas: el reporte dice cuantas encontro en el juego",
+              any(n.startswith("doctrinas con nombre de 2100") and "el juego tiene nombre para 2" in n for n in ctx.notes),
+              [n for n in ctx.notes if n.startswith("doctrinas con")])
+        efe = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text().split())
+        junta = " ".join((mod / "common/national_focus/JUNTA_focus.txt").read_text().split())
+        zwb = " ".join((mod / "common/national_focus/ZWB_focus.txt").read_text().split())
+        n_efe = efe.count("focus = { id =")
+        check("titeres: cada foco de una potencia se frena con senor",
+              n_efe > 0 and efe.count("available = {") == n_efe and efe.count("is_subject = no") >= n_efe, n_efe)
+        check("titeres: tambien la Anarquia y la junta (y los rebeldes que la usan)",
+              zwb.count("is_subject = no") >= zwb.count("focus = { id =") > 0
+              and junta.count("is_subject = no") >= junta.count("focus = { id =") > 0)
+    from tools.arte.arte import catalog
+    docs = [i for i in catalog() if i["type"] == "doctrine_icon"]
+    check("doctrinas: pedidos de arte simples, uno por doctrina (las _no_lar comparten)",
+          len(docs) == 97 and all("at most two objects" in i["description"] for i in docs)
+          and not any(i["id"].endswith("_no_lar") for i in docs), len(docs))
+
+
 def test_junta_militar() -> None:
     section("junta militar: arbol con hitos, foco secreto, fin de la guerra civil (2026-10-11)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -3718,6 +3757,7 @@ def main() -> int:
         test_junta_militar,
         test_equipo_por_arquetipo,
         test_tecnologias_e_ia,
+        test_doctrinas_y_titeres,
         test_vanilla_validation,
     ):
         test()

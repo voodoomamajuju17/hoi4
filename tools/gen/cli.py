@@ -50,6 +50,7 @@ from .emitters import mio as em_mio
 from .emitters import names as em_names
 from .emitters import rebeliones as em_rebeliones
 from .emitters import research as em_research
+from .emitters import doctrine_look as em_doctrine_look
 from .emitters import resources as em_resources
 from .emitters import scenario as em_scenario
 from .emitters import territory as em_territory
@@ -75,6 +76,7 @@ EMITTERS = [
     ("doctrines", em_doctrines.emit),   # despues de territory: doctrina de arranque por bloque
     ("unique_units", em_unique_units.emit),  # antes que research (bloqueos) y decisiones (efectos)
     ("research", em_research.emit),     # la investigacion de 2100: años y nombres
+    ("doctrine_look", em_doctrine_look.emit),  # nombres e iconos de 2100 de las doctrinas
     ("faction_tech", em_faction_tech.emit),  # armas y tecnologias con nombre e imagen de cada faccion
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),

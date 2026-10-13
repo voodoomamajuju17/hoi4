@@ -1568,3 +1568,23 @@ tocan: el detalle muestra la imagen del equipo del país.
 Pedido del usuario: Emergencia I 50.000 (antes 30.000), II 100.000 (antes
 45.000), III 150.000 (antes 60.000). Las divisiones, el equipo, el costo y la
 Leva Forzosa quedan igual.
+
+## Doctrinas de 2100 y árboles frenados con señor (2026-10-13)
+
+- **Doctrinas** (17_research -> doctrines, doctrine_look.py): las 12 grandes
+  y las 89 subdoctrinas del juego (1.19.3) con nombre de 2100 (Plan Maestro
+  Algorítmico, Guerra de Enjambre Móvil, Integridad del Espacio Aéreo,
+  Caza Silenciosa de Convoyes, Operadores de Élite Aumentados...); las
+  grandes, con descripción propia. Los efectos no cambian. La clave de texto
+  se busca en el juego (la del id o la más corta que lo contiene) y el
+  reporte dice cuántas encontró.
+- **Íconos de doctrinas**: 97 pedidos de arte (14_doctrinas), con el estilo
+  de los íconos del juego (captura: "no pueden ser muy cargados"): uno o dos
+  objetos, silueta limpia, pocos colores, sin fondo. Al llegar
+  (assets/COMUN/doctrinas/<doctrina>.dds), el mod pisa la textura del ícono
+  de cada doctrina al tamaño del juego.
+- **Árboles frenados con señor** (pedido: "cuando se hace títere/satélite a
+  una anarquía, rebelde o meganación, su árbol de focos debería frenarse"):
+  cada foco de las potencias, la Anarquía y la junta lleva `is_subject = no`
+  en `available`; con señor no se puede empezar y el que está en curso se
+  detiene. Los satélites de arranque no tienen árbol propio y no cambian.
