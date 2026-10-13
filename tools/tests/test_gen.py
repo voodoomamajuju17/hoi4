@@ -1330,15 +1330,16 @@ def test_events() -> None:
               # create_unit sin comillas internas (error.log 2026-09-30: "Malformed token")
               and e3.count('"division_template = Leva_de_Emergencia_III ') == 16
               and e3.count('"division_template = Milicia_de_Emergencia ') == 12
-              and "add_manpower = 60000" in e3 and "type = support_equipment amount = 1000" in e3, e3[:1500])
+              and "add_manpower = 150000" in e3 and "type = support_equipment amount = 1000" in e3, e3[:1500])
         e1 = decs_e[decs_e.index("MEGANATIONS_emergencia_1 = {"):][:3000]
         check("emergencia: la 1 baja estabilidad y apoyo a la guerra por 6 meses (Leva Forzosa, 2026-10-01)",
               "cost = 150" in e1 and "add_dynamic_modifier = { modifier = MEGANATIONS_leva_forzosa_1 days = 180 }" in e1
               and "add_stability = -0.05" not in e1)
         # 2026-10-09: "triplicar el manpower de las levas de emergencia, duplicar los malus, mantener la duracion"
         e2 = decs_e[decs_e.index("MEGANATIONS_emergencia_2 = {"):][:3000]
-        check("emergencia: mano de obra x3 (30.000 / 45.000 / 60.000)",
-              "add_manpower = 30000" in e1 and "add_manpower = 45000" in e2 and "add_manpower = 60000" in e3)
+        # 2026-10-13: "modificar la cantidad de manpower de las emergencias en 50k, 100k y 150k"
+        check("emergencia: mano de obra 50.000 / 100.000 / 150.000",
+              "add_manpower = 50000" in e1 and "add_manpower = 100000" in e2 and "add_manpower = 150000" in e3)
         dyn = " ".join((mod / "common/dynamic_modifiers").joinpath(
             next(p.name for p in (mod / "common/dynamic_modifiers").glob("*.txt"))).read_text().split()) \
             if (mod / "common/dynamic_modifiers").exists() else ""

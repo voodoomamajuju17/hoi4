@@ -1562,3 +1562,9 @@ país (`GFX_<TAG>_<tecnología>_medium`) y el detalle el común
 misma para todos, así que ahora también se escribe en la ruta del archivo del
 juego (si es .dds) y el detalle la muestra. Las de cada facción (armas) no se
 tocan: el detalle muestra la imagen del equipo del país.
+
+## Emergencias: más mano de obra (2026-10-13)
+
+Pedido del usuario: Emergencia I 50.000 (antes 30.000), II 100.000 (antes
+45.000), III 150.000 (antes 60.000). Las divisiones, el equipo, el costo y la
+Leva Forzosa quedan igual.
