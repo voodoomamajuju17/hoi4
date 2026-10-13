@@ -12939,8 +12939,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The State Banquet', spanish: 'El Banquete de Estado'}
       desc:
-        english: 'A foreign delegation offers [Root.GetLeader] a banquet that will last until dawn. Every toast is a small negotiation.'
-        spanish: 'Una delegación extranjera le ofrece a [Root.GetLeader] un banquete que va a durar hasta el amanecer. Cada brindis es una pequeña negociación.'
+        english: 'A foreign delegation offers [Root.GetLeader] a banquet that will last until dawn. Every toast is a small negotiation.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Una delegación extranjera le ofrece a [Root.GetLeader] un banquete que va a durar hasta el amanecer. Cada brindis es una pequeña negociación.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Stay until the end and toast with everyone.', spanish: 'Quedarse hasta el final y brindar con todos.'}
         effects:
@@ -12958,7 +12958,7 @@ namespaces:
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 75}
         ai_chance: 25
       - name: {english: 'Improvise a speech.', spanish: 'Improvisar un discurso.'}
         effects:
@@ -12972,8 +12972,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The World Cup Final', spanish: 'La Final del Mundial'}
       desc:
-        english: 'Against every prediction, our team reached the final of the World Cup. The whole country wants to know where [Root.GetLeader] will watch it.'
-        spanish: 'Contra todos los pronósticos, nuestra selección llegó a la final del Mundial. Todo el país quiere saber dónde la va a ver [Root.GetLeader].'
+        english: 'Against every prediction, our team reached the final of the World Cup. The whole country wants to know where [Root.GetLeader] will watch it.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Contra todos los pronósticos, nuestra selección llegó a la final del Mundial. Todo el país quiere saber dónde la va a ver [Root.GetLeader].\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'At the stadium, wearing the jersey.', spanish: 'En el estadio, con la camiseta puesta.'}
         effects:
@@ -12992,8 +12992,8 @@ namespaces:
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: 0.05}
-        - {effect: add_political_power, value: -25}
+        - {effect: add_stability, value: 0.075}
+        - {effect: add_political_power, value: -38}
         ai_chance: 25
       - name: {english: 'Bet with a rival leader on live TV.', spanish: 'Apostar en vivo con un líder rival.'}
         effects:
@@ -13007,8 +13007,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Rebel Daughter', spanish: 'La Hija Rebelde'}
       desc:
-        english: 'The eldest daughter of [Root.GetLeader] was photographed leading a protest against the government. Her father''s government.'
-        spanish: 'La hija mayor de [Root.GetLeader] fue fotografiada encabezando una protesta contra el gobierno. El gobierno de su padre.'
+        english: 'The eldest daughter of [Root.GetLeader] was photographed leading a protest against the government. Her father''s government.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'La hija mayor de [Root.GetLeader] fue fotografiada encabezando una protesta contra el gobierno. El gobierno de su padre.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Defend her in public.', spanish: 'Defenderla en público.'}
         effects:
@@ -13032,7 +13032,7 @@ namespaces:
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: 0.02}
+        - {effect: add_stability, value: 0.03}
         ai_chance: 25
       src: user_request
     - id: 4
@@ -13040,14 +13040,14 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Diagnosis', spanish: 'El Diagnóstico'}
       desc:
-        english: 'The palace doctors found a heart problem in [Root.GetLeader]. Nothing urgent, they say. Yet.'
-        spanish: 'Los médicos del palacio le encontraron un problema en el corazón a [Root.GetLeader]. Nada urgente, dicen. Todavía.'
+        english: 'The palace doctors found a heart problem in [Root.GetLeader]. Nothing urgent, they say. Yet.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Los médicos del palacio le encontraron un problema en el corazón a [Root.GetLeader]. Nada urgente, dicen. Todavía.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Have surgery now and delegate for a month.', spanish: 'Operarse ya y delegar un mes.'}
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 2}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: -50}
+        - {effect: add_political_power, value: -75}
         ai_chance: 25
       - name: {english: 'Hide it and carry on.', spanish: 'Ocultarlo y seguir.'}
         effects:
@@ -13073,8 +13073,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Palace Philosopher', spanish: 'El Filósofo del Palacio'}
       desc:
-        english: 'An old philosopher, invited to dinner, asks [Root.GetLeader] in front of everyone: "What is power for?"'
-        spanish: 'Un viejo filósofo, invitado a cenar, le pregunta a [Root.GetLeader] delante de todos: "¿Para qué sirve el poder?"'
+        english: 'An old philosopher, invited to dinner, asks [Root.GetLeader] in front of everyone: "What is power for?"\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un viejo filósofo, invitado a cenar, le pregunta a [Root.GetLeader] delante de todos: "¿Para qué sirve el poder?"\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: '"To protect."', spanish: '"Para proteger."'}
         effects:
@@ -13106,8 +13106,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Minister''s Lover', spanish: 'La Amante del Ministro'}
       desc:
-        english: 'A minister was seen leaving the house of a famous singer at four in the morning. The press asks [Root.GetLeader] for an answer.'
-        spanish: 'Un ministro fue visto saliendo a las cuatro de la mañana de la casa de una cantante famosa. La prensa le pide una respuesta a [Root.GetLeader].'
+        english: 'A minister was seen leaving the house of a famous singer at four in the morning. The press asks [Root.GetLeader] for an answer.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un ministro fue visto saliendo a las cuatro de la mañana de la casa de una cantante famosa. La prensa le pide una respuesta a [Root.GetLeader].\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Fire the minister.', spanish: 'Echar al ministro.'}
         effects:
@@ -13132,7 +13132,7 @@ namespaces:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: 0.02}
+        - {effect: add_stability, value: 0.03}
         ai_chance: 25
       src: user_request
     - id: 7
@@ -13140,15 +13140,15 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Anniversary', spanish: 'El Aniversario'}
       desc:
-        english: 'The wedding anniversary of [Root.GetLeader] falls on the same day as a summit that took a year to organise.'
-        spanish: 'El aniversario de casados de [Root.GetLeader] cae el mismo día que una cumbre que llevó un año organizar.'
+        english: 'The wedding anniversary of [Root.GetLeader] falls on the same day as a summit that took a year to organise.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'El aniversario de casados de [Root.GetLeader] cae el mismo día que una cumbre que llevó un año organizar.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Cancel the summit: family first.', spanish: 'Cancelar la cumbre: primero la familia.'}
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: -30}
+        - {effect: add_political_power, value: -45}
         ai_chance: 25
       - name: {english: 'Go to the summit.', spanish: 'Ir a la cumbre.'}
         effects:
@@ -13174,14 +13174,14 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Generals Ask for an Audience', spanish: 'Los Generales Piden Audiencia'}
       desc:
-        english: 'Five generals ask to see [Root.GetLeader]. They want more budget, more say, and they are not used to being told no.'
-        spanish: 'Cinco generales piden ver a [Root.GetLeader]. Quieren más presupuesto, más voz, y no están acostumbrados a que les digan que no.'
+        english: 'Five generals ask to see [Root.GetLeader]. They want more budget, more say, and they are not used to being told no.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Cinco generales piden ver a [Root.GetLeader]. Quieren más presupuesto, más voz, y no están acostumbrados a que les digan que no.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Give them the budget.', spanish: 'Darles el presupuesto.'}
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: -75}
+        - {effect: add_political_power, value: -112}
         - {effect: army_experience, value: 25}
         ai_chance: 25
       - name: {english: 'Promise and not deliver.', spanish: 'Prometer y no cumplir.'}
@@ -13208,15 +13208,15 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Childhood Friend', spanish: 'El Amigo de la Infancia'}
       desc:
-        english: 'A childhood friend of [Root.GetLeader] shows up at the palace gate. He lost everything and asks for a job.'
-        spanish: 'Un amigo de la infancia de [Root.GetLeader] aparece en la puerta del palacio. Perdió todo y pide un trabajo.'
+        english: 'A childhood friend of [Root.GetLeader] shows up at the palace gate. He lost everything and asks for a job.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un amigo de la infancia de [Root.GetLeader] aparece en la puerta del palacio. Perdió todo y pide un trabajo.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Give him a ministry.', spanish: 'Darle un ministerio.'}
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: -0.02}
+        - {effect: add_stability, value: -0.03}
         ai_chance: 25
       - name: {english: 'A modest job, far from the cameras.', spanish: 'Un trabajo modesto, lejos de las cámaras.'}
         effects:
@@ -13242,8 +13242,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Charming Ambassador', spanish: 'La Embajadora Encantadora'}
       desc:
-        english: 'The new ambassador laughs at every joke of [Root.GetLeader] and always sits at the end of the table, closest to him.'
-        spanish: 'La nueva embajadora se ríe de cada chiste de [Root.GetLeader] y siempre se sienta en la punta de la mesa, al lado suyo.'
+        english: 'The new ambassador laughs at every joke of [Root.GetLeader] and always sits at the end of the table, closest to him.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'La nueva embajadora se ríe de cada chiste de [Root.GetLeader] y siempre se sienta en la punta de la mesa, al lado suyo.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Play along.', spanish: 'Seguirle el juego.'}
         effects:
@@ -13266,7 +13266,7 @@ namespaces:
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: 30}
+        - {effect: add_political_power, value: 45}
         ai_chance: 25
       src: user_request
     - id: 11
@@ -13274,8 +13274,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Storm over the Capital', spanish: 'La Tormenta sobre la Capital'}
       desc:
-        english: 'A storm floods the poor neighbourhoods of the capital. The cameras wait to see where [Root.GetLeader] appears.'
-        spanish: 'Una tormenta inunda los barrios pobres de la capital. Las cámaras esperan a ver dónde aparece [Root.GetLeader].'
+        english: 'A storm floods the poor neighbourhoods of the capital. The cameras wait to see where [Root.GetLeader] appears.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Una tormenta inunda los barrios pobres de la capital. Las cámaras esperan a ver dónde aparece [Root.GetLeader].\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Go in person, into the mud.', spanish: 'Ir en persona, al barro.'}
         effects:
@@ -13293,7 +13293,7 @@ namespaces:
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: 0.03}
+        - {effect: add_stability, value: 0.045}
         ai_chance: 25
       - name: {english: 'Blame the local government.', spanish: 'Culpar al gobierno local.'}
         effects:
@@ -13307,8 +13307,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Official Portrait', spanish: 'El Retrato Oficial'}
       desc:
-        english: 'The official portrait is ready. The painter was honest: [Root.GetLeader] looks tired, older, and very human.'
-        spanish: 'El retrato oficial está listo. El pintor fue honesto: [Root.GetLeader] se ve cansado, más viejo y muy humano.'
+        english: 'The official portrait is ready. The painter was honest: [Root.GetLeader] looks tired, older, and very human.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'El retrato oficial está listo. El pintor fue honesto: [Root.GetLeader] se ve cansado, más viejo y muy humano.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Hang it as it is.', spanish: 'Colgarlo así como está.'}
         effects:
@@ -13326,7 +13326,7 @@ namespaces:
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 2}
         - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: -50}
+        - {effect: add_political_power, value: -75}
         ai_chance: 25
       - name: {english: 'Send the painter to prison.', spanish: 'Mandar al pintor a la cárcel.'}
         effects:
@@ -13340,8 +13340,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Sleepless Night', spanish: 'La Noche sin Dormir'}
       desc:
-        english: 'It is four in the morning and [Root.GetLeader] has not slept. The war plans are on the desk. The bed is cold.'
-        spanish: 'Son las cuatro de la mañana y [Root.GetLeader] no durmió. Los planes de guerra están sobre el escritorio. La cama está fría.'
+        english: 'It is four in the morning and [Root.GetLeader] has not slept. The war plans are on the desk. The bed is cold.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Son las cuatro de la mañana y [Root.GetLeader] no durmió. Los planes de guerra están sobre el escritorio. La cama está fría.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'The doctor''s pills.', spanish: 'Las pastillas del médico.'}
         effects:
@@ -13359,7 +13359,7 @@ namespaces:
         - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
         - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: 40}
+        - {effect: add_political_power, value: 60}
         ai_chance: 25
       - name: {english: 'Call an old friend.', spanish: 'Llamar a un viejo amigo.'}
         effects:
@@ -13372,8 +13372,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Chess Duel', spanish: 'El Duelo de Ajedrez'}
       desc:
-        english: 'A rival leader challenges [Root.GetLeader] to a televised game of chess. Half the world will be watching.'
-        spanish: 'Un líder rival desafía a [Root.GetLeader] a una partida de ajedrez televisada. Medio mundo va a estar mirando.'
+        english: 'A rival leader challenges [Root.GetLeader] to a televised game of chess. Half the world will be watching.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un líder rival desafía a [Root.GetLeader] a una partida de ajedrez televisada. Medio mundo va a estar mirando.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Accept and play to win.', spanish: 'Aceptar y jugar para ganar.'}
         effects:
@@ -13397,7 +13397,7 @@ namespaces:
         - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_war_support, value: 0.03}
+        - {effect: add_war_support, value: 0.045}
         ai_chance: 25
       src: user_request
     - id: 15
@@ -13405,8 +13405,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Heir', spanish: 'El Heredero'}
       desc:
-        english: 'The son of [Root.GetLeader] wants to enlist and go to the front like any other young man.'
-        spanish: 'El hijo de [Root.GetLeader] quiere alistarse e ir al frente como cualquier otro joven.'
+        english: 'The son of [Root.GetLeader] wants to enlist and go to the front like any other young man.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'El hijo de [Root.GetLeader] quiere alistarse e ir al frente como cualquier otro joven.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Let him go.', spanish: 'Dejarlo ir.'}
         effects:
@@ -13439,8 +13439,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Prophecy', spanish: 'La Profecía'}
       desc:
-        english: 'A street prophet announces the fall of [Root.GetLeader] "before the next harvest". The video already has millions of views.'
-        spanish: 'Un profeta callejero anuncia la caída de [Root.GetLeader] "antes de la próxima cosecha". El video ya tiene millones de vistas.'
+        english: 'A street prophet announces the fall of [Root.GetLeader] "before the next harvest". The video already has millions of views.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un profeta callejero anuncia la caída de [Root.GetLeader] "antes de la próxima cosecha". El video ya tiene millones de vistas.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Ignore it.', spanish: 'Ignorarlo.'}
         effects:
@@ -13463,7 +13463,7 @@ namespaces:
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: 0.03}
+        - {effect: add_stability, value: 0.045}
         ai_chance: 25
       src: user_request
     - id: 17
@@ -13471,8 +13471,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'Incognito', spanish: 'De Incógnito'}
       desc:
-        english: '[Root.GetLeader] wants to walk the streets in disguise, like the kings of old stories, to hear what people really say.'
-        spanish: '[Root.GetLeader] quiere recorrer las calles disfrazado, como los reyes de los cuentos viejos, para escuchar lo que la gente dice de verdad.'
+        english: '[Root.GetLeader] wants to walk the streets in disguise, like the kings of old stories, to hear what people really say.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: '[Root.GetLeader] quiere recorrer las calles disfrazado, como los reyes de los cuentos viejos, para escuchar lo que la gente dice de verdad.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Alone, without escort.', spanish: 'Solo, sin escolta.'}
         effects:
@@ -13495,8 +13495,8 @@ namespaces:
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: 0.03}
-        - {effect: add_political_power, value: -25}
+        - {effect: add_stability, value: 0.045}
+        - {effect: add_political_power, value: -38}
         ai_chance: 25
       src: user_request
     - id: 18
@@ -13504,8 +13504,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Repentant Rival', spanish: 'El Rival Arrepentido'}
       desc:
-        english: 'An old political enemy of [Root.GetLeader] asks for forgiveness and offers his support. His followers are many.'
-        spanish: 'Un viejo enemigo político de [Root.GetLeader] pide perdón y ofrece su apoyo. Sus seguidores son muchos.'
+        english: 'An old political enemy of [Root.GetLeader] asks for forgiveness and offers his support. His followers are many.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un viejo enemigo político de [Root.GetLeader] pide perdón y ofrece su apoyo. Sus seguidores son muchos.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Accept him.', spanish: 'Aceptarlo.'}
         effects:
@@ -13529,7 +13529,7 @@ namespaces:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: 50}
+        - {effect: add_political_power, value: 75}
         ai_chance: 25
       src: user_request
     - id: 19
@@ -13537,8 +13537,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Nation''s Gala', spanish: 'La Gala de la Nación'}
       desc:
-        english: 'The national day gala. Everyone expects [Root.GetLeader] to open the dance.'
-        spanish: 'La gala del día de la nación. Todos esperan que [Root.GetLeader] abra el baile.'
+        english: 'The national day gala. Everyone expects [Root.GetLeader] to open the dance.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'La gala del día de la nación. Todos esperan que [Root.GetLeader] abra el baile.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Dance all night.', spanish: 'Bailar toda la noche.'}
         effects:
@@ -13562,7 +13562,7 @@ namespaces:
         - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
         - {effect: dynamic_modifier, id: MEGANATIONS_lider_fiesta, days: 180}
-        - {effect: add_political_power, value: -50}
+        - {effect: add_political_power, value: -75}
         ai_chance: 25
       src: user_request
     - id: 20
@@ -13570,14 +13570,14 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Anonymous Letter', spanish: 'La Carta Anónima'}
       desc:
-        english: 'An anonymous letter reaches [Root.GetLeader]: someone knows a secret from his youth and wants money.'
-        spanish: 'Una carta anónima le llega a [Root.GetLeader]: alguien conoce un secreto de su juventud y quiere plata.'
+        english: 'An anonymous letter reaches [Root.GetLeader]: someone knows a secret from his youth and wants money.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Una carta anónima le llega a [Root.GetLeader]: alguien conoce un secreto de su juventud y quiere plata.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
       options:
       - name: {english: 'Pay for silence.', spanish: 'Pagar el silencio.'}
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_political_power, value: -50}
+        - {effect: add_political_power, value: -75}
         ai_chance: 25
       - name: {english: 'Confess it before it comes out.', spanish: 'Confesarlo antes de que salga.'}
         effects:
@@ -13624,15 +13624,15 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Leader Collapses', spanish: 'El Líder se Desploma'}
       desc:
-        english: '[Root.GetLeader] collapsed in the middle of a cabinet meeting. The doctors demand weeks of rest; the country holds its breath (-15% stability, -100 political power; Health goes back up to 3).'
-        spanish: '[Root.GetLeader] se desplomó en medio de una reunión de gabinete. Los médicos exigen semanas de reposo; el país contiene la respiración (-15% de estabilidad, -100 de poder político; la Salud vuelve a 3).'
+        english: '[Root.GetLeader] collapsed in the middle of a cabinet meeting. The doctors demand weeks of rest; the country holds its breath (-20% stability, -150 political power; Health goes back up to 3).'
+        spanish: '[Root.GetLeader] se desplomó en medio de una reunión de gabinete. Los médicos exigen semanas de reposo; el país contiene la respiración (-20% de estabilidad, -150 de poder político; la Salud vuelve a 3).'
       options:
       - name: {english: 'Rest, at last.', spanish: 'Descansar, por fin.'}
         effects:
         - {effect: set_variable, var: MEGANATIONS_lider_salud, value: 3}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
-        - {effect: add_stability, value: -0.15}
-        - {effect: add_political_power, value: -100}
+        - {effect: add_stability, value: -0.2}
+        - {effect: add_political_power, value: -150}
       src: user_request
     - id: 30
       art: meganations_fin_guerra_generales

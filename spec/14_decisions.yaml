@@ -4917,6 +4917,55 @@ categories:
           when: {at_war: true}
       src: user_design
 
+  # El Líder (2026-10-13, pedido del usuario: "la escala de prestigio, astucia,
+  # salud, etc. no se ve en ningún lado"): el panel muestra las cuatro, qué
+  # hace cada una, y deja cuidarlo.
+  - id: MEGANATIONS_lider_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+    icon_prefer: [generic_political_actions]
+    visible: {flag: MEGANATIONS_lider_listo}
+    name: {english: The Leader, spanish: El Líder}
+    desc:
+      english: 'Charisma [?MEGANATIONS_lider_carisma|0]/10 (each point above or below 5: ±3% stability) · Cunning [?MEGANATIONS_lider_astucia|0]/10 (±0.15 political power a day) · Prestige [?MEGANATIONS_lider_prestigio|0]/10 (±4% war support) · Health [?MEGANATIONS_lider_salud|0]/10 (it drops 1 a year; at 0 the leader collapses: -20% stability, -150 political power). Every six months the leader faces a decision.'
+      spanish: 'Carisma [?MEGANATIONS_lider_carisma|0]/10 (cada punto sobre o bajo 5: ±3% de estabilidad) · Astucia [?MEGANATIONS_lider_astucia|0]/10 (±0,15 de poder político por día) · Prestigio [?MEGANATIONS_lider_prestigio|0]/10 (±4% de apoyo a la guerra) · Salud [?MEGANATIONS_lider_salud|0]/10 (baja 1 por año; en 0 el líder se desploma: -20% de estabilidad, -150 de poder político). Cada seis meses el líder enfrenta una decisión.'
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_lider_chequeo
+      name: {english: The Leader's Check-up, spanish: El Chequeo del Líder}
+      desc: {english: 'A week in the military hospital, away from the cameras. +1 Health. Once a year.', spanish: 'Una semana en el hospital militar, lejos de las cámaras. +1 de Salud. Una vez por año.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible: {variable_below: {var: MEGANATIONS_lider_salud, value: 10}}
+      effects:
+      - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+      - {effect: run, value: MEGANATIONS_lider_recalcular}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 10
+          when:
+            variable_below: {var: MEGANATIONS_lider_salud, value: 3}
+      src: user_request
+    - id: MEGANATIONS_lider_gira
+      name: {english: The Grand Tour, spanish: La Gran Gira}
+      desc: {english: 'Every province, every factory, every hand to shake. +1 Charisma, -1 Health. Once a year.', spanish: 'Cada provincia, cada fábrica, cada mano para estrechar. +1 de Carisma, -1 de Salud. Una vez por año.'}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 365
+      visible: {variable_below: {var: MEGANATIONS_lider_carisma, value: 10}}
+      effects:
+      - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
+      - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+      - {effect: run, value: MEGANATIONS_lider_recalcular}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: MEGANATIONS_lider_salud, value: 4}
+      src: user_request
+
   # Segunda etapa (análisis 2026-10-01, prioridad 12): diplomacia entre potencias y la Era de la Hegemonía
   - id: MEGANATIONS_diplomacia_category
     country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
@@ -14556,13 +14605,14 @@ scripted_effects:
       ops:
       - [set, MEGANATIONS_lider_ef_carisma, MEGANATIONS_lider_carisma]
       - [sub, MEGANATIONS_lider_ef_carisma, 5]
-      - [mul, MEGANATIONS_lider_ef_carisma, 0.02]
+      # 2026-10-13 ("más recompensas y castigos"): 3% / 0,15 PP / 4% por punto
+      - [mul, MEGANATIONS_lider_ef_carisma, 0.03]
       - [set, MEGANATIONS_lider_ef_astucia, MEGANATIONS_lider_astucia]
       - [sub, MEGANATIONS_lider_ef_astucia, 5]
-      - [mul, MEGANATIONS_lider_ef_astucia, 0.1]
+      - [mul, MEGANATIONS_lider_ef_astucia, 0.15]
       - [set, MEGANATIONS_lider_ef_prestigio, MEGANATIONS_lider_prestigio]
       - [sub, MEGANATIONS_lider_ef_prestigio, 5]
-      - [mul, MEGANATIONS_lider_ef_prestigio, 0.03]
+      - [mul, MEGANATIONS_lider_ef_prestigio, 0.04]
     - {effect: dynamic_modifier, id: MEGANATIONS_el_lider}
     - effect: if
       when:
@@ -14621,7 +14671,15 @@ scripted_effects:
       when: {not_flag: MEGANATIONS_lider_listo}
       then:
       - {effect: flag, value: MEGANATIONS_lider_listo}
+      - {effect: flag, value: MEGANATIONS_lider_edad, days: 365}
       - {effect: run, value: MEGANATIONS_lider_reiniciar}
+    # 2026-10-13 ("hacelo más difícil, un poco"): los años pesan, -1 de Salud por año
+    - effect: if
+      when: {not_flag: MEGANATIONS_lider_edad}
+      then:
+      - {effect: flag, value: MEGANATIONS_lider_edad, days: 365}
+      - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+      - {effect: run, value: MEGANATIONS_lider_recalcular}
     - effect: if
       when: {date_after: 2100.4.1, not_flag: MEGANATIONS_lider_espera}
       then:

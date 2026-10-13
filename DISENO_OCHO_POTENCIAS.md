@@ -1588,3 +1588,32 @@ Leva Forzosa quedan igual.
   cada foco de las potencias, la Anarquía y la junta lleva `is_subject = no`
   en `available`; con señor no se puede empezar y el que está en curso se
   detiene. Los satélites de arranque no tienen árbol propio y no cambian.
+
+## El líder visible y más exigente; la planilla de los focos (2026-10-13)
+
+- **Stats a la vista** (pedido: "la escala de prestigio, astucia, salud, etc.
+  no se ve en ningún lado"): el espíritu vivo El Líder no muestra su texto en
+  el juego, así que cada una de las 20 decisiones termina con "El líder hoy
+  (de 10): Carisma · Astucia · Salud · Prestigio", y hay un panel propio de
+  decisiones, **El Líder**, que muestra las cuatro con lo que hace cada una.
+- **Un poco más difícil, más premios y castigos**: cada punto sobre o bajo 5
+  vale 3% de estabilidad (antes 2%), 0,15 PP por día (antes 0,1) y 4% de
+  apoyo a la guerra (antes 3%). Los años pesan: -1 de Salud por año. El
+  desplome cuesta -20% de estabilidad y -150 PP (antes -15% y -100). Las
+  respuestas de las 20 decisiones mueven a la nación ×1,5.
+- **Cuidarlo cuesta**: el Chequeo del Líder (50 PP, una vez por año, +1 Salud)
+  y la Gran Gira (75 PP, una vez por año, +1 Carisma, -1 Salud). La IA se
+  chequea cuando la Salud está baja y no sale de gira si está en 3 o menos.
+- **Botín del SHD** (error.log: "navies and railway guns are not supported"
+  en `add_equipment_to_stockpile`): los 6 trenes blindados salen de la
+  producción, casi terminados (90%), como el Leviatán de la HSN. El generador
+  ahora frena si un botín pone trenes o barcos en el depósito.
+- **Planilla de los árboles** (pedido: "hacé el cálculo, la suma total de los
+  beneficios de cada árbol, quiero compararlos y equilibrar a mano"):
+  `python3 -m tools.focos_balance` arma `balance/focos_comparacion.xlsx` desde
+  el spec: Resumen (totales por árbol con fórmulas, puntaje en el acto, de
+  espíritus y total, y cuánto se aparta del promedio de las 8 potencias),
+  Por rama, Por foco, Espíritus (suma neta de modificadores con pesos
+  editables) y Pesos (editables). Cuenta todos los focos aunque algunos se
+  excluyan (4 por potencia, 6 la FCU). El rework de los focos lo hace el
+  usuario a mano con esta tabla; después se vuelve a correr.

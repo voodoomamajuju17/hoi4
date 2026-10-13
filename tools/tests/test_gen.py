@@ -3578,12 +3578,12 @@ def test_junta_militar() -> None:
         flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
         eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
         rec = eff[eff.index("MEGANATIONS_lider_recalcular = {"):][:2500]
-        check("lider: Carisma 2%, Astucia 0,1 PP, Prestigio 3% por punto",
-              "var = MEGANATIONS_lider_ef_carisma value = 0.02" in rec and "var = MEGANATIONS_lider_ef_astucia value = 0.1" in rec
-              and "var = MEGANATIONS_lider_ef_prestigio value = 0.03" in rec, rec[:900])
+        check("lider: Carisma 3%, Astucia 0,15 PP, Prestigio 4% por punto (2026-10-13: mas premios y castigos)",
+              "var = MEGANATIONS_lider_ef_carisma value = 0.03" in rec and "var = MEGANATIONS_lider_ef_astucia value = 0.15" in rec
+              and "var = MEGANATIONS_lider_ef_prestigio value = 0.04" in rec, rec[:900])
         ev = flat(mod / "events/meganations_lider.txt")
         e22 = ev[ev.index("id = meganations_lider.22 title"):ev.index("id = meganations_lider.30 title")]
-        check("lider: el desplome cuesta -15% de estabilidad y -100 PP", "add_stability = -0.15" in e22 and "add_political_power = -100" in e22, e22)
+        check("lider: el desplome cuesta -20% de estabilidad y -150 PP", "add_stability = -0.2" in e22 and "add_political_power = -150" in e22, e22)
         tree = flat(mod / "common/national_focus/JUNTA_focus.txt")
         check("junta: arbol propio sin pais (lo carga un efecto)", "id = meganations_junta_focus country = { factor = 0 } default = no" in tree, tree[:400])
         ids = [f for f in ("estado_de_sitio", "fabricas_del_cuartel", "el_orden_de_hierro", "la_nacion_en_armas", "la_fortaleza_inexpugnable",
@@ -3717,6 +3717,43 @@ def test_junta_militar() -> None:
               f"capital = {reg[0] if reg else 0} states = {{ 903 905 }} navy_ratio = 0.5" in out, out[:600])
         eff_mod.use_regions({})
 
+def test_lider_visible_y_focos() -> None:
+    section("lider visible y mas dificil, botin del SHD por produccion, planilla de focos (2026-10-13)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
+        loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation/spanish").rglob("*.yml"))
+        line = "El líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0]"
+        descs = [k for k in range(1, 21) if line in loc[loc.index(f"meganations_lider.{k}.d:"):][:1500]]
+        check("lider: cada una de las 20 decisiones muestra sus stats", len(descs) == 20, str(descs))
+        dec = flat(mod / "common/decisions/meganations_decisions.txt") if (mod / "common/decisions/meganations_decisions.txt").exists() \
+            else " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in (mod / "common/decisions").glob("*.txt"))
+        check("lider: panel propio con el chequeo (+1 Salud) y la gira (+1 Carisma, -1 Salud)",
+              "MEGANATIONS_lider_category = {" in dec and "MEGANATIONS_lider_chequeo = {" in dec and "MEGANATIONS_lider_gira = {" in dec)
+        check("lider: el panel explica cada stat", "Salud [?MEGANATIONS_lider_salud|0]/10 (baja 1 por año" in loc)
+        eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
+        pulse = eff[eff.index("MEGANATIONS_lider_pulso = {"):][:3000]
+        check("lider: los años pesan, -1 de Salud por año",
+              "has_country_flag = MEGANATIONS_lider_edad" in pulse and "set_country_flag = { flag = MEGANATIONS_lider_edad value = 1 days = 365 }" in pulse
+              and "var = MEGANATIONS_lider_salud value = -1" in pulse, pulse[:1500])
+        uu = flat(mod / "common/scripted_effects/meganations_unique_units.txt")
+        bot = uu[uu.index("SHD_dragon_del_canal_botin = {"):][:2500] if "SHD_dragon_del_canal_botin = {" in uu else ""
+        import yaml
+        shd = next(u for u in yaml.safe_load((REPO_ROOT / "spec/20_unique_units.yaml").read_text(encoding="utf-8"))["units"]
+                   if (u.get("capital_spoils") or {}).get("event") == "meganations_shd.300")
+        check("botin del SHD: los trenes blindados salen de la produccion, no del deposito (error.log)",
+              "production" in shd["capital_spoils"] and "equipment" not in shd["capital_spoils"]
+              and bot and "add_equipment_to_stockpile" not in bot, bot[:800])
+    from tools import focos_balance
+    rows, mods, order = focos_balance.collect()
+    check("planilla de focos: las 8 potencias primero, con todos sus focos",
+          order[:8] == ["EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE"] and all(sum(r["arbol"] == t for r in rows) > 50 for t in order[:8]), str(order))
+    efe = [r for r in rows if r["arbol"] == "EFE"]
+    check("planilla de focos: suma poder politico, fabricas y espiritus",
+          sum(r["pp"] for r in efe) > 0 and sum(r["civ"] for r in efe) > 0 and abs(mods["EFE"].get("political_power_gain", 0)) > 0)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -3765,6 +3802,7 @@ def main() -> int:
         test_equipo_por_arquetipo,
         test_tecnologias_e_ia,
         test_doctrinas_y_titeres,
+        test_lider_visible_y_focos,
         test_vanilla_validation,
     ):
         test()

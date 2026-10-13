@@ -163,7 +163,10 @@ units:
     # gigantes en la capital propia. Una vez por cada enemigo.
     capital_spoils:
       event: meganations_shd.300
-      equipment: 6
+      # error.log 2026-10-13: "add_equipment_to_stockpile Invalid equipment, navies
+      # and railway guns are not supported": los trenes salen de la producción,
+      # casi terminados (como el Leviatán de la HSN)
+      production: {amount: 6, factories: 5, progress: 0.9}
       template: {name: Ejército del Gran Canal, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, artillery_brigade, anti_air_brigade, anti_air_brigade]}
       divisions: 3
       experience: 0.5

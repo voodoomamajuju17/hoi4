@@ -214,6 +214,10 @@ def emit(ctx: BuildContext) -> None:
             loot = Block([("if", Block([
                 ("limit", Block([("NOT", Block([("has_country_flag", f"{uid}_desbloqueado")]))])),
                 (f"{uid}_desbloqueo", True)]))])
+            if eq_type and spoils.get("equipment") and any(w in eq_type for w in ("railway_gun", "ship_hull")):
+                # el juego no los acepta en el depósito (error.log 2026-10-13)
+                raise SpecError(f"{uid}: botin de capital con '{eq_type}' en el deposito; "
+                                "los trenes blindados y los barcos van con `production`", where=SOURCE)
             if eq_type and spoils.get("equipment"):
                 sb = Block([("type", eq_type), ("amount", int(spoils["equipment"])), ("producer", tag)])
                 if version:
