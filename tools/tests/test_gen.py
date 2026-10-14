@@ -3746,12 +3746,26 @@ def test_lider_visible_y_focos() -> None:
               "production" in shd["capital_spoils"] and "equipment" not in shd["capital_spoils"]
               and bot and "add_equipment_to_stockpile" not in bot, bot[:800])
     from tools import focos_balance
-    rows, mods, order = focos_balance.collect()
+    rows, mods, order, mech = focos_balance.collect()
     check("planilla de focos: las 8 potencias primero, con todos sus focos",
           order[:8] == ["EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE"] and all(sum(r["arbol"] == t for r in rows) > 50 for t in order[:8]), str(order))
     efe = [r for r in rows if r["arbol"] == "EFE"]
     check("planilla de focos: suma poder politico, fabricas y espiritus",
           sum(r["pp"] for r in efe) > 0 and sum(r["civ"] for r in efe) > 0 and abs(mods["EFE"].get("political_power_gain", 0)) > 0)
+    # 2026-10-13: "¿no afectan la produccion? ¿la org o el ataque de las divisiones?"
+    asc = [r for r in rows if r["arbol"] == "ASC" and not r["ideas"] and "ASC_computo +" in r["mecanica"]]
+    check("planilla de focos: subir el Computo de la ASC (sin espiritu) se ve como produccion de fabricas",
+          asc and all(r["mods"].get("industrial_capacity_factory", 0) >= 0 for r in asc)
+          and sum(r["mods"].get("industrial_capacity_factory", 0) > 0 for r in asc) >= 5,   # pasado el tope (150) ya no suma
+          str([(r["foco"], r["mods"]) for r in asc][:3]))
+    nre = [r for r in rows if r["arbol"] == "NRE" and not r["ideas"] and "NRE_auctoritas +" in r["mecanica"]]
+    check("planilla de focos: la Auctoritas de Roma se ve como organizacion del ejercito",
+          nre and any(r["mods"].get("army_org_factor", 0) > 0 for r in nre), str([(r["foco"], r["mods"]) for r in nre][:3]))
+    check("planilla de focos: ataque, defensa y organizacion por arbol",
+          all(abs(mods[t].get("army_org_factor", 0)) > 0 and abs(mods[t].get("army_attack_factor", 0)) > 0 for t in order[:8]))
+    check("planilla de focos: la mecanica respeta los topes (Computo hasta 150, presion de la HSN desde 0)",
+          any(x["var"] == "ASC_computo" and x["fin"] == 150 for x in mech)
+          and all(x["fin"] >= 0 for x in mech if x["var"] == "HSN_presion"), str(mech[:6]))
 
 
 def main() -> int:

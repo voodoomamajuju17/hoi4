@@ -1617,3 +1617,17 @@ Leva Forzosa quedan igual.
   editables) y Pesos (editables). Cuenta todos los focos aunque algunos se
   excluyan (4 por potencia, 6 la FCU). El rework de los focos lo hace el
   usuario a mano con esta tabla; después se vuelve a correr.
+- **Planilla v2** (pedido: "me faltan un montón de datos, ¿no afectan la
+  producción? ¿la org o el ataque de las divisiones?"): cada foco muestra
+  ahora cuánto cambia cada modificador permanente (producción, construcción,
+  investigación, ataque, defensa, organización, blindados, aire...). Un
+  simulador chico recorre el árbol en orden con el estado del país (variables
+  de la mecánica desde su valor de arranque, banderas, espíritus y espíritus
+  vivos) y corre las fórmulas de cada mecánica: subir el Cómputo de la ASC se
+  ve como producción y construcción, la Auctoritas de Roma como organización,
+  el Bioacero del EFE como blindados y defensa, con sus topes (el Cómputo
+  llega a 150 antes de terminar el árbol: los últimos 4 focos de Cómputo no
+  suman). Los eventos propios que dispara un foco suman el promedio de sus
+  opciones; los temporales se listan aparte. Hoja Mecánicas: cada variable
+  al arrancar y después de todos los focos. No simula el paso del tiempo ni
+  las decisiones; la HSN no suma nodos (dependen del mapa).
