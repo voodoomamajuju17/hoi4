@@ -1018,7 +1018,7 @@ countries:
       desc:
         english: Meridian's assembly arms work three shifts and never unionise.
         spanish: Los brazos de ensamble de Meridian trabajan tres turnos y nunca se sindicalizan.
-      modifiers: {production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05}
+      modifiers: {production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05, research_speed_factor: 0.05}
     - id: FCU_entrenamiento_corporativo
       name: {english: Corporate Training, spanish: Entrenamiento Corporativo}
       desc:
@@ -1030,7 +1030,7 @@ countries:
       desc:
         english: Few divisions, very expensive, always first.
         spanish: Pocas divisiones, muy caras, siempre primeras.
-      modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.05}
+      modifiers: {army_attack_factor: 0.1, army_defence_factor: 0.1}
     - id: FCU_dos_oceanos
       name: {english: Two Oceans, spanish: Dos Océanos}
       desc:
@@ -1146,7 +1146,7 @@ countries:
     - id: HSN_espiritu_talasocracia
       name: {english: The Thalassocracy, spanish: La Talasocracia}
       desc: {english: The sea is the state., spanish: El mar es el Estado.}
-      modifiers: {industrial_capacity_dockyard: 0.15, trade_opinion_factor: 0.1, political_power_gain: 0.05}
+      modifiers: {industrial_capacity_dockyard: 0.15, trade_opinion_factor: 0.1, political_power_gain: 0.05, stability_factor: 0.1}
       src: user_design
     - id: HSN_bajo_vigilancia
       name: {english: Under Watch, spanish: Bajo Vigilancia}
@@ -1272,14 +1272,14 @@ countries:
       desc:
         english: Whole districts built on hulls. The nation is wherever its docks are.
         spanish: Barrios enteros construidos sobre cascos. La nación está donde estén sus muelles.
-      modifiers: {industrial_capacity_dockyard: 0.1, production_speed_buildings_factor: 0.1}
+      modifiers: {industrial_capacity_dockyard: 0.1, production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05}
       src: user_design
     - id: HSN_infanteria_de_cubierta
       name: {english: Deck Infantry, spanish: Infantería de Cubierta}
       desc:
         english: Marines who fight from the ship to the beach and back.
         spanish: Infantes que pelean del barco a la playa y de vuelta.
-      modifiers: {army_attack_factor: 0.1, army_org_factor: 0.05}
+      modifiers: {army_attack_factor: 0.1, army_org_factor: 0.1}
       src: user_design
     - id: HSN_armada_de_alta_mar
       name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
@@ -1307,7 +1307,7 @@ countries:
       desc:
         english: Every port that signs the Charter trades under the Market's flag and its law.
         spanish: Cada puerto que firma la Carta comercia bajo la bandera y la ley del Mercado.
-      modifiers: {political_power_gain: 0.15, stability_factor: 0.03, consumer_goods_factor: -0.05}
+      modifiers: {political_power_gain: 0.15, stability_factor: 0.08, consumer_goods_factor: -0.05}
       src: user_request
     - id: HSN_talasocracia_de_los_siete_mares
       name: {english: The Thalassocracy of the Seven Seas, spanish: La Talasocracia de los Siete Mares}
@@ -2122,7 +2122,7 @@ countries:
     - id: APF_espiritu_un_solo_pueblo
       name: {english: One People, spanish: Un Solo Pueblo}
       desc: {english: 'From the Cape to Cairo, one people.', spanish: 'Del Cabo al Cairo, un solo pueblo.'}
-      modifiers: {stability_factor: 0.2, political_power_gain: 0.15, research_speed_factor: 0.05}
+      modifiers: {stability_factor: 0.1, political_power_gain: 0.15, research_speed_factor: 0.05}
       src: user_design
     - id: APF_liberar_los_emiratos
       name: {english: Free the Emirates!, spanish: ¡Liberar los Emiratos!}
@@ -2177,7 +2177,7 @@ countries:
         english: An unbreakable, self-sufficient continent that is very hard to conquer and very slow to industrialise.
         spanish: Un continente autosuficiente e irrompible, muy difícil de conquistar y muy lento para industrializarse.
       modifiers:
-        stability_factor: 0.2
+        stability_factor: 0.15
         army_defence_factor: 0.15
         political_power_gain: 0.1
         recruitable_population_factor: 0.1

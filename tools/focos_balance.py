@@ -191,14 +191,17 @@ REFRESH = {
     "EFE": ["EFE_espiritu_vivo", "@EFE_pulso_de_las_cubas"],
     "ASC": ["ASC_recalcular_computo", "@ASC_pulso_de_la_red"],
     "FCU": ["FCU_recalcular_directorio", "@FCU_pulso_del_directorio"],
-    "HSN": ["HSN_espiritu_vivo", "@HSN_pulso_de_las_potencias"],
+    "HSN": ["HSN_espiritu_vivo", "@HSN_pulso_de_las_potencias", "@HSN_recalcular_nodos"],
     "NAS": ["NAS_espiritu_vivo", "@NAS_pulso_de_los_templos"],
     "SHD": ["SHD_recalcular_caudales"],
     "APF": ["APF_espiritu_vivo", "@APF_pulso_de_los_consejos"],
     "NRE": ["NRE_recalcular_legiones", "@NRE_pulso_del_ocio"],
 }
-# dependen del mapa (quién controla cada región): no se simulan
+# dependen del mapa (quién controla cada región): no se simulan; la HSN
+# arranca con 4 nodos (Malaca, Sunda, Kanto y Manila; 08_territory) y de ese
+# efecto solo se toman sus niveles de espíritus
 OPAQUE = {"HSN_recalcular_nodos"}
+START_OVERRIDES = {"HSN": {"HSN_nodos": 4.0}}
 
 
 def _load(name: str) -> dict:
@@ -250,6 +253,8 @@ class Data:
                 self.start_vars[v.get("country") or m.get("country")][v["name"]] = float(v.get("start", 0))
             for var in m.get("variables") or []:
                 self.start_vars[var.get("country") or m.get("country")][var["name"]] = float(var.get("start", 0))
+        for tag, over in START_OVERRIDES.items():
+            self.start_vars[tag].update(over)
         self.fighters = (_load("13_military.yaml").get("free_fighters") or {}).get("focuses") or {}
         self.trees = _load("07_focus_trees.yaml")["trees"]
 
@@ -469,7 +474,11 @@ class Sim:
         self.vars[var] = x
 
     def refresh(self) -> None:
-        for name in REFRESH.get(self.tag, []):
+        # primero los topes y niveles de los pulsos, después las fórmulas
+        # (que leen las variables ya topeadas), y otra vez los niveles
+        names = REFRESH.get(self.tag, [])
+        pulses = [n for n in names if n.startswith("@")]
+        for name in pulses + [n for n in names if not n.startswith("@")] + pulses:
             if name.startswith("@"):
                 tiers = [x for x in self.d.scripted.get(name[1:], []) if x.get("effect") in ("clamp", "idea_tiers")]
                 self.apply(tiers, None, None, 1.0, False, 1)
@@ -546,6 +555,36 @@ def _event_effect(sim: Sim, eid: str) -> tuple[dict, dict, int]:
     return dict(inst), dict(mods), len(opts)
 
 
+def path_weights(tree: dict) -> dict[str, float]:
+    """Peso de cada foco en el "camino promedio": un foco que depende de una
+    elección excluyente (él mismo o algún requisito) pesa 1/2 por cada una."""
+    focuses = [f for b in tree["branches"] for f in b.get("focuses") or []]
+
+    def locked_by(root: str) -> set[str]:
+        locked = {root}
+        changed = True
+        while changed:
+            changed = False
+            for f in focuses:
+                if f["id"] in locked:
+                    continue
+                req = f.get("prerequisites") or []
+                any_ = f.get("prerequisites_any") or []
+                if any(p in locked for p in req) or (any_ and all(p in locked for p in any_)):
+                    locked.add(f["id"])
+                    changed = True
+        return locked
+
+    pairs = {tuple(sorted((f["id"], x))) for f in focuses for x in f.get("mutually_exclusive") or []}
+    weight = {f["id"]: 1.0 for f in focuses}
+    for a, b in pairs:
+        la, lb = locked_by(a), locked_by(b)
+        for fid in la ^ lb:
+            if fid in weight:
+                weight[fid] *= 0.5
+    return weight
+
+
 def collect() -> tuple[list[dict], dict, list[str], list[dict]]:
     """Filas por foco, modificadores netos por árbol, orden de árboles, mecánicas."""
     data = Data()
@@ -556,6 +595,7 @@ def collect() -> tuple[list[dict], dict, list[str], list[dict]]:
         if not isinstance(tree, dict) or "branches" not in tree:
             continue
         sim = Sim(data, tag)
+        camino = path_weights(tree)
         start_vars = dict(data.start_vars.get(tag, {}))
         start_mods = sim.modifiers()
         for branch in tree["branches"]:
@@ -580,6 +620,7 @@ def collect() -> tuple[list[dict], dict, list[str], list[dict]]:
                 excl = f.get("mutually_exclusive") or []
                 rows.append({"arbol": tag, "rama": branch.get("id", ""), "foco": f["id"],
                              "nombre": (f.get("name") or {}).get("spanish", ""), **row, "mods": mods,
+                             "camino": camino.get(f["id"], 1.0),
                              "ideas": ", ".join(texts["ideas"]), "temporales": ", ".join(texts["temporales"]),
                              "mecanica": ", ".join(texts["mecanica"]), "eventos": ", ".join(texts["eventos"]),
                              "sin_evaluar": ", ".join(sorted(sim.unknown)),
@@ -590,6 +631,18 @@ def collect() -> tuple[list[dict], dict, list[str], list[dict]]:
                 mech.append({"arbol": tag, "var": var, "inicio": x0, "fin": sim.vars.get(var, 0.0)})
     order = list(dict.fromkeys(r["arbol"] for r in rows))
     return rows, tree_mods, order, mech
+
+
+def scores(rows: list[dict] | None = None) -> dict[str, float]:
+    """Puntaje del camino promedio por árbol con los pesos por defecto (lo
+    mismo que calcula la planilla, sin abrirla)."""
+    rows = rows if rows is not None else collect()[0]
+    out: dict[str, float] = defaultdict(float)
+    for r in rows:
+        pts = sum(r[k] * WEIGHTS[k] for k, _ in COLS)
+        pts += sum(v * _scale(k) * MOD_WEIGHTS.get(k, 0) for k, v in r["mods"].items())
+        out[r["arbol"]] += pts * r["camino"]
+    return dict(out)
 
 
 def _mod_keys(rows: list[dict]) -> list[str]:
@@ -635,14 +688,17 @@ def write(path: Path = OUT) -> Path:
     ws.title = "Por foco"
     texts = ["Espíritus (detalle)", "Temporales (no suman)", "Mecánica que mueve", "Eventos (los propios suman)",
              "Condiciones que no se pudieron evaluar", "Excluye a"]
-    ws.append(["Árbol", "Rama", "Foco", "Nombre"] + [t for _, t, _ in num] + texts)
+    FIRST = 8          # columnas A-G: árbol, rama, foco, nombre, peso del camino, puntaje, puntaje del camino
+    ws.append(["Árbol", "Rama", "Foco", "Nombre", "Peso del camino", "Puntaje", "Puntaje del camino"]
+              + [t for _, t, _ in num] + texts)
     for r in rows:
         vals = [round(r[k], 3) for k, _ in COLS] + [round(r["mods"].get(k, 0.0) * _scale(k), 3) for k in mkeys]
-        ws.append([r["arbol"], r["rama"], r["foco"], r["nombre"]] + [v if abs(v) > 1e-9 else None for v in vals]
+        ws.append([r["arbol"], r["rama"], r["foco"], r["nombre"], r["camino"], None, None]
+                  + [v if abs(v) > 1e-9 else None for v in vals]
                   + [r["ideas"], r["temporales"], r["mecanica"], r["eventos"], r["sin_evaluar"], r["excluye"]])
     n = len(rows) + 1
-    col_of = {k: get_column_letter(5 + i) for i, (k, _, _) in enumerate(num)}
-    excl_L = get_column_letter(5 + len(num) + len(texts) - 1)
+    col_of = {k: get_column_letter(FIRST + i) for i, (k, _, _) in enumerate(num)}
+    excl_L = get_column_letter(FIRST + len(num) + len(texts) - 1)
 
     # ---- Pesos
     wp = wb.create_sheet("Pesos")
@@ -658,14 +714,18 @@ def write(path: Path = OUT) -> Path:
                                "por cada 1% (o por unidad si no son porcentaje). Cambialos y el puntaje se "
                                "recalcula.", "2100 Meganations")
     weight_row = {k: i + 2 for i, (k, _, _) in enumerate(num)}
+    for i in range(2, n + 1):
+        ws.cell(i, 6, "=" + "+".join(f"{col_of[k]}{i}*Pesos!$B${weight_row[k]}" for k, _, _ in num))
+        ws.cell(i, 7, f"=E{i}*F{i}")
+        ws.cell(i, 6).number_format = ws.cell(i, 7).number_format = "#,##0"
 
     # ---- Resumen
     wr = wb.create_sheet("Resumen", 0)
     wr.append(["Árbol", "Focos"] + [t for _, t, _ in num]
-              + ["Puntaje en el acto", "Puntaje de modificadores", "Puntaje total", "Total vs promedio de potencias",
-                 "Focos excluyentes (se cuentan igual)"])
+              + ["Puntaje en el acto", "Puntaje de modificadores", "Puntaje total (todos los focos)",
+                 "Puntaje del camino promedio", "Camino promedio vs promedio de potencias", "Focos excluyentes"])
     first_score = 3 + len(num)
-    sL, mL, tL = (get_column_letter(first_score + i) for i in range(3))
+    sL, mL, tL, cL = (get_column_letter(first_score + i) for i in range(4))
     for i, tag in enumerate(order, start=2):
         wr.cell(i, 1, tag)
         wr.cell(i, 2, f"=COUNTIF('Por foco'!$A$2:$A${n},$A{i})")
@@ -678,19 +738,20 @@ def write(path: Path = OUT) -> Path:
         wr.cell(i, first_score, "=" + "+".join(inst_terms))
         wr.cell(i, first_score + 1, "=" + ("+".join(mod_terms) if mod_terms else "0"))
         wr.cell(i, first_score + 2, f"={sL}{i}+{mL}{i}")
-        wr.cell(i, first_score + 4,
+        wr.cell(i, first_score + 3, f"=SUMIFS('Por foco'!$G$2:$G${n},'Por foco'!$A$2:$A${n},$A{i})")
+        wr.cell(i, first_score + 5,
                 f"=COUNTIFS('Por foco'!$A$2:$A${n},$A{i},'Por foco'!${excl_L}$2:${excl_L}${n},\"?*\")")
     m = len(order) + 1
     avg_row = m + 1
     wr.cell(avg_row, 1, "Promedio de las 8 potencias")
-    for j in range(2, first_score + 3):
+    for j in range(2, first_score + 4):
         L = get_column_letter(j)
         wr.cell(avg_row, j, f"=AVERAGE({L}2:{L}9)")
     for i in range(2, m + 1):
-        wr.cell(i, first_score + 3, f"=IF(${tL}${avg_row}=0,0,{tL}{i}/${tL}${avg_row}-1)")
-        wr.cell(i, first_score + 3).number_format = "0%;-0%;-"
+        wr.cell(i, first_score + 4, f"=IF(${cL}${avg_row}=0,0,{cL}{i}/${cL}${avg_row}-1)")
+        wr.cell(i, first_score + 4).number_format = "0%;-0%;-"
     for i in range(2, avg_row + 1):
-        for L in (sL, mL, tL):
+        for L in (sL, mL, tL, cL):
             wr[f"{L}{i}"].number_format = "#,##0"
         for j, (k, _, is_mod) in enumerate(num):
             if is_mod:
@@ -698,15 +759,19 @@ def write(path: Path = OUT) -> Path:
 
     # ---- Por rama
     wb2 = wb.create_sheet("Por rama", 1)
-    wb2.append(["Árbol", "Rama", "Focos"] + [t for _, t, _ in num])
+    wb2.append(["Árbol", "Rama", "Focos", "Puntaje", "Peso del camino"] + [t for _, t, _ in num])
     branches = list(dict.fromkeys((r["arbol"], r["rama"]) for r in rows))
     for i, (tag, br) in enumerate(branches, start=2):
         wb2.cell(i, 1, tag)
         wb2.cell(i, 2, br)
         wb2.cell(i, 3, f"=COUNTIFS('Por foco'!$A$2:$A${n},$A{i},'Por foco'!$B$2:$B${n},$B{i})")
+        wb2.cell(i, 4, f"=SUMIFS('Por foco'!$F$2:$F${n},'Por foco'!$A$2:$A${n},$A{i},'Por foco'!$B$2:$B${n},$B{i})")
+        wb2.cell(i, 4).number_format = "#,##0"
+        wb2.cell(i, 5, f"=IF(C{i}=0,0,SUMIFS('Por foco'!$E$2:$E${n},'Por foco'!$A$2:$A${n},$A{i},"
+                       f"'Por foco'!$B$2:$B${n},$B{i})/C{i})")
         for j, (k, _, _) in enumerate(num):
             col = col_of[k]
-            wb2.cell(i, 4 + j, f"=SUMIFS('Por foco'!${col}$2:${col}${n},'Por foco'!$A$2:$A${n},$A{i},"
+            wb2.cell(i, 6 + j, f"=SUMIFS('Por foco'!${col}$2:${col}${n},'Por foco'!$A$2:$A${n},$A{i},"
                                f"'Por foco'!$B$2:$B${n},$B{i})")
 
     # ---- Mecánicas: cómo quedan las variables de cada potencia después de todos sus focos
@@ -731,16 +796,19 @@ def write(path: Path = OUT) -> Path:
         "- 'Bienes de consumo', 'Desgaste' y los castigos: negativo es bueno (su peso es negativo).",
         "- Las mecánicas se simulan sin el paso del tiempo: no cuenta el crecimiento o el desgaste mensual ni",
         "  las decisiones; solo lo que suman los focos, con sus topes. La ASC se toma en su prioridad por",
-        "  defecto (economía); la HSN no suma nodos (dependen de las regiones que controle).",
+        "  defecto (economía); la HSN arranca con sus 4 nodos y no suma más (dependen de las regiones que",
+        "  conquiste).",
         "- Eventos propios que dispara un foco: suman el promedio de sus opciones. Los que le llegan a otro",
         "  país no cuentan. Los espíritus temporales no suman (están en su columna con los días).",
-        "- Se suman TODOS los focos de cada árbol, aunque algunos sean excluyentes (columna 'Excluye a').",
+        "- 'Puntaje total' suma TODOS los focos, aunque algunos sean excluyentes. 'Camino promedio' pesa 1/2 cada",
+        "  foco que depende de una elección excluyente (columna 'Peso del camino'): es la mejor vara para",
+        "  comparar árboles. El simulador recorre los dos lados de cada elección, uno detrás del otro.",
         "- Un 'states' al azar es 1 región. Una condición que no se puede evaluar (p. ej. controlar una",
         "  región) se da por cumplida dentro de un foco; queda anotada en su columna.",
         "- No incluye la repoblación (depende del mapa instalado).",
         "- Puntaje = cada columna por su peso de la hoja Pesos (celdas amarillas, editables). Los pesos son",
         "  inventados para comparar con la misma vara; no salen del juego.",
-        "- 'Total vs promedio' compara con el promedio de las 8 potencias (filas 2 a 9). Las anarquías, las",
+        "- 'Camino promedio vs promedio' compara con el promedio de las 8 potencias (filas 2 a 9). Las anarquías, las",
         "  Tierras Sin Ley (ZAN) y la Junta tienen árboles cortos: no se comparan con las potencias.",
     ]:
         wn.append([line])
@@ -758,7 +826,7 @@ def write(path: Path = OUT) -> Path:
         for j in range(1, sheet.max_column + 1):
             sheet.column_dimensions[get_column_letter(j)].width = 13
     # cabeceras de modificadores en verde
-    for sheet, offset in ((ws, 5), (wr, 3), (wb2, 4)):
+    for sheet, offset in ((ws, FIRST), (wr, 3), (wb2, 6)):
         for j, (_, _, is_mod) in enumerate(num):
             if is_mod:
                 sheet.cell(1, offset + j).fill = mod_fill
@@ -766,7 +834,7 @@ def write(path: Path = OUT) -> Path:
     ws.column_dimensions["C"].width = 34
     ws.column_dimensions["D"].width = 34
     ws.freeze_panes = "E2"
-    for j in range(5 + len(num), 5 + len(num) + len(texts)):
+    for j in range(FIRST + len(num), FIRST + len(num) + len(texts)):
         ws.column_dimensions[get_column_letter(j)].width = 50
     wn.column_dimensions["A"].width = 120
     wp.column_dimensions["A"].width = 45

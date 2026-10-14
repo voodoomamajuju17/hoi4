@@ -3745,6 +3745,9 @@ def test_lider_visible_y_focos() -> None:
         check("botin del SHD: los trenes blindados salen de la produccion, no del deposito (error.log)",
               "production" in shd["capital_spoils"] and "equipment" not in shd["capital_spoils"]
               and bot and "add_equipment_to_stockpile" not in bot, bot[:800])
+        rec = eff[eff.index("ASC_recalcular_computo = {"):][:1500]
+        check("equilibrio: la ASC vende el Computo que no entra en la red antes del tope",
+              "add_political_power = 40" in rec and rec.index("add_political_power = 40") < rec.index("clamp_variable"), rec[:700])
     from tools import focos_balance
     rows, mods, order, mech = focos_balance.collect()
     check("planilla de focos: las 8 potencias primero, con todos sus focos",
@@ -3763,6 +3766,14 @@ def test_lider_visible_y_focos() -> None:
           nre and any(r["mods"].get("army_org_factor", 0) > 0 for r in nre), str([(r["foco"], r["mods"]) for r in nre][:3]))
     check("planilla de focos: ataque, defensa y organizacion por arbol",
           all(abs(mods[t].get("army_org_factor", 0)) > 0 and abs(mods[t].get("army_attack_factor", 0)) > 0 for t in order[:8]))
+    # 2026-10-14: equilibrio chico, asimetrico, sin extremos
+    sc = focos_balance.scores(rows)
+    avg = sum(sc[t] for t in order[:8]) / 8
+    check("equilibrio: las 8 potencias quedan a menos de 10% del promedio (camino promedio)",
+          all(abs(sc[t] / avg - 1) < 0.10 for t in order[:8]), str({t: round(sc[t] / avg - 1, 3) for t in order[:8]}))
+    asc_rows = {r["foco"]: r for r in rows if r["arbol"] == "ASC"}
+    check("equilibrio: el Computo que sobra (mas de 150) se vende por poder politico",
+          asc_rows["ASC_la_mente_de_la_comuna"]["pp"] > 0 and asc_rows["ASC_datacenters_submarinos"]["pp"] > 0)
     check("planilla de focos: la mecanica respeta los topes (Computo hasta 150, presion de la HSN desde 0)",
           any(x["var"] == "ASC_computo" and x["fin"] == 150 for x in mech)
           and all(x["fin"] >= 0 for x in mech if x["var"] == "HSN_presion"), str(mech[:6]))

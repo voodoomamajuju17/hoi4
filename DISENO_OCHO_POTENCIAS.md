@@ -1631,3 +1631,38 @@ Leva Forzosa quedan igual.
   opciones; los temporales se listan aparte. Hoja Mecánicas: cada variable
   al arrancar y después de todos los focos. No simula el paso del tiempo ni
   las decisiones; la HSN no suma nodos (dependen del mapa).
+
+## Equilibrio chico de los árboles (2026-10-14)
+
+Pedido: "equilibrá solo los muy afectados, como la HSN; me gusta que sea
+asimétrico, la idea no es normalizar todo; fijate si por el lore conviene
+retocar algo más". Vara: el "camino promedio" de la planilla (cada foco que
+depende de una elección excluyente pesa 1/2). Antes: de -14% (HSN) a +11%
+(NRE) contra el promedio de las 8; después: de -7,5% a +7,5%.
+
+- **HSN** (-14% -> -7,5%), sin tocar su identidad (mar fuerte, ejército
+  flojo): la Talasocracia da +10% de estabilidad y la Carta de los Puertos
+  8% (antes 3%): la Liga de puertos se ordena; Refinerías de Borneo, 3
+  fábricas civiles (antes 2); Ciudades Flotantes, +5% de producción de
+  fábricas; Puertos de Aguas Profundas, 2 bonos de tecnología naval; Marines
+  de Alta Mar, 2 fábricas militares; Infantería de Cubierta, +10% de org
+  (antes 5%).
+- **FCU** (-9% -> -7%): Robótica Industrial de Meridian da +5% de
+  investigación (una federación de corporaciones tecnológicas sin nada de
+  investigación no cerraba); Divisiones de Respuesta Rápida, +10% de defensa
+  (antes 5%); El Contrato del Siglo, 3 fábricas (antes 2; el escándalo
+  sigue).
+- **APF** (+10% -> +7%): +100% de estabilidad no cerraba con una federación
+  de mil consejos con tensión propia: Un Solo Pueblo da 10% (antes 20%) y
+  la Federación de Aldeas 15% (antes 20%).
+- **NRE** (+11% -> +7,5%): El Ejército de las Provincias da 200.000 de mano
+  de obra (antes 300.000); sigue siendo la que más tiene.
+- **ASC**: el árbol suma ~200 de Cómputo y la red aguanta 150, así que los
+  últimos focos de Cómputo no daban nada. Ahora lo que sobra se vende: unos
+  +2 PP por punto (5 -> 10, 10 -> 20, 20 -> 40), dicho en el panel.
+- **Amazonas (ZWB)**: la anarquía más flaca por lejos; su mano de obra y su
+  equipo de los focos se duplican (40.000 y 80.000; 3.000 y 4.000 fusiles).
+  Sigue siendo la defensiva, con la paz blanca a los 5 años.
+- La planilla mide mejor: la HSN arranca con sus 4 nodos, los topes de cada
+  mecánica se aplican antes de la fórmula, y hay columnas de puntaje por foco
+  y del camino promedio.

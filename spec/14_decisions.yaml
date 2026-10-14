@@ -902,14 +902,14 @@ categories:
         +[?ASC_ef_org_ver]%, infrastructure building +[?ASC_ef_infra_ver]%\nWar: attack +[?ASC_ef_ataque_ver]%, defence +[?ASC_ef_defensa_ver]%\nHeat:
         stability [?ASC_ef_calor_ver]%\n\nChanging the priority leaves the grid 30 days recalibrating (no bonus). Data centres add compute. More
         compute = more heat: +4 per month from 60 compute, +8 from 100; below 60 it cools 3. Heat 50: Thermal Rationing; 80: blackouts. Compute
-        wears out: -1 per month.'
+        wears out: -1 per month. The grid holds up to 150 compute: whatever goes over is sold, about +2 political power per point.'
       spanish: '¿PARA QUÉ SIRVE? El cómputo es un bonus que vos dirigís. Elegís UNA prioridad y todo el cómputo rinde ahí: cuanto más cómputo, más
         grande el bonus (mirá el espíritu «La Red de Cómputo»).\n\nCómputo: [?ASC_computo]   Calor de la red: [?ASC_calor] / 100\n\nRINDE AHORA:\nEconomía:
         fábricas +[?ASC_ef_fabricas_ver]%, construcción +[?ASC_ef_construccion_ver]%\nInvestigación: +[?ASC_ef_investigacion_ver]%\nLogística: organización
         +[?ASC_ef_org_ver]%, construcción de infraestructura +[?ASC_ef_infra_ver]%\nGuerra: ataque +[?ASC_ef_ataque_ver]%, defensa +[?ASC_ef_defensa_ver]%\nCalor:
         estabilidad [?ASC_ef_calor_ver]%\n\nCambiar de prioridad deja la red 30 días recalibrando (sin bonus). Los datacenters suman cómputo. Más
         cómputo = más calor: +4 por mes desde 60 de cómputo, +8 desde 100; por debajo de 60 se enfría 3. Calor 50: Racionamiento Térmico; 80: apagones.
-        El cómputo se gasta: -1 por mes.'
+        El cómputo se gasta: -1 por mes. La red aguanta hasta 150 de cómputo: lo que sobra se vende, unos +2 de poder político por punto.'
     src: user_design
     after_effects:
     - {effect: run, value: ASC_recalcular_computo}
@@ -9429,6 +9429,26 @@ scripted_effects:
   # ASC: saca las 12 ideas de cómputo y pone la que corresponde a la prioridad y al nivel.
   - id: ASC_recalcular_computo
     effects:
+    # 2026-10-14 (planilla de focos): el árbol suma ~200 de cómputo y la red
+    # aguanta 150; los últimos focos de cómputo no daban nada. Lo que sobra se
+    # vende en el mercado de créditos: unos +2 PP por punto (5 -> 10, 10 -> 20, 20 -> 40).
+    - effect: if
+      when:
+        variable_at_least: {var: ASC_computo, value: 170}
+      then:
+      - {effect: add_political_power, value: 40}
+      else:
+      - effect: if
+        when:
+          variable_at_least: {var: ASC_computo, value: 160}
+        then:
+        - {effect: add_political_power, value: 20}
+        else:
+        - effect: if
+          when:
+            variable_at_least: {var: ASC_computo, value: 155}
+          then:
+          - {effect: add_political_power, value: 10}
     - {effect: clamp, var: ASC_computo, min: 0, max: 150}
     - effect: math
       ops:

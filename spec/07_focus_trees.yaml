@@ -3141,13 +3141,18 @@ trees:
         prerequisites:
         - FCU_la_junta_de_accionistas
         desc:
-          english: Two factories and a very big scandal (+15).
-          spanish: Dos fábricas y un escándalo muy grande (+15).
+          english: Three factories and a very big scandal (+15).
+          spanish: Tres fábricas y un escándalo muy grande (+15).
         reward:
         - effect: states
           pick: random
           effects:
           - {effect: build_here, building: industrial_complex, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
+        # 2026-10-14 (planilla de focos): una fábrica más
         - effect: states
           pick: random
           effects:
@@ -3748,6 +3753,11 @@ trees:
           pick: random
           effects:
           - {effect: build_here, building: industrial_complex, level: 1}
+        # 2026-10-14 (planilla de focos: la HSN era la más floja): una refinería más
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: industrial_complex, level: 1}
       - id: HSN_puertos_de_aguas_profundas
         name: {english: Deep-Water Ports, spanish: Puertos de Aguas Profundas}
         days: 63
@@ -3769,6 +3779,7 @@ trees:
           effects:
           - {effect: build_here, building: dockyard, level: 1}
           when: {coastal: true}
+        - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}   # 2026-10-14 (planilla de focos)
       - id: HSN_ciudades_flotantes
         name: {english: Floating Cities, spanish: Ciudades Flotantes}
         days: 84
@@ -3802,6 +3813,15 @@ trees:
         desc: {english: Sailors who can hold a beach., spanish: Marineros que pueden sostener una playa.}
         reward:
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+        # 2026-10-14 (planilla de focos): fábricas para armar a los marines
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
+        - effect: states
+          pick: random
+          effects:
+          - {effect: build_here, building: arms_factory, level: 1}
       - id: HSN_doctrina_de_desembarco
         name: {english: Landing Doctrine, spanish: Doctrina de Desembarco}
         days: 49
@@ -7546,7 +7566,7 @@ trees:
           english: Every province sends its sons to the legions.
           spanish: Cada provincia manda a sus hijos a las legiones.
         reward:
-        - {effect: add_manpower, value: 300000}
+        - {effect: add_manpower, value: 200000}   # 2026-10-14: antes 300.000 (planilla de focos)
         - {effect: army_experience, value: 50}
         - {effect: add_variable, var: NRE_prestigio_italica, value: 10}
         - {effect: add_variable, var: NRE_prestigio_macedonica, value: 10}
@@ -7815,7 +7835,7 @@ trees:
           spanish: Solo nosotros sabemos qué canal lleva a dónde. Disponible después de un año de sobrevivir.
         reward:
         - {effect: swap_ideas, remove: ZWB_resistencia_1, add: ZWB_resistencia_2}
-        - {effect: add_manpower, value: 20000}
+        - {effect: add_manpower, value: 40000}   # 2026-10-14: x2 (planilla de focos)
         src: user_request
         available: {date_after: 2101.1.1}
         prerequisites:
@@ -7829,7 +7849,7 @@ trees:
           spanish: Cada sendero una emboscada, cada árbol un tirador. Disponible después de un año y medio de sobrevivir.
         reward:
         - {effect: swap_ideas, remove: ZWB_resistencia_2, add: ZWB_resistencia_3}
-        - {effect: equipment, type: infantry_equipment, amount: 1500}
+        - {effect: equipment, type: infantry_equipment, amount: 3000}   # 2026-10-14: x2
         src: user_request
         available: {date_after: 2101.7.1}
         prerequisites:
@@ -7843,7 +7863,7 @@ trees:
           spanish: Los pueblos del río nos dan a sus hijos. Disponible después de dos años de sobrevivir.
         reward:
         - {effect: swap_ideas, remove: ZWB_resistencia_3, add: ZWB_resistencia_4}
-        - {effect: add_manpower, value: 40000}
+        - {effect: add_manpower, value: 80000}   # 2026-10-14: x2
         src: user_request
         available: {date_after: 2102.1.1}
         prerequisites:
@@ -7857,7 +7877,7 @@ trees:
           spanish: Peleamos desde arriba, y el enemigo nunca nos ve. Disponible después de tres años de sobrevivir.
         reward:
         - {effect: swap_ideas, remove: ZWB_resistencia_4, add: ZWB_resistencia_5}
-        - {effect: equipment, type: infantry_equipment, amount: 2000}
+        - {effect: equipment, type: infantry_equipment, amount: 4000}   # 2026-10-14: x2
         src: user_request
         available: {date_after: 2103.1.1}
         prerequisites:
