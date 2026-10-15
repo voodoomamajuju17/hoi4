@@ -65,6 +65,9 @@ KINDS = {
     # doctrinas (17_research -> doctrines, 2026-10-13): íconos simples como los
     # del juego; el generador los lleva al tamaño del ícono de cada doctrina
     "doctrine_icon": {"size": (256, 256), "transparent": True, "fit": "contain"},
+    # leyes del menú del país (05_ideas -> laws, 2026-10-15); el generador las
+    # lleva al tamaño del ícono de ley del juego
+    "law_icon": {"size": (256, 256), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -287,6 +290,7 @@ def catalog() -> list[dict]:
     # tecnología, la misma para todos los países.
     items += _tech_items()
     items += _doctrine_items()
+    items += _law_items()
     # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
     # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
     for u in _load("20_unique_units.yaml").get("units") or []:
@@ -477,6 +481,39 @@ def _doctrine_items() -> list[dict]:
     return items
 
 
+# 2026-10-15 ("haceme el pedido de imágenes para el menú de país, leyes
+# económicas, reclutamiento"): una imagen por ley, la misma para todos los países.
+LAW_STYLE = (
+    "small painted icon in the style of the Hearts of Iron IV law and national spirit icons: one clear scene or "
+    "object, bold readable silhouette, painterly propaganda-poster look, the near future of the year 2100 (not "
+    "science-fantasy), neutral design that belongs to no nation (no flags, no national colours, no emblems), "
+    "restrained palette of steel, concrete, graphite and muted earth tones with one accent light, no scenery beyond "
+    "what the subject needs, transparent PNG background, must read clearly at 64x64 pixels, no text, no letters, "
+    "no numbers, no watermark"
+)
+_LAW_CATEGORY = {"economy": "economy law", "trade_laws": "trade law", "mobilization_laws": "recruitment law"}
+
+
+def _law_items() -> list[dict]:
+    spec = _load("05_ideas.yaml").get("laws") or {}
+    items = []
+    for cat, what in _LAW_CATEGORY.items():
+        laws = spec.get(cat) or {}
+        siblings = [d["en"] for d in laws.values()]
+        for key, d in laws.items():
+            dest = REPO / "assets" / "COMUN" / "leyes" / f"{key}.dds"
+            others = ", ".join(n for n in siblings if n != d["en"])
+            items.append({
+                "type": "law_icon", "tag": "LEYES", "id": f"ley_{key}", "dest": dest, "done": dest.exists(),
+                "description": (f"WHAT: icon of the {what} {d['en']} ({d['es']}) in the country menu, the year 2100. "
+                                f"EXACT SUBJECT: {_one_line(d['art'])} The other laws of the same menu are "
+                                f"{others}: this icon must look clearly different from theirs. COMPOSITION: one "
+                                f"subject centred, filling about 80% of the square canvas, little empty space."),
+                "style": LAW_STYLE,
+            })
+    return items
+
+
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
 SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
 TECH_GROUPS = ("INFANTERIA", "APOYO", "BLINDADOS", "ARTILLERIA", "NAVAL", "AVIACION", "INGENIERIA", "INDUSTRIA")
@@ -561,13 +598,13 @@ def pedidos() -> None:
 ("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
-             ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas")]
+             ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
         for i in items:
             if i["type"] == kind:
-                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ", "DOCTRINAS") + TECH_GROUPS
+                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ", "DOCTRINAS") + TECH_GROUPS + ("LEYES",)
                                   else "SATELITES_Y_ANARQUIA", []).append(i)
         if kind in SINGLE_FILE and by_tag:
             # un solo archivo, ordenado por facción
@@ -685,7 +722,7 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
-        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon", "tech_icon", "doctrine_icon"):
+        if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon", "tech_icon", "doctrine_icon", "law_icon"):
             img = _recortar(img)
         if kind["fit"] == "cover":
             scale = max(w / img.width, h / img.height)

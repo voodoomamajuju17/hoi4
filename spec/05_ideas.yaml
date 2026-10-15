@@ -3150,6 +3150,144 @@ countries:
       src: user_request
 
 # =============================================================================
+# Las leyes del juego con el lore de 2100 (pedido del usuario, 2026-10-15:
+# "haceme el pedido de imágenes para el menú de país, leyes económicas,
+# reclutamiento, etc. Podés ajustar los nombres también"). Son las leyes del
+# juego instalado (common/ideas/: economy, trade_laws, mobilization_laws):
+# cambia el nombre y el ícono, no lo que hacen. La descripción sigue siendo la
+# del juego. El ícono es assets/COMUN/leyes/<ley>.dds (pedido law_icon); el
+# generador lo escribe, al tamaño del juego, en la textura del sprite de la ley.
+# `art`: lo que muestra el ícono (cámara, luz y posición de cada cosa).
+# =============================================================================
+laws:
+  src: user_request
+  economy:
+    undisturbed_isolation:
+      en: Total Disconnection
+      es: Desconexión Total
+      art: >-
+        a single heavy fibre-optic trunk cable cut cleanly in two, the two severed ends hanging apart in the centre with
+        dark dead strands, no light at all in them; front three-quarter view slightly from above; cold grey key light
+        from the upper left, deep shadow on the right.
+    isolation:
+      en: Grid Isolation
+      es: Red Aislada
+      art: >-
+        a small city power substation seen from slightly above, surrounded by a closed ring of concrete barriers, a
+        single dim amber lamp lit inside the ring and nothing outside it; three-quarter view; soft overcast light.
+    civilian_economy:
+      en: Consumer Economy
+      es: Economía de Consumo
+      art: >-
+        a delivery drone carrying a cardboard parcel above a shopping bag full of household goods (a kettle, a
+        lamp, a folded shirt); centred, three-quarter view from slightly below; warm friendly daylight from the left.
+    low_economic_mobilisation:
+      en: Factories on Alert
+      es: Fábricas en Alerta
+      art: >-
+        a clean civilian factory hall seen in three-quarter view, one of its three production lines lit with a
+        small orange warning beacon on top, a single grey military crate at the end of that line; neutral daylight
+        with the orange beacon glow as the only accent.
+    partial_economic_mobilisation:
+      en: Industrial Retooling
+      es: Reconversión Industrial
+      art: >-
+        a large orange robotic arm on a factory floor swapping a car-door part for an armoured vehicle panel, the
+        car part being set aside on the left, the armour panel lifted on the right; three-quarter view from slightly
+        above; bright factory light from above with sparks.
+    war_economy:
+      en: Automated War Economy
+      es: Economía de Guerra Automatizada
+      art: >-
+        an assembly line seen in steep perspective receding to the back, rows of identical artillery shells moving
+        on it under a pair of robotic welding arms throwing sparks; low camera at the start of the line; hot orange
+        light from the welding, cold blue factory light behind.
+    tot_economic_mobilisation:
+      en: Total Grid Mobilisation
+      es: Movilización Total de la Red
+      art: >-
+        a huge glowing fusion reactor core in the centre with heavy cables branching out to three small factory
+        silhouettes around it, all of them lit red and working at full power, steam rising; front view, slightly
+        from below; intense red and white light from the core, dark surroundings.
+  trade_laws:
+    free_trade:
+      en: Open Global Market
+      es: Mercado Abierto Global
+      art: >-
+        a giant cargo ship stacked with colourful shipping containers sailing toward the viewer, a small globe of
+        glowing trade routes floating above its bow; front three-quarter view from water level; bright clear
+        daylight, blue sea.
+    export_focus:
+      en: Export Corridors
+      es: Corredores de Exportación
+      art: >-
+        a magnetic-levitation freight train leaving a factory and heading out of frame to the right, its cars loaded
+        with crates, a straight lit corridor of rails running ahead; three-quarter side view; warm afternoon light,
+        cyan glow under the train.
+    limited_exports:
+      en: Strategic Quotas
+      es: Cuotas Estratégicas
+      art: >-
+        a port container gate with a heavy barrier half raised, two containers allowed through on the outside and a
+        tall stack held back behind the barrier on the inside, a scanner arch over the gate; three-quarter view from
+        slightly above; even daylight with one amber warning light on the barrier.
+    closed_economy:
+      en: Armoured Autarky
+      es: Autarquía Blindada
+      art: >-
+        a massive closed steel vault door with heavy locking bolts, a small self-contained cluster of factory,
+        greenhouse and solar panel visible through a slit window in it; straight front view, slightly from below;
+        hard light from the upper left, deep shadows.
+  mobilization_laws:
+    disarmed_nation:
+      en: Faithful to the Great Disarmament
+      es: Fiel al Gran Desarme
+      art: >-
+        a rifle broken in two halves lying crossed on a stone slab, a single white flower growing between the two
+        pieces; top-down three-quarter view; soft pale morning light, calm and solemn.
+    volunteer_only:
+      en: Professional Force
+      es: Fuerza Profesional
+      art: >-
+        a single professional soldier in modern grey armour standing at ease, helmet under one arm, a contract
+        tablet with a glowing signature line held in the other hand; full figure, front three-quarter view; clean
+        studio light from the left.
+    limited_conscription:
+      en: Selective Call-Up
+      es: Llamado Selectivo
+      art: >-
+        a holographic personnel file floating above a desk terminal, three small figure silhouettes on it with one
+        highlighted in green and two dimmed; three-quarter view from slightly above; cool blue screen light, dark
+        room.
+    extensive_conscription:
+      en: Mandatory Service
+      es: Servicio Obligatorio
+      art: >-
+        a row of five young recruits in identical new uniforms standing in line, seen from the front at a slight
+        angle, a sergeant drone hovering at the end of the line; even morning daylight on a parade ground.
+    service_by_requirement:
+      en: Algorithmic Draft
+      es: Leva por Algoritmo
+      art: >-
+        a large public screen panel on a city wall showing a glowing grid of many small person icons, a column of
+        them lit in red as selected, a single citizen standing in front of it seen from behind; three-quarter view;
+        red glow from the screen on a dusk street.
+    all_adults_serve:
+      en: Everyone Under Arms
+      es: Toda la Población en Armas
+      art: >-
+        a dense crowd of adults of every age, a factory worker, a nurse and an office worker in the front row, each
+        holding a rifle and wearing a simple armband, advancing toward the viewer; front view from slightly below;
+        dramatic overcast light, dust.
+    scraping_the_barrel:
+      en: The Last Levy
+      es: La Última Leva
+      art: >-
+        an old veteran with white hair and a teenager standing side by side in oversized mismatched gear, both
+        holding old rifles, an ill-fitting rusty exoskeleton brace on the old man's leg; front three-quarter view;
+        grey smoky light, desperate mood.
+
+# =============================================================================
 technical_notes:
   - id: TN006
     text: >
