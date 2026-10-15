@@ -43,6 +43,7 @@ from .emitters import ideologies as em_ideologies
 from .emitters import intelligence as em_intelligence
 from .emitters import military as em_military
 from .emitters import menu as em_menu
+from .emitters import ui_skin as em_ui_skin
 from .emitters import militia as em_militia
 from .emitters import manpower_relief as em_manpower_relief
 from .emitters import cazas as em_cazas
@@ -100,6 +101,7 @@ EMITTERS = [
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
     ("menu", em_menu.emit),
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
+    ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)
     ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)
     ("balance", em_balance.emit),       # ultimo: resume lo que quedo

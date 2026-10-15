@@ -1666,3 +1666,25 @@ depende de una elección excluyente pesa 1/2). Antes: de -14% (HSN) a +11%
 - La planilla mide mejor: la HSN arranca con sus 4 nodos, los topes de cada
   mecánica se aplican antes de la fórmula, y hay columnas de puntaje por foco
   y del camino promedio.
+
+## Piel de la interfaz (2026-10-15)
+
+Pedido: "cambiar la UI, solo frontend"; "solo cambiar piel"; "empecemos por
+la barra superior y el panel de Política" (con capturas de los dos, más la
+fila de pestañas militares que se ve debajo de la barra).
+
+- Solo imágenes: los .gui del juego (dónde va cada cosa) no se tocan, así un
+  parche no rompe la interfaz.
+- `ui_skin.py`, paso 1 (inventario): por pantalla (barra_superior ->
+  topbar.gui; politica -> countrypoliticsview.gui; pestanas_militares ->
+  producción, despliegue y logística) lee los .gui del juego instalado, los
+  sprites que usan y su textura, tamaño, cuadros (los botones traen sus
+  estados uno al lado del otro) y borde que no se estira. Va a
+  build/ui_inventario.txt y empezar.py arma ui_para_claude.zip con el
+  inventario y las texturas originales: con eso se piden las imágenes a
+  medida y se ve cómo es cada pieza original.
+- Paso 2 (aplicar): cada assets/ui/piel/<ruta del juego>.dds se escribe
+  sobre la textura del juego en esa ruta, a su tamaño. Si el juego ya no
+  trae esa ruta, aviso y no se usa.
+- Ojo: varias piezas (marcos y fondos en mosaico) se comparten con otras
+  ventanas; cambiarlas cambia el estilo de todas, que es lo que se busca.

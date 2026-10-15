@@ -3779,6 +3779,35 @@ def test_lider_visible_y_focos() -> None:
           and all(x["fin"] >= 0 for x in mech if x["var"] == "HSN_presion"), str(mech[:6]))
 
 
+def test_piel_interfaz() -> None:
+    section("piel de la interfaz: inventario por pantalla y assets/ui/piel (2026-10-15)")
+    from tools.gen import art
+    skin = REPO_ROOT / "assets" / "ui" / "piel" / "gfx" / "interface" / "topbar"
+    created = not skin.exists()
+    skin.mkdir(parents=True, exist_ok=True)
+    probe = skin / "topbar_bg_fixture.dds"
+    art.write_dds(probe, 64, 16, [(10, 200, 220)] * (64 * 16))
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+            inv = (ctx.data.get("ui_textures") or {})
+            text = Path(ctx.data["ui_inventory_path"]).read_text(encoding="utf-8")
+            check("piel: el inventario lista las texturas de la barra superior con su tamano",
+                  "gfx/interface/topbar/topbar_bg_fixture.dds  32x8" in text and "gfx/interface/topbar/topbar_bg_fixture.dds" in inv, text[:800])
+            check("piel: los botones dicen sus cuadros y su borde",
+                  "3 cuadros de 8x8" in text and "borde 4x4 (centro estirado)" in text, text[:800])
+            out = ctx.mod_root / "gfx/interface/topbar/topbar_bg_fixture.dds"
+            data = out.read_bytes() if out.exists() else b""
+            import struct as _st
+            check("piel: la imagen nueva pisa la textura del juego, a su tamano",
+                  data[:4] == b"DDS " and _st.unpack_from("<II", data, 12) == (8, 32), str(data[:24]))
+    finally:
+        probe.unlink()
+        if created:
+            import shutil as _sh
+            _sh.rmtree(REPO_ROOT / "assets" / "ui" / "piel", ignore_errors=True)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -3828,6 +3857,7 @@ def main() -> int:
         test_tecnologias_e_ia,
         test_doctrinas_y_titeres,
         test_lider_visible_y_focos,
+        test_piel_interfaz,
         test_vanilla_validation,
     ):
         test()

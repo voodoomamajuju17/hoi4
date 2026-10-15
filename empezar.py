@@ -356,6 +356,22 @@ def paso_reporte(juego, ctx) -> None:
             except OSError:
                 pass
 
+        # 2026-10-15 (piel de la interfaz): el inventario de la barra superior
+        # y del panel de Política, con las texturas originales, para pedir el
+        # arte nuevo a medida. Va en ui_para_claude.zip, al lado de este script.
+        inventario = ctx.data.get("ui_inventory_path")
+        if inventario and Path(inventario).exists():
+            try:
+                import zipfile
+                destino = REPO / "ui_para_claude.zip"
+                with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as zf:
+                    zf.write(inventario, "ui_inventario.txt")
+                    for rel, src in sorted((ctx.data.get("ui_textures") or {}).items()):
+                        zf.write(src, f"originales/{rel}")
+                bien(f"Interfaz: mandame tambien {destino.name}")
+            except OSError as exc:
+                ojo(f"No pude armar ui_para_claude.zip: {exc}")
+
         investigacion = ctx.data.get("research_path")
         if investigacion and Path(investigacion).exists():
             extra.append("")
