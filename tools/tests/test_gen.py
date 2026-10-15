@@ -2406,6 +2406,10 @@ def test_arte() -> None:
               len(tec) > 200 and len({i["description"] for i in tec}) == len(tec)
               and mc is not None and "Megafactories III" in mc["description"]
               and "Megafactories IV" in mc["description"], str(len(tec)))
+        leyes = [i for i in _arte.catalog() if i["type"] == "law_icon"]
+        check("leyes: un pedido por ley de economia, comercio y reclutamiento, todos distintos",
+              len(leyes) == 18 and len({i["description"] for i in leyes}) == 18
+              and all("EXACT SUBJECT" in i["description"] for i in leyes), str(len(leyes)))
         # 2026-10-13: "necesito los pedidos para los eventos tipo 'capturó X capital'"
         ev = {i["id"]: i for i in _arte.catalog() if i["type"] == "event_picture"}
         caps = [f"meganations_{t}.300" for t in ("efe", "fcu", "hsn", "asc", "apf", "nas", "shd", "nre")]
@@ -2921,6 +2925,9 @@ def test_faction_tech() -> None:
         # tecnologías comunes (2026-10-10): una existe en el árbol, otra no, y un alias
         art.write_dds(root / "assets/COMUN/tecnologias/tech_support.dds", 4, 4, [(40, 50, 60, 255)] * 16)
         art.write_dds(root / "assets/COMUN/tecnologias/basic_machine_tools.dds", 4, 4, [(40, 50, 60, 255)] * 16)
+        # leyes del menú del país (2026-10-15): una por su nombre, otra por su `picture`
+        art.write_dds(root / "assets/COMUN/leyes/war_economy.dds", 4, 4, [(70, 20, 20, 255)] * 16)
+        art.write_dds(root / "assets/COMUN/leyes/free_trade.dds", 4, 4, [(20, 70, 20, 255)] * 16)
         (root / "arte").mkdir()
         (root / "arte/tecnologias_descripciones.yaml").write_text(
             "groups:\n  X:\n    techs:\n      tech_trucks: {same_as: tech_support}\n", encoding="utf-8")
@@ -2944,6 +2951,15 @@ def test_faction_tech() -> None:
         check("unidad unica: su imagen va a su equipo y a sus tecnologias, solo para el EFE",
               bool(uu) and all(f"GFX_EFE_{t}_medium" in gfx for t in ([uu[0]["equipment"]] if uu[0]["equipment"] else [])
                                + uu[0]["techs"]) and "EFE_gliptodonte_" in gfx, str(uu)[:300])
+        # 2026-10-15: "haceme el pedido de imágenes para el menú de país, leyes económicas, reclutamiento"
+        laws_es = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*laws*spanish*"))
+        check("leyes: nombre de 2100 en la clave de la ley del juego",
+              'war_economy:0 "Economía de Guerra Automatizada"' in laws_es
+              and 'volunteer_only:0 "Fuerza Profesional"' in laws_es, laws_es[:300])
+        check("leyes: el icono va a la textura del sprite de la ley (por nombre y por picture)",
+              (mod / "gfx/interface/ideas/idea_war_economy.dds").exists()
+              and (mod / "gfx/interface/ideas/idea_trade_open.dds").exists(),
+              str([n for n in ctx.notes if n.startswith("leyes")]))
         import re as _re
         # 2026-10-09 (captura: "Gliptodonte Mk4" con el tanque del juego): el diseño lleva su ícono
         efe_dec = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/scripted_effects").glob("*.txt"))

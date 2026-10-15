@@ -38,6 +38,7 @@ from .emitters import forces as em_forces
 from .emitters import history as em_history
 from .emitters import faction_tech as em_faction_tech
 from .emitters import ideas as em_ideas
+from .emitters import laws as em_laws
 from .emitters import loading_quotes as em_loading_quotes
 from .emitters import ideologies as em_ideologies
 from .emitters import intelligence as em_intelligence
@@ -78,6 +79,7 @@ EMITTERS = [
     ("unique_units", em_unique_units.emit),  # antes que research (bloqueos) y decisiones (efectos)
     ("research", em_research.emit),     # la investigacion de 2100: años y nombres
     ("doctrine_look", em_doctrine_look.emit),  # nombres e iconos de 2100 de las doctrinas
+    ("laws", em_laws.emit),  # nombres e iconos de 2100 de las leyes (05_ideas -> laws)
     ("faction_tech", em_faction_tech.emit),  # armas y tecnologias con nombre e imagen de cada faccion
     ("ideas", em_ideas.emit),
     ("characters", em_characters.emit),
