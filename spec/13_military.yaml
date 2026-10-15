@@ -268,6 +268,9 @@ free_fighters:
     chassis: [small_plane_airframe_1]
     chassis_exclude: [cv_]
     max_module_year: 1940
+    # error.log 2026-10-15 ("Thrust 11 is lower than weight 13.5"): el
+    # generador saca piezas opcionales hasta que el motor pueda con el peso
+    thrust_check: true
     modules:
       fixed_main_weapon_slot: [cannon, heavy_mg, mg]
       fixed_auxiliary_weapon_slot_1: [heavy_mg, mg]

@@ -288,6 +288,19 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
             y, m, d = (int(x) for x in str(after[mega]).split(".")[:3])
             cond.add("OR", Block([("is_ai", False), ("date", Compare(">", f"{y}.{m}.{d}"))]))
         renew.add("if", Block([("limit", cond), ("create_wargoal", Block([("type", kind), ("target", anar)]))]))
+    # 2026-10-15 (game.log: la FCU en guerra con la NAS, el SHD, el EFE y la
+    # HSN a la vez): la IA recibe los objetivos del destino de a uno; el
+    # siguiente, sin guerra ni objetivo contra otra potencia y cada 4 meses.
+    majors = list((ctx.spec.raw["diplomacy"].get("race") or {}).get("tags") or [])
+    if majors:
+        from .effects import DESTINY_EFFECT, DESTINY_FLAG
+        cond = Block([("is_ai", True), ("has_country_flag", DESTINY_FLAG),
+                      ("NOT", Block([("has_country_flag", "MEGANATIONS_destino_ia_espera")])),
+                      ("NOT", Block([("OR", Block([("has_war_with", t) for t in majors]
+                                                   + [("has_wargoal_against", t) for t in majors]))]))])
+        renew.add("if", Block([("limit", cond),
+                               ("set_country_flag", Block([("flag", "MEGANATIONS_destino_ia_espera"), ("value", 1), ("days", 120)])),
+                               (DESTINY_EFFECT, True)]))
     annex = _annex_anarchy_puppets(ctx, hs, effects)
     if annex is not None:
         renew.add(ANNEX_EFFECT, True)

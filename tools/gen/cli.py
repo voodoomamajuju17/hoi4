@@ -90,6 +90,7 @@ EMITTERS = [
     ("focus_trees", em_focus_trees.emit),
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
+    ("destino_ia", em_focus_trees.emit_destiny_ai),  # objetivos del destino de a uno para la IA (focos y decisiones)
     ("intelligence", em_intelligence.emit),  # operaciones de inteligencia (18_intelligence)
     ("unit_names", em_unit_names.emit),  # nombres de divisiones y barcos (19_unit_names)
     ("mio", em_mio.emit),                  # OIM propias por meganacion (13_military -> mio)

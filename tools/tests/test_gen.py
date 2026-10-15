@@ -3815,6 +3815,13 @@ def test_piel_interfaz() -> None:
             out = ctx.mod_root / "gfx/interface/topbar/topbar_bg_fixture.dds"
             data = out.read_bytes() if out.exists() else b""
             import struct as _st
+            ia = " ".join((ctx.mod_root / "common/scripted_effects/meganations_a_destino_ia.txt").read_text(encoding="utf-8").split())
+            fcu = " ".join((ctx.mod_root / "common/national_focus/FCU_focus.txt").read_text(encoding="utf-8").split())
+            cb = " ".join((ctx.mod_root / "common/scripted_effects/meganations_casus_belli.txt").read_text(encoding="utf-8").split())
+            check("destino: la IA recibe los objetivos de a uno (game.log 2026-10-15), el jugador todos",
+                  "if = { limit = { tag = FCU }" in ia and "has_country_flag = MEGANATIONS_blanco_del_destino" in ia
+                  and "if = { limit = { is_ai = no }" in fcu and "else = { set_country_flag = MEGANATIONS_destino_escalonado" in fcu
+                  and "MEGANATIONS_destino_ia = yes" in cb and "has_wargoal_against = NAS" in cb, ia[:400])
             check("piel: la imagen nueva pisa la textura del juego, a su tamano",
                   data[:4] == b"DDS " and _st.unpack_from("<II", data, 12) == (8, 32), str(data[:24]))
     finally:
@@ -3822,6 +3829,45 @@ def test_piel_interfaz() -> None:
         if created:
             import shutil as _sh
             _sh.rmtree(REPO_ROOT / "assets" / "ui" / "piel", ignore_errors=True)
+
+
+def test_cazas_peso() -> None:
+    section("cazas gratis: el motor puede con el peso (error.log 2026-10-15)")
+    from tools.gen.emitters import unique_units as uu
+    eq = pdx.parse("""
+equipments = {
+    small_plane_airframe_1 = { year = 1936 weight = 8
+        module_slots = {
+            fixed_main_weapon_slot = { required = yes allowed_module_categories = { cannon } }
+            fixed_auxiliary_weapon_slot_1 = { required = no allowed_module_categories = { heavy_mg } }
+            engine_type_slot = { required = yes allowed_module_categories = { engine } }
+            special_type_slot_2 = { required = no allowed_module_categories = { drop_tank } }
+        } }
+}""").get("equipments")
+    mods = pdx.parse("""
+equipment_modules = {
+    aircraft_cannon_1_1x = { category = cannon add_stats = { weight = 2 } }
+    heavy_mg_2x = { category = heavy_mg add_stats = { weight = 1.5 } }
+    engine_1_1x = { category = engine add_stats = { thrust = 11 weight = 0 } }
+    drop_tanks = { category = drop_tank add_stats = { weight = 2 } }
+}""").get("equipment_modules")
+    equip = {k: v for k, v in eq.entries if k}
+    modules = {k: v for k, v in mods.entries if k}
+
+    class _Ctx:
+        notes: list = []
+        def note(self, m): self.notes.append(m)
+        def warn(self, m): self.notes.append("WARN " + m)
+    ctx = _Ctx()
+    design = {"name": "Caza", "chassis": ["small_plane_airframe_1"], "thrust_check": True,
+              "modules": {"fixed_main_weapon_slot": ["cannon"], "fixed_auxiliary_weapon_slot_1": ["heavy_mg"],
+                          "engine_type_slot": ["engine"], "special_type_slot_2": ["drop_tank"]}}
+    variant, _ = uu._design(ctx, "cazas_FCU", design, equip, modules, {}, {})
+    chosen = dict((k, pdx.text(v)) for k, v in variant.get("modules").entries)
+    check("cazas: sin el tanque de combustible el caza pesa 11,5 > 11; sin la ametralladora pesa 10",
+          "special_type_slot_2" not in chosen and "fixed_auxiliary_weapon_slot_1" not in chosen
+          and chosen.get("engine_type_slot") == "engine_1_1x" and chosen.get("fixed_main_weapon_slot") == "aircraft_cannon_1_1x",
+          str(chosen) + str(ctx.notes))
 
 
 def main() -> int:
@@ -3874,6 +3920,7 @@ def main() -> int:
         test_doctrinas_y_titeres,
         test_lider_visible_y_focos,
         test_piel_interfaz,
+        test_cazas_peso,
         test_vanilla_validation,
     ):
         test()

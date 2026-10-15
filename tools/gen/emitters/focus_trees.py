@@ -55,8 +55,23 @@ def _all_prereqs(f: dict) -> list[str]:
 
 
 def emit(ctx: BuildContext) -> None:
+    effects_mod.DESTINY_PICKS.clear()
     _emit(ctx)
     effects_mod.flush_tooltips(ctx)
+
+
+def emit_destiny_ai(ctx: BuildContext) -> None:
+    """MEGANATIONS_destino_ia (2026-10-15): el siguiente objetivo del destino de
+    la IA, de a uno (effects.py -> wargoal_holders ai_one_at_a_time). Lo corre
+    el pulso mensual (MEGANATIONS_renovar_casus_belli). Va después de las
+    decisiones, que también lo arman; el archivo empieza con "a" para que el
+    juego lo lea antes que meganations_casus_belli.txt, que lo llama."""
+    body = Block()
+    for tag, pick in sorted(effects_mod.DESTINY_PICKS.items()):
+        body.add("if", Block([("limit", Block([("tag", tag)]))] + pick.entries))
+    ctx.write_script("common/scripted_effects/meganations_a_destino_ia.txt",
+                     Block([(effects_mod.DESTINY_EFFECT, body)]), source=SOURCE)
+    ctx.note(f"destino de la IA de a uno: {', '.join(sorted(effects_mod.DESTINY_PICKS)) or 'ninguno'}")
 
 
 def _emit(ctx: BuildContext) -> None:

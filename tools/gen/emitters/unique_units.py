@@ -382,6 +382,28 @@ def _design(ctx, uid: str, design: dict, equip: dict[str, Block], modules: dict[
         elif text(sb.get("required")) == "yes":
             ctx.warn(f"{uid}: la casilla obligatoria {slot} quedo vacia")
 
+    if design.get("thrust_check"):
+        # error.log 2026-10-15: "'Caza Eagle Prime' - Thrust 11 is lower than
+        # weight 13.5": el juego rechaza el diseño. Se sacan piezas que no son
+        # obligatorias (de la última preferida a la primera) hasta que el
+        # motor pueda con el peso.
+        def total(key: str) -> float:
+            return _stat(block, equip, key) + sum(_stat(modules.get(m) or Block(), {}, key) for m in chosen.values())
+        optional = [s for s in reversed(order) if s in chosen and text((slots.get(s) or Block()).get("required")) != "yes"
+                    and "engine" not in s]
+        dropped = []
+        while total("weight") > total("thrust") > 0 and optional:
+            slot = optional.pop(0)
+            dropped.append(f"{slot}={chosen.pop(slot)}")
+            picked_from.pop(slot, None)
+        if dropped:
+            ctx.note(f"{uid}: sin {', '.join(dropped)} para que el motor pueda con el peso "
+                     f"(empuje {total('thrust'):g}, peso {total('weight'):g})")
+        if total("thrust") == 0:
+            ctx.warn(f"{uid}: no pude leer empuje y peso de las piezas; el diseño va sin control de peso")
+        elif total("weight") > total("thrust"):
+            ctx.warn(f"{uid}: empuje {total('thrust'):g} menor que el peso {total('weight'):g} aun sin piezas opcionales")
+
     variant = Block([("name", Quoted(design["name"])), ("type", chassis), ("parent_version", 0)])
     variant.add("modules", Block(list(chosen.items())))
     ups = _inherited(block, equip, "upgrades")
@@ -399,6 +421,25 @@ def _design(ctx, uid: str, design: dict, equip: dict[str, Block], modules: dict[
     ctx.note(f"{uid}: diseño '{design['name']}' sobre {chassis}: "
              + ", ".join(f"{s}={m} ({picked_from[s]})" for s, m in chosen.items()))
     return variant, grant
+
+
+def _stat(block: Block, equip: dict[str, Block], key: str) -> float:
+    """Un valor (thrust, weight) del equipo o de la pieza: directo, en add_stats
+    o add_average_stats, o heredado del padre/arquetipo."""
+    seen = set()
+    while isinstance(block, Block):
+        for where in (block, block.get("add_stats"), block.get("add_average_stats")):
+            if isinstance(where, Block) and where.get(key) is not None:
+                try:
+                    return float(text(where.get(key)))
+                except (TypeError, ValueError):
+                    pass
+        nxt = text(block.get("parent")) or text(block.get("archetype"))
+        if not nxt or nxt in seen:
+            return 0.0
+        seen.add(nxt)
+        block = equip.get(nxt)
+    return 0.0
 
 
 def _conflicts(mid: str, mb: Block, chosen: dict[str, str], modules: dict[str, Block]) -> bool:

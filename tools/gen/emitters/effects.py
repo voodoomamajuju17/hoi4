@@ -630,19 +630,39 @@ def render_effects(owner: str, items: list[dict], known,
             kind = item.get("type", "take_state")
             if ec.wargoals and kind not in ec.wargoals:
                 raise SpecError(f"{owner}: tipo de wargoal '{kind}' no existe en common/wargoals/", where=where)
-            for names in item.get("states") or []:
-                sid = resolve_state(names)
-                if sid is None:
-                    continue
+            sids = [sid for sid in (resolve_state(n) for n in item.get("states") or []) if sid is not None]
+
+            def valid() -> Block:
                 friendly = Block([("tag", "ROOT"), ("is_subject_of", "ROOT"), ("is_in_faction_with", "ROOT"),
                                   ("ROOT", Block([("has_guaranteed", "PREV")]))])
-                limit = Block([("NOT", Block([("is_controlled_by", "ROOT")])),
-                               ("OWNER", Block([("NOT", Block([("OR", friendly)]))]))])
+                return Block([("NOT", Block([("is_controlled_by", "ROOT")])),
+                              ("OWNER", Block([("NOT", Block([("OR", friendly)]))]))])
+
+            def goal_for(sid: int, extra: Block | None = None) -> Block:
+                limit = valid()
+                if extra is not None:
+                    limit.entries.extend(extra.entries)
                 goal = Block([("type", kind), ("target", "PREV"), ("generator", Block([(None, sid)]))])
-                take = Block([("limit", limit),
-                              ("OWNER", Block([("ROOT", Block([("create_wargoal", goal)]))]))])
-                block.add(str(sid), Block([("if", take)]))
+                return Block([("if", Block([("limit", limit),
+                                            ("OWNER", Block([("ROOT", Block([("create_wargoal", goal)]))]))]))])
+
+            every = Block([(str(sid), goal_for(sid)) for sid in sids])
             effects_used.setdefault("create_wargoal", owner)
+            if not item.get("ai_one_at_a_time"):
+                block.entries.extend(every.entries)
+                continue
+            # game.log 2026-10-15: con el objetivo contra TODOS los dueños de
+            # sus regiones, la IA de la FCU le declaró a la NAS (y al SHD, que
+            # la garantiza), al EFE y a la HSN en seis meses. La IA recibe uno
+            # por vez: contra el primer dueño de la lista; el siguiente, cuando
+            # no tenga guerra ni objetivo contra otra potencia (pulso mensual,
+            # MEGANATIONS_destino_ia). El jugador los recibe todos.
+            pick = destiny_pick_block(sids, goal_for, valid)
+            tag = owner.split("_")[0]
+            DESTINY_PICKS.setdefault(tag, pick)
+            block.add("if", Block([("limit", Block([("is_ai", False)]))] + every.entries))
+            block.add("else", Block([("set_country_flag", DESTINY_FLAG)] + pick.entries))
+            effects_used.setdefault("set_country_flag", owner)
             continue
         if effect == "claim":
             block.add("add_claim_by", item["value"])
@@ -1484,7 +1504,32 @@ def dynamic_modifier_ids(spec_raw: dict) -> set[str]:
 
 
 # efectos que escribe el generador mismo (no están en 14_decisions.yaml)
-GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MEGANATIONS_flota_pirata_ZAS", "MEGANATIONS_absorber_capital"}
+GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MEGANATIONS_flota_pirata_ZAS", "MEGANATIONS_absorber_capital",
+                      "MEGANATIONS_destino_ia"}
+
+# Objetivos del destino de a uno para la IA (2026-10-15): país -> bloque que
+# elige al primer dueño válido de sus regiones y crea los objetivos solo
+# contra él. focus_trees.py lo escribe en MEGANATIONS_destino_ia.
+DESTINY_PICKS: dict[str, Block] = {}
+DESTINY_FLAG = "MEGANATIONS_destino_escalonado"
+DESTINY_EFFECT = "MEGANATIONS_destino_ia"
+
+
+def destiny_pick_block(sids: list[int], goal_for, valid) -> Block:
+    chosen, target = "MEGANATIONS_destino_elegido", "MEGANATIONS_blanco_del_destino"
+    out = Block()
+    for sid in sids:
+        limit = valid()
+        limit.add("ROOT", Block([("NOT", Block([("has_country_flag", chosen)]))]))
+        out.add(str(sid), Block([("if", Block([
+            ("limit", limit),
+            ("OWNER", Block([("set_country_flag", target)])),
+            ("ROOT", Block([("set_country_flag", chosen)]))]))]))
+    for sid in sids:
+        out.add(str(sid), goal_for(sid, Block([("OWNER", Block([("has_country_flag", target)]))])))
+    out.add("every_country", Block([("limit", Block([("has_country_flag", target)])), ("clr_country_flag", target)]))
+    out.add("clr_country_flag", chosen)
+    return out
 
 
 def scripted_effect_ids(spec_raw: dict) -> set[str]:

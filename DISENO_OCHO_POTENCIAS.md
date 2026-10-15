@@ -1688,3 +1688,25 @@ fila de pestañas militares que se ve debajo de la barra).
   trae esa ruta, aviso y no se usa.
 - Ojo: varias piezas (marcos y fondos en mosaico) se comparten con otras
   ventanas; cambiarlas cambia el estilo de todas, que es lo que se busca.
+
+## Logs de la versión del equilibrio (2026-10-15)
+
+- **Cazas gratis rechazados** (error.log: "'Caza Eagle Prime' - Thrust 11 is
+  lower than weight 13.5", también 'Caza Petrel'): el diseño pesaba más de
+  lo que el motor empuja y el juego no lo creaba. Con `thrust_check` el
+  generador suma empuje y peso del fuselaje y las piezas (del juego
+  instalado) y saca piezas opcionales, de la última preferida a la primera
+  (tanque de combustible, radio, ametralladora auxiliar), hasta que el motor
+  pueda. El reporte dice qué sacó.
+- **La FCU contra medio mundo** (game.log: en 2101-2102 le declaró a la NAS
+  —y con ella al SHD, que la garantiza por el Pacto del Mandato—, al EFE y
+  a la HSN): el foco y la decisión del destino daban objetivos de guerra
+  contra TODOS los dueños de sus regiones de una, y la IA los usa aunque su
+  plan diga que no. Ahora (`ai_one_at_a_time`) la IA recibe objetivos solo
+  contra el primer dueño válido de la lista; el siguiente llega con el pulso
+  mensual (MEGANATIONS_destino_ia), cuando no tiene guerra ni objetivo
+  contra otra potencia, y como mucho cada 4 meses. El jugador los sigue
+  recibiendo todos.
+- Lo demás del error.log es del juego base (eventos de EE.UU., España,
+  México y Dinamarca que el mod saca, la ventana de rasgos del ejército, la
+  IA de desembarcos, OIM australianas e inglesas).
