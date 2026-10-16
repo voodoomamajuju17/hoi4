@@ -3,6 +3,7 @@
   python -m tools.arte.arte pedidos            escribe arte/pedidos/*.txt
   python -m tools.arte.arte importar <carpeta|zip>
                                               convierte y ubica las imágenes
+  python -m tools.arte.arte piel [originales]  arma assets/ui/piel/ (tools/arte/piel.py)
 
 El contrato: cada pedido es un bloque ASSET_REQUEST con un `id`. La imagen que
 vuelve se llama exactamente `<id>.png` (o .jpg/.webp). El importador sabe por
@@ -68,6 +69,10 @@ KINDS = {
     # leyes del menú del país (05_ideas -> laws, 2026-10-15); el generador las
     # lleva al tamaño del ícono de ley del juego
     "law_icon": {"size": (256, 256), "transparent": True, "fit": "contain"},
+    # íconos de la piel de la interfaz (arte/piel_interfaz.yaml, 2026-10-16):
+    # se guardan tal cual en assets/ui/piel_iconos/ y tools/arte/piel.py los
+    # lleva a cada textura (placa del botón, cuadros, tamaño)
+    "ui_icon": {"size": (512, 512), "transparent": True, "fit": "contain"},
 }
 
 COMMON_STYLE = (
@@ -291,6 +296,7 @@ def catalog() -> list[dict]:
     items += _tech_items()
     items += _doctrine_items()
     items += _law_items()
+    items += _ui_icon_items()
     # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
     # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
     for u in _load("20_unique_units.yaml").get("units") or []:
@@ -514,6 +520,33 @@ def _law_items() -> list[dict]:
     return items
 
 
+def _ui_icon_items() -> list[dict]:
+    """Íconos nuevos de la piel de la interfaz (arte/piel_interfaz.yaml)."""
+    import yaml
+    path = REPO / "arte" / "piel_interfaz.yaml"
+    if not path.exists():
+        return []
+    spec = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    items = []
+    for p in spec.get("iconos") or []:
+        dest = REPO / "assets" / "ui" / "piel_iconos" / f"{p['id']}.dds"
+        n = int(p.get("cuadros", 1))
+        size = None
+        if p.get("ancho") and p.get("alto"):
+            size = (int(p["ancho"]), int(p["alto"]))
+        photo = p.get("uso") == "foto"
+        items.append({
+            "type": "ui_icon", "tag": "INTERFAZ", "id": f"ui_{p['id']}", "dest": dest, "done": dest.exists(),
+            "size": size or ((624, 840) if photo else (512, 512)),
+            "transparent": not photo,
+            "description": (f"WHAT: {p['donde']}, in the redesigned interface of a 2100 grand strategy game"
+                            + (f" (the game shows it as {n} states; Claude makes them from this one image)" if n > 1 else "")
+                            + f". EXACT SUBJECT: {_one_line(p['dibujo'])}"),
+            "style": _one_line(p.get("estilo") or spec.get("estilo_iconos") or ""),
+        })
+    return items
+
+
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
 SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
 TECH_GROUPS = ("INFANTERIA", "APOYO", "BLINDADOS", "ARTILLERIA", "NAVAL", "AVIACION", "INGENIERIA", "INDUSTRIA")
@@ -548,7 +581,7 @@ def _request(item: dict) -> str:
         f"size: {w}x{h} (o más grande con la misma proporción)",
         f"style: {item['style'] if item.get('style') else common + '; ' + style}",
         f"description: {item['description']}",
-        f"transparent_background: {'true' if kind['transparent'] else 'false'}",
+        f"transparent_background: {'true' if item.get('transparent', kind['transparent']) else 'false'}",
         "",
     ])
 
@@ -598,7 +631,8 @@ def pedidos() -> None:
 ("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
-             ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes")]
+             ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes"),
+             ("ui_icon", "16_interfaz")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -722,6 +756,14 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
+        if item["type"] == "ui_icon":
+            if item.get("transparent", True):
+                img = _recortar(img)
+            img.thumbnail((1024, 1024), Image.LANCZOS)
+            raw = img.tobytes()
+            art.write_dds(item["dest"], img.width, img.height, [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)])
+            done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
+            continue
         if item["type"] in ("weapon_icon", "plane_icon", "unique_icon", "shared_icon", "tech_icon", "doctrine_icon", "law_icon"):
             img = _recortar(img)
         if kind["fit"] == "cover":
@@ -758,6 +800,10 @@ def importar(source: str) -> None:
     print(f"{len(done)} imagenes importadas")
     for line in done:
         print("  " + line)
+    if any(line.startswith("ui_icon") for line in done):
+        from tools.arte import piel
+        for line in piel.aplicar():
+            print(line)
     if unknown:
         print(f"{len(unknown)} sin id conocido (nombre de archivo distinto al pedido): {', '.join(unknown)}")
     if tmp:
@@ -771,5 +817,8 @@ if __name__ == "__main__":
         importar(sys.argv[2])
     elif len(sys.argv) >= 2 and sys.argv[1] == "chicos":
         chicos()
+    elif len(sys.argv) >= 2 and sys.argv[1] == "piel":
+        from tools.arte import piel
+        piel.main(sys.argv[2:])
     else:
         print(__doc__)

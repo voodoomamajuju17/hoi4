@@ -140,11 +140,12 @@ def apply_skin(ctx: BuildContext) -> int:
     from .menu import _dims, _resize, _texture_dims
     base = ctx.spec.root.parent.joinpath(*SKIN_DIR)
     done = 0
+    missing: list[str] = []
     for art in sorted(base.glob("**/*.dds")) if base.exists() else []:
         rel = art.relative_to(base).as_posix()
         vw, vh = _texture_dims(ctx, rel)
         if not (vw and vh):
-            ctx.warn(f"piel: {rel} no existe en el juego instalado (¿cambió de nombre?); no se usa")
+            missing.append(rel)
             continue
         data = art.read_bytes()
         w, h = _dims(data)
@@ -158,6 +159,10 @@ def apply_skin(ctx: BuildContext) -> int:
         dest.write_bytes(data)
         ctx.track(dest)
         done += 1
+    if missing:
+        # una sola línea: con un parche que renombra texturas pueden ser muchas
+        ctx.warn(f"piel: {len(missing)} texturas no existen en el juego instalado (¿cambiaron de nombre?), "
+                 f"no se usan: {', '.join(missing[:12])}{' ...' if len(missing) > 12 else ''}")
     return done
 
 

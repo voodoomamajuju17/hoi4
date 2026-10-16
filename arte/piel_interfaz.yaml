@@ -1,0 +1,372 @@
+# Piel de la interfaz (2026-10-16): qué texturas del juego se cambian y cómo.
+# Lo aplica `python3 -m tools.arte.arte piel` (tools/arte/piel.py) con las
+# texturas originales del zip ui_para_claude.zip que arma empezar.bat; el
+# resultado queda en assets/ui/piel/ y el build lo copia (ui_skin.py).
+#
+# retexturar: misma forma, relieve y transparencia que el original, con el
+#   material del mod; los dorados pasan al acento verde azulado y los demás
+#   colores (rojo, verde, azul: significan algo) quedan.
+# iconos: dibujo nuevo pedido a ChatGPT (tipo ui_icon, archivo ui_<id>.png).
+#   uso barra: va sobre la placa del botón de la barra, cuadro 2 más claro
+#   uso directo: reemplaza el ícono entero; resaltado: cuadro 2 con contorno
+#   uso combustible: cuadro 2 con flechas verdes (sube), 3 rojas (baja)
+#   uso foto: llena el cuadro entero (sin transparencia)
+# Fuera a propósito: máscaras, brillos y animaciones, banderas, tiras de
+# íconos distintos (tensión mundial, categorías, políticas de ocupación),
+# barras de progreso (sus colores dicen algo) y los fondos que ya cambia
+# 11_scenario.yaml -> tab_backgrounds (tiled_plain_bg, tiled_generic_overlay_bg1).
+
+material: assets/ui/fondo_ventanas.dds
+
+retexturar:
+  # barra_superior
+  - gfx/interface/tiles/tiled_generic_bg_1.dds
+  - gfx/interface/tiles/tiled_mini_dialog.dds
+  - gfx/interface/date_pause_button.dds
+  - gfx/interface/date_pause_button_bg.dds
+  - gfx/interface/factions/ui/topbar_faction_empty.dds
+  - gfx/interface/generic_box_96.dds
+  - gfx/interface/generic_box_smallest.dds
+  - gfx/interface/topbar/airoverview_button.dds
+  - gfx/interface/topbar/armyoverview_button.dds
+  - gfx/interface/topbar/armyoverview_buttons_bg.dds
+  - gfx/interface/topbar/background_extended.dds
+  - gfx/interface/topbar/musicplayer/music_next_button.dds
+  - gfx/interface/topbar/musicplayer/music_pause_button.dds
+  - gfx/interface/topbar/musicplayer/musicplayer_button.dds
+  - gfx/interface/topbar/musicplayer/playlist_bg.dds
+  - gfx/interface/topbar/musicplayer/playlist_button.dds
+  - gfx/interface/topbar/navyoverview_button.dds
+  - gfx/interface/topbar/speed_step.dds
+  - gfx/interface/topbar/toolbar/construction_button.dds
+  - gfx/interface/topbar/toolbar/deployment_button.dds
+  - gfx/interface/topbar/toolbar/diplomacy_button.dds
+  - gfx/interface/topbar/toolbar/intelligence_button.dds
+  - gfx/interface/topbar/toolbar/ledger_button.dds
+  - gfx/interface/topbar/toolbar/production_button.dds
+  - gfx/interface/topbar/toolbar/science_button.dds
+  - gfx/interface/topbar/toolbar/staff_office_button.dds
+  - gfx/interface/topbar/toolbar/topbar_decisionview_button.dds
+  - gfx/interface/topbar/toolbar/trade_button.dds
+  - gfx/interface/topbar/topbar_convoys.dds
+  - gfx/interface/topbar/topbar_date_overlay.dds
+  # politica
+  - gfx/interface/add_pol_idea_button.dds
+  - gfx/interface/closebutton.dds
+  - gfx/interface/government_button.dds
+  - gfx/interface/large_flag_frame.dds
+  - gfx/interface/main_screens_bottom.dds
+  - gfx/interface/nf_close_button.dds
+  - gfx/interface/occupation_policy_button.dds
+  - gfx/interface/occupation_policy_button_selected.dds
+  - gfx/interface/occupied_list_entry.dds
+  - gfx/interface/pol_goal_bg.dds
+  - gfx/interface/pol_goal_progress_frame.dds
+  - gfx/interface/pol_leader_frame.dds
+  - gfx/interface/pol_party_colour_bg.dds
+  - gfx/interface/pol_piechart_bg.dds
+  - gfx/interface/pol_view_bg.dds
+  - gfx/interface/tension_war_list_major.dds
+  - gfx/interface/tiles/tiled_window2_1b_border.dds
+  - gfx/interface/tiles/tiled_window_1b_border.dds
+  - gfx/interface/tiles/tiled_window_2b_border.dds
+  - gfx/interface/add_national_goal_button.dds
+  - gfx/interface/autonomy/autonomy_level_button.dds
+  - gfx/interface/autonomy/subject_button.dds
+  - gfx/interface/autonomy/subjects_entry_bg.dds
+  - gfx/interface/buttons/icon_button_32x32.dds
+  - gfx/interface/category_header.dds
+  - gfx/interface/dismantle_faction_button.dds
+  - gfx/interface/factions/ui/factions_button.dds
+  - gfx/interface/government_in_exile/countryview_government_in_exile_bg.dds
+  - gfx/interface/government_in_exile/government_in_exile_entry_bg.dds
+  - gfx/interface/government_in_exile/government_in_exile_progressbar_bg.dds
+  - gfx/interface/government_in_exile/reinstate_button.dds
+  - gfx/interface/header_bg.dds
+  - gfx/interface/icon_exiled_governments.dds
+  - gfx/interface/icon_manage_subjects.dds
+  - gfx/interface/icon_occupied_territories.dds
+  - gfx/interface/idea_entry_bg_2.dds
+  - gfx/interface/idea_entry_bg_3.dds
+  - gfx/interface/idea_group_header.dds
+  - gfx/interface/leading_pol_party_bg.dds
+  - gfx/interface/occupation/collaboration_bar_large_bg.dds
+  - gfx/interface/occupation/collaboration_entry_bg.dds
+  - gfx/interface/relations/relation_join_faction.dds
+  - gfx/interface/small_flag_frame_thin.dds
+  - gfx/interface/small_flag_frame_thin2.dds
+  # pestanas_militares
+  - gfx/interface/button_221x34.dds
+  - gfx/interface/cancel_conveyor_button.dds
+  - gfx/interface/collapse_or_close_buttons.dds
+  - gfx/interface/delete_template_button.dds
+  - gfx/interface/deploy_conveyor_button.dds
+  - gfx/interface/deploy_line_button.dds
+  - gfx/interface/deploy_priority_equipment_meter_bg.dds
+  - gfx/interface/deploy_reinforcements_entry.dds
+  - gfx/interface/deployment_binding.dds
+  - gfx/interface/deployment_named_division_bg.dds
+  - gfx/interface/deployment_named_division_obsolete_bg.dds
+  - gfx/interface/equipment_item.dds
+  - gfx/interface/foreign_templates_dropdown_button.dds
+  - gfx/interface/logistic_fuel_types.dds
+  - gfx/interface/logistics_fuel_graph_entry.dds
+  - gfx/interface/naval_decrease_amount.dds
+  - gfx/interface/naval_increase_amount.dds
+  - gfx/interface/small_button_71x26.dds
+  - gfx/interface/subview_header_bg_375x101.dds
+  - gfx/interface/tiles/tiled_plain_bg_small.dds
+  - gfx/interface/tiles/tiled_window.dds
+  - gfx/interface/tiles/tiled_window_1b_thin_border.dds
+  - gfx/interface/toggle_obsolete_button.dds
+  - gfx/interface/add_limit_bg.dds
+  - gfx/interface/change_conveyor_order_btn.dds
+  - gfx/interface/chart_history_level_button.dds
+  - gfx/interface/chart_history_type_button.dds
+  - gfx/interface/collapse_conveyor_btn.dds
+  - gfx/interface/conveyor_group_btn.dds
+  - gfx/interface/conveyor_group_btn_frame.dds
+  - gfx/interface/conveyor_location_btn.dds
+  - gfx/interface/deploy_priority_title_bg.dds
+  - gfx/interface/diplo_countrylist_flag_frame.dds
+  - gfx/interface/div_designer_colonial_flag_frame.dds
+  - gfx/interface/div_designer_colonial_flag_frame2.dds
+  - gfx/interface/div_designer_exile_flag_frame2.dds
+  - gfx/interface/generic_checkbox.dds
+  - gfx/interface/government_in_exile/division_designer_button.dds
+  - gfx/interface/linechart_frame.dds
+  - gfx/interface/logistics_air_equipment_entry_bg.dds
+  - gfx/interface/logistics_entry_bg.dds
+  - gfx/interface/logistics_equipment_entry_bg.dds
+  - gfx/interface/logistics_info_equip_variant_entry.dds
+  - gfx/interface/logistics_naval_equipment_entry_bg.dds
+  - gfx/interface/logistics_other_entry_bg.dds
+  - gfx/interface/logistics_win_bottom.dds
+  - gfx/interface/military_deployment_add_line_bg.dds
+  - gfx/interface/military_deployment_add_line_btn.dds
+  - gfx/interface/military_deployment_conveyor_bg.dds
+  - gfx/interface/military_deployment_end_line.dds
+  - gfx/interface/military_deployment_line_bg.dds
+  - gfx/interface/naviesview/btn_close.dds
+  - gfx/interface/naviesview/btn_delete.dds
+  - gfx/interface/progress_marker.dds
+  - gfx/interface/strategicair/details_linechart_bg.dds
+  - gfx/interface/tradeview/trade_filter_bg.dds
+  - gfx/interface/unitcontrol/unit_list_header.dds
+
+# Cada pedido: qué es, dónde se ve, el dibujo exacto, cámara, luz y encuadre.
+# `estilo` va igual en todos los de la barra y de recursos, así combinan.
+estilo_iconos: >-
+  game user-interface icon for a grand strategy game set in the year 2100. Material: engraved brushed
+  steel, pale silver-grey, with a thin cyan-teal light running along the upper and left edges of every
+  shape (like light catching a bevel), and a solid dark graphite outline about 3% of the canvas wide
+  around the whole silhouette so it reads on any background. Slight bevel and soft inner shading, no
+  gloss highlights. Flat straight-on front view, orthographic, no perspective. Light from the top left,
+  cool and even, no cast shadow on the background. One bold simple silhouette with at most three
+  inner details: it must still read at 27 pixels. Transparent background, nothing around the subject:
+  no plate, no circle, no frame, no glow halo. No text, no letters, no numbers, no watermark.
+
+iconos:
+  # -- barra de herramientas (arriba a la izquierda): botón 55x41, 2 cuadros
+  - id: diplomacia
+    textura: gfx/interface/topbar/toolbar/diplomacy_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Diplomacia de la barra superior
+    dibujo: >-
+      two armoured gauntlets shaking hands, seen from the side: the left hand comes in from the lower
+      left, the right hand from the lower right, they meet in the exact centre. Behind the clasp, a thin
+      ring of a globe (one horizontal line and one curved meridian) the width of the two hands, half
+      hidden behind them. Shape wider than tall, filling 90% of the width.
+  - id: produccion
+    textura: gfx/interface/topbar/toolbar/production_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Producción de la barra superior
+    dibujo: >-
+      an industrial robot arm with three segments, its base at the lower left, rising diagonally to the
+      upper right, its two-finger gripper holding a large cogwheel with eight square teeth that sits in
+      the right half of the canvas, centre slightly above the middle. The cogwheel is the largest shape;
+      the arm overlaps its lower left edge.
+  - id: investigacion
+    textura: gfx/interface/topbar/toolbar/science_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Investigación de la barra superior
+    dibujo: >-
+      a laboratory flask with a round body and a narrow neck, standing upright in the centre and filling
+      80% of the height. Inside the round body, a small atom: a dot nucleus and two thin elliptical
+      orbits crossing in an X. A short stub of circuit trace with a dot at its end comes out of each
+      side of the flask at mid height.
+  - id: construccion
+    textura: gfx/interface/topbar/toolbar/construction_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Construcción de la barra superior
+    dibujo: >-
+      a tower crane in side view: a vertical lattice mast on the left third, a long horizontal jib at the
+      top running to the right edge, and from the end of the jib a cable lowering a hexagonal building
+      module (a flat hexagonal prism seen from the front) into the lower right quarter. The mast stands
+      on a short base line at the bottom.
+  - id: despliegue
+    textura: gfx/interface/topbar/toolbar/deployment_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Despliegue (reclutar y desplegar divisiones) de la barra superior
+    dibujo: >-
+      a front view of a 2100 combat helmet with a wide visor slit, centred and filling the upper two
+      thirds of the canvas. Below it, a thick chevron arrow pointing down onto a short flat landing bar
+      at the bottom edge, as if the soldier is being dropped into place.
+  - id: inteligencia
+    textura: gfx/interface/topbar/toolbar/intelligence_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Inteligencia (agencia) de la barra superior
+    dibujo: >-
+      a mechanical eye seen straight on: an almond-shaped eye outline the full width of the canvas, and
+      inside it a round camera lens with a six-blade iris aperture as the pupil. Two thin arcs above the
+      eye, like a scanning signal, each shorter than the one below.
+  - id: registro
+    textura: gfx/interface/topbar/toolbar/ledger_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón del Registro (estadísticas y comparaciones) de la barra superior
+    dibujo: >-
+      an upright data tablet with rounded corners, slightly taller than wide, centred. On its screen, four
+      vertical bars of rising height from left to right on a base line, and above them a thin line
+      chart with three dots crossing the bars diagonally.
+  - id: estado_mayor
+    textura: gfx/interface/topbar/toolbar/staff_office_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón del Estado Mayor (oficiales) de la barra superior
+    dibujo: >-
+      a chess knight piece in side view, facing right, standing in the centre on a flat square grid tile
+      drawn in slight top view under its base (three lines each way). Above the knight's head, a small
+      five-pointed star. The knight fills 80% of the height.
+  - id: decisiones
+    textura: gfx/interface/topbar/toolbar/topbar_decisionview_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Decisiones de la barra superior
+    dibujo: >-
+      a judge's gavel tilted 45 degrees, head at the upper left, handle reaching down to the lower right,
+      about to strike a flat square block lying at the bottom left. The block carries a simple circuit
+      pattern on its front face (two lines with dots). Three short impact lines spread from the point
+      where head and block will meet.
+  - id: comercio
+    textura: gfx/interface/topbar/toolbar/trade_button.dds
+    uso: barra
+    cuadros: 2
+    donde: botón de Comercio de la barra superior
+    dibujo: >-
+      a shipping container in front view in the centre, ribbed with four vertical grooves, wider than
+      tall. Around it two thick curved arrows form a circle: one runs over the top from left to right,
+      the other under the bottom from right to left, each arrowhead pointing at the tail of the other.
+
+  # -- recursos de la barra (arriba al centro): íconos chicos
+  - id: mano_de_obra
+    textura: gfx/interface/manpower_icon.dds
+    uso: directo
+    donde: mano de obra (barra superior y todo el juego)
+    dibujo: >-
+      three soldiers in head-and-shoulders silhouette, front view: one in front in the centre, two
+      behind it to the left and right, slightly higher and partly hidden. All three wear 2100 helmets
+      with a horizontal visor line. Square composition filling 90% of the canvas.
+  - id: poder_politico
+    textura: gfx/interface/pol_power_icon.dds
+    uso: directo
+    donde: poder político (barra superior y todo el juego)
+    dibujo: >-
+      a parliament building in front view: a triangular pediment on four columns over three steps, and
+      rising from the centre of the roof a slim communications spire with two short crossbars and a dot
+      at the top. Square composition, the spire reaching the top edge.
+  - id: estabilidad
+    textura: gfx/interface/stability_icon.dds
+    uso: directo
+    donde: estabilidad (barra superior y todo el juego)
+    dibujo: >-
+      a balance scale in front view: a vertical post in the centre on a small base, a level horizontal
+      beam at the top with a ring (like a gyroscope) where it meets the post, and two shallow pans
+      hanging from the ends on three thin lines each. Both pans at exactly the same height.
+  - id: apoyo_guerra
+    textura: gfx/interface/war_support_icon.dds
+    uso: directo
+    donde: apoyo a la guerra (barra superior y todo el juego)
+    dibujo: >-
+      a raised clenched fist in an armoured gauntlet, front view, knuckles facing the viewer, the
+      forearm going straight down to the bottom edge. Three plates on the back of the hand and two
+      segmented rings around the wrist.
+  - id: fabricas
+    textura: gfx/interface/industrial_capacity_icon.dds
+    uso: resaltado
+    cuadros: 2
+    donde: fábricas (barra superior)
+    dibujo: >-
+      a factory in front view: a wide block with a saw-tooth roof of three teeth, two tall smokestacks
+      rising at the left, and a small robot arm folded on the right part of the roof. Two rows of
+      square windows on the front. Square composition.
+  - id: equipo
+    textura: gfx/interface/equipment_icon.dds
+    uso: directo
+    donde: equipo (barra superior y listas de equipo)
+    dibujo: >-
+      a military supply crate in three-quarter view from slightly above, longer than tall, with two
+      reinforcing bands around it and a small hexagon stencilled on its front face. Wider than tall
+      (about 5:4).
+  - id: convoyes
+    textura: gfx/interface/topbar/topbar_convoys.dds
+    uso: directo
+    donde: convoyes (barra superior)
+    dibujo: >-
+      an autonomous cargo ship in exact side view, bow to the right, a low flat hull loaded with a stack
+      of containers in the middle and a small slim bridge tower at the stern on the left, no funnel
+      smoke. Two wavy lines under the hull. Much wider than tall (about 3:2).
+  - id: bombas_nucleares
+    textura: gfx/interface/topbar/nuke_icon.dds
+    uso: directo
+    donde: bombas nucleares (barra superior)
+    dibujo: >-
+      a radiation trefoil (three blades around a centre dot) on a round disc. Here, as an exception, the
+      disc is filled with a dull warning amber and the trefoil is dark graphite; the steel and teal
+      bevel go on the disc rim only. Round, filling 95% of the canvas.
+  - id: poder_mando
+    textura: gfx/texticons/command_power.dds
+    uso: directo
+    donde: poder de mando (barra superior y oficiales)
+    dibujo: >-
+      a military field headset in front view: a headband arc across the top, an ear cup on each side,
+      and a microphone boom curving from the left ear cup to in front of where the mouth would be,
+      ending in a small round microphone. Slightly wider than tall.
+  - id: combustible
+    textura: gfx/interface/topbar/fuel_state_icon.dds
+    uso: combustible
+    cuadros: 3
+    donde: combustible (barra superior); el estado sube/baja se agrega solo
+    dibujo: >-
+      two hydrogen fuel cylinders standing upright side by side in front view, rounded tops, each with
+      a valve on top and two bands around the body, the right one slightly behind the left. Keep the
+      lower left quarter of the canvas quieter (fewer details): small arrows are added there later.
+
+  # -- política: lo que se ve cuando falta la imagen
+  - id: lider_desconocido
+    textura: gfx/leaders/leader_unknown.dds
+    uso: foto
+    donde: retrato de un líder sin imagen (panel de Política y otros)
+    estilo: >-
+      photographic studio portrait background, monochrome steel blue-grey, no text, no letters, no
+      watermark
+    dibujo: >-
+      a featureless dark silhouette of a person from the chest up, facing the camera, head centred in the
+      upper third, wearing a high-collared 2100 uniform jacket and no hat, shoulders reaching both edges.
+      Camera at eye level, portrait orientation 3:4. Behind, a soft light grey-blue fog lit from the top
+      left, darker toward the bottom corners. The silhouette is flat dark graphite with only a thin
+      cool rim light on the left side of the head and shoulder.
+  - id: foco_desconocido
+    textura: gfx/interface/goals/goal_unknown.dds
+    uso: directo
+    donde: foco nacional sin ícono (panel de Política y árbol de focos)
+    dibujo: >-
+      a bold question mark in the centre, filling 55% of the height, surrounded by an open wreath of two
+      branches whose leaves are thin circuit traces ending in dots, the branches starting at the bottom
+      centre and curving up each side, open at the top. Wider than tall (about 5:4).

@@ -1688,6 +1688,21 @@ fila de pestañas militares que se ve debajo de la barra).
   trae esa ruta, aviso y no se usa.
 - Ojo: varias piezas (marcos y fondos en mosaico) se comparten con otras
   ventanas; cambiarlas cambia el estilo de todas, que es lo que se busca.
+- Paso 3 (2026-10-16, llegó su ui_para_claude.zip): `arte/piel_interfaz.yaml`
+  y `python3 -m tools.arte.arte piel` (tools/arte/piel.py, corre con los
+  originales del zip, no en el build).
+  - 131 marcos, barras, paneles y botones **retexturados**: misma forma,
+    relieve y transparencia (todo sigue calzando con los .gui), con el metal
+    grafito de fondo_ventanas; dorados y bronces pasan a verde azulado, los
+    demás colores (rojo, verde, azul) significan algo y quedan.
+  - 22 **íconos nuevos** pedidos (16_interfaz): 10 botones de la barra (van
+    sobre la placa del botón sin el dibujo viejo; el segundo cuadro, más
+    claro), 10 recursos (mano de obra, poder político, estabilidad...; el
+    combustible lleva flechas sube/baja que agrega la herramienta), el líder
+    sin retrato y el foco sin ícono.
+  - Fuera: máscaras, brillos, animaciones, banderas, tiras de íconos
+    distintos (tensión mundial, categorías) y barras de progreso; tampoco los
+    fondos que ya cambia 11_scenario (tiled_plain_bg, overlay_bg1).
 
 ## Logs de la versión del equilibrio (2026-10-15)
 
