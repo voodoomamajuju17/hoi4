@@ -2410,6 +2410,33 @@ def test_arte() -> None:
         check("leyes: un pedido por ley de economia, comercio y reclutamiento, todos distintos",
               len(leyes) == 18 and len({i["description"] for i in leyes}) == 18
               and all("EXACT SUBJECT" in i["description"] for i in leyes), str(len(leyes)))
+        # 2026-10-16: piel de la interfaz (arte/piel_interfaz.yaml)
+        ui = [i for i in _arte.catalog() if i["type"] == "ui_icon"]
+        import yaml as _yaml
+        piel = _yaml.safe_load((REPO_ROOT / "arte" / "piel_interfaz.yaml").read_text(encoding="utf-8"))
+        ya = {(t.get("texture") or "") for t in (ctx.spec.raw.get("scenario") or {}).get("tab_backgrounds", {}).get("items", [])
+              if isinstance(t, dict)}
+        check("piel: un pedido de icono distinto por pieza, y no se pisan los fondos de 11_scenario",
+              len(ui) == len(piel["iconos"]) >= 20 and len({i["description"] for i in ui}) == len(ui)
+              and all("EXACT SUBJECT" in i["description"] and i["style"] for i in ui)
+              and not (set(piel["retexturar"]) & ya) and "gfx/interface/tiles/tiled_plain_bg.dds" in ya,
+              f"{len(ui)} {set(piel['retexturar']) & ya}")
+        try:
+            from PIL import Image as _Img
+        except ImportError:
+            _Img = None
+        if _Img is not None:
+            from tools.arte import piel as _piel
+            src = _Img.new("RGBA", (8, 4), (0, 0, 0, 0))
+            for x in range(4):
+                src.putpixel((x, 1), (200, 150, 60, 255))   # dorado
+                src.putpixel((x + 4, 1), (200, 30, 30, 255))  # rojo
+            mat = _Img.new("L", (4, 4), 128)
+            out = _piel.retexturar(src, mat)
+            g, r = out.getpixel((1, 1)), out.getpixel((5, 1))
+            check("piel: retexturar conserva tamano y transparencia, el dorado pasa a verde azulado y el rojo queda",
+                  out.size == (8, 4) and out.getpixel((0, 0))[3] == 0 and g[3] == 255
+                  and g[1] > g[0] and g[2] > g[0] and r[0] > 150 and r[1] < 80, f"{g} {r}")
         # 2026-10-13: "necesito los pedidos para los eventos tipo 'capturó X capital'"
         ev = {i["id"]: i for i in _arte.catalog() if i["type"] == "event_picture"}
         caps = [f"meganations_{t}.300" for t in ("efe", "fcu", "hsn", "asc", "apf", "nas", "shd", "nre")]
