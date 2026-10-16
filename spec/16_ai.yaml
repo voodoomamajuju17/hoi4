@@ -194,6 +194,37 @@ anarchy_wars:
     HSN: 2101.8.1
     NAS: 2102.1.1
     FCU: 2102.6.1
+  # 2026-10-16 (pedido del usuario: "Roma y la ASC declaran SIEMPRE la guerra a
+  # Emiratos y a Eurasia y siempre demasiado temprano; algún requisito previo
+  # mayor"). Para la IA, además de la fecha: un ejército de verdad y el foco de
+  # esa guerra terminado (o, si nunca lo toma, una fecha mucho más tarde). Sin
+  # esto la IA no recibe el casus belli permanente ni el plan de conquistar y
+  # declarar. El jugador sigue teniendo el casus belli desde el primer día.
+  requires:
+    NRE:
+      ZWM:
+        all:
+        - {date_after: 2101.1.1}
+        - {divisions_at_least: 24}
+        - any:
+          - {focus: NRE_el_ejercito_de_las_provincias}
+          - {date_after: 2102.6.1}
+      ZWE:
+        all:
+        - {date_after: 2102.1.1}
+        - {divisions_at_least: 30}
+        - any:
+          - {focus: NRE_la_marcha_al_norte}
+          - {not: {country_exists: ZWM}}
+          - {date_after: 2103.6.1}
+    ASC:
+      ZWE:
+        all:
+        - {date_after: 2101.1.1}
+        - {divisions_at_least: 24}
+        - any:
+          - {focus: ASC_la_liberacion_del_este}
+          - {date_after: 2102.6.1}
 
 # -----------------------------------------------------------------------------
 # Guerras del destino (2026-10-10, pedido del usuario: "que la IA persiga más
@@ -229,22 +260,22 @@ plans:
 - id: ASC_la_guerra_del_este
   country: ASC
   lore: 'Ya en guerra con Eurasia: empujar hasta el final.'
-  enable: {date_after: 2100.3.1}   # 2026-09-29: no antes de su fecha de guerra
+  # 2026-10-16: recién con el requisito de anarchy_wars.requires (ASC -> ZWE)
+  enable: {anarchy_war_ready: [ASC, ZWE]}
   strategies:
   - {type: conquer, target: ZWE, value: 200}
 - id: NRE_la_reconquista_de_oriente
   country: NRE
   lore: Ya en guerra con los Emiratos.
-  enable: {date_after: 2100.2.1}   # 2026-09-29: no antes de su fecha de guerra
+  # 2026-10-16: recién con el requisito de anarchy_wars.requires (NRE -> ZWM)
+  enable: {anarchy_war_ready: [NRE, ZWM]}
   strategies:
   - {type: conquer, target: ZWM, value: 200}
 - id: NRE_la_marcha_al_norte
   country: NRE
   lore: Terminado Oriente (o con el foco), las legiones miran a Eurasia.
-  enable:
-    any:
-    - {focus: NRE_la_marcha_al_norte}
-    - not: {country_exists: ZWM}
+  # 2026-10-16: recién con el requisito de anarchy_wars.requires (NRE -> ZWE)
+  enable: {anarchy_war_ready: [NRE, ZWE]}
   strategies:
   - {type: conquer, target: ZWE, value: 150}
   - {type: prepare_for_war, target: ZWE, value: 100}

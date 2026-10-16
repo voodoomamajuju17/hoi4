@@ -3934,6 +3934,16 @@ def test_aventuras() -> None:
               "start_civil_war = { ideology = fascism size = 0.3" in reb and "set_cosmetic_tag = ZWM_LEGION_PERDIDA" in reb, reb[-900:])
         check("aventuras: final surrealista que le cambia el nombre al país (la República del Censo)",
               "set_cosmetic_tag = ZAN_CENSO" in block(ev["zan"], "meganations_aventura_zan.125"))
+        # 2026-10-16: Roma y la Comuna no les declaran a Emiratos y Eurasia en 2100
+        cb = " ".join((ctx.mod_root / "common/scripted_effects/meganations_casus_belli.txt").read_text(encoding="utf-8").split())
+        plans = " ".join((ctx.mod_root / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8").split())
+        check("guerras contra la anarquía: la IA de Roma recibe el casus belli contra Eurasia recién con ejército y foco",
+              "tag = NRE ZWE = {" in cb and "OR = { is_ai = no AND = { date > 2100.2.1 date > 2102.1.1 has_army_size = { size > 29 }" in cb
+              and "has_completed_focus = NRE_la_marcha_al_norte" in cb, cb[:600])
+        check("guerras contra la anarquía: los planes de conquista piden el mismo requisito",
+              "ASC_la_guerra_del_este = { allowed = { original_tag = ASC } enable = { date > 2101.1.1 has_army_size = { size > 23 }" in plans
+              and "has_completed_focus = ASC_la_liberacion_del_este" in plans
+              and "NRE_declara_a_ZWE = {" in plans and "date > 2100.3.1 } } abort" not in plans)
         ideas = (ctx.mod_root / "common/ideas/ZWB_ideas.txt").read_text(encoding="utf-8")
         check("aventuras: los espíritus de las leyendas existen", "ZWB_av_leyenda_kaua = {" in ideas and "ZWB_av_muro_verde = {" in ideas)
         loc = (ctx.mod_root / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")

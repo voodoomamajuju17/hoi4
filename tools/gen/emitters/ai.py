@@ -170,8 +170,9 @@ def emit(ctx: BuildContext) -> None:
     _coalition_plans(ctx, spec.get("coalition") or {}, add_plan)
     _junta_plans(ctx, spec.get("junta_wars") or {}, add_plan)
 
+    requires = (spec.get("anarchy_wars") or {}).get("requires") or {}
     for p in spec.get("plans", []) or []:
-        add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
+        add_plan(p["id"], p["country"], p["strategies"], war_ready(p.get("enable"), requires), p.get("abort"))
     # unidades únicas (20_unique_units.yaml): se activan con su desbloqueo
     for p in ctx.data.get("unique_ai_plans") or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
@@ -433,6 +434,24 @@ def _destiny_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
     ctx.note("ia: guerras del destino: " + "; ".join(lines))
 
 
+def war_ready(cond, requires: dict):
+    """`anarchy_war_ready: [MEGA, ANARQUÍA]` -> el requisito de
+    16_ai.yaml -> anarchy_wars.requires para ese par (2026-10-16: Roma y la
+    Comuna declaraban siempre y demasiado temprano). Sin requisito, siempre."""
+    if isinstance(cond, list):
+        return [war_ready(c, requires) for c in cond]
+    if not isinstance(cond, dict):
+        return cond
+    out = {}
+    for k, v in cond.items():
+        if k == "anarchy_war_ready":
+            req = (requires.get(v[0]) or {}).get(v[1])
+            out.setdefault("all", []).append(req if req else {"always": True})
+        else:
+            out[k] = war_ready(v, requires) if isinstance(v, (dict, list)) and k != "flags" else v
+    return out
+
+
 def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
     """Guerras contra la Anarquía vecina (2026-09-28): todos arrancan en paz
     con un casus belli permanente (04_diplomacy -> anarchy_hostility). La IA
@@ -442,7 +461,9 @@ def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
     if not wars:
         return
     after = wars.get("declare_after") or {}
+    requires = wars.get("requires") or {}
     for mega, anar in ctx.data.get("anarchy_pairs") or []:
+        req = (requires.get(mega) or {}).get(anar)
         # Si la anarquía pasa a ser satélite de otro (una conferencia de paz),
         # declararle es declararle a su señor: la partida de 2026-09-29 tuvo a
         # Roma en guerra con la Comuna porque Eurasia era satélite de la ASC.
@@ -457,6 +478,8 @@ def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
         conquer_enable = dict(free)
         if after.get(mega):
             conquer_enable["date_after"] = str(after[mega])
+        if req:
+            conquer_enable["all"] = [req]
         add_plan(f"{mega}_contra_{anar}", mega, [
             {"type": "conquer", "target": anar, "value": wars.get("conquer", 150)},
         ], enable=conquer_enable, abort=gone)
@@ -464,6 +487,8 @@ def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
                   "country": {"tag": anar, "when": {"not_flag": f"{anar}_intocable", "subject": False}}}
         if after.get(mega):
             enable["date_after"] = str(after[mega])
+        if req:
+            enable["all"] = [req]
         add_plan(f"{mega}_declara_a_{anar}", mega,
                  [{"type": "declare_war", "target": anar, "value": wars.get("declare", 100)}], enable=enable, abort=gone)
 

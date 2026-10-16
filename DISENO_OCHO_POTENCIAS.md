@@ -1791,3 +1791,21 @@ surreal, guerra".
   assets/events/<evento>.dds y el evento las usa solo.
 - Sin probar en partida: los textos, los gatillos y las rebeliones salen
   bien en el build y en las pruebas, pero nadie jugó todavía una saga entera.
+
+## Roma y la Comuna contra Emiratos y Eurasia: requisito mayor (2026-10-16)
+
+Pedido: "Roma y ASC declaran SIEMPRE la guerra a Emiratos y a Eurasia y
+siempre demasiado temprano; algún tipo de requisito previo mayor".
+
+- Causa: la IA de Roma tenía el casus belli permanente contra los Emiratos
+  desde el 1 de febrero de 2100 y la Comuna contra Eurasia desde el 1 de
+  marzo, con planes de conquistar y declarar que pedían solo 12 divisiones.
+- Ahora (16_ai.yaml -> anarchy_wars.requires), para la IA, el casus belli,
+  el plan de conquista y el de declarar piden:
+  - Roma contra los Emiratos: desde 2101, 24 divisiones y el foco El
+    Ejército de las Provincias (o, si nunca lo toma, mediados de 2102).
+  - Roma contra Eurasia: desde 2102, 30 divisiones y La Marcha al Norte, o
+    los Emiratos ya caídos (o, si no, mediados de 2103).
+  - La Comuna contra Eurasia: desde 2101, 24 divisiones y La Liberación del
+    Este (o, si nunca lo toma, mediados de 2102).
+- El jugador sigue teniendo el casus belli desde el primer día.

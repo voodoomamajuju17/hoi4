@@ -271,11 +271,17 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     # Con el casus belli desde el día uno la IA declaraba sola en 2100 aunque su plan
     # esperara (2026-09-29: "Panáfrica le declara la guerra demasiado rápido a los
     # Emiratos"). El jugador lo tiene desde el primer pulso; la IA, desde su fecha.
-    after = ((ctx.spec.raw.get("ai") or {}).get("anarchy_wars") or {}).get("declare_after") or {}
+    wars = (ctx.spec.raw.get("ai") or {}).get("anarchy_wars") or {}
+    after = wars.get("declare_after") or {}
+    # 2026-10-16: requisito mayor para la IA en algunos pares (16_ai.yaml ->
+    # anarchy_wars.requires): ejército, fecha y el foco de esa guerra
+    requires = wars.get("requires") or {}
+    req_triggers: dict[str, str] = {}
     renew = Block()
     for mega, anar in pairs:
         cw = Block([("type", kind), ("target", anar)])
-        if not after.get(mega):
+        req = (requires.get(mega) or {}).get(anar)
+        if not after.get(mega) and not req:
             out[mega].append(("create_wargoal", cw))
         if mod:
             out[mega].append(("add_opinion_modifier", Block([("target", anar), ("modifier", mod)])))
@@ -284,9 +290,17 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
                       (anar, Block([("exists", True), ("NOT", Block([("has_country_flag", f"{anar}_intocable")]))])),
                       ("NOT", Block([("has_war_with", anar)])),
                       ("NOT", Block([("has_wargoal_against", anar)]))])
-        if after.get(mega):
-            y, m, d = (int(x) for x in str(after[mega]).split(".")[:3])
-            cond.add("OR", Block([("is_ai", False), ("date", Compare(">", f"{y}.{m}.{d}"))]))
+        if after.get(mega) or req:
+            ready = Block()
+            if after.get(mega):
+                y, m, d = (int(x) for x in str(after[mega]).split(".")[:3])
+                ready.add("date", Compare(">", f"{y}.{m}.{d}"))
+            if req:
+                from .effects import render_conditions
+                ready.entries.extend(render_conditions(f"{mega}_contra_{anar}", req, req_triggers,
+                                                       where="16_ai.yaml -> anarchy_wars.requires").entries)
+            cond.add("OR", Block([("is_ai", False)]
+                                 + (ready.entries if len(ready.entries) == 1 else [("AND", ready)])))
         renew.add("if", Block([("limit", cond), ("create_wargoal", Block([("type", kind), ("target", anar)]))]))
     # 2026-10-15 (game.log: la FCU en guerra con la NAS, el SHD, el EFE y la
     # HSN a la vez): la IA recibe los objetivos del destino de a uno; el
@@ -325,6 +339,8 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     effects["create_wargoal"] = SOURCE
     if mod:
         effects["add_opinion_modifier"] = SOURCE
+    if req_triggers:
+        ctx.verify_keys("triggers", req_triggers)
     ctx.verify_keys("triggers", {"has_wargoal_against": SOURCE, "exists": SOURCE, "has_war_with": SOURCE,
                                  "has_country_flag": SOURCE, "tag": SOURCE, "is_ai": SOURCE, "date": SOURCE})
     ctx.data["anarchy_pairs"] = pairs
