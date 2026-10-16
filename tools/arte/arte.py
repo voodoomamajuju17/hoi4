@@ -68,7 +68,21 @@ KINDS = {
     # leyes del menú del país (05_ideas -> laws, 2026-10-15); el generador las
     # lleva al tamaño del ícono de ley del juego
     "law_icon": {"size": (256, 256), "transparent": True, "fit": "contain"},
+    # aventuras de las anarquías (21_aventuras.yaml, 2026-10-16): un txt por
+    # anarquía, estilo historieta (Moebius + Kill Six Billion Demons); van a
+    # assets/events/<evento>.dds como cualquier imagen de evento
+    "adventure_picture": {"size": (210, 176), "transparent": False, "fit": "cover"},
 }
+
+# 2026-10-16, pedido del usuario: "el estilo tiene que ser un poco cómic/novela
+# gráfica que se inspire en los trabajos de Moebius y Kill Six Billion Demons"
+ADVENTURE_STYLE = (
+    "graphic novel panel, one single image (not a comic page, no panel borders, no speech balloons), inspired by "
+    "Moebius (Jean Giraud): clean ligne-claire ink lines, vast airy landscapes, luminous flat colour with soft "
+    "gradients, strange serene skies; and by Kill Six Billion Demons (Tom Parkinson-Morgan): ornate, densely "
+    "patterned mythic linework, cosmic grandeur, sacred-grotesque details and dramatic scale; bold readable "
+    "silhouettes that still work at 210x176 pixels, a little gore is fine, slightly tongue-in-cheek, "
+    "no text, no letters, no numbers unless the description asks for a glowing number shape, no watermark")
 
 COMMON_STYLE = (
     "Hearts of Iron IV style, retrofuturist year 2100, painterly propaganda-poster look, "
@@ -334,6 +348,36 @@ def catalog() -> list[dict]:
                 "type": "event_picture", "tag": "COMPARTIDOS" if art or tag is None else tag, "id": eid, "dest": dest,
                 "done": dest.exists(), "description": desc,
             })
+    items += _adventure_items()
+    return items
+
+
+def _adventure_items() -> list[dict]:
+    """Los eventos de las aventuras con `art` (21_aventuras.yaml): la
+    presentación, el primer capítulo de cada personaje y los momentos épicos."""
+    spec = _load("21_aventuras.yaml") if (SPEC / "21_aventuras.yaml").exists() else {}
+    items = []
+    for tag, saga in (spec.get("sagas") or {}).items():
+        ns = f"meganations_aventura_{tag.lower()}"
+        chars = {c["id"]: c["name"]["english"] for c in saga.get("characters") or []}
+        intro = dict(saga["intro"], id=2)
+        for kind_label, ev in ([("opening scene, the situation and the three characters", intro)]
+                               + [("chapter", n) for n in saga.get("nodes") or []]
+                               + [("ending: " + e["kind"], e) for e in saga.get("endings") or []]):
+            if not ev.get("art"):
+                continue
+            eid = f"{ns}.{ev['id']}"
+            dest = REPO / "assets" / "events" / f"{eid}.dds"
+            who = chars.get(ev.get("who"), "")
+            story = _one_line(ev["desc"]["english"].replace("\\n", " "))
+            items.append({
+                "type": "adventure_picture", "tag": tag, "id": eid, "dest": dest, "done": dest.exists(),
+                "style": f"{ADVENTURE_STYLE}; palette and world: {saga.get('palette', '')}",
+                "description": (f"Adventure '{saga['name']['english']}', {kind_label}"
+                                + (f", hero: {who}" if who else "") + f" - {ev['title']['english']}. "
+                                f"SCENE TO DRAW: {_one_line(ev['art'])}. "
+                                f"STORY CONTEXT (do not write it in the image): {story}"),
+            })
     return items
 
 
@@ -598,7 +642,8 @@ def pedidos() -> None:
 ("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
-             ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes")]
+             ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes"),
+             ("adventure_picture", "16_aventura")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -652,6 +697,8 @@ def _readme(summary: list[str]) -> str:
         "convierte (tools/arte) y quedan conectadas solas en el próximo build.",
         "",
         "Orden sugerido: 1 retratos, 2 espíritus, 3 focos, 4 eventos, 5 banderas, 9 armas por facción.",
+        "16_aventura_<TAG>: las aventuras de cada anarquía, estilo historieta (Moebius + Kill Six Billion",
+        "Demons); conviene pedir cada archivo en una misma conversación para que los personajes se parezcan.",
         f"Lo nuevo de la última tanda está junto en {NEW_FILE}.",
         "",
         "Archivos:",

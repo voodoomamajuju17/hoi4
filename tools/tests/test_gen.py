@@ -3831,6 +3831,100 @@ def test_piel_interfaz() -> None:
             _sh.rmtree(REPO_ROOT / "assets" / "ui" / "piel", ignore_errors=True)
 
 
+def test_aventuras() -> None:
+    section("aventuras de las anarquías: elegí tu propia aventura (2026-10-16)")
+    import copy
+    import re
+    import yaml as _yaml
+    from tools.gen.emitters import aventuras as av
+    from tools.gen.errors import SpecError as _SpecError
+    spec = _yaml.safe_load((REPO_ROOT / "spec" / "21_aventuras.yaml").read_text(encoding="utf-8"))
+    cfg, sagas = spec["config"], spec["sagas"]
+    check("aventuras: las 5 anarquías tienen su saga", sorted(sagas) == ["ZAN", "ZWB", "ZWE", "ZWI", "ZWM"], sorted(sagas))
+
+    def fails(mutate) -> bool:
+        saga = copy.deepcopy(sagas["ZWE"])
+        mutate(saga)
+        try:
+            av._validate("ZWE", saga, cfg)
+        except _SpecError:
+            return True
+        return False
+    first = sagas["ZWE"]["characters"][0]["first"]
+    check("aventuras: el validador rechaza una muerte antes de la tercera decisión",
+          fails(lambda s: [n for n in s["nodes"] if n["id"] == first][0]["options"][0].update(next=101)))
+    check("aventuras: el validador rechaza una mezcla de finales distinta (30/20/20/15/15)",
+          fails(lambda s: s["endings"][0].update(kind="neutral" if s["endings"][0]["kind"] != "neutral" else "muerte")))
+    check("aventuras: el validador rechaza una historia que vuelve sobre sí misma",
+          fails(lambda s: [n for n in s["nodes"] if n["id"] == 16][0]["options"][0].update(next=first)))
+    check("aventuras: el validador pide imagen en la presentación",
+          fails(lambda s: s["intro"].pop("art")))
+    try:
+        av._validate_catastrophes("ZWE", {"endings": [{"catastrophe": {"rename": "NO_EXISTE"}}], "nodes": []},
+                                  {}, {}, None)
+        bad_ct = False
+    except _SpecError:
+        bad_ct = True
+    check("aventuras: una catástrofe con un cosmetic tag que no existe no pasa", bad_ct)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        summary = ctx.data.get("aventuras") or {}
+        mix = {k: int(v) for k, v in cfg["ending_mix"].items()}
+        for tag in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN"):
+            s = summary.get(tag) or {}
+            check(f"aventuras {tag}: 20 finales con la mezcla pedida", s.get("endings") == 20 and s.get("mix") == mix, s)
+            check(f"aventuras {tag}: 1 de cada 3 eventos con imagen", s.get("art", 0) >= 0.3 * s.get("events", 99), s)
+            check(f"aventuras {tag}: al menos 2 rutas catastróficas (guerra, rebelión o nombre nuevo)",
+                  sum(len(v) for v in (s.get("catastrophes") or {}).values()) >= 2, s)
+        on_actions = " ".join((ctx.mod_root / "common/on_actions/00_meganations_on_actions.txt").read_text(encoding="utf-8").split())
+        check("aventuras: el reloj de cada anarquía arranca con la partida",
+              all(f"{t} = {{ country_event = meganations_aventura_{t.lower()}.1 }}" in on_actions
+                  for t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")), on_actions[-900:])
+        ev = {t: " ".join((ctx.mod_root / f"events/meganations_aventura_{t}.txt").read_text(encoding="utf-8-sig").split())
+              for t in ("zwe", "zwm", "zan")}
+
+        def block(text: str, eid: str) -> str:
+            # el evento hasta el próximo evento (no hasta el próximo country_event agendado)
+            i = text.find(f"id = {eid} title")
+            m = re.compile(r"country_event = \{ id = \S+ title =").search(text, i + 10)
+            return text[i:m.start() if m else len(text)]
+        check("aventuras: la presentación sale a los 2 meses (59 días) del arranque",
+              "id = meganations_aventura_zwe.2 days = 59" in block(ev["zwe"], "meganations_aventura_zwe.1"))
+        cut = block(ev["zwe"], "meganations_aventura_zwe.3")
+        check("aventuras: el corte sale solo si el capítulo agendado no llegó",
+              "NOT = { has_country_flag = ZWE_av_llego }" in cut and "has_country_flag = ZWE_av_en_curso" in cut
+              and "set_country_flag = ZWE_av_cortada" in cut, cut[:600])
+        ch = block(ev["zwm"], "meganations_aventura_zwm.20")
+        check("aventuras: cada capítulo exige no ser satélite y agenda el siguiente a 4 meses y el corte 2 días después",
+              "trigger = { is_subject = no" in ch and "id = meganations_aventura_zwm.21 days = 120" in ch
+              and "id = meganations_aventura_zwm.3 days = 122" in ch and "flag = ZWM_av_llego value = 1 days = 10" in ch, ch[:900])
+        war = block(ev["zwm"], "meganations_aventura_zwm.109")
+        check("aventuras: guerra catastrófica (Roma), solo si Roma la maneja la IA",
+              "NRE = { is_ai = yes }" in war and "NRE = { declare_war_on = { target = ZWM type = annex_everything }" in war, war[:1200])
+        reb = block(ev["zwm"], "meganations_aventura_zwm.116")
+        check("aventuras: rebelión catastrófica con nombre propio (la Legión Perdida)",
+              "start_civil_war = { ideology = fascism size = 0.3" in reb and "set_cosmetic_tag = ZWM_LEGION_PERDIDA" in reb, reb[-900:])
+        check("aventuras: final surrealista que le cambia el nombre al país (la República del Censo)",
+              "set_cosmetic_tag = ZAN_CENSO" in block(ev["zan"], "meganations_aventura_zan.125"))
+        ideas = (ctx.mod_root / "common/ideas/ZWB_ideas.txt").read_text(encoding="utf-8")
+        check("aventuras: los espíritus de las leyendas existen", "ZWB_av_leyenda_kaua = {" in ideas and "ZWB_av_muro_verde = {" in ideas)
+        loc = (ctx.mod_root / "localisation/spanish/meganations_events_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("aventuras: textos en castellano y la cuenta de calaveras en los finales",
+              "El Águila que se Quedó" in loc and "Calaveras en la cuenta del héroe: [?ZAN_av_calaveras|0]" in loc)
+    from tools.arte import arte as _arte
+    pics = [i for i in _arte.catalog() if i["type"] == "adventure_picture"]
+    by_tag = {}
+    for i in pics:
+        by_tag.setdefault(i["tag"], set()).add(i["id"])
+    check("aventuras: pedido de imágenes por anarquía (presentación y primer capítulo de cada personaje)",
+          sorted(by_tag) == ["ZAN", "ZWB", "ZWE", "ZWI", "ZWM"]
+          and all({f"meganations_aventura_{t.lower()}.{n}" for n in (2, 10, 20, 30)} <= ids for t, ids in by_tag.items()),
+          {t: len(v) for t, v in by_tag.items()})
+    check("aventuras: estilo historieta (Moebius + Kill Six Billion Demons) en cada pedido",
+          all("Moebius" in i["style"] and "Kill Six Billion Demons" in i["style"] for i in pics))
+
+
 def test_cazas_peso() -> None:
     section("cazas gratis: el motor puede con el peso (error.log 2026-10-15)")
     from tools.gen.emitters import unique_units as uu
@@ -3921,6 +4015,7 @@ def main() -> int:
         test_lider_visible_y_focos,
         test_piel_interfaz,
         test_cazas_peso,
+        test_aventuras,
         test_vanilla_validation,
     ):
         test()

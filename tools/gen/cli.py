@@ -45,6 +45,7 @@ from .emitters import intelligence as em_intelligence
 from .emitters import military as em_military
 from .emitters import menu as em_menu
 from .emitters import ui_skin as em_ui_skin
+from .emitters import aventuras as em_aventuras
 from .emitters import militia as em_militia
 from .emitters import manpower_relief as em_manpower_relief
 from .emitters import cazas as em_cazas
@@ -72,6 +73,7 @@ EMITTERS = [
     ("countries", em_countries.emit),
     ("resources", em_resources.emit),
     ("territory", em_territory.emit),   # antes que focos e historia: define capitales
+    ("aventuras", em_aventuras.emit),   # aventuras de las anarquías: eventos y espíritus (21_aventuras), antes que ideas y eventos
     ("militia", em_militia.emit),       # antes que history: define el oob
     ("military", em_military.emit),     # despues de militia: tecnologias, ejercito, equipo
     ("forces", em_forces.emit),         # armada y aviacion heredadas de 1936

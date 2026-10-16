@@ -146,11 +146,23 @@ def _emit(ctx: BuildContext) -> None:
             else:
                 ctx.warn(f"{eid}: la imagen '{picture}' no existe en el juego; el evento sale sin imagen.")
         b.add("is_triggered_only", True)
+        if ev.get("when"):
+            # 2026-10-16 (aventuras de las anarquías: "si deja de cumplirse el
+            # requisito, se cancela la cadena"): un evento agendado con días no
+            # sale si al llegar la fecha no se cumple la condición
+            b.add("trigger", render_conditions(eid, ev["when"], effect_ctx.triggers_used, where="12_events.yaml"))
+        immediate = Block()
         if not ev.get("hidden"):
             # Rastro en game.log (Documentos/Paradox Interactive/Hearts of Iron IV/logs):
             # así se puede ver qué eventos saltaron en una partida.
-            b.add("immediate", Block([("log", Quoted(f"[GetDateText] MEGANATIONS evento {eid} para [Root.GetTag]"))]))
+            immediate.add("log", Quoted(f"[GetDateText] MEGANATIONS evento {eid} para [Root.GetTag]"))
             effects_used.setdefault("log", eid)
+        if ev.get("immediate"):
+            # efectos al salir el evento, antes de que se elija una opción
+            immediate.entries.extend(render_effects(eid, ev["immediate"], effect_ctx, effects_used,
+                                                    where="12_events.yaml").entries)
+        if immediate.entries:
+            b.add("immediate", immediate)
         if ev.get("hidden"):
             b.add("hidden", True)  # evento de mantenimiento: corre sin ventana (hide_window no existe en HOI4)
 
