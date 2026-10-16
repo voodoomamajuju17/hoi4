@@ -2735,7 +2735,8 @@ def test_diplomacy() -> None:
         check("el casus belli se renueva si se pierde", "MEGANATIONS_renovar_casus_belli" in cb and "tag = NRE ZWE = { exists = yes" in cb
               and "NOT = { has_wargoal_against = ZWE }" in cb, cb[-600:])
         check("el casus belli: el jugador enseguida, la IA desde su fecha de guerra",
-              "OR = { is_ai = no date > 2100.2.1 }" in cb, cb[-600:])
+              # 2026-10-16: Roma contra Eurasia pide además ejército y foco (anarchy_wars.requires)
+              "OR = { is_ai = no AND = { date > 2100.2.1 date > 2102.1.1" in cb, cb[-600:])
         renew = cb[cb.index("MEGANATIONS_renovar_casus_belli = {"):]
         check("las Tierras Sin Ley no reciben casus belli (en paz con todos)", "target = ZAN" not in renew)
         # 2026-10-08: "Cuando se conquista una anarquia, demasiado seguido se lo convierte en titere."
