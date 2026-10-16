@@ -1725,3 +1725,69 @@ fila de pestañas militares que se ve debajo de la barra).
 - Lo demás del error.log es del juego base (eventos de EE.UU., España,
   México y Dinamarca que el mod saca, la ventana de rasgos del ejército, la
   IA de desembarcos, OIM australianas e inglesas).
+
+## Aventuras de las anarquías (2026-10-16)
+
+Pedido: "en vez de tener las decisiones cada 6 meses como las naciones,
+tiene una especie de historia de aventura con un héroe [...] tipo elige tu
+propia aventura"; después: "si deja de cumplirse un requisito, se cancela la
+cadena", "los efectos tienen que ser considerables cuando corresponde", "capaz
+añadir alguna ruta catastrófica para la nación, alguna rebelión, algo más
+surreal, guerra".
+
+- `spec/21_aventuras.yaml` + `tools/gen/emitters/aventuras.py`: una saga por
+  anarquía, cada una un espacio de eventos `meganations_aventura_<tag>`
+  (1 reloj oculto, 2 presentación, 3 corte, después capítulos y finales).
+  - Eurasia, **La Semilla Madre**: el tren blindado con el último trigo limpio
+    desapareció. Yarina (guardavías), Bohdan (poeta y cuatrero), la Hermana
+    Olena (con la mandíbula de un santo).
+  - Indostán, **El Sello del Río**: el Directorio cerró el Brahmaputra. Kabir
+    (buzo de acequias), la Princesa Meera (undécima heredera, con un
+    mangosta), el Sadhu Bhairav (dice que el río está enamorado).
+  - Emiratos, **El Águila de Arbogast**: la legión de Arbogast se fue y se
+    olvidó el Águila. Nour (chatarrera con brazo de dron), Gaius Severo (el
+    aquilífero que la perdió), Umm Jabbar (matriarca ciega). En la ruta de
+    Nour se puede pasar a jugar como el Águila.
+  - Amazonas, **La Selva de Acero**: un dirigible imperial con esporas de
+    Bioacero cayó y crece un bosque que come hierro. Joana Motosserra
+    (hachera), el Padre Anselmo (cura expulsado de todo), Kauã (chico con una
+    flor de acero en la mano).
+  - Tierras Sin Ley, **El Censo**: un robot del censo de EE.UU. lleva 58 años
+    contando y le quedan tres pueblos; su número convoca un Congreso. Lola
+    (falsificadora), el Sheriff Amos Kettleby, y la Unidad Censal 7 misma.
+- Ritmo: la presentación sale a los 59 días (1 de marzo de 2100); el primer
+  capítulo 3 días después de elegir; cada capítulo y el final, 120 días
+  después de la respuesta anterior.
+- Reglas que valida el generador (si no se cumplen, el build falla): 20
+  finales exactos por saga, 6 muerte / 4 objetivo / 4 otro logro / 3 malos /
+  3 neutros; ninguna muerte antes de la tercera decisión; sin capítulos
+  huérfanos ni ciclos; imagen en la presentación, en el primer capítulo de
+  cada personaje y en al menos 1 de cada 3 eventos; al menos 2 rutas
+  catastróficas por saga.
+- Corte: cada capítulo exige que la anarquía no sea satélite, que tenga su
+  capital y, si el capítulo tiene `place`, esa región (si arranca siendo
+  suya). Cada respuesta agenda el capítulo siguiente y, 2 días después, el
+  evento "El Hilo se Corta", que solo sale si el capítulo no llegó.
+- Premios y castigos grandes en el medio (depósitos de fusiles, fábricas,
+  vetas de cromo, petróleo o acero, bonos de investigación) y en los finales
+  (espíritu de la leyenda, divisiones, fábricas de armas, mano de obra).
+- Rutas catastróficas (`catastrophe`): `war_by` (una meganación declara la
+  guerra: Roma a Eurasia o a los Emiratos, el Directorio al Indostán, el
+  Imperio al Amazonas, la Unión a la Frontera), `rebellion` (guerra civil
+  con nombre y bandera propios: la Hermandad del Molino Gris, la Santa
+  Cabrería del Ganges, la Legión Perdida, la Congregación del Acero Vivo
+  —liderada por una mano cortada—, la Baronía del Hielo, Los No Contados
+  —liderados por Nadie—) y `rename` (el país cambia de nombre: el Emirato del
+  Águila, la Selva Soberana, la República del Censo). Las banderas nuevas
+  están en 5_banderas.
+- La IA también juega su aventura (elige al azar). La guerra catastrófica y
+  los castigos a otra potencia solo se aplican si esa potencia la maneja la
+  IA: la aventura de una anarquía de la IA nunca mete al jugador en una
+  guerra que no eligió.
+- Calaveras: cada opción sangrienta suma a la cuenta del héroe, que se
+  muestra en el final. Puro condimento.
+- Arte: 77 imágenes, `17_aventura_<TAG>.txt` (una por anarquía), estilo
+  historieta inspirado en Moebius y Kill Six Billion Demons; van a
+  assets/events/<evento>.dds y el evento las usa solo.
+- Sin probar en partida: los textos, los gatillos y las rebeliones salen
+  bien en el build y en las pruebas, pero nadie jugó todavía una saga entera.
