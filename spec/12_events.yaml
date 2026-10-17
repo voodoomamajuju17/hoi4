@@ -17641,3 +17641,635 @@ namespaces:
         effects: []
         ai_chance: 25
       src: user_request
+
+  # 2026-10-17: la receta de diversión (SHD)
+  meganations_shd_receta:
+    country: SHD
+    events:
+    - id: 1
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Lancang Dam', spanish: 'Perdimos La Represa del Lancang'}
+      desc:
+        english: 'The enemy holds the Lancang Dam. The engineers opened the gates before leaving; the valley below is under water.\n\n-10 Mandate of Heaven. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Dam Has Fallen.'
+        spanish: 'El enemigo tiene la Represa del Lancang. Los ingenieros abrieron las compuertas antes de irse; el valle de abajo está bajo el agua.\n\n-10 de Mandato del Cielo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Cayó una Represa.'
+      options:
+      - name: {english: 'Save the engineers.', spanish: 'Salvar a los ingenieros.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: SHD_mandato, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 40
+      - name: {english: 'Heaven is patient.', spanish: 'El Cielo es paciente.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 2
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Pearl River Gates', spanish: 'Perdimos Las Compuertas del Río de las Perlas'}
+      desc:
+        english: 'The enemy holds the Pearl River Gates. The engineers opened the gates before leaving; the valley below is under water.\n\n-10 Mandate of Heaven. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Dam Has Fallen.'
+        spanish: 'El enemigo tiene las Compuertas del Río de las Perlas. Los ingenieros abrieron las compuertas antes de irse; el valle de abajo está bajo el agua.\n\n-10 de Mandato del Cielo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Cayó una Represa.'
+      options:
+      - name: {english: 'Save the engineers.', spanish: 'Salvar a los ingenieros.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: SHD_mandato, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 40
+      - name: {english: 'Heaven is patient.', spanish: 'El Cielo es paciente.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 3
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Qiantang Locks', spanish: 'Perdimos Las Esclusas del Qiantang'}
+      desc:
+        english: 'The enemy holds the Qiantang Locks. The engineers opened the gates before leaving; the valley below is under water.\n\n-10 Mandate of Heaven. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Dam Has Fallen.'
+        spanish: 'El enemigo tiene las Esclusas del Qiantang. Los ingenieros abrieron las compuertas antes de irse; el valle de abajo está bajo el agua.\n\n-10 de Mandato del Cielo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Cayó una Represa.'
+      options:
+      - name: {english: 'Save the engineers.', spanish: 'Salvar a los ingenieros.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: SHD_mandato, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 40
+      - name: {english: 'Heaven is patient.', spanish: 'El Cielo es paciente.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 4
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Min River Dam', spanish: 'Perdimos La Represa del Min'}
+      desc:
+        english: 'The enemy holds the Min River Dam. The engineers opened the gates before leaving; the valley below is under water.\n\n-10 Mandate of Heaven. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Dam Has Fallen.'
+        spanish: 'El enemigo tiene la Represa del Min. Los ingenieros abrieron las compuertas antes de irse; el valle de abajo está bajo el agua.\n\n-10 de Mandato del Cielo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Cayó una Represa.'
+      options:
+      - name: {english: 'Save the engineers.', spanish: 'Salvar a los ingenieros.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: SHD_mandato, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 40
+      - name: {english: 'Heaven is patient.', spanish: 'El Cielo es paciente.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 5
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Yellow River Gates', spanish: 'Perdimos Las Compuertas del Río Amarillo'}
+      desc:
+        english: 'The enemy holds the Yellow River Gates. The engineers opened the gates before leaving; the valley below is under water.\n\n-10 Mandate of Heaven. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Dam Has Fallen.'
+        spanish: 'El enemigo tiene las Compuertas del Río Amarillo. Los ingenieros abrieron las compuertas antes de irse; el valle de abajo está bajo el agua.\n\n-10 de Mandato del Cielo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Cayó una Represa.'
+      options:
+      - name: {english: 'Save the engineers.', spanish: 'Salvar a los ingenieros.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: SHD_mandato, value: 5}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 40
+      - name: {english: 'Heaven is patient.', spanish: 'El Cielo es paciente.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 10
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The First Virtue', spanish: 'La Primera Virtud'}
+      desc:
+        english: 'The scholars of the Directorate debate the First Virtue for nine days and nine nights.\n\nREN: BENEVOLENCE: +5% stability and +4% recruitable population.\nLI: RITUAL ORDER: +0.15 political power a day and +3% organisation.\nZHI: WISDOM: +5% research speed.'
+        spanish: 'Los letrados del Directorio debaten la Primera Virtud durante nueve días y nueve noches.\n\nREN: BENEVOLENCIA: +5% de estabilidad y +4% de población reclutable.\nLI: ORDEN RITUAL: +0,15 de poder político por día y +3% de organización.\nZHI: SABIDURÍA: +5% de velocidad de investigación.'
+      options:
+      - name: {english: 'Ren: Benevolence.', spanish: 'Ren: Benevolencia.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_virtud_ren}
+        ai_chance: 35
+      - name: {english: 'Li: Ritual Order.', spanish: 'Li: Orden Ritual.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_virtud_li}
+        ai_chance: 35
+      - name: {english: 'Zhi: Wisdom.', spanish: 'Zhi: Sabiduría.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_virtud_zhi}
+        ai_chance: 30
+      src: user_request
+    - id: 11
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Great Works', spanish: 'Las Grandes Obras'}
+      desc:
+        english: 'Three great works are proposed. There is money and Mandate for only one.\n\nTHE GRAND CANAL REBORN: +10% construction and +15% infrastructure speed.\nTHE DIGITAL WALL: +8% defence and +3% stability.\nTHE THOUSAND FACTORIES: +7% factory output.'
+        spanish: 'Se proponen tres grandes obras. Hay plata y Mandato para una sola.\n\nEL GRAN CANAL RENACIDO: +10% de construcción y +15% de velocidad de infraestructura.\nLA MURALLA DIGITAL: +8% de defensa y +3% de estabilidad.\nLAS MIL FÁBRICAS: +7% de producción de fábricas.'
+      options:
+      - name: {english: 'The Grand Canal Reborn.', spanish: 'El Gran Canal Renacido.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_obra_canal}
+        ai_chance: 35
+      - name: {english: 'The Digital Wall.', spanish: 'La Muralla Digital.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_obra_muralla}
+        ai_chance: 35
+      - name: {english: 'The Thousand Factories.', spanish: 'Las Mil Fábricas.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_obra_fabricas}
+        ai_chance: 30
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Full Mandate', spanish: 'El Mandato Pleno'}
+      desc:
+        english: 'For the first time in a century, the rivers, the harvests and the people agree. Heaven waits for the Directorate''s answer.\n\nALL UNDER HEAVEN: +8% attack and war support, +5% organisation.\nGREAT HARMONY: +10% stability and +0.25 political power a day.\nTHE CELESTIAL ENGINE: +10% factory output and +8% research.'
+        spanish: 'Por primera vez en un siglo, los ríos, las cosechas y el pueblo están de acuerdo. El Cielo espera la respuesta del Directorio.\n\nTODO BAJO EL CIELO: +8% de ataque y apoyo a la guerra, +5% de organización.\nLA GRAN ARMONÍA: +10% de estabilidad y +0,25 de poder político por día.\nEL MOTOR CELESTE: +10% de producción de fábricas y +8% de investigación.'
+      options:
+      - name: {english: 'All Under Heaven.', spanish: 'Todo Bajo el Cielo.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_mandato_tianxia}
+        ai_chance: 40
+      - name: {english: 'Great Harmony.', spanish: 'La Gran Armonía.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_mandato_datong}
+        ai_chance: 30
+      - name: {english: 'The Celestial Engine.', spanish: 'El Motor Celeste.'}
+        effects:
+        - {effect: dynamic_modifier, id: SHD_mandato_motor}
+        ai_chance: 30
+      src: user_request
+    - id: 20
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Golden Harvest', spanish: 'Una Cosecha Dorada'}
+      desc:
+        english: 'The best harvest in thirty years.\n\nThank Heaven: +12 Mandate. Fill the granaries: +3% stability.'
+        spanish: 'La mejor cosecha en treinta años.\n\nAgradecerle al Cielo: +12 de Mandato. Llenar los graneros: +3% de estabilidad.'
+      options:
+      - name: {english: 'Thank Heaven.', spanish: 'Agradecerle al Cielo.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: 12}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 60
+      - name: {english: 'Fill the granaries.', spanish: 'Llenar los graneros.'}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 40
+      src: user_request
+    - id: 21
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A White Crane', spanish: 'Una Grulla Blanca'}
+      desc:
+        english: 'A white crane lands on the roof of the Directorate. Every newspaper calls it an omen.\n\n+10 Mandate.'
+        spanish: 'Una grulla blanca se posa en el techo del Directorio. Todos los diarios lo llaman un augurio.\n\n+10 de Mandato.'
+      options:
+      - name: {english: 'An excellent omen.', spanish: 'Un augurio excelente.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: 10}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 100
+      src: user_request
+    - id: 22
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Scholars Agree', spanish: 'Los Letrados Están de Acuerdo'}
+      desc:
+        english: 'The imperial examinations produce the best class in a century.\n\n+8 Mandate or +50 political power.'
+        spanish: 'Los exámenes imperiales producen la mejor promoción en un siglo.\n\n+8 de Mandato o +50 de poder político.'
+      options:
+      - name: {english: 'Heaven is pleased.', spanish: 'El Cielo está contento.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: 8}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: 'Put them to work.', spanish: 'Ponerlos a trabajar.'}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 50
+      src: user_request
+    - id: 23
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Rivers Are Calm', spanish: 'Los Ríos Están Tranquilos'}
+      desc:
+        english: 'A whole year without a flood.\n\n+12 Mandate.'
+        spanish: 'Un año entero sin inundaciones.\n\n+12 de Mandato.'
+      options:
+      - name: {english: 'As it should be.', spanish: 'Como debe ser.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: 12}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 100
+      src: user_request
+    - id: 24
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'An Earthquake', spanish: 'Un Terremoto'}
+      desc:
+        english: 'An earthquake in Sichuan. The people ask whether Heaven is angry.\n\nRebuild with the army: -10 Mandate, +20 army experience. Rebuild slowly: -5% stability.'
+        spanish: 'Un terremoto en Sichuan. El pueblo pregunta si el Cielo está enojado.\n\nReconstruir con el ejército: -10 de Mandato, +20 de experiencia del ejército. Reconstruir despacio: -5% de estabilidad.'
+      options:
+      - name: {english: 'The army.', spanish: 'El ejército.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: -10}
+        - {effect: army_experience, value: 20}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: 'Slowly.', spanish: 'Despacio.'}
+        effects:
+        - {effect: add_stability, value: -0.05}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Comet', spanish: 'Un Cometa'}
+      desc:
+        english: 'A comet crosses the sky for a month. The old people say dynasties fall under comets.\n\n-10 Mandate. Or fund the observatory to explain it: -40 political power.'
+        spanish: 'Un cometa cruza el cielo durante un mes. Los viejos dicen que las dinastías caen bajo los cometas.\n\n-10 de Mandato. O financiar el observatorio para explicarlo: -40 de poder político.'
+      options:
+      - name: {english: 'Let it pass.', spanish: 'Que pase.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: -10}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: 'Explain it.', spanish: 'Explicarlo.'}
+        effects:
+        - {effect: add_political_power, value: -40}
+        ai_chance: 50
+      src: user_request
+    - id: 26
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Corrupt Officials', spanish: 'Funcionarios Corruptos'}
+      desc:
+        english: 'A ring of provincial officials sold flood-relief rice.\n\nExecute them publicly: -3% stability. Fire them quietly: -10 Mandate.'
+        spanish: 'Una red de funcionarios provinciales vendió el arroz de las inundaciones.\n\nEjecutarlos en público: -3% de estabilidad. Echarlos en silencio: -10 de Mandato.'
+      options:
+      - name: {english: 'Publicly.', spanish: 'En público.'}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 50
+      - name: {english: 'Quietly.', spanish: 'En silencio.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: -10}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Dam Cracks', spanish: 'Se Raja la Represa'}
+      desc:
+        english: 'A crack in a minor dam forces the evacuation of three towns.\n\n-12 Mandate. Or repair it overnight: -50 political power, -4 Mandate.'
+        spanish: 'Una rajadura en una represa menor obliga a evacuar tres pueblos.\n\n-12 de Mandato. O repararla en una noche: -50 de poder político, -4 de Mandato.'
+      options:
+      - name: {english: 'Evacuate.', spanish: 'Evacuar.'}
+        effects:
+        - {effect: add_variable, var: SHD_mandato, value: -12}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      - name: {english: 'Overnight.', spanish: 'En una noche.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: SHD_mandato, value: -4}
+        - {effect: run, value: SHD_recalcular_caudales}
+        ai_chance: 50
+      src: user_request
+
+  # 2026-10-17: la receta de diversión (APF)
+  meganations_apf_receta:
+    country: APF
+    events:
+    - id: 1
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Èkó Has Fallen', spanish: 'Cayó Èkó'}
+      desc:
+        english: 'The enemy holds Èkó. The council has gone underground and the Federation feels the wound.\n\n-10 Ubuntu. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Council City Lost.'
+        spanish: 'El enemigo tiene Èkó. El consejo pasó a la clandestinidad y la Federación siente la herida.\n\n-10 de Ubuntu. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad de los Consejos Perdida.'
+      options:
+      - name: {english: 'Evacuate the council.', spanish: 'Evacuar el consejo.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: APF_ubuntu, value: 5}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'We are many.', spanish: 'Somos muchos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 2
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Accra Has Fallen', spanish: 'Cayó Acra'}
+      desc:
+        english: 'The enemy holds Accra. The council has gone underground and the Federation feels the wound.\n\n-10 Ubuntu. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Council City Lost.'
+        spanish: 'El enemigo tiene Acra. El consejo pasó a la clandestinidad y la Federación siente la herida.\n\n-10 de Ubuntu. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad de los Consejos Perdida.'
+      options:
+      - name: {english: 'Evacuate the council.', spanish: 'Evacuar el consejo.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: APF_ubuntu, value: 5}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'We are many.', spanish: 'Somos muchos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 3
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Alexandria Has Fallen', spanish: 'Cayó Alejandría'}
+      desc:
+        english: 'The enemy holds Alexandria. The council has gone underground and the Federation feels the wound.\n\n-10 Ubuntu. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Council City Lost.'
+        spanish: 'El enemigo tiene Alejandría. El consejo pasó a la clandestinidad y la Federación siente la herida.\n\n-10 de Ubuntu. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad de los Consejos Perdida.'
+      options:
+      - name: {english: 'Evacuate the council.', spanish: 'Evacuar el consejo.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: APF_ubuntu, value: 5}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'We are many.', spanish: 'Somos muchos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 4
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Tripoli Has Fallen', spanish: 'Cayó Trípoli'}
+      desc:
+        english: 'The enemy holds Tripoli. The council has gone underground and the Federation feels the wound.\n\n-10 Ubuntu. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Council City Lost.'
+        spanish: 'El enemigo tiene Trípoli. El consejo pasó a la clandestinidad y la Federación siente la herida.\n\n-10 de Ubuntu. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad de los Consejos Perdida.'
+      options:
+      - name: {english: 'Evacuate the council.', spanish: 'Evacuar el consejo.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: APF_ubuntu, value: 5}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'We are many.', spanish: 'Somos muchos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 5
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Djibouti Has Fallen', spanish: 'Cayó Yibuti'}
+      desc:
+        english: 'The enemy holds Djibouti. The council has gone underground and the Federation feels the wound.\n\n-10 Ubuntu. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Council City Lost.'
+        spanish: 'El enemigo tiene Yibuti. El consejo pasó a la clandestinidad y la Federación siente la herida.\n\n-10 de Ubuntu. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad de los Consejos Perdida.'
+      options:
+      - name: {english: 'Evacuate the council.', spanish: 'Evacuar el consejo.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: APF_ubuntu, value: 5}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'We are many.', spanish: 'Somos muchos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 10
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The First Assembly', spanish: 'La Primera Asamblea'}
+      desc:
+        english: 'Delegates from every council fill the hall in Èkó. Three motions survive the night.\n\nCOMMON MARKET: +5% factory output and +5% construction.\nTHE PEOPLE''S BRIGADES: +8% recruitable population and +3% organisation.\nTHE PALAVER TREE: +5% stability and +0.1 political power a day; tension -10.'
+        spanish: 'Delegados de cada consejo llenan la sala de Èkó. Tres mociones sobreviven a la noche.\n\nMERCADO COMÚN: +5% de producción de fábricas y +5% de construcción.\nLAS BRIGADAS DEL PUEBLO: +8% de población reclutable y +3% de organización.\nEL ÁRBOL DE LA PALABRA: +5% de estabilidad y +0,1 de poder político por día; tensión -10.'
+      options:
+      - name: {english: 'Common Market.', spanish: 'Mercado Común.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_mercado}
+        ai_chance: 35
+      - name: {english: 'The People''s Brigades.', spanish: 'Las Brigadas del Pueblo.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_brigadas}
+        ai_chance: 35
+      - name: {english: 'The Palaver Tree.', spanish: 'El Árbol de la Palabra.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_palabra}
+        - {effect: add_variable, var: APF_tension, value: -10}
+        ai_chance: 30
+      src: user_request
+    - id: 11
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Second Assembly', spanish: 'La Segunda Asamblea'}
+      desc:
+        english: 'The Second Assembly argues about borders, rivers and the sea.\n\nTHE GREAT GREEN WALL: +4% stability and +15% infrastructure speed.\nTHE LION''S ARMY: +7% attack and +4% defence.\nTHE FREE UNIVERSITIES: +7% research speed.'
+        spanish: 'La Segunda Asamblea discute sobre fronteras, ríos y el mar.\n\nLA GRAN MURALLA VERDE: +4% de estabilidad y +15% de velocidad de infraestructura.\nEL EJÉRCITO DEL LEÓN: +7% de ataque y +4% de defensa.\nLAS UNIVERSIDADES LIBRES: +7% de velocidad de investigación.'
+      options:
+      - name: {english: 'The Great Green Wall.', spanish: 'La Gran Muralla Verde.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_muralla_verde}
+        ai_chance: 30
+      - name: {english: 'The Lion''s Army.', spanish: 'El Ejército del León.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_leon}
+        ai_chance: 40
+      - name: {english: 'The Free Universities.', spanish: 'Las Universidades Libres.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_universidades}
+        ai_chance: 30
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Assembly of the Peoples', spanish: 'La Asamblea de los Pueblos'}
+      desc:
+        english: 'For the first time, every council of the continent sits in the same hall. The question is simple and enormous.\n\nPAN-AFRICA: +8% stability, +0.2 political power a day and +5% war support; tension -20.\nTHE SLEEPING GIANT WAKES: +10% factory output and +10% construction.\nTHE SHIELD OF AFRICA: +10% defence, +6% organisation and +5% recruitable population.'
+        spanish: 'Por primera vez, cada consejo del continente se sienta en la misma sala. La pregunta es simple y enorme.\n\nPANÁFRICA: +8% de estabilidad, +0,2 de poder político por día y +5% de apoyo a la guerra; tensión -20.\nEL GIGANTE DORMIDO DESPIERTA: +10% de producción de fábricas y +10% de construcción.\nEL ESCUDO DE ÁFRICA: +10% de defensa, +6% de organización y +5% de población reclutable.'
+      options:
+      - name: {english: 'Pan-Africa.', spanish: 'Panáfrica.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_panafrica}
+        - {effect: add_variable, var: APF_tension, value: -20}
+        ai_chance: 35
+      - name: {english: 'The Sleeping Giant Wakes.', spanish: 'El Gigante Dormido Despierta.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_gigante}
+        ai_chance: 35
+      - name: {english: 'The Shield of Africa.', spanish: 'El Escudo de África.'}
+        effects:
+        - {effect: dynamic_modifier, id: APF_asamblea_escudo}
+        ai_chance: 30
+      src: user_request
+    - id: 20
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Song Crosses the Continent', spanish: 'Una Canción Cruza el Continente'}
+      desc:
+        english: 'A song from Kinshasa is sung in every market from Dakar to Mombasa.\n\n+12 Ubuntu.'
+        spanish: 'Una canción de Kinshasa se canta en cada mercado de Dakar a Mombasa.\n\n+12 de Ubuntu.'
+      options:
+      - name: {english: 'Turn it up.', spanish: 'Súbanle el volumen.'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: 12}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 100
+      src: user_request
+    - id: 21
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Football Cup', spanish: 'La Copa de Fútbol'}
+      desc:
+        english: 'The Federation''s team wins the Cup of the Peoples.\n\n+10 Ubuntu and +3% war support.'
+        spanish: 'El equipo de la Federación gana la Copa de los Pueblos.\n\n+10 de Ubuntu y +3% de apoyo a la guerra.'
+      options:
+      - name: {english: 'Champions!', spanish: '¡Campeones!'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: 10}
+        - {effect: add_war_support, value: 0.03}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 100
+      src: user_request
+    - id: 22
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Wedding of Two Councils', spanish: 'Una Boda Entre Dos Consejos'}
+      desc:
+        english: 'The daughters of two rival council leaders marry each other. Both councils dance for a week.\n\n+10 Ubuntu and tension -5.'
+        spanish: 'Las hijas de dos líderes de consejos rivales se casan entre ellas. Los dos consejos bailan una semana.\n\n+10 de Ubuntu y tensión -5.'
+      options:
+      - name: {english: 'Dance.', spanish: 'Bailar.'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: 10}
+        - {effect: add_variable, var: APF_tension, value: -5}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 100
+      src: user_request
+    - id: 23
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Diaspora Returns', spanish: 'Vuelve la Diáspora'}
+      desc:
+        english: 'Thousands of families return from the north with skills and savings.\n\n+10 Ubuntu or +20,000 manpower.'
+        spanish: 'Miles de familias vuelven del norte con oficios y ahorros.\n\n+10 de Ubuntu o +20.000 de mano de obra.'
+      options:
+      - name: {english: 'Welcome home.', spanish: 'Bienvenidos a casa.'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: 10}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Join the brigades.', spanish: 'Súmense a las brigadas.'}
+        effects:
+        - {effect: add_manpower, value: 20000}
+        ai_chance: 50
+      src: user_request
+    - id: 24
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Border Quarrel', spanish: 'Una Pelea de Frontera'}
+      desc:
+        english: 'Two members argue over a river island.\n\nMediate: -10 Ubuntu. Let them fight it out: tension +8.'
+        spanish: 'Dos miembros pelean por una isla del río.\n\nMediar: -10 de Ubuntu. Que lo arreglen solos: tensión +8.'
+      options:
+      - name: {english: 'Mediate.', spanish: 'Mediar.'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: -10}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Let them.', spanish: 'Que lo arreglen.'}
+        effects:
+        - {effect: add_variable, var: APF_tension, value: 8}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Locusts', spanish: 'Langostas'}
+      desc:
+        english: 'A swarm of locusts eats the harvest of the Sahel.\n\nShare the granaries: -12 Ubuntu. Every council for itself: -4% stability.'
+        spanish: 'Una plaga de langostas se come la cosecha del Sahel.\n\nCompartir los graneros: -12 de Ubuntu. Cada consejo por su cuenta: -4% de estabilidad.'
+      options:
+      - name: {english: 'Share.', spanish: 'Compartir.'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: -12}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Each for itself.', spanish: 'Cada uno por su cuenta.'}
+        effects:
+        - {effect: add_stability, value: -0.04}
+        ai_chance: 50
+      src: user_request
+    - id: 26
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Corrupt Delegate', spanish: 'Un Delegado Corrupto'}
+      desc:
+        english: 'A delegate sold the Federation''s grain contracts to the Union.\n\nTry him in public: -10 Ubuntu, -3 tension. Hush it up: -40 political power.'
+        spanish: 'Un delegado le vendió los contratos de grano de la Federación a la Unión.\n\nJuzgarlo en público: -10 de Ubuntu, -3 de tensión. Taparlo: -40 de poder político.'
+      options:
+      - name: {english: 'Try him.', spanish: 'Juzgarlo.'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: -10}
+        - {effect: add_variable, var: APF_tension, value: -3}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Hush it up.', spanish: 'Taparlo.'}
+        effects:
+        - {effect: add_political_power, value: -40}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Old Grudges', spanish: 'Rencores Viejos'}
+      desc:
+        english: 'An old colonial-era map reopens a border dispute.\n\nBurn the map: -10 Ubuntu. Debate it: tension +10.'
+        spanish: 'Un viejo mapa de la época colonial reabre una disputa de fronteras.\n\nQuemar el mapa: -10 de Ubuntu. Debatirlo: tensión +10.'
+      options:
+      - name: {english: 'Burn it.', spanish: 'Quemarlo.'}
+        effects:
+        - {effect: add_variable, var: APF_ubuntu, value: -10}
+        - {effect: run, value: APF_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Debate it.', spanish: 'Debatirlo.'}
+        effects:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        ai_chance: 50
+      src: user_request

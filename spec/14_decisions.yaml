@@ -2680,7 +2680,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZET}
+      visible: {country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zet, value: 100}
       effects:
@@ -2715,7 +2715,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZET}
+      visible: {flag: APF_integracion_abierta, country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -2769,7 +2769,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZSA}
+      visible: {country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zsa, value: 100}
       effects:
@@ -2804,7 +2804,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZSA}
+      visible: {flag: APF_integracion_abierta, country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -2858,7 +2858,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZCO}
+      visible: {country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zco, value: 100}
       effects:
@@ -2893,7 +2893,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZCO}
+      visible: {flag: APF_integracion_abierta, country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -2947,7 +2947,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZAO}
+      visible: {country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zao, value: 100}
       effects:
@@ -2982,7 +2982,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZAO}
+      visible: {flag: APF_integracion_abierta, country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3036,7 +3036,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZMZ}
+      visible: {country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zmz, value: 100}
       effects:
@@ -3071,7 +3071,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZMZ}
+      visible: {flag: APF_integracion_abierta, country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3125,7 +3125,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZMG}
+      visible: {country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zmg, value: 100}
       effects:
@@ -3160,7 +3160,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZMG}
+      visible: {flag: APF_integracion_abierta, country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3214,7 +3214,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZKE}
+      visible: {country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zke, value: 100}
       effects:
@@ -3249,7 +3249,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZKE}
+      visible: {flag: APF_integracion_abierta, country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -5373,7 +5373,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZET}
+      visible: {country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zet, value: 15}
       - effect: scope
@@ -5401,7 +5401,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZET}
+      visible: {country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zet, value: 30}
       effects:
@@ -5434,7 +5434,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZSA}
+      visible: {country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zsa, value: 15}
       - effect: scope
@@ -5462,7 +5462,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZSA}
+      visible: {country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zsa, value: 30}
       effects:
@@ -5497,7 +5497,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZCO}
+      visible: {country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zco, value: 15}
       - effect: scope
@@ -5525,7 +5525,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZCO}
+      visible: {country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zco, value: 30}
       effects:
@@ -5560,7 +5560,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZAO}
+      visible: {country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zao, value: 15}
       - effect: scope
@@ -5588,7 +5588,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZAO}
+      visible: {country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zao, value: 30}
       effects:
@@ -5623,7 +5623,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZMZ}
+      visible: {country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zmz, value: 15}
       - effect: scope
@@ -5651,7 +5651,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZMZ}
+      visible: {country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zmz, value: 30}
       effects:
@@ -5686,7 +5686,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZMG}
+      visible: {country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zmg, value: 15}
       - effect: scope
@@ -5714,7 +5714,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZMG}
+      visible: {country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zmg, value: 30}
       effects:
@@ -5749,7 +5749,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZKE}
+      visible: {country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zke, value: 15}
       - effect: scope
@@ -5777,7 +5777,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZKE}
+      visible: {country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zke, value: 30}
       effects:
@@ -12652,6 +12652,524 @@ categories:
     after_effects:
     - {effect: run, value: FCU_recalcular_directorio}
 
+  # 2026-10-17: la receta de diversión (SHD) — productoras, tres elecciones, gastos y eventos.
+  - id: SHD_mandato_category
+    country: SHD
+    icon_prefer:
+    - generic_political_actions
+    - generic_industry
+    name: {english: 'The Mandate of Heaven', spanish: 'El Mandato del Cielo'}
+    desc:
+      english: 'Mandate of Heaven: [?SHD_mandato]\nGreat dams: [?SHD_productoras_r] / 5\n\nThe Mandate is the trust of Heaven in the Directorate: it flows from the great dams that tame the rivers. When the rivers obey, the Mandate grows; when a dam falls, Heaven notices.\n\nPRODUCERS: the Lancang Dam, the Pearl River Gates, the Qiantang Locks, the Min River Dam, the Yellow River Gates. Each one adds 1 Mandate of Heaven a month; losing one costs 10 and 180 days of trouble, and it produces again only when we retake and restore it.\nTHE THREE CHOICES: at 25, 50, 75 Mandate of Heaven you can spend them, once each, on a permanent choice between three paths.\nSPENDING: smaller amounts buy temporary bonuses.'
+      spanish: 'Mandato del Cielo: [?SHD_mandato]\nGrandes represas: [?SHD_productoras_r] / 5\n\nEl Mandato es la confianza del Cielo en el Directorio: fluye de las grandes represas que domestican los ríos. Cuando los ríos obedecen, el Mandato crece; cuando cae una represa, el Cielo se da cuenta.\n\nPRODUCTORAS: la Represa del Lancang, las Compuertas del Río de las Perlas, las Esclusas del Qiantang, la Represa del Min, las Compuertas del Río Amarillo. Cada una suma 1 de Mandato del Cielo por mes; perder una cuesta 10 y 180 días de problemas, y vuelve a producir recién cuando la recuperamos y la restauramos.\nLAS TRES ELECCIONES: con 25, 50, 75 de Mandato del Cielo podés gastarlos, una vez cada una, en una elección permanente entre tres caminos.\nGASTAR: con menos se compran bonos temporales.'
+    src: user_request
+    decisions:
+    - id: SHD_restaurar_1
+      name: {english: 'Restore The Lancang Dam', spanish: 'Restaurar La Represa del Lancang'}
+      desc:
+        english: 'The Lancang Dam is ours again. The gates close, the river obeys: it produces Mandate again. +2 Mandate.'
+        spanish: 'La Represa del Lancang vuelve a ser nuestra. Las compuertas se cierran, el río obedece: vuelve a producir Mandato. +2 de Mandato.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: SHD_prod_1_perdida}
+      available:
+        controls_state: [Yunnan]
+      effects:
+      - {effect: clear_flag, value: SHD_prod_1_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: SHD_restaurar_2
+      name: {english: 'Restore The Pearl River Gates', spanish: 'Restaurar Las Compuertas del Río de las Perlas'}
+      desc:
+        english: 'The Pearl River Gates is ours again. The gates close, the river obeys: it produces Mandate again. +2 Mandate.'
+        spanish: 'Las Compuertas del Río de las Perlas vuelve a ser nuestra. Las compuertas se cierran, el río obedece: vuelve a producir Mandato. +2 de Mandato.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: SHD_prod_2_perdida}
+      available:
+        controls_state: [Guangdong]
+      effects:
+      - {effect: clear_flag, value: SHD_prod_2_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: SHD_restaurar_3
+      name: {english: 'Restore The Qiantang Locks', spanish: 'Restaurar Las Esclusas del Qiantang'}
+      desc:
+        english: 'The Qiantang Locks is ours again. The gates close, the river obeys: it produces Mandate again. +2 Mandate.'
+        spanish: 'Las Esclusas del Qiantang vuelve a ser nuestra. Las compuertas se cierran, el río obedece: vuelve a producir Mandato. +2 de Mandato.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: SHD_prod_3_perdida}
+      available:
+        controls_state: [Zhejiang]
+      effects:
+      - {effect: clear_flag, value: SHD_prod_3_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: SHD_restaurar_4
+      name: {english: 'Restore The Min River Dam', spanish: 'Restaurar La Represa del Min'}
+      desc:
+        english: 'The Min River Dam is ours again. The gates close, the river obeys: it produces Mandate again. +2 Mandate.'
+        spanish: 'La Represa del Min vuelve a ser nuestra. Las compuertas se cierran, el río obedece: vuelve a producir Mandato. +2 de Mandato.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: SHD_prod_4_perdida}
+      available:
+        controls_state: [Fujian]
+      effects:
+      - {effect: clear_flag, value: SHD_prod_4_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: SHD_restaurar_5
+      name: {english: 'Restore The Yellow River Gates', spanish: 'Restaurar Las Compuertas del Río Amarillo'}
+      desc:
+        english: 'The Yellow River Gates is ours again. The gates close, the river obeys: it produces Mandate again. +2 Mandate.'
+        spanish: 'Las Compuertas del Río Amarillo vuelve a ser nuestra. Las compuertas se cierran, el río obedece: vuelve a producir Mandato. +2 de Mandato.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: SHD_prod_5_perdida}
+      available:
+        controls_state: [Gansu]
+      effects:
+      - {effect: clear_flag, value: SHD_prod_5_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: SHD_la_primera_virtud
+      name: {english: 'The First Virtue', spanish: 'La Primera Virtud'}
+      desc:
+        english: 'The Directorate can choose the virtue it will be judged by. Only one path, and only once. Needs and spends 25 Mandate of Heaven.'
+        spanish: 'El Directorio puede elegir la virtud por la que será juzgado. Un solo camino, y una sola vez. Pide y gasta 25 de Mandato del Cielo.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: SHD_mandato, value: 25}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -25}
+      - {effect: event, id: meganations_shd_receta.10}
+      ai:
+        factor: 50
+      src: user_request
+    - id: SHD_la_segunda_virtud
+      name: {english: 'The Great Works', spanish: 'Las Grandes Obras'}
+      desc:
+        english: 'Every dynasty is remembered for one great work. Only one path, and only once. Needs and spends 50 Mandate of Heaven.'
+        spanish: 'Cada dinastía es recordada por una gran obra. Un solo camino, y una sola vez. Pide y gasta 50 de Mandato del Cielo.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: SHD_mandato, value: 50}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -50}
+      - {effect: event, id: meganations_shd_receta.11}
+      ai:
+        factor: 50
+      src: user_request
+    - id: SHD_el_mandato_pleno
+      name: {english: 'The Full Mandate', spanish: 'El Mandato Pleno'}
+      desc:
+        english: 'Heaven''s full trust, once in a dynasty. Only one path, and only once. Needs and spends 75 Mandate of Heaven.'
+        spanish: 'La confianza plena del Cielo, una vez por dinastía. Un solo camino, y una sola vez. Pide y gasta 75 de Mandato del Cielo.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: SHD_mandato, value: 75}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -75}
+      - {effect: event, id: meganations_shd_receta.12}
+      ai:
+        factor: 50
+      src: user_request
+    - id: SHD_compuertas_del_mandato
+      name: {english: 'Open the Gates', spanish: 'Abrir las Compuertas'}
+      desc:
+        english: 'Water for every factory: +8% factory output for 90 days. Costs 15 Mandate.'
+        spanish: 'Agua para cada fábrica: +8% de producción de fábricas por 90 días. Cuesta 15 de Mandato.'
+      icon_prefer:
+      - generic_industry
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: SHD_mandato, value: 15}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -15}
+      - {effect: dynamic_modifier, id: SHD_receta_compuertas, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: SHD_mandato, value: 30}}
+      src: user_request
+    - id: SHD_censo_armonico
+      name: {english: 'The Harmonious Census', spanish: 'El Censo Armónico'}
+      desc:
+        english: 'Every household counted and comforted: +6% stability for 120 days. Costs 10 Mandate.'
+        spanish: 'Cada hogar contado y consolado: +6% de estabilidad por 120 días. Cuesta 10 de Mandato.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 10
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: SHD_mandato, value: 10}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -10}
+      - {effect: dynamic_modifier, id: SHD_receta_censo, days: 120}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: SHD_mandato, value: 20}}
+      src: user_request
+    - id: SHD_brigadas_del_rio
+      name: {english: 'River Brigades', spanish: 'Brigadas del Río'}
+      desc:
+        english: 'A million volunteers on the levees: +15% construction speed for 90 days. Costs 12 Mandate.'
+        spanish: 'Un millón de voluntarios en los diques: +15% de velocidad de construcción por 90 días. Cuesta 12 de Mandato.'
+      icon_prefer:
+      - generic_construction
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: SHD_mandato, value: 12}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -12}
+      - {effect: dynamic_modifier, id: SHD_receta_brigadas, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: SHD_mandato, value: 24}}
+      src: user_request
+    - id: SHD_ejercito_del_mandato
+      name: {english: 'The Army of the Mandate', spanish: 'El Ejército del Mandato'}
+      desc:
+        english: 'The soldiers fight for Heaven itself: +10% attack for 60 days. Costs 15 Mandate.'
+        spanish: 'Los soldados pelean por el Cielo mismo: +10% de ataque por 60 días. Cuesta 15 de Mandato.'
+      icon_prefer:
+      - generic_army_support
+      cost: 10
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: SHD_mandato, value: 15}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -15}
+      - {effect: dynamic_modifier, id: SHD_receta_ejercito, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: SHD_mandato, value: 30}}
+      src: user_request
+    - id: SHD_levas_de_la_aldea
+      name: {english: 'Village Levies', spanish: 'Levas de las Aldeas'}
+      desc:
+        english: 'Every village sends its sons: +40,000 manpower. Costs 12 Mandate.'
+        spanish: 'Cada aldea manda a sus hijos: +40.000 de mano de obra. Cuesta 12 de Mandato.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: SHD_mandato, value: 12}
+      effects:
+      - {effect: add_variable, var: SHD_mandato, value: -12}
+      - {effect: add_manpower, value: 40000}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: SHD_mandato, value: 24}}
+      src: user_request
+    after_effects:
+    - {effect: run, value: SHD_recalcular_caudales}
+
+  # 2026-10-17: la receta de diversión (APF) — productoras, tres elecciones, gastos y eventos.
+  - id: APF_ubuntu_category
+    country: APF
+    icon_prefer:
+    - generic_political_actions
+    - generic_industry
+    name: {english: 'Ubuntu: I Am Because We Are', spanish: 'Ubuntu: Soy Porque Somos'}
+    desc:
+      english: 'Ubuntu: [?APF_ubuntu]\nCouncil cities: [?APF_productoras_r] / 5\n\nUbuntu is the solidarity that holds the Federation together. Five great council cities produce it. Spend it to calm the tension, to arm the brigades or to build; save it for the three great Assemblies.\n\nPRODUCERS: Èkó, Accra, Alexandria, Tripoli, Djibouti. Each one adds 1 Ubuntu a month; losing one costs 10 and 180 days of trouble, and it produces again only when we retake and restore it.\nTHE THREE CHOICES: at 25, 50, 75 Ubuntu you can spend them, once each, on a permanent choice between three paths.\nSPENDING: smaller amounts buy temporary bonuses.'
+      spanish: 'Ubuntu: [?APF_ubuntu]\nCiudades de los consejos: [?APF_productoras_r] / 5\n\nEl Ubuntu es la solidaridad que mantiene unida a la Federación. Cinco grandes ciudades de los consejos lo producen. Gastalo para calmar la tensión, armar las brigadas o construir; guardalo para las tres grandes Asambleas.\n\nPRODUCTORAS: Èkó, Acra, Alejandría, Trípoli, Yibuti. Cada una suma 1 de Ubuntu por mes; perder una cuesta 10 y 180 días de problemas, y vuelve a producir recién cuando la recuperamos y la restauramos.\nLAS TRES ELECCIONES: con 25, 50, 75 de Ubuntu podés gastarlos, una vez cada una, en una elección permanente entre tres caminos.\nGASTAR: con menos se compran bonos temporales.'
+    src: user_request
+    decisions:
+    - id: APF_restaurar_1
+      name: {english: 'Reconvene Èkó', spanish: 'Reunir de nuevo Èkó'}
+      desc:
+        english: 'Èkó is ours again. The council meets again: it produces Ubuntu again. +2 Ubuntu.'
+        spanish: 'Èkó vuelve a ser nuestra. El consejo se reúne otra vez: vuelve a producir Ubuntu. +2 de Ubuntu.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: APF_prod_1_perdida}
+      available:
+        controls_state: [Lagos, Southern Nigeria, Nigeria]
+      effects:
+      - {effect: clear_flag, value: APF_prod_1_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: APF_restaurar_2
+      name: {english: 'Reconvene Accra', spanish: 'Reunir de nuevo Acra'}
+      desc:
+        english: 'Accra is ours again. The council meets again: it produces Ubuntu again. +2 Ubuntu.'
+        spanish: 'Acra vuelve a ser nuestra. El consejo se reúne otra vez: vuelve a producir Ubuntu. +2 de Ubuntu.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: APF_prod_2_perdida}
+      available:
+        controls_state: [Ghana]
+      effects:
+      - {effect: clear_flag, value: APF_prod_2_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: APF_restaurar_3
+      name: {english: 'Reconvene Alexandria', spanish: 'Reunir de nuevo Alejandría'}
+      desc:
+        english: 'Alexandria is ours again. The council meets again: it produces Ubuntu again. +2 Ubuntu.'
+        spanish: 'Alejandría vuelve a ser nuestra. El consejo se reúne otra vez: vuelve a producir Ubuntu. +2 de Ubuntu.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: APF_prod_3_perdida}
+      available:
+        controls_state: [Alexandria]
+      effects:
+      - {effect: clear_flag, value: APF_prod_3_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: APF_restaurar_4
+      name: {english: 'Reconvene Tripoli', spanish: 'Reunir de nuevo Trípoli'}
+      desc:
+        english: 'Tripoli is ours again. The council meets again: it produces Ubuntu again. +2 Ubuntu.'
+        spanish: 'Trípoli vuelve a ser nuestra. El consejo se reúne otra vez: vuelve a producir Ubuntu. +2 de Ubuntu.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: APF_prod_4_perdida}
+      available:
+        controls_state: [Tripoli]
+      effects:
+      - {effect: clear_flag, value: APF_prod_4_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: APF_restaurar_5
+      name: {english: 'Reconvene Djibouti', spanish: 'Reunir de nuevo Yibuti'}
+      desc:
+        english: 'Djibouti is ours again. The council meets again: it produces Ubuntu again. +2 Ubuntu.'
+        spanish: 'Yibuti vuelve a ser nuestra. El consejo se reúne otra vez: vuelve a producir Ubuntu. +2 de Ubuntu.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: APF_prod_5_perdida}
+      available:
+        controls_state: [French Somaliland]
+      effects:
+      - {effect: clear_flag, value: APF_prod_5_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: APF_la_primera_asamblea
+      name: {english: 'The First Assembly', spanish: 'La Primera Asamblea'}
+      desc:
+        english: 'The councils can agree on one great principle. Only one path, and only once. Needs and spends 25 Ubuntu.'
+        spanish: 'Los consejos pueden acordar un gran principio. Un solo camino, y una sola vez. Pide y gasta 25 de Ubuntu.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 25}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -25}
+      - {effect: event, id: meganations_apf_receta.10}
+      ai:
+        factor: 50
+      src: user_request
+    - id: APF_la_segunda_asamblea
+      name: {english: 'The Second Assembly', spanish: 'La Segunda Asamblea'}
+      desc:
+        english: 'The Federation decides what it owes the world. Only one path, and only once. Needs and spends 50 Ubuntu.'
+        spanish: 'La Federación decide qué le debe al mundo. Un solo camino, y una sola vez. Pide y gasta 50 de Ubuntu.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 50}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -50}
+      - {effect: event, id: meganations_apf_receta.11}
+      ai:
+        factor: 50
+      src: user_request
+    - id: APF_la_gran_asamblea
+      name: {english: 'The Assembly of the Peoples', spanish: 'La Asamblea de los Pueblos'}
+      desc:
+        english: 'The last Assembly: what Africa will be when the century ends. Only one path, and only once. Needs and spends 75 Ubuntu.'
+        spanish: 'La última Asamblea: qué va a ser África cuando termine el siglo. Un solo camino, y una sola vez. Pide y gasta 75 de Ubuntu.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 75}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -75}
+      - {effect: event, id: meganations_apf_receta.12}
+      ai:
+        factor: 50
+      src: user_request
+    - id: APF_cumbre_de_consejos
+      name: {english: 'Summit of Councils', spanish: 'Cumbre de Consejos'}
+      desc:
+        english: 'Three days of talks under the palaver tree: tension -15. Costs 12 Ubuntu.'
+        spanish: 'Tres días de conversación bajo el árbol de la palabra: tensión -15. Cuesta 12 de Ubuntu.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 12}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -12}
+      - {effect: add_variable, var: APF_tension, value: -15}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: APF_ubuntu, value: 24}}
+      src: user_request
+    - id: APF_brigadas_solidarias
+      name: {english: 'Solidarity Brigades', spanish: 'Brigadas Solidarias'}
+      desc:
+        english: 'Volunteers from every member: +30,000 manpower. Costs 12 Ubuntu.'
+        spanish: 'Voluntarios de cada miembro: +30.000 de mano de obra. Cuesta 12 de Ubuntu.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 12}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -12}
+      - {effect: add_manpower, value: 30000}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: APF_ubuntu, value: 24}}
+      src: user_request
+    - id: APF_mercado_de_temporada
+      name: {english: 'The Season Market', spanish: 'El Mercado de Temporada'}
+      desc:
+        english: 'Every member trades with every other: +8% factory output for 90 days. Costs 15 Ubuntu.'
+        spanish: 'Cada miembro comercia con todos los demás: +8% de producción de fábricas por 90 días. Cuesta 15 de Ubuntu.'
+      icon_prefer:
+      - generic_industry
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 15}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -15}
+      - {effect: dynamic_modifier, id: APF_receta_mercado, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: APF_ubuntu, value: 30}}
+      src: user_request
+    - id: APF_guardias_del_sahel
+      name: {english: 'Guards of the Sahel', spanish: 'Guardias del Sahel'}
+      desc:
+        english: 'The desert scouts watch every border: +12% defence for 60 days. Costs 10 Ubuntu.'
+        spanish: 'Los exploradores del desierto vigilan cada frontera: +12% de defensa por 60 días. Cuesta 10 de Ubuntu.'
+      icon_prefer:
+      - generic_army_support
+      cost: 10
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 10}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -10}
+      - {effect: dynamic_modifier, id: APF_receta_sahel, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: APF_ubuntu, value: 20}}
+      src: user_request
+    - id: APF_obras_comunitarias
+      name: {english: 'Community Works', spanish: 'Obras Comunitarias'}
+      desc:
+        english: 'Every neighbourhood builds its own: +15% construction speed for 90 days. Costs 12 Ubuntu.'
+        spanish: 'Cada barrio construye lo suyo: +15% de velocidad de construcción por 90 días. Cuesta 12 de Ubuntu.'
+      icon_prefer:
+      - generic_construction
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: APF_ubuntu, value: 12}
+      effects:
+      - {effect: add_variable, var: APF_ubuntu, value: -12}
+      - {effect: dynamic_modifier, id: APF_receta_obras, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: APF_ubuntu, value: 24}}
+      src: user_request
+    after_effects:
+    - {effect: run, value: APF_espiritu_vivo}
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -14534,6 +15052,7 @@ scripted_effects:
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
   - id: SHD_pulso_del_rio
     effects:
+    - {effect: run, value: SHD_pulso_receta}
     - effect: if
       when: {focus: SHD_sensores_del_caudal, not_flag: SHD_zhou}
       then:
@@ -14720,6 +15239,7 @@ scripted_effects:
       - {effect: event, id: meganations_shd.220, days: 1}
   - id: APF_pulso_de_los_consejos
     effects:
+    - {effect: run, value: APF_pulso_receta}
     - effect: if
       when: {focus: APF_radios_comunitarias}
       then:
@@ -19843,6 +20363,314 @@ scripted_effects:
           - {effect: flag, value: FCU_disturbio_3}
           - {effect: event, id: meganations_fcu_receta.63, days: 1}
 
+  # 2026-10-17: pulso de la receta (SHD), lo llama SHD_pulso_del_rio
+  - id: SHD_pulso_receta
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - SHD_productoras_r
+        - 0
+    - effect: if
+      when:
+        controls_state: [Yunnan]
+        not_flag: SHD_prod_1_perdida
+      then:
+      - {effect: flag, value: SHD_prod_1_activa}
+      - {effect: add_variable, var: SHD_productoras_r, value: 1}
+      - {effect: add_variable, var: SHD_mandato, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Yunnan]}
+        not_flag: SHD_prod_1_perdida
+        flag: SHD_prod_1_activa
+      then:
+      - {effect: flag, value: SHD_prod_1_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: -10}
+      - {effect: clamp, var: SHD_mandato, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: SHD_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_shd_receta.1, days: 1}
+    - effect: if
+      when:
+        controls_state: [Guangdong]
+        not_flag: SHD_prod_2_perdida
+      then:
+      - {effect: flag, value: SHD_prod_2_activa}
+      - {effect: add_variable, var: SHD_productoras_r, value: 1}
+      - {effect: add_variable, var: SHD_mandato, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Guangdong]}
+        not_flag: SHD_prod_2_perdida
+        flag: SHD_prod_2_activa
+      then:
+      - {effect: flag, value: SHD_prod_2_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: -10}
+      - {effect: clamp, var: SHD_mandato, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: SHD_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_shd_receta.2, days: 1}
+    - effect: if
+      when:
+        controls_state: [Zhejiang]
+        not_flag: SHD_prod_3_perdida
+      then:
+      - {effect: flag, value: SHD_prod_3_activa}
+      - {effect: add_variable, var: SHD_productoras_r, value: 1}
+      - {effect: add_variable, var: SHD_mandato, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Zhejiang]}
+        not_flag: SHD_prod_3_perdida
+        flag: SHD_prod_3_activa
+      then:
+      - {effect: flag, value: SHD_prod_3_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: -10}
+      - {effect: clamp, var: SHD_mandato, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: SHD_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_shd_receta.3, days: 1}
+    - effect: if
+      when:
+        controls_state: [Fujian]
+        not_flag: SHD_prod_4_perdida
+      then:
+      - {effect: flag, value: SHD_prod_4_activa}
+      - {effect: add_variable, var: SHD_productoras_r, value: 1}
+      - {effect: add_variable, var: SHD_mandato, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Fujian]}
+        not_flag: SHD_prod_4_perdida
+        flag: SHD_prod_4_activa
+      then:
+      - {effect: flag, value: SHD_prod_4_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: -10}
+      - {effect: clamp, var: SHD_mandato, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: SHD_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_shd_receta.4, days: 1}
+    - effect: if
+      when:
+        controls_state: [Gansu]
+        not_flag: SHD_prod_5_perdida
+      then:
+      - {effect: flag, value: SHD_prod_5_activa}
+      - {effect: add_variable, var: SHD_productoras_r, value: 1}
+      - {effect: add_variable, var: SHD_mandato, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Gansu]}
+        not_flag: SHD_prod_5_perdida
+        flag: SHD_prod_5_activa
+      then:
+      - {effect: flag, value: SHD_prod_5_perdida}
+      - {effect: add_variable, var: SHD_mandato, value: -10}
+      - {effect: clamp, var: SHD_mandato, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: SHD_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_shd_receta.5, days: 1}
+    - effect: if
+      when:
+        not_flag: SHD_receta_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: SHD_receta_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_0}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_0, days: 1095}
+          - {effect: event, id: meganations_shd_receta.20, days: 1}
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_1}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_1, days: 1095}
+          - {effect: event, id: meganations_shd_receta.21, days: 1}
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_2}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_2, days: 1095}
+          - {effect: event, id: meganations_shd_receta.22, days: 1}
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_3}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_3, days: 1095}
+          - {effect: event, id: meganations_shd_receta.23, days: 1}
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_4}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_4, days: 1095}
+          - {effect: event, id: meganations_shd_receta.24, days: 1}
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_5}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_5, days: 1095}
+          - {effect: event, id: meganations_shd_receta.25, days: 1}
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_6}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_6, days: 1095}
+          - {effect: event, id: meganations_shd_receta.26, days: 1}
+        - weight: 1
+          skip_if: {flag: SHD_receta_visto_7}
+          effects:
+          - {effect: flag, value: SHD_receta_visto_7, days: 1095}
+          - {effect: event, id: meganations_shd_receta.27, days: 1}
+
+  # 2026-10-17: pulso de la receta (APF), lo llama APF_pulso_de_los_consejos
+  - id: APF_pulso_receta
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - APF_productoras_r
+        - 0
+    - effect: if
+      when:
+        controls_state: [Lagos, Southern Nigeria, Nigeria]
+        not_flag: APF_prod_1_perdida
+      then:
+      - {effect: flag, value: APF_prod_1_activa}
+      - {effect: add_variable, var: APF_productoras_r, value: 1}
+      - {effect: add_variable, var: APF_ubuntu, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Lagos, Southern Nigeria, Nigeria]}
+        not_flag: APF_prod_1_perdida
+        flag: APF_prod_1_activa
+      then:
+      - {effect: flag, value: APF_prod_1_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: -10}
+      - {effect: clamp, var: APF_ubuntu, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: APF_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_apf_receta.1, days: 1}
+    - effect: if
+      when:
+        controls_state: [Ghana]
+        not_flag: APF_prod_2_perdida
+      then:
+      - {effect: flag, value: APF_prod_2_activa}
+      - {effect: add_variable, var: APF_productoras_r, value: 1}
+      - {effect: add_variable, var: APF_ubuntu, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Ghana]}
+        not_flag: APF_prod_2_perdida
+        flag: APF_prod_2_activa
+      then:
+      - {effect: flag, value: APF_prod_2_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: -10}
+      - {effect: clamp, var: APF_ubuntu, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: APF_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_apf_receta.2, days: 1}
+    - effect: if
+      when:
+        controls_state: [Alexandria]
+        not_flag: APF_prod_3_perdida
+      then:
+      - {effect: flag, value: APF_prod_3_activa}
+      - {effect: add_variable, var: APF_productoras_r, value: 1}
+      - {effect: add_variable, var: APF_ubuntu, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Alexandria]}
+        not_flag: APF_prod_3_perdida
+        flag: APF_prod_3_activa
+      then:
+      - {effect: flag, value: APF_prod_3_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: -10}
+      - {effect: clamp, var: APF_ubuntu, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: APF_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_apf_receta.3, days: 1}
+    - effect: if
+      when:
+        controls_state: [Tripoli]
+        not_flag: APF_prod_4_perdida
+      then:
+      - {effect: flag, value: APF_prod_4_activa}
+      - {effect: add_variable, var: APF_productoras_r, value: 1}
+      - {effect: add_variable, var: APF_ubuntu, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Tripoli]}
+        not_flag: APF_prod_4_perdida
+        flag: APF_prod_4_activa
+      then:
+      - {effect: flag, value: APF_prod_4_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: -10}
+      - {effect: clamp, var: APF_ubuntu, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: APF_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_apf_receta.4, days: 1}
+    - effect: if
+      when:
+        controls_state: [French Somaliland]
+        not_flag: APF_prod_5_perdida
+      then:
+      - {effect: flag, value: APF_prod_5_activa}
+      - {effect: add_variable, var: APF_productoras_r, value: 1}
+      - {effect: add_variable, var: APF_ubuntu, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [French Somaliland]}
+        not_flag: APF_prod_5_perdida
+        flag: APF_prod_5_activa
+      then:
+      - {effect: flag, value: APF_prod_5_perdida}
+      - {effect: add_variable, var: APF_ubuntu, value: -10}
+      - {effect: clamp, var: APF_ubuntu, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: APF_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_apf_receta.5, days: 1}
+    - effect: if
+      when:
+        not_flag: APF_receta_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: APF_receta_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_0}
+          effects:
+          - {effect: flag, value: APF_receta_visto_0, days: 1095}
+          - {effect: event, id: meganations_apf_receta.20, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_1}
+          effects:
+          - {effect: flag, value: APF_receta_visto_1, days: 1095}
+          - {effect: event, id: meganations_apf_receta.21, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_2}
+          effects:
+          - {effect: flag, value: APF_receta_visto_2, days: 1095}
+          - {effect: event, id: meganations_apf_receta.22, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_3}
+          effects:
+          - {effect: flag, value: APF_receta_visto_3, days: 1095}
+          - {effect: event, id: meganations_apf_receta.23, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_4}
+          effects:
+          - {effect: flag, value: APF_receta_visto_4, days: 1095}
+          - {effect: event, id: meganations_apf_receta.24, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_5}
+          effects:
+          - {effect: flag, value: APF_receta_visto_5, days: 1095}
+          - {effect: event, id: meganations_apf_receta.25, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_6}
+          effects:
+          - {effect: flag, value: APF_receta_visto_6, days: 1095}
+          - {effect: event, id: meganations_apf_receta.26, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_receta_visto_7}
+          effects:
+          - {effect: flag, value: APF_receta_visto_7, days: 1095}
+          - {effect: event, id: meganations_apf_receta.27, days: 1}
+
 dynamic_modifiers:
   # 2026-10-11 (pedido del usuario: más combate aéreo y ases para el NAS)
   - id: NAS_escuela_de_ases
@@ -21059,6 +21887,170 @@ dynamic_modifiers:
     desc: {english: 'The cities do not obey the Directorate any more.', spanish: 'Las ciudades ya no le obedecen al Directorio.'}
     modifiers: {'?stability_factor': -0.06, '?industrial_capacity_factory': -0.05}
 
+  - id: SHD_receta_productora_perdida
+    country: SHD
+    no_art: true
+    name: {english: 'A Dam Has Fallen', spanish: 'Cayó una Represa'}
+    desc: {english: '-5% stability and -10% construction speed', spanish: '-5% de estabilidad y -10% de velocidad de construcción'}
+    modifiers: {'?stability_factor': -0.05, '?production_speed_buildings_factor': -0.1}
+  - id: SHD_virtud_ren
+    country: SHD
+    no_art: true
+    name: {english: 'Ren: Benevolence', spanish: 'Ren: Benevolencia'}
+    desc: {english: 'The people are the root of the state.', spanish: 'El pueblo es la raíz del Estado.'}
+    modifiers: {'?stability_factor': 0.05, '?recruitable_population_factor': 0.04}
+  - id: SHD_virtud_li
+    country: SHD
+    no_art: true
+    name: {english: 'Li: Ritual Order', spanish: 'Li: Orden Ritual'}
+    desc: {english: 'Everything in its place.', spanish: 'Cada cosa en su lugar.'}
+    modifiers: {'?political_power_gain': 0.15, '?army_org_factor': 0.03}
+  - id: SHD_virtud_zhi
+    country: SHD
+    no_art: true
+    name: {english: 'Zhi: Wisdom', spanish: 'Zhi: Sabiduría'}
+    desc: {english: 'The scholar before the general.', spanish: 'El letrado antes que el general.'}
+    modifiers: {'?research_speed_factor': 0.05}
+  - id: SHD_obra_canal
+    country: SHD
+    no_art: true
+    name: {english: 'The Grand Canal Reborn', spanish: 'El Gran Canal Renacido'}
+    desc: {english: 'From Beijing to Hangzhou, again.', spanish: 'De Pekín a Hangzhou, otra vez.'}
+    modifiers: {'?production_speed_buildings_factor': 0.1, '?production_speed_infrastructure_factor': 0.15}
+  - id: SHD_obra_muralla
+    country: SHD
+    no_art: true
+    name: {english: 'The Digital Wall', spanish: 'La Muralla Digital'}
+    desc: {english: 'Nothing crosses unseen.', spanish: 'Nada cruza sin ser visto.'}
+    modifiers: {'?army_defence_factor': 0.08, '?stability_factor': 0.03}
+  - id: SHD_obra_fabricas
+    country: SHD
+    no_art: true
+    name: {english: 'The Thousand Factories', spanish: 'Las Mil Fábricas'}
+    desc: {english: 'A factory for every village.', spanish: 'Una fábrica para cada aldea.'}
+    modifiers: {'?industrial_capacity_factory': 0.07}
+  - id: SHD_mandato_tianxia
+    country: SHD
+    no_art: true
+    name: {english: 'All Under Heaven', spanish: 'Todo Bajo el Cielo'}
+    desc: {english: 'There is no outside.', spanish: 'No hay afuera.'}
+    modifiers: {'?army_attack_factor': 0.08, '?war_support_factor': 0.08, '?army_org_factor': 0.05}
+  - id: SHD_mandato_datong
+    country: SHD
+    no_art: true
+    name: {english: 'Great Harmony', spanish: 'La Gran Armonía'}
+    desc: {english: 'The world shared by all.', spanish: 'El mundo compartido por todos.'}
+    modifiers: {'?stability_factor': 0.1, '?political_power_gain': 0.25}
+  - id: SHD_mandato_motor
+    country: SHD
+    no_art: true
+    name: {english: 'The Celestial Engine', spanish: 'El Motor Celeste'}
+    desc: {english: 'Heaven runs on electricity now.', spanish: 'El Cielo ahora funciona con electricidad.'}
+    modifiers: {'?industrial_capacity_factory': 0.1, '?research_speed_factor': 0.08}
+  - id: SHD_receta_compuertas
+    country: SHD
+    no_art: true
+    name: {english: 'Open the Gates', spanish: 'Abrir las Compuertas'}
+    desc: {english: 'The turbines sing.', spanish: 'Las turbinas cantan.'}
+    modifiers: {'?industrial_capacity_factory': 0.08}
+  - id: SHD_receta_censo
+    country: SHD
+    no_art: true
+    name: {english: 'The Harmonious Census', spanish: 'El Censo Armónico'}
+    desc: {english: 'Everyone has a number, everyone has a place.', spanish: 'Todos tienen un número, todos tienen un lugar.'}
+    modifiers: {'?stability_factor': 0.06}
+  - id: SHD_receta_brigadas
+    country: SHD
+    no_art: true
+    name: {english: 'River Brigades', spanish: 'Brigadas del Río'}
+    desc: {english: 'Shovels at dawn.', spanish: 'Palas al amanecer.'}
+    modifiers: {'?production_speed_buildings_factor': 0.15}
+  - id: SHD_receta_ejercito
+    country: SHD
+    no_art: true
+    name: {english: 'The Army of the Mandate', spanish: 'El Ejército del Mandato'}
+    desc: {english: 'Heaven marches.', spanish: 'El Cielo marcha.'}
+    modifiers: {'?army_attack_factor': 0.1}
+
+  - id: APF_receta_productora_perdida
+    country: APF
+    no_art: true
+    name: {english: 'A Council City Lost', spanish: 'Una Ciudad de los Consejos Perdida'}
+    desc: {english: '-5% stability and -10% construction speed', spanish: '-5% de estabilidad y -10% de velocidad de construcción'}
+    modifiers: {'?stability_factor': -0.05, '?production_speed_buildings_factor': -0.1}
+  - id: APF_asamblea_mercado
+    country: APF
+    no_art: true
+    name: {english: 'Common Market', spanish: 'Mercado Común'}
+    desc: {english: 'One market from Cairo to the Cape.', spanish: 'Un solo mercado del Cairo al Cabo.'}
+    modifiers: {'?industrial_capacity_factory': 0.05, '?production_speed_buildings_factor': 0.05}
+  - id: APF_asamblea_brigadas
+    country: APF
+    no_art: true
+    name: {english: 'The People''s Brigades', spanish: 'Las Brigadas del Pueblo'}
+    desc: {english: 'Every village defends the Federation.', spanish: 'Cada aldea defiende la Federación.'}
+    modifiers: {'?recruitable_population_factor': 0.08, '?army_org_factor': 0.03}
+  - id: APF_asamblea_palabra
+    country: APF
+    no_art: true
+    name: {english: 'The Palaver Tree', spanish: 'El Árbol de la Palabra'}
+    desc: {english: 'Under the tree, everyone speaks.', spanish: 'Bajo el árbol, todos hablan.'}
+    modifiers: {'?stability_factor': 0.05, '?political_power_gain': 0.1}
+  - id: APF_asamblea_muralla_verde
+    country: APF
+    no_art: true
+    name: {english: 'The Great Green Wall', spanish: 'La Gran Muralla Verde'}
+    desc: {english: 'A forest across the Sahel.', spanish: 'Un bosque a través del Sahel.'}
+    modifiers: {'?stability_factor': 0.04, '?production_speed_infrastructure_factor': 0.15}
+  - id: APF_asamblea_leon
+    country: APF
+    no_art: true
+    name: {english: 'The Lion''s Army', spanish: 'El Ejército del León'}
+    desc: {english: 'The Federation can bite.', spanish: 'La Federación puede morder.'}
+    modifiers: {'?army_attack_factor': 0.07, '?army_defence_factor': 0.04}
+  - id: APF_asamblea_universidades
+    country: APF
+    no_art: true
+    name: {english: 'The Free Universities', spanish: 'Las Universidades Libres'}
+    desc: {english: 'Timbuktu, again.', spanish: 'Tombuctú, otra vez.'}
+    modifiers: {'?research_speed_factor': 0.07}
+  - id: APF_asamblea_panafrica
+    country: APF
+    no_art: true
+    name: {english: 'Pan-Africa', spanish: 'Panáfrica'}
+    desc: {english: 'One continent, one voice.', spanish: 'Un continente, una voz.'}
+    modifiers: {'?stability_factor': 0.08, '?political_power_gain': 0.2, '?war_support_factor': 0.05}
+  - id: APF_asamblea_gigante
+    country: APF
+    no_art: true
+    name: {english: 'The Sleeping Giant Wakes', spanish: 'El Gigante Dormido Despierta'}
+    desc: {english: 'The factories of the world move south.', spanish: 'Las fábricas del mundo se mudan al sur.'}
+    modifiers: {'?industrial_capacity_factory': 0.1, '?production_speed_buildings_factor': 0.1}
+  - id: APF_asamblea_escudo
+    country: APF
+    no_art: true
+    name: {english: 'The Shield of Africa', spanish: 'El Escudo de África'}
+    desc: {english: 'Never again a colony.', spanish: 'Nunca más una colonia.'}
+    modifiers: {'?army_defence_factor': 0.1, '?army_org_factor': 0.06, '?recruitable_population_factor': 0.05}
+  - id: APF_receta_mercado
+    country: APF
+    no_art: true
+    name: {english: 'The Season Market', spanish: 'El Mercado de Temporada'}
+    desc: {english: 'The caravans are back.', spanish: 'Volvieron las caravanas.'}
+    modifiers: {'?industrial_capacity_factory': 0.08}
+  - id: APF_receta_sahel
+    country: APF
+    no_art: true
+    name: {english: 'Guards of the Sahel', spanish: 'Guardias del Sahel'}
+    desc: {english: 'Nobody crosses the sand unseen.', spanish: 'Nadie cruza la arena sin ser visto.'}
+    modifiers: {'?army_defence_factor': 0.12}
+  - id: APF_receta_obras
+    country: APF
+    no_art: true
+    name: {english: 'Community Works', spanish: 'Obras Comunitarias'}
+    desc: {english: 'Many hands.', spanish: 'Muchas manos.'}
+    modifiers: {'?production_speed_buildings_factor': 0.15}
+
 on_actions:
   # 2026-10-17: la bomba es secreta hasta que se usa. Cuando alguien la tira
   # (ROOT), el mundo reacciona (meganations_asc_receta.40 y .41).
@@ -21164,3 +22156,7 @@ variable_names:
   NRE_productoras_r: {english: "Triumphal cities", spanish: "Ciudades triunfales"}
   FCU_dividendos: {english: "Dividends", spanish: "Dividendos"}
   FCU_productoras_r: {english: "Corporate headquarters", spanish: "Sedes corporativas"}
+  SHD_mandato: {english: "Mandate of Heaven", spanish: "Mandato del Cielo"}
+  SHD_productoras_r: {english: "Great dams", spanish: "Grandes represas"}
+  APF_ubuntu: {english: "Ubuntu", spanish: "Ubuntu"}
+  APF_productoras_r: {english: "Council cities", spanish: "Ciudades de los consejos"}
