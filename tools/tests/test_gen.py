@@ -3895,6 +3895,9 @@ def test_piel_interfaz() -> None:
             text = Path(ctx.data["ui_inventory_path"]).read_text(encoding="utf-8")
             check("piel: el inventario lista las texturas de la barra superior con su tamano",
                   "gfx/interface/topbar/topbar_bg_fixture.dds  32x8" in text and "gfx/interface/topbar/topbar_bg_fixture.dds" in inv, text[:800])
+            check("piel: lo que el juego elige por codigo (leyes, ideologias...) entra al inventario por nombre de sprite",
+                  "== leyes" in text and "gfx/interface/ideas/idea_war_economy.dds" in text
+                  and "== ideologias" in text and "== notificaciones" in text, text[-800:])
             check("piel: los botones dicen sus cuadros y su borde",
                   "3 cuadros de 8x8" in text and "borde 4x4 (centro estirado)" in text, text[:800])
             out = ctx.mod_root / "gfx/interface/topbar/topbar_bg_fixture.dds"

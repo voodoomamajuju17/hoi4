@@ -151,6 +151,34 @@ def _chevrones(w: int, h: int, color, arriba: bool):
     return out
 
 
+def _caja(frame):
+    """Dónde está el dibujo en el cuadro original (lo opaco y no negro): el
+    nuevo va en esa misma caja, así queda del tamaño y en el lugar del juego
+    (2026-10-17: "corregir escala de los íconos (y posición), están grandes")."""
+    w, h = frame.size
+    px = frame.load()
+    xs, ys = [], []
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a > 128 and max(r, g, b) > 40:
+                xs.append(x)
+                ys.append(y)
+    if not xs:
+        return (2, 2, w - 2, h - 2)
+    return (min(xs), min(ys), max(xs) + 1, max(ys) + 1)
+
+
+def _en_caja(icon, size, caja):
+    """El ícono nuevo dentro de la caja del original, centrado en ella."""
+    from PIL import Image
+    l, t, r, b = caja
+    dib = _fit(icon, r - l, b - t)
+    out = Image.new("RGBA", size, (0, 0, 0, 0))
+    out.alpha_composite(dib, (l, t))
+    return out
+
+
 def _icono(pieza: dict, original, material):
     """Textura final de una pieza con ícono nuevo (o None si todavía no llegó)."""
     from PIL import Image, ImageFilter
@@ -164,9 +192,10 @@ def _icono(pieza: dict, original, material):
     fw, fh = frames[0].size
     if uso == "barra":
         out = []
+        caja = _caja(frames[0])   # la misma caja en los dos cuadros: el dibujo no salta al pasar el mouse
         for i, f in enumerate(frames):
             placa = retexturar(_placa(f, 4), material)
-            dib = _fit(icon, fw - 12, fh - 8)
+            dib = _en_caja(icon, (fw, fh), caja)
             placa.alpha_composite(_brillo(dib, 0.82 if i == 0 else 1.12))
             out.append(placa)
         return _join(out)
@@ -175,7 +204,7 @@ def _icono(pieza: dict, original, material):
         icon = icon.resize((max(fw, round(icon.width * s)), max(fh, round(icon.height * s))), Image.LANCZOS)
         left, top = (icon.width - fw) // 2, (icon.height - fh) // 2
         return _join([icon.crop((left, top, left + fw, top + fh))] * n)
-    dib = _fit(icon, fw, fh)
+    dib = _en_caja(icon, (fw, fh), _caja(frames[0]))
     if uso == "combustible":
         # 0 estable, 1 subiendo (flechas verdes), 2 bajando (rojas), como el juego
         out = [dib]
