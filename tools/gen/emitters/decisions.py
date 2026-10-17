@@ -139,6 +139,19 @@ def _emit(ctx: BuildContext) -> None:
             se.add(e["id"], render_effects(e["id"], e["effects"], effect_ctx, effects_used, where=SOURCE))
         ctx.write_script("common/scripted_effects/meganations_effects.txt", se, source=SOURCE)
     _emit_dynamic_modifiers(ctx)
+    # 2026-10-17: ganchos del juego (on_actions), ej. on_nuke_drop para que el
+    # mundo reaccione recién cuando alguien usa la bomba
+    hooks = (ctx.spec.raw.get("decisions") or {}).get("on_actions") or []
+    if hooks:
+        merged: dict[str, Block] = {}
+        for h in hooks:
+            body_h = render_effects(h.get("id", h["hook"]), list(h["effects"]), effect_ctx, effects_used, where=SOURCE)
+            dest = merged.setdefault(h["hook"], Block())
+            dest.entries.extend(body_h.entries)
+        on = Block()
+        for hook, eff in merged.items():
+            on.add(hook, Block([("effect", eff)]))
+        ctx.write_script("common/on_actions/06_meganations_ganchos.txt", Block([("on_actions", on)]), source=SOURCE)
     _check_fields(vanilla, ctx, used_optional)
     ctx.write_script("common/decisions/categories/meganations_categories.txt", cats, source=SOURCE)
     ctx.write_script("common/decisions/meganations_decisions.txt", decs, source=SOURCE)

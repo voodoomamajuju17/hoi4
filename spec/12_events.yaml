@@ -14957,3 +14957,331 @@ namespaces:
         - {effect: dynamic_modifier, id: MEGANATIONS_hijos_de_odin_caen, days: 365}
         - {effect: add_political_power, value: 100}
       src: user_request
+
+  # 2026-10-17: la receta de diversión (NAS)
+  meganations_nas_receta:
+    country: NAS
+    events:
+    - id: 1
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Temple of the Lake Has Fallen', spanish: 'Cayó El Templo del Lago'}
+      desc:
+        english: 'The enemy holds the Temple of the Lake. Its mirrors are broken and its priests have fled to the mountains.\n\n-15 Inti-Soma. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Desecrated Temple.'
+        spanish: 'El enemigo tiene el Templo del Lago. Sus espejos están rotos y sus sacerdotes huyeron a la montaña.\n\n-15 de Inti-Soma. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Templo Profanado.'
+      options:
+      - name: {english: 'Carry the sacred fire to safety.', spanish: 'Llevar el fuego sagrado a lugar seguro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NAS_inti, value: 7}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'The Sun will remember them.', spanish: 'El Sol se va a acordar de ellos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 2
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Temple of the Coast Has Fallen', spanish: 'Cayó El Templo de la Costa'}
+      desc:
+        english: 'The enemy holds the Temple of the Coast. Its mirrors are broken and its priests have fled to the mountains.\n\n-15 Inti-Soma. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Desecrated Temple.'
+        spanish: 'El enemigo tiene el Templo de la Costa. Sus espejos están rotos y sus sacerdotes huyeron a la montaña.\n\n-15 de Inti-Soma. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Templo Profanado.'
+      options:
+      - name: {english: 'Carry the sacred fire to safety.', spanish: 'Llevar el fuego sagrado a lugar seguro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NAS_inti, value: 7}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'The Sun will remember them.', spanish: 'El Sol se va a acordar de ellos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 3
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Temple of the Equator Has Fallen', spanish: 'Cayó El Templo del Ecuador'}
+      desc:
+        english: 'The enemy holds the Temple of the Equator. Its mirrors are broken and its priests have fled to the mountains.\n\n-15 Inti-Soma. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Desecrated Temple.'
+        spanish: 'El enemigo tiene el Templo del Ecuador. Sus espejos están rotos y sus sacerdotes huyeron a la montaña.\n\n-15 de Inti-Soma. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Templo Profanado.'
+      options:
+      - name: {english: 'Carry the sacred fire to safety.', spanish: 'Llevar el fuego sagrado a lugar seguro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NAS_inti, value: 7}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'The Sun will remember them.', spanish: 'El Sol se va a acordar de ellos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 4
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The White Temple Has Fallen', spanish: 'Cayó El Templo Blanco'}
+      desc:
+        english: 'The enemy holds the White Temple. Its mirrors are broken and its priests have fled to the mountains.\n\n-15 Inti-Soma. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Desecrated Temple.'
+        spanish: 'El enemigo tiene el Templo Blanco. Sus espejos están rotos y sus sacerdotes huyeron a la montaña.\n\n-15 de Inti-Soma. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Templo Profanado.'
+      options:
+      - name: {english: 'Carry the sacred fire to safety.', spanish: 'Llevar el fuego sagrado a lugar seguro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NAS_inti, value: 7}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'The Sun will remember them.', spanish: 'El Sol se va a acordar de ellos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 5
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Temple of the Desert Has Fallen', spanish: 'Cayó El Templo del Desierto'}
+      desc:
+        english: 'The enemy holds the Temple of the Desert. Its mirrors are broken and its priests have fled to the mountains.\n\n-15 Inti-Soma. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Desecrated Temple.'
+        spanish: 'El enemigo tiene el Templo del Desierto. Sus espejos están rotos y sus sacerdotes huyeron a la montaña.\n\n-15 de Inti-Soma. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Templo Profanado.'
+      options:
+      - name: {english: 'Carry the sacred fire to safety.', spanish: 'Llevar el fuego sagrado a lugar seguro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NAS_inti, value: 7}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 40
+      - name: {english: 'The Sun will remember them.', spanish: 'El Sol se va a acordar de ellos.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 10
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The First Crown', spanish: 'La Primera Corona'}
+      desc:
+        english: 'The First Crown shines over Cusco. The council of the four quarters argues over what it should bless.\n\nTHE EYES OF THE CONDOR: +5% air attack, defence and superiority.\nTHE ROAD OF THE INCA: +20% infrastructure construction and +5% army speed.\nTHE CHILDREN OF THE SUN: +8% recruitable population and +3% stability.'
+        spanish: 'La Primera Corona brilla sobre el Cusco. El consejo de los cuatro suyos discute qué debe bendecir.\n\nLOS OJOS DEL CÓNDOR: +5% de ataque, defensa y superioridad aérea.\nEL CAMINO DEL INCA: +20% de construcción de infraestructura y +5% de velocidad del ejército.\nLOS HIJOS DEL SOL: +8% de población reclutable y +3% de estabilidad.'
+      options:
+      - name: {english: 'The Eyes of the Condor.', spanish: 'Los Ojos del Cóndor.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_ojos_del_condor}
+        ai_chance: 40
+      - name: {english: 'The Road of the Inca.', spanish: 'El Camino del Inca.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_camino_del_inca}
+        ai_chance: 30
+      - name: {english: 'The Children of the Sun.', spanish: 'Los Hijos del Sol.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_hijos_del_sol}
+        ai_chance: 30
+      src: user_request
+    - id: 11
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Second Crown', spanish: 'La Segunda Corona'}
+      desc:
+        english: 'The Second Crown is too heavy for one head. The generals, the farmers and the astronomers each want it.\n\nTHE WARRIORS OF THE PUMA: +8% attack and +5% organisation.\nTHE GOLDEN TERRACES: +6% factory output and -3% consumer goods.\nTHE ETERNAL QUIPU: +7% research speed.'
+        spanish: 'La Segunda Corona es demasiado pesada para una sola cabeza. Los generales, los campesinos y los astrónomos la quieren para sí.\n\nLOS GUERREROS DEL PUMA: +8% de ataque y +5% de organización.\nLAS TERRAZAS DORADAS: +6% de producción de fábricas y -3% de bienes de consumo.\nEL QUIPU ETERNO: +7% de velocidad de investigación.'
+      options:
+      - name: {english: 'The Warriors of the Puma.', spanish: 'Los Guerreros del Puma.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_guerreros_del_puma}
+        ai_chance: 40
+      - name: {english: 'The Golden Terraces.', spanish: 'Las Terrazas Doradas.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_terrazas_doradas}
+        ai_chance: 30
+      - name: {english: 'The Eternal Quipu.', spanish: 'El Quipu Eterno.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_quipu_eterno}
+        ai_chance: 30
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Crown of Inti', spanish: 'La Corona del Inti'}
+      desc:
+        english: 'For the first time since the Great Unravelling, every temple shines at once. The Sapa Inca must decide what the Kingdom will be.\n\nTAWANTINSUYU REBORN: +10% defence, +5% attack and +10% war support.\nTHE SUN THAT NEVER SETS: +0.3 political power a day and +10% stability.\nTHE GOLD OF THE ANDES: +10% factory output and +15% construction speed.'
+        spanish: 'Por primera vez desde el Gran Desarme, todos los templos brillan a la vez. El Sapa Inca debe decidir qué va a ser el Reino.\n\nEL TAWANTINSUYU RENACIDO: +10% de defensa, +5% de ataque y +10% de apoyo a la guerra.\nEL SOL QUE NO SE PONE: +0,3 de poder político por día y +10% de estabilidad.\nEL ORO DE LOS ANDES: +10% de producción de fábricas y +15% de velocidad de construcción.'
+      options:
+      - name: {english: 'Tawantinsuyu Reborn.', spanish: 'El Tawantinsuyu Renacido.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_tawantinsuyu}
+        ai_chance: 40
+      - name: {english: 'The Sun That Never Sets.', spanish: 'El Sol que No se Pone.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_sol_eterno}
+        ai_chance: 25
+      - name: {english: 'The Gold of the Andes.', spanish: 'El Oro de los Andes.'}
+        effects:
+        - {effect: dynamic_modifier, id: NAS_corona_oro_de_los_andes}
+        ai_chance: 35
+      src: user_request
+    - id: 20
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Solar Flare Over the Altiplano', spanish: 'Llamarada Solar sobre el Altiplano'}
+      desc:
+        english: 'A solar flare lights the altiplano at midnight. The mirrors drink it.\n\nStore it: +15 Inti-Soma. Study it: a research bonus.'
+        spanish: 'Una llamarada solar ilumina el altiplano a medianoche. Los espejos se la toman.\n\nGuardarla: +15 de Inti-Soma. Estudiarla: un bono de investigación.'
+      options:
+      - name: {english: 'Store every ray.', spanish: 'Guardar cada rayo.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: 15}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 60
+      - name: {english: 'The astronomers want it.', spanish: 'La quieren los astrónomos.'}
+        effects:
+        - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+        ai_chance: 40
+      src: user_request
+    - id: 21
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Pilgrims from the North', spanish: 'Peregrinos del Norte'}
+      desc:
+        english: 'Thousands of pilgrims from Nueva Granada climb to the temples with offerings.\n\nAccept the offerings: +10 Inti-Soma. Ask them to stay: +10,000 manpower.'
+        spanish: 'Miles de peregrinos de Nueva Granada suben a los templos con ofrendas.\n\nAceptar las ofrendas: +10 de Inti-Soma. Pedirles que se queden: +10.000 de mano de obra.'
+      options:
+      - name: {english: 'Accept the offerings.', spanish: 'Aceptar las ofrendas.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: 10}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 60
+      - name: {english: 'Ask them to stay.', spanish: 'Pedirles que se queden.'}
+        effects:
+        - {effect: add_manpower, value: 10000}
+        ai_chance: 40
+      src: user_request
+    - id: 22
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Gold in the Old Mine', spanish: 'Oro en la Mina Vieja'}
+      desc:
+        english: 'A collapsed colonial mine hides a vein of gold no one remembered.\n\nMelt it into mirrors: +10 Inti-Soma. Sell it: +50 political power.'
+        spanish: 'Una mina colonial derrumbada esconde una veta de oro que nadie recordaba.\n\nFundirla en espejos: +10 de Inti-Soma. Venderla: +50 de poder político.'
+      options:
+      - name: {english: 'Mirrors.', spanish: 'Espejos.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: 10}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Sell it.', spanish: 'Venderla.'}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 50
+      src: user_request
+    - id: 23
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Clear Year', spanish: 'Un Año Despejado'}
+      desc:
+        english: 'No clouds over the altiplano for months. The astronomers have never seen anything like it.\n\n+12 Inti-Soma. Or celebrate: +5% stability.'
+        spanish: 'Meses sin nubes sobre el altiplano. Los astrónomos nunca vieron algo así.\n\n+12 de Inti-Soma. O festejar: +5% de estabilidad.'
+      options:
+      - name: {english: 'Store the light.', spanish: 'Guardar la luz.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: 12}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 60
+      - name: {english: 'Celebrate.', spanish: 'Festejar.'}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        ai_chance: 40
+      src: user_request
+    - id: 24
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Dust Storm', spanish: 'Tormenta de Polvo'}
+      desc:
+        english: 'A storm from the Atacama buries the mirrors under dust.\n\nWait: -10 Inti-Soma. Pay crews to clean them: -40 political power, -3 Inti-Soma.'
+        spanish: 'Una tormenta del Atacama entierra los espejos bajo el polvo.\n\nEsperar: -10 de Inti-Soma. Pagar cuadrillas para limpiarlos: -40 de poder político, -3 de Inti-Soma.'
+      options:
+      - name: {english: 'Wait.', spanish: 'Esperar.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: -10}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Clean them.', spanish: 'Limpiarlos.'}
+        effects:
+        - {effect: add_political_power, value: -40}
+        - {effect: add_variable, var: NAS_inti, value: -3}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Mirrors Cracked by Frost', spanish: 'Espejos Rajados por la Helada'}
+      desc:
+        english: 'The worst frost in twenty years cracks the mirrors of three temples.\n\nReplace them slowly: -12 Inti-Soma. Replace them now: -50 political power, -4 Inti-Soma.'
+        spanish: 'La peor helada en veinte años raja los espejos de tres templos.\n\nReemplazarlos despacio: -12 de Inti-Soma. Reemplazarlos ya: -50 de poder político, -4 de Inti-Soma.'
+      options:
+      - name: {english: 'Slowly.', spanish: 'Despacio.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: -12}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Now.', spanish: 'Ya.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NAS_inti, value: -4}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      src: user_request
+    - id: 26
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Heretics of the Moon', spanish: 'Los Herejes de la Luna'}
+      desc:
+        english: 'A sect that worships Mama Killa, the Moon, smashes temple mirrors at night.\n\nHunt them: -3% stability. Ignore them: -10 Inti-Soma.'
+        spanish: 'Una secta que adora a Mama Killa, la Luna, rompe espejos de los templos de noche.\n\nCazarlos: -3% de estabilidad. Ignorarlos: -10 de Inti-Soma.'
+      options:
+      - name: {english: 'Hunt them.', spanish: 'Cazarlos.'}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 50
+      - name: {english: 'Ignore them.', spanish: 'Ignorarlos.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: -10}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Golden Disk Is Stolen', spanish: 'Robaron el Disco de Oro'}
+      desc:
+        english: 'The great golden disk of the Temple of the Lake is gone. Foreign hands, say the priests.\n\nForge a new one: -15 Inti-Soma. Blame the enemy: +5% war support, -5 Inti-Soma.'
+        spanish: 'El gran disco de oro del Templo del Lago desapareció. Manos extranjeras, dicen los sacerdotes.\n\nForjar uno nuevo: -15 de Inti-Soma. Culpar al enemigo: +5% de apoyo a la guerra, -5 de Inti-Soma.'
+      options:
+      - name: {english: 'Forge a new one.', spanish: 'Forjar uno nuevo.'}
+        effects:
+        - {effect: add_variable, var: NAS_inti, value: -15}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      - name: {english: 'Blame the enemy.', spanish: 'Culpar al enemigo.'}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: add_variable, var: NAS_inti, value: -5}
+        - {effect: run, value: NAS_espiritu_vivo}
+        ai_chance: 50
+      src: user_request

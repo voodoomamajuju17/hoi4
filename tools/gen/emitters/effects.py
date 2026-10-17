@@ -26,6 +26,8 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: run, value: X }                       -> X = yes (efecto de 14_decisions.yaml -> scripted_effects)
   { effect: leader_trait, value: X }              -> add_country_leader_trait
   { effect: tech_bonus, category: X, bonus: 0.5, uses: 1 } -> add_tech_bonus (categoría leída del juego)
+  { effect: tech, value: X }                     -> set_technology = { X = 1 } (2026-10-17, lo nuclear de la Comuna)
+  { effect: nukes, value: N }                    -> add_nuclear_bombs = N
   { effect: capital, effects: [...] }             -> capital_scope
   { effect: states, pick: random|every, when: {..}, effects: [..] }
                                                   -> random_owned_controlled_state / every_owned_state
@@ -460,6 +462,18 @@ def render_effects(owner: str, items: list[dict], known,
                 inner.add(str(int(opt.get("weight", 1))), body)
             block.add("random_list", inner)
             effects_used.setdefault("random_list", owner)
+            continue
+        if effect == "tech":
+            # 2026-10-17: dar una tecnología ya investigada (Proyecto Prometeo de la Comuna)
+            techs = item["value"] if isinstance(item["value"], list) else [item["value"]]
+            inner = Block([(str(x), 1) for x in techs])
+            inner.add("popup", False)
+            block.add("set_technology", inner)
+            effects_used.setdefault("set_technology", owner)
+            continue
+        if effect == "nukes":
+            block.add("add_nuclear_bombs", int(item["value"]))
+            effects_used.setdefault("add_nuclear_bombs", owner)
             continue
         if effect == "tech_bonus":
             # category puede ser una lista de alternativas: gana la primera que
@@ -1197,6 +1211,7 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       divisions_at_least: 12              -> has_army_size = { size > 11 }
       factories_at_least: 60              -> num_of_factories > 59
       tech: X                             -> has_tech = X (validada contra el árbol)
+      nukes_at_least: N                   -> num_of_nukes > N-1
       manpower_at_least: 500000           -> has_manpower > 499999
       war_support_at_least: 0.6           -> has_war_support > 0.6
       equipment_at_least: {type, amount}  -> has_equipment = { type > amount-1 }
@@ -1418,6 +1433,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "tech":
             block.add("has_tech", value)
             triggers_used.setdefault("has_tech", owner)
+        elif key == "nukes_at_least":
+            block.add("num_of_nukes", Compare(">", int(value) - 1))
+            triggers_used.setdefault("num_of_nukes", owner)
         elif key == "manpower_at_least":
             block.add("has_manpower", Compare(">", int(value) - 1))
             triggers_used.setdefault("has_manpower", owner)

@@ -10818,6 +10818,317 @@ categories:
       src: user_request
     src: user_request
 
+  # 2026-10-17: la receta de diversión (NAS) — productoras, tres elecciones, gastos y eventos.
+  - id: NAS_corona_del_sol_category
+    country: NAS
+    icon_prefer:
+    - generic_political_actions
+    - generic_research
+    name: {english: 'The Crowns of the Sun', spanish: 'Las Coronas del Sol'}
+    desc:
+      english: 'Inti-Soma: [?NAS_inti]\nProducing temples: [?NAS_productoras_r] / 5\n\nInti-Soma is also the currency of the Sun: the temples pay for weapons, men, roads and wars. Two great ceremonies can be held only once in the life of the Kingdom: The Offensive of the Sun and The Defence of the Andes.\n\nPRODUCERS: the Temple of the Lake, the Temple of the Coast, the Temple of the Equator, the White Temple, the Temple of the Desert. Each one adds 1 Inti-Soma a month; losing one costs 15 and 180 days of trouble, and it produces again only when we retake and restore it.\nTHE THREE CHOICES: at 40, 65, 90 Inti-Soma you can spend them, once each, on a permanent choice between three paths.\nSPENDING: smaller amounts buy temporary bonuses.'
+      spanish: 'Inti-Soma: [?NAS_inti]\nTemplos productores: [?NAS_productoras_r] / 5\n\nEl Inti-Soma también es la moneda del Sol: los templos pagan armas, hombres, caminos y guerras. Dos grandes ceremonias se hacen una sola vez en la vida del Reino: La Ofensiva del Sol y La Defensa de los Andes.\n\nPRODUCTORAS: el Templo del Lago, el Templo de la Costa, el Templo del Ecuador, el Templo Blanco, el Templo del Desierto. Cada una suma 1 de Inti-Soma por mes; perder una cuesta 15 y 180 días de problemas, y vuelve a producir recién cuando la recuperamos y la restauramos.\nLAS TRES ELECCIONES: con 40, 65, 90 de Inti-Soma podés gastarlos, una vez cada una, en una elección permanente entre tres caminos.\nGASTAR: con menos se compran bonos temporales.'
+    src: user_request
+    decisions:
+    - id: NAS_restaurar_1
+      name: {english: 'Reconsecrate The Temple of the Lake', spanish: 'Reconsagrar El Templo del Lago'}
+      desc:
+        english: 'The Temple of the Lake is ours again. New mirrors, new priests: it produces Inti-Soma again. +2 Inti-Soma.'
+        spanish: 'El Templo del Lago vuelve a ser nuestro. Espejos nuevos, sacerdotes nuevos: vuelve a producir Inti-Soma. +2 de Inti-Soma.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NAS_prod_1_perdida}
+      available:
+        controls_state: [La Paz]
+      effects:
+      - {effect: clear_flag, value: NAS_prod_1_perdida}
+      - {effect: add_variable, var: NAS_inti, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NAS_restaurar_2
+      name: {english: 'Reconsecrate The Temple of the Coast', spanish: 'Reconsagrar El Templo de la Costa'}
+      desc:
+        english: 'The Temple of the Coast is ours again. New mirrors, new priests: it produces Inti-Soma again. +2 Inti-Soma.'
+        spanish: 'El Templo de la Costa vuelve a ser nuestro. Espejos nuevos, sacerdotes nuevos: vuelve a producir Inti-Soma. +2 de Inti-Soma.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NAS_prod_2_perdida}
+      available:
+        controls_state: [Lima]
+      effects:
+      - {effect: clear_flag, value: NAS_prod_2_perdida}
+      - {effect: add_variable, var: NAS_inti, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NAS_restaurar_3
+      name: {english: 'Reconsecrate The Temple of the Equator', spanish: 'Reconsagrar El Templo del Ecuador'}
+      desc:
+        english: 'The Temple of the Equator is ours again. New mirrors, new priests: it produces Inti-Soma again. +2 Inti-Soma.'
+        spanish: 'El Templo del Ecuador vuelve a ser nuestro. Espejos nuevos, sacerdotes nuevos: vuelve a producir Inti-Soma. +2 de Inti-Soma.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NAS_prod_3_perdida}
+      available:
+        controls_state: [Ecuador]
+      effects:
+      - {effect: clear_flag, value: NAS_prod_3_perdida}
+      - {effect: add_variable, var: NAS_inti, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NAS_restaurar_4
+      name: {english: 'Reconsecrate The White Temple', spanish: 'Reconsagrar El Templo Blanco'}
+      desc:
+        english: 'The White Temple is ours again. New mirrors, new priests: it produces Inti-Soma again. +2 Inti-Soma.'
+        spanish: 'El Templo Blanco vuelve a ser nuestro. Espejos nuevos, sacerdotes nuevos: vuelve a producir Inti-Soma. +2 de Inti-Soma.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NAS_prod_4_perdida}
+      available:
+        controls_state: [Arequipa]
+      effects:
+      - {effect: clear_flag, value: NAS_prod_4_perdida}
+      - {effect: add_variable, var: NAS_inti, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NAS_restaurar_5
+      name: {english: 'Reconsecrate The Temple of the Desert', spanish: 'Reconsagrar El Templo del Desierto'}
+      desc:
+        english: 'The Temple of the Desert is ours again. New mirrors, new priests: it produces Inti-Soma again. +2 Inti-Soma.'
+        spanish: 'El Templo del Desierto vuelve a ser nuestro. Espejos nuevos, sacerdotes nuevos: vuelve a producir Inti-Soma. +2 de Inti-Soma.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NAS_prod_5_perdida}
+      available:
+        controls_state: [Tacna-Moquegua]
+      effects:
+      - {effect: clear_flag, value: NAS_prod_5_perdida}
+      - {effect: add_variable, var: NAS_inti, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NAS_la_primera_corona
+      name: {english: 'The First Crown', spanish: 'La Primera Corona'}
+      desc:
+        english: 'The priests have gathered enough light to forge the First Crown of the Sun. Only one path, and only once. Needs and spends 40 Inti-Soma.'
+        spanish: 'Los sacerdotes juntaron luz suficiente para forjar la Primera Corona del Sol. Un solo camino, y una sola vez. Pide y gasta 40 de Inti-Soma.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NAS_inti, value: 40}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -40}
+      - {effect: event, id: meganations_nas_receta.10}
+      ai:
+        factor: 50
+      src: user_request
+    - id: NAS_la_segunda_corona
+      name: {english: 'The Second Crown', spanish: 'La Segunda Corona'}
+      desc:
+        english: 'A heavier crown, for a Kingdom that wants more than to survive. Only one path, and only once. Needs and spends 65 Inti-Soma.'
+        spanish: 'Una corona más pesada, para un Reino que quiere algo más que sobrevivir. Un solo camino, y una sola vez. Pide y gasta 65 de Inti-Soma.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NAS_inti, value: 65}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -65}
+      - {effect: event, id: meganations_nas_receta.11}
+      ai:
+        factor: 50
+      src: user_request
+    - id: NAS_la_corona_del_inti
+      name: {english: 'The Crown of Inti', spanish: 'La Corona del Inti'}
+      desc:
+        english: 'The last crown, the one of the Sun himself. Whatever the Kingdom chooses, it will be forever. Only one path, and only once. Needs and spends 90 Inti-Soma.'
+        spanish: 'La última corona, la del Sol mismo. Lo que elija el Reino va a ser para siempre. Un solo camino, y una sola vez. Pide y gasta 90 de Inti-Soma.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NAS_inti, value: 90}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -90}
+      - {effect: event, id: meganations_nas_receta.12}
+      ai:
+        factor: 50
+      src: user_request
+    - id: NAS_mercaderes_del_pacifico
+      name: {english: 'The Pacific Merchants', spanish: 'Los Mercaderes del Pacífico'}
+      desc:
+        english: 'Pay in light, receive in steel: 3,000 infantry weapons and 400 support equipment. Costs 20 Inti-Soma.'
+        spanish: 'Se paga en luz, se recibe en acero: 3.000 armas de infantería y 400 de equipo de apoyo. Cuesta 20 de Inti-Soma.'
+      icon_prefer:
+      - generic_industry
+      cost: 0
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: NAS_inti, value: 20}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -20}
+      - {effect: equipment, type: infantry_equipment, amount: 3000}
+      - {effect: equipment, type: support_equipment, amount: 400}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NAS_inti, value: 40}}
+      src: user_request
+    - id: NAS_la_leva_del_sol
+      name: {english: 'The Levy of the Sun', spanish: 'La Leva del Sol'}
+      desc:
+        english: 'The temples call and the valleys answer: +30,000 manpower. Costs 15 Inti-Soma.'
+        spanish: 'Los templos llaman y los valles responden: +30.000 de mano de obra. Cuesta 15 de Inti-Soma.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: NAS_inti, value: 15}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -15}
+      - {effect: add_manpower, value: 30000}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NAS_inti, value: 30}}
+      src: user_request
+    - id: NAS_la_embajada_de_oro
+      name: {english: 'The Golden Embassy', spanish: 'La Embajada de Oro'}
+      desc:
+        english: 'Golden discs for foreign courts: +60 political power. Costs 15 Inti-Soma.'
+        spanish: 'Discos de oro para las cortes extranjeras: +60 de poder político. Cuesta 15 de Inti-Soma.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: NAS_inti, value: 15}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -15}
+      - {effect: add_political_power, value: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NAS_inti, value: 30}}
+      src: user_request
+    - id: NAS_la_escuela_del_condor
+      name: {english: 'The Condor''s Classroom', spanish: 'El Aula del Cóndor'}
+      desc:
+        english: 'Light for the flight simulators of Cusco: +40 air experience. Costs 20 Inti-Soma.'
+        spanish: 'Luz para los simuladores de vuelo del Cusco: +40 de experiencia aérea. Cuesta 20 de Inti-Soma.'
+      icon_prefer:
+      - generic_air
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: NAS_inti, value: 20}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -20}
+      - {effect: air_experience, value: 40}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NAS_inti, value: 40}}
+      src: user_request
+    - id: NAS_caminos_de_luz
+      name: {english: 'Roads of Light', spanish: 'Caminos de Luz'}
+      desc:
+        english: 'Mirrors along the roads light the night convoys: +25% infrastructure construction for 120 days and a road in the capital. Costs 25 Inti-Soma.'
+        spanish: 'Espejos a lo largo de los caminos iluminan los convoyes nocturnos: +25% de construcción de infraestructura por 120 días y un camino en la capital. Cuesta 25 de Inti-Soma.'
+      icon_prefer:
+      - generic_construction
+      cost: 0
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: NAS_inti, value: 25}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -25}
+      - {effect: dynamic_modifier, id: NAS_receta_caminos_de_luz, days: 120}
+      - {effect: build, building: infrastructure, level: 1}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NAS_inti, value: 50}}
+      src: user_request
+    - id: NAS_la_ofensiva_del_sol
+      name: {english: 'The Offensive of the Sun', spanish: 'La Ofensiva del Sol'}
+      desc:
+        english: 'Once in the life of the Kingdom: every temple burns at once for the armies. For 90 days, +15% attack, +10% breakthrough and +10% speed, and 75,000 men. Costs 40 Inti-Soma.'
+        spanish: 'Una sola vez en la vida del Reino: todos los templos arden a la vez por los ejércitos. Por 90 días, +15% de ataque, +10% de penetración y +10% de velocidad, y 75.000 hombres. Cuesta 40 de Inti-Soma.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 25
+      cooldown_days: 1
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NAS_inti, value: 40}
+        at_war: true
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -40}
+      - {effect: dynamic_modifier, id: NAS_ofensiva_del_sol, days: 90}
+      - {effect: add_manpower, value: 75000}
+      - {effect: add_war_support, value: 0.05}
+      ai:
+        factor: 20
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NAS_inti, value: 40}}
+      src: user_request
+    - id: NAS_la_defensa_de_los_andes
+      name: {english: 'The Defence of the Andes', spanish: 'La Defensa de los Andes'}
+      desc:
+        english: 'Once in the life of the Kingdom: the mountains become a wall. Forts on every border, and for 120 days +15% defence, +10% stability and +10% war support, and 50,000 men. Costs 40 Inti-Soma.'
+        spanish: 'Una sola vez en la vida del Reino: la cordillera se vuelve muralla. Fuertes en cada frontera y, por 120 días, +15% de defensa, +10% de estabilidad y +10% de apoyo a la guerra, y 50.000 hombres. Cuesta 40 de Inti-Soma.'
+      icon_prefer:
+      - generic_construction
+      - generic_army_support
+      cost: 25
+      cooldown_days: 1
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NAS_inti, value: 40}
+        at_war: true
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -40}
+      - {effect: dynamic_modifier, id: NAS_defensa_de_los_andes, days: 120}
+      - {effect: add_manpower, value: 50000}
+      - {effect: fortify, building: bunker, level: 1}
+      ai:
+        factor: 20
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NAS_inti, value: 40}}
+      src: user_request
+    after_effects:
+    - {effect: run, value: NAS_espiritu_vivo}
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -12594,6 +12905,7 @@ scripted_effects:
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
   - id: NAS_pulso_de_los_templos
     effects:
+    - {effect: run, value: NAS_pulso_receta}
     - effect: if
       when: {focus: NAS_templos_eficientes}
       then:
@@ -17205,6 +17517,160 @@ scripted_effects:
           else:
           - {effect: event, id: meganations_lider.48, days: 1}
 
+  # 2026-10-17: pulso de la receta (NAS), lo llama NAS_pulso_de_los_templos
+  - id: NAS_pulso_receta
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - NAS_productoras_r
+        - 0
+    - effect: if
+      when:
+        controls_state: [La Paz]
+        not_flag: NAS_prod_1_perdida
+      then:
+      - {effect: flag, value: NAS_prod_1_activa}
+      - {effect: add_variable, var: NAS_productoras_r, value: 1}
+      - {effect: add_variable, var: NAS_inti, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [La Paz]}
+        not_flag: NAS_prod_1_perdida
+        flag: NAS_prod_1_activa
+      then:
+      - {effect: flag, value: NAS_prod_1_perdida}
+      - {effect: add_variable, var: NAS_inti, value: -15}
+      - {effect: clamp, var: NAS_inti, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NAS_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nas_receta.1, days: 1}
+    - effect: if
+      when:
+        controls_state: [Lima]
+        not_flag: NAS_prod_2_perdida
+      then:
+      - {effect: flag, value: NAS_prod_2_activa}
+      - {effect: add_variable, var: NAS_productoras_r, value: 1}
+      - {effect: add_variable, var: NAS_inti, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Lima]}
+        not_flag: NAS_prod_2_perdida
+        flag: NAS_prod_2_activa
+      then:
+      - {effect: flag, value: NAS_prod_2_perdida}
+      - {effect: add_variable, var: NAS_inti, value: -15}
+      - {effect: clamp, var: NAS_inti, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NAS_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nas_receta.2, days: 1}
+    - effect: if
+      when:
+        controls_state: [Ecuador]
+        not_flag: NAS_prod_3_perdida
+      then:
+      - {effect: flag, value: NAS_prod_3_activa}
+      - {effect: add_variable, var: NAS_productoras_r, value: 1}
+      - {effect: add_variable, var: NAS_inti, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Ecuador]}
+        not_flag: NAS_prod_3_perdida
+        flag: NAS_prod_3_activa
+      then:
+      - {effect: flag, value: NAS_prod_3_perdida}
+      - {effect: add_variable, var: NAS_inti, value: -15}
+      - {effect: clamp, var: NAS_inti, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NAS_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nas_receta.3, days: 1}
+    - effect: if
+      when:
+        controls_state: [Arequipa]
+        not_flag: NAS_prod_4_perdida
+      then:
+      - {effect: flag, value: NAS_prod_4_activa}
+      - {effect: add_variable, var: NAS_productoras_r, value: 1}
+      - {effect: add_variable, var: NAS_inti, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Arequipa]}
+        not_flag: NAS_prod_4_perdida
+        flag: NAS_prod_4_activa
+      then:
+      - {effect: flag, value: NAS_prod_4_perdida}
+      - {effect: add_variable, var: NAS_inti, value: -15}
+      - {effect: clamp, var: NAS_inti, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NAS_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nas_receta.4, days: 1}
+    - effect: if
+      when:
+        controls_state: [Tacna-Moquegua]
+        not_flag: NAS_prod_5_perdida
+      then:
+      - {effect: flag, value: NAS_prod_5_activa}
+      - {effect: add_variable, var: NAS_productoras_r, value: 1}
+      - {effect: add_variable, var: NAS_inti, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Tacna-Moquegua]}
+        not_flag: NAS_prod_5_perdida
+        flag: NAS_prod_5_activa
+      then:
+      - {effect: flag, value: NAS_prod_5_perdida}
+      - {effect: add_variable, var: NAS_inti, value: -15}
+      - {effect: clamp, var: NAS_inti, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NAS_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nas_receta.5, days: 1}
+    - effect: if
+      when:
+        not_flag: NAS_receta_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: NAS_receta_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_0}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_0, days: 1095}
+          - {effect: event, id: meganations_nas_receta.20, days: 1}
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_1}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_1, days: 1095}
+          - {effect: event, id: meganations_nas_receta.21, days: 1}
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_2}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_2, days: 1095}
+          - {effect: event, id: meganations_nas_receta.22, days: 1}
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_3}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_3, days: 1095}
+          - {effect: event, id: meganations_nas_receta.23, days: 1}
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_4}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_4, days: 1095}
+          - {effect: event, id: meganations_nas_receta.24, days: 1}
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_5}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_5, days: 1095}
+          - {effect: event, id: meganations_nas_receta.25, days: 1}
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_6}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_6, days: 1095}
+          - {effect: event, id: meganations_nas_receta.26, days: 1}
+        - weight: 1
+          skip_if: {flag: NAS_receta_visto_7}
+          effects:
+          - {effect: flag, value: NAS_receta_visto_7, days: 1095}
+          - {effect: event, id: meganations_nas_receta.27, days: 1}
+
 dynamic_modifiers:
   # 2026-10-11 (pedido del usuario: más combate aéreo y ases para el NAS)
   - id: NAS_escuela_de_ases
@@ -17972,6 +18438,85 @@ dynamic_modifiers:
     desc: {english: 'The Machine survives.', spanish: 'La Máquina sobrevive.'}
     modifiers: {stability_factor: 0.1, research_speed_factor: 0.05}
 
+  - id: NAS_receta_productora_perdida
+    country: NAS
+    no_art: true
+    name: {english: 'Desecrated Temple', spanish: 'Templo Profanado'}
+    desc: {english: '-5% stability and -10% construction speed', spanish: '-5% de estabilidad y -10% de velocidad de construcción'}
+    modifiers: {'?stability_factor': -0.05, '?production_speed_buildings_factor': -0.1}
+  - id: NAS_corona_ojos_del_condor
+    country: NAS
+    no_art: true
+    name: {english: 'The Eyes of the Condor', spanish: 'Los Ojos del Cóndor'}
+    desc: {english: 'The squadrons fly with the blessing of the Sun.', spanish: 'Las escuadrillas vuelan con la bendición del Sol.'}
+    modifiers: {'?air_attack_factor': 0.05, '?air_defence_factor': 0.05, '?air_superiority_efficiency': 0.05}
+  - id: NAS_corona_camino_del_inca
+    country: NAS
+    no_art: true
+    name: {english: 'The Road of the Inca', spanish: 'El Camino del Inca'}
+    desc: {english: 'Every valley joined to every other.', spanish: 'Cada valle unido a todos los demás.'}
+    modifiers: {'?production_speed_infrastructure_factor': 0.2, '?army_speed_factor': 0.05}
+  - id: NAS_corona_hijos_del_sol
+    country: NAS
+    no_art: true
+    name: {english: 'The Children of the Sun', spanish: 'Los Hijos del Sol'}
+    desc: {english: 'More families come down from the heights to serve.', spanish: 'Más familias bajan de las alturas para servir.'}
+    modifiers: {'?recruitable_population_factor': 0.08, '?stability_factor': 0.03}
+  - id: NAS_corona_guerreros_del_puma
+    country: NAS
+    no_art: true
+    name: {english: 'The Warriors of the Puma', spanish: 'Los Guerreros del Puma'}
+    desc: {english: 'The old warrior orders, reborn in armour.', spanish: 'Las viejas órdenes guerreras, renacidas en armadura.'}
+    modifiers: {'?army_attack_factor': 0.08, '?army_org_factor': 0.05}
+  - id: NAS_corona_terrazas_doradas
+    country: NAS
+    no_art: true
+    name: {english: 'The Golden Terraces', spanish: 'Las Terrazas Doradas'}
+    desc: {english: 'The mountains themselves become factories.', spanish: 'Las montañas mismas se vuelven fábricas.'}
+    modifiers: {'?industrial_capacity_factory': 0.06, '?consumer_goods_factor': -0.03}
+  - id: NAS_corona_quipu_eterno
+    country: NAS
+    no_art: true
+    name: {english: 'The Eternal Quipu', spanish: 'El Quipu Eterno'}
+    desc: {english: 'Knots of light that remember everything.', spanish: 'Nudos de luz que lo recuerdan todo.'}
+    modifiers: {'?research_speed_factor': 0.07}
+  - id: NAS_corona_tawantinsuyu
+    country: NAS
+    no_art: true
+    name: {english: 'Tawantinsuyu Reborn', spanish: 'El Tawantinsuyu Renacido'}
+    desc: {english: 'The four quarters march as one.', spanish: 'Los cuatro suyos marchan como uno.'}
+    modifiers: {'?army_defence_factor': 0.1, '?army_attack_factor': 0.05, '?war_support_factor': 0.1}
+  - id: NAS_corona_sol_eterno
+    country: NAS
+    no_art: true
+    name: {english: 'The Sun That Never Sets', spanish: 'El Sol que No se Pone'}
+    desc: {english: 'The Kingdom is the Sun, and the Sun is everywhere.', spanish: 'El Reino es el Sol, y el Sol está en todas partes.'}
+    modifiers: {'?political_power_gain': 0.3, '?stability_factor': 0.1}
+  - id: NAS_corona_oro_de_los_andes
+    country: NAS
+    no_art: true
+    name: {english: 'The Gold of the Andes', spanish: 'El Oro de los Andes'}
+    desc: {english: 'The light becomes gold, and the gold becomes factories.', spanish: 'La luz se vuelve oro, y el oro se vuelve fábricas.'}
+    modifiers: {'?industrial_capacity_factory': 0.1, '?production_speed_buildings_factor': 0.15}
+  - id: NAS_receta_caminos_de_luz
+    country: NAS
+    no_art: true
+    name: {english: 'Roads of Light', spanish: 'Caminos de Luz'}
+    desc: {english: 'Night convoys under the mirrors.', spanish: 'Convoyes nocturnos bajo los espejos.'}
+    modifiers: {'?production_speed_infrastructure_factor': 0.25}
+  - id: NAS_ofensiva_del_sol
+    country: NAS
+    no_art: true
+    name: {english: 'The Offensive of the Sun', spanish: 'La Ofensiva del Sol'}
+    desc: {english: 'The Sun marches in front of the armies.', spanish: 'El Sol marcha delante de los ejércitos.'}
+    modifiers: {'?army_attack_factor': 0.15, '?breakthrough_factor': 0.1, '?army_speed_factor': 0.1}
+  - id: NAS_defensa_de_los_andes
+    country: NAS
+    no_art: true
+    name: {english: 'The Defence of the Andes', spanish: 'La Defensa de los Andes'}
+    desc: {english: 'No one crosses the cordillera.', spanish: 'Nadie cruza la cordillera.'}
+    modifiers: {'?army_defence_factor': 0.15, '?stability_factor': 0.1, '?war_support_factor': 0.1}
+
 variable_names:
   ASC_valhalla: {english: "Fury of the Sons of Odin", spanish: "Furia de los Hijos de Odín"}
   MEGANATIONS_lider_carisma: {english: "Leader's Charisma", spanish: "Carisma del líder"}
@@ -18050,3 +18595,4 @@ variable_names:
   SHD_racha: {english: "Harmony streak", spanish: "Racha de armonía"}
   EFE_hambre_del_metal: {english: "Hunger of the living metal", spanish: "Hambre del metal vivo"}
   SHD_meses_desborde: {english: "Months of overflow", spanish: "Meses de desborde", hidden: true}
+  NAS_productoras_r: {english: "Producing temples", spanish: "Templos productores"}
