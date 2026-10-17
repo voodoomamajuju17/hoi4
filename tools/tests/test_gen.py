@@ -1417,6 +1417,43 @@ def test_events() -> None:
               "divide_variable = { var = EFE_ef_blindaje value = 200 }" in esp
               and "divide_variable = { var = EFE_ef_defensa value = 500 }" in esp, esp[:600])
 
+        # La receta de diversión en las ocho (2026-10-17): productoras, tres elecciones, gastos, eventos.
+        section("La receta de las ocho")
+        for tag, res in (("NAS", "NAS_inti"), ("ASC", "ASC_computo"), ("HSN", "HSN_peaje"), ("NRE", "NRE_gloria"),
+                         ("FCU", "FCU_dividendos"), ("SHD", "SHD_mandato"), ("APF", "APF_ubuntu")):
+            pr = " ".join(pdx.render(pdx.parse(se_raw).get(f"{tag}_pulso_receta")).split())
+            check(f"{tag}: pulso de la receta con 5 productoras y eventos",
+                  all(f"has_country_flag = {tag}_prod_{n}_activa" in pr for n in range(1, 6))
+                  and f"meganations_{tag.lower()}_receta.27" in pr and f"var = {res}" in pr, pr[:300])
+            check(f"{tag}: el pulso mensual llama a la receta", f"{tag}_pulso_receta = yes" in se_all)
+            check(f"{tag}: tres elecciones de un uso",
+                  sum(1 for k in (10, 11, 12) if f"id = meganations_{tag.lower()}_receta.{k}" in decs_v3) == 3)
+        check("NAS: Ofensiva del Sol y Defensa de los Andes, de un uso",
+              all(decs_v3[decs_v3.index(f"{d} = {{"):][:300].count("fire_only_once = yes") == 1
+                  for d in ("NAS_la_ofensiva_del_sol", "NAS_la_defensa_de_los_andes")))
+        p3 = decs_v3[decs_v3.index("ASC_prometeo_fase_3 = {"):][:1200]
+        check("ASC: Prometeo fase 3 da la tecnologia y dos bombas, con reloj de un año",
+              "days_mission_timeout = 365" in p3 and "set_technology = { nukes = 1" in p3 and "add_nuclear_bombs = 2" in p3, p3[:600])
+        hooks = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text().split())
+        check("la bomba es secreta: el mundo reacciona recien en on_nuke_drop",
+              "on_nuke_drop = { effect = {" in hooks and "meganations_asc_receta.41" in hooks, hooks[-400:])
+        hsn_ev = " ".join((mod / "events/meganations_hsn_receta.txt").read_text().split())
+        check("HSN: La Toma Silenciosa tiene 20 finales", all(f"id = meganations_hsn_receta.{i} " in hsn_ev for i in range(100, 120)))
+        # el mapa de prueba no tiene Taiwán ni Hong Kong: se mira el spec (en el juego se resuelven)
+        spec_ev = (REPO_ROOT / "spec/12_events.yaml").read_text(encoding="utf-8")
+        check("HSN: los finales felices pasan el nodo (transfer_to en los 4 objetivos x 2 triunfos)",
+              spec_ev.count("{effect: transfer_to, value: HSN}") >= 8)
+        check("NRE: tres campañas con reloj y costo en Auctoritas",
+              all(f"NRE_mision_{l} = {{" in decs_v3 for l in ("italica", "macedonica", "fulminata"))
+              and "var = NRE_auctoritas value = -15" in decs_v3)
+        check("FCU: disturbios en Detroit, Chicago y Los Angeles con mision de 120 dias",
+              all(f"FCU_calmar_{n} = {{" in decs_v3 for n in (1, 2, 3)) and "days_mission_timeout = 120" in decs_v3)
+        check("satelites, anarquias y meganaciones: paneles compartidos para el debil",
+              "MEGANATIONS_sat_resistencia_desesperada = {" in decs_v3 and "MEGANATIONS_anar_resistencia_desesperada = {" in decs_v3
+              and "MEGANATIONS_la_ultima_trinchera = {" in decs_v3)
+        check("APF: los botones de un miembro se ocultan si deja de ser satelite",
+              "visible = { country_exists = ZCO ZCO = { is_subject_of = APF } }" in decs_v3, decs_v3[decs_v3.index("APF_invertir_zco = {"):][:300])
+
         # Africa (2026-10-17): cinco paises nuevos a integrar, el Congo se rebela, plazo y liberacion.
         section("APF: Africa ampliada")
         decs_af = decs_v3
@@ -1808,8 +1845,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("132 modificadores dinamicos: 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones y 2 del NAS en el aire",
-              len(dm.entries) == 132 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("236 modificadores dinamicos (con la receta de las ocho, 2026-10-17): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones y 2 del NAS en el aire",
+              len(dm.entries) == 236 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
