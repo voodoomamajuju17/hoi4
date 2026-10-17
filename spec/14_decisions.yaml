@@ -13170,6 +13170,234 @@ categories:
     after_effects:
     - {effect: run, value: APF_espiritu_vivo}
 
+  # 2026-10-17 (pedido del usuario: "juguito para los que no son meganaciones" y
+  # "todos tienen oportunidades contra todos"): paneles compartidos.
+  - id: MEGANATIONS_pequena_patria_category
+    country: [PTA, YYG, ZNG, ZLL, ZNR, ZSE, ZAF, ZAS, ZBC, ZAL, ZKR, ZST, ZET, ZSA, ZCO, ZAO, ZMZ, ZMG, ZKE, ZHI, ZDA, ZSG]
+    icon_prefer:
+    - generic_political_actions
+    name: {english: 'The Small Homeland', spanish: 'La Pequeña Patria'}
+    desc:
+      english: 'A satellite is still a nation. Militias, old weapons, our own officers and our own factory; and if a megastate comes for us, every street is a fortress.'
+      spanish: 'Un satélite sigue siendo una nación. Milicias, armas viejas, oficiales propios y una fábrica nuestra; y si una meganación viene por nosotros, cada calle es una fortaleza.'
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_sat_patriotismo
+      name: {english: 'Local Patriotism', spanish: 'Patriotismo Local'}
+      desc:
+        english: 'Flags in every window, our own songs on the radio: +5% stability and +3% war support.'
+        spanish: 'Banderas en cada ventana, nuestras canciones en la radio: +5% de estabilidad y +3% de apoyo a la guerra.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 365
+      effects:
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 3
+      src: user_request
+    - id: MEGANATIONS_sat_milicia
+      name: {english: 'Citizen Militia', spanish: 'Milicia Ciudadana'}
+      desc:
+        english: 'Every town trains its own: two militia divisions and 15,000 men.'
+        spanish: 'Cada pueblo entrena la suya: dos divisiones de milicia y 15.000 hombres.'
+      icon_prefer:
+      - generic_army_support
+      cost: 40
+      cooldown_days: 240
+      effects:
+      - {effect: division_template, name: Milicia Ciudadana, regiments: [infantry, infantry, infantry, infantry]}
+      - {effect: create_units, template: Milicia Ciudadana, count: 2, experience: 0.1}
+      - {effect: add_manpower, value: 15000}
+      ai:
+        factor: 4
+      src: user_request
+    - id: MEGANATIONS_sat_armas_viejas
+      name: {english: 'Buy Old Weapons', spanish: 'Comprar Armas Viejas'}
+      desc:
+        english: 'Surplus from the megastates'' depots, cheap and still working: 3,000 infantry weapons and 500 support equipment.'
+        spanish: 'Excedentes de los depósitos de las meganaciones, baratos y todavía andando: 3.000 armas de infantería y 500 de equipo de apoyo.'
+      icon_prefer:
+      - generic_industry
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: equipment, type: infantry_equipment, amount: 3000}
+      - {effect: equipment, type: support_equipment, amount: 500}
+      ai:
+        factor: 4
+      src: user_request
+    - id: MEGANATIONS_sat_escuela_de_oficiales
+      name: {english: 'Officers'' School', spanish: 'Escuela de Oficiales'}
+      desc:
+        english: 'Our own officers, trained at home: +25 army experience.'
+        spanish: 'Nuestros propios oficiales, formados en casa: +25 de experiencia del ejército.'
+      icon_prefer:
+      - generic_army_support
+      cost: 50
+      cooldown_days: 365
+      effects:
+      - {effect: army_experience, value: 25}
+      ai:
+        factor: 2
+      src: user_request
+    - id: MEGANATIONS_sat_industria_nacional
+      name: {english: 'National Industry', spanish: 'Industria Nacional'}
+      desc:
+        english: 'A factory that belongs to us: a civilian factory in the capital.'
+        spanish: 'Una fábrica que es nuestra: una fábrica civil en la capital.'
+      icon_prefer:
+      - generic_construction
+      cost: 75
+      cooldown_days: 365
+      effects:
+      - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+      src: user_request
+    - id: MEGANATIONS_sat_resistencia_desesperada
+      name: {english: 'Desperate Resistance', spanish: 'Resistencia Desesperada'}
+      desc:
+        english: 'At war with a megastate and with fewer than 30 divisions: every street is a fortress. For 120 days, +15% defence, +10% organisation and +5% war support, and 20,000 men. Once a year.'
+        spanish: 'En guerra con una meganación y con menos de 30 divisiones: cada calle es una fortaleza. Por 120 días, +15% de defensa, +10% de organización y +5% de apoyo a la guerra, y 20.000 hombres. Una vez por año.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 25
+      cooldown_days: 365
+      available:
+        at_war: true
+        any: [{war_with: EFE}, {war_with: FCU}, {war_with: ASC}, {war_with: HSN}, {war_with: NAS}, {war_with: SHD}, {war_with: APF}, {war_with: NRE}]
+        not: {divisions_at_least: 30}
+      effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_resistencia_desesperada, days: 120}
+      - {effect: add_manpower, value: 20000}
+      ai:
+        factor: 40
+      src: user_request
+  - id: MEGANATIONS_ley_del_caudillo_category
+    country: [ZWE, ZWI, ZWM, ZWB, ZAN]
+    icon_prefer:
+    - generic_army_support
+    - generic_prepare_civil_war
+    name: {english: 'The Law of the Warlord', spanish: 'La Ley del Caudillo'}
+    desc:
+      english: 'Plunder, levies, pacts and mercenaries: the tools of a warlord. And when a megastate marches in, the land itself fights.'
+      spanish: 'Saqueo, levas, pactos y mercenarios: las herramientas de un caudillo. Y cuando una meganación entra, la tierra misma pelea.'
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_anar_saqueo
+      name: {english: 'Plunder', spanish: 'Saqueo'}
+      desc:
+        english: 'The warlord lets his men loose on a rich valley: 2,500 infantry weapons and 300 support equipment; -3% stability.'
+        spanish: 'El caudillo suelta a sus hombres sobre un valle rico: 2.500 armas de infantería y 300 de equipo de apoyo; -3% de estabilidad.'
+      icon_prefer:
+      - generic_industry
+      cost: 25
+      cooldown_days: 180
+      effects:
+      - {effect: equipment, type: infantry_equipment, amount: 2500}
+      - {effect: equipment, type: support_equipment, amount: 300}
+      - {effect: add_stability, value: -0.03}
+      ai:
+        factor: 4
+      src: user_request
+    - id: MEGANATIONS_anar_leva
+      name: {english: 'Forced Levy', spanish: 'Leva a la Fuerza'}
+      desc:
+        english: 'Every village gives sons, whether it wants to or not: +40,000 manpower; -5% stability.'
+        spanish: 'Cada aldea da hijos, quiera o no: +40.000 de mano de obra; -5% de estabilidad.'
+      icon_prefer:
+      - generic_army_support
+      cost: 30
+      cooldown_days: 240
+      effects:
+      - {effect: add_manpower, value: 40000}
+      - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 4
+      src: user_request
+    - id: MEGANATIONS_anar_pacto
+      name: {english: 'Pact Between Warlords', spanish: 'Pacto entre Caudillos'}
+      desc:
+        english: 'The lesser warlords swear on blood and diesel: +8% stability and +5% organisation for 180 days.'
+        spanish: 'Los caudillos menores juran con sangre y gasoil: +8% de estabilidad y +5% de organización por 180 días.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 365
+      effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_pacto_de_caudillos, days: 180}
+      ai:
+        factor: 3
+      src: user_request
+    - id: MEGANATIONS_anar_mercenarios
+      name: {english: 'Wandering Mercenaries', spanish: 'Mercenarios Errantes'}
+      desc:
+        english: 'A company of veterans who fought for every side: three experienced divisions.'
+        spanish: 'Una compañía de veteranos que pelearon para todos los bandos: tres divisiones con experiencia.'
+      icon_prefer:
+      - generic_army_support
+      cost: 60
+      cooldown_days: 365
+      effects:
+      - {effect: division_template, name: Mercenarios Errantes, regiments: [infantry, infantry, infantry, infantry, infantry, artillery_brigade]}
+      - {effect: create_units, template: Mercenarios Errantes, count: 3, experience: 0.5}
+      ai:
+        factor: 4
+      src: user_request
+    - id: MEGANATIONS_anar_resistencia_desesperada
+      name: {english: 'Desperate Resistance', spanish: 'Resistencia Desesperada'}
+      desc:
+        english: 'At war with a megastate and with fewer than 30 divisions: every street is a fortress. For 120 days, +15% defence, +10% organisation and +5% war support, and 20,000 men. Once a year.'
+        spanish: 'En guerra con una meganación y con menos de 30 divisiones: cada calle es una fortaleza. Por 120 días, +15% de defensa, +10% de organización y +5% de apoyo a la guerra, y 20.000 hombres. Una vez por año.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 25
+      cooldown_days: 365
+      available:
+        at_war: true
+        any: [{war_with: EFE}, {war_with: FCU}, {war_with: ASC}, {war_with: HSN}, {war_with: NAS}, {war_with: SHD}, {war_with: APF}, {war_with: NRE}]
+        not: {divisions_at_least: 30}
+      effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_resistencia_desesperada, days: 120}
+      - {effect: add_manpower, value: 20000}
+      ai:
+        factor: 40
+      src: user_request
+  - id: MEGANATIONS_ultima_trinchera_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+    icon_prefer:
+    - generic_army_support
+    name: {english: 'The Last Trench', spanish: 'La Última Trinchera'}
+    desc:
+      english: 'No megastate is invincible, and none is finished while it still fights.'
+      spanish: 'Ninguna meganación es invencible, y ninguna está terminada mientras siga peleando.'
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_la_ultima_trinchera
+      name: {english: 'The Last Trench', spanish: 'La Última Trinchera'}
+      desc:
+        english: 'Losing a war badly (surrender above 30%): the whole nation goes to the front. For 180 days, +15% defence, +10% organisation and +10% war support, 100,000 men and 5,000 infantry weapons. Every two years at most.'
+        spanish: 'Perdiendo una guerra feo (rendición por encima de 30%): toda la nación va al frente. Por 180 días, +15% de defensa, +10% de organización y +10% de apoyo a la guerra, 100.000 hombres y 5.000 armas de infantería. Como mucho cada dos años.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 50
+      cooldown_days: 730
+      available:
+        at_war: true
+        surrender_at_least: 0.3
+      effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_ultima_trinchera, days: 180}
+      - {effect: add_manpower, value: 100000}
+      - {effect: equipment, type: infantry_equipment, amount: 5000}
+      ai:
+        factor: 50
+      src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -22050,6 +22278,25 @@ dynamic_modifiers:
     name: {english: 'Community Works', spanish: 'Obras Comunitarias'}
     desc: {english: 'Many hands.', spanish: 'Muchas manos.'}
     modifiers: {'?production_speed_buildings_factor': 0.15}
+
+  - id: MEGANATIONS_resistencia_desesperada
+    country: null
+    no_art: true
+    name: {english: 'Desperate Resistance', spanish: 'Resistencia Desesperada'}
+    desc: {english: 'Every street is a fortress.', spanish: 'Cada calle es una fortaleza.'}
+    modifiers: {'?army_defence_factor': 0.15, '?army_org_factor': 0.1, '?war_support_factor': 0.05}
+  - id: MEGANATIONS_pacto_de_caudillos
+    country: null
+    no_art: true
+    name: {english: 'Pact Between Warlords', spanish: 'Pacto entre Caudillos'}
+    desc: {english: 'Sworn on blood and diesel.', spanish: 'Jurado con sangre y gasoil.'}
+    modifiers: {'?stability_factor': 0.08, '?army_org_factor': 0.05}
+  - id: MEGANATIONS_ultima_trinchera
+    country: null
+    no_art: true
+    name: {english: 'The Last Trench', spanish: 'La Última Trinchera'}
+    desc: {english: 'The whole nation at the front.', spanish: 'Toda la nación en el frente.'}
+    modifiers: {'?army_defence_factor': 0.15, '?army_org_factor': 0.1, '?war_support_factor': 0.1}
 
 on_actions:
   # 2026-10-17: la bomba es secreta hasta que se usa. Cuando alguien la tira
