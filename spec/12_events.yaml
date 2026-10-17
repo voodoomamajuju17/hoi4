@@ -16799,3 +16799,437 @@ namespaces:
         - {effect: clear_flag, value: HSN_toma_en_curso}
         ai_chance: 100
       src: user_request
+
+  # 2026-10-17: la receta de diversión (NRE)
+  meganations_nre_receta:
+    country: NRE
+    events:
+    - id: 1
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Rome Has Fallen', spanish: 'Cayó Roma'}
+      desc:
+        english: 'The enemy marches through Rome. Its arches are down and its games are silent.\n\n-10 Gloria. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A City of Triumph Lost.'
+        spanish: 'El enemigo marcha por Roma. Sus arcos están en el suelo y sus juegos, en silencio.\n\n-10 de Gloria. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad del Triunfo Perdida.'
+      options:
+      - name: {english: 'Save the eagles and the archives.', spanish: 'Salvar las águilas y los archivos.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NRE_gloria, value: 5}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 40
+      - name: {english: 'Rome will return.', spanish: 'Roma va a volver.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 2
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Lutetia Has Fallen', spanish: 'Cayó Lutecia'}
+      desc:
+        english: 'The enemy marches through Lutetia. Its arches are down and its games are silent.\n\n-10 Gloria. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A City of Triumph Lost.'
+        spanish: 'El enemigo marcha por Lutecia. Sus arcos están en el suelo y sus juegos, en silencio.\n\n-10 de Gloria. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad del Triunfo Perdida.'
+      options:
+      - name: {english: 'Save the eagles and the archives.', spanish: 'Salvar las águilas y los archivos.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NRE_gloria, value: 5}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 40
+      - name: {english: 'Rome will return.', spanish: 'Roma va a volver.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 3
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Lugdunum Has Fallen', spanish: 'Cayó Lugdunum'}
+      desc:
+        english: 'The enemy marches through Lugdunum. Its arches are down and its games are silent.\n\n-10 Gloria. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A City of Triumph Lost.'
+        spanish: 'El enemigo marcha por Lugdunum. Sus arcos están en el suelo y sus juegos, en silencio.\n\n-10 de Gloria. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad del Triunfo Perdida.'
+      options:
+      - name: {english: 'Save the eagles and the archives.', spanish: 'Salvar las águilas y los archivos.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NRE_gloria, value: 5}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 40
+      - name: {english: 'Rome will return.', spanish: 'Roma va a volver.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 4
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Massilia Has Fallen', spanish: 'Cayó Massilia'}
+      desc:
+        english: 'The enemy marches through Massilia. Its arches are down and its games are silent.\n\n-10 Gloria. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A City of Triumph Lost.'
+        spanish: 'El enemigo marcha por Massilia. Sus arcos están en el suelo y sus juegos, en silencio.\n\n-10 de Gloria. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad del Triunfo Perdida.'
+      options:
+      - name: {english: 'Save the eagles and the archives.', spanish: 'Salvar las águilas y los archivos.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NRE_gloria, value: 5}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 40
+      - name: {english: 'Rome will return.', spanish: 'Roma va a volver.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 5
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Burdigala Has Fallen', spanish: 'Cayó Burdigala'}
+      desc:
+        english: 'The enemy marches through Burdigala. Its arches are down and its games are silent.\n\n-10 Gloria. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A City of Triumph Lost.'
+        spanish: 'El enemigo marcha por Burdigala. Sus arcos están en el suelo y sus juegos, en silencio.\n\n-10 de Gloria. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Una Ciudad del Triunfo Perdida.'
+      options:
+      - name: {english: 'Save the eagles and the archives.', spanish: 'Salvar las águilas y los archivos.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: NRE_gloria, value: 5}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 40
+      - name: {english: 'Rome will return.', spanish: 'Roma va a volver.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 10
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The First Triumph', spanish: 'El Primer Triunfo'}
+      desc:
+        english: 'Architects, generals and priests each bring a model of the monument.\n\nTHE ARCH OF THE LEGIONS: +5% organisation and morale.\nTHE NEW COLOSSEUM: +5% stability and +3% war support.\nTHE AQUEDUCTS OF STEEL: +10% construction and infrastructure speed.'
+        spanish: 'Arquitectos, generales y sacerdotes traen cada uno una maqueta del monumento.\n\nEL ARCO DE LAS LEGIONES: +5% de organización y moral.\nEL NUEVO COLISEO: +5% de estabilidad y +3% de apoyo a la guerra.\nLOS ACUEDUCTOS DE ACERO: +10% de velocidad de construcción y de infraestructura.'
+      options:
+      - name: {english: 'The Arch of the Legions.', spanish: 'El Arco de las Legiones.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_arco}
+        ai_chance: 40
+      - name: {english: 'The New Colosseum.', spanish: 'El Nuevo Coliseo.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_coliseo}
+        ai_chance: 30
+      - name: {english: 'The Aqueducts of Steel.', spanish: 'Los Acueductos de Acero.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_acueductos}
+        ai_chance: 30
+      src: user_request
+    - id: 11
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Second Triumph', spanish: 'El Segundo Triunfo'}
+      desc:
+        english: 'The Senate offers the emperor a title. Which one he takes will define his reign.\n\nIMPERATOR: +7% attack and +4% defence.\nPATER PATRIAE: +6% stability and +0.15 political power a day.\nRESTITUTOR ORBIS: +6% factory output and +5% recruitable population.'
+        spanish: 'El Senado le ofrece un título al emperador. El que elija va a definir su reinado.\n\nIMPERATOR: +7% de ataque y +4% de defensa.\nPATER PATRIAE: +6% de estabilidad y +0,15 de poder político por día.\nRESTITUTOR ORBIS: +6% de producción de fábricas y +5% de población reclutable.'
+      options:
+      - name: {english: 'Imperator.', spanish: 'Imperator.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_imperator}
+        ai_chance: 40
+      - name: {english: 'Pater Patriae.', spanish: 'Pater Patriae.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_pater_patriae}
+        ai_chance: 30
+      - name: {english: 'Restitutor Orbis.', spanish: 'Restitutor Orbis.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_restitutor}
+        ai_chance: 30
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Eternal Triumph', spanish: 'El Triunfo Eterno'}
+      desc:
+        english: 'Seventy-five years of Gloria in a single day. Rome must decide what kind of empire it is.\n\nPAX ROMANA: +10% stability and +8% factory output.\nROMA INVICTA: +8% attack, organisation and war support.\nTHE SENATE REBORN: +0.3 political power a day and +6% research speed.'
+        spanish: 'Setenta y cinco años de Gloria en un solo día. Roma debe decidir qué clase de imperio es.\n\nPAX ROMANA: +10% de estabilidad y +8% de producción de fábricas.\nROMA INVICTA: +8% de ataque, organización y apoyo a la guerra.\nEL SENADO RENACIDO: +0,3 de poder político por día y +6% de velocidad de investigación.'
+      options:
+      - name: {english: 'Pax Romana.', spanish: 'Pax Romana.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_pax}
+        ai_chance: 30
+      - name: {english: 'Roma Invicta.', spanish: 'Roma Invicta.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_invicta}
+        ai_chance: 40
+      - name: {english: 'The Senate Reborn.', spanish: 'El Senado Renacido.'}
+        effects:
+        - {effect: dynamic_modifier, id: NRE_triunfo_senado}
+        ai_chance: 30
+      src: user_request
+    - id: 20
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Statue Is Found', spanish: 'Encuentran una Estatua'}
+      desc:
+        english: 'Workers digging a metro line find a bronze Augustus.\n\nPut it in the Forum: +12 Gloria. Sell it to a collector: +50 political power.'
+        spanish: 'Obreros que cavan una línea de metro encuentran un Augusto de bronce.\n\nPonerlo en el Foro: +12 de Gloria. Vendérselo a un coleccionista: +50 de poder político.'
+      options:
+      - name: {english: 'The Forum.', spanish: 'El Foro.'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: 12}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 60
+      - name: {english: 'Sell it.', spanish: 'Venderlo.'}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 40
+      src: user_request
+    - id: 21
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Poet Sings of Us', spanish: 'Un Poeta Canta Sobre Nosotros'}
+      desc:
+        english: 'A young poet writes an epic about the emperor. It is very long and quite good.\n\n+10 Gloria.'
+        spanish: 'Un poeta joven escribe una epopeya sobre el emperador. Es muy larga y bastante buena.\n\n+10 de Gloria.'
+      options:
+      - name: {english: 'Make it compulsory reading.', spanish: 'Que sea lectura obligatoria.'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 100
+      src: user_request
+    - id: 22
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Eagles Return', spanish: 'Vuelven las Águilas'}
+      desc:
+        english: 'A lost eagle standard of the 21st century is returned by a warlord as a gift.\n\nCelebrate: +10 Gloria. Ask what he wants: +5 Auctoritas.'
+        spanish: 'Un caudillo devuelve como regalo un estandarte de águila perdido en el siglo XXI.\n\nFestejar: +10 de Gloria. Preguntarle qué quiere: +5 de Auctoritas.'
+      options:
+      - name: {english: 'Celebrate.', spanish: 'Festejar.'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: 10}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 60
+      - name: {english: 'Ask what he wants.', spanish: 'Preguntarle qué quiere.'}
+        effects:
+        - {effect: add_variable, var: NRE_auctoritas, value: 5}
+        ai_chance: 40
+      src: user_request
+    - id: 23
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Chariot Race', spanish: 'Una Carrera de Cuadrigas'}
+      desc:
+        english: 'The Circus Maximus hosts its first race in eighty years. The Greens win.\n\n+8 Gloria and +2% stability.'
+        spanish: 'El Circo Máximo tiene su primera carrera en ochenta años. Ganan los Verdes.\n\n+8 de Gloria y +2% de estabilidad.'
+      options:
+      - name: {english: 'Ave, Greens!', spanish: '¡Ave, Verdes!'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: 8}
+        - {effect: add_stability, value: 0.02}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 100
+      src: user_request
+    - id: 24
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Graffiti on the Capitol', spanish: 'Grafitis en el Capitolio'}
+      desc:
+        english: 'Someone painted ''SIC SEMPER TYRANNIS'' on the Capitol, in very good Latin.\n\nHunt the author: -3% stability. Paint over it: -10 Gloria.'
+        spanish: 'Alguien pintó ''SIC SEMPER TYRANNIS'' en el Capitolio, en muy buen latín.\n\nCazar al autor: -3% de estabilidad. Taparlo: -10 de Gloria.'
+      options:
+      - name: {english: 'Hunt the author.', spanish: 'Cazar al autor.'}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 50
+      - name: {english: 'Paint over it.', spanish: 'Taparlo.'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: -10}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Arena Collapses', spanish: 'Se Derrumba la Arena'}
+      desc:
+        english: 'The stands of the new arena of Lugdunum collapse during the games.\n\n-12 Gloria. Or blame the architect publicly: -40 political power, -4 Gloria.'
+        spanish: 'Las tribunas de la nueva arena de Lugdunum se derrumban durante los juegos.\n\n-12 de Gloria. O culpar al arquitecto en público: -40 de poder político, -4 de Gloria.'
+      options:
+      - name: {english: 'Mourn.', spanish: 'Hacer duelo.'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: -12}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 50
+      - name: {english: 'Blame the architect.', spanish: 'Culpar al arquitecto.'}
+        effects:
+        - {effect: add_political_power, value: -40}
+        - {effect: add_variable, var: NRE_gloria, value: -4}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 50
+      src: user_request
+    - id: 26
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Bad Omen', spanish: 'Un Mal Augurio'}
+      desc:
+        english: 'The sacred chickens of the Capitol refuse to eat. The augurs are very worried.\n\nPostpone everything: -10 Gloria. Ignore the chickens: -5 Auctoritas.'
+        spanish: 'Los pollos sagrados del Capitolio se niegan a comer. Los augures están muy preocupados.\n\nPostergar todo: -10 de Gloria. Ignorar a los pollos: -5 de Auctoritas.'
+      options:
+      - name: {english: 'Postpone.', spanish: 'Postergar.'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: -10}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 50
+      - name: {english: 'Ignore the chickens.', spanish: 'Ignorar a los pollos.'}
+        effects:
+        - {effect: add_variable, var: NRE_auctoritas, value: -5}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Satirist Mocks the Emperor', spanish: 'Un Satírico se Burla del Emperador'}
+      desc:
+        english: 'A comedy in Massilia shows the emperor as a chicken. The audience loves it.\n\nClose the theatre: -3% stability. Laugh along: -8 Gloria, +2% stability.'
+        spanish: 'Una comedia en Massilia muestra al emperador como un pollo. Al público le encanta.\n\nCerrar el teatro: -3% de estabilidad. Reírse con ellos: -8 de Gloria, +2% de estabilidad.'
+      options:
+      - name: {english: 'Close it.', spanish: 'Cerrarlo.'}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 50
+      - name: {english: 'Laugh along.', spanish: 'Reírse con ellos.'}
+        effects:
+        - {effect: add_variable, var: NRE_gloria, value: -8}
+        - {effect: add_stability, value: 0.02}
+        - {effect: run, value: NRE_recalcular_legiones}
+        ai_chance: 50
+      src: user_request
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Legio I Italica Marches', spanish: 'Marcha la Legio I Italica'}
+      desc:
+        english: 'The eagles of the Legio I Italica leave the camp at dawn. Within 180 days, at war: 36 divisions and 15,000 infantry weapons in the depots. The Senate watches; so do the other legions.'
+        spanish: 'Las águilas de la Legio I Italica salen del campamento al amanecer. En 180 días, en guerra: 36 divisiones y 15.000 armas de infantería en los depósitos. El Senado mira; las otras legiones también.'
+      options:
+      - name: {english: 'Ave, Imperator.', spanish: 'Ave, Imperator.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 43
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Triumph of the Legio I Italica', spanish: 'Triunfo de la Legio I Italica'}
+      desc:
+        english: 'The Legio I Italica returns with standards, prisoners and songs. The Forum is full for three days.'
+        spanish: 'La Legio I Italica vuelve con estandartes, prisioneros y canciones. El Foro está lleno tres días.'
+      options:
+      - name: {english: 'Io triumphe!', spanish: '¡Io triumphe!'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 100
+      src: user_request
+    - id: 46
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Legio I Italica Returns Empty-Handed', spanish: 'La Legio I Italica Vuelve con las Manos Vacías'}
+      desc:
+        english: 'The campaign failed. The Legio I Italica blames the Senate, the Senate blames the emperor, and the emperor counts the knives.'
+        spanish: 'La campaña fracasó. La Legio I Italica le echa la culpa al Senado, el Senado al emperador, y el emperador cuenta los cuchillos.'
+      options:
+      - name: {english: 'Vae victis... and vae to us.', spanish: 'Vae victis... y vae a nosotros.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 41
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Legio V Macedonica Marches', spanish: 'Marcha la Legio V Macedonica'}
+      desc:
+        english: 'The eagles of the Legio V Macedonica leave the camp at dawn. Within a year: take Kiev, Odessa, Crimea, Baghdad or Tehran. The Senate watches; so do the other legions.'
+        spanish: 'Las águilas de la Legio V Macedonica salen del campamento al amanecer. En un año: tomar Kiev, Odesa, Crimea, Bagdad o Teherán. El Senado mira; las otras legiones también.'
+      options:
+      - name: {english: 'Ave, Imperator.', spanish: 'Ave, Imperator.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 44
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Triumph of the Legio V Macedonica', spanish: 'Triunfo de la Legio V Macedonica'}
+      desc:
+        english: 'The Legio V Macedonica returns with standards, prisoners and songs. The Forum is full for three days.'
+        spanish: 'La Legio V Macedonica vuelve con estandartes, prisioneros y canciones. El Foro está lleno tres días.'
+      options:
+      - name: {english: 'Io triumphe!', spanish: '¡Io triumphe!'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 100
+      src: user_request
+    - id: 47
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Legio V Macedonica Returns Empty-Handed', spanish: 'La Legio V Macedonica Vuelve con las Manos Vacías'}
+      desc:
+        english: 'The campaign failed. The Legio V Macedonica blames the Senate, the Senate blames the emperor, and the emperor counts the knives.'
+        spanish: 'La campaña fracasó. La Legio V Macedonica le echa la culpa al Senado, el Senado al emperador, y el emperador cuenta los cuchillos.'
+      options:
+      - name: {english: 'Vae victis... and vae to us.', spanish: 'Vae victis... y vae a nosotros.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 42
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Legio XII Fulminata Marches', spanish: 'Marcha la Legio XII Fulminata'}
+      desc:
+        english: 'The eagles of the Legio XII Fulminata leave the camp at dawn. Within 120 days: take a warlord capital (Moscow, Leningrad, Tehran, Baghdad or Nejd). The Senate watches; so do the other legions.'
+        spanish: 'Las águilas de la Legio XII Fulminata salen del campamento al amanecer. En 120 días: tomar una capital de caudillos (Moscú, Leningrado, Teherán, Bagdad o Nejd). El Senado mira; las otras legiones también.'
+      options:
+      - name: {english: 'Ave, Imperator.', spanish: 'Ave, Imperator.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 45
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Triumph of the Legio XII Fulminata', spanish: 'Triunfo de la Legio XII Fulminata'}
+      desc:
+        english: 'The Legio XII Fulminata returns with standards, prisoners and songs. The Forum is full for three days.'
+        spanish: 'La Legio XII Fulminata vuelve con estandartes, prisioneros y canciones. El Foro está lleno tres días.'
+      options:
+      - name: {english: 'Io triumphe!', spanish: '¡Io triumphe!'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 100
+      src: user_request
+    - id: 48
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Legio XII Fulminata Returns Empty-Handed', spanish: 'La Legio XII Fulminata Vuelve con las Manos Vacías'}
+      desc:
+        english: 'The campaign failed. The Legio XII Fulminata blames the Senate, the Senate blames the emperor, and the emperor counts the knives.'
+        spanish: 'La campaña fracasó. La Legio XII Fulminata le echa la culpa al Senado, el Senado al emperador, y el emperador cuenta los cuchillos.'
+      options:
+      - name: {english: 'Vae victis... and vae to us.', spanish: 'Vae victis... y vae a nosotros.'}
+        effects: []
+        ai_chance: 100
+      src: user_request

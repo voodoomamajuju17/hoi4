@@ -11864,6 +11864,447 @@ categories:
         factor: 3
       src: user_request
 
+  # 2026-10-17: la receta de diversión (NRE) — productoras, tres elecciones, gastos y eventos.
+  - id: NRE_gloria_category
+    country: NRE
+    icon_prefer:
+    - generic_political_actions
+    - generic_army_support
+    name: {english: 'The Gloria of Rome', spanish: 'La Gloria de Roma'}
+    desc:
+      english: 'Gloria: [?NRE_gloria]\nTriumphal cities: [?NRE_productoras_r] / 5\n\nGloria is what Rome remembers about itself: arches, games, triumphs. Five great cities produce it. Bread and circuses cost Gloria; so does every triumph that is worth remembering.\n\nPRODUCERS: Rome, Lutetia, Lugdunum, Massilia, Burdigala. Each one adds 1 Gloria a month; losing one costs 10 and 180 days of trouble, and it produces again only when we retake and restore it.\nTHE THREE CHOICES: at 25, 50, 75 Gloria you can spend them, once each, on a permanent choice between three paths.\nSPENDING: smaller amounts buy temporary bonuses.'
+      spanish: 'Gloria: [?NRE_gloria]\nCiudades triunfales: [?NRE_productoras_r] / 5\n\nLa Gloria es lo que Roma recuerda de sí misma: arcos, juegos, triunfos. Cinco grandes ciudades la producen. El pan y circo cuesta Gloria; y también cada triunfo que valga la pena recordar.\n\nPRODUCTORAS: Roma, Lutecia, Lugdunum, Massilia, Burdigala. Cada una suma 1 de Gloria por mes; perder una cuesta 10 y 180 días de problemas, y vuelve a producir recién cuando la recuperamos y la restauramos.\nLAS TRES ELECCIONES: con 25, 50, 75 de Gloria podés gastarlos, una vez cada una, en una elección permanente entre tres caminos.\nGASTAR: con menos se compran bonos temporales.'
+    src: user_request
+    decisions:
+    - id: NRE_restaurar_1
+      name: {english: 'Rebuild Rome', spanish: 'Reconstruir Roma'}
+      desc:
+        english: 'Rome is ours again. New arches, new games: it produces Gloria again. +2 Gloria.'
+        spanish: 'Roma vuelve a ser nuestra. Arcos nuevos, juegos nuevos: vuelve a producir Gloria. +2 de Gloria.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NRE_prod_1_perdida}
+      available:
+        controls_state: [Lazio]
+      effects:
+      - {effect: clear_flag, value: NRE_prod_1_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NRE_restaurar_2
+      name: {english: 'Rebuild Lutetia', spanish: 'Reconstruir Lutecia'}
+      desc:
+        english: 'Lutetia is ours again. New arches, new games: it produces Gloria again. +2 Gloria.'
+        spanish: 'Lutecia vuelve a ser nuestra. Arcos nuevos, juegos nuevos: vuelve a producir Gloria. +2 de Gloria.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NRE_prod_2_perdida}
+      available:
+        controls_state: [Ile de France]
+      effects:
+      - {effect: clear_flag, value: NRE_prod_2_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NRE_restaurar_3
+      name: {english: 'Rebuild Lugdunum', spanish: 'Reconstruir Lugdunum'}
+      desc:
+        english: 'Lugdunum is ours again. New arches, new games: it produces Gloria again. +2 Gloria.'
+        spanish: 'Lugdunum vuelve a ser nuestra. Arcos nuevos, juegos nuevos: vuelve a producir Gloria. +2 de Gloria.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NRE_prod_3_perdida}
+      available:
+        controls_state: [Rhone]
+      effects:
+      - {effect: clear_flag, value: NRE_prod_3_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NRE_restaurar_4
+      name: {english: 'Rebuild Massilia', spanish: 'Reconstruir Massilia'}
+      desc:
+        english: 'Massilia is ours again. New arches, new games: it produces Gloria again. +2 Gloria.'
+        spanish: 'Massilia vuelve a ser nuestra. Arcos nuevos, juegos nuevos: vuelve a producir Gloria. +2 de Gloria.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NRE_prod_4_perdida}
+      available:
+        controls_state: [Bouches-du-Rhône]
+      effects:
+      - {effect: clear_flag, value: NRE_prod_4_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NRE_restaurar_5
+      name: {english: 'Rebuild Burdigala', spanish: 'Reconstruir Burdigala'}
+      desc:
+        english: 'Burdigala is ours again. New arches, new games: it produces Gloria again. +2 Gloria.'
+        spanish: 'Burdigala vuelve a ser nuestra. Arcos nuevos, juegos nuevos: vuelve a producir Gloria. +2 de Gloria.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: NRE_prod_5_perdida}
+      available:
+        controls_state: [Aquitaine]
+      effects:
+      - {effect: clear_flag, value: NRE_prod_5_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: NRE_el_primer_triunfo
+      name: {english: 'The First Triumph', spanish: 'El Primer Triunfo'}
+      desc:
+        english: 'Rome can dedicate its first great monument of the century. Only one path, and only once. Needs and spends 25 Gloria.'
+        spanish: 'Roma puede dedicar su primer gran monumento del siglo. Un solo camino, y una sola vez. Pide y gasta 25 de Gloria.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NRE_gloria, value: 25}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -25}
+      - {effect: event, id: meganations_nre_receta.10}
+      ai:
+        factor: 50
+      src: user_request
+    - id: NRE_el_segundo_triunfo
+      name: {english: 'The Second Triumph', spanish: 'El Segundo Triunfo'}
+      desc:
+        english: 'A triumph worthy of Trajan. Only one path, and only once. Needs and spends 50 Gloria.'
+        spanish: 'Un triunfo digno de Trajano. Un solo camino, y una sola vez. Pide y gasta 50 de Gloria.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NRE_gloria, value: 50}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -50}
+      - {effect: event, id: meganations_nre_receta.11}
+      ai:
+        factor: 50
+      src: user_request
+    - id: NRE_triunfo_de_legion_eterno
+      name: {english: 'The Eternal Triumph', spanish: 'El Triunfo Eterno'}
+      desc:
+        english: 'The last triumph: the one that will be carved on the Capitol. Only one path, and only once. Needs and spends 75 Gloria.'
+        spanish: 'El último triunfo: el que se va a tallar en el Capitolio. Un solo camino, y una sola vez. Pide y gasta 75 de Gloria.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: NRE_gloria, value: 75}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -75}
+      - {effect: event, id: meganations_nre_receta.12}
+      ai:
+        factor: 50
+      src: user_request
+    - id: NRE_panem_et_circenses
+      name: {english: 'Panem et Circenses', spanish: 'Panem et Circenses'}
+      desc:
+        english: 'Free bread and a week of games: +8% stability for 90 days. Costs 10 Gloria.'
+        spanish: 'Pan gratis y una semana de juegos: +8% de estabilidad por 90 días. Cuesta 10 de Gloria.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: NRE_gloria, value: 10}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -10}
+      - {effect: dynamic_modifier, id: NRE_receta_circo, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NRE_gloria, value: 20}}
+      src: user_request
+    - id: NRE_donativum
+      name: {english: 'Donativum', spanish: 'Donativum'}
+      desc:
+        english: 'A gift for every legionary: +10 Auctoritas and +5 prestige for every legion. Costs 15 Gloria.'
+        spanish: 'Un regalo para cada legionario: +10 de Auctoritas y +5 de prestigio para cada legión. Cuesta 15 de Gloria.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: NRE_gloria, value: 15}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -15}
+      - {effect: add_variable, var: NRE_auctoritas, value: 10}
+      - {effect: add_variable, var: NRE_prestigio_italica, value: 5}
+      - {effect: add_variable, var: NRE_prestigio_macedonica, value: 5}
+      - {effect: add_variable, var: NRE_prestigio_fulminata, value: 5}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NRE_gloria, value: 30}}
+      src: user_request
+    - id: NRE_ludi_gladiatorii
+      name: {english: 'Gladiatorial Games', spanish: 'Juegos de Gladiadores'}
+      desc:
+        english: 'The arena makes soldiers: +8% war support for 120 days and +20,000 manpower. Costs 15 Gloria.'
+        spanish: 'La arena hace soldados: +8% de apoyo a la guerra por 120 días y +20.000 de mano de obra. Cuesta 15 de Gloria.'
+      icon_prefer:
+      - generic_army_support
+      cost: 10
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: NRE_gloria, value: 15}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -15}
+      - {effect: dynamic_modifier, id: NRE_receta_gladiadores, days: 120}
+      - {effect: add_manpower, value: 20000}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NRE_gloria, value: 30}}
+      src: user_request
+    - id: NRE_via_imperialis
+      name: {english: 'Via Imperialis', spanish: 'Via Imperialis'}
+      desc:
+        english: 'A new imperial road: +20% infrastructure speed for 120 days and a road in the capital. Costs 15 Gloria.'
+        spanish: 'Una nueva vía imperial: +20% de velocidad de infraestructura por 120 días y un camino en la capital. Cuesta 15 de Gloria.'
+      icon_prefer:
+      - generic_construction
+      cost: 10
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: NRE_gloria, value: 15}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -15}
+      - {effect: dynamic_modifier, id: NRE_receta_via, days: 120}
+      - {effect: build, building: infrastructure, level: 1}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NRE_gloria, value: 30}}
+      src: user_request
+    - id: NRE_testudo
+      name: {english: 'Testudo', spanish: 'Testudo'}
+      desc:
+        english: 'The old formation, in powered armour: +12% defence for 60 days. Costs 10 Gloria.'
+        spanish: 'La vieja formación, en armadura motorizada: +12% de defensa por 60 días. Cuesta 10 de Gloria.'
+      icon_prefer:
+      - generic_army_support
+      cost: 10
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: NRE_gloria, value: 10}
+      effects:
+      - {effect: add_variable, var: NRE_gloria, value: -10}
+      - {effect: dynamic_modifier, id: NRE_receta_testudo, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: NRE_gloria, value: 20}}
+      src: user_request
+    after_effects:
+    - {effect: run, value: NRE_recalcular_legiones}
+
+  # 2026-10-17 (pedido del usuario): misiones con reloj de las legiones, con premio y costo en Auctoritas.
+  - id: NRE_campanas_category
+    country: NRE
+    icon_prefer:
+    - generic_army_support
+    - generic_prepare_civil_war
+    name: {english: 'The Campaigns of the Legions', spanish: 'Las Campañas de las Legiones'}
+    desc:
+      english: 'AUCTORITAS: [?NRE_auctoritas]\nLegio I Italica: [?NRE_prestigio_italica]   Legio V Macedonica: [?NRE_prestigio_macedonica]   Legio XII Fulminata: [?NRE_prestigio_fulminata]\n\nEntrust a campaign to a legion (15 Auctoritas). Each has a clock and a goal: the Italica holds the line, the Macedonica marches east, the Fulminata strikes a warlord capital. Triumph: prestige, Auctoritas, experience and The Triumph. Failure: the emperor pays in Auctoritas.'
+      spanish: 'AUCTORITAS: [?NRE_auctoritas]\nLegio I Italica: [?NRE_prestigio_italica]   Legio V Macedonica: [?NRE_prestigio_macedonica]   Legio XII Fulminata: [?NRE_prestigio_fulminata]\n\nEncomendarle una campaña a una legión (15 de Auctoritas). Cada una tiene un reloj y una meta: la Italica sostiene la línea, la Macedonica marcha al este, la Fulminata golpea una capital de caudillos. Triunfo: prestigio, Auctoritas, experiencia y El Triunfo. Fracaso: el emperador lo paga en Auctoritas.'
+    src: user_request
+    decisions:
+    - id: NRE_campana_italica
+      name: {english: 'Legio I Italica: The Wall of Italy', spanish: 'Legio I Italica: El Muro de Italia'}
+      desc:
+        english: 'Entrust a campaign to the Legio I Italica. Within 180 days, at war: 36 divisions and 15,000 infantry weapons in the depots. Done: +20 prestige for the legion, +10 Auctoritas, +60 army experience and ''The Triumph'' for 120 days. Failed: -15 Auctoritas and -10 prestige for the legion. Costs 15 Auctoritas.'
+        spanish: 'Encomendarle una campaña a la Legio I Italica. En 180 días, en guerra: 36 divisiones y 15.000 armas de infantería en los depósitos. Cumplida: +20 de prestigio para la legión, +10 de Auctoritas, +60 de experiencia del ejército y «El Triunfo» por 120 días. Fallida: -15 de Auctoritas y -10 de prestigio para la legión. Cuesta 15 de Auctoritas.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 0
+      cooldown_days: 365
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 15}
+        not_flag: NRE_campana_activa_italica
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
+      - {effect: flag, value: NRE_campana_activa_italica}
+      - {effect: event, id: meganations_nre_receta.40}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when: {not: {at_war: true}}
+      src: user_request
+    - id: NRE_mision_italica
+      name: {english: 'Campaign of the Legio I Italica', spanish: 'Campaña de la Legio I Italica'}
+      desc:
+        english: 'Within 180 days, at war: 36 divisions and 15,000 infantry weapons in the depots.'
+        spanish: 'En 180 días, en guerra: 36 divisiones y 15.000 armas de infantería en los depósitos.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      available:
+        at_war: true
+        divisions_at_least: 36
+        equipment_at_least: {type: infantry_equipment, amount: 15000}
+      mission:
+        days: 180
+        activation: {tag: NRE, flag: NRE_campana_activa_italica}
+      effects:
+      - {effect: add_variable, var: NRE_prestigio_italica, value: 20}
+      - {effect: add_variable, var: NRE_auctoritas, value: 10}
+      - {effect: army_experience, value: 60}
+      - {effect: dynamic_modifier, id: NRE_triunfo_de_legion, days: 120}
+      - {effect: clear_flag, value: NRE_campana_activa_italica}
+      - {effect: event, id: meganations_nre_receta.43}
+      - {effect: run, value: NRE_recalcular_legiones}
+      timeout_effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
+      - {effect: add_variable, var: NRE_prestigio_italica, value: -10}
+      - {effect: clear_flag, value: NRE_campana_activa_italica}
+      - {effect: event, id: meganations_nre_receta.46}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai:
+        factor: 1
+      src: user_request
+    - id: NRE_campana_macedonica
+      name: {english: 'Legio V Macedonica: The Eastern March', spanish: 'Legio V Macedonica: La Marcha del Este'}
+      desc:
+        english: 'Entrust a campaign to the Legio V Macedonica. Within a year: take Kiev, Odessa, Crimea, Baghdad or Tehran. Done: +20 prestige for the legion, +10 Auctoritas, +60 army experience and ''The Triumph'' for 120 days. Failed: -15 Auctoritas and -10 prestige for the legion. Costs 15 Auctoritas.'
+        spanish: 'Encomendarle una campaña a la Legio V Macedonica. En un año: tomar Kiev, Odesa, Crimea, Bagdad o Teherán. Cumplida: +20 de prestigio para la legión, +10 de Auctoritas, +60 de experiencia del ejército y «El Triunfo» por 120 días. Fallida: -15 de Auctoritas y -10 de prestigio para la legión. Cuesta 15 de Auctoritas.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 0
+      cooldown_days: 365
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 15}
+        not_flag: NRE_campana_activa_macedonica
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
+      - {effect: flag, value: NRE_campana_activa_macedonica}
+      - {effect: event, id: meganations_nre_receta.41}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when: {not: {at_war: true}}
+      src: user_request
+    - id: NRE_mision_macedonica
+      name: {english: 'Campaign of the Legio V Macedonica', spanish: 'Campaña de la Legio V Macedonica'}
+      desc:
+        english: 'Within a year: take Kiev, Odessa, Crimea, Baghdad or Tehran.'
+        spanish: 'En un año: tomar Kiev, Odesa, Crimea, Bagdad o Teherán.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      available:
+        any: [{controls_state: [Kiev]}, {controls_state: [Odessa]}, {controls_state: [Crimea]}, {controls_state: [Baghdad]}, {controls_state: [Tehran]}]
+      mission:
+        days: 365
+        activation: {tag: NRE, flag: NRE_campana_activa_macedonica}
+      effects:
+      - {effect: add_variable, var: NRE_prestigio_macedonica, value: 20}
+      - {effect: add_variable, var: NRE_auctoritas, value: 10}
+      - {effect: army_experience, value: 60}
+      - {effect: dynamic_modifier, id: NRE_triunfo_de_legion, days: 120}
+      - {effect: clear_flag, value: NRE_campana_activa_macedonica}
+      - {effect: event, id: meganations_nre_receta.44}
+      - {effect: run, value: NRE_recalcular_legiones}
+      timeout_effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
+      - {effect: add_variable, var: NRE_prestigio_macedonica, value: -10}
+      - {effect: clear_flag, value: NRE_campana_activa_macedonica}
+      - {effect: event, id: meganations_nre_receta.47}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai:
+        factor: 1
+      src: user_request
+    - id: NRE_campana_fulminata
+      name: {english: 'Legio XII Fulminata: The Thunderbolt', spanish: 'Legio XII Fulminata: El Rayo'}
+      desc:
+        english: 'Entrust a campaign to the Legio XII Fulminata. Within 120 days: take a warlord capital (Moscow, Leningrad, Tehran, Baghdad or Nejd). Done: +20 prestige for the legion, +10 Auctoritas, +60 army experience and ''The Triumph'' for 120 days. Failed: -15 Auctoritas and -10 prestige for the legion. Costs 15 Auctoritas.'
+        spanish: 'Encomendarle una campaña a la Legio XII Fulminata. En 120 días: tomar una capital de caudillos (Moscú, Leningrado, Teherán, Bagdad o Nejd). Cumplida: +20 de prestigio para la legión, +10 de Auctoritas, +60 de experiencia del ejército y «El Triunfo» por 120 días. Fallida: -15 de Auctoritas y -10 de prestigio para la legión. Cuesta 15 de Auctoritas.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 0
+      cooldown_days: 365
+      available:
+        variable_at_least: {var: NRE_auctoritas, value: 15}
+        not_flag: NRE_campana_activa_fulminata
+      effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
+      - {effect: flag, value: NRE_campana_activa_fulminata}
+      - {effect: event, id: meganations_nre_receta.42}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when: {not: {at_war: true}}
+      src: user_request
+    - id: NRE_mision_fulminata
+      name: {english: 'Campaign of the Legio XII Fulminata', spanish: 'Campaña de la Legio XII Fulminata'}
+      desc:
+        english: 'Within 120 days: take a warlord capital (Moscow, Leningrad, Tehran, Baghdad or Nejd).'
+        spanish: 'En 120 días: tomar una capital de caudillos (Moscú, Leningrado, Teherán, Bagdad o Nejd).'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      available:
+        any: [{controls_state: [Moscow]}, {controls_state: [Tehran]}, {controls_state: [Baghdad]}, {controls_state: [Leningrad]}, {controls_state: [Nejd]}]
+      mission:
+        days: 120
+        activation: {tag: NRE, flag: NRE_campana_activa_fulminata}
+      effects:
+      - {effect: add_variable, var: NRE_prestigio_fulminata, value: 20}
+      - {effect: add_variable, var: NRE_auctoritas, value: 10}
+      - {effect: army_experience, value: 60}
+      - {effect: dynamic_modifier, id: NRE_triunfo_de_legion, days: 120}
+      - {effect: clear_flag, value: NRE_campana_activa_fulminata}
+      - {effect: event, id: meganations_nre_receta.45}
+      - {effect: run, value: NRE_recalcular_legiones}
+      timeout_effects:
+      - {effect: add_variable, var: NRE_auctoritas, value: -15}
+      - {effect: add_variable, var: NRE_prestigio_fulminata, value: -10}
+      - {effect: clear_flag, value: NRE_campana_activa_fulminata}
+      - {effect: event, id: meganations_nre_receta.48}
+      - {effect: run, value: NRE_recalcular_legiones}
+      ai:
+        factor: 1
+      src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -14203,6 +14644,7 @@ scripted_effects:
           - {effect: event, id: meganations_apf.444, days: 1}
   - id: NRE_pulso_del_ocio
     effects:
+    - {effect: run, value: NRE_pulso_receta}
     - effect: if
       when: {focus: NRE_colonias_de_veteranos, at_war: false}
       then:
@@ -18717,6 +19159,160 @@ scripted_effects:
           - {effect: event, id: meganations_hsn_receta.27, days: 1}
     - {effect: add_variable, var: HSN_peaje, value: HSN_nodos}
 
+  # 2026-10-17: pulso de la receta (NRE), lo llama NRE_pulso_del_ocio
+  - id: NRE_pulso_receta
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - NRE_productoras_r
+        - 0
+    - effect: if
+      when:
+        controls_state: [Lazio]
+        not_flag: NRE_prod_1_perdida
+      then:
+      - {effect: flag, value: NRE_prod_1_activa}
+      - {effect: add_variable, var: NRE_productoras_r, value: 1}
+      - {effect: add_variable, var: NRE_gloria, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Lazio]}
+        not_flag: NRE_prod_1_perdida
+        flag: NRE_prod_1_activa
+      then:
+      - {effect: flag, value: NRE_prod_1_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: -10}
+      - {effect: clamp, var: NRE_gloria, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NRE_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nre_receta.1, days: 1}
+    - effect: if
+      when:
+        controls_state: [Ile de France]
+        not_flag: NRE_prod_2_perdida
+      then:
+      - {effect: flag, value: NRE_prod_2_activa}
+      - {effect: add_variable, var: NRE_productoras_r, value: 1}
+      - {effect: add_variable, var: NRE_gloria, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Ile de France]}
+        not_flag: NRE_prod_2_perdida
+        flag: NRE_prod_2_activa
+      then:
+      - {effect: flag, value: NRE_prod_2_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: -10}
+      - {effect: clamp, var: NRE_gloria, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NRE_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nre_receta.2, days: 1}
+    - effect: if
+      when:
+        controls_state: [Rhone]
+        not_flag: NRE_prod_3_perdida
+      then:
+      - {effect: flag, value: NRE_prod_3_activa}
+      - {effect: add_variable, var: NRE_productoras_r, value: 1}
+      - {effect: add_variable, var: NRE_gloria, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Rhone]}
+        not_flag: NRE_prod_3_perdida
+        flag: NRE_prod_3_activa
+      then:
+      - {effect: flag, value: NRE_prod_3_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: -10}
+      - {effect: clamp, var: NRE_gloria, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NRE_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nre_receta.3, days: 1}
+    - effect: if
+      when:
+        controls_state: [Bouches-du-Rhône]
+        not_flag: NRE_prod_4_perdida
+      then:
+      - {effect: flag, value: NRE_prod_4_activa}
+      - {effect: add_variable, var: NRE_productoras_r, value: 1}
+      - {effect: add_variable, var: NRE_gloria, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Bouches-du-Rhône]}
+        not_flag: NRE_prod_4_perdida
+        flag: NRE_prod_4_activa
+      then:
+      - {effect: flag, value: NRE_prod_4_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: -10}
+      - {effect: clamp, var: NRE_gloria, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NRE_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nre_receta.4, days: 1}
+    - effect: if
+      when:
+        controls_state: [Aquitaine]
+        not_flag: NRE_prod_5_perdida
+      then:
+      - {effect: flag, value: NRE_prod_5_activa}
+      - {effect: add_variable, var: NRE_productoras_r, value: 1}
+      - {effect: add_variable, var: NRE_gloria, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Aquitaine]}
+        not_flag: NRE_prod_5_perdida
+        flag: NRE_prod_5_activa
+      then:
+      - {effect: flag, value: NRE_prod_5_perdida}
+      - {effect: add_variable, var: NRE_gloria, value: -10}
+      - {effect: clamp, var: NRE_gloria, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: NRE_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_nre_receta.5, days: 1}
+    - effect: if
+      when:
+        not_flag: NRE_receta_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: NRE_receta_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_0}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_0, days: 1095}
+          - {effect: event, id: meganations_nre_receta.20, days: 1}
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_1}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_1, days: 1095}
+          - {effect: event, id: meganations_nre_receta.21, days: 1}
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_2}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_2, days: 1095}
+          - {effect: event, id: meganations_nre_receta.22, days: 1}
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_3}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_3, days: 1095}
+          - {effect: event, id: meganations_nre_receta.23, days: 1}
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_4}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_4, days: 1095}
+          - {effect: event, id: meganations_nre_receta.24, days: 1}
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_5}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_5, days: 1095}
+          - {effect: event, id: meganations_nre_receta.25, days: 1}
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_6}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_6, days: 1095}
+          - {effect: event, id: meganations_nre_receta.26, days: 1}
+        - weight: 1
+          skip_if: {flag: NRE_receta_visto_7}
+          effects:
+          - {effect: flag, value: NRE_receta_visto_7, days: 1095}
+          - {effect: event, id: meganations_nre_receta.27, days: 1}
+
 dynamic_modifiers:
   # 2026-10-11 (pedido del usuario: más combate aéreo y ases para el NAS)
   - id: NAS_escuela_de_ases
@@ -19757,6 +20353,97 @@ dynamic_modifiers:
     desc: {english: 'Our ships dock where our flag does not fly.', spanish: 'Nuestros barcos atracan donde no flamea nuestra bandera.'}
     modifiers: {'?industrial_capacity_dockyard': 0.1}
 
+  - id: NRE_receta_productora_perdida
+    country: NRE
+    no_art: true
+    name: {english: 'A City of Triumph Lost', spanish: 'Una Ciudad del Triunfo Perdida'}
+    desc: {english: '-5% stability and -10% construction speed', spanish: '-5% de estabilidad y -10% de velocidad de construcción'}
+    modifiers: {'?stability_factor': -0.05, '?production_speed_buildings_factor': -0.1}
+  - id: NRE_triunfo_arco
+    country: NRE
+    no_art: true
+    name: {english: 'The Arch of the Legions', spanish: 'El Arco de las Legiones'}
+    desc: {english: 'Every legionary marches under it once.', spanish: 'Cada legionario marcha bajo él una vez.'}
+    modifiers: {'?army_org_factor': 0.05, '?army_morale_factor': 0.05}
+  - id: NRE_triunfo_coliseo
+    country: NRE
+    no_art: true
+    name: {english: 'The New Colosseum', spanish: 'El Nuevo Coliseo'}
+    desc: {english: 'Bread and circuses, forever.', spanish: 'Pan y circo, para siempre.'}
+    modifiers: {'?stability_factor': 0.05, '?war_support_factor': 0.03}
+  - id: NRE_triunfo_acueductos
+    country: NRE
+    no_art: true
+    name: {english: 'The Aqueducts of Steel', spanish: 'Los Acueductos de Acero'}
+    desc: {english: 'Water and roads to every province.', spanish: 'Agua y caminos a cada provincia.'}
+    modifiers: {'?production_speed_buildings_factor': 0.1, '?production_speed_infrastructure_factor': 0.1}
+  - id: NRE_triunfo_imperator
+    country: NRE
+    no_art: true
+    name: {english: 'Imperator', spanish: 'Imperator'}
+    desc: {english: 'The emperor is first a soldier.', spanish: 'El emperador es primero un soldado.'}
+    modifiers: {'?army_attack_factor': 0.07, '?army_defence_factor': 0.04}
+  - id: NRE_triunfo_pater_patriae
+    country: NRE
+    no_art: true
+    name: {english: 'Pater Patriae', spanish: 'Pater Patriae'}
+    desc: {english: 'The father of the fatherland.', spanish: 'El padre de la patria.'}
+    modifiers: {'?stability_factor': 0.06, '?political_power_gain': 0.15}
+  - id: NRE_triunfo_restitutor
+    country: NRE
+    no_art: true
+    name: {english: 'Restitutor Orbis', spanish: 'Restitutor Orbis'}
+    desc: {english: 'The restorer of the world.', spanish: 'El restaurador del mundo.'}
+    modifiers: {'?industrial_capacity_factory': 0.06, '?recruitable_population_factor': 0.05}
+  - id: NRE_triunfo_pax
+    country: NRE
+    no_art: true
+    name: {english: 'Pax Romana', spanish: 'Pax Romana'}
+    desc: {english: 'Peace, by order of Rome.', spanish: 'La paz, por orden de Roma.'}
+    modifiers: {'?stability_factor': 0.1, '?industrial_capacity_factory': 0.08}
+  - id: NRE_triunfo_invicta
+    country: NRE
+    no_art: true
+    name: {english: 'Roma Invicta', spanish: 'Roma Invicta'}
+    desc: {english: 'Rome has never lost. Rome will never lose.', spanish: 'Roma nunca perdió. Roma nunca va a perder.'}
+    modifiers: {'?army_attack_factor': 0.08, '?army_org_factor': 0.08, '?war_support_factor': 0.08}
+  - id: NRE_triunfo_senado
+    country: NRE
+    no_art: true
+    name: {english: 'The Senate Reborn', spanish: 'El Senado Renacido'}
+    desc: {english: 'The republic inside the empire.', spanish: 'La república dentro del imperio.'}
+    modifiers: {'?political_power_gain': 0.3, '?research_speed_factor': 0.06}
+  - id: NRE_receta_circo
+    country: NRE
+    no_art: true
+    name: {english: 'Panem et Circenses', spanish: 'Panem et Circenses'}
+    desc: {english: 'The crowd roars.', spanish: 'La multitud ruge.'}
+    modifiers: {'?stability_factor': 0.08}
+  - id: NRE_receta_gladiadores
+    country: NRE
+    no_art: true
+    name: {english: 'Gladiatorial Games', spanish: 'Juegos de Gladiadores'}
+    desc: {english: 'Blood on the sand, fire in the hearts.', spanish: 'Sangre en la arena, fuego en los corazones.'}
+    modifiers: {'?war_support_factor': 0.08}
+  - id: NRE_receta_via
+    country: NRE
+    no_art: true
+    name: {english: 'Via Imperialis', spanish: 'Via Imperialis'}
+    desc: {english: 'All roads lead to Rome.', spanish: 'Todos los caminos llevan a Roma.'}
+    modifiers: {'?production_speed_infrastructure_factor': 0.2}
+  - id: NRE_receta_testudo
+    country: NRE
+    no_art: true
+    name: {english: 'Testudo', spanish: 'Testudo'}
+    desc: {english: 'Shields up.', spanish: 'Escudos arriba.'}
+    modifiers: {'?army_defence_factor': 0.12}
+  - id: NRE_triunfo_de_legion
+    country: NRE
+    no_art: true
+    name: {english: 'The Triumph', spanish: 'El Triunfo'}
+    desc: {english: 'A legion returned victorious.', spanish: 'Una legión volvió victoriosa.'}
+    modifiers: {'?war_support_factor': 0.05, '?army_attack_factor': 0.05, '?stability_factor': 0.03}
+
 on_actions:
   # 2026-10-17: la bomba es secreta hasta que se usa. Cuando alguien la tira
   # (ROOT), el mundo reacciona (meganations_asc_receta.40 y .41).
@@ -19858,3 +20545,5 @@ variable_names:
   ASC_productoras_r: {english: "Producing data cores", spanish: "Núcleos de datos productores"}
   HSN_peaje: {english: "Toll", spanish: "Peaje"}
   HSN_productoras_r: {english: "Toll ports", spanish: "Puertos de peaje"}
+  NRE_gloria: {english: "Gloria", spanish: "Gloria"}
+  NRE_productoras_r: {english: "Triumphal cities", spanish: "Ciudades triunfales"}
