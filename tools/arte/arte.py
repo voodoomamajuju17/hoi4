@@ -200,6 +200,8 @@ def catalog() -> list[dict]:
                     "done": dest.exists(), "description": f"{name}: {_one_line(desc)}",
                 })
     for dm in _load("14_decisions.yaml").get("dynamic_modifiers") or []:
+        if dm.get("no_art"):   # 2026-10-17: "sin imágenes" (Bioacero v3 del EFE)
+            continue
         tag = dm["country"] or "MEGANATIONS"   # sin país: sirve para todos (Leva Forzosa)
         dest = REPO / "assets" / tag / "ideas" / f"{dm['id']}.dds"
         items.append({
@@ -337,7 +339,7 @@ def catalog() -> list[dict]:
     for ns, block in spec_events["namespaces"].items():
         tag = block.get("country")
         for ev in block.get("events") or []:
-            if ev.get("hidden"):
+            if ev.get("hidden") or ev.get("no_art"):   # no_art: "sin imágenes" (2026-10-17)
                 continue
             # `art`: varios eventos casi iguales comparten una sola imagen (2026-09-29)
             art = ev.get("art")

@@ -26,20 +26,8 @@ categories:
     - generic_research
     name: {english: The BioSteel Race, spanish: La Carrera del Bioacero}
     desc:
-      english: 'BioSteel in the vats: [?EFE_biosteel]  ->  armour +[?EFE_ef_blindaje_ver]%, defence +[?EFE_ef_defensa_ver]%\nVat saturation: [?EFE_saturacion]
-        / 100  ->  stability [?EFE_ef_saturacion_ver]%\n\nStored BioSteel is living armour (spirit ''The Living Metal''), and the BioSteel Race
-        tiers need 5, 10 and 15. Spending it buys something now; keeping it keeps the bonus.\nTHE LIVING METAL EATS: every month saturation rises
-        by half the stored BioSteel (with [?EFE_biosteel] it rises [?EFE_hambre_del_metal]) and drops by 3 on its own. Every harvest and every focus
-        that gives BioSteel raises it more.\n40+: Forced Vats (more military production, less stability). 70+: Vat Fever and a 25% monthly chance
-        of the Mycelium Blight; 85+, 50%; 95, certain.\nFrom 13 BioSteel the metal rots: -1 per month (from 16, -2). Purge the vats before they
-        purge you.'
-      spanish: 'Bioacero en las cubas: [?EFE_biosteel]  ->  blindaje +[?EFE_ef_blindaje_ver]%, defensa +[?EFE_ef_defensa_ver]%\nSaturación de las
-        cubas: [?EFE_saturacion] / 100  ->  estabilidad [?EFE_ef_saturacion_ver]%\n\nEl Bioacero guardado es blindaje vivo (espíritu «El Metal Vivo»),
-        y los niveles de la Carrera del Bioacero piden 5, 10 y 15. Gastarlo compra algo ya; guardarlo mantiene el bonus.\nEL METAL VIVO COME: cada
-        mes la saturación sube la mitad del Bioacero guardado (con [?EFE_biosteel] suben [?EFE_hambre_del_metal]) y baja sola 3. Cada cosecha y
-        cada foco que da Bioacero la sube más.\n40 o más: Cubas Forzadas (más producción militar, menos estabilidad). 70 o más: Fiebre de las Cubas
-        y 25% por mes de Plaga del Micelio; 85 o más, 50%; 95, segura.\nDesde 13 de Bioacero el metal se pudre: -1 por mes (desde 16, -2). Purgá
-        las cubas antes de que ellas te purguen a vos.'
+      english: 'BioSteel in the vats: [?EFE_biosteel]  ->  armour +[?EFE_ef_blindaje_ver]%, defence +[?EFE_ef_defensa_ver]%\nVat saturation: [?EFE_saturacion] / 100  ->  stability [?EFE_ef_saturacion_ver]%\nProducing regions: [?EFE_productoras] / 5  (sprouts [?EFE_brote] / 6)\n\nTHE FIVE PRODUCERS: Gaia, the Plain of the Vats, Reforested Cuyo, the Yungas Forest and the Río Negro Frontier. Each one adds a sprout every month; every 6 sprouts become 1 BioSteel. Losing one costs 3 BioSteel and 180 days of burnt vats, and it does not produce again until we retake it and replant it.\nTHE THREE HARVESTS: at 10, 20 and 30 BioSteel you can spend them, once each, on a permanent choice between three paths. The Race tiers ask for 8, 16 and 24.\nSPENDING: 2 to 4 BioSteel buy 60 or 90 days of attack, defence, factories, construction, organisation or calm.\nTHE LIVING METAL EATS: every month saturation rises by a quarter of the stored BioSteel (now [?EFE_hambre_del_metal]) and drops by 4. 40+: Forced Vats. 70+: Vat Fever and a 25% monthly chance of the Mycelium Blight; 85+, 50%; 95, certain.\nFrom 25 BioSteel the metal rots: -1 per month (from 29, -2).'
+      spanish: 'Bioacero en las cubas: [?EFE_biosteel]  ->  blindaje +[?EFE_ef_blindaje_ver]%, defensa +[?EFE_ef_defensa_ver]%\nSaturación de las cubas: [?EFE_saturacion] / 100  ->  estabilidad [?EFE_ef_saturacion_ver]%\nRegiones productoras: [?EFE_productoras] / 5  (brotes [?EFE_brote] / 6)\n\nLAS CINCO PRODUCTORAS: Gaia, la Llanura de las Cubas, el Cuyo Reforestado, la Selva de las Yungas y la Frontera del Río Negro. Cada una suma un brote por mes; cada 6 brotes son 1 de Bioacero. Perder una cuesta 3 de Bioacero y 180 días de cubas quemadas, y no vuelve a producir hasta que la recuperemos y la replantemos.\nLAS TRES COSECHAS: con 10, 20 y 30 de Bioacero podés gastarlos, una sola vez cada una, en una elección permanente entre tres caminos. Los niveles de la Carrera piden 8, 16 y 24.\nGASTAR: de 2 a 4 de Bioacero compran 60 o 90 días de ataque, defensa, fábricas, construcción, organización o calma.\nEL METAL VIVO COME: cada mes la saturación sube un cuarto del Bioacero guardado (ahora [?EFE_hambre_del_metal]) y baja sola 4. 40 o más: Cubas Forzadas. 70 o más: Fiebre de las Cubas y 25% por mes de Plaga del Micelio; 85 o más, 50%; 95, segura.\nDesde 25 de Bioacero el metal se pudre: -1 por mes (desde 29, -2).'
     src: invented
     decisions:
     - id: EFE_como_se_juega
@@ -57,15 +45,15 @@ categories:
     - id: EFE_ampliar_las_cubas
       name: {english: Expand the Vats, spanish: Ampliar las Cubas}
       desc:
-        english: Another hall of vats in the Plain of the Vats. Slow, expensive and safe.
-        spanish: Otra nave de cubas en la Llanura de las Cubas. Lento, caro y seguro.
+        english: Another hall of vats in the Plain of the Vats. Slow, expensive and safe. +2 BioSteel, saturation +8.
+        spanish: Otra nave de cubas en la Llanura de las Cubas. Lento, caro y seguro. +2 de Bioacero, saturación +8.
       icon_prefer:
       - generic_industry
       - generic_construction
       cost: 50
       cooldown_days: 45
       effects:
-      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_biosteel, value: 2}
       - {effect: add_variable, var: EFE_saturacion, value: 8}
       ai_factor: 10
       ai:
@@ -80,8 +68,8 @@ categories:
     - id: EFE_cultivo_intensivo
       name: {english: Intensive Cultivation, spanish: Cultivo Intensivo}
       desc:
-        english: Double shifts in the vats and rationed water in the cities. The yield doubles; so do the complaints.
-        spanish: Doble turno en las cubas y agua racionada en las ciudades. El rendimiento se duplica; las quejas también.
+        english: Double shifts in the vats and rationed water in the cities. The yield doubles; so do the complaints. +3 BioSteel, saturation +12.
+        spanish: Doble turno en las cubas y agua racionada en las ciudades. El rendimiento se duplica; las quejas también. +3 de Bioacero, saturación +12.
       icon_prefer:
       - generic_industry
       - generic_production
@@ -89,9 +77,9 @@ categories:
       cooldown_days: 60
       available: {stability_at_least: 0.4}
       effects:
-      - {effect: add_variable, var: EFE_biosteel, value: 2}
+      - {effect: add_variable, var: EFE_biosteel, value: 3}
       - {effect: add_stability, value: -0.05}
-      - {effect: add_variable, var: EFE_saturacion, value: 14}
+      - {effect: add_variable, var: EFE_saturacion, value: 12}
       ai_factor: 5
       ai:
         factor: 5
@@ -114,10 +102,10 @@ categories:
       cooldown_days: 180
       available: {stability_at_least: 0.5}
       effects:
-      - {effect: add_variable, var: EFE_biosteel, value: 4}
+      - {effect: add_variable, var: EFE_biosteel, value: 6}
       - {effect: add_stability, value: -0.15}
       - {effect: add_war_support, value: -0.05}
-      - {effect: add_variable, var: EFE_saturacion, value: 18}
+      - {effect: add_variable, var: EFE_saturacion, value: 16}
       ai_factor: 1
       ai:
         factor: 1
@@ -168,6 +156,287 @@ categories:
       - {effect: add_variable, var: EFE_saturacion, value: 10}
       - {effect: run, value: EFE_gliptodonte_desbloqueo}
       ai_factor: 20
+      src: user_request
+    # 2026-10-17 Bioacero v3 (pedido del usuario): las tres cosechas, de un solo uso,
+    # cada una abre un dilema de tres caminos (12_events.yaml, efe.510-512).
+    - id: EFE_la_cosecha_del_diez
+      name: {english: The Harvest of Ten, spanish: La Cosecha del Diez}
+      desc:
+        english: 'Ten units of living metal, spent at once on something that stays: deep roots for the Guard, sap for the factories or children for the vats. Only one path, and only once. Needs and spends 10 BioSteel.'
+        spanish: 'Diez unidades de metal vivo gastadas de una vez en algo que queda: raíces hondas para la Guardia, savia para las fábricas o hijos para las cubas. Un solo camino, y una sola vez. Pide y gasta 10 de Bioacero.'
+      icon_prefer:
+      - generic_industry
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 10}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -10}
+      - {effect: event, id: meganations_efe.510}
+      ai: {factor: 50}
+      src: user_request
+    - id: EFE_la_cosecha_del_veinte
+      name: {english: The Harvest of Twenty, spanish: La Cosecha del Veinte}
+      desc:
+        english: 'Twenty units: enough to change how the Empire fights or how the vats breathe. Only one path, and only once. Needs and spends 20 BioSteel.'
+        spanish: 'Veinte unidades: alcanza para cambiar cómo pelea el Imperio o cómo respiran las cubas. Un solo camino, y una sola vez. Pide y gasta 20 de Bioacero.'
+      icon_prefer:
+      - generic_industry
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 20}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -20}
+      - {effect: event, id: meganations_efe.511}
+      ai: {factor: 50}
+      src: user_request
+    - id: EFE_la_cosecha_del_treinta
+      name: {english: The Harvest of Thirty, spanish: La Cosecha del Treinta}
+      desc:
+        english: 'Thirty units, the whole Plain in one harvest. The Empire will be remembered for what it does with them. Only one path, and only once. Needs and spends 30 BioSteel.'
+        spanish: 'Treinta unidades, toda la Llanura en una sola cosecha. El Imperio va a ser recordado por lo que haga con ellas. Un solo camino, y una sola vez. Pide y gasta 30 de Bioacero.'
+      icon_prefer:
+      - generic_industry
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 30}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -30}
+      - {effect: event, id: meganations_efe.512}
+      ai: {factor: 50}
+      src: user_request
+    # 2026-10-17 Bioacero v3: bonos temporales que gastan Bioacero (y bajan la saturación).
+    - id: EFE_savia_de_guerra
+      name: {english: War Sap, spanish: Savia de Guerra}
+      desc:
+        english: 'Living sap in the Guard''s rations: they do not sleep, they do not stop. Spend 3 BioSteel: +10% attack for 60 days. Saturation -3.'
+        spanish: 'Savia viva en las raciones de la Guardia: no duermen, no paran. Gastar 3 de Bioacero: +10% de ataque por 60 días. Saturación -3.'
+      icon_prefer:
+      - generic_army_support
+      cost: 15
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 3}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+      - {effect: dynamic_modifier, id: EFE_temp_savia_de_guerra, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_biosteel, value: 10}
+      src: user_request
+    - id: EFE_corteza_viva
+      name: {english: Living Bark, spanish: Corteza Viva}
+      desc:
+        english: 'The trenches grow their own bark overnight. Spend 3 BioSteel: +12% defence and faster entrenchment for 60 days. Saturation -3.'
+        spanish: 'Las trincheras crían su propia corteza de un día para el otro. Gastar 3 de Bioacero: +12% de defensa y atrincherarse más rápido por 60 días. Saturación -3.'
+      icon_prefer:
+      - generic_army_support
+      - generic_construction
+      cost: 15
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 3}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+      - {effect: dynamic_modifier, id: EFE_temp_corteza_viva, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_biosteel, value: 10}
+      src: user_request
+    - id: EFE_hojas_en_las_lineas
+      name: {english: Leaves on the Lines, spanish: Hojas en las Líneas}
+      desc:
+        english: 'Living alloy in the machines of the factories: they heal while they work. Spend 2 BioSteel: +8% factory output for 90 days. Saturation -3.'
+        spanish: 'Aleación viva en las máquinas de las fábricas: se curan mientras trabajan. Gastar 2 de Bioacero: +8% de producción de fábricas por 90 días. Saturación -3.'
+      icon_prefer:
+      - generic_industry
+      - generic_production
+      cost: 15
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 2}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -2}
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+      - {effect: dynamic_modifier, id: EFE_temp_hojas_en_las_lineas, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_biosteel, value: 9}
+      src: user_request
+    - id: EFE_raiz_en_las_obras
+      name: {english: Roots in the Works, spanish: Raíz en las Obras}
+      desc:
+        english: 'Scaffolding that grows by itself. Spend 2 BioSteel: +15% construction speed for 90 days. Saturation -3.'
+        spanish: 'Andamios que crecen solos. Gastar 2 de Bioacero: +15% de velocidad de construcción por 90 días. Saturación -3.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 15
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 2}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -2}
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+      - {effect: dynamic_modifier, id: EFE_temp_raiz_en_las_obras, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_biosteel, value: 9}
+      src: user_request
+    - id: EFE_fervor_del_monte
+      name: {english: Fervour of the Forest, spanish: Fervor del Monte}
+      desc:
+        english: 'The priests of Gaia march with the divisions and anoint them with living metal. Spend 4 BioSteel: +10% organisation and +10% morale for 60 days. Saturation -3.'
+        spanish: 'Los sacerdotes de Gaia marchan con las divisiones y las ungen con metal vivo. Gastar 4 de Bioacero: +10% de organización y +10% de moral por 60 días. Saturación -3.'
+      icon_prefer:
+      - generic_army_support
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 4}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -4}
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+      - {effect: dynamic_modifier, id: EFE_temp_fervor_del_monte, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_biosteel, value: 11}
+      src: user_request
+    - id: EFE_ofrenda_a_gaia
+      name: {english: Offering to Gaia, spanish: Ofrenda a Gaia}
+      desc:
+        english: 'A living statue for every plaza of the Empire. Spend 2 BioSteel: +6% stability and +15% political power for 90 days. Saturation -3.'
+        spanish: 'Una estatua viva en cada plaza del Imperio. Gastar 2 de Bioacero: +6% de estabilidad y +15% de poder político por 90 días. Saturación -3.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 10
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: EFE_biosteel, value: 2}
+      effects:
+      - {effect: add_variable, var: EFE_biosteel, value: -2}
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+      - {effect: dynamic_modifier, id: EFE_temp_ofrenda_a_gaia, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: EFE_biosteel, value: 9}
+      src: user_request
+    # 2026-10-17 Bioacero v3: replantar una región productora perdida y recuperada.
+    - id: EFE_replantar_1
+      name: {english: 'Replant Gaia', spanish: 'Replantar Gaia'}
+      desc:
+        english: 'Gaia is ours again, but its vats are ash. Replanting them makes it a producer again. +1 BioSteel, saturation +5.'
+        spanish: 'Gaia vuelve a ser nuestra, pero sus cubas son ceniza. Replantarlas la vuelve productora. +1 de Bioacero, saturación +5.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: EFE_prod_1_perdida}
+      available:
+        controls_state: [Buenos Aires]
+      effects:
+      - {effect: clear_flag, value: EFE_prod_1_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_saturacion, value: 5}
+      ai: {factor: 30}
+      src: user_request
+    - id: EFE_replantar_2
+      name: {english: 'Replant Plain of the Vats', spanish: 'Replantar la Llanura de las Cubas'}
+      desc:
+        english: 'The Plain of the Vats is ours again, but its vats are ash. Replanting them makes it a producer again. +1 BioSteel, saturation +5.'
+        spanish: 'La Llanura de las Cubas vuelve a ser nuestra, pero sus cubas son ceniza. Replantarlas la vuelve productora. +1 de Bioacero, saturación +5.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: EFE_prod_2_perdida}
+      available:
+        controls_state: [Santa Fe]
+      effects:
+      - {effect: clear_flag, value: EFE_prod_2_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_saturacion, value: 5}
+      ai: {factor: 30}
+      src: user_request
+    - id: EFE_replantar_3
+      name: {english: 'Replant Reforested Cuyo', spanish: 'Replantar el Cuyo Reforestado'}
+      desc:
+        english: 'Reforested Cuyo is ours again, but its vats are ash. Replanting them makes it a producer again. +1 BioSteel, saturation +5.'
+        spanish: 'El Cuyo Reforestado vuelve a ser nuestra, pero sus cubas son ceniza. Replantarlas la vuelve productora. +1 de Bioacero, saturación +5.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: EFE_prod_3_perdida}
+      available:
+        controls_state: [Mendoza]
+      effects:
+      - {effect: clear_flag, value: EFE_prod_3_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_saturacion, value: 5}
+      ai: {factor: 30}
+      src: user_request
+    - id: EFE_replantar_4
+      name: {english: 'Replant Yungas Forest', spanish: 'Replantar la Selva de las Yungas'}
+      desc:
+        english: 'The Yungas Forest is ours again, but its vats are ash. Replanting them makes it a producer again. +1 BioSteel, saturation +5.'
+        spanish: 'La Selva de las Yungas vuelve a ser nuestra, pero sus cubas son ceniza. Replantarlas la vuelve productora. +1 de Bioacero, saturación +5.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: EFE_prod_4_perdida}
+      available:
+        controls_state: [Tucumán]
+      effects:
+      - {effect: clear_flag, value: EFE_prod_4_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_saturacion, value: 5}
+      ai: {factor: 30}
+      src: user_request
+    - id: EFE_replantar_5
+      name: {english: 'Replant Río Negro Frontier', spanish: 'Replantar la Frontera del Río Negro'}
+      desc:
+        english: 'The Río Negro Frontier is ours again, but its vats are ash. Replanting them makes it a producer again. +1 BioSteel, saturation +5.'
+        spanish: 'La Frontera del Río Negro vuelve a ser nuestra, pero sus cubas son ceniza. Replantarlas la vuelve productora. +1 de Bioacero, saturación +5.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: EFE_prod_5_perdida}
+      available:
+        controls_state: [Río Negro]
+      effects:
+      - {effect: clear_flag, value: EFE_prod_5_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_saturacion, value: 5}
+      ai: {factor: 30}
       src: user_request
     - id: EFE_purgar_las_cubas
       name: {english: Purge the Vats, spanish: Purgar las Cubas}
@@ -2372,18 +2641,18 @@ categories:
     name: {english: Federal Integration, spanish: La Integración Federal}
     desc:
       english: 'HOW THE FEDERATION WORKS\nDevelopment = how much the Federation has invested in a member. Every investment builds it a factory and
-        adds +10.\nIntegration = how far that member has joined the Federation. Under Amara it can never pass Development: invest first, integrate
+        adds +20.\nIntegration = how far that member has joined the Federation. Under Amara it can never pass Development: invest first, integrate
         later. At 100 the member joins the APF with cores.\n\nHighlands: Development [?APF_desarrollo_zet], Integration [?APF_integracion_zet]\nCape:
-        Development [?APF_desarrollo_zsa], Integration [?APF_integracion_zsa]\nRegional tension: [?APF_tension] / 100  ->  stability [?APF_ef_tension_ver]%\nWhat
+        Development [?APF_desarrollo_zsa], Integration [?APF_integracion_zsa]\nCongo Confederation: Development [?APF_desarrollo_zco], Integration [?APF_integracion_zco]\nAngolan Union: Development [?APF_desarrollo_zao], Integration [?APF_integracion_zao]\nMozambique League: Development [?APF_desarrollo_zmz], Integration [?APF_integracion_zmz]\nRed Island Assembly: Development [?APF_desarrollo_zmg], Integration [?APF_integracion_zmg]\nRift Federation: Development [?APF_desarrollo_zke], Integration [?APF_integracion_zke]\nRegional tension: [?APF_tension] / 100  ->  stability [?APF_ef_tension_ver]%\nWhat
         is invested in the members speeds up APF construction: +[?APF_ef_desarrollo_ver]%\n\nTENSION: every investment +3 (the others want theirs);
-        every integration +8 (+15 under Diallo); every half-integrated member (Integration 30 to 99) +2 per month. It falls 2 per month and with
+        every integration +5 (+10 under Diallo); every half-integrated member (Integration 40 to 99) +1 per month. It falls 3 per month and with
         the Assembly of the Councils.\n50 or more: Restless Councils. 75 or more: the councils may rise.'
       spanish: 'CÓMO FUNCIONA LA FEDERACIÓN\nDesarrollo = cuánto invirtió la Federación en un miembro. Cada inversión le construye una fábrica y
-        le suma +10.\nIntegración = cuánto se sumó ese miembro a la Federación. Con Amara nunca puede pasar al Desarrollo: primero se invierte,
+        le suma +20.\nIntegración = cuánto se sumó ese miembro a la Federación. Con Amara nunca puede pasar al Desarrollo: primero se invierte,
         después se integra. En 100 el miembro se suma a la APF con núcleos.\n\nTierras Altas: Desarrollo [?APF_desarrollo_zet], Integración [?APF_integracion_zet]\nCabo:
-        Desarrollo [?APF_desarrollo_zsa], Integración [?APF_integracion_zsa]\nTensión regional: [?APF_tension] / 100  ->  estabilidad [?APF_ef_tension_ver]%\nLo
+        Desarrollo [?APF_desarrollo_zsa], Integración [?APF_integracion_zsa]\nConfederación del Congo: Desarrollo [?APF_desarrollo_zco], Integración [?APF_integracion_zco]\nUnión de Angola: Desarrollo [?APF_desarrollo_zao], Integración [?APF_integracion_zao]\nLiga de Mozambique: Desarrollo [?APF_desarrollo_zmz], Integración [?APF_integracion_zmz]\nAsamblea de la Isla Roja: Desarrollo [?APF_desarrollo_zmg], Integración [?APF_integracion_zmg]\nFederación del Rift: Desarrollo [?APF_desarrollo_zke], Integración [?APF_integracion_zke]\nTensión regional: [?APF_tension] / 100  ->  estabilidad [?APF_ef_tension_ver]%\nLo
         invertido en los miembros acelera la construcción de la APF: +[?APF_ef_desarrollo_ver]%\n\nLA TENSIÓN: cada inversión +3 (los demás piden
-        lo suyo); cada integración +8 (+15 con Diallo); cada miembro a medio integrar (Integración de 30 a 99) +2 por mes. Baja 2 por mes y con
+        lo suyo); cada integración +5 (+10 con Diallo); cada miembro a medio integrar (Integración de 40 a 99) +1 por mes. Baja 3 por mes y con
         la Asamblea de los Consejos.\n50 o más: Consejos Inquietos. 75 o más: los consejos pueden levantarse.'
     src: user_design
     decisions:
@@ -2401,21 +2670,21 @@ categories:
       src: user_decision
     - id: APF_invertir_zet
       name:
-        english: Invest in Highlands Federation (Development +10)
-        spanish: Invertir en la Federación de las Tierras Altas (Desarrollo +10)
+        english: Invest in Highlands Federation (Development +20)
+        spanish: Invertir en la Federación de las Tierras Altas (Desarrollo +20)
       desc:
         english: 'Congress money for the Highlands Federation: +20 Development and a factory there.'
         spanish: 'Plata del Congreso para la Federación de las Tierras Altas: +20 de Desarrollo y una fábrica allá.'
       icon_prefer:
       - generic_construction
       - generic_industry
-      cost: 50
-      cooldown_days: 60
+      cost: 35
+      cooldown_days: 45
       visible: {country_exists: ZET}
       available:
         variable_below: {var: APF_desarrollo_zet, value: 100}
       effects:
-      - {effect: add_variable, var: APF_desarrollo_zet, value: 10}
+      - {effect: add_variable, var: APF_desarrollo_zet, value: 20}
       - {effect: clamp, var: APF_desarrollo_zet, min: 0, max: 100}
       - effect: scope
         target: ZET
@@ -2427,7 +2696,7 @@ categories:
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 60}
+            variable_at_least: {var: APF_tension, value: 75}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zet, value: 70}
@@ -2436,27 +2705,27 @@ categories:
             variable_below: {var: APF_desarrollo_zet, value: 40}
     - id: APF_integrar_zet
       name:
-        english: Integrate Highlands Federation (Integration +10)
-        spanish: Integrar la Federación de las Tierras Altas (Integración +10)
+        english: Integrate Highlands Federation (Integration +20)
+        spanish: Integrar la Federación de las Tierras Altas (Integración +20)
       desc:
-        english: Under Amara, Integration grows +10 and can never pass Development. Under Diallo, +25 and it can. At 100 the member joins with cores.
-        spanish: Con Amara, la Integración sube +10 y nunca puede pasar al Desarrollo. Con Diallo, +25 y sí puede. En 100 el miembro se suma con
+        english: Under Amara, Integration grows +20 and can never pass Development. Under Diallo, +30 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +20 y nunca puede pasar al Desarrollo. Con Diallo, +30 y sí puede. En 100 el miembro se suma con
           núcleos.
       icon_prefer:
       - generic_political_actions
-      cost: 50
-      cooldown_days: 60
+      cost: 35
+      cooldown_days: 45
       visible: {flag: APF_integracion_abierta, country_exists: ZET}
       available:
         any:
         - {flag: APF_diallo}
         - variable_at_least: {var: APF_desarrollo_zet, value: APF_integracion_zet}
       effects:
-      - {effect: add_variable, var: APF_integracion_zet, value: 10}
+      - {effect: add_variable, var: APF_integracion_zet, value: 20}
       - effect: if
         when: {flag: APF_diallo}
         then:
-        - {effect: add_variable, var: APF_integracion_zet, value: 15}
+        - {effect: add_variable, var: APF_integracion_zet, value: 10}
       - effect: if
         when:
           variable_at_least: {var: APF_integracion_zet, value: 100}
@@ -2479,32 +2748,32 @@ categories:
       - effect: if
         when: {flag: APF_diallo}
         then:
-        - {effect: add_variable, var: APF_tension, value: 15}
+        - {effect: add_variable, var: APF_tension, value: 10}
         else:
-        - {effect: add_variable, var: APF_tension, value: 8}
+        - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 55}
+            variable_at_least: {var: APF_tension, value: 70}
     - id: APF_invertir_zsa
       name:
-        english: Invest in Cape Federation (Development +10)
-        spanish: Invertir en la Federación del Cabo (Desarrollo +10)
+        english: Invest in Cape Federation (Development +20)
+        spanish: Invertir en la Federación del Cabo (Desarrollo +20)
       desc:
         english: 'Congress money for the Cape Federation: +20 Development and a factory there.'
         spanish: 'Plata del Congreso para la Federación del Cabo: +20 de Desarrollo y una fábrica allá.'
       icon_prefer:
       - generic_construction
       - generic_industry
-      cost: 50
-      cooldown_days: 60
+      cost: 35
+      cooldown_days: 45
       visible: {country_exists: ZSA}
       available:
         variable_below: {var: APF_desarrollo_zsa, value: 100}
       effects:
-      - {effect: add_variable, var: APF_desarrollo_zsa, value: 10}
+      - {effect: add_variable, var: APF_desarrollo_zsa, value: 20}
       - {effect: clamp, var: APF_desarrollo_zsa, min: 0, max: 100}
       - effect: scope
         target: ZSA
@@ -2516,7 +2785,7 @@ categories:
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 60}
+            variable_at_least: {var: APF_tension, value: 75}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zsa, value: 70}
@@ -2525,27 +2794,27 @@ categories:
             variable_below: {var: APF_desarrollo_zsa, value: 40}
     - id: APF_integrar_zsa
       name:
-        english: Integrate Cape Federation (Integration +10)
-        spanish: Integrar la Federación del Cabo (Integración +10)
+        english: Integrate Cape Federation (Integration +20)
+        spanish: Integrar la Federación del Cabo (Integración +20)
       desc:
-        english: Under Amara, Integration grows +10 and can never pass Development. Under Diallo, +25 and it can. At 100 the member joins with cores.
-        spanish: Con Amara, la Integración sube +10 y nunca puede pasar al Desarrollo. Con Diallo, +25 y sí puede. En 100 el miembro se suma con
+        english: Under Amara, Integration grows +20 and can never pass Development. Under Diallo, +30 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +20 y nunca puede pasar al Desarrollo. Con Diallo, +30 y sí puede. En 100 el miembro se suma con
           núcleos.
       icon_prefer:
       - generic_political_actions
-      cost: 50
-      cooldown_days: 60
+      cost: 35
+      cooldown_days: 45
       visible: {flag: APF_integracion_abierta, country_exists: ZSA}
       available:
         any:
         - {flag: APF_diallo}
         - variable_at_least: {var: APF_desarrollo_zsa, value: APF_integracion_zsa}
       effects:
-      - {effect: add_variable, var: APF_integracion_zsa, value: 10}
+      - {effect: add_variable, var: APF_integracion_zsa, value: 20}
       - effect: if
         when: {flag: APF_diallo}
         then:
-        - {effect: add_variable, var: APF_integracion_zsa, value: 15}
+        - {effect: add_variable, var: APF_integracion_zsa, value: 10}
       - effect: if
         when:
           variable_at_least: {var: APF_integracion_zsa, value: 100}
@@ -2568,15 +2837,460 @@ categories:
       - effect: if
         when: {flag: APF_diallo}
         then:
-        - {effect: add_variable, var: APF_tension, value: 15}
+        - {effect: add_variable, var: APF_tension, value: 10}
         else:
-        - {effect: add_variable, var: APF_tension, value: 8}
+        - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 55}
+            variable_at_least: {var: APF_tension, value: 70}
+    - id: APF_invertir_zco
+      name:
+        english: Invest in Congo Confederation (Development +20)
+        spanish: Invertir en la Confederación del Congo (Desarrollo +20)
+      desc:
+        english: 'Congress money for the Congo Confederation: +20 Development and a factory there.'
+        spanish: 'Plata del Congreso para la Confederación del Congo: +20 de Desarrollo y una fábrica allá.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 35
+      cooldown_days: 45
+      visible: {country_exists: ZCO}
+      available:
+        variable_below: {var: APF_desarrollo_zco, value: 100}
+      effects:
+      - {effect: add_variable, var: APF_desarrollo_zco, value: 20}
+      - {effect: clamp, var: APF_desarrollo_zco, min: 0, max: 100}
+      - effect: scope
+        target: ZCO
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: APF_tension, value: 3}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 75}
+        - factor: 0.2
+          when:
+            variable_at_least: {var: APF_desarrollo_zco, value: 70}
+        - factor: 3
+          when:
+            variable_below: {var: APF_desarrollo_zco, value: 40}
+    - id: APF_integrar_zco
+      name:
+        english: Integrate Congo Confederation (Integration +20)
+        spanish: Integrar la Confederación del Congo (Integración +20)
+      desc:
+        english: Under Amara, Integration grows +20 and can never pass Development. Under Diallo, +30 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +20 y nunca puede pasar al Desarrollo. Con Diallo, +30 y sí puede. En 100 el miembro se suma con
+          núcleos.
+      icon_prefer:
+      - generic_political_actions
+      cost: 35
+      cooldown_days: 45
+      visible: {flag: APF_integracion_abierta, country_exists: ZCO}
+      available:
+        any:
+        - {flag: APF_diallo}
+        - variable_at_least: {var: APF_desarrollo_zco, value: APF_integracion_zco}
+      effects:
+      - {effect: add_variable, var: APF_integracion_zco, value: 20}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_integracion_zco, value: 10}
+      - effect: if
+        when:
+          variable_at_least: {var: APF_integracion_zco, value: 100}
+        then:
+        - effect: scope
+          target: ZCO
+          effects:
+          - effect: states
+            pick: every
+            effects:
+            - {effect: add_core, value: APF}
+        - {effect: annex, target: ZCO}
+        - {effect: event, id: meganations_apf.3}
+        - effect: if
+          when: {flag: APF_diallo}
+          then:
+          - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
+          else:
+          - {effect: add_stability, value: 0.05}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        else:
+        - {effect: add_variable, var: APF_tension, value: 5}
+      ai:
+        factor: 8
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 70}
+    - id: APF_invertir_zao
+      name:
+        english: Invest in Angolan Union (Development +20)
+        spanish: Invertir en la Unión de Angola (Desarrollo +20)
+      desc:
+        english: 'Congress money for the Angolan Union: +20 Development and a factory there.'
+        spanish: 'Plata del Congreso para la Unión de Angola: +20 de Desarrollo y una fábrica allá.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 35
+      cooldown_days: 45
+      visible: {country_exists: ZAO}
+      available:
+        variable_below: {var: APF_desarrollo_zao, value: 100}
+      effects:
+      - {effect: add_variable, var: APF_desarrollo_zao, value: 20}
+      - {effect: clamp, var: APF_desarrollo_zao, min: 0, max: 100}
+      - effect: scope
+        target: ZAO
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: APF_tension, value: 3}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 75}
+        - factor: 0.2
+          when:
+            variable_at_least: {var: APF_desarrollo_zao, value: 70}
+        - factor: 3
+          when:
+            variable_below: {var: APF_desarrollo_zao, value: 40}
+    - id: APF_integrar_zao
+      name:
+        english: Integrate Angolan Union (Integration +20)
+        spanish: Integrar la Unión de Angola (Integración +20)
+      desc:
+        english: Under Amara, Integration grows +20 and can never pass Development. Under Diallo, +30 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +20 y nunca puede pasar al Desarrollo. Con Diallo, +30 y sí puede. En 100 el miembro se suma con
+          núcleos.
+      icon_prefer:
+      - generic_political_actions
+      cost: 35
+      cooldown_days: 45
+      visible: {flag: APF_integracion_abierta, country_exists: ZAO}
+      available:
+        any:
+        - {flag: APF_diallo}
+        - variable_at_least: {var: APF_desarrollo_zao, value: APF_integracion_zao}
+      effects:
+      - {effect: add_variable, var: APF_integracion_zao, value: 20}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_integracion_zao, value: 10}
+      - effect: if
+        when:
+          variable_at_least: {var: APF_integracion_zao, value: 100}
+        then:
+        - effect: scope
+          target: ZAO
+          effects:
+          - effect: states
+            pick: every
+            effects:
+            - {effect: add_core, value: APF}
+        - {effect: annex, target: ZAO}
+        - {effect: event, id: meganations_apf.3}
+        - effect: if
+          when: {flag: APF_diallo}
+          then:
+          - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
+          else:
+          - {effect: add_stability, value: 0.05}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        else:
+        - {effect: add_variable, var: APF_tension, value: 5}
+      ai:
+        factor: 8
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 70}
+    - id: APF_invertir_zmz
+      name:
+        english: Invest in Mozambique League (Development +20)
+        spanish: Invertir en la Liga de Mozambique (Desarrollo +20)
+      desc:
+        english: 'Congress money for the Mozambique League: +20 Development and a factory there.'
+        spanish: 'Plata del Congreso para la Liga de Mozambique: +20 de Desarrollo y una fábrica allá.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 35
+      cooldown_days: 45
+      visible: {country_exists: ZMZ}
+      available:
+        variable_below: {var: APF_desarrollo_zmz, value: 100}
+      effects:
+      - {effect: add_variable, var: APF_desarrollo_zmz, value: 20}
+      - {effect: clamp, var: APF_desarrollo_zmz, min: 0, max: 100}
+      - effect: scope
+        target: ZMZ
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: APF_tension, value: 3}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 75}
+        - factor: 0.2
+          when:
+            variable_at_least: {var: APF_desarrollo_zmz, value: 70}
+        - factor: 3
+          when:
+            variable_below: {var: APF_desarrollo_zmz, value: 40}
+    - id: APF_integrar_zmz
+      name:
+        english: Integrate Mozambique League (Integration +20)
+        spanish: Integrar la Liga de Mozambique (Integración +20)
+      desc:
+        english: Under Amara, Integration grows +20 and can never pass Development. Under Diallo, +30 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +20 y nunca puede pasar al Desarrollo. Con Diallo, +30 y sí puede. En 100 el miembro se suma con
+          núcleos.
+      icon_prefer:
+      - generic_political_actions
+      cost: 35
+      cooldown_days: 45
+      visible: {flag: APF_integracion_abierta, country_exists: ZMZ}
+      available:
+        any:
+        - {flag: APF_diallo}
+        - variable_at_least: {var: APF_desarrollo_zmz, value: APF_integracion_zmz}
+      effects:
+      - {effect: add_variable, var: APF_integracion_zmz, value: 20}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_integracion_zmz, value: 10}
+      - effect: if
+        when:
+          variable_at_least: {var: APF_integracion_zmz, value: 100}
+        then:
+        - effect: scope
+          target: ZMZ
+          effects:
+          - effect: states
+            pick: every
+            effects:
+            - {effect: add_core, value: APF}
+        - {effect: annex, target: ZMZ}
+        - {effect: event, id: meganations_apf.3}
+        - effect: if
+          when: {flag: APF_diallo}
+          then:
+          - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
+          else:
+          - {effect: add_stability, value: 0.05}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        else:
+        - {effect: add_variable, var: APF_tension, value: 5}
+      ai:
+        factor: 8
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 70}
+    - id: APF_invertir_zmg
+      name:
+        english: Invest in Red Island Assembly (Development +20)
+        spanish: Invertir en la Asamblea de la Isla Roja (Desarrollo +20)
+      desc:
+        english: 'Congress money for the Red Island Assembly: +20 Development and a factory there.'
+        spanish: 'Plata del Congreso para la Asamblea de la Isla Roja: +20 de Desarrollo y una fábrica allá.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 35
+      cooldown_days: 45
+      visible: {country_exists: ZMG}
+      available:
+        variable_below: {var: APF_desarrollo_zmg, value: 100}
+      effects:
+      - {effect: add_variable, var: APF_desarrollo_zmg, value: 20}
+      - {effect: clamp, var: APF_desarrollo_zmg, min: 0, max: 100}
+      - effect: scope
+        target: ZMG
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: APF_tension, value: 3}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 75}
+        - factor: 0.2
+          when:
+            variable_at_least: {var: APF_desarrollo_zmg, value: 70}
+        - factor: 3
+          when:
+            variable_below: {var: APF_desarrollo_zmg, value: 40}
+    - id: APF_integrar_zmg
+      name:
+        english: Integrate Red Island Assembly (Integration +20)
+        spanish: Integrar la Asamblea de la Isla Roja (Integración +20)
+      desc:
+        english: Under Amara, Integration grows +20 and can never pass Development. Under Diallo, +30 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +20 y nunca puede pasar al Desarrollo. Con Diallo, +30 y sí puede. En 100 el miembro se suma con
+          núcleos.
+      icon_prefer:
+      - generic_political_actions
+      cost: 35
+      cooldown_days: 45
+      visible: {flag: APF_integracion_abierta, country_exists: ZMG}
+      available:
+        any:
+        - {flag: APF_diallo}
+        - variable_at_least: {var: APF_desarrollo_zmg, value: APF_integracion_zmg}
+      effects:
+      - {effect: add_variable, var: APF_integracion_zmg, value: 20}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_integracion_zmg, value: 10}
+      - effect: if
+        when:
+          variable_at_least: {var: APF_integracion_zmg, value: 100}
+        then:
+        - effect: scope
+          target: ZMG
+          effects:
+          - effect: states
+            pick: every
+            effects:
+            - {effect: add_core, value: APF}
+        - {effect: annex, target: ZMG}
+        - {effect: event, id: meganations_apf.3}
+        - effect: if
+          when: {flag: APF_diallo}
+          then:
+          - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
+          else:
+          - {effect: add_stability, value: 0.05}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        else:
+        - {effect: add_variable, var: APF_tension, value: 5}
+      ai:
+        factor: 8
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 70}
+    - id: APF_invertir_zke
+      name:
+        english: Invest in Rift Federation (Development +20)
+        spanish: Invertir en la Federación del Rift (Desarrollo +20)
+      desc:
+        english: 'Congress money for the Rift Federation: +20 Development and a factory there.'
+        spanish: 'Plata del Congreso para la Federación del Rift: +20 de Desarrollo y una fábrica allá.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 35
+      cooldown_days: 45
+      visible: {country_exists: ZKE}
+      available:
+        variable_below: {var: APF_desarrollo_zke, value: 100}
+      effects:
+      - {effect: add_variable, var: APF_desarrollo_zke, value: 20}
+      - {effect: clamp, var: APF_desarrollo_zke, min: 0, max: 100}
+      - effect: scope
+        target: ZKE
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_variable, var: APF_tension, value: 3}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 75}
+        - factor: 0.2
+          when:
+            variable_at_least: {var: APF_desarrollo_zke, value: 70}
+        - factor: 3
+          when:
+            variable_below: {var: APF_desarrollo_zke, value: 40}
+    - id: APF_integrar_zke
+      name:
+        english: Integrate Rift Federation (Integration +20)
+        spanish: Integrar la Federación del Rift (Integración +20)
+      desc:
+        english: Under Amara, Integration grows +20 and can never pass Development. Under Diallo, +30 and it can. At 100 the member joins with cores.
+        spanish: Con Amara, la Integración sube +20 y nunca puede pasar al Desarrollo. Con Diallo, +30 y sí puede. En 100 el miembro se suma con
+          núcleos.
+      icon_prefer:
+      - generic_political_actions
+      cost: 35
+      cooldown_days: 45
+      visible: {flag: APF_integracion_abierta, country_exists: ZKE}
+      available:
+        any:
+        - {flag: APF_diallo}
+        - variable_at_least: {var: APF_desarrollo_zke, value: APF_integracion_zke}
+      effects:
+      - {effect: add_variable, var: APF_integracion_zke, value: 20}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_integracion_zke, value: 10}
+      - effect: if
+        when:
+          variable_at_least: {var: APF_integracion_zke, value: 100}
+        then:
+        - effect: scope
+          target: ZKE
+          effects:
+          - effect: states
+            pick: every
+            effects:
+            - {effect: add_core, value: APF}
+        - {effect: annex, target: ZKE}
+        - {effect: event, id: meganations_apf.3}
+        - effect: if
+          when: {flag: APF_diallo}
+          then:
+          - {effect: timed_idea, idea: APF_territorios_dificiles, days: 180}
+          else:
+          - {effect: add_stability, value: 0.05}
+      - effect: if
+        when: {flag: APF_diallo}
+        then:
+        - {effect: add_variable, var: APF_tension, value: 10}
+        else:
+        - {effect: add_variable, var: APF_tension, value: 5}
+      ai:
+        factor: 8
+        modifiers:
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_tension, value: 70}
     - id: APF_plan_de_desarrollo_regional
       name: {english: Regional Development Plan, spanish: Plan de Desarrollo Regional}
       desc:
@@ -4633,12 +5347,12 @@ categories:
     - generic_formable_nations
     name: {english: Our Satellites, spanish: Nuestros Satélites}
     desc:
-      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nHighlands Federation: [?APF_lealtad_zet]\nCape Federation: [?APF_lealtad_zsa]\n\nRight now:
+      english: 'LOYALTY OF YOUR SATELLITES (0-100)\nHighlands Federation: [?APF_lealtad_zet]\nCape Federation: [?APF_lealtad_zsa]\nCongo Confederation: [?APF_lealtad_zco]\nAngolan Union: [?APF_lealtad_zao]\nMozambique League: [?APF_lealtad_zmz]\nRed Island Assembly: [?APF_lealtad_zmg]\nRift Federation: [?APF_lealtad_zke]\n\nRight now:
         political power [?APF_ef_sat_pp_ver] per day, stability [?APF_ef_sat_estab_ver]% (spirit ''The Satellites'').\n\nEvery month loyalty falls
         1 (2 if you are at war: they bleed too) and rises 1 if your stability is 60% or more.\n75 or more: loyal, it gives you political power (+0.10
         per day each).\nBelow 25: restless, it costs political power and stability, and it may rise against you.\nAid raises loyalty and builds
         them a factory; tribute gives you political power and men, but lowers loyalty.'
-      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nFederación de las Tierras Altas: [?APF_lealtad_zet]\nFederación del Cabo: [?APF_lealtad_zsa]\n\nEfecto
+      spanish: 'LEALTAD DE TUS SATÉLITES (0-100)\nFederación de las Tierras Altas: [?APF_lealtad_zet]\nFederación del Cabo: [?APF_lealtad_zsa]\nConfederación del Congo: [?APF_lealtad_zco]\nUnión de Angola: [?APF_lealtad_zao]\nLiga de Mozambique: [?APF_lealtad_zmz]\nAsamblea de la Isla Roja: [?APF_lealtad_zmg]\nFederación del Rift: [?APF_lealtad_zke]\n\nEfecto
         ahora: poder político [?APF_ef_sat_pp_ver] por día, estabilidad [?APF_ef_sat_estab_ver]% (espíritu «Los Satélites»).\n\nCada mes la lealtad
         baja 1 (2 si estás en guerra: ellos también sangran) y sube 1 si tu estabilidad es 60% o más.\n75 o más: leal, te da poder político (+0,10
         por día cada uno).\nMenos de 25: inquieto, te resta poder político y estabilidad, y puede rebelarse.\nLa Ayuda sube la lealtad y le construye
@@ -4768,6 +5482,321 @@ categories:
         - factor: 3
           when:
             variable_at_least: {var: APF_lealtad_zsa, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: APF_ayuda_zco
+      name:
+        english: Aid to Congo Confederation (Loyalty +15)
+        spanish: Ayuda a Confederación del Congo (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Congo Confederation. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Confederación del Congo. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZCO}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zco, value: 15}
+      - effect: scope
+        target: ZCO
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: APF_lealtad_zco, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_lealtad_zco, value: 70}
+      src: user_design
+    - id: APF_tributo_zco
+      name:
+        english: Demand Tribute from Congo Confederation (Loyalty -20)
+        spanish: Exigir Tributo a Confederación del Congo (Lealtad -20)
+      desc:
+        english: 'Congo Confederation pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Confederación del Congo paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZCO}
+      available:
+        variable_at_least: {var: APF_lealtad_zco, value: 30}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zco, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZCO
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: APF_lealtad_zco, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: APF_lealtad_zco, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: APF_ayuda_zao
+      name:
+        english: Aid to Angolan Union (Loyalty +15)
+        spanish: Ayuda a Unión de Angola (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Angolan Union. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Unión de Angola. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZAO}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zao, value: 15}
+      - effect: scope
+        target: ZAO
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: APF_lealtad_zao, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_lealtad_zao, value: 70}
+      src: user_design
+    - id: APF_tributo_zao
+      name:
+        english: Demand Tribute from Angolan Union (Loyalty -20)
+        spanish: Exigir Tributo a Unión de Angola (Lealtad -20)
+      desc:
+        english: 'Angolan Union pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Unión de Angola paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZAO}
+      available:
+        variable_at_least: {var: APF_lealtad_zao, value: 30}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zao, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZAO
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: APF_lealtad_zao, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: APF_lealtad_zao, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: APF_ayuda_zmz
+      name:
+        english: Aid to Mozambique League (Loyalty +15)
+        spanish: Ayuda a Liga de Mozambique (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Mozambique League. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Liga de Mozambique. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZMZ}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zmz, value: 15}
+      - effect: scope
+        target: ZMZ
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: APF_lealtad_zmz, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_lealtad_zmz, value: 70}
+      src: user_design
+    - id: APF_tributo_zmz
+      name:
+        english: Demand Tribute from Mozambique League (Loyalty -20)
+        spanish: Exigir Tributo a Liga de Mozambique (Lealtad -20)
+      desc:
+        english: 'Mozambique League pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Liga de Mozambique paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZMZ}
+      available:
+        variable_at_least: {var: APF_lealtad_zmz, value: 30}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zmz, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZMZ
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: APF_lealtad_zmz, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: APF_lealtad_zmz, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: APF_ayuda_zmg
+      name:
+        english: Aid to Red Island Assembly (Loyalty +15)
+        spanish: Ayuda a Asamblea de la Isla Roja (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Red Island Assembly. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Asamblea de la Isla Roja. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZMG}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zmg, value: 15}
+      - effect: scope
+        target: ZMG
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: APF_lealtad_zmg, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_lealtad_zmg, value: 70}
+      src: user_design
+    - id: APF_tributo_zmg
+      name:
+        english: Demand Tribute from Red Island Assembly (Loyalty -20)
+        spanish: Exigir Tributo a Asamblea de la Isla Roja (Lealtad -20)
+      desc:
+        english: 'Red Island Assembly pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Asamblea de la Isla Roja paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZMG}
+      available:
+        variable_at_least: {var: APF_lealtad_zmg, value: 30}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zmg, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZMG
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: APF_lealtad_zmg, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: APF_lealtad_zmg, value: 80}
+        - factor: 3
+          when: {at_war: true}
+      src: user_design
+    - id: APF_ayuda_zke
+      name:
+        english: Aid to Rift Federation (Loyalty +15)
+        spanish: Ayuda a Federación del Rift (Lealtad +15)
+      desc:
+        english: Money, engineers and a new factory for Rift Federation. Loyalty is bought, and it is not cheap.
+        spanish: Plata, ingenieros y una fábrica nueva para Federación del Rift. La lealtad se compra, y no es barata.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 50
+      cooldown_days: 91
+      visible: {country_exists: ZKE}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zke, value: 15}
+      - effect: scope
+        target: ZKE
+        effects:
+        - {effect: build, building: industrial_complex, level: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 4
+          when:
+            variable_below: {var: APF_lealtad_zke, value: 40}
+        - factor: 0
+          when:
+            variable_at_least: {var: APF_lealtad_zke, value: 70}
+      src: user_design
+    - id: APF_tributo_zke
+      name:
+        english: Demand Tribute from Rift Federation (Loyalty -20)
+        spanish: Exigir Tributo a Federación del Rift (Lealtad -20)
+      desc:
+        english: 'Rift Federation pays for its protection: political power +60 and 15,000 men. They will remember it.'
+        spanish: 'Federación del Rift paga por su protección: poder político +60 y 15.000 hombres. Se lo van a acordar.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 119
+      visible: {country_exists: ZKE}
+      available:
+        variable_at_least: {var: APF_lealtad_zke, value: 30}
+      effects:
+      - {effect: add_variable, var: APF_lealtad_zke, value: -20}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_manpower, value: 15000}
+      - effect: scope
+        target: ZKE
+        effects:
+        - {effect: add_stability, value: -0.05}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: APF_lealtad_zke, value: 60}
+        - factor: 3
+          when:
+            variable_at_least: {var: APF_lealtad_zke, value: 80}
         - factor: 3
           when: {at_war: true}
       src: user_design
@@ -7054,6 +8083,591 @@ categories:
         - {effect: end_puppet, value: ZSA}
         - {effect: event, id: meganations_apf.45, days: 1}
       - {effect: event, id: meganations_apf.47, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZCO_independencia_category
+    country: ZCO
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: APF}
+    name:
+      english: Our Place under African People's Federation
+      spanish: Nuestro Lugar bajo Federación de los Pueblos Africanos
+    desc:
+      english: 'LOYALTY TO AFRICAN PEOPLE''S FEDERATION: [?APF.APF_lealtad_zco] / 100\n\nEvery month it drops by 1 (2 if African People''s Federation
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if African People''s Federation is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A FEDERACIÓN DE LOS PUEBLOS AFRICANOS: [?APF.APF_lealtad_zco] / 100\n\nCada mes baja 1 (2 si Federación de los Pueblos Africanos
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Federación de los Pueblos Africanos
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZCO_cooperar_con_el_senor
+      name:
+        english: Cooperate with African People's Federation (Loyalty +8)
+        spanish: Cooperar con Federación de los Pueblos Africanos (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zco, value: 8}
+        - {effect: clamp, var: APF_lealtad_zco, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zco, value: 40}
+      src: user_request
+    - id: ZCO_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zco, value: -10}
+        - {effect: clamp, var: APF_lealtad_zco, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: APF
+                when:
+                  variable_below: {var: APF_lealtad_zco, value: 40}
+            - country:
+                tag: APF
+                when: {at_war: true}
+      src: user_request
+    - id: ZCO_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: African People''s Federation cannot hold us.'
+        spanish: 'Ahora o nunca: Federación de los Pueblos Africanos no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: APF
+            when:
+              variable_below: {var: APF_lealtad_zco, value: 20}
+        - any:
+          - country:
+              tag: APF
+              when: {at_war: true}
+          - country:
+              tag: APF
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zco, value: 10}
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: end_puppet, value: ZCO}
+        - {effect: event, id: meganations_apf.411, days: 1}
+      - {effect: event, id: meganations_apf.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZAO_independencia_category
+    country: ZAO
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: APF}
+    name:
+      english: Our Place under African People's Federation
+      spanish: Nuestro Lugar bajo Federación de los Pueblos Africanos
+    desc:
+      english: 'LOYALTY TO AFRICAN PEOPLE''S FEDERATION: [?APF.APF_lealtad_zao] / 100\n\nEvery month it drops by 1 (2 if African People''s Federation
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if African People''s Federation is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A FEDERACIÓN DE LOS PUEBLOS AFRICANOS: [?APF.APF_lealtad_zao] / 100\n\nCada mes baja 1 (2 si Federación de los Pueblos Africanos
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Federación de los Pueblos Africanos
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZAO_cooperar_con_el_senor
+      name:
+        english: Cooperate with African People's Federation (Loyalty +8)
+        spanish: Cooperar con Federación de los Pueblos Africanos (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zao, value: 8}
+        - {effect: clamp, var: APF_lealtad_zao, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zao, value: 40}
+      src: user_request
+    - id: ZAO_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zao, value: -10}
+        - {effect: clamp, var: APF_lealtad_zao, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: APF
+                when:
+                  variable_below: {var: APF_lealtad_zao, value: 40}
+            - country:
+                tag: APF
+                when: {at_war: true}
+      src: user_request
+    - id: ZAO_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: African People''s Federation cannot hold us.'
+        spanish: 'Ahora o nunca: Federación de los Pueblos Africanos no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: APF
+            when:
+              variable_below: {var: APF_lealtad_zao, value: 20}
+        - any:
+          - country:
+              tag: APF
+              when: {at_war: true}
+          - country:
+              tag: APF
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zao, value: 10}
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: end_puppet, value: ZAO}
+        - {effect: event, id: meganations_apf.412, days: 1}
+      - {effect: event, id: meganations_apf.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZMZ_independencia_category
+    country: ZMZ
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: APF}
+    name:
+      english: Our Place under African People's Federation
+      spanish: Nuestro Lugar bajo Federación de los Pueblos Africanos
+    desc:
+      english: 'LOYALTY TO AFRICAN PEOPLE''S FEDERATION: [?APF.APF_lealtad_zmz] / 100\n\nEvery month it drops by 1 (2 if African People''s Federation
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if African People''s Federation is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A FEDERACIÓN DE LOS PUEBLOS AFRICANOS: [?APF.APF_lealtad_zmz] / 100\n\nCada mes baja 1 (2 si Federación de los Pueblos Africanos
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Federación de los Pueblos Africanos
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZMZ_cooperar_con_el_senor
+      name:
+        english: Cooperate with African People's Federation (Loyalty +8)
+        spanish: Cooperar con Federación de los Pueblos Africanos (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zmz, value: 8}
+        - {effect: clamp, var: APF_lealtad_zmz, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zmz, value: 40}
+      src: user_request
+    - id: ZMZ_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zmz, value: -10}
+        - {effect: clamp, var: APF_lealtad_zmz, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: APF
+                when:
+                  variable_below: {var: APF_lealtad_zmz, value: 40}
+            - country:
+                tag: APF
+                when: {at_war: true}
+      src: user_request
+    - id: ZMZ_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: African People''s Federation cannot hold us.'
+        spanish: 'Ahora o nunca: Federación de los Pueblos Africanos no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: APF
+            when:
+              variable_below: {var: APF_lealtad_zmz, value: 20}
+        - any:
+          - country:
+              tag: APF
+              when: {at_war: true}
+          - country:
+              tag: APF
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zmz, value: 10}
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: end_puppet, value: ZMZ}
+        - {effect: event, id: meganations_apf.413, days: 1}
+      - {effect: event, id: meganations_apf.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZMG_independencia_category
+    country: ZMG
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: APF}
+    name:
+      english: Our Place under African People's Federation
+      spanish: Nuestro Lugar bajo Federación de los Pueblos Africanos
+    desc:
+      english: 'LOYALTY TO AFRICAN PEOPLE''S FEDERATION: [?APF.APF_lealtad_zmg] / 100\n\nEvery month it drops by 1 (2 if African People''s Federation
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if African People''s Federation is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A FEDERACIÓN DE LOS PUEBLOS AFRICANOS: [?APF.APF_lealtad_zmg] / 100\n\nCada mes baja 1 (2 si Federación de los Pueblos Africanos
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Federación de los Pueblos Africanos
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZMG_cooperar_con_el_senor
+      name:
+        english: Cooperate with African People's Federation (Loyalty +8)
+        spanish: Cooperar con Federación de los Pueblos Africanos (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zmg, value: 8}
+        - {effect: clamp, var: APF_lealtad_zmg, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zmg, value: 40}
+      src: user_request
+    - id: ZMG_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zmg, value: -10}
+        - {effect: clamp, var: APF_lealtad_zmg, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: APF
+                when:
+                  variable_below: {var: APF_lealtad_zmg, value: 40}
+            - country:
+                tag: APF
+                when: {at_war: true}
+      src: user_request
+    - id: ZMG_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: African People''s Federation cannot hold us.'
+        spanish: 'Ahora o nunca: Federación de los Pueblos Africanos no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: APF
+            when:
+              variable_below: {var: APF_lealtad_zmg, value: 20}
+        - any:
+          - country:
+              tag: APF
+              when: {at_war: true}
+          - country:
+              tag: APF
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zmg, value: 10}
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: end_puppet, value: ZMG}
+        - {effect: event, id: meganations_apf.414, days: 1}
+      - {effect: event, id: meganations_apf.46, days: 1}
+      ai:
+        factor: 1
+        modifiers: []
+      src: user_request
+  - id: ZKE_independencia_category
+    country: ZKE
+    icon_prefer:
+    - generic_political_actions
+    - generic_prepare_civil_war
+    visible: {subject_of: APF}
+    name:
+      english: Our Place under African People's Federation
+      spanish: Nuestro Lugar bajo Federación de los Pueblos Africanos
+    desc:
+      english: 'LOYALTY TO AFRICAN PEOPLE''S FEDERATION: [?APF.APF_lealtad_zke] / 100\n\nEvery month it drops by 1 (2 if African People''s Federation
+        is at war) and rises by 1 if they are stable. Below 25 there is unrest; below 20, if African People''s Federation is at war or losing, or
+        below 10 anyway, you can declare independence.\nCooperating raises it; agitating lowers it and hardens your people.'
+      spanish: 'LEALTAD A FEDERACIÓN DE LOS PUEBLOS AFRICANOS: [?APF.APF_lealtad_zke] / 100\n\nCada mes baja 1 (2 si Federación de los Pueblos Africanos
+        está en guerra) y sube 1 si allá están estables. Por debajo de 25 hay disturbios; por debajo de 20, si Federación de los Pueblos Africanos
+        está en guerra o perdiendo, o por debajo de 10 igual, podés declarar la independencia.\nCooperar la sube; agitar la baja y endurece a tu
+        gente.'
+    src: user_request
+    decisions:
+    - id: ZKE_cooperar_con_el_senor
+      name:
+        english: Cooperate with African People's Federation (Loyalty +8)
+        spanish: Cooperar con Federación de los Pueblos Africanos (Lealtad +8)
+      desc:
+        english: Our ministers sign what they are asked to sign. The capital is grateful.
+        spanish: Nuestros ministros firman lo que les piden. La capital está agradecida.
+      icon_prefer:
+      - generic_political_actions
+      cost: 25
+      cooldown_days: 90
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zke, value: 8}
+        - {effect: clamp, var: APF_lealtad_zke, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_stability, value: 0.02}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zke, value: 40}
+      src: user_request
+    - id: ZKE_agitar_la_independencia
+      name: {english: Agitate for Independence (Loyalty -10), spanish: Agitar por la Independencia (Lealtad -10)}
+      desc:
+        english: Pamphlets, strikes and old flags. The people remember they were a country.
+        spanish: Panfletos, huelgas y banderas viejas. La gente se acuerda de que fue un país.
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 50
+      cooldown_days: 60
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: add_variable, var: APF_lealtad_zke, value: -10}
+        - {effect: clamp, var: APF_lealtad_zke, min: 0, max: 100}
+        - {effect: run, value: APF_recalcular_satelites}
+      - {effect: add_war_support, value: 0.03}
+      ai:
+        factor: 0
+        modifiers:
+        - factor: 1
+          when:
+            all:
+            - country:
+                tag: APF
+                when:
+                  variable_below: {var: APF_lealtad_zke, value: 40}
+            - country:
+                tag: APF
+                when: {at_war: true}
+      src: user_request
+    - id: ZKE_declarar_la_independencia
+      name: {english: Declare Independence, spanish: Declarar la Independencia}
+      desc:
+        english: 'Now or never: African People''s Federation cannot hold us.'
+        spanish: 'Ahora o nunca: Federación de los Pueblos Africanos no nos puede retener.'
+      icon_prefer:
+      - generic_prepare_civil_war
+      - generic_political_actions
+      cost: 100
+      available:
+        all:
+        - country:
+            tag: APF
+            when:
+              variable_below: {var: APF_lealtad_zke, value: 20}
+        - any:
+          - country:
+              tag: APF
+              when: {at_war: true}
+          - country:
+              tag: APF
+              when: {surrender_at_least: 0.2}
+          - country:
+              tag: APF
+              when:
+                variable_below: {var: APF_lealtad_zke, value: 10}
+      effects:
+      - effect: scope
+        target: APF
+        effects:
+        - {effect: end_puppet, value: ZKE}
+        - {effect: event, id: meganations_apf.415, days: 1}
+      - {effect: event, id: meganations_apf.46, days: 1}
       ai:
         factor: 1
         modifiers: []
@@ -10195,7 +11809,9 @@ scripted_effects:
   # Las Ocho Potencias v2 (2026-09-26): el pulso mensual de cada mecánica y sus riesgos.
   - id: EFE_pulso_de_las_cubas
     effects:
-    - {effect: add_variable, var: EFE_saturacion, value: -3}
+    # 2026-10-17 Bioacero v3 (pedido del usuario): lo normal es ir de 1 a 30.
+    # El hambre es un cuarto del Bioacero (antes la mitad) y la saturación baja 4 sola.
+    - {effect: add_variable, var: EFE_saturacion, value: -4}
     - effect: math
       ops:
       - - set
@@ -10203,7 +11819,7 @@ scripted_effects:
         - EFE_biosteel
       - - div
         - EFE_hambre_del_metal
-        - 2
+        - 4
       - - round
         - EFE_hambre_del_metal
         - null
@@ -10213,15 +11829,217 @@ scripted_effects:
       then:
       - {effect: add_variable, var: EFE_saturacion, value: -3}
     - effect: if
+      when: {flag: EFE_cubas_sin_fondo}
+      then:
+      - {effect: add_variable, var: EFE_saturacion, value: -3}
+    # Las cinco regiones productoras: un brote por mes cada una (dos con la Cosecha Doble).
+    # Solo se puede perder una productora que ya se vio controlada (bandera _activa):
+    # si el juego no reconociera un nombre, esa región no produce pero tampoco se "pierde".
+    - effect: math
+      ops:
+      - - set
+        - EFE_productoras
+        - 0
+    - effect: if
       when:
-        variable_at_least: {var: EFE_biosteel, value: 13}
+        controls_state: [Buenos Aires]
+        not_flag: EFE_prod_1_perdida
+      then:
+      - {effect: flag, value: EFE_prod_1_activa}
+      - {effect: add_variable, var: EFE_productoras, value: 1}
+      - effect: if
+        when: {not_flag: EFE_sequia_pampa}
+        then:
+        - {effect: add_variable, var: EFE_brote, value: 1}
+        - effect: if
+          when: {flag: EFE_cosecha_doble}
+          then:
+          - {effect: add_variable, var: EFE_brote, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Buenos Aires]}
+        not_flag: EFE_prod_1_perdida
+        flag: EFE_prod_1_activa
+      then:
+      - {effect: flag, value: EFE_prod_1_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: dynamic_modifier, id: EFE_cubas_quemadas, days: 180}
+      - {effect: event, id: meganations_efe.501, days: 1}
+    - effect: if
+      when:
+        controls_state: [Santa Fe]
+        not_flag: EFE_prod_2_perdida
+      then:
+      - {effect: flag, value: EFE_prod_2_activa}
+      - {effect: add_variable, var: EFE_productoras, value: 1}
+      - effect: if
+        when: {not_flag: EFE_sequia_pampa}
+        then:
+        - {effect: add_variable, var: EFE_brote, value: 1}
+        - effect: if
+          when: {flag: EFE_cosecha_doble}
+          then:
+          - {effect: add_variable, var: EFE_brote, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Santa Fe]}
+        not_flag: EFE_prod_2_perdida
+        flag: EFE_prod_2_activa
+      then:
+      - {effect: flag, value: EFE_prod_2_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: dynamic_modifier, id: EFE_cubas_quemadas, days: 180}
+      - {effect: event, id: meganations_efe.502, days: 1}
+    - effect: if
+      when:
+        controls_state: [Mendoza]
+        not_flag: EFE_prod_3_perdida
+      then:
+      - {effect: flag, value: EFE_prod_3_activa}
+      - {effect: add_variable, var: EFE_productoras, value: 1}
+      - effect: if
+        when: {not_flag: EFE_sequia_pampa}
+        then:
+        - {effect: add_variable, var: EFE_brote, value: 1}
+        - effect: if
+          when: {flag: EFE_cosecha_doble}
+          then:
+          - {effect: add_variable, var: EFE_brote, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Mendoza]}
+        not_flag: EFE_prod_3_perdida
+        flag: EFE_prod_3_activa
+      then:
+      - {effect: flag, value: EFE_prod_3_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: dynamic_modifier, id: EFE_cubas_quemadas, days: 180}
+      - {effect: event, id: meganations_efe.503, days: 1}
+    - effect: if
+      when:
+        controls_state: [Tucumán]
+        not_flag: EFE_prod_4_perdida
+      then:
+      - {effect: flag, value: EFE_prod_4_activa}
+      - {effect: add_variable, var: EFE_productoras, value: 1}
+      - effect: if
+        when: {not_flag: EFE_sequia_pampa}
+        then:
+        - {effect: add_variable, var: EFE_brote, value: 1}
+        - effect: if
+          when: {flag: EFE_cosecha_doble}
+          then:
+          - {effect: add_variable, var: EFE_brote, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Tucumán]}
+        not_flag: EFE_prod_4_perdida
+        flag: EFE_prod_4_activa
+      then:
+      - {effect: flag, value: EFE_prod_4_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: dynamic_modifier, id: EFE_cubas_quemadas, days: 180}
+      - {effect: event, id: meganations_efe.504, days: 1}
+    - effect: if
+      when:
+        controls_state: [Río Negro]
+        not_flag: EFE_prod_5_perdida
+      then:
+      - {effect: flag, value: EFE_prod_5_activa}
+      - {effect: add_variable, var: EFE_productoras, value: 1}
+      - effect: if
+        when: {not_flag: EFE_sequia_pampa}
+        then:
+        - {effect: add_variable, var: EFE_brote, value: 1}
+        - effect: if
+          when: {flag: EFE_cosecha_doble}
+          then:
+          - {effect: add_variable, var: EFE_brote, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Río Negro]}
+        not_flag: EFE_prod_5_perdida
+        flag: EFE_prod_5_activa
+      then:
+      - {effect: flag, value: EFE_prod_5_perdida}
+      - {effect: add_variable, var: EFE_biosteel, value: -3}
+      - {effect: dynamic_modifier, id: EFE_cubas_quemadas, days: 180}
+      - {effect: event, id: meganations_efe.505, days: 1}
+    - effect: if
+      when:
+        variable_at_least: {var: EFE_brote, value: 6}
+      then:
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_brote, value: -6}
+    - effect: if
+      when:
+        variable_at_least: {var: EFE_brote, value: 6}
+      then:
+      - {effect: add_variable, var: EFE_biosteel, value: 1}
+      - {effect: add_variable, var: EFE_brote, value: -6}
+    # Podredumbre solo arriba de todo (antes desde 13).
+    - effect: if
+      when:
+        variable_at_least: {var: EFE_biosteel, value: 25}
       then:
       - {effect: add_variable, var: EFE_biosteel, value: -1}
     - effect: if
       when:
-        variable_at_least: {var: EFE_biosteel, value: 16}
+        variable_at_least: {var: EFE_biosteel, value: 29}
       then:
       - {effect: add_variable, var: EFE_biosteel, value: -1}
+    - {effect: clamp, var: EFE_biosteel, min: 0, max: 35}
+    # Eventos de Bioacero ganado o perdido (efe.520-527), uno cada tanto.
+    - effect: if
+      when:
+        not_flag: EFE_bio_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: EFE_bio_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_0}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_0, days: 1095}
+          - {effect: event, id: meganations_efe.520, days: 1}
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_1}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_1, days: 1095}
+          - {effect: event, id: meganations_efe.521, days: 1}
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_2}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_2, days: 1095}
+          - {effect: event, id: meganations_efe.522, days: 1}
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_3}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_3, days: 1095}
+          - {effect: event, id: meganations_efe.523, days: 1}
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_4}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_4, days: 1095}
+          - {effect: event, id: meganations_efe.524, days: 1}
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_5}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_5, days: 1095}
+          - {effect: event, id: meganations_efe.525, days: 1}
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_6}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_6, days: 1095}
+          - {effect: event, id: meganations_efe.526, days: 1}
+        - weight: 1
+          skip_if: {flag: EFE_bio_visto_7}
+          effects:
+          - {effect: flag, value: EFE_bio_visto_7, days: 1095}
+          - {effect: event, id: meganations_efe.527, days: 1}
     - {effect: clamp, var: EFE_saturacion, min: 0, max: 100}
     - effect: idea_tiers
       tiers:
@@ -10276,7 +12094,7 @@ scripted_effects:
       - {effect: event, id: meganations_efe.30, days: 1}
     - effect: if
       when:
-        variable_at_least: {var: EFE_biosteel, value: 15}
+        variable_at_least: {var: EFE_biosteel, value: 25}
         not_flag: EFE_hito_hecho
         date_after: 2101.1.1
       then:
@@ -10286,7 +12104,7 @@ scripted_effects:
     - {effect: run, value: EFE_pulso_satelites}
     - effect: if
       when:
-        variable_at_least: {var: EFE_biosteel, value: 9}
+        variable_at_least: {var: EFE_biosteel, value: 12}
         not_flag: EFE_cadena_1
         date_after: 2100.9.1
       then:
@@ -11068,17 +12886,49 @@ scripted_effects:
       when: {focus: APF_radios_comunitarias}
       then:
       - {effect: add_variable, var: APF_tension, value: -1}
-    - {effect: add_variable, var: APF_tension, value: -2}
+    - {effect: add_variable, var: APF_tension, value: -3}
     - effect: if
       when:
-        variable_between: {var: APF_integracion_zet, min: 30, max: 99}
+        country_exists: ZET
+        variable_between: {var: APF_integracion_zet, min: 40, max: 99}
       then:
-      - {effect: add_variable, var: APF_tension, value: 2}
+      - {effect: add_variable, var: APF_tension, value: 1}
     - effect: if
       when:
-        variable_between: {var: APF_integracion_zsa, min: 30, max: 99}
+        country_exists: ZSA
+        variable_between: {var: APF_integracion_zsa, min: 40, max: 99}
       then:
-      - {effect: add_variable, var: APF_tension, value: 2}
+      - {effect: add_variable, var: APF_tension, value: 1}
+    - effect: if
+      when:
+        country_exists: ZCO
+        variable_between: {var: APF_integracion_zco, min: 40, max: 99}
+      then:
+      - {effect: add_variable, var: APF_tension, value: 1}
+    - effect: if
+      when:
+        country_exists: ZAO
+        variable_between: {var: APF_integracion_zao, min: 40, max: 99}
+      then:
+      - {effect: add_variable, var: APF_tension, value: 1}
+    - effect: if
+      when:
+        country_exists: ZMZ
+        variable_between: {var: APF_integracion_zmz, min: 40, max: 99}
+      then:
+      - {effect: add_variable, var: APF_tension, value: 1}
+    - effect: if
+      when:
+        country_exists: ZMG
+        variable_between: {var: APF_integracion_zmg, min: 40, max: 99}
+      then:
+      - {effect: add_variable, var: APF_tension, value: 1}
+    - effect: if
+      when:
+        country_exists: ZKE
+        variable_between: {var: APF_integracion_zke, min: 40, max: 99}
+      then:
+      - {effect: add_variable, var: APF_tension, value: 1}
     - {effect: clamp, var: APF_tension, min: 0, max: 100}
     - effect: idea_tiers
       tiers:
@@ -11112,6 +12962,11 @@ scripted_effects:
           any:
           - {country_exists: ZET}
           - {country_exists: ZSA}
+          - {country_exists: ZCO}
+          - {country_exists: ZAO}
+          - {country_exists: ZMZ}
+          - {country_exists: ZMG}
+          - {country_exists: ZKE}
         not_flag: APF_hito_hecho
         date_after: 2101.1.1
       then:
@@ -11168,6 +13023,135 @@ scripted_effects:
       then:
       - {effect: flag, value: APF_tierras_sin_ley}
       - {effect: event, id: meganations_apf.210, days: 1}
+    # 2026-10-17 (pedido del usuario): el Congo se resiste a integrarse. Cuando la
+    # Integración del Congo pasa 40, o a mediados de 2102 igual, los consejos de
+    # Kinshasa dicen que no (meganations_apf.420). Si la Federación cede, un año
+    # después vuelve a pasar y esta vez rompen (421).
+    - effect: if
+      when:
+        country: {tag: ZCO, when: {subject_of: APF}}
+        not_flag: APF_congo_resiste
+        any:
+        - variable_at_least: {var: APF_integracion_zco, value: 40}
+        - {date_after: 2102.6.1}
+      then:
+      - {effect: flag, value: APF_congo_resiste}
+      - {effect: event, id: meganations_apf.420, days: 1}
+    - effect: if
+      when:
+        country: {tag: ZCO, when: {subject_of: APF}}
+        flag: APF_congo_concesion
+        not_flag: APF_congo_concesion_espera
+        not: {flag: APF_congo_rompio}
+        any:
+        - variable_at_least: {var: APF_integracion_zco, value: 40}
+        - {date_after: 2103.6.1}
+      then:
+      - {effect: flag, value: APF_congo_rompio}
+      - {effect: event, id: meganations_apf.421, days: 1}
+    # El plazo: a mediados de 2104 se avisa; a mediados de 2105 los miembros que
+    # todavía no se integraron se van, libres (sin justificación para nadie).
+    - effect: if
+      when: {date_after: 2104.6.1, not_flag: APF_plazo_aviso}
+      then:
+      - {effect: flag, value: APF_plazo_aviso}
+      - {effect: event, id: meganations_apf.430, days: 1}
+    - effect: if
+      when: {date_after: 2105.6.1, not_flag: APF_plazo_vencido}
+      then:
+      - {effect: flag, value: APF_plazo_vencido}
+      - effect: if
+        when: {country: {tag: ZET, when: {subject_of: APF}}}
+        then:
+        - {effect: end_puppet, value: ZET}
+        - effect: scope
+          target: ZET
+          effects:
+          - {effect: leave_faction}
+          - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+      - effect: if
+        when: {country: {tag: ZSA, when: {subject_of: APF}}}
+        then:
+        - {effect: end_puppet, value: ZSA}
+        - effect: scope
+          target: ZSA
+          effects:
+          - {effect: leave_faction}
+          - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+      - effect: if
+        when: {country: {tag: ZAO, when: {subject_of: APF}}}
+        then:
+        - {effect: end_puppet, value: ZAO}
+        - effect: scope
+          target: ZAO
+          effects:
+          - {effect: leave_faction}
+          - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+      - effect: if
+        when: {country: {tag: ZMZ, when: {subject_of: APF}}}
+        then:
+        - {effect: end_puppet, value: ZMZ}
+        - effect: scope
+          target: ZMZ
+          effects:
+          - {effect: leave_faction}
+          - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+      - effect: if
+        when: {country: {tag: ZMG, when: {subject_of: APF}}}
+        then:
+        - {effect: end_puppet, value: ZMG}
+        - effect: scope
+          target: ZMG
+          effects:
+          - {effect: leave_faction}
+          - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+      - effect: if
+        when: {country: {tag: ZKE, when: {subject_of: APF}}}
+        then:
+        - {effect: end_puppet, value: ZKE}
+        - effect: scope
+          target: ZKE
+          effects:
+          - {effect: leave_faction}
+          - {effect: dynamic_modifier, id: MEGANATIONS_independencia_nacional, days: 365}
+      - {effect: event, id: meganations_apf.431, days: 1}
+    # Insubordinación: con la tensión regional alta, de vez en cuando una
+    # región se planta (huelgas, bloqueos, consejos que no obedecen).
+    - effect: if
+      when:
+        variable_at_least: {var: APF_tension, value: 35}
+        not_flag: APF_insub_espera
+      then:
+      - {effect: flag, value: APF_insub_espera, days: 120}
+      - effect: random
+        options:
+        - weight: 3
+          effects: []
+        - weight: 1
+          skip_if: {flag: APF_insub_visto_0}
+          effects:
+          - {effect: flag, value: APF_insub_visto_0, days: 1095}
+          - {effect: event, id: meganations_apf.440, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_insub_visto_1}
+          effects:
+          - {effect: flag, value: APF_insub_visto_1, days: 1095}
+          - {effect: event, id: meganations_apf.441, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_insub_visto_2}
+          effects:
+          - {effect: flag, value: APF_insub_visto_2, days: 1095}
+          - {effect: event, id: meganations_apf.442, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_insub_visto_3}
+          effects:
+          - {effect: flag, value: APF_insub_visto_3, days: 1095}
+          - {effect: event, id: meganations_apf.443, days: 1}
+        - weight: 1
+          skip_if: {flag: APF_insub_visto_4}
+          effects:
+          - {effect: flag, value: APF_insub_visto_4, days: 1095}
+          - {effect: event, id: meganations_apf.444, days: 1}
   - id: NRE_pulso_del_ocio
     effects:
     - effect: if
@@ -11231,7 +13215,9 @@ scripted_effects:
       - {effect: flag, value: NRE_cadena_3}
       - {effect: event, id: meganations_nre.100, days: 1}
     - effect: if
-      when: {war_support_at_least: 0.7, at_war: false, not_flag: NRE_cadena_5, date_after: 2101.6.1}
+      # 2026-10-17 (game.log): este evento le daba a Roma la guerra contra Eurasia en junio de 2101,
+      # salteando el requisito de 16_ai.yaml. Ahora sale desde 2102 y la IA solo marcha si está lista.
+      when: {war_support_at_least: 0.7, at_war: false, not_flag: NRE_cadena_5, date_after: 2102.1.1}
       then:
       - {effect: flag, value: NRE_cadena_5}
       - {effect: event, id: meganations_nre.110, days: 1}
@@ -11339,6 +13325,21 @@ scripted_effects:
       - - add
         - APF_ef_desarrollo
         - APF_desarrollo_zsa
+      - - add
+        - APF_ef_desarrollo
+        - APF_desarrollo_zco
+      - - add
+        - APF_ef_desarrollo
+        - APF_desarrollo_zao
+      - - add
+        - APF_ef_desarrollo
+        - APF_desarrollo_zmz
+      - - add
+        - APF_ef_desarrollo
+        - APF_desarrollo_zmg
+      - - add
+        - APF_ef_desarrollo
+        - APF_desarrollo_zke
       - - mul
         - APF_ef_desarrollo
         - 1
@@ -11376,7 +13377,7 @@ scripted_effects:
         - 1
       - - div
         - EFE_ef_blindaje
-        - 100
+        - 200
       - - set
         - EFE_ef_defensa
         - EFE_biosteel
@@ -11385,7 +13386,7 @@ scripted_effects:
         - 1
       - - div
         - EFE_ef_defensa
-        - 250
+        - 500
       - - set
         - EFE_ef_saturacion
         - EFE_saturacion
@@ -12440,6 +14441,126 @@ scripted_effects:
         - - sub
           - APF_ef_sat_estab
           - 0.03
+    - {effect: clamp, var: APF_lealtad_zco, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZCO
+        variable_at_least: {var: APF_lealtad_zco, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - APF_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZCO
+        variable_below: {var: APF_lealtad_zco, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - APF_ef_sat_pp
+          - 0.1
+        - - sub
+          - APF_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: APF_lealtad_zao, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZAO
+        variable_at_least: {var: APF_lealtad_zao, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - APF_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZAO
+        variable_below: {var: APF_lealtad_zao, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - APF_ef_sat_pp
+          - 0.1
+        - - sub
+          - APF_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: APF_lealtad_zmz, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZMZ
+        variable_at_least: {var: APF_lealtad_zmz, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - APF_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZMZ
+        variable_below: {var: APF_lealtad_zmz, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - APF_ef_sat_pp
+          - 0.1
+        - - sub
+          - APF_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: APF_lealtad_zmg, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZMG
+        variable_at_least: {var: APF_lealtad_zmg, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - APF_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZMG
+        variable_below: {var: APF_lealtad_zmg, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - APF_ef_sat_pp
+          - 0.1
+        - - sub
+          - APF_ef_sat_estab
+          - 0.03
+    - {effect: clamp, var: APF_lealtad_zke, min: 0, max: 100}
+    - effect: if
+      when:
+        country_exists: ZKE
+        variable_at_least: {var: APF_lealtad_zke, value: 75}
+      then:
+      - effect: math
+        ops:
+        - - add
+          - APF_ef_sat_pp
+          - 0.1
+    - effect: if
+      when:
+        country_exists: ZKE
+        variable_below: {var: APF_lealtad_zke, value: 25}
+      then:
+      - effect: math
+        ops:
+        - - sub
+          - APF_ef_sat_pp
+          - 0.1
+        - - sub
+          - APF_ef_sat_estab
+          - 0.03
     - effect: math
       ops:
       - - set
@@ -12516,6 +14637,131 @@ scripted_effects:
             effects:
             - {effect: flag, value: APF_rebelion_zsa_reciente, days: 182}
             - {effect: event, id: meganations_apf.41, days: 1}
+    - effect: if
+      when: {country_exists: ZCO}
+      then:
+      - {effect: add_variable, var: APF_lealtad_zco, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zco, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zco, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: APF_lealtad_zco, value: 25}
+          not_flag: APF_rebelion_zco_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: APF_rebelion_zco_reciente, days: 182}
+            - {effect: event, id: meganations_apf.401, days: 1}
+    - effect: if
+      when: {country_exists: ZAO}
+      then:
+      - {effect: add_variable, var: APF_lealtad_zao, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zao, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zao, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: APF_lealtad_zao, value: 25}
+          not_flag: APF_rebelion_zao_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: APF_rebelion_zao_reciente, days: 182}
+            - {effect: event, id: meganations_apf.402, days: 1}
+    - effect: if
+      when: {country_exists: ZMZ}
+      then:
+      - {effect: add_variable, var: APF_lealtad_zmz, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zmz, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zmz, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: APF_lealtad_zmz, value: 25}
+          not_flag: APF_rebelion_zmz_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: APF_rebelion_zmz_reciente, days: 182}
+            - {effect: event, id: meganations_apf.403, days: 1}
+    - effect: if
+      when: {country_exists: ZMG}
+      then:
+      - {effect: add_variable, var: APF_lealtad_zmg, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zmg, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zmg, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: APF_lealtad_zmg, value: 25}
+          not_flag: APF_rebelion_zmg_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: APF_rebelion_zmg_reciente, days: 182}
+            - {effect: event, id: meganations_apf.404, days: 1}
+    - effect: if
+      when: {country_exists: ZKE}
+      then:
+      - {effect: add_variable, var: APF_lealtad_zke, value: -1}
+      - effect: if
+        when: {at_war: true}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zke, value: -1}
+      - effect: if
+        when: {stability_at_least: 0.6}
+        then:
+        - {effect: add_variable, var: APF_lealtad_zke, value: 1}
+      - effect: if
+        when:
+          variable_below: {var: APF_lealtad_zke, value: 25}
+          not_flag: APF_rebelion_zke_reciente
+        then:
+        - effect: random
+          options:
+          - weight: 75
+            effects: []
+          - weight: 25
+            effects:
+            - {effect: flag, value: APF_rebelion_zke_reciente, days: 182}
+            - {effect: event, id: meganations_apf.405, days: 1}
     - {effect: run, value: APF_recalcular_satelites}
   - id: NRE_recalcular_satelites
     effects:
@@ -12855,6 +15101,11 @@ scripted_effects:
         - {in_faction_with: ZST}
         - {in_faction_with: ZET}
         - {in_faction_with: ZSA}
+        - {in_faction_with: ZCO}
+        - {in_faction_with: ZAO}
+        - {in_faction_with: ZMZ}
+        - {in_faction_with: ZMG}
+        - {in_faction_with: ZKE}
         - {in_faction_with: ZHI}
         - {in_faction_with: ZDA}
       then:
@@ -15113,6 +17364,103 @@ dynamic_modifiers:
       army_armor_defence_factor: EFE_ef_blindaje
       army_defence_factor: EFE_ef_defensa
       stability_factor: EFE_ef_saturacion
+  # 2026-10-17 Bioacero v3: cubas quemadas, las nueve elecciones de las cosechas y los bonos temporales.
+  - id: EFE_cubas_quemadas
+    country: EFE
+    no_art: true
+    name: {english: 'Burnt Vats', spanish: 'Cubas Quemadas'}
+    desc: {english: 'A producing region fell and its vats burned with it.', spanish: 'Cayó una región productora y sus cubas ardieron con ella.'}
+    modifiers: {stability_factor: -0.05, production_speed_buildings_factor: -0.1, industrial_capacity_factory: -0.03}
+  - id: EFE_bono_raices_hondas
+    country: EFE
+    no_art: true
+    name: {english: 'Deep Roots', spanish: 'Raíces Hondas'}
+    desc: {english: 'The Guard digs in where the forest grows.', spanish: 'La Guardia se atrinchera donde crece el monte.'}
+    modifiers: {army_defence_factor: 0.05, dig_in_speed_factor: 0.2}
+  - id: EFE_bono_savia_fabril
+    country: EFE
+    no_art: true
+    name: {english: 'Sap in the Factories', spanish: 'Savia Fabril'}
+    desc: {english: 'Living alloy in every machine of the Empire.', spanish: 'Aleación viva en cada máquina del Imperio.'}
+    modifiers: {industrial_capacity_factory: 0.05}
+  - id: EFE_bono_hijos_de_las_cubas
+    country: EFE
+    no_art: true
+    name: {english: 'Children of the Vats', spanish: 'Hijos de las Cubas'}
+    desc: {english: 'The vats feed the cities and the cities send their children to the Guard.', spanish: 'Las cubas alimentan las ciudades y las ciudades mandan a sus hijos a la Guardia.'}
+    modifiers: {recruitable_population_factor: 0.08, stability_factor: 0.02}
+  - id: EFE_bono_el_bosque_que_marcha
+    country: EFE
+    no_art: true
+    name: {english: 'The Marching Forest', spanish: 'El Bosque que Marcha'}
+    desc: {english: 'Where the Guard advances, the forest advances.', spanish: 'Donde avanza la Guardia, avanza el monte.'}
+    modifiers: {army_attack_factor: 0.07, army_org_factor: 0.05}
+  - id: EFE_bono_cubas_sin_fondo
+    country: EFE
+    no_art: true
+    name: {english: 'Bottomless Vats', spanish: 'Cubas sin Fondo'}
+    desc: {english: 'The vats breathe deeper: saturation drops 3 more every month.', spanish: 'Las cubas respiran más hondo: la saturación baja 3 más por mes.'}
+    modifiers: {production_speed_buildings_factor: 0.1}
+  - id: EFE_bono_cosecha_doble
+    country: EFE
+    no_art: true
+    name: {english: 'Double Harvest', spanish: 'Cosecha Doble'}
+    desc: {english: 'Every producing region gives two sprouts a month instead of one.', spanish: 'Cada región productora da dos brotes por mes en vez de uno.'}
+    modifiers: {consumer_goods_factor: -0.03}
+  - id: EFE_bono_gliptodonte_rey
+    country: EFE
+    no_art: true
+    name: {english: 'The Glyptodon King', spanish: 'El Gliptodonte Rey'}
+    desc: {english: 'Every hull of the Empire is grown, not forged.', spanish: 'Cada casco del Imperio se cultiva, no se forja.'}
+    modifiers: {army_armor_attack_factor: 0.15, army_armor_defence_factor: 0.15}
+  - id: EFE_bono_corazon_de_gaia
+    country: EFE
+    no_art: true
+    name: {english: 'The Heart of Gaia', spanish: 'El Corazón de Gaia'}
+    desc: {english: 'The living metal beats under the throne of Gaia.', spanish: 'El metal vivo late bajo el trono de Gaia.'}
+    modifiers: {stability_factor: 0.1, war_support_factor: 0.1, political_power_gain: 0.25}
+  - id: EFE_bono_semilla_del_mundo
+    country: EFE
+    no_art: true
+    name: {english: 'The Seed of the World', spanish: 'La Semilla del Mundo'}
+    desc: {english: 'The Empire sells life itself: every laboratory in the world wants a strain.', spanish: 'El Imperio vende la vida misma: cada laboratorio del mundo quiere una cepa.'}
+    modifiers: {industrial_capacity_factory: 0.1, research_speed_factor: 0.1}
+  - id: EFE_temp_savia_de_guerra
+    country: EFE
+    no_art: true
+    name: {english: 'War Sap', spanish: 'Savia de Guerra'}
+    desc: {english: 'Living sap in the rations.', spanish: 'Savia viva en las raciones.'}
+    modifiers: {army_attack_factor: 0.1}
+  - id: EFE_temp_corteza_viva
+    country: EFE
+    no_art: true
+    name: {english: 'Living Bark', spanish: 'Corteza Viva'}
+    desc: {english: 'The trenches grow their own bark.', spanish: 'Las trincheras crían su propia corteza.'}
+    modifiers: {army_defence_factor: 0.12, dig_in_speed_factor: 0.3}
+  - id: EFE_temp_hojas_en_las_lineas
+    country: EFE
+    no_art: true
+    name: {english: 'Leaves on the Lines', spanish: 'Hojas en las Líneas'}
+    desc: {english: 'Machines that heal while they work.', spanish: 'Máquinas que se curan mientras trabajan.'}
+    modifiers: {industrial_capacity_factory: 0.08}
+  - id: EFE_temp_raiz_en_las_obras
+    country: EFE
+    no_art: true
+    name: {english: 'Roots in the Works', spanish: 'Raíz en las Obras'}
+    desc: {english: 'Scaffolding that grows by itself.', spanish: 'Andamios que crecen solos.'}
+    modifiers: {production_speed_buildings_factor: 0.15}
+  - id: EFE_temp_fervor_del_monte
+    country: EFE
+    no_art: true
+    name: {english: 'Fervour of the Forest', spanish: 'Fervor del Monte'}
+    desc: {english: 'Divisions anointed with living metal.', spanish: 'Divisiones ungidas con metal vivo.'}
+    modifiers: {army_org_factor: 0.1, army_morale_factor: 0.1}
+  - id: EFE_temp_ofrenda_a_gaia
+    country: EFE
+    no_art: true
+    name: {english: 'Offering to Gaia', spanish: 'Ofrenda a Gaia'}
+    desc: {english: 'A living statue in every plaza.', spanish: 'Una estatua viva en cada plaza.'}
+    modifiers: {stability_factor: 0.06, political_power_gain: 0.15}
   - id: NAS_mod_luz
     country: NAS
     name: {english: The Light of the Temples, spanish: La Luz de los Templos}
@@ -15420,6 +17768,31 @@ dynamic_modifiers:
     name: {english: 'The Spoils of The Cape Federation', spanish: 'El Botín de la Federación del Cabo'}
     desc: {english: 'Absorbed when we took the capital of the Cape Federation: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Federación del Cabo: +2,5% de población reclutable.'}
     modifiers: {recruitable_population_factor: 0.025}
+  - id: MEGANATIONS_botin_ZCO
+    country: null
+    name: {english: 'The Spoils of The Congo Confederation', spanish: 'El Botín de la Confederación del Congo'}
+    desc: {english: 'Absorbed when we took the capital of the Congo Confederation: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Confederación del Congo: +2,5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.025}
+  - id: MEGANATIONS_botin_ZAO
+    country: null
+    name: {english: 'The Spoils of The Angolan Union', spanish: 'El Botín de la Unión de Angola'}
+    desc: {english: 'Absorbed when we took the capital of the Angolan Union: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Unión de Angola: +2,5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.025}
+  - id: MEGANATIONS_botin_ZMZ
+    country: null
+    name: {english: 'The Spoils of The Mozambique League', spanish: 'El Botín de la Liga de Mozambique'}
+    desc: {english: 'Absorbed when we took the capital of the Mozambique League: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Liga de Mozambique: +2,5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.025}
+  - id: MEGANATIONS_botin_ZMG
+    country: null
+    name: {english: 'The Spoils of The Red Island Assembly', spanish: 'El Botín de la Asamblea de la Isla Roja'}
+    desc: {english: 'Absorbed when we took the capital of the Red Island Assembly: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Asamblea de la Isla Roja: +2,5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.025}
+  - id: MEGANATIONS_botin_ZKE
+    country: null
+    name: {english: 'The Spoils of The Rift Federation', spanish: 'El Botín de la Federación del Rift'}
+    desc: {english: 'Absorbed when we took the capital of the Rift Federation: +2.5% recruitable population.', spanish: 'Absorbido al tomar la capital de la Federación del Rift: +2,5% de población reclutable.'}
+    modifiers: {recruitable_population_factor: 0.025}
   - id: MEGANATIONS_botin_ZHI
     country: null
     name: {english: 'The Spoils of The Province of Hispania', spanish: 'El Botín de la Provincia de Hispania'}
@@ -15548,6 +17921,16 @@ dynamic_modifiers:
     name: {english: 'The Red Network', spanish: 'La Red Roja'}
     desc: {english: 'The Commune''s servers think for us.', spanish: 'Los servidores de la Comuna piensan por nosotros.'}
     modifiers: {research_speed_factor: 0.1, army_org_factor: 0.1}
+  - id: MEGANATIONS_la_selva_resiste
+    country: null
+    name: {english: 'The Forest Resists', spanish: 'La Selva Resiste'}
+    desc: {english: 'Every river is a moat and every village a fort. The Federation will have to come and take it.', spanish: 'Cada río es un foso y cada aldea un fuerte. La Federación va a tener que venir a buscarlo.'}
+    modifiers: {army_defence_factor: 0.2, army_org_factor: 0.1, recruitable_population_factor: 0.03, production_speed_buildings_factor: 0.15}
+  - id: APF_insubordinacion
+    country: APF
+    name: {english: 'Insubordinate Councils', spanish: 'Consejos Insubordinados'}
+    desc: {english: 'Strikes, road blocks and councils that answer the radio but not the orders.', spanish: 'Huelgas, cortes de ruta y consejos que contestan la radio pero no las órdenes.'}
+    modifiers: {industrial_capacity_factory: -0.06, stability_factor: -0.03, production_speed_buildings_factor: -0.05}
   - id: MEGANATIONS_independencia_nacional
     country: null
     name: {english: 'National Independence', spanish: 'La Independencia Nacional'}
@@ -15599,6 +17982,16 @@ variable_names:
   APF_desarrollo_zsa: {english: "Cape Development", spanish: "Desarrollo del Cabo"}
   APF_integracion_zet: {english: "Highlands Integration", spanish: "Integración de las Tierras Altas"}
   APF_integracion_zsa: {english: "Cape Integration", spanish: "Integración del Cabo"}
+  APF_desarrollo_zco: {english: "Congo Confederation Development", spanish: "Desarrollo de la Confederación del Congo"}
+  APF_integracion_zco: {english: "Congo Confederation Integration", spanish: "Integración de la Confederación del Congo"}
+  APF_desarrollo_zao: {english: "Angolan Union Development", spanish: "Desarrollo de la Unión de Angola"}
+  APF_integracion_zao: {english: "Angolan Union Integration", spanish: "Integración de la Unión de Angola"}
+  APF_desarrollo_zmz: {english: "Mozambique League Development", spanish: "Desarrollo de la Liga de Mozambique"}
+  APF_integracion_zmz: {english: "Mozambique League Integration", spanish: "Integración de la Liga de Mozambique"}
+  APF_desarrollo_zmg: {english: "Red Island Assembly Development", spanish: "Desarrollo de la Asamblea de la Isla Roja"}
+  APF_integracion_zmg: {english: "Red Island Assembly Integration", spanish: "Integración de la Asamblea de la Isla Roja"}
+  APF_desarrollo_zke: {english: "Rift Federation Development", spanish: "Desarrollo de la Federación del Rift"}
+  APF_integracion_zke: {english: "Rift Federation Integration", spanish: "Integración de la Federación del Rift"}
   APF_tension: {english: "Regional tension", spanish: "Tensión regional"}
   ASC_calor: {english: "Grid heat", spanish: "Calor de la red"}
   ASC_computo: {english: "Compute", spanish: "Cómputo"}
@@ -15607,6 +18000,8 @@ variable_names:
   EFE_integracion_pta: {english: "Patagonia integration stage", spanish: "Etapa de integración de la Patagonia"}
   EFE_integracion_yyg: {english: "Yvytu Ykua Guasu integration stage", spanish: "Etapa de integración de Yvytu Ykua Guasu"}
   EFE_saturacion: {english: "Vat saturation", spanish: "Saturación de las cubas"}
+  EFE_brote: {english: "BioSteel sprouts", spanish: "Brotes de Bioacero"}
+  EFE_productoras: {english: "Producing regions", spanish: "Regiones productoras"}
   FCU_castellane: {english: "Castellane (water)", spanish: "Castellane (agua)"}
   FCU_halvorsen: {english: "Halvorsen-Ito (food)", spanish: "Halvorsen-Ito (comida)"}
   FCU_meridian: {english: "Meridian (arms)", spanish: "Meridian (armas)"}
@@ -15645,6 +18040,11 @@ variable_names:
   SHD_lealtad_zst: {english: "Loyalty of Steppe Directorate", spanish: "Lealtad de Directorio de la Estepa"}
   APF_lealtad_zet: {english: "Loyalty of Highlands Federation", spanish: "Lealtad de Federación de las Tierras Altas"}
   APF_lealtad_zsa: {english: "Loyalty of Cape Federation", spanish: "Lealtad de Federación del Cabo"}
+  APF_lealtad_zco: {english: "Loyalty of Congo Confederation", spanish: "Lealtad de Confederación del Congo"}
+  APF_lealtad_zao: {english: "Loyalty of Angolan Union", spanish: "Lealtad de Unión de Angola"}
+  APF_lealtad_zmz: {english: "Loyalty of Mozambique League", spanish: "Lealtad de Liga de Mozambique"}
+  APF_lealtad_zmg: {english: "Loyalty of Red Island Assembly", spanish: "Lealtad de Asamblea de la Isla Roja"}
+  APF_lealtad_zke: {english: "Loyalty of Rift Federation", spanish: "Lealtad de Federación del Rift"}
   NRE_lealtad_zhi: {english: "Loyalty of Province of Hispania", spanish: "Lealtad de Provincia de Hispania"}
   NRE_lealtad_zda: {english: "Loyalty of Province of Dacia", spanish: "Lealtad de Provincia de Dacia"}
   SHD_racha: {english: "Harmony streak", spanish: "Racha de armonía"}

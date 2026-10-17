@@ -354,6 +354,50 @@ territories:
     resolve:
       - { owner: SAF }
 
+  ZCO:
+    src: user_request   # 2026-10-17: un miembro más de la Federación
+    resolve:
+      - { state: ['Léopoldville', 'Leopoldville'] }
+      - { state: ['Coquilhatville'] }
+      - { state: ['Costermansville'] }
+      - { state: ['Elisabethville'] }
+      - { state: ['Lusambo'] }
+      - { state: ['Stanleyville'] }
+    capital_state: ['Léopoldville', 'Leopoldville']
+
+  ZAO:
+    src: user_request   # 2026-10-17: un miembro más de la Federación
+    resolve:
+      - { state: ['Luanda'] }
+      - { state: ['Cabinda'] }
+      - { state: ['South West Angola'] }
+      - { state: ['Zambesi'] }
+    capital_state: ['Luanda']
+
+  ZMZ:
+    src: user_request   # 2026-10-17: un miembro más de la Federación
+    resolve:
+      - { state: ['Lourenço Marques', 'Lourenco Marques'] }
+      - { state: ['Manica e Sofala'] }
+      - { state: ['Zambezia-Moçambique', 'Zambezia-Mocambique'] }
+    capital_state: ['Lourenço Marques', 'Lourenco Marques']
+
+  ZMG:
+    src: user_request   # 2026-10-17: un miembro más de la Federación
+    resolve:
+      - { state: ['Madagascar'] }
+      - { state: ['Comoro Islands'] }
+    capital_state: ['Madagascar']
+
+  ZKE:
+    src: user_request   # 2026-10-17: un miembro más de la Federación
+    resolve:
+      - { state: ['Nairobi'] }
+      - { state: ['Mombasa'] }
+      - { state: ['Garissa'] }
+      - { state: ['Nyanza-Rift Valley'] }
+    capital_state: ['Nairobi']
+
   NRE:
     src: invented
     lore: >
@@ -400,7 +444,7 @@ territories:
       template_name:
         english: "Militia"
         spanish: "Milicia"
-      regiments: [infantry, infantry]
+      regiments: [infantry, infantry, infantry]   # 2026-10-17: "como mínimo 3 brigadas"
       src: invented
 
   ZWI:
@@ -412,7 +456,7 @@ territories:
       template_name:
         english: "Militia"
         spanish: "Milicia"
-      regiments: [infantry, infantry]
+      regiments: [infantry, infantry, infantry]   # 2026-10-17: "como mínimo 3 brigadas"
       src: invented
 
   ZWM:
@@ -424,7 +468,7 @@ territories:
       template_name:
         english: "Militia"
         spanish: "Milicia"
-      regiments: [infantry, infantry]
+      regiments: [infantry, infantry, infantry]   # 2026-10-17: "como mínimo 3 brigadas"
       src: invented
 
   ZWB:
@@ -436,7 +480,7 @@ territories:
       template_name:
         english: "Militia"
         spanish: "Milicia"
-      regiments: [infantry, infantry]
+      regiments: [infantry, infantry, infantry]   # 2026-10-17: "como mínimo 3 brigadas"
       src: invented
 
   ZAN:
@@ -488,7 +532,7 @@ territories:
       template_name:
         english: "Militia"
         spanish: "Milicia"
-      regiments: [infantry, infantry]
+      regiments: [infantry, infantry, infantry]   # 2026-10-17: "como mínimo 3 brigadas"
       src: invented
 
 # =============================================================================
@@ -798,6 +842,11 @@ city_names:
     APF: { english: "Èkó", spanish: "Èkó" }
     ZET: { english: "Finfinne", spanish: "Finfinne" }
     ZSA: { english: "Tshwane", spanish: "Tshwane" }
+    ZCO: { english: "Kinshasa", spanish: "Kinshasa" }
+    ZAO: { english: "Luanda", spanish: "Luanda" }
+    ZMZ: { english: "Maputo", spanish: "Maputo" }
+    ZMG: { english: "Antananarivo", spanish: "Antananarivo" }
+    ZKE: { english: "Nairobi", spanish: "Nairobi" }
     ZHI: { english: "Matritum", spanish: "Matritum" }
     ZDA: { english: "Bunker City", spanish: "Ciudad Búnker" }
     ZWE: { english: "Warlords' Citadel", spanish: "Ciudadela de los Señores" }

@@ -173,7 +173,7 @@ def test_pdx_roundtrip() -> None:
 def test_spec_loads() -> None:
     section("spec")
     spec = specload.load(REPO_ROOT / "spec")
-    check("30 paises (8 meganaciones + 16 satelites + 5 de la Anarquia + el Santuario de Gaia)", len(spec.countries) == 30, f"hay {len(spec.countries)}")
+    check("35 paises (8 meganaciones + 21 satelites + 5 de la Anarquia + el Santuario de Gaia)", len(spec.countries) == 35, f"hay {len(spec.countries)}")
     check("todos los TAG de 3 letras", all(len(c.tag) == 3 for c in spec.countries))
     tags = {c.tag for c in spec.countries}
     for expected in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "PTA", "YYG"):
@@ -529,7 +529,7 @@ def test_phase3_content() -> None:
             check(f"umbral {n} mira la variable EFE_biosteel", pdx.text(cond.get("var")) == "EFE_biosteel")
             check(f"umbral {n} compara >=", pdx.text(cond.get("compare")) == "greater_than_or_equals")
             amounts.append(pdx.text(cond.get("value")))
-        check("umbrales 5/10/15", amounts == ["5", "10", "15"], str(amounts))
+        check("umbrales 8/16/24 (Bioacero v3: lo normal es ir de 1 a 30)", amounts == ["8", "16", "24"], str(amounts))
         t2 = next(f for f in focuses if pdx.text(f.get("id")) == "EFE_biosteel_umbral_2")
         swap = t2.get("completion_reward").get("swap_ideas")
         check("tier 2 reemplaza al 1", pdx.text(swap.get("remove_idea")) == "EFE_biosteel_t1")
@@ -588,8 +588,8 @@ def test_phase3_content() -> None:
         check("BioSteel ya no es un recurso del mapa", not (mod / "common/resources").exists())
         efe_hist = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
         sv = pdx.parse(efe_hist).get("set_variable")
-        check("el EFE arranca con 5 de BioSteel (variable)",
-              pdx.text(sv.get("var")) == "EFE_biosteel" and pdx.text(sv.get("value")) == "5", efe_hist[-400:])
+        check("el EFE arranca con 3 de BioSteel (variable)",
+              pdx.text(sv.get("var")) == "EFE_biosteel" and pdx.text(sv.get("value")) == "3", efe_hist[-400:])
         by2 = {pdx.text(f.get("id")): f for f in focuses}
         add = by2["EFE_el_metal_que_crece"].get("completion_reward").get("add_to_variable")
         check("El Metal que Crece suma 5 de BioSteel",
@@ -613,7 +613,7 @@ def test_phase3_content() -> None:
         check("icono elegido entre los vanilla", pdx.text(cat.get("icon")) == "generic_industry")
         decs_raw = (mod / "common/decisions/meganations_decisions.txt").read_text()
         decs = pdx.parse(decs_raw).get("EFE_biosteel_category")
-        check("7 decisiones (con Purgar las Cubas, Como se Juega y el Gliptodonte)", len(decs.keys()) == 7, str(decs.keys()))
+        check("21 decisiones (7 de antes + 3 cosechas + 6 bonos temporales + 5 replantar)", len(decs.keys()) == 21, str(decs.keys()))
         guia = decs.get("EFE_como_se_juega")
         check("Como se Juega: gratis, la IA no la usa, muestra la bienvenida", pdx.text(guia.get("cost")) == "0"
               and "meganations_efe.29" in pdx.render(guia.get("complete_effect"))
@@ -623,7 +623,7 @@ def test_phase3_content() -> None:
               and pdx.text(ampliar.get("days_re_enable")) == "45")
         ampl = pdx.render(ampliar.get("complete_effect"))
         check("ampliar satura las cubas", "var = EFE_saturacion" in ampl, ampl)
-        check("ampliar: +1 BioSteel", pdx.text(ampliar.get("complete_effect").get("add_to_variable").get("value")) == "1")
+        check("ampliar: +2 BioSteel (escala 1-30)", pdx.text(ampliar.get("complete_effect").get("add_to_variable").get("value")) == "2")
         check("icono de decision vanilla", pdx.text(ampliar.get("icon")) == "generic_industry")
         check("cultivo intensivo pide estabilidad > 0.4", "has_stability > 0.4" in decs_raw, decs_raw[:2000])
         blindar = decs.get("EFE_blindar_la_guardia")
@@ -787,11 +787,11 @@ def test_territory() -> None:
         check("ningun senor de la guerra funda una faccion", "create_faction" not in lh, lh[-600:])
         check("ni suma a los otros", "add_to_faction" not in lh)
         tpl = units.get("division_template")
-        check("plantilla de milicia con 2 infanterias", len(tpl.get("regiments").get_all("infantry")) == 2)
+        check("plantilla de milicia con 3 infanterias (minimo 3 brigadas)", len(tpl.get("regiments").get_all("infantry")) == 3)
         bal = (Path(tmp) / "balance.txt").read_text()
         check("balance generado fuera del mod", not (mod / "balance.txt").exists() and "BALANCE" in bal)
         check("balance cuenta las milicias", any(l.startswith("ZWI") and " 5 " in l for l in bal.splitlines()), bal[:800])
-        check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 5" in bal)
+        check("balance muestra el contador de BioSteel", "EFE_biosteel: arranca en 3" in bal)
         check("balance ya no alerta ejercitos vacios", "Sin ejercito inicial" not in bal, bal[-600:])
 
         section("arranque militar: tecnologias, ejercito, equipo")
@@ -1181,7 +1181,7 @@ def test_events() -> None:
         ideas_efe = " ".join((mod / "common/ideas/EFE_ideas.txt").read_text().split())
         adv = ideas_efe[ideas_efe.index("EFE_agua_de_la_vida = {"):][:900]
         check("EFE: el espiritu final tiene pros y contras", "monthly_population = 0.15" in adv and "war_support_factor = -0.1" in adv, adv)
-        check("74 eventos del EFE (guerra limitada, 5 menores, independencias, el Santuario, guerra civil, destino y botin de capital)", len(events) == 74, str(len(events)))
+        check("90 eventos del EFE (74 de antes + 16 del Bioacero v3)", len(events) == 90, str(len(events)))
         # 2026-09-29: guerras civiles (elegir bando), rama política extendida y forma final
         efe_cw = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         e220 = efe_cw[efe_cw.index("id = meganations_efe.220 title"):][:30000]
@@ -1368,17 +1368,74 @@ def test_events() -> None:
         se_all = " ".join(se_raw.split())
         pulso = " ".join(pdx.render(pdx.parse(se_raw).get("EFE_pulso_de_las_cubas")).split())
         # Bioacero v2 (2026-09-29): "llega a 15 sin consecuencias ni saturacion".
-        check("Bioacero v2: el metal vivo come (la saturacion sube la mitad del Bioacero guardado)",
+        check("Bioacero v3: el metal vivo come (la saturacion sube un cuarto del Bioacero guardado)",
               "set_variable = { var = EFE_hambre_del_metal value = EFE_biosteel }" in pulso
-              and "divide_variable = { var = EFE_hambre_del_metal value = 2 }" in pulso
+              and "divide_variable = { var = EFE_hambre_del_metal value = 4 }" in pulso
               and "add_to_variable = { var = EFE_saturacion value = EFE_hambre_del_metal }" in pulso, pulso[:900])
-        check("Bioacero v2: se pudre desde 13", "var = EFE_biosteel value = 13 compare = greater_than_or_equals" in pulso)
+        check("Bioacero v3: se pudre recien desde 25", "var = EFE_biosteel value = 25 compare = greater_than_or_equals" in pulso
+              and "var = EFE_biosteel value = 13 compare" not in pulso)
         check("Bioacero v2: la plaga, mas probable cuanto mas llenas las cubas",
               "var = EFE_saturacion value = 85 compare = greater_than_or_equals" in pulso)
         efe_tree_b = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text().split())
         metal = efe_tree_b[efe_tree_b.index("id = EFE_el_metal_que_crece"):][:2500]
         check("Bioacero v2: el que dan los focos tambien satura",
               "var = EFE_biosteel value = 5" in metal and "var = EFE_saturacion value = 15" in metal, metal[:800])
+        # Bioacero v3 (2026-10-17): de 1 a 30, cinco productoras, tres cosechas de un uso con dilema,
+        # bonos temporales y eventos de Bioacero ganado o perdido.
+        section("Bioacero v3 (EFE)")
+        check("v3: las productoras dan brotes y 6 brotes son 1 de Bioacero",
+              "var = EFE_brote value = 6 compare = greater_than_or_equals" in pulso
+              and "add_to_variable = { var = EFE_brote value = -6 }" in pulso, pulso[:1200])
+        check("v3: una productora solo se pierde si antes se vio controlada",
+              all(f"has_country_flag = EFE_prod_{n}_activa" in pulso and f"meganations_efe.50{n}" in pulso for n in range(1, 6)))
+        check("v3: perder una productora cuesta 3 y quema las cubas 180 dias",
+              "modifier = EFE_cubas_quemadas days = 180" in pulso)
+        check("v3: eventos de Bioacero ganado o perdido (520-527)",
+              all(f"meganations_efe.52{n}" in pulso for n in range(8)))
+        decs_v3 = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text().split())
+        for name, need, ev in (("diez", 10, 510), ("veinte", 20, 511), ("treinta", 30, 512)):
+            blk = decs_v3[decs_v3.index(f"EFE_la_cosecha_del_{name} = {{"):][:700]
+            check(f"v3: la cosecha del {name} es de un uso, gasta {need} y abre el dilema",
+                  "fire_only_once = yes" in blk and f"value = {need} compare = greater_than_or_equals" in blk
+                  and f"value = -{need} }}" in blk and f"id = meganations_efe.{ev}" in blk, blk)
+        ev_v3 = " ".join((mod / "events/meganations_efe.txt").read_text().split())
+        for ev in (510, 511, 512):
+            blk = ev_v3[ev_v3.index(f"id = meganations_efe.{ev} "):]
+            blk = blk[:blk.index("country_event = {")] if "country_event = {" in blk else blk
+            check(f"v3: el dilema {ev} tiene tres caminos permanentes", blk.count("option = {") == 3
+                  and blk.count("add_dynamic_modifier = { modifier = EFE_bono_") == 3, blk[:600])
+        for d in ("EFE_savia_de_guerra", "EFE_corteza_viva", "EFE_hojas_en_las_lineas", "EFE_raiz_en_las_obras",
+                  "EFE_fervor_del_monte", "EFE_ofrenda_a_gaia"):
+            blk = decs_v3[decs_v3.index(f"{d} = {{"):][:900]
+            check(f"v3: {d} gasta Bioacero por un bono temporal", "days_re_enable" in blk
+                  and "add_dynamic_modifier = { modifier = EFE_temp_" in blk and " days = " in blk.split("add_dynamic_modifier")[1][:80], blk)
+        rep2 = decs_v3[decs_v3.index("EFE_replantar_2 = {"):][:500]
+        check("v3: replantar aparece al perder la productora y la vuelve a activar",
+              "visible = { has_country_flag = EFE_prod_2_perdida }" in rep2 and "clr_country_flag = EFE_prod_2_perdida" in rep2, rep2)
+        esp = " ".join(pdx.render(pdx.parse(se_raw).get("EFE_espiritu_vivo")).split())
+        check("v3: el blindaje escala a la mitad por punto (30 = lo que antes daban 15)",
+              "divide_variable = { var = EFE_ef_blindaje value = 200 }" in esp
+              and "divide_variable = { var = EFE_ef_defensa value = 500 }" in esp, esp[:600])
+
+        # Africa (2026-10-17): cinco paises nuevos a integrar, el Congo se rebela, plazo y liberacion.
+        section("APF: Africa ampliada")
+        decs_af = decs_v3
+        for tag in ("zco", "zao", "zmz", "zmg", "zke"):
+            check(f"APF puede invertir e integrar {tag.upper()}",
+                  f"APF_invertir_{tag} = {{" in decs_af and f"APF_integrar_{tag} = {{" in decs_af)
+        inv = decs_af[decs_af.index("APF_invertir_zco = {"):][:500]
+        check("invertir da +20 de Desarrollo (como dice su texto)", "var = APF_desarrollo_zco value = 20" in inv, inv)
+        apf_ev = " ".join((mod / "events/meganations_apf.txt").read_text().split())
+        cg = apf_ev[apf_ev.index("id = meganations_apf.421 title"):][:7000]
+        check("el Congo rompe: se va de la federacion, recibe ejercito y declara la guerra",
+              "end_puppet = ZCO" in cg and "set_cosmetic_tag = ZCO_LIBRE" in cg and "declare_war_on" in cg
+              and "add_manpower = 150000" in cg, cg[:900])
+        pul_apf = " ".join(pdx.render(pdx.parse(se_raw).get("APF_pulso_de_los_consejos")).split())
+        check("plazo: en 2105.6.1 los que no se integraron quedan libres, sin justificacion para Roma",
+              "date > 2105.6.1" in pul_apf and "meganations_apf.431" in pul_apf, pul_apf[:400])
+        lib = apf_ev[apf_ev.index("id = meganations_apf.431 title"):][:1500] + pul_apf
+        check("la liberacion no le da guerra justificada a nadie", "create_wargoal" not in lib)
+        check("insubordinacion: eventos 440-444", all(f"meganations_apf.44{n}" in pul_apf for n in range(5)))
         check("eventos menores: salen por fecha, una sola vez",
               "limit = { date > 2100.3.20 NOT = { has_country_flag = EFE_menor_200 } } set_country_flag = EFE_menor_200 "
               "country_event = { id = meganations_efe.200 days = 1 }" in pulso, pulso[:300])
@@ -1751,8 +1808,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("16 espiritus vivos (la mecanica y los satelites de cada potencia), 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones y 2 del NAS en el aire",
-              len(dm.entries) == 109 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("132 modificadores dinamicos: 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones y 2 del NAS en el aire",
+              len(dm.entries) == 132 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2550,7 +2607,7 @@ def test_mecanicas_v2() -> None:
         check("FCU: las cuatro se normalizan a 200", "set_variable = { var = FCU_factor value = 200 }" in fcu)
         check("FCU: sin 'el fuerte se hace mas fuerte' (no es suma cero)", "FCU_castellane value = 1 }" not in se_txt)
         check("FCU: cada contrato sube una y baja otra", "Contrato Ferroviario Automatizado (M+10 H-10)" in es)
-        check("APF: la tension sube con cada miembro a medio integrar", "var = APF_integracion_zet value = 30" in " ".join(se_txt.split()))
+        check("APF: la tension sube con cada miembro a medio integrar", "var = APF_integracion_zet value = 40" in " ".join(se_txt.split()))
         dec_txt = (mod / "common/decisions/meganations_decisions.txt").read_text()
         inv2 = dec_txt[dec_txt.index("APF_invertir_zet = {"):]
         inv2 = " ".join(inv2[:inv2.index("ai_will_do")].split())

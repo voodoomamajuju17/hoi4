@@ -1809,3 +1809,73 @@ siempre demasiado temprano; algún tipo de requisito previo mayor".
   - La Comuna contra Eurasia: desde 2101, 24 divisiones y La Liberación del
     Este (o, si nunca lo toma, mediados de 2102).
 - El jugador sigue teniendo el casus belli desde el primer día.
+
+## África ampliada y el Bioacero v3 (2026-10-17)
+
+Pedido: "en África casi no está integrando a los satélites... particionar
+más partes de África, otros 4 o 5 países a los que tiene que integrar...
+uno se resiste y declara la guerra... a los otros, un límite de tiempo...
+un poco de insubordinación". Y para el EFE: "lo normal debería ser ir del 1
+al 30 de Bioacero... con 10 la opción de gastar 10 en un bono permanente,
+el próximo a 20 y así... 5 regiones productoras... menos decaimiento y más
+formas de usarlo, bonos temporales... eventos donde se pierda o se gane".
+"El gasto de 30 también es monouso; con opciones, tipo dilema."
+
+APF (14_decisions.yaml, 12_events.yaml, 02/03/04/08/15/19):
+- Por qué no integraba: cada paso costaba 50 PP con 60 días de espera
+  (unos 850 PP por miembro), invertir daba +10 aunque el texto decía +20, y
+  la IA frenaba con tensión 55/60 mientras cada miembro a medio integrar
+  sumaba +2 por mes. Ahora: 35 PP, 45 días, +20 de verdad, +1 de tensión
+  por mes por miembro a medio camino, y la IA frena recién en 70/75.
+- Cinco miembros nuevos, todos títeres de la APF y en su facción: la
+  Confederación del Congo (ZCO), la Unión de Angola (ZAO), la Liga de
+  Mozambique (ZMZ), la Asamblea de la Isla Roja (ZMG, Madagascar) y la
+  Federación del Rift (ZKE, Kenia). Cada uno con líder, 2 generales, leyes,
+  nombres de división, panel de satélite y de integración.
+- El Congo se resiste (apf.420): con Integración 40 o a mediados de 2102.
+  Ceder cuesta 50 PP e Integración; presionar lo hace romper (apf.421): se
+  va como República Libre del Kongo con 16 divisiones (10 de 6 infanterías
+  + artillería, 6 de 4 infanterías), 150.000 hombres, equipo, 5 fábricas y
+  "La Selva Resiste" por dos años, y declara la guerra a la APF. Si cedió,
+  puede volver a resistirse un año después.
+- Plazo: aviso a mediados de 2104 (apf.430); a mediados de 2105 los que
+  siguen siendo títeres quedan libres (apf.431), sin justificación de guerra
+  para nadie (el usuario sacó lo de Roma).
+- Insubordinación (apf.440-444): con tensión 35 o más, cada tanto, una zona
+  se insubordina; negociar (PP), reprimir (estabilidad y tensión) o ignorar
+  (malus de 90 días).
+- Las milicias de todas las anarquías tienen ahora 3 brigadas como mínimo.
+
+EFE, Bioacero v3 (14_decisions.yaml, 12_events.yaml, 05/06):
+- Arranca en 3. Los niveles de la Carrera piden 8, 16 y 24.
+- Cinco regiones productoras: Gaia, la Llanura de las Cubas (Santa Fe), el
+  Cuyo Reforestado (Mendoza), la Selva de las Yungas (Tucumán) y la
+  Frontera del Río Negro. Cada una da un brote por mes; 6 brotes son 1 de
+  Bioacero (unos 10 por año con las cinco). Perder una: -3 de Bioacero,
+  "Cubas Quemadas" por 180 días y un evento (efe.501-505); no produce hasta
+  recuperarla y replantarla (decisión, 40 PP). Solo se pierde una que ya se
+  vio controlada: si el juego no reconociera un nombre, no se descuenta.
+- Menos decaimiento: el hambre es un cuarto del Bioacero (antes la mitad),
+  la saturación baja 4 por mes (antes 3) y se pudre recién desde 25 (-1) y
+  29 (-2), antes desde 13. Tope 35.
+- El blindaje y la defensa escalan a la mitad por punto: con 30 se tiene lo
+  que antes daban 15.
+- Las tres cosechas, de un solo uso, cada una un dilema de tres caminos
+  permanentes (efe.510-512):
+  - 10: Raíces Hondas (defensa, atrincheramiento), Savia Fabril (fábricas)
+    o Hijos de las Cubas (población reclutable, estabilidad).
+  - 20: El Bosque que Marcha (ataque, organización), Cubas sin Fondo (la
+    saturación baja 3 más por mes, construcción) o Cosecha Doble (dos
+    brotes por productora).
+  - 30: El Gliptodonte Rey (blindados), El Corazón de Gaia (estabilidad,
+    guerra, PP) o La Semilla del Mundo (fábricas e investigación).
+- Bonos temporales que gastan 2 a 4 de Bioacero y bajan 3 la saturación:
+  Savia de Guerra, Corteza Viva, Hojas en las Líneas, Raíz en las Obras,
+  Fervor del Monte y Ofrenda a Gaia (60 o 90 días).
+- Las cosechas a mano rinden más (+2, +3, +6) porque la escala es más alta.
+- Eventos de Bioacero ganado o perdido (efe.520-527, sin imágenes nuevas):
+  lluvia de esporas, una veta en el monte, la semilla de los gauchos, el
+  tributo de los satélites, robo en las cubas, el hongo gris, sequía en la
+  pampa (las productoras no brotan 90 días) y la langosta de acero.
+- Sin probar en el juego: el ritmo real (10 por año más decisiones) puede
+  quedar rápido o lento; es lo primero a mirar en la próxima partida.

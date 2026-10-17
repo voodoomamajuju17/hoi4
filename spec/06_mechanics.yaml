@@ -29,8 +29,9 @@ mechanics:
       "funciona como una progresión por niveles. Se recuperó una lógica de
       umbrales —por ejemplo 5 / 10 / 15— que desbloquean mejoras sucesivas.
       Esto lo convierte en una carrera nacional de desarrollo material."
-    thresholds: [5, 10, 15]
-    thresholds_src: canon
+    thresholds: [8, 16, 24]
+    thresholds_src: user_request
+    thresholds_note: "2026-10-17: el usuario pidió que lo normal sea ir de 1 a 30 de Bioacero."
     thresholds_caveat: >
       El doc dice "por ejemplo", o sea que los cita como ilustración, no como
       valores cerrados. Tratarlos como provisionales. Ver Q043 -> unit_caveat.
@@ -47,15 +48,15 @@ mechanics:
     variable:
       name: EFE_biosteel
       country: EFE
-      start: 5
-      start_src: invented
-      start_why: "Con 5 el tier 1 está disponible desde el arranque."
+      start: 3
+      start_src: user_request
+      start_why: "2026-10-17: «empezás con 3 de Bioacero»; lo normal es ir de 1 a 30."
     exclusive_to: EFE
     exclusive_src: user_decision
     counter: variable
     counter_src: canon
     counter_note: >
-      Cada umbral (5/10/15) es condición de un foco de La Carrera del
+      Cada umbral (8/16/24) es condición de un foco de La Carrera del
       Bioacero: check_variable sobre EFE_biosteel.
     tiers_mode: exclusive
     tiers_mode_note: "Cada tier reemplaza al anterior (swap_ideas); no se acumulan."
@@ -142,6 +143,9 @@ mechanics:
     - {name: EFE_integracion_yyg, start: 0}
     - {name: EFE_integracion_pta, start: 0}
     - {name: EFE_saturacion, start: 10}
+    # 2026-10-17 Bioacero v3: brotes de las 5 regiones productoras (6 = 1 de Bioacero)
+    - {name: EFE_brote, start: 0}
+    - {name: EFE_productoras, start: 5}
 
   # ===========================================================================
   - id: hsn_red_de_nodos
@@ -234,7 +238,7 @@ mechanics:
     definition_status: implementable
     src: user_design
     name: {english: Federal Integration, spanish: La Integración Federal}
-    design: Cada miembro (Tierras Altas, Cabo) tiene Desarrollo e Integración de 0 a 100. Invertir sube el Desarrollo y construye en el miembro;
+    design: Cada miembro (Tierras Altas, Cabo, y desde 2026-10-17 Congo, Angola, Mozambique, Madagascar y Kenia) tiene Desarrollo e Integración de 0 a 100. Invertir sube el Desarrollo y construye en el miembro;
       integrar sube la Integración, que con Amara no puede pasar al Desarrollo (+10 por paso) y con Diallo sí (+25). En 100 se anexa con núcleos;
       con Diallo, con territorios difíciles. El Plan de Desarrollo Regional desarrolla regiones propias una por una en el mapa.
     variables:
@@ -242,6 +246,16 @@ mechanics:
     - {name: APF_integracion_zet, start: 10}
     - {name: APF_desarrollo_zsa, start: 20}
     - {name: APF_integracion_zsa, start: 10}
+    - {name: APF_desarrollo_zco, start: 10}
+    - {name: APF_integracion_zco, start: 0}
+    - {name: APF_desarrollo_zao, start: 10}
+    - {name: APF_integracion_zao, start: 0}
+    - {name: APF_desarrollo_zmz, start: 10}
+    - {name: APF_integracion_zmz, start: 0}
+    - {name: APF_desarrollo_zmg, start: 10}
+    - {name: APF_integracion_zmg, start: 0}
+    - {name: APF_desarrollo_zke, start: 10}
+    - {name: APF_integracion_zke, start: 0}
     - {name: APF_tension, start: 15}
 
   # ===========================================================================
@@ -480,6 +494,11 @@ mechanics:
     - {name: SHD_lealtad_zst, start: 60, country: SHD}
     - {name: APF_lealtad_zet, start: 60, country: APF}
     - {name: APF_lealtad_zsa, start: 60, country: APF}
+    - {name: APF_lealtad_zco, start: 55, country: APF}
+    - {name: APF_lealtad_zao, start: 55, country: APF}
+    - {name: APF_lealtad_zmz, start: 55, country: APF}
+    - {name: APF_lealtad_zmg, start: 55, country: APF}
+    - {name: APF_lealtad_zke, start: 55, country: APF}
     - {name: NRE_lealtad_zhi, start: 60, country: NRE}
     - {name: NRE_lealtad_zda, start: 60, country: NRE}
 
