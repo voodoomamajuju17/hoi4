@@ -1181,7 +1181,7 @@ def test_events() -> None:
         ideas_efe = " ".join((mod / "common/ideas/EFE_ideas.txt").read_text().split())
         adv = ideas_efe[ideas_efe.index("EFE_agua_de_la_vida = {"):][:900]
         check("EFE: el espiritu final tiene pros y contras", "monthly_population = 0.15" in adv and "war_support_factor = -0.1" in adv, adv)
-        check("90 eventos del EFE (74 de antes + 16 del Bioacero v3)", len(events) == 90, str(len(events)))
+        check("92 eventos del EFE (74 de antes + 16 del Bioacero v3 + 2 de la Sucesion)", len(events) == 92, str(len(events)))
         # 2026-09-29: guerras civiles (elegir bando), rama política extendida y forma final
         efe_cw = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         e220 = efe_cw[efe_cw.index("id = meganations_efe.220 title"):][:30000]
@@ -1501,7 +1501,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("88 rasgos propios (14 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 88, str(len(body.keys())))
+        check("91 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 91, str(len(body.keys())))
         # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
         efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
         chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
@@ -1808,8 +1808,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("132 modificadores dinamicos: 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones y 2 del NAS en el aire",
-              len(dm.entries) == 132 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("142 modificadores dinamicos: 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 142 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2013,7 +2013,8 @@ def test_ai() -> None:
         check("tooltips: con nombre legible", 'MN_tt_NAS_granjas_p1:0 "§YGranjas del Sol§!: +1"' in tips, tips[:300])
         check("tooltips: el Control del Monte sigue secreto", "EFE_control_del_monte" not in tips)
         import yaml
-        raw_dec = yaml.safe_load((REPO_ROOT / "spec/14_decisions.yaml").read_text(encoding="utf-8"))
+        # con los archivos de mecánicas que se suman encima (22_mecanicas_v4)
+        raw_dec = specload.load(REPO_ROOT / "spec").raw["decisions"]
         used = set()
         def walk(x):
             if isinstance(x, dict):
