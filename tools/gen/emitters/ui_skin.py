@@ -33,6 +33,26 @@ SCREENS: dict[str, list[str]] = {
     "pestanas_militares": ["countryproductionview.gui", "countrydeploymentview.gui",
                            "countrylogisticsview.gui"],
 }
+# Pantallas armadas por nombre de sprite, para lo que el juego elige por
+# código y no aparece en ningún .gui (2026-10-17, captura del usuario: "las
+# leyes, los placeholders, las notificaciones y las imágenes de la ideología;
+# falta el ícono de mercado internacional"). Se buscan en todos los .gfx de
+# interface/, solo texturas de gfx/interface/.
+PATTERNS: dict[str, list[str]] = {
+    "ideologias": [r"ideology", r"ideologies", r"pol_.*party"],
+    "notificaciones": [r"alert", r"notification"],
+    "mercado": [r"market", r"trade"],
+    "huecos_vacios": [r"empty", r"slot", r"placeholder", r"advisor", r"unknown"],
+    "leyes": [r"^GFX_idea_(?:.*economic|.*mobilisation|.*conscription|.*export|.*trade|.*isolation|"
+              r"civilian_economy|war_economy|free_trade|closed_economy|volunteer_only|disarmed_nation|"
+              r"service_by_requirement|all_adults_serve|scraping_the_barrel)"],
+}
+# .gui que se suman a sus pantallas si existen (nombres no confirmados: los
+# que no estén se informan y se saltean)
+EXTRA_GUI: dict[str, list[str]] = {
+    "notificaciones": ["alerts.gui", "topbar_alerts.gui", "alertsview.gui"],
+    "mercado": ["internationalmarket.gui", "international_market.gui", "marketview.gui", "tradeview.gui"],
+}
 SKIN_DIR = ("assets", "ui", "piel")
 SPRITE_KINDS = ("spriteType", "corneredTileSpriteType", "frameAnimatedSpriteType",
                 "progressbartype", "textSpriteType", "maskedShieldType")
@@ -117,6 +137,34 @@ def inventory(ctx: BuildContext) -> dict[str, list[dict]]:
         for piece in seen.values():
             w, h = _texture_dims(ctx, piece["texture"])
             piece["size"] = (w, h)
+            piece["gui"] = sorted(piece["gui"])
+            pieces.append(piece)
+        out[screen] = sorted(pieces, key=lambda p: p["texture"].lower())
+    for screen, pats in PATTERNS.items():
+        seen = {}
+        rx = re.compile("|".join(pats), re.I)
+        for sp, info in sprites.items():
+            if not rx.search(sp):
+                continue
+            for tex in info["textures"]:
+                if not re.sub("/+", "/", tex).lower().startswith("gfx/interface/"):
+                    continue
+                piece = seen.setdefault(tex.lower(), {"texture": tex, "sprites": [], "gui": {info["file"]}, **info})
+                piece["sprites"].append(sp)
+        for gname in EXTRA_GUI.get(screen, []):
+            path = guis.get(gname.lower())
+            if path is None:
+                continue
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+            for sp in dict.fromkeys(_GFX_REF.findall(text)):
+                info = sprites.get(sp)
+                for tex in (info or {}).get("textures", []):
+                    piece = seen.setdefault(tex.lower(), {"texture": tex, "sprites": [], "gui": set(), **info})
+                    piece["sprites"].append(sp)
+                    piece["gui"].add(path.name)
+        pieces = []
+        for piece in seen.values():
+            piece["size"] = _texture_dims(ctx, piece["texture"])
             piece["gui"] = sorted(piece["gui"])
             pieces.append(piece)
         out[screen] = sorted(pieces, key=lambda p: p["texture"].lower())
