@@ -11507,6 +11507,363 @@ categories:
         factor: 1
       src: user_request
 
+  # 2026-10-17: la receta de diversión (HSN) — productoras, tres elecciones, gastos y eventos.
+  - id: HSN_peaje_category
+    country: HSN
+    icon_prefer:
+    - generic_naval
+    - generic_industry
+    name: {english: 'The Toll of the Seas', spanish: 'El Peaje de los Mares'}
+    desc:
+      english: 'Toll: [?HSN_peaje]\nToll ports: [?HSN_productoras_r] / 5\n\nEvery ship that passes pays. Five great ports collect the Toll, and every node you hold adds one more each month. Spend it, or save it for the three great charters of the Clearing House.\n\nPRODUCERS: the Port of Malacca, the Port of Sunda, the Port of Tokyo Bay, the Port of Manila, the Port of Osaka. Each one adds 1 Toll a month; losing one costs 10 and 180 days of trouble, and it produces again only when we retake and restore it.\nTHE THREE CHOICES: at 30, 55, 80 Toll you can spend them, once each, on a permanent choice between three paths.\nSPENDING: smaller amounts buy temporary bonuses.'
+      spanish: 'Peaje: [?HSN_peaje]\nPuertos de peaje: [?HSN_productoras_r] / 5\n\nCada barco que pasa paga. Cinco grandes puertos cobran el Peaje, y cada nodo que tenés suma uno más por mes. Gastalo, o guardalo para las tres grandes cartas de la Cámara de Compensación.\n\nPRODUCTORAS: el Puerto de Malaca, el Puerto de la Sonda, el Puerto de la Bahía de Tokio, el Puerto de Manila, el Puerto de Osaka. Cada una suma 1 de Peaje por mes; perder una cuesta 10 y 180 días de problemas, y vuelve a producir recién cuando la recuperamos y la restauramos.\nLAS TRES ELECCIONES: con 30, 55, 80 de Peaje podés gastarlos, una vez cada una, en una elección permanente entre tres caminos.\nGASTAR: con menos se compran bonos temporales.'
+    src: user_request
+    decisions:
+    - id: HSN_restaurar_1
+      name: {english: 'Reopen The Port of Malacca', spanish: 'Reabrir El Puerto de Malaca'}
+      desc:
+        english: 'The Port of Malacca is ours again. New booths, same prices: it collects the Toll again. +2 Toll.'
+        spanish: 'El Puerto de Malaca vuelve a ser nuestro. Casillas nuevas, los mismos precios: vuelve a cobrar el Peaje. +2 de Peaje.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: HSN_prod_1_perdida}
+      available:
+        controls_state: [Kuala Lumpur]
+      effects:
+      - {effect: clear_flag, value: HSN_prod_1_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: HSN_restaurar_2
+      name: {english: 'Reopen The Port of Sunda', spanish: 'Reabrir El Puerto de la Sonda'}
+      desc:
+        english: 'The Port of Sunda is ours again. New booths, same prices: it collects the Toll again. +2 Toll.'
+        spanish: 'El Puerto de la Sonda vuelve a ser nuestro. Casillas nuevas, los mismos precios: vuelve a cobrar el Peaje. +2 de Peaje.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: HSN_prod_2_perdida}
+      available:
+        controls_state: [West Java]
+      effects:
+      - {effect: clear_flag, value: HSN_prod_2_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: HSN_restaurar_3
+      name: {english: 'Reopen The Port of Tokyo Bay', spanish: 'Reabrir El Puerto de la Bahía de Tokio'}
+      desc:
+        english: 'The Port of Tokyo Bay is ours again. New booths, same prices: it collects the Toll again. +2 Toll.'
+        spanish: 'El Puerto de la Bahía de Tokio vuelve a ser nuestro. Casillas nuevas, los mismos precios: vuelve a cobrar el Peaje. +2 de Peaje.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: HSN_prod_3_perdida}
+      available:
+        controls_state: [Kanto]
+      effects:
+      - {effect: clear_flag, value: HSN_prod_3_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: HSN_restaurar_4
+      name: {english: 'Reopen The Port of Manila', spanish: 'Reabrir El Puerto de Manila'}
+      desc:
+        english: 'The Port of Manila is ours again. New booths, same prices: it collects the Toll again. +2 Toll.'
+        spanish: 'El Puerto de Manila vuelve a ser nuestro. Casillas nuevas, los mismos precios: vuelve a cobrar el Peaje. +2 de Peaje.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: HSN_prod_4_perdida}
+      available:
+        controls_state: [Manila]
+      effects:
+      - {effect: clear_flag, value: HSN_prod_4_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: HSN_restaurar_5
+      name: {english: 'Reopen The Port of Osaka', spanish: 'Reabrir El Puerto de Osaka'}
+      desc:
+        english: 'The Port of Osaka is ours again. New booths, same prices: it collects the Toll again. +2 Toll.'
+        spanish: 'El Puerto de Osaka vuelve a ser nuestro. Casillas nuevas, los mismos precios: vuelve a cobrar el Peaje. +2 de Peaje.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: HSN_prod_5_perdida}
+      available:
+        controls_state: [Kansai]
+      effects:
+      - {effect: clear_flag, value: HSN_prod_5_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: HSN_la_primera_carta
+      name: {english: 'The First Charter', spanish: 'La Primera Carta'}
+      desc:
+        english: 'The Clearing House can write a charter that will rule the seas forever. Only one path, and only once. Needs and spends 30 Toll.'
+        spanish: 'La Cámara de Compensación puede escribir una carta que gobierne los mares para siempre. Un solo camino, y una sola vez. Pide y gasta 30 de Peaje.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: HSN_peaje, value: 30}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -30}
+      - {effect: event, id: meganations_hsn_receta.10}
+      ai:
+        factor: 50
+      src: user_request
+    - id: HSN_la_segunda_carta
+      name: {english: 'The Second Charter', spanish: 'La Segunda Carta'}
+      desc:
+        english: 'A charter for a Nation that no longer asks permission. Only one path, and only once. Needs and spends 55 Toll.'
+        spanish: 'Una carta para una Nación que ya no pide permiso. Un solo camino, y una sola vez. Pide y gasta 55 de Peaje.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: HSN_peaje, value: 55}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -55}
+      - {effect: event, id: meganations_hsn_receta.11}
+      ai:
+        factor: 50
+      src: user_request
+    - id: HSN_la_carta_del_mundo
+      name: {english: 'The Charter of the World', spanish: 'La Carta del Mundo'}
+      desc:
+        english: 'The last charter. The one they will teach in schools. Only one path, and only once. Needs and spends 80 Toll.'
+        spanish: 'La última carta. La que van a enseñar en las escuelas. Un solo camino, y una sola vez. Pide y gasta 80 de Peaje.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: HSN_peaje, value: 80}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -80}
+      - {effect: event, id: meganations_hsn_receta.12}
+      ai:
+        factor: 50
+      src: user_request
+    - id: HSN_convoy_blindado
+      name: {english: 'Armoured Convoys', spanish: 'Convoyes Blindados'}
+      desc:
+        english: 'Escorts paid by the toll: +8% naval defence for 90 days. Costs 10 Toll.'
+        spanish: 'Escoltas pagadas con el peaje: +8% de defensa naval por 90 días. Cuesta 10 de Peaje.'
+      icon_prefer:
+      - generic_naval
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: HSN_peaje, value: 10}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -10}
+      - {effect: dynamic_modifier, id: HSN_receta_convoy, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: HSN_peaje, value: 20}}
+      src: user_request
+    - id: HSN_astilleros_de_noche
+      name: {english: 'Night Shifts in the Yards', spanish: 'Turnos de Noche en los Astilleros'}
+      desc:
+        english: 'The yards never sleep: +12% dockyard output for 90 days. Costs 15 Toll.'
+        spanish: 'Los astilleros nunca duermen: +12% de producción de astilleros por 90 días. Cuesta 15 de Peaje.'
+      icon_prefer:
+      - generic_naval
+      - generic_industry
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: HSN_peaje, value: 15}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -15}
+      - {effect: dynamic_modifier, id: HSN_receta_astilleros, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: HSN_peaje, value: 30}}
+      src: user_request
+    - id: HSN_mercenarios_del_puerto
+      name: {english: 'Harbour Mercenaries', spanish: 'Mercenarios del Puerto'}
+      desc:
+        english: 'Hire the dockside crews: +25,000 manpower. Costs 15 Toll.'
+        spanish: 'Contratar a las cuadrillas del muelle: +25.000 de mano de obra. Cuesta 15 de Peaje.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: HSN_peaje, value: 15}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -15}
+      - {effect: add_manpower, value: 25000}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: HSN_peaje, value: 30}}
+      src: user_request
+    - id: HSN_comprar_silencio
+      name: {english: 'Buy Silence', spanish: 'Comprar Silencio'}
+      desc:
+        english: 'Gifts for every chancellery: pressure from the powers -15 and +40 political power. Costs 15 Toll.'
+        spanish: 'Regalos para cada cancillería: presión de las potencias -15 y +40 de poder político. Cuesta 15 de Peaje.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: HSN_peaje, value: 15}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -15}
+      - {effect: add_variable, var: HSN_presion, value: -15}
+      - {effect: add_political_power, value: 40}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: HSN_peaje, value: 30}}
+      src: user_request
+    - id: HSN_mareas_de_guerra
+      name: {english: 'War Tides', spanish: 'Mareas de Guerra'}
+      desc:
+        english: 'The toll pays the marines a bonus: +10% attack for 60 days. Costs 15 Toll.'
+        spanish: 'El peaje les paga un premio a los marines: +10% de ataque por 60 días. Cuesta 15 de Peaje.'
+      icon_prefer:
+      - generic_army_support
+      cost: 10
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: HSN_peaje, value: 15}
+      effects:
+      - {effect: add_variable, var: HSN_peaje, value: -15}
+      - {effect: dynamic_modifier, id: HSN_receta_mareas, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: HSN_peaje, value: 30}}
+      src: user_request
+
+  # 2026-10-17 (pedido del usuario): HSN, tomar un Nodo sin disparar. Elegí tu propia aventura
+  # con 20 finales: 10% triunfo, 20% fracaso con premio, 50% nada (con sabor), 20% negativo.
+  - id: HSN_toma_silenciosa_category
+    country: HSN
+    icon_prefer:
+    - generic_naval
+    - generic_political_actions
+    name: {english: 'The Silent Takeover', spanish: 'La Toma Silenciosa'}
+    desc:
+      english: 'Take a node without a shot: Taiwan, Hong Kong, Okinawa or Kyushu, only while a government run by the AI or by warlords holds it. One attempt a year. Out of 20 possible endings, roughly: 1 in 10 is a triumph (the node changes hands), 2 in 10 fail with a consolation prize, 5 in 10 end in nothing at all, and 2 in 10 end badly (scandal, hangings, war). The bold choices raise both the triumphs and the disasters.'
+      spanish: 'Tomar un nodo sin un tiro: Taiwán, Hong Kong, Okinawa o Kyushu, solo mientras lo tenga un gobierno manejado por la IA o por caudillos. Un intento por año. De 20 finales posibles, más o menos: 1 de cada 10 es un triunfo (el nodo cambia de manos), 2 de cada 10 fallan con un premio consuelo, 5 de cada 10 no terminan en nada, y 2 de cada 10 terminan mal (escándalo, ahorcados, guerra). Las elecciones audaces suben tanto los triunfos como los desastres.'
+    src: user_request
+    decisions:
+    - id: HSN_toma_silenciosa_1
+      name: {english: 'The Silent Takeover: Taiwan', spanish: 'La Toma Silenciosa: Taiwán'}
+      desc:
+        english: 'Take the node of Taiwan without firing a shot: bribes, blackmail or a hostile buyout. Only against a government run by the AI or by warlords. Most attempts end in nothing; some end in glory; some end very badly. Costs 75 political power; one attempt a year.'
+        spanish: 'Tomar el nodo de Taiwán sin disparar un tiro: sobornos, chantaje o una compra hostil. Solo contra un gobierno manejado por la IA o por caudillos. La mayoría de los intentos no terminan en nada; algunos en gloria; algunos muy mal. Cuesta 75 de poder político; un intento por año.'
+      icon_prefer:
+      - generic_naval
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 365
+      visible: {not: {controls_state: [Taiwan]}}
+      available:
+        not_flag: HSN_toma_en_curso
+        country: {tag: SHD, when: {is_ai: true, owns_state: [Taiwan]}}
+      effects:
+      - {effect: flag, value: HSN_toma_1, days: 400}
+      - {effect: flag, value: HSN_toma_en_curso, days: 400}
+      - {effect: event, id: meganations_hsn_receta.50}
+      ai:
+        factor: 3
+      src: user_request
+    - id: HSN_toma_silenciosa_2
+      name: {english: 'The Silent Takeover: Hong Kong', spanish: 'La Toma Silenciosa: Hong Kong'}
+      desc:
+        english: 'Take the node of Hong Kong without firing a shot: bribes, blackmail or a hostile buyout. Only against a government run by the AI or by warlords. Most attempts end in nothing; some end in glory; some end very badly. Costs 75 political power; one attempt a year.'
+        spanish: 'Tomar el nodo de Hong Kong sin disparar un tiro: sobornos, chantaje o una compra hostil. Solo contra un gobierno manejado por la IA o por caudillos. La mayoría de los intentos no terminan en nada; algunos en gloria; algunos muy mal. Cuesta 75 de poder político; un intento por año.'
+      icon_prefer:
+      - generic_naval
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 365
+      visible: {not: {controls_state: [Hong Kong]}}
+      available:
+        not_flag: HSN_toma_en_curso
+        country: {tag: ZWI, when: {is_ai: true, owns_state: [Hong Kong]}}
+      effects:
+      - {effect: flag, value: HSN_toma_2, days: 400}
+      - {effect: flag, value: HSN_toma_en_curso, days: 400}
+      - {effect: event, id: meganations_hsn_receta.50}
+      ai:
+        factor: 3
+      src: user_request
+    - id: HSN_toma_silenciosa_3
+      name: {english: 'The Silent Takeover: Okinawa', spanish: 'La Toma Silenciosa: Okinawa'}
+      desc:
+        english: 'Take the node of Okinawa without firing a shot: bribes, blackmail or a hostile buyout. Only against a government run by the AI or by warlords. Most attempts end in nothing; some end in glory; some end very badly. Costs 75 political power; one attempt a year.'
+        spanish: 'Tomar el nodo de Okinawa sin disparar un tiro: sobornos, chantaje o una compra hostil. Solo contra un gobierno manejado por la IA o por caudillos. La mayoría de los intentos no terminan en nada; algunos en gloria; algunos muy mal. Cuesta 75 de poder político; un intento por año.'
+      icon_prefer:
+      - generic_naval
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 365
+      visible: {not: {controls_state: [Okinawa, Ryukyu]}}
+      available:
+        not_flag: HSN_toma_en_curso
+        country: {tag: ZKR, when: {is_ai: true, owns_state: [Okinawa, Ryukyu]}}
+      effects:
+      - {effect: flag, value: HSN_toma_3, days: 400}
+      - {effect: flag, value: HSN_toma_en_curso, days: 400}
+      - {effect: event, id: meganations_hsn_receta.50}
+      ai:
+        factor: 3
+      src: user_request
+    - id: HSN_toma_silenciosa_4
+      name: {english: 'The Silent Takeover: Kyushu', spanish: 'La Toma Silenciosa: Kyushu'}
+      desc:
+        english: 'Take the node of Kyushu without firing a shot: bribes, blackmail or a hostile buyout. Only against a government run by the AI or by warlords. Most attempts end in nothing; some end in glory; some end very badly. Costs 75 political power; one attempt a year.'
+        spanish: 'Tomar el nodo de Kyushu sin disparar un tiro: sobornos, chantaje o una compra hostil. Solo contra un gobierno manejado por la IA o por caudillos. La mayoría de los intentos no terminan en nada; algunos en gloria; algunos muy mal. Cuesta 75 de poder político; un intento por año.'
+      icon_prefer:
+      - generic_naval
+      - generic_political_actions
+      cost: 75
+      cooldown_days: 365
+      visible: {not: {controls_state: [Kitakyūshū, Kitakyushu, Kyushu, Fukuoka]}}
+      available:
+        not_flag: HSN_toma_en_curso
+        country: {tag: ZKR, when: {is_ai: true, owns_state: [Kitakyūshū, Kitakyushu, Kyushu, Fukuoka]}}
+      effects:
+      - {effect: flag, value: HSN_toma_4, days: 400}
+      - {effect: flag, value: HSN_toma_en_curso, days: 400}
+      - {effect: event, id: meganations_hsn_receta.50}
+      ai:
+        factor: 3
+      src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -13162,6 +13519,7 @@ scripted_effects:
       - {effect: event, id: meganations_asc.220, days: 1}
   - id: HSN_pulso_de_las_potencias
     effects:
+    - {effect: run, value: HSN_pulso_receta}
     - effect: if       # la Asamblea de Armadores, cada cuatro años desde 2104
       when: {date_after: 2104.6.1, any: [{not_flag: HSN_asamblea_marca}, {flag_older: {flag: HSN_asamblea_marca, days: 1455}}]}
       then:
@@ -18204,6 +18562,161 @@ scripted_effects:
           - {effect: flag, value: ASC_receta_visto_7, days: 1095}
           - {effect: event, id: meganations_asc_receta.27, days: 1}
 
+  # 2026-10-17: pulso de la receta (HSN), lo llama HSN_pulso_de_las_potencias
+  - id: HSN_pulso_receta
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - HSN_productoras_r
+        - 0
+    - effect: if
+      when:
+        controls_state: [Kuala Lumpur]
+        not_flag: HSN_prod_1_perdida
+      then:
+      - {effect: flag, value: HSN_prod_1_activa}
+      - {effect: add_variable, var: HSN_productoras_r, value: 1}
+      - {effect: add_variable, var: HSN_peaje, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Kuala Lumpur]}
+        not_flag: HSN_prod_1_perdida
+        flag: HSN_prod_1_activa
+      then:
+      - {effect: flag, value: HSN_prod_1_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: -10}
+      - {effect: clamp, var: HSN_peaje, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: HSN_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_hsn_receta.1, days: 1}
+    - effect: if
+      when:
+        controls_state: [West Java]
+        not_flag: HSN_prod_2_perdida
+      then:
+      - {effect: flag, value: HSN_prod_2_activa}
+      - {effect: add_variable, var: HSN_productoras_r, value: 1}
+      - {effect: add_variable, var: HSN_peaje, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [West Java]}
+        not_flag: HSN_prod_2_perdida
+        flag: HSN_prod_2_activa
+      then:
+      - {effect: flag, value: HSN_prod_2_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: -10}
+      - {effect: clamp, var: HSN_peaje, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: HSN_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_hsn_receta.2, days: 1}
+    - effect: if
+      when:
+        controls_state: [Kanto]
+        not_flag: HSN_prod_3_perdida
+      then:
+      - {effect: flag, value: HSN_prod_3_activa}
+      - {effect: add_variable, var: HSN_productoras_r, value: 1}
+      - {effect: add_variable, var: HSN_peaje, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Kanto]}
+        not_flag: HSN_prod_3_perdida
+        flag: HSN_prod_3_activa
+      then:
+      - {effect: flag, value: HSN_prod_3_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: -10}
+      - {effect: clamp, var: HSN_peaje, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: HSN_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_hsn_receta.3, days: 1}
+    - effect: if
+      when:
+        controls_state: [Manila]
+        not_flag: HSN_prod_4_perdida
+      then:
+      - {effect: flag, value: HSN_prod_4_activa}
+      - {effect: add_variable, var: HSN_productoras_r, value: 1}
+      - {effect: add_variable, var: HSN_peaje, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Manila]}
+        not_flag: HSN_prod_4_perdida
+        flag: HSN_prod_4_activa
+      then:
+      - {effect: flag, value: HSN_prod_4_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: -10}
+      - {effect: clamp, var: HSN_peaje, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: HSN_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_hsn_receta.4, days: 1}
+    - effect: if
+      when:
+        controls_state: [Kansai]
+        not_flag: HSN_prod_5_perdida
+      then:
+      - {effect: flag, value: HSN_prod_5_activa}
+      - {effect: add_variable, var: HSN_productoras_r, value: 1}
+      - {effect: add_variable, var: HSN_peaje, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Kansai]}
+        not_flag: HSN_prod_5_perdida
+        flag: HSN_prod_5_activa
+      then:
+      - {effect: flag, value: HSN_prod_5_perdida}
+      - {effect: add_variable, var: HSN_peaje, value: -10}
+      - {effect: clamp, var: HSN_peaje, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: HSN_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_hsn_receta.5, days: 1}
+    - effect: if
+      when:
+        not_flag: HSN_receta_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: HSN_receta_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_0}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_0, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.20, days: 1}
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_1}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_1, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.21, days: 1}
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_2}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_2, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.22, days: 1}
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_3}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_3, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.23, days: 1}
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_4}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_4, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.24, days: 1}
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_5}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_5, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.25, days: 1}
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_6}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_6, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.26, days: 1}
+        - weight: 1
+          skip_if: {flag: HSN_receta_visto_7}
+          effects:
+          - {effect: flag, value: HSN_receta_visto_7, days: 1095}
+          - {effect: event, id: meganations_hsn_receta.27, days: 1}
+    - {effect: add_variable, var: HSN_peaje, value: HSN_nodos}
+
 dynamic_modifiers:
   # 2026-10-11 (pedido del usuario: más combate aéreo y ases para el NAS)
   - id: NAS_escuela_de_ases
@@ -19159,6 +19672,91 @@ dynamic_modifiers:
     desc: {english: 'If they have it, we need it.', spanish: 'Si ellos la tienen, nosotros la necesitamos.'}
     modifiers: {'?research_speed_factor': 0.05}
 
+  - id: HSN_receta_productora_perdida
+    country: HSN
+    no_art: true
+    name: {english: 'A Toll Port Lost', spanish: 'Un Puerto de Peaje Perdido'}
+    desc: {english: '-5% stability and -10% construction speed', spanish: '-5% de estabilidad y -10% de velocidad de construcción'}
+    modifiers: {'?stability_factor': -0.05, '?production_speed_buildings_factor': -0.1}
+  - id: HSN_carta_puertos_libres
+    country: HSN
+    no_art: true
+    name: {english: 'Free Ports', spanish: 'Puertos Libres'}
+    desc: {english: 'Everyone is welcome. Everyone pays.', spanish: 'Todos son bienvenidos. Todos pagan.'}
+    modifiers: {'?trade_opinion_factor': 0.2, '?political_power_gain': 0.1}
+  - id: HSN_carta_gremio_naval
+    country: HSN
+    no_art: true
+    name: {english: 'The Shipwrights'' Guild', spanish: 'El Gremio de Carpinteros de Ribera'}
+    desc: {english: 'The best hulls in the world.', spanish: 'Los mejores cascos del mundo.'}
+    modifiers: {'?industrial_capacity_dockyard': 0.08}
+  - id: HSN_carta_marines
+    country: HSN
+    no_art: true
+    name: {english: 'The Marines'' Oath', spanish: 'El Juramento de los Marines'}
+    desc: {english: 'From the ship to the beach to the city.', spanish: 'Del barco a la playa a la ciudad.'}
+    modifiers: {'?army_attack_factor': 0.05, '?army_org_factor': 0.04}
+  - id: HSN_carta_aguas_azules
+    country: HSN
+    no_art: true
+    name: {english: 'The Blue Water Navy', spanish: 'La Armada de Aguas Azules'}
+    desc: {english: 'No sea is too far.', spanish: 'Ningún mar queda lejos.'}
+    modifiers: {'?naval_damage_factor': 0.07, '?naval_defense_factor': 0.07}
+  - id: HSN_carta_banco
+    country: HSN
+    no_art: true
+    name: {english: 'The Clearing Bank', spanish: 'El Banco de Compensación'}
+    desc: {english: 'Every coin in the Pacific passes through us.', spanish: 'Cada moneda del Pacífico pasa por nosotros.'}
+    modifiers: {'?industrial_capacity_factory': 0.06, '?consumer_goods_factor': -0.03}
+  - id: HSN_carta_diplomacia
+    country: HSN
+    no_art: true
+    name: {english: 'The Quiet Diplomacy', spanish: 'La Diplomacia Silenciosa'}
+    desc: {english: 'The powers watch less when they owe you.', spanish: 'Las potencias vigilan menos cuando te deben.'}
+    modifiers: {'?stability_factor': 0.06, '?political_power_gain': 0.1}
+  - id: HSN_carta_talasocracia
+    country: HSN
+    no_art: true
+    name: {english: 'Thalassocracy', spanish: 'Talasocracia'}
+    desc: {english: 'The sea is a nation, and the nation is the sea.', spanish: 'El mar es una nación, y la nación es el mar.'}
+    modifiers: {'?naval_damage_factor': 0.1, '?industrial_capacity_dockyard': 0.1, '?war_support_factor': 0.05}
+  - id: HSN_carta_mercado
+    country: HSN
+    no_art: true
+    name: {english: 'The Market of Markets', spanish: 'El Mercado de los Mercados'}
+    desc: {english: 'Everything is for sale, and we set the price.', spanish: 'Todo está en venta, y el precio lo ponemos nosotros.'}
+    modifiers: {'?industrial_capacity_factory': 0.1, '?trade_opinion_factor': 0.3}
+  - id: HSN_carta_republica_pirata
+    country: HSN
+    no_art: true
+    name: {english: 'The Pirate Republic', spanish: 'La República Pirata'}
+    desc: {english: 'Why pay the toll, when you can take the ship?', spanish: '¿Para qué cobrar el peaje, si te podés quedar con el barco?'}
+    modifiers: {'?army_attack_factor': 0.08, '?naval_damage_factor': 0.08, '?political_power_gain': -0.1}
+  - id: HSN_receta_convoy
+    country: HSN
+    no_art: true
+    name: {english: 'Armoured Convoys', spanish: 'Convoyes Blindados'}
+    desc: {english: 'Every convoy escorted.', spanish: 'Cada convoy escoltado.'}
+    modifiers: {'?naval_defense_factor': 0.08}
+  - id: HSN_receta_astilleros
+    country: HSN
+    no_art: true
+    name: {english: 'Night Shifts in the Yards', spanish: 'Turnos de Noche en los Astilleros'}
+    desc: {english: 'Welders under floodlights.', spanish: 'Soldadores bajo reflectores.'}
+    modifiers: {'?industrial_capacity_dockyard': 0.12}
+  - id: HSN_receta_mareas
+    country: HSN
+    no_art: true
+    name: {english: 'War Tides', spanish: 'Mareas de Guerra'}
+    desc: {english: 'Paid in advance.', spanish: 'Pagado por adelantado.'}
+    modifiers: {'?army_attack_factor': 0.1}
+  - id: HSN_toma_derechos_de_puerto
+    country: HSN
+    no_art: true
+    name: {english: 'Port Rights', spanish: 'Derechos de Puerto'}
+    desc: {english: 'Our ships dock where our flag does not fly.', spanish: 'Nuestros barcos atracan donde no flamea nuestra bandera.'}
+    modifiers: {'?industrial_capacity_dockyard': 0.1}
+
 on_actions:
   # 2026-10-17: la bomba es secreta hasta que se usa. Cuando alguien la tira
   # (ROOT), el mundo reacciona (meganations_asc_receta.40 y .41).
@@ -19258,3 +19856,5 @@ variable_names:
   SHD_meses_desborde: {english: "Months of overflow", spanish: "Meses de desborde", hidden: true}
   NAS_productoras_r: {english: "Producing temples", spanish: "Templos productores"}
   ASC_productoras_r: {english: "Producing data cores", spanish: "Núcleos de datos productores"}
+  HSN_peaje: {english: "Toll", spanish: "Peaje"}
+  HSN_productoras_r: {english: "Toll ports", spanish: "Puertos de peaje"}

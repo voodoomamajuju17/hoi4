@@ -15708,3 +15708,1094 @@ namespaces:
         - {effect: add_stability, value: 0.02}
         ai_chance: 25
       src: user_request
+
+  # 2026-10-17: la receta de diversión (HSN)
+  meganations_hsn_receta:
+    country: HSN
+    events:
+    - id: 1
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Port of Malacca', spanish: 'Perdimos El Puerto de Malaca'}
+      desc:
+        english: 'The enemy holds the Port of Malacca. The toll booths are empty and the ships pay someone else now.\n\n-10 Toll. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Toll Port Lost.'
+        spanish: 'El enemigo tiene el Puerto de Malaca. Las casillas de peaje están vacías y los barcos ahora le pagan a otro.\n\n-10 de Peaje. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Un Puerto de Peaje Perdido.'
+      options:
+      - name: {english: 'Save the ledgers.', spanish: 'Salvar los libros contables.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: HSN_peaje, value: 5}
+        ai_chance: 40
+      - name: {english: 'The sea remembers debts.', spanish: 'El mar se acuerda de las deudas.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 2
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Port of Sunda', spanish: 'Perdimos El Puerto de la Sonda'}
+      desc:
+        english: 'The enemy holds the Port of Sunda. The toll booths are empty and the ships pay someone else now.\n\n-10 Toll. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Toll Port Lost.'
+        spanish: 'El enemigo tiene el Puerto de la Sonda. Las casillas de peaje están vacías y los barcos ahora le pagan a otro.\n\n-10 de Peaje. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Un Puerto de Peaje Perdido.'
+      options:
+      - name: {english: 'Save the ledgers.', spanish: 'Salvar los libros contables.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: HSN_peaje, value: 5}
+        ai_chance: 40
+      - name: {english: 'The sea remembers debts.', spanish: 'El mar se acuerda de las deudas.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 3
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Port of Tokyo Bay', spanish: 'Perdimos El Puerto de la Bahía de Tokio'}
+      desc:
+        english: 'The enemy holds the Port of Tokyo Bay. The toll booths are empty and the ships pay someone else now.\n\n-10 Toll. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Toll Port Lost.'
+        spanish: 'El enemigo tiene el Puerto de la Bahía de Tokio. Las casillas de peaje están vacías y los barcos ahora le pagan a otro.\n\n-10 de Peaje. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Un Puerto de Peaje Perdido.'
+      options:
+      - name: {english: 'Save the ledgers.', spanish: 'Salvar los libros contables.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: HSN_peaje, value: 5}
+        ai_chance: 40
+      - name: {english: 'The sea remembers debts.', spanish: 'El mar se acuerda de las deudas.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 4
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Port of Manila', spanish: 'Perdimos El Puerto de Manila'}
+      desc:
+        english: 'The enemy holds the Port of Manila. The toll booths are empty and the ships pay someone else now.\n\n-10 Toll. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Toll Port Lost.'
+        spanish: 'El enemigo tiene el Puerto de Manila. Las casillas de peaje están vacías y los barcos ahora le pagan a otro.\n\n-10 de Peaje. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Un Puerto de Peaje Perdido.'
+      options:
+      - name: {english: 'Save the ledgers.', spanish: 'Salvar los libros contables.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: HSN_peaje, value: 5}
+        ai_chance: 40
+      - name: {english: 'The sea remembers debts.', spanish: 'El mar se acuerda de las deudas.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 5
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Port of Osaka', spanish: 'Perdimos El Puerto de Osaka'}
+      desc:
+        english: 'The enemy holds the Port of Osaka. The toll booths are empty and the ships pay someone else now.\n\n-10 Toll. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: A Toll Port Lost.'
+        spanish: 'El enemigo tiene el Puerto de Osaka. Las casillas de peaje están vacías y los barcos ahora le pagan a otro.\n\n-10 de Peaje. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Un Puerto de Peaje Perdido.'
+      options:
+      - name: {english: 'Save the ledgers.', spanish: 'Salvar los libros contables.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: HSN_peaje, value: 5}
+        ai_chance: 40
+      - name: {english: 'The sea remembers debts.', spanish: 'El mar se acuerda de las deudas.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 10
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The First Charter', spanish: 'La Primera Carta'}
+      desc:
+        english: 'The captains, the bankers and the admirals each bring a draft of the First Charter.\n\nFREE PORTS: +20% trade opinion and +0.1 political power a day.\nTHE SHIPWRIGHTS'' GUILD: +8% dockyard output.\nTHE MARINES'' OATH: +5% attack and +4% organisation.'
+        spanish: 'Los capitanes, los banqueros y los almirantes traen cada uno un borrador de la Primera Carta.\n\nPUERTOS LIBRES: +20% de opinión comercial y +0,1 de poder político por día.\nEL GREMIO DE CARPINTEROS DE RIBERA: +8% de producción de astilleros.\nEL JURAMENTO DE LOS MARINES: +5% de ataque y +4% de organización.'
+      options:
+      - name: {english: 'Free Ports.', spanish: 'Puertos Libres.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_puertos_libres}
+        ai_chance: 35
+      - name: {english: 'The Shipwrights'' Guild.', spanish: 'El Gremio de Carpinteros de Ribera.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_gremio_naval}
+        ai_chance: 35
+      - name: {english: 'The Marines'' Oath.', spanish: 'El Juramento de los Marines.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_marines}
+        ai_chance: 30
+      src: user_request
+    - id: 11
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Second Charter', spanish: 'La Segunda Carta'}
+      desc:
+        english: 'The Second Charter will decide what the High Seas Nation is when the other powers stop laughing.\n\nTHE BLUE WATER NAVY: +7% naval damage and naval defence.\nTHE CLEARING BANK: +6% factory output and -3% consumer goods.\nTHE QUIET DIPLOMACY: +6% stability and +0.1 political power a day; pressure -20.'
+        spanish: 'La Segunda Carta va a decidir qué es la Nación de Alta Mar cuando las otras potencias dejen de reírse.\n\nLA ARMADA DE AGUAS AZULES: +7% de daño y defensa naval.\nEL BANCO DE COMPENSACIÓN: +6% de producción de fábricas y -3% de bienes de consumo.\nLA DIPLOMACIA SILENCIOSA: +6% de estabilidad y +0,1 de poder político por día; presión -20.'
+      options:
+      - name: {english: 'The Blue Water Navy.', spanish: 'La Armada de Aguas Azules.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_aguas_azules}
+        ai_chance: 40
+      - name: {english: 'The Clearing Bank.', spanish: 'El Banco de Compensación.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_banco}
+        ai_chance: 30
+      - name: {english: 'The Quiet Diplomacy.', spanish: 'La Diplomacia Silenciosa.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_diplomacia}
+        - {effect: add_variable, var: HSN_presion, value: -20}
+        ai_chance: 30
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Charter of the World', spanish: 'La Carta del Mundo'}
+      desc:
+        english: 'Eighty ports'' worth of toll, gathered in one vault. The Clearing House must decide what the sea will be.\n\nTHALASSOCRACY: +10% naval damage, +10% dockyards and +5% war support.\nTHE MARKET OF MARKETS: +10% factory output and +30% trade opinion.\nTHE PIRATE REPUBLIC: +8% attack and naval damage, -0.1 political power a day.'
+        spanish: 'El peaje de ochenta puertos, juntado en una sola bóveda. La Cámara de Compensación debe decidir qué va a ser el mar.\n\nTALASOCRACIA: +10% de daño naval, +10% de astilleros y +5% de apoyo a la guerra.\nEL MERCADO DE LOS MERCADOS: +10% de producción de fábricas y +30% de opinión comercial.\nLA REPÚBLICA PIRATA: +8% de ataque y daño naval, -0,1 de poder político por día.'
+      options:
+      - name: {english: 'Thalassocracy.', spanish: 'Talasocracia.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_talasocracia}
+        ai_chance: 40
+      - name: {english: 'The Market of Markets.', spanish: 'El Mercado de los Mercados.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_mercado}
+        ai_chance: 30
+      - name: {english: 'The Pirate Republic.', spanish: 'La República Pirata.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_carta_republica_pirata}
+        ai_chance: 30
+      src: user_request
+    - id: 20
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Record Season', spanish: 'Una Temporada Récord'}
+      desc:
+        english: 'More ships than ever pass the straits this season.\n\nCollect: +12 Toll. Lower the fees to win friends: +30 political power.'
+        spanish: 'Esta temporada pasan más barcos que nunca por los estrechos.\n\nCobrar: +12 de Peaje. Bajar las tarifas para ganar amigos: +30 de poder político.'
+      options:
+      - name: {english: 'Collect.', spanish: 'Cobrar.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: 12}
+        ai_chance: 60
+      - name: {english: 'Lower the fees.', spanish: 'Bajar las tarifas.'}
+        effects:
+        - {effect: add_political_power, value: 30}
+        ai_chance: 40
+      src: user_request
+    - id: 21
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Sunken Treasure', spanish: 'Un Tesoro Hundido'}
+      desc:
+        english: 'Divers find a 21st-century cargo ship full of rare metals.\n\nSell it: +15 Toll. Melt it into hulls: +40 navy experience.'
+        spanish: 'Unos buzos encuentran un carguero del siglo XXI lleno de metales raros.\n\nVenderlo: +15 de Peaje. Fundirlo en cascos: +40 de experiencia naval.'
+      options:
+      - name: {english: 'Sell it.', spanish: 'Venderlo.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: 15}
+        ai_chance: 50
+      - name: {english: 'Melt it.', spanish: 'Fundirlo.'}
+        effects:
+        - {effect: navy_experience, value: 40}
+        ai_chance: 50
+      src: user_request
+    - id: 22
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Insurers Pay', spanish: 'Pagan los Aseguradores'}
+      desc:
+        english: 'A storm sank three of our ships; the insurers in Singapore pay double.\n\n+10 Toll.'
+        spanish: 'Una tormenta hundió tres de nuestros barcos; los aseguradores de Singapur pagan el doble.\n\n+10 de Peaje.'
+      options:
+      - name: {english: 'Lucky storm.', spanish: 'Bendita tormenta.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: 10}
+        ai_chance: 100
+      src: user_request
+    - id: 23
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Foreign Fleet Pays Up', spanish: 'Una Flota Extranjera Paga'}
+      desc:
+        english: 'A foreign navy asks to cross our straits in peace and pays for it.\n\nTake the money: +10 Toll, +5 pressure. Refuse: +5% war support.'
+        spanish: 'Una armada extranjera pide cruzar nuestros estrechos en paz y paga por eso.\n\nTomar la plata: +10 de Peaje, +5 de presión. Negarse: +5% de apoyo a la guerra.'
+      options:
+      - name: {english: 'Take the money.', spanish: 'Tomar la plata.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: 10}
+        - {effect: add_variable, var: HSN_presion, value: 5}
+        ai_chance: 60
+      - name: {english: 'Refuse.', spanish: 'Negarse.'}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        ai_chance: 40
+      src: user_request
+    - id: 24
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Toll Evaders', spanish: 'Evasores del Peaje'}
+      desc:
+        english: 'A fleet of smugglers learned to cross at night without paying.\n\nHunt them: -30 political power, +20 navy experience. Let them go: -10 Toll.'
+        spanish: 'Una flota de contrabandistas aprendió a cruzar de noche sin pagar.\n\nCazarlos: -30 de poder político, +20 de experiencia naval. Dejarlos ir: -10 de Peaje.'
+      options:
+      - name: {english: 'Hunt them.', spanish: 'Cazarlos.'}
+        effects:
+        - {effect: add_political_power, value: -30}
+        - {effect: navy_experience, value: 20}
+        ai_chance: 50
+      - name: {english: 'Let them go.', spanish: 'Dejarlos ir.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: -10}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Toll War', spanish: 'Una Guerra de Tarifas'}
+      desc:
+        english: 'A rival port halves its fees.\n\nMatch them: -12 Toll. Ignore them: -3% stability.'
+        spanish: 'Un puerto rival corta sus tarifas a la mitad.\n\nIgualarlas: -12 de Peaje. Ignorarlo: -3% de estabilidad.'
+      options:
+      - name: {english: 'Match them.', spanish: 'Igualarlas.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: -12}
+        ai_chance: 50
+      - name: {english: 'Ignore them.', spanish: 'Ignorarlo.'}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 50
+      src: user_request
+    - id: 26
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Collector Ran Off', spanish: 'El Recaudador se Fugó'}
+      desc:
+        english: 'The chief collector of Malacca ran off with a season of tolls.\n\n-15 Toll. Or hunt him across the Pacific: -50 political power, -5 Toll.'
+        spanish: 'El recaudador jefe de Malaca se fugó con una temporada de peajes.\n\n-15 de Peaje. O perseguirlo por el Pacífico: -50 de poder político, -5 de Peaje.'
+      options:
+      - name: {english: 'Let him go.', spanish: 'Dejarlo ir.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: -15}
+        ai_chance: 50
+      - name: {english: 'Hunt him.', spanish: 'Perseguirlo.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: HSN_peaje, value: -5}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Blocked Strait', spanish: 'Un Estrecho Bloqueado'}
+      desc:
+        english: 'A wrecked supertanker blocks the strait for a month.\n\nWait: -10 Toll. Blow it up: -30 political power, +10 pressure.'
+        spanish: 'Un superpetrolero encallado bloquea el estrecho por un mes.\n\nEsperar: -10 de Peaje. Volarlo: -30 de poder político, +10 de presión.'
+      options:
+      - name: {english: 'Wait.', spanish: 'Esperar.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: -10}
+        ai_chance: 50
+      - name: {english: 'Blow it up.', spanish: 'Volarlo.'}
+        effects:
+        - {effect: add_political_power, value: -30}
+        - {effect: add_variable, var: HSN_presion, value: 10}
+        ai_chance: 50
+      src: user_request
+    - id: 50
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Silent Takeover', spanish: 'La Toma Silenciosa'}
+      desc:
+        english: 'The Clearing House has picked its target. Three ways to take a port without a shot.\n\nTHE BRIEFCASE: money, lots of it, to the right people.\nTHE FILE: everyone has a secret; find the right one.\nTHE BOARDROOM: buy the port company through seven shell firms.'
+        spanish: 'La Cámara de Compensación eligió su blanco. Tres maneras de tomar un puerto sin un tiro.\n\nEL MALETÍN: plata, mucha, a la gente indicada.\nEL EXPEDIENTE: todos tienen un secreto; hay que encontrar el indicado.\nEL DIRECTORIO: comprar la empresa del puerto a través de siete sociedades pantalla.'
+      options:
+      - name: {english: 'The briefcase.', spanish: 'El maletín.'}
+        effects:
+        - {effect: event, id: meganations_hsn_receta.51, days: 30}
+        ai_chance: 34
+      - name: {english: 'The file.', spanish: 'El expediente.'}
+        effects:
+        - {effect: event, id: meganations_hsn_receta.52, days: 30}
+        ai_chance: 33
+      - name: {english: 'The boardroom.', spanish: 'El directorio.'}
+        effects:
+        - {effect: event, id: meganations_hsn_receta.53, days: 30}
+        ai_chance: 33
+      src: user_request
+    - id: 51
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Briefcase', spanish: 'El Maletín'}
+      desc:
+        english: 'The governor accepts a first envelope. Now he wants three more, and a villa. Our man on the ground says we can push him, or we can play it safe and buy his deputies instead.\n\nThe bold way: more triumphs, more disasters. The careful way: more nothing.'
+        spanish: 'El gobernador acepta un primer sobre. Ahora quiere tres más, y una villa. Nuestro hombre en el lugar dice que podemos presionarlo, o ir a lo seguro y comprar a sus segundos.\n\nEl camino audaz: más triunfos, más desastres. El camino cuidadoso: más de nada.'
+      options:
+      - name: {english: 'Push the governor.', spanish: 'Presionar al gobernador.'}
+        effects:
+
+        - effect: random
+          options:
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.100, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.103, days: 20}
+          - weight: 7
+            effects:
+            - {effect: event, id: meganations_hsn_receta.105, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.106, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.107, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.108, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.109, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.110, days: 20}
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.116, days: 20}
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.119, days: 20}
+        ai_chance: 50
+      - name: {english: 'Buy the deputies.', spanish: 'Comprar a los segundos.'}
+        effects:
+
+        - effect: random
+          options:
+          - weight: 5
+            effects:
+            - {effect: event, id: meganations_hsn_receta.101, days: 20}
+          - weight: 13
+            effects:
+            - {effect: event, id: meganations_hsn_receta.103, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.104, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.108, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.109, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.110, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.111, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.112, days: 20}
+          - weight: 10
+            effects:
+            - {effect: event, id: meganations_hsn_receta.119, days: 20}
+        ai_chance: 50
+      src: user_request
+    - id: 52
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The File', spanish: 'El Expediente'}
+      desc:
+        english: 'The chief of security has a secret: a second family on another island. We can use it now, or wait for something even worse.\n\nThe bold way: more triumphs, more disasters. The careful way: more nothing.'
+        spanish: 'El jefe de seguridad tiene un secreto: una segunda familia en otra isla. Podemos usarlo ya, o esperar algo todavía peor.\n\nEl camino audaz: más triunfos, más desastres. El camino cuidadoso: más de nada.'
+      options:
+      - name: {english: 'Use it now.', spanish: 'Usarlo ya.'}
+        effects:
+
+        - effect: random
+          options:
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.100, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.102, days: 20}
+          - weight: 7
+            effects:
+            - {effect: event, id: meganations_hsn_receta.104, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.110, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.111, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.112, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.113, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.114, days: 20}
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.117, days: 20}
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.118, days: 20}
+        ai_chance: 50
+      - name: {english: 'Wait for worse.', spanish: 'Esperar algo peor.'}
+        effects:
+
+        - effect: random
+          options:
+          - weight: 5
+            effects:
+            - {effect: event, id: meganations_hsn_receta.100, days: 20}
+          - weight: 13
+            effects:
+            - {effect: event, id: meganations_hsn_receta.102, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.105, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.111, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.112, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.113, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.114, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.115, days: 20}
+          - weight: 10
+            effects:
+            - {effect: event, id: meganations_hsn_receta.117, days: 20}
+        ai_chance: 50
+      src: user_request
+    - id: 53
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Boardroom', spanish: 'El Directorio'}
+      desc:
+        english: 'Six of the seven shell firms have bought their shares. The seventh needs a signature from a judge. We can forge it, or find a judge who will sign anything.\n\nThe bold way: more triumphs, more disasters. The careful way: more nothing.'
+        spanish: 'Seis de las siete sociedades pantalla compraron sus acciones. La séptima necesita la firma de un juez. Podemos falsificarla, o encontrar un juez que firme cualquier cosa.\n\nEl camino audaz: más triunfos, más desastres. El camino cuidadoso: más de nada.'
+      options:
+      - name: {english: 'Forge it.', spanish: 'Falsificarla.'}
+        effects:
+
+        - effect: random
+          options:
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.101, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.104, days: 20}
+          - weight: 7
+            effects:
+            - {effect: event, id: meganations_hsn_receta.105, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.106, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.108, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.110, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.112, days: 20}
+          - weight: 8
+            effects:
+            - {effect: event, id: meganations_hsn_receta.114, days: 20}
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.116, days: 20}
+          - weight: 15
+            effects:
+            - {effect: event, id: meganations_hsn_receta.118, days: 20}
+        ai_chance: 50
+      - name: {english: 'Find a pliant judge.', spanish: 'Buscar un juez dócil.'}
+        effects:
+
+        - effect: random
+          options:
+          - weight: 5
+            effects:
+            - {effect: event, id: meganations_hsn_receta.101, days: 20}
+          - weight: 13
+            effects:
+            - {effect: event, id: meganations_hsn_receta.103, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.104, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.107, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.109, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.111, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.113, days: 20}
+          - weight: 12
+            effects:
+            - {effect: event, id: meganations_hsn_receta.115, days: 20}
+          - weight: 10
+            effects:
+            - {effect: event, id: meganations_hsn_receta.116, days: 20}
+        ai_chance: 50
+      src: user_request
+    - id: 100
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Flag Changes at Dawn', spanish: 'La Bandera Cambia al Amanecer'}
+      desc:
+        english: 'At five in the morning the harbour master lowers the old flag, folds it neatly and raises ours. Nobody fired a shot. Nobody even woke up. The node is ours.'
+        spanish: 'A las cinco de la mañana el capitán del puerto baja la bandera vieja, la dobla prolijamente e iza la nuestra. Nadie disparó un tiro. Nadie se despertó siquiera. El nodo es nuestro.'
+      options:
+      - name: {english: 'A clean deal.', spanish: 'Un trato limpio.'}
+        effects:
+
+        - effect: if
+          when: {flag: HSN_toma_1}
+          then:
+          - effect: in_state
+            state: [Taiwan]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+
+        - effect: if
+          when: {flag: HSN_toma_2}
+          then:
+          - effect: in_state
+            state: [Hong Kong]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: ZWI
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+
+        - effect: if
+          when: {flag: HSN_toma_3}
+          then:
+          - effect: in_state
+            state: [Okinawa, Ryukyu]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: ZKR
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+
+        - effect: if
+          when: {flag: HSN_toma_4}
+          then:
+          - effect: in_state
+            state: [Kitakyūshū, Kitakyushu, Kyushu, Fukuoka]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: ZKR
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+        - {effect: add_political_power, value: 50}
+        - {effect: add_variable, var: HSN_presion, value: 10}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 101
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Bought, Paid, Delivered', spanish: 'Comprado, Pagado, Entregado'}
+      desc:
+        english: 'The board of the port authority votes 7 to 2 to sell. The two who voted against have been offered early retirement in Tahiti. The node is ours, with receipt.'
+        spanish: 'El directorio de la autoridad portuaria vota 7 a 2 vender. A los dos que votaron en contra les ofrecieron una jubilación anticipada en Tahití. El nodo es nuestro, con factura.'
+      options:
+      - name: {english: 'Frame the receipt.', spanish: 'Enmarquen la factura.'}
+        effects:
+
+        - effect: if
+          when: {flag: HSN_toma_1}
+          then:
+          - effect: in_state
+            state: [Taiwan]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+
+        - effect: if
+          when: {flag: HSN_toma_2}
+          then:
+          - effect: in_state
+            state: [Hong Kong]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: ZWI
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+
+        - effect: if
+          when: {flag: HSN_toma_3}
+          then:
+          - effect: in_state
+            state: [Okinawa, Ryukyu]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: ZKR
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+
+        - effect: if
+          when: {flag: HSN_toma_4}
+          then:
+          - effect: in_state
+            state: [Kitakyūshū, Kitakyushu, Kyushu, Fukuoka]
+            effects:
+            - {effect: transfer_to, value: HSN}
+          - effect: scope
+            target: ZKR
+            effects:
+            - {effect: opinion, target: HSN, modifier: meganations_afrenta}
+        - {effect: add_variable, var: HSN_peaje, value: 10}
+        - {effect: add_variable, var: HSN_presion, value: 10}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 102
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Caught, but With the Maps', spanish: 'Nos Atraparon, pero con los Mapas'}
+      desc:
+        english: 'Our agents were arrested. Before that, they photographed every mine, battery and channel of the harbour. +50 navy experience and +30 army experience.'
+        spanish: 'Arrestaron a nuestros agentes. Antes, fotografiaron cada mina, batería y canal del puerto. +50 de experiencia naval y +30 de experiencia del ejército.'
+      options:
+      - name: {english: 'Worth it.', spanish: 'Valió la pena.'}
+        effects:
+        - {effect: navy_experience, value: 50}
+        - {effect: army_experience, value: 30}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 103
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Governor Defects Alone', spanish: 'El Gobernador Deserta Solo'}
+      desc:
+        english: 'The governor did not bring the port, but he brought himself, his yacht and his address book. +75 political power and +15 Toll.'
+        spanish: 'El gobernador no trajo el puerto, pero se trajo a sí mismo, su yate y su agenda. +75 de poder político y +15 de Peaje.'
+      options:
+      - name: {english: 'Welcome aboard.', spanish: 'Bienvenido a bordo.'}
+        effects:
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: HSN_peaje, value: 15}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 104
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Port Rights Instead', spanish: 'Derechos de Puerto en su Lugar'}
+      desc:
+        english: 'They will not sell, but they will let our ships dock, refuel and repair. For a year, +10% dockyard output.'
+        spanish: 'No venden, pero dejan que nuestros barcos atraquen, carguen y reparen. Por un año, +10% de producción de astilleros.'
+      options:
+      - name: {english: 'Half a node is still a node.', spanish: 'Medio nodo sigue siendo nodo.'}
+        effects:
+        - {effect: dynamic_modifier, id: HSN_toma_derechos_de_puerto, days: 365}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 105
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Smugglers'' Gratitude', spanish: 'La Gratitud de los Contrabandistas'}
+      desc:
+        english: 'The operation failed, but the smugglers who helped us got rich in the chaos. They pay their debts: 3,000 infantry weapons and 20 Toll.'
+        spanish: 'La operación falló, pero los contrabandistas que nos ayudaron se hicieron ricos en el caos. Pagan sus deudas: 3.000 armas de infantería y 20 de Peaje.'
+      options:
+      - name: {english: 'Friends in low places.', spanish: 'Amigos en lugares bajos.'}
+        effects:
+        - {effect: equipment, type: infantry_equipment, amount: 3000}
+        - {effect: add_variable, var: HSN_peaje, value: 20}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 106
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Natural Causes (Really)', spanish: 'Causas Naturales (En Serio)'}
+      desc:
+        english: 'The governor we were bribing died of a heart attack at his own birthday party. Really. We had nothing to do with it. Nobody believes us, but nobody can prove anything either.\n\nNothing happens. The node stays where it was.'
+        spanish: 'El gobernador al que estábamos sobornando murió de un infarto en su propio cumpleaños. En serio. No tuvimos nada que ver. Nadie nos cree, pero nadie puede probar nada tampoco.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_political_power, value: 10}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 107
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Wrong Island', spanish: 'La Isla Equivocada'}
+      desc:
+        english: 'Our agents spent four months bribing the administration of an island. A different island. With a similar name. Its mayor is very grateful.\n\nNothing happens. The node stays where it was.'
+        spanish: 'Nuestros agentes pasaron cuatro meses sobornando a la administración de una isla. Otra isla. Con un nombre parecido. Su intendente está muy agradecido.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 108
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'His Twin Took the Money', spanish: 'Se Quedó la Plata su Gemelo'}
+      desc:
+        english: 'The bribe was accepted, in full, by the governor''s twin brother, who has no position, no power and, as of last week, no forwarding address.\n\nNothing happens. The node stays where it was.'
+        spanish: 'El soborno lo aceptó, completo, el hermano gemelo del gobernador, que no tiene cargo, ni poder, ni, desde la semana pasada, dirección conocida.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: 3}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 109
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Festival of Lanterns', spanish: 'El Festival de los Faroles'}
+      desc:
+        english: 'The operation was planned for the night of the Festival of Lanterns. Our agents went to the festival. It was a very good festival.\n\nNothing happens. The node stays where it was.'
+        spanish: 'La operación estaba planeada para la noche del Festival de los Faroles. Nuestros agentes fueron al festival. Fue un muy buen festival.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_stability, value: 0.01}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 110
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Lost in Customs', spanish: 'Perdido en la Aduana'}
+      desc:
+        english: 'The briefcase with the money is still in customs, waiting for a form that has not existed since 2070.\n\nNothing happens. The node stays where it was.'
+        spanish: 'El maletín con la plata sigue en la aduana, esperando un formulario que no existe desde 2070.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_political_power, value: -10}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 111
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Typhoon', spanish: 'El Tifón'}
+      desc:
+        english: 'A typhoon closed the port for six weeks. When it opened again, everyone we had bribed had been reassigned. The sea does not take bribes.\n\nNothing happens. The node stays where it was.'
+        spanish: 'Un tifón cerró el puerto seis semanas. Cuando volvió a abrir, a todos los que habíamos sobornado los habían trasladado. El mar no acepta sobornos.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 112
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Harbour Master''s Cat', spanish: 'El Gato del Capitán del Puerto'}
+      desc:
+        english: 'The harbour master agreed to everything, on one condition: that we find his cat. We did not find his cat.\n\nNothing happens. The node stays where it was.'
+        spanish: 'El capitán del puerto aceptó todo, con una condición: que encontráramos a su gato. No encontramos a su gato.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_variable, var: HSN_peaje, value: 2}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 113
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Our Agent Fell in Love', spanish: 'Nuestro Agente se Enamoró'}
+      desc:
+        english: 'Agent Kahale fell in love with the daughter of the port''s chief of security. They are getting married in spring. We have been invited. The port remains theirs.\n\nNothing happens. The node stays where it was.'
+        spanish: 'El agente Kahale se enamoró de la hija del jefe de seguridad del puerto. Se casan en primavera. Estamos invitados. El puerto sigue siendo de ellos.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_stability, value: 0.01}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 114
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Contract in the Wrong Language', spanish: 'El Contrato en el Idioma Equivocado'}
+      desc:
+        english: 'The sale contract was signed, stamped and notarised. In a language nobody in the port can read. Legally, we now own a lighthouse that no longer exists.\n\nNothing happens. The node stays where it was.'
+        spanish: 'El contrato de venta se firmó, se selló y se legalizó. En un idioma que nadie en el puerto sabe leer. Legalmente, ahora somos dueños de un faro que ya no existe.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_political_power, value: 5}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 115
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Everybody Already Knew', spanish: 'Todos Ya Sabían'}
+      desc:
+        english: 'When our agents arrived, the whole port greeted them by name. The operation had been on the radio for two weeks.\n\nNothing happens. The node stays where it was.'
+        spanish: 'Cuando llegaron nuestros agentes, todo el puerto los saludó por su nombre. La operación estaba en la radio hace dos semanas.\n\nNo pasa nada. El nodo sigue donde estaba.'
+      options:
+      - name: {english: 'Next year, then.', spanish: 'El año que viene, entonces.'}
+        effects:
+        - {effect: add_variable, var: HSN_presion, value: 3}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 116
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Diplomatic Scandal', spanish: 'Un Escándalo Diplomático'}
+      desc:
+        english: 'Every newspaper in the Pacific publishes the photos. Our ambassador is expelled. -5% stability and +15 pressure from the powers.'
+        spanish: 'Todos los diarios del Pacífico publican las fotos. Expulsan a nuestro embajador. -5% de estabilidad y +15 de presión de las potencias.'
+      options:
+      - name: {english: 'Deny everything.', spanish: 'Negar todo.'}
+        effects:
+        - {effect: add_stability, value: -0.05}
+        - {effect: add_variable, var: HSN_presion, value: 15}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 117
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Agents Are Hanged', spanish: 'Ahorcan a los Agentes'}
+      desc:
+        english: 'They were hanged in the harbour square, at noon, in front of the ships. -5% war support and -50 political power.'
+        spanish: 'Los ahorcaron en la plaza del puerto, al mediodía, frente a los barcos. -5% de apoyo a la guerra y -50 de poder político.'
+      options:
+      - name: {english: 'We will remember their names.', spanish: 'Vamos a recordar sus nombres.'}
+        effects:
+        - {effect: add_war_support, value: -0.05}
+        - {effect: add_political_power, value: -50}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 118
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'They Want a War', spanish: 'Quieren una Guerra'}
+      desc:
+        english: 'The owners of the port took the attempt as what it was. They declare war on us.'
+        spanish: 'Los dueños del puerto se tomaron el intento como lo que era. Nos declaran la guerra.'
+      options:
+      - name: {english: 'So be it.', spanish: 'Que así sea.'}
+        effects:
+
+        - effect: if
+          when:
+            flag: HSN_toma_1
+            country: {tag: SHD, when: {is_ai: true}}
+            not: {war_with: SHD}
+          then:
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: declare_war, target: HSN, type: annex_everything}
+
+        - effect: if
+          when:
+            flag: HSN_toma_2
+            country: {tag: ZWI, when: {is_ai: true}}
+            not: {war_with: ZWI}
+          then:
+          - effect: scope
+            target: ZWI
+            effects:
+            - {effect: declare_war, target: HSN, type: annex_everything}
+
+        - effect: if
+          when:
+            flag: HSN_toma_3
+            country: {tag: ZKR, when: {is_ai: true}}
+            not: {war_with: ZKR}
+          then:
+          - effect: scope
+            target: ZKR
+            effects:
+            - {effect: declare_war, target: HSN, type: annex_everything}
+
+        - effect: if
+          when:
+            flag: HSN_toma_4
+            country: {tag: ZKR, when: {is_ai: true}}
+            not: {war_with: ZKR}
+          then:
+          - effect: scope
+            target: ZKR
+            effects:
+            - {effect: declare_war, target: HSN, type: annex_everything}
+        - {effect: add_war_support, value: 0.05}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
+    - id: 119
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Money Vanished', spanish: 'La Plata Desapareció'}
+      desc:
+        english: 'One hundred and twenty million credits, the middleman, and his speedboat: gone. -100 political power and -15 Toll.'
+        spanish: 'Ciento veinte millones de créditos, el intermediario y su lancha: desaparecidos. -100 de poder político y -15 de Peaje.'
+      options:
+      - name: {english: 'Find him.', spanish: 'Encuéntrenlo.'}
+        effects:
+        - {effect: add_political_power, value: -100}
+        - {effect: add_variable, var: HSN_peaje, value: -15}
+        - {effect: clear_flag, value: HSN_toma_1}
+        - {effect: clear_flag, value: HSN_toma_2}
+        - {effect: clear_flag, value: HSN_toma_3}
+        - {effect: clear_flag, value: HSN_toma_4}
+        - {effect: clear_flag, value: HSN_toma_en_curso}
+        ai_chance: 100
+      src: user_request
