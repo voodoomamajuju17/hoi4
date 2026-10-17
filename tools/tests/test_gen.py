@@ -4062,6 +4062,68 @@ equipment_modules = {
           str(chosen) + str(ctx.notes))
 
 
+def test_mecanicas_v4() -> None:
+    section("mecanicas v4: rearme secreto, sucesion, guarnicion, cotizacion, corso, sol, diques, asamblea (2026-10-17)")
+    import copy
+    import re
+    import yaml as _yaml
+    from tools.gen.errors import SpecError as _SpecError
+    overlay = _yaml.safe_load((REPO_ROOT / "spec" / "22_mecanicas_v4.yaml").read_text(encoding="utf-8"))
+    spec = specload.load(REPO_ROOT / "spec")
+    raw = spec.raw
+    cats = {c["id"]: c for c in raw["decisions"]["categories"]}
+    for cid in ("MEGANATIONS_rearme_category", "EFE_sucesion_category", "ASC_guarnicion_category",
+                "FCU_cotizacion_category", "HSN_corso_category", "NAS_calendario_category",
+                "SHD_hidraulica_category", "APF_asamblea_category"):
+        check(f"v4: el panel {cid} entra al spec", cid in cats)
+    effects = {e["id"]: e for e in raw["decisions"]["scripted_effects"]}
+    pulses = ("EFE_pulso_de_las_cubas", "FCU_pulso_del_directorio", "ASC_pulso_de_la_red", "HSN_pulso_de_las_potencias",
+              "NAS_pulso_de_los_templos", "SHD_pulso_del_rio", "APF_pulso_de_los_consejos", "NRE_pulso_del_ocio")
+    for pid in pulses:
+        runs = [e.get("value") for e in effects[pid]["effects"] if e.get("effect") == "run"]
+        check(f"v4: el pulso {pid} corre el rearme secreto", "MEGANATIONS_rearme_pulso" in runs, runs[-3:])
+    v4_decisions = [d for c in overlay["decisions"]["categories"] for d in c["decisions"]]
+    check("v4: toda decision nueva tiene criterio para la IA",
+          all("ai" in d or "ai_factor" in d for d in v4_decisions),
+          [d["id"] for d in v4_decisions if "ai" not in d and "ai_factor" not in d])
+    # toda variable que muestra un panel se calcula en algun lado
+    text = (REPO_ROOT / "spec" / "22_mecanicas_v4.yaml").read_text(encoding="utf-8")
+    shown = set(re.findall(r"\[\?([A-Za-z_0-9]+)\]", text))
+    everywhere = text + (REPO_ROOT / "spec" / "14_decisions.yaml").read_text(encoding="utf-8")
+    missing = sorted(v for v in shown if not re.search(rf"(var: {v}\b|\[set, {v},|\[mul, {v},)", everywhere))
+    check("v4: toda variable que se muestra se calcula", not missing, missing)
+    # el archivo nuevo nunca pisa lo viejo
+    try:
+        specload.merge_overlay({"decisions": copy.deepcopy(raw["decisions"])},
+                               {"decisions": {"categories": [{"id": "X_cat",
+                                                              "decisions": [{"id": "ASC_automatizar_guarnicion"}]}]}},
+                               "prueba")
+        rejected = False
+    except _SpecError:
+        rejected = True
+    check("v4: una decision con id repetido no entra", rejected)
+    # arreglos de coherencia del segundo analisis
+    dec_text = (REPO_ROOT / "spec" / "14_decisions.yaml").read_text(encoding="utf-8")
+    check("v4: las elecciones de la FCU arrancan en 2104 (Cronicas y Archivo)", "date_after: 2104.1.1, any: [{not_flag: FCU_eleccion_marca}" in dec_text)
+    check("v4: el Destino del EFE pide Bioacero 12 (escala 1-30)", "{var: EFE_biosteel, value: 12}" in dec_text)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        out = Path(tmp) / "meganations_2100"
+        decisions = "".join(p.read_text(encoding="utf-8-sig") for p in (out / "common" / "decisions").rglob("*.txt"))
+        for d in v4_decisions:
+            check(f"v4: la decision {d['id']} sale en el mod", f"{d['id']} = {{" in decisions)
+        ev = (out / "events" / "meganations_v4.txt").read_text(encoding="utf-8-sig")
+        check("v4: el descubrimiento le da objetivos de guerra a las otras potencias", "create_wargoal" in ev and "tag = ROOT" in ev)
+        efe_hist = next((out / "history" / "countries").glob("EFE - *.txt")).read_text(encoding="utf-8-sig")
+        order = [efe_hist.find(f"recruit_character = {c}") for c in ("EFE_tupa_heredero", "EFE_custodia_pereira",
+                                                                    "EFE_regente_etchegaray")]
+        check("v4: los tres herederos del EFE estan reclutados", all(i >= 0 for i in order), order)
+        check("v4: Aurelio sigue siendo el lider de arranque", "promote_character = EFE_aurelio_iv" in efe_hist)
+        scripted = (out / "common" / "scripted_effects" / "meganations_effects.txt").read_text(encoding="utf-8-sig")
+        check("v4: la sucesion pide salud baja desde 2104", "MEGANATIONS_lider_salud" in scripted and "2104.1.1" in scripted)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4114,6 +4176,7 @@ def main() -> int:
         test_piel_interfaz,
         test_cazas_peso,
         test_aventuras,
+        test_mecanicas_v4,
         test_vanilla_validation,
     ):
         test()
