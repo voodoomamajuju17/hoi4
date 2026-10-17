@@ -15285,3 +15285,426 @@ namespaces:
         - {effect: run, value: NAS_espiritu_vivo}
         ai_chance: 50
       src: user_request
+
+  # 2026-10-17: la receta de diversión (ASC)
+  meganations_asc_receta:
+    country: ASC
+    events:
+    - id: 1
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Rotterdam Core Is Lost', spanish: 'Perdimos El Núcleo de Róterdam'}
+      desc:
+        english: 'The enemy holds the Rotterdam Core. The engineers wiped the servers before leaving; the Plan is blind in one eye.\n\n-12 Compute. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Severed Core.'
+        spanish: 'El enemigo tiene el Núcleo de Róterdam. Los ingenieros borraron los servidores antes de irse; el Plan quedó tuerto.\n\n-12 de Cómputo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Núcleo Cortado.'
+      options:
+      - name: {english: 'Evacuate the backups.', spanish: 'Evacuar las copias de seguridad.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: ASC_computo, value: 6}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 40
+      - name: {english: 'The Commune does not forget.', spanish: 'La Comuna no olvida.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 2
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Prague Core Is Lost', spanish: 'Perdimos El Núcleo de Praga'}
+      desc:
+        english: 'The enemy holds the Prague Core. The engineers wiped the servers before leaving; the Plan is blind in one eye.\n\n-12 Compute. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Severed Core.'
+        spanish: 'El enemigo tiene el Núcleo de Praga. Los ingenieros borraron los servidores antes de irse; el Plan quedó tuerto.\n\n-12 de Cómputo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Núcleo Cortado.'
+      options:
+      - name: {english: 'Evacuate the backups.', spanish: 'Evacuar las copias de seguridad.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: ASC_computo, value: 6}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 40
+      - name: {english: 'The Commune does not forget.', spanish: 'La Comuna no olvida.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 3
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Alpine Vault Is Lost', spanish: 'Perdimos La Bóveda Alpina'}
+      desc:
+        english: 'The enemy holds the Alpine Vault. The engineers wiped the servers before leaving; the Plan is blind in one eye.\n\n-12 Compute. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Severed Core.'
+        spanish: 'El enemigo tiene la Bóveda Alpina. Los ingenieros borraron los servidores antes de irse; el Plan quedó tuerto.\n\n-12 de Cómputo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Núcleo Cortado.'
+      options:
+      - name: {english: 'Evacuate the backups.', spanish: 'Evacuar las copias de seguridad.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: ASC_computo, value: 6}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 40
+      - name: {english: 'The Commune does not forget.', spanish: 'La Comuna no olvida.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 4
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Copenhagen Core Is Lost', spanish: 'Perdimos El Núcleo de Copenhague'}
+      desc:
+        english: 'The enemy holds the Copenhagen Core. The engineers wiped the servers before leaving; the Plan is blind in one eye.\n\n-12 Compute. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Severed Core.'
+        spanish: 'El enemigo tiene el Núcleo de Copenhague. Los ingenieros borraron los servidores antes de irse; el Plan quedó tuerto.\n\n-12 de Cómputo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Núcleo Cortado.'
+      options:
+      - name: {english: 'Evacuate the backups.', spanish: 'Evacuar las copias de seguridad.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: ASC_computo, value: 6}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 40
+      - name: {english: 'The Commune does not forget.', spanish: 'La Comuna no olvida.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 5
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Vienna Core Is Lost', spanish: 'Perdimos El Núcleo de Viena'}
+      desc:
+        english: 'The enemy holds the Vienna Core. The engineers wiped the servers before leaving; the Plan is blind in one eye.\n\n-12 Compute. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Severed Core.'
+        spanish: 'El enemigo tiene el Núcleo de Viena. Los ingenieros borraron los servidores antes de irse; el Plan quedó tuerto.\n\n-12 de Cómputo. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Núcleo Cortado.'
+      options:
+      - name: {english: 'Evacuate the backups.', spanish: 'Evacuar las copias de seguridad.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: ASC_computo, value: 6}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 40
+      - name: {english: 'The Commune does not forget.', spanish: 'La Comuna no olvida.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 10
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The First Directive', spanish: 'La Primera Directiva'}
+      desc:
+        english: 'The Council votes the First Directive of the century. Three drafts reach the table.\n\nFULL AUTOMATION: +5% factory output and +5% construction speed.\nTHE CITIZEN SOLDIER: +8% recruitable population and +3% organisation.\nCOLD SERVERS: +5% stability and +3% research speed.'
+        spanish: 'El Consejo vota la Primera Directiva del siglo. Llegan tres borradores a la mesa.\n\nAUTOMATIZACIÓN TOTAL: +5% de producción de fábricas y +5% de velocidad de construcción.\nEL CIUDADANO SOLDADO: +8% de población reclutable y +3% de organización.\nSERVIDORES FRÍOS: +5% de estabilidad y +3% de velocidad de investigación.'
+      options:
+      - name: {english: 'Full Automation.', spanish: 'Automatización Total.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_automatizacion}
+        ai_chance: 40
+      - name: {english: 'The Citizen Soldier.', spanish: 'El Ciudadano Soldado.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_ciudadano_soldado}
+        ai_chance: 30
+      - name: {english: 'Cold Servers.', spanish: 'Servidores Fríos.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_servidores_frios}
+        - {effect: add_variable, var: ASC_calor, value: -20}
+        ai_chance: 30
+      src: user_request
+    - id: 11
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Second Directive', spanish: 'La Segunda Directiva'}
+      desc:
+        english: 'The Second Directive divides the Council: the generals, the engineers and the teachers each bring their own.\n\nTHE IRON ALGORITHM: +7% attack and +5% defence.\nTHE INFINITE FACTORY: +7% factory output and -3% consumer goods.\nTHE OPEN ACADEMY: +7% research speed.'
+        spanish: 'La Segunda Directiva divide al Consejo: los generales, los ingenieros y los maestros traen cada uno la suya.\n\nEL ALGORITMO DE HIERRO: +7% de ataque y +5% de defensa.\nLA FÁBRICA INFINITA: +7% de producción de fábricas y -3% de bienes de consumo.\nLA ACADEMIA ABIERTA: +7% de velocidad de investigación.'
+      options:
+      - name: {english: 'The Iron Algorithm.', spanish: 'El Algoritmo de Hierro.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_algoritmo_de_hierro}
+        ai_chance: 40
+      - name: {english: 'The Infinite Factory.', spanish: 'La Fábrica Infinita.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_fabrica_infinita}
+        ai_chance: 30
+      - name: {english: 'The Open Academy.', spanish: 'La Academia Abierta.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_academia_abierta}
+        ai_chance: 30
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Final Directive', spanish: 'La Directiva Final'}
+      desc:
+        english: 'One hundred units of compute, focused on a single question: what is the Commune for?\n\nTHE RED MACHINE: +8% attack, organisation and war support.\nPOST-SCARCITY: -5% consumer goods, +8% stability and +5% factory output.\nTHE SINGULARITY: +12% research speed and +0.1 political power a day.'
+        spanish: 'Cien unidades de cómputo, enfocadas en una sola pregunta: ¿para qué existe la Comuna?\n\nLA MÁQUINA ROJA: +8% de ataque, organización y apoyo a la guerra.\nLA POST-ESCASEZ: -5% de bienes de consumo, +8% de estabilidad y +5% de producción de fábricas.\nLA SINGULARIDAD: +12% de velocidad de investigación y +0,1 de poder político por día.'
+      options:
+      - name: {english: 'The Red Machine.', spanish: 'La Máquina Roja.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_maquina_roja}
+        ai_chance: 40
+      - name: {english: 'Post-Scarcity.', spanish: 'La Post-Escasez.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_post_escasez}
+        ai_chance: 30
+      - name: {english: 'The Singularity.', spanish: 'La Singularidad.'}
+        effects:
+        - {effect: dynamic_modifier, id: ASC_directiva_singularidad}
+        ai_chance: 30
+      src: user_request
+    - id: 20
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Breakthrough in Lyon', spanish: 'Un Avance en Lyon'}
+      desc:
+        english: 'The Lyon institute finds a way to pack twice the compute in the same rack.\n\nDeploy it: +12 Compute. Publish it: +50 political power.'
+        spanish: 'El instituto de Lyon encuentra la forma de meter el doble de cómputo en el mismo rack.\n\nDesplegarlo: +12 de Cómputo. Publicarlo: +50 de poder político.'
+      options:
+      - name: {english: 'Deploy it.', spanish: 'Desplegarlo.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 12}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 60
+      - name: {english: 'Publish it.', spanish: 'Publicarlo.'}
+        effects:
+        - {effect: add_political_power, value: 50}
+        ai_chance: 40
+      src: user_request
+    - id: 21
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Cold Winter', spanish: 'Un Invierno Frío'}
+      desc:
+        english: 'The coldest winter in decades cools the grid for free.\n\nOverclock: +10 Compute. Save energy: -10 heat.'
+        spanish: 'El invierno más frío en décadas enfría la red gratis.\n\nSobreexigirla: +10 de Cómputo. Ahorrar energía: -10 de calor.'
+      options:
+      - name: {english: 'Overclock.', spanish: 'Sobreexigirla.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      - name: {english: 'Save energy.', spanish: 'Ahorrar energía.'}
+        effects:
+        - {effect: add_variable, var: ASC_calor, value: -10}
+        ai_chance: 50
+      src: user_request
+    - id: 22
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Volunteer Coders', spanish: 'Programadores Voluntarios'}
+      desc:
+        english: 'Thousands of citizens offer their nights to the Plan.\n\nAccept: +8 Compute and +2% stability.'
+        spanish: 'Miles de ciudadanos ofrecen sus noches al Plan.\n\nAceptar: +8 de Cómputo y +2% de estabilidad.'
+      options:
+      - name: {english: 'Accept.', spanish: 'Aceptar.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 8}
+        - {effect: add_stability, value: 0.02}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 100
+      src: user_request
+    - id: 23
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Captured Servers', spanish: 'Servidores Capturados'}
+      desc:
+        english: 'A border patrol finds an abandoned warlord server farm.\n\nConnect it: +10 Compute, +5 heat. Wipe it: +30 political power.'
+        spanish: 'Una patrulla de frontera encuentra una granja de servidores abandonada de un caudillo.\n\nConectarla: +10 de Cómputo, +5 de calor. Borrarla: +30 de poder político.'
+      options:
+      - name: {english: 'Connect it.', spanish: 'Conectarla.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: 10}
+        - {effect: add_variable, var: ASC_calor, value: 5}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 60
+      - name: {english: 'Wipe it.', spanish: 'Borrarla.'}
+        effects:
+        - {effect: add_political_power, value: 30}
+        ai_chance: 40
+      src: user_request
+    - id: 24
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Worm in the Grid', spanish: 'Un Gusano en la Red'}
+      desc:
+        english: 'A foreign worm eats through the backups.\n\nPurge it: -10 Compute. Isolate the sector: -40 political power, -3 Compute.'
+        spanish: 'Un gusano extranjero se come las copias de seguridad.\n\nPurgarlo: -10 de Cómputo. Aislar el sector: -40 de poder político, -3 de Cómputo.'
+      options:
+      - name: {english: 'Purge it.', spanish: 'Purgarlo.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: -10}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      - name: {english: 'Isolate.', spanish: 'Aislar.'}
+        effects:
+        - {effect: add_political_power, value: -40}
+        - {effect: add_variable, var: ASC_computo, value: -3}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Heat Wave', spanish: 'Una Ola de Calor'}
+      desc:
+        english: 'Forty degrees in Brussels. The coolers cannot keep up.\n\nThrottle: -8 Compute. Push through: +12 heat.'
+        spanish: 'Cuarenta grados en Bruselas. Los enfriadores no dan abasto.\n\nBajar el ritmo: -8 de Cómputo. Seguir igual: +12 de calor.'
+      options:
+      - name: {english: 'Throttle.', spanish: 'Bajar el ritmo.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: -8}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      - name: {english: 'Push through.', spanish: 'Seguir igual.'}
+        effects:
+        - {effect: add_variable, var: ASC_calor, value: 12}
+        ai_chance: 50
+      src: user_request
+    - id: 26
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Luddite Cells', spanish: 'Las Células Luditas'}
+      desc:
+        english: 'Saboteurs who hate the machines cut fibre cables at night.\n\nHunt them: -3% stability. Repair and wait: -10 Compute.'
+        spanish: 'Saboteadores que odian las máquinas cortan cables de fibra de noche.\n\nCazarlos: -3% de estabilidad. Reparar y esperar: -10 de Cómputo.'
+      options:
+      - name: {english: 'Hunt them.', spanish: 'Cazarlos.'}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        ai_chance: 50
+      - name: {english: 'Repair.', spanish: 'Reparar.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: -10}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Fire in Frankfurt', spanish: 'Un Incendio en Fráncfort'}
+      desc:
+        english: 'A data hall in Frankfurt burns for two days.\n\nRebuild slowly: -12 Compute. Rebuild now: -50 political power, -4 Compute.'
+        spanish: 'Una sala de datos de Fráncfort arde dos días.\n\nReconstruir despacio: -12 de Cómputo. Reconstruir ya: -50 de poder político, -4 de Cómputo.'
+      options:
+      - name: {english: 'Slowly.', spanish: 'Despacio.'}
+        effects:
+        - {effect: add_variable, var: ASC_computo, value: -12}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      - name: {english: 'Now.', spanish: 'Ya.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: ASC_computo, value: -4}
+        - {effect: run, value: ASC_recalcular_computo}
+        ai_chance: 50
+      src: user_request
+    - id: 30
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Project Prometheus', spanish: 'El Proyecto Prometeo'}
+      desc:
+        english: 'Under the Swiss Alps, behind seven doors, the best minds of the Commune begin. Officially, it is a weather station.'
+        spanish: 'Bajo los Alpes suizos, detrás de siete puertas, las mejores mentes de la Comuna empiezan. Oficialmente, es una estación meteorológica.'
+      options:
+      - name: {english: 'Nobody must know.', spanish: 'Nadie debe saberlo.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 31
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Accelerators Sing', spanish: 'Los Aceleradores Cantan'}
+      desc:
+        english: 'The rings come to life. For one second, the grid of half of Europe dims. Nobody outside the bunker knows why.'
+        spanish: 'Los anillos cobran vida. Por un segundo, la red de media Europa baja. Nadie fuera del búnker sabe por qué.'
+      options:
+      - name: {english: 'Next phase.', spanish: 'Próxima fase.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 32
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Star in a Bottle', spanish: 'Una Estrella en una Botella'}
+      desc:
+        english: 'The fusion reactor holds for eleven minutes. Then for an hour. Then for a week. The Commune has its own sun.'
+        spanish: 'El reactor de fusión aguanta once minutos. Después una hora. Después una semana. La Comuna tiene su propio sol.'
+      options:
+      - name: {english: 'Next phase.', spanish: 'Próxima fase.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 33
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Fire Is Ours', spanish: 'El Fuego es Nuestro'}
+      desc:
+        english: 'Two devices, each the size of a refrigerator, rest in a cave under the Jungfrau. Nobody in the world knows they exist. The Council decides, in silence, that they will only be used if the Commune is about to fall... or not.\n\nTwo fusion bombs. If we use one, the world WILL react.'
+        spanish: 'Dos artefactos, cada uno del tamaño de una heladera, descansan en una cueva bajo el Jungfrau. Nadie en el mundo sabe que existen. El Consejo decide, en silencio, que solo se usarán si la Comuna está por caer... o no.\n\nDos bombas de fusión. Si usamos una, el mundo VA a reaccionar.'
+      options:
+      - name: {english: 'Silence.', spanish: 'Silencio.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 34
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Council Grants Another Year', spanish: 'El Consejo Da Otro Año'}
+      desc:
+        english: 'The phase failed its deadline. The scientists ask for patience; the Council asks for results. In 90 days the work starts again.'
+        spanish: 'La fase no llegó a tiempo. Los científicos piden paciencia; el Consejo pide resultados. En 90 días se retoma el trabajo.'
+      options:
+      - name: {english: 'Again.', spanish: 'Otra vez.'}
+        effects: []
+        ai_chance: 100
+      src: user_request
+    - id: 40
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Bomb Has Spoken', spanish: 'La Bomba Habló'}
+      desc:
+        english: 'We used the fire of the stars. The city is gone, and so is the old world. For two years: +10% war support and -10% stability. Every power on Earth now decides what to do about us.'
+        spanish: 'Usamos el fuego de las estrellas. La ciudad ya no existe, y tampoco el mundo viejo. Por dos años: +10% de apoyo a la guerra y -10% de estabilidad. Cada potencia de la Tierra decide ahora qué hacer con nosotros.'
+      options:
+      - name: {english: 'History will judge.', spanish: 'La historia juzgará.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_la_bomba_hablo, days: 730}
+        ai_chance: 100
+      src: user_request
+    - id: 41
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Fire of the Stars', spanish: 'El Fuego de las Estrellas'}
+      desc:
+        english: '[From.GetName] has used a fusion weapon. A city has disappeared in one second. Nobody knew they had it.\n\nCONDEMN: war goal against them and +10% war support.\nOUR OWN FIRE: for a year, +5% research speed.\nLOOK AWAY: +2% stability.'
+        spanish: '[From.GetName] usó un arma de fusión. Una ciudad desapareció en un segundo. Nadie sabía que la tenían.\n\nCONDENAR: objetivo de guerra contra ellos y +10% de apoyo a la guerra.\nNUESTRO PROPIO FUEGO: por un año, +5% de velocidad de investigación.\nMIRAR PARA OTRO LADO: +2% de estabilidad.'
+      options:
+      - name: {english: 'Never again: condemn them.', spanish: 'Nunca más: condenarlos.'}
+        effects:
+        - {effect: wargoal, target: FROM, type: annex_everything}
+        - {effect: add_war_support, value: 0.1}
+        ai_chance: 40
+      - name: {english: 'We need our own fire.', spanish: 'Necesitamos nuestro propio fuego.'}
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_carrera_atomica, days: 365}
+        ai_chance: 35
+      - name: {english: 'Look away.', spanish: 'Mirar para otro lado.'}
+        effects:
+        - {effect: add_stability, value: 0.02}
+        ai_chance: 25
+      src: user_request

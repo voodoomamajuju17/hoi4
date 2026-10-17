@@ -11129,6 +11129,384 @@ categories:
     after_effects:
     - {effect: run, value: NAS_espiritu_vivo}
 
+  # 2026-10-17: la receta de diversión (ASC) — productoras, tres elecciones, gastos y eventos.
+  - id: ASC_plan_category
+    country: ASC
+    icon_prefer:
+    - generic_research
+    - generic_industry
+    name: {english: 'The Plan of the Commune', spanish: 'El Plan de la Comuna'}
+    desc:
+      english: 'Compute: [?ASC_computo]\nProducing data cores: [?ASC_productoras_r] / 5\n\nCompute is the blood of the Plan. Five great data cores feed it; three great choices will decide what the Commune becomes.\n\nPRODUCERS: the Rotterdam Core, the Prague Core, the Alpine Vault, the Copenhagen Core, the Vienna Core. Each one adds 1 Compute a month; losing one costs 12 and 180 days of trouble, and it produces again only when we retake and restore it.\nTHE THREE CHOICES: at 40, 70, 100 Compute you can spend them, once each, on a permanent choice between three paths.\nSPENDING: smaller amounts buy temporary bonuses.'
+      spanish: 'Cómputo: [?ASC_computo]\nNúcleos de datos productores: [?ASC_productoras_r] / 5\n\nEl cómputo es la sangre del Plan. Cinco grandes núcleos de datos lo alimentan; tres grandes elecciones van a decidir en qué se convierte la Comuna.\n\nPRODUCTORAS: el Núcleo de Róterdam, el Núcleo de Praga, la Bóveda Alpina, el Núcleo de Copenhague, el Núcleo de Viena. Cada una suma 1 de Cómputo por mes; perder una cuesta 12 y 180 días de problemas, y vuelve a producir recién cuando la recuperamos y la restauramos.\nLAS TRES ELECCIONES: con 40, 70, 100 de Cómputo podés gastarlos, una vez cada una, en una elección permanente entre tres caminos.\nGASTAR: con menos se compran bonos temporales.'
+    src: user_request
+    decisions:
+    - id: ASC_restaurar_1
+      name: {english: 'Reboot The Rotterdam Core', spanish: 'Reiniciar El Núcleo de Róterdam'}
+      desc:
+        english: 'The Rotterdam Core is ours again. New servers, same purpose: it produces Compute again. +2 Compute.'
+        spanish: 'El Núcleo de Róterdam vuelve a ser nuestro. Servidores nuevos, el mismo propósito: vuelve a producir Cómputo. +2 de Cómputo.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: ASC_prod_1_perdida}
+      available:
+        controls_state: [Holland]
+      effects:
+      - {effect: clear_flag, value: ASC_prod_1_perdida}
+      - {effect: add_variable, var: ASC_computo, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: ASC_restaurar_2
+      name: {english: 'Reboot The Prague Core', spanish: 'Reiniciar El Núcleo de Praga'}
+      desc:
+        english: 'The Prague Core is ours again. New servers, same purpose: it produces Compute again. +2 Compute.'
+        spanish: 'El Núcleo de Praga vuelve a ser nuestro. Servidores nuevos, el mismo propósito: vuelve a producir Cómputo. +2 de Cómputo.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: ASC_prod_2_perdida}
+      available:
+        controls_state: [Bohemia]
+      effects:
+      - {effect: clear_flag, value: ASC_prod_2_perdida}
+      - {effect: add_variable, var: ASC_computo, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: ASC_restaurar_3
+      name: {english: 'Reboot The Alpine Vault', spanish: 'Reiniciar La Bóveda Alpina'}
+      desc:
+        english: 'The Alpine Vault is ours again. New servers, same purpose: it produces Compute again. +2 Compute.'
+        spanish: 'La Bóveda Alpina vuelve a ser nuestro. Servidores nuevos, el mismo propósito: vuelve a producir Cómputo. +2 de Cómputo.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: ASC_prod_3_perdida}
+      available:
+        controls_state: [Swiss Plateau]
+      effects:
+      - {effect: clear_flag, value: ASC_prod_3_perdida}
+      - {effect: add_variable, var: ASC_computo, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: ASC_restaurar_4
+      name: {english: 'Reboot The Copenhagen Core', spanish: 'Reiniciar El Núcleo de Copenhague'}
+      desc:
+        english: 'The Copenhagen Core is ours again. New servers, same purpose: it produces Compute again. +2 Compute.'
+        spanish: 'El Núcleo de Copenhague vuelve a ser nuestro. Servidores nuevos, el mismo propósito: vuelve a producir Cómputo. +2 de Cómputo.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: ASC_prod_4_perdida}
+      available:
+        controls_state: [Sjaelland]
+      effects:
+      - {effect: clear_flag, value: ASC_prod_4_perdida}
+      - {effect: add_variable, var: ASC_computo, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: ASC_restaurar_5
+      name: {english: 'Reboot The Vienna Core', spanish: 'Reiniciar El Núcleo de Viena'}
+      desc:
+        english: 'The Vienna Core is ours again. New servers, same purpose: it produces Compute again. +2 Compute.'
+        spanish: 'El Núcleo de Viena vuelve a ser nuestro. Servidores nuevos, el mismo propósito: vuelve a producir Cómputo. +2 de Cómputo.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: ASC_prod_5_perdida}
+      available:
+        controls_state: [Lower Austria]
+      effects:
+      - {effect: clear_flag, value: ASC_prod_5_perdida}
+      - {effect: add_variable, var: ASC_computo, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: ASC_la_primera_directiva
+      name: {english: 'The First Directive', spanish: 'La Primera Directiva'}
+      desc:
+        english: 'The Plan can be rewritten once at its root. Only one path, and only once. Needs and spends 40 Compute.'
+        spanish: 'El Plan se puede reescribir una vez desde la raíz. Un solo camino, y una sola vez. Pide y gasta 40 de Cómputo.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: ASC_computo, value: 40}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -40}
+      - {effect: event, id: meganations_asc_receta.10}
+      ai:
+        factor: 50
+      src: user_request
+    - id: ASC_la_segunda_directiva
+      name: {english: 'The Second Directive', spanish: 'La Segunda Directiva'}
+      desc:
+        english: 'The Plan, rewritten for a Commune at war with the world. Only one path, and only once. Needs and spends 70 Compute.'
+        spanish: 'El Plan, reescrito para una Comuna en guerra con el mundo. Un solo camino, y una sola vez. Pide y gasta 70 de Cómputo.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: ASC_computo, value: 70}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -70}
+      - {effect: event, id: meganations_asc_receta.11}
+      ai:
+        factor: 50
+      src: user_request
+    - id: ASC_la_directiva_final
+      name: {english: 'The Final Directive', spanish: 'La Directiva Final'}
+      desc:
+        english: 'The last rewrite: what the Commune will be when the century ends. Only one path, and only once. Needs and spends 100 Compute.'
+        spanish: 'La última reescritura: qué va a ser la Comuna cuando termine el siglo. Un solo camino, y una sola vez. Pide y gasta 100 de Cómputo.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: ASC_computo, value: 100}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -100}
+      - {effect: event, id: meganations_asc_receta.12}
+      ai:
+        factor: 50
+      src: user_request
+    - id: ASC_simulacion_de_batalla
+      name: {english: 'Battle Simulation', spanish: 'Simulación de Batalla'}
+      desc:
+        english: 'The grid plays every battle before it happens: +8% organisation and +5% attack for 60 days. Costs 15 Compute.'
+        spanish: 'La red juega cada batalla antes de que pase: +8% de organización y +5% de ataque por 60 días. Cuesta 15 de Cómputo.'
+      icon_prefer:
+      - generic_army_support
+      cost: 10
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: ASC_computo, value: 15}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -15}
+      - {effect: dynamic_modifier, id: ASC_receta_simulacion, days: 60}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: ASC_computo, value: 30}}
+      src: user_request
+    - id: ASC_obras_optimizadas
+      name: {english: 'Optimised Works', spanish: 'Obras Optimizadas'}
+      desc:
+        english: 'Every crane, every truck, every brick scheduled to the second: +15% construction speed for 90 days. Costs 15 Compute.'
+        spanish: 'Cada grúa, cada camión, cada ladrillo programado al segundo: +15% de velocidad de construcción por 90 días. Cuesta 15 de Cómputo.'
+      icon_prefer:
+      - generic_construction
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: ASC_computo, value: 15}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -15}
+      - {effect: dynamic_modifier, id: ASC_receta_obras, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: ASC_computo, value: 30}}
+      src: user_request
+    - id: ASC_plan_relampago
+      name: {english: 'Lightning Plan', spanish: 'Plan Relámpago'}
+      desc:
+        english: 'A five-year plan in ninety days: +8% factory output for 90 days. Costs 20 Compute.'
+        spanish: 'Un plan quinquenal en noventa días: +8% de producción de fábricas por 90 días. Cuesta 20 de Cómputo.'
+      icon_prefer:
+      - generic_industry
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: ASC_computo, value: 20}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -20}
+      - {effect: dynamic_modifier, id: ASC_receta_plan_relampago, days: 90}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: ASC_computo, value: 40}}
+      src: user_request
+    - id: ASC_red_de_vigilancia
+      name: {english: 'The Watching Grid', spanish: 'La Red que Vigila'}
+      desc:
+        english: 'Every camera, every message, every rumour: +6% stability for 120 days. Costs 10 Compute.'
+        spanish: 'Cada cámara, cada mensaje, cada rumor: +6% de estabilidad por 120 días. Cuesta 10 de Cómputo.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 10
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: ASC_computo, value: 10}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -10}
+      - {effect: dynamic_modifier, id: ASC_receta_vigilancia, days: 120}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: ASC_computo, value: 20}}
+      src: user_request
+    - id: ASC_vender_computo
+      name: {english: 'Sell Compute Abroad', spanish: 'Vender Cómputo Afuera'}
+      desc:
+        english: 'Foreign governments rent our servers: +60 political power and the grid cools. Costs 15 Compute.'
+        spanish: 'Gobiernos extranjeros alquilan nuestros servidores: +60 de poder político y la red se enfría. Cuesta 15 de Cómputo.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 120
+      available:
+        variable_at_least: {var: ASC_computo, value: 15}
+      effects:
+      - {effect: add_variable, var: ASC_computo, value: -15}
+      - {effect: add_political_power, value: 60}
+      - {effect: add_variable, var: ASC_calor, value: -5}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: ASC_computo, value: 30}}
+      src: user_request
+    after_effects:
+    - {effect: run, value: ASC_recalcular_computo}
+
+  # 2026-10-17 (pedido del usuario): el Proyecto Prometeo de la Comuna, la bomba en tres
+  # fases con reloj. Secreto: el mundo reacciona recién cuando se usa (on_nuke_drop).
+  - id: ASC_prometeo_category
+    country: ASC
+    icon_prefer:
+    - generic_research
+    - generic_nuclear
+    name: {english: 'Project Prometheus', spanish: 'El Proyecto Prometeo'}
+    desc:
+      english: 'TOP SECRET. Three phases, a year each: the accelerators, the fusion reactor, the weapon. If a phase expires, the Council grants another year after 90 days of pause. When the fire is ready, nobody will know; the day it is used, the whole world will.'
+      spanish: 'ALTO SECRETO. Tres fases, un año cada una: los aceleradores, el reactor de fusión, el arma. Si una fase vence, el Consejo da otro año tras 90 días de pausa. Cuando el fuego esté listo, nadie lo va a saber; el día que se use, lo va a saber el mundo entero.'
+    src: user_request
+    decisions:
+    - id: ASC_abrir_prometeo
+      name: {english: 'Open Project Prometheus', spanish: 'Abrir el Proyecto Prometeo'}
+      desc:
+        english: 'In a bunker under the Alps, the Commune starts building the fire of the stars. Three phases, a year each: accelerators, the fusion reactor, the weapon. NOBODY outside the Council will know, until the day it is used.'
+        spanish: 'En un búnker bajo los Alpes, la Comuna empieza a construir el fuego de las estrellas. Tres fases, un año cada una: los aceleradores, el reactor de fusión, el arma. NADIE fuera del Consejo lo va a saber, hasta el día en que se use.'
+      icon_prefer:
+      - generic_research
+      - generic_nuclear
+      cost: 75
+      fire_only_once: true
+      available:
+        date_after: 2100.6.1
+      effects:
+      - {effect: flag, value: ASC_prometeo_1}
+      - {effect: event, id: meganations_asc_receta.30}
+      ai:
+        factor: 10
+      src: user_request
+    - id: ASC_prometeo_fase_1
+      name: {english: 'Phase I: The Accelerators', spanish: 'Fase I: Los Aceleradores'}
+      desc:
+        english: 'Rings of superconductors under the Alps, fed by the grid. Within a year: 50 Compute and 140 factories. Done: Experimental Fusion and +10% research for 180 days. Expired: -50 political power and 90 days of pause before trying again.'
+        spanish: 'Anillos de superconductores bajo los Alpes, alimentados por la red. En un año: 50 de Cómputo y 140 fábricas. Cumplida: Fusión Experimental y +10% de investigación por 180 días. Vencida: -50 de poder político y 90 días de pausa antes de reintentar.'
+      icon_prefer:
+      - generic_research
+      - generic_nuclear
+      cost: 0
+      available:
+        variable_at_least: {var: ASC_computo, value: 50}
+        factories_at_least: 140
+      mission:
+        days: 365
+        activation: {tag: ASC, flag: ASC_prometeo_1, not_flag: ASC_prometeo_pausa}
+      effects:
+      - {effect: tech, value: atomic_research}
+      - {effect: dynamic_modifier, id: ASC_prometeo_impulso, days: 180}
+      - {effect: flag, value: ASC_prometeo_2}
+      - {effect: clear_flag, value: ASC_prometeo_1}
+      - {effect: event, id: meganations_asc_receta.31}
+      timeout_effects:
+      - {effect: add_political_power, value: -50}
+      - {effect: flag, value: ASC_prometeo_pausa, days: 90}
+      - {effect: event, id: meganations_asc_receta.34}
+      ai:
+        factor: 1
+      src: user_request
+    - id: ASC_prometeo_fase_2
+      name: {english: 'Phase II: The Fusion Reactor', spanish: 'Fase II: El Reactor de Fusión'}
+      desc:
+        english: 'The first fusion reactor of the century, running in secret. Within a year: 70 Compute and 155 factories. Done: Fusion Reactor (we can build reactors) and the first reactor built. Expired: -50 political power and 90 days of pause.'
+        spanish: 'El primer reactor de fusión del siglo, funcionando en secreto. En un año: 70 de Cómputo y 155 fábricas. Cumplida: Reactor de Fusión (podemos construir reactores) y el primer reactor ya construido. Vencida: -50 de poder político y 90 días de pausa.'
+      icon_prefer:
+      - generic_research
+      - generic_nuclear
+      cost: 0
+      available:
+        variable_at_least: {var: ASC_computo, value: 70}
+        factories_at_least: 155
+      mission:
+        days: 365
+        activation: {tag: ASC, flag: ASC_prometeo_2, not_flag: ASC_prometeo_pausa}
+      effects:
+      - {effect: tech, value: nuclear_reactor}
+      - {effect: build, building: nuclear_reactor, level: 1, optional: true}
+      - {effect: add_variable, var: ASC_calor, value: -15}
+      - {effect: flag, value: ASC_prometeo_3}
+      - {effect: clear_flag, value: ASC_prometeo_2}
+      - {effect: event, id: meganations_asc_receta.32}
+      timeout_effects:
+      - {effect: add_political_power, value: -50}
+      - {effect: flag, value: ASC_prometeo_pausa, days: 90}
+      - {effect: event, id: meganations_asc_receta.34}
+      ai:
+        factor: 1
+      src: user_request
+    - id: ASC_prometeo_fase_3
+      name: {english: 'Phase III: The Fire of Prometheus', spanish: 'Fase III: El Fuego de Prometeo'}
+      desc:
+        english: 'The weapon. Within a year: 90 Compute and 170 factories. Done: Fusion Weapons, two bombs ready and the Secret of Prometheus. The world will not know, until we use it. Expired: -50 political power and 90 days of pause.'
+        spanish: 'El arma. En un año: 90 de Cómputo y 170 fábricas. Cumplida: Armas de Fusión, dos bombas listas y El Secreto de Prometeo. El mundo no lo va a saber, hasta que la usemos. Vencida: -50 de poder político y 90 días de pausa.'
+      icon_prefer:
+      - generic_research
+      - generic_nuclear
+      cost: 0
+      available:
+        variable_at_least: {var: ASC_computo, value: 90}
+        factories_at_least: 170
+      mission:
+        days: 365
+        activation: {tag: ASC, flag: ASC_prometeo_3, not_flag: ASC_prometeo_pausa}
+      effects:
+      - {effect: tech, value: nukes}
+      - {effect: nukes, value: 2}
+      - {effect: dynamic_modifier, id: ASC_secreto_de_prometeo}
+      - {effect: flag, value: ASC_fuego_de_prometeo}
+      - {effect: clear_flag, value: ASC_prometeo_3}
+      - {effect: event, id: meganations_asc_receta.33}
+      timeout_effects:
+      - {effect: add_political_power, value: -50}
+      - {effect: flag, value: ASC_prometeo_pausa, days: 90}
+      - {effect: event, id: meganations_asc_receta.34}
+      ai:
+        factor: 1
+      src: user_request
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -12658,6 +13036,7 @@ scripted_effects:
       - {effect: event, id: meganations_fcu.210, days: 1}
   - id: ASC_pulso_de_la_red
     effects:
+    - {effect: run, value: ASC_pulso_receta}
     - effect: if
       when: {focus: ASC_el_computo_distribuido}
       then:
@@ -17671,6 +18050,160 @@ scripted_effects:
           - {effect: flag, value: NAS_receta_visto_7, days: 1095}
           - {effect: event, id: meganations_nas_receta.27, days: 1}
 
+  # 2026-10-17: pulso de la receta (ASC), lo llama ASC_pulso_de_la_red
+  - id: ASC_pulso_receta
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - ASC_productoras_r
+        - 0
+    - effect: if
+      when:
+        controls_state: [Holland]
+        not_flag: ASC_prod_1_perdida
+      then:
+      - {effect: flag, value: ASC_prod_1_activa}
+      - {effect: add_variable, var: ASC_productoras_r, value: 1}
+      - {effect: add_variable, var: ASC_computo, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Holland]}
+        not_flag: ASC_prod_1_perdida
+        flag: ASC_prod_1_activa
+      then:
+      - {effect: flag, value: ASC_prod_1_perdida}
+      - {effect: add_variable, var: ASC_computo, value: -12}
+      - {effect: clamp, var: ASC_computo, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: ASC_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_asc_receta.1, days: 1}
+    - effect: if
+      when:
+        controls_state: [Bohemia]
+        not_flag: ASC_prod_2_perdida
+      then:
+      - {effect: flag, value: ASC_prod_2_activa}
+      - {effect: add_variable, var: ASC_productoras_r, value: 1}
+      - {effect: add_variable, var: ASC_computo, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Bohemia]}
+        not_flag: ASC_prod_2_perdida
+        flag: ASC_prod_2_activa
+      then:
+      - {effect: flag, value: ASC_prod_2_perdida}
+      - {effect: add_variable, var: ASC_computo, value: -12}
+      - {effect: clamp, var: ASC_computo, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: ASC_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_asc_receta.2, days: 1}
+    - effect: if
+      when:
+        controls_state: [Swiss Plateau]
+        not_flag: ASC_prod_3_perdida
+      then:
+      - {effect: flag, value: ASC_prod_3_activa}
+      - {effect: add_variable, var: ASC_productoras_r, value: 1}
+      - {effect: add_variable, var: ASC_computo, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Swiss Plateau]}
+        not_flag: ASC_prod_3_perdida
+        flag: ASC_prod_3_activa
+      then:
+      - {effect: flag, value: ASC_prod_3_perdida}
+      - {effect: add_variable, var: ASC_computo, value: -12}
+      - {effect: clamp, var: ASC_computo, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: ASC_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_asc_receta.3, days: 1}
+    - effect: if
+      when:
+        controls_state: [Sjaelland]
+        not_flag: ASC_prod_4_perdida
+      then:
+      - {effect: flag, value: ASC_prod_4_activa}
+      - {effect: add_variable, var: ASC_productoras_r, value: 1}
+      - {effect: add_variable, var: ASC_computo, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Sjaelland]}
+        not_flag: ASC_prod_4_perdida
+        flag: ASC_prod_4_activa
+      then:
+      - {effect: flag, value: ASC_prod_4_perdida}
+      - {effect: add_variable, var: ASC_computo, value: -12}
+      - {effect: clamp, var: ASC_computo, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: ASC_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_asc_receta.4, days: 1}
+    - effect: if
+      when:
+        controls_state: [Lower Austria]
+        not_flag: ASC_prod_5_perdida
+      then:
+      - {effect: flag, value: ASC_prod_5_activa}
+      - {effect: add_variable, var: ASC_productoras_r, value: 1}
+      - {effect: add_variable, var: ASC_computo, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Lower Austria]}
+        not_flag: ASC_prod_5_perdida
+        flag: ASC_prod_5_activa
+      then:
+      - {effect: flag, value: ASC_prod_5_perdida}
+      - {effect: add_variable, var: ASC_computo, value: -12}
+      - {effect: clamp, var: ASC_computo, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: ASC_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_asc_receta.5, days: 1}
+    - effect: if
+      when:
+        not_flag: ASC_receta_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: ASC_receta_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_0}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_0, days: 1095}
+          - {effect: event, id: meganations_asc_receta.20, days: 1}
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_1}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_1, days: 1095}
+          - {effect: event, id: meganations_asc_receta.21, days: 1}
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_2}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_2, days: 1095}
+          - {effect: event, id: meganations_asc_receta.22, days: 1}
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_3}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_3, days: 1095}
+          - {effect: event, id: meganations_asc_receta.23, days: 1}
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_4}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_4, days: 1095}
+          - {effect: event, id: meganations_asc_receta.24, days: 1}
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_5}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_5, days: 1095}
+          - {effect: event, id: meganations_asc_receta.25, days: 1}
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_6}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_6, days: 1095}
+          - {effect: event, id: meganations_asc_receta.26, days: 1}
+        - weight: 1
+          skip_if: {flag: ASC_receta_visto_7}
+          effects:
+          - {effect: flag, value: ASC_receta_visto_7, days: 1095}
+          - {effect: event, id: meganations_asc_receta.27, days: 1}
+
 dynamic_modifiers:
   # 2026-10-11 (pedido del usuario: más combate aéreo y ases para el NAS)
   - id: NAS_escuela_de_ases
@@ -18517,6 +19050,134 @@ dynamic_modifiers:
     desc: {english: 'No one crosses the cordillera.', spanish: 'Nadie cruza la cordillera.'}
     modifiers: {'?army_defence_factor': 0.15, '?stability_factor': 0.1, '?war_support_factor': 0.1}
 
+  - id: ASC_receta_productora_perdida
+    country: ASC
+    no_art: true
+    name: {english: 'Severed Core', spanish: 'Núcleo Cortado'}
+    desc: {english: '-5% stability and -10% construction speed', spanish: '-5% de estabilidad y -10% de velocidad de construcción'}
+    modifiers: {'?stability_factor': -0.05, '?production_speed_buildings_factor': -0.1}
+  - id: ASC_directiva_automatizacion
+    country: ASC
+    no_art: true
+    name: {english: 'Full Automation', spanish: 'Automatización Total'}
+    desc: {english: 'Machines building machines.', spanish: 'Máquinas que construyen máquinas.'}
+    modifiers: {'?industrial_capacity_factory': 0.05, '?production_speed_buildings_factor': 0.05}
+  - id: ASC_directiva_ciudadano_soldado
+    country: ASC
+    no_art: true
+    name: {english: 'The Citizen Soldier', spanish: 'El Ciudadano Soldado'}
+    desc: {english: 'Every worker trains on Sundays.', spanish: 'Cada trabajador entrena los domingos.'}
+    modifiers: {'?recruitable_population_factor': 0.08, '?army_org_factor': 0.03}
+  - id: ASC_directiva_servidores_frios
+    country: ASC
+    no_art: true
+    name: {english: 'Cold Servers', spanish: 'Servidores Fríos'}
+    desc: {english: 'The grid runs cooler, and so do tempers.', spanish: 'La red corre más fría, y los ánimos también.'}
+    modifiers: {'?stability_factor': 0.05, '?research_speed_factor': 0.03}
+  - id: ASC_directiva_algoritmo_de_hierro
+    country: ASC
+    no_art: true
+    name: {english: 'The Iron Algorithm', spanish: 'El Algoritmo de Hierro'}
+    desc: {english: 'Every battle simulated a million times.', spanish: 'Cada batalla simulada un millón de veces.'}
+    modifiers: {'?army_attack_factor': 0.07, '?army_defence_factor': 0.05}
+  - id: ASC_directiva_fabrica_infinita
+    country: ASC
+    no_art: true
+    name: {english: 'The Infinite Factory', spanish: 'La Fábrica Infinita'}
+    desc: {english: 'Lights out, lines running.', spanish: 'Luces apagadas, líneas funcionando.'}
+    modifiers: {'?industrial_capacity_factory': 0.07, '?consumer_goods_factor': -0.03}
+  - id: ASC_directiva_academia_abierta
+    country: ASC
+    no_art: true
+    name: {english: 'The Open Academy', spanish: 'La Academia Abierta'}
+    desc: {english: 'Every citizen a researcher.', spanish: 'Cada ciudadano, un investigador.'}
+    modifiers: {'?research_speed_factor': 0.07}
+  - id: ASC_directiva_maquina_roja
+    country: ASC
+    no_art: true
+    name: {english: 'The Red Machine', spanish: 'La Máquina Roja'}
+    desc: {english: 'The Commune is a weapon.', spanish: 'La Comuna es un arma.'}
+    modifiers: {'?army_attack_factor': 0.08, '?army_org_factor': 0.08, '?war_support_factor': 0.08}
+  - id: ASC_directiva_post_escasez
+    country: ASC
+    no_art: true
+    name: {english: 'Post-Scarcity', spanish: 'La Post-Escasez'}
+    desc: {english: 'Nobody lacks anything.', spanish: 'A nadie le falta nada.'}
+    modifiers: {'?consumer_goods_factor': -0.05, '?stability_factor': 0.08, '?industrial_capacity_factory': 0.05}
+  - id: ASC_directiva_singularidad
+    country: ASC
+    no_art: true
+    name: {english: 'The Singularity', spanish: 'La Singularidad'}
+    desc: {english: 'The Plan plans itself.', spanish: 'El Plan se planifica solo.'}
+    modifiers: {'?research_speed_factor': 0.12, '?political_power_gain': 0.1}
+  - id: ASC_receta_simulacion
+    country: ASC
+    no_art: true
+    name: {english: 'Battle Simulation', spanish: 'Simulación de Batalla'}
+    desc: {english: 'Every battle already played.', spanish: 'Cada batalla ya jugada.'}
+    modifiers: {'?army_org_factor': 0.08, '?army_attack_factor': 0.05}
+  - id: ASC_receta_obras
+    country: ASC
+    no_art: true
+    name: {english: 'Optimised Works', spanish: 'Obras Optimizadas'}
+    desc: {english: 'Scheduled to the second.', spanish: 'Programado al segundo.'}
+    modifiers: {'?production_speed_buildings_factor': 0.15}
+  - id: ASC_receta_plan_relampago
+    country: ASC
+    no_art: true
+    name: {english: 'Lightning Plan', spanish: 'Plan Relámpago'}
+    desc: {english: 'Five years in ninety days.', spanish: 'Cinco años en noventa días.'}
+    modifiers: {'?industrial_capacity_factory': 0.08}
+  - id: ASC_receta_vigilancia
+    country: ASC
+    no_art: true
+    name: {english: 'The Watching Grid', spanish: 'La Red que Vigila'}
+    desc: {english: 'The grid sees everything.', spanish: 'La red lo ve todo.'}
+    modifiers: {'?stability_factor': 0.06}
+  - id: ASC_prometeo_impulso
+    country: ASC
+    no_art: true
+    name: {english: 'The Accelerators', spanish: 'Los Aceleradores'}
+    desc: {english: 'The grid feeds the rings.', spanish: 'La red alimenta los anillos.'}
+    modifiers: {'?research_speed_factor': 0.1}
+  - id: ASC_secreto_de_prometeo
+    country: ASC
+    no_art: true
+    name: {english: 'The Secret of Prometheus', spanish: 'El Secreto de Prometeo'}
+    desc: {english: 'Only the Council knows. The Council sleeps well.', spanish: 'Solo el Consejo lo sabe. El Consejo duerme tranquilo.'}
+    modifiers: {'?stability_factor': 0.03, '?research_speed_factor': 0.03}
+  - id: MEGANATIONS_la_bomba_hablo
+    country: null
+    no_art: true
+    name: {english: 'The Bomb Has Spoken', spanish: 'La Bomba Habló'}
+    desc: {english: 'We used the fire of the stars.', spanish: 'Usamos el fuego de las estrellas.'}
+    modifiers: {'?war_support_factor': 0.1, '?stability_factor': -0.1}
+  - id: MEGANATIONS_carrera_atomica
+    country: null
+    no_art: true
+    name: {english: 'The Atomic Race', spanish: 'La Carrera Atómica'}
+    desc: {english: 'If they have it, we need it.', spanish: 'Si ellos la tienen, nosotros la necesitamos.'}
+    modifiers: {'?research_speed_factor': 0.05}
+
+on_actions:
+  # 2026-10-17: la bomba es secreta hasta que se usa. Cuando alguien la tira
+  # (ROOT), el mundo reacciona (meganations_asc_receta.40 y .41).
+  - id: MEGANATIONS_bomba_usada
+    hook: on_nuke_drop
+    effects:
+    - effect: if
+      when:
+        not_flag: MEGANATIONS_bomba_reciente
+      then:
+      - {effect: flag, value: MEGANATIONS_bomba_reciente, days: 180}
+      - {effect: event, id: meganations_asc_receta.40, days: 1}
+      - effect: every_country
+        when:
+          factories_at_least: 25
+          not_flag: MEGANATIONS_bomba_reciente
+        effects:
+        - {effect: event, id: meganations_asc_receta.41, days: 2}
+
 variable_names:
   ASC_valhalla: {english: "Fury of the Sons of Odin", spanish: "Furia de los Hijos de Odín"}
   MEGANATIONS_lider_carisma: {english: "Leader's Charisma", spanish: "Carisma del líder"}
@@ -18596,3 +19257,4 @@ variable_names:
   EFE_hambre_del_metal: {english: "Hunger of the living metal", spanish: "Hambre del metal vivo"}
   SHD_meses_desborde: {english: "Months of overflow", spanish: "Meses de desborde", hidden: true}
   NAS_productoras_r: {english: "Producing temples", spanish: "Templos productores"}
+  ASC_productoras_r: {english: "Producing data cores", spanish: "Núcleos de datos productores"}

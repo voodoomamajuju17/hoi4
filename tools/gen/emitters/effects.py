@@ -323,6 +323,11 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "build":
             building = item.get("building")
+            if ec.buildings and building not in ec.buildings and item.get("optional"):
+                # 2026-10-17: edificio de DLC o versión (reactor nuclear): sin él se saltea con aviso
+                if ec.warn:
+                    ec.warn(f"{owner}: el edificio '{building}' no existe en este juego; no se construye.")
+                continue
             if ec.buildings and building not in ec.buildings:
                 raise SpecError(f"{owner}: el edificio '{building}' no existe en common/buildings/",
                                 where=where)
