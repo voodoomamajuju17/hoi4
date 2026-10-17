@@ -17233,3 +17233,411 @@ namespaces:
         effects: []
         ai_chance: 100
       src: user_request
+
+  # 2026-10-17: la receta de diversión (FCU)
+  meganations_fcu_receta:
+    country: FCU
+    events:
+    - id: 1
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Obsidian Tower', spanish: 'Perdimos La Torre Obsidian'}
+      desc:
+        english: 'The enemy holds the Obsidian Tower. The shareholders are furious and the share price is in free fall.\n\n-10 Dividends. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Headquarters Lost.'
+        spanish: 'El enemigo tiene la Torre Obsidian. Los accionistas están furiosos y la acción está en caída libre.\n\n-10 de Dividendos. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Sede Perdida.'
+      options:
+      - name: {english: 'Move the servers and the gold.', spanish: 'Mudar los servidores y el oro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: FCU_dividendos, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'We will buy it back. With interest.', spanish: 'La vamos a recomprar. Con intereses.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 2
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Halvorsen-Ito Campus', spanish: 'Perdimos El Campus Halvorsen-Ito'}
+      desc:
+        english: 'The enemy holds the Halvorsen-Ito Campus. The shareholders are furious and the share price is in free fall.\n\n-10 Dividends. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Headquarters Lost.'
+        spanish: 'El enemigo tiene el Campus Halvorsen-Ito. Los accionistas están furiosos y la acción está en caída libre.\n\n-10 de Dividendos. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Sede Perdida.'
+      options:
+      - name: {english: 'Move the servers and the gold.', spanish: 'Mudar los servidores y el oro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: FCU_dividendos, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'We will buy it back. With interest.', spanish: 'La vamos a recomprar. Con intereses.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 3
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Castellane Waterworks', spanish: 'Perdimos Las Aguas de Castellane'}
+      desc:
+        english: 'The enemy holds the Castellane Waterworks. The shareholders are furious and the share price is in free fall.\n\n-10 Dividends. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Headquarters Lost.'
+        spanish: 'El enemigo tiene las Aguas de Castellane. Los accionistas están furiosos y la acción está en caída libre.\n\n-10 de Dividendos. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Sede Perdida.'
+      options:
+      - name: {english: 'Move the servers and the gold.', spanish: 'Mudar los servidores y el oro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: FCU_dividendos, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'We will buy it back. With interest.', spanish: 'La vamos a recomprar. Con intereses.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 4
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost Fort Meridian', spanish: 'Perdimos El Fuerte Meridian'}
+      desc:
+        english: 'The enemy holds Fort Meridian. The shareholders are furious and the share price is in free fall.\n\n-10 Dividends. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Headquarters Lost.'
+        spanish: 'El enemigo tiene el Fuerte Meridian. Los accionistas están furiosos y la acción está en caída libre.\n\n-10 de Dividendos. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Sede Perdida.'
+      options:
+      - name: {english: 'Move the servers and the gold.', spanish: 'Mudar los servidores y el oro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: FCU_dividendos, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'We will buy it back. With interest.', spanish: 'La vamos a recomprar. Con intereses.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 5
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'We Lost The Detroit Foundries', spanish: 'Perdimos Las Fundiciones de Detroit'}
+      desc:
+        english: 'The enemy holds the Detroit Foundries. The shareholders are furious and the share price is in free fall.\n\n-10 Dividends. It will not produce again until we retake it and restore it (decision in the panel). For 180 days: Headquarters Lost.'
+        spanish: 'El enemigo tiene las Fundiciones de Detroit. Los accionistas están furiosos y la acción está en caída libre.\n\n-10 de Dividendos. No vuelve a producir hasta que la recuperemos y la restauremos (decisión del panel). Por 180 días: Sede Perdida.'
+      options:
+      - name: {english: 'Move the servers and the gold.', spanish: 'Mudar los servidores y el oro.'}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: FCU_dividendos, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'We will buy it back. With interest.', spanish: 'La vamos a recomprar. Con intereses.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 60
+      src: user_request
+    - id: 10
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The First Shareholders'' Meeting', spanish: 'La Primera Junta de Accionistas'}
+      desc:
+        english: 'The first great shareholders'' meeting of the century. Three motions reach the floor.\n\nSHAREHOLDER VALUE: +5% factory output and -2% consumer goods.\nTHE EMPLOYEE STOCK PLAN: +5% stability and +4% recruitable population.\nDEFENCE CONTRACTS: +4% attack and defence.'
+        spanish: 'La primera gran junta de accionistas del siglo. Llegan tres mociones al recinto.\n\nVALOR PARA EL ACCIONISTA: +5% de producción de fábricas y -2% de bienes de consumo.\nEL PLAN DE ACCIONES PARA EMPLEADOS: +5% de estabilidad y +4% de población reclutable.\nCONTRATOS DE DEFENSA: +4% de ataque y defensa.'
+      options:
+      - name: {english: 'Shareholder Value.', spanish: 'Valor para el Accionista.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_junta_valor}
+        ai_chance: 40
+      - name: {english: 'The Employee Stock Plan.', spanish: 'El Plan de Acciones para Empleados.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_junta_empleados}
+        ai_chance: 30
+      - name: {english: 'Defence Contracts.', spanish: 'Contratos de Defensa.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_junta_defensa}
+        ai_chance: 30
+      src: user_request
+    - id: 11
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Hostile Takeover', spanish: 'La Adquisición Hostil'}
+      desc:
+        english: 'Three corporations bid for the same public agency. The Directorate decides who wins.\n\nMERIDIAN BUYS THE ARMY: +6% organisation and +5% attack; Meridian +15.\nHALVORSEN-ITO BUYS THE UNIVERSITIES: +7% research speed; Halvorsen-Ito +15.\nCASTELLANE BUYS THE RIVERS: +6% stability and +8% construction speed; Castellane +15.'
+        spanish: 'Tres corporaciones ofertan por la misma agencia pública. El Directorio decide quién gana.\n\nMERIDIAN COMPRA EL EJÉRCITO: +6% de organización y +5% de ataque; Meridian +15.\nHALVORSEN-ITO COMPRA LAS UNIVERSIDADES: +7% de velocidad de investigación; Halvorsen-Ito +15.\nCASTELLANE COMPRA LOS RÍOS: +6% de estabilidad y +8% de velocidad de construcción; Castellane +15.'
+      options:
+      - name: {english: 'Meridian Buys the Army.', spanish: 'Meridian Compra el Ejército.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_junta_meridian}
+        - {effect: add_variable, var: FCU_meridian, value: 15}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 35
+      - name: {english: 'Halvorsen-Ito Buys the Universities.', spanish: 'Halvorsen-Ito Compra las Universidades.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_junta_halvorsen}
+        - {effect: add_variable, var: FCU_halvorsen, value: 15}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 35
+      - name: {english: 'Castellane Buys the Rivers.', spanish: 'Castellane Compra los Ríos.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_junta_castellane}
+        - {effect: add_variable, var: FCU_castellane, value: 15}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 30
+      src: user_request
+    - id: 12
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Final Offer', spanish: 'La Oferta Final'}
+      desc:
+        english: 'Seventy-five years of dividends on one table. The Directorate signs the last contract of the century.\n\nTHE CORPORATE REPUBLIC: +8% stability, +0.2 political power a day and +5% factory output.\nTHE WAR ECONOMY INC.: +10% factory output and +6% attack.\nTHE INFINITE MARKET: +8% research, +30% trade opinion and -4% consumer goods.'
+        spanish: 'Setenta y cinco años de dividendos sobre una mesa. El Directorio firma el último contrato del siglo.\n\nLA REPÚBLICA CORPORATIVA: +8% de estabilidad, +0,2 de poder político por día y +5% de producción de fábricas.\nECONOMÍA DE GUERRA S.A.: +10% de producción de fábricas y +6% de ataque.\nEL MERCADO INFINITO: +8% de investigación, +30% de opinión comercial y -4% de bienes de consumo.'
+      options:
+      - name: {english: 'The Corporate Republic.', spanish: 'La República Corporativa.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_oferta_republica}
+        ai_chance: 35
+      - name: {english: 'The War Economy Inc..', spanish: 'Economía de Guerra S.A..'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_oferta_guerra}
+        ai_chance: 40
+      - name: {english: 'The Infinite Market.', spanish: 'El Mercado Infinito.'}
+        effects:
+        - {effect: dynamic_modifier, id: FCU_oferta_mercado}
+        ai_chance: 25
+      src: user_request
+    - id: 20
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Record Quarter', spanish: 'Un Trimestre Récord'}
+      desc:
+        english: 'The quarterly results beat every forecast.\n\nPay the shareholders: +12 Dividends. Reinvest: +40 political power.'
+        spanish: 'Los resultados trimestrales superan todos los pronósticos.\n\nPagarles a los accionistas: +12 de Dividendos. Reinvertir: +40 de poder político.'
+      options:
+      - name: {english: 'Pay them.', spanish: 'Pagarles.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: 12}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 60
+      - name: {english: 'Reinvest.', spanish: 'Reinvertir.'}
+        effects:
+        - {effect: add_political_power, value: 40}
+        ai_chance: 40
+      src: user_request
+    - id: 21
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Hit Product', spanish: 'Un Producto Exitoso'}
+      desc:
+        english: 'A Halvorsen-Ito smart helmet sells forty million units.\n\n+10 Dividends and Halvorsen-Ito +5.'
+        spanish: 'Un casco inteligente de Halvorsen-Ito vende cuarenta millones de unidades.\n\n+10 de Dividendos y Halvorsen-Ito +5.'
+      options:
+      - name: {english: 'Ship them.', spanish: 'Que salgan.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: 10}
+        - {effect: add_variable, var: FCU_halvorsen, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 100
+      src: user_request
+    - id: 22
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Foreign Investors', spanish: 'Inversores Extranjeros'}
+      desc:
+        english: 'The High Seas Nation wants to buy Union bonds.\n\nSell: +12 Dividends. Refuse, for security: +3% war support.'
+        spanish: 'La Nación de Alta Mar quiere comprar bonos de la Unión.\n\nVender: +12 de Dividendos. Negarse, por seguridad: +3% de apoyo a la guerra.'
+      options:
+      - name: {english: 'Sell.', spanish: 'Vender.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: 12}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 60
+      - name: {english: 'Refuse.', spanish: 'Negarse.'}
+        effects:
+        - {effect: add_war_support, value: 0.03}
+        ai_chance: 40
+      src: user_request
+    - id: 23
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Tax Loophole', spanish: 'Un Hueco en los Impuestos'}
+      desc:
+        english: 'Obsidian''s lawyers find a loophole the size of Ohio.\n\nUse it: +12 Dividends, +5 scandal. Close it: +3% stability.'
+        spanish: 'Los abogados de Obsidian encuentran un hueco del tamaño de Ohio.\n\nUsarlo: +12 de Dividendos, +5 de escándalo. Cerrarlo: +3% de estabilidad.'
+      options:
+      - name: {english: 'Use it.', spanish: 'Usarlo.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: 12}
+        - {effect: add_variable, var: FCU_escandalo, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 60
+      - name: {english: 'Close it.', spanish: 'Cerrarlo.'}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        ai_chance: 40
+      src: user_request
+    - id: 24
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Market Crash', spanish: 'Un Derrumbe de la Bolsa'}
+      desc:
+        english: 'The Manhattan exchange loses a third of its value in a morning.\n\nBail out the banks: -12 Dividends. Let them fall: -4% stability.'
+        spanish: 'La bolsa de Manhattan pierde un tercio de su valor en una mañana.\n\nRescatar a los bancos: -12 de Dividendos. Dejarlos caer: -4% de estabilidad.'
+      options:
+      - name: {english: 'Bail out.', spanish: 'Rescatar.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: -12}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 50
+      - name: {english: 'Let them fall.', spanish: 'Dejarlos caer.'}
+        effects:
+        - {effect: add_stability, value: -0.04}
+        ai_chance: 50
+      src: user_request
+    - id: 25
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'A Class Action', spanish: 'Una Demanda Colectiva'}
+      desc:
+        english: 'Ten million citizens sue Castellane over the water quota.\n\nSettle: -10 Dividends. Fight it: +10 scandal.'
+        spanish: 'Diez millones de ciudadanos demandan a Castellane por la cuota de agua.\n\nArreglar: -10 de Dividendos. Pelear: +10 de escándalo.'
+      options:
+      - name: {english: 'Settle.', spanish: 'Arreglar.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: -10}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 50
+      - name: {english: 'Fight it.', spanish: 'Pelear.'}
+        effects:
+        - {effect: add_variable, var: FCU_escandalo, value: 10}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 50
+      src: user_request
+    - id: 26
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'An Embezzler', spanish: 'Un Desfalcador'}
+      desc:
+        english: 'A Meridian vice-president vanishes with the pension fund.\n\n-12 Dividends. Or hunt him with Meridian''s own contractors: -40 political power, Meridian -5.'
+        spanish: 'Un vicepresidente de Meridian desaparece con el fondo de pensiones.\n\n-12 de Dividendos. O cazarlo con los contratistas de la propia Meridian: -40 de poder político, Meridian -5.'
+      options:
+      - name: {english: 'Write it off.', spanish: 'Darlo por perdido.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: -12}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 50
+      - name: {english: 'Hunt him.', spanish: 'Cazarlo.'}
+        effects:
+        - {effect: add_political_power, value: -40}
+        - {effect: add_variable, var: FCU_meridian, value: -5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 50
+      src: user_request
+    - id: 27
+      trigger: effect
+      no_art: true
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Strike', spanish: 'La Huelga'}
+      desc:
+        english: 'The Detroit foundries go on strike.\n\nPay: -12 Dividends. Replace them with robots: -3% stability, +5 scandal.'
+        spanish: 'Las fundiciones de Detroit van a la huelga.\n\nPagar: -12 de Dividendos. Reemplazarlos con robots: -3% de estabilidad, +5 de escándalo.'
+      options:
+      - name: {english: 'Pay.', spanish: 'Pagar.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: -12}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 50
+      - name: {english: 'Robots.', spanish: 'Robots.'}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        - {effect: add_variable, var: FCU_escandalo, value: 5}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 50
+      src: user_request
+    - id: 61
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Detroit Is Burning', spanish: 'Arde Detroit'}
+      desc:
+        english: 'Riots in Detroit. It started with a cut to the water quota and ended with the corporate tower of the city on fire. A mission opens: calm the city within 120 days, or the unrest spreads.\n\nSEND MERIDIAN: Meridian +10, -3% stability, and the mission is easier.\nNEGOTIATE: -15 Dividends and the scandal falls.\nWAIT: nothing now.'
+        spanish: 'Disturbios en Detroit. Empezó con un recorte de la cuota de agua y terminó con la torre corporativa de la ciudad en llamas. Se abre una misión: calmar la ciudad en 120 días, o el disturbio se extiende.\n\nMANDAR A MERIDIAN: Meridian +10, -3% de estabilidad, y la misión es más fácil.\nNEGOCIAR: -15 de Dividendos y baja el escándalo.\nESPERAR: nada por ahora.'
+      options:
+      - name: {english: 'Send Meridian.', spanish: 'Mandar a Meridian.'}
+        effects:
+        - {effect: add_variable, var: FCU_meridian, value: 10}
+        - {effect: add_stability, value: -0.03}
+        - {effect: flag, value: FCU_disturbio_mano_dura_1, days: 120}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'Negotiate.', spanish: 'Negociar.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: -15}
+        - {effect: add_variable, var: FCU_escandalo, value: -10}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 35
+      - name: {english: 'Wait.', spanish: 'Esperar.'}
+        effects: []
+        ai_chance: 25
+      src: user_request
+    - id: 62
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Chicago Is Burning', spanish: 'Arde Chicago'}
+      desc:
+        english: 'Riots in Chicago. It started with a cut to the water quota and ended with the corporate tower of the city on fire. A mission opens: calm the city within 120 days, or the unrest spreads.\n\nSEND MERIDIAN: Meridian +10, -3% stability, and the mission is easier.\nNEGOTIATE: -15 Dividends and the scandal falls.\nWAIT: nothing now.'
+        spanish: 'Disturbios en Chicago. Empezó con un recorte de la cuota de agua y terminó con la torre corporativa de la ciudad en llamas. Se abre una misión: calmar la ciudad en 120 días, o el disturbio se extiende.\n\nMANDAR A MERIDIAN: Meridian +10, -3% de estabilidad, y la misión es más fácil.\nNEGOCIAR: -15 de Dividendos y baja el escándalo.\nESPERAR: nada por ahora.'
+      options:
+      - name: {english: 'Send Meridian.', spanish: 'Mandar a Meridian.'}
+        effects:
+        - {effect: add_variable, var: FCU_meridian, value: 10}
+        - {effect: add_stability, value: -0.03}
+        - {effect: flag, value: FCU_disturbio_mano_dura_2, days: 120}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'Negotiate.', spanish: 'Negociar.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: -15}
+        - {effect: add_variable, var: FCU_escandalo, value: -10}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 35
+      - name: {english: 'Wait.', spanish: 'Esperar.'}
+        effects: []
+        ai_chance: 25
+      src: user_request
+    - id: 63
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Los Angeles Is Burning', spanish: 'Arde Los Ángeles'}
+      desc:
+        english: 'Riots in Los Angeles. It started with a cut to the water quota and ended with the corporate tower of the city on fire. A mission opens: calm the city within 120 days, or the unrest spreads.\n\nSEND MERIDIAN: Meridian +10, -3% stability, and the mission is easier.\nNEGOTIATE: -15 Dividends and the scandal falls.\nWAIT: nothing now.'
+        spanish: 'Disturbios en Los Ángeles. Empezó con un recorte de la cuota de agua y terminó con la torre corporativa de la ciudad en llamas. Se abre una misión: calmar la ciudad en 120 días, o el disturbio se extiende.\n\nMANDAR A MERIDIAN: Meridian +10, -3% de estabilidad, y la misión es más fácil.\nNEGOCIAR: -15 de Dividendos y baja el escándalo.\nESPERAR: nada por ahora.'
+      options:
+      - name: {english: 'Send Meridian.', spanish: 'Mandar a Meridian.'}
+        effects:
+        - {effect: add_variable, var: FCU_meridian, value: 10}
+        - {effect: add_stability, value: -0.03}
+        - {effect: flag, value: FCU_disturbio_mano_dura_3, days: 120}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 40
+      - name: {english: 'Negotiate.', spanish: 'Negociar.'}
+        effects:
+        - {effect: add_variable, var: FCU_dividendos, value: -15}
+        - {effect: add_variable, var: FCU_escandalo, value: -10}
+        - {effect: run, value: FCU_recalcular_directorio}
+        ai_chance: 35
+      - name: {english: 'Wait.', spanish: 'Esperar.'}
+        effects: []
+        ai_chance: 25
+      src: user_request

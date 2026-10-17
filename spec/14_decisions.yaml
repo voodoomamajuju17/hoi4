@@ -12305,6 +12305,353 @@ categories:
         factor: 1
       src: user_request
 
+  # 2026-10-17: la receta de diversión (FCU) — productoras, tres elecciones, gastos y eventos.
+  - id: FCU_dividendos_category
+    country: FCU
+    icon_prefer:
+    - generic_industry
+    - generic_political_actions
+    name: {english: 'The Dividends of the Union', spanish: 'Los Dividendos de la Unión'}
+    desc:
+      english: 'Dividends: [?FCU_dividendos]\nCorporate headquarters: [?FCU_productoras_r] / 5\n\nDividends are what the Directorate pays itself. Five corporate headquarters produce them. Each corporation has its own action, paid in Dividends: it helps the Union and tips the balance of the Directorate. When the scandal is high or stability low, Detroit, Chicago or Los Angeles can burn.\n\nPRODUCERS: the Obsidian Tower, the Halvorsen-Ito Campus, the Castellane Waterworks, Fort Meridian, the Detroit Foundries. Each one adds 1 Dividends a month; losing one costs 10 and 180 days of trouble, and it produces again only when we retake and restore it.\nTHE THREE CHOICES: at 25, 50, 75 Dividends you can spend them, once each, on a permanent choice between three paths.\nSPENDING: smaller amounts buy temporary bonuses.'
+      spanish: 'Dividendos: [?FCU_dividendos]\nSedes corporativas: [?FCU_productoras_r] / 5\n\nLos Dividendos son lo que el Directorio se paga a sí mismo. Cinco sedes corporativas los producen. Cada corporación tiene su propia acción, pagada en Dividendos: ayuda a la Unión y mueve el equilibrio del Directorio. Con el escándalo alto o la estabilidad baja, Detroit, Chicago o Los Ángeles pueden arder.\n\nPRODUCTORAS: la Torre Obsidian, el Campus Halvorsen-Ito, las Aguas de Castellane, el Fuerte Meridian, las Fundiciones de Detroit. Cada una suma 1 de Dividendos por mes; perder una cuesta 10 y 180 días de problemas, y vuelve a producir recién cuando la recuperamos y la restauramos.\nLAS TRES ELECCIONES: con 25, 50, 75 de Dividendos podés gastarlos, una vez cada una, en una elección permanente entre tres caminos.\nGASTAR: con menos se compran bonos temporales.'
+    src: user_request
+    decisions:
+    - id: FCU_restaurar_1
+      name: {english: 'Reopen The Obsidian Tower', spanish: 'Reabrir La Torre Obsidian'}
+      desc:
+        english: 'The Obsidian Tower is ours again. New offices, same logo: it produces Dividends again. +2 Dividends.'
+        spanish: 'La Torre Obsidian vuelve a ser nuestra. Oficinas nuevas, el mismo logo: vuelve a producir Dividendos. +2 de Dividendos.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: FCU_prod_1_perdida}
+      available:
+        controls_state: [New York]
+      effects:
+      - {effect: clear_flag, value: FCU_prod_1_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: FCU_restaurar_2
+      name: {english: 'Reopen The Halvorsen-Ito Campus', spanish: 'Reabrir El Campus Halvorsen-Ito'}
+      desc:
+        english: 'The Halvorsen-Ito Campus is ours again. New offices, same logo: it produces Dividends again. +2 Dividends.'
+        spanish: 'El Campus Halvorsen-Ito vuelve a ser nuestra. Oficinas nuevas, el mismo logo: vuelve a producir Dividendos. +2 de Dividendos.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: FCU_prod_2_perdida}
+      available:
+        controls_state: [California]
+      effects:
+      - {effect: clear_flag, value: FCU_prod_2_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: FCU_restaurar_3
+      name: {english: 'Reopen The Castellane Waterworks', spanish: 'Reabrir Las Aguas de Castellane'}
+      desc:
+        english: 'The Castellane Waterworks is ours again. New offices, same logo: it produces Dividends again. +2 Dividends.'
+        spanish: 'Las Aguas de Castellane vuelve a ser nuestra. Oficinas nuevas, el mismo logo: vuelve a producir Dividendos. +2 de Dividendos.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: FCU_prod_3_perdida}
+      available:
+        controls_state: [Illinois]
+      effects:
+      - {effect: clear_flag, value: FCU_prod_3_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: FCU_restaurar_4
+      name: {english: 'Reopen Fort Meridian', spanish: 'Reabrir El Fuerte Meridian'}
+      desc:
+        english: 'Fort Meridian is ours again. New offices, same logo: it produces Dividends again. +2 Dividends.'
+        spanish: 'El Fuerte Meridian vuelve a ser nuestra. Oficinas nuevas, el mismo logo: vuelve a producir Dividendos. +2 de Dividendos.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: FCU_prod_4_perdida}
+      available:
+        controls_state: [Texas]
+      effects:
+      - {effect: clear_flag, value: FCU_prod_4_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: FCU_restaurar_5
+      name: {english: 'Reopen The Detroit Foundries', spanish: 'Reabrir Las Fundiciones de Detroit'}
+      desc:
+        english: 'The Detroit Foundries is ours again. New offices, same logo: it produces Dividends again. +2 Dividends.'
+        spanish: 'Las Fundiciones de Detroit vuelve a ser nuestra. Oficinas nuevas, el mismo logo: vuelve a producir Dividendos. +2 de Dividendos.'
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 40
+      visible: {flag: FCU_prod_5_perdida}
+      available:
+        controls_state: [Michigan]
+      effects:
+      - {effect: clear_flag, value: FCU_prod_5_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: 2}
+      ai:
+        factor: 30
+      src: user_request
+    - id: FCU_la_primera_junta
+      name: {english: 'The First Shareholders'' Meeting', spanish: 'La Primera Junta de Accionistas'}
+      desc:
+        english: 'The shareholders can change the bylaws of the Union once. Only one path, and only once. Needs and spends 25 Dividends.'
+        spanish: 'Los accionistas pueden cambiar el estatuto de la Unión una vez. Un solo camino, y una sola vez. Pide y gasta 25 de Dividendos.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 25}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -25}
+      - {effect: event, id: meganations_fcu_receta.10}
+      ai:
+        factor: 50
+      src: user_request
+    - id: FCU_la_segunda_junta
+      name: {english: 'The Hostile Takeover', spanish: 'La Adquisición Hostil'}
+      desc:
+        english: 'One corporation can swallow a piece of the State. Only one path, and only once. Needs and spends 50 Dividends.'
+        spanish: 'Una corporación puede tragarse un pedazo del Estado. Un solo camino, y una sola vez. Pide y gasta 50 de Dividendos.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 50}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -50}
+      - {effect: event, id: meganations_fcu_receta.11}
+      ai:
+        factor: 50
+      src: user_request
+    - id: FCU_la_oferta_final
+      name: {english: 'The Final Offer', spanish: 'La Oferta Final'}
+      desc:
+        english: 'The last merger: what the Union will be when the century ends. Only one path, and only once. Needs and spends 75 Dividends.'
+        spanish: 'La última fusión: qué va a ser la Unión cuando termine el siglo. Un solo camino, y una sola vez. Pide y gasta 75 de Dividendos.'
+      icon_prefer:
+      - generic_political_actions
+      - generic_research
+      cost: 0
+      fire_only_once: true
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 75}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -75}
+      - {effect: event, id: meganations_fcu_receta.12}
+      ai:
+        factor: 50
+      src: user_request
+    - id: FCU_los_grifos_de_castellane
+      name: {english: 'Castellane''s Taps', spanish: 'Los Grifos de Castellane'}
+      desc:
+        english: 'Castellane opens the taps for the cities: +6% stability and +4% war support for 90 days. Castellane +10, Meridian -5. Costs 12 Dividends.'
+        spanish: 'Castellane abre los grifos para las ciudades: +6% de estabilidad y +4% de apoyo a la guerra por 90 días. Castellane +10, Meridian -5. Cuesta 12 de Dividendos.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 12}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -12}
+      - {effect: dynamic_modifier, id: FCU_receta_grifos, days: 90}
+      - {effect: add_variable, var: FCU_castellane, value: 10}
+      - {effect: add_variable, var: FCU_meridian, value: -5}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: FCU_dividendos, value: 24}}
+      src: user_request
+    - id: FCU_la_cosecha_de_datos
+      name: {english: 'The Data Harvest', spanish: 'La Cosecha de Datos'}
+      desc:
+        english: 'Halvorsen-Ito reads every message in the Union: +7% research speed for 90 days. Halvorsen-Ito +10, Obsidian -5, scandal +5. Costs 12 Dividends.'
+        spanish: 'Halvorsen-Ito lee cada mensaje de la Unión: +7% de velocidad de investigación por 90 días. Halvorsen-Ito +10, Obsidian -5, escándalo +5. Cuesta 12 de Dividendos.'
+      icon_prefer:
+      - generic_research
+      cost: 10
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 12}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -12}
+      - {effect: dynamic_modifier, id: FCU_receta_datos, days: 90}
+      - {effect: add_variable, var: FCU_halvorsen, value: 10}
+      - {effect: add_variable, var: FCU_obsidian, value: -5}
+      - {effect: add_variable, var: FCU_escandalo, value: 5}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: FCU_dividendos, value: 24}}
+      src: user_request
+    - id: FCU_contratistas_de_meridian
+      name: {english: 'Meridian Contractors', spanish: 'Contratistas de Meridian'}
+      desc:
+        english: 'Meridian rents four battalions of veteran contractors to the Union, and 20,000 men. Meridian +10, Castellane -5. Costs 18 Dividends.'
+        spanish: 'Meridian le alquila a la Unión cuatro batallones de contratistas veteranos, y 20.000 hombres. Meridian +10, Castellane -5. Cuesta 18 de Dividendos.'
+      icon_prefer:
+      - generic_army_support
+      cost: 0
+      cooldown_days: 240
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 18}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -18}
+      - {effect: division_template, name: Contratistas de Meridian, regiments: [infantry, infantry, infantry, infantry, infantry, artillery_brigade]}
+      - {effect: create_units, template: Contratistas de Meridian, count: 4, experience: 0.4}
+      - {effect: add_manpower, value: 20000}
+      - {effect: add_variable, var: FCU_meridian, value: 10}
+      - {effect: add_variable, var: FCU_castellane, value: -5}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: FCU_dividendos, value: 36}}
+      src: user_request
+    - id: FCU_bonos_de_guerra_obsidian
+      name: {english: 'Obsidian War Bonds', spanish: 'Bonos de Guerra Obsidian'}
+      desc:
+        english: 'Obsidian sells war bonds to everyone with a pulse: +10% factory output for 90 days and +50 political power. Obsidian +10, Halvorsen-Ito -5, scandal +5. Costs 15 Dividends.'
+        spanish: 'Obsidian les vende bonos de guerra a todos los que tengan pulso: +10% de producción de fábricas por 90 días y +50 de poder político. Obsidian +10, Halvorsen-Ito -5, escándalo +5. Cuesta 15 de Dividendos.'
+      icon_prefer:
+      - generic_industry
+      cost: 10
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 15}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -15}
+      - {effect: dynamic_modifier, id: FCU_receta_bonos, days: 90}
+      - {effect: add_political_power, value: 50}
+      - {effect: add_variable, var: FCU_obsidian, value: 10}
+      - {effect: add_variable, var: FCU_halvorsen, value: -5}
+      - {effect: add_variable, var: FCU_escandalo, value: 5}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: FCU_dividendos, value: 30}}
+      src: user_request
+    - id: FCU_campana_de_relaciones_publicas
+      name: {english: 'Public Relations Campaign', spanish: 'Campaña de Relaciones Públicas'}
+      desc:
+        english: 'Billboards, holograms and influencers: scandal -15. Costs 10 Dividends.'
+        spanish: 'Carteles, hologramas e influencers: escándalo -15. Cuesta 10 de Dividendos.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least: {var: FCU_dividendos, value: 10}
+      effects:
+      - {effect: add_variable, var: FCU_dividendos, value: -10}
+      - {effect: add_variable, var: FCU_escandalo, value: -15}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: FCU_dividendos, value: 20}}
+      src: user_request
+    - id: FCU_calmar_1
+      name: {english: 'Calm Detroit', spanish: 'Calmar Detroit'}
+      desc:
+        english: 'Restore order in Detroit within 120 days: 45% stability, or 35% if Meridian went in. Done: +5% stability and +40 political power. Expired: the riots spread, ''Riots in the Cities'' for 180 days and +10 scandal.'
+        spanish: 'Restablecer el orden en Detroit en 120 días: 45% de estabilidad, o 35% si entró Meridian. Cumplida: +5% de estabilidad y +40 de poder político. Vencida: el disturbio se extiende, «Disturbios en las Ciudades» por 180 días y +10 de escándalo.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      available:
+        any: [{stability_at_least: 0.45}, {all: [{flag: FCU_disturbio_mano_dura_1}, {stability_at_least: 0.35}]}]
+      mission:
+        days: 120
+        activation: {tag: FCU, flag: FCU_disturbio_1}
+      effects:
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_political_power, value: 40}
+      - {effect: clear_flag, value: FCU_disturbio_1}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: FCU_disturbios_urbanos, days: 180}
+      - {effect: add_variable, var: FCU_escandalo, value: 10}
+      - {effect: clear_flag, value: FCU_disturbio_1}
+      - {effect: run, value: FCU_recalcular_directorio}
+      ai:
+        factor: 1
+      src: user_request
+    - id: FCU_calmar_2
+      name: {english: 'Calm Chicago', spanish: 'Calmar Chicago'}
+      desc:
+        english: 'Restore order in Chicago within 120 days: 45% stability, or 35% if Meridian went in. Done: +5% stability and +40 political power. Expired: the riots spread, ''Riots in the Cities'' for 180 days and +10 scandal.'
+        spanish: 'Restablecer el orden en Chicago en 120 días: 45% de estabilidad, o 35% si entró Meridian. Cumplida: +5% de estabilidad y +40 de poder político. Vencida: el disturbio se extiende, «Disturbios en las Ciudades» por 180 días y +10 de escándalo.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      available:
+        any: [{stability_at_least: 0.45}, {all: [{flag: FCU_disturbio_mano_dura_2}, {stability_at_least: 0.35}]}]
+      mission:
+        days: 120
+        activation: {tag: FCU, flag: FCU_disturbio_2}
+      effects:
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_political_power, value: 40}
+      - {effect: clear_flag, value: FCU_disturbio_2}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: FCU_disturbios_urbanos, days: 180}
+      - {effect: add_variable, var: FCU_escandalo, value: 10}
+      - {effect: clear_flag, value: FCU_disturbio_2}
+      - {effect: run, value: FCU_recalcular_directorio}
+      ai:
+        factor: 1
+      src: user_request
+    - id: FCU_calmar_3
+      name: {english: 'Calm Los Angeles', spanish: 'Calmar Los Ángeles'}
+      desc:
+        english: 'Restore order in Los Angeles within 120 days: 45% stability, or 35% if Meridian went in. Done: +5% stability and +40 political power. Expired: the riots spread, ''Riots in the Cities'' for 180 days and +10 scandal.'
+        spanish: 'Restablecer el orden en Los Ángeles en 120 días: 45% de estabilidad, o 35% si entró Meridian. Cumplida: +5% de estabilidad y +40 de poder político. Vencida: el disturbio se extiende, «Disturbios en las Ciudades» por 180 días y +10 de escándalo.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      available:
+        any: [{stability_at_least: 0.45}, {all: [{flag: FCU_disturbio_mano_dura_3}, {stability_at_least: 0.35}]}]
+      mission:
+        days: 120
+        activation: {tag: FCU, flag: FCU_disturbio_3}
+      effects:
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_political_power, value: 40}
+      - {effect: clear_flag, value: FCU_disturbio_3}
+      timeout_effects:
+      - {effect: dynamic_modifier, id: FCU_disturbios_urbanos, days: 180}
+      - {effect: add_variable, var: FCU_escandalo, value: 10}
+      - {effect: clear_flag, value: FCU_disturbio_3}
+      - {effect: run, value: FCU_recalcular_directorio}
+      ai:
+        factor: 1
+      src: user_request
+    after_effects:
+    - {effect: run, value: FCU_recalcular_directorio}
+
 scripted_effects:
 
   # Después de cada contrato o foco que mueve una corporación.
@@ -13689,6 +14036,7 @@ scripted_effects:
       - {effect: guarantee, value: ZSG}
   - id: FCU_pulso_del_directorio
     effects:
+    - {effect: run, value: FCU_pulso_receta}
     - effect: if
       when: {focus: FCU_la_prensa_amiga}
       then:
@@ -19313,6 +19661,188 @@ scripted_effects:
           - {effect: flag, value: NRE_receta_visto_7, days: 1095}
           - {effect: event, id: meganations_nre_receta.27, days: 1}
 
+  # 2026-10-17: pulso de la receta (FCU), lo llama FCU_pulso_del_directorio
+  - id: FCU_pulso_receta
+    effects:
+    - effect: math
+      ops:
+      - - set
+        - FCU_productoras_r
+        - 0
+    - effect: if
+      when:
+        controls_state: [New York]
+        not_flag: FCU_prod_1_perdida
+      then:
+      - {effect: flag, value: FCU_prod_1_activa}
+      - {effect: add_variable, var: FCU_productoras_r, value: 1}
+      - {effect: add_variable, var: FCU_dividendos, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [New York]}
+        not_flag: FCU_prod_1_perdida
+        flag: FCU_prod_1_activa
+      then:
+      - {effect: flag, value: FCU_prod_1_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: -10}
+      - {effect: clamp, var: FCU_dividendos, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: FCU_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_fcu_receta.1, days: 1}
+    - effect: if
+      when:
+        controls_state: [California]
+        not_flag: FCU_prod_2_perdida
+      then:
+      - {effect: flag, value: FCU_prod_2_activa}
+      - {effect: add_variable, var: FCU_productoras_r, value: 1}
+      - {effect: add_variable, var: FCU_dividendos, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [California]}
+        not_flag: FCU_prod_2_perdida
+        flag: FCU_prod_2_activa
+      then:
+      - {effect: flag, value: FCU_prod_2_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: -10}
+      - {effect: clamp, var: FCU_dividendos, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: FCU_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_fcu_receta.2, days: 1}
+    - effect: if
+      when:
+        controls_state: [Illinois]
+        not_flag: FCU_prod_3_perdida
+      then:
+      - {effect: flag, value: FCU_prod_3_activa}
+      - {effect: add_variable, var: FCU_productoras_r, value: 1}
+      - {effect: add_variable, var: FCU_dividendos, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Illinois]}
+        not_flag: FCU_prod_3_perdida
+        flag: FCU_prod_3_activa
+      then:
+      - {effect: flag, value: FCU_prod_3_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: -10}
+      - {effect: clamp, var: FCU_dividendos, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: FCU_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_fcu_receta.3, days: 1}
+    - effect: if
+      when:
+        controls_state: [Texas]
+        not_flag: FCU_prod_4_perdida
+      then:
+      - {effect: flag, value: FCU_prod_4_activa}
+      - {effect: add_variable, var: FCU_productoras_r, value: 1}
+      - {effect: add_variable, var: FCU_dividendos, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Texas]}
+        not_flag: FCU_prod_4_perdida
+        flag: FCU_prod_4_activa
+      then:
+      - {effect: flag, value: FCU_prod_4_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: -10}
+      - {effect: clamp, var: FCU_dividendos, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: FCU_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_fcu_receta.4, days: 1}
+    - effect: if
+      when:
+        controls_state: [Michigan]
+        not_flag: FCU_prod_5_perdida
+      then:
+      - {effect: flag, value: FCU_prod_5_activa}
+      - {effect: add_variable, var: FCU_productoras_r, value: 1}
+      - {effect: add_variable, var: FCU_dividendos, value: 1}
+    - effect: if
+      when:
+        not: {controls_state: [Michigan]}
+        not_flag: FCU_prod_5_perdida
+        flag: FCU_prod_5_activa
+      then:
+      - {effect: flag, value: FCU_prod_5_perdida}
+      - {effect: add_variable, var: FCU_dividendos, value: -10}
+      - {effect: clamp, var: FCU_dividendos, min: 0, max: 100000}
+      - {effect: dynamic_modifier, id: FCU_receta_productora_perdida, days: 180}
+      - {effect: event, id: meganations_fcu_receta.5, days: 1}
+    - effect: if
+      when:
+        not_flag: FCU_receta_evento_espera
+        date_after: 2100.4.1
+      then:
+      - {effect: flag, value: FCU_receta_evento_espera, days: 100}
+      - effect: random
+        options:
+        - weight: 5
+          effects: []
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_0}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_0, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.20, days: 1}
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_1}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_1, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.21, days: 1}
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_2}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_2, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.22, days: 1}
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_3}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_3, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.23, days: 1}
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_4}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_4, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.24, days: 1}
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_5}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_5, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.25, days: 1}
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_6}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_6, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.26, days: 1}
+        - weight: 1
+          skip_if: {flag: FCU_receta_visto_7}
+          effects:
+          - {effect: flag, value: FCU_receta_visto_7, days: 1095}
+          - {effect: event, id: meganations_fcu_receta.27, days: 1}
+    # Disturbios urbanos (2026-10-17): con escándalo alto o estabilidad baja, una ciudad se levanta.
+    - effect: if
+      when:
+        not_flag: FCU_disturbio_espera
+        any:
+        - {variable_at_least: {var: FCU_escandalo, value: 35}}
+        - {stability_below: 0.45}
+      then:
+      - {effect: flag, value: FCU_disturbio_espera, days: 150}
+      - effect: random
+        options:
+        - weight: 2
+          effects: []
+        - weight: 1
+          skip_if: {any: [{flag: FCU_disturbio_1}, {not: {controls_state: [Michigan]}}]}
+          effects:
+          - {effect: flag, value: FCU_disturbio_1}
+          - {effect: event, id: meganations_fcu_receta.61, days: 1}
+        - weight: 1
+          skip_if: {any: [{flag: FCU_disturbio_2}, {not: {controls_state: [Illinois]}}]}
+          effects:
+          - {effect: flag, value: FCU_disturbio_2}
+          - {effect: event, id: meganations_fcu_receta.62, days: 1}
+        - weight: 1
+          skip_if: {any: [{flag: FCU_disturbio_3}, {not: {controls_state: [California]}}]}
+          effects:
+          - {effect: flag, value: FCU_disturbio_3}
+          - {effect: event, id: meganations_fcu_receta.63, days: 1}
+
 dynamic_modifiers:
   # 2026-10-11 (pedido del usuario: más combate aéreo y ases para el NAS)
   - id: NAS_escuela_de_ases
@@ -20444,6 +20974,91 @@ dynamic_modifiers:
     desc: {english: 'A legion returned victorious.', spanish: 'Una legión volvió victoriosa.'}
     modifiers: {'?war_support_factor': 0.05, '?army_attack_factor': 0.05, '?stability_factor': 0.03}
 
+  - id: FCU_receta_productora_perdida
+    country: FCU
+    no_art: true
+    name: {english: 'Headquarters Lost', spanish: 'Sede Perdida'}
+    desc: {english: '-5% stability and -10% construction speed', spanish: '-5% de estabilidad y -10% de velocidad de construcción'}
+    modifiers: {'?stability_factor': -0.05, '?production_speed_buildings_factor': -0.1}
+  - id: FCU_junta_valor
+    country: FCU
+    no_art: true
+    name: {english: 'Shareholder Value', spanish: 'Valor para el Accionista'}
+    desc: {english: 'Every factory earns its keep.', spanish: 'Cada fábrica se gana lo suyo.'}
+    modifiers: {'?industrial_capacity_factory': 0.05, '?consumer_goods_factor': -0.02}
+  - id: FCU_junta_empleados
+    country: FCU
+    no_art: true
+    name: {english: 'The Employee Stock Plan', spanish: 'El Plan de Acciones para Empleados'}
+    desc: {english: 'Every worker owns a share. A very small one.', spanish: 'Cada trabajador tiene una acción. Muy chiquita.'}
+    modifiers: {'?stability_factor': 0.05, '?recruitable_population_factor': 0.04}
+  - id: FCU_junta_defensa
+    country: FCU
+    no_art: true
+    name: {english: 'Defence Contracts', spanish: 'Contratos de Defensa'}
+    desc: {english: 'War is a market like any other.', spanish: 'La guerra es un mercado como cualquier otro.'}
+    modifiers: {'?army_attack_factor': 0.04, '?army_defence_factor': 0.04}
+  - id: FCU_junta_meridian
+    country: FCU
+    no_art: true
+    name: {english: 'Meridian Buys the Army', spanish: 'Meridian Compra el Ejército'}
+    desc: {english: 'The army is now a subsidiary.', spanish: 'El ejército ahora es una subsidiaria.'}
+    modifiers: {'?army_org_factor': 0.06, '?army_attack_factor': 0.05}
+  - id: FCU_junta_halvorsen
+    country: FCU
+    no_art: true
+    name: {english: 'Halvorsen-Ito Buys the Universities', spanish: 'Halvorsen-Ito Compra las Universidades'}
+    desc: {english: 'Tuition is free. Your data is not.', spanish: 'La matrícula es gratis. Tus datos no.'}
+    modifiers: {'?research_speed_factor': 0.07}
+  - id: FCU_junta_castellane
+    country: FCU
+    no_art: true
+    name: {english: 'Castellane Buys the Rivers', spanish: 'Castellane Compra los Ríos'}
+    desc: {english: 'Every drop has an owner.', spanish: 'Cada gota tiene dueño.'}
+    modifiers: {'?stability_factor': 0.06, '?production_speed_buildings_factor': 0.08}
+  - id: FCU_oferta_republica
+    country: FCU
+    no_art: true
+    name: {english: 'The Corporate Republic', spanish: 'La República Corporativa'}
+    desc: {english: 'One share, one vote.', spanish: 'Una acción, un voto.'}
+    modifiers: {'?stability_factor': 0.08, '?political_power_gain': 0.2, '?industrial_capacity_factory': 0.05}
+  - id: FCU_oferta_guerra
+    country: FCU
+    no_art: true
+    name: {english: 'The War Economy Inc.', spanish: 'Economía de Guerra S.A.'}
+    desc: {english: 'Profits are measured in divisions.', spanish: 'Las ganancias se miden en divisiones.'}
+    modifiers: {'?industrial_capacity_factory': 0.1, '?army_attack_factor': 0.06}
+  - id: FCU_oferta_mercado
+    country: FCU
+    no_art: true
+    name: {english: 'The Infinite Market', spanish: 'El Mercado Infinito'}
+    desc: {english: 'There is nothing that cannot be sold.', spanish: 'No hay nada que no se pueda vender.'}
+    modifiers: {'?research_speed_factor': 0.08, '?trade_opinion_factor': 0.3, '?consumer_goods_factor': -0.04}
+  - id: FCU_receta_grifos
+    country: FCU
+    no_art: true
+    name: {english: 'Castellane''s Taps', spanish: 'Los Grifos de Castellane'}
+    desc: {english: 'Clean water, courtesy of Castellane.', spanish: 'Agua limpia, cortesía de Castellane.'}
+    modifiers: {'?stability_factor': 0.06, '?war_support_factor': 0.04}
+  - id: FCU_receta_datos
+    country: FCU
+    no_art: true
+    name: {english: 'The Data Harvest', spanish: 'La Cosecha de Datos'}
+    desc: {english: 'Everything you say is a data point.', spanish: 'Todo lo que decís es un dato.'}
+    modifiers: {'?research_speed_factor': 0.07}
+  - id: FCU_receta_bonos
+    country: FCU
+    no_art: true
+    name: {english: 'Obsidian War Bonds', spanish: 'Bonos de Guerra Obsidian'}
+    desc: {english: 'Buy now, win later.', spanish: 'Comprá ahora, ganá después.'}
+    modifiers: {'?industrial_capacity_factory': 0.1}
+  - id: FCU_disturbios_urbanos
+    country: FCU
+    no_art: true
+    name: {english: 'Riots in the Cities', spanish: 'Disturbios en las Ciudades'}
+    desc: {english: 'The cities do not obey the Directorate any more.', spanish: 'Las ciudades ya no le obedecen al Directorio.'}
+    modifiers: {'?stability_factor': -0.06, '?industrial_capacity_factory': -0.05}
+
 on_actions:
   # 2026-10-17: la bomba es secreta hasta que se usa. Cuando alguien la tira
   # (ROOT), el mundo reacciona (meganations_asc_receta.40 y .41).
@@ -20547,3 +21162,5 @@ variable_names:
   HSN_productoras_r: {english: "Toll ports", spanish: "Puertos de peaje"}
   NRE_gloria: {english: "Gloria", spanish: "Gloria"}
   NRE_productoras_r: {english: "Triumphal cities", spanish: "Ciudades triunfales"}
+  FCU_dividendos: {english: "Dividends", spanish: "Dividendos"}
+  FCU_productoras_r: {english: "Corporate headquarters", spanish: "Sedes corporativas"}
