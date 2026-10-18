@@ -77,9 +77,9 @@ decisions:
   # ---------------------------------------------------------------------------
   # El Rearme Secreto (las ocho potencias)
   # ---------------------------------------------------------------------------
-  # IA (2026-10-18, simulador): frena en 35 y quema papeles desde 30, debajo
-  # de la zona en que la descubren (40). Frenando en 45 el disimulo se
-  # terminaba a mitad de 2103 en la mitad de las partidas; así, cerca de 2121.
+  # IA (2026-10-18, simulador): frena en 42 y quema papeles desde 37. El
+  # usuario quiere que el disimulo termine en 2105 en promedio (con el árbol
+  # a medio hacer): frenando en 45 terminaba en 2103 y en 35, cerca de 2121.
   - id: MEGANATIONS_rearme_category
     country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
     icon_prefer: [generic_industry, generic_army_support]
@@ -115,7 +115,7 @@ decisions:
         factor: 2
         modifiers:
         - factor: 0
-          when: {variable_at_least: {var: MN_rearme, value: 35}}
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
       src: user_request
     - id: MEGANATIONS_rearme_aeromodelismo
       name: {english: The Patriotic Model Aircraft Club, spanish: El Club de Aeromodelismo Patriótico}
@@ -132,7 +132,7 @@ decisions:
         factor: 1
         modifiers:
         - factor: 0
-          when: {variable_at_least: {var: MN_rearme, value: 35}}
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
       src: user_request
     - id: MEGANATIONS_rearme_pesqueros
       name: {english: Fishing Boats with Cannons, spanish: Pesqueros con Cañón}
@@ -149,7 +149,7 @@ decisions:
         factor: 1
         modifiers:
         - factor: 0
-          when: {variable_at_least: {var: MN_rearme, value: 35}}
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
       src: user_request
     - id: MEGANATIONS_rearme_reservistas
       name: {english: Reservists Who Do Not Exist, spanish: Reservistas que No Existen}
@@ -168,7 +168,7 @@ decisions:
         factor: 2
         modifiers:
         - factor: 0
-          when: {variable_at_least: {var: MN_rearme, value: 35}}
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
       src: user_request
     - id: MEGANATIONS_rearme_papeles
       name: {english: Burn the Paperwork, spanish: Quemar los Papeles}
@@ -186,7 +186,7 @@ decisions:
         factor: 4
         modifiers:
         - factor: 0
-          when: {variable_below: {var: MN_rearme, value: 30}}
+          when: {variable_below: {var: MN_rearme, value: 37}}
       src: user_request
 
   # ---------------------------------------------------------------------------

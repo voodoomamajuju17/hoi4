@@ -224,6 +224,6 @@ encima de los demás archivos (un id repetido frena el build).
 - [ ] Tests rápidos separados de los que generan el mod completo
 - [x] Simulador de la IA (`make simular`, `tools/simulador/`, informe en `SIMULADOR_IA.md`, 2026-10-18): corre los
   scripts del spec mes a mes sin el juego y cuenta qué elige la IA. Supuestos a la vista en `tools/simulador/supuestos.yaml`
-- [~] Ajustes del simulador (2026-10-18, aprobados por el usuario): la IA del rearme frena en 35 (el disimulo pasa de ~2103
-  a ~2120), la del ASC espera Cómputo 50 hasta 2103 (Sorteo de ~100% a ~75%), la de la FCU espera la OPA hasta 2103
+- [~] Ajustes del simulador (2026-10-18, aprobados por el usuario): la IA del rearme frena en 42 (el disimulo termina en
+  2105 en promedio, pedido del usuario), la del ASC espera Cómputo 50 hasta 2103 (Sorteo de ~100% a ~75%), la de la FCU espera la OPA hasta 2103
   (Castellane de 98% a ~80%) y la crisis del siglo nunca repite la anterior

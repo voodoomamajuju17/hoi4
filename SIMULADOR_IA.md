@@ -35,32 +35,32 @@ Porcentaje de partidas en que la IA elige el primer foco (el resto elige el otro
 
 ## El Rearme Secreto
 
-Se termina el disimulo (tercer descubrimiento): el 10% de las partidas antes de 2109.1, la mitad antes de 2120.6, el 90% antes de 2134.4. Nunca, hasta 2140.1: 11%.
+Se termina el disimulo (tercer descubrimiento): el 10% de las partidas antes de 2102.7, la mitad antes de 2104.7, el 90% antes de 2108.1. Nunca, hasta 2140.1: 0%.
 
 | Potencia | veces descubierta por partida | la descubren primero | exposición máxima (media) |
 |---|---|---|---|
-| EFE | 0.35 | 13% | 44 |
-| FCU | 0.37 | 14% | 44 |
-| ASC | 0.37 | 12% | 45 |
-| HSN | 0.37 | 12% | 45 |
-| NAS | 0.39 | 15% | 45 |
-| SHD | 0.32 | 10% | 45 |
-| APF | 0.33 | 11% | 45 |
-| NRE | 0.34 | 12% | 44 |
+| EFE | 0.39 | 13% | 48 |
+| FCU | 0.39 | 13% | 48 |
+| ASC | 0.40 | 14% | 48 |
+| HSN | 0.38 | 11% | 48 |
+| NAS | 0.37 | 14% | 48 |
+| SHD | 0.35 | 10% | 48 |
+| APF | 0.37 | 13% | 48 |
+| NRE | 0.35 | 12% | 48 |
 
 ## La Sucesión del EFE
 
-Muere Aurelio IV: el 10% antes de 2104.3, la mitad antes de 2105.3, el 90% antes de 2108.5. Sigue vivo en 2140.1: 0%.
+Muere Aurelio IV: el 10% antes de 2104.3, la mitad antes de 2105.5, el 90% antes de 2108.3. Sigue vivo en 2140.1: 0%.
 
 | Al morir el Emperador | partidas |
 |---|---|
-| Tupã Benítez heredero | 54% |
+| Tupã Benítez heredero | 52% |
 | Yara Pereira, Custodia electa | 27% |
-| Etchegaray regente | 19% |
+| Etchegaray regente | 20% |
 
-Año en que la IA nombra heredero: 2101: 100%, 2102: 0%.
+Año en que la IA nombra heredero: 2101: 100%.
 
-Colapsos del líder del EFE por partida (Salud en 0): 0: 3%, 1: 20%, 2: 35%, 3: 25%, 4: 13%, 5: 4%, 6: 0%.
+Colapsos del líder del EFE por partida (Salud en 0): 0: 5%, 1: 19%, 2: 36%, 3: 25%, 4: 10%, 5: 4%, 6: 1%, 7: 0%.
 
 ## La crisis del siglo (2106-2200)
 
@@ -83,5 +83,5 @@ Racha más larga de la misma crisis: 1 seguidas: 100%.
 
 Condiciones del mapa que el motor no simula (probabilidad fija en supuestos.yaml): `country:YYG`, `divisions_at_least`, `in_faction_with: ROOT`, `subject: false`.
 
-Efectos que no cambian lo que se mide y no se simulan: `build`, `army_experience`, `add_manpower`, `dynamic_modifier`, `air_experience`, `navy_experience`, `add_war_support`, `add_political_power`, `promote`, `end_puppet`, `scope`, `annex`, `retire_leader`, `civil_war`.
+Efectos que no cambian lo que se mide y no se simulan: `dynamic_modifier`, `army_experience`, `build`, `add_manpower`, `air_experience`, `navy_experience`, `add_war_support`, `add_political_power`, `promote`, `end_puppet`, `scope`, `annex`, `retire_leader`, `civil_war`.
 
