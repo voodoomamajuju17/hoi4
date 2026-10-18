@@ -41,6 +41,70 @@ SPEC_FILES = {
     "questions": "99_open_questions.yaml",
 }
 
+# Archivos que se suman encima de los anteriores (2026-10-17, segundo análisis
+# de rutas): las mecánicas nuevas viven en su propio archivo para no chocar con
+# los cambios que se hacen al mismo tiempo en 12_events y 14_decisions.
+OVERLAY_FILES = ["22_mecanicas_v4.yaml"]
+
+
+def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
+    """Suma un archivo de mecánicas a lo ya cargado.
+
+    Claves que entiende (todas opcionales):
+      decisions: {categories, scripted_effects, dynamic_modifiers} -> se agregan
+                 a 14_decisions; variable_names se mezcla.
+      extend_scripted_effects: {id: [efectos]} -> se agregan al final de un
+                 efecto que ya existe (los pulsos mensuales).
+      events: {namespaces: {ns: {country, events}}} -> eventos nuevos en un
+                 espacio que ya existe (mismo país) o en uno nuevo.
+      leaders: {characters, leader_traits} -> se agregan a 03_leaders.
+    Un id repetido es un error: el archivo nuevo nunca pisa lo viejo.
+    """
+    where = filename
+
+    def add_unique(target: list, items: list, what: str) -> None:
+        seen = {x.get("id") for x in target}
+        for item in items or []:
+            if item.get("id") in seen:
+                raise SpecError(f"{what} '{item.get('id')}' ya existe", where=where)
+            seen.add(item.get("id"))
+            target.append(item)
+
+    dec_new = overlay.get("decisions") or {}
+    dec = raw.setdefault("decisions", {})
+    all_decisions = [d for c in dec.get("categories") or [] for d in c.get("decisions") or []]
+    for cat in dec_new.get("categories") or []:
+        add_unique(all_decisions, cat.get("decisions") or [], "decision")
+    add_unique(dec.setdefault("categories", []), dec_new.get("categories"), "categoria")
+    add_unique(dec.setdefault("scripted_effects", []), dec_new.get("scripted_effects"), "scripted_effect")
+    add_unique(dec.setdefault("dynamic_modifiers", []), dec_new.get("dynamic_modifiers"), "dynamic_modifier")
+    names = dec.setdefault("variable_names", {})
+    for key, value in (dec_new.get("variable_names") or {}).items():
+        if key in names:
+            raise SpecError(f"variable_names '{key}' ya existe", where=where)
+        names[key] = value
+
+    by_id = {e["id"]: e for e in dec.get("scripted_effects") or []}
+    for sid, effects in (overlay.get("extend_scripted_effects") or {}).items():
+        if sid not in by_id:
+            raise SpecError(f"extend_scripted_effects: '{sid}' no existe en 14_decisions", where=where)
+        by_id[sid]["effects"] = list(by_id[sid].get("effects") or []) + list(effects or [])
+
+    namespaces = raw.setdefault("events", {}).setdefault("namespaces", {})
+    for ns, block in ((overlay.get("events") or {}).get("namespaces") or {}).items():
+        if ns in namespaces:
+            if namespaces[ns].get("country") != block.get("country"):
+                raise SpecError(f"{ns}: el pais no coincide con 12_events", where=where)
+            add_unique(namespaces[ns].setdefault("events", []), block.get("events"), f"evento {ns}")
+        else:
+            namespaces[ns] = block
+
+    leaders_new = overlay.get("leaders") or {}
+    leaders = raw.setdefault("leaders", {})
+    add_unique(leaders.setdefault("characters", []), leaders_new.get("characters"), "personaje")
+    add_unique(leaders.setdefault("leader_traits", []), leaders_new.get("leader_traits"), "rasgo")
+
+
 # Marcadores de "todavía no lo sabemos". Un emisor que se topa con esto debe
 # levantar BlockedError con la Qxxx correspondiente, nunca inventar un default.
 UNKNOWN = {"unknown", "not_started", None}
@@ -81,6 +145,14 @@ class Spec:
                 self.raw[name] = yaml.safe_load(path.read_text(encoding="utf-8"))
             except yaml.YAMLError as exc:
                 raise SpecError(f"spec/{filename} no parsea: {exc}", where="specload") from exc
+        for filename in OVERLAY_FILES:
+            path = root / filename
+            if path.exists():
+                try:
+                    overlay = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+                except yaml.YAMLError as exc:
+                    raise SpecError(f"spec/{filename} no parsea: {exc}", where="specload") from exc
+                merge_overlay(self.raw, overlay, filename)
         self.countries: list[Country] = []
         self._build_countries()
         self.validate()

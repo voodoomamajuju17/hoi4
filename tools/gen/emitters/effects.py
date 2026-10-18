@@ -308,6 +308,10 @@ def render_effects(owner: str, items: list[dict], known,
                 effects_used.setdefault("annex_country", owner)
             else:
                 kind = item.get("type", "annex_everything")
+                if isinstance(kind, list):
+                    # alternativas (2026-10-17): gana la primera que el juego tenga
+                    # (derrocar al gobierno, si no la anexión)
+                    kind = next((k for k in kind if not ec.wargoals or k in ec.wargoals), kind[-1])
                 if ec.wargoals and kind not in ec.wargoals:
                     raise SpecError(f"{owner}: tipo de wargoal '{kind}' no existe en common/wargoals/",
                                     where=where)

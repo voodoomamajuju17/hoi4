@@ -200,3 +200,30 @@ eventos con ultimátum e IA con condiciones.
 - [ ] Textos de ayuda con lore en ideologías, ideas y decisiones
 - [ ] Música del menú o de facción (si se consigue)
 - [ ] Easter eggs del borrador histórico (la línea 2060/2080, Q020)
+
+## 10. Segundo análisis de rutas y jugabilidad (2026-10-17)
+
+Documento: "Rutas, jugabilidad y programa: segundo análisis" (Claude Doc). Las
+mecánicas nuevas viven en `spec/22_mecanicas_v4.yaml`, que el cargador suma
+encima de los demás archivos (un id repetido frena el build).
+
+- [x] El Rearme Secreto (las ocho): exposición, observadores de Ginebra, fin del disimulo
+- [x] EFE: la Sucesión de Aurelio IV (Tupã, la Custodia electa o el Regente)
+- [x] ASC: la Guarnición (autómatas contra humanos), ligada a PLAN-41
+- [x] FCU: la Cotización (Martes Negro, Burbuja, contratistas)
+- [x] HSN: patentes de corso en paz, infamia y Liga contra el Corso
+- [x] NAS: el Calendario del Sol (estaciones, Inti Raymi)
+- [x] SHD: la Guerra Hidráulica
+- [x] APF: la Asamblea de Guerra
+- [x] Elecciones de la FCU desde 2104 (Crónicas y Archivo); Destino del EFE con Bioacero 12
+- [ ] Verlo en el juego: build, partida hasta 2104, game.log y error.log
+- [ ] Imágenes propias de los eventos nuevos
+- [ ] tools/arte y tools/focos_balance leen el spec a través del cargador (hoy no ven el archivo v4)
+- [ ] Etapa 2: crisis que escalan, una sucesión por potencia, diplomacia antes de 2106, IA política con variación
+- [ ] Etapa 3: Ginebra como institución, acciones de la FCU para otros, estaciones en la guerra, "El Gran Desarme vuelve"
+- [ ] Tests rápidos separados de los que generan el mod completo
+- [x] Simulador de la IA (`make simular`, `tools/simulador/`, informe en `SIMULADOR_IA.md`, 2026-10-18): corre los
+  scripts del spec mes a mes sin el juego y cuenta qué elige la IA. Supuestos a la vista en `tools/simulador/supuestos.yaml`
+- [~] Ajustes del simulador (2026-10-18, aprobados por el usuario): la IA del rearme frena en 42 (el disimulo termina en
+  2105 en promedio, pedido del usuario), la del ASC espera Cómputo 50 hasta 2103 (Sorteo de ~100% a ~75%), la de la FCU espera la OPA hasta 2103
+  (Castellane de 98% a ~80%) y la crisis del siglo nunca repite la anterior

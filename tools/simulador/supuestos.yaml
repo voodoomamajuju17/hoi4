@@ -1,0 +1,62 @@
+# Supuestos del simulador de la IA (2026-10-18).
+#
+# Todo lo que el spec no dice (porque lo decide el mapa, la guerra o el juego)
+# vive acá, a la vista. Cambiar un número y volver a correr es la forma de
+# preguntar "¿y si...?". Los pesos de la IA, las condiciones, los umbrales y
+# los azares NO están acá: se leen del spec cada vez.
+
+corridas: 1000
+semilla: 2100
+hasta: 2140.1.1          # rearme, sucesión y líder se simulan hasta esta fecha
+
+# La IA toma una decisión de factor f en un mes con probabilidad 1-(1-p)^f.
+# p cubre que le alcance el poder político y que compita con leyes y asesores.
+decisiones_prob_base: 0.15
+
+# Ramas políticas: los focos abren después de la cadena de prerequisitos
+# (días del spec) por este ritmo, porque la IA hace focos de varias ramas a la
+# vez. Abierto el par, cada mes la IA lo elige con esta probabilidad.
+focos_ritmo: 1.6
+focos_eleccion_mensual: 0.35
+
+# El estado de cada potencia, mes a mes. 'resto' vale para las que no están.
+# estabilidad: arranca en 'inicio', vuelve despacio a 'media', con ruido 'sd'.
+# guerra: desde 'desde', cada mes en paz hay 'riesgo' de entrar en guerra
+#   (contra quien sea: la Anarquía vecina también cuenta para at_war) y cada
+#   mes en guerra 'paz' de salir.
+# variables: arrancan en el 'start' de 06_mechanics (o en 'inicio' si se pone acá), suben 'por_mes' con ruido 'sd', entre min y max.
+# flags: desde 'desde', cada mes hay 'riesgo' de que aparezca (y se queda).
+estado:
+  resto:
+    estabilidad: {inicio: 0.6, media: 0.55, sd: 0.03}
+    guerra: {desde: 2100.6.1, riesgo: 0.03, paz: 0.05}
+  FCU:
+    # análisis 2026-10-01: la FCU no tiene guerra planeada antes de 2103
+    guerra: {desde: 2103.1.1, riesgo: 0.03, paz: 0.05}
+    flags:
+      FCU_opa_habilitada: {desde: 2100.6.1, riesgo: 0.01}
+  ASC:
+    variables:
+      ASC_computo: {por_mes: 1.0, sd: 1.5, min: 0, max: 100}
+  NRE:
+    variables:
+      NRE_prestigio_italica: {por_mes: 0.2, sd: 4, min: 0, max: 100}
+      NRE_prestigio_macedonica: {por_mes: 0.2, sd: 4, min: 0, max: 100}
+      NRE_prestigio_fulminata: {por_mes: 0.2, sd: 4, min: 0, max: 100}
+
+# Los tres escenarios de la tabla de ramas políticas. 'ia_tipica' usa 'estado'
+# tal cual; los otros fijan la guerra.
+escenarios_focos:
+  paz: {guerra: never}
+  ia_tipica: {}
+  guerra: {guerra: always}
+
+# Condiciones del mapa que el motor no simula: probabilidad de que se cumplan
+# tal como están escritas, por país ('resto' para los demás).
+condiciones:
+  "in_faction_with: ROOT": 0.0
+  "subject: false": 1.0
+  country:YYG: {EFE: 0.9, resto: 0.0}          # el Paraguay sigue siendo satélite del EFE
+  divisions_at_least: {EFE: 0.7, resto: 0.7}    # 24 divisiones para el Regente
+  war_with: 0.0
+  has_war_with: 0.0

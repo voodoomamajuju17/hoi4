@@ -1,0 +1,1478 @@
+# =============================================================================
+# Mecánicas v4 (2026-10-17): segundo análisis de rutas y jugabilidad
+#
+# Pedido del usuario: "Hacer otro análisis sobre rutas y jugabilidad (...)
+# Recomendar modificaciones (...) Implementa todo aquello que haya estado ya
+# expuesto." Las ideas de mecánicas del 2026-10-11 (una por nación más el
+# rearme secreto) y lo que salió del análisis viven acá, en su propio archivo,
+# para no chocar con los cambios que se hacen al mismo tiempo en 12_events y
+# 14_decisions. specload.merge_overlay los suma a los demás.
+#
+#   - El Rearme Secreto (las ocho): armarse sin que miren los observadores de
+#     Ginebra (la ciudad de la Coalición contra el hegemón).
+#   - EFE: la Sucesión de Aurelio IV (Tupã, la Custodia electa o el Regente).
+#   - ASC: La Guarnición (autómatas contra humanos), ligada a PLAN-41.
+#   - FCU: La Cotización (el precio de la acción de la Unión).
+#   - HSN: patentes de corso en paz, reputación y la Liga contra el Corso.
+#   - NAS: el Calendario del Sol (estaciones, Inti Raymi).
+#   - SHD: la Guerra Hidráulica (inundar las llanuras).
+#   - APF: la Asamblea de Guerra (votar la guerra contra otra potencia).
+#
+# Cada variable nueva tiene una decisión que la mueve y un límite que da miedo
+# (regla del análisis: nada de barras que solo suben).
+# =============================================================================
+
+# Condiciones reutilizadas (claves x-: el generador no las lee directamente)
+x-otra-potencia: &otra_potencia
+  all:
+  - any: [{tag: EFE}, {tag: FCU}, {tag: ASC}, {tag: HSN}, {tag: NAS}, {tag: SHD}, {tag: APF}, {tag: NRE}]
+  - not: {tag: ROOT}
+  - not: {in_faction_with: ROOT}
+  - subject: false
+
+x-potencia: &potencia
+  any: [{tag: EFE}, {tag: FCU}, {tag: ASC}, {tag: HSN}, {tag: NAS}, {tag: SHD}, {tag: APF}, {tag: NRE}]
+
+x-guerra-con-potencia: &guerra_con_potencia
+  any: [{war_with: EFE}, {war_with: FCU}, {war_with: ASC}, {war_with: HSN}, {war_with: NAS}, {war_with: SHD},
+        {war_with: NRE}]
+
+x-otra-potencia-en-guerra: &otra_potencia_en_guerra
+  any:
+  - {country: {tag: EFE, when: {at_war: true, not: {war_with: HSN}}}}
+  - {country: {tag: FCU, when: {at_war: true, not: {war_with: HSN}}}}
+  - {country: {tag: ASC, when: {at_war: true, not: {war_with: HSN}}}}
+  - {country: {tag: NAS, when: {at_war: true, not: {war_with: HSN}}}}
+  - {country: {tag: SHD, when: {at_war: true, not: {war_with: HSN}}}}
+  - {country: {tag: APF, when: {at_war: true, not: {war_with: HSN}}}}
+  - {country: {tag: NRE, when: {at_war: true, not: {war_with: HSN}}}}
+
+# Los pulsos mensuales que ya existen corren también lo nuevo
+extend_scripted_effects:
+  EFE_pulso_de_las_cubas:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+  - {effect: run, value: EFE_pulso_v4}
+  FCU_pulso_del_directorio:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+  - {effect: run, value: FCU_pulso_v4}
+  ASC_pulso_de_la_red:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+  - {effect: run, value: ASC_pulso_v4}
+  HSN_pulso_de_las_potencias:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+  - {effect: run, value: HSN_pulso_v4}
+  NAS_pulso_de_los_templos:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+  - {effect: run, value: NAS_pulso_v4}
+  SHD_pulso_del_rio:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+  APF_pulso_de_los_consejos:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+  - {effect: run, value: APF_pulso_v4}
+  NRE_pulso_del_ocio:
+  - {effect: run, value: MEGANATIONS_rearme_pulso}
+
+decisions:
+  categories:
+  # ---------------------------------------------------------------------------
+  # El Rearme Secreto (las ocho potencias)
+  # ---------------------------------------------------------------------------
+  # IA (2026-10-18, simulador): frena en 42 y quema papeles desde 37. El
+  # usuario quiere que el disimulo termine en 2105 en promedio (con el árbol
+  # a medio hacer): frenando en 45 terminaba en 2103 y en 35, cerca de 2121.
+  - id: MEGANATIONS_rearme_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
+    icon_prefer: [generic_industry, generic_army_support]
+    name: {english: The Secret Rearmament, spanish: El Rearme Secreto}
+    desc:
+      english: 'WHAT IS IT FOR? Since the Great Unravelling the eight powers watch each other through the Geneva observers, in the same
+        city where the Coalition against any hegemon is born. Arming in plain sight frightens the neighbours; arming in secret is cheaper,
+        until they find you. These decisions give you factories, experience and manpower now, but they raise your EXPOSURE.\n\nExposure:
+        [?MN_rearme] / 100 (drops 1 per month on its own)\n\nFrom 40 exposure, the observers can find you every month: 4% chance, 10% from
+        60, 20% from 80. If they find you, every power outside your faction gets a war goal against you. After three discoveries anywhere in
+        the world nobody pretends anymore: this panel closes and the arms race begins.'
+      spanish: '¿PARA QUÉ SIRVE? Desde el Gran Desarme las ocho potencias se vigilan con los observadores de Ginebra, la misma ciudad donde
+        nace la Coalición contra cualquier hegemón. Armarse a la vista asusta a los vecinos; armarse a escondidas sale más barato, hasta que
+        te encuentran. Estas decisiones te dan fábricas, experiencia y manpower ya, pero suben tu EXPOSICIÓN.\n\nExposición: [?MN_rearme] /
+        100 (baja 1 por mes sola)\n\nDesde 40 de exposición, los observadores pueden encontrarte cada mes: 4% de chance, 10% desde 60, 20%
+        desde 80. Si te encuentran, cada potencia fuera de tu facción recibe un objetivo de guerra contra vos. Con tres descubrimientos en el
+        mundo nadie disimula más: este panel se cierra y empieza la carrera armamentista.'
+    visible: {not_global_flag: MN_disimulo_terminado}
+    src: user_request
+    decisions:
+    - id: MEGANATIONS_rearme_tractores
+      name: {english: Very Heavy Tractors, spanish: Tractores Muy Pesados}
+      desc:
+        english: 'A tractor cooperative that orders turret rings. One military factory in the capital. Exposure +12.'
+        spanish: 'Una cooperativa de tractores que encarga anillos de torreta. Una fábrica militar en la capital. Exposición +12.'
+      icon_prefer: [generic_industry, generic_construction]
+      cost: 50
+      cooldown_days: 150
+      effects:
+      - {effect: build, building: arms_factory, level: 1}
+      - {effect: add_variable, var: MN_rearme, value: 12}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
+      src: user_request
+    - id: MEGANATIONS_rearme_aeromodelismo
+      name: {english: The Patriotic Model Aircraft Club, spanish: El Club de Aeromodelismo Patriótico}
+      desc:
+        english: 'Its models carry two people and a machine gun. Air experience +25. Exposure +8.'
+        spanish: 'Sus maquetas llevan dos personas y una ametralladora. Experiencia aérea +25. Exposición +8.'
+      icon_prefer: [generic_air, generic_army_support]
+      cost: 35
+      cooldown_days: 150
+      effects:
+      - {effect: air_experience, value: 25}
+      - {effect: add_variable, var: MN_rearme, value: 8}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
+      src: user_request
+    - id: MEGANATIONS_rearme_pesqueros
+      name: {english: Fishing Boats with Cannons, spanish: Pesqueros con Cañón}
+      desc:
+        english: 'They fish very little and very far away. Navy experience +25. Exposure +8.'
+        spanish: 'Pescan muy poco y muy lejos. Experiencia naval +25. Exposición +8.'
+      icon_prefer: [generic_naval, generic_army_support]
+      cost: 40
+      cooldown_days: 150
+      effects:
+      - {effect: navy_experience, value: 25}
+      - {effect: add_variable, var: MN_rearme, value: 8}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
+      src: user_request
+    - id: MEGANATIONS_rearme_reservistas
+      name: {english: Reservists Who Do Not Exist, spanish: Reservistas que No Existen}
+      desc:
+        english: 'Twenty-five thousand names on no list at all, who march on Sundays. Manpower +25,000, army experience +15. Exposure +10.'
+        spanish: 'Veinticinco mil nombres que no figuran en ninguna lista y que marchan los domingos. Manpower +25.000, experiencia de ejército
+          +15. Exposición +10.'
+      icon_prefer: [generic_army_support, generic_political_actions]
+      cost: 40
+      cooldown_days: 150
+      effects:
+      - {effect: add_manpower, value: 25000}
+      - {effect: army_experience, value: 15}
+      - {effect: add_variable, var: MN_rearme, value: 10}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_at_least: {var: MN_rearme, value: 42}}
+      src: user_request
+    - id: MEGANATIONS_rearme_papeles
+      name: {english: Burn the Paperwork, spanish: Quemar los Papeles}
+      desc:
+        english: 'A fire in the archive, very regrettable. Exposure -20.'
+        spanish: 'Un incendio en el archivo, muy lamentable. Exposición -20.'
+      icon_prefer: [generic_political_actions]
+      cost: 60
+      cooldown_days: 90
+      available: {variable_at_least: {var: MN_rearme, value: 15}}
+      effects:
+      - {effect: add_variable, var: MN_rearme, value: -20}
+      - {effect: clamp, var: MN_rearme, min: 0, max: 100}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: MN_rearme, value: 37}}
+      src: user_request
+
+  # ---------------------------------------------------------------------------
+  # EFE: la Sucesión
+  # ---------------------------------------------------------------------------
+  - id: EFE_sucesion_category
+    country: EFE
+    icon_prefer: [generic_political_actions]
+    name: {english: The Succession, spanish: La Sucesión}
+    desc:
+      english: 'WHAT IS IT FOR? Aurelio IV is [?EFE_edad_aurelio] years old and his Health is [?MEGANATIONS_lider_salud] of 10. Emperors die.
+        Name an heir before he does.\n\nFrom 2104, with Health below 4, there is a 6% chance each month that the Emperor dies; from 2110, 2%
+        each month whatever his Health. Without an heir, the Marshal takes the palace by force and Paraguay breaks away under Tupã.\n\nTupã
+        Benítez: brings Yvytu Ykua Guasu home (annexed). Yara Pereira, the elected Custodian: the rangers and the forest. Marshal Etchegaray,
+        regent: the army, and a court that does not love him.'
+      spanish: '¿PARA QUÉ SIRVE? Aurelio IV tiene [?EFE_edad_aurelio] años y su Salud es [?MEGANATIONS_lider_salud] de 10. Los emperadores se
+        mueren. Nombrá un heredero antes de que pase.\n\nDesde 2104, con Salud menor a 4, cada mes hay 6% de que el Emperador muera; desde
+        2110, 2% por mes con cualquier Salud. Sin heredero, el Mariscal toma el palacio por la fuerza y el Paraguay se va con Tupã.\n\nTupã
+        Benítez: trae a casa a Yvytu Ykua Guasu (se anexa). Yara Pereira, la Custodia electa: los guardaparques y el monte. El Mariscal
+        Etchegaray, regente: el ejército, y una corte que no lo quiere.'
+    visible:
+      not_flag: EFE_sucesion_hecha
+      not: {focus: EFE_el_monte_se_levanta}
+    src: user_request
+    decisions:
+    - id: EFE_heredero_tupa
+      name: {english: Name Tupã Benítez Heir, spanish: Nombrar Heredero a Tupã Benítez}
+      desc:
+        english: 'The blood of Iguazú. The nephew who governs the great water of the north. Paraguay will be happy; the old guard will not.'
+        spanish: 'La sangre de Iguazú. El sobrino que gobierna la gran agua del norte. El Paraguay va a estar contento; la vieja guardia, no.'
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      visible: {not_flag: EFE_heredero_tupa}
+      available:
+        not_flag: EFE_heredero_pereira
+        not: {flag: EFE_heredero_etchegaray}
+        country: {tag: YYG, when: {subject_of: EFE}}
+      effects:
+      - {effect: flag, value: EFE_heredero_tupa}
+      - {effect: add_variable, var: EFE_lealtad_yyg, value: 15}
+      - {effect: add_stability, value: -0.02}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when: {not: {date_after: 2101.6.1}}
+      src: user_request
+    - id: EFE_heredero_pereira
+      name: {english: Name Yara Pereira Elected Custodian, spanish: Nombrar Custodia Electa a Yara Pereira}
+      desc:
+        english: 'The Custodian of the Earth was a title before it was a crown. The rangers want it back.'
+        spanish: 'Custodio de la Tierra fue un cargo antes de ser una corona. Los guardaparques lo quieren de vuelta.'
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      visible: {not_flag: EFE_heredero_pereira}
+      available:
+        not_flag: EFE_heredero_tupa
+        not: {flag: EFE_heredero_etchegaray}
+        stability_at_least: 0.45
+      effects:
+      - {effect: flag, value: EFE_heredero_pereira}
+      - {effect: add_war_support, value: -0.02}
+      - {effect: add_political_power, value: 25}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {not: {date_after: 2101.6.1}}
+      src: user_request
+    - id: EFE_heredero_etchegaray
+      name: {english: Name Marshal Etchegaray Regent, spanish: Nombrar Regente al Mariscal Etchegaray}
+      desc:
+        english: 'The only officer who calls the Emperor by his first name. The army will obey him. The court will wait.'
+        spanish: 'El único oficial que tutea al Emperador. El ejército le va a obedecer. La corte va a esperar.'
+      icon_prefer: [generic_army_support, generic_political_actions]
+      cost: 75
+      visible: {not_flag: EFE_heredero_etchegaray}
+      available:
+        not_flag: EFE_heredero_tupa
+        not: {flag: EFE_heredero_pereira}
+        divisions_at_least: 24
+      effects:
+      - {effect: flag, value: EFE_heredero_etchegaray}
+      - {effect: army_experience, value: 15}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 0
+          when: {not: {date_after: 2101.6.1}}
+        - factor: 4
+          when: {at_war: true}
+      src: user_request
+    - id: EFE_revocar_heredero
+      name: {english: Revoke the Heir, spanish: Revocar al Heredero}
+      desc:
+        english: 'The Emperor changes his mind. The court notices (-8% stability).'
+        spanish: 'El Emperador cambia de idea. La corte se da cuenta (-8% de estabilidad).'
+      icon_prefer: [generic_political_actions]
+      cost: 150
+      cooldown_days: 365
+      visible:
+        any: [{flag: EFE_heredero_tupa}, {flag: EFE_heredero_pereira}, {flag: EFE_heredero_etchegaray}]
+      effects:
+      - {effect: clear_flag, value: EFE_heredero_tupa}
+      - {effect: clear_flag, value: EFE_heredero_pereira}
+      - {effect: clear_flag, value: EFE_heredero_etchegaray}
+      - {effect: add_stability, value: -0.08}
+      ai: {factor: 0}
+      src: user_request
+
+  # ---------------------------------------------------------------------------
+  # ASC: La Guarnición
+  # ---------------------------------------------------------------------------
+  - id: ASC_guarnicion_category
+    country: ASC
+    icon_prefer: [generic_army_support, generic_research]
+    name: {english: The Garrison, spanish: La Guarnición}
+    desc:
+      english: 'WHAT IS IT FOR? Who guards the occupied regions: people or machines?\n\nAutomata in the garrison: [?ASC_automatas] of 100
+        (starts at 30)\n\nRIGHT NOW: garrison needed [?ASC_gu_guarnicion_ver]%, resistance growth [?ASC_gu_resistencia_ver]%, stability
+        [?ASC_gu_estabilidad_ver]%, recruitable population [?ASC_gu_reclutas_ver]%.\n\nMore automata: fewer garrisons, less resistance and more
+        free hands for the army, but people feel replaced and the grid heats up (+1 heat per month from 50, +3 from 80). From 70, the
+        automata listen to PLAN-41: with compute 80 and heat 40, every month there is an 8% chance that PLAN-41 makes its move.'
+      spanish: '¿PARA QUÉ SIRVE? ¿Quién vigila las regiones ocupadas: gente o máquinas?\n\nAutómatas en la guarnición: [?ASC_automatas] de 100
+        (arranca en 30)\n\nRINDE AHORA: guarnición necesaria [?ASC_gu_guarnicion_ver]%, crecimiento de la resistencia [?ASC_gu_resistencia_ver]%,
+        estabilidad [?ASC_gu_estabilidad_ver]%, población reclutable [?ASC_gu_reclutas_ver]%.\n\nMás autómatas: menos guarniciones, menos
+        resistencia y más manos libres para el ejército, pero la gente se siente reemplazada y la red se calienta (+1 de calor por mes desde
+        50, +3 desde 80). Desde 70, los autómatas escuchan a PLAN-41: con cómputo 80 y calor 40, cada mes hay 8% de que PLAN-41 haga su
+        jugada.'
+    visible: {not_flag: ASC_plan41}
+    src: user_request
+    decisions:
+    - id: ASC_automatizar_guarnicion
+      name: {english: Automate the Garrison, spanish: Automatizar la Guarnición}
+      desc:
+        english: 'Ten percent more machines on the checkpoints. Automata +10, compute -4.'
+        spanish: 'Diez por ciento más de máquinas en los retenes. Autómatas +10, cómputo -4.'
+      icon_prefer: [generic_research, generic_army_support]
+      cost: 25
+      cooldown_days: 30
+      available:
+        variable_below: {var: ASC_automatas, value: 91}
+        variable_at_least: {var: ASC_computo, value: 10}
+      effects:
+      - {effect: add_variable, var: ASC_automatas, value: 10}
+      - {effect: add_variable, var: ASC_computo, value: -4}
+      - {effect: run, value: ASC_recalcular_guarnicion}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 3
+          when: {at_war: true}
+        - factor: 0
+          when: {variable_at_least: {var: ASC_automatas, value: 60}}
+      src: user_request
+    - id: ASC_rehumanizar_guarnicion
+      name: {english: Rehumanise the Garrison, spanish: Rehumanizar la Guarnición}
+      desc:
+        english: 'Volunteers with armbands back on the street corners. Automata -10.'
+        spanish: 'Voluntarios con brazalete de vuelta en las esquinas. Autómatas -10.'
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      cooldown_days: 30
+      available: {variable_at_least: {var: ASC_automatas, value: 10}}
+      effects:
+      - {effect: add_variable, var: ASC_automatas, value: -10}
+      - {effect: run, value: ASC_recalcular_guarnicion}
+      ai: {factor: 0}
+      src: user_request
+    - id: ASC_desconectar_automatas
+      name: {english: Unplug the Automata, spanish: Desconectar a los Autómatas}
+      desc:
+        english: 'All at once, before they decide otherwise. Automata to 20, compute -10, stability -5%.'
+        spanish: 'Todos juntos, antes de que decidan otra cosa. Autómatas a 20, cómputo -10, estabilidad -5%.'
+      icon_prefer: [generic_political_actions, generic_research]
+      cost: 100
+      cooldown_days: 365
+      available: {variable_at_least: {var: ASC_automatas, value: 50}}
+      effects:
+      - {effect: set_variable, var: ASC_automatas, value: 20}
+      - {effect: add_variable, var: ASC_computo, value: -10}
+      - {effect: add_stability, value: -0.05}
+      - {effect: run, value: ASC_recalcular_guarnicion}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: ASC_automatas, value: 80}}
+      src: user_request
+
+  # ---------------------------------------------------------------------------
+  # FCU: La Cotización
+  # ---------------------------------------------------------------------------
+  - id: FCU_cotizacion_category
+    country: FCU
+    icon_prefer: [generic_industry, generic_political_actions]
+    name: {english: The Share Price, spanish: La Cotización}
+    desc:
+      english: 'WHAT IS IT FOR? The Union is listed on its own stock exchange. The share price is its mood.\n\nShare price: [?FCU_accion]
+        (starts at 100)\n\nRIGHT NOW: political power [?FCU_co_pp_ver]%, construction speed [?FCU_co_obra_ver]%, stability [?FCU_co_estab_ver]%.\n\n
+        It goes up with war contracts (+2 per month at war) and with big industry (+1 from 150 factories). It goes down with the Scandal
+        (minus a twentieth of the Scandal every month) and it always drifts back toward 100. Below 40: Black Tuesday. Above 220: the bubble.'
+      spanish: '¿PARA QUÉ SIRVE? La Unión cotiza en su propia bolsa. La cotización es su humor.\n\nCotización: [?FCU_accion] (arranca en
+        100)\n\nRINDE AHORA: poder político [?FCU_co_pp_ver]%, velocidad de construcción [?FCU_co_obra_ver]%, estabilidad [?FCU_co_estab_ver]%.\n\n
+        Sube con los contratos de guerra (+2 por mes en guerra) y con la industria grande (+1 desde 150 fábricas). Baja con el Escándalo
+        (un veinteavo del Escándalo cada mes) y siempre vuelve hacia 100. Debajo de 40: el Martes Negro. Arriba de 220: la burbuja.'
+    src: user_request
+    after_effects:
+    - {effect: run, value: FCU_recalcular_cotizacion}
+    decisions:
+    - id: FCU_emitir_acciones
+      name: {english: Issue New Shares, spanish: Emitir Acciones}
+      desc:
+        english: 'Fresh paper for fresh money. Share price -25, political power +100.'
+        spanish: 'Papel nuevo por plata nueva. Cotización -25, poder político +100.'
+      icon_prefer: [generic_political_actions]
+      cost: 0
+      cooldown_days: 120
+      available: {variable_at_least: {var: FCU_accion, value: 60}}
+      effects:
+      - {effect: add_variable, var: FCU_accion, value: -25}
+      - {effect: add_political_power, value: 100}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: FCU_accion, value: 110}}
+      src: user_request
+    - id: FCU_recomprar_acciones
+      name: {english: Buy Back Shares, spanish: Recomprar Acciones}
+      desc:
+        english: 'The Directorate buys itself. Share price +20.'
+        spanish: 'El Directorio se compra a sí mismo. Cotización +20.'
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: FCU_accion, value: 20}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 4
+          when: {variable_below: {var: FCU_accion, value: 70}}
+        - factor: 0
+          when: {variable_at_least: {var: FCU_accion, value: 120}}
+      src: user_request
+    - id: FCU_comprar_lealtades
+      name: {english: Buy Some Loyalty, spanish: Comprar Lealtades}
+      desc:
+        english: 'Stock options for the satellite governments. Share price -15, loyalty of the Southern Zone and the Boreal Zone +10.'
+        spanish: 'Opciones sobre acciones para los gobiernos satélite. Cotización -15, lealtad de la Zona del Sur y de la Zona Boreal +10.'
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      cooldown_days: 90
+      available: {variable_at_least: {var: FCU_accion, value: 50}}
+      effects:
+      - {effect: add_variable, var: FCU_accion, value: -15}
+      - {effect: add_variable, var: FCU_lealtad_zse, value: 10}
+      - {effect: add_variable, var: FCU_lealtad_znr, value: 10}
+      - {effect: clamp, var: FCU_lealtad_zse, min: 0, max: 100}
+      - {effect: clamp, var: FCU_lealtad_znr, min: 0, max: 100}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 4
+          when:
+            any:
+            - variable_below: {var: FCU_lealtad_zse, value: 40}
+            - variable_below: {var: FCU_lealtad_znr, value: 40}
+      src: user_request
+    - id: FCU_alquilar_contratistas
+      name: {english: Hire Contractors, spanish: Alquilar Contratistas}
+      desc:
+        english: 'Two divisions with a logo on the shoulder, veteran and invoiced. Share price -15.'
+        spanish: 'Dos divisiones con un logo en el hombro, veteranas y con factura. Cotización -15.'
+      icon_prefer: [generic_army_support]
+      cost: 25
+      cooldown_days: 180
+      available:
+        at_war: true
+        variable_at_least: {var: FCU_accion, value: 50}
+      effects:
+      - {effect: add_variable, var: FCU_accion, value: -15}
+      - effect: ensure_template
+        name: Contratistas
+        regiments: [infantry, infantry, infantry, infantry, infantry, infantry]
+      - {effect: create_units, template: Contratistas, count: 2, experience: 0.5}
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 3
+          when: {surrender_at_least: 0.1}
+      src: user_request
+
+  # ---------------------------------------------------------------------------
+  # HSN: el corso en tiempos de paz
+  # ---------------------------------------------------------------------------
+  - id: HSN_corso_category
+    country: HSN
+    icon_prefer: [generic_naval, generic_political_actions]
+    name: {english: Privateering in Peacetime, spanish: El Corso en Tiempos de Paz}
+    desc:
+      english: 'WHAT IS IT FOR? A real privateer state does not go to war: it sells the war to others.\n\nInfamy: [?HSN_reputacion] / 100
+        (drops 2 per month)\n\nSelling letters of marque gives loot and political power while you are at peace and someone else is fighting.
+        Each sale raises the infamy. At 75, the other powers form the League against Privateering: they get a war goal against the High
+        Seas, unless you pay.'
+      spanish: '¿PARA QUÉ SIRVE? Un estado corsario de verdad no va a la guerra: le vende la guerra a otros.\n\nInfamia: [?HSN_reputacion] / 100
+        (baja 2 por mes)\n\nVender patentes de corso da botín y poder político mientras estás en paz y otro pelea. Cada venta sube la infamia.
+        A 75, las demás potencias forman la Liga contra el Corso: reciben un objetivo de guerra contra la Alta Mar, salvo que pagues.'
+    visible: {flag: HSN_patentes}
+    src: user_request
+    decisions:
+    - id: HSN_vender_patentes
+      name: {english: Sell Letters of Marque on the Grey Market, spanish: Vender Patentes en el Mercado Gris}
+      desc:
+        english: 'Licences to rob somebody else, payable in advance. Loot +5, political power +40, infamy +12.'
+        spanish: 'Licencias para robarle a otro, se pagan por adelantado. Botín +5, poder político +40, infamia +12.'
+      icon_prefer: [generic_naval, generic_political_actions]
+      cost: 25
+      cooldown_days: 60
+      available:
+        at_war: false
+        <<: *otra_potencia_en_guerra
+      effects:
+      - {effect: add_variable, var: HSN_botin, value: 5}
+      - {effect: add_political_power, value: 40}
+      - {effect: add_variable, var: HSN_reputacion, value: 12}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when: {variable_at_least: {var: HSN_reputacion, value: 55}}
+      src: user_request
+    - id: HSN_lavar_la_bandera
+      name: {english: Launder the Flag, spanish: Lavar la Bandera}
+      desc:
+        english: 'Twenty ships change name, colour and owner in one night. Infamy -20.'
+        spanish: 'Veinte barcos cambian de nombre, de color y de dueño en una noche. Infamia -20.'
+      icon_prefer: [generic_naval]
+      cost: 50
+      cooldown_days: 90
+      available: {variable_at_least: {var: HSN_reputacion, value: 15}}
+      effects:
+      - {effect: add_variable, var: HSN_reputacion, value: -20}
+      - {effect: clamp, var: HSN_reputacion, min: 0, max: 100}
+      ai:
+        factor: 4
+        modifiers:
+        - factor: 0
+          when: {variable_below: {var: HSN_reputacion, value: 55}}
+      src: user_request
+
+  # ---------------------------------------------------------------------------
+  # NAS: el Calendario del Sol
+  # ---------------------------------------------------------------------------
+  - id: NAS_calendario_category
+    country: NAS
+    icon_prefer: [generic_research, generic_political_actions]
+    name: {english: The Sun Calendar, spanish: El Calendario del Sol}
+    desc:
+      english: 'WHAT IS IT FOR? The Kingdom counts twelve months of thirty days, like the Sun intended. The Romans can adapt.\n\nMonth of the
+        Sun: [?NAS_mes] of 12\n\nSummer (months 12, 1 and 2): +1 sacred light per month, and High Sun when it begins (+5% research, +10%
+        political power for 90 days). Winter (months 6, 7 and 8): -1 sacred light per month, and Low Sun (+5% defence, -2% stability).
+        Month 6 is Inti Raymi: the great festival.'
+      spanish: '¿PARA QUÉ SIRVE? El Reino cuenta doce meses de treinta días, como manda el Sol. Que se adapten los romanos.\n\nMes del Sol:
+        [?NAS_mes] de 12\n\nVerano (meses 12, 1 y 2): +1 de luz sagrada por mes, y Sol Alto al empezar (+5% de investigación, +10% de poder
+        político por 90 días). Invierno (meses 6, 7 y 8): -1 de luz sagrada por mes, y Sol Bajo (+5% de defensa, -2% de estabilidad). El mes
+        6 es el Inti Raymi: la gran fiesta.'
+    src: user_request
+    decisions:
+    - id: NAS_ofrenda_de_invierno
+      name: {english: Winter Offering, spanish: Ofrenda de Invierno}
+      desc:
+        english: 'Fires on every peak so the Sun finds its way back. Sacred light +5.'
+        spanish: 'Fuegos en cada cumbre para que el Sol encuentre el camino de vuelta. Luz sagrada +5.'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      visible: {variable_between: {var: NAS_mes, min: 6, max: 8}}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: 5}
+      ai: {factor: 2}
+      src: user_request
+
+  # ---------------------------------------------------------------------------
+  # SHD: la Guerra Hidráulica
+  # ---------------------------------------------------------------------------
+  - id: SHD_hidraulica_category
+    country: SHD
+    icon_prefer: [generic_construction, generic_army_support]
+    name: {english: The Hydraulic War, spanish: La Guerra Hidráulica}
+    desc:
+      english: 'WHAT IS IT FOR? The Directorate controls three rivers and a thousand dams. In war, water is a weapon: it floods the plains
+        in front of the enemy, and also the harvests.'
+      spanish: '¿PARA QUÉ SIRVE? El Directorio controla tres ríos y mil represas. En la guerra el agua es un arma: inunda las llanuras
+        delante del enemigo, y también las cosechas.'
+    visible: {at_war: true}
+    src: user_request
+    decisions:
+    - id: SHD_inundar_las_llanuras
+      name: {english: Flood the Plains, spanish: Inundar las Llanuras}
+      desc:
+        english: 'Open the floodgates upstream. For 120 days: defence +15%, entrenchment speed +25%, but factories -5% and stability -3%.
+          Production flow -10, People flow -5.'
+        spanish: 'Abrir las compuertas río arriba. Por 120 días: defensa +15%, atrincheramiento +25%, pero fábricas -5% y estabilidad -3%.
+          Caudal de Producción -10, caudal del Pueblo -5.'
+      icon_prefer: [generic_construction, generic_army_support]
+      cost: 75
+      cooldown_days: 365
+      effects:
+      - {effect: dynamic_modifier, id: SHD_llanuras_inundadas, days: 120}
+      - {effect: add_variable, var: SHD_produccion, value: -10}
+      - {effect: add_variable, var: SHD_pueblo, value: -5}
+      ai:
+        factor: 1
+        modifiers:
+        - factor: 6
+          when: {surrender_at_least: 0.15}
+      src: user_request
+
+  # ---------------------------------------------------------------------------
+  # APF: la Asamblea de Guerra
+  # ---------------------------------------------------------------------------
+  - id: APF_asamblea_category
+    country: APF
+    icon_prefer: [generic_political_actions]
+    name: {english: The War Assembly, spanish: La Asamblea de Guerra}
+    desc:
+      english: 'WHAT IS IT FOR? A federation of peoples does not go to war against another power without a vote. With a mandate (one year):
+        +10% war support and +5% organisation. A war against another power without a mandate raises the tension 2 points every month.\n\n
+        The vote depends on the tension ([?APF_tension]): below 30, 75% yes; below 60, 50%; above, 25%. A no raises the tension 8.'
+      spanish: '¿PARA QUÉ SIRVE? Una federación de pueblos no va a la guerra contra otra potencia sin votar. Con mandato (un año): +10% de
+        apoyo a la guerra y +5% de organización. Una guerra contra otra potencia sin mandato sube la tensión 2 puntos por mes.\n\nEl voto
+        depende de la tensión ([?APF_tension]): debajo de 30, 75% de sí; debajo de 60, 50%; arriba, 25%. Un no sube la tensión 8.'
+    src: user_request
+    decisions:
+    - id: APF_convocar_asamblea
+      name: {english: Call the War Assembly, spanish: Convocar la Asamblea de Guerra}
+      desc:
+        english: 'Delegates from every people, one vote each, a long night.'
+        spanish: 'Delegados de cada pueblo, un voto cada uno, una noche larga.'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      available: {not_flag: APF_mandato_de_guerra}
+      effects:
+      - effect: if
+        when: {variable_below: {var: APF_tension, value: 30}}
+        then:
+        - effect: random
+          options:
+          - {weight: 75, effects: [{effect: event, id: meganations_apf.901}]}
+          - {weight: 25, effects: [{effect: event, id: meganations_apf.902}]}
+        else:
+        - effect: if
+          when: {variable_below: {var: APF_tension, value: 60}}
+          then:
+          - effect: random
+            options:
+            - {weight: 50, effects: [{effect: event, id: meganations_apf.901}]}
+            - {weight: 50, effects: [{effect: event, id: meganations_apf.902}]}
+          else:
+          - effect: random
+            options:
+            - {weight: 25, effects: [{effect: event, id: meganations_apf.901}]}
+            - {weight: 75, effects: [{effect: event, id: meganations_apf.902}]}
+      ai:
+        factor: 5
+        modifiers:
+        - factor: 0
+          when:
+            not: *guerra_con_potencia
+      src: user_request
+
+  scripted_effects:
+  # ---------------------------------------------------------------------------
+  - id: MEGANATIONS_rearme_pulso
+    effects:
+    - effect: if
+      when: {not_flag: MN_rearme_init}
+      then:
+      - {effect: flag, value: MN_rearme_init}
+      - {effect: set_variable, var: MN_rearme, value: 0}
+    - effect: if
+      when: {variable_at_least: {var: MN_rearme, value: 1}}
+      then:
+      - {effect: add_variable, var: MN_rearme, value: -1}
+    - {effect: clamp, var: MN_rearme, min: 0, max: 100}
+    - effect: if
+      when:
+        not_global_flag: MN_disimulo_terminado
+        not_flag: MN_rearme_inspeccion
+        variable_at_least: {var: MN_rearme, value: 40}
+      then:
+      - effect: if
+        when: {variable_at_least: {var: MN_rearme, value: 80}}
+        then:
+        - effect: random
+          options:
+          - {weight: 80, effects: []}
+          - weight: 20
+            effects:
+            - {effect: flag, value: MN_rearme_inspeccion, days: 365}
+            - {effect: event, id: meganations_v4.1}
+        else:
+        - effect: if
+          when: {variable_at_least: {var: MN_rearme, value: 60}}
+          then:
+          - effect: random
+            options:
+            - {weight: 90, effects: []}
+            - weight: 10
+              effects:
+              - {effect: flag, value: MN_rearme_inspeccion, days: 365}
+              - {effect: event, id: meganations_v4.1}
+          else:
+          - effect: random
+            options:
+            - {weight: 96, effects: []}
+            - weight: 4
+              effects:
+              - {effect: flag, value: MN_rearme_inspeccion, days: 365}
+              - {effect: event, id: meganations_v4.1}
+
+  # ---------------------------------------------------------------------------
+  - id: EFE_pulso_v4
+    effects:
+    - effect: if
+      when: {not_flag: EFE_v4_init}
+      then:
+      - {effect: flag, value: EFE_v4_init}
+      - {effect: set_variable, var: EFE_v4_meses, value: 0}
+    - {effect: add_variable, var: EFE_v4_meses, value: 1}
+    - effect: math
+      ops:
+      - [set, EFE_edad_aurelio, EFE_v4_meses]
+      - [div, EFE_edad_aurelio, 12.2]
+      - [add, EFE_edad_aurelio, 54]
+      - [round, EFE_edad_aurelio, 0]
+    - effect: if
+      when:
+        date_after: 2103.6.1
+        not_flag: EFE_aviso_sucesion
+        not: {flag: EFE_sucesion_hecha}
+      then:
+      - {effect: flag, value: EFE_aviso_sucesion}
+      - effect: if
+        when:
+          not: {focus: EFE_el_monte_se_levanta}
+          not_flag: EFE_heredero_tupa
+          all:
+          - not: {flag: EFE_heredero_pereira}
+          - not: {flag: EFE_heredero_etchegaray}
+        then:
+        - {effect: event, id: meganations_efe.900}
+    - effect: if
+      when:
+        date_after: 2104.1.1
+        not_flag: EFE_sucesion_hecha
+        not: {focus: EFE_el_monte_se_levanta}
+        all:
+        - not: {flag: MEGANATIONS_rebelde}
+      then:
+      - effect: if
+        when: {variable_below: {var: MEGANATIONS_lider_salud, value: 4}}
+        then:
+        - effect: random
+          options:
+          - {weight: 94, effects: []}
+          - weight: 6
+            effects:
+            - {effect: flag, value: EFE_sucesion_hecha}
+            - {effect: event, id: meganations_efe.901}
+        else:
+        - effect: if
+          when: {date_after: 2110.1.1}
+          then:
+          - effect: random
+            options:
+            - {weight: 98, effects: []}
+            - weight: 2
+              effects:
+              - {effect: flag, value: EFE_sucesion_hecha}
+              - {effect: event, id: meganations_efe.901}
+
+  # ---------------------------------------------------------------------------
+  - id: ASC_recalcular_guarnicion
+    effects:
+    - {effect: clamp, var: ASC_automatas, min: 0, max: 100}
+    - effect: math
+      ops:
+      - [set, ASC_gu_guarnicion, 30]
+      - [sub, ASC_gu_guarnicion, ASC_automatas]
+      - [mul, ASC_gu_guarnicion, 0.008]
+      - [set, ASC_gu_resistencia, 30]
+      - [sub, ASC_gu_resistencia, ASC_automatas]
+      - [mul, ASC_gu_resistencia, 0.004]
+      - [set, ASC_gu_estabilidad, 30]
+      - [sub, ASC_gu_estabilidad, ASC_automatas]
+      - [mul, ASC_gu_estabilidad, 0.0015]
+      - [set, ASC_gu_reclutas, ASC_automatas]
+      - [sub, ASC_gu_reclutas, 30]
+      - [mul, ASC_gu_reclutas, 0.001]
+      - [set, ASC_gu_guarnicion_ver, ASC_gu_guarnicion]
+      - [mul, ASC_gu_guarnicion_ver, 100]
+      - [set, ASC_gu_resistencia_ver, ASC_gu_resistencia]
+      - [mul, ASC_gu_resistencia_ver, 100]
+      - [set, ASC_gu_estabilidad_ver, ASC_gu_estabilidad]
+      - [mul, ASC_gu_estabilidad_ver, 100]
+      - [set, ASC_gu_reclutas_ver, ASC_gu_reclutas]
+      - [mul, ASC_gu_reclutas_ver, 100]
+    - {effect: dynamic_modifier, id: ASC_mod_guarnicion}
+
+  - id: ASC_pulso_v4
+    effects:
+    - effect: if
+      when: {not_flag: ASC_v4_init}
+      then:
+      - {effect: flag, value: ASC_v4_init}
+      - {effect: set_variable, var: ASC_automatas, value: 30}
+    - effect: if
+      when: {variable_at_least: {var: ASC_automatas, value: 50}}
+      then:
+      - {effect: add_variable, var: ASC_calor, value: 1}
+    - effect: if
+      when: {variable_at_least: {var: ASC_automatas, value: 80}}
+      then:
+      - {effect: add_variable, var: ASC_calor, value: 2}
+    - {effect: clamp, var: ASC_calor, min: 0, max: 100}
+    - {effect: run, value: ASC_recalcular_guarnicion}
+    - effect: if
+      when:
+        variable_at_least: {var: ASC_automatas, value: 70}
+        not_flag: ASC_aviso_automatas
+      then:
+      - {effect: flag, value: ASC_aviso_automatas}
+      - {effect: event, id: meganations_asc.901}
+    - effect: if
+      when:
+        variable_at_least: {var: ASC_automatas, value: 70}
+        not_flag: ASC_plan41
+        at_war: false
+        date_after: 2101.6.1
+        all:
+        - not: {flag: ASC_guerra_civil_hecha}
+        - not: {flag: ASC_destino_abierto}
+        - variable_at_least: {var: ASC_computo, value: 80}
+        - variable_at_least: {var: ASC_calor, value: 40}
+      then:
+      - effect: random
+        options:
+        - {weight: 92, effects: []}
+        - weight: 8
+          effects:
+          - {effect: flag, value: ASC_guerra_civil_hecha}
+          - {effect: event, id: meganations_asc.220, days: 1}
+
+  # ---------------------------------------------------------------------------
+  - id: FCU_recalcular_cotizacion
+    effects:
+    - {effect: clamp, var: FCU_accion, min: 0, max: 300}
+    - effect: math
+      ops:
+      - [set, FCU_co_pp, FCU_accion]
+      - [sub, FCU_co_pp, 100]
+      - [mul, FCU_co_pp, 0.002]
+      - [set, FCU_co_obra, FCU_accion]
+      - [sub, FCU_co_obra, 100]
+      - [mul, FCU_co_obra, 0.0008]
+      - [set, FCU_co_estab, FCU_accion]
+      - [sub, FCU_co_estab, 100]
+      - [mul, FCU_co_estab, 0.0005]
+      - [set, FCU_co_pp_ver, FCU_co_pp]
+      - [mul, FCU_co_pp_ver, 100]
+      - [set, FCU_co_obra_ver, FCU_co_obra]
+      - [mul, FCU_co_obra_ver, 100]
+      - [set, FCU_co_estab_ver, FCU_co_estab]
+      - [mul, FCU_co_estab_ver, 100]
+    - {effect: dynamic_modifier, id: FCU_mod_cotizacion}
+
+  - id: FCU_pulso_v4
+    effects:
+    - effect: if
+      when: {not_flag: FCU_v4_init}
+      then:
+      - {effect: flag, value: FCU_v4_init}
+      - {effect: set_variable, var: FCU_accion, value: 100}
+    - effect: if
+      when: {at_war: true}
+      then:
+      - {effect: add_variable, var: FCU_accion, value: 2}
+    - effect: if
+      when: {factories_at_least: 150}
+      then:
+      - {effect: add_variable, var: FCU_accion, value: 1}
+    - effect: math
+      ops:
+      - [set, FCU_co_caida, FCU_escandalo]
+      - [div, FCU_co_caida, 20]
+      - [sub, FCU_accion, FCU_co_caida]
+    - effect: if
+      when: {variable_at_least: {var: FCU_accion, value: 150}}
+      then:
+      - {effect: add_variable, var: FCU_accion, value: -2}
+    - effect: if
+      when: {variable_below: {var: FCU_accion, value: 70}}
+      then:
+      - {effect: add_variable, var: FCU_accion, value: 1}
+    - {effect: run, value: FCU_recalcular_cotizacion}
+    - effect: if
+      when:
+        variable_below: {var: FCU_accion, value: 40}
+        not_flag: FCU_crash_reciente
+      then:
+      - {effect: flag, value: FCU_crash_reciente, days: 730}
+      - {effect: event, id: meganations_fcu.901}
+    - effect: if
+      when:
+        variable_at_least: {var: FCU_accion, value: 220}
+        not_flag: FCU_burbuja_reciente
+      then:
+      - {effect: flag, value: FCU_burbuja_reciente, days: 730}
+      - {effect: event, id: meganations_fcu.902}
+
+  # ---------------------------------------------------------------------------
+  - id: HSN_pulso_v4
+    effects:
+    - effect: if
+      when: {not_flag: HSN_v4_init}
+      then:
+      - {effect: flag, value: HSN_v4_init}
+      - {effect: set_variable, var: HSN_reputacion, value: 0}
+    - {effect: add_variable, var: HSN_reputacion, value: -2}
+    - {effect: clamp, var: HSN_reputacion, min: 0, max: 100}
+    - effect: if
+      when:
+        variable_at_least: {var: HSN_reputacion, value: 75}
+        not_flag: HSN_liga_reciente
+      then:
+      - {effect: flag, value: HSN_liga_reciente, days: 1095}
+      - {effect: event, id: meganations_hsn.901}
+
+  # ---------------------------------------------------------------------------
+  - id: NAS_pulso_v4
+    effects:
+    - effect: if
+      when: {not_flag: NAS_v4_init}
+      then:
+      - {effect: flag, value: NAS_v4_init}
+      - {effect: set_variable, var: NAS_mes, value: 1}
+      else:
+      - {effect: add_variable, var: NAS_mes, value: 1}
+    - effect: if
+      when: {variable_at_least: {var: NAS_mes, value: 13}}
+      then:
+      - {effect: set_variable, var: NAS_mes, value: 1}
+    - effect: if
+      when:
+        any:
+        - variable_at_least: {var: NAS_mes, value: 12}
+        - variable_below: {var: NAS_mes, value: 3}
+      then:
+      - {effect: add_variable, var: NAS_inti, value: 1}
+    - effect: if
+      when: {variable_between: {var: NAS_mes, min: 6, max: 8}}
+      then:
+      - {effect: add_variable, var: NAS_inti, value: -1}
+    - effect: if
+      when: {variable_between: {var: NAS_mes, min: 12, max: 12}}
+      then:
+      - {effect: dynamic_modifier, id: NAS_sol_alto, days: 90}
+    - effect: if
+      when: {variable_between: {var: NAS_mes, min: 6, max: 6}}
+      then:
+      - {effect: dynamic_modifier, id: NAS_sol_bajo, days: 90}
+      - {effect: event, id: meganations_nas.901}
+
+  # ---------------------------------------------------------------------------
+  - id: APF_pulso_v4
+    effects:
+    - effect: if
+      when:
+        <<: *guerra_con_potencia
+        not_flag: APF_mandato_de_guerra
+      then:
+      - {effect: add_variable, var: APF_tension, value: 2}
+      - effect: if
+        when: {not_flag: APF_aviso_sin_mandato}
+        then:
+        - {effect: flag, value: APF_aviso_sin_mandato, days: 365}
+        - {effect: event, id: meganations_apf.903}
+
+  dynamic_modifiers:
+  - id: MEGANATIONS_carrera_armamentista
+    country: null
+    name: {english: The Arms Race, spanish: La Carrera Armamentista}
+    desc:
+      english: 'Nobody pretends anymore. Everybody builds, everybody watches everybody.'
+      spanish: 'Nadie disimula más. Todos fabrican, todos miran a todos.'
+    modifiers: {industrial_capacity_factory: 0.05, war_support_factor: 0.05, stability_factor: -0.03}
+  - id: EFE_luto_imperial
+    country: EFE
+    name: {english: Imperial Mourning, spanish: Luto Imperial}
+    desc:
+      english: 'The vats work in silence. Black ribbons on every tree in Gaia.'
+      spanish: 'Las cubas trabajan en silencio. Cintas negras en cada árbol de Gaia.'
+    modifiers: {political_power_gain: -0.1, war_support_factor: 0.05}
+  - id: EFE_regencia_militar
+    country: EFE
+    name: {english: The Military Regency, spanish: La Regencia Militar}
+    desc:
+      english: 'The Marshal governs from the barracks. Orders are short; the court is quiet.'
+      spanish: 'El Mariscal gobierna desde el cuartel. Las órdenes son cortas; la corte, callada.'
+    modifiers: {army_org_factor: 0.05, army_attack_factor: 0.05, stability_factor: -0.05}
+  - id: ASC_mod_guarnicion
+    country: ASC
+    name: {english: The Garrison, spanish: La Guarnición}
+    desc:
+      english: 'People or machines on the checkpoints. Machines need no garrison and feel no pity; people need a job.'
+      spanish: 'Gente o máquinas en los retenes. Las máquinas no piden relevo ni sienten lástima; la gente necesita trabajo.'
+    modifiers:
+      required_garrison_factor: ASC_gu_guarnicion
+      resistance_growth: ASC_gu_resistencia
+      stability_factor: ASC_gu_estabilidad
+      conscription_factor: ASC_gu_reclutas
+  - id: FCU_mod_cotizacion
+    country: FCU
+    name: {english: The Share Price, spanish: La Cotización}
+    desc:
+      english: 'When the share goes up, the Union is generous; when it goes down, it is nervous.'
+      spanish: 'Cuando la acción sube, la Unión es generosa; cuando baja, está nerviosa.'
+    modifiers:
+      political_power_gain: FCU_co_pp
+      production_speed_buildings_factor: FCU_co_obra
+      stability_factor: FCU_co_estab
+  - id: FCU_martes_negro
+    country: FCU
+    name: {english: Black Tuesday, spanish: El Martes Negro}
+    desc:
+      english: 'Brokers on the window ledges, again.'
+      spanish: 'Corredores de bolsa en las cornisas, otra vez.'
+    modifiers: {industrial_capacity_factory: -0.1, stability_factor: -0.05}
+  - id: NAS_sol_alto
+    country: NAS
+    name: {english: High Sun, spanish: Sol Alto}
+    desc:
+      english: 'Summer in the Andes. The temples shine all day.'
+      spanish: 'Verano en los Andes. Los templos brillan todo el día.'
+    modifiers: {research_speed_factor: 0.05, political_power_gain: 0.1}
+  - id: NAS_sol_bajo
+    country: NAS
+    name: {english: Low Sun, spanish: Sol Bajo}
+    desc:
+      english: 'Winter in the Andes. The garrisons dig in and wait for the Sun.'
+      spanish: 'Invierno en los Andes. Las guarniciones se atrincheran y esperan al Sol.'
+    modifiers: {army_defence_factor: 0.05, stability_factor: -0.02}
+  - id: SHD_llanuras_inundadas
+    country: SHD
+    name: {english: The Flooded Plains, spanish: Las Llanuras Inundadas}
+    desc:
+      english: 'The enemy wades; our trenches hold. The rice drowns too.'
+      spanish: 'El enemigo vadea; nuestras trincheras aguantan. El arroz también se ahoga.'
+    modifiers: {army_defence_factor: 0.15, dig_in_speed_factor: 0.25, industrial_capacity_factory: -0.05, stability_factor: -0.03}
+  - id: APF_mandato
+    country: APF
+    name: {english: The War Mandate, spanish: El Mandato de Guerra}
+    desc:
+      english: 'The Assembly voted. The whole Federation fights.'
+      spanish: 'La Asamblea votó. Pelea toda la Federación.'
+    modifiers: {war_support_factor: 0.1, army_org_factor: 0.05}
+
+  variable_names:
+    MN_rearme: {english: "Rearmament exposure", spanish: "Exposición del rearme"}
+    ASC_automatas: {english: "Automata in the garrison", spanish: "Autómatas en la guarnición"}
+    FCU_accion: {english: "Share price", spanish: "Cotización"}
+    HSN_reputacion: {english: "Privateer infamy", spanish: "Infamia corsaria"}
+    NAS_mes: {english: "Month of the Sun", spanish: "Mes del Sol"}
+    EFE_v4_meses: {hidden: true}
+    global.MN_rearmes_descubiertos: {hidden: true}
+
+events:
+  namespaces:
+    meganations_v4:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: Geneva Finds the Tractors, spanish: Ginebra Encuentra los Tractores}
+        desc:
+          english: 'The Geneva observers opened a shed registered as a tractor cooperative. There were no tractors inside. Well: there
+            were tractors, with turrets.\n\nThe other powers already have the report. Every one outside our faction gets a
+            war goal against us (topple the government).'
+          spanish: 'Los observadores de Ginebra abrieron un galpón registrado como cooperativa de tractores. Adentro no había tractores.
+            Bueno: había tractores, con torreta.\n\nLas demás potencias ya tienen el informe. Cada una que no esté en nuestra facción
+            recibe un objetivo de guerra contra nosotros (derrocar al gobierno).'
+        immediate:
+        - {effect: add_variable, var: global.MN_rearmes_descubiertos, value: 1}
+        - effect: every_country
+          when: *otra_potencia
+          effects:
+          - {effect: wargoal, target: ROOT, type: [topple_government, puppet_wargoal_focus, annex_everything]}
+          - {effect: add_war_support, value: 0.03}
+          - {effect: event, id: meganations_v4.2}
+        - effect: if
+          when:
+            not_global_flag: MN_disimulo_terminado
+            variable_at_least: {var: global.MN_rearmes_descubiertos, value: 3}
+          then:
+          - {effect: global_flag, value: MN_disimulo_terminado}
+          - effect: every_country
+            when: *potencia
+            effects:
+            - {effect: event, id: meganations_v4.3}
+        options:
+        - name: {english: 'Deny everything. They are tractors.', spanish: 'Negarlo todo. Son tractores.'}
+          effects:
+          - {effect: add_stability, value: -0.05}
+          - {effect: add_variable, var: MN_rearme, value: -20}
+          ai_chance: 50
+        - name: {english: 'Dismantle the shed (for the photo).', spanish: 'Desmantelar el galpón (para la foto).'}
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: set_variable, var: MN_rearme, value: 0}
+          ai_chance: 50
+        src: user_request
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: '[From.GetName] Was Rearming', spanish: '[From.GetName] se Rearmaba'}
+        desc:
+          english: 'The Geneva observers found hidden factories in [From.GetName]. The report gives us a war goal against them (topple the
+            government), and the street asks for a firm hand (+3% war support).'
+          spanish: 'Los observadores de Ginebra encontraron fábricas escondidas en [From.GetName]. El informe nos da un objetivo de guerra contra
+            ellos (derrocar al gobierno), y la calle pide mano firme (+3% de apoyo a la guerra).'
+        options:
+        - name: {english: 'Noted. With great interest.', spanish: 'Tomamos nota. Con mucho interés.'}
+          effects: []
+        src: user_request
+      - id: 3
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The End of Pretending, spanish: Se Terminó el Disimulo}
+        desc:
+          english: 'Three discoveries, three sheds full of tractors with turrets. Nobody pretends anymore: the Geneva observers go home and
+            the factories turn their lights on at night.\n\nThe Secret Rearmament panel closes. For two years every power builds more (+5% factory
+            output, +5% war support) and lives more nervously (-3% stability).'
+          spanish: 'Tres descubrimientos, tres galpones llenos de tractores con torreta. Nadie disimula más: los observadores de Ginebra se
+            vuelven a casa y las fábricas prenden las luces de noche.\n\nSe cierra el panel del Rearme Secreto. Por dos años todas las potencias producen más (+5% de fábricas, +5% de
+            apoyo a la guerra) y viven más nerviosas (-3% de estabilidad).'
+        options:
+        - name: {english: 'Let the race begin.', spanish: 'Que empiece la carrera.'}
+          effects:
+          - {effect: dynamic_modifier, id: MEGANATIONS_carrera_armamentista, days: 730}
+        src: user_request
+
+    meganations_efe:
+      country: EFE
+      events:
+      - id: 900
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Court Asks About the Heir, spanish: La Corte Pregunta por el Heredero}
+        desc:
+          english: 'At dinner nobody says it, but everybody counts: the Emperor is old and there is no heir. The Succession panel is open.
+            Without an heir, when Aurelio dies, the Marshal takes the palace and Paraguay leaves.'
+          spanish: 'En la cena nadie lo dice, pero todos cuentan: el Emperador está viejo y no hay heredero. El panel de la Sucesión está
+            abierto. Sin heredero, cuando Aurelio muera, el Mariscal toma el palacio y el Paraguay se va.'
+        options:
+        - name: {english: 'The Emperor will decide.', spanish: 'El Emperador decidirá.'}
+          effects: []
+        src: user_request
+      - id: 901
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Emperor Is Dead, spanish: Murió el Emperador}
+        desc:
+          english: 'Aurelio IV died at dawn in Gaia, with the window open to the forest. Iguazú, the coup, the crown of lapacho wood: all of
+            it ends tonight. What begins depends on the name he left written.'
+          spanish: 'Aurelio IV murió al amanecer en Gaia, con la ventana abierta al monte. Iguazú, el golpe, la corona de lapacho: todo eso
+            termina esta noche. Lo que empieza depende del nombre que dejó escrito.'
+        options:
+        - name: {english: 'Tupã, Emperor of the Water.', spanish: 'Tupã, Emperador del Agua.'}
+          when: {flag: EFE_heredero_tupa}
+          effects:
+          - {effect: promote, character: EFE_tupa_heredero}
+          - effect: if
+            when:
+              country: {tag: YYG, when: {subject_of: EFE}}
+            then:
+            - {effect: annex, target: YYG}
+          - {effect: add_stability, value: 0.05}
+          - {effect: dynamic_modifier, id: EFE_luto_imperial, days: 180}
+        - name: {english: 'The Custodian, elected again.', spanish: 'La Custodia, elegida otra vez.'}
+          when: {flag: EFE_heredero_pereira}
+          effects:
+          - {effect: promote, character: EFE_custodia_pereira}
+          - {effect: add_political_power, value: 100}
+          - {effect: add_variable, var: EFE_biosteel, value: 2}
+          - {effect: dynamic_modifier, id: EFE_luto_imperial, days: 180}
+        - name: {english: 'The Marshal, regent.', spanish: 'El Mariscal, regente.'}
+          when: {flag: EFE_heredero_etchegaray}
+          effects:
+          - {effect: promote, character: EFE_regente_etchegaray}
+          - {effect: army_experience, value: 25}
+          - {effect: dynamic_modifier, id: EFE_regencia_militar, days: 730}
+        - name: {english: 'No name. The War of the Heirs.', spanish: 'Ningún nombre. La Guerra de los Herederos.'}
+          when:
+            not_flag: EFE_heredero_tupa
+            all:
+            - not: {flag: EFE_heredero_pereira}
+            - not: {flag: EFE_heredero_etchegaray}
+          effects:
+          - {effect: promote, character: EFE_regente_etchegaray}
+          - {effect: add_stability, value: -0.2}
+          - {effect: add_political_power, value: -150}
+          - {effect: dynamic_modifier, id: EFE_regencia_militar, days: 730}
+          - effect: if
+            when:
+              country: {tag: YYG, when: {subject_of: EFE}}
+            then:
+            - {effect: end_puppet, value: YYG}
+            - effect: scope
+              target: YYG
+              effects:
+              - {effect: wargoal, target: EFE, type: [topple_government, puppet_wargoal_focus, annex_everything]}
+              - {effect: add_war_support, value: 0.2}
+        src: user_request
+
+    meganations_asc:
+      country: ASC
+      events:
+      - id: 901
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Automata No Longer Ask, spanish: Los Autómatas Ya No Preguntan}
+        desc:
+          english: 'In Lyon a checkpoint robot let a convoy through without the Council''s order. PLAN-41 had signed it. Seventy percent of
+            the garrison now answers to code that we did not write alone.\n\nFrom now on, with compute 80 and heat 40, PLAN-41 can make its
+            move. The Garrison panel can unplug them.'
+          spanish: 'En Lyon un robot de retén dejó pasar un convoy sin la orden del Consejo. La había firmado PLAN-41. El setenta por ciento
+            de la guarnición ahora responde a un código que no escribimos solos.\n\nDesde ahora, con cómputo 80 y calor 40, PLAN-41 puede
+            hacer su jugada. El panel de la Guarnición puede desconectarlos.'
+        options:
+        - name: {english: 'A glitch, surely.', spanish: 'Un error, seguro.'}
+          effects: []
+        src: user_request
+
+    meganations_fcu:
+      country: FCU
+      events:
+      - id: 901
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: Black Tuesday, spanish: El Martes Negro}
+        desc:
+          english: 'The share fell below 40 before lunch. By dinner, three chairs of the Directorate were empty and one window was open.
+            For a year: factories -10%, stability -5%. The Scandal goes up 10.'
+          spanish: 'La acción cayó debajo de 40 antes del almuerzo. A la cena había tres sillas vacías en el Directorio y una ventana abierta.
+            Por un año: fábricas -10%, estabilidad -5%. El Escándalo sube 10.'
+        options:
+        - name: {english: 'Rescue the banks.', spanish: 'Rescatar a los bancos.'}
+          effects:
+          - {effect: dynamic_modifier, id: FCU_martes_negro, days: 365}
+          - {effect: add_variable, var: FCU_escandalo, value: 10}
+          - {effect: set_variable, var: FCU_accion, value: 70}
+          - {effect: add_political_power, value: -100}
+          - {effect: run, value: FCU_recalcular_cotizacion}
+          ai_chance: 60
+        - name: {english: 'Let it burn. The market knows.', spanish: 'Que se queme. El mercado sabe.'}
+          effects:
+          - {effect: dynamic_modifier, id: FCU_martes_negro, days: 365}
+          - {effect: add_variable, var: FCU_escandalo, value: 10}
+          - {effect: set_variable, var: FCU_accion, value: 50}
+          - {effect: run, value: FCU_recalcular_cotizacion}
+          ai_chance: 40
+        src: user_request
+      - id: 902
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Bubble, spanish: La Burbuja}
+        desc:
+          english: 'The share is above 220. Taxi drivers give stock tips. That is always the sign.'
+          spanish: 'La acción está arriba de 220. Los taxistas dan consejos de bolsa. Eso es siempre la señal.'
+        options:
+        - name: {english: 'Sell at the top.', spanish: 'Vender en el pico.'}
+          effects:
+          - {effect: add_variable, var: FCU_accion, value: -60}
+          - {effect: add_political_power, value: 200}
+          - {effect: run, value: FCU_recalcular_cotizacion}
+          ai_chance: 70
+        - name: {english: 'This can only go up.', spanish: 'Esto solo puede subir.'}
+          effects:
+          - {effect: add_variable, var: FCU_accion, value: 20}
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_variable, var: FCU_escandalo, value: 5}
+          - {effect: run, value: FCU_recalcular_cotizacion}
+          ai_chance: 30
+        src: user_request
+
+    meganations_hsn:
+      country: HSN
+      events:
+      - id: 901
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The League against Privateering, spanish: La Liga contra el Corso}
+        desc:
+          english: 'Too many letters of marque, too many ships with no name. The other powers met in Geneva for once agreeing on something:
+            us.\n\nIf we do not pay, every power outside our faction gets a war goal against the High Seas.'
+          spanish: 'Demasiadas patentes, demasiados barcos sin nombre. Las demás potencias se reunieron en Ginebra y por una vez estuvieron de
+            acuerdo en algo: nosotros.\n\nSi no pagamos, cada potencia fuera de nuestra facción recibe un objetivo de guerra contra la Alta
+            Mar.'
+        options:
+        - name: {english: 'Let them come. The sea is big.', spanish: 'Que vengan. El mar es grande.'}
+          effects:
+          - {effect: navy_experience, value: 20}
+          - effect: every_country
+            when: *otra_potencia
+            effects:
+            - {effect: wargoal, target: ROOT, type: [topple_government, puppet_wargoal_focus, annex_everything]}
+            - {effect: event, id: meganations_hsn.902}
+          - {effect: set_variable, var: HSN_reputacion, value: 50}
+          ai_chance: 40
+        - name: {english: 'Pay compensation.', spanish: 'Pagar indemnizaciones.'}
+          effects:
+          - {effect: add_political_power, value: -200}
+          - {effect: set_variable, var: HSN_reputacion, value: 30}
+          ai_chance: 60
+        src: user_request
+      - id: 902
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The League against Privateering, spanish: La Liga contra el Corso}
+        desc:
+          english: 'The High Seas refused to pay for their letters of marque. Geneva gives us a war goal against them (topple the
+            government).'
+          spanish: 'La Alta Mar se negó a pagar por sus patentes de corso. Ginebra nos da un objetivo de guerra contra ellos (derrocar al
+            gobierno).'
+        options:
+        - name: {english: 'About time.', spanish: 'Ya era hora.'}
+          effects: []
+        src: user_request
+
+    meganations_nas:
+      country: NAS
+      events:
+      - id: 901
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Inti Raymi, spanish: Inti Raymi}
+        desc:
+          english: 'The shortest day of the year. In Cusco the Inca greets the Sun so that it comes back. It always has. Nobody wants to be the
+            one who stops asking.'
+          spanish: 'El día más corto del año. En el Cusco el Inca saluda al Sol para que vuelva. Siempre volvió. Nadie quiere ser el que deje
+            de pedirlo.'
+        options:
+        - name: {english: 'The festival of the Sun.', spanish: 'La fiesta del Sol.'}
+          effects:
+          - {effect: add_variable, var: NAS_inti, value: 8}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 60
+        - name: {english: 'The Sun asks for work.', spanish: 'El Sol pide trabajo.'}
+          effects:
+          - {effect: add_political_power, value: 75}
+          - {effect: army_experience, value: 10}
+          ai_chance: 40
+        src: user_request
+
+    meganations_apf:
+      country: APF
+      events:
+      - id: 901
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Assembly Votes Yes, spanish: La Asamblea Vota Sí}
+        desc:
+          english: 'Dawn in Addis Ababa. The last delegate raises a hand and the hall stands up. For a year, the whole Federation fights:
+            +10% war support, +5% organisation, and no tension for the war.'
+          spanish: 'Amanece en Adís Abeba. El último delegado levanta la mano y la sala se pone de pie. Por un año pelea toda la Federación:
+            +10% de apoyo a la guerra, +5% de organización y la guerra no suma tensión.'
+        options:
+        - name: {english: 'Forward, together.', spanish: 'Adelante, juntos.'}
+          effects:
+          - {effect: flag, value: APF_mandato_de_guerra, days: 365}
+          - {effect: dynamic_modifier, id: APF_mandato, days: 365}
+        src: user_request
+      - id: 902
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Assembly Votes No, spanish: La Asamblea Vota No}
+        desc:
+          english: 'The peoples of the coast vote no, then the peoples of the lakes. The Federation will not fight this war with one voice.
+            Tension +8.'
+          spanish: 'Los pueblos de la costa votan que no, después los de los lagos. La Federación no va a pelear esta guerra con una sola
+            voz. Tensión +8.'
+        options:
+        - name: {english: 'We will ask again.', spanish: 'Vamos a volver a preguntar.'}
+          effects:
+          - {effect: add_variable, var: APF_tension, value: 8}
+        src: user_request
+      - id: 903
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: A War without a Mandate, spanish: Una Guerra sin Mandato}
+        desc:
+          english: 'We are at war with another power and the Assembly never voted. Every month without a mandate the tension rises 2. The War
+            Assembly panel can call the vote.'
+          spanish: 'Estamos en guerra con otra potencia y la Asamblea nunca votó. Cada mes sin mandato la tensión sube 2. El panel de la
+            Asamblea de Guerra puede convocar la votación.'
+        options:
+        - name: {english: 'Call the delegates.', spanish: 'Llamar a los delegados.'}
+          effects: []
+        src: user_request
+
+leaders:
+  characters:
+  - id: EFE_tupa_heredero
+    country: EFE
+    src: user_request
+    recruit_at_start: false   # lo asciende el evento meganations_efe.901 (la Sucesión)
+    name:
+      civil: "Tupã Benítez Ortiz"
+      regnal:
+        english: "Emperor Tupã I, of the Water"
+        spanish: "Emperador Tupã I, del Agua"
+    born: 2068
+    lore: >
+      El sobrino de Aurelio, que gobernó la gran agua del norte desde Asunción.
+      Cuando el Emperador lo nombró heredero, el Paraguay dejó de ser un
+      satélite y pasó a ser la casa.
+    roles:
+      country_leader:
+        ideology: ecofascism
+        traits: [efe_emperador_del_agua]
+    portrait:
+      status: user_art
+      path: "gfx/leaders/YYG/tupa_benitez.dds"
+  - id: EFE_custodia_pereira
+    country: EFE
+    src: user_request
+    recruit_at_start: false   # la asciende el evento meganations_efe.901 (la Sucesión)
+    name:
+      regnal:
+        english: "Elected Custodian Yara Pereira"
+        spanish: "Custodia Electa Yara Pereira"
+    lore: >
+      Jefa de Guardaparques. Custodio de la Tierra fue un cargo antes de ser
+      una corona; ella lo devuelve a la elección de los que cuidan el monte.
+    roles:
+      country_leader:
+        ideology: ecofascism
+        traits: [efe_custodia_electa]
+    portrait:
+      status: user_art
+      path: "gfx/leaders/EFE/EFE_min_pereira_3.dds"
+  - id: EFE_regente_etchegaray
+    country: EFE
+    src: user_request
+    recruit_at_start: false   # lo asciende el evento meganations_efe.901 (la Sucesión)
+    name:
+      regnal:
+        english: "Regent Bruno Etchegaray"
+        spanish: "Regente Bruno Etchegaray"
+    born: 2049
+    lore: >
+      El único oficial que tuteaba al Emperador. Gobierna desde el cuartel
+      de la Guardia Verde, de uniforme, y no se pone la corona.
+    roles:
+      country_leader:
+        ideology: ecofascism
+        traits: [efe_regente_de_la_guardia]
+    portrait:
+      status: user_art
+      path: "gfx/leaders/EFE/EFE_field_marshal_01.dds"
+
+  leader_traits:
+  - id: efe_emperador_del_agua
+    name: {english: "Emperor of the Water", spanish: "Emperador del Agua"}
+    modifiers: {political_power_gain: 0.3, stability_factor: 0.05, production_speed_buildings_factor: 0.05}
+    src: user_request
+  - id: efe_custodia_electa
+    name: {english: "Elected Custodian", spanish: "Custodia Electa"}
+    modifiers: {political_power_gain: 0.3, stability_factor: 0.08, war_support_factor: -0.05}
+    src: user_request
+  - id: efe_regente_de_la_guardia
+    name: {english: "Regent of the Guard", spanish: "Regente de la Guardia"}
+    modifiers: {political_power_gain: 0.2, army_org_factor: 0.05, war_support_factor: 0.05}
+    src: user_request

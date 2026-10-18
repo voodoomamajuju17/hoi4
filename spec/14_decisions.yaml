@@ -9101,10 +9101,10 @@ categories:
     name: {english: 'The Destiny: The Dominion of Gaia', spanish: 'El Destino: El Dominio de Gaia'}
     desc:
       english: 'The last stage of the megastate. Control Lima, La Paz, the Amazon (or the Sanctuary under its guarantee), São Paulo, Rio de Janeiro, Bogotá (Cundinamarca) and Caracas
-        (Miranda); have 45 divisions, 8 BioSteel stored and 50% stability, and proclaim The Dominion of Gaia: a new name, a new flag, cores on every
+        (Miranda); have 45 divisions, 12 BioSteel stored and 50% stability, and proclaim The Dominion of Gaia: a new name, a new flag, cores on every
         owned region and a great national spirit.'
       spanish: 'La última etapa de la meganación. Controlar Lima, La Paz, el Amazonas (o el Santuario bajo su garantía), São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas
-        (Miranda); tener 45 divisiones, 8 de Bioacero guardado y 50% de estabilidad, y proclamar El Dominio de Gaia: nombre y bandera nuevos, núcleos
+        (Miranda); tener 45 divisiones, 12 de Bioacero guardado y 50% de estabilidad, y proclamar El Dominio de Gaia: nombre y bandera nuevos, núcleos
         en cada región propia y un gran espíritu nacional.'
     icon_prefer:
     - generic_formable_nations
@@ -9166,7 +9166,7 @@ categories:
         divisions_at_least: 45
         stability_at_least: 0.5
         all:
-        - variable_at_least: {var: EFE_biosteel, value: 8}
+        - variable_at_least: {var: EFE_biosteel, value: 12}   # 2026-10-17: era 8, regalado en la escala 1-30 de Bioacero v3
         # análisis 2026-10-01: el Santuario se queda con el Amazonas y el EFE lo
         # garantiza para siempre; esa promesa cuenta como tener la selva
         - explained:
@@ -14844,8 +14844,9 @@ scripted_effects:
       - {effect: event, id: meganations_fcu.31, days: 1}
     - {effect: run, value: FCU_pulso_satelites}
     - effect: if
-      # análisis 2026-10-01: "cada cuatro años" de verdad (2102, 2106, 2110...)
-      when: {date_after: 2102.1.1, any: [{not_flag: FCU_eleccion_marca}, {flag_older: {flag: FCU_eleccion_marca, days: 1455}}]}
+      # análisis 2026-10-01: "cada cuatro años" de verdad. 2026-10-17 (segundo
+      # análisis): 2104, 2108, 2112... como dicen las Crónicas y el Archivo
+      when: {date_after: 2104.1.1, any: [{not_flag: FCU_eleccion_marca}, {flag_older: {flag: FCU_eleccion_marca, days: 1455}}]}
       then:
       - {effect: flag, value: FCU_cadena_8}
       - {effect: clear_flag, value: FCU_eleccion_marca}
@@ -19111,6 +19112,7 @@ scripted_effects:
       - effect: random
         options:
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_0}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19125,7 +19127,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.20, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_0}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_1}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19140,7 +19151,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.21, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_1}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_2}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19155,7 +19175,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.22, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_2}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_3}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19170,7 +19199,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.23, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_3}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_4}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19185,7 +19223,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.24, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_4}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_5}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19200,7 +19247,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.25, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_5}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_6}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19215,7 +19271,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.26, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_6}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_7}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -19230,6 +19295,14 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.27, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_7}
     - effect: if
       when: {date_after: 2100.7.20, not_global_flag: MEGANATIONS_mundo_1}
       then:
