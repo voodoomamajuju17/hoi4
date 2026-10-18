@@ -9,8 +9,8 @@ Porcentaje de partidas en que la IA elige el primer foco (el resto elige el otro
 | Potencia | Foco | contra | abre (aprox.) | en paz | IA típica | en guerra |
 |---|---|---|---|---|---|---|
 | EFE | El Mandato Renovado | Los Incendios de Gaia | 2100.6 | 72% | 74% | 59% |
-| ASC | El Sorteo del Año | El Silencio del Consejo | 2100.6 | 99% ⚠ | 100% ⚠ | 100% ⚠ |
-| FCU | El Segundo Mandato de Castellane | Junta de Accionistas de Emergencia | 2100.6 | 98% ⚠ | 98% ⚠ | 98% ⚠ |
+| ASC | El Sorteo del Año | El Silencio del Consejo | 2100.6 | 75% | 74% | 75% |
+| FCU | El Segundo Mandato de Castellane | Junta de Accionistas de Emergencia | 2100.6 | 82% | 80% | 71% |
 | HSN | El Libro de Fletes | El Motín de Kanto | 2100.6 | 75% | 71% | 62% |
 | NAS | La Coronación Renovada | El Inca Rompe el Silencio | 2100.6 | 75% | 71% | 25% |
 | SHD | Ajuste Técnico nº 1 | Abrir las Compuertas | 2100.6 | 76% | 72% | 21% |
@@ -35,53 +35,53 @@ Porcentaje de partidas en que la IA elige el primer foco (el resto elige el otro
 
 ## El Rearme Secreto
 
-Se termina el disimulo (tercer descubrimiento): el 10% de las partidas antes de 2102.1, la mitad antes de 2103.8, el 90% antes de 2106.3. Nunca, hasta 2140.1: 0%.
+Se termina el disimulo (tercer descubrimiento): el 10% de las partidas antes de 2109.1, la mitad antes de 2120.6, el 90% antes de 2134.4. Nunca, hasta 2140.1: 11%.
 
 | Potencia | veces descubierta por partida | la descubren primero | exposición máxima (media) |
 |---|---|---|---|
-| EFE | 0.38 | 13% | 51 |
-| FCU | 0.39 | 15% | 51 |
-| ASC | 0.37 | 11% | 51 |
-| HSN | 0.39 | 13% | 50 |
-| NAS | 0.39 | 13% | 50 |
-| SHD | 0.36 | 12% | 50 |
-| APF | 0.37 | 12% | 50 |
-| NRE | 0.35 | 11% | 50 |
+| EFE | 0.35 | 13% | 44 |
+| FCU | 0.37 | 14% | 44 |
+| ASC | 0.37 | 12% | 45 |
+| HSN | 0.37 | 12% | 45 |
+| NAS | 0.39 | 15% | 45 |
+| SHD | 0.32 | 10% | 45 |
+| APF | 0.33 | 11% | 45 |
+| NRE | 0.34 | 12% | 44 |
 
 ## La Sucesión del EFE
 
-Muere Aurelio IV: el 10% antes de 2104.3, la mitad antes de 2105.3, el 90% antes de 2108.3. Sigue vivo en 2140.1: 0%.
+Muere Aurelio IV: el 10% antes de 2104.3, la mitad antes de 2105.3, el 90% antes de 2108.5. Sigue vivo en 2140.1: 0%.
 
 | Al morir el Emperador | partidas |
 |---|---|
-| Tupã Benítez heredero | 55% |
-| Yara Pereira, Custodia electa | 25% |
-| Etchegaray regente | 20% |
+| Tupã Benítez heredero | 54% |
+| Yara Pereira, Custodia electa | 27% |
+| Etchegaray regente | 19% |
 
 Año en que la IA nombra heredero: 2101: 100%, 2102: 0%.
 
-Colapsos del líder del EFE por partida (Salud en 0): 0: 5%, 1: 18%, 2: 34%, 3: 27%, 4: 12%, 5: 3%, 6: 1%, 7: 0%.
+Colapsos del líder del EFE por partida (Salud en 0): 0: 3%, 1: 20%, 2: 35%, 3: 25%, 4: 13%, 5: 4%, 6: 0%.
 
 ## La crisis del siglo (2106-2200)
 
-141 crisis por partida. La misma crisis dos veces seguidas: 17.5 veces por partida; pasa al menos una vez en el 100% de las partidas.
+141 crisis por partida. La misma crisis dos veces seguidas: 0.0 veces por partida; pasa al menos una vez en el 0% de las partidas.
 
 | Crisis | veces por partida |
 |---|---|
+| La Tormenta Solar | 17.8 |
 | La Carrera Orbital | 17.7 |
-| La Pandemia del Micelio | 17.7 |
 | El Gran Crac | 17.7 |
-| El Éxodo Climático | 17.6 |
 | La Cumbre de las Ocho | 17.6 |
 | La Gran Sequía | 17.6 |
-| La Tormenta Solar | 17.5 |
+| El Éxodo Climático | 17.6 |
 | La Marea Negra | 17.5 |
+| La Pandemia del Micelio | 17.5 |
 
-Racha más larga de la misma crisis: 2 seguidas: 13%, 3 seguidas: 66%, 4 seguidas: 19%, 5 seguidas: 2%, 6 seguidas: 0%.
+Racha más larga de la misma crisis: 1 seguidas: 100%.
 
 ## Supuestos que se usaron
 
 Condiciones del mapa que el motor no simula (probabilidad fija en supuestos.yaml): `country:YYG`, `divisions_at_least`, `in_faction_with: ROOT`, `subject: false`.
 
-Efectos que no cambian lo que se mide y no se simulan: `dynamic_modifier`, `army_experience`, `build`, `add_manpower`, `navy_experience`, `air_experience`, `add_war_support`, `add_political_power`, `promote`, `end_puppet`, `scope`, `annex`, `retire_leader`, `civil_war`.
+Efectos que no cambian lo que se mide y no se simulan: `build`, `army_experience`, `add_manpower`, `dynamic_modifier`, `air_experience`, `navy_experience`, `add_war_support`, `add_political_power`, `promote`, `end_puppet`, `scope`, `annex`, `retire_leader`, `civil_war`.
 

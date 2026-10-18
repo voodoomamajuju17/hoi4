@@ -1092,11 +1092,13 @@ def test_routes() -> None:
                     if s["type"] == "declare_war" and f"{p['country']}_contra_{s['target']}" in str(p.get("enable"))}
         missing = sorted(f for f, a, b in flags if (a, b) not in declares)
         # prioridad 12: segunda etapa
-        mw = " ".join(se[se.index("MEGANATIONS_eventos_mundiales = {"):].split())[:4000]
+        mw = " ".join(se[se.index("MEGANATIONS_eventos_mundiales = {"):].split())[:12000]
         check("crisis del siglo: desde 2106, una cada 240 dias entre 8",
               "date > 2106.1.1" in mw and "has_country_flag = { flag = MEGANATIONS_crisis_tardia days > 235 }" in mw
               and "clr_country_flag = MEGANATIONS_crisis_tardia" in mw
               and all(f"meganations_mundo.{i}" in mw for i in range(20, 28)), mw[:800])
+        check("crisis del siglo: nunca la misma dos veces seguidas (simulador, 2026-10-18)",
+              all(f"MEGANATIONS_ultima_crisis_{i}" in mw for i in range(8)), mw[:800])
         dtxt = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
         pacto = dtxt[dtxt.index("MEGANATIONS_pacto_con_EFE = {"):][:700]
         check("pactos entre potencias desde 2106, nunca con el rival de bloque",

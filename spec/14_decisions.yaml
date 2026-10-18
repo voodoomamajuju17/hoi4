@@ -16522,6 +16522,7 @@ scripted_effects:
       - effect: random
         options:
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_0}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16536,7 +16537,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.20, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_0}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_1}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16551,7 +16561,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.21, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_1}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_2}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16566,7 +16585,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.22, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_2}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_3}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16581,7 +16609,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.23, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_3}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_4}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16596,7 +16633,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.24, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_4}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_5}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16611,7 +16657,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.25, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_5}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_6}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16626,7 +16681,16 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.26, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_7}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_6}
         - weight: 1
+          skip_if: {flag: MEGANATIONS_ultima_crisis_7}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
           - effect: every_country
             when:
@@ -16641,6 +16705,14 @@ scripted_effects:
               - {tag: NRE}
             effects:
             - {effect: event, id: meganations_mundo.27, days: 1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_0}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_1}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_2}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_3}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_4}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_5}
+            - {effect: clear_flag, value: MEGANATIONS_ultima_crisis_6}
+            - {effect: flag, value: MEGANATIONS_ultima_crisis_7}
     - effect: if
       when: {date_after: 2100.7.20, not_global_flag: MEGANATIONS_mundo_1}
       then:

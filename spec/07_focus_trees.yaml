@@ -1148,6 +1148,12 @@ trees:
           - factor: 0.3
             when:
               variable_at_least: {var: ASC_computo, value: 80}
+          # 2026-10-18 (simulador): sin esto la IA elegía el Sorteo ~100%, porque el
+          # Silencio pide Cómputo 50 y el par abre antes. Espera hasta 2103.
+          - factor: 0
+            when:
+              variable_below: {var: ASC_computo, value: 50}
+              not: {date_after: 2103.1.1}
         desc:
           english: Every year a new Council, with three random leanings that open their own decisions.
           spanish: Cada año un Consejo nuevo, con tres inclinaciones al azar que abren sus propias decisiones.
@@ -2135,6 +2141,11 @@ trees:
             when: {at_war: true}
           - factor: 0.2
             when: {flag: FCU_opa_habilitada}
+          # 2026-10-18 (simulador): Castellane salía 98%; la IA espera la OPA hasta 2103
+          - factor: 0
+            when:
+              not_flag: FCU_opa_habilitada
+              not: {date_after: 2103.1.1}
         desc:
           english: 'Valeria Castellane keeps the Chair. Her secret: never let any of the Four win.'
           spanish: 'Valeria Castellane conserva la Presidencia. Su secreto: no dejar ganar nunca a ninguna de las Cuatro.'
