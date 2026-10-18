@@ -1092,11 +1092,13 @@ def test_routes() -> None:
                     if s["type"] == "declare_war" and f"{p['country']}_contra_{s['target']}" in str(p.get("enable"))}
         missing = sorted(f for f, a, b in flags if (a, b) not in declares)
         # prioridad 12: segunda etapa
-        mw = " ".join(se[se.index("MEGANATIONS_eventos_mundiales = {"):].split())[:4000]
+        mw = " ".join(se[se.index("MEGANATIONS_eventos_mundiales = {"):].split())[:12000]
         check("crisis del siglo: desde 2106, una cada 240 dias entre 8",
               "date > 2106.1.1" in mw and "has_country_flag = { flag = MEGANATIONS_crisis_tardia days > 235 }" in mw
               and "clr_country_flag = MEGANATIONS_crisis_tardia" in mw
               and all(f"meganations_mundo.{i}" in mw for i in range(20, 28)), mw[:800])
+        check("crisis del siglo: nunca la misma dos veces seguidas (simulador, 2026-10-18)",
+              all(f"MEGANATIONS_ultima_crisis_{i}" in mw for i in range(8)), mw[:800])
         dtxt = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
         pacto = dtxt[dtxt.index("MEGANATIONS_pacto_con_EFE = {"):][:700]
         check("pactos entre potencias desde 2106, nunca con el rival de bloque",
@@ -1181,7 +1183,7 @@ def test_events() -> None:
         ideas_efe = " ".join((mod / "common/ideas/EFE_ideas.txt").read_text().split())
         adv = ideas_efe[ideas_efe.index("EFE_agua_de_la_vida = {"):][:900]
         check("EFE: el espiritu final tiene pros y contras", "monthly_population = 0.15" in adv and "war_support_factor = -0.1" in adv, adv)
-        check("90 eventos del EFE (74 de antes + 16 del Bioacero v3)", len(events) == 90, str(len(events)))
+        check("92 eventos del EFE (74 de antes + 16 del Bioacero v3 + 2 de la Sucesion)", len(events) == 92, str(len(events)))
         # 2026-09-29: guerras civiles (elegir bando), rama política extendida y forma final
         efe_cw = " ".join((mod / "events/meganations_efe.txt").read_text().split())
         e220 = efe_cw[efe_cw.index("id = meganations_efe.220 title"):][:30000]
@@ -1558,7 +1560,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("88 rasgos propios (14 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 88, str(len(body.keys())))
+        check("91 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 91, str(len(body.keys())))
         # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
         efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
         chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
@@ -1865,8 +1867,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("236 modificadores dinamicos (con la receta de las ocho, 2026-10-17): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones y 2 del NAS en el aire",
-              len(dm.entries) == 236 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("246 modificadores dinamicos (con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 246 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2070,7 +2072,8 @@ def test_ai() -> None:
         check("tooltips: con nombre legible", 'MN_tt_NAS_granjas_p1:0 "§YGranjas del Sol§!: +1"' in tips, tips[:300])
         check("tooltips: el Control del Monte sigue secreto", "EFE_control_del_monte" not in tips)
         import yaml
-        raw_dec = yaml.safe_load((REPO_ROOT / "spec/14_decisions.yaml").read_text(encoding="utf-8"))
+        # con los archivos de mecánicas que se suman encima (22_mecanicas_v4)
+        raw_dec = specload.load(REPO_ROOT / "spec").raw["decisions"]
         used = set()
         def walk(x):
             if isinstance(x, dict):
@@ -4119,6 +4122,95 @@ equipment_modules = {
           str(chosen) + str(ctx.notes))
 
 
+def test_mecanicas_v4() -> None:
+    section("mecanicas v4: rearme secreto, sucesion, guarnicion, cotizacion, corso, sol, diques, asamblea (2026-10-17)")
+    import copy
+    import re
+    import yaml as _yaml
+    from tools.gen.errors import SpecError as _SpecError
+    overlay = _yaml.safe_load((REPO_ROOT / "spec" / "22_mecanicas_v4.yaml").read_text(encoding="utf-8"))
+    spec = specload.load(REPO_ROOT / "spec")
+    raw = spec.raw
+    cats = {c["id"]: c for c in raw["decisions"]["categories"]}
+    for cid in ("MEGANATIONS_rearme_category", "EFE_sucesion_category", "ASC_guarnicion_category",
+                "FCU_cotizacion_category", "HSN_corso_category", "NAS_calendario_category",
+                "SHD_hidraulica_category", "APF_asamblea_category"):
+        check(f"v4: el panel {cid} entra al spec", cid in cats)
+    effects = {e["id"]: e for e in raw["decisions"]["scripted_effects"]}
+    pulses = ("EFE_pulso_de_las_cubas", "FCU_pulso_del_directorio", "ASC_pulso_de_la_red", "HSN_pulso_de_las_potencias",
+              "NAS_pulso_de_los_templos", "SHD_pulso_del_rio", "APF_pulso_de_los_consejos", "NRE_pulso_del_ocio")
+    for pid in pulses:
+        runs = [e.get("value") for e in effects[pid]["effects"] if e.get("effect") == "run"]
+        check(f"v4: el pulso {pid} corre el rearme secreto", "MEGANATIONS_rearme_pulso" in runs, runs[-3:])
+    v4_decisions = [d for c in overlay["decisions"]["categories"] for d in c["decisions"]]
+    check("v4: toda decision nueva tiene criterio para la IA",
+          all("ai" in d or "ai_factor" in d for d in v4_decisions),
+          [d["id"] for d in v4_decisions if "ai" not in d and "ai_factor" not in d])
+    # toda variable que muestra un panel se calcula en algun lado
+    text = (REPO_ROOT / "spec" / "22_mecanicas_v4.yaml").read_text(encoding="utf-8")
+    shown = set(re.findall(r"\[\?([A-Za-z_0-9]+)\]", text))
+    everywhere = text + (REPO_ROOT / "spec" / "14_decisions.yaml").read_text(encoding="utf-8")
+    missing = sorted(v for v in shown if not re.search(rf"(var: {v}\b|\[set, {v},|\[mul, {v},)", everywhere))
+    check("v4: toda variable que se muestra se calcula", not missing, missing)
+    # el archivo nuevo nunca pisa lo viejo
+    try:
+        specload.merge_overlay({"decisions": copy.deepcopy(raw["decisions"])},
+                               {"decisions": {"categories": [{"id": "X_cat",
+                                                              "decisions": [{"id": "ASC_automatizar_guarnicion"}]}]}},
+                               "prueba")
+        rejected = False
+    except _SpecError:
+        rejected = True
+    check("v4: una decision con id repetido no entra", rejected)
+    # arreglos de coherencia del segundo analisis
+    dec_text = (REPO_ROOT / "spec" / "14_decisions.yaml").read_text(encoding="utf-8")
+    check("v4: las elecciones de la FCU arrancan en 2104 (Cronicas y Archivo)", "date_after: 2104.1.1, any: [{not_flag: FCU_eleccion_marca}" in dec_text)
+    check("v4: el Destino del EFE pide Bioacero 12 (escala 1-30)", "{var: EFE_biosteel, value: 12}" in dec_text)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        out = Path(tmp) / "meganations_2100"
+        decisions = "".join(p.read_text(encoding="utf-8-sig") for p in (out / "common" / "decisions").rglob("*.txt"))
+        for d in v4_decisions:
+            check(f"v4: la decision {d['id']} sale en el mod", f"{d['id']} = {{" in decisions)
+        ev = (out / "events" / "meganations_v4.txt").read_text(encoding="utf-8-sig")
+        check("v4: el descubrimiento le da objetivos de guerra a las otras potencias", "create_wargoal" in ev and "tag = ROOT" in ev)
+        efe_hist = next((out / "history" / "countries").glob("EFE - *.txt")).read_text(encoding="utf-8-sig")
+        order = [efe_hist.find(f"recruit_character = {c}") for c in ("EFE_tupa_heredero", "EFE_custodia_pereira",
+                                                                    "EFE_regente_etchegaray")]
+        check("v4: los tres herederos del EFE estan reclutados", all(i >= 0 for i in order), order)
+        check("v4: Aurelio sigue siendo el lider de arranque", "promote_character = EFE_aurelio_iv" in efe_hist)
+        scripted = (out / "common" / "scripted_effects" / "meganations_effects.txt").read_text(encoding="utf-8-sig")
+        check("v4: la sucesion pide salud baja desde 2104", "MEGANATIONS_lider_salud" in scripted and "2104.1.1" in scripted)
+
+
+def test_simulador() -> None:
+    section("simulador de la IA: corre los scripts del spec sin el juego (2026-10-18)")
+    from tools.simulador import simular as sim
+    from tools.simulador.motor import Mundo
+    import random as _random
+    raw = specload.load(REPO_ROOT / "spec").raw
+    sup = sim.cargar_supuestos()
+    pares = sim.pares_excluyentes(raw)
+    check("simulador: encuentra los pares de focos excluyentes de las ocho", len({p["tag"] for p in pares}) == 8,
+          sorted({p["tag"] for p in pares}))
+    check("simulador: ASC_computo arranca con el start de 06_mechanics",
+          sim.valores_iniciales(raw).get("ASC_computo") == 30.0)
+    mundo = Mundo(raw, sup, _random.Random(1), paises=["EFE"])
+    efe = mundo.paises["EFE"]
+    efe.flags["MN_rearme_init"] = None
+    efe.flags["MN_rearme_inspeccion"] = None
+    efe.variables["MN_rearme"] = 90.0
+    mundo.correr_script(efe, "MEGANATIONS_rearme_pulso")
+    check("simulador: el pulso del rearme baja 1 la exposicion", efe.variables["MN_rearme"] == 89.0, efe.variables)
+    uno = sim.simular_mundo(raw, sup, corridas=5)
+    dos = sim.simular_mundo(raw, sup, corridas=5)
+    check("simulador: misma semilla, mismo resultado", uno["fin_disimulo"] == dos["fin_disimulo"] and uno["muerte"] == dos["muerte"])
+    crisis = sim.simular_crisis(raw, sup, corridas=2)
+    check("simulador: la crisis del siglo sale cada ~8 meses de 2106 a 2200", all(130 <= t <= 150 for t in crisis["total"]),
+          crisis["total"])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4171,6 +4263,8 @@ def main() -> int:
         test_piel_interfaz,
         test_cazas_peso,
         test_aventuras,
+        test_mecanicas_v4,
+        test_simulador,
         test_vanilla_validation,
     ):
         test()
