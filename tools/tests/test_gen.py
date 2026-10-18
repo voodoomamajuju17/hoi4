@@ -4125,6 +4125,33 @@ def test_mecanicas_v4() -> None:
         check("v4: la sucesion pide salud baja desde 2104", "MEGANATIONS_lider_salud" in scripted and "2104.1.1" in scripted)
 
 
+def test_simulador() -> None:
+    section("simulador de la IA: corre los scripts del spec sin el juego (2026-10-18)")
+    from tools.simulador import simular as sim
+    from tools.simulador.motor import Mundo
+    import random as _random
+    raw = specload.load(REPO_ROOT / "spec").raw
+    sup = sim.cargar_supuestos()
+    pares = sim.pares_excluyentes(raw)
+    check("simulador: encuentra los pares de focos excluyentes de las ocho", len({p["tag"] for p in pares}) == 8,
+          sorted({p["tag"] for p in pares}))
+    check("simulador: ASC_computo arranca con el start de 06_mechanics",
+          sim.valores_iniciales(raw).get("ASC_computo") == 30.0)
+    mundo = Mundo(raw, sup, _random.Random(1), paises=["EFE"])
+    efe = mundo.paises["EFE"]
+    efe.flags["MN_rearme_init"] = None
+    efe.flags["MN_rearme_inspeccion"] = None
+    efe.variables["MN_rearme"] = 90.0
+    mundo.correr_script(efe, "MEGANATIONS_rearme_pulso")
+    check("simulador: el pulso del rearme baja 1 la exposicion", efe.variables["MN_rearme"] == 89.0, efe.variables)
+    uno = sim.simular_mundo(raw, sup, corridas=5)
+    dos = sim.simular_mundo(raw, sup, corridas=5)
+    check("simulador: misma semilla, mismo resultado", uno["fin_disimulo"] == dos["fin_disimulo"] and uno["muerte"] == dos["muerte"])
+    crisis = sim.simular_crisis(raw, sup, corridas=2)
+    check("simulador: la crisis del siglo sale cada ~8 meses de 2106 a 2200", all(130 <= t <= 150 for t in crisis["total"]),
+          crisis["total"])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4178,6 +4205,7 @@ def main() -> int:
         test_cazas_peso,
         test_aventuras,
         test_mecanicas_v4,
+        test_simulador,
         test_vanilla_validation,
     ):
         test()

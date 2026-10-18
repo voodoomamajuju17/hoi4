@@ -222,3 +222,7 @@ encima de los demás archivos (un id repetido frena el build).
 - [ ] Etapa 2: crisis que escalan, una sucesión por potencia, diplomacia antes de 2106, IA política con variación
 - [ ] Etapa 3: Ginebra como institución, acciones de la FCU para otros, estaciones en la guerra, "El Gran Desarme vuelve"
 - [ ] Tests rápidos separados de los que generan el mod completo
+- [x] Simulador de la IA (`make simular`, `tools/simulador/`, informe en `SIMULADOR_IA.md`, 2026-10-18): corre los
+  scripts del spec mes a mes sin el juego y cuenta qué elige la IA. Supuestos a la vista en `tools/simulador/supuestos.yaml`
+- [ ] Decidir con el simulador: la IA del ASC elige el Sorteo ~100% (el Silencio pide Cómputo 50 y el par abre antes),
+  la FCU elige a Castellane ~98%, el disimulo del rearme termina en ~2103 y la misma crisis del siglo se repite seguida ~17 veces
