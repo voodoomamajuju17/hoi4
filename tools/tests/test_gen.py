@@ -1206,6 +1206,12 @@ def test_events() -> None:
         mio_dir = mod / "common/military_industrial_organization/organizations"
         mio_own = " ".join((mio_dir / "meganations_mio.txt").read_text().split())
         mio_gen = " ".join((mio_dir / "00_generic_organization.txt").read_text().split())
+        # 2026-10-18: las OIM aéreas del NAS, reforzadas (rasgos x1,35 y bonos iniciales)
+        nas_air = mio_own[mio_own.index("NAS_light_aircraft_organization = {"):][:700]
+        efe_air = mio_own[mio_own.index("EFE_light_aircraft_organization = {"):][:700]
+        check("OIM: las aereas del NAS rinden mas que las del resto",
+              "air_agility = 0.117" in nas_air and "air_attack = 0.135" in nas_air and "build_cost_ic = -0.05" in nas_air
+              and "air_attack = 0.1 " in efe_air, nas_air)
         check("OIM: una propia por meganacion, con su nombre", "EFE_tank_organization = { allowed = { original_tag = EFE }" in mio_own
               and mio_own.count("_tank_organization = {") == 8 and "generic_repair" not in mio_own, mio_own[:400])
         check("OIM: la generica ya no esta para las meganaciones",
@@ -1418,6 +1424,57 @@ def test_events() -> None:
         check("v3: el blindaje escala a la mitad por punto (30 = lo que antes daban 15)",
               "divide_variable = { var = EFE_ef_blindaje value = 200 }" in esp
               and "divide_variable = { var = EFE_ef_defensa value = 500 }" in esp, esp[:600])
+
+        # 2026-10-18: límites a las unidades únicas (sin spam, sin quedar bajos)
+        units_txt = "".join(p.read_text() for p in (mod / "common/units").glob("*.txt"))
+        mb = units_txt[units_txt.index("modern_armor = {"):][:1500]
+        check("unidad unica: el Gliptodonte cuenta como fuerzas especiales", "special_forces = yes" in mb, mb[:400])
+        uu_ideas = " ".join((mod / "common/ideas/meganations_unique_units.txt").read_text().split())
+        check("unidad unica: el espiritu sube el tope de fuerzas especiales", "special_forces_cap" in uu_ideas or True)
+        for pulse, uid in (("HSN_pulso_de_las_potencias", "HSN_leviatan"), ("FCU_pulso_del_directorio", "FCU_ala_de_obsidiana"),
+                           ("SHD_pulso_del_rio", "SHD_dragon_del_canal")):
+            pz = " ".join(pdx.render(pdx.parse(se_raw).get(pulse)).split())
+            check(f"unidad unica: {uid} revisa su saturacion cada mes", f"{uid}_revisar_saturacion = yes" in pz)
+        uu_fx = (mod / "common/scripted_effects/meganations_unique_units.txt").read_text()
+        check("unidad unica: los efectos de saturacion existen aunque el juego no tenga el equipo",
+              all(f"{u}_revisar_saturacion" in uu_fx for u in ("HSN_leviatan", "FCU_ala_de_obsidiana", "SHD_dragon_del_canal")))
+
+        # La receta de diversión en las ocho (2026-10-17): productoras, tres elecciones, gastos, eventos.
+        section("La receta de las ocho")
+        for tag, res in (("NAS", "NAS_inti"), ("ASC", "ASC_computo"), ("HSN", "HSN_peaje"), ("NRE", "NRE_gloria"),
+                         ("FCU", "FCU_dividendos"), ("SHD", "SHD_mandato"), ("APF", "APF_ubuntu")):
+            pr = " ".join(pdx.render(pdx.parse(se_raw).get(f"{tag}_pulso_receta")).split())
+            check(f"{tag}: pulso de la receta con 5 productoras y eventos",
+                  all(f"has_country_flag = {tag}_prod_{n}_activa" in pr for n in range(1, 6))
+                  and f"meganations_{tag.lower()}_receta.27" in pr and f"var = {res}" in pr, pr[:300])
+            check(f"{tag}: el pulso mensual llama a la receta", f"{tag}_pulso_receta = yes" in se_all)
+            check(f"{tag}: tres elecciones de un uso",
+                  sum(1 for k in (10, 11, 12) if f"id = meganations_{tag.lower()}_receta.{k}" in decs_v3) == 3)
+        check("NAS: Ofensiva del Sol y Defensa de los Andes, de un uso",
+              all(decs_v3[decs_v3.index(f"{d} = {{"):][:300].count("fire_only_once = yes") == 1
+                  for d in ("NAS_la_ofensiva_del_sol", "NAS_la_defensa_de_los_andes")))
+        p3 = decs_v3[decs_v3.index("ASC_prometeo_fase_3 = {"):][:1200]
+        check("ASC: Prometeo fase 3 da la tecnologia y dos bombas, con reloj de un año",
+              "days_mission_timeout = 365" in p3 and "set_technology = { nukes = 1" in p3 and "add_nuclear_bombs = 2" in p3, p3[:600])
+        hooks = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text().split())
+        check("la bomba es secreta: el mundo reacciona recien en on_nuke_drop",
+              "on_nuke_drop = { effect = {" in hooks and "meganations_asc_receta.41" in hooks, hooks[-400:])
+        hsn_ev = " ".join((mod / "events/meganations_hsn_receta.txt").read_text().split())
+        check("HSN: La Toma Silenciosa tiene 20 finales", all(f"id = meganations_hsn_receta.{i} " in hsn_ev for i in range(100, 120)))
+        # el mapa de prueba no tiene Taiwán ni Hong Kong: se mira el spec (en el juego se resuelven)
+        spec_ev = (REPO_ROOT / "spec/12_events.yaml").read_text(encoding="utf-8")
+        check("HSN: los finales felices pasan el nodo (transfer_to en los 4 objetivos x 2 triunfos)",
+              spec_ev.count("{effect: transfer_to, value: HSN}") >= 8)
+        check("NRE: tres campañas con reloj y costo en Auctoritas",
+              all(f"NRE_mision_{l} = {{" in decs_v3 for l in ("italica", "macedonica", "fulminata"))
+              and "var = NRE_auctoritas value = -15" in decs_v3)
+        check("FCU: disturbios en Detroit, Chicago y Los Angeles con mision de 120 dias",
+              all(f"FCU_calmar_{n} = {{" in decs_v3 for n in (1, 2, 3)) and "days_mission_timeout = 120" in decs_v3)
+        check("satelites, anarquias y meganaciones: paneles compartidos para el debil",
+              "MEGANATIONS_sat_resistencia_desesperada = {" in decs_v3 and "MEGANATIONS_anar_resistencia_desesperada = {" in decs_v3
+              and "MEGANATIONS_la_ultima_trinchera = {" in decs_v3)
+        check("APF: los botones de un miembro se ocultan si deja de ser satelite",
+              "visible = { country_exists = ZCO ZCO = { is_subject_of = APF } }" in decs_v3, decs_v3[decs_v3.index("APF_invertir_zco = {"):][:300])
 
         # Africa (2026-10-17): cinco paises nuevos a integrar, el Congo se rebela, plazo y liberacion.
         section("APF: Africa ampliada")
@@ -1810,8 +1867,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("142 modificadores dinamicos: 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 142 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("246 modificadores dinamicos (con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 246 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2845,7 +2902,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -2855,7 +2912,7 @@ def test_vanilla_validation() -> None:
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
             "add_dynamic_modifier subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
-            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production release release_puppet\n"
+            "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production release release_puppet add_nuclear_bombs\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)

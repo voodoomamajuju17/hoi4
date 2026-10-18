@@ -123,6 +123,7 @@ mechanics:
     variables:
     - {name: ASC_computo, start: 30}
     - {name: ASC_calor, start: 10}
+    - {name: ASC_productoras_r, start: 5}
     note: 'Es la mecánica mejor definida del documento después de BioSteel: tiene un loop cerrado (produce -> consume -> penaliza) y no solo un
       nombre. Candidata natural a segunda facción implementada.
 
@@ -196,6 +197,8 @@ mechanics:
     - {name: HSN_nodos_prev, start: 0}
     - {name: HSN_botin, start: 0}
     - {name: HSN_presion, start: 0}
+    - {name: HSN_peaje, start: 10}
+    - {name: HSN_productoras_r, start: 5}
 
   # ===========================================================================
   - id: nas_qhapaq_nan_e_inti_soma
@@ -229,6 +232,7 @@ mechanics:
     - {name: NAS_inti, start: 20}
     - {name: NAS_inti_max, start: 100}
     - {name: NAS_granjas, start: 1}
+    - {name: NAS_productoras_r, start: 5}
     - {name: NAS_integracion_zng, start: 0}
     - {name: NAS_integracion_zll, start: 0}
 
@@ -257,6 +261,8 @@ mechanics:
     - {name: APF_desarrollo_zke, start: 10}
     - {name: APF_integracion_zke, start: 0}
     - {name: APF_tension, start: 15}
+    - {name: APF_ubuntu, start: 10}
+    - {name: APF_productoras_r, start: 5}
 
   # ===========================================================================
   - id: shd_tres_caudales
@@ -275,6 +281,8 @@ mechanics:
     - {name: SHD_prox_o, start: 0}
     - {name: SHD_prox_pu, start: 0}
     - {name: SHD_racha, start: 0}
+    - {name: SHD_mandato, start: 10}
+    - {name: SHD_productoras_r, start: 5}
     - {name: SHD_integracion_zkr, start: 0}
     - {name: SHD_integracion_zst, start: 0}
 
@@ -295,6 +303,8 @@ mechanics:
     - {name: NRE_prestigio_macedonica, start: 45}
     - {name: NRE_prestigio_fulminata, start: 40}
     - {name: NRE_auctoritas, start: 20}
+    - {name: NRE_gloria, start: 10}
+    - {name: NRE_productoras_r, start: 5}
     - {name: NRE_provincia_zhi, start: 0}
     - {name: NRE_provincia_zda, start: 0}
 
@@ -346,6 +356,8 @@ mechanics:
     - {name: FCU_meridian, start: 50}
     - {name: FCU_obsidian, start: 50}
     - {name: FCU_escandalo, start: 10}
+    - {name: FCU_dividendos, start: 10}
+    - {name: FCU_productoras_r, start: 5}
     thresholds: {synergy_min: 40, synergy_max: 60, crisis_below: 15, opa_meridian: 70, opa_rivals_below: 25}
     see: Q017
 

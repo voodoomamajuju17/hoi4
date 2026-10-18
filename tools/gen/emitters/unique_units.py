@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from ..context import BuildContext
 from ..errors import SpecError
-from ..pdx import Block, Quoted, parse_file, text
+from ..pdx import Block, Compare, Quoted, parse_file, text
 from . import ideas as ideas_mod
 from .effects import EffectContext, render_effects
 
@@ -51,6 +51,8 @@ def emit(ctx: BuildContext) -> None:
     visible: set[str] = ctx.data.setdefault("tech_locks_visible", set())
     plans: list[dict] = ctx.data.setdefault("unique_ai_plans", [])
     effects = Block()
+    sub_changes: dict[str, dict] = {}
+    sat_triggers: dict[str, str] = {}
     ideas = Block()
     effects_used: dict[str, str] = {}
     modifiers_used: dict[str, str] = {}
@@ -254,7 +256,49 @@ def emit(ctx: BuildContext) -> None:
         # suministros): se cambia la definición del juego (solo la tiene esta
         # potencia). Factor: 1.05 = +5%.
         if u.get("sub_unit_stats"):
-            _sub_unit_stats(ctx, uid, u["sub_unit_stats"])
+            for k, v in u["sub_unit_stats"].items():
+                sub_changes.setdefault(k, {}).update(v)
+        # Límite sin spam (2026-10-18, pedido del usuario): los batallones únicos
+        # cuentan como fuerzas especiales (tope del juego: un porcentaje de todos
+        # los batallones); el espíritu sube ese tope para que no quede bajo.
+        cap = u.get("cap") or {}
+        for k in cap.get("special_forces") or []:
+            sub_changes.setdefault(k, {})["special_forces"] = True
+        # Barcos, aviones y trenes únicos: con demasiados, la producción se satura
+        # (un espíritu que encarece el equipo hasta bajar del tope).
+        sat = cap.get("saturation")
+        if sat and not eq_type:
+            effects.add(f"{uid}_revisar_saturacion", Block())   # sin equipo en este juego: no hace nada
+        if sat and eq_type:
+            chassis = equip.get(eq_type) or Block()
+            archetype = text(chassis.get("archetype")) or eq_type
+            sat_id = f"{uid}_saturacion"
+            kind, size = sat["kind"], int(sat["size"])
+            if kind == "navy":
+                trig = ("has_navy_size", Block([("size", Compare(">", size - 1)), ("type", sat["type"])]))
+            elif kind == "air":
+                trig = ("has_deployed_air_force_size", Block([("size", Compare(">", size - 1)), ("type", sat["type"])]))
+            else:
+                trig = ("has_equipment", Block([(archetype, Compare(">", size - 1))]))
+            sat_triggers[trig[0]] = uid
+            idea = Block([("allowed", Block([("always", False)])), ("removal_cost", -1)])
+            pic = _picture(idea_sprites, ["industry", "production", "factory"])
+            if pic:
+                idea.add("picture", pic)
+            idea.add("equipment_bonus", Block([(archetype, Block([("build_cost_ic", float(sat.get("build_cost", 0.5))),
+                                                                   ("instant", True)]))]))
+            ideas.add(ctx.loc.reference(sat_id, f"unique:{sat_id}"), idea)
+            ctx.loc.define(sat_id, en=sat["name"]["english"], es=sat["name"]["spanish"],
+                           file="meganations_unique_units", origin=f"unique:{sat_id}")
+            ctx.loc.define_and_reference(f"{sat_id}_desc", en=sat["desc"]["english"], es=sat["desc"]["spanish"],
+                                         file="meganations_unique_units", origin=f"unique:{sat_id}")
+            check = Block()
+            check.add("if", Block([("limit", Block([trig, ("NOT", Block([("has_idea", sat_id)]))])), ("add_ideas", sat_id)]))
+            check.add("else_if", Block([("limit", Block([("NOT", Block([trig])), ("has_idea", sat_id)])), ("remove_ideas", sat_id)]))
+            effects.add(f"{uid}_revisar_saturacion", check)
+            effects_used.setdefault("add_ideas", uid)
+            effects_used.setdefault("remove_ideas", uid)
+            ctx.note(f"unidad unica {uid}: saturacion con {trig[0]} > {size - 1} (+{sat.get('build_cost', 0.5):g} de costo)")
 
         # 4. IA: después del desbloqueo, que la fabrique (sin exagerar)
         if u.get("ai"):
@@ -308,13 +352,15 @@ def emit(ctx: BuildContext) -> None:
             techs[:] = [t for t in techs if t not in gone]
             ctx.note(f"unidades unicas: {tag} ya no arranca con {', '.join(gone)} (son de otra potencia)")
 
+    if sub_changes:
+        _sub_unit_stats(ctx, "unidades unicas", sub_changes)
     ctx.write_script("common/scripted_effects/meganations_unique_units.txt", effects, source=SOURCE)
     if ideas.entries:
         ctx.write_script("common/ideas/meganations_unique_units.txt",
                          Block([("ideas", Block([("country", ideas)]))]), source=SOURCE)
     ctx.verify_keys("effects", effects_used)
     ctx.verify_keys("modifiers", modifiers_used)
-    ctx.verify_keys("triggers", {"original_tag": "unique_units"})
+    ctx.verify_keys("triggers", {"original_tag": "unique_units", "has_idea": "unique_units", **sat_triggers})
 
 
 def _fixed_equipment(words: list[str], equip: dict[str, Block], enabled_by: dict[str, str]) -> str | None:
@@ -560,6 +606,14 @@ def _sub_unit_stats(ctx: BuildContext, uid: str, wanted: dict) -> None:
             if key not in wanted or not isinstance(body, Block):
                 continue
             for stat, factor in wanted[key].items():
+                if isinstance(factor, bool):
+                    # atributo sí/no (special_forces): se pone aunque el juego no lo tenga
+                    if body.get(stat) is None:
+                        body.add(stat, factor)
+                    else:
+                        body.entries = [(k, factor if k == stat else v) for k, v in body.entries]
+                    changed.append(f"{key}.{stat} = {'yes' if factor else 'no'}")
+                    continue
                 old = body.get(stat)
                 try:
                     val = float(ptext(old))

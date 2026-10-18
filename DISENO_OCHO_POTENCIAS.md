@@ -1879,3 +1879,91 @@ EFE, Bioacero v3 (14_decisions.yaml, 12_events.yaml, 05/06):
   pampa (las productoras no brotan 90 días) y la langosta de acero.
 - Sin probar en el juego: el ritmo real (10 por año más decisiones) puede
   quedar rápido o lento; es lo primero a mirar en la próxima partida.
+
+## La receta de las ocho y el débil con chances (2026-10-17)
+
+Pedido: "hacé absolutamente todos los cambios propuestos, ninguno tiene que
+perder nominalmente nada... equilibrio en el sentido de jugabilidad: todos
+tienen oportunidades contra todos... meterle juguito también a otros países".
+
+Receta común (generador en el scratchpad, todo AGREGADO: una categoría, un
+pulso `<TAG>_pulso_receta` enganchado al pulso mensual, un namespace
+`meganations_<tag>_receta` y modificadores nuevos por potencia):
+- Cinco regiones productoras: +1 del recurso por mes cada una. Perderla:
+  -10 a -15, 180 días de malus y un evento; restaurarla (40 PP) la reactiva.
+  Solo se pierde una que ya se vio controlada (bandera `_activa`).
+- Tres elecciones permanentes de un uso (eventos .10/.11/.12, tres caminos).
+- Gastos temporales (60-120 días) o directos (armas, hombres, PP).
+- Ocho eventos de ganar/perder recurso (.20-.27), uno cada ~100 días.
+
+Por potencia:
+- NAS: Inti-Soma como moneda (templos de La Paz, Lima, Ecuador, Arequipa,
+  Tacna). Mercaderes del Pacífico, Leva del Sol, Embajada de Oro, Aula del
+  Cóndor, Caminos de Luz. La Ofensiva del Sol (90 días, +75.000) y La Defensa
+  de los Andes (120 días, fuertes, +10% estabilidad y guerra, +50.000), de un
+  uso, en guerra, no excluyentes. Coronas a 40/65/90.
+- ASC: Cómputo (núcleos de Holanda, Bohemia, Meseta Suiza, Selandia, Baja
+  Austria). Directivas a 40/70/100. Proyecto Prometeo: 75 PP para abrir, tres
+  misiones de 365 días (50/70/90 de Cómputo y 140/155/170 fábricas): Fusión
+  Experimental, Reactor de Fusión (+reactor si el juego lo tiene), Armas de
+  Fusión y 2 bombas. Si vence, -50 PP y 90 días de pausa. Secreto: el mundo
+  reacciona solo en on_nuke_drop (gancho nuevo del motor, 14_decisions ->
+  on_actions): quien la tira recibe "La Bomba Habló" (2 años) y cada país con
+  25+ fábricas elige condenar (objetivo de guerra), su propio fuego o mirar.
+- HSN: Peaje (puertos de Kuala Lumpur, Java Oeste, Kanto, Manila, Kansai, +1
+  por nodo). Cartas a 30/55/80. La Toma Silenciosa: Taiwán, Hong Kong,
+  Okinawa o Kyushu, solo contra IA o caudillos, 75 PP y un intento por año;
+  maletín/expediente/directorio, camino audaz (15/15/40/30) o cuidadoso
+  (5/25/60/10): promedio 10/20/50/20 entre 20 finales.
+- NRE: Gloria (Roma, Lutecia, Lugdunum, Massilia, Burdigala). Triunfos a
+  25/50/75. Campañas de las legiones (15 de Auctoritas): Italica 180 días (en
+  guerra, 36 divisiones, 15.000 armas), Macedonica 365 días (Kiev, Odesa,
+  Crimea, Bagdad o Teherán), Fulminata 120 días (una capital de caudillos).
+  Cumplida: +20 prestigio, +10 Auctoritas, experiencia y El Triunfo. Fallida:
+  -15 Auctoritas, -10 prestigio.
+- FCU: Dividendos (Nueva York, California, Illinois, Texas, Michigan).
+  Juntas a 25/50/75. Una acción por corporación (Grifos de Castellane, Cosecha
+  de Datos de Halvorsen-Ito, Contratistas de Meridian, Bonos de Obsidian) que
+  mueven el Directorio. Disturbios en Detroit, Chicago o Los Ángeles con
+  escándalo 35+ o estabilidad <45%: misión de 120 días para calmarla.
+- SHD: Mandato del Cielo (represas de Yunnan, Guangdong, Zhejiang, Fujian,
+  Gansu). Virtudes a 25/50/75.
+- APF: Ubuntu (Èkó, Acra, Alejandría, Trípoli, Yibuti). Asambleas a 25/50/75.
+  Los botones de invertir/integrar/ayudar/tributo de un miembro se ocultan si
+  dejó de ser satélite (28 decisiones; no se borró ninguna).
+- Paneles compartidos: La Pequeña Patria (21 satélites y el Santuario),
+  La Ley del Caudillo (anarquías), Resistencia Desesperada (en guerra con una
+  meganación y con menos de 30 divisiones) y La Última Trinchera (meganación
+  con rendición > 30%).
+- Lore: los states del Congo, Angola y Mozambique con nombres poscoloniales.
+- Juego de logs (mayo de 2102): Roma Pide Guerra (nre.110) adelantaba la guerra
+  contra Eurasia; ahora sale desde 2102 y la IA marcha solo si está lista.
+- Análisis y programa de cambios futuros: publicado aparte (Atlas 2100).
+- Sin probar en el juego: ritmos de cada recurso, si la IA usa las misiones,
+  y la Toma Silenciosa contra estados con nombres que el mapa de prueba no
+  tiene (Taiwán, Hong Kong, Okinawa, Kyushu).
+
+## Límites a las unidades únicas y las OIM aéreas del Sol (2026-10-18)
+
+Pedido: "¿podemos poner límites a las unidades únicas? No demasiado bajo,
+pero no quiero spam. ¿Las IA construyen sus unidades únicas? Fortalecé las
+empresas industriales aéreas del NAS".
+
+- La IA sí las construye: la decisión de desbloqueo tiene peso 20 (la toma
+  apenas puede), arranca con una división y la unidad en la cola de
+  producción, y un plan de IA (16_ai / 20_unique_units -> ai) le sube la
+  producción. El EFE no lleva plan propio porque ya prioriza blindados.
+- Divisiones únicas (Gliptodonte, Onagro, Centinela, Kiboko; los
+  paracaidistas del Cóndor ya lo eran): cuentan como fuerzas especiales, con
+  el tope del juego (un porcentaje de todos los batallones). El espíritu de
+  la unidad sube ese tope +10% (+5% el Cóndor), así no queda bajo.
+- Barcos, aviones y trenes únicos: saturación. Más de 7 buques capitales
+  (Leviatán), más de 299 bombarderos pesados desplegados (Ala de Obsidiana) o
+  más de 7 Dragones en depósito: el equipo cuesta +50% hasta bajar del tope
+  (espíritu `<id>_saturacion`, revisado cada mes en el pulso de la potencia).
+- OIM aéreas del NAS (cazas y pesados): cada rasgo rinde +35% y el rasgo
+  inicial suma +5% agilidad, +5% ataque aéreo, +5% fiabilidad y -5% costo
+  (13_military -> mio.boost).
+- Sin probar en el juego: si el tope de fuerzas especiales del juego se
+  aplica igual a los blindados marcados como tales (en el juego vanilla lo
+  usan marines, paracaidistas y montaña).

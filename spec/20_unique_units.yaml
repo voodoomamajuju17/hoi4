@@ -117,12 +117,16 @@ units:
       divisions: 3
       experience: 0.5
     ai: []     # el EFE ya prioriza blindados (16_ai.yaml); alcanza con la cola de producción
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
+    cap:
+      special_forces: [modern_armor]
     spirit:
       id: EFE_el_rebano_de_gliptodontes
       name: {english: The Glyptodon Herd, spanish: El Rebaño de Gliptodontes}
       desc:
-        english: 'Living armour on a modern hull. Glyptodon (and every variant on its chassis), compared with a modern tank: speed +10%, armour +10%, fuel capacity +5%, defence +4%, soft attack +6%, hard attack +8%. The battalion uses 5% more supply.'
-        spanish: 'Blindaje vivo sobre un casco moderno. Gliptodonte (y toda variante sobre su chasis), frente a un tanque moderno: velocidad +10%, blindaje +10%, capacidad de combustible +5%, defensa +4%, ataque blando +6%, ataque duro +8%. El batallón usa 5% más de suministros.'
+        english: 'Living armour on a modern hull. Glyptodon (and every variant on its chassis), compared with a modern tank: speed +10%, armour +10%, fuel capacity +5%, defence +4%, soft attack +6%, hard attack +8%. The battalion uses 5% more supply. Counts as special forces: the cap is raised by 10% of all battalions.'
+        spanish: 'Blindaje vivo sobre un casco moderno. Gliptodonte (y toda variante sobre su chasis), frente a un tanque moderno: velocidad +10%, blindaje +10%, capacidad de combustible +5%, defensa +4%, ataque blando +6%, ataque duro +8%. El batallón usa 5% más de suministros. Cuenta como fuerzas especiales: el tope sube 10% de todos los batallones.'
+      modifiers: {'?special_forces_cap': 0.1}
       equipment_bonus: {maximum_speed: 0.1, armor_value: 0.1, fuel_capacity: 0.05, defense: 0.04, soft_attack: 0.06,
                         hard_attack: 0.08}
       picture_prefer: [tank, armor, armour]
@@ -172,6 +176,14 @@ units:
       experience: 0.5
     ai:
     - {type: equipment_production_factor, id: railway_gun, value: 10}
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
+    cap:
+      saturation:
+        kind: stockpile
+        size: 8
+        build_cost: 0.5
+        name: {english: 'Saturated Canal Works', spanish: 'Talleres del Canal Saturados'}
+        desc: {english: 'More than 7 Dragons waiting in the depots: every new one costs 50% more until they are deployed.', spanish: 'Más de 7 Dragones esperando en los depósitos: cada uno nuevo cuesta 50% más hasta que se desplieguen.'}
     spirit:
       id: SHD_los_dragones_del_canal
       name: {english: The Dragons of the Canal, spanish: Los Dragones del Canal}
@@ -234,6 +246,15 @@ units:
       experience: 0.5
     ai:
     - {type: equipment_production_factor, id: capital_ship, value: 10}
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
+    cap:
+      saturation:
+        kind: navy
+        size: 8
+        type: capital_ship
+        build_cost: 0.5
+        name: {english: 'Saturated Capital Yards', spanish: 'Gradas Capitales Saturadas'}
+        desc: {english: 'More than 7 capital ships at sea: every new one costs 50% more until the fleet shrinks.', spanish: 'Más de 7 buques capitales en el mar: cada uno nuevo cuesta 50% más hasta que la flota se achique.'}
     spirit:
       id: HSN_la_clase_leviatan
       name: {english: The Leviathan Class, spanish: La Clase Leviatán}
@@ -286,13 +307,14 @@ units:
       experience: 0.5
     ai:
     - {type: role_ratio, id: paratroopers, value: 8}
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
     spirit:
       id: NAS_los_hijos_del_condor
       name: {english: The Sons of the Condor, spanish: Los Hijos del Cóndor}
       desc:
-        english: 'Andean airborne troops. Special forces: +10% attack and defence. Tiltrotors: +50% range, +20% reliability.'
-        spanish: 'Tropas aerotransportadas andinas. Fuerzas especiales: +10% ataque y defensa. Tiltrotores: +50% alcance, +20% fiabilidad.'
-      modifiers: {'?special_forces_attack_factor': 0.1, '?special_forces_defence_factor': 0.1}
+        english: 'Andean airborne troops. Special forces: +10% attack and defence. Tiltrotors: +50% range, +20% reliability. Counts as special forces: the cap is raised by 5% of all battalions.'
+        spanish: 'Tropas aerotransportadas andinas. Fuerzas especiales: +10% ataque y defensa. Tiltrotores: +50% alcance, +20% fiabilidad. Cuenta como fuerzas especiales: el tope sube 5% de todos los batallones.'
+      modifiers: {'?special_forces_cap': 0.05, '?special_forces_attack_factor': 0.1, '?special_forces_defence_factor': 0.1}
       equipment_bonus: {air_range: 0.5, reliability: 0.2}
       picture_prefer: [paratroop, air, special]
 
@@ -340,12 +362,16 @@ units:
       experience: 0.5
     ai:
     - {type: equipment_production_factor, id: rocket_artillery, value: 10}
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
+    cap:
+      special_forces: [rocket_artillery_brigade]
     spirit:
       id: NRE_la_tormenta_de_marte
       name: {english: The Storm of Mars, spanish: La Tormenta de Marte}
       desc:
-        english: 'The rocket batteries of the legions. Onager: +15% soft attack, +15% reliability, -10% production cost.'
-        spanish: 'Las baterías de cohetes de las legiones. Onagro: +15% ataque suave, +15% fiabilidad, -10% costo de producción.'
+        english: 'The rocket batteries of the legions. Onager: +15% soft attack, +15% reliability, -10% production cost. Counts as special forces: the cap is raised by 10% of all battalions.'
+        spanish: 'Las baterías de cohetes de las legiones. Onagro: +15% ataque suave, +15% fiabilidad, -10% costo de producción. Cuenta como fuerzas especiales: el tope sube 10% de todos los batallones.'
+      modifiers: {'?special_forces_cap': 0.1}
       equipment_bonus: {soft_attack: 0.15, reliability: 0.15, build_cost_ic: -0.1}
       picture_prefer: [artillery, rocket]
 
@@ -395,12 +421,16 @@ units:
       experience: 0.5
     ai:
     - {type: equipment_production_factor, id: armored_car, value: 10}
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
+    cap:
+      special_forces: [armored_car]
     spirit:
       id: ASC_la_red_de_centinelas
       name: {english: The Sentinel Network, spanish: La Red de Centinelas}
       desc:
-        english: 'Crewless armoured cars linked to the Plan. Sentinel: +20% speed, +25% reliability, +10% soft attack.'
-        spanish: 'Autos blindados sin tripulación conectados al Plan. Centinela: +20% velocidad, +25% fiabilidad, +10% ataque suave.'
+        english: 'Crewless armoured cars linked to the Plan. Sentinel: +20% speed, +25% reliability, +10% soft attack. Counts as special forces: the cap is raised by 10% of all battalions.'
+        spanish: 'Autos blindados sin tripulación conectados al Plan. Centinela: +20% velocidad, +25% fiabilidad, +10% ataque suave. Cuenta como fuerzas especiales: el tope sube 10% de todos los batallones.'
+      modifiers: {'?special_forces_cap': 0.1}
       equipment_bonus: {maximum_speed: 0.2, reliability: 0.25, soft_attack: 0.1}
       picture_prefer: [recon, motor, mechan]
 
@@ -448,12 +478,16 @@ units:
     ai:
     - {type: role_ratio, id: mobile, value: 8}
     - {type: equipment_production_factor, id: amphibious_mechanized, value: 10}
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
+    cap:
+      special_forces: [amphibious_mechanized]
     spirit:
       id: APF_los_kiboko
       name: {english: The Kiboko, spanish: Los Kiboko}
       desc:
-        english: 'Amphibious vehicles of the great rivers. Kiboko: +15% speed, +20% reliability, +10% defence.'
-        spanish: 'Vehículos anfibios de los grandes ríos. Kiboko: +15% velocidad, +20% fiabilidad, +10% defensa.'
+        english: 'Amphibious vehicles of the great rivers. Kiboko: +15% speed, +20% reliability, +10% defence. Counts as special forces: the cap is raised by 10% of all battalions.'
+        spanish: 'Vehículos anfibios de los grandes ríos. Kiboko: +15% velocidad, +20% fiabilidad, +10% defensa. Cuenta como fuerzas especiales: el tope sube 10% de todos los batallones.'
+      modifiers: {'?special_forces_cap': 0.1}
       equipment_bonus: {maximum_speed: 0.15, reliability: 0.2, defense: 0.1}
       picture_prefer: [amphib, marine, naval]
 
@@ -506,6 +540,15 @@ units:
       experience: 0.5
     ai:
     - {type: equipment_production_factor, id: strategic_bomber, value: 10}
+    # 2026-10-18 (pedido del usuario: "límites a las unidades únicas, no demasiado bajos, sin spam")
+    cap:
+      saturation:
+        kind: air
+        size: 300
+        type: strategic_bomber
+        build_cost: 0.5
+        name: {english: 'Saturated Heavy Lines', spanish: 'Líneas Pesadas Saturadas'}
+        desc: {english: 'More than 299 heavy bombers deployed: every new one costs 50% more until the wings shrink.', spanish: 'Más de 299 bombarderos pesados desplegados: cada uno nuevo cuesta 50% más hasta que las alas se achiquen.'}
     spirit:
       id: FCU_alcance_global
       name: {english: Global Reach, spanish: Alcance Global}
