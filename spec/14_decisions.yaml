@@ -14782,6 +14782,7 @@ scripted_effects:
       - {effect: guarantee, value: ZSG}
   - id: FCU_pulso_del_directorio
     effects:
+    - {effect: run, value: FCU_ala_de_obsidiana_revisar_saturacion}   # 2026-10-18: tope de la unidad única
     - {effect: run, value: FCU_pulso_receta}
     - effect: if
       when: {focus: FCU_la_prensa_amiga}
@@ -15054,6 +15055,7 @@ scripted_effects:
       - {effect: event, id: meganations_asc.220, days: 1}
   - id: HSN_pulso_de_las_potencias
     effects:
+    - {effect: run, value: HSN_leviatan_revisar_saturacion}   # 2026-10-18: tope de la unidad única
     - {effect: run, value: HSN_pulso_receta}
     - effect: if       # la Asamblea de Armadores, cada cuatro años desde 2104
       when: {date_after: 2104.6.1, any: [{not_flag: HSN_asamblea_marca}, {flag_older: {flag: HSN_asamblea_marca, days: 1455}}]}
@@ -15280,6 +15282,7 @@ scripted_effects:
     - {effect: run, value: MEGANATIONS_eventos_mundiales}
   - id: SHD_pulso_del_rio
     effects:
+    - {effect: run, value: SHD_dragon_del_canal_revisar_saturacion}   # 2026-10-18: tope de la unidad única
     - {effect: run, value: SHD_pulso_receta}
     - effect: if
       when: {focus: SHD_sensores_del_caudal, not_flag: SHD_zhou}

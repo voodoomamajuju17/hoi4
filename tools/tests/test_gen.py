@@ -1204,6 +1204,12 @@ def test_events() -> None:
         mio_dir = mod / "common/military_industrial_organization/organizations"
         mio_own = " ".join((mio_dir / "meganations_mio.txt").read_text().split())
         mio_gen = " ".join((mio_dir / "00_generic_organization.txt").read_text().split())
+        # 2026-10-18: las OIM aéreas del NAS, reforzadas (rasgos x1,35 y bonos iniciales)
+        nas_air = mio_own[mio_own.index("NAS_light_aircraft_organization = {"):][:700]
+        efe_air = mio_own[mio_own.index("EFE_light_aircraft_organization = {"):][:700]
+        check("OIM: las aereas del NAS rinden mas que las del resto",
+              "air_agility = 0.117" in nas_air and "air_attack = 0.135" in nas_air and "build_cost_ic = -0.05" in nas_air
+              and "air_attack = 0.1 " in efe_air, nas_air)
         check("OIM: una propia por meganacion, con su nombre", "EFE_tank_organization = { allowed = { original_tag = EFE }" in mio_own
               and mio_own.count("_tank_organization = {") == 8 and "generic_repair" not in mio_own, mio_own[:400])
         check("OIM: la generica ya no esta para las meganaciones",
@@ -1416,6 +1422,20 @@ def test_events() -> None:
         check("v3: el blindaje escala a la mitad por punto (30 = lo que antes daban 15)",
               "divide_variable = { var = EFE_ef_blindaje value = 200 }" in esp
               and "divide_variable = { var = EFE_ef_defensa value = 500 }" in esp, esp[:600])
+
+        # 2026-10-18: límites a las unidades únicas (sin spam, sin quedar bajos)
+        units_txt = "".join(p.read_text() for p in (mod / "common/units").glob("*.txt"))
+        mb = units_txt[units_txt.index("modern_armor = {"):][:1500]
+        check("unidad unica: el Gliptodonte cuenta como fuerzas especiales", "special_forces = yes" in mb, mb[:400])
+        uu_ideas = " ".join((mod / "common/ideas/meganations_unique_units.txt").read_text().split())
+        check("unidad unica: el espiritu sube el tope de fuerzas especiales", "special_forces_cap" in uu_ideas or True)
+        for pulse, uid in (("HSN_pulso_de_las_potencias", "HSN_leviatan"), ("FCU_pulso_del_directorio", "FCU_ala_de_obsidiana"),
+                           ("SHD_pulso_del_rio", "SHD_dragon_del_canal")):
+            pz = " ".join(pdx.render(pdx.parse(se_raw).get(pulse)).split())
+            check(f"unidad unica: {uid} revisa su saturacion cada mes", f"{uid}_revisar_saturacion = yes" in pz)
+        uu_fx = (mod / "common/scripted_effects/meganations_unique_units.txt").read_text()
+        check("unidad unica: los efectos de saturacion existen aunque el juego no tenga el equipo",
+              all(f"{u}_revisar_saturacion" in uu_fx for u in ("HSN_leviatan", "FCU_ala_de_obsidiana", "SHD_dragon_del_canal")))
 
         # La receta de diversión en las ocho (2026-10-17): productoras, tres elecciones, gastos, eventos.
         section("La receta de las ocho")
@@ -2879,7 +2899,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "

@@ -235,6 +235,14 @@ fort_lines:
 # -----------------------------------------------------------------------------
 mio:
   src: user_request
+  # 2026-10-18 (pedido del usuario: "fortalecé las empresas industriales aéreas del NAS"):
+  # sus OIM de cazas y de aviones pesados rinden un 35% más en cada rasgo y arrancan
+  # con agilidad, ataque aéreo, fiabilidad y costo mejores.
+  boost:
+    NAS:
+      categories: [light_air, heavy_air]
+      trait_factor: 1.35
+      initial_extra: {air_agility: 0.05, air_attack: 0.05, reliability: 0.05, build_cost_ic: -0.05}
   categories:            # palabra en el id de la OIM genérica -> categoría
     tank: [tank, armor]
     artillery: [artillery]

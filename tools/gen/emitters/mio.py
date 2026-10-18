@@ -15,7 +15,7 @@ import copy
 import re
 
 from ..context import BuildContext
-from ..pdx import Block, parse_file
+from ..pdx import Block, parse_file, text
 
 SOURCE = "spec/13_military.yaml -> mio"
 LOC_FILE = "meganations_mio"
@@ -81,6 +81,11 @@ def _personalize(ctx: BuildContext, spec: dict, folder) -> None:
                 copy_body.entries.insert(0, ("allowed", Block([("original_tag", tag)])))
                 if copy_body.get("name") is not None:
                     copy_body.entries = [(k, new_id if k == "name" else v) for k, v in copy_body.entries]
+                boost = (spec.get("boost") or {}).get(tag) or {}
+                if cat in (boost.get("categories") or []):
+                    _boost(copy_body, boost)
+                    ctx.note(f"OIM: {new_id} reforzada (rasgos x{boost.get('trait_factor', 1)}, "
+                             f"inicial +{', '.join(f'{k} {v}' for k, v in (boost.get('initial_extra') or {}).items())})")
                 ours.add(new_id, copy_body)
                 ctx.loc.define_and_reference(new_id, en=name, es=name, file=LOC_FILE, origin=f"mio:{new_id}")
         if changed:
@@ -92,6 +97,56 @@ def _personalize(ctx: BuildContext, spec: dict, folder) -> None:
                          source=SOURCE)
     ctx.note(f"OIM: {len(ours)} propias ({', '.join(f'{c}={k}' for c, k in sorted(used.items()))}) "
              f"en {touched} archivos del juego")
+
+
+def _scale(block: Block, factor: float) -> None:
+    """Multiplica los números de un bloque de bonos (y de sus sub-bloques)."""
+    out = []
+    for k, v in block.entries:
+        if isinstance(v, Block):
+            _scale(v, factor)
+        else:
+            try:
+                num = float(text(v))
+                if k not in ("instant",):
+                    v = round(num * factor, 4)
+            except (TypeError, ValueError):
+                pass
+        out.append((k, v))
+    block.entries = out
+
+
+def _boost(body: Block, boost: dict) -> None:
+    """2026-10-18 (pedido del usuario: "fortalecé las empresas industriales aéreas
+    del NAS"): todos los rasgos de la OIM rinden más (`trait_factor`) y el rasgo
+    inicial suma bonos (`initial_extra`)."""
+    factor = float(boost.get("trait_factor", 1))
+    for key, trait in body.entries:
+        if key not in ("trait", "initial_trait") or not isinstance(trait, Block):
+            continue
+        for bk, bonus in trait.entries:
+            if bk in ("equipment_bonus", "production_bonus") and isinstance(bonus, Block) and factor != 1:
+                _scale(bonus, factor)
+    extra = boost.get("initial_extra") or {}
+    if extra:
+        init = body.get("initial_trait")
+        if not isinstance(init, Block):
+            init = Block([("name", "generic_mio_initial_trait")])
+            body.add("initial_trait", init)
+        eq = init.get("equipment_bonus")
+        if not isinstance(eq, Block):
+            eq = Block()
+            init.add("equipment_bonus", eq)
+        for stat, val in extra.items():
+            old = eq.get(stat)
+            try:
+                base = float(text(old)) if old is not None else 0.0
+            except (TypeError, ValueError):
+                base = 0.0
+            if old is None:
+                eq.add(stat, float(val))
+            else:
+                eq.entries = [(k, round(base + float(val), 4) if k == stat else v) for k, v in eq.entries]
 
 
 def _diagnose(ctx: BuildContext, folder) -> None:

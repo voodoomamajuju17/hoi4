@@ -1558,6 +1558,7 @@ def destiny_pick_block(sids: list[int], goal_for, valid) -> Block:
 def scripted_effect_ids(spec_raw: dict) -> set[str]:
     units = (spec_raw.get("unique_units") or {}).get("units") or []
     unique = {f"{u['id']}_desbloqueo" for u in units} | {f"{u['id']}_botin" for u in units if u.get("capital_spoils")}
+    unique |= {f"{u['id']}_revisar_saturacion" for u in units if (u.get("cap") or {}).get("saturation")}
     from .carrera import scripted_ids as race_ids
     from .cazas import scripted_ids as fighter_ids
     return ({e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED

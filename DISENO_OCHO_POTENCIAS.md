@@ -1942,3 +1942,28 @@ Por potencia:
 - Sin probar en el juego: ritmos de cada recurso, si la IA usa las misiones,
   y la Toma Silenciosa contra estados con nombres que el mapa de prueba no
   tiene (Taiwán, Hong Kong, Okinawa, Kyushu).
+
+## Límites a las unidades únicas y las OIM aéreas del Sol (2026-10-18)
+
+Pedido: "¿podemos poner límites a las unidades únicas? No demasiado bajo,
+pero no quiero spam. ¿Las IA construyen sus unidades únicas? Fortalecé las
+empresas industriales aéreas del NAS".
+
+- La IA sí las construye: la decisión de desbloqueo tiene peso 20 (la toma
+  apenas puede), arranca con una división y la unidad en la cola de
+  producción, y un plan de IA (16_ai / 20_unique_units -> ai) le sube la
+  producción. El EFE no lleva plan propio porque ya prioriza blindados.
+- Divisiones únicas (Gliptodonte, Onagro, Centinela, Kiboko; los
+  paracaidistas del Cóndor ya lo eran): cuentan como fuerzas especiales, con
+  el tope del juego (un porcentaje de todos los batallones). El espíritu de
+  la unidad sube ese tope +10% (+5% el Cóndor), así no queda bajo.
+- Barcos, aviones y trenes únicos: saturación. Más de 7 buques capitales
+  (Leviatán), más de 299 bombarderos pesados desplegados (Ala de Obsidiana) o
+  más de 7 Dragones en depósito: el equipo cuesta +50% hasta bajar del tope
+  (espíritu `<id>_saturacion`, revisado cada mes en el pulso de la potencia).
+- OIM aéreas del NAS (cazas y pesados): cada rasgo rinde +35% y el rasgo
+  inicial suma +5% agilidad, +5% ataque aéreo, +5% fiabilidad y -5% costo
+  (13_military -> mio.boost).
+- Sin probar en el juego: si el tope de fuerzas especiales del juego se
+  aplica igual a los blindados marcados como tales (en el juego vanilla lo
+  usan marines, paracaidistas y montaña).

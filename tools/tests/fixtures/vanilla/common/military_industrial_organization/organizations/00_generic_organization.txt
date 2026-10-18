@@ -10,3 +10,19 @@ generic_repair_organization = {
 	icon = GFX_idea_generic_tank_manufacturer
 	equipment_type = { armor }
 }
+generic_light_aircraft_organization = {
+	icon = GFX_idea_generic_light_aircraft_manufacturer
+	allowed = { always = yes }
+	equipment_type = { small_plane_airframe }
+	research_categories = { cat_light_fighter }
+	initial_trait = {
+		name = generic_mio_initial_trait_light_aircraft
+		equipment_bonus = { air_agility = 0.05 }
+	}
+	trait = {
+		token = generic_light_aircraft_trait_1
+		name = generic_light_aircraft_trait_1
+		position = { x = 0 y = 0 }
+		equipment_bonus = { air_attack = 0.1 reliability = 0.05 }
+	}
+}
