@@ -3729,6 +3729,10 @@ def test_doctrinas_y_titeres() -> None:
     check("doctrinas: pedidos de arte simples, uno por doctrina (las _no_lar comparten)",
           len(docs) == 97 and all("at most two objects" in i["description"] for i in docs)
           and not any(i["id"].endswith("_no_lar") for i in docs), len(docs))
+    sin = [i["id"] for i in catalog() if not i["done"] and i["type"] in ("national_spirit_icon", "national_focus_icon")
+           and "EXACT SUBJECT" not in i["description"]]
+    check("iconos: cada espiritu y foco pendiente trae que dibujar (arte/iconos_descripciones.yaml, 2026-10-19)",
+          not sin, sin[:10])
 
 
 def test_junta_militar() -> None:

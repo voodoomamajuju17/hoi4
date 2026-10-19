@@ -357,6 +357,7 @@ def catalog() -> list[dict]:
                 "done": dest.exists(), "description": desc,
             })
     items += _adventure_items()
+    _apply_icon_looks(items)
     return items
 
 
@@ -596,6 +597,38 @@ def _ui_icon_items() -> list[dict]:
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
 SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
 TECH_GROUPS = ("INFANTERIA", "APOYO", "BLINDADOS", "ARTILLERIA", "NAVAL", "AVIACION", "INGENIERIA", "INDUSTRIA")
+
+# 2026-10-19 ("¿la descripción de los espíritus alcanza para que ChatGPT las
+# haga bien?" -> "reescribí la lista"): ícono = un solo objeto claro, sin escena.
+ICON_STYLE = (
+    "small painted icon in the style of the Hearts of Iron IV national spirit and focus icons: ONE clear central "
+    "object or symbol, bold readable silhouette with a dark outline, painterly but simple, strong contrast, "
+    "the year 2100, NO scenery and NO crowd, nothing small or fussy, transparent PNG background, must read clearly "
+    "at {w}x{h} pixels, no text, no letters, no numbers, no watermark"
+)
+
+
+def _apply_icon_looks(items: list[dict]) -> None:
+    """Reemplaza el texto del juego por un pedido visual (arte/iconos_descripciones.yaml)."""
+    import yaml
+    path = REPO / "arte" / "iconos_descripciones.yaml"
+    if not path.exists():
+        return
+    spec = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    looks, palettes = spec.get("iconos") or {}, spec.get("paletas") or {}
+    for item in items:
+        look = looks.get(item["id"])
+        if not look or item["type"] not in ("national_spirit_icon", "national_focus_icon"):
+            continue
+        w, h = KINDS[item["type"]]["size"]
+        name = item["description"].split(":", 1)[0]
+        what = "national spirit" if item["type"] == "national_spirit_icon" else "national focus"
+        palette = look.get("paleta") or palettes.get(item["tag"]) or STYLE.get(item["tag"]) or palettes.get("MEGANATIONS", "")
+        item["description"] = (f"WHAT: icon of the {what} '{name}'. EXACT SUBJECT: {_one_line(look['dibujo'])}. "
+                               f"COMPOSITION: that single subject centred, filling about 80% of the canvas, "
+                               f"little empty space, no background scene.")
+        item["style"] = ICON_STYLE.format(w=w, h=h) + f"; palette: {palette}"
+
 
 SHARED_STYLE = (
     "photorealistic 3D-rendered equipment icon matching the weapon icons of this Hearts of Iron IV mod: realistic "
