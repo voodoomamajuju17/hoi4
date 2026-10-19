@@ -1967,3 +1967,13 @@ empresas industriales aéreas del NAS".
 - Sin probar en el juego: si el tope de fuerzas especiales del juego se
   aplica igual a los blindados marcados como tales (en el juego vanilla lo
   usan marines, paracaidistas y montaña).
+
+## Crash al cargar con Götterdämmerung (2026-10-19)
+
+**Síntoma:** el juego se cerraba al final de la carga, mientras aplicaba la historia inicial. Pasaba desde el lote de África ampliada.
+
+**Causa:** con el DLC Götterdämmerung, el juego base trae, en la historia de 8 regiones del Congo, Ruanda y Burundi, un bloque `IF = { limit = { has_dlc = "Gotterdammerung" } transfer_state_to = COG ... }`. Ese bloque le pasa la región al Congo Belga de 1936. Antes se lo llevaba la Federación sin que se notara, porque le sobraban regiones. La Confederación del Congo, en cambio, perdía las 6 que tiene, capital incluida. Su historia seguía cargando capital, ejército y personajes sobre un país sin tierra, y el juego se caía. Es el mismo tipo de crash que el del 23/09.
+
+**Arreglo:** `tools/gen/emitters/territory.py` borra `transfer_state_to` (y `set_state_owner_to`) de las regiones reasignadas. Un bloque condicional que tenga una de esas instrucciones se borra entero, con los modificadores del escenario de 1936 que lo acompañan. Lo prueba el fixture `910-Fixture.txt`.
+
+**Efecto lateral:** Ruanda y Burundi ahora sí son de la Federación desde el arranque. Antes, en el juego, quedaban del Congo Belga.

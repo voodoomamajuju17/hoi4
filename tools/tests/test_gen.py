@@ -1768,6 +1768,8 @@ def test_balance() -> None:
         check("Congo: el dueno dentro de un if condicional se borra", "COG" not in libya, libya)
         check("el if que queda sin efectos desaparece, el que tiene otros efectos queda",
               libya.count("if = {") == 1 and "fixture_flag" in libya and 'has_dlc = "Thunder' in libya, libya)
+        check("Congo: el IF de Gotterdammerung que pasa el state a COG (transfer_state_to) se borra entero (2026-10-19, crash)",
+              "transfer_state_to" not in libya and "Gotterdammerung" not in libya and "COG_state_loyal" not in libya, libya)
         startup = (mod / "common/on_actions/01_meganations_territory.txt").read_text()
         check("red de seguridad: on_startup devuelve cada state a su dueno", "on_startup" in startup
               and "transfer_state = 910" in startup and "is_owned_by = APF" in startup, startup[:600])

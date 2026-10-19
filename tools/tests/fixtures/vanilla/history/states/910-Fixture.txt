@@ -15,5 +15,10 @@ state = {
 			set_state_flag = fixture_flag
 			add_core_of = COG
 		}
+		IF = {
+			limit = { has_dlc = "Gotterdammerung" }
+			transfer_state_to = COG
+			add_dynamic_modifier = { modifier = COG_state_loyal_to_belgium_modifier }
+		}
 	}
 }

@@ -53,7 +53,13 @@ _DROP_FROM_HISTORY = {
     "owner", "controller", "add_core_of", "add_claim_by",
     "start_resistance", "add_resistance", "add_resistance_target",
     "set_demilitarized_zone",
+    # 2026-10-19 (crash al cargar): con Götterdämmerung el juego base pasa el
+    # Congo a COG con transfer_state_to; el país del mod se quedaba sin tierra.
+    "transfer_state_to", "set_state_owner_to",
 }
+# Un bloque condicional que regalaba el state a un país de 1936 es de ese
+# escenario: se borra entero (con sus modificadores, p. ej. COG_state_loyal_*).
+_HANDOVER = {"transfer_state_to", "set_state_owner_to"}
 
 _DATE_KEY = re.compile(r"^\d{1,4}\.\d{1,2}\.\d{1,2}(\.\d{1,2})?$")
 _COMPARISON = re.compile(r'"[^"]*"|#[^\n]*|([<>])')
@@ -506,6 +512,8 @@ def _strip_ownership(block: Block) -> Block | None:
     Los `limit` son condiciones (ahí `owner = X` pregunta, no asigna) y quedan
     intactos. Si el bloque se queda sin efectos, devuelve None para borrarlo.
     """
+    if any(k in _HANDOVER for k, _ in block.entries):
+        return None
     out = Block()
     for k, v in block.entries:
         if k in _DROP_FROM_HISTORY:
