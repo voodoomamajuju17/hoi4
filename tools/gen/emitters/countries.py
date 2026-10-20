@@ -88,13 +88,26 @@ def _emit_flags(ctx: BuildContext) -> None:
     """
     gfx_root = ctx.mod_root / "gfx"
     for c in ctx.spec.countries:
-        asset = c.raw.get("flag_asset")
+        asset = _flag_asset(ctx, c)
         if asset:
             for variant in ("", "medium/", "small/"):
                 ctx.copy_asset(f"{asset}/{variant}{c.tag}.tga", f"gfx/flags/{variant}{c.tag}.tga")
             continue
         for path in write_country_flags(gfx_root, c.tag, c.color):
             ctx.track(path)
+
+
+def _flag_asset(ctx: BuildContext, c) -> str | None:
+    """La carpeta de la bandera del usuario: la del spec (`flag_asset`) o, si no
+    está, assets/<TAG>/flags cuando ya trae <TAG>.tga (2026-10-20: las banderas
+    que llegan por tools/arte no se conectaban solas)."""
+    if c.raw.get("flag_asset"):
+        return c.raw["flag_asset"]
+    folder = f"assets/{c.tag}/flags"
+    repo = ctx.spec.root.parent
+    if all((repo / folder / v / f"{c.tag}.tga").exists() for v in ("", "medium", "small")):
+        return folder
+    return None
 
 
 def cosmetic_tags(ctx: BuildContext) -> list[dict]:
@@ -120,7 +133,7 @@ def _emit_cosmetic_tags(ctx: BuildContext) -> None:
         # Bandera: la del usuario (assets/<padre>/flags/<ID>.tga); mientras no
         # llegue, la del país padre.
         own = repo / "assets" / parent.tag / "flags" / f"{cid}.tga"
-        asset = parent.raw.get("flag_asset")
+        asset = _flag_asset(ctx, parent)
         for variant in ("", "medium/", "small/"):
             if own.exists():
                 ctx.copy_asset(f"assets/{parent.tag}/flags/{variant}{cid}.tga", f"gfx/flags/{variant}{cid}.tga")

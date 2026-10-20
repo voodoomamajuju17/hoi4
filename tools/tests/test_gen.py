@@ -1773,6 +1773,9 @@ def test_balance() -> None:
         check("Congo: el dueno dentro de un if condicional se borra", "COG" not in libya, libya)
         check("el if que queda sin efectos desaparece, el que tiene otros efectos queda",
               libya.count("if = {") == 1 and "fixture_flag" in libya and 'has_dlc = "Thunder' in libya, libya)
+        zco_flag = mod / "gfx/flags/ZCO.tga"
+        check("bandera del usuario en assets/<TAG>/flags sin flag_asset en el spec: se usa igual (2026-10-20)",
+              zco_flag.exists() and zco_flag.read_bytes() == (REPO_ROOT / "assets/ZCO/flags/ZCO.tga").read_bytes())
         check("Congo: el IF de Gotterdammerung que pasa el state a COG (transfer_state_to) se borra entero (2026-10-19, crash)",
               "transfer_state_to" not in libya and "Gotterdammerung" not in libya and "COG_state_loyal" not in libya, libya)
         startup = (mod / "common/on_actions/01_meganations_territory.txt").read_text()
@@ -2508,9 +2511,16 @@ def test_arte() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         shd = (ctx.mod_root / "common/ideas/SHD_ideas.txt").read_text()
-        body = shd[shd.index("SHD_boom_exportador = {"):]   # sin dibujo todavia
+        # el primero del SHD que todavía no tiene dibujo (2026-10-20: el de ejemplo ya llegó)
+        from tools.arte.arte import catalog as _cat
+        sin_dibujo = [i["id"] for i in _cat() if i["type"] == "national_spirit_icon" and i["tag"] == "SHD"
+                      and not i["done"] and f"\n\t\t{i['id']} = {{" in shd]
+        body = shd[shd.index(f"\t\t{sin_dibujo[0]} = {{"):] if sin_dibujo else ""
+        import re as _re
+        pic = _re.search(r"picture = (\S+)", body[:600])
         check("un espiritu sin dibujo toma un icono generico del juego segun su efecto (sin '?')",
-              "picture = generic_production_bonus" in body[:300], body[:300])
+              bool(sin_dibujo) and pic is not None and pic.group(1).startswith(("generic_", "GFX_idea_generic"))
+              and "?" not in pic.group(1), body[:400])
         # Partida 2026-09-29: los espíritus sin dibujo mostraban un asesor con un papel o un avión.
         all_pics = " ".join((ctx.mod_root / "common/ideas").joinpath(f).read_text()
                             for f in [p.name for p in (ctx.mod_root / "common/ideas").glob("*.txt")])
