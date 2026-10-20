@@ -1596,11 +1596,16 @@ def test_leaders_and_ideologies() -> None:
         check("ministro: puesto, token, rasgo propio y costo", pdx.text(adv.get("slot")) == "political_advisor"
               and pdx.text(adv.get("idea_token")) == mins[0] and pdx.text(adv.get("cost")) == "150", pdx.render(adv))
         gens = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("corps_commander") is not None]
-        check("generales propios (EFE: 3 + su mariscal, y el lider de su rebelion del 2026-10-11)",
-              len(gens) == 4 and "EFE_lider_rebelde" in gens, str(gens))
+        check("generales propios (EFE: 3 + 2 nuevos del 2026-10-19, y el lider de su rebelion del 2026-10-11)",
+              len(gens) == 6 and "EFE_lider_rebelde" in gens and "EFE_gen_moura_8" in gens, str(gens))
         hsn_chars = pdx.parse((mod / "common/characters/HSN_characters.txt").read_text()).get("characters")
         adm = [k for k, v in hsn_chars.entries if isinstance(v, pdx.Block) and v.get("navy_leader") is not None]
-        check("la HSN tiene almirantes", len(adm) == 2, str(adm))
+        check("la HSN tiene almirantes (2 + 2 del 2026-10-19)", len(adm) == 4, str(adm))
+        for tag in ("EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"):
+            chars_t = pdx.parse((mod / f"common/characters/{tag}_characters.txt").read_text()).get("characters")
+            new_ones = [k for k, v in chars_t.entries if isinstance(v, pdx.Block) and k.split("_")[-1] in ("7", "8", "9", "10", "11")
+                        and any(v.get(r) is not None for r in ("field_marshal", "corps_commander", "navy_leader"))]
+            check(f"{tag}: 1 mariscal, 2 generales y 2 almirantes nuevos (2026-10-19)", len(new_ones) == 5, str(new_ones))
         efe_hist = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
         check("los ministros y generales se reclutan en la historia", f"recruit_character = {mins[0]}" in efe_hist)
         check("rasgos no aleatorios", all(pdx.text(v.get("random")) == "no" for _, v in body.entries))

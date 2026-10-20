@@ -244,6 +244,28 @@ def catalog() -> list[dict]:
                            "Flat flag design, simple bold shapes and 2-4 colours, readable when tiny, "
                            "fills the whole rectangle, no border, no text.",
         })
+    # 2026-10-19: la bandera de base de cada país (antes solo se pedían las cosméticas;
+    # los 5 africanos nuevos y el Santuario de Gaia no tenían ninguna)
+    import yaml as _yaml
+    flag_art = (_yaml.safe_load((REPO / "arte" / "banderas_descripciones.yaml").read_text(encoding="utf-8"))
+                or {}).get("banderas") or {} if (REPO / "arte" / "banderas_descripciones.yaml").exists() else {}
+    countries = _load("02_countries.yaml")
+    for group in countries.values():
+        if not isinstance(group, list):
+            continue
+        for c in group:
+            if not isinstance(c, dict) or "tag" not in c or "name" not in c:
+                continue
+            tag = c["tag"]
+            dest = REPO / "assets" / tag / "flags" / f"{tag}.tga"
+            name = (c.get("name") or {}).get("english", tag)
+            art = flag_art.get(tag) or f"a flag that fits this country: {_one_line(c.get('lore', ''))}"
+            items.append({
+                "type": "country_flag", "tag": tag, "id": tag, "dest": dest, "done": dest.exists(),
+                "description": f"National flag of {name}: {_one_line(art)} "
+                               "Flat flag design, simple bold shapes and 2-4 colours, readable when tiny, "
+                               "fills the whole rectangle, no border, no text.",
+            })
     intel = _load("18_intelligence.yaml")
     for up in intel.get("agency_upgrades") or []:
         dest = REPO / "assets" / "agency" / f"{up['id']}.dds"
