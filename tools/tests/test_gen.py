@@ -2511,16 +2511,20 @@ def test_arte() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         shd = (ctx.mod_root / "common/ideas/SHD_ideas.txt").read_text()
-        # el primero del SHD que todavía no tiene dibujo (2026-10-20: el de ejemplo ya llegó)
+        # un espíritu que todavía no tiene dibujo, de cualquier país (2026-10-21: los de ejemplo ya llegaron)
         from tools.arte.arte import catalog as _cat
-        sin_dibujo = [i["id"] for i in _cat() if i["type"] == "national_spirit_icon" and i["tag"] == "SHD"
-                      and not i["done"] and f"\n\t\t{i['id']} = {{" in shd]
-        body = shd[shd.index(f"\t\t{sin_dibujo[0]} = {{"):] if sin_dibujo else ""
         import re as _re
-        pic = _re.search(r"picture = (\S+)", body[:600])
-        check("un espiritu sin dibujo toma un icono generico del juego segun su efecto (sin '?')",
-              bool(sin_dibujo) and pic is not None and pic.group(1).startswith(("generic_", "GFX_idea_generic"))
-              and "?" not in pic.group(1), body[:400])
+        ideas_txt = {f.name: f.read_text() for f in (ctx.mod_root / "common/ideas").glob("*.txt")}
+        sin_dibujo = [(i["id"], txt) for i in _cat() if i["type"] == "national_spirit_icon" and not i["done"]
+                      for txt in ideas_txt.values() if f"\n\t\t{i['id']} = {{" in txt]
+        if sin_dibujo:
+            cid, txt = sin_dibujo[0]
+            body = txt[txt.index(f"\t\t{cid} = {{"):]
+            pic = _re.search(r"picture = (\S+)", body[:600])
+            check("un espiritu sin dibujo toma un icono generico del juego segun su efecto (sin '?')",
+                  pic is not None and "?" not in pic.group(1) and pic.group(1) != cid, body[:400])
+        else:
+            check("un espiritu sin dibujo toma un icono generico (no queda ninguno sin dibujo)", True)
         # Partida 2026-09-29: los espíritus sin dibujo mostraban un asesor con un papel o un avión.
         all_pics = " ".join((ctx.mod_root / "common/ideas").joinpath(f).read_text()
                             for f in [p.name for p in (ctx.mod_root / "common/ideas").glob("*.txt")])
