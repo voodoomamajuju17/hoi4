@@ -96,16 +96,19 @@ def _resource_floor(ctx, spec, assignment, capitals, by_state, kinds, delta) -> 
     base_floor = float(spec["per_meganation"])
     # 2026-10-21 (pedido del usuario: "un poco más de metal donde hace falta; es medio
     # básico y se usa para todo"): pisos propios por recurso y tipo de país, también
-    # para los satélites (overrides.<recurso>.<meganation|satellite>)
+    # para los satélites (overrides.<recurso>.<meganation|satellite>). Van en una
+    # segunda pasada, después del piso común: si no alcanza para todos, el reparto
+    # de la primera queda como antes y la segunda solo mueve lo que sobra.
     overrides = spec.get("overrides") or {}
     kind_name = {"mega": "meganation", "sat": "satellite"}
 
-    def floor_of(tag: str, res: str) -> float:
+    def stages_of(res: str) -> list[dict[str, float]]:
+        out = [{"meganation": base_floor, "satellite": 0.0}]
         own = overrides.get(res) or {}
-        k = kinds.get(tag)
-        if kind_name.get(k) in own:
-            return float(own[kind_name[k]])
-        return base_floor if k == "mega" else 0.0
+        if own:
+            out.append({"meganation": float(own.get("meganation", base_floor)),
+                        "satellite": float(own.get("satellite", 0.0))})
+        return out
 
     moved_total = 0
     for res in spec["resources"]:
@@ -118,45 +121,52 @@ def _resource_floor(ctx, spec, assignment, capitals, by_state, kinds, delta) -> 
         def country_total(tag: str) -> float:
             return sum(v + delta[sid][res] for sid, v in amount.items() if assignment[sid] == tag)
 
-        receivers = ([t for t in sorted(kinds) if kinds[t] == "mega"]
-                     + [t for t in sorted(kinds) if kinds[t] == "sat" and floor_of(t, res) > 0])
-        for tag in receivers:
-            floor = floor_of(tag, res)
-            need = floor - country_total(tag)
-            cap = capitals.get(tag)
-            if need <= 0 or cap is None:
-                continue
-            # Donantes: otros países del mod, el que más tiene primero.
-            donors = sorted(
-                {assignment[sid] for sid in amount if assignment[sid] != tag},
-                key=lambda d: -country_total(d),
-            )
-            for donor in donors:
-                if need <= 0:
-                    break
-                keep = floor_of(donor, res)
-                spare = country_total(donor) - keep
-                if spare <= 0:
+        stages = stages_of(res)
+        for n_stage, stage in enumerate(stages):
+            last = n_stage == len(stages) - 1
+
+            def floor_of(tag: str) -> float:
+                return stage.get(kind_name.get(kinds.get(tag), ""), 0.0)
+
+            receivers = ([t for t in sorted(kinds) if kinds[t] == "mega"]
+                         + [t for t in sorted(kinds) if kinds[t] == "sat" and floor_of(t) > 0])
+            for tag in receivers:
+                floor = floor_of(tag)
+                need = floor - country_total(tag)
+                cap = capitals.get(tag)
+                if need <= 0 or cap is None:
                     continue
-                states = sorted((sid for sid in amount if assignment[sid] == donor),
-                                key=lambda sid: -(amount[sid] + delta[sid][res]))
-                for sid in states:
-                    if need <= 0 or spare <= 0:
+                # Donantes: otros países del mod, el que más tiene primero.
+                donors = sorted(
+                    {assignment[sid] for sid in amount if assignment[sid] != tag},
+                    key=lambda d: -country_total(d),
+                )
+                for donor in donors:
+                    if need <= 0:
                         break
-                    avail = amount[sid] + delta[sid][res]
-                    take = min(avail, need, spare)
-                    if take <= 0:
+                    keep = floor_of(donor)
+                    spare = country_total(donor) - keep
+                    if spare <= 0:
                         continue
-                    take = int(take)
-                    if take == 0:
-                        continue
-                    delta[sid][res] -= take
-                    delta[cap][res] += take
-                    need -= take
-                    spare -= take
-                    moved_total += take
-            if need > 0:
-                ctx.warn(f"recursos: {tag} queda con {floor - need:.0f} de {res} (no hay mas excedente fuera de la Anarquia).")
+                    states = sorted((sid for sid in amount if assignment[sid] == donor),
+                                    key=lambda sid: -(amount[sid] + delta[sid][res]))
+                    for sid in states:
+                        if need <= 0 or spare <= 0:
+                            break
+                        avail = amount[sid] + delta[sid][res]
+                        take = min(avail, need, spare)
+                        if take <= 0:
+                            continue
+                        take = int(take)
+                        if take == 0:
+                            continue
+                        delta[sid][res] -= take
+                        delta[cap][res] += take
+                        need -= take
+                        spare -= take
+                        moved_total += take
+                if need > 0 and last:
+                    ctx.warn(f"recursos: {tag} queda con {floor - need:.0f} de {res} (no hay mas excedente fuera de la Anarquia).")
 
         # Invariante: lo que se sacó es exactamente lo que se puso.
         net = sum(d[res] for d in delta.values())

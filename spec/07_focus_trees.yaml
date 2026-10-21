@@ -3830,7 +3830,8 @@ trees:
         reward:
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
         # 2026-10-21 (pedido del usuario: "más polenta en marines"): las tecnologías de marines
-        - {effect: tech_bonus, category: [marine_tech, cat_special_forces_generic], bonus: 1.0, uses: 2}
+        # (si el juego no tuviera esas categorías, armas de infantería, que usan los marines)
+        - {effect: tech_bonus, category: [marine_tech, cat_special_forces_generic, infantry_weapons], bonus: 1.0, uses: 2}
         # 2026-10-14 (planilla de focos): fábricas para armar a los marines
         - effect: states
           pick: random
