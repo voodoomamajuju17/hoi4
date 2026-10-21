@@ -1977,3 +1977,19 @@ empresas industriales aéreas del NAS".
 **Arreglo:** `tools/gen/emitters/territory.py` borra `transfer_state_to` (y `set_state_owner_to`) de las regiones reasignadas. Un bloque condicional que tenga una de esas instrucciones se borra entero, con los modificadores del escenario de 1936 que lo acompañan. Lo prueba el fixture `910-Fixture.txt`.
 
 **Efecto lateral:** Ruanda y Burundi ahora sí son de la Federación desde el arranque. Antes, en el juego, quedaban del Congo Belga.
+
+## Marines de la HSN, acero, Rearme y blindados ligeros (2026-10-21)
+
+**Marines y desembarcos de la HSN** (pedido del usuario: "más polenta en marines y que mejore la calidad de las invasiones navales, frecuencia y lógica").
+- Diagnóstico: la HSN arrancaba solo con el transporte (1 plan de invasión de 2 divisiones), sin plantilla de marines (la tecnología, dada por historia, no carga la plantilla del juego) y con una rama "Infantería de Cubierta" que daba bonos de artillería y de infantería genérica.
+- Arranque: suma las lanchas de desembarco (`mtg_landing_craft`: +3 planes, +4 divisiones por plan, menos días de preparación) y el espíritu permanente **Desembarcos Asegurados** (+1 plan, +2 divisiones por plan, -10 días de preparación, +10% al tope de fuerzas especiales, +10% ataque y defensa de fuerzas especiales).
+- Ejército: 2 divisiones de **Infantería de Marina de Alta Mar** (6 batallones de marines) además de la guarnición, con su plantilla (13_military -> army.extra). Solo si el juego tiene el batallón y la HSN arranca con la tecnología.
+- Focos: Marines de Alta Mar suma un bono x2 para las tecnologías de marines; Doctrina de Desembarco cambia el bono de artillería por transportes y lanchas; Asalto Anfibio da su espíritu (+25% invasión anfibia, +2 divisiones y +1 plan, +10% ataque de fuerzas especiales, -20% tiempo de entrenamiento). La IA toma la rama antes (ai_factor 3).
+- IA: marines 35% de sus divisiones (antes 25%), más convoyes, investigación x13,5 de marines, transportes, lanchas y fuerzas especiales, y un `invade` (150) contra cada objetivo de sus planes de guerra (16_ai -> invasions). Los tipos y los ids se validan contra el juego instalado: lo que no exista se omite con aviso en el reporte.
+- Sin probar en el juego: que `invade` exista como tipo de estrategia en esta versión (el fixture lo tiene, el juego real se valida al compilar) y que los modificadores de invasión sirvan en un espíritu (se validan contra la documentación del juego).
+
+**Acero** (pedido del usuario: "un poco más de metal donde hace falta"): piso propio de 80 para las meganaciones y de 10 para los satélites (15_balance -> resource_floor.overrides). Sale de los que más tienen, el total mundial no cambia y cada donante conserva su piso. Con el reporte del 20/10: EFE 48 -> 80, NAS 20 -> 80 y unos 14 satélites suben a 10 (unas 200 unidades, casi todas de la Comuna, la Unión y Roma).
+
+**Rearme Secreto**: si la potencia ya está en guerra con otra potencia, el disimulo no tiene sentido. El pulso lo cierra (evento `meganations_v4.4`, "Ya No Hace Falta Esconderse"), pone el contador en cero, da la carrera armamentista por dos años y la categoría desaparece.
+
+**Blindados ligeros**: familia `armored_car` en la investigación por facción (nombres e imágenes de las 13 líneas) y 25 tecnologías más con su pedido de imagen.

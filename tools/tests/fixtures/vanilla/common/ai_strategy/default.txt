@@ -11,6 +11,9 @@ FIXTURE_strategy = {
 	ai_strategy = { type = protect id = AUS value = 100 }
 	ai_strategy = { type = befriend id = ITA value = 100 }
 	ai_strategy = { type = support id = ITA value = 100 }
+	# 2026-10-21: desembarco. No confirmado contra el juego instalado: si el juego no lo
+	# usa, el build real lo descarta con aviso (ai.py valida los tipos).
+	ai_strategy = { type = invade id = ENG value = 100 }
 }
 
 # fixture: estrategias militares (roles y equipo con sus ids reales)

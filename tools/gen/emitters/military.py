@@ -105,6 +105,7 @@ def emit(ctx: BuildContext) -> None:
             div.add("division_template", Quoted(tpl_name))
             div.add("start_experience_factor", 0.2)
             units.add("division", div)
+        count += _extra_divisions(ctx, spec, c.tag, sub_units, root, units, spot, land, names)
         root.add("units", units)
 
         oob = f"{c.tag}_2100"
@@ -234,6 +235,42 @@ def _dump_tree(ctx: BuildContext, tree: dict[str, dict]) -> None:
     path = ctx.out_root / "investigacion.txt"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     ctx.data["research_path"] = str(path)
+
+
+def _extra_divisions(ctx: BuildContext, spec: dict, tag: str, sub_units: set[str], root: Block,
+                     units: Block, spot, land, names) -> int:
+    """Divisiones de arranque además de la guarnición (army.extra, 2026-10-21:
+    "más polenta en marines" para la HSN). Cada entrada trae su plantilla; se
+    saltea con aviso si el juego no tiene algún regimiento o si el país no
+    arranca con la tecnología que lo habilita (una división sin su tecnología
+    no carga)."""
+    added = 0
+    for extra in ((spec["army"].get("extra") or {}).get(tag) or []):
+        tpl = extra["template"]
+        name = tpl["name"]["spanish"]
+        missing = [u for u in list(tpl["regiments"]) + list(tpl.get("support") or []) if u not in sub_units]
+        need = extra.get("requires_tech")
+        if not sub_units or missing:
+            ctx.warn(f"arranque militar: {tag} sin '{name}': el juego no tiene {', '.join(missing) or 'common/units/'}.")
+            continue
+        if need and need not in (ctx.data["techs"].get(tag) or []):
+            ctx.warn(f"arranque militar: {tag} sin '{name}': no arranca con la tecnologia {need}.")
+            continue
+        root.add("division_template", _template(tpl))
+        province = next((p for p in spot.provinces if p in land), spot.provinces[0] if spot.provinces else None)
+        if province is None:
+            continue
+        k = int(extra.get("count", 1))
+        for n in range(k):
+            div = Block()
+            div.add("name", Quoted(f"{n + 1}.ª {name} de {display_name(spot, names)}"))
+            div.add("location", province)
+            div.add("division_template", Quoted(name))
+            div.add("start_experience_factor", 0.3)
+            units.add("division", div)
+        added += k
+        ctx.note(f"arranque militar: {tag} suma {k} divisiones de '{name}'")
+    return added
 
 
 def _check_templates(spec: dict, sub_units: set[str]) -> None:

@@ -320,10 +320,15 @@ def family_members(families: dict, equipment: dict) -> dict[str, list[tuple[str,
         for eq, (archetype, _) in equipment.items():
             if archetype is None:
                 continue
-            for pattern in f["match"]:
+            for order, pattern in enumerate(f["match"]):
                 m = re.match(pattern, eq)
                 if m:
-                    by_stem.setdefault(eq[:m.start(1)], []).append((int(m.group(1)), eq))
+                    num = m.group(1) if m.re.groups else ""
+                    # `line`: una sola línea aunque cambie el prefijo (2026-10-21: el
+                    # vehículo blindado de 1918 es gw_armored_car_equipment, sin número,
+                    # y los siguientes armored_car_equipment_1, _2)
+                    stem = f.get("line") or eq[:m.start(1)]
+                    by_stem.setdefault(stem, []).append(((order, int(num) if num else 0), eq))
                     break
         found = []
         for stem in sorted(by_stem):

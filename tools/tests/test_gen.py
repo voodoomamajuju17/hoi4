@@ -821,6 +821,12 @@ def test_territory() -> None:
         oob = pdx.parse((mod / "history/units/EFE_2100.txt").read_text())
         tpls = [pdx.text(tpl.get("name")) for tpl in oob.get_all("division_template")]
         check("EFE: una sola plantilla, infanteria basica", tpls == ["Infantería Básica"], str(tpls))
+        # 2026-10-21: los marines de arranque de la HSN necesitan el batallón y la tecnología;
+        # el fixture no tiene el batallón 'marine', así que se saltean con aviso
+        hsn_oob = pdx.parse((mod / "history/units/HSN_2100.txt").read_text())
+        check("HSN: sin el batallon de marines en el juego, solo la guarnicion (y aviso)",
+              [pdx.text(x.get("name")) for x in hsn_oob.get_all("division_template")] == ["Infantería Básica"]
+              and any("HSN sin 'Infantería de Marina de Alta Mar'" in w for w in ctx.warnings))
         divs = oob.get("units").get_all("division")
         check("EFE: 2 divisiones", len(divs) == 2, str(len(divs)))
         check("en la capital", all(pdx.text(d.get("location")) == pdx.text(divs[0].get("location")) for d in divs))
@@ -2374,6 +2380,15 @@ def test_ai() -> None:
         hsn = " ".join(pdx.render(root.get("MEGANATIONS_HSN_militar")).split())
         check("IA militar: un id que el juego no usa se omite (marines en el fixture)", "marines" not in hsn, hsn[:400])
         check("IA militar: el aviso lo dice", any("role_ratio:marines" in w for w in ctx.warnings))
+        # 2026-10-21 (pedido del usuario: "mejores invasiones navales" de la HSN)
+        costas = root.get("MEGANATIONS_HSN_las_costas_del_indostan")
+        cr = " ".join(pdx.render(costas).split()) if costas is not None else ""
+        check("IA: la HSN suma un desembarco (invade) contra su objetivo de guerra",
+              "type = conquer id = ZWI" in cr and "type = invade id = ZWI value = 150" in cr, cr[:400])
+        otros = [k for k, v in root.entries if isinstance(v, pdx.Block) and not k.startswith("MEGANATIONS_HSN_")
+                 and "type = invade" in " ".join(pdx.render(v).split())]
+        check("IA: solo la HSN desembarca por esta regla", not otros, str(otros[:5]))
+        check("IA: el reporte cuenta los desembarcos", any("planes de desembarco (invade)" in n for n in ctx.notes))
         war = root.get("MEGANATIONS_EFE_militar_en_guerra")
         check("IA militar: en guerra, mas industria a las armas", war is not None
               and "has_war = yes" in pdx.render(war.get("enable")) and "value = 90" in pdx.render(war))
@@ -4236,6 +4251,49 @@ def test_simulador() -> None:
           crisis["total"])
 
 
+def test_marines_hsn() -> None:
+    section("HSN: marines y desembarcos (2026-10-21)")
+    import yaml
+    from tools.gen.emitters import military as mil_mod
+    raw = specload.load(REPO_ROOT / "spec").raw
+    hsn_techs = raw["military"]["research"]["country_techs"]["HSN"]
+    check("HSN arranca con transporte y lanchas de desembarco", {"mtg_transport", "mtg_landing_craft"} <= set(hsn_techs))
+    start = [i["id"] for i in raw["ideas"]["countries"]["HSN"]["starting_ideas"]]
+    check("HSN arranca con Desembarcos Asegurados", "HSN_desembarcos_asegurados" in start)
+    tree = yaml.safe_load((REPO_ROOT / "spec/07_focus_trees.yaml").read_text(encoding="utf-8"))["trees"]["HSN"]
+    foci = {f["id"]: f for b in tree["branches"] for f in b["focuses"]}
+    rw = foci["HSN_doctrina_de_desembarco"]["reward"]
+    check("Doctrina de Desembarco ya no da bono de artilleria", all(e.get("category") != "artillery" for e in rw))
+    check("Asalto Anfibio da su espiritu",
+          {"effect": "add_ideas", "value": "HSN_espiritu_asalto_anfibio"} in foci["HSN_asalto_anfibio"]["reward"])
+
+    class _S:
+        id, provinces, name_key, file_label = 1, [10, 11], "", "Kanto"
+    class _C:
+        def __init__(self):
+            self.data, self.warnings, self.notes = {"techs": {"HSN": ["marines"], "EFE": []}}, [], []
+        def warn(self, m): self.warnings.append(m)
+        def note(self, m): self.notes.append(m)
+    spec = raw["military"]
+    for tag, units_ok, want in (("HSN", {"infantry", "marine"}, 2), ("EFE", {"infantry", "marine"}, 0)):
+        c = _C()
+        root, units = pdx.Block(), pdx.Block()
+        n = mil_mod._extra_divisions(c, spec, tag, units_ok, root, units, _S(), {10, 11}, {})
+        check(f"divisiones extra de {tag}: {want}", n == want and len(units.get_all("division")) == want, str(n))
+    c = _C()
+    c.data["techs"]["HSN"] = []
+    root, units = pdx.Block(), pdx.Block()
+    n = mil_mod._extra_divisions(c, spec, "HSN", {"infantry", "marine"}, root, units, _S(), {10, 11}, {})
+    check("sin la tecnologia de marines no se crean (y avisa)", n == 0 and any("marines" in w for w in c.warnings))
+    c = _C()
+    root, units = pdx.Block(), pdx.Block()
+    mil_mod._extra_divisions(c, spec, "HSN", {"infantry", "marine"}, root, units, _S(), {10, 11}, {})
+    tpl = root.get("division_template")
+    check("la plantilla de marines tiene 6 batallones", tpl is not None and len(tpl.get("regiments").get_all("marine")) == 6)
+    check("las divisiones usan esa plantilla",
+          all(pdx.text(d.get("division_template")) == "Infantería de Marina de Alta Mar" for d in units.get_all("division")))
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4289,6 +4347,7 @@ def main() -> int:
         test_cazas_peso,
         test_aventuras,
         test_mecanicas_v4,
+        test_marines_hsn,
         test_simulador,
         test_vanilla_validation,
     ):

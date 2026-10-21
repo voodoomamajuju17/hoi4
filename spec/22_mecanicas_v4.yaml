@@ -37,6 +37,12 @@ x-guerra-con-potencia: &guerra_con_potencia
   any: [{war_with: EFE}, {war_with: FCU}, {war_with: ASC}, {war_with: HSN}, {war_with: NAS}, {war_with: SHD},
         {war_with: NRE}]
 
+# 2026-10-21 (el usuario: "lo del rearme secreto no tiene mucho sentido si todas las facciones están
+# en guerra"): en guerra con cualquiera de las otras siete, el disimulo se termina para ese país
+x-en-guerra-con-una-potencia: &en_guerra_con_una_potencia
+  any: [{war_with: EFE}, {war_with: FCU}, {war_with: ASC}, {war_with: HSN}, {war_with: NAS}, {war_with: SHD},
+        {war_with: APF}, {war_with: NRE}]
+
 x-otra-potencia-en-guerra: &otra_potencia_en_guerra
   any:
   - {country: {tag: EFE, when: {at_war: true, not: {war_with: HSN}}}}
@@ -97,7 +103,7 @@ decisions:
         100 (baja 1 por mes sola)\n\nDesde 40 de exposición, los observadores pueden encontrarte cada mes: 4% de chance, 10% desde 60, 20%
         desde 80. Si te encuentran, cada potencia fuera de tu facción recibe un objetivo de guerra contra vos. Con tres descubrimientos en el
         mundo nadie disimula más: este panel se cierra y empieza la carrera armamentista.'
-    visible: {not_global_flag: MN_disimulo_terminado}
+    visible: {not_global_flag: MN_disimulo_terminado, not_flag: MN_rearme_abierto}
     src: user_request
     decisions:
     - id: MEGANATIONS_rearme_tractores
@@ -678,7 +684,19 @@ decisions:
     - effect: if
       when:
         not_global_flag: MN_disimulo_terminado
+        not_flag: MN_rearme_abierto
+        all:
+        - *en_guerra_con_una_potencia
+      then:
+      - {effect: flag, value: MN_rearme_abierto}
+      - {effect: set_variable, var: MN_rearme, value: 0}
+      - {effect: event, id: meganations_v4.4}
+    - effect: if
+      when:
+        not_global_flag: MN_disimulo_terminado
         not_flag: MN_rearme_inspeccion
+        all:
+        - not: {flag: MN_rearme_abierto}
         variable_at_least: {var: MN_rearme, value: 40}
       then:
       - effect: if
@@ -1139,6 +1157,23 @@ events:
             apoyo a la guerra) y viven más nerviosas (-3% de estabilidad).'
         options:
         - name: {english: 'Let the race begin.', spanish: 'Que empiece la carrera.'}
+          effects:
+          - {effect: dynamic_modifier, id: MEGANATIONS_carrera_armamentista, days: 730}
+        src: user_request
+      - id: 4
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: No Need to Hide Anymore, spanish: Ya No Hace Falta Esconderse}
+        desc:
+          english: 'We are at war with another power. The Geneva observers left on the first train and the sheds full of "tractors" turn
+            their lights on at night: there is nothing left to hide.\n\nThe Secret Rearmament panel closes for us and the exposure no longer
+            matters. For two years we build more (+5% factory output, +5% war support) and live more nervously (-3% stability).'
+          spanish: 'Estamos en guerra con otra potencia. Los observadores de Ginebra se fueron en el primer tren y los galpones llenos de
+            "tractores" prenden las luces de noche: ya no queda nada que esconder.\n\nSe cierra para nosotros el panel del Rearme Secreto y
+            la exposición ya no importa. Por dos años producimos más (+5% de fábricas, +5% de apoyo a la guerra) y vivimos más nerviosos (-3%
+            de estabilidad).'
+        options:
+        - name: {english: 'Turn the lights on.', spanish: 'Prender las luces.'}
           effects:
           - {effect: dynamic_modifier, id: MEGANATIONS_carrera_armamentista, days: 730}
         src: user_request

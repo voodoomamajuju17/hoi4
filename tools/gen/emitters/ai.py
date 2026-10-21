@@ -61,13 +61,32 @@ def emit(ctx: BuildContext) -> None:
     dropped_ids: set[str] = set()
     replaced_ids: set[str] = set()
     written = 0
+    # 2026-10-21 (pedido del usuario: "que la HSN mejore las invasiones navales,
+    # calidad, frecuencia y lógica"): cada plan de guerra del país (conquistar,
+    # prepararse o declarar contra X) suma un `invade` contra X.
+    invasions = spec.get("invasions") or {}
+    invade_value = {k: int(v) for k, v in (invasions.get("by_country") or {}).items()}
+    invade_from = set(invasions.get("from_types") or ["conquer", "prepare_for_war", "declare_war"])
+    invade_added = 0
 
     def add_plan(pid: str, country: str, strategies: list[dict], enable=None, abort=None) -> None:
-        nonlocal written
+        nonlocal written, invade_added
         if country not in tags:
             raise SpecError(f"ia {pid}: '{country}' no es un pais del mod", where=SOURCE)
         if country not in alive:
             return
+        if invade_value.get(country):
+            have = {st.get("target") for st in strategies if st.get("type") == "invade"}
+            extra = []
+            for st in strategies:
+                tgt = st.get("target")
+                if st.get("type") in invade_from and tgt and tgt not in have:
+                    have.add(tgt)
+                    extra.append({"type": "invade", "target": tgt, "value": invade_value[country]})
+            if extra:
+                strategies = list(strategies) + extra
+                if known is None or "invade" in known:
+                    invade_added += len(extra)
         lines = []
         targets = []
         for st in strategies:
@@ -177,6 +196,9 @@ def emit(ctx: BuildContext) -> None:
     for p in ctx.data.get("unique_ai_plans") or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
 
+    if invade_added:
+        ctx.note(f"ia: {invade_added} planes de desembarco (invade) contra los objetivos de guerra de "
+                 f"{', '.join(sorted(invade_value))}")
     if replaced_ids:
         ctx.note(f"ia: ids reemplazados por el mas parecido que usa el juego: {', '.join(sorted(replaced_ids))}")
     if dropped_ids:

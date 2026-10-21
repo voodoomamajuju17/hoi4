@@ -93,7 +93,20 @@ def _construction(ctx, spec, assignment, by_state, added) -> None:
 
 
 def _resource_floor(ctx, spec, assignment, capitals, by_state, kinds, delta) -> None:
-    floor = float(spec["per_meganation"])
+    base_floor = float(spec["per_meganation"])
+    # 2026-10-21 (pedido del usuario: "un poco más de metal donde hace falta; es medio
+    # básico y se usa para todo"): pisos propios por recurso y tipo de país, también
+    # para los satélites (overrides.<recurso>.<meganation|satellite>)
+    overrides = spec.get("overrides") or {}
+    kind_name = {"mega": "meganation", "sat": "satellite"}
+
+    def floor_of(tag: str, res: str) -> float:
+        own = overrides.get(res) or {}
+        k = kinds.get(tag)
+        if kind_name.get(k) in own:
+            return float(own[kind_name[k]])
+        return base_floor if k == "mega" else 0.0
+
     moved_total = 0
     for res in spec["resources"]:
         # Stock actual por país y por state (solo países del mod, sin Anarquía).
@@ -105,7 +118,10 @@ def _resource_floor(ctx, spec, assignment, capitals, by_state, kinds, delta) -> 
         def country_total(tag: str) -> float:
             return sum(v + delta[sid][res] for sid, v in amount.items() if assignment[sid] == tag)
 
-        for tag in sorted(t for t, k in kinds.items() if k == "mega"):
+        receivers = ([t for t in sorted(kinds) if kinds[t] == "mega"]
+                     + [t for t in sorted(kinds) if kinds[t] == "sat" and floor_of(t, res) > 0])
+        for tag in receivers:
+            floor = floor_of(tag, res)
             need = floor - country_total(tag)
             cap = capitals.get(tag)
             if need <= 0 or cap is None:
@@ -118,7 +134,7 @@ def _resource_floor(ctx, spec, assignment, capitals, by_state, kinds, delta) -> 
             for donor in donors:
                 if need <= 0:
                     break
-                keep = floor if kinds[donor] == "mega" else 0.0
+                keep = floor_of(donor, res)
                 spare = country_total(donor) - keep
                 if spare <= 0:
                     continue

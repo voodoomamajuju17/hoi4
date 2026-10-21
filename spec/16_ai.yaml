@@ -94,6 +94,15 @@ military:
             basic_medium_tank_chassis, improved_medium_tank_chassis, basic_heavy_tank_chassis,
             gwtank, basic_light_tank, improved_light_tank, basic_medium_tank, improved_medium_tank,
             motorised_infantry, mechanised_infantry]
+  # 2026-10-21 (pedido del usuario: "que la HSN tenga más polenta en marines y mejore
+  # las invasiones navales"): lo que agranda y acelera los desembarcos (las lanchas
+  # suben cuántos planes de invasión y cuántas divisiones por plan) y los marines.
+  invasion_research:
+    value: 0
+    by_country: {HSN: 250}
+    techs: [marines, marines2, marines3, tech_marines, mtg_transport, mtg_landing_craft, mtg_tank_landing_craft,
+            improved_special_forces, advanced_special_forces, survival_training,
+            amphibious_mechanized_infantry, amphibious_mechanized_infantry_2, amphibious_drive]
   by_country:
     EFE:    # blindados de Bioacero
     - {type: role_ratio, id: armor, value: 25}
@@ -113,7 +122,9 @@ military:
     HSN:    # infantería de marina y flota
     - {type: equipment_production_factor, id: fighter, value: 15}
     - {type: role_ratio, id: armor, value: 5}
-    - {type: role_ratio, id: marines, value: 25}
+    # 2026-10-21 (pedido del usuario: "más polenta en marines"): 25 -> 35
+    - {type: role_ratio, id: marines, value: 35}
+    - {type: equipment_production_factor, id: convoy, value: 20}
     - {type: dockyard_to_military_factory_ratio, value: 60}
     NAS:    # montaña y cóndores
     - {type: role_ratio, id: armor, value: 8}
@@ -137,6 +148,18 @@ military:
     - {type: role_ratio, id: armor, value: 8}
     - {type: role_ratio, id: infantry, value: 70}
     - {type: equipment_production_factor, id: fighter, value: 10}
+
+# -----------------------------------------------------------------------------
+# Desembarcos (2026-10-21, pedido del usuario: "que la HSN mejore la calidad de
+# las invasiones navales, la frecuencia y la lógica"). Cada plan de guerra del
+# país (conquistar, prepararse o declarar contra X) suma un `invade` contra X:
+# la IA del juego busca el desembarco contra quien ya quiere atacar, en vez de
+# esperar a tener frontera. Si el juego no conoce el tipo, se omite con aviso.
+# -----------------------------------------------------------------------------
+invasions:
+  src: user_request
+  by_country: {HSN: 150}
+  from_types: [conquer, prepare_for_war, declare_war]
 
 # -----------------------------------------------------------------------------
 # Tope de flota de la IA (2026-10-02, partida a 2106: "esta cantidad de barcos

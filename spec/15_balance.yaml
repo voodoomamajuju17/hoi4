@@ -143,6 +143,11 @@ resource_floor:
   src: invented
   per_meganation: 20
   resources: [oil, steel, aluminium, rubber, tungsten, chromium]
+  # 2026-10-21 (pedido del usuario: "poné un poco más de metal donde hace falta; tiene sentido que haya
+  # diferencias entre zonas, pero es medio básico y se usa para todo"): el acero tiene piso propio, también
+  # para los satélites. Sale de los que más tienen (el total mundial no cambia) y cada uno conserva su piso.
+  overrides:
+    steel: {meganation: 80, satellite: 10}
 
 # -----------------------------------------------------------------------------
 # Repoblación (2026-10-10, pedido del usuario: "en las regiones con menos

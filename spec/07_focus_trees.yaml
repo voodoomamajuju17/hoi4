@@ -3816,7 +3816,8 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
     - id: cubierta
-      ai_factor: 1
+      # 2026-10-21 (pedido del usuario: "más polenta en marines"): 1 -> 3, la IA la toma antes
+      ai_factor: 3
       name: {english: Deck Infantry, spanish: Infantería de Cubierta}
       focuses:
       - id: HSN_marines_de_alta_mar
@@ -3828,6 +3829,8 @@ trees:
         desc: {english: Sailors who can hold a beach., spanish: Marineros que pueden sostener una playa.}
         reward:
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
+        # 2026-10-21 (pedido del usuario: "más polenta en marines"): las tecnologías de marines
+        - {effect: tech_bonus, category: [marine_tech, cat_special_forces_generic], bonus: 1.0, uses: 2}
         # 2026-10-14 (planilla de focos): fábricas para armar a los marines
         - effect: states
           pick: random
@@ -3845,7 +3848,10 @@ trees:
         - HSN_marines_de_alta_mar
         desc: {english: From ship to shore in one tide., spanish: Del barco a la costa en una marea.}
         reward:
-        - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 1}
+        # 2026-10-21 (pedido del usuario: "mejores invasiones navales"): era un bono de
+        # artillería; ahora los transportes y las lanchas de desembarco
+        - {effect: tech_bonus, category: [tp_tech, naval_equipment], bonus: 1.0, uses: 2}
+        - {effect: navy_experience, value: 25}
       - id: HSN_asalto_anfibio
         name: {english: Amphibious Assault, spanish: Asalto Anfibio}
         days: 63
@@ -3856,6 +3862,8 @@ trees:
         reward:
         - {effect: army_experience, value: 50}
         - {effect: navy_experience, value: 25}
+        # 2026-10-21 (pedido del usuario: "más polenta en marines")
+        - {effect: add_ideas, value: HSN_espiritu_asalto_anfibio}
       - id: HSN_guarniciones_de_isla
         name: {english: Island Garrisons, spanish: Guarniciones de Isla}
         days: 49

@@ -706,6 +706,10 @@ by_faction:
     motorized:   {match: ['^motorized_equipment_(\d+)$'], art: "a wheeled troop transport vehicle"}
     mechanized:  {match: ['^mechanized_equipment_(\d+)$'], art: "a tracked armoured infantry fighting vehicle"}
     amphibious:  {match: ['^amphibious_mechanized_equipment_(\d+)$'], art: "an amphibious armoured vehicle coming out of the water"}
+    # 2026-10-21 (captura del usuario: "Vehículo blindado I, II, III" con la imagen del juego): el
+    # de 1918 no tiene número (gw_armored_car_equipment); `line` los pone en una sola línea I, II, III
+    armored_car: {match: ['^gw_armored_car_equipment$', '^armored_car_equipment_(\d+)$'], line: armored_car,
+                  art: "a fast wheeled armoured scout car"}
     light_tank:  {match: ['^light_tank_(?:chassis|equipment)_(\d+)$'], art: "a light, fast scout tank"}
     medium_tank: {match: ['^medium_tank_(?:chassis|equipment)_(\d+)$'], art: "a medium battle tank"}
     heavy_tank:  {match: ['^heavy_tank_(?:chassis|equipment)_(\d+)$'], art: "a heavy, thickly armoured tank"}
@@ -740,6 +744,7 @@ by_faction:
       anti_tank:   {en: Horsefly Launcher, es: Lanzador Tábano}
       rocket:      {en: Wasp Swarm, es: Enjambre Avispa}
       motorized:   {en: Rhea Carrier, es: Transporte Ñandú}
+      armored_car: {en: Armadillo Scout, es: Explorador Tatú}
       mechanized:  {en: Capybara Carrier, es: Blindado Carpincho}
       amphibious:  {en: Caiman Drone, es: Dron Yacaré}
       light_tank:  {en: Fox Tank, es: Tanque Zorro}
@@ -763,6 +768,7 @@ by_faction:
       anti_tank:   {en: Strike Launcher, es: Lanzador Huelga}
       rocket:      {en: Assembly Swarm, es: Enjambre Asamblea}
       motorized:   {en: Brigade Carrier, es: Transporte Brigada}
+      armored_car: {en: Automaton Scout, es: Explorador Autómata}
       mechanized:  {en: Combat Automaton, es: Autómata de Combate}
       amphibious:  {en: Amphibious Automaton, es: Autómata Anfibio}
       light_tank:  {en: Delegate Tank, es: Tanque Delegado}
@@ -786,6 +792,7 @@ by_faction:
       anti_tank:   {en: Hostile Takeover Launcher, es: Lanzador Hostile Takeover}
       rocket:      {en: Bull Market Swarm, es: Enjambre Bull Market}
       motorized:   {en: Fleetline Carrier, es: Transporte Fleetline}
+      armored_car: {en: Pathfinder Scout, es: Explorador Pathfinder}
       mechanized:  {en: Patriot Carrier, es: Blindado Patriot}
       amphibious:  {en: Bayou Drone, es: Dron Bayou}
       light_tank:  {en: Mustang Tank, es: Tanque Mustang}
@@ -809,6 +816,7 @@ by_faction:
       anti_tank:   {en: Harpoon Launcher, es: Lanzador Arpón}
       rocket:      {en: Jellyfish Swarm, es: Enjambre Medusa}
       motorized:   {en: Stevedore Carrier, es: Transporte Estibador}
+      armored_car: {en: Dockrunner Scout, es: Explorador Corredor de Muelle}
       mechanized:  {en: Container Carrier, es: Blindado Contenedor}
       amphibious:  {en: Crab Drone, es: Dron Cangrejo}
       light_tank:  {en: Barracuda Tank, es: Tanque Barracuda}
@@ -832,6 +840,7 @@ by_faction:
       anti_tank:   {en: Waraka Launcher, es: Lanzador Waraka}
       rocket:      {en: Chaski Swarm, es: Enjambre Chaski}
       motorized:   {en: Llama Carrier, es: Transporte Llama}
+      armored_car: {en: Chasqui Scout, es: Explorador Chasqui}
       mechanized:  {en: Vicuña Carrier, es: Blindado Vicuña}
       amphibious:  {en: Titicaca Drone, es: Dron Titicaca}
       light_tank:  {en: Vizcacha Tank, es: Tanque Vizcacha}
@@ -855,6 +864,7 @@ by_faction:
       anti_tank:   {en: Pojia Launcher, es: Lanzador Pojia}
       rocket:      {en: Fengqun Swarm, es: Enjambre Fengqun}
       motorized:   {en: Yunhe Carrier, es: Transporte Yunhe}
+      armored_car: {en: Qingniao Scout, es: Explorador Qingniao}
       mechanized:  {en: Changcheng Carrier, es: Blindado Changcheng}
       amphibious:  {en: Jiaolong Drone, es: Dron Jiaolong}
       light_tank:  {en: Baihu Tank, es: Tanque Baihu}
@@ -878,6 +888,7 @@ by_faction:
       anti_tank:   {en: Nyati Launcher, es: Lanzador Nyati}
       rocket:      {en: Nzige Swarm, es: Enjambre Nzige}
       motorized:   {en: Safari Carrier, es: Transporte Safari}
+      armored_car: {en: Cheetah Scout, es: Explorador Guepardo}
       mechanized:  {en: Tembo Carrier, es: Blindado Tembo}
       amphibious:  {en: Kiboko Drone, es: Dron Kiboko}
       light_tank:  {en: Duma Tank, es: Tanque Duma}
@@ -901,6 +912,7 @@ by_faction:
       anti_tank:   {en: Scorpio Launcher, es: Lanzador Scorpio}
       rocket:      {en: Ballista Swarm, es: Enjambre Ballista}
       motorized:   {en: Cursus Carrier, es: Transporte Cursus}
+      armored_car: {en: Speculator Scout, es: Explorador Speculator}
       mechanized:  {en: Testudo Carrier, es: Blindado Testudo}
       amphibious:  {en: Triton Drone, es: Dron Tritón}
       light_tank:  {en: Veles Tank, es: Tanque Vélite}
@@ -924,6 +936,7 @@ by_faction:
       anti_tank:   {en: Kurgan Launcher, es: Lanzador Kurgán}
       rocket:      {en: Organ Rocket Launcher, es: Lanzacohetes Órgano}
       motorized:   {en: Steppe Technical, es: Técnica de la Estepa}
+      armored_car: {en: Cossack Scout Car, es: Auto Cosaco}
       mechanized:  {en: Patched Carrier, es: Blindado Remendado}
       amphibious:  {en: Armoured Raft, es: Balsa Blindada}
       light_tank:  {en: Wolf Tank, es: Tanque Lobo}
@@ -941,6 +954,7 @@ by_faction:
       anti_tank:   {en: Chakra Launcher, es: Lanzador Chakra}
       rocket:      {en: Mysorean Rockets, es: Cohetes de Mysore}
       motorized:   {en: Armoured Tuk-Tuk, es: Tuk-Tuk Blindado}
+      armored_car: {en: Bazaar Scout, es: Explorador del Bazar}
       mechanized:  {en: Rajput Carrier, es: Blindado Rajput}
       amphibious:  {en: Gharial Drone, es: Dron Gavial}
       light_tank:  {en: Cobra Tank, es: Tanque Cobra}
@@ -958,6 +972,7 @@ by_faction:
       anti_tank:   {en: Asp Launcher, es: Lanzador Áspid}
       rocket:      {en: Desert Locust Swarm, es: Enjambre Langosta del Desierto}
       motorized:   {en: Dune Technical, es: Técnica de Duna}
+      armored_car: {en: Falcon Scout, es: Explorador Halcón}
       mechanized:  {en: Oasis Carrier, es: Blindado Oasis}
       amphibious:  {en: Dhow Drone, es: Dron Dhow}
       light_tank:  {en: Gazelle Tank, es: Tanque Gacela}
@@ -975,6 +990,7 @@ by_faction:
       anti_tank:   {en: Anaconda Launcher, es: Lanzador Anaconda}
       rocket:      {en: Piranha Swarm, es: Enjambre Piraña}
       motorized:   {en: Garimpo Technical, es: Técnica Garimpo}
+      armored_car: {en: Piranha Scout, es: Explorador Piraña}
       mechanized:  {en: Bulldozer Carrier, es: Blindado Topadora}
       amphibious:  {en: Boto Drone, es: Dron Boto}
       light_tank:  {en: Coati Tank, es: Tanque Coatí}
@@ -992,6 +1008,7 @@ by_faction:
       anti_tank:   {en: Pipe Launcher, es: Lanzador de Caño}
       rocket:      {en: Homemade Rockets, es: Cohetes Caseros}
       motorized:   {en: Rusted Technical, es: Técnica Oxidada}
+      armored_car: {en: Raider Buggy, es: Buggy Saqueador}
       mechanized:  {en: Frankenstein Carrier, es: Blindado Frankenstein}
       amphibious:  {en: Pirate Raft, es: Balsa Pirata}
       light_tank:  {en: Hyena Tank, es: Tanque Hiena}

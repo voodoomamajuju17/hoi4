@@ -1281,6 +1281,19 @@ countries:
         spanish: Infantes que pelean del barco a la playa y de vuelta.
       modifiers: {army_attack_factor: 0.1, army_org_factor: 0.1}
       src: user_design
+    # 2026-10-21 (pedido del usuario: "más polenta en marines"): el foco Asalto Anfibio
+    - id: HSN_espiritu_asalto_anfibio
+      name: {english: Amphibious Assault, spanish: Asalto Anfibio}
+      desc:
+        english: The islands are taken from the sea, in waves, before the defender has finished counting the boats.
+        spanish: Las islas se toman desde el mar, en oleadas, antes de que el defensor termine de contar los botes.
+      modifiers:
+        ?amphibious_invasion: 0.25
+        ?naval_invasion_division_cap: 2
+        ?naval_invasion_plan_cap: 1
+        ?special_forces_attack_factor: 0.1
+        ?special_forces_training_time_factor: -0.2
+      src: user_request
     - id: HSN_armada_de_alta_mar
       name: {english: The High Seas Navy, spanish: La Armada de Alta Mar}
       desc:
@@ -1411,6 +1424,23 @@ countries:
         ?amphibious_invasion: 0.1
         ?amphibious_invasion_defence: 0.1
       src: user_design
+    # 2026-10-21 (pedido del usuario: "más polenta en marines y mejores invasiones navales")
+    - id: HSN_desembarcos_asegurados
+      name: {english: Underwritten Landings, spanish: Desembarcos Asegurados}
+      desc:
+        english: 'Every landing has a policy: the insurers pay for the boats, the marines take the beach. More landings at once, more divisions
+          per landing, less time to prepare them, and harder-hitting marines.'
+        spanish: 'Cada desembarco tiene su póliza: las aseguradoras pagan los botes y los marines toman la playa. Más desembarcos a la vez, más
+          divisiones por desembarco, menos tiempo para prepararlos y marines que pegan más fuerte.'
+      modifiers:
+        ?naval_invasion_plan_cap: 1
+        ?naval_invasion_division_cap: 2
+        ?naval_invasion_prep_days: -10
+        ?special_forces_cap: 0.1
+        ?special_forces_attack_factor: 0.1
+        ?special_forces_defence_factor: 0.1
+      src: user_request
+      removable: false
   NAS:
     coverage: full_v1
     focus_ideas:
