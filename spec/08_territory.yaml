@@ -58,6 +58,8 @@ territories:
       - { owner: ARG }
       - { owner: URG }
       - { owner: CHL }
+      # 2026-10-22 (pedido del usuario): las Georgias del Sur son del EFE (eran británicas y caían en Venezuela)
+      - { state: ["South Georgia", "South Georgia and the South Sandwich Islands"] }
       - { state: ["Rio Grande do Sul"] }
     resolve_src: inferred
     resolve_note: >
@@ -225,6 +227,19 @@ territories:
       - { state: ["Sarawak"] }
       - { state: ["North Borneo", "Sabah"] }
       - { state: ["Brunei"] }
+      # 2026-10-22 (pedido del usuario: "Indostán NO debería tener territorios en Oceanía"):
+      # el juego cuenta estas islas del Pacífico norte y central como Asia, y el resto
+      # de Asia iba a Indostán. Pasan a la potencia del mar, junto a sus Marshall y Carolinas.
+      - { state: ["Hawaii"] }
+      - { state: ["Johnston Atoll"] }
+      - { state: ["Midway Island", "Midway"] }
+      - { state: ["Wake Island", "Wake"] }
+      - { state: ["Guam"] }
+      - { state: ["Line Islands"] }
+      - { state: ["Maiana", "Gilbert Islands"] }
+      - { state: ["Christmas Island"] }
+      - { state: ["Cocos Islands", "Cocos (Keeling) Islands"] }
+      - { state: ["Portuguese Timor", "East Timor"] }
     capital_state: ["Singapore", "Straits Settlements", "Java", "West Java"]
 
   ZAF:
@@ -237,6 +252,15 @@ territories:
       - { owner: CUB }
       - { owner: HAI }
       - { owner: DOM }
+      # 2026-10-22 (pedido del usuario): las islas del Caribe británicas, francesas y
+      # holandesas son de las Antillas (el juego las pone en Sudamérica y caían en Venezuela)
+      - { state: ["Jamaica"] }
+      - { state: ["Bahama Islands", "Bahamas"] }
+      - { state: ["Southern Bahamas"] }
+      - { state: ["Trinidad", "Trinidad and Tobago"] }
+      - { state: ["Windward Islands"] }
+      - { state: ["French Caribbean", "Martinique", "Guadeloupe"] }
+      - { state: ["Curacao", "Netherlands Antilles"] }
 
   ZAS:
     src: invented
@@ -246,6 +270,12 @@ territories:
       - { continent: australia }                 # el resto del Pacífico
       - { owner: AST }
       - { owner: NZL }
+      # 2026-10-22 (pedido del usuario: "Indostán NO debería tener territorios en Oceanía"):
+      # las islas del Pacífico sur que el juego cuenta como Asia, junto a Samoa y las Salomón
+      - { state: ["Fiji"] }
+      - { state: ["American Samoa"] }
+      - { state: ["Fongafale", "Tuvalu", "Ellice Islands"] }
+      - { state: ["Phoenix Island", "Phoenix Islands"] }
 
   ASC:
     src: invented
@@ -494,6 +524,7 @@ territories:
     resolve:
       # Alaska
       - { state: ["Alaska"] }
+      - { state: ["Attu Island", "Aleutian Islands"] }   # 2026-10-22: las Aleutianas, con Alaska (eran de Indostán)
       # norte de Canadá
       - { state: ["N.W Territories", "Northwest Territories"] }
       - { state: ["Yukon", "Yukon Territory"] }

@@ -1993,3 +1993,13 @@ empresas industriales aéreas del NAS".
 **Rearme Secreto**: si la potencia ya está en guerra con otra potencia, el disimulo no tiene sentido. El pulso lo cierra (evento `meganations_v4.4`, "Ya No Hace Falta Esconderse"), pone el contador en cero, da la carrera armamentista por dos años y la categoría desaparece.
 
 **Blindados ligeros**: familia `armored_car` en la investigación por facción (nombres e imágenes de las 13 líneas) y 25 tecnologías más con su pedido de imagen.
+
+## Islas del Pacífico y del Caribe (2026-10-22)
+
+Pedido del usuario: "Indostán NO debería tener territorios en Oceanía". El juego cuenta varias islas del Pacífico como Asia, y el resto de Asia era de Indostán; las islas británicas, francesas y holandesas del Caribe las pone en Sudamérica y caían en Venezuela (ZLL). Ahora, por nombre (08_territory):
+- HSN: Hawái, Johnston, Midway, Wake, Guam, islas de la Línea, Maiana (Gilbert), isla de Navidad, Cocos y Timor Portugués.
+- ZAS (Australia, satélite de la HSN): Fiyi, Samoa Americana, Fongafale (Tuvalu) y Fénix.
+- ZAN: Attu (Aleutianas), con Alaska.
+- EFE: Georgias del Sur (eran británicas y caían en Venezuela).
+- ZAF (Antillas): Jamaica, Bahamas, Bahamas del Sur, Trinidad, Islas de Barlovento, Caribe francés y Curazao.
+- Indostán conserva Andamán y Diego García (océano Índico), Hong Kong y Macao, y los estados malayos del norte.
