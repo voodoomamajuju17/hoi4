@@ -115,6 +115,19 @@ army:
       name: { english: "Basic Infantry", spanish: "Infantería Básica" }
       regiments: [infantry, infantry, infantry, infantry, infantry, infantry]
       support: []
+  # 2026-10-24 (pedido del usuario: "las meganaciones deberían empezar con algunas tropas
+  # más, milicias con 3 o 4 brigadas en algunas capitales y ciudades importantes; la HSN
+  # tiene demasiadas islas y nada para defenderlas, sería muy fácil de conquistar Japón o
+  # Filipinas"): una milicia en la capital y una en cada una de las N regiones con más
+  # puntos de victoria. La HSN, más, repartidas por sus islas.
+  city_militia:
+    template:
+      name: { english: "Urban Militia", spanish: "Milicia Urbana" }
+      regiments: [infantry, infantry, infantry, infantry]
+      support: []
+    capital: true
+    per_kind: { meganation: 4 }
+    overrides: { HSN: 9 }
   # 2026-10-21 (pedido del usuario: "más polenta en marines" para la HSN): divisiones
   # de arranque además de la guarnición, con su propia plantilla. Solo si el juego
   # tiene esos regimientos y el país arranca con la tecnología que los habilita (si

@@ -2003,3 +2003,7 @@ Pedido del usuario: "Indostán NO debería tener territorios en Oceanía". El ju
 - EFE: Georgias del Sur (eran británicas y caían en Venezuela).
 - ZAF (Antillas): Jamaica, Bahamas, Bahamas del Sur, Trinidad, Islas de Barlovento, Caribe francés y Curazao.
 - Indostán conserva Andamán y Diego García (océano Índico), Hong Kong y Macao, y los estados malayos del norte.
+
+## Milicias de arranque en capitales y ciudades (2026-10-24)
+
+Pedido del usuario: "las meganaciones deberían empezar con algunas tropas más, milicias con 3 o 4 brigadas en capitales y ciudades importantes; la HSN tiene demasiadas islas y nada para defenderlas". Cada meganación arranca con una **Milicia Urbana** (4 batallones de infantería) en la capital y otra en cada una de sus 4 regiones con más puntos de victoria (a igualdad, la más poblada), en la ciudad principal de la región. La HSN, en 9 regiones además de la capital, para que Japón, Filipinas y Java no queden vacías (13_military -> army.city_militia). Se suman a la guarnición, a los marines de la HSN y a las milicias de la Anarquía.

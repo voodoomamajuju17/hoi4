@@ -820,15 +820,18 @@ def test_territory() -> None:
 
         oob = pdx.parse((mod / "history/units/EFE_2100.txt").read_text())
         tpls = [pdx.text(tpl.get("name")) for tpl in oob.get_all("division_template")]
-        check("EFE: una sola plantilla, infanteria basica", tpls == ["Infantería Básica"], str(tpls))
+        # 2026-10-24: más la Milicia Urbana de las capitales y ciudades importantes
+        check("EFE: guarnicion basica y milicia urbana", tpls == ["Infantería Básica", "Milicia Urbana"], str(tpls))
+        mil_tpl = [x for x in oob.get_all("division_template") if pdx.text(x.get("name")) == "Milicia Urbana"][0]
+        check("la milicia urbana tiene 4 brigadas", len(mil_tpl.get("regiments").get_all("infantry")) == 4)
         # 2026-10-21: los marines de arranque de la HSN necesitan el batallón y la tecnología;
         # el fixture no tiene el batallón 'marine', así que se saltean con aviso
         hsn_oob = pdx.parse((mod / "history/units/HSN_2100.txt").read_text())
         check("HSN: sin el batallon de marines en el juego, solo la guarnicion (y aviso)",
-              [pdx.text(x.get("name")) for x in hsn_oob.get_all("division_template")] == ["Infantería Básica"]
+              "Infantería de Marina de Alta Mar" not in [pdx.text(x.get("name")) for x in hsn_oob.get_all("division_template")]
               and any("HSN sin 'Infantería de Marina de Alta Mar'" in w for w in ctx.warnings))
         divs = oob.get("units").get_all("division")
-        check("EFE: 2 divisiones", len(divs) == 2, str(len(divs)))
+        check("EFE: 2 de guarnicion + 1 milicia en la capital (el fixture tiene una sola region)", len(divs) == 3, str(len(divs)))
         check("en la capital", all(pdx.text(d.get("location")) == pdx.text(divs[0].get("location")) for d in divs))
         check("todos pueden fabricar equipo de infanteria (tecnologia base)",
               "infantry_weapons" in efe_h and "infantry_weapons" in zwi_h and "infantry_weapons" in pta_h)

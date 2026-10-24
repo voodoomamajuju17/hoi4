@@ -106,6 +106,7 @@ def emit(ctx: BuildContext) -> None:
             div.add("start_experience_factor", 0.2)
             units.add("division", div)
         count += _extra_divisions(ctx, spec, c.tag, sub_units, root, units, spot, land, names)
+        count += _city_militia(ctx, spec, kind, c.tag, sub_units, root, units, spot, owned, land, names)
         root.add("units", units)
 
         oob = f"{c.tag}_2100"
@@ -235,6 +236,47 @@ def _dump_tree(ctx: BuildContext, tree: dict[str, dict]) -> None:
     path = ctx.out_root / "investigacion.txt"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     ctx.data["research_path"] = str(path)
+
+
+def _city_militia(ctx: BuildContext, spec: dict, kind: str, tag: str, sub_units: set[str], root: Block,
+                  units: Block, spot, owned: list, land, names) -> int:
+    """Milicias de arranque en la capital y en las ciudades importantes
+    (army.city_militia, 2026-10-24: "las meganaciones deberían empezar con
+    algunas tropas más, milicias de 3 o 4 brigadas en capitales y ciudades
+    importantes; la HSN tiene demasiadas islas y nada para defenderlas").
+    Una en la capital y una en cada una de las N regiones con más puntos de
+    victoria (y población, a igualdad), en su ciudad principal."""
+    cfg = spec["army"].get("city_militia") or {}
+    n = int((cfg.get("overrides") or {}).get(tag, (cfg.get("per_kind") or {}).get(kind, 0)))
+    if n <= 0:
+        return 0
+    tpl = cfg["template"]
+    name = tpl["name"]["spanish"]
+    missing = [u for u in list(tpl["regiments"]) + list(tpl.get("support") or []) if u not in sub_units]
+    if not sub_units or missing:
+        ctx.warn(f"arranque militar: {tag} sin '{name}': el juego no tiene {', '.join(missing) or 'common/units/'}.")
+        return 0
+    root.add("division_template", _template(tpl))
+
+    def city(s):
+        on_land = [p for p in s.vp_provinces if p in land] or [p for p in s.provinces if p in land]
+        if on_land:
+            return on_land[0]
+        # la capital, como la guarnición: aunque el mapa no la marque como tierra
+        return (s.provinces[0] if s.provinces else None) if s is spot else None
+
+    others = sorted((s for s in owned if s is not spot and city(s) is not None),
+                    key=lambda s: (-s.victory_points, -s.manpower, s.id))
+    picked = ([spot] if cfg.get("capital", True) and city(spot) is not None else []) + others[:n]
+    for i, s in enumerate(picked):
+        div = Block()
+        div.add("name", Quoted(f"{i + 1}.ª {name} de {display_name(s, names)}"))
+        div.add("location", city(s))
+        div.add("division_template", Quoted(name))
+        div.add("start_experience_factor", 0.1)
+        units.add("division", div)
+    ctx.note(f"arranque militar: {tag} suma {len(picked)} milicias ({', '.join(display_name(s, names) for s in picked)})")
+    return len(picked)
 
 
 def _extra_divisions(ctx: BuildContext, spec: dict, tag: str, sub_units: set[str], root: Block,
