@@ -2007,3 +2007,7 @@ Pedido del usuario: "Indostán NO debería tener territorios en Oceanía". El ju
 ## Milicias de arranque en capitales y ciudades (2026-10-24)
 
 Pedido del usuario: "las meganaciones deberían empezar con algunas tropas más, milicias con 3 o 4 brigadas en capitales y ciudades importantes; la HSN tiene demasiadas islas y nada para defenderlas". Cada meganación arranca con una **Milicia Urbana** (4 batallones de infantería) en la capital y otra en cada una de sus 4 regiones con más puntos de victoria (a igualdad, la más poblada), en la ciudad principal de la región. La HSN, en 9 regiones además de la capital, para que Japón, Filipinas y Java no queden vacías (13_military -> army.city_militia). Se suman a la guarnición, a los marines de la HSN y a las milicias de la Anarquía.
+
+## Las Tierras Sin Ley no capitulan mientras sigan en otro continente (2026-10-24)
+
+Pedido del usuario: "el ZAN había avanzado muchísimo en África y con Kiev, pero derrotado por la FCU fue anexionado; si todavía sobrevive en algún continente, no debería capitular". Cada mes se cuenta en cuántos continentes controla al menos una región (suya de arranque o conquistada). Con 2 o más tiene **Dispersos por el Mundo** (+0,9 al límite de rendición: prácticamente no capitula); con menos se le saca y vuelve a poder capitular normalmente (04_diplomacy -> anarchy_hostility.dispersed). Sin probar en el juego: el límite exacto en que el juego decide la rendición con +0,9.

@@ -176,6 +176,53 @@ def _annex_anarchy_puppets(ctx: BuildContext, hs: dict, effects: dict) -> Block 
     return body
 
 
+def _dispersed_anarchies(ctx: BuildContext, hs: dict, effects: dict) -> Block | None:
+    """Anarquías repartidas por el mundo (2026-10-24, pedido del usuario: "el ZAN
+    fue anexionado por la FCU aunque tenía África y Kiev; si todavía sobrevive en
+    algún continente, no debería capitular"). Cada mes se cuenta en cuántos
+    continentes controla al menos una región (cualquier región del continente,
+    suya de arranque o conquistada); con `min_continents` o más tiene el
+    modificador (+límite de rendición), y con menos se le saca."""
+    cfg = hs.get("dispersed") or {}
+    if not cfg:
+        return None
+    continents = ctx.vanilla.state_continents() if ctx.vanilla else {}
+    if not continents:
+        ctx.warn("anarquias dispersas: sin continentes en el mapa; no se aplica.")
+        return None
+    by_cont: dict[str, list[int]] = {}
+    for sid, cont in continents.items():
+        by_cont.setdefault(cont, []).append(sid)
+    tags = {c.tag for c in ctx.spec.countries}
+    need = int(cfg.get("min_continents", 2))
+    mod = cfg["modifier"]
+    body = Block()
+    for a in cfg.get("tags") or []:
+        if a not in tags:
+            raise SpecError(f"anarchy_hostility.dispersed: '{a}' no es un pais del mod", where=SOURCE)
+        inner = Block([("set_temp_variable", Block([("var", "MN_continentes"), ("value", 0)]))])
+        for cont in sorted(by_cont):
+            inner.add("if", Block([
+                ("limit", Block([("OR", Block([("controls_state", s) for s in sorted(by_cont[cont])]))])),
+                ("add_to_temp_variable", Block([("var", "MN_continentes"), ("value", 1)]))]))
+        inner.add("if", Block([
+            ("limit", Block([("check_variable", Block([("var", "MN_continentes"), ("value", need), ("compare", "greater_than_or_equals")])),
+                             ("NOT", Block([("has_dynamic_modifier", Block([("modifier", mod)]))]))])),
+            ("add_dynamic_modifier", Block([("modifier", mod)]))]))
+        inner.add("if", Block([
+            ("limit", Block([("check_variable", Block([("var", "MN_continentes"), ("value", need), ("compare", "less_than")])),
+                             ("has_dynamic_modifier", Block([("modifier", mod)]))])),
+            ("remove_dynamic_modifier", Block([("modifier", mod)]))]))
+        body.add(a, Block([("if", Block([("limit", Block([("exists", True)]))] + inner.entries))]))
+    for k in ("set_temp_variable", "add_to_temp_variable", "add_dynamic_modifier", "remove_dynamic_modifier"):
+        effects[k] = SOURCE
+    ctx.verify_keys("triggers", {"controls_state": SOURCE, "check_variable": SOURCE,
+                                 "has_dynamic_modifier": SOURCE, "exists": SOURCE})
+    ctx.note(f"anarquias dispersas: {', '.join(cfg.get('tags') or [])} no capitulan con tierra en {need}+ continentes "
+             f"({len(by_cont)} continentes en el mapa)")
+    return body
+
+
 def _capital_capture(ctx: BuildContext, anarchies: list[str], effects: dict) -> Block | None:
     """Botín de capital (2026-10-10): cuando una meganación controla la
     capital de arranque de una meganación o anarquía con la que está en
@@ -315,6 +362,9 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
         renew.add("if", Block([("limit", cond),
                                ("set_country_flag", Block([("flag", "MEGANATIONS_destino_ia_espera"), ("value", 1), ("days", 120)])),
                                (DESTINY_EFFECT, True)]))
+    dispersed = _dispersed_anarchies(ctx, hs, effects)
+    if dispersed is not None:
+        renew.entries.extend(dispersed.entries)
     annex = _annex_anarchy_puppets(ctx, hs, effects)
     if annex is not None:
         renew.add(ANNEX_EFFECT, True)

@@ -183,6 +183,13 @@ anarchy_hostility:
   annex_puppets:
     tags: [ZWE, ZWI, ZWM, ZWB, ZAN]
     keep_flag: MEGANATIONS_titere_buscado
+  # 2026-10-24 (pedido del usuario: "si todavía sobrevive en algún continente, no debería
+  # capitular"): la anarquía repartida en varios continentes no capitula mientras controle
+  # tierra (de las suyas de arranque o conquistada) en dos o más. Pulso mensual.
+  dispersed:
+    tags: [ZAN]
+    min_continents: 2
+    modifier: MEGANATIONS_tierras_dispersas
 
 rivalries:
   - { between: [EFE, NRE], modifier: meganations_bloc_rival, lore: "Dos Restauraciones: la Tierra o Roma." }

@@ -1567,7 +1567,7 @@ categories:
         today: [?HSN_nodos] of 8  ->  trade +[?HSN_ef_nodos_ver]%, dockyards +[?HSN_ef_astilleros_ver]%, factories +[?HSN_ef_fabricas_ver]%, political
         power +[?HSN_ef_pp_ver] per day, consumer goods [?HSN_ef_bienes_ver]% (spirit ''The Node Network''; every node counts).\nYou start with
         4: Malacca, Sunda, Kanto and Manila. Taiwan belongs to the Harmonious Directorate, Okinawa and Kyushu to Korea, and Hong Kong to the warlords
-        (the decision ''Claim Hong Kong'' gives you the casus belli). The other four must be won: with focuses, events or war.\n\nWHAT THEY GIVE
+        (you already have a permanent casus belli against them; if it falls to someone else, the decision ''Claim Hong Kong'' gives you one against them). The other four must be won: with focuses, events or war.\n\nWHAT THEY GIVE
         (spirits):\n2 nodes: Network I (+15% trade, +10% dockyards, +0.1 political power). 4: Network II (+20% trade, +15% dockyards, +10% factories,
         +0.15 political power). 6: Network III (+30% trade, +20% dockyards, +15% factories, +5% research, +0.2 political power). All 8: World Clearing
         House (+40% trade, +25% dockyards, +20% factories, +10% research, +0.3 political power).\nLosing a node: ''A Node Lost'' for 180 days (-10%
@@ -1581,7 +1581,7 @@ categories:
         hoy: [?HSN_nodos] de 8  ->  comercio +[?HSN_ef_nodos_ver]%, astilleros +[?HSN_ef_astilleros_ver]%, fábricas +[?HSN_ef_fabricas_ver]%, poder
         político +[?HSN_ef_pp_ver] por día, bienes de consumo [?HSN_ef_bienes_ver]% (espíritu «La Red de Nodos»; cada nodo suma).\nArrancás con
         4: Malaca, Sunda, Kanto y Manila. Taiwán es del Directorio Armónico, Okinawa y Kyushu de Corea, y Hong Kong de los señores de la guerra
-        (la decisión «Reclamar Hong Kong» te da el casus belli). Los otros cuatro hay que ganarlos: con focos, eventos o guerra.\n\nQUÉ TE DAN (espíritus):\n2
+        (contra ellos ya tenés casus belli permanente; si cae en manos de otro, la decisión «Reclamar Hong Kong» te lo da contra ese). Los otros cuatro hay que ganarlos: con focos, eventos o guerra.\n\nQUÉ TE DAN (espíritus):\n2
         nodos: Red I (+15% comercio, +10% astilleros, +0,1 poder político). 4: Red II (+20% comercio, +15% astilleros, +10% fábricas, +0,15 poder
         político). 6: Red III (+30% comercio, +20% astilleros, +15% fábricas, +5% investigación, +0,2 poder político). Los 8: Cámara Mundial de
         Compensación (+40% comercio, +25% astilleros, +20% fábricas, +10% investigación, +0,3 poder político).\nPerder un nodo: «Un Nodo Perdido»
@@ -1603,27 +1603,118 @@ categories:
       - {effect: event, id: meganations_hsn.29}
       ai: {factor: 0}
       src: user_decision
+    # 2026-10-24 (pregunta del usuario: "¿tiene sentido reclamar Hong Kong si ya arrancás con
+    # una justificación contra Indostán?"): no. Mientras sea de Indostán (contra el que hay casus
+    # belli permanente) no aparece; si pasa a otro, el casus belli es contra quien lo tenga.
     - id: HSN_reclamar_hong_kong
       name: {english: Claim Hong Kong, spanish: Reclamar Hong Kong}
       desc:
-        english: The eighth node is in the hands of warlords. A casus belli for Hong Kong, whoever holds it now.
-        spanish: El octavo nodo está en manos de señores de la guerra. Un casus belli por Hong Kong, lo tenga quien lo tenga.
+        english: Hong Kong, the eighth node, has fallen into foreign hands. A casus belli against whoever holds it now.
+        spanish: Hong Kong, el octavo nodo, cayó en manos extranjeras. Un casus belli contra quien lo tenga ahora.
       icon_prefer:
       - generic_naval
       - generic_political_actions
       cost: 50
       cooldown_days: 182
       visible:
-        not:
-          controls_state:
-          - Hong Kong
-      available: {country_exists: ZWI}
+        all:
+        - not:
+            controls_state:
+            - Hong Kong
+        - not:
+            owns_state:
+            - Hong Kong
+        - not:
+            country: {tag: ZWI, when: {owns_state: [Hong Kong]}}
       effects:
-      - effect: wargoal
-        target: ZWI
-        type: take_state
-        states:
-        - - Hong Kong
+      - effect: if
+        when: {country: {tag: SHD, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: SHD
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: FCU, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: FCU
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: ASC, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: ASC
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: NRE, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: NRE
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: EFE, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: EFE
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: NAS, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: NAS
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: APF, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: APF
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: ZWE, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: ZWE
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: ZWM, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: ZWM
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: ZWB, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: ZWB
+          type: take_state
+          states:
+          - - Hong Kong
+      - effect: if
+        when: {country: {tag: ZAN, when: {owns_state: [Hong Kong]}}}
+        then:
+        - effect: wargoal
+          target: ZAN
+          type: take_state
+          states:
+          - - Hong Kong
       ai:
         factor: 3
         modifiers:
@@ -21386,6 +21477,15 @@ dynamic_modifiers:
     name: {english: 'Cold Blood', spanish: 'Cabeza Fría'}
     desc: {english: 'The sworn war, fought patiently.', spanish: 'La guerra jurada, peleada con paciencia.'}
     modifiers: {army_defence_factor: 0.1, political_power_gain: 0.1}
+  # 2026-10-24 (pedido del usuario: "el ZAN había avanzado muchísimo en África y con Kiev, pero
+  # derrotado por la FCU fue anexionado; si todavía sobrevive en algún continente, no debería
+  # capitular"): mientras controle tierra en dos continentes o más (pulso mensual, 04_diplomacy ->
+  # anarchy_hostility.dispersed)
+  - id: MEGANATIONS_tierras_dispersas
+    country: null
+    name: {english: 'Scattered Across the World', spanish: 'Dispersos por el Mundo'}
+    desc: {english: 'We still hold land on more than one continent: losing one front does not end us.', spanish: 'Todavía tenemos tierra en más de un continente: perder un frente no nos termina.'}
+    modifiers: {'?surrender_limit': 0.9}
   - id: MEGANATIONS_venganza
     country: null
     name: {english: 'Revenge Fulfilled', spanish: 'Venganza Cumplida'}
