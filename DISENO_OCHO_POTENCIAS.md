@@ -2023,3 +2023,19 @@ Pedido del usuario: "muchas cosas en el panel de decisiones completamente superf
 - De `_generic_decisions.txt` se vacían 14 sueltas (Maginot, la bomba genérica, caminos de Birmania, comprar barcos viejos); el resto del archivo queda igual (se corta a mano, no se reescribe).
 - 19 se quedan con nombre y descripción de 2100 (propaganda en redes, holotransmisiones, holocine, bonos digitales, fábricas automatizadas, cargueros autónomos...).
 Cada decisión vaciada queda como cáscara que nunca se carga (como las de los países que no existen), así otros scripts que la nombran no llenan el error.log.
+## Formas Finales: divisiones a 1,5 veces lo que hay en 2103 (2026-10-24)
+
+Pedido del usuario: "esa cantidad de divisiones las alcanzan fácil en 2 o 3 años; deberían ser un 50% más de lo que alcanzan en promedio en 2103/4". Contadas en sus dos guardados de la misma partida (divisiones propias de cada potencia, sin cuarteles generales ni las de satélites que comanda):
+
+| Potencia | 2102,6 | 2103,4 | Antes | Ahora (1,5 x 2103,4) |
+|---|---|---|---|---|
+| EFE | 55 | 85 | 45 | 130 |
+| FCU | 70 | 114 | 50 | 170 |
+| ASC | 102 | 132 | 60 | 200 |
+| HSN | 43 | 55 | 30 | 85 |
+| NAS | 47 | 68 | 35 | 100 |
+| SHD | 91 | 150 | 60 | 225 |
+| APF | 118 | 158 | 60 | 235 |
+| NRE | 108 | 171 | 70 | 255 |
+
+Una sola partida; la HSN la jugaba el usuario. Redondeado a 5. Cambia `divisions_at_least` y los textos de cada `<TAG>_proclamar_la_forma_final` (14_decisions).
