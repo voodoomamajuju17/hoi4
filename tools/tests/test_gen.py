@@ -1269,7 +1269,7 @@ def test_events() -> None:
         pf = decs_d[decs_d.index("EFE_proclamar_la_forma_final = {"):][:3000]
         check("forma final: nombre y bandera nuevos, nucleos y espiritu, con condiciones de tropas",
               "set_cosmetic_tag = EFE_GAIA" in pf and "add_ideas = EFE_dominio_de_gaia" in pf
-              and "has_army_size = { size > 44 }" in pf and "add_core_of = EFE" in pf, pf[:1500])
+              and "has_army_size = { size > 129 }" in pf and "add_core_of = EFE" in pf, pf[:1500])
         names_ct = (mod / "localisation/spanish/meganations_countries_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("forma final: el nombre nuevo en todos los gobiernos",
               ' EFE_GAIA:0 "El Dominio de Gaia"' in names_ct and ' EFE_GAIA_fascism:0 "El Dominio de Gaia"' in names_ct
