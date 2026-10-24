@@ -515,6 +515,9 @@ units:
       hide_branch: false     # la línea pesada se ve (de ella cuelgan otras); solo la FCU la investiga
     design:
       name: Ala de Obsidiana
+      # 2026-10-24 (error.log: "Thrust is lower than weight"): se sacan piezas opcionales
+      # hasta que el motor pueda con el peso
+      thrust_check: true
       chassis: [large_plane_airframe]
       max_module_year: 1940
       modules:
