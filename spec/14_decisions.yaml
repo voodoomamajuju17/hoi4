@@ -6527,12 +6527,26 @@ categories:
       src: user_request
     - id: MEGANATIONS_hegemonia_mundial
       name: {english: World Hegemony, spanish: Hegemonía Mundial}
-      desc: {english: Requires 250 factories and 100 divisions. Only one power can be first; the others are told., spanish: Pide 250 fábricas y
-          100 divisiones. Solo una potencia puede ser la primera; a las demás se les avisa.}
+      desc: {english: 'Requires 250 factories and the army of the final form (EFE 130, FCU 170, ASC 200, HSN 85, NAS 100, SHD 225, APF 235,
+          NRE 255 divisions). Only one power can be first; the others are told.', spanish: 'Pide 250 fábricas y el ejército de la forma final
+          (EFE 130, FCU 170, ASC 200, HSN 85, NAS 100, SHD 225, APF 235, NRE 255 divisiones). Solo una potencia puede ser la primera; a las
+          demás se les avisa.'}
       icon_prefer: [generic_formable_nations, generic_political_actions]
       cost: 300
       fire_only_once: true
-      available: {factories_at_least: 250, divisions_at_least: 100, not_global_flag: MEGANATIONS_hegemonia}
+      # Divisiones: 1,5 veces lo que tenía cada potencia en mayo de 2103 (igual que su forma final, 2026-10-24).
+      available:
+        factories_at_least: 250
+        not_global_flag: MEGANATIONS_hegemonia
+        any:
+        - all: [{tag: EFE}, {divisions_at_least: 130}]
+        - all: [{tag: FCU}, {divisions_at_least: 170}]
+        - all: [{tag: ASC}, {divisions_at_least: 200}]
+        - all: [{tag: HSN}, {divisions_at_least: 85}]
+        - all: [{tag: NAS}, {divisions_at_least: 100}]
+        - all: [{tag: SHD}, {divisions_at_least: 225}]
+        - all: [{tag: APF}, {divisions_at_least: 235}]
+        - all: [{tag: NRE}, {divisions_at_least: 255}]
       effects:
       - {effect: global_flag, value: MEGANATIONS_hegemonia}
       - {effect: dynamic_modifier, id: MEGANATIONS_hegemonia}
