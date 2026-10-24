@@ -2015,3 +2015,20 @@ Pedido del usuario: "el ZAN había avanzado muchísimo en África y con Kiev, pe
 ## Imágenes de los barcos en el diseñador (2026-10-24)
 
 Pedido del usuario: "las imágenes del equipo naval cambian a las de vainilla". Los barcos de arranque traen la imagen del mod en su diseño, pero cada diseño nuevo tomaba la de vainilla: el juego no trae lista de íconos de barcos en `gfx/interface/equipmentdesigner/graphic_db/` (solo cuarteles, aviones y tanques). Según su documentación (archivos que mandó el usuario), esa base acepta cualquier tipo de equipo, así que el mod escribe `meganations_00_ship_icons.txt`: por país, cada casco (tipo y arquetipo) con su imagen propia, que tiene la prioridad más alta. Sin probar en el juego.
+
+## Formas Finales: divisiones a 1,5 veces lo que hay en 2103 (2026-10-24)
+
+Pedido del usuario: "esa cantidad de divisiones las alcanzan fácil en 2 o 3 años; deberían ser un 50% más de lo que alcanzan en promedio en 2103/4". Contadas en sus dos guardados de la misma partida (divisiones propias de cada potencia, sin cuarteles generales ni las de satélites que comanda):
+
+| Potencia | 2102,6 | 2103,4 | Antes | Ahora (1,5 x 2103,4) |
+|---|---|---|---|---|
+| EFE | 55 | 85 | 45 | 130 |
+| FCU | 70 | 114 | 50 | 170 |
+| ASC | 102 | 132 | 60 | 200 |
+| HSN | 43 | 55 | 30 | 85 |
+| NAS | 47 | 68 | 35 | 100 |
+| SHD | 91 | 150 | 60 | 225 |
+| APF | 118 | 158 | 60 | 235 |
+| NRE | 108 | 171 | 70 | 255 |
+
+Una sola partida; la HSN la jugaba el usuario. Redondeado a 5. Cambia `divisions_at_least` y los textos de cada `<TAG>_proclamar_la_forma_final` (14_decisions).
