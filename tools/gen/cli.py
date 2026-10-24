@@ -44,6 +44,7 @@ from .emitters import ideologies as em_ideologies
 from .emitters import intelligence as em_intelligence
 from .emitters import military as em_military
 from .emitters import menu as em_menu
+from .emitters import music as em_music
 from .emitters import ui_skin as em_ui_skin
 from .emitters import aventuras as em_aventuras
 from .emitters import militia as em_militia
@@ -105,6 +106,7 @@ EMITTERS = [
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
     ("menu", em_menu.emit),
+    ("music", em_music.emit),           # estacion de musica propia (11_scenario -> music)
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
     ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)

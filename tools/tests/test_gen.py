@@ -4336,6 +4336,26 @@ def test_decisiones_vanilla() -> None:
           raw["rename"]["war_propaganda_radio_industry"]["es"][0] == "Red de Holotransmisiones")
 
 
+def test_musica() -> None:
+    section("musica propia: estacion y a quien le suena cada tema (2026-10-24)")
+    from tools.gen.emitters.music import classify
+    check("tema de paz de una faccion", classify("EFE_paz") == ("EFE", "paz"))
+    check("tema regional de guerra", classify("ZAN_kiev_guerra") == ("ZAN", "guerra"))
+    check("himno", classify("NRE_himno") == ("NRE", "himno"))
+    check("tema para todos", classify("mn_tema_principal") == (None, "otro"))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        songs = mod / "music/meganations/meganations_songs.txt"
+        st = " ".join(songs.read_text().split()) if songs.exists() else ""
+        check("la estacion existe", 'music_station = "meganations"' in st, st[:200])
+        check("el de paz no suena en guerra y solo a su faccion y satelites",
+              'song = "EFE_paz"' in st and "original_tag = PTA" in st and "has_war = yes" in st)
+        check("los temas viajan al mod", (mod / "music/meganations/EFE_himno.ogg").exists())
+        check("la estacion tiene nombre", "meganations_TITLE" in " ".join(
+            p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*music*")))
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4391,6 +4411,7 @@ def main() -> int:
         test_mecanicas_v4,
         test_marines_hsn,
         test_decisiones_vanilla,
+        test_musica,
         test_simulador,
         test_vanilla_validation,
     ):

@@ -2042,3 +2042,7 @@ Pedido del usuario: "esa cantidad de divisiones las alcanzan fácil en 2 o 3 añ
 Una sola partida; la HSN la jugaba el usuario. Redondeado a 5. Cambia `divisions_at_least` y los textos de cada `<TAG>_proclamar_la_forma_final` (14_decisions).
 
 Hegemonía Mundial (mismo día, pedido "aplicalo"): antes pedía 100 divisiones para todas, que cinco potencias ya pasaban en mayo de 2103. Ahora pide a cada potencia el mismo número que su forma final (tabla de arriba), además de las 250 fábricas. Como la decisión solo aparece después de la forma final, en la práctica pide no haber perdido ese ejército.
+
+## Música propia: la estación "2100 Meganations" (2026-10-24)
+
+Pedido del usuario: soundtrack original hecho con Suno (pedidos en arte/musica/). Los temas que llegan se convierten a OGG en assets/music/<id>.ogg y el generador arma una estación del reproductor de música del juego (11_scenario -> music, emitters/music.py). A quién le suena cada tema sale del nombre: `<TAG>_paz` y `<TAG>_guerra` (también los regionales, como `ZAN_kiev_paz`) solo a esa facción y sus satélites, en paz o en guerra; `<TAG>_himno` y otros `<TAG>_<algo>` siempre a esa facción; `mn_<algo>` a todos (el tema principal, así nadie se queda sin música). Primer lote: 17 temas (el tema principal, 4 del EFE, los himnos de 8 facciones y 5 de las Tierras Sin Ley). Sin probar en el juego: hay que elegir la estación en el reproductor; el tema del menú principal sigue siendo el del juego.

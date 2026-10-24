@@ -364,3 +364,74 @@ vanilla_decisions:
     generic_refit_civilian_ships_category:
       en: [Autonomous Merchant Fleet, "The robot cargo ships of the merchant fleet can be armed in an emergency."]
       es: [Flota Mercante Autónoma, "Los cargueros robot de la flota mercante se pueden armar en una emergencia."]
+
+# -----------------------------------------------------------------------------
+# Música propia (2026-10-24, pedido del usuario: "soundtrack original con Suno").
+# Una estación del reproductor del juego, "2100 Meganations". Los temas están en
+# assets/music/<id>.ogg (convertidos de los MP3 del usuario) y el nombre dice a
+# quién le suena:
+#   <TAG>_paz / <TAG>_guerra (o <TAG>_<algo>_paz / _guerra): esa facción y sus
+#     satélites, en paz o en guerra
+#   <TAG>_himno y otros <TAG>_<algo>: esa facción y sus satélites, siempre
+#   mn_<algo>: todos (el tema principal, de fondo para cualquiera)
+# Un tema sin título acá usa su id como nombre en el reproductor.
+# -----------------------------------------------------------------------------
+music:
+  src: user_request
+  station: meganations
+  name: {english: "2100 Meganations", spanish: "2100 Meganations"}
+  album_art: assets/music/album_art.dds
+  weights: {own_state: 3, own_anthem: 1, own_other: 1.5, everyone: 0.4}
+  titles:
+    mn_tema_principal: Eight Crowns Over a Broken World
+    EFE_paz: The Vats Breathe Under Buenos Aires
+    EFE_guerra: March of the Living Steel
+    EFE_himno: Himno del Imperio Verde
+    EFE_rock_pampa: Ruta 2100
+    EFE_rock_cubas: Hijos de las Cubas
+    FCU_paz: Quarterly Report of a Continent
+    FCU_guerra: Hostile Acquisition
+    FCU_himno: The Banner of the Board
+    ASC_paz: The Plan Runs Itself
+    ASC_guerra: Red Algorithm
+    ASC_himno: "Brüder, zur Maschine"
+    HSN_paz: Ten Thousand Ships at Dusk
+    HSN_guerra: Leviathans Leave the Strait
+    HSN_himno: "千の海 · Majulah Samudera"
+    NAS_paz: Inti Rises Over Cusco
+    NAS_guerra: Condors of the Black Sun
+    NAS_himno: Haylli Inti
+    SHD_paz: The River Is Measured
+    SHD_guerra: The Floodgates Open
+    SHD_himno: "和谐进行曲 · March of Harmony"
+    APF_paz: The Council Under the Baobab
+    APF_guerra: The Federation Marches
+    APF_himno: Shirikisho la Watu
+    NRE_paz: The Forum at Evening
+    NRE_guerra: The Legions Return
+    NRE_himno: Roma Aeterna
+    ZWE_paz: Scrap Market in the Snow
+    ZWE_guerra: Cossacks of the Last Steppe
+    ZWE_himno: "Степная вольница · The Free Steppe"
+    ZWI_paz: Monsoon Bazaar
+    ZWI_guerra: The Warlords of the Ganges
+    ZWI_himno: "जय हो · Jaya Ho"
+    ZWM_paz: The Oasis at Noon
+    ZWM_guerra: Falcons Over the Oil Fields
+    ZWM_himno: "بلادي · Biladi"
+    ZWB_paz: The River Sawmill
+    ZWB_guerra: Gold and Mud
+    ZWB_himno: Ouviram do Amazonas
+    ZAN_paz: Ghost Town Gas Station
+    ZAN_guerra: Raiders on the Highway
+    ZAN_himno: Lawless Land
+    ZAN_alaska_paz: Pipeline Ghosts
+    ZAN_alaska_guerra: Snowmobile Raid
+    ZAN_norte_paz: Gasolinera del Desierto
+    ZAN_norte_guerra: Caravana de Fierro
+    ZAN_centroamerica_paz: Marimba Under the Volcano
+    ZAN_centroamerica_guerra: Machete y Gasoil
+    ZAN_africa_paz: Scrapyard on the Niger
+    ZAN_africa_guerra: Convoy of Rust
+    ZAN_kiev_paz: Golden Domes in the Soot
+    ZAN_kiev_guerra: Cossacks on Diesel
