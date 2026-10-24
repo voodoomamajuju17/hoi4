@@ -2015,3 +2015,11 @@ Pedido del usuario: "el ZAN había avanzado muchísimo en África y con Kiev, pe
 ## Imágenes de los barcos en el diseñador (2026-10-24)
 
 Pedido del usuario: "las imágenes del equipo naval cambian a las de vainilla". Los barcos de arranque traen la imagen del mod en su diseño, pero cada diseño nuevo tomaba la de vainilla: el juego no trae lista de íconos de barcos en `gfx/interface/equipmentdesigner/graphic_db/` (solo cuarteles, aviones y tanques). Según su documentación (archivos que mandó el usuario), esa base acepta cualquier tipo de equipo, así que el mod escribe `meganations_00_ship_icons.txt`: por país, cada casco (tipo y arquetipo) con su imagen propia, que tiene la prioridad más alta. Sin probar en el juego.
+
+## Decisiones de vainilla: menos carga y nombres de 2100 (2026-10-24)
+
+Pedido del usuario: "muchas cosas en el panel de decisiones completamente superfluas (vetar restauracionismo); lo de vainilla si no se elimina va modificado". Con los archivos de `common/decisions` que mandó, lista aprobada el mismo día (11_scenario -> vanilla_decisions):
+- Se vacían enteros 18 archivos: decisiones de partidos e ideologías (prohibir partidos, redadas, censura, guerras civiles ideológicas), las formables de vainilla, Trial of Allegiance, empresas militares extranjeras, tratados navales, Congreso de EE. UU., OTAN, Unión Africana, nórdicas, bálticas, SS, Paraguay, China e India de 1936.
+- De `_generic_decisions.txt` se vacían 14 sueltas (Maginot, la bomba genérica, caminos de Birmania, comprar barcos viejos); el resto del archivo queda igual (se corta a mano, no se reescribe).
+- 19 se quedan con nombre y descripción de 2100 (propaganda en redes, holotransmisiones, holocine, bonos digitales, fábricas automatizadas, cargueros autónomos...).
+Cada decisión vaciada queda como cáscara que nunca se carga (como las de los países que no existen), así otros scripts que la nombran no llenan el error.log.

@@ -4312,6 +4312,25 @@ def test_marines_hsn() -> None:
           all(pdx.text(d.get("division_template")) == "Infantería de Marina de Alta Mar" for d in units.get_all("division")))
 
 
+def test_decisiones_vanilla() -> None:
+    section("decisiones de vainilla: se vacian o se renombran (2026-10-24)")
+    from tools.gen.emitters.cleanup import _blank_decisions
+    src = ("cat_a = {\n\tkeep_me = { cost = 5 # comentario { }\n\t\tcomplete_effect = { add_stability = 0.1 } }\n"
+           "\tdismantle_maginot = { cost = 50 available = { has_war = no } complete_effect = { x = { y = 1 } } }\n}\n"
+           "cat_b = { purchase_ships_eng = { cost = 1 } other = { a = \"dismantle_maginot\" } }\n")
+    new, found = _blank_decisions(src, {"dismantle_maginot", "purchase_ships_eng"})
+    root = pdx.parse(new)
+    a, b = root.get("cat_a"), root.get("cat_b")
+    check("vacia solo las pedidas", found == {"dismantle_maginot", "purchase_ships_eng"})
+    check("la vaciada nunca se carga", "allowed = { always = no }" in " ".join(pdx.render(a.get("dismantle_maginot")).split()))
+    check("lo demas queda igual", "add_stability = 0.1" in pdx.render(a.get("keep_me")) and b.get("other") is not None)
+    raw = specload.load(REPO_ROOT / "spec").raw["scenario"]["vanilla_decisions"]
+    check("la lista aprobada saca los partidos y las formables",
+          {"political_decisions.txt", "formable_nation_decisions.txt"} <= set(raw["remove_files"]))
+    check("la propaganda de radio se renombra para 2100",
+          raw["rename"]["war_propaganda_radio_industry"]["es"][0] == "Red de Holotransmisiones")
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4366,6 +4385,7 @@ def main() -> int:
         test_aventuras,
         test_mecanicas_v4,
         test_marines_hsn,
+        test_decisiones_vanilla,
         test_simulador,
         test_vanilla_validation,
     ):

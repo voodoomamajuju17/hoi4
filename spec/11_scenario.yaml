@@ -272,3 +272,95 @@ loading_quotes:
   - {author: "Asignación individual, Plan 2100", author_en: "Individual Allocation, Plan 2100", es: "El Plan le recomienda que siga votando según su criterio. El Plan no puede recomendarle cuál es su criterio.", en: "The Plan recommends that you keep voting by your own judgement. The Plan cannot recommend what your judgement is."}
   - {author: "Anneliese Brandt, a lápiz", author_en: "Anneliese Brandt, in pencil", es: "Diez horas. Lo que tardo en leer una novela. Me cobran una novela por año.", en: "Ten hours. As long as it takes me to read a novel. They charge me a novel a year."}
   - {author: "Anneliese Brandt, a lápiz", author_en: "Anneliese Brandt, in pencil", es: "Voté que no dos veces. En la segunda no estuve sola.", en: "I voted no twice. The second time I was not alone."}
+
+# -----------------------------------------------------------------------------
+# Decisiones de vainilla (2026-10-24, pedido del usuario: "hay muchas cosas en el
+# panel de decisiones completamente superfluas, p. ej. vetar restauracionismo; lo
+# de vainilla si no se elimina va modificado, hablar de radio no tiene sentido en
+# 2100"). Lista aprobada por el usuario el mismo día.
+#   remove_files: archivos de common/decisions/ que se vacían enteros (cada
+#     decisión queda como cáscara que nunca se carga, como las de países viejos)
+#   remove: decisiones sueltas que se vacían; el resto del archivo queda igual
+#   rename: decisiones (o categorías) que se quedan con otro nombre y descripción
+# -----------------------------------------------------------------------------
+vanilla_decisions:
+  src: user_request
+  remove_files:
+  - political_decisions.txt          # partidos, redadas, censura, guerras civiles ideológicas
+  - formable_nation_decisions.txt    # formables de vainilla (chocan con las formas finales)
+  - TOA_formable_nation_decisions.txt
+  - TOA_shared_decisions.txt         # Sudamérica de 1936: acorazados, inmigración, asesores
+  - aat_mio_decisions.txt            # invitar empresas militares de países que no existen
+  - MTG_naval_treaty.txt
+  - MTG_congress.txt
+  - NATO.txt
+  - African_Union_decisions.txt
+  - BALTIC.txt
+  - NORDIC.txt
+  - SS.txt
+  - GUAY_decisions.txt
+  - anti_japan_infiltration.txt
+  - WTT_border_conflicts.txt
+  - WTT_politcal_power_struggle_decisions.txt
+  - RAJ_GOE.txt
+  - DOD_hungary.txt
+  remove:
+    _generic_decisions.txt: [targeted_race_for_the_bomb, dismantle_maginot, seize_some_trains_woo,
+                             CHI_close_burma_road, CHI_reopen_burma_road, CHI_close_ledo_road, CHI_reopen_ledo_road,
+                             CHI_close_the_hump, CHI_reopen_the_hump, CHI_close_hanoi_route,
+                             purchase_ships_eng, purchase_ships_sov, purchase_ships_ger, purchase_ships_usa]
+  rename:
+    war_propaganda:
+      en: [War Campaign on the Networks, "Saturate every feed, every lens and every implant with the reasons for this war."]
+      es: [Campaña de Guerra en las Redes, "Saturar cada feed, cada lente y cada implante con las razones de esta guerra."]
+    war_propaganda_casualties:
+      en: [The Fallen on Every Screen, "Turn our casualties into a cause: their faces on every holographic billboard."]
+      es: [Los Caídos en Cada Pantalla, "Convertir nuestras bajas en una causa: sus caras en cada cartel holográfico."]
+    war_propaganda_convoys:
+      en: [Defend the Supply Lanes, "The convoys feed the nation: every sunk freighter is a story the whole network must hear."]
+      es: [Defender las Rutas de Suministro, "Los convoyes alimentan a la nación: cada carguero hundido es una historia que toda la red tiene que escuchar."]
+    war_propaganda_bombing:
+      en: [Under the Drones, "The enemy's drones hit our cities: show the ruins, and show us rebuilding them."]
+      es: [Bajo los Drones, "Los drones enemigos golpean nuestras ciudades: mostrar las ruinas, y mostrarnos reconstruyéndolas."]
+    war_propaganda_radio_industry:
+      en: [Holo-broadcast Network, "State channels on every holographic set and every neural feed, all day long."]
+      es: [Red de Holotransmisiones, "Canales del Estado en cada holograma y en cada feed neural, todo el día."]
+    war_propaganda_film_industry:
+      en: [State Holocinema, "Immersive war epics made with the studios: the front, felt from the sofa."]
+      es: [Holocine Estatal, "Epopeyas de guerra inmersivas hechas con los estudios: el frente, sentido desde el sillón."]
+    war_bonds:
+      en: [Digital War Bonds, "Every citizen's wallet can buy a share of victory with a single tap."]
+      es: [Bonos de Guerra Digitales, "La billetera de cada ciudadano puede comprar una parte de la victoria con un toque."]
+    women_in_the_workforce:
+      en: [Total Civil Mobilisation, "Everyone who is not at the front keeps the factories, the grids and the server farms running."]
+      es: [Movilización Civil Total, "Todos los que no están en el frente mantienen andando las fábricas, las redes y las granjas de servidores."]
+    emergency_factory_conversion_defensive:
+      en: [Reprogram the Automated Factories (Defence), "Overwrite the civilian production code: the lines build for the defence of the nation."]
+      es: [Reprogramar las Fábricas Automatizadas (Defensa), "Sobrescribir el código de producción civil: las líneas fabrican para la defensa de la nación."]
+    emergency_factory_conversion_offensive:
+      en: [Reprogram the Automated Factories (Offensive), "Overwrite the civilian production code: the lines build for the offensive."]
+      es: [Reprogramar las Fábricas Automatizadas (Ofensiva), "Sobrescribir el código de producción civil: las líneas fabrican para la ofensiva."]
+    improved_worker_conditions:
+      en: [Labour Pact, "Shorter shifts, better pay and safer lines, in exchange for peace in the factories."]
+      es: [Pacto Laboral, "Turnos más cortos, mejor paga y líneas más seguras, a cambio de paz en las fábricas."]
+    blow_suez_canal:
+      en: [Demolish the Suez Canal, "Demolition drones and charges in the locks: nobody passes for a long time."]
+      es: [Demoler el Canal de Suez, "Drones de demolición y cargas en las esclusas: por mucho tiempo no pasa nadie."]
+    blow_panama_canal:
+      en: [Demolish the Panama Canal, "Demolition drones and charges in the locks: nobody passes for a long time."]
+      es: [Demoler el Canal de Panamá, "Drones de demolición y cargas en las esclusas: por mucho tiempo no pasa nadie."]
+    rebuild_suez_canal:
+      en: [Rebuild the Suez Canal, "Engineering swarms clear the rubble and rebuild the locks."]
+      es: [Reconstruir el Canal de Suez, "Enjambres de ingeniería despejan los escombros y reconstruyen las esclusas."]
+    rebuild_panama_canal:
+      en: [Rebuild the Panama Canal, "Engineering swarms clear the rubble and rebuild the locks."]
+      es: [Reconstruir el Canal de Panamá, "Enjambres de ingeniería despejan los escombros y reconstruyen las esclusas."]
+    refit_to_destroyer:
+      en: [Militarise Autonomous Freighters (Destroyer), "Bolt weapons and sensors onto a robot cargo ship: a destroyer in weeks."]
+      es: [Militarizar Cargueros Autónomos (Destructor), "Atornillar armas y sensores a un carguero robot: un destructor en semanas."]
+    refit_to_cruiser:
+      en: [Militarise Autonomous Freighters (Cruiser), "Bolt missile cells onto the biggest robot cargo ships: a cruiser in weeks."]
+      es: [Militarizar Cargueros Autónomos (Crucero), "Atornillar celdas de misiles a los cargueros robot más grandes: un crucero en semanas."]
+    generic_refit_civilian_ships_category:
+      en: [Autonomous Merchant Fleet, "The robot cargo ships of the merchant fleet can be armed in an emergency."]
+      es: [Flota Mercante Autónoma, "Los cargueros robot de la flota mercante se pueden armar en una emergencia."]

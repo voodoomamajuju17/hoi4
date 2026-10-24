@@ -30,8 +30,19 @@ def emit(ctx: BuildContext) -> None:
     vanilla_tags = (ctx.vanilla.country_tags() | set(ctx.vanilla.country_history_files())) - ours
     silenced = []
     stubs = 0
+    vd = ctx.spec.raw["scenario"].get("vanilla_decisions") or {}
+    whole = set(vd.get("remove_files") or [])
     for path in sorted((ctx.vanilla.root / "common" / "decisions").glob("*.txt")):
         m = _TAG_FILE.match(path.name)
+        if path.name in whole and not (m and m.group(1) in vanilla_tags):
+            stub, n = _stub_decisions(path)
+            ctx.write_text(f"common/decisions/{path.name}",
+                           banner_for("spec/11_scenario.yaml -> vanilla_decisions")
+                           + "# Vaciado a proposito: no tiene sentido en 2100 (pedido del usuario, 2026-10-24).\n"
+                           + (stub if stub else ""))
+            stubs += n
+            silenced.append(path.name)
+            continue
         if m and m.group(1) in vanilla_tags:
             stub, n = _stub_decisions(path)
             ctx.write_text(f"common/decisions/{path.name}",
@@ -39,6 +50,7 @@ def emit(ctx: BuildContext) -> None:
                            + (stub if stub else ""))
             stubs += n
             silenced.append(m.group(1))
+    _partial_and_renames(ctx, vd, whole)
     if silenced:
         ctx.note(f"limpieza: {len(silenced)} archivos de decisiones de paises vanilla vaciados "
                  f"({', '.join(sorted(set(silenced))[:12])}{'...' if len(set(silenced)) > 12 else ''}); "
@@ -245,3 +257,95 @@ def emit_kept_events(ctx: BuildContext) -> None:
     missing = keep - found
     if missing:
         ctx.warn(f"eventos del juego: no se encontraron los namespaces {', '.join(sorted(missing))}.")
+
+
+def _partial_and_renames(ctx: BuildContext, vd: dict, whole: set) -> None:
+    """Decisiones sueltas de vainilla que se vacían (el resto del archivo queda
+    igual, cortado a mano para no reescribir lo que no se toca) y las que se
+    quedan con nombre y descripción de 2100 (2026-10-24)."""
+    folder = ctx.vanilla.root / "common" / "decisions"
+    gone = 0
+    for fname, ids in (vd.get("remove") or {}).items():
+        path = folder / fname
+        if fname in whole or not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        new, found = _blank_decisions(text, set(ids))
+        missing = sorted(set(ids) - found)
+        if missing:
+            ctx.warn(f"limpieza: en {fname} no estan: {', '.join(missing)}")
+        if found:
+            ctx.write_text(f"common/decisions/{fname}",
+                           banner_for("spec/11_scenario.yaml -> vanilla_decisions")
+                           + f"# Copia del archivo del juego sin {len(found)} decisiones de 1936 (pedido del usuario, 2026-10-24).\n"
+                           + new)
+            gone += len(found)
+    renamed = 0
+    for key, langs in (vd.get("rename") or {}).items():
+        (en_name, en_desc), (es_name, es_desc) = langs["en"], langs["es"]
+        for k, en, es in ((key, en_name, es_name), (f"{key}_desc", en_desc, es_desc)):
+            ctx.loc.define_and_reference(k, en=en, es=es, file="replace/meganations_decisiones_vanilla",
+                                         origin="vanilla_decisions")
+        renamed += 1
+    if gone or renamed:
+        ctx.note(f"limpieza: {gone} decisiones genericas de 1936 vaciadas; {renamed} con nombre de 2100")
+
+
+def _blank_decisions(text: str, ids: set) -> tuple[str, set]:
+    """Reemplaza el cuerpo de cada decisión `id = { ... }` (dentro de una
+    categoría, profundidad 1) por una cáscara que nunca se carga."""
+    out, found = [], set()
+    i, n, depth = 0, len(text), 0
+    last = 0
+    while i < n:
+        c = text[i]
+        if c == "#":
+            j = text.find("\n", i)
+            i = n if j < 0 else j
+            continue
+        if c == '"':
+            j = text.find('"', i + 1)
+            i = n if j < 0 else j + 1
+            continue
+        if c == "{":
+            if depth == 1:
+                # ¿qué clave abre este bloque?
+                k = i - 1
+                while k >= 0 and text[k] in " \t\r\n=":
+                    k -= 1
+                e = k + 1
+                while k >= 0 and (text[k].isalnum() or text[k] == "_"):
+                    k -= 1
+                key = text[k + 1:e]
+                if key in ids:
+                    # buscar el cierre
+                    d, j = 0, i
+                    while j < n:
+                        ch = text[j]
+                        if ch == "#":
+                            q = text.find("\n", j)
+                            j = n if q < 0 else q
+                            continue
+                        if ch == '"':
+                            q = text.find('"', j + 1)
+                            j = n if q < 0 else q + 1
+                            continue
+                        if ch == "{":
+                            d += 1
+                        elif ch == "}":
+                            d -= 1
+                            if d == 0:
+                                break
+                        j += 1
+                    out.append(text[last:i])
+                    out.append("{ allowed = { always = no } available = { always = no } }")
+                    last = j + 1
+                    i = j + 1
+                    found.add(key)
+                    continue
+            depth += 1
+        elif c == "}":
+            depth -= 1
+        i += 1
+    out.append(text[last:])
+    return "".join(out), found
