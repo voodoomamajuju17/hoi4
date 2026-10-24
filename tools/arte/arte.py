@@ -77,6 +77,9 @@ KINDS = {
     # anarquía, estilo historieta (Moebius + Kill Six Billion Demons); van a
     # assets/events/<evento>.dds como cualquier imagen de evento
     "adventure_picture": {"size": (210, 176), "transparent": False, "fit": "cover"},
+    # pantallas de carga (arte/pantallas_carga_descripciones.yaml, 2026-10-24): la vida
+    # diaria de cada potencia y anarquía; 1920x1440 en DXT1, como las que ya hay
+    "loading_screen": {"size": (1920, 1440), "transparent": False, "fit": "cover"},
 }
 
 # 2026-10-16, pedido del usuario: "el estilo tiene que ser un poco cómic/novela
@@ -379,7 +382,32 @@ def catalog() -> list[dict]:
                 "done": dest.exists(), "description": desc,
             })
     items += _adventure_items()
+    items += _loading_items()
     _apply_icon_looks(items)
+    return items
+
+
+LOADING_STYLE = (
+    "Hearts of Iron IV loading screen, wide cinematic painting, retrofuturist year 2100, rich painterly detail, "
+    "everyday life of ordinary people (not a battle), atmospheric light, no text, no letters, no logos, no watermark"
+)
+
+
+def _loading_items() -> list[dict]:
+    """Pantallas de carga de la vida diaria (2026-10-24): una por potencia y anarquía."""
+    path = REPO / "arte" / "pantallas_carga_descripciones.yaml"
+    if not path.exists():
+        return []
+    data = (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("pantallas") or {}
+    items = []
+    for n, (tag, p) in enumerate(data.items(), start=20):
+        iid = f"{n}_{tag}_vida_diaria"
+        dest = REPO / "assets" / "menu" / "loading" / f"{iid}.dds"
+        items.append({
+            "type": "loading_screen", "tag": tag, "id": iid, "dest": dest, "done": dest.exists(),
+            "style": f"{LOADING_STYLE}; {STYLE.get(tag, '')}",
+            "description": f"{p['titulo']}: {_one_line(p['escena'])}",
+        })
     return items
 
 
@@ -617,7 +645,7 @@ def _ui_icon_items() -> list[dict]:
 
 
 PLANE_FAMILIES = {"light_plane", "medium_plane", "carrier_plane", "heavy_plane"}
-SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon"}
+SINGLE_FILE = {"unique_icon", "plane_icon", "shared_icon", "loading_screen"}
 TECH_GROUPS = ("INFANTERIA", "APOYO", "BLINDADOS", "ARTILLERIA", "NAVAL", "AVIACION", "INGENIERIA", "INDUSTRIA")
 
 # 2026-10-19 ("¿la descripción de los espíritus alcanza para que ChatGPT las
@@ -733,7 +761,8 @@ def pedidos() -> None:
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
              ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes"),
-             ("ui_icon", "16_interfaz"), ("adventure_picture", "17_aventura")]
+             ("ui_icon", "16_interfaz"), ("adventure_picture", "17_aventura"),
+             ("loading_screen", "18_pantallas_de_carga")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -859,6 +888,16 @@ def importar(source: str) -> None:
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
         img = Image.open(path).convert("RGBA")
+        if item["type"] == "loading_screen":
+            # 2026-10-24: como las pantallas que ya hay (1920x1440, DXT1); sin comprimir pesarían 11 MB
+            iw, ih = img.size
+            scale = max(w / iw, h / ih)
+            img = img.convert("RGB").resize((max(w, round(iw * scale)), max(h, round(ih * scale))), Image.LANCZOS)
+            left, top = (img.width - w) // 2, (img.height - h) // 2
+            item["dest"].parent.mkdir(parents=True, exist_ok=True)
+            img.crop((left, top, left + w, top + h)).save(item["dest"], "DDS", pixel_format="DXT1")
+            done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
+            continue
         if item["type"] == "ui_icon":
             if item.get("transparent", True):
                 img = _recortar(img)
