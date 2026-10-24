@@ -78,10 +78,17 @@ def emit(ctx: BuildContext) -> None:
         named_techs: set[str] = set()
         for fam, entry in names[style].items():
             # v2 (arte/armas_descripciones.yaml) primero; si no, la primera tanda
-            art = repo / "assets" / style / "armas" / f"{fam}.dds"
-            if not art.exists():
-                art = repo / "assets" / style / "tech" / f"{fam}.dds"
+            base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
+            if not base_art.exists():
+                base_art = repo / "assets" / style / "tech" / f"{fam}.dds"
             for eq, gen in members.get(fam, []):
+                # 2026-10-24 (pedido del usuario: "las imágenes de los diseños no
+                # progresan; pedidos nuevos para cada investigación"): una imagen
+                # propia por generación (assets/<estilo>/armas/<familia>_<n>.dds,
+                # pedida en arte/pedidos); mientras no llegue, la de la familia
+                own_gen = repo / "assets" / style / "armas" / f"{fam}_{gen}.dds"
+                art = own_gen if own_gen.exists() else base_art
+                look = gen if own_gen.exists() else None
                 if enabled_by.get(eq) and not free(eq):
                     continue      # de una unidad única
                 en, es = f"{entry['en']} {roman(gen)}", f"{entry['es']} {roman(gen)}"
@@ -99,7 +106,7 @@ def emit(ctx: BuildContext) -> None:
                     targets.append(t)
                 if art.exists():
                     for target in targets:
-                        rel = _texture(ctx, art, style, fam, sizes.of(target), written)
+                        rel = _texture(ctx, art, style, fam, sizes.of(target), written, look)
                         sprites.add("spriteType", Block([("name", Quoted(f"GFX_{tag}_{target}_medium")),
                                                          ("texturefile", Quoted(rel))]))
                         counts["sprites"] += 1
@@ -475,18 +482,20 @@ def _fit(data: bytes, w: int, h: int, nw: int, nh: int) -> bytes:
 
 
 def _texture(ctx: BuildContext, art, style: str, fam: str, size: tuple[int, int],
-             written: dict[tuple[str, str, int, int], str]) -> str:
-    """La imagen de la familia al tamaño del ícono del juego (una por tamaño)."""
+             written: dict, gen: int | None = None) -> str:
+    """La imagen de la familia al tamaño del ícono del juego (una por tamaño y,
+    si es la imagen propia de una generación, una por generación)."""
     from .menu import _dims
     nw, nh = size
-    key = (style, fam, nw, nh)
+    key = (style, fam, nw, nh) + ((gen,) if gen else ())
     if key in written:
         return written[key]
     data = art.read_bytes()
     w, h = _dims(data)
     if (nw, nh) != (w, h) and w and h:
         data = _fit(data, w, h, nw, nh)
-    rel = f"{TEX_DIR}/{style}_{fam}_{nw}x{nh}.dds"
+    suffix = f"_{gen}" if gen else ""
+    rel = f"{TEX_DIR}/{style}_{fam}{suffix}_{nw}x{nh}.dds"
     dest = ctx.mod_root / rel
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_bytes(data)

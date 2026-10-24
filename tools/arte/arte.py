@@ -322,6 +322,38 @@ def catalog() -> list[dict]:
                     "Single object, three-quarter or side view, centred, fills most of the frame, transparent "
                     "background, no text, no letters, no numbers."),
             })
+    # 2026-10-24 (pedido del usuario: "las imágenes de los diseños no progresan; pedidos
+    # nuevos para cada investigación, que cada nivel se note en una mejora tecnológica"):
+    # una imagen por generación, de la 2 en adelante (la 1 es la de la familia).
+    gens_path = REPO / "arte" / "generaciones_armas.yaml"
+    gens = yaml.safe_load(gens_path.read_text(encoding="utf-8")) if gens_path.exists() else {}
+    tank_like = {"light_tank", "medium_tank", "heavy_tank", "modern_tank", "super_heavy"}
+    ship_like = {"destroyer", "cruiser", "capital", "carrier", "submarine"}
+    for tag, entries in (look.get("names") or {}).items():
+        for fam, n in entries.items():
+            top = int((gens.get("generaciones") or {}).get(fam, 1))
+            hint_key = "tank" if fam in tank_like else "ship" if fam in ship_like else \
+                "plane" if fam in PLANE_FAMILIES else fam
+            hint = (gens.get("mejoras") or {}).get(hint_key, "each generation is visibly more advanced")
+            own = _one_line((detail["art"].get(tag) or {}).get(fam, ""))
+            for g in range(2, top + 1):
+                dest = REPO / "assets" / tag / "armas" / f"{fam}_{g}.dds"
+                stage = ("the most advanced, final version" if g == top else
+                         "a clearly improved, mid-generation version")
+                items.append({
+                    "type": "plane_icon" if fam in PLANE_FAMILIES else "weapon_icon", "tag": tag,
+                    "id": f"arma_{tag}_{fam}_{g}", "dest": dest, "done": dest.exists(),
+                    "description": (
+                        f"GENERATION {g} OF {top} of the {n['en']} ({n['es']}): {fams.get(fam, {}).get('art', fam)}. "
+                        f"It is {stage} of the same weapon line, with the SAME faction design language as generation 1 "
+                        f"(arma_{tag}_{fam}.png): {own} "
+                        f"Show the technological progress so generation {g} is obviously newer than generation {g - 1}: "
+                        f"{hint}. Keep the faction materials, colours and silhouette family; only the technology level "
+                        "changes, like Infantry Equipment I, II, III in Hearts of Iron IV. "
+                        f"FACTION {_one_line(detail['looks'].get(tag, ''))} "
+                        "Single object, three-quarter or side view, centred, fills most of the frame, transparent "
+                        "background, no text, no letters, no numbers."),
+                })
     # Equipo común (2026-10-07: "hace falta el pedido para la imagen del tren,
     # uno común para todos"): una imagen para todos los países.
     for fam, f in (look.get("shared") or {}).items():
