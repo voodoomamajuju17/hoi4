@@ -1125,6 +1125,11 @@ def test_routes() -> None:
         check("la Era de la Hegemonia: tras la forma final",
               "MEGANATIONS_la_gran_obra = {" in dtxt and "MEGANATIONS_hegemonia_mundial = {" in dtxt
               and "has_country_flag = NRE_forma_final" in dtxt)
+        # 2026-10-24: cada potencia necesita el ejército de su forma final, no 100 divisiones para todas
+        heg = dtxt[dtxt.index("MEGANATIONS_hegemonia_mundial = {"):][:1500]
+        check("hegemonia mundial: divisiones de la forma final de cada potencia",
+              "tag = HSN has_army_size = { size > 84 }" in heg and "tag = NRE has_army_size = { size > 254 }" in heg
+              and "num_of_factories > 249 has_army_size" not in heg, heg)
         fcu_s = se[se.index("FCU_pulso"):]
         check("elecciones de la Union cada cuatro anos",
               "has_country_flag = { flag = FCU_eleccion_marca days > 1455 }" in fcu_s)

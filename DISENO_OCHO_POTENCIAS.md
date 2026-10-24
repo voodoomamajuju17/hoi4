@@ -805,7 +805,8 @@ llega a 100 al toque y la tensión nunca sube".
     Paz a X (paz blanca si acepta). Eventos meganations_mundo.40-45.
   - La Era de la Hegemonía (tras la forma final): Integrar lo Conquistado
     (núcleos, una vez por año), La Gran Obra (+10% fábricas, +15% construcción)
-    y Hegemonía Mundial (250 fábricas y 100 divisiones; solo una potencia;
+    y Hegemonía Mundial (250 fábricas y el ejército de la forma final, ver
+    abajo; solo una potencia;
     meganations_mundo.50 a las demás).
   - Generador: global_flag con days, efecto relation (diplomatic_relation) y
     FROM/ROOT/PREV como destino de eventos y alcances.
@@ -2039,3 +2040,5 @@ Pedido del usuario: "esa cantidad de divisiones las alcanzan fácil en 2 o 3 añ
 | NRE | 108 | 171 | 70 | 255 |
 
 Una sola partida; la HSN la jugaba el usuario. Redondeado a 5. Cambia `divisions_at_least` y los textos de cada `<TAG>_proclamar_la_forma_final` (14_decisions).
+
+Hegemonía Mundial (mismo día, pedido "aplicalo"): antes pedía 100 divisiones para todas, que cinco potencias ya pasaban en mayo de 2103. Ahora pide a cada potencia el mismo número que su forma final (tabla de arriba), además de las 250 fábricas. Como la decisión solo aparece después de la forma final, en la práctica pide no haber perdido ese ejército.
