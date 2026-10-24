@@ -336,10 +336,11 @@ def catalog() -> list[dict]:
                 "plane" if fam in PLANE_FAMILIES else fam
             hint = (gens.get("mejoras") or {}).get(hint_key, "each generation is visibly more advanced")
             own = _one_line((detail["art"].get(tag) or {}).get(fam, ""))
-            for g in range(2, top + 1):
+            # 2026-10-24 (eligió el usuario, "criterio del punto 2"): solo la vieja (la de la
+            # familia, ya está) y la última; las intermedias usan la más cercana
+            for g in ([top] if top > 1 else []):
                 dest = REPO / "assets" / tag / "armas" / f"{fam}_{g}.dds"
-                stage = ("the most advanced, final version" if g == top else
-                         "a clearly improved, mid-generation version")
+                stage = "the most advanced, final version"
                 items.append({
                     "type": "plane_icon" if fam in PLANE_FAMILIES else "weapon_icon", "tag": tag,
                     "id": f"arma_{tag}_{fam}_{g}", "dest": dest, "done": dest.exists(),
@@ -347,7 +348,7 @@ def catalog() -> list[dict]:
                         f"GENERATION {g} OF {top} of the {n['en']} ({n['es']}): {fams.get(fam, {}).get('art', fam)}. "
                         f"It is {stage} of the same weapon line, with the SAME faction design language as generation 1 "
                         f"(arma_{tag}_{fam}.png): {own} "
-                        f"Show the technological progress so generation {g} is obviously newer than generation {g - 1}: "
+                        f"Show the technological progress so it is obviously far newer than generation 1: "
                         f"{hint}. Keep the faction materials, colours and silhouette family; only the technology level "
                         "changes, like Infantry Equipment I, II, III in Hearts of Iron IV. "
                         f"FACTION {_one_line(detail['looks'].get(tag, ''))} "

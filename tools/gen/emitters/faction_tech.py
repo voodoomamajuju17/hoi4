@@ -86,9 +86,12 @@ def emit(ctx: BuildContext) -> None:
                 # progresan; pedidos nuevos para cada investigación"): una imagen
                 # propia por generación (assets/<estilo>/armas/<familia>_<n>.dds,
                 # pedida en arte/pedidos); mientras no llegue, la de la familia
-                own_gen = repo / "assets" / style / "armas" / f"{fam}_{gen}.dds"
-                art = own_gen if own_gen.exists() else base_art
-                look = gen if own_gen.exists() else None
+                # las intermedias sin imagen propia toman la más cercana (empate: la anterior)
+                have = {g: repo / "assets" / style / "armas" / f"{fam}_{g}.dds"
+                        for g in range(2, gen + 8) if (repo / "assets" / style / "armas" / f"{fam}_{g}.dds").exists()}
+                near = min([1] + list(have), key=lambda g: (abs(g - gen), g))
+                art = have[near] if near in have else base_art
+                look = near if near in have else None
                 if enabled_by.get(eq) and not free(eq):
                     continue      # de una unidad única
                 en, es = f"{entry['en']} {roman(gen)}", f"{entry['es']} {roman(gen)}"
