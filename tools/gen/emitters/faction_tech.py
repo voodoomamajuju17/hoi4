@@ -274,6 +274,26 @@ def _designer_icons(ctx: BuildContext, tags: list[str], sprites: Block, equipmen
             ctx.write_script("/".join(GRAPHIC_DB) + f"/meganations_{path.name}", body, source=SOURCE)
         report.append(f"{path.name}: plantilla {template_tag} ({', '.join(cats)}); "
                       f"{len(out.entries)} paises con iconos propios en {lists} listas")
+    # 2026-10-24 (pedido del usuario: "las imágenes del equipo naval cambian a las de
+    # vainilla"): el juego no trae lista de íconos para barcos, pero la base de
+    # imágenes acepta cualquier tipo de equipo (graphic_db/_documentation.info:
+    # "Associates equipment archetypes and/or types with a GFX entry"). Sin lista,
+    # cada diseño nuevo tomaba la imagen de vainilla; con esta, los cascos de cada
+    # país arrancan con la suya.
+    ships = Block()
+    n_ships = 0
+    for tag in tags:
+        mine = {cat: lst for cat, lst in (own.get(tag) or {}).items() if cat.startswith("ship_hull")}
+        if not mine:
+            continue
+        block = Block()
+        for cat in sorted(mine):
+            block.add(cat, Block([("pool", Block([("icons", Block([(None, name) for name, _ in mine[cat]]))]))]))
+            n_ships += 1
+        ships.add(tag, block)
+    if ships.entries:
+        ctx.write_script("/".join(GRAPHIC_DB) + "/meganations_00_ship_icons.txt", ships, source=SOURCE)
+        report.append(f"meganations_00_ship_icons.txt (barcos, propia): {len(ships.entries)} paises, {n_ships} listas")
     ctx.note("disenadores (iconos elegibles): " + " | ".join(report))
 
 

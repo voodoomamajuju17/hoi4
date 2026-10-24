@@ -3186,6 +3186,11 @@ def test_faction_tech() -> None:
               dbt.count('"GFX_EFE_infantry_equipment_') == 1 and '"GFX_GER_infantry_equipment_1_medium" }' in dbt, dbt[:500])
         check("disenador: sin imagen propia no se agrega bloque (SHD queda con las del juego)",
               "SHD = {" not in dbt and "western_european" not in dbt, dbt[:300])
+        # 2026-10-24: lista propia de íconos para los cascos (el juego no trae una para barcos)
+        sdb = mod / "gfx/interface/equipmentdesigner/graphic_db/meganations_00_ship_icons.txt"
+        sdb_t = " ".join(sdb.read_text().split()) if sdb.exists() else ""
+        check("disenador naval: cada pais con su imagen de casco primero",
+              "HSN = {" in sdb_t and "ship_hull_heavy = { pool = { icons = { GFX_HSN_ship_hull_heavy_" in sdb_t, sdb_t[:400])
         check("disenador: el reporte dice que plantilla uso", any("iconos elegibles" in n and "plantilla GER" in n for n in ctx.notes),
               str([n for n in ctx.notes if "disenadores" in n]))
 

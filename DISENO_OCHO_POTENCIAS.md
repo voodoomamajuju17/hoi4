@@ -2011,3 +2011,7 @@ Pedido del usuario: "las meganaciones deberían empezar con algunas tropas más,
 ## Las Tierras Sin Ley no capitulan mientras sigan en otro continente (2026-10-24)
 
 Pedido del usuario: "el ZAN había avanzado muchísimo en África y con Kiev, pero derrotado por la FCU fue anexionado; si todavía sobrevive en algún continente, no debería capitular". Cada mes se cuenta en cuántos continentes controla al menos una región (suya de arranque o conquistada). Con 2 o más tiene **Dispersos por el Mundo** (+0,9 al límite de rendición: prácticamente no capitula); con menos se le saca y vuelve a poder capitular normalmente (04_diplomacy -> anarchy_hostility.dispersed). Sin probar en el juego: el límite exacto en que el juego decide la rendición con +0,9.
+
+## Imágenes de los barcos en el diseñador (2026-10-24)
+
+Pedido del usuario: "las imágenes del equipo naval cambian a las de vainilla". Los barcos de arranque traen la imagen del mod en su diseño, pero cada diseño nuevo tomaba la de vainilla: el juego no trae lista de íconos de barcos en `gfx/interface/equipmentdesigner/graphic_db/` (solo cuarteles, aviones y tanques). Según su documentación (archivos que mandó el usuario), esa base acepta cualquier tipo de equipo, así que el mod escribe `meganations_00_ship_icons.txt`: por país, cada casco (tipo y arquetipo) con su imagen propia, que tiene la prioridad más alta. Sin probar en el juego.
