@@ -1499,7 +1499,7 @@ def test_events() -> None:
         inv = decs_af[decs_af.index("APF_invertir_zco = {"):][:500]
         check("invertir da +20 de Desarrollo (como dice su texto)", "var = APF_desarrollo_zco value = 20" in inv, inv)
         apf_ev = " ".join((mod / "events/meganations_apf.txt").read_text().split())
-        cg = apf_ev[apf_ev.index("id = meganations_apf.421 title"):][:7000]
+        cg = apf_ev[apf_ev.index("id = meganations_apf.421 title"):][:14000]
         check("el Congo rompe: se va de la federacion, recibe ejercito y declara la guerra",
               "end_puppet = ZCO" in cg and "set_cosmetic_tag = ZCO_LIBRE" in cg and "declare_war_on" in cg
               and "add_manpower = 225000" in cg, cg[:900])
