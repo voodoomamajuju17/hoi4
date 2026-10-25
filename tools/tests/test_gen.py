@@ -4346,12 +4346,13 @@ def test_musica() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
-        songs = mod / "music/meganations/meganations_songs.txt"
+        songs = mod / "music/meganations_songs.txt"
         st = " ".join(songs.read_text().split()) if songs.exists() else ""
         check("la estacion existe", 'music_station = "meganations"' in st, st[:200])
-        check("el de paz no suena en guerra y solo a su faccion y satelites",
-              'song = "EFE_paz"' in st and "original_tag = PTA" in st and "has_war = yes" in st)
-        check("los temas viajan al mod", (mod / "music/meganations/EFE_himno.ogg").exists())
+        efe = st[st.index('song = "EFE_paz"'):][:300] if 'song = "EFE_paz"' in st else ""
+        check("el de paz suena solo en paz y solo a su faccion y satelites (como el juego: condiciones en el modifier)",
+              "modifier = { factor = 3 OR = { original_tag = EFE" in efe and "original_tag = PTA" in efe and "has_war = no" in efe, efe)
+        check("los temas viajan al mod, en music/ sin subcarpeta", (mod / "music/EFE_himno.ogg").exists())
         check("la estacion tiene nombre", "meganations_TITLE" in " ".join(
             p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*music*")))
 

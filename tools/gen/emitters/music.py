@@ -6,10 +6,10 @@ cada facción y sus satélites escuchan sus temas (los de paz en paz, los de
 guerra en guerra, el himno siempre) y los que empiezan con mn_ suenan para
 todos, así ningún país se queda sin música en la estación.
 
-Produce:
-  music/<estacion>/<id>.ogg          los temas
-  music/<estacion>/<estacion>.asset  qué archivo es cada tema
-  music/<estacion>/<estacion>_songs.txt  la estación y cuándo suena cada uno
+Produce (en music/ directamente: el juego no lee subcarpetas):
+  music/<id>.ogg                     los temas
+  music/<estacion>_music.asset       qué archivo es cada tema
+  music/<estacion>_songs.txt         la estación y cuándo suena cada uno
   interface/<estacion>_music.gfx     la tapa del disco de la estación
   localisation                       nombre de la estación y de cada tema
 """
@@ -57,31 +57,35 @@ def emit(ctx: BuildContext) -> None:
     songs_block = Block([("music_station", Quoted(station))])
     unknown = []
     for song in songs:
-        ctx.copy_asset(f"assets/music/{song}.ogg", f"music/{station}/{song}.ogg")
+        # 2026-10-25 ("la estación de radio no aparece"; archivos del juego que mandó el
+        # usuario): el juego lee las estaciones de music/ directamente, no de subcarpetas,
+        # y cada tema suena solo si se cumplen las condiciones de su `modifier`
+        ctx.copy_asset(f"assets/music/{song}.ogg", f"music/{song}.ogg")
         asset.append(f'music = {{\n\tname = "{song}"\n\tfile = "{song}.ogg"\n\tvolume = 0.65\n}}\n')
         tag, kind = classify(song)
-        chance = Block()
+        mod = Block()
         if tag is None:
-            chance.add("factor", w["everyone"])
+            mod.add("factor", w["everyone"])
         else:
             if tag not in tags:
                 unknown.append(song)
                 continue
             base = w["own_state"] if kind in ("paz", "guerra") else w["own_anthem"] if kind == "himno" else w["own_other"]
-            chance.add("factor", base)
+            mod.add("factor", base)
             sats = [s for s, o in subjects.items() if o == tag]
-            who = Block([("original_tag", tag)] + [("original_tag", s) for s in sats])
-            chance.add("modifier", Block([("factor", 0), ("NOT", Block([("OR", who)]) if len(who.entries) > 1
-                                                          else Block([("original_tag", tag)]))]))
+            if sats:
+                mod.add("OR", Block([("original_tag", x) for x in [tag] + sats]))
+            else:
+                mod.add("original_tag", tag)
             if kind == "paz":
-                chance.add("modifier", Block([("factor", 0), ("has_war", True)]))
+                mod.add("has_war", False)
             elif kind == "guerra":
-                chance.add("modifier", Block([("factor", 0), ("has_war", False)]))
-        songs_block.add("music", Block([("song", Quoted(song)), ("chance", chance)]))
+                mod.add("has_war", True)
+        songs_block.add("music", Block([("song", Quoted(song)), ("chance", Block([("modifier", mod)]))]))
         ctx.loc.define_and_reference(song, en=titles.get(song, song), es=titles.get(song, song),
                                      file="meganations_music", origin="music")
-    ctx.write_text(f"music/{station}/{station}.asset", banner_for(SOURCE).replace("#", "#") + "".join(asset))
-    ctx.write_text(f"music/{station}/{station}_songs.txt", banner_for(SOURCE) + render(songs_block))
+    ctx.write_text(f"music/{station}_music.asset", banner_for(SOURCE) + "".join(asset))
+    ctx.write_text(f"music/{station}_songs.txt", banner_for(SOURCE) + render(songs_block))
     name = spec.get("name") or {"english": "2100 Meganations", "spanish": "2100 Meganations"}
     ctx.loc.define_and_reference(f"{station}_TITLE", en=name["english"], es=name["spanish"],
                                  file="meganations_music", origin="music")
