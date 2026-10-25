@@ -30,7 +30,6 @@ _NAME = re.compile(r"(?i)^GFX_frontend_(main_?)?bg$|(main_?menu|menu).*(bg|backg
 _SPRITE = re.compile(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)"?\s+texturefile\s*=\s*"([^"]+)"', re.S)
 _GUI_SPRITE = re.compile(r'(?:spriteType|quadTextureSprite)\s*=\s*"?(GFX_[A-Za-z0-9_]+)"?')
 _MIN_BG_WIDTH = 1280
-_MIN_LOADING_WIDTH = 640   # pantallas de carga viejas o de expansiones más chicas
 
 
 def emit(ctx: BuildContext) -> None:
@@ -51,7 +50,7 @@ def emit(ctx: BuildContext) -> None:
     loading_dir = spec.get("loading_screens")
     screens = sorted((ctx.spec.root.parent / loading_dir).glob("*.dds")) if loading_dir else []
     if screens:
-        loading = sorted(t for t in targets if "loadingscreen" in t.lower() and t not in _frontend_textures(ctx))
+        loading = sorted(t for t in targets if t.startswith("gfx/loadingscreens/") and t not in _frontend_textures(ctx))
         for i, texture in enumerate(loading):
             dest = ctx.mod_root / texture
             dest.parent.mkdir(parents=True, exist_ok=True)
@@ -256,9 +255,10 @@ def _menu_textures(ctx: BuildContext) -> set[str]:
                     w, _h = _dims(fh.read(128))
             except OSError:
                 continue
-            # 2026-10-24 ("todavía hay muchas pantallas de carga de vainilla o de DLCs"):
-            # todas las de la carpeta, también las más chicas que el fondo del menú
-            if w >= _MIN_LOADING_WIDTH:
+            # 2026-10-25 (captura del usuario: dos imágenes superpuestas en la carga): solo
+            # las pantallas completas; las más chicas son recuadros que el juego dibuja
+            # encima del fondo, y con una imagen nuestra adentro se veían dos a la vez
+            if w >= _MIN_BG_WIDTH:
                 out.add(f"gfx/loadingscreens/{path.name}")
     # 2026-09-30 ("sacá las pantallas de carga que no sean del mod"): muchas
     # expansiones traen las suyas dentro de un .zip; también se pisan.
@@ -271,17 +271,10 @@ def _menu_textures(ctx: BuildContext) -> set[str]:
                     if low.startswith("gfx/loadingscreens/") and low.endswith(".dds") and "/" not in low[19:]:
                         with z.open(entry) as fh:
                             w, _h = _dims(fh.read(128))
-                        if w >= _MIN_LOADING_WIDTH:
+                        if w >= _MIN_BG_WIDTH:
                             out.add(entry.replace("\\", "/"))
         except (OSError, zipfile.BadZipFile):
             continue
-    # y cualquier sprite de la interfaz cuya textura sea una pantalla de carga
-    for name, texture in sprites.items():
-        low = texture.lower()
-        if "loadingscreen" in low and low.endswith(".dds"):
-            width, _h = _texture_dims(ctx, texture)
-            if width >= _MIN_LOADING_WIDTH:
-                out.add(texture)
     if small:
         ctx.note("menu principal: imagenes medianas del menu que NO se tocan: " + ", ".join(small[:15]))
     return out
