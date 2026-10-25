@@ -24,6 +24,7 @@ SOURCE = "spec/04_diplomacy.yaml -> rebellions"
 
 
 def prepare(ctx: BuildContext) -> None:
+    effects_mod.use_rebel_boost((ctx.spec.raw["diplomacy"].get("rebellions") or {}).get("boost"))
     cfg = (ctx.spec.raw["diplomacy"].get("rebellions") or {}).get("regions") or {}
     regions: dict[str, tuple[int, list[int]]] = {}
     if not cfg or ctx.vanilla is None:

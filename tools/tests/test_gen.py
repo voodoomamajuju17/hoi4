@@ -1502,7 +1502,7 @@ def test_events() -> None:
         cg = apf_ev[apf_ev.index("id = meganations_apf.421 title"):][:7000]
         check("el Congo rompe: se va de la federacion, recibe ejercito y declara la guerra",
               "end_puppet = ZCO" in cg and "set_cosmetic_tag = ZCO_LIBRE" in cg and "declare_war_on" in cg
-              and "add_manpower = 150000" in cg, cg[:900])
+              and "add_manpower = 225000" in cg, cg[:900])
         pul_apf = " ".join(pdx.render(pdx.parse(se_raw).get("APF_pulso_de_los_consejos")).split())
         check("plazo: en 2105.6.1 los que no se integraron quedan libres, sin justificacion para Roma",
               "date > 2105.6.1" in pul_apf and "meganations_apf.431" in pul_apf, pul_apf[:400])
@@ -1891,8 +1891,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("247 modificadores dinamicos (con los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 247 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("248 modificadores dinamicos (con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 248 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -3284,7 +3284,7 @@ def test_capitales_y_rebeliones() -> None:
               "type = infantry_equipment amount = 3000" in e71 and "type = infantry_equipment amount = -2000" in e76, e76[:400])
         # FCU: la secesion de Meridian
         fcu = flat(mod / "events/meganations_fcu.txt")
-        e312 = fcu[fcu.index("id = meganations_fcu.312 title"):][:5000]
+        e312 = fcu[fcu.index("id = meganations_fcu.312 title"):][:12000]
         check("FCU: la corporacion se separa (guerra civil) con nombre propio y se une a las Tierras Sin Ley",
               "start_civil_war = { ideology = neutrality" in e312 and "set_cosmetic_tag = FCU_MERIDIAN" in e312
               and "MEGANATIONS_hermandad_sin_ley = yes" in e312
@@ -4357,6 +4357,18 @@ def test_musica() -> None:
             p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*music*")))
 
 
+def test_rebeliones_reforzadas() -> None:
+    section("rebeliones reforzadas (2026-10-25)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        fcu = " ".join((ctx.mod_root / "events/meganations_fcu.txt").read_text().split())
+        cw = fcu[fcu.index("start_civil_war"):][:9000] if "start_civil_war" in fcu else ""
+        check("Meridian se lleva al menos el 35% del pais", "size = 0.35" in cw, cw[:200])
+        check("los rebeldes arrancan con su columna, gente y fervor",
+              "Columna_Rebelde" in cw.replace("Columna Rebelde", "Columna_Rebelde") and "add_manpower = 120000" in cw
+              and "MEGANATIONS_fervor_rebelde" in cw, cw[:600])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4413,6 +4425,7 @@ def main() -> int:
         test_marines_hsn,
         test_decisiones_vanilla,
         test_musica,
+        test_rebeliones_reforzadas,
         test_simulador,
         test_vanilla_validation,
     ):

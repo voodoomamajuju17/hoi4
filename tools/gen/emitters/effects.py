@@ -70,6 +70,16 @@ def use_regions(mapping: dict[str, tuple[int, list[int]]] | None) -> None:
     _REGIONS.update(mapping or {})
 
 
+# 2026-10-25 (pedido del usuario: "reforzar un poco las rebeliones"): lo que recibe
+# siempre el bando que se separa en una guerra civil (04_diplomacy -> rebellions.boost)
+_REBEL_BOOST: dict = {}
+
+
+def use_rebel_boost(cfg: dict | None) -> None:
+    _REBEL_BOOST.clear()
+    _REBEL_BOOST.update(cfg or {})
+
+
 def use_states(mapping: dict[str, int] | None) -> None:
     global _STATES
     _STATES = mapping
@@ -849,7 +859,8 @@ def render_effects(owner: str, items: list[dict], known,
             for k in ("set_global_flag", "set_variable", "set_country_flag"):
                 effects_used.setdefault(k, owner)
             ec.triggers_used.setdefault("has_idea", owner)
-            inner = Block([("ideology", item["ideology"]), ("size", float(item.get("size", 0.35)))])
+            size = max(float(item.get("size", 0.35)), float(_REBEL_BOOST.get("min_size", 0)))
+            inner = Block([("ideology", item["ideology"]), ("size", size)])
             # 2026-10-11: dónde se levanta (capital y regiones del bando que se
             # separa, de rebeliones.py) y qué parte del ejército, la flota y la
             # aviación se lleva
@@ -877,6 +888,8 @@ def render_effects(owner: str, items: list[dict], known,
                 rb.add("set_country_leader_portrait", Block([("portrait", portrait_sprite(leader["portrait"]))]))
             if rebels.get("effects"):
                 rb.entries.extend(render_effects(owner, rebels["effects"], ec, effects_used, where=where).entries)
+            if _REBEL_BOOST.get("effects"):
+                rb.entries.extend(render_effects(owner, _REBEL_BOOST["effects"], ec, effects_used, where=where).entries)
             block.add("random_country", rb)
             if item.get("global_flag"):
                 block.add("set_global_flag", item["global_flag"])

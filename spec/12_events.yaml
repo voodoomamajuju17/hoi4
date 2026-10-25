@@ -3401,7 +3401,7 @@ namespaces:
           - effect: civil_war
             tag: FCU
             ideology: neutrality
-            size: 0.25
+            size: 0.35          # 2026-10-25: 0.25 -> 0.35 ("reforzar un poco las rebeliones")
             global_flag: FCU_secesion_meridian
             rebels:
               cosmetic_tag: FCU_MERIDIAN
@@ -7560,22 +7560,24 @@ namespaces:
           - {effect: leave_faction}
           - {effect: cosmetic_tag, value: ZCO_LIBRE}
           - {effect: dynamic_modifier, id: MEGANATIONS_la_selva_resiste, days: 730}
-          - {effect: add_manpower, value: 150000}
+          - {effect: add_manpower, value: 225000}
           - {effect: add_stability, value: 0.1}
           - {effect: add_war_support, value: 0.2}
-          - {effect: equipment, type: infantry_equipment, amount: 9000}
-          - {effect: equipment, type: support_equipment, amount: 1200}
-          - {effect: equipment, type: artillery_equipment, amount: 900}
-          - {effect: build, building: arms_factory, level: 3}
+          - {effect: equipment, type: infantry_equipment, amount: 14000}
+          - {effect: equipment, type: support_equipment, amount: 1800}
+          - {effect: equipment, type: artillery_equipment, amount: 1400}
+          - {effect: dynamic_modifier, id: MEGANATIONS_fervor_rebelde, days: 365}
+          - {effect: build, building: arms_factory, level: 5}
           - {effect: build, building: industrial_complex, level: 2}
           - effect: division_template
             name: Guardia del Gran Río
             regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade]
-          - {effect: create_units, template: Guardia del Gran Río, count: 10, experience: 0.3}
+          # 2026-10-25 (pedido del usuario: "reforzar un poco las rebeliones"): 10 -> 15 y 6 -> 9
+          - {effect: create_units, template: Guardia del Gran Río, count: 15, experience: 0.3}
           - effect: division_template
             name: Milicia del Kivu
             regiments: [infantry, infantry, infantry, infantry]
-          - {effect: create_units, template: Milicia del Kivu, count: 6, experience: 0.15}
+          - {effect: create_units, template: Milicia del Kivu, count: 9, experience: 0.15}
           - {effect: declare_war, target: APF, type: annex_everything}
         - {effect: add_variable, var: APF_tension, value: 10}
         - {effect: add_war_support, value: 0.05}

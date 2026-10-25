@@ -318,6 +318,22 @@ race:
 # -----------------------------------------------------------------------------
 rebellions:
   src: user_request
+  # 2026-10-25 (pedido del usuario: "hay que reforzar un poco las rebeliones, Meridian, el
+  # consejo en África, etc."): el bando que se separa en cualquier guerra civil se lleva
+  # al menos `min_size` del país y arranca con tropas, equipo y gente propios, aunque el
+  # país tuviera un ejército chico cuando estalló
+  boost:
+    min_size: 0.35
+    effects:
+    - {effect: add_manpower, value: 120000}
+    - {effect: equipment, type: infantry_equipment, amount: 6000}
+    - {effect: equipment, type: support_equipment, amount: 800}
+    - {effect: equipment, type: artillery_equipment, amount: 600}
+    - effect: division_template
+      name: Columna Rebelde
+      regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade]
+    - {effect: create_units, template: Columna Rebelde, count: 8, experience: 0.3}
+    - {effect: dynamic_modifier, id: MEGANATIONS_fervor_rebelde, days: 365}
   regions:
     NRE_oriente: {tag: NRE, side: east}
     HSN_nodo:
