@@ -292,8 +292,11 @@ def _designer_icons(ctx: BuildContext, tags: list[str], sprites: Block, equipmen
     # país arrancan con la suya.
     ships = Block()
     n_ships = 0
+    # error.log 2026-10-25 ("Unknown equipment type: ship_hull_super_heavy"): solo equipos
+    # que el juego define en common/units/equipment (no los que solo nombra una tecnología)
+    real = set(ctx.vanilla.equipment())
     for tag in tags:
-        mine = {cat: lst for cat, lst in (own.get(tag) or {}).items() if cat.startswith("ship_hull")}
+        mine = {cat: lst for cat, lst in (own.get(tag) or {}).items() if cat.startswith("ship_hull") and cat in real}
         if not mine:
             continue
         block = Block()
