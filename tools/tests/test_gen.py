@@ -3185,10 +3185,12 @@ def test_faction_tech() -> None:
         db = mod / "gfx/interface/equipmentdesigner/graphic_db/meganations_00_icons_fixture.txt"
         dbt = " ".join(db.read_text(encoding="utf-8-sig").split()) if db.exists() else ""
         check("disenador: cada faccion con imagen tiene su bloque en la base de imagenes (copiado de un pais del juego)",
-              _re.search(r'EFE = \{ infantry_equipment = \{ icons = \{ "GFX_EFE_infantry_equipment_\d_medium" "GFX_GER_', dbt)
+              _re.search(r'EFE = \{ infantry_equipment = \{ icons = \{ (?:"GFX_EFE_infantry_equipment_\d_medium" )+"GFX_GER_', dbt)
               and "GER_rifle_entity" in dbt, dbt[:500])
         check("disenador: la propia va primero, una por imagen, y quedan las del juego como alternativa",
-              dbt.count('"GFX_EFE_infantry_equipment_') == 1 and '"GFX_GER_infantry_equipment_1_medium" }' in dbt, dbt[:500])
+              # 2026-10-26: con la imagen moderna de cada arma hay una entrada por imagen distinta
+              dbt.count('"GFX_EFE_infantry_equipment_') == 1 + len(list((REPO_ROOT / "assets/EFE/armas").glob("rifle_[0-9].dds")))
+              and '"GFX_GER_infantry_equipment_1_medium" }' in dbt, dbt[:500])
         check("disenador: sin imagen propia no se agrega bloque (SHD queda con las del juego)",
               "SHD = {" not in dbt and "western_european" not in dbt, dbt[:300])
         # 2026-10-24: lista propia de íconos para los cascos (el juego no trae una para barcos)
@@ -4369,6 +4371,36 @@ def test_rebeliones_reforzadas() -> None:
               and "MEGANATIONS_fervor_rebelde" in cw, cw[:600])
 
 
+def test_espacios_fabricas() -> None:
+    section("fabricas dentro de los espacios de la region (2026-10-26)")
+    from tools.gen.vanilla import Vanilla
+    from tools.gen import pdx as pdx_mod
+    van = Vanilla(FIXTURE_VANILLA)
+    shared = van.shared_slot_buildings()
+    check("lee shares_slots suelto y dentro de level_cap",
+          {"industrial_complex", "arms_factory", "dockyard"} <= shared, sorted(shared))
+    slots = van.state_category_slots()
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        over = []
+        for path in sorted((ctx.mod_root / "history/states").glob("*.txt")):
+            state = pdx_mod.parse_file(path).get("state")
+            hist = state.get("history") if state is not None else None
+            if hist is None:
+                continue
+            cat = pdx_mod.text(state.get("state_category")) if state.get("state_category") is not None else ""
+            extra = hist.get("add_extra_state_shared_building_slots")
+            room = slots.get(cat, 0) + (int(pdx_mod.text(extra)) if extra is not None else 0)
+            b = hist.get("buildings")
+            used = sum(int(float(pdx_mod.text(v))) for k, v in (b.entries if b is not None else [])
+                       if k in shared)
+            vanilla_used = sum(v for k, v in (next((s.buildings for s in van.states()
+                               if s.path.name == path.name), None) or {}).items() if k in shared)
+            if used > max(room, vanilla_used):
+                over.append(f"{path.name}: {used}/{room}")
+        check("ninguna region tiene mas fabricas que espacios", not over, over[:5])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4426,6 +4458,7 @@ def main() -> int:
         test_decisiones_vanilla,
         test_musica,
         test_rebeliones_reforzadas,
+        test_espacios_fabricas,
         test_simulador,
         test_vanilla_validation,
     ):

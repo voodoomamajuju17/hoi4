@@ -46,13 +46,9 @@ def _construction(ctx, spec, assignment, by_state, added) -> None:
     kind = {c.tag: ("meganation" if c.is_major else "satellite" if c.is_subject else "anarchy")
             for c in ctx.spec.countries}
     slots_by_cat = ctx.vanilla.state_category_slots()
-    shared = ctx.vanilla.shared_slot_buildings()
+    shared = ctx.vanilla.shared_slot_buildings() or _shared_fallback(ctx)
     extra_by_kind = spec.get("extra_slots") or {}
-    extra: dict[int, int] = {}
-    for sid, tag in assignment.items():
-        n = int(extra_by_kind.get(kind.get(tag), 0))
-        if n > 0 and sid in by_state:
-            extra[sid] = n
+    extra = _extra_slots(ctx, assignment, by_state)
     ctx.data["extra_slots"] = extra
     if extra:
         ctx.note(f"construccion: {sum(extra.values())} espacios extra en {len(extra)} regiones "
@@ -179,7 +175,7 @@ def _resource_floor(ctx, spec, assignment, capitals, by_state, kinds, delta) -> 
 
 def _industrialize(ctx, spec, assignment, by_state, added) -> None:
     slots_by_cat = ctx.vanilla.state_category_slots()
-    shared = ctx.vanilla.shared_slot_buildings()
+    shared = ctx.vanilla.shared_slot_buildings() or _shared_fallback(ctx)
     building = spec["building"]
     if not slots_by_cat:
         ctx.warn("industrializacion: no pude leer common/state_category/; se saltea.")
@@ -284,6 +280,27 @@ def _deindustrialize(ctx, tag, owned, excess, added) -> None:
 def _ic(s: StateInfo) -> int:
     b = s.buildings or {}
     return b.get("industrial_complex", 0) + b.get("arms_factory", 0)
+
+
+def _extra_slots(ctx, assignment, by_state) -> dict[int, int]:
+    """Espacios extra por región (15_balance -> construction.extra_slots)."""
+    spec = ((ctx.spec.raw.get("balance") or {}).get("construction") or {}).get("extra_slots") or {}
+    kind = {c.tag: ("meganation" if c.is_major else "satellite" if c.is_subject else "anarchy")
+            for c in ctx.spec.countries}
+    out: dict[int, int] = {}
+    for sid, tag in assignment.items():
+        n = int(spec.get(kind.get(tag), 0))
+        if n > 0 and sid in by_state:
+            out[sid] = n
+    return out
+
+
+def _shared_fallback(ctx) -> set[str]:
+    """Si no se pudo leer common/buildings/, las fábricas de siempre: mejor
+    contar de más que llenar una región por encima de sus espacios."""
+    ctx.warn("edificios: no pude leer cuales comparten espacios (common/buildings/); uso la lista conocida.")
+    return {"industrial_complex", "arms_factory", "dockyard", "synthetic_refinery",
+            "fuel_silo", "rocket_site", "nuclear_reactor"}
 
 
 def _free_slots(s: StateInfo, slots_by_cat: dict[str, int], shared: set[str]) -> int:

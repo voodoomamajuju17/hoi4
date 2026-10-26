@@ -898,7 +898,17 @@ class Vanilla:
             block = root.get("buildings")
             if isinstance(block, pdx.Block):
                 for name, b in block.entries:
-                    if name and isinstance(b, pdx.Block) and pdx.text(b.get("shares_slots")) == "yes":
+                    if not name or not isinstance(b, pdx.Block):
+                        continue
+                    # Desde 1.12 va dentro de `level_cap = { shares_slots = yes }`;
+                    # antes estaba suelto. Sin esto ninguna fábrica contaba como
+                    # ocupada y se llenaban regiones por encima de sus espacios
+                    # (Kanto con 22 en 15: "Malformed token: 16" en el error.log).
+                    cap = b.get("level_cap")
+                    flag = b.get("shares_slots")
+                    if flag is None and isinstance(cap, pdx.Block):
+                        flag = cap.get("shares_slots")
+                    if flag is not None and pdx.text(flag) == "yes":
                         out.add(name)
         return out
 
