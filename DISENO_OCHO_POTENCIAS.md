@@ -2072,3 +2072,7 @@ Pedido del usuario: "1/1/2120 all the way"; las anarquías quedan como están. E
 Partida del usuario: la APF peleaba en Anatolia y no había absorbido a ningún satélite. Con un presupuesto de poder político (40-60 por mes, compitiendo con el resto de sus decisiones) el simulador lo reproduce: en 95 de 100 partidas ninguna anexión hasta 2106. La IA gastaba en Ayuda a los siete y repartía la integración entre todos; ninguno llegaba a 100 y la tensión quedaba en 84-100, que la frenaba.
 
 Cambio solo en los pesos de la IA (las reglas del jugador no cambian): integrar frena con tensión 85 (antes 70) y prioriza al miembro que ya va por 20 (x2) o 40 (x4); invertir frena con tensión 60 (antes 75) y prioriza al miembro cuya integración está trabada por el Desarrollo; la Ayuda a un miembro que ya va por 20 de integración baja a x0,25. Simulado: 4 a 7 satélites integrados hasta 2106, también en guerra y con poco poder político. Test: test_rumbo_2120.
+
+## Bitácora anual en el game.log (2026-10-27)
+
+Antes de la partida de observador: cada año (desde el 2/1/2100) el game.log recibe una línea por meganación y por Tierra Sin Ley con regiones controladas, divisiones, fábricas civiles y militares, satélites y estabilidad (%), o "ya no existe". Buscar "MEGANATIONS bitacora". La corren las ocho meganaciones con una cuenta de años propia y escribe solo la primera, así sigue aunque alguna desaparezca. Emisor: tools/gen/emitters/bitacora.py. Test: test_bitacora.

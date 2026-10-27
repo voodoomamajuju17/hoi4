@@ -4425,6 +4425,20 @@ def test_rumbo_2120() -> None:
               for x in ("zet", "zsa", "zco", "zao", "zmz", "zmg", "zke")))
 
 
+def test_bitacora() -> None:
+    section("bitacora anual en el game.log (2026-10-27)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        ev = (ctx.mod_root / "events/meganations_bitacora.txt").read_text(encoding="utf-8-sig")
+        on = (ctx.mod_root / "common/on_actions/07_meganations_bitacora.txt").read_text(encoding="utf-8-sig")
+        check("cada meganacion y anarquia deja su foto o 'ya no existe'",
+              all(f"MEGANATIONS bitacora {t} regiones" in ev and f"MEGANATIONS bitacora {t} ya no existe" in ev
+                  for t in ("EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE", "ZAN", "ZWE")), ev[:400])
+        check("se repite cada 365 dias y escribe una sola vez por anio",
+              "days = 365" in ev and "global.MN_bitacora_n" in ev, ev[:400])
+        check("la arrancan las ocho meganaciones", all(f"\t\t\t{t} = {{" in on for t in ("EFE", "NRE", "HSN")), on[-300:])
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4484,6 +4498,7 @@ def main() -> int:
         test_rebeliones_reforzadas,
         test_espacios_fabricas,
         test_rumbo_2120,
+        test_bitacora,
         test_simulador,
         test_vanilla_validation,
     ):
