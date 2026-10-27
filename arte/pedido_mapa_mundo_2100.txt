@@ -1,0 +1,159 @@
+# 2 pedidos - mapa del mundo en 2100 (megafacciones, zonas de influencia y anarquías)
+#
+# Para ChatGPT (imagen). Pegar UN bloque ASSET_REQUEST por vez.
+# Primero el 1 (mapa con texto, leyenda y descripciones). Si el texto sale roto,
+# pedir el 2 (el mismo mapa sin texto) y después pedir solo la leyenda aparte.
+#
+# De dónde sale cada frontera (todo del spec, rama claude/youthful-carson-7d9r1t):
+#   spec/08_territory.yaml   -> qué regiones tiene cada país al 1/1/2100
+#   spec/02_countries.yaml   -> nombres, colores del juego, quién es satélite de quién
+#   spec/04_diplomacy.yaml   -> facciones y rivalidades
+#   spec/12_events.yaml      -> "EL MUNDO EN 2100" de cada país (descripciones y líderes)
+#   city_names / capitals    -> nombres de 2100 de las capitales
+# El reparto se hace sobre el mapa de HOI4 de 1936: "todo lo que era de X" usa las
+# fronteras de 1936 (por ejemplo Polonia con Lwów y Wilno, Rumania con Besarabia).
+# El Santuario de Gaia (ZSG) no está: no existe al arrancar.
+#
+# Colores: las 8 potencias usan su color del juego (02_countries.yaml). Los
+# satélites van rayados con el color de su potencia (para que se vea la zona de
+# influencia) y las anarquías en tonos apagados de ruina, para que se lean.
+
+ASSET_REQUEST
+type: world_map_poster
+id: mapa_mundo_2100
+filename: mapa_mundo_2100.png
+size: 3840x2160 (16:9; o más grande con la misma proporción)
+transparent_background: false
+style: A finished strategy-game world map poster for the Hearts of Iron IV mod "2100 Meganations", painted like a high-end Paradox Interactive political map seen on a war-room table: flat political colour fills on realistic modern coastlines, subtle painted relief (mountain shading on the Andes, Rockies, Alps, Himalaya, Urals and Atlas showing through the colours at 15% opacity), soft paper grain, crisp vector-sharp borders, elegant serif labels in Spanish. Retrofuturist year 2100 mood: a faint cyan holographic latitude/longitude grid every 15 degrees over the oceans, a thin brass-and-graphite frame around the whole poster with small rivets in the corners. Even, flat, top-down lighting with no shadows cast across the map and no perspective tilt: the map must stay perfectly flat and readable like a printed atlas plate. No watermark, no signature, no logos of real companies, no real-world modern flags.
+description: |
+  WHAT: an EXACT political map of the whole world on 1 January 2100, showing the eight meganations, their satellites (their zones of influence) and the anarchies, with a title, a legend and one short description of each faction. Accuracy of who owns what matters more than anything else: follow the territory list below exactly and do not invent extra countries.
+
+  LAYOUT (16:9 landscape):
+  - Map area: the left 72% of the poster, full height minus a title band. Right 28%: a vertical dark graphite side panel with the legend and the descriptions.
+  - Title band across the top of the map area, dark graphite (#1C2024) with thin brass lines: big title "EL MUNDO EN 2100" and smaller subtitle "Las ocho meganaciones, sus zonas de influencia y las anarquías — 1 de enero de 2100".
+  - Small compass rose in the lower-left ocean (South Pacific), a small scale bar under it.
+
+  PROJECTION AND FRAMING: Miller cylindrical projection like the Hearts of Iron IV map, centred on the Greenwich meridian, cropped from 80°N (so all of Greenland, Svalbard and northern Siberia show) down to 57°S (Cape Horn and the Malvinas show, Antarctica not shown). The Pacific is split at the left and right edges: Alaska, Hawaii and the western Americas on the left; Japan, New Zealand and the Pacific islands on the right. Real modern coastlines and lakes.
+
+  OCEANS: deep slate blue #1E3448, slightly lighter near coasts (#2A4660), with the faint cyan holographic grid. Ocean names in pale italic serif: "Océano Pacífico", "Océano Atlántico", "Océano Índico", "Océano Ártico", "Mar Mediterráneo", "Mar de la China Meridional", "Mar del Caribe".
+
+  HOW TO DRAW EACH KIND OF COUNTRY:
+  1) MEGANATION (8): solid flat fill in its colour (given below), country outline 3 px in the darker shade of the same colour. Its capital: a gold five-point star inside a small circle, with the 2100 capital name in small italic. Country name in bold small caps, white with a thin dark outline, large enough to read.
+  2) SATELLITE: diagonal stripes at 45 degrees, half the stripes in its meganation's colour and half pale cream #EFE6D2 (so it reads as "belongs to that bloc, but is not the same country"), outlined 2 px in the meganation's dark shade. Name in regular small caps, dark graphite.
+  3) ZONE OF INFLUENCE: around each whole bloc (the meganation plus all its satellites together) draw one thick outer glow border, 6 px, in the meganation's colour at 60% opacity, following the bloc's outer coastline and land borders. Between members of the same bloc keep only a thin white 1 px line.
+  4) ANARCHY: flat muted fill in its colour (below) covered by a dark cracked, scorched, crosshatched texture like burnt paper; border drawn as a jagged dashed line in near-black #2B2B2B. Name in distressed stencil capitals, off-white. No stars, no capitals.
+  Between countries of different blocs: a crisp 2 px near-black border.
+
+  THE EIGHT MEGANATIONS AND THEIR SATELLITES (exact territory; "1936" means the borders of that country on the Hearts of Iron IV 1936 map):
+
+  A. IMPERIO ECOFASCISTA (EFE) — forest green #2A8436, dark shade #194F20. Capital star: Gaia (old Buenos Aires).
+     Territory: all of Argentina EXCEPT Tierra del Fuego; all of Uruguay; all of Chile EXCEPT the Magallanes region; the Brazilian state of Rio Grande do Sul; the island of South Georgia.
+     Satellites (green stripes):
+     - Patagonia Austral (PTA): Tierra del Fuego (both the Argentine and Chilean parts), the Chilean Magallanes region and the Malvinas/Falkland Islands. Small capital dot: Puerto del Fin del Mundo (Punta Arenas).
+     - Yvytu Ykua Guasu (YYG): all of Paraguay plus the Brazilian states of Mato Grosso, Mato Grosso do Sul (the Ponta Porã area), Paraná and Santa Catarina. Small capital dot: Asunción de las Aguas. NOTE: Misiones and Formosa are NOT in this satellite; they stay solid EFE green.
+     Bloc label in the sea next to it: "El Pacto de la Tierra".
+
+  B. REINO CELESTE NEOANDINO (NAS) — sun gold #E4BA30, dark shade #89701D. Capital star: Qosqo (Cusco).
+     Territory: all of Peru, Bolivia and Ecuador.
+     Satellites (gold stripes):
+     - Nueva Granada (ZNG): all of Colombia (Panama is NOT included, see FCU).
+     - Llanos Libres del Orinoco (ZLL): all of Venezuela plus the three Guianas (Guyana, Suriname and French Guiana).
+     Bloc label: "La Confederación del Sol".
+
+  C. UNIÓN LIBRE DE CAPITAL CORPORATIVO (FCU) — corporate blue #3048B4, dark shade #1D2B6C. Capital star: Gran Manhattan (New York).
+     Territory: the contiguous United States EXCEPT six Midwest states (North Dakota, South Dakota, Nebraska, Kansas, Iowa, Minnesota), which are Tierras Sin Ley. So the FCU is a horseshoe: the whole East Coast, the South, Texas, the Rockies and the whole West Coast, still connected through Missouri/Oklahoma, with a lawless hole in the northern plains. Plus the whole Isthmus of Panama with the Panama Canal, and the island of Puerto Rico. Alaska is NOT FCU.
+     Satellites (blue stripes):
+     - Zona de Recursos Boreal (ZNR): southern Canada (British Columbia, Alberta, Saskatchewan, Manitoba, Ontario, Quebec and the Maritimes). The Yukon, the Northwest Territories and Nunavut/Keewatin are NOT included (Tierras Sin Ley).
+     - Zona Económica del Sur (ZSE): Mexico EXCEPT its four north-western states (Baja California, Sonora, Chihuahua and Sinaloa, which are Tierras Sin Ley), plus Honduras, El Salvador and Costa Rica. Guatemala and Nicaragua are NOT included (Tierras Sin Ley), so this satellite is broken into pieces in Central America.
+     Bloc label: "La Cartera Continental".
+
+  D. NACIÓN DE MERCADO DE ALTA MAR (HSN) — sea petrol #0C788A, dark shade #074853. Capital star: Nodo Cero (Singapore).
+     Territory, a maritime empire of straits and islands: Thailand; Vietnam, Laos and Cambodia; the whole Malay peninsula and Singapore; all of Borneo (Sarawak, Sabah, Brunei and Indonesian Kalimantan); all of Indonesia (Sumatra, Java, Sulawesi, the Moluccas, the Lesser Sunda Islands); East Timor; the Philippines; Japan (Honshu, Hokkaido, Shikoku, southern Sakhalin and the Kuril Islands) EXCEPT Okinawa and the Kitakyushu region of Kyushu, which are Korean (see SHD). In the Pacific: Hawaii, Midway, Wake, Johnston Atoll, Guam, the Marianas, Caroline and Marshall Islands, the Gilbert Islands, the Line Islands; in the Indian Ocean: Christmas Island and the Cocos Islands. Draw the small islands as clear dots with a petrol ring so they are visible.
+     Satellites (petrol stripes):
+     - Pacto del Mar Austral (ZAS): Australia, New Zealand, New Guinea and the South Pacific islands (Solomon Islands, New Hebrides, New Caledonia, Fiji, Samoa and American Samoa, Tuvalu, the Phoenix Islands).
+     - Puertos Libres Antillanos (ZAF): Cuba, Hispaniola (Haiti and the Dominican Republic), Jamaica, the Bahamas, Trinidad and Tobago, the Windward Islands, Martinique and Guadeloupe, Curaçao and the Dutch Antilles. (Puerto Rico is FCU, not this.)
+     Bloc label: "La Liga de los Puertos".
+
+  E. COMUNA SOCIALISTA AUTOMATIZADA (ASC) — commune red #C63030, dark shade #771D1D. Capital star: Kommune Berlin.
+     Territory: Germany (1936 borders, including East Prussia), Austria, Switzerland, the Czech lands (Bohemia and Moravia), the Netherlands, Belgium, Luxembourg, Denmark, Norway (with Svalbard), Sweden, plus Danzig and the Polish corridor (Gdynia/Pomorze down to Toruń). Also Denmark's Atlantic lands: Iceland, the Faroe Islands and Greenland (whole of Greenland in red).
+     Satellites (red stripes):
+     - Comuna Báltica (ZBC): Poland in its 1936 borders (with Wilno/Vilnius, Brest and Lwów, but without the corridor), Slovakia, Carpathian Ruthenia, Finland (1936 borders, with Viipuri and Petsamo), Estonia, Latvia and Lithuania.
+     - República Obrera de Albión (ZAL): Great Britain, Northern Ireland and Ireland.
+     Bloc label: "La Red de las Comunas".
+
+  F. NEO IMPERIO ROMANO (NRE) — imperial purple #78309C, dark shade #481D5E. Capital star: Roma.
+     Territory: France (with Corsica), Italy (with Sicily, Sardinia and Istria), Yugoslavia, Albania, Greece (with Crete) and all of Turkey (European Thrace and the whole of Anatolia).
+     Satellites (purple stripes):
+     - Provincia de Hispania (ZHI): Spain and Portugal (the Iberian peninsula and the Balearic Islands).
+     - Provincia de Dacia (ZDA): Romania (1936 borders, with Bessarabia and Transylvania), Bulgaria and Hungary.
+     Bloc label: "La Pax Romana".
+
+  G. DIRECTORIO SINO-ARMÓNICO (SHD) — harmony jade #78C6A8, dark shade #487765. Capital star: Hexie Jing (Beijing).
+     Territory: all of China reunified, from Manchuria to Tibet: Manchuria, the whole Chinese heartland and coast, Xinjiang, Tibet, Yunnan, Guangxi, Qinghai and Gansu, plus the island of Taiwan. EXCEPTION: Hong Kong and Macau are NOT Chinese here (they belong to the Señores de la Guerra del Indostán, see anarchies) and Mengjiang (Inner Mongolia: Chahar and Suiyuan) belongs to the Steppe satellite.
+     Satellites (jade stripes):
+     - Protectorado Armónico de Corea (ZKR): the whole Korean peninsula plus Okinawa and the Kitakyushu region in northern Kyushu.
+     - Directorio de la Estepa (ZST): Mongolia, Tuva, Mengjiang (Inner Mongolia: Chahar and Suiyuan) and ALL of the old Soviet Asia: Siberia, the Russian Far East (Vladivostok, Kamchatka, northern Sakhalin) and Central Asia (Kazakhstan, Uzbekistan, Turkmenistan, Kyrgyzstan, Tajikistan). It is the largest single territory on the map; its western border runs along the Ural Mountains and the Caspian Sea.
+     Bloc label: "La Esfera Armónica".
+
+  H. FEDERACIÓN DE LOS PUEBLOS AFRICANOS (APF) — earth orange #C66C1E, dark shade #774112. Capital star: Èkó (Lagos).
+     Territory: almost all of Africa: Morocco (with the Spanish zone and Western Sahara), Algeria, Tunisia, Libya, Egypt (with the Suez Canal and Sinai), Sudan, Eritrea, Djibouti, the Somalias, Niger, Chad, Nigeria, Ghana, Togo, Dahomey/Benin, Cameroon, Gabon, the Republic of the Congo (Brazzaville), the Central African Republic, Uganda, Tanganyika/Tanzania, Ruanda-Urundi, Zambia, Malawi, Zimbabwe, Botswana, Lesotho and Eswatini.
+     Satellites, called "members" (orange stripes; this bloc has seven, label each one):
+     - Federación de las Tierras Altas (ZET): Ethiopia.
+     - Federación del Cabo (ZSA): South Africa, with South West Africa (Namibia).
+     - Confederación del Congo (ZCO): the former Belgian Congo (the six regions of Kinshasa, Mbandaka, Kisangani, Kivu, Kasái and Katanga).
+     - Unión de Angola (ZAO): Angola with Cabinda.
+     - Liga de Mozambique (ZMZ): Mozambique.
+     - Asamblea de la Isla Roja (ZMG): Madagascar and the Comoro Islands.
+     - Federación del Rift (ZKE): Kenya.
+     West Africa (from Senegal to Burkina Faso and Ivory Coast) is NOT APF: it is Tierras Sin Ley.
+     Bloc label: "El Congreso de los Pueblos".
+
+  THE ANARCHIES (independent warlords, not a faction, each fights alone; muted fills with the scorched texture):
+  - Señores de la Guerra de Eurasia (ZWE) — ash rose #A9827B. All of the old European USSR that no meganation holds: from Leningrad and Karelia down to Crimea, from the Dnieper and Belarus (Minsk) east to the Volga and the Urals, including the Caucasus. EXCEPT the Kiev region, which is Tierras Sin Ley.
+  - Señores de la Guerra del Indostán (ZWI) — umber #6C5848. The whole Indian subcontinent (India, Pakistan, Bangladesh, Nepal, Bhutan, Ceylon/Sri Lanka), Burma and Afghanistan (from Kabul to Madras), plus two coastal enclaves on the Chinese coast: Hong Kong and Macau (draw them as small umber dots with a label).
+  - Emiratos del Desierto (ZWM) — desert ochre #B39A6B. The Arabian peninsula (Nejd, Hejaz, Yemen, Oman, the Gulf coast and Kuwait), Iraq/Mesopotamia, Persia/Iran, Syria, Lebanon, Jordan and Palestine. Their border with Rome is the Turkish southern border; with the Federation, the Sinai.
+  - Caudillos del Amazonas (ZWB) — charred maroon #6E3A48. All of Brazil that the Empire and Yvytu do not hold: the Amazon, the north-east, Minas Gerais, Rio de Janeiro and São Paulo, from Manaus to Belém and down to São Paulo.
+  - Las Tierras Sin Ley (ZAN) — cold slate grey #7F9299 with a scattered stipple. Scattered holes in the map, all with the same colour and the label "Tierras Sin Ley" on each piece: (1) Alaska and the Aleutian Islands; (2) northern Canada: the Yukon, the Northwest Territories and Nunavut/Keewatin; (3) the US Midwest: North Dakota, South Dakota, Nebraska, Kansas, Iowa and Minnesota; (4) north-west Mexico: Baja California, Sonora, Chihuahua and Sinaloa; (5) Guatemala and Nicaragua; (6) West Africa: Mauritania, Senegal, Gambia, Guinea-Bissau, Guinea, Sierra Leone, Liberia, Ivory Coast, Mali (French Sudan) and Upper Volta (Burkina Faso); (7) the Kiev region in Ukraine, a small island of slate surrounded by Eurasia.
+
+  NO OTHER COUNTRIES: there are no free modern states on this map. Every piece of land belongs to one of the countries above. Antarctica is not shown.
+
+  RIGHT SIDE PANEL (dark graphite #1C2024, text in warm off-white #EDE6D6, headings in each faction's colour). Top: legend with four small sample swatches and their meaning: "Meganación" (solid fill + gold star), "Satélite / miembro" (stripes), "Zona de influencia" (glowing outer border), "Anarquía" (scorched fill, dashed border). Below: eight compact blocks, one per meganation, each with a colour square, the name in bold, then one or two lines, then its satellites on one line. Then one block "Las anarquías" with one line each. Keep these texts exactly:
+
+  ■ IMPERIO ECOFASCISTA — Gaia. Emperador Aurelio IV. El bosque es la nación y la nación obedece; cultiva el Bioacero, un metal vivo que crece en cubas.
+    Satélites: Patagonia Austral · Yvytu Ykua Guasu
+  ■ REINO CELESTE NEOANDINO — Qosqo. Sapa Inti Amaru Quispe II, hijo del Sol. Guarda la luz del sol en templos-batería, el Inti-Soma.
+    Satélites: Nueva Granada · Llanos Libres del Orinoco
+  ■ UNIÓN LIBRE DE CAPITAL CORPORATIVO — Gran Manhattan. Valeria Castellane. Lo que queda de los Estados Unidos, gobernado por cuatro corporaciones; los ciudadanos son accionistas.
+    Satélites: Zona de Recursos Boreal · Zona Económica del Sur
+  ■ NACIÓN DE MERCADO DE ALTA MAR — Nodo Cero. Capitán General Kofi Aldana. No la define una frontera sino una ruta: cobra el paso por los estrechos.
+    Satélites: Pacto del Mar Austral · Puertos Libres Antillanos
+  ■ COMUNA SOCIALISTA AUTOMATIZADA — Kommune Berlin. El Consejo de Asignación, sorteado, y el sistema PLAN-41. Las máquinas trabajan; nadie es pobre y nadie está libre del Plan.
+    Satélites: Comuna Báltica · República Obrera de Albión
+  ■ NEO IMPERIO ROMANO — Roma. Imperator Lucius Varro. De la Galia a Anatolia, con Senado, cónsules y legiones que pueden hacer otro emperador.
+    Provincias: Hispania · Dacia
+  ■ DIRECTORIO SINO-ARMÓNICO — Hexie Jing. Director Lin Wenzhao. Ingenieros que gobiernan la sociedad como un sistema hidráulico de tres caudales.
+    Satélites: Protectorado de Corea · Directorio de la Estepa
+  ■ FEDERACIÓN DE LOS PUEBLOS AFRICANOS — Èkó. Portavoz Amara Nwosu-Keïta. Consejos de pueblo unidos en el Congreso de Lagos; sobran gente y tierra, faltan fábricas.
+    Miembros: Tierras Altas · Cabo · Congo · Angola · Mozambique · Isla Roja · Rift
+  LAS ANARQUÍAS
+    Eurasia — atamanes del trigo y los ferrocarriles, de Leningrado a Crimea.
+    Indostán — rajás y templos amurallados, de Kabul a Madrás y Hong Kong.
+    Emiratos del Desierto — tribus y pozos muertos, de Bagdad a Teherán.
+    Caudillos del Amazonas — cañoneras y motosierras, de Manaos a São Paulo.
+    Tierras Sin Ley — lo que nadie volvió a armar: cientos de caudillos sin nombre.
+
+  At the very bottom of the panel, in tiny italic: "Rivalidades: Ecofascistas–Roma · Comuna–Federación · Unión–Alta Mar · Ecofascistas–Unión · Ecofascistas–Reino del Sol".
+
+  TEXT RULES: all text in Spanish, spelled exactly as given above, including accents (á é í ó ú ñ ü) and the letter "Èkó". No other text anywhere on the image. Labels never overlap borders of other countries if avoidable; put the name of small countries in the nearest sea with a thin leader line.
+
+  CHECKLIST BEFORE FINISHING: Alaska is slate (lawless), not blue. The US Midwest is a slate hole. Greenland is red (Commune). Panama is blue (Union), Colombia gold-striped. Hong Kong is umber. Taiwan is jade. Okinawa and northern Kyushu are jade-striped (Korea). Kiev is a slate island. West Africa is slate. Ethiopia, South Africa, Congo, Angola, Mozambique, Madagascar and Kenya are orange-striped, the rest of Africa solid orange. France is purple. Poland and Finland are red-striped. Brazil is split: south in green and green stripes, the rest maroon.
+
+ASSET_REQUEST
+type: world_map_plain
+id: mapa_mundo_2100_sin_texto
+filename: mapa_mundo_2100_sin_texto.png
+size: 3840x2160 (16:9; o más grande con la misma proporción)
+transparent_background: false
+style: Exactly the same map, projection, colours, stripes, glowing bloc borders, scorched anarchy texture, ocean colour and holographic grid as mapa_mundo_2100.png, but the map fills the WHOLE image edge to edge (no title band, no side panel, no frame), with no text, no letters, no numbers and no labels at all. Only the gold capital stars of the eight meganations remain. Flat top-down lighting, no tilt, no watermark.
+description: |
+  WHAT: the clean version of mapa_mundo_2100.png, to use as a background or to add labels by hand. Same territory list as mapa_mundo_2100.png (paste that request's list of meganations, satellites and anarchies again in the same conversation if needed). Miller projection centred on Greenwich, 80°N to 57°S, no Antarctica. Check the same checklist: Alaska slate, US Midwest slate, Greenland red, Panama blue, Hong Kong umber, Taiwan jade, Kiev slate island, West Africa slate, Brazil split between green (south) and maroon (rest).
