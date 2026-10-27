@@ -6144,19 +6144,28 @@ categories:
     visible: {flag: MEGANATIONS_lider_listo}
     name: {english: The Leader, spanish: El Líder}
     desc:
-      english: 'Charisma [?MEGANATIONS_lider_carisma|0]/10 (each point above or below 5: ±3% stability) · Cunning [?MEGANATIONS_lider_astucia|0]/10 (±0.15 political power a day) · Prestige [?MEGANATIONS_lider_prestigio|0]/10 (±4% war support) · Health [?MEGANATIONS_lider_salud|0]/10 (it drops 1 a year; at 0 the leader collapses: -20% stability, -150 political power). Every six months the leader faces a decision.'
-      spanish: 'Carisma [?MEGANATIONS_lider_carisma|0]/10 (cada punto sobre o bajo 5: ±3% de estabilidad) · Astucia [?MEGANATIONS_lider_astucia|0]/10 (±0,15 de poder político por día) · Prestigio [?MEGANATIONS_lider_prestigio|0]/10 (±4% de apoyo a la guerra) · Salud [?MEGANATIONS_lider_salud|0]/10 (baja 1 por año; en 0 el líder se desploma: -20% de estabilidad, -150 de poder político). Cada seis meses el líder enfrenta una decisión.'
+      english: 'Charisma [?MEGANATIONS_lider_carisma|0]/10 (each point above or below 5: ±3% stability) · Cunning [?MEGANATIONS_lider_astucia|0]/10 (±0.15 political power a day) · Prestige [?MEGANATIONS_lider_prestigio|0]/10 (±4% war support) · Health [?MEGANATIONS_lider_salud|0]/10 (it drops 1 a year; at 0 the leader collapses: -20% stability, -150 political power). Every six months the leader faces a decision. Nobody stays at the top: once a year every stat at 8 or more drops 1, and bad news come uninvited (scandals, relapses, coup rumours, attempts).'
+      spanish: 'Carisma [?MEGANATIONS_lider_carisma|0]/10 (cada punto sobre o bajo 5: ±3% de estabilidad) · Astucia [?MEGANATIONS_lider_astucia|0]/10 (±0,15 de poder político por día) · Prestigio [?MEGANATIONS_lider_prestigio|0]/10 (±4% de apoyo a la guerra) · Salud [?MEGANATIONS_lider_salud|0]/10 (baja 1 por año; en 0 el líder se desploma: -20% de estabilidad, -150 de poder político). Cada seis meses el líder enfrenta una decisión. Nadie se sostiene en la cima: una vez por año cada estadística en 8 o más baja 1, y las malas noticias llegan sin avisar (escándalos, recaídas, rumores de golpe, atentados).'
     src: user_request
     decisions:
     - id: MEGANATIONS_lider_chequeo
       name: {english: The Leader's Check-up, spanish: El Chequeo del Líder}
-      desc: {english: 'A week in the military hospital, away from the cameras. +1 Health. Once a year.', spanish: 'Una semana en el hospital militar, lejos de las cámaras. +1 de Salud. Una vez por año.'}
+      desc: {english: 'A week in the military hospital, away from the cameras. +1 Health. Once a year. One time in four someone sees the leader go in: -1 Prestige.', spanish: 'Una semana en el hospital militar, lejos de las cámaras. +1 de Salud. Una vez por año. Una de cada cuatro veces alguien lo ve entrar: -1 de Prestigio.'}
       icon_prefer: [generic_political_actions]
       cost: 50
       cooldown_days: 365
       visible: {variable_below: {var: MEGANATIONS_lider_salud, value: 10}}
       effects:
       - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 1}
+      # 2026-10-27 ("complicala un poco"): el hospital no es secreto
+      - effect: random
+        options:
+        - weight: 3
+          effects:
+          - {effect: flag, value: MEGANATIONS_chequeo_discreto, days: 30}
+        - weight: 1
+          effects:
+          - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
       - {effect: run, value: MEGANATIONS_lider_recalcular}
       ai:
         factor: 1
@@ -6167,7 +6176,7 @@ categories:
       src: user_request
     - id: MEGANATIONS_lider_gira
       name: {english: The Grand Tour, spanish: La Gran Gira}
-      desc: {english: 'Every province, every factory, every hand to shake. +1 Charisma, -1 Health. Once a year.', spanish: 'Cada provincia, cada fábrica, cada mano para estrechar. +1 de Carisma, -1 de Salud. Una vez por año.'}
+      desc: {english: 'Every province, every factory, every hand to shake. +1 Charisma, -1 Health. Once a year. One time in four the cameras catch a crowd booing: -1 Prestige.', spanish: 'Cada provincia, cada fábrica, cada mano para estrechar. +1 de Carisma, -1 de Salud. Una vez por año. Una de cada cuatro veces las cámaras agarran un abucheo: -1 de Prestigio.'}
       icon_prefer: [generic_political_actions]
       cost: 75
       cooldown_days: 365
@@ -6175,6 +6184,14 @@ categories:
       effects:
       - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 1}
       - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+      - effect: random
+        options:
+        - weight: 3
+          effects:
+          - {effect: flag, value: MEGANATIONS_gira_sin_abucheos, days: 30}
+        - weight: 1
+          effects:
+          - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
       - {effect: run, value: MEGANATIONS_lider_recalcular}
       ai:
         factor: 1
@@ -19882,6 +19899,69 @@ scripted_effects:
       - {effect: flag, value: MEGANATIONS_lider_edad, days: 365}
       - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
       - {effect: run, value: MEGANATIONS_lider_recalcular}
+    # 2026-10-27 ("es demasiado fácil, complicala un poco"): nadie se sostiene en
+    # la cima. Una vez por año, cada estadística en 8 o más baja 1.
+    - effect: if
+      when: {not_flag: MEGANATIONS_lider_cima}
+      then:
+      - {effect: flag, value: MEGANATIONS_lider_cima, days: 365}
+      - effect: if
+        when: {variable_at_least: {var: MEGANATIONS_lider_carisma, value: 8}}
+        then:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+      - effect: if
+        when: {variable_at_least: {var: MEGANATIONS_lider_astucia, value: 8}}
+        then:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+      - effect: if
+        when: {variable_at_least: {var: MEGANATIONS_lider_prestigio, value: 8}}
+        then:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+      - {effect: run, value: MEGANATIONS_lider_recalcular}
+    # 2026-10-27: El Peso del Poder (meganations_peso). Cada 150 días, con
+    # chance, una mala noticia de las que le tocan al líder de hoy: cuantas más
+    # le tocan (más arriba está), más probable que llegue una.
+    - effect: if
+      when: {date_after: 2100.7.1, not_flag: MEGANATIONS_peso_espera}
+      then:
+      - {effect: flag, value: MEGANATIONS_peso_espera, days: 150}
+      - effect: random
+        options:
+        - weight: 3
+          effects:
+          - {effect: flag, value: MEGANATIONS_peso_tregua, days: 150}
+        - weight: 1
+          skip_if: {variable_below: {var: MEGANATIONS_lider_prestigio, value: 6}}
+          effects:
+          - {effect: event, id: meganations_peso.1, days: 3}
+        - weight: 1
+          skip_if: {variable_at_least: {var: MEGANATIONS_lider_salud, value: 6}}
+          effects:
+          - {effect: event, id: meganations_peso.2, days: 3}
+        - weight: 1
+          skip_if: {all: [{variable_at_least: {var: MEGANATIONS_lider_astucia, value: 5}}, {stability_at_least: 0.4}]}
+          effects:
+          - {effect: event, id: meganations_peso.3, days: 3}
+        - weight: 1
+          skip_if: {all: [{variable_below: {var: MEGANATIONS_lider_prestigio, value: 7}}, {variable_below: {var: MEGANATIONS_lider_carisma, value: 7}}]}
+          effects:
+          - {effect: event, id: meganations_peso.4, days: 3}
+        - weight: 1
+          skip_if: {variable_below: {var: MEGANATIONS_lider_astucia, value: 7}}
+          effects:
+          - {effect: event, id: meganations_peso.5, days: 3}
+        - weight: 1
+          skip_if: {any: [{at_war: false}, {not: {surrender_at_least: 0.1}}]}
+          effects:
+          - {effect: event, id: meganations_peso.6, days: 3}
+        - weight: 1
+          skip_if: {any: [{variable_below: {var: MEGANATIONS_lider_carisma, value: 6}}, {not: {date_after: 2102.1.1}}]}
+          effects:
+          - {effect: event, id: meganations_peso.7, days: 3}
+        - weight: 1
+          skip_if: {variable_below: {var: MEGANATIONS_lider_salud, value: 6}}
+          effects:
+          - {effect: event, id: meganations_peso.8, days: 3}
     - effect: if
       when: {date_after: 2100.4.1, not_flag: MEGANATIONS_lider_espera}
       then:

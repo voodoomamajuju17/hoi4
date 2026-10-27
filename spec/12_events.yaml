@@ -15064,6 +15064,236 @@ namespaces:
         - {effect: add_political_power, value: 100}
       src: user_request
 
+  # ===========================================================================
+  # El Peso del Poder (2026-10-27, pedido del usuario: "toda la movida de
+  # prestigio, salud, etc. es demasiado fácil, complicala un poco, poné algunos
+  # eventos/decisiones independientes que resten o que al menos compliquen un
+  # toque el asunto"). Malas noticias que no salen de la ronda de las 20
+  # decisiones del líder: las saca MEGANATIONS_lider_pulso cada 150 días, con
+  # chance, y solo las que le corresponden al líder de hoy (un líder con mucho
+  # Prestigio tiene escándalos y atentados; uno con poca Astucia, rumores de
+  # golpe). Ninguna respuesta suma: se elige qué se pierde.
+  # ===========================================================================
+  meganations_peso:
+    country: null
+    events:
+    - id: 1
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Scandal', spanish: 'El Escándalo'}
+      desc:
+        english: 'A foreign portal publishes photos of [Root.GetLeader] at a party that was never on the agenda. By noon the video has more views than the New Year''s speech.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un portal extranjero publica fotos de [Root.GetLeader] en una fiesta que no figuraba en la agenda. Para el mediodía, el video tiene más vistas que el discurso de fin de año.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'Take down the portal, and everyone who shared it.', spanish: 'Bajar el portal y a todos los que lo compartieron.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: add_political_power, value: -50}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 30
+      - name: {english: 'Deny everything: it is a montage.', spanish: 'Negarlo todo: es un montaje.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 40
+      - name: {english: 'Hand over the press chief.', spanish: 'Entregar al jefe de prensa.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: add_stability, value: -0.03}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 30
+      src: user_request
+    - id: 2
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Relapse', spanish: 'La Recaída'}
+      desc:
+        english: 'The pain came back, worse than last time. The doctor asks for a month of rest; the cabinet asks that nobody find out.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'El dolor volvió, peor que la última vez. El médico pide un mes de reposo; el gabinete pide que nadie se entere.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'A month of rest, far from everything.', spanish: 'Un mes de reposo, lejos de todo.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: add_political_power, value: -50}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 60
+      - name: {english: 'Carry on as if nothing happened.', spanish: 'Seguir como si nada.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 10
+      - name: {english: 'Let a double stand in at the ceremonies.', spanish: 'Que lo reemplace un doble en los actos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - effect: random
+          options:
+          - weight: 2
+            effects:
+            - {effect: flag, value: MEGANATIONS_peso_doble_oculto, days: 30}
+          - weight: 1
+            effects:
+            - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 30
+      src: user_request
+    - id: 3
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Coup Rumour', spanish: 'El Rumor de Golpe'}
+      desc:
+        english: 'Three colonels had dinner together twice in the same week. The political police do not know what they talked about, and that is what worries them.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Tres coroneles cenaron juntos dos veces en la misma semana. La policía política no sabe de qué hablaron, y eso es lo que le preocupa.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'Purge the barracks before they talk.', spanish: 'Purgar el cuartel antes de que hablen.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: add_stability, value: -0.05}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 35
+      - name: {english: 'Buy their loyalty.', spanish: 'Comprarles la lealtad.'}
+        effects:
+        - {effect: add_political_power, value: -100}
+        ai_chance: 40
+      - name: {english: 'Pretend not to notice.', spanish: 'Hacerse el distraído.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        - effect: random
+          options:
+          - weight: 3
+            effects:
+            - {effect: flag, value: MEGANATIONS_peso_coroneles_callados, days: 30}
+          - weight: 1
+            effects:
+            - {effect: event, id: meganations_lider.21, days: 14}
+        ai_chance: 25
+      src: user_request
+    - id: 4
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Attempt', spanish: 'El Atentado'}
+      desc:
+        english: 'An unregistered drone exploded forty metres from the stand. [Root.GetLeader] is alive; the driver is not.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Un dron sin matrícula explotó a cuarenta metros del palco. [Root.GetLeader] sigue vivo; el chofer, no.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'Armour the palace and cancel the ceremonies.', spanish: 'Blindar el palacio y suspender los actos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 40
+      - name: {english: 'Back on the stand the next day.', spanish: 'Volver al palco al día siguiente.'}
+        effects:
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -2}
+          - weight: 1
+            effects:
+            - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 10
+      - name: {english: 'Find someone to blame, anyone.', spanish: 'Encontrar culpables, los que sean.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: add_stability, value: -0.03}
+        - {effect: add_war_support, value: 0.03}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 30
+      src: user_request
+    - id: 5
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Envy of the Court', spanish: 'La Envidia de la Corte'}
+      desc:
+        english: 'The ministers learned too well from the leader: now they plot against one another with the same methods, and every file is stuck in some office.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Los ministros aprendieron demasiado bien del líder: ahora conspiran entre ellos con sus mismos métodos, y cada expediente está trabado en alguna oficina.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'Hand out posts to calm them down.', spanish: 'Repartir cargos para calmarlos.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        ai_chance: 45
+      - name: {english: 'Let them devour each other.', spanish: 'Dejar que se devoren entre ellos.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 35
+      - name: {english: 'Humiliate the ringleader in front of the cabinet.', spanish: 'Humillar al cabecilla delante del gabinete.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 20
+      src: user_request
+    - id: 6
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'Defeat on the Screens', spanish: 'La Derrota en las Pantallas'}
+      desc:
+        english: 'The screens in every square show the map of the front. Nobody says anything, but everyone looks up at the balcony.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Las pantallas de cada plaza muestran el mapa del frente. Nadie dice nada, pero todos miran hacia el balcón.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'Take the blame on national television.', spanish: 'Asumir la culpa en cadena nacional.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 35
+      - name: {english: 'Blame the generals.', spanish: 'Culpar a los generales.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_astucia, value: -1}
+        - {effect: add_war_support, value: -0.03}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 35
+      - name: {english: 'Switch the screens off.', spanish: 'Apagar las pantallas.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: add_stability, value: -0.03}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 30
+      src: user_request
+    - id: 7
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Weariness of the People', spanish: 'El Cansancio del Pueblo'}
+      desc:
+        english: 'The same face on every banknote, every screen, every inauguration. In the markets they no longer insult the leader: they do impressions.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'La misma cara en cada billete, en cada pantalla, en cada inauguración. En los mercados ya no lo insultan: lo imitan.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'A new campaign, with new faces.', spanish: 'Una campaña nueva, con caras nuevas.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        ai_chance: 50
+      - name: {english: 'Let it pass.', spanish: 'Dejar que pase.'}
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: -1}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 50
+      src: user_request
+    - id: 8
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: 'The Palace Doctor Lies', spanish: 'El Médico de Palacio Miente'}
+      desc:
+        english: 'A nurse walks into the security office with a folder: two years of [Root.GetLeader]''s test results do not match the ones the palace doctor signed.\n\nThe leader today (out of 10): Charisma [?MEGANATIONS_lider_carisma|0] · Cunning [?MEGANATIONS_lider_astucia|0] · Health [?MEGANATIONS_lider_salud|0] · Prestige [?MEGANATIONS_lider_prestigio|0]'
+        spanish: 'Una enfermera entra a la oficina de seguridad con una carpeta: los análisis de [Root.GetLeader] de los últimos dos años no coinciden con los que firmó el médico de palacio.\n\nEl líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0] · Salud [?MEGANATIONS_lider_salud|0] · Prestigio [?MEGANATIONS_lider_prestigio|0]'
+      options:
+      - name: {english: 'Change doctors and repeat every test.', spanish: 'Cambiar de médico y repetir todos los análisis.'}
+        effects:
+        - {effect: add_political_power, value: -75}
+        ai_chance: 70
+      - name: {english: 'Burn the folder: the doctor can be trusted.', spanish: 'Quemar la carpeta: el médico es de confianza.'}
+        effects:
+        - effect: random
+          options:
+          - weight: 1
+            effects:
+            - {effect: flag, value: MEGANATIONS_peso_medico_leal, days: 30}
+          - weight: 1
+            effects:
+            - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -2}
+        - {effect: run, value: MEGANATIONS_lider_recalcular}
+        ai_chance: 30
+      src: user_request
+
   # 2026-10-17: la receta de diversión (NAS)
   meganations_nas_receta:
     country: NAS
