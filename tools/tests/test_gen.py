@@ -1891,8 +1891,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("248 modificadores dinamicos (con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 248 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("254 modificadores dinamicos (6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 254 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2965,7 +2965,7 @@ def test_vanilla_validation() -> None:
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
-            "add_dynamic_modifier remove_dynamic_modifier set_temp_variable add_to_temp_variable subtract_from_variable multiply_variable divide_variable round_variable every_country custom_effect_tooltip puppet white_peace send_equipment log "
+            "add_dynamic_modifier remove_dynamic_modifier set_temp_variable add_to_temp_variable subtract_from_variable multiply_variable divide_variable round_variable set_politics add_popularity every_country custom_effect_tooltip puppet white_peace send_equipment log "
             "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production release release_puppet add_nuclear_bombs\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
@@ -4477,6 +4477,45 @@ def test_incidentes_y_guerras() -> None:
         check("cada pulso mensual llama a la produccion de la unidad unica", pulses.count("MEGANATIONS_unidades_unicas_ia = yes") == 3)
 
 
+def test_albion() -> None:
+    section("Albion: Gran Bretania se suelta si la ASC capitula antes de 2104 (2026-10-27)")
+    raw = specload.load(REPO_ROOT / "spec").raw
+    tree = raw["focus_trees"]["trees"]["ZAL"]
+    ramas = {b["id"]: b["focuses"] for b in tree["branches"]}
+    check("dos ramas de 8 focos de 182 dias (unos 4 anios cada una)",
+          set(ramas) == {"hacia_el_futuro", "hacia_el_pasado"} and all(len(f) == 8 and sum(x["days"] for x in f) == 8 * 182
+                                                                       for f in ramas.values()))
+    finales = {b: f[-1]["reward"] for b, f in ramas.items()}
+    check("cada final cambia nombre, bandera y lider",
+          all(any(e.get("effect") == "cosmetic_tag" for e in r) and any(e.get("effect") == "promote" for e in r)
+              for r in finales.values()))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        hooks = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
+        check("la rebelion sale cuando la ASC capitula antes de 2104",
+              "on_capitulation" in hooks and "tag = ASC" in hooks and "date > 2104.1.1" in hooks and "meganations_albion.1" in hooks)
+        ev = " ".join((mod / "events/meganations_albion.txt").read_text(encoding="utf-8-sig").split())
+        check("se suelta en paz: deja de ser satelite, paz blanca y carga su arbol",
+              "end_puppet = ZAL" in ev and "white_peace = ZAL" in ev and "load_focus_tree" in ev)
+        focus = " ".join((mod / "common/national_focus/ZAL_focus.txt").read_text(encoding="utf-8-sig").split())
+        check("hacia el pasado: se alia con Roma contra la Comuna; hacia el futuro: vuelve con la Comuna en paz",
+              focus.count("add_to_faction = ZAL") == 2 and "NRE = { add_to_faction = ZAL" in focus
+              and "ASC = { add_to_faction = ZAL" in focus and "white_peace = ASC" in focus and "set_politics" in focus, focus[:300])
+
+
+def test_reglas() -> None:
+    section("reglas de la partida: deslizadores de las meganaciones (2026-10-27)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        d = " ".join((ctx.mod_root / "common/difficulty_settings/00_difficulty.txt").read_text(encoding="utf-8-sig").split())
+        check("un deslizador por meganacion y ninguno de 1936",
+              all(f"countries = {{ {t} }}" in d for t in ("EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"))
+              and "GER" not in d and "SOV" not in d and "diff_strong_ai_generic" in d, d[:300])
+        check("el reporte lista las reglas del juego que nombran paises de 1936",
+              any("reglas del juego nombran" in n and "SOV_ai_behavior" in n for n in ctx.notes))
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4538,6 +4577,8 @@ def main() -> int:
         test_rumbo_2120,
         test_bitacora,
         test_incidentes_y_guerras,
+        test_albion,
+        test_reglas,
         test_simulador,
         test_vanilla_validation,
     ):

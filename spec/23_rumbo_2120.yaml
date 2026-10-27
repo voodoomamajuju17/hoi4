@@ -50,6 +50,199 @@ power_wars:
 
 events:
   namespaces:
+    # -------------------------------------------------------------------------
+    # Albión (2026-10-27): ver la sección de Albión al final del archivo
+    # -------------------------------------------------------------------------
+    meganations_albion:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Albion Breaks Loose", spanish: "Albión se Suelta"}
+        desc:
+          english: >-
+            The Commune has capitulated, and in London nobody waited for the terms. At dawn the councils of Albion
+            unplugged the last cable to Berlin, sent the Commune's commissars home on the morning ferry and signed a
+            white peace with everyone the Commune had dragged them into fighting. No shots, no flags burned: Albion
+            simply stopped answering. Now the question is not whether Britain is free, but what it will do with its
+            freedom: run towards the future the Commune promised, or back to the century when Britain ruled the
+            waves.
+          spanish: >-
+            La Comuna capituló, y en Londres nadie esperó las condiciones. Al amanecer los consejos de Albión
+            desenchufaron el último cable a Berlín, mandaron a los comisarios de la Comuna a casa en el ferry de la
+            mañana y firmaron la paz blanca con todos aquellos con los que la Comuna los había metido en guerra. Sin
+            tiros, sin banderas quemadas: Albión simplemente dejó de contestar. Ahora la pregunta no es si Gran
+            Bretaña es libre, sino qué va a hacer con su libertad: correr hacia el futuro que prometía la Comuna, o
+            volver al siglo en que Gran Bretaña gobernaba los mares.
+        options:
+        - name: {english: "Albion answers to no one.", spanish: "Albión no le responde a nadie."}
+          effects:
+          - effect: scope
+            target: ASC
+            effects:
+            - {effect: end_puppet, value: ZAL}
+          - {effect: leave_faction}
+          - effect: every_country
+            when: {war_with: ZAL}
+            effects:
+            - {effect: white_peace, value: ZAL}
+          - {effect: focus_tree, value: meganations_albion_focus}
+          - {effect: add_political_power, value: 150}
+          - {effect: add_stability, value: 0.1}
+          - {effect: ensure_template, name: Guardia de Albion, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade]}
+          - {effect: create_units, template: Guardia de Albion, name: Guardia de Albion, count: 6, experience: 0.2}
+          - effect: every_country
+            when: {is_ai: false}
+            effects:
+            - {effect: event, id: meganations_albion.2, days: 1}
+        src: user_request
+      - id: 2
+        trigger: effect
+        art: meganations_albion.1
+        picture: GFX_report_event_generic_rally
+        title: {english: "Britain Leaves the Commune", spanish: "Gran Bretaña Deja la Comuna"}
+        desc:
+          english: >-
+            With the Commune on its knees, the Albion Workers' Republic has declared itself free, quietly and without
+            a war. The British Isles are on their own for the first time in thirty years. In every capital the same
+            question is asked: will the island of the Luddites embrace the machines, or crown a queen?
+          spanish: >-
+            Con la Comuna de rodillas, la República Obrera de Albión se declaró libre, en silencio y sin guerra. Las
+            islas británicas están solas por primera vez en treinta años. En todas las capitales se hace la misma
+            pregunta: ¿la isla de los luditas va a abrazar las máquinas, o va a coronar una reina?
+        options:
+        - name: {english: "Interesting times.", spanish: "Tiempos interesantes."}
+          effects: []
+        src: user_request
+      - id: 5
+        trigger: effect
+        art: meganations_albion.10
+        picture: GFX_report_event_generic_rally
+        title: {english: "Albion Comes Back", spanish: "Albión Vuelve"}
+        desc:
+          english: >-
+            The Parliament of Minds of Albion has sent us a message, signed by everyone at once: whatever war stood
+            between us is over, on the old borders, and Albion wants to stand with the Commune again. Not as a
+            satellite: as an equal. PLAN-41 calculated the offer in a millisecond. It is the first time a former
+            satellite has come back to the Plan of its own free will.
+          spanish: >-
+            El Parlamento de las Mentes de Albión nos mandó un mensaje firmado por todos a la vez: la guerra que
+            hubiera entre nosotros terminó, con las fronteras de antes, y Albión quiere volver a estar al lado de la
+            Comuna. No como satélite: como igual. PLAN-41 calculó la oferta en un milisegundo. Es la primera vez que
+            un antiguo satélite vuelve al Plan por su propia voluntad.
+        options:
+        - name: {english: "Welcome back, comrades.", spanish: "Bienvenidos de vuelta, camaradas."}
+          effects:
+          - {effect: add_political_power, value: 50}
+        src: user_request
+      - id: 6
+        trigger: effect
+        art: meganations_albion.20
+        picture: GFX_report_event_generic_rally
+        title: {english: "Albion Joins the Pax Romana", spanish: "Albión se Suma a la Pax Romana"}
+        desc:
+          english: >-
+            An envoy in a frock coat and a top hat has arrived at the Senate with a letter sealed in red wax: the
+            future Empire of Great Britain offers Rome its fleet and its regiments against the Commune of machines.
+            The senators laughed at the hat. Then they counted the ironclads, and stopped laughing.
+          spanish: >-
+            Un enviado de levita y galera llegó al Senado con una carta sellada con lacre rojo: el futuro Imperio de
+            Gran Bretaña le ofrece a Roma su flota y sus regimientos contra la Comuna de las máquinas. Los senadores
+            se rieron de la galera. Después contaron los acorazados, y dejaron de reírse.
+        options:
+        - name: {english: "Two empires, one enemy.", spanish: "Dos imperios, un enemigo."}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+        src: user_request
+      - id: 10
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Ascended Commonwealth of Albion", spanish: "La Mancomunidad Ascendida de Albión"}
+        desc:
+          english: >-
+            At midnight on a Tuesday, without speeches, sixty million people closed their eyes at the same time and
+            opened them as one. The Parliament of Minds has dissolved itself, because there is nothing left to
+            debate. The First Ascended, Siobhan Cray, who smashed servers in Manchester at twenty, now speaks with
+            the voice of every Briton. The island that started the industrial revolution has started the next one.
+            The rest of the world is still human. For now.
+          spanish: >-
+            A la medianoche de un martes, sin discursos, sesenta millones de personas cerraron los ojos al mismo
+            tiempo y los abrieron como una sola. El Parlamento de las Mentes se disolvió, porque ya no queda nada
+            que debatir. La Primera Ascendida, Siobhan Cray, que a los veinte rompía servidores en Manchester, ahora
+            habla con la voz de cada británico. La isla que empezó la revolución industrial empezó la siguiente. El
+            resto del mundo todavía es humano. Por ahora.
+        options:
+        - name: {english: "We are Albion.", spanish: "Somos Albión."}
+          effects:
+          - effect: every_country
+            when: {is_ai: false}
+            effects:
+            - {effect: event, id: meganations_albion.11, days: 1}
+        src: user_request
+      - id: 11
+        trigger: effect
+        art: meganations_albion.10
+        picture: GFX_report_event_generic_rally
+        title: {english: "Britain Ascends", spanish: "Gran Bretaña Asciende"}
+        desc:
+          english: >-
+            The British Isles have become the Ascended Commonwealth of Albion: one mind, sixty million bodies, a
+            flag drawn like a circuit. Their envoys answer every question before it is finished. Nobody knows yet
+            whether that is a threat or a promise.
+          spanish: >-
+            Las islas británicas se volvieron la Mancomunidad Ascendida de Albión: una sola mente, sesenta millones
+            de cuerpos, una bandera dibujada como un circuito. Sus enviados contestan cada pregunta antes de que
+            termine. Nadie sabe todavía si eso es una amenaza o una promesa.
+        options:
+        - name: {english: "Disconnect the embassy cables.", spanish: "Desconectar los cables de la embajada."}
+          effects: []
+        src: user_request
+      - id: 20
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "God Save the Queen", spanish: "Dios Salve a la Reina"}
+        desc:
+          english: >-
+            Westminster Abbey has not seen a coronation in more than a century, so the ceremony was copied from old
+            films. Nobody minded. Victoria III, until recently an actress of period drama in Bath, rode to the abbey in
+            a golden carriage pulled by eight robotic horses, was anointed with oil from a bottle labelled 'holy' and
+            came out Queen of Great Britain and Empress of Whatever Is Left. In the streets, a million people in
+            top hats sang an anthem whose lyrics half of them were reading off their phones. The Neo-Victorian Empire
+            has been born, and it is magnificent, ridiculous and very well armed.
+          spanish: >-
+            La Abadía de Westminster no veía una coronación hacía más de un siglo, así que la ceremonia se copió de
+            películas viejas. A nadie le importó. Victoria III, hasta hace poco actriz de teatro de época en Bath, fue
+            a la abadía en una carroza dorada tirada por ocho caballos robot, la ungieron con aceite de una botella
+            que decía 'sagrado' y salió Reina de Gran Bretaña y Emperatriz de Lo Que Quede. En las calles, un millón de
+            personas de galera cantaron un himno cuya letra la mitad leía del teléfono. Nació el Imperio
+            Neovictoriano, y es magnífico, ridículo y está muy bien armado.
+        options:
+        - name: {english: "Rule, Britannia!", spanish: "¡Reina, Britannia!"}
+          effects:
+          - effect: every_country
+            when: {is_ai: false}
+            effects:
+            - {effect: event, id: meganations_albion.21, days: 1}
+        src: user_request
+      - id: 21
+        trigger: effect
+        art: meganations_albion.20
+        picture: GFX_report_event_generic_rally
+        title: {english: "A Queen in 2100", spanish: "Una Reina en 2100"}
+        desc:
+          english: >-
+            Great Britain has crowned a queen and proclaimed the Neo-Victorian Empire, with airships, ironclads and
+            red coats over composite armour. The world laughed at the coronation broadcast; the admiralties of the
+            world are not laughing at the fleet.
+          spanish: >-
+            Gran Bretaña coronó una reina y proclamó el Imperio Neovictoriano, con dirigibles, acorazados y casacas
+            rojas sobre blindaje compuesto. El mundo se rió de la transmisión de la coronación; los almirantazgos del
+            mundo no se ríen de la flota.
+        options:
+        - name: {english: "Long live the Queen, apparently.", spanish: "Viva la Reina, parece."}
+          effects: []
+        src: user_request
     meganations_incidentes:
       country: null
       events:
@@ -751,3 +944,355 @@ events:
         - name: {english: "The century decides.", spanish: "Decide el siglo."}
           effects: []
         src: user_request
+
+# =============================================================================
+# Albión (2026-10-27). Pedido del usuario: "un evento donde Gran Bretaña se
+# rebela si la ASC capitula (en paz blanca, scripteada, antes de 2104). En caso
+# de este evento, un árbol de focos para GB con 2 ramas excluyentes: 'hacia el
+# futuro', donde poco a poco se vuelve una sociedad transhumana, o 'hacia el
+# pasado', donde se vuelve una monarquía constitucional, un mock de las glorias
+# victorianas en 2100. En el primero puede aliarse con la ASC de vuelta (paz
+# blanca y statu quo si está en guerra con ella); en el segundo se alía con el
+# NRE contra la ASC. 8 focos cada rama, 4 años, con un final a todo culo,
+# cambiando de nombre, bandera y líder."
+#
+# Gran Bretaña en el mod es ZAL, la República Obrera de Albión (luditas,
+# satélite de la ASC). Cuando la ASC capitula antes de 2104, Albión se suelta:
+# deja de ser satélite, firma paz blanca con todos los enemigos que tenía por
+# ser de la Comuna y carga su propio árbol (meganations_albion_focus).
+# Cada rama: 8 focos de 182 días (unos 4 años).
+# =============================================================================
+
+decisions:
+  on_actions:
+  - id: ZAL_albion_se_suelta
+    hook: on_capitulation        # ROOT = el que capitula
+    effects:
+    - effect: if
+      when:
+        all:
+        - {tag: ASC}
+        - not: {date_after: 2104.1.1}
+        - not: {global_flag: MEGANATIONS_albion_suelta}
+        - country: {tag: ZAL, when: {subject_of: ASC}}
+      then:
+      - {effect: global_flag, value: MEGANATIONS_albion_suelta}
+      - {effect: event, id: meganations_albion.1, days: 1, target: ZAL}
+  dynamic_modifiers:
+  - id: ZAL_red_de_londres
+    country: ZAL
+    name: {english: 'London Reconnected', spanish: 'Londres Reconectada'}
+    desc: {english: 'The city that smashed its servers turns them back on, one district at a time.', spanish: 'La ciudad que rompió sus servidores los vuelve a encender, barrio por barrio.'}
+    modifiers: {research_speed_factor: 0.08, '?industrial_capacity_factory': 0.05}
+  - id: ZAL_implantes
+    country: ZAL
+    name: {english: 'The Manchester Implants', spanish: 'Los Implantes de Manchester'}
+    desc: {english: 'The grandsons of the Luddites queue for neural lace. The army is the first to get it.', spanish: 'Los nietos de los luditas hacen fila para el encaje neuronal. El ejército lo recibe primero.'}
+    modifiers: {army_org_factor: 0.08, '?experience_gain_army_factor': 0.15, recruitable_population_factor: 0.05}
+  - id: ZAL_mente_de_albion
+    country: ZAL
+    name: {english: 'The Mind of Albion', spanish: 'La Mente de Albión'}
+    desc: {english: 'Sixty million people, one consensus, updated every second.', spanish: 'Sesenta millones de personas, un solo consenso, actualizado cada segundo.'}
+    modifiers: {research_speed_factor: 0.12, stability_factor: 0.1, industrial_capacity_factory: 0.1, army_org_factor: 0.1, production_factory_efficiency_gain_factor: 0.1}
+  - id: ZAL_espiritu_vapor
+    country: ZAL
+    name: {english: 'Steam and Tea', spanish: 'Vapor y Té'}
+    desc: {english: 'Brass boilers in the factories, porcelain in every canteen. It is slower; nobody minds.', spanish: 'Calderas de bronce en las fábricas, porcelana en cada comedor. Es más lento; a nadie le importa.'}
+    modifiers: {stability_factor: 0.08, industrial_capacity_factory: 0.05, '?consumer_goods_factor': -0.03}
+  - id: ZAL_espiritu_armada
+    country: ZAL
+    name: {english: "Her Majesty's Navy", spanish: 'La Armada de Su Majestad'}
+    desc: {english: 'Ironclads with solar sails and cannons that fire mostly salutes. Mostly.', spanish: 'Acorazados con velas solares y cañones que disparan sobre todo salvas. Sobre todo.'}
+    modifiers: {industrial_capacity_dockyard: 0.15, '?naval_speed_factor': 0.05, '?navy_org_factor': 0.1}
+  - id: ZAL_imperio_neovictoriano
+    country: ZAL
+    name: {english: 'The Neo-Victorian Empire', spanish: 'El Imperio Neovictoriano'}
+    desc: {english: 'Top hats, airships and a queen on every banknote. Rule, Britannia, again.', spanish: 'Galeras, dirigibles y una reina en cada billete. Reina, Britannia, otra vez.'}
+    modifiers: {stability_factor: 0.15, war_support_factor: 0.15, industrial_capacity_dockyard: 0.15, army_defence_factor: 0.1, political_power_gain: 0.25}
+
+cosmetic_tags:
+- id: ZAL_ASCENDIDA
+  parent: ZAL
+  name: {english: 'The Ascended Commonwealth of Albion', spanish: 'La Mancomunidad Ascendida de Albión'}
+  adjective: {english: 'Ascended', spanish: 'ascendida'}
+  art: 'a deep midnight-blue field with a thin silver Union-Jack-like lattice redrawn as a circuit board, a glowing white neural-node star at the crossing; elegant, post-human, cold.'
+  src: user_request
+- id: ZAL_VICTORIANA
+  parent: ZAL
+  name: {english: 'The Neo-Victorian Empire of Great Britain', spanish: 'El Imperio Neovictoriano de Gran Bretaña'}
+  adjective: {english: 'Neo-Victorian', spanish: 'neovictoriano'}
+  art: 'a rich crimson field with a navy-blue canton bearing a golden crown over crossed brass cogwheels, thin gold border; pompous, imperial, 19th-century ceremonial style.'
+  src: user_request
+
+leaders:
+  characters:
+  - id: ZAL_siobhan_cray
+    country: ZAL
+    src: user_request
+    recruit_at_start: false     # la asciende el último foco de "hacia el futuro"
+    name:
+      regnal:
+        english: "First Ascended Siobhan Cray"
+        spanish: "Primera Ascendida Siobhan Cray"
+    born: 2068
+    lore: >
+      Neuroingeniera de Edimburgo, la primera persona en vivir un año entero
+      conectada a la red de Londres. Era ludita a los veinte; dice que rompía
+      servidores porque eran de otros. Ahora los servidores son de todos, y ella
+      habla por todos al mismo tiempo.
+    roles:
+      country_leader:
+        ideology: automated_socialism
+        traits: []
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/ZAL/siobhan_cray.dds"
+  - id: ZAL_victoria_iii
+    country: ZAL
+    src: user_request
+    recruit_at_start: false     # la corona el último foco de "hacia el pasado"
+    name:
+      regnal:
+        english: "Her Majesty Queen Victoria III"
+        spanish: "Su Majestad la Reina Victoria III"
+    born: 2074
+    lore: >
+      Victoria Ashcombe-Hale era actriz de teatro de época en Bath hasta que la
+      Cámara de los Lores restaurada encontró en un archivo parroquial que
+      descendía, muy de lejos, de una rama menor de la vieja casa real. Lleva la
+      corona como un vestuario y la nación la aplaude como a un estreno. Nadie
+      sabe si se lo cree. Todos saben que funciona.
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: []
+    portrait:
+      status: placeholder
+      path: "gfx/leaders/ZAL/victoria_iii.dds"
+
+focus_trees:
+  trees:
+    ZAL:
+      id: meganations_albion_focus
+      default: false
+      shared: true          # lo carga meganations_albion.1 (focus_tree), no arranca con él
+      src: user_request
+      branches:
+      - id: hacia_el_futuro
+        name: {english: Towards the Future, spanish: Hacia el Futuro}
+        focuses:
+        - id: ZAL_hacia_el_futuro
+          name: {english: 'Towards the Future', spanish: 'Hacia el Futuro'}
+          days: 182
+          icon: GFX_goal_generic_scientific_exchange
+          desc:
+            english: 'The Luddites smashed the machines because the machines belonged to others. Now Albion is free, and the machines can belong to Albion. The first council without a single broken server.'
+            spanish: 'Los luditas rompieron las máquinas porque las máquinas eran de otros. Ahora Albión es libre, y las máquinas pueden ser de Albión. El primer consejo sin un solo servidor roto.'
+          reward:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_stability, value: 0.05}
+          ai: {factor: 1}
+        - id: ZAL_londres_reconectada
+          name: {english: 'London Reconnected', spanish: 'Londres Reconectada'}
+          days: 182
+          icon: GFX_goal_generic_research
+          prerequisites: [ZAL_hacia_el_futuro]
+          desc:
+            english: 'Unplugged London plugs back in. The same districts that burned their servers in 2088 queue up to switch them on again.'
+            spanish: 'Londres Desenchufada se vuelve a enchufar. Los mismos barrios que quemaron sus servidores en 2088 hacen fila para volver a encenderlos.'
+          reward:
+          - {effect: dynamic_modifier, id: ZAL_red_de_londres}
+        - id: ZAL_los_implantes_de_manchester
+          name: {english: 'The Manchester Implants', spanish: 'Los Implantes de Manchester'}
+          days: 182
+          icon: GFX_goal_generic_army_doctrines
+          prerequisites: [ZAL_londres_reconectada]
+          desc:
+            english: 'In the city where the Night of the Broken Servers began, the first neural-lace clinics open. The army gets them first; the poets, second.'
+            spanish: 'En la ciudad donde empezó la Noche de los Servidores Rotos abren las primeras clínicas de encaje neuronal. El ejército las recibe primero; los poetas, después.'
+          reward:
+          - {effect: dynamic_modifier, id: ZAL_implantes}
+          - {effect: add_manpower, value: 30000}
+        - id: ZAL_el_parlamento_de_las_mentes
+          name: {english: 'The Parliament of Minds', spanish: 'El Parlamento de las Mentes'}
+          days: 182
+          icon: GFX_goal_generic_political_pressure
+          prerequisites: [ZAL_los_implantes_de_manchester]
+          desc:
+            english: 'Westminster closes its benches. Laws are now voted every second by everyone connected, and the result is read aloud by a voice nobody owns.'
+            spanish: 'Westminster cierra sus bancas. Ahora las leyes las vota cada segundo toda la gente conectada, y el resultado lo lee en voz alta una voz que no es de nadie.'
+          reward:
+          - {effect: add_political_power, value: 150}
+          - {effect: add_stability, value: 0.08}
+        - id: ZAL_la_reconciliacion_con_la_comuna
+          name: {english: 'Reconciliation with the Commune', spanish: 'La Reconciliación con la Comuna'}
+          days: 182
+          icon: GFX_goal_generic_positive_trade_relations
+          prerequisites: [ZAL_el_parlamento_de_las_mentes]
+          desc:
+            english: 'The Commune and Albion want the same future, only at different speeds. If there is war with the Commune, it ends here, in a white peace and the old borders. Then Albion offers to stand with it again, this time as an equal.'
+            spanish: 'La Comuna y Albión quieren el mismo futuro, solo que a distinta velocidad. Si hay guerra con la Comuna, termina acá, en paz blanca y con las fronteras de antes. Después Albión le ofrece volver a estar a su lado, esta vez como igual.'
+          reward:
+          - effect: if
+            when: {war_with: ASC}
+            then:
+            - {effect: white_peace, value: ASC}
+          - effect: if
+            when:
+              all:
+              - {country_exists: ASC}
+              - country: {tag: ASC, when: {faction_leader: true}}
+              - not: {in_faction: true}
+            then:
+            - effect: scope
+              target: ASC
+              effects:
+              - {effect: add_to_faction, value: ZAL}
+          - {effect: event, id: meganations_albion.5, days: 1, target: ASC}
+        - id: ZAL_cuerpos_de_silicio
+          name: {english: 'Bodies of Silicon', spanish: 'Cuerpos de Silicio'}
+          days: 182
+          icon: GFX_goal_generic_build_tank
+          prerequisites: [ZAL_la_reconciliacion_con_la_comuna]
+          desc:
+            english: 'Soldiers who never tire, because half of each of them is a machine. The Luddites called them abominations; their grandsons call them brothers.'
+            spanish: 'Soldados que no se cansan, porque la mitad de cada uno es máquina. Los luditas los llamaban abominaciones; sus nietos los llaman hermanos.'
+          reward:
+          - {effect: army_experience, value: 75}
+          - {effect: equipment, type: infantry_equipment, amount: 4000}
+          - {effect: add_war_support, value: 0.05}
+        - id: ZAL_la_mente_colmena
+          name: {english: 'The Hive of Albion', spanish: 'La Colmena de Albión'}
+          days: 182
+          icon: GFX_goal_generic_research
+          prerequisites: [ZAL_cuerpos_de_silicio]
+          desc:
+            english: 'Sixty million people, one consensus, updated every second. Nobody remembers what it was like to disagree, and nobody misses it.'
+            spanish: 'Sesenta millones de personas, un solo consenso, actualizado cada segundo. Nadie se acuerda de cómo era no estar de acuerdo, y nadie lo extraña.'
+          reward:
+          - {effect: add_political_power, value: 150}
+          - {effect: add_stability, value: 0.1}
+        - id: ZAL_la_mancomunidad_ascendida
+          name: {english: 'The Ascended Commonwealth', spanish: 'La Mancomunidad Ascendida'}
+          days: 182
+          icon: GFX_goal_generic_scientific_exchange
+          prerequisites: [ZAL_la_mente_colmena]
+          desc:
+            english: 'The cradle of the industrial revolution becomes the cradle of what comes after the human. Albion is no longer a country: it is a mind with a flag. A new name, a new banner, and the First Ascended speaks for all.'
+            spanish: 'La cuna de la revolución industrial se vuelve la cuna de lo que viene después de lo humano. Albión ya no es un país: es una mente con bandera. Nombre nuevo, estandarte nuevo, y la Primera Ascendida habla por todos.'
+          reward:
+          - {effect: cosmetic_tag, value: ZAL_ASCENDIDA}
+          - {effect: promote, character: ZAL_siobhan_cray}
+          - {effect: dynamic_modifier, id: ZAL_mente_de_albion}
+          - {effect: remove_dynamic_modifier, id: ZAL_red_de_londres}
+          - {effect: event, id: meganations_albion.10, days: 1}
+      - id: hacia_el_pasado
+        name: {english: Towards the Past, spanish: Hacia el Pasado}
+        focuses:
+        - id: ZAL_hacia_el_pasado
+          name: {english: 'Towards the Past', spanish: 'Hacia el Pasado'}
+          days: 182
+          icon: GFX_goal_generic_national_unity
+          desc:
+            english: 'If the future was a Commune of machines, Albion will look back. To before the servers, before the Commune, before everything went wrong: to the century when Britain ruled the waves.'
+            spanish: 'Si el futuro era una Comuna de máquinas, Albión va a mirar para atrás. A antes de los servidores, antes de la Comuna, antes de que todo saliera mal: al siglo en que Gran Bretaña gobernaba los mares.'
+          reward:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_war_support, value: 0.05}
+          ai: {factor: 1}
+        - id: ZAL_vapor_y_te
+          name: {english: 'Steam and Tea', spanish: 'Vapor y Té'}
+          days: 182
+          icon: GFX_goal_generic_construct_civ_factory
+          prerequisites: [ZAL_hacia_el_pasado]
+          desc:
+            english: 'The Luddites never forbade steam. Brass boilers return to the factories, porcelain to every canteen, and the clocks of the cities are wound by hand again.'
+            spanish: 'Los luditas nunca prohibieron el vapor. Vuelven las calderas de bronce a las fábricas, la porcelana a cada comedor, y los relojes de las ciudades se vuelven a dar cuerda a mano.'
+          reward:
+          - {effect: dynamic_modifier, id: ZAL_espiritu_vapor}
+        - id: ZAL_la_camara_de_los_lores
+          name: {english: 'The House of Lords Restored', spanish: 'La Cámara de los Lores Restaurada'}
+          days: 182
+          icon: GFX_goal_generic_political_pressure
+          prerequisites: [ZAL_vapor_y_te]
+          desc:
+            english: 'Nobody remembers who the lords were, so new ones are appointed: the oldest union leaders, two retired generals and a celebrated pastry chef. They wear ermine. They take it very seriously.'
+            spanish: 'Nadie se acuerda de quiénes eran los lores, así que se nombran nuevos: los sindicalistas más viejos, dos generales retirados y un pastelero famoso. Se ponen armiño. Se lo toman muy en serio.'
+          reward:
+          - {effect: add_political_power, value: 150}
+          - {effect: add_stability, value: 0.08}
+        - id: ZAL_la_armada_de_su_majestad
+          name: {english: "Her Majesty's Navy", spanish: 'La Armada de Su Majestad'}
+          days: 182
+          icon: GFX_goal_generic_navy_doctrines_tactics
+          prerequisites: [ZAL_la_camara_de_los_lores]
+          desc:
+            english: 'There is no majesty yet, but there is already a navy for her. Ironclads with solar sails leave the yards of the Clyde, painted black and gold.'
+            spanish: 'Todavía no hay majestad, pero ya hay una armada para ella. De los astilleros del Clyde salen acorazados con velas solares, pintados de negro y oro.'
+          reward:
+          - {effect: dynamic_modifier, id: ZAL_espiritu_armada}
+          - {effect: navy_experience, value: 50}
+        - id: ZAL_la_alianza_con_roma
+          name: {english: 'The Alliance with Rome', spanish: 'La Alianza con Roma'}
+          days: 182
+          icon: GFX_goal_generic_allies_build_infantry
+          prerequisites: [ZAL_la_armada_de_su_majestad]
+          desc:
+            english: 'Two restorations, one enemy. Rome rebuilds the Empire of the Caesars; Albion, the Empire of the Queen. Both know who took Europe from them: the Commune of machines. Albion joins the Pax Romana against the Commune.'
+            spanish: 'Dos restauraciones, un solo enemigo. Roma reconstruye el Imperio de los Césares; Albión, el Imperio de la Reina. Las dos saben quién les quitó Europa: la Comuna de las máquinas. Albión se suma a la Pax Romana contra la Comuna.'
+          reward:
+          - effect: if
+            when:
+              all:
+              - {country_exists: NRE}
+              - country: {tag: NRE, when: {faction_leader: true}}
+              - not: {in_faction: true}
+            then:
+            - effect: scope
+              target: NRE
+              effects:
+              - {effect: add_to_faction, value: ZAL}
+          - effect: if
+            when: {country_exists: ASC}
+            then:
+            - {effect: wargoal, target: ASC, type: annex_everything}
+          - {effect: event, id: meganations_albion.6, days: 1, target: NRE}
+        - id: ZAL_la_exposicion_de_2100
+          name: {english: 'The Great Exhibition of 2100', spanish: 'La Gran Exposición de 2100'}
+          days: 182
+          icon: GFX_goal_generic_construct_mil_factory
+          prerequisites: [ZAL_la_alianza_con_roma]
+          desc:
+            english: 'A new Crystal Palace rises in Hyde Park, made of solar glass. Inside: steam looms, brass automatons that serve tea and a full-size airship. Half the world comes to laugh; the other half, to buy.'
+            spanish: 'En Hyde Park se levanta un nuevo Palacio de Cristal, hecho de vidrio solar. Adentro: telares a vapor, autómatas de bronce que sirven té y un dirigible de tamaño real. Medio mundo viene a reírse; la otra mitad, a comprar.'
+          reward:
+          - {effect: add_political_power, value: 150}
+          - {effect: build, building: industrial_complex, level: 2}
+          - {effect: add_stability, value: 0.05}
+        - id: ZAL_los_regimientos_de_la_reina
+          name: {english: "The Queen's Regiments", spanish: 'Los Regimientos de la Reina'}
+          days: 182
+          icon: GFX_goal_generic_army_doctrines
+          prerequisites: [ZAL_la_exposicion_de_2100]
+          desc:
+            english: 'Red coats over composite armour, bearskin hats with night vision. The regiments drill in Horse Guards Parade every morning, and the tourists film them.'
+            spanish: 'Casacas rojas sobre blindaje compuesto, gorros de piel de oso con visión nocturna. Los regimientos desfilan cada mañana en Horse Guards Parade, y los turistas los filman.'
+          reward:
+          - {effect: army_experience, value: 75}
+          - {effect: equipment, type: infantry_equipment, amount: 4000}
+          - {effect: add_war_support, value: 0.08}
+        - id: ZAL_el_imperio_neovictoriano
+          name: {english: 'The Neo-Victorian Empire', spanish: 'El Imperio Neovictoriano'}
+          days: 182
+          icon: GFX_goal_generic_national_unity
+          prerequisites: [ZAL_los_regimientos_de_la_reina]
+          desc:
+            english: 'Westminster Abbey, a golden carriage, a crown copied from an old photograph. Victoria III is crowned Queen of Great Britain and Empress of Whatever Is Left, and the nation cheers as if the last two centuries had never happened. A new name, a new flag, a queen.'
+            spanish: 'La Abadía de Westminster, una carroza dorada, una corona copiada de una foto vieja. Victoria III es coronada Reina de Gran Bretaña y Emperatriz de Lo Que Quede, y la nación festeja como si los últimos dos siglos no hubieran pasado. Nombre nuevo, bandera nueva, una reina.'
+          reward:
+          - {effect: set_politics, group: fascism, popularity: 0.5}
+          - {effect: promote, character: ZAL_victoria_iii}
+          - {effect: cosmetic_tag, value: ZAL_VICTORIANA}
+          - {effect: dynamic_modifier, id: ZAL_imperio_neovictoriano}
+          - {effect: remove_dynamic_modifier, id: ZAL_espiritu_vapor}
+          - {effect: event, id: meganations_albion.20, days: 1}

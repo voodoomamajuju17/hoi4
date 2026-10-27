@@ -172,7 +172,9 @@ def emit(ctx: BuildContext) -> None:
                         f"{cid}: ideologia de lider '{ideology}' no existe en 01_ideologies.yaml",
                         where="03_leaders.yaml",
                     )
-                if ideology != country.ideology:
+                # los que llegan en la partida (recruit_at_start: false, ej. la reina de
+                # Albión) cambian la ideología a propósito: no es un descuido
+                if ideology != country.ideology and ch.get("recruit_at_start", True):
                     ctx.warn(
                         f"{cid} lidera con '{ideology}' pero {tag} arranca en "
                         f"'{country.ideology}'. Ver TN001."

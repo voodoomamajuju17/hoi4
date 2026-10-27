@@ -2097,3 +2097,18 @@ Captura del usuario: las tres tecnologías del Centinela se veían iguales y con
 Captura del usuario: fusiles, lanzadores, el láser antiaéreo y la artillería se veían chicos en su tarjeta; los tanques, bien. Cada imagen se ajustaba a la medida del sprite del juego de esa arma, y para esas armas el sprite del juego es más chico que el recuadro. Ahora los íconos anchos (tarjetas de equipo, proporción 1,5 o más) van todos por lo menos a la medida grande (la más común, 146x54 en 1.19); los cuadrados de las tecnologías chicas quedan como estaban.
 
 Crash del 27/10 (2104.11): el usuario escribió "observe" con una conferencia de paz abierta. El exception.txt es un acceso inválido del motor sin nada del mod en la pila; el error.log no muestra nada nuevo. Recomendación: entrar en modo observador al arrancar, no durante una conferencia de paz.
+
+## Albión: Gran Bretaña se suelta (2026-10-27)
+
+Pedido del usuario: si la ASC capitula antes de 2104, Gran Bretaña se rebela en paz blanca; árbol propio con dos ramas excluyentes de 8 focos (unos 4 años): "Hacia el Futuro" (sociedad transhumana; paz blanca con la ASC y vuelta a su facción) y "Hacia el Pasado" (monarquía constitucional, parodia de las glorias victorianas; se suma a la Pax Romana contra la ASC). Final a lo grande: nombre, bandera y líder nuevos. Todo en spec/23_rumbo_2120.yaml.
+
+- Gran Bretaña es ZAL, la República Obrera de Albión (luditas, satélite de la ASC).
+- Gancho on_capitulation: si la que capitula es la ASC, antes del 1/1/2104 y Albión sigue siendo su satélite, le llega meganations_albion.1: deja de ser satélite, sale de la facción, paz blanca con todos los que estaban en guerra con ella, 6 divisiones de la Guardia de Albión y carga meganations_albion_focus. Los jugadores reciben la noticia.
+- Hacia el Futuro: Londres Reconectada, los Implantes de Manchester, el Parlamento de las Mentes, la Reconciliación con la Comuna (paz blanca si hay guerra, entra a la facción de la ASC si la lidera), Cuerpos de Silicio, la Colmena y la Mancomunidad Ascendida de Albión (ZAL_ASCENDIDA, Primera Ascendida Siobhan Cray, socialismo automatizado).
+- Hacia el Pasado: Vapor y Té, la Cámara de los Lores Restaurada, la Armada de Su Majestad, la Alianza con Roma (entra a la Pax Romana si Roma la lidera; casus belli contra la ASC), la Gran Exposición de 2100, los Regimientos de la Reina y el Imperio Neovictoriano de Gran Bretaña (ZAL_VICTORIANA, Su Majestad la Reina Victoria III, restauración imperial: el partido gobernante pasa al grupo fascismo).
+- Efectos nuevos del generador: set_politics y remove_dynamic_modifier. specload suma del archivo propio árboles, nombres cosméticos y ganchos; tools/arte también lee esos archivos.
+- Arte: arte/pedidos_guerras_y_albion.txt (47 pedidos: 18 de las guerras, 3 eventos de Albión, 16 focos, 6 espíritus, 2 retratos, 2 banderas). Test: test_albion.
+
+## Reglas de la partida (2026-10-27)
+
+Captura del usuario (Custom Game Rules -> Major Nation Buffs: Alemania, Italia, la URSS...): "fijate cómo cambiar las reglas para adaptarlas al mod". Los deslizadores salen de common/difficulty_settings; ahora hay uno por meganación (mismo modificador y multiplicador que el juego) y se pisan los archivos del juego. Las reglas de common/game_rules que nombran países de 1936 no se tocan (los scripts del juego las consultan); el reporte las lista para decidir qué hacer con cada una. Emisor: tools/gen/emitters/reglas.py. Test: test_reglas.

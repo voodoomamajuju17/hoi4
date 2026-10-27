@@ -739,6 +739,14 @@ def render_effects(owner: str, items: list[dict], known,
                 block.add(key, Block([("var", var), ("value", value)]))
                 effects_used.setdefault(key, owner)
             continue
+        if effect == "remove_dynamic_modifier":
+            # 2026-10-27 (Albión): el modificador de una etapa se va cuando llega el final
+            mid = item["id"]
+            if ec.dynamic_modifiers is not None and mid not in ec.dynamic_modifiers:
+                raise SpecError(f"{owner}: remove_dynamic_modifier '{mid}' no existe", where=where)
+            block.add("remove_dynamic_modifier", Block([("modifier", mid)]))
+            effects_used.setdefault("remove_dynamic_modifier", owner)
+            continue
         if effect == "dynamic_modifier":
             # Espíritu vivo: se agrega una vez; sus números salen de variables.
             mid = item["id"]
@@ -957,6 +965,16 @@ def render_effects(owner: str, items: list[dict], known,
                                    ("create_intelligence_agency", True)]))
             effects_used.setdefault("create_intelligence_agency", owner)
             ec.triggers_used.setdefault("has_intelligence_agency", owner)
+            continue
+        if effect == "set_politics":
+            # 2026-10-27 (Albión, "hacia el pasado"): el partido gobernante cambia de
+            # grupo (la reina es de la restauración imperial, no del ludismo)
+            group = item["group"]
+            block.add("set_politics", Block([("ruling_party", group), ("elections_allowed", bool(item.get("elections", False)))]))
+            if item.get("popularity"):
+                block.add("add_popularity", Block([("ideology", group), ("popularity", float(item["popularity"]))]))
+                effects_used.setdefault("add_popularity", owner)
+            effects_used.setdefault("set_politics", owner)
             continue
         if effect == "cosmetic_tag":
             # nombre y bandera nuevos (02_countries.yaml -> cosmetic_tags)

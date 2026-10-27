@@ -165,7 +165,33 @@ def chicos() -> None:
 
 
 def _load(name: str) -> dict:
-    return yaml.safe_load((SPEC / name).read_text(encoding="utf-8"))
+    data = yaml.safe_load((SPEC / name).read_text(encoding="utf-8"))
+    # 2026-10-27: lo nuevo del programa vive en archivos propios (specload.OVERLAY_FILES);
+    # para el arte se suman árboles, personajes, banderas, espíritus y eventos
+    try:
+        from tools.gen.specload import OVERLAY_FILES
+    except ImportError:
+        OVERLAY_FILES = []
+    for extra in OVERLAY_FILES:
+        path = SPEC / extra
+        if not path.exists() or not isinstance(data, dict):
+            continue
+        ov = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if name == "07_focus_trees.yaml":
+            data.setdefault("trees", {}).update((ov.get("focus_trees") or {}).get("trees") or {})
+        elif name == "03_leaders.yaml":
+            data.setdefault("characters", []).extend((ov.get("leaders") or {}).get("characters") or [])
+        elif name == "02_countries.yaml":
+            data.setdefault("cosmetic_tags", []).extend(ov.get("cosmetic_tags") or [])
+        elif name == "14_decisions.yaml":
+            data.setdefault("dynamic_modifiers", []).extend((ov.get("decisions") or {}).get("dynamic_modifiers") or [])
+        elif name == "12_events.yaml":
+            for ns, block in ((ov.get("events") or {}).get("namespaces") or {}).items():
+                if ns in data.setdefault("namespaces", {}):
+                    data["namespaces"][ns].setdefault("events", []).extend(block.get("events") or [])
+                else:
+                    data["namespaces"][ns] = block
+    return data
 
 
 def _one_line(text: str) -> str:

@@ -109,6 +109,18 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
             raise SpecError("power_wars ya existe", where=where)
         raw["power_wars"] = overlay["power_wars"]
 
+    # 2026-10-27 (Albión): árboles de focos, nombres cosméticos y ganchos del juego
+    trees_new = (overlay.get("focus_trees") or {}).get("trees") or {}
+    trees = raw.setdefault("focus_trees", {}).setdefault("trees", {})
+    for key, tree in trees_new.items():
+        if key in trees:
+            raise SpecError(f"arbol de focos '{key}' ya existe", where=where)
+        trees[key] = tree
+    countries = raw.setdefault("countries", {})
+    add_unique(countries.setdefault("cosmetic_tags", []), overlay.get("cosmetic_tags"), "cosmetic_tag")
+    hooks = dec_new.get("on_actions") or []
+    add_unique(dec.setdefault("on_actions", []), hooks, "on_action")
+
     leaders_new = overlay.get("leaders") or {}
     leaders = raw.setdefault("leaders", {})
     add_unique(leaders.setdefault("characters", []), leaders_new.get("characters"), "personaje")
