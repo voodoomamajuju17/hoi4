@@ -2112,3 +2112,7 @@ Pedido del usuario: si la ASC capitula antes de 2104, Gran Bretaña se rebela en
 ## Reglas de la partida (2026-10-27)
 
 Captura del usuario (Custom Game Rules -> Major Nation Buffs: Alemania, Italia, la URSS...): "fijate cómo cambiar las reglas para adaptarlas al mod". Los deslizadores salen de common/difficulty_settings; ahora hay uno por meganación (mismo modificador y multiplicador que el juego) y se pisan los archivos del juego. Las reglas de common/game_rules que nombran países de 1936 no se tocan (los scripts del juego las consultan); el reporte las lista para decidir qué hacer con cada una. Emisor: tools/gen/emitters/reglas.py. Test: test_reglas.
+
+## Música: 24 temas más (2026-10-28)
+
+Llegaron 24 temas de Suno (paz y guerra de casi todas las potencias y anarquías, y los himnos del Amazonas, el Indostán y los Emiratos). Se asignan por título (11_scenario -> music.titles), OGG Vorbis 44,1 kHz en assets/music/<id>.ogg. Van 41 de 52. Faltan: Hijos de las Cubas (EFE), Leviathans Leave the Strait (HSN guerra), el himno de Eurasia y los 8 regionales de las Tierras Sin Ley (Alaska, el norte de México, Centroamérica, África).
