@@ -426,6 +426,13 @@ class _Sizes:
 
     def of(self, target: str) -> tuple[int, int]:
         w, h = self._of(target)
+        # 2026-10-27 (captura del usuario: fusiles, lanzadores y artillería chicos
+        # en su recuadro; los tanques bien): el sprite del juego de esas armas es
+        # más chico que el recuadro. Los íconos anchos (tarjetas de equipo) van
+        # todos a la medida grande; los cuadrados (tecnologías chicas) quedan.
+        dw, dh = self.default_eq
+        if h and w / h >= 1.5 and (w < dw or h < dh):
+            w, h = max(w, dw), max(h, dh)
         return max(1, round(w * self.scale)), max(1, round(h * self.scale))
 
     def _of(self, target: str) -> tuple[int, int]:
