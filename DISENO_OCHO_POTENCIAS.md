@@ -2056,3 +2056,19 @@ Pedido del usuario: "hay que reforzar un poco las rebeliones, Meridian, el conse
 El error.log del usuario marcaba `Malformed token: 16` en history/states/282-Japan.txt (Kanto). Causa: desde 1.12 el juego declara `shares_slots = yes` dentro de `level_cap = { ... }` en common/buildings/, y el generador solo lo buscaba suelto. Resultado: ninguna fábrica contaba como ocupada y la industrialización llenaba regiones por encima de sus espacios (Kanto quedó con 22 edificios en 15 espacios). El juego rechaza el nivel que no entra; en Kanto se ve porque el monumento del Palacio Imperial vacía el aviso en el log, en las demás regiones pasaba en silencio.
 
 Ahora se leen las dos formas (y si no se puede leer nada, se usa la lista conocida de fábricas). Las fábricas de la industrialización van solo a espacios libres; los espacios extra de construcción (15_balance -> construction.extra_slots) quedan para astilleros y para que el jugador construya. Si una potencia no llega a su franja por falta de espacio, el reporte lo dice ("faltan N: no hay mas slots libres"). Test: test_espacios_fabricas.
+
+## Etapa 1 de "Rumbo a 2120": el reloj (2026-10-27)
+
+Pedido del usuario: "1/1/2120 all the way"; las anarquías quedan como están. Esta sesión es la principal para el programa; la otra queda para arte, errores y arreglos chicos.
+
+- Fin de la partida: END_DATE 2120.1.1.1 (11_scenario.yaml -> game_dates.end). Antes 2200.
+- La crisis del siglo vuelve cada 180 días desde 2106 (antes 235): unas 28 hasta 2120 en el simulador, nunca la misma dos veces seguidas.
+- La segunda vez que sale una misma crisis es peor: el bloque que la elige marca MEGANATIONS_crisis_vista_N y, si ya estaba, MEGANATIONS_crisis_repetida_N; en las seis crisis malas (mundo.20-25) cada opción cuesta además 3% de estabilidad y 50 de poder político.
+- La elección del Directorio de la FCU (fcu.110) y la Asamblea de Armadores de la HSN (hsn.240) de 2116 son las últimas y cuentan doble (los efectos de la opción se repiten desde 2116.1.1). El texto lo dice.
+- Simulador: todo hasta 2120.1.1 (supuestos.yaml -> hasta).
+
+### La APF no integraba a sus satélites
+
+Partida del usuario: la APF peleaba en Anatolia y no había absorbido a ningún satélite. Con un presupuesto de poder político (40-60 por mes, compitiendo con el resto de sus decisiones) el simulador lo reproduce: en 95 de 100 partidas ninguna anexión hasta 2106. La IA gastaba en Ayuda a los siete y repartía la integración entre todos; ninguno llegaba a 100 y la tensión quedaba en 84-100, que la frenaba.
+
+Cambio solo en los pesos de la IA (las reglas del jugador no cambian): integrar frena con tensión 85 (antes 70) y prioriza al miembro que ya va por 20 (x2) o 40 (x4); invertir frena con tensión 60 (antes 75) y prioriza al miembro cuya integración está trabada por el Desarrollo; la Ayuda a un miembro que ya va por 20 de integración baja a x0,25. Simulado: 4 a 7 satélites integrados hasta 2106, también en guerra y con poco poder político. Test: test_rumbo_2120.

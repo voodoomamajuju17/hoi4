@@ -107,7 +107,7 @@ def informe(raw: dict, sup: dict, focos: list[dict], mundo: dict, crisis: dict) 
     m = c["corridas"]
     total = sum(c["total"]) / m
     con_repeticion = sum(1 for s in c["seguidas"] if s > 0) / m
-    w("## La crisis del siglo (2106-2200)")
+    w("## La crisis del siglo (2106-2120)")
     w("")
     w(f"{total:.0f} crisis por partida. La misma crisis dos veces seguidas: {sum(c['seguidas']) / m:.1f} veces por partida; "
       f"pasa al menos una vez en el {_pct(con_repeticion)} de las partidas.")

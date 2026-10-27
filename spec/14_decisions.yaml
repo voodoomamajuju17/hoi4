@@ -2785,15 +2785,17 @@ categories:
       ai:
         factor: 4
         modifiers:
+        # 2026-10-27: la IA invierte donde la integración está trabada (con
+        # Amara no puede pasar al Desarrollo), no en los siete a la vez
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 75}
+            variable_at_least: {var: APF_tension, value: 60}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zet, value: 70}
         - factor: 3
           when:
-            variable_below: {var: APF_desarrollo_zet, value: 40}
+            variable_at_least: {var: APF_integracion_zet, value: APF_desarrollo_zet}
     - id: APF_integrar_zet
       name:
         english: Integrate Highlands Federation (Integration +20)
@@ -2844,10 +2846,19 @@ categories:
         - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
+        # 2026-10-27 (partida del usuario: la APF no integraba a nadie): la IA
+        # repartía la integración entre los siete y ninguno llegaba a 100. Ahora
+        # termina lo que empezó y solo frena con la tensión muy alta.
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 70}
+            variable_at_least: {var: APF_tension, value: 85}
+        - factor: 2
+          when:
+            variable_at_least: {var: APF_integracion_zet, value: 20}
+        - factor: 4
+          when:
+            variable_at_least: {var: APF_integracion_zet, value: 40}
     - id: APF_invertir_zsa
       name:
         english: Invest in Cape Federation (Development +20)
@@ -2874,15 +2885,17 @@ categories:
       ai:
         factor: 4
         modifiers:
+        # 2026-10-27: la IA invierte donde la integración está trabada (con
+        # Amara no puede pasar al Desarrollo), no en los siete a la vez
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 75}
+            variable_at_least: {var: APF_tension, value: 60}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zsa, value: 70}
         - factor: 3
           when:
-            variable_below: {var: APF_desarrollo_zsa, value: 40}
+            variable_at_least: {var: APF_integracion_zsa, value: APF_desarrollo_zsa}
     - id: APF_integrar_zsa
       name:
         english: Integrate Cape Federation (Integration +20)
@@ -2933,10 +2946,19 @@ categories:
         - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
+        # 2026-10-27 (partida del usuario: la APF no integraba a nadie): la IA
+        # repartía la integración entre los siete y ninguno llegaba a 100. Ahora
+        # termina lo que empezó y solo frena con la tensión muy alta.
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 70}
+            variable_at_least: {var: APF_tension, value: 85}
+        - factor: 2
+          when:
+            variable_at_least: {var: APF_integracion_zsa, value: 20}
+        - factor: 4
+          when:
+            variable_at_least: {var: APF_integracion_zsa, value: 40}
     - id: APF_invertir_zco
       name:
         english: Invest in Congo Confederation (Development +20)
@@ -2963,15 +2985,17 @@ categories:
       ai:
         factor: 4
         modifiers:
+        # 2026-10-27: la IA invierte donde la integración está trabada (con
+        # Amara no puede pasar al Desarrollo), no en los siete a la vez
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 75}
+            variable_at_least: {var: APF_tension, value: 60}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zco, value: 70}
         - factor: 3
           when:
-            variable_below: {var: APF_desarrollo_zco, value: 40}
+            variable_at_least: {var: APF_integracion_zco, value: APF_desarrollo_zco}
     - id: APF_integrar_zco
       name:
         english: Integrate Congo Confederation (Integration +20)
@@ -3022,10 +3046,19 @@ categories:
         - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
+        # 2026-10-27 (partida del usuario: la APF no integraba a nadie): la IA
+        # repartía la integración entre los siete y ninguno llegaba a 100. Ahora
+        # termina lo que empezó y solo frena con la tensión muy alta.
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 70}
+            variable_at_least: {var: APF_tension, value: 85}
+        - factor: 2
+          when:
+            variable_at_least: {var: APF_integracion_zco, value: 20}
+        - factor: 4
+          when:
+            variable_at_least: {var: APF_integracion_zco, value: 40}
     - id: APF_invertir_zao
       name:
         english: Invest in Angolan Union (Development +20)
@@ -3052,15 +3085,17 @@ categories:
       ai:
         factor: 4
         modifiers:
+        # 2026-10-27: la IA invierte donde la integración está trabada (con
+        # Amara no puede pasar al Desarrollo), no en los siete a la vez
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 75}
+            variable_at_least: {var: APF_tension, value: 60}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zao, value: 70}
         - factor: 3
           when:
-            variable_below: {var: APF_desarrollo_zao, value: 40}
+            variable_at_least: {var: APF_integracion_zao, value: APF_desarrollo_zao}
     - id: APF_integrar_zao
       name:
         english: Integrate Angolan Union (Integration +20)
@@ -3111,10 +3146,19 @@ categories:
         - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
+        # 2026-10-27 (partida del usuario: la APF no integraba a nadie): la IA
+        # repartía la integración entre los siete y ninguno llegaba a 100. Ahora
+        # termina lo que empezó y solo frena con la tensión muy alta.
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 70}
+            variable_at_least: {var: APF_tension, value: 85}
+        - factor: 2
+          when:
+            variable_at_least: {var: APF_integracion_zao, value: 20}
+        - factor: 4
+          when:
+            variable_at_least: {var: APF_integracion_zao, value: 40}
     - id: APF_invertir_zmz
       name:
         english: Invest in Mozambique League (Development +20)
@@ -3141,15 +3185,17 @@ categories:
       ai:
         factor: 4
         modifiers:
+        # 2026-10-27: la IA invierte donde la integración está trabada (con
+        # Amara no puede pasar al Desarrollo), no en los siete a la vez
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 75}
+            variable_at_least: {var: APF_tension, value: 60}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zmz, value: 70}
         - factor: 3
           when:
-            variable_below: {var: APF_desarrollo_zmz, value: 40}
+            variable_at_least: {var: APF_integracion_zmz, value: APF_desarrollo_zmz}
     - id: APF_integrar_zmz
       name:
         english: Integrate Mozambique League (Integration +20)
@@ -3200,10 +3246,19 @@ categories:
         - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
+        # 2026-10-27 (partida del usuario: la APF no integraba a nadie): la IA
+        # repartía la integración entre los siete y ninguno llegaba a 100. Ahora
+        # termina lo que empezó y solo frena con la tensión muy alta.
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 70}
+            variable_at_least: {var: APF_tension, value: 85}
+        - factor: 2
+          when:
+            variable_at_least: {var: APF_integracion_zmz, value: 20}
+        - factor: 4
+          when:
+            variable_at_least: {var: APF_integracion_zmz, value: 40}
     - id: APF_invertir_zmg
       name:
         english: Invest in Red Island Assembly (Development +20)
@@ -3230,15 +3285,17 @@ categories:
       ai:
         factor: 4
         modifiers:
+        # 2026-10-27: la IA invierte donde la integración está trabada (con
+        # Amara no puede pasar al Desarrollo), no en los siete a la vez
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 75}
+            variable_at_least: {var: APF_tension, value: 60}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zmg, value: 70}
         - factor: 3
           when:
-            variable_below: {var: APF_desarrollo_zmg, value: 40}
+            variable_at_least: {var: APF_integracion_zmg, value: APF_desarrollo_zmg}
     - id: APF_integrar_zmg
       name:
         english: Integrate Red Island Assembly (Integration +20)
@@ -3289,10 +3346,19 @@ categories:
         - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
+        # 2026-10-27 (partida del usuario: la APF no integraba a nadie): la IA
+        # repartía la integración entre los siete y ninguno llegaba a 100. Ahora
+        # termina lo que empezó y solo frena con la tensión muy alta.
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 70}
+            variable_at_least: {var: APF_tension, value: 85}
+        - factor: 2
+          when:
+            variable_at_least: {var: APF_integracion_zmg, value: 20}
+        - factor: 4
+          when:
+            variable_at_least: {var: APF_integracion_zmg, value: 40}
     - id: APF_invertir_zke
       name:
         english: Invest in Rift Federation (Development +20)
@@ -3319,15 +3385,17 @@ categories:
       ai:
         factor: 4
         modifiers:
+        # 2026-10-27: la IA invierte donde la integración está trabada (con
+        # Amara no puede pasar al Desarrollo), no en los siete a la vez
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 75}
+            variable_at_least: {var: APF_tension, value: 60}
         - factor: 0.2
           when:
             variable_at_least: {var: APF_desarrollo_zke, value: 70}
         - factor: 3
           when:
-            variable_below: {var: APF_desarrollo_zke, value: 40}
+            variable_at_least: {var: APF_integracion_zke, value: APF_desarrollo_zke}
     - id: APF_integrar_zke
       name:
         english: Integrate Rift Federation (Integration +20)
@@ -3378,10 +3446,19 @@ categories:
         - {effect: add_variable, var: APF_tension, value: 5}
       ai:
         factor: 8
+        # 2026-10-27 (partida del usuario: la APF no integraba a nadie): la IA
+        # repartía la integración entre los siete y ninguno llegaba a 100. Ahora
+        # termina lo que empezó y solo frena con la tensión muy alta.
         modifiers:
         - factor: 0
           when:
-            variable_at_least: {var: APF_tension, value: 70}
+            variable_at_least: {var: APF_tension, value: 85}
+        - factor: 2
+          when:
+            variable_at_least: {var: APF_integracion_zke, value: 20}
+        - factor: 4
+          when:
+            variable_at_least: {var: APF_integracion_zke, value: 40}
     - id: APF_plan_de_desarrollo_regional
       name: {english: Regional Development Plan, spanish: Plan de Desarrollo Regional}
       desc:
@@ -5480,6 +5557,9 @@ categories:
         - factor: 0
           when:
             variable_at_least: {var: APF_lealtad_zet, value: 70}
+        - factor: 0.25   # 2026-10-27: ya se está sumando a la Federación
+          when:
+            variable_at_least: {var: APF_integracion_zet, value: 20}
       src: user_design
     - id: APF_tributo_zet
       name:
@@ -5541,6 +5621,9 @@ categories:
         - factor: 0
           when:
             variable_at_least: {var: APF_lealtad_zsa, value: 70}
+        - factor: 0.25   # 2026-10-27: ya se está sumando a la Federación
+          when:
+            variable_at_least: {var: APF_integracion_zsa, value: 20}
       src: user_design
     - id: APF_tributo_zsa
       name:
@@ -5604,6 +5687,9 @@ categories:
         - factor: 0
           when:
             variable_at_least: {var: APF_lealtad_zco, value: 70}
+        - factor: 0.25   # 2026-10-27: ya se está sumando a la Federación
+          when:
+            variable_at_least: {var: APF_integracion_zco, value: 20}
       src: user_design
     - id: APF_tributo_zco
       name:
@@ -5667,6 +5753,9 @@ categories:
         - factor: 0
           when:
             variable_at_least: {var: APF_lealtad_zao, value: 70}
+        - factor: 0.25   # 2026-10-27: ya se está sumando a la Federación
+          when:
+            variable_at_least: {var: APF_integracion_zao, value: 20}
       src: user_design
     - id: APF_tributo_zao
       name:
@@ -5730,6 +5819,9 @@ categories:
         - factor: 0
           when:
             variable_at_least: {var: APF_lealtad_zmz, value: 70}
+        - factor: 0.25   # 2026-10-27: ya se está sumando a la Federación
+          when:
+            variable_at_least: {var: APF_integracion_zmz, value: 20}
       src: user_design
     - id: APF_tributo_zmz
       name:
@@ -5793,6 +5885,9 @@ categories:
         - factor: 0
           when:
             variable_at_least: {var: APF_lealtad_zmg, value: 70}
+        - factor: 0.25   # 2026-10-27: ya se está sumando a la Federación
+          when:
+            variable_at_least: {var: APF_integracion_zmg, value: 20}
       src: user_design
     - id: APF_tributo_zmg
       name:
@@ -5856,6 +5951,9 @@ categories:
         - factor: 0
           when:
             variable_at_least: {var: APF_lealtad_zke, value: 70}
+        - factor: 0.25   # 2026-10-27: ya se está sumando a la Federación
+          when:
+            variable_at_least: {var: APF_integracion_zke, value: 20}
       src: user_design
     - id: APF_tributo_zke
       name:
@@ -19195,10 +19293,11 @@ scripted_effects:
             effects:
             - {effect: event, id: meganations_mundo.114, days: 1}
     # Crisis del siglo (análisis 2026-10-01, prioridad 12): desde 2106, una cada ~8 meses.
+    # 2026-10-27 (Etapa 1, la partida termina en 2120): una cada ~6 meses (180 días).
     # game.log 2026-10-02: la bandera GLOBAL con vencimiento no frena nada (salían
     # 64 por mes). La espera es una bandera de PAÍS con vencimiento en las 8 potencias.
     - effect: if
-      when: {date_after: 2106.1.1, any: [{not_flag: MEGANATIONS_crisis_tardia}, {flag_older: {flag: MEGANATIONS_crisis_tardia, days: 235}}]}
+      when: {date_after: 2106.1.1, any: [{not_flag: MEGANATIONS_crisis_tardia}, {flag_older: {flag: MEGANATIONS_crisis_tardia, days: 180}}]}
       then:
       - effect: every_country
         when:
@@ -19219,6 +19318,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_0}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_0}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_0}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_0}
           - effect: every_country
             when:
               any:
@@ -19243,6 +19348,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_1}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_1}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_1}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_1}
           - effect: every_country
             when:
               any:
@@ -19267,6 +19378,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_2}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_2}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_2}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_2}
           - effect: every_country
             when:
               any:
@@ -19291,6 +19408,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_3}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_3}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_3}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_3}
           - effect: every_country
             when:
               any:
@@ -19315,6 +19438,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_4}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_4}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_4}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_4}
           - effect: every_country
             when:
               any:
@@ -19339,6 +19468,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_5}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_5}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_5}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_5}
           - effect: every_country
             when:
               any:
@@ -19363,6 +19498,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_6}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_6}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_6}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_6}
           - effect: every_country
             when:
               any:
@@ -19387,6 +19528,12 @@ scripted_effects:
         - weight: 1
           skip_if: {flag: MEGANATIONS_ultima_crisis_7}  # 2026-10-18 (simulador): nunca la misma dos veces seguidas
           effects:
+          # 2026-10-27 (Etapa 1, rumbo a 2120): la segunda vez que sale la misma crisis es peor
+          - effect: if
+            when: {global_flag: MEGANATIONS_crisis_vista_7}
+            then:
+            - {effect: global_flag, value: MEGANATIONS_crisis_repetida_7}
+          - {effect: global_flag, value: MEGANATIONS_crisis_vista_7}
           - effect: every_country
             when:
               any:

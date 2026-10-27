@@ -927,7 +927,7 @@ def test_scenario() -> None:
         check("bloque del resto del mundo entrecomillado", '"---" = {' in raw, raw)
         defines = (mod / "common/defines/00_meganations_defines.lua").read_text()
         check("START_DATE 2100", 'NDefines.NGame.START_DATE = "2100.1.1.12"' in defines, defines)
-        check("END_DATE 2200", 'NDefines.NGame.END_DATE = "2200.1.1.1"' in defines, defines)
+        check("END_DATE 2120 (la partida termina el 1/1/2120)", 'NDefines.NGame.END_DATE = "2120.1.1.1"' in defines, defines)
         es = (mod / "localisation/spanish/meganations_scenario_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("nombre del escenario en castellano", "La Era de las Meganaciones" in es)
 
@@ -1102,8 +1102,8 @@ def test_routes() -> None:
         missing = sorted(f for f, a, b in flags if (a, b) not in declares)
         # prioridad 12: segunda etapa
         mw = " ".join(se[se.index("MEGANATIONS_eventos_mundiales = {"):].split())[:12000]
-        check("crisis del siglo: desde 2106, una cada 240 dias entre 8",
-              "date > 2106.1.1" in mw and "has_country_flag = { flag = MEGANATIONS_crisis_tardia days > 235 }" in mw
+        check("crisis del siglo: desde 2106, una cada 180 dias entre 8 (2026-10-27: fin en 2120)",
+              "date > 2106.1.1" in mw and "has_country_flag = { flag = MEGANATIONS_crisis_tardia days > 180 }" in mw
               and "clr_country_flag = MEGANATIONS_crisis_tardia" in mw
               and all(f"meganations_mundo.{i}" in mw for i in range(20, 28)), mw[:800])
         check("crisis del siglo: nunca la misma dos veces seguidas (simulador, 2026-10-18)",
@@ -4272,7 +4272,7 @@ def test_simulador() -> None:
     dos = sim.simular_mundo(raw, sup, corridas=5)
     check("simulador: misma semilla, mismo resultado", uno["fin_disimulo"] == dos["fin_disimulo"] and uno["muerte"] == dos["muerte"])
     crisis = sim.simular_crisis(raw, sup, corridas=2)
-    check("simulador: la crisis del siglo sale cada ~8 meses de 2106 a 2200", all(130 <= t <= 150 for t in crisis["total"]),
+    check("simulador: la crisis del siglo sale cada ~6 meses de 2106 a 2120", all(25 <= t <= 30 for t in crisis["total"]),
           crisis["total"])
 
 
@@ -4401,6 +4401,30 @@ def test_espacios_fabricas() -> None:
         check("ninguna region tiene mas fabricas que espacios", not over, over[:5])
 
 
+def test_rumbo_2120() -> None:
+    section("Etapa 1: el reloj de 2120 (2026-10-27)")
+    raw = specload.load(REPO_ROOT / "spec").raw
+    dec = raw["decisions"]
+    ef = {e["id"]: e for e in dec.get("scripted_effects") or []}
+    import json as _json
+    mundial = _json.dumps(ef["MEGANATIONS_eventos_mundiales"], ensure_ascii=False)
+    check("la crisis del siglo vuelve cada 180 dias", '"days": 180' in mundial)
+    check("cada crisis marca si ya salio antes", all(f"MEGANATIONS_crisis_vista_{i}" in mundial and f"MEGANATIONS_crisis_repetida_{i}" in mundial for i in range(8)))
+    ns = raw["events"]["namespaces"]
+    mundo = {str(e["id"]): e for e in ns["meganations_mundo"]["events"]}
+    check("la segunda vez cada crisis mala cuesta mas (todas las opciones)",
+          all(all(f"MEGANATIONS_crisis_repetida_{i - 20}" in _json.dumps(o) for o in mundo[str(i)]["options"]) for i in range(20, 26)))
+    fcu = {str(e["id"]): e for e in ns["meganations_fcu"]["events"]}
+    hsn = {str(e["id"]): e for e in ns["meganations_hsn"]["events"]}
+    check("la eleccion de la FCU de 2116 cuenta doble", all("2116.1.1" in _json.dumps(o) for o in fcu["110"]["options"]))
+    check("la Asamblea de Armadores de 2116 cuenta doble", all("2116.1.1" in _json.dumps(o) for o in hsn["240"]["options"]))
+    apf = next(c for c in dec["categories"] if c["id"] == "APF_integracion_category")
+    integ = {d["id"]: _json.dumps(d.get("ai")) for d in apf["decisions"]}
+    check("la IA de la APF termina la integracion que empezo",
+          all("APF_integracion_" + x in integ["APF_integrar_" + x] and '"value": 85' in integ["APF_integrar_" + x]
+              for x in ("zet", "zsa", "zco", "zao", "zmz", "zmg", "zke")))
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4459,6 +4483,7 @@ def main() -> int:
         test_musica,
         test_rebeliones_reforzadas,
         test_espacios_fabricas,
+        test_rumbo_2120,
         test_simulador,
         test_vanilla_validation,
     ):

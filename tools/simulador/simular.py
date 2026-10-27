@@ -174,7 +174,7 @@ def _categorias(raw: dict, ids: list[str]) -> list[dict]:
 
 def simular_mundo(raw: dict, sup: dict, corridas: int | None = None) -> dict:
     corridas = corridas or int(sup["corridas"])
-    hasta = mes_de(sup.get("hasta", "2140.1.1"))
+    hasta = mes_de(sup.get("hasta", "2120.1.1"))
     p_base = float(sup.get("decisiones_prob_base", 0.15))
     rearme = _categorias(raw, ["MEGANATIONS_rearme_category"])
     efe_cats = _categorias(raw, ["EFE_sucesion_category", "MEGANATIONS_lider_category"])
@@ -245,7 +245,7 @@ def simular_mundo(raw: dict, sup: dict, corridas: int | None = None) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# La crisis del siglo (2106-2200)
+# La crisis del siglo (2106-2120)
 # ---------------------------------------------------------------------------
 
 def _bloque_crisis(raw: dict) -> dict:
@@ -260,7 +260,7 @@ def simular_crisis(raw: dict, sup: dict, corridas: int | None = None) -> dict:
     corridas = corridas or int(sup["corridas"])
     bloque = _bloque_crisis(raw)
     rng = random.Random(f"{sup.get('semilla', 0)}:crisis")
-    desde, hasta = mes_de("2106.1.1"), mes_de("2200.1.1")
+    desde, hasta = mes_de("2106.1.1"), mes_de(sup.get("hasta", "2120.1.1"))
     por_tipo, seguidas, racha_max, total = Counter(), [], Counter(), []
     for _ in range(corridas):
         mundo = Mundo(raw, sup, rng)

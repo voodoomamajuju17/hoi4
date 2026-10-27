@@ -2356,13 +2356,18 @@ namespaces:
         picture: GFX_report_event_generic_rally
         title: {english: Directorate Elections, spanish: Elecciones del Directorio}
         desc:
-          english: Every four years the shareholders elect the chair of the Directorate. This year the vote is close.
-          spanish: Cada cuatro años los accionistas eligen la presidencia del Directorio. Este año la votación está peleada.
+          english: Every four years the shareholders elect the chair of the Directorate. This year the vote is close. The vote of 2116 is the last before the Geneva Report, and it counts double.
+          spanish: Cada cuatro años los accionistas eligen la presidencia del Directorio. Este año la votación está peleada. La de 2116 es la última antes del Informe de Ginebra, y cuenta doble.
         options:
         - name: {english: Castellane takes the chair., spanish: Castellane se queda con la presidencia.}
           effects:
           - {effect: add_variable, var: FCU_castellane, value: 15}
           - {effect: run, value: FCU_recalcular_directorio}
+          - effect: if   # 2026-10-27: la elección de 2116 es la última y cuenta doble
+            when: {date_after: 2116.1.1}
+            then:
+            - {effect: add_variable, var: FCU_castellane, value: 15}
+            - {effect: run, value: FCU_recalcular_directorio}
           - effect: if
             when: {country_exists: HSN}
             then:
@@ -2372,6 +2377,11 @@ namespaces:
           effects:
           - {effect: add_variable, var: FCU_meridian, value: 15}
           - {effect: run, value: FCU_recalcular_directorio}
+          - effect: if   # 2026-10-27: la elección de 2116 es la última y cuenta doble
+            when: {date_after: 2116.1.1}
+            then:
+            - {effect: add_variable, var: FCU_meridian, value: 15}
+            - {effect: run, value: FCU_recalcular_directorio}
           - effect: if
             when: {country_exists: HSN}
             then:
@@ -2381,6 +2391,11 @@ namespaces:
           effects:
           - {effect: add_variable, var: FCU_obsidian, value: 15}
           - {effect: run, value: FCU_recalcular_directorio}
+          - effect: if   # 2026-10-27: la elección de 2116 es la última y cuenta doble
+            when: {date_after: 2116.1.1}
+            then:
+            - {effect: add_variable, var: FCU_obsidian, value: 15}
+            - {effect: run, value: FCU_recalcular_directorio}
           - effect: if
             when: {country_exists: HSN}
             then:
@@ -4650,23 +4665,38 @@ namespaces:
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: The Assembly of Shipowners, spanish: La Asamblea de Armadores}
-        desc: {english: 'Every four years the shipowners, the insurers and the crews elect who speaks for the Market. The fleet votes too.', spanish: 'Cada
-            cuatro años los armadores, las aseguradoras y las tripulaciones eligen quién habla por el Mercado. La flota también vota.'}
+        desc: {english: 'Every four years the shipowners, the insurers and the crews elect who speaks for the Market. The fleet votes too. The Assembly of 2116 is the last before the Geneva Report, and it counts double.', spanish: 'Cada
+            cuatro años los armadores, las aseguradoras y las tripulaciones eligen quién habla por el Mercado. La flota también vota. La Asamblea de 2116 es la última antes del Informe de Ginebra, y cuenta doble.'}
         options:
         - name: {english: 'The insurers: order and premiums.', spanish: 'Las aseguradoras: orden y primas.'}
           effects:
           - {effect: add_political_power, value: 75}
           - {effect: add_variable, var: HSN_presion, value: -10}
           - {effect: clamp, var: HSN_presion, min: 0, max: 100}
+          - effect: if   # 2026-10-27: la Asamblea de 2116 es la última y cuenta doble
+            when: {date_after: 2116.1.1}
+            then:
+            - {effect: add_political_power, value: 75}
+            - {effect: add_variable, var: HSN_presion, value: -10}
+            - {effect: clamp, var: HSN_presion, min: 0, max: 100}
           ai_chance: 40
         - name: {english: 'The crews: the sea is taken, not bought.', spanish: 'Las tripulaciones: el mar se toma, no se compra.'}
           effects:
           - {effect: add_war_support, value: 0.05}
           - {effect: navy_experience, value: 25}
+          - effect: if   # 2026-10-27: la Asamblea de 2116 es la última y cuenta doble
+            when: {date_after: 2116.1.1}
+            then:
+            - {effect: add_war_support, value: 0.05}
+            - {effect: navy_experience, value: 25}
           ai_chance: 35
         - name: {english: 'The free ports: open trade.', spanish: 'Los puertos libres: comercio abierto.'}
           effects:
           - {effect: add_stability, value: 0.05}
+          - effect: if   # 2026-10-27: la Asamblea de 2116 es la última y cuenta doble
+            when: {date_after: 2116.1.1}
+            then:
+            - {effect: add_stability, value: 0.05}
           ai_chance: 25
         src: user_request
 
@@ -12823,10 +12853,20 @@ namespaces:
       - name: {english: 'Ration and import, whatever it costs.', spanish: 'Racionar e importar, cueste lo que cueste.'}
         effects:
         - {effect: add_political_power, value: -100}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_0}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       - name: {english: The people will endure., spanish: El pueblo va a aguantar.}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_sequia, days: 182}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_0}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       src: user_request
     - id: 21
@@ -12840,10 +12880,20 @@ namespaces:
         effects:
         - {effect: add_political_power, value: -75}
         - {effect: add_manpower, value: -20000}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_1}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       - name: {english: Keep the factories running., spanish: Que las fábricas sigan.}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_pandemia, days: 182}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_1}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       src: user_request
     - id: 22
@@ -12856,10 +12906,20 @@ namespaces:
       - name: {english: Rebuild at full speed., spanish: Reconstruir a toda velocidad.}
         effects:
         - {effect: add_political_power, value: -80}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_2}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       - name: {english: Work by hand until it is fixed., spanish: Trabajar a mano hasta que se arregle.}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_tormenta_solar, days: 120}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_2}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       src: user_request
     - id: 23
@@ -12872,11 +12932,21 @@ namespaces:
       - name: {english: 'Open the borders: hands and soldiers.', spanish: 'Abrir las fronteras: manos y soldados.'}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_exodo, days: 182}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_3}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 60
       - name: {english: Close the borders., spanish: Cerrar las fronteras.}
         effects:
         - {effect: add_war_support, value: 0.03}
         - {effect: add_stability, value: -0.02}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_3}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 40
       src: user_request
     - id: 24
@@ -12889,10 +12959,20 @@ namespaces:
       - name: {english: Clean the ports., spanish: Limpiar los puertos.}
         effects:
         - {effect: add_political_power, value: -75}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_4}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       - name: {english: Wait for the sea., spanish: Esperar al mar.}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_marea_negra, days: 182}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_4}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 50
       src: user_request
     - id: 25
@@ -12905,10 +12985,20 @@ namespaces:
       - name: {english: Bail out the banks., spanish: Rescatar a los bancos.}
         effects:
         - {effect: add_political_power, value: -120}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_5}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 40
       - name: {english: Let it burn., spanish: Que se queme.}
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_crac, days: 182}
+        - effect: if  # 2026-10-27: la segunda vez es peor
+          when: {global_flag: MEGANATIONS_crisis_repetida_5}
+          then:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_political_power, value: -50}
         ai_chance: 60
       src: user_request
     - id: 26
