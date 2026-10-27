@@ -372,6 +372,14 @@ def paso_reporte(juego, ctx) -> None:
             except OSError as exc:
                 ojo(f"No pude armar ui_para_claude.zip: {exc}")
 
+        # 2026-10-26 ("nunca vi que la HSN desembarcara nada"): los planes
+        # de desembarco del juego base (Japón, el Día D), tal cual, para que
+        # la HSN haga lo mismo.
+        desembarcos = ctx.data.get("invasion_reference_path")
+        if desembarcos and Path(desembarcos).exists():
+            extra.append("")
+            extra.append(Path(desembarcos).read_text(encoding="utf-8"))
+
         investigacion = ctx.data.get("research_path")
         if investigacion and Path(investigacion).exists():
             extra.append("")
