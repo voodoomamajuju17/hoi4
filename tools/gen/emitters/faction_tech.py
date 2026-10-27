@@ -121,8 +121,17 @@ def emit(ctx: BuildContext) -> None:
         if not art.exists():
             continue
         targets = ([uu["equipment"]] if uu.get("equipment") else []) + list(uu.get("techs") or [])
+        level_of = {t: n for n, ts in (uu.get("levels") or {}).items() for t in ts}
+        targets += [t for t in level_of if t not in targets and (t in equipment or t in tree)]
         for target in targets:
-            rel = _texture(ctx, art, uu["tag"], uu["id"], sizes.of(target), written)
+            # 2026-10-27 (captura del usuario: las tres del Centinela iguales): cada
+            # nivel con su imagen si llegó; si no, la de la unidad
+            n = level_of.get(target)
+            own = repo / "assets" / uu["tag"] / "armas" / f"{uu['id']}_{n}.dds" if n else None
+            if own is not None and own.exists():
+                rel = _texture(ctx, own, uu["tag"], uu["id"], sizes.of(target), written, n)
+            else:
+                rel = _texture(ctx, art, uu["tag"], uu["id"], sizes.of(target), written)
             name = f"GFX_{uu['tag']}_{target}_medium"
             # la unidad única le gana a la imagen de la familia (el Gliptodonte
             # es el tanque moderno del EFE): un solo sprite con ese nombre

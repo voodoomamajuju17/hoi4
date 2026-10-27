@@ -2076,3 +2076,18 @@ Cambio solo en los pesos de la IA (las reglas del jugador no cambian): integrar 
 ## Bitácora anual en el game.log (2026-10-27)
 
 Antes de la partida de observador: cada año (desde el 2/1/2100) el game.log recibe una línea por meganación y por Tierra Sin Ley con regiones controladas, divisiones, fábricas civiles y militares, satélites y estabilidad (%), o "ya no existe". Buscar "MEGANATIONS bitacora". La corren las ocho meganaciones con una cuenta de años propia y escribe solo la primera, así sigue aunque alguna desaparezca. Emisor: tools/gen/emitters/bitacora.py. Test: test_bitacora.
+
+## Por qué se declaran la guerra (2026-10-27)
+
+Pedido del usuario (partida de observador): "¿por qué se declaran la guerra? ¿qué tiene uno que quiere el otro? ¿por qué el EFE ataca el Amazonas? (...) cambiemos los casus belli con las anarquías a partir de 3 o 4 meses, con algún evento que muestre su justificación; también sumar lore al conflicto entre naciones, parecen medio de golpe". Todo en spec/23_rumbo_2120.yaml (archivo propio del programa, specload lo suma).
+
+- Anarquías: el casus belli ya no está desde el día uno. Cada uno de los 10 pares tiene un incidente de frontera entre el 10/3 y el 27/4 de 2100 (meganations_incidentes.1-10): el Fuego de Rondônia (EFE), el Camino Cortado del Antisuyu (NAS), las Compuertas del Brahmaputra, el Maglev de la Estepa y los Petroleros de Ormuz (SHD), el Abordaje de Chennai (HSN), la Guarnición de Antioquía y Bárbaros en el Danubio (NRE), las Columnas de Refugiados (ASC) y los Pozos del Sahel (APF). El jugador recibe el casus belli en el acto; la IA, además, sigue esperando su fecha y su ejército (16_ai -> anarchy_wars). Después se renueva solo, como antes.
+- Al empezar cada guerra, los jugadores reciben el porqué (meganations_incidentes.21-30 con anarquías, 61-68 entre rivales, 69 general entre potencias), una vez por par (on_declare_war).
+- Reclamar el Destino: el dueño de cada región reclamada recibe un aviso con lo que pide la Forma Final del que reclama (41-48), así la guerra no llega sin aviso.
+- Se ampliaron los textos cortos de los ultimátums (Arequipa, el Pacífico, Taiwán, Antofagasta, el tributo de Roma, los Emiratos).
+
+## Centinela y las unidades únicas de la IA (2026-10-27)
+
+Captura del usuario: las tres tecnologías del Centinela se veían iguales y con el nombre del juego. Las tecnologías toman el nombre del equipo ($gw_armored_car_equipment$), así que se nombra el equipo: Centinela I (La Manada), II (El Acechador), III (La Araña Aniquiladora), con imagen propia por nivel cuando llegue (assets/ASC/armas/ASC_centinela_2/_3.dds; pedidos en arte/pedidos/10_unidades_unicas.txt). El equipo mismo: +6/+9/+12 de antiaéreo, +15% blindaje, +10% defensa; el batallón: +15% PS y movimiento por terreno (llanura y desierto +15%, colinas y ciudad +10%, sin penalidad en bosque, selva, pantano y río).
+
+"No veo que la IA la produzca" (y el NRE no hacía Onagros): el juego no conoce estos equipos como id de producción de la IA (el reporte los cambiaba por artillería o motorizada). Ahora cada unidad única tiene `<id>_ia_produccion`: cada 180 días la IA dueña encarga el modelo más nuevo que tenga y suma una división; si investigó la tecnología sin tomar la decisión, recibe el desbloqueo. Lo llama el pulso mensual de cada potencia. Test: test_incidentes_y_guerras.

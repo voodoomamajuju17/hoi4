@@ -1,0 +1,753 @@
+# =============================================================================
+# Rumbo a 2120 (2026-10-27): lo nuevo del programa, en su propio archivo para no
+# chocar con los arreglos que siguen entrando a 12_events y 14_decisions
+# (specload.merge_overlay lo suma a los demás).
+#
+# Los incidentes de frontera con la Anarquía. Pedido del usuario: "¿por qué se
+# declaran la guerra? ¿qué tiene uno que quiere el otro? ¿por qué el EFE ataca
+# el Amazonas? (...) cambiemos los casus belli con las anarquías a partir de 3 o
+# 4 meses de iniciada la partida, con algún evento que muestre su justificación".
+#
+# Antes: cada meganación que toca una anarquía tenía desde el 1/1/2100 un casus
+# belli permanente, sin explicación. Ahora el casus belli llega con un incidente
+# (marzo-abril de 2100), uno por par, que cuenta qué pasó y qué quiere cada uno.
+# Después se renueva solo, como antes (04_diplomacy -> anarchy_hostility). La IA
+# sigue esperando además su fecha y su ejército (16_ai -> anarchy_wars).
+# Al empezar la guerra, los jugadores reciben la noticia con el porqué.
+# =============================================================================
+
+anarchy_incidents:
+  # par -> fecha del incidente, evento del incidente, evento de la guerra
+  EFE: {ZWB: {date: 2100.3.18, incident: meganations_incidentes.1, war: meganations_incidentes.21}}
+  NAS: {ZWB: {date: 2100.4.22, incident: meganations_incidentes.2, war: meganations_incidentes.22}}
+  SHD:
+    ZWI: {date: 2100.3.29, incident: meganations_incidentes.3, war: meganations_incidentes.23}
+    ZWE: {date: 2100.4.14, incident: meganations_incidentes.4, war: meganations_incidentes.24}
+    ZWM: {date: 2100.4.27, incident: meganations_incidentes.5, war: meganations_incidentes.25}
+  HSN: {ZWI: {date: 2100.4.8, incident: meganations_incidentes.6, war: meganations_incidentes.26}}
+  NRE:
+    ZWM: {date: 2100.3.10, incident: meganations_incidentes.7, war: meganations_incidentes.27}
+    ZWE: {date: 2100.4.18, incident: meganations_incidentes.8, war: meganations_incidentes.28}
+  ASC: {ZWE: {date: 2100.3.24, incident: meganations_incidentes.9, war: meganations_incidentes.29}}
+  APF: {ZWM: {date: 2100.4.3, incident: meganations_incidentes.10, war: meganations_incidentes.30}}
+  # un par que el mapa arme y no esté arriba usa estos
+  default: {date: 2100.4.15, incident: meganations_incidentes.99, war: meganations_incidentes.98}
+
+# Guerras entre potencias (2026-10-27: "parecen medio de golpe"): cuando empieza
+# una, cada jugador recibe el porqué (una vez por par). Los pares de
+# 04_diplomacy -> rivalries tienen texto propio; el resto, uno general.
+power_wars:
+  pairs:
+  - {between: [EFE, NRE], event: meganations_incidentes.61}
+  - {between: [ASC, APF], event: meganations_incidentes.62}
+  - {between: [FCU, HSN], event: meganations_incidentes.63}
+  - {between: [EFE, FCU], event: meganations_incidentes.64}
+  - {between: [EFE, NAS], event: meganations_incidentes.65}
+  - {between: [HSN, SHD], event: meganations_incidentes.66}
+  - {between: [ASC, NRE], event: meganations_incidentes.67}
+  - {between: [APF, NRE], event: meganations_incidentes.68}
+  default: meganations_incidentes.69
+
+events:
+  namespaces:
+    meganations_incidentes:
+      country: null
+      events:
+      # ---------------------------------------------------------------------
+      # Los incidentes (le llegan a la meganación; el jugador recibe el casus
+      # belli en el acto, la IA cuando le llega su fecha y su ejército)
+      # ---------------------------------------------------------------------
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Rondônia Fire, spanish: El Fuego de Rondônia}
+        desc:
+          english: >-
+            For three weeks the smoke has reached Gaia. The Amazon Caudillos are clearing forest for their gold dredges
+            and their sawmills, and this time the fire crossed into our reserves of Mato Grosso: eleven thousand
+            hectares of replanted forest, the work of a generation of Green Militias, are ash. The rangers who tried
+            to stop the bulldozers were driven off with gunfire. The Empire was born defending the forest with hunting
+            rifles. The court asks the Emperor a single question: how much longer will we watch the largest forest on
+            Earth burn?
+          spanish: >-
+            Hace tres semanas que el humo llega hasta Gaia. Los Caudillos del Amazonas desmontan selva para sus dragas
+            de oro y sus aserraderos, y esta vez el fuego cruzó a nuestras reservas de Mato Grosso: once mil hectáreas
+            de monte replantado, el trabajo de una generación de Milicias Verdes, son ceniza. A los guardaparques que
+            quisieron frenar las topadoras los echaron a tiros. El Imperio nació defendiendo el monte con fusiles de
+            caza. La corte le hace al Emperador una sola pregunta: ¿cuánto más vamos a mirar cómo arde la selva más
+            grande de la Tierra?
+        options:
+        - name: {english: 'The forest is the nation. The Amazon will be protected, with or without its Caudillos.', spanish: 'El monte es la nación. El Amazonas se va a proteger, con o sin sus Caudillos.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWB, type: annex_everything}
+        src: user_request
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Severed Road of the Antisuyu, spanish: El Camino Cortado del Antisuyu}
+        desc:
+          english: >-
+            The Antisuyu, the fourth quarter of the Inca world, always went down from the mountains into the jungle.
+            Last month the Sapa Inti's engineers reopened the old road to Madre de Dios and raised a temple-battery
+            at its end. The Caudillos' loggers tore down the road, took the battery's panels and sold them on the
+            river. The priests read it as an offence to the Sun; the Court reads it as a border that someone else is
+            drawing for us. The jungle that the Caudillos burn was ours before it was anyone's.
+          spanish: >-
+            El Antisuyu, el cuarto rincón del mundo inca, siempre bajó de la cordillera hacia la selva. El mes pasado
+            los ingenieros del Sapa Inti reabrieron el viejo camino a Madre de Dios y levantaron un templo-batería en
+            su punta. Los madereros de los Caudillos arrancaron el camino, se llevaron los paneles del templo y los
+            vendieron en el río. Los sacerdotes lo leen como una ofensa al Sol; la Corte, como una frontera que otro
+            nos está dibujando. La selva que los Caudillos queman fue nuestra antes de ser de nadie.
+        options:
+        - name: {english: 'The roads of the Inca will cross the jungle again.', spanish: 'Los caminos del Inca van a volver a cruzar la selva.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWB, type: annex_everything}
+        src: user_request
+      - id: 3
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Sluices of the Brahmaputra, spanish: Las Compuertas del Brahmaputra}
+        desc:
+          english: >-
+            The water that comes down from Tibet is the Directorate's oldest promise: measured, shared, on time. On
+            the night of the new moon the Warlords of Hindustan blew up two sluice stations of the Brahmaputra and
+            diverted the flow to their own fields. Downstream, the valleys of Assam flooded; upstream, our engineers
+            count the damage in millions of cubic metres. The Warlords say the river is theirs. The Directorate does
+            not believe in rivers that belong to whoever is strongest.
+          spanish: >-
+            El agua que baja del Tíbet es la promesa más vieja del Directorio: medida, repartida, a tiempo. En la
+            noche de luna nueva los Señores de la Guerra del Indostán volaron dos estaciones de compuertas del
+            Brahmaputra y desviaron el caudal a sus campos. Río abajo se inundaron los valles de Assam; río arriba,
+            nuestros ingenieros cuentan el daño en millones de metros cúbicos. Los Señores dicen que el río es suyo.
+            El Directorio no cree en ríos que sean del más fuerte.
+        options:
+        - name: {english: 'Harmony will be restored, sluice by sluice.', spanish: 'La armonía se va a restablecer, compuerta por compuerta.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWI, type: annex_everything}
+        src: user_request
+      - id: 4
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Maglev of the Steppe, spanish: El Maglev de la Estepa}
+        desc:
+          english: >-
+            The freight maglev that joins Xi'an with the steppe carries a train every four minutes. Last week the
+            Eurasian Warlords cut the line at Khorgos, emptied forty cars of grain and machinery and left the rest
+            blocking the track. It is the third time this year. The Directorate's planners calculate that every day
+            the line is closed costs more than a month of war. Nobody in the Directorate likes war; everyone in the
+            Directorate likes sums that add up.
+          spanish: >-
+            El maglev de carga que une Xi'an con la estepa pasa un tren cada cuatro minutos. La semana pasada los
+            Señores de la Guerra de Eurasia cortaron la línea en Khorgos, vaciaron cuarenta vagones de grano y
+            maquinaria y dejaron el resto atravesado en la vía. Es la tercera vez en el año. Los planificadores del
+            Directorio calculan que cada día de línea cortada cuesta más que un mes de guerra. A nadie en el
+            Directorio le gusta la guerra; a todos les gustan las cuentas que cierran.
+        options:
+        - name: {english: 'The line will run again, and it will run to the end.', spanish: 'La línea va a volver a andar, y va a andar hasta el final.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWE, type: annex_everything}
+        src: user_request
+      - id: 5
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Tankers of Hormuz, spanish: Los Petroleros de Ormuz}
+        desc:
+          english: >-
+            The Desert Emirates have decided that the Strait of Hormuz has an owner. Their fast boats stopped three
+            tankers bound for our desalination plants, charged a toll in gold and kept one ship as a guarantee. The
+            Emirs buy imported weapons with that toll. Without that oil the cisterns of the south run dry before
+            summer. The Directorate does not pay tolls to whoever has no right to charge them.
+          spanish: >-
+            Los Emiratos del Desierto decidieron que el estrecho de Ormuz tiene dueño. Sus lanchas rápidas pararon
+            tres petroleros que iban a nuestras plantas desalinizadoras, cobraron un peaje en oro y se quedaron con un
+            barco de garantía. Con ese peaje los Emires compran armas importadas. Sin ese petróleo las cisternas del
+            sur se secan antes del verano. El Directorio no le paga peaje a quien no tiene derecho a cobrarlo.
+        options:
+        - name: {english: 'The strait belongs to those who keep the water flowing.', spanish: 'El estrecho es de quien hace correr el agua.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWM, type: annex_everything}
+        src: user_request
+      - id: 6
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Chennai Boarding, spanish: El Abordaje de Chennai}
+        desc:
+          english: >-
+            The freighter Malacca Star, insured by three of our houses, was boarded off Chennai by the Warlords of
+            Hindustan. They kept the cargo, ransomed the crew and painted their banner on the hull. The insurers have
+            already paid; now they want to know why. Half the cargo of the Indian Ocean passes in front of those
+            ports, and a port that does not answer to the Market is a port that charges whatever it likes.
+          spanish: >-
+            El carguero Estrella de Malaca, asegurado por tres de nuestras casas, fue abordado frente a Chennai por
+            los Señores de la Guerra del Indostán. Se quedaron con la carga, pidieron rescate por la tripulación y le
+            pintaron su bandera al casco. Las aseguradoras ya pagaron; ahora quieren saber por qué. La mitad de la
+            carga del Índico pasa frente a esos puertos, y un puerto que no responde al Mercado es un puerto que
+            cobra lo que quiere.
+        options:
+        - name: {english: 'Those ports will join the network. The premium is already paid.', spanish: 'Esos puertos se van a sumar a la red. La prima ya está pagada.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWI, type: annex_everything}
+        src: user_request
+      - id: 7
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Antioch Garrison, spanish: La Guarnición de Antioquía}
+        desc:
+          english: >-
+            The East is the war that Rome left unfinished. On the feast of the Lupercalia the Desert Emirates attacked
+            the garrison of Antioch with mercenaries and imported drones; the legion held the walls, but the road to
+            Aleppo is closed and the villages of the frontier pay tribute to the Emirs again. In the Senate nobody
+            speaks of a border any more. They speak of provinces: Syria, Judea, Mesopotamia. The Emperor listens.
+          spanish: >-
+            Oriente es la guerra que Roma dejó sin terminar. En la fiesta de las Lupercales los Emiratos del Desierto
+            atacaron la guarnición de Antioquía con mercenarios y drones importados; la legión aguantó las murallas,
+            pero el camino a Alepo está cortado y las aldeas de la frontera vuelven a pagarles tributo a los Emires.
+            En el Senado ya nadie habla de frontera. Hablan de provincias: Siria, Judea, Mesopotamia. El Emperador
+            escucha.
+        options:
+        - name: {english: 'What was Rome will be Rome again.', spanish: 'Lo que fue de Roma va a volver a ser de Roma.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWM, type: annex_everything}
+        src: user_request
+      - id: 8
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Barbarians on the Danube, spanish: Bárbaros en el Danubio}
+        desc:
+          english: >-
+            The Eurasian Warlords crossed the frozen Danube at night and sacked the frontier town of Vidin: the
+            granaries, the power plant, the bells of the church. By morning they were gone, with three hundred
+            prisoners to sell in the markets of the steppe. The legates say what they always say: the limes is only as
+            strong as the fear it inspires. In Rome the old word is spoken again, without irony: barbarians.
+          spanish: >-
+            Los Señores de la Guerra de Eurasia cruzaron el Danubio helado de noche y saquearon el pueblo de frontera
+            de Vidin: los graneros, la usina, las campanas de la iglesia. A la mañana ya no estaban, y se llevaron
+            trescientos prisioneros para vender en los mercados de la estepa. Los legados dicen lo de siempre: el
+            limes es tan fuerte como el miedo que da. En Roma se vuelve a decir la vieja palabra, sin ironía:
+            bárbaros.
+        options:
+        - name: {english: 'The legions will push the limes to the north.', spanish: 'Las legiones van a llevar el limes hacia el norte.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWE, type: annex_everything}
+        src: user_request
+      - id: 9
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Refugee Columns, spanish: Las Columnas de Refugiados}
+        desc:
+          english: >-
+            Forty thousand people reached the border of the Commune in a single week, walking from the east. They come
+            from the lands of the Eurasian Warlords: villages emptied by forced levies, factories dismantled and sold
+            for scrap. The Plan absorbed them, as it always does, but the Plan also calculated the cause: as long as
+            the Warlords exist, the columns will keep coming. PLAN-41's report fits in one line. Liberation of the
+            East: cost acceptable.
+          spanish: >-
+            Cuarenta mil personas llegaron a la frontera de la Comuna en una sola semana, caminando desde el este.
+            Vienen de las tierras de los Señores de la Guerra de Eurasia: aldeas vaciadas por levas forzosas, fábricas
+            desarmadas y vendidas como chatarra. El Plan los absorbió, como siempre, pero el Plan también calculó la
+            causa: mientras existan los Señores, las columnas van a seguir llegando. El informe de PLAN-41 cabe en
+            una línea. Liberación del Este: costo aceptable.
+        options:
+        - name: {english: 'Execute the liberation of the East.', spanish: 'Ejecutar la liberación del Este.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWE, type: annex_everything}
+        src: user_request
+      - id: 10
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Wells of the Sahel, spanish: Los Pozos del Sahel}
+        desc:
+          english: >-
+            The council of Abéché wrote it in chalk, the way every council writes: the Emirs' mercenaries took the
+            wells of the oasis and now sell the water by the litre, in gold, to the same villages that dug them.
+            Twelve councils of the Sahel have sent the same message to Lagos. The Federation was born from a water
+            rota written in a schoolhouse. If it cannot defend a well, it is not a federation.
+          spanish: >-
+            El consejo de Abéché lo escribió con tiza, como escriben todos los consejos: los mercenarios de los Emires
+            tomaron los pozos del oasis y ahora venden el agua por litro, en oro, a las mismas aldeas que los cavaron.
+            Doce consejos del Sahel mandaron el mismo mensaje a Lagos. La Federación nació de un turno de agua escrito
+            en una escuela. Si no puede defender un pozo, no es una federación.
+        options:
+        - name: {english: 'The water belongs to the councils.', spanish: 'El agua es de los consejos.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - effect: if
+            when: {is_ai: false}
+            then:
+            - {effect: wargoal, target: ZWM, type: annex_everything}
+        src: user_request
+      # par sin texto propio (por si el mapa arma uno nuevo)
+      - id: 99
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: Blood on the Border, spanish: Sangre en la Frontera}
+        desc:
+          english: >-
+            The warlords on our border raided a frontier town again: the granaries, the power plant, the people.
+            The ministers no longer ask whether to answer, only when.
+          spanish: >-
+            Los caudillos de la frontera volvieron a asaltar un pueblo nuestro: los graneros, la usina, la gente.
+            Los ministros ya no preguntan si hay que responder, sino cuándo.
+        options:
+        - name: {english: 'Prepare the answer.', spanish: 'Preparar la respuesta.'}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+        src: user_request
+      # ---------------------------------------------------------------------
+      # La guerra empieza (le llega a cada jugador; mismo dibujo que el incidente)
+      # ---------------------------------------------------------------------
+      - id: 21
+        trigger: effect
+        art: meganations_incidentes.1
+        picture: GFX_report_event_generic_rally
+        title: {english: The War of the Amazon, spanish: La Guerra del Amazonas}
+        desc:
+          english: >-
+            The Green Empire has entered the Amazon. Its legions carry seedlings along with their rifles: Gaia says it
+            is not conquering, it is putting out a fire. The Caudillos say the jungle feeds those who work it. Both
+            will measure the war in hectares.
+          spanish: >-
+            El Imperio Verde entró al Amazonas. Sus legiones llevan plantines junto con los fusiles: Gaia dice que no
+            conquista, que apaga un incendio. Los Caudillos dicen que la selva es de quien la trabaja. Los dos van a
+            medir la guerra en hectáreas.
+        options:
+        - name: {english: 'The forest decides.', spanish: 'Decide el monte.'}
+          effects: []
+        src: user_request
+      - id: 22
+        trigger: effect
+        art: meganations_incidentes.2
+        picture: GFX_report_event_generic_rally
+        title: {english: The Descent of the Sun, spanish: El Descenso del Sol}
+        desc:
+          english: >-
+            The armies of the Sun Kingdom are coming down from the mountains towards the jungle, along the roads of
+            the Antisuyu. For the Sapa Inti it is a homecoming. For the Caudillos of the Amazon it is one more empire
+            that wants their trees.
+          spanish: >-
+            Los ejércitos del Reino del Sol bajan de la cordillera hacia la selva, por los caminos del Antisuyu. Para
+            el Sapa Inti es una vuelta a casa. Para los Caudillos del Amazonas, un imperio más que quiere sus árboles.
+        options:
+        - name: {english: 'The Sun goes down to the jungle.', spanish: 'El Sol baja a la selva.'}
+          effects: []
+        src: user_request
+      - id: 23
+        trigger: effect
+        art: meganations_incidentes.3
+        picture: GFX_report_event_generic_rally
+        title: {english: The War of the Rivers, spanish: La Guerra de los Ríos}
+        desc:
+          english: >-
+            The Directorate has crossed the Himalayas. Its engineers march behind the army, rebuilding sluices as
+            soon as the front moves forward. The Warlords of Hindustan call it an invasion; the Directorate calls it
+            maintenance.
+          spanish: >-
+            El Directorio cruzó el Himalaya. Sus ingenieros marchan detrás del ejército y reconstruyen compuertas
+            apenas el frente avanza. Los Señores del Indostán lo llaman invasión; el Directorio lo llama
+            mantenimiento.
+        options:
+        - name: {english: 'Measured, shared, on time.', spanish: 'Medida, repartida, a tiempo.'}
+          effects: []
+        src: user_request
+      - id: 24
+        trigger: effect
+        art: meganations_incidentes.4
+        picture: GFX_report_event_generic_rally
+        title: {english: The War of the Steppe, spanish: La Guerra de la Estepa}
+        desc:
+          english: >-
+            The Directorate is pushing west along its maglev, station by station. Every town it takes gets light,
+            water and a timetable. The Eurasian Warlords get a war they did not calculate.
+          spanish: >-
+            El Directorio avanza hacia el oeste siguiendo su maglev, estación por estación. Cada pueblo que toma
+            recibe luz, agua y un horario. Los Señores de Eurasia reciben una guerra que no calcularon.
+        options:
+        - name: {english: 'The line runs to the end.', spanish: 'La línea anda hasta el final.'}
+          effects: []
+        src: user_request
+      - id: 25
+        trigger: effect
+        art: meganations_incidentes.5
+        picture: GFX_report_event_generic_rally
+        title: {english: The War of the Strait, spanish: La Guerra del Estrecho}
+        desc:
+          english: >-
+            The Directorate's fleet has entered the Gulf to reopen Hormuz. The Emirs answer with mercenaries and
+            imported missiles. For the rest of the world, it means the price of oil for as long as the war lasts.
+          spanish: >-
+            La flota del Directorio entró al Golfo para reabrir Ormuz. Los Emires responden con mercenarios y misiles
+            importados. Para el resto del mundo, eso es el precio del petróleo mientras dure la guerra.
+        options:
+        - name: {english: 'Nobody charges for the water.', spanish: 'Nadie cobra el agua.'}
+          effects: []
+        src: user_request
+      - id: 26
+        trigger: effect
+        art: meganations_incidentes.6
+        picture: GFX_report_event_generic_rally
+        title: {english: The Ports of the Indian Ocean, spanish: Los Puertos del Índico}
+        desc:
+          english: >-
+            The High Seas fleet is shelling the coast of Hindustan and landing its marines in the ports that boarded
+            its ships. The insurers have already priced the war. The Warlords of Hindustan have not yet understood
+            that they are a line on a balance sheet.
+          spanish: >-
+            La flota de la Alta Mar bombardea la costa del Indostán y desembarca sus marines en los puertos que le
+            abordaron los barcos. Las aseguradoras ya le pusieron precio a la guerra. Los Señores del Indostán todavía
+            no entendieron que son una línea en un balance.
+        options:
+        - name: {english: 'Everything has a premium.', spanish: 'Todo tiene una prima.'}
+          effects: []
+        src: user_request
+      - id: 27
+        trigger: effect
+        art: meganations_incidentes.7
+        picture: GFX_report_event_generic_rally
+        title: {english: The Reconquest of the East, spanish: La Reconquista de Oriente}
+        desc:
+          english: >-
+            The legions have left Antioch heading east. Rome calls it a reconquest; the Emirs call it a crusade with
+            drones. Both sides agree on one thing: this war has been waiting two thousand years.
+          spanish: >-
+            Las legiones salieron de Antioquía hacia el este. Roma lo llama reconquista; los Emires, una cruzada con
+            drones. Los dos están de acuerdo en algo: esta guerra lleva dos mil años esperando.
+        options:
+        - name: {english: 'Rome returns.', spanish: 'Roma vuelve.'}
+          effects: []
+        src: user_request
+      - id: 28
+        trigger: effect
+        art: meganations_incidentes.8
+        picture: GFX_report_event_generic_rally
+        title: {english: Beyond the Danube, spanish: Más Allá del Danubio}
+        desc:
+          english: >-
+            The legions have crossed the Danube northwards, for the first time in sixteen centuries. The Eurasian
+            Warlords had raided the limes; now the limes is coming for them.
+          spanish: >-
+            Las legiones cruzaron el Danubio hacia el norte, por primera vez en dieciséis siglos. Los Señores de
+            Eurasia asaltaban el limes; ahora el limes va por ellos.
+        options:
+        - name: {english: 'The limes moves north.', spanish: 'El limes se mueve al norte.'}
+          effects: []
+        src: user_request
+      - id: 29
+        trigger: effect
+        art: meganations_incidentes.9
+        picture: GFX_report_event_generic_rally
+        title: {english: The Liberation of the East, spanish: La Liberación del Este}
+        desc:
+          english: >-
+            The Commune's columns are advancing east, with no flags and no anthems: only drones, automatons and a
+            schedule. Behind them come the trucks of the Plan with food, power and census forms. The Eurasian Warlords
+            are fighting an army that does not sleep.
+          spanish: >-
+            Las columnas de la Comuna avanzan hacia el este sin banderas ni himnos: solo drones, autómatas y un
+            cronograma. Detrás vienen los camiones del Plan con comida, energía y planillas de censo. Los Señores de
+            Eurasia pelean contra un ejército que no duerme.
+        options:
+        - name: {english: 'Cost acceptable.', spanish: 'Costo aceptable.'}
+          effects: []
+        src: user_request
+      - id: 30
+        trigger: effect
+        art: meganations_incidentes.10
+        picture: GFX_report_event_generic_rally
+        title: {english: The March of the Wells, spanish: La Marcha de los Pozos}
+        desc:
+          english: >-
+            The Federation is marching from the Sahel towards the Emirates, well by well. Every oasis it frees gets a
+            council and a water rota written in chalk. The Emirs pay their mercenaries in gold; the councils pay in
+            water, and water is worth more.
+          spanish: >-
+            La Federación marcha del Sahel hacia los Emiratos, pozo por pozo. Cada oasis que libera recibe un consejo
+            y un turno de agua escrito con tiza. Los Emires les pagan a sus mercenarios en oro; los consejos pagan en
+            agua, y el agua vale más.
+        options:
+        - name: {english: 'The water belongs to the councils.', spanish: 'El agua es de los consejos.'}
+          effects: []
+        src: user_request
+      - id: 98
+        trigger: effect
+        no_art: true
+        art: meganations_incidentes.99
+        picture: GFX_report_event_generic_rally
+        title: {english: War on the Border, spanish: Guerra en la Frontera}
+        desc:
+          english: >-
+            A meganation has gone to war against the warlords on its border. After months of raids, the answer has
+            come.
+          spanish: >-
+            Una meganación fue a la guerra contra los caudillos de su frontera. Después de meses de asaltos, llegó la
+            respuesta.
+        options:
+        - name: {english: 'We will follow it closely.', spanish: 'Lo vamos a seguir de cerca.'}
+          effects: []
+        src: user_request
+      - id: 41
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Green Empire Claims Our Lands", spanish: "El Imperio Verde Reclama Nuestras Tierras"}
+        desc:
+          english: >-
+            Gaia has proclaimed its destiny: the Dominion of Gaia, a single forest from the Caribbean to Cape Horn, under one Emperor. On the map the Green Guard hands out in its barracks, our regions are already painted green. The envoys do not ask for anything. They inform.
+          spanish: >-
+            Gaia proclamó su destino: el Dominio de Gaia, un solo monte del Caribe al Cabo de Hornos, bajo un solo Emperador. En el mapa que la Guardia Verde reparte en sus cuarteles, nuestras regiones ya están pintadas de verde. Los enviados no piden nada. Informan.
+        options:
+        - name: {english: "Let them come for them.", spanish: "Que vengan a buscarlas."}
+          effects: []
+        src: user_request
+      - id: 42
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Union Makes an Offer for Our Lands", spanish: "La Unión Hace una Oferta por Nuestras Tierras"}
+        desc:
+          english: >-
+            The Directorate of the Union has published its prospectus: the Americas Corporation, one continent, one board, one share price. Our regions appear in the annex as 'assets to be acquired'. The annex also lists the divisions that will carry out the acquisition if the offer is refused.
+          spanish: >-
+            El Directorio de la Unión publicó su prospecto: la Corporación de las Américas, un continente, un directorio, una sola cotización. Nuestras regiones aparecen en el anexo como 'activos a adquirir'. El anexo también enumera las divisiones que van a ejecutar la compra si la oferta se rechaza.
+        options:
+        - name: {english: "We are not for sale.", spanish: "No estamos en venta."}
+          effects: []
+        src: user_request
+      - id: 43
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Plan Includes Us", spanish: "El Plan Nos Incluye"}
+        desc:
+          english: >-
+            The Commune has announced the Continental Commune, from Paris to Kiev. PLAN-41's new version arrived on our ministers' screens without anyone sending it: our regions are already listed in it, with their factories, their power and their population, as one more node of the continental plan.
+          spanish: >-
+            La Comuna anunció la Comuna Continental, de París a Kiev. La nueva versión de PLAN-41 llegó a las pantallas de nuestros ministros sin que nadie la mandara: nuestras regiones ya figuran ahí, con sus fábricas, su energía y su población, como un nodo más del plan continental.
+        options:
+        - name: {english: "We are not a node.", spanish: "No somos un nodo."}
+          effects: []
+        src: user_request
+      - id: 44
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Market Wants Our Ports", spanish: "El Mercado Quiere Nuestros Puertos"}
+        desc:
+          english: >-
+            The High Seas have proclaimed the Thalassocracy, the World Clearing House: every port on Earth, one network, one toll. Their insurers have already raised the premium on every ship that docks in our regions. The captains say that a port outside the network is a port at risk.
+          spanish: >-
+            La Alta Mar proclamó la Talasocracia, la Cámara Mundial de Compensación: todos los puertos de la Tierra, una red, un solo peaje. Sus aseguradoras ya subieron la prima de cada barco que amarra en nuestras regiones. Los capitanes dicen que un puerto fuera de la red es un puerto en riesgo.
+        options:
+        - name: {english: "Our ports have their own flag.", spanish: "Nuestros puertos tienen su propia bandera."}
+          effects: []
+        src: user_request
+      - id: 45
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Sun Claims Our Lands", spanish: "El Sol Reclama Nuestras Tierras"}
+        desc:
+          english: >-
+            The Sapa Inti has proclaimed the Empire of the Eternal Sun: the four quarters of the Tawantinsuyu, and more. The priests have read in the stars that our regions belong to the Sun. The army waiting on the passes has not read anything; it is waiting for orders.
+          spanish: >-
+            El Sapa Inti proclamó el Imperio del Sol Eterno: los cuatro suyus del Tawantinsuyu, y más. Los sacerdotes leyeron en las estrellas que nuestras regiones son del Sol. El ejército que espera en los pasos no leyó nada; espera órdenes.
+        options:
+        - name: {english: "The Sun rises for everyone.", spanish: "El sol sale para todos."}
+          effects: []
+        src: user_request
+      - id: 46
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Directorate Measures Our Lands", spanish: "El Directorio Mide Nuestras Tierras"}
+        desc:
+          english: >-
+            The Directorate has proclaimed the Celestial Harmony: one order under one sky. Its surveyors have already crossed into our regions with theodolites and water gauges, as if they were theirs. In the Directorate's language, harmony is a measurement. Ours did not pass.
+          spanish: >-
+            El Directorio proclamó la Armonía Celeste: un solo orden bajo un solo cielo. Sus agrimensores ya cruzaron a nuestras regiones con teodolitos y medidores de agua, como si fueran suyas. En el idioma del Directorio, la armonía es una medida. La nuestra no aprobó.
+        options:
+        - name: {english: "Harmony is not imposed.", spanish: "La armonía no se impone."}
+          effects: []
+        src: user_request
+      - id: 47
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Councils Claim Our Lands", spanish: "Los Consejos Reclaman Nuestras Tierras"}
+        desc:
+          english: >-
+            The African Federation has proclaimed the Original Human Empire: the land where humanity was born, returned to its peoples. The Congress in Lagos speaks of the cradle and the origin; its maps speak of our regions, and its councils already have names for them.
+          spanish: >-
+            La Federación africana proclamó el Imperio Humano Original: la tierra donde nació la humanidad, devuelta a sus pueblos. El Congreso de Lagos habla de la cuna y del origen; sus mapas hablan de nuestras regiones, y sus consejos ya tienen nombre para ellas.
+        options:
+        - name: {english: "Our land has its own people.", spanish: "Nuestra tierra tiene su propia gente."}
+          effects: []
+        src: user_request
+      - id: 48
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "Rome Claims Our Lands", spanish: "Roma Reclama Nuestras Tierras"}
+        desc:
+          english: >-
+            Rome has proclaimed the Eternal Roman Empire. The Senate has recovered the old lists of provinces, and our regions are on them, with their Latin names. The legates say that Rome does not conquer what was already Rome: it only takes it back.
+          spanish: >-
+            Roma proclamó el Imperio Romano Eterno. El Senado recuperó las viejas listas de provincias, y nuestras regiones están en ellas, con su nombre en latín. Los legados dicen que Roma no conquista lo que ya fue Roma: solo lo recupera.
+        options:
+        - name: {english: "Rome is a memory.", spanish: "Roma es un recuerdo."}
+          effects: []
+        src: user_request
+      - id: 61
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Two Restorations at War", spanish: "Dos Restauraciones en Guerra"}
+        desc:
+          english: >-
+            The Green Empire and the Neo Roman Empire are at war. Both promised the world a restoration, the Earth or Rome, and both always knew that only one of them could be right. The war will be fought on the Atlantic and in the colonies; it will be decided in the minds of everyone else.
+          spanish: >-
+            El Imperio Verde y el Neo Imperio Romano están en guerra. Los dos le prometieron al mundo una restauración, la Tierra o Roma, y los dos supieron siempre que solo uno podía tener razón. La guerra se va a pelear en el Atlántico y en las colonias; se va a decidir en la cabeza de todos los demás.
+        options:
+        - name: {english: "The Earth or Rome.", spanish: "La Tierra o Roma."}
+          effects: []
+        src: user_request
+      - id: 62
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Machines or Councils", spanish: "Máquinas o Consejos"}
+        desc:
+          english: >-
+            The Automated Commune and the African Federation are at war. Two collectivisms, two answers to the same question: who decides, the Plan or the people? Africa has the land, the minerals and the numbers; the Commune has the algorithms and the drones.
+          spanish: >-
+            La Comuna Automatizada y la Federación africana están en guerra. Dos colectivismos, dos respuestas a la misma pregunta: ¿quién decide, el Plan o la gente? África tiene la tierra, los minerales y el número; la Comuna tiene los algoritmos y los drones.
+        options:
+        - name: {english: "The Plan or the people.", spanish: "El Plan o la gente."}
+          effects: []
+        src: user_request
+      - id: 63
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Corporation Against the Fleet", spanish: "La Corporación contra la Flota"}
+        desc:
+          english: >-
+            The Union and the High Seas are at war. The Union wanted to buy the routes of the Pacific; the Market preferred to sink the offer. The insurers of half the world have stopped writing policies until they know who will charge the toll tomorrow.
+          spanish: >-
+            La Unión y la Alta Mar están en guerra. La Unión quería comprar las rutas del Pacífico; el Mercado prefirió hundir la oferta. Las aseguradoras de medio mundo dejaron de firmar pólizas hasta saber quién va a cobrar el peaje mañana.
+        options:
+        - name: {english: "Every war has a price.", spanish: "Toda guerra tiene precio."}
+          effects: []
+        src: user_request
+      - id: 64
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Water Is Not for Sale", spanish: "El Agua no se Vende"}
+        desc:
+          english: >-
+            The Green Empire and the Union are at war, again. Since Iguazú in 2072 the Union has wanted the Guaraní Aquifer and the Empire has guarded it with rifles. This time it is not forty-three militiamen; it is two of the eight greatest powers on Earth.
+          spanish: >-
+            El Imperio Verde y la Unión están en guerra, otra vez. Desde Iguazú, en 2072, la Unión quiere el Acuífero Guaraní y el Imperio lo cuida a los tiros. Esta vez no son cuarenta y tres milicianos; son dos de las ocho potencias más grandes de la Tierra.
+        options:
+        - name: {english: "Iguazú, again.", spanish: "Iguazú, otra vez."}
+          effects: []
+        src: user_request
+      - id: 65
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Two Empires for One Jungle", spanish: "Dos Imperios para una Sola Selva"}
+        desc:
+          english: >-
+            The Green Empire and the Sun Kingdom are at war. They share the mountains, the mistrust and, above all, the Amazon. The forest of Gaia and the roads of the Inca cannot both cross the same jungle.
+          spanish: >-
+            El Imperio Verde y el Reino del Sol están en guerra. Comparten la cordillera, la desconfianza y, sobre todo, el Amazonas. El monte de Gaia y los caminos del Inca no pueden cruzar los dos la misma selva.
+        options:
+        - name: {english: "One jungle, one empire.", spanish: "Una selva, un imperio."}
+          effects: []
+        src: user_request
+      - id: 66
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Hong Kong Is Not Shared", spanish: "Hong Kong no se Comparte"}
+        desc:
+          english: >-
+            The High Seas and the Directorate are at war. For years they haggled over every ship that crossed Taiwan and every crate that left Hong Kong. Now they have stopped haggling. The China Sea is the busiest stretch of water on Earth; for a while it will be the most dangerous.
+          spanish: >-
+            La Alta Mar y el Directorio están en guerra. Durante años regatearon cada barco que cruzaba Taiwán y cada cajón que salía de Hong Kong. Ahora dejaron de regatear. El mar de China es el pedazo de agua más transitado de la Tierra; por un tiempo va a ser el más peligroso.
+        options:
+        - name: {english: "The haggling is over.", spanish: "Se terminó el regateo."}
+          effects: []
+        src: user_request
+      - id: 67
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Line of the Alps", spanish: "La Línea de los Alpes"}
+        desc:
+          english: >-
+            The Commune and Rome are at war. Rome fortified the Alps against the machines; the machines calculated how long the fortresses would hold. The answer is about to be known.
+          spanish: >-
+            La Comuna y Roma están en guerra. Roma fortificó los Alpes contra las máquinas; las máquinas calcularon cuánto iban a aguantar los fuertes. La respuesta está por saberse.
+        options:
+        - name: {english: "Let the fortresses answer.", spanish: "Que respondan los fuertes."}
+          effects: []
+        src: user_request
+      - id: 68
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Rome or the Origin", spanish: "Roma o el Origen"}
+        desc:
+          english: >-
+            Rome and the African Federation are at war. Rome demands tribute from Africa, as it did two thousand years ago; the councils answer that the first humans walked here long before the first Caesar. The Mediterranean is once again a frontier.
+          spanish: >-
+            Roma y la Federación africana están en guerra. Roma le exige tributo a África, como hace dos mil años; los consejos contestan que los primeros humanos caminaron acá mucho antes que el primer César. El Mediterráneo vuelve a ser frontera.
+        options:
+        - name: {english: "The Mediterranean, a frontier again.", spanish: "El Mediterráneo, otra vez frontera."}
+          effects: []
+        src: user_request
+      - id: 69
+        trigger: effect
+        no_art: true
+        picture: GFX_report_event_generic_rally
+        title: {english: "War Between Meganations", spanish: "Guerra entre Meganaciones"}
+        desc:
+          english: >-
+            [MN_guerra_a.GetNameDefCap] and [MN_guerra_b.GetNameDef] are at war. Two of the eight powers that rose from the Great Unravelling have decided that the world is too small for both of their certainties.
+          spanish: >-
+            [MN_guerra_a.GetNameDefCap] y [MN_guerra_b.GetNameDef] están en guerra. Dos de las ocho potencias que salieron del Gran Desarme decidieron que el mundo es chico para las dos certezas.
+        options:
+        - name: {english: "The century decides.", spanish: "Decide el siglo."}
+          effects: []
+        src: user_request

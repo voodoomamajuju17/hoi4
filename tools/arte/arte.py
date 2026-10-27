@@ -387,6 +387,19 @@ def catalog() -> list[dict]:
                 "Show the machine itself (not soldiers posing), heroic three-quarter view, centred, fills most of the "
                 "frame, transparent background, no text, no letters, no numbers."),
         })
+        # Niveles de la unidad única (2026-10-27): assets/<TAG>/armas/<id>_<n>.dds
+        for n in sorted(int(k) for k in (u.get("art_levels") or {})):
+            dest = REPO / "assets" / tag / "armas" / f"{u['id']}_{n}.dds"
+            items.append({
+                "type": "unique_icon", "tag": tag, "id": f"arma_{u['id']}_{n}", "dest": dest, "done": dest.exists(),
+                "description": (
+                    f"WHAT: the UNIQUE unit of this faction, the {u['name']['english']} ({u['name']['spanish']}), "
+                    f"a newer level of the same machine as arma_{u['id']}.png. "
+                    f"{_one_line((detail.get('unique') or {}).get(u['id'] + f'_{n}', ''))} "
+                    f"FACTION {_one_line(detail['looks'].get(tag, ''))} "
+                    "Show the machine itself, heroic three-quarter view, centred with a margin around it, transparent "
+                    "background, no people, no text, no letters, no numbers."),
+            })
     spec_events = _load("12_events.yaml")
     shared = spec_events.get("shared_art") or {}
     # descripción larga a mano para algunos eventos (2026-10-13: capitales tomadas)

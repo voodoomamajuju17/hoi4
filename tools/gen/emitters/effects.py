@@ -671,13 +671,27 @@ def render_effects(owner: str, items: list[dict], known,
                 return Block([("NOT", Block([("is_controlled_by", "ROOT")])),
                               ("OWNER", Block([("NOT", Block([("OR", friendly)]))]))])
 
+            # 2026-10-27 (pedido del usuario: las guerras entre potencias "parecen
+            # medio de golpe"): el dueño de la región se entera de que la reclaman
+            # y por qué (`notice`: evento que le llega, con FROM = quien reclama)
+            notice = item.get("notice")
+            if notice and ec.events is not None and notice not in ec.events:
+                raise SpecError(f"{owner}: wargoal_holders.notice '{notice}' no existe", where=where)
+            claimer = owner.split("_")[0]
+
             def goal_for(sid: int, extra: Block | None = None) -> Block:
                 limit = valid()
                 if extra is not None:
                     limit.entries.extend(extra.entries)
                 goal = Block([("type", kind), ("target", "PREV"), ("generator", Block([(None, sid)]))])
-                return Block([("if", Block([("limit", limit),
-                                            ("OWNER", Block([("ROOT", Block([("create_wargoal", goal)]))]))]))])
+                inner = Block([("ROOT", Block([("create_wargoal", goal)]))])
+                if notice:
+                    flag = f"MEGANATIONS_aviso_destino_{claimer}"
+                    inner.add("if", Block([
+                        ("limit", Block([("NOT", Block([("has_country_flag", flag)]))])),
+                        ("set_country_flag", Block([("flag", flag), ("value", 1), ("days", 170)])),
+                        ("country_event", Block([("id", notice), ("days", 2)]))]))
+                return Block([("if", Block([("limit", limit), ("OWNER", inner)]))])
 
             every = Block([(str(sid), goal_for(sid)) for sid in sids])
             effects_used.setdefault("create_wargoal", owner)
@@ -1576,6 +1590,8 @@ def scripted_effect_ids(spec_raw: dict) -> set[str]:
     units = (spec_raw.get("unique_units") or {}).get("units") or []
     unique = {f"{u['id']}_desbloqueo" for u in units} | {f"{u['id']}_botin" for u in units if u.get("capital_spoils")}
     unique |= {f"{u['id']}_revisar_saturacion" for u in units if (u.get("cap") or {}).get("saturation")}
+    unique |= {f"{u['id']}_ia_produccion" for u in units if u.get("ai_upkeep") or u.get("production")}
+    unique |= {"MEGANATIONS_unidades_unicas_ia"}
     from .carrera import scripted_ids as race_ids
     from .cazas import scripted_ids as fighter_ids
     return ({e["id"] for e in (spec_raw.get("decisions") or {}).get("scripted_effects") or []} | GENERATED_SCRIPTED

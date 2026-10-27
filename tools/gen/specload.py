@@ -44,7 +44,7 @@ SPEC_FILES = {
 # Archivos que se suman encima de los anteriores (2026-10-17, segundo análisis
 # de rutas): las mecánicas nuevas viven en su propio archivo para no chocar con
 # los cambios que se hacen al mismo tiempo en 12_events y 14_decisions.
-OVERLAY_FILES = ["22_mecanicas_v4.yaml"]
+OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -98,6 +98,16 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
             add_unique(namespaces[ns].setdefault("events", []), block.get("events"), f"evento {ns}")
         else:
             namespaces[ns] = block
+
+    # 2026-10-27 (Rumbo a 2120): los incidentes de frontera con la Anarquía
+    if overlay.get("anarchy_incidents"):
+        if raw.get("anarchy_incidents"):
+            raise SpecError("anarchy_incidents ya existe", where=where)
+        raw["anarchy_incidents"] = overlay["anarchy_incidents"]
+    if overlay.get("power_wars"):
+        if raw.get("power_wars"):
+            raise SpecError("power_wars ya existe", where=where)
+        raw["power_wars"] = overlay["power_wars"]
 
     leaders_new = overlay.get("leaders") or {}
     leaders = raw.setdefault("leaders", {})

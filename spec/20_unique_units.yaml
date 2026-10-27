@@ -395,6 +395,50 @@ units:
         del trabajo de explorador; el explorador nunca lo pidió.
     sub_unit: armored_car
     sub_unit_name: {english: Sentinel Pack, spanish: Manada de Centinelas}
+    # 2026-10-27 (pedido del usuario: "mejorá la unidad única de la ASC, sobre todo
+    # movimiento por territorio; mejorar bastante su antiaéreo y su blindaje y PS
+    # ligeramente"). Patas en vez de ruedas desde el nivel III: no le importa el
+    # terreno. Valores del batallón (solo la ASC lo tiene): por terreno, absolutos.
+    sub_unit_stats:
+      armored_car:
+        max_strength: 1.15
+        plains: {movement: 0.15}
+        desert: {movement: 0.15}
+        hills: {movement: 0.10}
+        forest: {movement: 0.0, attack: 0.0}
+        jungle: {movement: 0.0, attack: 0.0}
+        marsh: {movement: 0.0}
+        mountain: {movement: 0.0, attack: -0.05}
+        urban: {movement: 0.10, attack: 0.10}
+        river: {movement: 0.0}
+    # 2026-10-27 (captura del usuario: "ahí no se llama Centinela"): las tecnologías
+    # toman el nombre del equipo ($gw_armored_car_equipment$), así que se nombra el equipo
+    names:
+      gw_armored_car_equipment: {en: 'Sentinel I: The Pack', es: 'Centinela I: La Manada'}
+      gw_armored_car_equipment_short: {en: 'Sentinel I', es: 'Centinela I'}
+      armored_car_equipment_1: {en: 'Sentinel II: The Stalker', es: 'Centinela II: El Acechador'}
+      armored_car_equipment_1_short: {en: 'Sentinel II', es: 'Centinela II'}
+      armored_car_equipment_2: {en: 'Sentinel III: The Annihilator Spider', es: 'Centinela III: La Araña Aniquiladora'}
+      armored_car_equipment_2_short: {en: 'Sentinel III', es: 'Centinela III'}
+    # imagen por nivel: assets/ASC/armas/ASC_centinela_2.dds y _3.dds (arte/pedidos)
+    art_levels:
+      2: [armored_car2, armored_car_equipment_1]
+      3: [armored_car3, armored_car_equipment_2]
+    # el equipo mismo (pedido del usuario: "no las stats de la división sino del
+    # equipo"): mucho más antiaéreo, un poco más de blindaje. "+N" se suma.
+    equipment_stats:
+      gw_armored_car_equipment: {air_attack: '+6', armor_value: 1.15, defense: 1.10}
+      armored_car_equipment_1: {air_attack: '+9', armor_value: 1.15, defense: 1.10}
+      armored_car_equipment_2: {air_attack: '+12', armor_value: 1.15, defense: 1.10}
+    # la IA: cada 180 días encarga el modelo más nuevo y suma una división
+    ai_upkeep:
+      every_days: 180
+      amount: 120
+      factories: 3
+      divisions: 1
+      models:
+      - [armored_car3, armored_car_equipment_2]
+      - [armored_car2, armored_car_equipment_1]
     lock:
       techs: [armored_car1, armored_car2, armored_car3]
       enables: [armored_car]
@@ -428,8 +472,8 @@ units:
       id: ASC_la_red_de_centinelas
       name: {english: The Sentinel Network, spanish: La Red de Centinelas}
       desc:
-        english: 'Crewless armoured cars linked to the Plan. Sentinel: +20% speed, +25% reliability, +10% soft attack. Counts as special forces: the cap is raised by 10% of all battalions.'
-        spanish: 'Autos blindados sin tripulación conectados al Plan. Centinela: +20% velocidad, +25% fiabilidad, +10% ataque suave. Cuenta como fuerzas especiales: el tope sube 10% de todos los batallones.'
+        english: 'Crewless walkers linked to the Plan. Sentinel: +20% speed, +25% reliability, +10% soft attack. The machine itself carries anti-air autocannons and more armour than any armoured car; the pack barely feels the terrain and has 15% more strength. Counts as special forces: the cap is raised by 10% of all battalions.'
+        spanish: 'Caminantes sin tripulación conectados al Plan. Centinela: +20% velocidad, +25% fiabilidad, +10% ataque suave. La máquina misma lleva cañones antiaéreos y más blindaje que cualquier auto blindado; la manada casi no siente el terreno y tiene 15% más de PS. Cuenta como fuerzas especiales: el tope sube 10% de todos los batallones.'
       modifiers: {'?special_forces_cap': 0.1}
       equipment_bonus: {maximum_speed: 0.2, reliability: 0.25, soft_attack: 0.1}
       picture_prefer: [recon, motor, mechan]

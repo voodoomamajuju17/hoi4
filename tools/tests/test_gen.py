@@ -4439,6 +4439,44 @@ def test_bitacora() -> None:
         check("la arrancan las ocho meganaciones", all(f"\t\t\t{t} = {{" in on for t in ("EFE", "NRE", "HSN")), on[-300:])
 
 
+def test_incidentes_y_guerras() -> None:
+    section("incidentes de frontera, guerras con su porque y unidades unicas de la IA (2026-10-27)")
+    raw = specload.load(REPO_ROOT / "spec").raw
+    inc = raw.get("anarchy_incidents") or {}
+    pares = [(m, a) for m, d in inc.items() if m != "default" for a in d]
+    check("los 10 pares con la Anarquia tienen incidente entre marzo y abril de 2100",
+          len(pares) == 10 and all(str(inc[m][a]["date"]).startswith(("2100.3.", "2100.4.")) for m, a in pares), pares)
+    ns = {str(e["id"]): e for e in raw["events"]["namespaces"]["meganations_incidentes"]["events"]}
+    check("cada incidente cuenta el porque (texto largo) y da el casus belli al jugador",
+          all(len(ns[inc[m][a]["incident"].split(".")[1]]["desc"]["spanish"]) > 300
+              and "wargoal" in str(ns[inc[m][a]["incident"].split(".")[1]]["options"]) for m, a in pares))
+    check("cada reclamo del Destino avisa al duenio de la region",
+          sum(1 for c in raw["decisions"]["categories"] for d in c.get("decisions") or []
+              for e in d.get("effects") or [] if isinstance(e, dict) and e.get("effect") == "wargoal_holders"
+              and e.get("notice")) == 8)
+    uu = {u["id"]: u for u in raw["unique_units"]["units"]}
+    c = uu["ASC_centinela"]
+    check("Centinela: nombre por modelo, imagen por nivel, equipo mas fuerte y movimiento por terreno",
+          c["names"]["armored_car_equipment_2"]["es"].startswith("Centinela III")
+          and c["art_levels"][3] and "+" in str(c["equipment_stats"]["armored_car_equipment_2"]["air_attack"])
+          and "forest" in c["sub_unit_stats"]["armored_car"])
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        cb = (ctx.mod_root / "common/scripted_effects/meganations_casus_belli.txt").read_text(encoding="utf-8-sig")
+        check("el casus belli contra la Anarquia espera el incidente", "_incidente_" in cb and "meganations_incidentes." in cb)
+        hist = " ".join(p.read_text(encoding="utf-8-sig") for p in (ctx.mod_root / "history/countries").glob("*.txt"))
+        flat = " ".join(hist.split())
+        check("nadie arranca con casus belli contra la Anarquia",
+              not any(f"create_wargoal = {{ type = annex_everything target = {a}" in flat for a in ("ZWB", "ZWE", "ZWI", "ZWM")))
+        on = (ctx.mod_root / "common/on_actions/08_meganations_guerras_anarquia.txt").read_text(encoding="utf-8-sig")
+        check("al declarar, los jugadores reciben el porque (anarquias y potencias)",
+              "on_declare_war" in on and "meganations_incidentes.2" in on and "meganations_incidentes.6" in on)
+        su = (ctx.mod_root / "common/scripted_effects/meganations_unique_units.txt").read_text(encoding="utf-8-sig")
+        check("la IA encarga su unidad unica cada 180 dias", "MEGANATIONS_unidades_unicas_ia = {" in su and "days = 180" in su)
+        pulses = " ".join((ctx.mod_root / "events" / f"meganations_{t}.txt").read_text(encoding="utf-8-sig") for t in ("efe", "nre", "apf"))
+        check("cada pulso mensual llama a la produccion de la unidad unica", pulses.count("MEGANATIONS_unidades_unicas_ia = yes") == 3)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -4499,6 +4537,7 @@ def main() -> int:
         test_espacios_fabricas,
         test_rumbo_2120,
         test_bitacora,
+        test_incidentes_y_guerras,
         test_simulador,
         test_vanilla_validation,
     ):

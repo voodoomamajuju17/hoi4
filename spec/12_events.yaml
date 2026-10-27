@@ -339,6 +339,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: EFE_pulso_de_las_cubas}
+          - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
           - {effect: intelligence_agency}
           - {effect: event, id: meganations_efe.20, days: 30}
         src: user_design
@@ -685,8 +686,8 @@ namespaces:
         picture: GFX_report_event_generic_rally
         title: {english: The Sun Yields Arequipa, spanish: El Sol Cede Arequipa}
         desc:
-          english: The priests handed over Arequipa without a shot.
-          spanish: Los sacerdotes entregaron Arequipa sin un disparo.
+          english: "The priests handed over Arequipa without a shot. The Sun Kingdom chose to lose a city rather than a war; in Cusco they say the Sapa Inti will not forget it, and in Gaia nobody expects him to. For now the passes of the Andes are ours."
+          spanish: "Los sacerdotes entregaron Arequipa sin un disparo. El Reino del Sol eligió perder una ciudad antes que una guerra; en Cusco dicen que el Sapa Inti no lo va a olvidar, y en Gaia nadie espera que lo olvide. Por ahora, los pasos de los Andes son nuestros."
         options:
         - name: {english: Good., spanish: Bien.}
           effects:
@@ -698,8 +699,8 @@ namespaces:
         picture: GFX_report_event_generic_rally
         title: {english: The Sun Refuses, spanish: El Sol se Niega}
         desc:
-          english: The Sun Kingdom refused. The Green Guard has its casus belli.
-          spanish: El Reino del Sol se negó. La Guardia Verde tiene su casus belli.
+          english: "The Sun Kingdom refused. The priests sent back our envoy with a bowl of quinoa and a sentence from the Sapa Inti: 'The mountain does not belong to whoever looks at it from below.' The Green Guard has been waiting for that answer. Arequipa covers the northern flank of the Empire, and the Empire is going to take it."
+          spanish: "El Reino del Sol se negó. Los sacerdotes nos devolvieron al enviado con un cuenco de quinoa y una frase del Sapa Inti: 'La montaña no es de quien la mira desde abajo'. La Guardia Verde esperaba esa respuesta. Arequipa cubre el flanco norte del Imperio, y el Imperio la va a tomar."
         options:
         - name: {english: Then it is war., spanish: Entonces es la guerra.}
           effects:
@@ -2123,6 +2124,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: FCU_pulso_del_directorio}
+          - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
           - {effect: intelligence_agency}
           - {effect: event, id: meganations_fcu.20, days: 30}
         src: user_design
@@ -2496,8 +2498,8 @@ namespaces:
         picture: GFX_report_event_generic_rally
         title: {english: The Sea Nation Sells, spanish: La Nación del Mar Vende}
         desc:
-          english: We have a seat on the board of the sea.
-          spanish: Tenemos un asiento en el directorio del mar.
+          english: "We have a seat on the board of the sea. The High Seas sold us shares in their insurers rather than face our fleets; from now on, part of every toll on the Pacific ends up in the Union's accounts. The captains of the Market call it a surrender. The Directorate calls it a good quarter."
+          spanish: "Tenemos un asiento en el directorio del mar. La Alta Mar nos vendió acciones de sus aseguradoras antes que enfrentar nuestras flotas; desde ahora, una parte de cada peaje del Pacífico termina en las cuentas de la Unión. Los capitanes del Mercado lo llaman una rendición. El Directorio lo llama un buen trimestre."
         options:
         - name: {english: Good., spanish: Bien.}
           effects:
@@ -2508,7 +2510,9 @@ namespaces:
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: The Sea Nation Refuses, spanish: La Nación del Mar se Niega}
-        desc: {english: They laughed at our offer., spanish: Se rieron de nuestra oferta.}
+        desc:
+          english: "They laughed at our offer. Kofi Aldana read the Directorate's proposal aloud at the clearing house in Singapore, and the insurers of half the Pacific laughed with him. The High Seas will not sell a single share. The Union has never lost a negotiation; it has only ever moved it to another table. The next one will be at sea."
+          spanish: "Se rieron de nuestra oferta. Kofi Aldana leyó en voz alta la propuesta del Directorio en la cámara de compensación de Singapur, y las aseguradoras de medio Pacífico se rieron con él. La Alta Mar no va a vender ni una acción. La Unión nunca perdió una negociación; solo la cambió de mesa. La próxima va a ser en el mar."
         options:
         - name: {english: Then it is war., spanish: Entonces es la guerra.}
           effects:
@@ -3565,6 +3569,7 @@ namespaces:
         - name: {english: Go on., spanish: Seguir.}
           effects:
           - {effect: run, value: HSN_pulso_de_las_potencias}
+          - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
           - {effect: intelligence_agency}
           - {effect: event, id: meganations_hsn.20, days: 30}
         src: user_design
@@ -3878,8 +3883,8 @@ namespaces:
         picture: GFX_report_event_generic_rally
         title: {english: Taiwan Is Ours, spanish: Taiwán es Nuestro}
         desc:
-          english: The Directorate sold. The fifth node is ours.
-          spanish: El Directorio vendió. El quinto nodo es nuestro.
+          english: "The Directorate sold. Taiwan's ports and shipyards join the network in exchange for a discount on every Directorate ship that crosses the straits. The Directorate does not like to sell, but it likes even less a war that does not add up. The fifth node is ours."
+          spanish: "El Directorio vendió. Los puertos y astilleros de Taiwán se suman a la red a cambio de un descuento en cada barco del Directorio que cruce los estrechos. Al Directorio no le gusta vender, pero le gusta menos una guerra que no cierra en las cuentas. El quinto nodo es nuestro."
         options:
         - name: {english: Good., spanish: Bien.}
           effects:
@@ -3890,7 +3895,9 @@ namespaces:
         trigger: effect
         picture: GFX_report_event_generic_rally
         title: {english: The Directorate Refuses, spanish: El Directorio se Niega}
-        desc: {english: The Directorate will not sell Taiwan., spanish: El Directorio no va a vender Taiwán.}
+        desc:
+          english: "The Directorate will not sell Taiwan. Its answer arrived as a table of figures: what the island produces, what it costs to defend and what it would cost the Market to take it. The last column was much longer than the others. Our captains read it as a challenge. The network is missing a node, and there is only one way left to add it."
+          spanish: "El Directorio no va a vender Taiwán. Su respuesta llegó como una tabla de cifras: lo que produce la isla, lo que cuesta defenderla y lo que le costaría al Mercado tomarla. La última columna era mucho más larga que las otras. Nuestros capitanes la leyeron como un desafío. A la red le falta un nodo, y queda una sola manera de sumarlo."
         options:
         - name: {english: Then it is war., spanish: Entonces es la guerra.}
           effects:
@@ -4973,6 +4980,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: ASC_pulso_de_la_red}
+        - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
         - {effect: intelligence_agency}
         - {effect: event, id: meganations_asc.20, days: 30}
       src: user_design
@@ -6168,6 +6176,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: APF_pulso_de_los_consejos}
+        - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
         - {effect: intelligence_agency}
         - {effect: event, id: meganations_apf.20, days: 30}
       src: user_design
@@ -7866,6 +7875,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: NAS_pulso_de_los_templos}
+        - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
         - {effect: intelligence_agency}
         - {effect: event, id: meganations_nas.20, days: 30}
       src: user_design
@@ -8877,8 +8887,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: The Empire Yields the Salt Flats, spanish: El Imperio Cede los Salares}
       desc:
-        english: The Green Empire handed over Antofagasta. The Collasuyu reaches the sea.
-        spanish: El Imperio Verde entregó Antofagasta. El Collasuyu llega al mar.
+        english: "The Green Empire handed over Antofagasta. The Emperor preferred to lose the salt rather than open a second front; the Sapa Inti walked into the city on the day of the Inti Raymi, and the priests poured chicha into the sea. The Collasuyu reaches the sea again, as it did before the Spanish."
+        spanish: "El Imperio Verde entregó Antofagasta. El Emperador prefirió perder la sal antes que abrir un segundo frente; el Sapa Inti entró a la ciudad el día del Inti Raymi y los sacerdotes le echaron chicha al mar. El Collasuyu vuelve a llegar al mar, como antes de los españoles."
       options:
       - name: {english: The Sun is patient., spanish: El Sol es paciente.}
         effects:
@@ -8890,8 +8900,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: The Empire Refuses, spanish: El Imperio se Niega}
       desc:
-        english: The Green Empire keeps the salt. The Sapa Inca has his casus belli for Antofagasta.
-        spanish: El Imperio Verde se queda con la sal. El Sapa Inca tiene su casus belli por Antofagasta.
+        english: "The Green Empire keeps the salt. Gaia answered that the salt flats feed the vats of BioSteel and that no priest is going to take them away. For the Sun Kingdom the Salt Flats of Antofagasta are the end of the Collasuyu and the sea that the empire lost five centuries ago. The Sapa Inca has his casus belli, and the army on the passes has its orders."
+        spanish: "El Imperio Verde se queda con la sal. Gaia contestó que los salares alimentan las cubas del Bioacero y que ningún sacerdote se los va a quitar. Para el Reino del Sol, los Salares de Antofagasta son el final del Collasuyu y el mar que el imperio perdió hace cinco siglos. El Sapa Inca tiene su casus belli, y el ejército de los pasos tiene sus órdenes."
       options:
       - name: {english: The mountain comes down to the sea., spanish: La montaña baja al mar.}
         effects:
@@ -9024,6 +9034,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: SHD_pulso_del_rio}
+        - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
         - {effect: intelligence_agency}
         - {effect: event, id: meganations_shd.20, days: 30}
       src: user_design
@@ -10441,6 +10452,7 @@ namespaces:
       - name: {english: Go on., spanish: Seguir.}
         effects:
         - {effect: run, value: NRE_pulso_del_ocio}
+        - {effect: run, value: MEGANATIONS_unidades_unicas_ia}   # 2026-10-27: la IA fabrica su unidad única
         - {effect: intelligence_agency}
         - {effect: event, id: meganations_nre.20, days: 30}
       src: user_design
@@ -10734,8 +10746,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: Rome Refuses, spanish: Roma se Niega}
       desc:
-        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
-        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+        english: 'The Senate sent our envoy back with a single word: no. Rome will not give up a single province it considers its own, and it does not recognise those who ask. The people in the streets are already shouting it: free the Emirates! Whatever happens now, it will not be decided by envoys.'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. Roma no cede ni una provincia que considere suya, y no reconoce a quien se la pide. La gente en la calle ya lo grita: ¡liberar los Emiratos! Lo que pase ahora no lo van a decidir los enviados.'
       options:
       - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
         effects:
@@ -10813,8 +10825,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: Rome Refuses, spanish: Roma se Niega}
       desc:
-        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
-        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+        english: 'The Senate sent our envoy back with a single word: no. Rome will not give up a single province it considers its own, and it does not recognise those who ask. The people in the streets are already shouting it: free the Emirates! Whatever happens now, it will not be decided by envoys.'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. Roma no cede ni una provincia que considere suya, y no reconoce a quien se la pide. La gente en la calle ya lo grita: ¡liberar los Emiratos! Lo que pase ahora no lo van a decidir los enviados.'
       options:
       - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
         effects:
@@ -10896,8 +10908,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: Rome Refuses, spanish: Roma se Niega}
       desc:
-        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
-        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+        english: 'The Senate sent our envoy back with a single word: no. Rome will not give up a single province it considers its own, and it does not recognise those who ask. The people in the streets are already shouting it: free the Emirates! Whatever happens now, it will not be decided by envoys.'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. Roma no cede ni una provincia que considere suya, y no reconoce a quien se la pide. La gente en la calle ya lo grita: ¡liberar los Emiratos! Lo que pase ahora no lo van a decidir los enviados.'
       options:
       - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
         effects:
@@ -10971,8 +10983,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: Rome Refuses, spanish: Roma se Niega}
       desc:
-        english: 'The Senate sent our envoy back with a single word: no. The people in the streets are already shouting it: free the Emirates!'
-        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. La gente en la calle ya lo grita: ¡liberar los Emiratos!'
+        english: 'The Senate sent our envoy back with a single word: no. Rome will not give up a single province it considers its own, and it does not recognise those who ask. The people in the streets are already shouting it: free the Emirates! Whatever happens now, it will not be decided by envoys.'
+        spanish: 'El Senado nos devolvió al enviado con una sola palabra: no. Roma no cede ni una provincia que considere suya, y no reconoce a quien se la pide. La gente en la calle ya lo grita: ¡liberar los Emiratos! Lo que pase ahora no lo van a decidir los enviados.'
       options:
       - name: {english: 'To war, to free the Emirates!', spanish: '¡A la guerra, a liberar los Emiratos!'}
         effects:
@@ -11157,7 +11169,9 @@ namespaces:
       trigger: effect
       picture: GFX_report_event_generic_rally
       title: {english: Africa Pays, spanish: África Paga}
-      desc: {english: The Federation paid the tribute., spanish: La Federación pagó el tributo.}
+      desc:
+        english: "The Federation paid the tribute: rifles and silver, every year, 'for the peace of the Mediterranean'. The councils voted for it so as not to bleed in a war they could not yet win, and every council that voted wrote it down. Rome takes the tribute as recognition. Lagos takes it as a debt."
+        spanish: "La Federación pagó el tributo: fusiles y plata, todos los años, 'por la paz del Mediterráneo'. Los consejos lo votaron para no desangrarse en una guerra que todavía no podían ganar, y cada consejo que lo votó lo dejó anotado. Roma toma el tributo como un reconocimiento. Lagos, como una deuda."
       options:
       - name: {english: Good., spanish: Bien.}
         effects:
@@ -11169,8 +11183,8 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: Africa Refuses, spanish: África se Niega}
       desc:
-        english: The councils sent the legate back with nothing.
-        spanish: Los consejos devolvieron al legado con las manos vacías.
+        english: "The councils sent the legate back with nothing. The Congress in Lagos answered in a single line, written in chalk by the council of Tillabéri: 'Africa paid Rome once; it will not pay again.' The Senate reads the answer as rebellion. The legions on the other shore of the Mediterranean read it as an order."
+        spanish: "Los consejos devolvieron al legado con las manos vacías. El Congreso de Lagos contestó en una sola línea, escrita con tiza por el consejo de Tillabéri: 'África ya le pagó a Roma una vez; no le va a pagar otra'. El Senado lee la respuesta como rebelión. Las legiones del otro lado del Mediterráneo, como una orden."
       options:
       - name: {english: Then it is war., spanish: Entonces es la guerra.}
         effects:

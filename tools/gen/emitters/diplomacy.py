@@ -325,10 +325,28 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     requires = wars.get("requires") or {}
     req_triggers: dict[str, str] = {}
     renew = Block()
+    # 2026-10-27 (pedido del usuario: "¿por qué se declaran la guerra?"): el casus
+    # belli ya no está desde el día uno; llega con un incidente de frontera
+    # (23_rumbo_2120.yaml -> anarchy_incidents) que cuenta el porqué.
+    incidents = ctx.spec.raw.get("anarchy_incidents") or {}
+    default_inc = incidents.get("default")
+    war_news: list[tuple[str, str, str]] = []
     for mega, anar in pairs:
         cw = Block([("type", kind), ("target", anar)])
         req = (requires.get(mega) or {}).get(anar)
-        if not after.get(mega) and not req:
+        inc = (incidents.get(mega) or {}).get(anar) or default_inc
+        if inc:
+            flag = f"{mega}_incidente_{anar}"
+            y, m, d = (int(x) for x in str(inc["date"]).split(".")[:3])
+            renew.add("if", Block([
+                ("limit", Block([("tag", mega), ("date", Compare(">", f"{y}.{m}.{d}")),
+                                 (anar, Block([("exists", True)])),
+                                 ("NOT", Block([("has_country_flag", flag)]))])),
+                ("set_country_flag", flag),
+                ("country_event", Block([("id", inc["incident"]), ("days", 1)]))]))
+            if inc.get("war"):
+                war_news.append((mega, anar, inc["war"]))
+        elif not after.get(mega) and not req:
             out[mega].append(("create_wargoal", cw))
         if mod:
             out[mega].append(("add_opinion_modifier", Block([("target", anar), ("modifier", mod)])))
@@ -337,6 +355,8 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
                       (anar, Block([("exists", True), ("NOT", Block([("has_country_flag", f"{anar}_intocable")]))])),
                       ("NOT", Block([("has_war_with", anar)])),
                       ("NOT", Block([("has_wargoal_against", anar)]))])
+        if inc:
+            cond.add("has_country_flag", f"{mega}_incidente_{anar}")
         if after.get(mega) or req:
             ready = Block()
             if after.get(mega):
@@ -394,4 +414,44 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
     ctx.verify_keys("triggers", {"has_wargoal_against": SOURCE, "exists": SOURCE, "has_war_with": SOURCE,
                                  "has_country_flag": SOURCE, "tag": SOURCE, "is_ai": SOURCE, "date": SOURCE})
     ctx.data["anarchy_pairs"] = pairs
+    pw = ctx.spec.raw.get("power_wars") or {}
+    majors_pw = [c.tag for c in ctx.spec.countries if c.is_major and c.tag in alive]
+    if war_news or pw:
+        # al empezar la guerra, cada jugador recibe el porqué (una vez por par)
+        body = Block()
+        for mega, anar, ev in war_news:
+            g = f"MEGANATIONS_guerra_{mega}_{anar}"
+            body.add("if", Block([
+                ("limit", Block([("NOT", Block([("has_global_flag", g)])),
+                                 ("OR", Block([("AND", Block([("tag", mega), ("FROM", Block([("tag", anar)]))])),
+                                               ("AND", Block([("tag", anar), ("FROM", Block([("tag", mega)]))]))]))])),
+                ("set_global_flag", g),
+                ("every_country", Block([("limit", Block([("is_ai", False)])),
+                                         ("country_event", Block([("id", ev), ("days", 1)]))]))]))
+        # entre potencias (2026-10-27): los pares de rivalidad con texto propio, el resto el general
+        own = {frozenset(p["between"]): p["event"] for p in pw.get("pairs") or []}
+        for i, a in enumerate(majors_pw):
+            for b in majors_pw[i + 1:]:
+                ev = own.get(frozenset((a, b))) or pw.get("default")
+                if not ev:
+                    continue
+                g = f"MEGANATIONS_guerra_{a}_{b}"
+                body.add("if", Block([
+                    ("limit", Block([("NOT", Block([("has_global_flag", g)])),
+                                     ("OR", Block([("AND", Block([("tag", a), ("FROM", Block([("tag", b)]))])),
+                                                   ("AND", Block([("tag", b), ("FROM", Block([("tag", a)]))]))]))])),
+                    ("set_global_flag", g),
+                    ("save_global_event_target_as", "MN_guerra_a"),
+                    ("FROM", Block([("save_global_event_target_as", "MN_guerra_b")])),
+                    ("every_country", Block([("limit", Block([("is_ai", False)])),
+                                             ("country_event", Block([("id", ev), ("days", 1)]))]))]))
+        on = Block([("on_actions", Block([("on_declare_war", Block([("effect", body)]))]))])
+        ctx.write_script("common/on_actions/08_meganations_guerras_anarquia.txt", on,
+                         source=SOURCE + " -> 23_rumbo_2120.yaml (anarchy_incidents)")
+        effects["country_event"] = SOURCE
+        ctx.verify_keys("triggers", {"has_global_flag": SOURCE})
+    if incidents:
+        ctx.note("incidentes de frontera (casus belli contra la Anarquia): "
+                 + ", ".join(f"{m}->{a} {((incidents.get(m) or {}).get(a) or default_inc or {}).get('date')}"
+                             for m, a in pairs))
     ctx.note("casus belli permanentes contra la Anarquia: " + ", ".join(f"{m}->{a}" for m, a in pairs))

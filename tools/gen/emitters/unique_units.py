@@ -23,6 +23,7 @@ from ..pdx import Block, Compare, Quoted, parse_file, text
 from . import ideas as ideas_mod
 from .effects import EffectContext, render_effects
 
+UPKEEP_EFFECT = "MEGANATIONS_unidades_unicas_ia"
 SOURCE = "spec/20_unique_units.yaml"
 LOC_FILE = "replace/meganations_unique_units"
 
@@ -52,6 +53,7 @@ def emit(ctx: BuildContext) -> None:
     plans: list[dict] = ctx.data.setdefault("unique_ai_plans", [])
     effects = Block()
     sub_changes: dict[str, dict] = {}
+    upkeep_calls: list[tuple[str, str]] = []
     sat_triggers: dict[str, str] = {}
     ideas = Block()
     effects_used: dict[str, str] = {}
@@ -132,6 +134,12 @@ def emit(ctx: BuildContext) -> None:
         # nombre sale como una sola palabra, create_unit lo necesita así)
         tpl = u.get("template")
         dsl: list[dict] = [{"effect": "flag", "value": f"{uid}_desbloqueado"}]
+        if tpl and tpl.get("support"):
+            # apoyo opcional (2026-10-27): una compañía que el juego no tiene se omite sola
+            gone = [r for r in tpl["support"] if r not in sub_units]
+            if gone:
+                ctx.warn(f"{uid}: compañias de apoyo que el juego no tiene ({', '.join(gone)}): se omiten")
+                tpl = dict(tpl, support=[r for r in tpl["support"] if r in sub_units])
         bad = [r for r in (tpl or {}).get("regiments", []) + ((tpl or {}).get("support") or []) if r not in sub_units]
         if bad:
             ctx.warn(f"{uid}: batallones que el juego no tiene ({', '.join(bad)}): sin plantilla ni divisiones")
@@ -206,6 +214,57 @@ def emit(ctx: BuildContext) -> None:
             effects_used.setdefault("add_ideas", uid)
 
         effects.add(f"{uid}_desbloqueo", body)
+
+        # 2026-10-27 (partida de observador: "no veo que la IA la produzca"): el
+        # juego no conoce el equipo como id de producción de la IA y no arma
+        # divisiones con plantillas que no diseñó. Cada `every_days` la IA dueña
+        # encarga el modelo más nuevo que tenga y suma `divisions` divisiones.
+        upkeep = u.get("ai_upkeep")
+        if upkeep is None and u.get("production") and eq_type:
+            # sin ai_upkeep propio: lo mismo que encarga al desbloquearla, cada 180 días
+            pr = u["production"]
+            upkeep = {"every_days": 180, "amount": int(pr.get("amount", 50)),
+                      "factories": int(pr.get("factories", 2)), "divisions": 1}
+        if upkeep:
+            keep = Block()
+            cond = Block([("is_ai", True), ("has_country_flag", f"{uid}_desbloqueado"),
+                          ("NOT", Block([("has_country_flag", f"{uid}_ia_espera")]))])
+            keep.add("set_country_flag", Block([("flag", f"{uid}_ia_espera"), ("value", 1),
+                                                ("days", int(upkeep.get("every_days", 180)))]))
+            models = [(t, e) for t, e in (upkeep.get("models") or [])] + ([(None, eq_type)] if eq_type else [])
+            chain = None
+            for i, (tech, eq) in enumerate(models):
+                eqb = Block([("type", eq), ("creator", Quoted(tag))])
+                if tech is None and version:
+                    eqb.add("version_name", Quoted(version))
+                order = Block([("equipment", eqb),
+                               ("requested_factories", int(upkeep.get("factories", 2))),
+                               ("progress", 0.0), ("amount", int(upkeep.get("amount", 100)))])
+                if tech is None:
+                    branch = Block([("add_equipment_production", order)])
+                    if chain is None:
+                        keep.entries.extend(branch.entries)
+                    else:
+                        keep.add("else", branch)
+                    break
+                b = Block([("limit", Block([("has_tech", tech)])), ("add_equipment_production", order)])
+                keep.add("if" if chain is None else "else_if", b)
+                chain = True
+            if tpl and not bad and int(upkeep.get("divisions", 0) or 0):
+                keep.entries.extend(render_effects(uid, [{"effect": "create_units", "template": tpl["name"],
+                                                          "count": int(upkeep["divisions"]), "experience": 0.2}],
+                                                   ec, effects_used, where=SOURCE).entries)
+            first = (u.get("lock") or {}).get("techs") or []
+            first = [t for t in first if t in locked][:1]
+            catch = []
+            if first:
+                # la IA que investigó la tecnología sin tomar la decisión recibe el desbloqueo igual
+                catch = [("if", Block([("limit", Block([("is_ai", True), ("has_tech", first[0]),
+                                                        ("NOT", Block([("has_country_flag", f"{uid}_desbloqueado")]))])),
+                                       (f"{uid}_desbloqueo", True)]))]
+            effects.add(f"{uid}_ia_produccion", Block(catch + [("if", Block([("limit", cond)] + keep.entries))]))
+            upkeep_calls.append((tag, f"{uid}_ia_produccion"))
+            effects_used.setdefault("add_equipment_production", uid)
 
         # Botín de capital (2026-10-10): al tomar la capital de un enemigo
         # (meganación o anarquía) el evento corre <id>_botin: si la unidad no
@@ -307,7 +366,9 @@ def emit(ctx: BuildContext) -> None:
 
         # Para el arte (faction_tech): su ícono en el equipo y las tecnologías propias
         ctx.data.setdefault("uu_art", []).append({"id": uid, "tag": tag, "equipment": eq_type,
-                                                   "techs": sorted(locked)})
+                                                   "techs": sorted(locked),
+                                                   # imagen por nivel (assets/<TAG>/armas/<id>_<n>.dds)
+                                                   "levels": {int(n): list(ts) for n, ts in (u.get("art_levels") or {}).items()}})
 
         # 5. Nombres: el batallón (pisa el del juego) y las tecnologías bloqueadas
         names = {}
@@ -339,6 +400,15 @@ def emit(ctx: BuildContext) -> None:
             n = names[key]
             ctx.loc.define_and_reference(key, en=n["english"], es=n["spanish"], file=LOC_FILE,
                                          origin=f"unique:{uid}")
+        # 2026-10-27: la tecnología bloqueada lleva el nombre de su equipo también
+        # con la clave por país (<TAG>_<tecnología>), que es la que el juego muestra
+        # si existe y pisa cualquier otro nombre
+        for t in sorted(locked):
+            eqs = [e for e, by in enabled_by.items() if by == t and e in names and e in have]
+            if eqs and f"{tag}_{t}" not in ctx.loc._defined:
+                n = names[eqs[0]]
+                ctx.loc.define_and_reference(f"{tag}_{t}", en=n["english"], es=n["spanish"], file=LOC_FILE,
+                                             origin=f"unique:{uid}")
 
         ctx.note(f"unidad unica {uid} ({tag}): {len(locked)} tecnologias bloqueadas para el resto "
                  f"({', '.join(sorted(locked)[:10])}); equipo {eq_type or 'ninguno'}; "
@@ -352,8 +422,22 @@ def emit(ctx: BuildContext) -> None:
             techs[:] = [t for t in techs if t not in gone]
             ctx.note(f"unidades unicas: {tag} ya no arranca con {', '.join(gone)} (son de otra potencia)")
 
+    # lo corre el pulso mensual de cada potencia (MEGANATIONS_eventos_mundiales)
+    calls = Block()
+    for tag, eff in upkeep_calls:
+        calls.add("if", Block([("limit", Block([("original_tag", tag)])), (eff, True)]))
+    effects.add(UPKEEP_EFFECT, calls)
+    if upkeep_calls:
+        ctx.note("unidades unicas: la IA dueña encarga su unidad y suma una division cada 180 dias ("
+                 + ", ".join(t for t, _ in upkeep_calls) + ")")
     if sub_changes:
         _sub_unit_stats(ctx, "unidades unicas", sub_changes)
+    eq_changes: dict = {}
+    for u in units:
+        for eq, stats in (u.get("equipment_stats") or {}).items():
+            eq_changes.setdefault(eq, {}).update(stats)
+    if eq_changes:
+        _equipment_stats(ctx, eq_changes)
     ctx.write_script("common/scripted_effects/meganations_unique_units.txt", effects, source=SOURCE)
     if ideas.entries:
         ctx.write_script("common/ideas/meganations_unique_units.txt",
@@ -589,6 +673,57 @@ def lock_techs(src: str, locks: dict[str, str], visible: set[str] | frozenset = 
     return src, count
 
 
+def _equipment_stats(ctx: BuildContext, wanted: dict) -> None:
+    """2026-10-27 (pedido del usuario: "mejorá las stats de la unidad, del
+    equipo"): estadísticas de equipos del juego, en una copia del archivo con el
+    mismo nombre. Número = factor; "+N" = se suma. Si el modelo no tiene la
+    estadística, se parte de la de su arquetipo (o de 0)."""
+    from ..pdx import text as ptext
+    files = []
+    for path in sorted((ctx.vanilla.root / "common" / "units" / "equipment").glob("*.txt")):
+        try:
+            root = parse_file(path)
+        except ValueError:
+            continue
+        block = root.get("equipments")
+        if isinstance(block, Block):
+            files.append((path, root, block))
+    archetypes = {name: eq for _, _, b in files for name, eq in b.entries if isinstance(eq, Block)}
+
+    def base(eq: Block, stat: str) -> float:
+        for src in (eq, archetypes.get(ptext(eq.get("archetype")) if eq.get("archetype") is not None else "")):
+            if isinstance(src, Block) and src.get(stat) is not None:
+                try:
+                    return float(ptext(src.get(stat)))
+                except (TypeError, ValueError):
+                    return 0.0
+        return 0.0
+
+    found = set()
+    for path, root, block in files:
+        changed = []
+        for name, eq in block.entries:
+            if name not in wanted or not isinstance(eq, Block):
+                continue
+            found.add(name)
+            for stat, how in wanted[name].items():
+                old = base(eq, stat)
+                new = old + float(str(how)[1:]) if str(how).startswith("+") else old * float(how)
+                new = round(new, 3)
+                if eq.get(stat) is None:
+                    eq.add(stat, new)
+                else:
+                    eq.entries = [(k, new if k == stat else v) for k, v in eq.entries]
+                changed.append(f"{name}.{stat} {old:g} -> {new:g}")
+        if changed:
+            ctx.write_script(f"common/units/equipment/{path.name}", root,
+                             source=f"{path.name} del juego con {', '.join(changed)} ({SOURCE})")
+            ctx.note("unidades unicas (equipo): " + ", ".join(changed))
+    missing = sorted(set(wanted) - found)
+    if missing:
+        ctx.warn(f"unidades unicas: equipos que el juego no tiene ({', '.join(missing)}): no se cambian")
+
+
 def _sub_unit_stats(ctx: BuildContext, uid: str, wanted: dict) -> None:
     """Multiplica estadísticas de batallones del juego (common/units), en una
     copia del archivo con el mismo nombre (pisa al original)."""
@@ -606,6 +741,20 @@ def _sub_unit_stats(ctx: BuildContext, uid: str, wanted: dict) -> None:
             if key not in wanted or not isinstance(body, Block):
                 continue
             for stat, factor in wanted[key].items():
+                if isinstance(factor, dict):
+                    # bloque por terreno (2026-10-27, el Centinela: "bonificaciones a
+                    # movimiento por territorio"): valores absolutos, no factores
+                    sub = body.get(stat)
+                    if not isinstance(sub, Block):
+                        sub = Block()
+                        body.add(stat, sub)
+                    for k2, v2 in factor.items():
+                        if sub.get(k2) is None:
+                            sub.add(k2, float(v2))
+                        else:
+                            sub.entries = [(k, float(v2) if k == k2 else v) for k, v in sub.entries]
+                    changed.append(f"{key}.{stat} = {{{', '.join(f'{k2} {float(v2):g}' for k2, v2 in factor.items())}}}")
+                    continue
                 if isinstance(factor, bool):
                     # atributo sí/no (special_forces): se pone aunque el juego no lo tenga
                     if body.get(stat) is None:
