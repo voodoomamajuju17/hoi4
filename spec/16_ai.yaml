@@ -155,11 +155,35 @@ military:
 # país (conquistar, prepararse o declarar contra X) suma un `invade` contra X:
 # la IA del juego busca el desembarco contra quien ya quiere atacar, en vez de
 # esperar a tener frontera. Si el juego no conoce el tipo, se omite con aviso.
+#
+# 2026-10-26 (reporte: "nunca vi que la HSN desembarcara nada"; pedido: "fijate
+# qué hace que los aliados produzcan el día D o Japón invada marítimamente").
+# Su única guerra segura es contra el Indostán, que limita por tierra con
+# Indochina: con solo el `invade` es probable que mande todo a esa frontera y
+# no le quede nadie para el mar (no visto en el juego). El juego base desembarca cuando
+# tiene tropas que no necesita en ningún frente terrestre (los Estados Unidos
+# las juntan antes en Inglaterra), y la IA tiene dos estrategias documentadas
+# para eso (hoi4.paradoxwikis.com/AI_modding), que acá se suman:
+#   unit_request: invasion_unit_request { tag = X } junto a cada `invade`:
+#                 tropas reservadas para desembarcar contra ese objetivo.
+#   focus:        naval_invasion_focus mientras está en guerra (plan <TAG>_dia_d):
+#                 ganas de desembarcar en general.
+# El build copia al reporte (desembarcos_del_juego.txt) los planes del juego base
+# que desembarcan, para ajustar esto a lo que hace el juego de verdad.
 # -----------------------------------------------------------------------------
 invasions:
   src: user_request
   by_country: {HSN: 150, ZJP: 120}   # 2026-10-28: el Shogunato también desembarca
   from_types: [conquer, prepare_for_war, declare_war]
+  unit_request: {HSN: 100}
+  focus: {HSN: 200}
+  # 2026-10-28 (su reporte.txt trajo los planes del juego base): Japón, el que
+  # sí desembarca, apunta a regiones concretas (state =, 100 a 400) y no solo
+  # a países. Un plan por región del destino, activo mientras su dueño está
+  # en guerra con la potencia: tropas para esa costa (400, como Guam) y más
+  # ganas de desembarcar (Japón 400 en total; con el Día D quedan 200 + 200).
+  destiny_states:
+    HSN: {unit_request: 400, focus: 200}
 
 # -----------------------------------------------------------------------------
 # Tope de flota de la IA (2026-10-02, partida a 2106: "esta cantidad de barcos

@@ -960,6 +960,12 @@ llega a 100 al toque y la tensión nunca sube".
   consumen los robots) y +25% de penalización si le faltan recursos.
 - **El carbón se llama Torio** (en inglés Thorium): en 2100 la energía de las
   fábricas sale de reactores. Se renombra en todos los textos del juego.
+- **Los otros seis recursos también tienen nombre de 2100** (2026-10-28, "renombrá
+  todos"): Petróleo -> Hidrógeno, Acero -> Titanio, Aluminio -> Grafeno, Caucho ->
+  Polímero, Tungsteno -> Neodimio, Cromo -> Litio (inglés: Hydrogen, Titanium,
+  Graphene, Polymer, Neodymium, Lithium). Mismo mecanismo que el Torio: se
+  reescriben los textos del juego base; la prosa del mod (el "acero vivo", el
+  Bioacero) no se toca. Pedidos de íconos en arte/pedidos_recursos.txt.
 - **Imagen propia de las unidades únicas** (2026-10-03, "¿no hay imagen única
   para el Gliptodonte y otras tecnologías únicas?"): 8 pedidos
   arma_<id_unidad> (con su historia y la filosofía de la facción); la imagen
@@ -1988,6 +1994,7 @@ empresas industriales aéreas del NAS".
 - Focos: Marines de Alta Mar suma un bono x2 para las tecnologías de marines; Doctrina de Desembarco cambia el bono de artillería por transportes y lanchas; Asalto Anfibio da su espíritu (+25% invasión anfibia, +2 divisiones y +1 plan, +10% ataque de fuerzas especiales, -20% tiempo de entrenamiento). La IA toma la rama antes (ai_factor 3).
 - IA: marines 35% de sus divisiones (antes 25%), más convoyes, investigación x13,5 de marines, transportes, lanchas y fuerzas especiales, y un `invade` (150) contra cada objetivo de sus planes de guerra (16_ai -> invasions). Los tipos y los ids se validan contra el juego instalado: lo que no exista se omite con aviso en el reporte.
 - Sin probar en el juego: que `invade` exista como tipo de estrategia en esta versión (el fixture lo tiene, el juego real se valida al compilar) y que los modificadores de invasión sirvan en un espíritu (se validan contra la documentación del juego).
+- 26/10 (reporte: "nunca vi que la HSN desembarcara nada"; pedido: "fijate qué hace que los aliados produzcan el día D o Japón invada"). El juego base desembarca con tropas que no necesita en ningún frente terrestre (los Estados Unidos las juntan antes en Inglaterra). La HSN, en cambio, pelea contra el Indostán, que limita por tierra con Indochina. Se suman las dos estrategias de desembarco documentadas en la wiki de modding: `invasion_unit_request { tag = X }` (100) junto a cada `invade`, para reservar tropas, y el plan `HSN_dia_d`, que en guerra da `naval_invasion_focus` (200). El reporte ahora dice si el juego base usa cada tipo y copia enteros sus planes de desembarco (desembarcos_del_juego.txt), para ajustar con el código real del juego.
 
 **Acero** (pedido del usuario: "un poco más de metal donde hace falta"): piso propio de 80 para las meganaciones y de 10 para los satélites (15_balance -> resource_floor.overrides). Sale de los que más tienen, el total mundial no cambia y cada donante conserva su piso. Con el reporte del 20/10: EFE 48 -> 80, NAS 20 -> 80 y unos 14 satélites suben a 10 (unas 200 unidades, casi todas de la Comuna, la Unión y Roma).
 

@@ -35,32 +35,32 @@ Porcentaje de partidas en que la IA elige el primer foco (el resto elige el otro
 
 ## El Rearme Secreto
 
-Se termina el disimulo (tercer descubrimiento): el 10% de las partidas antes de 2102.7, la mitad antes de 2104.7, el 90% antes de 2108.1. Nunca, hasta 2140.1: 0%.
+Se termina el disimulo (tercer descubrimiento): el 10% de las partidas antes de 2102.5, la mitad antes de 2104.6, el 90% antes de 2108.3. Nunca, hasta 2140.1: 0%.
 
 | Potencia | veces descubierta por partida | la descubren primero | exposición máxima (media) |
 |---|---|---|---|
-| EFE | 0.39 | 13% | 48 |
-| FCU | 0.39 | 13% | 48 |
-| ASC | 0.40 | 14% | 48 |
-| HSN | 0.38 | 11% | 48 |
-| NAS | 0.37 | 14% | 48 |
-| SHD | 0.35 | 10% | 48 |
+| EFE | 0.40 | 13% | 48 |
+| FCU | 0.37 | 12% | 48 |
+| ASC | 0.37 | 12% | 48 |
+| HSN | 0.39 | 12% | 48 |
+| NAS | 0.35 | 14% | 48 |
+| SHD | 0.37 | 13% | 48 |
 | APF | 0.37 | 13% | 48 |
-| NRE | 0.35 | 12% | 48 |
+| NRE | 0.39 | 11% | 48 |
 
 ## La Sucesión del EFE
 
-Muere Aurelio IV: el 10% antes de 2104.3, la mitad antes de 2105.5, el 90% antes de 2108.3. Sigue vivo en 2140.1: 0%.
+Muere Aurelio IV: el 10% antes de 2104.3, la mitad antes de 2105.3, el 90% antes de 2107.10. Sigue vivo en 2140.1: 0%.
 
 | Al morir el Emperador | partidas |
 |---|---|
-| Tupã Benítez heredero | 52% |
-| Yara Pereira, Custodia electa | 27% |
-| Etchegaray regente | 20% |
+| Tupã Benítez heredero | 56% |
+| Yara Pereira, Custodia electa | 26% |
+| Etchegaray regente | 18% |
 
-Año en que la IA nombra heredero: 2101: 100%.
+Año en que la IA nombra heredero: 2101: 100%, 2102: 0%.
 
-Colapsos del líder del EFE por partida (Salud en 0): 0: 5%, 1: 19%, 2: 36%, 3: 25%, 4: 10%, 5: 4%, 6: 1%, 7: 0%.
+Colapsos del líder del EFE por partida (Salud en 0): 0: 2%, 1: 8%, 2: 20%, 3: 29%, 4: 23%, 5: 13%, 6: 4%, 7: 1%.
 
 ## La crisis del siglo (2106-2200)
 
@@ -81,7 +81,7 @@ Racha más larga de la misma crisis: 1 seguidas: 100%.
 
 ## Supuestos que se usaron
 
-Condiciones del mapa que el motor no simula (probabilidad fija en supuestos.yaml): `country:YYG`, `divisions_at_least`, `in_faction_with: ROOT`, `subject: false`.
+Condiciones del mapa que el motor no simula (probabilidad fija en supuestos.yaml): `country:YYG`, `divisions_at_least`, `in_faction_with: ROOT`, `subject: false`, `surrender_at_least`, `war_with`.
 
-Efectos que no cambian lo que se mide y no se simulan: `dynamic_modifier`, `army_experience`, `build`, `add_manpower`, `air_experience`, `navy_experience`, `add_war_support`, `add_political_power`, `promote`, `end_puppet`, `scope`, `annex`, `retire_leader`, `civil_war`.
+Efectos que no cambian lo que se mide y no se simulan: `dynamic_modifier`, `army_experience`, `build`, `add_manpower`, `add_political_power`, `air_experience`, `navy_experience`, `add_war_support`, `promote`, `retire_leader`, `civil_war`, `end_puppet`, `scope`, `annex`.
 

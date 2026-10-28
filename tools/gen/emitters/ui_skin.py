@@ -43,6 +43,11 @@ PATTERNS: dict[str, list[str]] = {
     "notificaciones": [r"alert", r"notification"],
     "mercado": [r"market", r"trade"],
     "huecos_vacios": [r"empty", r"slot", r"placeholder", r"advisor", r"unknown"],
+    # 2026-10-27 (captura del menú de construcción): los íconos de edificios,
+    # para saber nombre, tamaño y cuadros de cada sprite antes de reemplazarlos
+    "edificios": [r"building", r"facility"],
+    # 2026-10-27: los recursos (petróleo, aluminio, caucho, tungsteno, acero, cromo y el carbón, que es Torio)
+    "recursos": [r"resource", r"coal", r"oil", r"aluminium", r"rubber", r"tungsten", r"steel", r"chromium"],
     "leyes": [r"^GFX_idea_(?:.*economic|.*mobilisation|.*conscription|.*export|.*trade|.*isolation|"
               r"civilian_economy|war_economy|free_trade|closed_economy|volunteer_only|disarmed_nation|"
               r"service_by_requirement|all_adults_serve|scraping_the_barrel)"],

@@ -17,6 +17,8 @@ nunca se inventa. Una estrategia contra un país sin territorio se omite.
 
 from __future__ import annotations
 
+import re
+
 from ..context import BuildContext
 from ..errors import SpecError
 from ..pdx import Block, Compare
@@ -32,7 +34,15 @@ TECH_IDS = {"research_tech", "research_weight_factor"}
 # no usar en sus propios planes: se aceptan aunque no aparezcan en common/ai_strategy/.
 # research_weight_factor = { id = <tecnología> value = <% de más> } (2026-09-30:
 # "la HSN no investiga barcos"; research_tech no existe, éste sí).
-DOCUMENTED = {"research_weight_factor"}
+DOCUMENTED = {"research_weight_factor", "naval_invasion_focus", "invasion_unit_request"}
+# 2026-10-26 ("fijate qué hace que los aliados produzcan el día D o Japón invada
+# marítimamente"): invasion_unit_request apunta con `tag`, no con `id`
+# (hoi4.paradoxwikis.com/AI_modding).
+TAG_PARAM = {"invasion_unit_request"}
+# lo que el juego base usa para sus desembarcos: los planes que lo tienen se
+# copian tal cual al reporte (desembarcos_del_juego.txt)
+INVASION_RE = re.compile(r"\btype\s*=\s*(?:invade|naval_invasion_focus|invasion_unit_request)\b"
+                         r"|\bordertype\s*=\s*invasion\b|\bput_unit_buffers\b")
 # 2026-10-11 (reporte: "ids que el juego no usa con ese tipo, se omiten"): los
 # planes de las unidades únicas pedían equipos que la IA del juego no conoce
 # como id; se prueba con el más parecido que sí conoce.
@@ -70,6 +80,10 @@ def emit(ctx: BuildContext) -> None:
     invasions = spec.get("invasions") or {}
     invade_value = {k: int(v) for k, v in (invasions.get("by_country") or {}).items()}
     invade_from = set(invasions.get("from_types") or ["conquer", "prepare_for_war", "declare_war"])
+    # 2026-10-26: como el Día D del juego base, además del `invade` contra el
+    # objetivo: tropas reservadas para el desembarco contra él (unit_request)
+    # y, mientras está en guerra, ganas de desembarcar en general (focus).
+    unit_request = {k: int(v) for k, v in (invasions.get("unit_request") or {}).items()}
     invade_added = 0
 
     def add_plan(pid: str, country: str, strategies: list[dict], enable=None, abort=None) -> None:
@@ -86,10 +100,13 @@ def emit(ctx: BuildContext) -> None:
                 if st.get("type") in invade_from and tgt and tgt not in have:
                     have.add(tgt)
                     extra.append({"type": "invade", "target": tgt, "value": invade_value[country]})
+                    if unit_request.get(country):
+                        extra.append({"type": "invasion_unit_request", "target": tgt,
+                                      "value": unit_request[country]})
             if extra:
                 strategies = list(strategies) + extra
                 if known is None or "invade" in known:
-                    invade_added += len(extra)
+                    invade_added += sum(1 for e in extra if e["type"] == "invade")
         lines = []
         targets = []
         for st in strategies:
@@ -122,7 +139,7 @@ def emit(ctx: BuildContext) -> None:
             b = Block()
             b.add("type", kind)
             if ident is not None:
-                b.add("id", ident)
+                b.add("tag" if kind in TAG_PARAM else "id", ident)
             b.add("value", int(st["value"]))
             lines.append(b)
         if not lines:
@@ -199,6 +216,15 @@ def emit(ctx: BuildContext) -> None:
     for p in ctx.data.get("unique_ai_plans") or []:
         add_plan(p["id"], p["country"], p["strategies"], p.get("enable"), p.get("abort"))
 
+    for country, value in (invasions.get("focus") or {}).items():
+        add_plan(f"{country}_dia_d", country, [{"type": "naval_invasion_focus", "value": int(value)}],
+                 enable={"at_war": True})
+    written += _destiny_landings(ctx, invasions.get("destiny_states") or {}, root)
+    if known is not None:
+        ctx.note("ia: tipos de desembarco que usa el juego base: "
+                 + ", ".join(f"{t} {'sí' if t in known else 'no'}"
+                             for t in ("invade", "naval_invasion_focus", "invasion_unit_request")))
+    _vanilla_invasion_reference(ctx)
     if invade_added:
         ctx.note(f"ia: {invade_added} planes de desembarco (invade) contra los objetivos de guerra de "
                  f"{', '.join(sorted(invade_value))}")
@@ -420,6 +446,56 @@ def destiny_targets(ctx: BuildContext) -> dict[str, list[str]]:
     return out
 
 
+def _destiny_landings(ctx: BuildContext, cfg: dict, root: Block) -> int:
+    """Desembarcos sobre las regiones del destino (2026-10-28, copiado de
+    JAP_invade_guam del juego base, que vio en su reporte.txt): un plan por
+    región, activo mientras quien la controla está en guerra con el país;
+    pide tropas de desembarco para ESA región (state =) y ganas de desembarcar.
+    El juego base apunta por región, no por país: así sabe dónde ir."""
+    from .territory import normalize
+    ids = ctx.data.get("state_ids_by_name") or {}
+    if not ids:
+        if cfg:
+            ctx.note("ia: desembarcos del destino sin escribir (faltan las regiones del juego base)")
+        return 0
+    written, lines = 0, []
+    for cat in (ctx.spec.raw.get("decisions") or {}).get("categories") or []:
+        for d in cat.get("decisions") or []:
+            tag = str(d.get("id", "")).split("_")[0]
+            if not str(d.get("id", "")).endswith("_reclamar_el_destino") or tag not in cfg:
+                continue
+            value = int((cfg[tag] or {}).get("unit_request", 400))
+            focus = int((cfg[tag] or {}).get("focus", 0))
+            for e in d.get("effects") or []:
+                if e.get("effect") != "wargoal_holders":
+                    continue
+                for names in e.get("states") or []:
+                    sid = next((ids[normalize(n)] for n in names if normalize(n) in ids), None)
+                    if sid is None:
+                        ctx.warn(f"ia: desembarco del destino de {tag}: no encuentro la región {names}")
+                        continue
+                    plan = Block()
+                    plan.add("allowed", Block([("original_tag", tag)]))
+                    plan.add("enable", Block([(str(sid), Block([("controller", Block([("has_war_with", tag)]))]))]))
+                    plan.add("abort_when_not_enabled", True)
+                    req = Block()
+                    req.add("type", "invasion_unit_request")
+                    req.add("state", sid)
+                    req.add("value", value)
+                    plan.add("ai_strategy", req)
+                    if focus:
+                        f = Block()
+                        f.add("type", "naval_invasion_focus")
+                        f.add("value", focus)
+                        plan.add("ai_strategy", f)
+                    root.add(f"MEGANATIONS_{tag}_desembarco_{sid}", plan)
+                    written += 1
+                    lines.append(f"{names[0]} ({sid})")
+    if lines:
+        ctx.note(f"ia: desembarcos del destino ({written}): " + ", ".join(lines))
+    return written
+
+
 def _destiny_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
     """La IA persigue su forma final (2026-10-10, pedido del usuario: "que
     persiga más agresivamente sus objetivos finales"). Con el destino abierto
@@ -475,6 +551,59 @@ def war_ready(cond, requires: dict):
         else:
             out[k] = war_ready(v, requires) if isinstance(v, (dict, list)) and k != "flags" else v
     return out
+
+
+def _vanilla_invasion_reference(ctx: BuildContext, limit: int = 60000) -> None:
+    """Copia al reporte los planes del juego base que desembarcan (Japón, el
+    Día D de los aliados...), tal cual están escritos, para imitarlos."""
+    if not ctx.vanilla:
+        return
+    out: list[str] = []
+    size = 0
+    for sub in ("ai_strategy", "ai_strategy_plans"):
+        folder = ctx.vanilla.root / "common" / sub
+        if not folder.is_dir():
+            continue
+        for path in sorted(folder.rglob("*.txt")):
+            try:
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            for block in _top_blocks(text):
+                if not INVASION_RE.search(block):
+                    continue
+                piece = f"# {sub}/{path.relative_to(folder).as_posix()}\n{block.strip()}\n"
+                if size + len(piece) > limit:
+                    out.append("# (cortado: hay más)")
+                    break
+                out.append(piece)
+                size += len(piece)
+    lines = ["DESEMBARCOS DEL JUEGO BASE (common/ai_strategy y ai_strategy_plans)",
+             f"{len([o for o in out if not o.startswith('# (')])} planes con invade, naval_invasion_focus, "
+             "invasion_unit_request, put_unit_buffers u órdenes de invasión", ""] + (out or ["ninguno"])
+    path = ctx.out_root / "desembarcos_del_juego.txt"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    ctx.data["invasion_reference_path"] = str(path)
+
+
+def _top_blocks(text: str) -> list[str]:
+    """Los bloques `nombre = { ... }` de primer nivel de un archivo (sin
+    comentarios), para copiarlos enteros."""
+    clean = re.sub(r"#[^\n]*", "", text)
+    blocks: list[str] = []
+    depth = 0
+    start = None
+    for i, ch in enumerate(clean):
+        if ch == "{":
+            if depth == 0:
+                start = clean.rfind("\n", 0, i) + 1
+            depth += 1
+        elif ch == "}" and depth:
+            depth -= 1
+            if depth == 0 and start is not None:
+                blocks.append(clean[start:i + 1])
+                start = None
+    return blocks
 
 
 def _anarchy_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:

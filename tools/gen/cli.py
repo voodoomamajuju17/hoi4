@@ -24,6 +24,7 @@ from . import specload, vanilla as vanilla_mod
 from .context import BuildContext
 from .emitters import ai as em_ai
 from .emitters import bitacora as em_bitacora
+from .emitters import mapa as em_mapa
 from .emitters import reglas as em_reglas
 from .emitters import balance as em_balance
 from .emitters import carrera as em_carrera
@@ -110,6 +111,7 @@ EMITTERS = [
     ("menu", em_menu.emit),
     ("music", em_music.emit),           # estacion de musica propia (11_scenario -> music)
     ("bitacora", em_bitacora.emit),     # foto anual del mundo en el game.log (2026-10-27)
+    ("mapa", em_mapa.emit),             # noticias: nace o desaparece un país (2026-10-28)
     ("reglas", em_reglas.emit),         # reglas de la partida: deslizadores de las meganaciones (2026-10-27)
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
     ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
