@@ -912,7 +912,15 @@ def render_effects(owner: str, items: list[dict], known,
                 rb.entries.extend(render_effects(owner, rebels["effects"], ec, effects_used, where=where).entries)
             if _REBEL_BOOST.get("effects"):
                 rb.entries.extend(render_effects(owner, _REBEL_BOOST["effects"], ec, effects_used, where=where).entries)
+            # 2026-10-28 ("eventos para todos cuando se forme una nueva nación"):
+            # la noticia del bando nuevo (meganations_mapa.4, FROM = el país que se parte)
+            rb.add("save_global_event_target_as", "MN_mapa_rebelde")
             block.add("random_country", rb)
+            block.add("every_country", Block([("limit", Block([("is_ai", False)])),
+                                              ("country_event", Block([("id", "meganations_mapa.4"), ("days", 1)]))]))
+            for k in ("save_global_event_target_as", "every_country", "country_event"):
+                effects_used.setdefault(k, owner)
+            ec.triggers_used.setdefault("is_ai", owner)
             if item.get("global_flag"):
                 block.add("set_global_flag", item["global_flag"])
                 effects_used.setdefault("set_global_flag", owner)

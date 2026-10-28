@@ -177,6 +177,13 @@ invasions:
   from_types: [conquer, prepare_for_war, declare_war]
   unit_request: {HSN: 100}
   focus: {HSN: 200}
+  # 2026-10-28 (su reporte.txt trajo los planes del juego base): Japón, el que
+  # sí desembarca, apunta a regiones concretas (state =, 100 a 400) y no solo
+  # a países. Un plan por región del destino, activo mientras su dueño está
+  # en guerra con la potencia: tropas para esa costa (400, como Guam) y más
+  # ganas de desembarcar (Japón 400 en total; con el Día D quedan 200 + 200).
+  destiny_states:
+    HSN: {unit_request: 400, focus: 200}
 
 # -----------------------------------------------------------------------------
 # Tope de flota de la IA (2026-10-02, partida a 2106: "esta cantidad de barcos

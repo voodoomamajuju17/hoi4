@@ -223,6 +223,49 @@ def _icono(pieza: dict, original, material):
     return _join([dib] * n)
 
 
+def _tira(pieza: dict, original, material):
+    """Una tira de íconos (2026-10-28: edificios y recursos): cada cuadro con
+    ícono nuevo se arma; los demás quedan como el original. None si no llegó ninguno."""
+    from PIL import Image
+    n = int(pieza["cuadros"])
+    frames = _frames(original, n)
+    uso = pieza.get("uso", "directo")
+    out, puestos = [], 0
+    for k, f in enumerate(frames, start=1):
+        ident = (pieza.get("iconos") or {}).get(k)
+        path = ICONS / f"{ident}.dds" if ident else None
+        if not path or not path.exists():
+            out.append(f)
+            continue
+        icon = Image.open(path).convert("RGBA")
+        caja = _caja(f)
+        if uso != "barra":
+            # los recursos del juego son finos (la gota del petróleo): el nuevo,
+            # cuadrado, quedaba chiquito; va en todo el cuadro con 1 px de aire
+            caja = (1, 1, f.width - 1, f.height - 1)
+        if uso == "barra":
+            placa = retexturar(_placa(f, int(pieza.get("borde", 4))), material)
+            placa.alpha_composite(_en_caja(icon, f.size, caja))
+            out.append(placa)
+        else:
+            dib = _en_caja(icon, f.size, caja)
+            if uso == "falta":
+                # como el juego: un resplandor de fuego alrededor y el dibujo
+                # apenas teñido (2026-10-28: el teñido entero quedaba rosa)
+                from PIL import ImageFilter
+                a = dib.getchannel("A").filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(1.2))
+                fuego = Image.new("RGBA", f.size, (240, 90, 20, 0))
+                fuego.putalpha(a.point(lambda v: min(255, v * 2)))
+                rojo = Image.new("RGBA", f.size, (230, 60, 40, 0))
+                rojo.putalpha(dib.getchannel("A").point(lambda v: v * 25 // 100))
+                dib.alpha_composite(rojo)
+                fuego.alpha_composite(dib)
+                dib = fuego
+            out.append(dib)
+        puestos += 1
+    return _join(out) if puestos else None
+
+
 def _escribir(img, rel: str) -> None:
     from tools.gen import art
     dest = SKIN / rel
@@ -256,6 +299,17 @@ def aplicar(originales: str | None = None) -> list[str]:
             img = retexturar(original, material)
         _escribir(img, rel)
         hechas.append(rel)
+    for pieza in spec.get("tiras") or []:
+        rel = pieza["textura"]
+        src = root / rel
+        if not src.exists():
+            faltan.append(rel)
+            continue
+        img = _tira(pieza, Image.open(src).convert("RGBA"), material)
+        if img is not None:
+            _escribir(img, rel)
+            hechas.append(rel)
+            con_icono.append(rel)
     lines = [f"piel: {len(hechas)} texturas escritas en {SKIN.relative_to(REPO)} ({len(con_icono)} con ícono nuevo)"]
     if faltan:
         lines.append(f"piel: sin original en {root}: {', '.join(faltan)}")
