@@ -411,21 +411,28 @@ namespaces:
             santuario para Gaia, o la cuba más grande que vio el mundo?'
         options:
         - name:
-            english: A Sanctuary for Gaia (a new neutral nation in the heart of the forest)
-            spanish: Un Santuario para Gaia (una nación neutral nueva en el corazón de la selva)
+            english: 'A Sanctuary for Gaia (a new neutral nation in the heart of the forest; +8 BioSteel, -30 saturation, +150 political power, an elite division, and every month the healthy forest feeds the vats)'
+            spanish: 'Un Santuario para Gaia (una nación neutral nueva en el corazón de la selva; +8 de Bioacero, -30 de saturación, +150 de poder político, una división de élite y cada mes la selva sana alimenta las cubas)'
           effects:
           - {effect: flag, value: EFE_conquista_proteger}
           - {effect: add_ideas, value: EFE_santuario_amazonico}
-          - {effect: add_variable, var: EFE_saturacion, value: -20}
+          # 2026-10-28 (pedido del usuario: "soltar a Gaia debería ser mucho más ventajoso en
+          # el efecto inmediato"): Gaia bendice las cubas
+          - {effect: add_variable, var: EFE_saturacion, value: -30}
+          - {effect: clamp, var: EFE_saturacion, min: 0, max: 100}
+          - {effect: add_variable, var: EFE_biosteel, value: 8}
+          - {effect: add_political_power, value: 150}
           - {effect: flag, value: EFE_santuario_pendiente}
-          ai_chance: 50
-        - name: {english: The Productive Jungle., spanish: La Selva Productiva.}
+          ai_chance: 70   # la IA elige lo que ahora conviene
+        - name: {english: 'The Productive Jungle (the forest will burn for a year, and the Caudillos will want it back).', spanish: 'La Selva Productiva (la selva va a arder un año, y los Caudillos la van a querer de vuelta).'}
           effects:
           - {effect: flag, value: EFE_conquista_explotar}
           - {effect: add_ideas, value: EFE_selva_explotada}
           - {effect: add_variable, var: EFE_biosteel, value: 5}
-          - {effect: add_variable, var: EFE_saturacion, value: 15}
-          ai_chance: 50
+          # 2026-10-28 (pedido del usuario: "un poco mayor el malus de anexar todo Brasil")
+          - {effect: add_variable, var: EFE_saturacion, value: 22}
+          - {effect: dynamic_modifier, id: EFE_selva_arde, days: 365}
+          ai_chance: 30
         src: user_design
       - id: 31
         trigger: effect

@@ -14991,6 +14991,32 @@ scripted_effects:
         not: {guarantees: ZSG}
       then:
       - {effect: guarantee, value: ZSG}
+    # 2026-10-28: la selva sana alimenta las cubas (un brote por mes mientras exista el
+    # Santuario bajo nuestra garantía)
+    - effect: if
+      when:
+        flag: EFE_santuario_creado
+        country_exists: ZSG
+        guarantees: ZSG
+      then:
+      - {effect: add_variable, var: EFE_brote, value: 1}
+    # 2026-10-28: en la selva explotada los Caudillos vuelven con más facilidad
+    - effect: if
+      when:
+        flag: EFE_conquista_explotar
+        date_after: 2102.1.1
+        not: {country_exists: ZWB}
+        not_flag: EFE_caudillos_selva
+        owns_state: [Amazonas]
+      then:
+      - effect: random
+        options:
+        - weight: 96
+          effects: []
+        - weight: 4
+          effects:
+          - {effect: flag, value: EFE_caudillos_selva, days: 365}
+          - {effect: event, id: meganations_mundo.103, days: 1}
   - id: FCU_pulso_del_directorio
     effects:
     - {effect: run, value: FCU_ala_de_obsidiana_revisar_saturacion}   # 2026-10-18: tope de la unidad única
@@ -19748,6 +19774,9 @@ scripted_effects:
           name: Guardaparques
           count: 4
           experience: 0.3
+    # 2026-10-28: el EFE también gana una división de élite de la Guardia del Santuario
+    - {effect: ensure_template, name: Guardia del Santuario, regiments: [infantry, infantry, infantry, infantry, infantry, infantry, artillery_brigade, artillery_brigade]}
+    - {effect: create_units, template: Guardia del Santuario, name: Guardia del Santuario, count: 1, experience: 0.75}
     - {effect: flag, value: EFE_santuario_creado}
     - {effect: event, id: meganations_efe.32, days: 1}
 

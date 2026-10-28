@@ -102,6 +102,14 @@ def emit(ctx: BuildContext) -> None:
     moved = 0
     capital_pool: list[Block] = []   # buques capitales de 1936, de cualquier dueño
 
+    # 2026-10-28 (Japón): copia de barcos de un país de 1936 para un país que nace en la
+    # partida (13_military -> forces.reserved_fleets: {TAG: {from, definition, copies, name}}).
+    # No se le sacan a nadie: es una copia que el evento carga con load_oob.
+    reserved_cfg = cut.get("reserved_fleets") or {}
+    if reserved_cfg:
+        pirates_cfg = dict(pirates_cfg)
+        for rtag, rc in reserved_cfg.items():   # el efecto existe siempre (vacío si no hay barcos)
+            pirates_cfg.setdefault(rtag, {"name": rc.get("name", f"{rtag}_flota"), "copies": rc.get("copies", 1)})
     for path in naval_files:
         root = _safe_parse(ctx, path)
         if root is None:
@@ -109,6 +117,24 @@ def emit(ctx: BuildContext) -> None:
         units = root.get("units")
         if not isinstance(units, Block):
             continue
+        for rtag, rc in reserved_cfg.items():
+            if not path.name.upper().startswith(str(rc.get("from", "")).upper() + "_"):
+                continue
+            for key, fleet in units.entries:
+                if key != "fleet" or not isinstance(fleet, Block):
+                    continue
+                kept = copy.deepcopy(fleet)
+                want = rc.get("definition")
+                for tf_key, tf in kept.entries:
+                    if tf_key == "task_force" and isinstance(tf, Block) and want:
+                        tf.entries = [(k, v) for k, v in tf.entries
+                                      if k != "ship" or (isinstance(v, Block) and _text(v.get("definition")) == want)]
+                kept.entries = [(k, v) for k, v in kept.entries
+                                if k != "task_force" or (isinstance(v, Block) and _count(v, "ship"))]
+                if _count(kept, "ship"):
+                    _retag(kept, rtag)
+                    pirate_fleets[rtag].add("fleet", kept)
+
         for ship in _ships_in(units):
             if _text(ship.get("definition")) in CAPITALS:
                 capital_pool.append(copy.deepcopy(ship))

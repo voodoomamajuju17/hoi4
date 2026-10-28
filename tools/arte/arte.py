@@ -123,6 +123,9 @@ STYLE = {
            "dark green, brown and orange",
     "ZAN": "the lawless lands: scavenged junk, welded scrap, raider graffiti without letters, "
            "rust, black and hazard yellow",
+    # 2026-10-28: el Shogunato de los Astilleros (Japón rebelde de la HSN)
+    "ZJP": "the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, "
+           "old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson",
     # imágenes que comparten varias potencias (eventos con `art`): sin colores de nadie
     "COMPARTIDOS": "the 2100 world of rival megastates: officers of different armies, maps, borders and "
                    "flags without symbols, neutral grey and ochre palette",

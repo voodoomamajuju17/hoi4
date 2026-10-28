@@ -158,7 +158,7 @@ military:
 # -----------------------------------------------------------------------------
 invasions:
   src: user_request
-  by_country: {HSN: 150}
+  by_country: {HSN: 150, ZJP: 120}   # 2026-10-28: el Shogunato también desembarca
   from_types: [conquer, prepare_for_war, declare_war]
 
 # -----------------------------------------------------------------------------
@@ -172,7 +172,7 @@ invasions:
 naval_cap:
   src: user_request
   default: 25
-  by_country: {HSN: 120, FCU: 60, NRE: 50, ASC: 50}
+  by_country: {HSN: 120, FCU: 60, NRE: 50, ASC: 50, ZJP: 50}
   # -2 y no -1: las ideas y la industria les suman bonos de astillero
   modifiers: {industrial_capacity_dockyard: -2.0}
   name: {english: "Fleet at Capacity", spanish: "Flota completa"}
@@ -267,7 +267,30 @@ destiny_wars:
   divisions: 30
   divisions_two_fronts: 50
 
+born_later: [ZSG, ZJP]   # nacen en la partida: sus planes se escriben igual
+
 plans:
+# 2026-10-28: el Shogunato de los Astilleros (24_japon.yaml) y la intervención del SHD
+- id: ZJP_la_guerra_de_los_astilleros
+  country: ZJP
+  lore: 'Recuperar las islas y los puertos que la Alta Mar todavía tiene; no buscar otras guerras.'
+  enable: {war_with: HSN}
+  strategies:
+  - {type: conquer, target: HSN, value: 150}
+- id: SHD_por_el_shogunato
+  country: SHD
+  lore: 'Eligió apoyar al Shogunato: va contra la Alta Mar cuando tenga la justificación.'
+  enable: {flag: SHD_apoya_shogunato}
+  strategies:
+  - {type: conquer, target: HSN, value: 120}
+  - {type: declare_war, target: HSN, value: 120}
+- id: SHD_por_la_alta_mar
+  country: SHD
+  lore: 'Eligió apoyar a la Alta Mar: va contra el Shogunato cuando tenga la justificación.'
+  enable: {flag: SHD_apoya_hsn}
+  strategies:
+  - {type: conquer, target: ZJP, value: 150}
+  - {type: declare_war, target: ZJP, value: 150}
 - id: EFE_el_amazonas
   country: EFE
   lore: 'Tiene la justificación desde el primer día: prepara la guerra y declara cuando esté listo.'

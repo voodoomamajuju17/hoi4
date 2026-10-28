@@ -132,6 +132,82 @@ units:
       picture_prefer: [tank, armor, armour]
 
   # ---------------------------------------------------------------------------
+  # 2026-10-28 (pedido del usuario: "reservar Tanque Pesado solo para Japón y crear la
+  # unidad Mecha: blindado velocísimo y de gran ataque"). El Shogunato no existe al
+  # arrancar: el desbloqueo lo corre su nacimiento (23_rumbo_2120.yaml). Nadie más
+  # investiga tanques pesados en toda la partida.
+  - id: ZJP_mecha
+    country: ZJP
+    src: user_request
+    name: {english: Mecha, spanish: Mecha}
+    lore:
+      english: >-
+        Ten metres of armour on two legs, a pilot wired into the spine and the
+        speed of a sports car. The shipyards of Kanto built them in secret for
+        thirty years, telling Singapore they were cranes. They were not cranes.
+      spanish: >-
+        Diez metros de blindaje sobre dos piernas, un piloto conectado a la
+        columna y la velocidad de un auto de carrera. Los astilleros de Kanto los
+        construyeron en secreto durante treinta años, diciéndole a Singapur que
+        eran grúas. No eran grúas.
+    sub_unit: heavy_armor
+    sub_unit_name: {english: Mecha Battalion, spanish: Batallón Mecha}
+    lock:
+      techs: [basic_heavy_tank_chassis, improved_heavy_tank_chassis, advanced_heavy_tank_chassis]
+      enables: []
+      hide_branch: false
+    names:
+      heavy_tank_chassis_1: {en: 'Mecha I: Ashigaru', es: 'Mecha I: Ashigaru'}
+      heavy_tank_chassis_1_short: {en: 'Mecha I', es: 'Mecha I'}
+      heavy_tank_chassis_2: {en: 'Mecha II: Samurai', es: 'Mecha II: Samurái'}
+      heavy_tank_chassis_2_short: {en: 'Mecha II', es: 'Mecha II'}
+      heavy_tank_chassis_3: {en: 'Mecha III: Daimyo', es: 'Mecha III: Daimio'}
+      heavy_tank_chassis_3_short: {en: 'Mecha III', es: 'Mecha III'}
+    art_levels:
+      2: [improved_heavy_tank_chassis, heavy_tank_chassis_2]
+      3: [advanced_heavy_tank_chassis, heavy_tank_chassis_3]
+    # el equipo mismo: más del doble de rápido que un pesado
+    equipment_stats:
+      heavy_tank_chassis_1: {maximum_speed: 2.2}
+      heavy_tank_chassis_2: {maximum_speed: 2.2}
+      heavy_tank_chassis_3: {maximum_speed: 2.2}
+    design:
+      name: Mecha
+      chassis: [heavy_tank_chassis_2, heavy_tank_chassis_1]
+      modules:
+        main_armament_slot: [high_velocity_cannon, heavy_cannon, medium_cannon]
+        turret_type_slot: [three_man, 3_man, two_man, 2_man]
+        suspension_type_slot: [torsion_bar, christie, bogie]
+        armor_type_slot: [welded_armor, welded, cast_armor, cast]
+        engine_type_slot: [diesel, petrol_electric, gasoline]
+        special_type_slot_1: [radio]
+        special_type_slot_2: [smoke_launcher, smoke]
+        special_type_slot_3: [extra_ammo, ammo_storage, wet_ammo]
+        special_type_slot_4: [sloped_armor, sloped, armor_skirts, skirt]
+      upgrades: {engine: 5, armor: 2}
+    grant:
+      equipment: 80
+      extra_equipment:
+      - {like: motorized_equipment, amount: 120}
+    template:
+      name: Mechas
+      regiments: [heavy_armor, heavy_armor, heavy_armor, heavy_armor, motorized, motorized]
+    divisions: 4
+    production: {amount: 40, factories: 3, progress: 0}
+    ai: []
+    cap:
+      special_forces: [heavy_armor]
+    spirit:
+      id: ZJP_los_mechas
+      name: {english: The Mechas of Kanto, spanish: Los Mechas de Kanto}
+      desc:
+        english: 'Walking armour, fast as cavalry. Mecha (and every variant on its chassis), compared with a heavy tank: more than twice the speed, speed +40% on top, soft attack +30%, hard attack +35%, breakthrough +30%. Counts as special forces: the cap is raised by 10% of all battalions.'
+        spanish: 'Blindaje que camina, rápido como la caballería. Mecha (y toda variante sobre su chasis), frente a un tanque pesado: más del doble de velocidad y encima +40%, ataque blando +30%, ataque duro +35%, ruptura +30%. Cuenta como fuerzas especiales: el tope sube 10% de todos los batallones.'
+      modifiers: {'?special_forces_cap': 0.1}
+      equipment_bonus: {maximum_speed: 0.4, soft_attack: 0.3, hard_attack: 0.35, breakthrough: 0.3}
+      picture_prefer: [tank, armor, armour]
+
+  # ---------------------------------------------------------------------------
   - id: SHD_dragon_del_canal
     country: SHD
     src: user_request

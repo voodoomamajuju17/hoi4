@@ -189,6 +189,11 @@ forces:
   # (x3) y los carga el evento de la rebelión (meganations_hsn.312).
   pirate_fleets:
     ZAS: {name: ZAS_flota_pirata, copies: 3}
+  # 2026-10-28 (pedido del usuario: "Japón tiene que arrancar relativamente fuerte, fijate si
+  # puede tener submarinos"): una copia de los submarinos de la flota japonesa de 1936 (x2)
+  # que carga el nacimiento del Shogunato. A la HSN no se le saca nada.
+  reserved_fleets:
+    ZJP: {from: JAP, definition: submarine, copies: 2, name: ZJP_flota_shogunato}
   air: false
 
 stockpile:

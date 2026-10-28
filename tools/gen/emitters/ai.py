@@ -49,6 +49,9 @@ def emit(ctx: BuildContext) -> None:
     spec = ctx.spec.raw.get("ai") or {}
     territory = ctx.data.get("territory") or {}
     alive = set(territory.values()) if territory else {c.tag for c in ctx.spec.countries}
+    # 2026-10-28: países que nacen en la partida (el Shogunato, el Santuario de Gaia):
+    # sus planes y los planes contra ellos se escriben igual (16_ai.yaml -> born_later)
+    alive |= set(spec.get("born_later") or []) & {c.tag for c in ctx.spec.countries}
     tags = {c.tag for c in ctx.spec.countries}
     known = ctx.vanilla.ai_strategy_types() if ctx.vanilla else None
     if known is None:

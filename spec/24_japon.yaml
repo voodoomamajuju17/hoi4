@@ -1,0 +1,1807 @@
+# =============================================================================
+# El Shogunato de los Astilleros (2026-10-28). Generado por un script a partir del
+# plan aprobado por el usuario; se puede editar a mano.
+#
+# Pedido: Japón se rebela contra la HSN cuando se dan DOS de estas tres: el enemigo
+# ocupa una región de las islas, la HSN perdió Singapur, la HSN tiene menos de 65% de
+# estabilidad. La HSN elige guerra sí / guerra no. Japón arranca fuerte (con
+# submarinos). Si hay guerra, el SHD elige intervenir por el Shogunato, por la HSN o no
+# intervenir (si no está ya en guerra con la HSN): +20% de astilleros por 120 días y a
+# los 60 días la justificación lista. Árbol: tres caminos de 5 (Zaibatsu, Yakuza,
+# Científicos SRS) y un final común, CyberShogun. Moneda propia: Giri. Unidad única:
+# el Mecha (el tanque pesado, solo de Japón; 20_unique_units.yaml).
+# =============================================================================
+extend_scripted_effects:
+  HSN_pulso_de_las_potencias:
+  - effect: if
+    when:
+      all:
+      - not:
+          global_flag: MEGANATIONS_japon_rebelde
+      - any:
+        - controls_state: &id001
+          - Kanto
+        - controls_state: &id002
+          - Kansai
+          - Kinki
+        - controls_state: &id003
+          - San'yo
+          - Chugoku
+          - Chūgoku
+        - controls_state: &id004
+          - San'in
+        - controls_state: &id005
+          - Shikoku
+        - controls_state: &id006
+          - Kyushu
+          - Kyūshū
+        - controls_state: &id007
+          - Tohoku
+          - Tōhoku
+        - controls_state: &id008
+          - Hokkaido
+          - Hokkaidō
+        - controls_state: &id009
+          - Okinawa
+        - controls_state: &id010
+          - Tokai
+          - Tōkai
+          - Chubu
+          - Chūbu
+        - controls_state: &id011
+          - Hokuriku
+      - any:
+        - all:
+          - &id012
+            any:
+            - all:
+              - owns_state: *id001
+              - not:
+                  controls_state: *id001
+            - all:
+              - owns_state: *id002
+              - not:
+                  controls_state: *id002
+            - all:
+              - owns_state: *id003
+              - not:
+                  controls_state: *id003
+            - all:
+              - owns_state: *id004
+              - not:
+                  controls_state: *id004
+            - all:
+              - owns_state: *id005
+              - not:
+                  controls_state: *id005
+            - all:
+              - owns_state: *id006
+              - not:
+                  controls_state: *id006
+            - all:
+              - owns_state: *id007
+              - not:
+                  controls_state: *id007
+            - all:
+              - owns_state: *id008
+              - not:
+                  controls_state: *id008
+            - all:
+              - owns_state: *id009
+              - not:
+                  controls_state: *id009
+            - all:
+              - owns_state: *id010
+              - not:
+                  controls_state: *id010
+            - all:
+              - owns_state: *id011
+              - not:
+                  controls_state: *id011
+          - &id013
+            lost_state:
+            - Singapore
+            - Straits Settlements
+        - all:
+          - *id012
+          - &id014
+            stability_below: 0.65
+        - all:
+          - *id013
+          - *id014
+    then:
+    - effect: global_flag
+      value: MEGANATIONS_japon_rebelde
+    - effect: event
+      id: meganations_japon.1
+      days: 1
+decisions:
+  categories:
+  - id: ZJP_giri_category
+    country: ZJP
+    icon_prefer:
+    - generic_political_actions
+    name:
+      english: The Giri of the Docks
+      spanish: El Giri de los Diques
+    desc:
+      english: 'GIRI: [?ZJP_giri] / 100\n\nThe debt of honour that holds the Shogunate together. Every month the docks pay 3, and the chosen road
+        pays 2 more (the Yakuza, 2 more at war). It buys ronin, Mechas, sabotage and the last step to the CyberShogun (50).\n80 or more: Blood
+        Debts (the clans collect on their own). 0: The Docks Hesitate.'
+      spanish: 'GIRI: [?ZJP_giri] / 100\n\nLa deuda de honor que sostiene al Shogunato. Cada mes los diques pagan 3, y el camino elegido paga
+        2 más (la Yakuza, 2 más en guerra). Compra rōnin, Mechas, sabotajes y el último paso hacia el CyberShogun (50).\n80 o más: Deudas de Sangre
+        (los clanes cobran por su cuenta). 0: Los Diques Dudan.'
+    src: user_request
+    decisions:
+    - id: ZJP_contratar_ronin
+      name:
+        english: Hire Ronin (15 Giri)
+        spanish: Contratar Rōnin (15 de Giri)
+      desc:
+        english: 'Masterless soldiers sell their swords to whoever pays the Giri: 2 divisions.'
+        spanish: 'Soldados sin señor venden su espada a quien pague el Giri: 2 divisiones.'
+      icon_prefer:
+      - generic_army_support
+      - generic_prepare_civil_war
+      cost: 0
+      cooldown_days: 120
+      available:
+        variable_at_least:
+          var: ZJP_giri
+          value: 15
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: -15
+      - effect: ensure_template
+        name: Ronin
+        regiments:
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+      - effect: create_units
+        template: Ronin
+        name: Ronin
+        count: 2
+        experience: 0.4
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            at_war: false
+      src: user_request
+    - id: ZJP_ceremonia_del_te
+      name:
+        english: Tea Ceremony with the Clans (10 Giri)
+        spanish: Ceremonia del Té con los Clanes (10 de Giri)
+      desc:
+        english: 'Settle some debts over a cup of tea: +5% stability and 50 political power.'
+        spanish: 'Saldar algunas deudas con una taza de té: +5% de estabilidad y 50 de poder político.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 90
+      available:
+        variable_at_least:
+          var: ZJP_giri
+          value: 10
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: -10
+      - effect: add_stability
+        value: 0.05
+      - effect: add_political_power
+        value: 50
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 3
+          when:
+            stability_below: 0.5
+        - factor: 3
+          when:
+            variable_at_least:
+              var: ZJP_giri
+              value: 70
+      src: user_request
+    - id: ZJP_linea_de_mechas
+      name:
+        english: The Mecha Line (20 Giri)
+        spanish: La Línea de Mechas (20 de Giri)
+      desc:
+        english: 120 days of factories working only for the Mechas.
+        spanish: 120 días de fábricas trabajando solo para los Mechas.
+      icon_prefer:
+      - generic_industry
+      - generic_construction
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least:
+          var: ZJP_giri
+          value: 20
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: -20
+      - effect: dynamic_modifier
+        id: ZJP_linea_mechas
+        days: 120
+      ai:
+        factor: 3
+      src: user_request
+    - id: ZJP_sabotear_singapur
+      name:
+        english: Sabotage Singapore's Yards (25 Giri)
+        spanish: Sabotear los Astilleros de Singapur (25 de Giri)
+      desc:
+        english: 'Sand in the cranes, fire in the warehouses: the High Seas build 20% fewer ships for 120 days.'
+        spanish: 'Arena en las grúas, fuego en los depósitos: la Alta Mar construye 20% menos barcos durante 120 días.'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 150
+      available:
+        all:
+        - variable_at_least:
+            var: ZJP_giri
+            value: 25
+        - war_with: HSN
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: -25
+      - effect: scope
+        target: HSN
+        effects:
+        - effect: dynamic_modifier
+          id: MEGANATIONS_astilleros_saboteados
+          days: 120
+      ai:
+        factor: 4
+      src: user_request
+      visible:
+        country_exists: HSN
+    - id: ZJP_contrato_megacorp
+      name:
+        english: Megacorp Contract (20 Giri)
+        spanish: Contrato con la Megacorporación (20 de Giri)
+      desc:
+        english: The zaibatsu build two factories in exchange for a seat on the council.
+        spanish: Los zaibatsu construyen dos fábricas a cambio de una silla en el consejo.
+      icon_prefer:
+      - generic_construction
+      - generic_industry
+      cost: 0
+      cooldown_days: 180
+      available:
+        variable_at_least:
+          var: ZJP_giri
+          value: 20
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: -20
+      - effect: build
+        building: industrial_complex
+        level: 2
+      ai:
+        factor: 3
+      src: user_request
+      visible:
+        focus: ZJP_zai_2
+    - id: ZJP_tributo_de_los_puertos
+      name:
+        english: Tribute of the Ports (+20 Giri)
+        spanish: Tributo de los Puertos (+20 de Giri)
+      desc:
+        english: 'The clans collect from every pier: +20 Giri, but the people notice (-4% stability).'
+        spanish: 'Los clanes cobran en cada muelle: +20 de Giri, pero la gente lo nota (-4% de estabilidad).'
+      icon_prefer:
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 90
+      available:
+        variable_below:
+          var: ZJP_giri
+          value: 70
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: 20
+      - &id015
+        effect: clamp
+        var: ZJP_giri
+        min: 0
+        max: 100
+      - effect: add_stability
+        value: -0.04
+      ai:
+        factor: 2
+        modifiers:
+        - factor: 0
+          when:
+            stability_below: 0.4
+      src: user_request
+      visible:
+        focus: ZJP_yak_2
+    - id: ZJP_clones_de_sendai
+      name:
+        english: The Clones of Sendai (20 Giri)
+        spanish: Los Clones de Sendai (20 de Giri)
+      desc:
+        english: 'The laboratories deliver a new batch: 40,000 men and 2 divisions that never ask questions.'
+        spanish: 'Los laboratorios entregan una tanda nueva: 40.000 hombres y 2 divisiones que nunca preguntan.'
+      icon_prefer:
+      - generic_army_support
+      - generic_research
+      cost: 0
+      cooldown_days: 150
+      available:
+        variable_at_least:
+          var: ZJP_giri
+          value: 20
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: -20
+      - effect: add_manpower
+        value: 40000
+      - effect: ensure_template
+        name: Clones de Sendai
+        regiments:
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - infantry
+        - artillery_brigade
+      - effect: create_units
+        template: Clones de Sendai
+        name: Clones
+        count: 2
+        experience: 0.2
+      ai:
+        factor: 3
+      src: user_request
+      visible:
+        focus: ZJP_srs_2
+    - id: ZJP_experimento_prohibido
+      name:
+        english: The Forbidden Experiment (30 Giri)
+        spanish: El Experimento Prohibido (30 de Giri)
+      desc:
+        english: Most of the time it works (research +20% for 180 days). Sometimes it does not (stability -10% and 20,000 dead).
+        spanish: La mayoría de las veces funciona (investigación +20% por 180 días). A veces no (estabilidad -10% y 20.000 muertos).
+      icon_prefer:
+      - generic_research
+      cost: 0
+      cooldown_days: 180
+      available:
+        variable_at_least:
+          var: ZJP_giri
+          value: 30
+      effects:
+      - effect: add_variable
+        var: ZJP_giri
+        value: -30
+      - effect: random
+        options:
+        - weight: 70
+          effects:
+          - effect: dynamic_modifier
+            id: ZJP_experimento_exito
+            days: 180
+        - weight: 30
+          effects:
+          - effect: add_stability
+            value: -0.1
+          - effect: add_manpower
+            value: -20000
+      ai:
+        factor: 1
+      src: user_request
+      visible:
+        focus: ZJP_srs_4
+  scripted_effects:
+  - id: ZJP_nacimiento
+    effects:
+    - effect: in_state
+      state: *id001
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id002
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id003
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id004
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id005
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id006
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id007
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id008
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id009
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id010
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: in_state
+      state: *id011
+      effects:
+      - effect: if
+        when:
+          all:
+          - owned_by: HSN
+          - controlled_by: HSN
+        then:
+        - effect: transfer_to
+          value: ZJP
+    - effect: if
+      when:
+        country_exists: ZJP
+      then:
+      - effect: scope
+        target: ZJP
+        effects:
+        - effect: inherit_technology
+          value: HSN
+        - effect: focus_tree
+          value: meganations_shogunato_focus
+        - effect: add_manpower
+          value: 150000
+        - effect: equipment
+          type: infantry_equipment
+          amount: 12000
+        - effect: equipment
+          type: support_equipment
+          amount: 1000
+        - effect: equipment
+          type: artillery_equipment
+          amount: 1000
+        - effect: ensure_template
+          name: Ashigaru de Kanto
+          regiments:
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - infantry
+          - artillery_brigade
+          - artillery_brigade
+        - effect: create_units
+          template: Ashigaru de Kanto
+          name: Ashigaru
+          count: 8
+          experience: 0.3
+        - effect: ensure_template
+          name: Infantería de los Diques
+          regiments:
+          - marine
+          - marine
+          - marine
+          - marine
+          - marine
+          - marine
+        - effect: create_units
+          template: Infantería de los Diques
+          name: Diques
+          count: 4
+          experience: 0.3
+        - effect: dynamic_modifier
+          id: ZJP_fervor
+          days: 365
+        - effect: add_political_power
+          value: 150
+        - effect: add_stability
+          value: 0.15
+        - effect: add_war_support
+          value: 0.2
+        - effect: add_variable
+          var: ZJP_giri
+          value: 25
+        - effect: event
+          id: meganations_japon.20
+          days: 30
+  - id: ZJP_pulso
+    effects:
+    - effect: add_variable
+      var: ZJP_giri
+      value: 3
+    - effect: if
+      when:
+        focus: ZJP_zai_1
+      then:
+      - effect: add_variable
+        var: ZJP_giri
+        value: 2
+    - effect: if
+      when:
+        focus: ZJP_yak_1
+      then:
+      - effect: add_variable
+        var: ZJP_giri
+        value: 2
+    - effect: if
+      when:
+        all:
+        - focus: ZJP_yak_1
+        - at_war: true
+      then:
+      - effect: add_variable
+        var: ZJP_giri
+        value: 2
+    - effect: if
+      when:
+        focus: ZJP_srs_1
+      then:
+      - effect: add_variable
+        var: ZJP_giri
+        value: 2
+    - *id015
+    - effect: if
+      when:
+        variable_at_least:
+          var: ZJP_giri
+          value: 80
+      then:
+      - effect: dynamic_modifier
+        id: ZJP_deudas_de_sangre
+      else:
+      - effect: remove_dynamic_modifier
+        id: ZJP_deudas_de_sangre
+    - effect: if
+      when:
+        variable_below:
+          var: ZJP_giri
+          value: 1
+      then:
+      - effect: dynamic_modifier
+        id: ZJP_astilleros_dudan
+      else:
+      - effect: remove_dynamic_modifier
+        id: ZJP_astilleros_dudan
+  dynamic_modifiers:
+  - id: ZJP_fervor
+    country: ZJP
+    name:
+      english: Shogunate Fervour
+      spanish: Fervor del Shogunato
+    desc:
+      english: The docks have risen. Every welder is a soldier and every crane a watchtower.
+      spanish: Los diques se levantaron. Cada soldador es un soldado y cada grúa una torre de vigía.
+    modifiers:
+      army_defence_factor: 0.15
+      army_org_factor: 0.1
+      recruitable_population_factor: 0.1
+      war_support_factor: 0.15
+  - id: MEGANATIONS_preparativos_guerra
+    country: null
+    name:
+      english: Preparations for War
+      spanish: Preparativos para la Guerra
+    desc:
+      english: 'The yards of the Directorate work around the clock: whoever wins in Japan will owe us.'
+      spanish: 'Los astilleros del Directorio trabajan día y noche: el que gane en Japón nos va a deber.'
+    modifiers:
+      industrial_capacity_dockyard: 0.2
+  - id: ZJP_deudas_de_sangre
+    country: ZJP
+    name:
+      english: Blood Debts
+      spanish: Deudas de Sangre
+    desc:
+      english: 'Too much Giri owed and never paid: the clans start collecting on their own.'
+      spanish: 'Demasiado Giri debido y nunca pagado: los clanes empiezan a cobrar por su cuenta.'
+    modifiers:
+      stability_factor: -0.1
+      political_power_gain: -0.2
+  - id: ZJP_astilleros_dudan
+    country: ZJP
+    name:
+      english: The Docks Hesitate
+      spanish: Los Diques Dudan
+    desc:
+      english: 'No Giri left: the shipyards wonder who they are really working for.'
+      spanish: 'No queda Giri: los astilleros se preguntan para quién trabajan en realidad.'
+    modifiers:
+      industrial_capacity_dockyard: -0.15
+      stability_factor: -0.05
+  - id: ZJP_linea_mechas
+    country: ZJP
+    name:
+      english: The Mecha Line
+      spanish: La Línea de Mechas
+    desc:
+      english: Three shifts, one assembly line, a Mecha every morning.
+      spanish: Tres turnos, una línea de montaje, un Mecha cada mañana.
+    modifiers:
+      industrial_capacity_factory: 0.08
+      production_factory_efficiency_gain_factor: 0.15
+  - id: MEGANATIONS_astilleros_saboteados
+    country: null
+    name:
+      english: Sabotaged Yards
+      spanish: Astilleros Saboteados
+    desc:
+      english: Someone poured sand into the cranes of Singapore. Nobody saw anything.
+      spanish: Alguien echó arena en las grúas de Singapur. Nadie vio nada.
+    modifiers:
+      industrial_capacity_dockyard: -0.2
+  - id: ZJP_zai_e1
+    country: ZJP
+    name:
+      english: Employees, Not Citizens
+      spanish: Empleados, No Ciudadanos
+    desc:
+      english: Every Japanese is now on a payroll. The factories roar; nobody leaves the line to go to the front.
+      spanish: Cada japonés está ahora en una nómina. Las fábricas rugen; nadie deja la línea para ir al frente.
+    modifiers:
+      industrial_capacity_factory: 0.2
+      production_factory_max_efficiency_factor: 0.1
+      stability_factor: -0.15
+      recruitable_population_factor: -0.3
+      political_power_gain: -0.2
+  - id: ZJP_zai_e2
+    country: ZJP
+    name:
+      english: The Megacorporations of Kanto
+      spanish: Las Megacorporaciones de Kanto
+    desc:
+      english: Four families, forty towers, one board. Overtime is patriotism; strikes are treason.
+      spanish: Cuatro familias, cuarenta torres, un directorio. Las horas extra son patriotismo; las huelgas, traición.
+    modifiers:
+      industrial_capacity_factory: 0.25
+      industrial_capacity_dockyard: 0.2
+      production_factory_max_efficiency_factor: 0.1
+      stability_factor: -0.2
+      war_support_factor: -0.15
+      recruitable_population_factor: -0.3
+  - id: ZJP_zai_e3
+    country: ZJP
+    name:
+      english: Shipyards on Three Shifts
+      spanish: Astilleros a Tres Turnos
+    desc:
+      english: Yokosuka never sleeps again, and neither does anyone who works there.
+      spanish: Yokosuka no vuelve a dormir, y nadie que trabaje ahí tampoco.
+    modifiers:
+      industrial_capacity_factory: 0.25
+      industrial_capacity_dockyard: 0.35
+      production_factory_max_efficiency_factor: 0.1
+      stability_factor: -0.25
+      war_support_factor: -0.15
+      recruitable_population_factor: -0.3
+      ?monthly_population: -0.2
+  - id: ZJP_zai_e4
+    country: ZJP
+    name:
+      english: Mechas in Series
+      spanish: Mechas en Serie
+    desc:
+      english: 'The company finally pays bonuses: in Mecha parts, but bonuses.'
+      spanish: 'La empresa por fin paga bonos: en piezas de Mecha, pero bonos.'
+    modifiers:
+      industrial_capacity_factory: 0.25
+      industrial_capacity_dockyard: 0.3
+      production_factory_efficiency_gain_factor: 0.25
+      production_factory_max_efficiency_factor: 0.1
+      stability_factor: -0.05
+      recruitable_population_factor: -0.1
+  - id: ZJP_zai_e5
+    country: ZJP
+    name:
+      english: The Eternal Keiretsu
+      spanish: El Keiretsu Eterno
+    desc:
+      english: Every company owns a piece of every other, and all of them own the state. Nobody falls alone, and nobody falls.
+      spanish: Cada empresa es dueña de un pedazo de las demás, y todas son dueñas del Estado. Nadie cae solo, y nadie cae.
+    modifiers:
+      industrial_capacity_factory: 0.3
+      industrial_capacity_dockyard: 0.35
+      production_factory_efficiency_gain_factor: 0.25
+      production_factory_max_efficiency_factor: 0.15
+      stability_factor: 0.1
+      consumer_goods_factor: -0.05
+  - id: ZJP_yak_e1
+    country: ZJP
+    name:
+      english: The Law of the Clans
+      spanish: La Ley de los Clanes
+    desc:
+      english: The police take orders from the oyabun now. Everything works, for a fee.
+      spanish: La policía ahora recibe órdenes de los oyabun. Todo funciona, por una comisión.
+    modifiers:
+      political_power_gain: 0.3
+      army_org_factor: 0.1
+      stability_factor: -0.2
+      industrial_capacity_factory: -0.1
+      research_speed_factor: -0.1
+  - id: ZJP_yak_e2
+    country: ZJP
+    name:
+      english: The Night Ports
+      spanish: Los Puertos de Noche
+    desc:
+      english: Every container pays twice. Every factory pays protection.
+      spanish: Cada contenedor paga dos veces. Cada fábrica paga protección.
+    modifiers:
+      political_power_gain: 0.4
+      war_support_factor: 0.15
+      army_attack_factor: 0.1
+      stability_factor: -0.2
+      industrial_capacity_factory: -0.15
+      research_speed_factor: -0.15
+  - id: ZJP_yak_e3
+    country: ZJP
+    name:
+      english: The Sworn Brothers
+      spanish: Los Hermanos Juramentados
+    desc:
+      english: Tattooed dockers with katanas and assault rifles. Brave, loyal, and nobody dares to audit them.
+      spanish: Estibadores tatuados con katanas y fusiles de asalto. Valientes, leales, y nadie se anima a auditarlos.
+    modifiers:
+      army_attack_factor: 0.2
+      army_org_factor: 0.15
+      recruitable_population_factor: 0.15
+      political_power_gain: 0.4
+      stability_factor: -0.25
+      industrial_capacity_factory: -0.15
+      research_speed_factor: -0.2
+  - id: ZJP_yak_e4
+    country: ZJP
+    name:
+      english: The Dock Network
+      spanish: La Red de los Muelles
+    desc:
+      english: A whistle in Osaka, an answer in Sapporo. The clans start paying their taxes, in their own way.
+      spanish: Un silbido en Osaka, una respuesta en Sapporo. Los clanes empiezan a pagar impuestos, a su manera.
+    modifiers:
+      army_attack_factor: 0.2
+      army_defence_factor: 0.15
+      political_power_gain: 0.3
+      industrial_capacity_factory: -0.05
+      research_speed_factor: -0.05
+  - id: ZJP_yak_e5
+    country: ZJP
+    name:
+      english: The Code of the Dragon
+      spanish: El Código del Dragón
+    desc:
+      english: Honour among thieves has become the law of the land, and it is a strict law.
+      spanish: El honor entre ladrones se volvió la ley del país, y es una ley estricta.
+    modifiers:
+      army_attack_factor: 0.25
+      army_defence_factor: 0.2
+      army_org_factor: 0.15
+      political_power_gain: 0.4
+      stability_factor: 0.15
+      war_support_factor: 0.2
+  - id: ZJP_srs_e1
+    country: ZJP
+    name:
+      english: Volunteers for Trials
+      spanish: Voluntarios para Ensayos
+    desc:
+      english: The pharmacy pays well for volunteers. Not all of them come back.
+      spanish: La farmacia paga bien a los voluntarios. No todos vuelven.
+    modifiers:
+      research_speed_factor: 0.2
+      ?monthly_population: -0.3
+      stability_factor: -0.1
+      war_support_factor: -0.15
+  - id: ZJP_srs_e2
+    country: ZJP
+    name:
+      english: The Laboratories Without Ethics
+      spanish: Los Laboratorios Sin Ética
+    desc:
+      english: Below the pharmacy, the real work. Nobody asks where the test subjects come from.
+      spanish: Debajo de la farmacia, el trabajo de verdad. Nadie pregunta de dónde salen los sujetos de prueba.
+    modifiers:
+      research_speed_factor: 0.3
+      ?monthly_population: -0.4
+      stability_factor: -0.2
+      war_support_factor: -0.15
+  - id: ZJP_srs_e3
+    country: ZJP
+    name:
+      english: The Combat Clones
+      spanish: Los Clones de Combate
+    desc:
+      english: Identical soldiers by the thousand, grown in vats. They obey; they do not improvise.
+      spanish: Soldados idénticos de a miles, crecidos en cubas. Obedecen; no improvisan.
+    modifiers:
+      research_speed_factor: 0.3
+      recruitable_population_factor: 0.3
+      army_org_factor: -0.1
+      ?monthly_population: -0.3
+      stability_factor: -0.2
+  - id: ZJP_srs_e4
+    country: ZJP
+    name:
+      english: The Forbidden Experiment
+      spanish: El Experimento Prohibido
+    desc:
+      english: The doors in the basement have no handle on the outside, but the clones have finally learned to think.
+      spanish: Las puertas del sótano no tienen picaporte del lado de afuera, pero los clones por fin aprendieron a pensar.
+    modifiers:
+      research_speed_factor: 0.35
+      recruitable_population_factor: 0.2
+      stability_factor: -0.05
+  - id: ZJP_srs_e5
+    country: ZJP
+    name:
+      english: The Mind in the Machine
+      spanish: La Mente en la Máquina
+    desc:
+      english: 'SRS''s last experiment worked: minds that do not need bodies, clones that do not need sleep.'
+      spanish: 'El último experimento de SRS funcionó: mentes que no necesitan cuerpo, clones que no necesitan dormir.'
+    modifiers:
+      research_speed_factor: 0.4
+      recruitable_population_factor: 0.25
+      army_org_factor: 0.1
+      stability_factor: 0.1
+  - id: ZJP_experimento_exito
+    country: ZJP
+    name:
+      english: The Experiment Worked
+      spanish: El Experimento Funcionó
+    desc:
+      english: Nobody asks what it cost. The results are on every desk.
+      spanish: Nadie pregunta cuánto costó. Los resultados están en todos los escritorios.
+    modifiers:
+      research_speed_factor: 0.2
+  - id: ZJP_cybershogunato
+    country: ZJP
+    name:
+      english: The CyberShogunate
+      spanish: El CyberShogunato
+    desc:
+      english: One mind in one machine, and the machine commands the islands.
+      spanish: Una mente en una máquina, y la máquina gobierna las islas.
+    modifiers:
+      research_speed_factor: 0.1
+      industrial_capacity_factory: 0.15
+      industrial_capacity_dockyard: 0.15
+      army_attack_factor: 0.15
+      army_org_factor: 0.15
+      stability_factor: 0.15
+      war_support_factor: 0.15
+  variable_names:
+    ZJP_giri:
+      english: Giri
+      spanish: Giri
+events:
+  namespaces:
+    meganations_japon:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Kanto Rises
+          spanish: Kanto se Levanta
+        desc:
+          english: 'The Market is losing, and in Kanto they have noticed first. At dawn Admiral Kaede Mori refused to hand over the Yokosuka fleet,
+            raised an old banner over the docks and declared that the shipyards of Japan answer to her now. The industrial families back her,
+            the clans of the ports back her, and in Sendai a pharmaceutical company has offered her its laboratories. They call it the Shipyard
+            Shogunate. The insurers ask the only question that matters: do we fight for Japan, or do we let it go?'
+          spanish: 'El Mercado está perdiendo, y en Kanto se dieron cuenta primero. Al amanecer la almirante Kaede Mori se negó a entregar la
+            flota de Yokosuka, izó una bandera vieja sobre los diques y declaró que los astilleros de Japón ahora le responden a ella. La apoyan
+            las familias industriales, la apoyan los clanes de los puertos, y en Sendai una farmacéutica le ofreció sus laboratorios. Lo llaman
+            el Shogunato de los Astilleros. Las aseguradoras hacen la única pregunta que importa: ¿peleamos por Japón, o lo dejamos ir?'
+        options:
+        - name:
+            english: Japan is ours. Crush the Shogunate.
+            spanish: Japón es nuestro. Aplastar al Shogunato.
+          effects:
+          - effect: run
+            value: ZJP_nacimiento
+          - effect: if
+            when:
+              country_exists: ZJP
+            then:
+            - &id016
+              effect: scope
+              target: ZJP
+              effects:
+              - effect: run
+                value: ZJP_mecha_desbloqueo
+              - effect: run
+                value: MEGANATIONS_flota_pirata_ZJP
+            - effect: scope
+              target: ZJP
+              effects:
+              - effect: declare_war
+                target: HSN
+                type: annex_everything
+            - effect: if
+              when:
+                all:
+                - country_exists: SHD
+                - country:
+                    tag: SHD
+                    when:
+                      not:
+                        war_with: HSN
+              then:
+              - effect: event
+                id: meganations_japon.10
+                days: 3
+                target: SHD
+            - effect: every_country
+              when:
+                is_ai: false
+              effects:
+              - effect: event
+                id: meganations_japon.2
+                days: 1
+          ai_chance:
+            base: 50
+            modifiers:
+            - factor: 2
+              when:
+                divisions_at_least: 60
+        - name:
+            english: Let Japan go. We cannot fight on two fronts.
+            spanish: Dejar ir a Japón. No podemos pelear en dos frentes.
+          effects:
+          - effect: run
+            value: ZJP_nacimiento
+          - effect: if
+            when:
+              country_exists: ZJP
+            then:
+            - *id016
+            - effect: relation
+              value: ZJP
+              type: non_aggression_pact
+            - effect: add_stability
+              value: 0.08
+            - effect: every_country
+              when:
+                is_ai: false
+              effects:
+              - effect: event
+                id: meganations_japon.3
+                days: 1
+          ai_chance:
+            base: 30
+            modifiers:
+            - factor: 3
+              when:
+                not:
+                  divisions_at_least: 25
+        src: user_request
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: War in the Shipyards
+          spanish: Guerra en los Astilleros
+        desc:
+          english: The High Seas have refused to let Japan go, and the Shipyard Shogunate answers with Mechas and submarines. The busiest docks
+            on Earth have become a front line.
+          spanish: La Alta Mar se negó a dejar ir a Japón, y el Shogunato de los Astilleros contesta con Mechas y submarinos. Los diques más transitados
+            de la Tierra se volvieron una línea de frente.
+        options:
+        - name:
+            english: A civil war at sea.
+            spanish: Una guerra civil en el mar.
+          effects: []
+        src: user_request
+        art: meganations_japon.1
+      - id: 3
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Shogunate Goes Free
+          spanish: El Shogunato Queda Libre
+        desc:
+          english: The High Seas have let Japan go without a fight. The Shipyard Shogunate is born with a signature, a non-aggression pact and
+            a fleet of submarines nobody knew existed.
+          spanish: La Alta Mar dejó ir a Japón sin pelear. El Shogunato de los Astilleros nace con una firma, un pacto de no agresión y una flota
+            de submarinos que nadie sabía que existía.
+        options:
+        - name:
+            english: Japan is free again.
+            spanish: Japón vuelve a ser libre.
+          effects: []
+        src: user_request
+        art: meganations_japon.1
+      - id: 10
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The War in Japan
+          spanish: La Guerra en Japón
+        desc:
+          english: 'Japan is burning: the Shipyard Shogunate has risen against the High Seas. Our rival is bleeding, and whoever helps the winner
+            will have a debtor in the most valuable docks of the Pacific. The Council of the Directorate must choose: back the Shogunate, back
+            the Market, or watch from the shore.'
+          spanish: 'Japón arde: el Shogunato de los Astilleros se levantó contra la Alta Mar. Nuestro rival se desangra, y el que ayude al ganador
+            va a tener un deudor en los diques más valiosos del Pacífico. El Consejo del Directorio tiene que elegir: apoyar al Shogunato, apoyar
+            al Mercado, o mirar desde la orilla.'
+        options:
+        - name:
+            english: Back the Shogunate.
+            spanish: Apoyar al Shogunato.
+          effects:
+          - effect: flag
+            value: SHD_apoya_shogunato
+          - effect: dynamic_modifier
+            id: MEGANATIONS_preparativos_guerra
+            days: 120
+          - effect: event
+            id: meganations_japon.11
+            days: 60
+          ai_chance: 60
+        - name:
+            english: Back the High Seas.
+            spanish: Apoyar a la Alta Mar.
+          effects:
+          - effect: flag
+            value: SHD_apoya_hsn
+          - effect: dynamic_modifier
+            id: MEGANATIONS_preparativos_guerra
+            days: 120
+          - effect: event
+            id: meganations_japon.11
+            days: 60
+          ai_chance: 10
+        - name:
+            english: Watch from the shore.
+            spanish: Mirar desde la orilla.
+          effects:
+          - effect: add_political_power
+            value: 50
+          ai_chance: 30
+        src: user_request
+      - id: 11
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Justification Is Ready
+          spanish: La Justificación Está Lista
+        desc:
+          english: 'Sixty days of preparations, and the yards of the Directorate have done their part. The diplomats have done theirs: the case
+            for war is written, signed and ready.'
+          spanish: 'Sesenta días de preparativos, y los astilleros del Directorio hicieron su parte. Los diplomáticos hicieron la suya: el motivo
+            de la guerra está escrito, firmado y listo.'
+        options:
+        - name:
+            english: To war.
+            spanish: A la guerra.
+          effects:
+          - effect: if
+            when:
+              all:
+              - flag: SHD_apoya_shogunato
+              - country_exists: HSN
+              - not:
+                  war_with: HSN
+            then:
+            - effect: wargoal
+              target: HSN
+              type: annex_everything
+          - effect: if
+            when:
+              all:
+              - flag: SHD_apoya_hsn
+              - country_exists: ZJP
+              - not:
+                  war_with: ZJP
+            then:
+            - effect: wargoal
+              target: ZJP
+              type: annex_everything
+        src: user_request
+        art: meganations_japon.10
+      - id: 20
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Giri of the Docks
+          spanish: El Giri de los Diques
+        desc:
+          english: Monthly pulse.
+          spanish: Pulso mensual.
+        options:
+        - name:
+            english: OK
+            spanish: OK
+          effects:
+          - effect: run
+            value: ZJP_pulso
+          - effect: run
+            value: MEGANATIONS_unidades_unicas_ia
+          - effect: event
+            id: meganations_japon.20
+            days: 30
+        src: user_request
+        no_art: true
+        hidden: true
+      - id: 30
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The CyberShogun Awakens
+          spanish: Despierta el CyberShogun
+        desc:
+          english: 'At midnight the lights of every port in Japan went out at once, and came back on in a single rhythm, like a heartbeat. In
+            dry dock number one of Yokosuka, the greatest Mecha ever built opened its eyes. Inside there is no pilot: there is a mind, uploaded
+            and multiplied, wired to every crane, every warship and every Mecha of the islands. [Root.GetLeader] speaks through it with a thousand
+            voices. The Shipyard Shogunate is gone: [Root.GetName] has been born, and it does not sleep.'
+          spanish: 'A la medianoche se apagaron a la vez las luces de todos los puertos de Japón, y volvieron a prenderse con un solo ritmo, como
+            un latido. En el dique seco número uno de Yokosuka, el Mecha más grande jamás construido abrió los ojos. Adentro no hay piloto: hay
+            una mente, subida y multiplicada, conectada a cada grúa, cada buque y cada Mecha de las islas. [Root.GetLeader] habla a través de
+            él con mil voces. El Shogunato de los Astilleros ya no existe: nació [Root.GetName], y no duerme.'
+        options:
+        - name:
+            english: The machine commands.
+            spanish: La máquina manda.
+          effects:
+          - effect: every_country
+            when:
+              is_ai: false
+            effects:
+            - effect: event
+              id: meganations_japon.31
+              days: 1
+        src: user_request
+      - id: 31
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Shogun in the Machine
+          spanish: Un Shogun en la Máquina
+        desc:
+          english: 'Japan has a CyberShogun now: a single mind inside a Mecha the size of a tower, commanding every shipyard of the islands. Its
+            envoys bow politely and never blink.'
+          spanish: 'Japón tiene ahora un CyberShogun: una sola mente adentro de un Mecha del tamaño de una torre, al mando de cada astillero de
+            las islas. Sus enviados saludan con una reverencia y nunca parpadean.'
+        options:
+        - name:
+            english: Keep an eye on the Pacific.
+            spanish: Vigilar el Pacífico.
+          effects: []
+        src: user_request
+        art: meganations_japon.30
+leaders:
+  characters:
+  - id: ZJP_kaede_mori
+    country: ZJP
+    src: user_request
+    name:
+      regnal:
+        english: Shogun-Admiral Kaede Mori
+        spanish: Shōgun Almirante Kaede Mori
+    born: 2061
+    lore: Almirante de la base de Yokosuka. Cuando Singapur ordenó entregar la flota de Kanto, apagó la radio, izó una bandera vieja y les dijo
+      a los astilleros que desde ese día respondían a ella.
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: []
+    portrait:
+      status: placeholder
+      path: gfx/leaders/ZJP/kaede_mori.dds
+  - id: ZJP_daisuke_kanemura
+    country: ZJP
+    src: user_request
+    name:
+      regnal:
+        english: CyberShogun Daisuke Kanemura
+        spanish: CyberShogun Daisuke Kanemura
+    born: 2058
+    lore: 'Heredero de la más vieja de las familias zaibatsu de Kanto: traje negro, anteojos verdes, el logo de la corporación en la solapa. Habla
+      en trimestres y en toneladas. Al final del camino su mente se sube al Mecha más grande del mundo y la corporación se vuelve el Estado.'
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: []
+    portrait:
+      status: placeholder
+      path: gfx/leaders/ZJP/daisuke_kanemura.dds
+    recruit_at_start: false
+  - id: ZJP_ryuji_sakaguchi
+    country: ZJP
+    src: user_request
+    name:
+      regnal:
+        english: CyberShogun Ryuji Sakaguchi
+        spanish: CyberShogun Ryūji Sakaguchi
+    born: 2055
+    lore: 'Oyabun del clan que maneja los muelles de Osaka desde hace tres generaciones: tatuajes de dragón hasta el cuello, katana en la oficina,
+      neón rojo en la puerta. Le faltan dos falanges y le sobran amigos en cada puerto. Al final del camino su mente se sube al Mecha y el código
+      del clan se vuelve la ley.'
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: []
+    portrait:
+      status: placeholder
+      path: gfx/leaders/ZJP/ryuji_sakaguchi.dds
+    recruit_at_start: false
+  - id: ZJP_kenzo_akabane
+    country: ZJP
+    src: user_request
+    name:
+      regnal:
+        english: CyberShogun Kenzo Akabane
+        spanish: CyberShogun Kenzō Akabane
+    born: 2063
+    lore: Presidente de SRS, la farmacéutica más respetada de Sendai. Bata blanca impecable y una sonrisa de propaganda; en los sótanos crecen
+      clones y se hacen experimentos que ningún comité aprobaría, por eso no tiene comité. Al final del camino es el primero en subir su propia
+      mente a la máquina.
+    roles:
+      country_leader:
+        ideology: imperial_restoration
+        traits: []
+    portrait:
+      status: placeholder
+      path: gfx/leaders/ZJP/kenzo_akabane.dds
+    recruit_at_start: false
+cosmetic_tags:
+- id: ZJP_CYBER_KANEMURA
+  parent: ZJP
+  name:
+    english: The Kanemura CyberShogunate
+    spanish: El CyberShogunato Kanemura
+  adjective:
+    english: Kanemura
+    spanish: Kanemura
+  art: corporate emerald-green field with a chrome rising-sun disc drawn as a circuit, a stylised zaibatsu-style corporate diamond logo in white
+    over it; glossy, cold, corporate dystopia.
+  src: user_request
+- id: ZJP_CYBER_SAKAGUCHI
+  parent: ZJP
+  name:
+    english: The Sakaguchi CyberShogunate
+    spanish: El CyberShogunato Sakaguchi
+  adjective:
+    english: Sakaguchi
+    spanish: Sakaguchi
+  art: black field with a crimson neon rising-sun disc and a white coiled dragon crossing it, a katana silhouette below; menacing yakuza neon
+    style.
+  src: user_request
+- id: ZJP_CYBER_AKABANE
+  parent: ZJP
+  name:
+    english: The Akabane CyberShogunate
+    spanish: El CyberShogunato Akabane
+  adjective:
+    english: Akabane
+    spanish: Akabane
+  art: sterile white field with a toxic violet rising-sun disc ringed by a biohazard-like trefoil drawn as a double helix; clinical and sinister.
+  src: user_request
+focus_trees:
+  trees:
+    ZJP:
+      id: meganations_shogunato_focus
+      default: false
+      shared: true
+      src: user_request
+      branches:
+      - id: ruta_zaibatsu
+        name:
+          english: The Zaibatsu Road
+          spanish: Ruta Zaibatsu
+        focuses:
+        - id: ZJP_zai_1
+          name:
+            english: The Council of the Zaibatsu
+            spanish: El Consejo de los Zaibatsu
+          days: 70
+          icon: GFX_goal_generic_construct_civ_factory
+          desc:
+            english: 'Four industrial families take the seats of the council and put every Japanese on a payroll. Factories +20%, but recruitable
+              population -30%, stability -15% and political power -20%: employees do not go to war.'
+            spanish: 'Cuatro familias industriales ocupan las sillas del consejo y ponen a cada japonés en una nómina. Fábricas +20%, pero población
+              reclutable -30%, estabilidad -15% y poder político -20%: los empleados no van a la guerra.'
+          reward:
+          - effect: dynamic_modifier
+            id: ZJP_zai_e1
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          - effect: add_political_power
+            value: 100
+          mutually_exclusive:
+          - ZJP_yak_1
+          - ZJP_srs_1
+          ai:
+            factor: 1
+        - id: ZJP_zai_2
+          name:
+            english: The Megacorporations of Kanto
+            spanish: Las Megacorporaciones de Kanto
+          days: 70
+          icon: GFX_goal_generic_industry
+          desc:
+            english: Glass towers with the family logos over every city. Factories +25% and shipyards +20%; stability -20% and war support -15%.
+              Unlocks the Megacorp Contract.
+            spanish: Torres de vidrio con los logos de las familias sobre cada ciudad. Fábricas +25% y astilleros +20%; estabilidad -20% y apoyo
+              a la guerra -15%. Abre el Contrato con la Megacorporación.
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_zai_e1
+          - effect: dynamic_modifier
+            id: ZJP_zai_e2
+          prerequisites:
+          - ZJP_zai_1
+        - id: ZJP_zai_3
+          name:
+            english: Shipyards on Three Shifts
+            spanish: Astilleros a Tres Turnos
+          days: 70
+          icon: GFX_goal_generic_navy_doctrines_tactics
+          desc:
+            english: 'Yokosuka, Kure and Sasebo never sleep again. Shipyards +35%; stability -25% and fewer births: nobody has time for a family.'
+            spanish: 'Yokosuka, Kure y Sasebo no vuelven a dormir. Astilleros +35%; estabilidad -25% y menos nacimientos: nadie tiene tiempo para
+              una familia.'
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_zai_e2
+          - effect: dynamic_modifier
+            id: ZJP_zai_e3
+          - effect: navy_experience
+            value: 50
+          prerequisites:
+          - ZJP_zai_2
+        - id: ZJP_zai_4
+          name:
+            english: Mechas in Series
+            spanish: Mechas en Serie
+          days: 70
+          icon: GFX_goal_generic_build_tank
+          desc:
+            english: 'What was built by hand in secret is now stamped by the thousand. The company finally pays bonuses: the penalties almost
+              disappear (stability -5%, recruitable population -10%) and efficiency grows 25% faster.'
+            spanish: 'Lo que se hacía a mano y en secreto ahora se estampa de a miles. La empresa por fin paga bonos: los castigos casi desaparecen
+              (estabilidad -5%, población reclutable -10%) y la eficiencia crece 25% más rápido.'
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_zai_e3
+          - effect: dynamic_modifier
+            id: ZJP_zai_e4
+          - effect: army_experience
+            value: 75
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          prerequisites:
+          - ZJP_zai_3
+        - id: ZJP_zai_5
+          name:
+            english: The Eternal Keiretsu
+            spanish: El Keiretsu Eterno
+          days: 70
+          icon: GFX_goal_generic_positive_trade_relations
+          desc:
+            english: 'Every company owns a piece of the state. No penalties left: factories +30%, shipyards +35%, stability +10%.'
+            spanish: 'Cada empresa es dueña de un pedazo del Estado. No quedan castigos: fábricas +30%, astilleros +35%, estabilidad +10%.'
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_zai_e4
+          - effect: dynamic_modifier
+            id: ZJP_zai_e5
+          - effect: add_political_power
+            value: 150
+          - effect: add_variable
+            var: ZJP_giri
+            value: 20
+          - effect: build
+            building: industrial_complex
+            level: 3
+          prerequisites:
+          - ZJP_zai_4
+      - id: ruta_yakuza
+        name:
+          english: The Yakuza Road
+          spanish: Ruta Yakuza
+        focuses:
+        - id: ZJP_yak_1
+          name:
+            english: The Pact of the Oyabun
+            spanish: El Pacto de los Oyabun
+          days: 70
+          icon: GFX_goal_generic_political_pressure
+          desc:
+            english: The clans that ran the ports for Singapore now run the country for the Shogun. Political power +30%, but stability -20%,
+              factories -10% (protection money) and research -10%.
+            spanish: Los clanes que manejaban los puertos para Singapur ahora manejan el país para el Shogun. Poder político +30%, pero estabilidad
+              -20%, fábricas -10% (la protección se paga) e investigación -10%.
+          reward:
+          - effect: dynamic_modifier
+            id: ZJP_yak_e1
+          - effect: add_variable
+            var: ZJP_giri
+            value: 15
+          mutually_exclusive:
+          - ZJP_zai_1
+          - ZJP_srs_1
+          ai:
+            factor: 1
+        - id: ZJP_yak_2
+          name:
+            english: The Night Ports
+            spanish: Los Puertos de Noche
+          days: 70
+          icon: GFX_goal_generic_trade
+          desc:
+            english: Red neon over the docks, low cars without lights, containers that never pass customs. Political power +40%, attack +10%;
+              factories -15%, research -15%. Unlocks the Tribute of the Ports.
+            spanish: Neón rojo sobre los muelles, autos bajos sin luces, contenedores que nunca pasan por la aduana. Poder político +40%, ataque
+              +10%; fábricas -15%, investigación -15%. Abre el Tributo de los Puertos.
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_yak_e1
+          - effect: dynamic_modifier
+            id: ZJP_yak_e2
+          prerequisites:
+          - ZJP_yak_1
+        - id: ZJP_yak_3
+          name:
+            english: The Sworn Brothers
+            spanish: Los Hermanos Juramentados
+          days: 70
+          icon: GFX_goal_generic_allies_build_infantry
+          desc:
+            english: 'Tattooed dockers with katanas and rifles take the oath: 60,000 men and 4 divisions. Attack +20%, organisation +15%; stability
+              -25%, research -20%.'
+            spanish: 'Estibadores tatuados con katanas y fusiles prestan juramento: 60.000 hombres y 4 divisiones. Ataque +20%, organización +15%;
+              estabilidad -25%, investigación -20%.'
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_yak_e2
+          - effect: dynamic_modifier
+            id: ZJP_yak_e3
+          - effect: add_manpower
+            value: 60000
+          - effect: ensure_template
+            name: Hermandad
+            regiments:
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+          - effect: create_units
+            template: Hermandad
+            name: Hermandad
+            count: 4
+            experience: 0.4
+          prerequisites:
+          - ZJP_yak_2
+        - id: ZJP_yak_4
+          name:
+            english: The Dock Network
+            spanish: La Red de los Muelles
+          days: 70
+          icon: GFX_goal_generic_defence
+          desc:
+            english: The clans start paying their taxes, in their own way. The penalties almost disappear (factories and research -5%) and defence
+              rises 15%.
+            spanish: Los clanes empiezan a pagar sus impuestos, a su manera. Los castigos casi desaparecen (fábricas e investigación -5%) y la
+              defensa sube 15%.
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_yak_e3
+          - effect: dynamic_modifier
+            id: ZJP_yak_e4
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          - effect: add_war_support
+            value: 0.1
+          prerequisites:
+          - ZJP_yak_3
+        - id: ZJP_yak_5
+          name:
+            english: The Code of the Dragon
+            spanish: El Código del Dragón
+          days: 70
+          icon: GFX_goal_generic_national_unity
+          desc:
+            english: 'Honour among thieves becomes the law of the land. No penalties left: attack +25%, defence +20%, stability +15%, war support
+              +20%.'
+            spanish: 'El honor entre ladrones se vuelve la ley del país. No quedan castigos: ataque +25%, defensa +20%, estabilidad +15%, apoyo
+              a la guerra +20%.'
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_yak_e4
+          - effect: dynamic_modifier
+            id: ZJP_yak_e5
+          - effect: add_variable
+            var: ZJP_giri
+            value: 20
+          - effect: army_experience
+            value: 75
+          prerequisites:
+          - ZJP_yak_4
+      - id: ruta_srs
+        name:
+          english: The SRS Scientists Road
+          spanish: Ruta Científicos SRS
+        focuses:
+        - id: ZJP_srs_1
+          name:
+            english: The Sendai Pharmaceutical
+            spanish: La Farmacéutica de Sendai
+          days: 70
+          icon: GFX_goal_generic_research
+          desc:
+            english: 'To the public, SRS makes medicines; Doctor Akabane now advises the Shogun. Research +20% and one research slot, but the
+              pharmacy pays volunteers for trials: fewer births, stability -10%, war support -15%.'
+            spanish: 'Para el público, SRS fabrica medicamentos; el doctor Akabane ahora asesora al Shogun. Investigación +20% y un espacio de
+              investigación, pero la farmacia les paga a voluntarios para sus ensayos: menos nacimientos, estabilidad -10%, apoyo a la guerra
+              -15%.'
+          reward:
+          - effect: dynamic_modifier
+            id: ZJP_srs_e1
+          - effect: add_research_slot
+            value: 1
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          mutually_exclusive:
+          - ZJP_zai_1
+          - ZJP_yak_1
+          ai:
+            factor: 1
+        - id: ZJP_srs_2
+          name:
+            english: The Laboratories Without Ethics
+            spanish: Los Laboratorios Sin Ética
+          days: 70
+          icon: GFX_goal_generic_scientific_exchange
+          desc:
+            english: Lab coats, biohazard doors and vats in the basement. Research +30%; stability -20% and even fewer births. Unlocks the Clones
+              of Sendai.
+            spanish: Batas, puertas con el símbolo de riesgo biológico y cubas en el sótano. Investigación +30%; estabilidad -20% y todavía menos
+              nacimientos. Abre los Clones de Sendai.
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_srs_e1
+          - effect: dynamic_modifier
+            id: ZJP_srs_e2
+          prerequisites:
+          - ZJP_srs_1
+        - id: ZJP_srs_3
+          name:
+            english: The Combat Clones
+            spanish: Los Clones de Combate
+          days: 70
+          icon: GFX_goal_generic_army_doctrines
+          desc:
+            english: 'Identical soldiers grown in vats: 50,000 men and 3 divisions. Recruitable population +30%, but organisation -10%: clones
+              obey, they do not improvise.'
+            spanish: 'Soldados idénticos crecidos en cubas: 50.000 hombres y 3 divisiones. Población reclutable +30%, pero organización -10%:
+              los clones obedecen, no improvisan.'
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_srs_e2
+          - effect: dynamic_modifier
+            id: ZJP_srs_e3
+          - effect: add_manpower
+            value: 50000
+          - effect: ensure_template
+            name: Clones de Sendai
+            regiments:
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - artillery_brigade
+          - effect: create_units
+            template: Clones de Sendai
+            name: Clones
+            count: 3
+            experience: 0.2
+          prerequisites:
+          - ZJP_srs_2
+        - id: ZJP_srs_4
+          name:
+            english: The Forbidden Experiment
+            spanish: El Experimento Prohibido
+          days: 70
+          icon: GFX_goal_generic_research
+          desc:
+            english: The clones finally learn to think. The penalties almost disappear (stability -5%); research +35%. Unlocks the Forbidden Experiment.
+            spanish: Los clones por fin aprenden a pensar. Los castigos casi desaparecen (estabilidad -5%); investigación +35%. Abre el Experimento
+              Prohibido.
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_srs_e3
+          - effect: dynamic_modifier
+            id: ZJP_srs_e4
+          - effect: add_political_power
+            value: 100
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          prerequisites:
+          - ZJP_srs_3
+        - id: ZJP_srs_5
+          name:
+            english: The Mind in the Machine
+            spanish: La Mente en la Máquina
+          days: 70
+          icon: GFX_goal_generic_scientific_exchange
+          desc:
+            english: 'SRS''s last experiment works: minds without bodies, clones without sleep. No penalties left: research +40%, organisation
+              +10%, stability +10% and another research slot.'
+            spanish: 'El último experimento de SRS funciona: mentes sin cuerpo, clones sin sueño. No quedan castigos: investigación +40%, organización
+              +10%, estabilidad +10% y otro espacio de investigación.'
+          reward:
+          - effect: remove_dynamic_modifier
+            id: ZJP_srs_e4
+          - effect: dynamic_modifier
+            id: ZJP_srs_e5
+          - effect: add_research_slot
+            value: 1
+          - effect: add_variable
+            var: ZJP_giri
+            value: 20
+          prerequisites:
+          - ZJP_srs_4
+        - id: ZJP_cybershogun
+          name:
+            english: CyberShogun
+            spanish: CyberShogun
+          days: 140
+          icon: GFX_goal_generic_scientific_exchange
+          desc:
+            english: 'The greatest Mecha ever built waits in dry dock number one of Yokosuka, as tall as a tower. Inside, instead of a pilot,
+              a mind: that of the boss of the road we chose, uploaded, multiplied and wired to every crane, warship and Mecha of the islands.
+              Costs 50 Giri. The country takes the name of its new master, a new flag, and the boss becomes the CyberShogun.'
+            spanish: 'El Mecha más grande jamás construido espera en el dique seco número uno de Yokosuka, alto como una torre. Adentro, en vez
+              de un piloto, una mente: la del jefe del camino que elegimos, subida, multiplicada y conectada a cada grúa, cada buque y cada Mecha
+              de las islas. Cuesta 50 de Giri. El país toma el nombre de su nuevo amo, bandera nueva, y el jefe se vuelve el CyberShogun.'
+          reward:
+          - effect: add_variable
+            var: ZJP_giri
+            value: -50
+          - effect: if
+            when:
+              focus: ZJP_zai_5
+            then:
+            - effect: cosmetic_tag
+              value: ZJP_CYBER_KANEMURA
+            - effect: promote
+              character: ZJP_daisuke_kanemura
+          - effect: if
+            when:
+              focus: ZJP_yak_5
+            then:
+            - effect: cosmetic_tag
+              value: ZJP_CYBER_SAKAGUCHI
+            - effect: promote
+              character: ZJP_ryuji_sakaguchi
+          - effect: if
+            when:
+              focus: ZJP_srs_5
+            then:
+            - effect: cosmetic_tag
+              value: ZJP_CYBER_AKABANE
+            - effect: promote
+              character: ZJP_kenzo_akabane
+          - effect: dynamic_modifier
+            id: ZJP_cybershogunato
+          - effect: tech
+            value: advanced_heavy_tank_chassis
+          - effect: event
+            id: meganations_japon.30
+            days: 1
+          prerequisites_any:
+          - ZJP_zai_5
+          - ZJP_yak_5
+          - ZJP_srs_5
+          available:
+            variable_at_least:
+              var: ZJP_giri
+              value: 50

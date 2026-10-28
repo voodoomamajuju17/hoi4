@@ -43,10 +43,14 @@ def emit(ctx: BuildContext) -> None:
                             where=SOURCE)
 
     # Quién usa qué estilo
-    style_of: dict[str, str] = {}
+    style_of: dict = {}
     for c in ctx.spec.countries:
         if c.tag in names:
             style_of[c.tag] = c.tag
+        elif c.tag in inherit and isinstance(inherit[c.tag], dict):
+            # 2026-10-28 (Japón): estilo por tipo de arma, p. ej. lo terrestre de la
+            # HSN y lo naval y aéreo del SHD ({default, naval, air})
+            style_of[c.tag] = {k: v for k, v in inherit[c.tag].items() if v in names}
         elif c.tag in inherit and inherit[c.tag] in names:
             style_of[c.tag] = inherit[c.tag]
         elif c.is_subject and c.overlord in names:
@@ -74,9 +78,15 @@ def emit(ctx: BuildContext) -> None:
     sprites = Block()
     written: dict[tuple[str, str, int, int], str] = {}
     counts = {"nombres": 0, "tecnologias": 0, "sprites": 0}
-    for tag, style in sorted(style_of.items()):
+    for tag, style_spec in sorted(style_of.items(), key=lambda x: x[0]):
         named_techs: set[str] = set()
-        for fam, entry in names[style].items():
+        mix = style_spec if isinstance(style_spec, dict) else {"default": style_spec}
+        per_family = []
+        for fam in families:
+            style = mix.get(_family_kind(fam)) or mix.get("default")
+            if style and fam in names.get(style, {}):
+                per_family.append((fam, style, names[style][fam]))
+        for fam, style, entry in per_family:
             # v2 (arte/armas_descripciones.yaml) primero; si no, la primera tanda
             base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
             if not base_art.exists():
@@ -317,6 +327,18 @@ def _designer_icons(ctx: BuildContext, tags: list[str], sprites: Block, equipmen
         ctx.write_script("/".join(GRAPHIC_DB) + "/meganations_00_ship_icons.txt", ships, source=SOURCE)
         report.append(f"meganations_00_ship_icons.txt (barcos, propia): {len(ships.entries)} paises, {n_ships} listas")
     ctx.note("disenadores (iconos elegibles): " + " | ".join(report))
+
+
+NAVAL_FAMILIES = {"destroyer", "cruiser", "capital", "carrier", "submarine"}
+
+
+def _family_kind(fam: str) -> str:
+    """naval, air o land (para heredar el estilo por tipo de arma)."""
+    if fam in NAVAL_FAMILIES:
+        return "naval"
+    if fam.endswith("_plane"):
+        return "air"
+    return "land"
 
 
 def _count_pictures(block: Block) -> int:

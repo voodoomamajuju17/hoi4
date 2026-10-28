@@ -62,14 +62,14 @@ events:
         title: {english: "Albion Breaks Loose", spanish: "Albión se Suelta"}
         desc:
           english: >-
-            The Commune has capitulated, and in London nobody waited for the terms. At dawn the councils of Albion
+            Rome has defeated the Commune, and in London nobody waited for the terms. At dawn the councils of Albion
             unplugged the last cable to Berlin, sent the Commune's commissars home on the morning ferry and signed a
             white peace with everyone the Commune had dragged them into fighting. No shots, no flags burned: Albion
             simply stopped answering. Now the question is not whether Britain is free, but what it will do with its
             freedom: run towards the future the Commune promised, or back to the century when Britain ruled the
             waves.
           spanish: >-
-            La Comuna capituló, y en Londres nadie esperó las condiciones. Al amanecer los consejos de Albión
+            Roma derrotó a la Comuna, y en Londres nadie esperó las condiciones. Al amanecer los consejos de Albión
             desenchufaron el último cable a Berlín, mandaron a los comisarios de la Comuna a casa en el ferry de la
             mañana y firmaron la paz blanca con todos aquellos con los que la Comuna los había metido en guerra. Sin
             tiros, sin banderas quemadas: Albión simplemente dejó de contestar. Ahora la pregunta no es si Gran
@@ -78,10 +78,13 @@ events:
         options:
         - name: {english: "Albion answers to no one.", spanish: "Albión no le responde a nadie."}
           effects:
-          - effect: scope
-            target: ASC
-            effects:
-            - {effect: end_puppet, value: ZAL}
+          - effect: if
+            when: {subject_of: ASC}
+            then:
+            - effect: scope
+              target: ASC
+              effects:
+              - {effect: end_puppet, value: ZAL}
           - {effect: leave_faction}
           - effect: every_country
             when: {war_with: ZAL}
@@ -104,11 +107,11 @@ events:
         title: {english: "Britain Leaves the Commune", spanish: "Gran Bretaña Deja la Comuna"}
         desc:
           english: >-
-            With the Commune on its knees, the Albion Workers' Republic has declared itself free, quietly and without
-            a war. The British Isles are on their own for the first time in thirty years. In every capital the same
+            With the Commune beaten by Rome, the Albion Workers' Republic has declared itself free, quietly and
+            without a war. The British Isles are on their own for the first time in thirty years. In every capital the same
             question is asked: will the island of the Luddites embrace the machines, or crown a queen?
           spanish: >-
-            Con la Comuna de rodillas, la República Obrera de Albión se declaró libre, en silencio y sin guerra. Las
+            Con la Comuna vencida por Roma, la República Obrera de Albión se declaró libre, en silencio y sin guerra. Las
             islas británicas están solas por primera vez en treinta años. En todas las capitales se hace la misma
             pregunta: ¿la isla de los luditas va a abrazar las máquinas, o va a coronar una reina?
         options:
@@ -963,8 +966,43 @@ events:
 # Cada rama: 8 focos de 182 días (unos 4 años).
 # =============================================================================
 
+extend_scripted_effects:
+  MEGANATIONS_eventos_mundiales:
+  # Albión (2026-10-28): después de la derrota ante Roma, con la paz firmada
+  - effect: if
+    when:
+      all:
+      - {global_flag: MEGANATIONS_asc_cayo_ante_roma}
+      - not: {global_flag: MEGANATIONS_albion_suelta}
+      - {country_exists: ASC}
+      - country: {tag: ASC, when: {all: [{subject: false}, {not: {war_with: NRE}}]}}
+    then:
+    - {effect: global_flag, value: MEGANATIONS_albion_suelta}
+    - effect: if
+      when:
+        country: {tag: ZAL, when: {subject_of: ASC}}
+      then:
+      - {effect: event, id: meganations_albion.1, days: 1, target: ZAL}
+      else:
+      - effect: scope
+        target: ASC
+        effects:
+        - effect: states
+          pick: every
+          when: {core_of: ZAL}
+          effects:
+          - {effect: transfer_to, value: ZAL}
+      - effect: if
+        when: {country_exists: ZAL}
+        then:
+        - {effect: event, id: meganations_albion.1, days: 2, target: ZAL}
+
 decisions:
   on_actions:
+  # 2026-10-28 (el usuario: "no tiene sentido que Gran Bretaña solo pueda existir antes de
+  # 2104; renace cuando la ASC pierda contra el NRE, una sola vez, y la ASC siga existiendo
+  # y no sea satélite"): la capitulación ante Roma deja la marca; el pulso mundial espera
+  # al tratado y recién ahí suelta (o hace renacer) a Albión.
   - id: ZAL_albion_se_suelta
     hook: on_capitulation        # ROOT = el que capitula
     effects:
@@ -972,13 +1010,17 @@ decisions:
       when:
         all:
         - {tag: ASC}
-        - not: {date_after: 2104.1.1}
+        - {war_with: NRE}
         - not: {global_flag: MEGANATIONS_albion_suelta}
-        - country: {tag: ZAL, when: {subject_of: ASC}}
       then:
-      - {effect: global_flag, value: MEGANATIONS_albion_suelta}
-      - {effect: event, id: meganations_albion.1, days: 1, target: ZAL}
+      - {effect: global_flag, value: MEGANATIONS_asc_cayo_ante_roma}
   dynamic_modifiers:
+  # 2026-10-28 (pedido del usuario: un poco más de castigo por anexar todo el Amazonas)
+  - id: EFE_selva_arde
+    country: EFE
+    name: {english: 'The Forest Burns', spanish: 'La Selva Arde'}
+    desc: {english: 'Every felled tree is a guerrilla recruit. The Amazon fights back.', spanish: 'Cada árbol talado es un guerrillero más. El Amazonas devuelve los golpes.'}
+    modifiers: {recruitable_population_factor: -0.1, '?attrition': 0.05}
   - id: ZAL_red_de_londres
     country: ZAL
     name: {english: 'London Reconnected', spanish: 'Londres Reconectada'}

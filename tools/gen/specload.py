@@ -44,7 +44,7 @@ SPEC_FILES = {
 # Archivos que se suman encima de los anteriores (2026-10-17, segundo análisis
 # de rutas): las mecánicas nuevas viven en su propio archivo para no chocar con
 # los cambios que se hacen al mismo tiempo en 12_events y 14_decisions.
-OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml"]
+OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:

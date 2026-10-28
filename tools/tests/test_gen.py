@@ -1891,8 +1891,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("254 modificadores dinamicos (6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 254 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("278 modificadores dinamicos (23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 278 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2953,6 +2953,7 @@ def test_vanilla_validation() -> None:
             mods.update(trait["modifiers"])
         for dm in spec.raw["decisions"].get("dynamic_modifiers") or []:
             mods.update(dm["modifiers"])
+        mods = {m.lstrip("?") for m in mods}   # "?x": opcional, el doc lo lista sin el signo
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
@@ -2965,7 +2966,7 @@ def test_vanilla_validation() -> None:
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
-            "add_dynamic_modifier remove_dynamic_modifier set_temp_variable add_to_temp_variable subtract_from_variable multiply_variable divide_variable round_variable set_politics add_popularity every_country custom_effect_tooltip puppet white_peace send_equipment log "
+            "add_dynamic_modifier remove_dynamic_modifier set_temp_variable add_to_temp_variable subtract_from_variable multiply_variable divide_variable round_variable set_politics add_popularity inherit_technology every_country custom_effect_tooltip puppet white_peace send_equipment log "
             "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production release release_puppet add_nuclear_bombs\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
@@ -4478,7 +4479,7 @@ def test_incidentes_y_guerras() -> None:
 
 
 def test_albion() -> None:
-    section("Albion: Gran Bretania se suelta si la ASC capitula antes de 2104 (2026-10-27)")
+    section("Albion: Gran Bretania se suelta si la ASC pierde contra Roma, una sola vez (2026-10-27/28)")
     raw = specload.load(REPO_ROOT / "spec").raw
     tree = raw["focus_trees"]["trees"]["ZAL"]
     ramas = {b["id"]: b["focuses"] for b in tree["branches"]}
@@ -4493,8 +4494,15 @@ def test_albion() -> None:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
         hooks = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
-        check("la rebelion sale cuando la ASC capitula antes de 2104",
-              "on_capitulation" in hooks and "tag = ASC" in hooks and "date > 2104.1.1" in hooks and "meganations_albion.1" in hooks)
+        check("la ASC capitula en guerra con Roma: queda anotado (sin fecha limite)",
+              "on_capitulation" in hooks and "tag = ASC" in hooks and "has_war_with = NRE" in hooks
+              and "MEGANATIONS_asc_cayo_ante_roma" in hooks and "date > 2104.1.1" not in hooks, hooks[:600])
+        mundo = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        i = mundo.index("MEGANATIONS_asc_cayo_ante_roma")
+        tramo = mundo[i - 200:i + 1500]
+        check("Gran Bretania renace al hacer la paz, una sola vez, si la ASC sigue existiendo y no es satelite",
+              "meganations_albion.1" in tramo and "MEGANATIONS_albion_suelta" in mundo and "is_subject = no" in tramo
+              and "has_war_with = NRE" in tramo, tramo[:900])
         ev = " ".join((mod / "events/meganations_albion.txt").read_text(encoding="utf-8-sig").split())
         check("se suelta en paz: deja de ser satelite, paz blanca y carga su arbol",
               "end_puppet = ZAL" in ev and "white_peace = ZAL" in ev and "load_focus_tree" in ev)
@@ -4502,6 +4510,124 @@ def test_albion() -> None:
         check("hacia el pasado: se alia con Roma contra la Comuna; hacia el futuro: vuelve con la Comuna en paz",
               focus.count("add_to_faction = ZAL") == 2 and "NRE = { add_to_faction = ZAL" in focus
               and "ASC = { add_to_faction = ZAL" in focus and "white_peace = ASC" in focus and "set_politics" in focus, focus[:300])
+
+
+def test_japon() -> None:
+    section("Japon: el Shogunato de los Astilleros (2026-10-28)")
+    raw = specload.load(REPO_ROOT / "spec").raw
+    tree = raw["focus_trees"]["trees"]["ZJP"]
+    focos = [f for b in tree["branches"] for f in b["focuses"]]
+    by = {f["id"]: f for f in focos}
+    rutas = {r: [by.get(f"ZJP_{r}_{n}") for n in range(1, 6)] for r in ("zai", "yak", "srs")}
+    check("tres caminos de 5 focos y un foco final", all(all(rutas[r]) for r in rutas) and "ZJP_cybershogun" in by
+          and len(focos) == 16, sorted(by))
+    check("los caminos se excluyen desde el primer foco",
+          all(set(rutas[r][0].get("mutually_exclusive") or []) == {f"ZJP_{o}_1" for o in rutas if o != r} for r in rutas),
+          str({r: rutas[r][0].get("mutually_exclusive") for r in rutas}))
+    final = by["ZJP_cybershogun"]
+    check("el CyberShogun se llega desde cualquiera de los tres caminos",
+          set(final.get("prerequisites_any") or []) == {"ZJP_zai_5", "ZJP_yak_5", "ZJP_srs_5"}, str(final.get("prerequisites_any")))
+    rew = str(final.get("reward"))
+    check("el final cambia el nombre y el lider por el jefe del camino",
+          all(t in rew for t in ("ZJP_CYBER_KANEMURA", "ZJP_CYBER_SAKAGUCHI", "ZJP_CYBER_AKABANE",
+                                 "ZJP_daisuke_kanemura", "ZJP_ryuji_sakaguchi", "ZJP_kenzo_akabane")), rew[:500])
+    dms = {d["id"]: d for d in raw["decisions"]["dynamic_modifiers"]}
+    def malos(d):   # negativo = castigo (menos bienes de consumo es premio)
+        return [k for k, v in d["modifiers"].items() if isinstance(v, (int, float)) and v < 0 and k != "consumer_goods_factor"]
+    check("castigos fuertes al principio de cada camino, que se suavizan, y el ultimo sin castigos",
+          all(malos(dms[f"ZJP_{r}_e1"]) and len(malos(dms[f"ZJP_{r}_e4"])) <= len(malos(dms[f"ZJP_{r}_e3"]))
+              and not malos(dms[f"ZJP_{r}_e5"]) for r in rutas),
+          str({r: [malos(dms[f"ZJP_{r}_e{n}"]) for n in range(1, 6)] for r in rutas}))
+    check("preparativos para la guerra: +20% de astilleros",
+          dms["MEGANATIONS_preparativos_guerra"]["modifiers"].get("industrial_capacity_dockyard") == 0.2)
+    import yaml
+    unidades = yaml.safe_load((REPO_ROOT / "spec/20_unique_units.yaml").read_text(encoding="utf-8"))["units"]
+    unidad = next(u for u in unidades if u["id"] == "ZJP_mecha")
+    check("el Mecha se queda con el tanque pesado y es velocisimo",
+          set(unidad["lock"]["techs"]) >= {"basic_heavy_tank_chassis", "improved_heavy_tank_chassis", "advanced_heavy_tank_chassis"}
+          and all(v["maximum_speed"] >= 2 for v in unidad["equipment_stats"].values()), str(unidad.get("lock")))
+    res = raw.get("research_look") or {}
+    check("iconos: lo de tierra de la HSN, mar y aire del SHD",
+          ((res.get("by_faction") or {}).get("inherit") or {}).get("ZJP") == {"default": "HSN", "naval": "SHD", "air": "SHD"},
+          str((res.get("by_faction") or {}).get("inherit")))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        i = se.index("has_global_flag = MEGANATIONS_japon_rebelde")
+        trig = se[i:se.index("set_global_flag = MEGANATIONS_japon_rebelde", i)]
+        check("el disparo: dos de tres (region ocupada, Singapur perdido, estabilidad bajo 65%), una sola vez",
+              trig.count("has_stability < 0.65") == 2 and "owns_state" in trig and "meganations_japon.1" in se[i:i + len(trig) + 200],
+              trig[:500])
+        check("si el juego no conoce Singapur, esa condicion queda en falso (no en verdadero)",
+              "AND = { always = no has_stability < 0.65 }" in trig, trig[-400:])
+        ev = " ".join((mod / "events/meganations_japon.txt").read_text(encoding="utf-8-sig").split())
+        e1 = ev[ev.index("id = meganations_japon.1 title"):ev.index("id = meganations_japon.2 title")]
+        check("la HSN elige: guerra (el Shogunato le declara) o dejarlo ir (independiente, con pacto)",
+              e1.count("ZJP_nacimiento = yes") == 2 and "declare_war_on = { target = HSN" in e1
+              and "non_aggression_pact" in e1, e1[:900])
+        check("Japon arranca fuerte: Mechas y submarinos al nacer",
+              e1.count("ZJP_mecha_desbloqueo = yes") == 2 and e1.count("MEGANATIONS_flota_pirata_ZJP = yes") == 2)
+        check("el SHD recibe su evento solo si no esta ya en guerra con la HSN",
+              "NOT = { has_war_with = HSN }" in e1 and "meganations_japon.10" in e1, e1[:1500])
+        e10 = ev[ev.index("id = meganations_japon.10 title"):ev.index("id = meganations_japon.11 title")]
+        check("intervenir: preparativos 120 dias y a los 60 la justificacion, por el Shogunato o por la HSN",
+              e10.count("add_dynamic_modifier = { modifier = MEGANATIONS_preparativos_guerra days = 120 }") == 2
+              and e10.count("country_event = { id = meganations_japon.11 days = 60 }") == 2
+              and "SHD_apoya_shogunato" in e10 and "SHD_apoya_hsn" in e10, e10[:900])
+        e11 = ev[ev.index("id = meganations_japon.11 title"):ev.index("id = meganations_japon.20 title")]
+        check("la justificacion sale lista contra el bando elegido",
+              "create_wargoal = { type = annex_everything target = HSN }" in e11
+              and "create_wargoal = { type = annex_everything target = ZJP }" in e11, e11[:600])
+        nac = se[se.index("ZJP_nacimiento = {"):][:4000]
+        check("nace con las regiones que la HSN tiene en la mano, sus tecnologias y su arbol",
+              "transfer_state" in nac and "inherit_technology = HSN" in nac and "load_focus_tree" in nac, nac[:900])
+        dec = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
+        check("el Giri: decisiones que lo gastan, como las monedas de las potencias",
+              all(d in dec for d in ("ZJP_contratar_ronin", "ZJP_linea_de_mechas", "ZJP_sabotear_singapur", "ZJP_experimento_prohibido"))
+              and "var = ZJP_giri" in dec)
+        cats = (mod / "common/decisions/categories/meganations_categories.txt").read_text(encoding="utf-8-sig")
+        check("el panel del Giri", "ZJP_giri_category" in cats)
+        loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*.yml"))
+        check("el panel muestra el Giri", "[?ZJP_giri]" in loc)
+        ai = (mod / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8-sig")
+        planes = {p_["id"]: p_ for p_ in raw["ai"]["plans"]}
+        check("IA: Japon (nace en la partida) tiene su plan de guerra contra la HSN; el SHD va contra el bando elegido",
+              "MEGANATIONS_ZJP_la_guerra_de_los_astilleros" in ai
+              and planes["SHD_por_el_shogunato"]["enable"] == {"flag": "SHD_apoya_shogunato"}
+              and planes["SHD_por_la_alta_mar"]["enable"] == {"flag": "SHD_apoya_hsn"})
+        check("la IA de Japon encarga Mechas como las meganaciones",
+              any("unidades unicas" in n and "ZJP" in n for n in ctx.notes))
+        check("Japon tiene armada propia (los submarinos se copian del Japon del juego)",
+              any("armada guardada de ZJP" in n for n in ctx.notes))
+        gfx = (mod / "interface/meganations_faction_tech.gfx").read_text(encoding="utf-8-sig")
+        check("Japon usa iconos propios mezclados (HSN en tierra)", "GFX_ZJP_infantry_equipment_1_medium" in gfx)
+
+
+def test_gaia() -> None:
+    section("Gaia: soltar el Santuario conviene mucho mas; anexar todo Brasil cuesta (2026-10-28)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        ev = " ".join((mod / "events/meganations_efe.txt").read_text(encoding="utf-8-sig").split())
+        e30 = ev[ev.index("id = meganations_efe.30 title"):ev.index("id = meganations_efe.31 title")]
+        a, b = e30.split("name = meganations_efe.30.b")
+        check("el Santuario: bioacero, cubas descansadas, poder politico, y la IA lo prefiere",
+              "var = EFE_biosteel value = 8" in a and "var = EFE_saturacion value = -30" in a
+              and "add_political_power = 150" in a and "factor = 70" in a, a[-700:])
+        check("explotar: la selva arde un anio y satura las cubas",
+              "add_dynamic_modifier = { modifier = EFE_selva_arde days = 365 }" in b
+              and "var = EFE_saturacion value = 22" in b and "factor = 30" in b, b[:700])
+        dm = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text(encoding="utf-8-sig"))
+        arde = dm.get("EFE_selva_arde")
+        check("la selva que arde: menos reclutables",
+              arde is not None and float(pdx.text(arde.get("recruitable_population_factor"))) < 0,
+              pdx.render(arde) if arde is not None else "")
+        dec = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        check("el Santuario nace con una division de elite", "division_template = Guardia_del_Santuario start_experience_factor = 0.75" in se)
+        check("si se exploto, los Caudillos vuelven por la selva (cuesta hombres aplastarlos)",
+              "EFE_caudillos_selva" in se and "meganations_mundo.103" in se)
 
 
 def test_reglas() -> None:
@@ -4578,6 +4704,8 @@ def main() -> int:
         test_bitacora,
         test_incidentes_y_guerras,
         test_albion,
+        test_japon,
+        test_gaia,
         test_reglas,
         test_simulador,
         test_vanilla_validation,

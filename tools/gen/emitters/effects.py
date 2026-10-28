@@ -966,6 +966,15 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("create_intelligence_agency", owner)
             ec.triggers_used.setdefault("has_intelligence_agency", owner)
             continue
+        if effect == "inherit_technology":
+            # 2026-10-28 (Japón): un país que nace en la partida no tiene tecnologías;
+            # copia las del país del que se separa
+            target = item["value"]
+            if ec.tags and target not in ec.tags and target not in SCOPES:
+                raise SpecError(f"{owner}: inherit_technology de '{target}', que no es un pais del mod", where=where)
+            block.add("inherit_technology", target)
+            effects_used.setdefault("inherit_technology", owner)
+            continue
         if effect == "set_politics":
             # 2026-10-27 (Albión, "hacia el pasado"): el partido gobernante cambia de
             # grupo (la reina es de la restauración imperial, no del ludismo)
@@ -1376,6 +1385,15 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("controls_state", sid)
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "lost_state":
+            # ya no controla la región (2026-10-28, Japón: "la HSN perdió Singapur").
+            # Si el nombre no existe en el juego queda en falso, no en verdadero.
+            sid = resolve_state(value)
+            if sid is None:
+                block.add("always", False)
+            else:
+                block.add("NOT", Block([("controls_state", sid)]))
+                triggers_used.setdefault("controls_state", owner)
         elif key == "owns_state":
             # es dueño de la región (nombres alternativos de UNA región)
             sid = resolve_state(value)
@@ -1388,6 +1406,11 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             # en una región: su dueño es `value`
             block.add("is_owned_by", value)
             triggers_used.setdefault("is_owned_by", owner)
+        elif key == "controlled_by":
+            # en una región: la controla `value` (2026-10-28, Japón: solo se entrega lo
+            # que la HSN todavía tiene en la mano)
+            block.add("is_controlled_by", value)
+            triggers_used.setdefault("is_controlled_by", owner)
         elif key == "guarantees":
             block.add("has_guaranteed", value)
             triggers_used.setdefault("has_guaranteed", owner)
@@ -1576,7 +1599,8 @@ def dynamic_modifier_ids(spec_raw: dict) -> set[str]:
 
 
 # efectos que escribe el generador mismo (no están en 14_decisions.yaml)
-GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MEGANATIONS_flota_pirata_ZAS", "MEGANATIONS_absorber_capital",
+GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MEGANATIONS_flota_pirata_ZAS", "MEGANATIONS_flota_pirata_ZJP",
+                      "MEGANATIONS_absorber_capital",
                       "MEGANATIONS_destino_ia"}
 
 # Objetivos del destino de a uno para la IA (2026-10-15): país -> bloque que
