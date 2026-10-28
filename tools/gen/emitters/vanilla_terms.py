@@ -6,7 +6,9 @@ Colectivismo, Orden de Mercado, Mandato Trascendente), pero muchos textos del
 juego que siguen en uso (decisiones e ideas genéricas, modificadores, asesores,
 tooltips) nombran "fascista", "comunista", "democrático" o "no alineado"
 escritos a mano. También el carbón, que en 2100 se llama Torio (combustible de
-los reactores que alimentan las fábricas). Acá se recorren todos los textos vanilla y se reescriben con
+los reactores que alimentan las fábricas), y desde el 2026-10-28 los otros seis
+recursos: petróleo -> Hidrógeno, acero -> Titanio, aluminio -> Grafeno,
+caucho -> Polímero, tungsteno -> Neodimio, cromo -> Litio. Acá se recorren todos los textos vanilla y se reescriben con
 los nombres del mod (localisation/<idioma>/replace/). Lo que el mod ya define
 no se toca, ni lo que va entre $...$, [...] o £...£.
 """
@@ -41,6 +43,14 @@ TERMS = {
         (r"no alineamiento", "Mandato Trascendente"),
         # el carbón (energía de las fábricas desde 1.17) en 2100 es torio de reactor
         (r"carbones", "torio"), (r"carbón", "torio"), (r"carbon(?=\b)", "torio"),
+        # 2026-10-28 (pedido del usuario: "renombrá todos" los recursos). Todos
+        # masculinos y singulares, como los del juego, para no romper artículos.
+        (r"petróleo", "hidrógeno"), (r"petroleo", "hidrógeno"),
+        (r"acero", "titanio"),
+        (r"aluminio", "grafeno"),
+        (r"caucho", "polímero"),
+        (r"tungsteno", "neodimio"), (r"wolframio", "neodimio"),
+        (r"cromo", "litio"),
     ],
     "english": [
         (r"fascism", "Restoration"), (r"fascists", "Restorationists"), (r"fascist", "Restorationist"),
@@ -49,6 +59,12 @@ TERMS = {
         (r"democratic", "Market"), (r"democrats", "Marketists"), (r"democrat", "Marketist"),
         (r"non-aligned", "Transcendent"), (r"non aligned", "Transcendent"),
         (r"coal", "thorium"),
+        (r"oil", "hydrogen"),
+        (r"steel", "titanium"),
+        (r"aluminium", "graphene"), (r"aluminum", "graphene"),
+        (r"rubber", "polymer"),
+        (r"tungsten", "neodymium"),
+        (r"chromium", "lithium"), (r"chrome", "lithium"),
     ],
 }
 

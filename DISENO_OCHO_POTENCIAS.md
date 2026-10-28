@@ -960,6 +960,12 @@ llega a 100 al toque y la tensión nunca sube".
   consumen los robots) y +25% de penalización si le faltan recursos.
 - **El carbón se llama Torio** (en inglés Thorium): en 2100 la energía de las
   fábricas sale de reactores. Se renombra en todos los textos del juego.
+- **Los otros seis recursos también tienen nombre de 2100** (2026-10-28, "renombrá
+  todos"): Petróleo -> Hidrógeno, Acero -> Titanio, Aluminio -> Grafeno, Caucho ->
+  Polímero, Tungsteno -> Neodimio, Cromo -> Litio (inglés: Hydrogen, Titanium,
+  Graphene, Polymer, Neodymium, Lithium). Mismo mecanismo que el Torio: se
+  reescriben los textos del juego base; la prosa del mod (el "acero vivo", el
+  Bioacero) no se toca. Pedidos de íconos en arte/pedidos_recursos.txt.
 - **Imagen propia de las unidades únicas** (2026-10-03, "¿no hay imagen única
   para el Gliptodonte y otras tecnologías únicas?"): 8 pedidos
   arma_<id_unidad> (con su historia y la filosofía de la facción); la imagen
