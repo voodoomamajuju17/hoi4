@@ -3235,6 +3235,13 @@ def test_vanilla_terms() -> None:
     check("no toca lo que va entre $ $ ni [ ]", rewrite("$fascism$ [GetFascist] comunista", es)
           == "$fascism$ [GetFascist] colectivista")
     check("ingles", rewrite("Daily Fascist Support, communist party", en) == "Daily Restorationist Support, collectivist party")
+    # 2026-10-28 ("renombrá todos" los recursos)
+    check("recursos: los siete con su nombre de 2100",
+          rewrite("Petróleo, acero, aluminio, caucho, tungsteno, cromo y carbón; $steel$", es)
+          == "Hidrógeno, titanio, grafeno, polímero, neodimio, litio y torio; $steel$")
+    check("recursos en ingles, sin tocar palabras que los contienen",
+          rewrite("Oil, Steel, Aluminium, Rubber, Tungsten, Chromium and Coal; oilfield, turmoil", en)
+          == "Hydrogen, Titanium, Graphene, Polymer, Neodymium, Lithium and Thorium; oilfield, turmoil")
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         txt = "".join(p.read_text(encoding="utf-8-sig") for p in ctx.mod_root.glob("localisation/spanish/replace/*ideology_terms*"))
