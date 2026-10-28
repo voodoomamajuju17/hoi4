@@ -279,17 +279,27 @@ plans:
   - {type: conquer, target: HSN, value: 150}
 - id: SHD_por_el_shogunato
   country: SHD
-  lore: 'Eligió apoyar al Shogunato: va contra la Alta Mar cuando tenga la justificación.'
+  lore: 'Eligió apoyar al Shogunato: se prepara contra la Alta Mar.'
   enable: {flag: SHD_apoya_shogunato}
   strategies:
   - {type: conquer, target: HSN, value: 120}
+- id: SHD_por_el_shogunato_declarar
+  country: SHD
+  lore: 'Declara cuando tiene la justificación (evento 11) y un ejército de verdad.'
+  enable: {all: [{flag: SHD_apoya_shogunato}, {divisions_at_least: 30}]}
+  strategies:
   - {type: declare_war, target: HSN, value: 120}
 - id: SHD_por_la_alta_mar
   country: SHD
-  lore: 'Eligió apoyar a la Alta Mar: va contra el Shogunato cuando tenga la justificación.'
+  lore: 'Eligió apoyar a la Alta Mar: se prepara contra el Shogunato.'
   enable: {flag: SHD_apoya_hsn}
   strategies:
   - {type: conquer, target: ZJP, value: 150}
+- id: SHD_por_la_alta_mar_declarar
+  country: SHD
+  lore: 'Declara cuando tiene la justificación (evento 11) y un ejército de verdad.'
+  enable: {all: [{flag: SHD_apoya_hsn}, {divisions_at_least: 20}]}
+  strategies:
   - {type: declare_war, target: ZJP, value: 150}
 - id: EFE_el_amazonas
   country: EFE

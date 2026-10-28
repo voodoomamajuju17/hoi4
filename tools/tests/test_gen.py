@@ -173,7 +173,7 @@ def test_pdx_roundtrip() -> None:
 def test_spec_loads() -> None:
     section("spec")
     spec = specload.load(REPO_ROOT / "spec")
-    check("35 paises (8 meganaciones + 21 satelites + 5 de la Anarquia + el Santuario de Gaia)", len(spec.countries) == 35, f"hay {len(spec.countries)}")
+    check("36 paises (8 meganaciones + 21 satelites + 5 de la Anarquia + el Santuario de Gaia + el Shogunato de los Astilleros)", len(spec.countries) == 36, f"hay {len(spec.countries)}")
     check("todos los TAG de 3 letras", all(len(c.tag) == 3 for c in spec.countries))
     tags = {c.tag for c in spec.countries}
     for expected in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "PTA", "YYG"):
@@ -2395,9 +2395,10 @@ def test_ai() -> None:
         cr = " ".join(pdx.render(costas).split()) if costas is not None else ""
         check("IA: la HSN suma un desembarco (invade) contra su objetivo de guerra",
               "type = conquer id = ZWI" in cr and "type = invade id = ZWI value = 150" in cr, cr[:400])
-        otros = [k for k, v in root.entries if isinstance(v, pdx.Block) and not k.startswith("MEGANATIONS_HSN_")
+        otros = [k for k, v in root.entries if isinstance(v, pdx.Block)
+                 and not k.startswith(("MEGANATIONS_HSN_", "MEGANATIONS_ZJP_"))   # 2026-10-28: y el Shogunato, que es de islas
                  and "type = invade" in " ".join(pdx.render(v).split())]
-        check("IA: solo la HSN desembarca por esta regla", not otros, str(otros[:5]))
+        check("IA: solo la HSN (y el Shogunato) desembarcan por esta regla", not otros, str(otros[:5]))
         check("IA: el reporte cuenta los desembarcos", any("planes de desembarco (invade)" in n for n in ctx.notes))
         # 2026-10-24: las Tierras Sin Ley no capitulan con tierra en 2+ continentes
         cb = " ".join((mod / "common/scripted_effects/meganations_casus_belli.txt").read_text().split())
@@ -4258,7 +4259,8 @@ def test_simulador() -> None:
     raw = specload.load(REPO_ROOT / "spec").raw
     sup = sim.cargar_supuestos()
     pares = sim.pares_excluyentes(raw)
-    check("simulador: encuentra los pares de focos excluyentes de las ocho", len({p["tag"] for p in pares}) == 8,
+    check("simulador: encuentra los pares de focos excluyentes de las ocho (y del Shogunato)",
+          {p["tag"] for p in pares} == {"APF", "ASC", "EFE", "FCU", "HSN", "NAS", "NRE", "SHD", "ZJP"},
           sorted({p["tag"] for p in pares}))
     check("simulador: ASC_computo arranca con el start de 06_mechanics",
           sim.valores_iniciales(raw).get("ASC_computo") == 30.0)
