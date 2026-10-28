@@ -383,3 +383,60 @@ iconos:
       a bold question mark in the centre, filling 55% of the height, surrounded by an open wreath of two
       branches whose leaves are thin circuit traces ending in dots, the branches starting at the bottom
       centre and curving up each side, open at the top. Wider than tall (about 5:4).
+
+# Tiras: una textura con varios íconos en fila (2026-10-28, menú de
+# construcción y recursos). Cada cuadro con ícono nuevo se arma solo; los que
+# no tienen quedan como en el juego. Los íconos se piden a mano
+# (arte/pedidos_edificios.txt, arte/pedidos_recursos.txt) y se importan con su
+# nombre de archivo tal cual (edificio_<x>.png, recurso_<x>.png).
+#   uso barra: placa del botón (con el material del mod) y el dibujo en la caja del original
+#   uso directo: el dibujo solo, en la caja del original
+#   uso falta: como directo, teñido de rojo (el recurso que falta)
+# El orden de los cuadros sale de la tira original (ui_para_claude.zip del 2026-10-28).
+tiras:
+  - textura: gfx/interface/buildings/building_icon_strip.dds
+    cuadros: 31
+    uso: barra
+    borde: 5
+    donde: menú de construcción y vista del estado
+    iconos:
+      1: edificio_fabrica_civil
+      2: edificio_fabrica_militar
+      3: edificio_infraestructura
+      4: edificio_astillero
+      5: edificio_base_aerea
+      6: edificio_base_naval
+      7: edificio_bunker
+      8: edificio_fuerte_costero
+      9: edificio_antiaereo
+      10: edificio_refineria
+      11: edificio_radar
+      12: edificio_sitio_cohetes
+      14: edificio_silo_combustible
+      15: edificio_nodo_suministro
+      16: edificio_ferrocarril
+      17: edificio_instalacion_aerea
+      18: edificio_instalacion_naval
+      19: edificio_instalacion_terrestre
+      20: edificio_instalacion_nuclear
+      28: edificio_puerto_flotante
+      29: edificio_puerto_ciudad
+      30: edificio_reactor_nuclear
+      31: edificio_red_electrica
+  - textura: gfx/interface/resources_strip.dds
+    cuadros: 7
+    uso: directo
+    donde: fila de recursos
+    iconos: &recursos
+      1: recurso_hidrogeno
+      2: recurso_grafeno
+      3: recurso_polimero
+      4: recurso_neodimio
+      5: recurso_titanio
+      6: recurso_litio
+      7: recurso_torio
+  - textura: gfx/interface/missing_resources_strip.dds
+    cuadros: 7
+    uso: falta
+    donde: recurso que falta
+    iconos: *recursos

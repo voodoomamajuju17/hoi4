@@ -2413,6 +2413,22 @@ def test_ai() -> None:
         check("IA: los desembarcos del juego base se copian enteros para el reporte",
               "FIXTURE_JAP_invade_PHI = {" in reft and "type = invade id = PHI value = 200" in reft
               and "FIXTURE_military" not in reft and reft.rstrip().endswith("}"), reft[:400])
+        # 2026-10-28 (su reporte trajo JAP_invade_guam): un plan por región del destino
+        from types import SimpleNamespace
+        from tools.gen.emitters import ai as ai_mod
+        fake = SimpleNamespace(data={"state_ids_by_name": {"suez": 447, "cape": 275}}, notes=[], warnings=[],
+                               spec=SimpleNamespace(raw={"decisions": {"categories": [{"decisions": [
+                                   {"id": "HSN_reclamar_el_destino", "effects": [
+                                       {"effect": "wargoal_holders", "states": [["Suez"], ["Cape"], ["Atlantida"]]}]}]}]}}))
+        fake.note, fake.warn = fake.notes.append, fake.warnings.append
+        r2 = pdx.Block()
+        n2 = ai_mod._destiny_landings(fake, {"HSN": {"unit_request": 400, "focus": 200}}, r2)
+        d2 = " ".join(pdx.render(r2).split())
+        check("IA: desembarco por región del destino, activo con su dueño en guerra (como Guam)",
+              n2 == 2 and "MEGANATIONS_HSN_desembarco_447 = { allowed = { original_tag = HSN } enable = { 447 = { controller = "
+              "{ has_war_with = HSN } } } abort_when_not_enabled = yes ai_strategy = { type = invasion_unit_request "
+              "state = 447 value = 400 } ai_strategy = { type = naval_invasion_focus value = 200 } }" in d2, d2[:500])
+        check("IA: región del destino que no existe se avisa", any("Atlantida" in w for w in fake.warnings), str(fake.warnings))
         # 2026-10-24: las Tierras Sin Ley no capitulan con tierra en 2+ continentes
         cb = " ".join((mod / "common/scripted_effects/meganations_casus_belli.txt").read_text().split())
         check("ZAN: cuenta continentes y pone o saca el modificador de dispersos",
@@ -2596,7 +2612,13 @@ def test_arte() -> None:
               len(leyes) == 18 and len({i["description"] for i in leyes}) == 18
               and all("EXACT SUBJECT" in i["description"] for i in leyes), str(len(leyes)))
         # 2026-10-16: piel de la interfaz (arte/piel_interfaz.yaml)
-        ui = [i for i in _arte.catalog() if i["type"] == "ui_icon"]
+        ui_all = [i for i in _arte.catalog() if i["type"] == "ui_icon"]
+        ui = [i for i in ui_all if not i.get("hand_written")]
+        # 2026-10-28: íconos de las tiras (edificios y recursos), pedidos a mano
+        tiras_ids = {i["id"] for i in ui_all if i.get("hand_written")}
+        check("piel: los íconos de edificios y recursos se pueden importar por su nombre",
+              {"edificio_fabrica_civil", "edificio_ferrocarril", "recurso_torio", "recurso_hidrogeno"} <= tiras_ids,
+              str(sorted(tiras_ids))[:300])
         import yaml as _yaml
         piel = _yaml.safe_load((REPO_ROOT / "arte" / "piel_interfaz.yaml").read_text(encoding="utf-8"))
         ya = {(t.get("texture") or "") for t in (ctx.spec.raw.get("scenario") or {}).get("tab_backgrounds", {}).get("items", [])
@@ -2972,7 +2994,7 @@ def test_vanilla_validation() -> None:
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
             "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n")
         (docs / "effects_documentation.md").write_text(
-            "add_political_power add_stability add_war_support army_experience "
+            "add_political_power save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
@@ -4477,6 +4499,25 @@ def test_rumbo_2120() -> None:
               for x in ("zet", "zsa", "zco", "zao", "zmz", "zmg", "zke")))
 
 
+def test_mapa() -> None:
+    section("el mapa cambia: noticias al nacer o desaparecer un pais (2026-10-28)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        on = " ".join((ctx.mod_root / "common/on_actions/09_meganations_mapa.txt").read_text(encoding="utf-8-sig").split())
+        check("desaparece: on_annex y on_civil_war_end, sin noticia doble ni en la primera semana",
+              "on_annex = { effect = { if = { limit = { date > 2100.1.8 FROM = { NOT = { has_country_flag = MN_mapa_contado"
+              in on and "on_civil_war_end = { effect" in on and "save_global_event_target_as = MN_mapa_ido" in on, on[:400])
+        check("nace: on_release_as_free y on_release_as_puppet",
+              "on_release_as_free = { effect" in on and "on_release_as_puppet = { effect" in on
+              and "id = meganations_mapa.2" in on, on[-400:])
+        check("solo a los jugadores", on.count("limit = { is_ai = no }") == 4, on[:200])
+        dec = " ".join((ctx.mod_root / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
+        check("las 8 Formas Finales avisan a los jugadores de paises chicos", dec.count("id = meganations_mapa.3") == 8)
+        evs = " ".join(p.read_text(encoding="utf-8-sig") for p in (ctx.mod_root / "events").glob("*.txt"))
+        check("cada guerra civil del mod avisa del bando nuevo",
+              "save_global_event_target_as = MN_mapa_rebelde" in evs and "meganations_mapa.4" in evs)
+
+
 def test_bitacora() -> None:
     section("bitacora anual en el game.log (2026-10-27)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -4628,6 +4669,7 @@ def main() -> int:
         test_espacios_fabricas,
         test_rumbo_2120,
         test_bitacora,
+        test_mapa,
         test_incidentes_y_guerras,
         test_albion,
         test_reglas,

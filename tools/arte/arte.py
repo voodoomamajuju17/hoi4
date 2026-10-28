@@ -713,6 +713,22 @@ def _ui_icon_items() -> list[dict]:
                             + f". EXACT SUBJECT: {_one_line(p['dibujo'])}"),
             "style": _one_line(p.get("estilo") or spec.get("estilo_iconos") or ""),
         })
+    # tiras (2026-10-28): los íconos de edificios y recursos, pedidos a mano en
+    # arte/pedidos_edificios.txt y arte/pedidos_recursos.txt; acá solo para que
+    # `importar` los reconozca por su nombre de archivo
+    vistos: set[str] = set()   # los recursos están en dos tiras (normal y "falta")
+    for t in spec.get("tiras") or []:
+        for ident in dict.fromkeys((t.get("iconos") or {}).values()):
+            if ident in vistos:
+                continue
+            vistos.add(ident)
+            dest = REPO / "assets" / "ui" / "piel_iconos" / f"{ident}.dds"
+            items.append({
+                "type": "ui_icon", "tag": "INTERFAZ", "id": ident, "dest": dest, "done": dest.exists(),
+                "size": (512, 512), "transparent": True, "hand_written": True,
+                "description": f"WHAT: {t.get('donde', '')}. EXACT SUBJECT: ver el pedido escrito a mano ({ident}).",
+                "style": _one_line(spec.get("estilo_iconos") or ""),
+            })
     return items
 
 
@@ -806,7 +822,7 @@ def _previous_ids() -> set[str] | None:
 
 
 def pedidos() -> None:
-    items = [i for i in catalog() if not i["done"]]
+    items = [i for i in catalog() if not i["done"] and not i.get("hand_written")]
     OUT.mkdir(parents=True, exist_ok=True)
     before = _previous_ids()
     old_new = (OUT / NEW_FILE).read_text(encoding="utf-8") if (OUT / NEW_FILE).exists() else None

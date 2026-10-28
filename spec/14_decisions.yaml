@@ -9400,6 +9400,22 @@ categories:
               - {country_exists: ZSG, guarantees: ZSG}
       effects:
       - {effect: flag, value: EFE_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: EFE_GAIA}
       - {effect: add_ideas, value: EFE_dominio_de_gaia}
       - effect: states
@@ -9499,6 +9515,22 @@ categories:
         - variable_below: {var: FCU_escandalo, value: 30}
       effects:
       - {effect: flag, value: FCU_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: FCU_AMERICAS}
       - {effect: add_ideas, value: FCU_corporacion_de_las_americas}
       - effect: states
@@ -9598,6 +9630,22 @@ categories:
         - variable_at_least: {var: ASC_computo, value: 100}
       effects:
       - {effect: flag, value: ASC_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: ASC_CONTINENTAL}
       - {effect: add_ideas, value: ASC_comuna_continental}
       - effect: states
@@ -9701,6 +9749,22 @@ categories:
         - variable_at_least: {var: HSN_nodos, value: 7}
       effects:
       - {effect: flag, value: HSN_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: HSN_SIETE_MARES}
       - {effect: add_ideas, value: HSN_talasocracia_de_los_siete_mares}
       - effect: states
@@ -9800,6 +9864,22 @@ categories:
         - variable_at_least: {var: NAS_inti, value: 60}
       effects:
       - {effect: flag, value: NAS_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: NAS_SOL_ETERNO}
       - {effect: add_ideas, value: NAS_imperio_del_sol_eterno}
       - effect: states
@@ -9897,6 +9977,22 @@ categories:
         - variable_at_least: {var: SHD_orden, value: 60}
       effects:
       - {effect: flag, value: SHD_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: SHD_ARMONIA_CELESTE}
       - {effect: add_ideas, value: SHD_armonia_celeste}
       - effect: states
@@ -10006,6 +10102,22 @@ categories:
         stability_at_least: 0.5
       effects:
       - {effect: flag, value: APF_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: APF_HUMANO_ORIGINAL}
       - {effect: add_ideas, value: APF_imperio_humano_original}
       - effect: states
@@ -10109,6 +10221,22 @@ categories:
         - variable_at_least: {var: NRE_auctoritas, value: 50}
       effects:
       - {effect: flag, value: NRE_forma_final}
+      # 2026-10-28: la noticia para los jugadores de países chicos (las potencias tienen la suya)
+      - effect: every_country
+        when:
+          is_ai: false
+          not:
+            any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+        effects:
+        - {effect: event, id: meganations_mapa.3, days: 2}
       - {effect: cosmetic_tag, value: NRE_ROMA_AETERNA}
       - {effect: add_ideas, value: NRE_imperio_eterno}
       - effect: states

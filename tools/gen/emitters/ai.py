@@ -216,6 +216,7 @@ def emit(ctx: BuildContext) -> None:
     for country, value in (invasions.get("focus") or {}).items():
         add_plan(f"{country}_dia_d", country, [{"type": "naval_invasion_focus", "value": int(value)}],
                  enable={"at_war": True})
+    written += _destiny_landings(ctx, invasions.get("destiny_states") or {}, root)
     if known is not None:
         ctx.note("ia: tipos de desembarco que usa el juego base: "
                  + ", ".join(f"{t} {'sí' if t in known else 'no'}"
@@ -440,6 +441,56 @@ def destiny_targets(ctx: BuildContext) -> dict[str, list[str]]:
                         holders.append(who)
             out[tag] = holders
     return out
+
+
+def _destiny_landings(ctx: BuildContext, cfg: dict, root: Block) -> int:
+    """Desembarcos sobre las regiones del destino (2026-10-28, copiado de
+    JAP_invade_guam del juego base, que vio en su reporte.txt): un plan por
+    región, activo mientras quien la controla está en guerra con el país;
+    pide tropas de desembarco para ESA región (state =) y ganas de desembarcar.
+    El juego base apunta por región, no por país: así sabe dónde ir."""
+    from .territory import normalize
+    ids = ctx.data.get("state_ids_by_name") or {}
+    if not ids:
+        if cfg:
+            ctx.note("ia: desembarcos del destino sin escribir (faltan las regiones del juego base)")
+        return 0
+    written, lines = 0, []
+    for cat in (ctx.spec.raw.get("decisions") or {}).get("categories") or []:
+        for d in cat.get("decisions") or []:
+            tag = str(d.get("id", "")).split("_")[0]
+            if not str(d.get("id", "")).endswith("_reclamar_el_destino") or tag not in cfg:
+                continue
+            value = int((cfg[tag] or {}).get("unit_request", 400))
+            focus = int((cfg[tag] or {}).get("focus", 0))
+            for e in d.get("effects") or []:
+                if e.get("effect") != "wargoal_holders":
+                    continue
+                for names in e.get("states") or []:
+                    sid = next((ids[normalize(n)] for n in names if normalize(n) in ids), None)
+                    if sid is None:
+                        ctx.warn(f"ia: desembarco del destino de {tag}: no encuentro la región {names}")
+                        continue
+                    plan = Block()
+                    plan.add("allowed", Block([("original_tag", tag)]))
+                    plan.add("enable", Block([(str(sid), Block([("controller", Block([("has_war_with", tag)]))]))]))
+                    plan.add("abort_when_not_enabled", True)
+                    req = Block()
+                    req.add("type", "invasion_unit_request")
+                    req.add("state", sid)
+                    req.add("value", value)
+                    plan.add("ai_strategy", req)
+                    if focus:
+                        f = Block()
+                        f.add("type", "naval_invasion_focus")
+                        f.add("value", focus)
+                        plan.add("ai_strategy", f)
+                    root.add(f"MEGANATIONS_{tag}_desembarco_{sid}", plan)
+                    written += 1
+                    lines.append(f"{names[0]} ({sid})")
+    if lines:
+        ctx.note(f"ia: desembarcos del destino ({written}): " + ", ".join(lines))
+    return written
 
 
 def _destiny_war_plans(ctx: BuildContext, wars: dict, add_plan) -> None:
