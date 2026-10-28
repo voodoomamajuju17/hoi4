@@ -116,6 +116,9 @@ def paso_python() -> bool:
 
 
 RUTA_GUARDADA = REPO / "ruta_del_juego.txt"
+# 2026-10-28 (pedido del usuario: "mete esto por defecto"): la ruta de su Steam,
+# para que una carpeta recién clonada la encuentre sin preguntar
+RUTA_POR_DEFECTO = r"C:\SteamLibrary\steamapps\common\Hearts of Iron IV"
 
 
 def _limpiar_ruta(texto: str) -> str:
@@ -136,6 +139,8 @@ def paso_buscar_juego(ruta_manual: str | None) -> object | None:
     # La ruta que ya funciono una vez queda guardada: no hay que pegarla de nuevo.
     if ruta_manual is None and RUTA_GUARDADA.exists():
         ruta_manual = RUTA_GUARDADA.read_text(encoding="utf-8").strip() or None
+    if ruta_manual is None and Path(RUTA_POR_DEFECTO).exists():
+        ruta_manual = RUTA_POR_DEFECTO
 
     juego = None
     try:
