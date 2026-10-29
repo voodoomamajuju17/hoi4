@@ -63,7 +63,7 @@ _COUNTRY_ONLY = {"add_political_power", "add_stability", "add_war_support", "arm
                  "exists", "has_wargoal_against", "is_in_faction_with", "surrender_progress", "is_ai", "capital_scope",
                  "set_truce", "is_subject_of", "is_subject"}
 _TO_STATE = {"capital_scope", "random_owned_state", "random_owned_controlled_state", "every_owned_state", "every_state",
-             "random_state", "any_state", "any_owned_state", "every_controlled_state", "random_controlled_state",
+             "random_state", "any_state", "any_owned_state", "every_controlled_state", "random_controlled_state", "any_controlled_state",
              "any_neighbor_state", "random_neighbor_state", "every_neighbor_state", "CAPITAL"}
 _TO_COUNTRY = {"owner", "controller", "OWNER", "CONTROLLER", "ROOT", "FROM", "every_country", "random_country",
                "any_country", "every_other_country", "any_other_country", "every_enemy_country", "any_enemy_country",
@@ -1891,8 +1891,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("278 modificadores dinamicos (23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 278 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("279 modificadores dinamicos (la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 279 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2993,10 +2993,10 @@ def test_vanilla_validation() -> None:
         mods = {m.lstrip("?") for m in mods}   # "?x": opcional, el doc lo lista sin el signo
         docs = van / "documentation"
         docs.mkdir()
-        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
+        (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### any_controlled_state\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
             "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n")
         (docs / "effects_documentation.md").write_text(
-            "add_political_power hidden_effect save_global_event_target_as add_stability add_war_support army_experience "
+            "add_political_power hidden_effect random_controlled_state save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
             "create_wargoal add_building_construction add_extra_state_shared_building_slots "
             "add_research_slot add_resource set_technology add_equipment_to_stockpile add_to_variable set_variable create_faction add_to_faction set_naval_oob set_air_oob add_opinion_modifier declare_war_on add_named_threat transfer_state "
@@ -4506,20 +4506,21 @@ def test_arsenal_vendido() -> None:
     section("el arsenal vendido vuelve como insurgencia (2026-10-29)")
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
-        ev = " ".join((ctx.mod_root / "events/meganations_mundo.txt").read_text(encoding="utf-8-sig").split())
-        i70 = ev.index("id = meganations_mundo.70 ")
-        e70 = ev[i70:ev.index("country_event", i70)]
+        raw = (ctx.mod_root / "events/meganations_mundo.txt").read_text(encoding="utf-8-sig")
+        evs = {}
+        for chunk in raw.split("\ncountry_event = {")[1:]:
+            flat = " ".join(chunk.split())
+            evs[flat.split("id = ", 1)[1].split(" ", 1)[0]] = flat
+        def body(n):
+            return evs.get(f"meganations_mundo.{n}", "")
+        e70 = body(70)
         check("ingenieros 75 PP; vender 100 PP y 50% de insurgencia a los 90 o 120 dias",
               "add_political_power = -75" in e70 and "add_political_power = 100" in e70
               and "id = meganations_mundo.73 days = 90" in e70 and "id = meganations_mundo.73 days = 120" in e70, e70[:600])
-        i73 = ev.index("id = meganations_mundo.73 ")
-        e73 = ev[i73:ev.index("country_event", i73)]
+        e73 = body(73)
         check("cada respuesta con su costo a la vista y el desenlace escondido",
               all(f"add_political_power = -{c} hidden_effect = {{ country_event = {{ id = meganations_mundo.{n} days = 21 }} }}" in e73
                   for c, n in ((25, 74), (50, 87), (100, 88))), e73[:900])
-        def body(n):
-            i = ev.index(f"id = meganations_mundo.{n} ")
-            return ev[i:ev.index("country_event", i)]
         check("A atentado, B insurgencia, C se evita con equipo",
               "damage_building = { type = infrastructure damage = 2 }" in body(74)
               and "add_resistance = 40" in body(87) and "MEGANATIONS_insurgencia_armada" in body(87)
