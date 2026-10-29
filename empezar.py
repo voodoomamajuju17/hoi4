@@ -304,6 +304,54 @@ def paso_instalar(ctx) -> bool:
 # ---------------------------------------------------------------------------
 
 
+def _buscar_asesores(root: Path, nombres: tuple[str, ...]) -> list[str]:
+    """Dónde define el juego base a ciertos asesores: la clave de su nombre en
+    localisation/ y los archivos de common/ e history/ que la usan."""
+    import re
+    out = ["", "-" * 68, "ASESORES DEL JUEGO BASE (dónde se definen)", "-" * 68]
+    claves: dict[str, str] = {}
+    for yml in (root / "localisation").rglob("*.yml"):
+        try:
+            texto = yml.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        for linea in texto.splitlines():
+            for nombre in nombres:
+                if nombre in linea and ":" in linea:
+                    clave = linea.split(":", 1)[0].strip()
+                    if clave and clave not in claves:
+                        claves[clave] = nombre
+                        out.append(f"nombre {nombre!r}: clave {clave} en {yml.relative_to(root)}")
+    if not claves:
+        out.append("ninguno de esos nombres está en localisation/ (los arma el juego con listas de nombres)")
+    patron = re.compile("|".join(re.escape(c) for c in claves)) if claves else None
+    vistos = 0
+    for carpeta in ("common", "history", "events"):
+        for f in (root / carpeta).rglob("*.txt"):
+            try:
+                texto = f.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            if patron is None:
+                continue
+            for n, linea in enumerate(texto.splitlines(), 1):
+                if patron.search(linea):
+                    out.append(f"usa la clave: {f.relative_to(root)}:{n}: {linea.strip()[:160]}")
+                    vistos += 1
+                    if vistos > 80:
+                        out.append("(cortado)")
+                        return out
+    # los asesores genéricos que el juego reparte solo (si existen en esta versión)
+    for f in sorted((root / "common").rglob("*.txt")):
+        try:
+            texto = f.read_text(encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+        if "generate_character" in texto or "random_character" in texto:
+            out.append(f"genera personajes: {f.relative_to(root)}")
+    return out
+
+
 def paso_reporte(juego, ctx) -> None:
     titulo("PASO 5 de 5  —  Escribiendo reporte.txt")
 
@@ -343,6 +391,13 @@ def paso_reporte(juego, ctx) -> None:
             extra.append(f"States vanilla:   {len(states)}")
         except Exception as exc:  # noqa: BLE001
             extra.append(f"States vanilla:   ERROR - {exc}")
+
+        # 2026-10-29 ("sacá todos estos ministros, están al pedo"): cuatro
+        # asesores del juego base con nombres de acá. Dónde los define el juego.
+        try:
+            extra.extend(_buscar_asesores(juego.root, ("Gaspar Mitre", "Manuel Flores", "Ramón de Urquiza", "Máximo Rojas")))
+        except Exception as exc:  # noqa: BLE001
+            extra.append(f"ASESORES DEL JUEGO BASE: ERROR - {exc}")
 
     if ctx is not None:
         extra.append(f"Archivos:         {len(ctx.written)}")

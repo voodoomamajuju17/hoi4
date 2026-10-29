@@ -457,6 +457,7 @@ def catalog() -> list[dict]:
                 "done": dest.exists(), "description": desc,
             })
     items += _adventure_items()
+    items += _mapa_items(long_desc.get("composition", ""))
     items += _loading_items()
     _apply_icon_looks(items)
     return items
@@ -482,6 +483,29 @@ def _loading_items() -> list[dict]:
             "type": "loading_screen", "tag": tag, "id": iid, "dest": dest, "done": dest.exists(),
             "style": f"{LOADING_STYLE}; {STYLE.get(tag, '')}",
             "description": f"{p['titulo']}: {_one_line(p['escena'])}",
+        })
+    return items
+
+
+def _mapa_items(composition: str) -> list[dict]:
+    """Noticias del mapa con imagen propia por país (2026-10-29, pedido del usuario:
+    "todos estos eventos necesitan su propia imagen, completamente originales")."""
+    path = REPO / "arte" / "mapa_paises.yaml"
+    if not path.exists():
+        return []
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    items = []
+    for key, text in (data.get("imagenes") or {}).items():
+        tag = key.split("_", 2)[2]
+        dest = REPO / "assets" / "events" / f"{key}.dds"
+        items.append({
+            "type": "event_picture", "tag": tag, "id": key, "dest": dest, "done": dest.exists(),
+            "description": f"{_one_line(text)} {_one_line(data.get('composicion') or composition)}".strip(),
+            # la técnica de cada pedido manda (no el "propaganda poster" de siempre)
+            "style": ("Hearts of Iron IV event picture set in the year 2100. Use exactly the TECHNIQUE named in the "
+                      "description; no default poster look"
+                      + (f"; palette and motifs: {STYLE[tag]}" if tag in STYLE else "")
+                      + "; no text, no letters, no watermark"),
         })
     return items
 
