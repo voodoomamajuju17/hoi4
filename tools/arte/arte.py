@@ -450,12 +450,22 @@ def catalog() -> list[dict]:
             dest = REPO / "assets" / "events" / f"{eid}.dds"
             desc = (f"{ev['title']['english']}: {_one_line(ev['desc']['english'])}" if not art
                     else _one_line(shared.get(art, ev['desc']['english'])))
+            style = None
             if eid in long_events:
                 desc = f"{_one_line(long_events[eid])} {_one_line(long_desc.get('composition', ''))}".strip()
-            items.append({
+                if "TECHNIQUE:" in str(long_events[eid]):
+                    # 2026-10-29: la técnica de cada pedido manda (no el "propaganda poster" de siempre)
+                    style = ("Hearts of Iron IV event picture set in the year 2100. Use exactly the TECHNIQUE named in "
+                             "the description; no default poster look"
+                             + (f"; palette and motifs: {STYLE[tag]}" if tag in STYLE else "")
+                             + "; no text, no letters, no watermark")
+            item = {
                 "type": "event_picture", "tag": "COMPARTIDOS" if art or tag is None else tag, "id": eid, "dest": dest,
                 "done": dest.exists(), "description": desc,
-            })
+            }
+            if style:
+                item["style"] = style
+            items.append(item)
     items += _adventure_items()
     items += _mapa_items(long_desc.get("composition", ""))
     items += _loading_items()
