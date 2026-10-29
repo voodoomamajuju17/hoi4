@@ -4725,6 +4725,21 @@ def test_gaia() -> None:
               "EFE_caudillos_selva" in se and "meganations_mundo.103" in se)
 
 
+def test_agencias() -> None:
+    section("agencias de inteligencia propias con el emblema del espiritu (2026-10-29)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        ag = " ".join((mod / "common/intelligence_agencies/meganations_agencias.txt").read_text(encoding="utf-8").split())
+        check("una agencia por meganacion, con su emblema y solo para ella",
+              all(f"picture = GFX_intelligence_agency_logo_MEGANATIONS_{t} " in ag and f"available = {{ original_tag = {t} }}" in ag
+                  for t in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE")) and "Frumentarii" in ag, ag[:400])
+        gfx = (mod / "interface/meganations_agencias.gfx").read_text(encoding="utf-8")
+        check("el emblema es la imagen del Servicio de Inteligencia",
+              (mod / "gfx/interface/intelligence_agency_logos/meganations/SHD.dds").exists()
+              and "intelligence_agency_logos/meganations/SHD.dds" in gfx)
+
+
 def test_reglas() -> None:
     section("reglas de la partida: deslizadores de las meganaciones (2026-10-27)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -4802,6 +4817,7 @@ def main() -> int:
         test_albion,
         test_japon,
         test_gaia,
+        test_agencias,
         test_reglas,
         test_simulador,
         test_vanilla_validation,

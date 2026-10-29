@@ -2150,3 +2150,7 @@ Pedido del usuario: soltar a Gaia tiene que ser mucho más ventajoso en el efect
 - La Selva Productiva: +22 de saturación y la Selva Arde un año (-10% de población reclutable, más desgaste); la selva explotada resta más estabilidad (-8%). Desde 2102, sin los Caudillos y con el Amazonas en manos del EFE, cada mes hay 4% de que vuelvan (meganations_mundo.103).
 - Test: test_gaia.
 
+
+## Agencias de inteligencia propias (2026-10-29)
+
+Captura del usuario: al crear la agencia salía el "Research and Analysis Wing" de la India de 1936 (el mod no definía agencias y el juego daba una suya). Ahora cada meganación tiene la suya, con el emblema de su espíritu Servicio de Inteligencia: Las Raíces del Imperio (EFE), Dirección de Vigilancia Algorítmica (ASC), Consultora de Riesgo Consolidado (FCU), Oficina de Seguros y Manifiestos (HSN), Los Ojos del Inti (NAS), Oficina del Caudal Oculto (SHD), Consejo de las Voces Lejanas (APF) y Frumentarii (NRE). Emisor: tools/gen/emitters/agencias.py. Test: test_agencias.
