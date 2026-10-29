@@ -1891,8 +1891,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("279 modificadores dinamicos (la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 279 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("280 modificadores dinamicos (la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 280 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -4502,6 +4502,27 @@ def test_rumbo_2120() -> None:
               for x in ("zet", "zsa", "zco", "zao", "zmz", "zmg", "zke")))
 
 
+def test_ocultos() -> None:
+    section("eventos inocentes con efectos escondidos (2026-10-29)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        raw = (ctx.mod_root / "events/meganations_ocultos.txt").read_text(encoding="utf-8-sig")
+        evs = {}
+        for chunk in raw.split("\ncountry_event = {")[1:]:
+            flat = " ".join(chunk.split())
+            evs[flat.split("id = ", 1)[1].split(" ", 1)[0]] = flat
+        starts = [f"meganations_ocultos.{n}" for n in (1, 10, 20, 30, 40, 50, 60, 70, 80, 90)]
+        check("2 globales y 8 unicos, cada uno con tres opciones", all(evs.get(e, "").count("option = {") == 3 for e in starts),
+              str(sorted(evs))[:300])
+        sin_esconder = [e for e in starts for opt in evs[e].split("option = {")[1:]
+                        if "country_event" in opt.split("hidden_effect")[0]]
+        check("el desenlace siempre va escondido (hidden_effect)", not sin_esconder, str(sin_esconder))
+        dec = " ".join((ctx.mod_root / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        check("globales: 12 meses de espera y 2% por mes (2 cada ~10 anios), el bunker incluido",
+              "flag = MEGANATIONS_oculto_espera days > 365" in dec and "147 = { }" in dec
+              and "id = meganations_ocultos.1 days = 2" in dec and "id = meganations_ocultos.10 days = 2" in dec, dec[:200])
+
+
 def test_arsenal_vendido() -> None:
     section("el arsenal vendido vuelve como insurgencia (2026-10-29)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -4859,6 +4880,7 @@ def main() -> int:
         test_bitacora,
         test_mapa,
         test_arsenal_vendido,
+        test_ocultos,
         test_incidentes_y_guerras,
         test_albion,
         test_japon,
