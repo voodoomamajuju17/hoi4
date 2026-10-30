@@ -548,11 +548,35 @@ def render_effects(owner: str, items: list[dict], known,
         if effect == "sabotage_factories":
             # 2026-10-11 (los Hijos de Odín): bombas en las fábricas de una región
             # al azar. damage_building no se verifica contra documentation/.
+            # 2026-10-29: `buildings` elige qué (atentado: infraestructura)
             dmg = Block()
-            for b in ("industrial_complex", "arms_factory"):
+            for b in item.get("buildings") or ("industrial_complex", "arms_factory"):
                 dmg.add("damage_building", Block([("type", b), ("damage", int(item.get("damage", 1)))]))
             block.add("random_owned_controlled_state", dmg)
             effects_used.setdefault("random_owned_controlled_state", owner)
+            continue
+        if effect == "hidden":
+            # 2026-10-29 (pedido del usuario: "escondé siempre en este tipo de
+            # eventos los efectos"): lo que pasa no se ve en la opción
+            block.add("hidden_effect", render_effects(owner, list(item.get("effects") or []), ec, effects_used, where=where))
+            effects_used.setdefault("hidden_effect", owner)
+            continue
+        if effect == "insurgency":
+            # 2026-10-29 (las armas del búnker vendido): la resistencia sube en una
+            # región ocupada (controlada y no propia); sin ninguna, una región propia
+            # que no es núcleo pierde infraestructura. add_resistance y
+            # damage_building no se verifican contra documentation/.
+            occ = Block([("limit", Block([("NOT", Block([("is_owned_by", "ROOT")]))])),
+                         ("add_resistance", int(item.get("resistance", 40)))])
+            block.add("if", Block([("limit", Block([("any_controlled_state", Block([("NOT", Block([("is_owned_by", "ROOT")]))]))])),
+                                   ("random_controlled_state", occ)]))
+            block.add("else", Block([("random_owned_controlled_state", Block([
+                ("limit", Block([("NOT", Block([("is_core_of", "ROOT")]))])),
+                ("damage_building", Block([("type", "infrastructure"), ("damage", 1)]))]))]))
+            for k in ("random_controlled_state", "random_owned_controlled_state"):
+                effects_used.setdefault(k, owner)
+            for k in ("any_controlled_state", "is_owned_by", "is_core_of"):
+                ec.triggers_used.setdefault(k, owner)
             continue
         if effect == "refresh_focus_tree":
             # vuelve a mirar los allow_branch del árbol (el foco secreto de la
@@ -720,7 +744,8 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "run":
             name = item["value"]
-            if ec.scripted is not None and name not in ec.scripted:
+            # MEGANATIONS_mapa_*: los escribe tools/gen/emitters/mapa.py (2026-10-29)
+            if ec.scripted is not None and name not in ec.scripted and not name.startswith("MEGANATIONS_mapa_"):
                 raise SpecError(f"{owner}: run '{name}' no esta en 14_decisions.yaml -> scripted_effects",
                                 where=where)
             block.add(name, True)
@@ -916,11 +941,9 @@ def render_effects(owner: str, items: list[dict], known,
             # la noticia del bando nuevo (meganations_mapa.4, FROM = el país que se parte)
             rb.add("save_global_event_target_as", "MN_mapa_rebelde")
             block.add("random_country", rb)
-            block.add("every_country", Block([("limit", Block([("is_ai", False)])),
-                                              ("country_event", Block([("id", "meganations_mapa.4"), ("days", 1)]))]))
-            for k in ("save_global_event_target_as", "every_country", "country_event"):
-                effects_used.setdefault(k, owner)
-            ec.triggers_used.setdefault("is_ai", owner)
+            # con la imagen propia del país si ya está (mapa.py)
+            block.add("MEGANATIONS_mapa_guerra_civil", True)
+            effects_used.setdefault("save_global_event_target_as", owner)
             if item.get("global_flag"):
                 block.add("set_global_flag", item["global_flag"])
                 effects_used.setdefault("set_global_flag", owner)

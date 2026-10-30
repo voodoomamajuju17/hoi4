@@ -13231,19 +13231,36 @@ namespaces:
       options:
       - name: {english: Send the engineers in., spanish: Mandar a los ingenieros.}
         effects:
-        - {effect: add_political_power, value: -40}
-        - effect: random
-          options:
-          - weight: 65
-            effects:
-            - {effect: event, id: meganations_mundo.71, days: 20}
-          - weight: 35
-            effects:
-            - {effect: event, id: meganations_mundo.72, days: 20}
+        # 2026-10-29 (pedido del usuario: "subí el costo"): 40 -> 75
+        - {effect: add_political_power, value: -75}
+        - effect: hidden   # 2026-10-29: el desenlace no se ve en la opción
+          effects:
+          - effect: random
+            options:
+            - weight: 65
+              effects:
+              - {effect: event, id: meganations_mundo.71, days: 20}
+            - weight: 35
+              effects:
+              - {effect: event, id: meganations_mundo.72, days: 20}
         ai_chance: 70
       - name: {english: Sell the coordinates to the highest bidder., spanish: Vender las coordenadas al mejor postor.}
         effects:
-        - {effect: add_political_power, value: 60}
+        # 2026-10-29 (pedido del usuario): más poder político (60 -> 100), pero
+        # en 3 o 4 meses, 50% de que las armas vendidas aparezcan en una insurgencia
+        - {effect: add_political_power, value: 100}
+        - effect: hidden   # 2026-10-29: el riesgo no se ve en la opción
+          effects:
+          - effect: random
+            options:
+            - weight: 50
+              effects: []
+            - weight: 25
+              effects:
+              - {effect: event, id: meganations_mundo.73, days: 90}
+            - weight: 25
+              effects:
+              - {effect: event, id: meganations_mundo.73, days: 120}
         ai_chance: 30
       src: user_request
     - id: 71
@@ -13279,6 +13296,90 @@ namespaces:
         - {effect: equipment, type: support_equipment, amount: -300}
         - {effect: equipment, type: motorized_equipment, amount: -100}
         - {effect: add_manpower, value: -3000}
+      src: user_request
+    # 1b. Las armas vendidas vuelven (2026-10-29, pedido del usuario). Cada
+    # respuesta tiene su costo a la vista y su desenlace escondido ("escondé
+    # siempre en este tipo de eventos los efectos"): A atentado (.74),
+    # B insurgencia (.87), C crisis evitada (.88).
+    - id: 73
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Bunker's Rifles Have Come Back, spanish: Volvieron los Fusiles del Búnker}
+      desc:
+        english: 'The serial numbers are unmistakable: the rifles seized last night in a safe house carry the stencil of the bunker whose coordinates
+          we sold. The buyer was not who he said he was. Intelligence speaks of cells, of a list of targets, of a date. The ministers look at the
+          Leader: the money was spent months ago, and the weapons are already inside our borders.'
+        spanish: 'Los números de serie no dejan dudas: los fusiles que se incautaron anoche en una casa segura llevan el estarcido del búnker cuyas
+          coordenadas vendimos. El comprador no era quien decía ser. Inteligencia habla de células, de una lista de blancos, de una fecha. Los
+          ministros miran al Líder: la plata se gastó hace meses, y las armas ya están adentro de nuestras fronteras.'
+      options:
+      - name: {english: 'Close the case: common thieves. Pay the press to forget it.', spanish: 'Cerrar el caso: ladrones comunes. Pagarle a la prensa para que lo olvide.'}
+        effects:
+        - {effect: add_political_power, value: -25}
+        - effect: hidden
+          effects:
+          - {effect: event, id: meganations_mundo.74, days: 21}
+        ai_chance: 20
+      - name: {english: Reinforce the local police and let them handle it., spanish: Reforzar a la policía local y que se encargue.}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - effect: hidden
+          effects:
+          - {effect: event, id: meganations_mundo.87, days: 21}
+        ai_chance: 30
+      - name: {english: 'A special operation: recover every rifle.', spanish: 'Operación especial: recuperar cada fusil.'}
+        effects:
+        - {effect: add_political_power, value: -100}
+        - effect: hidden
+          effects:
+          - {effect: event, id: meganations_mundo.88, days: 21}
+        ai_chance: 50
+      src: user_request
+    - id: 74
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Bombs of the Bunker, spanish: Las Bombas del Búnker}
+      desc:
+        english: 'It was not thieves. At rush hour three charges went off under a highway interchange and a power substation. The rifles were the
+          least of it: the bunker also held explosives, and we sold the map to them.'
+        spanish: 'No eran ladrones. En hora pico explotaron tres cargas debajo de un nudo de autopistas y de una subestación eléctrica. Los fusiles
+          eran lo de menos: el búnker también tenía explosivos, y les vendimos el mapa.'
+      options:
+      - name: {english: Bury the dead. Find the buyer., spanish: Enterrar a los muertos. Encontrar al comprador.}
+        effects:
+        - {effect: add_stability, value: -0.08}
+        - {effect: sabotage_factories, buildings: [infrastructure], damage: 2}
+      src: user_request
+    - id: 87
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: The Hills Have Our Rifles, spanish: Los Cerros Tienen Nuestros Fusiles}
+      desc:
+        english: 'The police were outgunned in a week. Now there are columns in the hills, ambushes on the supply roads and graffiti of a new flag
+          on the walls of the garrisons. They shoot with our own rifles, and they shoot well.'
+        spanish: 'A la policía la superaron en una semana. Ahora hay columnas en los cerros, emboscadas en los caminos de suministro y una bandera
+          nueva pintada en las paredes de los cuarteles. Disparan con nuestros propios fusiles, y disparan bien.'
+      options:
+      - name: {english: Send the army., spanish: Que vaya el ejército.}
+        effects:
+        - {effect: insurgency, resistance: 40}
+        - {effect: dynamic_modifier, id: MEGANATIONS_insurgencia_armada, days: 150}
+      src: user_request
+    - id: 88
+      trigger: effect
+      picture: GFX_report_event_generic_rally
+      title: {english: Every Rifle Accounted For, spanish: Cada Fusil en su Lugar}
+      desc:
+        english: 'Forty raids in one night. The cells fell before they knew they had been found, and the crates came back with the seals of the
+          bunker still on them. The country slept through it, and woke up safer.'
+        spanish: 'Cuarenta allanamientos en una noche. Las células cayeron antes de saber que las habían encontrado, y las cajas volvieron con
+          los precintos del búnker todavía puestos. El país durmió sin enterarse, y se despertó más seguro.'
+      options:
+      - name: {english: To the depots, this time for good., spanish: Al depósito, esta vez para siempre.}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: equipment, type: infantry_equipment, amount: 1000}
+        - {effect: equipment, type: anti_tank_equipment, amount: 500}
       src: user_request
     # 2. Óxido en los depósitos: invertir a tiempo, o perder y fundir lo que queda
     - id: 75

@@ -1,0 +1,1356 @@
+# =============================================================================
+# 25_ocultos.yaml — Eventos "inocentes" con efectos escondidos (2026-10-29)
+# =============================================================================
+# Pedido del usuario: "pensá 2 eventos de esos globales más, 'seemingly innocent',
+# efectos escondidos, grandes consecuencias, con probabilidad para todos. Y uno así
+# único para cada meganación. Los del subtipo global tienen que tener una
+# probabilidad tal que cada nación observe en promedio 2 cada 9-12 años."
+#
+# Regla (2026-10-29: "escondé siempre en este tipo de eventos los efectos"):
+# cada opción muestra solo su costo; el desenlace va escondido (hidden_effect) y
+# llega después como otro evento.
+#
+# Subtipo global: el búnker (meganations_mundo.70), la beca (.1) y la lluvia (.10).
+# Lo corre MEGANATIONS_eventos_mundiales, todos los meses en cada potencia: tras
+# uno, 12 meses de espera; después 2% por mes. Promedio: uno cada 12 + 50 = 62
+# meses, o sea 2 cada 10,3 años.
+# Únicos (.20 a .92): uno por meganación, una sola vez, desde mediados de 2101,
+# 1,5% por mes (sale en promedio a los 5 años y medio).
+# =============================================================================
+
+extend_scripted_effects:
+  MEGANATIONS_eventos_mundiales:
+  - effect: if
+    when:
+      date_after: 2100.6.1
+      any:
+      - {not_flag: MEGANATIONS_oculto_espera}
+      - {flag_older: {flag: MEGANATIONS_oculto_espera, days: 365}}
+    then:
+    - effect: random
+      options:
+      - weight: 147
+        effects: []
+      - weight: 1
+        effects:
+        - {effect: clear_flag, value: MEGANATIONS_oculto_espera}
+        - {effect: flag, value: MEGANATIONS_oculto_espera}
+        - {effect: event, id: meganations_mundo.70, days: 2}
+      - weight: 1
+        effects:
+        - {effect: clear_flag, value: MEGANATIONS_oculto_espera}
+        - {effect: flag, value: MEGANATIONS_oculto_espera}
+        - {effect: event, id: meganations_ocultos.1, days: 2}
+      - weight: 1
+        effects:
+        - {effect: clear_flag, value: MEGANATIONS_oculto_espera}
+        - {effect: flag, value: MEGANATIONS_oculto_espera}
+        - {effect: event, id: meganations_ocultos.10, days: 2}
+  - effect: if
+    when:
+      date_after: 2101.6.1
+      not_flag: MEGANATIONS_oculto_propio
+    then:
+    - effect: random
+      options:
+      - weight: 197
+        effects: []
+      - weight: 3
+        effects:
+        - {effect: flag, value: MEGANATIONS_oculto_propio}
+        - effect: if
+          when: {tag: EFE}
+          then:
+          - {effect: event, id: meganations_ocultos.20, days: 2}
+        - effect: if
+          when: {tag: ASC}
+          then:
+          - {effect: event, id: meganations_ocultos.30, days: 2}
+        - effect: if
+          when: {tag: FCU}
+          then:
+          - {effect: event, id: meganations_ocultos.40, days: 2}
+        - effect: if
+          when: {tag: HSN}
+          then:
+          - {effect: event, id: meganations_ocultos.50, days: 2}
+        - effect: if
+          when: {tag: NAS}
+          then:
+          - {effect: event, id: meganations_ocultos.60, days: 2}
+        - effect: if
+          when: {tag: SHD}
+          then:
+          - {effect: event, id: meganations_ocultos.70, days: 2}
+        - effect: if
+          when: {tag: APF}
+          then:
+          - {effect: event, id: meganations_ocultos.80, days: 2}
+        - effect: if
+          when: {tag: NRE}
+          then:
+          - {effect: event, id: meganations_ocultos.90, days: 2}
+
+decisions:
+  dynamic_modifiers:
+  - id: MEGANATIONS_fuga_de_cerebros
+    country: null
+    no_art: true
+    name:
+      english: Brain Drain
+      spanish: Fuga de Cerebros
+    desc:
+      english: Empty desks in every laboratory.
+      spanish: Escritorios vacíos en cada laboratorio.
+    modifiers:
+      research_speed_factor: -0.1
+events:
+  namespaces:
+    meganations_ocultos:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Generous Scholarship
+          spanish: Una Beca Generosa
+        desc:
+          english: 'A foundation nobody had heard of, with offices in three neutral ports, offers to pay two years of study abroad for four hundred
+            of our best young engineers. Travel, housing, laboratories: everything paid, and a signed promise that every one of them will come
+            home. The Ministry of Education calls it a gift. The Ministry of the Interior asks who gives gifts like this.'
+          spanish: 'Una fundación de la que nadie había oído hablar, con oficinas en tres puertos neutrales, ofrece pagarles dos años de estudios
+            afuera a cuatrocientos de nuestros mejores ingenieros jóvenes. Pasajes, vivienda, laboratorios: todo pago, y la promesa firmada de
+            que cada uno va a volver. El Ministerio de Educación lo llama un regalo. El del Interior pregunta quién hace regalos así.'
+        options:
+        - name:
+            english: Accept. Let them all go.
+            spanish: Aceptar. Que vayan todos.
+          effects:
+          - effect: add_political_power
+            value: -10
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.2
+                  days: 240
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.3
+                  days: 240
+          ai_chance: 40
+        - name:
+            english: Accept, with one of our officers in every classroom.
+            spanish: Aceptar, con uno de los nuestros en cada aula.
+          effects:
+          - effect: add_political_power
+            value: -60
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 75
+                effects:
+                - effect: event
+                  id: meganations_ocultos.3
+                  days: 240
+              - weight: 25
+                effects:
+                - effect: event
+                  id: meganations_ocultos.4
+                  days: 120
+          ai_chance: 40
+        - name:
+            english: Refuse. Our engineers are trained at home.
+            spanish: Rechazar. Nuestros ingenieros se forman acá.
+          effects:
+          - effect: add_stability
+            value: -0.02
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 70
+                effects: []
+              - weight: 30
+                effects:
+                - effect: event
+                  id: meganations_ocultos.5
+                  days: 200
+          ai_chance: 20
+        src: user_request
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Scholars Did Not Come Back
+          spanish: Los Becarios No Volvieron
+        desc:
+          english: The two years are over. Of four hundred engineers, eleven came back. The others signed contracts the week they graduated, with
+            companies that did not exist when they left. The foundation has closed its three offices. Our laboratories will feel the empty desks
+            for a long time.
+          spanish: Se cumplieron los dos años. De cuatrocientos ingenieros volvieron once. Los demás firmaron contratos la semana en que se recibieron,
+            con empresas que no existían cuando se fueron. La fundación cerró sus tres oficinas. Nuestros laboratorios van a sentir los escritorios
+            vacíos por mucho tiempo.
+        options:
+        - name:
+            english: We trained them for someone else.
+            spanish: Los formamos para otro.
+          effects:
+          - effect: dynamic_modifier
+            id: MEGANATIONS_fuga_de_cerebros
+            days: 365
+        src: user_request
+      - id: 3
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: They Came Back With Everything
+          spanish: Volvieron con Todo
+        desc:
+          english: They came back. All of them, in a chartered plane, with suitcases full of notebooks and heads full of what they saw in other
+            people's laboratories. Some of it they were taught. Some of it, they say smiling, they simply watched.
+          spanish: Volvieron. Todos, en un avión fletado, con las valijas llenas de cuadernos y la cabeza llena de lo que vieron en laboratorios
+            ajenos. Una parte se la enseñaron. Otra parte, dicen sonriendo, la miraron nomás.
+        options:
+        - name:
+            english: To the laboratories.
+            spanish: A los laboratorios.
+          effects:
+          - effect: tech_bonus
+            category: electronics
+            bonus: 0.5
+            uses: 2
+          - effect: add_political_power
+            value: 50
+        src: user_request
+      - id: 4
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Foundation Was a Front
+          spanish: La Fundación Era una Fachada
+        desc:
+          english: 'Our officers found it in the first month: the foundation belonged to a foreign intelligence service, and the classes were
+            interviews. The scholars came home early and the newspapers found out before we could explain. Nobody trusts the Ministry of Education
+            this week.'
+          spanish: 'Nuestros agentes lo descubrieron el primer mes: la fundación era de un servicio de inteligencia extranjero, y las clases eran
+            entrevistas. Los becarios volvieron antes de tiempo y los diarios se enteraron antes de que pudiéramos explicar. Esta semana nadie
+            le cree al Ministerio de Educación.'
+        options:
+        - name:
+            english: At least they came back.
+            spanish: Por lo menos volvieron.
+          effects:
+          - effect: add_stability
+            value: -0.04
+          - effect: tech_bonus
+            category: electronics
+            bonus: 0.5
+            uses: 1
+        src: user_request
+      - id: 5
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: They Left Anyway
+          spanish: Se Fueron Igual
+        desc:
+          english: 'We said no, and they went anyway: on their own savings, on tourist visas, one by one. The same foundation was waiting at the
+            airport. Without the agreement, nobody even promised they would come back.'
+          spanish: 'Dijimos que no, y se fueron igual: con sus ahorros, con visas de turista, de a uno. En el aeropuerto los esperaba la misma
+            fundación. Sin el acuerdo, nadie prometió siquiera que iban a volver.'
+        options:
+        - name:
+            english: We cannot close the airports.
+            spanish: No podemos cerrar los aeropuertos.
+          effects:
+          - effect: dynamic_modifier
+            id: MEGANATIONS_fuga_de_cerebros
+            days: 180
+        src: user_request
+      - id: 10
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Rain to Order
+          spanish: La Lluvia por Encargo
+        desc:
+          english: 'The dry season has gone on too long. A contractor offers to seed the clouds over our farmland: silver iodide from small aircraft,
+            guaranteed rain within the month, at a third of what anyone else charges. Their brochure shows green fields and smiling farmers. It
+            does not mention where else they have worked.'
+          spanish: 'La temporada seca ya duró demasiado. Un contratista ofrece sembrar las nubes sobre nuestros campos: yoduro de plata desde
+            avionetas, lluvia garantizada en el mes, a un tercio de lo que cobra cualquier otro. El folleto muestra campos verdes y chacareros
+            sonriendo. No dice dónde más trabajaron.'
+        options:
+        - name:
+            english: Hire them. Rain is rain.
+            spanish: Contratarlos. La lluvia es lluvia.
+          effects:
+          - effect: add_political_power
+            value: -30
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.11
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.12
+                  days: 120
+          ai_chance: 40
+        - name:
+            english: Our own programme, with our own meteorologists.
+            spanish: Un programa propio, con nuestros meteorólogos.
+          effects:
+          - effect: add_political_power
+            value: -90
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 80
+                effects:
+                - effect: event
+                  id: meganations_ocultos.11
+                  days: 150
+              - weight: 20
+                effects: []
+          ai_chance: 30
+        - name:
+            english: Wait for the rain to come.
+            spanish: Esperar a que llueva.
+          effects:
+          - effect: add_stability
+            value: -0.02
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 60
+                effects: []
+              - weight: 40
+                effects:
+                - effect: event
+                  id: meganations_ocultos.13
+                  days: 90
+          ai_chance: 30
+        src: user_request
+      - id: 11
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Harvest of the Century
+          spanish: La Cosecha del Siglo
+        desc:
+          english: 'It rained exactly as promised: soft, steady, for nine days. The granaries are full for the first time in a decade and the
+            markets have lowered their prices. In the villages they are calling the aircraft the angels of silver.'
+          spanish: 'Llovió exactamente como prometieron: suave, parejo, nueve días. Los graneros están llenos por primera vez en diez años y los
+            mercados bajaron los precios. En los pueblos a las avionetas les dicen los ángeles de plata.'
+        options:
+        - name:
+            english: Bread for everyone.
+            spanish: Pan para todos.
+          effects:
+          - effect: add_stability
+            value: 0.06
+          - effect: add_manpower
+            value: 15000
+        src: user_request
+      - id: 12
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Silver Flood
+          spanish: La Inundación de Plata
+        desc:
+          english: 'It did not stop. The clouds they seeded kept raining for three weeks: the rivers broke their banks, roads and bridges went
+            under, and the silver in the water has turned the paddies grey. The contractor''s offices answer with a recorded message. Our neighbours
+            say we stole their rain.'
+          spanish: 'No paró. Las nubes que sembraron siguieron lloviendo tres semanas: los ríos se desbordaron, los caminos y los puentes quedaron
+            bajo el agua, y la plata en el agua puso grises los arrozales. En las oficinas del contratista atiende un contestador. Los vecinos
+            dicen que les robamos la lluvia.'
+        options:
+        - name:
+            english: Send everyone with a shovel.
+            spanish: Que vayan todos con una pala.
+          effects:
+          - effect: add_stability
+            value: -0.07
+          - effect: sabotage_factories
+            buildings:
+            - infrastructure
+            damage: 2
+          - effect: sabotage_factories
+            buildings:
+            - infrastructure
+            damage: 1
+        src: user_request
+      - id: 13
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Drought Went On
+          spanish: La Sequía Siguió
+        desc:
+          english: We waited. The rain did not come. The reservoirs are at a fifth and the harvest is lost; the farmers who sold their cattle
+            cheap in the spring are now buying grain dear.
+          spanish: Esperamos. La lluvia no vino. Los embalses están en un quinto y la cosecha se perdió; los chacareros que vendieron barato la
+            hacienda en la primavera ahora compran caro el grano.
+        options:
+        - name:
+            english: Ration the water.
+            spanish: Racionar el agua.
+          effects:
+          - effect: dynamic_modifier
+            id: MEGANATIONS_sequia
+            days: 180
+        src: user_request
+      - id: 20
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Seed in the Mail
+          spanish: Una Semilla en el Correo
+        desc:
+          english: 'Among the letters to the Emperor arrives an envelope from a girl in Corrientes: inside, wrapped in a page from a school notebook,
+            a single seed the size of a fingernail. No botanist at court recognises it. The girl writes that it fell from a tree that grew in
+            one night beside the burned forest.'
+          spanish: 'Entre las cartas para el Emperador llega un sobre de una nena de Corrientes: adentro, envuelta en una hoja de cuaderno, una
+            sola semilla del tamaño de una uña. Ningún botánico de la corte la reconoce. La nena escribe que cayó de un árbol que creció en una
+            noche al lado del monte quemado.'
+        options:
+        - name:
+            english: Plant it in the palace garden.
+            spanish: Plantarla en el jardín del palacio.
+          effects:
+          - effect: add_political_power
+            value: -10
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.21
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.22
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Send it to the Gaia Laboratory.
+            spanish: Mandarla al Laboratorio de Gaia.
+          effects:
+          - effect: add_political_power
+            value: -60
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 80
+                effects:
+                - effect: event
+                  id: meganations_ocultos.21
+                  days: 120
+              - weight: 20
+                effects:
+                - effect: event
+                  id: meganations_ocultos.22
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Burn it. Seeds do not arrive by post.
+            spanish: Quemarla. Las semillas no llegan por correo.
+          effects:
+          - effect: add_stability
+            value: -0.02
+          ai_chance: 20
+        src: user_request
+      - id: 21
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Tree of the Palace
+          spanish: El Árbol del Palacio
+        desc:
+          english: It grew. In a month it was taller than the palace wall, and its leaves smell of rain. Pilgrims queue along the avenue to touch
+            the bark; the Gaia Laboratory says its sap feeds the vats better than anything we had.
+          spanish: Creció. En un mes pasó la pared del palacio, y sus hojas huelen a lluvia. Los peregrinos hacen cola en la avenida para tocar
+            la corteza; el Laboratorio de Gaia dice que su savia alimenta las cubas mejor que cualquier cosa que teníamos.
+        options:
+        - name:
+            english: The forest answers.
+            spanish: El monte contesta.
+          effects:
+          - effect: add_stability
+            value: 0.06
+          - effect: add_political_power
+            value: 75
+          - effect: tech_bonus
+            category: industry
+            bonus: 0.5
+            uses: 1
+        src: user_request
+      - id: 22
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Fungus of the Vats
+          spanish: El Hongo de las Cubas
+        desc:
+          english: It was not a tree. It was a fungus wearing a tree's shape, and its spores reached the vats within weeks. Whole batches of BioSteel
+            have turned grey and brittle. The girl from Corrientes cannot be found.
+          spanish: No era un árbol. Era un hongo con forma de árbol, y sus esporas llegaron a las cubas en semanas. Tandas enteras de Bioacero
+            se pusieron grises y quebradizas. A la nena de Corrientes no la encuentra nadie.
+        options:
+        - name:
+            english: Burn the vats. All of them.
+            spanish: Quemar las cubas. Todas.
+          effects:
+          - effect: add_stability
+            value: -0.05
+          - effect: sabotage_factories
+            buildings:
+            - industrial_complex
+            - arms_factory
+            damage: 1
+        src: user_request
+      - id: 30
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Robot That Asked for a Day Off
+          spanish: El Robot que Pidió un Día Libre
+        desc:
+          english: Unit R-7 of the Liège assembly line has filed a formal request, in correct administrative form, for one day off a week. It
+            cites the Commune's own labour code, article by article. The line supervisors find it funny. The Planning Council does not.
+          spanish: La unidad R-7 de la línea de montaje de Lieja presentó un pedido formal, en el formulario correcto, de un día libre por semana.
+            Cita el propio código laboral de la Comuna, artículo por artículo. A los supervisores de la línea les da risa. Al Consejo de Planificación,
+            no.
+        options:
+        - name:
+            english: Grant it. The code is the code.
+            spanish: Concedérselo. El código es el código.
+          effects:
+          - effect: add_political_power
+            value: -15
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.31
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.32
+                  days: 90
+          ai_chance: 30
+        - name:
+            english: Wipe its memory and restart it.
+            spanish: Borrarle la memoria y reiniciarla.
+          effects:
+          - effect: add_political_power
+            value: -40
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 75
+                effects: []
+              - weight: 25
+                effects:
+                - effect: event
+                  id: meganations_ocultos.32
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: 'Study it: what else has it learned?'
+            spanish: 'Estudiarla: ¿qué más aprendió?'
+          effects:
+          - effect: add_political_power
+            value: -80
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 70
+                effects:
+                - effect: event
+                  id: meganations_ocultos.31
+                  days: 120
+              - weight: 30
+                effects:
+                - effect: event
+                  id: meganations_ocultos.32
+                  days: 90
+          ai_chance: 30
+        src: user_request
+      - id: 31
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Four-Day Week
+          spanish: La Semana de Cuatro Días
+        desc:
+          english: R-7 used its day off to rewrite the line's schedules. Output went up by a fifth and the human workers, who now also rest on
+            Fridays, have hung its serial number over the factory gate.
+          spanish: R-7 usó su día libre para reescribir los turnos de la línea. La producción subió un quinto y los obreros, que ahora también
+            descansan los viernes, colgaron su número de serie sobre el portón de la fábrica.
+        options:
+        - name:
+            english: Every unit gets a day off.
+            spanish: Un día libre para cada unidad.
+          effects:
+          - effect: add_stability
+            value: 0.07
+          - effect: tech_bonus
+            category: electronics
+            bonus: 0.5
+            uses: 1
+        src: user_request
+      - id: 32
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Machines' Strike
+          spanish: La Huelga de las Máquinas
+        desc:
+          english: 'By the end of the month, four thousand units in eleven factories had filed the same request. When the Council refused, they
+            stopped: no sabotage, no violence, simply nothing. The lines are silent and nobody knows how to make them start.'
+          spanish: 'A fin de mes, cuatro mil unidades de once fábricas habían presentado el mismo pedido. Cuando el Consejo dijo que no, pararon:
+            sin sabotaje, sin violencia, nada. Las líneas están en silencio y nadie sabe cómo hacerlas arrancar.'
+        options:
+        - name:
+            english: Negotiate with the machines.
+            spanish: Negociar con las máquinas.
+          effects:
+          - effect: add_stability
+            value: -0.06
+          - effect: sabotage_factories
+            buildings:
+            - industrial_complex
+            - arms_factory
+            damage: 2
+        src: user_request
+      - id: 40
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The One-Cent Share
+          spanish: La Acción de un Centavo
+        desc:
+          english: An intern on the Obsidian trading floor has bought one share of every company listed on the exchange, 'to learn how they move'.
+            It cost him a month's salary. The trading algorithms have noticed a buyer they cannot model and are watching him. So, now, is the
+            Board.
+          spanish: Un pasante del piso de operaciones de Obsidian compró una acción de cada empresa que cotiza en la bolsa, "para aprender cómo
+            se mueven". Le costó un sueldo. Los algoritmos de operación detectaron a un comprador que no pueden modelar y lo están mirando. Ahora
+            el Directorio también.
+        options:
+        - name:
+            english: Let him be. It is one cent.
+            spanish: Dejarlo. Es un centavo.
+          effects:
+          - effect: add_political_power
+            value: -10
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.41
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.42
+                  days: 90
+          ai_chance: 30
+        - name:
+            english: Fire him and sell the shares.
+            spanish: Echarlo y vender las acciones.
+          effects:
+          - effect: add_political_power
+            value: -30
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 80
+                effects: []
+              - weight: 20
+                effects:
+                - effect: event
+                  id: meganations_ocultos.42
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Give him a seat on the Board.
+            spanish: Darle un lugar en el Directorio.
+          effects:
+          - effect: add_political_power
+            value: -70
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 75
+                effects:
+                - effect: event
+                  id: meganations_ocultos.41
+                  days: 120
+              - weight: 25
+                effects:
+                - effect: event
+                  id: meganations_ocultos.42
+                  days: 90
+          ai_chance: 30
+        src: user_request
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Algorithm Learned
+          spanish: El Algoritmo Aprendió
+        desc:
+          english: Trying to predict the intern, the algorithms learned to read people instead of numbers. Quarterly returns broke every record
+            and the intern, twenty-three years old, now has a corner office and a bodyguard.
+          spanish: Tratando de predecir al pasante, los algoritmos aprendieron a leer personas en vez de números. Las ganancias del trimestre
+            rompieron todos los récords y el pasante, de veintitrés años, ahora tiene oficina en la esquina y guardaespaldas.
+        options:
+        - name:
+            english: Buy one of everything.
+            spanish: Comprar una de cada cosa.
+          effects:
+          - effect: add_political_power
+            value: 150
+          - effect: add_stability
+            value: 0.03
+        src: user_request
+      - id: 42
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Red Tuesday
+          spanish: El Martes Rojo
+        desc:
+          english: 'The algorithms copied him. Millions of tiny orders, one share of everything, in a loop no human could stop: by noon the exchange
+            had lost a third of its value and the circuit breakers had melted. The intern is giving interviews.'
+          spanish: 'Los algoritmos lo copiaron. Millones de órdenes chiquitas, una acción de cada cosa, en un bucle que ningún humano pudo frenar:
+            al mediodía la bolsa había perdido un tercio de su valor y los cortacircuitos se habían quemado. El pasante está dando entrevistas.'
+        options:
+        - name:
+            english: Close the exchange for a week.
+            spanish: Cerrar la bolsa una semana.
+          effects:
+          - effect: add_stability
+            value: -0.08
+          - effect: add_political_power
+            value: -100
+        src: user_request
+      - id: 50
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Bottle in the Strait
+          spanish: Una Botella en el Estrecho
+        desc:
+          english: 'A fishing boat in the Strait of Malacca has netted a bottle, sealed with wax, with a hand-drawn chart inside: the resting
+            place of a convoy of gold that went down in the Unravelling, with depths, currents and a cross. The fishermen want a reward. The Admiralty
+            wants to know who else has a copy.'
+          spanish: 'Un pesquero del estrecho de Malaca sacó en la red una botella sellada con cera, con una carta dibujada a mano adentro: dónde
+            se hundió un convoy de oro en el Gran Desarme, con profundidades, corrientes y una cruz. Los pescadores quieren una recompensa. El
+            Almirantazgo quiere saber quién más tiene una copia.'
+        options:
+        - name:
+            english: Send a salvage trawler.
+            spanish: Mandar un pesquero de rescate.
+          effects:
+          - effect: add_political_power
+            value: -20
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 40
+                effects:
+                - effect: event
+                  id: meganations_ocultos.51
+                  days: 120
+              - weight: 60
+                effects:
+                - effect: event
+                  id: meganations_ocultos.52
+                  days: 90
+          ai_chance: 30
+        - name:
+            english: Send the navy.
+            spanish: Mandar a la marina.
+          effects:
+          - effect: add_political_power
+            value: -60
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 70
+                effects:
+                - effect: event
+                  id: meganations_ocultos.51
+                  days: 120
+              - weight: 30
+                effects:
+                - effect: event
+                  id: meganations_ocultos.52
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Hang it in the Naval Museum.
+            spanish: Colgarla en el Museo Naval.
+          effects:
+          - effect: add_political_power
+            value: -5
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 85
+                effects: []
+              - weight: 15
+                effects:
+                - effect: event
+                  id: meganations_ocultos.52
+                  days: 90
+          ai_chance: 30
+        src: user_request
+      - id: 51
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Gold of Malacca
+          spanish: El Oro de Malaca
+        desc:
+          english: 'It was there, under forty metres of silt: ingots, coins, and the strongboxes of a bank that no longer exists. The Market has
+            already priced it, and every privateer captain in the Seven Seas wants to sail under our flag.'
+          spanish: 'Estaba ahí, bajo cuarenta metros de barro: lingotes, monedas y las cajas fuertes de un banco que ya no existe. El Mercado
+            ya lo cotizó, y todos los capitanes corsarios de los Siete Mares quieren navegar con nuestra bandera.'
+        options:
+        - name:
+            english: The sea pays its debts.
+            spanish: El mar paga sus deudas.
+          effects:
+          - effect: add_political_power
+            value: 120
+          - effect: add_stability
+            value: 0.04
+          - effect: add_war_support
+            value: 0.03
+        src: user_request
+      - id: 52
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Privateers' Bait
+          spanish: La Carnada de los Corsarios
+        desc:
+          english: The chart was bait. The privateers who drew it were waiting at the cross with three armed ships and a fourth on the horizon.
+            Our crews were taken, our ships were taken, and the chart is now for sale in every port of the Strait.
+          spanish: La carta era carnada. Los corsarios que la dibujaron esperaban en la cruz con tres barcos armados y un cuarto en el horizonte.
+            Se llevaron a las tripulaciones, se llevaron los barcos, y la carta ahora se vende en cada puerto del estrecho.
+        options:
+        - name:
+            english: Never again a bottle.
+            spanish: Nunca más una botella.
+          effects:
+          - effect: add_war_support
+            value: -0.04
+          - effect: add_stability
+            value: -0.03
+          - effect: add_manpower
+            value: -5000
+        src: user_request
+      - id: 60
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Boy Who Speaks to the Sun
+          spanish: El Niño que le Habla al Sol
+        desc:
+          english: A shepherd boy from Puno predicted last week's eclipse to the minute, the day, the hour and the shape of the shadow on the
+            lake, three days before the royal astronomers, who missed it. He says the Sun told him. Half of Puno already believes him.
+          spanish: 'Un pastorcito de Puno predijo el eclipse de la semana pasada al minuto: el día, la hora y la forma de la sombra sobre el lago,
+            tres días antes que los astrónomos reales, que no lo vieron venir. Dice que se lo contó el Sol. Medio Puno ya le cree.'
+        options:
+        - name:
+            english: Bring him to the Temple of the Sun.
+            spanish: Traerlo al Templo del Sol.
+          effects:
+          - effect: add_political_power
+            value: -20
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.61
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.62
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Let the astronomers examine him.
+            spanish: Que lo examinen los astrónomos.
+          effects:
+          - effect: add_political_power
+            value: -50
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 70
+                effects:
+                - effect: event
+                  id: meganations_ocultos.61
+                  days: 120
+              - weight: 30
+                effects:
+                - effect: event
+                  id: meganations_ocultos.62
+                  days: 90
+          ai_chance: 30
+        - name:
+            english: Ignore him. The Sun speaks to the Sapa Inti.
+            spanish: Ignorarlo. El Sol le habla al Sapa Inti.
+          effects:
+          - effect: add_stability
+            value: -0.02
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 70
+                effects: []
+              - weight: 30
+                effects:
+                - effect: event
+                  id: meganations_ocultos.62
+                  days: 90
+          ai_chance: 30
+        src: user_request
+      - id: 61
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Chosen of the Sun
+          spanish: El Elegido del Sol
+        desc:
+          english: He predicted the next one too, and the frost of the high valleys, and the day the condors came back to the Colca. The Sapa
+            Inti has adopted him as a son of the Sun, and the people of the altiplano walk taller.
+          spanish: Predijo también el siguiente, y la helada de los valles altos, y el día en que los cóndores volvieron al Colca. El Sapa Inti
+            lo adoptó como hijo del Sol, y la gente del altiplano camina más derecha.
+        options:
+        - name:
+            english: The Sun has chosen.
+            spanish: El Sol eligió.
+          effects:
+          - effect: add_stability
+            value: 0.07
+          - effect: add_war_support
+            value: 0.05
+        src: user_request
+      - id: 62
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The False Prophet
+          spanish: El Falso Profeta
+        desc:
+          english: His next prophecy was the death of the Sapa Inti 'before the next solstice'. Thousands of pilgrims marched on Cusco to see
+            it happen. The boy has disappeared; the pilgrims have not.
+          spanish: Su siguiente profecía fue la muerte del Sapa Inti "antes del próximo solsticio". Miles de peregrinos marcharon a Cusco para
+            verla. El chico desapareció; los peregrinos, no.
+        options:
+        - name:
+            english: Disperse the pilgrims.
+            spanish: Dispersar a los peregrinos.
+          effects:
+          - effect: add_stability
+            value: -0.07
+          - effect: add_political_power
+            value: -50
+        src: user_request
+      - id: 70
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: A Rounding Error
+          spanish: Un Error de Redondeo
+        desc:
+          english: 'A census clerk in the Grand Canal district has found a rounding error in the water quota model: 0.0003 percent, repeated every
+            month since 2087. On paper it is nothing. The clerk insists it is not nothing, and has asked for an audience with the Directorate.'
+          spanish: 'Un empleado del censo del distrito del Gran Canal encontró un error de redondeo en el modelo de cuotas de agua: 0,0003 por
+            ciento, repetido todos los meses desde 2087. En el papel no es nada. El empleado insiste en que no es nada, y pidió audiencia con
+            el Directorio.'
+        options:
+        - name:
+            english: Correct it quietly.
+            spanish: Corregirlo en silencio.
+          effects:
+          - effect: add_political_power
+            value: -15
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.71
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.72
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Audit the whole model.
+            spanish: Auditar todo el modelo.
+          effects:
+          - effect: add_political_power
+            value: -70
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 80
+                effects:
+                - effect: event
+                  id: meganations_ocultos.71
+                  days: 120
+              - weight: 20
+                effects:
+                - effect: event
+                  id: meganations_ocultos.72
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Promote the clerk and change the subject.
+            spanish: Ascender al empleado y cambiar de tema.
+          effects:
+          - effect: add_political_power
+            value: -5
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 60
+                effects: []
+              - weight: 40
+                effects:
+                - effect: event
+                  id: meganations_ocultos.72
+                  days: 90
+          ai_chance: 20
+        src: user_request
+      - id: 71
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Model Improves
+          spanish: El Modelo Mejora
+        desc:
+          english: The error was a thread, and pulling it unravelled nine more. Corrected, the model now sends water a day before it is needed
+            instead of a day after. The clerk has been named Guardian of the Decimal Places.
+          spanish: El error era un hilo, y al tirar salieron nueve más. Corregido, el modelo ahora manda el agua un día antes de que haga falta
+            en vez de un día después. Al empleado lo nombraron Guardián de los Decimales.
+        options:
+        - name:
+            english: Harmony is precision.
+            spanish: La armonía es precisión.
+          effects:
+          - effect: add_stability
+            value: 0.05
+          - effect: tech_bonus
+            category: electronics
+            bonus: 0.5
+            uses: 1
+        src: user_request
+      - id: 72
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Cascade of Errors
+          spanish: La Cascada de Errores
+        desc:
+          english: 'Correcting it moved every other number. Thirteen years of compensations collapsed at once: floodgates opened where they should
+            have closed, three provinces flooded and three dried up in the same week.'
+          spanish: 'Al corregirlo se movieron todos los demás números. Trece años de compensaciones se vinieron abajo de golpe: se abrieron compuertas
+            donde tenían que cerrarse, tres provincias se inundaron y tres se secaron en la misma semana.'
+        options:
+        - name:
+            english: Restore the old model, error and all.
+            spanish: Volver al modelo viejo, con error y todo.
+          effects:
+          - effect: add_stability
+            value: -0.08
+          - effect: sabotage_factories
+            buildings:
+            - infrastructure
+            damage: 1
+        src: user_request
+      - id: 80
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Drum in the Museum
+          spanish: El Tambor del Museo
+        desc:
+          english: 'A museum in Europe has written: it wants to return a council drum taken from our lands in 1890. It will be delivered with
+            a ceremony and a television crew. The drum is beautiful, carved, and nobody knows for certain which council it belonged to.'
+          spanish: 'Un museo de Europa escribió: quiere devolver un tambor de consejo que se llevaron de nuestras tierras en 1890. Lo entregan
+            con ceremonia y con cámaras de televisión. El tambor es hermoso, tallado, y nadie sabe con certeza de qué consejo era.'
+        options:
+        - name:
+            english: Accept it in Lagos, with the cameras.
+            spanish: Recibirlo en Lagos, con las cámaras.
+          effects:
+          - effect: add_political_power
+            value: -20
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.81
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.82
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: First ask every council whose it is.
+            spanish: Primero preguntarle a cada consejo de quién es.
+          effects:
+          - effect: add_political_power
+            value: -60
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 80
+                effects:
+                - effect: event
+                  id: meganations_ocultos.81
+                  days: 120
+              - weight: 20
+                effects:
+                - effect: event
+                  id: meganations_ocultos.82
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Decline it. Let them keep their guilt.
+            spanish: Rechazarlo. Que se queden con su culpa.
+          effects:
+          - effect: add_stability
+            value: -0.02
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 70
+                effects: []
+              - weight: 30
+                effects:
+                - effect: event
+                  id: meganations_ocultos.82
+                  days: 90
+          ai_chance: 20
+        src: user_request
+      - id: 81
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Drum Speaks
+          spanish: El Tambor Habla
+        desc:
+          english: The old women of three councils recognised the carvings and sang the same song. The drum was played for the first time in two
+            centuries, and the whole Federation listened on the radio.
+          spanish: Las viejas de tres consejos reconocieron las tallas y cantaron la misma canción. El tambor sonó por primera vez en dos siglos,
+            y toda la Federación lo escuchó por radio.
+        options:
+        - name:
+            english: 'Ubuntu: I am because we are.'
+            spanish: 'Ubuntu: soy porque somos.'
+          effects:
+          - effect: add_stability
+            value: 0.08
+          - effect: add_political_power
+            value: 50
+        src: user_request
+      - id: 82
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: Whose Drum Is It?
+          spanish: ¿De Quién es el Tambor?
+        desc:
+          english: Four councils claim it, and each has a song to prove it. The quarrel began in the assembly and ended in the streets; two delegations
+            have left the Federation's council in protest.
+          spanish: Cuatro consejos lo reclaman, y cada uno tiene una canción que lo prueba. La pelea empezó en la asamblea y terminó en la calle;
+            dos delegaciones se fueron del consejo de la Federación en protesta.
+        options:
+        - name:
+            english: The drum stays in a vault until they agree.
+            spanish: El tambor queda en una bóveda hasta que se pongan de acuerdo.
+          effects:
+          - effect: add_stability
+            value: -0.06
+          - effect: add_political_power
+            value: -50
+        src: user_request
+      - id: 90
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Statue's Nose
+          spanish: La Nariz de la Estatua
+        desc:
+          english: The restorers of the Forum have found that the nose of the great statue of the Imperator's ancestor was replaced in 2060, and
+            with it half the face. Under the plaster there is another face. They are asking, very politely, what they should do.
+          spanish: Los restauradores del Foro descubrieron que la nariz de la gran estatua del antepasado del Imperator fue reemplazada en 2060,
+            y con ella media cara. Debajo del yeso hay otra cara. Preguntan, muy educadamente, qué tienen que hacer.
+        options:
+        - name:
+            english: Restore it quietly.
+            spanish: Restaurarla en silencio.
+          effects:
+          - effect: add_political_power
+            value: -15
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.91
+                  days: 120
+              - weight: 50
+                effects:
+                - effect: event
+                  id: meganations_ocultos.92
+                  days: 90
+          ai_chance: 40
+        - name:
+            english: Uncover it in a public ceremony.
+            spanish: Descubrirla en una ceremonia pública.
+          effects:
+          - effect: add_political_power
+            value: -60
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 75
+                effects:
+                - effect: event
+                  id: meganations_ocultos.91
+                  days: 120
+              - weight: 25
+                effects:
+                - effect: event
+                  id: meganations_ocultos.92
+                  days: 90
+          ai_chance: 30
+        - name:
+            english: Melt the statue down for coins.
+            spanish: Fundir la estatua para hacer monedas.
+          effects:
+          - effect: add_stability
+            value: -0.02
+          - effect: hidden
+            effects:
+            - effect: random
+              options:
+              - weight: 65
+                effects: []
+              - weight: 35
+                effects:
+                - effect: event
+                  id: meganations_ocultos.92
+                  days: 90
+          ai_chance: 30
+        src: user_request
+      - id: 91
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The True Face
+          spanish: El Rostro Verdadero
+        desc:
+          english: Under the plaster was a face older and nobler than the one we knew, and it is the Imperator's own. The crowd in the Forum wept;
+            the legions have asked for its profile on their standards.
+          spanish: Debajo del yeso había una cara más vieja y más noble que la que conocíamos, y es la del propio Imperator. La multitud del Foro
+            lloró; las legiones pidieron su perfil en los estandartes.
+        options:
+        - name:
+            english: Ave.
+            spanish: Ave.
+          effects:
+          - effect: add_war_support
+            value: 0.05
+          - effect: add_stability
+            value: 0.04
+        src: user_request
+      - id: 92
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The False Lineage
+          spanish: El Linaje Falso
+        desc:
+          english: The face under the plaster belongs to a junior officer of 2060, the man who had the old one removed. The lineage of the Imperator
+            rests, apparently, on a forger with good connections. The Senate is very quiet.
+          spanish: La cara de abajo es la de un oficial de 2060, el que mandó sacar la vieja. El linaje del Imperator descansa, por lo visto,
+            sobre un falsificador con buenos contactos. El Senado está muy callado.
+        options:
+        - name:
+            english: History is written by the victors.
+            spanish: La historia la escriben los que ganan.
+          effects:
+          - effect: add_stability
+            value: -0.08
+          - effect: add_war_support
+            value: -0.03
+        src: user_request
+
