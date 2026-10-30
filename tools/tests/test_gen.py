@@ -4559,7 +4559,13 @@ def test_mapa() -> None:
         check("nace: on_release_as_free y on_release_as_puppet",
               "on_release_as_free = { effect" in on and "on_release_as_puppet = { effect" in on
               and "id = meganations_mapa.2" in on, on[-400:])
-        check("solo a los jugadores", on.count("limit = { is_ai = no }") == 4, on[:200])
+        check("solo a los jugadores (cada envio, con o sin imagen propia)",
+              on.count("every_country = {") >= 4
+              and on.count("every_country = { limit = { is_ai = no }") == on.count("every_country = {"), on[:200])
+        ev_p = ctx.mod_root / "events/meganations_mapa_p.txt"
+        n_img = len(list((REPO_ROOT / "assets" / "events").glob("mapa_*.dds")))
+        check("cada imagen recibida tiene su evento",
+              n_img == 0 or ev_p.read_text(encoding="utf-8-sig").count("country_event = {") == n_img, str(n_img))
         dec = " ".join((ctx.mod_root / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
         check("las 8 Formas Finales avisan a los jugadores de paises chicos",
               dec.count("MEGANATIONS_mapa_forma_final = yes") == 8)
