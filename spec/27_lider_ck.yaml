@@ -1,0 +1,1528 @@
+# =============================================================================
+# El líder, más Crusader Kings (2026-11-01)
+#
+# Pedido del usuario: "Salud va del 0-100. Los demás del 0-20. Y cambia para
+# todos los líderes, existentes y potenciales: cada líder tiene stats diferentes.
+# Cambiar también los efectos de los eventos que modifican esta mecánica. Además,
+# agregar en al menos 20% de eventos ya existentes efectos sobre estas stats.
+# Cada ministro suma o resta alguna stat al líder."
+#
+# - MEGANATIONS_lider_detectar: cada mes mira quién gobierna; si cambió, pone
+#   las stats de ese líder (Carisma, Astucia, Prestigio, Salud y cuánta Salud
+#   pierde por año). Un líder que no es personaje del mod saca uno de 4 perfiles.
+# - lider_ck.ministros: lo que suma o resta cada ministro mientras está en el
+#   cargo (on_add / on_remove, tools/gen/emitters/characters.py).
+# - lider_ck.eventos: cambios de stats en ~20% de los eventos visibles, una
+#   entrada por opción (tools/gen/specload.py -> _lider_ck_eventos). Generado con
+#   una regla por el nombre de la opción (reprimir: +Prestigio -Carisma;
+#   negociar: +Astucia; fiestas: +Carisma -Salud...) y por lo que ya hace la
+#   opción (estabilidad -> Carisma, apoyo a la guerra -> Prestigio).
+# =============================================================================
+
+decisions:
+  scripted_effects:
+  - id: MEGANATIONS_lider_detectar
+    effects:
+    - effect: if
+      when:
+        all:
+        - leader_is: EFE_aurelio_iv
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 1
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 1
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 45
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 8
+    - effect: if
+      when:
+        all:
+        - leader_is: EFE_anahi_quiroga
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 2
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 2
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 18
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 10
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 80
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 4
+    - effect: if
+      when:
+        all:
+        - leader_is: EFE_tupa_heredero
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 3
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 3
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 85
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 4
+    - effect: if
+      when:
+        all:
+        - leader_is: EFE_custodia_pereira
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 4
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 4
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 70
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 5
+    - effect: if
+      when:
+        all:
+        - leader_is: EFE_regente_etchegaray
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 5
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 5
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 7
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 16
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 55
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 7
+    - effect: if
+      when:
+        all:
+        - leader_is: ASC_allocation_council
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 6
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 6
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 6
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 16
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 10
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 90
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 3
+    - effect: if
+      when:
+        all:
+        - leader_is: ASC_plan_41
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 7
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 7
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 3
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 20
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 100
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 1
+    - effect: if
+      when:
+        all:
+        - leader_is: FCU_valeria_castellane
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 8
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 8
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 17
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 55
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 7
+    - effect: if
+      when:
+        all:
+        - leader_is: FCU_marcus_rourke
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 9
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 65
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 6
+    - effect: if
+      when:
+        all:
+        - leader_is: HSN_kofi_aldana
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 10
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 10
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 65
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 6
+    - effect: if
+      when:
+        all:
+        - leader_is: HSN_ines_tavake
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 11
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 80
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 5
+    - effect: if
+      when:
+        all:
+        - leader_is: NAS_amaru_quispe
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 12
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 17
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 8
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 85
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 4
+    - effect: if
+      when:
+        all:
+        - leader_is: NAS_amaru_inca
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 13
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 18
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 17
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 85
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 4
+    - effect: if
+      when:
+        all:
+        - leader_is: SHD_lin_wenzhao
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 14
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 8
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 17
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 40
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 8
+    - effect: if
+      when:
+        all:
+        - leader_is: SHD_zhou_mingyuan
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 15
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 80
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 4
+    - effect: if
+      when:
+        all:
+        - leader_is: APF_amara_nwosu
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 16
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 16
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 16
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 10
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 70
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 5
+    - effect: if
+      when:
+        all:
+        - leader_is: APF_kwame_diallo
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 17
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 17
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 10
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 16
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 75
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 5
+    - effect: if
+      when:
+        all:
+        - leader_is: NRE_lucius_varro
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 18
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 18
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 17
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 60
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 6
+    - effect: if
+      when:
+        all:
+        - leader_is: NRE_legado_arbogast
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 19
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 19
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 18
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 75
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 5
+    - effect: if
+      when:
+        all:
+        - leader_is: NRE_irina_vasilescu
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 20
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 20
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 80
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 4
+    - effect: if
+      when:
+        all:
+        - leader_is: NRE_kerem_aydin
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 21
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 21
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 70
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 5
+    - effect: if
+      when:
+        all:
+        - not:
+            any:
+            - leader_is: EFE_aurelio_iv
+            - leader_is: EFE_anahi_quiroga
+            - leader_is: EFE_tupa_heredero
+            - leader_is: EFE_custodia_pereira
+            - leader_is: EFE_regente_etchegaray
+            - leader_is: ASC_allocation_council
+            - leader_is: ASC_plan_41
+            - leader_is: FCU_valeria_castellane
+            - leader_is: FCU_marcus_rourke
+            - leader_is: HSN_kofi_aldana
+            - leader_is: HSN_ines_tavake
+            - leader_is: NAS_amaru_quispe
+            - leader_is: NAS_amaru_inca
+            - leader_is: SHD_lin_wenzhao
+            - leader_is: SHD_zhou_mingyuan
+            - leader_is: APF_amara_nwosu
+            - leader_is: APF_kwame_diallo
+            - leader_is: NRE_lucius_varro
+            - leader_is: NRE_legado_arbogast
+            - leader_is: NRE_irina_vasilescu
+            - leader_is: NRE_kerem_aydin
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 0
+      then:
+      - effect: random
+        options:
+        - weight: 1
+          effects:
+          - effect: set_variable
+            var: MEGANATIONS_lider_id
+            value: 0
+          - effect: set_variable
+            var: MEGANATIONS_lider_carisma
+            value: 10
+          - effect: set_variable
+            var: MEGANATIONS_lider_astucia
+            value: 10
+          - effect: set_variable
+            var: MEGANATIONS_lider_prestigio
+            value: 10
+          - effect: set_variable
+            var: MEGANATIONS_lider_salud
+            value: 60
+          - effect: set_variable
+            var: MEGANATIONS_lider_desgaste
+            value: 5
+        - weight: 1
+          effects:
+          - effect: set_variable
+            var: MEGANATIONS_lider_id
+            value: 0
+          - effect: set_variable
+            var: MEGANATIONS_lider_carisma
+            value: 13
+          - effect: set_variable
+            var: MEGANATIONS_lider_astucia
+            value: 8
+          - effect: set_variable
+            var: MEGANATIONS_lider_prestigio
+            value: 11
+          - effect: set_variable
+            var: MEGANATIONS_lider_salud
+            value: 70
+          - effect: set_variable
+            var: MEGANATIONS_lider_desgaste
+            value: 5
+        - weight: 1
+          effects:
+          - effect: set_variable
+            var: MEGANATIONS_lider_id
+            value: 0
+          - effect: set_variable
+            var: MEGANATIONS_lider_carisma
+            value: 8
+          - effect: set_variable
+            var: MEGANATIONS_lider_astucia
+            value: 13
+          - effect: set_variable
+            var: MEGANATIONS_lider_prestigio
+            value: 9
+          - effect: set_variable
+            var: MEGANATIONS_lider_salud
+            value: 55
+          - effect: set_variable
+            var: MEGANATIONS_lider_desgaste
+            value: 6
+        - weight: 1
+          effects:
+          - effect: set_variable
+            var: MEGANATIONS_lider_id
+            value: 0
+          - effect: set_variable
+            var: MEGANATIONS_lider_carisma
+            value: 11
+          - effect: set_variable
+            var: MEGANATIONS_lider_astucia
+            value: 11
+          - effect: set_variable
+            var: MEGANATIONS_lider_prestigio
+            value: 13
+          - effect: set_variable
+            var: MEGANATIONS_lider_salud
+            value: 65
+          - effect: set_variable
+            var: MEGANATIONS_lider_desgaste
+            value: 5
+    - effect: run
+      value: MEGANATIONS_lider_recalcular
+lider_ck:
+  ministros:
+    EFE_min_arriagada_1:
+      carisma: 1
+      astucia: 1
+    EFE_min_vidal_2:
+      carisma: -1
+      astucia: 2
+      salud: -5
+    EFE_min_pereira_3:
+      prestigio: 2
+      salud: 5
+    EFE_min_lujan_4:
+      astucia: 3
+      prestigio: -1
+    EFE_min_kaltenbach_5:
+      astucia: 1
+      salud: 10
+    EFE_min_inteligencia_6:
+      carisma: -1
+      astucia: 3
+    FCU_min_whitmore_1:
+      carisma: -1
+      astucia: 3
+    FCU_min_okafor_2:
+      astucia: 2
+      salud: -5
+    FCU_min_voss_3:
+      astucia: 2
+      prestigio: 1
+    FCU_min_marchetti_4:
+      carisma: 3
+      prestigio: 1
+    FCU_min_raman_5:
+      astucia: 2
+      salud: 5
+    FCU_min_inteligencia_6:
+      carisma: -2
+      astucia: 3
+    ASC_min_brandt_1:
+      carisma: 1
+      astucia: 2
+    ASC_min_wolski_2:
+      carisma: -1
+      astucia: 2
+    ASC_min_rousseau_3:
+      astucia: 1
+      prestigio: 1
+    ASC_min_solberg_4:
+      carisma: 1
+      astucia: 1
+    ASC_min_varga_5:
+      carisma: -1
+      astucia: 3
+    ASC_min_inteligencia_6:
+      carisma: -2
+      astucia: 2
+      prestigio: 1
+    HSN_min_sato_lee_1:
+      carisma: 1
+      astucia: 2
+    HSN_min_faleolo_2:
+      astucia: 3
+      prestigio: -1
+    HSN_min_mehta_3:
+      astucia: 1
+      prestigio: 2
+    HSN_min_xiao_4:
+      carisma: 2
+      astucia: 1
+    HSN_min_reyes_5:
+      carisma: 1
+      astucia: 1
+      salud: 5
+    HSN_min_inteligencia_6:
+      carisma: -1
+      astucia: 3
+    NAS_min_mamani_1:
+      carisma: -1
+      astucia: 3
+      salud: 5
+    NAS_min_huaman_2:
+      carisma: 1
+      salud: 10
+    NAS_min_condori_3:
+      carisma: 1
+      astucia: 1
+      prestigio: 1
+    NAS_min_apaza_4:
+      astucia: 2
+    NAS_min_quispe_5:
+      astucia: 2
+      prestigio: 1
+    NAS_min_inteligencia_6:
+      astucia: 2
+    SHD_min_hao_1:
+      astucia: 2
+    SHD_min_jing_2:
+      carisma: -2
+      astucia: 2
+      prestigio: 2
+    SHD_min_na_3:
+      carisma: 1
+      astucia: 1
+    SHD_min_wei_4:
+      carisma: 3
+      astucia: -1
+      prestigio: 1
+    SHD_min_mei_5:
+      astucia: 2
+      salud: 5
+    SHD_min_inteligencia_6:
+      carisma: -1
+      astucia: 3
+    APF_min_adeyemi_1:
+      carisma: 2
+      astucia: 1
+    APF_min_otieno_2:
+      carisma: 1
+      astucia: 1
+      salud: -5
+    APF_min_diop_3:
+      carisma: 2
+      salud: 5
+    APF_min_moyo_4:
+      carisma: 1
+      astucia: -1
+      prestigio: 3
+    APF_min_mensah_5:
+      carisma: 1
+      astucia: 1
+      salud: 5
+    APF_min_inteligencia_6:
+      astucia: 2
+    NRE_min_dima_1:
+      astucia: 2
+      prestigio: 1
+    NRE_min_serrano_2:
+      carisma: 2
+    NRE_min_rusu_3:
+      astucia: 1
+      prestigio: 1
+    NRE_min_demir_4:
+      carisma: 2
+      astucia: -1
+      prestigio: 2
+    NRE_min_stamate_5:
+      astucia: 2
+      prestigio: 1
+      salud: 5
+    NRE_min_inteligencia_6:
+      carisma: -2
+      astucia: 3
+      prestigio: 1
+  eventos:
+    meganations_apf.1:
+    - carisma: -1
+    - carisma: 1
+      prestigio: 1
+    meganations_apf.31:
+    - carisma: 1
+    - prestigio: 3
+    meganations_apf.40:
+    - carisma: 2
+      prestigio: -1
+    - prestigio: 2
+      carisma: -3
+    meganations_apf.41:
+    - carisma: 2
+      prestigio: -1
+    - prestigio: 2
+      carisma: -3
+    meganations_apf.44:
+    - carisma: -1
+    - {}
+    meganations_apf.100:
+    - {}
+    - prestigio: 1
+    meganations_apf.101:
+    - astucia: 2
+    - prestigio: 1
+    meganations_apf.110:
+    - carisma: 1
+      prestigio: 1
+    - astucia: 1
+    meganations_apf.161:
+    - {}
+    - prestigio: 1
+    meganations_apf.169:
+    - {}
+    - prestigio: 1
+    meganations_apf.173:
+    - {}
+    - prestigio: 1
+    meganations_apf.177:
+    - {}
+    - prestigio: 1
+    meganations_apf.203:
+    - {}
+    - carisma: 1
+    meganations_apf.204:
+    - astucia: 1
+    - carisma: 1
+    meganations_apf.220:
+    - carisma: 1
+      prestigio: 1
+    - carisma: 2
+    meganations_apf.231:
+    - {}
+    - astucia: 2
+    - prestigio: 1
+    meganations_apf.411:
+    - carisma: -1
+    - {}
+    meganations_apf.414:
+    - carisma: -1
+    - {}
+    meganations_apf.415:
+    - carisma: -1
+    - {}
+    meganations_apf.420:
+    - carisma: 2
+      prestigio: -1
+    - astucia: 2
+      prestigio: 1
+    meganations_apf.443:
+    - astucia: 2
+    - carisma: -1
+      prestigio: 1
+    - astucia: -1
+      prestigio: -1
+    meganations_apf_receta.1:
+    - carisma: 1
+    - prestigio: 1
+    meganations_apf_receta.3:
+    - carisma: 1
+    - prestigio: 1
+    meganations_apf_receta.4:
+    - carisma: 1
+    - prestigio: 1
+    meganations_asc.30:
+    - carisma: 2
+      astucia: 1
+    - astucia: 1
+    meganations_asc.31:
+    - carisma: 2
+      prestigio: -1
+    - astucia: 2
+      carisma: 1
+    meganations_asc.40:
+    - carisma: 2
+      prestigio: -1
+    - prestigio: 2
+      carisma: -3
+    meganations_asc.110:
+    - prestigio: 2
+    - prestigio: 1
+    meganations_asc.130:
+    - {}
+    - astucia: 1
+      prestigio: 1
+    meganations_asc.181:
+    - {}
+    - prestigio: 1
+    meganations_asc.200:
+    - carisma: 1
+    - {}
+    meganations_asc.201:
+    - carisma: 1
+    - {}
+    meganations_asc.202:
+    - carisma: 3
+      prestigio: -1
+    - {}
+    meganations_asc.231:
+    - {}
+    - astucia: 2
+    - prestigio: 1
+    meganations_asc_receta.3:
+    - {}
+    - prestigio: 1
+    meganations_asc_receta.4:
+    - {}
+    - prestigio: 1
+    meganations_asc_receta.5:
+    - {}
+    - prestigio: 1
+    meganations_asc_receta.20:
+    - {}
+    - astucia: 1
+    meganations_asc_receta.24:
+    - prestigio: 2
+      carisma: -2
+    - {}
+    meganations_asc_receta.26:
+    - carisma: -1
+    - {}
+    meganations_efe.2:
+    - carisma: 3
+      salud: -5
+      astucia: 1
+    - carisma: 2
+      salud: -5
+      prestigio: 1
+    meganations_efe.3:
+    - {}
+    - carisma: 1
+      astucia: 1
+    meganations_efe.5:
+    - carisma: -1
+    - prestigio: 1
+    meganations_efe.13:
+    - {}
+    - prestigio: 1
+    meganations_efe.23:
+    - {}
+    - carisma: 1
+    meganations_efe.31:
+    - prestigio: 2
+    - carisma: 3
+      salud: -5
+      astucia: 1
+    meganations_efe.40:
+    - carisma: 2
+      prestigio: -1
+    - prestigio: 2
+      carisma: -3
+    meganations_efe.44:
+    - carisma: -1
+    - {}
+    meganations_efe.100:
+    - prestigio: 1
+    - astucia: 2
+    meganations_efe.120:
+    - prestigio: 1
+    - {}
+    meganations_efe.140:
+    - astucia: 1
+    - carisma: 1
+      prestigio: 1
+    meganations_efe.151:
+    - carisma: -1
+    - astucia: -1
+    meganations_efe.161:
+    - {}
+    - prestigio: 1
+    meganations_efe.169:
+    - {}
+    - prestigio: 1
+    meganations_efe.502:
+    - {}
+    - prestigio: 1
+    meganations_efe.901:
+    - carisma: 1
+    - prestigio: 2
+      astucia: 1
+    - carisma: 1
+    - prestigio: 2
+      carisma: -1
+    meganations_fcu.22:
+    - salud: -10
+      prestigio: 1
+    - astucia: 2
+    - carisma: -1
+    meganations_fcu.23:
+    - astucia: 2
+    - prestigio: 1
+    meganations_fcu.45:
+    - carisma: -1
+    - {}
+    meganations_fcu.150:
+    - {}
+    - astucia: 2
+      carisma: 1
+    meganations_fcu.151:
+    - {}
+    - prestigio: 1
+    meganations_fcu.161:
+    - {}
+    - prestigio: 1
+    meganations_fcu.165:
+    - {}
+    - prestigio: 1
+    meganations_fcu.173:
+    - {}
+    - prestigio: 1
+    meganations_fcu.177:
+    - {}
+    - prestigio: 1
+    meganations_fcu.181:
+    - {}
+    - prestigio: 1
+    meganations_fcu.200:
+    - astucia: 3
+    - astucia: 1
+    meganations_fcu.203:
+    - {}
+    - carisma: 1
+    meganations_fcu.204:
+    - carisma: 1
+    - {}
+    meganations_fcu.210:
+    - prestigio: 1
+    - prestigio: -1
+    meganations_fcu.310:
+    - astucia: 2
+    - carisma: -1
+    meganations_fcu.311:
+    - astucia: 2
+    - prestigio: 3
+      carisma: -2
+    meganations_fcu_receta.1:
+    - {}
+    - astucia: 2
+      prestigio: 1
+    meganations_fcu_receta.2:
+    - {}
+    - astucia: 2
+      prestigio: 1
+    meganations_fcu_receta.3:
+    - {}
+    - astucia: 2
+      prestigio: 1
+    meganations_fcu_receta.4:
+    - {}
+    - astucia: 2
+      prestigio: 1
+    meganations_fcu_receta.5:
+    - {}
+    - astucia: 2
+      prestigio: 1
+    meganations_fcu_receta.10:
+    - {}
+    - astucia: 1
+    - {}
+    meganations_fcu_receta.12:
+    - {}
+    - prestigio: 2
+    - {}
+    meganations_fcu_receta.20:
+    - astucia: 2
+    - {}
+    meganations_fcu_receta.23:
+    - {}
+    - carisma: 1
+    meganations_fcu_receta.63:
+    - carisma: -1
+    - astucia: 2
+    - astucia: -1
+      prestigio: -1
+    meganations_hsn.2:
+    - astucia: 2
+      carisma: -1
+    - prestigio: 1
+    meganations_hsn.23:
+    - astucia: 1
+    - {}
+    meganations_hsn.30:
+    - astucia: 1
+    - {}
+    meganations_hsn.31:
+    - carisma: 2
+      salud: -5
+      astucia: 1
+    - {}
+    meganations_hsn.40:
+    - carisma: 2
+      prestigio: -1
+    - prestigio: 2
+      carisma: -3
+    meganations_hsn.45:
+    - carisma: -1
+    - {}
+    meganations_hsn.100:
+    - astucia: 2
+    - {}
+    meganations_hsn.102:
+    - astucia: 1
+    - {}
+    meganations_hsn.110:
+    - astucia: 2
+    - {}
+    meganations_hsn.165:
+    - {}
+    - prestigio: 1
+    meganations_hsn.173:
+    - {}
+    - prestigio: 1
+    meganations_hsn.177:
+    - {}
+    - prestigio: 1
+    meganations_hsn.181:
+    - {}
+    - prestigio: 1
+    meganations_hsn.185:
+    - {}
+    - prestigio: 1
+    meganations_hsn.200:
+    - astucia: -1
+      prestigio: -1
+      carisma: 1
+    - {}
+    meganations_hsn.201:
+    - astucia: 1
+    - carisma: 1
+    meganations_hsn.203:
+    - carisma: 3
+      salud: -5
+    - astucia: 1
+    meganations_hsn.311:
+    - prestigio: 1
+    - astucia: -1
+      prestigio: -1
+      carisma: -1
+    meganations_hsn.901:
+    - {}
+    - astucia: 2
+    meganations_hsn_receta.1:
+    - {}
+    - prestigio: 1
+    meganations_hsn_receta.3:
+    - {}
+    - prestigio: 1
+    meganations_hsn_receta.4:
+    - {}
+    - prestigio: 1
+    meganations_hsn_receta.11:
+    - {}
+    - {}
+    - astucia: 2
+    meganations_hsn_receta.23:
+    - {}
+    - prestigio: 1
+    meganations_hsn_receta.25:
+    - {}
+    - astucia: -1
+      prestigio: -1
+      carisma: -1
+    meganations_hsn_receta.27:
+    - astucia: -1
+      prestigio: -1
+    - {}
+    meganations_hsn_receta.51:
+    - {}
+    - astucia: 2
+    meganations_hsn_receta.52:
+    - {}
+    - astucia: -1
+      prestigio: -1
+    meganations_mundo.3:
+    - {}
+    - astucia: -1
+      prestigio: -1
+    meganations_mundo.23:
+    - {}
+    - prestigio: 1
+      carisma: -1
+    meganations_mundo.26:
+    - astucia: 3
+    - prestigio: 1
+    meganations_mundo.50:
+    - {}
+    - astucia: 2
+    - prestigio: 1
+    meganations_mundo.73:
+    - astucia: 2
+    - {}
+    - prestigio: 2
+      carisma: -2
+    meganations_mundo.75:
+    - {}
+    - astucia: -1
+      prestigio: -1
+    meganations_mundo.95:
+    - prestigio: 3
+      carisma: -2
+    - astucia: 2
+      carisma: -1
+    meganations_mundo.101:
+    - prestigio: 2
+      carisma: -2
+    - astucia: 2
+    - prestigio: 1
+    meganations_mundo.102:
+    - prestigio: 2
+      carisma: -2
+    - astucia: 2
+    - prestigio: 1
+    meganations_mundo.103:
+    - prestigio: 2
+      carisma: -2
+    - astucia: 2
+    - prestigio: 1
+    meganations_nas.41:
+    - carisma: 2
+      prestigio: -1
+    - prestigio: 2
+      carisma: -3
+    meganations_nas.44:
+    - carisma: -1
+    - {}
+    meganations_nas.100:
+    - astucia: 2
+    - {}
+    meganations_nas.110:
+    - astucia: 2
+    - carisma: 1
+    meganations_nas.161:
+    - {}
+    - prestigio: 1
+    meganations_nas.165:
+    - {}
+    - prestigio: 1
+    meganations_nas.169:
+    - {}
+    - prestigio: 1
+    meganations_nas.181:
+    - {}
+    - prestigio: 1
+    meganations_nas.202:
+    - {}
+    - carisma: 1
+    meganations_nas.204:
+    - astucia: 1
+      carisma: -1
+    - carisma: 1
+    meganations_nas.231:
+    - {}
+    - astucia: 2
+    - prestigio: 1
+    meganations_nas.240:
+    - carisma: -1
+    - prestigio: 1
+    meganations_nas_receta.1:
+    - {}
+    - prestigio: 1
+    meganations_nas_receta.2:
+    - {}
+    - prestigio: 1
+    meganations_nas_receta.3:
+    - {}
+    - prestigio: 1
+    meganations_nas_receta.4:
+    - {}
+    - prestigio: 1
+    meganations_nas_receta.5:
+    - {}
+    - prestigio: 1
+    meganations_nas_receta.23:
+    - {}
+    - carisma: 3
+      salud: -5
+    meganations_nas_receta.27:
+    - {}
+    - prestigio: 1
+    meganations_nre.5:
+    - carisma: -1
+    - astucia: 2
+      carisma: -1
+    - prestigio: 1
+      carisma: -1
+    meganations_nre.6:
+    - carisma: -1
+    - astucia: 2
+      carisma: -1
+    - prestigio: 1
+      carisma: -1
+    meganations_nre.50:
+    - {}
+    - carisma: 1
+    - {}
+    - astucia: 2
+    meganations_nre.51:
+    - prestigio: 2
+    - {}
+    meganations_nre.52:
+    - prestigio: 2
+    - {}
+    meganations_nre.53:
+    - prestigio: 2
+    - {}
+    meganations_nre.61:
+    - astucia: 2
+    - prestigio: 1
+    meganations_nre.63:
+    - astucia: 2
+    - prestigio: 1
+    meganations_nre.81:
+    - prestigio: 2
+    - astucia: 2
+      carisma: -1
+    meganations_nre.83:
+    - prestigio: 2
+    - astucia: 2
+      carisma: -1
+    meganations_nre.120:
+    - carisma: -1
+    - prestigio: 1
+    meganations_nre.150:
+    - prestigio: -2
+      astucia: 1
+    - prestigio: -2
+      astucia: 1
+      carisma: 1
+    meganations_nre.151:
+    - astucia: 2
+    - prestigio: 1
+    meganations_nre.177:
+    - {}
+    - prestigio: 1
+    meganations_nre.181:
+    - {}
+    - prestigio: 1
+    meganations_nre.201:
+    - carisma: 1
+    - carisma: -1
+    meganations_nre.203:
+    - {}
+    - carisma: 1
+    meganations_nre.231:
+    - {}
+    - astucia: 2
+    - prestigio: 1
+    meganations_nre_receta.2:
+    - {}
+    - prestigio: 1
+    meganations_nre_receta.3:
+    - {}
+    - prestigio: 1
+    meganations_nre_receta.20:
+    - {}
+    - astucia: 1
+    meganations_nre_receta.27:
+    - carisma: -1
+    - carisma: 1
+    meganations_ocultos.30:
+    - {}
+    - {}
+    - astucia: 1
+    meganations_ocultos.60:
+    - {}
+    - {}
+    - astucia: -1
+      prestigio: -1
+      carisma: -1
+    meganations_ocultos.70:
+    - astucia: -1
+      prestigio: -1
+    - {}
+    - {}
+    meganations_ocultos.80:
+    - {}
+    - carisma: 1
+    - carisma: -1
+    meganations_ocultos.90:
+    - astucia: -1
+      prestigio: -1
+    - {}
+    - carisma: -1
+    meganations_shd.22:
+    - carisma: 1
+    - {}
+    meganations_shd.31:
+    - astucia: 1
+      carisma: 1
+    - astucia: -1
+      prestigio: -1
+    meganations_shd.45:
+    - carisma: -1
+    - {}
+    meganations_shd.101:
+    - {}
+    - carisma: 1
+    meganations_shd.102:
+    - salud: 10
+      prestigio: -1
+    - astucia: -1
+      prestigio: -1
+    meganations_shd.120:
+    - {}
+    - carisma: 2
+      prestigio: -1
+    meganations_shd.161:
+    - {}
+    - prestigio: 1
+    meganations_shd.169:
+    - {}
+    - prestigio: 1
+    meganations_shd.173:
+    - {}
+    - prestigio: 1
+    meganations_shd.200:
+    - carisma: 1
+    - {}
+    meganations_shd.202:
+    - carisma: 3
+      prestigio: -1
+    - carisma: -1
+    meganations_shd.203:
+    - carisma: 1
+    - carisma: -1
+    meganations_shd.204:
+    - carisma: 1
+    - {}
+    meganations_shd.231:
+    - {}
+    - astucia: 2
+    - prestigio: 1
+    meganations_shd_receta.2:
+    - {}
+    - prestigio: 1
+    meganations_shd_receta.3:
+    - {}
+    - prestigio: 1
+    meganations_shd_receta.22:
+    - {}
+    - astucia: 1
+    meganations_shd_receta.26:
+    - carisma: -1
+    - astucia: -1
+      prestigio: -1

@@ -2165,3 +2165,14 @@ Pedido del usuario: más chance de guerra civil ("estabilidad menor a 50 ya acti
 - Frente al ultimátum la IA resiste 55% (antes 40%). El Rumor de Golpe ya puede salir con estabilidad bajo 50% (antes 40%).
 - Los Años Inciertos (todos los países, on_startup): -10% de estabilidad y -0,05% por semana los dos primeros años; -5% los dos siguientes.
 - Test: test_guerras_civiles.
+
+## El líder, más Crusader Kings (2026-11-01)
+
+Captura del panel "El Líder" y pedido del usuario: Salud de 0 a 100 y las otras de 0 a 20; stats distintas para cada líder (los que gobiernan y los que pueden llegar); los eventos que ya tocaban la mecánica reescalados; un 20% de los eventos existentes con efectos sobre las stats; cada ministro suma o resta alguna stat ("Sumo Sacerdote Túpac Mamani: +3 Astucia, +5 Salud, -1 Carisma").
+
+- Escala: Carisma, Astucia y Prestigio 0-20 (10 es neutro; cada punto: 1,5% de estabilidad / 0,075 de poder político por día / 2% de apoyo a la guerra, los mismos topes que antes). Salud 0-100. Los cambios viejos se multiplicaron (x2; Salud x10), también los umbrales.
+- Cada líder (21 personajes de las ocho) trae sus stats y su desgaste de Salud por año; un líder que no es personaje del mod saca uno de 4 perfiles. MEGANATIONS_lider_detectar mira cada mes quién gobierna y, si cambió, pone las suyas.
+- Ministros: los 48 asesores políticos y teóricos de las ocho suman o restan stats mientras están en el cargo (on_add/on_remove a MEGANATIONS_lider_bono_*). Lo que cuenta es lo del líder más lo de los ministros (MEGANATIONS_lider_total_*).
+- Eventos: 184 de 922 visibles (20%) suman cambios de stats por opción (27_lider_ck.yaml -> lider_ck.eventos), elegidos con una regla por el nombre de la opción y lo que ya hace.
+- Nadie se sostiene en la cima: una vez por año, -2 a cada stat en 16 o más.
+- Planilla para revisar: balance/lider_stats.txt. Test: test_lider_ck.

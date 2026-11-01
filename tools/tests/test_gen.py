@@ -3618,8 +3618,9 @@ def test_decisiones_del_lider() -> None:
               and "random_list = { 1 = { modifier = { factor = 0 has_country_flag = MEGANATIONS_lider_visto_1 } set_country_flag = MEGANATIONS_lider_visto_1 country_event = { id = meganations_lider.1" in pulse, pulse[:1500])
         check("lider: el pulso mundial lo corre", "MEGANATIONS_lider_pulso = yes" in eff[eff.index("MEGANATIONS_eventos_mundiales = {"):][:800])
         rec = eff[eff.index("MEGANATIONS_lider_recalcular = {"):][:2000]
-        check("lider: stats de 0 a 10 que mueven el espiritu El Lider; Salud en 0, desplome",
-              "clamp_variable = { var = MEGANATIONS_lider_carisma min = 0 max = 10 }" in rec
+        check("lider: stats de 0 a 20 (Salud de 0 a 100, 2026-11-01) que mueven el espiritu El Lider; Salud en 0, desplome",
+              "clamp_variable = { var = MEGANATIONS_lider_carisma min = 0 max = 20 }" in rec
+              and "clamp_variable = { var = MEGANATIONS_lider_salud min = 0 max = 100 }" in rec
               and "modifier = MEGANATIONS_el_lider" in rec and "id = meganations_lider.22" in rec, rec[:600])
         e8 = bodies[8]
         e21 = ev[ev.index("id = meganations_lider.21 title"):ev.index("id = meganations_lider.22 title")]
@@ -3653,17 +3654,17 @@ def test_decisiones_del_lider() -> None:
               "set_country_flag = { flag = MEGANATIONS_peso_espera value = 1 days = 150 }" in pul
               and "random_list = { 3 = { set_country_flag = { flag = MEGANATIONS_peso_tregua" in pul
               and all(f"id = meganations_peso.{i} days = 3" in pul for i in range(1, 9)), pul[:800])
-        check("peso: el escándalo solo con Prestigio 6 o más",
-              "1 = { modifier = { factor = 0 check_variable = { var = MEGANATIONS_lider_prestigio value = 6 compare = less_than } } country_event = { id = meganations_peso.1" in pul)
-        check("peso: nadie se sostiene en la cima (una vez por año, -1 a cada stat en 8 o más)",
+        check("peso: el escándalo solo con Prestigio 12 o más (de 20)",
+              "1 = { modifier = { factor = 0 check_variable = { var = MEGANATIONS_lider_prestigio value = 12 compare = less_than } } country_event = { id = meganations_peso.1" in pul)
+        check("peso: nadie se sostiene en la cima (una vez por año, -2 a cada stat en 16 o más)",
               "set_country_flag = { flag = MEGANATIONS_lider_cima value = 1 days = 365 }" in pul
-              and "check_variable = { var = MEGANATIONS_lider_carisma value = 8 compare = greater_than_or_equals }" in pul, pul[:600])
+              and "check_variable = { var = MEGANATIONS_lider_carisma value = 16 compare = greater_than_or_equals }" in pul, pul[:600])
         dec = flat(mod / "common/decisions/meganations_decisions.txt") if (mod / "common/decisions/meganations_decisions.txt").exists() else ""
         if not dec:
             dec = " ".join(flat(f) for f in (mod / "common/decisions").glob("*.txt"))
         cheq = dec[dec.index("MEGANATIONS_lider_chequeo = {"):][:1500]
-        check("peso: el chequeo puede salir en los diarios (-1 de Prestigio, 1 de cada 4)",
-              "random_list = { 3 = {" in cheq and "MEGANATIONS_lider_prestigio value = -1" in cheq, cheq[:800])
+        check("peso: el chequeo puede salir en los diarios (-2 de Prestigio, 1 de cada 4)",
+              "random_list = { 3 = {" in cheq and "MEGANATIONS_lider_prestigio value = -2" in cheq, cheq[:800])
 
 
 def test_equipo_por_arquetipo() -> None:
@@ -3880,9 +3881,9 @@ def test_junta_militar() -> None:
         flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
         eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
         rec = eff[eff.index("MEGANATIONS_lider_recalcular = {"):][:2500]
-        check("lider: Carisma 3%, Astucia 0,15 PP, Prestigio 4% por punto (2026-10-13: mas premios y castigos)",
-              "var = MEGANATIONS_lider_ef_carisma value = 0.03" in rec and "var = MEGANATIONS_lider_ef_astucia value = 0.15" in rec
-              and "var = MEGANATIONS_lider_ef_prestigio value = 0.04" in rec, rec[:900])
+        check("lider: Carisma 1,5%, Astucia 0,075 PP, Prestigio 2% por punto sobre o bajo 10 (escala 0-20, 2026-11-01)",
+              "var = MEGANATIONS_lider_ef_carisma value = 0.015" in rec and "var = MEGANATIONS_lider_ef_astucia value = 0.075" in rec
+              and "var = MEGANATIONS_lider_ef_prestigio value = 0.02" in rec, rec[:900])
         ev = flat(mod / "events/meganations_lider.txt")
         e22 = ev[ev.index("id = meganations_lider.22 title"):ev.index("id = meganations_lider.30 title")]
         check("lider: el desplome cuesta -20% de estabilidad y -150 PP", "add_stability = -0.2" in e22 and "add_political_power = -150" in e22, e22)
@@ -4026,19 +4027,19 @@ def test_lider_visible_y_focos() -> None:
         mod = ctx.mod_root
         flat = lambda p: " ".join(p.read_text(encoding="utf-8-sig").split())
         loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation/spanish").rglob("*.yml"))
-        line = "El líder hoy (de 10): Carisma [?MEGANATIONS_lider_carisma|0] · Astucia [?MEGANATIONS_lider_astucia|0]"
+        line = "El líder hoy: Carisma [?MEGANATIONS_lider_total_carisma|0]/20 · Astucia [?MEGANATIONS_lider_total_astucia|0]/20"
         descs = [k for k in range(1, 21) if line in loc[loc.index(f"meganations_lider.{k}.d:"):][:1500]]
         check("lider: cada una de las 20 decisiones muestra sus stats", len(descs) == 20, str(descs))
         dec = flat(mod / "common/decisions/meganations_decisions.txt") if (mod / "common/decisions/meganations_decisions.txt").exists() \
             else " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in (mod / "common/decisions").glob("*.txt"))
         check("lider: panel propio con el chequeo (+1 Salud) y la gira (+1 Carisma, -1 Salud)",
               "MEGANATIONS_lider_category = {" in dec and "MEGANATIONS_lider_chequeo = {" in dec and "MEGANATIONS_lider_gira = {" in dec)
-        check("lider: el panel explica cada stat", "Salud [?MEGANATIONS_lider_salud|0]/10 (baja 1 por año" in loc)
+        check("lider: el panel explica cada stat", "Salud [?MEGANATIONS_lider_total_salud|0]/100 (baja [?MEGANATIONS_lider_desgaste|0] por año" in loc)
         eff = flat(mod / "common/scripted_effects/meganations_effects.txt")
         pulse = eff[eff.index("MEGANATIONS_lider_pulso = {"):][:3000]
-        check("lider: los años pesan, -1 de Salud por año",
+        check("lider: los años pesan, cada líder pierde su desgaste de Salud por año",
               "has_country_flag = MEGANATIONS_lider_edad" in pulse and "set_country_flag = { flag = MEGANATIONS_lider_edad value = 1 days = 365 }" in pulse
-              and "var = MEGANATIONS_lider_salud value = -1" in pulse, pulse[:1500])
+              and "subtract_from_variable = { var = MEGANATIONS_lider_salud value = MEGANATIONS_lider_desgaste }" in pulse, pulse[:1500])
         uu = flat(mod / "common/scripted_effects/meganations_unique_units.txt")
         bot = uu[uu.index("SHD_dragon_del_canal_botin = {"):][:2500] if "SHD_dragon_del_canal_botin = {" in uu else ""
         import yaml
@@ -4842,6 +4843,39 @@ def test_guerras_civiles() -> None:
               and "modifier = MEGANATIONS_anios_inciertos_2 days = 1461" in on, on[:500])
 
 
+def test_lider_ck() -> None:
+    section("el lider, mas Crusader Kings: stats propias, ministros y eventos (2026-11-01)")
+    raw = specload.load(REPO_ROOT / "spec").raw
+    ck = raw["lider_ck"]
+    check("los 48 ministros (asesores politicos y teoricos de las ocho) suman o restan stats",
+          len(ck["ministros"]) == 48 and ck["ministros"]["NAS_min_mamani_1"] == {"carisma": -1, "astucia": 3, "salud": 5})
+    visibles = sum(1 for b in raw["events"]["namespaces"].values() for e in b.get("events") or [] if not e.get("hidden"))
+    check("cerca del 20% de los eventos visibles mueve stats del lider", abs(len(ck["eventos"]) - visibles * 0.2) <= 2,
+          f"{len(ck['eventos'])} de {visibles}")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        det = se[se.index("MEGANATIONS_lider_detectar = {"):][:200000]
+        check("cada lider de las ocho trae sus stats (21) y un lider generico saca un perfil",
+              det.count("has_country_leader = { character =") >= 21 + 21
+              and "has_country_leader = { character = NAS_amaru_quispe ruling_only = yes }" in det
+              and "var = MEGANATIONS_lider_desgaste" in det, det[:600])
+        pul = se[se.index("MEGANATIONS_lider_pulso = {"):][:1500]
+        check("cada mes mira si cambio el lider", "MEGANATIONS_lider_detectar = yes" in pul, pul[:500])
+        rec = se[se.index("MEGANATIONS_lider_recalcular = {"):][:3000]
+        check("lo que cuenta es lo del lider mas lo de los ministros",
+              "add_to_variable = { var = MEGANATIONS_lider_total_carisma value = MEGANATIONS_lider_bono_carisma }" in rec, rec[:800])
+        nas = " ".join((mod / "common/characters/NAS_characters.txt").read_text(encoding="utf-8-sig").split())
+        m = nas[nas.index("NAS_min_mamani_1 = {"):][:2500]
+        check("el ministro suma al entrar y resta al salir",
+              "on_add = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = -1 }" in m
+              and "on_remove = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = 1 }" in m, m[:900])
+        ev = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "events").glob("*.txt"))
+        n = ev.count("limit = { has_country_flag = MEGANATIONS_lider_listo }")
+        check("las opciones de los eventos elegidos mueven las stats (solo en las meganaciones)", n >= 184, n)
+
+
 def test_reglas() -> None:
     section("reglas de la partida: deslizadores de las meganaciones (2026-10-27)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -4923,6 +4957,7 @@ def main() -> int:
         test_gaia,
         test_agencias,
         test_guerras_civiles,
+        test_lider_ck,
         test_reglas,
         test_simulador,
         test_vanilla_validation,

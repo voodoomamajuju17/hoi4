@@ -769,7 +769,7 @@ decisions:
         - not: {flag: MEGANATIONS_rebelde}
       then:
       - effect: if
-        when: {variable_below: {var: MEGANATIONS_lider_salud, value: 4}}
+        when: {variable_below: {var: MEGANATIONS_lider_salud, value: 40}}
         then:
         - effect: random
           options:
