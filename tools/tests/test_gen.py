@@ -1574,7 +1574,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("91 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia)", len(body.keys()) == 91, str(len(body.keys())))
+        check("107 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia; 6 de los ministros de Japon y 10 de los de Gran Bretana, 2026-11-01)", len(body.keys()) == 107, str(len(body.keys())))
         # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
         efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
         chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
@@ -1891,8 +1891,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("282 modificadores dinamicos (los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 282 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("341 modificadores dinamicos (24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 341 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -4884,8 +4884,12 @@ def test_lider_ck() -> None:
     ck = raw["lider_ck"]
     check("los 48 ministros (asesores politicos y teoricos de las ocho) suman o restan stats",
           len(ck["ministros"]) == 48 and ck["ministros"]["NAS_min_mamani_1"] == {"carisma": -1, "astucia": 3, "salud": 5})
-    visibles = sum(1 for b in raw["events"]["namespaces"].values() for e in b.get("events") or [] if not e.get("hidden"))
-    check("cerca del 20% de los eventos visibles mueve stats del lider", abs(len(ck["eventos"]) - visibles * 0.2) <= 2,
+    # 2026-11-01: Japon y Gran Bretana no tienen stats del lider (el pulso del lider
+    # corre solo en las ocho), asi que sus eventos no entran en la cuenta
+    sin_lider = {"meganations_japon", "meganations_albion"}
+    visibles = sum(1 for ns, b in raw["events"]["namespaces"].items() if ns not in sin_lider
+                   for e in b.get("events") or [] if not e.get("hidden"))
+    check("cerca del 20% de los eventos visibles mueve stats del lider", abs(len(ck["eventos"]) / visibles - 0.2) <= 0.005,
           f"{len(ck['eventos'])} de {visibles}")
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
