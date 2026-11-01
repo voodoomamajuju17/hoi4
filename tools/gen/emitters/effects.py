@@ -593,6 +593,36 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("add_country_leader_trait", item["value"])
             effects_used.setdefault("add_country_leader_trait", owner)
             continue
+        if effect == "recruit":
+            # 2026-11-01 (Gran Bretaña: "los que existen para neovictorian no existen
+            # para trans-humanist"): el personaje no se recluta en la historia
+            # (recruit_in_history: false) y llega recién cuando se elige su camino
+            cid = item["character"]
+            if ec.characters is not None and cid not in ec.characters:
+                raise SpecError(f"{owner}: recruit '{cid}' no es un personaje de 03_leaders.yaml", where=where)
+            block.add("recruit_character", cid)
+            effects_used.setdefault("recruit_character", owner)
+            continue
+        if effect == "unit_leaders":
+            # 2026-11-01 (Japón: "los generales y mariscales tienen sus propias
+            # lealtades"): cada general/almirante que cumpla `when`
+            #   { effect: unit_leaders, kind: army|navy, when: {unit_trait: X}, effects: [...] }
+            key = {"army": "every_army_leader", "navy": "every_navy_leader"}.get(item.get("kind", "army"))
+            if key is None:
+                raise SpecError(f"{owner}: unit_leaders.kind '{item.get('kind')}' (army o navy)", where=where)
+            inner = Block()
+            if item.get("when"):
+                inner.add("limit", render_conditions(owner, item["when"], ec.triggers_used, where=where))
+            inner.entries.extend(render_effects(owner, item.get("effects") or [], ec, effects_used, where=where).entries)
+            block.add(key, inner)
+            effects_used.setdefault(key, owner)
+            continue
+        if effect in ("add_unit_trait", "remove_unit_trait"):
+            # dentro de unit_leaders: rasgo de general (03_leaders.yaml -> unit_leader_traits)
+            key = "add_unit_leader_trait" if effect == "add_unit_trait" else "remove_unit_leader_trait"
+            block.add(key, item["value"])
+            effects_used.setdefault(key, owner)
+            continue
         if effect == "states":
             pick = item.get("pick", "every")
             key = {"random": "random_owned_controlled_state", "every": "every_owned_state"}.get(pick)
@@ -1442,6 +1472,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "variable_is":
             block.add("check_variable", Block([("var", value["var"]), ("value", value["value"]), ("compare", "equals")]))
             triggers_used.setdefault("check_variable", owner)
+        elif key == "unit_trait":
+            # en un general o almirante (unit_leaders): tiene ese rasgo (2026-11-01, las Casas de Japón)
+            block.add("has_trait", value)
+            triggers_used.setdefault("has_trait", owner)
         elif key == "dynamic_modifier":
             # tiene puesto ese modificador dinámico (2026-11-01: el Sol Bajo de la NAS)
             block.add("has_dynamic_modifier", Block([("modifier", value)]))

@@ -44,9 +44,17 @@ def emit(ctx: BuildContext) -> None:
 
     # Quién usa qué estilo
     style_of: dict = {}
+    # 2026-11-01 (Japón y Gran Bretaña con armas propias): mientras no llegue la
+    # imagen propia de una familia se usa la del estilo que tenían antes
+    # (`inherit` o el señor), no la del juego
+    art_fallback: dict = {}
     for c in ctx.spec.countries:
         if c.tag in names:
             style_of[c.tag] = c.tag
+            if c.tag in inherit:
+                art_fallback[c.tag] = inherit[c.tag]
+            elif c.is_subject and c.overlord in names:
+                art_fallback[c.tag] = c.overlord
         elif c.tag in inherit and isinstance(inherit[c.tag], dict):
             # 2026-10-28 (Japón): estilo por tipo de arma, p. ej. lo terrestre de la
             # HSN y lo naval y aéreo del SHD ({default, naval, air})
@@ -91,6 +99,14 @@ def emit(ctx: BuildContext) -> None:
             base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
             if not base_art.exists():
                 base_art = repo / "assets" / style / "tech" / f"{fam}.dds"
+            fb = art_fallback.get(tag) if style == tag else None
+            if fb is not None and not base_art.exists():
+                fb_style = (fb.get(_family_kind(fam)) or fb.get("default")) if isinstance(fb, dict) else fb
+                if fb_style in names:
+                    style = fb_style
+                    base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
+                    if not base_art.exists():
+                        base_art = repo / "assets" / style / "tech" / f"{fam}.dds"
             for eq, gen in members.get(fam, []):
                 # 2026-10-24 (pedido del usuario: "las imágenes de los diseños no
                 # progresan; pedidos nuevos para cada investigación"): una imagen

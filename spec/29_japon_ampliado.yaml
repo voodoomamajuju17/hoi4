@@ -1,0 +1,2697 @@
+# =============================================================================
+# 29_japon_ampliado.yaml — El Shogunato de los Astilleros, segunda parte (2026-11-01)
+# =============================================================================
+# Pedido del usuario: "Crear contenido para Japón y GB hasta que sean, al menos,
+# 65% del promedio de una meganación. No tocar focos. [...] Crear ministros,
+# generales. En el caso de Japón, los generales y mariscales tienen sus propias
+# lealtades, así que rinden mejor cuando gobierna su 'mafia'."
+#
+# Las Tres Casas (las "mafias"): los Zaibatsu, la Yakuza y SRS, más los leales a
+# la Shōgun Kaede Mori. Gobierna la Casa de la ruta elegida en el árbol
+# (ZJP_zai_1 / ZJP_yak_1 / ZJP_srs_1); antes de elegir, arbitra la Shōgun.
+#   ZJP_gobierna: 0 la Shōgun, 1 Zaibatsu, 2 Yakuza, 3 SRS.
+# Cada general y mariscal lleva el rasgo de su Casa (zjp_casa_*). Cuando su Casa
+# gobierna recibe "Su Casa Gobierna" (+1 en las cuatro habilidades); los de las
+# otras dos Casas, "Su Casa no Gobierna" (-1 ataque, -1 planificación). Los
+# leales a la Shōgun rinden mejor mientras ella arbitra y quedan neutros después.
+# Un Juramento de Sangre (25 de Giri) pasa a los generales de una Casa relegada
+# al servicio de la Shōgun: dejan de rendir menos.
+# Favor de cada Casa (0-100, arranca en 50): con una Casa en el poder, la que
+# gobierna gana 1 por mes y las otras dos pierden 1. En 15 o menos, la Casa rompe
+# el pacto (evento). Todas en 70 o más: Las Tres Casas en Paz. Alguna en 20 o
+# menos: Las Casas Afilan los Cuchillos.
+# Eventos sueltos: ZJP_eventos_pulso tira uno por vez (después de cada uno, 60
+# días de espera), cada uno una sola vez y solo si se cumple su condición.
+# Ministros de una Casa: solo se nombran si gobierna su Casa o la Shōgun.
+# =============================================================================
+
+extend_scripted_effects:
+  ZJP_pulso:
+  - {effect: run, value: ZJP_casas_pulso}
+  - {effect: run, value: ZJP_eventos_pulso}
+
+decisions:
+  variable_names:
+    ZJP_gobierna: {english: Ruling House, spanish: Casa que Gobierna}
+    ZJP_favor_zaibatsu: {english: Favour of the Zaibatsu, spanish: Favor de los Zaibatsu}
+    ZJP_favor_yakuza: {english: Favour of the Yakuza, spanish: Favor de la Yakuza}
+    ZJP_favor_srs: {english: Favour of SRS, spanish: Favor de SRS}
+
+  scripted_effects:
+  # ---------------------------------------------------------------------------
+  # Las Tres Casas: quién gobierna, el favor, las lealtades de los generales
+  # ---------------------------------------------------------------------------
+  - id: ZJP_casas_pulso
+    effects:
+    - effect: if
+      when: {not_flag: ZJP_casas_listas}
+      then:
+      - {effect: flag, value: ZJP_casas_listas}
+      - {effect: set_variable, var: ZJP_favor_zaibatsu, value: 50}
+      - {effect: set_variable, var: ZJP_favor_yakuza, value: 50}
+      - {effect: set_variable, var: ZJP_favor_srs, value: 50}
+      - {effect: set_variable, var: ZJP_gobierna, value: 0}
+      - {effect: event, id: meganations_japon.40, days: 3}
+    - effect: if
+      when: {focus: ZJP_zai_1}
+      then:
+      - {effect: set_variable, var: ZJP_gobierna, value: 1}
+    - effect: if
+      when: {focus: ZJP_yak_1}
+      then:
+      - {effect: set_variable, var: ZJP_gobierna, value: 2}
+    - effect: if
+      when: {focus: ZJP_srs_1}
+      then:
+      - {effect: set_variable, var: ZJP_gobierna, value: 3}
+    # el favor: la Casa que gobierna sube, las otras bajan
+    - effect: if
+      when: {variable_is: {var: ZJP_gobierna, value: 1}}
+      then:
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 1}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: -1}
+      - {effect: add_variable, var: ZJP_favor_srs, value: -1}
+    - effect: if
+      when: {variable_is: {var: ZJP_gobierna, value: 2}}
+      then:
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -1}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: 1}
+      - {effect: add_variable, var: ZJP_favor_srs, value: -1}
+    - effect: if
+      when: {variable_is: {var: ZJP_gobierna, value: 3}}
+      then:
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -1}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: -1}
+      - {effect: add_variable, var: ZJP_favor_srs, value: 1}
+    - {effect: clamp, var: ZJP_favor_zaibatsu, min: 0, max: 100}
+    - {effect: clamp, var: ZJP_favor_yakuza, min: 0, max: 100}
+    - {effect: clamp, var: ZJP_favor_srs, min: 0, max: 100}
+    # las lealtades de los generales: solo cuando cambia quién gobierna
+    - effect: if
+      when: {all: [{variable_is: {var: ZJP_gobierna, value: 0}}, {not_flag: ZJP_lealtad_0}]}
+      then:
+      - {effect: flag, value: ZJP_lealtad_0}
+      - {effect: run, value: ZJP_lealtades}
+    - effect: if
+      when: {all: [{variable_is: {var: ZJP_gobierna, value: 1}}, {not_flag: ZJP_lealtad_1}]}
+      then:
+      - {effect: clear_flag, value: ZJP_lealtad_0}
+      - {effect: flag, value: ZJP_lealtad_1}
+      - {effect: run, value: ZJP_lealtades}
+      - {effect: event, id: meganations_japon.60, days: 2}
+    - effect: if
+      when: {all: [{variable_is: {var: ZJP_gobierna, value: 2}}, {not_flag: ZJP_lealtad_2}]}
+      then:
+      - {effect: clear_flag, value: ZJP_lealtad_0}
+      - {effect: flag, value: ZJP_lealtad_2}
+      - {effect: run, value: ZJP_lealtades}
+      - {effect: event, id: meganations_japon.61, days: 2}
+    - effect: if
+      when: {all: [{variable_is: {var: ZJP_gobierna, value: 3}}, {not_flag: ZJP_lealtad_3}]}
+      then:
+      - {effect: clear_flag, value: ZJP_lealtad_0}
+      - {effect: flag, value: ZJP_lealtad_3}
+      - {effect: run, value: ZJP_lealtades}
+      - {effect: event, id: meganations_japon.62, days: 2}
+    # espíritus del Consejo
+    - effect: if
+      when:
+        all:
+        - {variable_at_least: {var: ZJP_favor_zaibatsu, value: 70}}
+        - {variable_at_least: {var: ZJP_favor_yakuza, value: 70}}
+        - {variable_at_least: {var: ZJP_favor_srs, value: 70}}
+      then:
+      - {effect: dynamic_modifier, id: ZJP_casas_en_paz}
+      - effect: if
+        when: {not_flag: ZJP_paz_vista}
+        then:
+        - {effect: flag, value: ZJP_paz_vista}
+        - {effect: event, id: meganations_japon.64, days: 2}
+      else:
+      - {effect: remove_dynamic_modifier, id: ZJP_casas_en_paz}
+    - effect: if
+      when:
+        any:
+        - {variable_below: {var: ZJP_favor_zaibatsu, value: 21}}
+        - {variable_below: {var: ZJP_favor_yakuza, value: 21}}
+        - {variable_below: {var: ZJP_favor_srs, value: 21}}
+      then:
+      - {effect: dynamic_modifier, id: ZJP_cuchillos}
+      else:
+      - {effect: remove_dynamic_modifier, id: ZJP_cuchillos}
+    # una Casa con el favor por el piso rompe el pacto (una vez cada una)
+    - effect: if
+      when: {all: [{variable_below: {var: ZJP_favor_zaibatsu, value: 16}}, {not_flag: ZJP_rompe_zaibatsu}]}
+      then:
+      - {effect: flag, value: ZJP_rompe_zaibatsu}
+      - {effect: event, id: meganations_japon.53, days: 3}
+    - effect: if
+      when: {all: [{variable_below: {var: ZJP_favor_yakuza, value: 16}}, {not_flag: ZJP_rompe_yakuza}]}
+      then:
+      - {effect: flag, value: ZJP_rompe_yakuza}
+      - {effect: event, id: meganations_japon.54, days: 3}
+    - effect: if
+      when: {all: [{variable_below: {var: ZJP_favor_srs, value: 16}}, {not_flag: ZJP_rompe_srs}]}
+      then:
+      - {effect: flag, value: ZJP_rompe_srs}
+      - {effect: event, id: meganations_japon.55, days: 3}
+    # el destino de la Shōgun, cuando el CyberShogun despierta
+    - effect: if
+      when: {all: [{focus: ZJP_cybershogun}, {not_flag: ZJP_destino_shogun}]}
+      then:
+      - {effect: flag, value: ZJP_destino_shogun}
+      - {effect: event, id: meganations_japon.98, days: 20}
+
+  - id: ZJP_lealtades
+    effects:
+    - effect: unit_leaders
+      kind: army
+      effects:
+      - {effect: remove_unit_trait, value: zjp_su_casa_gobierna}
+      - {effect: remove_unit_trait, value: zjp_casa_relegada}
+    - effect: if
+      when: {variable_is: {var: ZJP_gobierna, value: 0}}
+      then:
+      - effect: unit_leaders
+        kind: army
+        when: {unit_trait: zjp_casa_shogun}
+        effects:
+        - {effect: add_unit_trait, value: zjp_su_casa_gobierna}
+    - effect: if
+      when: {variable_is: {var: ZJP_gobierna, value: 1}}
+      then:
+      - effect: unit_leaders
+        kind: army
+        when: {unit_trait: zjp_casa_zaibatsu}
+        effects:
+        - {effect: add_unit_trait, value: zjp_su_casa_gobierna}
+      - effect: unit_leaders
+        kind: army
+        when: {any: [{unit_trait: zjp_casa_yakuza}, {unit_trait: zjp_casa_srs}]}
+        effects:
+        - {effect: add_unit_trait, value: zjp_casa_relegada}
+    - effect: if
+      when: {variable_is: {var: ZJP_gobierna, value: 2}}
+      then:
+      - effect: unit_leaders
+        kind: army
+        when: {unit_trait: zjp_casa_yakuza}
+        effects:
+        - {effect: add_unit_trait, value: zjp_su_casa_gobierna}
+      - effect: unit_leaders
+        kind: army
+        when: {any: [{unit_trait: zjp_casa_zaibatsu}, {unit_trait: zjp_casa_srs}]}
+        effects:
+        - {effect: add_unit_trait, value: zjp_casa_relegada}
+    - effect: if
+      when: {variable_is: {var: ZJP_gobierna, value: 3}}
+      then:
+      - effect: unit_leaders
+        kind: army
+        when: {unit_trait: zjp_casa_srs}
+        effects:
+        - {effect: add_unit_trait, value: zjp_su_casa_gobierna}
+      - effect: unit_leaders
+        kind: army
+        when: {any: [{unit_trait: zjp_casa_zaibatsu}, {unit_trait: zjp_casa_yakuza}]}
+        effects:
+        - {effect: add_unit_trait, value: zjp_casa_relegada}
+
+  # ---------------------------------------------------------------------------
+  # Los eventos sueltos: uno por vez, cada uno una sola vez
+  # ---------------------------------------------------------------------------
+  - id: ZJP_eventos_pulso
+    effects:
+    - effect: if
+      when: {all: [{flag: ZJP_casas_listas}, {not_flag: ZJP_evento_espera}]}
+      then:
+      - effect: random
+        options:
+        - {weight: 60, effects: []}
+        # el nacimiento y la guerra
+        - weight: 14
+          skip_if: {any: [{flag: ZJP_ev_41}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_41}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.41, days: 1}
+        - weight: 12
+          skip_if: {any: [{flag: ZJP_ev_42}, {not: {war_with: HSN}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_42}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.42, days: 1}
+        - weight: 10
+          skip_if: {any: [{flag: ZJP_ev_43}, {at_war: false}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_43}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.43, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZJP_ev_44}, {not: {country_exists: ZKR}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_44}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.44, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZJP_ev_45}, {not: {country_exists: SHD}}, {war_with: SHD}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_45}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.45, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_46}, {not: {country_exists: ASC}}, {war_with: ASC}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_46}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.46, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_47}, {not: {country_exists: ZWE}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_47}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.47, days: 1}
+        # las Casas
+        - weight: 10
+          skip_if: {any: [{flag: ZJP_ev_50}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_50}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.50, days: 1}
+        - weight: 10
+          skip_if: {any: [{flag: ZJP_ev_51}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_51}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.51, days: 1}
+        - weight: 10
+          skip_if: {any: [{flag: ZJP_ev_52}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_52}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.52, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZJP_ev_56}, {variable_is: {var: ZJP_gobierna, value: 0}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_56}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.56, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZJP_ev_57}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_57}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.57, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZJP_ev_58}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_58}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.58, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZJP_ev_59}, {not: {variable_is: {var: ZJP_gobierna, value: 0}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_59}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.59, days: 1}
+        # la Casa que gobierna
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_65}, {not: {variable_is: {var: ZJP_gobierna, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_65}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.65, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_66}, {not: {variable_is: {var: ZJP_gobierna, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_66}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.66, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_67}, {not: {variable_is: {var: ZJP_gobierna, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_67}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.67, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_68}, {not: {variable_is: {var: ZJP_gobierna, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_68}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.68, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_70}, {not: {variable_is: {var: ZJP_gobierna, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_70}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.70, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_71}, {not: {variable_is: {var: ZJP_gobierna, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_71}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.71, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_72}, {not: {variable_is: {var: ZJP_gobierna, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_72}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.72, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_73}, {not: {variable_is: {var: ZJP_gobierna, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_73}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.73, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_75}, {not: {variable_is: {var: ZJP_gobierna, value: 3}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_75}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.75, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_76}, {not: {variable_is: {var: ZJP_gobierna, value: 3}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_76}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.76, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_77}, {not: {variable_is: {var: ZJP_gobierna, value: 3}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_77}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.77, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_78}, {not: {variable_is: {var: ZJP_gobierna, value: 3}}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_78}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.78, days: 1}
+        # los Mechas
+        - weight: 8
+          skip_if: {any: [{flag: ZJP_ev_80}, {at_war: false}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_80}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.80, days: 1}
+        - weight: 7
+          skip_if: {any: [{flag: ZJP_ev_81}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_81}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.81, days: 1}
+        - weight: 7
+          skip_if: {any: [{flag: ZJP_ev_82}, {at_war: true}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_82}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.82, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_83}, {at_war: false}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_83}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.83, days: 1}
+        # la vida en las islas
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_85}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_85}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.85, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_86}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_86}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.86, days: 1}
+        - weight: 4
+          skip_if: {any: [{flag: ZJP_ev_87}, {not: {date_after: 2104.1.1}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_87}
+          - {effect: flag, value: ZJP_evento_espera, days: 90}
+          - {effect: event, id: meganations_japon.87, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_89}, {at_war: true}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_89}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.89, days: 1}
+        - weight: 7
+          skip_if: {any: [{flag: ZJP_ev_90}, {at_war: false}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_90}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.90, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_91}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_91}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.91, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_92}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_92}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.92, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZJP_ev_93}, {at_war: false}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_93}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.93, days: 1}
+        # después del CyberShogun
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_95}, {not: {focus: ZJP_cybershogun}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_95}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.95, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_96}, {not: {focus: ZJP_cybershogun}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_96}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.96, days: 1}
+        - weight: 9
+          skip_if: {any: [{flag: ZJP_ev_97}, {not: {focus: ZJP_cybershogun}}]}
+          effects:
+          - {effect: flag, value: ZJP_ev_97}
+          - {effect: flag, value: ZJP_evento_espera, days: 60}
+          - {effect: event, id: meganations_japon.97, days: 1}
+
+  # ---------------------------------------------------------------------------
+  # Paneles
+  # ---------------------------------------------------------------------------
+  categories:
+  - id: ZJP_casas_category
+    country: ZJP
+    icon_prefer: [generic_political_actions]
+    name: {english: The Council of the Three Houses, spanish: El Consejo de las Tres Casas}
+    desc:
+      english: 'ZAIBATSU: [?ZJP_favor_zaibatsu] / YAKUZA: [?ZJP_favor_yakuza] / SRS: [?ZJP_favor_srs]\n\nThree Houses hold the Shogunate together, and each one has its own generals. The House of the chosen road governs: its generals fight better, those of the other two fight worse. Every month the ruling House gains 1 favour and the other two lose 1. At 15 or less a House breaks the pact; all three at 70 or more, the Three Houses at Peace.'
+      spanish: 'ZAIBATSU: [?ZJP_favor_zaibatsu] / YAKUZA: [?ZJP_favor_yakuza] / SRS: [?ZJP_favor_srs]\n\nTres Casas sostienen al Shogunato, y cada una tiene sus propios generales. Gobierna la Casa del camino elegido: sus generales pelean mejor, los de las otras dos, peor. Cada mes la Casa que gobierna gana 1 de favor y las otras dos pierden 1. Con 15 o menos una Casa rompe el pacto; las tres en 70 o más, las Tres Casas en Paz.'
+    src: user_request
+    decisions:
+    - id: ZJP_banquete_kanemura
+      name: {english: 'Banquet in the Kanemura Tower (10 Giri)', spanish: 'Banquete en la Torre Kanemura (10 de Giri)'}
+      desc: {english: 'Champagne, contracts and a toast to the next quarter: +15 favour of the Zaibatsu.', spanish: 'Champán, contratos y un brindis por el próximo trimestre: +15 de favor de los Zaibatsu.'}
+      icon_prefer: [generic_political_actions]
+      cooldown_days: 120
+      available: {variable_at_least: {var: ZJP_giri, value: 10}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -10}
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 15}
+      - {effect: clamp, var: ZJP_favor_zaibatsu, min: 0, max: 100}
+      ai:
+        factor: 1
+        modifiers:
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        - {factor: 8, when: {variable_below: {var: ZJP_favor_zaibatsu, value: 30}}}
+        - {factor: 0, when: {variable_at_least: {var: ZJP_favor_zaibatsu, value: 80}}}
+      src: user_request
+    - id: ZJP_sobre_de_medianoche
+      name: {english: 'A Midnight Envelope for the Oyabun (10 Giri)', spanish: 'Un Sobre de Medianoche para el Oyabun (10 de Giri)'}
+      desc: {english: 'Cash, a bottle of old whisky and no questions: +15 favour of the Yakuza.', spanish: 'Efectivo, una botella de whisky viejo y ninguna pregunta: +15 de favor de la Yakuza.'}
+      icon_prefer: [generic_political_actions]
+      cooldown_days: 120
+      available: {variable_at_least: {var: ZJP_giri, value: 10}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -10}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: 15}
+      - {effect: clamp, var: ZJP_favor_yakuza, min: 0, max: 100}
+      ai:
+        factor: 1
+        modifiers:
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        - {factor: 8, when: {variable_below: {var: ZJP_favor_yakuza, value: 30}}}
+        - {factor: 0, when: {variable_at_least: {var: ZJP_favor_yakuza, value: 80}}}
+      src: user_request
+    - id: ZJP_subsidio_sendai
+      name: {english: 'Grant for the Sendai Laboratories (10 Giri)', spanish: 'Subsidio a los Laboratorios de Sendai (10 de Giri)'}
+      desc: {english: 'New centrifuges, new vats and a blind eye to what grows in them: +15 favour of SRS.', spanish: 'Centrífugas nuevas, cubas nuevas y la vista gorda sobre lo que crece adentro: +15 de favor de SRS.'}
+      icon_prefer: [generic_political_actions]
+      cooldown_days: 120
+      available: {variable_at_least: {var: ZJP_giri, value: 10}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -10}
+      - {effect: add_variable, var: ZJP_favor_srs, value: 15}
+      - {effect: clamp, var: ZJP_favor_srs, min: 0, max: 100}
+      ai:
+        factor: 1
+        modifiers:
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        - {factor: 8, when: {variable_below: {var: ZJP_favor_srs, value: 30}}}
+        - {factor: 0, when: {variable_at_least: {var: ZJP_favor_srs, value: 80}}}
+      src: user_request
+    - id: ZJP_arbitraje_shogun
+      name: {english: "The Shogun's Arbitration", spanish: 'El Arbitraje de la Shōgun'}
+      desc: {english: 'While no House governs, Kaede Mori sits the three bosses at the same table: +8 favour of every House.', spanish: 'Mientras no gobierna ninguna Casa, Kaede Mori sienta a los tres jefes en la misma mesa: +8 de favor de cada Casa.'}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      visible: {variable_is: {var: ZJP_gobierna, value: 0}}
+      effects:
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 8}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: 8}
+      - {effect: add_variable, var: ZJP_favor_srs, value: 8}
+      - {effect: clamp, var: ZJP_favor_zaibatsu, min: 0, max: 100}
+      - {effect: clamp, var: ZJP_favor_yakuza, min: 0, max: 100}
+      - {effect: clamp, var: ZJP_favor_srs, min: 0, max: 100}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZJP_rehenes_de_honor
+      name: {english: 'Hostages of Honour', spanish: 'Rehenes de Honor'}
+      desc: {english: 'Each House sends a son or a daughter to live at the court of Yokosuka, "as guests". Stability up, every House a little colder.', spanish: 'Cada Casa manda un hijo o una hija a vivir en la corte de Yokosuka, "como invitados". Más estabilidad, y cada Casa un poco más fría.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      fire_only_once: true
+      effects:
+      - {effect: dynamic_modifier, id: ZJP_rehenes}
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -5}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: -5}
+      - {effect: add_variable, var: ZJP_favor_srs, value: -5}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZJP_juramento_zaibatsu
+      name: {english: 'Blood Oath: the Zaibatsu Generals (25 Giri)', spanish: 'Juramento de Sangre: los Generales Zaibatsu (25 de Giri)'}
+      desc: {english: 'The generals of the Zaibatsu swear on the Shogun''s sword: they stop answering to their House and stop fighting worse while it does not govern. The Zaibatsu take it badly (-20 favour).', spanish: 'Los generales de los Zaibatsu juran sobre la espada de la Shōgun: dejan de responderle a su Casa y de pelear peor mientras no gobierna. Los Zaibatsu se lo toman mal (-20 de favor).'}
+      icon_prefer: [generic_army_support]
+      fire_only_once: true
+      visible: {all: [{not: {variable_is: {var: ZJP_gobierna, value: 0}}}, {not: {variable_is: {var: ZJP_gobierna, value: 1}}}]}
+      available: {variable_at_least: {var: ZJP_giri, value: 25}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -25}
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -20}
+      - effect: unit_leaders
+        kind: army
+        when: {unit_trait: zjp_casa_zaibatsu}
+        effects:
+        - {effect: remove_unit_trait, value: zjp_casa_zaibatsu}
+        - {effect: remove_unit_trait, value: zjp_casa_relegada}
+        - {effect: add_unit_trait, value: zjp_casa_shogun}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 75}}]}}]}
+      src: user_request
+    - id: ZJP_juramento_yakuza
+      name: {english: 'Blood Oath: the Yakuza Generals (25 Giri)', spanish: 'Juramento de Sangre: los Generales de la Yakuza (25 de Giri)'}
+      desc: {english: 'The sworn brothers swear a second oath, this time to the Shogun. They stop fighting worse while their clan does not govern. The Yakuza never forgets (-20 favour).', spanish: 'Los hermanos jurados juran por segunda vez, ahora a la Shōgun. Dejan de pelear peor mientras su clan no gobierna. La Yakuza no se olvida (-20 de favor).'}
+      icon_prefer: [generic_army_support]
+      fire_only_once: true
+      visible: {all: [{not: {variable_is: {var: ZJP_gobierna, value: 0}}}, {not: {variable_is: {var: ZJP_gobierna, value: 2}}}]}
+      available: {variable_at_least: {var: ZJP_giri, value: 25}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -25}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: -20}
+      - effect: unit_leaders
+        kind: army
+        when: {unit_trait: zjp_casa_yakuza}
+        effects:
+        - {effect: remove_unit_trait, value: zjp_casa_yakuza}
+        - {effect: remove_unit_trait, value: zjp_casa_relegada}
+        - {effect: add_unit_trait, value: zjp_casa_shogun}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 75}}]}}]}
+      src: user_request
+    - id: ZJP_juramento_srs
+      name: {english: 'Blood Oath: the SRS Generals (25 Giri)', spanish: 'Juramento de Sangre: los Generales de SRS (25 de Giri)'}
+      desc: {english: 'The commanders of the clone legions sign a new protocol: the Shogun before the company. They stop fighting worse while SRS does not govern. Sendai takes note (-20 favour).', spanish: 'Los comandantes de las legiones de clones firman un protocolo nuevo: la Shōgun antes que la empresa. Dejan de pelear peor mientras SRS no gobierna. Sendai toma nota (-20 de favor).'}
+      icon_prefer: [generic_army_support]
+      fire_only_once: true
+      visible: {all: [{not: {variable_is: {var: ZJP_gobierna, value: 0}}}, {not: {variable_is: {var: ZJP_gobierna, value: 3}}}]}
+      available: {variable_at_least: {var: ZJP_giri, value: 25}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -25}
+      - {effect: add_variable, var: ZJP_favor_srs, value: -20}
+      - effect: unit_leaders
+        kind: army
+        when: {unit_trait: zjp_casa_srs}
+        effects:
+        - {effect: remove_unit_trait, value: zjp_casa_srs}
+        - {effect: remove_unit_trait, value: zjp_casa_relegada}
+        - {effect: add_unit_trait, value: zjp_casa_shogun}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 75}}]}}]}
+      src: user_request
+    - id: ZJP_consejo_de_guerra
+      name: {english: 'War Council of the Houses (10 Giri)', spanish: 'Consejo de Guerra de las Casas (10 de Giri)'}
+      desc: {english: 'The three bosses and the Shogun around one map for a whole night: 120 days of attack and organisation, and a little favour for everyone.', spanish: 'Los tres jefes y la Shōgun alrededor de un solo mapa durante toda una noche: 120 días de ataque y organización, y un poco de favor para todos.'}
+      icon_prefer: [generic_army_support]
+      cost: 50
+      cooldown_days: 240
+      available: {all: [{at_war: true}, {variable_at_least: {var: ZJP_giri, value: 10}}]}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -10}
+      - {effect: dynamic_modifier, id: ZJP_consejo_de_guerra_e, days: 120}
+      - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 3}
+      - {effect: add_variable, var: ZJP_favor_yakuza, value: 3}
+      - {effect: add_variable, var: ZJP_favor_srs, value: 3}
+      ai:
+        factor: 3
+        modifiers:
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        # 2026-11-01: como en 24_japon, la IA guarda el Giri para el CyberShogun
+      src: user_request
+
+  - id: ZJP_diques_category
+    country: ZJP
+    icon_prefer: [generic_shipbuilding, generic_industry]
+    name: {english: The Docks of Japan, spanish: Los Diques de Japón}
+    desc:
+      english: 'The Shogunate was born in a dry dock and lives on what its shipyards can float. Every crane is a vote; every hull, a promise to the Houses.'
+      spanish: 'El Shogunato nació en un dique seco y vive de lo que sus astilleros pueden hacer flotar. Cada grúa es un voto; cada casco, una promesa a las Casas.'
+    src: user_request
+    decisions:
+    - id: ZJP_reflotar_yokosuka
+      name: {english: 'Refloat the Yokosuka Fleet', spanish: 'Reflotar la Flota de Yokosuka'}
+      desc: {english: 'The hulls the Market left to rot in the bay go back into dry dock: 2 shipyards and naval experience.', spanish: 'Los cascos que el Mercado dejó pudrirse en la bahía vuelven al dique seco: 2 astilleros y experiencia naval.'}
+      icon_prefer: [generic_shipbuilding, generic_industry]
+      cost: 100
+      fire_only_once: true
+      effects:
+      - {effect: build, building: dockyard, level: 2}
+      - {effect: navy_experience, value: 40}
+      ai: {factor: 5}
+      src: user_request
+    - id: ZJP_astilleros_de_nagasaki
+      name: {english: 'The Nagasaki Yards', spanish: 'Los Astilleros de Nagasaki'}
+      desc: {english: 'The oldest yards of the south light their furnaces again: 2 shipyards in Kyushu.', spanish: 'Los astilleros más viejos del sur vuelven a prender los hornos: 2 astilleros en Kyushu.'}
+      icon_prefer: [generic_shipbuilding, generic_industry]
+      cost: 75
+      fire_only_once: true
+      available: {owns_state: [Kyushu, Kyūshū]}
+      effects:
+      - effect: in_state
+        state: [Kyushu, Kyūshū]
+        effects:
+        - {effect: build_here, building: dockyard, level: 2}
+      ai: {factor: 4}
+      src: user_request
+    - id: ZJP_lobas_de_kure
+      name: {english: 'The She-Wolves of Kure (15 Giri)', spanish: 'Las Lobas de Kure (15 de Giri)'}
+      desc: {english: 'The submarine yards of Kure work in three shifts for 180 days: more shipyard output and deadlier submarines.', spanish: 'Los astilleros de submarinos de Kure trabajan en tres turnos durante 180 días: más producción naval y submarinos más letales.'}
+      icon_prefer: [generic_shipbuilding]
+      cooldown_days: 300
+      available: {variable_at_least: {var: ZJP_giri, value: 15}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -15}
+      - {effect: dynamic_modifier, id: ZJP_lobas_de_kure_e, days: 180}
+      ai: {factor: 2, modifiers: [{factor: 3, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 65}}]}}]}
+      src: user_request
+    - id: ZJP_cortar_cables
+      name: {english: 'Cut the Cables of the High Seas (20 Giri)', spanish: 'Cortar los Cables de la Alta Mar (20 de Giri)'}
+      desc: {english: 'Divers of the Yokosuka fleet cut the undersea cables that carry the Market''s prices: the High Seas research and decide slower for 120 days.', spanish: 'Los buzos de la flota de Yokosuka cortan los cables submarinos que llevan los precios del Mercado: la Alta Mar investiga y decide más lento durante 120 días.'}
+      icon_prefer: [generic_operation, generic_political_actions]
+      cooldown_days: 365
+      available: {all: [{war_with: HSN}, {variable_at_least: {var: ZJP_giri, value: 20}}]}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -20}
+      - effect: scope
+        target: HSN
+        effects:
+        - {effect: dynamic_modifier, id: HSN_cables_cortados_japon, days: 120}
+      ai:
+        factor: 3
+        modifiers:
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}
+        # 2026-11-01: como en 24_japon, la IA guarda el Giri para el CyberShogun
+      src: user_request
+    - id: ZJP_reconstruir_osaka
+      name: {english: 'Rebuild the Port of Osaka', spanish: 'Reconstruir el Puerto de Osaka'}
+      desc: {english: 'Cranes, rail and warehouses for the great port of Kansai: infrastructure and a shipyard.', spanish: 'Grúas, vías y galpones para el gran puerto de Kansai: infraestructura y un astillero.'}
+      icon_prefer: [generic_construction, generic_industry]
+      cost: 75
+      fire_only_once: true
+      available: {all: [{at_war: false}, {owns_state: [Kansai, Kinki]}]}
+      effects:
+      - effect: in_state
+        state: [Kansai, Kinki]
+        effects:
+        - {effect: build_here, building: infrastructure, level: 2}
+        - {effect: build_here, building: dockyard, level: 1}
+      ai: {factor: 3}
+      src: user_request
+    - id: ZJP_mechas_en_los_muelles
+      name: {english: 'Mechas on the Piers (15 Giri)', spanish: 'Mechas en los Muelles (15 de Giri)'}
+      desc: {english: 'A Mecha at the end of every pier and a searchlight on every crane: 180 days of stronger defence on the islands.', spanish: 'Un Mecha en la punta de cada muelle y un reflector en cada grúa: 180 días de defensa más fuerte en las islas.'}
+      icon_prefer: [generic_army_support]
+      cooldown_days: 240
+      available: {variable_at_least: {var: ZJP_giri, value: 15}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -15}
+      - {effect: dynamic_modifier, id: ZJP_mechas_en_los_muelles_e, days: 180}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 65}}]}}]}
+      src: user_request
+    - id: ZJP_vender_mechas
+      name: {english: 'Sell Mechas to Whoever Pays', spanish: 'Vender Mechas a Quien Pague'}
+      desc: {english: 'Three Mechas leave by night for a buyer nobody names: political power and Giri, and some shame.', spanish: 'Tres Mechas salen de noche para un comprador que nadie nombra: poder político y Giri, y algo de vergüenza.'}
+      icon_prefer: [generic_trade, generic_political_actions]
+      cooldown_days: 365
+      available: {at_war: false}
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: add_variable, var: ZJP_giri, value: 10}
+      - {effect: add_stability, value: -0.03}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZJP_dique_seco_uno
+      name: {english: 'Dry Dock Number One', spanish: 'El Dique Seco Número Uno'}
+      desc: {english: 'The engineers who build the Mechas share their notes with the naval architects: two naval breakthroughs.', spanish: 'Los ingenieros que arman los Mechas les pasan sus apuntes a los arquitectos navales: dos avances navales.'}
+      icon_prefer: [generic_shipbuilding, generic_industry]
+      cost: 100
+      fire_only_once: true
+      effects:
+      - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 2}
+      ai: {factor: 3}
+      src: user_request
+
+  - id: ZJP_negocios_category
+    country: ZJP
+    icon_prefer: [generic_political_actions]
+    name: {english: The Business of the Ruling House, spanish: Los Negocios de la Casa que Gobierna}
+    desc:
+      english: 'Whoever governs the Shogunate brings their own way of doing things. Each House opens its own deals here when its road is chosen.'
+      spanish: 'Quien gobierna el Shogunato trae su propia manera de hacer las cosas. Cada Casa abre acá sus propios negocios cuando se elige su camino.'
+    visible: {not: {variable_is: {var: ZJP_gobierna, value: 0}}}
+    src: user_request
+    decisions:
+    - id: ZJP_oferta_publica
+      name: {english: 'Initial Public Offering of the Shogunate', spanish: 'Oferta Pública del Shogunato'}
+      desc: {english: 'Shares of the state itself, on sale in Kanto: political power now, a year of more factories and less stability.', spanish: 'Acciones del Estado mismo, a la venta en Kanto: poder político ya, un año de más fábricas y menos estabilidad.'}
+      icon_prefer: [generic_trade, generic_industry]
+      cooldown_days: 730
+      visible: {variable_is: {var: ZJP_gobierna, value: 1}}
+      effects:
+      - {effect: add_political_power, value: 150}
+      - {effect: dynamic_modifier, id: ZJP_oferta_publica_e, days: 365}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZJP_contratos_de_por_vida
+      name: {english: 'Lifetime Contracts', spanish: 'Contratos de por Vida'}
+      desc: {english: 'Every new employee signs for life, and life includes the reserve: manpower and faster construction for 180 days.', spanish: 'Cada empleado nuevo firma de por vida, y la vida incluye la reserva: mano de obra y construcción más rápida durante 180 días.'}
+      icon_prefer: [generic_industry, generic_army_support]
+      cost: 50
+      cooldown_days: 365
+      visible: {variable_is: {var: ZJP_gobierna, value: 1}}
+      effects:
+      - {effect: add_manpower, value: 40000}
+      - {effect: dynamic_modifier, id: ZJP_contratos_por_vida, days: 180}
+      ai: {factor: 2, modifiers: [{factor: 2, when: {at_war: true}}]}
+      src: user_request
+    - id: ZJP_impuesto_de_proteccion
+      name: {english: 'The Protection Tax', spanish: 'El Impuesto de Protección'}
+      desc: {english: 'Every shop on the islands pays the clan for a peace nobody else can offer: +15 Giri and 180 days of more political power, at the cost of some stability.', spanish: 'Cada negocio de las islas le paga al clan por una paz que nadie más puede dar: +15 de Giri y 180 días de más poder político, a costa de algo de estabilidad.'}
+      icon_prefer: [generic_trade, generic_political_actions]
+      cooldown_days: 180
+      visible: {variable_is: {var: ZJP_gobierna, value: 2}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: 15}
+      - {effect: add_stability, value: -0.03}
+      - {effect: dynamic_modifier, id: ZJP_proteccion, days: 180}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZJP_contrabando_de_armas
+      name: {english: 'Gun-Running at the Black Pier', spanish: 'Contrabando de Armas en el Muelle Negro'}
+      desc: {english: 'Crates without papers, ships without flags: rifles, support kits and guns for the army.', spanish: 'Cajones sin papeles, barcos sin bandera: fusiles, equipo de apoyo y cañones para el ejército.'}
+      icon_prefer: [generic_army_support, generic_trade]
+      cost: 50
+      cooldown_days: 270
+      visible: {variable_is: {var: ZJP_gobierna, value: 2}}
+      effects:
+      - {effect: equipment, type: infantry_equipment, amount: 3000}
+      - {effect: equipment, type: support_equipment, amount: 300}
+      - {effect: equipment, type: artillery_equipment, amount: 300}
+      ai: {factor: 2, modifiers: [{factor: 3, when: {at_war: true}}]}
+      src: user_request
+    - id: ZJP_lote_de_emergencia
+      name: {english: 'Emergency Clone Batch (15 Giri)', spanish: 'Lote de Clones de Emergencia (15 de Giri)'}
+      desc: {english: 'Sixty thousand soldiers decanted in a single week. Nobody asks them what they think; they do not think much yet.', spanish: 'Sesenta mil soldados decantados en una sola semana. Nadie les pregunta qué piensan; todavía no piensan mucho.'}
+      icon_prefer: [generic_army_support]
+      cooldown_days: 300
+      visible: {variable_is: {var: ZJP_gobierna, value: 3}}
+      available: {variable_at_least: {var: ZJP_giri, value: 15}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -15}
+      - {effect: add_manpower, value: 60000}
+      - {effect: dynamic_modifier, id: ZJP_clones_de_emergencia, days: 180}
+      ai: {factor: 2, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 65}}]}}]}
+      src: user_request
+    - id: ZJP_ensayo_masivo
+      name: {english: 'Mass Clinical Trial', spanish: 'Ensayo Clínico Masivo'}
+      desc: {english: 'A free vaccine for the whole population, with a few extra ingredients: a breakthrough and a year of faster research. Something could go wrong.', spanish: 'Una vacuna gratis para toda la población, con algunos ingredientes de más: un avance y un año de investigación más rápida. Algo podría salir mal.'}
+      icon_prefer: [generic_research, generic_political_actions]
+      cost: 75
+      cooldown_days: 540
+      visible: {variable_is: {var: ZJP_gobierna, value: 3}}
+      effects:
+      - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+      - {effect: dynamic_modifier, id: ZJP_ensayo_clinico, days: 365}
+      - effect: hidden
+        effects:
+        - effect: random
+          options:
+          - {weight: 70, effects: []}
+          - weight: 30
+            effects:
+            - effect: if
+              when: {not_flag: ZJP_ev_77}
+              then:
+              - {effect: flag, value: ZJP_ev_77}
+              - {effect: event, id: meganations_japon.77, days: 90}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZJP_las_mil_voces
+      name: {english: 'The Thousand Voices (20 Giri)', spanish: 'Las Mil Voces (20 de Giri)'}
+      desc: {english: 'The CyberShogun speaks in every screen of the islands at once, for six months: much more political power and some war support.', spanish: 'El CyberShogun habla en todas las pantallas de las islas a la vez, durante seis meses: mucho más poder político y algo de apoyo a la guerra.'}
+      icon_prefer: [generic_political_actions]
+      cooldown_days: 365
+      visible: {focus: ZJP_cybershogun}
+      available: {variable_at_least: {var: ZJP_giri, value: 20}}
+      effects:
+      - {effect: add_variable, var: ZJP_giri, value: -20}
+      - {effect: dynamic_modifier, id: ZJP_mil_voces, days: 180}
+      ai:
+        factor: 3
+        modifiers:
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}
+        # 2026-11-01: como en 24_japon, la IA guarda el Giri para el CyberShogun
+      src: user_request
+
+  dynamic_modifiers:
+  - id: ZJP_casas_en_paz
+    country: ZJP
+    name: {english: The Three Houses at Peace, spanish: Las Tres Casas en Paz}
+    desc: {english: 'Zaibatsu money, Yakuza muscle, SRS science, all pulling the same way. It will not last; enjoy it.', spanish: 'La plata de los Zaibatsu, el músculo de la Yakuza, la ciencia de SRS, todo tirando para el mismo lado. No va a durar; aprovechalo.'}
+    modifiers: {stability_factor: 0.1, political_power_gain: 0.15, industrial_capacity_factory: 0.05}
+  - id: ZJP_cuchillos
+    country: ZJP
+    name: {english: The Houses Sharpen Their Knives, spanish: Las Casas Afilan los Cuchillos}
+    desc: {english: 'One House feels betrayed, and in Japan a betrayed House does not complain: it waits.', spanish: 'Una Casa se siente traicionada, y en Japón una Casa traicionada no se queja: espera.'}
+    modifiers: {stability_factor: -0.08, political_power_gain: -0.1}
+  - id: ZJP_rehenes
+    country: ZJP
+    name: {english: Hostages of Honour, spanish: Rehenes de Honor}
+    desc: {english: 'Three young heirs drink tea at the court of Yokosuka every afternoon. Their fathers behave.', spanish: 'Tres herederos jóvenes toman el té en la corte de Yokosuka cada tarde. Sus padres se portan bien.'}
+    modifiers: {stability_factor: 0.06, political_power_gain: -0.05}
+  - id: ZJP_consejo_de_guerra_e
+    country: ZJP
+    name: {english: War Council of the Houses, spanish: Consejo de Guerra de las Casas}
+    desc: {english: 'For once the three Houses fight the same war.', spanish: 'Por una vez las tres Casas pelean la misma guerra.'}
+    modifiers: {army_attack_factor: 0.05, army_org_factor: 0.05}
+  - id: ZJP_lobas_de_kure_e
+    country: ZJP
+    name: {english: The She-Wolves of Kure, spanish: Las Lobas de Kure}
+    desc: {english: 'Black hulls slide into the water every week. Their captains call them the she-wolves.', spanish: 'Cada semana un casco negro se desliza al agua. Sus capitanes las llaman las lobas.'}
+    modifiers: {industrial_capacity_dockyard: 0.1, submarine_attack: 0.1}
+  - id: HSN_cables_cortados_japon
+    country: HSN
+    name: {english: The Cables Are Cut, spanish: Los Cables Cortados}
+    desc: {english: 'The prices from Tokyo arrive late, or not at all. The Market hates not knowing.', spanish: 'Los precios de Tokio llegan tarde, o no llegan. El Mercado odia no saber.'}
+    modifiers: {research_speed_factor: -0.05, political_power_gain: -0.15}
+  - id: ZJP_mechas_en_los_muelles_e
+    country: ZJP
+    name: {english: Mechas on the Piers, spanish: Mechas en los Muelles}
+    desc: {english: 'Every pier ends in a Mecha with its searchlight on.', spanish: 'Cada muelle termina en un Mecha con el reflector prendido.'}
+    modifiers: {army_defence_factor: 0.08, dig_in_speed_factor: 0.1}
+  - id: ZJP_oferta_publica_e
+    country: ZJP
+    name: {english: The Shogunate on the Stock Exchange, spanish: El Shogunato en la Bolsa}
+    desc: {english: 'Everyone owns a little piece of the state, and everyone checks its price every morning.', spanish: 'Todos tienen un pedacito del Estado, y todos miran su cotización cada mañana.'}
+    modifiers: {industrial_capacity_factory: 0.05, stability_factor: -0.05}
+  - id: ZJP_contratos_por_vida
+    country: ZJP
+    name: {english: Lifetime Contracts, spanish: Contratos de por Vida}
+    desc: {english: 'One company, one employee, one life.', spanish: 'Una empresa, un empleado, una vida.'}
+    modifiers: {production_speed_buildings_factor: 0.1, stability_factor: -0.03}
+  - id: ZJP_proteccion
+    country: ZJP
+    name: {english: The Protection Tax, spanish: El Impuesto de Protección}
+    desc: {english: 'The envelope arrives every Friday. Nobody has been robbed in months.', spanish: 'El sobre llega cada viernes. Hace meses que no roban a nadie.'}
+    modifiers: {political_power_gain: 0.1, consumer_goods_factor: 0.02}
+  - id: ZJP_clones_de_emergencia
+    country: ZJP
+    name: {english: Emergency Clones, spanish: Clones de Emergencia}
+    desc: {english: 'Identical faces in every barracks. The mothers of Sendai cross the street when they see them.', spanish: 'Caras idénticas en cada cuartel. Las madres de Sendai cruzan la calle cuando los ven.'}
+    modifiers: {stability_factor: -0.05, recruitable_population_factor: 0.04}
+  - id: ZJP_ensayo_clinico
+    country: ZJP
+    name: {english: The Mass Clinical Trial, spanish: El Ensayo Clínico Masivo}
+    desc: {english: 'The whole country is a laboratory, and the results are excellent. So far.', spanish: 'El país entero es un laboratorio, y los resultados son excelentes. Por ahora.'}
+    modifiers: {research_speed_factor: 0.08, stability_factor: -0.04}
+  - id: ZJP_mil_voces
+    country: ZJP
+    name: {english: The Thousand Voices, spanish: Las Mil Voces}
+    desc: {english: 'The same voice in every speaker of every port, polite and tireless.', spanish: 'La misma voz en cada parlante de cada puerto, amable e incansable.'}
+    modifiers: {political_power_gain: 0.25, war_support_factor: 0.05}
+  - id: ZJP_capital_en_fuga
+    country: ZJP
+    name: {english: Capital in Flight, spanish: El Capital en Fuga}
+    desc: {english: 'The Zaibatsu have moved their money to accounts the Shogun cannot see.', spanish: 'Los Zaibatsu se llevaron la plata a cuentas que la Shōgun no puede ver.'}
+    modifiers: {industrial_capacity_factory: -0.1, production_speed_buildings_factor: -0.1}
+  - id: ZJP_puertos_sin_ley
+    country: ZJP
+    name: {english: Lawless Ports, spanish: Puertos sin Ley}
+    desc: {english: 'Without the clans, every pier belongs to whoever has the most knives tonight.', spanish: 'Sin los clanes, cada muelle es del que tenga más cuchillos esta noche.'}
+    modifiers: {stability_factor: -0.08, industrial_capacity_dockyard: -0.1}
+  - id: ZJP_laboratorios_cerrados
+    country: ZJP
+    name: {english: Closed Laboratories, spanish: Laboratorios Cerrados}
+    desc: {english: 'SRS has locked its doors in Sendai. Its scientists answer only to the company.', spanish: 'SRS cerró sus puertas en Sendai. Sus científicos solo le responden a la empresa.'}
+    modifiers: {research_speed_factor: -0.1, recruitable_population_factor: -0.03}
+  - id: ZJP_estrecho_de_tsushima
+    country: ZJP
+    name: {english: The Tsushima Doctrine, spanish: La Doctrina de Tsushima}
+    desc: {english: 'Strike first, strike at the narrowest point, and never let the enemy fleet reach open sea.', spanish: 'Golpear primero, golpear en el punto más angosto y nunca dejar que la flota enemiga llegue a mar abierto.'}
+    modifiers: {naval_damage_factor: 0.08, naval_speed_factor: 0.05}
+  - id: ZJP_neon_de_osaka
+    country: ZJP
+    name: {english: Neon over Osaka, spanish: Neón sobre Osaka}
+    desc: {english: 'The clans have lit the whole city in crimson. Crime is down; the nightlife has never been better.', spanish: 'Los clanes iluminaron toda la ciudad de carmesí. El delito bajó; la noche nunca estuvo mejor.'}
+    modifiers: {stability_factor: 0.05, consumer_goods_factor: -0.03}
+  - id: ZJP_huelga_soldadores
+    country: ZJP
+    name: {english: The Welders' Grievance, spanish: El Rencor de los Soldadores}
+    desc: {english: 'The strike is over, but the welders work exactly as slowly as the contract allows.', spanish: 'La huelga terminó, pero los soldadores trabajan exactamente tan lento como permite el contrato.'}
+    modifiers: {industrial_capacity_dockyard: -0.08}
+  - id: ZJP_luto_de_kanto
+    country: ZJP
+    name: {english: Mourning in Kanto, spanish: Luto en Kanto}
+    desc: {english: 'The earth moved for ninety seconds. The rebuilding will take years.', spanish: 'La tierra se movió noventa segundos. La reconstrucción va a llevar años.'}
+    modifiers: {production_speed_buildings_factor: -0.1, stability_factor: -0.05}
+  - id: ZJP_idols_del_frente
+    country: ZJP
+    name: {english: Idols of the Front, spanish: Idols del Frente}
+    desc: {english: 'Four singers in sailor uniforms sing for the troops on every channel. Enlistment has tripled.', spanish: 'Cuatro cantantes con uniforme de marinero les cantan a las tropas en todos los canales. El alistamiento se triplicó.'}
+    modifiers: {war_support_factor: 0.08, recruitable_population_factor: 0.02}
+  - id: ZJP_monjes_de_kioto
+    country: ZJP
+    name: {english: The Monks of Kyoto, spanish: Los Monjes de Kioto}
+    desc: {english: 'In the old temples someone still sweeps the gravel every morning, and the country breathes a little slower.', spanish: 'En los templos viejos alguien todavía barre la grava cada mañana, y el país respira un poco más lento.'}
+    modifiers: {stability_factor: 0.06, war_support_factor: -0.03}
+  - id: ZJP_tren_bala
+    country: ZJP
+    name: {english: The Last Bullet Train, spanish: El Último Tren Bala}
+    desc: {english: 'The old line runs again from Kyushu to Hokkaido, carrying troops in the seats of the tourists.', spanish: 'La línea vieja vuelve a correr de Kyushu a Hokkaido, con soldados en los asientos de los turistas.'}
+    modifiers: {production_speed_infrastructure_factor: 0.15, army_speed_factor: 0.03}
+  - id: ZJP_mecha_insomne
+    country: ZJP
+    name: {english: The Sleepless Mecha, spanish: El Mecha Insomne}
+    desc: {english: 'At three in the morning the great Mecha of Yokosuka turns its head towards the sea, and nobody told it to.', spanish: 'A las tres de la mañana el gran Mecha de Yokosuka gira la cabeza hacia el mar, y nadie se lo ordenó.'}
+    modifiers: {stability_factor: -0.05, research_speed_factor: 0.05}
+
+# =============================================================================
+# Eventos (52 nuevos, 40-98). Las imágenes: arte/eventos_descripciones.yaml.
+# =============================================================================
+events:
+  namespaces:
+    meganations_japon:
+      country: null
+      events:
+      - id: 40
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Shogun Speaks to the Docks", spanish: "La Shōgun Les Habla a los Diques"}
+        desc:
+          english: >-
+            From the deck of a half-built carrier, Kaede Mori speaks to the docks of Yokosuka and, through every crane
+            radio, to the whole country. She has three Houses behind her and none of them trusts the others. The Zaibatsu
+            want contracts, the Yakuza want the ports, SRS wants laboratories. Each one is listening for its own name.
+          spanish: >-
+            Desde la cubierta de un portadrones a medio armar, Kaede Mori les habla a los diques de Yokosuka y, por la radio
+            de cada grúa, al país entero. Tiene tres Casas detrás y ninguna confía en las otras. Los Zaibatsu quieren
+            contratos, la Yakuza quiere los puertos, SRS quiere laboratorios. Cada una escucha a ver si dice su nombre.
+        options:
+        - name: {english: "Promise the Zaibatsu the factories.", spanish: "Prometerles las fábricas a los Zaibatsu."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 12}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -4}
+          - {effect: add_variable, var: ZJP_favor_srs, value: -4}
+          ai_chance: 25
+        - name: {english: "Promise the Yakuza the ports.", spanish: "Prometerle los puertos a la Yakuza."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -4}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 12}
+          - {effect: add_variable, var: ZJP_favor_srs, value: -4}
+          ai_chance: 25
+        - name: {english: "Promise SRS the laboratories.", spanish: "Prometerle los laboratorios a SRS."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -4}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -4}
+          - {effect: add_variable, var: ZJP_favor_srs, value: 12}
+          ai_chance: 25
+        - name: {english: "Promise nothing to anyone.", spanish: "No prometerle nada a nadie."}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          ai_chance: 25
+        src: user_request
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Submarines of Kure", spanish: "Los Submarinos de Kure"}
+        desc:
+          english: >-
+            For eleven years the Market's inspectors counted the hulls in the Kure basin and never looked under the water.
+            Today twenty-four submarines surfaced at once in the bay, crewed by sailors who had trained in secret since
+            they were cadets. The admirals of Singapore are reading the news twice.
+          spanish: >-
+            Durante once años los inspectores del Mercado contaron los cascos de la dársena de Kure y nunca miraron debajo
+            del agua. Hoy salieron a la superficie a la vez veinticuatro submarinos en la bahía, con tripulaciones que se
+            entrenaban en secreto desde que eran cadetes. Los almirantes de Singapur leen la noticia dos veces.
+        options:
+        - name: {english: "Send them hunting.", spanish: "Que salgan a cazar."}
+          effects:
+          - {effect: navy_experience, value: 30}
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 60
+        - name: {english: "Keep them hidden a little longer.", spanish: "Tenerlos escondidos un poco más."}
+          effects:
+          - {effect: add_political_power, value: 50}
+          ai_chance: 40
+        src: user_request
+      - id: 42
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Yokosuka Holds", spanish: "Yokosuka Resiste"}
+        desc:
+          english: >-
+            The High Seas came for the docks at night: marines in fast boats, drones over the cranes, a destroyer firing at
+            the dry docks. The welders fought them with cutting torches and rivet guns until the Mechas arrived. By dawn
+            the Market's marines were back in their boats, and Yokosuka was still ours.
+          spanish: >-
+            La Alta Mar vino por los diques de noche: infantes de marina en lanchas rápidas, drones sobre las grúas, un
+            destructor tirándoles a los diques secos. Los soldadores los enfrentaron con sopletes y pistolas de remaches
+            hasta que llegaron los Mechas. Al amanecer los infantes del Mercado estaban otra vez en sus lanchas, y Yokosuka
+            seguía siendo nuestra.
+        options:
+        - name: {english: "Every welder is a soldier.", spanish: "Cada soldador es un soldado."}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: army_experience, value: 20}
+          ai_chance: 60
+        - name: {english: "Pay the widows first.", spanish: "Primero, pagarles a las viudas."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          - {effect: add_political_power, value: -25}
+          ai_chance: 40
+        src: user_request
+      - id: 43
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Strait of Tsushima", spanish: "El Estrecho de Tsushima"}
+        desc:
+          english: >-
+            Two hundred years ago a Japanese fleet won a war in the strait of Tsushima in a single afternoon. The admirals
+            of Yokosuka have studied that afternoon all their lives. Now they want permission to fight the way their
+            grandfathers did: everything at the narrowest point, all at once.
+          spanish: >-
+            Hace doscientos años una flota japonesa ganó una guerra en el estrecho de Tsushima en una sola tarde. Los
+            almirantes de Yokosuka estudiaron esa tarde toda su vida. Ahora piden permiso para pelear como sus abuelos:
+            todo en el punto más angosto, todo a la vez.
+        options:
+        - name: {english: "Fight like Tsushima.", spanish: "Pelear como en Tsushima."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_estrecho_de_tsushima, days: 730}
+          ai_chance: 60
+        - name: {english: "Wolf packs, not battles.", spanish: "Manadas de lobos, no batallas."}
+          effects:
+          - {effect: navy_experience, value: 40}
+          ai_chance: 40
+        src: user_request
+      - id: 44
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Seoul Looks East", spanish: "Seúl Mira hacia el Este"}
+        desc:
+          english: >-
+            The Protectorate of Korea has sent a quiet delegation across the strait: three engineers and a diplomat who
+            never says whom she works for. They want to know whether the Shogunate would build ships for Korea, and
+            whether it would protect a Korea that someday stopped obeying the Directorate.
+          spanish: >-
+            El Protectorado de Corea mandó una delegación callada a través del estrecho: tres ingenieros y una diplomática
+            que nunca dice para quién trabaja. Quieren saber si el Shogunato le construiría barcos a Corea, y si
+            protegería a una Corea que algún día dejara de obedecer al Directorio.
+        options:
+        - name: {english: "We build for whoever pays.", spanish: "Construimos para el que pague."}
+          effects:
+          - {effect: add_variable, var: ZJP_giri, value: 10}
+          ai_chance: 50
+        - name: {english: "Promise them our protection.", spanish: "Prometerles nuestra protección."}
+          effects:
+          - effect: scope
+            target: ZKR
+            effects:
+            - {effect: opinion, target: ZJP, modifier: meganations_concesion}
+          - {effect: add_war_support, value: -0.02}
+          ai_chance: 30
+        - name: {english: "Send them home politely.", spanish: "Mandarlos a casa con educación."}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 20
+        src: user_request
+      - id: 45
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "An Envoy of the Directorate", spanish: "Un Enviado del Directorio"}
+        desc:
+          english: >-
+            A jade-green envoy of the Hydraulic Directorate has arrived in Yokosuka with a letter of credit and a long list
+            of conditions written in perfect Japanese. The Directorate offers money for the shipyards, and asks only for
+            a seat at every meeting of the Council of the Houses.
+          spanish: >-
+            Un enviado verde jade del Directorio Hidráulico llegó a Yokosuka con una carta de crédito y una larga lista de
+            condiciones escrita en un japonés perfecto. El Directorio ofrece plata para los astilleros, y solo pide una
+            silla en cada reunión del Consejo de las Casas.
+        options:
+        - name: {english: "Take the money and the observer.", spanish: "Aceptar la plata y al observador."}
+          effects:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 50
+        - name: {english: "The Council meets without guests.", spanish: "El Consejo se reúne sin invitados."}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          - effect: scope
+            target: SHD
+            effects:
+            - {effect: opinion, target: ZJP, modifier: meganations_afrenta}
+          ai_chance: 50
+        src: user_request
+      - id: 46
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Commune Sends Robots", spanish: "La Comuna Manda Robots"}
+        desc:
+          english: >-
+            The Commune of Europe, which has no leaders, has sent no envoy: a freighter simply docked in Osaka with three
+            hundred welding robots and a note signed by a planning algorithm. The robots are free. The note explains that
+            free things are how the Plan says hello.
+          spanish: >-
+            La Comuna de Europa, que no tiene líderes, no mandó ningún enviado: un carguero simplemente atracó en Osaka con
+            trescientos robots soldadores y una nota firmada por un algoritmo de planificación. Los robots son gratis. La
+            nota explica que las cosas gratis son la manera en que el Plan saluda.
+        options:
+        - name: {english: "Put them to work.", spanish: "Ponerlos a trabajar."}
+          effects:
+          - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 5}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -5}
+          ai_chance: 60
+        - name: {english: "Sink them in the bay.", spanish: "Hundirlos en la bahía."}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 5}
+          ai_chance: 40
+        src: user_request
+      - id: 47
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Warlords of Sakhalin", spanish: "Los Señores de Sajalín"}
+        desc:
+          english: >-
+            Across the cold strait of La Pérouse, the warlords of Sakhalin are selling everything they looted from the old
+            Russian bases: torpedoes, reactor rods, a whole icebreaker. The Yakuza wants to buy. The Shogun's admirals want
+            to know who else is buying.
+          spanish: >-
+            Del otro lado del frío estrecho de La Pérouse, los señores de la guerra de Sajalín venden todo lo que saquearon
+            de las viejas bases rusas: torpedos, barras de reactor, un rompehielos entero. La Yakuza quiere comprar. Los
+            almirantes de la Shōgun quieren saber quién más compra.
+        options:
+        - name: {english: "Buy the torpedoes.", spanish: "Comprar los torpedos."}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 5}
+          ai_chance: 50
+        - name: {english: "Make sure nobody buys them.", spanish: "Asegurarse de que no los compre nadie."}
+          effects:
+          - {effect: navy_experience, value: 20}
+          - {effect: add_war_support, value: 0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 50
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "A Banquet in the Kanemura Tower", spanish: "Un Banquete en la Torre Kanemura"}
+        desc:
+          english: >-
+            The Zaibatsu have invited the whole court to a banquet on the ninetieth floor of the Kanemura Tower. Between
+            the lobster and the dessert, Daisuke Kanemura slides a folder across the table: the Shogunate's shipbuilding
+            contracts for the next ten years, already filled in with his companies' names. It only needs a signature.
+          spanish: >-
+            Los Zaibatsu invitaron a toda la corte a un banquete en el piso noventa de la Torre Kanemura. Entre la langosta
+            y el postre, Daisuke Kanemura desliza una carpeta por la mesa: los contratos navales del Shogunato para los
+            próximos diez años, ya completados con los nombres de sus empresas. Solo falta una firma.
+        options:
+        - name: {english: "Sign.", spanish: "Firmar."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 12}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -5}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 50
+        - name: {english: "Leave the folder on the table.", spanish: "Dejar la carpeta sobre la mesa."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -10}
+          - {effect: add_political_power, value: 30}
+          ai_chance: 50
+        src: user_request
+      - id: 51
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Oyabun Asks for a Port", spanish: "El Oyabun Pide un Puerto"}
+        desc:
+          english: >-
+            Ryuji Sakaguchi asked for an audience and arrived with forty men in white suits who waited in the courtyard in
+            perfect silence. He wants the port of Osaka: customs, cranes and night shifts, all in the hands of his clan. In
+            exchange, he says, nothing will ever be stolen in Osaka again.
+          spanish: >-
+            Ryūji Sakaguchi pidió una audiencia y llegó con cuarenta hombres de traje blanco que esperaron en el patio en
+            perfecto silencio. Quiere el puerto de Osaka: aduana, grúas y turnos de noche, todo en manos de su clan. A
+            cambio, dice, en Osaka no se va a volver a robar nada nunca más.
+        options:
+        - name: {english: "Osaka is yours.", spanish: "Osaka es tuya."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 12}
+          - {effect: add_variable, var: ZJP_giri, value: 5}
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 50
+        - name: {english: "The ports belong to the Shogun.", spanish: "Los puertos son de la Shōgun."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -10}
+          - {effect: add_war_support, value: 0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 52
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Basements of Sendai", spanish: "Los Sótanos de Sendai"}
+        desc:
+          english: >-
+            Doctor Akabane's request is three pages long and very polite. SRS needs volunteers for the next phase of its
+            research, and the prisons of the Shogunate are full of people with nothing better to do. The word 'volunteer'
+            appears eleven times. The word 'consent' does not appear at all.
+          spanish: >-
+            El pedido del doctor Akabane tiene tres páginas y es muy educado. SRS necesita voluntarios para la próxima fase
+            de su investigación, y las cárceles del Shogunato están llenas de gente sin nada mejor que hacer. La palabra
+            'voluntario' aparece once veces. La palabra 'consentimiento' no aparece nunca.
+        options:
+        - name: {english: "Open the prisons.", spanish: "Abrir las cárceles."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: 12}
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          - {effect: add_stability, value: -0.05}
+          ai_chance: 50
+        - name: {english: "Not with our prisoners.", spanish: "Con nuestros presos, no."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: -10}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 53
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Zaibatsu Break the Pact", spanish: "Los Zaibatsu Rompen el Pacto"}
+        desc:
+          english: >-
+            The Zaibatsu have stopped coming to the Council. Their companies have moved their accounts abroad, their
+            executives no longer answer calls, and in the Kanemura Tower the lights of the ninetieth floor are off for the
+            first time in thirty years. A House that leaves the table takes its money with it.
+          spanish: >-
+            Los Zaibatsu dejaron de venir al Consejo. Sus empresas se llevaron las cuentas afuera, sus ejecutivos ya no
+            atienden, y en la Torre Kanemura las luces del piso noventa están apagadas por primera vez en treinta años.
+            Una Casa que se levanta de la mesa se lleva la plata con ella.
+        options:
+        - name: {english: "Buy them back (20 Giri).", spanish: "Recuperarlos (20 de Giri)."}
+          when: {variable_at_least: {var: ZJP_giri, value: 20}}
+          effects:
+          - {effect: add_variable, var: ZJP_giri, value: -20}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 25}
+          - {effect: clear_flag, value: ZJP_rompe_zaibatsu}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}]}
+        - name: {english: "Let them go.", spanish: "Que se vayan."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_capital_en_fuga, days: 365}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 20}
+          - {effect: clear_flag, value: ZJP_rompe_zaibatsu}
+          ai_chance: 25
+        - name: {english: "Seize their factories.", spanish: "Quedarse con sus fábricas."}
+          effects:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_stability, value: -0.08}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 20}
+          - {effect: clear_flag, value: ZJP_rompe_zaibatsu}
+          ai_chance: 15
+        src: user_request
+      - id: 54
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Yakuza Breaks the Pact", spanish: "La Yakuza Rompe el Pacto"}
+        desc:
+          english: >-
+            The clans have gone quiet. No envelopes, no greetings, no men in white suits in the courtyard. In the ports the
+            night shift did not show up, and on the piers of Kobe the cranes stand still with containers hanging in the
+            air. The Yakuza has not declared war. It has simply stopped keeping the peace.
+          spanish: >-
+            Los clanes se callaron. Ni sobres, ni saludos, ni hombres de traje blanco en el patio. En los puertos no vino el
+            turno de noche, y en los muelles de Kobe las grúas están quietas con los contenedores colgando en el aire. La
+            Yakuza no declaró la guerra. Simplemente dejó de cuidar la paz.
+        options:
+        - name: {english: "Pay their price (20 Giri).", spanish: "Pagar su precio (20 de Giri)."}
+          when: {variable_at_least: {var: ZJP_giri, value: 20}}
+          effects:
+          - {effect: add_variable, var: ZJP_giri, value: -20}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 25}
+          - {effect: clear_flag, value: ZJP_rompe_yakuza}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}]}
+        - name: {english: "Let the ports burn for a while.", spanish: "Que los puertos ardan un tiempo."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_puertos_sin_ley, days: 365}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 20}
+          - {effect: clear_flag, value: ZJP_rompe_yakuza}
+          ai_chance: 25
+        - name: {english: "Teach them who rules.", spanish: "Enseñarles quién manda."}
+          effects:
+          - {effect: add_stability, value: -0.06}
+          - {effect: army_experience, value: 30}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 20}
+          - {effect: clear_flag, value: ZJP_rompe_yakuza}
+          ai_chance: 15
+        src: user_request
+      - id: 55
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "SRS Breaks the Pact", spanish: "SRS Rompe el Pacto"}
+        desc:
+          english: >-
+            SRS has sealed its laboratories. The guards of Sendai now wear the company's violet instead of the Shogunate's
+            crimson, the clone barracks no longer answer the army's radio, and Doctor Akabane sends his regrets: he is very
+            busy. Nobody knows what is growing in the vats tonight.
+          spanish: >-
+            SRS selló sus laboratorios. Los guardias de Sendai ahora usan el violeta de la empresa en vez del carmesí del
+            Shogunato, los cuarteles de clones ya no le contestan a la radio del ejército y el doctor Akabane manda sus
+            disculpas: está muy ocupado. Nadie sabe qué crece en las cubas esta noche.
+        options:
+        - name: {english: "Fund them again (20 Giri).", spanish: "Volver a financiarlos (20 de Giri)."}
+          when: {variable_at_least: {var: ZJP_giri, value: 20}}
+          effects:
+          - {effect: add_variable, var: ZJP_giri, value: -20}
+          - {effect: add_variable, var: ZJP_favor_srs, value: 25}
+          - {effect: clear_flag, value: ZJP_rompe_srs}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}]}
+        - name: {english: "Leave Sendai alone.", spanish: "Dejar tranquila a Sendai."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_laboratorios_cerrados, days: 365}
+          - {effect: add_variable, var: ZJP_favor_srs, value: 20}
+          - {effect: clear_flag, value: ZJP_rompe_srs}
+          ai_chance: 25
+        - name: {english: "Send the Mechas to Sendai.", spanish: "Mandar los Mechas a Sendai."}
+          effects:
+          - {effect: add_stability, value: -0.06}
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          - {effect: add_variable, var: ZJP_favor_srs, value: 20}
+          - {effect: clear_flag, value: ZJP_rompe_srs}
+          ai_chance: 15
+        src: user_request
+      - id: 56
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Murder at the Ryokan", spanish: "El Asesinato en el Ryokan"}
+        desc:
+          english: >-
+            A Zaibatsu vice-president was found in the hot spring of a ryokan in Hakone with his throat cut and a Yakuza pin
+            in his hand. The Zaibatsu demand blood; the clans swear the pin was planted; SRS offers, very kindly, to perform
+            the autopsy. The whole country is waiting to see whom the court believes.
+          spanish: >-
+            A un vicepresidente de los Zaibatsu lo encontraron en la fuente termal de un ryokan de Hakone, degollado y con
+            un pin de la Yakuza en la mano. Los Zaibatsu piden sangre; los clanes juran que el pin lo plantaron; SRS se
+            ofrece, muy amablemente, a hacer la autopsia. Todo el país espera a ver a quién le cree la corte.
+        options:
+        - name: {english: "The Yakuza did it.", spanish: "Fue la Yakuza."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 10}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -12}
+          ai_chance: 35
+        - name: {english: "The pin was planted.", spanish: "El pin lo plantaron."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -12}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 10}
+          ai_chance: 35
+        - name: {english: "Let SRS do the autopsy.", spanish: "Que SRS haga la autopsia."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: 8}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -4}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -4}
+          ai_chance: 30
+        src: user_request
+      - id: 57
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Welders' Strike", spanish: "La Huelga de los Soldadores"}
+        desc:
+          english: >-
+            Forty thousand welders have downed their torches across the shipyards of Kanto. They want one day off a week and
+            helmets that do not crack. The Zaibatsu want them back at work by Monday, the Yakuza offers to 'talk to them',
+            and SRS mentions that clones do not strike.
+          spanish: >-
+            Cuarenta mil soldadores dejaron los sopletes en todos los astilleros de Kanto. Quieren un día libre por semana y
+            cascos que no se partan. Los Zaibatsu los quieren de vuelta el lunes, la Yakuza se ofrece a 'hablar con ellos'
+            y SRS comenta que los clones no hacen huelga.
+        options:
+        - name: {english: "Give them their day off.", spanish: "Darles su día libre."}
+          effects:
+          - {effect: add_political_power, value: -60}
+          - {effect: add_stability, value: 0.04}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -5}
+          ai_chance: 40
+        - name: {english: "Let the Yakuza talk to them.", spanish: "Que la Yakuza hable con ellos."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 8}
+          - {effect: add_stability, value: -0.04}
+          - {effect: dynamic_modifier, id: ZJP_huelga_soldadores, days: 180}
+          ai_chance: 30
+        - name: {english: "Replace them with clones.", spanish: "Reemplazarlos por clones."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: 8}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 3}
+          - {effect: add_stability, value: -0.06}
+          ai_chance: 30
+        src: user_request
+      - id: 58
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Clones in the Street", spanish: "Clones en la Calle"}
+        desc:
+          english: >-
+            A photograph is going around every screen in Tokyo: eleven identical young men waiting at the same pedestrian
+            crossing in Ginza, in identical grey suits, all looking at the same billboard. SRS says it is a coincidence. The
+            newspapers have started counting faces.
+          spanish: >-
+            Una foto da vueltas por todas las pantallas de Tokio: once muchachos idénticos esperando en el mismo cruce
+            peatonal de Ginza, con trajes grises idénticos, todos mirando el mismo cartel. SRS dice que es una casualidad.
+            Los diarios empezaron a contar caras.
+        options:
+        - name: {english: "A coincidence, as SRS says.", spanish: "Una casualidad, como dice SRS."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: 6}
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 50
+        - name: {english: "Order SRS to keep them indoors.", spanish: "Ordenarle a SRS que los tenga adentro."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: -8}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 50
+        src: user_request
+      - id: 59
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Generals' Toast", spanish: "El Brindis de los Generales"}
+        desc:
+          english: >-
+            The Shogun has invited the generals of all three Houses to the same table for the first time. The Zaibatsu
+            officers arrived in limousines, the Yakuza officers in black sports cars, the SRS officers in a white ambulance.
+            Nobody has touched the sake yet. Everyone is waiting to see who drinks first, and to whom.
+          spanish: >-
+            La Shōgun invitó por primera vez a los generales de las tres Casas a la misma mesa. Los oficiales de los
+            Zaibatsu llegaron en limusina, los de la Yakuza en autos deportivos negros, los de SRS en una ambulancia
+            blanca. Nadie tocó el sake todavía. Todos esperan a ver quién toma primero, y a la salud de quién.
+        options:
+        - name: {english: "A toast to the Shogunate, paid by the court (10 Giri).", spanish: "Un brindis por el Shogunato, que paga la corte (10 de Giri)."}
+          when: {variable_at_least: {var: ZJP_giri, value: 10}}
+          effects:
+          - {effect: add_variable, var: ZJP_giri, value: -10}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 4}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 4}
+          - {effect: add_variable, var: ZJP_favor_srs, value: 4}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}]}
+        - name: {english: "Separate tables, and the sake goes back.", spanish: "Mesas separadas, y el sake vuelve a la bodega."}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          - {effect: army_experience, value: 10}
+          ai_chance: 40
+        src: user_request
+      - id: 60
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Zaibatsu Take the Council", spanish: "Los Zaibatsu Toman el Consejo"}
+        desc:
+          english: >-
+            The Council of the Shogunate now meets on the ninetieth floor of the Kanemura Tower, and its agenda is printed
+            as a quarterly report. The Zaibatsu generals have been given new offices and new tanks; the Yakuza and SRS
+            commanders have been given polite letters reminding them who pays their salaries.
+          spanish: >-
+            El Consejo del Shogunato ahora se reúne en el piso noventa de la Torre Kanemura, y su orden del día se imprime
+            como un informe trimestral. A los generales de los Zaibatsu les dieron oficinas nuevas y tanques nuevos; a los
+            comandantes de la Yakuza y de SRS, cartas muy educadas que les recuerdan quién les paga el sueldo.
+        options:
+        - name: {english: "The House of money governs.", spanish: "Gobierna la Casa de la plata."}
+          effects:
+          - effect: every_country
+            when: {is_ai: false}
+            effects:
+            - {effect: event, id: meganations_japon.63, days: 1}
+        src: user_request
+      - id: 61
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Yakuza Takes the Council", spanish: "La Yakuza Toma el Consejo"}
+        desc:
+          english: >-
+            The Council now meets in a back room of a restaurant in Osaka, behind a red neon sign, and nobody takes notes.
+            The generals of the clans walk into headquarters with their jackets open and their tattoos showing. The
+            Zaibatsu and SRS commanders have learned to knock before they enter.
+          spanish: >-
+            El Consejo ahora se reúne en un salón del fondo de un restaurante de Osaka, detrás de un cartel de neón rojo, y
+            nadie toma notas. Los generales de los clanes entran al cuartel general con el saco abierto y los tatuajes a la
+            vista. Los comandantes de los Zaibatsu y de SRS aprendieron a golpear antes de entrar.
+        options:
+        - name: {english: "The House of the clans governs.", spanish: "Gobierna la Casa de los clanes."}
+          effects:
+          - effect: every_country
+            when: {is_ai: false}
+            effects:
+            - {effect: event, id: meganations_japon.63, days: 1}
+        src: user_request
+      - id: 62
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "SRS Takes the Council", spanish: "SRS Toma el Consejo"}
+        desc:
+          english: >-
+            The Council now meets in a white room in Sendai that smells of disinfectant, and every member is given a small
+            violet pill before the session, 'for concentration'. The SRS commanders run the war from the laboratories. The
+            Zaibatsu and Yakuza generals take their pills, and wonder.
+          spanish: >-
+            El Consejo ahora se reúne en una sala blanca de Sendai que huele a desinfectante, y a cada miembro le dan una
+            pastillita violeta antes de la sesión, 'para la concentración'. Los comandantes de SRS manejan la guerra desde
+            los laboratorios. Los generales de los Zaibatsu y de la Yakuza se toman sus pastillas, y se preguntan.
+        options:
+        - name: {english: "The House of the laboratories governs.", spanish: "Gobierna la Casa de los laboratorios."}
+          effects:
+          - effect: every_country
+            when: {is_ai: false}
+            effects:
+            - {effect: event, id: meganations_japon.63, days: 1}
+        src: user_request
+      - id: 63
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Shogunate Chooses a Master", spanish: "El Shogunato Elige Amo"}
+        desc:
+          english: >-
+            The Shipyard Shogunate of Japan has chosen which of its three Houses will govern: the corporations, the clans or
+            the laboratories. Its generals now fight for their House as much as for their country, and the losers are
+            counting the days.
+          spanish: >-
+            El Shogunato de los Astilleros de Japón eligió cuál de sus tres Casas va a gobernar: las corporaciones, los
+            clanes o los laboratorios. Sus generales ahora pelean por su Casa tanto como por su país, y los que perdieron
+            cuentan los días.
+        options:
+        - name: {english: "Three Houses, one fleet.", spanish: "Tres Casas, una flota."}
+          effects: []
+        src: user_request
+      - id: 64
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Three Houses at Peace", spanish: "Las Tres Casas en Paz"}
+        desc:
+          english: >-
+            For the first time since the docks rose, the three bosses have shared a meal without bodyguards. Kanemura poured
+            the sake, Sakaguchi told a joke and Akabane laughed at it, which nobody had ever seen. The court is not sure
+            whether to celebrate or to worry.
+          spanish: >-
+            Por primera vez desde que se levantaron los diques, los tres jefes compartieron una comida sin guardaespaldas.
+            Kanemura sirvió el sake, Sakaguchi contó un chiste y Akabane se rió, cosa que nadie había visto nunca. La corte
+            no sabe si festejar o preocuparse.
+        options:
+        - name: {english: "Celebrate, and worry.", spanish: "Festejar, y preocuparse."}
+          effects:
+          - {effect: add_political_power, value: 50}
+        src: user_request
+      - id: 65
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Shareholders' Meeting", spanish: "La Junta de Accionistas"}
+        desc:
+          english: >-
+            The annual shareholders' meeting of the Shogunate was held in a stadium in Yokohama, with fireworks and a
+            hologram of the chief executive. The shareholders voted, by a large majority, to cut the military budget and pay
+            themselves a dividend. The generals were not shareholders.
+          spanish: >-
+            La junta anual de accionistas del Shogunato se hizo en un estadio de Yokohama, con fuegos artificiales y un
+            holograma del director general. Los accionistas votaron, por amplia mayoría, recortar el presupuesto militar y
+            pagarse un dividendo. Los generales no eran accionistas.
+        options:
+        - name: {english: "Pay the dividend.", spanish: "Pagar el dividendo."}
+          effects:
+          - {effect: add_political_power, value: 75}
+          - {effect: add_war_support, value: -0.04}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 5}
+          ai_chance: 50
+        - name: {english: "Veto the vote.", spanish: "Vetar la votación."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -8}
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        src: user_request
+      - id: 66
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Kawasaki Lay-offs", spanish: "Los Despidos de Kawasaki"}
+        desc:
+          english: >-
+            Kanemura Heavy Industries has replaced twelve thousand workers in its Kawasaki plant with machines bought from
+            the Commune. The dismissed workers are camped outside the gates with their families. The company asks the army
+            to clear the road.
+          spanish: >-
+            Kanemura Industrias Pesadas reemplazó a doce mil obreros de su planta de Kawasaki por máquinas compradas a la
+            Comuna. Los despedidos acampan frente a los portones con sus familias. La empresa le pide al ejército que
+            despeje el camino.
+        options:
+        - name: {english: "Clear the road.", spanish: "Despejar el camino."}
+          effects:
+          - {effect: add_stability, value: -0.05}
+          - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 5}
+          ai_chance: 50
+        - name: {english: "Draft them instead.", spanish: "Mejor, reclutarlos."}
+          effects:
+          - {effect: add_manpower, value: 12000}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -4}
+          ai_chance: 50
+        src: user_request
+      - id: 67
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Kanemura Buys a Foreign Port", spanish: "Kanemura Compra un Puerto Extranjero"}
+        desc:
+          english: >-
+            Through four shell companies and a bank in a neutral port, the Zaibatsu have bought a container port on the
+            other side of the Pacific. Its workers woke up to a new flag on the cranes. Abroad they call it a purchase; at
+            home, the first colony bought on credit.
+          spanish: >-
+            A través de cuatro empresas fantasma y un banco de un puerto neutral, los Zaibatsu compraron un puerto de
+            contenedores del otro lado del Pacífico. Sus trabajadores se despertaron con una bandera nueva en las grúas.
+            Afuera lo llaman una compra; acá, la primera colonia comprada a crédito.
+        options:
+        - name: {english: "A colony is a colony.", spanish: "Una colonia es una colonia."}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - {effect: add_political_power, value: 50}
+          ai_chance: 50
+        - name: {english: "Sell it again, at a profit.", spanish: "Venderlo de nuevo, con ganancia."}
+          effects:
+          - {effect: add_variable, var: ZJP_giri, value: 10}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 5}
+          ai_chance: 50
+        src: user_request
+      - id: 68
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "A Record Quarter", spanish: "El Trimestre Récord"}
+        desc:
+          english: >-
+            The shipyards of the Shogunate have closed the best quarter in their history: more tonnage than the Market,
+            more Mechas than ever, and profits that the Zaibatsu want to reinvest at once. The only question is in what.
+          spanish: >-
+            Los astilleros del Shogunato cerraron el mejor trimestre de su historia: más tonelaje que el Mercado, más Mechas
+            que nunca y ganancias que los Zaibatsu quieren reinvertir ya. La única pregunta es en qué.
+        options:
+        - name: {english: "In more shipyards.", spanish: "En más astilleros."}
+          effects:
+          - {effect: build, building: dockyard, level: 1}
+          ai_chance: 40
+        - name: {english: "In more factories.", spanish: "En más fábricas."}
+          effects:
+          - {effect: build, building: industrial_complex, level: 1}
+          ai_chance: 40
+        - name: {english: "In the dividend.", spanish: "En el dividendo."}
+          effects:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 5}
+          ai_chance: 20
+        src: user_request
+      - id: 70
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Clan War of Kobe", spanish: "La Guerra de los Clanes de Kobe"}
+        desc:
+          english: >-
+            Two families of the Sakaguchi clan are killing each other in the alleys of Kobe over who controls the fish
+            market. Eleven dead in a week, and both families are asking the Oyabun to choose. Whoever he chooses, the other
+            will remember.
+          spanish: >-
+            Dos familias del clan Sakaguchi se están matando en los callejones de Kobe por quién controla el mercado de
+            pescado. Once muertos en una semana, y las dos familias le piden al Oyabun que elija. Elija a quien elija, la
+            otra se va a acordar.
+        options:
+        - name: {english: "Let them fight it out.", spanish: "Que lo arreglen a los tiros."}
+          effects:
+          - {effect: add_stability, value: -0.04}
+          - {effect: army_experience, value: 15}
+          ai_chance: 50
+        - name: {english: "Split the market in half.", spanish: "Partir el mercado en dos."}
+          effects:
+          - {effect: add_political_power, value: -40}
+          - {effect: add_stability, value: 0.03}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 5}
+          ai_chance: 50
+        src: user_request
+      - id: 71
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Minister's Little Finger", spanish: "El Meñique del Ministro"}
+        desc:
+          english: >-
+            The Minister of Supply arrived at the Council with his left hand wrapped in a bandage and offered the Oyabun a
+            small lacquered box. He had lost a shipment of fuel to the Market's privateers. The other ministers are now very
+            careful with their shipments.
+          spanish: >-
+            El ministro de Abastecimiento llegó al Consejo con la mano izquierda vendada y le ofreció al Oyabun una cajita
+            laqueada. Había perdido un cargamento de combustible a manos de los corsarios del Mercado. Los otros ministros
+            ahora cuidan muchísimo sus cargamentos.
+        options:
+        - name: {english: "Accept the apology.", spanish: "Aceptar la disculpa."}
+          effects:
+          - {effect: add_political_power, value: 60}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 50
+        - name: {english: "Ban the old customs from the Council.", spanish: "Prohibir las viejas costumbres en el Consejo."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -8}
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 50
+        src: user_request
+      - id: 72
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Neon over Osaka", spanish: "Neón sobre Osaka"}
+        desc:
+          english: >-
+            The clans have relit every neon sign in Osaka at their own expense: kilometres of crimson and pink over the
+            canals, the most beautiful night in Asia. The streets are safer than ever. Everyone knows who is watching from
+            behind the signs.
+          spanish: >-
+            Los clanes volvieron a encender todos los carteles de neón de Osaka con su propia plata: kilómetros de carmesí y
+            rosa sobre los canales, la noche más linda de Asia. Las calles están más seguras que nunca. Todos saben quién
+            mira desde atrás de los carteles.
+        options:
+        - name: {english: "Let the city shine.", spanish: "Que brille la ciudad."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_neon_de_osaka, days: 365}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 3}
+        src: user_request
+      - id: 73
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Ships Without Flags", spanish: "Los Barcos sin Bandera"}
+        desc:
+          english: >-
+            Forty fishing boats without flags, without names and without lights have left the night ports of Kyushu. They
+            come back full of whatever the Market's convoys were carrying. The clan calls it fishing. The insurers of
+            Singapore call it piracy.
+          spanish: >-
+            Cuarenta pesqueros sin bandera, sin nombre y sin luces salieron de los puertos nocturnos de Kyushu. Vuelven
+            llenos de lo que llevaban los convoyes del Mercado. El clan lo llama pesca. Las aseguradoras de Singapur lo
+            llaman piratería.
+        options:
+        - name: {english: "Good fishing.", spanish: "Buena pesca."}
+          effects:
+          - {effect: add_variable, var: ZJP_giri, value: 10}
+          - {effect: equipment, type: infantry_equipment, amount: 1500}
+          ai_chance: 60
+        - name: {english: "Call the boats back.", spanish: "Que vuelvan los barcos."}
+          effects:
+          - {effect: add_political_power, value: 25}
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -5}
+          ai_chance: 40
+        src: user_request
+      - id: 75
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Batch Seven Wakes Up", spanish: "El Lote Siete Despierta"}
+        desc:
+          english: >-
+            Batch Seven of the Sendai clones has started asking questions. Not about orders, which they follow perfectly,
+            but about the sky, about music, about why they all dream the same dream. Doctor Akabane is delighted. The army
+            is less delighted.
+          spanish: >-
+            El Lote Siete de los clones de Sendai empezó a hacer preguntas. No sobre las órdenes, que cumplen a la
+            perfección, sino sobre el cielo, sobre la música, sobre por qué todos sueñan el mismo sueño. El doctor Akabane
+            está encantado. El ejército, menos.
+        options:
+        - name: {english: "Let them ask.", spanish: "Que pregunten."}
+          effects:
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 50
+        - name: {english: "Recondition Batch Seven.", spanish: "Reacondicionar al Lote Siete."}
+          effects:
+          - {effect: army_experience, value: 25}
+          - {effect: add_variable, var: ZJP_favor_srs, value: -4}
+          ai_chance: 50
+        src: user_request
+      - id: 76
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "A Vaccine for Everyone", spanish: "Una Vacuna para Todos"}
+        desc:
+          english: >-
+            SRS has announced a free vaccine against the autumn fever for every citizen of the Shogunate. The queues wind
+            around the blocks of every city. The vaccine works perfectly against the fever. Whatever else it does will be
+            published in the next annual report.
+          spanish: >-
+            SRS anunció una vacuna gratis contra la fiebre de otoño para cada ciudadano del Shogunato. Las colas dan la
+            vuelta a la manzana en todas las ciudades. La vacuna funciona perfecto contra la fiebre. Lo demás que hace se va
+            a publicar en el próximo informe anual.
+        options:
+        - name: {english: "Vaccinate everyone.", spanish: "Vacunar a todos."}
+          effects:
+          - {effect: add_manpower, value: 20000}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 60
+        - name: {english: "Only the army.", spanish: "Solo al ejército."}
+          effects:
+          - {effect: army_experience, value: 15}
+          ai_chance: 40
+        src: user_request
+      - id: 77
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Escape from Laboratory Nine", spanish: "La Fuga del Laboratorio Nueve"}
+        desc:
+          english: >-
+            Something escaped from Laboratory Nine in Sendai last night, through two steel doors and a wall. SRS says it was
+            a 'non-hazardous prototype'. The police found the doors. Nobody has found the prototype, and the people of
+            Sendai have stopped going out at night.
+          spanish: >-
+            Algo se escapó anoche del Laboratorio Nueve de Sendai, atravesando dos puertas de acero y una pared. SRS dice
+            que era un 'prototipo no peligroso'. La policía encontró las puertas. El prototipo no lo encontró nadie, y la
+            gente de Sendai dejó de salir de noche.
+        options:
+        - name: {english: "Hunt it down with the Mechas.", spanish: "Cazarlo con los Mechas."}
+          effects:
+          - {effect: army_experience, value: 20}
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 60
+        - name: {english: "Deny everything.", spanish: "Negar todo."}
+          effects:
+          - {effect: add_stability, value: -0.06}
+          - {effect: add_variable, var: ZJP_favor_srs, value: 6}
+          ai_chance: 40
+        src: user_request
+      - id: 78
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Committee That Does Not Exist", spanish: "El Comité que No Existe"}
+        desc:
+          english: >-
+            A journalist from Kyoto has found the minutes of the SRS ethics committee: twelve years of blank pages, signed
+            every month by the same three people, two of whom died in 2091. The article is ready to be published tomorrow
+            morning.
+          spanish: >-
+            Un periodista de Kioto encontró las actas del comité de ética de SRS: doce años de páginas en blanco, firmadas
+            cada mes por las mismas tres personas, dos de las cuales murieron en 2091. El artículo está listo para salir
+            mañana a la mañana.
+        options:
+        - name: {english: "Let it be published.", spanish: "Que se publique."}
+          effects:
+          - {effect: add_stability, value: -0.04}
+          - {effect: add_variable, var: ZJP_favor_srs, value: -10}
+          - {effect: add_political_power, value: 30}
+          ai_chance: 30
+        - name: {english: "Buy the newspaper.", spanish: "Comprar el diario."}
+          effects:
+          - {effect: add_political_power, value: -60}
+          - {effect: add_variable, var: ZJP_favor_srs, value: 5}
+          ai_chance: 40
+        - name: {english: "The journalist volunteers for a trial.", spanish: "El periodista se ofrece de voluntario para un ensayo."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: 10}
+          - {effect: add_stability, value: -0.06}
+          ai_chance: 30
+        src: user_request
+      - id: 80
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The First Mecha Falls", spanish: "Cae el Primer Mecha"}
+        desc:
+          english: >-
+            Mecha number 114 fell today on a hill in the south, brought down by a missile it never saw. Its pilot, a
+            nineteen-year-old from Hiroshima, walked out of the wreck carrying the samurai crest of its head under her arm.
+            The photograph is on every screen of the islands.
+          spanish: >-
+            Hoy cayó el Mecha número 114 en una colina del sur, derribado por un misil que nunca vio. Su piloto, una chica de
+            diecinueve años de Hiroshima, salió de los restos con el crestón samurái de la cabeza bajo el brazo. La foto
+            está en todas las pantallas de las islas.
+        options:
+        - name: {english: "Give her a new Mecha.", spanish: "Darle un Mecha nuevo."}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          ai_chance: 50
+        - name: {english: "Study the wreck.", spanish: "Estudiar los restos."}
+          effects:
+          - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 1}
+          ai_chance: 50
+        src: user_request
+      - id: 81
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Sixteen-Year-Old Pilots", spanish: "Pilotos de Dieciséis Años"}
+        desc:
+          english: >-
+            The Mecha academies are accepting sixteen-year-olds: their reflexes are faster and their bodies fit the cockpits
+            better. The mothers' associations protest outside the academy of Yokosuka every morning. Every evening the
+            queue to sign up is longer.
+          spanish: >-
+            Las academias de Mechas aceptan chicos de dieciséis años: tienen reflejos más rápidos y entran mejor en las
+            cabinas. Las asociaciones de madres protestan todas las mañanas frente a la academia de Yokosuka. Todas las
+            tardes, la fila para anotarse es más larga.
+        options:
+        - name: {english: "Keep the age.", spanish: "Mantener la edad."}
+          effects:
+          - {effect: army_experience, value: 30}
+          - {effect: add_stability, value: -0.04}
+          ai_chance: 50
+        - name: {english: "Raise it to eighteen.", spanish: "Subirla a dieciocho."}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          - {effect: add_war_support, value: -0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 82
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Mecha Parade in Ginza", spanish: "Desfile de Mechas en Ginza"}
+        desc:
+          english: >-
+            Eighty Mechas marched down the Ginza at dawn, each one taller than the shop fronts, their footsteps setting off
+            car alarms for kilometres. Children climbed onto their parents' shoulders; foreign attachés took notes.
+            Somewhere in Singapore someone is watching the broadcast in slow motion.
+          spanish: >-
+            Ochenta Mechas desfilaron por Ginza al amanecer, cada uno más alto que las vidrieras, con pisadas que hacían
+            saltar las alarmas de los autos por kilómetros. Los chicos se subían a los hombros de sus padres; los agregados
+            extranjeros tomaban notas. En algún lugar de Singapur alguien mira la transmisión en cámara lenta.
+        options:
+        - name: {english: "Let the world watch.", spanish: "Que mire el mundo."}
+          effects:
+          - {effect: add_war_support, value: 0.04}
+          - {effect: add_political_power, value: 25}
+        src: user_request
+      - id: 83
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Mecha That Would Not Fire", spanish: "El Mecha que No Quiso Disparar"}
+        desc:
+          english: >-
+            During an assault, the targeting computer of Mecha 207 refused to fire on a village where the enemy had dug in,
+            and froze for eleven minutes. The pilot survived; the assault failed. The engineers say it was a bug. The pilot
+            says it was not.
+          spanish: >-
+            Durante un asalto, la computadora de tiro del Mecha 207 se negó a disparar sobre un pueblo donde se había
+            atrincherado el enemigo, y se congeló once minutos. El piloto sobrevivió; el asalto fracasó. Los ingenieros dicen
+            que fue una falla. El piloto dice que no.
+        options:
+        - name: {english: "Patch every Mecha.", spanish: "Parchar todos los Mechas."}
+          effects:
+          - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 1}
+          - {effect: add_war_support, value: -0.02}
+          ai_chance: 60
+        - name: {english: "Leave the code alone.", spanish: "No tocar el código."}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 40
+        src: user_request
+      - id: 85
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Last Monks of Kyoto", spanish: "Los Últimos Monjes de Kioto"}
+        desc:
+          english: >-
+            The last monks of Kyoto have asked the Shogun for one thing: that the war never reach the old temples. They offer
+            nothing in exchange but prayers. Half the country has started visiting them on Sundays.
+          spanish: >-
+            Los últimos monjes de Kioto le pidieron una sola cosa a la Shōgun: que la guerra nunca llegue a los templos
+            viejos. No ofrecen nada a cambio, salvo rezos. Medio país empezó a visitarlos los domingos.
+        options:
+        - name: {english: "Kyoto will be spared.", spanish: "Kioto se va a salvar."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_monjes_de_kioto, days: 730}
+          ai_chance: 50
+        - name: {english: "Even the temples serve the docks.", spanish: "Hasta los templos sirven a los diques."}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 86
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Typhoon over Kyushu", spanish: "Tifón sobre Kyushu"}
+        desc:
+          english: >-
+            The strongest typhoon in thirty years has struck Kyushu: winds of three hundred kilometres an hour, the port of
+            Nagasaki under water, two cranes lying in the bay. The Houses are already arguing about who pays for the
+            rebuilding.
+          spanish: >-
+            El tifón más fuerte en treinta años pegó en Kyushu: vientos de trescientos kilómetros por hora, el puerto de
+            Nagasaki bajo el agua, dos grúas tiradas en la bahía. Las Casas ya discuten quién paga la reconstrucción.
+        options:
+        - name: {english: "The Shogun pays.", spanish: "Paga la Shōgun."}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 50
+        - name: {english: "The Zaibatsu pay.", spanish: "Pagan los Zaibatsu."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -8}
+          ai_chance: 35
+        - name: {english: "Nobody pays.", spanish: "No paga nadie."}
+          effects:
+          - {effect: add_stability, value: -0.05}
+          ai_chance: 15
+        src: user_request
+      - id: 87
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Great Kanto Earthquake", spanish: "El Gran Terremoto de Kanto"}
+        desc:
+          english: >-
+            At 4:12 in the morning the earth moved for ninety seconds. Half of Yokohama is in ruins, the dry docks of
+            Yokosuka are cracked and fires burn in Tokyo. The great Mecha stood still through the whole quake; the cranes
+            around it fell. Every House offers help, and every offer has a price.
+          spanish: >-
+            A las 4:12 de la mañana la tierra se movió noventa segundos. Medio Yokohama está en ruinas, los diques secos de
+            Yokosuka se rajaron y hay incendios en Tokio. El gran Mecha se quedó quieto durante todo el terremoto; las grúas
+            a su alrededor se cayeron. Cada Casa ofrece ayuda, y cada oferta tiene precio.
+        immediate:
+        - effect: every_country
+          when: {is_ai: false}
+          effects:
+          - {effect: event, id: meganations_japon.88, days: 1}
+        options:
+        - name: {english: "Zaibatsu money.", spanish: "La plata de los Zaibatsu."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 10}
+          - {effect: dynamic_modifier, id: ZJP_luto_de_kanto, days: 180}
+          ai_chance: 25
+        - name: {english: "Yakuza hands.", spanish: "Las manos de la Yakuza."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: 10}
+          - {effect: dynamic_modifier, id: ZJP_luto_de_kanto, days: 180}
+          ai_chance: 25
+        - name: {english: "SRS doctors.", spanish: "Los médicos de SRS."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_srs, value: 10}
+          - {effect: dynamic_modifier, id: ZJP_luto_de_kanto, days: 180}
+          ai_chance: 25
+        - name: {english: "The Shogunate alone.", spanish: "El Shogunato solo."}
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_stability, value: 0.03}
+          - {effect: dynamic_modifier, id: ZJP_luto_de_kanto, days: 365}
+          ai_chance: 25
+        src: user_request
+      - id: 88
+        trigger: effect
+        art: meganations_japon.87
+        picture: GFX_report_event_generic_rally
+        title: {english: "Japan Shakes", spanish: "Tiembla Japón"}
+        desc:
+          english: >-
+            A great earthquake has struck the Kanto plain. The shipyards of Japan are cracked and Yokohama is burning; for
+            months the Shogunate will build houses instead of ships.
+          spanish: >-
+            Un gran terremoto pegó en la llanura de Kanto. Los astilleros de Japón están rajados y Yokohama arde; durante
+            meses el Shogunato va a construir casas en vez de barcos.
+        options:
+        - name: {english: "Send condolences.", spanish: "Mandar las condolencias."}
+          effects: []
+        src: user_request
+      - id: 89
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Pachinko Fever", spanish: "La Fiebre del Pachinko"}
+        desc:
+          english: >-
+            The Yakuza's new pachinko halls, with neon machines that pay out in Giri vouchers, have swallowed the savings of
+            half the country in six months. Families are ruined, and the coffers of the Shogunate have never been so full.
+          spanish: >-
+            Las salas de pachinko nuevas de la Yakuza, con máquinas de neón que pagan en vales de Giri, se tragaron en seis
+            meses los ahorros de medio país. Hay familias arruinadas, y las arcas del Shogunato nunca estuvieron tan llenas.
+        options:
+        - name: {english: "Tax the halls.", spanish: "Ponerles impuestos a las salas."}
+          effects:
+          - {effect: add_political_power, value: 80}
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 60
+        - name: {english: "Close them.", spanish: "Cerrarlas."}
+          effects:
+          - {effect: add_variable, var: ZJP_favor_yakuza, value: -10}
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 40
+        src: user_request
+      - id: 90
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Idols for the Front", spanish: "Idols para el Frente"}
+        desc:
+          english: >-
+            A Zaibatsu record label has created four idols in sailor uniforms who sing only about the war: the cranes, the
+            Mechas, the boys at the front. Their first song has been played four hundred million times. The enlistment
+            offices cannot keep up.
+          spanish: >-
+            Un sello discográfico de los Zaibatsu creó cuatro idols con uniforme de marinero que solo cantan sobre la guerra:
+            las grúas, los Mechas, los chicos del frente. Su primera canción se escuchó cuatrocientos millones de veces. Las
+            oficinas de alistamiento no dan abasto.
+        options:
+        - name: {english: "Turn the volume up.", spanish: "Subir el volumen."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_idols_del_frente, days: 365}
+          - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 3}
+        src: user_request
+      - id: 91
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Grandparents of Okinawa", spanish: "Los Abuelos de Okinawa"}
+        desc:
+          english: >-
+            The oldest people in the world live in Okinawa, as they always have. A delegation of centenarians has come to
+            Yokosuka to tell the Shogun how they survived the last war: by planting sweet potatoes and refusing to be
+            afraid. They ask for nothing. They brought sweet potatoes.
+          spanish: >-
+            En Okinawa vive la gente más vieja del mundo, como siempre. Una delegación de centenarios vino a Yokosuka a
+            contarle a la Shōgun cómo sobrevivieron a la última guerra: plantando batatas y negándose a tener miedo. No
+            piden nada. Trajeron batatas.
+        options:
+        - name: {english: "Listen to them.", spanish: "Escucharlos."}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          ai_chance: 50
+        - name: {english: "Put their faces on the posters.", spanish: "Poner sus caras en los afiches."}
+          effects:
+          - {effect: add_war_support, value: 0.04}
+          ai_chance: 50
+        src: user_request
+      - id: 92
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Last Bullet Train", spanish: "El Último Tren Bala"}
+        desc:
+          english: >-
+            The old bullet-train line from Kagoshima to Sapporo, closed since the Great Unravelling, has been reopened by
+            volunteers who restored the carriages by hand. The first train ran the whole length of Japan in eleven hours,
+            full of soldiers and grandmothers.
+          spanish: >-
+            La vieja línea del tren bala de Kagoshima a Sapporo, cerrada desde el Gran Desarme, la reabrieron voluntarios que
+            restauraron los vagones a mano. El primer tren recorrió todo Japón en once horas, lleno de soldados y de abuelas.
+        options:
+        - name: {english: "A flag at every station.", spanish: "Una bandera en cada estación."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_tren_bala, days: 730}
+        src: user_request
+      - id: 93
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Festival of War Lanterns", spanish: "El Festival de los Faroles de Guerra"}
+        desc:
+          english: >-
+            On the night of Obon every family in the islands floated a paper lantern for a soldier at the front. Millions of
+            small lights drifted out of the harbours at once, and the enemy's satellites photographed them, puzzled. The
+            next morning enlistment rose by a third.
+          spanish: >-
+            En la noche del Obon cada familia de las islas soltó un farol de papel por un soldado del frente. Millones de
+            lucecitas salieron a la vez de los puertos, y los satélites del enemigo las fotografiaron, desconcertados. A la
+            mañana siguiente el alistamiento subió un tercio.
+        options:
+        - name: {english: "For the ones at the front.", spanish: "Por los del frente."}
+          effects:
+          - {effect: add_war_support, value: 0.05}
+          - {effect: add_manpower, value: 15000}
+        src: user_request
+      - id: 95
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "A Thousand Voices in the Diet", spanish: "Mil Voces en la Dieta"}
+        desc:
+          english: >-
+            The old Diet building has reopened, with a single seat. The CyberShogun speaks from it in a thousand voices at
+            once, each one answering a different question from a different citizen. The old politicians sit in the gallery
+            and take notes, out of habit.
+          spanish: >-
+            Reabrió el viejo edificio de la Dieta, con una sola banca. El CyberShogun habla desde ahí con mil voces a la vez,
+            cada una contestándole una pregunta distinta a un ciudadano distinto. Los políticos viejos se sientan en la
+            galería y toman notas, por costumbre.
+        options:
+        - name: {english: "One seat is enough.", spanish: "Con una banca alcanza."}
+          effects:
+          - {effect: add_political_power, value: 100}
+          - {effect: add_stability, value: 0.03}
+        src: user_request
+      - id: 96
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Mecha Sleeps Badly", spanish: "El Mecha Duerme Mal"}
+        desc:
+          english: >-
+            Every night at three in the morning the great Mecha of dock number one turns its head towards the sea and holds
+            still for an hour. The engineers find nothing wrong. The dock workers have started leaving offerings at its feet.
+          spanish: >-
+            Cada noche a las tres de la mañana el gran Mecha del dique número uno gira la cabeza hacia el mar y se queda
+            quieto una hora. Los ingenieros no encuentran ninguna falla. Los trabajadores del dique empezaron a dejarle
+            ofrendas a los pies.
+        options:
+        - name: {english: "Let it dream.", spanish: "Dejarlo soñar."}
+          effects:
+          - {effect: dynamic_modifier, id: ZJP_mecha_insomne, days: 365}
+          ai_chance: 50
+        - name: {english: "Reboot it.", spanish: "Reiniciarlo."}
+          effects:
+          - {effect: add_stability, value: -0.02}
+          - {effect: add_political_power, value: 25}
+          ai_chance: 50
+        src: user_request
+      - id: 97
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Pilgrims in Yokosuka", spanish: "Peregrinos en Yokosuka"}
+        desc:
+          english: >-
+            Pilgrims are arriving in Yokosuka from all over Asia: monks, engineers, lonely people. They come to see the Mecha
+            with a mind inside and ask it questions. It answers every one of them, politely, and some of them stay to work in
+            the docks.
+          spanish: >-
+            Llegan peregrinos a Yokosuka de toda Asia: monjes, ingenieros, gente sola. Vienen a ver al Mecha que tiene una
+            mente adentro y a hacerle preguntas. Les contesta a todos, con educación, y algunos se quedan a trabajar en los
+            diques.
+        options:
+        - name: {english: "Let them stay.", spanish: "Que se queden."}
+          effects:
+          - {effect: add_manpower, value: 10000}
+          - {effect: add_political_power, value: 25}
+        src: user_request
+      - id: 98
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Fate of the Shogun", spanish: "El Destino de la Shōgun"}
+        desc:
+          english: >-
+            The woman who started it all, Kaede Mori, has no place in a country governed by a machine. On the last night
+            before the upload she asked to be taken back to the dry dock where she raised the old banner. What becomes of her
+            is the first decision of the CyberShogun.
+          spanish: >-
+            La mujer que empezó todo, Kaede Mori, no tiene lugar en un país gobernado por una máquina. La última noche antes
+            de la subida pidió que la llevaran al dique seco donde izó la bandera vieja. Lo que pase con ella es la primera
+            decisión del CyberShogun.
+        options:
+        - name: {english: "Give her back the fleet.", spanish: "Devolverle la flota."}
+          effects:
+          - {effect: navy_experience, value: 50}
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        - name: {english: "An honourable exile.", spanish: "Un exilio honorable."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 30
+        - name: {english: "Upload her too.", spanish: "Subirla a ella también."}
+          effects:
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 20
+        src: user_request
+
+# =============================================================================
+# Ministros, jefes militares, mariscales, generales y almirantes
+# =============================================================================
+# Cada general y mariscal es de una Casa (rasgo zjp_casa_*). ZJP_lealtades les
+# pone "Su Casa Gobierna" o "Su Casa no Gobierna" cuando cambia quién gobierna.
+# Los almirantes no son de ninguna Casa: la flota es de la Shōgun.
+# Los ministros y jefes de una Casa solo se pueden nombrar mientras gobierna su
+# Casa o arbitra la Shōgun (`available`); si gobierna otra Casa, renuncian.
+leaders:
+  leader_traits:
+  - id: zjp_min_chambelana
+    name: {english: Chamberlain of Yokosuka, spanish: Chambelana de Yokosuka}
+    modifiers: {stability_factor: 0.05, political_power_gain: 0.05}
+    src: user_request
+  - id: zjp_min_maestro_de_diques
+    name: {english: Master of the Dry Docks, spanish: Maestro de los Diques Secos}
+    modifiers: {industrial_capacity_dockyard: 0.1}
+    src: user_request
+  - id: zjp_min_tesorera_zaibatsu
+    name: {english: Treasurer of the Zaibatsu, spanish: Tesorera de los Zaibatsu}
+    modifiers: {industrial_capacity_factory: 0.06, consumer_goods_factor: -0.02}
+    src: user_request
+  - id: zjp_min_wakagashira
+    name: {english: Wakagashira of the Docks, spanish: Wakagashira de los Muelles}
+    modifiers: {political_power_gain: 0.1, war_support_factor: 0.04}
+    src: user_request
+  - id: zjp_min_cubas_de_sendai
+    name: {english: Keeper of the Sendai Vats, spanish: Guardiana de las Cubas de Sendai}
+    modifiers: {recruitable_population_factor: 0.05, stability_factor: -0.02}
+    src: user_request
+  - id: zjp_min_ingeniera_de_mechas
+    name: {english: Mecha Engineer, spanish: Ingeniera de Mechas}
+    modifiers: {research_speed_factor: 0.06}
+    src: user_request
+
+  unit_leader_traits:
+  - id: zjp_casa_shogun
+    country: ZJP
+    name: {english: Loyal to the Shogun, spanish: Leal a la Shōgun}
+    desc: {english: 'Answers to Kaede Mori and to no House. Fights better while she arbitrates.', spanish: 'Le responde a Kaede Mori y a ninguna Casa. Pelea mejor mientras ella arbitra.'}
+    defense_skill: 1
+    src: user_request
+  - id: zjp_casa_zaibatsu
+    country: ZJP
+    name: {english: Of the Zaibatsu, spanish: De los Zaibatsu}
+    desc: {english: 'A company officer with a company salary. Fights better when the Zaibatsu govern, worse when they do not.', spanish: 'Oficial de la empresa, con sueldo de la empresa. Pelea mejor cuando gobiernan los Zaibatsu, peor cuando no.'}
+    logistics_skill: 1
+    src: user_request
+  - id: zjp_casa_yakuza
+    country: ZJP
+    name: {english: Of the Yakuza, spanish: De la Yakuza}
+    desc: {english: 'Sworn to the clan with sake and blood. Fights better when the Yakuza govern, worse when they do not.', spanish: 'Jurado al clan con sake y sangre. Pelea mejor cuando gobierna la Yakuza, peor cuando no.'}
+    attack_skill: 1
+    src: user_request
+  - id: zjp_casa_srs
+    country: ZJP
+    name: {english: Of SRS, spanish: De SRS}
+    desc: {english: 'Owes the laboratories of Sendai a new heart, or a new body. Fights better when SRS governs, worse when it does not.', spanish: 'Les debe a los laboratorios de Sendai un corazón nuevo, o un cuerpo nuevo. Pelea mejor cuando gobierna SRS, peor cuando no.'}
+    planning_skill: 1
+    src: user_request
+  - id: zjp_su_casa_gobierna
+    country: ZJP
+    trait_type: status_trait
+    name: {english: Their House Governs, spanish: Su Casa Gobierna}
+    desc: {english: 'Their House holds the Shogunate: every order is obeyed at once.', spanish: 'Su Casa tiene el Shogunato: cada orden se cumple en el acto.'}
+    attack_skill: 1
+    defense_skill: 1
+    planning_skill: 1
+    logistics_skill: 1
+    src: user_request
+  - id: zjp_casa_relegada
+    country: ZJP
+    trait_type: status_trait
+    name: {english: Their House Is Out of Power, spanish: Su Casa no Gobierna}
+    desc: {english: 'Their House lost the Council. The orders arrive late, and are obeyed later.', spanish: 'Su Casa perdió el Consejo. Las órdenes llegan tarde, y se cumplen más tarde.'}
+    attack_skill: -1
+    planning_skill: -1
+    src: user_request
+
+  characters:
+  # --- ministros ---------------------------------------------------------------
+  - id: ZJP_min_hoshino_1
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Chamberlain Aiko Hoshino, spanish: Chambelana Aiko Hoshino}}
+    born: 2058
+    lore: Era la secretaria del puerto de Yokosuka. La noche de la bandera vieja fue la que guardó los libros de cuentas
+      en una caja fuerte y la llave en el bolsillo. Desde entonces el Shogunato le paga a quien ella dice.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zjp_min_chambelana]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_min_hoshino_1.dds, role: civilian, placeholder: false}
+  - id: ZJP_min_kitamura_2
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Master of the Docks Goro Kitamura, spanish: Maestro de Diques Goro Kitamura}}
+    born: 2042
+    lore: Cuarenta años soldando cascos para el Mercado de Alta Mar. Conoce cada dique de Kanto por el ruido que hace
+      cuando se llena. Dice que los barcos se construyen con paciencia y se pierden con prisa.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zjp_min_maestro_de_diques]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_min_kitamura_2.dds, role: civilian, placeholder: false}
+  - id: ZJP_min_kanemura_3
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Director Yui Kanemura, spanish: Directora Yui Kanemura}}
+    born: 2066
+    lore: La hermana menor de Daisuke Kanemura, la que lleva las cuentas que él no mira. Si gobierna otra Casa,
+      devuelve la llave de la tesorería y se lleva la contabilidad en la cabeza.
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits: [zjp_min_tesorera_zaibatsu]
+        available: {any: [{variable_is: {var: ZJP_gobierna, value: 0}}, {variable_is: {var: ZJP_gobierna, value: 1}}]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_min_kanemura_3.dds, role: civilian, placeholder: false}
+  - id: ZJP_min_mizuno_4
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Wakagashira Tetsuo Mizuno, spanish: Wakagashira Tetsuo Mizuno}}
+    born: 2060
+    lore: El segundo de Ryūji Sakaguchi, el que cobra en los muelles de Osaka. Nunca levanta la voz; los comerciantes
+      pagan antes de que llegue. Si gobierna otra Casa, se vuelve a Osaka a esperar.
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits: [zjp_min_wakagashira]
+        available: {any: [{variable_is: {var: ZJP_gobierna, value: 0}}, {variable_is: {var: ZJP_gobierna, value: 2}}]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_min_mizuno_4.dds, role: civilian, placeholder: false}
+  - id: ZJP_min_shirogane_5
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Doctor Emi Shirogane, spanish: Doctora Emi Shirogane}}
+    born: 2064
+    lore: Jefa de las cubas de clonación de Sendai. Firma cada lote con su nombre, como un pintor. Si gobierna otra
+      Casa, apaga las cubas una por una y se lleva las claves.
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits: [zjp_min_cubas_de_sendai]
+        available: {any: [{variable_is: {var: ZJP_gobierna, value: 0}}, {variable_is: {var: ZJP_gobierna, value: 3}}]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_min_shirogane_5.dds, role: civilian, placeholder: false}
+  - id: ZJP_min_ono_6
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Engineer Sachiko Ono, spanish: Ingeniera Sachiko Ōno}}
+    born: 2070
+    lore: Diseñó el primer Mecha de Yokosuka en un cuaderno de dibujo, con piezas de grúa. Le dicen a cada Casa que
+      el próximo modelo será suyo. Los dibuja a todos igual.
+    roles:
+      advisor: {slot: theorist, cost: 100, traits: [zjp_min_ingeniera_de_mechas]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_min_ono_6.dds, role: civilian, placeholder: false}
+  # --- jefes militares ---------------------------------------------------------
+  - id: ZJP_mando_kuroda_1
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: General Tsuyoshi Kuroda, spanish: General Tsuyoshi Kuroda}}
+    born: 2057
+    lore: Hermano jurado de Sakaguchi desde los quince años. Manda el ejército como mandaba a los cobradores, de
+      frente y sin papeles.
+    roles:
+      advisor:
+        slot: army_chief
+        ledger: army
+        cost: 100
+        traits: [mn_mando_ofensiva]
+        available: {any: [{variable_is: {var: ZJP_gobierna, value: 0}}, {variable_is: {var: ZJP_gobierna, value: 2}}]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_mando_kuroda_1.dds, role: army, placeholder: false}
+  - id: ZJP_mando_okada_2
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Admiral Kiyoshi Okada, spanish: Almirante Kiyoshi Okada}}
+    born: 2046
+    lore: El oficial más viejo de la flota de Kanto. Le apagó la radio a Singapur junto con Kaede Mori, y fue él quien
+      encontró la bandera vieja en un cajón del museo naval.
+    roles:
+      advisor: {slot: navy_chief, ledger: navy, cost: 100, traits: [mn_mando_armada_decisiva]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_mando_okada_2.dds, role: navy, placeholder: false}
+  - id: ZJP_mando_fujiwara_3
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Air Commander Mariko Fujiwara, spanish: Comandante del Aire Mariko Fujiwara}}
+    born: 2068
+    lore: Dirigía la división de drones de Kanemura Industrias Pesadas. Sus enjambres vuelan con el logo de la
+      empresa pintado debajo de las alas.
+    roles:
+      advisor:
+        slot: air_chief
+        ledger: air
+        cost: 100
+        traits: [mn_mando_aire_superioridad]
+        available: {any: [{variable_is: {var: ZJP_gobierna, value: 0}}, {variable_is: {var: ZJP_gobierna, value: 1}}]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_mando_fujiwara_3.dds, role: army, placeholder: false}
+  - id: ZJP_mando_sakamoto_4
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Colonel Doctor Jun Sakamoto, spanish: Coronel Doctor Jun Sakamoto}}
+    born: 2065
+    lore: Médico militar de SRS. Cuenta los regimientos de clones por lote y por fecha de vencimiento, y nunca se
+      equivoca en ninguna de las dos.
+    roles:
+      advisor:
+        slot: high_command
+        ledger: army
+        cost: 100
+        traits: [mn_mando_reservas]
+        available: {any: [{variable_is: {var: ZJP_gobierna, value: 0}}, {variable_is: {var: ZJP_gobierna, value: 3}}]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_mando_sakamoto_4.dds, role: army, placeholder: false}
+  - id: ZJP_mando_tachibana_5
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: General Rei Tachibana, spanish: General Rei Tachibana}}
+    born: 2062
+    lore: Fortificó Kanto con contenedores llenos de hormigón cuando la flota del Mercado vino a buscar a sus
+      barcos. No volvieron.
+    roles:
+      advisor: {slot: high_command, ledger: army, cost: 100, traits: [mn_mando_fortificacion]}
+    portrait: {path: gfx/leaders/ZJP/ZJP_mando_tachibana_5.dds, role: army, placeholder: false}
+  # --- mariscales: uno por Casa --------------------------------------------------
+  - id: ZJP_mariscal_inoue
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Marshal Kazuo Inoue, spanish: Mariscal Kazuo Inoue}}
+    born: 2051
+    lore: Último oficial de las viejas Fuerzas de Autodefensa que todavía se acuerda de los reglamentos. Le juró
+      lealtad a Kaede Mori con la mano sobre un manual de 2040.
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 4
+        planning_skill: 4
+        logistics_skill: 3
+        traits: [organizer, zjp_casa_shogun]
+    portrait: {path: gfx/leaders/ZJP/ZJP_mariscal_inoue.dds, role: army, placeholder: false}
+  - id: ZJP_mariscal_endo
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Marshal Masaru Endo, spanish: Mariscal Masaru Endō}}
+    born: 2056
+    lore: Jefe de seguridad de las cuatro familias zaibatsu. Hace la guerra con planillas, por trimestre, y la
+      cierra cuando deja de dar ganancia.
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 5
+        traits: [logistics_wizard, zjp_casa_zaibatsu]
+    portrait: {path: gfx/leaders/ZJP/ZJP_mariscal_endo.dds, role: army, placeholder: false}
+  - id: ZJP_mariscal_kuze
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Marshal Shota Kuze, spanish: Mariscal Shōta Kuze}}
+    born: 2054
+    lore: Le dicen el Dragón de Kobe. Tomó el puerto con trescientos hombres y ningún plan escrito. Su clan le
+      tatuó la batalla en la espalda, cuadra por cuadra.
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 5
+        defense_skill: 2
+        planning_skill: 3
+        logistics_skill: 3
+        traits: [offensive_doctrine, zjp_casa_yakuza]
+    portrait: {path: gfx/leaders/ZJP/ZJP_mariscal_kuze.dds, role: army, placeholder: false}
+  - id: ZJP_mariscal_fujita
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Marshal Nao Fujita, spanish: Mariscal Nao Fujita}}
+    born: 2069
+    lore: Es el primer oficial de SRS criado en una cuba que llegó a mariscal. Nadie se anima a preguntarle cuántas
+      hermanas tiene, ni en qué regimiento sirven.
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 5
+        logistics_skill: 3
+        traits: [brilliant_strategist, zjp_casa_srs]
+    portrait: {path: gfx/leaders/ZJP/ZJP_mariscal_fujita.dds, role: army, placeholder: false}
+  # --- generales: uno por Casa ---------------------------------------------------
+  - id: ZJP_gen_yamada_1
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: General Rin Yamada, spanish: Generala Rin Yamada}}
+    born: 2071
+    lore: Infante de marina de Yokosuka. Desembarca con la ola de la mañana y siempre en la playa que nadie esperaba.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 2
+        traits: [naval_invader, zjp_casa_shogun]
+    portrait: {path: gfx/leaders/ZJP/ZJP_gen_yamada_1.dds, role: army, placeholder: false}
+  - id: ZJP_gen_nishimura_2
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: General Kaori Nishimura, spanish: Generala Kaori Nishimura}}
+    born: 2067
+    lore: Piloto de pruebas de los Mechas de Kanemura. Manda los blindados desde la cabina del suyo, a doce metros
+      del suelo.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 4
+        defense_skill: 2
+        planning_skill: 2
+        logistics_skill: 3
+        traits: [panzer_leader, zjp_casa_zaibatsu]
+    portrait: {path: gfx/leaders/ZJP/ZJP_gen_nishimura_2.dds, role: army, placeholder: false}
+  - id: ZJP_gen_arai_3
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: General Daichi Arai, spanish: General Daichi Arai}}
+    born: 2063
+    lore: Creció en los callejones de Shinjuku. Pelea en las ciudades como en una riña de bar, con lo que tenga a mano
+      y por la espalda.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 4
+        defense_skill: 2
+        planning_skill: 2
+        logistics_skill: 2
+        traits: [trickster, zjp_casa_yakuza]
+    portrait: {path: gfx/leaders/ZJP/ZJP_gen_arai_3.dds, role: army, placeholder: false}
+  - id: ZJP_gen_hayashi_4
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: General Isamu Hayashi, spanish: General Isamu Hayashi}}
+    born: 2060
+    lore: Manda la infantería de clones de SRS. Les aprendió el nombre a todos, aunque se repitan.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 2
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 2
+        traits: [infantry_leader, zjp_casa_srs]
+    portrait: {path: gfx/leaders/ZJP/ZJP_gen_hayashi_4.dds, role: army, placeholder: false}
+  # --- almirantes: de la Shōgun ---------------------------------------------------
+  - id: ZJP_alm_nakagawa_1
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Admiral Yumi Nakagawa, spanish: Almirante Yumi Nakagawa}}
+    born: 2066
+    lore: Manda las Lobas de Kure, los submarinos que nunca aparecieron en ningún registro del Mercado. Duerme de día.
+    roles:
+      navy_leader:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        maneuvering_skill: 4
+        coordination_skill: 3
+        traits: [seawolf]
+    portrait: {path: gfx/leaders/ZJP/ZJP_alm_nakagawa_1.dds, role: navy, placeholder: false}
+  - id: ZJP_alm_shimizu_2
+    country: ZJP
+    src: user_request
+    name: {regnal: {english: Admiral Takeshi Shimizu, spanish: Almirante Takeshi Shimizu}}
+    born: 2059
+    lore: Reflotó tres cruceros hundidos en la bahía de Tokio y los volvió a hacer navegar. La tripulación dice que
+      todavía tienen agua del fondo en las bodegas.
+    roles:
+      navy_leader:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 4
+        maneuvering_skill: 3
+        coordination_skill: 3
+        traits: [superior_tactician]
+    portrait: {path: gfx/leaders/ZJP/ZJP_alm_shimizu_2.dds, role: navy, placeholder: false}

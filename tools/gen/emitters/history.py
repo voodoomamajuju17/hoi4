@@ -141,7 +141,9 @@ def emit(ctx: BuildContext) -> None:
         # fuera de la historia). Los de `recruit_at_start: false` (líderes de
         # una revolución) van al final, y después se confirma al líder de
         # arranque con promote_character: un foco los asciende más tarde.
-        chars = characters_mod.characters_of(ctx, c.tag)
+        # 2026-11-01 (Gran Bretaña): `recruit_in_history: false` no se recluta acá;
+        # lo recluta un efecto `recruit` cuando se elige su camino
+        chars = [ch for ch in characters_mod.characters_of(ctx, c.tag) if ch.get("recruit_in_history", True)]
         late = [ch for ch in chars if not ch.get("recruit_at_start", True)]
         for ch in [ch for ch in chars if ch.get("recruit_at_start", True)] + late:
             b.add("recruit_character", ch["id"])

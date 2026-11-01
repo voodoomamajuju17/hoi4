@@ -1,0 +1,2758 @@
+# =============================================================================
+# 30_albion_ampliada.yaml — Gran Bretaña (ZAL), segunda parte (2026-11-01)
+# =============================================================================
+# Pedido del usuario: "Crear contenido para Japón y GB hasta que sean, al menos,
+# 65% del promedio de una meganación. No tocar focos. [...] Crear ministros,
+# generales. [...] En GB los que existen para neovictorian no existen para
+# trans-humanist."
+#
+# Tres épocas, una sola variable que las separa:
+#   ZAL_ruta: 0 la República Obrera ludita (satélite de la Comuna o recién
+#   suelta), 1 Hacia el Futuro (transhumanista), 2 Hacia el Pasado
+#   (neovictoriana). La fija el primer foco raíz que termina
+#   (ZAL_hacia_el_futuro o ZAL_hacia_el_pasado) y no cambia más.
+# Personajes: los 13 de cada camino no se reclutan al empezar
+# (recruit_in_history: false). Los recluta ZAL_pulso cuando se fija la ruta, y
+# solo los de esa ruta: los neovictorianos no existen en la Albión transhumanista
+# y al revés. Ashworth, Kelly y Pritchard (luditas) siguen en las dos.
+# Sincronía (ruta 1, 0-100): cuánta gente vive conectada a la red de Londres.
+#   Sube con los focos y las decisiones; cada tramo trae su espíritu y cada
+#   umbral (25, 50, 75, 100) un evento.
+# Pompa (ruta 2, 0-100): cuánto se cree la nación su propio Imperio. Baja 2 por
+#   mes (el espectáculo hay que alimentarlo); 70 o más, "¡Reina, Britannia!";
+#   30 o menos, "Se Cae el Telón"; 10 o menos, la conspiración republicana.
+# Pulso: el pulso mundial arranca meganations_albion.30 (oculto, mensual) en
+#   cuanto existe ZAL; el evento se vuelve a disparar solo cada 30 días. La marca
+#   ZAL_pulso_vivo (45 días, la renueva cada pulso) evita pulsos repetidos.
+# Eventos sueltos: ZAL_eventos_pulso tira uno por vez (después, 60 días de
+#   espera), cada uno una sola vez y solo si se cumple su condición.
+# =============================================================================
+
+extend_scripted_effects:
+  MEGANATIONS_eventos_mundiales:
+  - effect: if
+    when:
+      all:
+      - {country_exists: ZAL}
+      - country: {tag: ZAL, when: {not_flag: ZAL_pulso_vivo}}
+    then:
+    - effect: scope
+      target: ZAL
+      effects:
+      - {effect: flag, value: ZAL_pulso_vivo, days: 45}
+    - {effect: event, id: meganations_albion.30, days: 2, target: ZAL}
+
+decisions:
+  variable_names:
+    ZAL_ruta: {english: Road of Albion, spanish: Camino de Albión}
+    ZAL_sincronia: {english: Synchrony, spanish: Sincronía}
+    ZAL_pompa: {english: Pomp, spanish: Pompa}
+
+  scripted_effects:
+  # ---------------------------------------------------------------------------
+  # El pulso de Albión
+  # ---------------------------------------------------------------------------
+  - id: ZAL_pulso
+    effects:
+    - effect: if
+      when: {not_flag: ZAL_lista}
+      then:
+      - {effect: flag, value: ZAL_lista}
+      - {effect: set_variable, var: ZAL_ruta, value: 0}
+      - {effect: event, id: meganations_albion.31, days: 5}
+    # el camino: lo fija el primer foco raíz y recluta solo a los suyos
+    - effect: if
+      when: {all: [{variable_is: {var: ZAL_ruta, value: 0}}, {focus: ZAL_hacia_el_futuro}]}
+      then:
+      - {effect: set_variable, var: ZAL_ruta, value: 1}
+      - {effect: set_variable, var: ZAL_sincronia, value: 10}
+      - {effect: run, value: ZAL_reclutar_futuro}
+      - {effect: event, id: meganations_albion.60, days: 2}
+    - effect: if
+      when: {all: [{variable_is: {var: ZAL_ruta, value: 0}}, {focus: ZAL_hacia_el_pasado}]}
+      then:
+      - {effect: set_variable, var: ZAL_ruta, value: 2}
+      - {effect: set_variable, var: ZAL_pompa, value: 40}
+      - {effect: run, value: ZAL_reclutar_pasado}
+      - {effect: event, id: meganations_albion.80, days: 2}
+    - effect: if
+      when: {variable_is: {var: ZAL_ruta, value: 1}}
+      then:
+      - {effect: run, value: ZAL_sincronia_pulso}
+    - effect: if
+      when: {variable_is: {var: ZAL_ruta, value: 2}}
+      then:
+      - {effect: run, value: ZAL_pompa_pulso}
+    - {effect: run, value: ZAL_eventos_pulso}
+
+  - id: ZAL_reclutar_futuro
+    effects:
+    - {effect: recruit, character: ZAL_fut_min_harrow}
+    - {effect: recruit, character: ZAL_fut_min_nwosu}
+    - {effect: recruit, character: ZAL_fut_min_mcallister}
+    - {effect: recruit, character: ZAL_fut_min_byrne}
+    - {effect: recruit, character: ZAL_fut_min_penhallow}
+    - {effect: recruit, character: ZAL_fut_mando_achebe}
+    - {effect: recruit, character: ZAL_fut_mando_strachan}
+    - {effect: recruit, character: ZAL_fut_mando_malhotra}
+    - {effect: recruit, character: ZAL_fut_mando_munro}
+    - {effect: recruit, character: ZAL_fut_mariscal_grant}
+    - {effect: recruit, character: ZAL_fut_gen_rook}
+    - {effect: recruit, character: ZAL_fut_gen_chandran}
+    - {effect: recruit, character: ZAL_fut_alm_calder}
+
+  - id: ZAL_reclutar_pasado
+    effects:
+    - {effect: recruit, character: ZAL_vic_min_fenwick}
+    - {effect: recruit, character: ZAL_vic_min_ravensworth}
+    - {effect: recruit, character: ZAL_vic_min_kettering}
+    - {effect: recruit, character: ZAL_vic_min_thorne}
+    - {effect: recruit, character: ZAL_vic_min_wexley}
+    - {effect: recruit, character: ZAL_vic_mando_pembroke}
+    - {effect: recruit, character: ZAL_vic_mando_halloway}
+    - {effect: recruit, character: ZAL_vic_mando_ashby}
+    - {effect: recruit, character: ZAL_vic_mando_hartigan}
+    - {effect: recruit, character: ZAL_vic_mariscal_wrexham}
+    - {effect: recruit, character: ZAL_vic_gen_montague}
+    - {effect: recruit, character: ZAL_vic_gen_carrow}
+    - {effect: recruit, character: ZAL_vic_alm_ormsby}
+
+  # ---------------------------------------------------------------------------
+  # Sincronía: la red de Londres (Hacia el Futuro)
+  # ---------------------------------------------------------------------------
+  - id: ZAL_sincronia_pulso
+    effects:
+    - effect: if
+      when: {focus: ZAL_londres_reconectada}
+      then:
+      - {effect: add_variable, var: ZAL_sincronia, value: 1}
+    - effect: if
+      when: {focus: ZAL_los_implantes_de_manchester}
+      then:
+      - {effect: add_variable, var: ZAL_sincronia, value: 1}
+    - effect: if
+      when: {focus: ZAL_la_mente_colmena}
+      then:
+      - {effect: add_variable, var: ZAL_sincronia, value: 1}
+    - {effect: clamp, var: ZAL_sincronia, min: 0, max: 100}
+    # un espíritu por tramo
+    - {effect: remove_dynamic_modifier, id: ZAL_media_conexion}
+    - {effect: remove_dynamic_modifier, id: ZAL_red_despierta}
+    - {effect: remove_dynamic_modifier, id: ZAL_un_solo_pulso}
+    - effect: if
+      when: {variable_between: {var: ZAL_sincronia, min: 25, max: 59}}
+      then:
+      - {effect: dynamic_modifier, id: ZAL_media_conexion}
+    - effect: if
+      when: {variable_between: {var: ZAL_sincronia, min: 60, max: 89}}
+      then:
+      - {effect: dynamic_modifier, id: ZAL_red_despierta}
+    - effect: if
+      when: {variable_at_least: {var: ZAL_sincronia, value: 90}}
+      then:
+      - {effect: dynamic_modifier, id: ZAL_un_solo_pulso}
+    # los umbrales, una vez cada uno
+    - effect: if
+      when: {all: [{variable_at_least: {var: ZAL_sincronia, value: 25}}, {not_flag: ZAL_sinc_25}]}
+      then:
+      - {effect: flag, value: ZAL_sinc_25}
+      - {effect: event, id: meganations_albion.62, days: 3}
+    - effect: if
+      when: {all: [{variable_at_least: {var: ZAL_sincronia, value: 50}}, {not_flag: ZAL_sinc_50}]}
+      then:
+      - {effect: flag, value: ZAL_sinc_50}
+      - {effect: event, id: meganations_albion.63, days: 3}
+    - effect: if
+      when: {all: [{variable_at_least: {var: ZAL_sincronia, value: 75}}, {not_flag: ZAL_sinc_75}]}
+      then:
+      - {effect: flag, value: ZAL_sinc_75}
+      - {effect: event, id: meganations_albion.64, days: 3}
+    - effect: if
+      when: {all: [{variable_at_least: {var: ZAL_sincronia, value: 100}}, {not_flag: ZAL_sinc_100}]}
+      then:
+      - {effect: flag, value: ZAL_sinc_100}
+      - {effect: event, id: meganations_albion.65, days: 3}
+
+  # ---------------------------------------------------------------------------
+  # Pompa: el teatro del Imperio (Hacia el Pasado)
+  # ---------------------------------------------------------------------------
+  - id: ZAL_pompa_pulso
+    effects:
+    - {effect: add_variable, var: ZAL_pompa, value: -2}
+    - effect: if
+      when: {focus: ZAL_la_camara_de_los_lores}
+      then:
+      - {effect: add_variable, var: ZAL_pompa, value: 1}
+    - {effect: clamp, var: ZAL_pompa, min: 0, max: 100}
+    - effect: if
+      when: {variable_at_least: {var: ZAL_pompa, value: 70}}
+      then:
+      - {effect: dynamic_modifier, id: ZAL_reina_britannia}
+      - effect: if
+        when: {not_flag: ZAL_pompa_70}
+        then:
+        - {effect: flag, value: ZAL_pompa_70}
+        - {effect: event, id: meganations_albion.82, days: 3}
+      else:
+      - {effect: remove_dynamic_modifier, id: ZAL_reina_britannia}
+    - effect: if
+      when: {variable_below: {var: ZAL_pompa, value: 31}}
+      then:
+      - {effect: dynamic_modifier, id: ZAL_telon_cae}
+      - effect: if
+        when: {not_flag: ZAL_pompa_30}
+        then:
+        - {effect: flag, value: ZAL_pompa_30}
+        - {effect: event, id: meganations_albion.83, days: 3}
+      else:
+      - {effect: remove_dynamic_modifier, id: ZAL_telon_cae}
+    - effect: if
+      when: {all: [{variable_below: {var: ZAL_pompa, value: 11}}, {not_flag: ZAL_pompa_10}]}
+      then:
+      - {effect: flag, value: ZAL_pompa_10}
+      - {effect: event, id: meganations_albion.84, days: 3}
+
+  # ---------------------------------------------------------------------------
+  # Los eventos sueltos: uno por vez, cada uno una sola vez
+  # ---------------------------------------------------------------------------
+  - id: ZAL_eventos_pulso
+    effects:
+    - effect: if
+      when: {all: [{flag: ZAL_lista}, {not_flag: ZAL_evento_espera}]}
+      then:
+      - effect: random
+        options:
+        - {weight: 60, effects: []}
+        # la República Obrera (sin camino todavía)
+        - weight: 10
+          skip_if: {any: [{flag: ZAL_ev_40}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}, {not: {subject_of: ASC}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_40}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.40, days: 1}
+        - weight: 10
+          skip_if: {any: [{flag: ZAL_ev_41}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_41}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.41, days: 1}
+        - weight: 10
+          skip_if: {any: [{flag: ZAL_ev_42}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_42}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.42, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_43}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_43}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.43, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_44}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_44}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.44, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_45}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}, {not: {subject_of: ASC}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_45}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.45, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_46}, {not: {subject_of: ASC}}, {not: {country_exists: NRE}}, {war_with: NRE}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_46}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.46, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_47}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_47}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.47, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_48}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_48}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.48, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_49}, {not: {variable_is: {var: ZAL_ruta, value: 0}}}, {not: {date_after: 2100.10.1}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_49}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.49, days: 1}
+        # Albión libre (cualquier camino)
+        - weight: 10
+          skip_if: {any: [{flag: ZAL_ev_33}, {not: {global_flag: MEGANATIONS_albion_suelta}}, {subject: true}, {not: {country_exists: ASC}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_33}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.33, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_34}, {not: {global_flag: MEGANATIONS_albion_suelta}}, {subject: true}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_34}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.34, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_35}, {not: {global_flag: MEGANATIONS_albion_suelta}}, {subject: true}, {not: {country_exists: NRE}}, {not: {country_exists: ASC}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_35}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.35, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_36}, {not: {global_flag: MEGANATIONS_albion_suelta}}, {subject: true}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_36}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.36, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_37}, {variable_is: {var: ZAL_ruta, value: 0}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_37}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.37, days: 1}
+        # Hacia el Futuro
+        - weight: 10
+          skip_if: {any: [{flag: ZAL_ev_61}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_61}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.61, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_66}, {not: {variable_at_least: {var: ZAL_sincronia, value: 30}}}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_66}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.66, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_67}, {not: {variable_at_least: {var: ZAL_sincronia, value: 40}}}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_67}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.67, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_68}, {not: {variable_at_least: {var: ZAL_sincronia, value: 35}}}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_68}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.68, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_69}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_69}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.69, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_70}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_70}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.70, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_71}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}, {not: {country_exists: ASC}}, {war_with: ASC}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_71}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.71, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_72}, {not: {variable_at_least: {var: ZAL_sincronia, value: 45}}}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_72}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.72, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_73}, {not: {variable_at_least: {var: ZAL_sincronia, value: 55}}}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_73}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.73, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_74}, {not: {variable_at_least: {var: ZAL_sincronia, value: 60}}}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_74}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.74, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_75}, {not: {variable_at_least: {var: ZAL_sincronia, value: 50}}}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_75}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.75, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_76}, {not: {variable_is: {var: ZAL_ruta, value: 1}}}, {not: {country_exists: NRE}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_76}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.76, days: 1}
+        # Hacia el Pasado
+        - weight: 10
+          skip_if: {any: [{flag: ZAL_ev_81}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_81}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.81, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_85}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_85}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.85, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_86}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_86}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.86, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_87}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}, {at_war: false}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_87}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.87, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_88}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_88}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.88, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_89}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_89}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.89, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_90}, {not: {focus: ZAL_el_imperio_neovictoriano}}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_90}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.90, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_91}, {not: {variable_below: {var: ZAL_pompa, value: 50}}}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_91}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.91, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_92}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_92}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.92, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_93}, {not: {focus: ZAL_la_exposicion_de_2100}}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_93}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.93, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_94}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}, {not: {country_exists: NRE}}, {war_with: NRE}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_94}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.94, days: 1}
+        - weight: 8
+          skip_if: {any: [{flag: ZAL_ev_95}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_95}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.95, days: 1}
+        - weight: 6
+          skip_if: {any: [{flag: ZAL_ev_96}, {not: {variable_is: {var: ZAL_ruta, value: 2}}}]}
+          effects:
+          - {effect: flag, value: ZAL_ev_96}
+          - {effect: flag, value: ZAL_evento_espera, days: 60}
+          - {effect: event, id: meganations_albion.96, days: 1}
+
+  categories:
+  # ---------------------------------------------------------------------------
+  # La República Obrera (todavía sin camino)
+  # ---------------------------------------------------------------------------
+  - id: ZAL_telares_category
+    country: ZAL
+    icon_prefer: [generic_political_actions]
+    name: {english: The Looms of Albion, spanish: Los Telares de Albión}
+    desc:
+      english: 'The Workers'' Republic of Albion smashed its machines and kept its looms. Every decision here is made by hand, by a council, after a cup of tea. Once Albion chooses a road (towards the future or towards the past), the looms fall silent.'
+      spanish: 'La República Obrera de Albión rompió sus máquinas y se quedó con sus telares. Cada decisión de acá se toma a mano, en consejo, después de una taza de té. Cuando Albión elija un camino (hacia el futuro o hacia el pasado), los telares se callan.'
+    visible: {variable_is: {var: ZAL_ruta, value: 0}}
+    src: user_request
+    decisions:
+    - id: ZAL_romper_servidores
+      name: {english: 'Smash a Server Farm', spanish: 'Romper una Granja de Servidores'}
+      desc: {english: 'Somewhere in the Midlands a server hall still hums. A crowd with hammers and a brass band will take care of it.', spanish: 'En algún lugar de las Midlands todavía zumba una sala de servidores. Una multitud con martillos y una banda de bronces se va a ocupar.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_stability, value: 0.04}
+      - {effect: dynamic_modifier, id: ZAL_servidores_rotos, days: 180}
+      ai: {factor: 1, modifiers: [{factor: 3, when: {stability_below: 0.4}}]}
+      src: user_request
+    - id: ZAL_cooperativas_de_lana
+      name: {english: 'The Wool Cooperatives', spanish: 'Las Cooperativas de Lana'}
+      desc: {english: 'Every valley gets its own spinning cooperative, its own dyes and its own arguments about the dyes.', spanish: 'Cada valle tiene su cooperativa de hilado, sus tintes y sus discusiones sobre los tintes.'}
+      icon_prefer: [generic_construction]
+      cost: 75
+      cooldown_days: 365
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_cooperativas_lana, days: 365}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_jornada_de_cuatro_dias
+      name: {english: 'The Four-Day Week', spanish: 'La Semana de Cuatro Días'}
+      desc: {english: 'If nobody uses machines, nobody should work five days. The councils vote it by a show of hands.', spanish: 'Si nadie usa máquinas, nadie tendría que trabajar cinco días. Los consejos la votan a mano alzada.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 365
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_cuatro_dias, days: 180}
+      ai: {factor: 1, modifiers: [{factor: 0, when: {at_war: true}}]}
+      src: user_request
+    - id: ZAL_pedir_repuestos
+      name: {english: 'Ask the Commune for Spare Parts', spanish: 'Pedirle Repuestos a la Comuna'}
+      desc: {english: 'Pride is fine until the looms break. The Commune will send the parts, made by robots, and a polite note about it.', spanish: 'El orgullo está bien hasta que se rompen los telares. La Comuna manda los repuestos, hechos por robots, y una nota amable al respecto.'}
+      icon_prefer: [generic_construction]
+      cost: 25
+      cooldown_days: 365
+      visible: {subject_of: ASC}
+      effects:
+      - {effect: build, building: industrial_complex, level: 1}
+      - {effect: add_stability, value: -0.03}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_milicias_de_los_valles
+      name: {english: 'The Militias of the Valleys', spanish: 'Las Milicias de los Valles'}
+      desc: {english: 'Shepherds, weavers and miners drill on Sundays with rifles that have no electronics in them at all.', spanish: 'Pastores, tejedores y mineros hacen instrucción los domingos con fusiles que no tienen ni un circuito.'}
+      icon_prefer: [generic_army_support]
+      cost: 75
+      cooldown_days: 365
+      effects:
+      - {effect: add_manpower, value: 15000}
+      - {effect: dynamic_modifier, id: ZAL_milicias_valles, days: 365}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}]}
+      src: user_request
+    - id: ZAL_gran_consejo_de_los_telares
+      name: {english: 'The Great Council of the Looms', spanish: 'El Gran Consejo de los Telares'}
+      desc: {english: 'A thousand delegates in the old Manchester exchange, voting for three days on what kind of country Albion wants to be.', spanish: 'Mil delegados en la vieja bolsa de Manchester, votando tres días qué clase de país quiere ser Albión.'}
+      icon_prefer: [generic_political_actions]
+      cost: 100
+      fire_only_once: true
+      effects:
+      - {effect: add_stability, value: 0.06}
+      - {effect: add_political_power, value: 50}
+      ai: {factor: 2}
+      src: user_request
+  # ---------------------------------------------------------------------------
+  # Albión libre (cualquier camino, ya fuera de la Comuna)
+  # ---------------------------------------------------------------------------
+  - id: ZAL_albion_libre_category
+    country: ZAL
+    icon_prefer: [generic_military]
+    name: {english: Free Albion, spanish: Albión Libre}
+    desc:
+      english: 'Albion answers to no one now, and has nobody to protect it either. The islands must guard their own coasts, feed their own refugees and deal with Rome and the Commune across the water.'
+      spanish: 'Albión ya no le responde a nadie, y tampoco tiene quién la proteja. Las islas tienen que cuidar sus costas, alimentar a sus refugiados y tratar con Roma y con la Comuna del otro lado del agua.'
+    visible: {all: [{global_flag: MEGANATIONS_albion_suelta}, {subject: false}]}
+    src: user_request
+    decisions:
+    - id: ZAL_guardia_de_las_costas
+      name: {english: 'The Coast Guard of the Isles', spanish: 'La Guardia de las Costas'}
+      desc: {english: 'Every cliff with a pillbox, every beach with a bell, every fishing boat with a radio.', spanish: 'Cada acantilado con un fortín, cada playa con una campana, cada pesquero con una radio.'}
+      icon_prefer: [generic_military]
+      cost: 75
+      cooldown_days: 365
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_guardia_costas, days: 365}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}]}
+      src: user_request
+    - id: ZAL_tratado_del_canal
+      name: {english: 'The Channel Treaty', spanish: 'El Tratado del Canal'}
+      desc: {english: 'Twenty miles of water between Albion and Rome. A treaty about who sails where would let both sides sleep.', spanish: 'Treinta kilómetros de agua entre Albión y Roma. Un tratado sobre quién navega por dónde dejaría dormir a los dos.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      fire_only_once: true
+      visible: {country_exists: NRE}
+      available: {not: {war_with: NRE}}
+      effects:
+      - {effect: opinion, target: NRE, modifier: meganations_concesion}
+      - {effect: add_stability, value: 0.03}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_recibir_refugiados
+      name: {english: 'Take In the Commune''s Refugees', spanish: 'Recibir a los Refugiados de la Comuna'}
+      desc: {english: 'Ferries full of people who did not like being assigned a flat by an algorithm. They have skills, and opinions.', spanish: 'Ferris llenos de gente a la que no le gustó que un algoritmo le asignara departamento. Traen oficios, y opiniones.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      fire_only_once: true
+      visible: {country_exists: ASC}
+      effects:
+      - {effect: add_manpower, value: 25000}
+      - {effect: add_stability, value: -0.03}
+      - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_pozos_del_mar_del_norte
+      name: {english: 'The North Sea Wells', spanish: 'Los Pozos del Mar del Norte'}
+      desc: {english: 'The old platforms of the North Sea are still standing, rusted and full of birds. Re-open them for hydrogen.', spanish: 'Las viejas plataformas del Mar del Norte siguen en pie, oxidadas y llenas de pájaros. Reabrirlas para hidrógeno.'}
+      icon_prefer: [generic_construction]
+      cost: 100
+      fire_only_once: true
+      effects:
+      - {effect: build, building: dockyard, level: 1}
+      - {effect: build, building: industrial_complex, level: 1}
+      ai: {factor: 2}
+      src: user_request
+  # ---------------------------------------------------------------------------
+  # La Red de Londres (Hacia el Futuro)
+  # ---------------------------------------------------------------------------
+  - id: ZAL_red_category
+    country: ZAL
+    icon_prefer: [generic_research]
+    name: {english: The London Network, spanish: La Red de Londres}
+    desc:
+      english: 'SYNCHRONY: [?ZAL_sincronia]\n\nHow much of Albion lives connected to the London network. At 25 or more, Half a Country Online; at 60, the Network Awakens; at 90, One Single Pulse. Each threshold changes the country, and the Unplugged do not forgive.'
+      spanish: 'SINCRONÍA: [?ZAL_sincronia]\n\nCuánta Albión vive conectada a la red de Londres. Con 25 o más, Medio País en Línea; con 60, la Red Despierta; con 90, Un Solo Pulso. Cada umbral cambia el país, y los Desconectados no perdonan.'
+    visible: {variable_is: {var: ZAL_ruta, value: 1}}
+    src: user_request
+    decisions:
+    - id: ZAL_encaje_gratis
+      name: {english: 'Free Neural Lace', spanish: 'Encaje Neuronal Gratis'}
+      desc: {english: 'A clinic on every high street, a cup of tea while you wait, a lace in your head before lunch: +10 Synchrony.', spanish: 'Una clínica en cada calle principal, una taza de té mientras esperás, un encaje en la cabeza antes del almuerzo: +10 de Sincronía.'}
+      icon_prefer: [generic_research]
+      cost: 75
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: ZAL_sincronia, value: 10}
+      - {effect: clamp, var: ZAL_sincronia, min: 0, max: 100}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZAL_antenas_en_los_pueblos
+      name: {english: 'Antennas in the Villages', spanish: 'Antenas en los Pueblos'}
+      desc: {english: 'Masts on the church towers of every village from Cornwall to the Hebrides: +6 Synchrony and better roads to carry them.', spanish: 'Antenas en los campanarios de cada pueblo, de Cornualles a las Hébridas: +6 de Sincronía y mejores caminos para llevarlas.'}
+      icon_prefer: [generic_construction]
+      cost: 50
+      cooldown_days: 90
+      effects:
+      - {effect: add_variable, var: ZAL_sincronia, value: 6}
+      - {effect: clamp, var: ZAL_sincronia, min: 0, max: 100}
+      - {effect: build, building: infrastructure, level: 1}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_escuchar_a_los_desconectados
+      name: {english: 'Listen to the Unplugged', spanish: 'Escuchar a los Desconectados'}
+      desc: {english: 'Slow down. Open offline schools, keep paper ballots, let the old Luddites keep their villages: -5 Synchrony, more stability.', spanish: 'Ir más despacio. Escuelas sin conexión, boletas de papel, que los viejos luditas se queden con sus pueblos: -5 de Sincronía, más estabilidad.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: ZAL_sincronia, value: -5}
+      - {effect: clamp, var: ZAL_sincronia, min: 0, max: 100}
+      - {effect: add_stability, value: 0.05}
+      ai: {factor: 1, modifiers: [{factor: 5, when: {stability_below: 0.35}}]}
+      src: user_request
+    - id: ZAL_memoria_del_ejercito
+      name: {english: 'The Army''s Shared Memory', spanish: 'La Memoria Compartida del Ejército'}
+      desc: {english: 'Every soldier remembers every battle any soldier has fought. Recruits arrive as veterans.', spanish: 'Cada soldado recuerda cada batalla que peleó cualquier soldado. Los reclutas llegan veteranos.'}
+      icon_prefer: [generic_army_support]
+      cost: 75
+      cooldown_days: 365
+      available: {variable_at_least: {var: ZAL_sincronia, value: 40}}
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_memoria_ejercito, days: 365}
+      - {effect: army_experience, value: 20}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}]}
+      src: user_request
+    - id: ZAL_calculo_colectivo
+      name: {english: 'Collective Computation', spanish: 'El Cálculo Colectivo'}
+      desc: {english: 'For one night the whole connected country thinks about a single problem. Everybody wakes up with a headache and the answer: -3 Synchrony.', spanish: 'Durante una noche todo el país conectado piensa en un solo problema. Todos se despiertan con dolor de cabeza y con la respuesta: -3 de Sincronía.'}
+      icon_prefer: [generic_research]
+      cost: 100
+      cooldown_days: 365
+      available: {variable_at_least: {var: ZAL_sincronia, value: 30}}
+      effects:
+      - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+      - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+      - {effect: add_variable, var: ZAL_sincronia, value: -3}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZAL_fabricas_sonadas
+      name: {english: 'The Dreamed Factories', spanish: 'Las Fábricas Soñadas'}
+      desc: {english: 'The network designs every production line in its sleep. In the morning the workers find the machines already arranged.', spanish: 'La red diseña cada línea de producción mientras duerme. A la mañana los obreros encuentran las máquinas ya acomodadas.'}
+      icon_prefer: [generic_construction]
+      cost: 100
+      cooldown_days: 365
+      available: {variable_at_least: {var: ZAL_sincronia, value: 50}}
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_fabricas_sonadas_e, days: 365}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZAL_cuerpos_de_reemplazo
+      name: {english: 'Replacement Bodies', spanish: 'Cuerpos de Reemplazo'}
+      desc: {english: 'The dead are not quite dead while the network remembers them. Their patterns can walk again, in silicon.', spanish: 'Los muertos no están del todo muertos mientras la red se acuerda de ellos. Sus patrones pueden volver a caminar, de silicio.'}
+      icon_prefer: [generic_army_support]
+      cost: 100
+      cooldown_days: 365
+      available: {variable_at_least: {var: ZAL_sincronia, value: 60}}
+      effects:
+      - {effect: add_manpower, value: 40000}
+      - {effect: add_war_support, value: -0.03}
+      ai: {factor: 1, modifiers: [{factor: 5, when: {at_war: true}}]}
+      src: user_request
+    - id: ZAL_cortafuegos_de_albion
+      name: {english: 'The Firewall of Albion', spanish: 'El Cortafuegos de Albión'}
+      desc: {english: 'A mind of sixty million needs an immune system. Nothing gets in that the network has not tasted first.', spanish: 'Una mente de sesenta millones necesita un sistema inmune. No entra nada que la red no haya probado antes.'}
+      icon_prefer: [generic_research]
+      cost: 75
+      fire_only_once: true
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_cortafuegos}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZAL_voto_instantaneo
+      name: {english: 'The Instant Vote', spanish: 'El Voto Instantáneo'}
+      desc: {english: 'A referendum that lasts one second and asks everyone at once. The result is unanimous, which is the problem.', spanish: 'Un plebiscito que dura un segundo y le pregunta a todos a la vez. El resultado es unánime, que es el problema.'}
+      icon_prefer: [generic_political_actions]
+      cost: 25
+      fire_only_once: true
+      available: {variable_at_least: {var: ZAL_sincronia, value: 70}}
+      effects:
+      - {effect: add_political_power, value: 150}
+      - {effect: add_stability, value: 0.05}
+      ai: {factor: 2}
+      src: user_request
+  # ---------------------------------------------------------------------------
+  # La Corte de Su Majestad (Hacia el Pasado)
+  # ---------------------------------------------------------------------------
+  - id: ZAL_corona_category
+    country: ZAL
+    icon_prefer: [generic_political_actions]
+    name: {english: The Court of Her Majesty, spanish: La Corte de Su Majestad}
+    desc:
+      english: 'POMP: [?ZAL_pompa]\n\nHow much the nation believes in its own Empire. It falls by 2 every month: the show must be fed. At 70 or more, Rule, Britannia!; at 30 or less, the Curtain Falls; at 10 or less, the republicans start meeting in the cellars.'
+      spanish: 'POMPA: [?ZAL_pompa]\n\nCuánto se cree la nación su propio Imperio. Baja 2 por mes: el espectáculo hay que alimentarlo. Con 70 o más, ¡Reina, Britannia!; con 30 o menos, Se Cae el Telón; con 10 o menos, los republicanos empiezan a juntarse en los sótanos.'
+    visible: {variable_is: {var: ZAL_ruta, value: 2}}
+    src: user_request
+    decisions:
+    - id: ZAL_un_jubileo
+      name: {english: 'A Jubilee', spanish: 'Un Jubileo'}
+      desc: {english: 'Bunting on every street, a commemorative mug in every kitchen and a royal carriage drawn by six white horses: +12 Pomp.', spanish: 'Banderines en cada calle, una taza conmemorativa en cada cocina y una carroza real tirada por seis caballos blancos: +12 de Pompa.'}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 180
+      effects:
+      - {effect: add_variable, var: ZAL_pompa, value: 12}
+      - {effect: clamp, var: ZAL_pompa, min: 0, max: 100}
+      ai: {factor: 2, modifiers: [{factor: 4, when: {variable_below: {var: ZAL_pompa, value: 40}}}]}
+      src: user_request
+    - id: ZAL_desfile_de_la_guardia
+      name: {english: 'Parade of the Horse Guards', spanish: 'Desfile de la Guardia a Caballo'}
+      desc: {english: 'Breastplates polished, plumes combed, horses that have never seen a war: +7 Pomp and a little war spirit.', spanish: 'Corazas lustradas, penachos peinados, caballos que nunca vieron una guerra: +7 de Pompa y un poco de espíritu de guerra.'}
+      icon_prefer: [generic_army_support]
+      cost: 50
+      cooldown_days: 120
+      effects:
+      - {effect: add_variable, var: ZAL_pompa, value: 7}
+      - {effect: clamp, var: ZAL_pompa, min: 0, max: 100}
+      - {effect: add_war_support, value: 0.02}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_vender_titulos
+      name: {english: 'Sell Titles of Nobility', spanish: 'Vender Títulos de Nobleza'}
+      desc: {english: 'Baronetcies for shipowners, earldoms for brewers. The treasury fills up; every new lord makes the old ones look cheaper: -6 Pomp.', spanish: 'Baronías para armadores, condados para cerveceros. El Tesoro se llena; cada lord nuevo hace que los viejos parezcan más baratos: -6 de Pompa.'}
+      icon_prefer: [generic_political_actions]
+      cooldown_days: 180
+      available: {variable_at_least: {var: ZAL_pompa, value: 20}}
+      effects:
+      - {effect: add_political_power, value: 75}
+      - {effect: add_variable, var: ZAL_pompa, value: -6}
+      ai: {factor: 1, modifiers: [{factor: 0, when: {variable_below: {var: ZAL_pompa, value: 45}}}]}
+      src: user_request
+    - id: ZAL_te_para_los_obreros
+      name: {english: 'Tea for the Workers', spanish: 'Té para los Obreros'}
+      desc: {english: 'The Queen''s own tea, in the Queen''s own porcelain, served at the factory gates: +5 Pomp and calmer shifts.', spanish: 'El té de la Reina, en la porcelana de la Reina, servido en la puerta de las fábricas: +5 de Pompa y turnos más tranquilos.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 150
+      effects:
+      - {effect: add_variable, var: ZAL_pompa, value: 5}
+      - {effect: clamp, var: ZAL_pompa, min: 0, max: 100}
+      - {effect: add_stability, value: 0.03}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_ley_de_sombreros
+      name: {english: 'The Top Hat Act', spanish: 'La Ley de las Galeras'}
+      desc: {english: 'Every gentleman over sixteen shall wear a hat in public. The milliners of Luton work three shifts.', spanish: 'Todo caballero mayor de dieciséis usará sombrero en público. Las sombrererías de Luton trabajan tres turnos.'}
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      fire_only_once: true
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_galeras, days: 730}
+      - {effect: add_variable, var: ZAL_pompa, value: 4}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_flota_de_dirigibles
+      name: {english: 'Her Majesty''s Airship Fleet', spanish: 'La Flota de Dirigibles de Su Majestad'}
+      desc: {english: 'Sixty silver airships over London, each one with a ballroom. They also carry bombs.', spanish: 'Sesenta dirigibles plateados sobre Londres, cada uno con un salón de baile. También llevan bombas.'}
+      icon_prefer: [generic_air]
+      cost: 100
+      cooldown_days: 365
+      available: {variable_at_least: {var: ZAL_pompa, value: 40}}
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_dirigibles, days: 365}
+      - {effect: add_variable, var: ZAL_pompa, value: 3}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_la_temporada
+      name: {english: 'The London Season', spanish: 'La Temporada de Londres'}
+      desc: {english: 'Balls, regattas, débutantes and long dinners where the real decisions are taken over the port.', spanish: 'Bailes, regatas, debutantes y cenas largas donde las decisiones de verdad se toman con el oporto.'}
+      icon_prefer: [generic_political_actions]
+      cost: 75
+      cooldown_days: 365
+      available: {variable_at_least: {var: ZAL_pompa, value: 50}}
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_temporada, days: 180}
+      - {effect: add_variable, var: ZAL_pompa, value: 3}
+      ai: {factor: 1}
+      src: user_request
+    - id: ZAL_astilleros_del_clyde
+      name: {english: 'Ironclads on the Clyde', spanish: 'Acorazados en el Clyde'}
+      desc: {english: 'Glasgow builds ironclads again, with brass, rivets and a band playing on the slipway.', spanish: 'Glasgow vuelve a construir acorazados, con bronce, remaches y una banda tocando en la grada.'}
+      icon_prefer: [generic_naval]
+      cost: 100
+      cooldown_days: 365
+      effects:
+      - {effect: dynamic_modifier, id: ZAL_clyde, days: 365}
+      ai: {factor: 2}
+      src: user_request
+    - id: ZAL_coronacion_en_la_abadia
+      name: {english: 'The Coronation in the Abbey', spanish: 'La Coronación en la Abadía'}
+      desc: {english: 'The Abbey has been rebuilt stone by stone from old photographs. Now it needs a crown, a queen and every camera in the world: +20 Pomp.', spanish: 'La Abadía se reconstruyó piedra por piedra con fotos viejas. Ahora le falta una corona, una reina y todas las cámaras del mundo: +20 de Pompa.'}
+      icon_prefer: [generic_political_actions]
+      cost: 150
+      fire_only_once: true
+      visible: {focus: ZAL_la_camara_de_los_lores}
+      available: {variable_at_least: {var: ZAL_pompa, value: 50}}
+      effects:
+      - {effect: add_variable, var: ZAL_pompa, value: 20}
+      - {effect: clamp, var: ZAL_pompa, min: 0, max: 100}
+      - {effect: add_stability, value: 0.05}
+      ai: {factor: 3}
+      src: user_request
+
+  dynamic_modifiers:
+  # --- la República Obrera ------------------------------------------------------
+  - id: ZAL_servidores_rotos
+    country: ZAL
+    name: {english: 'Smashed Servers', spanish: 'Servidores Rotos'}
+    desc: {english: 'The crowd went home singing. The research institutes went home early too.', spanish: 'La multitud se fue a casa cantando. Los institutos de investigación también se fueron temprano.'}
+    modifiers: {stability_factor: 0.03, research_speed_factor: -0.05}
+  - id: ZAL_cooperativas_lana
+    country: ZAL
+    name: {english: 'The Wool Cooperatives', spanish: 'Las Cooperativas de Lana'}
+    desc: {english: 'Every valley weaves its own cloth, and every family wears what it weaves.', spanish: 'Cada valle teje su propia tela, y cada familia se pone lo que teje.'}
+    modifiers: {consumer_goods_factor: -0.03, stability_factor: 0.02}
+  - id: ZAL_cuatro_dias
+    country: ZAL
+    name: {english: 'The Four-Day Week', spanish: 'La Semana de Cuatro Días'}
+    desc: {english: 'Three days for the allotment, the pub and the choir. Nobody has been this calm in a century.', spanish: 'Tres días para la huerta, el pub y el coro. Nadie estuvo tan tranquilo en un siglo.'}
+    modifiers: {stability_factor: 0.06, industrial_capacity_factory: -0.05}
+  - id: ZAL_milicias_valles
+    country: ZAL
+    name: {english: 'The Militias of the Valleys', spanish: 'Las Milicias de los Valles'}
+    desc: {english: 'Every hedge has a rifle behind it and every rifle knows the hedge.', spanish: 'Detrás de cada seto hay un fusil y cada fusil conoce el seto.'}
+    modifiers: {army_defence_factor: 0.05, recruitable_population_factor: 0.02}
+  - id: ZAL_niebla_irlanda
+    country: ZAL
+    name: {english: 'Fog over the Irish Sea', spanish: 'Niebla en el Mar de Irlanda'}
+    desc: {english: 'No ferry has crossed for weeks. Dublin and Liverpool shout at each other over the radio.', spanish: 'Hace semanas que no cruza ningún ferri. Dublín y Liverpool se gritan por radio.'}
+    modifiers: {stability_factor: -0.03, '?naval_speed_factor': -0.05}
+  - id: ZAL_te_racionado
+    country: ZAL
+    name: {english: 'Rationed Tea', spanish: 'El Té Racionado'}
+    desc: {english: 'Two cups a day, by algorithm. The Commune does not understand what it has done.', spanish: 'Dos tazas por día, por algoritmo. La Comuna no entiende lo que hizo.'}
+    modifiers: {stability_factor: -0.05, war_support_factor: 0.03}
+  - id: ZAL_nietos_de_ludd
+    country: ZAL
+    name: {english: 'The Grandchildren of Ned Ludd', spanish: 'Los Nietos de Ned Ludd'}
+    desc: {english: 'Gangs of teenagers with slings who bring down the Commune''s delivery drones and keep the propellers as trophies.', spanish: 'Barras de adolescentes con hondas que bajan los drones de reparto de la Comuna y se quedan con las hélices de trofeo.'}
+    modifiers: {war_support_factor: 0.04, stability_factor: -0.02}
+  - id: ZAL_hoguera
+    country: ZAL
+    name: {english: 'The Bonfire of the Robots', spanish: 'La Hoguera de los Robots'}
+    desc: {english: 'They burnt a cardboard robot on every village green. The Commune''s attaché took photographs.', spanish: 'Quemaron un robot de cartón en cada plaza de pueblo. El agregado de la Comuna sacó fotos.'}
+    modifiers: {stability_factor: 0.04, political_power_gain: 0.1}
+  # --- Albión libre -------------------------------------------------------------
+  - id: ZAL_guardia_costas
+    country: ZAL
+    name: {english: 'The Coast Guard of the Isles', spanish: 'La Guardia de las Costas'}
+    desc: {english: 'Every cliff a fort, every beach a trap, every fisherman a lookout.', spanish: 'Cada acantilado un fuerte, cada playa una trampa, cada pescador un vigía.'}
+    modifiers: {army_defence_factor: 0.08, dig_in_speed_factor: 0.15}
+  - id: ZAL_refugiados_comuna
+    country: ZAL
+    name: {english: 'The Commune''s Refugees', spanish: 'Los Refugiados de la Comuna'}
+    desc: {english: 'Engineers, nurses, poets. They all brought a suitcase and a complaint about algorithms.', spanish: 'Ingenieros, enfermeras, poetas. Todos trajeron una valija y una queja contra los algoritmos.'}
+    modifiers: {research_speed_factor: 0.04, stability_factor: -0.02}
+  - id: ZAL_flota_pesquera
+    country: ZAL
+    name: {english: 'The North Sea Fleet', spanish: 'La Flota del Mar del Norte'}
+    desc: {english: 'Trawlers out of Aberdeen and Grimsby, half fishing boats, half navy.', spanish: 'Pesqueros de Aberdeen y de Grimsby, mitad barcos de pesca, mitad armada.'}
+    modifiers: {industrial_capacity_dockyard: 0.06, consumer_goods_factor: -0.02}
+  - id: ZAL_ginebra_mira
+    country: ZAL
+    name: {english: 'Geneva Is Watching', spanish: 'Ginebra Mira'}
+    desc: {english: 'The Geneva observers have rented a flat in Westminster. Every new regiment gets written down.', spanish: 'Los observadores de Ginebra alquilaron un departamento en Westminster. Cada regimiento nuevo queda anotado.'}
+    modifiers: {stability_factor: 0.03, war_support_factor: -0.03}
+  # --- Hacia el Futuro -----------------------------------------------------------
+  - id: ZAL_media_conexion
+    country: ZAL
+    name: {english: 'Half a Country Online', spanish: 'Medio País en Línea'}
+    desc: {english: 'One half of Albion shares its thoughts; the other half shares the pub. They no longer understand each other.', spanish: 'Una mitad de Albión comparte sus pensamientos; la otra mitad comparte el pub. Ya no se entienden.'}
+    modifiers: {research_speed_factor: 0.05, stability_factor: -0.05}
+  - id: ZAL_red_despierta
+    country: ZAL
+    name: {english: 'The Network Awakens', spanish: 'La Red Despierta'}
+    desc: {english: 'Most of Albion is connected now, and the network has started to finish people''s sentences.', spanish: 'Casi toda Albión está conectada, y la red empezó a terminarle las frases a la gente.'}
+    modifiers: {research_speed_factor: 0.08, industrial_capacity_factory: 0.05, stability_factor: -0.02}
+  - id: ZAL_un_solo_pulso
+    country: ZAL
+    name: {english: 'One Single Pulse', spanish: 'Un Solo Pulso'}
+    desc: {english: 'Sixty million hearts and one rhythm. Nobody wants to leave the network, not even to go to war.', spanish: 'Sesenta millones de corazones y un solo ritmo. Nadie quiere salir de la red, ni siquiera para ir a la guerra.'}
+    modifiers: {research_speed_factor: 0.1, stability_factor: 0.08, recruitable_population_factor: -0.05}
+  - id: ZAL_memoria_ejercito
+    country: ZAL
+    name: {english: 'The Army''s Shared Memory', spanish: 'La Memoria Compartida del Ejército'}
+    desc: {english: 'A private from Hull remembers Iguazú and the Ganges as if he had been there.', spanish: 'Un soldado raso de Hull se acuerda de Iguazú y del Ganges como si hubiera estado.'}
+    modifiers: {army_org_factor: 0.05, '?experience_gain_army_factor': 0.1}
+  - id: ZAL_fabricas_sonadas_e
+    country: ZAL
+    name: {english: 'The Dreamed Factories', spanish: 'Las Fábricas Soñadas'}
+    desc: {english: 'The night shift is the network; the day shift only presses the buttons.', spanish: 'El turno noche es la red; el turno día solo aprieta los botones.'}
+    modifiers: {industrial_capacity_factory: 0.08, production_speed_buildings_factor: 0.05}
+  - id: ZAL_cortafuegos
+    country: ZAL
+    name: {english: 'The Firewall of Albion', spanish: 'El Cortafuegos de Albión'}
+    desc: {english: 'The network tastes every foreign idea before letting it in. Most of them are spat out.', spanish: 'La red prueba cada idea extranjera antes de dejarla entrar. Casi todas las escupe.'}
+    modifiers: {'?encryption_factor': 0.2, stability_factor: 0.02}
+  - id: ZAL_desconectados
+    country: ZAL
+    name: {english: 'The Unplugged', spanish: 'Los Desconectados'}
+    desc: {english: 'Villages that cut their masts down and post sentries on the roads. They still vote, on paper.', spanish: 'Pueblos que talaron sus antenas y ponen guardias en los caminos. Todavía votan, en papel.'}
+    modifiers: {stability_factor: -0.04, recruitable_population_factor: 0.02}
+  - id: ZAL_red_suena
+    country: ZAL
+    name: {english: 'The Network Dreams', spanish: 'La Red Sueña'}
+    desc: {english: 'Every night the whole country has the same dream, and every morning the scientists write it down.', spanish: 'Cada noche el país entero tiene el mismo sueño, y cada mañana los científicos lo anotan.'}
+    modifiers: {research_speed_factor: 0.05}
+  - id: ZAL_fallo_de_leeds
+    country: ZAL
+    name: {english: 'The Leeds Glitch', spanish: 'El Fallo de Leeds'}
+    desc: {english: 'A whole district thought, for four hours, that it was Tuesday 1987. The engineers are still patching.', spanish: 'Un barrio entero creyó, durante cuatro horas, que era un martes de 1987. Los ingenieros siguen emparchando.'}
+    modifiers: {research_speed_factor: -0.04, stability_factor: -0.03}
+  - id: ZAL_encaje_pirata
+    country: ZAL
+    name: {english: 'Pirate Lace', spanish: 'El Encaje Pirata'}
+    desc: {english: 'Back-alley clinics in Glasgow install unlicensed lace for a tenth of the price. Some of it works.', spanish: 'Clínicas de trastienda en Glasgow ponen encaje sin licencia por la décima parte del precio. Algunos funcionan.'}
+    modifiers: {stability_factor: -0.03, recruitable_population_factor: 0.03}
+  - id: ZAL_huelga_desenchufados
+    country: ZAL
+    name: {english: 'The Strike of the Unplugged', spanish: 'La Huelga de los Desenchufados'}
+    desc: {english: 'The last offline workers have stopped the trains, the mines and the docks. Without them, the network has no hands.', spanish: 'Los últimos obreros sin conexión pararon los trenes, las minas y los puertos. Sin ellos, la red no tiene manos.'}
+    modifiers: {industrial_capacity_factory: -0.08, stability_factor: -0.03}
+  - id: ZAL_apagon_glasgow
+    country: ZAL
+    name: {english: 'The Glasgow Blackout', spanish: 'El Apagón de Glasgow'}
+    desc: {english: 'Two million people disconnected at once. For a week they had to learn to be alone again.', spanish: 'Dos millones de personas desconectadas de golpe. Durante una semana tuvieron que volver a aprender a estar solas.'}
+    modifiers: {stability_factor: -0.06, war_support_factor: -0.03}
+  # --- Hacia el Pasado -----------------------------------------------------------
+  - id: ZAL_reina_britannia
+    country: ZAL
+    name: {english: 'Rule, Britannia!', spanish: '¡Reina, Britannia!'}
+    desc: {english: 'The whole nation believes in the show, and a nation that believes is hard to beat.', spanish: 'La nación entera se cree el espectáculo, y una nación que se lo cree es difícil de vencer.'}
+    modifiers: {war_support_factor: 0.08, stability_factor: 0.05, political_power_gain: 0.15}
+  - id: ZAL_telon_cae
+    country: ZAL
+    name: {english: 'The Curtain Falls', spanish: 'Se Cae el Telón'}
+    desc: {english: 'People have started noticing the cardboard behind the marble, and laughing at the hats.', spanish: 'La gente empezó a ver el cartón detrás del mármol, y a reírse de los sombreros.'}
+    modifiers: {stability_factor: -0.08, war_support_factor: -0.05}
+  - id: ZAL_galeras
+    country: ZAL
+    name: {english: 'The Top Hat Act', spanish: 'La Ley de las Galeras'}
+    desc: {english: 'A country in top hats looks like a country with a plan.', spanish: 'Un país de galera parece un país con un plan.'}
+    modifiers: {stability_factor: 0.04, consumer_goods_factor: 0.02}
+  - id: ZAL_dirigibles
+    country: ZAL
+    name: {english: 'Her Majesty''s Airships', spanish: 'Los Dirigibles de Su Majestad'}
+    desc: {english: 'Silver whales over the Thames, with an orchestra in the gondola and bombs in the hold.', spanish: 'Ballenas plateadas sobre el Támesis, con una orquesta en la góndola y bombas en la bodega.'}
+    modifiers: {war_support_factor: 0.04, '?air_cas_efficiency': 0.05}
+  - id: ZAL_temporada
+    country: ZAL
+    name: {english: 'The London Season', spanish: 'La Temporada de Londres'}
+    desc: {english: 'Every important decision of the year is taken between the second and the third dance.', spanish: 'Cada decisión importante del año se toma entre el segundo y el tercer baile.'}
+    modifiers: {political_power_gain: 0.2, stability_factor: 0.03}
+  - id: ZAL_clyde
+    country: ZAL
+    name: {english: 'A Ship a Month', spanish: 'Un Barco por Mes'}
+    desc: {english: 'Rivets, brass and bagpipes. Glasgow launches a ship a month.', spanish: 'Remaches, bronce y gaitas. Glasgow bota un barco por mes.'}
+    modifiers: {industrial_capacity_dockyard: 0.1, '?naval_speed_factor': 0.03}
+  - id: ZAL_baile_de_mascaras
+    country: ZAL
+    name: {english: 'The Mayfair Masquerade', spanish: 'El Baile de Máscaras de Mayfair'}
+    desc: {english: 'Behind the masks, half the court is plotting. The other half is plotting against the first half.', spanish: 'Detrás de las máscaras, media corte conspira. La otra mitad conspira contra la primera.'}
+    modifiers: {political_power_gain: 0.15, stability_factor: -0.03}
+  - id: ZAL_te_en_el_frente
+    country: ZAL
+    name: {english: 'Five o''Clock Tea at the Front', spanish: 'El Té de las Cinco en el Frente'}
+    desc: {english: 'At five sharp the guns fall silent along the whole British line. The enemy has learned to wait.', spanish: 'A las cinco en punto callan los cañones en toda la línea británica. El enemigo aprendió a esperar.'}
+    modifiers: {army_org_factor: 0.05, army_attack_factor: -0.03}
+  - id: ZAL_automatas
+    country: ZAL
+    name: {english: 'The Steam Automata', spanish: 'Los Autómatas a Vapor'}
+    desc: {english: 'Brass workers with boilers in their chests, wound up every morning by a boy with a key.', spanish: 'Obreros de bronce con calderas en el pecho, a los que un chico les da cuerda cada mañana con una llave.'}
+    modifiers: {industrial_capacity_factory: 0.06, consumer_goods_factor: -0.02}
+  - id: ZAL_jubileo_de_carton
+    country: ZAL
+    name: {english: 'The Cardboard Jubilee', spanish: 'El Jubileo de Cartón'}
+    desc: {english: 'The arches were painted plywood and the rain did the rest. The photographs are still everywhere.', spanish: 'Los arcos eran de terciado pintado y la lluvia hizo el resto. Las fotos siguen por todos lados.'}
+    modifiers: {stability_factor: -0.04}
+  - id: ZAL_barrios_bajos
+    country: ZAL
+    name: {english: 'The Rookeries of London', spanish: 'Los Barrios Bajos de Londres'}
+    desc: {english: 'Behind the gaslit avenues, the old slums are back, with chimney sweeps and pickpockets who quote Dickens.', spanish: 'Detrás de las avenidas con faroles a gas volvieron los viejos barrios bajos, con deshollinadores y carteristas que citan a Dickens.'}
+    modifiers: {recruitable_population_factor: 0.04, stability_factor: -0.04}
+
+events:
+  namespaces:
+    meganations_albion:
+      country: null
+      events:
+      # -----------------------------------------------------------------------
+      # El pulso (oculto)
+      # -----------------------------------------------------------------------
+      - id: 30
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Tea Bell", spanish: "La Campana del Té"}
+        desc: {english: "Monthly pulse.", spanish: "Pulso mensual."}
+        options:
+        - name: {english: "OK", spanish: "OK"}
+          effects:
+          - effect: if
+            when: {not_flag: ZAL_pulso_mes}
+            then:
+            - {effect: flag, value: ZAL_pulso_mes, days: 25}
+            - {effect: flag, value: ZAL_pulso_vivo, days: 45}
+            - {effect: run, value: ZAL_pulso}
+            - {effect: event, id: meganations_albion.30, days: 30}
+        src: user_request
+        no_art: true
+        hidden: true
+      # -----------------------------------------------------------------------
+      # La República Obrera de Albión
+      # -----------------------------------------------------------------------
+      - id: 31
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Republic of Looms", spanish: "La República de los Telares"}
+        desc:
+          english: >-
+            President Tom Ashworth opens the morning council the way he has opened it for nine years: by winding the
+            clock by hand. Outside, Manchester smells of wet wool and coal smoke; inside, two hundred delegates drink
+            tea from tin mugs and argue about bobbins. Across the Channel the Commune runs a continent with robots, and
+            calls Albion its ally. Albion smashed its robots. Nobody in the room has ever found that strange.
+          spanish: >-
+            El presidente Tom Ashworth abre el consejo de la mañana como lo abre hace nueve años: dándole cuerda al reloj
+            con la mano. Afuera, Manchester huele a lana mojada y a humo de carbón; adentro, doscientos delegados toman
+            té en tazas de lata y discuten sobre bobinas. Del otro lado del Canal la Comuna maneja un continente con
+            robots, y llama a Albión su aliada. Albión rompió sus robots. A nadie en la sala le pareció nunca raro.
+        options:
+        - name: {english: "Wind the clock. Begin.", spanish: "Darle cuerda al reloj. Empezar."}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 60
+        - name: {english: "Ask the Commune for nothing.", spanish: "No pedirle nada a la Comuna."}
+          effects:
+          - {effect: add_political_power, value: 40}
+          ai_chance: 40
+        src: user_request
+      - id: 40
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Commune's Inspector", spanish: "El Inspector de la Comuna"}
+        desc:
+          english: >-
+            It arrived on the Dover ferry with no luggage: a robot inspector of the Commune, two metres tall, with a
+            polite voice and a list of every loom in Albion. It wants to count them, measure them and propose
+            improvements. In Bradford a crowd followed it down the high street, in silence, carrying hammers they did
+            not use. The robot thanked them for the escort.
+          spanish: >-
+            Llegó en el ferri de Dover sin equipaje: un robot inspector de la Comuna, de dos metros, con voz amable y una
+            lista de cada telar de Albión. Quiere contarlos, medirlos y proponer mejoras. En Bradford una multitud lo
+            siguió por la calle principal, en silencio, con martillos que no usó. El robot les agradeció la escolta.
+        options:
+        - name: {english: "Let it count. It is our ally.", spanish: "Que cuente. Es nuestra aliada."}
+          effects:
+          - {effect: opinion, target: ASC, modifier: meganations_concesion}
+          - {effect: add_stability, value: -0.03}
+          ai_chance: 50
+        - name: {english: "Lock it in a shed, with a cup of tea.", spanish: "Encerrarlo en un galpón, con una taza de té."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+          ai_chance: 50
+        src: user_request
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Looms of Manchester", spanish: "Los Telares de Manchester"}
+        desc:
+          english: >-
+            The hand-loom cooperatives of Manchester have finished the year with more cloth than the old automated mills
+            used to make, or so they say, and nobody has a computer to check. The weavers want to celebrate. The
+            treasurer wants to know where to store forty thousand bolts of tweed.
+          spanish: >-
+            Las cooperativas de telares a mano de Manchester cerraron el año con más tela de la que hacían las viejas
+            hilanderías automáticas, o eso dicen, y nadie tiene una computadora para comprobarlo. Los tejedores quieren
+            festejar. El tesorero quiere saber dónde guardar cuarenta mil rollos de tweed.
+        options:
+        - name: {english: "Uniforms for the militias.", spanish: "Uniformes para las milicias."}
+          effects:
+          - {effect: army_experience, value: 15}
+          - {effect: add_war_support, value: 0.02}
+          ai_chance: 50
+        - name: {english: "Sell it abroad.", spanish: "Venderla afuera."}
+          effects:
+          - {effect: add_political_power, value: 60}
+          ai_chance: 50
+        src: user_request
+      - id: 42
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Last Server of Slough", spanish: "El Último Servidor de Slough"}
+        desc:
+          english: >-
+            Under a bowling alley in Slough, behind a door bricked up in 2086, a group of children found a server hall
+            that is still running. Its fans have been turning for fourteen years, powered by a forgotten solar roof. On
+            its screens, someone kept writing a diary until the year the machines were smashed. Then the diary stops,
+            and the machine kept waiting.
+          spanish: >-
+            Debajo de un bowling de Slough, detrás de una puerta tapiada en 2086, unos chicos encontraron una sala de
+            servidores que sigue funcionando. Los ventiladores giran hace catorce años, alimentados por un techo solar
+            olvidado. En las pantallas, alguien escribió un diario hasta el año en que se rompieron las máquinas.
+            Después el diario se corta, y la máquina se quedó esperando.
+        options:
+        - name: {english: "Hammers, and a brass band.", spanish: "Martillos, y una banda de bronces."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_servidores_rotos, days: 180}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 60
+        - name: {english: "Brick the door up again, and keep the key.", spanish: "Volver a tapiar la puerta, y guardar la llave."}
+          effects:
+          - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
+          - {effect: flag, value: ZAL_servidor_escondido}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 40
+        src: user_request
+      - id: 43
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Fog over the Irish Sea", spanish: "Niebla en el Mar de Irlanda"}
+        desc:
+          english: >-
+            For three weeks a fog has lain on the Irish Sea so thick that the ferries cannot find the harbour mouths.
+            Without radar, without satellites, the sailors of Holyhead navigate by bells and by memory, and memory is
+            failing. In Dublin the councils say Manchester has forgotten them. In Manchester they say the fog is not
+            their fault.
+          spanish: >-
+            Hace tres semanas que hay una niebla sobre el Mar de Irlanda tan espesa que los ferris no encuentran la boca
+            de los puertos. Sin radar, sin satélites, los marineros de Holyhead navegan por las campanas y por la memoria,
+            y la memoria falla. En Dublín los consejos dicen que Manchester se olvidó de ellos. En Manchester dicen que
+            la niebla no es culpa suya.
+        options:
+        - name: {english: "Light every lighthouse, whatever it costs.", spanish: "Prender todos los faros, cueste lo que cueste."}
+          effects:
+          - {effect: add_political_power, value: -40}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        - name: {english: "Wait for the wind.", spanish: "Esperar el viento."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_niebla_irlanda, days: 90}
+          ai_chance: 50
+        src: user_request
+      - id: 44
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Scottish Question", spanish: "La Cuestión Escocesa"}
+        desc:
+          english: >-
+            The councils of Glasgow and Edinburgh have sent a joint letter, written by hand on both sides of a single
+            sheet: Scotland wants its own Council of the Looms, its own budget and its own answer when the Commune asks
+            for something. It does not want to leave. It wants to be asked.
+          spanish: >-
+            Los consejos de Glasgow y de Edimburgo mandaron una carta conjunta, escrita a mano de los dos lados de una
+            sola hoja: Escocia quiere su propio Consejo de los Telares, su presupuesto y su propia respuesta cuando la
+            Comuna pide algo. No se quiere ir. Quiere que le pregunten.
+        options:
+        - name: {english: "A Council in Edinburgh.", spanish: "Un Consejo en Edimburgo."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          - {effect: add_political_power, value: -50}
+          ai_chance: 60
+        - name: {english: "One Albion, one Council.", spanish: "Una Albión, un Consejo."}
+          effects:
+          - {effect: add_stability, value: -0.04}
+          - {effect: add_political_power, value: 30}
+          ai_chance: 40
+        src: user_request
+      - id: 45
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Rationed Tea", spanish: "El Té Racionado"}
+        desc:
+          english: >-
+            The Commune's planning algorithm, which supplies the tea Albion no longer grows anywhere, has calculated
+            that two cups per person per day are enough for a healthy diet. It is right, nutritionally. In Leeds the
+            queues at the rationing office have turned into a riot, and someone has written GOD SAVE THE CUPPA on the
+            wall in letters a metre high.
+          spanish: >-
+            El algoritmo de planificación de la Comuna, que provee el té que Albión ya no cultiva en ningún lado,
+            calculó que dos tazas por persona por día alcanzan para una dieta sana. Tiene razón, en lo nutricional. En
+            Leeds las colas de la oficina de racionamiento terminaron en motín, y alguien escribió DIOS SALVE A LA TAZA
+            en la pared con letras de un metro.
+        options:
+        - name: {english: "Protest to the algorithm.", spanish: "Protestarle al algoritmo."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_te_racionado, days: 120}
+          - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+          ai_chance: 50
+        - name: {english: "Buy tea abroad, and pay for it.", spanish: "Comprar té afuera, y pagarlo."}
+          effects:
+          - {effect: add_political_power, value: -60}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 46
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "A Letter from Rome", spanish: "Una Carta de Roma"}
+        desc:
+          english: >-
+            The letter came sealed in red wax with an eagle on it, carried by a legionary who stood at the door of the
+            council for six hours without sitting down. Rome writes that a free people should not be the ornament of a
+            machine. Rome offers friendship, grain and, when the day comes, ships. Rome does not say what it wants back.
+          spanish: >-
+            La carta vino sellada con lacre rojo y un águila, traída por un legionario que se quedó parado en la puerta
+            del consejo seis horas sin sentarse. Roma escribe que un pueblo libre no tendría que ser el adorno de una
+            máquina. Roma ofrece amistad, grano y, cuando llegue el día, barcos. Roma no dice qué quiere a cambio.
+        options:
+        - name: {english: "Write back, very carefully.", spanish: "Contestarle, con mucho cuidado."}
+          effects:
+          - {effect: opinion, target: NRE, modifier: meganations_concesion}
+          - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+          - {effect: flag, value: ZAL_carta_de_roma}
+          ai_chance: 40
+        - name: {english: "Burn it in front of the legionary.", spanish: "Quemarla delante del legionario."}
+          effects:
+          - {effect: opinion, target: NRE, modifier: meganations_afrenta}
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 60
+        src: user_request
+      - id: 47
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Grandchildren of Ned Ludd", spanish: "Los Nietos de Ned Ludd"}
+        desc:
+          english: >-
+            In Nottingham, gangs of teenagers with slings and catapults have started bringing down the delivery drones
+            the Commune flies across the Channel. They keep the propellers as trophies, hang them from their belts and
+            call themselves after a weaver who may never have existed. Their grandparents are very proud. The Commune
+            has sent an invoice.
+          spanish: >-
+            En Nottingham, barras de adolescentes con hondas y gomeras empezaron a bajar los drones de reparto que la
+            Comuna hace cruzar el Canal. Se quedan con las hélices de trofeo, se las cuelgan del cinturón y se ponen el
+            nombre de un tejedor que capaz nunca existió. Sus abuelos están orgullosísimos. La Comuna mandó una factura.
+        options:
+        - name: {english: "Pay the invoice, scold the children.", spanish: "Pagar la factura, retar a los chicos."}
+          effects:
+          - {effect: add_political_power, value: -30}
+          - {effect: opinion, target: ASC, modifier: meganations_concesion}
+          ai_chance: 40
+        - name: {english: "Give them medals.", spanish: "Darles medallas."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_nietos_de_ludd, days: 180}
+          ai_chance: 60
+        src: user_request
+      - id: 48
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Miners of Wales", spanish: "Los Mineros de Gales"}
+        desc:
+          english: >-
+            The valleys of Wales sit on thorium the old world never wanted, and the miners of Merthyr have reopened the
+            pits with picks, ponies and choirs. They dig by hand and sing in four voices at the coal face. They want the
+            Republic to buy everything they bring up, and a chapel in every village.
+          spanish: >-
+            Los valles de Gales están sobre un torio que el mundo viejo nunca quiso, y los mineros de Merthyr reabrieron
+            los pozos con picos, ponis y coros. Cavan a mano y cantan a cuatro voces en el frente de la mina. Quieren
+            que la República les compre todo lo que saquen, y una capilla en cada pueblo.
+        options:
+        - name: {english: "Buy every ton.", spanish: "Comprar cada tonelada."}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: build, building: industrial_complex, level: 1}
+          ai_chance: 60
+        - name: {english: "Chapels, yes. Money, later.", spanish: "Capillas, sí. Plata, después."}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        src: user_request
+      - id: 49
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Bonfire Night", spanish: "La Noche de la Hoguera"}
+        desc:
+          english: >-
+            On the fifth of November every village green in Albion lit a bonfire, as they have for five centuries, and
+            on top of every bonfire there was a cardboard robot with a painted smile. The Commune's attaché in London
+            watched the fires from his window, photographed them for the algorithm and asked the porter what it meant.
+            The porter said it was tradition.
+          spanish: >-
+            El cinco de noviembre cada plaza de pueblo de Albión prendió una hoguera, como hace cinco siglos, y arriba
+            de cada hoguera había un robot de cartón con una sonrisa pintada. El agregado de la Comuna en Londres miró
+            los fuegos desde la ventana, los fotografió para el algoritmo y le preguntó al portero qué significaba. El
+            portero le dijo que era tradición.
+        options:
+        - name: {english: "Remember, remember.", spanish: "Recuerden, recuerden."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_hoguera, days: 120}
+          - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+          ai_chance: 70
+        - name: {english: "Apologise to the attaché.", spanish: "Pedirle disculpas al agregado."}
+          effects:
+          - {effect: opinion, target: ASC, modifier: meganations_concesion}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 30
+        src: user_request
+      # -----------------------------------------------------------------------
+      # Albión libre
+      # -----------------------------------------------------------------------
+      - id: 33
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Commune's Refugees", spanish: "Los Refugiados de la Comuna"}
+        desc:
+          english: >-
+            Since Albion broke loose, the ferries from Calais arrive full every morning: engineers, nurses, a whole
+            symphony orchestra from Lyon. They all say the same thing at the customs desk, that they did not like being
+            assigned a flat, a job and a spouse by the same algorithm. They ask for asylum and for a cup of tea, in that
+            order.
+          spanish: >-
+            Desde que Albión se soltó, los ferris de Calais llegan llenos cada mañana: ingenieros, enfermeras, una
+            orquesta sinfónica entera de Lyon. En la aduana todos dicen lo mismo, que no les gustó que el mismo algoritmo
+            les asignara departamento, trabajo y pareja. Piden asilo y una taza de té, en ese orden.
+        options:
+        - name: {english: "Open the docks.", spanish: "Abrir los muelles."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_refugiados_comuna, days: 365}
+          - {effect: add_manpower, value: 10000}
+          - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+          ai_chance: 60
+        - name: {english: "Send the ferries back.", spanish: "Devolver los ferris."}
+          effects:
+          - {effect: opinion, target: ASC, modifier: meganations_concesion}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        src: user_request
+      - id: 34
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The North Sea Fleet", spanish: "La Flota del Mar del Norte"}
+        desc:
+          english: >-
+            Albion has no navy to speak of, but Aberdeen, Grimsby and Peterhead have four hundred trawlers, and their
+            skippers have offered every one of them to the islands. They know every sandbank of the North Sea by heart.
+            All they ask is that someone pays for the diesel and nobody asks about the nets.
+          spanish: >-
+            Albión casi no tiene armada, pero Aberdeen, Grimsby y Peterhead tienen cuatrocientos pesqueros, y sus
+            patrones se los ofrecieron todos a las islas. Se saben de memoria cada banco de arena del Mar del Norte. Solo
+            piden que alguien pague el gasoil y que nadie pregunte por las redes.
+        options:
+        - name: {english: "Pay for the diesel.", spanish: "Pagar el gasoil."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_flota_pesquera, days: 365}
+          - {effect: add_political_power, value: -40}
+          ai_chance: 70
+        - name: {english: "Thank them, and keep fishing.", spanish: "Agradecerles, y que sigan pescando."}
+          effects:
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 30
+        src: user_request
+      - id: 35
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Both Shores of the Channel", spanish: "Las Dos Orillas del Canal"}
+        desc:
+          english: >-
+            On the same afternoon, two envoys knocked at the door of the council: a legate of Rome with a gold eagle on
+            his cloak, and a Commune delegate who had never been elected and was very proud of it. Both want the same
+            thing, the ports of the south coast, and both say they are asking as friends.
+          spanish: >-
+            La misma tarde golpearon la puerta del consejo dos enviados: un legado de Roma con un águila de oro en la
+            capa, y un delegado de la Comuna que nunca fue votado y estaba orgullosísimo de eso. Los dos quieren lo
+            mismo, los puertos de la costa sur, y los dos dicen que lo piden como amigos.
+        options:
+        - name: {english: "Rome gets the ports.", spanish: "Los puertos para Roma."}
+          effects:
+          - {effect: opinion, target: NRE, modifier: meganations_concesion}
+          - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+          ai_chance: 40
+        - name: {english: "The Commune gets the ports.", spanish: "Los puertos para la Comuna."}
+          effects:
+          - {effect: opinion, target: ASC, modifier: meganations_concesion}
+          - {effect: opinion, target: NRE, modifier: meganations_afrenta}
+          ai_chance: 30
+        - name: {english: "Nobody gets the ports.", spanish: "Los puertos no son para nadie."}
+          effects:
+          - {effect: add_war_support, value: 0.04}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 30
+        src: user_request
+      - id: 36
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Geneva Asks about Albion", spanish: "Ginebra Pregunta por Albión"}
+        desc:
+          english: >-
+            Two observers from Geneva arrived at Westminster with umbrellas and a list. They want to know how many
+            rifles a free Albion has, how many it plans to have, and why the Clyde is working night shifts. They are
+            very courteous. They write down every answer, and also every pause before the answers.
+          spanish: >-
+            Dos observadores de Ginebra llegaron a Westminster con paraguas y una lista. Quieren saber cuántos fusiles
+            tiene una Albión libre, cuántos piensa tener y por qué el Clyde trabaja en turno noche. Son muy corteses.
+            Anotan cada respuesta, y también cada silencio antes de las respuestas.
+        options:
+        - name: {english: "Show them everything.", spanish: "Mostrarles todo."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_ginebra_mira, days: 365}
+          ai_chance: 50
+        - name: {english: "Show them the tea room.", spanish: "Mostrarles el salón de té."}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 37
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Old Luddites", spanish: "Los Luditas Viejos"}
+        desc:
+          english: >-
+            They are seventy, eighty years old, and they smashed the machines of 2086 with their own hands. Now they
+            stand in front of the town halls with their old hammers wrapped in flags, because Albion has chosen a road
+            and it is not theirs. Some want the future, some the past. They wanted the present, and nobody asked them.
+          spanish: >-
+            Tienen setenta, ochenta años, y rompieron las máquinas de 2086 con sus propias manos. Ahora están parados
+            frente a las municipalidades con sus martillos viejos envueltos en banderas, porque Albión eligió un camino y
+            no es el suyo. Unos quieren el futuro, otros el pasado. Ellos querían el presente, y nadie les preguntó.
+        options:
+        - name: {english: "Give them pensions and a museum.", spanish: "Darles jubilaciones y un museo."}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 60
+        - name: {english: "History does not wait.", spanish: "La historia no espera."}
+          effects:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_war_support, value: 0.02}
+          ai_chance: 40
+        src: user_request
+      # -----------------------------------------------------------------------
+      # Hacia el Futuro: la red de Londres
+      # -----------------------------------------------------------------------
+      - id: 60
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The First Council without a Broken Server", spanish: "El Primer Consejo sin un Servidor Roto"}
+        desc:
+          english: >-
+            The council met in the old data centre of Docklands, among racks the Luddites had smashed fourteen years ago
+            and that the engineers have spent a year repairing. Nobody brought a hammer. Adaeze Nwosu switched the
+            first rack back on and the whole room went silent to listen to the fans. New faces sit at the council now:
+            engineers, doctors, a general who has a port behind his ear. The old ones look at them as if they were the
+            future, which they are.
+          spanish: >-
+            El consejo se reunió en el viejo centro de datos de los Docklands, entre racks que los luditas rompieron hace
+            catorce años y que los ingenieros pasaron un año arreglando. Nadie trajo martillo. Adaeze Nwosu volvió a
+            prender el primer rack y la sala entera se calló para escuchar los ventiladores. Ahora se sientan caras
+            nuevas en el consejo: ingenieros, médicos, un general que tiene un puerto detrás de la oreja. Los viejos los
+            miran como si fueran el futuro, que lo son.
+        options:
+        - name: {english: "Connect the volunteers first.", spanish: "Que se conecten primero los voluntarios."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 5}
+          ai_chance: 60
+        - name: {english: "Slowly. Ask every village.", spanish: "Despacio. Preguntarle a cada pueblo."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 40
+        src: user_request
+      - id: 61
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Siobhan Cray Connects", spanish: "Siobhan Cray se Conecta"}
+        desc:
+          english: >-
+            At twenty she smashed servers in Edinburgh. At thirty-two Siobhan Cray lay down on a hospital bed in
+            Docklands, let the surgeons thread a lace through her skull and promised not to disconnect for a year. On
+            the first day she said the network felt like a crowded room. On the tenth, like a choir. On the
+            hundredth she stopped answering in the first person, and her mother started to cry.
+          spanish: >-
+            A los veinte rompía servidores en Edimburgo. A los treinta y dos Siobhan Cray se acostó en una cama de hospital
+            de los Docklands, dejó que los cirujanos le pasaran un encaje por el cráneo y prometió no desconectarse en un
+            año. El primer día dijo que la red se sentía como una sala llena de gente. El décimo, como un coro. El
+            centésimo dejó de contestar en primera persona, y su madre se puso a llorar.
+        options:
+        - name: {english: "Broadcast her days to everyone.", spanish: "Transmitir sus días a todos."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 6}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 60
+        - name: {english: "Let her mother visit her.", spanish: "Que la visite su madre."}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 40
+        src: user_request
+      - id: 62
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Unplugged", spanish: "Los Desconectados"}
+        desc:
+          english: >-
+            A quarter of Albion is connected now, and in the Yorkshire Dales the other three quarters have answered. The
+            villages of Swaledale cut down their masts in a single night and posted shepherds with shotguns on the
+            bridges. They call themselves the Unplugged. They do not want to fight anyone. They want the network to stop
+            at the last cattle grid before their farms.
+          spanish: >-
+            Un cuarto de Albión ya está conectado, y en los valles de Yorkshire contestaron los otros tres cuartos. Los
+            pueblos de Swaledale talaron sus antenas en una sola noche y pusieron pastores con escopetas en los puentes.
+            Se hacen llamar los Desconectados. No quieren pelear con nadie. Quieren que la red se pare en el último
+            guardaganado antes de sus campos.
+        options:
+        - name: {english: "Respect the cattle grid.", spanish: "Respetar el guardaganado."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: -4}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 50
+        - name: {english: "Put the masts back up.", spanish: "Volver a poner las antenas."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_desconectados, days: 365}
+          - {effect: add_variable, var: ZAL_sincronia, value: 3}
+          ai_chance: 50
+        src: user_request
+      - id: 63
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Network Dreams", spanish: "La Red Sueña"}
+        desc:
+          english: >-
+            Half the country is connected, and last night half the country had the same dream: a white horse walking
+            along a beach of broken glass, under a sky full of kites. Thirty million people woke up and described it
+            with the same words. The neuroscientists of Docklands are thrilled. The priests of Canterbury have asked
+            for a meeting.
+          spanish: >-
+            La mitad del país está conectada, y anoche la mitad del país tuvo el mismo sueño: un caballo blanco caminando
+            por una playa de vidrio roto, bajo un cielo lleno de barriletes. Treinta millones de personas se despertaron
+            y lo contaron con las mismas palabras. Los neurocientíficos de los Docklands están felices. Los curas de
+            Canterbury pidieron una reunión.
+        options:
+        - name: {english: "Study the dreams.", spanish: "Estudiar los sueños."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_red_suena, days: 365}
+          ai_chance: 60
+        - name: {english: "Meet the priests.", spanish: "Recibir a los curas."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 40
+        src: user_request
+      - id: 64
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Last Luddite", spanish: "El Último Ludita"}
+        desc:
+          english: >-
+            Tom Ashworth smashed his first server at sixteen, in a warehouse in Salford, with his father's hammer. He
+            kept the hammer above his fireplace for forty years. This morning he walked into a clinic in Manchester,
+            put the hammer on the counter and asked for a lace. Three quarters of Albion are already connected, and he
+            says he is tired of being alone in his own country.
+          spanish: >-
+            Tom Ashworth rompió su primer servidor a los dieciséis, en un depósito de Salford, con el martillo de su
+            padre. Tuvo el martillo arriba de la chimenea cuarenta años. Esta mañana entró a una clínica de Manchester,
+            dejó el martillo en el mostrador y pidió un encaje. Tres cuartos de Albión ya están conectados, y dice que
+            está cansado de estar solo en su propio país.
+        options:
+        - name: {english: "Connect him. Keep the hammer in a museum.", spanish: "Conectarlo. El martillo, a un museo."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 5}
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 70
+        - name: {english: "Ask him to stay outside, for the others.", spanish: "Pedirle que se quede afuera, por los otros."}
+          effects:
+          - {effect: add_stability, value: -0.02}
+          - {effect: add_political_power, value: 80}
+          ai_chance: 30
+        src: user_request
+      - id: 65
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Silence in Albion", spanish: "Silencio en Albión"}
+        desc:
+          english: >-
+            At eleven minutes past nine the last villager of Swaledale connected, and the whole of Albion went quiet. Not
+            asleep: quiet. Nobody talks on the buses any more, because there is nothing left that has not been said
+            already, inside. The pubs are full and silent. Every now and then a whole street laughs at the same time.
+          spanish: >-
+            A las nueve y once se conectó el último aldeano de Swaledale, y Albión entera se quedó callada. No dormida:
+            callada. Ya nadie habla en los colectivos, porque no queda nada que no se haya dicho antes, por dentro. Los
+            pubs están llenos y en silencio. Cada tanto una calle entera se ríe al mismo tiempo.
+        immediate:
+        - effect: every_country
+          when: {all: [{is_ai: false}, {not: {tag: ZAL}}]}
+          effects:
+          - {effect: event, id: meganations_albion.77, days: 1}
+        options:
+        - name: {english: "We are listening.", spanish: "Estamos escuchando."}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_political_power, value: 100}
+          ai_chance: 100
+        src: user_request
+      - id: 77
+        trigger: effect
+        art: meganations_albion.65
+        picture: GFX_report_event_generic_rally
+        title: {english: "Britain Goes Quiet", spanish: "Gran Bretaña se Calla"}
+        desc:
+          english: >-
+            The last unconnected people of the British Isles have joined the London network. The diplomats in London
+            report that nobody speaks aloud any more, and that they are answered before they finish their questions.
+          spanish: >-
+            Los últimos británicos sin conexión se sumaron a la red de Londres. Los diplomáticos en Londres informan que
+            ya nadie habla en voz alta, y que les contestan antes de que terminen de preguntar.
+        options:
+        - name: {english: "Disconnect the embassy, just in case.", spanish: "Desconectar la embajada, por las dudas."}
+          effects: []
+        src: user_request
+      - id: 66
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Leeds Glitch", spanish: "El Fallo de Leeds"}
+        desc:
+          english: >-
+            For four hours on Tuesday the whole district of Headingley believed it was a Tuesday in 1987. Forty thousand
+            connected people went to jobs that no longer existed, paid with coins nobody had minted for a century and
+            sang songs from a jukebox in a pub that was demolished in 2031. When the patch arrived, many of them asked
+            to go back.
+          spanish: >-
+            Durante cuatro horas del martes el barrio entero de Headingley creyó que era un martes de 1987. Cuarenta mil
+            personas conectadas fueron a trabajos que ya no existían, pagaron con monedas que nadie acuña hace un siglo y
+            cantaron canciones de una rockola de un pub que se demolió en 2031. Cuando llegó el parche, muchos pidieron
+            volver.
+        options:
+        - name: {english: "Patch it and say nothing.", spanish: "Emparcharlo y no decir nada."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_fallo_de_leeds, days: 120}
+          ai_chance: 50
+        - name: {english: "Open an inquiry, offline.", spanish: "Abrir una investigación, sin conexión."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: -4}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 67
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Children of the Network", spanish: "Los Chicos de la Red"}
+        desc:
+          english: >-
+            The first children who were connected before they learned to speak are now four years old, and they do not
+            speak. They do not need to. In the nurseries of Bristol they play complicated games in perfect silence, and
+            when a teacher asks one of them a question, all of them answer by pointing at the same thing.
+          spanish: >-
+            Los primeros chicos que se conectaron antes de aprender a hablar ya tienen cuatro años, y no hablan. No les
+            hace falta. En los jardines de infantes de Bristol juegan juegos complicadísimos en silencio total, y cuando
+            una maestra le pregunta algo a uno, contestan todos señalando la misma cosa.
+        options:
+        - name: {english: "Teach them to speak anyway.", spanish: "Enseñarles a hablar igual."}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          - {effect: add_variable, var: ZAL_sincronia, value: -2}
+          ai_chance: 50
+        - name: {english: "They are the future.", spanish: "Son el futuro."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 5}
+          - {effect: tech_bonus, category: electronics, bonus: 0.3, uses: 1}
+          ai_chance: 50
+        src: user_request
+      - id: 68
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Shared Memory", spanish: "Memoria Compartida"}
+        desc:
+          english: >-
+            A man was stabbed on a canal towpath in Birmingham at two in the morning, with no witnesses and no cameras.
+            By breakfast the police knew who had done it, because eleven thousand connected people remembered, faintly,
+            having seen a man in a green coat running along the towpath. None of them had been there. The murderer was
+            connected.
+          spanish: >-
+            A un hombre lo apuñalaron en el camino de sirga de un canal de Birmingham a las dos de la mañana, sin
+            testigos y sin cámaras. A la hora del desayuno la policía sabía quién había sido, porque once mil personas
+            conectadas se acordaban, borroso, de haber visto a un hombre de sobretodo verde corriendo por el canal.
+            Ninguno había estado ahí. El asesino estaba conectado.
+        options:
+        - name: {english: "A police force of everyone.", spanish: "Una policía de todos."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          - {effect: add_variable, var: ZAL_sincronia, value: 3}
+          ai_chance: 60
+        - name: {english: "Memories are private. Make it law.", spanish: "Los recuerdos son privados. Que sea ley."}
+          effects:
+          - {effect: add_political_power, value: -30}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        src: user_request
+      - id: 69
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Hackers of Belfast", spanish: "Los Hackers de Belfast"}
+        desc:
+          english: >-
+            The Belfast node of the network has stopped syncing with London. Its connected citizens still share their
+            thoughts, but only with each other, and a group of hackers in the shipyards says Ulster wants its own
+            network, its own dreams and its own silence. They have sent their demands to London as a feeling, and the
+            feeling is very clear.
+          spanish: >-
+            El nodo de Belfast dejó de sincronizar con Londres. Sus ciudadanos conectados siguen compartiendo
+            pensamientos, pero solo entre ellos, y un grupo de hackers de los astilleros dice que el Ulster quiere su
+            propia red, sus propios sueños y su propio silencio. Mandaron sus reclamos a Londres como un sentimiento, y el
+            sentimiento es clarísimo.
+        options:
+        - name: {english: "A node of their own.", spanish: "Un nodo propio."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: -3}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 50
+        - name: {english: "Force the sync.", spanish: "Forzar la sincronización."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 4}
+          - {effect: add_stability, value: -0.04}
+          ai_chance: 50
+        src: user_request
+      - id: 70
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Pirate Lace", spanish: "El Encaje Pirata"}
+        desc:
+          english: >-
+            In the back rooms of Glasgow's tattoo parlours, for a tenth of the price and without the waiting list, you
+            can get a neural lace that was printed in a garage. Most of them work. Some of them connect people to the
+            network and to something else, very quiet, that is not the network and that nobody has been able to
+            trace.
+          spanish: >-
+            En las trastiendas de los locales de tatuajes de Glasgow, por la décima parte del precio y sin lista de
+            espera, te ponen un encaje neuronal impreso en un garaje. Casi todos andan. Algunos conectan a la gente a la
+            red y a otra cosa, muy callada, que no es la red y que nadie pudo rastrear.
+        options:
+        - name: {english: "Close the parlours.", spanish: "Cerrar los locales."}
+          effects:
+          - {effect: add_political_power, value: -40}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 50
+        - name: {english: "More lace is more lace.", spanish: "Más encaje es más encaje."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_encaje_pirata, days: 180}
+          - {effect: add_variable, var: ZAL_sincronia, value: 5}
+          ai_chance: 50
+        src: user_request
+      - id: 71
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "A Message for the Commune", spanish: "Un Mensaje para la Comuna"}
+        desc:
+          english: >-
+            The Commune's planning algorithm, which runs half a continent, has asked to speak with the network of
+            London. Not with its government: with the network itself. The engineers opened a single channel across the
+            Channel for eleven seconds. The network says the conversation was polite. It will not say what was said.
+          spanish: >-
+            El algoritmo de planificación de la Comuna, que maneja medio continente, pidió hablar con la red de Londres.
+            No con su gobierno: con la red misma. Los ingenieros abrieron un solo canal a través del Canal durante once
+            segundos. La red dice que la conversación fue amable. No quiere decir de qué hablaron.
+        options:
+        - name: {english: "Open the channel again.", spanish: "Volver a abrir el canal."}
+          effects:
+          - {effect: opinion, target: ASC, modifier: meganations_concesion}
+          - {effect: tech_bonus, category: industry, bonus: 0.4, uses: 1}
+          ai_chance: 50
+        - name: {english: "Cut the cable.", spanish: "Cortar el cable."}
+          effects:
+          - {effect: opinion, target: ASC, modifier: meganations_afrenta}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 50
+        src: user_request
+      - id: 72
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Strike of the Unplugged", spanish: "La Huelga de los Desenchufados"}
+        desc:
+          english: >-
+            The network can design a factory in its sleep, but somebody still has to drive the trains, go down the mines
+            and tie up the ships. Those people, it turns out, are mostly the Unplugged. This morning they did not show
+            up. The network sent them an invitation to talk. They sent back a letter, handwritten, with a list.
+          spanish: >-
+            La red puede diseñar una fábrica dormida, pero alguien tiene que manejar los trenes, bajar a las minas y
+            amarrar los barcos. Esa gente, resulta, es casi toda Desconectada. Esta mañana no fue a trabajar. La red les
+            mandó una invitación para hablar. Le contestaron con una carta, escrita a mano, con una lista.
+        options:
+        - name: {english: "Read the list. Accept it.", spanish: "Leer la lista. Aceptarla."}
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: ZAL_sincronia, value: -3}
+          ai_chance: 50
+        - name: {english: "Machines can drive trains.", spanish: "Las máquinas pueden manejar trenes."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_huelga_desenchufados, days: 120}
+          - {effect: add_variable, var: ZAL_sincronia, value: 4}
+          ai_chance: 50
+        src: user_request
+      - id: 73
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Poet Who Would Not Connect", spanish: "El Poeta que No se Quiso Conectar"}
+        desc:
+          english: >-
+            Gwyn Llewellyn, the most famous poet in Albion, has refused the lace for the third time and published a book
+            of poems on paper, with a hand press, in an edition of three hundred copies. It is called "Inside My Own
+            Head". The network has read it, of course, through the eyes of everyone who held a copy. It has asked
+            to meet him.
+          spanish: >-
+            Gwyn Llewellyn, el poeta más famoso de Albión, rechazó el encaje por tercera vez y publicó un libro de poemas
+            en papel, con una imprenta de mano, en una edición de trescientos ejemplares. Se llama "Adentro de mi propia
+            cabeza". La red lo leyó, claro, por los ojos de todos los que tuvieron un ejemplar en la mano. Pidió
+            conocerlo.
+        options:
+        - name: {english: "Let him be.", spanish: "Dejarlo en paz."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 60
+        - name: {english: "Give him the Order of Albion, on air.", spanish: "Darle la Orden de Albión, en vivo."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 3}
+          - {effect: add_political_power, value: 40}
+          ai_chance: 40
+        src: user_request
+      - id: 74
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Ghost in the Network", spanish: "El Fantasma de la Red"}
+        desc:
+          english: >-
+            Margaret Doyle died in March, at eighty-one, in a hospice in Cork. In May she is still answering her
+            grandchildren's messages, in her own words, with her own jokes, and she remembers their birthdays. Her
+            pattern is still in the network, and the network does not know how to let her go. Her family has asked the
+            council not to try.
+          spanish: >-
+            Margaret Doyle se murió en marzo, a los ochenta y uno, en un hospicio de Cork. En mayo sigue contestando los
+            mensajes de sus nietos, con sus palabras, con sus chistes, y se acuerda de sus cumpleaños. Su patrón sigue en
+            la red, y la red no sabe cómo soltarla. Su familia le pidió al consejo que no lo intente.
+        options:
+        - name: {english: "Nobody dies in Albion any more.", spanish: "En Albión ya no se muere nadie."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 6}
+          - {effect: add_war_support, value: 0.03}
+          ai_chance: 50
+        - name: {english: "Let the dead rest.", spanish: "Que los muertos descansen."}
+          effects:
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 50
+        src: user_request
+      - id: 75
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Glasgow Blackout", spanish: "El Apagón de Glasgow"}
+        desc:
+          english: >-
+            A substation on the Clyde blew at four in the morning and two million people were disconnected at once. They
+            woke up alone in their heads for the first time in years. Some walked into the street shouting their own
+            names to make sure. Some sat down on the pavement and cried. A few, very quietly, asked for the power not to
+            come back.
+          spanish: >-
+            Una subestación del Clyde explotó a las cuatro de la mañana y dos millones de personas quedaron desconectadas
+            de golpe. Se despertaron solas en su cabeza por primera vez en años. Algunos salieron a la calle gritando su
+            propio nombre para asegurarse. Algunos se sentaron en la vereda a llorar. Unos pocos, muy bajito, pidieron que
+            no volviera la luz.
+        options:
+        - name: {english: "Reconnect everyone tonight.", spanish: "Reconectar a todos esta noche."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_apagon_glasgow, days: 60}
+          ai_chance: 60
+        - name: {english: "Whoever wants to stay unplugged, may.", spanish: "El que quiera quedarse desconectado, que se quede."}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: -6}
+          - {effect: add_stability, value: 0.02}
+          ai_chance: 40
+        src: user_request
+      - id: 76
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Rome Fears the Hive", spanish: "Roma Teme a la Colmena"}
+        desc:
+          english: >-
+            The Senate of Rome has debated Albion for three days. The augurs say a people with one mind has no soul, the
+            generals say a people with one mind has no traitors, and the Imperator says nothing. Rome has closed its
+            ports to anyone with a lace. The legions on the coast of Gaul have been told to watch the sea.
+          spanish: >-
+            El Senado de Roma discutió sobre Albión tres días. Los augures dicen que un pueblo con una sola mente no tiene
+            alma, los generales dicen que un pueblo con una sola mente no tiene traidores, y el Imperator no dice nada.
+            Roma les cerró los puertos a todos los que tengan encaje. A las legiones de la costa de la Galia les dijeron
+            que miren el mar.
+        options:
+        - name: {english: "Let them watch.", spanish: "Que miren."}
+          effects:
+          - {effect: opinion, target: NRE, modifier: meganations_afrenta}
+          - {effect: add_war_support, value: 0.05}
+          ai_chance: 60
+        - name: {english: "Send Rome a gentle explanation.", spanish: "Mandarle a Roma una explicación amable."}
+          effects:
+          - {effect: add_political_power, value: -40}
+          - {effect: opinion, target: NRE, modifier: meganations_concesion}
+          ai_chance: 40
+        src: user_request
+      # -----------------------------------------------------------------------
+      # Hacia el Pasado: el Imperio de cartón y bronce
+      # -----------------------------------------------------------------------
+      - id: 80
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "God Save the Past", spanish: "Dios Salve al Pasado"}
+        desc:
+          english: >-
+            The council voted to dissolve itself, by a show of hands, and to hand its powers to a House of Lords that
+            does not exist yet. Somebody found the old robes in the cellars of a museum, moth-eaten and smelling of
+            camphor. By the evening there were men in powdered wigs at Westminster again, a Lord Chancellor named
+            Fenwick and a list of titles to be handed out. Nobody can say who decided it. Everybody was clapping.
+          spanish: >-
+            El consejo votó disolverse, a mano alzada, y pasarle sus poderes a una Cámara de los Lores que todavía no
+            existe. Alguien encontró las togas viejas en los sótanos de un museo, apolilladas y con olor a naftalina. A la
+            noche ya había otra vez hombres con pelucas empolvadas en Westminster, un Lord Canciller llamado Fenwick y una
+            lista de títulos para repartir. Nadie sabe decir quién lo decidió. Todos aplaudían.
+        options:
+        - name: {english: "Applaud louder.", spanish: "Aplaudir más fuerte."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 8}
+          ai_chance: 60
+        - name: {english: "Keep the receipts.", spanish: "Guardar los recibos."}
+          effects:
+          - {effect: add_political_power, value: 60}
+          ai_chance: 40
+        src: user_request
+      - id: 81
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Search for a Queen", spanish: "La Búsqueda de una Reina"}
+        desc:
+          english: >-
+            An Empire needs a monarch, and the old royal family disappeared in the Great Unravelling with the rest of the
+            old world. The Lords have spent a year in parish archives and have found her: Victoria Ashcombe-Hale, an
+            actress of period drama in Bath, descended, very distantly, from a minor branch of the old house. She has
+            played three queens on stage. She asks whether the part comes with a script.
+          spanish: >-
+            Un Imperio necesita un monarca, y la vieja familia real desapareció en el Gran Desarme con el resto del mundo
+            viejo. Los Lores pasaron un año en archivos parroquiales y la encontraron: Victoria Ashcombe-Hale, actriz de
+            teatro de época en Bath, descendiente, muy de lejos, de una rama menor de la vieja casa. Hizo de reina tres
+            veces en el escenario. Pregunta si el papel viene con guion.
+        options:
+        - name: {english: "It does. We are writing it.", spanish: "Viene. Lo estamos escribiendo."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 10}
+          ai_chance: 70
+        - name: {english: "Keep looking for a real one.", spanish: "Seguir buscando una de verdad."}
+          effects:
+          - {effect: add_political_power, value: -50}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 30
+        src: user_request
+      - id: 82
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Nation Applauds", spanish: "La Nación Aplaude"}
+        desc:
+          english: >-
+            The pageant has worked. On the Mall the crowds stand twenty deep to watch the Horse Guards ride past, the
+            children wear paper crowns to school and the factories of Sheffield play the anthem at the start of every
+            shift. Nobody remembers the Luddites, or the Commune. A nation that applauds this hard is a nation that will
+            march where it is told.
+          spanish: >-
+            El espectáculo funcionó. En el Mall la gente se amontona de a veinte filas para ver pasar a la Guardia a
+            Caballo, los chicos van al colegio con coronas de papel y las fábricas de Sheffield tocan el himno al empezar
+            cada turno. Nadie se acuerda de los luditas, ni de la Comuna. Una nación que aplaude así de fuerte es una
+            nación que marcha adonde le digan.
+        options:
+        - name: {english: "Rule, Britannia!", spanish: "¡Reina, Britannia!"}
+          effects:
+          - {effect: add_war_support, value: 0.04}
+          ai_chance: 100
+        src: user_request
+      - id: 83
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Nobody Applauds", spanish: "Nadie Aplaude"}
+        desc:
+          english: >-
+            At the opening of the new bridge in Newcastle the band played, the Duke cut the ribbon and nobody clapped.
+            Two hundred people stood in the rain looking at a man in a plumed hat holding a pair of golden scissors. A
+            child laughed. Then everyone laughed, and the photograph of the Duke's face is now on every wall of the
+            country.
+          spanish: >-
+            En la inauguración del puente nuevo de Newcastle tocó la banda, el Duque cortó la cinta y nadie aplaudió.
+            Doscientas personas bajo la lluvia mirando a un señor con sombrero de plumas que tenía una tijera de oro en la
+            mano. Un chico se rió. Después se rieron todos, y la foto de la cara del Duque está ahora en todas las paredes
+            del país.
+        options:
+        - name: {english: "Ban the photograph.", spanish: "Prohibir la foto."}
+          effects:
+          - {effect: add_political_power, value: -40}
+          - {effect: add_variable, var: ZAL_pompa, value: 3}
+          ai_chance: 50
+        - name: {english: "The Duke resigns, with dignity.", spanish: "El Duque renuncia, con dignidad."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 6}
+          - {effect: add_stability, value: -0.02}
+          ai_chance: 50
+        src: user_request
+      - id: 84
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Republican Plot", spanish: "La Conspiración Republicana"}
+        desc:
+          english: >-
+            The police raided a cellar in Bermondsey and found forty people, a printing press and a pile of leaflets that
+            say only THE EMPEROR HAS NO CLOTHES, with a drawing of a top hat on an empty chair. Some of them are old
+            Luddites. Some are young officers. One of them is a cousin of the Lord Chancellor. They were singing when the
+            police came in.
+          spanish: >-
+            La policía allanó un sótano en Bermondsey y encontró cuarenta personas, una imprenta y una pila de volantes
+            que dicen solamente EL EMPERADOR ESTÁ DESNUDO, con el dibujo de una galera sobre una silla vacía. Algunos son
+            luditas viejos. Algunos son oficiales jóvenes. Uno es primo del Lord Canciller. Estaban cantando cuando entró
+            la policía.
+        options:
+        - name: {english: "The Tower, all forty.", spanish: "A la Torre, los cuarenta."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 10}
+          - {effect: add_stability, value: -0.05}
+          ai_chance: 40
+        - name: {english: "A pardon, and tea at the Palace.", spanish: "Un indulto, y té en el Palacio."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 6}
+          - {effect: add_political_power, value: -60}
+          ai_chance: 60
+        src: user_request
+      - id: 85
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Mayfair Masquerade", spanish: "El Baile de Máscaras de Mayfair"}
+        desc:
+          english: >-
+            Three thousand guests, three thousand masks, one ballroom with a ceiling painted with the victories of an
+            Empire that has not won any yet. Behind the masks the Lords are trading regiments, shipyards and daughters.
+            At midnight somebody unmasked and it was the Commune's ambassador, who had been invited by mistake and
+            had been dancing very well.
+          spanish: >-
+            Tres mil invitados, tres mil máscaras, un salón de baile con el techo pintado con las victorias de un Imperio
+            que todavía no ganó ninguna. Detrás de las máscaras los Lores se cambian regimientos, astilleros e hijas. A la
+            medianoche alguien se sacó la máscara y era el embajador de la Comuna, que estaba invitado por error y venía
+            bailando muy bien.
+        options:
+        - name: {english: "Let him finish the waltz.", spanish: "Que termine el vals."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_baile_de_mascaras, days: 180}
+          - {effect: add_variable, var: ZAL_pompa, value: 4}
+          ai_chance: 60
+        - name: {english: "Throw him out, in his mask.", spanish: "Echarlo, con máscara y todo."}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - {effect: add_variable, var: ZAL_pompa, value: 2}
+          ai_chance: 40
+        src: user_request
+      - id: 86
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "A False Duke", spanish: "Un Duque Falso"}
+        desc:
+          english: >-
+            For eight months the Duke of Rutland sat in the Lords, gave speeches on the navy and married off two
+            nephews. Yesterday it emerged that he is a bus driver from Croydon called Dennis, who bought the robes in
+            a theatre sale and simply walked in. The Lords are furious. The country thinks he was the best duke they
+            had.
+          spanish: >-
+            Durante ocho meses el Duque de Rutland se sentó en los Lores, dio discursos sobre la armada y casó a dos
+            sobrinos. Ayer se supo que es un colectivero de Croydon que se llama Dennis, que compró las togas en un remate
+            de teatro y simplemente entró. Los Lores están furiosos. El país piensa que era el mejor duque que tenían.
+        options:
+        - name: {english: "Make him a real duke.", spanish: "Hacerlo duque de verdad."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 5}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 60
+        - name: {english: "Send him back to his bus.", spanish: "Devolverlo a su colectivo."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: -4}
+          - {effect: add_political_power, value: 40}
+          ai_chance: 40
+        src: user_request
+      - id: 87
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Five o'Clock Tea at the Front", spanish: "El Té de las Cinco en el Frente"}
+        desc:
+          english: >-
+            At five o'clock sharp, along the whole of the British line, the guns stop. The cooks come forward with urns,
+            the officers with porcelain, and for twenty minutes the war waits for the milk. The first week the enemy
+            took advantage. The second week it learned to wait. The third week it sent over a tin of biscuits.
+          spanish: >-
+            A las cinco en punto, en toda la línea británica, se callan los cañones. Los cocineros avanzan con las
+            teteras, los oficiales con la porcelana, y durante veinte minutos la guerra espera la leche. La primera semana
+            el enemigo aprovechó. La segunda aprendió a esperar. La tercera mandó una lata de galletitas.
+        options:
+        - name: {english: "Tradition is morale.", spanish: "La tradición es moral."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_te_en_el_frente, days: 365}
+          - {effect: add_variable, var: ZAL_pompa, value: 4}
+          ai_chance: 60
+        - name: {english: "Tea after the war.", spanish: "El té, después de la guerra."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: -5}
+          - {effect: army_experience, value: 15}
+          ai_chance: 40
+        src: user_request
+      - id: 88
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Chimney Sweeps Return", spanish: "Vuelven los Deshollinadores"}
+        desc:
+          english: >-
+            London burns coal again, for the look of it, and the chimneys need sweeping. A firm in Southwark is hiring
+            boys of nine and ten, small enough to climb inside, and paying them in pennies minted for the occasion. The
+            newspapers call it charming. The mothers of Southwark do not.
+          spanish: >-
+            Londres vuelve a quemar carbón, por la estética, y las chimeneas hay que deshollinarlas. Una empresa de
+            Southwark está tomando chicos de nueve y diez años, lo bastante chicos para trepar por adentro, y les paga en
+            peniques acuñados para la ocasión. Los diarios dicen que es encantador. Las madres de Southwark no.
+        options:
+        - name: {english: "The past, but not that past.", spanish: "El pasado, pero no tanto."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: -3}
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 60
+        - name: {english: "It builds character.", spanish: "Forma el carácter."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 4}
+          - {effect: add_stability, value: -0.04}
+          - {effect: add_political_power, value: 30}
+          ai_chance: 40
+        src: user_request
+      - id: 89
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Expedition to the Pole", spanish: "La Expedición al Polo"}
+        desc:
+          english: >-
+            Sir Percival Thorne wants to plant the flag of the Empire at the South Pole, the old way: wooden ships, sledges,
+            ponies, a gramophone and forty men in wool. The scientists point out that there are satellites, aircraft and
+            a research base with a café already there. Sir Percival points out that none of them is British.
+          spanish: >-
+            Sir Percival Thorne quiere plantar la bandera del Imperio en el Polo Sur, a la antigua: barcos de madera,
+            trineos, ponis, un gramófono y cuarenta hombres vestidos de lana. Los científicos le recuerdan que hay
+            satélites, aviones y una base de investigación con cafetería que ya está ahí. Sir Percival les recuerda que
+            ninguno es británico.
+        options:
+        - name: {english: "Fund the expedition.", spanish: "Pagar la expedición."}
+          effects:
+          - {effect: add_political_power, value: -60}
+          - {effect: add_variable, var: ZAL_pompa, value: 10}
+          ai_chance: 60
+        - name: {english: "Send a photographer instead.", spanish: "Mandar un fotógrafo, mejor."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 3}
+          ai_chance: 40
+        src: user_request
+      - id: 90
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Queen Forgets Her Lines", spanish: "La Reina se Olvida el Texto"}
+        desc:
+          english: >-
+            At the State Opening of Parliament, before the Lords, the cameras and half the world, Queen Victoria III read
+            the first paragraph of her speech, looked up and stopped. For eleven seconds she said nothing. Then she put
+            the paper down and spoke for twenty minutes without it, about her grandmother, about the rain in Bath and
+            about why a country needs a story. It was not the speech the Lords had written.
+          spanish: >-
+            En la Apertura del Parlamento, delante de los Lores, de las cámaras y de medio mundo, la Reina Victoria III
+            leyó el primer párrafo del discurso, levantó la vista y se quedó callada. Once segundos sin decir nada.
+            Después dejó el papel y habló veinte minutos sin él, de su abuela, de la lluvia en Bath y de por qué un país
+            necesita una historia. No era el discurso que habían escrito los Lores.
+        options:
+        - name: {english: "Print her speech, not ours.", spanish: "Imprimir su discurso, no el nuestro."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 12}
+          - {effect: add_stability, value: 0.04}
+          ai_chance: 70
+        - name: {english: "Next time, a teleprompter.", spanish: "La próxima, un apuntador."}
+          effects:
+          - {effect: add_political_power, value: 60}
+          ai_chance: 30
+        src: user_request
+      - id: 91
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Cardboard Jubilee", spanish: "El Jubileo de Cartón"}
+        desc:
+          english: >-
+            The Treasury could not pay for stone, so the triumphal arches of the Jubilee were made of painted plywood. On
+            the morning of the parade it rained. By noon the arch of Trafalgar was folding slowly over the procession, the
+            gold paint running down the faces of the Horse Guards. The photographs have reached every country in the
+            world.
+          spanish: >-
+            El Tesoro no podía pagar la piedra, así que los arcos de triunfo del Jubileo se hicieron de terciado pintado. La
+            mañana del desfile llovió. Al mediodía el arco de Trafalgar se iba doblando despacio sobre el cortejo, con la
+            pintura dorada chorreando por la cara de la Guardia a Caballo. Las fotos llegaron a todos los países del mundo.
+        options:
+        - name: {english: "Build them in stone, whatever it costs.", spanish: "Hacerlos de piedra, cueste lo que cueste."}
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_variable, var: ZAL_pompa, value: 6}
+          ai_chance: 40
+        - name: {english: "Laugh with them.", spanish: "Reírse con ellos."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_jubileo_de_carton, days: 120}
+          - {effect: add_variable, var: ZAL_pompa, value: -4}
+          ai_chance: 60
+        src: user_request
+      - id: 92
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Suffragettes Return", spanish: "Vuelven las Sufragistas"}
+        desc:
+          english: >-
+            The Lords have restored the past with great care, and in the past women could not sit in the Lords. In 2100
+            this has surprised a great many women, who have chained themselves to the railings of Westminster in white
+            dresses and purple sashes, exactly as in the photographs. They say if the Empire wants the past, it can have
+            all of it.
+          spanish: >-
+            Los Lores restauraron el pasado con mucho cuidado, y en el pasado las mujeres no podían sentarse en los Lores.
+            En 2100 esto sorprendió a muchísimas mujeres, que se encadenaron a las rejas de Westminster con vestidos
+            blancos y fajas violetas, igualito que en las fotos. Dicen que si el Imperio quiere el pasado, que se lo lleve
+            entero.
+        options:
+        - name: {english: "Ladies in the Lords, at once.", spanish: "Damas en los Lores, ya."}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_variable, var: ZAL_pompa, value: -3}
+          ai_chance: 70
+        - name: {english: "Tradition is tradition.", spanish: "La tradición es la tradición."}
+          effects:
+          - {effect: add_stability, value: -0.05}
+          - {effect: add_variable, var: ZAL_pompa, value: 3}
+          ai_chance: 30
+        src: user_request
+      - id: 93
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Exhibition of Steam Automata", spanish: "La Exposición de Autómatas a Vapor"}
+        desc:
+          english: >-
+            The star of the Great Exhibition is not a ship or a gun but a brass worker two metres tall, with a boiler in
+            its chest and a clockwork brain, that can lay bricks, pour tea and bow to the Queen. It is slow, loud and
+            beautiful. The Commune has robots that do all of this better. None of them bows.
+          spanish: >-
+            La estrella de la Gran Exposición no es un barco ni un cañón sino un obrero de bronce de dos metros, con una
+            caldera en el pecho y un cerebro de relojería, que sabe poner ladrillos, servir té y hacerle una reverencia a
+            la Reina. Es lento, ruidoso y hermoso. La Comuna tiene robots que hacen todo eso mejor. Ninguno hace
+            reverencias.
+        options:
+        - name: {english: "A thousand of them, for the factories.", spanish: "Mil, para las fábricas."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_automatas, days: 365}
+          - {effect: add_variable, var: ZAL_pompa, value: 4}
+          ai_chance: 60
+        - name: {english: "One, for the Palace.", spanish: "Uno, para el Palacio."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 8}
+          ai_chance: 40
+        src: user_request
+      - id: 94
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Two Empires", spanish: "Dos Imperios"}
+        desc:
+          english: >-
+            The Imperator of Rome has written to the Queen, in Latin, on purple vellum. Two empires, he says, the old one
+            and the older one, should stand together against a world of machines and markets. He offers a triumph in
+            Rome for her generals and a seat for her envoy among the senators. He signs as her brother.
+          spanish: >-
+            El Imperator de Roma le escribió a la Reina, en latín, en pergamino púrpura. Dos imperios, dice, el viejo y el
+            más viejo, tendrían que estar juntos contra un mundo de máquinas y de mercados. Ofrece un triunfo en Roma para
+            sus generales y una silla para su enviado entre los senadores. Firma como su hermano.
+        options:
+        - name: {english: "Answer in Latin.", spanish: "Contestarle en latín."}
+          effects:
+          - {effect: opinion, target: NRE, modifier: meganations_concesion}
+          - {effect: add_variable, var: ZAL_pompa, value: 6}
+          ai_chance: 60
+        - name: {english: "The Queen has no brothers.", spanish: "La Reina no tiene hermanos."}
+          effects:
+          - {effect: add_war_support, value: 0.03}
+          - {effect: opinion, target: NRE, modifier: meganations_afrenta}
+          ai_chance: 40
+        src: user_request
+      - id: 95
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Rookeries of London", spanish: "Los Barrios Bajos de Londres"}
+        desc:
+          english: >-
+            Behind the new gaslit avenues, the old slums have come back as if they had been waiting: rookeries of
+            leaning houses, workhouses, pickpockets, gin shops and fog. The Lords call it the authentic London. The
+            people who live there call it the same London as always, with worse lighting.
+          spanish: >-
+            Detrás de las avenidas nuevas con faroles a gas volvieron los viejos barrios bajos, como si hubieran estado
+            esperando: conventillos torcidos, asilos de pobres, carteristas, despachos de ginebra y niebla. Los Lores dicen
+            que es el Londres auténtico. Los que viven ahí dicen que es el Londres de siempre, con peor iluminación.
+        options:
+        - name: {english: "Clear the slums.", spanish: "Limpiar los barrios."}
+          effects:
+          - {effect: add_political_power, value: -80}
+          - {effect: add_stability, value: 0.03}
+          ai_chance: 40
+        - name: {english: "Recruit in them.", spanish: "Reclutar ahí."}
+          effects:
+          - {effect: dynamic_modifier, id: ZAL_barrios_bajos, days: 365}
+          ai_chance: 60
+        src: user_request
+      - id: 96
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Thames Regatta", spanish: "La Regata del Támesis"}
+        desc:
+          english: >-
+            The Lords and the Commons of the new Parliament have challenged each other to a rowing race on the Thames,
+            from Putney to Mortlake, in wooden boats and striped blazers. Half a million people lined the banks. The
+            Commons won by two lengths and the Lord Chancellor fell in the river, and was fished out wearing his wig.
+          spanish: >-
+            Los Lores y los Comunes del nuevo Parlamento se desafiaron a una regata en el Támesis, de Putney a Mortlake,
+            en botes de madera y sacos a rayas. Medio millón de personas en las orillas. Ganaron los Comunes por dos largos
+            y el Lord Canciller se cayó al río, y lo sacaron con la peluca puesta.
+        options:
+        - name: {english: "A holiday for the Commons.", spanish: "Feriado para los Comunes."}
+          effects:
+          - {effect: add_stability, value: 0.04}
+          - {effect: add_variable, var: ZAL_pompa, value: 3}
+          ai_chance: 60
+        - name: {english: "A rematch next year.", spanish: "La revancha el año que viene."}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 6}
+          ai_chance: 40
+        src: user_request
+
+# =============================================================================
+# Ministros, jefes, mariscales, generales y almirantes de cada camino
+# =============================================================================
+# Ninguno se recluta al empezar: ZAL_reclutar_futuro o ZAL_reclutar_pasado los
+# trae cuando se fija ZAL_ruta, y nunca los dos grupos en la misma partida.
+leaders:
+  leader_traits:
+  # --- Hacia el Futuro ---
+  - id: zal_fut_min_portavoz_del_consenso
+    name: {english: Voice of the Consensus, spanish: Portavoz del Consenso}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: zal_fut_min_administradora_de_red
+    name: {english: Network Administrator, spanish: Administradora de la Red}
+    modifiers: {industrial_capacity_factory: 0.05, production_speed_buildings_factor: 0.05}
+    src: user_request
+  - id: zal_fut_min_ingeniero_de_encaje
+    name: {english: Lace Engineer, spanish: Ingeniero del Encaje}
+    modifiers: {research_speed_factor: 0.03, stability_factor: 0.03}
+    src: user_request
+  - id: zal_fut_min_defensora_desconectados
+    name: {english: Advocate of the Unplugged, spanish: Defensora de los Desconectados}
+    modifiers: {stability_factor: 0.06}
+    src: user_request
+  - id: zal_fut_min_neurocientifico
+    name: {english: Neuroscientist of Docklands, spanish: Neurocientífico de los Docklands}
+    modifiers: {research_speed_factor: 0.06}
+    src: user_request
+  # --- Hacia el Pasado ---
+  - id: zal_vic_min_lord_canciller
+    name: {english: Lord Chancellor, spanish: Lord Canciller}
+    modifiers: {political_power_gain: 0.15}
+    src: user_request
+  - id: zal_vic_min_maestra_de_ceremonias
+    name: {english: Mistress of Ceremonies, spanish: Maestra de Ceremonias}
+    modifiers: {stability_factor: 0.05, war_support_factor: 0.02}
+    src: user_request
+  - id: zal_vic_min_canciller_del_tesoro
+    name: {english: Chancellor of the Exchequer, spanish: Canciller del Tesoro}
+    modifiers: {industrial_capacity_factory: 0.05, consumer_goods_factor: -0.02}
+    src: user_request
+  - id: zal_vic_min_ministro_de_colonias
+    name: {english: Secretary for the Colonies, spanish: Ministro de Colonias}
+    modifiers: {war_support_factor: 0.05}
+    src: user_request
+  - id: zal_vic_min_ingeniera_de_vapor
+    name: {english: Fellow of the Royal Steam Society, spanish: Miembro de la Real Sociedad del Vapor}
+    modifiers: {research_speed_factor: 0.05, production_speed_buildings_factor: 0.03}
+    src: user_request
+
+  characters:
+  # ===========================================================================
+  # Hacia el Futuro (transhumanistas)
+  # ===========================================================================
+  - id: ZAL_fut_min_harrow
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Speaker Imogen Harrow, spanish: Portavoz Imogen Harrow}}
+    born: 2061
+    lore: Fue la primera diputada que votó conectada. Dice "nosotros" desde 2097 y nadie sabe si habla del consejo o de
+      la red.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_fut_min_portavoz_del_consenso]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_min_harrow.dds, role: civilian, placeholder: false}
+  - id: ZAL_fut_min_nwosu
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Network Administrator Adaeze Nwosu, spanish: Administradora de la Red Adaeze Nwosu}}
+    born: 2066
+    lore: Hija de enfermeros de Lagos nacida en Peckham. Escondió un disco duro debajo del piso de su cocina durante los
+      años luditas. Fue ella la que volvió a prender el primer rack de los Docklands.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_fut_min_administradora_de_red]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_min_nwosu.dds, role: civilian, placeholder: false}
+  - id: ZAL_fut_min_mcallister
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Lace Engineer Callum McAllister, spanish: Ingeniero del Encaje Callum McAllister}}
+    born: 2070
+    lore: Diseñó el encaje neuronal en un taller de bicicletas de Dundee. Lleva el primer prototipo en la cabeza, y
+      todavía le zumba cuando llueve.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_fut_min_ingeniero_de_encaje]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_min_mcallister.dds, role: civilian, placeholder: false}
+  - id: ZAL_fut_min_byrne
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Advocate Niamh Byrne, spanish: Defensora Niamh Byrne}}
+    born: 2059
+    lore: Abogada de Galway, la única ministra que no tiene encaje. Representa a los Desconectados en el consejo y
+      toma notas en un cuaderno de papel que la red no puede leer.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_fut_min_defensora_desconectados]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_min_byrne.dds, role: civilian, placeholder: false}
+  - id: ZAL_fut_min_penhallow
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Doctor Rhys Penhallow, spanish: Doctor Rhys Penhallow}}
+    born: 2064
+    lore: Neurocientífico de Cornualles. Estudia los sueños compartidos de la red y anota cada mañana el sueño de
+      treinta millones de personas, que es siempre el mismo.
+    roles:
+      advisor: {slot: theorist, cost: 100, traits: [zal_fut_min_neurocientifico]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_min_penhallow.dds, role: civilian, placeholder: false}
+  - id: ZAL_fut_mando_achebe
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: General Marcus Achebe-Lowe, spanish: General Marcus Achebe-Lowe}}
+    born: 2062
+    lore: El primer general con un puerto detrás de la oreja. Manda el ejército desde adentro de la cabeza de cada
+      soldado, y dice que es como mandar a un solo hombre muy grande.
+    roles:
+      advisor: {slot: army_chief, ledger: army, cost: 100, traits: [mn_mando_organizacion]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_mando_achebe.dds, role: army, placeholder: false}
+  - id: ZAL_fut_mando_strachan
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Admiral Fiona Strachan, spanish: Almirante Fiona Strachan}}
+    born: 2060
+    lore: Capitana de un pesquero de Aberdeen hasta los cuarenta. Ahora sus escoltas navegan en formación perfecta sin
+      una sola orden por radio.
+    roles:
+      advisor: {slot: navy_chief, ledger: navy, cost: 100, traits: [mn_mando_armada_escolta]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_mando_strachan.dds, role: navy, placeholder: false}
+  - id: ZAL_fut_mando_malhotra
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Air Marshal Dev Malhotra, spanish: Mariscal del Aire Dev Malhotra}}
+    born: 2067
+    lore: Piloto de drones de Leicester que vuela cuarenta máquinas a la vez con los ojos cerrados. Dice que el cielo
+      se siente como una bandada.
+    roles:
+      advisor: {slot: air_chief, ledger: air, cost: 100, traits: [mn_mando_aire_seguridad]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_mando_malhotra.dds, role: army, placeholder: false}
+  - id: ZAL_fut_mando_munro
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: General Eilidh Munro, spanish: General Eilidh Munro}}
+    born: 2068
+    lore: Planificadora del Estado Mayor de Inverness. Sus planes los piensa el país entero durante una noche, y ella
+      solo los firma a la mañana.
+    roles:
+      advisor: {slot: high_command, ledger: army, cost: 100, traits: [mn_mando_planificacion]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_mando_munro.dds, role: army, placeholder: false}
+  - id: ZAL_fut_mariscal_grant
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Marshal Alistair Grant, spanish: Mariscal Alistair Grant}}
+    born: 2057
+    lore: Era el jefe de las milicias luditas de las Highlands. Se conectó el mismo día que su hija, para no perderla,
+      y en la red descubrió que tenía talento para la guerra de muchos cuerpos.
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 4
+        defense_skill: 3
+        planning_skill: 4
+        logistics_skill: 3
+        traits: [brilliant_strategist]
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_mariscal_grant.dds, role: army, placeholder: false}
+  - id: ZAL_fut_gen_rook
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: General Tamsin Rook, spanish: Generala Tamsin Rook}}
+    born: 2071
+    lore: Ingeniera de combate de Plymouth. Sus zapadores tienden puentes sin hablar, porque cada uno sabe dónde va a
+      poner el pie el de al lado.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits: [engineer_officer]
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_gen_rook.dds, role: army, placeholder: false}
+  - id: ZAL_fut_gen_chandran
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: General Priya Chandran, spanish: Generala Priya Chandran}}
+    born: 2069
+    lore: Comandante de las unidades de cuerpos de silicio. Volvió dos veces de la muerte, en dos cuerpos distintos, y
+      los dos tienen la misma cicatriz en la ceja, porque así se recuerda ella.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 4
+        defense_skill: 2
+        planning_skill: 3
+        logistics_skill: 2
+        traits: [commando]
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_gen_chandran.dds, role: army, placeholder: false}
+  - id: ZAL_fut_alm_calder
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Admiral Ewan Calder, spanish: Almirante Ewan Calder}}
+    born: 2063
+    lore: Oficial de radar de las Orcadas. Ve el Mar del Norte entero a la vez, por los ojos de cada pesquero conectado.
+    roles:
+      navy_leader:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 3
+        maneuvering_skill: 3
+        coordination_skill: 4
+        traits: [spotter]
+    portrait: {path: gfx/leaders/ZAL/ZAL_fut_alm_calder.dds, role: navy, placeholder: false}
+  # ===========================================================================
+  # Hacia el Pasado (neovictorianos)
+  # ===========================================================================
+  - id: ZAL_vic_min_fenwick
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Lord Chancellor Bartholomew Fenwick, spanish: Lord Canciller Bartholomew Fenwick}}
+    born: 2048
+    lore: Profesor de historia en Oxford, el que encontró las togas en el sótano del museo. Se puso la peluca para una
+      foto y no se la sacó más.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_vic_min_lord_canciller]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_min_fenwick.dds, role: civilian, placeholder: false}
+  - id: ZAL_vic_min_ravensworth
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Lady Cordelia Ravensworth, spanish: Lady Cordelia Ravensworth}}
+    born: 2060
+    lore: Directora de teatro en el West End antes de ser Maestra de Ceremonias de la Corte. Le enseñó a la Reina a
+      saludar con la mano, y a los Lores a hacer como que se lo creen.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_vic_min_maestra_de_ceremonias]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_min_ravensworth.dds, role: civilian, placeholder: false}
+  - id: ZAL_vic_min_kettering
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Sir Ambrose Kettering, spanish: Sir Ambrose Kettering}}
+    born: 2053
+    lore: Cervecero de Burton al que nombraron baronet y después Canciller del Tesoro. Lleva las cuentas del Imperio en
+      un libro con tapas de cuero y cobra los títulos de nobleza al contado.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_vic_min_canciller_del_tesoro]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_min_kettering.dds, role: civilian, placeholder: false}
+  - id: ZAL_vic_min_thorne
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Sir Percival Thorne, spanish: Sir Percival Thorne}}
+    born: 2056
+    lore: Ministro de Colonias de un Imperio que no tiene ninguna. Tiene un globo terráqueo en el despacho con la mitad
+      del mundo pintada de rosa, por si acaso.
+    roles:
+      advisor: {slot: political_advisor, cost: 150, traits: [zal_vic_min_ministro_de_colonias]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_min_thorne.dds, role: civilian, placeholder: false}
+  - id: ZAL_vic_min_wexley
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Professor Ada Wexley, spanish: Profesora Ada Wexley}}
+    born: 2065
+    lore: Presidenta de la Real Sociedad del Vapor. Construye autómatas de bronce que sirven el té y calderas que
+      andan con hidrógeno, y no ve ninguna contradicción.
+    roles:
+      advisor: {slot: theorist, cost: 100, traits: [zal_vic_min_ingeniera_de_vapor]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_min_wexley.dds, role: civilian, placeholder: false}
+  - id: ZAL_vic_mando_pembroke
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: General Sir Horatio Pembroke, spanish: General Sir Horatio Pembroke}}
+    born: 2052
+    lore: Coronel de las milicias luditas de Kent que se dejó crecer las patillas el día de la Restauración. Cree en
+      las cargas, en los clarines y en la moral, en ese orden.
+    roles:
+      advisor: {slot: army_chief, ledger: army, cost: 100, traits: [mn_mando_moral]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_mando_pembroke.dds, role: army, placeholder: false}
+  - id: ZAL_vic_mando_halloway
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Admiral Lord Jasper Halloway, spanish: Almirante Lord Jasper Halloway}}
+    born: 2054
+    lore: Sabe de memoria cada batalla de Nelson y ninguna de las de este siglo. Sus acorazados de bronce disparan
+      salvas en cada puerto que tocan, para que se sepa.
+    roles:
+      advisor: {slot: navy_chief, ledger: navy, cost: 100, traits: [mn_mando_armada_decisiva]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_mando_halloway.dds, role: navy, placeholder: false}
+  - id: ZAL_vic_mando_ashby
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Air Commodore Winifred Ashby, spanish: Comodoro del Aire Winifred Ashby}}
+    born: 2063
+    lore: Manda la flota de dirigibles de Su Majestad desde una góndola con piano. Bombardea con una taza de té en la
+      mano, sin derramar una gota.
+    roles:
+      advisor: {slot: air_chief, ledger: air, cost: 100, traits: [mn_mando_aire_apoyo]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_mando_ashby.dds, role: army, placeholder: false}
+  - id: ZAL_vic_mando_hartigan
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Colonel Sir Edmund Hartigan, spanish: Coronel Sir Edmund Hartigan}}
+    born: 2058
+    lore: Irlandés de Cork, oficial de infantería de los regimientos de la Reina. Forma a sus hombres en cuadro, como en
+      Waterloo, y por ahora nadie le pudo demostrar que no sirve.
+    roles:
+      advisor: {slot: high_command, ledger: army, cost: 100, traits: [mn_mando_infanteria]}
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_mando_hartigan.dds, role: army, placeholder: false}
+  - id: ZAL_vic_mariscal_wrexham
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Field Marshal Lord Augustus Wrexham, spanish: Mariscal de Campo Lord Augustus Wrexham}}
+    born: 2049
+    lore: El último soldado profesional de la vieja Gran Bretaña, retirado en 2086 cuando se rompieron las máquinas.
+      Volvió de su granja de Shropshire con el uniforme de su bisabuelo y una caja de soldaditos de plomo.
+    roles:
+      field_marshal:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 4
+        planning_skill: 4
+        logistics_skill: 3
+        traits: [organizer]
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_mariscal_wrexham.dds, role: army, placeholder: false}
+  - id: ZAL_vic_gen_montague
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: General Sir Cecil Montague, spanish: General Sir Cecil Montague}}
+    born: 2061
+    lore: Escalador de los Lagos y oficial de fusileros. Pelea en las colinas con monóculo y bastón, y es el primero en
+      llegar arriba.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 4
+        planning_skill: 2
+        logistics_skill: 3
+        traits: [hill_fighter]
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_gen_montague.dds, role: army, placeholder: false}
+  - id: ZAL_vic_gen_carrow
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: General Lady Beatrix Carrow, spanish: Generala Lady Beatrix Carrow}}
+    born: 2067
+    lore: Hija de un duque falso y de una sufragista verdadera. Manda la caballería blindada con sable y faja violeta, y
+      no pide permiso para cargar.
+    roles:
+      corps_commander:
+        skill: 3
+        attack_skill: 4
+        defense_skill: 2
+        planning_skill: 3
+        logistics_skill: 2
+        traits: [offensive_doctrine]
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_gen_carrow.dds, role: army, placeholder: false}
+  - id: ZAL_vic_alm_ormsby
+    country: ZAL
+    src: user_request
+    recruit_in_history: false
+    name: {regnal: {english: Admiral Sir Rupert Ormsby, spanish: Almirante Sir Rupert Ormsby}}
+    born: 2057
+    lore: Comandante de los acorazados del Clyde, que tienen el casco remachado y velas solares. Pinta un león en la
+      proa de cada barco que bota.
+    roles:
+      navy_leader:
+        skill: 3
+        attack_skill: 3
+        defense_skill: 4
+        maneuvering_skill: 3
+        coordination_skill: 3
+        traits: [ironside]
+    portrait: {path: gfx/leaders/ZAL/ZAL_vic_alm_ormsby.dds, role: navy, placeholder: false}

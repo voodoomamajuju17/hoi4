@@ -4,6 +4,7 @@
   python -m tools.arte.arte importar <carpeta|zip>
                                               convierte y ubica las imágenes
   python -m tools.arte.arte piel [originales]  arma assets/ui/piel/ (tools/arte/piel.py)
+  python -m tools.arte.arte lote <txt> <TAG|ns>...  un solo txt con lo que falta de esos países
 
 El contrato: cada pedido es un bloque ASSET_REQUEST con un `id`. La imagen que
 vuelve se llama exactamente `<id>.png` (o .jpg/.webp). El importador sabe por
@@ -126,6 +127,11 @@ STYLE = {
     # 2026-10-28: el Shogunato de los Astilleros (Japón rebelde de la HSN)
     "ZJP": "the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, "
            "old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson",
+    # 2026-11-01: Gran Bretaña libre (la República Obrera de Albión y sus dos caminos)
+    "ZAL": "free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, "
+           "tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, "
+           "midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, "
+           "Thames fog and Union-like crosses without real flags",
     # imágenes que comparten varias potencias (eventos con `art`): sin colores de nadie
     "COMPARTIDOS": "the 2100 world of rival megastates: officers of different armies, maps, borders and "
                    "flags without symbols, neutral grey and ochre palette",
@@ -184,6 +190,14 @@ def _load(name: str) -> dict:
             data.setdefault("trees", {}).update((ov.get("focus_trees") or {}).get("trees") or {})
         elif name == "03_leaders.yaml":
             data.setdefault("characters", []).extend((ov.get("leaders") or {}).get("characters") or [])
+            # 2026-11-01: también sus rasgos, para que el retrato diga el nombre y no el id
+            for key in ("leader_traits", "unit_leader_traits"):
+                extra_traits = (ov.get("leaders") or {}).get(key) or []
+                if isinstance(data.get(key), dict):
+                    data[key].update({t["id"]: t for t in extra_traits} if isinstance(extra_traits, list) else extra_traits)
+                else:
+                    data.setdefault(key, []).extend(extra_traits if isinstance(extra_traits, list)
+                                                    else [dict(v, id=k) for k, v in extra_traits.items()])
         elif name == "02_countries.yaml":
             data.setdefault("cosmetic_tags", []).extend(ov.get("cosmetic_tags") or [])
         elif name == "14_decisions.yaml":
@@ -246,8 +260,11 @@ def catalog() -> list[dict]:
     # assets/<TAG>/leaders/<id>.dds. Los de arte/retratos_descripciones.yaml
     # llevan el pedido detallado (encuadre, luz, ropa y fondo).
     looks = yaml.safe_load((REPO / "arte" / "retratos_descripciones.yaml").read_text(encoding="utf-8"))
-    traits = _load("03_leaders.yaml").get("leader_traits") or {}
-    traits = traits if isinstance(traits, dict) else {t["id"]: t for t in traits}
+    leaders_spec = _load("03_leaders.yaml")
+    traits = {}
+    for key in ("leader_traits", "unit_leader_traits"):
+        got = leaders_spec.get(key) or {}
+        traits.update(got if isinstance(got, dict) else {t["id"]: t for t in got})
     for ch in _load("03_leaders.yaml").get("characters") or []:
         if not isinstance(ch, dict):
             continue
@@ -587,7 +604,10 @@ def _portrait(ch: dict, look: dict, me: dict, traits: dict) -> str:
         kind = kind or _KIND.get(body.get("slot") or role)
         trait_names += [((traits.get(t) or {}).get("name") or {}).get("english", t.replace("_", " "))
                         for t in body.get("traits") or []]
-    wear = look.get(kind or "civil") or look.get("army") or look.get("civil")
+    # 2026-11-01 (Gran Bretaña): cada camino se viste distinto; `wear` y `nation`
+    # del personaje mandan sobre los de su país
+    wear = me.get("wear") or look.get(kind or "civil") or look.get("army") or look.get("civil")
+    look = dict(look, nation=me.get("nation") or look["nation"], light=me.get("light") or look["light"])
     regnal = (ch.get("name") or {}).get("regnal") or {}
     who = regnal.get("english") or ch["id"]
     detail = me.get("detail") or next((_TRAIT_DETAIL[t] for t in trait_names if t in _TRAIT_DETAIL), "")
@@ -858,6 +878,39 @@ def _previous_ids() -> set[str] | None:
     return ids
 
 
+def lote(tags: list[str], salida: str, titulo: str = "") -> None:
+    """Un solo txt con todo lo que falta de unos países (2026-11-01, pedido del
+    usuario: "pedidos de imágenes de tecnología y eventos, retratos, etc. Todo en
+    un txt bien detallado"). Toma lo del catálogo cuyo tag está en `tags` o cuyo id
+    empieza con meganations_<algo de tags> (los eventos de Japón y Albión son
+    mundiales: no llevan país)."""
+    # un argumento de 3 letras es un país; cualquier otro, el comienzo de un id
+    # (meganations_japon, o un espíritu de otro país como HSN_cables_cortados_japon)
+    prefixes = tuple(t for t in tags if len(t) != 3)
+    tags = [t for t in tags if len(t) == 3]
+    order = ["leader_portrait", "event_picture", "national_spirit_icon", "weapon_icon", "plane_icon",
+             "country_flag", "unique_icon"]
+    # sin íconos de foco: esos van en su propio pedido (arte/pedidos_focos_*.txt)
+    items = [i for i in catalog() if not i["done"] and not i.get("hand_written")
+             and i["type"] != "national_focus_icon"
+             and (i["tag"] in tags or (prefixes and i["id"].startswith(prefixes)))]
+    items.sort(key=lambda i: (order.index(i["type"]) if i["type"] in order else 99, i["tag"] not in tags[:1]))
+    counts: dict[str, int] = {}
+    for i in items:
+        counts[i["type"]] = counts.get(i["type"], 0) + 1
+    head = [f"# {titulo or 'Pedidos de arte'} ({len(items)} pedidos)",
+            "# " + ", ".join(f"{n} {k}" for k, n in counts.items()),
+            "# Cada pedido trae el nombre de archivo exacto: la imagen tiene que volver con ese nombre.",
+            "# El número es solo para ubicarse; se pueden mandar en cualquier orden y en varios zip.", ""]
+    body = []
+    for n, i in enumerate(items, start=1):
+        body.append(f"## {n}\n" + _request(i))
+    (REPO / salida).write_text("\n".join(head) + "\n" + "\n".join(body), encoding="utf-8")
+    print(f"{len(items)} pedidos en {salida}")
+    for k, n in counts.items():
+        print(f"  {k}: {n}")
+
+
 def pedidos() -> None:
     items = [i for i in catalog() if not i["done"] and not i.get("hand_written")]
     OUT.mkdir(parents=True, exist_ok=True)
@@ -1087,5 +1140,8 @@ if __name__ == "__main__":
     elif len(sys.argv) >= 2 and sys.argv[1] == "piel":
         from tools.arte import piel
         piel.main(sys.argv[2:])
+    elif len(sys.argv) >= 4 and sys.argv[1] == "lote":
+        # python -m tools.arte.arte lote arte/pedidos_japon_y_gran_bretana.txt ZJP ZAL meganations_japon meganations_albion
+        lote(sys.argv[3:], sys.argv[2], "Pedidos de arte: Japón y Gran Bretaña")
     else:
         print(__doc__)
