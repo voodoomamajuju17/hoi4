@@ -1079,7 +1079,7 @@ def test_routes() -> None:
               # el juego de prueba no tiene Antofagasta: ahí la condición queda en always = no
               ("EFE = { owns_state" in colla or "EFE = { always = no }" in colla) and "meganations_nas.240" in colla, colla)
         nas_ev = " ".join((mod / "events/meganations_nas.txt").read_text(encoding="utf-8-sig").split())
-        e242 = nas_ev[nas_ev.index("id = meganations_nas.242"):][:900]
+        e242 = nas_ev[nas_ev.index("id = meganations_nas.242 title"):][:1500]
         check("si el Imperio se niega: objetivo de guerra por Antofagasta y plan de IA",
               "type = take_state_focus target = EFE" in e242 and "set_country_flag = NAS_contra_EFE" in e242, e242)
         pax = " ".join(pdx.render(focus("NRE", "NRE_pax_romana").get("available")).split())
@@ -3617,7 +3617,7 @@ def test_decisiones_del_lider() -> None:
               "set_country_flag = { flag = MEGANATIONS_lider_espera value = 1 days = 182 }" in pulse
               and "random_list = { 1 = { modifier = { factor = 0 has_country_flag = MEGANATIONS_lider_visto_1 } set_country_flag = MEGANATIONS_lider_visto_1 country_event = { id = meganations_lider.1" in pulse, pulse[:1500])
         check("lider: el pulso mundial lo corre", "MEGANATIONS_lider_pulso = yes" in eff[eff.index("MEGANATIONS_eventos_mundiales = {"):][:800])
-        rec = eff[eff.index("MEGANATIONS_lider_recalcular = {"):][:2000]
+        rec = eff[eff.index("MEGANATIONS_lider_recalcular = {"):][:5000]
         check("lider: stats de 0 a 20 (Salud de 0 a 100, 2026-11-01) que mueven el espiritu El Lider; Salud en 0, desplome",
               "clamp_variable = { var = MEGANATIONS_lider_carisma min = 0 max = 20 }" in rec
               and "clamp_variable = { var = MEGANATIONS_lider_salud min = 0 max = 100 }" in rec
