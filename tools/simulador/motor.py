@@ -162,6 +162,8 @@ class Mundo:
             return p.tag == (root.tag if v == "ROOT" else v)
         if k == "focus":
             return v in p.focos
+        if k == "variable_is":
+            return self.var(p, v["var"]) == self._valor(p, v["value"])
         if k == "country":
             otro = self.paises.get(v["tag"])
             if otro is None:
@@ -236,6 +238,9 @@ class Mundo:
             for otro in list(self.paises.values()):
                 if self.cumple(otro, ef.get("when"), root=p):
                     self.correr(otro, ef.get("effects"))
+        elif tipo == "complete_focus":
+            # 2026-11-01: la ruta estalla sola (26_guerras_civiles); la recompensa no se simula
+            p.focos.add(ef["value"]) if isinstance(p.focos, set) else p.focos.append(ef["value"])
         elif tipo == "wargoal":
             self.contar(f"objetivo_de_guerra_contra:{p.tag if ef.get('target') in (None, 'ROOT') else ef['target']}")
         else:
