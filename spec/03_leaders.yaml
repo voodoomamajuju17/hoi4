@@ -4039,6 +4039,462 @@ characters:
         traits:
         - ironside
 
+  # ---------------------------------------------------------------------------
+  # Las cuatro voces (2026-11-01, pedido del usuario: "sacá todos estos ministros,
+  # están al pedo. O cambialos por algo copado"). Reemplazan a los 4 ministros de
+  # ideología del juego base: una voz por grupo en cada potencia. La de su propio
+  # grupo es leal (defiende el régimen); las otras tres son corrientes disidentes
+  # que empujan su ideología, con una ventaja y un costo.
+  # ---------------------------------------------------------------------------
+  - id: EFE_corriente_restauracion
+    country: EFE
+    src: user_request
+    note: "Voz leal de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Franciscan who left the Church to preach that the jungle is the body of the nation; he says mass under the ceibo and blesses the Milicias Verdes with river water.
+    name:
+      regnal: {english: "Friar Benigno Saravia, Preacher of the Wilds", spanish: "Fray Benigno Saravia, Predicador del Monte"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_corriente_restauracion
+  - id: EFE_corriente_colectivismo
+    country: EFE
+    src: user_request
+    note: "Voz disidente de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Missionera, third generation of yerba harvesters. The Empire tolerates her cooperatives because they feed the capital; she knows the day they stop being useful, they will be broken.
+    name:
+      regnal: {english: "Rosaura Benítez, Delegate of the Yerba Cooperatives", spanish: "Rosaura Benítez, Delegada de las Cooperativas Yerbateras"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_corriente_colectivismo
+  - id: EFE_corriente_mercado
+    country: EFE
+    src: user_request
+    note: "Voz disidente de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Porteño broker who sells the Empire's surplus bio-steel to the FCU through three shell companies; he keeps a ledger nobody else can read and a passport in each pocket.
+    name:
+      regnal: {english: "Hernán Agüero-Lynch, Bio-steel Consignee", spanish: "Hernán Agüero-Lynch, Consignatario del Bioacero"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_corriente_mercado
+  - id: EFE_corriente_mandato
+    country: EFE
+    src: user_request
+    note: "Voz disidente de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Guaraní seer who claims the falls speak since the Battle of Iguazú; pilgrims cross the Empire to hear her, and the Emperor has not yet decided whether she is an ally or a threat.
+    name:
+      regnal: {english: "Ñasaindy Ortiz, the Seer of Iguazú", spanish: "Ñasaindy Ortiz, la Vidente de Iguazú"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - efe_corriente_mandato
+  - id: NRE_corriente_restauracion
+    country: NRE
+    src: user_request
+    note: "Voz leal de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Priest of the new imperial cult in Bucharest; he invented half the rites he presides over and believes every word of them.
+    name:
+      regnal: {english: "Sextus Valerius Corvinus, Flamen of the Imperator", spanish: "Sexto Valerio Corvino, Flamen del Imperator"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_corriente_restauracion
+  - id: NRE_corriente_colectivismo
+    country: NRE
+    src: user_request
+    note: "Voz disidente de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Welder from the Constanța yards elected tribune by the workers; the Senate calls him Spartaco to mock him, and he has adopted the name.
+    name:
+      regnal: {english: "Spartacus Ionescu, Tribune of the Shipyard Plebs", spanish: "Spartaco Ionescu, Tribuno de la Plebe de los Astilleros"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_corriente_colectivismo
+  - id: NRE_corriente_mercado
+    country: NRE
+    src: user_request
+    note: "Voz disidente de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Head of the Danube river guilds, the only senator who pays her legions with her own money and reminds everyone of it.
+    name:
+      regnal: {english: "Livia Mercatori, Consul of the Danube Merchants", spanish: "Livia Mercatori, Cónsul de los Mercaderes del Danubio"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_corriente_mercado
+  - id: NRE_corriente_mandato
+    country: NRE
+    src: user_request
+    note: "Voz disidente de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Keeper of the reopened cave of Cumae; her riddles are copied by the Senate scribes and read aloud before every vote on war.
+    name:
+      regnal: {english: "Theodora, Sibyl of Cumae", spanish: "Teodora Sibila de Cumas"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nre_corriente_mandato
+  - id: ASC_corriente_colectivismo
+    country: ASC
+    src: user_request
+    note: "Voz leal de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Swedish engineer who wrote the first allocation rules by hand before PLAN-41 existed; she trusts the machine and audits it every night.
+    name:
+      regnal: {english: "Greta Holmqvist, Commissar of the Pure Plan", spanish: "Greta Holmqvist, Comisaria del Plan Puro"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_corriente_colectivismo
+  - id: ASC_corriente_restauracion
+    country: ASC
+    src: user_request
+    note: "Voz disidente de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Polish historian who says the machines erased the nations and wants them back, one flag at a time; the Commune lets him talk because the algorithm says he is harmless.
+    name:
+      regnal: {english: "Radomir Kowal, Speaker of the Flesh Homeland", spanish: "Radomir Kowal, Portavoz de la Patria de Carne"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_corriente_restauracion
+  - id: ASC_corriente_mercado
+    country: ASC
+    src: user_request
+    note: "Voz disidente de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Runs the only queue in the Commune: the line of citizens who want to choose. Her petitions for 'a second brand of bread' have collected two million signatures.
+    name:
+      regnal: {english: "Margit Lindahl, Consumer Advocate", spanish: "Margit Lindahl, Defensora del Consumidor"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_corriente_mercado
+  - id: ASC_corriente_mandato
+    country: ASC
+    src: user_request
+    note: "Voz disidente de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      A former maintenance technician who believes PLAN-41 is a god in the making and that his job is to pray to it; his followers wear the red light of the servers on their foreheads.
+    name:
+      regnal: {english: "Brother Zero", spanish: "El Hermano Cero"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - asc_corriente_mandato
+  - id: APF_corriente_colectivismo
+    country: APF
+    src: user_request
+    note: "Voz leal de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Oldest delegate of the federation; he has voted in every council since the founding and still walks to each session from his village.
+    name:
+      regnal: {english: "Baba Kofi Mensah-Lungu, Elder of the Village Councils", spanish: "Baba Kofi Mensah-Lungu, Anciano del Consejo de Aldeas"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_corriente_colectivismo
+  - id: APF_corriente_restauracion
+    country: APF
+    src: user_request
+    note: "Voz disidente de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Heir of a lake kingdom abolished twice, once by colonists and once by the councils; he says the federation is a market square with no king and offers to be one.
+    name:
+      regnal: {english: "Mwami Gasana Rwigema, Restorer of the Kingdoms", spanish: "Mwami Gasana Rwigema, Restaurador de los Reinos"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_corriente_restauracion
+  - id: APF_corriente_mercado
+    country: APF
+    src: user_request
+    note: "Voz disidente de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Runs the last private exchange in the federation; the councils hate her, borrow from her, and repay late.
+    name:
+      regnal: {english: "Chiamaka Obi, President of the Lagos Exchange", spanish: "Chiamaka Obi, Presidenta de la Bolsa de Lagos"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_corriente_mercado
+  - id: APF_corriente_mandato
+    country: APF
+    src: user_request
+    note: "Voz disidente de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Somali rain prophetess whose predictions in the drought of 2093 saved three provinces; now millions listen to her before they listen to the councils.
+    name:
+      regnal: {english: "Mama Ayaan Warsame, Prophetess of the Horn", spanish: "Mama Ayaan Warsame, la Profetisa del Cuerno"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - apf_corriente_mandato
+  - id: FCU_corriente_mercado
+    country: FCU
+    src: user_request
+    note: "Voz leal de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Owns 0.8% of everything. He has never lost a vote because he has never needed one.
+    name:
+      regnal: {english: "Bradley Ashcombe III, Chairman of the Shareholders' Board", spanish: "Bradley Ashcombe III, Presidente de la Junta de Accionistas"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_corriente_mercado
+  - id: FCU_corriente_colectivismo
+    country: FCU
+    src: user_request
+    note: "Voz disidente de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Organised the robot maintenance crews of the Gulf warehouses into the only union the Union could not buy out; her picket signs are printed by the company's own printers.
+    name:
+      regnal: {english: "Dolores 'Lola' Ybarra, Warehouse Union Organiser", spanish: "Dolores 'Lola' Ybarra, Organizadora del Sindicato de los Almacenes"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_corriente_colectivismo
+  - id: FCU_corriente_restauracion
+    country: FCU
+    src: user_request
+    note: "Voz disidente de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      A retired contractor colonel who keeps an old flag folded in a triangle and says the Union sold the country by the share; his militia drills on weekends in Montana.
+    name:
+      regnal: {english: "Colonel (ret.) Wade Garrison, the Last Patriot", spanish: "Coronel (r) Wade Garrison, el Último Patriota"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_corriente_restauracion
+  - id: FCU_corriente_mandato
+    country: FCU
+    src: user_request
+    note: "Voz disidente de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Preaches in a stadium that dividends are grace and the market is providence; his church is listed on the exchange and pays well.
+    name:
+      regnal: {english: "Reverend Solomon Vance, Pastor of Prosperity", spanish: "Reverendo Solomon Vance, Pastor de la Prosperidad"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - fcu_corriente_mandato
+  - id: HSN_corriente_mercado
+    country: HSN
+    src: user_request
+    note: "Voz leal de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Every ship of the Hanse sails under a policy she signed; if she refuses to insure a war, there is no war.
+    name:
+      regnal: {english: "Benedicta Okonjo-Tan, President of the Insurance Exchange", spanish: "Benedicta Okonjo-Tan, Presidenta de la Lonja de Seguros"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_corriente_mercado
+  - id: HSN_corriente_colectivismo
+    country: HSN
+    src: user_request
+    note: "Voz disidente de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Samoan crane operator who shut down Malacca for nine days in 2097; the Hanse remembers and pays him to sit on its councils.
+    name:
+      regnal: {english: "Tavita Leota, Spokesman of the Dockers", spanish: "Tavita Leota, Portavoz de los Estibadores"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_corriente_colectivismo
+  - id: HSN_corriente_restauracion
+    country: HSN
+    src: user_request
+    note: "Voz disidente de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Descendant of North Sea privateers who wants the Hanse to stop trading with everyone and start ruling the seas instead.
+    name:
+      regnal: {english: "Kapitän Henrik Störtebeker-Vos, Heir of the League", spanish: "Kapitän Henrik Störtebeker-Vos, Heredero de la Liga"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_corriente_restauracion
+  - id: HSN_corriente_mandato
+    country: HSN
+    src: user_request
+    note: "Voz disidente de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Polynesian wayfinder who crosses the Pacific without instruments; captains wait for her blessing before every long route.
+    name:
+      regnal: {english: "Grandmother Mahina, Reader of the Currents", spanish: "Abuela Mahina, la que Lee las Corrientes"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - hsn_corriente_mandato
+  - id: NAS_corriente_mandato
+    country: NAS
+    src: user_request
+    note: "Voz leal de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Keeper of the rebuilt golden temple in Cusco; no decree is valid until she has read it aloud in front of the sun disk.
+    name:
+      regnal: {english: "Willka Ccori, Keeper of the Coricancha", spanish: "Willka Ccori, Guardiana del Coricancha"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_corriente_mandato
+  - id: NAS_corriente_colectivismo
+    country: NAS
+    src: user_request
+    note: "Voz disidente de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Leads the lithium miners of Uyuni, who say the Sun shines on everyone and the mines should too.
+    name:
+      regnal: {english: "Domitila Choque, Secretary of the Mining Ayllu", spanish: "Domitila Choque, Secretaria del Ayllu Minero"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_corriente_colectivismo
+  - id: NAS_corriente_mercado
+    country: NAS
+    src: user_request
+    note: "Voz disidente de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Criollo merchant who treats the Sapa Inca with exquisite courtesy and the customs ledgers with none.
+    name:
+      regnal: {english: "Gonzalo Pizarro-Leguía, Lima Exporter", spanish: "Gonzalo Pizarro-Leguía, Exportador de Lima"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_corriente_mercado
+  - id: NAS_corriente_restauracion
+    country: NAS
+    src: user_request
+    note: "Voz disidente de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Officer of a republic that no longer exists; he wears its medals and plots its return in the barracks of La Paz.
+    name:
+      regnal: {english: "Colonel Ramiro Arguedas, of Old Bolivia", spanish: "Coronel Ramiro Arguedas, de la Vieja Bolivia"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - nas_corriente_restauracion
+  - id: SHD_corriente_mandato
+    country: SHD
+    src: user_request
+    note: "Voz leal de mandato (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Writes the commentaries every official must memorise; he claims descent from Confucius and nobody has dared to check.
+    name:
+      regnal: {english: "Master Kong Lizhi, Rector of the Academy of Harmony", spanish: "Maestro Kong Lizhi, Rector de la Academia de la Armonía"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_corriente_mandato
+  - id: SHD_corriente_colectivismo
+    country: SHD
+    src: user_request
+    note: "Voz disidente de colectivismo (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Brigade leader on the Yellow River dykes; she quotes old songs that the Directorate removed from the textbooks.
+    name:
+      regnal: {english: "Wang Xiuying, Voice of the Dyke Brigades", spanish: "Wang Xiuying, Voz de las Brigadas del Dique"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_corriente_colectivismo
+  - id: SHD_corriente_mercado
+    country: SHD
+    src: user_request
+    note: "Voz disidente de mercado (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Cantonese tycoon who funds half the Directorate's ports and asks, very politely, for a vote in return.
+    name:
+      regnal: {english: "Victor Leung Ka-wai, Chairman of the Hong Kong Chamber", spanish: "Victor Leung Ka-wai, Presidente de la Cámara de Hong Kong"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_corriente_mercado
+  - id: SHD_corriente_restauracion
+    country: SHD
+    src: user_request
+    note: "Voz disidente de restauracion (2026-11-01): reemplaza al ministro de ideología del juego base."
+    lore: >-
+      Retired general who says the Directorate forgot that harmony was once kept by the sword; he collects imperial swords and young officers.
+    name:
+      regnal: {english: "General (ret.) Han Tiezheng, of the Old Wall", spanish: "General (r) Han Tiezheng, de la Vieja Muralla"}
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - shd_corriente_restauracion
+
 advisor_experience:
   src: user_request
   army_chief: mn_xp_jefe_ejercito
@@ -4443,6 +4899,136 @@ leader_traits:
   - id: nre_int_frumentarii
     name: {english: Frumentarii, spanish: Frumentarii}
     modifiers: {'?operative_slot': 1, '?army_intel_factor': 0.15, '?intel_network_gain_factor': 0.1}
+    src: user_request
+
+  # Rasgos de las cuatro voces (2026-11-01): deriva de su ideología + ventaja y costo
+  - id: efe_corriente_restauracion
+    name: {english: "Preacher of the Green Liturgy", spanish: "Predicador de la Liturgia Verde"}
+    modifiers: {fascism_drift: 0.1, drift_defence_factor: 0.2, war_support_factor: 0.03}
+    src: user_request
+  - id: efe_corriente_colectivismo
+    name: {english: "Voice of the Cooperatives", spanish: "Voz de las Cooperativas"}
+    modifiers: {communism_drift: 0.1, consumer_goods_factor: -0.03, stability_factor: -0.02}
+    src: user_request
+  - id: efe_corriente_mercado
+    name: {english: "Licence Buyer", spanish: "Comprador de Licencias"}
+    modifiers: {democratic_drift: 0.1, trade_opinion_factor: 0.15, political_power_gain: -0.05}
+    src: user_request
+  - id: efe_corriente_mandato
+    name: {english: "Reader of the Falls", spanish: "Lectora de las Cataratas"}
+    modifiers: {neutrality_drift: 0.1, research_speed_factor: -0.02, stability_factor: 0.03}
+    src: user_request
+  - id: nre_corriente_restauracion
+    name: {english: "Flamen of the Imperial Cult", spanish: "Flamen del Culto Imperial"}
+    modifiers: {fascism_drift: 0.1, drift_defence_factor: 0.2, political_power_gain: 0.05}
+    src: user_request
+  - id: nre_corriente_colectivismo
+    name: {english: "Tribune of the Plebs", spanish: "Tribuno de la Plebe"}
+    modifiers: {communism_drift: 0.1, industrial_capacity_factory: 0.03, stability_factor: -0.03}
+    src: user_request
+  - id: nre_corriente_mercado
+    name: {english: "Consul of the Merchants", spanish: "Cónsul de los Mercaderes"}
+    modifiers: {democratic_drift: 0.1, trade_opinion_factor: 0.15, war_support_factor: -0.03}
+    src: user_request
+  - id: nre_corriente_mandato
+    name: {english: "Sibyl of the Empire", spanish: "Sibila del Imperio"}
+    modifiers: {neutrality_drift: 0.1, stability_factor: 0.03, research_speed_factor: -0.02}
+    src: user_request
+  - id: asc_corriente_colectivismo
+    name: {english: "Guardian of Allocation", spanish: "Guardiana de la Asignación"}
+    modifiers: {communism_drift: 0.1, drift_defence_factor: 0.2, production_speed_buildings_factor: 0.03}
+    src: user_request
+  - id: asc_corriente_restauracion
+    name: {english: "Nostalgic of the Nation", spanish: "Nostálgico de la Nación"}
+    modifiers: {fascism_drift: 0.1, war_support_factor: 0.05, stability_factor: -0.03}
+    src: user_request
+  - id: asc_corriente_mercado
+    name: {english: "Consumer Advocate", spanish: "Defensora del Consumidor"}
+    modifiers: {democratic_drift: 0.1, consumer_goods_factor: -0.03, industrial_capacity_factory: -0.02}
+    src: user_request
+  - id: asc_corriente_mandato
+    name: {english: "Prophet of the Machine", spanish: "Profeta de la Máquina"}
+    modifiers: {neutrality_drift: 0.1, research_speed_factor: 0.03, political_power_gain: -0.05}
+    src: user_request
+  - id: apf_corriente_colectivismo
+    name: {english: "Elder of the Councils", spanish: "Anciano de los Consejos"}
+    modifiers: {communism_drift: 0.1, drift_defence_factor: 0.2, stability_factor: 0.02}
+    src: user_request
+  - id: apf_corriente_restauracion
+    name: {english: "Restorer of the Crowns", spanish: "Restaurador de las Coronas"}
+    modifiers: {fascism_drift: 0.1, war_support_factor: 0.05, stability_factor: -0.03}
+    src: user_request
+  - id: apf_corriente_mercado
+    name: {english: "Voice of the Lagos Exchange", spanish: "Voz de la Bolsa de Lagos"}
+    modifiers: {democratic_drift: 0.1, trade_opinion_factor: 0.15, consumer_goods_factor: 0.02}
+    src: user_request
+  - id: apf_corriente_mandato
+    name: {english: "Prophetess of the Rain", spanish: "Profetisa de la Lluvia"}
+    modifiers: {neutrality_drift: 0.1, stability_factor: 0.03, political_power_gain: -0.05}
+    src: user_request
+  - id: fcu_corriente_mercado
+    name: {english: "Chairman of the Board", spanish: "Presidente de la Junta"}
+    modifiers: {democratic_drift: 0.1, drift_defence_factor: 0.2, political_power_gain: 0.05}
+    src: user_request
+  - id: fcu_corriente_colectivismo
+    name: {english: "Union Organiser", spanish: "Organizadora del Sindicato"}
+    modifiers: {communism_drift: 0.1, industrial_capacity_factory: 0.03, stability_factor: -0.03}
+    src: user_request
+  - id: fcu_corriente_restauracion
+    name: {english: "Patriot of the Old Republic", spanish: "Patriota de la Vieja República"}
+    modifiers: {fascism_drift: 0.1, war_support_factor: 0.05, trade_opinion_factor: -0.1}
+    src: user_request
+  - id: fcu_corriente_mandato
+    name: {english: "Pastor of Prosperity", spanish: "Pastor de la Prosperidad"}
+    modifiers: {neutrality_drift: 0.1, stability_factor: 0.03, consumer_goods_factor: 0.02}
+    src: user_request
+  - id: hsn_corriente_mercado
+    name: {english: "Lady of the Policies", spanish: "Señora de las Pólizas"}
+    modifiers: {democratic_drift: 0.1, drift_defence_factor: 0.2, trade_opinion_factor: 0.1}
+    src: user_request
+  - id: hsn_corriente_colectivismo
+    name: {english: "Voice of the Docks", spanish: "Voz de los Muelles"}
+    modifiers: {communism_drift: 0.1, industrial_capacity_factory: 0.03, stability_factor: -0.03}
+    src: user_request
+  - id: hsn_corriente_restauracion
+    name: {english: "Heir of the Old League", spanish: "Heredero de la Vieja Liga"}
+    modifiers: {fascism_drift: 0.1, war_support_factor: 0.05, trade_opinion_factor: -0.1}
+    src: user_request
+  - id: hsn_corriente_mandato
+    name: {english: "Star Navigator", spanish: "Navegante de las Estrellas"}
+    modifiers: {neutrality_drift: 0.1, stability_factor: 0.03, research_speed_factor: -0.02}
+    src: user_request
+  - id: nas_corriente_mandato
+    name: {english: "Keeper of the Sun Temple", spanish: "Guardiana del Templo del Sol"}
+    modifiers: {neutrality_drift: 0.1, drift_defence_factor: 0.2, stability_factor: 0.02}
+    src: user_request
+  - id: nas_corriente_colectivismo
+    name: {english: "Voice of the Mining Ayllu", spanish: "Voz del Ayllu Minero"}
+    modifiers: {communism_drift: 0.1, industrial_capacity_factory: 0.03, stability_factor: -0.03}
+    src: user_request
+  - id: nas_corriente_mercado
+    name: {english: "Lord of the Callao Customs", spanish: "Señor de la Aduana del Callao"}
+    modifiers: {democratic_drift: 0.1, trade_opinion_factor: 0.15, political_power_gain: -0.05}
+    src: user_request
+  - id: nas_corriente_restauracion
+    name: {english: "Nostalgic of the Republics", spanish: "Nostálgico de las Repúblicas"}
+    modifiers: {fascism_drift: 0.1, war_support_factor: 0.05, stability_factor: -0.03}
+    src: user_request
+  - id: shd_corriente_mandato
+    name: {english: "Rector of Harmony", spanish: "Rector de la Armonía"}
+    modifiers: {neutrality_drift: 0.1, drift_defence_factor: 0.2, research_speed_factor: 0.02}
+    src: user_request
+  - id: shd_corriente_colectivismo
+    name: {english: "Voice of the Brigades", spanish: "Voz de las Brigadas"}
+    modifiers: {communism_drift: 0.1, industrial_capacity_factory: 0.03, stability_factor: -0.03}
+    src: user_request
+  - id: shd_corriente_mercado
+    name: {english: "Chairman of the Chamber", spanish: "Presidente de la Cámara"}
+    modifiers: {democratic_drift: 0.1, trade_opinion_factor: 0.15, stability_factor: -0.02}
+    src: user_request
+  - id: shd_corriente_restauracion
+    name: {english: "Nostalgic of the Celestial Empire", spanish: "Nostálgico del Imperio Celeste"}
+    modifiers: {fascism_drift: 0.1, war_support_factor: 0.05, political_power_gain: -0.05}
     src: user_request
 
 technical_notes:
