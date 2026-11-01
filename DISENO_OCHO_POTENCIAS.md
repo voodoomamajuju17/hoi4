@@ -2154,3 +2154,14 @@ Pedido del usuario: soltar a Gaia tiene que ser mucho más ventajoso en el efect
 ## Agencias de inteligencia propias (2026-10-29)
 
 Captura del usuario: al crear la agencia salía el "Research and Analysis Wing" de la India de 1936 (el mod no definía agencias y el juego daba una suya). Ahora cada meganación tiene la suya, con el emblema de su espíritu Servicio de Inteligencia: Las Raíces del Imperio (EFE), Dirección de Vigilancia Algorítmica (ASC), Consultora de Riesgo Consolidado (FCU), Oficina de Seguros y Manifiestos (HSN), Los Ojos del Inti (NAS), Oficina del Caudal Oculto (SHD), Consejo de las Voces Lejanas (APF) y Frumentarii (NRE). Emisor: tools/gen/emitters/agencias.py. Test: test_agencias.
+
+## Guerras civiles más probables; los Años Inciertos (2026-11-01)
+
+Pedido del usuario: más chance de guerra civil ("estabilidad menor a 50 ya activa la posibilidad") y estabilidad más difícil los primeros años, sin exagerar. Todo en spec/26_guerras_civiles.yaml.
+
+- Cada mes, con estabilidad bajo 50% (desde 6/2100, sin guerra civil en curso), MEGANATIONS_crisis_interna:
+  - Ultimátum de los Generales: 1,5% por mes (3% bajo 35%), una vez por año como mucho y nunca después de la rebelión propia de esa potencia. HSN (infamia del corso 50+) y NAS (Sol Bajo) suman 2% más.
+  - Las rutas que terminan en guerra civil se adelantan, 4% por mes, si ya hicieron el foco anterior y no eligieron la otra rama: EFE El Monte se Levanta (después de Los Incendios de Gaia), APF Los Consejos se Arman (después de la Asamblea de Lagos), NRE La Legión Decide (después del Consilium). Se completa el foco con su recompensa (efecto nuevo complete_focus).
+- Frente al ultimátum la IA resiste 55% (antes 40%). El Rumor de Golpe ya puede salir con estabilidad bajo 50% (antes 40%).
+- Los Años Inciertos (todos los países, on_startup): -10% de estabilidad y -0,05% por semana los dos primeros años; -5% los dos siguientes.
+- Test: test_guerras_civiles.

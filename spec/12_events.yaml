@@ -14585,21 +14585,21 @@ namespaces:
       picture: GFX_report_event_generic_rally
       title: {english: 'The Generals'' Ultimatum', spanish: 'El Ultimátum de los Generales'}
       desc:
-        english: 'The humiliated generals did not forget. Tonight the tanks surround the palace and a colonel brings a letter: [Root.GetLeader] resigns before dawn, or the army decides.\n\nRESIGN: [Root.GetLeader] leaves power at once and the party names someone else (-10% stability, +5% war support).\n\nRESIST: the country splits, and what rises depends on the country (liberals, nationalists, schismatics, fanatics...).'
-        spanish: 'Los generales humillados no se olvidaron. Esta noche los tanques rodean el palacio y un coronel trae una carta: [Root.GetLeader] renuncia antes del amanecer, o decide el ejército.\n\nRENUNCIAR: [Root.GetLeader] deja el poder en el acto y el partido nombra a otro (-10% de estabilidad, +5% de apoyo a la guerra).\n\nRESISTIR: el país se parte, y lo que se levanta depende de cada potencia (liberales, nacionalistas, cismáticos, fanáticos...).'
+        english: 'The generals have run out of patience. Tonight the tanks surround the palace and a colonel brings a letter: [Root.GetLeader] resigns before dawn, or the army decides.\n\nRESIGN: [Root.GetLeader] leaves power at once and the party names someone else (-10% stability, +5% war support).\n\nRESIST: the country splits, and what rises depends on the country (liberals, nationalists, schismatics, fanatics...).'
+        spanish: 'A los generales se les acabó la paciencia. Esta noche los tanques rodean el palacio y un coronel trae una carta: [Root.GetLeader] renuncia antes del amanecer, o decide el ejército.\n\nRENUNCIAR: [Root.GetLeader] deja el poder en el acto y el partido nombra a otro (-10% de estabilidad, +5% de apoyo a la guerra).\n\nRESISTIR: el país se parte, y lo que se levanta depende de cada potencia (liberales, nacionalistas, cismáticos, fanáticos...).'
       options:
       - name: {english: 'Resign, to avoid the blood.', spanish: 'Renunciar, para evitar la sangre.'}
         effects:
         - {effect: run, value: MEGANATIONS_lider_derrocado}
         - {effect: add_stability, value: -0.1}
         - {effect: add_war_support, value: 0.05}
-        ai_chance: 60
+        ai_chance: 45   # 2026-11-01: más guerras civiles (antes 60/40)
       - name: {english: 'Resist: let them come.', spanish: 'Resistir: que vengan.'}
         effects:
         - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: 1}
         - {effect: run, value: MEGANATIONS_lider_recalcular}
         - {effect: run, value: MEGANATIONS_lider_guerra_civil}
-        ai_chance: 40
+        ai_chance: 55
       src: user_request
     - id: 22
       trigger: effect

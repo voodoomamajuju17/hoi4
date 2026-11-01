@@ -1,0 +1,176 @@
+# =============================================================================
+# Guerras civiles más probables y estabilidad más difícil (2026-11-01)
+#
+# Pedido del usuario: "habría que aumentar la chance de guerra civil en algunas
+# naciones" -> "dale, hacé las 3. Estabilidad menor a 50 ya activa la
+# posibilidad. También complicar un poco el tema estabilidad en todos los
+# países, al menos por los primeros años; se vuelve muy fácil estabilizar, no
+# complicar demasiado."
+#
+# 1. El Ultimátum de los Generales (meganations_lider.21) llega solo con
+#    estabilidad bajo 50% (1,5% por mes; 3% bajo 35%) y la IA resiste más
+#    (55% en vez de 40%). El Rumor de Golpe también aparece bajo 50%
+#    (12_events / 14_decisions). Lo que se levanta es la rebelión de cada potencia
+#    (meganations_lider.40-47).
+# 2. Las rutas que terminan en guerra civil (EFE: El Monte se Levanta; APF: Los
+#    Consejos se Arman; NRE: La Legión Decide) pueden estallar solas: con el foco
+#    anterior hecho, sin haber elegido la otra rama y con estabilidad bajo 50%,
+#    4% por mes. Se completa el foco, con su recompensa y su evento.
+# 3. La HSN (infamia del corso 50 o más) y la NAS (Sol Bajo) suman 2% por mes
+#    de ultimátum: la Cruz del Mar y el Sol Negro tienen su propia mecha.
+# 4. Los Años Inciertos: todos los países arrancan con -10% de estabilidad y
+#    una caída lenta (-0,05% por semana) los dos primeros años, y -5% los dos
+#    siguientes.
+# =============================================================================
+
+extend_scripted_effects:
+  MEGANATIONS_eventos_mundiales:
+  - {effect: run, value: MEGANATIONS_crisis_interna}
+
+decisions:
+  scripted_effects:
+  - id: MEGANATIONS_crisis_interna
+    effects:
+    - effect: if
+      when:
+        all:
+        - {date_after: 2100.6.1}
+        - {stability_below: 0.5}
+        - {civil_war: false}
+        - {capitulated: false}
+        - not: {flag: MEGANATIONS_crisis_espera}
+        - not: {flag: MEGANATIONS_rebelde}
+      then:
+      - {effect: run, value: MEGANATIONS_crisis_rutas}
+      - {effect: run, value: MEGANATIONS_crisis_ultimatum}
+
+  # el ultimátum, una vez por año como mucho y nunca después de la rebelión propia
+  - id: MEGANATIONS_crisis_ultimatum
+    effects:
+    - effect: if
+      when:
+        all:
+        - not: {flag: MEGANATIONS_crisis_espera}
+        - not:
+            any:
+            - all: [{tag: EFE}, {global_flag: MEGANATIONS_rebelion_EFE}]
+            - all: [{tag: FCU}, {global_flag: MEGANATIONS_rebelion_FCU}]
+            - all: [{tag: ASC}, {global_flag: MEGANATIONS_rebelion_ASC}]
+            - all: [{tag: HSN}, {global_flag: MEGANATIONS_rebelion_HSN}]
+            - all: [{tag: NAS}, {global_flag: MEGANATIONS_rebelion_NAS}]
+            - all: [{tag: SHD}, {global_flag: MEGANATIONS_rebelion_SHD}]
+            - all: [{tag: APF}, {global_flag: MEGANATIONS_rebelion_APF}]
+            - all: [{tag: NRE}, {global_flag: MEGANATIONS_rebelion_NRE}]
+      then:
+      - effect: if
+        when: {stability_below: 0.35}
+        then:
+        - effect: random
+          options:
+          - {weight: 97, effects: []}
+          - weight: 3
+            effects:
+            - {effect: run, value: MEGANATIONS_crisis_estalla}
+        else:
+        - effect: random
+          options:
+          - {weight: 985, effects: []}
+          - weight: 15
+            effects:
+            - {effect: run, value: MEGANATIONS_crisis_estalla}
+      # la mecha propia de la HSN (la Cruz del Mar) y la NAS (el Sol Negro)
+      - effect: if
+        when:
+          all:
+          - not: {flag: MEGANATIONS_crisis_espera}
+          - any:
+            - all: [{tag: HSN}, {variable_at_least: {var: HSN_reputacion, value: 50}}]
+            - all: [{tag: NAS}, {dynamic_modifier: NAS_sol_bajo}]
+        then:
+        - effect: random
+          options:
+          - {weight: 98, effects: []}
+          - weight: 2
+            effects:
+            - {effect: run, value: MEGANATIONS_crisis_estalla}
+
+  - id: MEGANATIONS_crisis_estalla
+    effects:
+    - {effect: flag, value: MEGANATIONS_crisis_espera, days: 365}
+    - {effect: event, id: meganations_lider.21, days: 7}
+
+  # las rutas que ya terminan en guerra civil se adelantan
+  - id: MEGANATIONS_crisis_rutas
+    effects:
+    - effect: if
+      when:
+        all:
+        - {tag: EFE}
+        - {focus: EFE_los_incendios_de_gaia}
+        - not: {focus: EFE_el_monte_se_levanta}
+      then:
+      - effect: random
+        options:
+        - {weight: 96, effects: []}
+        - weight: 4
+          effects:
+          - {effect: flag, value: MEGANATIONS_crisis_espera, days: 365}
+          - {effect: complete_focus, value: EFE_el_monte_se_levanta}
+    - effect: if
+      when:
+        all:
+        - {tag: APF}
+        - {focus: APF_la_asamblea_de_lagos}
+        - not: {focus: APF_los_consejos_se_arman}
+        - not: {focus: APF_mil_consejos}
+      then:
+      - effect: random
+        options:
+        - {weight: 96, effects: []}
+        - weight: 4
+          effects:
+          - {effect: flag, value: MEGANATIONS_crisis_espera, days: 365}
+          - {effect: complete_focus, value: APF_los_consejos_se_arman}
+    - effect: if
+      when:
+        all:
+        - {tag: NRE}
+        - {focus: NRE_el_consilium}
+        - not: {focus: NRE_la_legion_decide}
+        - not: {focus: NRE_el_senado_restaurado}
+      then:
+      - effect: random
+        options:
+        - {weight: 96, effects: []}
+        - weight: 4
+          effects:
+          - {effect: flag, value: MEGANATIONS_crisis_espera, days: 365}
+          - {effect: complete_focus, value: NRE_la_legion_decide}
+
+  dynamic_modifiers:
+  - id: MEGANATIONS_anios_inciertos
+    country: null
+    no_art: true
+    name: {english: The Uncertain Years, spanish: Los Años Inciertos}
+    desc:
+      english: 'The new century still has no owner. Every government rules on borrowed time, and everyone knows it.'
+      spanish: 'El siglo nuevo todavía no tiene dueño. Cada gobierno manda con tiempo prestado, y todos lo saben.'
+    modifiers: {stability_factor: -0.05, '?stability_weekly': -0.0005}   # + el de abajo: -10% los dos primeros años
+  - id: MEGANATIONS_anios_inciertos_2
+    country: null
+    no_art: true
+    name: {english: The Uncertain Years (Waning), spanish: Los Años Inciertos (Pasando)}
+    desc:
+      english: 'The worst is over, but nobody trusts the calm yet.'
+      spanish: 'Lo peor pasó, pero nadie le cree todavía a la calma.'
+    modifiers: {stability_factor: -0.05}
+
+  on_actions:
+  - id: MEGANATIONS_anios_inciertos_arranque
+    hook: on_startup
+    effects:
+    - effect: every_country
+      when: {exists: true}
+      effects:
+      - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos, days: 730}
+      - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos_2, days: 1461}

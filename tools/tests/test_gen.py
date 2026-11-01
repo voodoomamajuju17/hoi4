@@ -1891,8 +1891,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("280 modificadores dinamicos (la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 280 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("282 modificadores dinamicos (los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 282 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -3003,7 +3003,7 @@ def test_vanilla_validation() -> None:
             "add_timed_idea air_experience navy_experience promote_character recruit_character remove_ideas "
             "set_country_flag clr_country_flag clamp_variable set_variable add_country_leader_trait "
             "random_owned_controlled_state every_owned_state add_core_of set_state_flag clr_state_flag random_list add_claim_by add_tech_bonus "
-            "add_dynamic_modifier remove_dynamic_modifier set_temp_variable add_to_temp_variable subtract_from_variable multiply_variable divide_variable round_variable set_politics add_popularity inherit_technology every_country custom_effect_tooltip puppet white_peace send_equipment log "
+            "add_dynamic_modifier remove_dynamic_modifier set_temp_variable add_to_temp_variable subtract_from_variable multiply_variable divide_variable round_variable set_politics add_popularity inherit_technology complete_national_focus every_country custom_effect_tooltip puppet white_peace send_equipment log "
             "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production release release_puppet add_nuclear_bombs\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
@@ -4812,6 +4812,36 @@ def test_agencias() -> None:
               and "intelligence_agency_logos/meganations/SHD.dds" in gfx)
 
 
+def test_guerras_civiles() -> None:
+    section("guerras civiles mas probables y estabilidad mas dificil al principio (2026-11-01)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        i = se.index("MEGANATIONS_crisis_interna = {")
+        crisis = se[i:i + 600]
+        check("con estabilidad bajo 50% (y sin guerra civil en curso) puede estallar la crisis",
+              "has_stability < 0.5" in crisis and "MEGANATIONS_crisis_rutas = yes" in crisis
+              and "MEGANATIONS_crisis_ultimatum = yes" in crisis, crisis)
+        mundo = se[se.index("MEGANATIONS_eventos_mundiales = {"):]
+        check("la corre el pulso mundial de cada potencia", "MEGANATIONS_crisis_interna = yes" in mundo[:20000])
+        ult = se[se.index("MEGANATIONS_crisis_ultimatum = {"):][:3000]
+        check("ultimatum: 1,5% por mes (3% bajo 35%), y la HSN y la NAS con su mecha propia",
+              "985 = { }" in ult and "97 = { }" in ult and "HSN_reputacion" in ult
+              and "has_dynamic_modifier = { modifier = NAS_sol_bajo }" in ult, ult[:900])
+        rut = se[se.index("MEGANATIONS_crisis_rutas = {"):][:2500]
+        check("las rutas del EFE, la APF y Roma pueden estallar solas (completa el foco)",
+              all(f"complete_national_focus = {f}" in rut for f in
+                  ("EFE_el_monte_se_levanta", "APF_los_consejos_se_arman", "NRE_la_legion_decide")), rut[:600])
+        ev = " ".join((mod / "events/meganations_lider.txt").read_text(encoding="utf-8-sig").split())
+        e21 = ev[ev.index("id = meganations_lider.21 title"):][:2500]
+        check("frente al ultimatum la IA resiste mas (55%)", "factor = 55" in e21 and "factor = 45" in e21, e21[-700:])
+        on = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
+        check("los Anios Inciertos: todos los paises arrancan con menos estabilidad",
+              "on_startup" in on and "modifier = MEGANATIONS_anios_inciertos days = 730" in on
+              and "modifier = MEGANATIONS_anios_inciertos_2 days = 1461" in on, on[:500])
+
+
 def test_reglas() -> None:
     section("reglas de la partida: deslizadores de las meganaciones (2026-10-27)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -4892,6 +4922,7 @@ def main() -> int:
         test_japon,
         test_gaia,
         test_agencias,
+        test_guerras_civiles,
         test_reglas,
         test_simulador,
         test_vanilla_validation,

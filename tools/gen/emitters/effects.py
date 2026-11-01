@@ -997,6 +997,15 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("create_intelligence_agency", owner)
             ec.triggers_used.setdefault("has_intelligence_agency", owner)
             continue
+        if effect == "complete_focus":
+            # 2026-11-01 (guerras civiles): la ruta estalla sola con estabilidad baja; el
+            # foco se completa con su recompensa, así la historia es la misma
+            fid = item["value"]
+            if KNOWN_FOCUSES and fid not in KNOWN_FOCUSES:
+                raise SpecError(f"{owner}: complete_focus de '{fid}', que no es un foco del mod", where=where)
+            block.add("complete_national_focus", fid)
+            effects_used.setdefault("complete_national_focus", owner)
+            continue
         if effect == "inherit_technology":
             # 2026-10-28 (Japón): un país que nace en la partida no tiene tecnologías;
             # copia las del país del que se separa
@@ -1416,6 +1425,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("controls_state", sid)
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "dynamic_modifier":
+            # tiene puesto ese modificador dinámico (2026-11-01: el Sol Bajo de la NAS)
+            block.add("has_dynamic_modifier", Block([("modifier", value)]))
+            triggers_used.setdefault("has_dynamic_modifier", owner)
         elif key == "lost_state":
             # ya no controla la región (2026-10-28, Japón: "la HSN perdió Singapur").
             # Si el nombre no existe en el juego queda en falso, no en verdadero.
