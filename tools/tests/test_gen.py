@@ -4549,6 +4549,22 @@ def test_arsenal_vendido() -> None:
               and "type = infantry_equipment amount = 1000" in body(88) and "type = anti_tank_equipment amount = 500" in body(88))
 
 
+def test_asesores_genericos() -> None:
+    section("sin los 4 ministros de ideología del juego base (2026-11-01)")
+    from tools.gen.emitters.cleanup import drop_generated_advisors
+    src = (FIXTURE_VANILLA / "history/general/generic_advisors.txt").read_text(encoding="utf-8")
+    out, n = drop_generated_advisors(src)
+    check("saca los asesores políticos y deja el resto",
+          n == 2 and "fascist_demagogue" not in out and "popular_figurehead" not in out
+          and "army_chief_defensive_1" in out and out.count("{") == out.count("}"), out)
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        f = ctx.mod_root / "history/general/generic_advisors.txt"
+        txt = f.read_text(encoding="utf-8") if f.exists() else ""
+        check("el build pisa el archivo del juego base con la copia limpia",
+              "political_advisor" not in txt and "army_chief_defensive_1" in txt, txt[:300])
+
+
 def test_mapa() -> None:
     section("el mapa cambia: noticias al nacer o desaparecer un pais (2026-10-28)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -4954,6 +4970,7 @@ def main() -> int:
         test_rumbo_2120,
         test_bitacora,
         test_mapa,
+        test_asesores_genericos,
         test_arsenal_vendido,
         test_ocultos,
         test_incidentes_y_guerras,

@@ -102,6 +102,7 @@ EMITTERS = [
     ("unit_names", em_unit_names.emit),  # nombres de divisiones y barcos (19_unit_names)
     ("mio", em_mio.emit),                  # OIM propias por meganacion (13_military -> mio)
     ("cleanup", em_cleanup.emit),       # vacia decisiones de paises vanilla que no existen
+    ("asesores_genericos", em_cleanup.emit_generic_advisors),  # saca los 4 ministros de ideología del juego base (2026-11-01)
     ("spirits", em_cleanup.emit_spirits),  # saca espiritus vanilla repartidos por region (Monroe...)
     ("vanilla_events", em_cleanup.emit_kept_events),  # elecciones, justificacion de guerra, ases
     ("diplomacy", em_diplomacy.emit),
