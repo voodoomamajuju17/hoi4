@@ -1413,6 +1413,37 @@ focus_trees:
           - ZJP_srs_1
           ai:
             factor: 1
+        - id: ZJP_zai_6
+          name:
+            english: The Salaryman Soldiers
+            spanish: Los Soldados Asalariados
+          days: 70
+          icon: GFX_goal_generic_allies_build_infantry
+          desc:
+            english: 'Corporate security in grey suits and body armour: three divisions that answer to the board before the Shogun.'
+            spanish: 'Seguridad corporativa con traje gris y chaleco antibalas: tres divisiones que responden al directorio antes que al Shogun.'
+          reward:
+          - effect: ensure_template
+            name: Seguridad Corporativa
+            regiments:
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - motorized
+            - motorized
+          - effect: create_units
+            template: Seguridad Corporativa
+            name: Seguridad Corporativa
+            count: 3
+            experience: 0.3
+          - effect: add_variable
+            var: ZJP_giri
+            value: 5
+          prerequisites:
+          - ZJP_zai_1
         - id: ZJP_zai_2
           name:
             english: The Megacorporations of Kanto
@@ -1430,7 +1461,24 @@ focus_trees:
           - effect: dynamic_modifier
             id: ZJP_zai_e2
           prerequisites:
-          - ZJP_zai_1
+          - ZJP_zai_6
+        - id: ZJP_zai_7
+          name:
+            english: The Kanemura Tower
+            spanish: La Torre Kanemura
+          days: 70
+          icon: GFX_goal_generic_construct_civ_factory
+          desc:
+            english: Two hundred floors of black glass over Tokyo Bay, a green logo at the top that can be seen from orbit. Two civilian factories.
+            spanish: Doscientos pisos de vidrio negro sobre la bahía de Tokio, un logo verde arriba que se ve desde la órbita. Dos fábricas civiles.
+          reward:
+          - effect: build
+            building: industrial_complex
+            level: 2
+          - effect: add_political_power
+            value: 75
+          prerequisites:
+          - ZJP_zai_2
         - id: ZJP_zai_3
           name:
             english: Shipyards on Three Shifts
@@ -1449,7 +1497,43 @@ focus_trees:
           - effect: navy_experience
             value: 50
           prerequisites:
-          - ZJP_zai_2
+          - ZJP_zai_7
+        - id: ZJP_zai_8
+          name:
+            english: Defence Contracts
+            spanish: Contratos de Defensa
+          days: 70
+          icon: GFX_goal_generic_construct_mil_factory
+          desc:
+            english: Every family wants a piece of the war budget. Three military factories, delivered on time and over budget.
+            spanish: Cada familia quiere un pedazo del presupuesto de guerra. Tres fábricas militares, entregadas a tiempo y con sobreprecio.
+          reward:
+          - effect: build
+            building: arms_factory
+            level: 3
+          - effect: army_experience
+            value: 50
+          prerequisites:
+          - ZJP_zai_3
+        - id: ZJP_zai_9
+          name:
+            english: The Osaka Exchange
+            spanish: La Bolsa de Osaka
+          days: 70
+          icon: GFX_goal_generic_positive_trade_relations
+          desc:
+            english: The shares of the Shogunate trade in Osaka, and they go up every day. Nobody asks who is buying.
+            spanish: Las acciones del Shogunato cotizan en Osaka y suben todos los días. Nadie pregunta quién compra.
+          reward:
+          - effect: add_political_power
+            value: 100
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          - effect: add_stability
+            value: 0.05
+          prerequisites:
+          - ZJP_zai_8
         - id: ZJP_zai_4
           name:
             english: Mechas in Series
@@ -1472,7 +1556,25 @@ focus_trees:
             var: ZJP_giri
             value: 10
           prerequisites:
-          - ZJP_zai_3
+          - ZJP_zai_9
+        - id: ZJP_zai_10
+          name:
+            english: Export Mechas
+            spanish: Mechas de Exportación
+          days: 70
+          icon: GFX_goal_generic_build_tank
+          desc:
+            english: Half the world wants a Mecha and only Kanto makes them. Two dockyards paid with the first orders.
+            spanish: Medio mundo quiere un Mecha y solo Kanto los fabrica. Dos astilleros pagados con los primeros pedidos.
+          reward:
+          - effect: build
+            building: dockyard
+            level: 2
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          prerequisites:
+          - ZJP_zai_4
         - id: ZJP_zai_5
           name:
             english: The Eternal Keiretsu
@@ -1496,7 +1598,7 @@ focus_trees:
             building: industrial_complex
             level: 3
           prerequisites:
-          - ZJP_zai_4
+          - ZJP_zai_10
       - id: ruta_yakuza
         name:
           english: The Yakuza Road
@@ -1524,6 +1626,24 @@ focus_trees:
           - ZJP_srs_1
           ai:
             factor: 1
+        - id: ZJP_yak_6
+          name:
+            english: Cars Without Lights
+            spanish: Autos sin Luces
+          days: 70
+          icon: GFX_goal_generic_motorized
+          desc:
+            english: Low black cars run the coast road at night with the headlights off. Messages, weapons and men arrive before dawn.
+            spanish: Autos negros y bajos recorren la ruta de la costa de noche con las luces apagadas. Mensajes, armas y hombres llegan antes
+              del amanecer.
+          reward:
+          - effect: army_experience
+            value: 50
+          - effect: add_variable
+            var: ZJP_giri
+            value: 5
+          prerequisites:
+          - ZJP_yak_1
         - id: ZJP_yak_2
           name:
             english: The Night Ports
@@ -1541,7 +1661,24 @@ focus_trees:
           - effect: dynamic_modifier
             id: ZJP_yak_e2
           prerequisites:
-          - ZJP_yak_1
+          - ZJP_yak_6
+        - id: ZJP_yak_7
+          name:
+            english: The Pachinko Halls
+            spanish: Los Salones de Pachinko
+          days: 70
+          icon: GFX_goal_generic_trade
+          desc:
+            english: A thousand halls of steel balls and neon. Every coin that falls pays for a rifle.
+            spanish: Mil salones de bolitas de acero y neón. Cada moneda que cae paga un fusil.
+          reward:
+          - effect: add_political_power
+            value: 100
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          prerequisites:
+          - ZJP_yak_2
         - id: ZJP_yak_3
           name:
             english: The Sworn Brothers
@@ -1575,7 +1712,42 @@ focus_trees:
             count: 4
             experience: 0.4
           prerequisites:
-          - ZJP_yak_2
+          - ZJP_yak_7
+        - id: ZJP_yak_8
+          name:
+            english: Vibro-Katanas
+            spanish: Katanas de Vibración
+          days: 70
+          icon: GFX_goal_generic_army_doctrines
+          desc:
+            english: The old blades, rebuilt in the shipyards with a motor in the hilt. They cut through armour plate like paper.
+            spanish: Las viejas hojas, rehechas en los astilleros con un motor en la empuñadura. Cortan el blindaje como si fuera papel.
+          reward:
+          - effect: army_experience
+            value: 75
+          - effect: add_war_support
+            value: 0.05
+          prerequisites:
+          - ZJP_yak_3
+        - id: ZJP_yak_9
+          name:
+            english: The Tattoos Speak
+            spanish: Los Tatuajes Hablan
+          days: 70
+          icon: GFX_goal_generic_intelligence_exchange
+          desc:
+            english: Every clan has eyes in every port. What the High Seas plan at breakfast, the Shogun knows by lunch.
+            spanish: Cada clan tiene ojos en cada puerto. Lo que la Alta Mar planea en el desayuno, el Shogun lo sabe al mediodía.
+          reward:
+          - effect: add_political_power
+            value: 50
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          - effect: add_stability
+            value: 0.05
+          prerequisites:
+          - ZJP_yak_8
         - id: ZJP_yak_4
           name:
             english: The Dock Network
@@ -1598,7 +1770,36 @@ focus_trees:
           - effect: add_war_support
             value: 0.1
           prerequisites:
-          - ZJP_yak_3
+          - ZJP_yak_9
+        - id: ZJP_yak_10
+          name:
+            english: The Council of a Hundred Clans
+            spanish: El Consejo de los Cien Clanes
+          days: 70
+          icon: GFX_goal_generic_allies_build_infantry
+          desc:
+            english: For the first time all the clans sit at the same table. Four more divisions of sworn brothers and forty thousand men.
+            spanish: Por primera vez todos los clanes se sientan a la misma mesa. Cuatro divisiones más de hermanos juramentados y cuarenta mil
+              hombres.
+          reward:
+          - effect: add_manpower
+            value: 40000
+          - effect: ensure_template
+            name: Hermandad
+            regiments:
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+          - effect: create_units
+            template: Hermandad
+            name: Hermandad
+            count: 4
+            experience: 0.4
+          prerequisites:
+          - ZJP_yak_4
         - id: ZJP_yak_5
           name:
             english: The Code of the Dragon
@@ -1621,7 +1822,7 @@ focus_trees:
           - effect: army_experience
             value: 75
           prerequisites:
-          - ZJP_yak_4
+          - ZJP_yak_10
       - id: ruta_srs
         name:
           english: The SRS Scientists Road
@@ -1652,6 +1853,23 @@ focus_trees:
           - ZJP_yak_1
           ai:
             factor: 1
+        - id: ZJP_srs_6
+          name:
+            english: The Paid Volunteers
+            spanish: Los Voluntarios Pagos
+          days: 70
+          icon: GFX_goal_generic_propaganda
+          desc:
+            english: 'Posters in every station: a month of food for a week of tests. The queues go round the block.'
+            spanish: 'Carteles en cada estación: un mes de comida por una semana de pruebas. Las filas dan la vuelta a la manzana.'
+          reward:
+          - effect: add_political_power
+            value: 75
+          - effect: add_variable
+            var: ZJP_giri
+            value: 5
+          prerequisites:
+          - ZJP_srs_1
         - id: ZJP_srs_2
           name:
             english: The Laboratories Without Ethics
@@ -1669,7 +1887,22 @@ focus_trees:
           - effect: dynamic_modifier
             id: ZJP_srs_e2
           prerequisites:
-          - ZJP_srs_1
+          - ZJP_srs_6
+        - id: ZJP_srs_7
+          name:
+            english: The Gene Line
+            spanish: La Línea Genética
+          days: 70
+          icon: GFX_goal_generic_construct_civ_factory
+          desc:
+            english: An assembly line where the product is a person. Two civilian factories to feed the vats.
+            spanish: Una línea de montaje donde el producto es una persona. Dos fábricas civiles para alimentar las cubas.
+          reward:
+          - effect: build
+            building: industrial_complex
+            level: 2
+          prerequisites:
+          - ZJP_srs_2
         - id: ZJP_srs_3
           name:
             english: The Combat Clones
@@ -1704,7 +1937,42 @@ focus_trees:
             count: 3
             experience: 0.2
           prerequisites:
-          - ZJP_srs_2
+          - ZJP_srs_7
+        - id: ZJP_srs_8
+          name:
+            english: Clone Pilots
+            spanish: Pilotos Clonados
+          days: 70
+          icon: GFX_goal_generic_air_doctrines
+          desc:
+            english: A pilot who does not fear death, because there are a hundred more of him. The air arm grows overnight.
+            spanish: Un piloto que no le teme a la muerte, porque hay cien más como él. La aviación crece de un día para el otro.
+          reward:
+          - effect: air_experience
+            value: 75
+          - effect: navy_experience
+            value: 25
+          prerequisites:
+          - ZJP_srs_3
+        - id: ZJP_srs_9
+          name:
+            english: The Dreams of the Vats
+            spanish: Los Sueños de las Cubas
+          days: 70
+          icon: GFX_goal_generic_scientific_exchange
+          desc:
+            english: The clones dream all at once, the same dream. The doctors write it down and call it progress.
+            spanish: Los clones sueñan todos a la vez el mismo sueño. Los médicos lo anotan y lo llaman progreso.
+          reward:
+          - effect: add_political_power
+            value: 100
+          - effect: add_stability
+            value: 0.05
+          - effect: add_variable
+            var: ZJP_giri
+            value: 10
+          prerequisites:
+          - ZJP_srs_8
         - id: ZJP_srs_4
           name:
             english: The Forbidden Experiment
@@ -1726,7 +1994,36 @@ focus_trees:
             var: ZJP_giri
             value: 10
           prerequisites:
-          - ZJP_srs_3
+          - ZJP_srs_9
+        - id: ZJP_srs_10
+          name:
+            english: The Army That Never Sleeps
+            spanish: El Ejército que No Duerme
+          days: 70
+          icon: GFX_goal_generic_army_doctrines
+          desc:
+            english: Three more divisions of clones, grown in a single night, and thirty thousand more in the vats.
+            spanish: Tres divisiones más de clones, crecidas en una sola noche, y treinta mil más en las cubas.
+          reward:
+          - effect: add_manpower
+            value: 30000
+          - effect: ensure_template
+            name: Clones de Sendai
+            regiments:
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - infantry
+            - artillery_brigade
+          - effect: create_units
+            template: Clones de Sendai
+            name: Clones de Sendai
+            count: 3
+            experience: 0.2
+          prerequisites:
+          - ZJP_srs_4
         - id: ZJP_srs_5
           name:
             english: The Mind in the Machine
@@ -1749,7 +2046,7 @@ focus_trees:
             var: ZJP_giri
             value: 20
           prerequisites:
-          - ZJP_srs_4
+          - ZJP_srs_10
         - id: ZJP_cybershogun
           name:
             english: CyberShogun
