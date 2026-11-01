@@ -349,3 +349,77 @@ def _blank_decisions(text: str, ids: set) -> tuple[str, set]:
         i += 1
     out.append(text[last:])
     return "".join(out), found
+
+
+# ---------------------------------------------------------------------------
+# Asesores genéricos del juego base (2026-11-01)
+# ---------------------------------------------------------------------------
+# Pedido del usuario: "sacá todos estos ministros, están al pedo" (Gaspar
+# Mitre, Manuel Flores, Ramón de Urquiza, Máximo Rojas). "Están en todas las
+# naciones: todas tienen sus 4 ministros default de ideología". El juego base
+# los crea en history/general/*.txt con generate_character (nombre al azar de
+# la lista del país), uno por ideología. Se pisa cada archivo de esa carpeta
+# que los crea con una copia sin esos bloques; lo demás queda igual.
+
+GENERIC_SOURCE = "history/general vanilla sin los asesores políticos genéricos (pedido del usuario 2026-11-01)"
+
+
+def _block_end(text: str, start: int) -> int:
+    """Índice de la llave que cierra el bloque que abre text[start] == '{'."""
+    d, j, n = 0, start, len(text)
+    while j < n:
+        ch = text[j]
+        if ch == "#":
+            q = text.find("\n", j)
+            j = n if q < 0 else q
+            continue
+        if ch == '"':
+            q = text.find('"', j + 1)
+            j = n if q < 0 else q + 1
+            continue
+        if ch == "{":
+            d += 1
+        elif ch == "}":
+            d -= 1
+            if d == 0:
+                return j
+        j += 1
+    return n - 1
+
+
+def drop_generated_advisors(text: str, slot: str = "political_advisor") -> tuple[str, int]:
+    """Saca cada `generate_character = { ... }` que crea un asesor de `slot`."""
+    out, last, dropped = [], 0, 0
+    for m in re.finditer(r"(?m)^[^#\n]*?\bgenerate_character\s*=\s*\{", text):
+        start = m.end() - 1
+        if start < last:
+            continue
+        end = _block_end(text, start)
+        body = text[start:end + 1]
+        if re.search(rf"\bslot\s*=\s*{slot}\b", body):
+            key_at = text.rfind("generate_character", m.start(), start)
+            out.append(text[last:key_at])
+            out.append("# (asesor genérico quitado por el mod)")
+            last = end + 1
+            dropped += 1
+    out.append(text[last:])
+    return "".join(out), dropped
+
+
+def emit_generic_advisors(ctx: BuildContext) -> None:
+    if ctx.vanilla is None:
+        ctx.skip("history/general", "los asesores genéricos se sacan leyendo el juego instalado")
+        return
+    folder = ctx.vanilla.root / "history" / "general"
+    total, files = 0, []
+    for path in sorted(folder.glob("*.txt")) if folder.exists() else []:
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        new, n = drop_generated_advisors(text)
+        if n:
+            ctx.write_text(f"history/general/{path.name}", banner_for(GENERIC_SOURCE) + new)
+            total += n
+            files.append(path.name)
+    if files:
+        ctx.note(f"asesores genéricos: {total} quitados de history/general ({', '.join(files)})")
+    else:
+        ctx.note("asesores genéricos: history/general no crea asesores políticos (nada que sacar)")
