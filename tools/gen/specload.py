@@ -44,7 +44,9 @@ SPEC_FILES = {
 # Archivos que se suman encima de los anteriores (2026-10-17, segundo análisis
 # de rutas): las mecánicas nuevas viven en su propio archivo para no chocar con
 # los cambios que se hacen al mismo tiempo en 12_events y 14_decisions.
-OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", "25_ocultos.yaml", "26_guerras_civiles.yaml", "27_lider_ck.yaml"]
+OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", "25_ocultos.yaml", "26_guerras_civiles.yaml", "27_lider_ck.yaml",
+                 # 2026-11-01: Japón y Gran Bretaña al 65% de una meganación (sin tocar focos)
+                 "28_japon_ampliado.yaml", "29_albion_ampliada.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -134,6 +136,8 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
     leaders = raw.setdefault("leaders", {})
     add_unique(leaders.setdefault("characters", []), leaders_new.get("characters"), "personaje")
     add_unique(leaders.setdefault("leader_traits", []), leaders_new.get("leader_traits"), "rasgo")
+    # 2026-11-01 (las Casas de Japón): rasgos propios de generales y almirantes
+    add_unique(leaders.setdefault("unit_leader_traits", []), leaders_new.get("unit_leader_traits"), "rasgo de general")
 
 
 # Marcadores de "todavía no lo sabemos". Un emisor que se topa con esto debe

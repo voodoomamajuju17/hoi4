@@ -98,7 +98,11 @@ def emit(ctx: BuildContext) -> None:
     xp_rules = {k: v for k, v in (ctx.spec.raw["leaders"].get("advisor_experience") or {}).items() if k != "src"}
     ministros = (ctx.spec.raw.get("lider_ck") or {}).get("ministros") or {}
     unit_traits = ctx.vanilla.unit_leader_traits() if ctx.vanilla else None
+    own_unit_traits = _emit_unit_traits(ctx)
+    if unit_traits is not None:
+        unit_traits = set(unit_traits) | own_unit_traits
     types, _ = ctx.spec.ideology_index()
+    adv_triggers: dict[str, str] = {}
     by_country: dict[str, list[dict]] = {}
     for ch in defined_characters(ctx):
         by_country.setdefault(ch["country"], []).append(ch)
@@ -221,6 +225,12 @@ def emit(ctx: BuildContext) -> None:
                     # alto mando (2026-09-29): ejército, marina o aire en el panel militar
                     ab.add("ledger", advisor["ledger"])
                 ab.add("allowed", Block([("original_tag", tag)]))
+                # 2026-11-01 (Japón y Gran Bretaña): ministros que solo aparecen o solo
+                # se pueden nombrar con una condición (la Casa que gobierna, el camino)
+                for cond in ("visible", "available"):
+                    if advisor.get(cond):
+                        from .effects import render_conditions
+                        ab.add(cond, render_conditions(cid, advisor[cond], adv_triggers, where="03_leaders.yaml"))
                 traits = Block()
                 wanted_traits = list(advisor.get("traits") or [])
                 # experiencia por cargo (03_leaders.yaml -> advisor_experience)
@@ -264,6 +274,76 @@ def emit(ctx: BuildContext) -> None:
         root = Block()
         root.add("characters", characters)
         ctx.write_script(f"common/characters/{tag}_characters.txt", root, source=SOURCE)
+    ctx.verify_keys("triggers", adv_triggers)
+
+
+UNIT_TRAITS_SOURCE = "spec/03_leaders.yaml -> unit_leader_traits"
+TRAIT_ICON_SIZE = (40, 40)
+
+
+def _emit_unit_traits(ctx: BuildContext) -> set[str]:
+    """Rasgos propios de generales y almirantes (2026-11-01, las Casas de Japón).
+
+    common/unit_leader/meganations_unit_traits.txt -> leader_traits. Solo se usan
+    los campos de siempre (type, trait_type y los puntos de habilidad); el ícono
+    va como GFX_trait_<id>, de assets/<TAG>/rasgos/<id>.dds si existe (si no,
+    un disco del color del país)."""
+    traits = ctx.spec.raw["leaders"].get("unit_leader_traits") or []
+    if not traits:
+        return set()
+    body = Block()
+    sprites = Block()
+    repo = ctx.spec.root.parent
+    skill_keys = ("attack_skill", "defense_skill", "planning_skill", "logistics_skill",
+                  "maneuvering_skill", "coordination_skill")
+    for t in traits:
+        tid = t["id"]
+        tb = Block()
+        tb.add("random", False)
+        tb.add("type", t.get("type", "land"))
+        tb.add("trait_type", t.get("trait_type", "personality_trait"))
+        for key in skill_keys:
+            if t.get(key):
+                tb.add(key, int(t[key]))
+        body.add(ctx.loc.reference(tid, f"unit_traits:{tid}"), tb)
+        ctx.loc.define(tid, en=t["name"]["english"], es=t["name"]["spanish"], file=LOC_FILE,
+                       origin=f"unit_traits:{tid}")
+        if t.get("desc"):
+            # el juego busca <rasgo>_desc solo, como con los espíritus
+            ctx.loc.define_and_reference(f"{tid}_desc", en=t["desc"]["english"], es=t["desc"]["spanish"],
+                                         file=LOC_FILE, origin=f"unit_traits:{tid}")
+        tag = t.get("country", "MEGANATIONS")
+        dest = f"gfx/interface/traits/meganations/{tid}.dds"
+        own = f"assets/{tag}/rasgos/{tid}.dds"
+        if (repo / own).exists():
+            ctx.copy_asset(own, dest)
+        else:
+            color = ctx.spec.country(tag).color if tag != "MEGANATIONS" else (90, 110, 120)
+            _write_trait_disc(ctx, dest, color)
+        sprites.add("spriteType", Block([("name", Quoted(f"GFX_trait_{tid}")), ("texturefile", Quoted(dest))]))
+    ctx.write_script("common/unit_leader/meganations_unit_traits.txt", Block([("leader_traits", body)]),
+                     source=UNIT_TRAITS_SOURCE)
+    ctx.write_script("interface/meganations_unit_traits.gfx", Block([("spriteTypes", sprites)]),
+                     source=UNIT_TRAITS_SOURCE)
+    return {t["id"] for t in traits}
+
+
+def _write_trait_disc(ctx: BuildContext, relative: str, color: tuple[int, int, int]) -> None:
+    w, h = TRAIT_ICON_SIZE
+    cx, cy, r = w / 2, h / 2, w / 2 - 2
+    pixels = []
+    for y in range(h):
+        for x in range(w):
+            d = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+            if d <= r - 3:
+                pixels.append(tuple(min(255, int(c * 0.8) + 30) for c in color) + (255,))
+            elif d <= r:
+                pixels.append((200, 190, 150, 255))
+            else:
+                pixels.append((0, 0, 0, 0))
+    path = ctx.mod_root / relative
+    write_dds(path, w, h, pixels)
+    ctx.track(path)
 
 
 def _write_silhouette(ctx: BuildContext, relative: str, color: tuple[int, int, int],
