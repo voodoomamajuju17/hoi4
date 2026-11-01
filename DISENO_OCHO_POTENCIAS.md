@@ -2185,6 +2185,7 @@ Captura del panel "El Líder" y pedido del usuario: Salud de 0 a 100 y las otras
 
 ## Árboles más largos y la industria de la NAS (2026-11-01)
 
+- Japón: la IA gastaba todo el Giri y nunca llegaba a los 50 del CyberShogun. Desde el octavo foco del camino no gasta por debajo de 50 + el costo (y junta Giri con más ganas).
 - Japón (partida a 2108: "el árbol estaba listo en muy poco tiempo; agrandar con 15 focos"): cada camino pasa de 5 a 10 focos (unos dos años más). Los nuevos van intercalados y dan cosas concretas (divisiones, fábricas, astilleros, poder político, Giri); los castigos cambian en los focos 1, 3 y 5 del camino, se suavizan en el 8 y el premio llega en el 10.
 - Albión (+15): un tronco común de 5 (Las Islas: astilleros del Clyde, Guardia Nacional, minas de Gales, el Canal fortificado) y 5 más en cada rama; las dos ramas ahora se excluyen (antes se podían hacer las dos).
 - NAS ("más bonus en industria y más espacios en sus provincias, sin exagerar"): +1 espacio de construcción en cada región al arrancar y +1 más en tres focos de industria (El Consejo del Campo, Talleres de Altura, Las Minas de Potosí); Tawantinsuyu da 15% de fábricas (antes 10%), las Terrazas ya no restan fábricas y las Terrazas II y la Minería II suman un poco más.

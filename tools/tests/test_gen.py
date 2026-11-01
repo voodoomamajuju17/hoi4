@@ -4780,6 +4780,10 @@ def test_japon() -> None:
               and "var = ZJP_giri" in dec)
         cats = (mod / "common/decisions/categories/meganations_categories.txt").read_text(encoding="utf-8-sig")
         check("el panel del Giri", "ZJP_giri_category" in cats)
+        ronin = dec[dec.index("ZJP_contratar_ronin = {"):][:3000]
+        check("la IA ahorra Giri para el CyberShogun desde el octavo foco del camino (partida 2026-11-01)",
+              "has_completed_focus = ZJP_zai_4" in ronin and "NOT = { has_completed_focus = ZJP_cybershogun }" in ronin
+              and "var = ZJP_giri value = 65 compare = less_than" in ronin, ronin[-900:])
         loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*.yml"))
         check("el panel muestra el Giri", "[?ZJP_giri]" in loc)
         ai = (mod / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8-sig")

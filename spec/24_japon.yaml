@@ -175,6 +175,19 @@ decisions:
         - factor: 0
           when:
             at_war: false
+        - factor: 0
+          when:
+            all:
+            - &id015
+              any:
+              - focus: ZJP_zai_4
+              - focus: ZJP_yak_4
+              - focus: ZJP_srs_4
+            - not:
+                focus: ZJP_cybershogun
+            - variable_below:
+                var: ZJP_giri
+                value: 65
       src: user_request
     - id: ZJP_ceremonia_del_te
       name:
@@ -210,6 +223,15 @@ decisions:
             variable_at_least:
               var: ZJP_giri
               value: 70
+        - factor: 0
+          when:
+            all:
+            - *id015
+            - not:
+                focus: ZJP_cybershogun
+            - variable_below:
+                var: ZJP_giri
+                value: 60
       src: user_request
     - id: ZJP_linea_de_mechas
       name:
@@ -236,6 +258,16 @@ decisions:
         days: 120
       ai:
         factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            all:
+            - *id015
+            - not:
+                focus: ZJP_cybershogun
+            - variable_below:
+                var: ZJP_giri
+                value: 70
       src: user_request
     - id: ZJP_sabotear_singapur
       name:
@@ -266,6 +298,16 @@ decisions:
           days: 120
       ai:
         factor: 4
+        modifiers:
+        - factor: 0
+          when:
+            all:
+            - *id015
+            - not:
+                focus: ZJP_cybershogun
+            - variable_below:
+                var: ZJP_giri
+                value: 75
       src: user_request
       visible:
         country_exists: HSN
@@ -294,6 +336,16 @@ decisions:
         level: 2
       ai:
         factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            all:
+            - *id015
+            - not:
+                focus: ZJP_cybershogun
+            - variable_below:
+                var: ZJP_giri
+                value: 70
       src: user_request
       visible:
         focus: ZJP_zai_2
@@ -316,7 +368,7 @@ decisions:
       - effect: add_variable
         var: ZJP_giri
         value: 20
-      - &id015
+      - &id016
         effect: clamp
         var: ZJP_giri
         min: 0
@@ -329,6 +381,12 @@ decisions:
         - factor: 0
           when:
             stability_below: 0.4
+        - factor: 3
+          when:
+            all:
+            - *id015
+            - not:
+                focus: ZJP_cybershogun
       src: user_request
       visible:
         focus: ZJP_yak_2
@@ -371,6 +429,16 @@ decisions:
         experience: 0.2
       ai:
         factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            all:
+            - *id015
+            - not:
+                focus: ZJP_cybershogun
+            - variable_below:
+                var: ZJP_giri
+                value: 70
       src: user_request
       visible:
         focus: ZJP_srs_2
@@ -408,6 +476,16 @@ decisions:
             value: -20000
       ai:
         factor: 1
+        modifiers:
+        - factor: 0
+          when:
+            all:
+            - *id015
+            - not:
+                focus: ZJP_cybershogun
+            - variable_below:
+                var: ZJP_giri
+                value: 80
       src: user_request
       visible:
         focus: ZJP_srs_4
@@ -637,7 +715,7 @@ decisions:
       - effect: add_variable
         var: ZJP_giri
         value: 2
-    - *id015
+    - *id016
     - effect: if
       when:
         variable_at_least:
@@ -1002,7 +1080,7 @@ events:
             when:
               country_exists: ZJP
             then:
-            - &id016
+            - &id017
               effect: scope
               target: ZJP
               effects:
@@ -1053,7 +1131,7 @@ events:
             when:
               country_exists: ZJP
             then:
-            - *id016
+            - *id017
             - effect: relation
               value: ZJP
               type: non_aggression_pact
