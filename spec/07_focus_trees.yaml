@@ -4830,7 +4830,6 @@ trees:
         desc: {english: Arms factories on the coast., spanish: Fábricas de armas en la costa.}
         reward:
         - {effect: build, building: arms_factory, level: 2}
-        - {effect: states, pick: every, effects: [{effect: add_slot, value: 1}]}   # 2026-11-01: +1 espacio en cada región
       - id: NAS_las_minas_de_potosi
         name: {english: The Potosí Mines, spanish: Las Minas de Potosí}
         days: 63
@@ -6562,7 +6561,7 @@ trees:
           spanish: De rezagada a potencia respetable, en tres años.
         reward:
         - {effect: add_ideas, value: APF_espiritu_despegue_industrial}
-        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: build, building: industrial_complex, level: 3}
       - id: APF_astilleros_de_dakar
         name: {english: The Dakar Shipyards, spanish: Los Astilleros de Dakar}
         days: 49
@@ -7487,7 +7486,7 @@ trees:
           english: Italy becomes one industrial district.
           spanish: Italia se vuelve un solo distrito industrial.
         reward:
-        - {effect: build, building: industrial_complex, level: 2}
+        - {effect: build, building: industrial_complex, level: 3}
       - id: NRE_el_arsenal_de_roma
         name: {english: The Arsenal of Rome, spanish: El Arsenal de Roma}
         days: 84
@@ -7496,7 +7495,7 @@ trees:
         - NRE_astilleros_de_ostia
         desc: {english: Every legion armed in Rome., spanish: Cada legión armada en Roma.}
         reward:
-        - {effect: build, building: arms_factory, level: 2}
+        - {effect: build, building: arms_factory, level: 3}
       - id: NRE_la_economia_de_guerra
         name: {english: The Imperial War Economy, spanish: La Economía de Guerra Imperial}
         days: 105

@@ -2294,6 +2294,30 @@ categories:
             variable_below: {var: NAS_inti, value: 55}
         - factor: 3
           when: {stability_below: 0.4}
+    # 2026-11-01 (pedido del usuario: "¿poner una opción para cambiar Inti-Soma por slots?")
+    - id: NAS_abrir_la_montana
+      name: {english: Open the Mountain, spanish: Abrir la Montaña}
+      desc: {english: 'The priests bless a new terrace cut into the slope: one more building slot in one of our regions. Costs 30 light. Every six months.',
+        spanish: 'Los sacerdotes bendicen una terraza nueva tallada en la ladera: un espacio de construcción más en una de nuestras regiones. Cuesta 30 de luz. Cada seis meses.'}
+      icon_prefer:
+      - generic_construction
+      - generic_political_actions
+      cost: 0
+      cooldown_days: 180
+      available:
+        variable_at_least: {var: NAS_inti, value: 30}
+      effects:
+      - {effect: add_variable, var: NAS_inti, value: -30}
+      - effect: states
+        pick: random
+        effects:
+        - {effect: add_slot, value: 1}
+      ai:
+        factor: 3
+        modifiers:
+        - factor: 0
+          when:
+            variable_below: {var: NAS_inti, value: 60}
     - id: NAS_construir_granja
       name: {english: Build a Sun Farm, spanish: Construir una Granja del Sol}
       desc:
