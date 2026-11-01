@@ -178,6 +178,9 @@ forces:
   # 2026-09-27: "nadie tiene marina". Destructores heredados para las potencias
   # con costa y flota en 1936; la HSN, la potencia naval, más que nadie.
   navies: [HSN, FCU, NRE, ASC, EFE, SHD, APF]
+  # 2026-11-01: Japón está en el mapa desde el arranque (regla de descolonización); lo de
+  # 1936 en sus puertos y aeródromos sigue siendo de la HSN, en otra base suya
+  owner_remap: {ZJP: HSN}
   ship_definition: destroyer
   max_ships: {HSN: 6, default: 2}
   # 2026-10-03 (pedido del usuario): cada flota arranca con su orgullo de la

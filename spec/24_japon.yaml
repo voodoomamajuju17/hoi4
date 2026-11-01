@@ -620,66 +620,70 @@ decisions:
       - effect: scope
         target: ZJP
         effects:
-        - effect: inherit_technology
-          value: HSN
-        - effect: focus_tree
-          value: meganations_shogunato_focus
-        - effect: add_manpower
-          value: 150000
-        - effect: equipment
-          type: infantry_equipment
-          amount: 12000
-        - effect: equipment
-          type: support_equipment
-          amount: 1000
-        - effect: equipment
-          type: artillery_equipment
-          amount: 1000
-        - effect: ensure_template
-          name: Ashigaru de Kanto
-          regiments:
-          - infantry
-          - infantry
-          - infantry
-          - infantry
-          - infantry
-          - infantry
-          - artillery_brigade
-          - artillery_brigade
-        - effect: create_units
-          template: Ashigaru de Kanto
-          name: Ashigaru
-          count: 8
-          experience: 0.3
-        - effect: ensure_template
-          name: Infantería de los Diques
-          regiments:
-          - marine
-          - marine
-          - marine
-          - marine
-          - marine
-          - marine
-        - effect: create_units
-          template: Infantería de los Diques
-          name: Diques
-          count: 4
-          experience: 0.3
-        - effect: dynamic_modifier
-          id: ZJP_fervor
-          days: 365
-        - effect: add_political_power
-          value: 150
-        - effect: add_stability
-          value: 0.15
-        - effect: add_war_support
-          value: 0.2
-        - effect: add_variable
-          var: ZJP_giri
-          value: 25
-        - effect: event
-          id: meganations_japon.20
-          days: 30
+        - effect: run
+          value: ZJP_paquete
+  - id: ZJP_paquete
+    effects:
+    - effect: inherit_technology
+      value: HSN
+    - effect: focus_tree
+      value: meganations_shogunato_focus
+    - effect: add_manpower
+      value: 150000
+    - effect: equipment
+      type: infantry_equipment
+      amount: 12000
+    - effect: equipment
+      type: support_equipment
+      amount: 1000
+    - effect: equipment
+      type: artillery_equipment
+      amount: 1000
+    - effect: ensure_template
+      name: Ashigaru de Kanto
+      regiments:
+      - infantry
+      - infantry
+      - infantry
+      - infantry
+      - infantry
+      - infantry
+      - artillery_brigade
+      - artillery_brigade
+    - effect: create_units
+      template: Ashigaru de Kanto
+      name: Ashigaru
+      count: 8
+      experience: 0.3
+    - effect: ensure_template
+      name: Infantería de los Diques
+      regiments:
+      - marine
+      - marine
+      - marine
+      - marine
+      - marine
+      - marine
+    - effect: create_units
+      template: Infantería de los Diques
+      name: Diques
+      count: 4
+      experience: 0.3
+    - effect: dynamic_modifier
+      id: ZJP_fervor
+      days: 365
+    - effect: add_political_power
+      value: 150
+    - effect: add_stability
+      value: 0.15
+    - effect: add_war_support
+      value: 0.2
+    - effect: add_variable
+      var: ZJP_giri
+      value: 25
+    - effect: event
+      id: meganations_japon.20
+      days: 30
   - id: ZJP_pulso
     effects:
     - effect: add_variable

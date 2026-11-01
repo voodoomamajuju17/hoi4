@@ -44,7 +44,7 @@ SPEC_FILES = {
 # Archivos que se suman encima de los anteriores (2026-10-17, segundo análisis
 # de rutas): las mecánicas nuevas viven en su propio archivo para no chocar con
 # los cambios que se hacen al mismo tiempo en 12_events y 14_decisions.
-OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", "25_ocultos.yaml", "26_guerras_civiles.yaml", "27_lider_ck.yaml"]
+OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", "25_ocultos.yaml", "26_guerras_civiles.yaml", "27_lider_ck.yaml", "28_descolonizado.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -107,6 +107,10 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
             raise SpecError("lider_ck ya existe", where=where)
         raw["lider_ck"] = overlay["lider_ck"]
         _lider_ck_eventos(namespaces, overlay["lider_ck"].get("eventos") or {}, where)
+
+    # 2026-11-01: reglas propias de la partida (Custom Game Rules)
+    if overlay.get("game_rules"):
+        add_unique(raw.setdefault("game_rules", []), overlay["game_rules"], "regla")
 
     # 2026-10-27 (Rumbo a 2120): los incidentes de frontera con la Anarquía
     if overlay.get("anarchy_incidents"):

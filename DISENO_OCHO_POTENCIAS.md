@@ -2191,3 +2191,13 @@ Captura del panel "El Líder" y pedido del usuario: Salud de 0 a 100 y las otras
 - NAS ("más bonus en industria y más espacios en sus provincias, sin exagerar"): +1 espacio de construcción en cada región al arrancar y +1 más en tres focos de industria (El Consejo del Campo, Talleres de Altura, Las Minas de Potosí); Tawantinsuyu da 15% de fábricas (antes 10%), las Terrazas ya no restan fábricas y las Terrazas II y la Minería II suman un poco más.
 - NAS: decisión "Abrir la Montaña" en el panel del Inti-Soma: 30 de luz por un espacio de construcción en una región al azar, cada 180 días (la IA la usa con 60 de luz o más).
 - Arte: arte/pedidos_focos_japon_albion.txt (30 íconos).
+
+## Regla: Japón y Gran Bretaña descolonizados desde el arranque (2026-11-01)
+
+Pedido del usuario: una regla de partida para que Gran Bretaña y Japón estén disponibles desde el principio (descolonizados), o no, y que la partida siga normal. Todo en spec/28_descolonizado.yaml.
+
+- Regla MEGANATIONS_DESCOLONIZADO (Custom Game Rules): "Como en la historia" (de base) o "Descolonizados desde el arranque".
+- Para poder elegir un país tiene que existir en el mapa antes de arrancar (las reglas se eligen en la misma pantalla). Por eso Japón (ZJP) ahora empieza con sus islas (08_territory; Kyushu y Okinawa siguen siendo de Corea). El primer día: con la regla normal y Japón en manos de la IA, la HSN lo absorbe y recupera los núcleos (la rebelión llega después, como siempre); con la regla de descolonización, o si un jugador eligió Japón, queda independiente con su paquete de nacimiento (ZJP_paquete), los Mechas y los submarinos, y ya no hay rebelión.
+- Las flotas y aviones de 1936 en los puertos japoneses siguen siendo de la HSN, en otra base suya (13_military -> forces.owner_remap).
+- Gran Bretaña ya se podía elegir (satélite de la Comuna). Con la regla deja de ser satélite el primer día, sale de la facción y carga su árbol; con la regla normal sigue como estaba.
+- Generador: reglas propias (game_rules en el spec, tools/gen/emitters/reglas.py) y la condición game_rule. Test: test_descolonizado.

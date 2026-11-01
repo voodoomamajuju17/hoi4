@@ -23,10 +23,43 @@ LOC_FILE = "meganations_reglas"
 
 
 def emit(ctx: BuildContext) -> None:
+    _own_rules(ctx)
     if ctx.vanilla is None:
         return
     _difficulty(ctx)
     _game_rules_report(ctx)
+
+
+def _own_rules(ctx: BuildContext) -> None:
+    """Reglas propias del mod (2026-11-01, pedido del usuario: "agregá como regla si GB o
+    Japón están disponibles desde el principio (descolonizados) o no"). Spec: game_rules
+    (lista de {id, name, group, options: [{id, name, desc}], la primera es la de base}).
+    En los efectos se leen con la condición `game_rule: {rule, option}`."""
+    rules = ctx.spec.raw.get("game_rules") or []
+    if not rules:
+        return
+    root = Block()
+    for r in rules:
+        body = Block()
+        body.add("name", Quoted(r["id"]))
+        body.add("group", Quoted(r.get("group", "RULE_GROUP_GENERAL")))
+        if r.get("desc"):
+            body.add("desc", Quoted(f"{r['id']}_DESC"))
+            ctx.loc.define_and_reference(f"{r['id']}_DESC", en=r["desc"]["english"], es=r["desc"]["spanish"],
+                                         file=LOC_FILE, origin="reglas")
+        ctx.loc.define_and_reference(r["id"], en=r["name"]["english"], es=r["name"]["spanish"],
+                                     file=LOC_FILE, origin="reglas")
+        for i, o in enumerate(r["options"]):
+            key = f"{r['id']}_{o['id']}"
+            ob = Block([("name", o["id"]), ("text", Quoted(key)), ("desc", Quoted(f"{key}_DESC"))])
+            body.add("default" if i == 0 else "option", ob)
+            ctx.loc.define_and_reference(key, en=o["name"]["english"], es=o["name"]["spanish"],
+                                         file=LOC_FILE, origin="reglas")
+            ctx.loc.define_and_reference(f"{key}_DESC", en=o["desc"]["english"], es=o["desc"]["spanish"],
+                                         file=LOC_FILE, origin="reglas")
+        root.add(r["id"], body)
+    ctx.write_script("common/game_rules/meganations_reglas.txt", root, source="spec (game_rules)")
+    ctx.note(f"reglas propias: {', '.join(r['id'] for r in rules)}")
 
 
 def _difficulty(ctx: BuildContext) -> None:
