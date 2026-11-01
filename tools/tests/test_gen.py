@@ -4334,8 +4334,8 @@ def test_simulador() -> None:
     raw = specload.load(REPO_ROOT / "spec").raw
     sup = sim.cargar_supuestos()
     pares = sim.pares_excluyentes(raw)
-    check("simulador: encuentra los pares de focos excluyentes de las ocho (y del Shogunato)",
-          {p["tag"] for p in pares} == {"APF", "ASC", "EFE", "FCU", "HSN", "NAS", "NRE", "SHD", "ZJP"},
+    check("simulador: encuentra los pares de focos excluyentes de las ocho (y del Shogunato y Albion)",
+          {p["tag"] for p in pares} == {"APF", "ASC", "EFE", "FCU", "HSN", "NAS", "NRE", "SHD", "ZAL", "ZJP"},
           sorted({p["tag"] for p in pares}))
     check("simulador: ASC_computo arranca con el start de 06_mechanics",
           sim.valores_iniciales(raw).get("ASC_computo") == 30.0)
