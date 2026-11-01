@@ -4639,6 +4639,7 @@ trees:
         desc: {english: Feed the kingdom or sell the mountain., spanish: Alimentar al reino o vender la montaña.}
         reward:
         - {effect: build, building: industrial_complex, level: 2}
+        - {effect: states, pick: every, effects: [{effect: add_slot, value: 1}]}   # 2026-11-01: +1 espacio en cada región
       - id: NAS_las_terrazas
         name: {english: The Terraces, spanish: Las Terrazas}
         days: 63
@@ -4810,6 +4811,7 @@ trees:
         reward:
         - {effect: build, building: industrial_complex, level: 2}
         - {effect: remove_idea, value: NAS_montanas_aisladas}
+        - {effect: states, pick: every, effects: [{effect: add_slot, value: 1}]}   # 2026-11-01: +1 espacio en cada región
       - id: NAS_hidroelectricas_andinas
         name: {english: Andean Hydropower, spanish: Hidroeléctricas Andinas}
         days: 49
@@ -4839,6 +4841,7 @@ trees:
         reward:
         - {effect: build, building: industrial_complex, level: 2}
         - {effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}
+        - {effect: states, pick: every, effects: [{effect: add_slot, value: 1}]}   # 2026-11-01: +1 espacio en cada región
       - id: NAS_astilleros_del_callao
         name: {english: The Callao Shipyards, spanish: Los Astilleros del Callao}
         days: 49

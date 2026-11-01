@@ -174,3 +174,19 @@ decisions:
       effects:
       - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos, days: 730}
       - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos_2, days: 1461}
+  # 2026-11-01 (pedido del usuario: "en el árbol de la NAS, más bonus en industria; ¿podés
+  # poner más slots en sus provincias? Sin exagerar"): +1 espacio de construcción en cada
+  # región de la NAS al arrancar (sus regiones de montaña casi no tenían lugar).
+  - id: NAS_espacios_de_montana
+    hook: on_startup
+    effects:
+    - effect: if
+      when: {country_exists: NAS}
+      then:
+      - effect: scope
+        target: NAS
+        effects:
+        - effect: states
+          pick: every
+          effects:
+          - {effect: add_slot, value: 1}

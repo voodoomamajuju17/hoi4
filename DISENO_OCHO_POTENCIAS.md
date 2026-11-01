@@ -2182,3 +2182,12 @@ Captura del panel "El Líder" y pedido del usuario: Salud de 0 a 100 y las otras
 - Gran Bretaña no renació: la Comuna cayó ante Roma, pero cuando llegó la paz las islas ya eran de Roma y la Comuna no tenía nada británico para devolver; el evento se perdía y la marca quedaba puesta. Ahora renace con lo británico de la Comuna o de Roma, y si todavía no hay nada se vuelve a probar el mes siguiente.
 - Japón se rebeló en diciembre de 2100: la HSN arranca con 46% de estabilidad (la condición de menos de 65% ya estaba cumplida). Ahora no antes de 2102.
 - error.log: "Malformed token: Onagros / Centinelas" y "create_unit error reading army data": la IA edita o borra la plantilla de su unidad única y el encargo de cada 180 días fallaba. Ahora la plantilla se vuelve a crear si falta (ensure_template, también con apoyo).
+
+## Árboles más largos y la industria de la NAS (2026-11-01)
+
+- Japón: la IA gastaba todo el Giri y nunca llegaba a los 50 del CyberShogun. Desde el octavo foco del camino no gasta por debajo de 50 + el costo (y junta Giri con más ganas).
+- Japón (partida a 2108: "el árbol estaba listo en muy poco tiempo; agrandar con 15 focos"): cada camino pasa de 5 a 10 focos (unos dos años más). Los nuevos van intercalados y dan cosas concretas (divisiones, fábricas, astilleros, poder político, Giri); los castigos cambian en los focos 1, 3 y 5 del camino, se suavizan en el 8 y el premio llega en el 10.
+- Albión (+15): un tronco común de 5 (Las Islas: astilleros del Clyde, Guardia Nacional, minas de Gales, el Canal fortificado) y 5 más en cada rama; las dos ramas ahora se excluyen (antes se podían hacer las dos).
+- NAS ("más bonus en industria y más espacios en sus provincias, sin exagerar"): +1 espacio de construcción en cada región al arrancar y +1 más en tres focos de industria (El Consejo del Campo, Talleres de Altura, Las Minas de Potosí); Tawantinsuyu da 15% de fábricas (antes 10%), las Terrazas ya no restan fábricas y las Terrazas II y la Minería II suman un poco más.
+- NAS: decisión "Abrir la Montaña" en el panel del Inti-Soma: 30 de luz por un espacio de construcción en una región al azar, cada 180 días (la IA la usa con 60 de luz o más).
+- Arte: arte/pedidos_focos_japon_albion.txt (30 íconos).

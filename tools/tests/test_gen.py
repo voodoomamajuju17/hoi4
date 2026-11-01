@@ -4334,8 +4334,8 @@ def test_simulador() -> None:
     raw = specload.load(REPO_ROOT / "spec").raw
     sup = sim.cargar_supuestos()
     pares = sim.pares_excluyentes(raw)
-    check("simulador: encuentra los pares de focos excluyentes de las ocho (y del Shogunato)",
-          {p["tag"] for p in pares} == {"APF", "ASC", "EFE", "FCU", "HSN", "NAS", "NRE", "SHD", "ZJP"},
+    check("simulador: encuentra los pares de focos excluyentes de las ocho (y del Shogunato y Albion)",
+          {p["tag"] for p in pares} == {"APF", "ASC", "EFE", "FCU", "HSN", "NAS", "NRE", "SHD", "ZAL", "ZJP"},
           sorted({p["tag"] for p in pares}))
     check("simulador: ASC_computo arranca con el start de 06_mechanics",
           sim.valores_iniciales(raw).get("ASC_computo") == 30.0)
@@ -4667,9 +4667,13 @@ def test_albion() -> None:
     raw = specload.load(REPO_ROOT / "spec").raw
     tree = raw["focus_trees"]["trees"]["ZAL"]
     ramas = {b["id"]: b["focuses"] for b in tree["branches"]}
-    check("dos ramas de 8 focos de 182 dias (unos 4 anios cada una)",
-          set(ramas) == {"hacia_el_futuro", "hacia_el_pasado"} and all(len(f) == 8 and sum(x["days"] for x in f) == 8 * 182
-                                                                       for f in ramas.values()))
+    check("un tronco comun de 5 y dos ramas de 13 focos (15 mas, 2026-11-01)",
+          set(ramas) == {"las_islas", "hacia_el_futuro", "hacia_el_pasado"} and len(ramas["las_islas"]) == 5
+          and len(ramas["hacia_el_futuro"]) == 13 and len(ramas["hacia_el_pasado"]) == 13, {k: len(v) for k, v in ramas.items()})
+    check("las dos ramas se excluyen",
+          ramas["hacia_el_futuro"][0].get("mutually_exclusive") == ["ZAL_hacia_el_pasado"]
+          and ramas["hacia_el_pasado"][0].get("mutually_exclusive") == ["ZAL_hacia_el_futuro"])
+    ramas = {k: v for k, v in ramas.items() if k != "las_islas"}
     finales = {b: f[-1]["reward"] for b, f in ramas.items()}
     check("cada final cambia nombre, bandera y lider",
           all(any(e.get("effect") == "cosmetic_tag" for e in r) and any(e.get("effect") == "promote" for e in r)
@@ -4703,8 +4707,12 @@ def test_japon() -> None:
     focos = [f for b in tree["branches"] for f in b["focuses"]]
     by = {f["id"]: f for f in focos}
     rutas = {r: [by.get(f"ZJP_{r}_{n}") for n in range(1, 6)] for r in ("zai", "yak", "srs")}
-    check("tres caminos de 5 focos y un foco final", all(all(rutas[r]) for r in rutas) and "ZJP_cybershogun" in by
-          and len(focos) == 16, sorted(by))
+    rutas = {r: [by.get(f"ZJP_{r}_{n}") for n in range(1, 11)] for r in ("zai", "yak", "srs")}
+    check("tres caminos de 10 focos (15 mas, 2026-11-01) y un foco final", all(all(rutas[r]) for r in rutas)
+          and "ZJP_cybershogun" in by and len(focos) == 31, sorted(by))
+    orden = [1, 6, 2, 7, 3, 8, 9, 4, 10, 5]
+    check("los castigos cambian en los focos 1, 3 y 5 del camino, se suavizan en el 8 y el premio llega en el 10",
+          all(by[f"ZJP_{r}_{b}"].get("prerequisites") == [f"ZJP_{r}_{a}"] for r in rutas for a, b in zip(orden, orden[1:])))
     check("los caminos se excluyen desde el primer foco",
           all(set(rutas[r][0].get("mutually_exclusive") or []) == {f"ZJP_{o}_1" for o in rutas if o != r} for r in rutas),
           str({r: rutas[r][0].get("mutually_exclusive") for r in rutas}))
@@ -4772,6 +4780,10 @@ def test_japon() -> None:
               and "var = ZJP_giri" in dec)
         cats = (mod / "common/decisions/categories/meganations_categories.txt").read_text(encoding="utf-8-sig")
         check("el panel del Giri", "ZJP_giri_category" in cats)
+        ronin = dec[dec.index("ZJP_contratar_ronin = {"):][:3000]
+        check("la IA ahorra Giri para el CyberShogun desde el octavo foco del camino (partida 2026-11-01)",
+              "has_completed_focus = ZJP_zai_4" in ronin and "NOT = { has_completed_focus = ZJP_cybershogun }" in ronin
+              and "var = ZJP_giri value = 65 compare = less_than" in ronin, ronin[-900:])
         loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*.yml"))
         check("el panel muestra el Giri", "[?ZJP_giri]" in loc)
         ai = (mod / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8-sig")
