@@ -10,6 +10,11 @@
 # - Acá: lo que suman o restan sus 16 ministros y el 20% de sus eventos visibles
 #   con cambios de stats (misma regla que las meganaciones).
 # =============================================================================
+# - La Pompa (30_albion_ampliada): la primera caída a 10 o menos tumba al gobierno
+#   (meganations_albion.97); la segunda, guerra civil contra los Ascendidos (.98).
+# - Lo mismo del lado transhumanista: con estabilidad bajo 30% "se cae la Red" (.99, se
+#   rearma sobre 50%); la segunda vez, guerra civil contra los neovictorianos (.100).
+# =============================================================================
 
 extend_scripted_effects:
   ZJP_pulso:
@@ -18,6 +23,42 @@ extend_scripted_effects:
   ZAL_pulso:
   - effect: run
     value: MEGANATIONS_lider_pulso
+  - effect: if
+    when:
+      all:
+      - variable_is:
+          var: ZAL_ruta
+          value: 1
+      - stability_below: 0.3
+      - not_flag: ZAL_red_caida
+    then:
+    - effect: flag
+      value: ZAL_red_caida
+    - effect: if
+      when:
+        not_flag: ZAL_crisis_de_la_red
+      then:
+      - effect: flag
+        value: ZAL_crisis_de_la_red
+      - effect: event
+        id: meganations_albion.99
+        days: 3
+      else:
+      - effect: if
+        when:
+          not_global_flag: ZAL_guerra_de_las_eras
+        then:
+        - effect: event
+          id: meganations_albion.100
+          days: 3
+  - effect: if
+    when:
+      all:
+      - flag: ZAL_red_caida
+      - stability_at_least: 0.5
+    then:
+    - effect: clear_flag
+      value: ZAL_red_caida
 lider_ck:
   ministros:
     ZJP_min_hoshino_1:
@@ -149,3 +190,199 @@ lider_ck:
     - prestigio: 1
     - carisma: 1
     - carisma: -1
+events:
+  namespaces:
+    meganations_albion:
+      country: null
+      events:
+      - id: 97
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Government Falls
+          spanish: Cae el Gobierno
+        desc:
+          english: 'The Pomp ran out. The papers mock the airships, the music halls mock the Queen, and the Lords mock each
+            other. This morning the Prime Minister resigned in the middle of tea, and nobody wants the job. In the clubs of
+            Pall Mall the old Luddites and the young engineers are saying the same thing for once: the Empire was a costume,
+            and the party is over.'
+          spanish: 'Se acabó la Pompa. Los diarios se burlan de los dirigibles, los teatros de revista se burlan de la Reina
+            y los Lores se burlan entre ellos. Esta mañana el Primer Ministro renunció en medio del té, y nadie quiere el
+            cargo. En los clubes de Pall Mall los luditas viejos y los ingenieros jóvenes dicen por una vez lo mismo: el Imperio
+            era un disfraz, y la fiesta se terminó.'
+        options:
+        - name:
+            english: A new cabinet, of loyal men.
+            spanish: Un gabinete nuevo, de hombres leales.
+          effects:
+          - effect: add_stability
+            value: -0.1
+          - effect: add_political_power
+            value: -100
+          - effect: add_variable
+            var: ZAL_pompa
+            value: 15
+          - effect: clamp
+            var: ZAL_pompa
+            min: 0
+            max: 100
+          ai_chance: 60
+        - name:
+            english: Let Parliament choose, for once.
+            spanish: Que elija el Parlamento, por una vez.
+          effects:
+          - effect: add_stability
+            value: -0.05
+          - effect: add_war_support
+            value: -0.1
+          - effect: add_variable
+            var: ZAL_pompa
+            value: 10
+          - effect: clamp
+            var: ZAL_pompa
+            min: 0
+            max: 100
+          ai_chance: 40
+        src: user_request
+      - id: 98
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The War of the Two Ages
+          spanish: La Guerra de las Dos Eras
+        desc:
+          english: The Crown fell twice, and the second time it did not get up. Siobhan Cray, the engineer the court laughed
+            at, plugged Manchester and Edinburgh into the London network overnight and proclaimed the Ascended Commonwealth.
+            The Queen still has the Guards, the airships and the Navy. Cray has the cables, the factories and half the young.
+            Albion is at war with its own future.
+          spanish: La Corona cayó dos veces, y la segunda no se levantó. Siobhan Cray, la ingeniera de la que se reía la corte,
+            conectó Manchester y Edimburgo a la red de Londres en una sola noche y proclamó la Mancomunidad Ascendida. La
+            Reina todavía tiene la Guardia, los dirigibles y la Armada. Cray tiene los cables, las fábricas y la mitad de
+            los jóvenes. Albión está en guerra con su propio futuro.
+        options:
+        - name:
+            english: God save the Queen.
+            spanish: Dios salve a la Reina.
+          effects:
+          - effect: global_flag
+            value: ZAL_guerra_de_las_eras
+          - effect: civil_war
+            tag: ZAL
+            ideology: communism
+            size: 0.4
+            global_flag: ZAL_guerra_civil
+            rebels:
+              cosmetic_tag: ZAL_ASCENDIDA
+              leader:
+                name:
+                  english: First Ascended Siobhan Cray
+                  spanish: Primera Ascendida Siobhan Cray
+                portrait: gfx/leaders/ZAL/siobhan_cray.dds
+              effects:
+              - effect: flag
+                value: MEGANATIONS_rebelde
+              - effect: add_political_power
+                value: 100
+          - effect: add_war_support
+            value: 0.1
+          - effect: add_variable
+            var: ZAL_pompa
+            value: 30
+          - effect: clamp
+            var: ZAL_pompa
+            min: 0
+            max: 100
+          ai_chance: 100
+        src: user_request
+      - id: 99
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The Network Goes Down
+          spanish: Se Cae la Red
+        desc:
+          english: For eleven hours London was silent inside. The implants went dark, the Parliament of Minds could not reach
+            a quorum and a million people discovered they had forgotten how to decide things alone. The network is back, but
+            the trust is not. The Disconnected are marching on Whitehall, and the Council needs someone to blame.
+          spanish: Durante once horas Londres se quedó en silencio por dentro. Los implantes se apagaron, el Parlamento de
+            las Mentes no llegó al quórum y un millón de personas descubrió que se había olvidado de decidir sola. La red
+            volvió, pero la confianza no. Los Desconectados marchan sobre Whitehall y el Consejo necesita un culpable.
+        options:
+        - name:
+            english: Reboot the Council, with new minds.
+            spanish: Reiniciar el Consejo, con mentes nuevas.
+          effects:
+          - effect: add_stability
+            value: 0.05
+          - effect: add_political_power
+            value: -100
+          - effect: add_variable
+            var: ZAL_sincronia
+            value: -10
+          - effect: clamp
+            var: ZAL_sincronia
+            min: 0
+            max: 100
+          ai_chance: 60
+        - name:
+            english: Listen to the Disconnected.
+            spanish: Escuchar a los Desconectados.
+          effects:
+          - effect: add_stability
+            value: 0.1
+          - effect: add_war_support
+            value: -0.1
+          - effect: add_variable
+            var: ZAL_sincronia
+            value: -15
+          - effect: clamp
+            var: ZAL_sincronia
+            min: 0
+            max: 100
+          ai_chance: 40
+        src: user_request
+      - id: 100
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title:
+          english: The War of the Two Ages
+          spanish: La Guerra de las Dos Eras
+        desc:
+          english: 'The network went down twice, and the second time the old country was waiting. In the cathedrals and the
+            regimental messes they had kept the flags, the uniforms and a name: Victoria Ashcombe-Hale, an actress from Bath
+            who plays a queen better than anyone alive. Tonight she was crowned in Westminster Abbey by candlelight. Half
+            the Army knelt. Albion is at war with its own past.'
+          spanish: 'La red se cayó dos veces, y la segunda vez el país viejo estaba esperando. En las catedrales y en los
+            comedores de los regimientos habían guardado las banderas, los uniformes y un nombre: Victoria Ashcombe-Hale,
+            una actriz de Bath que hace de reina mejor que nadie. Esta noche la coronaron a la luz de las velas en la Abadía
+            de Westminster. Medio Ejército se arrodilló. Albión está en guerra con su propio pasado.'
+        options:
+        - name:
+            english: The future does not kneel.
+            spanish: El futuro no se arrodilla.
+          effects:
+          - effect: global_flag
+            value: ZAL_guerra_de_las_eras
+          - effect: civil_war
+            tag: ZAL
+            ideology: fascism
+            size: 0.4
+            global_flag: ZAL_guerra_civil
+            rebels:
+              cosmetic_tag: ZAL_VICTORIANA
+              leader:
+                name:
+                  english: Her Majesty Queen Victoria III
+                  spanish: Su Majestad la Reina Victoria III
+                portrait: gfx/leaders/ZAL/victoria_iii.dds
+              effects:
+              - effect: flag
+                value: MEGANATIONS_rebelde
+              - effect: add_political_power
+                value: 100
+          - effect: add_war_support
+            value: 0.1
+          - effect: add_stability
+            value: 0.1
+          ai_chance: 100
+        src: user_request

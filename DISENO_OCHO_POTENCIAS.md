@@ -2209,3 +2209,11 @@ Pedido del usuario: adaptar a las stats del líder los líderes, ministros y eve
 - Panel del Líder y pulso mensual del líder (decisiones del líder, El Peso del Poder, la edad) también para ZJP y ZAL: se suma a ZJP_pulso y a ZAL_pulso.
 - Stats propias de sus 7 líderes (27_lider_ck.yaml): Shōgun Almirante Kaede Mori 14/13/16/75; los CyberShogun (mentes en la máquina, casi no envejecen) Kanemura 9/18/12/95, Sakaguchi 13/12/18/95, Akabane 7/20/11/95; Tom Ashworth 15/9/12/60; la Primera Ascendida Siobhan Cray 10/18/12/95; la Reina Victoria III 19/10/15/85.
 - Sus 16 ministros suman o restan stats; 24 de sus 118 eventos visibles (20%) mueven stats, con la misma regla que las meganaciones (31_lider_japon_albion.yaml).
+
+## Albión: crisis de gobierno y la Guerra de las Dos Eras (2026-11-01)
+
+Pedido del usuario: en vez de la conspiración republicana, crisis de gobierno la primera vez y guerra civil contra el otro bando la segunda, "lo mismo para ambos lados".
+
+- Neovictoriana: la Pompa en 10 o menos tumba al gobierno (meganations_albion.97: gabinete leal o que elija el Parlamento). Cuenta otra caída recién cuando la Pompa vuelve a pasar de 30; la segunda es la Guerra de las Dos Eras (.98): se levanta la Mancomunidad Ascendida de Siobhan Cray (40% del país).
+- Transhumanista: con estabilidad bajo 30% "se cae la Red" (.99: reiniciar el Consejo o escuchar a los Desconectados); se rearma cuando la estabilidad vuelve a 50%. La segunda vez, la Guerra de las Dos Eras (.100): se levanta el Imperio Neovictoriano de la Reina Victoria III.
+- Una sola guerra de las eras por partida. El evento de la conspiración republicana (.84) queda sin usar. Spec: 30_albion_ampliada (Pompa) y 31_lider_japon_albion (eventos y la Red).

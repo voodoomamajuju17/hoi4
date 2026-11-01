@@ -4696,6 +4696,12 @@ def test_albion() -> None:
         ev = " ".join((mod / "events/meganations_albion.txt").read_text(encoding="utf-8-sig").split())
         check("se suelta en paz: deja de ser satelite, paz blanca y carga su arbol",
               "end_puppet = ZAL" in ev and "white_peace = ZAL" in ev and "load_focus_tree" in ev)
+        check("la Pompa: la primera caida tumba al gobierno, la segunda es guerra civil contra los Ascendidos",
+              "id = meganations_albion.97" in ev and "start_civil_war = { ideology = communism size = 0.4 }" in ev
+              and "set_cosmetic_tag = ZAL_ASCENDIDA" in ev)
+        check("y lo mismo del lado transhumanista: se cae la Red, y la segunda vez guerra contra los neovictorianos",
+              "id = meganations_albion.99" in ev and "start_civil_war = { ideology = fascism size = 0.4 }" in ev
+              and "set_cosmetic_tag = ZAL_VICTORIANA" in ev)
         focus = " ".join((mod / "common/national_focus/ZAL_focus.txt").read_text(encoding="utf-8-sig").split())
         check("hacia el pasado: se alia con Roma contra la Comuna; hacia el futuro: vuelve con la Comuna en paz",
               focus.count("add_to_faction = ZAL") == 2 and "NRE = { add_to_faction = ZAL" in focus

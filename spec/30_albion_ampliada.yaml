@@ -206,11 +206,27 @@ decisions:
         - {effect: event, id: meganations_albion.83, days: 3}
       else:
       - {effect: remove_dynamic_modifier, id: ZAL_telon_cae}
+    # 2026-11-01 (pedido del usuario: "más que conspiración, crisis de gobierno la primera vez,
+    # y la segunda vez que cae la Pompa, guerra civil contra los transhumanistas"). Cuenta
+    # como otra caída recién después de que la Pompa volvió a pasar de 30.
     - effect: if
       when: {all: [{variable_below: {var: ZAL_pompa, value: 11}}, {not_flag: ZAL_pompa_10}]}
       then:
       - {effect: flag, value: ZAL_pompa_10}
-      - {effect: event, id: meganations_albion.84, days: 3}
+      - effect: if
+        when: {not_flag: ZAL_crisis_de_gobierno}
+        then:
+        - {effect: flag, value: ZAL_crisis_de_gobierno}
+        - {effect: event, id: meganations_albion.97, days: 3}
+        else:
+        - effect: if
+          when: {not_global_flag: ZAL_guerra_de_las_eras}
+          then:
+          - {effect: event, id: meganations_albion.98, days: 3}
+    - effect: if
+      when: {all: [{variable_at_least: {var: ZAL_pompa, value: 31}}, {flag: ZAL_pompa_10}]}
+      then:
+      - {effect: clear_flag, value: ZAL_pompa_10}
 
   # ---------------------------------------------------------------------------
   # Los eventos sueltos: uno por vez, cada uno una sola vez
@@ -733,8 +749,8 @@ decisions:
     icon_prefer: [generic_political_actions]
     name: {english: The Court of Her Majesty, spanish: La Corte de Su Majestad}
     desc:
-      english: 'POMP: [?ZAL_pompa]\n\nHow much the nation believes in its own Empire. It falls by 2 every month: the show must be fed. At 70 or more, Rule, Britannia!; at 30 or less, the Curtain Falls; at 10 or less, the republicans start meeting in the cellars.'
-      spanish: 'POMPA: [?ZAL_pompa]\n\nCuánto se cree la nación su propio Imperio. Baja 2 por mes: el espectáculo hay que alimentarlo. Con 70 o más, ¡Reina, Britannia!; con 30 o menos, Se Cae el Telón; con 10 o menos, los republicanos empiezan a juntarse en los sótanos.'
+      english: 'POMP: [?ZAL_pompa]\n\nHow much the nation believes in its own Empire. It falls by 2 every month: the show must be fed. At 70 or more, Rule, Britannia!; at 30 or less, the Curtain Falls; at 10 or less, the government falls; the second time, Albion splits in two: the Crown against the Ascended.'
+      spanish: 'POMPA: [?ZAL_pompa]\n\nCuánto se cree la nación su propio Imperio. Baja 2 por mes: el espectáculo hay que alimentarlo. Con 70 o más, ¡Reina, Britannia!; con 30 o menos, Se Cae el Telón; con 10 o menos, cae el gobierno; la segunda vez, Albión se parte en dos: la Corona contra los Ascendidos.'
     visible: {variable_is: {var: ZAL_ruta, value: 2}}
     src: user_request
     decisions:
