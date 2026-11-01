@@ -275,7 +275,7 @@ def test_vanilla_fixture() -> None:
     check("4 grupos en el fixture", len([k for k, _ in ideologies.entries if k]) == 4)
 
     states = van.states()
-    check("19 states leidos", len(states) == 19, f"leyo {len(states)}")
+    check("20 states leidos (Manila para la HSN, 2026-11-01)", len(states) == 20, f"leyo {len(states)}")
     by_id = {s.id: s for s in states}
     check("state 900 con owner ARG", by_id[900].owner == "ARG")
     check("provincias parseadas", by_id[900].provinces == [1, 2, 3], str(by_id[900].provinces))
@@ -749,7 +749,7 @@ def test_territory() -> None:
         check("Italia europea -> NRE", terr.get(909) == "NRE", str(terr))
         check("Libia italiana -> APF por continente", terr.get(910) == "APF")
         check("Corea por core, aunque sea de Japon -> ZKR", terr.get(911) == "ZKR")
-        check("Japon -> HSN (los puertos)", terr.get(912) == "HSN")
+        check("Japon -> ZJP desde el arranque (regla de descolonizacion; con la regla normal la HSN lo absorbe el primer dia)", terr.get(912) == "ZJP")
         check("India -> Anarquia de Asia (ZWI)", terr.get(914) == "ZWI" and terr.get(915) == "ZWI")
         check("Moscu -> Anarquia de Europa (ZWE)", terr.get(917) == "ZWE")
         check("Ceilan (asia) -> ZWI", terr.get(916) == "ZWI")
