@@ -2994,7 +2994,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### any_controlled_state\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power hidden_effect random_controlled_state save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -4871,7 +4871,7 @@ def test_lider_ck() -> None:
         check("el ministro suma al entrar y resta al salir",
               "on_add = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = -1 }" in m
               and "on_remove = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = 1 }" in m, m[:900])
-        ev = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "events").glob("*.txt"))
+        ev = " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in (mod / "events").glob("*.txt"))
         n = ev.count("limit = { has_country_flag = MEGANATIONS_lider_listo }")
         check("las opciones de los eventos elegidos mueven las stats (solo en las meganaciones)", n >= 184, n)
 
