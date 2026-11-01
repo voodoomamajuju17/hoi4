@@ -2201,3 +2201,11 @@ Pedido del usuario: una regla de partida para que Gran Bretaña y Japón estén 
 - Las flotas y aviones de 1936 en los puertos japoneses siguen siendo de la HSN, en otra base suya (13_military -> forces.owner_remap).
 - Gran Bretaña ya se podía elegir (satélite de la Comuna). Con la regla deja de ser satélite el primer día, sale de la facción y carga su árbol; con la regla normal sigue como estaba.
 - Generador: reglas propias (game_rules en el spec, tools/gen/emitters/reglas.py) y la condición game_rule. Test: test_descolonizado.
+
+## El líder de Japón y de Gran Bretaña (2026-11-01)
+
+Pedido del usuario: adaptar a las stats del líder los líderes, ministros y eventos del contenido nuevo de Japón y Gran Bretaña (29_japon_ampliado, 30_albion_ampliada, de la otra sesión).
+
+- Panel del Líder y pulso mensual del líder (decisiones del líder, El Peso del Poder, la edad) también para ZJP y ZAL: se suma a ZJP_pulso y a ZAL_pulso.
+- Stats propias de sus 7 líderes (27_lider_ck.yaml): Shōgun Almirante Kaede Mori 14/13/16/75; los CyberShogun (mentes en la máquina, casi no envejecen) Kanemura 9/18/12/95, Sakaguchi 13/12/18/95, Akabane 7/20/11/95; Tom Ashworth 15/9/12/60; la Primera Ascendida Siobhan Cray 10/18/12/95; la Reina Victoria III 19/10/15/85.
+- Sus 16 ministros suman o restan stats; 24 de sus 118 eventos visibles (20%) mueven stats, con la misma regla que las meganaciones (31_lider_japon_albion.yaml).

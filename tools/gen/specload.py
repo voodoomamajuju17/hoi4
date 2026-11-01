@@ -46,7 +46,7 @@ SPEC_FILES = {
 # los cambios que se hacen al mismo tiempo en 12_events y 14_decisions.
 OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", "25_ocultos.yaml", "26_guerras_civiles.yaml", "27_lider_ck.yaml", "28_descolonizado.yaml",
                  # 2026-11-01: Japón y Gran Bretaña al 65% de una meganación (sin tocar focos)
-                 "29_japon_ampliado.yaml", "30_albion_ampliada.yaml"]
+                 "29_japon_ampliado.yaml", "30_albion_ampliada.yaml", "31_lider_japon_albion.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -105,9 +105,19 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
     # suma a opciones de eventos ya existentes cambios de Carisma, Astucia, Prestigio
     # y Salud ({"ns.id": [ {carisma: 2}, {}, ... ] }, una entrada por opción).
     if overlay.get("lider_ck"):
-        if raw.get("lider_ck"):
-            raise SpecError("lider_ck ya existe", where=where)
-        raw["lider_ck"] = overlay["lider_ck"]
+        # 2026-11-01: un archivo posterior puede sumar ministros y eventos (Japón y Albión
+        # ampliados viven en 29/30; sus stats, en 31)
+        ck = raw.setdefault("lider_ck", {})
+        ministros = ck.setdefault("ministros", {})
+        for cid, cambios in (overlay["lider_ck"].get("ministros") or {}).items():
+            if cid in ministros:
+                raise SpecError(f"lider_ck: el ministro '{cid}' ya tiene stats", where=where)
+            ministros[cid] = cambios
+        eventos = ck.setdefault("eventos", {})
+        for key in overlay["lider_ck"].get("eventos") or {}:
+            if key in eventos:
+                raise SpecError(f"lider_ck: el evento '{key}' ya tiene stats", where=where)
+        eventos.update(overlay["lider_ck"].get("eventos") or {})
         _lider_ck_eventos(namespaces, overlay["lider_ck"].get("eventos") or {}, where)
 
     # 2026-11-01: reglas propias de la partida (Custom Game Rules)

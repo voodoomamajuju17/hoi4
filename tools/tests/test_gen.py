@@ -4882,15 +4882,21 @@ def test_lider_ck() -> None:
     section("el lider, mas Crusader Kings: stats propias, ministros y eventos (2026-11-01)")
     raw = specload.load(REPO_ROOT / "spec").raw
     ck = raw["lider_ck"]
-    check("los 48 ministros (asesores politicos y teoricos de las ocho) suman o restan stats",
-          len(ck["ministros"]) == 48 and ck["ministros"]["NAS_min_mamani_1"] == {"carisma": -1, "astucia": 3, "salud": 5})
-    # 2026-11-01: Japon y Gran Bretana no tienen stats del lider (el pulso del lider
-    # corre solo en las ocho), asi que sus eventos no entran en la cuenta
-    sin_lider = {"meganations_japon", "meganations_albion"}
-    visibles = sum(1 for ns, b in raw["events"]["namespaces"].items() if ns not in sin_lider
-                   for e in b.get("events") or [] if not e.get("hidden"))
-    check("cerca del 20% de los eventos visibles mueve stats del lider", abs(len(ck["eventos"]) / visibles - 0.2) <= 0.005,
-          f"{len(ck['eventos'])} de {visibles}")
+    check("64 ministros (los 48 de las ocho y los 16 de Japon y Albion) suman o restan stats",
+          len(ck["ministros"]) == 64 and ck["ministros"]["NAS_min_mamani_1"] == {"carisma": -1, "astucia": 3, "salud": 5}
+          and "ZJP_min_mizuno_4" in ck["ministros"] and "ZAL_vic_min_thorne" in ck["ministros"])
+    # 2026-11-01: Japon y Gran Bretana tambien tienen el lider (31_lider_japon_albion): el 20% de
+    # sus eventos se cuenta aparte, con la misma regla
+    propios = {"meganations_japon", "meganations_albion"}
+    vis = lambda keep: sum(1 for ns, b in raw["events"]["namespaces"].items() if keep(ns)
+                           for e in b.get("events") or [] if not e.get("hidden"))
+    de_ellos = [k for k in ck["eventos"] if k.rpartition(".")[0] in propios]
+    check("cerca del 20% de los eventos visibles mueve stats del lider (las ocho)",
+          abs((len(ck["eventos"]) - len(de_ellos)) / vis(lambda ns: ns not in propios) - 0.2) <= 0.005)
+    check("y cerca del 20% de los de Japon y Albion",
+          abs(len(de_ellos) / vis(lambda ns: ns in propios) - 0.2) <= 0.01, f"{len(de_ellos)}")
+    check("Japon y Gran Bretania tienen el panel del Lider",
+          {"ZJP", "ZAL"} <= set(next(c for c in raw["decisions"]["categories"] if c["id"] == "MEGANATIONS_lider_category")["country"]))
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root
@@ -4902,6 +4908,10 @@ def test_lider_ck() -> None:
               and "var = MEGANATIONS_lider_desgaste" in det, det[:600])
         pul = se[se.index("MEGANATIONS_lider_pulso = {"):][:1500]
         check("cada mes mira si cambio el lider", "MEGANATIONS_lider_detectar = yes" in pul, pul[:500])
+        check("Japon y Albion corren el pulso del lider y sus lideres traen stats",
+              se.count("MEGANATIONS_lider_pulso = yes") >= 3
+              and "has_country_leader = { character = ZJP_kaede_mori ruling_only = yes }" in det
+              and "has_country_leader = { character = ZAL_victoria_iii ruling_only = yes }" in det)
         rec = se[se.index("MEGANATIONS_lider_recalcular = {"):][:3000]
         check("lo que cuenta es lo del lider mas lo de los ministros",
               "add_to_variable = { var = MEGANATIONS_lider_total_carisma value = MEGANATIONS_lider_bono_carisma }" in rec, rec[:800])

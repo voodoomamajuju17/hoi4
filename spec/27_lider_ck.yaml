@@ -18,6 +18,7 @@
 #   negociar: +Astucia; fiestas: +Carisma -Salud...) y por lo que ya hace la
 #   opción (estabilidad -> Carisma, apoyo a la guerra -> Prestigio).
 # =============================================================================
+# 2026-11-01: también los 7 líderes de Japón y Gran Bretaña (ministros y eventos en 31_lider_japon_albion.yaml).
 
 decisions:
   scripted_effects:
@@ -593,6 +594,195 @@ decisions:
     - effect: if
       when:
         all:
+        - leader_is: ZJP_kaede_mori
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 22
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 22
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 14
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 16
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 75
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 5
+    - effect: if
+      when:
+        all:
+        - leader_is: ZJP_daisuke_kanemura
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 23
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 23
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 18
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 95
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 1
+    - effect: if
+      when:
+        all:
+        - leader_is: ZJP_ryuji_sakaguchi
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 24
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 24
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 13
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 18
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 95
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 1
+    - effect: if
+      when:
+        all:
+        - leader_is: ZJP_kenzo_akabane
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 25
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 25
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 7
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 20
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 11
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 95
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 1
+    - effect: if
+      when:
+        all:
+        - leader_is: ZAL_tom_ashworth
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 26
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 26
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 9
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 60
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 6
+    - effect: if
+      when:
+        all:
+        - leader_is: ZAL_siobhan_cray
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 27
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 27
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 10
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 18
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 12
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 95
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 2
+    - effect: if
+      when:
+        all:
+        - leader_is: ZAL_victoria_iii
+        - not:
+            variable_is:
+              var: MEGANATIONS_lider_id
+              value: 28
+      then:
+      - effect: set_variable
+        var: MEGANATIONS_lider_id
+        value: 28
+      - effect: set_variable
+        var: MEGANATIONS_lider_carisma
+        value: 19
+      - effect: set_variable
+        var: MEGANATIONS_lider_astucia
+        value: 10
+      - effect: set_variable
+        var: MEGANATIONS_lider_prestigio
+        value: 15
+      - effect: set_variable
+        var: MEGANATIONS_lider_salud
+        value: 85
+      - effect: set_variable
+        var: MEGANATIONS_lider_desgaste
+        value: 4
+    - effect: if
+      when:
+        all:
         - not:
             any:
             - leader_is: EFE_aurelio_iv
@@ -616,6 +806,13 @@ decisions:
             - leader_is: NRE_legado_arbogast
             - leader_is: NRE_irina_vasilescu
             - leader_is: NRE_kerem_aydin
+            - leader_is: ZJP_kaede_mori
+            - leader_is: ZJP_daisuke_kanemura
+            - leader_is: ZJP_ryuji_sakaguchi
+            - leader_is: ZJP_kenzo_akabane
+            - leader_is: ZAL_tom_ashworth
+            - leader_is: ZAL_siobhan_cray
+            - leader_is: ZAL_victoria_iii
         - not:
             variable_is:
               var: MEGANATIONS_lider_id

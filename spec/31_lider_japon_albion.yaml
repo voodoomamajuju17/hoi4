@@ -1,0 +1,151 @@
+# =============================================================================
+# El líder de Japón y de Gran Bretaña, estilo Crusader Kings (2026-11-01)
+#
+# Pedido del usuario: "hay nuevo contenido de Japón y GB (29_japon_ampliado,
+# 30_albion_ampliada), y hay que adaptar los líderes y ministros a los stats que
+# metimos en las meganaciones, así como los eventos que modifican stats".
+# - Los dos tienen el panel del Líder (14_decisions) y su pulso mensual (decisiones
+#   del líder, El Peso del Poder, la edad): se suma a ZJP_pulso y a ZAL_pulso.
+# - Las stats de sus 7 líderes están en 27_lider_ck.yaml (MEGANATIONS_lider_detectar).
+# - Acá: lo que suman o restan sus 16 ministros y el 20% de sus eventos visibles
+#   con cambios de stats (misma regla que las meganaciones).
+# =============================================================================
+
+extend_scripted_effects:
+  ZJP_pulso:
+  - effect: run
+    value: MEGANATIONS_lider_pulso
+  ZAL_pulso:
+  - effect: run
+    value: MEGANATIONS_lider_pulso
+lider_ck:
+  ministros:
+    ZJP_min_hoshino_1:
+      carisma: 2
+      astucia: 1
+    ZJP_min_kitamura_2:
+      astucia: 2
+      salud: -5
+    ZJP_min_kanemura_3:
+      carisma: -1
+      astucia: 3
+    ZJP_min_mizuno_4:
+      carisma: -1
+      prestigio: 3
+    ZJP_min_shirogane_5:
+      carisma: -1
+      astucia: 2
+      salud: 10
+    ZJP_min_ono_6:
+      astucia: 2
+      prestigio: 1
+    ZAL_fut_min_harrow:
+      carisma: 3
+    ZAL_fut_min_nwosu:
+      astucia: 3
+    ZAL_fut_min_mcallister:
+      astucia: 2
+      salud: 5
+    ZAL_fut_min_byrne:
+      carisma: 2
+      prestigio: -1
+    ZAL_fut_min_penhallow:
+      astucia: 2
+      salud: 10
+    ZAL_vic_min_fenwick:
+      astucia: 2
+      prestigio: 1
+      salud: -5
+    ZAL_vic_min_ravensworth:
+      carisma: 3
+      astucia: -1
+    ZAL_vic_min_kettering:
+      astucia: 3
+    ZAL_vic_min_thorne:
+      carisma: -1
+      prestigio: 3
+    ZAL_vic_min_wexley:
+      astucia: 2
+  eventos:
+    meganations_albion.33:
+    - {}
+    - carisma: 1
+    meganations_albion.41:
+    - prestigio: 1
+    - astucia: 1
+    meganations_albion.42:
+    - carisma: 1
+    - carisma: -1
+    meganations_albion.44:
+    - carisma: 2
+    - {}
+    meganations_albion.67:
+    - carisma: 1
+    - {}
+    meganations_albion.69:
+    - carisma: 1
+    - carisma: -1
+    meganations_albion.80:
+    - {}
+    - astucia: 1
+    meganations_albion.81:
+    - {}
+    - carisma: 1
+    meganations_albion.84:
+    - carisma: -1
+    - {}
+    meganations_albion.88:
+    - carisma: 1
+    - carisma: -1
+    meganations_albion.89:
+    - astucia: 2
+    - {}
+    meganations_albion.92:
+    - carisma: 1
+    - carisma: -1
+    meganations_albion.94:
+    - {}
+    - prestigio: 1
+    meganations_japon.43:
+    - {}
+    - astucia: -1
+      prestigio: -1
+    meganations_japon.46:
+    - {}
+    - prestigio: 3
+      carisma: -2
+    meganations_japon.51:
+    - carisma: -1
+    - prestigio: 1
+    meganations_japon.53:
+    - {}
+    - {}
+    - astucia: 1
+      carisma: -1
+    meganations_japon.66:
+    - carisma: -1
+    - {}
+    meganations_japon.68:
+    - {}
+    - {}
+    - astucia: 1
+    meganations_japon.83:
+    - prestigio: -1
+    - carisma: 1
+    meganations_japon.85:
+    - {}
+    - prestigio: 1
+      carisma: -1
+    meganations_japon.87:
+    - {}
+    - {}
+    - salud: 10
+      prestigio: -1
+    - carisma: 1
+    meganations_japon.96:
+    - {}
+    - carisma: -1
+    meganations_japon.98:
+    - prestigio: 1
+    - carisma: 1
+    - carisma: -1
