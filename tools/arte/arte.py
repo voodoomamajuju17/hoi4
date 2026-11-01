@@ -890,7 +890,9 @@ def lote(tags: list[str], salida: str, titulo: str = "") -> None:
     tags = [t for t in tags if len(t) == 3]
     order = ["leader_portrait", "event_picture", "national_spirit_icon", "weapon_icon", "plane_icon",
              "country_flag", "unique_icon"]
+    # sin íconos de foco: esos van en su propio pedido (arte/pedidos_focos_*.txt)
     items = [i for i in catalog() if not i["done"] and not i.get("hand_written")
+             and i["type"] != "national_focus_icon"
              and (i["tag"] in tags or (prefixes and i["id"].startswith(prefixes)))]
     items.sort(key=lambda i: (order.index(i["type"]) if i["type"] in order else 99, i["tag"] not in tags[:1]))
     counts: dict[str, int] = {}
