@@ -251,9 +251,12 @@ def emit(ctx: BuildContext) -> None:
                 keep.add("if" if chain is None else "else_if", b)
                 chain = True
             if tpl and not bad and int(upkeep.get("divisions", 0) or 0):
-                keep.entries.extend(render_effects(uid, [{"effect": "create_units", "template": tpl["name"],
-                                                          "count": int(upkeep["divisions"]), "experience": 0.2}],
-                                                   ec, effects_used, where=SOURCE).entries)
+                # error.log 2026-11-01 ("Malformed token: Onagros", "create_unit error reading
+                # army data"): la IA edita o borra la plantilla; si falta, se vuelve a crear
+                keep.entries.extend(render_effects(uid, [
+                    {"effect": "ensure_template", "name": tpl["name"], "regiments": regs, "support": sup},
+                    {"effect": "create_units", "template": tpl["name"],
+                     "count": int(upkeep["divisions"]), "experience": 0.2}], ec, effects_used, where=SOURCE).entries)
             first = (u.get("lock") or {}).get("techs") or []
             first = [t for t in first if t in locked][:1]
             catch = []

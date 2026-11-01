@@ -2176,3 +2176,9 @@ Captura del panel "El Líder" y pedido del usuario: Salud de 0 a 100 y las otras
 - Eventos: 184 de 922 visibles (20%) suman cambios de stats por opción (27_lider_ck.yaml -> lider_ck.eventos), elegidos con una regla por el nombre de la opción y lo que ya hace.
 - Nadie se sostiene en la cima: una vez por año, -2 a cada stat en 16 o más.
 - Planilla para revisar: balance/lider_stats.txt. Test: test_lider_ck.
+
+## Arreglos de la partida a 2108 (2026-11-01)
+
+- Gran Bretaña no renació: la Comuna cayó ante Roma, pero cuando llegó la paz las islas ya eran de Roma y la Comuna no tenía nada británico para devolver; el evento se perdía y la marca quedaba puesta. Ahora renace con lo británico de la Comuna o de Roma, y si todavía no hay nada se vuelve a probar el mes siguiente.
+- Japón se rebeló en diciembre de 2100: la HSN arranca con 46% de estabilidad (la condición de menos de 65% ya estaba cumplida). Ahora no antes de 2102.
+- error.log: "Malformed token: Onagros / Centinelas" y "create_unit error reading army data": la IA edita o borra la plantilla de su unidad única y el encargo de cada 180 días fallaba. Ahora la plantilla se vuelve a crear si falta (ensure_template, también con apoyo).

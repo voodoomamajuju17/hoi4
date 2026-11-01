@@ -832,9 +832,15 @@ def render_effects(owner: str, items: list[dict], known,
             for i, r in enumerate(item["regiments"]):
                 regs.add(r, Block([("x", i // 5), ("y", i % 5)]))
             name = template_token(item["name"])
+            tpl = Block([("name", Quoted(name)), ("regiments", regs)])
+            if item.get("support"):
+                sup = Block()
+                for i, r in enumerate(item["support"]):
+                    sup.add(r, Block([("x", 0), ("y", i)]))
+                tpl.add("support", sup)
             block.add("if", Block([
                 ("limit", Block([("NOT", Block([("has_template", Quoted(name))]))])),
-                ("division_template", Block([("name", Quoted(name)), ("regiments", regs)]))]))
+                ("division_template", tpl)]))
             effects_used.setdefault("division_template", owner)
             continue
         if effect == "create_units":

@@ -977,13 +977,17 @@ extend_scripted_effects:
       - {country_exists: ASC}
       - country: {tag: ASC, when: {all: [{subject: false}, {not: {war_with: NRE}}]}}
     then:
-    - {effect: global_flag, value: MEGANATIONS_albion_suelta}
     - effect: if
       when:
         country: {tag: ZAL, when: {subject_of: ASC}}
       then:
+      - {effect: global_flag, value: MEGANATIONS_albion_suelta}
       - {effect: event, id: meganations_albion.1, days: 1, target: ZAL}
       else:
+      # 2026-11-01 (partida del usuario: "no vi rebelión de GB"): Roma ya se había
+      # quedado con las islas, la Comuna no tenía nada británico para devolver y el
+      # evento se perdía. Ahora Gran Bretaña renace con lo británico que tengan la
+      # Comuna o Roma, y si todavía no hay nada, se vuelve a probar el mes siguiente.
       - effect: scope
         target: ASC
         effects:
@@ -993,8 +997,20 @@ extend_scripted_effects:
           effects:
           - {effect: transfer_to, value: ZAL}
       - effect: if
+        when: {country_exists: NRE}
+        then:
+        - effect: scope
+          target: NRE
+          effects:
+          - effect: states
+            pick: every
+            when: {core_of: ZAL}
+            effects:
+            - {effect: transfer_to, value: ZAL}
+      - effect: if
         when: {country_exists: ZAL}
         then:
+        - {effect: global_flag, value: MEGANATIONS_albion_suelta}
         - {effect: event, id: meganations_albion.1, days: 2, target: ZAL}
 
 decisions:
