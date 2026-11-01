@@ -1425,6 +1425,13 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("controls_state", sid)
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "leader_is":
+            # gobierna ese personaje (2026-11-01: las stats propias de cada líder)
+            block.add("has_country_leader", Block([("character", value), ("ruling_only", True)]))
+            triggers_used.setdefault("has_country_leader", owner)
+        elif key == "variable_is":
+            block.add("check_variable", Block([("var", value["var"]), ("value", value["value"]), ("compare", "equals")]))
+            triggers_used.setdefault("check_variable", owner)
         elif key == "dynamic_modifier":
             # tiene puesto ese modificador dinámico (2026-11-01: el Sol Bajo de la NAS)
             block.add("has_dynamic_modifier", Block([("modifier", value)]))

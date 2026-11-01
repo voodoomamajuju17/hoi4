@@ -99,6 +99,15 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
         else:
             namespaces[ns] = block
 
+    # 2026-11-01 ("volverlo más Crusader Kings"): las stats del líder. `lider_ck.eventos`
+    # suma a opciones de eventos ya existentes cambios de Carisma, Astucia, Prestigio
+    # y Salud ({"ns.id": [ {carisma: 2}, {}, ... ] }, una entrada por opción).
+    if overlay.get("lider_ck"):
+        if raw.get("lider_ck"):
+            raise SpecError("lider_ck ya existe", where=where)
+        raw["lider_ck"] = overlay["lider_ck"]
+        _lider_ck_eventos(namespaces, overlay["lider_ck"].get("eventos") or {}, where)
+
     # 2026-10-27 (Rumbo a 2120): los incidentes de frontera con la Anarquía
     if overlay.get("anarchy_incidents"):
         if raw.get("anarchy_incidents"):
@@ -329,3 +338,33 @@ class Spec:
 
 def load(root: Path | str = "spec") -> Spec:
     return Spec(Path(root))
+
+
+LIDER_VARS = {"carisma": "MEGANATIONS_lider_carisma", "astucia": "MEGANATIONS_lider_astucia",
+              "prestigio": "MEGANATIONS_lider_prestigio", "salud": "MEGANATIONS_lider_salud"}
+
+
+def _lider_ck_eventos(namespaces: dict, eventos: dict, where: str) -> None:
+    """Agrega a cada opción el cambio de stats del líder (solo en las meganaciones,
+    las que tienen la mecánica: bandera MEGANATIONS_lider_listo)."""
+    for key, por_opcion in eventos.items():
+        ns, _, eid = key.rpartition(".")
+        block = namespaces.get(ns)
+        event = next((e for e in (block or {}).get("events") or [] if str(e.get("id")) == eid), None)
+        if event is None:
+            raise SpecError(f"lider_ck: el evento '{key}' no existe", where=where)
+        options = event.get("options") or []
+        if len(por_opcion) > len(options):
+            raise SpecError(f"lider_ck: '{key}' tiene {len(options)} opciones y se piden {len(por_opcion)}", where=where)
+        for opt, cambios in zip(options, por_opcion):
+            if not cambios:
+                continue
+            efectos = []
+            for stat, valor in cambios.items():
+                if stat not in LIDER_VARS:
+                    raise SpecError(f"lider_ck: '{key}': stat '{stat}' desconocida", where=where)
+                efectos.append({"effect": "add_variable", "var": LIDER_VARS[stat], "value": valor})
+            efectos.append({"effect": "run", "value": "MEGANATIONS_lider_recalcular"})
+            opt.setdefault("effects", []).append(
+                {"effect": "if", "when": {"flag": "MEGANATIONS_lider_listo"}, "then": efectos})
+

@@ -96,6 +96,7 @@ def _emit_traits(ctx: BuildContext) -> set[str]:
 def emit(ctx: BuildContext) -> None:
     known_traits = _emit_traits(ctx)
     xp_rules = {k: v for k, v in (ctx.spec.raw["leaders"].get("advisor_experience") or {}).items() if k != "src"}
+    ministros = (ctx.spec.raw.get("lider_ck") or {}).get("ministros") or {}
     unit_traits = ctx.vanilla.unit_leader_traits() if ctx.vanilla else None
     types, _ = ctx.spec.ideology_index()
     by_country: dict[str, list[dict]] = {}
@@ -234,6 +235,20 @@ def emit(ctx: BuildContext) -> None:
                                         where="03_leaders.yaml")
                     traits.add(None, trait)
                 ab.add("traits", traits)
+                # 2026-11-01 (pedido del usuario: "cada ministro suma o resta alguna stat
+                # al líder"): 27_lider_ck.yaml -> lider_ck.ministros
+                cambios = ministros.get(cid) or {}
+                if cambios:
+                    on_add, on_remove = Block(), Block()
+                    for stat, valor in cambios.items():
+                        var = f"MEGANATIONS_lider_bono_{stat}"
+                        on_add.add("add_to_variable", Block([("var", var), ("value", valor)]))
+                        on_remove.add("add_to_variable", Block([("var", var), ("value", -valor)]))
+                    for b in (on_add, on_remove):
+                        b.add("if", Block([("limit", Block([("has_country_flag", "MEGANATIONS_lider_listo")])),
+                                           ("MEGANATIONS_lider_recalcular", True)]))
+                    ab.add("on_add", on_add)
+                    ab.add("on_remove", on_remove)
                 ab.add("cost", int(advisor.get("cost", 150)))
                 ab.add("ai_will_do", Block([("factor", float(advisor.get("ai_factor", 1)))]))
                 body.add("advisor", ab)
