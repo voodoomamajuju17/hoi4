@@ -74,14 +74,25 @@ def emit(ctx: BuildContext) -> None:
         if air_base.get(sid, 0) > air_base.get(best_base.get(tag), 0):
             best_base[tag] = sid
 
-    def owner_of_province(prov) -> str | None:
+    # 2026-11-01 (regla "Japón descolonizado"): Japón (ZJP) existe en el mapa desde el
+    # arranque, pero las flotas y aviones de 1936 basados ahí siguen siendo de la HSN
+    # (forces.owner_remap: {ZJP: HSN}); se mudan a la mejor base propia de la HSN.
+    remap = cut.get("owner_remap") or {}
+
+    def raw_owner(prov) -> str | None:
         sid = prov_state.get(_int(prov))
-        tag = assignment.get(sid) if sid is not None else None
+        return assignment.get(sid) if sid is not None else None
+
+    def owner_of_province(prov) -> str | None:
+        tag = raw_owner(prov)
+        tag = remap.get(tag, tag)
         return tag if tag in receivers else None
 
     def owner_of_state(sid) -> str | None:
         tag = assignment.get(_int(sid))
+        tag = remap.get(tag, tag)
         return tag if tag in receivers else None
+    mudar: list[Block] = []
 
     naval_files, air_files = _vanilla_oob_files(ctx)
     # Flotas que quedan guardadas para un evento (2026-10-10: la república
@@ -154,6 +165,8 @@ def emit(ctx: BuildContext) -> None:
                 dropped += 1
                 continue
             _retag(fleet, tag)
+            if raw_owner(_text(base)) in remap:
+                mudar.append(fleet)
             fleets[tag].add("fleet", fleet)
             ships[tag] += _count(fleet, "ship")
 
@@ -173,7 +186,10 @@ def emit(ctx: BuildContext) -> None:
                 dropped += 1
                 continue
             sid = _int(sid)
-            if air_base.get(sid, 0) <= 0:
+            if assignment.get(sid) in remap and tag in best_base:
+                sid = best_base[tag]
+                moved += 1
+            elif air_base.get(sid, 0) <= 0:
                 if tag not in best_base:
                     dropped += 1
                     continue
@@ -186,6 +202,21 @@ def emit(ctx: BuildContext) -> None:
             used_by.add(tag)
         for tag in used_by:
             air_variants[tag].extend(_variants(root))
+
+    if mudar:
+        ids = {id(f) for f in mudar}
+        for tag in {remap[t] for t in remap}:
+            otras = [f for k, f in fleets[tag].entries if k == "fleet" and isinstance(f, Block) and id(f) not in ids]
+            base = next((f.get("naval_base") for f in otras if f.get("naval_base") is not None), None)
+            for f in mudar:
+                if base is None or f not in [x for _, x in fleets[tag].entries]:
+                    continue
+                f.entries = [(k, base if k == "naval_base" else v) for k, v in f.entries]
+                for k, tf in f.entries:
+                    if k == "task_force" and isinstance(tf, Block):
+                        tf.entries = [(kk, base if kk == "location" else vv) for kk, vv in tf.entries]
+        ctx.note(f"armada: {len(mudar)} flotas de los puertos de {', '.join(remap)} quedan para "
+                 f"{', '.join(sorted(set(remap.values())))} en otra base")
 
     before = (sum(ships.values()), sum(planes.values()))
     if keep < 1.0:

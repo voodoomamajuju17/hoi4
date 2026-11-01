@@ -275,7 +275,7 @@ def test_vanilla_fixture() -> None:
     check("4 grupos en el fixture", len([k for k, _ in ideologies.entries if k]) == 4)
 
     states = van.states()
-    check("19 states leidos", len(states) == 19, f"leyo {len(states)}")
+    check("20 states leidos (Manila para la HSN, 2026-11-01)", len(states) == 20, f"leyo {len(states)}")
     by_id = {s.id: s for s in states}
     check("state 900 con owner ARG", by_id[900].owner == "ARG")
     check("provincias parseadas", by_id[900].provinces == [1, 2, 3], str(by_id[900].provinces))
@@ -749,7 +749,7 @@ def test_territory() -> None:
         check("Italia europea -> NRE", terr.get(909) == "NRE", str(terr))
         check("Libia italiana -> APF por continente", terr.get(910) == "APF")
         check("Corea por core, aunque sea de Japon -> ZKR", terr.get(911) == "ZKR")
-        check("Japon -> HSN (los puertos)", terr.get(912) == "HSN")
+        check("Japon -> ZJP desde el arranque (regla de descolonizacion; con la regla normal la HSN lo absorbe el primer dia)", terr.get(912) == "ZJP")
         check("India -> Anarquia de Asia (ZWI)", terr.get(914) == "ZWI" and terr.get(915) == "ZWI")
         check("Moscu -> Anarquia de Europa (ZWE)", terr.get(917) == "ZWE")
         check("Ceilan (asia) -> ZWI", terr.get(916) == "ZWI")
@@ -2994,7 +2994,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### any_controlled_state\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_trait\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_game_rule\n### has_trait\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power hidden_effect random_controlled_state save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -4915,6 +4915,25 @@ def test_lider_ck() -> None:
         check("las opciones de los eventos elegidos mueven las stats (solo en las meganaciones)", n >= 184, n)
 
 
+def test_descolonizado() -> None:
+    section("regla: Japon y Gran Bretania descolonizados desde el arranque (2026-11-01)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        gr = " ".join((mod / "common/game_rules/meganations_reglas.txt").read_text(encoding="utf-8-sig").split())
+        check("la regla con dos opciones (normal de base)",
+              "MEGANATIONS_DESCOLONIZADO = {" in gr and "default = { name = NORMAL" in gr and "option = { name = DESCOLONIZADO" in gr, gr)
+        on = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
+        check("Japon: con la regla o elegido por un jugador queda independiente con su paquete; si no, la HSN lo absorbe",
+              "has_game_rule = { rule = MEGANATIONS_DESCOLONIZADO option = DESCOLONIZADO } ZJP = { is_ai = no }" in on
+              and "ZJP_paquete = yes" in on and "annex_country = { target = ZJP transfer_troops = yes }" in on
+              and "add_core_of = HSN" in on, on[:900])
+        check("Gran Bretania: con la regla deja de ser satelite y carga su arbol",
+              "ASC = { end_puppet = ZAL }" in on and "tree = meganations_albion_focus" in on)
+        check("Japon esta en el mapa al arrancar (para poder elegirlo)",
+              any("owner = ZJP" in p.read_text(encoding="utf-8-sig") for p in (mod / "history/states").glob("*.txt")))
+
+
 def test_reglas() -> None:
     section("reglas de la partida: deslizadores de las meganaciones (2026-10-27)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -4998,6 +5017,7 @@ def main() -> int:
         test_agencias,
         test_guerras_civiles,
         test_lider_ck,
+        test_descolonizado,
         test_reglas,
         test_simulador,
         test_vanilla_validation,

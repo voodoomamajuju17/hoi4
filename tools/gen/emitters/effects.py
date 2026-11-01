@@ -1461,6 +1461,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("controls_state", sid)
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "game_rule":
+            # regla de la partida (2026-11-01): has_game_rule = { rule = X option = Y }
+            block.add("has_game_rule", Block([("rule", value["rule"]), ("option", value["option"])]))
+            triggers_used.setdefault("has_game_rule", owner)
         elif key == "leader_is":
             # gobierna ese personaje (2026-11-01: las stats propias de cada líder)
             block.add("has_country_leader", Block([("character", value), ("ruling_only", True)]))

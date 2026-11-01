@@ -156,7 +156,9 @@ def emit(ctx: BuildContext) -> None:
 
     add("ALERTAS")
     add("-" * 100)
-    no_army = [r["tag"] for r in rows if r["states"] and not r["divisions"]]
+    # los que reciben su ejército por efecto el primer día (2026-11-01: Japón, 16_ai -> born_later)
+    al_nacer = set(((ctx.spec.raw.get("ai") or {}).get("born_later")) or [])
+    no_army = [r["tag"] for r in rows if r["states"] and not r["divisions"] and r["tag"] not in al_nacer]
     if no_army:
         add(f"! Sin ejercito inicial: {', '.join(no_army)}.")
     techs = ctx.data.get("techs") or {}

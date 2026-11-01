@@ -350,6 +350,24 @@ territories:
       - { state: ["Taiwan"] }
     capital_state: ["Beijing", "Peking", "Hebei"]
 
+  # 2026-11-01 (regla "Japón y Gran Bretaña descolonizados"): Japón existe en el mapa
+  # desde el arranque para poder elegirlo; con la regla normal la HSN lo absorbe el
+  # primer día (28_descolonizado.yaml). Kyushu y Okinawa son de Corea (ZKR).
+  ZJP:
+    src: user_request
+    lore: >
+      Las islas de Japón: los astilleros de Kanto, Kansai y Hokkaido.
+    resolve:
+      - { state: ["Kanto"] }
+      - { state: ["Kansai", "Kinki"] }
+      - { state: ["San'yo", "Chugoku", "Chūgoku"] }
+      - { state: ["San'in"] }
+      - { state: ["Shikoku"] }
+      - { state: ["Tohoku", "Tōhoku"] }
+      - { state: ["Hokkaido", "Hokkaidō"] }
+      - { state: ["Tokai", "Chubu", "Chūbu"] }
+      - { state: ["Hokuriku"] }
+
   ZKR:
     src: invented
     lore: >

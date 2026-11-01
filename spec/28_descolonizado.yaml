@@ -1,0 +1,89 @@
+# =============================================================================
+# Regla de partida: Japón y Gran Bretaña descolonizados desde el arranque (2026-11-01)
+#
+# Pedido del usuario: "agregá como regla si GB o Japón están disponibles para
+# elegir desde el principio (descolonizado) o no y sigue normal".
+#
+# Para poder ELEGIR un país en la pantalla de selección tiene que existir en el
+# mapa antes de arrancar (las reglas se eligen en esa misma pantalla). Por eso
+# Japón (ZJP) ahora empieza con sus islas (08_territory) y el primer día:
+#   - regla NORMAL y Japón en manos de la IA: la HSN lo absorbe (como siempre;
+#     la rebelión llega después, 24_japon.yaml) y recupera los núcleos;
+#   - regla DESCOLONIZADO, o Japón elegido por un jugador: queda independiente
+#     con el paquete de nacimiento (ZJP_paquete), los Mechas y la flota, y ya no
+#     hay rebelión.
+# Gran Bretaña (ZAL) ya se podía elegir (satélite de la Comuna). Con la regla
+# DESCOLONIZADO deja de ser satélite el primer día y carga su árbol; con la
+# regla NORMAL sigue como hasta ahora (renace si la Comuna cae ante Roma).
+# =============================================================================
+
+game_rules:
+- id: MEGANATIONS_DESCOLONIZADO
+  name: {english: Japan and Great Britain, spanish: Japón y Gran Bretaña}
+  desc:
+    english: 'Whether the Shipyard Shogunate and Albion start the game independent, or rise later as in the main story.'
+    spanish: 'Si el Shogunato de los Astilleros y Albión arrancan la partida independientes, o se levantan después como en la historia principal.'
+  options:
+  - id: NORMAL
+    name: {english: As in the story, spanish: Como en la historia}
+    desc:
+      english: 'Japan belongs to the High Seas and Great Britain is a satellite of the Commune. They break free later (Japan when the High Seas falter, Britain when Rome defeats the Commune). A player who picks Japan keeps it independent.'
+      spanish: 'Japón es de la Alta Mar y Gran Bretaña es satélite de la Comuna. Se liberan después (Japón cuando la Alta Mar trastabilla, Gran Bretaña cuando Roma derrota a la Comuna). Un jugador que elige Japón lo mantiene independiente.'
+  - id: DESCOLONIZADO
+    name: {english: Decolonised from the start, spanish: Descolonizados desde el arranque}
+    desc:
+      english: 'Both start independent: the Shipyard Shogunate with its Mechas, its submarines and its tree, and Albion free of the Commune with its own tree. The game goes on normally from there.'
+      spanish: 'Los dos arrancan independientes: el Shogunato de los Astilleros con sus Mechas, sus submarinos y su árbol, y Albión libre de la Comuna con su propio árbol. La partida sigue normal desde ahí.'
+
+decisions:
+  on_actions:
+  - id: MEGANATIONS_descolonizado_arranque
+    hook: on_startup
+    effects:
+    # Japón
+    - effect: if
+      when: {country_exists: ZJP}
+      then:
+      - effect: if
+        when:
+          any:
+          - {game_rule: {rule: MEGANATIONS_DESCOLONIZADO, option: DESCOLONIZADO}}
+          - country: {tag: ZJP, when: {is_ai: false}}
+        then:
+        - {effect: global_flag, value: MEGANATIONS_japon_rebelde}
+        - effect: scope
+          target: ZJP
+          effects:
+          - {effect: run, value: ZJP_paquete}
+          - {effect: run, value: ZJP_mecha_desbloqueo}
+          - {effect: run, value: MEGANATIONS_flota_pirata_ZJP}
+        else:
+        - effect: scope
+          target: HSN
+          effects:
+          - {effect: annex, target: ZJP}
+          - effect: states
+            pick: every
+            when: {core_of: ZJP}
+            effects:
+            - {effect: add_core, value: HSN}
+    # Gran Bretaña
+    - effect: if
+      when:
+        all:
+        - {game_rule: {rule: MEGANATIONS_DESCOLONIZADO, option: DESCOLONIZADO}}
+        - {country_exists: ZAL}
+        - {country_exists: ASC}
+        - country: {tag: ZAL, when: {subject_of: ASC}}
+      then:
+      - {effect: global_flag, value: MEGANATIONS_albion_suelta}
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: end_puppet, value: ZAL}
+      - effect: scope
+        target: ZAL
+        effects:
+        - {effect: leave_faction}
+        - {effect: focus_tree, value: meganations_albion_focus}
+        - {effect: add_political_power, value: 100}
