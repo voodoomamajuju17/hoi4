@@ -14,6 +14,8 @@ Produce:
 
 from __future__ import annotations
 
+import struct
+
 from ..context import BuildContext
 from ..pdx import Block, Quoted, banner_for, render
 
@@ -43,7 +45,10 @@ def emit(ctx: BuildContext) -> None:
         if not src.exists():
             continue
         tex = f"gfx/interface/intelligence_agency_logos/meganations/{c.tag}.dds"
-        ctx.copy_asset(f"assets/{c.tag}/ideas/{c.tag}_servicio_de_inteligencia.dds", tex)
+        dest = ctx.mod_root / tex
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(_logo(src.read_bytes()))
+        ctx.track(dest)
         gfx = f"GFX_intelligence_agency_logo_MEGANATIONS_{c.tag}"
         sprites.add("spriteType", Block([("name", Quoted(gfx)), ("texturefile", Quoted(tex))]))
         nombre = NOMBRES.get(c.tag, f"Servicio de Inteligencia de {c.tag}")
@@ -60,3 +65,61 @@ def emit(ctx: BuildContext) -> None:
     ctx.write_text("interface/meganations_agencias.gfx",
                    banner_for(SOURCE) + render(Block([("spriteTypes", sprites)])))
     ctx.note(f"agencias: propias con el emblema del Servicio de Inteligencia ({', '.join(hechas)})")
+
+
+# 2026-11-01 (captura del usuario: el emblema salía chico y arriba a la
+# izquierda del aro de la agencia). El juego dibuja el logo a su tamaño, desde
+# la esquina del hueco; el espíritu mide 64x64 y el aro está centrado en
+# (66, 66). El emblema se recorta a lo que tiene dibujo, se agranda a ~100 px
+# y se centra en un lienzo de 132x132, así cae en el medio del hueco.
+LIENZO = 132
+EMBLEMA = 100
+
+
+def _logo(src: bytes) -> bytes:
+    """DDS A8R8G8B8 de 64x64 -> DDS de LIENZO x LIENZO con el emblema centrado."""
+    if src[:4] != b"DDS " or struct.unpack_from("<I", src, 88)[0] != 32:
+        return src  # formato inesperado: va tal cual
+    h, w = struct.unpack_from("<II", src, 12)
+    body = src[128:128 + w * h * 4]
+    # bytes en memoria: B, G, R, A. Premultiplicado para que el borde no se ensucie.
+    px = []
+    for i in range(w * h):
+        b, g, r, a = body[i * 4:i * 4 + 4]
+        f = a / 255
+        px.append((b * f, g * f, r * f, float(a)))
+    xs = [i % w for i in range(w * h) if px[i][3] > 8]
+    ys = [i // w for i in range(w * h) if px[i][3] > 8]
+    if not xs:
+        return src
+    x0, x1, y0, y1 = min(xs), max(xs) + 1, min(ys), max(ys) + 1
+    bw, bh = x1 - x0, y1 - y0
+    k = EMBLEMA / max(bw, bh)
+    nw, nh = round(bw * k), round(bh * k)
+    ox, oy = (LIENZO - nw) // 2, (LIENZO - nh) // 2
+
+    def at(x: int, y: int):
+        if x0 <= x < x1 and y0 <= y < y1:
+            return px[y * w + x]
+        return (0.0, 0.0, 0.0, 0.0)
+
+    out = bytearray(LIENZO * LIENZO * 4)
+    for y in range(nh):
+        sy = y0 + (y + 0.5) / k - 0.5
+        iy = int(sy // 1)
+        fy = sy - iy
+        for x in range(nw):
+            sx = x0 + (x + 0.5) / k - 0.5
+            ix = int(sx // 1)
+            fx = sx - ix
+            p00, p10, p01, p11 = at(ix, iy), at(ix + 1, iy), at(ix, iy + 1), at(ix + 1, iy + 1)
+            c = [p00[j] * (1 - fx) * (1 - fy) + p10[j] * fx * (1 - fy)
+                 + p01[j] * (1 - fx) * fy + p11[j] * fx * fy for j in range(4)]
+            a = c[3]
+            o = ((oy + y) * LIENZO + ox + x) * 4
+            if a > 0:
+                out[o:o + 4] = bytes([min(255, round(c[0] * 255 / a)), min(255, round(c[1] * 255 / a)),
+                                      min(255, round(c[2] * 255 / a)), min(255, round(a))])
+    header = bytearray(src[:128])
+    struct.pack_into("<III", header, 12, LIENZO, LIENZO, LIENZO * 4)
+    return bytes(header) + bytes(out)
