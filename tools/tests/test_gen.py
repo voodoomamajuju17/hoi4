@@ -4810,6 +4810,11 @@ def test_agencias() -> None:
         check("el emblema es la imagen del Servicio de Inteligencia",
               (mod / "gfx/interface/intelligence_agency_logos/meganations/SHD.dds").exists()
               and "intelligence_agency_logos/meganations/SHD.dds" in gfx)
+        import struct as _st
+        logo = (mod / "gfx/interface/intelligence_agency_logos/meganations/EFE.dds").read_bytes()
+        check("el emblema va agrandado y centrado en un lienzo de 132x132 (aro de la agencia, 2026-11-01)",
+              _st.unpack_from("<II", logo, 12) == (132, 132) and len(logo) == 128 + 132 * 132 * 4
+              and logo[128 + (66 * 132 + 66) * 4 + 3] > 0 and logo[128 + 3] == 0)
 
 
 def test_reglas() -> None:
