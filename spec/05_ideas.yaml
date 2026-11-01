@@ -1543,7 +1543,7 @@ countries:
       modifiers:
         stability_factor: 0.15
         political_power_gain: 0.15
-        industrial_capacity_factory: 0.1
+        industrial_capacity_factory: 0.15   # 2026-11-01: más industria para la NAS (antes 0.1)
         army_attack_factor: 0.1
       src: user_design
     - id: NAS_terrazas
@@ -1551,12 +1551,12 @@ countries:
       desc:
         english: The mountainsides feed the kingdom, terrace by terrace.
         spanish: Las laderas alimentan al reino, terraza por terraza.
-      modifiers: {stability_factor: 0.1, production_speed_buildings_factor: 0.1, industrial_capacity_factory: -0.03}
+      modifiers: {stability_factor: 0.1, production_speed_buildings_factor: 0.1}
       src: user_design
     - id: NAS_terrazas_2
       name: {english: The Terrace Kingdom, spanish: El Reino de las Terrazas}
       desc: {english: Self-sufficient to the last potato., spanish: Autosuficiente hasta la última papa.}
-      modifiers: {stability_factor: 0.15, production_speed_buildings_factor: 0.15, political_power_gain: 0.1}
+      modifiers: {stability_factor: 0.15, production_speed_buildings_factor: 0.15, political_power_gain: 0.1, industrial_capacity_factory: 0.05}
       src: user_design
     - id: NAS_mineria
       name: {english: Sky Mining, spanish: La Minería del Cielo}
@@ -1570,7 +1570,7 @@ countries:
       desc:
         english: Potosí again, without the slaves this time.
         spanish: Potosí otra vez, esta vez sin esclavos.
-      modifiers: {local_resources_factor: 0.25, trade_opinion_factor: 0.2, industrial_capacity_factory: 0.1}
+      modifiers: {local_resources_factor: 0.25, trade_opinion_factor: 0.2, industrial_capacity_factory: 0.15}
       src: user_design
     - id: NAS_espiritu_aclimatacion
       name: {english: Acclimatisation, spanish: Aclimatación}
