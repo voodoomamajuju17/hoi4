@@ -67,6 +67,21 @@ def emit(ctx: BuildContext) -> None:
             dest.write_bytes(picks[i].read_bytes())
             ctx.track(dest)
         targets = targets - set(loading)
+        # 2026-11-02 (el usuario: "¿no hay forma de expandir esos lugares? todavía me muestra
+        # imágenes de los DLC"): el juego carga TODOS los archivos de gfx/loadingscreens, sin
+        # importar el nombre, y el descriptor reemplaza esa carpeta (00_project -> replace_paths).
+        # Así entran todas las nuestras con nombre propio y no aparece ninguna del juego. Las
+        # piezas chicas de la pantalla de carga (recuadros del estado y del consejo) se copian
+        # del juego tal cual, porque las usa la interfaz.
+        if spec.get("replace_loadingscreens"):
+            for screen in screens:
+                dest = ctx.mod_root / "gfx" / "loadingscreens" / f"load_mn_{screen.stem}.dds"
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(screen.read_bytes())
+                ctx.track(dest)
+            kept = _copy_small_loading_pieces(ctx)
+            ctx.note(f"pantallas de carga: las {len(screens)} del mod con nombre propio; la carpeta del juego "
+                     f"se reemplaza entera ({kept} piezas chicas de la interfaz copiadas del juego)")
         if loading:
             ctx.note(f"pantallas de carga: {len(screens)} imagenes del mod en {len(loading)} pantallas del juego "
                      f"({', '.join(x.rsplit('/', 1)[-1] for x in loading)})")
@@ -666,3 +681,42 @@ def _diagnose_ui(ctx: BuildContext) -> None:
     for r in rows[:80]:
         ctx.note(f"interfaz: {r}")
     ctx.note(f"interfaz: {len(rows)} piezas de estilo encontradas (se listan hasta 80)")
+
+
+def _copy_small_loading_pieces(ctx: BuildContext) -> int:
+    """Con gfx/loadingscreens reemplazada, las texturas chicas que el juego dibuja
+    encima del fondo (estado de la carga, consejos) tienen que estar en el mod."""
+    import zipfile
+    kept = 0
+    for base in [ctx.vanilla.root] + sorted((ctx.vanilla.root / "dlc").glob("*/")):
+        for path in sorted((base / "gfx" / "loadingscreens").glob("*.dds")):
+            try:
+                data = path.read_bytes()
+                w, _h = _dims(data[:128])
+            except OSError:
+                continue
+            dest = ctx.mod_root / "gfx" / "loadingscreens" / path.name
+            if w < _MIN_BG_WIDTH and not dest.exists():
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(data)
+                ctx.track(dest)
+                kept += 1
+    for archive in sorted((ctx.vanilla.root / "dlc").glob("*/*.zip")):
+        try:
+            with zipfile.ZipFile(archive) as z:
+                for entry in z.namelist():
+                    low = entry.replace("\\", "/").lower()
+                    if not (low.startswith("gfx/loadingscreens/") and low.endswith(".dds") and "/" not in low[19:]):
+                        continue
+                    data = z.read(entry)
+                    w, _h = _dims(data[:128])
+                    dest = ctx.mod_root / entry.replace("\\", "/")
+                    if w < _MIN_BG_WIDTH and not dest.exists():
+                        dest.parent.mkdir(parents=True, exist_ok=True)
+                        dest.write_bytes(data)
+                        ctx.track(dest)
+                        kept += 1
+        except (OSError, zipfile.BadZipFile):
+            continue
+    return kept
+

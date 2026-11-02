@@ -1739,6 +1739,12 @@ def test_balance() -> None:
         check("pantallas de carga: las del juego llevan las imagenes del mod", lar.read_bytes() in shots)
         check("pantallas de carga: el fondo del menu queda en la textura del menu", raw not in shots)
         check("pantallas de carga: el reporte lo dice", any(n.startswith("pantallas de carga:") for n in ctx.notes))
+        propias = sorted((mod / "gfx/loadingscreens").glob("load_mn_*.dds"))
+        check("pantallas de carga: entran todas las del mod con nombre propio (2026-11-02)",
+              len(propias) == len(shots) and all(p.read_bytes() in shots for p in propias), len(propias))
+        desc = (mod / "descriptor.mod").read_text(encoding="utf-8-sig")
+        check("pantallas de carga: la carpeta del juego se reemplaza (no aparecen las del juego ni de los DLC)",
+              'replace_path = "gfx/loadingscreens"' in desc)
         # Fondos que el juego estira (2026-09-30: rayas en focos y Construcciones)
         # 2026-10-02: ya no se descarta: el dibujo va en las esquinas y la cruz del centro queda lisa
         bg2 = mod / "gfx/interface/tiles/tiled_plain_bg2.dds"

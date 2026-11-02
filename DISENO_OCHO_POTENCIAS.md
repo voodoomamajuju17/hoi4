@@ -2217,3 +2217,7 @@ Pedido del usuario: en vez de la conspiración republicana, crisis de gobierno l
 - Neovictoriana: la Pompa en 10 o menos tumba al gobierno (meganations_albion.97: gabinete leal o que elija el Parlamento). Cuenta otra caída recién cuando la Pompa vuelve a pasar de 30; la segunda es la Guerra de las Dos Eras (.98): se levanta la Mancomunidad Ascendida de Siobhan Cray (40% del país).
 - Transhumanista: con estabilidad bajo 30% "se cae la Red" (.99: reiniciar el Consejo o escuchar a los Desconectados); se rearma cuando la estabilidad vuelve a 50%. La segunda vez, la Guerra de las Dos Eras (.100): se levanta el Imperio Neovictoriano de la Reina Victoria III.
 - Una sola guerra de las eras por partida. El evento de la conspiración republicana (.84) queda sin usar. Spec: 30_albion_ampliada (Pompa) y 31_lider_japon_albion (eventos y la Red).
+
+## Pantallas de carga: todas las nuestras, ninguna del juego (2026-11-02)
+
+El juego tiene 21 pantallas de carga con nombre propio y el mod las pisaba con las nuestras; las que sobraban no aparecían y las de algunos DLC seguían saliendo. Ahora el juego carga todo lo que hay en gfx/loadingscreens (sin importar el nombre), así que van todas las del mod como load_mn_<nombre>.dds, y el descriptor reemplaza la carpeta (replace_path): no aparece ninguna del juego ni de los DLC. Las piezas chicas de la pantalla de carga (recuadros de estado y consejo) se copian del juego tal cual. Se sacaron las de vida diaria de la Comuna y la FCU (pedido del usuario).
