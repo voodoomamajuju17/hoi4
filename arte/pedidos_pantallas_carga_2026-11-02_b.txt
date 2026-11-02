@@ -1,0 +1,456 @@
+# 10 pedidos - loading_screen - pantallas de carga cinematográficas, segunda tanda (2026-11-02)
+
+Para el generador de imágenes:
+- Cada bloque ASSET_REQUEST es UNA imagen. Pedir una imagen por vez, pegando el bloque entero.
+- Devolverla con el nombre EXACTO de `filename`.
+- Proporción 4:3 horizontal (1920x1440 o más grande con la misma proporción). PNG.
+- Sin texto, letras, números legibles, logos, banderas reales ni marcas de agua. Única excepción: el diario de la imagen 44 (dice qué texto lleva).
+- Zona libre: el 15% inferior del cuadro queda tranquilo (suelo, agua, sombra, mesa), porque ahí el juego dibuja la barra de carga.
+- Todas son fotorrealistas, pero cada una tiene su propia cámara, encuadre y técnica.
+- Van a assets/menu/loading/ y el juego las reparte entre sus pantallas de carga.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 37_APF_dentro_del_tanque_ogun
+filename: 37_APF_dentro_del_tanque_ogun.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "El hierro de Ogun" - inside a state-of-the-art tank of the African Peoples' Federation, at the moment it fires.
+
+style: Ultra-realistic cinematic film still from a modern tank war film, shot inside a real turret with a compact cinema camera: practical lights only, hard contrast, real dust and smoke particles in the air, motion blur on the recoiling breech, sweat and skin texture, film grain. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The African Peoples' Federation (APF) builds rugged, repairable "people's technology": tough, simple, modern machines with civilian and mining DNA, solar and biofuel power, painted with bright kente-like geometric bands. Its most advanced tank is the Ogun, dedicated to the orisha of iron: a sleek dark-iron hull with forged hammer-marked surfaces, red and yellow geometric patterns, solar strips and a long gun. Inside it is high-tech but honest: everything can be unbolted and fixed with a spanner.
+
+camera:
+- Lens: 18mm, aperture f/2.8, shutter 1/50 s (the recoil is a violent blur, the faces sharp).
+- Position: wedged in the loader's corner of the turret, at the rear left, at shoulder height, looking forward-right across the whole turret interior.
+- Angle: slightly upward, Dutch tilt of 4 degrees; the camera shakes with the shot (a little double-image on the brightest lights).
+
+composition:
+- Right half: the gun breech, huge, dark forged iron with hammer marks, recoiling toward the camera at full speed, a spent brass-and-composite shell case ejecting with a puff of grey smoke and sparks. Hydraulic recoil cylinders painted earth red. A yellow-and-black geometric band painted around the breech guard.
+- Left-centre: the gunner, a woman of about 30 from East Africa, close-cropped hair under a padded olive tanker's helmet with a band of kente-like pattern, face pressed to the rubber eyepiece of the gunsight, jaw clenched, a thin line of sweat; her hands on worn twin grips with yellow triggers.
+- Upper centre, in the commander's position above and behind her: the commander, a man of about 45 from West Africa, grey in his beard, leaning to his periscope, one hand raised in a fist (the "fire" signal still in the air), mouth open shouting.
+- Between them, a small rugged display screen in a rubber frame shows the thermal view outside: through it (only shapes, no numbers) a white-hot enemy tank silhouette on a dusty plain, just hit, a bright flash. Next to the screen: big chunky analogue switches, a laminated card with only pictograms, a red bead necklace and a small carved wooden Ogun figure hanging from a cable tie, a dented water bottle.
+- Walls: dark iron with visible bolts, cables in orange sleeves held by zip ties, a solar-battery pack with a green status light, ammunition racks with blast doors open on the left showing the next rounds (copper-coloured caps).
+- Bottom 15% (calm): the dark turret floor, a crumpled blanket, cables, brass shell cases rolling.
+
+light:
+- Main light: the muzzle flash light flooding in through the gunner's sight and the open vision blocks: a split second of hot orange-white light from the front-right, freezing the dust.
+- Interior: dim red combat lighting, plus the cold blue-white glow of the thermal screen on the gunner's cheek.
+- Contrast between red interior, orange flash and blue screen.
+
+atmosphere: propellant smoke filling the turret, dust shaken off every surface, sparks, the whole frame vibrating.
+
+palette: dark forged iron, earth red, savanna ochre, bright yellow and black geometric bands, olive fabric, warm skin tones, red combat light, one blue screen.
+
+avoid: spaceship cockpit, holograms, glossy sci-fi, Western tank interiors copied exactly, readable text or numbers on screens or panels, cartoon expressions.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 38_SHD_artilleria_mina_himalaya
+filename: 38_SHD_artilleria_mina_himalaya.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "La mina del paso" - a Chinese self-propelled artillery piece of the Socialist Hydraulic Directorate hits an anti-tank mine while crossing the Himalaya.
+
+style: Photorealistic long-lens documentary photograph, like a famous frame shot by a mountain war photographer with a 400mm telephoto from the other side of a valley: compressed perspective, atmospheric haze between planes, frozen debris, slight heat-shimmer, natural grain. Majestic and terrible at once. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Socialist Hydraulic Directorate (SHD) is a Chinese state built around dams and canals. Its machines are simple, standardized, mass-produced: boxy, symmetrical, water-cooled and hydraulically driven, concrete-grey and jade-green, with stencilled geometric unit codes (no letters) and a small harmony emblem (a circle with flowing waves). Its self-propelled howitzer, the Leiting, is a heavy tracked gun with a thick barrel inside a large water-jacket, pipes, massive recoil pistons, a boxy armoured shield like a sluice gate and a water tank at the back. They always travel in rows of identical vehicles.
+
+camera:
+- Lens: 400mm, aperture f/8, shutter 1/2000 s (rocks and water droplets frozen in mid-air).
+- Position: on the opposite slope of a deep Himalayan valley, about 1.5 km away and at the same height as the road.
+- Angle: horizontal, perfectly level, the road crossing the frame from left to right along a sheer cliff face.
+
+composition:
+- Upper 15%: the snowy ridge and the brilliant ice summits of the Himalaya against a deep cold blue sky, a plume of wind-blown snow from the highest peak.
+- Middle: a narrow road cut into a vertical cliff of grey rock, with a low broken parapet and strings of faded prayer flags (no letters) hanging from an old pole.
+- Centre: the convoy. A line of six identical Leiting self-propelled howitzers spaced at exact intervals, barrels locked forward. The third vehicle (centre of the frame) has just driven onto an anti-tank mine: a huge eruption of brown dust, rock and black smoke bursts from under its left track; the whole 50-tonne vehicle is lifted, its front tilted up about 15 degrees, one track unrolling in the air like a ribbon, road-wheels and armour plates flying, and its water tank ruptured, a white spray of water and steam bursting from the back, glittering in the sun.
+- Left: the two vehicles in front, stopping; tiny crew figures in dark green uniforms jumping down. Right: the vehicles behind braking, one already reversing; a jade-green command truck at the end of the column.
+- Bottom 20% (calm): the deep shadowed valley below the road, a glacier-grey river far down, mist, out-of-focus scree.
+
+light:
+- High-altitude midday sun, very hard and clean, from the upper left; razor-sharp shadows; the snow almost white-blue.
+- The explosion lit by the sun from the side (no fireball glow: dust, earth and steam, with only a small orange core at the base).
+
+atmosphere: thin air, crystal clear in the distance but with a pale blue haze between the camera and the road; tiny falling rocks rolling down the cliff after the blast; snow dust lifted by the shockwave.
+
+palette: granite grey, snow white, ice blue, concrete grey and jade green of the vehicles, brown dust, white steam.
+
+avoid: big orange Hollywood fireball, vehicles that look modern-day Chinese PLZ copies, readable markings, red flags, wide-angle distortion, cartoon look.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 39_ASC_medallas_a_los_robots_hamburgo
+filename: 39_ASC_medallas_a_los_robots_hamburgo.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Héroes del Plan" - an officer of the Automated Socialist Commune decorates fully robotic soldiers in front of Hamburg City Hall while the crowd cheers after a great victory. Hamburg, 2104.
+
+style: Photorealistic press photograph of a historic day, like a front-page news photo taken with a 200mm telephoto from the press stand: compressed crowd, shallow depth of field, real colours of a northern European spring day, confetti in motion, natural grain. Triumphant, but with a quiet strangeness. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Automated Socialist Commune (ASC) rules Europe with planning algorithms and robots; its army needs no humans. Its robot soldiers are constructivist geometry: white ceramic armour plates with red structural frames, black sensor glass with rows of identical small red sensor eyes, no faces, no mouths, modular blocks that clip together, geometric serial markings (no letters). Its officers wear charcoal-grey field uniforms with white shoulder panels, red constructivist chevrons, a high mandarin collar and a red triangle rank badge on the collar.
+
+the place: the Rathausmarkt square in Hamburg, in front of the real neo-Renaissance City Hall (Rathaus) with its tall central clock tower, green copper roofs and sandstone facade full of statues. In 2104 the facade is cleaned and lit, with long vertical red-and-white banners with only geometric shapes (a triangle inside a hexagon) hanging between the windows. Small white maintenance drones hover near the roof.
+
+camera:
+- Lens: 200mm, aperture f/4, shutter 1/800 s.
+- Position: on a press platform at the right edge of the square, about 4 metres high, 50 metres from the ceremony.
+- Angle: looking left and slightly down, so the line of robots runs diagonally from the right foreground toward the City Hall entrance at the left, with the tower filling the upper left.
+
+composition:
+- Midground, the diagonal: a single straight line of twelve identical robot soldiers standing at perfect attention, 2.1 metres tall, white ceramic plates with fresh battle scars, scorch marks and a few patched plates in brighter white, red frames, rows of small red sensor eyes glowing calmly. Each has a small red-and-white enamel medal on a short ribbon pinned to its chest plate.
+- On that line, in the centre of the frame and in sharp focus: the decorating officer, a woman of about 50, Northern European, grey hair in a tight short cut, charcoal-grey uniform with white shoulder panels and red chevrons, standing on her toes to pin a medal onto the chest plate of the tallest robot, who has slightly lowered its head toward her, a strangely human gesture. Behind her an aide holds a flat case with the remaining medals.
+- Behind the line, on the City Hall steps: a row of human dignitaries in grey and a white robot honour band (robots with brass instruments).
+- Left and right edges and background: the crowd, thousands of Hamburgers behind low barriers, delirious with joy: families with children on shoulders, dock workers in red overalls, old people crying, teenagers waving small paper flags with red triangles (no letters), hats thrown in the air. Red and white confetti falling everywhere.
+- Upper right: the sky with a formation of white ASC drones crossing in a perfect triangle, trailing thin red smoke.
+- Bottom 15% (calm): out-of-focus heads of the crowd and the press barrier rail, blurred.
+
+light:
+- Bright spring afternoon after rain: wet cobblestones shining, sun low from the right, warm on the sandstone facade, crisp shadows; clouds clearing over the copper roofs.
+
+atmosphere: confetti in the air in all depths of field (sharp and blurred), a light breeze moving the banners, the small human gesture at the centre amid the machine perfection.
+
+palette: sandstone, copper green, charcoal grey, white ceramic, constructivist red, wet grey cobbles, blue sky patches.
+
+avoid: Terminator skulls, humanoid robot faces, Star Wars droids, Nazi or Soviet-era real symbols, readable text on banners or flags, modern-day German flags, sad tone.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 40_EFE_vs_FCU_bunker_tierra_del_fuego
+filename: 40_EFE_vs_FCU_bunker_tierra_del_fuego.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "El nido del Fin del Mundo" - a bio-steel bunker of the Ecofascist Empire, a machine-gun nest, firing on landing craft and elite mercenaries of the Corporate Union on the coast of Tierra del Fuego.
+
+style: Ultra-realistic cinematic war film still, as if from the opening beach-landing sequence of a great war film, shot from inside the bunker with a cinema camera: hard daylight through the firing slit, deep shadows, muzzle-flash freeze, cold sea spray, film grain. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Ecofascist Empire (EFE) does not build, it grows: its bunkers are cultivated from bio-steel, a dark green-bronze material that looks like lacquered hardwood fused with insect chitin, with growth rings, veins and knots, no straight lines, glowing amber sap in translucent veins, and small gold laurel inlays. Its soldiers wear deep forest-green high-collared field tunics with bark-brown leather straps. The Corporate Union (FCU) fights with premium contractor products: sleek navy-blue carbon and polished chrome, LED strips, sponsor-like abstract badges, and paid elite mercenaries.
+
+camera:
+- Lens: 28mm, aperture f/5.6, shutter 1/250 s.
+- Position: inside the bunker, at the back wall, at the height of a crouching man, 2 metres behind the firing slit.
+- Angle: looking straight out through the wide horizontal firing slit down onto the beach, so the slit frames the battle like a cinema screen inside the dark organic walls.
+
+composition:
+- Frame within the frame: the dark interior of the bunker fills the edges: curved bio-steel walls like the inside of a giant seed or a turtle shell, ribs like roots, amber sap veins glowing softly, a few gold laurel inlays around the slit, spent shell casings and a thermos of mate on a ledge.
+- Right third, in profile and in focus: the machine-gunner, a young EFE soldier (about 22, Patagonian mestizo features, windburned cheeks, dark green helmet with a bark-like texture) firing the gun. The machine gun is grown bio-steel: shaped like a long thin animal with a ribbed barrel cooled by living gill-like fins, fed by a belt of amber-tipped rounds, a bright muzzle flash at the slit. On the left, his loader (an older man with a grey moustache) feeds the belt, shouting.
+- Through the slit (centre): the beach of Tierra del Fuego below, 150 metres away: grey-black pebbles, kelp, the cold grey-green sea with white breaking waves. Three FCU landing craft: sleek navy and chrome hydrofoil boats with LED strips, ramps dropping in the surf, one hit and smoking. Elite FCU mercenaries running up the beach: tall operators in navy carbon armour with chrome helmet visors, cyan LED lines, abstract silver corporate patches (no letters), expensive modular rifles; some fall, some dive behind the ruins of a beached fishing boat, one fires a shoulder launcher toward the bunker; bullet impacts kicking up water and pebbles in lines.
+- Distance: the snowy jagged mountains of Tierra del Fuego across the channel, low dark clouds, a flock of seabirds scattering.
+- Bottom 15% (calm): the inner ledge of the slit and the dark bunker floor, out of focus, with the casings.
+
+light:
+- Overcast, cold, windy austral day; flat silver light from the sea outside, very bright compared with the dark interior.
+- The amber sap glow and the muzzle flash light the gunner's face from below and from the front.
+
+atmosphere: sea spray and drizzle blown by strong wind, smoke from the hit landing craft drifting along the beach, cordite haze inside the bunker.
+
+palette: dark forest green, bark brown, chitin bronze, amber glow, gold inlays inside; cold grey sea, black pebbles, navy blue, chrome and cyan for the FCU outside.
+
+avoid: concrete Atlantic Wall bunker, WWII Normandy uniforms, readable logos on the mercenaries, cartoon gore, sunny weather, tropical beach.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 41_SHD_briefing_costa_vietnamita
+filename: 41_SHD_briefing_costa_vietnamita.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "El plan de la costa" - the high command of the Socialist Hydraulic Directorate at a briefing over a map of the coast of present-day Vietnam, held by the High Seas Market Nation.
+
+style: Photorealistic cinematic still from a political-military drama, shot from high above the map table with a 35mm lens, like a carefully lit overhead shot by a great cinematographer: controlled pools of light, deep shadows around the edges, tiny dust in the lamp beams, rich detail on the map. Cold, calculating, silent tension. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Socialist Hydraulic Directorate (SHD) is a Chinese state built around dams and canals, ruled by engineers. Officers wear dark green high-collared field uniforms with grey shoulder boards and a small jade wave insignia on the collar; civilian directors wear dark Zhongshan-style tunics with a jade wave pin. The coast they study belongs to the High Seas Market Nation (HSN), a maritime trade empire coloured petrol teal.
+
+camera:
+- Lens: 35mm, aperture f/4.
+- Position: almost directly above the table, about 3 metres high, rotated so the map's coastline runs from top to bottom slightly diagonally.
+- Angle: 75 degrees downward (not perfectly flat): we see the map, the hands and the tops of heads, and the faces of the officers on the far side looking down.
+
+composition:
+- Centre (60% of the frame): a large physical map table: a raised relief map of the Vietnamese coast from the Gulf of Tonkin to the Mekong delta, with Hainan island at the top right, the long S-shaped coastline, mountains of the interior in relief, the sea in deep blue. The map is real geography but has NO text, no labels, no numbers. On it:
+  - HSN positions marked by small petrol-teal blocks along the coast and teal ship models in the bays (the ports of Haiphong, Da Nang and Cam Ranh shown only by their shapes).
+  - SHD forces as identical jade-green blocks in perfect rows on the inland border, and jade arrows of thin glass rods pointing to the coast.
+  - Water features stand out: the rivers drawn in thin silver lines, the Red River and Mekong in silver, a small dam symbol (circle with waves).
+- Around the table: seven members of the high command. Directly at the bottom centre, only hands and arm visible: the presiding Director's hand in a dark sleeve moving a jade arrow onto Da Nang with a long brass pointer. On the far side, facing the camera: a grey-haired general (Chinese, about 65) with reading glasses on his forehead, arms crossed; a younger woman colonel of naval engineering (about 40) pointing at the tide lines with a pencil; an intelligence officer in a plain grey tunic holding a folder of black-and-white aerial photos (no text) of a port. On the left and right sides: officers seen from above, caps on the table, teacups with lids, a hydraulic flow calculator (a brass slide device) and a jade paperweight.
+- Edges: dark, a polished stone floor, the edge of a large window with blinds throwing striped light.
+- Bottom 15% (calm): the dark edge of the table and the Director's sleeve, out of focus.
+
+light:
+- Three green-shaded hanging lamps over the table make three warm pools of light on the map; everything else falls into shadow.
+- Cold blue night light comes in through the blinds on the right, in stripes across the floor and one officer's shoulder.
+
+atmosphere: cigarette and tea steam curling up into the lamp beams; absolute order on the table; tension in the hands.
+
+palette: jade green, dark green uniforms, concrete grey, deep sea blue of the map, silver rivers, warm lamp yellow, petrol teal for the enemy.
+
+avoid: digital holographic map, screens, readable labels or place names, real modern Chinese military symbols or flags, red star overload, fantasy map style.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 42_NAS_wingsuit_andes
+filename: 42_NAS_wingsuit_andes.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Hijos del Cóndor" - paratroopers of the Neo-Andean Sky Kingdom in wingsuits, flying at great speed through the Andes under anti-aircraft fire.
+
+style: Photorealistic extreme-sports cinematography: shot by a camera flyer following the squad in his own wingsuit, with a stabilised cinema camera on his helmet: extreme speed sensation, motion blur on the rocks, sharp flyers, real lens, flak bursts like a war film. Breathtaking. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Neo-Andean Sky Kingdom (NAS) is a solar mountain kingdom: gold, turquoise, terracotta and alpaca white, Inca stepped (chakana) geometry and woven aguayo stripes. Its elite troops are the Sons of the Condor, paratroopers in high-altitude gear: oxygen masks, pale grey and ochre wool-and-kevlar, small sun-gold disc insignia on the shoulder.
+
+camera:
+- Lens: 16mm, aperture f/8, shutter 1/400 s.
+- Position: flying, 8 metres behind and 3 metres above the last flyer of the squad, through a narrow gorge.
+- Angle: looking forward and down along the flight path, the horizon tilted about 20 degrees because the camera flyer is banking right.
+
+composition:
+- Centre and right: five Sons of the Condor in a tight V formation, arms and legs spread. Their wingsuits are designed like condor wings: black upper surface with long white panels on the wing edges and separated "finger" tips at the ends, like the primary feathers of the Andean condor; thin gold solar-film strips along the arm wings; a woven aguayo stripe (red, gold, turquoise) on the leg wing. Helmets of turquoise-tinted visor and oxygen mask, a short rifle and a compact parachute pack strapped to the back, a gold sun-disc on each shoulder.
+- Around them: a narrow Andean gorge rushing past at 250 km/h: vertical cliffs of dark rock streaked with ochre, snow and blue ice in the gullies, a thin silver river 300 metres below. The cliff on the left passes so close it is a pure motion blur.
+- Ahead (upper centre): the gorge opens toward a high plateau with an enemy anti-aircraft position on a rocky spur: the source of the fire.
+- The flak: black and grey bursts of anti-aircraft fire exploding in the gorge ahead and above the squad, two very close (one at upper right with a bright orange core and shrapnel streaks), lines of glowing tracer bullets arcing up from the spur and passing between the flyers.
+- Bottom 15% (calm): the dark blurred rock and the distant river far below.
+
+light:
+- Dawn: the sun just rising behind the mountains at the upper left, a gold rim light on every flyer's wings and helmet; the bottom of the gorge still in deep blue shadow; snow peaks blazing pink-gold.
+
+atmosphere: thin clouds tearing past, ice crystals sparkling, flak smoke, the feeling of falling at full speed.
+
+palette: black, condor white, sun gold, turquoise, aguayo red, dark rock, blue shadows, pink-gold snow, orange flak.
+
+avoid: Red Bull or brand logos, bright neon wingsuits, Iron Man jetpacks, readable text, Himalayan prayer flags, fantasy bird-men.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 43_NRE_triunfo_bagdad
+filename: 43_NRE_triunfo_bagdad.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "El Triunfo de Bagdad" - the people of Rome celebrate a neo-Roman legion in a Triumph, returning home after conquering Baghdad; women ride on top of a great neo-Roman tank; general joy.
+
+style: Photorealistic street photography inside a jubilant crowd, like a historic parade photo taken by a photographer squeezed in the front row with a 35mm lens: people brushing past the lens, rose petals in focus and out of focus, warm natural colour, true sunlight. Euphoric, loud, overwhelming. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Neo-Roman Empire (NRE) restored Rome and holds Triumphs for its victories, like the ancient ones. Its war machines are massive, ceremonial and theatrical: crimson, imperial purple, polished gold, marble white and bronze, eagle standards and laurels. Its main battle tank, the Pretorian, is sleek but ceremonial, imperial purple with gold trim, an ornate crested turret, a scorpion emblem of the praetorian guard, marble-white details and polished bronze track guards. Soldiers wear dark burgundy uniforms with segmented lorica-like ballistic plates and crimson cloaks pinned with a gold eagle fibula.
+
+camera:
+- Lens: 35mm, aperture f/4, shutter 1/1000 s.
+- Position: in the front row of the crowd at street level on the Via dei Fori Imperiali, at the barrier, 1.6 metres high, 12 metres from the tank.
+- Angle: looking up the avenue as the parade comes toward the camera, slightly upward at the tank; the Colosseum at the end of the avenue in the upper right background.
+
+composition:
+- Centre: a Pretorian tank rolling slowly toward the camera, its long gun raised high and wrapped with a laurel garland, a gold eagle on the front, battle dust of Mesopotamia still on its lower hull and tracks. On top of the turret and hull: five young Roman women of the crowd who climbed up: one standing on the turret waving a crimson scarf, two sitting on the gun barrel laughing, one kissing a legionary tank commander on the cheek while he grins in his crested helmet, one throwing rose petals.
+- Around and behind the tank: the legion on foot in marching blocks, crimson cloaks, eagle standards (aquila) held high with laurel wreaths, some legionaries carrying trophies from the East: a captured enemy banner without letters, an ornate Mesopotamian palm-wood chest. A gilded open triumphal car pulled behind by a white armoured vehicle carries the victorious general in a purple cloak with a laurel crown, a man holding the crown over his head as in ancient Triumphs (far, small, behind the tank).
+- Both sides of the avenue: an ocean of people on the barriers, balconies and the ruins of the Imperial Forums: children on shoulders, old men crying, nuns, waiters in aprons, everyone throwing rose petals and confetti; crimson banners with only a gold eagle and laurel shapes hanging from the buildings.
+- Foreground edges: blurred arms, a raised smartphone-like glass tablet, a girl's hand throwing petals right in front of the lens (soft).
+- Sky: three NRE aircraft passing overhead trailing crimson, white and gold smoke.
+- Bottom 15% (calm): out-of-focus heads and shoulders of the front row, the barrier rail, petals on the ground.
+
+light:
+- Golden late-afternoon Roman sunlight from the left, warm on the marble and on the faces, long shadows; the petals glowing backlit; the Colosseum in warm haze.
+
+atmosphere: rose petals and confetti everywhere, dust kicked up by tracks, a sense of noise: trumpets, shouts, engines.
+
+palette: crimson, imperial purple, gold, marble white, bronze, rose red petals, warm travertine stone, blue Roman sky.
+
+avoid: fascist-era real symbols (fasces, real 1930s flags), modern Italian flags, readable SPQR or any text, ancient-only costumes with no technology, sad or ominous tone.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 44_ZAN_diario_los_angeles
+filename: 44_ZAN_diario_los_angeles.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Cayó Angelópolis" - a squad of five raiders from the Lawless Lands laugh and celebrate reading a Corporate Union newspaper about how they took Los Angeles; on the front page, the photo of their commander, who is there with them laughing and drinking. Los Angeles, 2099.
+
+style: Photorealistic cinematic still, like a scene from a gritty crime film shot with an anamorphic lens: warm tungsten interior light, oval bokeh, faint horizontal lens flare, rich skin texture, film grain. Raw, funny, a little menacing. No CGI gloss, no illustration, no painting. No logos, no watermark.
+
+text exception: the newspaper is the only text in the image. Masthead in elegant black serif capitals: "THE UNION HERALD". Huge headline below: "ANGELOPOLIS FALLS". Nothing else readable: the columns of body text are only blurred grey lines. (Angelopolis is the corporate name of Los Angeles in the Corporate Union.)
+
+setting and lore: In 2099 the raiders of the Lawless Lands took Los Angeles from the Corporate Union (FCU), the glossy chrome-and-navy corporate state of North America. The raiders build everything from junk: welded scrap armour, car doors, road signs without letters, chains and spikes, raider tags without letters; palette of rust, soot black, hazard yellow and faded mismatched colours.
+
+the place: the looted penthouse office of a corporate tower in Los Angeles at night: floor-to-ceiling windows, a long glossy navy-blue boardroom table scratched with knife marks, white leather executive chairs, a smashed glass screen on the wall, an expensive abstract chrome sculpture now wearing a raider's spiked helmet. Through the windows: the night city skyline with some fires burning, palm trees, the glow of the burning FCU tower across the street, searchlights.
+
+camera:
+- Lens: 40mm anamorphic, aperture f/2.8.
+- Position: at the end of the boardroom table, at table height (the bottom of the frame is the glossy table surface, reflecting the scene).
+- Angle: straight along the table toward the group at the far end, slightly low.
+
+composition:
+- Centre: the commander, sitting with his boots up on the table in the big chief executive's chair: a big man of about 50, sunburnt, grey mohawk, thick beard braided with small bolts, a scar across the nose, a welded scrap-metal shoulder plate made from a car door over a leather vest, rings made of nuts. He laughs with his head thrown back, holding a bottle of very expensive whisky in a crystal decanter, pouring it into his mouth.
+- In front of him, held up by a raider so the front page faces the camera: the newspaper "THE UNION HERALD" with "ANGELOPOLIS FALLS" and a large black-and-white front-page photo that is clearly THE SAME commander: his same face and mohawk, shot by a press photographer, standing on a burning chrome car with a rifle raised.
+- The other four raiders around him, all laughing:
+  - left: a wiry young woman with shaved sides and hazard-yellow face paint stripes, pointing at the photo and doubled over laughing;
+  - left back: an old raider with a gas-mask hanging at his neck, wearing a stolen FCU executive's navy suit jacket over his armour, raising a champagne flute;
+  - right: a huge man holding the newspaper up with both hands, mouth open in a roar of laughter, armour made of a road sign;
+  - right edge: a teenager in a too-big corporate security helmet, filming the moment with a cracked device, grinning.
+- Table: crystal glasses, a whisky decanter, an open box of cigars, a rifle made of pipes, a pile of corporate ID badges, a shattered framed corporate award.
+- Bottom 15% (calm): the dark glossy table surface in the foreground, out of focus, reflecting the warm lights.
+
+light:
+- Warm tungsten from a single desk lamp and two candles on the table; cold blue and orange city light from the windows behind (fires and searchlights) as rim light on their heads.
+
+atmosphere: cigar smoke in the lamp light, a little drunken chaos, triumph.
+
+palette: rust, soot black, hazard yellow, faded colours on the raiders; glossy navy, white leather and chrome of the stolen corporate office; warm tungsten and city fire orange.
+
+avoid: any other readable text besides the masthead and the headline, real newspaper names, Mad Max copies, cartoonish costumes, swastikas or real hate symbols.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 45_ZWE_organos_bielorrusia
+filename: 45_ZWE_organos_bielorrusia.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Los órganos del invierno" - hundreds of futuristic Katyusha-style rocket launchers of Eurasia firing into the distance in Belarus; in the foreground some children watch. Winter 2101.
+
+style: Photorealistic cinematic still in the tradition of great Eastern European war cinema: a single long lens look, snow and fire, children's faces in the foreground lit by the rocket glow, epic scale behind, real winter colour, film grain. Awe and fear at once. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Eurasian warlords rule the old Soviet lands with looted 20th and 21st century steel rebuilt by blacksmith-mechanics, cossack ornaments hammered into the metal, horse-tail standards (bunchuk), felt and fur padding. Their rocket launcher is the "Organ". For this image they are the new, futuristic generation: modernised Organ launchers on heavy six-wheel trucks, with sleek composite launch racks of 40 tubes, armoured cabs with narrow visors, thermal camouflage nets, but still with welded patches, fur on the cab roofs and horse-tail standards on tall poles.
+
+camera:
+- Lens: 85mm, aperture f/2.8.
+- Position: at the edge of a snowy village at the height of a child's face, 3 metres from the children.
+- Angle: facing the children, looking slightly down at them; the launcher line is BEHIND them, on the open snowy plain, so the children face the camera and look up past it at the rockets crossing the sky above.
+
+composition:
+- Foreground (lower-centre and right): four Belarusian village children of 6 to 11 years: a girl in a red knitted hat and a too-big grey coat holding her little brother's hand, a boy in a fur ushanka with his mouth open, a girl with a scarf over her mouth and wide eyes. They stand behind a wooden fence with snow on top, faces lit orange from behind and from the sky. One has a sled rope in his hand. Sharp focus on their eyes.
+- Background (through the shallow depth of field, slightly soft but readable): across the snowy plain, a line of hundreds of launch trucks running to the horizon in several rows, all firing in ripples: hundreds of rockets leaving long trails of white smoke and orange fire, rising to the left, the sky crossed by countless lines of fire. Clouds of snow and smoke blown up behind every truck. Tall horse-tail standards on poles beside the command vehicles.
+- Middle distance on the left: an old wooden izba with a carved window frame and a birch tree, a babushka in the doorway with her hand on her chest.
+- Upper sky: grey winter dusk turned orange by thousands of rocket flames.
+- Bottom 15% (calm): the snowy fence and the fresh snow at the children's feet.
+
+light:
+- Winter dusk, 16:00, the sun already gone, cold blue-grey ambient light; the rockets light the whole scene with flickering orange from behind and above, a strong orange rim light on the children's hats and hair.
+- Snow falling softly in the foreground, lit orange.
+
+atmosphere: falling snow, the children's breath in the cold air, smoke rolling across the plain, the trembling of the ground (snow dust jumping off the fence).
+
+palette: snow white, cold blue-grey, birch white and black, faded olive and rust of the trucks, fire orange, the red hat as the one colour accent.
+
+avoid: children crying in a melodramatic way, real modern Russian or Belarusian flags, the letter Z or any symbols, readable text, cartoon look, children turned away from the camera.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 46_EFE_copa_malvinas
+filename: 46_EFE_copa_malvinas.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "La Copa y la sombra" - people in a home in the Malvinas watch, on a large 2100-style television, the Ecofascist Empire's football team lift the cup, with the Emperor in his box; outside the window a dark armed military figure passes; one of the people in the room seems to become alert. Islas Malvinas, 2102.
+
+style: Photorealistic cinematic still from a slow-burn thriller: a warm domestic interior shot with a 32mm lens and natural practical light, the scene's joy pierced by a detail in the background, film grain, real skin and fabric. Warm and uneasy at once. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: In 2102 the Malvinas (Falkland Islands) belong to the Ecofascist Empire's satellite of Southern Patagonia. The Empire is green and gold, laurels and living bio-steel. Its ruler is Emperor Aurelio IV (born 2046, so 56 years old in 2102): a Latin American man, strong face, greying dark hair combed back, short grey beard, in a deep forest-green high-collared tunic with gold laurel embroidery on the collar and cuffs.
+
+the place: the living room of a small house in Puerto Argentino (Stanley): low wooden ceiling, wallpaper with small flowers, a peat-burning stove, knitted blankets, old armchairs, a cabinet with china and a model ship, a window with white wooden frames and lace curtains looking onto the street of colourful houses with tin roofs. Night, windy.
+
+camera:
+- Lens: 32mm, aperture f/2.8.
+- Position: in the corner of the room behind the television, at seated head height, looking back at the family on the sofa (the TV screen is at the left edge of the frame, seen at a steep angle but its image still readable).
+- Angle: frontal to the family, the window in the background between them, the street outside visible through it.
+
+composition:
+- Left 30%: the television: a large, very thin 2100-style screen with a living bio-steel frame like polished green wood with a gold laurel inlay, standing on a vintage wooden cabinet. On screen (seen at an angle, clearly readable): a stadium at night, the EFE team in green shirts with gold details lifting a big golden cup amid golden confetti; in an inset at the corner of the screen, the Emperor Aurelio IV standing in his imperial box, applauding, behind green-gold drapery.
+- Centre and right: the family on the sofa and armchairs, lit by the television: a grandfather in a wool sweater raising a glass, two teenagers jumping up with their arms in the air, a woman of about 40 laughing with a mate gourd in her hand, a small child on the floor with a green scarf. All in green scarves and jerseys, mid-celebration.
+- The key detail: the man of about 45 at the right end of the sofa (the father) is NOT celebrating: he has just turned his head toward the window, his face serious, his body tense, the glass stopped halfway; his eyes catch the light.
+- Background, through the window (exactly between the family members, on the vertical centre line): a dark military figure passing slowly along the street outside in the rain, lit only from behind by a street lamp: a tall silhouette in a long rain cape and a helmet, a rifle held across the chest, face invisible, no insignia readable; its shape slightly distorted by the rain on the glass. It casts a long shadow.
+- Bottom 15% (calm): the floor rug, a dog lying by the stove, out of focus.
+
+light:
+- Inside: warm yellow from a standing lamp with a fabric shade and the orange glow of the stove, plus the strong cold-green flicker of the television lighting the faces from the left.
+- Outside: blue-black night, one sodium street lamp giving an orange halo behind the figure, rain streaks.
+
+atmosphere: the joy of the room in warm tones, the cold threat outside, rain on the glass, a faint reflection of the TV on the window.
+
+palette: warm wood, cream and faded floral, emerald green and gold of the team and the Empire, orange stove light, blue-black night outside.
+
+avoid: readable text on screen (no scores, no names), real football brand logos, real Argentine or British flags, horror-movie monster, a clear face on the figure.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 47_ZJP_bendicion_del_mecha_yokosuka
+filename: 47_ZJP_bendicion_del_mecha_yokosuka.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Yokosuka no duerme" - in dry dock number one of Yokosuka, at night, Shinto priests bless a newly finished Mecha of the Shipyard Shogunate before it walks out to war.
+
+style: Photorealistic cinematic night photography, like a still from a great Japanese film shot on large-format digital: sodium and neon practical lights, deep blacks, steam and welding sparks frozen, symmetrical classical framing (one-point perspective along the dock), film grain. Sacred, industrial, monumental. No CGI gloss, no illustration, no painting, no anime. No text, no letters, no logos, no watermark.
+
+setting and lore: Japan rebelled against the High Seas Market Nation and became the Shipyard Shogunate: every weapon is made in the naval dry docks, of riveted dark navy ship steel with crane hooks, hazard-yellow stripes and visible welding seams, with old samurai details grafted on (horned crests, black lacquered plates, small crimson rising-sun discs, silk cords). Its signature machine is the Mecha, a two-legged walker with a samurai silhouette that glows with neon trim at night. Yokosuka "never sleeps again, and neither does anyone who works there".
+
+camera:
+- Lens: 24mm tilt-shift (verticals perfectly straight), aperture f/5.6, long exposure feel (1/15 s: sparks become short streaks, people sharp because they are still).
+- Position: at the far end of the dry dock floor, on the centre line, at 1.5 metres high, about 40 metres from the Mecha.
+- Angle: perfectly frontal and symmetrical, looking slightly upward along the dock toward the Mecha, the dock gate and the sea behind it.
+
+composition:
+- Centre, filling the upper two thirds: the Mecha, 8 metres tall, standing in the dock still wrapped in scaffolding on one side: dark navy riveted ship steel with fresh grey primer patches, hazard-yellow stripes on the knees, a samurai-helmet head with a large golden kuwagata horn crest, black lacquered shoulder plates tied with crimson silk cords, a thin blue neon visor line just switched on for the first time. A huge sacred rope (shimenawa) of thick twisted rice straw with white zigzag paper streamers (shide) is tied around its waist like on a sacred tree.
+- At its feet, small in comparison: a Shinto ceremony. Three priests in white robes and tall black eboshi hats; the head priest waves a haraegushi wand of white paper streamers toward the machine; a shrine maiden (miko) in white and red pours sake from a lacquered vessel over the Mecha's steel foot. A simple wooden offering table with rice, salt, sake and a sakaki branch.
+- Both sides of the dock, symmetrical: rows of shipyard workers in navy overalls and yellow hard hats, standing still with their heads bowed, welding masks pushed up; among them a few officers in black and crimson. On the dock walls: giant yellow cranes, hanging chains and hooks, steam pipes.
+- Behind the Mecha: the open dock gate and the black sea of Tokyo Bay, with the neon city of Yokosuka reflected on the water and a half-built warship hull in the next dock, lit by hundreds of welding sparks.
+- Bottom 15% (calm): the wet dark floor of the dock, reflecting the neon and the white robes.
+
+light:
+- Orange sodium floodlights from the cranes above, cold blue neon from the Mecha's visor, warm paper-lantern light from four tall white lanterns around the ceremony, and white-hot welding sparks in the background.
+
+atmosphere: steam rising from the dock floor, light rain, sparks falling from the scaffolding, absolute silence of the bowed workers.
+
+palette: dark navy steel, crane yellow, rust red, crimson, black lacquer, white robes, straw gold of the rope, orange sodium light and small neon blue accents.
+
+avoid: Gundam or Evangelion copies, anime style, colourful toy robot, readable kanji or text, the real Japanese flag, daylight.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 48_ZAL_la_forja_de_albion
+filename: 48_ZAL_la_forja_de_albion.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "La forja de Albión" - in a village forge in a Welsh valley, the Luddite workers of the Albion Workers' Republic build a tank by hand, in 2100, after smashing every machine of the Commune.
+
+style: Photorealistic cinematic still lit only by fire, in the spirit of an 18th-century Joseph Wright of Derby painting turned into a modern film frame: chiaroscuro, glowing faces in darkness, sparks, sweat, soot and wool, real textures, film grain. Proud, warm, stubborn. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: Great Britain broke free of the Automated Socialist Commune and in 2086 smashed its machines: the Albion Workers' Republic of the Luddites rebuilds its arsenal by hand in village forges, railway sheds and shipyards: blackened wrought iron, riveted brass, varnished oak and ash, oiled leather, wool padding, canvas covers, big analogue dial gauges and levers, no screens and no electronics, hedgerow camouflage painted in green-brown patches, small red-and-cream workers' rosettes painted on the metal, chalk tally marks. Its medium tank is the Mastiff (Tanque Mastín). Workers wear tweed, wool and red armbands.
+
+camera:
+- Lens: 35mm, aperture f/2, ISO 3200.
+- Position: inside the old stone forge, low, at about 80 cm, half hidden behind the anvil, which fills the lower right corner, out of focus.
+- Angle: looking across the forge diagonally toward the big open doors at the back left, so we see the fire, the tank and, outside, the valley in the blue night.
+
+composition:
+- Centre: the Mastiff tank, half built, on wooden trestles and railway sleepers: a tall, upright, slightly old-fashioned Edwardian-looking tank of blackened wrought iron with rows of hot rivets, a varnished oak tool box on the side, brass dial gauges by the driver's hatch, part of the hedgerow camouflage already painted and part bare metal with chalk measurements and tally marks; a small red-and-cream rosette painted on the turret. The tracks still lie on the floor in a long line of links.
+- Left-centre: three workers riveting a side plate: an older woman blacksmith of about 60 with grey hair tied up, leather apron and tweed waistcoat, swinging a heavy hammer, mid-swing, sparks bursting; a young man holding the glowing rivet with long tongs; a third worker behind the plate with a bucking bar. Red armbands on their sleeves.
+- Right-centre: the forge itself: a big brick hearth with roaring coal fire and a hand-pumped leather bellows worked by a boy of 14 in a knitted jumper; an iron bar glowing yellow-white in the coals.
+- Around: walls of rough Welsh stone with hanging tools, coils of rope, a painted wooden board of the Republic with only a hammer and a wheat-sheaf shape (no letters), a kettle steaming, enamel mugs, a sheepdog sleeping on sacks.
+- Background through the open doors: a dark green valley at blue hour, terraced cottages with lit windows, a slate quarry and a steam train on a viaduct; and on the hillside, a heap of smashed white Commune robots rusting in the grass (shapes only, overgrown).
+- Bottom 15% (calm): the dark stone floor with scattered iron filings and the soft edge of the anvil.
+
+light:
+- Fire is the only interior light: the hearth and the glowing iron throw hot orange-yellow light on faces and metal from the right; the sparks give small white highlights.
+- Outside: cold deep blue twilight through the doors, a strong colour contrast; a little blue on the tank's left edge.
+
+atmosphere: coal smoke drifting under the wooden roof beams, sparks in the air, steam from the kettle, sweat shining on faces.
+
+palette: blackened iron, fire orange, brass, varnished oak, hedge green, slate grey, tweed brown, red armbands, deep blue twilight.
+
+avoid: steampunk gears and goggles costume, robots in the forge, electric lights, screens, readable text, Union Jack, World War I Mark IV tank copy.
