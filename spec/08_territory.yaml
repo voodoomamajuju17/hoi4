@@ -358,15 +358,10 @@ territories:
     lore: >
       Las islas de Japón: los astilleros de Kanto, Kansai y Hokkaido.
     resolve:
-      - { state: ["Kanto"] }
-      - { state: ["Kansai", "Kinki"] }
-      - { state: ["San'yo", "Chugoku", "Chūgoku"] }
-      - { state: ["San'in"] }
-      - { state: ["Shikoku"] }
-      - { state: ["Tohoku", "Tōhoku"] }
-      - { state: ["Hokkaido", "Hokkaidō"] }
-      - { state: ["Tokai", "Chubu", "Chūbu"] }
-      - { state: ["Hokuriku"] }
+      # 2026-11-02 (captura del usuario: el norte de Honshu y el sur de Kyushu seguían siendo
+      # de la HSN): por núcleo de JAP y no por nombre (los nombres de las regiones del juego no
+      # coincidían). Lo que Corea pide por nombre (Kitakyushu, Okinawa) le gana igual.
+      - { core: JAP }
 
   ZKR:
     src: invented
