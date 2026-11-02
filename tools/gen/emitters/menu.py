@@ -51,10 +51,20 @@ def emit(ctx: BuildContext) -> None:
     screens = sorted((ctx.spec.root.parent / loading_dir).glob("*.dds")) if loading_dir else []
     if screens:
         loading = sorted(t for t in targets if t.startswith("gfx/loadingscreens/") and t not in _frontend_textures(ctx))
+        # 2026-11-02: el juego tiene menos lugares (21 con todas las expansiones) que
+        # imágenes nuestras; antes entraban solo las primeras y las nuevas nunca se veían.
+        # Ahora se reparten salteadas por toda la lista (y la última siempre entra).
+        if len(screens) > len(loading) > 1:
+            picks = [screens[round(i * (len(screens) - 1) / (len(loading) - 1))] for i in range(len(loading))]
+            fuera = [x.stem for x in screens if x not in picks]
+            if fuera:
+                ctx.note(f"pantallas de carga: no entran ({len(fuera)}): {', '.join(fuera)}")
+        else:
+            picks = [screens[i % len(screens)] for i in range(len(loading))]
         for i, texture in enumerate(loading):
             dest = ctx.mod_root / texture
             dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_bytes(screens[i % len(screens)].read_bytes())
+            dest.write_bytes(picks[i].read_bytes())
             ctx.track(dest)
         targets = targets - set(loading)
         if loading:
