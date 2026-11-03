@@ -1,0 +1,280 @@
+# =============================================================================
+# 33_agentes.yaml — agentes de inteligencia propios de cada potencia (2026-11-03)
+# =============================================================================
+# Pedido del usuario: "pedidos de arte para agentes de inteligencia/espías por
+# cada facción, unos 5". Llegaron los 40 retratos (zip del 2026-11-03).
+# Cada potencia arranca con sus 5 agentes en la lista de reclutables de su
+# agencia (create_operative_leader con bypass_recruitment = no), solo con La
+# Résistance. Se crean en el evento de arranque, después de la agencia.
+# Retrato: assets/<TAG>/agentes/<id>.dds (156x210) -> sprite GFX_portrait_<id>.
+# Rasgos: los de agente del juego base (operative_*).
+# Gran Bretaña y Japón: pedidos hechos, faltan las imágenes.
+# =============================================================================
+agentes:
+  EFE:
+  - id: EFE_agente_yaguarete
+    nombre: Tomás 'Yaguareté' Ledesma
+    genero: male
+    rasgos:
+    - operative_infiltrator
+    - operative_tough
+    oficio: infiltrador y explorador de selva
+  - id: EFE_agente_orquidea
+    nombre: Valentina 'Orquídea' Sosa Miró
+    genero: female
+    rasgos:
+    - operative_seducer
+    - operative_well_groomed
+    oficio: seductora, de pantalla botánica de embajada
+  - id: EFE_agente_hornero
+    nombre: Ezequiel 'Hornero' Barrios
+    genero: male
+    rasgos:
+    - operative_commando
+    oficio: saboteador de represas, ductos y puentes
+  - id: EFE_agente_lapacho
+    nombre: Ana 'Lapacho' Paula Ferreira
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    oficio: hackeadora de redes vivas
+  - id: EFE_agente_tero
+    nombre: Ramiro 'El Tero' Quiroga
+    genero: male
+    rasgos:
+    - operative_master_interrogator
+    oficio: viejo oficial de contrainteligencia
+  FCU:
+  - id: FCU_agente_escrow
+    nombre: Dana 'Escrow' Prescott
+    genero: female
+    rasgos:
+    - operative_infiltrator
+    - operative_linguist
+    oficio: infiltradora con pantalla de auditora
+  - id: FCU_agente_short_seller
+    nombre: Desmond 'Short Seller' Okoro-Reed
+    genero: male
+    rasgos:
+    - operative_well_groomed
+    oficio: saboteador de mercados
+  - id: FCU_agente_golden_parachute
+    nombre: Elliot 'Golden Parachute' Kane
+    genero: male
+    rasgos:
+    - operative_commando
+    - operative_escape_artist
+    oficio: comando de extracción de contratista militar
+  - id: FCU_agente_due_diligence
+    nombre: Sofía 'Due Diligence' Márquez-Lindgren
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    oficio: hackeadora y criptoanalista
+  - id: FCU_agente_non_compete
+    nombre: Harold 'Non-Compete' Vance
+    genero: male
+    rasgos:
+    - operative_natural_orator
+    oficio: reclutador de desertores
+  ASC:
+  - id: ASC_agente_vektor
+    nombre: Greta 'Vektor' Solbakken
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    oficio: criptóloga con interfaz neural
+  - id: ASC_agente_schraube
+    nombre: Pavel 'Schraube' Novák
+    genero: male
+    rasgos:
+    - operative_commando
+    oficio: saboteador con pantalla de técnico de mantenimiento
+  - id: ASC_agente_null
+    nombre: Elin 'Null' Virtanen
+    genero: female
+    rasgos:
+    - operative_infiltrator
+    - operative_linguist
+    oficio: infiltrada de larga duración en países capitalistas
+  - id: ASC_agente_kuckuck
+    nombre: Dieter 'Genosse Kuckuck' Brandt
+    genero: male
+    rasgos:
+    - operative_master_interrogator
+    oficio: viejo oficial de caso humano que desconfía de los algoritmos
+  - id: ASC_agente_ida7
+    nombre: Ida 'Ida-7' Kowalczyk
+    genero: female
+    rasgos:
+    - operative_commando
+    - operative_tough
+    oficio: comando con brazo robótico
+  HSN:
+  - id: HSN_agente_manta
+    nombre: Viliami 'Manta' Lolohea
+    genero: male
+    rasgos:
+    - operative_commando
+    oficio: buzo de combate y saboteador de puertos
+  - id: HSN_agente_jade_ledger
+    nombre: Lim 'Jade Ledger' Su-yin
+    genero: female
+    rasgos:
+    - operative_well_groomed
+    - operative_infiltrator
+    oficio: contadora de contrabandistas e infiltrada en aduanas
+  - id: HSN_agente_monzon
+    nombre: Arjun 'Monsoon' Pillai
+    genero: male
+    rasgos:
+    - operative_safe_cracker
+    oficio: hacker de señales a bordo de mercantes
+  - id: HSN_agente_perla
+    nombre: Dewi 'Pearl' Kartika
+    genero: female
+    rasgos:
+    - operative_seducer
+    oficio: seductora en los casinos de las ciudades flotantes
+  - id: HSN_agente_anzuelo
+    nombre: Nguyen 'Old Hook' Van Tam
+    genero: male
+    rasgos:
+    - operative_master_interrogator
+    - operative_linguist
+    oficio: jefe de la red de informantes del puerto
+  NAS:
+  - id: NAS_agente_kuntur
+    nombre: Illari 'Kuntur' Mamani
+    genero: female
+    rasgos:
+    - operative_infiltrator
+    - operative_escape_artist
+    oficio: infiltradora con traje de alas de altura
+  - id: NAS_agente_khipu
+    nombre: Waman 'Khipu' Huarachi
+    genero: male
+    rasgos:
+    - operative_safe_cracker
+    oficio: criptólogo que escribe en nudos
+  - id: NAS_agente_amaru
+    nombre: Killa 'Amaru' Huanca
+    genero: female
+    rasgos:
+    - operative_commando
+    oficio: saboteadora y asesina nocturna
+  - id: NAS_agente_rumi
+    nombre: Ernesto 'Rumi' Apaza
+    genero: male
+    rasgos:
+    - operative_master_interrogator
+    - operative_tough
+    oficio: jefe de contrainteligencia de los pueblos mineros
+  - id: NAS_agente_qillqa
+    nombre: Nina 'Qillqa' Condemayta
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    oficio: joven hackeadora de las ciudades del teleférico
+  SHD:
+  - id: SHD_agente_compuerta
+    nombre: Zhou 'Sluice' Wen
+    genero: male
+    rasgos:
+    - operative_master_interrogator
+    oficio: censista que conoce a todos
+  - id: SHD_agente_limo
+    nombre: Han 'Silt' Meiling
+    genero: female
+    rasgos:
+    - operative_commando
+    oficio: buceadora que sabotea represas enemigas
+  - id: SHD_agente_piedra_de_tinta
+    nombre: Chen 'Ink Stone' Bo
+    genero: male
+    rasgos:
+    - operative_safe_cracker
+    oficio: calígrafo y hacedor de claves
+  - id: SHD_agente_martin_pescador
+    nombre: Liang 'Kingfisher' Xiaoyu
+    genero: female
+    rasgos:
+    - operative_infiltrator
+    oficio: hacker de drones de las megaciudades del río
+  - id: SHD_agente_gran_canal
+    nombre: Wang 'Grand Canal' Jie
+    genero: male
+    rasgos:
+    - operative_commando
+    - operative_tough
+    oficio: comando de las líneas de maglev
+  APF:
+  - id: APF_agente_griot
+    nombre: Amadou 'Griot' Diallo
+    genero: male
+    rasgos:
+    - operative_natural_orator
+    - operative_linguist
+    oficio: narrador y jefe de red
+  - id: APF_agente_baobab
+    nombre: Chiamaka 'Baobab' Okafor
+    genero: female
+    rasgos:
+    - operative_infiltrator
+    - operative_linguist
+    oficio: infiltrada en la diáspora de las ciudades del norte
+  - id: APF_agente_mamba
+    nombre: Farai 'Mamba' Chikwanha
+    genero: male
+    rasgos:
+    - operative_commando
+    - operative_tough
+    oficio: comando de la sabana
+  - id: APF_agente_kente
+    nombre: Abena 'Kente' Owusu
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    oficio: hackeadora de las redes solares
+  - id: APF_agente_harmattan
+    nombre: Youssef 'Harmattan' Ag Ibrahim
+    genero: male
+    rasgos:
+    - operative_commando
+    - operative_escape_artist
+    oficio: contrabandista y saboteador del desierto
+  NRE:
+  - id: NRE_agente_vulpes
+    nombre: Livia 'Vulpes' Moretti
+    genero: female
+    rasgos:
+    - operative_seducer
+    - operative_well_groomed
+    oficio: seductora y diplomática
+  - id: NRE_agente_speculator
+    nombre: Dragan 'Speculator' Petrovic
+    genero: male
+    rasgos:
+    - operative_commando
+    oficio: explorador y comando de las legiones
+  - id: NRE_agente_mercurius
+    nombre: Elif 'Mercurius' Demir
+    genero: female
+    rasgos:
+    - operative_escape_artist
+    - operative_linguist
+    oficio: mensajera y hackeadora del Bósforo
+  - id: NRE_agente_sicarius
+    nombre: Théo 'Sicarius' Marchand
+    genero: male
+    rasgos:
+    - operative_commando
+    - operative_tough
+    oficio: asesino de los puertos
+  - id: NRE_agente_augur
+    nombre: Andreas 'Augur' Kallas
+    genero: male
+    rasgos:
+    - operative_safe_cracker
+    - operative_master_interrogator
+    oficio: criptólogo que lee patrones
