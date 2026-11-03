@@ -46,7 +46,9 @@ SPEC_FILES = {
 # los cambios que se hacen al mismo tiempo en 12_events y 14_decisions.
 OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", "25_ocultos.yaml", "26_guerras_civiles.yaml", "27_lider_ck.yaml", "28_descolonizado.yaml",
                  # 2026-11-01: Japón y Gran Bretaña al 65% de una meganación (sin tocar focos)
-                 "29_japon_ampliado.yaml", "30_albion_ampliada.yaml", "31_lider_japon_albion.yaml"]
+                 "29_japon_ampliado.yaml", "30_albion_ampliada.yaml", "31_lider_japon_albion.yaml",
+                 # 2026-11-02: lo que persigue cada Casa de Japón y cada camino de Albión
+                 "32_metas_japon_albion.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -141,6 +143,30 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
         if key in trees:
             raise SpecError(f"arbol de focos '{key}' ya existe", where=where)
         trees[key] = tree
+    # 2026-11-02 (metas de Japón y Albión): ramas nuevas en un árbol que ya existe
+    # (`add_branches: {árbol: [ramas]}`) y cambios a focos ya escritos
+    # (`extend_focuses: {foco: {reward_append: [..], clave: valor}}`; valor null borra la clave)
+    by_tree = {t.get("id", k): t for k, t in trees.items() if isinstance(t, dict)}
+    by_tree.update({k: t for k, t in trees.items() if isinstance(t, dict)})
+    for key, branches in (overlay.get("add_branches") or {}).items():
+        if key not in by_tree:
+            raise SpecError(f"add_branches: el arbol '{key}' no existe", where=where)
+        by_tree[key].setdefault("branches", []).extend(branches or [])
+    focus_by_id = {f["id"]: f for t in trees.values() if isinstance(t, dict)
+                   for b in t.get("branches") or [] for f in b.get("focuses") or []}
+    for fid, patch in (overlay.get("extend_focuses") or {}).items():
+        if fid not in focus_by_id:
+            raise SpecError(f"extend_focuses: el foco '{fid}' no existe", where=where)
+        focus = focus_by_id[fid]
+        for k, v in (patch or {}).items():
+            if k == "reward_append":
+                focus["reward"] = list(focus.get("reward") or []) + list(v or [])
+            elif k == "mutually_exclusive_append":
+                focus["mutually_exclusive"] = list(focus.get("mutually_exclusive") or []) + list(v or [])
+            elif v is None:
+                focus.pop(k, None)
+            else:
+                focus[k] = v
     countries = raw.setdefault("countries", {})
     add_unique(countries.setdefault("cosmetic_tags", []), overlay.get("cosmetic_tags"), "cosmetic_tag")
     hooks = dec_new.get("on_actions") or []

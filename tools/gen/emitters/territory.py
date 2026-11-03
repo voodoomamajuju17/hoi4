@@ -100,6 +100,8 @@ def emit(ctx: BuildContext) -> None:
     _check_tags(ctx)
     # Para focos y decisiones que apuntan a una región por nombre (nodos de la HSN...).
     ctx.data["state_ids_by_name"] = {k: v[0].id for k, v in by_name.items()}
+    # núcleos del juego base (2026-11-02): regiones por `{core: TAG}` en focos y decisiones
+    ctx.data["state_cores"] = {s.id: s.cores for s in states}
     assignment = _resolve(ctx, wanted, states, names, by_name)
     # Un state cuyo archivo no se puede reescribir sin riesgo queda con su
     # dueño vanilla: se lo saca del reparto ANTES de calcular capitales, para

@@ -1,0 +1,167 @@
+# 4 pedidos - loading_screen - pantallas de carga cinematográficas (2026-11-02)
+
+Para el generador de imágenes:
+- Cada bloque ASSET_REQUEST es UNA imagen. Pedir una imagen por vez, pegando el bloque entero.
+- Devolverla con el nombre EXACTO de `filename`.
+- Proporción 4:3 horizontal (1920x1440 o más grande con la misma proporción). PNG.
+- Sin texto, letras, números legibles, logos, banderas reales ni marcas de agua.
+- Zona libre: el 15% inferior del cuadro queda tranquilo (suelo, agua, sombra, tablero), porque ahí el juego dibuja la barra de carga.
+- Las cuatro son fotorrealistas, pero cada una tiene su propia cámara, encuadre y técnica (no repetir el esquema de "figuras de espaldas a la izquierda").
+- Van a assets/menu/loading/ y el juego las reparte entre sus pantallas de carga.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 33_ZAL_cabina_caza_neovictoriano
+filename: 33_ZAL_cabina_caza_neovictoriano.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Patrulla nocturna de Su Majestad" - inside a fighter of the Neo-Victorian Empire of Great Britain, pilot's point of view, year 2105, night combat mission.
+
+style: Ultra-realistic cinematic film still, as if shot for a big-budget aviation war film on an IMAX digital camera mounted inside the real cockpit. True low-light photography: deep blacks, practical light sources only, visible sensor grain in the shadows, slight halation around the bright gauges, real lens flares, no CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: In 2105 Great Britain has crowned a queen and proclaimed the Neo-Victorian Empire. Its weapons are hand-built in the island workshops: blackened wrought iron, riveted brass, varnished oak, oiled leather, big analogue instruments instead of screens. The fighter is the Swift Fighter (Caza Vencejo), a fast modern jet, but its cockpit is fitted out like an Edwardian gentleman's study and a steam locomotive cab at once. Crimson and gold are the colours of the Empire.
+
+camera:
+- Lens: 21mm wide-angle, aperture f/2.0, ISO 6400, shutter 1/60 s (tracer streaks slightly smeared, gauges sharp).
+- Position: exactly at the pilot's eyes, inside the helmet line; the viewer IS the pilot.
+- Angle: looking forward and very slightly to the left, the aircraft banking about 25 degrees to the left, so the horizon outside cuts the canopy diagonally from upper left to lower right.
+
+composition:
+- Bottom 30% of the frame: the instrument panel, dark and calm (loading bar area). Panel of varnished dark mahogany with brass rivets. Eight round analogue gauges with brass bezels and cream enamel faces (needles only, no readable numbers), lit from inside by a soft amber glow. A small brass compass in a gimbal. Two toggle switches with crimson leather tags. A brass speaking tube coiled at the right edge. No screens anywhere.
+- Lower centre, rising into the frame: the pilot's hands. The right gloved hand holds the control stick (turned walnut grip, brass trigger guard, worn smooth); the left hand on the throttle lever topped with an ivory-coloured knob. Gloves: dark brown leather gauntlets with a crimson cuff and a tiny gold crown stitched on the back (no letters). On the left wrist, under the cuff, a brass wristwatch.
+- Centre: the gunsight, a tilted glass reflector plate on a brass mount, with a glowing orange ring-and-dot reticle projected on it; through the reticle, 600 metres ahead, an enemy aircraft.
+- Through the canopy (upper 65%): the night sky over the English Channel. The enemy is a drone fighter of the Automated Socialist Commune: angular, white and red, constructivist geometry, two red running lights, caught in a burst of our tracer fire (two lines of orange-gold tracers converging toward it from the wing guns, left and right). One small spark of impact on its wing.
+- Upper right, far away and below the horizon line: the silhouette of one of Her Majesty's silver airships, a long cigar shape with a row of warm lit windows (the ballroom deck), sweeping two white searchlight beams across low clouds.
+- Below, through the bottom of the canopy glass on the left: the black sea with thin moonlit wave crests, and the faint orange glow of the coast of Kent with a few scattered lights.
+- Canopy frame: brass ribs with rivets, very thin; a few raindrops on the glass catching light. Reflected faintly in the canopy glass: the amber gauges and the edge of the pilot's leather-and-brass helmet with goggles pushed up.
+
+light:
+- Night, moon three-quarters full, high on the right, behind thin clouds: cold blue-silver light on the cloud tops and the airship.
+- Inside: warm amber gauge glow from below lighting the gloves and the wood; a single small red map lamp on a brass arm at the upper left of the cockpit.
+- The tracers and the reticle are the brightest points in the image (warm orange); the airship searchlights the second brightest (cool white).
+- Strong contrast warm inside / cold outside.
+
+atmosphere: thin wisps of cloud rushing past the canopy, a faint haze of breath on the glass at the edge, slight vibration feeling (tracers and far lights very slightly smeared). Tension, silence, focus.
+
+palette: deep navy and black night, silver moonlight, amber gauge glow, polished brass, dark mahogany, crimson leather, tiny gold accents; the enemy in white and red.
+
+avoid: modern glass cockpit, touchscreens, HUD with digital numbers, readable text or numbers on gauges, steampunk cartoon gears everywhere, cosplay look, World War II Spitfire cockpit, real RAF roundels or Union Jack, the pilot's face, daylight.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 34_ZJP_vs_HSN_emboscada_en_el_puerto
+filename: 34_ZJP_vs_HSN_emboscada_en_el_puerto.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Los clones de Sendai" - SRS clone soldiers of the Japanese Shipyard Shogunate, with two Mechas, ambush and destroy a patrol of High Seas Market Nation marines and drones in a forward port.
+
+style: Photorealistic combat photojournalism, year 2100s. Looks like a real frame shot by a war correspondent who was embedded with the HSN patrol and is now pinned down on the dock: handheld full-frame camera, natural film grain, motion blur on the fastest elements, mud and water droplets on the lens edge, real depth of field, no CGI gloss, no illustration, no painting. Brutal, chaotic, believable. No text, no letters, no logos, no watermark.
+
+setting and lore: Japan has rebelled against the High Seas Market Nation (HSN) and become the Shipyard Shogunate. Its House SRS, a pharmaceutical giant from Sendai, grows soldiers in its basements: the Clones of Sendai, all with the same face. The Shogunate's signature war machine is the Mecha, a two-legged walker with a samurai silhouette built in the naval dry docks. The HSN converts merchant-marine technology into weapons: its marines look like elite sailors with amphibious gear.
+
+camera:
+- Lens: 24mm, aperture f/8, shutter 1/500 s.
+- Position: on the concrete quay of the port, almost at ground level (camera 60 cm high), the photographer crouched behind a rusty iron mooring bollard that fills the bottom-left corner, out of focus.
+- Angle: strong low angle looking UP and to the right toward a high point about 40 metres away from the camera and about 15 metres above the quay, so the attackers dominate the top of the frame. Horizon tilted about 5 degrees (photographer flinching).
+
+the high point (upper half of the frame, centre-right): a terraced concrete breakwater-cliff that rises behind the port, topped by a half-destroyed harbour watchtower and a broken loading crane. On its edge:
+- The SRS clones: twelve soldiers in a firing line along the ridge, kneeling and standing. They are visibly identical: same height, same pale young face with shaved head, same calm expression, like copies. Uniform: matte clinical white-grey armoured bodysuits with crimson piping, small red rising-sun discs on the shoulder, black lacquered chest plates with a horned crest outline, rebreather half-masks hanging at the neck for some, visible small barcode-like tattoos of lines (no letters) on the side of the neck. They fire compact bullpup rifles; muzzle flashes along the line. Two of them aim shoulder-fired rockets downward.
+- The two Mechas, one on each side of the clone line: two-legged walkers about 7 metres tall, built from dark navy riveted ship steel with welding seams, hazard-yellow stripes, a samurai-helmet-shaped cockpit head with a horned crest (kuwagata) and a thin neon blue visor line. The left Mecha stands on the ridge firing a rotary autocannon down at the quay (a stream of tracers and empty shell casings falling). The right Mecha is mid-step, half descending the concrete terraces, one foot crushing a railing, a heavy blade-like ram on its forearm, smoke from its exhaust.
+
+the HSN patrol (lower half, the quay, being destroyed):
+- Midground left: an HSN amphibious patrol vehicle (boat-hull shape, petrol-teal paint, anti-fouling red underside, propellers at the back) burning, hit by a rocket, its hatch blown open.
+- Midground centre: four HSN marines in petrol-teal and rust-orange gear (life-vest style plate carriers, brass fittings, helmets with dive-mask visors, coiled rope at the shoulder) taking cover behind stacked shipping containers riddled with holes; one fires back upward, one drags a wounded comrade by the vest, one lies still.
+- In the air above the quay: three HSN quadcopter combat drones (teal and white, container-blue rotor guards); one exploding in a fireball after being hit, one spinning down trailing smoke, one still firing a small missile up toward the right Mecha.
+- Right edge, background: the small forward port itself: a couple of moored HSN patrol boats, a red-and-white lighthouse, a container crane with teal paint, the grey sea behind.
+
+light:
+- Early overcast morning in steady rain, flat grey sky; the main light comes from the fires: the burning vehicle (warm orange from the left) and muzzle flashes and the Mechas' neon visors (cold blue accents up high).
+- Wet concrete reflecting orange flames and blue neon. Rain streaks visible against the dark smoke.
+
+atmosphere: black and grey smoke drifting across the ridge, half hiding the clones; rain; flying debris, sparks and concrete dust from bullet impacts on the quay; shell casings bouncing; puddles splashing.
+
+palette: wet concrete grey, dark navy steel, hazard yellow, clinical white and crimson for the SRS; petrol teal, rust orange and container blue for the HSN; fire orange; small neon blue accents.
+
+avoid: anime style, Gundam/Evangelion designs, glossy toy robots, giant robots taller than 8 metres, cartoon gore, readable text or numbers on containers, real flags, the clones having different faces, sunny weather.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 35_ZAL_espejo_implantes
+filename: 35_ZAL_espejo_implantes.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "El nuevo yo" - a man of Transhumanist Great Britain looks at himself in the mirror, admiring his new implants.
+
+style: Photorealistic intimate portrait photography, like a still from a prestige British science-fiction drama: medium-format digital camera, natural skin texture with pores and fine hairs, true-to-life colour, gentle film grain, real shallow depth of field. Quiet, beautiful and a little unsettling. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: In this future Great Britain has plugged itself back into the network: the transhumanist path. Most of the country lives connected to the London network through neural lace and implants made in the Manchester clinics. Its look is silver circuitry, midnight blue and cold white, inside the old brick-and-tile Britain of rain and terraced houses.
+
+the man: about 38 years old, British, ordinary and recognisable (not a model): short dark-blond hair shaved on one side, light stubble, a working man's build, bare-chested with a white towel over one shoulder. His expression: quiet wonder and a touch of vanity, a half-smile, eyebrows slightly raised, as if meeting a better version of himself. He touches the new implant at his left temple with two fingertips of his right hand.
+
+the implants (new, a few days old: the skin around the edges is still slightly pink and healing, with tiny surgical dots):
+- Left side of the head: a fine filigree of silver circuitry laid just under the skin, from the temple, around the ear and down the jaw to the neck, like frost on glass; where it surfaces it is polished silver, with a faint cold-white light pulsing slowly along the lines.
+- Left eye: an ocular implant: the iris made of concentric hairline silver rings that glow faintly midnight-blue; the eye otherwise human, with eyelashes and moisture.
+- At the base of the skull: a small round port with a brushed-silver rim (seen in the mirror reflection, because he turns his head a little).
+- Left forearm: a palm-sized panel of translucent synthetic skin over the inner forearm, showing silver tendons and a soft blue glow beneath; a thin line of medical tape still on one edge.
+
+camera:
+- Lens: 85mm, aperture f/2.2.
+- Position and angle: the camera is beside the mirror, against the wall, at eye level, about 1.2 metres from him, looking back at him at about 40 degrees. We see him in three-quarter view on the RIGHT half of the frame (his implanted left side toward the camera), and in the LEFT half of the frame we see the mirror and his reflection from the other angle, so the image shows both sides of him at once. The camera itself must not appear in the mirror.
+- Focus: sharp on his real eye and the temple implant; the reflection slightly softer.
+
+the room: a small bathroom in an old London Victorian terraced house: white subway tiles with grey grout, some cracked; an old cast-iron sink with brass taps, a ceramic cup with a toothbrush, a straight razor; the mirror is old, with a thin oak frame and slightly worn silvering at the corners, a little steam fog at its lower edge. Through a small frosted sash window on the far right, grey rain and the blurred silhouettes of brick chimneys. On the shelf: a sleek white medical box from the clinic with a simple silver line emblem (no letters), and a folded paper aftercare leaflet (no readable text).
+
+light:
+- Main light: soft cold daylight from the rainy window on the right, wrapping his face.
+- Secondary: the faint cold-white and midnight-blue glow of the implants, reflected on his cheek and fingers.
+- A warm, dim incandescent bulb above the mirror, slightly out of frame, giving a small warm highlight on his hair and the tiles, for contrast.
+
+composition: the bottom 15% of the frame is calm: the edge of the sink, the towel, out-of-focus tiles. Lots of breathing room above his head.
+
+palette: cold white, midnight blue, silver, the warm skin tones, a touch of warm bulb light; old white tiles and grey rain.
+
+avoid: horror body-cutting, blood, cyberpunk neon overload, robot face, metal plates bolted on the face, Terminator look, futuristic sleek apartment, pin-up pose, readable text on the box or leaflet.
+
+====================================================================
+ASSET_REQUEST
+type: loading_screen
+id: 36_ZAS_concierto_de_rock_pirata
+filename: 36_ZAS_concierto_de_rock_pirata.png
+size: 1920x1440 (o más grande con la misma proporción 4:3)
+transparent_background: false
+
+title: "Sin peajes, sin amos" - a rock concert on the coast of the Pirate Republic of the Southern Sea (Pirate Australia).
+
+style: Photorealistic concert and festival photography with a cinematic grade, like a famous festival photo taken from a high vantage point with a full-frame camera: real stage lighting, haze catching the beams, crowd motion blur, natural grain, true night colours. Joyful, loud, free. No CGI gloss, no illustration, no painting. No text, no letters, no logos, no watermark.
+
+setting and lore: The Australian satellite rebelled against the High Seas Market Nation and became the Pirate Republic of the Southern Sea: no tolls, no charters, no masters, every captain votes and every prize is shared, and the shipyards of Sydney never stop. Its flag is the white Southern Cross on a black field with a crossed cutlass and harpoon under it, with a ragged edge.
+
+camera:
+- Lens: 16mm ultra-wide, aperture f/2.8, ISO 3200, shutter 1/125 s.
+- Position: high up the mast of a beached old cargo ship that lies tilted on the sand at the left side of the beach, about 20 metres above the ground, behind and to the left of the stage.
+- Angle: looking down and forward over the band's shoulders toward the crowd and the sea beyond, three-quarter rear view of the stage; horizon in the upper third.
+
+composition:
+- Bottom 20% (calm): the rusty, out-of-focus edge of the ship's mast platform and a coiled rope at the bottom-left corner, dark.
+- Left-centre, below the camera: the stage, built from a stripped steel barge pulled up on the sand plus stacked rusty shipping containers in faded colours, with ship hatches as risers. Lighting rigs hang from two old dock-crane arms. Amplifier stacks made of salvaged ship speakers welded into steel frames.
+- On stage (seen from behind and above, faces lit from the front): a five-piece rock band. The singer, a tall woman with a shaved head and sun-bleached tattoos, in a sleeveless sailor's vest, leans out over the crowd with the microphone, one boot on the monitor. A guitarist with long grey dreadlocks and an old weathered electric guitar, a bassist with a captain's coat, a drummer whose kit includes a ship's bell and oil-drum toms, and a keyboard player at a battered synth bolted to a navigation console.
+- Centre and right: the crowd, thousands of people on the beach and the dunes, densely packed, arms up, lighters and flares in hands: sailors, dock workers, shipwrights in welding aprons, families, old captains in faded uniforms, young people with sun-bleached hair and tattoos, a few with salvaged HSN uniform jackets worn inside out as a joke. Several ragged black flags with the white Southern Cross wave above the crowd. Two people crowd-surf.
+- Background right: the sea at dusk, with the pirate fleet anchored offshore: a dozen ships of every kind (converted container ships, patrol boats with mismatched paint, old tall-masted yachts), their searchlights pointed up into the sky in a crossing fan of beams, joining the stage lights. Far on the horizon, the lit skyline and harbour cranes of Sydney, very small.
+- Sky: a red parachute flare floating down over the water, and a few fireworks bursting in gold.
+
+light:
+- Blue hour just after sunset: the last band of deep orange on the horizon over the sea, deep blue sky above with the first stars and the Southern Cross constellation visible.
+- Stage lights: strong warm white and amber beams from the crane rigs, plus magenta and cyan wash, cutting through the haze; the singer's figure in rim light.
+- Crowd lit by the flares (red) and lighters (warm points); the fleet's searchlights cool white.
+
+atmosphere: sea haze and stage smoke catching every beam, salt spray, sparks from a welded steel sign-sculpture (no letters) at the side of the stage, sand kicked up, a few seagulls lit by the beams.
+
+palette: deep sea blue, sunset orange, flare red, amber stage light, rust and faded container colours, black-and-white pirate flags.
+
+avoid: cartoon pirates with eyepatches and parrots, tricorn hats, Jolly Roger skull-and-crossbones, real band logos, readable text on screens or banners, modern corporate festival branding, daytime.

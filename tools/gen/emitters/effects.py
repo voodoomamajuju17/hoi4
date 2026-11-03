@@ -87,6 +87,38 @@ def use_states(mapping: dict[str, int] | None) -> None:
 
 _TERRITORY: dict[int, str] = {}
 
+# Núcleos del juego base (2026-11-02): state id -> tags con núcleo ahí en 1936. Para
+# objetivos como "las Filipinas" sin adivinar los nombres de cada región.
+_CORES: dict[int, tuple[str, ...]] = {}
+
+
+def use_cores(mapping: dict | None) -> None:
+    global _CORES
+    _CORES = {int(k): tuple(v) for k, v in (mapping or {}).items()}
+
+
+def expand_states(entries) -> list[int]:
+    """Lista de regiones (2026-11-02, objetivos de Japón y Albión): cada entrada
+    es una lista de nombres (la primera que exista), `{territory: TAG}` (todo lo
+    que TAG tenía al arranque del mod) o `{core: TAG}` (cada región con núcleo de
+    TAG en el juego base). Sin repetidos, en orden."""
+    out: list[int] = []
+    for entry in entries or []:
+        if isinstance(entry, dict):
+            if "territory" in entry:
+                ids = sorted(sid for sid, tag in _TERRITORY.items() if tag == entry["territory"])
+            elif "core" in entry:
+                ids = sorted(sid for sid, cores in _CORES.items() if entry["core"] in cores)
+            else:
+                raise SpecError(f"region desconocida: {entry} (va una lista de nombres, territory o core)")
+            if not ids:
+                UNRESOLVED.add(str(entry))
+        else:
+            sid = resolve_state(entry)
+            ids = [] if sid is None else [sid]
+        out.extend(i for i in ids if i not in out)
+    return out
+
 
 def use_territory(mapping: dict | None) -> None:
     """state id -> dueño al arranque (08_territory): para objetivos de guerra
@@ -687,6 +719,12 @@ def render_effects(owner: str, items: list[dict], known,
             block.add(key, item["value"])
             effects_used.setdefault(key, owner)
             continue
+        if effect == "claims":
+            # reclamos de `value` en cada región de la lista (ver expand_states)
+            for sid in expand_states(item.get("states")):
+                block.add(str(sid), Block([("add_claim_by", item["value"])]))
+                effects_used.setdefault("add_claim_by", owner)
+            continue
         if effect == "in_state":
             sid = resolve_state(item["state"])
             if sid is None:
@@ -717,7 +755,7 @@ def render_effects(owner: str, items: list[dict], known,
             kind = item.get("type", "take_state")
             if ec.wargoals and kind not in ec.wargoals:
                 raise SpecError(f"{owner}: tipo de wargoal '{kind}' no existe en common/wargoals/", where=where)
-            sids = [sid for sid in (resolve_state(n) for n in item.get("states") or []) if sid is not None]
+            sids = expand_states(item.get("states"))
 
             def valid() -> Block:
                 friendly = Block([("tag", "ROOT"), ("is_subject_of", "ROOT"), ("is_in_faction_with", "ROOT"),
@@ -760,9 +798,18 @@ def render_effects(owner: str, items: list[dict], known,
             # MEGANATIONS_destino_ia). El jugador los recibe todos.
             pick = destiny_pick_block(sids, goal_for, valid)
             tag = owner.split("_")[0]
-            DESTINY_PICKS.setdefault(tag, pick)
+            # 2026-11-02: un país con varias listas (las Casas de Japón, las etapas del
+            # Imperio): `ai_key` las separa y `ai_when` dice cuál vale para el pulso
+            key = item.get("ai_key", "")
+            when = None
+            if item.get("ai_when"):
+                when = render_conditions(owner, item["ai_when"], {}, where=where)
+            DESTINY_PICKS.setdefault((tag, key), (when, pick))
             block.add("if", Block([("limit", Block([("is_ai", False)]))] + every.entries))
-            block.add("else", Block([("set_country_flag", DESTINY_FLAG)] + pick.entries))
+            # `ai_defer`: la IA no recibe el primero ya (está en otra guerra al nacer);
+            # lo elige el pulso cuando no tenga guerra con una potencia
+            first = [] if item.get("ai_defer") else list(pick.entries) + [("clr_country_flag", "MEGANATIONS_destino_elegido")]
+            block.add("else", Block([("set_country_flag", DESTINY_FLAG)] + first))
             effects_used.setdefault("set_country_flag", owner)
             continue
         if effect == "claim":
@@ -1590,10 +1637,10 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             triggers_used.setdefault("has_state_flag", owner)
         elif key == "controls_all":
             for names in value:
-                sid = resolve_state(names)
-                if sid is None:
+                ids = expand_states([names])
+                if not ids:
                     block.add("always", False)
-                else:
+                for sid in ids:
                     block.add("controls_state", sid)
                     triggers_used.setdefault("controls_state", owner)
         elif key == "coastal":
@@ -1701,7 +1748,7 @@ GENERATED_SCRIPTED = {"MEGANATIONS_renovar_casus_belli", "MEGANATIONS_flota_pira
 # Objetivos del destino de a uno para la IA (2026-10-15): país -> bloque que
 # elige al primer dueño válido de sus regiones y crea los objetivos solo
 # contra él. focus_trees.py lo escribe en MEGANATIONS_destino_ia.
-DESTINY_PICKS: dict[str, Block] = {}
+DESTINY_PICKS: dict[tuple[str, str], tuple[Block | None, Block]] = {}
 DESTINY_FLAG = "MEGANATIONS_destino_escalonado"
 DESTINY_EFFECT = "MEGANATIONS_destino_ia"
 
@@ -1719,7 +1766,7 @@ def destiny_pick_block(sids: list[int], goal_for, valid) -> Block:
     for sid in sids:
         out.add(str(sid), goal_for(sid, Block([("OWNER", Block([("has_country_flag", target)]))])))
     out.add("every_country", Block([("limit", Block([("has_country_flag", target)])), ("clr_country_flag", target)]))
-    out.add("clr_country_flag", chosen)
+    # la marca `chosen` la borra quien llama, después de todas las listas del país
     return out
 
 

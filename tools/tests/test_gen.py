@@ -1897,8 +1897,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("341 modificadores dinamicos (24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 341 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("350 modificadores dinamicos (9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 350 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -4675,13 +4675,15 @@ def test_albion() -> None:
     raw = specload.load(REPO_ROOT / "spec").raw
     tree = raw["focus_trees"]["trees"]["ZAL"]
     ramas = {b["id"]: b["focuses"] for b in tree["branches"]}
-    check("un tronco comun de 5 y dos ramas de 13 focos (15 mas, 2026-11-01)",
-          set(ramas) == {"las_islas", "hacia_el_futuro", "hacia_el_pasado"} and len(ramas["las_islas"]) == 5
-          and len(ramas["hacia_el_futuro"]) == 13 and len(ramas["hacia_el_pasado"]) == 13, {k: len(v) for k, v in ramas.items()})
-    check("las dos ramas se excluyen",
-          ramas["hacia_el_futuro"][0].get("mutually_exclusive") == ["ZAL_hacia_el_pasado"]
-          and ramas["hacia_el_pasado"][0].get("mutually_exclusive") == ["ZAL_hacia_el_futuro"])
-    ramas = {k: v for k, v in ramas.items() if k != "las_islas"}
+    # 2026-11-02: un tercer camino, Quedarse Luditas (32_metas_japon_albion.yaml)
+    check("un tronco comun de 5, dos ramas de 13 focos (15 mas, 2026-11-01) y Quedarse Luditas (7)",
+          set(ramas) == {"las_islas", "hacia_el_futuro", "hacia_el_pasado", "quedarse_luditas"} and len(ramas["las_islas"]) == 5
+          and len(ramas["hacia_el_futuro"]) == 13 and len(ramas["hacia_el_pasado"]) == 13
+          and len(ramas["quedarse_luditas"]) == 7, {k: len(v) for k, v in ramas.items()})
+    check("los tres caminos se excluyen",
+          ramas["hacia_el_futuro"][0].get("mutually_exclusive") == ["ZAL_hacia_el_pasado", "ZAL_quedarse_luditas"]
+          and ramas["hacia_el_pasado"][0].get("mutually_exclusive") == ["ZAL_hacia_el_futuro", "ZAL_quedarse_luditas"])
+    ramas = {k: v for k, v in ramas.items() if k in ("hacia_el_futuro", "hacia_el_pasado")}
     finales = {b: f[-1]["reward"] for b, f in ramas.items()}
     check("cada final cambia nombre, bandera y lider",
           all(any(e.get("effect") == "cosmetic_tag" for e in r) and any(e.get("effect") == "promote" for e in r)
@@ -4731,8 +4733,11 @@ def test_japon() -> None:
           all(set(rutas[r][0].get("mutually_exclusive") or []) == {f"ZJP_{o}_1" for o in rutas if o != r} for r in rutas),
           str({r: rutas[r][0].get("mutually_exclusive") for r in rutas}))
     final = by["ZJP_cybershogun"]
-    check("el CyberShogun se llega desde cualquiera de los tres caminos",
-          set(final.get("prerequisites_any") or []) == {"ZJP_zai_5", "ZJP_yak_5", "ZJP_srs_5"}, str(final.get("prerequisites_any")))
+    # 2026-11-02 (pedido del usuario): sin focos previos; pide 35 de Giri y la meta de su Casa
+    check("el CyberShogun solo pide 35 de Giri y la meta de la Casa (sin focos previos)",
+          not final.get("prerequisites_any") and not final.get("prerequisites")
+          and final["available"]["variable_at_least"] == {"var": "ZJP_giri", "value": 35}
+          and all(f"ZJP_{r}_1" in str(final["available"]) for r in ("zai", "yak", "srs")), str(final.get("available"))[:300])
     rew = str(final.get("reward"))
     check("el final cambia el nombre y el lider por el jefe del camino",
           all(t in rew for t in ("ZJP_CYBER_KANEMURA", "ZJP_CYBER_SAKAGUCHI", "ZJP_CYBER_AKABANE",
@@ -4797,7 +4802,7 @@ def test_japon() -> None:
         ronin = dec[dec.index("ZJP_contratar_ronin = {"):][:3000]
         check("la IA ahorra Giri para el CyberShogun desde el octavo foco del camino (partida 2026-11-01)",
               "has_completed_focus = ZJP_zai_4" in ronin and "NOT = { has_completed_focus = ZJP_cybershogun }" in ronin
-              and "var = ZJP_giri value = 65 compare = less_than" in ronin, ronin[-900:])
+              and "var = ZJP_giri value = 50 compare = less_than" in ronin, ronin[-900:])
         loc = "".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*.yml"))
         check("el panel muestra el Giri", "[?ZJP_giri]" in loc)
         ai = (mod / "common/ai_strategy/meganations_ai.txt").read_text(encoding="utf-8-sig")
@@ -5056,6 +5061,46 @@ def test_reglas() -> None:
               any("reglas del juego nombran" in n and "SOV_ai_behavior" in n for n in ctx.notes))
 
 
+
+def test_metas_japon_albion() -> None:
+    section("Metas de las Casas de Japon y de los caminos de Albion (2026-11-02)")
+    raw = specload.load(REPO_ROOT / "spec").raw
+    focos = {f["id"]: f for t in raw["focus_trees"]["trees"].values() if isinstance(t, dict)
+             for b in t.get("branches") or [] for f in b.get("focuses") or []}
+    check("tercer camino de Albion: Quedarse Luditas excluye a los otros dos y ellos a el",
+          set(focos["ZAL_quedarse_luditas"]["mutually_exclusive"]) == {"ZAL_hacia_el_futuro", "ZAL_hacia_el_pasado"}
+          and "ZAL_quedarse_luditas" in focos["ZAL_hacia_el_futuro"]["mutually_exclusive"]
+          and "ZAL_quedarse_luditas" in focos["ZAL_hacia_el_pasado"]["mutually_exclusive"])
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        fz = " ".join((mod / "common/national_focus/ZJP_focus.txt").read_text(encoding="utf-8-sig").split())
+        z1 = fz[fz.index("id = ZJP_zai_1 "):fz.index("id = ZJP_zai_6 ")]
+        check("Zaibatsu: reclamo y objetivo de guerra sobre Corea (por territorio del mod, no por nombre)",
+              "911 = { add_claim_by = ZJP }" in z1 and "generator = { 911 }" in z1, z1[:700])
+        check("la IA no recibe el objetivo al elegir la Casa (lo elige el pulso, sin otra guerra)",
+              "else = { set_country_flag = MEGANATIONS_destino_escalonado }" in z1, z1[-300:])
+        s1 = fz[fz.index("id = ZJP_srs_1 "):fz.index("id = ZJP_srs_6 ")]
+        check("SRS: las Filipinas por nucleo del juego base", "919 = { add_claim_by = ZJP }" in s1, s1[:500])
+        cy = fz[fz.index("id = ZJP_cybershogun "):]
+        check("CyberShogun: 35 de Giri, la meta de la Casa y ningun foco previo",
+              "value = 35 compare = greater_than_or_equals" in cy and "MN_tt_req_ZJP_meta_de_la_casa" in cy
+              and "prerequisite" not in cy[:cy.index("completion_reward")], cy[:600])
+        ia = " ".join((mod / "common/scripted_effects/meganations_a_destino_ia.txt").read_text(encoding="utf-8-sig").split())
+        zjp = ia[ia.index("limit = { tag = ZJP }"):]
+        check("el pulso de la IA: una lista por Casa, cada una con su condicion",
+              all(f"has_completed_focus = ZJP_{r}_1" in zjp for r in ("zai", "yak", "srs")), zjp[:400])
+        fa = " ".join((mod / "common/national_focus/ZAL_focus.txt").read_text(encoding="utf-8-sig").split())
+        lu = fa[fa.index("id = ZAL_la_internacional_ludita "):]
+        check("la Gran Rotura reclama el Ruhr", "906 = { add_claim_by = ZAL }" in lu, lu[:500])
+        dec = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
+        check("Albion: las tres etapas del Imperio, la Red del Norte y la Gran Rotura como decisiones",
+              all(d in dec for d in ("ZAL_las_llaves_de_los_mares", "ZAL_la_joya_de_la_corona", "ZAL_el_sol_no_se_pone_decision",
+                                     "ZAL_completar_la_red", "ZAL_pedirle_el_norte_a_la_comuna", "ZAL_proclamar_la_gran_rotura",
+                                     "ZJP_proclamar_el_mar_del_shogun", "ZJP_reclamar_la_meta")))
+        joya = dec[dec.index("ZAL_las_llaves_de_los_mares = {"):][:4000]
+        check("la primera etapa abre la guerra por la Joya de la Corona (Delhi)", "generator = { 914 }" in joya, joya[:600])
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
@@ -5123,6 +5168,7 @@ def main() -> int:
         test_incidentes_y_guerras,
         test_albion,
         test_japon,
+        test_metas_japon_albion,
         test_gaia,
         test_agencias,
         test_ficha_lider,
