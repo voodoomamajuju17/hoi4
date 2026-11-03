@@ -1,0 +1,977 @@
+# =============================================================================
+# 32_metas_japon_albion.yaml — lo que persigue cada Casa de Japón y cada camino
+# de Albión (2026-11-02)
+# =============================================================================
+# Pedido del usuario (2026-11-02, después de ver la propuesta): "baja el costo de
+# giri a 35 para el Cybershogun y solo tené como requisito previo cumplir con el
+# objetivo de su rama en particular. [...] Lo demás sí a todo." (Albión satélite
+# con independencia propia quedó "en el tintero": no se hace por ahora.)
+#
+# Japón (el Shogunato no tiene camino del Shogun: son tres Casas):
+#   - Todas: unir el archipiélago. Okinawa y Kitakyushu arrancan en manos de Corea.
+#   - Zaibatsu: además, Corea entera (los diques del continente).
+#   - Yakuza: además, Taiwán y Hong Kong (los puertos de noche).
+#   - SRS: además, Taiwán y las Filipinas (las fábricas de chips y los voluntarios).
+#   El primer foco de la Casa da los reclamos y los objetivos de guerra. El
+#   CyberShogun ya no pide el último foco del camino: pide 35 de Giri y la meta de
+#   su Casa cumplida. Después persigue Singapur y Malaca.
+# Albión:
+#   - Hacia el Futuro: la Red del Atlántico Norte (Islandia, Feroe, Groenlandia,
+#     Terranova). Lo de la Comuna se pide (si es aliada, lo entrega por evento);
+#     lo demás, por guerra.
+#   - Hacia el Pasado: el Imperio por etapas. 1) el Mediterráneo y el Atlántico Sur;
+#     2) la India; 3) donde nunca se pone el sol (Canadá, Australia, Nueva Zelanda,
+#     Kenia, Nigeria y el Cabo).
+#   - Quedarse Luditas: tercer camino, la Gran Rotura (Países Bajos, Bélgica y el
+#     Ruhr, el corazón robótico de la Comuna).
+# Regiones: listas de nombres (la primera que exista en el juego), `territory: TAG`
+# (todo lo que TAG tenía al arrancar) o `core: TAG` (núcleo en el juego base).
+# Un nombre que el juego no conoce queda anotado en el reporte.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Regiones (anclas, para no repetir listas)
+# -----------------------------------------------------------------------------
+x_regiones:
+  okinawa: &okinawa ["Okinawa", "Ryukyu"]
+  kitakyushu: &kitakyushu ["Kitakyūshū", "Kitakyushu", "Kyushu", "Fukuoka"]
+  taiwan: &taiwan ["Taiwan"]
+  hong_kong: &hong_kong ["Hong Kong"]
+  singapur: &singapur ["Singapore", "Straits Settlements"]
+  johor: &johor ["Johor", "Unfederated Malay States"]
+  penang: &penang ["Penang"]
+  perak: &perak ["Perak"]
+  islandia: &islandia ["Iceland"]
+  feroe: &feroe ["Faroe Islands", "Faroes", "Faroe"]
+  groenlandia: &groenlandia ["Greenland"]
+  terranova: &terranova ["Newfoundland", "Newfoundland and Labrador"]
+  gibraltar: &gibraltar ["Gibraltar"]
+  malta: &malta ["Malta"]
+  chipre: &chipre ["Cyprus"]
+  suez: &suez ["Suez"]
+  malvinas: &malvinas ["Falkland Islands", "Malvinas", "Islas Malvinas"]
+  delhi: &delhi ["Delhi"]
+  bombay: &bombay ["Bombay"]
+  bengala: &bengala ["West Bengal", "Bengal"]
+  madras: &madras ["Madras"]
+  ontario: &ontario ["Southern Ontario", "Ontario"]
+  quebec: &quebec ["Southern Quebec", "Quebec"]
+  columbia: &columbia ["British Columbia"]
+  nueva_gales: &nueva_gales ["New South Wales"]
+  victoria: &victoria ["Victoria"]
+  isla_norte: &isla_norte ["North Island", "New Zealand"]
+  nairobi: &nairobi ["Nairobi"]
+  lagos: &lagos ["Lagos", "Southern Nigeria", "Nigeria"]
+  el_cabo: &el_cabo ["Cape", "Cape Province", "Western Cape"]
+  ruhr: &ruhr ["Ruhr", "Westfalen", "Westphalia"]
+  renania: &renania ["Rheinland", "Rhineland", "Rheinprovinz"]
+
+# -----------------------------------------------------------------------------
+# Focos que ya existían
+# -----------------------------------------------------------------------------
+extend_focuses:
+  # --- Japón: el primer foco de cada Casa trae su meta -----------------------
+  ZJP_zai_1:
+    desc:
+      english: 'Four industrial families take the seats of the council and put every Japanese on a payroll. Factories +20%, but recruitable
+        population -30%, stability -15% and political power -20%: employees do not go to war.\nTHE GOAL OF THE HOUSE: the shipyards of the
+        continent. Claims and war goals on all of Korea, Okinawa and Kitakyushu included. With them and 35 Giri, the CyberShogun.'
+      spanish: 'Cuatro familias industriales ocupan las sillas del consejo y ponen a cada japonés en una nómina. Fábricas +20%, pero población
+        reclutable -30%, estabilidad -15% y poder político -20%: los empleados no van a la guerra.\nLA META DE LA CASA: los diques del
+        continente. Reclamos y objetivos de guerra sobre Corea entera, con Okinawa y Kitakyushu. Con eso y 35 de Giri, el CyberShogun.'
+    reward_append:
+    - {effect: claims, value: ZJP, states: [*okinawa, *kitakyushu, {territory: ZKR}]}
+    - effect: wargoal_holders
+      type: take_state
+      ai_one_at_a_time: true
+      ai_defer: true
+      ai_key: zaibatsu
+      ai_when: {all: [{focus: ZJP_zai_1}, {not: {focus: ZJP_cybershogun}}]}
+      states: [*okinawa, *kitakyushu, {territory: ZKR}]
+  ZJP_yak_1:
+    desc:
+      english: 'The clans that ran the ports for Singapore now run the country for the Shogun. Political power +30%, but stability -20%,
+        factories -10% (protection money) and research -10%.\nTHE GOAL OF THE HOUSE: the night ports, from Kyushu to Hong Kong. Claims and
+        war goals on Okinawa, Kitakyushu, Taiwan and Hong Kong. With them and 35 Giri, the CyberShogun.'
+      spanish: 'Los clanes que manejaban los puertos para Singapur ahora manejan el país para el Shogun. Poder político +30%, pero estabilidad
+        -20%, fábricas -10% (la protección se paga) e investigación -10%.\nLA META DE LA CASA: los puertos de noche, de Kyushu a Hong Kong.
+        Reclamos y objetivos de guerra sobre Okinawa, Kitakyushu, Taiwán y Hong Kong. Con eso y 35 de Giri, el CyberShogun.'
+    reward_append:
+    - {effect: claims, value: ZJP, states: [*okinawa, *kitakyushu, *taiwan, *hong_kong]}
+    - effect: wargoal_holders
+      type: take_state
+      ai_one_at_a_time: true
+      ai_defer: true
+      ai_key: yakuza
+      ai_when: {all: [{focus: ZJP_yak_1}, {not: {focus: ZJP_cybershogun}}]}
+      states: [*okinawa, *kitakyushu, *taiwan, *hong_kong]
+  ZJP_srs_1:
+    desc:
+      english: 'To the public, SRS makes medicines; Doctor Akabane now advises the Shogun. Research +20% and one research slot, but the
+        pharmacy pays volunteers for trials: fewer births, stability -10%, war support -15%.\nTHE GOAL OF THE HOUSE: chips and volunteers.
+        Claims and war goals on Okinawa, Kitakyushu, the chip foundries of Taiwan and the Philippines. With them and 35 Giri, the CyberShogun.'
+      spanish: 'Para el público, SRS fabrica medicamentos; el doctor Akabane ahora asesora al Shogun. Investigación +20% y un espacio de
+        investigación, pero la farmacia les paga a voluntarios para sus ensayos: menos nacimientos, estabilidad -10%, apoyo a la guerra
+        -15%.\nLA META DE LA CASA: chips y voluntarios. Reclamos y objetivos de guerra sobre Okinawa, Kitakyushu, las fundiciones de chips de
+        Taiwán y las Filipinas. Con eso y 35 de Giri, el CyberShogun.'
+    reward_append:
+    - {effect: claims, value: ZJP, states: [*okinawa, *kitakyushu, *taiwan, {core: PHI}]}
+    - effect: wargoal_holders
+      type: take_state
+      ai_one_at_a_time: true
+      ai_defer: true
+      ai_key: srs
+      ai_when: {all: [{focus: ZJP_srs_1}, {not: {focus: ZJP_cybershogun}}]}
+      states: [*okinawa, *kitakyushu, *taiwan, {core: PHI}]
+  # --- El CyberShogun: 35 de Giri y la meta de la Casa, nada más -------------
+  ZJP_cybershogun:
+    prerequisites_any: null
+    desc:
+      english: 'The greatest Mecha ever built waits in dry dock number one of Yokosuka, as tall as a tower. Inside, instead of a pilot,
+        a mind: that of the boss of our House, uploaded, multiplied and wired to every crane, warship and Mecha of the islands.
+        Needs the goal of our House fulfilled and costs 35 Giri. The country takes the name of its new master, a new flag, and the boss
+        becomes the CyberShogun. Then the Shogunate goes for the throat of the High Seas: Singapore and the Strait of Malacca.'
+      spanish: 'El Mecha más grande jamás construido espera en el dique seco número uno de Yokosuka, alto como una torre. Adentro, en vez
+        de un piloto, una mente: la del jefe de nuestra Casa, subida, multiplicada y conectada a cada grúa, cada buque y cada Mecha de las
+        islas. Pide la meta de nuestra Casa cumplida y cuesta 35 de Giri. El país toma el nombre de su nuevo amo, bandera nueva, y el jefe
+        se vuelve el CyberShogun. Después el Shogunato va por el cuello de la Alta Mar: Singapur y el estrecho de Malaca.'
+    available:
+      variable_at_least: {var: ZJP_giri, value: 35}
+      all:
+      - explained:
+          id: ZJP_meta_de_la_casa
+          english: The goal of our House is fulfilled (we control every region it asks for)
+          spanish: La meta de nuestra Casa está cumplida (controlamos cada región que pide)
+          when:
+            any:
+            - all:
+              - {focus: ZJP_zai_1}
+              - controls_all: [*okinawa, *kitakyushu, {territory: ZKR}]
+            - all:
+              - {focus: ZJP_yak_1}
+              - controls_all: [*okinawa, *kitakyushu, *taiwan, *hong_kong]
+            - all:
+              - {focus: ZJP_srs_1}
+              - controls_all: [*okinawa, *kitakyushu, *taiwan, {core: PHI}]
+    reward:
+    - {effect: add_variable, var: ZJP_giri, value: -35}
+    - effect: if
+      when: {focus: ZJP_zai_1}
+      then:
+      - {effect: cosmetic_tag, value: ZJP_CYBER_KANEMURA}
+      - {effect: promote, character: ZJP_daisuke_kanemura}
+    - effect: if
+      when: {focus: ZJP_yak_1}
+      then:
+      - {effect: cosmetic_tag, value: ZJP_CYBER_SAKAGUCHI}
+      - {effect: promote, character: ZJP_ryuji_sakaguchi}
+    - effect: if
+      when: {focus: ZJP_srs_1}
+      then:
+      - {effect: cosmetic_tag, value: ZJP_CYBER_AKABANE}
+      - {effect: promote, character: ZJP_kenzo_akabane}
+    - {effect: dynamic_modifier, id: ZJP_cybershogunato}
+    - {effect: tech, value: advanced_heavy_tank_chassis}
+    - {effect: event, id: meganations_japon.30, days: 1}
+    # 2026-11-02: la meta del CyberShogun
+    - {effect: flag, value: ZJP_estrechos_abiertos}
+    - {effect: claims, value: ZJP, states: [*singapur, *johor, *penang, *perak]}
+    - effect: wargoal_holders
+      type: take_state
+      ai_one_at_a_time: true
+      ai_key: zz_cybershogun
+      ai_when: {all: [{focus: ZJP_cybershogun}, {not_flag: ZJP_mar_del_shogun}]}
+      states: [*singapur, *johor, *penang, *perak]
+    ai: {factor: 50}
+
+  # --- Albión: los dos caminos y el tercero ----------------------------------
+  ZAL_hacia_el_futuro:
+    mutually_exclusive_append: [ZAL_quedarse_luditas]
+  ZAL_hacia_el_pasado:
+    mutually_exclusive_append: [ZAL_quedarse_luditas]
+  ZAL_los_cables_de_cornualles:
+    reward_append:
+    - {effect: flag, value: ZAL_red_del_norte_abierta}
+    - {effect: claims, value: ZAL, states: [*islandia, *feroe, *groenlandia, *terranova]}
+    - effect: wargoal_holders
+      type: take_state
+      ai_one_at_a_time: true
+      ai_key: red
+      ai_when: {all: [{flag: ZAL_red_del_norte_abierta}, {not_flag: ZAL_red_del_norte}]}
+      states: [*islandia, *feroe, *groenlandia, *terranova]
+  ZAL_el_imperio_neovictoriano:
+    reward_append:
+    - {effect: flag, value: ZAL_imperio_abierto}
+    - {effect: claims, value: ZAL, states: [*gibraltar, *malta, *chipre, *suez, *malvinas]}
+    - effect: wargoal_holders
+      type: take_state
+      ai_one_at_a_time: true
+      ai_key: imperio_1
+      ai_when: {all: [{flag: ZAL_imperio_abierto}, {not_flag: ZAL_imperio_etapa_1}]}
+      states: [*gibraltar, *malta, *chipre, *suez, *malvinas]
+
+# -----------------------------------------------------------------------------
+# El tercer camino: Quedarse Luditas
+# -----------------------------------------------------------------------------
+add_branches:
+  ZAL:
+  - id: quedarse_luditas
+    name: {english: 'Stay Luddite', spanish: 'Quedarse Luditas'}
+    focuses:
+    - id: ZAL_quedarse_luditas
+      name: {english: Stay Luddite, spanish: Quedarse Luditas}
+      days: 182
+      icon: GFX_goal_generic_workers_rights
+      mutually_exclusive: [ZAL_hacia_el_futuro, ZAL_hacia_el_pasado]
+      desc:
+        english: 'Not forwards, not backwards: Albion stays what it is. The looms keep working, the councils keep voting by a show of hands,
+          and the hammers that broke the servers in 2086 are taken down from the walls. Across the water the Commune still runs half a
+          continent with robots. That is the problem.'
+        spanish: 'Ni para adelante ni para atrás: Albión se queda como es. Los telares siguen andando, los consejos siguen votando a mano
+          alzada, y los martillos que rompieron los servidores en 2086 se bajan de las paredes. Del otro lado del agua la Comuna todavía
+          maneja medio continente con robots. Ese es el problema.'
+      reward:
+      - {effect: flag, value: ZAL_quedarse_luditas}
+      - {effect: add_stability, value: 0.05}
+      - {effect: add_political_power, value: 75}
+      ai: {factor: 1}
+    - id: ZAL_la_constitucion_del_telar
+      name: {english: The Constitution of the Loom, spanish: La Constitución del Telar}
+      days: 119
+      icon: GFX_goal_generic_national_unity
+      prerequisites: [ZAL_quedarse_luditas]
+      desc:
+        english: 'One page, handwritten, nailed to the door of every town hall: no machine shall decide for a person. Everything else is
+          open to debate, and is debated.'
+        spanish: 'Una página, escrita a mano, clavada en la puerta de cada municipio: ninguna máquina decide por una persona. Todo lo demás
+          se discute, y se discute.'
+      reward:
+      - {effect: dynamic_modifier, id: ZAL_constitucion_del_telar}
+    - id: ZAL_las_brigadas_del_martillo
+      name: {english: The Hammer Brigades, spanish: Las Brigadas del Martillo}
+      days: 119
+      icon: GFX_goal_generic_allies_build_infantry
+      prerequisites: [ZAL_la_constitucion_del_telar]
+      desc:
+        english: 'Miners, weavers and dockers who already know how to break a machine. Now they learn to do it under fire. Three
+          divisions.'
+        spanish: 'Mineros, tejedores y estibadores que ya saben romper una máquina. Ahora aprenden a hacerlo bajo fuego. Tres
+          divisiones.'
+      reward:
+      - effect: ensure_template
+        name: Brigada del Martillo
+        regiments: [infantry, infantry, infantry, infantry, infantry, infantry]
+      - {effect: create_units, template: Brigada del Martillo, name: Martillo, count: 3, experience: 0.2}
+      - {effect: army_experience, value: 25}
+    - id: ZAL_los_saboteadores_del_canal
+      name: {english: The Channel Saboteurs, spanish: Los Saboteadores del Canal}
+      days: 119
+      icon: GFX_goal_generic_intelligence_exchange
+      prerequisites: [ZAL_las_brigadas_del_martillo]
+      desc:
+        english: 'Fishing boats that cross at night with sugar for the fuel tanks of the robots of Rotterdam. Opens the decisions of the
+          Great Breaking.'
+        spanish: 'Pesqueros que cruzan de noche con azúcar para los tanques de combustible de los robots de Rotterdam. Abre las decisiones
+          de la Gran Rotura.'
+      reward:
+      - {effect: flag, value: ZAL_rotura_abierta}
+      - {effect: add_political_power, value: 50}
+    - id: ZAL_los_fusiles_sin_circuitos
+      name: {english: Rifles Without Circuits, spanish: Fusiles sin Circuitos}
+      days: 119
+      icon: GFX_goal_generic_small_arms
+      prerequisites: [ZAL_los_saboteadores_del_canal]
+      desc:
+        english: 'A drone cannot jam what has no electronics. The village forges make bolts, sights and barrels the old way, and they
+          never fail.'
+        spanish: 'Un dron no puede interferir lo que no tiene electrónica. Las herrerías de los pueblos hacen cerrojos, miras y cañones a la
+          vieja usanza, y nunca fallan.'
+      reward:
+      - {effect: dynamic_modifier, id: ZAL_fusiles_sin_circuitos}
+    - id: ZAL_la_internacional_ludita
+      name: {english: The Luddite International, spanish: La Internacional Ludita}
+      days: 182
+      icon: GFX_goal_generic_major_war
+      prerequisites: [ZAL_los_fusiles_sin_circuitos]
+      desc:
+        english: 'In the Netherlands, in Flanders, in the Ruhr, there are workers who never asked to be replaced. Albion promises them
+          their hands back. Claims and war goals on the Netherlands, Belgium and the Ruhr.'
+        spanish: 'En los Países Bajos, en Flandes, en el Ruhr hay obreros que nunca pidieron que los reemplacen. Albión les promete
+          devolverles las manos. Reclamos y objetivos de guerra sobre los Países Bajos, Bélgica y el Ruhr.'
+      reward:
+      - {effect: claims, value: ZAL, states: [{core: HOL}, {core: BEL}, *ruhr, *renania]}
+      - effect: wargoal_holders
+        type: take_state
+        ai_one_at_a_time: true
+        ai_key: rotura
+        ai_when: {all: [{flag: ZAL_quedarse_luditas}, {not_flag: ZAL_gran_rotura}]}
+        states: [{core: HOL}, {core: BEL}, *ruhr, *renania]
+      - {effect: add_war_support, value: 0.1}
+    - id: ZAL_la_gran_rotura
+      name: {english: The Great Breaking, spanish: La Gran Rotura}
+      days: 182
+      icon: GFX_goal_generic_destroy_factory
+      prerequisites: [ZAL_la_internacional_ludita]
+      desc:
+        english: 'Unlocks the decision to proclaim the Great Breaking. Requires controlling the Netherlands, Belgium, the Ruhr and the
+          Rhineland: the robotic heart of the Commune, stopped by hand.'
+        spanish: 'Destraba la decisión de proclamar la Gran Rotura. Pide controlar los Países Bajos, Bélgica, el Ruhr y Renania: el
+          corazón robótico de la Comuna, parado a mano.'
+      reward:
+      - {effect: flag, value: ZAL_rotura_final_abierta}
+      - {effect: add_political_power, value: 50}
+
+# -----------------------------------------------------------------------------
+# Decisiones
+# -----------------------------------------------------------------------------
+decisions:
+  dynamic_modifiers:
+  - id: ZJP_el_mar_del_shogun
+    country: ZJP
+    name: {english: The Sea of the Shogun, spanish: El Mar del Shogun}
+    desc:
+      english: Every ship that passes Malacca bows to Yokosuka now.
+      spanish: Cada barco que pasa por Malaca ahora le hace una reverencia a Yokosuka.
+    modifiers:
+      industrial_capacity_dockyard: 0.2
+      naval_damage_factor: 0.1
+      production_speed_dockyard_factor: 0.15
+      political_power_factor: 0.15
+  - id: ZAL_red_del_atlantico_norte
+    country: ZAL
+    name: {english: The North Atlantic Network, spanish: La Red del Atlántico Norte}
+    desc:
+      english: Servers under the ice of Greenland, minds that think at the temperature of the sea.
+      spanish: Servidores bajo el hielo de Groenlandia, mentes que piensan a la temperatura del mar.
+    modifiers:
+      research_speed_factor: 0.15
+      stability_factor: 0.05
+      encryption_factor: 0.25
+      decryption_factor: 0.25
+  - id: ZAL_imperio_mediterraneo
+    country: ZAL
+    name: {english: The Keys of the Seas, spanish: Las Llaves de los Mares}
+    desc:
+      english: Gibraltar, Malta, Suez and the Falklands. Every key is polished on Sundays.
+      spanish: Gibraltar, Malta, Suez y las Malvinas. Cada llave se lustra los domingos.
+    modifiers:
+      naval_speed_factor: 0.1
+      navy_org_factor: 0.1
+      political_power_factor: 0.1
+  - id: ZAL_joya_de_la_corona
+    country: ZAL
+    name: {english: The Jewel in the Crown, spanish: La Joya de la Corona}
+    desc:
+      english: Delhi celebrates a Durbar again, and the Queen watches it on a brass screen.
+      spanish: Delhi vuelve a celebrar un Durbar, y la Reina lo mira en una pantalla de bronce.
+    modifiers:
+      industrial_capacity_factory: 0.1
+      recruitable_population_factor: 0.25
+      production_speed_buildings_factor: 0.1
+  - id: ZAL_el_sol_no_se_pone
+    country: ZAL
+    name: {english: The Sun Never Sets, spanish: El Sol No Se Pone}
+    desc:
+      english: Somewhere in the Empire it is always five o'clock.
+      spanish: En algún lugar del Imperio siempre son las cinco.
+    modifiers:
+      stability_factor: 0.15
+      war_support_factor: 0.15
+      army_org_factor: 0.1
+      industrial_capacity_factory: 0.1
+      industrial_capacity_dockyard: 0.1
+  - id: ZAL_constitucion_del_telar
+    country: ZAL
+    name: {english: The Constitution of the Loom, spanish: La Constitución del Telar}
+    desc:
+      english: No machine decides for a person.
+      spanish: Ninguna máquina decide por una persona.
+    modifiers:
+      stability_factor: 0.1
+      political_power_factor: 0.1
+      research_speed_factor: -0.05
+  - id: ZAL_fusiles_sin_circuitos
+    country: ZAL
+    name: {english: Rifles Without Circuits, spanish: Fusiles sin Circuitos}
+    desc:
+      english: Nothing to jam, nothing to hack, nothing that breaks in the rain.
+      spanish: Nada que interferir, nada que hackear, nada que se rompa con la lluvia.
+    modifiers:
+      army_defence_factor: 0.1
+      army_org_factor: 0.1
+      equipment_capture_factor: 0.1
+  - id: ASC_sabotaje_ludita
+    country: ASC
+    name: {english: Sugar in the Tanks, spanish: Azúcar en los Tanques}
+    desc:
+      english: Somebody keeps pouring sugar into the fuel of the robots of Rotterdam.
+      spanish: Alguien sigue echando azúcar en el combustible de los robots de Rotterdam.
+    modifiers:
+      industrial_capacity_factory: -0.1
+      production_speed_buildings_factor: -0.1
+  - id: ZAL_rotura_cumplida
+    country: ZAL
+    name: {english: The Great Breaking, spanish: La Gran Rotura}
+    desc:
+      english: The robots of the Ruhr stand still in the rain, and the workers walk back into the factories with their own hands.
+      spanish: Los robots del Ruhr se quedan quietos bajo la lluvia, y los obreros vuelven a entrar a las fábricas con sus propias manos.
+    modifiers:
+      industrial_capacity_factory: 0.15
+      stability_factor: 0.1
+      war_support_factor: 0.1
+      army_attack_factor: 0.1
+  categories:
+  # ---------------------------------------------------------------------------
+  # Japón: la meta de la Casa y los estrechos
+  # ---------------------------------------------------------------------------
+  - id: ZJP_metas_category
+    country: ZJP
+    icon_prefer: [generic_formable_nations, generic_political_actions]
+    name: {english: 'The Goal of the House', spanish: 'La Meta de la Casa'}
+    desc:
+      english: 'Every House wants something from the sea. The Zaibatsu, the shipyards of Korea; the Yakuza, the night ports from Kyushu to
+        Hong Kong; SRS, the chips of Taiwan and the volunteers of the Philippines. All of them, first, the whole archipelago: Okinawa and
+        Kitakyushu. With the goal fulfilled and 35 Giri, the CyberShogun wakes up, and then the Shogunate goes for Singapore and Malacca.'
+      spanish: 'Cada Casa quiere algo del mar. Los Zaibatsu, los diques de Corea; la Yakuza, los puertos de noche de Kyushu a Hong Kong;
+        SRS, los chips de Taiwán y los voluntarios de las Filipinas. Todas, primero, el archipiélago entero: Okinawa y Kitakyushu. Con la
+        meta cumplida y 35 de Giri despierta el CyberShogun, y después el Shogunato va por Singapur y Malaca.'
+    visible:
+      any:
+      - {focus: ZJP_zai_1}
+      - {focus: ZJP_yak_1}
+      - {focus: ZJP_srs_1}
+    src: user_request
+    decisions:
+    - id: ZJP_reclamar_la_meta
+      name: {english: 'Claim the Goal of the House', spanish: 'Reclamar la Meta de la Casa'}
+      desc:
+        english: 'Every region our House asks for that is still in foreign hands becomes a war goal against whoever holds it now (not our
+          satellites, our faction or those we guarantee).'
+        spanish: 'Cada región que pide nuestra Casa y sigue en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      visible: {not: {focus: ZJP_cybershogun}}
+      effects:
+      - effect: if
+        when: {focus: ZJP_zai_1}
+        then:
+        - effect: wargoal_holders
+          type: take_state
+          ai_one_at_a_time: true
+          ai_key: zaibatsu
+          ai_when: {all: [{focus: ZJP_zai_1}, {not: {focus: ZJP_cybershogun}}]}
+          states: [*okinawa, *kitakyushu, {territory: ZKR}]
+      - effect: if
+        when: {focus: ZJP_yak_1}
+        then:
+        - effect: wargoal_holders
+          type: take_state
+          ai_one_at_a_time: true
+          ai_key: yakuza
+          ai_when: {all: [{focus: ZJP_yak_1}, {not: {focus: ZJP_cybershogun}}]}
+          states: [*okinawa, *kitakyushu, *taiwan, *hong_kong]
+      - effect: if
+        when: {focus: ZJP_srs_1}
+        then:
+        - effect: wargoal_holders
+          type: take_state
+          ai_one_at_a_time: true
+          ai_key: srs
+          ai_when: {all: [{focus: ZJP_srs_1}, {not: {focus: ZJP_cybershogun}}]}
+          states: [*okinawa, *kitakyushu, *taiwan, {core: PHI}]
+      ai: {factor: 10, modifiers: [{factor: 0.2, when: {war_with: HSN}}]}
+      src: user_request
+    - id: ZJP_reclamar_los_estrechos
+      name: {english: 'Claim the Straits', spanish: 'Reclamar los Estrechos'}
+      desc:
+        english: 'Singapore, Johor, Penang and Perak: every one still in foreign hands becomes a war goal against whoever holds it now.'
+        spanish: 'Singapur, Johor, Penang y Perak: cada una que siga en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga
+          ahora.'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      visible: {flag: ZJP_estrechos_abiertos, not_flag: ZJP_mar_del_shogun}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        ai_one_at_a_time: true
+        ai_key: zz_cybershogun
+        ai_when: {all: [{focus: ZJP_cybershogun}, {not_flag: ZJP_mar_del_shogun}]}
+        states: [*singapur, *johor, *penang, *perak]
+      ai: {factor: 10}
+      src: user_request
+    - id: ZJP_proclamar_el_mar_del_shogun
+      name: {english: 'Proclaim the Sea of the Shogun', spanish: 'Proclamar el Mar del Shogun'}
+      desc:
+        english: 'The High Seas lived off the Strait of Malacca. Now the strait belongs to the Shogunate.\nRequires controlling Singapore,
+          Johor, Penang and Perak. Cores on the four and a great national spirit.'
+        spanish: 'La Alta Mar vivía del estrecho de Malaca. Ahora el estrecho es del Shogunato.\nPide controlar Singapur, Johor, Penang y
+          Perak. Núcleos en las cuatro y un gran espíritu nacional.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 100
+      visible: {flag: ZJP_estrechos_abiertos, not_flag: ZJP_mar_del_shogun}
+      available:
+        controls_all: [*singapur, *johor, *penang, *perak]
+      effects:
+      - {effect: flag, value: ZJP_mar_del_shogun}
+      - {effect: dynamic_modifier, id: ZJP_el_mar_del_shogun}
+      - {effect: in_state, state: *singapur, effects: [{effect: add_core, value: ZJP}]}
+      - {effect: in_state, state: *johor, effects: [{effect: add_core, value: ZJP}]}
+      - {effect: in_state, state: *penang, effects: [{effect: add_core, value: ZJP}]}
+      - {effect: in_state, state: *perak, effects: [{effect: add_core, value: ZJP}]}
+      - {effect: event, id: meganations_japon.99, days: 1}
+      ai: {factor: 100}
+      src: user_request
+  # ---------------------------------------------------------------------------
+  # Albión hacia el futuro: la Red del Atlántico Norte
+  # ---------------------------------------------------------------------------
+  - id: ZAL_red_del_norte_category
+    country: ZAL
+    icon_prefer: [generic_research, generic_political_actions]
+    name: {english: 'The North Atlantic Network', spanish: 'La Red del Atlántico Norte'}
+    desc:
+      english: 'A mind needs cold to think: servers under the ice, cables under the sea. Iceland, the Faroes, Greenland and Newfoundland.
+        What the Commune holds is asked for, and the Commune answers better if we are its ally; the rest is taken. With the four and a
+        Synchrony of 50, the Network is complete.'
+      spanish: 'Una mente necesita frío para pensar: servidores bajo el hielo, cables bajo el mar. Islandia, las Feroe, Groenlandia y
+        Terranova. Lo que tiene la Comuna se pide, y la Comuna contesta mejor si somos su aliada; lo demás se toma. Con las cuatro y una
+        Sincronía de 50, la Red está completa.'
+    visible: {flag: ZAL_red_del_norte_abierta}
+    src: user_request
+    decisions:
+    - id: ZAL_pedirle_el_norte_a_la_comuna
+      name: {english: 'Ask the Commune for the North', spanish: 'Pedirle el Norte a la Comuna'}
+      desc:
+        english: 'A delegation of implanted engineers crosses to Hamburg with the cable plans. If the Commune still holds Iceland, the Faroes
+          or Greenland, it can hand them over.'
+        spanish: 'Una delegación de ingenieros con implantes cruza a Hamburgo con los planos del cable. Si la Comuna todavía tiene Islandia,
+          las Feroe o Groenlandia, las puede entregar.'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      visible: {country_exists: ASC, not_flag: ZAL_red_del_norte}
+      available:
+        not: {war_with: ASC}
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: event, id: meganations_albion.101, days: 3}
+      ai: {factor: 10}
+      src: user_request
+    - id: ZAL_reclamar_los_cables
+      name: {english: 'Claim the Cables', spanish: 'Reclamar los Cables'}
+      desc:
+        english: 'Every island of the Network still in foreign hands becomes a war goal against whoever holds it now (not our satellites, our
+          faction or those we guarantee).'
+        spanish: 'Cada isla de la Red que siga en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no nuestros
+          satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      visible: {not_flag: ZAL_red_del_norte}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        ai_one_at_a_time: true
+        ai_key: red
+        ai_when: {all: [{flag: ZAL_red_del_norte_abierta}, {not_flag: ZAL_red_del_norte}]}
+        states: [*islandia, *feroe, *groenlandia, *terranova]
+      ai: {factor: 5}
+      src: user_request
+    - id: ZAL_completar_la_red
+      name: {english: 'Complete the Network', spanish: 'Completar la Red'}
+      desc:
+        english: 'The last cable reaches St. John''s. Albion thinks at the temperature of the sea.\nRequires controlling Iceland, the Faroes,
+          Greenland and Newfoundland and a Synchrony of 50. Cores on the four and a great national spirit.'
+        spanish: 'El último cable llega a St. John''s. Albión piensa a la temperatura del mar.\nPide controlar Islandia, las Feroe,
+          Groenlandia y Terranova y una Sincronía de 50. Núcleos en las cuatro y un gran espíritu nacional.'
+      icon_prefer: [generic_formable_nations, generic_research]
+      cost: 100
+      visible: {not_flag: ZAL_red_del_norte}
+      available:
+        controls_all: [*islandia, *feroe, *groenlandia, *terranova]
+        variable_at_least: {var: ZAL_sincronia, value: 50}
+      effects:
+      - {effect: flag, value: ZAL_red_del_norte}
+      - {effect: dynamic_modifier, id: ZAL_red_del_atlantico_norte}
+      - {effect: in_state, state: *islandia, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *feroe, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *groenlandia, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *terranova, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: event, id: meganations_albion.102, days: 1}
+      ai: {factor: 100}
+      src: user_request
+  # ---------------------------------------------------------------------------
+  # Albión hacia el pasado: el Imperio, por etapas
+  # ---------------------------------------------------------------------------
+  - id: ZAL_imperio_category
+    country: ZAL
+    icon_prefer: [generic_formable_nations, generic_political_actions]
+    name: {english: 'The Empire of the Queen', spanish: 'El Imperio de la Reina'}
+    desc:
+      english: 'Victoria III wants back everything that was red on the old maps, in order. First the keys of the seas (Gibraltar, Malta,
+        Cyprus, Suez and the Falklands); then the Jewel in the Crown (Delhi, Bombay, Bengal and Madras); last, the lands where the sun never
+        sets (Canada, Australia, New Zealand, Kenya, Nigeria and the Cape). Each stage claims the next.'
+      spanish: 'Victoria III quiere de vuelta todo lo que era rojo en los mapas viejos, en orden. Primero las llaves de los mares (Gibraltar,
+        Malta, Chipre, Suez y las Malvinas); después la Joya de la Corona (Delhi, Bombay, Bengala y Madrás); al final, las tierras donde
+        nunca se pone el sol (Canadá, Australia, Nueva Zelanda, Kenia, Nigeria y el Cabo). Cada etapa reclama la siguiente.'
+    visible: {flag: ZAL_imperio_abierto}
+    src: user_request
+    decisions:
+    - id: ZAL_reclamar_el_imperio
+      name: {english: 'Claim the Empire', spanish: 'Reclamar el Imperio'}
+      desc:
+        english: 'Every region of the current stage still in foreign hands becomes a war goal against whoever holds it now (not our
+          satellites, our faction or those we guarantee).'
+        spanish: 'Cada región de la etapa actual que siga en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora (no
+          nuestros satélites, nuestra facción ni los que garantizamos).'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      visible: {not_flag: ZAL_imperio_etapa_3}
+      effects:
+      - effect: if
+        when: {not_flag: ZAL_imperio_etapa_1}
+        then:
+        - effect: wargoal_holders
+          type: take_state
+          ai_one_at_a_time: true
+          ai_key: imperio_1
+          ai_when: {all: [{flag: ZAL_imperio_abierto}, {not_flag: ZAL_imperio_etapa_1}]}
+          states: [*gibraltar, *malta, *chipre, *suez, *malvinas]
+      - effect: if
+        when: {flag: ZAL_imperio_etapa_1, not_flag: ZAL_imperio_etapa_2}
+        then:
+        - effect: wargoal_holders
+          type: take_state
+          ai_one_at_a_time: true
+          ai_key: imperio_2
+          ai_when: {flag: ZAL_imperio_etapa_1, not_flag: ZAL_imperio_etapa_2}
+          states: [*delhi, *bombay, *bengala, *madras]
+      - effect: if
+        when: {flag: ZAL_imperio_etapa_2, not_flag: ZAL_imperio_etapa_3}
+        then:
+        - effect: wargoal_holders
+          type: take_state
+          ai_one_at_a_time: true
+          ai_key: imperio_3
+          ai_when: {flag: ZAL_imperio_etapa_2, not_flag: ZAL_imperio_etapa_3}
+          states: [*ontario, *quebec, *columbia, *nueva_gales, *victoria, *isla_norte, *nairobi, *lagos, *el_cabo]
+      ai: {factor: 10}
+      src: user_request
+    - id: ZAL_las_llaves_de_los_mares
+      name: {english: 'The Keys of the Seas', spanish: 'Las Llaves de los Mares'}
+      desc:
+        english: 'The Royal Navy sails again through every gate of the old Empire.\nRequires controlling Gibraltar, Malta, Cyprus, Suez and
+          the Falklands. Cores on all five, a national spirit and claims on the Jewel in the Crown.'
+        spanish: 'La Armada Real vuelve a pasar por cada puerta del viejo Imperio.\nPide controlar Gibraltar, Malta, Chipre, Suez y las
+          Malvinas. Núcleos en las cinco, un espíritu nacional y reclamos sobre la Joya de la Corona.'
+      icon_prefer: [generic_formable_nations, generic_naval]
+      cost: 100
+      visible: {not_flag: ZAL_imperio_etapa_1}
+      available:
+        controls_all: [*gibraltar, *malta, *chipre, *suez, *malvinas]
+      effects:
+      - {effect: flag, value: ZAL_imperio_etapa_1}
+      - {effect: dynamic_modifier, id: ZAL_imperio_mediterraneo}
+      - {effect: in_state, state: *gibraltar, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *malta, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *chipre, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *suez, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *malvinas, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: claims, value: ZAL, states: [{core: RAJ}]}
+      - effect: wargoal_holders
+        type: take_state
+        ai_one_at_a_time: true
+        ai_key: imperio_2
+        ai_when: {flag: ZAL_imperio_etapa_1, not_flag: ZAL_imperio_etapa_2}
+        states: [*delhi, *bombay, *bengala, *madras]
+      - {effect: event, id: meganations_albion.103, days: 1}
+      ai: {factor: 100}
+      src: user_request
+    - id: ZAL_la_joya_de_la_corona
+      name: {english: 'The Jewel in the Crown', spanish: 'La Joya de la Corona'}
+      desc:
+        english: 'A Durbar in Delhi, elephants with brass armour and a Queen on a screen.\nRequires controlling Delhi, Bombay, Bengal and
+          Madras. A national spirit and claims on the lands where the sun never sets.'
+        spanish: 'Un Durbar en Delhi, elefantes con armadura de bronce y una Reina en una pantalla.\nPide controlar Delhi, Bombay, Bengala y
+          Madrás. Un espíritu nacional y reclamos sobre las tierras donde nunca se pone el sol.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 150
+      visible: {flag: ZAL_imperio_etapa_1, not_flag: ZAL_imperio_etapa_2}
+      available:
+        controls_all: [*delhi, *bombay, *bengala, *madras]
+      effects:
+      - {effect: flag, value: ZAL_imperio_etapa_2}
+      - {effect: dynamic_modifier, id: ZAL_joya_de_la_corona}
+      - {effect: claims, value: ZAL, states: [{territory: ZNR}, {territory: ZAS}, {territory: ZKE}, {territory: ZSA}, *lagos]}
+      - effect: wargoal_holders
+        type: take_state
+        ai_one_at_a_time: true
+        ai_key: imperio_3
+        ai_when: {flag: ZAL_imperio_etapa_2, not_flag: ZAL_imperio_etapa_3}
+        states: [*ontario, *quebec, *columbia, *nueva_gales, *victoria, *isla_norte, *nairobi, *lagos, *el_cabo]
+      - {effect: event, id: meganations_albion.104, days: 1}
+      ai: {factor: 100}
+      src: user_request
+    - id: ZAL_el_sol_no_se_pone_decision
+      name: {english: 'The Sun Never Sets', spanish: 'El Sol No Se Pone'}
+      desc:
+        english: 'From Ottawa to Wellington, from Lagos to the Cape, the bells ring at five.\nRequires controlling Ontario, Quebec, British
+          Columbia, New South Wales, Victoria, the North Island, Nairobi, Lagos and the Cape. Cores on every region we own and the greatest
+          spirit of the Empire.'
+        spanish: 'De Ottawa a Wellington, de Lagos al Cabo, las campanas suenan a las cinco.\nPide controlar Ontario, Quebec, Columbia
+          Británica, Nueva Gales del Sur, Victoria, la Isla Norte, Nairobi, Lagos y el Cabo. Núcleos en cada región propia y el espíritu
+          más grande del Imperio.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 200
+      visible: {flag: ZAL_imperio_etapa_2, not_flag: ZAL_imperio_etapa_3}
+      available:
+        controls_all: [*ontario, *quebec, *columbia, *nueva_gales, *victoria, *isla_norte, *nairobi, *lagos, *el_cabo]
+      effects:
+      - {effect: flag, value: ZAL_imperio_etapa_3}
+      - {effect: dynamic_modifier, id: ZAL_el_sol_no_se_pone}
+      - effect: states
+        pick: every
+        when:
+          not: {core_of: ZAL}
+        effects:
+        - {effect: add_core, value: ZAL}
+      - {effect: event, id: meganations_albion.105, days: 1}
+      ai: {factor: 100}
+      src: user_request
+  # ---------------------------------------------------------------------------
+  # Quedarse Luditas: la Gran Rotura
+  # ---------------------------------------------------------------------------
+  - id: ZAL_rotura_category
+    country: ZAL
+    icon_prefer: [generic_political_actions]
+    name: {english: 'The Great Breaking', spanish: 'La Gran Rotura'}
+    desc:
+      english: 'Albion broke its machines. Now it goes to break the Commune''s: the Netherlands, Belgium, the Ruhr and the Rhineland,
+        the robotic heart of the continent. Sabotage first, war after.'
+      spanish: 'Albión rompió sus máquinas. Ahora va a romper las de la Comuna: los Países Bajos, Bélgica, el Ruhr y Renania, el corazón
+        robótico del continente. Primero el sabotaje, después la guerra.'
+    visible: {flag: ZAL_rotura_abierta}
+    src: user_request
+    decisions:
+    - id: ZAL_azucar_en_los_tanques
+      name: {english: 'Sugar in the Tanks', spanish: 'Azúcar en los Tanques'}
+      desc:
+        english: 'A night crossing to Rotterdam with sacks of sugar. For 120 days the Commune''s factories lose a tenth of their output.'
+        spanish: 'Un cruce de noche a Rotterdam con bolsas de azúcar. Por 120 días las fábricas de la Comuna pierden un décimo de lo que
+          producen.'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      visible: {country_exists: ASC, not_flag: ZAL_gran_rotura}
+      effects:
+      - effect: scope
+        target: ASC
+        effects:
+        - {effect: dynamic_modifier, id: ASC_sabotaje_ludita, days: 120}
+      - {effect: add_war_support, value: 0.02}
+      ai: {factor: 3}
+      src: user_request
+    - id: ZAL_reclamar_la_rotura
+      name: {english: 'Claim the Heart of the Commune', spanish: 'Reclamar el Corazón de la Comuna'}
+      desc:
+        english: 'Every region of the Great Breaking still in foreign hands becomes a war goal against whoever holds it now.'
+        spanish: 'Cada región de la Gran Rotura que siga en manos ajenas pasa a ser un objetivo de guerra contra quien la tenga ahora.'
+      icon_prefer: [generic_political_actions]
+      cost: 50
+      cooldown_days: 180
+      visible: {focus: ZAL_la_internacional_ludita, not_flag: ZAL_gran_rotura}
+      effects:
+      - effect: wargoal_holders
+        type: take_state
+        ai_one_at_a_time: true
+        ai_key: rotura
+        ai_when: {all: [{flag: ZAL_quedarse_luditas}, {not_flag: ZAL_gran_rotura}]}
+        states: [{core: HOL}, {core: BEL}, *ruhr, *renania]
+      ai: {factor: 10}
+      src: user_request
+    - id: ZAL_proclamar_la_gran_rotura
+      name: {english: 'Proclaim the Great Breaking', spanish: 'Proclamar la Gran Rotura'}
+      desc:
+        english: 'In Essen the robots stand still in the rain and the workers walk back in.\nRequires controlling the Netherlands, Belgium, the
+          Ruhr and the Rhineland. Cores on the Ruhr and the Rhineland and a great national spirit.'
+        spanish: 'En Essen los robots se quedan quietos bajo la lluvia y los obreros vuelven a entrar.\nPide controlar los Países Bajos,
+          Bélgica, el Ruhr y Renania. Núcleos en el Ruhr y Renania y un gran espíritu nacional.'
+      icon_prefer: [generic_formable_nations, generic_political_actions]
+      cost: 100
+      visible: {flag: ZAL_rotura_final_abierta, not_flag: ZAL_gran_rotura}
+      available:
+        controls_all: [{core: HOL}, {core: BEL}, *ruhr, *renania]
+      effects:
+      - {effect: flag, value: ZAL_gran_rotura}
+      - {effect: dynamic_modifier, id: ZAL_rotura_cumplida}
+      - {effect: in_state, state: *ruhr, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: in_state, state: *renania, effects: [{effect: add_core, value: ZAL}]}
+      - {effect: event, id: meganations_albion.106, days: 1}
+      ai: {factor: 100}
+      src: user_request
+
+# -----------------------------------------------------------------------------
+# Eventos
+# -----------------------------------------------------------------------------
+events:
+  namespaces:
+    meganations_japon:
+      country: null
+      events:
+      - id: 99
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: 'The Sea of the Shogun', spanish: 'El Mar del Shogun'}
+        desc:
+          english: >-
+            The first ship to cross the Strait of Malacca under the new flag is an old container carrier from Kobe. Its
+            captain stops the engines off Singapore, the way his grandfather did for the High Seas, and waits for the
+            pilot. The pilot who climbs aboard is a Mecha, eight metres tall, standing on a tug. It bows. The captain bows
+            back, and no one on the bridge says a word until the lights of Johor are behind them.
+          spanish: >-
+            El primer barco que cruza el estrecho de Malaca con la bandera nueva es un portacontenedores viejo de Kobe. El
+            capitán para las máquinas frente a Singapur, como hacía su abuelo para la Alta Mar, y espera al práctico. El
+            práctico que sube a bordo es un Mecha de ocho metros, parado sobre un remolcador. Hace una reverencia. El
+            capitán se la devuelve, y nadie en el puente dice una palabra hasta que las luces de Johor quedan atrás.
+        options:
+        - name: {english: 'The sea bows to Yokosuka.', spanish: 'El mar le hace una reverencia a Yokosuka.'}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_variable, var: ZJP_giri, value: 15}
+        src: user_request
+    meganations_albion:
+      country: null
+      events:
+      - id: 101
+        trigger: effect
+        picture: GFX_report_event_generic_sign_treaty1
+        title: {english: 'Albion Asks for the North', spanish: 'Albión Pide el Norte'}
+        desc:
+          english: >-
+            The delegation from London arrives in Hamburg with paper plans, which the planning algorithm finds touching.
+            They want Iceland, the Faroes and Greenland: cold places for warm servers, they say, and cables under the sea
+            to join the two networks. The algorithm has already calculated what Albion would do with them. It has not yet
+            calculated whether it minds.
+          spanish: >-
+            La delegación de Londres llega a Hamburgo con planos en papel, cosa que al algoritmo de planificación le parece
+            enternecedora. Quieren Islandia, las Feroe y Groenlandia: lugares fríos para servidores calientes, dicen, y
+            cables bajo el mar para unir las dos redes. El algoritmo ya calculó qué haría Albión con ellas. Todavía no
+            calculó si le molesta.
+        options:
+        - name: {english: 'Hand over the islands.', spanish: 'Entregar las islas.'}
+          effects:
+          - {effect: in_state, state: *islandia, effects: [{effect: if, when: {owned_by: ASC}, then: [{effect: transfer_to, value: ZAL}]}]}
+          - {effect: in_state, state: *feroe, effects: [{effect: if, when: {owned_by: ASC}, then: [{effect: transfer_to, value: ZAL}]}]}
+          - {effect: in_state, state: *groenlandia, effects: [{effect: if, when: {owned_by: ASC}, then: [{effect: transfer_to, value: ZAL}]}]}
+          ai_chance:
+            base: 20
+            modifiers:
+            - {factor: 4, when: {country: {tag: ZAL, when: {focus: ZAL_la_reconciliacion_con_la_comuna}}}}
+            - {factor: 0.25, when: {at_war: true}}
+        - name: {english: 'The network of Europe stays in Europe.', spanish: 'La red de Europa se queda en Europa.'}
+          effects:
+          - {effect: add_political_power, value: 25}
+          ai_chance: 50
+        src: user_request
+      - id: 102
+        trigger: effect
+        picture: GFX_report_event_generic_research_lab
+        title: {english: 'The Last Cable', spanish: 'El Último Cable'}
+        desc:
+          english: >-
+            At 4:12 in the morning the cable ship Brunel drops the last splice off St. John's, and sixty million people in
+            Albion feel, for one second, the cold of the North Atlantic, all at once. Some of them laugh. Speaker Imogen
+            Harrow says "we" and, for the first time, means Reykjavík too.
+          spanish: >-
+            A las 4:12 de la mañana el buque cablero Brunel suelta el último empalme frente a St. John's, y sesenta millones
+            de personas en Albión sienten, por un segundo, el frío del Atlántico Norte, todas a la vez. Algunas se ríen. La
+            Portavoz Imogen Harrow dice "nosotros" y, por primera vez, también se refiere a Reikiavik.
+        options:
+        - name: {english: 'We think colder, and faster.', spanish: 'Pensamos más frío, y más rápido.'}
+          effects:
+          - {effect: add_variable, var: ZAL_sincronia, value: 10}
+        src: user_request
+      - id: 103
+        trigger: effect
+        picture: GFX_report_event_generic_navy
+        title: {english: 'The Keys of the Seas', spanish: 'Las Llaves de los Mares'}
+        desc:
+          english: >-
+            Victoria III receives the five keys on a velvet cushion: Gibraltar, Malta, Cyprus, Suez, Port Stanley. They are
+            new keys, cast last week in Birmingham, because nobody knew where the old ones were. She holds them up to the
+            cameras anyway, and the crowd on the Mall cheers as if they were the real ones. In a way, they are.
+          spanish: >-
+            Victoria III recibe las cinco llaves sobre un almohadón de terciopelo: Gibraltar, Malta, Chipre, Suez, Puerto
+            Argentino. Son llaves nuevas, fundidas la semana pasada en Birmingham, porque nadie sabía dónde estaban las viejas.
+            Igual las levanta para las cámaras, y la multitud del Mall festeja como si fueran las de verdad. En cierto modo,
+            lo son.
+        options:
+        - name: {english: 'Next, the Jewel in the Crown.', spanish: 'Ahora, la Joya de la Corona.'}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 15}
+        src: user_request
+      - id: 104
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: 'The Durbar of Delhi', spanish: 'El Durbar de Delhi'}
+        desc:
+          english: >-
+            Three hundred elephants with brass armour, a regiment of redcoats with night-vision bearskins and a throne of
+            teak under a canopy of solar glass. The Queen does not come: she appears on a screen four storeys high, and
+            the crowd, which has seen warlords come and go for forty years, watches her with polite curiosity. The tea, at
+            least, is excellent.
+          spanish: >-
+            Trescientos elefantes con armadura de bronce, un regimiento de casacas rojas con gorros de piel con visión
+            nocturna y un trono de teca bajo un dosel de vidrio solar. La Reina no viene: aparece en una pantalla de cuatro
+            pisos, y la multitud, que vio pasar señores de la guerra durante cuarenta años, la mira con curiosidad educada.
+            El té, por lo menos, es excelente.
+        options:
+        - name: {english: 'The sun is rising in the East.', spanish: 'El sol sale por el Este.'}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 15}
+        src: user_request
+      - id: 105
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: 'The Sun Never Sets', spanish: 'El Sol No Se Pone'}
+        desc:
+          english: >-
+            At five o'clock in London it is five in the morning in Wellington, and the bells ring in both. The Ministry of
+            the Empire has hired a man whose only job is to make sure that, somewhere under the Union, someone is always
+            having tea. He has never had a day off. He does not want one.
+          spanish: >-
+            A las cinco de la tarde en Londres son las cinco de la mañana en Wellington, y las campanas suenan en las dos. El
+            Ministerio del Imperio contrató a un hombre cuyo único trabajo es asegurarse de que, en algún lugar bajo la
+            Unión, alguien siempre esté tomando el té. Nunca tuvo un día libre. No quiere tenerlo.
+        options:
+        - name: {english: 'Rule, Britannia.', spanish: 'Reina, Britannia.'}
+          effects:
+          - {effect: add_variable, var: ZAL_pompa, value: 30}
+          - {effect: add_stability, value: 0.05}
+        src: user_request
+      - id: 106
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: 'The Great Breaking', spanish: 'La Gran Rotura'}
+        desc:
+          english: >-
+            In Essen the assembly lines stop at noon, when the Albion sappers cut the last power line. Four thousand robots
+            stand still in the rain in the yards of the old Krupp works. The workers who were sent home in 2079 come back
+            the next morning, some with their grandchildren, and find the doors open. Nobody knows how to run the lines by
+            hand any more. They start learning that afternoon.
+          spanish: >-
+            En Essen las líneas de montaje se paran al mediodía, cuando los zapadores de Albión cortan la última línea
+            eléctrica. Cuatro mil robots se quedan quietos bajo la lluvia en los patios de la vieja Krupp. Los obreros que
+            mandaron a sus casas en 2079 vuelven a la mañana siguiente, algunos con sus nietos, y encuentran las puertas
+            abiertas. Ya nadie sabe manejar las líneas a mano. Empiezan a aprender esa misma tarde.
+        options:
+        - name: {english: 'By hand, then.', spanish: 'A mano, entonces.'}
+          effects:
+          - {effect: add_stability, value: 0.05}
+          - {effect: add_political_power, value: 100}
+        src: user_request

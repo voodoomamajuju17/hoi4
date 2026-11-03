@@ -507,7 +507,7 @@ decisions:
       ai:
         factor: 1
         modifiers:
-        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 45}}]}}
         - {factor: 8, when: {variable_below: {var: ZJP_favor_zaibatsu, value: 30}}}
         - {factor: 0, when: {variable_at_least: {var: ZJP_favor_zaibatsu, value: 80}}}
       src: user_request
@@ -524,7 +524,7 @@ decisions:
       ai:
         factor: 1
         modifiers:
-        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 45}}]}}
         - {factor: 8, when: {variable_below: {var: ZJP_favor_yakuza, value: 30}}}
         - {factor: 0, when: {variable_at_least: {var: ZJP_favor_yakuza, value: 80}}}
       src: user_request
@@ -541,7 +541,7 @@ decisions:
       ai:
         factor: 1
         modifiers:
-        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 45}}]}}
         - {factor: 8, when: {variable_below: {var: ZJP_favor_srs, value: 30}}}
         - {factor: 0, when: {variable_at_least: {var: ZJP_favor_srs, value: 80}}}
       src: user_request
@@ -591,7 +591,7 @@ decisions:
         - {effect: remove_unit_trait, value: zjp_casa_zaibatsu}
         - {effect: remove_unit_trait, value: zjp_casa_relegada}
         - {effect: add_unit_trait, value: zjp_casa_shogun}
-      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 75}}]}}]}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}]}
       src: user_request
     - id: ZJP_juramento_yakuza
       name: {english: 'Blood Oath: the Yakuza Generals (25 Giri)', spanish: 'Juramento de Sangre: los Generales de la Yakuza (25 de Giri)'}
@@ -610,7 +610,7 @@ decisions:
         - {effect: remove_unit_trait, value: zjp_casa_yakuza}
         - {effect: remove_unit_trait, value: zjp_casa_relegada}
         - {effect: add_unit_trait, value: zjp_casa_shogun}
-      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 75}}]}}]}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}]}
       src: user_request
     - id: ZJP_juramento_srs
       name: {english: 'Blood Oath: the SRS Generals (25 Giri)', spanish: 'Juramento de Sangre: los Generales de SRS (25 de Giri)'}
@@ -629,7 +629,7 @@ decisions:
         - {effect: remove_unit_trait, value: zjp_casa_srs}
         - {effect: remove_unit_trait, value: zjp_casa_relegada}
         - {effect: add_unit_trait, value: zjp_casa_shogun}
-      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 75}}]}}]}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}]}
       src: user_request
     - id: ZJP_consejo_de_guerra
       name: {english: 'War Council of the Houses (10 Giri)', spanish: 'Consejo de Guerra de las Casas (10 de Giri)'}
@@ -647,7 +647,7 @@ decisions:
       ai:
         factor: 3
         modifiers:
-        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 45}}]}}
         # 2026-11-01: como en 24_japon, la IA guarda el Giri para el CyberShogun
       src: user_request
 
@@ -694,7 +694,7 @@ decisions:
       effects:
       - {effect: add_variable, var: ZJP_giri, value: -15}
       - {effect: dynamic_modifier, id: ZJP_lobas_de_kure_e, days: 180}
-      ai: {factor: 2, modifiers: [{factor: 3, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 65}}]}}]}
+      ai: {factor: 2, modifiers: [{factor: 3, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 50}}]}}]}
       src: user_request
     - id: ZJP_cortar_cables
       name: {english: 'Cut the Cables of the High Seas (20 Giri)', spanish: 'Cortar los Cables de la Alta Mar (20 de Giri)'}
@@ -711,7 +711,7 @@ decisions:
       ai:
         factor: 3
         modifiers:
-        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 55}}]}}
         # 2026-11-01: como en 24_japon, la IA guarda el Giri para el CyberShogun
       src: user_request
     - id: ZJP_reconstruir_osaka
@@ -738,7 +738,7 @@ decisions:
       effects:
       - {effect: add_variable, var: ZJP_giri, value: -15}
       - {effect: dynamic_modifier, id: ZJP_mechas_en_los_muelles_e, days: 180}
-      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 65}}]}}]}
+      ai: {factor: 1, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 50}}]}}]}
       src: user_request
     - id: ZJP_vender_mechas
       name: {english: 'Sell Mechas to Whoever Pays', spanish: 'Vender Mechas a Quien Pague'}
@@ -832,7 +832,7 @@ decisions:
       - {effect: add_variable, var: ZJP_giri, value: -15}
       - {effect: add_manpower, value: 60000}
       - {effect: dynamic_modifier, id: ZJP_clones_de_emergencia, days: 180}
-      ai: {factor: 2, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 65}}]}}]}
+      ai: {factor: 2, modifiers: [{factor: 4, when: {at_war: true}}, {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 50}}]}}]}
       src: user_request
     - id: ZJP_ensayo_masivo
       name: {english: 'Mass Clinical Trial', spanish: 'Ensayo Clínico Masivo'}
@@ -871,7 +871,7 @@ decisions:
       ai:
         factor: 3
         modifiers:
-        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}
+        - {factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 55}}]}}
         # 2026-11-01: como en 24_japon, la IA guarda el Giri para el CyberShogun
       src: user_request
 
@@ -1324,7 +1324,7 @@ events:
           - {effect: add_variable, var: ZJP_giri, value: -20}
           - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 25}
           - {effect: clear_flag, value: ZJP_rompe_zaibatsu}
-          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}]}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 55}}]}}]}
         - name: {english: "Let them go.", spanish: "Que se vayan."}
           effects:
           - {effect: dynamic_modifier, id: ZJP_capital_en_fuga, days: 365}
@@ -1359,7 +1359,7 @@ events:
           - {effect: add_variable, var: ZJP_giri, value: -20}
           - {effect: add_variable, var: ZJP_favor_yakuza, value: 25}
           - {effect: clear_flag, value: ZJP_rompe_yakuza}
-          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}]}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 55}}]}}]}
         - name: {english: "Let the ports burn for a while.", spanish: "Que los puertos ardan un tiempo."}
           effects:
           - {effect: dynamic_modifier, id: ZJP_puertos_sin_ley, days: 365}
@@ -1394,7 +1394,7 @@ events:
           - {effect: add_variable, var: ZJP_giri, value: -20}
           - {effect: add_variable, var: ZJP_favor_srs, value: 25}
           - {effect: clear_flag, value: ZJP_rompe_srs}
-          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 70}}]}}]}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 55}}]}}]}
         - name: {english: "Leave Sendai alone.", spanish: "Dejar tranquila a Sendai."}
           effects:
           - {effect: dynamic_modifier, id: ZJP_laboratorios_cerrados, days: 365}
@@ -1519,7 +1519,7 @@ events:
           - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 4}
           - {effect: add_variable, var: ZJP_favor_yakuza, value: 4}
           - {effect: add_variable, var: ZJP_favor_srs, value: 4}
-          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 60}}]}}]}
+          ai_chance: {base: 60, modifiers: [{factor: 0, when: {all: [{any: [{focus: ZJP_zai_4}, {focus: ZJP_yak_4}, {focus: ZJP_srs_4}]}, {not: {focus: ZJP_cybershogun}}, {variable_below: {var: ZJP_giri, value: 45}}]}}]}
         - name: {english: "Separate tables, and the sake goes back.", spanish: "Mesas separadas, y el sake vuelve a la bodega."}
           effects:
           - {effect: add_stability, value: 0.02}

@@ -67,11 +67,23 @@ def emit_destiny_ai(ctx: BuildContext) -> None:
     decisiones, que también lo arman; el archivo empieza con "a" para que el
     juego lo lea antes que meganations_casus_belli.txt, que lo llama."""
     body = Block()
-    for tag, pick in sorted(effects_mod.DESTINY_PICKS.items()):
-        body.add("if", Block([("limit", Block([("tag", tag)]))] + pick.entries))
+    by_tag: dict[str, list] = {}
+    for (tag, key), (when, pick) in sorted(effects_mod.DESTINY_PICKS.items(), key=lambda kv: kv[0]):
+        by_tag.setdefault(tag, []).append((when, pick))
+    for tag, picks in by_tag.items():
+        inner = Block([("limit", Block([("tag", tag)]))])
+        for when, pick in picks:
+            # 2026-11-02: varias listas por país; la primera que elige un dueño deja
+            # la marca y las demás ya no eligen ese mes
+            if when is None:
+                inner.entries.extend(pick.entries)
+            else:
+                inner.add("if", Block([("limit", when)] + pick.entries))
+        inner.add("clr_country_flag", "MEGANATIONS_destino_elegido")
+        body.add("if", inner)
     ctx.write_script("common/scripted_effects/meganations_a_destino_ia.txt",
                      Block([(effects_mod.DESTINY_EFFECT, body)]), source=SOURCE)
-    ctx.note(f"destino de la IA de a uno: {', '.join(sorted(effects_mod.DESTINY_PICKS)) or 'ninguno'}")
+    ctx.note(f"destino de la IA de a uno: {', '.join(sorted(by_tag)) or 'ninguno'}")
 
 
 def _emit(ctx: BuildContext) -> None:
@@ -83,6 +95,7 @@ def _emit(ctx: BuildContext) -> None:
     effects_mod.use_states(ctx.data.get("state_ids_by_name"))
     effects_mod.use_variable_names(ctx.spec.raw)
     effects_mod.use_territory(ctx.data.get("territory"))
+    effects_mod.use_cores(ctx.data.get("state_cores"))
     effects_mod.use_equipment(ctx.vanilla)
     trees = ctx.spec.raw["focus_trees"].get("trees") or {}
     for tag, tree in trees.items():
