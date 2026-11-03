@@ -94,11 +94,35 @@ def _difficulty(ctx: BuildContext) -> None:
             ("multiplier", mult)]))
         ctx.loc.define_and_reference(key, en=f"Strengthen {c.name_en}", es=f"Fortalecer: {c.name_es}",
                                      file=LOC_FILE, origin="reglas")
+    # 2026-11-03 (pedido: "agregar en las reglas fortalecer anarquías, todas juntas si se
+    # puede; también faltan Japón y GB"): Japón y Albión con su propio deslizador, y uno
+    # solo para las cinco anarquías de las aventuras (21_aventuras -> sagas)
+    extra = []
+    for tag in ("ZJP", "ZAL"):
+        c = ctx.spec.country(tag)
+        if c is None:
+            continue
+        key = f"MEGANATIONS_fortalecer_{tag}"
+        settings.add("difficulty_setting", Block([
+            ("key", Quoted(key)), ("modifier", modifier), ("countries", Block([(None, tag)])),
+            ("multiplier", mult)]))
+        ctx.loc.define_and_reference(key, en=f"Strengthen {c.name_en}", es=f"Fortalecer: {c.name_es}",
+                                     file=LOC_FILE, origin="reglas")
+        extra.append(tag)
+    anarquias = [t for t in ((ctx.spec.raw.get("adventures") or {}).get("sagas") or {}) if ctx.spec.country(t)]
+    if anarquias:
+        key = "MEGANATIONS_fortalecer_anarquias"
+        settings.add("difficulty_setting", Block([
+            ("key", Quoted(key)), ("modifier", modifier), ("countries", Block([(None, t) for t in anarquias])),
+            ("multiplier", mult)]))
+        ctx.loc.define_and_reference(key, en="Strengthen the anarchies", es="Fortalecer: las anarquías",
+                                     file=LOC_FILE, origin="reglas")
+        extra.append("anarquías (" + " ".join(anarquias) + ")")
     for i, path in enumerate(files):
         body = settings if i == 0 else Block()
         ctx.write_script(f"common/difficulty_settings/{path.name}", Block([("difficulty_settings", body)]),
                          source=SOURCE + f" (pisa {path.name} del juego)")
-    ctx.note(f"reglas: 'Major Nation Buffs' con las {len(megas)} meganaciones ({modifier} x{mult:g}); "
+    ctx.note(f"reglas: 'Major Nation Buffs' con las {len(megas)} meganaciones y {', '.join(extra)} ({modifier} x{mult:g}); "
              f"{len(files)} archivo(s) del juego reemplazado(s)")
 
 

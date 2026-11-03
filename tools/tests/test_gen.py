@@ -2620,7 +2620,7 @@ def test_arte() -> None:
               and all("EXACT SUBJECT" in i["description"] for i in leyes), str(len(leyes)))
         # 2026-10-16: piel de la interfaz (arte/piel_interfaz.yaml)
         ui_all = [i for i in _arte.catalog() if i["type"] == "ui_icon"]
-        ui = [i for i in ui_all if not i.get("hand_written")]
+        ui = [i for i in ui_all if not i.get("hand_written") and i["dest"].parent.name == "piel_iconos"]
         # 2026-10-28: íconos de las tiras (edificios y recursos), pedidos a mano
         tiras_ids = {i["id"] for i in ui_all if i.get("hand_written")}
         check("piel: los íconos de edificios y recursos se pueden importar por su nombre",
@@ -3423,9 +3423,16 @@ def _diversion_checks(ctx) -> None:
         for d in cat_.get("decisions") or []:
             if d["id"].endswith("_proclamar_la_forma_final"):
                 need[d["id"][:3]] = len(d["available"]["controls_all"])
-    board = loc[loc.index(" MEGANATIONS_carrera_category_desc:"):].split("\n", 1)[0]
-    check("marcador: el panel muestra las 8 potencias con su total de regiones clave",
-          all(f"[?global.MEGANATIONS_carrera_{t}|0] de {n}" in board for t, n in need.items()) and len(need) == 8, board)
+    board = loc[loc.index(" MEGANATIONS_carrera_marcador_desc:"):].split("\n", 1)[0]
+    panel = loc[loc.index(" MEGANATIONS_carrera_category_desc:"):].split("\n", 1)[0]
+    check("marcador: El Marcador muestra las 8 potencias con su total de regiones clave; el panel, una línea (2026-11-03)",
+          all(f"[?global.MEGANATIONS_carrera_{t}|0] de {n}" in board for t, n in need.items()) and len(need) == 8
+          and "carrera_EFE" not in panel and len(panel) < 260, board)
+    tr = dec[dec.index("MEGANATIONS_ultima_trinchera_category = {"):][:400] if "MEGANATIONS_ultima_trinchera_category = {" in dec else ""
+    cats = flat(mod / "common/decisions/categories/meganations_categories.txt") if (mod / "common/decisions/categories/meganations_categories.txt").exists() else ""
+    ct = cats[cats.index("MEGANATIONS_ultima_trinchera_category = {"):][:500] if "MEGANATIONS_ultima_trinchera_category" in cats else tr
+    check("la Última Trinchera solo aparece en guerra y perdiendo (2026-11-03)",
+          "has_war = yes" in ct and "surrender_progress > 0.2" in ct, ct)
     fa = dec[dec.index("MEGANATIONS_frenar_a_NRE = {"):][:1200]
     check("frenar a un rival: visible con su destino abierto y a dos regiones, no contra el señor ni la faccion",
           f"var = global.MEGANATIONS_carrera_NRE value = {need['NRE'] - 2}" in fa and "NRE = { has_country_flag = NRE_destino_abierto" in fa
@@ -4936,7 +4943,7 @@ def test_ficha_lider() -> None:
         loc = (mod / "localisation/spanish/meganations_ficha_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("ficha: textos en castellano", 'MN_FICHA_TITULO:0 "EL LÍDER"' in loc and "baja [?MEGANATIONS_lider_desgaste|0]" in loc, loc[:300])
     from tools.arte import arte as _arte
-    rec = [i for i in _arte.catalog() if i["id"].startswith("recurso_")]
+    rec = [i for i in _arte.catalog() if i["dest"].parent.name == "recursos" and i["dest"].parent.parent.name == "ui"]
     check("recursos propios: un ícono por moneda de cada nación (Ubuntu en la APF) y los medidores, en cobre",
           len(rec) == 20 and any(i["id"] == "recurso_APF_ubuntu" for i in rec)
           and all("copper" in i["style"] and "ACCENT" in i["description"] for i in rec), str(len(rec)))
@@ -5062,6 +5069,9 @@ def test_reglas() -> None:
         check("un deslizador por meganacion y ninguno de 1936",
               all(f"countries = {{ {t} }}" in d for t in ("EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"))
               and "GER" not in d and "SOV" not in d and "diff_strong_ai_generic" in d, d[:300])
+        check("también Japón, Albión y un deslizador para las cinco anarquías juntas (2026-11-03)",
+              "countries = { ZJP }" in d and "countries = { ZAL }" in d
+              and "key = \"MEGANATIONS_fortalecer_anarquias\"" in d and "countries = { ZWE ZWI ZWM ZWB ZAN }" in d, d[-600:])
         check("el reporte lista las reglas del juego que nombran paises de 1936",
               any("reglas del juego nombran" in n and "SOV_ai_behavior" in n for n in ctx.notes))
 

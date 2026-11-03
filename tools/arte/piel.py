@@ -46,7 +46,9 @@ DORADO = (8, 42)
 # verde, azul: significan algo) quedan.
 # rampa por brillo: (brillo del grafito, color nuevo)
 CRISTAL = [(0, (3, 8, 11)), (30, (14, 25, 31)), (50, (30, 40, 44)), (64, (92, 54, 30)),
-           (85, (170, 104, 58)), (110, (222, 150, 96)), (170, (250, 200, 150)), (255, (255, 232, 205))]
+           (85, (170, 104, 58)), (110, (222, 150, 96)), (150, (236, 184, 140)),
+           # el papel de los eventos (muy claro) queda marfil, no naranja: el texto es oscuro
+           (185, (236, 214, 186)), (255, (248, 241, 229))]
 COBRE = [(0, (24, 10, 4)), (60, (90, 46, 20)), (120, (170, 102, 56)), (190, (236, 170, 118)),
          (255, (255, 228, 200))]
 TURQUESA = (100, 150)   # H de PIL del acento verde azulado que pasa a cobre

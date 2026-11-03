@@ -32,6 +32,12 @@ SCREENS: dict[str, list[str]] = {
     # dibujan las ventanas de producción, despliegue y logística
     "pestanas_militares": ["countryproductionview.gui", "countrydeploymentview.gui",
                            "countrylogisticsview.gui"],
+    # 2026-11-03 (capturas del menú y de "Seleccionar país": "priorizar cambios en
+    # pantalla principal y de elección de países"). Con * se toman todos los .gui
+    # que coinciden (los nombres cambian entre versiones del juego).
+    "menu_principal": ["frontendmainview.gui", "mainmenu*.gui", "frontend_main*.gui"],
+    "eleccion_de_pais": ["frontend*.gui", "*bookmark*.gui", "*countryselect*.gui", "*gamesetup*.gui",
+                         "*lobby*.gui"],
 }
 # Pantallas armadas por nombre de sprite, para lo que el juego elige por
 # código y no aparece en ningún .gui (2026-10-17, captura del usuario: "las
@@ -130,11 +136,18 @@ def inventory(ctx: BuildContext) -> dict[str, list[dict]]:
     out: dict[str, list[dict]] = {}
     for screen, names in SCREENS.items():
         seen: dict[str, dict] = {}
+        paths = []
         for gname in names:
+            if "*" in gname:
+                import fnmatch
+                paths += [p for n, p in sorted(guis.items()) if fnmatch.fnmatch(n, gname.lower())]
+                continue
             path = guis.get(gname.lower())
             if path is None:
                 ctx.note(f"piel: {screen}: el juego no trae {gname}")
                 continue
+            paths.append(path)
+        for path in dict.fromkeys(paths):
             text = path.read_text(encoding="utf-8-sig", errors="replace")
             for sp in dict.fromkeys(_GFX_REF.findall(text)):
                 info = sprites.get(sp)

@@ -58,7 +58,7 @@ DISENO = {
     "secciones": {"atributos": 84, "pesa": 290, "gabinete": 432},
     "efectos_y": 312, "efectos_x": (260, 510, 760), "efecto": (230, 56),
     "gabinete": (36, 452, 5, 2, 182, 104, 8, 8),   # x, y, columnas, filas, ancho, alto, separación x, y
-    "boton": 46,
+    "boton": 36,   # del alto de los botones de la barra (2026-11-03)
 }
 SEGMENTOS = 20
 CUADROS_SALUD = 21

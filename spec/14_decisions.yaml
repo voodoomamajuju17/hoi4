@@ -10210,9 +10210,12 @@ categories:
     country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
     icon_prefer: [generic_formable_nations, generic_political_actions]
     name: {english: The Race for Destiny, spanish: La Carrera del Destino}
+    # 2026-11-03 (captura: "el marcador podría estar resuelto mejor sin ocupar todo
+    # ese espacio en el panel de decisiones"): la tabla vive en el cuadro de ayuda de
+    # El Marcador; acá, una línea
     desc:
-      english: 'Key regions of its final form that each power controls (updated every month):\n[EFE.GetName]: [?global.MEGANATIONS_carrera_EFE|0] of 6\n[FCU.GetName]: [?global.MEGANATIONS_carrera_FCU|0] of 6\n[ASC.GetName]: [?global.MEGANATIONS_carrera_ASC|0] of 6\n[HSN.GetName]: [?global.MEGANATIONS_carrera_HSN|0] of 6\n[NAS.GetName]: [?global.MEGANATIONS_carrera_NAS|0] of 6\n[SHD.GetName]: [?global.MEGANATIONS_carrera_SHD|0] of 6\n[APF.GetName]: [?global.MEGANATIONS_carrera_APF|0] of 11\n[NRE.GetName]: [?global.MEGANATIONS_carrera_NRE|0] of 8\n\nWhen a power with its destiny open is two regions away, the others can stop it. When it is one away, everyone is warned.'
-      spanish: 'Regiones clave de su forma final que controla cada potencia (se actualiza cada mes):\n[EFE.GetName]: [?global.MEGANATIONS_carrera_EFE|0] de 6\n[FCU.GetName]: [?global.MEGANATIONS_carrera_FCU|0] de 6\n[ASC.GetName]: [?global.MEGANATIONS_carrera_ASC|0] de 6\n[HSN.GetName]: [?global.MEGANATIONS_carrera_HSN|0] de 6\n[NAS.GetName]: [?global.MEGANATIONS_carrera_NAS|0] de 6\n[SHD.GetName]: [?global.MEGANATIONS_carrera_SHD|0] de 6\n[APF.GetName]: [?global.MEGANATIONS_carrera_APF|0] de 11\n[NRE.GetName]: [?global.MEGANATIONS_carrera_NRE|0] de 8\n\nCuando a una potencia con el destino abierto le faltan dos regiones, las demás pueden frenarla. Cuando le falta una, todos reciben el aviso.'
+      english: 'Hover over The Scoreboard to see how many key regions each power holds. Two regions away: it can be stopped. One away: everyone is warned.'
+      spanish: 'Pasá el mouse por El Marcador para ver cuántas regiones clave tiene cada potencia. A dos regiones se la puede frenar; a una, todos reciben el aviso.'
     src: user_request
     decisions:
     - id: MEGANATIONS_carrera_marcador
@@ -13660,6 +13663,11 @@ categories:
     country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE]
     icon_prefer:
     - generic_army_support
+    # 2026-11-03 ("no tiene sentido que sea una decisión visible siempre, solo cuando es
+    # relevante"): aparece en guerra, con la rendición ya por encima de 20%
+    visible:
+      at_war: true
+      surrender_at_least: 0.2
     name: {english: 'The Last Trench', spanish: 'La Última Trinchera'}
     desc:
       english: 'No megastate is invincible, and none is finished while it still fights.'

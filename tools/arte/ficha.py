@@ -130,8 +130,11 @@ def fondo(D):
     _hilo(img, sx + 110, W - 36, sec["atributos"] - 9)
     _hilo(img, sx + 170, W - 36, sec["pesa"] - 9)
     _hilo(img, 36 + 330, W - 36, sec["gabinete"] - 9)
-    # renglones de las stats
-    d = ImageDraw.Draw(img)
+    # renglones de las stats, cajas y anillo: se dibujan en una capa aparte y se
+    # mezclan (2026-11-03, captura: dibujados directo reemplazaban el vidrio por
+    # algo casi transparente y se veía el mapa a través)
+    capa = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(capa)
     for y in D["stats_y"]:
         d.line((sx, y + 44, sx + 520, y + 44), fill=(255, 255, 255, 14))
     # cajas de "lo que pesa hoy"
@@ -155,11 +158,15 @@ def fondo(D):
         a1 = math.radians(k + 3)
         d.line((cx + r * math.cos(a0), cy + r * math.sin(a0), cx + r * math.cos(a1), cy + r * math.sin(a1)),
                fill=CU + (120,))
+    img.alpha_composite(capa)
+    d = ImageDraw.Draw(img)
     # pie
     _hilo(img, 36, W - 36, H - 44, CU_LO, 160)
     # borde de cobre, filete interior, esquinas y remaches
     _borde_cobre(img, 0, 1)
-    d.rectangle((3, 3, W - 4, H - 4), outline=(0, 0, 0, 160))
+    filete = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(filete).rectangle((3, 3, W - 4, H - 4), outline=(0, 0, 0, 160))
+    img.alpha_composite(filete)
     _esquinas(img)
     for x, y in ((9, 9), (W - 10, 9), (9, H - 10), (W - 10, H - 10)):
         _remache(img, x, y)
@@ -256,7 +263,8 @@ def _hexagono(w, h, inset=0):
 
 def boton(D):
     from PIL import Image, ImageDraw
-    n = D["boton"]
+    final = D["boton"]
+    n = 46   # se dibuja a 46 y se achica al tamaño de la barra
     S = 4
     big = Image.new("RGBA", (n * S, n * S), (0, 0, 0, 0))
     d = ImageDraw.Draw(big)
@@ -269,7 +277,7 @@ def boton(D):
     d.pieslice((c - 11 * S, c + 1 * S, c + 11 * S, c + 21 * S), 180, 360, fill=CU_HI + (255,))
     for dx in (-5, 0, 5):
         d.polygon([(c + (dx - 2) * S, c - 12 * S), (c + dx * S, c - 16 * S), (c + (dx + 2) * S, c - 12 * S)], fill=CU + (255,))
-    return big.resize((n, n), Image.LANCZOS)
+    return big.resize((final, final), Image.LANCZOS)
 
 
 def carta(D):

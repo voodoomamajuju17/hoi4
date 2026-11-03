@@ -2274,3 +2274,32 @@ le cambiemos nada por ahora. Lo demás dale para adelante".
   letras propias (Cormorant, Barlow) y la ventana de eventos en cobre (con el
   próximo ui_para_claude.zip).
 
+### Primera prueba en el juego (2026-11-03, capturas)
+
+- El botón hexagonal cayó bien, debajo de la bandera, y la ficha abre.
+- Arreglado: las cajas de "Lo que pesa hoy" y los renglones dejaban ver el
+  mapa (se dibujaban reemplazando el vidrio en vez de mezclarse).
+- Pedido: "priorizar cambios en pantalla principal y de elección de países".
+  ui_skin.py suma las pantallas menu_principal y eleccion_de_pais (todos los
+  frontend*.gui y los de marcadores/selección/lobby, con comodín) al
+  ui_para_claude.zip; con los originales se pasan a cristal y cobre los
+  botones, el panel del menú, los marcos de retrato y los paneles de
+  "Información" e "Historia del país".
+- Reglas: "Fortalecer: Japón", "Fortalecer: Albión" y un solo deslizador
+  "Fortalecer: las anarquías" para las cinco de las aventuras (ZWE, ZWI, ZWM,
+  ZWB, ZAN; el juego deja varios países en un mismo deslizador).
+- Pedidos de arte: 20 íconos de recursos propios (arte/recursos_propios.yaml):
+  la moneda de cada nación para la barra (en la APF, Ubuntu, que es lo que se
+  gasta) y sus medidores.
+- Llegó ui_para_claude.zip (2026-11-03): la piel se rearmó desde los
+  originales, ya en cristal y cobre (172 texturas): se suman la ventana de
+  eventos (el papel queda marfil tibio: el texto es oscuro; marco y clip de
+  cobre), el panel de decisiones (cabeceras, renglones, descripción, cruz de
+  cerrar) y las alertas (íconos de alerta, pedidos diplomáticos, contador). El
+  brillo verde/rojo/amarillo de las alertas queda como el juego.
+- El botón de la Ficha se mudó a la fila de botones de la barra (x 626, y 37,
+  36 px): debajo de la bandera tapaba el retrato del general.
+- Panel de decisiones (captura): La Carrera del Destino ocupa una línea; la
+  tabla de regiones vive en el cuadro de ayuda de El Marcador. La Última
+  Trinchera aparece solo en guerra y con la rendición por encima de 20%.
+
