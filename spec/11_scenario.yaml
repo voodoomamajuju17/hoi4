@@ -437,3 +437,17 @@ music:
     ZAN_africa_guerra: Convoy of Rust
     ZAN_kiev_paz: Golden Domes in the Soot
     ZAN_kiev_guerra: Cossacks on Diesel
+
+# -----------------------------------------------------------------------------
+# La Ficha del Líder (2026-11-03, maqueta aprobada: "cristal y cobre de base con
+# marcos por facción"). Ventana propia: tools/gen/emitters/ficha_lider.py; arte:
+# tools/arte/ficha.py -> assets/ui/ficha/. El botón cuelga de la barra superior;
+# x/y en píxeles desde la esquina que dice orientation (se corrige con una
+# captura). countries: si falta, los del panel El Líder. styles: marco por país
+# (base, efe, fcu, asc, zal, zjp); los que no están, cobre solo.
+# -----------------------------------------------------------------------------
+ficha_lider:
+  src: user_request
+  button: {x: 6, y: 112, orientation: upper_left}
+  styles: {EFE: efe, FCU: fcu, ASC: asc, ZAL: zal, ZJP: zjp}
+

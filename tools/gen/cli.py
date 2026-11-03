@@ -27,6 +27,7 @@ from .emitters import bitacora as em_bitacora
 from .emitters import mapa as em_mapa
 from .emitters import reglas as em_reglas
 from .emitters import agencias as em_agencias
+from .emitters import ficha_lider as em_ficha_lider
 from .emitters import balance as em_balance
 from .emitters import carrera as em_carrera
 from .emitters import cleanup as em_cleanup
@@ -116,6 +117,7 @@ EMITTERS = [
     ("mapa", em_mapa.emit),             # noticias: nace o desaparece un país (2026-10-28)
     ("reglas", em_reglas.emit),
     ("agencias", em_agencias.emit),     # agencias de inteligencia con el emblema del espíritu (2026-10-29)         # reglas de la partida: deslizadores de las meganaciones (2026-10-27)
+    ("ficha_lider", em_ficha_lider.emit),  # la Ficha del Líder, ventana propia en cristal y cobre (2026-11-03)
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
     ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)

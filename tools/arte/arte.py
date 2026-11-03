@@ -4,6 +4,8 @@
   python -m tools.arte.arte importar <carpeta|zip>
                                               convierte y ubica las imágenes
   python -m tools.arte.arte piel [originales]  arma assets/ui/piel/ (tools/arte/piel.py)
+  python -m tools.arte.arte piel cobre         pasa assets/ui/piel/ a cristal y cobre (una vez)
+  python -m tools.arte.arte ficha              dibuja el arte de la Ficha del Líder (tools/arte/ficha.py)
   python -m tools.arte.arte lote <txt> <TAG|ns>...  un solo txt con lo que falta de esos países
 
 El contrato: cada pedido es un bloque ASSET_REQUEST con un `id`. La imagen que
@@ -1137,6 +1139,9 @@ if __name__ == "__main__":
         importar(sys.argv[2])
     elif len(sys.argv) >= 2 and sys.argv[1] == "chicos":
         chicos()
+    elif len(sys.argv) >= 2 and sys.argv[1] == "ficha":
+        from tools.arte import ficha
+        ficha.main(sys.argv[2:])
     elif len(sys.argv) >= 2 and sys.argv[1] == "piel":
         from tools.arte import piel
         piel.main(sys.argv[2:])

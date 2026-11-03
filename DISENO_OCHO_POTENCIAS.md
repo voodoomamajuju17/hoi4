@@ -2221,3 +2221,56 @@ Pedido del usuario: en vez de la conspiración republicana, crisis de gobierno l
 ## Pantallas de carga: todas las nuestras, ninguna del juego (2026-11-02)
 
 El juego tiene 21 pantallas de carga con nombre propio y el mod las pisaba con las nuestras; las que sobraban no aparecían y las de algunos DLC seguían saliendo. Ahora el juego carga todo lo que hay en gfx/loadingscreens (sin importar el nombre), así que van todas las del mod como load_mn_<nombre>.dds, y el descriptor reemplaza la carpeta (replace_path): no aparece ninguna del juego ni de los DLC. Las piezas chicas de la pantalla de carga (recuadros de estado y consejo) se copian del juego tal cual. Se sacaron las de vida diaria de la Comuna y la FCU (pedido del usuario).
+
+## Interfaz en cristal y cobre (2026-11-03)
+
+Pedido: "Fíjate que vamos a tener que modear BIEN el GUI [...] con mucha
+personalidad, distinto a todos, elegante, de calidad"; decidido sobre tres
+maquetas: "cristal y cobre de base con marcos por facción", "también
+rediseñar las pantallas del juego", "Excelente mockup. Me encanta. Al mapa no
+le cambiemos nada por ahora. Lo demás dale para adelante".
+
+- **Piel**: las 142 texturas de assets/ui/piel (marcos, botones, paneles,
+  íconos de la barra) pasan de grafito y verde azulado a cristal y cobre:
+  lo oscuro queda como vidrio azul petróleo casi negro (liso, sin rayas), los
+  bordes y relieves claros y el acento verde azulado pasan a cobre, y los
+  íconos plateados quedan en cobre. Las tiras de edificios y recursos y la
+  foto del líder sin retrato no se tocan (sus colores dicen algo).
+  `tools/arte/piel.py`: `cristal_y_cobre()` (también corre cuando se arma la
+  piel desde los originales) y `python3 -m tools.arte.arte piel cobre`.
+- **Más pantallas al inventario** (ui_skin.py): la ventana de eventos, las
+  decisiones, la diplomacia y los cuadros de ayuda entran a
+  ui_para_claude.zip; con ese zip se pasan a cobre (la ventana de eventos no
+  puede cambiar de marco según el país: el juego no lo permite; los marcos
+  por facción van en las ventanas propias).
+- **La Ficha del Líder** (`tools/gen/emitters/ficha_lider.py`, arte de
+  `tools/arte/ficha.py` en assets/ui/ficha/): ventana propia de 1020x740.
+  - Se abre con un botón hexagonal de cobre colgado de la barra superior
+    (scripted GUI con parent_window_token = top_bar; posición en
+    11_scenario.yaml -> ficha_lider.button, se corrige con una captura) o con
+    la decisión "La Ficha del Líder" del panel El Líder (gratis, la IA no la
+    toma). Se cierra con la cruz o Escape.
+  - Retrato del líder (el que detecta MEGANATIONS_lider_detectar; si no tiene
+    número, una silueta) en marco de cobre, nombre y partido.
+  - Carisma, Astucia y Prestigio en barras de 20 segmentos: cobre lo del
+    líder, turquesa lo que suman los ministros; Salud en un anillo (rojo bajo
+    30) con cuánto baja por año; lo que pesa hoy (estabilidad, poder político,
+    apoyo a la guerra).
+  - El gabinete posible del país (hasta 10 casillas): retrato, nombre y lo que
+    suma o resta; encendido el que gobierna (MEGANATIONS_gabinete_<n>, que el
+    ministro pone al entrar y saca al salir), apagado el resto.
+  - Marco por facción encima: EFE enredadera dorada, FCU cromo con esquinas
+    cortadas, ASC cuña roja y franja roja y blanca, Albión doble filete de
+    bronce y velo vino, Japón laca carmesí, hilo de neón y 将軍. El resto,
+    cobre solo (11_scenario.yaml -> ficha_lider.styles).
+  - MEGANATIONS_ficha_actualizar (lo corre MEGANATIONS_lider_recalcular)
+    deja en MEGANATIONS_gui_* el cuadro de cada barra y los efectos en %.
+- Sin probar en partida: la sintaxis sigue a Kaiserreich, Millennium Dawn y
+  Equestria at War, y la vista previa se dibujó desde el .gui generado, pero
+  nadie abrió todavía la ventana en el juego. Lo más probable de corregir con
+  una captura: dónde cae el botón en la barra y el largo de algunos textos.
+- Pendiente: la barra superior con el Giri y la medalla de la bandera (otro
+  scripted GUI colgado de top_bar, cuando se sepa dónde cae el botón), las
+  letras propias (Cormorant, Barlow) y la ventana de eventos en cobre (con el
+  próximo ui_para_claude.zip).
+

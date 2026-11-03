@@ -48,6 +48,13 @@ PATTERNS: dict[str, list[str]] = {
     "edificios": [r"building", r"facility"],
     # 2026-10-27: los recursos (petróleo, aluminio, caucho, tungsteno, acero, cromo y el carbón, que es Torio)
     "recursos": [r"resource", r"coal", r"oil", r"aluminium", r"rubber", r"tungsten", r"steel", r"chromium"],
+    # 2026-11-03 (maquetas aprobadas: "cristal y cobre", "también rediseñar las
+    # pantallas del juego"): la ventana de eventos, las decisiones, la
+    # diplomacia y los cuadros de ayuda, para pasarlos a cobre
+    "eventos": [r"event"],
+    "decisiones": [r"decision"],
+    "diplomacia": [r"diplomac"],
+    "ayudas": [r"tooltip"],
     "leyes": [r"^GFX_idea_(?:.*economic|.*mobilisation|.*conscription|.*export|.*trade|.*isolation|"
               r"civilian_economy|war_economy|free_trade|closed_economy|volunteer_only|disarmed_nation|"
               r"service_by_requirement|all_adults_serve|scraping_the_barrel)"],
@@ -56,6 +63,10 @@ PATTERNS: dict[str, list[str]] = {
 # que no estén se informan y se saltean)
 EXTRA_GUI: dict[str, list[str]] = {
     "notificaciones": ["alerts.gui", "topbar_alerts.gui", "alertsview.gui"],
+    "eventos": ["eventwindow.gui", "event_window.gui", "eventview.gui", "newseventwindow.gui",
+                "countryeventview.gui", "reportseventwindow.gui"],
+    "decisiones": ["countrydecisionview.gui", "countrydecisionsview.gui", "decisionview.gui"],
+    "diplomacia": ["countrydiplomacyview.gui", "diplomacyview.gui"],
     "mercado": ["internationalmarket.gui", "international_market.gui", "marketview.gui", "tradeview.gui"],
 }
 SKIN_DIR = ("assets", "ui", "piel")

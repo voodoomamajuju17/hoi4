@@ -775,7 +775,7 @@ def render_effects(owner: str, items: list[dict], known,
         if effect == "run":
             name = item["value"]
             # MEGANATIONS_mapa_*: los escribe tools/gen/emitters/mapa.py (2026-10-29)
-            if ec.scripted is not None and name not in ec.scripted and not name.startswith("MEGANATIONS_mapa_"):
+            if ec.scripted is not None and name not in ec.scripted and not name.startswith(("MEGANATIONS_mapa_", "MEGANATIONS_ficha_")):
                 raise SpecError(f"{owner}: run '{name}' no esta en 14_decisions.yaml -> scripted_effects",
                                 where=where)
             block.add(name, True)

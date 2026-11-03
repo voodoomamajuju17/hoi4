@@ -4860,6 +4860,94 @@ def test_agencias() -> None:
               and logo[128 + (66 * 132 + 66) * 4 + 3] > 0 and logo[128 + 3] == 0)
 
 
+def test_ficha_lider() -> None:
+    section("la Ficha del Líder: ventana propia en cristal y cobre (maqueta aprobada 2026-11-03)")
+    import re
+    import struct as _st
+    from tools.gen.emitters import ficha_lider as fl
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        gui = (mod / "interface/meganations_ficha.gui").read_text(encoding="utf-8")
+        gfx = (mod / "interface/meganations_ficha.gfx").read_text(encoding="utf-8")
+        sg = " ".join((mod / "common/scripted_guis/meganations_ficha.txt").read_text(encoding="utf-8").split())
+        sl = " ".join((mod / "common/scripted_localisation/meganations_ficha.txt").read_text(encoding="utf-8").split())
+        se = " ".join((mod / "common/scripted_effects/meganations_ficha.txt").read_text(encoding="utf-8").split())
+        check("ficha: el botón cuelga de la barra superior y la ventana se abre con una bandera del país",
+              "parent_window_token = top_bar window_name = \"mn_ficha_boton_window\"" in sg
+              and "window_name = \"mn_ficha_lider_window\"" in sg and "has_country_flag = MEGANATIONS_ficha_abierta" in sg
+              and 'name = "mn_ficha_boton_window"' in gui and 'name = "mn_ficha_lider_window"' in gui
+              and "ai_enabled = { always = no }" in sg, sg[:500])
+        nombres = set(re.findall(r'name = "(\w+)"', gui))
+        usados = set(re.findall(r"(\w+?)(?:_visible)? = \{ (?:image|frame|OR|tag|always|NOT)", sg))
+        usados = {u for u in usados if u not in ("visible", "abrir_click", "cerrar_click", "limit", "ai_enabled", "if", "else")}
+        check("ficha: cada imagen, barra y casilla que maneja el guion existe en la ventana",
+              usados and usados <= nombres, str(sorted(usados - nombres))[:400])
+        sprites = dict(re.findall(r'name = "(GFX_\w+)"\s*texturefile = "([^"]+)"', gfx))
+        pedidos = set(re.findall(r'spriteType = "(GFX_\w+)"', gui)) | set(re.findall(r"localization_key = (GFX_\w+)", sl))
+        check("ficha: toda imagen que pide la ventana está definida (salvo la cruz de cerrar del juego)",
+              pedidos - {"GFX_closebutton"} <= set(sprites) and all((mod / t).exists() for t in sprites.values()),
+              str(sorted(pedidos - set(sprites)))[:300])
+        check("ficha: barras de 20 segmentos y anillo de salud en 21 cuadros, elegidos por variable",
+              gfx.count("noOfFrames = 21") == 3 and "barra_car_total = { frame = MEGANATIONS_gui_car_total }" in sg
+              and "salud_anillo = { frame = MEGANATIONS_gui_salud }" in sg)
+        def dims(rel):
+            data = (mod / rel).read_bytes()
+            return _st.unpack_from("<II", data, 12)[::-1]
+        W, H = fl.DISENO["ventana"]
+        check("ficha: el arte tiene las medidas de la ventana (fondo, barra x21, anillo x21)",
+              dims(f"{fl.TEX}/fondo.dds") == (W, H) and dims(f"{fl.TEX}/barra_total.dds") == (fl.DISENO["barra"][1] * 21, fl.DISENO["barra"][2])
+              and dims(f"{fl.TEX}/salud.dds") == (fl.DISENO["anillo"][2] * 21, fl.DISENO["anillo"][2])
+              and dims(f"{fl.TEX}/marco_efe.dds") == (W, H))
+        n = sprites.get("GFX_mn_lider_1", "")
+        check("ficha: el retrato sale del líder detectado (Aurelio IV es el 1) y si no hay, una silueta",
+              "MEGANATIONS_lider_id = 1 } } localization_key = GFX_mn_lider_1" in sl and n.startswith("gfx/leaders/EFE/")
+              and "text = { localization_key = GFX_mn_ficha_sin_retrato }" in sl, n)
+        check("ficha: marco por facción (EFE enredadera, Japón laca y neón) y cobre solo para el resto",
+              "trigger = { tag = EFE } localization_key = GFX_mn_ficha_marco_efe" in sl
+              and "trigger = { tag = ZJP } localization_key = GFX_mn_ficha_marco_zjp" in sl
+              and "tag = NAS } localization_key = GFX_mn_ficha_marco" not in sl)
+        ch = " ".join((mod / "common/characters/EFE_characters.txt").read_text(encoding="utf-8-sig").split())
+        i = ch.index("EFE_min_arriagada_1 = {")
+        check("ficha: el ministro enciende su casilla al entrar al gobierno y la apaga al salir",
+              "set_country_flag = MEGANATIONS_gabinete_1" in ch[i:i + 3000] and "clr_country_flag = MEGANATIONS_gabinete_1" in ch[i:i + 3000]
+              and "min_apagado_1_visible = {" in sg and "NOT = { has_country_flag = MEGANATIONS_gabinete_1 }" in sg, ch[i:i + 600])
+        check("ficha: sus casillas muestran nombre y lo que suma cada ministro",
+              "name = MN_min_nombre_1 text = { trigger = { tag = EFE } localization_key = EFE_min_arriagada_1 }" in sl
+              and "name = MN_min_bono_1 text = { trigger = { tag = EFE } localization_key = MN_FICHA_BONO_EFE_min_arriagada_1 }" in sl)
+        main = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        rec = main[main.index("MEGANATIONS_lider_recalcular = {"):][:4000]
+        check("ficha: el líder recalculado actualiza lo que lee la ventana (cuadro = stat + 1)",
+              "MEGANATIONS_ficha_actualizar = yes" in rec and "add_to_variable = { MEGANATIONS_gui_car_total = 1 }" in se
+              and "divide_variable = { MEGANATIONS_gui_salud = 5 }" in se, rec[-400:])
+        dec = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split()) \
+            if (mod / "common/decisions/meganations_decisions.txt").exists() else ""
+        if not dec:
+            dec = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/decisions").glob("*.txt")).replace("\n", " ")
+            dec = " ".join(dec.split())
+        j = dec.find("MEGANATIONS_lider_ficha = {")
+        check("ficha: también se abre desde la decisión del panel El Líder (la IA no la toma)",
+              j >= 0 and "set_country_flag = MEGANATIONS_ficha_abierta" in dec[j:j + 900] and "factor = 0" in dec[j:j + 900], dec[j:j + 400])
+        loc = (mod / "localisation/spanish/meganations_ficha_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("ficha: textos en castellano", 'MN_FICHA_TITULO:0 "EL LÍDER"' in loc and "baja [?MEGANATIONS_lider_desgaste|0]" in loc, loc[:300])
+    try:
+        from PIL import Image as _Img
+    except ImportError:
+        _Img = None
+    if _Img is not None:
+        from tools.arte import piel as _piel
+        src = _Img.new("RGBA", (6, 2), (0, 0, 0, 0))
+        src.putpixel((0, 1), (40, 160, 170, 255))   # verde azulado del acento
+        src.putpixel((1, 1), (30, 34, 38, 255))     # grafito oscuro
+        src.putpixel((2, 1), (200, 30, 30, 255))    # rojo
+        src.putpixel((3, 1), (150, 152, 155, 255))  # relieve claro
+        out = _piel.cristal_y_cobre(src)
+        t, g, r, c = (out.getpixel((x, 1)) for x in range(4))
+        check("piel en cobre: el acento y los relieves pasan a cobre, el grafito a cristal, el rojo queda",
+              out.getpixel((5, 0))[3] == 0 and t[0] > t[1] > t[2] and c[0] > c[1] > c[2] and g[2] >= g[0]
+              and r[0] > 150 and r[1] < 80, f"{t} {g} {r} {c}")
+
+
 def test_guerras_civiles() -> None:
     section("guerras civiles mas probables y estabilidad mas dificil al principio (2026-11-01)")
     with tempfile.TemporaryDirectory() as tmp:
@@ -5037,6 +5125,7 @@ def main() -> int:
         test_japon,
         test_gaia,
         test_agencias,
+        test_ficha_lider,
         test_guerras_civiles,
         test_lider_ck,
         test_descolonizado,

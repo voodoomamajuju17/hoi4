@@ -39,6 +39,18 @@ ACENTO = {"black": (0, 18, 22), "mid": (20, 140, 150), "white": (165, 250, 240),
 # tonos dorados, bronces y marrones (H de PIL, 0-255): esos pasan al acento
 DORADO = (8, 42)
 
+# 2026-11-03 (maquetas aprobadas: "cristal y cobre de base"): sobre lo de arriba
+# (grafito + verde azulado) va un segundo paso, cristal_y_cobre(): lo oscuro
+# pasa a cristal (negro azulado verdoso), los bordes y relieves claros a cobre
+# y el verde azulado del acento también a cobre. Los demás colores (rojo,
+# verde, azul: significan algo) quedan.
+# rampa por brillo: (brillo del grafito, color nuevo)
+CRISTAL = [(0, (3, 8, 11)), (30, (14, 25, 31)), (50, (30, 40, 44)), (64, (92, 54, 30)),
+           (85, (170, 104, 58)), (110, (222, 150, 96)), (170, (250, 200, 150)), (255, (255, 232, 205))]
+COBRE = [(0, (24, 10, 4)), (60, (90, 46, 20)), (120, (170, 102, 56)), (190, (236, 170, 118)),
+         (255, (255, 228, 200))]
+TURQUESA = (100, 150)   # H de PIL del acento verde azulado que pasa a cobre
+
 
 def cargar() -> dict:
     import yaml
@@ -84,6 +96,69 @@ def retexturar(img, material):
     out = Image.composite(accent, out, m_gold).convert("RGBA")
     out.putalpha(alpha)
     return out
+
+
+def _rampa(puntos):
+    """Tabla de 256 colores interpolando la rampa (brillo -> color)."""
+    tabla = []
+    for v in range(256):
+        for (a, ca), (b, cb) in zip(puntos, puntos[1:]):
+            if a <= v <= b:
+                t = (v - a) / (b - a) if b > a else 0
+                tabla.append(tuple(round(ca[i] + (cb[i] - ca[i]) * t) for i in range(3)))
+                break
+    return tabla
+
+
+def cristal_y_cobre(img):
+    """Grafito -> cristal, relieves claros y acento verde azulado -> cobre.
+    Misma forma y transparencia; los colores que dicen algo quedan."""
+    from PIL import Image, ImageChops
+    img = img.convert("RGBA")
+    alpha = img.getchannel("A")
+    rgb = img.convert("RGB")
+    lum = rgb.convert("L")
+    if min(img.size) >= 48:
+        # el cristal es liso: se borran las rayitas del grafito, los bordes quedan
+        from PIL import ImageFilter
+        lum = lum.filter(ImageFilter.MedianFilter(3))
+    def pintar(rampa):
+        t = _rampa(rampa)
+        return Image.merge("RGB", [lum.point([c[i] for c in t]) for i in range(3)])
+    vidrio = pintar(CRISTAL)
+    cobre = pintar(COBRE)
+    hue, sat, val = rgb.convert("HSV").split()
+    color = ImageChops.multiply(sat.point(lambda x: 0 if x < 45 else min(255, (x - 45) * 3)),
+                                val.point(lambda x: 0 if x < 30 else min(255, (x - 30) * 4)))
+    turq = ImageChops.multiply(color, hue.point(lambda x: 255 if TURQUESA[0] <= x <= TURQUESA[1] else 0))
+    otro = ImageChops.multiply(color, ImageChops.invert(hue.point(lambda x: 255 if TURQUESA[0] <= x <= TURQUESA[1] else 0)))
+    out = Image.composite(rgb, vidrio, otro)
+    out = Image.composite(cobre, out, turq).convert("RGBA")
+    out.putalpha(alpha)
+    return out
+
+
+def convertir_a_cobre() -> list[str]:
+    """Una sola vez (2026-11-03): pasa a cristal y cobre lo que ya está en
+    assets/ui/piel/ (hecho en grafito el 2026-10-16), sin necesitar los
+    originales. Lo ya convertido se anota en .cobre y no se repite. Las tiras de
+    íconos (edificios, recursos: sus colores dicen algo) y la foto del líder
+    sin retrato quedan como están."""
+    from PIL import Image
+    spec = cargar()
+    fuera = {p["textura"] for p in spec.get("tiras") or []}
+    fuera |= {p["textura"] for p in spec.get("iconos") or [] if p.get("uso") == "foto"}
+    marca = SKIN / ".cobre"
+    hechas = set(marca.read_text(encoding="utf-8").split()) if marca.exists() else set()
+    nuevas = []
+    for path in sorted(SKIN.glob("**/*.dds")):
+        rel = path.relative_to(SKIN).as_posix()
+        if rel in fuera or rel in hechas:
+            continue
+        _escribir(cristal_y_cobre(Image.open(path)), rel)
+        nuevas.append(rel)
+    marca.write_text("\n".join(sorted(hechas | set(nuevas))) + "\n", encoding="utf-8")
+    return [f"piel: {len(nuevas)} texturas pasadas a cristal y cobre ({len(hechas)} ya estaban)"]
 
 
 def _frames(img, n: int):
@@ -297,8 +372,13 @@ def aplicar(originales: str | None = None) -> list[str]:
             if rel not in (spec.get("retexturar") or []):
                 continue
             img = retexturar(original, material)
+        if not (rel in iconos and iconos[rel].get("uso") == "foto"):
+            img = cristal_y_cobre(img)
         _escribir(img, rel)
         hechas.append(rel)
+    marca = SKIN / ".cobre"   # lo hecho desde los originales ya está en cobre
+    previas = set(marca.read_text(encoding="utf-8").split()) if marca.exists() else set()
+    marca.write_text("\n".join(sorted(previas | set(hechas))) + "\n", encoding="utf-8")
     for pieza in spec.get("tiras") or []:
         rel = pieza["textura"]
         src = root / rel
@@ -319,5 +399,9 @@ def aplicar(originales: str | None = None) -> list[str]:
 def main(argv: list[str]) -> None:
     import sys
     sys.path.insert(0, str(REPO))
+    if argv and argv[0] == "cobre":
+        for line in convertir_a_cobre():
+            print(line)
+        return
     for line in aplicar(argv[0] if argv else None):
         print(line)

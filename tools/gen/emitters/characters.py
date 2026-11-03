@@ -147,6 +147,8 @@ def emit(ctx: BuildContext) -> None:
                     else:
                         _write_portrait(ctx, portrait_path, country.color)
                         _write_portrait(ctx, small_rel, country.color, SMALL_PORTRAIT_SIZE)
+                    # 2026-11-03: la Ficha del Líder (ficha_lider.py) usa el mismo retrato
+                    ctx.data.setdefault("retratos", {})[cid] = portrait_path
                     sizes = Block()
                     sizes.add("large", Quoted(portrait_path))
                     # el chico explícito: sin él el juego arma "<grande>_small" y, con un
@@ -168,6 +170,7 @@ def emit(ctx: BuildContext) -> None:
                     _write_silhouette(ctx, large, country.color, PORTRAIT_SIZE)
                     _write_silhouette(ctx, small, country.color, SMALL_PORTRAIT_SIZE)
                 body.add("portraits", Block([("civilian", Block([("large", Quoted(large)), ("small", Quoted(small))]))]))
+                ctx.data.setdefault("retratos", {})[cid] = large
 
             leader = (ch.get("roles") or {}).get("country_leader")
             if isinstance(leader, dict):
@@ -254,6 +257,12 @@ def emit(ctx: BuildContext) -> None:
                         var = f"MEGANATIONS_lider_bono_{stat}"
                         on_add.add("add_to_variable", Block([("var", var), ("value", valor)]))
                         on_remove.add("add_to_variable", Block([("var", var), ("value", -valor)]))
+                    # 2026-11-03: su casilla en la Ficha del Líder se enciende mientras gobierna
+                    from .ficha_lider import casilla
+                    n = casilla(ctx, cid)
+                    if n:
+                        on_add.add("set_country_flag", f"MEGANATIONS_gabinete_{n}")
+                        on_remove.add("clr_country_flag", f"MEGANATIONS_gabinete_{n}")
                     for b in (on_add, on_remove):
                         b.add("if", Block([("limit", Block([("has_country_flag", "MEGANATIONS_lider_listo")])),
                                            ("MEGANATIONS_lider_recalcular", True)]))

@@ -6172,6 +6172,19 @@ categories:
       spanish: 'Carisma [?MEGANATIONS_lider_total_carisma|0]/20 (cada punto sobre o bajo 10: ±1,5% de estabilidad) · Astucia [?MEGANATIONS_lider_total_astucia|0]/20 (±0,075 de poder político por día) · Prestigio [?MEGANATIONS_lider_total_prestigio|0]/20 (±2% de apoyo a la guerra) · Salud [?MEGANATIONS_lider_total_salud|0]/100 (baja [?MEGANATIONS_lider_desgaste|0] por año; en 0 el líder se desploma: -20% de estabilidad, -150 de poder político).\n\nEl líder trae [?MEGANATIONS_lider_carisma|0] / [?MEGANATIONS_lider_astucia|0] / [?MEGANATIONS_lider_prestigio|0] / [?MEGANATIONS_lider_salud|0]; los ministros suman [?MEGANATIONS_lider_bono_carisma|0] / [?MEGANATIONS_lider_bono_astucia|0] / [?MEGANATIONS_lider_bono_prestigio|0] / [?MEGANATIONS_lider_bono_salud|0].\n\nCada líder es distinto. Cada seis meses el líder enfrenta una decisión, y muchos eventos del país mueven estas stats. Nadie se sostiene en la cima: una vez por año cada estadística en 16 o más baja 2, y las malas noticias llegan sin avisar (escándalos, recaídas, rumores de golpe, atentados).'
     src: user_request
     decisions:
+    # 2026-11-03: la Ficha del Líder también se abre desde acá, por si el botón
+    # de la barra superior cae en un mal lugar
+    - id: MEGANATIONS_lider_ficha
+      name: {english: The Leader's Sheet, spanish: La Ficha del Líder}
+      desc: {english: 'Open the sheet: the leader''s stats, health and the cabinet. It is also opened by the hexagonal button under the top bar.', spanish: 'Abre la ficha: las stats del líder, su salud y el gabinete. También la abre el botón hexagonal debajo de la barra superior.'}
+      icon_prefer: [generic_political_actions]
+      cost: 0
+      visible: {not: {flag: MEGANATIONS_ficha_abierta}}
+      effects:
+      - {effect: flag, value: MEGANATIONS_ficha_abierta}
+      - {effect: run, value: MEGANATIONS_ficha_actualizar}
+      ai:
+        factor: 0
     - id: MEGANATIONS_lider_chequeo
       name: {english: The Leader's Check-up, spanish: El Chequeo del Líder}
       desc: {english: 'A week in the military hospital, away from the cameras. +10 Health. Once a year. One time in four someone sees the leader go in: -2 Prestige.', spanish: 'Una semana en el hospital militar, lejos de las cámaras. +10 de Salud. Una vez por año. Una de cada cuatro veces alguien lo ve entrar: -2 de Prestigio.'}
@@ -19925,6 +19938,8 @@ scripted_effects:
       - [sub, MEGANATIONS_lider_ef_prestigio, 10]
       - [mul, MEGANATIONS_lider_ef_prestigio, 0.02]
     - {effect: dynamic_modifier, id: MEGANATIONS_el_lider}
+    # 2026-11-03: lo que lee la Ficha del Líder (tools/gen/emitters/ficha_lider.py)
+    - {effect: run, value: MEGANATIONS_ficha_actualizar}
     - effect: if
       when:
         variable_below: {var: MEGANATIONS_lider_total_salud, value: 1}
@@ -22058,7 +22073,7 @@ dynamic_modifiers:
   - id: MEGANATIONS_el_lider
     country: null
     name: {english: 'The Leader', spanish: 'El Líder'}
-    desc: {english: 'Charisma [?MEGANATIONS_lider_total_carisma|0]/20 (stability), Cunning [?MEGANATIONS_lider_total_astucia|0]/20 (political power), Health [?MEGANATIONS_lider_total_salud|0]/100, Prestige [?MEGANATIONS_lider_total_prestigio|0]/20 (war support). Out of 10; each point above or below 5 counts. Health at 0: the leader collapses.', spanish: 'Carisma [?MEGANATIONS_lider_total_carisma|0]/20 (estabilidad), Astucia [?MEGANATIONS_lider_total_astucia|0]/20 (poder político), Salud [?MEGANATIONS_lider_total_salud|0]/100, Prestigio [?MEGANATIONS_lider_total_prestigio|0]/20 (apoyo a la guerra). Sobre 10; cada punto sobre o bajo 5 cuenta. Salud en 0: el líder se desploma.'}
+    desc: {english: 'Charisma [?MEGANATIONS_lider_total_carisma|0]/20 (stability), Cunning [?MEGANATIONS_lider_total_astucia|0]/20 (political power), Health [?MEGANATIONS_lider_total_salud|0]/100, Prestige [?MEGANATIONS_lider_total_prestigio|0]/20 (war support). Each point above or below 10 counts. Health at 0: the leader collapses.', spanish: 'Carisma [?MEGANATIONS_lider_total_carisma|0]/20 (estabilidad), Astucia [?MEGANATIONS_lider_total_astucia|0]/20 (poder político), Salud [?MEGANATIONS_lider_total_salud|0]/100, Prestigio [?MEGANATIONS_lider_total_prestigio|0]/20 (apoyo a la guerra). Cada punto sobre o bajo 10 cuenta. Salud en 0: el líder se desploma.'}
     modifiers: {stability_factor: MEGANATIONS_lider_ef_carisma, political_power_gain: MEGANATIONS_lider_ef_astucia, war_support_factor: MEGANATIONS_lider_ef_prestigio}
   - id: MEGANATIONS_lider_pensamiento
     country: null

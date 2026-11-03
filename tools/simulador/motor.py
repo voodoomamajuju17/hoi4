@@ -193,6 +193,8 @@ class Mundo:
             self._efecto(pais, ef)
 
     def correr_script(self, pais: Pais, sid: str) -> None:
+        if sid.startswith("MEGANATIONS_ficha_"):
+            return   # la Ficha del Líder solo prepara lo que muestra la ventana (ficha_lider.py)
         if sid not in self._efectos:
             raise KeyError(f"scripted effect '{sid}' no existe en el spec")
         self.correr(pais, self._efectos[sid].get("effects"))
