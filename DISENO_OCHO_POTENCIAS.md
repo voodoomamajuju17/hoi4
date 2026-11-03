@@ -2302,4 +2302,15 @@ le cambiemos nada por ahora. Lo demás dale para adelante".
 - Panel de decisiones (captura): La Carrera del Destino ocupa una línea; la
   tabla de regiones vive en el cuadro de ayuda de El Marcador. La Última
   Trinchera aparece solo en guerra y con la rendición por encima de 20%.
+- El Líder sale del panel de Decisiones (2026-11-03, "migrarla a la pantalla
+  de líder"): el Chequeo (50 PP) y la Gran Gira (75 PP) son botones abajo a la
+  derecha de la Ficha, una vez por año cada uno, apagados si no alcanza el
+  poder político o ya se hizo; el cuadro de ayuda dice lo que hacen. El panel
+  El Líder queda solo para la IA (is_ai) y lo que hacen los dos vive en
+  MEGANATIONS_lider_hacer_chequeo / _gira, igual para los dos caminos. La
+  decisión "La Ficha del Líder" se fue (el botón de la barra alcanza).
+- La Sucesión (EFE): el texto decía Salud "de 10" y "menor a 4"; ahora "de
+  100" y "menor a 40", como ya hacía el cálculo.
+- Inventario: los íconos de módulos y huecos del diseñador (GFX_EMI_*,
+  GFX_EMSI_*) entran al ui_para_claude.zip para pedirlos nuevos.
 

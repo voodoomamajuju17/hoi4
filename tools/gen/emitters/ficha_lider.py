@@ -8,8 +8,8 @@ Es una ventana del mod (scripted GUI), no una pantalla del juego retocada: el
 juego la dibuja encima del mapa cuando el país tiene la bandera
 MEGANATIONS_ficha_abierta. Se abre con el botón hexagonal que se cuelga de la
 barra superior (parent_window_token = top_bar, como hace Kaiserreich con la
-popularidad del partido) o con la decisión "La Ficha del Líder" del panel El
-Líder, por si el botón cae en un lugar raro de la barra.
+popularidad del partido). Desde el 2026-11-03 el Chequeo y la Gira también
+están acá, como botones; el panel El Líder de Decisiones queda solo para la IA.
 
 Muestra lo que arma 27_lider_ck / 14_decisions (MEGANATIONS_lider_*):
   - el retrato del líder (cada líder detectado tiene su número,
@@ -58,6 +58,7 @@ DISENO = {
     "secciones": {"atributos": 84, "pesa": 290, "gabinete": 432},
     "efectos_y": 312, "efectos_x": (260, 510, 760), "efecto": (230, 56),
     "gabinete": (36, 452, 5, 2, 182, 104, 8, 8),   # x, y, columnas, filas, ancho, alto, separación x, y
+    "accion": (210, 30),   # botones Chequeo y Gira, abajo a la derecha (2026-11-03)
     "boton": 36,   # del alto de los botones de la barra (2026-11-03)
 }
 SEGMENTOS = 20
@@ -65,7 +66,7 @@ CUADROS_SALUD = 21
 
 ESTILOS_POR_DEFECTO = {"EFE": "efe", "FCU": "fcu", "ASC": "asc", "ZAL": "zal", "ZJP": "zjp"}
 ESTILOS = ("base", "efe", "fcu", "asc", "zal", "zjp")
-PIEZAS = ["fondo", "retrato_marco", "barra_total", "barra_base", "salud", "boton", "carta",
+PIEZAS = ["fondo", "retrato_marco", "barra_total", "barra_base", "salud", "boton", "boton_accion", "carta",
           "apagado", "sin_retrato"] + [f"marco_{e}" for e in ESTILOS]
 CUADROS = {"barra_total": SEGMENTOS + 1, "barra_base": SEGMENTOS + 1, "salud": CUADROS_SALUD}
 
@@ -325,7 +326,14 @@ def _gui(max_min: int, cfg: dict) -> str:
         g.append(_text(f"min_nombre_{k}", x + 76, y + 6, f"[MN_min_nombre_{k}]", "hoi_16mbs", cw - 80, 56))
         g.append(_text(f"min_bono_{k}", x + 76, y + 64, f"[MN_min_bono_{k}]", "hoi_16mbs", cw - 80, 36))
         g.append(_icon(f"min_apagado_{k}", x, y, "GFX_mn_ficha_apagado", "\n\t\t\talwaystransparent = yes"))
-    g.append(_text("pie", 70, H - 34, "MN_FICHA_PIE", "hoi_16mbs", W - 140, 20))
+    g.append(_text("pie", 70, H - 34, "MN_FICHA_PIE", "hoi_16mbs", W - 580, 20))
+    # 2026-11-03 ("la decisión de El Líder también migrarla a la pantalla del líder")
+    aw, ah = DISENO["accion"]
+    for i, (nombre, texto) in enumerate((("chequeo", "MN_FICHA_CHEQUEO"), ("gira", "MN_FICHA_GIRA"))):
+        x = W - 70 - (2 - i) * (aw + 10) + 10
+        g.append(f'\t\tbuttonType = {{\n\t\t\tname = "{nombre}"\n\t\t\tposition = {{ x = {x} y = {H - 44} }}\n'
+                 f'\t\t\tspriteType = "GFX_mn_ficha_boton_accion"\n\t\t\ttext = "{texto}"\n'
+                 f'\t\t\tbuttonFont = "hoi_18mbs"\n\t\t\tpdx_tooltip = "{texto}_TT"\n\t\t}}\n')
     g.append("\t}\n}\n")
     return "".join(g)
 
@@ -342,7 +350,11 @@ def _scripted_gui(tags: list[str], gab: dict[str, list[str]], max_min: int) -> s
              "\t\t\t}\n\t\t}\n\t\tai_enabled = { always = no }\n\t}\n")
     s.append('\tmn_ficha_lider = {\n\t\tcontext_type = player_context\n\t\twindow_name = "mn_ficha_lider_window"\n'
              f"\t\tvisible = {{ {quien} has_country_flag = MEGANATIONS_ficha_abierta }}\n"
-             "\t\teffects = {\n\t\t\tcerrar_click = { clr_country_flag = MEGANATIONS_ficha_abierta }\n\t\t}\n")
+             "\t\teffects = {\n\t\t\tcerrar_click = { clr_country_flag = MEGANATIONS_ficha_abierta }\n"
+             "\t\t\tchequeo_click = { add_political_power = -50 set_country_flag = { flag = MEGANATIONS_chequeo_hecho value = 1 days = 365 } "
+             "MEGANATIONS_lider_hacer_chequeo = yes MEGANATIONS_ficha_actualizar = yes }\n"
+             "\t\t\tgira_click = { add_political_power = -75 set_country_flag = { flag = MEGANATIONS_gira_hecha value = 1 days = 365 } "
+             "MEGANATIONS_lider_hacer_gira = yes MEGANATIONS_ficha_actualizar = yes }\n\t\t}\n")
     s.append("\t\tproperties = {\n\t\t\tretrato = { image = \"[MN_ficha_retrato]\" }\n"
              "\t\t\tmarco_faccion = { image = \"[MN_ficha_marco]\" }\n")
     for _, c in STATS:
@@ -352,6 +364,10 @@ def _scripted_gui(tags: list[str], gab: dict[str, list[str]], max_min: int) -> s
     for k in range(1, max_min + 1):
         s.append(f"\t\t\tmin_retrato_{k} = {{ image = \"[MN_min_retrato_{k}]\" }}\n")
     s.append("\t\t}\n\t\ttriggers = {\n")
+    s.append("\t\t\tchequeo_click_enabled = { has_political_power > 49 NOT = { has_country_flag = MEGANATIONS_chequeo_hecho } "
+             "check_variable = { MEGANATIONS_lider_salud < 100 } }\n"
+             "\t\t\tgira_click_enabled = { has_political_power > 74 NOT = { has_country_flag = MEGANATIONS_gira_hecha } "
+             "check_variable = { MEGANATIONS_lider_carisma < 20 } }\n")
     for k in range(1, max_min + 1):
         con = [t for t, l in gab.items() if len(l) >= k]
         hay = _tags_or(con) if con else "always = no"
@@ -387,8 +403,13 @@ def _textos(ctx: BuildContext) -> None:
         "MN_FICHA_EF_PP_NOM": ("political power", "poder político"),
         "MN_FICHA_EF_GUERRA": ("§C[?MEGANATIONS_gui_guerra|0]%§!", "§C[?MEGANATIONS_gui_guerra|0]%§!"),
         "MN_FICHA_EF_GUERRA_NOM": ("war support", "apoyo a la guerra"),
-        "MN_FICHA_PIE": ("The leader's decisions are in Decisions > The Leader. Each point above or below 10 counts.",
-                         "Las decisiones del líder están en Decisiones > El Líder. Cada punto sobre o bajo 10 cuenta."),
+        "MN_FICHA_CHEQUEO": ("Check-up  50", "Chequeo médico  50"),
+        "MN_FICHA_CHEQUEO_TT": ("§YThe Leader's Check-up§! (50 political power, once a year)\nA week in the military hospital, away from the cameras. +10 Health. One time in four someone sees the leader go in: -2 Prestige.",
+                                "§YEl Chequeo del Líder§! (50 de poder político, una vez por año)\nUna semana en el hospital militar, lejos de las cámaras. +10 de Salud. Una de cada cuatro veces alguien lo ve entrar: -2 de Prestigio."),
+        "MN_FICHA_GIRA": ("Grand Tour  75", "Gran Gira  75"),
+        "MN_FICHA_GIRA_TT": ("§YThe Grand Tour§! (75 political power, once a year)\nEvery province, every factory, every hand to shake. +2 Charisma, -10 Health. One time in four the cameras catch a crowd booing: -2 Prestige.",
+                             "§YLa Gran Gira§! (75 de poder político, una vez por año)\nCada provincia, cada fábrica, cada mano para estrechar. +2 de Carisma, -10 de Salud. Una de cada cuatro veces las cámaras agarran un abucheo: -2 de Prestigio."),
+        "MN_FICHA_PIE": ("Each point above or below 10 counts.", "Cada punto sobre o bajo 10 cuenta."),
     }
     for k, (en, es) in T.items():
         ctx.loc.define_and_reference(k, en=en, es=es, file="meganations_ficha", origin="ficha")

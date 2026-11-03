@@ -58,6 +58,9 @@ PATTERNS: dict[str, list[str]] = {
     # pantallas del juego"): la ventana de eventos, las decisiones, la
     # diplomacia y los cuadros de ayuda, para pasarlos a cobre
     "eventos": [r"event"],
+    # 2026-11-03 (capturas del diseñador: "todos estos íconos de componentes van
+    # reemplazados"): los módulos y los huecos del diseñador de tanques, barcos y aviones
+    "disenador": [r"^GFX_EMI_", r"^GFX_EMSI_"],
     "decisiones": [r"decision"],
     "diplomacia": [r"diplomac"],
     "ayudas": [r"tooltip"],

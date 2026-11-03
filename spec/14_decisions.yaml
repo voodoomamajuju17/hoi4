@@ -6165,26 +6165,15 @@ categories:
   - id: MEGANATIONS_lider_category
     country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE, ZJP, ZAL]   # 2026-11-01: también Japón y Gran Bretaña
     icon_prefer: [generic_political_actions]
-    visible: {flag: MEGANATIONS_lider_listo}
+    # 2026-11-03 ("la decisión de El Líder también migrarla a la pantalla del líder"): el
+    # jugador lo hace desde la Ficha (botones Chequeo y Gira); el panel queda para la IA
+    visible: {all: [{flag: MEGANATIONS_lider_listo}, {is_ai: true}]}
     name: {english: The Leader, spanish: El Líder}
     desc:
       english: 'Charisma [?MEGANATIONS_lider_total_carisma|0]/20 (each point above or below 10: ±1.5% stability) · Cunning [?MEGANATIONS_lider_total_astucia|0]/20 (±0.075 political power a day) · Prestige [?MEGANATIONS_lider_total_prestigio|0]/20 (±2% war support) · Health [?MEGANATIONS_lider_total_salud|0]/100 (every year it drops [?MEGANATIONS_lider_desgaste|0]; at 0 the leader collapses: -20% stability, -150 political power).\n\nThe leader brings [?MEGANATIONS_lider_carisma|0] / [?MEGANATIONS_lider_astucia|0] / [?MEGANATIONS_lider_prestigio|0] / [?MEGANATIONS_lider_salud|0]; the ministers add [?MEGANATIONS_lider_bono_carisma|0] / [?MEGANATIONS_lider_bono_astucia|0] / [?MEGANATIONS_lider_bono_prestigio|0] / [?MEGANATIONS_lider_bono_salud|0].\n\nEvery leader is different. Every six months the leader faces a decision, and many of the country''s events change these stats. Nobody stays at the top: once a year every stat at 16 or more drops 2, and bad news come uninvited (scandals, relapses, coup rumours, attempts).'
       spanish: 'Carisma [?MEGANATIONS_lider_total_carisma|0]/20 (cada punto sobre o bajo 10: ±1,5% de estabilidad) · Astucia [?MEGANATIONS_lider_total_astucia|0]/20 (±0,075 de poder político por día) · Prestigio [?MEGANATIONS_lider_total_prestigio|0]/20 (±2% de apoyo a la guerra) · Salud [?MEGANATIONS_lider_total_salud|0]/100 (baja [?MEGANATIONS_lider_desgaste|0] por año; en 0 el líder se desploma: -20% de estabilidad, -150 de poder político).\n\nEl líder trae [?MEGANATIONS_lider_carisma|0] / [?MEGANATIONS_lider_astucia|0] / [?MEGANATIONS_lider_prestigio|0] / [?MEGANATIONS_lider_salud|0]; los ministros suman [?MEGANATIONS_lider_bono_carisma|0] / [?MEGANATIONS_lider_bono_astucia|0] / [?MEGANATIONS_lider_bono_prestigio|0] / [?MEGANATIONS_lider_bono_salud|0].\n\nCada líder es distinto. Cada seis meses el líder enfrenta una decisión, y muchos eventos del país mueven estas stats. Nadie se sostiene en la cima: una vez por año cada estadística en 16 o más baja 2, y las malas noticias llegan sin avisar (escándalos, recaídas, rumores de golpe, atentados).'
     src: user_request
     decisions:
-    # 2026-11-03: la Ficha del Líder también se abre desde acá, por si el botón
-    # de la barra superior cae en un mal lugar
-    - id: MEGANATIONS_lider_ficha
-      name: {english: The Leader's Sheet, spanish: La Ficha del Líder}
-      desc: {english: 'Open the sheet: the leader''s stats, health and the cabinet. It is also opened by the hexagonal button under the top bar.', spanish: 'Abre la ficha: las stats del líder, su salud y el gabinete. También la abre el botón hexagonal debajo de la barra superior.'}
-      icon_prefer: [generic_political_actions]
-      cost: 0
-      visible: {not: {flag: MEGANATIONS_ficha_abierta}}
-      effects:
-      - {effect: flag, value: MEGANATIONS_ficha_abierta}
-      - {effect: run, value: MEGANATIONS_ficha_actualizar}
-      ai:
-        factor: 0
     - id: MEGANATIONS_lider_chequeo
       name: {english: The Leader's Check-up, spanish: El Chequeo del Líder}
       desc: {english: 'A week in the military hospital, away from the cameras. +10 Health. Once a year. One time in four someone sees the leader go in: -2 Prestige.', spanish: 'Una semana en el hospital militar, lejos de las cámaras. +10 de Salud. Una vez por año. Una de cada cuatro veces alguien lo ve entrar: -2 de Prestigio.'}
@@ -6193,17 +6182,7 @@ categories:
       cooldown_days: 365
       visible: {variable_below: {var: MEGANATIONS_lider_salud, value: 100}}
       effects:
-      - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 10}
-      # 2026-10-27 ("complicala un poco"): el hospital no es secreto
-      - effect: random
-        options:
-        - weight: 3
-          effects:
-          - {effect: flag, value: MEGANATIONS_chequeo_discreto, days: 30}
-        - weight: 1
-          effects:
-          - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -2}
-      - {effect: run, value: MEGANATIONS_lider_recalcular}
+      - {effect: run, value: MEGANATIONS_lider_hacer_chequeo}
       ai:
         factor: 1
         modifiers:
@@ -6219,17 +6198,7 @@ categories:
       cooldown_days: 365
       visible: {variable_below: {var: MEGANATIONS_lider_carisma, value: 20}}
       effects:
-      - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 2}
-      - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -10}
-      - effect: random
-        options:
-        - weight: 3
-          effects:
-          - {effect: flag, value: MEGANATIONS_gira_sin_abucheos, days: 30}
-        - weight: 1
-          effects:
-          - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -2}
-      - {effect: run, value: MEGANATIONS_lider_recalcular}
+      - {effect: run, value: MEGANATIONS_lider_hacer_gira}
       ai:
         factor: 1
         modifiers:
@@ -19953,6 +19922,33 @@ scripted_effects:
         variable_below: {var: MEGANATIONS_lider_total_salud, value: 1}
       then:
       - {effect: event, id: meganations_lider.22, days: 1}
+  # 2026-11-03: lo que hacen el Chequeo y la Gira, igual desde la decisión (IA) o la Ficha (jugador)
+  - id: MEGANATIONS_lider_hacer_chequeo
+    effects:
+    - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 10}
+    # 2026-10-27 ("complicala un poco"): el hospital no es secreto
+    - effect: random
+      options:
+      - weight: 3
+        effects:
+        - {effect: flag, value: MEGANATIONS_chequeo_discreto, days: 30}
+      - weight: 1
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -2}
+    - {effect: run, value: MEGANATIONS_lider_recalcular}
+  - id: MEGANATIONS_lider_hacer_gira
+    effects:
+    - {effect: add_variable, var: MEGANATIONS_lider_carisma, value: 2}
+    - {effect: add_variable, var: MEGANATIONS_lider_salud, value: -10}
+    - effect: random
+      options:
+      - weight: 3
+        effects:
+        - {effect: flag, value: MEGANATIONS_gira_sin_abucheos, days: 30}
+      - weight: 1
+        effects:
+        - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -2}
+    - {effect: run, value: MEGANATIONS_lider_recalcular}
   - id: MEGANATIONS_lider_reiniciar
     effects:
     # 2026-11-01: cada líder trae sus stats (27_lider_ck.yaml -> MEGANATIONS_lider_detectar)

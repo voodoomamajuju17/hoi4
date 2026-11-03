@@ -280,6 +280,16 @@ def boton(D):
     return big.resize((final, final), Image.LANCZOS)
 
 
+def boton_accion(D):
+    from PIL import Image, ImageDraw
+    w, h = D["accion"]
+    img = _grad_v(w, h, (40, 58, 66), (14, 24, 30))
+    _borde_cobre(img, 0, 1)
+    d = ImageDraw.Draw(img)
+    d.line((2, 1, w - 3, 1), fill=(255, 255, 255, 40))
+    return img
+
+
 def carta(D):
     from PIL import Image, ImageDraw
     w, h = D["gabinete"][4], D["gabinete"][5]
@@ -449,7 +459,7 @@ PIEZAS = {
     "fondo": fondo, "retrato_marco": retrato_marco,
     "barra_total": lambda D: _barra(D, (TEAL_HI, TEAL, TEAL_LO), True),
     "barra_base": lambda D: _barra(D, (CU_HI, CU, CU_LO), False),
-    "salud": salud, "boton": boton, "carta": carta, "apagado": apagado, "sin_retrato": sin_retrato,
+    "salud": salud, "boton": boton, "boton_accion": boton_accion, "carta": carta, "apagado": apagado, "sin_retrato": sin_retrato,
     "marco_base": lambda D: _vacio(), "marco_efe": marco_efe, "marco_fcu": marco_fcu, "marco_asc": marco_asc,
     "marco_zal": marco_zal, "marco_zjp": marco_zjp,
 }

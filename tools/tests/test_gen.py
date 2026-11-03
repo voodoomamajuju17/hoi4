@@ -3677,7 +3677,8 @@ def test_decisiones_del_lider() -> None:
         dec = flat(mod / "common/decisions/meganations_decisions.txt") if (mod / "common/decisions/meganations_decisions.txt").exists() else ""
         if not dec:
             dec = " ".join(flat(f) for f in (mod / "common/decisions").glob("*.txt"))
-        cheq = dec[dec.index("MEGANATIONS_lider_chequeo = {"):][:1500]
+        _se = flat(mod / "common/scripted_effects/meganations_effects.txt")
+        cheq = _se[_se.index("MEGANATIONS_lider_hacer_chequeo = {"):][:1500]   # 2026-11-03: compartido con la Ficha
         check("peso: el chequeo puede salir en los diarios (-2 de Prestigio, 1 de cada 4)",
               "random_list = { 3 = {" in cheq and "MEGANATIONS_lider_prestigio value = -2" in cheq, cheq[:800])
 
@@ -4932,14 +4933,12 @@ def test_ficha_lider() -> None:
         check("ficha: el líder recalculado actualiza lo que lee la ventana (cuadro = stat + 1)",
               "MEGANATIONS_ficha_actualizar = yes" in rec and "add_to_variable = { MEGANATIONS_gui_car_total = 1 }" in se
               and "divide_variable = { MEGANATIONS_gui_salud = 5 }" in se, rec[-400:])
-        dec = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split()) \
-            if (mod / "common/decisions/meganations_decisions.txt").exists() else ""
-        if not dec:
-            dec = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/decisions").glob("*.txt")).replace("\n", " ")
-            dec = " ".join(dec.split())
-        j = dec.find("MEGANATIONS_lider_ficha = {")
-        check("ficha: también se abre desde la decisión del panel El Líder (la IA no la toma)",
-              j >= 0 and "set_country_flag = MEGANATIONS_ficha_abierta" in dec[j:j + 900] and "factor = 0" in dec[j:j + 900], dec[j:j + 400])
+        cats = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text(encoding="utf-8-sig").split())
+        lc = cats[cats.index("MEGANATIONS_lider_category = {"):][:500]
+        check("ficha: el Chequeo y la Gira son botones de la ficha y el panel El Líder queda solo para la IA (2026-11-03)",
+              "is_ai = yes" in lc and "chequeo_click = { add_political_power = -50" in sg
+              and "MEGANATIONS_lider_hacer_gira = yes" in sg and "gira_click_enabled = { has_political_power > 74" in sg
+              and 'name = "chequeo"' in gui and 'name = "gira"' in gui, lc)
         loc = (mod / "localisation/spanish/meganations_ficha_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("ficha: textos en castellano", 'MN_FICHA_TITULO:0 "EL LÍDER"' in loc and "baja [?MEGANATIONS_lider_desgaste|0]" in loc, loc[:300])
     from tools.arte import arte as _arte
