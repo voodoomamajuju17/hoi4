@@ -4939,6 +4939,13 @@ def test_ficha_lider() -> None:
               "is_ai = yes" in lc and "chequeo_click = { add_political_power = -50" in sg
               and "MEGANATIONS_lider_hacer_gira = yes" in sg and "gira_click_enabled = { has_political_power > 74" in sg
               and 'name = "chequeo"' in gui and 'name = "gira"' in gui, lc)
+        check("ficha: la Sucesión del EFE vive en la ficha (nombrar y revocar), con costo y requisitos de su decisión (2026-11-03)",
+              "her_nombrar_3_click = { add_political_power = -75 EFE_sucesion_etchegaray = yes }" in sg
+              and "her_nombrar_2_click_enabled = { has_political_power > 99" in sg and "has_stability > 0.45" in sg
+              and "her_revocar_1_visible = { tag = EFE" in sg and "EFE_sucesion_revocar = yes" in sg
+              and 'name = "her_nombrar_1"' in gui, sg[sg.find("her_"):][:300])
+        k = cats.index("EFE_sucesion_category = {") if "EFE_sucesion_category = {" in cats else -1
+        check("ficha: el panel La Sucesión queda solo para la IA", k >= 0 and "is_ai = yes" in cats[k:k + 400], cats[k:k + 400])
         loc = (mod / "localisation/spanish/meganations_ficha_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("ficha: textos en castellano", 'MN_FICHA_TITULO:0 "EL LÍDER"' in loc and "baja [?MEGANATIONS_lider_desgaste|0]" in loc, loc[:300])
     from tools.arte import arte as _arte

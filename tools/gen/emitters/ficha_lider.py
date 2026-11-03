@@ -58,7 +58,9 @@ DISENO = {
     "secciones": {"atributos": 84, "pesa": 290, "gabinete": 432},
     "efectos_y": 312, "efectos_x": (260, 510, 760), "efecto": (230, 56),
     "gabinete": (36, 452, 5, 2, 182, 104, 8, 8),   # x, y, columnas, filas, ancho, alto, separación x, y
-    "accion": (210, 30),   # botones Chequeo y Gira, abajo a la derecha (2026-11-03)
+    "accion": (210, 30),
+    "heredero": (226, 564, 247, 104, 8),   # x, y, ancho, alto, separación: la Sucesión en la 2.ª fila del gabinete
+    "boton_chico": (160, 24),   # botones Chequeo y Gira, abajo a la derecha (2026-11-03)
     "boton": 36,   # del alto de los botones de la barra (2026-11-03)
 }
 SEGMENTOS = 20
@@ -66,7 +68,8 @@ CUADROS_SALUD = 21
 
 ESTILOS_POR_DEFECTO = {"EFE": "efe", "FCU": "fcu", "ASC": "asc", "ZAL": "zal", "ZJP": "zjp"}
 ESTILOS = ("base", "efe", "fcu", "asc", "zal", "zjp")
-PIEZAS = ["fondo", "retrato_marco", "barra_total", "barra_base", "salud", "boton", "boton_accion", "carta",
+PIEZAS = ["fondo", "retrato_marco", "barra_total", "barra_base", "salud", "boton", "boton_accion", "boton_chico",
+          "carta_ancha", "carta",
           "apagado", "sin_retrato"] + [f"marco_{e}" for e in ESTILOS]
 CUADROS = {"barra_total": SEGMENTOS + 1, "barra_base": SEGMENTOS + 1, "salud": CUADROS_SALUD}
 
@@ -233,12 +236,101 @@ def emit(ctx: BuildContext) -> None:
     ctx.write_text("common/scripted_effects/meganations_ficha.txt", banner_for(SOURCE) + "".join(se))
 
     # -- la ventana ---------------------------------------------------------
-    ctx.write_text("interface/meganations_ficha.gui", banner_for(SOURCE) + _gui(max_min, cfg))
+    extra = _sucesion(ctx, lid, retratos)
+    if extra.get("gfx"):
+        gfx_path = ctx.mod_root / "interface/meganations_ficha.gfx"
+        txt = gfx_path.read_text(encoding="utf-8")
+        gfx_path.write_text(txt[:txt.rindex("}")] + extra["gfx"] + "}\n", encoding="utf-8")
+    gui = _gui(max_min, cfg)
+    gui = gui[:gui.rindex("\t}\n}\n")] + extra.get("gui", "") + "\t}\n}\n"
+    ctx.write_text("interface/meganations_ficha.gui", banner_for(SOURCE) + gui)
     ctx.write_text("common/scripted_guis/meganations_ficha.txt",
-                   banner_for(SOURCE) + _scripted_gui(tags, gab, max_min))
+                   banner_for(SOURCE) + _scripted_gui(tags, gab, max_min, extra))
     _textos(ctx)
     ctx.note(f"ficha del líder: ventana propia para {len(tags)} países, {len(lid)} retratos de líder, "
              f"gabinete de hasta {max_min} ministros")
+
+
+def _sucesion(ctx: BuildContext, lid: list[tuple[int, str]], retratos: dict[str, str]) -> dict:
+    """La Sucesión dentro de la Ficha (2026-11-03, "dale con la opción 1"): una carta por
+    candidato en la 2.ª fila del gabinete, con retrato, nombre, qué trae y "Nombrar"; el
+    elegido muestra "Revocar". Costo, requisitos y efectos salen de su decisión."""
+    from ..pdx import render
+    from .effects import render_conditions
+    cfg = config(ctx).get("succession") or {}
+    if not cfg or ctx.spec.country(cfg.get("country", "")) is None:
+        return {}
+    decs = {d["id"]: d for c in (ctx.spec.raw.get("decisions") or {}).get("categories") or []
+            for d in c.get("decisions") or []}
+    tag = cfg["country"]
+    usados: dict[str, str] = {}
+
+    def cond(spec) -> str:
+        if not spec:
+            return ""
+        return " ".join(render(render_conditions("ficha_sucesion", spec, usados, where=SOURCE)).split())
+
+    visible = f"tag = {tag} " + cond(cfg.get("visible"))
+    hx, hy, hw, hh, hs = DISENO["heredero"]
+    bw, bh = DISENO["boton_chico"]
+    num = {cid: n for n, cid in lid}
+    gui, gfx, eff, trig, props = [], [], [], [], []
+    rev = cfg.get("revoke") or {}
+    rd = decs.get(rev.get("decision", ""), {})
+    rcost = int(rd.get("cost", 150))
+    flags = [c["decision"] for c in cfg["candidates"]]
+    for i, c in enumerate(cfg["candidates"]):
+        d = decs.get(c["decision"])
+        if d is None:
+            ctx.warn(f"ficha del líder: la sucesión pide la decisión {c['decision']}, que no existe")
+            continue
+        k = i + 1
+        x, y = hx + i * (hw + hs), hy
+        cid = c["character"]
+        cost = int(d.get("cost", 0))
+        sprite = f"GFX_mn_lider_{num[cid]}" if cid in num and cid in retratos else None
+        if sprite is None and cid in retratos:
+            sprite = f"GFX_mn_cand_{cid}"
+            gfx.append(_sprite(sprite, retratos[cid]))
+        gui.append(_icon(f"her_carta_{k}", x, y, "GFX_mn_ficha_carta_ancha"))
+        gui.append(_icon(f"her_retrato_{k}", x + 6, y + 8, sprite or "GFX_mn_ficha_sin_retrato", "\n\t\t\tscale = 0.42"))
+        gui.append(_text(f"her_nombre_{k}", x + 78, y + 6, ctx.loc.reference(cid, f"ficha:{cid}"), "hoi_16mbs", hw - 84, 20))
+        clave = f"MN_FICHA_HER_{k}"
+        ctx.loc.define_and_reference(clave, en=c["summary"]["english"], es=c["summary"]["spanish"],
+                                     file="meganations_ficha", origin="ficha")
+        gui.append(_text(f"her_resumen_{k}", x + 78, y + 28, clave, "hoi_16mbs", hw - 84, 40))
+        for nombre, texto in ((f"her_nombrar_{k}", f"MN_FICHA_NOMBRAR_{k}"), (f"her_revocar_{k}", "MN_FICHA_REVOCAR")):
+            gui.append(f'\t\tbuttonType = {{\n\t\t\tname = "{nombre}"\n\t\t\tposition = {{ x = {x + 78} y = {y + hh - bh - 6} }}\n'
+                       f'\t\t\tspriteType = "GFX_mn_ficha_boton_chico"\n\t\t\ttext = "{texto}"\n'
+                       f'\t\t\tbuttonFont = "hoi_16mbs"\n\t\t\tpdx_tooltip = "{texto}_TT"\n\t\t}}\n')
+        ctx.loc.define_and_reference(f"MN_FICHA_NOMBRAR_{k}", en=f"Name  {cost}", es=f"Nombrar  {cost}",
+                                     file="meganations_ficha", origin="ficha")
+        dn = d.get("name") or {}
+        dd = d.get("desc") or {}
+        ctx.loc.define_and_reference(f"MN_FICHA_NOMBRAR_{k}_TT",
+                                     en=f"§Y{dn.get('english', '')}§! ({cost} political power)\n{dd.get('english', '')}",
+                                     es=f"§Y{dn.get('spanish', '')}§! ({cost} de poder político)\n{dd.get('spanish', '')}",
+                                     file="meganations_ficha", origin="ficha")
+        otros = " ".join(f"NOT = {{ has_country_flag = {f} }}" for f in flags)
+        req = cond(d.get("available"))
+        eff.append(f"\t\t\ther_nombrar_{k}_click = {{ add_political_power = -{cost} {c['effect']} = yes }}\n")
+        eff.append(f"\t\t\ther_revocar_{k}_click = {{ add_political_power = -{rcost} set_country_flag = "
+                   f"{{ flag = MEGANATIONS_revocar_hecho value = 1 days = 365 }} {rev.get('effect')} = yes }}\n")
+        for el in ("her_carta", "her_retrato", "her_nombre", "her_resumen"):
+            trig.append(f"\t\t\t{el}_{k}_visible = {{ {visible} }}\n")
+        trig.append(f"\t\t\ther_nombrar_{k}_visible = {{ {visible} NOT = {{ has_country_flag = {c['decision']} }} }}\n")
+        trig.append(f"\t\t\ther_nombrar_{k}_click_enabled = {{ has_political_power > {cost - 1} {otros} {req} }}\n")
+        trig.append(f"\t\t\ther_revocar_{k}_visible = {{ {visible} has_country_flag = {c['decision']} }}\n")
+        trig.append(f"\t\t\ther_revocar_{k}_click_enabled = {{ has_political_power > {rcost - 1} "
+                    f"NOT = {{ has_country_flag = MEGANATIONS_revocar_hecho }} }}\n")
+    ctx.loc.define_and_reference("MN_FICHA_REVOCAR", en=f"Revoke  {rcost}", es=f"Revocar  {rcost}",
+                                 file="meganations_ficha", origin="ficha")
+    rn, rdsc = rd.get("name") or {}, rd.get("desc") or {}
+    ctx.loc.define_and_reference("MN_FICHA_REVOCAR_TT",
+                                 en=f"§G{'Named heir'}§!\n§Y{rn.get('english', '')}§! ({rcost} political power, once a year)\n{rdsc.get('english', '')}",
+                                 es=f"§GEs el heredero elegido§!\n§Y{rn.get('spanish', '')}§! ({rcost} de poder político, una vez por año)\n{rdsc.get('spanish', '')}",
+                                 file="meganations_ficha", origin="ficha")
+    return {"gui": "".join(gui), "gfx": "".join(gfx), "effects": "".join(eff), "triggers": "".join(trig)}
 
 
 def _bono(cambios: dict) -> tuple[str, str]:
@@ -338,7 +430,8 @@ def _gui(max_min: int, cfg: dict) -> str:
     return "".join(g)
 
 
-def _scripted_gui(tags: list[str], gab: dict[str, list[str]], max_min: int) -> str:
+def _scripted_gui(tags: list[str], gab: dict[str, list[str]], max_min: int, extra: dict | None = None) -> str:
+    extra = extra or {}
     quien = _tags_or(tags)
     s = ["scripted_gui = {\n"]
     s.append("\tmn_ficha_boton = {\n\t\tcontext_type = player_context\n\t\tparent_window_token = top_bar\n"
@@ -354,7 +447,8 @@ def _scripted_gui(tags: list[str], gab: dict[str, list[str]], max_min: int) -> s
              "\t\t\tchequeo_click = { add_political_power = -50 set_country_flag = { flag = MEGANATIONS_chequeo_hecho value = 1 days = 365 } "
              "MEGANATIONS_lider_hacer_chequeo = yes MEGANATIONS_ficha_actualizar = yes }\n"
              "\t\t\tgira_click = { add_political_power = -75 set_country_flag = { flag = MEGANATIONS_gira_hecha value = 1 days = 365 } "
-             "MEGANATIONS_lider_hacer_gira = yes MEGANATIONS_ficha_actualizar = yes }\n\t\t}\n")
+             "MEGANATIONS_lider_hacer_gira = yes MEGANATIONS_ficha_actualizar = yes }\n"
+             + extra.get("effects", "") + "\t\t}\n")
     s.append("\t\tproperties = {\n\t\t\tretrato = { image = \"[MN_ficha_retrato]\" }\n"
              "\t\t\tmarco_faccion = { image = \"[MN_ficha_marco]\" }\n")
     for _, c in STATS:
@@ -363,7 +457,9 @@ def _scripted_gui(tags: list[str], gab: dict[str, list[str]], max_min: int) -> s
     s.append("\t\t\tsalud_anillo = { frame = MEGANATIONS_gui_salud }\n")
     for k in range(1, max_min + 1):
         s.append(f"\t\t\tmin_retrato_{k} = {{ image = \"[MN_min_retrato_{k}]\" }}\n")
+    s.append(extra.get("properties", ""))
     s.append("\t\t}\n\t\ttriggers = {\n")
+    s.append(extra.get("triggers", ""))
     s.append("\t\t\tchequeo_click_enabled = { has_political_power > 49 NOT = { has_country_flag = MEGANATIONS_chequeo_hecho } "
              "check_variable = { MEGANATIONS_lider_salud < 100 } }\n"
              "\t\t\tgira_click_enabled = { has_political_power > 74 NOT = { has_country_flag = MEGANATIONS_gira_hecha } "

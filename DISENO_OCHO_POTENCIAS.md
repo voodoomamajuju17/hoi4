@@ -2313,4 +2313,13 @@ le cambiemos nada por ahora. Lo demás dale para adelante".
   100" y "menor a 40", como ya hacía el cálculo.
 - Inventario: los íconos de módulos y huecos del diseñador (GFX_EMI_*,
   GFX_EMSI_*) entran al ui_para_claude.zip para pedirlos nuevos.
+- La Sucesión del EFE pasa a la Ficha (2026-11-03, "dale con la opción 1"):
+  en la segunda fila del gabinete, una carta por candidato (Tupã Benítez,
+  Custodia Yara Pereira, Mariscal Etchegaray) con retrato, qué trae y
+  "Nombrar" (costo y requisitos de su decisión: 100/100/75, Paraguay súbdito,
+  45% de estabilidad, 24 divisiones); el elegido muestra "Revocar" (150, una
+  vez por año). Se ve mientras la sucesión está abierta. Lo que hace cada uno
+  vive en EFE_sucesion_* (22_mecanicas_v4), igual para la IA, que sigue con
+  el panel de Decisiones. Configurable en 11_scenario.yaml ->
+  ficha_lider.succession.
 

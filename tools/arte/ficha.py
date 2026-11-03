@@ -290,6 +290,24 @@ def boton_accion(D):
     return img
 
 
+def boton_chico(D):
+    from PIL import Image, ImageDraw
+    w, h = D["boton_chico"]
+    img = _grad_v(w, h, (40, 58, 66), (14, 24, 30))
+    _borde_cobre(img, 0, 1)
+    return img
+
+
+def carta_ancha(D):
+    from PIL import Image, ImageDraw
+    w, h = D["heredero"][2], D["heredero"][3]
+    img = Image.new("RGBA", (w, h), (30, 18, 10, 120))
+    d = ImageDraw.Draw(img)
+    d.rectangle((0, 0, w - 1, h - 1), outline=CU_HI + (200,))
+    d.rectangle((4, 6, 4 + 68, 6 + 91), outline=CU + (255,))
+    return img
+
+
 def carta(D):
     from PIL import Image, ImageDraw
     w, h = D["gabinete"][4], D["gabinete"][5]
@@ -459,7 +477,7 @@ PIEZAS = {
     "fondo": fondo, "retrato_marco": retrato_marco,
     "barra_total": lambda D: _barra(D, (TEAL_HI, TEAL, TEAL_LO), True),
     "barra_base": lambda D: _barra(D, (CU_HI, CU, CU_LO), False),
-    "salud": salud, "boton": boton, "boton_accion": boton_accion, "carta": carta, "apagado": apagado, "sin_retrato": sin_retrato,
+    "salud": salud, "boton": boton, "boton_accion": boton_accion, "boton_chico": boton_chico, "carta_ancha": carta_ancha, "carta": carta, "apagado": apagado, "sin_retrato": sin_retrato,
     "marco_base": lambda D: _vacio(), "marco_efe": marco_efe, "marco_fcu": marco_fcu, "marco_asc": marco_asc,
     "marco_zal": marco_zal, "marco_zjp": marco_zjp,
 }

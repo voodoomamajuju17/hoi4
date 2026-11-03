@@ -213,9 +213,12 @@ decisions:
         2110, 2% por mes con cualquier Salud. Sin heredero, el Mariscal toma el palacio por la fuerza y el Paraguay se va con Tupã.\n\nTupã
         Benítez: trae a casa a Yvytu Ykua Guasu (se anexa). Yara Pereira, la Custodia electa: los guardaparques y el monte. El Mariscal
         Etchegaray, regente: el ejército, y una corte que no lo quiere.'
+    # 2026-11-03 (opción 1 elegida por el usuario): el jugador nombra al heredero desde la
+    # Ficha del Líder (sección El Heredero); el panel queda para la IA
     visible:
       not_flag: EFE_sucesion_hecha
       not: {focus: EFE_el_monte_se_levanta}
+      is_ai: true
     src: user_request
     decisions:
     - id: EFE_heredero_tupa
@@ -231,9 +234,7 @@ decisions:
         not: {flag: EFE_heredero_etchegaray}
         country: {tag: YYG, when: {subject_of: EFE}}
       effects:
-      - {effect: flag, value: EFE_heredero_tupa}
-      - {effect: add_variable, var: EFE_lealtad_yyg, value: 15}
-      - {effect: add_stability, value: -0.02}
+      - {effect: run, value: EFE_sucesion_tupa}
       ai:
         factor: 3
         modifiers:
@@ -253,9 +254,7 @@ decisions:
         not: {flag: EFE_heredero_etchegaray}
         stability_at_least: 0.45
       effects:
-      - {effect: flag, value: EFE_heredero_pereira}
-      - {effect: add_war_support, value: -0.02}
-      - {effect: add_political_power, value: 25}
+      - {effect: run, value: EFE_sucesion_pereira}
       ai:
         factor: 2
         modifiers:
@@ -275,8 +274,7 @@ decisions:
         not: {flag: EFE_heredero_pereira}
         divisions_at_least: 24
       effects:
-      - {effect: flag, value: EFE_heredero_etchegaray}
-      - {effect: army_experience, value: 15}
+      - {effect: run, value: EFE_sucesion_etchegaray}
       ai:
         factor: 1
         modifiers:
@@ -296,10 +294,7 @@ decisions:
       visible:
         any: [{flag: EFE_heredero_tupa}, {flag: EFE_heredero_pereira}, {flag: EFE_heredero_etchegaray}]
       effects:
-      - {effect: clear_flag, value: EFE_heredero_tupa}
-      - {effect: clear_flag, value: EFE_heredero_pereira}
-      - {effect: clear_flag, value: EFE_heredero_etchegaray}
-      - {effect: add_stability, value: -0.08}
+      - {effect: run, value: EFE_sucesion_revocar}
       ai: {factor: 0}
       src: user_request
 
@@ -668,6 +663,27 @@ decisions:
       src: user_request
 
   scripted_effects:
+  # 2026-11-03: lo que hace nombrar (o revocar) al heredero, igual desde la decisión (IA) o la Ficha (jugador)
+  - id: EFE_sucesion_tupa
+    effects:
+    - {effect: flag, value: EFE_heredero_tupa}
+    - {effect: add_variable, var: EFE_lealtad_yyg, value: 15}
+    - {effect: add_stability, value: -0.02}
+  - id: EFE_sucesion_pereira
+    effects:
+    - {effect: flag, value: EFE_heredero_pereira}
+    - {effect: add_war_support, value: -0.02}
+    - {effect: add_political_power, value: 25}
+  - id: EFE_sucesion_etchegaray
+    effects:
+    - {effect: flag, value: EFE_heredero_etchegaray}
+    - {effect: army_experience, value: 15}
+  - id: EFE_sucesion_revocar
+    effects:
+    - {effect: clear_flag, value: EFE_heredero_tupa}
+    - {effect: clear_flag, value: EFE_heredero_pereira}
+    - {effect: clear_flag, value: EFE_heredero_etchegaray}
+    - {effect: add_stability, value: -0.08}
   # ---------------------------------------------------------------------------
   - id: MEGANATIONS_rearme_pulso
     effects:

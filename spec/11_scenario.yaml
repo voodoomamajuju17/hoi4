@@ -452,4 +452,19 @@ ficha_lider:
   # elegir un ejército): sube a la fila de botones de la barra, después del último
   button: {x: 626, y: 37, orientation: upper_left}
   styles: {EFE: efe, FCU: fcu, ASC: asc, ZAL: zal, ZJP: zjp}
+  # 2026-11-03 ("dale con la opción 1"): La Sucesión del EFE dentro de la Ficha, en la
+  # segunda fila del gabinete. Cada candidato toma costo, requisitos y efectos de su
+  # decisión (22_mecanicas_v4); el elegido muestra "Revocar".
+  succession:
+    country: EFE
+    visible: {not_flag: EFE_sucesion_hecha, not: {focus: EFE_el_monte_se_levanta}}
+    start_slot: 7
+    candidates:
+    - {decision: EFE_heredero_tupa, character: EFE_tupa_heredero, effect: EFE_sucesion_tupa,
+       summary: {english: 'Brings Paraguay home (annexed).', spanish: 'Trae a casa al Paraguay (se anexa).'}}
+    - {decision: EFE_heredero_pereira, character: EFE_custodia_pereira, effect: EFE_sucesion_pereira,
+       summary: {english: 'Rangers and forest. Needs 45% stability.', spanish: 'Guardaparques y monte. Pide 45% de estabilidad.'}}
+    - {decision: EFE_heredero_etchegaray, character: EFE_regente_etchegaray, effect: EFE_sucesion_etchegaray,
+       summary: {english: 'The army obeys him. Needs 24 divisions.', spanish: 'El ejército le obedece. Pide 24 divisiones.'}}
+    revoke: {decision: EFE_revocar_heredero, effect: EFE_sucesion_revocar}
 
