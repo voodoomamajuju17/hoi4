@@ -419,6 +419,7 @@ def catalog() -> list[dict]:
     items += _doctrine_items()
     items += _law_items()
     items += _ui_icon_items()
+    items += _recurso_items()
     # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
     # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
     for u in _load("20_unique_units.yaml").get("units") or []:
@@ -745,6 +746,27 @@ def _law_items() -> list[dict]:
                                 f"subject centred, filling about 80% of the square canvas, little empty space."),
                 "style": LAW_STYLE,
             })
+    return items
+
+
+def _recurso_items() -> list[dict]:
+    """Íconos de los recursos propios de cada nación (arte/recursos_propios.yaml, 2026-11-03)."""
+    import yaml
+    path = REPO / "arte" / "recursos_propios.yaml"
+    if not path.exists():
+        return []
+    spec = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    items = []
+    for p in spec.get("recursos") or []:
+        dest = REPO / "assets" / "ui" / "recursos" / f"{p['id']}.dds"
+        items.append({
+            "type": "ui_icon", "tag": "INTERFAZ", "id": p["id"], "dest": dest, "done": dest.exists(),
+            "size": (512, 512), "transparent": True,
+            "description": (f"WHAT: the resource icon of {p['donde']}, shown in the top bar and tooltips of a "
+                            f"2100 grand strategy game. EXACT SUBJECT: {_one_line(p['dibujo'])} "
+                            f"NATION ACCENT COLOUR: {p['acento']}."),
+            "style": _one_line(spec.get("estilo") or ""),
+        })
     return items
 
 

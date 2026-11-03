@@ -4935,6 +4935,11 @@ def test_ficha_lider() -> None:
               j >= 0 and "set_country_flag = MEGANATIONS_ficha_abierta" in dec[j:j + 900] and "factor = 0" in dec[j:j + 900], dec[j:j + 400])
         loc = (mod / "localisation/spanish/meganations_ficha_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("ficha: textos en castellano", 'MN_FICHA_TITULO:0 "EL LÍDER"' in loc and "baja [?MEGANATIONS_lider_desgaste|0]" in loc, loc[:300])
+    from tools.arte import arte as _arte
+    rec = [i for i in _arte.catalog() if i["id"].startswith("recurso_")]
+    check("recursos propios: un ícono por moneda de cada nación (Ubuntu en la APF) y los medidores, en cobre",
+          len(rec) == 20 and any(i["id"] == "recurso_APF_ubuntu" for i in rec)
+          and all("copper" in i["style"] and "ACCENT" in i["description"] for i in rec), str(len(rec)))
     try:
         from PIL import Image as _Img
     except ImportError:

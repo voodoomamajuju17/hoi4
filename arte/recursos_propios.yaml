@@ -1,0 +1,168 @@
+# Íconos de los recursos propios de cada nación (2026-11-03).
+# Pedido: "claramente hay que reworkear varios íconos, si vas a tener recurso
+# propio como tal"; "lo que corresponda"; en la APF, "el que se gasta como
+# moneda" (Ubuntu). Van a la barra superior en cristal y cobre (el principal,
+# con número y barrita) y a las ayudas y la Ficha (los secundarios).
+# Los pide tools/arte/arte.py (16_interfaz); llegan a assets/ui/recursos/<id>.dds.
+
+estilo: >-
+  game user-interface resource icon for a grand strategy game set in the year 2100, matching a
+  "glass and copper" interface. Material: polished warm copper (#c27a45, highlights #f0b585, shadows
+  #6b3a1c) with ONE small accent in the nation colour given below (an inlay, a glowing core or an
+  enamel detail, never more than a fifth of the shape). Solid dark brown-black outline about 3% of the
+  canvas wide around the whole silhouette so it reads on any background. Slight bevel and soft inner
+  shading, no gloss blobs. Flat straight-on front view, orthographic, no perspective. Light from the
+  top left, warm and even, no cast shadow on the background. One bold simple silhouette with at most
+  three inner details: it must still read at 24 pixels. Subject centred, filling about 85% of the
+  square canvas. Transparent background, nothing around the subject: no plate, no circle, no frame,
+  no glow halo. No text, no letters, no numbers, no watermark.
+
+recursos:
+  # -- principales: los que se gastan como moneda (van en la barra superior)
+  - id: recurso_EFE_bioacero
+    tag: EFE
+    donde: Bioacero (Imperio Ecofascista), la moneda que crece en las cubas y se gasta en blindaje y decisiones
+    acento: deep leaf green with a thin line of old gold
+    dibujo: >-
+      a short thick ingot of living metal standing slightly tilted, its copper surface veined like wood
+      grain, with three small leaves sprouting from its top edge and thin root-tendrils curling from
+      its base. The leaves are the green accent.
+  - id: recurso_FCU_dividendos
+    tag: FCU
+    donde: Dividendos (Unión Libre de Capital Corporativo), lo que el Directorio se paga a sí mismo
+    acento: cold chrome blue (#5ec8ff)
+    dibujo: >-
+      a stack of four thick coins seen from the front, slightly fanned, with a sharp upward arrow rising
+      out of the top coin like a stock chart line. The arrow is the chrome blue accent.
+  - id: recurso_ASC_computo
+    tag: ASC
+    donde: Cómputo (Comuna Socialista Automatizada), la sangre del Plan que dan los núcleos de datos
+    acento: signal red (#c8102e)
+    dibujo: >-
+      a square processor chip seen from the front with short pins on all four sides, and in its centre a
+      small glowing red core shaped like a five-pointed star. The core is the red accent.
+  - id: recurso_HSN_peaje
+    tag: HSN
+    donde: Peaje (Nación de Mercado de Alta Mar), lo que paga cada barco que pasa por sus puertos
+    acento: deep sea teal
+    dibujo: >-
+      a ship's anchor seen from the front with a large coin threaded on its shank like a ring, the coin
+      halfway down. The coin has a small sea-teal enamel wave in its centre: that is the accent.
+  - id: recurso_NAS_inti
+    tag: NAS
+    donde: Inti (Reino Celeste Neoandino), la luz sagrada guardada en los templos
+    acento: bright sun gold
+    dibujo: >-
+      a round Inca sun disc with a calm face (two eyes, nose, mouth as simple engraved lines) and twelve
+      short straight rays around it, alternating long and short. The face is the gold accent.
+  - id: recurso_SHD_mandato
+    tag: SHD
+    donde: Mandato del Cielo (Directorio Sino-Armónico), la confianza del Cielo que dan las represas
+    acento: imperial jade green
+    dibujo: >-
+      a round jade bi disc (a flat ring with a round hole in the middle) standing upright, with three
+      small horizontal wave lines engraved across its lower half like water held by a dam. The jade ring
+      face is the accent, the rim is copper.
+  - id: recurso_APF_ubuntu
+    tag: APF
+    donde: Ubuntu (Federación de los Pueblos Africanos), la solidaridad que mantiene unida a la Federación
+    acento: warm ochre and earth red
+    dibujo: >-
+      three hands seen from above, each gripping the wrist of the next, forming a closed triangle with an
+      empty space in the centre. A small ochre bead sits in the empty centre: that is the accent.
+  - id: recurso_NRE_auctoritas
+    tag: NRE
+    donde: Auctoritas (Neo Imperio Romano), el respeto del ejército por el emperador
+    acento: imperial purple
+    dibujo: >-
+      a Roman legion eagle standard seen from the front: the eagle with spread wings on top of a short
+      pole, a small laurel wreath hanging under it. A purple banner strip hangs from the crossbar: that
+      is the accent.
+  - id: recurso_ZJP_giri
+    tag: ZJP
+    donde: Giri (Shogunato de los Astilleros), la deuda de honor que sostiene al Shogunato
+    acento: crimson with a hot neon pink edge (#ff2d78)
+    dibujo: >-
+      a torii gate seen from the front, simple and bold, with a short katana lying horizontally across
+      its two pillars at mid-height. The upper crossbeam is the crimson accent.
+  - id: recurso_ZAL_pompa
+    tag: ZAL
+    donde: Pompa (Albión, ruta neovictoriana), cuánto se cree la nación su propio Imperio
+    acento: deep wine red velvet
+    dibujo: >-
+      a top hat seen from the front with a small crown pinned on its band, slightly tilted. The hat band
+      is the wine-red accent.
+  - id: recurso_ZAL_sincronia
+    tag: ZAL
+    donde: Sincronía (Albión, ruta transhumanista), cuánta Albión vive conectada a la red de Londres
+    acento: electric cyan
+    dibujo: >-
+      a human head in profile facing right, its back half made of a simple circuit pattern of three lines
+      ending in dots, with a thin cable leaving the back of the neck. The circuit dots are the cyan
+      accent.
+
+  # -- secundarios: medidores que no se gastan (ayudas y Ficha)
+  - id: recurso_EFE_saturacion
+    tag: EFE
+    donde: Saturación de las cubas (Imperio Ecofascista), cuánto se exige a las cubas; alta, baja la estabilidad
+    acento: toxic yellow-green
+    dibujo: >-
+      a round laboratory vat seen from the front, filled to the brim, with a thick bubbling liquid
+      spilling over one edge in two drops. The liquid is the toxic accent.
+  - id: recurso_FCU_escandalo
+    tag: FCU
+    donde: Escándalo (Unión Libre de Capital Corporativo), lo que sabe la prensa; alto, las ciudades arden
+    acento: alarm red
+    dibujo: >-
+      a folded newspaper seen from the front with a big red blot-shaped stamp on it, and two short motion
+      lines at its upper corner as if it was just thrown. The stamp is the red accent (no letters on it).
+  - id: recurso_ASC_valhalla
+    tag: ASC
+    donde: Valhalla (Comuna Socialista Automatizada), las mentes subidas a la red
+    acento: pale ice blue
+    dibujo: >-
+      a Viking-style winged helmet seen from the front, its face opening filled with a simple glowing
+      grid of squares like a screen. The grid is the ice-blue accent.
+  - id: recurso_HSN_presion
+    tag: HSN
+    donde: Presión (Nación de Mercado de Alta Mar), cuánto aprietan las otras potencias
+    acento: storm grey-blue
+    dibujo: >-
+      a round ship's pressure gauge seen from the front, its needle pushed far into the right end of the
+      dial, three tick marks along the dial. The needle is the accent.
+  - id: recurso_SHD_orden
+    tag: SHD
+    donde: Orden (Directorio Sino-Armónico), la mano dura del Directorio
+    acento: imperial yellow
+    dibujo: >-
+      a square Chinese official seal stamp seen from the front, its handle a small crouching guardian lion.
+      The seal face is the yellow accent (no characters on it, only a simple square border).
+  - id: recurso_SHD_pueblo
+    tag: SHD
+    donde: Pueblo (Directorio Sino-Armónico), lo que la gente aguanta antes de levantarse
+    acento: rice-paper cream and red
+    dibujo: >-
+      three simple conical rice-farmer hats seen from the front, one in front and two behind, overlapping.
+      A small red tassel on the front hat is the accent.
+  - id: recurso_APF_tension
+    tag: APF
+    donde: Tensión regional (Federación de los Pueblos Africanos), el peligro que sube si no se la calma con Ubuntu
+    acento: hot orange
+    dibujo: >-
+      a short drum seen from the front with a crack running down its skin, and a thin flame rising from
+      the crack. The flame is the orange accent.
+  - id: recurso_NRE_gloria
+    tag: NRE
+    donde: Gloria (Neo Imperio Romano), lo que Roma recuerda de sí misma, que se gasta en pan y circo
+    acento: laurel green and gold
+    dibujo: >-
+      a triumphal arch seen from the front, one big arch with a small laurel wreath on top of it. The
+      laurel is the accent.
+  - id: recurso_ZJP_favor
+    tag: ZJP
+    donde: Favor de las tres Casas (Shogunato de los Astilleros), cuánto te quiere cada Casa (Zaibatsu, Yakuza, SRS)
+    acento: crimson
+    dibujo: >-
+      three overlapping round family crests (mon) seen from the front, arranged in a triangle: one with a
+      gear, one with a cherry blossom, one with a lightning bolt. The centre where they overlap is the
+      crimson accent.
