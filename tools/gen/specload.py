@@ -48,7 +48,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-01: Japón y Gran Bretaña al 65% de una meganación (sin tocar focos)
                  "29_japon_ampliado.yaml", "30_albion_ampliada.yaml", "31_lider_japon_albion.yaml",
                  # 2026-11-02: lo que persigue cada Casa de Japón y cada camino de Albión
-                 "32_metas_japon_albion.yaml"]
+                 "32_metas_japon_albion.yaml",
+                 # 2026-11-03: agentes de inteligencia propios de cada potencia
+                 "33_agentes.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -131,6 +133,11 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
         if raw.get("anarchy_incidents"):
             raise SpecError("anarchy_incidents ya existe", where=where)
         raw["anarchy_incidents"] = overlay["anarchy_incidents"]
+    # 2026-11-03: agentes de inteligencia con retrato propio
+    if overlay.get("agentes"):
+        if raw.get("agentes"):
+            raise SpecError("agentes ya existe", where=where)
+        raw["agentes"] = overlay["agentes"]
     if overlay.get("power_wars"):
         if raw.get("power_wars"):
             raise SpecError("power_wars ya existe", where=where)

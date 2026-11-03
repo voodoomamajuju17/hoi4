@@ -3000,7 +3000,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### any_controlled_state\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_game_rule\n### has_trait\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_game_rule\n### has_trait\n### has_dlc\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power hidden_effect random_controlled_state save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -3012,7 +3012,9 @@ def test_vanilla_validation() -> None:
             "add_dynamic_modifier remove_dynamic_modifier set_temp_variable add_to_temp_variable subtract_from_variable multiply_variable divide_variable round_variable set_politics add_popularity inherit_technology complete_national_focus every_country custom_effect_tooltip puppet white_peace send_equipment log "
             "create_unit division_template add_to_war every_enemy_country set_state_owner add_advisor_role every_state create_faction add_to_faction leave_faction diplomatic_relation save_event_target_as set_truce set_grand_doctrine set_sub_doctrine add_mastery set_global_flag end_puppet clr_global_flag random_country set_cosmetic_tag start_civil_war create_intelligence_agency create_equipment_variant add_equipment_production release release_puppet add_nuclear_bombs "
             # 2026-11-01: generales de Japón y Albión (lealtad a la Casa, elencos por ruta)
-            "every_army_leader every_navy_leader add_unit_leader_trait remove_unit_leader_trait\n"
+            "every_army_leader every_navy_leader add_unit_leader_trait remove_unit_leader_trait "
+            # 2026-11-03: agentes de inteligencia con retrato propio
+            "create_operative_leader\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -4870,6 +4872,19 @@ def test_agencias() -> None:
         check("el emblema va agrandado y centrado en un lienzo de 132x132 (aro de la agencia, 2026-11-01)",
               _st.unpack_from("<II", logo, 12) == (132, 132) and len(logo) == 128 + 132 * 132 * 4
               and logo[128 + (66 * 132 + 66) * 4 + 3] > 0 and logo[128 + 3] == 0)
+
+        # 2026-11-03: los agentes propios (33_agentes.yaml), creados después de la agencia
+        ef = " ".join((mod / "common/scripted_effects/meganations_agentes.txt").read_text(encoding="utf-8").split())
+        check("40 agentes con nombre, retrato propio, rasgos y nacionalidad",
+              ef.count("create_operative_leader = {") == 40
+              and 'gfx = GFX_portrait_NAS_agente_khipu gender = male traits = { operative_safe_cracker } nationalities = { NAS }' in ef
+              and 'has_dlc = "La Resistance"' in ef and "bypass_recruitment = no" in ef, ef[:300])
+        sp = (mod / "interface/meganations_agentes.gfx").read_text(encoding="utf-8")
+        check("cada retrato de agente tiene su sprite y su archivo",
+              sp.count("spriteType = {") == 40 and (mod / "gfx/leaders/SHD/agentes/SHD_agente_limo.dds").exists())
+        ev = " ".join((mod / "events/meganations_efe.txt").read_text(encoding="utf-8-sig").split())
+        check("el arranque crea la agencia y después los agentes",
+              "create_intelligence_agency = yes } MEGANATIONS_crear_agentes = yes" in ev)
 
 
 def test_ficha_lider() -> None:

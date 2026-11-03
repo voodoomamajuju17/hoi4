@@ -27,6 +27,7 @@ from .emitters import bitacora as em_bitacora
 from .emitters import mapa as em_mapa
 from .emitters import reglas as em_reglas
 from .emitters import agencias as em_agencias
+from .emitters import agentes as em_agentes
 from .emitters import ficha_lider as em_ficha_lider
 from .emitters import balance as em_balance
 from .emitters import carrera as em_carrera
@@ -96,6 +97,7 @@ EMITTERS = [
     ("manpower_relief", em_manpower_relief.emit),  # repoblacion: antes que los focos (les suma efectos)
     ("cazas", em_cazas.prepare),  # cazas gratis: el diseño de cada potencia y los focos que los dan
     ("focus_trees", em_focus_trees.emit),
+    ("agentes", em_agentes.emit),       # agentes de inteligencia (2026-11-03): antes que events, que los crea al arrancar
     ("events", em_events.emit),
     ("decisions", em_decisions.emit),
     ("destino_ia", em_focus_trees.emit_destiny_ai),  # objetivos del destino de a uno para la IA (focos y decisiones)
