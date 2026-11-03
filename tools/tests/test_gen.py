@@ -898,7 +898,7 @@ def test_territory() -> None:
         pta = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
         check("capital provisoria del satelite", "capital = 901" in pta, pta)
         check("pais sin territorio no lleva capital",
-              "capital" not in (mod / "history/countries/FCU - Free Corporative Capital Union.txt").read_text())
+              "capital" not in (mod / "history/countries/FCU - Free Corporate Capital Union.txt").read_text())
 
 
 def test_scenario() -> None:
@@ -2235,7 +2235,7 @@ def test_ai() -> None:
               any("attrition" in w for w in ctx.warnings) or "attrition" in ideas_zwb)
         zwe_ev = " ".join((mod / "events/meganations_zwe.txt").read_text().split())
         check("Eurasia: la Union de los Senores (crea la faccion y convoca a las demas)",
-              'create_faction = "La Unión de los Señores de la Guerra"' in zwe_ev and "id = meganations_zwe.11" in zwe_ev
+              'create_faction = MN_faction_the_warlords_union' in zwe_ev and "id = meganations_zwe.11" in zwe_ev
               and "ZWE = { add_to_faction = ROOT }" in zwe_ev, zwe_ev[:500])
         zwi_ev = " ".join((mod / "events/meganations_zwi.txt").read_text().split())
         check("Indostan: si cae Bagdad entra en las guerras de los Emiratos",
@@ -3972,7 +3972,7 @@ def test_junta_militar() -> None:
         check("ASC: la caza de los Hijos de Odin (muy dificil de frenar)", "ASC_valhalla_redadas = {" in dec
               and "var = ASC_valhalla value = -8" in dec and "var = ASC_valhalla value = -20" in dec and "ASC_valhalla_infiltrar = {" in dec)
         check("HSN: la Cruz del Mar se lleva la mitad de la flota y se alia con el Indostan",
-              "navy_ratio = 0.5" in e43 and "set_cosmetic_tag = HSN_CRUZADA" in e43 and 'create_faction = "The Alliance of Sea and Faith"' in e43
+              "navy_ratio = 0.5" in e43 and "set_cosmetic_tag = HSN_CRUZADA" in e43 and 'create_faction = MN_faction_the_alliance_of_sea_and_faith' in e43
               and "add_to_faction = ZWI" in e43, e43[-800:])
         check("NAS: la Junta del Sol Negro, esoterica y paranoica, con su arbol",
               "load_focus_tree = { tree = meganations_junta_focus keep_completed = no }" in e44 and "set_country_flag = MEGANATIONS_junta" in e44
@@ -4863,7 +4863,12 @@ def test_agencias() -> None:
         ag = " ".join((mod / "common/intelligence_agencies/meganations_agencias.txt").read_text(encoding="utf-8").split())
         check("una agencia por meganacion, con su emblema y solo para ella",
               all(f"picture = GFX_intelligence_agency_logo_MEGANATIONS_{t} " in ag and f"available = {{ original_tag = {t} }}" in ag
-                  for t in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE")) and "Frumentarii" in ag, ag[:400])
+                  for t in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE")) and 'names = { "MN_agencia_NRE" }' in ag, ag[:400])
+        loc_ag = {lang: (mod / f"localisation/{lang}/meganations_intelligence_l_{lang}.yml").read_text(encoding="utf-8-sig")
+                  for lang in ("english", "spanish")}
+        check("el nombre de la agencia se traduce (glosario 2026-11-03)",
+              'MN_agencia_EFE:0 "The Roots of the Empire"' in loc_ag["english"]
+              and 'MN_agencia_EFE:0 "Las Raíces del Imperio"' in loc_ag["spanish"], loc_ag["english"][:300])
         gfx = (mod / "interface/meganations_agencias.gfx").read_text(encoding="utf-8")
         check("el emblema es la imagen del Servicio de Inteligencia",
               (mod / "gfx/interface/intelligence_agency_logos/meganations/SHD.dds").exists()
