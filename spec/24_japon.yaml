@@ -127,10 +127,10 @@ decisions:
       spanish: El Giri de los Diques
     desc:
       english: 'GIRI: [?ZJP_giri] / 100\n\nThe debt of honour that holds the Shogunate together. Every month the docks pay 3, and the chosen road
-        pays 2 more (the Yakuza, 2 more at war). It buys ronin, Mechas, sabotage and the last step to the CyberShogun (50).\n80 or more: Blood
+        pays 2 more (the Yakuza, 2 more at war). It buys ronin, Mechas, sabotage and the last step to the CyberShogun (35).\n80 or more: Blood
         Debts (the clans collect on their own). 0: The Docks Hesitate.'
       spanish: 'GIRI: [?ZJP_giri] / 100\n\nLa deuda de honor que sostiene al Shogunato. Cada mes los diques pagan 3, y el camino elegido paga
-        2 más (la Yakuza, 2 más en guerra). Compra rōnin, Mechas, sabotajes y el último paso hacia el CyberShogun (50).\n80 o más: Deudas de Sangre
+        2 más (la Yakuza, 2 más en guerra). Compra rōnin, Mechas, sabotajes y el último paso hacia el CyberShogun (35).\n80 o más: Deudas de Sangre
         (los clanes cobran por su cuenta). 0: Los Diques Dudan.'
     src: user_request
     decisions:
@@ -187,7 +187,7 @@ decisions:
                 focus: ZJP_cybershogun
             - variable_below:
                 var: ZJP_giri
-                value: 65
+                value: 50
       src: user_request
     - id: ZJP_ceremonia_del_te
       name:
@@ -231,7 +231,7 @@ decisions:
                 focus: ZJP_cybershogun
             - variable_below:
                 var: ZJP_giri
-                value: 60
+                value: 45
       src: user_request
     - id: ZJP_linea_de_mechas
       name:
@@ -267,7 +267,7 @@ decisions:
                 focus: ZJP_cybershogun
             - variable_below:
                 var: ZJP_giri
-                value: 70
+                value: 55
       src: user_request
     - id: ZJP_sabotear_singapur
       name:
@@ -307,7 +307,7 @@ decisions:
                 focus: ZJP_cybershogun
             - variable_below:
                 var: ZJP_giri
-                value: 75
+                value: 60
       src: user_request
       visible:
         country_exists: HSN
@@ -345,7 +345,7 @@ decisions:
                 focus: ZJP_cybershogun
             - variable_below:
                 var: ZJP_giri
-                value: 70
+                value: 55
       src: user_request
       visible:
         focus: ZJP_zai_2
@@ -438,7 +438,7 @@ decisions:
                 focus: ZJP_cybershogun
             - variable_below:
                 var: ZJP_giri
-                value: 70
+                value: 55
       src: user_request
       visible:
         focus: ZJP_srs_2
@@ -485,7 +485,7 @@ decisions:
                 focus: ZJP_cybershogun
             - variable_below:
                 var: ZJP_giri
-                value: 80
+                value: 65
       src: user_request
       visible:
         focus: ZJP_srs_4
@@ -2129,6 +2129,8 @@ focus_trees:
             value: 20
           prerequisites:
           - ZJP_srs_10
+        # 2026-11-02: costo (35), requisito (la meta de la Casa), texto y premio se
+        # reemplazan en 32_metas_japon_albion.yaml -> extend_focuses
         - id: ZJP_cybershogun
           name:
             english: CyberShogun
