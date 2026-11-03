@@ -20,7 +20,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from . import specload, vanilla as vanilla_mod
+from . import glosario, specload, vanilla as vanilla_mod
 from .context import BuildContext
 from .emitters import ai as em_ai
 from .emitters import bitacora as em_bitacora
@@ -168,6 +168,8 @@ def build(
 
     # Cero claves huerfanas, verificado antes de escribir los .yml.
     ctx.loc.verify()
+    # El inglés contra el glosario (spec/33_glosario.yaml): solo avisa.
+    glosario.check(ctx)
     for path in ctx.loc.write(mod_root):
         ctx.track(path)
 

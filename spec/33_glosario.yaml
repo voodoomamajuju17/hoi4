@@ -1,0 +1,77 @@
+# =============================================================================
+# 33_glosario.yaml — Una sola traducción al inglés para cada término del mod
+# =============================================================================
+# Pedido del usuario (2026-11-03): traducir TODO al inglés para publicar el mod.
+# El estudio mostró que el 96% de los textos ya tiene inglés propio; lo que
+# falta es que cada término se traduzca siempre igual.
+#
+# tools/gen/glosario.py lee este archivo después de que todos los emisores
+# definieron su texto y avisa en el reporte (no frena el build):
+#   - si un texto en inglés usa una variante de `evitar` (lista, o mapa
+#     variante -> lo que va en su lugar cuando no es el término entero);
+#   - si los números de un texto no coinciden entre inglés y castellano
+#     (señal de que se cambió uno y el otro quedó viejo);
+#   - si un texto largo quedó igual en los dos idiomas (sin traducir).
+#
+# Regla de estilo: inglés británico como el juego base (armour, favour,
+# organisation); "Neo-" con guión; los nombres propios del mundo quedan en su
+# idioma (Auctoritas, Giri, Ubuntu, Kiboko).
+#
+# Los términos sin `evitar` son referencia para quien escriba texto nuevo.
+# =============================================================================
+
+glosario:
+  terminos:
+    # -- mundo y lore ---------------------------------------------------------
+    - {es: Gran Desarme, en: Great Unravelling, evitar: [Great Disarmament]}
+    - {es: Invierno de Ceniza, en: Ash Winter}
+    - {es: Observadores de Ginebra, en: Geneva Observers}
+    - {es: Coalición de Ginebra, en: Geneva Coalition}
+    - {es: Informe de Ginebra, en: Geneva Report}
+    - {es: Rearme Secreto, en: Secret Rearmament}
+    - {es: Se Terminó el Disimulo, en: The End of Pretending}
+    - {es: Forma Final, en: Final Form}
+    - {es: Destino, en: Destiny}
+    - {es: Hegemonía Mundial, en: World Hegemony}
+    - {es: Poder de Cómputo, en: Compute Power, evitar: [Computing Power]}
+    - {es: Bioacero, en: BioSteel}
+
+    # -- potencias (nombre / adjetivo) ---------------------------------------
+    - {es: Imperio Ecofascista, en: Ecofascist Empire}
+    - {es: Comuna Socialista Automatizada, en: Automated Socialist Commune}
+    - {es: Unión Libre de Capital Corporativo, en: Free Corporate Capital Union, evitar: {Corporative: Corporate}}
+    - {es: Nación de Mercado de Alta Mar, en: High Seas Market Nation}
+    - {es: Reino Celeste Neoandino, en: Neo-Andean Sky Kingdom, evitar: {NeoAndean: Neo-Andean}}
+    - {es: Directorio Sino-Armónico, en: Sino-Harmonious Directorate}
+    - {es: Federación de los Pueblos Africanos, en: African People's Federation, evitar: {Federal African: Pan-African}}
+    - {es: Neo Imperio Romano, en: Neo-Roman Empire, evitar: {Neo Roman: Neo-Roman}}
+    - {es: Santuario de Gaia, en: Gaia's Sanctuary, evitar: [Sanctuary of Gaia]}
+    - {es: Caudillos del Amazonas, en: Amazon Caudillos}
+    - {es: Coronel, en: Colonel, evitar: [Coronel]}
+
+    # -- ideologías -----------------------------------------------------------
+    - {es: Restauración, en: Restoration}
+    - {es: Colectivismo, en: Collectivism}
+    - {es: Orden de Mercado, en: Market Order}
+    - {es: Mandato Trascendente, en: Transcendent Mandate}
+
+    # -- recursos (vanilla_terms.py los renombra en los textos del juego base)
+    - {es: Hidrógeno, en: Hydrogen}
+    - {es: Titanio, en: Titanium}
+    - {es: Grafeno, en: Graphene}
+    - {es: Polímero, en: Polymer}
+    - {es: Neodimio, en: Neodymium}
+    - {es: Litio, en: Lithium}
+    - {es: Torio, en: Thorium}
+
+  # Textos donde los números difieren a propósito ("siglo XXI" = "21st century",
+  # "día 1" = "day one").
+  numeros_distintos_a_proposito:
+    - meganations_apf.21.d
+    - meganations_apf.29.d
+    - meganations_hsn_receta.21.d
+    - meganations_nre_receta.22.d
+
+  # Textos iguales en los dos idiomas que están bien así (nombres propios).
+  iguales_a_proposito:
+    - ASC_mando_vries_4

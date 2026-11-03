@@ -22,7 +22,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
-from tools.gen import art, pdx, specload  # noqa: E402
+from tools.gen import art, glosario, pdx, specload  # noqa: E402
 from tools.gen import vanilla as vanilla_mod  # noqa: E402
 from tools.gen.cli import build  # noqa: E402
 from tools.gen.errors import LocalisationError  # noqa: E402
@@ -5130,9 +5130,37 @@ def test_metas_japon_albion() -> None:
         joya = dec[dec.index("ZAL_las_llaves_de_los_mares = {"):][:4000]
         check("la primera etapa abre la guerra por la Joya de la Corona (Delhi)", "generator = { 914 }" in joya, joya[:600])
 
+def test_glosario() -> None:
+    section("glosario: chequeo del inglés")
+    g = {"terminos": [{"es": "Gran Desarme", "en": "Great Unravelling", "evitar": ["Great Disarmament"]},
+                      {"es": "Neoandino", "en": "Neo-Andean", "evitar": {"NeoAndean": "Neo-Andean"}}],
+         "numeros_distintos_a_proposito": ["OK_NUM"], "iguales_a_proposito": ["OK_IGUAL"]}
+    textos = [
+        ("A", "t", "Since the Great Disarmament", "Desde el Gran Desarme"),
+        ("B", "t", "The NeoAndean court", "La corte neoandina"),
+        ("C", "t", "+5% stability", "+10% de estabilidad"),
+        ("D", "t", "La capital de la selva", "La capital de la selva"),
+        ("OK_NUM", "t", "21st century", "siglo XXI"),
+        ("OK_IGUAL", "t", "General Marieke de Vries manda", "General Marieke de Vries manda"),
+        ("E", "replace/x", "Great Disarmament", "Gran Desarme"),
+        ("F", "t", "The Neo-Andean court, +5% stability", "La corte neoandina, +5% de estabilidad"),
+    ]
+    p = glosario.revisar(textos, g)
+    todas = {k for claves in p.values() for k in claves}
+    check("variante de lista detectada", "A" in p.get("'Great Disarmament' en vez de 'Great Unravelling'", []), str(p))
+    check("variante de mapa detectada", "B" in p.get("'NeoAndean' en vez de 'Neo-Andean'", []), str(p))
+    check("números distintos detectados", "C" in p.get("números distintos entre inglés y castellano", []), str(p))
+    check("texto sin traducir detectado", "D" in p.get("texto sin traducir (igual en los dos idiomas)", []), str(p))
+    check("excepciones respetadas", not {"OK_NUM", "OK_IGUAL"} & todas, str(p))
+    check("textos del juego base ignorados", "E" not in todas, str(p))
+    check("texto correcto sin avisos", "F" not in todas, str(p))
+    check("el glosario del spec carga", len(glosario.load(REPO_ROOT / "spec").get("terminos") or []) > 20)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
+        test_glosario,
         test_spec_loads,
         test_loc_orphans,
         test_vanilla_fixture,
