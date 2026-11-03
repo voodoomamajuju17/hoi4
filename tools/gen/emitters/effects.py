@@ -266,6 +266,8 @@ def _norm(name: str) -> str:
 # Ids de todos los focos del mod (los carga focus_trees.emit antes de
 # renderizar nada): una condición `focus:` con un id que no existe es un error.
 KNOWN_FOCUSES: set[str] = set()
+# 2026-11-03: agentes.py lo prende si escribió MEGANATIONS_crear_agentes
+CREAR_AGENTES = False
 
 
 def resolve_state(names) -> int | None:
@@ -1078,6 +1080,9 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("if", Block([("limit", Block([("NOT", Block([("has_intelligence_agency", True)]))])),
                                    ("create_intelligence_agency", True)]))
             effects_used.setdefault("create_intelligence_agency", owner)
+            # 2026-11-03: después de la agencia, los agentes propios (agentes.py)
+            if CREAR_AGENTES:
+                block.add("MEGANATIONS_crear_agentes", True)
             ec.triggers_used.setdefault("has_intelligence_agency", owner)
             continue
         if effect == "complete_focus":
