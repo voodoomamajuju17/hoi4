@@ -1,4 +1,4 @@
-"""Genera arte/pedidos_agentes_inteligencia.txt (40 retratos de espías, 5 por potencia).
+"""Genera arte/pedidos_agentes_inteligencia.txt (59 retratos de espías: 5 por potencia, 9 de Gran Bretaña, 10 de Japón).
 
 Uso: python3 arte/pedidos_agentes_inteligencia.py arte/pedidos_agentes_inteligencia.txt
 Los datos sirven también para crear los agentes cuando lleguen las imágenes."""
@@ -13,6 +13,21 @@ NATIONS = {
     "SHD": ("Socialist Hydraulic Directorate (China, a state built around dams and canals)", "the Census Bureau, which counts every person, every litre and every secret"),
     "APF": ("African Peoples' Federation (a continental federation of councils)", "the Diaspora Networks, agents spread through the African communities of the whole world"),
     "NRE": ("Neo-Roman Empire (Italy, the Balkans and the Mediterranean, a restored Rome)", "the Frumentarii, the reborn imperial secret service of Rome"),
+    # Gran Bretaña: un grupo por camino (solo existen los del camino que se juega)
+    "ZAL_VIC": ("The Neo-Victorian Empire of Great Britain (Britain and Ireland restored to Victorian pomp)", "the Crown's Secret Bureau, gaslight spies of the restored Empire"),
+    "ZAL_FUT": ("Ascending Albion (Britain and Ireland turning transhumanist, the London network)", "the Listening Nodes of the Network, agents who are part of the shared mind"),
+    "ZAL_LUD": ("Albion Workers' Republic (a revolutionary Luddite republic, Britain and Ireland)", "the Workers' Watch, a spy service with no computers, only paper, bicycles and pigeons"),
+    # Japón: tres por Casa y uno de la Shōgun
+    "ZJP_ZAI": ("The Shipyard Shogunate (Japan risen against the High Seas Market Nation)", "the House of the Zaibatsu: corporate security of the four old industrial families (emerald green and black glass)"),
+    "ZJP_YAK": ("The Shipyard Shogunate (Japan risen against the High Seas Market Nation)", "the House of the Yakuza: the Osaka clans that rule the docks (crimson neon and tattoos)"),
+    "ZJP_SRS": ("The Shipyard Shogunate (Japan risen against the High Seas Market Nation)", "the House of SRS: the Sendai pharmaceutical company that grows clones (clinical white and violet)"),
+    "ZJP_SHO": ("The Shipyard Shogunate (Japan risen against the High Seas Market Nation)", "the Shōgun Kaede Mori's own hand, loyal to no House (naval blue and the old flag)"),
+}
+
+LABELS = {
+    "ZAL_VIC": "GRAN BRETAÑA - NEOVICTORIANOS", "ZAL_FUT": "GRAN BRETAÑA - TRANSHUMANISTAS",
+    "ZAL_LUD": "GRAN BRETAÑA - LUDITAS", "ZJP_ZAI": "JAPÓN - ZAIBATSU", "ZJP_YAK": "JAPÓN - YAKUZA",
+    "ZJP_SRS": "JAPÓN - SRS", "ZJP_SHO": "JAPÓN - LA SHŌGUN (el mejor espía del juego)",
 }
 
 STYLE = ("photorealistic painted portrait matching the existing leader portraits of this Hearts of Iron IV mod: "
@@ -441,13 +456,219 @@ ag(tag="NRE", slug="augur", code="Augur", name="Andreas Kallas",
    light="bright morning Mediterranean light, warm sun from the right, the sky clear blue",
    bg="a rooftop in Athens with the Acropolis far away and a big flock of starlings drawing shapes in the sky")
 
+# ---------------------------------------------------------------- ZAL: neovictorianos
+ag(tag="ZAL", group="ZAL_VIC", slug="nightingale", code="Nightingale", name="Lady Cordelia Ashby-Vane",
+   role=("seducer of the ballrooms", "seductora de los bailes de salón"),
+   person="a 36-year-old English woman: pale porcelain skin, auburn hair in an elaborate Victorian updo with loose ringlets at the temples, a long elegant neck, green eyes, rouged lips",
+   expr="coquettish and sweet on the surface, the eyes perfectly cold",
+   clothes="a deep plum silk ball gown with an off-the-shoulder neckline and black lace trim, long black satin gloves, a velvet choker with a cameo",
+   detail="a folded black lace fan held at her chin; between the ribs of the fan a tiny brass lens glints",
+   framing="chest-up; she stands left of centre, the blurred ballroom on the right",
+   camera="eye level, 85mm at f/1.8; body in three-quarter turn to the right, the face turned back over the shoulder to the lens, the fan just below the mouth",
+   light="warm golden gaslight from crystal chandeliers, soft and theatrical, deep velvet shadows, the glints of jewels",
+   bg="a gaslit Victorian ballroom of the Restoration, blurred waltzing couples in crimson uniforms and crinolines, gilded mirrors")
+ag(tag="ZAL", group="ZAL_VIC", slug="clockwork", code="Clockwork", name="Silas Thorne",
+   role=("safecracker and saboteur of steam machines", "ladrón de cajas fuertes y saboteador de máquinas de vapor"),
+   person="a 48-year-old Englishman from the East End: thin face, long sideburns, a waxed moustache, grease under the fingernails, sharp dark eyes",
+   expr="sly and pleased, the corner of the mouth lifted",
+   clothes="a brown tweed waistcoat with a brass pocket-watch chain over a collarless shirt with rolled sleeves, a bowler hat tipped back",
+   detail="a jeweller's loupe with several brass lenses clipped over the left eye (the eye still visible through it), a tiny brass gear held up between two fingers",
+   framing="tight head-and-shoulders, the hand with the gear entering the frame at chin height; centred",
+   camera="high angle, 50mm at f/2.8, as if seen from above the workbench; he looks up into the lens from his work",
+   light="a single warm oil lamp from below right on the bench, brass reflections dancing on his face, the rest of the room dark brown",
+   bg="the inside of a bank vault being opened, the huge brass gears of the vault door in soft focus behind him")
+ag(tag="ZAL", group="ZAL_VIC", slug="fog", code="Fog", name="Captain Rupert Lyle-Hartley",
+   role=("counter-intelligence officer of the Crown", "oficial de contrainteligencia de la Corona"),
+   person="a 55-year-old English gentleman: long narrow face, grey mutton-chop whiskers, a monocle on a silk cord tucked into the waistcoat, heavy-lidded pale blue eyes",
+   expr="bored and aristocratic, which is exactly how he disarms people",
+   clothes="a black Inverness cape over a dark grey frock coat, a high white wing collar and a black silk cravat with a pearl pin, a black top hat",
+   detail="a silver-headed walking cane held near the shoulder; the silver head is shaped like a lion with tiny brass vents (an air gun)",
+   framing="bust cut at mid-chest; he is on the right third, the empty fog on the left",
+   camera="eye level, 135mm telephoto at f/2.8 from across a street, a lamp post slightly in front and out of focus; body in profile to the left, head turned to the lens",
+   light="night fog: a gas street lamp behind and above him making a glowing halo in the mist, a soft cold fill on the face, the rest dissolving into grey",
+   bg="a fog-bound London embankment at night, the silhouette of Westminster and steam carriages barely visible")
+
+# ---------------------------------------------------------------- ZAL: transhumanistas
+ag(tag="ZAL", group="ZAL_FUT", slug="ping", code="Ping", name="Priya Chandrasekar",
+   role=("network-born hacker", "hackeadora nacida en la red"),
+   person="a 25-year-old British Indian woman from Leicester: brown skin, long straight black hair tucked behind the ears, a delicate glowing cyan lace pattern of implants running from the temples down the neck, dark eyes with a faint cyan ring",
+   expr="distracted and slightly smiling, as if hearing a joke in another room",
+   clothes="a seamless silver-grey high-collared coat with no buttons and a thin cyan light line along the collar",
+   detail="no device at all in her hands: tiny cyan sparks of light jump between her fingertips",
+   framing="close portrait from the top of the head to the collarbones, centred",
+   camera="eye level, 85mm at f/2, perfectly frontal and symmetrical",
+   light="cool white key light with a thin cyan rim light, clean and clinical; the implants glowing softly on her skin",
+   bg="a dark void filled with a soft sphere of thousands of linked light nodes in cyan and white, as if she were inside the network")
+ag(tag="ZAL", group="ZAL_FUT", slug="mirror", code="Mirror", name="Callum Reid",
+   role=("face-changing infiltrator", "infiltrado que cambia de cara"),
+   person="a 41-year-old Scottish man: pale skin, short dark red hair, a square jaw, freckles, light blue eyes; a fine almost invisible seam of synthetic skin runs along the jawline and under the ear",
+   expr="calm and slightly unsettling, like a face that is not quite his",
+   clothes="a charcoal technician's jacket with silver piping over a cyan undershirt",
+   detail="behind him, a mirror reflects his head from behind, but the reflected face in the mirror's edge shows a different man (a subtle second face in soft focus)",
+   framing="head-and-shoulders on the left third; the mirror occupies the right side of the frame",
+   camera="eye level, 50mm at f/2; three-quarter turn to the left, eyes to the lens",
+   light="cold white light from a ring of LEDs around the mirror, a cyan rim from behind",
+   bg="a clean white dressing room of the Network with a large mirror ringed with lights, racks of synthetic faces on stands, out of focus")
+ag(tag="ZAL", group="ZAL_FUT", slug="lacuna", code="Lacuna", name="Dr. Hannah Okonjo-Bright",
+   role=("uploaded mind in a synthetic body, data thief", "mente subida a un cuerpo sintético, ladrona de datos"),
+   person="a woman who was 50 when she uploaded, now in a synthetic body that looks about 35: Black British, dark smooth skin with a faint satin sheen, close-cropped grey hair, kind dark eyes, the neck seamless like porcelain where it meets the collar",
+   expr="gentle and melancholic, a small sad smile",
+   clothes="a seamless silver-grey coat with a high collar and a cyan light line, a small old analogue wristwatch from her human life",
+   detail="at the base of the throat a small round panel is open, showing soft cyan light inside",
+   framing="bust cut at mid-chest, centred, plenty of air above the head",
+   camera="slightly low angle, 85mm at f/2.8; body square, the head tilted a little to the left",
+   light="soft diffuse white from a large window wall, very gentle, with the cyan glow of the throat panel lighting the chin from below",
+   bg="a quiet laboratory of the Docklands with repaired server racks glowing cyan and the Thames through a window, hammer dents still visible on the rack doors")
+
+# ---------------------------------------------------------------- ZAL: luditas
+ag(tag="ZAL", group="ZAL_LUD", slug="hammer", code="Hammer", name="Bridget Doyle",
+   role=("saboteur who smashes servers", "saboteadora que rompe servidores"),
+   person="a 44-year-old Irish woman from Belfast: freckled weathered skin, thick red-grey hair tied back roughly, a broken front tooth, strong forearms, green eyes",
+   expr="fierce and grinning, a fighter's joy",
+   clothes="a hand-sewn tweed jacket with brass buttons and a red armband, a knitted scarf, no electronics anywhere",
+   detail="a sledgehammer resting on her shoulder, its head scratched and dented; shards of circuit board stuck in the wool of her sleeve",
+   framing="chest-up with the hammer head in the upper right corner; she stands slightly left of centre",
+   camera="low angle, 28mm at f/4 close to her, the dead machines looming behind; she looks down into the lens",
+   light="grey rainy daylight through a smashed roof, rain falling in streaks, a flicker of a dying red server light on one cheek",
+   bg="a dead server hall with smashed racks, hanging cables and water dripping from the ceiling")
+ag(tag="ZAL", group="ZAL_LUD", slug="carrier", code="Carrier", name="Ned Haworth",
+   role=("old spymaster of the pigeon post", "viejo jefe de red del correo de palomas"),
+   person="a 72-year-old Yorkshireman: ruddy wrinkled face, white whiskers, bushy white eyebrows, a flat cap, twinkling blue eyes",
+   expr="kindly and amused, the look of a grandfather who knows everybody's business",
+   clothes="a patched brown tweed coat, a knitted green waistcoat, a red armband faded almost to pink",
+   detail="a grey carrier pigeon perched on his raised hand at chest height, a tiny paper message rolled and tied to its leg",
+   framing="bust cut at mid-chest, the pigeon inside the frame at the lower left; centred",
+   camera="eye level, 50mm at f/4, documentary feel; he faces the lens squarely",
+   light="soft pale dawn light over the moor, cool blue-grey with a warm streak of sun on the horizon behind him",
+   bg="a brick pigeon loft on a Yorkshire moor at dawn, stone walls, heather and a flight of pigeons taking off")
+ag(tag="ZAL", group="ZAL_LUD", slug="thistle", code="Thistle", name="Moira Gunn",
+   role=("infiltrator who is invisible to the machines", "infiltrada invisible para las máquinas"),
+   person="a 30-year-old Scottish woman from Glasgow: pale skin, dark curly hair under a knitted tam, pink cheeks from the cold, sharp grey eyes, no implants of any kind",
+   expr="cheerful and quick, a crooked smile",
+   clothes="a long wool coat in heather tweed, a thick knitted scarf, leather gloves, the red armband hidden under the coat and just visible at the cuff",
+   detail="the handlebar and wicker basket of a bicycle at the lower edge of the frame, a bundle of paper letters in the basket",
+   framing="head-and-shoulders, placed on the right third, the wet street on the left",
+   camera="eye level, 85mm at f/2 from across the street in the rain; she turns her head toward the lens",
+   light="grey rainy daylight with a warm yellow light from a pub window on her face",
+   bg="a rainy Glasgow street of sandstone tenements, a smashed surveillance camera hanging from a lamp post")
+
+# ---------------------------------------------------------------- ZJP: Zaibatsu
+ag(tag="ZJP", group="ZJP_ZAI", slug="soroban", code="Soroban", name="Reiko Tanabe",
+   role=("industrial spy of the four families", "espía industrial de las cuatro familias"),
+   person="a 39-year-old Japanese woman: pale skin, sleek black hair in a sharp low ponytail, thin eyebrows, narrow emerald-tinted glasses",
+   expr="polite, unreadable, a very small smile",
+   clothes="a sharp black suit with a high collar, a thin emerald tie, a small emerald enamel corporate pin (abstract shape, no letters)",
+   detail="a tiny black-glass data cube held between two fingers, a faint emerald light inside it",
+   framing="chest-up, centred, the hand with the cube at chin height",
+   camera="eye level, 85mm at f/2, seen as a reflection in a black glass wall: her face sharp, the city lights layered over the glass",
+   light="cool emerald light from the city outside as rim, a soft white key from the left, glossy reflections on black glass",
+   bg="the night skyline of Tokyo seen from the top of a black glass tower, emerald-lit corporate floors below")
+ag(tag="ZJP", group="ZJP_ZAI", slug="netsuke", code="Netsuke", name="Haruto Saionji",
+   role=("playboy heir and seducer", "heredero calavera y seductor"),
+   person="a 28-year-old Japanese man: handsome smooth face, longish black hair swept to one side, a lazy charming smile, a small diamond stud in one ear",
+   expr="lazy, charming and amused, half-closed eyes",
+   clothes="a black velvet dinner jacket with an emerald silk lapel and an emerald bow tie undone at the collar",
+   detail="a carved ivory-white netsuke toggle hanging from his breast pocket on a silk cord; a glass of whisky in his hand",
+   framing="chest-up; he sits on the left third leaning back, the bar lights on the right",
+   camera="slightly low angle, 50mm at f/1.8; body turned to the right, head turned back to the lens",
+   light="warm amber bar light from below, emerald neon rim from behind, glinting glass",
+   bg="a private rooftop bar over Tokyo Bay at night, the cranes of the Yokosuka docks far away")
+ag(tag="ZJP", group="ZJP_ZAI", slug="kintsugi", code="Kintsugi", name="Gorō Ishikawa",
+   role=("fixer who repairs scandals", "componedor de escándalos"),
+   person="a 61-year-old Japanese man: heavy lidded eyes, thinning grey hair combed back, a grey moustache, deep lines around the mouth",
+   expr="serene and patient, the face of a man who has buried many problems",
+   clothes="a dark charcoal kimono-collared jacket over a black shirt, a thin emerald silk band on the collar",
+   detail="he holds in both hands at chest height a black tea bowl repaired with gold kintsugi seams",
+   framing="bust cut at mid-chest, the bowl in the lower third; centred",
+   camera="eye level, kneeling height, 105mm at f/2.8; frontal, eyes to the lens",
+   light="soft side light from a paper shoji screen on the left, warm and quiet, the gold seams catching the light",
+   bg="a traditional tea room on the top floor of a corporate tower, tatami and a single hanging scroll (no readable characters)")
+
+# ---------------------------------------------------------------- ZJP: Yakuza
+ag(tag="ZJP", group="ZJP_YAK", slug="oni", code="Oni", name="Kenji Murata",
+   role=("enforcer and assassin of the Osaka clan", "ejecutor y asesino del clan de Osaka"),
+   person="a 45-year-old Japanese man: broad hard face, a slicked-back black pompadour, a scar across the upper lip, a missing tip of the left little finger",
+   expr="dangerous calm, eyes heavy and still",
+   clothes="a black suit jacket worn open over a bare chest showing a full irezumi tattoo of a red oni demon and waves",
+   detail="a crimson silk pocket square and a short tantō knife in a lacquered sheath tucked in the waistband, just visible",
+   framing="chest-up, centred, the tattoo filling the lower half",
+   camera="low angle, 35mm at f/2 close to him; frontal, looking down into the lens",
+   light="crimson and magenta neon from the left, flickering white from pachinko machines on the right, smoke in the air",
+   bg="a crowded pachinko parlour at night, rows of glowing machines and steel balls, all blurred")
+ag(tag="ZJP", group="ZJP_YAK", slug="kitsune", code="Kitsune", name="Yuki Arai",
+   role=("hostess-club seducer", "seductora de club de anfitrionas"),
+   person="a 31-year-old Japanese woman: pale skin, glossy black hair in a modern updo with a red lacquer comb, red lips, sharp dark eyes with red eyeliner",
+   expr="sweet and flirtatious, with a hint of mockery",
+   clothes="a modern crimson silk kimono-dress with black obi, one shoulder slipping, a koi tattoo visible on the shoulder",
+   detail="a white kitsune fox mask pushed up onto the side of her head, the face completely uncovered",
+   framing="head-and-shoulders, on the right third, neon bokeh on the left",
+   camera="eye level, 85mm at f/1.4; profile to the left, the head turned back to the lens",
+   light="crimson neon key from the left, a cool blue fill from a window, glittering bokeh",
+   bg="a back alley of Dōtonbori in Osaka at night, wet asphalt and neon signs (no readable text)")
+ag(tag="ZJP", group="ZJP_YAK", slug="tanuki", code="Tanuki", name="Shirō Ogata",
+   role=("fence and informant of the docks", "reducidor e informante de los muelles"),
+   person="a 66-year-old Japanese man: round chubby face, a bald head with a fringe of white hair, small twinkling eyes, rosy cheeks",
+   expr="jolly and harmless-looking, laughing with his eyes",
+   clothes="a crimson aloha-style shirt with black dragon prints under a stained white apron, a towel tied around the head",
+   detail="a ladle in one hand and, tucked in the apron pocket, a thick envelope of money; dragon tattoos peeking out of the short sleeves",
+   framing="bust cut at mid-chest, centred, steam rising across the lower part of the frame",
+   camera="eye level, 50mm at f/2.8, as seen from the customer's stool; frontal",
+   light="warm yellow light from paper lanterns of the stall above, steam diffusing it, crimson neon from the street behind",
+   bg="a tiny ramen stall under the railway tracks of Osaka, a train passing above in a blur")
+
+# ---------------------------------------------------------------- ZJP: SRS
+ag(tag="ZJP", group="ZJP_SRS", slug="lote_0451", code="Lote 0451", name="no name, batch 0451",
+   role=("clone infiltrator", "infiltrado clon"),
+   person="a clone who is three months old but looks like a 30-year-old Japanese man: perfectly symmetrical smooth face, short black hair cut exactly the same as the copies behind him, no scars at all, very calm dark eyes, a small barcode-like pattern of dots tattooed behind the ear (no numbers)",
+   expr="blank and obedient, but with a first hint of curiosity in the eyes",
+   clothes="a plain white high-collared clinical uniform with a violet stripe on the shoulder",
+   detail="behind him, out of focus, three more copies of exactly the same face standing in a row",
+   framing="head-and-shoulders, centred, the copies lined up behind on both sides",
+   camera="eye level, 50mm at f/2, strictly frontal and symmetrical like a catalogue photo",
+   light="flat clinical white light, a violet accent light from above",
+   bg="a sterile white corridor with acid-green growth vats in the distance")
+ag(tag="ZJP", group="ZJP_SRS", slug="placebo", code="Placebo", name="Dr. Emi Kurokawa",
+   role=("poisoner and biochemist", "envenenadora y bioquímica"),
+   person="a 47-year-old Japanese woman: pale skin, black hair in a severe straight bob with a grey streak, thin lips, cold elegant face",
+   expr="gentle bedside smile that does not reach the eyes",
+   clothes="an impeccable white lab coat over a violet blouse, a small violet pharmaceutical logo pin (no letters)",
+   detail="a slim silver injector pen held up like a cigarette, a single violet drop at its tip",
+   framing="chest-up; she stands on the left third, the laboratory on the right",
+   camera="eye level, 85mm at f/2; three-quarter turn to the right, eyes to the lens",
+   light="cold white overhead light with violet lights from the shelves, glass reflections",
+   bg="a laboratory with shelves of glass vials of violet liquid, white and spotless")
+ag(tag="ZJP", group="ZJP_SRS", slug="wetware", code="Wetware", name="Sora Fujimoto",
+   role=("hacker wired straight into the brain", "hacker conectado directo al cerebro"),
+   person="a 22-year-old Japanese person: androgynous pale face, white-bleached hair cut short and spiky, thin violet cables plugged into small ports along the back of the skull, dark eyes with violet pupils",
+   expr="feverish and delighted, a wide unblinking stare",
+   clothes="an oversized white hospital-style jacket with a violet stripe, a black turtleneck",
+   detail="violet light running along the cables like pulses, reflected in the eyes",
+   framing="close portrait from the top of the head to the collarbones, a 10 degree Dutch tilt",
+   camera="high angle, 35mm at f/2 from above; looking up into the lens",
+   light="violet glow from the cables and screens as key, cold white rim from behind, everything else dark",
+   bg="a dark night laboratory in the basement of Sendai, rows of violet monitors and growth vats")
+
+# ---------------------------------------------------------------- ZJP: la Shōgun
+ag(tag="ZJP", group="ZJP_SHO", slug="mumei", code="Mumei", name="Tsubaki Hayakawa",
+   role=("the best spy in the world: the Shōgun's tea server, who has poured tea in every headquarters of the Pacific", "la mejor espía del mundo: la que sirve el té de la Shōgun y lo sirvió en todos los cuarteles del Pacífico"),
+   person="a 74-year-old Japanese woman: small and slight, a soft wrinkled face, white hair in a neat bun with a plain wooden pin, very bright black eyes that do not fit her humble look",
+   expr="humble and gentle at first glance; looking longer, a sharp, knowing, almost frightening intelligence in the eyes and a tiny smile",
+   clothes="a plain navy-blue cotton work kimono with a white apron, sleeves tied back with a cord; on the apron, almost hidden, a tiny pin of the old red-sun flag",
+   detail="she holds a simple iron teapot and a single cup at chest height; on the tray, folded under the cup, a sheet of paper with a broken red wax seal of the High Seas Market (no letters)",
+   framing="bust cut at mid-chest, centred, the teapot and tray in the lower third; this is the masterpiece of the series, the most careful and detailed portrait of all",
+   camera="eye level, 85mm at f/2, quiet and intimate; she is slightly bowed as if serving, and lifts only her eyes to the lens",
+   light="low-key chiaroscuro: a single soft warm light from a paper lantern at the left, the rest of the room in deep naval-blue shadow, a thin cold blue rim of moonlight from a window on her white hair",
+   bg="the admiralty of Yokosuka at night: a long map table with fleet markers and a tall window over the dry docks and a half-built Mecha in scaffolding, all in soft focus, an old Japanese naval flag hanging on the wall")
+
 def out():
     o = []
     w = o.append
-    w("PEDIDOS DE RETRATOS - AGENTES DE INTELIGENCIA (40 retratos, 5 por potencia)")
+    w("PEDIDOS DE RETRATOS - AGENTES DE INTELIGENCIA (59 retratos)")
     w("=" * 77)
     w("")
-    w("Espías para la agencia de inteligencia de cada meganación: los agentes que")
+    w("Espías para la agencia de inteligencia de cada meganación (5 cada una), de")
+    w("Gran Bretaña (3 por camino: neovictorianos, transhumanistas, luditas) y de")
+    w("Japón (3 por Casa más el agente de la Shōgun): los agentes que")
     w("hoy salen con el retrato genérico del juego base cuando reclutás uno.")
     w("")
     w("Para ChatGPT:")
@@ -464,13 +685,13 @@ def out():
     w("los conecta como agentes propios de cada potencia.")
     w("")
     n = 0
-    for tag, (nation, agency) in NATIONS.items():
-        group = [a for a in A if a["tag"] == tag]
+    for key, (nation, agency) in NATIONS.items():
+        group = [a for a in A if a.get("group", a["tag"]) == key]
         w("")
-        w(f"########## {tag} ({len(group)}) ##########")
+        w(f"########## {LABELS.get(key, key)} ({len(group)}) ##########")
         for a in group:
             n += 1
-            ident = f"{tag}_agente_{a['slug']}"
+            ident = f"{a['tag']}_agente_{a['slug']}"
             w("")
             w("ASSET_REQUEST")
             w("type: operative_portrait")
@@ -484,7 +705,7 @@ def out():
                  f"CAMERA: {a['camera']}. LIGHT: {a['light']}. BACKGROUND: {a['bg']}; recognisable but softer than the face.")
             w(f"description: {d}")
             w("transparent_background: false")
-    assert n == 40, n
+    assert n == 59, n
     return "\n".join(o) + "\n"
 
 if __name__ == "__main__":
