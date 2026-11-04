@@ -428,6 +428,14 @@ def paso_reporte(juego, ctx) -> None:
                     zf.write(inventario, "ui_inventario.txt")
                     for rel, src in sorted((ctx.data.get("ui_textures") or {}).items()):
                         zf.write(src, f"originales/{rel}")
+                    # 2026-11-03 (rediseño de pantallas): los .gui y .gfx del juego (son
+                    # texto y pesan poco) para ver qué pieza va en cada pantalla y poder
+                    # cambiar dónde va cada cosa
+                    juego = ctx.vanilla.root if ctx.vanilla else None
+                    if juego is not None:
+                        for archivo in sorted((juego / "interface").glob("**/*")):
+                            if archivo.suffix.lower() in (".gui", ".gfx") and archivo.is_file():
+                                zf.write(archivo, f"interface/{archivo.relative_to(juego / 'interface').as_posix()}")
                 bien(f"Interfaz: mandame tambien {destino.name}")
             except OSError as exc:
                 ojo(f"No pude armar ui_para_claude.zip: {exc}")
