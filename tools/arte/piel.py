@@ -322,6 +322,8 @@ def _icono(pieza: dict, original, material):
         caja = _caja(frames[0])   # la misma caja en los dos cuadros: el dibujo no salta al pasar el mouse
         for i, f in enumerate(frames):
             placa = retexturar(_placa(f, 4), material)
+            if _icono_path(pieza["id"]).stem.endswith("_v2"):
+                placa = cristal_y_cobre(placa)   # el ícono nuevo ya viene en cobre: solo la placa
             dib = _en_caja(icon, (fw, fh), caja)
             placa.alpha_composite(_brillo(dib, 0.82 if i == 0 else 1.12))
             out.append(placa)
@@ -454,7 +456,8 @@ def aplicar(originales: str | None = None) -> list[str]:
                 hechas.append(rel)
                 continue
             img = retexturar(original, material)
-        if not (rel in iconos and iconos[rel].get("uso") == "foto"):
+        nuevo = rel in iconos and rel in con_icono and _icono_path(iconos[rel]["id"]).stem.endswith("_v2")
+        if not (rel in iconos and iconos[rel].get("uso") == "foto") and not nuevo:
             img = cristal_y_cobre(img, rel in set(spec.get("retexturar_todo") or []))
         _escribir(img, rel)
         hechas.append(rel)
