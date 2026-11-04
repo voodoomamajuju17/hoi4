@@ -1,4 +1,4 @@
-"""Chequeo del inglés contra el glosario (spec/33_glosario.yaml).
+"""Chequeo del inglés contra el glosario (spec/34_glosario.yaml).
 
 Corre después de que todos los emisores definieron su texto y antes de
 escribir los .yml. No frena el build: deja avisos en el reporte para que el
@@ -23,7 +23,7 @@ import yaml
 
 from .context import BuildContext
 
-GLOSARIO_FILE = "33_glosario.yaml"
+GLOSARIO_FILE = "34_glosario.yaml"
 
 # Lo que no es texto: colores, variables, comandos y saltos de línea.
 _MARKUP = re.compile(r"§.|\$[^$]*\$|\[[^\]]*\]|£[^£]*£|\\n")
