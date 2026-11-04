@@ -112,7 +112,7 @@ def _rampa(puntos):
     return tabla
 
 
-def cristal_y_cobre(img):
+def cristal_y_cobre(img, todo: bool = False):
     """Grafito -> cristal, relieves claros y acento verde azulado -> cobre.
     Misma forma y transparencia; los colores que dicen algo quedan."""
     from PIL import Image, ImageChops
@@ -134,10 +134,54 @@ def cristal_y_cobre(img):
                                 val.point(lambda x: 0 if x < 30 else min(255, (x - 30) * 4)))
     turq = ImageChops.multiply(color, hue.point(lambda x: 255 if TURQUESA[0] <= x <= TURQUESA[1] else 0))
     otro = ImageChops.multiply(color, ImageChops.invert(hue.point(lambda x: 255 if TURQUESA[0] <= x <= TURQUESA[1] else 0)))
+    if todo:
+        # retexturar_todo (2026-11-03): los botones verdes del juego también pasan a cobre
+        turq, otro = color, Image.new("L", img.size, 0)
     out = Image.composite(rgb, vidrio, otro)
     out = Image.composite(cobre, out, turq).convert("RGBA")
     out.putalpha(alpha)
     return out
+
+
+def boton_nuevo(original, n: int):
+    """Botón dibujado de cero como en la maqueta (2026-11-03): vidrio azul petróleo con
+    borde de cobre, en la forma (transparencia) del original y con sus cuadros: el
+    primero normal, el segundo (mouse encima) más claro, el tercero (apretado) más oscuro."""
+    from PIL import Image, ImageChops, ImageFilter
+    frames = _frames(original.convert("RGBA"), n)
+    out = []
+    for i, f in enumerate(frames):
+        w, h = f.size
+        alpha = f.getchannel("A")
+        k = 1.0 if i == 0 else (1.35 if i == 1 else 0.75)
+        cuerpo = Image.new("RGB", (w, h))
+        px = cuerpo.load()
+        for y in range(h):
+            t = y / max(1, h - 1)
+            top, bot = (40, 58, 66), (12, 21, 27)
+            c = tuple(min(255, round((top[j] + (bot[j] - top[j]) * t) * k)) for j in range(3))
+            for x in range(w):
+                px[x, y] = c
+        # borde de cobre: el contorno de la forma (2 px), más claro arriba
+        duro = alpha.point(lambda a: 255 if a > 100 else 0)
+        adentro = duro.filter(ImageFilter.MinFilter(5))
+        borde = ImageChops.subtract(duro, adentro)
+        cobre = Image.new("RGB", (w, h))
+        cp = cobre.load()
+        for y in range(h):
+            t = y / max(1, h - 1)
+            c = (round(240 + (107 - 240) * t), round(181 + (58 - 181) * t), round(133 + (28 - 133) * t))
+            for x in range(w):
+                cp[x, y] = c
+        img = Image.composite(cobre, cuerpo, borde).convert("RGBA")
+        # un brillo fino arriba, adentro del borde
+        brillo = ImageChops.subtract(adentro, adentro.transform((w, h), Image.AFFINE, (1, 0, 0, 0, 1, 1)))
+        luz = Image.new("RGBA", (w, h), (255, 255, 255, 0))
+        luz.putalpha(brillo.point(lambda a: 40 if a else 0))
+        img.alpha_composite(luz)
+        img.putalpha(alpha)
+        out.append(img)
+    return _join(out)
 
 
 def convertir_a_cobre() -> list[str]:
@@ -161,6 +205,12 @@ def convertir_a_cobre() -> list[str]:
         nuevas.append(rel)
     marca.write_text("\n".join(sorted(hechas | set(nuevas))) + "\n", encoding="utf-8")
     return [f"piel: {len(nuevas)} texturas pasadas a cristal y cobre ({len(hechas)} ya estaban)"]
+
+
+def _icono_path(ident: str):
+    """La versión nueva del ícono (<id>_v2.dds, rediseño 2026-11-03) si llegó; si no, la de antes."""
+    nuevo = ICONS / f"{ident}_v2.dds"
+    return nuevo if nuevo.exists() else ICONS / f"{ident}.dds"
 
 
 def _frames(img, n: int):
@@ -259,7 +309,7 @@ def _en_caja(icon, size, caja):
 def _icono(pieza: dict, original, material):
     """Textura final de una pieza con ícono nuevo (o None si todavía no llegó)."""
     from PIL import Image, ImageFilter
-    path = ICONS / f"{pieza['id']}.dds"
+    path = _icono_path(pieza['id'])
     if not path.exists():
         return None
     icon = Image.open(path).convert("RGBA")
@@ -310,7 +360,7 @@ def _tira(pieza: dict, original, material):
     out, puestos = [], 0
     for k, f in enumerate(frames, start=1):
         ident = (pieza.get("iconos") or {}).get(k)
-        path = ICONS / f"{ident}.dds" if ident else None
+        path = _icono_path(ident) if ident else None
         if not path or not path.exists():
             out.append(f)
             continue
@@ -358,6 +408,20 @@ def aplicar(originales: str | None = None) -> list[str]:
     spec = cargar()
     material = _material(REPO / spec.get("material", "assets/ui/fondo_ventanas.dds"))
     iconos = {p["textura"]: p for p in spec.get("iconos") or []}
+    # cuadros y mosaico de cada textura, del inventario que viene en el zip
+    import re as _re
+    cuadros: dict[str, tuple[int, bool]] = {}
+    inv = (root.parent / "ui_inventario.txt") if (root.parent / "ui_inventario.txt").exists() else root / "ui_inventario.txt"
+    if inv.exists():
+        for linea in inv.read_text(encoding="utf-8").splitlines():
+            if not linea.startswith("  gfx"):
+                continue
+            rel_ = _re.sub("/+", "/", linea.split()[0])
+            m = _re.search(r"\((\d+) cuadros", linea)
+            # las que el juego estira o repite por partes (borde fijo) no llevan escuadras propias
+            cuadros[rel_] = (int(m.group(1)) if m else 1, "centro en mosaico" in linea, "borde " in linea)
+    # las que tienen un dibujo que hay que conservar (alertas, íconos): solo cambian de color
+    conservar = set(spec.get("conservar_dibujo") or [])
     hechas, faltan, con_icono = [], [], []
     for rel in list(dict.fromkeys((spec.get("retexturar") or []) + list(iconos))):
         src = root / rel
@@ -373,9 +437,25 @@ def aplicar(originales: str | None = None) -> list[str]:
         if img is None:
             if rel not in (spec.get("retexturar") or []):
                 continue
+            nuevos = {b["textura"]: b for b in spec.get("botones_nuevos") or []}
+            if rel in nuevos:
+                img = boton_nuevo(original, int(nuevos[rel].get("cuadros", 1)))
+                _escribir(img, rel)
+                hechas.append(rel)
+                continue
+            info = cuadros.get(rel, (1, False, False))
+            if (min(original.size) >= 20 and max(original.size) >= 48 and rel not in conservar):
+                # 2026-11-03 ("cambiar radicalmente TODO el GUI [...] seguir los primeros mockups"):
+                # la pieza se dibuja de nuevo en cristal y cobre (tools/arte/rediseno.py)
+                from tools.arte.rediseno import redibujar_cuadros
+                esq = False if ("midsection" in rel or "middle" in rel or "tileable" in rel
+                                or "event_report" in rel) else None
+                _escribir(redibujar_cuadros(original, info[0], mosaico=info[1], esquinas=esq), rel)
+                hechas.append(rel)
+                continue
             img = retexturar(original, material)
         if not (rel in iconos and iconos[rel].get("uso") == "foto"):
-            img = cristal_y_cobre(img)
+            img = cristal_y_cobre(img, rel in set(spec.get("retexturar_todo") or []))
         _escribir(img, rel)
         hechas.append(rel)
     marca = SKIN / ".cobre"   # lo hecho desde los originales ya está en cobre

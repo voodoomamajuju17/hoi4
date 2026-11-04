@@ -2323,3 +2323,30 @@ le cambiemos nada por ahora. Lo demás dale para adelante".
   el panel de Decisiones. Configurable en 11_scenario.yaml ->
   ficha_lider.succession.
 
+## Rediseño radical de la interfaz (2026-11-03)
+
+Pedido: "necesito que cambie radicalmente TODO el GUI, no quiero cambio de
+color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
+"si necesitás hacer pedidos de imágenes o algo externo, hacelo".
+
+- `tools/arte/rediseno.py`: cada pieza se dibuja de nuevo en el estilo de las
+  maquetas. Del original solo se toma el plano (forma, compartimentos,
+  bordes); encima va vidrio liso azul petróleo con brillo frío, los huecos
+  como vidrio más hondo, cada borde del plano como filete fino de cobre, el
+  contorno con filo de cobre y sombra interior, y en las piezas grandes
+  escuadras de cobre en las esquinas con remaches. El papel (eventos,
+  Información, Historia del país) queda hoja marfil lisa con filete de cobre;
+  en las piezas que se apilan va parejo y sin escuadras.
+- `tools/arte/piel.py`: lo de retexturar se redibuja (menos lo chico y lo de
+  conservar_dibujo: alertas, íconos); los botones (main_lobby_button,
+  button_*, play_button...) se dibujan de cero: vidrio con borde de cobre,
+  claro al pasar el mouse, oscuro al apretar. Cuadros y mosaico salen del
+  ui_inventario.txt del zip. 318 texturas: barra superior, Política,
+  pestañas militares, menú principal, elección de país, eventos, decisiones,
+  diplomacia, comercio, facciones, producción, alertas.
+- Pedidos de imágenes (rediseño): los 23 íconos de la barra y los recursos se
+  piden de nuevo en cobre art déco (estilo_iconos_v2, archivo <id>_v2), el
+  logo del menú "2100 MEGANATIONS" reemplaza a Hearts of Iron IV, y 11
+  fondos y cabeceras (art_v2: vidrio ahumado con filetes de cobre). Lo de
+  antes sigue hasta que llega lo nuevo (menu.py y piel.py prefieren _v2).
+

@@ -353,8 +353,14 @@ def emit_tabs(ctx: BuildContext) -> None:
     spec = (ctx.spec.raw.get("scenario") or {}).get("tab_backgrounds")
     if not spec or ctx.vanilla is None:
         return
-    textures = {it["texture"]: f"assets/ui/{it['id']}.dds" for it in spec.get("items") or []
-                if (ctx.spec.root.parent / "assets" / "ui" / f"{it['id']}.dds").exists()}
+    # 2026-11-03 (rediseño "radical"): si llegó la versión nueva (<id>_v2.dds), va esa
+    def _arte(it):
+        base = ctx.spec.root.parent / "assets" / "ui"
+        for nombre in (f"{it['id']}_v2.dds", f"{it['id']}.dds"):
+            if (base / nombre).exists():
+                return f"assets/ui/{nombre}"
+        return None
+    textures = {it["texture"]: _arte(it) for it in spec.get("items") or [] if _arte(it)}
     _diagnose_ui(ctx)
     _emit_research(ctx)
     if not textures:

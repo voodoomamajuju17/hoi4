@@ -325,15 +325,22 @@ def catalog() -> list[dict]:
             "description": f"Intelligence agency upgrade icon, round badge: {up['english']}: {up['art']}.",
         })
     for bg in ((_load("11_scenario.yaml").get("tab_backgrounds") or {}).get("items") or []):
-        dest = REPO / "assets" / "ui" / f"{bg['id']}.dds"
         tile = (" SEAMLESS TILE: the left edge must continue the right edge and the top the bottom."
                 if bg.get("seamless") else "")
-        items.append({
-            "type": "ui_background", "tag": "INTERFAZ", "id": bg["id"], "dest": dest, "done": dest.exists(),
+        # 2026-11-03 (rediseño "radical, que se vea totalmente nuevo y fresco"): art_v2 pide
+        # la versión cristal y cobre (<id>_v2); la de antes sigue hasta que llegue
+        v2 = bg.get("art_v2")
+        iid = f"{bg['id']}_v2" if v2 else bg["id"]
+        dest = REPO / "assets" / "ui" / f"{iid}.dds"
+        item = {
+            "type": "ui_background", "tag": "INTERFAZ", "id": iid, "dest": dest, "done": dest.exists(),
             "size": tuple(bg["size"]),
-            "description": f"User interface background for Hearts of Iron IV ({bg['where']}): {bg['art']}. "
+            "description": f"User interface background for Hearts of Iron IV ({bg['where']}): {v2 or bg['art']}. "
                            f"No text, no icons, no buttons; it sits behind the interface.{tile}",
-        })
+        }
+        if v2:
+            item["style"] = UI_STYLE_V2
+        items.append(item)
     for bg in ((_load("11_scenario.yaml").get("research_backgrounds") or {}).get("items") or []):
         dest = REPO / "assets" / "ui" / "investigacion" / f"{bg['id']}.dds"
         items.append({
@@ -791,21 +798,24 @@ def _ui_icon_items() -> list[dict]:
         return []
     spec = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     items = []
+    v2 = spec.get("estilo_iconos_v2")
     for p in spec.get("iconos") or []:
-        dest = REPO / "assets" / "ui" / "piel_iconos" / f"{p['id']}.dds"
+        # 2026-11-03: rediseño: cada ícono se pide de nuevo en cobre (<id>_v2); el de antes sigue
+        sufijo = "_v2" if v2 and p.get("uso") != "foto" else ""
+        dest = REPO / "assets" / "ui" / "piel_iconos" / f"{p['id']}{sufijo}.dds"
         n = int(p.get("cuadros", 1))
         size = None
         if p.get("ancho") and p.get("alto"):
             size = (int(p["ancho"]), int(p["alto"]))
         photo = p.get("uso") == "foto"
         items.append({
-            "type": "ui_icon", "tag": "INTERFAZ", "id": f"ui_{p['id']}", "dest": dest, "done": dest.exists(),
+            "type": "ui_icon", "tag": "INTERFAZ", "id": f"ui_{p['id']}{sufijo}", "dest": dest, "done": dest.exists(),
             "size": size or ((624, 840) if photo else (512, 512)),
             "transparent": not photo,
             "description": (f"WHAT: {p['donde']}, in the redesigned interface of a 2100 grand strategy game"
                             + (f" (the game shows it as {n} states; Claude makes them from this one image)" if n > 1 else "")
                             + f". EXACT SUBJECT: {_one_line(p['dibujo'])}"),
-            "style": _one_line(p.get("estilo") or spec.get("estilo_iconos") or ""),
+            "style": _one_line(p.get("estilo") or (v2 if sufijo else None) or spec.get("estilo_iconos") or ""),
         })
     # tiras (2026-10-28): los íconos de edificios y recursos, pedidos a mano en
     # arte/pedidos_edificios.txt y arte/pedidos_recursos.txt; acá solo para que
@@ -869,6 +879,13 @@ SHARED_STYLE = (
 
 UI_STYLE = ("game user-interface background texture, subtle and low contrast so text and buttons stay readable, "
             "no text, no letters, no logos, no watermark, no frame")
+
+# 2026-11-03: el rediseño en cristal y cobre de las maquetas aprobadas
+UI_STYLE_V2 = ("game user-interface background for a 2100 grand strategy game in a 'glass and copper' design: "
+               "deep petrol-blue to near-black smoked glass (#14222b to #060c10), smooth and clean, a faint cold "
+               "teal sheen (#4fd6c8 at very low opacity), hair-thin warm copper lines (#c27a45) used sparingly; "
+               "elegant, art-deco precision, quiet and low contrast so text stays readable; "
+               "no text, no letters, no logos, no watermark, no frame, no scratches, no grunge")
 
 FLAG_STYLE = ("flat national flag for Hearts of Iron IV, vexillology, clean flat shapes, no gradients, "
               "no painterly texture, no text, no letters, no watermark")
