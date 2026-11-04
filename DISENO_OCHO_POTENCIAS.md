@@ -2386,4 +2386,9 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
 - Shogunato (2026-11-03, "el árbol es rapidísimo de hacer, alargá el
   tiempo"): cada meta de 70 a 140 días, el CyberShogun de 140 a 210 (en
   24_japon.yaml; si se vuelve a generar con japon_gen.py, mantener esto).
+- Rediseño del arte de la interfaz (2026-11-03, tres tandas: "reemplazá donde
+  corresponda"): los 42 íconos (barra, recursos del juego y recursos propios)
+  en bronce sobrio con detalles de color, los 4 de ideologías y los 11 fondos
+  y cabeceras (_v2). Todo el arte pedido para la interfaz está; quedan los
+  160 eventos.
 
