@@ -8,7 +8,6 @@
 # Résistance. Se crean en el evento de arranque, después de la agencia.
 # Retrato: assets/<TAG>/agentes/<id>.dds (156x210) -> sprite GFX_portrait_<id>.
 # Rasgos: los de agente del juego base (operative_*).
-# Gran Bretaña y Japón: pedidos hechos, faltan las imágenes.
 # =============================================================================
 agentes:
   EFE:
@@ -278,3 +277,173 @@ agentes:
     - operative_safe_cracker
     - operative_master_interrogator
     oficio: criptólogo que lee patrones
+  ZAL:
+  - id: ZAL_agente_nightingale
+    nombre: Lady Cordelia 'Nightingale' Ashby-Vane
+    genero: female
+    rasgos:
+    - operative_seducer
+    - operative_well_groomed
+    oficio: seductora de los bailes de salón
+    grupo: ZAL_neovictorianos
+  - id: ZAL_agente_clockwork
+    nombre: Silas 'Clockwork' Thorne
+    genero: male
+    rasgos:
+    - operative_safe_cracker
+    oficio: ladrón de cajas fuertes y saboteador de máquinas de vapor
+    grupo: ZAL_neovictorianos
+  - id: ZAL_agente_fog
+    nombre: Captain Rupert 'Fog' Lyle-Hartley
+    genero: male
+    rasgos:
+    - operative_master_interrogator
+    oficio: oficial de contrainteligencia de la Corona
+    grupo: ZAL_neovictorianos
+  - id: ZAL_agente_ping
+    nombre: Priya 'Ping' Chandrasekar
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    oficio: hackeadora nacida en la red
+    grupo: ZAL_transhumanistas
+  - id: ZAL_agente_mirror
+    nombre: Callum 'Mirror' Reid
+    genero: male
+    rasgos:
+    - operative_infiltrator
+    - operative_linguist
+    oficio: infiltrado que cambia de cara
+    grupo: ZAL_transhumanistas
+  - id: ZAL_agente_lacuna
+    nombre: Dr. Hannah 'Lacuna' Okonjo-Bright
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    - operative_tough
+    oficio: mente subida a un cuerpo sintético, ladrona de datos
+    grupo: ZAL_transhumanistas
+  - id: ZAL_agente_hammer
+    nombre: Bridget 'Hammer' Doyle
+    genero: female
+    rasgos:
+    - operative_commando
+    - operative_tough
+    oficio: saboteadora que rompe servidores
+    grupo: ZAL_luditas
+  - id: ZAL_agente_carrier
+    nombre: Ned 'Carrier' Haworth
+    genero: male
+    rasgos:
+    - operative_natural_orator
+    - operative_linguist
+    oficio: viejo jefe de red del correo de palomas
+    grupo: ZAL_luditas
+  - id: ZAL_agente_thistle
+    nombre: Moira 'Thistle' Gunn
+    genero: female
+    rasgos:
+    - operative_infiltrator
+    - operative_escape_artist
+    oficio: infiltrada invisible para las máquinas
+    grupo: ZAL_luditas
+  ZJP:
+  - id: ZJP_agente_soroban
+    nombre: Reiko 'Soroban' Tanabe
+    genero: female
+    rasgos:
+    - operative_safe_cracker
+    oficio: espía industrial de las cuatro familias
+    grupo: ZJP
+  - id: ZJP_agente_netsuke
+    nombre: Haruto 'Netsuke' Saionji
+    genero: male
+    rasgos:
+    - operative_seducer
+    - operative_well_groomed
+    oficio: heredero calavera y seductor
+    grupo: ZJP
+  - id: ZJP_agente_kintsugi
+    nombre: Goro 'Kintsugi' Ishikawa
+    genero: male
+    rasgos:
+    - operative_natural_orator
+    - operative_well_groomed
+    oficio: componedor de escándalos
+    grupo: ZJP
+  - id: ZJP_agente_oni
+    nombre: Kenji 'Oni' Murata
+    genero: male
+    rasgos:
+    - operative_commando
+    - operative_tough
+    oficio: ejecutor y asesino del clan de Osaka
+    grupo: ZJP
+  - id: ZJP_agente_kitsune
+    nombre: Yuki 'Kitsune' Arai
+    genero: female
+    rasgos:
+    - operative_seducer
+    oficio: seductora de club de anfitrionas
+    grupo: ZJP
+  - id: ZJP_agente_tanuki
+    nombre: Shiro 'Tanuki' Ogata
+    genero: male
+    rasgos:
+    - operative_master_interrogator
+    oficio: reducidor e informante de los muelles
+    grupo: ZJP
+  - id: ZJP_agente_lote_0451
+    nombre: '''Lote 0451'''
+    genero: male
+    rasgos:
+    - operative_infiltrator
+    - operative_tough
+    oficio: infiltrado clon
+    grupo: ZJP
+  - id: ZJP_agente_placebo
+    nombre: Dr. Emi 'Placebo' Kurokawa
+    genero: female
+    rasgos:
+    - operative_commando
+    oficio: envenenadora y bioquímica
+    grupo: ZJP
+  - id: ZJP_agente_wetware
+    nombre: Sora 'Wetware' Fujimoto
+    genero: male
+    rasgos:
+    - operative_safe_cracker
+    oficio: hacker conectado directo al cerebro
+    grupo: ZJP
+  - id: ZJP_agente_mumei
+    nombre: Tsubaki 'Mumei' Hayakawa
+    genero: female
+    rasgos:
+    - operative_infiltrator
+    - operative_seducer
+    - operative_linguist
+    - operative_master_interrogator
+    - operative_escape_artist
+    oficio: 'la mejor espía del mundo: la que sirve el té de la Shōgun y lo sirvió en todos los cuarteles del Pacífico'
+    grupo: ZJP
+
+# --- Gran Bretaña y Japón (llegaron el 2026-11-04) ---------------------------
+# No arrancan en 2100: se crean con el pulso mensual del país, cuando ya tiene
+# agencia de inteligencia (la arma con la decisión del juego base). Cada grupo
+# una sola vez. Pedido del usuario: "Para GB 3 Neovictorianos, 3 Transhumanos y
+# 3 luditas. Para Japon 3 por mafia + 1 shogun q es el mejor espia de todo el
+# juego": los británicos de un camino solo existen en ese camino (los luditas
+# están desde el principio, como Ashworth, Kelly y Pritchard), y Mumei tiene
+# cinco rasgos (los demás tienen uno o dos).
+agentes_grupos:
+  ZAL_luditas: {}
+  ZAL_transhumanistas: {cuando: {variable_is: {var: ZAL_ruta, value: 1}}}
+  ZAL_neovictorianos: {cuando: {variable_is: {var: ZAL_ruta, value: 2}}}
+  ZJP: {}
+
+extend_scripted_effects:
+  ZAL_pulso:
+  - {effect: run, value: MEGANATIONS_agentes_ZAL}
+  ZJP_pulso:
+  - {effect: run, value: MEGANATIONS_agentes_ZJP}
+
