@@ -19,6 +19,16 @@
 # juego usa `fallback`.
 # Los ids de batallones y cascos se validan contra el juego instalado; los que
 # no existen se omiten con aviso en el reporte.
+#
+# Idioma (2026-11-04, traducción al inglés: "rule of cool, como traductor
+# oficial"). Los nombres de divisiones y barcos son texto fijo: el juego no los
+# traduce, así que cada potencia usa su idioma del mundo y se ve igual en
+# cualquier idioma del juego. EFE, NAS y los satélites de América Latina en
+# castellano; FCU, HSN, ZNR, ZAS, ZAL y ZAN en inglés; SHD y ZST en pinyin; NRE,
+# ZHI y ZDA en latín; ASC en alemán; APF y ZKE en suajili; ZBC en finés; ZKR en
+# coreano; ZET en amhárico; ZSA en afrikáans; ZCO en francés; ZAO, ZMZ, ZWB y
+# ZSG en portugués; ZMG en malgache; ZJP en japonés; ZWE en ruso; ZWI en hindi; ZWM en árabe.
+# Solo letras de Latin-1 (la fuente del juego no tiene otras).
 # =============================================================================
 
 unit_names:
@@ -112,48 +122,48 @@ unit_names:
     ASC:
       infantry:
         group: {en: "Communard Divisions", es: "Divisiones Comunales"}
-        pattern: "{n}.ª División Comunal «{name}»"
-        fallback: "%d.ª División Comunal"
-        names: [Comuna de París, Espartaco, Rosa Luxemburgo, Clara Zetkin, Karl Liebknecht, Consejo de Kiel,
-                Ruhr Rojo, Lieja, Gdansk, Consejo de Múnich, Primero de Mayo, Jornada de Ocho Horas,
-                Asamblea Permanente, Quórum, Sorteo, Mandato Revocable]
+        pattern: "{n}. Kommunedivision «{name}»"
+        fallback: "%d. Kommunedivision"
+        names: [Pariser Kommune, Spartakus, Rosa Luxemburg, Clara Zetkin, Karl Liebknecht, Kieler Rat,
+                Rote Ruhr, Lüttich, Danzig, Münchner Räterepublik, Erster Mai, Achtstundentag,
+                Ständige Versammlung, Quorum, Losentscheid, Imperatives Mandat]
       mobile:    # la IA de la ASC pide ejército móvil
         group: {en: "Plan Mobile Divisions", es: "Divisiones Móviles del Plan"}
-        pattern: "{n}.ª División Móvil «{name}»"
-        fallback: "%d.ª División Móvil del Plan"
-        names: [Zuse, Turing, Lovelace, Babbage, Von Neumann, Shannon, Wiener, Glushkov,
-                Cybersyn, OGAS, Kantoróvich, Hollerith, Boole, Leibniz, PLAN-41, Nodo Central]
+        pattern: "{n}. Mobile Plandivision «{name}»"
+        fallback: "%d. Mobile Plandivision"
+        names: [Zuse, Turing, Lovelace, Babbage, Von Neumann, Shannon, Wiener, Gluschkow,
+                Cybersyn, OGAS, Kantorowitsch, Hollerith, Boole, Leibniz, PLAN-41, Zentralknoten]
       armor:
         group: {en: "Kombinat Armored Divisions", es: "Divisiones Blindadas del Kombinat"}
-        pattern: "{n}.ª Blindada del Kombinat «{name}»"
-        fallback: "%d.ª División Blindada del Kombinat"
-        names: [Martillo, Yunque, Prensa, Torno, Fresadora, Laminadora, Alto Horno, Engranaje,
-                Pistón, Turbina, Remachadora, Forja Automática]
+        pattern: "{n}. Kombinat-Panzerdivision «{name}»"
+        fallback: "%d. Kombinat-Panzerdivision"
+        names: [Hammer, Amboss, Presse, Drehbank, Fräse, Walzwerk, Hochofen, Zahnrad,
+                Kolben, Turbine, Nietmaschine, Automatenschmiede]
       airborne:  # el enjambre de drones (v2 del diseño)
         group: {en: "Swarm Divisions", es: "Divisiones Enjambre"}
-        pattern: "{n}.ª División Enjambre «{name}»"
-        fallback: "Enjambre %d"
-        names: [Colmena, Bandada, Cardumen, Enjambre Rojo, Red Neuronal, Señal Portadora]
+        pattern: "{n}. Schwarmdivision «{name}»"
+        fallback: "Schwarm %d"
+        names: [Bienenstock, Vogelzug, Fischschwarm, Roter Schwarm, Neuronales Netz, Trägersignal]
       marines:
         group: {en: "Red Baltic Marines", es: "Infantería del Báltico Rojo"}
-        pattern: "{n}.ª de Infantería del Báltico Rojo «{name}»"
-        fallback: "%d.ª División de Infantería del Báltico"
-        names: [Rostock, Kiel, Frisia, Rügen, Heligoland, Jutlandia]
+        pattern: "{n}. Rote Ostsee-Marinedivision «{name}»"
+        fallback: "%d. Ostsee-Marinedivision"
+        names: [Rostock, Kiel, Friesland, Rügen, Helgoland, Jütland]
       mountain:
         group: {en: "Communard Mountain Divisions", es: "Divisiones Comunales de Montaña"}
-        pattern: "{n}.ª de Montaña «{name}»"
-        fallback: "%d.ª División de Montaña"
-        names: [Harz, Selva Negra, Sudetes, Ardenas, Eifel, Tatras]
+        pattern: "{n}. Gebirgsdivision «{name}»"
+        fallback: "%d. Gebirgsdivision"
+        names: [Harz, Schwarzwald, Sudeten, Ardennen, Eifel, Tatra]
       militia:
         group: {en: "Workers' Militias", es: "Milicias Obreras"}
-        pattern: "{n}.ª Milicia Obrera «{name}»"
-        fallback: "%d.ª Milicia Obrera de Barrio"
-        names: [Cooperativa, Sindicato, Comité de Fábrica, Consejo de Barrio, Huelga General, Ateneo Obrero]
+        pattern: "{n}. Arbeitermiliz «{name}»"
+        fallback: "%d. Arbeitermiliz"
+        names: [Genossenschaft, Gewerkschaft, Betriebsrat, Kiezrat, Generalstreik, Arbeiterbildungsverein]
       cavalry:
         group: {en: "Collective Farm Riders", es: "Jinetes del Koljós"}
-        pattern: "{n}.º de Jinetes «{name}»"
-        fallback: "%d.º Regimiento de Jinetes del Koljós"
-        names: [Espiga, Centeno, Arado, Trilladora]
+        pattern: "{n}. Kolchos-Reiterregiment «{name}»"
+        fallback: "%d. Kolchos-Reiterregiment"
+        names: [Ähre, Roggen, Pflug, Dreschmaschine]
 
     # La Unión: cuatro corporaciones, contratistas motorizados.
     FCU:
@@ -348,46 +358,46 @@ unit_names:
     APF:
       infantry:  # la IA pide 70% de infantería
         group: {en: "Federal Divisions", es: "Divisiones Federales"}
-        pattern: "{n}.ª División Federal «{name}»"
-        fallback: "%d.ª División Federal"
-        names: [Malí, Songhai, Ghana, Kanem, Benín, Oyo, Kongo, Gran Zimbabue,
-                Kush, Mapungubwe, Asante, Dahomey, Sokoto, Monomotapa, Buganda, Luba]
+        pattern: "Divisheni ya {n} ya Shirikisho «{name}»"
+        fallback: "Divisheni ya %d ya Shirikisho"
+        names: [Mali, Songhai, Ghana, Kanem, Benin, Oyo, Kongo, Zimbabwe Kuu,
+                Kushi, Mapungubwe, Asante, Dahomey, Sokoto, Monomotapa, Buganda, Luba]
       militia:   # su identidad: las milicias de los consejos
         group: {en: "Council Militias", es: "Milicias de los Consejos"}
-        pattern: "{n}.ª Milicia del Consejo de {name}"
-        fallback: "%d.ª Milicia de los Consejos"
-        names: [Bamako, Kano, Lagos, Accra, Kinsasa, Lubumbashi, Nairobi, Dar es Salaam,
-                Kampala, Lusaka, Harare, Luanda, Abiyán, Uagadugú, Niamey, Yamena]
+        pattern: "Wanamgambo wa {n} wa Baraza la {name}"
+        fallback: "Wanamgambo wa %d wa Mabaraza"
+        names: [Bamako, Kano, Lagos, Accra, Kinshasa, Lubumbashi, Nairobi, Dar es Salaam,
+                Kampala, Lusaka, Harare, Luanda, Abidjan, Ouagadougou, Niamey, N'Djamena]
       mobile:
         group: {en: "Trans-African Divisions", es: "Divisiones Transafricanas"}
-        pattern: "{n}.ª División Transafricana «{name}»"
-        fallback: "%d.ª División Transafricana"
-        names: [Transahariana, Caravana, Harmattan, Corredor de Lobito, Ruta del Cobre, Gran Rift]
+        pattern: "Divisheni ya {n} ya Kuvuka Afrika «{name}»"
+        fallback: "Divisheni ya %d ya Kuvuka Afrika"
+        names: [Sahara, Msafara, Harmattan, Ushoroba wa Lobito, Njia ya Shaba, Bonde Kuu la Ufa]
       armor:
         group: {en: "Katanga Armored Divisions", es: "Divisiones Blindadas de Katanga"}
-        pattern: "{n}.ª Blindada de Katanga «{name}»"
-        fallback: "%d.ª División Blindada de Katanga"
-        names: [Búfalo, Rinoceronte, Elefante, León, Leopardo, Hipopótamo, Mamba, Cocodrilo]
+        pattern: "Divisheni ya {n} ya Deraya ya Katanga «{name}»"
+        fallback: "Divisheni ya %d ya Deraya ya Katanga"
+        names: [Nyati, Kifaru, Tembo, Simba, Chui, Kiboko, Koboko, Mamba]
       mountain:
         group: {en: "Highland Divisions", es: "Divisiones de las Montañas"}
-        pattern: "{n}.ª de Montaña «{name}»"
-        fallback: "%d.ª División de Montaña"
-        names: [Ruwenzori, Kilimanjaro, Monte Kenia, Elgon, Virunga, Fouta Djallon]
+        pattern: "Divisheni ya {n} ya Milimani «{name}»"
+        fallback: "Divisheni ya %d ya Milimani"
+        names: [Ruwenzori, Kilimanjaro, Mlima Kenya, Elgon, Virunga, Fouta Djallon]
       marines:
         group: {en: "Gulf of Guinea Marines", es: "Infantería del Golfo de Guinea"}
-        pattern: "{n}.ª de Infantería de Marina «{name}»"
-        fallback: "%d.ª División de Infantería de Marina"
-        names: [Golfo de Guinea, Bioko, Delta del Níger, Gorée, Zanzíbar, Cabo Verde]
+        pattern: "Divisheni ya {n} ya Wanamaji «{name}»"
+        fallback: "Divisheni ya %d ya Wanamaji"
+        names: [Ghuba ya Guinea, Bioko, Delta ya Niger, Gorée, Zanzibar, Cabo Verde]
       airborne:
         group: {en: "Rift Falcons", es: "Halcones del Rift"}
-        pattern: "{n}.ª de Halcones del Rift «{name}»"
-        fallback: "%d.ª División Aerotransportada"
-        names: [Águila Pescadora, Secretario, Marabú, Cálao]
+        pattern: "Divisheni ya {n} ya Kozi wa Bonde la Ufa «{name}»"
+        fallback: "Divisheni ya %d ya Anga"
+        names: [Furukombe, Karani, Korongo, Hondohondo]
       cavalry:
         group: {en: "Sahel Riders", es: "Jinetes del Sahel"}
-        pattern: "{n}.º de Jinetes del Sahel «{name}»"
-        fallback: "%d.º Regimiento de Jinetes del Sahel"
-        names: [Tombuctú, Agadez, Gao, Djenné, Tamanrasset, Aïr]
+        pattern: "Kikosi cha {n} cha Wapanda Farasi wa Sahel «{name}»"
+        fallback: "Kikosi cha %d cha Wapanda Farasi wa Sahel"
+        names: [Timbuktu, Agadez, Gao, Djenné, Tamanrasset, Aïr]
 
     # El Imperio: las legiones, la Tormenta de Marte, las Vías.
     NRE:
@@ -496,9 +506,9 @@ unit_names:
     ZBC:
       all:
         group: {en: "Baltic Commune Divisions", es: "Divisiones de la Comuna Báltica"}
-        pattern: "{n}.ª División Báltica «{name}»"
-        fallback: "%d.ª División Báltica"
-        names: [Karelia, Laponia, Saimaa, Vilna, Riga, Tallin, Kaunas, Tartu, Sisu, Kalevala]
+        pattern: "{n}. Baltian divisioona «{name}»"
+        fallback: "%d. Baltian divisioona"
+        names: [Karjala, Lappi, Saimaa, Vilna, Riika, Tallinna, Kaunas, Tartto, Sisu, Kalevala]
     ZAL:
       all:
         group: {en: "Albion Workers' Divisions", es: "Divisiones Obreras de Albión"}
@@ -509,58 +519,58 @@ unit_names:
     ZKR:
       all:
         group: {en: "Korean Protectorate Divisions", es: "Divisiones del Protectorado"}
-        pattern: "{n}.ª División «{name}»"
-        fallback: "%d.ª División del Protectorado"
+        pattern: "Je{n} Sadan «{name}»"
+        fallback: "Je%d Sadan"
         names: [Paektu, Halla, Kumgang, Taebaek, Jiri, Han, Taedong, Nakdong, Hwarang, Goguryeo]
     ZST:
       all:
         group: {en: "Steppe Divisions", es: "Divisiones de la Estepa"}
-        pattern: "{n}.ª División de la Estepa «{name}»"
-        fallback: "%d.ª División de la Estepa"
-        names: [Khangai, Altái, Gobi, Orjón, Kerulen, Selenga, Tuvá, Jentii, Tengri, Karakórum]
+        pattern: "Di {n} Caoyuan Shi «{name}»"
+        fallback: "Di %d Caoyuan Shi"
+        names: [Khangai, Altai, Gobi, Orkhon, Kherlen, Selenge, Tuva, Khentii, Tengri, Karakorum]
     ZET:
       all:
         group: {en: "Highland Federation Divisions", es: "Divisiones de las Tierras Altas"}
-        pattern: "{n}.ª División de las Tierras Altas «{name}»"
-        fallback: "%d.ª División de las Tierras Altas"
-        names: [Simien, Aksum, Lalibela, Gondar, Harar, Tana, Nilo Azul, Ras Dashen, Adua, Banco de Semillas]
+        pattern: "{n}ña Kifle Tor «{name}»"
+        fallback: "%dña Kifle Tor"
+        names: [Simien, Aksum, Lalibela, Gondar, Harar, Tana, Abay, Ras Dashen, Adwa, Ye Zer Bank]
     ZSA:
       all:
         group: {en: "Cape Federation Divisions", es: "Divisiones del Cabo"}
-        pattern: "{n}.ª División del Cabo «{name}»"
-        fallback: "%d.ª División del Cabo"
-        names: [Drakensberg, Karoo, Highveld, Limpopo, Mil Consejos, Kalahari, Namaqualand, Zululand,
-                Montaña de la Mesa, Cabo de las Tormentas]
+        pattern: "{n}de Kaapse Divisie «{name}»"
+        fallback: "%dde Kaapse Divisie"
+        names: [Drakensberg, Karoo, Hoëveld, Limpopo, Duisend Rade, Kalahari, Namakwaland, Zoeloeland,
+                Tafelberg, Stormkaap]
     ZCO:
       all:
         group: {en: "Congo Confederation Divisions", es: "Divisiones del Congo"}
-        pattern: "{n}.ª División del Congo «{name}»"
-        fallback: "%d.ª División del Congo"
-        names: [Inga, Katanga, Kivu, Ubangi, Kasai, Lualaba, Ituri, Maniema, Tshopo, Gran Río]
+        pattern: "{n}e Division du Congo «{name}»"
+        fallback: "%de Division du Congo"
+        names: [Inga, Katanga, Kivu, Oubangui, Kasaï, Lualaba, Ituri, Maniema, Tshopo, Grand Fleuve]
     ZAO:
       all:
         group: {en: "Angolan Union Divisions", es: "Divisiones de Angola"}
-        pattern: "{n}.ª División de Angola «{name}»"
-        fallback: "%d.ª División de Angola"
+        pattern: "{n}.ª Divisão de Angola «{name}»"
+        fallback: "%d.ª Divisão de Angola"
         names: [Cabinda, Kwanza, Benguela, Huambo, Namibe, Cunene, Moxico, Malanje, Lobito, Rainha Nzinga]
     ZMZ:
       all:
         group: {en: "Mozambique League Divisions", es: "Divisiones de Mozambique"}
-        pattern: "{n}.ª División de Mozambique «{name}»"
-        fallback: "%d.ª División de Mozambique"
+        pattern: "{n}.ª Divisão de Moçambique «{name}»"
+        fallback: "%d.ª Divisão de Moçambique"
         names: [Beira, Zambeze, Limpopo, Cahora Bassa, Niassa, Inhambane, Tete, Sofala, Pemba, Ilha]
     ZMG:
       all:
         group: {en: "Red Island Divisions", es: "Divisiones de la Isla Roja"}
-        pattern: "{n}.ª División de la Isla Roja «{name}»"
-        fallback: "%d.ª División de la Isla Roja"
-        names: [Antananarivo, Toamasina, Mahajanga, Fianarantsoa, Toliara, Antsiranana, Comoras, Baobab, Lémur, Vanilla]
+        pattern: "Diviziona faha-{n} «{name}»"
+        fallback: "Diviziona faha-%d"
+        names: [Antananarivo, Toamasina, Mahajanga, Fianarantsoa, Toliara, Antsiranana, Komoro, Renala, Varika, Lavanila]
     ZKE:
       all:
         group: {en: "Rift Federation Divisions", es: "Divisiones del Rift"}
-        pattern: "{n}.ª División del Rift «{name}»"
-        fallback: "%d.ª División del Rift"
-        names: [Kilimanjaro, Mombasa, Turkana, Rift, Masai Mara, Lamu, Kisumu, Nakuru, Tsavo, Monte Kenia]
+        pattern: "Divisheni ya {n} ya Bonde la Ufa «{name}»"
+        fallback: "Divisheni ya %d ya Bonde la Ufa"
+        names: [Kilimanjaro, Mombasa, Turkana, Bonde la Ufa, Maasai Mara, Lamu, Kisumu, Nakuru, Tsavo, Mlima Kenya]
     ZHI:
       all:
         group: {en: "Hispanic Legions", es: "Legiones de Hispania"}
@@ -576,49 +586,57 @@ unit_names:
         names: [Sarmizegetusa, Decebalus, Burebista, Carpathica, Danubiana, Transilvana, Pannonica, Moesica,
                 Thracica, Bunker]
 
+    ZJP:         # 2026-11-04: Japón en japonés (romaji sin macrones, por la fuente)
+      all:
+        group: {en: "Shogunate Divisions", es: "Divisiones del Shogunato"}
+        pattern: "Dai {n} Shidan «{name}»"
+        fallback: "Dai %d Shidan"
+        names: [Edo, Kanto, Fuji, Sakura, Yokosuka, Kurogane, Raijin, Fujin, Hachiman, Tsukuyomi,
+                Kamakura, Kiku]
+
     # --- La Anarquía --------------------------------------------------------
     ZWE:
       all:
         group: {en: "Eurasian Warbands", es: "Bandas de Eurasia"}
         pattern: "{name}"
-        fallback: "Banda %d de Eurasia"
-        names: [Horda de los Urales, Banda del Volga, Lobos de Siberia, Los del Transiberiano,
-                Cosacos del Don, Banda del Ob, Estepa Negra, Hermandad del Tren]
+        fallback: "Vataga %d"
+        names: [Uralskaya Orda, Volzhskaya Vataga, Sibirskiye Volki, Transsibirtsy,
+                Donskiye Kazaki, Obskaya Vataga, Chornaya Step, Bratstvo Poyezda]
     ZWI:
       all:
         group: {en: "Hindustan Warbands", es: "Bandas del Indostán"}
         pattern: "{name}"
-        fallback: "Banda %d del Indostán"
-        names: [Banda del Ganges, Señores del Decán, Tigres de Bengala, Hijos del Monzón,
-                Los del Punyab, Jinetes del Thar, Banda del Indo, Guardia de Benarés]
+        fallback: "Toli %d"
+        names: [Ganga Toli, Dakkhan ke Sardar, Bangal ke Bagh, Mausam ke Bete,
+                Punjab ke Sher, Thar ke Sawar, Sindhu Toli, Banaras ke Rakshak]
     ZWM:
       all:
         group: {en: "Desert Emirate Bands", es: "Bandas de los Emiratos"}
         pattern: "{name}"
-        fallback: "Banda %d del Desierto"
-        names: [Halcones del Nafud, Espadas del Rub al-Jali, Jinetes del Siroco, Banda del Éufrates,
-                Guardia del Pozo, Lanzas de Nejd, Hijos del Simún, Escorpiones del Golfo]
+        fallback: "Katiba %d"
+        names: [Suqur an-Nafud, Suyuf ar-Rub al-Khali, Fursan ash-Sharqi, Katibat al-Furat,
+                Hurras al-Bir, Rimah Najd, Abna as-Samum, Aqarib al-Khalij]
     ZWB:
       all:
         group: {en: "Amazon Caudillo Bands", es: "Bandas de los Caudillos"}
         pattern: "{name}"
-        fallback: "Banda %d del Amazonas"
-        names: [Banda del Río Negro, Caucheros, Garimpeiros, Hijos del Boto, Los del Xingu,
-                Anacondas, Guardia del Tapajós, Pirañas]
+        fallback: "Bando %d do Amazonas"
+        names: [Bando do Rio Negro, Seringueiros, Garimpeiros, Filhos do Boto, Os do Xingu,
+                Sucuris, Guarda do Tapajós, Piranhas]
     ZAN:
       all:
         group: {en: "Lawless Bands", es: "Bandas Sin Ley"}
         pattern: "{name}"
-        fallback: "Banda %d Sin Ley"
-        names: [Pueblo Amurallado, Los Sin Bandera, Banda del Desarme, Caravana Perdida,
-                Hijos del Polvo, Los Últimos, Milicia del Cruce, Carroñeros]
+        fallback: "Lawless Band %d"
+        names: [Walled Town, The Flagless, Unravelling Gang, Lost Caravan,
+                Sons of the Dust, The Last Ones, Crossroads Militia, Scavengers]
     ZSG:
       all:
         group: {en: "Sanctuary Wardens", es: "Custodios del Santuario"}
         pattern: "{name}"
-        fallback: "%d.ª Brigada de Guardaparques"
-        names: [Guardaparques del Santuario, Chamanes del Río, Custodios de la Madera Viva, Guardia del Caucho,
-                Vigías del Dosel, Hermandad de la Ceiba, Guardianes del Agua Dulce, Centinelas del Musgo]
+        fallback: "%d.ª Brigada de Guarda-Parques"
+        names: [Guarda-Parques do Santuário, Xamãs do Rio, Guardiões da Madeira Viva, Guarda da Seringueira,
+                Vigias do Dossel, Irmandade da Sumaúma, Guardiões da Água Doce, Sentinelas do Musgo]
 
   # ---------------------------------------------------------------------------
   # BARCOS
@@ -640,19 +658,19 @@ unit_names:
                   names: [Cóndor, Hornero, Chajá, Benteveo, Tero, Jabirú, Flamenco, Calandria]}
 
     ASC:
-      screen:    {group: {en: "Council Words", es: "Palabras del Consejo"}, fallback: "Destructor %d",
-                  names: [Igualdad, Solidaridad, Quórum, Sorteo, Asamblea, Consenso, Plenario, Mandato, Delegado,
-                          Cooperativa, Sindicato, Huelga, Jornada, Plusvalía, Dialéctica, Autogestión]}
-      submarine: {group: {en: "Algorithms", es: "Algoritmos"}, fallback: "Sumergible %d",
-                  names: [Algoritmo, Heurística, Recursión, Bucle, Paridad, Checksum, Compilador, Núcleo, Caché,
-                          Protocolo, Cifrado, Enrutador]}
-      cruiser:   {group: {en: "Commune Cities", es: "Ciudades de la Comuna"}, fallback: "Crucero %d",
-                  names: [Rostock, Kiel, Róterdam, Amberes, Szczecin, Essen, Dortmund, Leipzig, Dresde, Bremen, Hamburgo, Lübeck]}
-      capital:   {group: {en: "The Plan", es: "El Plan"}, fallback: "Acorazado %d",
-                  names: [Karl Marx, Friedrich Engels, Rosa Luxemburgo, Comuna de París, Espartaco, PLAN-41,
-                          Consejo Sorteado, Quórum Humano]}
-      carrier:   {group: {en: "Datacenters", es: "Centros de datos"}, fallback: "Portaaviones %d",
-                  names: [Servidor Central, Red Total, Nube Roja, Mainframe, Cybersyn, OGAS, Colmena, Enjambre]}
+      screen:    {group: {en: "Council Words", es: "Palabras del Consejo"}, fallback: "Zerstörer %d",
+                  names: [Gleichheit, Solidarität, Quorum, Losentscheid, Versammlung, Konsens, Plenum, Mandat, Delegierter,
+                          Genossenschaft, Gewerkschaft, Streik, Arbeitstag, Mehrwert, Dialektik, Selbstverwaltung]}
+      submarine: {group: {en: "Algorithms", es: "Algoritmos"}, fallback: "U-Boot %d",
+                  names: [Algorithmus, Heuristik, Rekursion, Schleife, Parität, Prüfsumme, Compiler, Kernel, Cache,
+                          Protokoll, Chiffre, Router]}
+      cruiser:   {group: {en: "Commune Cities", es: "Ciudades de la Comuna"}, fallback: "Kreuzer %d",
+                  names: [Rostock, Kiel, Rotterdam, Antwerpen, Stettin, Essen, Dortmund, Leipzig, Dresden, Bremen, Hamburg, Lübeck]}
+      capital:   {group: {en: "The Plan", es: "El Plan"}, fallback: "Schlachtschiff %d",
+                  names: [Karl Marx, Friedrich Engels, Rosa Luxemburg, Pariser Kommune, Spartakus, PLAN-41,
+                          Losrat, Menschliches Quorum]}
+      carrier:   {group: {en: "Datacenters", es: "Centros de datos"}, fallback: "Flugzeugträger %d",
+                  names: [Zentralserver, Totales Netz, Rote Wolke, Mainframe, Cybersyn, OGAS, Bienenstock, Schwarm]}
 
     FCU:
       screen:    {group: {en: "Corporate Values", es: "Valores corporativos"}, fallback: "Destroyer %d",
@@ -721,19 +739,19 @@ unit_names:
                   names: [Fenghuang, Xianhe, Lu, Yan, Cuiniao, Xique, Hongyan, Yuanyang]}
 
     APF:
-      screen:    {group: {en: "Words of the Federation", es: "Palabras de la Federación"}, fallback: "Destructor %d",
+      screen:    {group: {en: "Words of the Federation", es: "Palabras de la Federación"}, fallback: "Mwangamizi %d",
                   names: [Uhuru, Umoja, Harambee, Ujamaa, Ubuntu, Amani, Imani, Nguvu, Haki, Heshima, Tumaini,
                           Jamhuri, Maendeleo, Uzalendo, Sankofa, Teranga]}
-      submarine: {group: {en: "Water Spirits", es: "Espíritus del agua"}, fallback: "Sumergible %d",
+      submarine: {group: {en: "Water Spirits", es: "Espíritus del agua"}, fallback: "Nyambizi %d",
                   names: [Mami Wata, Ninki Nanka, Inkanyamba, Mamlambo, Grootslang, Nyami Nyami, Kishi, Nommo]}
-      cruiser:   {group: {en: "Federal Ports", es: "Puertos federales"}, fallback: "Crucero %d",
-                  names: [Dakar, Durban, Lagos, Accra, Abiyán, Luanda, Mombasa, Dar es Salaam, Maputo, Conakry,
-                          Freetown, Monrovia, Zanzíbar, Lomé]}
-      capital:   {group: {en: "Gods and Founders", es: "Dioses y fundadores"}, fallback: "Acorazado %d",
-                  names: [Olokun, Yemayá, Shangó, Mansa Musa, Sundiata, Federación, Consejo de los Pueblos,
-                          Kilimanjaro, Gran Rift]}
-      carrier:   {group: {en: "African Birds", es: "Aves de África"}, fallback: "Portaaviones %d",
-                  names: [Grulla Coronada, Águila Pescadora, Ibis, Secretario, Cálao, Pelícano, Marabú, Turaco]}
+      cruiser:   {group: {en: "Federal Ports", es: "Puertos federales"}, fallback: "Kruza %d",
+                  names: [Dakar, Durban, Lagos, Accra, Abidjan, Luanda, Mombasa, Dar es Salaam, Maputo, Conakry,
+                          Freetown, Monrovia, Zanzibar, Lomé]}
+      capital:   {group: {en: "Gods and Founders", es: "Dioses y fundadores"}, fallback: "Manowari %d",
+                  names: [Olokun, Yemoja, Shango, Mansa Musa, Sundiata, Shirikisho, Baraza la Watu,
+                          Kilimanjaro, Bonde Kuu la Ufa]}
+      carrier:   {group: {en: "African Birds", es: "Aves de África"}, fallback: "Mbeba Ndege %d",
+                  names: [Korongo Taji, Furukombe, Kwarara, Karani, Hondohondo, Mwari, Korongo, Turako]}
 
     NRE:
       screen:    {group: {en: "Roman Virtues", es: "Virtudes romanas"}, fallback: "Liburna %d",
@@ -773,16 +791,19 @@ unit_names:
     ZAS: {all: {group: {en: "Austral Pact", es: "Pacto Austral"}, fallback: "Vessel %d",
                 names: [Sydney, Melbourne, Perth, Darwin, Brisbane, Hobart, Auckland, Wellington, Tasman, Coral Sea,
                         Great Barrier, Freshwater]}}
-    ZBC: {all: {group: {en: "Baltic Shores", es: "Costas bálticas"}, fallback: "Nave %d",
-                names: [Ilmarinen, Väinämöinen, Kalev, Lembitu, Hiiumaa, Saaremaa, Åland, Ahti, Turku, Klaipėda,
+    ZBC: {all: {group: {en: "Baltic Shores", es: "Costas bálticas"}, fallback: "Alus %d",
+                names: [Ilmarinen, Väinämöinen, Kalev, Lembitu, Hiiumaa, Saaremaa, Åland, Ahti, Turku, Klaipeda,
                         Ventspils, Kotka]}}
     ZAL: {all: {group: {en: "Rivers of Albion", es: "Ríos de Albión"}, fallback: "Vessel %d",
                 names: [Mersey, Clyde, Tyne, Thames, Severn, Humber, Shannon, Liffey, Forth, Tay, Solway, Orkney]}}
-    ZKR: {all: {group: {en: "Korean Coasts", es: "Costas coreanas"}, fallback: "Nave %d",
+    ZJP: {all: {group: {en: "Ships of the Docks", es: "Naves de los Diques"}, fallback: "Kan %d",
+                names: [Kurofune, Arashi, Shiokaze, Hayabusa, Tsurugi, Ryujin, Watatsumi, Susanoo, Amaterasu,
+                        Shinkai, Kaminari, Uzushio]}}
+    ZKR: {all: {group: {en: "Korean Coasts", es: "Costas coreanas"}, fallback: "Hamjeong %d",
                 names: [Busan, Incheon, Wonsan, Ulsan, Mokpo, Jeju, Ulleung, Geobukseon, Yi Sun-sin, Gangneung]}}
-    ZET: {all: {group: {en: "Red Sea", es: "Mar Rojo"}, fallback: "Nave %d",
+    ZET: {all: {group: {en: "Red Sea", es: "Mar Rojo"}, fallback: "Merkeb %d",
                 names: [Massawa, Assab, Dahlak, Danakil, Bab el-Mandeb, Adulis]}}
-    ZSA: {all: {group: {en: "Cape Waters", es: "Aguas del Cabo"}, fallback: "Vessel %d",
+    ZSA: {all: {group: {en: "Cape Waters", es: "Aguas del Cabo"}, fallback: "Skip %d",
                 names: [Agulhas, Benguela, False Bay, Simon's Town, Gqeberha, East London, Saldanha, Knysna,
                         Mossel Bay, Robben Island, Protea, Springbok]}}
     ZHI: {all: {group: {en: "Hispanic Ports", es: "Puertos de Hispania"}, fallback: "Navis %d",

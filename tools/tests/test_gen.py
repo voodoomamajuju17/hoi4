@@ -2896,6 +2896,15 @@ def test_unit_names() -> None:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         f = ctx.mod_root / un.DIVISIONS_FILE
         check("se escribe names_divisions", f.exists())
+        # 2026-11-04 (traducción al inglés): cada potencia en su idioma del mundo
+        divs = " ".join(f.read_text(encoding="utf-8").split()) if f.exists() else ""
+        check("nombres de unidades en el idioma de cada potencia (ASC alemán, APF suajili, ZCO francés)",
+              'fallback_name = "%d. Kommunedivision"' in divs and 'fallback_name = "Divisheni ya %d ya Shirikisho"' in divs
+              and 'fallback_name = "%de Division du Congo"' in divs and "División Comunal" not in divs
+              and "División Federal" not in divs, divs[:300])
+        texto = f.read_text(encoding="utf-8") if f.exists() else ""
+        check("nombres de unidades sin letras fuera de Latin-1 (la fuente del juego no las tiene)",
+              all(ord(ch) < 256 for ch in texto), str({ch for ch in texto if ord(ch) > 255}))
         fs = ctx.mod_root / un.SHIPS_FILE
         ships_txt = " ".join(fs.read_text(encoding="utf-8").split()) if fs.exists() else ""
         # reporte 2026-10-01: destroyer, battleship... se descartaban (se validaban solo contra el equipo)
