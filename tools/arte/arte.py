@@ -450,6 +450,15 @@ def catalog() -> list[dict]:
                     "background, no people, no text, no letters, no numbers."),
             })
     spec_events = _load("12_events.yaml")
+    # 2026-11-03 ("revisá todos los eventos que carecen de imagen y hacé el pedido"): también
+    # los eventos de los archivos que se suman (22-31: mecánicas, Japón, Albión...)
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(REPO))
+        from tools.gen import specload as _specload
+        spec_events = dict(spec_events, namespaces=_specload.load(REPO / "spec").raw["events"]["namespaces"])
+    except Exception:   # noqa: BLE001 — si el spec no carga, quedan los de 12_events
+        pass
     shared = spec_events.get("shared_art") or {}
     # descripción larga a mano para algunos eventos (2026-10-13: capitales tomadas)
     long_path = REPO / "arte" / "eventos_descripciones.yaml"
@@ -459,7 +468,9 @@ def catalog() -> list[dict]:
     for ns, block in spec_events["namespaces"].items():
         tag = block.get("country")
         for ev in block.get("events") or []:
-            if ev.get("hidden") or ev.get("no_art"):   # no_art: "sin imágenes" (2026-10-17)
+            # no_art ("sin imágenes", 2026-10-17) ya no excluye: el 2026-11-03 el usuario pidió
+            # imagen para todos los eventos que salían con una foto genérica del juego
+            if ev.get("hidden"):
                 continue
             # `art`: varios eventos casi iguales comparten una sola imagen (2026-09-29)
             art = ev.get("art")
@@ -468,7 +479,9 @@ def catalog() -> list[dict]:
                 continue
             asked.add(eid)
             dest = REPO / "assets" / "events" / f"{eid}.dds"
-            desc = (f"{ev['title']['english']}: {_one_line(ev['desc']['english'])}" if not art
+            # solo la escena (el primer párrafo): las opciones y sus efectos no se dibujan
+            escena = str(ev['desc']['english']).split("\\n\\n")[0].split("\n\n")[0]
+            desc = (f"{ev['title']['english']}: {_one_line(escena)}" if not art
                     else _one_line(shared.get(art, ev['desc']['english'])))
             style = None
             if eid in long_events:
