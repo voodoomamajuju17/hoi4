@@ -21,15 +21,17 @@ from ..pdx import Block, Quoted, banner_for, render
 
 SOURCE = "tools/gen/emitters/agencias.py (pedido del usuario 2026-10-29)"
 
+# 2026-11-03 (glosario del inglés): castellano, inglés. El nombre se escribe
+# como clave de localisation para que cada idioma vea el suyo.
 NOMBRES = {
-    "EFE": "Las Raíces del Imperio",
-    "ASC": "Dirección de Vigilancia Algorítmica",
-    "FCU": "Consultora de Riesgo Consolidado",
-    "HSN": "Oficina de Seguros y Manifiestos",
-    "NAS": "Los Ojos del Inti",
-    "SHD": "Oficina del Caudal Oculto",
-    "APF": "Consejo de las Voces Lejanas",
-    "NRE": "Frumentarii",
+    "EFE": ("Las Raíces del Imperio", "The Roots of the Empire"),
+    "ASC": ("Dirección de Vigilancia Algorítmica", "Directorate of Algorithmic Surveillance"),
+    "FCU": ("Consultora de Riesgo Consolidado", "Consolidated Risk Consultancy"),
+    "HSN": ("Oficina de Seguros y Manifiestos", "Office of Insurance and Manifests"),
+    "NAS": ("Los Ojos del Inti", "The Eyes of Inti"),
+    "SHD": ("Oficina del Caudal Oculto", "Office of the Hidden Current"),
+    "APF": ("Consejo de las Voces Lejanas", "Council of Distant Voices"),
+    "NRE": ("Frumentarii", "Frumentarii"),
 }
 
 
@@ -51,7 +53,9 @@ def emit(ctx: BuildContext) -> None:
         ctx.track(dest)
         gfx = f"GFX_intelligence_agency_logo_MEGANATIONS_{c.tag}"
         sprites.add("spriteType", Block([("name", Quoted(gfx)), ("texturefile", Quoted(tex))]))
-        nombre = NOMBRES.get(c.tag, f"Servicio de Inteligencia de {c.tag}")
+        es, en = NOMBRES.get(c.tag, (f"Servicio de Inteligencia de {c.tag}", f"{c.tag} Intelligence Service"))
+        nombre = ctx.loc.define_and_reference(f"MN_agencia_{c.tag}", en=en, es=es,
+                                              file="meganations_intelligence", origin=f"agencias:{c.tag}")
         agencias.add("intelligence_agency", Block([
             ("picture", gfx),
             ("names", Block([(None, Quoted(nombre))])),

@@ -34,7 +34,7 @@ NATION = {
     "EFE": ("Ecofascist Empire (South America, Buenos Aires)",
             "green and gold palette; living bio-steel details, laurels and leaves on uniforms; background of "
             "jungle-covered cities, bio-vats or reforested pampas; Latin American faces"),
-    "FCU": ("Free Corporative Capital Union (North America, corporate state)",
+    "FCU": ("Free Corporate Capital Union (North America, corporate state)",
             "navy blue, silver and white; tailored corporate suits or sleek private-military uniforms; "
             "background of glass towers, trading floors or boardrooms"),
     "ASC": ("Automated Socialist Commune (northern Europe, run by AI and councils)",
@@ -43,7 +43,7 @@ NATION = {
     "HSN": ("High Seas Market Nation (Southeast Asia and Japan, maritime trade)",
             "teal and brass; naval officer coats or merchant captain jackets; background of container "
             "ports, ships and straits; East and Southeast Asian faces"),
-    "NAS": ("NeoAndean Sky Kingdom (Andes, reborn Inca solar monarchy)",
+    "NAS": ("Neo-Andean Sky Kingdom (Andes, reborn Inca solar monarchy)",
             "gold and turquoise; Andean textiles and modern high-altitude uniforms, sun motifs; "
             "background of snowy Andes, stone terraces and solar temples; Andean faces"),
     "SHD": ("Sino-Harmonious Directorate (China, hydraulic technocracy)",

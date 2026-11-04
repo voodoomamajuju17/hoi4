@@ -824,7 +824,7 @@ def render_effects(owner: str, items: list[dict], known,
         if effect == "run":
             name = item["value"]
             # MEGANATIONS_mapa_*: los escribe tools/gen/emitters/mapa.py (2026-10-29)
-            if ec.scripted is not None and name not in ec.scripted and not name.startswith(("MEGANATIONS_mapa_", "MEGANATIONS_ficha_")):
+            if ec.scripted is not None and name not in ec.scripted and not name.startswith(("MEGANATIONS_mapa_", "MEGANATIONS_ficha_", "MEGANATIONS_agentes_")):
                 raise SpecError(f"{owner}: run '{name}' no esta en 14_decisions.yaml -> scripted_effects",
                                 where=where)
             block.add(name, True)
@@ -1264,7 +1264,15 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("diplomatic_relation", owner)
             continue
         if effect == "create_faction":
-            block.add("create_faction", Quoted(item["value"]))
+            # 2026-11-03 (glosario del inglés): el nombre va como clave con los
+            # dos idiomas; un texto suelto se vería igual en cualquier idioma.
+            value = item["value"]
+            if isinstance(value, dict):
+                key = "MN_faction_" + re.sub(r"[^a-z0-9]+", "_", value["english"].lower()).strip("_")
+                TOOLTIPS[key] = (value["english"], value["spanish"])
+                block.add("create_faction", key)
+            else:
+                block.add("create_faction", Quoted(value))
             effects_used.setdefault("create_faction", owner)
             continue
         if effect == "add_to_faction":

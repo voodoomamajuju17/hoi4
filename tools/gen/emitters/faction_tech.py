@@ -96,17 +96,7 @@ def emit(ctx: BuildContext) -> None:
                 per_family.append((fam, style, names[style][fam]))
         for fam, style, entry in per_family:
             # v2 (arte/armas_descripciones.yaml) primero; si no, la primera tanda
-            base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
-            if not base_art.exists():
-                base_art = repo / "assets" / style / "tech" / f"{fam}.dds"
-            fb = art_fallback.get(tag) if style == tag else None
-            if fb is not None and not base_art.exists():
-                fb_style = (fb.get(_family_kind(fam)) or fb.get("default")) if isinstance(fb, dict) else fb
-                if fb_style in names:
-                    style = fb_style
-                    base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
-                    if not base_art.exists():
-                        base_art = repo / "assets" / style / "tech" / f"{fam}.dds"
+            style, base_art = _family_art(repo, style, fam, art_fallback.get(tag) if style == tag else None, names)
             for eq, gen in members.get(fam, []):
                 # 2026-10-24 (pedido del usuario: "las imágenes de los diseños no
                 # progresan; pedidos nuevos para cada investigación"): una imagen
@@ -165,6 +155,55 @@ def emit(ctx: BuildContext) -> None:
                                if not (isinstance(v, Block) and _text(v.get("name")) == name)]
             sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(rel))]))
             counts["sprites"] += 1
+    # 2026-11-03 (captura del usuario: tecnologías del árbol con la imagen del
+    # juego). Las líneas de una unidad única que los demás ven pero no pueden
+    # investigar (hide_branch: false) se quedaban con la imagen del juego para
+    # todos menos el dueño: ahora muestran la de la unidad, que es de quien es.
+    visible = ctx.data.get("tech_locks_visible") or set()
+    if visible:
+        have = {_text(v.get("name")) for _, v in sprites.entries if isinstance(v, Block)}
+        n_vis = 0
+        for uu in ctx.data.get("uu_art") or []:
+            for t in uu.get("techs") or []:
+                if t not in visible or t not in tree:
+                    continue
+                own = _text(next((v.get("texturefile") for _, v in sprites.entries if isinstance(v, Block)
+                                  and _text(v.get("name")) == f"GFX_{uu['tag']}_{t}_medium"), None) or "")
+                if not own:
+                    continue
+                for c in ctx.spec.countries:
+                    name = f"GFX_{c.tag}_{t}_medium"
+                    if name in have:
+                        continue
+                    sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(own))]))
+                    have.add(name)
+                    counts["sprites"] += 1
+                n_vis += 1
+        if n_vis:
+            ctx.note(f"armas por faccion: {n_vis} tecnologias de unidades unicas que los demas ven "
+                     f"con la imagen de la unidad")
+    # 2026-11-03: tecnologías que habilitan un equipo fuera de las familias (las
+    # cubiertas de conversión de portaaviones) toman la imagen de una familia
+    # (by_faction.tech_art: tecnología -> familia). No pisa una imagen que ya esté.
+    tech_art = spec.get("tech_art") or {}
+    if tech_art:
+        have = {_text(v.get("name")) for _, v in sprites.entries if isinstance(v, Block)}
+        for tag, style_spec in sorted(style_of.items(), key=lambda x: x[0]):
+            mix = style_spec if isinstance(style_spec, dict) else {"default": style_spec}
+            for tech, fam in sorted(tech_art.items()):
+                name = f"GFX_{tag}_{tech}_medium"
+                if tech not in tree or tech in locks or name in have or fam not in families:
+                    continue
+                style = mix.get(_family_kind(fam)) or mix.get("default")
+                if not style or fam not in names.get(style, {}):
+                    continue
+                style, art = _family_art(repo, style, fam, art_fallback.get(tag) if style == tag else None, names)
+                if not art.exists():
+                    continue
+                rel = _texture(ctx, art, style, fam, sizes.of(tech), written)
+                sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(rel))]))
+                have.add(name)
+                counts["sprites"] += 1
     # Equipo común (by_faction.shared, 2026-10-07: el tren): una imagen,
     # assets/COMUN/armas/<familia>.dds, para el equipo y sus tecnologías en
     # todos los países.
@@ -229,6 +268,22 @@ def emit(ctx: BuildContext) -> None:
              f"para {len(style_of)} paises ({len(names)} estilos); {counts['sprites']} iconos propios "
              f"({len(written)} imagenes)")
     _probe(ctx, members, enabled_by)
+
+
+def _family_art(repo, style: str, fam: str, fb, names: dict):
+    """(estilo, imagen) de una familia: v2 (armas/) o la primera tanda (tech/);
+    si el país todavía no tiene la suya, la del estilo que heredaba (`fb`)."""
+    base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
+    if not base_art.exists():
+        base_art = repo / "assets" / style / "tech" / f"{fam}.dds"
+    if fb is not None and not base_art.exists():
+        fb_style = (fb.get(_family_kind(fam)) or fb.get("default")) if isinstance(fb, dict) else fb
+        if fb_style in names:
+            style = fb_style
+            base_art = repo / "assets" / style / "armas" / f"{fam}.dds"
+            if not base_art.exists():
+                base_art = repo / "assets" / style / "tech" / f"{fam}.dds"
+    return style, base_art
 
 
 def _tech_aliases(repo) -> dict[str, str]:

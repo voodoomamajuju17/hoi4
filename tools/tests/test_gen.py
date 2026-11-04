@@ -22,7 +22,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
-from tools.gen import art, pdx, specload  # noqa: E402
+from tools.gen import art, glosario, pdx, specload  # noqa: E402
 from tools.gen import vanilla as vanilla_mod  # noqa: E402
 from tools.gen.cli import build  # noqa: E402
 from tools.gen.errors import LocalisationError  # noqa: E402
@@ -898,7 +898,7 @@ def test_territory() -> None:
         pta = (mod / "history/countries/PTA - Southern Patagonia.txt").read_text()
         check("capital provisoria del satelite", "capital = 901" in pta, pta)
         check("pais sin territorio no lleva capital",
-              "capital" not in (mod / "history/countries/FCU - Free Corporative Capital Union.txt").read_text())
+              "capital" not in (mod / "history/countries/FCU - Free Corporate Capital Union.txt").read_text())
 
 
 def test_scenario() -> None:
@@ -2235,7 +2235,7 @@ def test_ai() -> None:
               any("attrition" in w for w in ctx.warnings) or "attrition" in ideas_zwb)
         zwe_ev = " ".join((mod / "events/meganations_zwe.txt").read_text().split())
         check("Eurasia: la Union de los Senores (crea la faccion y convoca a las demas)",
-              'create_faction = "La Unión de los Señores de la Guerra"' in zwe_ev and "id = meganations_zwe.11" in zwe_ev
+              'create_faction = MN_faction_the_warlords_union' in zwe_ev and "id = meganations_zwe.11" in zwe_ev
               and "ZWE = { add_to_faction = ROOT }" in zwe_ev, zwe_ev[:500])
         zwi_ev = " ".join((mod / "events/meganations_zwi.txt").read_text().split())
         check("Indostan: si cae Bagdad entra en las guerras de los Emiratos",
@@ -3227,6 +3227,15 @@ def test_faction_tech() -> None:
         check("tecnologias comunes: la misma imagen en todos los paises; el alias la reusa; nada si no esta en el arbol",
               all(f"GFX_{t}_{x}_medium" in gfx for t in ("EFE", "SHD", "PTA", "ZAN") for x in ("tech_support", "tech_trucks"))
               and "COMUN_tec_tech_support_" in gfx and "basic_machine_tools" not in gfx, gfx[-600:])
+        # 2026-11-03 (captura del usuario: tecnologías del árbol con la imagen del juego)
+        cent = _re.search(r'name = "GFX_ASC_armored_car1_medium"\s*texturefile = "([^"]+)"', gfx)
+        oth = _re.search(r'name = "GFX_EFE_armored_car1_medium"\s*texturefile = "([^"]+)"', gfx)
+        check("unidad unica visible (hide_branch: false): los demas ven la imagen de la unidad, no la del juego",
+              bool(cent and oth) and cent.group(1) == oth.group(1) and "ASC_centinela" in cent.group(1),
+              str(cent and cent.group(1)) + " / " + str(oth and oth.group(1)))
+        check("tech_art: las cubiertas de conversion toman la imagen de la familia portaaviones",
+              _re.search(r'name = "GFX_EFE_early_ship_hull_carrier_medium"\s*texturefile = "[^"]*EFE_carrier', gfx)
+              is not None, gfx[-400:])
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
         # 2026-10-09: "la imagen de los aviones aparece en el diseño de arranque pero no se mantiene
         # si lo actualizás, y no hay forma de elegirla" -> base de imágenes del diseñador
@@ -3972,7 +3981,7 @@ def test_junta_militar() -> None:
         check("ASC: la caza de los Hijos de Odin (muy dificil de frenar)", "ASC_valhalla_redadas = {" in dec
               and "var = ASC_valhalla value = -8" in dec and "var = ASC_valhalla value = -20" in dec and "ASC_valhalla_infiltrar = {" in dec)
         check("HSN: la Cruz del Mar se lleva la mitad de la flota y se alia con el Indostan",
-              "navy_ratio = 0.5" in e43 and "set_cosmetic_tag = HSN_CRUZADA" in e43 and 'create_faction = "The Alliance of Sea and Faith"' in e43
+              "navy_ratio = 0.5" in e43 and "set_cosmetic_tag = HSN_CRUZADA" in e43 and 'create_faction = MN_faction_the_alliance_of_sea_and_faith' in e43
               and "add_to_faction = ZWI" in e43, e43[-800:])
         check("NAS: la Junta del Sol Negro, esoterica y paranoica, con su arbol",
               "load_focus_tree = { tree = meganations_junta_focus keep_completed = no }" in e44 and "set_country_flag = MEGANATIONS_junta" in e44
@@ -4863,7 +4872,12 @@ def test_agencias() -> None:
         ag = " ".join((mod / "common/intelligence_agencies/meganations_agencias.txt").read_text(encoding="utf-8").split())
         check("una agencia por meganacion, con su emblema y solo para ella",
               all(f"picture = GFX_intelligence_agency_logo_MEGANATIONS_{t} " in ag and f"available = {{ original_tag = {t} }}" in ag
-                  for t in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE")) and "Frumentarii" in ag, ag[:400])
+                  for t in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE")) and 'names = { "MN_agencia_NRE" }' in ag, ag[:400])
+        loc_ag = {lang: (mod / f"localisation/{lang}/meganations_intelligence_l_{lang}.yml").read_text(encoding="utf-8-sig")
+                  for lang in ("english", "spanish")}
+        check("el nombre de la agencia se traduce (glosario 2026-11-03)",
+              'MN_agencia_EFE:0 "The Roots of the Empire"' in loc_ag["english"]
+              and 'MN_agencia_EFE:0 "Las Raíces del Imperio"' in loc_ag["spanish"], loc_ag["english"][:300])
         gfx = (mod / "interface/meganations_agencias.gfx").read_text(encoding="utf-8")
         check("el emblema es la imagen del Servicio de Inteligencia",
               (mod / "gfx/interface/intelligence_agency_logos/meganations/SHD.dds").exists()
@@ -4876,13 +4890,22 @@ def test_agencias() -> None:
 
         # 2026-11-03: los agentes propios (33_agentes.yaml), creados después de la agencia
         ef = " ".join((mod / "common/scripted_effects/meganations_agentes.txt").read_text(encoding="utf-8").split())
-        check("40 agentes con nombre, retrato propio, rasgos y nacionalidad",
-              ef.count("create_operative_leader = {") == 40
+        check("59 agentes con nombre, retrato propio, rasgos y nacionalidad",
+              ef.count("create_operative_leader = {") == 59
               and 'gfx = GFX_portrait_NAS_agente_khipu gender = male traits = { operative_safe_cracker } nationalities = { NAS }' in ef
               and 'has_dlc = "La Resistance"' in ef and "bypass_recruitment = no" in ef, ef[:300])
         sp = (mod / "interface/meganations_agentes.gfx").read_text(encoding="utf-8")
         check("cada retrato de agente tiene su sprite y su archivo",
-              sp.count("spriteType = {") == 40 and (mod / "gfx/leaders/SHD/agentes/SHD_agente_limo.dds").exists())
+              sp.count("spriteType = {") == 59 and (mod / "gfx/leaders/SHD/agentes/SHD_agente_limo.dds").exists())
+        zal = ef[ef.index("MEGANATIONS_agentes_ZAL"):]
+        check("Gran Bretaña y Japón: con agencia, una vez por grupo, los británicos según su camino (2026-11-04)",
+              "has_intelligence_agency = yes" in zal
+              and "has_country_flag = MN_agentes_ZAL_neovictorianos } check_variable = { var = ZAL_ruta value = 2" in zal
+              and "MEGANATIONS_agentes_ZJP" in ef
+              and "traits = { operative_infiltrator operative_seducer operative_linguist operative_master_interrogator operative_escape_artist }" in ef,
+              zal[:400])
+        se2 = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        check("el pulso de Albión y el del Shogunato los crean", "MEGANATIONS_agentes_ZAL = yes" in se2 and "MEGANATIONS_agentes_ZJP = yes" in se2)
         ev = " ".join((mod / "events/meganations_efe.txt").read_text(encoding="utf-8-sig").split())
         check("el arranque crea la agencia y después los agentes",
               "create_intelligence_agency = yes } MEGANATIONS_crear_agentes = yes" in ev)
@@ -5137,9 +5160,37 @@ def test_metas_japon_albion() -> None:
         joya = dec[dec.index("ZAL_las_llaves_de_los_mares = {"):][:4000]
         check("la primera etapa abre la guerra por la Joya de la Corona (Delhi)", "generator = { 914 }" in joya, joya[:600])
 
+def test_glosario() -> None:
+    section("glosario: chequeo del inglés")
+    g = {"terminos": [{"es": "Gran Desarme", "en": "Great Unravelling", "evitar": ["Great Disarmament"]},
+                      {"es": "Neoandino", "en": "Neo-Andean", "evitar": {"NeoAndean": "Neo-Andean"}}],
+         "numeros_distintos_a_proposito": ["OK_NUM"], "iguales_a_proposito": ["OK_IGUAL"]}
+    textos = [
+        ("A", "t", "Since the Great Disarmament", "Desde el Gran Desarme"),
+        ("B", "t", "The NeoAndean court", "La corte neoandina"),
+        ("C", "t", "+5% stability", "+10% de estabilidad"),
+        ("D", "t", "La capital de la selva", "La capital de la selva"),
+        ("OK_NUM", "t", "21st century", "siglo XXI"),
+        ("OK_IGUAL", "t", "General Marieke de Vries manda", "General Marieke de Vries manda"),
+        ("E", "replace/x", "Great Disarmament", "Gran Desarme"),
+        ("F", "t", "The Neo-Andean court, +5% stability", "La corte neoandina, +5% de estabilidad"),
+    ]
+    p = glosario.revisar(textos, g)
+    todas = {k for claves in p.values() for k in claves}
+    check("variante de lista detectada", "A" in p.get("'Great Disarmament' en vez de 'Great Unravelling'", []), str(p))
+    check("variante de mapa detectada", "B" in p.get("'NeoAndean' en vez de 'Neo-Andean'", []), str(p))
+    check("números distintos detectados", "C" in p.get("números distintos entre inglés y castellano", []), str(p))
+    check("texto sin traducir detectado", "D" in p.get("texto sin traducir (igual en los dos idiomas)", []), str(p))
+    check("excepciones respetadas", not {"OK_NUM", "OK_IGUAL"} & todas, str(p))
+    check("textos del juego base ignorados", "E" not in todas, str(p))
+    check("texto correcto sin avisos", "F" not in todas, str(p))
+    check("el glosario del spec carga", len(glosario.load(REPO_ROOT / "spec").get("terminos") or []) > 20)
+
+
 def main() -> int:
     for test in (
         test_pdx_roundtrip,
+        test_glosario,
         test_spec_loads,
         test_loc_orphans,
         test_vanilla_fixture,

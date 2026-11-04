@@ -138,6 +138,7 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
         if raw.get("agentes"):
             raise SpecError("agentes ya existe", where=where)
         raw["agentes"] = overlay["agentes"]
+        raw["agentes_grupos"] = overlay.get("agentes_grupos") or {}
     if overlay.get("power_wars"):
         if raw.get("power_wars"):
             raise SpecError("power_wars ya existe", where=where)
