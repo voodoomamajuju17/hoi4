@@ -2349,4 +2349,16 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   logo del menú "2100 MEGANATIONS" reemplaza a Hearts of Iron IV, y 11
   fondos y cabeceras (art_v2: vidrio ahumado con filetes de cobre). Lo de
   antes sigue hasta que llega lo nuevo (menu.py y piel.py prefieren _v2).
+- Primera prueba del rediseño (2026-11-03, capturas: "meh, pero se puede";
+  "esos colores tienen algo malo"):
+  - El papel de los eventos hacía franjas (cada pieza apilada con su
+    degradé): ahora es un solo tono parejo en todas las piezas.
+  - El cobre de los íconos recoloreados salía naranja fuego: rampa más
+    metálica y menos saturada.
+  - Faltaban piezas de la elección de país (marcos de retratos, paneles de
+    Información e Historia, franja del medio): el juego las nombra .tga y en
+    el disco son .dds; ui_skin.py ahora las encuentra (_real) y entran al
+    próximo ui_para_claude.zip.
+  - Pedidos: íconos nuevos de las cuatro ideologías (Restauración,
+    Colectivismo, Orden de Mercado, Mandato Trascendente).
 

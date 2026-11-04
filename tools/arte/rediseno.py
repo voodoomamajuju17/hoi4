@@ -22,7 +22,7 @@ from __future__ import annotations
 CU, CU_HI, CU_LO = (194, 122, 69), (240, 181, 133), (107, 58, 28)
 VID_A, VID_B = (20, 34, 43), (6, 12, 16)
 HONDO = (3, 7, 10)
-PAPEL = (236, 226, 206)
+PAPEL = (230, 222, 206)
 
 
 def _lerp(a, b, t):
@@ -82,8 +82,9 @@ def redibujar(original, *, esquinas: bool | None = None, papel_ok: bool = True, 
     base = Image.new("RGB", (w, h), _lerp(VID_A, VID_B, 0.55)) if mosaico else _vgrad(w, h, VID_A, VID_B)
     base = Image.composite(_vgrad(w, h, (8, 15, 20), HONDO), base, hondo)
     # en las piezas que se apilan (sin escuadras) el papel va parejo, si no hace franjas
-    hoja = Image.new("RGB", (w, h), _lerp(PAPEL, (224, 210, 186), 0.5)) if esquinas is False \
-        else _vgrad(w, h, PAPEL, (224, 210, 186))
+    # 2026-11-03 (captura: "esos colores tienen algo malo"): el papel es un solo tono
+    # parejo en todas las piezas; con degradé cada pieza apilada hacía una franja
+    hoja = Image.new("RGB", (w, h), PAPEL)
     base = Image.composite(hoja, base, papel)
 
     # filetes: los bordes del plano, finos, en cobre

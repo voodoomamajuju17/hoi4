@@ -130,6 +130,18 @@ def sprite_table(root: Path) -> dict[str, dict]:
     return out
 
 
+def _real(root, tex: str) -> str:
+    """El juego nombra a veces .tga o .png y en el disco hay un .dds con el mismo nombre
+    (2026-11-03: así faltaban los marcos de los retratos y los paneles de la elección de
+    país). Devuelve la ruta que existe."""
+    import re as _re
+    tex = _re.sub("/+", "/", tex)
+    if (root / tex).exists() or not tex.lower().endswith((".tga", ".png")):
+        return tex
+    dds = tex.rsplit(".", 1)[0] + ".dds"
+    return dds if (root / dds).exists() else tex
+
+
 def inventory(ctx: BuildContext) -> dict[str, list[dict]]:
     """Pantalla -> piezas (una por textura) con sprite, tamaño, cuadros y borde."""
     from .menu import _texture_dims
@@ -157,11 +169,12 @@ def inventory(ctx: BuildContext) -> dict[str, list[dict]]:
                 if not info:
                     continue
                 for tex in info["textures"]:
+                    tex = _real(root, tex)
                     piece = seen.setdefault(tex.lower(), {"texture": tex, "sprites": [], "gui": set(), **info})
                     piece["sprites"].append(sp)
                     piece["gui"].add(path.name)
             for tex in dict.fromkeys(_TEX_REF.findall(text)):
-                tex = tex.replace("\\", "/")
+                tex = _real(root, tex.replace("\\", "/"))
                 piece = seen.setdefault(tex.lower(), {"texture": tex, "sprites": [], "gui": set(), "kind": "directa",
                                                       "frames": 1, "border": None, "tiling": False})
                 piece["gui"].add(path.name)
@@ -181,6 +194,7 @@ def inventory(ctx: BuildContext) -> dict[str, list[dict]]:
             for tex in info["textures"]:
                 if not re.sub("/+", "/", tex).lower().startswith("gfx/interface/"):
                     continue
+                tex = _real(root, tex)
                 piece = seen.setdefault(tex.lower(), {"texture": tex, "sprites": [], "gui": {info["file"]}, **info})
                 piece["sprites"].append(sp)
         for gname in EXTRA_GUI.get(screen, []):

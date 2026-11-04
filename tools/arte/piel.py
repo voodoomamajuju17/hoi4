@@ -45,12 +45,12 @@ DORADO = (8, 42)
 # y el verde azulado del acento también a cobre. Los demás colores (rojo,
 # verde, azul: significan algo) quedan.
 # rampa por brillo: (brillo del grafito, color nuevo)
-CRISTAL = [(0, (3, 8, 11)), (30, (14, 25, 31)), (50, (30, 40, 44)), (64, (92, 54, 30)),
-           (85, (170, 104, 58)), (110, (222, 150, 96)), (150, (236, 184, 140)),
-           # el papel de los eventos (muy claro) queda marfil, no naranja: el texto es oscuro
-           (185, (236, 214, 186)), (255, (248, 241, 229))]
-COBRE = [(0, (24, 10, 4)), (60, (90, 46, 20)), (120, (170, 102, 56)), (190, (236, 170, 118)),
-         (255, (255, 228, 200))]
+# 2026-11-03 (captura: el cobre de los íconos salía naranja fuego): cobre más metálico
+CRISTAL = [(0, (3, 8, 11)), (30, (14, 25, 31)), (50, (30, 40, 44)), (64, (78, 56, 40)),
+           (85, (138, 100, 72)), (110, (184, 140, 106)), (150, (214, 182, 152)),
+           (185, (230, 214, 192)), (255, (246, 240, 230))]
+COBRE = [(0, (22, 12, 6)), (60, (84, 54, 34)), (120, (156, 112, 80)), (190, (214, 178, 146)),
+         (255, (246, 228, 208))]
 TURQUESA = (100, 150)   # H de PIL del acento verde azulado que pasa a cobre
 
 
