@@ -4876,13 +4876,22 @@ def test_agencias() -> None:
 
         # 2026-11-03: los agentes propios (33_agentes.yaml), creados después de la agencia
         ef = " ".join((mod / "common/scripted_effects/meganations_agentes.txt").read_text(encoding="utf-8").split())
-        check("40 agentes con nombre, retrato propio, rasgos y nacionalidad",
-              ef.count("create_operative_leader = {") == 40
+        check("59 agentes con nombre, retrato propio, rasgos y nacionalidad",
+              ef.count("create_operative_leader = {") == 59
               and 'gfx = GFX_portrait_NAS_agente_khipu gender = male traits = { operative_safe_cracker } nationalities = { NAS }' in ef
               and 'has_dlc = "La Resistance"' in ef and "bypass_recruitment = no" in ef, ef[:300])
         sp = (mod / "interface/meganations_agentes.gfx").read_text(encoding="utf-8")
         check("cada retrato de agente tiene su sprite y su archivo",
-              sp.count("spriteType = {") == 40 and (mod / "gfx/leaders/SHD/agentes/SHD_agente_limo.dds").exists())
+              sp.count("spriteType = {") == 59 and (mod / "gfx/leaders/SHD/agentes/SHD_agente_limo.dds").exists())
+        zal = ef[ef.index("MEGANATIONS_agentes_ZAL"):]
+        check("Gran Bretaña y Japón: con agencia, una vez por grupo, los británicos según su camino (2026-11-04)",
+              "has_intelligence_agency = yes" in zal
+              and "has_country_flag = MN_agentes_ZAL_neovictorianos } check_variable = { var = ZAL_ruta value = 2" in zal
+              and "MEGANATIONS_agentes_ZJP" in ef
+              and "traits = { operative_infiltrator operative_seducer operative_linguist operative_master_interrogator operative_escape_artist }" in ef,
+              zal[:400])
+        se2 = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        check("el pulso de Albión y el del Shogunato los crean", "MEGANATIONS_agentes_ZAL = yes" in se2 and "MEGANATIONS_agentes_ZJP = yes" in se2)
         ev = " ".join((mod / "events/meganations_efe.txt").read_text(encoding="utf-8-sig").split())
         check("el arranque crea la agencia y después los agentes",
               "create_intelligence_agency = yes } MEGANATIONS_crear_agentes = yes" in ev)
