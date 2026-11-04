@@ -3227,6 +3227,15 @@ def test_faction_tech() -> None:
         check("tecnologias comunes: la misma imagen en todos los paises; el alias la reusa; nada si no esta en el arbol",
               all(f"GFX_{t}_{x}_medium" in gfx for t in ("EFE", "SHD", "PTA", "ZAN") for x in ("tech_support", "tech_trucks"))
               and "COMUN_tec_tech_support_" in gfx and "basic_machine_tools" not in gfx, gfx[-600:])
+        # 2026-11-03 (captura del usuario: tecnologías del árbol con la imagen del juego)
+        cent = _re.search(r'name = "GFX_ASC_armored_car1_medium"\s*texturefile = "([^"]+)"', gfx)
+        oth = _re.search(r'name = "GFX_EFE_armored_car1_medium"\s*texturefile = "([^"]+)"', gfx)
+        check("unidad unica visible (hide_branch: false): los demas ven la imagen de la unidad, no la del juego",
+              bool(cent and oth) and cent.group(1) == oth.group(1) and "ASC_centinela" in cent.group(1),
+              str(cent and cent.group(1)) + " / " + str(oth and oth.group(1)))
+        check("tech_art: las cubiertas de conversion toman la imagen de la familia portaaviones",
+              _re.search(r'name = "GFX_EFE_early_ship_hull_carrier_medium"\s*texturefile = "[^"]*EFE_carrier', gfx)
+              is not None, gfx[-400:])
         check("el reporte dice si el juego usa nombres por pais", any("que usa el juego por pais" in n for n in ctx.notes))
         # 2026-10-09: "la imagen de los aviones aparece en el diseño de arranque pero no se mantiene
         # si lo actualizás, y no hay forma de elegirla" -> base de imágenes del diseñador

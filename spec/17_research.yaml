@@ -734,6 +734,11 @@ by_faction:
   # Equipo con una sola imagen para todos los países (2026-10-07, captura del
   # usuario con la locomotora vieja: "uno común para todos"). La imagen va en
   # assets/COMUN/armas/<familia>.dds; los nombres siguen saliendo de `equipment`.
+  # 2026-11-03 (captura del usuario: tecnologías con la imagen del juego): las que
+  # habilitan un equipo que no entra en ninguna familia toman la imagen de una
+  # (Cubiertas de conversión: los cascos de portaaviones convertidos)
+  tech_art:
+    early_ship_hull_carrier: carrier
   shared:
     train: {match: ['^train_equipment_(\d+)$'], art: "a maglev freight train of the year 2100"}
   names:
