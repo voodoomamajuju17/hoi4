@@ -4963,10 +4963,10 @@ def test_ficha_lider() -> None:
         check("ficha: el retrato sale del líder detectado (Aurelio IV es el 1) y si no hay, una silueta",
               "MEGANATIONS_lider_id = 1 } } localization_key = GFX_mn_lider_1" in sl and n.startswith("gfx/leaders/EFE/")
               and "text = { localization_key = GFX_mn_ficha_sin_retrato }" in sl, n)
-        check("ficha: marco por facción (EFE enredadera, Japón laca y neón) y cobre solo para el resto",
+        check("ficha: marco por facción (EFE enredadera, Japón laca y neón, las demás en su color)",
               "trigger = { tag = EFE } localization_key = GFX_mn_ficha_marco_efe" in sl
               and "trigger = { tag = ZJP } localization_key = GFX_mn_ficha_marco_zjp" in sl
-              and "tag = NAS } localization_key = GFX_mn_ficha_marco" not in sl)
+              and "trigger = { tag = NAS } localization_key = GFX_mn_ficha_marco_nas" in sl)   # 2026-11-03: todas con su color
         ch = " ".join((mod / "common/characters/EFE_characters.txt").read_text(encoding="utf-8-sig").split())
         i = ch.index("EFE_min_arriagada_1 = {")
         check("ficha: el ministro enciende su casilla al entrar al gobierno y la apaga al salir",
@@ -4993,6 +4993,20 @@ def test_ficha_lider() -> None:
               and 'name = "her_nombrar_1"' in gui, sg[sg.find("her_"):][:300])
         k = cats.index("EFE_sucesion_category = {") if "EFE_sucesion_category = {" in cats else -1
         check("ficha: el panel La Sucesión queda solo para la IA", k >= 0 and "is_ai = yes" in cats[k:k + 400], cats[k:k + 400])
+        rb = " ".join((mod / "common/scripted_guis/meganations_recursos.txt").read_text(encoding="utf-8").split())
+        rgui = (mod / "interface/meganations_recursos.gui").read_text(encoding="utf-8")
+        check("barra: el recurso propio de cada nación arriba, con su ícono (Bioacero, Giri; Albión según su camino) (2026-11-03)",
+              "parent_window_token = top_bar" in rb and 'text = "[?EFE_biosteel|0]"' in rgui and 'text = "[?ZJP_giri|0]"' in rgui
+              and "rec_icono_10_visible = { tag = ZAL check_variable = { var = ZAL_ruta value = 2" in rb
+              and (mod / f"{fl.TEX}/recursos/recurso_EFE_bioacero.dds").exists(), rb[:300])
+        ac = " ".join((mod / "common/scripted_guis/meganations_acentos.txt").read_text(encoding="utf-8").split())
+        check("acentos: hilo del color de la facción bajo la barra y escuadras en Política (2026-11-03)",
+              "parent_window_token = top_bar" in ac and "parent_window_token = politics_tab" in ac
+              and "hilo_ZJP_visible = { tag = ZJP }" in ac and "esq_der_EFE_visible = { tag = EFE }" in ac, ac[:300])
+        foc = " ".join((mod / "common/national_focus/ZJP_focus.txt").read_text(encoding="utf-8-sig").split()) \
+            if (mod / "common/national_focus/ZJP_focus.txt").exists() else ""
+        check("Shogunato: el árbol tarda el doble (metas de 140 días; 2026-11-03)",
+              not foc or ("cost = 20" in foc and "cost = 10 " not in foc), foc[:200])
         loc = (mod / "localisation/spanish/meganations_ficha_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("ficha: textos en castellano", 'MN_FICHA_TITULO:0 "EL LÍDER"' in loc and "baja [?MEGANATIONS_lider_desgaste|0]" in loc, loc[:300])
     from tools.arte import arte as _arte

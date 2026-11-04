@@ -451,7 +451,7 @@ ficha_lider:
   # 2026-11-03 (captura: debajo de la bandera tapaba el retrato del general al
   # elegir un ejército): sube a la fila de botones de la barra, después del último
   button: {x: 626, y: 37, orientation: upper_left}
-  styles: {EFE: efe, FCU: fcu, ASC: asc, ZAL: zal, ZJP: zjp}
+  styles: {EFE: efe, FCU: fcu, ASC: asc, ZAL: zal, ZJP: zjp, HSN: hsn, NAS: nas, SHD: shd, APF: apf, NRE: nre}
   # 2026-11-03 ("dale con la opción 1"): La Sucesión del EFE dentro de la Ficha, en la
   # segunda fila del gabinete. Cada candidato toma costo, requisitos y efectos de su
   # decisión (22_mecanicas_v4); el elegido muestra "Revocar".
@@ -467,4 +467,50 @@ ficha_lider:
     - {decision: EFE_heredero_etchegaray, character: EFE_regente_etchegaray, effect: EFE_sucesion_etchegaray,
        summary: {english: 'The army obeys him. Needs 24 divisions.', spanish: 'El ejército le obedece. Pide 24 divisiones.'}}
     revoke: {decision: EFE_revocar_heredero, effect: EFE_sucesion_revocar}
+  # 2026-11-03 (maqueta de la barra: "el recurso propio de cada nación arriba"): ícono,
+  # número y, al pasar el mouse, el nombre y los medidores secundarios. x/y desde la
+  # esquina de arriba a la izquierda de la barra (se corrige con una captura).
+  resource_bar:
+    position: {x: 975, y: 4}
+    items:
+    - {country: EFE, var: EFE_biosteel, icon: recurso_EFE_bioacero, name: {english: BioSteel, spanish: Bioacero},
+       extra: [{var: EFE_saturacion, icon: recurso_EFE_saturacion, name: {english: Vat saturation, spanish: Saturación de las cubas}}]}
+    - {country: FCU, var: FCU_dividendos, icon: recurso_FCU_dividendos, name: {english: Dividends, spanish: Dividendos},
+       extra: [{var: FCU_escandalo, icon: recurso_FCU_escandalo, name: {english: Scandal, spanish: Escándalo}}]}
+    - {country: ASC, var: ASC_computo, icon: recurso_ASC_computo, name: {english: Compute, spanish: Cómputo},
+       extra: [{var: ASC_valhalla, icon: recurso_ASC_valhalla, name: {english: Valhalla, spanish: Valhalla}}]}
+    - {country: HSN, var: HSN_peaje, icon: recurso_HSN_peaje, name: {english: Toll, spanish: Peaje},
+       extra: [{var: HSN_presion, icon: recurso_HSN_presion, name: {english: Pressure, spanish: Presión}}]}
+    - {country: NAS, var: NAS_inti, icon: recurso_NAS_inti, name: {english: Inti, spanish: Inti}}
+    - {country: SHD, var: SHD_mandato, icon: recurso_SHD_mandato, name: {english: Mandate of Heaven, spanish: Mandato del Cielo},
+       extra: [{var: SHD_orden, icon: recurso_SHD_orden, name: {english: Order, spanish: Orden}},
+               {var: SHD_pueblo, icon: recurso_SHD_pueblo, name: {english: People, spanish: Pueblo}}]}
+    - {country: APF, var: APF_ubuntu, icon: recurso_APF_ubuntu, name: {english: Ubuntu, spanish: Ubuntu},
+       extra: [{var: APF_tension, icon: recurso_APF_tension, name: {english: Regional tension, spanish: Tensión regional}}]}
+    - {country: NRE, var: NRE_auctoritas, icon: recurso_NRE_auctoritas, name: {english: Auctoritas, spanish: Auctoritas},
+       extra: [{var: NRE_gloria, icon: recurso_NRE_gloria, name: {english: Glory, spanish: Gloria}}]}
+    - {country: ZJP, var: ZJP_giri, icon: recurso_ZJP_giri, name: {english: Giri, spanish: Giri},
+       extra: [{var: ZJP_favor_zaibatsu, icon: recurso_ZJP_favor, name: {english: Favour of the Zaibatsu, spanish: Favor de los Zaibatsu}},
+               {var: ZJP_favor_yakuza, icon: recurso_ZJP_favor, name: {english: Favour of the Yakuza, spanish: Favor de la Yakuza}},
+               {var: ZJP_favor_srs, icon: recurso_ZJP_favor, name: {english: Favour of the SRS, spanish: Favor del SRS}}]}
+    - {country: ZAL, var: ZAL_pompa, icon: recurso_ZAL_pompa, name: {english: Pomp, spanish: Pompa}, when: {variable_is: {var: ZAL_ruta, value: 2}}}
+    - {country: ZAL, var: ZAL_sincronia, icon: recurso_ZAL_sincronia, name: {english: Synchrony, spanish: Sincronía}, when: {variable_is: {var: ZAL_ruta, value: 1}}}
+  # 2026-11-03 ("darle color propio a cada facción, como en la ventana del líder, es algo
+  # que debe repetirse en todos lados, sin abusar"): un hilo de luz del color de la
+  # facción bajo la barra superior y escuadras de ese color en Política. x/y se corrigen
+  # con una captura.
+  faction_accents:
+    colors:
+      EFE: [201, 170, 92]
+      FCU: [94, 200, 255]
+      ASC: [214, 30, 58]
+      HSN: [46, 184, 178]
+      NAS: [240, 192, 64]
+      SHD: [72, 186, 128]
+      APF: [222, 146, 54]
+      NRE: [156, 76, 168]
+      ZJP: [255, 45, 120]
+      ZAL: [190, 70, 84]
+    topbar: {x: 0, y: 77, width: 690}
+    politics: {x: 0, y: 0, width: 540}
 

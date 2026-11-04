@@ -66,8 +66,9 @@ DISENO = {
 SEGMENTOS = 20
 CUADROS_SALUD = 21
 
-ESTILOS_POR_DEFECTO = {"EFE": "efe", "FCU": "fcu", "ASC": "asc", "ZAL": "zal", "ZJP": "zjp"}
-ESTILOS = ("base", "efe", "fcu", "asc", "zal", "zjp")
+ESTILOS_POR_DEFECTO = {"EFE": "efe", "FCU": "fcu", "ASC": "asc", "ZAL": "zal", "ZJP": "zjp",
+                       "HSN": "hsn", "NAS": "nas", "SHD": "shd", "APF": "apf", "NRE": "nre"}
+ESTILOS = ("base", "efe", "fcu", "asc", "zal", "zjp", "hsn", "nas", "shd", "apf", "nre")
 PIEZAS = ["fondo", "retrato_marco", "barra_total", "barra_base", "salud", "boton", "boton_accion", "boton_chico",
           "carta_ancha", "carta",
           "apagado", "sin_retrato"] + [f"marco_{e}" for e in ESTILOS]
@@ -247,6 +248,8 @@ def emit(ctx: BuildContext) -> None:
     ctx.write_text("common/scripted_guis/meganations_ficha.txt",
                    banner_for(SOURCE) + _scripted_gui(tags, gab, max_min, extra))
     _textos(ctx)
+    _barra_recurso(ctx)
+    _acentos(ctx)
     ctx.note(f"ficha del líder: ventana propia para {len(tags)} países, {len(lid)} retratos de líder, "
              f"gabinete de hasta {max_min} ministros")
 
@@ -333,6 +336,108 @@ def _sucesion(ctx: BuildContext, lid: list[tuple[int, str]], retratos: dict[str,
     return {"gui": "".join(gui), "gfx": "".join(gfx), "effects": "".join(eff), "triggers": "".join(trig)}
 
 
+def _barra_recurso(ctx: BuildContext) -> None:
+    """El recurso propio de cada nación en la barra superior (2026-11-03, maqueta de la
+    barra; íconos de arte/recursos_propios.yaml): ícono y número; al pasar el mouse, el
+    nombre y los medidores secundarios. Va colgado de top_bar, como el botón del Líder."""
+    from ..pdx import render
+    from .effects import render_conditions
+    cfg = config(ctx).get("resource_bar") or {}
+    items = [i for i in cfg.get("items") or [] if ctx.spec.country(i.get("country", "")) is not None]
+    repo = ctx.spec.root.parent
+    items = [i for i in items if (repo / "assets/ui/recursos/chicos" / f"{i['icon']}.dds").exists()]
+    if not items:
+        return
+    usados: dict[str, str] = {}
+    gfx, gui, trig = ["spriteTypes = {\n"], [], []
+    iconos = sorted({i["icon"] for i in items})
+    for ic in iconos:
+        tex = f"{TEX}/recursos/{ic}.dds"
+        ctx.copy_asset(f"assets/ui/recursos/chicos/{ic}.dds", tex)
+        gfx.append(_sprite(f"GFX_mn_recurso_{ic}", tex))
+    gfx.append("}\n")
+    pos = cfg.get("position") or {}
+    gui.append('guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "mn_recurso_window"\n'
+               f'\t\tposition = {{ x = {int(pos.get("x", 975))} y = {int(pos.get("y", 4))} }}\n'
+               '\t\tsize = { width = 130 height = 30 }\n\t\torientation = upper_left\n')
+    for k, it in enumerate(items, start=1):
+        clave = f"MN_RECURSO_TT_{k}"
+        en = f"§Y{it['name']['english']}§!: [?{it['var']}|0]"
+        es = f"§Y{it['name']['spanish']}§!: [?{it['var']}|0]"
+        for ex in it.get("extra") or []:
+            en += f"\\n{ex['name']['english']}: [?{ex['var']}|0]"
+            es += f"\\n{ex['name']['spanish']}: [?{ex['var']}|0]"
+        ctx.loc.define_and_reference(clave, en=en, es=es, file="meganations_ficha", origin="recursos")
+        gui.append(f'\t\ticonType = {{\n\t\t\tname = "rec_icono_{k}"\n\t\t\tspriteType = "GFX_mn_recurso_{it["icon"]}"\n'
+                   f'\t\t\tposition = {{ x = 0 y = 0 }}\n\t\t\tpdx_tooltip = "{clave}"\n\t\t}}\n')
+        gui.append(f'\t\tinstantTextBoxType = {{\n\t\t\tname = "rec_valor_{k}"\n\t\t\tposition = {{ x = 32 y = 5 }}\n'
+                   f'\t\t\tfont = "hoi_18mbs"\n\t\t\ttext = "[?{it["var"]}|0]"\n\t\t\tmaxWidth = 90\n'
+                   f'\t\t\tmaxHeight = 22\n\t\t\tformat = left\n\t\t\tfixedsize = yes\n'
+                   f'\t\t\tpdx_tooltip = "{clave}"\n\t\t}}\n')
+        cuando = f"tag = {it['country']}"
+        if it.get("when"):
+            cuando += " " + " ".join(render(render_conditions("barra_recurso", it["when"], usados, where=SOURCE)).split())
+        for el in ("rec_icono", "rec_valor"):
+            trig.append(f"\t\t\t{el}_{k}_visible = {{ {cuando} }}\n")
+    gui.append("\t}\n}\n")
+    tags = sorted({i["country"] for i in items})
+    sg = ("scripted_gui = {\n\tmn_recurso_barra = {\n\t\tcontext_type = player_context\n"
+          "\t\tparent_window_token = top_bar\n\t\twindow_name = \"mn_recurso_window\"\n"
+          f"\t\tvisible = {{ {_tags_or(tags)} }}\n\t\ttriggers = {{\n" + "".join(trig) +
+          "\t\t}\n\t\tai_enabled = { always = no }\n\t}\n}\n")
+    ctx.write_text("interface/meganations_recursos.gfx", banner_for(SOURCE) + "".join(gfx))
+    ctx.write_text("interface/meganations_recursos.gui", banner_for(SOURCE) + "".join(gui))
+    ctx.write_text("common/scripted_guis/meganations_recursos.txt", banner_for(SOURCE) + sg)
+    ctx.note(f"barra: recurso propio para {len(tags)} países ({len(items)} recursos)")
+
+
+def _acentos(ctx: BuildContext) -> None:
+    """El color de cada facción, sin abusar (2026-11-03): un hilo de luz bajo la barra
+    superior (top_bar) y escuadras en las esquinas de arriba de Política (politics_tab).
+    Arte de tools/arte/ficha.py acentos; colores en 11_scenario.yaml -> faction_accents."""
+    cfg = config(ctx).get("faction_accents") or {}
+    repo = ctx.spec.root.parent
+    tags = [t for t in (cfg.get("colors") or {}) if ctx.spec.country(t) is not None
+            and (repo / ARTE[0] / ARTE[1] / ARTE[2] / "acentos" / f"hilo_{t}.dds").exists()]
+    if not tags:
+        return
+    gfx, sg = ["spriteTypes = {\n"], ["scripted_gui = {\n"]
+    for t in tags:
+        for pieza in (f"hilo_{t}", f"escuadra_izq_{t}", f"escuadra_der_{t}"):
+            ctx.copy_asset(f"{'/'.join(ARTE)}/acentos/{pieza}.dds", f"{TEX}/acentos/{pieza}.dds")
+            gfx.append(_sprite(f"GFX_mn_acento_{pieza}", f"{TEX}/acentos/{pieza}.dds"))
+    gfx.append("}\n")
+    tb, pol = cfg.get("topbar") or {}, cfg.get("politics") or {}
+    gui = ['guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "mn_acento_barra_window"\n'
+           f'\t\tposition = {{ x = {int(tb.get("x", 0))} y = {int(tb.get("y", 77))} }}\n'
+           f'\t\tsize = {{ width = {int(tb.get("width", 690))} height = 7 }}\n\t\torientation = upper_left\n']
+    for t in tags:
+        gui.append(_icon(f"hilo_{t}", 0, 0, f"GFX_mn_acento_hilo_{t}", "\n\t\t\talwaystransparent = yes"))
+    gui.append("\t}\n")
+    pw = int(pol.get("width", 540))
+    gui.append('\tcontainerWindowType = {\n\t\tname = "mn_acento_politica_window"\n'
+               f'\t\tposition = {{ x = {int(pol.get("x", 0))} y = {int(pol.get("y", 0))} }}\n'
+               f'\t\tsize = {{ width = {pw} height = 40 }}\n\t\torientation = upper_left\n')
+    for t in tags:
+        gui.append(_icon(f"esq_izq_{t}", 0, 0, f"GFX_mn_acento_escuadra_izq_{t}", "\n\t\t\talwaystransparent = yes"))
+        gui.append(_icon(f"esq_der_{t}", pw - 38, 0, f"GFX_mn_acento_escuadra_der_{t}", "\n\t\t\talwaystransparent = yes"))
+    gui.append("\t}\n}\n")
+    for nombre, token, ventana, elems in (("mn_acento_barra", "top_bar", "mn_acento_barra_window", ("hilo",)),
+                                          ("mn_acento_politica", "politics_tab", "mn_acento_politica_window",
+                                           ("esq_izq", "esq_der"))):
+        sg.append(f"\t{nombre} = {{\n\t\tcontext_type = player_context\n\t\tparent_window_token = {token}\n"
+                  f'\t\twindow_name = "{ventana}"\n\t\tvisible = {{ {_tags_or(tags)} }}\n\t\ttriggers = {{\n')
+        for t in tags:
+            for el in elems:
+                sg.append(f"\t\t\t{el}_{t}_visible = {{ tag = {t} }}\n")
+        sg.append("\t\t}\n\t\tai_enabled = { always = no }\n\t}\n")
+    sg.append("}\n")
+    ctx.write_text("interface/meganations_acentos.gfx", banner_for(SOURCE) + "".join(gfx))
+    ctx.write_text("interface/meganations_acentos.gui", banner_for(SOURCE) + "".join(gui))
+    ctx.write_text("common/scripted_guis/meganations_acentos.txt", banner_for(SOURCE) + "".join(sg))
+    ctx.note(f"acentos de facción: {len(tags)} países (barra superior y Política)")
+
+
 def _bono(cambios: dict) -> tuple[str, str]:
     abrev = {"carisma": ("CHA", "CAR"), "astucia": ("CUN", "AST"), "prestigio": ("PRE", "PRE"), "salud": ("HEA", "SAL")}
     en, es = [], []
@@ -385,7 +490,7 @@ def _gui(max_min: int, cfg: dict) -> str:
     g.append('\t\tbuttonType = {\n\t\t\tname = "cerrar"\n\t\t\tposition = { x = %d y = 14 }\n'
              '\t\t\tspriteType = "GFX_closebutton"\n\t\t\tshortcut = "ESCAPE"\n\t\t}\n' % (W - 84))
     px0, py0, px1, py1 = DISENO["placa"]
-    g.append(_text("nombre", px0 + 14, py0 + 8, "[Root.GetLeader]", "hoi_24header", px1 - px0 - 28, py1 - py0 - 12, "centre"))
+    g.append(_text("nombre", px0 + 14, py0 + 8, "[Root.GetLeader]", "hoi_18mbs", px1 - px0 - 28, py1 - py0 - 12, "centre"))
     g.append(_text("partido", px0, py1 + 6, "[Root.GetRulingParty]", "hoi_16mbs", px1 - px0, 20, "centre"))
     secc = DISENO["secciones"]
     g.append(_text("sec_atributos", DISENO["stats_x"], secc["atributos"] - 18, "MN_FICHA_ATRIBUTOS", "hoi_16mbs", 300, 18))

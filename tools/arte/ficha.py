@@ -473,6 +473,27 @@ def marco_zjp(D):
     return img
 
 
+def _marco_color(color):
+    """Marco sobrio en el color de la facción (2026-11-03, HSN, NAS, SHD, APF y Roma):
+    filete fino a 5 px del borde y escuadras con remache en las cuatro esquinas."""
+    def dibujar(D):
+        from PIL import Image, ImageDraw, ImageFilter
+        W, H = D["ventana"]
+        img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(img)
+        d.rectangle((5, 5, W - 6, H - 6), outline=color + (150,))
+        L = 46
+        for (x, y, dx, dy) in ((5, 5, 1, 1), (W - 6, 5, -1, 1), (5, H - 6, 1, -1), (W - 6, H - 6, -1, -1)):
+            for k in range(3):
+                d.line((x, y + dy * k, x + dx * L, y + dy * k), fill=color + (255,))
+                d.line((x + dx * k, y, x + dx * k, y + dy * L), fill=color + (255,))
+            d.ellipse((x + dx * 10 - 3, y + dy * 10 - 3, x + dx * 10 + 3, y + dy * 10 + 3), fill=color + (255,))
+        halo = img.filter(ImageFilter.GaussianBlur(2))
+        halo.alpha_composite(img)
+        return halo
+    return dibujar
+
+
 PIEZAS = {
     "fondo": fondo, "retrato_marco": retrato_marco,
     "barra_total": lambda D: _barra(D, (TEAL_HI, TEAL, TEAL_LO), True),
@@ -480,6 +501,9 @@ PIEZAS = {
     "salud": salud, "boton": boton, "boton_accion": boton_accion, "boton_chico": boton_chico, "carta_ancha": carta_ancha, "carta": carta, "apagado": apagado, "sin_retrato": sin_retrato,
     "marco_base": lambda D: _vacio(), "marco_efe": marco_efe, "marco_fcu": marco_fcu, "marco_asc": marco_asc,
     "marco_zal": marco_zal, "marco_zjp": marco_zjp,
+    "marco_hsn": _marco_color((46, 184, 178)), "marco_nas": _marco_color((240, 192, 64)),
+    "marco_shd": _marco_color((72, 186, 128)), "marco_apf": _marco_color((222, 146, 54)),
+    "marco_nre": _marco_color((156, 76, 168)),
 }
 
 
@@ -499,6 +523,84 @@ def dibujar(salida: Path = SALIDA) -> list[str]:
     return [f"ficha: {len(hechas)} piezas en {salida.relative_to(REPO)}"] + ["  " + h for h in hechas]
 
 
+def recursos_chicos(lado: int = 28) -> list[str]:
+    """Los íconos de recursos propios (assets/ui/recursos, 512 px) achicados para la barra
+    superior (2026-11-03): el juego no achica bien una imagen grande, sale serruchada."""
+    import sys
+    sys.path.insert(0, str(REPO))
+    from PIL import Image
+    from tools.gen import art
+    base = REPO / "assets" / "ui" / "recursos"
+    salida = base / "chicos"
+    hechas = []
+    for src in sorted(base.glob("*.dds")):
+        img = Image.open(src).convert("RGBA")
+        caja = img.getchannel("A").point(lambda a: 255 if a > 16 else 0).getbbox()
+        if caja:
+            img = img.crop(caja)
+        k = lado / max(img.size)
+        img = img.resize((max(1, round(img.width * k)), max(1, round(img.height * k))), Image.LANCZOS)
+        lienzo = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
+        lienzo.alpha_composite(img, ((lado - img.width) // 2, (lado - img.height) // 2))
+        raw = lienzo.tobytes()
+        art.write_dds(salida / src.name, lado, lado, [tuple(raw[i:i + 4]) for i in range(0, len(raw), 4)])
+        hechas.append(src.stem)
+    return [f"recursos: {len(hechas)} íconos chicos ({lado} px) en {salida.relative_to(REPO)}"]
+
+
+def acentos(colores: dict, ancho_barra: int, ancho_pol: int) -> list[str]:
+    """Acentos de color por facción (2026-11-03): un hilo de luz para debajo de la barra
+    superior y un par de escuadras para las esquinas de Política."""
+    import sys
+    sys.path.insert(0, str(REPO))
+    from PIL import Image, ImageDraw, ImageFilter
+    from tools.gen import art
+    salida = SALIDA / "acentos"
+    def guardar(img, nombre):
+        raw = img.tobytes()
+        art.write_dds(salida / f"{nombre}.dds", img.width, img.height, [tuple(raw[i:i + 4]) for i in range(0, len(raw), 4)])
+    for tag, c in colores.items():
+        c = tuple(c)
+        # hilo: 1 px brillante con un halo suave, que se apaga en las puntas
+        w, h = ancho_barra, 7
+        hilo = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        d = ImageDraw.Draw(hilo)
+        for x in range(w):
+            t = x / max(1, w - 1)
+            a = min(1.0, t / 0.08, (1 - t) / 0.25)
+            d.point((x, 3), c + (round(235 * a),))
+        halo = hilo.filter(ImageFilter.GaussianBlur(1.6))
+        halo.alpha_composite(hilo)
+        guardar(halo, f"hilo_{tag}")
+        # escuadras: dos esquinas en L para arriba de Política (izquierda y derecha)
+        L, g = 34, 2
+        for lado in ("izq", "der"):
+            e = Image.new("RGBA", (L + 4, L + 4), (0, 0, 0, 0))
+            d = ImageDraw.Draw(e)
+            x0 = 2 if lado == "izq" else L + 1
+            dx = 1 if lado == "izq" else -1
+            for k in range(g):
+                d.line((x0, 2 + k, x0 + dx * L, 2 + k), fill=c + (230,))
+                d.line((x0 + dx * k, 2, x0 + dx * k, 2 + L), fill=c + (230,))
+            d.ellipse((x0 + dx * 6 - 2, 6, x0 + dx * 6 + 2, 10), fill=c + (255,))
+            halo = e.filter(ImageFilter.GaussianBlur(1.2))
+            halo.alpha_composite(e)
+            guardar(halo, f"escuadra_{lado}_{tag}")
+    return [f"acentos: {len(colores)} facciones en {salida.relative_to(REPO)}"]
+
+
 def main(argv: list[str]) -> None:
+    if argv and argv[0] == "acentos":
+        import yaml
+        cfg = (yaml.safe_load((REPO / "spec" / "11_scenario.yaml").read_text(encoding="utf-8"))
+               .get("ficha_lider") or {}).get("faction_accents") or {}
+        for line in acentos(cfg.get("colors") or {}, int((cfg.get("topbar") or {}).get("width", 690)),
+                            int((cfg.get("politics") or {}).get("width", 540))):
+            print(line)
+        return
+    if argv and argv[0] == "recursos":
+        for line in recursos_chicos():
+            print(line)
+        return
     for line in dibujar(Path(argv[0]) if argv else SALIDA):
         print(line)

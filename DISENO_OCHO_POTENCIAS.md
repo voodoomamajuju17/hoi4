@@ -2361,4 +2361,29 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
     próximo ui_para_claude.zip.
   - Pedidos: íconos nuevos de las cuatro ideologías (Restauración,
     Colectivismo, Orden de Mercado, Mandato Trascendente).
+- Llegó el arte de la interfaz (2026-11-03, dos tandas): 23 íconos de la
+  barra y de los recursos del juego en cobre art déco, el logo "2100
+  MEGANATIONS" en el menú y los 20 íconos de recursos propios. Los íconos
+  nuevos van sobre la placa de cristal sin recolorear (conservan el turquesa).
+- Recurso propio en la barra superior (ficha_lider.py -> _barra_recurso;
+  11_scenario.yaml -> ficha_lider.resource_bar): ícono de 28 px (tools/arte/
+  ficha.py recursos_chicos) y número; al pasar el mouse, el nombre y los
+  medidores secundarios (Saturación, Escándalo, Valhalla, Presión, Orden y
+  Pueblo, Tensión, Gloria, Favor de las tres Casas). Albión muestra Pompa en
+  el camino del pasado y Sincronía en el del futuro; la ludita, nada.
+- empezar.bat: el ui_para_claude.zip lleva también los .gui y .gfx del juego
+  (para ubicar las piezas de la elección de país, que no son las que el
+  juego nombra, y para cambiar la distribución de las pantallas).
+- Color de cada facción en toda la interfaz, sin abusar (2026-11-03, "darle
+  color propio a cada facción, como en la ventana del líder, debe repetirse en
+  todos lados, sin abusar"): un hilo de luz del color de la facción bajo la
+  barra superior (top_bar) y escuadras de ese color en las esquinas de
+  Política (politics_tab); la Ficha suma marcos en su color para la HSN, la
+  NAS, el SHD, la APF y Roma. Colores en 11_scenario.yaml ->
+  ficha_lider.faction_accents; arte de tools/arte/ficha.py acentos.
+- Ficha: el nombre del líder pasa a la letra hoi_18mbs (la de títulos no
+  tiene la "ō" y salía "Sh?gun").
+- Shogunato (2026-11-03, "el árbol es rapidísimo de hacer, alargá el
+  tiempo"): cada meta de 70 a 140 días, el CyberShogun de 140 a 210 (en
+  24_japon.yaml; si se vuelve a generar con japon_gen.py, mantener esto).
 
