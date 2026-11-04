@@ -133,6 +133,11 @@ class LocRegistry:
 
     # -- Introspección ------------------------------------------------------
 
+    def texts(self):
+        """(clave, archivo lógico, inglés, castellano) de cada clave definida."""
+        for key, texts in self._defined.items():
+            yield key, self._file_of[key], texts["english"], texts["spanish"]
+
     @property
     def key_count(self) -> int:
         return len(self._defined)

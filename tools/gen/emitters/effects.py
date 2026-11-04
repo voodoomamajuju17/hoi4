@@ -1264,7 +1264,15 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("diplomatic_relation", owner)
             continue
         if effect == "create_faction":
-            block.add("create_faction", Quoted(item["value"]))
+            # 2026-11-03 (glosario del inglés): el nombre va como clave con los
+            # dos idiomas; un texto suelto se vería igual en cualquier idioma.
+            value = item["value"]
+            if isinstance(value, dict):
+                key = "MN_faction_" + re.sub(r"[^a-z0-9]+", "_", value["english"].lower()).strip("_")
+                TOOLTIPS[key] = (value["english"], value["spanish"])
+                block.add("create_faction", key)
+            else:
+                block.add("create_faction", Quoted(value))
             effects_used.setdefault("create_faction", owner)
             continue
         if effect == "add_to_faction":
