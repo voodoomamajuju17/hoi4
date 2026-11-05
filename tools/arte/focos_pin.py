@@ -46,6 +46,9 @@ def items() -> list[dict]:
     cfg = yaml.safe_load(YAML.read_text(encoding="utf-8")) or {}
     mats = cfg.get("materiales") or {}
     hechas = set(cfg.get("hechas") or [])
+    llegados_path = REPO / "arte" / "focos_pin_llegados.txt"
+    llegados = {l.strip() for l in llegados_path.read_text(encoding="utf-8").splitlines()
+                if l.strip() and not l.startswith("#")} if llegados_path.exists() else set()
     looks = {}
     desc_path = REPO / "arte" / "iconos_descripciones.yaml"
     if desc_path.exists():
@@ -58,6 +61,8 @@ def items() -> list[dict]:
         for rama in tree["branches"]:
             material = _uno((m.get("ramas") or {}).get(rama.get("id"), m["base"]))
             for f in rama["focuses"]:
+                if f["id"] in llegados:
+                    continue
                 nombre = f["name"]["english"]
                 if f["id"] in looks:
                     que = f"the emblem shows: {_uno(looks[f['id']]['dibujo']).rstrip('.')}."
@@ -116,6 +121,8 @@ def escribir(salida: Path) -> tuple[list[str], list[str]]:
         path = salida / f"20_focos_pin_{tag}.txt"
         materiales = sorted({i["material"] for i in grupo})
         cabeza = [f"# {len(grupo)} pedidos - íconos de foco en estilo PIN - {tag}",
+                  "# Consejo: un chat nuevo cada 15 pedidos más o menos. Si empieza a hacer monedas",
+                  "# redondas llenas de cosas, pegale de nuevo el `style` y el `material` del pedido.",
                   "# Como los del Imperio Ecofascista: foto de un pin de verdad, un solo emblema simple.",
                   "# Cada pedido trae su material (cambia según la rama del árbol) y el ícono viejo",
                   "# como referencia del motivo (en pedidos.zip, carpeta pedidos/referencias_focos).",

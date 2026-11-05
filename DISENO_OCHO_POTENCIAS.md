@@ -2460,3 +2460,9 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   marco de aluminio; Junta en hierro pavonado; anarquías en chapa recortada.
   tools/arte/focos_pin.py arma 20_focos_pin_<TAG>.txt (570 pedidos) con el
   ícono viejo como referencia del motivo (arte/referencias_focos/).
+- Llegaron pines (2026-11-05): Shogunato 31 (completo), Comuna 27,
+  Directorio 30, Neoandinos 25. arte/focos_pin_llegados.txt anota lo que
+  llegó y no se vuelve a pedir. ChatGPT empezó a hacer monedas redondas
+  llenas de cosas: el estilo ahora dice "un pin, no una moneda" (la silueta
+  sigue al emblema) y la Comuna lleva el circuito grabado en el acero en vez
+  de la placa verde.

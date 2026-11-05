@@ -2580,7 +2580,7 @@ def test_focos_pin() -> None:
     from tools.arte import focos_pin
     it = {i["id"]: i for i in focos_pin.items()}
     check("pin: no se vuelven a pedir los del Imperio (ya están) y sí los del resto",
-          not any(i["tag"] == "EFE" for i in it.values()) and {"ASC", "NRE", "ZJP", "ZAL"} <= {i["tag"] for i in it.values()},
+          not any(i["tag"] == "EFE" for i in it.values()) and {"NRE", "ZAL", "APF"} <= {i["tag"] for i in it.values()},
           str(len(it)))
     zal = [i for i in it.values() if i["tag"] == "ZAL"]
     check("pin: Albión neovictoriana bordada, transhumana en placa de circuito azul",
