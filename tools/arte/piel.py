@@ -56,7 +56,16 @@ TURQUESA = (100, 150)   # H de PIL del acento verde azulado que pasa a cobre
 
 def cargar() -> dict:
     import yaml
-    return yaml.safe_load(SPEC.read_text(encoding="utf-8")) or {}
+    spec = yaml.safe_load(SPEC.read_text(encoding="utf-8")) or {}
+    # 2026-11-03: los íconos del juego por cambiar (tools/arte/auditoria.py) se suman acá:
+    # cada uno entra cuando llega su imagen
+    from tools.arte import auditoria
+    juego = auditoria.cargar()
+    spec["iconos"] = list(spec.get("iconos") or []) + [
+        {k: v for k, v in i.items() if k in ("id", "textura", "uso", "cuadros")} for i in juego.get("iconos") or []]
+    spec["tiras"] = list(spec.get("tiras") or []) + [
+        {k: v for k, v in t.items() if k in ("textura", "cuadros", "uso", "borde", "iconos")} for t in juego.get("tiras") or []]
+    return spec
 
 
 def _material(path: Path):
@@ -213,6 +222,11 @@ def _icono_path(ident: str):
     return nuevo if nuevo.exists() else ICONS / f"{ident}.dds"
 
 
+def _es_nuevo(ident: str) -> bool:
+    """Ícono del rediseño (ya viene en cobre/bronce): no se recolorea, solo su placa."""
+    return _icono_path(ident).stem.endswith("_v2") or ident.startswith("juego_")
+
+
 def _frames(img, n: int):
     fw = img.width // n
     return [img.crop((i * fw, 0, (i + 1) * fw, img.height)) for i in range(n)]
@@ -322,7 +336,7 @@ def _icono(pieza: dict, original, material):
         caja = _caja(frames[0])   # la misma caja en los dos cuadros: el dibujo no salta al pasar el mouse
         for i, f in enumerate(frames):
             placa = retexturar(_placa(f, 4), material)
-            if _icono_path(pieza["id"]).stem.endswith("_v2"):
+            if _es_nuevo(pieza["id"]):
                 placa = cristal_y_cobre(placa)   # el ícono nuevo ya viene en cobre: solo la placa
             dib = _en_caja(icon, (fw, fh), caja)
             placa.alpha_composite(_brillo(dib, 0.82 if i == 0 else 1.12))
@@ -374,6 +388,8 @@ def _tira(pieza: dict, original, material):
             caja = (1, 1, f.width - 1, f.height - 1)
         if uso == "barra":
             placa = retexturar(_placa(f, int(pieza.get("borde", 4))), material)
+            if str(ident).startswith("juego_"):
+                placa = cristal_y_cobre(placa)
             placa.alpha_composite(_en_caja(icon, f.size, caja))
             out.append(placa)
         else:
@@ -456,7 +472,7 @@ def aplicar(originales: str | None = None) -> list[str]:
                 hechas.append(rel)
                 continue
             img = retexturar(original, material)
-        nuevo = rel in iconos and rel in con_icono and _icono_path(iconos[rel]["id"]).stem.endswith("_v2")
+        nuevo = rel in iconos and rel in con_icono and _es_nuevo(iconos[rel]["id"])
         if not (rel in iconos and iconos[rel].get("uso") == "foto") and not nuevo:
             img = cristal_y_cobre(img, rel in set(spec.get("retexturar_todo") or []))
         _escribir(img, rel)

@@ -266,8 +266,11 @@ def emit(ctx: BuildContext) -> None:
                     for b in (on_add, on_remove):
                         b.add("if", Block([("limit", Block([("has_country_flag", "MEGANATIONS_lider_listo")])),
                                            ("MEGANATIONS_lider_recalcular", True)]))
-                    ab.add("on_add", on_add)
-                    ab.add("on_remove", on_remove)
+                    # 2026-11-03 (error.log: "Invalid scope type for trigger has_country_flag in
+                    # common/characters/..."): on_add/on_remove corren en el personaje; todo va
+                    # dentro de OWNER (el país), como hace Millennium Dawn
+                    ab.add("on_add", Block([("OWNER", on_add)]))
+                    ab.add("on_remove", Block([("OWNER", on_remove)]))
                 ab.add("cost", int(advisor.get("cost", 150)))
                 ab.add("ai_will_do", Block([("factor", float(advisor.get("ai_factor", 1)))]))
                 body.add("advisor", ab)

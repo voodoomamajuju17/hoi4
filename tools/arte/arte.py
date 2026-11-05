@@ -76,6 +76,9 @@ KINDS = {
     # se guardan tal cual en assets/ui/piel_iconos/ y tools/arte/piel.py los
     # lleva a cada textura (placa del botón, cuadros, tamaño)
     "ui_icon": {"size": (512, 512), "transparent": True, "fit": "contain"},
+    # íconos del juego que siguen siendo los de 1936 (tools/arte/auditoria.py, 2026-11-03):
+    # cada pedido lleva la imagen de referencia del original (arte/referencias/<id>.png)
+    "game_icon": {"size": (512, 512), "transparent": True, "fit": "contain"},
     # aventuras de las anarquías (21_aventuras.yaml, 2026-10-16): un txt por
     # anarquía, estilo historieta (Moebius + Kill Six Billion Demons); van a
     # assets/events/<evento>.dds como cualquier imagen de evento
@@ -427,6 +430,7 @@ def catalog() -> list[dict]:
     items += _law_items()
     items += _ui_icon_items()
     items += _recurso_items()
+    items += _juego_items()
     # Unidades únicas (2026-10-03: "¿no hay imagen única para el Gliptodonte y
     # otras tecnologías únicas?"): su ícono en producción y en sus tecnologías.
     for u in _load("20_unique_units.yaml").get("units") or []:
@@ -769,6 +773,31 @@ def _law_items() -> list[dict]:
     return items
 
 
+def _juego_items() -> list[dict]:
+    """Íconos del juego por cambiar, con referencia (arte/iconos_juego.yaml, 2026-11-03)."""
+    from tools.arte import auditoria
+    datos = auditoria.cargar()
+    if not datos:
+        return []
+    estilo = _one_line(datos.get("estilo") or "")
+    items = []
+    entradas = [(i["id"], i["familia"], i["donde"], i.get("que", "")) for i in datos.get("iconos") or []]
+    for t in datos.get("tiras") or []:
+        entradas += [(ident, t["familia"], t["donde"], "") for ident in (t.get("iconos") or {}).values()]
+    for ident, fam, donde, que in entradas:
+        dest = REPO / "assets" / "ui" / "piel_iconos" / f"{ident}.dds"
+        items.append({
+            "type": "game_icon", "tag": fam.upper(), "id": ident, "dest": dest, "done": dest.exists(),
+            "size": (512, 512), "transparent": True, "referencia": f"referencias/{ident}.png",
+            "description": (f"WHAT: {donde} of a 2100 grand strategy game. EXACT SUBJECT: redraw from scratch the same "
+                            f"subject as the attached reference image referencias/{ident}.png"
+                            + (f" ({que})" if que else "") + "; keep what it means and its overall shape, "
+                            "but in the style below, with a cleaner and more modern 2100 look."),
+            "style": estilo,
+        })
+    return items
+
+
 def _recurso_items() -> list[dict]:
     """Íconos de los recursos propios de cada nación (arte/recursos_propios.yaml, 2026-11-03)."""
     import yaml
@@ -909,6 +938,8 @@ def _request(item: dict) -> str:
         f"size: {w}x{h} (o más grande con la misma proporción)",
         f"style: {item['style'] if item.get('style') else common + '; ' + style}",
         f"description: {item['description']}",
+        *([f"reference_image: {item['referencia']} (adjuntar esta imagen al pedido: es el ícono original del juego)"]
+          if item.get("referencia") else []),
         f"transparent_background: {'true' if item.get('transparent', kind['transparent']) else 'false'}",
         "",
     ])
@@ -993,14 +1024,14 @@ def pedidos() -> None:
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
              ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes"),
-             ("ui_icon", "16_interfaz"), ("adventure_picture", "17_aventura"),
+             ("ui_icon", "16_interfaz"), ("adventure_picture", "17_aventura"), ("game_icon", "19_iconos_juego"),
              ("loading_screen", "18_pantallas_de_carga")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
         for i in items:
             if i["type"] == kind:
-                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["tag"] in ("INTELIGENCIA", "INTERFAZ", "DOCTRINAS") + TECH_GROUPS + ("LEYES",)
+                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["type"] == "game_icon" or i["tag"] in ("INTELIGENCIA", "INTERFAZ", "DOCTRINAS") + TECH_GROUPS + ("LEYES",)
                                   else "SATELITES_Y_ANARQUIA", []).append(i)
         if kind in SINGLE_FILE and by_tag:
             # un solo archivo, ordenado por facción
@@ -1011,7 +1042,7 @@ def pedidos() -> None:
                             + "\n".join(_request(i) for i in group), encoding="utf-8")
             summary.append(f"{path.name}: {len(group)}")
     (OUT / "0_LEEME.txt").write_text(_readme(summary), encoding="utf-8")
-    _zip_pedidos()
+    _zip_pedidos([i["referencia"] for i in items if i.get("referencia")])
     print(f"{len(items)} pedidos en {OUT} (y {ZIP.relative_to(REPO)})")
     for line in summary:
         print("  " + line)
@@ -1020,7 +1051,7 @@ def pedidos() -> None:
 ZIP = REPO / "arte" / "pedidos.zip"
 
 
-def _zip_pedidos() -> None:
+def _zip_pedidos(referencias: list[str] | None = None) -> None:
     """Todos los pedidos en un zip, para bajarlos con un solo link
     (2026-09-29: "pasame link para mod y para arte"). Fechas fijas: el zip
     solo cambia si cambian los pedidos."""
@@ -1029,6 +1060,12 @@ def _zip_pedidos() -> None:
             info = zipfile.ZipInfo(f"pedidos/{path.name}", date_time=(2026, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED
             z.writestr(info, path.read_bytes())
+        # 2026-11-03: las imágenes de referencia de los íconos del juego pendientes
+        for rel in sorted(set(referencias or [])):
+            src = REPO / "arte" / rel
+            if src.exists():
+                info = zipfile.ZipInfo(f"pedidos/{rel}", date_time=(2026, 1, 1, 0, 0, 0))
+                z.writestr(info, src.read_bytes())
 
 
 def _readme(summary: list[str]) -> str:
@@ -1191,6 +1228,10 @@ if __name__ == "__main__":
         importar(sys.argv[2])
     elif len(sys.argv) >= 2 and sys.argv[1] == "chicos":
         chicos()
+    elif len(sys.argv) >= 3 and sys.argv[1] == "auditar":
+        from tools.arte import auditoria
+        for line in auditoria.armar(sys.argv[2]):
+            print(line)
     elif len(sys.argv) >= 2 and sys.argv[1] == "ficha":
         from tools.arte import ficha
         ficha.main(sys.argv[2:])

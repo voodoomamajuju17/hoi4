@@ -371,10 +371,15 @@ def emit_tabs(ctx: BuildContext) -> None:
     # franja del centro. El vanilla la pinta lisa; un dibujo con textura se
     # vuelve rayas. Esas texturas no se reemplazan.
     stretched = _stretched_textures(ctx)
+    # 2026-11-03 (captura de Reclutamiento: "sigue ese efecto caleidoscópico en los
+    # fondos"): los que REPITEN el centro también lo rompen si el dibujo no empalma
+    # (un mapa del mundo se veía tres veces cortado); a esos, mismo trato
+    repetidos = _stretched_textures(ctx, mosaico=True)
+    no_empalma = {it["texture"].lower() for it in spec.get("items") or [] if not it.get("seamless")}
     done = 0
     for texture, image in sorted(textures.items()):
         vw, vh = _texture_dims(ctx, texture)
-        why = stretched.get(texture.lower())
+        why = stretched.get(texture.lower()) or (repetidos.get(texture.lower()) if texture.lower() in no_empalma else None)
         src = (ctx.spec.root.parent / image).read_bytes()
         w, h = _dims(src)
         data = _resize(src, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else src
@@ -417,9 +422,10 @@ def _cornered(src: bytes, w: int, h: int, bx: int, by: int, ramp: int = 160) -> 
     return src[:128] + bytes(body)
 
 
-def _stretched_textures(ctx: BuildContext) -> dict[str, tuple[str, int, int]]:
+def _stretched_textures(ctx: BuildContext, mosaico: bool = False) -> dict[str, tuple[str, int, int]]:
     """textura (minúsculas) -> (sprite, borde x, borde y) de los corneredTile
-    con borde que estiran el centro en vez de repetirlo."""
+    con borde que estiran el centro en vez de repetirlo (con mosaico=True,
+    también los que lo repiten)."""
     out: dict[str, tuple[str, int, int]] = {}
     for path in (ctx.vanilla.root / "interface").glob("**/*.gfx"):
         try:
@@ -431,7 +437,7 @@ def _stretched_textures(ctx: BuildContext) -> dict[str, tuple[str, int, int]]:
             t = re.search(r'texture[Ff]ile\s*=\s*"([^"]+)"', body)
             b = _BORDER.search(body)
             tiling = _TILING_CENTER.search(body)
-            if not (n and t and b) or (tiling and tiling.group(1).lower() == "yes"):
+            if not (n and t and b) or (not mosaico and tiling and tiling.group(1).lower() == "yes"):
                 continue
             bx, by = int(b.group(1)), int(b.group(2))
             if bx or by:

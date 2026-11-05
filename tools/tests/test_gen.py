@@ -5003,10 +5003,29 @@ def test_ficha_lider() -> None:
         check("acentos: hilo del color de la facción bajo la barra y escuadras en Política (2026-11-03)",
               "parent_window_token = top_bar" in ac and "parent_window_token = politics_tab" in ac
               and "hilo_ZJP_visible = { tag = ZJP }" in ac and "esq_der_EFE_visible = { tag = EFE }" in ac, ac[:300])
+        check("acentos: las escuadras también en Decisiones, Investigación, Producción y el árbol de focos (2026-11-05)",
+              all(f"parent_window_token = {t}" in ac for t in ("decision_tab", "technology_tab", "production_tab", "national_focus"))
+              and 'name = "mn_acento_decision_tab_der_window"' in (mod / "interface/meganations_acentos.gui").read_text(encoding="utf-8")
+              and "orientation = upper_right" in (mod / "interface/meganations_acentos.gui").read_text(encoding="utf-8"), ac[:300])
+        check("ficha: el recurso propio como emblema junto al título y marca de agua detrás de los atributos (2026-11-05)",
+              'spriteType = "GFX_mn_ficha_emblema_recurso_ZJP_giri"' in gui and 'spriteType = "GFX_mn_ficha_marca_recurso_NRE_auctoritas"' in gui
+              and gui.index('name = "marca_1"') < gui.index('name = "nom_car"')
+              and "emblema_10_visible = { tag = ZAL check_variable = { var = ZAL_ruta value = 2" in sg
+              and (mod / f"{fl.TEX}/marca/recurso_EFE_bioacero.dds").exists(), sg[:300])
+        check("ficha: el pie lleva el lema de cada nación (2026-11-05)",
+              'text = "[MN_ficha_lema]"' in gui and "trigger = { tag = ZJP } localization_key = MN_FICHA_LEMA_ZJP" in sl
+              and "localization_key = MN_FICHA_PIE" in sl, sl[:300])
         foc = " ".join((mod / "common/national_focus/ZJP_focus.txt").read_text(encoding="utf-8-sig").split()) \
             if (mod / "common/national_focus/ZJP_focus.txt").exists() else ""
         check("Shogunato: el árbol tarda el doble (metas de 140 días; 2026-11-03)",
               not foc or ("cost = 20" in foc and "cost = 10 " not in foc), foc[:200])
+        ov = (mod / "gfx/interface/tiles/tiled_generic_overlay_bg1.dds").read_bytes() \
+            if (mod / "gfx/interface/tiles/tiled_generic_overlay_bg1.dds").exists() else b""
+        if ov:
+            _w, _h = _st.unpack_from("<II", ov, 12)[::-1]
+            px = lambda x, y: ov[128 + (y * _w + x) * 4:128 + (y * _w + x) * 4 + 3]
+            check("fondos: el centro que el juego repite queda liso si el dibujo no empalma (sin caleidoscopio, 2026-11-03)",
+                  px(_w // 2, _h // 2) == px(_w // 2 + 3, _h // 2 + 5), f"{_w}x{_h}")
         loc = (mod / "localisation/spanish/meganations_ficha_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("ficha: textos en castellano", 'MN_FICHA_TITULO:0 "EL LÍDER"' in loc and "baja [?MEGANATIONS_lider_desgaste|0]" in loc, loc[:300])
     from tools.arte import arte as _arte
@@ -5101,9 +5120,9 @@ def test_lider_ck() -> None:
               "add_to_variable = { var = MEGANATIONS_lider_total_carisma value = MEGANATIONS_lider_bono_carisma }" in rec, rec[:800])
         nas = " ".join((mod / "common/characters/NAS_characters.txt").read_text(encoding="utf-8-sig").split())
         m = nas[nas.index("NAS_min_mamani_1 = {"):][:2500]
-        check("el ministro suma al entrar y resta al salir",
-              "on_add = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = -1 }" in m
-              and "on_remove = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = 1 }" in m, m[:900])
+        check("el ministro suma al entrar y resta al salir, sobre el país (OWNER, error.log 2026-11-03)",
+              "on_add = { OWNER = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = -1 }" in m
+              and "on_remove = { OWNER = { add_to_variable = { var = MEGANATIONS_lider_bono_carisma value = 1 }" in m, m[:900])
         ev = " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in (mod / "events").glob("*.txt"))
         n = ev.count("limit = { has_country_flag = MEGANATIONS_lider_listo }")
         check("las opciones de los eventos elegidos mueven las stats (solo en las meganaciones)", n >= 184, n)

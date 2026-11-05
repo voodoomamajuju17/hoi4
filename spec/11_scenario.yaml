@@ -450,7 +450,9 @@ ficha_lider:
   src: user_request
   # 2026-11-03 (captura: debajo de la bandera tapaba el retrato del general al
   # elegir un ejército): sube a la fila de botones de la barra, después del último
-  button: {x: 626, y: 37, orientation: upper_left}
+  # 2026-11-03 (captura: en la fila de botones tapaba el panel de oficiales): al lado del
+  # recurso propio, en la fila de arriba
+  button: {x: 1110, y: 0, orientation: upper_left}
   styles: {EFE: efe, FCU: fcu, ASC: asc, ZAL: zal, ZJP: zjp, HSN: hsn, NAS: nas, SHD: shd, APF: apf, NRE: nre}
   # 2026-11-03 ("dale con la opción 1"): La Sucesión del EFE dentro de la Ficha, en la
   # segunda fila del gabinete. Cada candidato toma costo, requisitos y efectos de su
@@ -513,4 +515,19 @@ ficha_lider:
       ZAL: [190, 70, 84]
     topbar: {x: 0, y: 77, width: 690}
     politics: {x: 0, y: 0, width: 540}
+    # 2026-11-05 ("expandir el uso del color único"): las escuadras también en estas pantallas
+    windows: [decision_tab, technology_tab, production_tab, construction_tab, trade_tab, logistics_tab,
+              deployment_tab, national_focus]
+  # el lema de cada nación en el pie de la Ficha (2026-11-05, "un toque más de personalidad")
+  mottos:
+    EFE: {english: "The forest does not ask who rules. Neither do I.", spanish: "El monte no pregunta quién manda. Yo tampoco."}
+    FCU: {english: "Everything has a price. Even silence.", spanish: "Todo tiene precio. Hasta el silencio."}
+    ASC: {english: "No one is surplus. Nothing is wasted.", spanish: "Nadie sobra. Nada se pierde."}
+    HSN: {english: "Every ship that passes, pays.", spanish: "Cada barco que pasa, paga."}
+    NAS: {english: "The Sun is not up for negotiation.", spanish: "El Sol no se negocia."}
+    SHD: {english: "When the rivers obey, Heaven is silent.", spanish: "Cuando los ríos obedecen, el Cielo calla."}
+    APF: {english: "No one is saved alone.", spanish: "Nadie se salva solo."}
+    NRE: {english: "Rome is not asked for. Rome is taken.", spanish: "Roma no se pide. Se toma."}
+    ZJP: {english: "Debts are paid. In steel or in blood.", spanish: "La deuda se paga. Con acero o con sangre."}
+    ZAL: {english: "God save whatever is left.", spanish: "Dios salve a lo que quede."}
 

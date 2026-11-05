@@ -2391,4 +2391,44 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   en bronce sobrio con detalles de color, los 4 de ideologías y los 11 fondos
   y cabeceras (_v2). Todo el arte pedido para la interfaz está; quedan los
   160 eventos.
+- Auditoría de íconos del juego (2026-11-03, "estoy seguro que todavía hay mil
+  íconos y cositas para cambiar"): tools/arte/auditoria.py (`arte auditar
+  <zip>`) arma arte/iconos_juego.yaml con 415 íconos de 1936 que se ven
+  siempre: 60 de decisiones y 20 de categorías (las casi 700 decisiones del
+  mod usan 13), 70 alertas, 21 pedidos diplomáticos, 14 alertas de teatro y
+  230 módulos del diseñador. Cada pedido (19_iconos_juego_*.txt) lleva su
+  imagen de referencia (arte/referencias/, también en pedidos.zip): "el mismo
+  motivo, dibujado de nuevo en el estilo del mod". piel.py los pone en su
+  lugar al llegar, sin recolorear.
+- Error del juego (error.log del 2026-11-03): los efectos de los ministros
+  al entrar y salir corrían sobre el personaje ("Invalid scope type for
+  trigger has_country_flag in common/characters/..."); ahora van dentro de
+  OWNER, como en Millennium Dawn. Sin esto no se encendía su casilla ni
+  sumaban sus stats al líder.
+- Botones con dibujo de arriba a la derecha (ejército, armada, aviación,
+  música, pausa, cerrar) conservan el dibujo: el redibujado los oscurecía.
+- Fondos "caleidoscópicos" (captura de Reclutamiento): el juego repite el
+  centro de algunos fondos en mosaico y un dibujo que no empalma (el mapa del
+  mundo) salía cortado y repetido; ahora, igual que con los estirados, el
+  dibujo queda en las esquinas y el centro es liso.
+- El botón de la Ficha pasa a la fila de arriba, al lado del recurso propio
+  (x 1110, 30 px): en la fila de botones tapaba el panel de oficiales.
 
+- Personalidad de la Ficha del Líder (2026-11-05, "ponele un toque más de
+  personalidad a la ventana de líder... expandir el uso del color único"):
+  el recurso propio de la nación aparece como emblema junto a "EL LÍDER"
+  (con el número del recurso al pasar el mouse) y como marca de agua tenue,
+  teñida del color de la facción, detrás de los atributos (Albión cambia de
+  Pompa a Sincronía según su camino). Encima de cada marco, en el color de
+  la facción: el filete de la cabecera, un rombo y un tramo de color al
+  empezar cada sección, un halo detrás del retrato, un filete dentro de la
+  placa del nombre y el canto de las cajas de "lo que pesa hoy". El pie
+  lleva el lema de cada nación (11_scenario.yaml -> ficha_lider.mottos); la
+  ayuda "cada punto sobre o bajo 10 cuenta" pasa al rótulo ATRIBUTOS.
+  Arte: `arte ficha` y `arte ficha recursos` (emblema 44 px, marca 260 px).
+- El color de la facción en más pantallas (2026-11-05): las escuadras de las
+  esquinas de Política también en Decisiones, Investigación, Producción,
+  Construcción, Comercio, Logística, Despliegue y el árbol de focos
+  (faction_accents.windows; los nombres de ventana válidos salen del
+  validador tiger-lib). La esquina derecha se ancla arriba a la derecha de
+  cada pantalla, así no hace falta conocer su ancho. Sin probar en el juego.

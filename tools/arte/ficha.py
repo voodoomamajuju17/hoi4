@@ -494,6 +494,84 @@ def _marco_color(color):
     return dibujar
 
 
+# -- detalles por facción (2026-11-05, "ponele un toque más de personalidad a la ventana
+# del líder... expandir el uso del color único"): encima de cada marco, en el color de
+# la facción (11_scenario.yaml -> faction_accents): el filete de la cabecera, un rombo y
+# un tramo de color al empezar cada sección, un halo detrás del retrato, el borde de la
+# placa del nombre, el canto de las cajas de "lo que pesa hoy" y la viñeta del lema.
+
+def _hilo_color(img, x0, x1, y, color, alpha=230, puntas=0.25):
+    """Línea de 1 px en el color dado que se apaga en las puntas, con un halo de 1 px."""
+    from PIL import Image, ImageDraw, ImageFilter
+    capa = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(capa)
+    for x in range(x0, x1):
+        t = (x - x0) / max(1, x1 - x0)
+        a = alpha * max(0.0, min(1.0, t / puntas, (1 - t) / puntas))
+        d.point((x, y), tuple(color) + (round(a),))
+    halo = capa.filter(ImageFilter.GaussianBlur(1.4))
+    img.alpha_composite(halo)
+    img.alpha_composite(capa)
+
+
+def _rombo(d, cx, cy, r, color, alpha=255):
+    d.polygon([(cx, cy - r), (cx + r, cy), (cx, cy + r), (cx - r, cy)], fill=tuple(color) + (alpha,),
+              outline=(20, 10, 4, 200))
+
+
+def _detalles(img, D, color):
+    from PIL import Image, ImageDraw, ImageFilter
+    W, H = D["ventana"]
+    color = tuple(color)
+    claro = _lerp(color, (255, 255, 255), 0.35)
+    # halo detrás del retrato: se ve alrededor del marco del retrato
+    mx, my, mw, mh = D["retrato_marco"]
+    halo = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(halo).rounded_rectangle((mx - 4, my - 4, mx + mw + 4, my + mh + 4), radius=10,
+                                          outline=color + (150,), width=6)
+    img.alpha_composite(halo.filter(ImageFilter.GaussianBlur(7)))
+    # cabecera: el filete de cobre toma el color de la facción en el centro
+    _hilo_color(img, 0, W, D["cabecera"], color, 210, 0.3)
+    # secciones: un rombo y un tramo de color al empezar cada filete
+    sx, sec = D["stats_x"], D["secciones"]
+    d = ImageDraw.Draw(img)
+    for x0, y in ((sx + 110, sec["atributos"] - 9), (sx + 170, sec["pesa"] - 9), (36 + 330, sec["gabinete"] - 9)):
+        _hilo_color(img, x0 + 8, x0 + 150, y, color, 230, 0.6)
+        d = ImageDraw.Draw(img)
+        _rombo(d, x0, y, 4, claro)
+    # placa del nombre: un filete de color por dentro del borde de cobre
+    qx0, py0, qx1, py1 = D["placa"]
+    i = 4
+    poly = [(qx0 + 14 + i, py0 + i), (qx1 - 14 - i, py0 + i), (qx1 - i, (py0 + py1) // 2), (qx1 - 14 - i, py1 - i),
+            (qx0 + 14 + i, py1 - i), (qx0 + i, (py0 + py1) // 2)]
+    placa = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(placa).polygon(poly, outline=color + (190,))
+    img.alpha_composite(placa)
+    d = ImageDraw.Draw(img)
+    for x in (qx0 + 2, qx1 - 2):
+        _rombo(d, x, (py0 + py1) // 2, 3, claro)
+    # cajas de "lo que pesa hoy": el canto izquierdo en el color de la facción
+    ew, eh = D["efecto"]
+    for x in D["efectos_x"]:
+        y = D["efectos_y"]
+        d.rectangle((x, y, x + 1, y + eh), fill=color + (255,))
+        d.line((x + 2, y, x + 40, y), fill=color + (110,))
+    # pie: viñeta del lema
+    _rombo(d, 56, H - 25, 4, claro)
+    return img
+
+
+def _colores_estilo() -> dict:
+    """Estilo de marco -> color de la facción (de 11_scenario.yaml, faction_accents)."""
+    import yaml
+    from tools.gen.emitters.ficha_lider import ESTILOS_POR_DEFECTO
+    cfg = (yaml.safe_load((REPO / "spec" / "11_scenario.yaml").read_text(encoding="utf-8"))
+           .get("ficha_lider") or {})
+    colores = (cfg.get("faction_accents") or {}).get("colors") or {}
+    estilos = {**ESTILOS_POR_DEFECTO, **(cfg.get("styles") or {})}
+    return {e: colores[t] for t, e in estilos.items() if t in colores}
+
+
 PIEZAS = {
     "fondo": fondo, "retrato_marco": retrato_marco,
     "barra_total": lambda D: _barra(D, (TEAL_HI, TEAL, TEAL_LO), True),
@@ -514,8 +592,12 @@ def dibujar(salida: Path = SALIDA) -> list[str]:
     from tools.gen.emitters.ficha_lider import DISENO
     salida.mkdir(parents=True, exist_ok=True)
     hechas = []
+    colores = _colores_estilo()
     for nombre, fn in PIEZAS.items():
         img = fn(DISENO).convert("RGBA")
+        estilo = nombre[len("marco_"):] if nombre.startswith("marco_") else None
+        if estilo in colores and img.size == tuple(DISENO["ventana"]):
+            img = _detalles(img, DISENO, colores[estilo])
         raw = img.tobytes()
         art.write_dds(salida / f"{nombre}.dds", img.width, img.height,
                       [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)])
@@ -546,6 +628,67 @@ def recursos_chicos(lado: int = 28) -> list[str]:
         art.write_dds(salida / src.name, lado, lado, [tuple(raw[i:i + 4]) for i in range(0, len(raw), 4)])
         hechas.append(src.stem)
     return [f"recursos: {len(hechas)} íconos chicos ({lado} px) en {salida.relative_to(REPO)}"]
+
+
+def recursos_ficha(colores: dict, lado_emblema: int = 44, lado_marca: int = 260) -> list[str]:
+    """El recurso propio en la Ficha del Líder (2026-11-05): un emblema junto a "EL LÍDER"
+    (con un halo suave en el color de la facción) y una marca de agua grande y tenue,
+    teñida de ese color, detrás de los atributos. Solo los recursos principales
+    (los de la barra superior), que son los que identifican a la nación."""
+    import sys
+    sys.path.insert(0, str(REPO))
+    from PIL import Image, ImageFilter, ImageOps
+    from tools.gen import art
+    base = REPO / "assets" / "ui" / "recursos"
+
+    def ajustar(img, lado, relleno=1.0):
+        caja = img.getchannel("A").point(lambda a: 255 if a > 16 else 0).getbbox()
+        if caja:
+            img = img.crop(caja)
+        k = lado * relleno / max(img.size)
+        img = img.resize((max(1, round(img.width * k)), max(1, round(img.height * k))), Image.LANCZOS)
+        lienzo = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
+        lienzo.alpha_composite(img, ((lado - img.width) // 2, (lado - img.height) // 2))
+        return lienzo
+
+    def guardar(img, ruta):
+        raw = img.tobytes()
+        art.write_dds(ruta, img.width, img.height, [tuple(raw[i:i + 4]) for i in range(0, len(raw), 4)])
+
+    hechas = []
+    for icono, color in colores.items():
+        src = base / f"{icono}.dds"
+        if not src.exists():
+            continue
+        color = tuple(color)
+        img = Image.open(src).convert("RGBA")
+        # emblema: el ícono con un halo de color detrás
+        e = ajustar(img, lado_emblema, 0.86)
+        halo = Image.new("RGBA", e.size, color + (0,))
+        halo.putalpha(e.getchannel("A").point(lambda a: round(a * 0.7)))
+        halo = halo.filter(ImageFilter.GaussianBlur(3))
+        halo.alpha_composite(e)
+        guardar(halo, base / "emblema" / f"{icono}.dds")
+        # marca de agua: luminancia del ícono teñida del color de la facción, muy tenue
+        m = ajustar(img, lado_marca, 0.92)
+        gris = ImageOps.grayscale(m.convert("RGB"))
+        tinte = ImageOps.colorize(gris, black=_lerp(color, (0, 0, 0), 0.6), white=_lerp(color, (255, 255, 255), 0.4))
+        tinte = tinte.convert("RGBA")
+        tinte.putalpha(m.getchannel("A").point(lambda a: round(a * 0.085)))
+        guardar(tinte, base / "marca" / f"{icono}.dds")
+        hechas.append(icono)
+    return [f"recursos: {len(hechas)} emblemas ({lado_emblema} px) y marcas de agua ({lado_marca} px) "
+            f"en {base.relative_to(REPO)}/emblema y /marca"]
+
+
+def _colores_recurso() -> dict:
+    """Ícono de cada recurso principal (barra superior) -> color de su facción."""
+    import yaml
+    cfg = (yaml.safe_load((REPO / "spec" / "11_scenario.yaml").read_text(encoding="utf-8"))
+           .get("ficha_lider") or {})
+    colores = (cfg.get("faction_accents") or {}).get("colors") or {}
+    return {i["icon"]: colores[i["country"]] for i in (cfg.get("resource_bar") or {}).get("items") or []
+            if i.get("country") in colores}
 
 
 def acentos(colores: dict, ancho_barra: int, ancho_pol: int) -> list[str]:
@@ -599,7 +742,7 @@ def main(argv: list[str]) -> None:
             print(line)
         return
     if argv and argv[0] == "recursos":
-        for line in recursos_chicos():
+        for line in recursos_chicos() + recursos_ficha(_colores_recurso()):
             print(line)
         return
     for line in dibujar(Path(argv[0]) if argv else SALIDA):
