@@ -2485,3 +2485,9 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   con su pin actual como referencia del motivo).
 - El inventario de la interfaz suma el árbol de focos (nationalfocusview.gui),
   para rediseñar la placa del nombre del foco con el próximo ui_para_claude.zip.
+- Botón del Líder (2026-11-05, captura): un poco más abajo y a la izquierda,
+  pegado al número del recurso (x 1064, y 4); pedido de ícono nuevo
+  (arte/pedidos_fijos/22_boton_lider.txt, va a assets/ui/ficha/fuente/
+  boton_lider.png y `arte ficha` lo usa). El color del Imperio pasa de oro
+  viejo a verde (92, 196, 112): hilo, escuadras, detalles de la Ficha, las
+  ramas de su marco, emblema y marca de agua.

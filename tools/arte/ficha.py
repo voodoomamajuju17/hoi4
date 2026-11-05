@@ -264,6 +264,18 @@ def _hexagono(w, h, inset=0):
 def boton(D):
     from PIL import Image, ImageDraw
     final = D["boton"]
+    # 2026-11-05 ("definitivamente necesita un nuevo ícono"): si llegó el arte pedido
+    # (arte/pedidos_fijos/22_boton_lider.txt), va ese, achicado al tamaño de la barra
+    fuente = SALIDA / "fuente" / "boton_lider.png"
+    if fuente.exists():
+        img = Image.open(fuente).convert("RGBA")
+        caja = img.getchannel("A").point(lambda a: 255 if a > 16 else 0).getbbox()
+        if caja:
+            img = img.crop(caja)
+        img.thumbnail((final, final), Image.LANCZOS)
+        out = Image.new("RGBA", (final, final), (0, 0, 0, 0))
+        out.alpha_composite(img, ((final - img.width) // 2, (final - img.height) // 2))
+        return out
     n = 46   # se dibuja a 46 y se achica al tamaño de la barra
     S = 4
     big = Image.new("RGBA", (n * S, n * S), (0, 0, 0, 0))
@@ -365,12 +377,14 @@ def marco_efe(D):
     W, H = D["ventana"]
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    d.rectangle((5, 5, W - 6, H - 6), outline=ORO + (120,))
+    # 2026-11-05 ("no vi el color de facción en el EFE, ¿no debería ser un verde?")
+    VERDE = (92, 196, 112)
+    d.rectangle((5, 5, W - 6, H - 6), outline=VERDE + (120,))
     # cada rama nace en la esquina y sube por el borde (96 px)
-    _enredadera(d, 6, 6 + 96, 1, -1, ORO)
-    _enredadera(d, W - 7, 6 + 96, -1, -1, ORO)
-    _enredadera(d, 6, H - 7 - 96, 1, 1, ORO)
-    _enredadera(d, W - 7, H - 7 - 96, -1, 1, ORO)
+    _enredadera(d, 6, 6 + 96, 1, -1, VERDE)
+    _enredadera(d, W - 7, 6 + 96, -1, -1, VERDE)
+    _enredadera(d, 6, H - 7 - 96, 1, 1, VERDE)
+    _enredadera(d, W - 7, H - 7 - 96, -1, 1, VERDE)
     return img
 
 
