@@ -2432,3 +2432,13 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   (faction_accents.windows; los nombres de ventana válidos salen del
   validador tiger-lib). La esquina derecha se ancla arriba a la derecha de
   cada pantalla, así no hace falta conocer su ancho. Sin probar en el juego.
+- Acentos de color alineados (2026-11-05, captura de Política con la FCU, "los
+  celestes están desalineados"): medidos sobre la captura, las escuadras
+  quedaban 5 px arriba del marco, la izquierda 6 px fuera de la pantalla y la
+  derecha 8 px antes del borde; el hilo quedaba debajo del panel (y 79, el
+  panel arranca en 78) y asomaba al costado. Ahora las escuadras abrazan las
+  esquinas del marco (politics x 4, y 5, ancho 544) y el hilo va sobre el borde
+  de abajo de la barra (y 74). Las otras pantallas usan la misma corrección
+  (faction_accents.windows_offset), sin captura todavía.
+- Focos del Imperio Ecofascista: los 70 íconos en el estilo "pin" (insignia
+  de bronce y esmalte verde) reemplazan a los anteriores (tandas 01 a 03).

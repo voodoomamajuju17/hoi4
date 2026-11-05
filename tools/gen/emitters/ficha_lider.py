@@ -476,14 +476,16 @@ def _acentos(ctx: BuildContext) -> None:
     validas = {"decision_tab", "technology_tab", "trade_tab", "construction_tab", "production_tab",
                "deployment_tab", "logistics_tab", "diplomacy_tab", "national_focus"}
     pantallas = []
+    off = cfg.get("windows_offset") or {}
     for token in cfg.get("windows") or []:
         if token not in validas:
             ctx.warn(f"acentos de facción: '{token}' no es una ventana que acepte scripted GUI")
             continue
-        for lado, orient, x in (("izq", "upper_left", 0), ("der", "upper_right", -38)):
+        for lado, orient, x in (("izq", "upper_left", int(off.get("x", 0))),
+                                ("der", "upper_right", int(off.get("right_x", -38)))):
             ventana = f"mn_acento_{token}_{lado}_window"
             gui.append(f'\tcontainerWindowType = {{\n\t\tname = "{ventana}"\n'
-                       f'\t\tposition = {{ x = {x} y = 0 }}\n\t\tsize = {{ width = 38 height = 38 }}\n'
+                       f'\t\tposition = {{ x = {x} y = {int(off.get("y", 0))} }}\n\t\tsize = {{ width = 38 height = 38 }}\n'
                        f'\t\torientation = {orient}\n')
             for t in tags:
                 gui.append(_icon(f"esq_{lado}_{t}", 0, 0, f"GFX_mn_acento_escuadra_{lado}_{t}",

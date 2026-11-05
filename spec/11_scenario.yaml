@@ -513,8 +513,15 @@ ficha_lider:
       NRE: [156, 76, 168]
       ZJP: [255, 45, 120]
       ZAL: [190, 70, 84]
-    topbar: {x: 0, y: 77, width: 690}
-    politics: {x: 0, y: 0, width: 540}
+    # 2026-11-05 (captura de Política con la FCU, "los celestes están desalineados"):
+    # el hilo quedaba debajo del panel (y 79, el panel arranca en 78) y asomaba al costado;
+    # ahora va sobre el borde de abajo de la barra. Las escuadras quedaban 5 px arriba del
+    # marco, la izquierda 6 px afuera de la pantalla y la derecha 8 px antes del borde.
+    topbar: {x: 0, y: 74, width: 690}
+    politics: {x: 4, y: 5, width: 544}
+    # las otras pantallas son paneles del mismo lado y del mismo alto: misma corrección
+    # (la esquina derecha se ancla al borde derecho de cada pantalla)
+    windows_offset: {x: 4, y: 5, right_x: -36}
     # 2026-11-05 ("expandir el uso del color único"): las escuadras también en estas pantallas
     windows: [decision_tab, technology_tab, production_tab, construction_tab, trade_tab, logistics_tab,
               deployment_tab, national_focus]
