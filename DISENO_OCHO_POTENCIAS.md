@@ -2466,3 +2466,10 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   llenas de cosas: el estilo ahora dice "un pin, no una moneda" (la silueta
   sigue al emblema) y la Comuna lleva el circuito grabado en el acero en vez
   de la placa verde.
+- Pines: Neoandinos 26-40 y 20 de la Comuna (ya recortados, no monedas).
+- Logo nuevo (2026-11-05, "podés mejorarlo MUCHÍSIMO... ¿materiales
+  reales?"): arte/pedidos_fijos/21_logo.txt (se copia a pedidos/ en cada
+  `arte pedidos`). A: barra de vidrio ahumado con letras de cobre fundido,
+  filete de vidrio turquesa y el emblema de diez segmentos (uno por
+  meganación, en sus colores) con 2100 en el centro; B: insignia de bronce y
+  esmalte; C: chapa de blindaje; D: el emblema solo, para ícono del mod.

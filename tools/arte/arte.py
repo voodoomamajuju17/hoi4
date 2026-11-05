@@ -1045,6 +1045,10 @@ def pedidos() -> None:
     from tools.arte import focos_pin
     pin_resumen, pin_refs = focos_pin.escribir(OUT)
     summary += pin_resumen
+    # pedidos escritos a mano (arte/pedidos_fijos/*.txt, ej. el logo): se copian tal cual
+    for fijo in sorted((REPO / "arte" / "pedidos_fijos").glob("*.txt")):
+        (OUT / fijo.name).write_text(fijo.read_text(encoding="utf-8"), encoding="utf-8")
+        summary.append(f"{fijo.name}: {fijo.read_text(encoding='utf-8').count('ASSET_REQUEST')}")
     (OUT / "0_LEEME.txt").write_text(_readme(summary), encoding="utf-8")
     _zip_pedidos([i["referencia"] for i in items if i.get("referencia")] + pin_refs)
     print(f"{len(items)} pedidos en {OUT} (y {ZIP.relative_to(REPO)})")
