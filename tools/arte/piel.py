@@ -263,6 +263,23 @@ def _brillo(img, k: float):
     return out
 
 
+def _contraste(img, k: float):
+    from PIL import ImageEnhance
+    a = img.getchannel("A")
+    out = ImageEnhance.Contrast(img.convert("RGB")).enhance(k).convert("RGBA")
+    out.putalpha(a)
+    return out
+
+
+def _halo(dib, color=(255, 214, 170), alpha=70):
+    """Un resplandor suave detrás del dibujo, para que se lea sobre la placa oscura."""
+    from PIL import Image, ImageFilter
+    a = dib.getchannel("A").filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(1.5))
+    out = Image.new("RGBA", dib.size, color + (0,))
+    out.putalpha(a.point(lambda v: v * alpha // 255))
+    return out
+
+
 def _placa(frame, borde: int):
     """La placa del botón de la barra sin el dibujo: el interior se rellena
     con la transparencia de la columna de adentro del borde, fila por fila."""
@@ -339,7 +356,12 @@ def _icono(pieza: dict, original, material):
             if _es_nuevo(pieza["id"]):
                 placa = cristal_y_cobre(placa)   # el ícono nuevo ya viene en cobre: solo la placa
             dib = _en_caja(icon, (fw, fh), caja)
-            placa.alpha_composite(_brillo(dib, 0.82 if i == 0 else 1.12))
+            # 2026-11-05 ("los íconos no se entienden muy bien, está medio oscuro todo"): antes
+            # el cuadro normal iba al 82 %; el bronce nuevo ya es oscuro, así que se aclara y se
+            # le da más contraste, y un halo cálido tenue lo separa de la placa
+            dib = _contraste(_brillo(dib, 1.18 if i == 0 else 1.38), 1.18)
+            placa.alpha_composite(_halo(dib))
+            placa.alpha_composite(dib)
             out.append(placa)
         return _join(out)
     if uso == "foto":

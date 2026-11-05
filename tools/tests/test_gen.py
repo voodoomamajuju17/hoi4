@@ -562,11 +562,14 @@ def test_phase3_content() -> None:
               == (REPO_ROOT / "assets/EFE/flags/EFE.tga").read_bytes())
         check("los demas siguen con bandera placeholder", (mod / "gfx/flags/ASC.tga").exists())
         gfx = (mod / "interface/meganations_EFE_goals.gfx").read_text()
-        for icon in ("GFX_EFE_reforest_patagonia", "GFX_EFE_condor_doctrine"):
+        # 2026-11-05: el pin propio del foco gana sobre el icon_asset viejo
+        for fid in ("EFE_el_monte_se_levanta", "EFE_doctrina_del_condor"):
+            icon = f"GFX_focus_{fid}"
             check(f"sprite {icon} y su _shine", f'"{icon}"' in gfx and f'"{icon}_shine"' in gfx)
-            check(f"textura de {icon} copiada", (mod / f"gfx/interface/goals/{icon[4:]}.dds").exists())
+            check(f"textura de {icon} copiada", (mod / f"gfx/interface/goals/{fid}.dds").exists())
         focus_txt = (mod / "common/national_focus/EFE_focus.txt").read_text()
-        check("foco usa icono propio aunque vanilla no lo tenga", "icon = GFX_EFE_green_legions" in focus_txt)
+        check("foco usa su pin propio y no el ícono viejo del spec (2026-11-05)",
+              "icon = GFX_focus_EFE_legiones_de_iguazu" in focus_txt and "GFX_EFE_green_legions" not in focus_txt)
 
         hist_dir = mod / "history/countries"
         ours = {c.tag for c in ctx.spec.countries}
@@ -2579,8 +2582,8 @@ def test_focos_pin() -> None:
     section("focos en estilo pin: material por nación y rama, el ícono viejo de referencia (2026-11-05)")
     from tools.arte import focos_pin
     it = {i["id"]: i for i in focos_pin.items()}
-    check("pin: no se vuelven a pedir los del Imperio (ya están) y sí los del resto",
-          not any(i["tag"] == "EFE" for i in it.values()) and {"NRE", "ZAL", "APF"} <= {i["tag"] for i in it.values()},
+    check("pin: se piden los que faltan (el Imperio de nuevo, 2026-11-05)",
+          {"NRE", "ZAL", "APF"} <= {i["tag"] for i in it.values()},
           str(len(it)))
     zal = [i for i in it.values() if i["tag"] == "ZAL"]
     check("pin: Albión neovictoriana bordada, transhumana en placa de circuito azul",

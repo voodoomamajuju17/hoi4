@@ -36,6 +36,9 @@ SCREENS: dict[str, list[str]] = {
     # pantalla principal y de elección de países"). Con * se toman todos los .gui
     # que coinciden (los nombres cambian entre versiones del juego).
     "menu_principal": ["frontendmainview.gui", "mainmenu*.gui", "frontend_main*.gui"],
+    # 2026-11-05 ("fijate qué podés hacer con el marco, la parte del cuadrito que dice el
+    # nombre del foco"): el árbol de focos, con la placa del nombre y sus estados
+    "arbol_de_focos": ["nationalfocusview.gui", "*focus*.gui"],
     "eleccion_de_pais": ["frontend*.gui", "*bookmark*.gui", "*countryselect*.gui", "*gamesetup*.gui",
                          "*lobby*.gui"],
 }

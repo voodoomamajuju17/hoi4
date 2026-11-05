@@ -114,7 +114,9 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
     for branch in tree["branches"]:
         for f in branch.get("focuses", []) or []:
             own = repo / "assets" / tag / "goals" / f"{f['id']}.dds"
-            if not f.get("icon_asset") and own.exists():
+            # 2026-11-05 (captura: cuatro focos del EFE seguían con el ícono viejo): el ícono
+            # propio del foco (los pines nuevos) gana también sobre un icon_asset viejo
+            if own.exists():
                 f["icon_asset"] = f"assets/{tag}/goals/{f['id']}.dds"
                 f["icon"] = f"GFX_focus_{f['id']}"
     # Un icono propio es de un solo foco: repetirlo está prohibido.

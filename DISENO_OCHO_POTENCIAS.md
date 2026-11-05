@@ -2473,3 +2473,15 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   filete de vidrio turquesa y el emblema de diez segmentos (uno por
   meganación, en sus colores) con 2100 en el centro; B: insignia de bronce y
   esmalte; C: chapa de blindaje; D: el emblema solo, para ícono del mod.
+- Interfaz más clara (2026-11-05, capturas): los íconos de la barra superior
+  iban al 82 % de brillo; ahora al 118 % (138 % con el mouse encima), con más
+  contraste y un halo cálido tenue. Los huecos vacíos de asesores y empresas
+  (silueta, fábrica, tanque, "+") conservan su dibujo: el redibujado los
+  dejaba como un pozo negro.
+- Cuatro focos del Imperio (Doctrina del Cóndor, Legiones de Iguazú,
+  Autarquía Total, El Monte se Levanta) seguían con el ícono viejo porque el
+  spec les fijaba otro archivo: ahora el ícono propio del foco siempre gana.
+- El Imperio se vuelve a pedir entero en el estilo ajustado (20_focos_pin_EFE,
+  con su pin actual como referencia del motivo).
+- El inventario de la interfaz suma el árbol de focos (nationalfocusview.gui),
+  para rediseñar la placa del nombre del foco con el próximo ui_para_claude.zip.
