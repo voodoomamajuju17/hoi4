@@ -1,0 +1,102 @@
+# Íconos de foco en estilo "pin" (2026-11-05).
+# Pedido: "rehacé los pedidos faltantes de focos para encajar con el nuevo estilo.
+# Mega foco en el realismo, tienen que parecer fotos de pines posta. Materiales
+# verdaderos. Los de neovictoria bordados, con telas y metal; los de Albión
+# transhumana en una placa, tarjeta o PCB azul y metal; ónix, hierro y esmeralda
+# para los Zaibatsu, y así. Sencillo, poco elemento y bien claro. Como los del EFE."
+# El modelo son los 70 del Imperio Ecofascista (bronce envejecido y esmalte verde).
+# Los pide tools/arte/focos_pin.py (arte/pedidos/20_focos_pin_<TAG>.txt); cada pedido
+# lleva el ícono viejo como referencia del motivo (arte/referencias_focos/).
+
+estilo: >-
+  macro product photograph of ONE real, physical collectible pin badge, photorealistic, made of true
+  materials (see MATERIAL), the way a real enamel pin or military badge looks on a jeweller's photo:
+  real metal reflections, real enamel gloss, tiny honest wear on the edges. Shot straight-on from the
+  front, soft studio light from the top left, everything in sharp focus. The badge carries ONE simple,
+  bold emblem (at most two or three elements) that stands for the focus; its outline is one clear
+  die-cut shape (round, shield, hexagon, gear, or the silhouette of the emblem itself). Big shapes and
+  strong contrast between metal and enamel: it must read clearly at 95x85 pixels, nothing tiny or
+  fussy. Badge centred, filling about 85% of the canvas, same camera, light and scale for the whole
+  set. Isolated on a fully transparent background: no table, no backing card, no pin clasp visible,
+  no cast shadow beyond a faint contact shadow. No text, no letters, no numbers, no watermark.
+
+# MATERIAL de cada nación; "ramas" lo cambia para una rama del árbol (id de la rama)
+materiales:
+  ASC:
+    base: >-
+      brushed stainless steel with glossy signal-red hard enamel and small snow-white enamel fields,
+      like a Soviet award badge machined in 2100
+    ramas:
+      poder_de_computo: &asc_chip >-
+        brushed stainless steel and signal-red hard enamel with one small inlay of real green printed
+        circuit board, gold traces visible
+      red_fria: *asc_chip
+      mercado_computo: *asc_chip
+  FCU:
+    base: >-
+      polished chrome and platinum with cobalt-blue glass enamel, sharp bevels, an expensive corporate
+      executive lapel pin
+    ramas:
+      directorio: &fcu_onix polished black onyx set in mirror chrome, one thin cobalt-blue enamel line
+      casa_de_cristal: *fcu_onix
+  HSN:
+    base: >-
+      sea-worn solid brass with deep teal cloisonné enamel and a small mother-of-pearl inlay, like a
+      naval officer's insignia
+  NAS:
+    base: >-
+      hammered high-karat gold with turquoise and red spondylus-shell inlays, Andean goldsmith work
+    ramas:
+      mineria: hammered silver with turquoise inlay and a thin gold rim, Andean silversmith work
+  SHD:
+    base: >-
+      carved imperial-green jade set in gilt bronze with fine gold cloisonné wires
+    ramas:
+      precision: &shd_acero carved imperial-green jade set in brushed steel, precise machined edges
+      sala_de_control: *shd_acero
+  APF:
+    base: >-
+      lost-wax cast brass with ochre and terracotta enamel and a few real glass trade beads set in
+      the metal
+    ramas:
+      milicias: dark oxidised cast brass with earth-red enamel and a few real glass beads
+  NRE:
+    base: >-
+      gilded bronze in the style of a Roman phalera military decoration, imperial-purple enamel and a
+      small polished white marble inlay
+  ZJP:
+    base: >-
+      polished black onyx, blackened hand-forged iron and one faceted emerald
+    ramas:
+      ruta_zaibatsu: polished black onyx, blackened hand-forged iron and one faceted emerald
+      ruta_yakuza: >-
+        glossy black urushi lacquer with real gold leaf and crimson enamel, like a yakuza family crest
+        pin
+      ruta_srs: >-
+        white medical ceramic and brushed titanium with one glowing hot-pink glass inlay (#ff2d78),
+        laboratory-clean
+  ZAL:
+    base: >-
+      enamelled pewter with navy, red and white enamel, like a traditional British regimental badge
+    ramas:
+      hacia_el_pasado: >-
+        an embroidered badge, not metal-only: wine-red velvet and wool felt base with raised gold and
+        silver bullion-wire embroidery, a few small polished brass parts sewn on, real visible
+        stitches and fabric texture, neo-Victorian
+      hacia_el_futuro: >-
+        a small rigid plate cut from a deep-blue printed circuit board (real PCB: gold traces, solder
+        pads, tiny vias) framed in brushed aluminium, one small cyan glowing inlay, transhumanist
+  JUNTA:
+    base: >-
+      blackened iron with bone-white enamel and a single eclipse-orange enamel ring
+  ZWB: &anarquia
+    base: >-
+      an improvised badge hand-cut from scrap tin and rusted steel, hand-painted chipped enamel in two
+      colours, visible rivets and file marks, made by survivors
+  ZWE: *anarquia
+  ZWI: *anarquia
+  ZWM: *anarquia
+  ZAN: *anarquia
+
+# Naciones que ya están en el estilo nuevo (no se piden)
+hechas: [EFE]

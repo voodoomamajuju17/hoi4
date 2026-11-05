@@ -2575,6 +2575,24 @@ def test_ai() -> None:
               "type = contain" not in ai and any("contain" in w for w in ctx.warnings))
 
 
+def test_focos_pin() -> None:
+    section("focos en estilo pin: material por nación y rama, el ícono viejo de referencia (2026-11-05)")
+    from tools.arte import focos_pin
+    it = {i["id"]: i for i in focos_pin.items()}
+    check("pin: no se vuelven a pedir los del Imperio (ya están) y sí los del resto",
+          not any(i["tag"] == "EFE" for i in it.values()) and {"ASC", "NRE", "ZJP", "ZAL"} <= {i["tag"] for i in it.values()},
+          str(len(it)))
+    zal = [i for i in it.values() if i["tag"] == "ZAL"]
+    check("pin: Albión neovictoriana bordada, transhumana en placa de circuito azul",
+          any(i["rama"] == "hacia_el_pasado" and "embroider" in i["material"] for i in zal)
+          and any(i["rama"] == "hacia_el_futuro" and "printed circuit board" in i["material"] for i in zal), str(zal[:1]))
+    check("pin: Zaibatsu en ónix, hierro y esmeralda",
+          all("onyx" in i["material"] and "iron" in i["material"] and "emerald" in i["material"]
+              for i in it.values() if i["rama"] == "ruta_zaibatsu"))
+    check("pin: cada pedido lleva el ícono viejo como referencia del motivo",
+          all(i["origen"] is not None for i in it.values()), str([k for k, i in it.items() if i["origen"] is None][:5]))
+
+
 def test_arte() -> None:
     section("arte: iconos genericos, conexion por nombre, pedidos para el generador de imagenes")
     import shutil
@@ -5261,6 +5279,7 @@ def main() -> int:
         test_nre,
         test_ai,
         test_arte,
+        test_focos_pin,
         test_mecanicas_v2,
         test_forces,
         test_unit_names,

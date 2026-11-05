@@ -2442,3 +2442,21 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   (faction_accents.windows_offset), sin captura todavía.
 - Focos del Imperio Ecofascista: los 70 íconos en el estilo "pin" (insignia
   de bronce y esmalte verde) reemplazan a los anteriores (tandas 01 a 03).
+- Focos en estilo pin para todos (2026-11-05, "tienen que parecer fotos de
+  pines posta, materiales verdaderos... sencillo, poco elemento y bien
+  claro, como los del EFE"): arte/focos_pin.yaml fija el estilo (foto macro
+  de un pin real, un solo emblema, se lee a 95x85) y el material de cada
+  nación, que cambia por rama: Comuna en acero y esmalte rojo (las ramas de
+  cómputo con un trozo de circuito), Unión Corporativa en cromo y esmalte
+  cobalto (Directorio y Casa de Cristal en ónix), Alta Mar en latón marino,
+  esmalte turquesa y nácar, Neoandinos en oro martillado con turquesa y
+  spondylus (minería en plata), Directorio en jade sobre bronce dorado,
+  Federación en latón a la cera perdida con esmalte ocre y cuentas de
+  vidrio, Roma en falera de bronce dorado, púrpura y mármol; Shogunato:
+  Zaibatsu en ónix, hierro y esmeralda, Yakuza en laca urushi, pan de oro y
+  carmesí, SRS en cerámica blanca y titanio con vidrio rosa; Albión: las
+  Islas en peltre esmaltado, la neovictoriana bordada (terciopelo, fieltro,
+  hilo de oro y latón cosido), la transhumana en placa de circuito azul con
+  marco de aluminio; Junta en hierro pavonado; anarquías en chapa recortada.
+  tools/arte/focos_pin.py arma 20_focos_pin_<TAG>.txt (570 pedidos) con el
+  ícono viejo como referencia del motivo (arte/referencias_focos/).

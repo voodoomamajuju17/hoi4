@@ -955,7 +955,7 @@ def _previous_ids() -> set[str] | None:
     ids: set[str] = set()
     with zipfile.ZipFile(ZIP) as z:
         for name in z.namelist():
-            if name.endswith(NEW_FILE):
+            if name.endswith(NEW_FILE) or not name.endswith(".txt"):   # las referencias son imágenes
                 continue
             for line in z.read(name).decode("utf-8").splitlines():
                 if line.startswith("id: "):
@@ -1041,8 +1041,12 @@ def pedidos() -> None:
             path.write_text(f"# {len(group)} pedidos - {kind} - {tag or 'todas las facciones'}\n\n"
                             + "\n".join(_request(i) for i in group), encoding="utf-8")
             summary.append(f"{path.name}: {len(group)}")
+    # 2026-11-05: los focos en estilo pin (arte/focos_pin.yaml), con el ícono viejo de referencia
+    from tools.arte import focos_pin
+    pin_resumen, pin_refs = focos_pin.escribir(OUT)
+    summary += pin_resumen
     (OUT / "0_LEEME.txt").write_text(_readme(summary), encoding="utf-8")
-    _zip_pedidos([i["referencia"] for i in items if i.get("referencia")])
+    _zip_pedidos([i["referencia"] for i in items if i.get("referencia")] + pin_refs)
     print(f"{len(items)} pedidos en {OUT} (y {ZIP.relative_to(REPO)})")
     for line in summary:
         print("  " + line)
