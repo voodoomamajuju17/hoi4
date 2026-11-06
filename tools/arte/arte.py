@@ -1049,6 +1049,21 @@ def pedidos() -> None:
     for fijo in sorted((REPO / "arte" / "pedidos_fijos").glob("*.txt")):
         (OUT / fijo.name).write_text(fijo.read_text(encoding="utf-8"), encoding="utf-8")
         summary.append(f"{fijo.name}: {fijo.read_text(encoding='utf-8').count('ASSET_REQUEST')}")
+    # 2026-11-06 ("¿y si combinás todo lo faltante en un solo txt?", para generarlo por API):
+    # todo lo pendiente en un archivo, en el orden de los archivos sueltos
+    todos = [f for f in sorted(OUT.glob("*.txt"), key=lambda f: (int(f.name.split("_")[0]) if f.name.split("_")[0].isdigit() else 0, f.name))
+             if not f.name.startswith("0_")]
+    bloques = []
+    for f in todos:
+        texto = f.read_text(encoding="utf-8")
+        partes = texto.split("ASSET_REQUEST")[1:]
+        bloques += ["ASSET_REQUEST" + b.rstrip().rsplit("\n## ", 1)[0].rstrip() + "\n" for b in partes]
+    (OUT / "0_TODO_LO_QUE_FALTA.txt").write_text(
+        f"# {len(bloques)} pedidos: todo lo que falta, en un solo archivo (para generar por API).\n"
+        "# Cada bloque ASSET_REQUEST es una imagen. Usar en el prompt style + material (si hay) +\n"
+        "# description, adjuntar reference_image (está en pedidos.zip, misma ruta) y guardar con filename.\n\n"
+        + "\n".join(bloques), encoding="utf-8")
+    summary.insert(0, f"0_TODO_LO_QUE_FALTA.txt: {len(bloques)}")
     (OUT / "0_LEEME.txt").write_text(_readme(summary), encoding="utf-8")
     _zip_pedidos([i["referencia"] for i in items if i.get("referencia")] + pin_refs)
     print(f"{len(items)} pedidos en {OUT} (y {ZIP.relative_to(REPO)})")
