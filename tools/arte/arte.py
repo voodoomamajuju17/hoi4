@@ -1083,6 +1083,13 @@ def _zip_pedidos(referencias: list[str] | None = None) -> None:
             info = zipfile.ZipInfo(f"pedidos/{path.name}", date_time=(2026, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED
             z.writestr(info, path.read_bytes())
+        # 2026-11-06: la Fábrica (generar por API con control de calidad) viaja con los pedidos
+        for f in ("fabrica_hoi4.py", "control.py", "INICIAR.bat", "requirements.txt", "LEEME.txt"):
+            src = REPO / "tools" / "fabrica" / f
+            if src.exists():
+                info = zipfile.ZipInfo(f"fabrica/{f}", date_time=(2026, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                z.writestr(info, src.read_bytes())
         # 2026-11-03: las imágenes de referencia de los íconos del juego pendientes
         for rel in sorted(set(referencias or [])):
             src = REPO / "arte" / rel
@@ -1170,16 +1177,33 @@ def importar(source: str) -> None:
             z.extractall(tmp.name)
         src = Path(tmp.name)
     done, unknown = [], []
-    for path in sorted(src.rglob("*")):
-        if path.suffix.lower() not in (".png", ".jpg", ".jpeg", ".webp"):
-            continue
+    # 2026-11-06 ("aumentá el control de calidad y la prevención de errores de los que siempre
+    # vemos"): los archivos rotos o vacíos se avisan en vez de cortar todo; si el mismo pedido
+    # viene dos veces (la grande y la de 95x85) va la más grande que abra; lo que se pidió
+    # transparente y vino con fondo liso se limpia; lo que no pasa el control se avisa.
+    from tools.fabrica import control
+    rutas = [p for p in sorted(src.rglob("*")) if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")
+             and "revisar" not in p.parts and not p.name.startswith("hoja_de_contacto")]
+    mejores = control.mejores_por_nombre(rutas)
+    rotos = sorted({p.name for p in rutas if p.stem not in mejores})
+    avisos = []
+    for stem in sorted(mejores):
+        path = mejores[stem]
         item = by_id.get(path.stem)
         if item is None:
             unknown.append(path.name)
             continue
         kind = KINDS[item["type"]]
         w, h = item.get("size") or kind["size"]
-        img = Image.open(path).convert("RGBA")
+        img = control.abrir(path)
+        transparente = item.get("transparent", kind["transparent"])
+        if transparente:
+            img, limpio = control.quitar_fondo(img)
+            if limpio:
+                avisos.append(f"{path.stem}: tenía fondo liso, se lo saqué")
+        problemas = control.revisar(img, transparente)
+        if problemas:
+            avisos.append(f"{path.stem}: {'; '.join(problemas)} (se importó igual: revisalo)")
         if item["type"] == "loading_screen":
             # 2026-10-24: como las pantallas que ya hay (1920x1440, DXT1); sin comprimir pesarían 11 MB
             iw, ih = img.size
@@ -1240,6 +1264,10 @@ def importar(source: str) -> None:
             print(line)
     if unknown:
         print(f"{len(unknown)} sin id conocido (nombre de archivo distinto al pedido): {', '.join(unknown)}")
+    if rotos:
+        print(f"{len(rotos)} ROTOS o vacíos, no se importaron (pedirlos de nuevo): {', '.join(rotos)}")
+    for a in avisos:
+        print("  control: " + a)
     if tmp:
         tmp.cleanup()
 

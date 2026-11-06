@@ -2495,3 +2495,14 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   Neoandinos 56-68, Federación 1-15, Directorio 46-65 y 5 válvulas
   corregidas, y 3 del Imperio rehechos (Aeródromos, Astilleros, Mariscal).
   Patagonia llegó cortada en el zip: queda pendiente.
+- Generar por API (2026-11-06, "me rompí los huevos del límite de generación"):
+  arte/pedidos/0_TODO_LO_QUE_FALTA.txt junta todo lo pendiente. La Fábrica
+  (tools/fabrica/, también dentro de pedidos.zip en fabrica/) es la versión
+  revisada del programa que armó ChatGPT: lee `material` y `reference_image`
+  (que el original ignoraba), guarda la imagen grande, y tiene control de
+  calidad (tools/fabrica/control.py): archivo que no abre, fondo blanco donde
+  se pidió transparente (se quita solo), dibujo cortado, casi vacía, plana;
+  lo que falla va a revisar/ y se pide una vez más; para la tanda tras 5
+  errores seguidos; deja hoja_de_contacto.jpg y control.csv. `arte importar`
+  usa el mismo control: avisa los rotos en vez de cortar, elige la versión
+  más grande si un pedido viene dos veces, limpia fondos lisos.

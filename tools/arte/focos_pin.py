@@ -140,7 +140,9 @@ def anotar_llegados(carpeta: str) -> list[str]:
     previos = {l.strip() for l in path.read_text(encoding="utf-8").splitlines()
                if l.strip() and not l.startswith("#")} if path.exists() else set()
     focos = {i["id"] for i in items()} | previos
-    nuevos = {p.stem for p in Path(carpeta).rglob("*.png") if p.stem in focos} - previos
+    from tools.fabrica import control
+    buenos = control.mejores_por_nombre(p for p in Path(carpeta).rglob("*.png") if "revisar" not in p.parts)
+    nuevos = {s for s in buenos if s in focos} - previos   # los rotos no cuentan como llegados
     path.write_text(cabeza + "\n" + "\n".join(sorted(previos | nuevos)) + "\n", encoding="utf-8")
     for ident in nuevos:
         (REFS / f"{ident}.png").unlink(missing_ok=True)

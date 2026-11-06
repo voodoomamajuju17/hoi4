@@ -2578,6 +2578,48 @@ def test_ai() -> None:
               "type = contain" not in ai and any("contain" in w for w in ctx.warnings))
 
 
+def test_fabrica() -> None:
+    section("fábrica de imágenes por API: lee todo el pedido y controla la calidad (2026-11-06)")
+    import io as _io
+    import sys as _sys
+    from PIL import Image, ImageDraw
+    _sys.path.insert(0, str(REPO_ROOT / "tools/fabrica"))
+    import fabrica_hoi4 as F
+    from tools.fabrica import control
+    todo = REPO_ROOT / "arte/pedidos/0_TODO_LO_QUE_FALTA.txt"
+    peds = F.leer_pedidos(todo.read_text(encoding="utf-8"), todo.parent)
+    pin = next((p for p in peds if p.get("material")), None)
+    check("fábrica: lee los pedidos del archivo único, con su material", len(peds) > 0 and pin is not None, str(len(peds)))
+    if pin:
+        pr = F.armar_prompt(pin)
+        check("fábrica: el prompt lleva el material y el aviso de pin, no moneda",
+              "MATERIAL" in pr and pin["material"] in pr and "not a coin" in pr, pr[:300])
+    blanco = Image.new("RGBA", (300, 260), (252, 252, 250, 255))
+    ImageDraw.Draw(blanco).ellipse((60, 40, 240, 220), fill=(180, 120, 60, 255))
+    limpio, quitado = control.quitar_fondo(blanco)
+    check("control: el fondo blanco de un ícono transparente se quita solo",
+          quitado and limpio.getpixel((2, 2))[3] == 0 and limpio.getpixel((150, 130))[3] == 255 and not control.revisar(limpio, True))
+    check("control: archivo vacío o cortado no abre y se avisa",
+          control.abrir(b"") is None and control.abrir(b"\x89PNG\r\n\x1a\nxx") is None
+          and control.revisar(None, True) == ["no abre (archivo vacío o cortado)"])
+    cortado = Image.new("RGBA", (200, 180), (0, 0, 0, 0))
+    ImageDraw.Draw(cortado).rectangle((0, 0, 199, 120), fill=(9, 9, 9, 255))
+    check("control: dibujo cortado contra el borde e imagen vacía se marcan para revisar",
+          any("borde" in x for x in control.revisar(cortado, True))
+          and any("vacía" in x for x in control.revisar(Image.new("RGBA", (200, 180)), True)))
+    with tempfile.TemporaryDirectory() as tmp:
+        t = Path(tmp)
+        grande = Image.new("RGBA", (400, 360), (0, 0, 0, 0))
+        ImageDraw.Draw(grande).ellipse((50, 50, 350, 310), fill=(1, 200, 1, 255))
+        grande.save(t / "X_foco.png")
+        (t / "chica").mkdir()
+        grande.resize((95, 85)).save(t / "chica" / "X_foco.png")
+        (t / "Y_roto.png").write_bytes(b"")
+        m = control.mejores_por_nombre(sorted(t.rglob("*.png")))
+        check("control: del mismo pedido va la versión más grande; el roto no cuenta",
+              m.get("X_foco") == t / "X_foco.png" and "Y_roto" not in m, str(m))
+
+
 def test_focos_pin() -> None:
     section("focos en estilo pin: material por nación y rama, el ícono viejo de referencia (2026-11-05)")
     from tools.arte import focos_pin
@@ -5285,6 +5327,7 @@ def main() -> int:
         test_ai,
         test_arte,
         test_focos_pin,
+        test_fabrica,
         test_mecanicas_v2,
         test_forces,
         test_unit_names,

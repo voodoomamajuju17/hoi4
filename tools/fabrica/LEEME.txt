@@ -1,0 +1,26 @@
+FÁBRICA HOI4 v2 (con control de calidad)
+========================================
+Genera por API las imágenes de los pedidos (bloques ASSET_REQUEST) del mod.
+
+1. Python 3.10 o más nuevo (python.org; al instalar, marcar "Add Python to PATH").
+2. Bajá el zip de arte (pedidos.zip) y extraelo ENTERO en una carpeta: los TXT
+   y las carpetas de referencias tienen que quedar juntos.
+3. Doble clic en INICIAR.bat (la primera vez instala lo que falta).
+4. Pegá tu API key de OpenAI en la ventana (no se guarda en ningún lado).
+5. Elegí el TXT (por ejemplo 0_TODO_LO_QUE_FALTA.txt o 20_focos_pin_FCU.txt),
+   apretá "Analizar TXT" (gratis): te avisa si faltan referencias.
+6. Probá con Cantidad 1, mirá hoja_de_contacto.jpg, y después largá el resto.
+
+Qué controla solo:
+- archivo que no abre o vino cortado: no se guarda;
+- fondo blanco cuando se pidió transparente: lo quita; si no puede, a revisar/;
+- dibujo cortado contra el borde, imagen casi vacía o plana: a revisar/;
+- lo que no pasa el control se pide UNA vez más (se puede desmarcar);
+- 5 pedidos seguidos con error: para la tanda (clave, modelo o saldo);
+- al final: hoja_de_contacto.jpg (marco rojo = problema) y control.csv.
+
+Lo que NO puede ver solo (mirá la hoja de contacto): letras metidas en el
+dibujo, una moneda redonda en vez de pin, demasiados elementos.
+
+Mandale a Claude la carpeta de salida (o el ZIP) SIN la subcarpeta revisar/.
+Ojo: cada imagen cuesta. Poné un tope de gasto en platform.openai.com.
