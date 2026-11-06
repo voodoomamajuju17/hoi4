@@ -773,6 +773,16 @@ def _law_items() -> list[dict]:
     return items
 
 
+# 2026-11-06 (la Fábrica: "Your request was rejected by the safety system ... [abuse]"): el
+# filtro de OpenAI rechaza la referencia del ícono de fascismo del juego (los fasces). Estos
+# van sin referencia y con un motivo neutro que dice lo mismo en el juego.
+JUEGO_SIN_REFERENCIA = {
+    "juego_categorias_decision_category_generic_fascism":
+        "an authoritarian-order decision category: a heavy iron gauntlet closed around a short "
+        "marshal's baton wrapped in a laurel band; no flags, no symbols, no insignia",
+}
+
+
 def _juego_items() -> list[dict]:
     """Íconos del juego por cambiar, con referencia (arte/iconos_juego.yaml, 2026-11-03)."""
     from tools.arte import auditoria
@@ -786,6 +796,14 @@ def _juego_items() -> list[dict]:
         entradas += [(ident, t["familia"], t["donde"], "") for ident in (t.get("iconos") or {}).values()]
     for ident, fam, donde, que in entradas:
         dest = REPO / "assets" / "ui" / "piel_iconos" / f"{ident}.dds"
+        if ident in JUEGO_SIN_REFERENCIA:
+            items.append({
+                "type": "game_icon", "tag": fam.upper(), "id": ident, "dest": dest, "done": dest.exists(),
+                "size": (512, 512), "transparent": True,
+                "description": f"WHAT: {donde} of a 2100 grand strategy game. EXACT SUBJECT: {JUEGO_SIN_REFERENCIA[ident]}.",
+                "style": estilo,
+            })
+            continue
         items.append({
             "type": "game_icon", "tag": fam.upper(), "id": ident, "dest": dest, "done": dest.exists(),
             "size": (512, 512), "transparent": True, "referencia": f"referencias/{ident}.png",
