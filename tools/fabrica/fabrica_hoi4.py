@@ -428,7 +428,7 @@ def main():
 
     root = tk.Tk()
     root.title("Fábrica HOI4 · v3")
-    root.geometry("900x760")
+    root.geometry("980x800")
     eventos: "queue.Queue" = queue.Queue()
     parar = threading.Event()
     v = {k: tk.StringVar() for k in ("txt", "dest", "first", "count", "tope", "precio", "usd")}
@@ -472,12 +472,20 @@ def main():
         ttk.Combobox(s, textvariable=var, values=vals, state="readonly", width=24).grid(row=1, column=col, sticky="ew", padx=(0, 8))
     lim = ttk.Frame(f)
     lim.pack(fill="x", pady=4)
-    for t, k, w in (("Desde pedido Nº", "first", 6), ("Cantidad (0 = todos)", "count", 6),
-                    ("Tope de pedidos PAGOS", "tope", 6), ("Precio por imagen USD", "precio", 7), ("Tope USD", "usd", 7)):
+    for t, k, w in (("Desde el pedido Nº", "first", 6), ("Cuántos pedidos (0 = todos)", "count", 6)):
         ttk.Label(lim, text=t).pack(side="left")
-        ttk.Entry(lim, textvariable=v[k], width=w).pack(side="left", padx=(4, 12))
-    ttk.Label(f, text="El precio lo sacás de platform.openai.com/pricing para tu modelo y calidad; con él, el tope en USD "
-                      "corta antes de pasarse. registro.csv anota cada llamada.").pack(anchor="w")
+        ttk.Entry(lim, textvariable=v[k], width=w).pack(side="left", padx=(4, 14))
+    # 2026-11-06 (captura: "no entiendo" el "Tope de pedidos PAGOS"): nombres más claros
+    gasto = ttk.LabelFrame(f, text="Freno de gasto (sin al menos uno de los dos máximos no arranca)", padding=8)
+    gasto.pack(fill="x", pady=4)
+    for t, k, w in (("Máximo de imágenes a pagar en esta corrida", "tope", 6),
+                    ("Precio de cada imagen (USD)", "precio", 7), ("Máximo a gastar (USD)", "usd", 7)):
+        ttk.Label(gasto, text=t).pack(side="left")
+        ttk.Entry(gasto, textvariable=v[k], width=w).pack(side="left", padx=(4, 14))
+    ttk.Label(f, wraplength=840, justify="left",
+              text="Ejemplo: máximo 20 imágenes → para al llegar a 20 aunque falten más; la próxima vez sigue donde quedó. "
+                   "El precio de cada imagen lo ves en platform.openai.com/pricing (según modelo y calidad); "
+                   "si lo ponés, también podés frenar por plata (ej. máximo USD 5). registro.csv anota cada llamada.").pack(anchor="w")
     o = ttk.Frame(f)
     o.pack(fill="x", pady=4)
     for t, var in (("Repetir automáticamente las que no pasen el control (cuesta)", reintentar),
@@ -547,9 +555,9 @@ def main():
                 raise ValueError("Falta la API key (empieza con sk-).")
             tope, precio, usd = numero("tope"), numero("precio", float), numero("usd", float)
             if not tope and not usd:
-                raise ValueError("Poné un tope: de pedidos pagos o en USD (con el precio por imagen).")
+                raise ValueError("Poné un freno de gasto: el máximo de imágenes a pagar (ej. 20) o el máximo en USD (con el precio de cada imagen).")
             if usd and not precio:
-                raise ValueError("Para el tope en USD hace falta el precio por imagen.")
+                raise ValueError("Para frenar por plata hace falta el precio de cada imagen.")
         except Exception as ex:   # noqa: BLE001
             messagebox.showerror("Revisá", str(ex))
             return
