@@ -50,7 +50,9 @@ def infrastructure_plan(ctx: BuildContext, assignment: dict[int, str], capitals:
     count: dict[str, list[int]] = defaultdict(lambda: [0, 0])
     for sid, tag in assignment.items():
         st = by_state.get(sid)
-        rule = spec.get(kinds.get(tag, ""))
+        # 2026-11-06 (Eurasia: "mejorar suministro, infraestructura, trenes"): un país puede
+        # tener su propia regla (`tags`), que gana sobre la de su tipo
+        rule = (spec.get("tags") or {}).get(tag) or spec.get(kinds.get(tag, ""))
         if st is None or not rule or tag in skip:
             continue
         cur = int((st.buildings or {}).get("infrastructure", 0))
@@ -113,6 +115,10 @@ def supply_plan(ctx: BuildContext, assignment: dict[int, str], capitals: dict[st
     add_vp = int(spec.get("add_victory_points", 5))
     remove_in = set(spec.get("remove_in") or [])
     add_in = set(spec.get("add_in") or [])
+    # 2026-11-06: países puntuales que no pierden centros aunque sean anarquía y que
+    # suman centros nuevos como una potencia (Eurasia, frente al Directorio)
+    keep_tags = set(spec.get("keep_tags") or [])
+    add_tags = set(spec.get("add_tags") or [])
 
     def is_city(st, vp_min: int) -> bool:
         return (st.category or "") in CITY or st.victory_points >= vp_min
@@ -125,7 +131,7 @@ def supply_plan(ctx: BuildContext, assignment: dict[int, str], capitals: dict[st
         sid = prov_state.get(prov)
         tag = assignment.get(sid)
         st = by_state.get(sid)
-        if (tag and tag not in skip and kinds.get(tag) in remove_in and st is not None
+        if (tag and tag not in skip and tag not in keep_tags and kinds.get(tag) in remove_in and st is not None
                 and sid not in cap_states and not is_city(st, keep_vp)):
             removed.append(prov)
             continue
@@ -136,7 +142,7 @@ def supply_plan(ctx: BuildContext, assignment: dict[int, str], capitals: dict[st
     # 2. Agregar: ciudades de meganaciones y satélites sin centro, con su vía
     added: list[int] = []
     new_rails: list[list[int]] = []
-    if rails_ok and add_in:
+    if rails_ok and (add_in or add_tags):
         land = ctx.vanilla.land_provinces()
         neigh: dict[int, set[int]] = defaultdict(set)
         for a, b in ctx.vanilla.province_adjacency(ctx.out_root / ".cache"):
@@ -145,7 +151,8 @@ def supply_plan(ctx: BuildContext, assignment: dict[int, str], capitals: dict[st
         max_len = int(spec.get("max_rail_length", 25))
         for sid, tag in sorted(assignment.items()):
             st = by_state.get(sid)
-            if st is None or tag in skip or kinds.get(tag) not in add_in or nodes_by_state.get(sid):
+            if (st is None or tag in skip or (kinds.get(tag) not in add_in and tag not in add_tags)
+                    or nodes_by_state.get(sid)):
                 continue
             if not is_city(st, add_vp):
                 continue

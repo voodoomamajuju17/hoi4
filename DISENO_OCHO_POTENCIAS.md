@@ -2518,3 +2518,19 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   categorías, decisiones, diplomacia, módulos del diseñador y la alerta 50;
   151 imágenes de eventos). Ninguna rota ni con problemas de control. Quedan
   462 pedidos en 0_TODO_LO_QUE_FALTA.txt.
+- El Directorio, Eurasia y Siberia (2026-11-06; spec/35_directorio_siberia.yaml):
+  El Peso de la Armonía (SHD: -5% estabilidad, -5% apoyo a la guerra, +15%
+  guarnición); mecha propia (bajo 60% de estabilidad, 2% por mes de
+  ultimátum); dos crisis: Las Represas Agrietadas (2104) y El Cielo Calla (de
+  mediados de 2105 a mediados de 2106). Eurasia: búnker nivel 2 en todo su
+  límite con el Directorio y la Estepa (13_military fort_lines), su propia
+  regla de infraestructura (mín. 3, capital 5) y de centros de suministro con
+  vía (08_territory logistics: tags, keep_tags, add_tags), Los Trenes de los
+  Atamanes, 150 convoyes, trenes y camiones. Siberia se Levanta: si el
+  Directorio le declara la guerra a Eurasia con menos de 70% de estabilidad,
+  el Lejano Oriente pasa a las Tierras Sin Ley (núcleo, infraestructura +2 y
+  un centro de suministro en cada región), que entran a la guerra con
+  Eurasia: Guardia de la Taiga (4 divisiones por zona), equipo, convoyes,
+  trenes, 120.000 hombres y La Taiga Alimenta. Sus zonas se suman al refuerzo
+  anual de las Tierras Sin Ley. Los nombres de las regiones siberianas se
+  resuelven con el juego del usuario (el reporte avisa si alguno no existe).

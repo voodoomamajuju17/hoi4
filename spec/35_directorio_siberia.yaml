@@ -1,0 +1,325 @@
+# =============================================================================
+# El Directorio, Eurasia y Siberia (2026-11-06)
+#
+# Pedido del usuario: "hay que nerfear un toque al Directorio, subir su
+# probabilidad de rebelión, crear 2 chances de crisis entre el 2104 y 2106 más o
+# menos. Fortificar en nivel 2 todo el límite de Eurasia con el Directorio y
+# mejorar suministro de Eurasia / infraestructura / trenes / convoyes. Si el SHD
+# ataca a Eurasia con menos de 70% de estabilidad, el este siberiano se levanta,
+# como parte de las Tierras Sin Ley, aliándose con Eurasia y atacando al
+# Directorio. Crear tropas de Tierras Sin Ley en Kamchatka, etc. Mejorar
+# suministros. No quiero que se levanten en armas y de repente no tengan para
+# comer."
+#
+# Lo de este archivo:
+#  1. El Peso de la Armonía (SHD, todo el juego): -5% estabilidad, -5% apoyo a la
+#     guerra y +15% de guarnición necesaria (lo conquistado cuesta más).
+#  2. La mecha del Directorio: con estabilidad bajo 60%, 2% por mes de que los
+#     generales le pongan un ultimátum (meganations_lider.21, que puede terminar
+#     en la Comuna Roja de la Máquina). Se suma a la de todos bajo 50%.
+#  3. Dos crisis: Las Represas Agrietadas (en 2104) y El Cielo Calla (entre
+#     mediados de 2105 y mediados de 2106), con salidas que cuestan algo de los
+#     Tres Caudales o arriesgan la rebelión.
+#  4. Eurasia: Los Trenes de los Atamanes (menos consumo y desgaste, obras de
+#     vías y centros de suministro más rápidas), 150 convoyes y trenes al
+#     arranque. Su infraestructura, centros de suministro y vías nuevas van en
+#     08_territory (logistics) y la línea de búnkeres nivel 2 en 13_military.
+#  5. Siberia se Levanta: si el Directorio le declara la guerra a Eurasia con
+#     estabilidad bajo 70%, el Lejano Oriente siberiano (Kamchatka, Chukotka,
+#     Magadán, Yakutia, Jabárovsk, Amur, Primorie, Sajalín) pasa a las Tierras
+#     Sin Ley, que entran a la guerra del lado de Eurasia. Para que no se queden
+#     sin comer: infraestructura +2 y un centro de suministro en cada región,
+#     divisiones con equipo, convoyes, trenes, hombres y La Taiga Alimenta (un
+#     año de menos consumo, desgaste e invierno).
+# =============================================================================
+
+extend_scripted_effects:
+  MEGANATIONS_eventos_mundiales:
+  - {effect: run, value: SHD_pulso_directorio}
+
+decisions:
+  scripted_effects:
+  - id: SHD_pulso_directorio
+    effects:
+    - effect: if
+      when: {tag: SHD}
+      then:
+      # la mecha propia
+      - effect: if
+        when:
+          all:
+          - {date_after: 2100.6.1}
+          - {stability_below: 0.6}
+          - {civil_war: false}
+          - {capitulated: false}
+          - not: {flag: MEGANATIONS_crisis_espera}
+          - not: {flag: MEGANATIONS_rebelde}
+          - not: {global_flag: MEGANATIONS_rebelion_SHD}
+        then:
+        - effect: random
+          options:
+          - {weight: 98, effects: []}
+          - weight: 2
+            effects:
+            - {effect: run, value: MEGANATIONS_crisis_estalla}
+      # crisis 1: en 2104 (1 en 8 por mes; si no salió, en diciembre sale sí o sí)
+      - effect: if
+        when:
+          all:
+          - {date_after: 2103.12.31}
+          - not: {flag: SHD_crisis_represas}
+          - {capitulated: false}
+        then:
+        - effect: if
+          when: {date_after: 2104.11.30}
+          then:
+          - {effect: flag, value: SHD_crisis_represas}
+          - {effect: event, id: meganations_directorio.1, days: 3}
+          else:
+          - effect: random
+            options:
+            - {weight: 7, effects: []}
+            - weight: 1
+              effects:
+              - {effect: flag, value: SHD_crisis_represas}
+              - {effect: event, id: meganations_directorio.1, days: 3}
+      # crisis 2: entre junio de 2105 y junio de 2106
+      - effect: if
+        when:
+          all:
+          - {date_after: 2105.5.31}
+          - not: {flag: SHD_crisis_cielo}
+          - {capitulated: false}
+        then:
+        - effect: if
+          when: {date_after: 2106.5.31}
+          then:
+          - {effect: flag, value: SHD_crisis_cielo}
+          - {effect: event, id: meganations_directorio.2, days: 3}
+          else:
+          - effect: random
+            options:
+            - {weight: 11, effects: []}
+            - weight: 1
+              effects:
+              - {effect: flag, value: SHD_crisis_cielo}
+              - {effect: event, id: meganations_directorio.2, days: 3}
+
+  # el Lejano Oriente pasa a las Tierras Sin Ley (corre en el Directorio, ROOT)
+  - id: SIB_siberia_se_levanta
+    effects:
+    - {effect: global_flag, value: MEGANATIONS_siberia_levantada}
+    - effect: if
+      when: {country_exists: ZAN}
+      then:
+      - {effect: run, value: SIB_regiones_a_ZAN}
+      - effect: scope
+        target: ZAN
+        effects:
+        - {effect: run, value: SIB_armar_la_taiga}
+        - {effect: add_to_war_of, ally: ZWE, who: ZAN}
+      else:
+      # sin Tierras Sin Ley en el mapa, el Lejano Oriente se pasa a Eurasia
+      - {effect: run, value: SIB_regiones_a_ZWE}
+      - effect: scope
+        target: ZWE
+        effects:
+        - {effect: run, value: SIB_armar_la_taiga}
+    - effect: every_country
+      when: {is_ai: false}
+      effects:
+      - {effect: event, id: meganations_siberia.1, days: 1}
+
+  - id: SIB_regiones_a_ZAN
+    effects:
+    - {effect: in_state, state: [Kamchatka], effects: &region_zan [{effect: if, when: {any: [{owned_by: ZST}, {owned_by: SHD}]}, then: [{effect: transfer_to, value: ZAN}, {effect: add_core, value: ZAN}, {effect: build_here, building: infrastructure, level: 2}, {effect: build_here, building: supply_node, level: 1, province: victory_point}]}]}
+    - {effect: in_state, state: [Chukotka], effects: *region_zan}
+    - {effect: in_state, state: [Magadan], effects: *region_zan}
+    - {effect: in_state, state: [Okhotsk], effects: *region_zan}
+    - {effect: in_state, state: [Yakutsk, Yakutia], effects: *region_zan}
+    - {effect: in_state, state: [Aldan], effects: *region_zan}
+    - {effect: in_state, state: [Khabarovsk], effects: *region_zan}
+    - {effect: in_state, state: [Amur], effects: *region_zan}
+    - {effect: in_state, state: [Primorye, Primorsky Krai, Vladivostok], effects: *region_zan}
+    - {effect: in_state, state: [North Sakhalin, Sakhalin], effects: *region_zan}
+
+  - id: SIB_regiones_a_ZWE
+    effects:
+    - {effect: in_state, state: [Kamchatka], effects: &region_zwe [{effect: if, when: {any: [{owned_by: ZST}, {owned_by: SHD}]}, then: [{effect: transfer_to, value: ZWE}, {effect: build_here, building: infrastructure, level: 2}, {effect: build_here, building: supply_node, level: 1, province: victory_point}]}]}
+    - {effect: in_state, state: [Chukotka], effects: *region_zwe}
+    - {effect: in_state, state: [Magadan], effects: *region_zwe}
+    - {effect: in_state, state: [Okhotsk], effects: *region_zwe}
+    - {effect: in_state, state: [Yakutsk, Yakutia], effects: *region_zwe}
+    - {effect: in_state, state: [Aldan], effects: *region_zwe}
+    - {effect: in_state, state: [Khabarovsk], effects: *region_zwe}
+    - {effect: in_state, state: [Amur], effects: *region_zwe}
+    - {effect: in_state, state: [Primorye, Primorsky Krai, Vladivostok], effects: *region_zwe}
+    - {effect: in_state, state: [North Sakhalin, Sakhalin], effects: *region_zwe}
+
+  # las tropas y lo que comen (en el país que recibe el Lejano Oriente)
+  - id: SIB_armar_la_taiga
+    effects:
+    - {effect: ensure_template, name: Guardia de la Taiga, regiments: [infantry, infantry, infantry, infantry, infantry, infantry]}
+    - {effect: add_manpower, value: 120000}
+    - {effect: equipment, type: infantry_equipment, amount: 12000}
+    - {effect: equipment, type: support_equipment, amount: 600}
+    - {effect: equipment, type: convoy, amount: 120}
+    - {effect: equipment, type: train, amount: 40}
+    - {effect: equipment, type: motorized_equipment, amount: 300}
+    - {effect: dynamic_modifier, id: MEGANATIONS_la_taiga_alimenta, days: 365}
+    - effect: create_units
+      template: Guardia de la Taiga
+      count: 4
+      experience: 0.3
+      zones:
+      - [[Kamchatka]]
+      - [[Magadan], [Okhotsk], [Chukotka]]
+      - [[Yakutsk, Yakutia], [Aldan]]
+      - [[Khabarovsk], [Amur]]
+      - [[Primorye, Primorsky Krai, Vladivostok], [North Sakhalin, Sakhalin]]
+
+  dynamic_modifiers:
+  - id: MEGANATIONS_peso_de_la_armonia
+    country: null
+    no_art: true
+    name: {english: The Weight of Harmony, spanish: El Peso de la Armonía}
+    desc:
+      english: 'A third of the world answers to Beijing, and every province is another dam to watch, another river to hold back, another governor to suspect.'
+      spanish: 'Un tercio del mundo responde a Pekín, y cada provincia es otra represa que vigilar, otro río que contener, otro gobernador del que sospechar.'
+    modifiers: {stability_factor: -0.05, war_support_factor: -0.05, '?required_garrison_factor': 0.15}
+  - id: MEGANATIONS_trenes_de_los_atamanes
+    country: null
+    no_art: true
+    name: {english: The Atamans' Trains, spanish: Los Trenes de los Atamanes}
+    desc:
+      english: 'Armoured trains, rebuilt depots, horse convoys where the rails end: the warlords learned that whoever feeds the front holds the front.'
+      spanish: 'Trenes blindados, depósitos reconstruidos, caravanas a caballo donde se acaban las vías: los caudillos aprendieron que el que alimenta el frente sostiene el frente.'
+    modifiers: {'?supply_consumption_factor': -0.15, '?attrition': -0.15, production_speed_infrastructure_factor: 0.25, '?production_speed_supply_node_factor': 0.25, '?production_speed_rail_way_factor': 0.25}
+  - id: MEGANATIONS_la_taiga_alimenta
+    country: null
+    no_art: true
+    name: {english: The Taiga Feeds Us, spanish: La Taiga Alimenta}
+    desc:
+      english: 'Fish from the Okhotsk, reindeer from the tundra, grain hidden since the last war: the Far East rose with full granaries.'
+      spanish: 'Pescado del Ojotsk, renos de la tundra, granos escondidos desde la última guerra: el Lejano Oriente se levantó con los graneros llenos.'
+    modifiers: {'?supply_consumption_factor': -0.3, '?attrition': -0.3, '?winter_attrition_factor': -0.5, '?no_supply_grace': 240, '?out_of_supply_factor': -0.4, army_defence_factor: 0.1}
+
+  on_actions:
+  - id: SHD_ZWE_arranque
+    hook: on_startup
+    effects:
+    - effect: if
+      when: {country_exists: SHD}
+      then:
+      - effect: scope
+        target: SHD
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_peso_de_la_armonia}
+    - effect: if
+      when: {country_exists: ZWE}
+      then:
+      - effect: scope
+        target: ZWE
+        effects:
+        - {effect: dynamic_modifier, id: MEGANATIONS_trenes_de_los_atamanes}
+        - {effect: equipment, type: convoy, amount: 150}
+        - {effect: equipment, type: train, amount: 60}
+        - {effect: equipment, type: motorized_equipment, amount: 400}
+  # ROOT = el que declara, FROM = el atacado
+  - id: SIB_al_declarar
+    hook: on_declare_war
+    effects:
+    - effect: if
+      when:
+        all:
+        - {tag: SHD}
+        - {war_with: ZWE}
+        - {stability_below: 0.7}
+        - not: {global_flag: MEGANATIONS_siberia_levantada}
+      then:
+      - {effect: run, value: SIB_siberia_se_levanta}
+
+events:
+  namespaces:
+    meganations_directorio:
+      country: SHD
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Cracked Dams, spanish: Las Represas Agrietadas}
+        desc:
+          english: 'The inspectors of the Second Three Gorges report cracks in the spillway concrete, and the cement contracts lead to three governors and a nephew of the Directorate. Downstream live forty million people who were told the river had been tamed forever.'
+          spanish: 'Los inspectores de las Segundas Tres Gargantas informan grietas en el hormigón del aliviadero, y los contratos del cemento llevan a tres gobernadores y a un sobrino del Directorio. Río abajo viven cuarenta millones de personas a las que se les dijo que el río estaba domado para siempre.'
+        options:
+        - name: {english: 'Silence the inspectors. Nothing is cracked.', spanish: 'Silenciar a los inspectores. Nada está agrietado.'}
+          ai_chance: 30
+          effects:
+          - {effect: add_variable, var: SHD_orden, value: 5}
+          - {effect: add_variable, var: SHD_pueblo, value: -10}
+          - {effect: add_stability, value: -0.05}
+          - effect: random
+            options:
+            - {weight: 70, effects: []}
+            - weight: 30
+              effects:
+              - {effect: run, value: MEGANATIONS_crisis_estalla}
+        - name: {english: 'Evacuate the valley and repair it, whatever it costs.', spanish: 'Evacuar el valle y repararla, cueste lo que cueste.'}
+          ai_chance: 50
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_variable, var: SHD_produccion, value: -10}
+          - {effect: add_variable, var: SHD_pueblo, value: 10}
+          - {effect: add_stability, value: -0.02}
+        - name: {english: 'Put the governors on trial in public.', spanish: 'Juzgar en público a los gobernadores.'}
+          ai_chance: 20
+          effects:
+          - {effect: add_variable, var: SHD_orden, value: -10}
+          - {effect: add_variable, var: SHD_pueblo, value: 15}
+          - {effect: add_war_support, value: -0.05}
+          - {effect: add_political_power, value: -50}
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Heaven Falls Silent, spanish: El Cielo Calla}
+        desc:
+          english: 'Two years of drought in the north and floods in the south, and a comet over Beijing for nine nights. In the tea houses they repeat the old words: when Heaven sends signs, the Mandate is ending. The provincial committees ask the Directorate what it means to do about it.'
+          spanish: 'Dos años de sequía en el norte e inundaciones en el sur, y un cometa sobre Pekín durante nueve noches. En las casas de té repiten las palabras viejas: cuando el Cielo manda señales, el Mandato se termina. Los comités provinciales le preguntan al Directorio qué piensa hacer.'
+        options:
+        - name: {english: 'Spend the Mandate: grain, festivals and forgiveness.', spanish: 'Gastar el Mandato: granos, festivales y perdón.'}
+          when: {variable_at_least: {var: SHD_mandato, value: 30}}
+          ai_chance: 60
+          effects:
+          - {effect: add_variable, var: SHD_mandato, value: -30}
+          - {effect: add_variable, var: SHD_pueblo, value: 10}
+        - name: {english: 'Concede: lower taxes and open the granaries.', spanish: 'Ceder: bajar impuestos y abrir los graneros.'}
+          ai_chance: 30
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_variable, var: SHD_pueblo, value: 15}
+          - {effect: add_variable, var: SHD_orden, value: -10}
+        - name: {english: 'Heaven obeys the Directorate. Arrest the preachers.', spanish: 'El Cielo obedece al Directorio. Arresten a los predicadores.'}
+          ai_chance: 20
+          effects:
+          - {effect: add_variable, var: SHD_orden, value: 10}
+          - {effect: add_variable, var: SHD_pueblo, value: -15}
+          - {effect: add_stability, value: -0.08}
+          - effect: random
+            options:
+            - {weight: 65, effects: []}
+            - weight: 35
+              effects:
+              - {effect: run, value: MEGANATIONS_crisis_estalla}
+    meganations_siberia:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Siberia Rises, spanish: Siberia se Levanta}
+        desc:
+          english: 'The Directorate marched on the warlords of Eurasia, and the Far East answered with its own war. From Kamchatka to the Amur the garrisons are disarmed, the depots opened and the flags of the Steppe burned. The Lawless Lands claim the taiga and stand with Eurasia: whoever comes for the north will have to feed an army in the snow.'
+          spanish: 'El Directorio marchó contra los señores de la guerra de Eurasia, y el Lejano Oriente respondió con su propia guerra. De Kamchatka al Amur desarman las guarniciones, abren los depósitos y queman las banderas de la Estepa. Las Tierras Sin Ley reclaman la taiga y se ponen del lado de Eurasia: el que venga por el norte va a tener que alimentar un ejército en la nieve.'
+        options:
+        - name: {english: 'The north was never theirs.', spanish: 'El norte nunca fue de ellos.'}
+          effects: []

@@ -741,10 +741,16 @@ def render_effects(owner: str, items: list[dict], known,
             construction = Block()
             construction.add("type", building)
             construction.add("level", level)
+            if item.get("province") == "victory_point":
+                # 2026-11-06 (Siberia: "no quiero que se levanten en armas y no tengan para
+                # comer"): edificio de provincia (centro de suministro) en el punto de victoria
+                construction.add("province", Block([("all_provinces", True), ("limit_to_victory_point", True)]))
             construction.add("instant_build", True)
             # como `build`: fábricas y astilleros llevan su propio slot, si no
             # en una región llena la construcción no se haría
-            if ec.shared_slots is None or building in ec.shared_slots:
+            if item.get("province"):
+                pass
+            elif ec.shared_slots is None or building in ec.shared_slots:
                 block.add("add_extra_state_shared_building_slots", level)
                 effects_used.setdefault("add_extra_state_shared_building_slots", owner)
             block.add("add_building_construction", construction)

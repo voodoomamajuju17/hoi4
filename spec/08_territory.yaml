@@ -933,8 +933,14 @@ logistics:
     meganation: {add: 1, max: 5, capital_min: 5}
     satellite: {min: 2, max: 5, capital_min: 4}
     anarchy: {add: -1, min: 1, keep_capital: true}
+    # 2026-11-06 ("mejorar suministro de Eurasia/infraestructura/trenes"): Eurasia no es una
+    # anarquía cualquiera frente al Directorio
+    tags:
+      ZWE: {add: 1, min: 3, max: 5, capital_min: 5}
   supply_nodes:
     skip: [ZAN]
+    keep_tags: [ZWE]       # no pierde centros aunque sea anarquía
+    add_tags: [ZWE]        # y suma centros con su vía en sus ciudades, como una potencia
     # se sacan en las regiones de anarquía sin ciudad (menos su capital)
     remove_in: [anarchy]
     keep_victory_points: 5

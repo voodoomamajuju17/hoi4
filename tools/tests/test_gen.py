@@ -2578,6 +2578,44 @@ def test_ai() -> None:
               "type = contain" not in ai and any("contain" in w for w in ctx.warnings))
 
 
+def test_directorio_siberia() -> None:
+    section("el Directorio más frágil, Eurasia abastecida, Siberia se levanta (2026-11-06)")
+    import yaml as _y
+    from tools.gen.emitters import logistics, territory
+    mil = _y.safe_load((REPO_ROOT / "spec/13_military.yaml").read_text(encoding="utf-8"))
+    lineas = {(l["owner"], l["facing"], l["level"]) for l in mil["fort_lines"]}
+    check("Eurasia: búnker nivel 2 en todo su límite con el Directorio y su Estepa",
+          ("ZWE", "SHD", 2) in lineas and ("ZWE", "ZST", 2) in lineas, str(lineas))
+    # la línea sale de las provincias vecinas, sin depender de un mapa real
+    class _S:
+        def __init__(self, sid, provs, owner):
+            self.id, self.provinces, self.owner = sid, provs, owner
+    sts = [_S(1, [10, 11], "SOV"), _S(2, [20], "SOV"), _S(3, [30], "CHI")]
+    got = territory.fort_line_provinces({1: "ZWE", 2: "ZST", 3: "SHD"}, sts, {(11, 20), (10, 30)},
+                                        {"owner": "ZWE", "facing": "ZST", "level": 2})
+    check("Eurasia: la línea va en cada provincia que toca a la Estepa", got == {1: {11: 2}}, str(got))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
+        on = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8").split())
+        check("Siberia: si el Directorio le declara la guerra a Eurasia con menos de 70% de estabilidad, se levanta",
+              "tag = SHD has_war_with = ZWE has_stability < 0.7" in on and "SIB_siberia_se_levanta = yes" in on, on[:300])
+        check("Siberia: las Tierras Sin Ley entran a la guerra del lado de Eurasia, con tropas, equipo y La Taiga Alimenta",
+              "add_to_war = { targeted_alliance = ZWE" in se and "MEGANATIONS_la_taiga_alimenta" in se
+              and "type = convoy" in se and "add_manpower = 120000" in se, se[:200])
+        check("Directorio: mecha propia bajo 60% y dos crisis entre 2104 y 2106",
+              "has_stability < 0.6" in se and "meganations_directorio.1" in se and "meganations_directorio.2" in se
+              and "date > 2104.11.30" in se and "date > 2106.5.31" in se, "")
+        arr = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8").split())
+        check("arranque: El Peso de la Armonía en el Directorio y Los Trenes de los Atamanes en Eurasia",
+              "MEGANATIONS_peso_de_la_armonia" in arr and "MEGANATIONS_trenes_de_los_atamanes" in arr, "")
+    spec = _y.safe_load((REPO_ROOT / "spec/08_territory.yaml").read_text(encoding="utf-8"))["logistics"]
+    check("Eurasia: infraestructura propia (no la baja de las anarquías) y centros de suministro como potencia",
+          spec["infrastructure"]["tags"]["ZWE"]["min"] >= 3 and "ZWE" in spec["supply_nodes"]["keep_tags"]
+          and "ZWE" in spec["supply_nodes"]["add_tags"], "")
+
+
 def test_fabrica() -> None:
     section("fábrica de imágenes por API: lee todo el pedido y controla la calidad (2026-11-06)")
     import io as _io
@@ -5376,6 +5414,7 @@ def main() -> int:
         test_arte,
         test_focos_pin,
         test_fabrica,
+        test_directorio_siberia,
         test_mecanicas_v2,
         test_forces,
         test_unit_names,
