@@ -499,6 +499,25 @@ def main():
     def log(m):
         eventos.put(("log", m))
 
+    # 2026-11-06 (captura: "aprieto en analizar pero nada"): un error dentro de un botón
+    # no se veía en la ventana. Ahora va al registro de la ventana, a un cartel y a
+    # errores_fabrica.txt (junto al programa), con el detalle para mandárselo a Claude.
+    import traceback
+
+    def informar_error(ex):
+        detalle = traceback.format_exc()
+        try:
+            with open(Path(__file__).resolve().parent / "errores_fabrica.txt", "a", encoding="utf-8") as fe:
+                fe.write(datetime.datetime.now().isoformat(timespec="seconds") + "\n" + detalle + "\n")
+        except OSError:
+            pass
+        log(f"ERROR: {type(ex).__name__}: {ex}")
+        log(detalle.strip().splitlines()[-3] if len(detalle.strip().splitlines()) > 2 else detalle)
+        log("(el detalle quedó en errores_fabrica.txt, junto al programa: mandáselo a Claude)")
+        messagebox.showerror("Error", f"{type(ex).__name__}: {ex}\n\nDetalle en errores_fabrica.txt")
+
+    root.report_callback_exception = lambda tipo, ex, tb: informar_error(ex)
+
     def numero(k, tipo=int, minimo=0):
         try:
             x = tipo(v[k].get().strip().replace(",", ".") or 0)
@@ -522,11 +541,33 @@ def main():
         return todos, sel, Path(v["dest"].get().strip())
 
     def analizar():
+        log("Analizando… (lee el TXT y la carpeta de salida)")
         try:
             todos, sel, out = seleccion()
         except Exception as ex:   # noqa: BLE001
+            log(f"No se pudo leer: {ex}")
             messagebox.showerror("No se pudo leer", str(ex))
             return
+
+        try:
+            precio = numero("precio", float)
+        except ValueError:
+            precio = 0.0
+        repetir = reintentar.get()
+
+        def trabajo():
+            try:
+                _analizar(todos, sel, out, precio, repetir)
+            except Exception as ex:   # noqa: BLE001
+                eventos.put(("error", ex))
+
+        threading.Thread(target=trabajo, daemon=True).start()
+
+    def _analizar(todos, sel, out, precio, repetir):
+        hechos_viejos = [x for x in out.glob("*.png")] if out.is_dir() else []
+        if hechos_viejos and not (out / "final").is_dir():
+            log(f"AVISO: hay {len(hechos_viejos)} PNG sueltos en la carpeta de salida (de una versión anterior "
+                "de la fábrica). La v3 guarda en final/: movelos a final/ para que no se vuelvan a pagar.")
         estado = leer_estado(out)
         motivos = [ya_hecho(p, out, estado) for p in sel]
         faltan = sum(1 for m in motivos if m is None)
@@ -538,13 +579,9 @@ def main():
         if sin_ref:
             log(f"AVISO: {len(sin_ref)} piden referencia y no la encuentro junto al TXT (ej. {sin_ref[0]}). "
                 "Extraé pedidos.zip entero, sin mover el TXT.")
-        try:
-            precio = numero("precio", float)
-            if precio:
-                log(f"Estimado: {faltan} x USD {precio:.3f} = USD {faltan * precio:.2f}"
-                    + (" (más si repetís las que fallen)" if reintentar.get() else ""))
-        except ValueError:
-            pass
+        if precio:
+            log(f"Estimado: {faltan} x USD {precio:.3f} = USD {faltan * precio:.2f}"
+                + (" (más si repetís las que fallen)" if repetir else ""))
         log("Analizar no gasta nada.")
 
     def generar():
@@ -576,11 +613,14 @@ def main():
         barra.configure(maximum=len(sel), value=0)
         boton_gen.configure(state="disabled")
 
+        # los valores de la ventana se leen acá: Tk no deja leerlos desde otro hilo
+        repetir, mod, cal, con_zip = reintentar.get(), modelo.get(), calidad.get(), hacer_zip.get()
+
         def trabajo():
             try:
                 tanda(sel, out, gen, log, parar, lambda i: eventos.put(("prog", i)), tope, precio, usd,
-                      reintentar.get(), modelo.get(), calidad.get())
-                if hacer_zip.get():
+                      repetir, mod, cal)
+                if con_zip:
                     for z in zips(out, todos):
                         log(f"ZIP (solo final/): {z.name}")
             except Exception as ex:   # noqa: BLE001
@@ -620,6 +660,11 @@ def main():
                     barra.configure(value=c)
                 elif k == "fin":
                     boton_gen.configure(state="normal")
+                elif k == "error":
+                    try:
+                        raise c
+                    except Exception as ex:   # noqa: BLE001
+                        informar_error(ex)
         except queue.Empty:
             pass
         root.after(150, mirar)
@@ -629,5 +674,37 @@ def main():
     root.mainloop()
 
 
+def _faltan_librerias() -> list[str]:
+    faltan = []
+    for mod in ("PIL", "openai"):
+        try:
+            __import__(mod)
+        except ImportError:
+            faltan.append({"PIL": "Pillow"}.get(mod, mod))
+    return faltan
+
+
 if __name__ == "__main__":
+    # 2026-11-06 (captura: "No module named 'PIL'" al abrir el .py con doble clic): las
+    # librerías están en el .venv que arma INICIAR.bat. Si se abrió con otro Python, se
+    # vuelve a abrir solo con el del .venv; si no existe, se explica qué hacer.
+    faltan = _faltan_librerias()
+    if faltan:
+        aqui = Path(__file__).resolve().parent
+        venv = aqui / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        if venv.exists() and Path(sys.executable).resolve() != venv.resolve():
+            import subprocess
+            subprocess.Popen([str(venv), str(Path(__file__).resolve())], cwd=str(aqui))
+            sys.exit(0)
+        mensaje = (f"Faltan librerías ({', '.join(faltan)}).\n\nAbrí la fábrica con INICIAR.bat "
+                   "(doble clic): la primera vez las instala. No abras fabrica_hoi4.py directamente.")
+        try:
+            import tkinter
+            from tkinter import messagebox
+            tkinter.Tk().withdraw()
+            messagebox.showerror("Fábrica HOI4", mensaje)
+        except Exception:   # noqa: BLE001
+            print(mensaje)
+            input("Enter para cerrar")
+        sys.exit(1)
     main()
