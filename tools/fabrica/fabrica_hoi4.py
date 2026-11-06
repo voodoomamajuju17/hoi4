@@ -472,9 +472,10 @@ def main():
         ttk.Combobox(s, textvariable=var, values=vals, state="readonly", width=24).grid(row=1, column=col, sticky="ew", padx=(0, 8))
     lim = ttk.Frame(f)
     lim.pack(fill="x", pady=4)
-    for t, k, w in (("Desde el pedido Nº", "first", 6), ("Cuántos pedidos (0 = todos)", "count", 6)):
+    for t, k, w in (("Desde el pedido Nº", "first", 6), ("Cuántas imágenes nuevas (0 = todas)", "count", 6)):
         ttk.Label(lim, text=t).pack(side="left")
         ttk.Entry(lim, textvariable=v[k], width=w).pack(side="left", padx=(4, 14))
+    ttk.Label(lim, text="(cuenta solo las que faltan: lo hecho se saltea)").pack(side="left")
     # 2026-11-06 (captura: "no entiendo" el "Tope de pedidos PAGOS"): nombres más claros
     gasto = ttk.LabelFrame(f, text="Freno de gasto (sin al menos uno de los dos máximos no arranca)", padding=8)
     gasto.pack(fill="x", pady=4)
@@ -533,12 +534,18 @@ def main():
             raise ValueError("Elegí un TXT que exista.")
         todos = leer_pedidos(p.read_text(encoding="utf-8-sig"), p.parent)
         a, c = max(1, numero("first")), numero("count")
-        sel = todos[a - 1: None if c == 0 else a - 1 + c]
-        if not sel:
-            raise ValueError("No hay pedidos en ese rango.")
         if not v["dest"].get().strip():
             raise ValueError("Elegí la carpeta de salida.")
-        return todos, sel, Path(v["dest"].get().strip())
+        out = Path(v["dest"].get().strip())
+        # 2026-11-06 ("si pongo 1, ¿no cuenta desde la primera sin hacer?"): Cantidad = cuántas
+        # imágenes NUEVAS; lo ya hecho se saltea sin contarlo
+        estado = leer_estado(out)
+        sel = [p for p in todos[a - 1:] if ya_hecho(p, out, estado) is None]
+        if c:
+            sel = sel[:c]
+        if not sel:
+            raise ValueError("No queda nada por hacer desde ese pedido.")
+        return todos, sel, out
 
     def analizar():
         log("Analizando… (lee el TXT y la carpeta de salida)")
@@ -571,9 +578,27 @@ def main():
         estado = leer_estado(out)
         motivos = [ya_hecho(p, out, estado) for p in sel]
         faltan = sum(1 for m in motivos if m is None)
-        cambiados = sum(1 for m in motivos if m and "cambió" in m)
+        cambiados = sum(1 for p in todos if "cambió" in (ya_hecho(p, out, estado) or ""))
         sin_ref = [p["filename"] for p in sel if p["referencia_pedida"] and p["referencia"] is None]
-        log(f"{len(todos)} pedidos en el TXT; elegidos {len(sel)}; por hacer {faltan}.")
+        total = sum(1 for p in todos if ya_hecho(p, out, estado) is None)
+        log(f"{len(todos)} pedidos en el TXT; hechos {len(todos) - total}; faltan {total}. "
+            f"Esta corrida haría {faltan}.")
+        # por qué falta cada una (si ya se intentó y falló)
+        previo = {}
+        try:
+            with open(out / "registro.csv", encoding="utf-8") as fr:
+                for fila in csv.DictReader(fr):
+                    previo[fila["archivo"]] = (fila["estado"], fila["problemas"])
+        except OSError:
+            pass
+        fallidas = [(p["filename"], previo[p["filename"]][1]) for p in sel
+                    if previo.get(p["filename"], ("",))[0] == "falló"]
+        if fallidas:
+            log(f"De estas, {len(fallidas)} ya se intentaron y fallaron:")
+            for n, e in fallidas[:15]:
+                log(f"  {n}: {e[:140]}")
+            if len(fallidas) > 15:
+                log(f"  … y {len(fallidas) - 15} más (registro.csv)")
         if cambiados:
             log(f"AVISO: {cambiados} ya hechos con un pedido distinto al actual (no se rehacen solos).")
         if sin_ref:
