@@ -2491,3 +2491,7 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   boton_lider.png y `arte ficha` lo usa). El color del Imperio pasa de oro
   viejo a verde (92, 196, 112): hilo, escuadras, detalles de la Ficha, las
   ramas de su marco, emblema y marca de agua.
+- Lote del 2026-11-06: 24 alertas nuevas (cobre, "!" rojo o verde), pines de
+  Neoandinos 56-68, Federación 1-15, Directorio 46-65 y 5 válvulas
+  corregidas, y 3 del Imperio rehechos (Aeródromos, Astilleros, Mariscal).
+  Patagonia llegó cortada en el zip: queda pendiente.
