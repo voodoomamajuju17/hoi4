@@ -2624,10 +2624,10 @@ def test_fabrica() -> None:
     _sys.path.insert(0, str(REPO_ROOT / "tools/fabrica"))
     import fabrica_hoi4 as F
     from tools.fabrica import control
-    todo = REPO_ROOT / "arte/pedidos/0_TODO_LO_QUE_FALTA.txt"
+    todo = REPO_ROOT / "arte/pedidos/0_FOCOS_PIN_FALTANTES.txt"
     peds = F.leer_pedidos(todo.read_text(encoding="utf-8"), todo.parent)
     pin = next((p for p in peds if p.get("material")), None)
-    check("fábrica: lee los pedidos del archivo único, con su material", len(peds) > 0 and pin is not None, str(len(peds)))
+    check("fábrica: lee los pedidos de focos pin faltantes, con su material", len(peds) > 0 and pin is not None, str(len(peds)))
     if pin:
         pr = F.armar_prompt(pin)
         check("fábrica: el prompt lleva el material y el aviso de pin, no moneda",

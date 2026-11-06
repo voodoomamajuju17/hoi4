@@ -1015,7 +1015,11 @@ def lote(tags: list[str], salida: str, titulo: str = "") -> None:
 
 
 def pedidos() -> None:
-    items = [i for i in catalog() if not i["done"] and not i.get("hand_written")]
+    # 2026-11-06 ("no me gustan las imágenes del diseñador... están demasiado iguales a las
+    # referencias"): los módulos del diseñador van aparte, de nuevo y sin referencia
+    # (tools/arte/disenador.py -> 0_DISENADOR_2100.txt)
+    items = [i for i in catalog() if not i["done"] and not i.get("hand_written")
+             and not (i["type"] == "game_icon" and i.get("tag") == "DISENADOR")]
     OUT.mkdir(parents=True, exist_ok=True)
     before = _previous_ids()
     old_new = (OUT / NEW_FILE).read_text(encoding="utf-8") if (OUT / NEW_FILE).exists() else None
@@ -1069,8 +1073,27 @@ def pedidos() -> None:
         summary.append(f"{fijo.name}: {fijo.read_text(encoding='utf-8').count('ASSET_REQUEST')}")
     # 2026-11-06 ("¿y si combinás todo lo faltante en un solo txt?", para generarlo por API):
     # todo lo pendiente en un archivo, en el orden de los archivos sueltos
+    # 2026-11-06 ("las imágenes faltantes de los focus metelo en otro txt aparte"): los pines
+    # de foco y el diseñador tienen su propio archivo, el resto va junto
     todos = [f for f in sorted(OUT.glob("*.txt"), key=lambda f: (int(f.name.split("_")[0]) if f.name.split("_")[0].isdigit() else 0, f.name))
-             if not f.name.startswith("0_")]
+             if not f.name.startswith("0_") and not f.name.startswith("20_focos_pin")]
+    pin_txt = [f for f in sorted(OUT.glob("20_focos_pin_*.txt"))]
+    pin_bloques = []
+    for f in pin_txt:
+        pin_bloques += ["ASSET_REQUEST" + b.rstrip() + "\n" for b in f.read_text(encoding="utf-8").split("ASSET_REQUEST")[1:]]
+    (OUT / "0_FOCOS_PIN_FALTANTES.txt").write_text(
+        f"# {len(pin_bloques)} pedidos: los íconos de foco en estilo pin que faltan (todas las naciones).\n"
+        "# Cada uno lleva su material y el ícono viejo como referencia del MOTIVO (pedidos/referencias_focos).\n\n"
+        + "\n".join(pin_bloques), encoding="utf-8")
+    summary.insert(0, f"0_FOCOS_PIN_FALTANTES.txt: {len(pin_bloques)}")
+    from tools.arte import disenador
+    dis = disenador.items()
+    (OUT / "0_DISENADOR_2100.txt").write_text(
+        f"# {len(dis)} pedidos: los módulos del diseñador de equipo, de nuevo (2026-11-06).\n"
+        "# SIN imagen de referencia: cada uno describe la pieza de 2100 que reemplaza al módulo del juego.\n"
+        "# Diseño original, no copiar íconos de otros juegos.\n\n"
+        + "\n".join(disenador.pedido(i) for i in dis), encoding="utf-8")
+    summary.insert(0, f"0_DISENADOR_2100.txt: {len(dis)}")
     bloques = []
     for f in todos:
         texto = f.read_text(encoding="utf-8")

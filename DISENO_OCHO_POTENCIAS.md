@@ -2534,3 +2534,9 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   trenes, 120.000 hombres y La Taiga Alimenta. Sus zonas se suman al refuerzo
   anual de las Tierras Sin Ley. Los nombres de las regiones siberianas se
   resuelven con el juego del usuario (el reporte avisa si alguno no existe).
+- Diseñador de equipo de nuevo (2026-11-06, "están DEMASIADO iguales a las
+  referencias... priorizar originalidad, lore, época"): tools/arte/disenador.py
+  describe cada uno de los 230 módulos como la pieza de 2100 que lo reemplaza
+  (railguns, láseres antidrones, motores de hidrógeno, cerámica compuesta,
+  torretas sin tripulación), sin imagen de referencia: 0_DISENADOR_2100.txt.
+  Los pines de foco que faltan van juntos en 0_FOCOS_PIN_FALTANTES.txt.
