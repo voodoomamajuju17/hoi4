@@ -1240,6 +1240,11 @@ if __name__ == "__main__":
         from tools.arte import auditoria
         for line in auditoria.armar(sys.argv[2]):
             print(line)
+    elif len(sys.argv) >= 3 and sys.argv[1] == "pines":
+        # python -m tools.arte.arte pines <carpeta>: anota los focos pin que llegaron
+        from tools.arte import focos_pin
+        for line in focos_pin.anotar_llegados(sys.argv[2]):
+            print(line)
     elif len(sys.argv) >= 2 and sys.argv[1] == "ficha":
         from tools.arte import ficha
         ficha.main(sys.argv[2:])

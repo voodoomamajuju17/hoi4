@@ -130,3 +130,18 @@ def escribir(salida: Path) -> tuple[list[str], list[str]]:
         path.write_text("\n".join(cabeza) + "\n" + "\n".join(_pedido(i, estilo) for i in grupo), encoding="utf-8")
         resumen.append(f"{path.name}: {len(grupo)}")
     return resumen, refs
+
+
+def anotar_llegados(carpeta: str) -> list[str]:
+    """Anota en arte/focos_pin_llegados.txt los focos de una carpeta recién importada
+    (2026-11-06: a mano se perdía una línea) y borra sus referencias, que ya no hacen falta."""
+    path = REPO / "arte" / "focos_pin_llegados.txt"
+    cabeza = "# Focos que ya llegaron en estilo pin (2026-11-05); tools/arte/focos_pin.py no los vuelve a pedir."
+    previos = {l.strip() for l in path.read_text(encoding="utf-8").splitlines()
+               if l.strip() and not l.startswith("#")} if path.exists() else set()
+    focos = {i["id"] for i in items()} | previos
+    nuevos = {p.stem for p in Path(carpeta).rglob("*.png") if p.stem in focos} - previos
+    path.write_text(cabeza + "\n" + "\n".join(sorted(previos | nuevos)) + "\n", encoding="utf-8")
+    for ident in nuevos:
+        (REFS / f"{ident}.png").unlink(missing_ok=True)
+    return [f"pines: {len(nuevos)} focos nuevos anotados ({len(previos | nuevos)} en total)"]
