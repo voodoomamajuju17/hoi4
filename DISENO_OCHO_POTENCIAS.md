@@ -2514,3 +2514,7 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   USD (obligatorio) y registro.csv por llamada; masters/ final/ revisar/, ZIP
   solo de final/ y rearmados desde cero; estado.json con la huella de cada
   pedido para retomar sin pagar y avisar si el pedido cambió.
+- Primer lote de la Fábrica (2026-11-06): 372 imágenes (221 íconos del juego:
+  categorías, decisiones, diplomacia, módulos del diseñador y la alerta 50;
+  151 imágenes de eventos). Ninguna rota ni con problemas de control. Quedan
+  462 pedidos en 0_TODO_LO_QUE_FALTA.txt.
