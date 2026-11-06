@@ -1,26 +1,39 @@
-FÁBRICA HOI4 v2 (con control de calidad)
-========================================
+FÁBRICA HOI4 v3
+===============
 Genera por API las imágenes de los pedidos (bloques ASSET_REQUEST) del mod.
 
 1. Python 3.10 o más nuevo (python.org; al instalar, marcar "Add Python to PATH").
-2. Bajá el zip de arte (pedidos.zip) y extraelo ENTERO en una carpeta: los TXT
-   y las carpetas de referencias tienen que quedar juntos.
-3. Doble clic en INICIAR.bat (la primera vez instala lo que falta).
+2. Bajá pedidos.zip y extraelo ENTERO: los TXT y las carpetas de referencias
+   tienen que quedar juntos (la fábrica está en fabrica/).
+3. Doble clic en fabrica/INICIAR.bat (la primera vez instala lo que falta).
 4. Pegá tu API key de OpenAI en la ventana (no se guarda en ningún lado).
-5. Elegí el TXT (por ejemplo 0_TODO_LO_QUE_FALTA.txt o 20_focos_pin_FCU.txt),
-   apretá "Analizar TXT" (gratis): te avisa si faltan referencias.
-6. Probá con Cantidad 1, mirá hoja_de_contacto.jpg, y después largá el resto.
+5. Elegí el TXT (0_TODO_LO_QUE_FALTA.txt o uno por nación) y la carpeta de salida.
+6. Precio por imagen: sacalo de platform.openai.com/pricing (tu modelo y calidad).
+   Poné un tope de pedidos pagos y/o un tope en USD: sin tope no arranca.
+7. "Analizar TXT" (gratis): cuántos faltan, cuánto costaría, si faltan referencias.
+8. Probá con Cantidad 1, mirá hoja_de_contacto.jpg, después largá el resto.
 
-Qué controla solo:
-- archivo que no abre o vino cortado: no se guarda;
-- fondo blanco cuando se pidió transparente: lo quita; si no puede, a revisar/;
-- dibujo cortado contra el borde, imagen casi vacía o plana: a revisar/;
-- lo que no pasa el control se pide UNA vez más (se puede desmarcar);
-- 5 pedidos seguidos con error: para la tanda (clave, modelo o saldo);
-- al final: hoja_de_contacto.jpg (marco rojo = problema) y control.csv.
+Carpeta de salida:
+  masters/   lo que devolvió la API, intacto (grande)
+  final/     listo para el juego (tamaño exacto); los ZIP salen solo de acá
+  revisar/   lo dudoso: fondo quitado por el programa, dibujo cortado contra
+             el borde, casi vacía o plana
+  hoja_de_contacto.jpg  todo junto; marco rojo = revisar o falló
+  registro.csv          cada llamada: estado, problemas, si usó referencia, uso
+  estado.json           para retomar sin volver a pagar
 
-Lo que NO puede ver solo (mirá la hoja de contacto): letras metidas en el
-dibujo, una moneda redonda en vez de pin, demasiados elementos.
+Revisar a mano: si una de revisar/ está bien, MOVELA a final/ y apretá
+"Rearmar ZIP". Si está mal, borrala y en la próxima corrida se pide de nuevo.
 
-Mandale a Claude la carpeta de salida (o el ZIP) SIN la subcarpeta revisar/.
-Ojo: cada imagen cuesta. Poné un tope de gasto en platform.openai.com.
+Nunca gasta sin que lo decidas:
+- no repite nada solo (la casilla "Repetir automáticamente" viene apagada);
+- si la API rechaza una referencia, ese pedido falla y se avisa; 3 seguidas
+  paran la tanda. Seguir sin referencia: casilla "Permitir sin referencia";
+- 5 pedidos seguidos con error: para (clave, modelo o saldo);
+- al retomar no paga lo que está en final/ o en revisar/. Si el pedido
+  cambió desde que se hizo, avisa (no lo rehace solo).
+
+Lo que NO puede ver solo (mirá la hoja): letras metidas en el dibujo, una
+moneda en vez de pin, demasiados elementos.
+
+Mandale a Claude los ZIP (solo llevan final/).

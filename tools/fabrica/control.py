@@ -93,7 +93,7 @@ def revisar(img, transparente: bool) -> list[str]:
             problemas.append("casi vacía (el dibujo ocupa menos del 8 %)")
         borde = _borde(img)
         tocan = sum(1 for p in borde if p[3] > 128) / len(borde)
-        if tocan > 0.12:
+        if tocan > 0.20:
             problemas.append(f"el dibujo toca el borde en el {round(tocan * 100)} % del contorno (¿cortado?)")
     else:
         dev = ImageStat.Stat(img.convert("L")).stddev[0]

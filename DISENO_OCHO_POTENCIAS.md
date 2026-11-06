@@ -2506,3 +2506,11 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   errores seguidos; deja hoja_de_contacto.jpg y control.csv. `arte importar`
   usa el mismo control: avisa los rotos en vez de cortar, elige la versión
   más grande si un pedido viene dos veces, limpia fondos lisos.
+- Fábrica v3 (2026-11-06, auditoría de ChatGPT a la v2: "nunca debería
+  intentar arreglar una imagen pagando otra generación sin que vos lo
+  autorices"): referencia rechazada = ese pedido falla (seguir sin ella solo
+  con la casilla; 3 seguidas paran); nada se repite solo; el fondo quitado va
+  a revisar/ con el original intacto en masters/; tope de pedidos pagos y en
+  USD (obligatorio) y registro.csv por llamada; masters/ final/ revisar/, ZIP
+  solo de final/ y rearmados desde cero; estado.json con la huella de cada
+  pedido para retomar sin pagar y avisar si el pedido cambió.

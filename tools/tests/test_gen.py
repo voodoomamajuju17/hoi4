@@ -2618,6 +2618,54 @@ def test_fabrica() -> None:
         m = control.mejores_por_nombre(sorted(t.rglob("*.png")))
         check("control: del mismo pedido va la versión más grande; el roto no cuenta",
               m.get("X_foco") == t / "X_foco.png" and "Y_roto" not in m, str(m))
+        # la tanda con una API falsa (auditoría de ChatGPT a la v2, 2026-11-06)
+        import threading as _th
+
+        def png(img):
+            b = _io.BytesIO()
+            img.save(b, "PNG")
+            return b.getvalue()
+
+        bueno = png(grande)
+        fondo = Image.new("RGBA", (400, 360), (255, 255, 255, 255))
+        ImageDraw.Draw(fondo).ellipse((50, 50, 350, 310), fill=(1, 200, 1, 255))
+
+        class Falsa:
+            def __init__(self, salidas):
+                self.salidas, self.llamadas = list(salidas), 0
+
+            def generar(self, p):
+                self.llamadas += 1
+                x = self.salidas.pop(0)
+                if isinstance(x, Exception):
+                    raise x
+                return x, None, False
+
+        pines = [p for p in peds if p["transparente"]]
+        ps = pines[:6]
+        out = t / "salida"
+        hechos, malos, pagas = F.tanda(ps[:2], out, Falsa([bueno, png(fondo)]), lambda m: None, _th.Event(),
+                                       lambda i: None, tope_pagas=10)
+        check("fábrica v3: lo bueno a final/ en tamaño exacto, el fondo quitado a revisar/ con el original intacto",
+              hechos == 1 and (out / "final" / ps[0]["filename"]).is_file()
+              and Image.open(out / "final" / ps[0]["filename"]).size == tuple(ps[0]["size"])
+              and (out / "revisar" / ps[1]["filename"]).is_file()
+              and Image.open(out / "masters" / ps[1]["filename"]).getpixel((2, 2))[3] == 255, str(malos))
+        g = Falsa([bueno] * 5)
+        F.tanda(ps[:3], out, g, lambda m: None, _th.Event(), lambda i: None, tope_pagas=10)
+        check("fábrica v3: al retomar no paga lo que está en final/ ni en revisar/", g.llamadas == 1, str(g.llamadas))
+        g = Falsa([F.ReferenciaRechazada("x")] * 3 + [bueno])
+        F.tanda(ps[3:6], out, g, lambda m: None, _th.Event(), lambda i: None, tope_pagas=10)
+        check("fábrica v3: referencia rechazada = ese pedido falla, sin seguir en silencio sin referencias",
+              g.llamadas == 3 and not (out / "final" / ps[3]["filename"]).exists())
+        g = Falsa([bueno] * 9)
+        _, _, pagas = F.tanda(pines[10:19], out, g, lambda m: None, _th.Event(), lambda i: None,
+                              precio=0.05, tope_usd=0.16)
+        check("fábrica v3: el tope en dólares corta antes de pasarse", pagas == 3, str(pagas))
+        (out / "ZIP_parte_07.zip").write_bytes(b"viejo")
+        zs = F.zips(out, pines)
+        check("fábrica v3: los ZIP se rearman desde cero y solo con final/",
+              [z.name for z in zs] == ["ZIP_parte_01.zip"] and not (out / "ZIP_parte_07.zip").exists())
 
 
 def test_focos_pin() -> None:
