@@ -2582,13 +2582,15 @@ def test_focos_pin() -> None:
     section("focos en estilo pin: material por nación y rama, el ícono viejo de referencia (2026-11-05)")
     from tools.arte import focos_pin
     it = {i["id"]: i for i in focos_pin.items()}
-    check("pin: se piden los que faltan (el Imperio de nuevo, 2026-11-05)",
-          {"NRE", "ZAL", "APF"} <= {i["tag"] for i in it.values()},
-          str(len(it)))
-    zal = [i for i in it.values() if i["tag"] == "ZAL"]
+    llegados = {l.strip() for l in (focos_pin.REPO / "arte/focos_pin_llegados.txt").read_text(encoding="utf-8").splitlines()
+                if l.strip() and not l.startswith("#")}
+    check("pin: lo que ya llegó no se vuelve a pedir, y cada foco está pedido o llegado",
+          not (set(it) & llegados) and all(i["tag"] != "" for i in it.values()), str(sorted(set(it) & llegados)[:5]))
+    import yaml as _y
+    mats = (_y.safe_load(focos_pin.YAML.read_text(encoding="utf-8")) or {})["materiales"]
+    zal = mats["ZAL"]["ramas"]
     check("pin: Albión neovictoriana bordada, transhumana en placa de circuito azul",
-          any(i["rama"] == "hacia_el_pasado" and "embroider" in i["material"] for i in zal)
-          and any(i["rama"] == "hacia_el_futuro" and "printed circuit board" in i["material"] for i in zal), str(zal[:1]))
+          "embroider" in zal["hacia_el_pasado"] and "printed circuit board" in zal["hacia_el_futuro"], str(zal)[:200])
     check("pin: Zaibatsu en ónix, hierro y esmeralda",
           all("onyx" in i["material"] and "iron" in i["material"] and "emerald" in i["material"]
               for i in it.values() if i["rama"] == "ruta_zaibatsu"))
