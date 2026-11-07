@@ -2738,6 +2738,46 @@ def test_biblioteca() -> None:
           set(biblioteca.ORDEN[:10]) | {"TIERRAS_SIN_LEY"} <= cronicas, str(sorted(cronicas)))
 
 
+def test_politica_gui() -> None:
+    section("panel de Politica: espiritus en dos filas a tamano completo (2026-11-07)")
+    from tools.gen.emitters import politica_gui as pg
+    gui = """guiTypes = { containerWindowType = { name = "countrypoliticsview"
+        iconType ={ name ="pol_view_bg" spriteType = "GFX_pol_view_bg" position = { x= 0 y = 44 } }
+        iconType ={ name ="pol_faction_icon" position = { x= 19 y = 305 } }
+        containerWindowType = { name = "chart_explanation" position = { x = 18 y = 116 }
+            gridBoxType = { name = "parties_grid" position = { x = 260 y = 184 } } }
+        containerWindowType = { name = "political_pie_chart" position = { x= 270 y = 304 } }
+        containerWindowType = { name = "ruling_party_info" position = { x = 88 y = 305 } }
+        containerWindowType = { name = "autonomy_progress_view" position = { x = 0 y = 430 } }
+        buttonType = { name = "show_subjects_button" position = { x = 482 y = 246 } }
+        containerWindowType = { name = "national_spirit" position = { x = 81 y = 153 }
+            containerWindowType = { name = "national_spirit_container" position = { x = 99 y = 16 } size = { width = 364 height = 74 }
+                gridboxtype = { name = "spirit_grid" position = { x = 1 y = 2 } size = { width = 354 height = 68 }
+                    slotsize = { width = 59 height = 68 } max_slots = { x = 6 y = 1 } }
+                gridboxtype = { name = "spirit_grid_over_defined" size = { width = 330 height = 68 } } } }
+        containerWindowType = { name = "ideas" position = { x = 0 y = 425 } }
+        iconType = { name = "tutorial_glow" position = { x= 12 y = 383 } }
+        iconType = { name = "politics_bottom" position = { x = -2 y = 383 } }
+        buttonType = { name = "manage_occupied_button" position = { x = 10 y = 390 } }
+        instantTextboxType = { name = "manage_occupied_button_text" position = { x = 48 y = 398 } }
+        containerWindowType = { name = "subjects_button_container" position = { x = 367 y = 390 } }
+        buttonType = { name = "show_exiles_collaborations_button" position = { x = 190 y = 390 } }
+        instantTextboxType = { name = "manage_exiled_collaborations_governments" position = { x = 223 y = 398 } }
+        iconType = { name = "icon_exiled_collaborations_governments" position = { x = 192 y = 391 } }
+        iconType = { name = "icon_occupied_territories" position = { x = 12 y = 391 } }
+    } }"""
+    out, faltan = pg.parchar(gui)
+    check("politica: el .gui del juego se reconoce entero", out is not None and not faltan, faltan)
+    o = " ".join((out or "").split())
+    check("politica: dos filas de espiritus grandes y lo de abajo 68 px mas abajo",
+          "max_slots = { x = 6 y = 2 }" in o and "size = { width = 354 height = 136 }" in o
+          and "size = { width = 364 height = 142 }" in o and "position = { x = 0 y = 493 }" in o
+          and "position = { x = 260 y = 252 }" in o and 'spriteType = "GFX_mn_pol_view_bg_alto"' in o
+          and "size = { width = 330 height = 68 }" in o, o[:900])
+    roto, faltan = pg.parchar(gui.replace("spirit_grid\"", "otra_grilla\""))
+    check("politica: si el juego cambio la pantalla, no se toca", roto is None and "spirit_grid" in faltan, faltan)
+
+
 def test_materiales_piloto() -> None:
     section("interfaz de materiales reales: piloto de la ventana de eventos (2026-11-07)")
     from PIL import Image
@@ -5649,6 +5689,7 @@ def main() -> int:
         test_aventuras_japon,
         test_biblioteca,
         test_materiales_piloto,
+        test_politica_gui,
         test_eventos_rotos,
         test_mecanicas_v2,
         test_forces,

@@ -281,6 +281,7 @@ trees:
           english: Every ranger is a soldier and every tree is cover.
           spanish: Cada guardaparques es un soldado y cada árbol es una trinchera.
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: EFE_bosque_armado}
       - id: EFE_arrasar_la_tierra
         name: {english: Scorched Earth, spanish: Tierra Arrasada}
@@ -339,6 +340,7 @@ trees:
           english: The Amazon warlords burn the forest to sell the land. The forest answers.
           spanish: Los Caudillos del Amazonas queman la selva para vender la tierra. La selva contesta.
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
         - {effect: add_ideas, value: EFE_ofensiva_verde}
         - {effect: or_cores, country: ZWB, spare: [ZSG]}   # si los Caudillos ya cayeron (análisis 2026-10-01)
@@ -789,6 +791,7 @@ trees:
           english: The Guard that won at Iguazú goes back into uniform.
           spanish: La Guardia que ganó en Iguazú vuelve a ponerse el uniforme.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: EFE_guardia_movilizada}
         - {effect: remove_idea, value: EFE_guardia_mal_equipada}
       - id: EFE_doctrina_del_condor
@@ -802,6 +805,7 @@ trees:
           english: Strike from the mountains, vanish into the forest.
           spanish: Golpear desde la montaña, desaparecer en el bosque.
         reward:
+        - {effect: air_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: EFE_legiones_de_iguazu
         name: {english: The Iguazú Legions, spanish: Las Legiones de Iguazú}
@@ -814,6 +818,7 @@ trees:
           english: The veterans of Iguazú train a new generation.
           spanish: Los veteranos de Iguazú entrenan a una generación nueva.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_manpower, value: 50000}
         - {effect: tech_bonus, category: artillery, bonus: 0.5, uses: 1}
       - id: EFE_entrenamiento_de_montana
@@ -850,6 +855,7 @@ trees:
           english: BioSteel plates that close their own wounds. Needs BioSteel tier 2; spends 3.
           spanish: Placas de Bioacero que cierran sus propias heridas. Pide Bioacero nivel 2; gasta 3.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}   # 2026-09-30: la especialidad del EFE son los blindados
         - {effect: add_ideas, value: EFE_armadura_viviente}
         - {effect: add_variable, var: EFE_biosteel, value: -3}
@@ -867,6 +873,7 @@ trees:
           english: The Empire's air force takes the condor as its emblem.
           spanish: La aviación del Imperio toma al cóndor como emblema.
         reward:
+        - {effect: air_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
       - id: EFE_aerodromos_de_la_pampa
         name: {english: The Pampa Airfields, spanish: Los Aeródromos de la Pampa}
@@ -1298,6 +1305,7 @@ trees:
           english: Drones do not bleed. They only need supply.
           spanish: Los drones no sangran. Solo necesitan suministro.
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: ASC_espiritu_ejercito_sin_bajas}
         - {effect: event, id: meganations_apf.2, target: APF}
       - id: ASC_la_reserva_de_silicio
@@ -1776,6 +1784,7 @@ trees:
           english: The first autonomous squads join the line.
           spanish: Las primeras escuadras autónomas entran a la línea.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
         - {effect: remove_idea, value: ASC_frente_agotado}
       - id: ASC_columnas_autonomas
@@ -1829,6 +1838,7 @@ trees:
         - ASC_mantenimiento_predictivo
         desc: {english: Tanks with nobody inside., spanish: Tanques sin nadie adentro.}
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}
       - id: ASC_doctrina_del_enjambre
         name: {english: The Swarm Doctrine, spanish: La Doctrina del Enjambre}
@@ -1853,6 +1863,7 @@ trees:
         - ASC_el_ano_del_plan
         desc: {english: Hunters that never surface., spanish: Cazadores que nunca salen a la superficie.}
         reward:
+        - {effect: navy_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
       - id: ASC_patrulla_del_baltico
         name: {english: The Baltic Patrol, spanish: La Patrulla del Báltico}
@@ -1882,6 +1893,7 @@ trees:
           english: Clouds of small drones instead of squadrons.
           spanish: Nubes de drones chicos en vez de escuadrillas.
         reward:
+        - {effect: air_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: ASC_portadrones
         name: {english: Drone Carriers, spanish: Portadrones}
@@ -1892,6 +1904,7 @@ trees:
         - ASC_enjambres_aereos
         desc: {english: Ships that launch swarms., spanish: Barcos que lanzan enjambres.}
         reward:
+        - {effect: navy_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - effect: states
           pick: random
           effects:
@@ -1915,6 +1928,7 @@ trees:
         - ASC_portadrones
         desc: {english: From Scapa Flow to the Skagerrak., spanish: De Scapa Flow al Skagerrak.}
         reward:
+        - {effect: navy_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: ASC_flota_del_norte}
       - id: ASC_radar_continental
         name: {english: The Continental Radar, spanish: El Radar Continental}
@@ -2202,6 +2216,7 @@ trees:
           english: Meridian gets the army's orders, on the condition that it shares the profits with the Board.
           spanish: Meridian se queda con los pedidos del ejército, con la condición de repartir las ganancias con el Directorio.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_variable, var: FCU_meridian, value: 10}
         - {effect: run, value: FCU_recalcular_directorio}
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
@@ -2877,6 +2892,7 @@ trees:
           english: Few divisions, very expensive, always first.
           spanish: Pocas divisiones, muy caras, siempre primeras.
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: FCU_respuesta_rapida}
       - id: FCU_el_comandante_contratado
         name: {english: The Contracted Commander, spanish: El Comandante Contratado}
@@ -2902,6 +2918,7 @@ trees:
         - FCU_ano_fiscal
         desc: {english: Norfolk's docks work again., spanish: Los muelles de Norfolk vuelven a trabajar.}
         reward:
+        - {effect: navy_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - effect: states
           pick: random
           effects:
@@ -2922,6 +2939,7 @@ trees:
           english: San Diego and Seattle, facing the High Seas.
           spanish: San Diego y Seattle, mirando a la Alta Mar.
         reward:
+        - {effect: navy_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: naval_equipment, bonus: 0.5, uses: 1}
       - id: FCU_escoltas_de_convoy
         name: {english: Convoy Escorts, spanish: Escoltas de Convoy}
@@ -2944,6 +2962,7 @@ trees:
           english: Meridian's drones own the skies over the Union.
           spanish: Los drones de Meridian son dueños del cielo de la Unión.
         reward:
+        - {effect: air_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: FCU_portaaviones_corporativos
         name: {english: Corporate Carriers, spanish: Portaaviones Corporativos}
@@ -2956,6 +2975,7 @@ trees:
           english: Floating airfields with a logo on the flight deck.
           spanish: Aeródromos flotantes con un logo en la cubierta.
         reward:
+        - {effect: navy_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - effect: states
           pick: random
           effects:
@@ -3832,6 +3852,7 @@ trees:
         - HSN_el_libro_de_fletes_2100
         desc: {english: Sailors who can hold a beach., spanish: Marineros que pueden sostener una playa.}
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
         # 2026-10-21 (pedido del usuario: "más polenta en marines"): las tecnologías de marines
         # (si el juego no tuviera esas categorías, armas de infantería, que usan los marines)
@@ -3878,6 +3899,7 @@ trees:
         - HSN_asalto_anfibio
         desc: {english: Every node has its garrison., spanish: Cada nodo tiene su guarnición.}
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_manpower, value: 75000}
       - id: HSN_fuerzas_de_muelle
         name: {english: Dock Forces, spanish: Fuerzas de Muelle}
@@ -3922,6 +3944,7 @@ trees:
         - HSN_escoltas_de_convoy
         desc: {english: Planes that know the sea., spanish: Aviones que conocen el mar.}
         reward:
+        - {effect: air_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 1}
       - id: HSN_cazadores_de_submarinos
         name: {english: Submarine Hunters, spanish: Cazadores de Submarinos}
@@ -3933,6 +3956,7 @@ trees:
           english: The ASC's submarines are the first target.
           spanish: Los submarinos de la ASC son el primer blanco.
         reward:
+        - {effect: navy_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}
       - id: HSN_grupos_de_portaaviones
         name: {english: Carrier Groups, spanish: Grupos de Portaaviones}
@@ -3945,6 +3969,7 @@ trees:
           english: The clearing house finances the carriers; the carriers protect the clearing house.
           spanish: La cámara de compensación financia los portaaviones; los portaaviones protegen a la cámara.
         reward:
+        - {effect: navy_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - effect: states
           pick: random
           effects:
@@ -3968,6 +3993,7 @@ trees:
         - HSN_grupos_de_portaaviones
         desc: {english: The largest fleet of the century., spanish: La flota más grande del siglo.}
         reward:
+        - {effect: navy_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: HSN_armada_de_alta_mar}
       - id: HSN_dominio_de_las_rutas
         name: {english: Mastery of the Routes, spanish: Dominio de las Rutas}
@@ -4281,6 +4307,7 @@ trees:
           english: Whoever wants the Andes has to climb them.
           spanish: El que quiera los Andes tiene que subirlos.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: NAS_fortalezas_puna}
         - {effect: tech_bonus, category: mountaineers_tech, bonus: 0.5, uses: 1}
       - id: NAS_nueva_granada_leal
@@ -4408,6 +4435,7 @@ trees:
           english: The ancient labour tax, paid in soldiers.
           spanish: El viejo tributo de trabajo, pagado en soldados.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: NAS_espiritu_mita_de_guerra}
         - {effect: add_manpower, value: 50000}
       - id: NAS_el_cuntisuyu
@@ -4897,6 +4925,7 @@ trees:
           english: The best rifles for the best soldiers.
           spanish: Los mejores fusiles para los mejores soldados.
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
         - {effect: add_manpower, value: 30000}
       - id: NAS_doctrina_de_la_quebrada
@@ -4945,6 +4974,7 @@ trees:
         - NAS_el_sol_de_2100
         desc: {english: The condor's air force., spanish: La aviación del cóndor.}
         reward:
+        - {effect: air_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: NAS_aerodromos_de_altura
         name: {english: High-Altitude Airfields, spanish: Aeródromos de Altura}
@@ -4988,6 +5018,7 @@ trees:
         - NAS_transporte_de_montana
         desc: {english: The Sun's sky is closed., spanish: El cielo del Sol está cerrado.}
         reward:
+        - {effect: air_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: electronics, bonus: 0.5, uses: 2}
         - {effect: dynamic_modifier, id: NAS_el_cielo_cerrado}
       - id: NAS_la_flota_del_pacifico
@@ -5725,6 +5756,7 @@ trees:
         - SHD_el_directorio_de_2100
         desc: {english: 'Numbers are a flow, too.', spanish: Los números también son un caudal.}
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: SHD_espiritu_infanteria_de_masa}
         - {effect: remove_idea, value: SHD_ejercito_de_papel}
       - id: SHD_logistica_fluvial
@@ -5791,6 +5823,7 @@ trees:
         - SHD_el_directorio_de_2100
         desc: {english: The Directorate sees every province., spanish: El Directorio ve cada provincia.}
         reward:
+        - {effect: air_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
         - {effect: add_variable, var: SHD_orden, value: 5}
         - {effect: run, value: SHD_recalcular_caudales}
@@ -5824,6 +5857,7 @@ trees:
         - SHD_cazas_del_directorio
         desc: {english: 'Surveillance and defence, one system.', spanish: 'Vigilancia y defensa, un solo sistema.'}
         reward:
+        - {effect: air_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: SHD_cielo_armonioso}
       - id: SHD_bombarderos_tacticos
         name: {english: Tactical Bombers, spanish: Bombarderos Tácticos}
@@ -5833,6 +5867,7 @@ trees:
         - SHD_el_cielo_armonioso
         desc: {english: The flood also comes from the sky., spanish: La crecida también viene del cielo.}
         reward:
+        - {effect: air_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: SHD_la_flota_del_mar_de_china
         name: {english: The China Sea Fleet, spanish: La Flota del Mar de China}
@@ -6191,6 +6226,7 @@ trees:
         - APF_los_consejos_se_arman
         desc: {english: Every council has its rifles., spanish: Cada consejo tiene sus fusiles.}
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: APF_espiritu_milicia_popular}
         - {effect: add_manpower, value: 100000}
       - id: APF_la_marcha_al_este
@@ -6592,6 +6628,7 @@ trees:
         - APF_el_congreso_de_2100
         desc: {english: The militias become an army., spanish: Las milicias se vuelven ejército.}
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 2}
         - {effect: remove_idea, value: APF_milicias_sin_fusiles}
       - id: APF_instructores
@@ -6626,6 +6663,7 @@ trees:
         - APF_guerra_de_movimiento
         desc: {english: 'Fast, cheap and everywhere.', spanish: 'Rápida, barata y en todos lados.'}
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: APF_espiritu_infanteria_ligera}
       - id: APF_defensa_de_la_aldea
         name: {english: Defence of the Village, spanish: Defensa de la Aldea}
@@ -6658,6 +6696,7 @@ trees:
         - APF_el_congreso_de_2100
         desc: {english: An air force for a whole continent., spanish: Una aviación para un continente entero.}
         reward:
+        - {effect: air_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: air_equipment, bonus: 0.5, uses: 2}
       - id: APF_red_de_aerodromos
         name: {english: The Airfield Network, spanish: La Red de Aeródromos}
@@ -6757,6 +6796,7 @@ trees:
         - APF_moneda_comun
         desc: {english: One army for every member., spanish: Un ejército para todos los miembros.}
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_manpower, value: 50000}
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
       - id: APF_ciudadania_continental
@@ -7095,6 +7135,7 @@ trees:
           english: The Imperator's own legion. Opens calling the Praetorians.
           spanish: La legión propia del Imperator. Abre llamar a los pretorianos.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_ideas, value: NRE_guardia_pretoriana}
         - {effect: add_variable, var: NRE_auctoritas, value: 10}
         - {effect: run, value: NRE_recalcular_legiones}
@@ -7520,6 +7561,7 @@ trees:
           english: Three legions with names, histories and ambitions.
           spanish: Tres legiones con nombre, historia y ambiciones.
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: infantry_weapons, bonus: 0.5, uses: 1}
         - {effect: add_variable, var: NRE_auctoritas, value: 5}
         - {effect: run, value: NRE_recalcular_legiones}
@@ -7592,6 +7634,7 @@ trees:
           english: Tanks with the thunderbolt painted on the turret.
           spanish: Tanques con el rayo pintado en la torreta.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: tech_bonus, category: armor, bonus: 0.5, uses: 2}
         - {effect: build, building: arms_factory, level: 1}
       - id: NRE_el_ejercito_de_las_provincias
@@ -7633,6 +7676,7 @@ trees:
         - NRE_mare_nostrum
         desc: {english: Dry docks from Naples to Livorno., spanish: Diques secos de Nápoles a Livorno.}
         reward:
+        - {effect: navy_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: build, building: dockyard, level: 2}
       - id: NRE_las_aguilas_del_cielo
         name: {english: The Eagles of the Sky, spanish: Las Águilas del Cielo}
@@ -7652,6 +7696,7 @@ trees:
         - NRE_las_aguilas_del_cielo
         desc: {english: Air bases in every province., spanish: Bases aéreas en cada provincia.}
         reward:
+        - {effect: air_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - effect: states
           pick: random
           effects:
@@ -7694,6 +7739,7 @@ trees:
         - NRE_la_aclamacion_confirmada
         desc: {english: 'In Rome, officers are the currency.', spanish: 'En Roma, los oficiales son la moneda.'}
         reward:
+        - {effect: army_experience, value: 25}   # 2026-11-07: experiencia en focos militares
         - {effect: add_variable, var: NRE_auctoritas, value: 10}
         - {effect: run, value: NRE_recalcular_legiones}
       - id: NRE_los_tribunos
@@ -8573,6 +8619,7 @@ trees:
           spanish: Siete años después del colapso, las tierras que nadie quería son las más ricas de la Tierra. Fusiles, trenes y barcos caen como
             lluvia.
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: equipment, type: infantry_equipment, amount: 20000}
         - {effect: equipment, type: support_equipment, amount: 5000}
         - {effect: equipment, type: train_equipment_1, amount: 50}
@@ -8720,6 +8767,7 @@ trees:
         days: 35
         prerequisites: [JUNTA_los_arsenales_abiertos]
         reward:
+        - {effect: army_experience, value: 10}   # 2026-11-07: experiencia en focos militares
         - {effect: add_manpower, value: 150000}
         - {effect: dynamic_modifier, id: MEGANATIONS_junta_furia, days: 90}
         src: user_request

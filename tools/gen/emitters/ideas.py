@@ -136,6 +136,9 @@ def emit(ctx: BuildContext) -> None:
             continue
 
         group = Block()
+        # 2026-11-07 ("sacá el espíritu agencia de inteligencia manteniendo ese bonus"): una idea
+        # con `hidden: true` va a la categoría hidden_ideas del juego: da su bonus y no se ve
+        ocultas = Block()
         for idea in ideas:
             iid = idea["id"]
             if iid in seen:
@@ -176,7 +179,9 @@ def emit(ctx: BuildContext) -> None:
             body.add("modifier", mod)
             # Dibujo: propio si está en assets/<TAG>/ideas/<id>.dds; si no, genérico del juego.
             own = repo / "assets" / country.tag / "ideas" / f"{iid}.dds"
-            if own.exists():
+            if idea.get("hidden"):
+                ocultas.add(ctx.loc.reference(iid, f"ideas:{iid}"), body)
+            elif own.exists():
                 texture = f"gfx/interface/ideas/meganations/{iid}.dds"
                 ctx.copy_asset(f"assets/{country.tag}/ideas/{iid}.dds", texture)
                 sprite = Block()
@@ -193,7 +198,8 @@ def emit(ctx: BuildContext) -> None:
                     picked[generic] = picked.get(generic, 0) + 1
                 else:
                     pictures["ninguna"] += 1
-            group.add(ctx.loc.reference(iid, f"ideas:{iid}"), body)
+            if not idea.get("hidden"):
+                group.add(ctx.loc.reference(iid, f"ideas:{iid}"), body)
 
             desc = idea.get("desc")
             if not isinstance(desc, dict):
@@ -207,7 +213,10 @@ def emit(ctx: BuildContext) -> None:
 
         root = Block()
         country_block = Block()
-        country_block.add("country", group)
+        if group.entries:
+            country_block.add("country", group)
+        if ocultas.entries:
+            country_block.add("hidden_ideas", ocultas)
         root.add("ideas", country_block)
         ctx.write_script(f"common/ideas/{country.tag}_ideas.txt", root, source=SOURCE)
 

@@ -2621,3 +2621,14 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   (assets/ui/materiales) y la ventana de eventos armada con ellas
   (tools/arte/materiales_piloto.py -> assets/ui/materiales_piel, que se aplica
   encima de la piel). Test: test_materiales_piloto.
+- Menos espíritus y más experiencia (2026-11-07):
+  - Fuera Los Años Inciertos; Mando preparado y Flota completa solo a la IA.
+  - El Servicio de Inteligencia (+2 agentes, las ocho potencias) pasa a idea oculta
+    (`hidden: true` en 05_ideas -> categoría hidden_ideas): el bonus queda, el espíritu no se
+    ve; su imagen sigue siendo el logo de la agencia.
+  - Popularidades propias por nación (02_countries -> popularities) en vez de 70/10/10/10.
+  - Experiencia inicial por rama (02_countries -> experience, máximo 30) y +10/+25 de
+    experiencia en 56 focos militares.
+  - Panel de Política: tools/gen/emitters/politica_gui.py parte del countrypoliticsview.gui
+    del juego, pone los espíritus en dos filas a tamaño completo (hasta 12) y baja 68 px lo
+    de abajo; el fondo se estira. Test: test_politica_gui.

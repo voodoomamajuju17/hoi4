@@ -53,6 +53,16 @@ def emit(ctx: BuildContext) -> None:
         sp.add("election_frequency", int(politics.get("election_frequency", 48)))
         sp.add("elections_allowed", bool(politics.get("elections_allowed", False)))
         b.add("set_politics", sp)
+        # 2026-11-07 ("puntos de experiencia para cada rama, en cada nación, según lore; ninguna
+        # excediendo 30 de arranque"): spec/02_countries.yaml -> experience
+        exp = (ctx.spec.raw["countries"].get("experience") or {}).get(c.tag) or {}
+        for rama in ("army", "navy", "air"):
+            v = int(exp.get(rama, 0))
+            if not 0 <= v <= 30:
+                from ..errors import SpecError
+                raise SpecError(f"experience de {c.tag}: {rama} = {v} (de 0 a 30)", where="spec/02_countries.yaml")
+            if v:
+                b.add(f"{rama}_experience", v)
         propias = (ctx.spec.raw["countries"].get("popularities") or {}).get(c.tag)
         if propias:
             b.add("set_popularities", _popularities_propias(c.tag, c.ideology_group, propias))

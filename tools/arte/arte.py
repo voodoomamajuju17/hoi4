@@ -244,7 +244,7 @@ def catalog() -> list[dict]:
             continue
         for group in ("starting_ideas", "focus_ideas"):
             for idea in entry.get(group) or []:
-                if not isinstance(idea, dict):
+                if not isinstance(idea, dict) or idea.get("hidden"):   # 2026-11-07: ocultas, no se ven
                     continue
                 dest = REPO / "assets" / tag / "ideas" / f"{idea['id']}.dds"
                 name = idea.get("name", {}).get("english", idea["id"])
