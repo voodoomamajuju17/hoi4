@@ -1149,6 +1149,9 @@ def pedidos() -> None:
     # 2026-11-07: la prueba de estilo (espiritus_prueba.py) ya se eligió: azulejo
     from tools.arte import espiritus_azulejo
     summary.insert(0, espiritus_azulejo.escribir(OUT))
+    # 2026-11-07: muestras de material para la interfaz de materiales reales (piloto)
+    from tools.arte import materiales_gui
+    summary.insert(0, materiales_gui.escribir(OUT))
     bloques = []
     for f in todos:
         texto = f.read_text(encoding="utf-8")
