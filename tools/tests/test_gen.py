@@ -2753,6 +2753,9 @@ def test_fabrica() -> None:
     from tools.fabrica import control
     todo = REPO_ROOT / "arte/pedidos/0_FOCOS_PIN_FALTANTES.txt"
     peds = F.leer_pedidos(todo.read_text(encoding="utf-8"), todo.parent)
+    # 2026-11-07: quedan pocos pines; para las tandas de prueba se suman los del diseñador
+    dis = REPO_ROOT / "arte/pedidos/0_DISENADOR_2100.txt"
+    peds_tanda = peds + (F.leer_pedidos(dis.read_text(encoding="utf-8"), dis.parent) if dis.exists() else [])
     pin = next((p for p in peds if p.get("material")), None)
     check("fábrica: lee los pedidos de focos pin faltantes, con su material", len(peds) > 0 and pin is not None, str(len(peds)))
     if pin:
@@ -2806,7 +2809,7 @@ def test_fabrica() -> None:
                     raise x
                 return x, None, False
 
-        pines = [p for p in peds if p["transparente"]]
+        pines = [p for p in peds_tanda if p["transparente"]]
         ps = pines[:6]
         out = t / "salida"
         hechos, malos, pagas = F.tanda(ps[:2], out, Falsa([bueno, png(fondo)]), lambda m: None, _th.Event(),
