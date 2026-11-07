@@ -53,8 +53,9 @@ MATERIALES = {
             "jade green and steel grey glazes, precise measured lines like a hydraulic diagram"),
     "APF": ("ochre and forest green ink on warm paper, bold woodcut-like engraving, kente-pattern border",
             "ochre, forest green and deep red glazes on cream, bold geometric kente border"),
-    "NRE": ("crimson and gold ink, classical Roman engraving with laurel border",
-            "crimson and gold lustre glazes on marble white, Roman mosaic border"),
+    "NRE": ("imperial purple and gold ink, classical Roman engraving with laurel border",
+            # 2026-11-07: "la NRE púrpura original está muy bien" (se queda el púrpura)
+            "imperial purple, gold lustre and marble-white glazes, Roman mosaic border"),
     "ZJP": ("two-colour Japanese woodblock print on rice paper: indigo and crimson, visible wood grain",
             "black and crimson glazes with gold lustre outlines, like Japanese cloisonne enamel"),
     "ZAL": ("wine red ink with embossed relief, Victorian 1840s penny-black style engraving",
