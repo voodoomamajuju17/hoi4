@@ -16,6 +16,8 @@ Los íconos son genéricos (no de una facción): diseño neutro de 2100.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import re
 
 # (patrón sobre el "que" del ícono, lo que muestra en 2100). El primero que coincide gana.
@@ -201,13 +203,37 @@ ESTILO = (
     "circle, no frame, no hand, no vehicle around it unless the description says so. No text, no letters, no numbers.")
 
 
-def items() -> list[dict]:
-    """Un pedido por módulo del diseñador (todos: los que llegaron no gustaron)."""
+LLEGADOS = Path(__file__).resolve().parents[2] / "arte" / "disenador_llegados.txt"
+
+
+def _llegados() -> set[str]:
+    if not LLEGADOS.exists():
+        return set()
+    return {l.strip() for l in LLEGADOS.read_text(encoding="utf-8").splitlines() if l.strip() and not l.startswith("#")}
+
+
+def anotar_llegados(carpeta: str) -> list[str]:
+    """Anota en arte/disenador_llegados.txt los módulos de una carpeta recién importada
+    (2026-11-07): las imágenes viejas ya existían, así que el archivo es lo que dice
+    cuáles ya se rehicieron en el estilo nuevo."""
+    from tools.fabrica import control
+    todos = {i["id"] for i in items(todos=True)}
+    previos = _llegados()
+    buenos = control.mejores_por_nombre(p for p in Path(carpeta).rglob("*.png") if "revisar" not in p.parts)
+    nuevos = {s for s in buenos if s in todos} - previos
+    cabeza = "# Módulos del diseñador que ya llegaron en el estilo 2100 (tools/arte/disenador.py no los vuelve a pedir)."
+    LLEGADOS.write_text(cabeza + "\n" + "\n".join(sorted(previos | nuevos)) + "\n", encoding="utf-8")
+    return [f"diseñador: {len(nuevos)} módulos nuevos anotados ({len(previos | nuevos)} de {len(todos)})"]
+
+
+def items(todos: bool = False) -> list[dict]:
+    """Un pedido por módulo del diseñador que todavía no llegó en el estilo nuevo."""
     from tools.arte import auditoria
     datos = auditoria.cargar() or {}
+    hechos = set() if todos else _llegados()
     out = []
     for i in datos.get("iconos") or []:
-        if i.get("familia") != "disenador":
+        if i.get("familia") != "disenador" or i["id"] in hechos:
             continue
         out.append({"id": i["id"], "que": i.get("que", ""), "descripcion": describir(i.get("que", ""))})
     return out

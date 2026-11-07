@@ -1390,6 +1390,11 @@ if __name__ == "__main__":
         from tools.arte import focos_pin
         for line in focos_pin.anotar_llegados(sys.argv[2]):
             print(line)
+    elif len(sys.argv) >= 3 and sys.argv[1] == "disenador":
+        # python -m tools.arte.arte disenador <carpeta>: anota los módulos del diseñador que llegaron
+        from tools.arte import disenador
+        for line in disenador.anotar_llegados(sys.argv[2]):
+            print(line)
     elif len(sys.argv) >= 2 and sys.argv[1] == "ficha":
         from tools.arte import ficha
         ficha.main(sys.argv[2:])
