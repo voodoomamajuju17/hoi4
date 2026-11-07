@@ -465,10 +465,14 @@ def aplicar(originales: str | None = None) -> list[str]:
     hechas, faltan, con_icono = [], [], []
     for rel in list(dict.fromkeys((spec.get("retexturar") or []) + list(iconos))):
         src = root / rel
-        if not src.exists():
+        if src.exists():
+            original = Image.open(src).convert("RGBA")
+        elif rel in iconos and iconos[rel].get("tamano"):
+            # 2026-11-07: texturas que el inventario no trae (la del poder de mando de la barra)
+            original = Image.new("RGBA", tuple(iconos[rel]["tamano"]), (0, 0, 0, 0))
+        else:
             faltan.append(rel)
             continue
-        original = Image.open(src).convert("RGBA")
         img = None
         if rel in iconos:
             img = _icono(iconos[rel], original, material)

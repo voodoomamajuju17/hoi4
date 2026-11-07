@@ -591,6 +591,35 @@ iconos:
       a military field headset in front view: a headband arc across the top, an ear cup on each side,
       and a microphone boom curving from the left ear cup to in front of where the mouth would be,
       ending in a small round microphone. Slightly wider than tall.
+  # 2026-11-07 (captura de la barra: seguía el teléfono rojo): la barra superior no usa
+  # gfx/texticons/command_power.dds sino esta otra (topbar.gfx redefine GFX_command_power).
+  # No viene en ui_para_claude.zip: se arma sobre un lienzo vacío de `tamano`.
+  - id: poder_mando
+    textura: gfx/interface/command_power_icon.dds
+    uso: directo
+    tamano: [28, 26]
+    donde: poder de mando (barra superior)
+    dibujo: ver la entrada de arriba (mismo ícono)
+  # 2026-11-07: la experiencia del ejército, la marina y la aviación (las tres estrellas
+  # de la barra). Pedidas a mano en arte/pedidos_fijos/24_barra_superior.txt
+  - id: experiencia_ejercito
+    textura: gfx/texticons/army_experience_20x20.dds
+    uso: directo
+    a_mano: true
+    donde: experiencia del ejército (barra superior y diseñador de divisiones)
+    dibujo: ver arte/pedidos_fijos/24_barra_superior.txt
+  - id: experiencia_marina
+    textura: gfx/texticons/navy_experience_20x20.dds
+    uso: directo
+    a_mano: true
+    donde: experiencia de la marina (barra superior y diseñador de barcos)
+    dibujo: ver arte/pedidos_fijos/24_barra_superior.txt
+  - id: experiencia_aviacion
+    textura: gfx/texticons/air_experience_20x20.dds
+    uso: directo
+    a_mano: true
+    donde: experiencia de la aviación (barra superior y diseñador de aviones)
+    dibujo: ver arte/pedidos_fijos/24_barra_superior.txt
   - id: combustible
     textura: gfx/interface/topbar/fuel_state_icon.dds
     uso: combustible

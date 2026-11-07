@@ -893,7 +893,11 @@ def _ui_icon_items() -> list[dict]:
     spec = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     items = []
     v2 = spec.get("estilo_iconos_v2")
+    ids_vistos: set[str] = set()   # 2026-11-07: un ícono puede ir a dos texturas (poder de mando)
     for p in spec.get("iconos") or []:
+        if p["id"] in ids_vistos:
+            continue
+        ids_vistos.add(p["id"])
         # 2026-11-03: rediseño: cada ícono se pide de nuevo en cobre (<id>_v2); el de antes sigue
         sufijo = "_v2" if v2 and p.get("uso") != "foto" else ""
         dest = REPO / "assets" / "ui" / "piel_iconos" / f"{p['id']}{sufijo}.dds"
@@ -904,6 +908,7 @@ def _ui_icon_items() -> list[dict]:
         photo = p.get("uso") == "foto"
         items.append({
             "type": "ui_icon", "tag": "INTERFAZ", "id": f"ui_{p['id']}{sufijo}", "dest": dest, "done": dest.exists(),
+            "hand_written": bool(p.get("a_mano")),
             "size": size or ((624, 840) if photo else (512, 512)),
             "transparent": not photo,
             "description": (f"WHAT: {p['donde']}, in the redesigned interface of a 2100 grand strategy game"

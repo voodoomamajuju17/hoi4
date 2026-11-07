@@ -265,7 +265,7 @@ def boton(D):
     from PIL import Image, ImageDraw
     final = D["boton"]
     # 2026-11-05 ("definitivamente necesita un nuevo ícono"): si llegó el arte pedido
-    # (arte/pedidos_fijos/22_boton_lider.txt), va ese, achicado al tamaño de la barra
+    # (arte/pedidos_fijos/24_barra_superior.txt), va ese, achicado al tamaño de la barra
     fuente = SALIDA / "fuente" / "boton_lider.png"
     if fuente.exists():
         img = Image.open(fuente).convert("RGBA")
