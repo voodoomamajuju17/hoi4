@@ -1066,7 +1066,9 @@ def pedidos() -> None:
     # referencias"): los módulos del diseñador van aparte, de nuevo y sin referencia
     # (tools/arte/disenador.py -> 0_DISENADOR_2100.txt)
     items = [i for i in catalog() if not i["done"] and not i.get("hand_written")
-             and not (i["type"] == "game_icon" and i.get("tag") == "DISENADOR")]
+             and not (i["type"] == "game_icon" and i.get("tag") == "DISENADOR")
+             # 2026-11-07: los espíritus van todos como azulejo (espiritus_azulejo.py)
+             and i["type"] != "national_spirit_icon"]
     OUT.mkdir(parents=True, exist_ok=True)
     before = _previous_ids()
     old_new = (OUT / NEW_FILE).read_text(encoding="utf-8") if (OUT / NEW_FILE).exists() else None
@@ -1147,6 +1149,8 @@ def pedidos() -> None:
     # 2026-11-07: prueba de estilo de los espíritus (estampilla y azulejo, 2 por nación)
     from tools.arte import espiritus_prueba
     summary.insert(0, espiritus_prueba.escribir(OUT))
+    from tools.arte import espiritus_azulejo
+    summary.insert(0, espiritus_azulejo.escribir(OUT))
     bloques = []
     for f in todos:
         texto = f.read_text(encoding="utf-8")
@@ -1400,6 +1404,11 @@ if __name__ == "__main__":
         # python -m tools.arte.arte disenador <carpeta>: anota los módulos del diseñador que llegaron
         from tools.arte import disenador
         for line in disenador.anotar_llegados(sys.argv[2]):
+            print(line)
+    elif len(sys.argv) >= 3 and sys.argv[1] == "azulejos":
+        # python -m tools.arte.arte azulejos <carpeta>: anota los espíritus que llegaron como azulejo
+        from tools.arte import espiritus_azulejo
+        for line in espiritus_azulejo.anotar_llegados(sys.argv[2]):
             print(line)
     elif len(sys.argv) >= 2 and sys.argv[1] == "ficha":
         from tools.arte import ficha
