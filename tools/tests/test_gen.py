@@ -2755,7 +2755,10 @@ def test_fabrica() -> None:
     peds = F.leer_pedidos(todo.read_text(encoding="utf-8"), todo.parent)
     # 2026-11-07: quedan pocos pines; para las tandas de prueba se suman los del diseñador
     dis = REPO_ROOT / "arte/pedidos/0_DISENADOR_2100.txt"
-    peds_tanda = peds + (F.leer_pedidos(dis.read_text(encoding="utf-8"), dis.parent) if dis.exists() else [])
+    peds_tanda = list(peds)
+    for extra in (dis, REPO_ROOT / "arte/pedidos/0_ESPIRITUS_PRUEBA.txt"):
+        if extra.exists():
+            peds_tanda += F.leer_pedidos(extra.read_text(encoding="utf-8"), extra.parent)
     pin = next((p for p in peds if p.get("material")), None)
     check("fábrica: lee los pedidos de focos pin faltantes, con su material", len(peds) > 0 and pin is not None, str(len(peds)))
     if pin:
