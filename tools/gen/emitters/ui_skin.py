@@ -67,6 +67,10 @@ PATTERNS: dict[str, list[str]] = {
     "decisiones": [r"decision"],
     "diplomacia": [r"diplomac"],
     "ayudas": [r"tooltip"],
+    # 2026-11-07 (rediseño de las placas de nombre de los focos): el juego las elige
+    # por código (disponible, se puede empezar, completo, en curso) y no salen en el .gui
+    "placas_de_focos": [r"^GFX_focus_(?:unavailable|can_start|completed|available|in_progress|"
+                        r"ongoing|locked|bypassed|title|name)", r"titlebar"],
     "leyes": [r"^GFX_idea_(?:.*economic|.*mobilisation|.*conscription|.*export|.*trade|.*isolation|"
               r"civilian_economy|war_economy|free_trade|closed_economy|volunteer_only|disarmed_nation|"
               r"service_by_requirement|all_adults_serve|scraping_the_barrel)"],
