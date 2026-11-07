@@ -426,8 +426,15 @@ def paso_reporte(juego, ctx) -> None:
                 destino = REPO / "ui_para_claude.zip"
                 with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as zf:
                     zf.write(inventario, "ui_inventario.txt")
+                    # 2026-11-07: la misma textura puede venir con dos rutas que solo
+                    # difieren en mayúsculas; va una vez (sin "Duplicate name")
+                    puestos = set()
                     for rel, src in sorted((ctx.data.get("ui_textures") or {}).items()):
-                        zf.write(src, f"originales/{rel}")
+                        nombre = f"originales/{Path(rel).as_posix()}"
+                        if nombre.lower() in puestos:
+                            continue
+                        puestos.add(nombre.lower())
+                        zf.write(src, nombre)
                     # 2026-11-03 (rediseño de pantallas): los .gui y .gfx del juego (son
                     # texto y pesan poco) para ver qué pieza va en cada pantalla y poder
                     # cambiar dónde va cada cosa
@@ -493,9 +500,10 @@ def main() -> int:
         say("    2. Anda a 'Mods' y activa '2100 Meganations'")
         say("    3. Jugar")
         say()
-        say("  Es una version en desarrollo: el EFE tiene arbol, eventos y arte;")
-        say("  las otras potencias todavia no. Mira balance.txt para ver con")
-        say("  que arranca cada faccion.")
+        say("  Las diez potencias son jugables, cada una con su arbol, sus")
+        say("  eventos y sus aventuras. Para elegir nacion y saber que cambia")
+        say("  respecto del juego normal: docs/guia/como_jugar.md")
+        say("  (en GitHub se lee mejor, con imagenes).")
     say()
     say("  PASAME ESTO:")
     say(f"    1. El archivo  {REPORT}")
