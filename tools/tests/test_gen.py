@@ -587,6 +587,9 @@ def test_phase3_content() -> None:
             pops = pdx.parse(path.read_text()).get("set_popularities")
             total = sum(int(pdx.text(v)) for _, v in pops.entries)
             check(f"popularidades suman 100 en {path.name}", total == 100, str(total))
+        # 2026-11-07: cada potencia con su reparto, no todas 70/10/10/10
+        check("el EFE arranca con su propio reparto de ideologias",
+              "fascism = 56" in " ".join(efe.split()) and "neutrality = 22" in " ".join(efe.split()), efe[:600])
 
         check("BioSteel ya no es un recurso del mapa", not (mod / "common/resources").exists())
         efe_hist = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()

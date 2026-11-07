@@ -53,7 +53,11 @@ def emit(ctx: BuildContext) -> None:
         sp.add("election_frequency", int(politics.get("election_frequency", 48)))
         sp.add("elections_allowed", bool(politics.get("elections_allowed", False)))
         b.add("set_politics", sp)
-        b.add("set_popularities", _popularities(c.ideology_group, int(politics.get("ruling_popularity", 70))))
+        propias = (ctx.spec.raw["countries"].get("popularities") or {}).get(c.tag)
+        if propias:
+            b.add("set_popularities", _popularities_propias(c.tag, c.ideology_group, propias))
+        else:
+            b.add("set_popularities", _popularities(c.ideology_group, int(politics.get("ruling_popularity", 70))))
 
         starting = list(ideas_mod.starting_idea_ids(ctx, c.tag))
         law = _conscription_law(ctx, c.tag)
@@ -304,6 +308,24 @@ def _kind_laws(ctx: BuildContext, c) -> list[str]:
 
 def _capital(ctx: BuildContext, c) -> int | None:
     return (ctx.data.get("capitals") or {}).get(c.tag)
+
+
+def _popularities_propias(tag: str, ruling: str, pops: dict) -> Block:
+    """2026-11-07 (captura del panel de Política: "esto sigue igual"): el reparto propio de un
+    país (spec/02_countries.yaml -> popularities). Suma 100 y el que gobierna es el mayor."""
+    from ..errors import SpecError
+    vals = {g: int(pops.get(g, 0)) for g in GROUPS}
+    extra = sorted(set(pops) - set(GROUPS))
+    if extra or sum(vals.values()) != 100:
+        raise SpecError(f"popularities de {tag}: grupos {', '.join(GROUPS)} y que sumen 100 (suman {sum(vals.values())})",
+                        where="spec/02_countries.yaml")
+    if any(v >= vals[ruling] for g, v in vals.items() if g != ruling):
+        raise SpecError(f"popularities de {tag}: el que gobierna ({ruling}) tiene que ser el mayor",
+                        where="spec/02_countries.yaml")
+    b = Block()
+    for g in GROUPS:
+        b.add(g, vals[g])
+    return b
 
 
 def _popularities(ruling: str, share: int) -> Block:
