@@ -81,9 +81,14 @@ MUESTRAS = [
 ]
 
 
+LLEGADAS = Path(__file__).resolve().parents[2] / "assets" / "ui" / "materiales"
+
+
 def pedidos() -> list[str]:
     out = []
     for ident, mat, donde, oscuro in MUESTRAS:
+        if (LLEGADAS / f"{ident}.jpg").exists() or (LLEGADAS / f"{ident}.png").exists():
+            continue   # 2026-11-07: llegaron las 12; solo se piden las que falten
         out.append("\n".join([
             "ASSET_REQUEST",
             "type: material_swatch",
@@ -104,6 +109,10 @@ def pedidos() -> list[str]:
 
 def escribir(salida: Path) -> str:
     cuerpo = pedidos()
+    path = salida / "0_MATERIALES_GUI.txt"
+    if not cuerpo:
+        path.unlink(missing_ok=True)
+        return "0_MATERIALES_GUI.txt: 0 (llegaron todas)"
     cabeza = [
         f"# {len(cuerpo)} pedidos - MUESTRAS DE MATERIAL para la interfaz de materiales reales (2026-11-07)",
         "# PILOTO: la barra superior, la ventana de eventos y la de decisiones.",

@@ -82,6 +82,9 @@ EXTRA_GUI: dict[str, list[str]] = {
     "mercado": ["internationalmarket.gui", "international_market.gui", "marketview.gui", "tradeview.gui"],
 }
 SKIN_DIR = ("assets", "ui", "piel")
+# 2026-11-07: la interfaz de materiales reales (tools/arte/materiales_piloto.py) va encima de la
+# piel de cristal y cobre: si una textura está en las dos, gana la de materiales
+MATERIALES_DIR = ("assets", "ui", "materiales_piel")
 SPRITE_KINDS = ("spriteType", "corneredTileSpriteType", "frameAnimatedSpriteType",
                 "progressbartype", "textSpriteType", "maskedShieldType")
 _GFX_REF = re.compile(r'"?(GFX_[A-Za-z0-9_]+)"?')
@@ -232,10 +235,10 @@ def _line(p: dict) -> str:
         (f"  ({'; '.join(extra)})" if extra else "")
 
 
-def apply_skin(ctx: BuildContext) -> int:
+def apply_skin(ctx: BuildContext, carpeta: tuple[str, ...] = SKIN_DIR) -> int:
     """assets/ui/piel/<ruta del juego> -> la misma ruta en el mod, a su tamaño."""
     from .menu import _dims, _resize, _texture_dims
-    base = ctx.spec.root.parent.joinpath(*SKIN_DIR)
+    base = ctx.spec.root.parent.joinpath(*carpeta)
     done = 0
     missing: list[str] = []
     for art in sorted(base.glob("**/*.dds")) if base.exists() else []:
@@ -288,3 +291,6 @@ def emit(ctx: BuildContext) -> None:
     ctx.data["ui_textures"] = files
     done = apply_skin(ctx)
     ctx.note(f"piel: {done} texturas de la interfaz reemplazadas (assets/ui/piel)")
+    mat = apply_skin(ctx, MATERIALES_DIR)
+    if mat:
+        ctx.note(f"materiales: {mat} texturas de la interfaz de materiales reales (assets/ui/materiales_piel)")

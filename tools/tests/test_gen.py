@@ -2735,6 +2735,28 @@ def test_biblioteca() -> None:
           set(biblioteca.ORDEN[:10]) | {"TIERRAS_SIN_LEY"} <= cronicas, str(sorted(cronicas)))
 
 
+def test_materiales_piloto() -> None:
+    section("interfaz de materiales reales: piloto de la ventana de eventos (2026-11-07)")
+    from PIL import Image
+    from tools.gen.emitters import ui_skin
+    base = REPO_ROOT / "assets/ui/materiales_piel/gfx/interface"
+    tam = {"event_report_top_win": (581, 121), "event_report_tileable_midsection": (580, 66),
+           "event_report_bottom_win": (581, 206), "event_report_bottom_win_2": (581, 59),
+           "event_option_entry": (352, 48)}
+    reales = {}
+    for n in tam:
+        p = base / f"{n}.dds"
+        reales[n] = Image.open(p).size if p.exists() else None
+    check("materiales: las cinco piezas de la ventana de eventos, al tamaño exacto del juego",
+          reales == tam, str(reales))
+    check("materiales: las muestras de material están en el repo (12)",
+          len(list((REPO_ROOT / "assets/ui/materiales").glob("mat_*.jpg"))) == 12)
+    src = (REPO_ROOT / "tools/gen/emitters/ui_skin.py").read_text(encoding="utf-8")
+    check("materiales: se aplican después de la piel (ganan si están en las dos)",
+          ui_skin.MATERIALES_DIR == ("assets", "ui", "materiales_piel")
+          and src.index("apply_skin(ctx)") < src.index("apply_skin(ctx, MATERIALES_DIR)"))
+
+
 def test_directorio_siberia() -> None:
     section("el Directorio más frágil, Eurasia abastecida, Siberia se levanta (2026-11-06)")
     import yaml as _y
@@ -5590,6 +5612,7 @@ def main() -> int:
         test_aventuras_albion,
         test_aventuras_japon,
         test_biblioteca,
+        test_materiales_piloto,
         test_mecanicas_v2,
         test_forces,
         test_unit_names,
