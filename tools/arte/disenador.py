@@ -43,8 +43,8 @@ REGLAS: list[tuple[str, str]] = [
     (r"ship torpedo", "a triple launcher of sleek supercavitating torpedoes"),
     # --- aviones: motores
     (r"rocket engine", "a compact rocket booster pack with {n} bell nozzles and fuel lines"),
-    (r"jet engine axial", "{n} slim axial-flow hydrogen turbofan nacelle(s) with visible fan blades in the intake"),
-    (r"jet engine", "{n} short ducted turbojet nacelle(s) with a glowing ring exhaust"),
+    (r"jet engine axial", "{n} slim axial-flow hydrogen turbofan nacelles with visible fan blades in the intake"),
+    (r"jet engine", "{n} short ducted turbojet nacelles with a glowing ring exhaust"),
     (r"quad large plane jet engine type", "four large wing-mounted hydrogen turbofans on a heavy wing section"),
     (r"large plane jet engine type", "a large high-bypass hydrogen turbofan pod under a wing section"),
     (r"medium plane jet engine type", "a mid-size turbofan nacelle blended into a wing root"),
@@ -64,9 +64,9 @@ REGLAS: list[tuple[str, str]] = [
     (r"cannon defense turret", "{n} remote-controlled defensive cannon turret(s) with a sensor eye, no gunner"),
     (r"hmg defense turret", "{n} remote-controlled heavy gun turret(s) on a fuselage ring, no gunner"),
     (r"lmg defense turret", "{n} small remote gun turret(s) with a camera ball, no gunner"),
-    (r"air air radar", "an {tier} air-to-air radar: a nose cone opened to show a flat round phased-array disc"),
-    (r"air ground radar", "an {tier} ground-mapping radar: a long belly pod with a side-looking array strip"),
-    (r"radio navigation", "an {tier} satellite-navigation unit: a small dome antenna on a circuit block"),
+    (r"air air radar", "a {tier} air-to-air radar: a nose cone opened to show a flat round phased-array disc"),
+    (r"air ground radar", "a {tier} ground-mapping radar: a long belly pod with a side-looking array strip"),
+    (r"radio navigation", "a {tier} satellite-navigation unit: a small dome antenna on a circuit block"),
     (r"recon camera", "a reconnaissance sensor pod with a multi-lens camera turret"),
     (r"guided anti ship missile", "a sea-skimming anti-ship missile with small cruciform fins and a seeker nose"),
     (r"armor piercing bomb locks", "a pylon holding a pointed penetrator bomb with a hardened nose"),
@@ -76,12 +76,12 @@ REGLAS: list[tuple[str, str]] = [
     (r"improved rocket propelled bombs", "a cluster of guided rocket-boosted bombs with folding fins"),
     (r"rocket propelled bombs", "two rocket-boosted bombs with exhaust bells at the tail"),
     (r"rocket rails", "a launcher rail with four small guided rockets"),
-    (r"bomb sights", "an {tier} targeting pod: a pod with a rotating optical-laser ball"),
+    (r"bomb sights", "a {tier} targeting pod: a pod with a rotating optical-laser ball"),
     (r"large bomb bay", "an open large internal weapons bay seen from below, with a rotary launcher of bombs"),
     (r"medium bomb bay", "an open internal weapons bay with a row of guided bombs"),
     (r"small bomb bay", "a small internal weapons bay with two compact guided bombs"),
-    (r"tank buster", "an {tier} anti-armour gun pod: a long single-barrel railgun pod with a muzzle brake"),
-    (r"torpedo mounting", "an {tier} air-launched torpedo with a parachute pack and seeker nose, on a pylon"),
+    (r"tank buster", "a {tier} anti-armour gun pod: a long single-barrel railgun pod with a muzzle brake"),
+    (r"torpedo mounting", "a {tier} air-launched torpedo with a parachute pack and seeker nose, on a pylon"),
     (r"airdropped mines", "a pylon with smart sea mines that deploy their own little parachutes"),
     (r"drop tanks", "two conformal external hydrogen tanks shaped to hug a wing"),
     (r"self sealing fuel tanks", "a fuel cell wrapped in a self-healing gel bladder, cut away to show its layers"),
@@ -99,17 +99,17 @@ REGLAS: list[tuple[str, str]] = [
     (r"modern (tank )?turret", "a low, angular, crewless modern turret with an autoloader bustle and sensor heads"),
     (r"turret type", "a {weight} tank turret silhouette, clean and angular"),
     (r"super heavy (cannon|main armament)", "a monstrous long-barrel tank railgun with a capacitor bank"),
-    (r"heavy (cannon|main armament)", "an {tier} heavy tank gun: a long smoothbore barrel with an electrothermal breech"),
-    (r"medium (cannon|main armament)", "an {tier} medium tank gun with a thermal sleeve and fume extractor"),
-    (r"small (cannon|main armament)", "an {tier} light tank gun: a short fast-firing barrel"),
-    (r"high velocity cannon", "an {tier} hypervelocity tank railgun: a long thin barrel with rail housings"),
-    (r"heavy howitzer", "an {tier} heavy tank howitzer with a fat short barrel and an ammunition carousel"),
-    (r"medium howitzer", "an {tier} medium howitzer barrel with a recoil sleeve"),
+    (r"heavy (cannon|main armament)", "a {tier} heavy tank gun: a long smoothbore barrel with an electrothermal breech"),
+    (r"medium (cannon|main armament)", "a {tier} medium tank gun with a thermal sleeve and fume extractor"),
+    (r"small (cannon|main armament)", "a {tier} light tank gun: a short fast-firing barrel"),
+    (r"high velocity cannon", "a {tier} hypervelocity tank railgun: a long thin barrel with rail housings"),
+    (r"heavy howitzer", "a {tier} heavy tank howitzer with a fat short barrel and an ammunition carousel"),
+    (r"medium howitzer", "a {tier} medium howitzer barrel with a recoil sleeve"),
     (r"close support gun", "a short-barrel support gun for bunker busting"),
-    (r"auto cannon", "an {tier} tank autocannon with a twin ammunition feed"),
-    (r"anti air cannon", "an {tier} anti-drone turret: a quad rotary cannon beside a small laser emitter"),
+    (r"auto cannon", "a {tier} tank autocannon with a twin ammunition feed"),
+    (r"anti air cannon", "a {tier} anti-drone turret: a quad rotary cannon beside a small laser emitter"),
     (r"tank flamethrower|^flamethrower|advanced flamethrower", "a thermobaric projector: a thick nozzle fed by armoured fuel hoses"),
-    (r"rocket launcher", "an {tier} vehicle rocket launcher box with a grid of tube openings"),
+    (r"rocket launcher", "a {tier} vehicle rocket launcher box with a grid of tube openings"),
     (r"heavy machine gun|additional machine guns|secondary turret hmg", "a remote weapon station with a heavy rotary gun and a camera ball"),
     (r"secondary turret small cannon", "a small secondary remote turret with a compact cannon"),
     (r"secondary turret close support gun", "a small secondary turret with a stubby support gun"),
@@ -138,7 +138,7 @@ REGLAS: list[tuple[str, str]] = [
     (r"wet ammo storage|wet ammunition", "an ammunition rack surrounded by coolant jackets"),
     (r"easy maintenance", "a powerpack sliding out of an open engine deck on rails"),
     (r"fixed explosive charge", "a demolition charge rack bolted to a hull front"),
-    (r"tank radio", "an {tier} vehicle communications mast with a mesh-network antenna"),
+    (r"tank radio", "a {tier} vehicle communications mast with a mesh-network antenna"),
     # --- vehículos de tierra enormes (land cruisers, lc)
     (r"lc aerial deployment", "a land-cruiser drone hangar: a deck hatch opening with launch rails"),
     (r"lc aircraft catapult", "a deck catapult track with a small drone on it"),
@@ -156,7 +156,7 @@ REGLAS: list[tuple[str, str]] = [
     (r"lc hull mounted railway gun|lc super heavy railway gun", "a gigantic hull-mounted siege gun with a long barrel"),
     (r"lc internal fuel tanks", "a bank of large internal fuel cells"),
     (r"lc radar", "a rotating radar array on a tall mast"),
-    (r"lc radio", "an {tier} long-range communications array with a dish"),
+    (r"lc radio", "a {tier} long-range communications array with a dish"),
     (r"lc rocket launcher", "a large vertical-launch rocket cell block"),
     (r"lc stabilizers", "hydraulic outrigger stabiliser legs deployed to the ground"),
     (r"lc super heavy howitzer", "a super-heavy siege howitzer with a gigantic short barrel"),
@@ -187,20 +187,29 @@ def describir(que: str) -> str:
         if q.startswith("lc ") and "lc" not in patron:
             continue
         if re.search(patron, q):
-            return texto.format(n=n, tier=tier, size=size, weight=weight, susp=susp)
+            out = texto.format(n=n, tier=tier, size=size, weight=weight, susp=susp)
+            if n == "one":
+                out = out.replace("nacelles", "nacelle")
+            # "a advanced" / "a early-model" -> "an ..."
+            return re.sub(r"\ba (?=[aeiou])", "an ", out)
     return f"a 2100 equipment module: {que}"
 
 
 ESTILO = (
-    "game user-interface icon of an equipment module for a grand strategy game set in the year 2100. ORIGINAL "
-    "design, do NOT imitate any existing game's icon: a believable piece of 2100 military hardware (post-collapse "
-    "rebuilt industry: drones, railguns, defensive lasers, hydrogen engines, ceramic-composite armour; practical, "
-    "industrial, no sci-fi fantasy). Rendered as ONE object in clean three-quarter view on its own, like a museum "
-    "catalogue cutout: aged bronze and warm copper metal (#c27a45, highlights #f0b585, shadows #6b3a1c) with dark "
-    "graphite parts and at most one small teal accent (#4fd6c8, a light or a glowing part). Solid dark outline "
-    "about 3% of the canvas wide, light from the top left, no cast shadow. Bold readable silhouette, at most three "
-    "inner details: it must read at 40 pixels. Transparent background, nothing around the object: no plate, no "
-    "circle, no frame, no hand, no vehicle around it unless the description says so. No text, no letters, no numbers.")
+    # 2026-11-07 ("pidiendo el estilo que buscamos en las imágenes"): el de los 99 que llegaron y
+    # gustaron (lotes 01-100): foto de estudio de una pieza real, no un ícono plano con contorno
+    "PHOTOREALISTIC STUDIO PRODUCT PHOTO of a single piece of military hardware from the year 2100, like a "
+    "high-end 3D render of a real machined part for an equipment catalogue. ORIGINAL design, do not imitate any "
+    "existing game icon. MATERIALS: aged copper and bronze armour panels with a soft patina and fine scratches, "
+    "riveted and bolted seams, dark gunmetal / graphite mechanical parts (fans, barrels, pipes, brackets), visible "
+    "cables and small fittings; exactly one or two tiny glowing teal status lights (#4fd6c8), nothing else glowing "
+    "unless the description says so. LOOK: believable post-collapse rebuilt industry (hydrogen engines, railguns, "
+    "defensive lasers, drones, ceramic-composite armour), heavy and practical, no fantasy, no steampunk gears for "
+    "decoration. CAMERA: one object only, centred, three-quarter view from slightly above, filling about 80% of the "
+    "square, whole object visible, nothing cut off. LIGHT: soft studio key light from the top left, gentle rim "
+    "light, realistic reflections on the metal. BACKGROUND: fully transparent, no floor, no shadow on the ground, "
+    "no plate, no circle, no frame, no vehicle or person around it. No text, no letters, no numbers, no logos. "
+    "It must stay recognisable when shrunk to 64 pixels: strong clear silhouette")
 
 
 LLEGADOS = Path(__file__).resolve().parents[2] / "arte" / "disenador_llegados.txt"
@@ -245,7 +254,7 @@ def pedido(i: dict) -> str:
         "type: game_icon",
         f"id: {i['id']}",
         f"filename: {i['id']}.png",
-        "size: 512x512 (o más grande con la misma proporción)",
+        "size: 1254x1254 (cuadrada; como los que ya llegaron)",
         f"style: {ESTILO}",
         f"description: WHAT: module '{i['que']}' of the equipment designer (tanks, planes, ships). "
         f"EXACT SUBJECT: {i['descripcion']}.",

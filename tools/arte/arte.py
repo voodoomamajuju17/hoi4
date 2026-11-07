@@ -1136,9 +1136,12 @@ def pedidos() -> None:
     from tools.arte import disenador
     dis = disenador.items()
     (OUT / "0_DISENADOR_2100.txt").write_text(
-        f"# {len(dis)} pedidos: los módulos del diseñador de equipo, de nuevo (2026-11-06).\n"
-        "# SIN imagen de referencia: cada uno describe la pieza de 2100 que reemplaza al módulo del juego.\n"
-        "# Diseño original, no copiar íconos de otros juegos.\n\n"
+        f"# {len(dis)} pedidos: los módulos del diseñador de equipo que faltan (2026-11-07).\n"
+        "# ESTILO: el de los que ya llegaron y gustaron: foto de estudio, realista, de UNA pieza de metal,\n"
+        "# paneles de cobre y bronce gastados con remaches, partes mecánicas gris oscuro, una o dos lucecitas\n"
+        "# turquesa, vista de tres cuartos desde arriba, fondo transparente, sin texto.\n"
+        "# SIN imagen de referencia. Consejo: un chat nuevo cada 15 pedidos; si empieza a salir plano o\n"
+        "# dibujado, pegale de nuevo la línea `style`.\n\n"
         + "\n".join(disenador.pedido(i) for i in dis), encoding="utf-8")
     summary.insert(0, f"0_DISENADOR_2100.txt: {len(dis)}")
     bloques = []
