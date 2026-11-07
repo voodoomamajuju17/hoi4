@@ -137,7 +137,7 @@ REGLAS: list[tuple[str, str]] = [
     (r"extra ammo storage|internal ammunition", "an armoured ammunition locker with blow-out panels on top"),
     (r"wet ammo storage|wet ammunition", "an ammunition rack surrounded by coolant jackets"),
     (r"easy maintenance", "a powerpack sliding out of an open engine deck on rails"),
-    (r"fixed explosive charge", "a demolition charge rack bolted to a hull front"),
+    (r"fixed explosive charge", "a forward breaching module: a heavy armoured box with a hydraulic ram plate and two cable reels, bolted to the front of a hull"),
     (r"tank radio", "a {tier} vehicle communications mast with a mesh-network antenna"),
     # --- vehículos de tierra enormes (land cruisers, lc)
     (r"lc aerial deployment", "a land-cruiser drone hangar: a deck hatch opening with launch rails"),
@@ -248,7 +248,13 @@ def items(todos: bool = False) -> list[dict]:
     return out
 
 
+# 2026-11-07: el filtro de la API rechazó "fixed explosive charge" / "demolition charge"; en el
+# pedido el módulo va con un nombre neutro (en el juego sigue con el suyo)
+NOMBRE_SUAVE = {"fixed explosive charge": "fixed breaching module"}
+
+
 def pedido(i: dict) -> str:
+    i = dict(i, que=NOMBRE_SUAVE.get(i["que"], i["que"]))
     return "\n".join([
         "ASSET_REQUEST",
         "type: game_icon",
