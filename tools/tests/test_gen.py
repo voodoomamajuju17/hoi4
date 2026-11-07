@@ -2842,9 +2842,15 @@ def test_focos_pin() -> None:
     it = {i["id"]: i for i in focos_pin.items()}
     llegados = {l.strip() for l in (focos_pin.REPO / "arte/focos_pin_llegados.txt").read_text(encoding="utf-8").splitlines()
                 if l.strip() and not l.startswith("#")}
-    check("pin: lo que ya llegó no se vuelve a pedir, y cada foco está pedido o llegado",
-          not (set(it) & llegados) and all(i["tag"] != "" for i in it.values()), str(sorted(set(it) & llegados)[:5]))
     import yaml as _y
+    rehacer = set((_y.safe_load(focos_pin.YAML.read_text(encoding="utf-8")) or {}).get("rehacer") or [])
+    repetidos = {k for k in set(it) & llegados if it[k]["tag"] not in rehacer}
+    check("pin: lo que ya llegó no se vuelve a pedir (salvo una nación en `rehacer`), y cada foco está pedido o llegado",
+          not repetidos and all(i["tag"] != "" for i in it.values()), str(sorted(repetidos)[:5]))
+    check("pin: Japón se rehace entero, con el CyberShogun en su propio material (2026-11-07)",
+          "ZJP" not in rehacer or (sum(1 for i in it.values() if i["tag"] == "ZJP") == 31
+                                   and "shakudo" in it["ZJP_cybershogun"]["material"]
+                                   and "urushi" in it["ZJP_yak_1"]["material"]), str(rehacer))
     mats = (_y.safe_load(focos_pin.YAML.read_text(encoding="utf-8")) or {})["materiales"]
     zal = mats["ZAL"]["ramas"]
     check("pin: Albión neovictoriana bordada, transhumana en placa de circuito azul",
