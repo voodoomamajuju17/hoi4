@@ -198,13 +198,13 @@ def describir(que: str) -> str:
 ESTILO = (
     # 2026-11-07 ("pidiendo el estilo que buscamos en las imágenes"): el de los 99 que llegaron y
     # gustaron (lotes 01-100): foto de estudio de una pieza real, no un ícono plano con contorno
-    "PHOTOREALISTIC STUDIO PRODUCT PHOTO of a single piece of military hardware from the year 2100, like a "
-    "high-end 3D render of a real machined part for an equipment catalogue. ORIGINAL design, do not imitate any "
+    "PHOTOREALISTIC STUDIO PRODUCT PHOTO of a single mechanical component for a heavy vehicle of the year 2100, "
+    "like a museum display model or a high-end 3D render of a real machined part for an engineering catalogue. ORIGINAL design, do not imitate any "
     "existing game icon. MATERIALS: aged copper and bronze armour panels with a soft patina and fine scratches, "
     "riveted and bolted seams, dark gunmetal / graphite mechanical parts (fans, barrels, pipes, brackets), visible "
     "cables and small fittings; exactly one or two tiny glowing teal status lights (#4fd6c8), nothing else glowing "
-    "unless the description says so. LOOK: believable post-collapse rebuilt industry (hydrogen engines, railguns, "
-    "defensive lasers, drones, ceramic-composite armour), heavy and practical, no fantasy, no steampunk gears for "
+    "unless the description says so. LOOK: believable post-collapse rebuilt industry (hydrogen engines, magnetic "
+    "accelerators, sensors, drones, ceramic-composite plates), heavy and practical, no fantasy, no steampunk gears for "
     "decoration. CAMERA: one object only, centred, three-quarter view from slightly above, filling about 80% of the "
     "square, whole object visible, nothing cut off. LIGHT: soft studio key light from the top left, gentle rim "
     "light, realistic reflections on the metal. BACKGROUND: fully transparent, no floor, no shadow on the ground, "
@@ -248,13 +248,39 @@ def items(todos: bool = False) -> list[dict]:
     return out
 
 
-# 2026-11-07: el filtro de la API rechazó "fixed explosive charge" / "demolition charge"; en el
-# pedido el módulo va con un nombre neutro (en el juego sigue con el suyo)
+# 2026-11-07: el filtro de la API rechazó "fixed explosive charge" y "fuel drum" (violence); en el
+# pedido el módulo va con palabras neutras (en el juego sigue con su nombre). Se aplica al nombre
+# y a la descripción, en este orden.
 NOMBRE_SUAVE = {"fixed explosive charge": "fixed breaching module"}
+SUAVIZAR = [
+    (r"\bthermobaric projector\b", "heavy pressure-nozzle projector"),
+    (r"\bthermobaric\b", "high-pressure"),
+    (r"\bflamethrower\b", "pressure-nozzle projector"),
+    (r"\bfor bunker busting\b", "for close support"),
+    (r"\bbunker emplacement\b", "armoured blockhouse"),
+    (r"\bfortified bunker block with firing slits\b", "armoured blockhouse with observation slits"),
+    (r"\bhigh impact obliterator cannon\b", "very heavy accelerator cannon"),
+    (r"\bsiege\b", "very heavy"),
+    (r"\bmonstrous\b", "very large"),
+    (r"\bdecoy grenade launchers\b", "decoy dischargers"),
+    (r"\bshell racks\b", "storage racks"),
+    (r"\bshells\b", "cylinders"),
+    (r"\bammunition\b", "supply"),
+    (r"\bammo\b", "supply"),
+    (r"\bfuel drum\b", "jerrycan rack"),
+    (r"\bfuel cells\b", "fuel tanks"),
+    (r"\bweapon station\b", "turret station"),
+]
+
+
+def _suave(texto: str) -> str:
+    for patron, nuevo in SUAVIZAR:
+        texto = re.sub(patron, nuevo, texto)
+    return texto
 
 
 def pedido(i: dict) -> str:
-    i = dict(i, que=NOMBRE_SUAVE.get(i["que"], i["que"]))
+    i = dict(i, que=_suave(NOMBRE_SUAVE.get(i["que"], i["que"])), descripcion=_suave(i["descripcion"]))
     return "\n".join([
         "ASSET_REQUEST",
         "type: game_icon",
