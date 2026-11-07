@@ -78,30 +78,27 @@ y `map`.
 
 ---
 
-## Paso 4 — Abrir el juego y pasarme el resultado
+## Paso 4 — Jugar
 
-1. Abrí el launcher de Hearts of Iron IV
-2. Andá a **Mods** y activá **2100 Meganations**
-3. Dale a jugar
+1. Abrí el launcher de Hearts of Iron IV.
+2. Andá a **Mods** (o **Playsets**) y activá **2100 Meganations**.
+3. Dale a jugar y elegí una partida nueva. Si querés, en **Custom Game Rules** están las reglas
+   propias del mod (por ejemplo, empezar con Japón y Albión ya libres).
 
-> ### Ojo: todavía NO es jugable
->
-> Esto es una **prueba de humo**, no el mod. Ahora mismo tiene los 10 países,
-> las ideologías, las ideas nacionales y el árbol de focos del EFE, a Aurelio IV
-> y el BioSteel (el carbón renombrado), pero **todavía no tiene territorio**:
-> los países existen pero no aparecen en el mapa. Eso viene después.
->
-> Lo único que estamos probando es que el launcher lo liste y que el juego
-> llegue al menú sin romperse. Si esperás una partida jugable te vas a
-> decepcionar, y no es que esté fallando.
+¿Primera vez? Leé [Cómo jugar](docs/guia/como_jugar.md): qué nación elegir y qué es distinto al
+Hearts of Iron IV de siempre.
 
-**Pasame estas dos cosas:**
+**Para actualizar el mod** más adelante: bajá el repo de nuevo (o hacé *pull* si lo tenés
+clonado) y volvé a correr `empezar.bat` o `empezar.py`. Reemplaza la versión anterior.
+
+### Si algo falla, pasame esto
 
 1. El archivo **`reporte.txt`**, que queda en la misma carpeta del script.
-2. Si el juego tira algún error, el **`error.log`**, que está en:
+2. El **`error.log`** del juego, que está en:
    `Documentos\Paradox Interactive\Hearts of Iron IV\logs\error.log`
-
-Con eso corrijo el generador y seguimos con el territorio.
+3. Si es algo de la interfaz (una ventana, un botón, un ícono), una captura de pantalla y el
+   **`ui_para_claude.zip`** que arma el script en la misma carpeta: trae el inventario de las
+   pantallas del juego para poder rediseñarlas.
 
 ---
 

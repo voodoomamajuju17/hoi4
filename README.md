@@ -1,104 +1,95 @@
 # 2100 Meganations
 
-Total conversion de Hearts of Iron IV ambientado en el año 2100. Ocho
-mega-naciones con mecánicas nacionales asimétricas, más treinta países libres.
+![Las banderas de las diez potencias](docs/img/portada_banderas.png)
 
-> **Nota de nombre.** El pedido original hablaba de *"Seven Dominions"*, 2137 y
-> siete facciones. La biblia de diseño dice *2100 Meganations*, año 2100 y ocho
-> mega-naciones. Confirmado: manda el documento.
+> *"2100. Los viejos Estados nacionales ya no existen. Ocho meganaciones se reparten lo que queda
+> del planeta, cada una construida alrededor del recurso, equilibrio o sistema sin el que no puede
+> vivir."*
 
-## Regla dura
+**2100 Meganations** es una conversión total de *Hearts of Iron IV*. El mundo se deshiló en los
+años 2040: se perdieron las cosechas, las máquinas se quedaron con el trabajo y el agua decidió
+quién vivía. De lo que quedó salieron ocho meganaciones, dos potencias que esperan su momento y
+un puñado de tierras sin ley. La partida va del 1 de enero de 2100 al 1 de enero de 2120.
 
-**Los `.txt` del mod son SALIDA del generador. Nunca se editan a mano.**
+---
 
-Si cambia el lore, cambia `spec/` y se regenera todo. `make check` falla si
-alguien tocó `build/` a mano, y muestra qué archivo.
+## Las potencias
 
-```
-spec/*.yaml   ──►   tools/gen   ──►   build/meganations_2100/
-assets/             (Python)          (generado, no tocar)
-(a mano)
-```
+| | Nación | En una línea |
+|---|---|---|
+| 🌿 | [**Imperio Ecofascista**](docs/cronicas/EFE.md) | Un emperador coronado con lapacho, un bosque que es soberano y cubas donde crece el acero vivo. |
+| ⚙️ | [**Comuna Socialista Automatizada**](docs/cronicas/ASC.md) | Las fábricas que nadie rompió, un consejo sorteado y un sistema que no duerme. |
+| 💼 | [**Unión Libre de Capital Corporativo**](docs/cronicas/FCU.md) | Una república comprada en un remate: cuatro corporaciones y un dividendo. |
+| ⚓ | [**Nación de Mercado de Alta Mar**](docs/cronicas/HSN.md) | Un país que flota: estrechos, seguros y capitanes. |
+| ☀️ | [**Reino Celeste Neoandino**](docs/cronicas/NAS.md) | El hijo del Sol, templos de luz y soldados nacidos a cuatro mil metros. |
+| 🌊 | [**Directorio Sino-Armónico**](docs/cronicas/SHD.md) | Ingenieros que gobiernan una sociedad como se gobierna un río. |
+| 🌍 | [**Federación de los Pueblos Africanos**](docs/cronicas/APF.md) | Mil doscientos consejos de aldea y una maestra rural como portavoz. |
+| 🦅 | [**Neo Imperio Romano**](docs/cronicas/NRE.md) | Un Imperator alzado sobre un escudo y tres legados que quieren su trono. |
+| 🏯 | [**Shogunato de los Astilleros**](docs/cronicas/ZJP.md) | Japón se levanta contra la Alta Mar: tres Casas, el Giri y el Mecha. |
+| 👑 | [**Albión**](docs/cronicas/ZAL.md) | Los que rompieron las máquinas eligen entre volver al pasado o saltar al futuro. |
 
-## Uso
+Y entre ellas, [**las Tierras Sin Ley**](docs/cronicas/TIERRAS_SIN_LEY.md): los atamanes de
+Eurasia, la Rani del Raj, los emires de los pozos muertos, el coronel de la Amazonia y una unidad
+censal que camina desde 2042.
 
-```bash
-make validate                                   # valida spec/ sin escribir nada
-make build   HOI4_PATH="/ruta/a/Hearts of Iron IV"
-make check   HOI4_PATH="..."                    # ¿build/ coincide con spec/?
-make install HOI4_PATH="..."                    # copia a la carpeta de mods
-make test                                       # tests del generador
-```
+---
 
-Única dependencia: **PyYAML**. El resto es stdlib — los TGA y DDS placeholder
-se escriben a mano con `struct` para no depender de Pillow.
+## Qué trae
 
-### Por qué hace falta `HOI4_PATH`
+- **Diez naciones jugables con mecánicas propias.** Cada una tiene su moneda (Bioacero, Cómputo,
+  Dividendos, Peaje, Inti-Soma, Mandato del Cielo, Ubuntu, Gloria, Giri, Pompa o Sincronía), su
+  árbol de focos con varios destinos posibles y su unidad única: el Gliptodonte, el Centinela, el
+  Ala de Obsidiana, el Leviatán de Malaca, los Hijos del Cóndor, el Dragón del Gran Canal, el
+  Kiboko, el Onagro y el Mecha.
+- **El Líder.** Carisma, Astucia, Prestigio y Salud. Los ministros los cambian, uno de cada cinco
+  eventos los toca y los fundadores envejecen.
+- **Aventuras de "elegí tu propia aventura".** Catorce historias con decenas de finales, para las
+  anarquías, para el mundo en 2110 y para Japón y Albión. Los momentos grandes se abren en **la
+  Lámina**, una ventana con una pintura de museo y un relato largo.
+- **Un siglo inestable.** Ultimátums de los generales y guerras civiles con bandera propia, la
+  crisis del siglo, el Gigante que despierta una coalición en Ginebra y la Crisis del Sucesor.
+- **Arte propio.** Retratos, banderas, pines de metal y esmalte para cada foco, azulejos de
+  cerámica para cada espíritu, una interfaz de cristal y cobre y pantallas de carga.
 
-No es opcional de hecho. El generador lee la instalación vanilla para tres
-cosas, todas para no adivinar:
+---
 
-| Qué | Por qué se lee en vez de escribirse |
+## La Biblioteca
+
+Para leer antes, durante o después de una partida:
+
+| | |
 |---|---|
-| `documentation/` e `interface/` | Cada modificador, trigger y efecto que emitimos se busca ahí, y cada ícono de foco en los `.gfx`. Un nombre que no existe frena el build en vez de aparecer en `error.log`. |
-| `localisation/` | BioSteel es el carbón vanilla renombrado. Las claves a pisar se buscan por texto ("Coal"), no se escriben de memoria. |
-| `common/ideologies/` | La estrategia de reskin inyecta nuestras sub-ideologías en los cuatro grupos vanilla. Escribir el archivo de cero significaría reproducir de memoria los bloques `rules`, `ai` y `dynamic_faction_names`: un campo olvidado rompe la carga. |
-| `history/states/` | El reparto territorial del spec está por nombre de región. Un state ID inventado reasigna territorio ajeno **en silencio**, sin error de carga. |
-| `launcher-settings.json` | `supported_version` sale de ahí en vez de un número hardcodeado que envejece. |
+| 📖 [**Breve historia del fin del mundo**](docs/lore/el_mundo_en_2100.md) | De 2040 a 2100, y lo que se ve venir. |
+| 📜 [**Las crónicas**](docs/README.md#las-crónicas) | La historia de cada nación, contada. |
+| 🗂️ [**La Enciclopedia**](docs/enciclopedia/README.md) | Todo lo que el mod sabe de cada nación: líderes, gabinete, espíritus, focos, aventuras y eventos. |
+| 🎮 [**Cómo jugar**](docs/guia/como_jugar.md) | Qué es distinto a HOI4, qué nación elegir y cómo no perder en 2102. |
+| 🧭 [**Guía de aventuras**](docs/guia/aventuras.md) | Las catorce historias, sin spoilers. |
+| ✒️ [**Cuentos de 2100**](docs/README.md#cuentos-de-2100) | Cinco cuentos del mundo del mod. |
+| 💬 [**Frases**](docs/literatura/frases.md) | Lo que dicen los personajes en las pantallas de carga. |
+| 🛍️ [**Merch**](docs/merch/catalogo.md) | El catálogo de los puertos francos de Malaca, y lo que se podría fabricar de verdad. |
 
-Sin `HOI4_PATH` el generador igual corre, pero **salta las ideologías y avisa
-fuerte**: el mod no va a cargar porque los países apuntan a ideologías que no
-existen. No inventa nada para tapar el hueco.
+---
 
-`build/` no está en git justamente porque su contenido depende de tu
-instalación. Se genera local.
+## Instalar y jugar
 
-## Estructura
+1. Bajá este repositorio (botón verde **Code** → **Download ZIP**) o cloná la rama del mod.
+2. Seguí [EMPEZAR.md](EMPEZAR.md): instala lo que falta, arma el mod a partir de tu copia de
+   *Hearts of Iron IV* y lo deja en la carpeta de mods.
+3. En el launcher del juego, activá **2100 Meganations** y arrancá una partida nueva.
 
-```
-spec/                 fuente de verdad, editable a mano
-assets/               arte hecho a mano (banderas, retratos, íconos). El spec
-                      dice dónde va cada archivo; el generador lo copia tal cual
-  00_project.yaml     metadatos, restricciones, decisiones de arquitectura
-  01_ideologies.yaml  ... (ver spec/README.md)
-  99_open_questions.yaml   43 preguntas, por fase que bloquean
+El mod está en castellano y en inglés.
 
-tools/gen/            el generador
-  pdx.py              lee y escribe Paradox script
-  loc.py              localisation con garantía de cero claves huérfanas
-  art.py              TGA/DDS placeholder sin dependencias
-  vanilla.py          puente con la instalación del juego
-  specload.py         carga y valida spec/
-  emitters/           un módulo por dominio de salida:
-                      descriptor, ideologies, countries, resources,
-                      ideas, characters, focus_trees, events,
-                      territory, history, scenario
-tools/tests/          751 checks, corren sin el juego instalado
+---
 
-build/                SALIDA. Generada, no versionada, no editable.
-```
+## Para quien quiera meterse en el código
 
-## Procedencia
+El mod no se escribe a mano: se **genera** desde `spec/` (el lore y las reglas, en YAML) con un
+programa en Python. Cómo funciona, cómo se prueba y por qué está hecho así:
 
-Todo nodo del spec lleva un campo `src`: `canon` (literal del documento),
-`inferred` (deducido), `invented` (**mío, porque HOI4 no carga sin ese dato**,
-siempre con un `why`), `canon_superseded`, `non_canon_legacy` o `unknown`.
+- [README técnico](docs/desarrollo/README_tecnico.md): el generador, la estructura y las reglas.
+- [DISENO_OCHO_POTENCIAS.md](DISENO_OCHO_POTENCIAS.md): la bitácora de diseño, cambio por cambio.
+- [PROGRAMA.md](PROGRAMA.md) y [SIMULADOR_IA.md](SIMULADOR_IA.md): el programa de trabajo y el
+  simulador que tira los dados de la IA.
 
-Si al leer el spec no sabés de dónde salió un dato, es un bug del spec.
-
-## Estado
-
-| Fase | Estado |
-|---|---|
-| 1 — Spec | listo |
-| 2 — Arquitectura y generador | listo |
-| 3 — Vertical slice del EFE | jugable en 1.19.3: árbol de 31 focos, 4 eventos, minijuego del BioSteel, arte propio |
-| 4 — Loop de debug con `error.log` | en curso: cada prueba en el juego alimenta el generador |
-| 5 — Las otras siete | territorio, líder, ideología, ejército y balance listos; faltan árboles, ideas y mecánicas propias (Q030, Q032) y la diplomacia (Q018) |
-
-El mundo entero es del mod: 8 meganaciones, 16 satélites y la Anarquía. Los
-países del juego base quedan sin territorio. `build/balance.txt` resume con qué
-arranca cada facción.
-
-Lo que **no** cubren los tests, y por eso existe la Fase 4: si HOI4 acepta los
-nombres de campo que emitimos. Eso solo lo dice `error.log`.
+La Enciclopedia y la guía de aventuras se regeneran desde el spec con
+`python -m tools.docs.biblioteca`, así que nunca quedan atrás del juego.

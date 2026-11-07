@@ -2705,6 +2705,36 @@ def test_aventuras_japon() -> None:
               fin.count("has_country_flag = ZJPS2_nanami_paciente") == 2, fin[:400])
 
 
+def test_biblioteca() -> None:
+    section("la Biblioteca: enciclopedia generada, crónicas, guía, cuentos y merch, sin links rotos (2026-11-07)")
+    import re as _re
+    from tools.docs import biblioteca
+    biblioteca.main()
+    enc = REPO_ROOT / "docs/enciclopedia"
+    paginas = sorted(p.name for p in enc.glob("*.md"))
+    check("biblioteca: una página por nación, más el índice y los satélites",
+          all(f"{t}.md" in paginas for t in biblioteca.ORDEN) and "README.md" in paginas and "SATELITES.md" in paginas,
+          str(paginas))
+    efe = (enc / "EFE.md").read_text(encoding="utf-8")
+    check("biblioteca: la página trae líderes, espíritus, focos, unidad única y frases",
+          all(x in efe for x in ("## Quién manda", "## Espíritus nacionales", "## El árbol de focos nacionales",
+                                 "Gliptodonte", "## Frases")), efe[:300])
+    rotos = []
+    docs = [REPO_ROOT / "README.md", REPO_ROOT / "EMPEZAR.md"] + sorted((REPO_ROOT / "docs").rglob("*.md"))
+    for d in docs:
+        texto = d.read_text(encoding="utf-8")
+        destinos = _re.findall(r"\]\(([^)#\s]+)(?:#[^)]*)?\)", texto) + _re.findall(r'src="([^"]+)"', texto)
+        for dest in destinos:
+            if dest.startswith(("http://", "https://", "mailto:")):
+                continue
+            if not (d.parent / dest).resolve().exists():
+                rotos.append(f"{d.relative_to(REPO_ROOT)} -> {dest}")
+    check("biblioteca: ningún link ni imagen roto en los documentos", not rotos, "\n".join(rotos[:20]))
+    cronicas = {p.stem for p in (REPO_ROOT / "docs/cronicas").glob("*.md")}
+    check("biblioteca: crónica escrita para cada potencia jugable y para las tierras sin ley",
+          set(biblioteca.ORDEN[:10]) | {"TIERRAS_SIN_LEY"} <= cronicas, str(sorted(cronicas)))
+
+
 def test_directorio_siberia() -> None:
     section("el Directorio más frágil, Eurasia abastecida, Siberia se levanta (2026-11-06)")
     import yaml as _y
@@ -5559,6 +5589,7 @@ def main() -> int:
         test_despertar,
         test_aventuras_albion,
         test_aventuras_japon,
+        test_biblioteca,
         test_mecanicas_v2,
         test_forces,
         test_unit_names,
