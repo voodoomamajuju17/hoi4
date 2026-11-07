@@ -1144,6 +1144,9 @@ def pedidos() -> None:
         "# dibujado, pegale de nuevo la línea `style`.\n\n"
         + "\n".join(disenador.pedido(i) for i in dis), encoding="utf-8")
     summary.insert(0, f"0_DISENADOR_2100.txt: {len(dis)}")
+    # 2026-11-07: prueba de estilo de los espíritus (estampilla y azulejo, 2 por nación)
+    from tools.arte import espiritus_prueba
+    summary.insert(0, espiritus_prueba.escribir(OUT))
     bloques = []
     for f in todos:
         texto = f.read_text(encoding="utf-8")
