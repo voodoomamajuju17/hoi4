@@ -79,8 +79,6 @@ Destino pide se enteran, y no se lo toman bien.
 
 El siglo XXII no es estable:
 
-- **Los Años Inciertos.** Todos los países arrancan con la estabilidad en baja durante los dos
-  primeros años.
 - **El ultimátum de los generales.** Con estabilidad bajo 50%, los militares empiezan a hablar
   entre ellos. Si no los atendés, te dan un ultimátum, y si no cedés, guerra civil. Cada potencia
   tiene su propia rebelión, con bandera y nombre propios.

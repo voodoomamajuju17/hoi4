@@ -18,9 +18,8 @@
 #    4% por mes. Se completa el foco, con su recompensa y su evento.
 # 3. La HSN (infamia del corso 50 o más) y la NAS (Sol Bajo) suman 2% por mes
 #    de ultimátum: la Cruz del Mar y el Sol Negro tienen su propia mecha.
-# 4. Los Años Inciertos: todos los países arrancan con -10% de estabilidad y
-#    una caída lenta (-0,05% por semana) los dos primeros años, y -5% los dos
-#    siguientes.
+# 4. (Los Años Inciertos, -10% de estabilidad a todos al arrancar: sacados el
+#    2026-11-07, eran un espíritu más sin nada que hacer con él.)
 # =============================================================================
 
 extend_scripted_effects:
@@ -147,27 +146,11 @@ decisions:
           - {effect: flag, value: MEGANATIONS_crisis_espera, days: 365}
           - {effect: complete_focus, value: NRE_la_legion_decide}
 
-  dynamic_modifiers:
-  # 2026-11-07 (captura del usuario: "hay DEMASIADOS espíritus todo el tiempo, ni un día
-  # pasó"): eran dos a la vez (-10% los dos primeros años, -5% hasta el cuarto); ahora uno solo
-  # con el promedio, cuatro años
-  - id: MEGANATIONS_anios_inciertos
-    country: null
-    no_art: true
-    name: {english: The Uncertain Years, spanish: Los Años Inciertos}
-    desc:
-      english: 'The new century still has no owner. Every government rules on borrowed time, and everyone knows it.'
-      spanish: 'El siglo nuevo todavía no tiene dueño. Cada gobierno manda con tiempo prestado, y todos lo saben.'
-    modifiers: {stability_factor: -0.075, '?stability_weekly': -0.0004}
+  # 2026-11-07: fuera "Los Años Inciertos" (-7,5% de estabilidad a todos por cuatro años).
+  # El usuario: "no tiene sentido, solamente baja la estabilidad inicial de todos": otro
+  # espíritu en la lista desde el día uno sin nada que hacer con él.
 
   on_actions:
-  - id: MEGANATIONS_anios_inciertos_arranque
-    hook: on_startup
-    effects:
-    - effect: every_country
-      when: {exists: true}
-      effects:
-      - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos, days: 1461}
   # 2026-11-01 (pedido del usuario: "en el árbol de la NAS, más bonus en industria; ¿podés
   # poner más slots en sus provincias? Sin exagerar"): +1 espacio de construcción en cada
   # región de la NAS al arrancar (sus regiones de montaña casi no tenían lugar).

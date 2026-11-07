@@ -2163,7 +2163,7 @@ Pedido del usuario: más chance de guerra civil ("estabilidad menor a 50 ya acti
   - Ultimátum de los Generales: 1,5% por mes (3% bajo 35%), una vez por año como mucho y nunca después de la rebelión propia de esa potencia. HSN (infamia del corso 50+) y NAS (Sol Bajo) suman 2% más.
   - Las rutas que terminan en guerra civil se adelantan, 4% por mes, si ya hicieron el foco anterior y no eligieron la otra rama: EFE El Monte se Levanta (después de Los Incendios de Gaia), APF Los Consejos se Arman (después de la Asamblea de Lagos), NRE La Legión Decide (después del Consilium). Se completa el foco con su recompensa (efecto nuevo complete_focus).
 - Frente al ultimátum la IA resiste 55% (antes 40%). El Rumor de Golpe ya puede salir con estabilidad bajo 50% (antes 40%).
-- Los Años Inciertos (todos los países, on_startup): -10% de estabilidad y -0,05% por semana los dos primeros años; -5% los dos siguientes.
+- Los Años Inciertos (todos los países, on_startup): -10% de estabilidad y -0,05% por semana los dos primeros años; -5% los dos siguientes. **Sacados el 2026-11-07** ("no tiene sentido, solamente baja la estabilidad inicial"); el mismo día, los espíritus de la IA (Mando preparado, Flota completa) pasan a darse solo a los países de la IA: al jugador le aparecían apagados.
 - Test: test_guerras_civiles.
 
 ## El líder, más Crusader Kings (2026-11-01)
