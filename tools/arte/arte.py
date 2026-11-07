@@ -254,8 +254,8 @@ def catalog() -> list[dict]:
                     "done": dest.exists(), "description": f"{name}: {_one_line(desc)}",
                 })
     for dm in _load("14_decisions.yaml").get("dynamic_modifiers") or []:
-        if dm.get("no_art"):   # 2026-10-17: "sin imágenes" (Bioacero v3 del EFE)
-            continue
+        # no_art ("sin imágenes", 2026-10-17, Bioacero v3 del EFE) ya no excluye: el 2026-11-07
+        # ("fijate que hay espíritus con imágenes viejas") salían con un genérico del juego
         tag = dm["country"] or "MEGANATIONS"   # sin país: sirve para todos (Leva Forzosa)
         dest = REPO / "assets" / tag / "ideas" / f"{dm['id']}.dds"
         items.append({

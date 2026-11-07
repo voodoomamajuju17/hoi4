@@ -32,6 +32,9 @@ SCREENS: dict[str, list[str]] = {
     # dibujan las ventanas de producción, despliegue y logística
     "pestanas_militares": ["countryproductionview.gui", "countrydeploymentview.gui",
                            "countrylogisticsview.gui"],
+    # 2026-11-07 (captura de Producción: los botones de agregar línea y los filtros por tipo
+    # de equipo siguen siendo los del juego)
+    "produccion": ["countryproductionlineview.gui"],
     # 2026-11-03 (capturas del menú y de "Seleccionar país": "priorizar cambios en
     # pantalla principal y de elección de países"). Con * se toman todos los .gui
     # que coinciden (los nombres cambian entre versiones del juego).
