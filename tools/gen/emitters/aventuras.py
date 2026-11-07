@@ -41,6 +41,7 @@ from collections import deque
 from ..context import BuildContext
 from ..errors import SpecError
 from . import effects as effects_mod
+from . import laminas as laminas_mod
 
 SOURCE = "spec/21_aventuras.yaml"
 KINDS = ("muerte", "objetivo", "positivo", "negativo", "neutral")
@@ -64,26 +65,40 @@ def emit(ctx: BuildContext) -> None:
     namespaces = ctx.spec.raw["events"].setdefault("namespaces", {})
     cosmetic = {ct["id"]: ct.get("parent") for ct in ctx.spec.raw["countries"].get("cosmetic_tags") or []}
     summary = {}
-    for tag, saga in sagas.items():
-        ctx.spec.country(tag)  # falla si el TAG no existe
-        _validate(tag, saga, cfg)
-        _validate_catastrophes(tag, saga, cfg, cosmetic, {c.tag for c in ctx.spec.countries})
-        _ideas(ctx, tag, saga)
-        ns = namespace(tag)
+    plates: list[dict] = []   # la Lámina (laminas.py): las de todas las sagas
+    for key, saga in sagas.items():
+        # 2026-11-06 (Japón, Albión y 2110): una saga puede ser de otro país que su clave
+        # (`country`), de varios (`countries`: la misma historia para todos), tener su
+        # propia config y arrancar con una condición (`start`) en vez del 1 de marzo de 2100
+        countries = list(saga.get("countries") or [saga.get("country", key)])
+        for t in countries:
+            ctx.spec.country(t)  # falla si el TAG no existe
+        tag = countries[0] if len(countries) == 1 else None
+        scfg = {**cfg, **(saga.get("config") or {})}
+        prefix = saga.get("prefix", key)
+        _validate(key, saga, scfg)
+        _validate_catastrophes(key, saga, scfg, cosmetic, {c.tag for c in ctx.spec.countries}, tag)
+        for t in countries:
+            _ideas(ctx, t, saga)
+        ns = saga.get("namespace") or namespace(key)
         if ns in namespaces:
             raise SpecError(f"{ns}: ya existe en 12_events.yaml", where=SOURCE)
-        namespaces[ns] = {"country": tag, "events": _events(ctx, tag, saga, cfg)}
+        namespaces[ns] = {"country": tag, "events": _events(ctx, tag, saga, scfg, prefix, ns, plates)}
+        if saga.get("start"):
+            first = 2 + laminas_mod.ABRE if saga["intro"].get("plate") else 2
+            _arranque(ctx, prefix, ns, countries, saga["start"], first)
         n_events = 2 + len(saga["nodes"]) + len(saga["endings"])
         n_art = sum(1 for e in [saga["intro"], *saga["nodes"], *saga["endings"]] if e.get("art"))
         mix = {k: sum(1 for e in saga["endings"] if e["kind"] == k) for k in KINDS}
         cats = _catastrophes(saga)
-        summary[tag] = {"events": n_events, "art": n_art, "endings": len(saga["endings"]), "mix": mix,
+        summary[key] = {"events": n_events, "art": n_art, "endings": len(saga["endings"]), "mix": mix,
                         "catastrophes": {k: sorted(v) for k, v in cats.items()}}
-        ctx.note(f"aventura {tag} ({saga['name']['spanish']}): {len(saga['characters'])} personajes, "
+        ctx.note(f"aventura {key} ({saga['name']['spanish']}): {len(saga['characters'])} personajes, "
                  f"{len(saga['nodes'])} capítulos, {len(saga['endings'])} finales "
                  f"({', '.join(f'{k} {v}' for k, v in mix.items())}), {n_art} imágenes de {n_events} eventos; "
                  f"catástrofes: {', '.join(f'{k} {len(v)}' for k, v in cats.items()) or 'ninguna'}")
     ctx.data["aventuras"] = summary
+    laminas_mod.emit(ctx, plates)
 
 
 # ---------------------------------------------------------------- validación
@@ -134,10 +149,13 @@ def _validate(tag: str, saga: dict, cfg: dict) -> None:
     if _cyclic(nodes):
         raise SpecError(f"{tag}: la historia vuelve sobre sí misma (ciclo)", where=where)
     firsts = {ch["first"] for ch in saga["characters"]}
-    if not saga["intro"].get("art") or any(not nodes[f].get("art") for f in firsts):
+
+    def has_art(e: dict) -> bool:
+        return bool(e.get("art") or e.get("plate"))   # la Lámina trae su propia pintura
+    if not has_art(saga["intro"]) or any(not has_art(nodes[f]) for f in firsts):
         raise SpecError(f"{tag}: la presentación y el primer capítulo de cada personaje llevan imagen", where=where)
     total = 2 + len(nodes) + len(endings)
-    arts = sum(1 for e in [saga["intro"], *nodes.values(), *endings.values()] if e.get("art"))
+    arts = sum(1 for e in [saga["intro"], *nodes.values(), *endings.values()] if has_art(e))
     if arts < total * float(cfg.get("min_art_share", 0.3)):
         raise SpecError(f"{tag}: {arts} imágenes para {total} eventos (se pide 1 de cada 3)", where=where)
 
@@ -153,30 +171,37 @@ def _catastrophes(saga: dict) -> dict[str, list]:
     return out
 
 
-def _validate_catastrophes(tag: str, saga: dict, cfg: dict, cosmetic: dict, tags) -> None:
-    where = f"{SOURCE} -> {tag}"
+def _validate_catastrophes(key: str, saga: dict, cfg: dict, cosmetic: dict, tags, tag: str | None = None) -> None:
+    where = f"{SOURCE} -> {key}"
     holders = list(saga["endings"]) + [o for n in saga["nodes"] for o in n["options"]]
     for h in holders:
         cat = h.get("catastrophe") or {}
-        unknown = set(cat) - {"war_by", "rebellion", "rename"}
+        unknown = set(cat) - {"war_by", "rebellion", "rename", "crisis"}
         if unknown:
-            raise SpecError(f"{tag}: catástrofe desconocida {sorted(unknown)} (war_by, rebellion, rename)", where=where)
+            raise SpecError(f"{key}: catástrofe desconocida {sorted(unknown)} (war_by, rebellion, rename, crisis)",
+                            where=where)
+        if tag is None and set(cat) & {"war_by", "rebellion", "rename"}:
+            raise SpecError(f"{key}: una saga de varios países solo admite la catástrofe 'crisis'", where=where)
         if cat.get("war_by") and tags and cat["war_by"] not in tags:
             raise SpecError(f"{tag}: war_by '{cat['war_by']}' no es un país del mod", where=where)
         for ct in [(cat.get("rebellion") or {}).get("cosmetic_tag"), cat.get("rename")]:
             if ct and cosmetic.get(ct) != tag:
-                raise SpecError(f"{tag}: '{ct}' tiene que estar en 02_countries.yaml -> cosmetic_tags "
+                raise SpecError(f"{key}: '{ct}' tiene que estar en 02_countries.yaml -> cosmetic_tags "
                                 f"con parent: {tag}", where=where)
     need = int(cfg.get("min_catastrophes", 0))
     got = sum(len(v) for v in _catastrophes(saga).values())
     if got < need:
-        raise SpecError(f"{tag}: {got} rutas catastróficas, se piden {need}", where=where)
+        raise SpecError(f"{key}: {got} rutas catastróficas, se piden {need}", where=where)
 
 
-def _catastrophe_effects(tag: str, cat: dict | None) -> list[dict]:
+def _catastrophe_effects(tag: str | None, cat: dict | None) -> list[dict]:
     if not cat:
         return []
     out: list[dict] = []
+    if cat.get("crisis"):
+        # 2026-11-06: la crisis de cada potencia (el ultimátum de los generales, que puede
+        # terminar en su propia guerra civil): sirve para las sagas de varios países
+        out.append({"effect": "run", "value": "MEGANATIONS_crisis_estalla"})
     if cat.get("war_by"):
         by = cat["war_by"]
         # solo si la meganación la maneja la IA: si la juega una persona, una
@@ -231,9 +256,12 @@ def _ideas(ctx: BuildContext, tag: str, saga: dict) -> None:
 
 # ---------------------------------------------------------------- eventos
 
-def _requirement(ctx: BuildContext, tag: str, place) -> dict:
-    """La anarquía libre y con su capital; y la región del capítulo, si es suya."""
+def _requirement(ctx: BuildContext, tag: str | None, place) -> dict:
+    """La anarquía libre y con su capital; y la región del capítulo, si es suya.
+    Una saga de varios países (tag None) solo pide no ser satélite."""
     req: dict = {"subject": False}
+    if tag is None:
+        return req
     cap = (ctx.data.get("capitals") or {}).get(tag)
     conds = []
     if cap is not None:
@@ -262,36 +290,46 @@ def _schedule(ns: str, tag: str, target: int, days: int, cancel_delay: int) -> l
     ]
 
 
-def _events(ctx: BuildContext, tag: str, saga: dict, cfg: dict) -> list[dict]:
-    ns = namespace(tag)
+def _events(ctx: BuildContext, tag: str | None, saga: dict, cfg: dict, prefix: str, ns: str,
+            plates: list[dict] | None = None) -> list[dict]:
     pic = cfg.get("picture", "GFX_report_event_generic_rally")
     first_days = int(cfg.get("first_days", 3))
     interval = int(cfg.get("interval_days", 120))
     cancel_delay = int(cfg.get("cancel_delay_days", 2))
-    skulls = _flag(tag, "calaveras")
+    skulls = _flag(prefix, "calaveras")
     nodes = {n["id"]: n for n in saga["nodes"]}
     endings = {e["id"]: e for e in saga["endings"]}
-    arrive = [{"effect": "flag", "value": _flag(tag, "llego"), "days": 10}]
+    arrive = [{"effect": "flag", "value": _flag(prefix, "llego"), "days": 10}]
+    # 2026-11-06 (la Lámina): a lo que lleva `plate` se llega por el evento que la abre
+    plated = {2} if saga["intro"].get("plate") else set()
+    plated |= {n["id"] for n in saga["nodes"] if n.get("plate")} | {e["id"] for e in saga["endings"] if e.get("plate")}
+
+    def tgt(eid: int) -> int:
+        return eid + laminas_mod.ABRE if eid in plated else eid
     base_req = _requirement(ctx, tag, None)
     out: list[dict] = []
 
-    # 1: arranque (oculto) -> a los dos meses, la presentación
+    # 1: arranque (oculto) -> a los dos meses, la presentación. Con `start` arranca el
+    # pulso mensual (_arranque) y el 1 no hace nada.
     out.append({
         "id": 1, "trigger": "on_startup", "hidden": True, "picture": pic, "src": "user_request",
         "title": {"english": "Adventure clock", "spanish": "Reloj de la aventura"},
         "desc": {"english": "Hidden.", "spanish": "Oculto."},
         "options": [{"name": {"english": "Go on.", "spanish": "Seguir."},
-                     "effects": [{"effect": "event", "id": f"{ns}.2", "days": int(cfg.get("start_days", 59))}]}],
+                     "effects": [] if saga.get("start") else
+                     [{"effect": "event", "id": f"{ns}.{tgt(2)}", "days": int(cfg.get("start_days", 59))}]}],
     })
+    if saga.get("start"):
+        out[-1]["trigger"] = "effect"
     # 2: la situación y los personajes
     intro = saga["intro"]
     opts = []
     for ch in saga["characters"]:
         eff = [{"effect": "set_variable", "var": skulls, "value": 0},
-               {"effect": "flag", "value": _flag(tag, ch["id"])},
-               {"effect": "flag", "value": _flag(tag, "en_curso")}]
+               {"effect": "flag", "value": _flag(prefix, ch["id"])},
+               {"effect": "flag", "value": _flag(prefix, "en_curso")}]
         eff += list(ch.get("effects") or [])
-        eff += _schedule(ns, tag, ch["first"], first_days, cancel_delay)
+        eff += _schedule(ns, prefix, tgt(ch["first"]), first_days, cancel_delay)
         opts.append({"name": ch["pick"], "effects": eff, "ai_chance": 1})
     out.append({"id": 2, "trigger": "effect", "picture": pic, "src": "user_request", "when": dict(base_req),
                 "title": intro["title"], "desc": intro["desc"], "options": opts})
@@ -299,13 +337,13 @@ def _events(ctx: BuildContext, tag: str, saga: dict, cfg: dict) -> list[dict]:
     cut = cfg.get("cancel") or {}
     out.append({
         "id": 3, "trigger": "effect", "picture": pic, "src": "user_request",
-        "when": {"all": [{"not_flag": _flag(tag, "llego")}, {"not_flag": _flag(tag, "fin")}],
-                 "flag": _flag(tag, "en_curso")},
+        "when": {"all": [{"not_flag": _flag(prefix, "llego")}, {"not_flag": _flag(prefix, "fin")}],
+                 "flag": _flag(prefix, "en_curso")},
         "title": cut.get("title") or {"english": "The Thread Is Cut", "spanish": "El Hilo se Corta"},
         "desc": cut.get("desc") or {"english": "The story ends here.", "spanish": "La historia termina acá."},
         "options": [{"name": cut.get("close") or {"english": "So it goes.", "spanish": "Así son las cosas."},
-                     "effects": [{"effect": "clear_flag", "value": _flag(tag, "en_curso")},
-                                 {"effect": "flag", "value": _flag(tag, "cortada")}]}],
+                     "effects": [{"effect": "clear_flag", "value": _flag(prefix, "en_curso")},
+                                 {"effect": "flag", "value": _flag(prefix, "cortada")}]}],
     })
     # los capítulos
     for nid, node in nodes.items():
@@ -314,7 +352,9 @@ def _events(ctx: BuildContext, tag: str, saga: dict, cfg: dict) -> list[dict]:
             eff = list(opt.get("effects") or []) + _catastrophe_effects(tag, opt.get("catastrophe"))
             if opt.get("skulls"):
                 eff.append({"effect": "add_variable", "var": skulls, "value": int(opt["skulls"])})
-            eff += _schedule(ns, tag, opt["next"], interval, cancel_delay)
+            # `ending_days` (2026-11-07, Albión): la noche final tiene su desenlace enseguida
+            wait = int(cfg.get("ending_days", interval)) if opt["next"] in endings else interval
+            eff += _schedule(ns, prefix, tgt(opt["next"]), wait, cancel_delay)
             o = {"name": opt["name"], "effects": eff, "ai_chance": opt.get("ai_chance", 1)}
             if opt.get("when"):
                 o["when"] = opt["when"]
@@ -331,12 +371,41 @@ def _events(ctx: BuildContext, tag: str, saga: dict, cfg: dict) -> list[dict]:
         eff = list(end.get("effects") or [])
         # la catástrofe va después de cerrar la historia: si es una guerra
         # civil, las banderas ya quedaron puestas en el país que juega
-        eff += [{"effect": "flag", "value": _flag(tag, "fin")},
-                {"effect": "flag", "value": _flag(tag, f"fin_{end['kind']}")},
-                {"effect": "clear_flag", "value": _flag(tag, "en_curso")}]
+        eff += [{"effect": "flag", "value": _flag(prefix, "fin")},
+                {"effect": "flag", "value": _flag(prefix, f"fin_{end['kind']}")},
+                {"effect": "clear_flag", "value": _flag(prefix, "en_curso")}]
         eff += _catastrophe_effects(tag, end.get("catastrophe"))
         out.append({"id": eid, "trigger": "effect", "picture": pic, "src": "user_request",
                     "when": _requirement(ctx, tag, end.get("place")), "immediate": list(arrive),
                     "title": end["title"], "desc": desc,
                     "options": [{"name": end["close"], "effects": eff}]})
+    # las Láminas: un evento oculto por cada una, que la abre (o manda el capítulo a la IA)
+    if plates is not None and plated:
+        by_id = {e["id"]: e for e in out}
+        sources = {2: saga["intro"], **{n["id"]: n for n in saga["nodes"]}, **{e["id"]: e for e in saga["endings"]}}
+        for eid in sorted(plated):
+            src = sources[eid]
+            k = len(plates) + 1
+            plates.append({"k": k, "ns": ns, "eid": eid, "title": src["title"], "saga": saga["name"],
+                           "text": src["plate"]["text"], "art": src["plate"].get("art")})
+            ev = by_id[eid]
+            out.append(laminas_mod.opener(ns, eid, k, ev.get("when") or {}, list(arrive)))
     return out
+
+
+def _arranque(ctx: BuildContext, prefix: str, ns: str, countries: list[str], start: dict, first: int = 2) -> None:
+    """La saga arranca cuando se cumple `start.when` (una vez por país): un efecto con
+    guion que corre en el pulso mensual de las grandes potencias."""
+    se = ctx.spec.raw.setdefault("decisions", {}).setdefault("scripted_effects", [])
+    pulso = next((e for e in se if e.get("id") == "MEGANATIONS_pulso_grandes"), None)
+    if pulso is None:
+        raise SpecError("las sagas con `start` necesitan MEGANATIONS_pulso_grandes (36_gigante_sucesor)",
+                        where=SOURCE)
+    sid = f"{prefix}_av_arranque"
+    cond = [{"any": [{"tag": t} for t in countries]}, {"not_flag": _flag(prefix, "empezo")}]
+    if start.get("when"):
+        cond.append(start["when"])
+    se.append({"id": sid, "effects": [{"effect": "if", "when": {"all": cond}, "then": [
+        {"effect": "flag", "value": _flag(prefix, "empezo")},
+        {"effect": "event", "id": f"{ns}.{first}", "days": int(start.get("days", 1))}]}]})
+    pulso["effects"].append({"effect": "run", "value": sid})

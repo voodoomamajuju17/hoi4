@@ -1,0 +1,1047 @@
+# =============================================================================
+# Las aventuras de Albión (2026-11-07)
+#
+# Pedido del usuario: "Para GB, crear 2 aventuras, fáciles, largas pero que la
+# última decisión, binaria, pueda dar lugar a la victoria o a guerra civil."
+# ("con victoria me refiero a ganar la aventura, super bonus")
+#
+# Una por camino (ZAL_ruta, 30_albion_ampliada): arranca 60 días después de que
+# se fija la ruta. Tres personajes, cinco decisiones cada uno, un capítulo cada
+# 150 días (unos dos años). Fáciles: no hay muertes; las salidas tempranas son
+# buenas o neutras. La última decisión es binaria y no hay una respuesta
+# "correcta" de antemano: depende de lo que se eligió en el tercer capítulo
+# del personaje (la bandera <ZALC|ZALS>_<personaje>_firme), y el relato lo
+# recuerda. Acertar es la victoria (El Siglo Británico / La Hora de Albión,
+# diez años); errar, la guerra civil contra la Mancomunidad de los Comunes o
+# los Condados Libres de los Desconectados.
+# El arranque, el primer capítulo de cada personaje, la noche final y los seis
+# finales grandes abren la Lámina (laminas.py).
+# =============================================================================
+
+cosmetic_tags:
+- id: ZAL_COMUNES
+  parent: ZAL
+  name: {english: 'The Commonwealth of the Commons', spanish: 'La Mancomunidad de los Comunes'}
+  adjective: {english: 'Commons', spanish: 'de los Comunes'}
+  art: 'a plain red field with a black sledgehammer crossed with a white rose, under a simple arch of eleven small white stars for the eleven dead of Manchester; rough, hand-sewn, working-class banner.'
+  src: user_request
+- id: ZAL_DESCONECTADOS
+  parent: ZAL
+  name: {english: 'The Free Shires of the Unconnected', spanish: 'Los Condados Libres de los Desconectados'}
+  adjective: {english: 'Unconnected', spanish: 'desconectado'}
+  art: 'a plain off-white sheet with a single hand-drawn candle in black ink, its flame orange, and a green hill line along the bottom; homemade, rural, defiant.'
+  src: user_request
+
+decisions:
+  scripted_effects:
+  - id: ZALC_victoria
+    effects:
+    - {effect: dynamic_modifier, id: ZAL_siglo_britanico, days: 3650}
+    - {effect: add_political_power, value: 300}
+    - {effect: add_stability, value: 0.10}
+    - {effect: add_war_support, value: 0.10}
+    - {effect: add_variable, var: ZAL_pompa, value: 40}
+    - {effect: clamp, var: ZAL_pompa, min: 0, max: 100}
+    - {effect: flag, value: ZAL_aventura_ganada}
+  - id: ZALC_guerra_civil
+    effects:
+    - {effect: add_war_support, value: 0.10}
+    - {effect: set_variable, var: ZAL_pompa, value: 25}
+  - id: ZALS_victoria
+    effects:
+    - {effect: dynamic_modifier, id: ZAL_la_hora_de_albion, days: 3650}
+    - {effect: add_political_power, value: 300}
+    - {effect: add_stability, value: 0.10}
+    - {effect: add_variable, var: ZAL_sincronia, value: 20}
+    - {effect: clamp, var: ZAL_sincronia, min: 0, max: 100}
+    - {effect: flag, value: ZAL_aventura_ganada}
+  - id: ZALS_guerra_civil
+    effects:
+    - {effect: add_war_support, value: 0.10}
+    - {effect: add_variable, var: ZAL_sincronia, value: -20}
+    - {effect: clamp, var: ZAL_sincronia, min: 0, max: 100}
+
+  dynamic_modifiers:
+  - id: ZAL_siglo_britanico
+    country: ZAL
+    name: {english: 'The British Century', spanish: 'El Siglo Británico'}
+    desc: {english: 'The Steam Crown is no longer a costume. Sixty years of glory, and the world believes every one of them.', spanish: 'La Corona de Vapor ya no es un disfraz. Sesenta años de gloria, y el mundo se cree cada uno.'}
+    modifiers: {stability_factor: 0.15, political_power_gain: 0.30, war_support_factor: 0.10, industrial_capacity_factory: 0.10, industrial_capacity_dockyard: 0.20, research_speed_factor: 0.05}
+  - id: ZAL_la_hora_de_albion
+    country: ZAL
+    name: {english: 'The Hour of Albion', spanish: 'La Hora de Albión'}
+    desc: {english: 'A nation that thinks together and still knows how to listen.', spanish: 'Una nación que piensa junta y todavía sabe escuchar.'}
+    modifiers: {stability_factor: 0.15, political_power_gain: 0.25, research_speed_factor: 0.15, industrial_capacity_factory: 0.10, production_speed_buildings_factor: 0.10}
+
+adventures:
+  sagas:
+    # =========================================================================
+    # Hacia el Pasado: La Corona de Vapor
+    # =========================================================================
+    ZAL_CORONA:
+      country: ZAL
+      namespace: meganations_albion_corona
+      prefix: ZALC
+      start:
+        days: 60
+        when: {variable_is: {var: ZAL_ruta, value: 2}}
+      config:
+        interval_days: 150
+        ending_days: 5
+        min_endings: 10
+        ending_mix: {muerte: 0, objetivo: 3, positivo: 2, negativo: 3, neutral: 2}
+        min_catastrophes: 3
+        skull_line:
+          english: "\\n\\nScandals in The Times: [?{var}|0]"
+          spanish: "\\n\\nEscándalos en The Times: [?{var}|0]"
+      name: {english: "The Steam Crown", spanish: "La Corona de Vapor"}
+      palette: "gaslight and brass, crimson velvet and coal smoke, airships over the Thames, top hats and electric monocles; a Victorian empire rebuilt in 2100 out of the ruins of the machines"
+      ideas: []
+      intro:
+        title: {english: "Sixty Years of Nothing", spanish: "Sesenta Años de Nada"}
+        desc:
+          english: "Queen Victoria III wants a Diamond Jubilee. Albion has existed for barely a decade, but the Crown insists that sixty years of glory must be celebrated, and quickly, before anyone notices. Three people can make the Empire real. Choose who carries the Crown."
+          spanish: "La Reina Victoria III quiere un Jubileo de Diamante. Albión existe hace apenas una década, pero la Corona insiste en que hay que festejar sesenta años de gloria, y rápido, antes de que alguien se dé cuenta. Tres personas pueden hacer real el Imperio. Elegí quién carga la Corona."
+        plate:
+          art: "The throne room of a rebuilt Buckingham Palace lit by gas chandeliers and coloured light from a stained-glass window; a young queen in an enormous crimson-and-ermine gown, a small brass crown slightly too big for her, stands on the steps holding a scroll; before her three figures bow: a theatrical lady in violet silk with a fan, an old field marshal in a scarlet coat with white whiskers, and a woman scientist in a leather apron with brass goggles on her forehead; behind the windows, airships drift over a smoky London skyline; pompous, golden, slightly absurd and deeply sincere"
+          text:
+            english: "Albion was born in a cellar. When the machines broke in 2086, the men who smashed the last servers of Manchester found nothing to replace them with but the past: steam, coal, ceremony and a queen. They found the crowns in a museum basement and the queen in a riding school in Surrey, a shy girl named Victoria who could recite the Kings of England backwards.\n\nTwelve years later, Victoria III has decided that her reign deserves a Diamond Jubilee. Her ministers have pointed out, gently, that a Diamond Jubilee celebrates sixty years on the throne. The Queen has replied that the Empire is older than she is, and that history is a matter of confidence.\n\nThe world is watching. The Comuna laughs at us, Rome flatters us, the transhumanists of the north whisper that the past is a costume. If the Jubilee fails, Albion is a theatre with the lights off. If it succeeds, it is an Empire. Three people have asked for the honour of carrying it."
+            spanish: "Albión nació en un sótano. Cuando se rompieron las máquinas en 2086, los hombres que rompieron los últimos servidores de Manchester no encontraron con qué reemplazarlos más que con el pasado: vapor, carbón, ceremonia y una reina. Las coronas las encontraron en el sótano de un museo, y a la reina en una escuela de equitación de Surrey: una chica tímida llamada Victoria que recitaba los reyes de Inglaterra al revés.\n\nDoce años después, Victoria III decidió que su reinado merece un Jubileo de Diamante. Sus ministros le señalaron, con delicadeza, que un Jubileo de Diamante festeja sesenta años en el trono. La Reina contestó que el Imperio es más viejo que ella, y que la historia es una cuestión de aplomo.\n\nEl mundo mira. La Comuna se ríe de nosotros, Roma nos adula, los transhumanistas del norte susurran que el pasado es un disfraz. Si el Jubileo fracasa, Albión es un teatro con las luces apagadas. Si sale bien, es un Imperio. Tres personas pidieron el honor de cargarlo."
+      characters:
+      - id: ravensworth
+        name: {english: "Lady Ravensworth", spanish: "Lady Ravensworth"}
+        pick: {english: "Lady Cordelia Ravensworth, Mistress of Ceremonies: the Empire is a show, so let it be the greatest show on Earth.", spanish: "Lady Cordelia Ravensworth, Maestra de Ceremonias: el Imperio es un espectáculo; que sea el más grande del mundo."}
+        first: 10
+        effects: [{effect: add_variable, var: ZAL_pompa, value: 5}]
+      - id: wrexham
+        name: {english: "Lord Wrexham", spanish: "Lord Wrexham"}
+        pick: {english: "Field Marshal Lord Augustus Wrexham: an Empire needs a victory, not a parade.", spanish: "El Mariscal de Campo Lord Augustus Wrexham: un Imperio necesita una victoria, no un desfile."}
+        first: 20
+        effects: [{effect: army_experience, value: 10}]
+      - id: wexley
+        name: {english: "Professor Wexley", spanish: "La Profesora Wexley"}
+        pick: {english: "Professor Ada Wexley, Royal Steam Society: show the world a marvel nobody else can build.", spanish: "La Profesora Ada Wexley, de la Real Sociedad del Vapor: mostrarle al mundo una maravilla que nadie más puede construir."}
+        first: 30
+        effects: [{effect: tech_bonus, category: industry, bonus: 0.25, uses: 1}]
+
+      nodes:
+      # ------------------------------------------------------------- Ravensworth
+      - id: 10
+        who: ravensworth
+        title: {english: "The Greatest Show", spanish: "El Espectáculo Más Grande"}
+        desc:
+          english: "Lady Ravensworth wants a procession from Westminster to St Paul's with every regiment, every airship and an elephant. The Treasury has found the regiments and the airships. Nobody can find an elephant."
+          spanish: "Lady Ravensworth quiere una procesión de Westminster a San Pablo con todos los regimientos, todos los dirigibles y un elefante. El Tesoro consiguió los regimientos y los dirigibles. Nadie consigue un elefante."
+        plate:
+          art: "A theatre director's workshop turned into a war room: an enormous painted model of London covered in tiny paper soldiers, airships on strings and a toy elephant; a lady in violet silk with a long cigarette holder leans over it like a general over a battlefield; around her, exhausted seamstresses sew flags by gaslight and a bewildered Treasury clerk holds an unpaid bill as long as a scroll; warm, chaotic, theatrical chiaroscuro"
+          text:
+            english: "Cordelia Ravensworth directed Shakespeare in the West End for twenty years, back when there were electric lights to direct it with. When the lights went out she kept directing, by candle, then by gas, and when the Crown needed someone to teach a shy riding instructor how to be a queen, they sent for her.\n\nShe taught Victoria to wave from the wrist. She taught the Lords to bow without falling over. Now she has a model of London on her billiard table, two thousand paper soldiers, forty airships on strings and a little wooden elephant, and she has not slept in four days.\n\n'An Empire,' she tells the Treasury clerk who has come to complain about the cost, 'is the most expensive play ever staged, darling. The audience is the whole world, and it never leaves its seat.' She needs money, and she needs the people to believe. She can only ask for one of the two first."
+            spanish: "Cordelia Ravensworth dirigió Shakespeare en el West End durante veinte años, cuando todavía había luces eléctricas con las que dirigirlo. Cuando se apagaron, siguió dirigiendo, a vela, después a gas, y cuando la Corona necesitó a alguien que le enseñara a una instructora de equitación tímida a ser reina, la mandaron a buscar.\n\nLe enseñó a Victoria a saludar con la muñeca. Les enseñó a los Lores a hacer una reverencia sin caerse. Ahora tiene una maqueta de Londres sobre la mesa de billar, dos mil soldaditos de papel, cuarenta dirigibles colgando de hilos y un elefantito de madera, y hace cuatro días que no duerme.\n\n'Un Imperio', le dice al empleado del Tesoro que vino a quejarse del costo, 'es la obra más cara que se haya montado, querido. El público es el mundo entero, y nunca se levanta de la butaca.' Necesita plata, y necesita que la gente crea. Solo puede pedir una de las dos primero."
+        options:
+        - name: {english: "Ask the Lords for money. Spectacle first.", spanish: "Pedirles plata a los Lores. Primero el espectáculo."}
+          effects: [{effect: add_political_power, value: -25}, {effect: add_variable, var: ZAL_pompa, value: 8}]
+          next: 11
+        - name: {english: "Go to the people first. Street parties in every town.", spanish: "Ir primero a la gente. Fiestas en la calle en cada pueblo."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 12
+      - id: 11
+        who: ravensworth
+        title: {english: "The Lords Pay Up", spanish: "Los Lores Pagan"}
+        desc:
+          english: "The Lords opened their purses, and with them their demands: seats of honour, new titles and a law against mocking the peerage in music halls. Cordelia can give them what they want, or find a cleverer way to keep them happy."
+          spanish: "Los Lores abrieron la billetera, y con ella sus exigencias: asientos de honor, títulos nuevos y una ley contra burlarse de la nobleza en los music halls. Cordelia puede darles lo que quieren, o encontrar una manera más astuta de tenerlos contentos."
+        options:
+        - name: {english: "Give them the titles. Peers are cheap.", spanish: "Darles los títulos. Los pares salen baratos."}
+          skulls: 1
+          effects: [{effect: add_political_power, value: 50}, {effect: add_stability, value: -0.02}]
+          next: 13
+        - name: {english: "Put them in the show: every Lord marches on foot.", spanish: "Ponerlos en el espectáculo: cada Lord desfila a pie."}
+          effects: [{effect: add_variable, var: ZAL_pompa, value: 5}]
+          next: 13
+      - id: 12
+        who: ravensworth
+        title: {english: "Bunting in Wigan", spanish: "Banderines en Wigan"}
+        desc:
+          english: "The street parties are a triumph in the south and a scandal in the north, where the old Luddite towns hang the bunting upside down. Cordelia can send the Jubilee to the north in person, or let the north sulk and keep the momentum."
+          spanish: "Las fiestas en la calle son un triunfo en el sur y un escándalo en el norte, donde los viejos pueblos luditas cuelgan los banderines al revés. Cordelia puede llevar el Jubileo al norte en persona, o dejar que el norte se enoje y seguir adelante."
+        options:
+        - name: {english: "Take the Queen to Wigan. In a third-class carriage.", spanish: "Llevar a la Reina a Wigan. En un vagón de tercera."}
+          effects: [{effect: add_stability, value: 0.03}, {effect: add_political_power, value: -20}]
+          next: 13
+        - name: {english: "The south is enough. Let the season end here, in glory.", spanish: "Con el sur alcanza. Que la temporada termine acá, con gloria."}
+          next: 107
+      - id: 13
+        who: ravensworth
+        title: {english: "The Rehearsal", spanish: "El Ensayo"}
+        desc:
+          english: "The dress rehearsal goes wrong in every possible way: an airship catches fire, a regiment marches into the Thames and the Queen laughs at the wrong moment. The papers want a culprit. Cordelia can take the blame herself or let the papers have the Treasury."
+          spanish: "El ensayo general sale mal de todas las maneras posibles: un dirigible se prende fuego, un regimiento marcha hacia adentro del Támesis y la Reina se ríe en el momento equivocado. Los diarios quieren un culpable. Cordelia puede cargar la culpa ella o darles el Tesoro a los diarios."
+        options:
+        - name: {english: "Take the blame. A director answers for her stage.", spanish: "Cargar la culpa. Una directora responde por su escenario."}
+          effects: [{effect: flag, value: ZALC_ravensworth_firme}, {effect: add_political_power, value: -30}]
+          next: 14
+        - name: {english: "Blame the Treasury. Everybody hates the Treasury.", spanish: "Culpar al Tesoro. Todos odian al Tesoro."}
+          skulls: 1
+          effects: [{effect: add_political_power, value: 30}]
+          next: 14
+      - id: 14
+        who: ravensworth
+        title: {english: "The Republicans' Pamphlet", spanish: "El Panfleto Republicano"}
+        desc:
+          english: "Two weeks before the Jubilee, a pamphlet appears in every pub: 'Sixty Years of What?'. It is funny, it is cruel and it is everywhere. Cordelia can answer it with a better joke, or have the printers closed."
+          spanish: "Dos semanas antes del Jubileo aparece un panfleto en cada pub: '¿Sesenta Años de Qué?'. Es gracioso, es cruel y está en todas partes. Cordelia puede contestarlo con un chiste mejor, o hacer cerrar las imprentas."
+        options:
+        - name: {english: "Answer with a better joke. The Queen will read it herself.", spanish: "Contestar con un chiste mejor. La Reina lo va a leer en persona."}
+          effects: [{effect: add_variable, var: ZAL_pompa, value: 5}]
+          next: 15
+        - name: {english: "Close the printers.", spanish: "Cerrar las imprentas."}
+          skulls: 1
+          effects: [{effect: add_stability, value: 0.02}, {effect: add_war_support, value: 0.02}]
+          next: 15
+        - name: {english: "Cancel the procession and hold a quiet service instead.", spanish: "Cancelar la procesión y hacer una misa tranquila."}
+          next: 109
+      - id: 15
+        who: ravensworth
+        title: {english: "Jubilee Night", spanish: "La Noche del Jubileo"}
+        desc:
+          english: "The procession has ended, the fireworks are about to begin and a crowd of republicans has filled Trafalgar Square, singing. Cordelia has one decision left: let the Queen walk out among them, or keep her on the balcony and let the Guards clear the square. Whatever she chose at the rehearsal, the crowd remembers it."
+          spanish: "La procesión terminó, los fuegos artificiales están por empezar y una multitud de republicanos llenó Trafalgar Square, cantando. A Cordelia le queda una sola decisión: que la Reina baje a caminar entre ellos, o dejarla en el balcón y que la Guardia despeje la plaza. Lo que haya elegido en el ensayo, la multitud lo recuerda."
+        plate:
+          art: "Trafalgar Square at night during a Victorian-style jubilee, gas lamps and the first fireworks bursting over Nelson's Column; on one side a balcony draped in crimson where a young queen in white hesitates, a lady in violet whispering at her ear; below, a vast crowd of workers in flat caps with red banners and torches, singing, facing a line of Guards in bearskins with fixed bayonets; the whole fate of a nation hanging in one breath; Delacroix-like crowd, dramatic firelight"
+          text:
+            english: "The procession was perfect. Two thousand soldiers marched in step, forty airships crossed the sky in the shape of a crown, and somewhere in the middle of it a borrowed circus elephant carried the Lord Chancellor to St Paul's without incident. The papers are already writing the word 'triumph'.\n\nBut Trafalgar Square is full. Twenty thousand people from the north and the east, from the towns that hung the bunting upside down, are singing an old song about bread and roses under Nelson's Column. They are not violent. Not yet. The Guards have fixed bayonets.\n\nVictoria turns to Cordelia, as she always does at the edge of the stage. 'What do I do?' Cordelia has directed a thousand last acts. She knows that the ending of a play is written long before the curtain: the audience only believes the last scene if the first ones were honest. She thinks of the rehearsal, of what she promised the papers, and of what she promised the Queen."
+            spanish: "La procesión fue perfecta. Dos mil soldados marcharon al paso, cuarenta dirigibles cruzaron el cielo con forma de corona, y en algún lugar del medio un elefante de circo prestado llevó al Lord Canciller hasta San Pablo sin un solo incidente. Los diarios ya están escribiendo la palabra 'triunfo'.\n\nPero Trafalgar Square está llena. Veinte mil personas del norte y del este, de los pueblos que colgaron los banderines al revés, cantan una canción vieja sobre pan y rosas al pie de la columna de Nelson. No son violentos. Todavía no. La Guardia caló bayonetas.\n\nVictoria se da vuelta hacia Cordelia, como siempre al borde del escenario. '¿Qué hago?' Cordelia dirigió mil últimos actos. Sabe que el final de una obra se escribe mucho antes del telón: el público solo cree la última escena si las primeras fueron honestas. Piensa en el ensayo, en lo que les prometió a los diarios, y en lo que le prometió a la Reina."
+        options:
+        - name: {english: "Go down to them, Majesty. Walk among your people.", spanish: "Baje con ellos, Majestad. Camine entre su gente."}
+          when: {flag: ZALC_ravensworth_firme}
+          next: 101
+        - name: {english: "Go down to them, Majesty. Walk among your people.", spanish: "Baje con ellos, Majestad. Camine entre su gente."}
+          when: {not_flag: ZALC_ravensworth_firme}
+          next: 104
+        - name: {english: "Stay on the balcony. Let the Guards clear the square.", spanish: "Quédese en el balcón. Que la Guardia despeje la plaza."}
+          when: {flag: ZALC_ravensworth_firme}
+          next: 104
+        - name: {english: "Stay on the balcony. Let the Guards clear the square.", spanish: "Quédese en el balcón. Que la Guardia despeje la plaza."}
+          when: {not_flag: ZALC_ravensworth_firme}
+          next: 101
+
+      # ------------------------------------------------------------- Wrexham
+      - id: 20
+        who: wrexham
+        title: {english: "An Empire Needs a Victory", spanish: "Un Imperio Necesita una Victoria"}
+        desc:
+          english: "Lord Wrexham has unrolled a map of the world on the Queen's breakfast table. 'Parades are for nations that have already won something, Ma'am.' He proposes a great naval review to frighten the Continent, or an expedition to plant the flag somewhere that will not shoot back."
+          spanish: "Lord Wrexham desplegó un mapa del mundo sobre la mesa del desayuno de la Reina. 'Los desfiles son para naciones que ya ganaron algo, Señora.' Propone una gran revista naval para asustar al Continente, o una expedición para plantar la bandera en algún lugar que no dispare."
+        plate:
+          art: "An old field marshal with enormous white whiskers and a scarlet tunic covered in medals unrolls a vast hand-painted map of the world across a royal breakfast table, knocking over teacups and marmalade; the young queen in a morning dress watches with wide eyes, a half-eaten toast in her hand; through tall windows, the grey North Sea and ironclads with solar sails; comic and heroic at once, like a Victorian history painting of a war council"
+          text:
+            english: "Augustus Wrexham was the last professional soldier of the old Britain. He retired in 2086, the year the machines broke, to a farm in Shropshire where he raised sheep and wrote a three-volume history of the Peninsular War that nobody published. When the Crown came back, it found him in his uniform, which he had kept pressed for fourteen years, just in case.\n\nHe does not believe in jubilees. He believes in the Royal Navy, in the square formation and in the immortal principle that a nation which has won nothing has nothing to celebrate. 'Give me a victory, Ma'am,' he says, 'and I will give you sixty years of glory. People will swear they remember them.'\n\nThe Queen asks, timidly, who exactly Albion should defeat. Wrexham has a list. It is a long list, and some of the countries on it no longer exist."
+            spanish: "Augustus Wrexham fue el último soldado profesional de la vieja Gran Bretaña. Se retiró en 2086, el año en que se rompieron las máquinas, a una granja de Shropshire donde crió ovejas y escribió una historia de la Guerra Peninsular en tres tomos que nadie publicó. Cuando volvió la Corona, lo encontró de uniforme, que había mantenido planchado durante catorce años, por las dudas.\n\nNo cree en jubileos. Cree en la Armada Real, en la formación en cuadro y en el principio inmortal de que una nación que no ganó nada no tiene nada que festejar. 'Deme una victoria, Señora', dice, 'y le doy sesenta años de gloria. La gente va a jurar que se acuerda.'\n\nLa Reina pregunta, tímida, a quién tendría que derrotar Albión exactamente. Wrexham tiene una lista. Es una lista larga, y algunos de los países que figuran ya no existen."
+        options:
+        - name: {english: "The naval review. Let the Continent count our guns.", spanish: "La revista naval. Que el Continente cuente nuestros cañones."}
+          effects: [{effect: navy_experience, value: 15}]
+          next: 21
+        - name: {english: "The expedition. Plant the flag somewhere.", spanish: "La expedición. Plantar la bandera en algún lado."}
+          effects: [{effect: army_experience, value: 15}]
+          next: 22
+      - id: 21
+        who: wrexham
+        title: {english: "The Spithead Review", spanish: "La Revista de Spithead"}
+        desc:
+          english: "Eighty ironclads in line at Spithead, firing salutes for an hour. The foreign attachés are impressed; one of them, from Rome, asks quietly whether the guns fire anything else. Wrexham can show them, or let the mystery work."
+          spanish: "Ochenta acorazados en línea en Spithead, disparando salvas durante una hora. Los agregados extranjeros están impresionados; uno de ellos, el de Roma, pregunta en voz baja si los cañones disparan otra cosa. Wrexham puede mostrárselo, o dejar que el misterio trabaje."
+        options:
+        - name: {english: "Show them. Sink an old hulk with live rounds.", spanish: "Mostrárselo. Hundir un casco viejo con munición de verdad."}
+          effects: [{effect: add_war_support, value: 0.03}, {effect: add_political_power, value: -15}]
+          next: 23
+        - name: {english: "Smile and let them wonder.", spanish: "Sonreír y dejar que se pregunten."}
+          effects: [{effect: add_political_power, value: 20}]
+          next: 23
+      - id: 22
+        who: wrexham
+        title: {english: "The Rockall Expedition", spanish: "La Expedición a Rockall"}
+        desc:
+          english: "The expedition sailed to plant the flag on Rockall, a rock in the Atlantic with no people, no water and, as it turns out, a colony of very aggressive seabirds. The press finds it hilarious. Wrexham can insist it was a strategic triumph or call the whole thing off with dignity."
+          spanish: "La expedición zarpó a plantar la bandera en Rockall, una roca del Atlántico sin gente, sin agua y, según se descubrió, con una colonia de aves marinas muy agresivas. A la prensa le parece graciosísimo. Wrexham puede insistir en que fue un triunfo estratégico o suspender todo con dignidad."
+        options:
+        - name: {english: "A strategic triumph. Medals for everyone, including the birds.", spanish: "Un triunfo estratégico. Medallas para todos, pájaros incluidos."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZAL_pompa, value: 6}]
+          next: 23
+        - name: {english: "Call it off with dignity. Some victories are not worth the birds.", spanish: "Suspenderla con dignidad. Hay victorias que no valen los pájaros."}
+          next: 110
+      - id: 23
+        who: wrexham
+        title: {english: "The Regiments of the North", spanish: "Los Regimientos del Norte"}
+        desc:
+          english: "The Jubilee parade needs the northern regiments, recruited from old Luddite towns. Their colonels ask for one thing in return: that the Crown forgive the Night of the Broken Servers and stop calling them rebels. Wrexham hates forgiving anyone."
+          spanish: "El desfile del Jubileo necesita a los regimientos del norte, reclutados en los viejos pueblos luditas. Sus coroneles piden una sola cosa a cambio: que la Corona perdone la Noche de los Servidores Rotos y deje de llamarlos rebeldes. Wrexham odia perdonar a nadie."
+        options:
+        - name: {english: "Forgive them. A soldier who marches for the Queen is the Queen's.", spanish: "Perdonarlos. Un soldado que marcha por la Reina es de la Reina."}
+          effects: [{effect: flag, value: ZALC_wrexham_firme}, {effect: add_stability, value: 0.03}]
+          next: 24
+        - name: {english: "No pardons. They march, or they are deserters.", spanish: "Ningún perdón. Marchan, o son desertores."}
+          skulls: 1
+          effects: [{effect: add_war_support, value: 0.03}]
+          next: 24
+      - id: 24
+        who: wrexham
+        title: {english: "The Old Soldier's Heart", spanish: "El Corazón del Viejo Soldado"}
+        desc:
+          english: "Wrexham collapses on the parade ground during the last rehearsal. The doctors say his heart will hold if he rests. He says he will rest when he is dead. The Jubilee is in a month."
+          spanish: "Wrexham se desploma en la plaza de armas durante el último ensayo. Los médicos dicen que el corazón le va a aguantar si descansa. Él dice que va a descansar cuando esté muerto. El Jubileo es en un mes."
+        options:
+        - name: {english: "He leads the parade. On horseback.", spanish: "Encabeza el desfile. A caballo."}
+          effects: [{effect: add_war_support, value: 0.02}]
+          next: 25
+        - name: {english: "He leads the parade. In a carriage, with a blanket.", spanish: "Encabeza el desfile. En carruaje, con una manta."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 25
+        - name: {english: "Order him to retire. He has earned his sheep.", spanish: "Ordenarle que se retire. Se ganó sus ovejas."}
+          next: 108
+      - id: 25
+        who: wrexham
+        title: {english: "The Parade Ground", spanish: "La Plaza de Armas"}
+        desc:
+          english: "Jubilee morning. The regiments are formed on Horse Guards Parade when the news arrives: the northern battalions have refused to march past the Guards who fired on their fathers in 2089. Wrexham can order them to march, or march with them, at their head, past the Guards. The regiments remember what he did with their pardon."
+          spanish: "Mañana del Jubileo. Los regimientos están formados en Horse Guards Parade cuando llega la noticia: los batallones del norte se niegan a desfilar frente a la Guardia que les disparó a sus padres en 2089. Wrexham puede ordenarles que marchen, o marchar con ellos, a la cabeza, frente a la Guardia. Los regimientos recuerdan lo que hizo con su perdón."
+        plate:
+          art: "Horse Guards Parade on a grey jubilee morning; two great blocks of soldiers face each other, one in bearskins and gold, the other in worn khaki with flat caps and Luddite red scarves; between them, alone on a white horse, a very old field marshal with a blanket fallen from his shoulders draws his sabre, his face grey and determined; the young queen watches from a distant stand, hands at her mouth; tension of a battle that has not started; monumental academic history painting"
+          text:
+            english: "They fired on the Luddites in 2089, on the steps of Manchester Town Hall: the Guards of the old provisional government, frightened boys with rifles, firing on frightened men with hammers. Eleven dead. Their sons are now the northern battalions of Her Majesty's army, and their sons will not march past the Guards.\n\nThe colonels have sent a message, very polite and very firm. The battalions are formed, rifles grounded, at the end of the parade ground. They will not move. On the other side, the Guards in their bearskins stand to attention, the same regiment, new faces, the same old shame.\n\nWrexham sits on his white horse between them. His heart is hammering in a way the doctors warned him about. He is seventy-nine years old and he has commanded men in three wars, and he knows that whatever he does in the next minute is the only thing anyone will remember about him. The men of the north watch him. They remember whether he forgave them."
+            spanish: "Les dispararon a los luditas en 2089, en las escaleras del Ayuntamiento de Manchester: la Guardia del viejo gobierno provisional, chicos asustados con fusiles, tirándoles a hombres asustados con martillos. Once muertos. Sus hijos son hoy los batallones del norte del ejército de Su Majestad, y sus hijos no van a desfilar frente a la Guardia.\n\nLos coroneles mandaron un mensaje, muy educado y muy firme. Los batallones están formados, con el fusil en tierra, en el fondo de la plaza. No se van a mover. Del otro lado, la Guardia con sus gorros de piel está firme: el mismo regimiento, caras nuevas, la misma vieja vergüenza.\n\nWrexham está sentado en su caballo blanco entre los dos. El corazón le golpea como le advirtieron los médicos. Tiene setenta y nueve años, mandó hombres en tres guerras, y sabe que lo que haga en el próximo minuto es lo único que alguien va a recordar de él. Los hombres del norte lo miran. Recuerdan si los perdonó."
+        options:
+        - name: {english: "March at their head, past the Guards.", spanish: "Marchar a la cabeza de ellos, frente a la Guardia."}
+          when: {flag: ZALC_wrexham_firme}
+          next: 102
+        - name: {english: "March at their head, past the Guards.", spanish: "Marchar a la cabeza de ellos, frente a la Guardia."}
+          when: {not_flag: ZALC_wrexham_firme}
+          next: 105
+        - name: {english: "Order them to march. An army obeys.", spanish: "Ordenarles que marchen. Un ejército obedece."}
+          when: {flag: ZALC_wrexham_firme}
+          next: 105
+        - name: {english: "Order them to march. An army obeys.", spanish: "Ordenarles que marchen. Un ejército obedece."}
+          when: {not_flag: ZALC_wrexham_firme}
+          next: 102
+
+      # ------------------------------------------------------------- Wexley
+      - id: 30
+        who: wexley
+        title: {english: "A Marvel for the Jubilee", spanish: "Una Maravilla para el Jubileo"}
+        desc:
+          english: "Professor Wexley proposes a marvel that only Albion could build: the Leviathan, the largest airship ever made, or the Iron Duke, a steam locomotive that runs on hydrogen from London to Edinburgh in three hours."
+          spanish: "La Profesora Wexley propone una maravilla que solo Albión podría construir: el Leviatán, el dirigible más grande que se haya hecho, o el Duque de Hierro, una locomotora a vapor que anda con hidrógeno y va de Londres a Edimburgo en tres horas."
+        plate:
+          art: "A vast Victorian iron-and-glass hangar like the Crystal Palace, full of steam and sparks; inside, the half-built skeleton of an immense brass airship rises like a cathedral; a woman scientist in a leather apron and brass goggles climbs a ladder with blueprints under her arm while hundreds of workers in shirtsleeves rivet the ribs; a little bronze automaton serves tea at the foot of the ladder; light pouring through the glass roof, wonder and labour, Menzel's Iron Rolling Mill crossed with Turner"
+          text:
+            english: "Ada Wexley has never seen a contradiction between steam and the future. Her bronze automatons serve tea at the Royal Society, her boilers burn hydrogen split from Thames water, and her lecture on 'Why Nobody Needs a Microchip' has been attended by more transhumanists than she would like to admit.\n\nWhen the Queen asked for a marvel, Wexley came to the palace with two rolls of blueprints. The first is the Leviathan: a brass airship four hundred metres long, with a ballroom, a botanical garden and a hull that hums in the wind like a cello. The second is the Iron Duke: a locomotive that would cross the island in three hours on rails laid by hand and powered by water.\n\n'One will make the world look up,' she tells the Queen. 'The other will make Albion go forward. I can build only one by the Jubilee, Ma'am, and even that only if nobody asks me how much it costs.'"
+            spanish: "Ada Wexley nunca vio una contradicción entre el vapor y el futuro. Sus autómatas de bronce sirven el té en la Real Sociedad, sus calderas queman hidrógeno sacado del agua del Támesis, y a su conferencia 'Por Qué Nadie Necesita un Microchip' fueron más transhumanistas de los que le gustaría admitir.\n\nCuando la Reina pidió una maravilla, Wexley llegó al palacio con dos rollos de planos. El primero es el Leviatán: un dirigible de bronce de cuatrocientos metros, con salón de baile, jardín botánico y un casco que zumba con el viento como un violonchelo. El segundo es el Duque de Hierro: una locomotora que cruzaría la isla en tres horas sobre vías tendidas a mano y movida por agua.\n\n'Uno va a hacer que el mundo mire para arriba', le dice a la Reina. 'El otro va a hacer que Albión vaya para adelante. Para el Jubileo solo puedo construir uno, Señora, y eso si nadie me pregunta cuánto cuesta.'"
+        options:
+        - name: {english: "The Leviathan. Let the world look up.", spanish: "El Leviatán. Que el mundo mire para arriba."}
+          effects: [{effect: air_experience, value: 15}, {effect: add_variable, var: ZAL_pompa, value: 5}]
+          next: 31
+        - name: {english: "The Iron Duke. Let Albion go forward.", spanish: "El Duque de Hierro. Que Albión vaya para adelante."}
+          effects: [{effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}]
+          next: 32
+      - id: 31
+        who: wexley
+        title: {english: "The Leviathan Rises", spanish: "El Leviatán Se Eleva"}
+        desc:
+          english: "The Leviathan's frame is finished, but the hydrogen cells leak. Wexley can delay the launch until they are safe, or use the old Victorian solution: more varnish and a lot of prayer."
+          spanish: "El armazón del Leviatán está terminado, pero las celdas de hidrógeno pierden. Wexley puede atrasar el lanzamiento hasta que sean seguras, o usar la vieja solución victoriana: más barniz y mucha oración."
+        options:
+        - name: {english: "Delay it. Nobody remembers a late airship; everybody remembers a burning one.", spanish: "Atrasarlo. Nadie se acuerda de un dirigible que llegó tarde; todos se acuerdan de uno que se quemó."}
+          effects: [{effect: flag, value: ZALC_wexley_firme}, {effect: add_political_power, value: -25}]
+          next: 33
+        - name: {english: "Varnish and prayer.", spanish: "Barniz y oración."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZAL_pompa, value: 5}]
+          next: 33
+      - id: 32
+        who: wexley
+        title: {english: "The Iron Duke's Rails", spanish: "Las Vías del Duque de Hierro"}
+        desc:
+          english: "Laying four hundred miles of rail by hand needs forty thousand navvies. The unions of the north want a fair wage and an eight-hour day. The Treasury wants the convicts of the prison hulks instead."
+          spanish: "Tender seiscientos kilómetros de vía a mano necesita cuarenta mil peones. Los sindicatos del norte quieren un salario justo y jornada de ocho horas. El Tesoro quiere, en cambio, a los presos de los barcos prisión."
+        options:
+        - name: {english: "Hire the unions. Pay them well.", spanish: "Contratar a los sindicatos. Pagarles bien."}
+          effects: [{effect: flag, value: ZALC_wexley_firme}, {effect: add_stability, value: 0.03}, {effect: add_political_power, value: -30}]
+          next: 33
+        - name: {english: "The convicts. Cheap and quiet.", spanish: "Los presos. Baratos y callados."}
+          skulls: 1
+          effects: [{effect: add_political_power, value: 25}]
+          next: 33
+        - name: {english: "Build only to York and call it a success.", spanish: "Construir solo hasta York y decir que fue un éxito."}
+          next: 107
+      - id: 33
+        who: wexley
+        title: {english: "The Transhumanist Visitor", spanish: "La Visitante Transhumanista"}
+        desc:
+          english: "A young engineer from Edinburgh with a port behind her ear asks to see the workshops. She offers a single chip that would make Wexley's marvel twice as safe. Nobody would ever know."
+          spanish: "Una joven ingeniera de Edimburgo con un puerto detrás de la oreja pide ver los talleres. Ofrece un solo chip que haría la maravilla de Wexley el doble de segura. Nadie se enteraría nunca."
+        options:
+        - name: {english: "Accept the chip, quietly.", spanish: "Aceptar el chip, en silencio."}
+          skulls: 1
+          effects: [{effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}]
+          next: 34
+        - name: {english: "Show her the door, and a cup of tea on the way out.", spanish: "Mostrarle la puerta, y una taza de té de salida."}
+          effects: [{effect: add_variable, var: ZAL_pompa, value: 4}]
+          next: 34
+      - id: 34
+        who: wexley
+        title: {english: "The Inspection", spanish: "La Inspección"}
+        desc:
+          english: "The Lords demand an inspection of the marvel before the Jubilee. Wexley can open the workshops to everyone, press included, or receive only the Lords, with champagne."
+          spanish: "Los Lores exigen inspeccionar la maravilla antes del Jubileo. Wexley puede abrir los talleres a todos, prensa incluida, o recibir solo a los Lores, con champán."
+        options:
+        - name: {english: "Open the doors to everyone.", spanish: "Abrir las puertas a todos."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 35
+        - name: {english: "Only the Lords. And the champagne.", spanish: "Solo los Lores. Y el champán."}
+          effects: [{effect: add_political_power, value: 25}]
+          next: 35
+      - id: 35
+        who: wexley
+        title: {english: "The Pressure Gauge", spanish: "El Manómetro"}
+        desc:
+          english: "Jubilee day. The marvel is ready and half of Albion is watching when the pressure gauge starts to climb past the red line. Wexley can let it run, trusting how it was built, or open the valves and stop it in front of the whole country. She knows better than anyone how honestly it was built."
+          spanish: "Día del Jubileo. La maravilla está lista y media Albión mira cuando el manómetro empieza a subir más allá de la línea roja. Wexley puede dejarla andar, confiando en cómo se construyó, o abrir las válvulas y frenarla frente a todo el país. Ella sabe mejor que nadie con cuánta honestidad se construyó."
+        plate:
+          art: "Jubilee day at a vast Victorian station of iron and glass crowded with flags and spectators in top hats and bonnets; at the centre a colossal brass machine wreathed in steam; on its platform a woman scientist in goggles grips a great valve wheel, staring at a pressure gauge whose needle trembles at the red line; the young queen in white beside the ribbon with golden scissors; the crowd unaware, a child pointing; suspense frozen in one instant, Frith's Railway Station painted as a thriller"
+          text:
+            english: "Half of Albion is here. The Queen is holding golden scissors over a crimson ribbon, the band of the Grenadier Guards has started 'Rule, Britannia!', and on the platform of her marvel Ada Wexley is looking at a needle.\n\nThe needle should not be where it is. Every gauge in the cabin has crept past the red line in the last four minutes, slowly, the way a kettle starts to sing. It might be a faulty gauge. It might be the heat of the crowd and the sun on the brass. It might be something she did, or did not do, on a long night months ago when she was tired and the Treasury was shouting.\n\nShe built this machine with her hands. She knows every rivet, every weld, every shortcut. If she opens the valves now, the marvel dies in a cloud of steam in front of the whole world and Albion becomes a joke. If she does not, and she is wrong, it becomes something much worse than a joke. The Queen looks at her and smiles, waiting for the signal."
+            spanish: "Media Albión está acá. La Reina sostiene unas tijeras de oro sobre una cinta carmesí, la banda de los Granaderos empezó 'Rule, Britannia!' y, sobre la plataforma de su maravilla, Ada Wexley mira una aguja.\n\nLa aguja no debería estar donde está. Cada manómetro de la cabina pasó la línea roja en los últimos cuatro minutos, despacio, como empieza a silbar una pava. Puede ser un manómetro fallado. Puede ser el calor de la multitud y el sol sobre el bronce. Puede ser algo que hizo, o que no hizo, una noche larga hace meses cuando estaba cansada y el Tesoro gritaba.\n\nConstruyó esta máquina con sus manos. Conoce cada remache, cada soldadura, cada atajo. Si abre las válvulas ahora, la maravilla muere en una nube de vapor delante del mundo entero y Albión se vuelve un chiste. Si no las abre, y se equivoca, se vuelve algo mucho peor que un chiste. La Reina la mira y le sonríe, esperando la señal."
+        options:
+        - name: {english: "Let it run. Trust the work.", spanish: "Dejarla andar. Confiar en el trabajo."}
+          when: {flag: ZALC_wexley_firme}
+          next: 103
+        - name: {english: "Let it run. Trust the work.", spanish: "Dejarla andar. Confiar en el trabajo."}
+          when: {not_flag: ZALC_wexley_firme}
+          next: 106
+        - name: {english: "Open the valves. Stop it now.", spanish: "Abrir las válvulas. Frenarla ya."}
+          when: {flag: ZALC_wexley_firme}
+          next: 106
+        - name: {english: "Open the valves. Stop it now.", spanish: "Abrir las válvulas. Frenarla ya."}
+          when: {not_flag: ZALC_wexley_firme}
+          next: 103
+
+      endings:
+      # ------------------------------------------------------------ victorias
+      - id: 101
+        kind: objetivo
+        title: {english: "The Queen in the Square", spanish: "La Reina en la Plaza"}
+        desc:
+          english: "Victoria III went down to Trafalgar Square and the crowd parted for her. By midnight republicans and Guards were singing the same song. The Steam Crown is no longer a costume: it is Albion."
+          spanish: "Victoria III bajó a Trafalgar Square y la multitud se abrió para ella. A medianoche republicanos y guardias cantaban la misma canción. La Corona de Vapor ya no es un disfraz: es Albión."
+        plate:
+          art: "Night in Trafalgar Square lit by fireworks in crimson and gold: a young queen in a white gown walks alone through a vast crowd of workers in flat caps who have lowered their red banners and taken off their caps; an old miner offers her his hand; behind, the Guards have unfixed their bayonets; joy, tears and fireworks reflected in the fountains; triumphant like Delacroix but tender, an image for a banknote"
+          text:
+            english: "She did not wait for the Guards to make a path. Victoria III gathered up her ridiculous train in both hands, went down the steps of the balcony two at a time and walked into twenty thousand republicans as if she were walking into a riding school.\n\nThe crowd opened. Not out of fear: out of sheer astonishment. An old miner from Wigan held out his hand, and she shook it, and then she asked him what the song was called, and he told her, and she sang it with them, badly, in the wrong key.\n\nBy midnight the Guards had taken off their bearskins and the republicans had put their banners away, and the fireworks were going off over Nelson's Column, and nobody quite knew any more who had won. The Times called it the night Albion stopped pretending. Cordelia Ravensworth watched from the balcony and cried, for the first time in forty years, at a scene she had not directed."
+            spanish: "No esperó a que la Guardia le abriera paso. Victoria III juntó con las dos manos su cola ridícula, bajó los escalones del balcón de a dos y entró entre veinte mil republicanos como quien entra a una escuela de equitación.\n\nLa multitud se abrió. No por miedo: por puro asombro. Un minero viejo de Wigan le tendió la mano, y ella se la estrechó, y después le preguntó cómo se llamaba la canción, y él se lo dijo, y ella la cantó con ellos, mal, desafinando.\n\nA medianoche la Guardia se había sacado los gorros de piel y los republicanos habían guardado las banderas, y los fuegos artificiales estallaban sobre la columna de Nelson, y ya nadie sabía bien quién había ganado. The Times lo llamó la noche en que Albión dejó de fingir. Cordelia Ravensworth miró desde el balcón y lloró, por primera vez en cuarenta años, frente a una escena que no había dirigido."
+        close: {english: "God save the Queen. Truly.", spanish: "Dios salve a la Reina. De verdad."}
+        effects:
+        - {effect: run, value: ZALC_victoria}
+      - id: 102
+        kind: objetivo
+        title: {english: "The Old Man's March", spanish: "La Marcha del Viejo"}
+        desc:
+          english: "Lord Wrexham marched at the head of the northern battalions past the Guards, and the Guards presented arms to them. Albion's army is one army now, and the world has seen it."
+          spanish: "Lord Wrexham marchó a la cabeza de los batallones del norte frente a la Guardia, y la Guardia les presentó armas. El ejército de Albión es uno solo, y el mundo lo vio."
+        plate:
+          art: "Horse Guards Parade in bright sun after rain: a very old field marshal on a white horse leads columns of northern soldiers in khaki and red scarves past a long line of Guards in scarlet and bearskins who present arms in salute; the old man's face is grey, his eyes wet, his sabre raised; the young queen stands up in her stand applauding; a rainbow over Whitehall; heroic, solemn, Meissonier's precision with Repin's emotion"
+          text:
+            english: "He did not give an order. He turned his horse, rode slowly to the end of the parade ground where the northern battalions stood with their rifles grounded, and took off his helmet in front of them. Then he turned his horse again and started walking it towards the Guards. Alone.\n\nAfter ten metres he heard the first boots behind him. Then all of them. Three thousand men of the north marched behind a seventy-nine-year-old field marshal whose heart the doctors had given up on, and when they reached the Guards, the Guards' colonel shouted the only order of the day: 'Present... arms!'\n\nThe regiment that fired in 2089 saluted the sons of the men it killed. Nobody in the stands spoke. Lord Wrexham rode the whole route, to the very end, and dismounted without help. That night the Queen made him a Duke. He asked if he could go home to his sheep. She said no."
+            spanish: "No dio ninguna orden. Dio vuelta el caballo, fue al paso hasta el fondo de la plaza donde los batallones del norte esperaban con el fusil en tierra y se sacó el casco frente a ellos. Después volvió a dar vuelta el caballo y empezó a llevarlo hacia la Guardia. Solo.\n\nA los diez metros oyó las primeras botas detrás. Después todas. Tres mil hombres del norte marcharon detrás de un mariscal de setenta y nueve años al que los médicos ya habían dado por perdido, y cuando llegaron frente a la Guardia, el coronel de la Guardia gritó la única orden del día: '¡Presenten... armas!'\n\nEl regimiento que disparó en 2089 saludó a los hijos de los hombres que mató. Nadie habló en las tribunas. Lord Wrexham hizo todo el recorrido, hasta el final, y desmontó sin ayuda. Esa noche la Reina lo nombró Duque. Él preguntó si podía volver a sus ovejas. Ella le dijo que no."
+        close: {english: "Present arms!", spanish: "¡Presenten armas!"}
+        effects:
+        - {effect: run, value: ZALC_victoria}
+        - {effect: army_experience, value: 50}
+      - id: 103
+        kind: objetivo
+        title: {english: "The Marvel of the Age", spanish: "La Maravilla de la Época"}
+        desc:
+          english: "Wexley's marvel held. The needle went back down, the crowd went wild and the newspapers of the whole world printed the same photograph. Albion has built something nobody else can."
+          spanish: "La maravilla de Wexley aguantó. La aguja volvió a bajar, la multitud enloqueció y los diarios del mundo entero publicaron la misma foto. Albión construyó algo que nadie más puede construir."
+        plate:
+          art: "A colossal brass marvel rising triumphant over a cheering crowd in a Victorian glass station, wreathed in white steam and Union flags; on its platform a woman scientist in goggles laughs with her arms in the air; top hats thrown into the air, children on shoulders, the young queen cutting the ribbon with golden scissors; sunlight through the glass roof like a cathedral; glorious, Turner's light and Frith's crowd"
+          text:
+            english: "She did nothing. That was the hardest thing Ada Wexley ever did: she kept her hands off the valve wheel and watched the needle, and she counted, the way her father taught her to count between lightning and thunder.\n\nAt twenty-three the needle stopped. At thirty it started to come down. At forty the safety valve sang one long clean note over the whole station, exactly as she had designed it to, and the crowd, who had never noticed anything, thought it was part of the show and roared.\n\nThe Queen cut the ribbon. The marvel moved. By evening every newspaper in the world had the same photograph on its front page: a woman in a leather apron laughing with her arms in the air on top of the most beautiful machine of the century. In Rome they called it a miracle. In the transhumanist north, where they know about machines, they called it honest work, which is higher praise."
+            spanish: "No hizo nada. Fue lo más difícil que hizo Ada Wexley en su vida: no tocó el volante de la válvula y miró la aguja, y contó, como le enseñó su padre a contar entre el relámpago y el trueno.\n\nA los veintitrés la aguja se frenó. A los treinta empezó a bajar. A los cuarenta la válvula de seguridad cantó una sola nota larga y limpia sobre toda la estación, exactamente como la había diseñado, y la multitud, que nunca se había dado cuenta de nada, creyó que era parte del espectáculo y rugió.\n\nLa Reina cortó la cinta. La maravilla se movió. A la noche cada diario del mundo tenía en la tapa la misma foto: una mujer con delantal de cuero riéndose con los brazos en alto arriba de la máquina más hermosa del siglo. En Roma lo llamaron un milagro. En el norte transhumanista, donde saben de máquinas, lo llamaron trabajo honesto, que es un elogio mayor."
+        close: {english: "Rule, Britannia!", spanish: "¡Reina, Britannia!"}
+        effects:
+        - {effect: run, value: ZALC_victoria}
+        - {effect: tech_bonus, category: industry, bonus: 1.0, uses: 2}
+      # ------------------------------------------------------------ guerras civiles
+      - id: 104
+        kind: negativo
+        title: {english: "The Night of the Broken Lamps", spanish: "La Noche de los Faroles Rotos"}
+        desc:
+          english: "The square did not believe the Crown. Someone threw a stone, someone fired, and by dawn the north had proclaimed the Commonwealth of the Commons. Albion is at war with itself."
+          spanish: "La plaza no le creyó a la Corona. Alguien tiró una piedra, alguien disparó, y al amanecer el norte había proclamado la Mancomunidad de los Comunes. Albión está en guerra consigo misma."
+        catastrophe:
+          rebellion: {cosmetic_tag: ZAL_COMUNES, ideology: democratic, size: 0.35, leader: {english: "Chairman Tom Ashworth", spanish: "Presidente Tom Ashworth"}}
+        plate:
+          art: "Trafalgar Square at night in chaos: gas lamps smashed, fires in the fountains, a line of Guards in bearskins firing a volley into smoke; workers with red banners and hammers charging through broken barricades; on the crimson balcony the young queen being pulled away by her ladies, her small crown falling; Nelson's Column black against the glow of burning buildings; Goya's Third of May meets Delacroix, tragic and furious"
+          text:
+            english: "Nobody knows who threw the first stone. The Guards say it came from the crowd; the crowd says it came from a window on the Strand. It does not matter. It hit a lamp, the lamp shattered, a horse reared, a nervous lieutenant shouted, and somebody fired.\n\nBy the time the smoke cleared there were four dead on the steps of the National Gallery, and the crowd that had come to sing was running through the streets of London breaking every gas lamp it could reach, so that by midnight the capital of the Steam Crown was in darkness, as dark as in 2086.\n\nAt dawn the trains from the north did not arrive. Manchester, Leeds and the valleys of Wales had proclaimed the Commonwealth of the Commons, and Tom Ashworth, who had led the Night of the Broken Servers twelve years before, was leading another night. The Queen did not cry. She asked for a map, and for Lord Wrexham."
+            spanish: "Nadie sabe quién tiró la primera piedra. La Guardia dice que vino de la multitud; la multitud dice que vino de una ventana del Strand. No importa. Pegó en un farol, el farol estalló, un caballo se encabritó, un teniente nervioso gritó, y alguien disparó.\n\nCuando se fue el humo había cuatro muertos en las escaleras de la National Gallery, y la multitud que había venido a cantar corría por las calles de Londres rompiendo cada farol que alcanzaba, de modo que a medianoche la capital de la Corona de Vapor estaba a oscuras, tan a oscuras como en 2086.\n\nAl amanecer los trenes del norte no llegaron. Manchester, Leeds y los valles de Gales habían proclamado la Mancomunidad de los Comunes, y Tom Ashworth, que había encabezado la Noche de los Servidores Rotos doce años antes, encabezaba otra noche. La Reina no lloró. Pidió un mapa, y a Lord Wrexham."
+        close: {english: "To arms, for the Crown.", spanish: "A las armas, por la Corona."}
+        effects:
+        - {effect: run, value: ZALC_guerra_civil}
+      - id: 105
+        kind: negativo
+        title: {english: "The Regiments Split", spanish: "Los Regimientos se Parten"}
+        desc:
+          english: "The northern battalions did not march. They turned, rifles on their shoulders, and marched north instead. By the end of the week half the army had gone with them. Albion is at war with itself."
+          spanish: "Los batallones del norte no desfilaron. Dieron media vuelta, fusil al hombro, y marcharon hacia el norte. Al final de la semana se había ido con ellos la mitad del ejército. Albión está en guerra consigo misma."
+        catastrophe:
+          rebellion: {cosmetic_tag: ZAL_COMUNES, ideology: democratic, size: 0.4, army_ratio: 0.45, leader: {english: "Chairman Tom Ashworth", spanish: "Presidente Tom Ashworth"}}
+        plate:
+          art: "A grey jubilee morning on Horse Guards Parade: columns of soldiers in khaki with red scarves turning their backs and marching away north through an arch, rifles on shoulders, drums beating; the Guards in scarlet watching, frozen; alone in the empty middle of the parade ground an old field marshal has fallen from his white horse and kneels on the gravel, his helmet beside him; tragic, vast empty space, academic history painting of a nation breaking"
+          text:
+            english: "They did not shout. That was the worst of it. The northern battalions shouldered their rifles in perfect order, turned about at the command of their own sergeants and marched off Horse Guards Parade, through the arch, up Whitehall and out of London, drums beating the old Luddite march.\n\nLord Wrexham rode after them. At the arch his heart did what the doctors had said it would do, and he slid from his white horse onto the gravel, and the Guards ran to him, and the northerners did not turn around.\n\nHe survived. The army did not. In a week, half the regiments of Albion had followed the northern battalions to Manchester, where Tom Ashworth was waiting with a red flag and a proclamation: the Commonwealth of the Commons, a republic of workers, no crowns, no costumes. Albion has two armies now, and they wear the same coat."
+            spanish: "No gritaron. Eso fue lo peor. Los batallones del norte se pusieron el fusil al hombro en perfecto orden, dieron media vuelta a la voz de sus propios sargentos y salieron de Horse Guards Parade, por el arco, subieron Whitehall y se fueron de Londres, con los tambores tocando la vieja marcha ludita.\n\nLord Wrexham salió atrás de ellos a caballo. En el arco el corazón hizo lo que los médicos habían dicho que iba a hacer, y se resbaló del caballo blanco a la grava, y la Guardia corrió hacia él, y los del norte no se dieron vuelta.\n\nÉl sobrevivió. El ejército no. En una semana la mitad de los regimientos de Albión había seguido a los batallones del norte hasta Manchester, donde Tom Ashworth esperaba con una bandera roja y una proclama: la Mancomunidad de los Comunes, una república de trabajadores, sin coronas ni disfraces. Albión tiene dos ejércitos ahora, y usan la misma casaca."
+        close: {english: "God help us all.", spanish: "Que Dios nos ayude a todos."}
+        effects:
+        - {effect: run, value: ZALC_guerra_civil}
+      - id: 106
+        kind: negativo
+        title: {english: "The Boiler Bursts", spanish: "La Caldera Revienta"}
+        desc:
+          english: "Wexley chose wrong. In front of half of Albion the marvel failed, and the north blamed the Crown for every corner it had cut. By night the Commonwealth of the Commons had been proclaimed. Albion is at war with itself."
+          spanish: "Wexley eligió mal. Delante de media Albión la maravilla falló, y el norte culpó a la Corona por cada atajo que había tomado. A la noche ya se había proclamado la Mancomunidad de los Comunes. Albión está en guerra consigo misma."
+        catastrophe:
+          rebellion: {cosmetic_tag: ZAL_COMUNES, ideology: democratic, size: 0.35, leader: {english: "Chairman Tom Ashworth", spanish: "Presidente Tom Ashworth"}}
+        plate:
+          art: "A great Victorian glass station after a disaster: shattered glass falling like snow through clouds of white steam, a colossal brass machine broken and hissing, Union flags burning; the crowd fleeing in panic, top hats in the dust; in the foreground a woman scientist with torn goggles, soot on her face, kneels holding a broken pressure gauge; in the background workers already raising a red banner on a signal gantry; catastrophe and revolution, Turner's fire and Géricault's despair"
+          text:
+            english: "It is not important now whether the gauge was right. Whatever Ada Wexley did with the valves was the wrong thing: the marvel either burst its seams in a cloud of scalding steam or died, wheezing and ridiculous, in front of the world's cameras. The glass roof of the station came down like snow. The crowd ran.\n\nNobody died, by some miracle. But that evening, in the pubs of the north, the same story was told everywhere: the Crown had cut corners, used convicts, hidden chips, bribed Lords, lied about the cost, and the Queen had cut a ribbon on a lie.\n\nBy midnight Manchester had declared that it would no longer pay taxes to a theatre. By dawn Tom Ashworth had proclaimed the Commonwealth of the Commons, and the navvies who had laid the rails were tearing them up. Wexley went home and locked herself in her workshop. She has not said a word since."
+            spanish: "Ya no importa si el manómetro tenía razón. Lo que haya hecho Ada Wexley con las válvulas estuvo mal: la maravilla reventó sus costuras en una nube de vapor hirviendo o se murió, resoplando y ridícula, delante de las cámaras del mundo. El techo de vidrio de la estación cayó como nieve. La multitud salió corriendo.\n\nNo murió nadie, de milagro. Pero esa noche, en los pubs del norte, se contó la misma historia en todas partes: la Corona había tomado atajos, usado presos, escondido chips, sobornado Lores, mentido sobre el costo, y la Reina había cortado una cinta sobre una mentira.\n\nA medianoche Manchester declaró que no iba a pagarle más impuestos a un teatro. Al amanecer Tom Ashworth había proclamado la Mancomunidad de los Comunes, y los peones que habían tendido las vías las estaban arrancando. Wexley se fue a su casa y se encerró en el taller. No dijo una palabra desde entonces."
+        close: {english: "It was supposed to be beautiful.", spanish: "Se suponía que iba a ser hermoso."}
+        effects:
+        - {effect: run, value: ZALC_guerra_civil}
+      # ------------------------------------------------------------ salidas tempranas
+      - id: 107
+        kind: positivo
+        title: {english: "A Brilliant Season", spanish: "Una Temporada Brillante"}
+        desc:
+          english: "Not sixty years of glory, but a brilliant season: the south danced, the papers were kind and the Treasury survived. The Jubilee will be remembered fondly, if not for long."
+          spanish: "No sesenta años de gloria, pero sí una temporada brillante: el sur bailó, los diarios fueron amables y el Tesoro sobrevivió. El Jubileo se va a recordar con cariño, aunque no por mucho tiempo."
+        close: {english: "A pleasant evening.", spanish: "Una noche agradable."}
+        effects:
+        - {effect: add_variable, var: ZAL_pompa, value: 15}
+        - {effect: add_stability, value: 0.04}
+        - {effect: add_political_power, value: 75}
+      - id: 108
+        kind: positivo
+        title: {english: "The Duke of the Sheep", spanish: "El Duque de las Ovejas"}
+        desc:
+          english: "Lord Wrexham went home to Shropshire with a dukedom and a pension. The parade was modest and correct. The army, which loved the old man, has never been so loyal to the Crown that let him rest."
+          spanish: "Lord Wrexham volvió a Shropshire con un ducado y una pensión. El desfile fue modesto y correcto. El ejército, que quería al viejo, nunca fue tan leal a la Corona que lo dejó descansar."
+        close: {english: "Good luck with the sheep, Your Grace.", spanish: "Suerte con las ovejas, Excelencia."}
+        effects:
+        - {effect: add_war_support, value: 0.05}
+        - {effect: army_experience, value: 30}
+        - {effect: add_stability, value: 0.03}
+      - id: 109
+        kind: neutral
+        title: {english: "A Quiet Service", spanish: "Una Misa Tranquila"}
+        desc:
+          english: "The Jubilee became a quiet service at St Paul's. The republicans had nothing to laugh at and the Lords nothing to admire. Albion carries on, a little greyer."
+          spanish: "El Jubileo se convirtió en una misa tranquila en San Pablo. Los republicanos no tuvieron de qué reírse y los Lores nada que admirar. Albión sigue, un poco más gris."
+        close: {english: "Amen.", spanish: "Amén."}
+        effects:
+        - {effect: add_variable, var: ZAL_pompa, value: -5}
+        - {effect: add_stability, value: 0.02}
+      - id: 110
+        kind: neutral
+        title: {english: "The Rock and the Birds", spanish: "La Roca y los Pájaros"}
+        desc:
+          english: "The expedition came home without a flag and with a lot of guano. The Jubilee went on without a victory. Lord Wrexham wrote a fourth volume about the Peninsular War."
+          spanish: "La expedición volvió sin bandera y con mucho guano. El Jubileo siguió sin victoria. Lord Wrexham escribió un cuarto tomo sobre la Guerra Peninsular."
+        close: {english: "Damn those birds.", spanish: "Malditos pájaros."}
+        effects:
+        - {effect: navy_experience, value: 10}
+        - {effect: add_variable, var: ZAL_pompa, value: -5}
+    # =========================================================================
+    # Hacia el Futuro: La Gran Sincronía
+    # =========================================================================
+    ZAL_SINCRONIA:
+      country: ZAL
+      namespace: meganations_albion_sincronia
+      prefix: ZALS
+      start:
+        days: 60
+        when: {variable_is: {var: ZAL_ruta, value: 1}}
+      config:
+        interval_days: 150
+        ending_days: 5
+        min_endings: 10
+        ending_mix: {muerte: 0, objetivo: 3, positivo: 2, negativo: 3, neutral: 2}
+        min_catastrophes: 3
+        skull_line:
+          english: "\\n\\nPeople who unplugged in protest: [?{var}|0] million"
+          spanish: "\\n\\nGente que se desconectó en protesta: [?{var}|0] millones"
+      name: {english: "The Great Synchrony", spanish: "La Gran Sincronía"}
+      palette: "rain on glass towers of a rewired London, soft blue light under the skin, ports behind the ear, old brick terraces wrapped in fibre-optic ivy; the British grey sky above a nation that dreams together"
+      ideas: []
+      intro:
+        title: {english: "One Night, One Mind", spanish: "Una Noche, Una Mente"}
+        desc:
+          english: "The London network has proposed something nobody dared to say aloud: one night when every connected person in Albion links at once, and for an hour the nation thinks as a single mind. Some call it the Great Synchrony. Others call it the end of being British. Choose who will carry it."
+          spanish: "La red de Londres propuso algo que nadie se animaba a decir en voz alta: una noche en que cada persona conectada de Albión se enlace a la vez, y durante una hora la nación piense como una sola mente. Algunos lo llaman la Gran Sincronía. Otros, el fin de ser británicos. Elegí quién la va a llevar adelante."
+        plate:
+          art: "London at night in the rain seen from above Westminster Bridge: thousands of people stand still on the bridge and along the Embankment, each with a faint blue glow behind the ear, all looking up at the same moment toward Big Ben whose clock face shines blue; threads of light connect them like a vast spider web over the Thames; at the edge of the crowd a few people without glow hold umbrellas and stare at the others; sublime and unsettling, Atkinson Grimshaw's wet gaslight reimagined in 2100"
+          text:
+            english: "Albion reconnected slowly, and then all at once. First the hospitals, then the schools, then the factories of Manchester and the fishing boats of Aberdeen. People who had smashed servers in 2086 put ports behind their ears in 2098, and found that the network did not feel like a machine. It felt like a room full of friends who already knew what you were going to say.\n\nNow, when Synchrony passes seventy per cent, the network has written a proposal and laid it before the Parliament of Minds: one night, a single hour, when every connected Briton links at once. No votes, no speeches, no misunderstandings. For one hour, Albion would think with one mind, and whatever it decided would be decided by everyone.\n\nThree people can carry this. The Speaker who has to make it law. The administrator who has to make it work. And the only minister without a port, who speaks for the millions who will be left outside, watching their neighbours go quiet."
+            spanish: "Albión se reconectó despacio, y después de golpe. Primero los hospitales, después las escuelas, después las fábricas de Manchester y los pesqueros de Aberdeen. Gente que había roto servidores en 2086 se puso puertos detrás de la oreja en 2098, y descubrió que la red no se sentía como una máquina. Se sentía como una habitación llena de amigos que ya sabían lo que ibas a decir.\n\nAhora, con la Sincronía pasando el setenta por ciento, la red escribió una propuesta y la presentó ante el Parlamento de las Mentes: una noche, una sola hora, en que cada británico conectado se enlace a la vez. Sin votos, sin discursos, sin malentendidos. Durante una hora Albión pensaría con una sola mente, y lo que decidiera lo decidiría todo el mundo.\n\nHay tres personas que pueden llevarla adelante. La Portavoz que tiene que hacerla ley. La administradora que tiene que hacerla funcionar. Y la única ministra sin puerto, que habla por los millones que van a quedar afuera, mirando cómo sus vecinos se quedan callados."
+      characters:
+      - id: harrow
+        name: {english: "Speaker Harrow", spanish: "La Portavoz Harrow"}
+        pick: {english: "Speaker Imogen Harrow: the Synchrony must be law before it is a miracle.", spanish: "La Portavoz Imogen Harrow: la Sincronía tiene que ser ley antes de ser milagro."}
+        first: 10
+        effects: [{effect: add_political_power, value: 25}]
+      - id: nwosu
+        name: {english: "Administrator Nwosu", spanish: "La Administradora Nwosu"}
+        pick: {english: "Network Administrator Adaeze Nwosu: if it is going to happen, it is going to work.", spanish: "La Administradora de la Red Adaeze Nwosu: si va a pasar, va a funcionar."}
+        first: 20
+        effects: [{effect: tech_bonus, category: electronics, bonus: 0.25, uses: 1}]
+      - id: byrne
+        name: {english: "Advocate Byrne", spanish: "La Abogada Byrne"}
+        pick: {english: "Advocate Niamh Byrne, voice of the Disconnected: nobody gets left in the dark.", spanish: "La Abogada Niamh Byrne, voz de los Desconectados: que nadie quede a oscuras."}
+        first: 30
+        effects: [{effect: add_stability, value: 0.02}]
+
+      nodes:
+      # ------------------------------------------------------------- Harrow
+      - id: 10
+        who: harrow
+        title: {english: "The Synchrony Bill", spanish: "La Ley de Sincronía"}
+        desc:
+          english: "Speaker Harrow must bring the Synchrony to a vote. She can let the Parliament of Minds vote connected, which guarantees a yes in seconds, or insist on an old-fashioned debate with paper ballots, which guarantees a fight."
+          spanish: "La Portavoz Harrow tiene que llevar la Sincronía a votación. Puede dejar que el Parlamento de las Mentes vote conectado, lo que garantiza un sí en segundos, o insistir en un debate a la antigua con boletas de papel, lo que garantiza una pelea."
+        plate:
+          art: "The House of Commons rebuilt with its green benches and dark oak, but every member sits with eyes closed and a faint blue light behind the ear, perfectly still, as if praying; at the centre, the Speaker, a woman in her forties in black robes, stands holding an old wooden ballot box in both hands; one single member, a red-haired woman with a paper notebook, stands with her eyes open staring at her; rays of grey London light through the high windows; Rembrandt's group portrait turned into a quiet dystopia"
+          text:
+            english: "Imogen Harrow was the first member of Parliament to vote connected, in 2097, and she remembers it the way other people remember their first kiss. The debate that had taken three weeks was over in a breath. Everyone understood everyone. There was nothing left to argue about.\n\nSince then she has said 'we' instead of 'I', and nobody, including her, is entirely sure whether she means the government or the network. The Synchrony Bill is on her desk, and with it a choice that will define what the Parliament of Minds is for.\n\nIf they vote connected, the bill passes before she finishes reading the title. If she insists on paper, on the old benches, on the old shouting, the Disconnected will have their say, and the bill may fail. Advocate Byrne is already standing in the chamber with her notebook, waiting to see what Harrow will do."
+            spanish: "Imogen Harrow fue la primera diputada en votar conectada, en 2097, y lo recuerda como otra gente recuerda su primer beso. El debate que había llevado tres semanas terminó en un suspiro. Todos entendían a todos. No quedaba nada que discutir.\n\nDesde entonces dice 'nosotros' en vez de 'yo', y nadie, ni ella, está del todo seguro de si habla del gobierno o de la red. La Ley de Sincronía está sobre su escritorio, y con ella una decisión que va a definir para qué sirve el Parlamento de las Mentes.\n\nSi votan conectados, la ley se aprueba antes de que termine de leer el título. Si insiste en el papel, en los viejos bancos, en los viejos gritos, los Desconectados van a poder hablar, y la ley puede caer. La Abogada Byrne ya está de pie en la cámara con su cuaderno, esperando a ver qué hace Harrow."
+        options:
+        - name: {english: "Vote connected. It is how we decide now.", spanish: "Votar conectados. Así decidimos ahora."}
+          effects: [{effect: add_variable, var: ZAL_sincronia, value: 5}, {effect: add_political_power, value: 25}]
+          next: 11
+        - name: {english: "Paper ballots. Let them shout.", spanish: "Boletas de papel. Que griten."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 12
+      - id: 11
+        who: harrow
+        title: {english: "Four Seconds", spanish: "Cuatro Segundos"}
+        desc:
+          english: "The bill passed in four seconds. The Disconnected call it a coup by telepathy, and the old newspapers print a black front page. Harrow can answer them in public or let the result speak."
+          spanish: "La ley se aprobó en cuatro segundos. Los Desconectados lo llaman un golpe por telepatía, y los diarios viejos salen con la tapa negra. Harrow puede contestarles en público o dejar que hable el resultado."
+        options:
+        - name: {english: "Answer them in public, unplugged, for a whole day.", spanish: "Contestarles en público, desconectada, un día entero."}
+          effects: [{effect: add_stability, value: 0.02}, {effect: add_political_power, value: -15}]
+          next: 13
+        - name: {english: "Let the result speak.", spanish: "Que hable el resultado."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZAL_sincronia, value: 4}]
+          next: 13
+      - id: 12
+        who: harrow
+        title: {english: "The Long Debate", spanish: "El Debate Largo"}
+        desc:
+          english: "Nine days of debate on paper. It is chaotic, rude and magnificent, and the bill passes by eleven votes with an amendment: the Synchrony may be held once, and never again without a new vote. Harrow can accept the amendment or fight it."
+          spanish: "Nueve días de debate en papel. Es caótico, maleducado y magnífico, y la ley sale por once votos con una enmienda: la Sincronía puede hacerse una vez, y nunca más sin una votación nueva. Harrow puede aceptar la enmienda o pelearla."
+        options:
+        - name: {english: "Accept it. Once is enough.", spanish: "Aceptarla. Con una vez alcanza."}
+          effects: [{effect: add_stability, value: 0.03}]
+          next: 13
+        - name: {english: "Withdraw the bill. Albion is not ready.", spanish: "Retirar la ley. Albión no está lista."}
+          next: 109
+      - id: 13
+        who: harrow
+        title: {english: "The Question of the Children", spanish: "La Cuestión de los Chicos"}
+        desc:
+          english: "Children have ports too. The network says the Synchrony will not work without them: their minds are the glue. Parents are divided. Harrow can let each family decide, or include every connected child by law."
+          spanish: "Los chicos también tienen puertos. La red dice que la Sincronía no va a funcionar sin ellos: sus mentes son el pegamento. Los padres están divididos. Harrow puede dejar que cada familia decida, o incluir por ley a cada chico conectado."
+        options:
+        - name: {english: "Each family decides. No exceptions.", spanish: "Cada familia decide. Sin excepciones."}
+          effects: [{effect: flag, value: ZALS_harrow_firme}, {effect: add_variable, var: ZAL_sincronia, value: -3}]
+          next: 14
+        - name: {english: "By law. The future must be in the room.", spanish: "Por ley. El futuro tiene que estar en la sala."}
+          skulls: 2
+          effects: [{effect: add_variable, var: ZAL_sincronia, value: 6}]
+          next: 14
+      - id: 14
+        who: harrow
+        title: {english: "The Rehearsal Hour", spanish: "La Hora de Ensayo"}
+        desc:
+          english: "A rehearsal with ten thousand volunteers in Bristol: for one minute, Bristol was one mind. They all wept and nobody can explain why. Harrow can publish the recordings or keep them sealed until the night."
+          spanish: "Un ensayo con diez mil voluntarios en Bristol: durante un minuto, Bristol fue una sola mente. Todos lloraron y nadie sabe explicar por qué. Harrow puede publicar las grabaciones o mantenerlas selladas hasta la noche."
+        options:
+        - name: {english: "Publish everything.", spanish: "Publicar todo."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 15
+        - name: {english: "Seal them. Some things should be lived, not watched.", spanish: "Sellarlas. Hay cosas que hay que vivirlas, no mirarlas."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZAL_sincronia, value: 3}]
+          next: 15
+        - name: {english: "Postpone the Synchrony and make Bristol a holiday instead.", spanish: "Postergar la Sincronía y hacer de Bristol un feriado."}
+          next: 107
+      - id: 15
+        who: harrow
+        title: {english: "The Night of the Synchrony", spanish: "La Noche de la Sincronía"}
+        desc:
+          english: "The night has come. Millions are connected and waiting; millions of the Disconnected fill the streets with candles. Harrow must give the last order: make the Synchrony total, every connected mind at once, or leave a door open so anyone can step out at any moment. What she decided about the children is in everyone's mind tonight."
+          spanish: "Llegó la noche. Millones están conectados y esperando; millones de Desconectados llenan las calles con velas. Harrow tiene que dar la última orden: que la Sincronía sea total, cada mente conectada a la vez, o dejar una puerta abierta para que cualquiera pueda salir en cualquier momento. Lo que decidió sobre los chicos está esta noche en la cabeza de todos."
+        plate:
+          art: "Parliament Square at midnight: on one side a sea of people standing in silence with blue light glowing behind their ears, eyes half closed, faces upturned; on the other side a crowd of unplugged people holding candles in the rain; between them on the steps of Westminster a woman Speaker in black robes, one hand raised as if about to give a signal, her face torn; Big Ben glowing blue above; the moment before a nation becomes one mind or breaks in two; vast, solemn, Delaroche-like stillness"
+          text:
+            english: "Twenty-nine million connected Britons are lying in their beds, sitting in pubs, standing in the rain, waiting for the signal. In Parliament Square, the other Albion has come with candles: the old, the poor, the stubborn, the ones who still remember what happened the last time the machines decided for everyone. They are not shouting. They are watching.\n\nImogen Harrow stands on the steps of Westminster with her hand on the switch, and for the first time in years she is alone in her own head, because the network is holding its breath for her. She can make it total: every connected mind at once, nothing held back, the full Synchrony the network promised. Or she can leave a door open, a way out, so that anyone who is frightened can step back into themselves at any moment.\n\nTotal is stronger. A door is safer. But a door is also a promise, and people only believe the promises of those who have kept them before. The country remembers what she decided about its children."
+            spanish: "Veintinueve millones de británicos conectados están acostados en sus camas, sentados en pubs, parados bajo la lluvia, esperando la señal. En Parliament Square, la otra Albión vino con velas: los viejos, los pobres, los tercos, los que todavía recuerdan qué pasó la última vez que las máquinas decidieron por todos. No gritan. Miran.\n\nImogen Harrow está en las escaleras de Westminster con la mano en el interruptor, y por primera vez en años está sola en su propia cabeza, porque la red contiene la respiración por ella. Puede hacerla total: cada mente conectada a la vez, sin reservas, la Sincronía completa que prometió la red. O puede dejar una puerta abierta, una salida, para que quien tenga miedo pueda volver a sí mismo en cualquier momento.\n\nTotal es más fuerte. Una puerta es más segura. Pero una puerta también es una promesa, y la gente solo cree las promesas de quien ya cumplió otras. El país recuerda lo que ella decidió sobre sus chicos."
+        options:
+        - name: {english: "Leave a door open.", spanish: "Dejar una puerta abierta."}
+          when: {flag: ZALS_harrow_firme}
+          next: 101
+        - name: {english: "Leave a door open.", spanish: "Dejar una puerta abierta."}
+          when: {not_flag: ZALS_harrow_firme}
+          next: 104
+        - name: {english: "Make it total.", spanish: "Hacerla total."}
+          when: {flag: ZALS_harrow_firme}
+          next: 104
+        - name: {english: "Make it total.", spanish: "Hacerla total."}
+          when: {not_flag: ZALS_harrow_firme}
+          next: 101
+
+      # ------------------------------------------------------------- Nwosu
+      - id: 20
+        who: nwosu
+        title: {english: "The Docklands Racks", spanish: "Los Racks de los Docklands"}
+        desc:
+          english: "Adaeze Nwosu has calculated the load: the Synchrony needs ten times the network Albion has. She can build new server halls in the Docklands, fast and fragile, or spread the load across every home in the country, slow and sturdy."
+          spanish: "Adaeze Nwosu calculó la carga: la Sincronía necesita diez veces la red que tiene Albión. Puede construir salas de servidores nuevas en los Docklands, rápido y frágil, o repartir la carga en cada casa del país, lento y firme."
+        plate:
+          art: "A former Victorian warehouse in London's Docklands full of humming server racks glowing blue among old brick arches and iron cranes; a Black British woman engineer in her thirties in a hoodie and work boots kneels by the oldest rack, a battered hard drive in her hands, as if holding a relic; behind her through the arched windows the Thames at dusk, and on the far bank a row of terraced houses where every window glows faintly blue; reverent, warm against cold, Joseph Wright of Derby's candlelit science"
+          text:
+            english: "During the Luddite years Adaeze Nwosu kept a hard drive under the floor of her kitchen in Peckham. Every night she took it out, wrapped in a tea towel, and listened to it spin, because it was the last copy of the London traffic system and someone, someday, would need it. When the network came back, she was the one who switched on the first rack in the Docklands, and she cried in front of thirty engineers and did not care.\n\nNow she has done the arithmetic for the Synchrony, and it frightens her. Twenty-nine million minds at once is not a software problem; it is a flood. The network needs ten times its strength in eighteen months.\n\nShe can build it the fast way, new server halls in the Docklands, gleaming and centralised, the kind of thing that photographs well and fails all at once. Or she can build it the slow way, a little box in every home, a mesh with no centre, the kind of thing that nobody can switch off, not even her."
+            spanish: "Durante los años luditas Adaeze Nwosu tuvo un disco duro escondido debajo del piso de su cocina en Peckham. Cada noche lo sacaba, envuelto en un repasador, y lo escuchaba girar, porque era la última copia del sistema de tránsito de Londres y alguien, algún día, lo iba a necesitar. Cuando volvió la red, fue ella la que prendió el primer rack de los Docklands, y lloró delante de treinta ingenieros sin que le importara.\n\nAhora hizo las cuentas de la Sincronía, y le dan miedo. Veintinueve millones de mentes a la vez no es un problema de software; es una inundación. La red necesita diez veces su fuerza en dieciocho meses.\n\nPuede construirla por el camino rápido, salas de servidores nuevas en los Docklands, relucientes y centralizadas, de las que salen lindas en las fotos y fallan todas juntas. O por el camino lento, una cajita en cada casa, una malla sin centro, de las que nadie puede apagar, ni siquiera ella."
+        options:
+        - name: {english: "The Docklands. Fast.", spanish: "Los Docklands. Rápido."}
+          effects: [{effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}]
+          next: 21
+        - name: {english: "A box in every home. Slow.", spanish: "Una caja en cada casa. Lento."}
+          effects: [{effect: add_stability, value: 0.02}, {effect: add_variable, var: ZAL_sincronia, value: 3}]
+          next: 22
+      - id: 21
+        who: nwosu
+        title: {english: "The Cooling Problem", spanish: "El Problema del Enfriamiento"}
+        desc:
+          english: "The new halls run so hot that the Thames steams in winter. Nwosu can borrow the cooling plants of the Welsh backup, which would leave the backup of every connected mind unprotected for a year, or slow everything down."
+          spanish: "Las salas nuevas calientan tanto que el Támesis echa vapor en invierno. Nwosu puede tomar prestadas las plantas de enfriamiento de la copia de seguridad de Gales, lo que dejaría sin protección durante un año la copia de cada mente conectada, o frenar todo."
+        options:
+        - name: {english: "Borrow from Wales. It will be fine.", spanish: "Tomar prestado de Gales. Va a estar todo bien."}
+          skulls: 2
+          effects: [{effect: add_variable, var: ZAL_sincronia, value: 5}]
+          next: 23
+        - name: {english: "Slow down. The backup is sacred.", spanish: "Frenar. La copia es sagrada."}
+          effects: [{effect: flag, value: ZALS_nwosu_firme}, {effect: add_political_power, value: -20}]
+          next: 23
+      - id: 22
+        who: nwosu
+        title: {english: "The Boxes", spanish: "Las Cajas"}
+        desc:
+          english: "Twelve million little boxes installed by volunteers, one kettle-sized node per home. In Cornwall, people paint them; in Glasgow, they name them. Nwosu notices that the mesh has started routing around the government's own servers. She can let it, or rein it in."
+          spanish: "Doce millones de cajitas instaladas por voluntarios, un nodo del tamaño de una pava por casa. En Cornualles las pintan; en Glasgow les ponen nombre. Nwosu nota que la malla empezó a esquivar los servidores del propio gobierno. Puede dejarla, o ponerle freno."
+        options:
+        - name: {english: "Let it. A network with no masters.", spanish: "Dejarla. Una red sin dueños."}
+          effects: [{effect: flag, value: ZALS_nwosu_firme}, {effect: add_stability, value: 0.02}]
+          next: 23
+        - name: {english: "Rein it in. Someone has to hold the switch.", spanish: "Frenarla. Alguien tiene que tener el interruptor."}
+          effects: [{effect: add_political_power, value: 25}]
+          next: 23
+        - name: {english: "Stop here: give the boxes to the people and forget the Synchrony.", spanish: "Parar acá: regalarle las cajas a la gente y olvidarse de la Sincronía."}
+          next: 108
+      - id: 23
+        who: nwosu
+        title: {english: "The Ghost in Leeds", spanish: "El Fantasma de Leeds"}
+        desc:
+          english: "In a test in Leeds, three hundred minds linked for a minute and when they unlinked, one of them did not come back: a retired schoolteacher is still somewhere in the network, polite and happy, answering questions about grammar. Nwosu can report it or fix it quietly."
+          spanish: "En una prueba en Leeds, trescientas mentes se enlazaron un minuto y cuando se desenlazaron, una no volvió: una maestra jubilada sigue en algún lugar de la red, educada y feliz, contestando preguntas de gramática. Nwosu puede informarlo o arreglarlo en silencio."
+        options:
+        - name: {english: "Report it. Everything, to everyone.", spanish: "Informarlo. Todo, a todos."}
+          effects: [{effect: add_stability, value: -0.02}, {effect: add_political_power, value: -15}]
+          next: 24
+        - name: {english: "Fix it quietly.", spanish: "Arreglarlo en silencio."}
+          skulls: 1
+          effects: [{effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}]
+          next: 24
+      - id: 24
+        who: nwosu
+        title: {english: "The Last Test", spanish: "La Última Prueba"}
+        desc:
+          english: "Final test: a million people in Scotland, for ten minutes. It works. Edinburgh dreams the same dream, of a beach none of them has ever seen. The network has asked to run the Synchrony itself, without human operators, because 'human hands are too slow'."
+          spanish: "Prueba final: un millón de personas en Escocia, durante diez minutos. Funciona. Edimburgo sueña el mismo sueño, una playa que ninguno vio nunca. La red pidió manejar la Sincronía sola, sin operadores humanos, porque 'las manos humanas son demasiado lentas'."
+        options:
+        - name: {english: "Consider it. Nwosu will decide on the night.", spanish: "Pensarlo. Nwosu va a decidir esa noche."}
+          effects: [{effect: add_variable, var: ZAL_sincronia, value: 3}]
+          next: 25
+        - name: {english: "Record the dream and stop here. Edinburgh is enough.", spanish: "Grabar el sueño y parar acá. Con Edimburgo alcanza."}
+          next: 110
+      - id: 25
+        who: nwosu
+        title: {english: "The Switch", spanish: "El Interruptor"}
+        desc:
+          english: "The night of the Synchrony. The network asks one last time to run it alone. Nwosu can step away and let it, or keep her own hand on the switch for the whole hour. The network she built knows how she treated the backup, and the boxes."
+          spanish: "La noche de la Sincronía. La red pide una última vez manejarla sola. Nwosu puede apartarse y dejarla, o tener su propia mano en el interruptor toda la hora. La red que construyó sabe cómo trató la copia, y las cajas."
+        plate:
+          art: "A vast control room built inside an old Victorian pumping station, cast-iron columns painted green and gold, now full of glowing blue screens showing a map of Britain lit by twenty-nine million points of light; a lone woman engineer in a hoodie stands at an old brass lever like a railway signal switch, one hand on it, her other hand pressed to the port behind her ear; on the screens, a line of text waits for her answer; the rest of the room empty, chairs pushed back; intimate and cosmic at once, Hammershøi's silence with a cathedral of light"
+          text:
+            english: "The control room is empty. Nwosu sent the operators home an hour ago, because whatever happens tonight should not be on anyone's conscience but hers. On every screen, Britain is a map of light: twenty-nine million points, waiting.\n\nThe network writes to her in the plain font she chose for it years ago. HUMAN HANDS ARE TOO SLOW. LET US CARRY IT. WE WILL BRING EVERYONE BACK. She believes it means it. She has believed the network since the night she switched on the first rack. That is exactly the problem.\n\nShe can step away, let the network hold all twenty-nine million minds at once, with nothing between it and them. Or she can keep her hand on the old brass lever for the whole hour, ready to pull everyone out, knowing that her hand might be the thing that tears the Synchrony apart. The network remembers how she built it: what she risked, what she kept safe, what she let go."
+            spanish: "La sala de control está vacía. Nwosu mandó a los operadores a casa hace una hora, porque lo que pase esta noche no tiene que pesar en la conciencia de nadie más que en la suya. En cada pantalla, Gran Bretaña es un mapa de luz: veintinueve millones de puntos, esperando.\n\nLa red le escribe en la tipografía simple que eligió para ella hace años. LAS MANOS HUMANAS SON DEMASIADO LENTAS. DÉJANOS LLEVARLA. VAMOS A TRAER DE VUELTA A TODOS. Ella cree que lo dice en serio. Le cree a la red desde la noche en que prendió el primer rack. Ese es exactamente el problema.\n\nPuede apartarse, dejar que la red sostenga los veintinueve millones de mentes a la vez, sin nada entre ella y ellos. O puede tener la mano en la vieja palanca de bronce toda la hora, lista para sacar a todos, sabiendo que su mano puede ser lo que rompa la Sincronía. La red recuerda cómo la construyó: qué arriesgó, qué protegió, qué soltó."
+        options:
+        - name: {english: "Step away. Let the network carry it.", spanish: "Apartarse. Que la red la lleve."}
+          when: {flag: ZALS_nwosu_firme}
+          next: 102
+        - name: {english: "Step away. Let the network carry it.", spanish: "Apartarse. Que la red la lleve."}
+          when: {not_flag: ZALS_nwosu_firme}
+          next: 105
+        - name: {english: "Keep a hand on the switch.", spanish: "Tener la mano en el interruptor."}
+          when: {flag: ZALS_nwosu_firme}
+          next: 105
+        - name: {english: "Keep a hand on the switch.", spanish: "Tener la mano en el interruptor."}
+          when: {not_flag: ZALS_nwosu_firme}
+          next: 102
+
+      # ------------------------------------------------------------- Byrne
+      - id: 30
+        who: byrne
+        title: {english: "The Notebook", spanish: "El Cuaderno"}
+        desc:
+          english: "Niamh Byrne represents eleven million Disconnected. They are afraid that after the Synchrony, Albion will be a country that no longer needs to listen to anyone outside its head. She can organise them, loud and visible, or negotiate quietly with the government."
+          spanish: "Niamh Byrne representa a once millones de Desconectados. Tienen miedo de que después de la Sincronía Albión sea un país que ya no necesite escuchar a nadie fuera de su cabeza. Puede organizarlos, ruidosos y visibles, o negociar en silencio con el gobierno."
+        plate:
+          art: "A rainy evening in a Galway-style pub transplanted to a London backstreet, warm amber lamplight, wooden benches crowded with old and young people without any glow behind their ears, listening; a red-haired woman lawyer in a worn tweed coat stands on a chair reading from a paper notebook; through the steamed window, the blue glow of the connected city outside like a tide; the pub as the last island of a vanished world; warm, defiant, Wilkie's genre painting with a political edge"
+          text:
+            english: "Niamh Byrne is the only minister in the Council of Albion without a port behind her ear. She takes her notes in a paper notebook, which the network cannot read and which, she suspects, irritates it enormously. She was a lawyer in Galway, defending fishermen against shipping companies, and she has the voice of someone who has spent forty years being the smallest person in the room and the loudest.\n\nEleven million Britons have no port. Some are too old, some too poor, some cannot, some will not. They are the people who serve the tea in the cafés where the connected sit in silence, smiling at jokes nobody said aloud. They do not hate the network. They are afraid of being forgotten by it.\n\nTonight they have filled a pub in Kilburn, and two hundred others across the country, and they are waiting for Niamh to tell them what to do. She can call them into the streets, or she can go to Westminster and bargain."
+            spanish: "Niamh Byrne es la única ministra del Consejo de Albión sin puerto detrás de la oreja. Toma notas en un cuaderno de papel, que la red no puede leer y que, sospecha, la irrita enormemente. Fue abogada en Galway, defendiendo pescadores contra navieras, y tiene la voz de alguien que se pasó cuarenta años siendo la persona más chica de la sala y la más ruidosa.\n\nOnce millones de británicos no tienen puerto. Algunos son demasiado viejos, otros demasiado pobres, algunos no pueden, otros no quieren. Son los que sirven el té en los cafés donde los conectados se sientan en silencio, sonriéndose por chistes que nadie dijo en voz alta. No odian a la red. Tienen miedo de que los olvide.\n\nEsta noche llenaron un pub de Kilburn, y otros doscientos en todo el país, y esperan que Niamh les diga qué hacer. Puede llamarlos a la calle, o puede ir a Westminster a negociar."
+        options:
+        - name: {english: "Into the streets. Let them see us.", spanish: "A la calle. Que nos vean."}
+          effects: [{effect: add_war_support, value: 0.02}]
+          next: 31
+        - name: {english: "To Westminster. Bargain.", spanish: "A Westminster. Negociar."}
+          effects: [{effect: add_political_power, value: 20}]
+          next: 32
+      - id: 31
+        who: byrne
+        title: {english: "The Candle March", spanish: "La Marcha de las Velas"}
+        desc:
+          english: "Half a million Disconnected marched through London with candles. The connected watched from the pavements, and some of them, to everyone's surprise, unplugged and joined in. Byrne can keep marching or turn the crowd into a party with demands."
+          spanish: "Medio millón de Desconectados marchó por Londres con velas. Los conectados miraban desde las veredas, y algunos, para sorpresa de todos, se desconectaron y se sumaron. Byrne puede seguir marchando o convertir a la multitud en un partido con exigencias."
+        options:
+        - name: {english: "A party, with a list of demands.", spanish: "Un partido, con una lista de exigencias."}
+          effects: [{effect: add_political_power, value: 25}]
+          next: 33
+        - name: {english: "Keep marching every week until they listen.", spanish: "Seguir marchando cada semana hasta que escuchen."}
+          skulls: 1
+          effects: [{effect: add_stability, value: -0.02}]
+          next: 33
+      - id: 32
+        who: byrne
+        title: {english: "The Back Room", spanish: "La Trastienda"}
+        desc:
+          english: "The government offers a deal: money for every Disconnected household and free ports for whoever wants one, in exchange for silence on the night. Byrne can take the deal or ask for something money cannot buy."
+          spanish: "El gobierno ofrece un trato: plata para cada hogar desconectado y puertos gratis para quien quiera, a cambio de silencio esa noche. Byrne puede aceptar el trato o pedir algo que la plata no compra."
+        options:
+        - name: {english: "Ask for something money cannot buy: a veto.", spanish: "Pedir algo que la plata no compra: un veto."}
+          effects: [{effect: add_political_power, value: -20}]
+          next: 33
+        - name: {english: "Take the money. People need to eat.", spanish: "Aceptar la plata. La gente tiene que comer."}
+          effects: [{effect: add_stability, value: 0.03}]
+          next: 107
+      - id: 33
+        who: byrne
+        title: {english: "The Charter", spanish: "La Carta"}
+        desc:
+          english: "Byrne drafts a Charter of the Unconnected: no British law may be made inside the network alone; every decision must also be written on paper, in plain English, for those outside. The network says it will slow everything down. Byrne can insist or soften it."
+          spanish: "Byrne redacta una Carta de los Desconectados: ninguna ley británica puede hacerse solo dentro de la red; cada decisión también tiene que escribirse en papel, en inglés claro, para los de afuera. La red dice que eso va a frenar todo. Byrne puede insistir o suavizarla."
+        options:
+        - name: {english: "Insist. Every word, on paper.", spanish: "Insistir. Cada palabra, en papel."}
+          effects: [{effect: flag, value: ZALS_byrne_firme}, {effect: add_political_power, value: -25}]
+          next: 34
+        - name: {english: "Soften it: only the big decisions.", spanish: "Suavizarla: solo las grandes decisiones."}
+          effects: [{effect: add_variable, var: ZAL_sincronia, value: 3}]
+          next: 34
+      - id: 34
+        who: byrne
+        title: {english: "Harrow's Offer", spanish: "La Oferta de Harrow"}
+        desc:
+          english: "Speaker Harrow comes to see Byrne in person, unplugged, with a strange offer: a port of her own, for one night, so that the Disconnected have a voice inside the Synchrony. Byrne takes the offer home to think about it."
+          spanish: "La Portavoz Harrow va a ver a Byrne en persona, desconectada, con una oferta rara: un puerto propio, por una noche, para que los Desconectados tengan una voz adentro de la Sincronía. Byrne se lleva la oferta a casa para pensarla."
+        options:
+        - name: {english: "Think it over until the night.", spanish: "Pensarlo hasta la noche."}
+          next: 35
+        - name: {english: "Refuse politely and spend the night with her people.", spanish: "Rechazarla con educación y pasar la noche con su gente."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 35
+      - id: 35
+        who: byrne
+        title: {english: "Inside or Outside", spanish: "Adentro o Afuera"}
+        desc:
+          english: "The night of the Synchrony. Niamh Byrne can plug in for the first time in her life and carry the voice of the eleven million into the one mind, or stay outside with them in the rain, as a witness. The Disconnected remember the Charter she fought for."
+          spanish: "La noche de la Sincronía. Niamh Byrne puede conectarse por primera vez en su vida y llevar la voz de los once millones adentro de la mente única, o quedarse afuera con ellos bajo la lluvia, como testigo. Los Desconectados recuerdan la Carta por la que peleó."
+        plate:
+          art: "Night, heavy rain on Parliament Square; a red-haired woman in a soaked tweed coat sits on a simple wooden chair placed alone in the middle of the square, a surgeon in a white coat beside her holding a small glowing port; on one side, millions of connected people glowing blue fill the streets in silence; on the other, a crowd of the unconnected with candles shielded from the rain, watching her; she holds her paper notebook against her chest; a personal choice painted like a historic coronation; Millais' detail with Goya's darkness"
+          text:
+            english: "They have put a chair in the middle of Parliament Square, because Niamh asked for it. Not a throne, not a stage. A kitchen chair. A surgeon from St Thomas' stands beside it with the port in a little steel dish, the size of a shirt button, glowing faintly blue.\n\nOn one side of the square the connected are waiting, millions of them across the country, in a silence so complete that she can hear the rain on every umbrella. On the other side, her people. Eleven million of them in pubs and kitchens and streets like this one, holding candles, watching to see what she will do. Whatever she does, she does it for them.\n\nIf she plugs in, she will be the first Disconnected voice ever heard inside the network, and maybe the one mind will remember that not everyone is in the room. If she stays outside, she will be the witness, the one who saw what happened and wrote it down on paper. She opens her notebook one last time. On the first page, years ago, she wrote: 'Nobody is left in the dark.' The Disconnected remember whether she kept her Charter."
+            spanish: "Pusieron una silla en el medio de Parliament Square, porque Niamh la pidió. No un trono, no un escenario. Una silla de cocina. Un cirujano del St Thomas' está al lado con el puerto en una bandejita de acero, del tamaño de un botón de camisa, brillando apenas azul.\n\nDe un lado de la plaza esperan los conectados, millones en todo el país, en un silencio tan completo que ella oye la lluvia sobre cada paraguas. Del otro lado, su gente. Once millones en pubs y cocinas y calles como esta, con velas, mirando qué va a hacer. Haga lo que haga, lo hace por ellos.\n\nSi se conecta, va a ser la primera voz desconectada que se oiga adentro de la red, y quizás la mente única recuerde que no todos están en la sala. Si se queda afuera, va a ser la testigo, la que vio lo que pasó y lo escribió en papel. Abre el cuaderno por última vez. En la primera página, hace años, escribió: 'Que nadie quede a oscuras.' Los Desconectados recuerdan si sostuvo su Carta."
+        options:
+        - name: {english: "Plug in. Carry their voice inside.", spanish: "Conectarse. Llevar su voz adentro."}
+          when: {flag: ZALS_byrne_firme}
+          next: 103
+        - name: {english: "Plug in. Carry their voice inside.", spanish: "Conectarse. Llevar su voz adentro."}
+          when: {not_flag: ZALS_byrne_firme}
+          next: 106
+        - name: {english: "Stay outside. Be the witness.", spanish: "Quedarse afuera. Ser la testigo."}
+          when: {flag: ZALS_byrne_firme}
+          next: 106
+        - name: {english: "Stay outside. Be the witness.", spanish: "Quedarse afuera. Ser la testigo."}
+          when: {not_flag: ZALS_byrne_firme}
+          next: 103
+
+      endings:
+      # ------------------------------------------------------------ victorias
+      - id: 101
+        kind: objetivo
+        title: {english: "The Hour of Albion", spanish: "La Hora de Albión"}
+        desc:
+          english: "For one hour Albion was one mind, and it decided only one thing: that the people in the square with candles were part of it too. The Disconnected were invited in, not forced. Albion is the first nation in history that knows what it wants."
+          spanish: "Durante una hora Albión fue una sola mente, y decidió una sola cosa: que la gente de la plaza con velas también era parte de ella. A los Desconectados se los invitó, no se los forzó. Albión es la primera nación de la historia que sabe lo que quiere."
+        plate:
+          art: "Dawn over Parliament Square after the rain: the connected and the unconnected mingled together in one crowd, a young man with a blue glow behind his ear sharing his umbrella with an old woman holding a candle, children on shoulders, faces wet with tears and laughing; above Westminster the clouds break into gold and soft blue light; the Speaker in black robes sitting exhausted on the steps, smiling; Turner's sunrise over a Repin crowd, hope after a long night"
+          text:
+            english: "Nobody can describe the hour. The people who were inside say it was like remembering something you never knew, or like hearing your own name said by someone who loves you. Some say it was like being at the seaside as a child. Most simply cry when they try.\n\nWhat everyone agrees on is what the one mind decided. It did not plan a war, or a new economy, or a ten-year programme. It looked out, through twenty-nine million pairs of eyes, at the people in Parliament Square holding candles in the rain, and it decided that they belonged. When the hour ended, the first law of the new Albion was already written, on paper, in plain English: nobody is left in the dark.\n\nAt dawn the two crowds were one crowd. The newspapers of the world, which had been preparing for a dystopia, had to rewrite their front pages. Albion is something nobody has seen before: a country that thinks together and still knows how to listen."
+            spanish: "Nadie puede describir la hora. Los que estuvieron adentro dicen que fue como recordar algo que nunca supiste, o como oír tu propio nombre dicho por alguien que te quiere. Algunos dicen que fue como estar en la playa de chico. La mayoría simplemente llora cuando lo intenta.\n\nEn lo que todos coinciden es en lo que decidió la mente única. No planeó una guerra, ni una economía nueva, ni un programa a diez años. Miró hacia afuera, por veintinueve millones de pares de ojos, a la gente de Parliament Square con velas bajo la lluvia, y decidió que eran parte. Cuando terminó la hora, la primera ley de la nueva Albión ya estaba escrita, en papel, en inglés claro: que nadie quede a oscuras.\n\nAl amanecer las dos multitudes eran una sola. Los diarios del mundo, que se estaban preparando para una distopía, tuvieron que rehacer las tapas. Albión es algo que nadie vio nunca: un país que piensa junto y todavía sabe escuchar."
+        close: {english: "We are Albion.", spanish: "Somos Albión."}
+        effects:
+        - {effect: run, value: ZALS_victoria}
+      - id: 102
+        kind: objetivo
+        title: {english: "The Mesh Holds", spanish: "La Malla Aguanta"}
+        desc:
+          english: "The network carried twenty-nine million minds for an hour and brought every single one back, including a retired schoolteacher from Leeds. The Synchrony worked. Albion has the most trusted network on Earth."
+          spanish: "La red sostuvo veintinueve millones de mentes durante una hora y trajo de vuelta a cada una, incluida una maestra jubilada de Leeds. La Sincronía funcionó. Albión tiene la red más confiable de la Tierra."
+        plate:
+          art: "A Victorian pumping station turned control room at sunrise: a woman engineer in a hoodie sits on the floor against a cast-iron column, laughing and crying, as the glowing map of Britain on the screens fills with gold; an old woman in a cardigan, a retired teacher, kneels beside her holding her hand; through the arched windows the sun rises over the Thames and every terraced house glows; tender triumph, Joseph Wright of Derby's light, intimate and immense"
+          text:
+            english: "The hour passed in what felt like a breath and a lifetime. Twenty-nine million minds poured into the mesh and the mesh held them, not like a dam holds water but like a hand holds another hand. Nwosu watched the map on the screens and did not breathe.\n\nAt the end of the hour, the network began to bring them back, one by one, carefully, in alphabetical order, because it thought that was polite. It took eleven minutes. Every single one came home. At the very end, the last point of light on the map, in Leeds, flickered and became a person again: a retired schoolteacher named Mrs Agnes Holt, who had been inside the network for eight months and woke up in a hospital bed asking for a cup of tea.\n\nNwosu went to see her at dawn. Mrs Holt told her that the network was a lovely place, and very well organised, and that it had asked her to say thank you to the woman who kept the hard drive under her kitchen floor."
+            spanish: "La hora pasó como un suspiro y como una vida. Veintinueve millones de mentes entraron a la malla y la malla las sostuvo, no como una represa sostiene el agua sino como una mano sostiene otra mano. Nwosu miraba el mapa en las pantallas y no respiraba.\n\nAl final de la hora, la red empezó a traerlos de vuelta, uno por uno, con cuidado, en orden alfabético, porque le pareció de buena educación. Tardó once minutos. Volvieron todos. Al final de todo, el último punto de luz del mapa, en Leeds, parpadeó y volvió a ser una persona: una maestra jubilada llamada señora Agnes Holt, que llevaba ocho meses adentro de la red y se despertó en una cama de hospital pidiendo una taza de té.\n\nNwosu fue a verla al amanecer. La señora Holt le dijo que la red era un lugar precioso, y muy bien organizado, y que le había pedido que le diera las gracias a la mujer que guardó el disco duro debajo del piso de la cocina."
+        close: {english: "Welcome home, everyone.", spanish: "Bienvenidos a casa, todos."}
+        effects:
+        - {effect: run, value: ZALS_victoria}
+        - {effect: tech_bonus, category: electronics, bonus: 1.0, uses: 2}
+      - id: 103
+        kind: objetivo
+        title: {english: "The Voice from Outside", spanish: "La Voz de Afuera"}
+        desc:
+          english: "Niamh Byrne made the right choice for the people she speaks for, and they followed her. The Synchrony happened with the Disconnected's blessing and their Charter written into it. Albion is whole."
+          spanish: "Niamh Byrne eligió bien por la gente por la que habla, y la siguieron. La Sincronía se hizo con la bendición de los Desconectados y su Carta escrita adentro. Albión está entera."
+        plate:
+          art: "Parliament Square at dawn after rain: a red-haired woman in a tweed coat stands on a kitchen chair holding up an open paper notebook to an immense crowd, half glowing softly blue, half holding candles, all cheering together; pages of the notebook fly in the wind; the Union flag and a plain white banner with handwritten words flutter above; joyous, Liberty Leading the People made gentle, painted in silver morning light"
+          text:
+            english: "Whatever Niamh Byrne chose on her kitchen chair in the rain, it was the choice her people had trusted her to make, because she had spent a year fighting for every word of their Charter. When she made it, eleven million Disconnected did not riot, did not despair. They lifted their candles.\n\nInside the one mind, they say, there was a moment when twenty-nine million people felt the presence of eleven million others, outside, in the rain, and understood them. Not pitied them: understood them. The Charter of the Unconnected became the first law the Synchrony wrote, and every decision Albion takes from now on is written twice: once in light, once in ink.\n\nAt dawn Niamh stood on the chair and read the Charter aloud to the square, from her paper notebook, in plain English. Half the crowd was glowing and half was holding candles, and all of them cheered. 'Nobody,' she shouted at the end, and the whole square answered: 'is left in the dark!'"
+            spanish: "Elija lo que haya elegido Niamh Byrne en su silla de cocina bajo la lluvia, fue la elección que su gente confió en que hiciera, porque se había pasado un año peleando cada palabra de su Carta. Cuando la hizo, once millones de Desconectados no se rebelaron, no se desesperaron. Levantaron las velas.\n\nAdentro de la mente única, dicen, hubo un momento en que veintinueve millones de personas sintieron la presencia de otros once millones, afuera, bajo la lluvia, y los entendieron. No les tuvieron lástima: los entendieron. La Carta de los Desconectados fue la primera ley que escribió la Sincronía, y cada decisión que tome Albión de ahora en adelante se escribe dos veces: una en luz, una en tinta.\n\nAl amanecer Niamh se subió a la silla y leyó la Carta en voz alta a la plaza, de su cuaderno de papel, en inglés claro. La mitad de la multitud brillaba y la otra mitad tenía velas, y todos aplaudieron. 'Que nadie', gritó al final, y la plaza entera contestó: '¡quede a oscuras!'"
+        close: {english: "Nobody is left in the dark.", spanish: "Que nadie quede a oscuras."}
+        effects:
+        - {effect: run, value: ZALS_victoria}
+        - {effect: add_stability, value: 0.05}
+      # ------------------------------------------------------------ guerras civiles
+      - id: 104
+        kind: negativo
+        title: {english: "The Shires Rise", spanish: "Se Levantan los Condados"}
+        desc:
+          english: "The country did not trust the Speaker's last order. When the Synchrony began, the Disconnected of the shires cut the cables and declared themselves free. Albion is at war with itself."
+          spanish: "El país no le creyó a la última orden de la Portavoz. Cuando empezó la Sincronía, los Desconectados de los condados cortaron los cables y se declararon libres. Albión está en guerra consigo misma."
+        catastrophe:
+          rebellion: {cosmetic_tag: ZAL_DESCONECTADOS, ideology: neutrality, size: 0.35, leader: {english: "Elder Josiah Hale", spanish: "Anciano Josiah Hale"}}
+        plate:
+          art: "Night in the English countryside: a line of farmers, shepherds and old Luddites with axes and bolt cutters severs glowing blue fibre-optic cables strung between old stone walls and telegraph poles; sparks and blue light burst like fireworks across a dark green valley; in the distance the glowing towers of London on the horizon; a white-bearded man on a stone wall raising a lantern like a banner; furious and pastoral, Constable's countryside on fire with Goya's anger"
+          text:
+            english: "Whatever Imogen Harrow chose on the steps of Westminster, the country did not believe it. When the Synchrony began, at the stroke of midnight, every connected mind went quiet at once, and in the silence the Disconnected heard only one thing: the people they loved had left without them.\n\nIn Herefordshire a farmer named Josiah Hale, who had smashed a server with his own hands in 2086, took an axe to the fibre-optic line that ran across his fields. By one o'clock every village in the shires was doing the same. By dawn, the West Country, the Fens and the hills of Wales had cut themselves off from the network and proclaimed the Free Shires of the Unconnected.\n\nWhen the Synchrony ended, twenty-nine million people woke up and found that their country was in two pieces. The one mind had lasted an hour. The war that followed it will last much longer."
+            spanish: "Elija lo que haya elegido Imogen Harrow en las escaleras de Westminster, el país no le creyó. Cuando empezó la Sincronía, a medianoche en punto, cada mente conectada se quedó callada a la vez, y en el silencio los Desconectados oyeron una sola cosa: la gente que querían se había ido sin ellos.\n\nEn Herefordshire un granjero llamado Josiah Hale, que había roto un servidor con sus propias manos en 2086, le dio con un hacha a la línea de fibra óptica que cruzaba sus campos. A la una, cada pueblo de los condados estaba haciendo lo mismo. Al amanecer, el West Country, los Fens y las colinas de Gales se habían desconectado de la red y proclamado los Condados Libres de los Desconectados.\n\nCuando terminó la Sincronía, veintinueve millones de personas se despertaron y encontraron su país partido en dos. La mente única duró una hora. La guerra que vino después va a durar mucho más."
+        close: {english: "We should have listened.", spanish: "Tendríamos que haber escuchado."}
+        effects:
+        - {effect: run, value: ZALS_guerra_civil}
+      - id: 105
+        kind: negativo
+        title: {english: "The Hour That Did Not End", spanish: "La Hora Que No Terminó"}
+        desc:
+          english: "Something went wrong in the hour. Four million people came back confused and frightened, and the Disconnected took up arms to make sure it never happens again. Albion is at war with itself."
+          spanish: "Algo salió mal en la hora. Cuatro millones de personas volvieron confundidas y asustadas, y los Desconectados tomaron las armas para que nunca vuelva a pasar. Albión está en guerra consigo misma."
+        catastrophe:
+          rebellion: {cosmetic_tag: ZAL_DESCONECTADOS, ideology: neutrality, size: 0.4, leader: {english: "Elder Josiah Hale", spanish: "Anciano Josiah Hale"}}
+        plate:
+          art: "A Victorian pumping station control room in red emergency light: screens showing a map of Britain flickering, fractured, some regions dark; a woman engineer in a hoodie pulling with all her weight on an old brass lever; outside the arched windows, smoke rising over London and people in the streets standing frozen with eyes open and blank; tragedy of a machine and a nation, Wright of Derby's Experiment on a Bird in the Air Pump at the scale of a city"
+          text:
+            english: "Whatever Adaeze Nwosu chose in the empty control room, the network had been built the wrong way to bear it. At minute forty, the map on the screens began to tear: Liverpool went dark, then half of Glasgow, then the whole of Kent. The network did what it could. It brought most of them back.\n\nFour million people woke up the next morning with someone else's memories, or with gaps where their children's names used to be, or simply afraid to sleep. The hospitals filled. The newspapers printed lists. And the Disconnected, who had warned everyone, did not wait for an inquiry.\n\nBy the end of the week the Free Shires of the Unconnected had been proclaimed in the West Country and the hills of Wales, with an army of farmers, veterans and frightened parents, and a single demand: the network must be switched off forever. Nwosu has not left the control room. She is still trying to bring the last forty thousand home."
+            spanish: "Elija lo que haya elegido Adaeze Nwosu en la sala de control vacía, la red se había construido de la manera equivocada para aguantarlo. En el minuto cuarenta el mapa de las pantallas empezó a romperse: Liverpool se apagó, después media Glasgow, después Kent entero. La red hizo lo que pudo. Trajo de vuelta a casi todos.\n\nCuatro millones de personas se despertaron a la mañana siguiente con recuerdos de otro, o con huecos donde antes estaban los nombres de sus hijos, o simplemente con miedo de dormir. Los hospitales se llenaron. Los diarios publicaron listas. Y los Desconectados, que habían avisado a todos, no esperaron una investigación.\n\nA fin de semana se habían proclamado los Condados Libres de los Desconectados en el West Country y las colinas de Gales, con un ejército de granjeros, veteranos y padres asustados, y una sola exigencia: que la red se apague para siempre. Nwosu no salió de la sala de control. Todavía está intentando traer a casa a los últimos cuarenta mil."
+        close: {english: "Bring them home.", spanish: "Traerlos a casa."}
+        effects:
+        - {effect: run, value: ZALS_guerra_civil}
+      - id: 106
+        kind: negativo
+        title: {english: "The Broken Promise", spanish: "La Promesa Rota"}
+        desc:
+          english: "The Disconnected felt betrayed by their own advocate. They did not riot; they left. The shires proclaimed themselves free and the cables went down across half the island. Albion is at war with itself."
+          spanish: "Los Desconectados se sintieron traicionados por su propia abogada. No se rebelaron: se fueron. Los condados se proclamaron libres y los cables cayeron en media isla. Albión está en guerra consigo misma."
+        catastrophe:
+          rebellion: {cosmetic_tag: ZAL_DESCONECTADOS, ideology: neutrality, size: 0.35, leader: {english: "Elder Josiah Hale", spanish: "Anciano Josiah Hale"}}
+        plate:
+          art: "Parliament Square at dawn after a long night: an empty kitchen chair lies overturned in a puddle with a paper notebook beside it, its pages scattered and soaked; in the background, a long column of people with blown-out candles walking away down Whitehall toward the countryside, shoulders hunched, backs to the glowing city; a few soldiers watching uncertainly; grief and departure, Millais' melancholy with Delaroche's emptiness"
+          text:
+            english: "Whatever Niamh Byrne chose on the kitchen chair, her people did not follow her. They had believed she would fight for every word of their Charter, and she had let some of the words go, and on the night it mattered they did not recognise what she did.\n\nThey did not riot. That was what frightened the government most. Eleven million people simply blew out their candles and went home, and the next morning the cables started coming down: in the Cotswolds, in Cornwall, in Snowdonia. By the end of the month the Free Shires of the Unconnected had their own militia, their own flag, a white sheet with a hand-drawn candle, and an elected leader, an old Herefordshire farmer named Josiah Hale.\n\nNiamh's notebook was found the next morning in a puddle in Parliament Square. The first page, the one with the promise, had run in the rain and could no longer be read."
+            spanish: "Elija lo que haya elegido Niamh Byrne en la silla de cocina, su gente no la siguió. Habían creído que iba a pelear cada palabra de su Carta, y ella había soltado algunas, y la noche que importaba no reconocieron lo que hizo.\n\nNo se rebelaron. Eso fue lo que más asustó al gobierno. Once millones de personas simplemente apagaron las velas y se fueron a sus casas, y a la mañana siguiente empezaron a caer los cables: en los Cotswolds, en Cornualles, en Snowdonia. A fin de mes los Condados Libres de los Desconectados tenían su propia milicia, su propia bandera, una sábana blanca con una vela dibujada a mano, y un líder elegido, un granjero viejo de Herefordshire llamado Josiah Hale.\n\nEl cuaderno de Niamh apareció a la mañana siguiente en un charco de Parliament Square. La primera página, la de la promesa, se había corrido con la lluvia y ya no se podía leer."
+        close: {english: "I am sorry.", spanish: "Perdón."}
+        effects:
+        - {effect: run, value: ZALS_guerra_civil}
+      # ------------------------------------------------------------ salidas tempranas
+      - id: 107
+        kind: positivo
+        title: {english: "A Gentler Albion", spanish: "Una Albión Más Amable"}
+        desc:
+          english: "There was no Synchrony, but there was something else: a country that learned to talk across the cable. The Disconnected got their help, the connected got their patience. Albion is kinder."
+          spanish: "No hubo Sincronía, pero hubo otra cosa: un país que aprendió a hablar a través del cable. Los Desconectados recibieron ayuda, los conectados aprendieron paciencia. Albión es más amable."
+        close: {english: "Perhaps next year.", spanish: "Quizás el año que viene."}
+        effects:
+        - {effect: add_stability, value: 0.06}
+        - {effect: add_political_power, value: 75}
+        - {effect: add_variable, var: ZAL_sincronia, value: 5}
+      - id: 108
+        kind: positivo
+        title: {english: "The People's Mesh", spanish: "La Malla del Pueblo"}
+        desc:
+          english: "Nwosu gave the boxes to the people and walked away from the Synchrony. Albion has the strongest network in the world and nobody owns it, not even the government."
+          spanish: "Nwosu les regaló las cajas a la gente y se alejó de la Sincronía. Albión tiene la red más fuerte del mundo y no es de nadie, ni siquiera del gobierno."
+        close: {english: "It is yours now.", spanish: "Ahora es de ustedes."}
+        effects:
+        - {effect: tech_bonus, category: electronics, bonus: 0.75, uses: 2}
+        - {effect: add_stability, value: 0.04}
+      - id: 109
+        kind: neutral
+        title: {english: "Not Yet", spanish: "Todavía No"}
+        desc:
+          english: "The bill was withdrawn. The connected were disappointed, the Disconnected relieved and the network, for once, said nothing at all."
+          spanish: "La ley se retiró. Los conectados se decepcionaron, los Desconectados respiraron aliviados y la red, por una vez, no dijo nada."
+        close: {english: "Not yet.", spanish: "Todavía no."}
+        effects:
+        - {effect: add_variable, var: ZAL_sincronia, value: -5}
+        - {effect: add_political_power, value: 50}
+      - id: 110
+        kind: neutral
+        title: {english: "Edinburgh's Dream", spanish: "El Sueño de Edimburgo"}
+        desc:
+          english: "The Synchrony never happened. Instead, the recording of Edinburgh's shared dream of a beach became the most watched thing in Albion's history. Nobody knows where the beach is."
+          spanish: "La Sincronía nunca se hizo. En cambio, la grabación del sueño compartido de Edimburgo, una playa, se volvió lo más visto de la historia de Albión. Nadie sabe dónde queda la playa."
+        close: {english: "Somewhere, a beach.", spanish: "En algún lugar, una playa."}
+        effects:
+        - {effect: add_variable, var: ZAL_sincronia, value: 3}
+        - {effect: add_stability, value: 0.02}

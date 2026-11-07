@@ -1,0 +1,1906 @@
+# =============================================================================
+# Las aventuras de Japón (2026-11-07)
+#
+# Pedido del usuario: "Crear una aventura 'fácil' y breve para cada rama de
+# Japón. Seguida de una más larga y difícil."
+#
+# Una por Casa (ZJP_gobierna, 29_japon_ampliado): la corta arranca 45 días
+# después de que gobierna su Casa; la larga, 60 días después de que termina la
+# corta. Cortas: dos personajes, dos decisiones, un capítulo cada 90 días, sin
+# muertes ni catástrofes. Largas: tres personajes, cuatro decisiones, un
+# capítulo cada 120 días, tres muertes, guerras y guerras civiles; la última
+# decisión depende de algo que se eligió al principio (la bandera
+# <prefijo>_<personaje>_...), y el relato lo recuerda. Los héroes de las largas
+# son nuevos (los asesores del juego no pueden morir en un relato y seguir en el
+# gabinete); los de las cortas son los del juego.
+# Las presentaciones, los primeros capítulos y los finales grandes abren la
+# Lámina (laminas.py).
+# =============================================================================
+
+cosmetic_tags:
+- id: ZJP_CLANES
+  parent: ZJP
+  name: {english: 'The Free Clans of Kansai', spanish: 'Los Clanes Libres de Kansai'}
+  adjective: {english: 'Kansai', spanish: 'de Kansai'}
+  art: 'a black field with a white circle and inside it a red stylised carp leaping, a single katana stroke beneath; old-fashioned yakuza crest style, stark and proud.'
+  src: user_request
+- id: ZJP_CUBAS
+  parent: ZJP
+  name: {english: 'The Republic of the Vats', spanish: 'La República de las Cubas'}
+  adjective: {english: 'Vat-born', spanish: 'de las Cubas'}
+  art: 'a plain white field with a single red thread tied in a knot across the centre, above a small violet circle; minimalist, hand-made, the flag of the clone soldiers.'
+  src: user_request
+
+decisions:
+  scripted_effects:
+  - id: ZJPZ2_victoria
+    effects:
+    - {effect: dynamic_modifier, id: ZJP_dueno_del_mercado, days: 1825}
+    - {effect: add_variable, var: ZJP_giri, value: 50}
+    - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 20}
+    - {effect: add_political_power, value: 200}
+    - {effect: navy_experience, value: 50}
+  - id: ZJPY2_victoria
+    effects:
+    - {effect: dynamic_modifier, id: ZJP_juramento_renovado, days: 1825}
+    - {effect: add_variable, var: ZJP_giri, value: 50}
+    - {effect: add_variable, var: ZJP_favor_yakuza, value: 20}
+    - {effect: add_political_power, value: 200}
+    - {effect: add_stability, value: 0.08}
+  - id: ZJPS2_victoria
+    effects:
+    - {effect: dynamic_modifier, id: ZJP_ciudadanos_de_la_cuba, days: 1825}
+    - {effect: add_variable, var: ZJP_giri, value: 50}
+    - {effect: add_variable, var: ZJP_favor_srs, value: 20}
+    - {effect: add_political_power, value: 200}
+    - {effect: add_manpower, value: 150000}
+
+  dynamic_modifiers:
+  - id: ZJP_empresa_honesta
+    country: ZJP
+    name: {english: 'The Honest Company', spanish: 'La Empresa Honesta'}
+    desc: {english: 'The only books in Asia that tell the truth.', spanish: 'Los únicos libros de Asia que dicen la verdad.'}
+    modifiers: {consumer_goods_factor: -0.03, political_power_gain: 0.1, industrial_capacity_dockyard: 0.1}
+  - id: ZJP_cada_chico_un_piloto
+    country: ZJP
+    name: {english: 'Every Child a Pilot', spanish: 'Cada Chico, un Piloto'}
+    desc: {english: 'Paper Mecha helmets in every school.', spanish: 'Cascos de Mecha de cartón en cada escuela.'}
+    modifiers: {war_support_factor: 0.1, conscription_factor: 0.1}
+  - id: ZJP_fiesta_tranquila
+    country: ZJP
+    name: {english: 'The Quiet Festival', spanish: 'La Fiesta Tranquila'}
+    desc: {english: 'Grey suits and blue uniforms on the same corners.', spanish: 'Trajes grises y uniformes azules en las mismas esquinas.'}
+    modifiers: {stability_factor: 0.08, political_power_gain: 0.05}
+  - id: ZJP_dragon_de_osaka
+    country: ZJP
+    name: {english: 'The Dragon of Osaka', spanish: 'El Dragón de Osaka'}
+    desc: {english: 'Every clan carried the same dragon.', spanish: 'Todos los clanes cargaron el mismo dragón.'}
+    modifiers: {stability_factor: 0.05, war_support_factor: 0.05, army_org_factor: 0.03}
+  - id: ZJP_cancion_de_la_enfermera
+    country: ZJP
+    name: {english: "The Nurse's Song", spanish: 'La Canción de la Enfermera'}
+    desc: {english: 'Something of a person survives in the vats.', spanish: 'Algo de una persona sobrevive en las cubas.'}
+    modifiers: {research_speed_factor: 0.08, stability_factor: 0.03}
+  - id: ZJP_regimiento_que_canta
+    country: ZJP
+    name: {english: 'The Singing Regiment', spanish: 'El Regimiento que Canta'}
+    desc: {english: 'They sing before every battle. The enemy has learned to dread it.', spanish: 'Cantan antes de cada batalla. El enemigo aprendió a temerle.'}
+    modifiers: {army_morale_factor: 0.08, war_support_factor: 0.05}
+  - id: ZJP_dueno_del_mercado
+    country: ZJP
+    name: {english: 'Owner of the Market', spanish: 'Dueño del Mercado'}
+    desc: {english: 'The ships taken in 2089 are home, with their old names.', spanish: 'Los barcos que se llevaron en 2089 volvieron a casa, con sus nombres viejos.'}
+    modifiers: {industrial_capacity_dockyard: 0.25, industrial_capacity_factory: 0.10, political_power_gain: 0.15, stability_factor: 0.05}
+  - id: ZJP_juramento_renovado
+    country: ZJP
+    name: {english: 'The Oath Renewed', spanish: 'El Juramento Renovado'}
+    desc: {english: 'The clans of Kansai are bound to the Shogunate for another generation.', spanish: 'Los clanes de Kansai quedan atados al Shogunato por otra generación.'}
+    modifiers: {stability_factor: 0.12, political_power_gain: 0.20, war_support_factor: 0.10}
+  - id: ZJP_ciudadanos_de_la_cuba
+    country: ZJP
+    name: {english: 'Citizens of the Vat', spanish: 'Ciudadanos de la Cuba'}
+    desc: {english: 'They fight for a country that called them by their names.', spanish: 'Pelean por un país que los llamó por su nombre.'}
+    modifiers: {army_morale_factor: 0.10, army_org_factor: 0.05, conscription_factor: 0.1, stability_factor: 0.08}
+
+adventures:
+  sagas:
+    # =========================================================================
+    # Zaibatsu, corta y fácil: La Junta de Accionistas
+    # =========================================================================
+    ZJP_ZAI_1:
+      country: ZJP
+      namespace: meganations_japon_accionistas
+      prefix: ZJPZ1
+      start:
+        days: 45
+        when: {variable_is: {var: ZJP_gobierna, value: 1}}
+      config: &corta
+        interval_days: 90
+        ending_days: 10
+        min_endings: 6
+        ending_mix: {muerte: 0, objetivo: 2, positivo: 2, negativo: 1, neutral: 1}
+        min_catastrophes: 0
+        skull_line:
+          english: "\\n\\nFavours owed: [?{var}|0]"
+          spanish: "\\n\\nFavores debidos: [?{var}|0]"
+      name: {english: "The Shareholders' Meeting", spanish: "La Junta de Accionistas"}
+      palette: "glass towers over old Tokyo bay at night, emerald corporate neon, black suits and green-tinted glasses, rain on the shipyards of Kanto, giant Mecha in scaffolding"
+      ideas: []
+      intro:
+        title: {english: "Japan, Incorporated", spanish: "Japón, Sociedad Anónima"}
+        desc:
+          english: "The Zaibatsu rule, and the first quarterly report of the new Japan is due. The foreign investors who fled the HSN want to see a profit, a Mecha and a smile. Two people can give them what they want."
+          spanish: "Gobiernan los Zaibatsu, y vence el primer informe trimestral del nuevo Japón. Los inversores extranjeros que huyeron de la HSN quieren ver una ganancia, un Mecha y una sonrisa. Dos personas pueden darles lo que quieren."
+        plate:
+          art: "A vast corporate boardroom at the top of a Tokyo tower at night, emerald neon through rain-streaked glass; a long black lacquer table with foreign investors in expensive suits; at the window, a young woman in a severe dark suit with a ledger under her arm, and behind the glass, far below, a giant Mecha standing in the floodlit shipyards like a samurai statue; corporate ukiyo-e meets Caillebotte's modern city, cold and magnificent"
+          text:
+            english: "The Kanemura family has owned shipyards in Kanto since before the war, before the collapse, before the HSN came and took the fleet. Now that the Shogunate has given them the country, the Zaibatsu intend to run it the only way they know: like a company that must show a profit every three months.\n\nThe investors have come from Seoul, from Vancouver, from the ruins of the High Seas Market, all of them wanting to know whether Japan is a nation or a startup. The first shareholders' meeting is in ninety days. Yui Kanemura, who keeps the books her brother never reads, wants to show them honest numbers. General Kaori Nishimura, who pilots the Mecha, wants to show them something they will never forget."
+            spanish: "La familia Kanemura tiene astilleros en Kanto desde antes de la guerra, antes del colapso, antes de que viniera la HSN y se llevara la flota. Ahora que el Shogunato les dio el país, los Zaibatsu piensan manejarlo de la única manera que saben: como una empresa que tiene que mostrar ganancias cada tres meses.\n\nLos inversores vinieron de Seúl, de Vancouver, de las ruinas del Mercado de Alta Mar, y todos quieren saber si Japón es una nación o un emprendimiento. La primera junta de accionistas es en noventa días. Yui Kanemura, que lleva las cuentas que su hermano nunca lee, quiere mostrarles números honestos. La General Kaori Nishimura, que pilotea el Mecha, quiere mostrarles algo que no olviden nunca."
+      characters:
+      - id: yui
+        name: {english: "Yui Kanemura", spanish: "Yui Kanemura"}
+        pick: {english: "Director Yui Kanemura: honest books, the oldest trick in business.", spanish: "La Directora Yui Kanemura: libros honestos, el truco más viejo de los negocios."}
+        first: 10
+      - id: nishimura
+        name: {english: "General Nishimura", spanish: "La General Nishimura"}
+        pick: {english: "General Kaori Nishimura: twelve metres of steel speak louder than a balance sheet.", spanish: "La General Kaori Nishimura: doce metros de acero hablan más fuerte que un balance."}
+        first: 20
+      nodes:
+      - id: 10
+        who: yui
+        title: {english: "The Real Numbers", spanish: "Los Números Reales"}
+        desc:
+          english: "Yui has found a hole in the accounts: the shipyards are losing money on every hull. She can publish the truth with a plan to fix it, or find the money quietly in the Yakuza ports before the meeting."
+          spanish: "Yui encontró un agujero en las cuentas: los astilleros pierden plata con cada casco. Puede publicar la verdad con un plan para arreglarlo, o conseguir la plata en silencio en los puertos de la Yakuza antes de la junta."
+        plate:
+          art: "A small, spotless office at night lit by a single green desk lamp; a young Japanese woman in a dark suit, glasses pushed up on her forehead, bends over enormous paper ledgers and a glowing tablet, a red pencil in her teeth; behind her through the window, the cranes and half-built hulls of the Kanto shipyards under floodlights; quiet determination, Vermeer's light in a corporate tower"
+          text:
+            english: "Yui Kanemura learned accounting at nine, from her grandmother, on an abacus, in the back room of a shipyard that had been bankrupt three times and never closed. She has her grandmother's rule pinned above her desk: the numbers do not lie, people do.\n\nTonight the numbers are telling her that Kanemura Heavy Industries loses eleven million yen on every hull it builds, and has for two years, and that her brother Daisuke has been covering it with loans from people who do not send letters when they want their money back. The shareholders arrive in ninety days."
+            spanish: "Yui Kanemura aprendió contabilidad a los nueve años, con su abuela, con un ábaco, en la trastienda de un astillero que había quebrado tres veces y nunca cerró. Tiene la regla de su abuela clavada arriba del escritorio: los números no mienten, la gente sí.\n\nEsta noche los números le dicen que Kanemura Industrias Pesadas pierde once millones de yenes con cada casco que construye, hace dos años, y que su hermano Daisuke lo viene tapando con préstamos de gente que no manda cartas cuando quiere su plata de vuelta. Los accionistas llegan en noventa días."
+        options:
+        - name: {english: "Publish the truth, with a plan.", spanish: "Publicar la verdad, con un plan."}
+          effects: [{effect: add_political_power, value: -20}]
+          next: 11
+        - name: {english: "Borrow from the Yakuza ports, quietly.", spanish: "Pedirles a los puertos de la Yakuza, en silencio."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZJP_favor_yakuza, value: 5}]
+          next: 12
+      - id: 11
+        who: yui
+        title: {english: "The Honest Report", spanish: "El Informe Honesto"}
+        desc:
+          english: "The report shocked the investors, and then impressed them: nobody in Asia publishes real numbers any more. They will stay if Yui closes the worst yard, which employs four thousand welders, or if she finds a buyer for the losses abroad."
+          spanish: "El informe espantó a los inversores, y después los impresionó: ya nadie en Asia publica números reales. Se quedan si Yui cierra el peor astillero, que emplea a cuatro mil soldadores, o si encuentra afuera un comprador para las pérdidas."
+        options:
+        - name: {english: "Keep the yard. Sell the losses to Seoul.", spanish: "Mantener el astillero. Venderle las pérdidas a Seúl."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 101
+        - name: {english: "Close the yard. Numbers first.", spanish: "Cerrar el astillero. Primero los números."}
+          effects: [{effect: add_stability, value: -0.03}, {effect: add_political_power, value: 40}]
+          next: 103
+      - id: 12
+        who: yui
+        title: {english: "The Debt in Osaka", spanish: "La Deuda de Osaka"}
+        desc:
+          english: "The money came from Osaka, and so did a polite man named Tetsuo Mizuno, who would like a seat on the board. Yui can give it to him, or pay the debt back early at a ruinous price."
+          spanish: "La plata vino de Osaka, y también un señor muy educado llamado Tetsuo Mizuno, al que le gustaría un asiento en el directorio. Yui puede dárselo, o devolver la deuda antes de tiempo a un precio ruinoso."
+        options:
+        - name: {english: "Pay it back early. No Yakuza on the board.", spanish: "Devolverla antes. Ninguna Yakuza en el directorio."}
+          effects: [{effect: add_political_power, value: -40}]
+          next: 104
+        - name: {english: "Give him the seat.", spanish: "Darle el asiento."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZJP_favor_yakuza, value: 10}, {effect: add_variable, var: ZJP_favor_zaibatsu, value: -10}]
+          next: 106
+      - id: 20
+        who: nishimura
+        title: {english: "The Demonstration", spanish: "La Demostración"}
+        desc:
+          english: "Nishimura wants to show the investors the Mecha in action. She can stage a parade through the Ginza, safe and spectacular, or a live-fire exercise at Mount Fuji, dangerous and unforgettable."
+          spanish: "Nishimura quiere mostrarles el Mecha en acción a los inversores. Puede montar un desfile por Ginza, seguro y espectacular, o un ejercicio con fuego real en el Monte Fuji, peligroso e inolvidable."
+        plate:
+          art: "Dawn at the foot of Mount Fuji, snow on the summit; a twelve-metre Japanese Mecha painted in emerald and black with a corporate diamond logo kneels in a field of grass, steam rising from its joints; a woman pilot in a flight suit stands on its shoulder with her helmet under her arm, looking at the mountain; in the distance, a stand of investors under umbrellas; Hokusai's Fuji meets heroic modern history painting"
+          text:
+            english: "Kaori Nishimura was a test pilot before she was a general. She has crashed four prototypes and walked away from all of them, and she is the only person in Japan who calls the Mecha 'she'. When the board told her that the investors want to see what the money buys, she smiled the way pilots smile before something stupid.\n\nShe can march the Mecha down the Ginza at noon with confetti and children on their fathers' shoulders, which will look wonderful on the news. Or she can take the investors to the slopes of Fuji and show them what twelve metres of steel do to a hillside when they mean it."
+            spanish: "Kaori Nishimura fue piloto de pruebas antes que general. Estrelló cuatro prototipos y salió caminando de todos, y es la única persona de Japón que habla del Mecha en femenino. Cuando el directorio le dijo que los inversores quieren ver qué compra su plata, sonrió como sonríen los pilotos antes de hacer una estupidez.\n\nPuede hacer desfilar el Mecha por Ginza al mediodía, con papelitos y chicos en los hombros de sus padres, que va a quedar precioso en el noticiero. O puede llevar a los inversores a las faldas del Fuji y mostrarles qué le hacen doce metros de acero a una ladera cuando van en serio."
+        options:
+        - name: {english: "The Ginza parade.", spanish: "El desfile de Ginza."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 21
+        - name: {english: "Live fire at Fuji.", spanish: "Fuego real en el Fuji."}
+          effects: [{effect: army_experience, value: 15}]
+          next: 22
+      - id: 21
+        who: nishimura
+        title: {english: "Confetti and Steel", spanish: "Papelitos y Acero"}
+        desc:
+          english: "The parade was a triumph. Now a toy company wants to make a Mecha figure for every child in Japan, and the Navy wants the money for hulls instead. Nishimura can sign the toy deal or pass the money to the shipyards."
+          spanish: "El desfile fue un triunfo. Ahora una juguetería quiere hacer una figura del Mecha para cada chico de Japón, y la Armada quiere la plata para cascos. Nishimura puede firmar el trato de los juguetes o pasarles la plata a los astilleros."
+        options:
+        - name: {english: "Sign the toy deal. Every child a pilot.", spanish: "Firmar lo de los juguetes. Cada chico, un piloto."}
+          effects: [{effect: add_war_support, value: 0.03}]
+          next: 102
+        - name: {english: "The money goes to the yards.", spanish: "La plata va a los astilleros."}
+          effects: [{effect: navy_experience, value: 15}]
+          next: 103
+      - id: 22
+        who: nishimura
+        title: {english: "The Hillside", spanish: "La Ladera"}
+        desc:
+          english: "The live fire was spectacular, and it set half a forest on fire. The investors are thrilled; the Ministry of the Environment is not. Nishimura can pay for the replanting herself or blame a faulty shell."
+          spanish: "El fuego real fue espectacular, y prendió fuego medio bosque. Los inversores están fascinados; el Ministerio de Ambiente no. Nishimura puede pagar la reforestación de su bolsillo o culpar a un proyectil fallado."
+        options:
+        - name: {english: "Pay for the replanting, and plant the first tree herself.", spanish: "Pagar la reforestación, y plantar ella el primer árbol."}
+          effects: [{effect: add_political_power, value: -15}, {effect: add_stability, value: 0.02}]
+          next: 102
+        - name: {english: "Blame a faulty shell.", spanish: "Culpar a un proyectil fallado."}
+          skulls: 1
+          next: 105
+      endings:
+      - id: 101
+        kind: objetivo
+        title: {english: "The Honest Company", spanish: "La Empresa Honesta"}
+        desc:
+          english: "The investors stayed, the yards stayed open and Japan's bonds became the safest in Asia. Yui Kanemura is the most trusted name in the market."
+          spanish: "Los inversores se quedaron, los astilleros siguen abiertos y los bonos de Japón son los más seguros de Asia. Yui Kanemura es el nombre más confiable del mercado."
+        plate:
+          art: "A crowded trading floor in Tokyo under green light, hundreds of traders on their feet applauding; on a balcony a young woman in a dark suit holding an old wooden abacus, smiling for the first time; giant screens behind her showing a rising green line over the rising sun; triumph of honesty, joyful modern genre painting with Japanese woodblock clarity"
+          text:
+            english: "The second quarterly report was worse than the first, and it did not matter. The investors had learned that Japan, alone in Asia, published the truth, and money loves the truth more than it loves profit, because the truth is rarer.\n\nBy the end of the year Japanese bonds were the safest paper between Vladivostok and Sydney. Yui Kanemura hung her grandmother's abacus in the lobby of the stock exchange, where every trader passes it on the way in."
+            spanish: "El segundo informe trimestral fue peor que el primero, y no importó. Los inversores habían aprendido que Japón, solo en Asia, publicaba la verdad, y la plata ama la verdad más que la ganancia, porque la verdad es más rara.\n\nA fin de año los bonos japoneses eran el papel más seguro entre Vladivostok y Sídney. Yui Kanemura colgó el ábaco de su abuela en el hall de la bolsa, donde cada operador pasa al entrar."
+        close: {english: "The numbers do not lie.", spanish: "Los números no mienten."}
+        effects:
+        - {effect: dynamic_modifier, id: ZJP_empresa_honesta, days: 730}
+        - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 15}
+        - {effect: add_variable, var: ZJP_giri, value: 25}
+      - id: 102
+        kind: objetivo
+        title: {english: "Every Child a Pilot", spanish: "Cada Chico, un Piloto"}
+        desc:
+          english: "The Mecha became the face of Japan. Recruitment offices have queues around the block, and the investors have doubled their money. Kaori Nishimura is a national hero."
+          spanish: "El Mecha se volvió la cara de Japón. Las oficinas de reclutamiento tienen colas a la vuelta de la manzana, y los inversores duplicaron su plata. Kaori Nishimura es una heroína nacional."
+        plate:
+          art: "A sunny Tokyo street festival: children in paper Mecha helmets run between food stalls, a giant emerald Mecha stands in the background with a woman pilot waving from its open cockpit, cherry blossoms falling, recruitment posters on every wall; joyful, bright, a modern Hiroshige festival scene with heroic undertones"
+          text:
+            english: "Somewhere between the parade and the replanting, the Mecha stopped being a weapon and became a promise. Children wear paper Mecha helmets to school. Old men bow to it when it passes. The recruitment offices of the Shogunate have queues around the block every morning.\n\nThe investors doubled their money and asked for more. Kaori Nishimura has been on the cover of every magazine in Japan, and she keeps only one: a child's drawing of her Mecha, with her waving from the cockpit, in crayon."
+            spanish: "En algún punto entre el desfile y la reforestación, el Mecha dejó de ser un arma y se volvió una promesa. Los chicos van a la escuela con cascos de Mecha de cartón. Los viejos le hacen una reverencia cuando pasa. Las oficinas de reclutamiento del Shogunato tienen colas a la vuelta de la manzana cada mañana.\n\nLos inversores duplicaron su plata y pidieron más. Kaori Nishimura salió en la tapa de cada revista de Japón, y guarda solo una: el dibujo de un chico de su Mecha, con ella saludando desde la cabina, en crayón."
+        close: {english: "She flies.", spanish: "Ella vuela."}
+        effects:
+        - {effect: dynamic_modifier, id: ZJP_cada_chico_un_piloto, days: 730}
+        - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 10}
+        - {effect: add_variable, var: ZJP_giri, value: 20}
+        - {effect: army_experience, value: 25}
+      - id: 103
+        kind: positivo
+        title: {english: "A Good Quarter", spanish: "Un Buen Trimestre"}
+        desc:
+          english: "The meeting went well. Not brilliantly, but well. The shipyards have money, the investors have patience and the Zaibatsu have time."
+          spanish: "La junta salió bien. No brillante, pero bien. Los astilleros tienen plata, los inversores tienen paciencia y los Zaibatsu tienen tiempo."
+        close: {english: "Next quarter.", spanish: "El trimestre que viene."}
+        effects:
+        - {effect: add_political_power, value: 60}
+        - {effect: navy_experience, value: 10}
+        - {effect: add_variable, var: ZJP_favor_zaibatsu, value: 5}
+      - id: 104
+        kind: positivo
+        title: {english: "Clean Hands", spanish: "Manos Limpias"}
+        desc:
+          english: "Paying the Yakuza back early cost a fortune, but the Kanemura name is clean. The other Houses respect it, grudgingly."
+          spanish: "Devolverle a la Yakuza antes de tiempo costó una fortuna, pero el apellido Kanemura está limpio. Las otras Casas lo respetan, a regañadientes."
+        close: {english: "Expensive, but clean.", spanish: "Caro, pero limpio."}
+        effects:
+        - {effect: add_stability, value: 0.04}
+        - {effect: add_variable, var: ZJP_giri, value: 15}
+      - id: 105
+        kind: neutral
+        title: {english: "The Faulty Shell", spanish: "El Proyectil Fallado"}
+        desc:
+          english: "Nobody quite believed the story about the faulty shell, and nobody quite disbelieved it. The forest is still burnt. The investors bought, then sold."
+          spanish: "Nadie terminó de creerse la historia del proyectil fallado, y nadie terminó de descreerla. El bosque sigue quemado. Los inversores compraron, y después vendieron."
+        close: {english: "Business as usual.", spanish: "Lo de siempre."}
+        effects:
+        - {effect: army_experience, value: 10}
+      - id: 106
+        kind: negativo
+        title: {english: "A Seat for Osaka", spanish: "Un Asiento para Osaka"}
+        desc:
+          english: "Tetsuo Mizuno sits on the board of Kanemura Heavy Industries now. He never raises his voice. The other directors have started agreeing with him before he speaks."
+          spanish: "Tetsuo Mizuno se sienta ahora en el directorio de Kanemura Industrias Pesadas. Nunca levanta la voz. Los otros directores empezaron a darle la razón antes de que hable."
+        close: {english: "Yes, Mr Mizuno.", spanish: "Sí, señor Mizuno."}
+        effects:
+        - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -10}
+        - {effect: add_stability, value: -0.03}
+
+    # =========================================================================
+    # Zaibatsu, larga y difícil: La OPA Hostil
+    # =========================================================================
+    ZJP_ZAI_2:
+      country: ZJP
+      namespace: meganations_japon_opa
+      prefix: ZJPZ2
+      start:
+        days: 60
+        when: {any: [{flag: ZJPZ1_av_fin}, {flag: ZJPZ1_av_cortada}]}
+      config: &larga
+        interval_days: 120
+        ending_days: 15
+        min_endings: 12
+        ending_mix: {muerte: 3, objetivo: 3, positivo: 2, negativo: 2, neutral: 2}
+        min_catastrophes: 2
+        skull_line:
+          english: "\\n\\nEnemies made: [?{var}|0]"
+          spanish: "\\n\\nEnemigos hechos: [?{var}|0]"
+      name: {english: "The Hostile Takeover", spanish: "La OPA Hostil"}
+      palette: "emerald neon and black glass, typhoon rain over container ports, Singapore skyline across the sea, briefcases and katanas, drone swarms with corporate logos"
+      ideas: []
+      intro:
+        title: {english: "Buy the Market", spanish: "Comprar el Mercado"}
+        desc:
+          english: "Daisuke Kanemura has decided that Japan will not fight the High Seas Market. It will buy it. Share by share, port by port, until the HSN wakes up one morning owned by Kanto. Three people will carry out the most dangerous deal in Asian history."
+          spanish: "Daisuke Kanemura decidió que Japón no va a pelear contra el Mercado de Alta Mar. Lo va a comprar. Acción por acción, puerto por puerto, hasta que la HSN se despierte una mañana siendo propiedad de Kanto. Tres personas van a llevar adelante el negocio más peligroso de la historia de Asia."
+        plate:
+          art: "A rooftop helipad of a Tokyo skyscraper in a typhoon at night: a man in a black suit and green-tinted glasses stands at the edge with his coat flapping, looking across a stormy sea toward the distant glowing towers of Singapore drawn huge on the horizon like an enemy fortress; behind him three figures wait: a corporate raider woman with a briefcase, an old fixer in a raincoat, and a drone pilot with a swarm hovering above; Caspar David Friedrich's Wanderer as a corporate warlord"
+          text:
+            english: "The HSN took Japan's fleet in 2089 with a contract, not a battle. Daisuke Kanemura has never forgotten it. He was twenty and he watched the ships sail for Singapore with their new names painted over the old ones, and he decided that one day he would take everything back the same way: with paper.\n\nNow he has a country behind him. The plan is simple and insane: buy the High Seas Market's debts, its ports, its insurers, its shipping lines, quietly, through a hundred shell companies, until the day the HSN's board meets and discovers that the majority shareholder is Kanto. Three people will carry it out. Not all of them will live to see the end of it."
+            spanish: "La HSN se llevó la flota de Japón en 2089 con un contrato, no con una batalla. Daisuke Kanemura nunca lo olvidó. Tenía veinte años y vio a los barcos zarpar para Singapur con los nombres nuevos pintados encima de los viejos, y decidió que un día iba a recuperar todo de la misma manera: con papel.\n\nAhora tiene un país detrás. El plan es simple y demencial: comprar las deudas del Mercado de Alta Mar, sus puertos, sus aseguradoras, sus navieras, en silencio, por medio de cien empresas fantasma, hasta el día en que el directorio de la HSN se reúna y descubra que el accionista mayoritario es Kanto. Tres personas lo van a llevar adelante. No todas van a llegar vivas al final."
+      characters:
+      - id: aoki
+        name: {english: "Reiko Aoki", spanish: "Reiko Aoki"}
+        pick: {english: "Reiko Aoki, the raider: she has taken over eleven companies and been shot at twice.", spanish: "Reiko Aoki, la tiburona: se quedó con once empresas y le dispararon dos veces."}
+        first: 10
+      - id: haga
+        name: {english: "Old Haga", spanish: "El Viejo Haga"}
+        pick: {english: "Old Haga, the fixer: forty years buying people nobody else could buy.", spanish: "El Viejo Haga, el arreglador: cuarenta años comprando gente que nadie más podía comprar."}
+        first: 20
+      - id: sora
+        name: {english: "Sora Fujiwara", spanish: "Sora Fujiwara"}
+        pick: {english: "Sora Fujiwara, Mariko's nephew: the drones will make sure the deal is not refused.", spanish: "Sora Fujiwara, el sobrino de Mariko: los drones se van a asegurar de que nadie rechace el trato."}
+        first: 30
+      nodes:
+      # ---- Aoki: el papel
+      - id: 10
+        who: aoki
+        title: {english: "A Hundred Shell Companies", spanish: "Cien Empresas Fantasma"}
+        desc:
+          english: "Reiko Aoki needs a hundred shell companies to buy HSN debt without anyone noticing. She can register them in Panama, slow and safe, or in the Free Ports of the HSN itself, fast and very risky."
+          spanish: "Reiko Aoki necesita cien empresas fantasma para comprar deuda de la HSN sin que nadie se dé cuenta. Puede registrarlas en Panamá, lento y seguro, o en los Puertos Libres de la propia HSN, rápido y muy arriesgado."
+        plate:
+          art: "A cramped office in a Hong Kong-style tower lit by green screens and hundreds of filing boxes stacked to the ceiling; a sharp woman in her forties with short hair and a scar on her cheek signs documents at furious speed, a pistol on the desk under a stack of contracts; through the window, container cranes and the night sea; noir chiaroscuro, a modern Caravaggio of paperwork"
+          text:
+            english: "Reiko Aoki has a scar on her left cheek from a takeover in Busan, where the old owner disagreed with the price. She bought the company anyway, and the old owner's house, and kept the bullet in a glass box on her desk.\n\nFor the Kanemura deal she will need a hundred companies that do not exist, each buying a little of the HSN's debt, none large enough to be noticed. Where she registers them decides how fast she can move, and how soon Singapore will start asking questions."
+            spanish: "Reiko Aoki tiene una cicatriz en la mejilla izquierda de una adquisición en Busan, donde el dueño anterior no estuvo de acuerdo con el precio. Compró la empresa igual, y la casa del dueño anterior, y guardó la bala en una cajita de vidrio sobre el escritorio.\n\nPara el negocio de los Kanemura va a necesitar cien empresas que no existen, cada una comprando un poco de la deuda de la HSN, ninguna lo bastante grande para que la noten. Dónde las registre decide qué tan rápido puede moverse, y qué tan pronto Singapur va a empezar a hacer preguntas."
+        options:
+        - name: {english: "Panama. Slow and safe.", spanish: "Panamá. Lento y seguro."}
+          effects: [{effect: flag, value: ZJPZ2_aoki_paciente}, {effect: add_political_power, value: -20}]
+          next: 11
+        - name: {english: "The HSN's own Free Ports. Fast.", spanish: "Los Puertos Libres de la propia HSN. Rápido."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZJP_giri, value: 10}]
+          next: 12
+      - id: 11
+        who: aoki
+        title: {english: "The Insurers of Singapore", spanish: "Las Aseguradoras de Singapur"}
+        desc:
+          english: "The shell companies own a fifth of the HSN's debt. The next step is the insurers who cover its fleet. Their chairman will sell, for a seat on the new board, or Aoki can ruin him with what she knows about his books."
+          spanish: "Las empresas fantasma tienen un quinto de la deuda de la HSN. El paso siguiente son las aseguradoras que cubren su flota. Su presidente vende, por un asiento en el directorio nuevo, o Aoki puede arruinarlo con lo que sabe de sus libros."
+        options:
+        - name: {english: "Give him the seat.", spanish: "Darle el asiento."}
+          effects: [{effect: add_political_power, value: -25}]
+          next: 13
+        - name: {english: "Ruin him.", spanish: "Arruinarlo."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZJP_giri, value: 10}]
+          next: 13
+      - id: 12
+        who: aoki
+        title: {english: "Questions in Singapore", spanish: "Preguntas en Singapur"}
+        desc:
+          english: "The HSN's financial police have noticed thirty new companies buying debt in their own ports. An inspector is on his way. Aoki can bribe him, disappear for a while, or let Old Haga deal with it."
+          spanish: "La policía financiera de la HSN notó treinta empresas nuevas comprando deuda en sus propios puertos. Viene un inspector. Aoki puede sobornarlo, desaparecer un tiempo, o dejar que se ocupe el Viejo Haga."
+        options:
+        - name: {english: "Disappear for a while. The deal can wait.", spanish: "Desaparecer un tiempo. El negocio puede esperar."}
+          next: 13
+        - name: {english: "Bribe him.", spanish: "Sobornarlo."}
+          skulls: 1
+          next: 13
+        - name: {english: "Close everything and walk away with what we have.", spanish: "Cerrar todo e irse con lo que tenemos."}
+          next: 111
+      - id: 13
+        who: aoki
+        title: {english: "Fifty-One Per Cent", spanish: "Cincuenta y Uno por Ciento"}
+        desc:
+          english: "Aoki is one signature from a majority of the HSN's shipping lines. The seller is in Jakarta and wants to meet her in person, alone. It could be a trap. She can go, or ask Kanemura to buy the last shares at any price, openly."
+          spanish: "A Aoki le falta una firma para tener la mayoría de las navieras de la HSN. El vendedor está en Yakarta y quiere verla en persona, sola. Puede ser una trampa. Puede ir, o pedirle a Kanemura que compre las últimas acciones a cualquier precio, a la vista de todos."
+        options:
+        - name: {english: "Go to Jakarta.", spanish: "Ir a Yakarta."}
+          next: 14
+        - name: {english: "Buy openly. Let Singapore see it coming.", spanish: "Comprar a la vista. Que Singapur lo vea venir."}
+          catastrophe: {war_by: HSN}
+          next: 107
+      - id: 14
+        who: aoki
+        title: {english: "The Jakarta Meeting", spanish: "La Reunión de Yakarta"}
+        desc:
+          english: "The seller is waiting in a private room above the harbour, with the contract and two bodyguards. If Aoki was careful from the start, her cover is clean; if not, Singapore may know exactly who she is. She can sign at the table, or walk out and let the deal rest."
+          spanish: "El vendedor espera en un salón privado arriba del puerto, con el contrato y dos guardaespaldas. Si Aoki fue cuidadosa desde el principio, su fachada está limpia; si no, Singapur puede saber exactamente quién es. Puede firmar en la mesa, o irse y dejar el negocio como está."
+        options:
+        - name: {english: "Sign at the table.", spanish: "Firmar en la mesa."}
+          when: {flag: ZJPZ2_aoki_paciente}
+          next: 101
+        - name: {english: "Sign at the table.", spanish: "Firmar en la mesa."}
+          when: {not_flag: ZJPZ2_aoki_paciente}
+          next: 104
+        - name: {english: "Walk out. Forty-nine per cent is still a fortune.", spanish: "Irse. Cuarenta y nueve por ciento sigue siendo una fortuna."}
+          next: 109
+      # ---- Haga: la gente
+      - id: 20
+        who: haga
+        title: {english: "The People Who Matter", spanish: "La Gente Que Importa"}
+        desc:
+          english: "Old Haga knows that companies are just people with stationery. He needs the HSN board members who will vote with Kanto. He can start with the greedy ones, cheap and unreliable, or the frightened ones, expensive and loyal."
+          spanish: "El Viejo Haga sabe que las empresas son solo gente con papel membretado. Necesita a los directores de la HSN que van a votar con Kanto. Puede empezar por los codiciosos, baratos y poco confiables, o por los asustados, caros y leales."
+        plate:
+          art: "A smoky back room of an old Tokyo hostess bar at night, red lanterns and cigarette haze; an old man in a rumpled raincoat and a fedora sits alone at a low table pouring sake for an empty chair, a thick envelope beside the bottle; on the wall, photographs of dozens of powerful men, some crossed out; melancholic noir, Edward Hopper's loneliness in a Japanese setting"
+          text:
+            english: "Nobody knows Haga's first name. He has been buying people for the Kanemura family since Daisuke's grandfather ran a scrapyard, and in forty years he has never written anything down. He keeps it all in his head: who owes, who fears, who loves whom, who drinks.\n\nThe HSN board has fourteen members. Kanto needs eight. Haga already knows which ones can be bought and which can be frightened, and he knows that the ones you buy stay bought only until someone pays more, while the ones you frighten stay frightened for life. He pours the sake for the empty chair. He always does, for the first one."
+            spanish: "Nadie sabe el nombre de pila de Haga. Compra gente para la familia Kanemura desde que el abuelo de Daisuke tenía un desarmadero, y en cuarenta años nunca escribió nada. Lo tiene todo en la cabeza: quién debe, quién teme, quién quiere a quién, quién toma.\n\nEl directorio de la HSN tiene catorce miembros. Kanto necesita ocho. Haga ya sabe cuáles se pueden comprar y cuáles se pueden asustar, y sabe que los que comprás siguen comprados solo hasta que alguien paga más, mientras que los que asustás siguen asustados toda la vida. Le sirve sake a la silla vacía. Siempre lo hace, para el primero."
+        options:
+        - name: {english: "The greedy ones. Cheap.", spanish: "Los codiciosos. Baratos."}
+          next: 21
+        - name: {english: "The frightened ones. Loyal.", spanish: "Los asustados. Leales."}
+          effects: [{effect: flag, value: ZJPZ2_haga_leales}, {effect: add_political_power, value: -30}]
+          next: 22
+      - id: 21
+        who: haga
+        title: {english: "A Better Offer", spanish: "Una Oferta Mejor"}
+        desc:
+          english: "Three of the greedy directors have received a better offer from the Comuna's agents. Haga can outbid them, or let them go and look elsewhere."
+          spanish: "Tres de los directores codiciosos recibieron una oferta mejor de los agentes de la Comuna. Haga puede pagar más, o dejarlos ir y buscar en otro lado."
+        options:
+        - name: {english: "Outbid them.", spanish: "Pagar más."}
+          effects: [{effect: add_political_power, value: -30}]
+          next: 23
+        - name: {english: "Let them go. Look for the frightened ones now.", spanish: "Dejarlos ir. Buscar ahora a los asustados."}
+          effects: [{effect: flag, value: ZJPZ2_haga_leales}]
+          next: 23
+      - id: 22
+        who: haga
+        title: {english: "The Admiral's Daughter", spanish: "La Hija del Almirante"}
+        desc:
+          english: "The most frightened director is an old HSN admiral whose daughter studies in Kyoto. Haga could use her. He has never used a child before."
+          spanish: "El director más asustado es un viejo almirante de la HSN cuya hija estudia en Kioto. Haga podría usarla. Nunca usó a un chico."
+        options:
+        - name: {english: "Not the girl. Find another way.", spanish: "La chica no. Buscar otra manera."}
+          effects: [{effect: add_political_power, value: -20}]
+          next: 23
+        - name: {english: "Use her. Gently.", spanish: "Usarla. Con delicadeza."}
+          skulls: 2
+          next: 23
+        - name: {english: "Retire. Forty years is enough.", spanish: "Retirarse. Cuarenta años alcanzan."}
+          next: 112
+      - id: 23
+        who: haga
+        title: {english: "Seven Votes", spanish: "Siete Votos"}
+        desc:
+          english: "Haga has seven votes. He needs one more: the HSN's own chairman, who cannot be bought or frightened. Only a scandal would move him, and Haga has one. Using it would end the man and might start a war."
+          spanish: "Haga tiene siete votos. Le falta uno: el propio presidente de la HSN, que no se compra ni se asusta. Solo lo movería un escándalo, y Haga tiene uno. Usarlo terminaría con ese hombre y podría empezar una guerra."
+        options:
+        - name: {english: "Use the scandal.", spanish: "Usar el escándalo."}
+          catastrophe: {war_by: HSN}
+          skulls: 1
+          next: 108
+        - name: {english: "Meet the chairman face to face.", spanish: "Verse con el presidente cara a cara."}
+          next: 24
+      - id: 24
+        who: haga
+        title: {english: "Two Old Men", spanish: "Dos Viejos"}
+        desc:
+          english: "Haga and the HSN chairman meet in a Singapore teahouse, two old men who have known each other's names for thirty years. Everything depends on the seven Haga already has: are they the kind who stay? Haga can ask for the vote, or offer the chairman a way out for himself."
+          spanish: "Haga y el presidente de la HSN se encuentran en una casa de té de Singapur, dos viejos que se conocen el nombre hace treinta años. Todo depende de los siete que Haga ya tiene: ¿son de los que se quedan? Haga puede pedirle el voto, u ofrecerle al presidente una salida para él."
+        options:
+        - name: {english: "Ask for the vote.", spanish: "Pedirle el voto."}
+          when: {flag: ZJPZ2_haga_leales}
+          next: 102
+        - name: {english: "Ask for the vote.", spanish: "Pedirle el voto."}
+          when: {not_flag: ZJPZ2_haga_leales}
+          next: 105
+        - name: {english: "Offer him a way out.", spanish: "Ofrecerle una salida."}
+          next: 110
+      # ---- Sora: los drones
+      - id: 30
+        who: sora
+        title: {english: "The Swarm", spanish: "El Enjambre"}
+        desc:
+          english: "Sora Fujiwara commands four thousand corporate drones. His job: make sure the HSN's fleet cannot interfere while the deal closes. He can shadow their ships openly, a warning, or slip drones into their ports, invisible."
+          spanish: "Sora Fujiwara manda cuatro mil drones corporativos. Su trabajo: asegurarse de que la flota de la HSN no pueda meterse mientras se cierra el negocio. Puede seguir a sus barcos a la vista, como advertencia, o meter drones en sus puertos, invisibles."
+        plate:
+          art: "Night over the Strait of Malacca: thousands of small drones with glowing emerald running lights fly in a vast murmuration above a stormy sea, shaping the outline of a corporate diamond logo in the sky; below, a grey HSN warship with searchlights sweeping the clouds; on the deck of a Japanese fast boat a young pilot in a hooded jacket controls the swarm with gestures, his face lit green; awe and menace, Turner's storm with a sci-fi sky"
+          text:
+            english: "Sora Fujiwara learned to fly drones in his aunt Mariko's division before he learned to drive. He is twenty-four, he sleeps four hours a night and he thinks of the swarm as an extension of his hands: four thousand fingers that can touch anything between Okinawa and Singapore.\n\nThe deal needs time, and the HSN's fleet must not have a reason to move before it closes. Sora can make the fleet feel watched, every ship shadowed by a hundred green lights, so that its admirals hesitate. Or he can slip drones into the HSN's own ports, where they will sit like sleeping birds on cranes and radar masts, waiting for an order nobody else knows exists."
+            spanish: "Sora Fujiwara aprendió a volar drones en la división de su tía Mariko antes de aprender a manejar. Tiene veinticuatro años, duerme cuatro horas por noche y piensa en el enjambre como una extensión de sus manos: cuatro mil dedos que pueden tocar cualquier cosa entre Okinawa y Singapur.\n\nEl negocio necesita tiempo, y la flota de la HSN no tiene que tener un motivo para moverse antes de que se cierre. Sora puede hacer que la flota se sienta vigilada, cada barco seguido por cien luces verdes, para que sus almirantes duden. O puede meter drones en los propios puertos de la HSN, donde se van a quedar como pájaros dormidos en las grúas y los mástiles de radar, esperando una orden que nadie más sabe que existe."
+        options:
+        - name: {english: "Shadow them openly.", spanish: "Seguirlos a la vista."}
+          effects: [{effect: flag, value: ZJPZ2_sora_abierto}, {effect: air_experience, value: 15}]
+          next: 31
+        - name: {english: "Sleeping birds in their ports.", spanish: "Pájaros dormidos en sus puertos."}
+          skulls: 1
+          effects: [{effect: air_experience, value: 15}]
+          next: 32
+      - id: 31
+        who: sora
+        title: {english: "The Admiral Blinks", spanish: "El Almirante Parpadea"}
+        desc:
+          english: "The HSN admiral in Okinawa waters has ordered his ships back to port. One captain refused and fired on a drone. Sora can let it go, or answer."
+          spanish: "El almirante de la HSN en aguas de Okinawa ordenó volver a puerto. Un capitán se negó y le disparó a un dron. Sora puede dejarlo pasar, o contestar."
+        options:
+        - name: {english: "Let it go. One drone is cheap.", spanish: "Dejarlo pasar. Un dron sale barato."}
+          next: 33
+        - name: {english: "Answer: blind his ship with the swarm.", spanish: "Contestar: cegarle el barco con el enjambre."}
+          skulls: 1
+          next: 33
+      - id: 32
+        who: sora
+        title: {english: "A Bird Is Found", spanish: "Encuentran un Pájaro"}
+        desc:
+          english: "A dockworker in Singapore found one of Sora's sleeping drones on a crane and sold it to a newspaper. The HSN is searching every port. Sora can wake the drones and pull them out, or let them sleep and hope."
+          spanish: "Un estibador de Singapur encontró uno de los drones dormidos de Sora en una grúa y se lo vendió a un diario. La HSN está revisando cada puerto. Sora puede despertar los drones y sacarlos, o dejarlos dormir y rezar."
+        options:
+        - name: {english: "Pull them out.", spanish: "Sacarlos."}
+          effects: [{effect: flag, value: ZJPZ2_sora_abierto}]
+          next: 33
+        - name: {english: "Let them sleep.", spanish: "Dejarlos dormir."}
+          skulls: 1
+          next: 33
+        - name: {english: "Wake them all and burn the cranes. War now.", spanish: "Despertarlos todos y quemar las grúas. Guerra ya."}
+          catastrophe: {war_by: HSN}
+          next: 107
+      - id: 33
+        who: sora
+        title: {english: "The Storm Season", spanish: "La Temporada de Tormentas"}
+        desc:
+          english: "Typhoon season. The swarm loses a hundred drones a week to the wind. Sora can fly through it himself, from a boat in the strait, or ground the swarm until the weather clears and risk the deal."
+          spanish: "Temporada de tifones. El enjambre pierde cien drones por semana con el viento. Sora puede volar a través de la tormenta él mismo, desde un barco en el estrecho, o dejar el enjambre en tierra hasta que mejore el tiempo y arriesgar el negocio."
+        options:
+        - name: {english: "Fly through it.", spanish: "Volar a través de la tormenta."}
+          next: 34
+        - name: {english: "Ground the swarm. Let the weather decide.", spanish: "Dejar el enjambre en tierra. Que decida el clima."}
+          next: 112
+      - id: 34
+        who: sora
+        title: {english: "The Night of the Vote", spanish: "La Noche del Voto"}
+        desc:
+          english: "The HSN board votes tonight. The HSN fleet is putting to sea in the storm to stop it. Sora has one order left: fill the sky with the swarm in front of their guns, or bring the drones home and let the deal stand on its own. Everything depends on whether the HSN knows where his drones are."
+          spanish: "El directorio de la HSN vota esta noche. La flota de la HSN está saliendo al mar en la tormenta para impedirlo. A Sora le queda una orden: llenar el cielo con el enjambre frente a sus cañones, o traer los drones a casa y dejar que el negocio se sostenga solo. Todo depende de si la HSN sabe dónde están sus drones."
+        options:
+        - name: {english: "Fill the sky.", spanish: "Llenar el cielo."}
+          when: {flag: ZJPZ2_sora_abierto}
+          next: 103
+        - name: {english: "Fill the sky.", spanish: "Llenar el cielo."}
+          when: {not_flag: ZJPZ2_sora_abierto}
+          next: 106
+        - name: {english: "Bring them home.", spanish: "Traerlos a casa."}
+          next: 110
+      endings:
+      - id: 101
+        kind: objetivo
+        title: {english: "Majority Shareholder", spanish: "Accionista Mayoritario"}
+        desc:
+          english: "Reiko Aoki signed in Jakarta. Kanto now owns the majority of the High Seas Market's shipping lines. The ships that sailed for Singapore in 2089 are coming home, with their old names."
+          spanish: "Reiko Aoki firmó en Yakarta. Kanto es dueño de la mayoría de las navieras del Mercado de Alta Mar. Los barcos que zarparon para Singapur en 2089 vuelven a casa, con sus nombres viejos."
+        plate:
+          art: "Tokyo Bay at sunrise: a long line of old warships and container ships sails into harbour, workers on scaffolding repainting Japanese names over Singapore ones; on the pier a woman with a scar on her cheek in a dark coat stands beside a man in a black suit and green glasses, both watching in silence; crowds waving flags along the shore; triumphant homecoming, Monet's Impression Sunrise at the scale of a national epic"
+          text:
+            english: "The seller in Jakarta was exactly who he said he was, because Reiko Aoki had been careful from the first day, and nobody in Singapore knew her face. She signed, shook his hand and took the night ferry home.\n\nWhen the HSN board met the following Monday, the chairman read the shareholder register aloud and stopped halfway. Kanto owned fifty-one per cent of the High Seas Market's shipping. Three weeks later, the first of the ships taken in 2089 sailed into Tokyo Bay, and the dockworkers of Yokosuka stood on the scaffolding with brushes to paint the old names back on."
+            spanish: "El vendedor de Yakarta era exactamente quien decía ser, porque Reiko Aoki había sido cuidadosa desde el primer día, y nadie en Singapur conocía su cara. Firmó, le dio la mano y se tomó el ferry nocturno a casa.\n\nCuando el directorio de la HSN se reunió el lunes siguiente, el presidente leyó en voz alta el registro de accionistas y se detuvo a la mitad. Kanto tenía el cincuenta y uno por ciento de las navieras del Mercado de Alta Mar. Tres semanas después, el primero de los barcos que se llevaron en 2089 entró a la bahía de Tokio, y los estibadores de Yokosuka se subieron a los andamios con pinceles para volver a pintar los nombres viejos."
+        close: {english: "Welcome home.", spanish: "Bienvenidos a casa."}
+        effects:
+        - {effect: run, value: ZJPZ2_victoria}
+      - id: 102
+        kind: objetivo
+        title: {english: "The Eighth Vote", spanish: "El Octavo Voto"}
+        desc:
+          english: "The HSN chairman gave Haga his vote, because the other seven were men who stay bought by fear, not money. The High Seas Market now answers to Kanto."
+          spanish: "El presidente de la HSN le dio el voto a Haga, porque los otros siete eran de los que el miedo retiene, no la plata. El Mercado de Alta Mar ahora le responde a Kanto."
+        close: {english: "Pour one for the empty chair.", spanish: "Servile uno a la silla vacía."}
+        effects:
+        - {effect: run, value: ZJPZ2_victoria}
+      - id: 103
+        kind: objetivo
+        title: {english: "A Sky Full of Green", spanish: "Un Cielo Lleno de Verde"}
+        desc:
+          english: "The HSN fleet sailed into a sky full of green lights and turned back without firing a shot. The vote passed. Sora Fujiwara's swarm is the most feared weapon in the Pacific."
+          spanish: "La flota de la HSN se metió en un cielo lleno de luces verdes y dio media vuelta sin disparar un tiro. El voto se aprobó. El enjambre de Sora Fujiwara es el arma más temida del Pacífico."
+        plate:
+          art: "A storm breaking at dawn over the Strait of Malacca: thousands of emerald drones hover in a vast wall of light between a grey HSN battle fleet and the open sea; the warships are turning away, their wakes curving back; on the deck of a small fast boat a soaked young pilot raises both arms like a conductor; golden light pierces the clouds; triumphant and eerie, Aivazovsky's sea with a sky of green stars"
+          text:
+            english: "They never knew where his drones were, because Sora had never hidden them: every admiral in the HSN had spent months watching a hundred green lights shadow each of his ships. So when the fleet sailed into the storm and found the whole sky glowing in front of its guns, the admirals did what they had learned to do. They hesitated.\n\nA minute of hesitation was all the board needed. The vote passed at two in the morning, Singapore time. At dawn the HSN fleet turned for home, and the swarm followed it all the way to the edge of Japanese waters, and then, very politely, let it go."
+            spanish: "Nunca supieron dónde estaban sus drones, porque Sora nunca los había escondido: cada almirante de la HSN se había pasado meses viendo cien luces verdes seguir a cada uno de sus barcos. Así que cuando la flota se metió en la tormenta y encontró todo el cielo brillando frente a sus cañones, los almirantes hicieron lo que habían aprendido a hacer. Dudaron.\n\nUn minuto de duda era todo lo que necesitaba el directorio. El voto se aprobó a las dos de la mañana, hora de Singapur. Al amanecer la flota de la HSN volvió a casa, y el enjambre la acompañó hasta el borde de las aguas japonesas, y después, con mucha educación, la dejó ir."
+        close: {english: "Four thousand fingers.", spanish: "Cuatro mil dedos."}
+        effects:
+        - {effect: run, value: ZJPZ2_victoria}
+        - {effect: air_experience, value: 40}
+      - id: 104
+        kind: muerte
+        title: {english: "The Room Above the Harbour", spanish: "El Salón Arriba del Puerto"}
+        desc:
+          english: "Singapore knew who Reiko Aoki was. The seller in Jakarta was an HSN agent. They found her three days later in the harbour. The deal died with her."
+          spanish: "Singapur sabía quién era Reiko Aoki. El vendedor de Yakarta era un agente de la HSN. La encontraron tres días después en el puerto. El negocio murió con ella."
+        plate:
+          art: "A private room above Jakarta harbour at night, overturned chairs, scattered contracts soaked in spilled tea, a single fountain pen on the floor beside a glass box with a bullet in it; through the open window the harbour lights and a ship leaving; tragic still life, a noir Dutch vanitas"
+          text:
+            english: "She was fast. She had always been fast, and in Busan, and in Manila, being fast had kept her alive. But somewhere among the thirty companies registered in the HSN's own ports, someone in Singapore had found a signature that matched an old one, and by the time she sat down in the room above the harbour they knew exactly who she was.\n\nThe contract on the table was real. So were the bodyguards. The police in Jakarta wrote 'accidental drowning'. In Tokyo, Daisuke Kanemura put the little glass box with the Busan bullet on his own desk, and did not speak for a day."
+            spanish: "Era rápida. Siempre había sido rápida, y en Busan, y en Manila, ser rápida la había mantenido viva. Pero en algún lugar entre las treinta empresas registradas en los puertos de la propia HSN, alguien en Singapur encontró una firma que coincidía con una vieja, y cuando se sentó en el salón arriba del puerto ya sabían exactamente quién era.\n\nEl contrato sobre la mesa era real. Los guardaespaldas también. La policía de Yakarta escribió 'ahogamiento accidental'. En Tokio, Daisuke Kanemura puso la cajita de vidrio con la bala de Busan sobre su propio escritorio, y no habló durante un día."
+        close: {english: "She was fast.", spanish: "Era rápida."}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_stability, value: -0.03}
+      - id: 105
+        kind: muerte
+        title: {english: "Tea for the Empty Chair", spanish: "Té para la Silla Vacía"}
+        desc:
+          english: "The seven directors Haga had bought were bought again by Singapore. The chairman knew it. Old Haga did not come back from the teahouse."
+          spanish: "Los siete directores que Haga había comprado los volvió a comprar Singapur. El presidente lo sabía. El Viejo Haga no volvió de la casa de té."
+        plate:
+          art: "A traditional Singapore teahouse at dawn, rain on the paper screens; a low table with two cups of tea, one still full, a fedora resting beside it and an empty chair; a single red lantern still burning; elegiac and quiet, Hiroshige's rain over a Hopper-like emptiness"
+          text:
+            english: "They were cheap, the greedy ones, and Haga had known it all along: those you buy stay bought only until someone pays more. Singapore paid more. When Haga sat down in the teahouse, the chairman poured his tea with great courtesy and told him, sadly, that the seven votes he was counting on had already been sold back.\n\nHaga drank his tea. He was found the next morning, sitting upright at the table, as if waiting for someone. Nobody ever learned his first name. In Kanto, in a back room of an old hostess bar, someone still pours sake for an empty chair."
+            spanish: "Eran baratos, los codiciosos, y Haga lo había sabido todo el tiempo: los que comprás siguen comprados solo hasta que alguien paga más. Singapur pagó más. Cuando Haga se sentó en la casa de té, el presidente le sirvió el té con mucha cortesía y le dijo, con tristeza, que los siete votos con los que contaba ya se habían vuelto a vender.\n\nHaga se tomó el té. Lo encontraron a la mañana siguiente, sentado derecho frente a la mesa, como esperando a alguien. Nadie supo nunca su nombre de pila. En Kanto, en la trastienda de un viejo bar de anfitrionas, alguien todavía le sirve sake a una silla vacía."
+        close: {english: "Kanpai, old man.", spanish: "Kanpai, viejo."}
+        effects:
+        - {effect: add_political_power, value: -50}
+        - {effect: add_variable, var: ZJP_giri, value: -15}
+      - id: 106
+        kind: muerte
+        title: {english: "The Strait", spanish: "El Estrecho"}
+        desc:
+          english: "The HSN knew where the sleeping drones were, and turned them against the swarm. Sora Fujiwara's boat was lost in the storm. His aunt Mariko has not flown a drone since."
+          spanish: "La HSN sabía dónde estaban los drones dormidos, y los usó contra el enjambre. El barco de Sora Fujiwara se perdió en la tormenta. Su tía Mariko no volvió a volar un dron."
+        plate:
+          art: "A typhoon over the Strait of Malacca at night: emerald drones falling from the sky like dying fireflies into black waves; a small fast boat capsizing under a huge wave; on the horizon the searchlights of a grey warship; tragic and sublime, Turner's Slave Ship with falling green stars"
+          text:
+            english: "The sleeping birds in the ports had been found long before, and the HSN had not removed them: it had taught them a new song. When Sora filled the sky in front of the fleet, a thousand of his own drones woke up on the cranes of Singapore and flew at him.\n\nThe swarm tore itself apart over the strait. The fast boat was last seen in the trough of a wave forty metres high. Mariko Fujiwara grounded her division the next morning and handed in her wings. She keeps one drone on her desk, with a dead battery."
+            spanish: "Los pájaros dormidos en los puertos los habían encontrado mucho antes, y la HSN no los había sacado: les había enseñado una canción nueva. Cuando Sora llenó el cielo frente a la flota, mil de sus propios drones se despertaron en las grúas de Singapur y volaron hacia él.\n\nEl enjambre se destrozó solo sobre el estrecho. Al barco rápido lo vieron por última vez en el fondo de una ola de cuarenta metros. Mariko Fujiwara dejó en tierra su división a la mañana siguiente y entregó sus alas. Tiene un dron sobre el escritorio, con la batería muerta."
+        close: {english: "Come home, Sora.", spanish: "Volvé a casa, Sora."}
+        effects:
+        - {effect: add_political_power, value: -40}
+        - {effect: air_experience, value: -20}
+      - id: 107
+        kind: negativo
+        title: {english: "War by Other Means", spanish: "La Guerra por Otros Medios"}
+        desc:
+          english: "The deal became a war. Singapore saw the takeover coming and answered with guns. Japan has lost the market, and may lose much more."
+          spanish: "El negocio se volvió guerra. Singapur vio venir la adquisición y contestó con cañones. Japón perdió el mercado, y puede perder mucho más."
+        close: {english: "Then we fight.", spanish: "Entonces peleamos."}
+        effects:
+        - {effect: add_war_support, value: 0.10}
+        - {effect: add_variable, var: ZJP_favor_zaibatsu, value: -10}
+      - id: 108
+        kind: negativo
+        title: {english: "The Scandal", spanish: "El Escándalo"}
+        desc:
+          english: "The scandal destroyed the HSN chairman, and the HSN's generals, furious, did not wait for a new one. They declared war on the country that had done it."
+          spanish: "El escándalo destruyó al presidente de la HSN, y los generales de la HSN, furiosos, no esperaron a uno nuevo. Le declararon la guerra al país que lo había hecho."
+        close: {english: "It was business.", spanish: "Eran negocios."}
+        effects:
+        - {effect: add_war_support, value: 0.08}
+        - {effect: add_stability, value: -0.03}
+      - id: 109
+        kind: positivo
+        title: {english: "Forty-Nine Per Cent", spanish: "Cuarenta y Nueve por Ciento"}
+        desc:
+          english: "Aoki walked out of Jakarta alive. Kanto owns forty-nine per cent of the HSN's shipping: not control, but a fortune, and a voice on every board in Singapore."
+          spanish: "Aoki salió viva de Yakarta. Kanto tiene el cuarenta y nueve por ciento de las navieras de la HSN: no el control, pero sí una fortuna, y una voz en cada directorio de Singapur."
+        close: {english: "Almost.", spanish: "Casi."}
+        effects:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: ZJP_giri, value: 20}
+        - {effect: navy_experience, value: 20}
+      - id: 110
+        kind: positivo
+        title: {english: "The Gentlemen's Agreement", spanish: "El Pacto de Caballeros"}
+        desc:
+          english: "No takeover, but an agreement: the HSN leaves Japanese waters alone, and Japan leaves the HSN's debts alone. Peace, with interest."
+          spanish: "No hubo adquisición, pero sí un acuerdo: la HSN deja en paz las aguas japonesas, y Japón deja en paz las deudas de la HSN. Paz, con intereses."
+        close: {english: "Signed.", spanish: "Firmado."}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 75}
+      - id: 111
+        kind: neutral
+        title: {english: "Liquidation", spanish: "Liquidación"}
+        desc:
+          english: "Aoki closed the shell companies and sold the debt at a small loss. Nobody in Singapore ever learned how close they came."
+          spanish: "Aoki cerró las empresas fantasma y vendió la deuda con una pequeña pérdida. Nadie en Singapur supo nunca lo cerca que estuvieron."
+        close: {english: "Another day.", spanish: "Otro día será."}
+        effects:
+        - {effect: add_political_power, value: 30}
+      - id: 112
+        kind: neutral
+        title: {english: "The Deal Sleeps", spanish: "El Negocio Duerme"}
+        desc:
+          english: "The deal was put to sleep, not killed. The files are in a safe in Kanto, waiting for a better season."
+          spanish: "Al negocio lo pusieron a dormir, no lo mataron. Los papeles están en una caja fuerte de Kanto, esperando una temporada mejor."
+        close: {english: "Patience.", spanish: "Paciencia."}
+        effects:
+        - {effect: add_variable, var: ZJP_giri, value: 10}
+    # =========================================================================
+    # Yakuza, corta y fácil: La Fiesta del Puerto
+    # =========================================================================
+    ZJP_YAK_1:
+      country: ZJP
+      namespace: meganations_japon_matsuri
+      prefix: ZJPY1
+      start:
+        days: 45
+        when: {variable_is: {var: ZJP_gobierna, value: 2}}
+      config: *corta
+      name: {english: "The Harbour Festival", spanish: "La Fiesta del Puerto"}
+      palette: "Osaka docks at night, paper lanterns and crimson neon, dragon tattoos, festival floats, fireworks over black water, steaming food stalls"
+      ideas: []
+      intro:
+        title: {english: "The Clan Throws a Party", spanish: "El Clan Hace una Fiesta"}
+        desc:
+          english: "The Yakuza rule, and Ryūji Sakaguchi wants the whole country to see that the clans can keep the peace. The great harbour festival of Osaka is the test. Two people will run it."
+          spanish: "Gobierna la Yakuza, y Ryūji Sakaguchi quiere que el país entero vea que los clanes pueden mantener la paz. La gran fiesta del puerto de Osaka es la prueba. Dos personas la van a manejar."
+        plate:
+          art: "The docks of Osaka on festival night: a huge procession float shaped like a red dragon carried by hundreds of tattooed men in white loincloths and headbands, paper lanterns strung over the water, fireworks bursting over cranes and container ships; in the foreground a calm man in a grey suit watches from a pier with a cigarette, and a young street-fighter general in a leather jacket laughs with the crowd; vibrant, chaotic, Kuniyoshi's woodblock energy in modern neon"
+          text:
+            english: "For three generations the Sakaguchi clan has run the docks of Osaka: who unloads, who pays, who swims. Now Ryūji Sakaguchi runs the whole country, and half of Japan is waiting to see the clans fail. The harbour festival, the oldest in Kansai, will be the first time the Yakuza must keep order in daylight, with cameras, for everyone.\n\nTetsuo Mizuno, the oyabun's right hand, who never raises his voice, wants a festival so orderly that the police can stay home. Daichi Arai, who grew up in the alleys of Shinjuku and fights like a bar brawl, wants a festival so wild that nobody will ever again say the clans are only fear."
+            spanish: "Desde hace tres generaciones el clan Sakaguchi maneja los muelles de Osaka: quién descarga, quién paga, quién nada. Ahora Ryūji Sakaguchi maneja el país entero, y medio Japón espera ver fracasar a los clanes. La fiesta del puerto, la más vieja de Kansai, va a ser la primera vez que la Yakuza tenga que mantener el orden de día, con cámaras, para todos.\n\nTetsuo Mizuno, la mano derecha del oyabun, el que nunca levanta la voz, quiere una fiesta tan ordenada que la policía se pueda quedar en casa. Daichi Arai, que creció en los callejones de Shinjuku y pelea como en una riña de bar, quiere una fiesta tan salvaje que nadie vuelva a decir nunca que los clanes son solo miedo."
+      characters:
+      - id: mizuno
+        name: {english: "Tetsuo Mizuno", spanish: "Tetsuo Mizuno"}
+        pick: {english: "Wakagashira Tetsuo Mizuno: order, quietly.", spanish: "El Wakagashira Tetsuo Mizuno: orden, en silencio."}
+        first: 10
+      - id: arai
+        name: {english: "General Arai", spanish: "El General Arai"}
+        pick: {english: "General Daichi Arai: a party Osaka will never forget.", spanish: "El General Daichi Arai: una fiesta que Osaka no olvide nunca."}
+        first: 20
+      nodes:
+      - id: 10
+        who: mizuno
+        title: {english: "No Police", spanish: "Sin Policía"}
+        desc:
+          english: "Mizuno proposes that the clans police the festival themselves: no uniforms, just men in grey suits on every corner. The police are offended. He can invite them anyway, or keep them out."
+          spanish: "Mizuno propone que los clanes vigilen la fiesta ellos mismos: sin uniformes, solo hombres de traje gris en cada esquina. La policía se ofende. Puede invitarlos igual, o dejarlos afuera."
+        plate:
+          art: "A quiet tea room overlooking the Osaka docks at dusk; a middle-aged man in an immaculate grey suit kneels at a low table, pouring tea for a uniformed police commissioner who sits stiffly opposite; between them, a map of the festival route with small stones placed on every corner; lanterns being lit outside; tense civility, the stillness of a Japanese print with the menace of a gangster film"
+          text:
+            english: "Tetsuo Mizuno has collected the dock fees of Osaka for twenty years and has never once raised his voice. Merchants pay him before he asks. He believes that real power is the kind nobody sees, and he wants the festival to prove it: two hundred thousand people, no uniforms, no incidents, and on every corner a quiet man in a grey suit who makes sure.\n\nThe police commissioner of Osaka has come to tell him, very politely, that this is the police's job. Mizuno pours him tea and listens."
+            spanish: "Tetsuo Mizuno cobra las tarifas de los muelles de Osaka hace veinte años y nunca levantó la voz. Los comerciantes le pagan antes de que pida. Cree que el poder de verdad es el que nadie ve, y quiere que la fiesta lo demuestre: doscientas mil personas, sin uniformes, sin incidentes, y en cada esquina un hombre callado de traje gris que se asegura.\n\nEl comisario de la policía de Osaka vino a decirle, con mucha educación, que ese es el trabajo de la policía. Mizuno le sirve té y escucha."
+        options:
+        - name: {english: "Invite the police. Side by side.", spanish: "Invitar a la policía. Hombro con hombro."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 11
+        - name: {english: "Keep them out. Our festival, our order.", spanish: "Dejarlos afuera. Nuestra fiesta, nuestro orden."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZJP_favor_yakuza, value: 5}]
+          next: 12
+      - id: 11
+        who: mizuno
+        title: {english: "Side by Side", spanish: "Hombro con Hombro"}
+        desc:
+          english: "Grey suits and blue uniforms on the same corners. On the second night a pickpocket from a rival clan is caught. The police want to arrest him; the clan wants to handle it. Mizuno decides."
+          spanish: "Trajes grises y uniformes azules en las mismas esquinas. La segunda noche agarran a un carterista de un clan rival. La policía lo quiere detener; el clan quiere ocuparse. Decide Mizuno."
+        options:
+        - name: {english: "Hand him to the police.", spanish: "Entregarlo a la policía."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 101
+        - name: {english: "The clan handles its own.", spanish: "El clan se ocupa de los suyos."}
+          effects: [{effect: add_variable, var: ZJP_giri, value: 10}]
+          next: 103
+      - id: 12
+        who: mizuno
+        title: {english: "The Rival Clan", spanish: "El Clan Rival"}
+        desc:
+          english: "Without police, a rival clan from Kobe sees an opening and sends its men to sell protection to the stalls. Mizuno can buy them off with a share, or send them home."
+          spanish: "Sin policía, un clan rival de Kobe ve una oportunidad y manda a sus hombres a venderles protección a los puestos. Mizuno puede comprarlos con una parte, o mandarlos a casa."
+        options:
+        - name: {english: "Give them a share. Peace is cheap.", spanish: "Darles una parte. La paz sale barata."}
+          effects: [{effect: add_political_power, value: -20}]
+          next: 104
+        - name: {english: "Send them home.", spanish: "Mandarlos a casa."}
+          skulls: 1
+          next: 106
+      - id: 20
+        who: arai
+        title: {english: "The Float", spanish: "La Carroza"}
+        desc:
+          english: "Arai wants the biggest float in the history of Osaka: a dragon thirty metres long carried by every clan in Kansai, enemies included. Or he can keep it simple and give the money to the food stalls for free."
+          spanish: "Arai quiere la carroza más grande de la historia de Osaka: un dragón de treinta metros cargado por todos los clanes de Kansai, enemigos incluidos. O puede hacerla sencilla y darles la plata a los puestos de comida para que sean gratis."
+        plate:
+          art: "A noisy Osaka warehouse at night where dozens of tattooed men from rival clans, some with bandaged faces, work side by side building an enormous red-and-gold paper dragon; a young general in a leather jacket stands on a ladder painting the dragon's eye with a huge brush, everyone looking up at him; sawdust, sake bottles, lantern light; energetic and comic, a Hokusai sketchbook come to life"
+          text:
+            english: "Daichi Arai has been in a hundred fights and lost only the ones he started sober. He commands the Shogunate's city troops the way he used to run with the gangs of Shinjuku, from the front, with whatever is at hand, and his soldiers would follow him into the sea.\n\nHe has a plan for the festival. A dragon, thirty metres long, paper and bamboo and gold leaf, carried through the docks by every clan in Kansai, including the ones that were shooting at each other last spring. 'If they carry the same dragon,' he says, 'they can't carry guns.' Mizuno thinks he is mad. The oyabun thinks he might be right."
+            spanish: "Daichi Arai estuvo en cien peleas y perdió solo las que empezó sobrio. Manda las tropas de ciudad del Shogunato como corría con las bandas de Shinjuku, de frente, con lo que tenga a mano, y sus soldados lo seguirían hasta el mar.\n\nTiene un plan para la fiesta. Un dragón de treinta metros, de papel, bambú y pan de oro, cargado por los muelles por todos los clanes de Kansai, incluidos los que se estaban tiroteando la primavera pasada. 'Si cargan el mismo dragón', dice, 'no pueden cargar armas.' Mizuno cree que está loco. El oyabun cree que puede tener razón."
+        options:
+        - name: {english: "The great dragon. Every clan carries it.", spanish: "El gran dragón. Lo cargan todos los clanes."}
+          effects: [{effect: add_variable, var: ZJP_giri, value: 5}]
+          next: 21
+        - name: {english: "Free food for everyone instead.", spanish: "En cambio, comida gratis para todos."}
+          effects: [{effect: add_stability, value: 0.03}]
+          next: 22
+      - id: 21
+        who: arai
+        title: {english: "Who Carries the Head", spanish: "Quién Carga la Cabeza"}
+        desc:
+          english: "Every clan wants to carry the dragon's head. A fight is about to break out in the warehouse. Arai can decide by lottery, or carry the head himself."
+          spanish: "Cada clan quiere cargar la cabeza del dragón. Está por armarse una pelea en el galpón. Arai puede decidirlo por sorteo, o cargar la cabeza él."
+        options:
+        - name: {english: "Carry it himself.", spanish: "Cargarla él."}
+          effects: [{effect: army_experience, value: 15}]
+          next: 102
+        - name: {english: "A lottery. Fair is fair.", spanish: "Un sorteo. Lo justo es justo."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 103
+      - id: 22
+        who: arai
+        title: {english: "Free Takoyaki", spanish: "Takoyaki Gratis"}
+        desc:
+          english: "Free food drew half a million people instead of two hundred thousand. The docks are packed. Arai can open the warehouses to give people room, or close the gates."
+          spanish: "La comida gratis trajo medio millón de personas en vez de doscientas mil. Los muelles están repletos. Arai puede abrir los galpones para darle lugar a la gente, o cerrar los portones."
+        options:
+        - name: {english: "Open the warehouses.", spanish: "Abrir los galpones."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 104
+        - name: {english: "Close the gates.", spanish: "Cerrar los portones."}
+          next: 105
+      endings:
+      - id: 101
+        kind: objetivo
+        title: {english: "The Quiet Festival", spanish: "La Fiesta Tranquila"}
+        desc:
+          english: "Two hundred thousand people, four days, not a single incident. The newspapers that wanted to see the clans fail printed photographs of grey suits and blue uniforms sharing a cigarette. The Yakuza can keep the peace."
+          spanish: "Doscientas mil personas, cuatro días, ni un solo incidente. Los diarios que querían ver fracasar a los clanes publicaron fotos de trajes grises y uniformes azules compartiendo un cigarrillo. La Yakuza puede mantener la paz."
+        plate:
+          art: "Dawn after the festival on the Osaka docks: paper lanterns still glowing, street sweepers in grey suits and police officers in blue uniforms sharing a cigarette on the edge of the pier, an old woman offering them tea; seagulls and the first light on the water; a quiet triumph, Hasui Kawase's gentle woodblock calm"
+          text:
+            english: "On the last morning of the festival, a photographer from a Tokyo paper that had predicted riots walked the docks looking for something to photograph. He found a man in a grey suit and a police sergeant sitting on the edge of the pier, sharing a cigarette and arguing about baseball.\n\nThe photograph went around the world. Mizuno saw it in the paper and, for the first time anybody could remember, smiled in public."
+            spanish: "La última mañana de la fiesta, un fotógrafo de un diario de Tokio que había anunciado disturbios recorrió los muelles buscando algo que fotografiar. Encontró a un hombre de traje gris y a un sargento de policía sentados al borde del muelle, compartiendo un cigarrillo y discutiendo de béisbol.\n\nLa foto dio la vuelta al mundo. Mizuno la vio en el diario y, por primera vez que alguien recuerde, sonrió en público."
+        close: {english: "Peace, quietly.", spanish: "Paz, en silencio."}
+        effects:
+        - {effect: dynamic_modifier, id: ZJP_fiesta_tranquila, days: 730}
+        - {effect: add_variable, var: ZJP_favor_yakuza, value: 15}
+        - {effect: add_variable, var: ZJP_giri, value: 25}
+      - id: 102
+        kind: objetivo
+        title: {english: "The Dragon of Osaka", spanish: "El Dragón de Osaka"}
+        desc:
+          english: "Every clan in Kansai carried the dragon through the docks, with Arai at its head. That night the rival bosses drank together for the first time in thirty years. The clans are one."
+          spanish: "Todos los clanes de Kansai cargaron el dragón por los muelles, con Arai a la cabeza. Esa noche los jefes rivales tomaron juntos por primera vez en treinta años. Los clanes son uno."
+        plate:
+          art: "Osaka docks at night: a thirty-metre red-and-gold paper dragon carried through a roaring crowd by hundreds of tattooed men of rival clans shoulder to shoulder, a young general in a torn leather jacket under the dragon's head, laughing, fireworks bursting overhead and reflected in the black water; ecstatic, Kuniyoshi's warriors in a modern festival, red and gold and black"
+          text:
+            english: "The dragon weighed two tonnes and needed three hundred men to carry it, and Daichi Arai took the head himself, which weighed the most. The clans that had shot at each other last spring found themselves under the same bamboo poles, shoulder to sweaty shoulder, shouting the same rhythm.\n\nIt took six hours to carry the dragon from the fish market to the lighthouse. When they set it down, the bosses of Kobe, Sakai and Osaka sat down on the pier with a bottle and did not get up until morning. Arai fell asleep under the dragon's head, smiling."
+            spanish: "El dragón pesaba dos toneladas y necesitaba trescientos hombres para cargarlo, y Daichi Arai tomó la cabeza, que era lo más pesado. Los clanes que se habían tiroteado la primavera pasada se encontraron bajo las mismas varas de bambú, hombro con hombro sudado, gritando el mismo ritmo.\n\nTardaron seis horas en llevar el dragón del mercado de pescado al faro. Cuando lo bajaron, los jefes de Kobe, Sakai y Osaka se sentaron en el muelle con una botella y no se levantaron hasta la mañana. Arai se quedó dormido bajo la cabeza del dragón, sonriendo."
+        close: {english: "Wasshoi!", spanish: "¡Wasshoi!"}
+        effects:
+        - {effect: dynamic_modifier, id: ZJP_dragon_de_osaka, days: 730}
+        - {effect: add_variable, var: ZJP_favor_yakuza, value: 10}
+        - {effect: add_variable, var: ZJP_giri, value: 20}
+        - {effect: army_experience, value: 25}
+      - id: 103
+        kind: positivo
+        title: {english: "A Good Festival", spanish: "Una Buena Fiesta"}
+        desc:
+          english: "A good festival, with good food, a few fights and no deaths. Osaka will talk about it for a year."
+          spanish: "Una buena fiesta, con buena comida, algunas peleas y ningún muerto. Osaka va a hablar de ella un año."
+        close: {english: "Kanpai!", spanish: "¡Kanpai!"}
+        effects:
+        - {effect: add_political_power, value: 60}
+        - {effect: add_variable, var: ZJP_favor_yakuza, value: 5}
+      - id: 104
+        kind: positivo
+        title: {english: "Room for Everyone", spanish: "Lugar para Todos"}
+        desc:
+          english: "Peace with Kobe cost a share; room for the crowd cost the warehouses. Nobody got hurt, and that is what people remember."
+          spanish: "La paz con Kobe costó una parte; el lugar para la multitud costó los galpones. Nadie salió lastimado, y eso es lo que la gente recuerda."
+        close: {english: "Everyone home safe.", spanish: "Todos a casa sanos."}
+        effects:
+        - {effect: add_stability, value: 0.04}
+        - {effect: add_variable, var: ZJP_giri, value: 10}
+      - id: 105
+        kind: neutral
+        title: {english: "The Closed Gates", spanish: "Los Portones Cerrados"}
+        desc:
+          english: "The gates held and the crowd went home grumbling. A festival like any other."
+          spanish: "Los portones aguantaron y la multitud se fue a casa protestando. Una fiesta como cualquier otra."
+        close: {english: "Next year.", spanish: "El año que viene."}
+        effects:
+        - {effect: add_political_power, value: 25}
+      - id: 106
+        kind: negativo
+        title: {english: "Blood on the Pier", spanish: "Sangre en el Muelle"}
+        desc:
+          english: "Kobe's men did not go home quietly. There was a fight on the pier on the last night, with knives. The newspapers got the photographs they wanted."
+          spanish: "Los de Kobe no se fueron a casa en silencio. Hubo una pelea en el muelle la última noche, con cuchillos. Los diarios consiguieron las fotos que querían."
+        close: {english: "So much for peace.", spanish: "Adiós a la paz."}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        - {effect: add_variable, var: ZJP_favor_yakuza, value: -5}
+
+    # =========================================================================
+    # Yakuza, larga y difícil: El Último Oyabun
+    # =========================================================================
+    ZJP_YAK_2:
+      country: ZJP
+      namespace: meganations_japon_oyabun
+      prefix: ZJPY2
+      start:
+        days: 60
+        when: {any: [{flag: ZJPY1_av_fin}, {flag: ZJPY1_av_cortada}]}
+      config: *larga
+      name: {english: "The Last Oyabun", spanish: "El Último Oyabun"}
+      palette: "rain on Osaka alleys, crimson neon reflected in puddles, dragon tattoos and white shirts, temple bells, a sick old man in a hospital bed lit by monitors"
+      ideas: []
+      intro:
+        title: {english: "The Oyabun Is Dying", spanish: "El Oyabun Se Muere"}
+        desc:
+          english: "Ryūji Sakaguchi's old godfather, the man who made him, is dying in a hospital in Kobe. When he dies, the old clans of Kansai will choose whether to keep their oath to the Shogunate or break it. Three people can decide what happens in the next two years."
+          spanish: "El viejo padrino de Ryūji Sakaguchi, el hombre que lo hizo, se está muriendo en un hospital de Kobe. Cuando muera, los viejos clanes de Kansai van a elegir si mantienen su juramento al Shogunato o lo rompen. Tres personas pueden decidir qué pasa en los próximos dos años."
+        plate:
+          art: "A hospital room in Kobe at night lit by green monitors and the red neon of the street through rain-streaked windows; a very old man, his chest covered in faded dragon tattoos, lies in bed with a sake cup on the tray; around him three figures: a young woman in a black suit holding his hand, a tired police detective in a wet trench coat by the door, and a thin tattoo artist with ink-stained fingers sitting in the shadows; Rembrandt's deathbed scene in a neon noir"
+          text:
+            english: "Gonzō Tadokoro has been the oyabun of oyabuns in Kansai for forty-one years. He took in a boy named Ryūji Sakaguchi from the docks, taught him to read, to fight and to keep his word, and made him the man who now rules Japan. Gonzō is ninety-three and the doctors give him months.\n\nThe old clans swore loyalty to the Shogunate because Gonzō told them to. When he is gone, the oath dies with him, unless someone renews it. Three people stand around his bed: his granddaughter Hana, who could inherit his authority; Inspector Shin Goto, who has spent twenty years trying to put him in prison; and Kenji Ota, the tattoo artist who has inked every boss in Kansai and knows every secret written on their skin."
+            spanish: "Gonzō Tadokoro es el oyabun de los oyabun de Kansai desde hace cuarenta y un años. Recogió de los muelles a un chico llamado Ryūji Sakaguchi, le enseñó a leer, a pelear y a cumplir su palabra, y lo hizo el hombre que hoy gobierna Japón. Gonzō tiene noventa y tres años y los médicos le dan meses.\n\nLos clanes viejos le juraron lealtad al Shogunato porque Gonzō se los dijo. Cuando se vaya, el juramento muere con él, salvo que alguien lo renueve. Tres personas rodean su cama: su nieta Hana, que podría heredar su autoridad; el Inspector Shin Goto, que se pasó veinte años tratando de meterlo preso; y Kenji Ota, el tatuador que entintó a cada jefe de Kansai y conoce cada secreto escrito en su piel."
+      characters:
+      - id: hana
+        name: {english: "Hana Tadokoro", spanish: "Hana Tadokoro"}
+        pick: {english: "Hana Tadokoro, the granddaughter: a woman has never led the clans.", spanish: "Hana Tadokoro, la nieta: nunca una mujer encabezó los clanes."}
+        first: 10
+      - id: goto
+        name: {english: "Inspector Goto", spanish: "El Inspector Goto"}
+        pick: {english: "Inspector Shin Goto: the law, even when the law is the Yakuza.", spanish: "El Inspector Shin Goto: la ley, aunque la ley sea la Yakuza."}
+        first: 20
+      - id: ota
+        name: {english: "Kenji Ota", spanish: "Kenji Ota"}
+        pick: {english: "Kenji Ota, the tattoo artist: every secret in Kansai is on someone's back.", spanish: "Kenji Ota, el tatuador: cada secreto de Kansai está en la espalda de alguien."}
+        first: 30
+      nodes:
+      # ---- Hana
+      - id: 10
+        who: hana
+        title: {english: "The Granddaughter", spanish: "La Nieta"}
+        desc:
+          english: "Gonzō wants Hana to inherit. The old bosses will never accept a woman unless she earns it. She can earn it the old way, with a debt of blood, or the new way, by making them richer than Gonzō ever did."
+          spanish: "Gonzō quiere que herede Hana. Los jefes viejos nunca van a aceptar a una mujer salvo que se lo gane. Puede ganárselo a la antigua, con una deuda de sangre, o a la nueva, haciéndolos más ricos de lo que los hizo Gonzō."
+        plate:
+          art: "A traditional Japanese house in Kobe at night, sliding doors open onto a rain-soaked garden; a young woman in a black suit kneels alone facing twelve old men in dark kimonos seated in two rows, their faces hard, tattoos showing at their wrists; a single sword on a stand behind her; candles and the sound of rain; tense and solemn, a Kabuki stage painted by Georges de La Tour"
+          text:
+            english: "Hana Tadokoro studied economics in Vancouver and came home when her grandfather fell ill. She does not have a single tattoo. She speaks four languages and none of them the way the old bosses speak, and when she knelt before the council of Kansai for the first time, three of them left the room.\n\nGonzō has told the bosses that she is his heir. The bosses have told Gonzō, respectfully, that he is dying. Hana knows that she has until his funeral to make the clans hers, and that there are only two currencies they respect: blood and money."
+            spanish: "Hana Tadokoro estudió economía en Vancouver y volvió a casa cuando su abuelo se enfermó. No tiene un solo tatuaje. Habla cuatro idiomas y ninguno como hablan los jefes viejos, y cuando se arrodilló por primera vez ante el consejo de Kansai, tres se fueron de la sala.\n\nGonzō les dijo a los jefes que ella es su heredera. Los jefes le dijeron a Gonzō, con respeto, que se está muriendo. Hana sabe que tiene hasta el funeral para hacer suyos a los clanes, y que solo hay dos monedas que respetan: la sangre y la plata."
+        options:
+        - name: {english: "The old way. A debt of blood.", spanish: "A la antigua. Una deuda de sangre."}
+          skulls: 1
+          next: 11
+        - name: {english: "The new way. Make them rich.", spanish: "A la nueva. Hacerlos ricos."}
+          effects: [{effect: flag, value: ZJPY2_hana_respeto}, {effect: add_political_power, value: -20}]
+          next: 12
+      - id: 11
+        who: hana
+        title: {english: "The Traitor in Sakai", spanish: "El Traidor de Sakai"}
+        desc:
+          english: "There is a traitor in the Sakai clan, selling secrets to the HSN. Hana could punish him herself, in front of the council. She has never hurt anyone."
+          spanish: "Hay un traidor en el clan de Sakai, que le vende secretos a la HSN. Hana podría castigarlo ella misma, delante del consejo. Nunca lastimó a nadie."
+        options:
+        - name: {english: "Do it herself.", spanish: "Hacerlo ella."}
+          skulls: 1
+          next: 13
+        - name: {english: "Exile him instead. Mercy is also power.", spanish: "Exiliarlo. La piedad también es poder."}
+          effects: [{effect: flag, value: ZJPY2_hana_respeto}]
+          next: 13
+      - id: 12
+        who: hana
+        title: {english: "The Port Fund", spanish: "El Fondo del Puerto"}
+        desc:
+          english: "Hana's fund has doubled the clans' income in six months. The bosses are richer, and suspicious. One of them suggests she is laundering money for the Zaibatsu. She can open her books to the council or refuse."
+          spanish: "El fondo de Hana duplicó los ingresos de los clanes en seis meses. Los jefes están más ricos, y desconfiados. Uno sugiere que lava plata para los Zaibatsu. Puede abrirle los libros al consejo o negarse."
+        options:
+        - name: {english: "Open the books.", spanish: "Abrir los libros."}
+          effects: [{effect: add_variable, var: ZJP_giri, value: 10}]
+          next: 13
+        - name: {english: "Refuse. A boss does not explain.", spanish: "Negarse. Un jefe no da explicaciones."}
+          skulls: 1
+          next: 13
+        - name: {english: "Give the fund to the clans and go back to Vancouver.", spanish: "Darles el fondo a los clanes y volver a Vancouver."}
+          next: 111
+      - id: 13
+        who: hana
+        title: {english: "The Funeral", spanish: "El Funeral"}
+        desc:
+          english: "Gonzō Tadokoro died at dawn, holding Hana's hand. Ten thousand men in black suits came to Kobe. The council meets after the funeral. If Hana is refused, the Kobe clans will break their oath."
+          spanish: "Gonzō Tadokoro murió al amanecer, de la mano de Hana. Diez mil hombres de traje negro vinieron a Kobe. El consejo se reúne después del funeral. Si rechazan a Hana, los clanes de Kobe van a romper su juramento."
+        options:
+        - name: {english: "Face the council.", spanish: "Enfrentar al consejo."}
+          next: 14
+        - name: {english: "Step aside for the eldest boss, and keep the peace.", spanish: "Hacerse a un lado por el jefe más viejo, y cuidar la paz."}
+          next: 109
+      - id: 14
+        who: hana
+        title: {english: "The Council of Kansai", spanish: "El Consejo de Kansai"}
+        desc:
+          english: "Twelve old men, one young woman and her grandfather's sword. They will accept her or kill her: there is no third way in that room. Everything depends on how she earned their respect. She can take the sword herself, or offer it to them."
+          spanish: "Doce viejos, una mujer joven y la espada de su abuelo. La aceptan o la matan: en esa sala no hay una tercera opción. Todo depende de cómo se ganó su respeto. Puede tomar la espada ella, u ofrecérsela a ellos."
+        options:
+        - name: {english: "Take the sword.", spanish: "Tomar la espada."}
+          when: {flag: ZJPY2_hana_respeto}
+          next: 101
+        - name: {english: "Take the sword.", spanish: "Tomar la espada."}
+          when: {not_flag: ZJPY2_hana_respeto}
+          next: 104
+        - name: {english: "Offer them the sword.", spanish: "Ofrecerles la espada."}
+          next: 110
+      # ---- Goto
+      - id: 20
+        who: goto
+        title: {english: "Twenty Years of Files", spanish: "Veinte Años de Expedientes"}
+        desc:
+          english: "Inspector Goto has twenty years of files on Gonzō Tadokoro. Now the Yakuza rule Japan and the files are worthless, unless he uses them to make the clans keep the law. He can go to the oyabun Sakaguchi, or to the press."
+          spanish: "El Inspector Goto tiene veinte años de expedientes sobre Gonzō Tadokoro. Ahora la Yakuza gobierna Japón y los expedientes no valen nada, salvo que los use para que los clanes cumplan la ley. Puede ir al oyabun Sakaguchi, o a la prensa."
+        plate:
+          art: "A cramped police archive basement in Osaka lit by a flickering fluorescent tube; towering shelves of yellowed files; a tired middle-aged detective in a wet trench coat sits on a box reading a thick dossier, a cold cup noodle beside him; a photograph pinned on a cork board of a young tattooed man next to an old one; rain dripping through a grate; melancholic urban realism, a modern Daumier"
+          text:
+            english: "Shin Goto joined the Osaka police in 2080 to put men like Gonzō Tadokoro in prison. In twenty years he never managed it: witnesses forgot, evidence burned, judges retired early to nice houses. Then the Yakuza took Japan, and his superintendent told him to shred everything.\n\nHe did not. The files are in a basement that only he visits, and they contain twenty years of the clans' sins: who paid whom, who disappeared where. In the right hands they could make the clans keep a law, any law. In the wrong ones they could start a war."
+            spanish: "Shin Goto entró a la policía de Osaka en 2080 para meter presos a hombres como Gonzō Tadokoro. En veinte años nunca lo logró: los testigos se olvidaban, las pruebas se quemaban, los jueces se jubilaban temprano en casas lindas. Después la Yakuza tomó Japón, y su comisario le ordenó triturar todo.\n\nNo lo hizo. Los expedientes están en un sótano que solo él visita, y tienen veinte años de pecados de los clanes: quién le pagó a quién, quién desapareció dónde. En las manos correctas podrían hacer que los clanes cumplan una ley, cualquiera. En las equivocadas podrían empezar una guerra."
+        options:
+        - name: {english: "Go to Sakaguchi. Make a deal.", spanish: "Ir a ver a Sakaguchi. Hacer un trato."}
+          effects: [{effect: flag, value: ZJPY2_goto_trato}]
+          next: 21
+        - name: {english: "Go to the press.", spanish: "Ir a la prensa."}
+          skulls: 1
+          next: 22
+      - id: 21
+        who: goto
+        title: {english: "The Deal", spanish: "El Trato"}
+        desc:
+          english: "Sakaguchi listened, laughed and made an offer: Goto becomes the chief of a new national police, answering only to the oyabun. The files stay locked. Goto can accept, or demand that the police answer to a court instead."
+          spanish: "Sakaguchi escuchó, se rió e hizo una oferta: Goto pasa a ser jefe de una policía nacional nueva, que solo le responde al oyabun. Los expedientes quedan guardados. Goto puede aceptar, o exigir que la policía le responda a un tribunal."
+        options:
+        - name: {english: "Demand a court.", spanish: "Exigir un tribunal."}
+          effects: [{effect: add_political_power, value: -20}]
+          next: 23
+        - name: {english: "Accept. Some law is better than none.", spanish: "Aceptar. Algo de ley es mejor que nada."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 23
+      - id: 22
+        who: goto
+        title: {english: "The Front Page", spanish: "La Tapa"}
+        desc:
+          english: "The files made the front page of every paper in Japan. The Kobe clans are furious; Sakaguchi is embarrassed. Goto receives a single white chrysanthemum at home: a funeral flower. He can hide or keep going."
+          spanish: "Los expedientes salieron en la tapa de cada diario de Japón. Los clanes de Kobe están furiosos; Sakaguchi, avergonzado. Goto recibe en su casa un solo crisantemo blanco: una flor de funeral. Puede esconderse o seguir."
+        options:
+        - name: {english: "Keep going.", spanish: "Seguir."}
+          skulls: 1
+          next: 23
+        - name: {english: "Hide, and send the rest of the files to Sakaguchi as a peace offering.", spanish: "Esconderse, y mandarle el resto de los expedientes a Sakaguchi como ofrenda de paz."}
+          effects: [{effect: flag, value: ZJPY2_goto_trato}]
+          next: 23
+      - id: 23
+        who: goto
+        title: {english: "The Kobe Uprising", spanish: "El Levantamiento de Kobe"}
+        desc:
+          english: "With Gonzō dead, the Kobe clans are arming. Goto has proof that their boss has been talking to the HSN. He can arrest him tonight, or show the proof to the other clans and let them decide."
+          spanish: "Con Gonzō muerto, los clanes de Kobe se están armando. Goto tiene pruebas de que su jefe habla con la HSN. Puede detenerlo esta noche, o mostrarles las pruebas a los otros clanes y que decidan ellos."
+        options:
+        - name: {english: "Arrest him tonight.", spanish: "Detenerlo esta noche."}
+          next: 24
+        - name: {english: "Show the clans and let them decide.", spanish: "Mostrárselo a los clanes y que decidan."}
+          catastrophe: {rebellion: {cosmetic_tag: ZJP_CLANES, ideology: neutrality, size: 0.25, leader: {english: "Oyabun Masaki Hayama", spanish: "Oyabun Masaki Hayama"}}}
+          next: 107
+      - id: 24
+        who: goto
+        title: {english: "The Arrest", spanish: "La Detención"}
+        desc:
+          english: "Goto goes to Kobe with twelve officers and a warrant. The boss is waiting in his house with fifty men. Whether those men let Goto through depends on whether the clans see him as Sakaguchi's man or as a lone crusader. He can walk in, or wait for the army."
+          spanish: "Goto va a Kobe con doce oficiales y una orden. El jefe lo espera en su casa con cincuenta hombres. Que esos hombres lo dejen pasar depende de si los clanes lo ven como hombre de Sakaguchi o como un cruzado solitario. Puede entrar caminando, o esperar al ejército."
+        options:
+        - name: {english: "Walk in.", spanish: "Entrar caminando."}
+          when: {flag: ZJPY2_goto_trato}
+          next: 102
+        - name: {english: "Walk in.", spanish: "Entrar caminando."}
+          when: {not_flag: ZJPY2_goto_trato}
+          next: 105
+        - name: {english: "Wait for the army.", spanish: "Esperar al ejército."}
+          next: 110
+      # ---- Ota
+      - id: 30
+        who: ota
+        title: {english: "The Skin of Kansai", spanish: "La Piel de Kansai"}
+        desc:
+          english: "Kenji Ota has tattooed every boss in Kansai, and every tattoo tells a story the boss would rather nobody read. With Gonzō dying, everybody wants Ota on their side. He can choose a side, or sell to all of them."
+          spanish: "Kenji Ota tatuó a cada jefe de Kansai, y cada tatuaje cuenta una historia que el jefe preferiría que nadie lea. Con Gonzō muriéndose, todos quieren a Ota de su lado. Puede elegir un lado, o venderles a todos."
+        plate:
+          art: "A tiny tattoo studio in a Kobe back alley at night, walls covered in hand-painted designs of dragons, koi and demons; a thin man with ink-stained fingers works by lamplight on the vast back of a kneeling boss whose skin is a full irezumi of a tiger fighting a dragon; mirrors reflect a dozen other tattooed backs in photographs on the wall; intimate and secret, Utamaro's delicacy with Caravaggio's darkness"
+          text:
+            english: "Kenji Ota learned his art from a master who learned it from a master who tattooed the Yakuza of 1950s Kobe. Every dragon, every koi, every name hidden in the scales of a carp is a record: an oath, a debt, a killing. Ota remembers them all. That is why he is the most protected man in Kansai, and the most watched.\n\nNow every boss who wants to inherit Gonzō's authority has sent someone to Ota's little studio, with money, with threats, with flowers. He can choose one of them, which would make that boss very strong and Ota very hated, or he can sell a little to everyone and hope the balance holds."
+            spanish: "Kenji Ota aprendió su arte de un maestro que lo aprendió de un maestro que tatuaba a la Yakuza del Kobe de 1950. Cada dragón, cada koi, cada nombre escondido en las escamas de una carpa es un registro: un juramento, una deuda, un muerto. Ota los recuerda todos. Por eso es el hombre más protegido de Kansai, y el más vigilado.\n\nAhora cada jefe que quiere heredar la autoridad de Gonzō mandó a alguien al estudio chiquito de Ota, con plata, con amenazas, con flores. Puede elegir a uno, lo que haría a ese jefe muy fuerte y a Ota muy odiado, o puede venderles un poco a todos y esperar que el equilibrio aguante."
+        options:
+        - name: {english: "Choose Sakaguchi's side.", spanish: "Elegir el lado de Sakaguchi."}
+          effects: [{effect: flag, value: ZJPY2_ota_leal}, {effect: add_variable, var: ZJP_favor_yakuza, value: 5}]
+          next: 31
+        - name: {english: "Sell to everyone.", spanish: "Venderles a todos."}
+          skulls: 1
+          effects: [{effect: add_political_power, value: 30}]
+          next: 32
+      - id: 31
+        who: ota
+        title: {english: "The Hidden Name", spanish: "El Nombre Escondido"}
+        desc:
+          english: "On the back of the Kobe boss, hidden in a carp's scales, Ota once inked the name of a man the boss killed: Sakaguchi's own brother. Ota can tell the oyabun, or keep it to himself."
+          spanish: "En la espalda del jefe de Kobe, escondido en las escamas de una carpa, Ota una vez entintó el nombre de un hombre que el jefe mató: el propio hermano de Sakaguchi. Ota puede decírselo al oyabun, o guardárselo."
+        options:
+        - name: {english: "Keep it. Some names should sleep.", spanish: "Guardárselo. Hay nombres que tienen que dormir."}
+          next: 33
+        - name: {english: "Tell Sakaguchi.", spanish: "Decírselo a Sakaguchi."}
+          catastrophe: {rebellion: {cosmetic_tag: ZJP_CLANES, ideology: neutrality, size: 0.25, leader: {english: "Oyabun Masaki Hayama", spanish: "Oyabun Masaki Hayama"}}}
+          next: 108
+      - id: 32
+        who: ota
+        title: {english: "Everybody's Friend", spanish: "El Amigo de Todos"}
+        desc:
+          english: "Selling to everyone has made Ota rich and every boss suspicious. Someone burned his studio. He can rebuild in Kobe, or move to Tokyo under the oyabun's protection."
+          spanish: "Venderles a todos hizo rico a Ota y desconfiados a todos los jefes. Alguien le quemó el estudio. Puede reconstruirlo en Kobe, o mudarse a Tokio bajo la protección del oyabun."
+        options:
+        - name: {english: "Move to Tokyo.", spanish: "Mudarse a Tokio."}
+          effects: [{effect: flag, value: ZJPY2_ota_leal}]
+          next: 33
+        - name: {english: "Rebuild in Kobe.", spanish: "Reconstruir en Kobe."}
+          skulls: 1
+          next: 33
+      - id: 33
+        who: ota
+        title: {english: "The Last Tattoo", spanish: "El Último Tatuaje"}
+        desc:
+          english: "Before he dies, Gonzō asks Ota for one last tattoo: the names of every boss who swore loyalty to the Shogunate, over his heart. Ota can do it, or tell him it is too late."
+          spanish: "Antes de morir, Gonzō le pide a Ota un último tatuaje: los nombres de cada jefe que le juró lealtad al Shogunato, sobre el corazón. Ota puede hacerlo, o decirle que ya es tarde."
+        options:
+        - name: {english: "Do it.", spanish: "Hacerlo."}
+          next: 34
+        - name: {english: "Tell him it is too late, and close the studio for good.", spanish: "Decirle que ya es tarde, y cerrar el estudio para siempre."}
+          next: 111
+      - id: 34
+        who: ota
+        title: {english: "The Reading", spanish: "La Lectura"}
+        desc:
+          english: "At the funeral, before the coffin is closed, Ota must read the names over Gonzō's heart aloud, in front of every boss. Each name read is an oath renewed. Whether the bosses let him finish depends on whose man they think he is. He can read them all, or only the ones he trusts."
+          spanish: "En el funeral, antes de cerrar el cajón, Ota tiene que leer en voz alta los nombres sobre el corazón de Gonzō, frente a todos los jefes. Cada nombre leído es un juramento renovado. Que los jefes lo dejen terminar depende de quién creen que es su dueño. Puede leerlos todos, o solo los de los que confía."
+        options:
+        - name: {english: "Read them all.", spanish: "Leerlos todos."}
+          when: {flag: ZJPY2_ota_leal}
+          next: 103
+        - name: {english: "Read them all.", spanish: "Leerlos todos."}
+          when: {not_flag: ZJPY2_ota_leal}
+          next: 106
+        - name: {english: "Only the ones he trusts.", spanish: "Solo los de los que confía."}
+          next: 112
+      endings:
+      - id: 101
+        kind: objetivo
+        title: {english: "The Oyabun's Granddaughter", spanish: "La Nieta del Oyabun"}
+        desc:
+          english: "Hana Tadokoro took her grandfather's sword, and twelve old men bowed. The clans of Kansai have renewed their oath to the Shogunate, to her. For the first time, a woman leads the Yakuza."
+          spanish: "Hana Tadokoro tomó la espada de su abuelo, y doce viejos se inclinaron. Los clanes de Kansai renovaron su juramento al Shogunato, a ella. Por primera vez, una mujer encabeza la Yakuza."
+        plate:
+          art: "A traditional hall in Kobe at dawn, sliding doors open onto a garden with cherry blossoms falling in the rain; a young woman in a black suit stands holding an old katana upright before her; twelve old men in dark kimonos bow deeply to the floor before her in two rows; first light falling across the tatami; solemn triumph, a coronation painted like a Japanese screen in gold leaf"
+          text:
+            english: "She did not draw the sword. She lifted it from the stand in its scabbard, held it upright in front of her and waited. The oldest boss, who had walked out the first time she knelt there, looked at her for a long time. He remembered how she had earned it: not with blood but with mercy and money and open books, which in forty years he had never seen a boss dare.\n\nHe bowed. The other eleven followed. When Hana stepped out onto the veranda, ten thousand men in black suits in the street below took off their sunglasses at once. Ryūji Sakaguchi, watching from a car, wept for the second time in his life."
+            spanish: "No desenvainó la espada. La levantó del soporte con la vaina, la sostuvo derecha frente a ella y esperó. El jefe más viejo, el que se había ido la primera vez que ella se arrodilló ahí, la miró largo rato. Recordaba cómo se lo había ganado: no con sangre sino con piedad y plata y libros abiertos, algo que en cuarenta años nunca había visto animarse a un jefe.\n\nSe inclinó. Los otros once lo siguieron. Cuando Hana salió a la galería, diez mil hombres de traje negro en la calle se sacaron los anteojos de sol al mismo tiempo. Ryūji Sakaguchi, que miraba desde un auto, lloró por segunda vez en su vida."
+        close: {english: "Oyabun.", spanish: "Oyabun."}
+        effects:
+        - {effect: run, value: ZJPY2_victoria}
+      - id: 102
+        kind: objetivo
+        title: {english: "The Law of the Clans", spanish: "La Ley de los Clanes"}
+        desc:
+          english: "Goto walked into the house in Kobe and the fifty men let him through, because they knew he spoke for the oyabun. The traitor was arrested without a shot. Japan has a police the clans obey."
+          spanish: "Goto entró a la casa de Kobe y los cincuenta hombres lo dejaron pasar, porque sabían que hablaba por el oyabun. Al traidor lo detuvieron sin un tiro. Japón tiene una policía a la que los clanes obedecen."
+        plate:
+          art: "A rainy night in a Kobe courtyard: fifty tattooed men in white shirts stand aside in two silent lines with umbrellas, making a path; a tired detective in a soaked trench coat walks through them alone toward an old wooden house, a warrant in his hand; lantern light reflected in puddles; restrained and powerful, a modern Japanese woodblock print of quiet courage"
+          text:
+            english: "He did not draw his pistol. He walked through the gate with the warrant in his hand and his twelve officers waiting outside, and the fifty men in the courtyard looked at him, and then at each other, and stepped aside. They knew he came from Sakaguchi. They knew that touching him meant touching the oyabun.\n\nThe Kobe boss was arrested in his own living room, in his slippers. For the first time in history, a Japanese court tried a Yakuza boss and the clans attended the trial in silence. Goto went home that night, put his twenty years of files in the stove, and slept for eleven hours."
+            spanish: "No sacó la pistola. Entró por el portón con la orden en la mano y sus doce oficiales esperando afuera, y los cincuenta hombres del patio lo miraron, y después se miraron entre ellos, y se hicieron a un lado. Sabían que venía de parte de Sakaguchi. Sabían que tocarlo era tocar al oyabun.\n\nAl jefe de Kobe lo detuvieron en su propio living, en pantuflas. Por primera vez en la historia, un tribunal japonés juzgó a un jefe de la Yakuza y los clanes fueron al juicio en silencio. Goto volvió a su casa esa noche, metió sus veinte años de expedientes en la estufa, y durmió once horas."
+        close: {english: "Case closed.", spanish: "Caso cerrado."}
+        effects:
+        - {effect: run, value: ZJPY2_victoria}
+      - id: 103
+        kind: objetivo
+        title: {english: "The Names Over His Heart", spanish: "Los Nombres Sobre el Corazón"}
+        desc:
+          english: "Ota read every name over Gonzō's heart, and every boss whose name was read stood up and renewed his oath. The clans are bound to the Shogunate for another generation."
+          spanish: "Ota leyó cada nombre sobre el corazón de Gonzō, y cada jefe nombrado se puso de pie y renovó su juramento. Los clanes quedan atados al Shogunato por otra generación."
+        close: {english: "Sleep well, old man.", spanish: "Descansá, viejo."}
+        effects:
+        - {effect: run, value: ZJPY2_victoria}
+      - id: 104
+        kind: muerte
+        title: {english: "The Sword", spanish: "La Espada"}
+        desc:
+          english: "The council did not accept her. Hana Tadokoro died in her grandfather's house, by her grandfather's sword. The Kobe clans broke their oath the same night."
+          spanish: "El consejo no la aceptó. Hana Tadokoro murió en la casa de su abuelo, con la espada de su abuelo. Los clanes de Kobe rompieron su juramento esa misma noche."
+        plate:
+          art: "A traditional Japanese hall at night in candlelight, sliding doors torn, a katana lying on bloodstained tatami beside a young woman's black jacket; twelve cushions empty, the old men gone; rain falling in the garden beyond; a single white chrysanthemum on the floor; tragic stillness, a Japanese vanitas in the manner of a Kabuki tragedy print"
+          text:
+            english: "She had earned their fear, not their respect: blood, and a closed book, and a boss's pride. In that room, the old men had seen it a hundred times, and they knew how it ended. When she reached for the sword, the oldest of them was faster.\n\nShe was buried beside her grandfather two weeks later. The Kobe clans were not at the funeral: they were in the hills, with their guns, having declared that no oath sworn to the Tadokoro family bound them any longer."
+            spanish: "Se había ganado su miedo, no su respeto: sangre, y un libro cerrado, y orgullo de jefe. En esa sala los viejos lo habían visto cien veces, y sabían cómo terminaba. Cuando ella fue a buscar la espada, el más viejo fue más rápido.\n\nLa enterraron al lado de su abuelo dos semanas después. Los clanes de Kobe no fueron al funeral: estaban en las colinas, con sus armas, después de declarar que ningún juramento hecho a la familia Tadokoro los obligaba ya."
+        close: {english: "Hana.", spanish: "Hana."}
+        effects:
+        - {effect: add_stability, value: -0.05}
+        - {effect: add_variable, var: ZJP_favor_yakuza, value: -15}
+      - id: 105
+        kind: muerte
+        title: {english: "The White Chrysanthemum", spanish: "El Crisantemo Blanco"}
+        desc:
+          english: "Goto walked in alone, a crusader with no oyabun behind him. The fifty men did not step aside. Inspector Shin Goto's funeral was attended by every police officer in Osaka and by no one else."
+          spanish: "Goto entró solo, un cruzado sin oyabun detrás. Los cincuenta hombres no se hicieron a un lado. Al funeral del Inspector Shin Goto fueron todos los policías de Osaka y nadie más."
+        plate:
+          art: "A police funeral in Osaka in the rain: hundreds of officers in black uniforms with white gloves under black umbrellas, a portrait of a tired detective on an altar of white chrysanthemums; across the street, in the shadow of an alley, a few men in white shirts watch with their heads bowed; grief and silence, a modern Courbet's A Burial at Ornans in neon rain"
+          text:
+            english: "He was alone, and everybody knew it. The files on the front page had made him a hero to the papers and a dead man to the clans, and when he walked through the gate in Kobe, the fifty men in the courtyard did not look at each other. They did not need to.\n\nEvery police officer in Osaka came to his funeral, in white gloves, in the rain. Across the street, in an alley, three men from the Kobe clan stood with their heads bowed until the hearse had gone. Nobody ever knew whether it was respect or a warning."
+            spanish: "Estaba solo, y todos lo sabían. Los expedientes en la tapa lo habían hecho un héroe para los diarios y un muerto para los clanes, y cuando entró por el portón de Kobe, los cincuenta hombres del patio no se miraron entre ellos. No hacía falta.\n\nTodos los policías de Osaka fueron a su funeral, con guantes blancos, bajo la lluvia. Del otro lado de la calle, en un callejón, tres hombres del clan de Kobe se quedaron con la cabeza gacha hasta que pasó el coche fúnebre. Nadie supo nunca si era respeto o una advertencia."
+        close: {english: "Rest, Inspector.", spanish: "Descansá, Inspector."}
+        effects:
+        - {effect: add_stability, value: -0.04}
+        - {effect: add_political_power, value: -40}
+      - id: 106
+        kind: muerte
+        title: {english: "The Unfinished Reading", spanish: "La Lectura Inconclusa"}
+        desc:
+          english: "Ota was everybody's friend and nobody's man. At the seventh name, someone in the hall fired. The rest of the names were never read."
+          spanish: "Ota era amigo de todos y hombre de nadie. En el séptimo nombre, alguien en la sala disparó. El resto de los nombres no se leyó nunca."
+        plate:
+          art: "A funeral hall in Kobe in chaos: an open coffin with an old tattooed man inside, his chest covered in hand-inked names; a thin tattoo artist collapsing beside it, a sheet of names slipping from his ink-stained fingers; men in black suits scattering, overturned chairs, incense smoke and white flowers flying; tragic and violent, Goya's darkness in a Japanese setting"
+          text:
+            english: "He had sold a little to everyone, and in the end everyone believed he had sold them out. He read the first six names in a clear voice, and six bosses stood. At the seventh, a name that belonged to a man who believed Ota had sold his secrets to Kobe, someone at the back of the hall fired once.\n\nThe reading was never finished. Half of the bosses who had not heard their names read considered themselves free of their oath. Ota's apprentice closed the studio and burned every design in the alley. The secrets of Kansai went with him."
+            spanish: "Les había vendido un poco a todos, y al final todos creyeron que los había vendido. Leyó los primeros seis nombres con voz clara, y seis jefes se pusieron de pie. En el séptimo, un nombre que pertenecía a un hombre convencido de que Ota había vendido sus secretos a Kobe, alguien al fondo de la sala disparó una vez.\n\nLa lectura nunca terminó. La mitad de los jefes que no oyeron su nombre se consideraron libres de su juramento. El aprendiz de Ota cerró el estudio y quemó cada diseño en el callejón. Los secretos de Kansai se fueron con él."
+        close: {english: "Ink and ash.", spanish: "Tinta y ceniza."}
+        effects:
+        - {effect: add_stability, value: -0.04}
+        - {effect: add_variable, var: ZJP_giri, value: -15}
+      - id: 107
+        kind: negativo
+        title: {english: "The Clans Decide", spanish: "Los Clanes Deciden"}
+        desc:
+          english: "The clans saw the proof and decided, but not as Goto hoped: half of Kansai rose against the Shogunate. Japan is at war with its own underworld."
+          spanish: "Los clanes vieron las pruebas y decidieron, pero no como esperaba Goto: media Kansai se levantó contra el Shogunato. Japón está en guerra con su propio bajo mundo."
+        close: {english: "Then we fight.", spanish: "Entonces peleamos."}
+        effects:
+        - {effect: add_war_support, value: 0.08}
+      - id: 108
+        kind: negativo
+        title: {english: "The Brother's Name", spanish: "El Nombre del Hermano"}
+        desc:
+          english: "Sakaguchi learned who killed his brother and went to Kobe himself. The Kobe clans took up arms to protect their boss. The old feud has become a civil war."
+          spanish: "Sakaguchi supo quién mató a su hermano y fue a Kobe él mismo. Los clanes de Kobe tomaron las armas para proteger a su jefe. La vieja venganza se volvió guerra civil."
+        close: {english: "Blood for blood.", spanish: "Sangre por sangre."}
+        effects:
+        - {effect: add_war_support, value: 0.08}
+        - {effect: add_stability, value: -0.03}
+      - id: 109
+        kind: positivo
+        title: {english: "The Eldest Boss", spanish: "El Jefe Más Viejo"}
+        desc:
+          english: "Hana stepped aside and the eldest boss took Gonzō's place. He renewed the oath, for now. Hana runs the clans' money, which may be the real power."
+          spanish: "Hana se hizo a un lado y el jefe más viejo ocupó el lugar de Gonzō. Renovó el juramento, por ahora. Hana maneja la plata de los clanes, que quizás sea el poder de verdad."
+        close: {english: "For now.", spanish: "Por ahora."}
+        effects:
+        - {effect: add_variable, var: ZJP_giri, value: 20}
+        - {effect: add_political_power, value: 75}
+      - id: 110
+        kind: positivo
+        title: {english: "The Army Arrives", spanish: "Llega el Ejército"}
+        desc:
+          english: "The army came, the bosses negotiated and nobody died. It was not glorious, but the oath holds, under guard."
+          spanish: "Llegó el ejército, los jefes negociaron y no murió nadie. No fue glorioso, pero el juramento se sostiene, con custodia."
+        close: {english: "Order, at least.", spanish: "Orden, al menos."}
+        effects:
+        - {effect: add_stability, value: 0.04}
+        - {effect: army_experience, value: 20}
+      - id: 111
+        kind: neutral
+        title: {english: "Vancouver", spanish: "Vancouver"}
+        desc:
+          english: "Someone walked away. The clans sorted it out among themselves, the old way, out of sight. Nothing changed, which in Kansai is a kind of victory."
+          spanish: "Alguien se fue. Los clanes lo arreglaron entre ellos, a la antigua, fuera de la vista. No cambió nada, que en Kansai es una especie de victoria."
+        close: {english: "Nothing changes.", spanish: "Nada cambia."}
+        effects:
+        - {effect: add_political_power, value: 30}
+      - id: 112
+        kind: neutral
+        title: {english: "Half the Names", spanish: "La Mitad de los Nombres"}
+        desc:
+          english: "Ota read only the names he trusted. Half the clans renewed their oath; the other half went home without a word. An uneasy peace."
+          spanish: "Ota leyó solo los nombres de los que confiaba. La mitad de los clanes renovó su juramento; la otra mitad se fue a casa sin decir nada. Una paz incómoda."
+        close: {english: "Half is something.", spanish: "La mitad es algo."}
+        effects:
+        - {effect: add_variable, var: ZJP_giri, value: 10}
+    # =========================================================================
+    # SRS, corta y fácil: El Lote 2101
+    # =========================================================================
+    ZJP_SRS_1:
+      country: ZJP
+      namespace: meganations_japon_lote
+      prefix: ZJPS1
+      start:
+        days: 45
+        when: {variable_is: {var: ZJP_gobierna, value: 3}}
+      config: *corta
+      name: {english: "Batch 2101", spanish: "El Lote 2101"}
+      palette: "sterile white laboratories in Sendai, violet light through glass cloning vats, rows of identical young faces, snow on the northern mountains, clinical and quietly tender"
+      ideas: []
+      intro:
+        title: {english: "The Batch That Sings", spanish: "El Lote Que Canta"}
+        desc:
+          english: "SRS rules, and the vats of Sendai produce the soldiers of the Shogunate. But Batch 2101, three hundred clones, has done something no batch has ever done: in the night, without anyone teaching them, they sang. Two people must decide what that means."
+          spanish: "Gobierna SRS, y las cubas de Sendai producen los soldados del Shogunato. Pero el Lote 2101, trescientos clones, hizo algo que ningún lote hizo nunca: de noche, sin que nadie les enseñara, cantaron. Dos personas tienen que decidir qué significa eso."
+        plate:
+          art: "A vast white cloning hall in Sendai at night, rows of tall glass vats glowing violet; in front of them three hundred identical young men and women in plain white uniforms stand in perfect rows with their eyes closed and mouths open, singing; a woman scientist in an immaculate lab coat stands frozen with a clipboard, and a general in field uniform listens at the door with his cap in his hand; uncanny and beautiful, a Pre-Raphaelite choir in a sterile cathedral"
+          text:
+            english: "SRS makes the best soldiers in Asia. They are grown in eighteen months in the violet vats of Sendai, taught to march, shoot and obey, and they never complain, because nobody ever taught them how. Doctor Emi Shirogane signs every batch with her name, like a painter.\n\nLast night the night watchman of Hall Seven heard something and called her. Batch 2101, three hundred young men and women with the same face, was standing in the dark, singing. Not a march, not an anthem: an old Tōhoku lullaby that nobody in the building had ever played to them. They do not know where it came from. They will not stop."
+            spanish: "SRS hace los mejores soldados de Asia. Se crían en dieciocho meses en las cubas violetas de Sendai, les enseñan a marchar, disparar y obedecer, y nunca se quejan, porque nadie les enseñó cómo. La Doctora Emi Shirogane firma cada lote con su nombre, como un pintor.\n\nAnoche el sereno del Pabellón Siete oyó algo y la llamó. El Lote 2101, trescientos jóvenes con la misma cara, estaba parado a oscuras, cantando. No una marcha, no un himno: una vieja canción de cuna de Tōhoku que nadie en el edificio les había puesto nunca. No saben de dónde salió. No van a parar."
+      characters:
+      - id: shirogane
+        name: {english: "Doctor Shirogane", spanish: "La Doctora Shirogane"}
+        pick: {english: "Doctor Emi Shirogane: find out why, before anyone else does.", spanish: "La Doctora Emi Shirogane: averiguar por qué, antes que nadie."}
+        first: 10
+      - id: hayashi
+        name: {english: "General Hayashi", spanish: "El General Hayashi"}
+        pick: {english: "General Isamu Hayashi, who knows all their names: they are soldiers, and his.", spanish: "El General Isamu Hayashi, que se sabe todos sus nombres: son soldados, y son suyos."}
+        first: 20
+      nodes:
+      - id: 10
+        who: shirogane
+        title: {english: "The Lullaby", spanish: "La Canción de Cuna"}
+        desc:
+          english: "Shirogane can study Batch 2101 in the laboratory, with scans and samples, or simply sit with them and ask."
+          spanish: "Shirogane puede estudiar al Lote 2101 en el laboratorio, con estudios y muestras, o simplemente sentarse con ellos y preguntar."
+        plate:
+          art: "A small white room with a window onto snowy mountains; a woman scientist in a lab coat sits on the floor, her clipboard set aside, facing three identical young clones in white uniforms who sit cross-legged and look at her with curiosity; one of them holds her hand as if to read her palm; soft winter light; tender and strange, a Mary Cassatt intimacy in a clinical setting"
+          text:
+            english: "Emi Shirogane has made forty thousand people and never once asked one of them a question that was not on a form. When she enters Hall Seven, the three hundred stop singing and turn their identical faces to her with the patience of children waiting for a story.\n\nThe procedures say: isolate, scan, sample, report. Her whole career says the same. But one of them, number 117, has a small scar on her chin from a training accident, and when Shirogane looks at her, 117 smiles. Nobody taught them to smile either."
+            spanish: "Emi Shirogane hizo cuarenta mil personas y nunca le hizo a ninguna una pregunta que no estuviera en un formulario. Cuando entra al Pabellón Siete, los trescientos dejan de cantar y le dan vuelta las caras idénticas con la paciencia de chicos esperando un cuento.\n\nLos procedimientos dicen: aislar, escanear, muestrear, informar. Toda su carrera dice lo mismo. Pero una de ellos, la número 117, tiene una cicatriz chiquita en el mentón por un accidente de entrenamiento, y cuando Shirogane la mira, 117 sonríe. Tampoco les enseñaron a sonreír."
+        options:
+        - name: {english: "Sit with them and ask.", spanish: "Sentarse con ellos y preguntar."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 11
+        - name: {english: "The laboratory. Scans and samples.", spanish: "El laboratorio. Estudios y muestras."}
+          effects: [{effect: tech_bonus, category: electronics, bonus: 0.25, uses: 1}]
+          next: 12
+      - id: 11
+        who: shirogane
+        title: {english: "Where the Song Comes From", spanish: "De Dónde Viene la Canción"}
+        desc:
+          english: "The answer was in the vats: the donor whose genes made Batch 2101 was a nurse from Tōhoku who sang that lullaby to every newborn for forty years. Something of her survived. Shirogane can publish the discovery or protect the batch from curious scientists."
+          spanish: "La respuesta estaba en las cubas: la donante cuyos genes hicieron al Lote 2101 era una enfermera de Tōhoku que le cantó esa canción a cada recién nacido durante cuarenta años. Algo de ella sobrevivió. Shirogane puede publicar el descubrimiento o proteger al lote de los científicos curiosos."
+        options:
+        - name: {english: "Publish it. The world should know.", spanish: "Publicarlo. El mundo tiene que saberlo."}
+          effects: [{effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}]
+          next: 101
+        - name: {english: "Protect them. They are not an experiment.", spanish: "Protegerlos. No son un experimento."}
+          effects: [{effect: add_stability, value: 0.03}]
+          next: 103
+      - id: 12
+        who: shirogane
+        title: {english: "The Scans", spanish: "Los Estudios"}
+        desc:
+          english: "The scans show nothing wrong, and something new: a pattern in their brains that no batch has ever had. The SRS board wants to reproduce it in every batch, or erase it."
+          spanish: "Los estudios no muestran nada malo, y sí algo nuevo: un patrón en sus cerebros que ningún lote tuvo nunca. El directorio de SRS lo quiere reproducir en cada lote, o borrarlo."
+        options:
+        - name: {english: "Reproduce it, carefully.", spanish: "Reproducirlo, con cuidado."}
+          effects: [{effect: add_variable, var: ZJP_favor_srs, value: 5}]
+          next: 104
+        - name: {english: "Erase it. A soldier should not sing.", spanish: "Borrarlo. Un soldado no tiene que cantar."}
+          skulls: 1
+          next: 106
+      - id: 20
+        who: hayashi
+        title: {english: "My Soldiers", spanish: "Mis Soldados"}
+        desc:
+          english: "Hayashi does not care why they sing. He cares that SRS wants to send them back to the vats. He can take Batch 2101 into his own division at once, or let the scientists decide."
+          spanish: "A Hayashi no le importa por qué cantan. Le importa que SRS los quiere mandar de vuelta a las cubas. Puede llevarse al Lote 2101 a su propia división ya, o dejar que decidan los científicos."
+        plate:
+          art: "A snowy parade ground at a military base in Tōhoku at dawn; a weathered general in a field coat walks slowly along a line of three hundred identical young soldiers in white winter uniforms, stopping to look each one in the eye; behind him, the dark glass buildings of a laboratory; breath steaming in the cold, a crow on a fence post; quiet humanity, the stillness of a Vereshchagin painting in the snow"
+          text:
+            english: "Isamu Hayashi commands the clone infantry of SRS, and he is the only officer in Japan who has learned all their names, even though they repeat. There are three hundred Batch 2101s and he can tell every one of them apart: by the way they hold a rifle, by the way they eat, by the scar on 117's chin.\n\nThe SRS board has met without him and decided that a batch that sings is a defective batch, and defective batches go back to the vats. Hayashi has read the minutes twice. Then he put on his coat and drove to Hall Seven in the snow."
+            spanish: "Isamu Hayashi manda la infantería de clones de SRS, y es el único oficial de Japón que se aprendió todos sus nombres, aunque se repitan. Hay trescientos Lote 2101 y los distingue a todos: por cómo agarran el fusil, por cómo comen, por la cicatriz de 117 en el mentón.\n\nEl directorio de SRS se reunió sin él y decidió que un lote que canta es un lote fallado, y los lotes fallados vuelven a las cubas. Hayashi leyó el acta dos veces. Después se puso el abrigo y manejó hasta el Pabellón Siete bajo la nieve."
+        options:
+        - name: {english: "Take them into his division. Now.", spanish: "Llevárselos a su división. Ya."}
+          effects: [{effect: army_experience, value: 15}]
+          next: 21
+        - name: {english: "Let the scientists decide, and argue for them.", spanish: "Que decidan los científicos, y defenderlos."}
+          effects: [{effect: add_political_power, value: -15}]
+          next: 22
+      - id: 21
+        who: hayashi
+        title: {english: "The March to Hall Seven", spanish: "La Marcha al Pabellón Siete"}
+        desc:
+          english: "Hayashi marched three hundred clones out of the laboratory in the snow. SRS security stands at the gate. He can talk his way through, or simply keep marching."
+          spanish: "Hayashi sacó marchando a trescientos clones del laboratorio bajo la nieve. La seguridad de SRS está en el portón. Puede convencerlos hablando, o simplemente seguir marchando."
+        options:
+        - name: {english: "Keep marching. They will not shoot.", spanish: "Seguir marchando. No van a disparar."}
+          effects: [{effect: add_war_support, value: 0.03}]
+          next: 102
+        - name: {english: "Talk. Show them the orders he wrote himself.", spanish: "Hablar. Mostrarles las órdenes que escribió él mismo."}
+          next: 104
+      - id: 22
+        who: hayashi
+        title: {english: "The Board", spanish: "El Directorio"}
+        desc:
+          english: "Hayashi spoke to the SRS board for an hour. They agreed to keep the batch alive, as long as it is sent to the most dangerous front. He can accept, or threaten to resign."
+          spanish: "Hayashi les habló una hora al directorio de SRS. Aceptaron mantener vivo al lote, siempre que lo manden al frente más peligroso. Puede aceptar, o amenazar con renunciar."
+        options:
+        - name: {english: "Threaten to resign.", spanish: "Amenazar con renunciar."}
+          effects: [{effect: add_political_power, value: -20}]
+          next: 103
+        - name: {english: "Accept. He will go with them.", spanish: "Aceptar. Va a ir con ellos."}
+          effects: [{effect: army_experience, value: 10}]
+          next: 105
+      endings:
+      - id: 101
+        kind: objetivo
+        title: {english: "The Nurse's Song", spanish: "La Canción de la Enfermera"}
+        desc:
+          english: "Shirogane's discovery shook the world: something of a person survives in her clones. SRS is no longer a factory of soldiers; it is the most important laboratory on Earth, and Batch 2101 sings on the radio every New Year."
+          spanish: "El descubrimiento de Shirogane sacudió al mundo: algo de una persona sobrevive en sus clones. SRS ya no es una fábrica de soldados; es el laboratorio más importante de la Tierra, y el Lote 2101 canta en la radio cada Año Nuevo."
+        plate:
+          art: "A snowy New Year's night at a Shinto shrine in Sendai lit by lanterns; three hundred identical young people in simple white kimonos sing on the shrine steps before a huge silent crowd holding candles; an old woman in the front row weeps; a woman scientist in a dark coat stands at the side with her hand on her heart; serene and luminous, a Kawase Hasui snow scene with a choir of the future"
+          text:
+            english: "Her name was Fumiko Sato. She worked forty years in the maternity ward of Ishinomaki hospital, and every baby born there between 2040 and 2080 heard her sing the same lullaby. She donated her genes to SRS at eighty, to pay for her grandson's school. She never knew what they became.\n\nShirogane's paper has been translated into every language. Universities from Rome to Vancouver want to work with SRS. And every New Year, Batch 2101 sings Fumiko's lullaby on the radio from the steps of a shrine in Sendai, and old people in Ishinomaki who were babies in her ward turn up the volume and cry."
+            spanish: "Se llamaba Fumiko Sato. Trabajó cuarenta años en la maternidad del hospital de Ishinomaki, y cada bebé que nació ahí entre 2040 y 2080 la oyó cantar la misma canción de cuna. Donó sus genes a SRS a los ochenta, para pagar la escuela de su nieto. Nunca supo en qué se convirtieron.\n\nEl trabajo de Shirogane se tradujo a todos los idiomas. Universidades de Roma a Vancouver quieren trabajar con SRS. Y cada Año Nuevo el Lote 2101 canta la canción de Fumiko en la radio desde las escaleras de un templo de Sendai, y los viejos de Ishinomaki que fueron bebés en su sala suben el volumen y lloran."
+        close: {english: "Sleep, little one.", spanish: "Dormí, chiquito."}
+        effects:
+        - {effect: dynamic_modifier, id: ZJP_cancion_de_la_enfermera, days: 730}
+        - {effect: add_variable, var: ZJP_favor_srs, value: 15}
+        - {effect: add_variable, var: ZJP_giri, value: 25}
+      - id: 102
+        kind: objetivo
+        title: {english: "Hayashi's Own", spanish: "Los de Hayashi"}
+        desc:
+          english: "SRS security did not shoot. Batch 2101 marched out of the laboratory in the snow and into legend: the Singing Regiment, the most loyal unit in the Shogunate's army."
+          spanish: "La seguridad de SRS no disparó. El Lote 2101 salió del laboratorio marchando bajo la nieve y entró en la leyenda: el Regimiento que Canta, la unidad más leal del ejército del Shogunato."
+        plate:
+          art: "A long column of three hundred identical young soldiers in white winter uniforms marching through deep snow out of a laboratory gate, singing, breath steaming, led by a weathered general on foot; the security guards at the gate have lowered their rifles and one salutes; mountains and pale dawn behind; heroic and moving, Repin meets a Japanese snowscape"
+          text:
+            english: "The guards at the gate had orders. They also had eyes, and what they saw was a general of fifty-eight walking in front of three hundred young people in the snow, all singing a lullaby their own grandmothers had sung. One guard lowered his rifle. Then they all did. One of them saluted.\n\nThe Singing Regiment has fought on three fronts since, and has never retreated without orders. They sing before every battle. The enemy has learned to dread it."
+            spanish: "Los guardias del portón tenían órdenes. También tenían ojos, y lo que vieron fue a un general de cincuenta y ocho años caminando delante de trescientos jóvenes bajo la nieve, todos cantando una canción de cuna que habían cantado sus propias abuelas. Un guardia bajó el fusil. Después todos. Uno hizo la venia.\n\nEl Regimiento que Canta peleó en tres frentes desde entonces, y nunca se retiró sin órdenes. Cantan antes de cada batalla. El enemigo aprendió a temerle a esa canción."
+        close: {english: "Forward, my own.", spanish: "Adelante, los míos."}
+        effects:
+        - {effect: dynamic_modifier, id: ZJP_regimiento_que_canta, days: 730}
+        - {effect: add_variable, var: ZJP_favor_srs, value: 10}
+        - {effect: add_variable, var: ZJP_giri, value: 20}
+        - {effect: army_experience, value: 25}
+      - id: 103
+        kind: positivo
+        title: {english: "Left in Peace", spanish: "En Paz"}
+        desc:
+          english: "Batch 2101 was left in peace, in Hall Seven, to sing. Nobody knows quite what to do with them. Visitors come from all over Japan to listen."
+          spanish: "Al Lote 2101 lo dejaron en paz, en el Pabellón Siete, cantando. Nadie sabe bien qué hacer con ellos. Vienen visitantes de todo Japón a escucharlos."
+        close: {english: "Let them sing.", spanish: "Que canten."}
+        effects:
+        - {effect: add_stability, value: 0.04}
+        - {effect: add_variable, var: ZJP_giri, value: 10}
+      - id: 104
+        kind: positivo
+        title: {english: "A Better Batch", spanish: "Un Lote Mejor"}
+        desc:
+          english: "The new batches are a little different: more curious, a little slower to obey, much better at improvising under fire. The generals have stopped complaining."
+          spanish: "Los lotes nuevos son un poco distintos: más curiosos, un poco más lentos para obedecer, mucho mejores para improvisar bajo fuego. Los generales dejaron de quejarse."
+        close: {english: "Progress.", spanish: "Progreso."}
+        effects:
+        - {effect: army_experience, value: 20}
+        - {effect: add_political_power, value: 40}
+      - id: 105
+        kind: neutral
+        title: {english: "The Front", spanish: "El Frente"}
+        desc:
+          english: "Batch 2101 went to the most dangerous front with Hayashi at its head. They are still there. On quiet nights the other soldiers hear them sing."
+          spanish: "El Lote 2101 fue al frente más peligroso con Hayashi a la cabeza. Siguen ahí. En las noches tranquilas los otros soldados los oyen cantar."
+        close: {english: "On quiet nights.", spanish: "En las noches tranquilas."}
+        effects:
+        - {effect: army_experience, value: 15}
+      - id: 106
+        kind: negativo
+        title: {english: "Silence in Hall Seven", spanish: "Silencio en el Pabellón Siete"}
+        desc:
+          english: "The pattern was erased. Batch 2101 does not sing any more. It does not smile either. The night watchman of Hall Seven asked to be transferred."
+          spanish: "El patrón se borró. El Lote 2101 ya no canta. Tampoco sonríe. El sereno del Pabellón Siete pidió el traslado."
+        close: {english: "Efficient.", spanish: "Eficiente."}
+        effects:
+        - {effect: add_stability, value: -0.03}
+        - {effect: add_variable, var: ZJP_giri, value: -10}
+
+    # =========================================================================
+    # SRS, larga y difícil: Los Hijos de la Cuba
+    # =========================================================================
+    ZJP_SRS_2:
+      country: ZJP
+      namespace: meganations_japon_cubas
+      prefix: ZJPS2
+      start:
+        days: 60
+        when: {any: [{flag: ZJPS1_av_fin}, {flag: ZJPS1_av_cortada}]}
+      config: *larga
+      name: {english: "The Children of the Vat", spanish: "Los Hijos de la Cuba"}
+      palette: "violet vat light and white snow, clone soldiers in white uniforms, ruined Tōhoku coast, sterile boardrooms of SRS, the first protest banners painted by hand"
+      ideas: []
+      intro:
+        title: {english: "What Are We?", spanish: "¿Qué Somos?"}
+        desc:
+          english: "After the Singing Batch, a question is spreading through the barracks of the clone army, from regiment to regiment: what are we? Soldiers, property, or citizens of the Shogunate? Three people will decide the answer, and some of them will pay for it."
+          spanish: "Después del Lote que Canta, una pregunta se extiende por los cuarteles del ejército de clones, de regimiento en regimiento: ¿qué somos? ¿Soldados, propiedad, o ciudadanos del Shogunato? Tres personas van a decidir la respuesta, y algunas lo van a pagar."
+        plate:
+          art: "A barracks at night in Tōhoku: hundreds of identical clone soldiers in white sit on their bunks in silence, each holding a small handwritten card with the same question; one of them stands at the centre reading aloud by the light of a single violet lamp; at the door, half in shadow, a marshal with an identical face listens; tension of a revolution about to be born, Courbet's realism with an uncanny repetition of faces"
+          text:
+            english: "It began with a card. Someone in the Third Clone Regiment wrote three words on the back of a ration slip, WHAT ARE WE, and left it on a pillow. By the next week, every barracks in Tōhoku had a hundred of them. By the next month, the clones of the Shogunate's army, two hundred thousand young men and women grown in the vats of Sendai, were asking it out loud.\n\nSRS's lawyers have an answer: the clones are equipment, leased to the army. Marshal Nao Fujita, the first vat-born officer ever to reach his rank, has another, but has not yet said it. Three people, in the next two years, will decide which answer Japan lives with."
+            spanish: "Empezó con una tarjeta. Alguien del Tercer Regimiento de Clones escribió tres palabras en el dorso de un vale de comida, QUÉ SOMOS, y lo dejó sobre una almohada. A la semana siguiente cada cuartel de Tōhoku tenía cien. Al mes siguiente, los clones del ejército del Shogunato, doscientos mil jóvenes criados en las cubas de Sendai, lo preguntaban en voz alta.\n\nLos abogados de SRS tienen una respuesta: los clones son equipo, alquilado al ejército. El Mariscal Nao Fujita, el primer oficial nacido en una cuba que llegó a ese grado, tiene otra, pero todavía no la dijo. Tres personas, en los próximos dos años, van a decidir con qué respuesta vive Japón."
+      characters:
+      - id: nanami
+        name: {english: "Nanami 117", spanish: "Nanami 117"}
+        pick: {english: "Nanami 117, the girl with the scar from Batch 2101: the first clone with a name.", spanish: "Nanami 117, la chica de la cicatriz del Lote 2101: el primer clon con nombre."}
+        first: 10
+      - id: kurosawa
+        name: {english: "Counsel Kurosawa", spanish: "La Abogada Kurosawa"}
+        pick: {english: "Counsel Mio Kurosawa, SRS's best lawyer: she wrote the contracts and knows their weak spots.", spanish: "La Abogada Mio Kurosawa, la mejor de SRS: escribió los contratos y conoce sus puntos débiles."}
+        first: 20
+      - id: tanabe
+        name: {english: "Doctor Tanabe", spanish: "El Doctor Tanabe"}
+        pick: {english: "Doctor Ichiro Tanabe, inventor of the vats: he made them, and he wants to know what he made.", spanish: "El Doctor Ichiro Tanabe, inventor de las cubas: los hizo, y quiere saber qué hizo."}
+        first: 30
+      nodes:
+      # ---- Nanami
+      - id: 10
+        who: nanami
+        title: {english: "A Name", spanish: "Un Nombre"}
+        desc:
+          english: "Clone 117 has chosen a name: Nanami. Her regiment has started using it. The officers have not decided whether to punish it. She can wear it openly on her uniform, or keep it among the clones."
+          spanish: "El clon 117 eligió un nombre: Nanami. Su regimiento empezó a usarlo. Los oficiales no decidieron si castigarlo. Puede llevarlo a la vista en el uniforme, o guardarlo entre los clones."
+        plate:
+          art: "A young woman soldier in a white clone uniform with a small scar on her chin sits on a bunk sewing a hand-embroidered name tag onto her chest with red thread; around her, identical young soldiers lean close to watch, some holding needles of their own; lamplight; quiet rebellion, a Vermeer genre scene of a seamstress turned historic moment"
+          text:
+            english: "She took it from a poem in the barracks library: Nanami, seven seas. She liked that there were seven, because she was 117, and because she had never seen the sea. When she told the others, they did not laugh. Within a week, half of Batch 2101 had names.\n\nNanami has embroidered hers on a scrap of cloth in red thread, the only colour she could find. It sits on her bunk. Tomorrow is inspection. If she sews it onto her uniform, she will be the first clone in the history of the Shogunate to stand in line with a name."
+            spanish: "Lo sacó de un poema de la biblioteca del cuartel: Nanami, siete mares. Le gustó que fueran siete, porque ella era la 117, y porque nunca había visto el mar. Cuando se lo dijo a los demás, no se rieron. En una semana, la mitad del Lote 2101 tenía nombre.\n\nNanami bordó el suyo en un retazo de tela con hilo rojo, el único color que encontró. Está sobre su cama. Mañana hay revista. Si se lo cose al uniforme, va a ser el primer clon de la historia del Shogunato en formar con nombre."
+        options:
+        - name: {english: "Wear it openly.", spanish: "Llevarlo a la vista."}
+          skulls: 1
+          next: 11
+        - name: {english: "Keep it among the clones, for now.", spanish: "Guardarlo entre los clones, por ahora."}
+          effects: [{effect: flag, value: ZJPS2_nanami_paciente}]
+          next: 12
+      - id: 11
+        who: nanami
+        title: {english: "The Inspection", spanish: "La Revista"}
+        desc:
+          english: "Nanami stood at inspection with her name on her chest. The colonel ordered her to remove it. Forty clones behind her pinned theirs on. The colonel is waiting for her answer."
+          spanish: "Nanami formó en la revista con su nombre en el pecho. El coronel le ordenó sacárselo. Cuarenta clones detrás de ella se prendieron los suyos. El coronel espera su respuesta."
+        options:
+        - name: {english: "Remove it, and ask for a hearing.", spanish: "Sacárselo, y pedir audiencia."}
+          effects: [{effect: flag, value: ZJPS2_nanami_paciente}]
+          next: 13
+        - name: {english: "Refuse.", spanish: "Negarse."}
+          skulls: 1
+          next: 13
+      - id: 12
+        who: nanami
+        title: {english: "The Secret Names", spanish: "Los Nombres Secretos"}
+        desc:
+          english: "In secret, the names spread to every clone regiment. A sergeant of the old army, not a clone, finds out and offers to help. He could be sincere or a spy."
+          spanish: "En secreto, los nombres se extienden a cada regimiento de clones. Un sargento del ejército viejo, no clon, se entera y ofrece ayudar. Puede ser sincero o un espía."
+        options:
+        - name: {english: "Trust him.", spanish: "Confiar en él."}
+          next: 13
+        - name: {english: "Keep him away.", spanish: "Mantenerlo lejos."}
+          next: 13
+        - name: {english: "Stop here: the names are enough.", spanish: "Parar acá: con los nombres alcanza."}
+          next: 111
+      - id: 13
+        who: nanami
+        title: {english: "The March to Sendai", spanish: "La Marcha a Sendai"}
+        desc:
+          english: "The clone regiments want to march to SRS headquarters in Sendai, unarmed, to demand citizenship. They want Nanami at their head. She can lead them, or ask them to wait for the courts."
+          spanish: "Los regimientos de clones quieren marchar a la sede de SRS en Sendai, desarmados, para exigir la ciudadanía. Quieren a Nanami a la cabeza. Puede encabezarlos, o pedirles que esperen a los tribunales."
+        options:
+        - name: {english: "Lead them.", spanish: "Encabezarlos."}
+          next: 14
+        - name: {english: "March armed. They will not listen otherwise.", spanish: "Marchar armados. Si no, no van a escuchar."}
+          catastrophe: {rebellion: {cosmetic_tag: ZJP_CUBAS, ideology: communism, size: 0.3, leader: {english: "Nanami 117", spanish: "Nanami 117"}}}
+          next: 107
+      - id: 14
+        who: nanami
+        title: {english: "The Gates of SRS", spanish: "Los Portones de SRS"}
+        desc:
+          english: "Fifty thousand unarmed clones in the snow in front of SRS headquarters, and a line of security with rifles. Nanami can walk up to the gate alone, or sit down in the snow and wait. Everything depends on whether the clones have learned to wait, as she taught them, or to defy."
+          spanish: "Cincuenta mil clones desarmados en la nieve frente a la sede de SRS, y una línea de seguridad con fusiles. Nanami puede caminar sola hasta el portón, o sentarse en la nieve y esperar. Todo depende de si los clones aprendieron a esperar, como les enseñó, o a desafiar."
+        options:
+        - name: {english: "Walk to the gate alone.", spanish: "Caminar sola hasta el portón."}
+          when: {flag: ZJPS2_nanami_paciente}
+          next: 101
+        - name: {english: "Walk to the gate alone.", spanish: "Caminar sola hasta el portón."}
+          when: {not_flag: ZJPS2_nanami_paciente}
+          next: 104
+        - name: {english: "Sit down in the snow and wait.", spanish: "Sentarse en la nieve y esperar."}
+          next: 109
+      # ---- Kurosawa
+      - id: 20
+        who: kurosawa
+        title: {english: "The Contract", spanish: "El Contrato"}
+        desc:
+          english: "Mio Kurosawa wrote the leasing contract that makes the clones SRS equipment. She knows the clause that could undo it: a clone who can prove consciousness is not property. She can quietly tell the clones, or warn SRS."
+          spanish: "Mio Kurosawa escribió el contrato de alquiler que hace a los clones equipo de SRS. Conoce la cláusula que podría deshacerlo: un clon que pueda probar conciencia no es propiedad. Puede decírselo en silencio a los clones, o avisarle a SRS."
+        plate:
+          art: "A glass-walled corporate office in Sendai at night, snow falling outside; a woman lawyer in her thirties in a sharp grey suit stands alone in front of a wall-sized screen showing a contract, one clause highlighted in violet; her reflection in the glass overlaps the snowy city and, faintly, the reflection of a row of clone faces; moral crisis, a modern Hammershøi interior with a cold violet glow"
+          text:
+            english: "Mio Kurosawa was twenty-six when she wrote the SRS leasing contract, and she was proud of it: four hundred pages that turned human beings into equipment without ever using the word human. She put clause 211 in as a lawyer's joke, a safety valve nobody would ever use: if a leased unit can demonstrate consciousness before a court, the lease is void.\n\nThen she heard Batch 2101 sing. She has not slept properly since. Clause 211 is still in the contract. Only she remembers it is there."
+            spanish: "Mio Kurosawa tenía veintiséis años cuando escribió el contrato de alquiler de SRS, y estaba orgullosa: cuatrocientas páginas que convertían seres humanos en equipo sin usar nunca la palabra humano. Metió la cláusula 211 como chiste de abogada, una válvula de seguridad que nadie iba a usar nunca: si una unidad alquilada puede demostrar conciencia ante un tribunal, el alquiler es nulo.\n\nDespués oyó cantar al Lote 2101. Desde entonces no duerme bien. La cláusula 211 sigue en el contrato. Solo ella recuerda que está."
+        options:
+        - name: {english: "Tell the clones, quietly.", spanish: "Decírselo a los clones, en silencio."}
+          effects: [{effect: flag, value: ZJPS2_kurosawa_fiel}]
+          next: 21
+        - name: {english: "Warn SRS. It is her job.", spanish: "Avisarle a SRS. Es su trabajo."}
+          skulls: 1
+          effects: [{effect: add_variable, var: ZJP_favor_srs, value: 5}]
+          next: 22
+      - id: 21
+        who: kurosawa
+        title: {english: "Clause 211", spanish: "La Cláusula 211"}
+        desc:
+          english: "The clones need one of their own to stand before a court and prove consciousness. Kurosawa can choose the most articulate clone, or the most ordinary one."
+          spanish: "Los clones necesitan a uno de ellos que se presente ante un tribunal y pruebe conciencia. Kurosawa puede elegir al clon que mejor habla, o al más común."
+        options:
+        - name: {english: "The most ordinary one. If he is conscious, all are.", spanish: "El más común. Si él es consciente, todos lo son."}
+          next: 23
+        - name: {english: "The most articulate one.", spanish: "El que mejor habla."}
+          next: 23
+      - id: 22
+        who: kurosawa
+        title: {english: "The Amendment", spanish: "La Enmienda"}
+        desc:
+          english: "SRS asks Kurosawa to remove clause 211 before anyone finds it. She has the pen in her hand."
+          spanish: "SRS le pide a Kurosawa que saque la cláusula 211 antes de que alguien la encuentre. Tiene la lapicera en la mano."
+        options:
+        - name: {english: "Remove it.", spanish: "Sacarla."}
+          skulls: 2
+          next: 112
+        - name: {english: "Refuse, and resign.", spanish: "Negarse, y renunciar."}
+          effects: [{effect: flag, value: ZJPS2_kurosawa_fiel}]
+          next: 23
+      - id: 23
+        who: kurosawa
+        title: {english: "The Court of Sendai", spanish: "El Tribunal de Sendai"}
+        desc:
+          english: "The case is before the High Court of Sendai. SRS has hired forty lawyers and is pressuring the judges. Kurosawa can ask the CyberShogun to protect the court, or trust it to stand alone."
+          spanish: "El caso está ante el Tribunal Superior de Sendai. SRS contrató cuarenta abogados y presiona a los jueces. Kurosawa puede pedirle al CyberShogun que proteja al tribunal, o confiar en que se sostenga solo."
+        options:
+        - name: {english: "Trust the court.", spanish: "Confiar en el tribunal."}
+          next: 24
+        - name: {english: "Go to the press with SRS's threats against the judges.", spanish: "Ir a la prensa con las amenazas de SRS a los jueces."}
+          catastrophe: {rebellion: {cosmetic_tag: ZJP_CUBAS, ideology: communism, size: 0.25, leader: {english: "Marshal Nao Fujita", spanish: "Mariscal Nao Fujita"}}}
+          next: 108
+      - id: 24
+        who: kurosawa
+        title: {english: "The Verdict", spanish: "El Veredicto"}
+        desc:
+          english: "The verdict is tomorrow. Tonight, an SRS car is parked outside Kurosawa's apartment. The clones trust her, if she has been faithful to them from the start. She can go to court in the morning, or leave the country tonight with the evidence."
+          spanish: "El veredicto es mañana. Esta noche hay un auto de SRS estacionado frente al departamento de Kurosawa. Los clones confían en ella, si les fue fiel desde el principio. Puede ir al tribunal a la mañana, o irse del país esta noche con las pruebas."
+        options:
+        - name: {english: "Go to court in the morning.", spanish: "Ir al tribunal a la mañana."}
+          when: {flag: ZJPS2_kurosawa_fiel}
+          next: 102
+        - name: {english: "Go to court in the morning.", spanish: "Ir al tribunal a la mañana."}
+          when: {not_flag: ZJPS2_kurosawa_fiel}
+          next: 105
+        - name: {english: "Leave tonight with the evidence.", spanish: "Irse esta noche con las pruebas."}
+          next: 110
+      # ---- Tanabe
+      - id: 30
+        who: tanabe
+        title: {english: "The Inventor", spanish: "El Inventor"}
+        desc:
+          english: "Doctor Ichiro Tanabe invented the vats forty years ago. He is eighty-one and wants to know, before he dies, whether he made people or tools. He can examine the clones' brains, or simply live among them for a season."
+          spanish: "El Doctor Ichiro Tanabe inventó las cubas hace cuarenta años. Tiene ochenta y uno y quiere saber, antes de morir, si hizo personas o herramientas. Puede examinar los cerebros de los clones, o simplemente vivir entre ellos una temporada."
+        plate:
+          art: "An old Japanese scientist with white hair and round spectacles walks slowly between towering violet cloning vats in which identical figures float like sleeping saints; he rests one wrinkled hand on the glass of a vat, his face reflected over the face inside; dramatic violet light from below; contemplative and sacred, a modern Frankenstein painted with the reverence of a religious altarpiece"
+          text:
+            english: "Ichiro Tanabe was forty when he grew the first human being in a glass vat, in a basement in Sendai, using equipment he had rebuilt from a ruined hospital. He was trying to save the children of the irradiated coast. SRS bought his patents and made soldiers. He took the money and did not ask questions for forty years.\n\nHe is eighty-one now, and he has been told about the singing. He walks among the vats at night, as he did when he was young, and he looks into the faces floating there, and he wonders, for the first time, whether they dream."
+            spanish: "Ichiro Tanabe tenía cuarenta años cuando hizo crecer al primer ser humano en una cuba de vidrio, en un sótano de Sendai, con equipos que había reconstruido de un hospital en ruinas. Quería salvar a los chicos de la costa irradiada. SRS le compró las patentes e hizo soldados. Él tomó la plata y no hizo preguntas durante cuarenta años.\n\nAhora tiene ochenta y uno, y le contaron lo del canto. Camina entre las cubas de noche, como cuando era joven, y mira las caras que flotan ahí, y se pregunta, por primera vez, si sueñan."
+        options:
+        - name: {english: "Live among them for a season.", spanish: "Vivir entre ellos una temporada."}
+          effects: [{effect: flag, value: ZJPS2_tanabe_humilde}, {effect: add_stability, value: 0.02}]
+          next: 31
+        - name: {english: "Examine their brains.", spanish: "Examinarles el cerebro."}
+          skulls: 1
+          effects: [{effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}]
+          next: 32
+      - id: 31
+        who: tanabe
+        title: {english: "The Barracks", spanish: "El Cuartel"}
+        desc:
+          english: "Tanabe has lived three months in a clone barracks, eating their food and sleeping in their bunks. They call him Grandfather. A young clone asks him whether he is ashamed of them. He must answer."
+          spanish: "Tanabe vivió tres meses en un cuartel de clones, comiendo su comida y durmiendo en sus camas. Lo llaman Abuelo. Un clon joven le pregunta si le dan vergüenza. Tiene que contestar."
+        options:
+        - name: {english: "'No. I am ashamed of myself.'", spanish: "'No. Me doy vergüenza yo.'"}
+          next: 33
+        - name: {english: "'I don't know yet.'", spanish: "'Todavía no lo sé.'"}
+          next: 33
+      - id: 32
+        who: tanabe
+        title: {english: "The Scans", spanish: "Los Estudios"}
+        desc:
+          english: "The scans prove it beyond doubt: the clones dream, remember and grieve exactly as anyone else. SRS wants the results buried. Tanabe can publish, or give them to Counsel Kurosawa for the court."
+          spanish: "Los estudios lo prueban sin ninguna duda: los clones sueñan, recuerdan y sufren exactamente como cualquiera. SRS quiere enterrar los resultados. Tanabe puede publicarlos, o dárselos a la Abogada Kurosawa para el tribunal."
+        options:
+        - name: {english: "Give them to the court.", spanish: "Dárselos al tribunal."}
+          effects: [{effect: flag, value: ZJPS2_tanabe_humilde}]
+          next: 33
+        - name: {english: "Publish them, with his name on top.", spanish: "Publicarlos, con su nombre arriba."}
+          skulls: 1
+          next: 33
+        - name: {english: "Bury them. He is too old for this.", spanish: "Enterrarlos. Ya está viejo para esto."}
+          next: 112
+      - id: 33
+        who: tanabe
+        title: {english: "The Patent", spanish: "La Patente"}
+        desc:
+          english: "Tanabe still holds the original patent of the vats. If he revokes the licence, SRS can no longer grow clones. The army would lose its future soldiers; the clones would be the last of their kind."
+          spanish: "Tanabe todavía tiene la patente original de las cubas. Si revoca la licencia, SRS ya no puede criar clones. El ejército perdería sus soldados futuros; los clones serían los últimos de su especie."
+        options:
+        - name: {english: "Keep the licence for now.", spanish: "Mantener la licencia por ahora."}
+          next: 34
+        - name: {english: "Revoke it and give the vats to the clones themselves.", spanish: "Revocarla y darles las cubas a los propios clones."}
+          catastrophe: {war_by: SHD}
+          next: 108
+      - id: 34
+        who: tanabe
+        title: {english: "The Address", spanish: "El Discurso"}
+        desc:
+          english: "Tanabe has been asked to speak to the whole clone army by radio. He is old and ill. Whether they listen to a grandfather or a maker depends on how he has come to them. He can tell them the whole truth of how they were made, or tell them only that they are free to choose."
+          spanish: "A Tanabe le pidieron que le hable a todo el ejército de clones por radio. Está viejo y enfermo. Que lo escuchen como a un abuelo o como a un fabricante depende de cómo se acercó a ellos. Puede contarles toda la verdad de cómo los hicieron, o decirles solo que son libres de elegir."
+        options:
+        - name: {english: "The whole truth.", spanish: "Toda la verdad."}
+          when: {flag: ZJPS2_tanabe_humilde}
+          next: 103
+        - name: {english: "The whole truth.", spanish: "Toda la verdad."}
+          when: {not_flag: ZJPS2_tanabe_humilde}
+          next: 106
+        - name: {english: "Only that they are free to choose.", spanish: "Solo que son libres de elegir."}
+          next: 109
+      endings:
+      - id: 101
+        kind: objetivo
+        title: {english: "Seven Seas", spanish: "Siete Mares"}
+        desc:
+          english: "Nanami walked to the gate alone, and fifty thousand clones waited in the snow behind her without a sound. The gate opened. The clones of Japan are citizens, and the first thing Nanami did with her papers was go to see the sea."
+          spanish: "Nanami caminó sola hasta el portón, y cincuenta mil clones esperaron detrás de ella en la nieve sin hacer ruido. El portón se abrió. Los clones de Japón son ciudadanos, y lo primero que hizo Nanami con sus papeles fue ir a ver el mar."
+        plate:
+          art: "A grey winter beach on the Tōhoku coast; a young woman in a plain coat with a small scar on her chin stands barefoot at the edge of the waves, holding identity papers in one hand, her shoes in the other, looking at the sea for the first time; behind her on the dunes, hundreds of identical young people in civilian clothes watch silently; a single gull; transcendent and simple, Caspar David Friedrich's Monk by the Sea reborn"
+          text:
+            english: "She had taught them to wait. In a year of secret names and hearings and patience, Nanami had taught fifty thousand soldiers that the strongest thing they could do was stand still. So when she walked alone to the gate of SRS, nobody behind her moved, and the security men, who had been trained for a riot, did not know what to do with silence.\n\nThe CyberShogun signed the Citizenship Edict a week later. The first thing Nanami 117 did with her new papers was take a train to the coast at Ishinomaki and walk into the sea up to her knees. It was freezing. She laughed so hard she fell over."
+            spanish: "Les había enseñado a esperar. En un año de nombres secretos y audiencias y paciencia, Nanami les había enseñado a cincuenta mil soldados que lo más fuerte que podían hacer era quedarse quietos. Así que cuando caminó sola hasta el portón de SRS, nadie detrás de ella se movió, y los de seguridad, que estaban entrenados para un disturbio, no supieron qué hacer con el silencio.\n\nEl CyberShogun firmó el Edicto de Ciudadanía una semana después. Lo primero que hizo Nanami 117 con sus papeles nuevos fue tomarse un tren a la costa de Ishinomaki y meterse al mar hasta las rodillas. Estaba helado. Se rió tanto que se cayó."
+        close: {english: "Seven seas.", spanish: "Siete mares."}
+        effects:
+        - {effect: run, value: ZJPS2_victoria}
+      - id: 102
+        kind: objetivo
+        title: {english: "The Verdict of Sendai", spanish: "El Veredicto de Sendai"}
+        desc:
+          english: "Kurosawa went to court, and the clones packed the gallery because they trusted her. The High Court of Sendai ruled: clause 211 applies. The lease is void. The clones are free."
+          spanish: "Kurosawa fue al tribunal, y los clones llenaron la sala porque confiaban en ella. El Tribunal Superior de Sendai falló: la cláusula 211 se aplica. El alquiler es nulo. Los clones son libres."
+        plate:
+          art: "A wood-panelled courtroom in Sendai, packed to the walls with identical young people in white uniforms standing in silence; a woman lawyer in a grey suit stands before the bench holding a thick contract; an old judge in black robes reads the verdict; light streams through tall windows onto the faces; momentous and restrained, a modern history painting in the tradition of David's oaths"
+          text:
+            english: "The SRS car outside her apartment was still there at seven in the morning when she walked past it with her briefcase. Its driver did not move. Outside the court, ten thousand clones in white uniforms stood in the snow in silence, and when she reached the steps they parted for her, because she had been theirs from the first day.\n\nThe judgement took four minutes to read. Clause 211 applied. Consciousness had been demonstrated beyond reasonable doubt. The lease was void. In the gallery, a clone of the Third Regiment who had written three words on the back of a ration slip started, very softly, to sing."
+            spanish: "El auto de SRS frente a su departamento seguía ahí a las siete de la mañana cuando pasó al lado con el maletín. El chofer no se movió. Afuera del tribunal, diez mil clones de uniforme blanco esperaban en la nieve en silencio, y cuando ella llegó a las escaleras se abrieron para dejarla pasar, porque había sido de ellos desde el primer día.\n\nLeer la sentencia llevó cuatro minutos. La cláusula 211 se aplicaba. La conciencia se había demostrado más allá de toda duda razonable. El alquiler era nulo. En la sala, un clon del Tercer Regimiento que había escrito tres palabras en el dorso de un vale de comida empezó, muy bajito, a cantar."
+        close: {english: "Void.", spanish: "Nulo."}
+        effects:
+        - {effect: run, value: ZJPS2_victoria}
+      - id: 103
+        kind: objetivo
+        title: {english: "Grandfather", spanish: "Abuelo"}
+        desc:
+          english: "Tanabe told the clone army the whole truth, and they forgave him, because he had come to them as a grandfather. They chose to stay, as citizens and soldiers. The Shogunate's army is loyal as never before."
+          spanish: "Tanabe le contó toda la verdad al ejército de clones, y lo perdonaron, porque había ido a ellos como un abuelo. Eligieron quedarse, como ciudadanos y soldados. El ejército del Shogunato es leal como nunca."
+        close: {english: "Thank you, Grandfather.", spanish: "Gracias, Abuelo."}
+        effects:
+        - {effect: run, value: ZJPS2_victoria}
+        - {effect: army_experience, value: 40}
+      - id: 104
+        kind: muerte
+        title: {english: "Seven Shots", spanish: "Siete Disparos"}
+        desc:
+          english: "The clones behind Nanami had learned to defy, not to wait. When she walked to the gate, they surged after her, and the security line fired. Nanami 117 died in the snow with her name on her chest."
+          spanish: "Los clones detrás de Nanami habían aprendido a desafiar, no a esperar. Cuando ella caminó al portón, se lanzaron detrás, y la línea de seguridad disparó. Nanami 117 murió en la nieve con su nombre en el pecho."
+        plate:
+          art: "Snow in front of a sterile glass headquarters at dusk: a young woman in a white uniform lies fallen in the snow, a red embroidered name tag on her chest; thousands of identical young people stand frozen in shock behind her; a line of security guards with smoking rifles; violet light from the building; a single red thread blowing in the wind; tragic and iconic, Goya's Third of May in white and violet"
+          text:
+            english: "She had taught them to stand up, to refuse, to wear their names in the colonel's face, and they had learned. So when she walked to the gate alone, they could not let her go alone. Fifty thousand people moved at once, and a security line trained for riots saw a riot.\n\nSeven shots were fired. Only one hit anyone. They buried Nanami 117 in Ishinomaki, by the sea she never saw, with her red-threaded name on the stone. Every clone in Japan wears a red thread on their wrist now. SRS has not dared to forbid it."
+            spanish: "Les había enseñado a pararse, a negarse, a llevar su nombre en la cara del coronel, y habían aprendido. Así que cuando caminó sola hasta el portón, no pudieron dejarla ir sola. Cincuenta mil personas se movieron a la vez, y una línea de seguridad entrenada para disturbios vio un disturbio.\n\nSe dispararon siete tiros. Solo uno le dio a alguien. Enterraron a Nanami 117 en Ishinomaki, junto al mar que nunca vio, con su nombre de hilo rojo en la piedra. Cada clon de Japón lleva ahora un hilo rojo en la muñeca. SRS no se animó a prohibirlo."
+        close: {english: "Nanami.", spanish: "Nanami."}
+        effects:
+        - {effect: add_stability, value: -0.06}
+        - {effect: add_variable, var: ZJP_favor_srs, value: -15}
+      - id: 105
+        kind: muerte
+        title: {english: "The Car Outside", spanish: "El Auto de Afuera"}
+        desc:
+          english: "The clones did not trust the lawyer who once warned SRS, and nobody watched over her. Counsel Kurosawa never reached the court. The case was dismissed for lack of counsel."
+          spanish: "Los clones no confiaban en la abogada que alguna vez le avisó a SRS, y nadie la cuidó. La Abogada Kurosawa nunca llegó al tribunal. El caso se desestimó por falta de abogado."
+        plate:
+          art: "A snowy Sendai street at dawn: an empty briefcase lies open in the snow beside a black car with its door ajar, papers of a contract scattered and blowing away; footprints leading nowhere; the courthouse visible in the distance with its doors closed; chilling and quiet, a noir winter still life"
+          text:
+            english: "She had warned SRS once, at the beginning, and the clones had never forgotten it. When she walked out of her apartment at seven in the morning, there was nobody in white uniforms waiting in the street to walk her to the court. There was only the car.\n\nHer briefcase was found in the snow at nine. The High Court of Sendai waited an hour for counsel, and then dismissed the case. Clause 211 was removed from the contract the following week. Nobody remembers it was ever there."
+            spanish: "Le había avisado a SRS una vez, al principio, y los clones nunca lo olvidaron. Cuando salió de su departamento a las siete de la mañana, no había nadie de uniforme blanco esperando en la calle para acompañarla al tribunal. Solo estaba el auto.\n\nEncontraron su maletín en la nieve a las nueve. El Tribunal Superior de Sendai esperó una hora al abogado, y después desestimó el caso. A la semana siguiente sacaron la cláusula 211 del contrato. Nadie recuerda que haya estado alguna vez."
+        close: {english: "Clause 211.", spanish: "Cláusula 211."}
+        effects:
+        - {effect: add_stability, value: -0.04}
+        - {effect: add_political_power, value: -50}
+      - id: 106
+        kind: muerte
+        title: {english: "The Maker", spanish: "El Fabricante"}
+        desc:
+          english: "Tanabe told them the whole truth as a maker, from above, and they did not forgive him. The old man died in his laboratory a week later, alone, among the vats."
+          spanish: "Tanabe les contó toda la verdad como un fabricante, desde arriba, y no lo perdonaron. El viejo murió en su laboratorio una semana después, solo, entre las cubas."
+        plate:
+          art: "A dark cloning laboratory at night, the violet vats now empty and drained; an old scientist with white hair sits slumped in a chair at the centre, a radio microphone fallen from his hand; through the glass, a crowd of identical faces watching from outside without entering; desolation, a modern Pietà without mourners"
+          text:
+            english: "He spoke for an hour, and everything he said was true: the hospital basement, the irradiated children, the patents, the money, the forty years without questions. But he spoke as the man who had made them, not as one who had come to know them, and to two hundred thousand people it sounded like an owner reading out the manual.\n\nThe radio went silent. Nobody came to his laboratory after that, not SRS, not the clones. He was found a week later in his chair among the empty vats. The clones did not go to his funeral. A few of them, it is said, stood outside the cemetery gates and did not go in."
+            spanish: "Habló una hora, y todo lo que dijo era verdad: el sótano del hospital, los chicos irradiados, las patentes, la plata, los cuarenta años sin preguntas. Pero habló como el hombre que los había hecho, no como alguien que había llegado a conocerlos, y a doscientas mil personas les sonó a un dueño leyendo el manual.\n\nLa radio se quedó callada. Nadie fue a su laboratorio después de eso, ni SRS ni los clones. Lo encontraron una semana después en su silla entre las cubas vacías. Los clones no fueron a su funeral. Algunos, dicen, se quedaron afuera de los portones del cementerio y no entraron."
+        close: {english: "Forgive me.", spanish: "Perdónenme."}
+        effects:
+        - {effect: add_stability, value: -0.04}
+        - {effect: add_variable, var: ZJP_giri, value: -15}
+      - id: 107
+        kind: negativo
+        title: {english: "The Republic of the Vats", spanish: "La República de las Cubas"}
+        desc:
+          english: "The clones marched armed, and an army that marches armed is a revolution. The Republic of the Vats has been proclaimed in Tōhoku. Japan is at war with its own soldiers."
+          spanish: "Los clones marcharon armados, y un ejército que marcha armado es una revolución. Se proclamó la República de las Cubas en Tōhoku. Japón está en guerra con sus propios soldados."
+        close: {english: "What have we made?", spanish: "¿Qué hicimos?"}
+        effects:
+        - {effect: add_war_support, value: 0.08}
+      - id: 108
+        kind: negativo
+        title: {english: "The Price of Freedom", spanish: "El Precio de la Libertad"}
+        desc:
+          english: "The truth came out the hard way. The clones rose, or the world saw a Japan without its vat army and moved in. Freedom will be paid for in blood."
+          spanish: "La verdad salió por el peor camino. Los clones se levantaron, o el mundo vio un Japón sin su ejército de las cubas y avanzó. La libertad se va a pagar con sangre."
+        close: {english: "So be it.", spanish: "Que así sea."}
+        effects:
+        - {effect: add_war_support, value: 0.08}
+        - {effect: add_stability, value: -0.03}
+      - id: 109
+        kind: positivo
+        title: {english: "Free to Choose", spanish: "Libres de Elegir"}
+        desc:
+          english: "No victory, no blood: the clones were told they are free to choose, and most chose to stay. The question is open, but it is asked in peace."
+          spanish: "Ni victoria ni sangre: a los clones se les dijo que son libres de elegir, y la mayoría eligió quedarse. La pregunta sigue abierta, pero se hace en paz."
+        close: {english: "In peace.", spanish: "En paz."}
+        effects:
+        - {effect: add_stability, value: 0.04}
+        - {effect: add_variable, var: ZJP_giri, value: 15}
+      - id: 110
+        kind: positivo
+        title: {english: "The Evidence Abroad", spanish: "Las Pruebas en el Exterior"}
+        desc:
+          english: "Kurosawa fled with the evidence and published it from abroad. SRS was humiliated; the clones got better treatment, if not freedom. A partial victory."
+          spanish: "Kurosawa huyó con las pruebas y las publicó desde el exterior. SRS quedó humillada; los clones consiguieron mejor trato, aunque no la libertad. Una victoria a medias."
+        close: {english: "Half a victory.", spanish: "Media victoria."}
+        effects:
+        - {effect: add_stability, value: 0.03}
+        - {effect: add_political_power, value: 60}
+      - id: 111
+        kind: neutral
+        title: {english: "The Secret Names", spanish: "Los Nombres Secretos"}
+        desc:
+          english: "The clones keep their names among themselves. The army does not ask, SRS does not look. Nothing has changed, except everything, quietly."
+          spanish: "Los clones guardan sus nombres entre ellos. El ejército no pregunta, SRS no mira. No cambió nada, salvo todo, en silencio."
+        close: {english: "Quietly.", spanish: "En silencio."}
+        effects:
+        - {effect: add_variable, var: ZJP_giri, value: 10}
+      - id: 112
+        kind: neutral
+        title: {english: "Buried", spanish: "Enterrado"}
+        desc:
+          english: "The evidence was buried and the clause removed. The question was not answered; it was postponed. It will come back."
+          spanish: "Las pruebas se enterraron y la cláusula se sacó. La pregunta no se contestó; se postergó. Va a volver."
+        close: {english: "It will come back.", spanish: "Va a volver."}
+        effects:
+        - {effect: add_political_power, value: 40}
+        - {effect: add_variable, var: ZJP_favor_srs, value: 5}

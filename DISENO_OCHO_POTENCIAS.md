@@ -2540,3 +2540,66 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   (railguns, láseres antidrones, motores de hidrógeno, cerámica compuesta,
   torretas sin tripulación), sin imagen de referencia: 0_DISENADOR_2100.txt.
   Los pines de foco que faltan van juntos en 0_FOCOS_PIN_FALTANTES.txt.
+- El Gigante y la Crisis del Sucesor (2026-11-06; spec/36_gigante_sucesor.yaml):
+  con 180 regiones o más una gran potencia se vuelve el Gigante:
+  Sobreestiramiento (-10% estabilidad, -25% poder político, +25% guarnición;
+  con 300, El Imperio Demasiado Grande encima) y Ginebra Llama a las demás
+  (unirse a la Coalición que ya existía, pagar tributo o mirar para otro lado;
+  cada cinco años mientras siga igual). Cada mes, 3% de provincia levantada y
+  1,5% de gobernador ambicioso. Bajo 160 regiones, o con su Forma Final
+  proclamada, deja de serlo ("uno no debería tener sobreestiramiento en su
+  forma final"). Nueva condición states_at_least (num_of_controlled_states).
+  Sucesor: los líderes ya no son eternos. Desde 2107 se gastan +4 por año;
+  desde 2106, con Salud bajo 15, 1 en 6 por mes de El Último Invierno
+  (Delfín, Mariscal, Tribuna o aferrarse); a los 90 días muere y asume otro
+  (el heredero marca dos años de gobierno); a los 60, Los que Perdieron
+  (comprarlos, purgarlos con riesgo de ultimátum y guerra civil, exiliarlos).
+- Pines de foco sin referencia (2026-11-06, "no los hice con referencia"):
+  los pedidos van solo con descripción y material; se borraron las
+  referencias de focos (11 MB).
+- La Lámina de las aventuras (2026-11-07, "que se note que NO es un evento
+  más: cuadro más grande, más texto, más personalidad, imagen impactante en
+  tono obra de arte"): un capítulo, la presentación o un final con `plate`
+  abre primero una ventana propia de 1020x740 (tools/gen/emitters/laminas.py):
+  una pintura de 960x408, el título, el nombre de la saga, el relato largo y
+  el marco de la nación (mismos estilos que la Ficha del Líder). Continuar la
+  cierra y recién ahí llega el evento con las opciones. La IA no la ve. Sin
+  pintura todavía, una tela oscura (arte ficha laminas). Pedidos de arte
+  `adventure_plate` (17_laminas): óleo de academia del siglo XIX en formato
+  2.35:1, 1920x816; al importar se guarda la pintura y, achicada, la imagen
+  del evento.
+- El motor de aventuras sirve para cualquier nación (2026-11-07): una saga
+  puede tener `countries` (varias naciones, misma historia), `namespace`,
+  `prefix`, `config` propia y `start` (arranca desde el pulso de las grandes
+  potencias). Catástrofe nueva `crisis` (MEGANATIONS_crisis_estalla); las
+  sagas de varias naciones solo admiten esa.
+- El Despertar (2026-11-07; spec/37_el_despertar.yaml): desde marzo de 2110,
+  las ocho meganaciones (Japón y Albión solo si las juega una persona). Algo
+  en las redes se despertó: el Huésped. Tres puertas (la Ingeniera, el
+  General, la Ministra), un capítulo cada 180 días hasta fines de 2111, 12
+  finales (2 de muerte, 3 de objetivo, 3 buenos, 2 malos, 2 neutros; uno
+  enciende la guerra civil). Todos los momentos con Lámina. Cada final deja
+  MEGANATIONS_despertar_<final> para la Revolución de las Máquinas de 2113.
+- Las aventuras de Albión (2026-11-07; spec/38_aventuras_albion.yaml): una por
+  camino, arrancan 60 días después de que se fija la ruta. Hacia el Pasado: La
+  Corona de Vapor (el Jubileo de Diamante de Victoria III; Lady Ravensworth,
+  Lord Wrexham o la Profesora Wexley). Hacia el Futuro: La Gran Sincronía (una
+  hora en que Albión piensa con una sola mente; la Portavoz Harrow, la
+  Administradora Nwosu o la Abogada Byrne). Fáciles y largas: sin muertes,
+  cinco decisiones por personaje, un capítulo cada 150 días. La última
+  decisión es binaria y lo correcto depende de lo que se eligió en el tercer
+  capítulo (el relato lo recuerda): acertar es la victoria (El Siglo Británico
+  o La Hora de Albión, diez años, +300 de poder político, +10% estabilidad),
+  errar es la guerra civil contra La Mancomunidad de los Comunes o Los
+  Condados Libres de los Desconectados (cosmetic tags nuevos). El desenlace
+  llega a los 5 días (`ending_days`, nuevo en el motor).
+- Las aventuras de Japón (2026-11-07; spec/39_aventuras_japon.yaml): por cada
+  Casa, una corta y fácil (dos personajes del juego, dos decisiones, sin
+  muertes) que arranca 45 días después de que gobierna, y una larga y difícil
+  (tres héroes nuevos, cuatro decisiones, tres muertes, guerras con la HSN o el
+  Directorio y guerras civiles: Los Clanes Libres de Kansai, La República de
+  las Cubas) que arranca 60 días después de la corta. Zaibatsu: La Junta de
+  Accionistas / La OPA Hostil. Yakuza: La Fiesta del Puerto / El Último
+  Oyabun. SRS: El Lote 2101 / Los Hijos de la Cuba. En la larga, la última
+  decisión depende de una del primer capítulo: acertar da el gran premio
+  (cinco años), errar mata al héroe.

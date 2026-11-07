@@ -1,0 +1,402 @@
+# =============================================================================
+# El Gigante y la Crisis del Sucesor (2026-11-06)
+#
+# Pedido del usuario: "implementá el punto 1 y 2 de tu propuesta", que eran:
+#  1. "La Coalición contra el Hegemón: cuando una meganación pasa cierto tamaño,
+#     las demás reciben un evento y una decisión para unirse en su contra; y el
+#     gigante paga el sobreestiramiento: revueltas, generales ambiciosos."
+#  2. "La Crisis del Sucesor: para 2110 los líderes de 2100 están viejos; cuando
+#     el líder se enferma o muere, cada nación tiene su drama: candidatos con
+#     facciones, intriga y riesgo de guerra civil si gana el equivocado."
+#
+# Por qué: en la partida del game.log (2108) el Directorio tenía 432 regiones
+# (Roma, la que seguía, 138) y estabilidad 100. La Coalición de Ginebra ya
+# existía, pero solo la convocaban la Forma Final y la Hegemonía, que la gran
+# potencia decide proclamar: la que crece a fuerza de conquistas nunca la
+# despertaba. Y los líderes no morían nunca: al llegar a Salud 0 se desplomaban
+# y volvían.
+#
+# 1. EL GIGANTE: una gran potencia (las ocho, Japón y Albión) con 180 regiones o
+#    más se vuelve el Gigante: Sobreestiramiento (-10% estabilidad, -25% poder
+#    político, más guarnición) y, con 300, Sobreestiramiento Grave encima. Las
+#    otras reciben "Ginebra Llama" (unirse a la Coalición, pagar tributo o mirar
+#    para otro lado), y otra vez cada cinco años si sigue igual. Cada mes: 3% de
+#    que se levante una provincia y 1,5% de un gobernador ambicioso. Bajo 160
+#    regiones, o al proclamar su Forma Final, deja de serlo (en su forma final no
+#    hay Sobreestiramiento).
+# 2. EL SUCESOR: desde 2107 los líderes se gastan más rápido (+4 de desgaste
+#    por año). Desde 2106, con Salud bajo 15, una chance por mes (1 en 6) de "El
+#    Último Invierno": tres facciones ofrecen heredero (el Delfín del partido, el
+#    Mariscal, la Tribuna del Pueblo) o aferrarse. A los 90 días el líder muere y
+#    asume otro; el heredero elegido marca el gobierno dos años. A los 60 días,
+#    los que perdieron conspiran (comprarlos, purgarlos o exiliarlos; purgar
+#    puede encender el ultimátum de los generales y la guerra civil).
+# =============================================================================
+
+# el pulso de las grandes potencias: las ocho lo corren desde MEGANATIONS_eventos_mundiales,
+# Japón y Albión desde su propio pulso mensual (ellas no corren el de las ocho)
+extend_scripted_effects:
+  MEGANATIONS_eventos_mundiales:
+  - {effect: run, value: MEGANATIONS_pulso_grandes}
+  ZJP_pulso:
+  - {effect: run, value: MEGANATIONS_pulso_grandes}
+  ZAL_pulso:
+  - {effect: run, value: MEGANATIONS_pulso_grandes}
+
+decisions:
+  scripted_effects:
+  # lo que corre cada mes en cada gran potencia (también arrancan acá las aventuras de 2110,
+  # Japón y Albión: tools/gen/emitters/aventuras.py -> _arranque)
+  - id: MEGANATIONS_pulso_grandes
+    effects:
+    - {effect: run, value: MEGANATIONS_gigante_pulso}
+    - {effect: run, value: MEGANATIONS_sucesion_pulso}
+  # ---------------------------------------------------------------- el Gigante
+  - id: MEGANATIONS_gigante_pulso
+    effects:
+    - effect: if
+      when:
+        all:
+        - &grandes {any: [{tag: EFE}, {tag: FCU}, {tag: ASC}, {tag: HSN}, {tag: NAS}, {tag: SHD}, {tag: APF}, {tag: NRE}, {tag: ZJP}, {tag: ZAL}]}
+        - {date_after: 2101.1.1}
+        - {states_at_least: 180}
+        - {capitulated: false}
+        # 2026-11-06 ("uno no debería tener sobreestiramiento en su forma final"): quien la
+        # proclamó ya convocó a Ginebra al proclamarla y gobierna lo suyo como propio
+        - not: &forma_final {any: [{flag: EFE_forma_final}, {flag: FCU_forma_final}, {flag: ASC_forma_final}, {flag: HSN_forma_final}, {flag: NAS_forma_final}, {flag: SHD_forma_final}, {flag: APF_forma_final}, {flag: NRE_forma_final}]}
+      then:
+      - effect: if
+        when:
+          not: {flag: MEGANATIONS_gigante}
+        then:
+        - {effect: flag, value: MEGANATIONS_gigante}
+        - {effect: dynamic_modifier, id: MEGANATIONS_sobreestiramiento}
+        - {effect: event, id: meganations_gigante.2, days: 1}
+      - effect: if
+        when:
+          all:
+          - {states_at_least: 300}
+          - not: {flag: MEGANATIONS_gigante_grave}
+        then:
+        - {effect: flag, value: MEGANATIONS_gigante_grave}
+        - {effect: dynamic_modifier, id: MEGANATIONS_sobreestiramiento_grave}
+      # Ginebra llama a las demás, y de nuevo cada cinco años si sigue igual
+      - effect: if
+        when:
+          any:
+          - not: {flag: MEGANATIONS_gigante_aviso}
+          - {flag_older: {flag: MEGANATIONS_gigante_aviso, days: 1825}}
+        then:
+        - {effect: clear_flag, value: MEGANATIONS_gigante_aviso}
+        - {effect: flag, value: MEGANATIONS_gigante_aviso}
+        - effect: every_country
+          when:
+            all:
+            - *grandes
+            - not: {tag: ROOT}
+            - {exists: true}
+          effects:
+          - {effect: event, id: meganations_gigante.1, days: 3}
+      # lo que cuesta sostenerlo
+      - effect: random
+        options:
+        - {weight: 97, effects: []}
+        - weight: 3
+          effects:
+          - {effect: event, id: meganations_gigante.3, days: 1}
+      - effect: random
+        options:
+        - {weight: 985, effects: []}
+        - weight: 15
+          effects:
+          - {effect: event, id: meganations_gigante.4, days: 1}
+    # bajo 160 regiones deja de ser el Gigante (un margen, para que no titile), o al
+    # proclamar su forma final
+    - effect: if
+      when:
+        all:
+        - {flag: MEGANATIONS_gigante}
+        - any:
+          - not: {states_at_least: 160}
+          - *forma_final
+      then:
+      - {effect: clear_flag, value: MEGANATIONS_gigante}
+      - {effect: clear_flag, value: MEGANATIONS_gigante_grave}
+      - {effect: remove_dynamic_modifier, id: MEGANATIONS_sobreestiramiento}
+      - {effect: remove_dynamic_modifier, id: MEGANATIONS_sobreestiramiento_grave}
+
+  # ---------------------------------------------------------------- el Sucesor
+  - id: MEGANATIONS_sucesion_pulso
+    effects:
+    - effect: if
+      when:
+        all:
+        - *grandes
+        - {flag: MEGANATIONS_lider_listo}
+      then:
+      # los líderes de 2100 envejecen
+      - effect: if
+        when:
+          all:
+          - {date_after: 2106.12.31}
+          - not: {flag: MEGANATIONS_vejez}
+        then:
+        - {effect: flag, value: MEGANATIONS_vejez}
+        - effect: hidden
+          effects:
+          - {effect: add_variable, var: MEGANATIONS_lider_desgaste, value: 4}
+      - effect: if
+        when:
+          all:
+          - {date_after: 2105.12.31}
+          - {variable_below: {var: MEGANATIONS_lider_total_salud, value: 15}}
+          - not: {flag: MEGANATIONS_sucesion_en_curso}
+          - {civil_war: false}
+          - {capitulated: false}
+        then:
+        - effect: random
+          options:
+          - {weight: 5, effects: []}
+          - weight: 1
+            effects:
+            - {effect: flag, value: MEGANATIONS_sucesion_en_curso, days: 730}
+            - {effect: event, id: meganations_sucesor.1, days: 1}
+
+  variable_names:
+    MEGANATIONS_lider_desgaste: {english: "Leader's yearly wear", spanish: "Desgaste anual del líder"}
+
+  dynamic_modifiers:
+  - id: MEGANATIONS_sobreestiramiento
+    country: null
+    no_art: true
+    name: {english: Overstretched, spanish: Sobreestiramiento}
+    desc:
+      english: 'Too many provinces, too few governors you can trust. Every new map is a new list of problems.'
+      spanish: 'Demasiadas provincias, muy pocos gobernadores de confianza. Cada mapa nuevo es una lista nueva de problemas.'
+    modifiers: {stability_factor: -0.1, political_power_gain: -0.25, '?required_garrison_factor': 0.25}
+  - id: MEGANATIONS_sobreestiramiento_grave
+    country: null
+    no_art: true
+    name: {english: The Empire Too Large, spanish: El Imperio Demasiado Grande}
+    desc:
+      english: 'Nobody in the capital can name all the provinces any more. Some of them have stopped answering.'
+      spanish: 'Nadie en la capital puede nombrar todas las provincias. Algunas dejaron de contestar.'
+    modifiers: {stability_factor: -0.1, consumer_goods_factor: 0.05, '?required_garrison_factor': 0.25}
+  - id: MEGANATIONS_heredero_delfin
+    country: null
+    no_art: true
+    name: {english: The Dauphin's Government, spanish: El Gobierno del Delfín}
+    desc:
+      english: 'The party chose one of its own. Nothing changes, and that is exactly what was promised.'
+      spanish: 'El partido eligió a uno de los suyos. No cambia nada, y eso es justo lo que se prometió.'
+    modifiers: {stability_factor: 0.05, political_power_factor: 0.1}
+  - id: MEGANATIONS_heredero_mariscal
+    country: null
+    no_art: true
+    name: {english: The Marshal's Government, spanish: El Gobierno del Mariscal}
+    desc:
+      english: 'The uniform moved from the parade stand to the palace. The army has never been happier; the ministries, never more nervous.'
+      spanish: 'El uniforme pasó del palco del desfile al palacio. El ejército nunca estuvo tan contento; los ministerios, nunca tan nerviosos.'
+    modifiers: {war_support_factor: 0.1, army_attack_factor: 0.05, stability_factor: -0.05}
+  - id: MEGANATIONS_heredero_tribuna
+    country: null
+    no_art: true
+    name: {english: The Tribune's Government, spanish: El Gobierno de la Tribuna}
+    desc:
+      english: 'The crowd chose. The crowd is loud, generous with its love and very short of patience.'
+      spanish: 'Eligió la multitud. La multitud grita, es generosa con su amor y muy corta de paciencia.'
+    modifiers: {stability_factor: 0.1, political_power_factor: -0.1, consumer_goods_factor: 0.03}
+
+events:
+  namespaces:
+    meganations_gigante:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_sign_treaty1
+        title: {english: Geneva Calls, spanish: Ginebra Llama}
+        desc:
+          english: '[From.GetName] already holds more of the world than any power since the Great Unravelling, and it keeps going. The Geneva observers, the same ones who watch our factories, call the powers to the old hall by the lake: this is how every empire of the last century started, and every one of them ended in a war that took everyone with it.\n\nJOIN THE COALITION: war goals against the Giant and the guarantee of every other member, and its anger.\nPAY TRIBUTE: 50 political power and a non-aggression pact; it remembers who knelt.\nLOOK AWAY: it is far, or it is not our problem yet.'
+          spanish: '[From.GetName] ya tiene más mundo que cualquier potencia desde el Gran Desarme, y sigue. Los observadores de Ginebra, los mismos que vigilan nuestras fábricas, llaman a las potencias al viejo salón del lago: así empezó cada imperio del siglo pasado, y cada uno terminó en una guerra que se llevó a todos puestos.\n\nUNIRNOS A LA COALICIÓN: objetivos de guerra contra el Gigante y la garantía de cada miembro, y su enojo.\nPAGAR TRIBUTO: 50 de poder político y un pacto de no agresión; se acuerda de quién se arrodilló.\nMIRAR PARA OTRO LADO: está lejos, o todavía no es problema nuestro.'
+        options:
+        - name: {english: 'To Geneva. Someone has to stop them.', spanish: 'A Ginebra. Alguien tiene que pararlos.'}
+          ai_chance: 55
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_unirse}
+        - name: {english: 'Pay. Better a tribute than a war.', spanish: 'Pagar. Mejor un tributo que una guerra.'}
+          ai_chance: 15
+          effects:
+          - {effect: run, value: MEGANATIONS_coalicion_tributo}
+        - name: {english: 'Not our problem. Yet.', spanish: 'No es problema nuestro. Todavía.'}
+          ai_chance: 30
+          effects:
+          - {effect: add_political_power, value: 25}
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The World Fears Us, spanish: El Mundo nos Teme}
+        desc:
+          english: 'The maps in the war room no longer fit on the table. In Geneva they say our name the way the old men said the names of the empires of the last century, and every power is deciding whether to join a coalition against us. At home, the provinces we took are harder to hold than they were to take.\n\nWe are the Giant now: Overstretched (-10% stability, -25% political power, more garrisons) while we hold 180 regions or more.'
+          spanish: 'Los mapas de la sala de guerra ya no entran en la mesa. En Ginebra dicen nuestro nombre como los viejos decían los nombres de los imperios del siglo pasado, y cada potencia está decidiendo si se une a una coalición contra nosotros. Adentro, las provincias que tomamos cuestan más sostenerlas que lo que costó tomarlas.\n\nAhora somos el Gigante: Sobreestiramiento (-10% de estabilidad, -25% de poder político, más guarnición) mientras tengamos 180 regiones o más.'
+        options:
+        - name: {english: 'Let them tremble.', spanish: 'Que tiemblen.'}
+          ai_chance: 60
+          effects:
+          - {effect: add_war_support, value: 0.05}
+        - name: {english: 'Send our best ambassadors to Geneva.', spanish: 'Mandar a Ginebra a nuestros mejores embajadores.'}
+          ai_chance: 40
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_stability, value: 0.03}
+      - id: 3
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Province Rises, spanish: La Provincia se Levanta}
+        desc:
+          english: 'One of the regions we took two summers ago has hanged our governor from the town hall balcony and declared itself free. It will not last, but the others are watching what we do.'
+          spanish: 'Una de las regiones que tomamos hace dos veranos colgó a nuestro gobernador del balcón del municipio y se declaró libre. No va a durar, pero las demás miran qué hacemos.'
+        options:
+        - name: {english: 'Crush it. Make an example.', spanish: 'Aplastarla. Que sirva de ejemplo.'}
+          ai_chance: 50
+          effects:
+          - {effect: add_stability, value: -0.03}
+          - {effect: add_manpower, value: -8000}
+          - {effect: army_experience, value: 5}
+        - name: {english: 'Grant it a charter of its own.', spanish: 'Darle una carta propia.'}
+          ai_chance: 35
+          effects:
+          - {effect: add_political_power, value: -75}
+          - {effect: add_stability, value: 0.01}
+        - name: {english: 'Let it burn out on its own.', spanish: 'Dejar que se apague sola.'}
+          ai_chance: 15
+          effects:
+          - {effect: insurgency, resistance: 40}
+          - {effect: add_stability, value: -0.02}
+      - id: 4
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Ambitious Governor, spanish: El Gobernador Ambicioso}
+        desc:
+          english: 'Our governor of the far provinces collects his own taxes, pays his own soldiers and has started signing his letters with a title we never gave him. He is very popular. He is also very far away.'
+          spanish: 'Nuestro gobernador de las provincias lejanas cobra sus propios impuestos, les paga a sus propios soldados y empezó a firmar las cartas con un título que nunca le dimos. Es muy popular. También está muy lejos.'
+        options:
+        - name: {english: 'Buy him. Everyone has a price.', spanish: 'Comprarlo. Todos tienen precio.'}
+          ai_chance: 50
+          effects:
+          - {effect: add_political_power, value: -100}
+        - name: {english: 'Recall him, and send the guard to fetch him.', spanish: 'Llamarlo a la capital, y mandar a la guardia a buscarlo.'}
+          ai_chance: 40
+          effects:
+          - {effect: add_stability, value: -0.05}
+          - effect: random
+            options:
+            - {weight: 75, effects: []}
+            - weight: 25
+              effects:
+              - {effect: run, value: MEGANATIONS_crisis_estalla}
+        - name: {english: 'Name him our heir. Keep your enemies close.', spanish: 'Nombrarlo heredero. A los enemigos, cerca.'}
+          ai_chance: 10
+          effects:
+          - {effect: add_variable, var: MEGANATIONS_lider_prestigio, value: -2}
+          - {effect: add_stability, value: 0.02}
+
+    meganations_sucesor:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Last Winter", spanish: "El Último Invierno"}
+        desc:
+          english: '[Root.GetLeader] no longer leaves the residence. The doctors speak in the past tense when they think nobody is listening, and in the corridors three factions are already counting votes.\n\nTHE DAUPHIN: the party''s chosen heir. Continuity (two years: +5% stability, +10% political power).\nTHE MARSHAL: the army''s man. Order and victories (+10% war support, +5% attack, -5% stability).\nTHE TRIBUNE: the voice of the street. Love, and impatience (+10% stability, -10% political power).\nHOLD ON: deny everything and keep [Root.GetLeader] alive with every machine we have (-150 political power, +20 Health). Nobody chooses an heir.'
+          spanish: '[Root.GetLeader] ya no sale de la residencia. Los médicos hablan en pasado cuando creen que nadie escucha, y en los pasillos tres facciones ya cuentan votos.\n\nEL DELFÍN: el heredero elegido por el partido. Continuidad (dos años: +5% de estabilidad, +10% de poder político).\nEL MARISCAL: el hombre del ejército. Orden y victorias (+10% de apoyo a la guerra, +5% de ataque, -5% de estabilidad).\nLA TRIBUNA: la voz de la calle. Amor, e impaciencia (+10% de estabilidad, -10% de poder político).\nAFERRARSE: negar todo y mantener vivo a [Root.GetLeader] con todas las máquinas que tengamos (-150 de poder político, +20 de Salud). Nadie elige heredero.'
+        options:
+        - name: {english: 'The Dauphin. The party knows best.', spanish: 'El Delfín. El partido sabe.'}
+          ai_chance: 45
+          effects:
+          - {effect: flag, value: MEGANATIONS_heredero_es_delfin, days: 400}
+          - {effect: event, id: meganations_sucesor.2, days: 90}
+        - name: {english: 'The Marshal. Order first.', spanish: 'El Mariscal. Primero el orden.'}
+          ai_chance: 25
+          effects:
+          - {effect: flag, value: MEGANATIONS_heredero_es_mariscal, days: 400}
+          - {effect: add_war_support, value: 0.03}
+          - {effect: event, id: meganations_sucesor.2, days: 90}
+        - name: {english: 'The Tribune. Let the people choose.', spanish: 'La Tribuna. Que elija el pueblo.'}
+          ai_chance: 20
+          effects:
+          - {effect: flag, value: MEGANATIONS_heredero_es_tribuna, days: 400}
+          - {effect: add_political_power, value: -50}
+          - {effect: event, id: meganations_sucesor.2, days: 90}
+        - name: {english: 'Nobody dies. Bring every machine in the country.', spanish: 'Acá no se muere nadie. Traigan todas las máquinas del país.'}
+          ai_chance: 10
+          effects:
+          - {effect: add_political_power, value: -150}
+          - {effect: add_variable, var: MEGANATIONS_lider_salud, value: 20}
+          - {effect: run, value: MEGANATIONS_lider_recalcular}
+          - {effect: clear_flag, value: MEGANATIONS_sucesion_en_curso}
+          - {effect: flag, value: MEGANATIONS_sucesion_en_curso, days: 365}
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "The Leader Is Dead", spanish: "El Líder ha Muerto"}
+        desc:
+          english: 'The bells ring at dawn. [Root.GetLeader] died in the night, and by noon the new government has already sworn in, under the portraits that will be taken down tomorrow. The heir''s faction toasts; the others smile, and take notes.'
+          spanish: 'Las campanas suenan al amanecer. [Root.GetLeader] murió durante la noche, y al mediodía el nuevo gobierno ya juró, bajo los retratos que mañana van a descolgar. La facción del heredero brinda; las otras sonríen, y toman nota.'
+        options:
+        - name: {english: 'Long live the new leader.', spanish: 'Larga vida al nuevo líder.'}
+          effects:
+          - {effect: retire_leader}
+          - {effect: add_stability, value: -0.05}
+          - effect: if
+            when: {flag: MEGANATIONS_heredero_es_delfin}
+            then:
+            - {effect: dynamic_modifier, id: MEGANATIONS_heredero_delfin, days: 730}
+          - effect: if
+            when: {flag: MEGANATIONS_heredero_es_mariscal}
+            then:
+            - {effect: dynamic_modifier, id: MEGANATIONS_heredero_mariscal, days: 730}
+          - effect: if
+            when: {flag: MEGANATIONS_heredero_es_tribuna}
+            then:
+            - {effect: dynamic_modifier, id: MEGANATIONS_heredero_tribuna, days: 730}
+          - {effect: event, id: meganations_sucesor.3, days: 60}
+      - id: 3
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: "Those Who Lost", spanish: "Los que Perdieron"}
+        desc:
+          english: 'The factions that backed the other heirs did not leave the capital. They meet in the back rooms of the old ministries, they write to the generals, they remember every promise that was not kept. The new government is still learning where the light switches are.'
+          spanish: 'Las facciones que apoyaron a los otros herederos no se fueron de la capital. Se juntan en los cuartos del fondo de los ministerios viejos, les escriben a los generales, se acuerdan de cada promesa que no se cumplió. El gobierno nuevo todavía está aprendiendo dónde están las llaves de la luz.'
+        options:
+        - name: {english: 'Give them ministries. Everyone eats.', spanish: 'Darles ministerios. Que coman todos.'}
+          ai_chance: 50
+          effects:
+          - {effect: add_political_power, value: -100}
+          - {effect: add_stability, value: 0.03}
+        - name: {english: 'Purge them before they move.', spanish: 'Purgarlos antes de que se muevan.'}
+          ai_chance: 30
+          effects:
+          - {effect: add_stability, value: -0.05}
+          - effect: if
+            when: {stability_below: 0.4}
+            then:
+            - effect: random
+              options:
+              - {weight: 60, effects: []}
+              - weight: 40
+                effects:
+                - {effect: run, value: MEGANATIONS_crisis_estalla}
+            else:
+            - effect: random
+              options:
+              - {weight: 80, effects: []}
+              - weight: 20
+                effects:
+                - {effect: run, value: MEGANATIONS_crisis_estalla}
+        - name: {english: 'Exile them. Embassies are far away.', spanish: 'Exiliarlos. Las embajadas quedan lejos.'}
+          ai_chance: 20
+          effects:
+          - {effect: add_war_support, value: -0.05}
+          - {effect: add_political_power, value: -25}

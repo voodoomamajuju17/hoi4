@@ -20,6 +20,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 YAML = REPO / "arte" / "focos_pin.yaml"
 REFS = REPO / "arte" / "referencias_focos"
+CON_REFERENCIA = False   # 2026-11-06: sin referencia (ver _pedido)
 
 
 def _uno(texto: str) -> str:
@@ -87,7 +88,9 @@ def _pedido(i: dict, estilo: str) -> str:
         f"material: {i['material']}",
         f"description: {i['descripcion']}",
     ]
-    if i.get("referencia"):
+    # 2026-11-06 ("no los hice con referencia"): los pines que salieron bien se hicieron sin la
+    # imagen vieja; el pedido va solo con la descripción y el material
+    if i.get("referencia") and CON_REFERENCIA:
         lineas.append(f"reference_image: {i['referencia']} (adjuntar: es el ícono viejo; tomar solo el motivo, "
                       f"no su estilo ni su fondo)")
     lineas += ["transparent_background: true", ""]
@@ -103,11 +106,11 @@ def escribir(salida: Path) -> tuple[list[str], list[str]]:
     if not todos:
         return [], []
     estilo = _uno((yaml.safe_load(YAML.read_text(encoding="utf-8")) or {}).get("estilo"))
-    REFS.mkdir(parents=True, exist_ok=True)
     refs = []
     for i in todos:
-        if i["origen"] is None:
+        if i["origen"] is None or not CON_REFERENCIA:
             continue
+        REFS.mkdir(parents=True, exist_ok=True)
         destino = REFS / f"{i['id']}.png"
         if not destino.exists():
             Image.open(i["origen"]).convert("RGBA").save(destino, optimize=True)
@@ -124,8 +127,7 @@ def escribir(salida: Path) -> tuple[list[str], list[str]]:
                   "# Consejo: un chat nuevo cada 15 pedidos más o menos. Si empieza a hacer monedas",
                   "# redondas llenas de cosas, pegale de nuevo el `style` y el `material` del pedido.",
                   "# Como los del Imperio Ecofascista: foto de un pin de verdad, un solo emblema simple.",
-                  "# Cada pedido trae su material (cambia según la rama del árbol) y el ícono viejo",
-                  "# como referencia del motivo (en pedidos.zip, carpeta pedidos/referencias_focos).",
+                  "# Cada pedido trae su material (cambia según la rama del árbol). Sin imagen de referencia.",
                   f"# Materiales de esta nación: {len(materiales)}", ""]
         path.write_text("\n".join(cabeza) + "\n" + "\n".join(_pedido(i, estilo) for i in grupo), encoding="utf-8")
         resumen.append(f"{path.name}: {len(grupo)}")

@@ -52,7 +52,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-03: agentes de inteligencia propios de cada potencia
                  "33_agentes.yaml",
                  # 2026-11-06: el Directorio más frágil, Eurasia mejor abastecida, Siberia se levanta
-                 "35_directorio_siberia.yaml"]
+                 "35_directorio_siberia.yaml",
+                 # 2026-11-06: el Gigante (la Coalición de Ginebra por tamaño) y la Crisis del Sucesor
+                 "36_gigante_sucesor.yaml", "37_el_despertar.yaml", "38_aventuras_albion.yaml", "39_aventuras_japon.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -66,6 +68,7 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
       events: {namespaces: {ns: {country, events}}} -> eventos nuevos en un
                  espacio que ya existe (mismo país) o en uno nuevo.
       leaders: {characters, leader_traits} -> se agregan a 03_leaders.
+      adventures: {sagas: {clave: saga}} -> sagas nuevas junto a las de 21_aventuras.
     Un id repetido es un error: el archivo nuevo nunca pisa lo viejo.
     """
     where = filename
@@ -179,6 +182,15 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
                 focus[k] = v
     countries = raw.setdefault("countries", {})
     add_unique(countries.setdefault("cosmetic_tags", []), overlay.get("cosmetic_tags"), "cosmetic_tag")
+    # 2026-11-06: aventuras nuevas (2110, Japón, Albión) en su propio archivo: sagas que se suman
+    # a las de 21_aventuras (misma clave = error)
+    sagas_new = (overlay.get("adventures") or {}).get("sagas") or {}
+    if sagas_new:
+        sagas = raw.setdefault("adventures", {}).setdefault("sagas", {})
+        for key, saga in sagas_new.items():
+            if key in sagas:
+                raise SpecError(f"aventura '{key}' repetida", where=where)
+            sagas[key] = saga
     hooks = dec_new.get("on_actions") or []
     add_unique(dec.setdefault("on_actions", []), hooks, "on_action")
 

@@ -746,7 +746,87 @@ def acentos(colores: dict, ancho_barra: int, ancho_pol: int) -> list[str]:
     return [f"acentos: {len(colores)} facciones en {salida.relative_to(REPO)}"]
 
 
+# -- la Lámina de las aventuras (2026-11-06) -----------------------------------------
+# "Necesito que la aventura se note que NO es un evento más: cuadro más grande, más
+# texto, más personalidad, imagen impactante en tono obra de arte." La ventana mide lo
+# mismo que la Ficha (1020x740) y usa sus marcos por facción; el fondo es un vidrio
+# limpio con el lugar de la pintura enmarcado en cobre, como en una galería.
+
+LAMINA = {"ventana": (1020, 740), "pintura": (30, 96, 960, 408), "texto": (40, 516, 940, 168)}
+
+
+def lamina_fondo():
+    from PIL import Image, ImageDraw
+    W, H = LAMINA["ventana"]
+    img = _grad_v(W, H, VIDRIO_A, VIDRIO_B, 245)
+    capa = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(capa)
+    x, y, w, h = LAMINA["pintura"]
+    # el marco de galería de la pintura: sombra, moldura de cobre en dos filetes
+    d.rectangle((x - 10, y - 10, x + w + 10, y + h + 10), fill=(0, 0, 0, 120))
+    d.rectangle((x - 7, y - 7, x + w + 6, y + h + 6), outline=CU + (255,), width=3)
+    d.rectangle((x - 3, y - 3, x + w + 2, y + h + 2), outline=CU_LO + (255,), width=1)
+    img.alpha_composite(capa)
+    _hilo(img, 40, W - 40, 88)
+    _hilo(img, 60, W - 60, y + h + 14, CU_LO, 160)
+    _borde_cobre(img, 0, 1)
+    _esquinas(img)
+    for cx, cy in ((9, 9), (W - 10, 9), (9, H - 10), (W - 10, H - 10)):
+        _remache(img, cx, cy)
+    return img
+
+
+def lamina_vacia():
+    """La pintura de mientras: un lienzo oscuro con una veladura cálida, sin dibujo."""
+    from PIL import Image, ImageFilter
+    _, _, w, h = LAMINA["pintura"]
+    img = _grad_v(w, h, (46, 34, 26), (14, 12, 12), 255)
+    luz = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    lp = luz.load()
+    for yy in range(h):
+        for xx in range(w):
+            v = max(0.0, 1 - math.hypot((xx - w * 0.38) / (w * 0.55), (yy - h * 0.35) / (h * 0.9)))
+            if v > 0:
+                lp[xx, yy] = (210, 150, 90, round(70 * v))
+    img.alpha_composite(luz.filter(ImageFilter.GaussianBlur(8)))
+    return img
+
+
+def laminas(salida: Path | None = None) -> list[str]:
+    import sys
+    sys.path.insert(0, str(REPO))
+    from tools.gen import art
+    salida = salida or (REPO / "assets" / "ui" / "laminas")
+    salida.mkdir(parents=True, exist_ok=True)
+
+    def guardar(img, nombre):
+        raw = img.convert("RGBA").tobytes()
+        art.write_dds(salida / f"{nombre}.dds", img.width, img.height,
+                      [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)])
+
+    guardar(lamina_fondo(), "fondo")
+    guardar(lamina_vacia(), "vacia")
+    from PIL import Image
+    guardar(Image.new("RGBA", (8, 8), (0, 0, 0, 0)), "sin_marco")   # países sin marco propio
+    colores = _colores_estilo()
+    hechas = 2
+    for nombre, fn in PIEZAS.items():
+        if not nombre.startswith("marco_") or nombre == "marco_base":
+            continue
+        img = fn({"ventana": LAMINA["ventana"]}).convert("RGBA")
+        estilo = nombre[len("marco_"):]
+        if estilo in colores and img.size == LAMINA["ventana"]:
+            _hilo_color(img, 0, LAMINA["ventana"][0], 88, tuple(colores[estilo]), 200, 0.3)
+        guardar(img, nombre)
+        hechas += 1
+    return [f"láminas: {hechas} piezas en {salida.relative_to(REPO)}"]
+
+
 def main(argv: list[str]) -> None:
+    if argv and argv[0] == "laminas":
+        for line in laminas():
+            print(line)
+        return
     if argv and argv[0] == "acentos":
         import yaml
         cfg = (yaml.safe_load((REPO / "spec" / "11_scenario.yaml").read_text(encoding="utf-8"))

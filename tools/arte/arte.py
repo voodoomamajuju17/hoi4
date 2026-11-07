@@ -83,6 +83,9 @@ KINDS = {
     # anarquía, estilo historieta (Moebius + Kill Six Billion Demons); van a
     # assets/events/<evento>.dds como cualquier imagen de evento
     "adventure_picture": {"size": (210, 176), "transparent": False, "fit": "cover"},
+    # 2026-11-06: la Lámina de las aventuras de las meganaciones (tools/gen/emitters/laminas.py):
+    # se pide grande y se guarda a 960x408 (DXT1), y también como imagen del evento
+    "adventure_plate": {"size": (1920, 816), "transparent": False, "fit": "cover"},
     # pantallas de carga (arte/pantallas_carga_descripciones.yaml, 2026-10-24): la vida
     # diaria de cada potencia y anarquía; 1920x1440 en DXT1, como las que ya hay
     "loading_screen": {"size": (1920, 1440), "transparent": False, "fit": "cover"},
@@ -511,6 +514,7 @@ def catalog() -> list[dict]:
                 item["style"] = style
             items.append(item)
     items += _adventure_items()
+    items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
     items += _loading_items()
     _apply_icon_looks(items)
@@ -589,6 +593,49 @@ def _adventure_items() -> list[dict]:
                                 + (f", hero: {who}" if who else "") + f" - {ev['title']['english']}. "
                                 f"SCENE TO DRAW: {_one_line(ev['art'])}. "
                                 f"STORY CONTEXT (do not write it in the image): {story}"),
+            })
+    return items
+
+
+PLATE_STYLE = (
+    "a museum-grade large-format OIL PAINTING of this exact moment, as a great history painter of the "
+    "nineteenth-century academies would have painted it (the drama of Gericault's Raft of the Medusa, Delacroix's "
+    "Liberty Leading the People, Repin's crowds), but the scene happens in the year 2100: monumental composition "
+    "with one clear focal figure or group, dramatic chiaroscuro, emotional faces and gestures, visible brushwork, "
+    "canvas texture and rich glazes, a sky or a light that tells the mood. Cinematic wide format (about 2.35:1), "
+    "the main action in the central band so nothing important is cut. It must feel like a painting hung in a "
+    "national museum about a turning point of history, not a game screenshot or a photo. No frame, no text, no "
+    "letters, no numbers, no signature, no watermark")
+
+
+def _plate_items() -> list[dict]:
+    """Las Láminas de las aventuras (`plate` en las sagas, con los archivos que se suman):
+    una pintura de gran formato por momento."""
+    import sys as _sys
+    _sys.path.insert(0, str(REPO))
+    from tools.gen import specload
+    try:
+        raw = specload.load(SPEC).raw
+    except Exception:   # noqa: BLE001  (un spec roto no tiene que frenar los pedidos de arte)
+        return []
+    items = []
+    for key, saga in ((raw.get("adventures") or {}).get("sagas") or {}).items():
+        ns = saga.get("namespace") or f"meganations_aventura_{key.lower()}"
+        intro = dict(saga["intro"], id=2)
+        for label, ev in ([("opening", intro)] + [("chapter", n) for n in saga.get("nodes") or []]
+                          + [("ending: " + e["kind"], e) for e in saga.get("endings") or []]):
+            plate = ev.get("plate")
+            if not plate:
+                continue
+            eid = f"{ns}.{ev['id']}"
+            dest = REPO / "assets" / "aventuras" / "laminas" / f"{eid}.dds"
+            story = _one_line(plate["text"]["english"].replace("\\n", " "))
+            items.append({
+                "type": "adventure_plate", "tag": "AVENTURAS", "id": eid, "dest": dest, "done": dest.exists(),
+                "style": f"{PLATE_STYLE}; palette and world: {saga.get('palette', '')}",
+                "description": (f"Adventure '{saga['name']['english']}', {label} - {ev['title']['english']}. "
+                                f"PAINT THIS: {_one_line(plate.get('art') or ev.get('art') or '')}. "
+                                f"WHAT HAPPENS (do not write it in the image): {story}"),
             })
     return items
 
@@ -1046,14 +1093,14 @@ def pedidos() -> None:
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
              ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes"),
-             ("ui_icon", "16_interfaz"), ("adventure_picture", "17_aventura"), ("game_icon", "19_iconos_juego"),
+             ("ui_icon", "16_interfaz"), ("adventure_picture", "17_aventura"), ("adventure_plate", "17_laminas"), ("game_icon", "19_iconos_juego"),
              ("loading_screen", "18_pantallas_de_carga")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
         for i in items:
             if i["type"] == kind:
-                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["type"] == "game_icon" or i["tag"] in ("INTELIGENCIA", "INTERFAZ", "DOCTRINAS") + TECH_GROUPS + ("LEYES",)
+                by_tag.setdefault(i["tag"] if i["tag"] in STYLE or i["type"] == "game_icon" or i["tag"] in ("INTELIGENCIA", "INTERFAZ", "DOCTRINAS") + TECH_GROUPS + ("LEYES", "AVENTURAS")
                                   else "SATELITES_Y_ANARQUIA", []).append(i)
         if kind in SINGLE_FILE and by_tag:
             # un solo archivo, ordenado por facción
@@ -1083,7 +1130,7 @@ def pedidos() -> None:
         pin_bloques += ["ASSET_REQUEST" + b.rstrip() + "\n" for b in f.read_text(encoding="utf-8").split("ASSET_REQUEST")[1:]]
     (OUT / "0_FOCOS_PIN_FALTANTES.txt").write_text(
         f"# {len(pin_bloques)} pedidos: los íconos de foco en estilo pin que faltan (todas las naciones).\n"
-        "# Cada uno lleva su material y el ícono viejo como referencia del MOTIVO (pedidos/referencias_focos).\n\n"
+        "# Cada uno lleva su material. Sin imagen de referencia (los pines que salieron bien se hicieron sin ella).\n\n"
         + "\n".join(pin_bloques), encoding="utf-8")
     summary.insert(0, f"0_FOCOS_PIN_FALTANTES.txt: {len(pin_bloques)}")
     from tools.arte import disenador
@@ -1245,6 +1292,20 @@ def importar(source: str) -> None:
         problemas = control.revisar(img, transparente)
         if problemas:
             avisos.append(f"{path.stem}: {'; '.join(problemas)} (se importó igual: revisalo)")
+        if item["type"] == "adventure_plate":
+            # la pintura de la Lámina (960x408, DXT1) y, achicada, la imagen del evento
+            def cubrir(im, tw, th):
+                k = max(tw / im.width, th / im.height)
+                im = im.convert("RGB").resize((max(tw, round(im.width * k)), max(th, round(im.height * k))), Image.LANCZOS)
+                l, t = (im.width - tw) // 2, (im.height - th) // 2
+                return im.crop((l, t, l + tw, t + th))
+            item["dest"].parent.mkdir(parents=True, exist_ok=True)
+            cubrir(img, 960, 408).save(item["dest"], "DDS", pixel_format="DXT1")
+            ev = REPO / "assets" / "events" / f"{item['id']}.dds"
+            ev.parent.mkdir(parents=True, exist_ok=True)
+            cubrir(img, 210, 176).save(ev, "DDS", pixel_format="DXT1")
+            done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
+            continue
         if item["type"] == "loading_screen":
             # 2026-10-24: como las pantallas que ya hay (1920x1440, DXT1); sin comprimir pesarían 11 MB
             iw, ih = img.size

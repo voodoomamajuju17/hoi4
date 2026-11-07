@@ -737,9 +737,11 @@ def test_territory() -> None:
         check("suministro: centro nuevo en la ciudad de una meganacion, con su tramo de via hasta la red",
               "1 13\n" in sn and "1 2 13 22\n" in rw and rw.startswith("1 2 18 19\n1 2 22 23\n"), rw)
         added_b = ctx.data["added_buildings"]
-        check("infraestructura: la capital de una meganacion llega a 5; a una anarquia nunca se le sube",
+        check("infraestructura: la capital de una meganacion llega a 5; a una anarquia nunca se le sube "
+              "(salvo Eurasia, con regla propia desde 2026-11-06)",
               added_b.get(909, {}).get("infrastructure") == 5
-              and all(added_b.get(sid, {}).get("infrastructure", 0) <= 0 for sid in (914, 915, 916, 917)),
+              and all(added_b.get(sid, {}).get("infrastructure", 0) <= 0 for sid in (914, 915, 916))
+              and added_b.get(917, {}).get("infrastructure", 0) > 0,
               str({k: dict(v) for k, v in added_b.items()}))
         check("ciudades de 2100: el reporte dice cuantas y cuales faltan",
               any("ciudades de 2100: 1 renombradas" in n and "ASC (Essen -> Kommune Berlin)" in n for n in ctx.notes))
@@ -1675,7 +1677,9 @@ def test_balance() -> None:
         ba = pdx.parse((mod / "history/states/900-Fixture.txt").read_text()).get("state").get("history").get("buildings")
         check("la fabrica queda escrita en el state", pdx.text(ba.get("industrial_complex")) == "3"
               and pdx.text(ba.get("arms_factory")) == "3", str(ba))
-        check("la Anarquia no recibe fabricas", not any(added.get(sid) for sid in zan_states))
+        check("la Anarquia no recibe fabricas",
+              not any(added.get(sid, {}).get(k) for sid in zan_states
+                      for k in ("industrial_complex", "arms_factory", "dockyard")))
 
         efe = (mod / "history/countries/EFE - Ecofascist Empire.txt").read_text()
         check("EFE arranca con reclutamiento extensivo", "extensive_conscription" in efe)
@@ -1900,8 +1904,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("350 modificadores dinamicos (9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 350 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("377 modificadores dinamicos (8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 377 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2578,6 +2582,129 @@ def test_ai() -> None:
               "type = contain" not in ai and any("contain" in w for w in ctx.warnings))
 
 
+def test_gigante_sucesor() -> None:
+    section("el Gigante (Ginebra por tamaño) y la Crisis del Sucesor (2026-11-06)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
+        g = se[se.index("MEGANATIONS_gigante_pulso = {"):][:4000]
+        check("Gigante: con 180 regiones o más, Sobreestiramiento y Ginebra llama a las demás (cada 5 años)",
+              "num_of_controlled_states > 179" in g and "MEGANATIONS_sobreestiramiento" in g
+              and "meganations_gigante.1" in g and "days > 1825" in g, g[:400])
+        check("Gigante: en su Forma Final no hay Sobreestiramiento (2026-11-06)",
+              "has_country_flag = EFE_forma_final" in g and "has_country_flag = SHD_forma_final" in g, "")
+        check("Gigante: con 300, Sobreestiramiento Grave; bajo 160 deja de serlo",
+              "num_of_controlled_states > 299" in g and "num_of_controlled_states > 159" in g
+              and "remove_dynamic_modifier" in g, "")
+        ev = " ".join((mod / "events/meganations_gigante.txt").read_text(encoding="utf-8").split())
+        check("Gigante: unirse a la Coalición usa la de Ginebra que ya existía (garantías y objetivos)",
+              "MEGANATIONS_coalicion_unirse = yes" in ev and "MEGANATIONS_coalicion_tributo = yes" in ev, ev[:300])
+        su = se[se.index("MEGANATIONS_sucesion_pulso = {"):][:3000]
+        check("Sucesor: desde 2107 los líderes se gastan más y con Salud bajo 15 llega El Último Invierno",
+              "MEGANATIONS_lider_desgaste" in su and "var = MEGANATIONS_lider_total_salud value = 15 compare = less_than" in su
+              and "meganations_sucesor.1" in su, su[:300])
+        es = " ".join((mod / "events/meganations_sucesor.txt").read_text(encoding="utf-8").split())
+        check("Sucesor: el líder muere y asume otro; los que perdieron pueden encender la guerra civil",
+              "retire_country_leader = yes" in es and "MEGANATIONS_heredero_mariscal" in es
+              and "MEGANATIONS_crisis_estalla = yes" in es, es[:300])
+
+
+def test_despertar() -> None:
+    section("El Despertar: la aventura de 2110 de las grandes potencias, con su Lámina (2026-11-07)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        ev = " ".join((mod / "events/meganations_despertar.txt").read_text(encoding="utf-8").split())
+        finales = [i for i in range(101, 113) if f"id = meganations_despertar.{i} " in ev]
+        check("Despertar: 12 finales distintos", len(finales) == 12, str(finales))
+        check("Despertar: cada final deja su bandera para la Revolución de las Máquinas de 2113",
+              ev.count("set_global_flag = MEGANATIONS_despertar_") + ev.count("set_country_flag = MEGANATIONS_despertar_") >= 12,
+              ev[:200])
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
+        pg = se[se.index("MEGANATIONS_pulso_grandes = {"):][:600]
+        arr = se[se.index("MN2110_av_arranque = {"):][:1500]
+        check("Despertar: arranca desde el pulso de las grandes potencias, en marzo de 2110",
+              "MN2110_av_arranque = yes" in pg and "date > 2110.2.28" in arr
+              and "country_event = { id = meganations_despertar.5002" in arr, arr[:400])
+        check("Despertar: Japón y Albión solo si los juega una persona",
+              "AND = { tag = ZJP is_ai = no }" in arr and "AND = { tag = ZAL is_ai = no }" in arr, arr[:600])
+        # la Lámina: el capítulo se abre primero en la ventana grande; la IA va directo al evento
+        op = ev[ev.index("country_event = { id = meganations_despertar.5010 title"):][:900]
+        check("Lámina: el evento que la abre es oculto; la IA recibe el capítulo directo",
+              "hidden = yes" in op and "limit = { is_ai = yes } country_event = { id = meganations_despertar.10 " in op
+              and "set_country_flag = MN_lamina_abierta" in op, op[:500])
+        gui = " ".join((mod / "interface/meganations_laminas.gui").read_text(encoding="utf-8").split())
+        check("Lámina: ventana propia de 1020x740 con pintura grande, relato y Continuar",
+              'name = "mn_lamina_window"' in gui and "width = 1020 height = 740" in gui
+              and 'name = "pintura"' in gui and 'name = "relato"' in gui and 'name = "continuar"' in gui, gui[:300])
+        sg = " ".join((mod / "common/scripted_guis/meganations_laminas.txt").read_text(encoding="utf-8").split())
+        check("Lámina: se ve con la bandera y la IA no la usa",
+              "visible = { has_country_flag = MN_lamina_abierta }" in sg and "ai_enabled = { always = no }" in sg, sg[:300])
+        cont = " ".join((mod / "common/scripted_effects/meganations_laminas.txt").read_text(encoding="utf-8").split())
+        check("Lámina: Continuar manda el capítulo y la cierra",
+              "country_event = { id = meganations_despertar.10 }" in cont and "clr_country_flag = MN_lamina_abierta" in cont,
+              cont[:300])
+        loc = (mod / "localisation/spanish").glob("*laminas*")
+        texto = "".join(p.read_text(encoding="utf-8-sig") for p in loc)
+        check("Lámina: el relato largo está traducido", "MN_LAMINA_1_TEXTO" in texto and "Huésped" in texto, texto[:200])
+    from tools.arte import arte
+    pl = [i for i in arte._plate_items() if i["id"].startswith("meganations_despertar.")]
+    check("Lámina: hay un pedido de pintura por momento (presentación, capítulos y finales)",
+          len(pl) == 28 and all(i["type"] == "adventure_plate" for i in pl), str(len(pl)))
+
+
+def test_aventuras_albion() -> None:
+    section("Albión: dos aventuras largas y fáciles; la última decisión da la victoria o la guerra civil (2026-11-07)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
+        for ns, pre, ruta, final in (("meganations_albion_corona", "ZALC", 2, "ravensworth"),
+                                     ("meganations_albion_sincronia", "ZALS", 1, "harrow")):
+            ev = " ".join((mod / f"events/{ns}.txt").read_text(encoding="utf-8").split())
+            arr = se[se.index(f"{pre}_av_arranque = {{"):][:700]
+            check(f"{pre}: arranca cuando Albión toma su camino", f"var = ZAL_ruta value = {ruta}" in arr
+                  and f"id = {ns}.5002" in arr, arr[:400])
+            fin = ev[ev.index(f"id = {ns}.15 title"):][:2600]
+            check(f"{pre}: la noche final es binaria y lo correcto depende de una decisión anterior",
+                  fin.count(f"has_country_flag = {pre}_{final}_firme") == 4 and f"id = {ns}.5101 days = 5" in fin
+                  and f"id = {ns}.5104 days = 5" in fin, fin[:600])
+            check(f"{pre}: sin muertes (fácil)", f"{pre}_av_fin_muerte" not in ev, "")
+            gana = ev[ev.index(f"id = {ns}.101 title"):][:800]
+            check(f"{pre}: ganar la aventura da el gran premio", f"{pre}_victoria = yes" in gana, gana[:300])
+            pierde = ev[ev.index(f"id = {ns}.104 title"):][:1200]
+            check(f"{pre}: perderla es la guerra civil", "start_civil_war" in pierde, pierde[:300])
+        check("Albión: el premio dura diez años", "dynamic_modifier = ZAL_siglo_britanico" in se.replace("add_dynamic_modifier = { modifier = ZAL_siglo_britanico", "dynamic_modifier = ZAL_siglo_britanico")
+              and "days = 3650" in se[se.index("ZALC_victoria = {"):][:400], se[se.index("ZALC_victoria = {"):][:300])
+
+
+def test_aventuras_japon() -> None:
+    section("Japón: por cada Casa, una aventura corta y fácil y después una larga y difícil (2026-11-07)")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8").split())
+        av = ctx.data.get("aventuras") or {}
+        for casa, corta, larga, ns_corta in ((1, "ZJP_ZAI_1", "ZJP_ZAI_2", "meganations_japon_accionistas"),
+                                             (2, "ZJP_YAK_1", "ZJP_YAK_2", "meganations_japon_matsuri"),
+                                             (3, "ZJP_SRS_1", "ZJP_SRS_2", "meganations_japon_lote")):
+            pre1, pre2 = "ZJP" + corta[4] + "1", "ZJP" + corta[4] + "2"
+            a1 = se[se.index(f"{pre1}_av_arranque = {{"):][:600]
+            a2 = se[se.index(f"{pre2}_av_arranque = {{"):][:600]
+            check(f"{corta}: arranca cuando gobierna su Casa", f"var = ZJP_gobierna value = {casa}" in a1
+                  and f"id = {ns_corta}.5002" in a1, a1[:300])
+            check(f"{larga}: arranca cuando termina la corta", f"has_country_flag = {pre1}_av_fin" in a2, a2[:300])
+            m1, m2 = av[corta]["mix"], av[larga]["mix"]
+            check(f"{corta}: corta y fácil (sin muertes, 2 decisiones)", m1["muerte"] == 0 and av[corta]["endings"] == 6, str(m1))
+            check(f"{larga}: larga y difícil (3 muertes, guerras)", m2["muerte"] == 3 and av[larga]["endings"] == 12
+                  and sum(len(v) for v in av[larga]["catastrophes"].values()) >= 2, str(av[larga]))
+        ev = " ".join((mod / "events/meganations_japon_cubas.txt").read_text(encoding="utf-8").split())
+        fin = ev[ev.index("id = meganations_japon_cubas.14 title"):][:2000]
+        check("Japón: en la larga, la última decisión depende de lo que se eligió al principio",
+              fin.count("has_country_flag = ZJPS2_nanami_paciente") == 2, fin[:400])
+
+
 def test_directorio_siberia() -> None:
     section("el Directorio más frágil, Eurasia abastecida, Siberia se levanta (2026-11-06)")
     import yaml as _y
@@ -2707,7 +2834,7 @@ def test_fabrica() -> None:
 
 
 def test_focos_pin() -> None:
-    section("focos en estilo pin: material por nación y rama, el ícono viejo de referencia (2026-11-05)")
+    section("focos en estilo pin: material por nación y rama, sin referencia (2026-11-05/06)")
     from tools.arte import focos_pin
     it = {i["id"]: i for i in focos_pin.items()}
     llegados = {l.strip() for l in (focos_pin.REPO / "arte/focos_pin_llegados.txt").read_text(encoding="utf-8").splitlines()
@@ -2722,8 +2849,9 @@ def test_focos_pin() -> None:
     check("pin: Zaibatsu en ónix, hierro y esmeralda",
           all("onyx" in i["material"] and "iron" in i["material"] and "emerald" in i["material"]
               for i in it.values() if i["rama"] == "ruta_zaibatsu"))
-    check("pin: cada pedido lleva el ícono viejo como referencia del motivo",
-          all(i["origen"] is not None for i in it.values()), str([k for k, i in it.items() if i["origen"] is None][:5]))
+    uno = next(iter(it.values()), None)
+    check("pin: los pedidos van sin imagen de referencia (los que salieron bien se hicieron sin ella, 2026-11-06)",
+          uno is None or "reference_image" not in focos_pin._pedido({**uno, "referencia": "x.png"}, "estilo"))
 
 
 def test_arte() -> None:
@@ -3160,7 +3288,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### any_controlled_state\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_game_rule\n### has_trait\n### has_dlc\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### num_of_controlled_states\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_game_rule\n### has_trait\n### has_dlc\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power hidden_effect random_controlled_state save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -5415,6 +5543,10 @@ def main() -> int:
         test_focos_pin,
         test_fabrica,
         test_directorio_siberia,
+        test_gigante_sucesor,
+        test_despertar,
+        test_aventuras_albion,
+        test_aventuras_japon,
         test_mecanicas_v2,
         test_forces,
         test_unit_names,

@@ -109,7 +109,10 @@ def _difficulty(ctx: BuildContext) -> None:
         ctx.loc.define_and_reference(key, en=f"Strengthen {c.name_en}", es=f"Fortalecer: {c.name_es}",
                                      file=LOC_FILE, origin="reglas")
         extra.append(tag)
-    anarquias = [t for t in ((ctx.spec.raw.get("adventures") or {}).get("sagas") or {}) if ctx.spec.country(t)]
+    # las sagas de varias naciones (`countries`, El Despertar) o de otro país que su clave
+    # (`country`: Albión, Japón) no son una anarquía
+    anarquias = [t for t, s in ((ctx.spec.raw.get("adventures") or {}).get("sagas") or {}).items()
+                 if not s.get("countries") and not s.get("country") and ctx.spec.country(t)]
     if anarquias:
         key = "MEGANATIONS_fortalecer_anarquias"
         settings.add("difficulty_setting", Block([

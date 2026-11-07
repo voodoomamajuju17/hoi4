@@ -1415,6 +1415,7 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       stability_below: 0.4                -> has_stability < 0.4
       divisions_at_least: 12              -> has_army_size = { size > 11 }
       factories_at_least: 60              -> num_of_factories > 59
+      states_at_least: 180                -> num_of_controlled_states > 179 (2026-11-06, el Gigante)
       tech: X                             -> has_tech = X (validada contra el árbol)
       nukes_at_least: N                   -> num_of_nukes > N-1
       manpower_at_least: 500000           -> has_manpower > 499999
@@ -1668,6 +1669,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
         elif key == "factories_at_least":
             block.add("num_of_factories", Compare(">", int(value) - 1))
             triggers_used.setdefault("num_of_factories", owner)
+        elif key == "states_at_least":
+            block.add("num_of_controlled_states", Compare(">", int(value) - 1))
+            triggers_used.setdefault("num_of_controlled_states", owner)
         elif key == "tech":
             block.add("has_tech", value)
             triggers_used.setdefault("has_tech", owner)

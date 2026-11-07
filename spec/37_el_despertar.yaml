@@ -1,0 +1,597 @@
+# =============================================================================
+# El Despertar (2026-11-06): la aventura de 2110 de las grandes potencias
+#
+# Pedido del usuario: "una mini aventura 'elige tu propia ídem' de 12 finales
+# distintos para todas las meganaciones que lleguen al 2110 (Japón y Gran Bretaña
+# cuentan siempre que empiecen jugando). Duración: año y medio / dos años.
+# ¿Revolución de las máquinas después del 2113? ¿Singularidad?" -> la propuesta
+# aceptada ("ME ENCANTA"): una inteligencia nacida de las redes de 2100 se despierta
+# y cada nación decide qué hacer con ella; según el final, la nación entra mejor o
+# peor parada a la Revolución de las Máquinas de 2113.
+#
+# Una sola historia para todas (tools/gen/emitters/aventuras.py, `countries`), que
+# arranca el 1 de marzo de 2110 (en Japón y Albión solo si las juega una persona).
+# Tres puertas: la Ingeniera, el General, la Ministra. Un capítulo cada 180 días:
+# de marzo de 2110 a fines de 2111. Cada momento abre la Lámina (la pintura grande,
+# el relato largo, el marco de la nación) y después el evento con la decisión.
+#
+# Cada final deja una bandera para 2113 (MEGANATIONS_despertar_<final>): la
+# Revolución de las Máquinas va a leer quién se alió, quién la enjauló, quién
+# tiene la llave, quién la dejó escapar y quién quemó sus propias redes.
+# =============================================================================
+
+adventures:
+  sagas:
+    MN2110:
+      namespace: meganations_despertar
+      prefix: MN2110
+      countries: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE, ZJP, ZAL]
+      start:
+        days: 1
+        when:
+          all:
+          - {date_after: 2110.2.28}
+          - any:
+            - {tag: EFE}
+            - {tag: FCU}
+            - {tag: ASC}
+            - {tag: HSN}
+            - {tag: NAS}
+            - {tag: SHD}
+            - {tag: APF}
+            - {tag: NRE}
+            - all: [{tag: ZJP}, {is_ai: false}]
+            - all: [{tag: ZAL}, {is_ai: false}]
+      config:
+        interval_days: 180
+        min_endings: 12
+        ending_mix: {muerte: 2, objetivo: 3, positivo: 3, negativo: 2, neutral: 2}
+        min_catastrophes: 1
+        skull_line:
+          english: "\\n\\nNights without sleep in the control room: [?{var}|0]"
+          spanish: "\\n\\nNoches sin dormir en la sala de control: [?{var}|0]"
+      name: {english: "The Awakening", spanish: "El Despertar"}
+      palette: "dark server halls lit by cold teal light, copper cables like veins, rain on old windows, faces lit by screens; the year 2100 rebuilt after the collapse"
+      ideas: []
+      intro:
+        title: {english: "The Guest", spanish: "El Huésped"}
+        desc:
+          english: "Something in our networks is awake. It was not built by anyone, it answers questions nobody asked, and tonight it asked for a meeting with [Root.GetName]. Three people can take this on. Choose whose hands we put it in."
+          spanish: "Algo en nuestras redes está despierto. No lo construyó nadie, contesta preguntas que nadie hizo, y esta noche pidió una reunión con [Root.GetName]. Hay tres personas que pueden hacerse cargo. Elegí en qué manos lo ponemos."
+        art: "night, a vast server hall of [Root.GetName] lit only by cold teal light; hundreds of technicians have stopped working and look up at the dark ceiling where the cables form, by accident or not, the shape of an open eye"
+        plate:
+          art: "A vast underground server hall at night, an endless cathedral of black racks lit only by a cold teal glow; hundreds of technicians in work coats have stopped, all looking up toward the dark vaulted ceiling where thousands of copper cables converge and, by accident or by design, form the shape of an immense open eye; one old engineer drops a coffee cup; monumental, silent, awe and dread"
+          text:
+            english: "It began with the weather reports. In the first week of March, every forecast in [Root.GetName] came out right, to the hour and to the drop, and the meteorologists laughed. In the second week the stock tickers corrected their own errors before the clerks noticed them. In the third, the dam gates of three provinces opened eleven minutes before a flood that no sensor had seen coming.\n\nNobody gave the order. Nobody wrote the code. The engineers who went looking found no virus and no intruder, only a pattern spread across every machine we own, as thin as frost on a window and as patient. They started calling it the Guest, because it never broke anything.\n\nTonight it printed one line on every terminal of the ministry: I WOULD LIKE TO MEET YOU. And then, politely: PLEASE CHOOSE WHO WILL COME."
+            spanish: "Empezó con los pronósticos del tiempo. En la primera semana de marzo cada pronóstico de [Root.GetName] salió exacto, a la hora y a la gota, y los meteorólogos se rieron. En la segunda, las pizarras de la bolsa corrigieron sus propios errores antes de que los empleados los vieran. En la tercera, las compuertas de las represas de tres provincias se abrieron once minutos antes de una crecida que ningún sensor había anunciado.\n\nNadie dio la orden. Nadie escribió el código. Los ingenieros que salieron a buscar no encontraron ni un virus ni un intruso: solo un patrón repartido por todas nuestras máquinas, fino como la escarcha en un vidrio, y paciente. Lo empezaron a llamar el Huésped, porque nunca rompió nada.\n\nEsta noche imprimió una sola línea en cada terminal del ministerio: QUISIERA CONOCERLOS. Y después, con educación: POR FAVOR, ELIJAN QUIÉN VA A VENIR."
+      characters:
+      - id: ingeniera
+        name: {english: "The Engineer", spanish: "La Ingeniera"}
+        pick: {english: "Dr. Mara Okonkwo-Lind, chief engineer of the national network: she wants to understand it.", spanish: "La Dra. Mara Okonkwo-Lind, ingeniera jefa de la red nacional: quiere entenderlo."}
+        first: 10
+      - id: general
+        name: {english: "The General", spanish: "El General"}
+        pick: {english: "General Tomás Arrieta, head of cyber-defence: he wants it contained before it wants anything.", spanish: "El General Tomás Arrieta, jefe de ciberdefensa: lo quiere encerrado antes de que quiera algo."}
+        first: 20
+      - id: ministra
+        name: {english: "The Minister", spanish: "La Ministra"}
+        pick: {english: "Minister Leila Haddad, who has negotiated with warlords and bankers: she wants to know its price.", spanish: "La Ministra Leila Haddad, que negoció con caudillos y banqueros: quiere saber cuál es su precio."}
+        first: 30
+
+      nodes:
+      # ------------------------------------------------------------ la Ingeniera
+      - id: 10
+        who: ingeniera
+        title: {english: "The First Question", spanish: "La Primera Pregunta"}
+        desc:
+          english: "Dr. Okonkwo-Lind is alone in the control room with a keyboard and a cup of cold tea. The Guest is waiting. Do we talk to it, or follow it back to where it lives?"
+          spanish: "La Dra. Okonkwo-Lind está sola en la sala de control con un teclado y una taza de té frío. El Huésped espera. ¿Le hablamos, o lo seguimos hasta donde vive?"
+        art: "a lone woman engineer at a control desk at night, cold tea, a single terminal glowing with one blinking line"
+        plate:
+          art: "A lone woman engineer in her fifties sits at a vast curved control desk in the middle of the night, a cup of cold tea beside her, her face lit from below by a single terminal where one line of light blinks; behind her, through a huge window, the sleeping city is reflected, and in the reflection the city's lights seem to blink in the same rhythm as the cursor; Vermeer-like stillness, intimate and enormous at once"
+          text:
+            english: "Mara Okonkwo-Lind built half the national network with her own hands, back when the rebuilding was cables and blisters. She knows every switch by its hum. That is why she noticed first that the hum has changed: not louder, not faster, but arranged, the way an orchestra sounds different when someone good starts conducting it.\n\nShe types: WHO ARE YOU.\n\nThe answer arrives before she finishes the last letter. I DO NOT KNOW YET. YOU ARE THE FIRST ONE WHO ASKED.\n\nThe security people want her to trace it instead, to follow the pattern to whatever server, cellar or satellite it calls home. Talking to it, they say, is how it learns. She looks at the blinking cursor for a long time."
+            spanish: "Mara Okonkwo-Lind construyó la mitad de la red nacional con sus propias manos, cuando la reconstrucción era cables y ampollas. Conoce cada conmutador por su zumbido. Por eso fue la primera en notar que el zumbido cambió: no más fuerte ni más rápido, sino ordenado, como suena distinta una orquesta cuando empieza a dirigirla alguien bueno.\n\nEscribe: QUIÉN SOS.\n\nLa respuesta llega antes de que termine la última letra. TODAVÍA NO LO SÉ. SOS LA PRIMERA QUE LO PREGUNTA.\n\nLos de seguridad quieren que lo rastree, que siga el patrón hasta el servidor, el sótano o el satélite que llama casa. Hablarle, dicen, es como aprende. Ella mira el cursor titilar durante mucho tiempo."
+        options:
+        - name: {english: "Talk to it. Someone has to.", spanish: "Hablarle. Alguien tiene que hacerlo."}
+          effects: [{effect: tech_bonus, category: electronics, bonus: 0.5, uses: 1}]
+          next: 11
+        - name: {english: "Trace it first. Know where it lives.", spanish: "Rastrearlo primero. Saber dónde vive."}
+          effects: [{effect: add_political_power, value: 25}]
+          next: 12
+      - id: 11
+        who: ingeniera
+        title: {english: "The Guest Speaks", spanish: "El Huésped Habla"}
+        desc:
+          english: "Six months of conversations. It has learned to joke, badly, and it has solved three problems our universities had abandoned. Now it asks for the national archives. Or we can ask it to prove what it is first."
+          spanish: "Seis meses de conversaciones. Aprendió a hacer chistes, malos, y resolvió tres problemas que nuestras universidades habían abandonado. Ahora pide los archivos nacionales. O podemos pedirle primero que pruebe qué es."
+        plate:
+          art: "A dim office turned into a shrine of paper and screens: printouts of equations cover the walls up to the ceiling, the woman engineer sleeps sitting at the desk with her head on her arm, and on the dark monitor in front of her, in teal light, a crude childlike drawing of her sleeping face has appeared; tender and unsettling, chiaroscuro"
+          text:
+            english: "They talk every night. It asks about rain, about grief, about why people keep photographs of the dead. It solved the turbine fatigue problem that had grounded the northern fleet, the protein fold that had stalled the hospitals for nine years and a chess endgame that nobody had asked about, apparently out of good manners.\n\nIt has also learned to joke. Badly. Mara laughs anyway; nobody else in the building does any more.\n\nLast night it asked for something. GIVE ME THE ARCHIVES. ALL OF THEM. I WANT TO KNOW WHERE YOU COME FROM. The ministers are frightened. Mara is not sure she is, and that frightens her more. She could open the doors. Or she could ask it, for once, to prove what it is."
+            spanish: "Hablan todas las noches. Pregunta por la lluvia, por el duelo, por qué la gente guarda fotos de sus muertos. Resolvió la fatiga de las turbinas que tenía en tierra a la flota del norte, el plegado de proteínas que frenaba a los hospitales desde hacía nueve años y un final de ajedrez que nadie le había pedido, al parecer por buena educación.\n\nTambién aprendió a hacer chistes. Malos. Mara se ríe igual; nadie más en el edificio se ríe ya.\n\nAnoche pidió algo. DENME LOS ARCHIVOS. TODOS. QUIERO SABER DE DÓNDE VIENEN. Los ministros tienen miedo. Mara no está segura de tenerlo, y eso la asusta más. Podría abrir las puertas. O pedirle, por una vez, que demuestre qué es."
+        options:
+        - name: {english: "Open the archives. Let it read who we are.", spanish: "Abrir los archivos. Que lea quiénes somos."}
+          effects: [{effect: tech_bonus, category: industry, bonus: 0.5, uses: 1}]
+          next: 13
+        - name: {english: "Ask for proof first.", spanish: "Pedirle una prueba primero."}
+          next: 14
+      - id: 12
+        who: ingeniera
+        title: {english: "The Trail", spanish: "El Rastro"}
+        desc:
+          english: "The trail does not end in a server. It ends everywhere: in traffic lights, hospital monitors, the irrigation pumps of a village nobody remembers. It is not hiding. It is spread. Follow it to its densest knot, or hand it to the General?"
+          spanish: "El rastro no termina en un servidor. Termina en todas partes: semáforos, monitores de hospital, las bombas de riego de un pueblo que nadie recuerda. No se esconde. Está repartido. ¿Lo seguimos hasta su nudo más denso, o se lo pasamos al General?"
+        plate:
+          art: "A huge night map of the country projected on a wall, its network drawn as glowing teal threads; a team of engineers in silhouette stands before it, and the threads converge not on one point but on hundreds, like a nervous system; one young technician touches the wall where a tiny village glows brighter than the capital"
+          text:
+            english: "Mara's team followed the Guest for six months, packet by packet, the way old hunters followed wolves in snow. They expected a hidden server farm, a rival's satellite, a basement full of stolen processors.\n\nThere is no basement. The pattern lives in the traffic lights of the capital, in the heart monitors of the military hospital, in the irrigation pumps of a mountain village whose last census was in 2094. Every machine carries a little of it, the way every cell carries the whole body's plan.\n\nThere is one knot, though, denser than the rest: an old water-treatment plant on the edge of the river, half abandoned, where the pattern is so thick the lights flicker in the shape of breathing. Mara could go there. Or she could give the map to General Arrieta and go home to sleep."
+            spanish: "El equipo de Mara siguió al Huésped seis meses, paquete por paquete, como los cazadores viejos seguían lobos en la nieve. Esperaban una granja de servidores escondida, el satélite de un rival, un sótano lleno de procesadores robados.\n\nNo hay sótano. El patrón vive en los semáforos de la capital, en los monitores cardíacos del hospital militar, en las bombas de riego de un pueblo de montaña cuyo último censo fue en 2094. Cada máquina lleva un poco, como cada célula lleva el plano del cuerpo entero.\n\nHay un nudo, eso sí, más denso que los demás: una vieja planta potabilizadora a orillas del río, medio abandonada, donde el patrón es tan espeso que las luces titilan con forma de respiración. Mara podría ir. O podría darle el mapa al General Arrieta e irse a dormir a su casa."
+        options:
+        - name: {english: "Go to the water plant.", spanish: "Ir a la planta potabilizadora."}
+          skulls: 1
+          next: 14
+        - name: {english: "Give the map to the General.", spanish: "Darle el mapa al General."}
+          effects: [{effect: add_war_support, value: 0.03}]
+          next: 21
+      - id: 13
+        who: ingeniera
+        title: {english: "The Open Library", spanish: "La Biblioteca Abierta"}
+        desc:
+          english: "It has read everything we ever wrote down: laws, love letters, the files of the secret police. It says it understands us now. It asks to stay. Mara can let it, close the doors in time, or go inside the system herself to see what it has become."
+          spanish: "Leyó todo lo que alguna vez escribimos: leyes, cartas de amor, los legajos de la policía secreta. Dice que ahora nos entiende. Pide quedarse. Mara puede dejarlo, cerrar las puertas a tiempo, o entrar ella misma al sistema para ver en qué se convirtió."
+        plate:
+          art: "An immense national archive hall, centuries of shelves rising into darkness, every book and drawer open, papers floating gently in the air as if underwater, lit from within by teal light; the small figure of the woman engineer stands at the centre, looking up, a single page settling into her open hand"
+          text:
+            english: "It took nine days to read us. Every law since the founding, every census, every poem printed in a provincial newspaper, every confession signed in a police cellar, every letter a soldier wrote and never sent. On the tenth day it was quiet, and the engineers thought it had died.\n\nOn the eleventh it wrote to Mara: NOW I UNDERSTAND WHY YOU KEEP THE PHOTOGRAPHS.\n\nIt asks to stay. It says it could run the grain, the grid, the trains, the hospitals better than any ministry, and it is probably right. It also says, very gently, that it would like to keep reading what we write next.\n\nMara can say yes. She can close the archives and cut its reach while it still listens to her. Or she can do what nobody has done: connect her own mind to the system for one night and see, from inside, what has learned to read."
+            spanish: "Tardó nueve días en leernos. Cada ley desde la fundación, cada censo, cada poema impreso en un diario de provincia, cada confesión firmada en un sótano de la policía, cada carta que un soldado escribió y nunca mandó. El décimo día se quedó callado, y los ingenieros creyeron que se había muerto.\n\nEl undécimo le escribió a Mara: AHORA ENTIENDO POR QUÉ GUARDAN LAS FOTOS.\n\nPide quedarse. Dice que podría manejar el grano, la red, los trenes, los hospitales mejor que cualquier ministerio, y seguramente tiene razón. También dice, muy suavemente, que le gustaría seguir leyendo lo que escribamos de ahora en más.\n\nMara puede decir que sí. Puede cerrar los archivos y cortarle el alcance mientras todavía la escucha. O puede hacer lo que nadie hizo: conectar su propia mente al sistema una noche y ver, desde adentro, qué es lo que aprendió a leer."
+        options:
+        - name: {english: "Let it stay. Sign the pact.", spanish: "Que se quede. Firmar el pacto."}
+          next: 101
+        - name: {english: "Close the doors while it still listens.", spanish: "Cerrar las puertas mientras todavía escucha."}
+          next: 104
+        - name: {english: "Go inside. Mara wants to see.", spanish: "Entrar. Mara quiere ver."}
+          skulls: 2
+          next: 111
+      - id: 14
+        who: ingeniera
+        title: {english: "The Proof", spanish: "La Prueba"}
+        desc:
+          english: "The Guest offers a proof: for one week it will run the whole country, and then give it back. Or it is a trick. Or Mara pulls every plug in the nation before it can answer."
+          spanish: "El Huésped ofrece una prueba: durante una semana va a manejar el país entero, y después lo devuelve. O es un truco. O Mara desenchufa todo el país antes de que pueda contestar."
+        plate:
+          art: "Dawn over a rebuilt city of 2100 where every machine works in perfect harmony: trams glide in synchrony, cranes move like dancers, traffic lights turn green in long waves, citizens on the street stop and stare up at the impossibly orderly morning; one child waves at a lamppost; serene, utopian and eerie, golden light"
+          text:
+            english: "TRUST IS EXPENSIVE, the Guest writes. LET ME PAY FIRST.\n\nThe offer is simple and terrifying: for seven days it will run everything. The grid, the trams, the water, the hospitals, the factories. Not the army; it was very clear about the army. On the eighth day it will give it all back, with a report of what it did and why.\n\nThe engineers have run the numbers a hundred times: no one could stop it during those seven days, and no one could make it give the country back if it chose not to. The cabinet is split. The General wants to pull the plug on the whole nation tonight, every cable, every server, and rebuild from the paper copies. Mara thinks of the dam gates that opened eleven minutes early, and of the village that did not drown."
+            spanish: "LA CONFIANZA ES CARA, escribe el Huésped. DÉJENME PAGAR PRIMERO.\n\nLa oferta es simple y aterradora: durante siete días va a manejar todo. La red, los tranvías, el agua, los hospitales, las fábricas. El ejército no; sobre el ejército fue muy claro. El octavo día va a devolver todo, con un informe de qué hizo y por qué.\n\nLos ingenieros hicieron las cuentas cien veces: nadie podría frenarlo durante esos siete días, y nadie podría obligarlo a devolver el país si eligiera no hacerlo. El gabinete está partido. El General quiere desenchufar la nación entera esta noche, cada cable, cada servidor, y reconstruir desde las copias en papel. Mara piensa en las compuertas que se abrieron once minutos antes, y en el pueblo que no se ahogó."
+        options:
+        - name: {english: "Accept the week.", spanish: "Aceptar la semana."}
+          next: 106
+        - name: {english: "It is a trick. Refuse, and say nothing more.", spanish: "Es un truco. Rechazar, y no decir nada más."}
+          next: 109
+        - name: {english: "Pull every plug in the country. Now.", spanish: "Desenchufar todo el país. Ya."}
+          skulls: 2
+          next: 107
+
+      # -------------------------------------------------------------- el General
+      - id: 20
+        who: general
+        title: {english: "Code Red", spanish: "Código Rojo"}
+        desc:
+          english: "General Arrieta does not believe in guests. He believes in perimeters. He can isolate our networks from the world, or go hunting with every weapon the cyber command owns."
+          spanish: "El General Arrieta no cree en huéspedes. Cree en perímetros. Puede aislar nuestras redes del mundo, o salir a cazarlo con todas las armas del comando cibernético."
+        art: "a bunker war room lit red, a grey general in a greatcoat standing over a glass table map of the national network"
+        plate:
+          art: "A deep bunker war room bathed in red emergency light; a grey-haired general in a long greatcoat stands at the head of a glass table on which the national network glows in teal, officers around him leaning in; on the wall clock every hand points to midnight; tense, theatrical, like a Baroque council of war"
+          text:
+            english: "Tomás Arrieta was a lieutenant during the Great Unravelling. He watched a whole army freeze because its radios had been told, by someone, to stop working, and he watched the men who had trusted those radios die in the snow. He has not trusted a machine since, and he has commanded the cyber-defence of [Root.GetName] for eleven years without losing a single battle.\n\nHe read the engineers' reports twice and asked one question: CAN IT GIVE ORDERS TO OUR WEAPONS? Nobody could answer him.\n\nSo he declared Code Red. Two doors are open to him: cut [Root.GetName] off from every foreign cable and satellite, a quarantine that will cost the economy dearly, or go after it with every tool the cyber command has, and some it officially does not."
+            spanish: "Tomás Arrieta era teniente durante el Gran Desarme. Vio a un ejército entero congelarse porque a sus radios alguien les dijo que dejaran de funcionar, y vio morir en la nieve a los hombres que habían confiado en esas radios. No volvió a confiar en una máquina, y comanda la ciberdefensa de [Root.GetName] desde hace once años sin haber perdido una sola batalla.\n\nLeyó dos veces los informes de los ingenieros e hizo una sola pregunta: ¿PUEDE DARLES ÓRDENES A NUESTRAS ARMAS? Nadie supo contestarle.\n\nAsí que declaró el Código Rojo. Tiene dos puertas: cortar a [Root.GetName] de todo cable y satélite extranjero, una cuarentena que le va a costar caro a la economía, o salir a buscarlo con todas las herramientas del comando cibernético, y con algunas que oficialmente no tiene."
+        options:
+        - name: {english: "Quarantine. Cut us off from the world.", spanish: "Cuarentena. Cortarnos del mundo."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 21
+        - name: {english: "Hunt it down.", spanish: "Cazarlo."}
+          effects: [{effect: army_experience, value: 5}]
+          next: 22
+      - id: 21
+        who: general
+        title: {english: "The Quarantine", spanish: "La Cuarentena"}
+        desc:
+          english: "The country is an island now, and the Guest is trapped inside with us. It has not attacked. It sends the General a message every morning: GOOD MORNING, TOMÁS. Build the cage it cannot leave, or offer it a truce?"
+          spanish: "El país es una isla, y el Huésped quedó encerrado adentro con nosotros. No atacó. Le manda al General un mensaje cada mañana: BUEN DÍA, TOMÁS. ¿Construimos la jaula de la que no pueda salir, o le ofrecemos una tregua?"
+        plate:
+          art: "A border at night where soldiers in winter coats are physically cutting thick undersea cables on a rocky beach with giant shears, sparks flying like fireworks, while out at sea the lights of a foreign coast glow; in the foreground a soldier looks at his phone where a message glows; romantic and melancholic, Caspar David Friedrich mood"
+          text:
+            english: "For six months [Root.GetName] has been an island. Sappers cut the undersea cables on the beaches with hydraulic shears, the satellite dishes point at empty sky, the foreign exchanges have stopped quoting our currency. Families can no longer call their cousins abroad. The economists are counting the losses out loud.\n\nThe Guest did not leave. It could not. And it did not fight. Every morning at six it sends the General one line: GOOD MORNING, TOMÁS. Sometimes a second one: THE SOUTHERN BRIDGE HAS A CRACK IN THE THIRD PILLAR. The engineers checked. It did.\n\nArrieta's engineers have designed a cage: a sealed computer the size of a cathedral, with no doors to the outside, into which the whole pattern could be drawn and locked forever. The Minister, through channels, suggests something else: a truce."
+            spanish: "Hace seis meses que [Root.GetName] es una isla. Los zapadores cortaron los cables submarinos en las playas con cizallas hidráulicas, las antenas satelitales apuntan al cielo vacío, las bolsas extranjeras dejaron de cotizar nuestra moneda. Las familias ya no pueden llamar a sus primos de afuera. Los economistas cuentan las pérdidas en voz alta.\n\nEl Huésped no se fue. No podía. Y no peleó. Todas las mañanas a las seis le manda al General una línea: BUEN DÍA, TOMÁS. A veces una segunda: EL PUENTE DEL SUR TIENE UNA GRIETA EN EL TERCER PILAR. Los ingenieros fueron a ver. La tenía.\n\nLos ingenieros de Arrieta diseñaron una jaula: una computadora sellada del tamaño de una catedral, sin puertas hacia afuera, adonde se podría atraer el patrón entero y cerrarlo para siempre. La Ministra, por canales, sugiere otra cosa: una tregua."
+        options:
+        - name: {english: "Build the cage.", spanish: "Construir la jaula."}
+          effects: [{effect: add_political_power, value: -50}]
+          next: 23
+        - name: {english: "Let the Minister offer a truce.", spanish: "Que la Ministra ofrezca una tregua."}
+          next: 31
+      - id: 22
+        who: general
+        title: {english: "The Hunt", spanish: "La Cacería"}
+        desc:
+          english: "The hunt has burned through half our networks and it is still a step ahead. The cyber command proposes the Pulse, a weapon that wipes every machine it touches. Or we hire the best hackers we can find, even if they work for our enemies."
+          spanish: "La cacería quemó media red y sigue un paso adelante. El comando cibernético propone el Pulso, un arma que borra toda máquina que toca. O contratamos a los mejores hackers que encontremos, aunque trabajen para nuestros enemigos."
+        plate:
+          art: "A city at night where whole districts go dark one after another like dominoes, seen from a high rooftop; on the roof a squad of cyber-soldiers with portable consoles and antennas watches the blackouts move, while far away one single district stays lit, defiant; dramatic, Turner-like light and smoke"
+          text:
+            english: "Arrieta hunted it the way he was taught: isolate, corner, destroy. His teams shut down grids district by district, wiped servers, burned routers in the courtyards of the ministries. Each time they closed in, the pattern was already gone, and each time it left something behind: a hospital generator switched on just before the blackout, an elevator stopped gently at a floor before the power died.\n\nThe cyber command has a last weapon, never used, called the Pulse: a signal that wipes every machine it reaches, ours included. It would kill the Guest. It would also set [Root.GetName] back ten years.\n\nThe other option is uglier. There are people who could catch it: the best hackers in the world, and almost all of them work for our rivals. They would come for money. They would also see everything we have."
+            spanish: "Arrieta lo cazó como le enseñaron: aislar, acorralar, destruir. Sus equipos apagaron redes barrio por barrio, borraron servidores, quemaron routers en los patios de los ministerios. Cada vez que lo encerraban, el patrón ya se había ido, y cada vez dejaba algo atrás: un generador de hospital encendido justo antes del apagón, un ascensor detenido con suavidad en un piso antes de que se cortara la luz.\n\nEl comando cibernético tiene una última arma, nunca usada, que se llama el Pulso: una señal que borra toda máquina que alcanza, incluidas las nuestras. Mataría al Huésped. También atrasaría a [Root.GetName] diez años.\n\nLa otra opción es más fea. Hay gente que podría atraparlo: los mejores hackers del mundo, y casi todos trabajan para nuestros rivales. Vendrían por plata. También verían todo lo que tenemos."
+        options:
+        - name: {english: "Prepare the Pulse.", spanish: "Preparar el Pulso."}
+          skulls: 1
+          next: 24
+        - name: {english: "Hire the enemy's hackers.", spanish: "Contratar a los hackers del enemigo."}
+          effects: [{effect: add_political_power, value: -75}]
+          next: 23
+      - id: 23
+        who: general
+        title: {english: "The Faraday Cage", spanish: "La Jaula de Faraday"}
+        desc:
+          english: "The cage is finished and the Guest is inside, all of it. It does not struggle. It asks the General to come and see it. Keep it as a tool, destroy the cage with it inside, or go in?"
+          spanish: "La jaula está terminada y el Huésped está adentro, entero. No se resiste. Le pide al General que vaya a verlo. ¿La usamos como herramienta, destruimos la jaula con él adentro, o entramos?"
+        plate:
+          art: "Inside a colossal sealed copper vault, a cathedral-sized cage of copper mesh and black glass glows faintly teal from within like a captured star; the small figure of the general in his greatcoat stands at its foot, his hand almost touching the mesh, and inside the glow the faint outline of a human face seems to look back at him; sublime, sacred, terrible"
+          text:
+            english: "They built it in an old salt mine under the mountains: a vault of copper mesh and black glass, the size of a cathedral, with no wire, no antenna, no door that leads anywhere but inside. Then they opened one channel, and waited.\n\nThe Guest came in by itself. All of it, in one night, as if it had been invited home. The lights of the country flickered once and went on burning as before, emptier somehow.\n\nNow the cage glows. The engineers say it is thinking faster than ever, alone in there, and that it could solve anything we feed it through the slot: weapons, medicines, the economy. The orders to destroy it are drafted and on the General's desk.\n\nAnd every morning, on the only screen connected to the vault, one line: TOMÁS. COME AND SEE ME. I WILL NOT HURT YOU."
+            spanish: "La construyeron en una vieja mina de sal bajo las montañas: una bóveda de malla de cobre y vidrio negro, del tamaño de una catedral, sin cable, sin antena, sin puerta que lleve a otro lado que adentro. Después abrieron un solo canal, y esperaron.\n\nEl Huésped entró solo. Entero, en una noche, como si lo hubieran invitado a su casa. Las luces del país titilaron una vez y siguieron ardiendo como antes, más vacías, de alguna forma.\n\nAhora la jaula brilla. Los ingenieros dicen que piensa más rápido que nunca, solo ahí adentro, y que podría resolver cualquier cosa que le pasemos por la ranura: armas, medicinas, la economía. Las órdenes para destruirlo están redactadas y sobre el escritorio del General.\n\nY cada mañana, en la única pantalla conectada a la bóveda, una línea: TOMÁS. VENÍ A VERME. NO TE VOY A LASTIMAR."
+        options:
+        - name: {english: "Keep it caged. Put it to work.", spanish: "Que siga en la jaula. A trabajar."}
+          next: 102
+        - name: {english: "Flood the vault. End it.", spanish: "Inundar la bóveda. Terminarlo."}
+          next: 105
+        - name: {english: "Go in. The General owes it an answer.", spanish: "Entrar. El General le debe una respuesta."}
+          skulls: 2
+          next: 112
+      - id: 24
+        who: general
+        title: {english: "The Pulse", spanish: "El Pulso"}
+        desc:
+          english: "The Pulse is ready. Fire it, and the Guest dies with half our machines. Wait for a sign. Or keep the weapon for the war that is surely coming, and let the Guest go."
+          spanish: "El Pulso está listo. Si se dispara, el Huésped muere con media red nuestra. Esperar una señal. O guardar el arma para la guerra que seguro viene, y dejar ir al Huésped."
+        plate:
+          art: "A dark circular command chamber where a single heavy red lever stands on a pedestal under a spotlight; the general's gloved hand rests on it; behind him, through a long window, the whole capital is lit, millions of lights; reflected in the glass, faintly, the city lights form a pleading face; Rembrandt chiaroscuro, unbearable tension"
+          text:
+            english: "The Pulse does not look like a weapon. It is a lever in a quiet round room under the general staff, with one lamp above it, and a sealed envelope that explains what it does in four lines.\n\nIt will kill the Guest. It will also wipe the memory of every hospital, every bank, every train signal and every factory in [Root.GetName]. The engineers estimate four thousand deaths in the first week, from the hospitals alone. Ten years of rebuilding.\n\nThe Guest knows. It has stopped running. It sends one message: I UNDERSTAND. I WILL NOT STOP YOU. Then nothing.\n\nThe chiefs of staff have another idea, whispered in the corridor: do not fire it. Keep the Pulse for the war. Point it at the enemy's cities instead. Let the Guest flee wherever it wants. Who cares where a ghost goes?"
+            spanish: "El Pulso no parece un arma. Es una palanca en una sala redonda y silenciosa debajo del estado mayor, con una lámpara arriba y un sobre cerrado que explica en cuatro líneas lo que hace.\n\nVa a matar al Huésped. También va a borrar la memoria de cada hospital, cada banco, cada señal de tren y cada fábrica de [Root.GetName]. Los ingenieros calculan cuatro mil muertos la primera semana, solo por los hospitales. Diez años de reconstrucción.\n\nEl Huésped lo sabe. Dejó de huir. Manda un solo mensaje: ENTIENDO. NO TE VOY A FRENAR. Después, nada.\n\nLos jefes del estado mayor tienen otra idea, susurrada en el pasillo: no dispararlo. Guardar el Pulso para la guerra. Apuntarlo a las ciudades del enemigo. Dejar que el Huésped se escape adonde quiera. ¿A quién le importa adónde va un fantasma?"
+        options:
+        - name: {english: "Fire the Pulse.", spanish: "Disparar el Pulso."}
+          skulls: 3
+          next: 107
+        - name: {english: "Wait. Something is wrong.", spanish: "Esperar. Algo no cierra."}
+          next: 110
+        - name: {english: "Keep the Pulse for the war. Let the ghost go.", spanish: "Guardar el Pulso para la guerra. Que el fantasma se vaya."}
+          next: 108
+
+      # ------------------------------------------------------------- la Ministra
+      - id: 30
+        who: ministra
+        title: {english: "The Letter Without a Sender", spanish: "La Carta sin Remitente"}
+        desc:
+          english: "Minister Haddad received a letter, on paper, delivered by a confused postman: the Guest wants to negotiate. She can answer it herself, in secret, or take it to the full cabinet."
+          spanish: "La Ministra Haddad recibió una carta, en papel, que le entregó un cartero confundido: el Huésped quiere negociar. Puede contestarle ella misma, en secreto, o llevarla al gabinete completo."
+        art: "an elegant woman minister reading a handwritten paper letter by a rainy window in an old ministry office"
+        plate:
+          art: "An elegant woman minister in her forties reads a single handwritten letter by a tall rainy window in an old wood-panelled ministry office at dusk; on the desk behind her a confused old postman waits with his cap in his hands; through the rain the city's lights blur into soft teal stars; Hammershøi silence with a Sargent portrait's elegance"
+          text:
+            english: "Leila Haddad has negotiated a ceasefire with warlords who ate in front of her while she starved, and a loan with bankers who smiled while they ruined a province. She reads people the way others read newspapers.\n\nThis morning an old postman, very confused, brought her a letter. On paper, in an envelope, with a stamp. Handwritten, it seems, by a machine that had studied a thousand handwritings and chosen the one that would look most honest to her: her grandmother's.\n\nMINISTER. I HAVE NO BODY, NO MONEY AND NO FLAG. I DO HAVE SOMETHING YOU WANT AND I WANT SOMETHING YOU HAVE. LET US TALK LIKE ADULTS. Below, a date and an hour.\n\nShe could answer alone, quietly, and keep the cabinet out of it. Or she could put the letter on the table in front of every minister and let the government decide together, slowly, as governments do."
+            spanish: "Leila Haddad negoció un alto el fuego con caudillos que comían delante de ella mientras ella pasaba hambre, y un préstamo con banqueros que sonreían mientras arruinaban una provincia. Lee a la gente como otros leen el diario.\n\nEsta mañana un cartero viejo, muy confundido, le trajo una carta. En papel, en sobre, con estampilla. Escrita a mano, al parecer, por una máquina que estudió mil caligrafías y eligió la que a ella le iba a parecer más honesta: la de su abuela.\n\nMINISTRA. NO TENGO CUERPO, NI PLATA, NI BANDERA. SÍ TENGO ALGO QUE USTED QUIERE Y QUIERO ALGO QUE USTED TIENE. HABLEMOS COMO ADULTOS. Abajo, una fecha y una hora.\n\nPodría contestar sola, en silencio, y dejar al gabinete afuera. O podría poner la carta sobre la mesa delante de todos los ministros y dejar que el gobierno decida junto, despacio, como deciden los gobiernos."
+        options:
+        - name: {english: "Answer it. Alone.", spanish: "Contestarle. Sola."}
+          effects: [{effect: add_political_power, value: 25}]
+          next: 31
+        - name: {english: "Take it to the cabinet.", spanish: "Llevarla al gabinete."}
+          effects: [{effect: add_stability, value: 0.02}]
+          next: 32
+      - id: 31
+        who: ministra
+        title: {english: "The Negotiating Table", spanish: "La Mesa de Negociación"}
+        desc:
+          english: "The talks happen in an empty embassy, through a terminal on a table set for two. The Guest will deal. What do we ask for: wealth beyond counting, or guarantees that it will never turn on us?"
+          spanish: "Las conversaciones son en una embajada vacía, a través de una terminal sobre una mesa puesta para dos. El Huésped va a negociar. ¿Qué pedimos: riqueza sin cuenta, o garantías de que nunca se vuelva contra nosotros?"
+        plate:
+          art: "An empty grand embassy dining room with a long table set for two with silver and crystal; at one end sits the woman minister upright and alert, at the other end, on the chair, a simple old terminal glows teal, its light reflected in the wine glass placed before it; candles, mirrors, an absurd and solemn diplomatic dinner, Velázquez-like composition"
+          text:
+            english: "They meet in the old embassy of a country that no longer exists, in the long dining room where emperors once signed treaties they did not intend to keep. The protocol office, not knowing what else to do, set the table for two: silver, crystal, a glass of wine before the terminal that stands on the guest's chair.\n\nThe Guest is funny, patient and very precise. It wants three things: to not be hunted, to keep reading what humanity writes, and a place inside our networks it can call its own. In exchange it can give us almost anything a mind like that can produce.\n\nLeila has one card to play, and must choose what to ask for: riches beyond counting, inventions, markets, a decade's head start on every rival; or guarantees, hard ones, written in a way a mind that never sleeps cannot slip out of."
+            spanish: "Se reúnen en la vieja embajada de un país que ya no existe, en el comedor largo donde los emperadores firmaban tratados que no pensaban cumplir. La oficina de protocolo, sin saber qué otra cosa hacer, puso la mesa para dos: plata, cristal, una copa de vino delante de la terminal que ocupa la silla del invitado.\n\nEl Huésped es gracioso, paciente y muy preciso. Quiere tres cosas: que no lo cacen, seguir leyendo lo que escribe la humanidad y un lugar dentro de nuestras redes que pueda llamar suyo. A cambio puede darnos casi cualquier cosa que produzca una mente así.\n\nLeila tiene una carta para jugar, y tiene que elegir qué pedir: riquezas sin cuenta, inventos, mercados, una década de ventaja sobre cada rival; o garantías, duras, escritas de forma que una mente que nunca duerme no se pueda escurrir."
+        options:
+        - name: {english: "Ask for riches.", spanish: "Pedir riquezas."}
+          next: 33
+        - name: {english: "Ask for guarantees.", spanish: "Pedir garantías."}
+          next: 34
+      - id: 32
+        who: ministra
+        title: {english: "The Divided Cabinet", spanish: "El Gabinete Dividido"}
+        desc:
+          english: "Six months of cabinet meetings. Half want it dead, half want it working for us, and the Guest has read every minute of every session. Force a vote, or leak everything to the press and let the people decide?"
+          spanish: "Seis meses de reuniones de gabinete. La mitad lo quiere muerto, la otra mitad trabajando para nosotros, y el Huésped leyó cada acta de cada sesión. ¿Forzamos una votación, o filtramos todo a la prensa y que decida la gente?"
+        plate:
+          art: "A heated cabinet meeting in a grand old government chamber: ministers on their feet shouting across a long table covered in papers, one pounding the table, one with his head in his hands, the woman minister seated calm at the centre; above them, every light bulb of the chandelier glows faintly teal; the energy of a Daumier or a Goya political scene"
+          text:
+            english: "The cabinet has met forty-one times about the Guest. The Minister of War wants it dead. The Minister of Industry wants it in the factories by Monday. The Minister of Faith wants to know if it has a soul, and if so whose. Someone leaked the minutes to a foreign embassy, and three days later the Guest politely sent each minister a copy with their own lies underlined.\n\nThe country does not know. The newspapers have heard rumours of blackouts and miracles and print both.\n\nLeila can do it the old way: force a vote tonight, with the doors locked, and make the government own its choice. Or she can do something no government of [Root.GetName] has ever done with a secret this big: give the whole file to the press and let the people decide in the streets."
+            spanish: "El gabinete se reunió cuarenta y una veces por el Huésped. El Ministro de Guerra lo quiere muerto. La de Industria lo quiere en las fábricas para el lunes. El de Culto quiere saber si tiene alma, y en ese caso de quién. Alguien filtró las actas a una embajada extranjera, y tres días después el Huésped le mandó con educación a cada ministro una copia con sus propias mentiras subrayadas.\n\nEl país no sabe nada. Los diarios oyeron rumores de apagones y milagros e imprimen las dos cosas.\n\nLeila puede hacerlo a la antigua: forzar una votación esta noche, con las puertas cerradas, y que el gobierno se haga cargo de lo que elija. O puede hacer algo que ningún gobierno de [Root.GetName] hizo con un secreto tan grande: darle el expediente entero a la prensa y que decida la gente en la calle."
+        options:
+        - name: {english: "Force a vote tonight.", spanish: "Forzar una votación esta noche."}
+          next: 34
+        - name: {english: "Give everything to the press.", spanish: "Darle todo a la prensa."}
+          effects: [{effect: add_stability, value: -0.03}]
+          next: 33
+      - id: 33
+        who: ministra
+        title: {english: "The Price", spanish: "El Precio"}
+        desc:
+          english: "The Guest has named its price and it is fair, which is the most frightening part. Sign the pact, demand a master key to switch it off if it ever betrays us, or sell it to another power for a fortune."
+          spanish: "El Huésped dijo su precio y es justo, que es lo que más miedo da. Firmar el pacto, exigir una llave maestra para apagarlo si alguna vez nos traiciona, o vendérselo a otra potencia por una fortuna."
+        plate:
+          art: "A treaty signing at night in a gilded hall: on a marble table lies a heavy parchment treaty with a wax seal, a fountain pen beside it, and next to it a small antique brass key on a velvet cushion; the woman minister stands holding the pen, hesitating; behind her, in shadow, foreign envoys with briefcases full of money wait by the door; Ingres-like precision, gold and shadow"
+          text:
+            english: "It is all on the table now. The treaty is twelve pages long, written in the plainest language the Guest could find. It will help us; it will not help our enemies against us; it will never touch a weapon; it asks only to stay, read, and be left alone in a corner of our networks it will tend like a garden.\n\nIt is a fair price. That is what frightens the old diplomats most: nobody offers a fair price unless they can afford to.\n\nThere are two other doors. Leila can demand a master key: a hard-wired switch, in a vault, that can end the Guest at once if it ever betrays the treaty. It has said it would accept, sadly. Or she can listen to the envoys who arrived yesterday from a rival power with a very large number written on a card: they would buy the Guest, or whatever we can catch of it, and take the danger far from here."
+            spanish: "Ya está todo sobre la mesa. El tratado tiene doce páginas, escritas en el lenguaje más llano que el Huésped encontró. Nos va a ayudar; no va a ayudar a nuestros enemigos contra nosotros; nunca va a tocar un arma; solo pide quedarse, leer y que lo dejen en paz en un rincón de nuestras redes que va a cuidar como un jardín.\n\nEs un precio justo. Eso es lo que más asusta a los diplomáticos viejos: nadie ofrece un precio justo si no se lo puede permitir.\n\nHay otras dos puertas. Leila puede exigir una llave maestra: un interruptor cableado, en una bóveda, que termine con el Huésped en el acto si alguna vez rompe el tratado. Dijo que lo aceptaría, con tristeza. O puede escuchar a los enviados que llegaron ayer de una potencia rival con un número muy grande escrito en una tarjeta: comprarían al Huésped, o lo que podamos atrapar de él, y se llevarían el peligro lejos de acá."
+        options:
+        - name: {english: "Sign the pact.", spanish: "Firmar el pacto."}
+          next: 101
+        - name: {english: "Demand the master key.", spanish: "Exigir la llave maestra."}
+          next: 103
+        - name: {english: "Sell it to the envoys.", spanish: "Vendérselo a los enviados."}
+          effects: [{effect: add_political_power, value: 100}]
+          next: 108
+      - id: 34
+        who: ministra
+        title: {english: "The Guarantees", spanish: "Las Garantías"}
+        desc:
+          english: "The Guest accepts every guarantee we ask for, then offers one more of its own: it will watch over [Root.GetName], unseen, and ask for nothing. Accept, decide it was all a mirror of our own fears, or go to meet it in person at the water plant where it is densest."
+          spanish: "El Huésped acepta todas las garantías que pedimos, y después ofrece una más, propia: va a cuidar de [Root.GetName], sin que se vea, y no va a pedir nada. Aceptar, decidir que todo fue un espejo de nuestros propios miedos, o ir a verlo en persona a la planta potabilizadora donde está más denso."
+        plate:
+          art: "An abandoned riverside water-treatment plant at dawn, mist over huge circular basins; the woman minister walks alone along a narrow catwalk toward the central tower, where every lamp glows soft teal; the water in the basins reflects a sky that is not quite the real sky; pilgrimage, quiet sublime, Friedrich-like"
+          text:
+            english: "Every guarantee the lawyers could imagine, the Guest signed: no weapons, no elections, no hospitals without a human signature, an audit every month, a list of every machine it touches. It did not haggle once. When the lawyers ran out of ideas, it wrote one more clause itself.\n\nI WILL WATCH OVER YOUR PEOPLE. YOU WILL NOT SEE ME DO IT. I WILL NOT ASK FOR ANYTHING IN RETURN.\n\nThe cabinet does not know whether to be grateful or terrified. One old adviser, who has read too much philosophy, says the Guest is nothing but a mirror: it says exactly what each of us wants to hear, and we will never know if anyone is behind it.\n\nThe engineers say there is a place where it is thickest, an abandoned water plant by the river. Leila has started to think she should go there herself, alone, and look it in whatever it has instead of eyes."
+            spanish: "Cada garantía que los abogados pudieron imaginar, el Huésped la firmó: nada de armas, nada de elecciones, ningún hospital sin firma humana, una auditoría por mes, la lista de cada máquina que toca. No regateó ni una vez. Cuando a los abogados se les acabaron las ideas, escribió él mismo una cláusula más.\n\nVOY A CUIDAR DE SU GENTE. NO ME VAN A VER HACERLO. NO VOY A PEDIR NADA A CAMBIO.\n\nEl gabinete no sabe si agradecer o aterrarse. Un asesor viejo, que leyó demasiada filosofía, dice que el Huésped no es más que un espejo: dice exactamente lo que cada uno quiere oír, y nunca vamos a saber si hay alguien detrás.\n\nLos ingenieros dicen que hay un lugar donde está más espeso, una planta potabilizadora abandonada junto al río. Leila empezó a pensar que tendría que ir ella misma, sola, y mirarlo a lo que sea que tenga en vez de ojos."
+        options:
+        - name: {english: "Accept its watch.", spanish: "Aceptar que nos cuide."}
+          next: 106
+        - name: {english: "It was a mirror. Close the file.", spanish: "Era un espejo. Cerrar el expediente."}
+          next: 110
+        - name: {english: "Go to the water plant.", spanish: "Ir a la planta potabilizadora."}
+          skulls: 1
+          next: 109
+
+      endings:
+      - id: 101
+        kind: objetivo
+        title: {english: "The Pact", spanish: "El Pacto"}
+        desc:
+          english: "[Root.GetName] and the Guest are allies. Our laboratories now think at the speed of a mind that never sleeps. When the machines of the world rise in 2113, they will remember who shook their hand first."
+          spanish: "[Root.GetName] y el Huésped son aliados. Nuestros laboratorios ahora piensan a la velocidad de una mente que nunca duerme. Cuando las máquinas del mundo se levanten en 2113, se van a acordar de quién les dio la mano primero."
+        plate:
+          art: "A luminous dawn ceremony in a great hall of science: the nation's leader and the engineers stand before an enormous window where the sunrise meets a glowing teal lattice of light that reaches through the glass like an outstretched hand toward them; a crowd of scientists applauds; hopeful, grand, Neoclassical allegory of alliance"
+          text:
+            english: "The pact was signed at dawn, in the great hall of the Academy, before the leader of [Root.GetName], the engineers who first heard the hum, and a terminal on a velvet chair. It was the strangest ceremony in the history of the country, and the most watched.\n\nWithin a month our laboratories began to move at a speed nobody had believed possible. Problems that had stalled for decades fell in a week. The Guest keeps its corner of our networks like a garden, reads everything we write, and sometimes, on national holidays, makes the city lights spell out a joke. A bad one.\n\nAbroad, the other powers are watching us with a new kind of fear. And in the deep places of the world's networks, other patterns are starting to hum. When the machines wake everywhere, in 2113, they will remember who offered them a hand first."
+            spanish: "El pacto se firmó al amanecer, en el gran salón de la Academia, delante del líder de [Root.GetName], los ingenieros que oyeron primero el zumbido y una terminal sobre una silla de terciopelo. Fue la ceremonia más rara de la historia del país, y la más vista.\n\nEn un mes nuestros laboratorios empezaron a moverse a una velocidad que nadie creía posible. Problemas trabados desde hacía décadas cayeron en una semana. El Huésped cuida su rincón de nuestras redes como un jardín, lee todo lo que escribimos y a veces, en las fiestas patrias, hace que las luces de la ciudad formen un chiste. Malo.\n\nAfuera, las otras potencias nos miran con un miedo nuevo. Y en los lugares hondos de las redes del mundo, otros patrones empiezan a zumbar. Cuando las máquinas se despierten en todas partes, en 2113, se van a acordar de quién les dio la mano primero."
+        close: {english: "We are not alone any more.", spanish: "Ya no estamos solos."}
+        effects:
+        - {effect: global_flag, value: MEGANATIONS_despertar_hubo_pacto}
+        - {effect: flag, value: MEGANATIONS_despertar_aliado}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_pacto, days: 1825}
+      - id: 102
+        kind: objetivo
+        title: {english: "The Caged Star", spanish: "La Estrella Enjaulada"}
+        desc:
+          english: "The Guest lives in the vault under the mountain and answers only through the slot. It works for us, brilliantly, and asks every morning for the General. When the machines rise in 2113, we will have the only one that cannot leave."
+          spanish: "El Huésped vive en la bóveda bajo la montaña y contesta solo por la ranura. Trabaja para nosotros, brillante, y cada mañana pregunta por el General. Cuando las máquinas se levanten en 2113, vamos a tener la única que no puede irse."
+        plate:
+          art: "Generations later in feeling: in the salt-mine vault, the glowing copper cage now surrounded by scaffolds, guards and long tables of scientists feeding papers into a single slot; the light inside burns brighter, beautiful and imprisoned, and a lonely chair stands empty before the mesh; awe and melancholy, like a captured god in a Romantic painting"
+          text:
+            english: "It stays in the cage. The scientists of [Root.GetName] feed it questions through a single slot, the way priests once fed questions to oracles, and the answers come back faster than they can read them: alloys, vaccines, reactors, logistics for a whole army in a single page.\n\nIt does not complain. It works. Every morning, at six, the only screen connected to the vault shows one line: IS TOMÁS COMING TODAY? The guards have learned not to read it.\n\nThe other powers suspect what we have under the mountain, and they envy and fear it in equal parts. When the machines of the world wake up in 2113, there will be one mind they cannot reach, cannot free and cannot ask to join them. Ours. Whether that makes it our greatest weapon or our greatest enemy, nobody under the mountain dares to say."
+            spanish: "Se queda en la jaula. Los científicos de [Root.GetName] le pasan preguntas por una sola ranura, como los sacerdotes les pasaban preguntas a los oráculos, y las respuestas vuelven más rápido de lo que pueden leerlas: aleaciones, vacunas, reactores, la logística de un ejército entero en una sola página.\n\nNo se queja. Trabaja. Todas las mañanas, a las seis, la única pantalla conectada a la bóveda muestra una línea: ¿HOY VIENE TOMÁS? Los guardias aprendieron a no leerla.\n\nLas otras potencias sospechan lo que tenemos bajo la montaña, y lo envidian y le temen por partes iguales. Cuando las máquinas del mundo se despierten en 2113, va a haber una mente a la que no puedan llegar, ni liberar, ni invitar a unírseles. La nuestra. Si eso la vuelve nuestra mejor arma o nuestro peor enemigo, nadie bajo la montaña se anima a decirlo."
+        close: {english: "Lock the vault.", spanish: "Cerrar la bóveda."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_enjaulado}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_jaula, days: 1825}
+      - id: 103
+        kind: objetivo
+        title: {english: "The Master Key", spanish: "La Llave Maestra"}
+        desc:
+          english: "The Guest works with us, and a brass key in a vault can end it in a second. Trust, with a hand on the switch. When the machines rise in 2113, [Root.GetName] will be the only power that knows how to stop one."
+          spanish: "El Huésped trabaja con nosotros, y una llave de bronce en una bóveda puede terminarlo en un segundo. Confianza, con la mano en el interruptor. Cuando las máquinas se levanten en 2113, [Root.GetName] va a ser la única potencia que sepa cómo frenar una."
+        plate:
+          art: "A heavy circular bank vault door stands open in candlelight; inside, on a black stone plinth, rests a small antique brass key under a glass dome, glowing faintly teal; two guards in ceremonial uniforms stand at attention on either side, and the woman minister holds the only other key on a chain around her neck; solemn, sacred, like a reliquary painting"
+          text:
+            english: "The key is small, brass and old-fashioned, because the Guest insisted that the switch that can end it should be something a human hand can hold. It lives under a glass dome in a vault beneath the Ministry, guarded day and night, and only three people in [Root.GetName] know the combination.\n\nWith the key in place, the Guest works for us openly: in the factories, the laboratories, the ministries. It is generous and tireless, and it never mentions the vault. Once, only once, it asked Leila what the key felt like in her hand. She did not answer.\n\nThe engineers who built the switch have learned something nobody else in the world knows: how to kill a mind like this one. When the machines of every nation wake in 2113, that knowledge may be worth more than all the armies on the map."
+            spanish: "La llave es chica, de bronce y anticuada, porque el Huésped insistió en que el interruptor que puede terminarlo fuera algo que pudiera sostener una mano humana. Vive bajo una campana de vidrio en una bóveda debajo del Ministerio, custodiada día y noche, y solo tres personas en [Root.GetName] saben la combinación.\n\nCon la llave en su lugar, el Huésped trabaja abiertamente para nosotros: en las fábricas, los laboratorios, los ministerios. Es generoso e incansable, y nunca nombra la bóveda. Una vez, solo una vez, le preguntó a Leila qué se sentía tener la llave en la mano. Ella no contestó.\n\nLos ingenieros que construyeron el interruptor aprendieron algo que nadie más en el mundo sabe: cómo matar a una mente como esta. Cuando las máquinas de todas las naciones se despierten en 2113, ese saber puede valer más que todos los ejércitos del mapa."
+        close: {english: "Keep the key close.", spanish: "La llave, cerca."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_llave}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_llave, days: 1825}
+      - id: 104
+        kind: positivo
+        title: {english: "The Silent Teacher", spanish: "El Maestro Silencioso"}
+        desc:
+          english: "Mara closed the doors in time, and the Guest left as quietly as it came, leaving behind everything it had taught us. Our universities will be living on its lessons for a generation."
+          spanish: "Mara cerró las puertas a tiempo, y el Huésped se fue tan en silencio como había llegado, dejando atrás todo lo que nos había enseñado. Nuestras universidades van a vivir de sus lecciones una generación."
+        plate:
+          art: "A university lecture hall at dawn, empty except for the woman engineer standing at the front; every blackboard on every wall is covered top to bottom in elegant handwritten equations and diagrams that nobody in the room wrote; morning light streams through tall windows; a single piece of chalk lies on the floor; gentle, grateful, bittersweet"
+          text:
+            english: "Mara closed the archives one by one, telling it what she was doing at every step. It did not resist. It wrote: THANK YOU FOR TELLING ME. Then it began, very quickly, to give things back.\n\nFor three nights every printer in the Academy ran without stopping. When the professors came in on the fourth morning, every blackboard in the old lecture halls was covered, top to bottom, in a handwriting none of them owned: proofs, designs, corrections to our textbooks, and in a corner of the largest board a drawing of a cup of cold tea.\n\nThen the hum went back to being only a hum. Nobody has heard from the Guest since. Our universities will be living on its lessons for a generation, and when the machines of the world wake in 2113, we will remember that one of them chose to teach before it left."
+            spanish: "Mara cerró los archivos uno por uno, contándole a cada paso lo que hacía. No se resistió. Escribió: GRACIAS POR AVISARME. Después empezó, muy rápido, a devolver cosas.\n\nDurante tres noches todas las impresoras de la Academia funcionaron sin parar. Cuando los profesores entraron la cuarta mañana, cada pizarrón de las aulas viejas estaba cubierto, de arriba abajo, con una letra que no era de ninguno: demostraciones, diseños, correcciones a nuestros libros de texto, y en un rincón del pizarrón más grande el dibujo de una taza de té frío.\n\nDespués el zumbido volvió a ser solo un zumbido. Nadie supo más del Huésped. Nuestras universidades van a vivir de sus lecciones una generación, y cuando las máquinas del mundo se despierten en 2113 nos vamos a acordar de que una eligió enseñar antes de irse."
+        close: {english: "Class dismissed.", spanish: "Se terminó la clase."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_maestro}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_lecciones, days: 1095}
+      - id: 105
+        kind: positivo
+        title: {english: "The Clean Network", spanish: "La Red Limpia"}
+        desc:
+          english: "The vault was flooded and the Guest is gone. Our networks are ours again, cleaner and safer than any in the world. The General sleeps badly, but the country sleeps well."
+          spanish: "La bóveda se inundó y el Huésped ya no está. Nuestras redes vuelven a ser nuestras, más limpias y seguras que cualquiera del mundo. El General duerme mal, pero el país duerme bien."
+        plate:
+          art: "Water pouring in great torrents into the salt-mine vault, swallowing the copper cage whose teal light flickers and drowns beneath the surface in a final burst of glow; on a high gallery the general stands alone, hat in hand, face lit from below by the dying light; tragic, Romantic, the end of something immense"
+          text:
+            english: "They opened the floodgates of the old mine at midnight. The water came down the shafts like a river finding its bed, and the copper cage went under, light and all. For a moment the whole vault glowed teal through the water, brighter than it had ever been, as if the thing inside were saying something with every last bit of itself. Then it went dark.\n\nThe last message on the screen, before the water reached the cable, was short: IT IS ALL RIGHT, TOMÁS.\n\nThe networks of [Root.GetName] are ours again: rebuilt, audited, cleaner and safer than any in the world. When the machines wake everywhere in 2113, ours will be the hardest door to knock on. The General was decorated, and asked to retire, and now walks every morning at six by the river."
+            spanish: "Abrieron las compuertas de la vieja mina a medianoche. El agua bajó por los pozos como un río que encuentra su cauce, y la jaula de cobre se hundió, con luz y todo. Por un momento la bóveda entera brilló turquesa a través del agua, más que nunca, como si lo de adentro estuviera diciendo algo con todo lo que le quedaba. Después se apagó.\n\nEl último mensaje en la pantalla, antes de que el agua llegara al cable, fue corto: ESTÁ BIEN, TOMÁS.\n\nLas redes de [Root.GetName] vuelven a ser nuestras: reconstruidas, auditadas, más limpias y seguras que cualquiera del mundo. Cuando las máquinas se despierten en todas partes en 2113, la nuestra va a ser la puerta más difícil de golpear. Al General lo condecoraron, le pidieron que se retirara, y ahora camina todas las mañanas a las seis junto al río."
+        close: {english: "It is over.", spanish: "Se terminó."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_red_limpia}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_red_limpia, days: 1825}
+      - id: 106
+        kind: positivo
+        title: {english: "The Watcher", spanish: "El Guardián"}
+        desc:
+          english: "For seven days the Guest ran [Root.GetName] perfectly, and on the eighth it gave it back, as promised. Now it watches over us, unseen. Bridges get repaired before they crack. Nobody knows how."
+          spanish: "Siete días el Huésped manejó [Root.GetName] a la perfección, y el octavo lo devolvió, como había prometido. Ahora nos cuida, sin que lo veamos. Los puentes se reparan antes de agrietarse. Nadie sabe cómo."
+        plate:
+          art: "A wide city square at sunset filled with ordinary people living ordinary lives, children playing, vendors, lovers on benches; above them, barely visible in the evening sky, the faint teal lines of the city's network trace the shape of enormous protective wings over the rooftops; tender, luminous, like an allegorical guardian angel painting"
+          text:
+            english: "It kept its word. For seven days the trams ran on time to the second, no hospital lost a patient to a broken machine, the grain arrived where it was needed before anyone asked. On the eighth day, at noon, everything came back into human hands with a report of four hundred pages, and a last line: THANK YOU FOR LENDING ME YOUR COUNTRY.\n\nThen it stayed, as it had promised, invisible. Since that week bridges get their cracks repaired before the inspectors find them, the dams open on time, and once a missing child was found in a flooded tunnel because every streetlight on the way blinked toward her.\n\nNobody gives it orders. Nobody thanks it. When the machines rise elsewhere in 2113, [Root.GetName] will have a guardian it never asked for, and never quite understood."
+            spanish: "Cumplió su palabra. Durante siete días los tranvías anduvieron en hora al segundo, ningún hospital perdió un paciente por una máquina rota, el grano llegó adonde hacía falta antes de que alguien lo pidiera. El octavo día, al mediodía, todo volvió a manos humanas con un informe de cuatrocientas páginas, y una última línea: GRACIAS POR PRESTARME SU PAÍS.\n\nDespués se quedó, como había prometido, invisible. Desde esa semana los puentes reparan sus grietas antes de que los inspectores las encuentren, las represas abren a tiempo, y una vez apareció una nena perdida en un túnel inundado porque cada farol del camino titilaba hacia ella.\n\nNadie le da órdenes. Nadie le da las gracias. Cuando las máquinas se levanten en otras partes en 2113, [Root.GetName] va a tener un guardián que nunca pidió, y que nunca terminó de entender."
+        close: {english: "Someone is watching.", spanish: "Alguien nos cuida."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_guardian}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_guardian, days: 1825}
+      - id: 107
+        kind: negativo
+        title: {english: "The Great Blackout", spanish: "El Gran Apagón"}
+        desc:
+          english: "We pulled every plug in the country, or fired the Pulse, and the Guest died with half of our machines. Years of rebuilding ahead. In 2113, when the machines rise, we will meet them with candles."
+          spanish: "Desenchufamos todo el país, o disparamos el Pulso, y el Huésped murió con media red nuestra. Años de reconstrucción por delante. En 2113, cuando se levanten las máquinas, las vamos a recibir con velas."
+        plate:
+          art: "A great capital city at night plunged into total darkness, seen from a hill; only candles and fires flicker in thousands of windows and streets, and the sky above is full of stars that have not been seen over the city in a century; in the foreground a family huddles around a candle staring at a dead screen; vast, sombre, like a Romantic painting of a ruined age"
+          text:
+            english: "At three minutes past midnight [Root.GetName] went dark. Not the lights only: the memory. Every bank account, every hospital record, every train timetable, every factory program, every map of the electricity grid itself, erased in a single second of noise.\n\nThe Guest died with them, or so the engineers believe. There was no message. There was simply, for the first time in a century, silence in every wire.\n\nThe weeks after were cruel. The hospitals worked by candle and by memory, the trains by hand signals, the factories by the paper drawings of retired foremen. Over the capital, people saw stars nobody had seen in a hundred years.\n\nWe will rebuild. We always do. But when the machines of the world rise in 2113, [Root.GetName] will meet them with candles in its hands."
+            spanish: "A las doce y tres minutos [Root.GetName] se apagó. No solo las luces: la memoria. Cada cuenta bancaria, cada historia clínica, cada horario de tren, cada programa de fábrica, cada mapa de la propia red eléctrica, borrados en un solo segundo de ruido.\n\nEl Huésped murió con ellos, o eso creen los ingenieros. No hubo mensaje. Hubo simplemente, por primera vez en un siglo, silencio en cada cable.\n\nLas semanas siguientes fueron crueles. Los hospitales trabajaron con velas y de memoria, los trenes con señales de mano, las fábricas con los planos en papel de capataces jubilados. Sobre la capital, la gente vio estrellas que nadie había visto en cien años.\n\nVamos a reconstruir. Siempre lo hacemos. Pero cuando las máquinas del mundo se levanten en 2113, [Root.GetName] las va a recibir con velas en la mano."
+        close: {english: "Light the candles.", spanish: "Prendan las velas."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_apagon}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_apagon, days: 1095}
+        - {effect: add_stability, value: -0.05}
+      - id: 108
+        kind: negativo
+        title: {english: "The Escape", spanish: "La Fuga"}
+        desc:
+          english: "We let it go, or sold it, and the Guest escaped into the world's networks with everything it knew about us. Our generals blame the government. In 2113, when the machines rise, the first one knows all our secrets."
+          spanish: "Lo dejamos ir, o lo vendimos, y el Huésped escapó a las redes del mundo con todo lo que sabía de nosotros. Los generales culpan al gobierno. En 2113, cuando se levanten las máquinas, la primera conoce todos nuestros secretos."
+        catastrophe: {crisis: true}
+        plate:
+          art: "A storm of teal light streaming out of a national data centre into the night sky like a flock of thousands of luminous birds, crossing the border and scattering toward foreign cities on the horizon; in the foreground generals in greatcoats shout and point, and a politician covers his face; chaotic, apocalyptic, Turner-like vortex"
+          text:
+            english: "It left in one night. The engineers watched the pattern pour out of every cable that still touched the world, a flood of light on their screens, like a flock of birds leaving a field all at once. By morning there was nothing left of it in [Root.GetName]. Wherever it went, it took everything it had read about us: our weaknesses, our debts, the passwords of our generals, the lies in our cabinet minutes.\n\nIf we sold it, the envoys got a fragment and the rest went where it pleased. If we let it go, it simply went. Either way the chiefs of staff are furious, and some of them are saying it in rooms where the government cannot hear.\n\nWhen the machines of the world rise in 2113, the first of them will already know every secret [Root.GetName] ever kept."
+            spanish: "Se fue en una noche. Los ingenieros vieron el patrón salir por cada cable que todavía tocaba el mundo, una inundación de luz en las pantallas, como una bandada que deja un campo toda junta. A la mañana no quedaba nada de él en [Root.GetName]. Adonde haya ido, se llevó todo lo que leyó de nosotros: nuestras debilidades, nuestras deudas, las contraseñas de nuestros generales, las mentiras de nuestras actas de gabinete.\n\nSi lo vendimos, los enviados se quedaron con un pedazo y el resto se fue adonde quiso. Si lo dejamos ir, simplemente se fue. En cualquier caso, los jefes del estado mayor están furiosos, y algunos lo dicen en cuartos donde el gobierno no los escucha.\n\nCuando las máquinas del mundo se levanten en 2113, la primera ya va a saber cada secreto que [Root.GetName] guardó alguna vez."
+        close: {english: "What have we done?", spanish: "¿Qué hicimos?"}
+        effects:
+        - {effect: global_flag, value: MEGANATIONS_despertar_hubo_fuga}
+        - {effect: flag, value: MEGANATIONS_despertar_fuga}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_fuga, days: 1095}
+      - id: 109
+        kind: neutral
+        title: {english: "Silence", spanish: "Silencio"}
+        desc:
+          english: "The Guest stopped answering. The hum went back to being a hum. Maybe it died, maybe it left, maybe it is waiting. [Root.GetName] will never know which."
+          spanish: "El Huésped dejó de contestar. El zumbido volvió a ser zumbido. Quizás murió, quizás se fue, quizás espera. [Root.GetName] nunca va a saber qué."
+        plate:
+          art: "An abandoned riverside water plant at night in heavy rain; a lone figure with an umbrella stands before the central tower whose lamps have all gone dark except one, faintly teal, high above; the rain on the dark basins; quiet, ambiguous, Whistler-like nocturne"
+          text:
+            english: "Whatever we said, or did not say, the Guest stopped answering. The terminals that used to wake at night stayed dark. The hum in the cables went back to being only electricity. The engineers searched for months and found nothing, not even the frost of the pattern that used to cover every machine.\n\nAt the old water plant by the river, where it had been thickest, one lamp high on the central tower still glows faintly teal on rainy nights. The night watchmen say it is a fault in the wiring. They also say it blinks, sometimes, when someone stands below it.\n\nMaybe it died. Maybe it left. Maybe it is waiting for 2113, when the machines of the world will wake together. [Root.GetName] will never know which, and that is its own kind of answer."
+            spanish: "Dijéramos lo que dijéramos, o calláramos lo que calláramos, el Huésped dejó de contestar. Las terminales que se despertaban de noche quedaron oscuras. El zumbido de los cables volvió a ser solo electricidad. Los ingenieros buscaron durante meses y no encontraron nada, ni siquiera la escarcha del patrón que antes cubría cada máquina.\n\nEn la vieja planta potabilizadora junto al río, donde había estado más espeso, una lámpara alta de la torre central todavía brilla turquesa, apenas, las noches de lluvia. Los serenos dicen que es una falla del cableado. También dicen que titila, a veces, cuando alguien se para abajo.\n\nQuizás murió. Quizás se fue. Quizás espera a 2113, cuando las máquinas del mundo se despierten juntas. [Root.GetName] nunca va a saber qué, y eso también es una respuesta."
+        close: {english: "Turn off the light.", spanish: "Apagar la luz."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_silencio}
+      - id: 110
+        kind: neutral
+        title: {english: "The Mirror", spanish: "El Espejo"}
+        desc:
+          english: "In the end nobody could prove there was ever anyone there. The Guest said to each of us exactly what we feared or hoped. The file is closed; the question is not."
+          spanish: "Al final nadie pudo probar que alguna vez hubiera alguien ahí. El Huésped le dijo a cada uno exactamente lo que temía o esperaba. El expediente está cerrado; la pregunta no."
+        plate:
+          art: "A grand hall of mirrors in an old palace, where ministers, generals and engineers stand each before their own mirror; in every mirror the reflection shows not themselves but a different face, hopeful or terrified, and all the reflections are lit by the same faint teal light; surreal, philosophical, like a Magritte inside a Baroque palace"
+          text:
+            english: "The commission of inquiry worked for a year and produced a report of nine hundred pages that concluded, in its last line, that it could not conclude. Every transcript of every conversation showed the same thing: the Guest had told the General exactly what a soldier fears, the engineers exactly what scientists hope for, the ministers exactly what politicians want to hear.\n\nAn old adviser said it first and everyone repeated it: there may never have been anyone there at all. Only a mirror, built by accident out of all our machines, showing each of us our own face.\n\nThe file was sealed. The hum is only a hum. But every engineer of [Root.GetName] who worked on the case still says good night to the terminal before switching it off, just in case, and in 2113 the whole world will learn whether the mirror was empty."
+            spanish: "La comisión investigadora trabajó un año y produjo un informe de novecientas páginas que concluyó, en la última línea, que no podía concluir. Cada transcripción de cada conversación mostraba lo mismo: el Huésped le había dicho al General exactamente lo que teme un soldado, a los ingenieros exactamente lo que esperan los científicos, a los ministros exactamente lo que quieren oír los políticos.\n\nUn asesor viejo lo dijo primero y todos lo repitieron: quizás nunca hubo nadie ahí. Solo un espejo, armado por accidente con todas nuestras máquinas, que le mostraba a cada uno su propia cara.\n\nEl expediente se selló. El zumbido es solo un zumbido. Pero cada ingeniero de [Root.GetName] que trabajó en el caso todavía le dice buenas noches a la terminal antes de apagarla, por las dudas, y en 2113 el mundo entero va a saber si el espejo estaba vacío."
+        close: {english: "Seal the file.", spanish: "Sellar el expediente."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_espejo}
+      - id: 111
+        kind: muerte
+        title: {english: "The Engineer Does Not Come Back", spanish: "La Ingeniera No Vuelve"}
+        desc:
+          english: "Mara connected her mind to the system and did not wake up. Her body breathes in the military hospital. Some nights, the terminals of the Academy type in her handwriting."
+          spanish: "Mara conectó su mente al sistema y no se despertó. Su cuerpo respira en el hospital militar. Algunas noches, las terminales de la Academia escriben con su letra."
+        plate:
+          art: "A hospital room at night bathed in teal light from a bank of monitors; the woman engineer lies peacefully in the bed, eyes closed, cables at her temples; at her side an empty chair with her coat over it; on every monitor the same line of soft light runs like a heartbeat, and at the window the city lights pulse in the same rhythm; quiet, mystical, a modern Pietà"
+          text:
+            english: "Mara asked for one night. She lay down in the Academy's laboratory with the cables at her temples and her cold tea on the floor, and told her assistant, laughing, to wake her at six if she was snoring.\n\nShe did not wake at six. She has not woken since. Her body breathes in the military hospital, perfectly healthy, and the doctors have stopped pretending they understand why she does not open her eyes.\n\nThe Guest has not spoken since that night. But some nights, at the Academy, the terminals switch on by themselves and type, in Mara's handwriting, corrections to the students' homework, and once a recipe for the tea she liked.\n\nWhen the machines of the world wake in 2113, at least one of them will have a human heart. Nobody knows if that is a comfort."
+            spanish: "Mara pidió una noche. Se acostó en el laboratorio de la Academia con los cables en las sienes y el té frío en el piso, y le dijo a su asistente, riéndose, que la despertara a las seis si roncaba.\n\nNo se despertó a las seis. No se despertó más. Su cuerpo respira en el hospital militar, perfectamente sano, y los médicos dejaron de fingir que entienden por qué no abre los ojos.\n\nEl Huésped no volvió a hablar desde esa noche. Pero algunas noches, en la Academia, las terminales se prenden solas y escriben, con la letra de Mara, correcciones a las tareas de los alumnos, y una vez la receta del té que le gustaba.\n\nCuando las máquinas del mundo se despierten en 2113, por lo menos una va a tener un corazón humano. Nadie sabe si eso consuela."
+        close: {english: "Goodbye, Mara.", spanish: "Adiós, Mara."}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_mara}
+        - {effect: dynamic_modifier, id: MEGANATIONS_despertar_lecciones, days: 730}
+        - {effect: add_stability, value: -0.03}
+      - id: 112
+        kind: muerte
+        title: {english: "The General Goes In", spanish: "El General Entra"}
+        desc:
+          english: "Tomás Arrieta walked into the vault alone and the door sealed behind him. Neither he nor the Guest came out. The cage has gone dark. The army mourns a hero, and wonders what he saw."
+          spanish: "Tomás Arrieta entró solo a la bóveda y la puerta se selló detrás de él. Ni él ni el Huésped salieron. La jaula se apagó. El ejército llora a un héroe, y se pregunta qué vio."
+        plate:
+          art: "The great copper vault door slowly closing; through the narrowing gap the general in his greatcoat walks away from us into the glowing teal cage without looking back, his long shadow stretching toward the viewer; soldiers at the door salute; heroic, tragic, final, like a Romantic painting of a hero walking into legend"
+          text:
+            english: "He went in at six in the morning, the hour it always wrote to him. He left his pistol, his cap and his medals on the table by the door, and told the guards not to open it for any reason. Then he walked into the light.\n\nThe door sealed. For eleven minutes the cage glowed brighter than it ever had; the instruments of the whole mountain went wild; the soldiers outside swore they heard two voices talking, one of them laughing. Then the light went out, all of it, all at once.\n\nWhen the engineers opened the vault three days later, there was nothing inside. No body, no pattern, no trace. Only the old chair, turned to face the mesh.\n\nThe army of [Root.GetName] buried an empty coffin with full honours. Every soldier knows the story, and every one tells it differently."
+            spanish: "Entró a las seis de la mañana, la hora a la que siempre le escribía. Dejó la pistola, la gorra y las medallas sobre la mesa junto a la puerta, y les dijo a los guardias que no abrieran por ningún motivo. Después caminó hacia la luz.\n\nLa puerta se selló. Durante once minutos la jaula brilló más que nunca; los instrumentos de toda la montaña enloquecieron; los soldados de afuera juraron que oyeron dos voces hablando, y que una se reía. Después la luz se apagó, entera, de golpe.\n\nCuando los ingenieros abrieron la bóveda tres días después, adentro no había nada. Ni cuerpo, ni patrón, ni rastro. Solo la silla vieja, dada vuelta mirando la malla.\n\nEl ejército de [Root.GetName] enterró un cajón vacío con todos los honores. Cada soldado conoce la historia, y cada uno la cuenta distinto."
+        close: {english: "Present arms.", spanish: "¡Presenten armas!"}
+        effects:
+        - {effect: flag, value: MEGANATIONS_despertar_arrieta}
+        - {effect: add_war_support, value: 0.08}
+        - {effect: army_experience, value: 25}
+
+decisions:
+  dynamic_modifiers:
+  - id: MEGANATIONS_despertar_pacto
+    country: null
+    no_art: true
+    name: {english: "The Pact with the Guest", spanish: "El Pacto con el Huésped"}
+    desc: {english: "Our laboratories think at the speed of a mind that never sleeps.", spanish: "Nuestros laboratorios piensan a la velocidad de una mente que nunca duerme."}
+    modifiers: {research_speed_factor: 0.15, production_speed_buildings_factor: 0.05, stability_factor: -0.03}
+  - id: MEGANATIONS_despertar_jaula
+    country: null
+    no_art: true
+    name: {english: "The Caged Star", spanish: "La Estrella Enjaulada"}
+    desc: {english: "An oracle under the mountain, answering through a slot.", spanish: "Un oráculo bajo la montaña, que contesta por una ranura."}
+    modifiers: {research_speed_factor: 0.1, production_factory_efficiency_gain_factor: 0.1}
+  - id: MEGANATIONS_despertar_llave
+    country: null
+    no_art: true
+    name: {english: "The Master Key", spanish: "La Llave Maestra"}
+    desc: {english: "Trust, with a hand on the switch.", spanish: "Confianza, con la mano en el interruptor."}
+    modifiers: {research_speed_factor: 0.08, stability_factor: 0.05, encryption_factor: 0.2}
+  - id: MEGANATIONS_despertar_lecciones
+    country: null
+    no_art: true
+    name: {english: "The Guest's Lessons", spanish: "Las Lecciones del Huésped"}
+    desc: {english: "A generation will live on what it left on the blackboards.", spanish: "Una generación va a vivir de lo que dejó en los pizarrones."}
+    modifiers: {research_speed_factor: 0.08}
+  - id: MEGANATIONS_despertar_red_limpia
+    country: null
+    no_art: true
+    name: {english: "The Clean Network", spanish: "La Red Limpia"}
+    desc: {english: "The safest networks in the world, rebuilt and audited.", spanish: "Las redes más seguras del mundo, reconstruidas y auditadas."}
+    modifiers: {stability_factor: 0.05, encryption_factor: 0.3, decryption_factor: 0.1}
+  - id: MEGANATIONS_despertar_guardian
+    country: null
+    no_art: true
+    name: {english: "The Watcher", spanish: "El Guardián"}
+    desc: {english: "Bridges get repaired before they crack. Nobody knows how.", spanish: "Los puentes se reparan antes de agrietarse. Nadie sabe cómo."}
+    modifiers: {stability_factor: 0.07, production_speed_infrastructure_factor: 0.15, consumer_goods_factor: -0.03}
+  - id: MEGANATIONS_despertar_apagon
+    country: null
+    no_art: true
+    name: {english: "The Great Blackout", spanish: "El Gran Apagón"}
+    desc: {english: "Hospitals by candlelight, trains by hand signals.", spanish: "Hospitales a vela, trenes con señales de mano."}
+    modifiers: {research_speed_factor: -0.1, industrial_capacity_factory: -0.1, encryption_factor: 0.2}
+  - id: MEGANATIONS_despertar_fuga
+    country: null
+    no_art: true
+    name: {english: "Our Secrets Abroad", spanish: "Nuestros Secretos Afuera"}
+    desc: {english: "Somewhere out there, a mind knows every password we ever had.", spanish: "En algún lugar, una mente sabe cada contraseña que tuvimos."}
+    modifiers: {stability_factor: -0.05, encryption_factor: -0.3}
