@@ -2603,3 +2603,21 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   Oyabun. SRS: El Lote 2101 / Los Hijos de la Cuba. En la larga, la última
   decisión depende de una del primer capítulo: acertar da el gran premio
   (cinco años), errar mata al héroe.
+- Auditoría estática externa (2026-11-07): las copias de scripts del juego que
+  escribe el mod (on_actions sin espíritus vanilla, decisiones genéricas
+  recortadas, los eventos genéricos que se conservan) llamaban a eventos de
+  1936 que, con events/ reemplazado, no existen (9 llamadas directas y 214 en
+  on_actions). No rompían la carga pero llenaban el error.log y alguna decisión
+  vieja no hacía nada. Ahora, al final del armado (cleanup.emit_event_refs):
+  en on_actions, efectos y eventos se borra la llamada (también las entradas
+  `peso = evento` de random_events); una decisión que dependía de un evento que
+  no existe queda como cáscara. El reporte dice cuántas. Test: test_eventos_rotos.
+  El otro punto (el Santuario de Gaia sin capital ni regiones al arrancar) es a
+  propósito: nace en la partida cuando el Imperio le pasa la selva, como Japón.
+- La Biblioteca (2026-11-07): README nuevo, docs/ con la historia del mundo,
+  crónicas de cada nación, enciclopedia generada desde el spec
+  (tools/docs/biblioteca.py), guías, cuentos, frases y merch. Test: test_biblioteca.
+- Interfaz de materiales reales, piloto (2026-11-07): 12 muestras de material
+  (assets/ui/materiales) y la ventana de eventos armada con ellas
+  (tools/arte/materiales_piloto.py -> assets/ui/materiales_piel, que se aplica
+  encima de la piel). Test: test_materiales_piloto.

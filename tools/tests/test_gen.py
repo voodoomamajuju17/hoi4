@@ -2757,6 +2757,40 @@ def test_materiales_piloto() -> None:
           and src.index("apply_skin(ctx)") < src.index("apply_skin(ctx, MATERIALES_DIR)"))
 
 
+def test_eventos_rotos() -> None:
+    section("auditoría: ninguna llamada a un evento que el mod no carga (events/ reemplazado) (2026-11-07)")
+    from tools.gen.emitters import cleanup
+    existen = {"meganations_x.1"}
+    on = ("on_startup = { effect = { country_event = generic.12 country_event = { id = meganations_x.1 days = 3 } "
+          "news_event = { id = wtt_news.40 days = 1 } # country_event = comentada.1\n } }\n"
+          "on_monthly = { random_events = { 100 = sea_event.3 50 = meganations_x.1 } }")
+    nuevo, rotas = cleanup.quitar_llamadas(on, existen)
+    check("eventos rotos: se borran las llamadas y las entradas de random_events que no existen; las buenas quedan",
+          sorted(rotas) == ["generic.12", "sea_event.3", "wtt_news.40"] and "meganations_x.1" in nuevo
+          and "generic.12" not in nuevo and "wtt_news.40" not in nuevo and "sea_event.3" not in nuevo
+          and "comentada.1" in nuevo, nuevo)
+    dec = ("cat = { buena = { complete_effect = { country_event = meganations_x.1 } } "
+           "rota = { complete_effect = { add_political_power = 10 country_event = generic.13 } } }")
+    check("eventos rotos: una decisión que llama a un evento que no existe se reconoce",
+          cleanup._decisiones_con_rotas(dec, existen) == {"rota"}, str(cleanup._decisiones_con_rotas(dec, existen)))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        existen = set()
+        for p in (mod / "events").glob("*.txt"):
+            existen |= set(cleanup._ID_EVENTO.findall(cleanup._sin_comentarios(p.read_text(encoding="utf-8-sig"))))
+        rotas = []
+        for carpeta in ("common/on_actions", "common/scripted_effects", "common/decisions", "events"):
+            for p in (mod / carpeta).glob("*.txt"):
+                for _a, _b, i in cleanup.llamadas_rotas(p.read_text(encoding="utf-8-sig"), existen):
+                    rotas.append(f"{carpeta}/{p.name}: {i}")
+        check("eventos rotos: el mod armado no llama a ningún evento que no existe", not rotas, "\n".join(rotas[:20]))
+        copia = (mod / "common/on_actions/01_monroe_fixture.txt").read_text(encoding="utf-8-sig")
+        check("eventos rotos: la copia del script del juego perdió la llamada a usa_vanilla.7 y el reporte lo dice",
+              "usa_vanilla.7" not in copia and "if = { limit = { tag = USA }" in copia
+              and (ctx.data.get("eventos_rotos") or {}).get("llamadas") == 1, copia[-400:])
+
+
 def test_directorio_siberia() -> None:
     section("el Directorio más frágil, Eurasia abastecida, Siberia se levanta (2026-11-06)")
     import yaml as _y
@@ -5613,6 +5647,7 @@ def main() -> int:
         test_aventuras_japon,
         test_biblioteca,
         test_materiales_piloto,
+        test_eventos_rotos,
         test_mecanicas_v2,
         test_forces,
         test_unit_names,

@@ -423,3 +423,135 @@ def emit_generic_advisors(ctx: BuildContext) -> None:
         ctx.note(f"asesores genéricos: {total} quitados de history/general ({', '.join(files)})")
     else:
         ctx.note("asesores genéricos: history/general no crea asesores políticos (nada que sacar)")
+
+
+# ---------------------------------------------------------------------------
+# 2026-11-07 (auditoría estática: "replace_path = events, pero archivos heredados siguen
+# invocando eventos no presentes"): las copias de scripts del juego que escribe el mod
+# (on_actions sin espíritus vanilla, decisiones genéricas recortadas, eventos genéricos que
+# se conservan) todavía llaman a eventos de 1936 que con events/ reemplazado no existen.
+# Al final del armado: en on_actions, efectos y eventos se borra la llamada; una decisión
+# que depende de un evento que no existe queda como cáscara (nunca se carga).
+
+_LLAMADA = re.compile(r"\b(country_event|news_event|state_event|unit_leader_event|operative_leader_event)"
+                      r"\s*=\s*(\{|[A-Za-z0-9_]+\.[0-9]+)")
+_ID_EVENTO = re.compile(r"(?m)^\s*id\s*=\s*([A-Za-z0-9_]+\.[0-9]+)")
+_PESO_EVENTO = re.compile(r"(?<![A-Za-z0-9_.])([0-9]+(?:\.[0-9]+)?)\s*=\s*([A-Za-z][A-Za-z0-9_]*\.[0-9]+)\b")
+
+
+def _cierre(text: str, i: int) -> int:
+    """Índice del '}' que cierra el '{' en i (respeta comentarios y comillas)."""
+    d, n = 0, len(text)
+    while i < n:
+        c = text[i]
+        if c == "#":
+            q = text.find("\n", i)
+            i = n if q < 0 else q
+            continue
+        if c == '"':
+            q = text.find('"', i + 1)
+            i = n if q < 0 else q + 1
+            continue
+        if c == "{":
+            d += 1
+        elif c == "}":
+            d -= 1
+            if d == 0:
+                return i
+        i += 1
+    return n - 1
+
+
+def _sin_comentarios(text: str) -> str:
+    """El texto con los comentarios en blanco (mismo largo, mismas posiciones)."""
+    return re.sub(r"#[^\n]*", lambda m: " " * len(m.group(0)), text)
+
+
+def llamadas_rotas(text: str, existen: set[str]) -> list[tuple[int, int, str]]:
+    """(inicio, fin, id) de cada llamada a un evento que no está en `existen`."""
+    limpio = _sin_comentarios(text)
+    out = []
+    for m in _LLAMADA.finditer(limpio):
+        if m.group(2) == "{":
+            a = m.start(2)
+            b = _cierre(limpio, a)
+            ident = _ID_EVENTO.search(limpio[a:b + 1].replace("{", "\n"))
+            if ident and ident.group(1) not in existen:
+                out.append((m.start(), b + 1, ident.group(1)))
+        elif m.group(2) not in existen:
+            out.append((m.start(), m.end(), m.group(2)))
+    return out
+
+
+def quitar_llamadas(text: str, existen: set[str]) -> tuple[str, list[str]]:
+    """Borra las llamadas rotas y las entradas `peso = evento` rotas de random_events."""
+    rotas = llamadas_rotas(text, existen)
+    ids = [r[2] for r in rotas]
+    for a, b, _ in sorted(rotas, reverse=True):
+        text = text[:a] + text[b:]
+    limpio = _sin_comentarios(text)
+    for m in reversed(list(_PESO_EVENTO.finditer(limpio))):
+        if m.group(2) not in existen and "random_events" in limpio[max(0, m.start() - 400):m.start()]:
+            ids.append(m.group(2))
+            text = text[:m.start()] + text[m.end():]
+    return text, ids
+
+
+def _decisiones_con_rotas(text: str, existen: set[str]) -> set[str]:
+    """Los ids de las decisiones (profundidad 2: categoría > decisión) que llaman eventos rotos."""
+    limpio = _sin_comentarios(text)
+    rotas = [a for a, _b, _i in llamadas_rotas(text, existen)]
+    if not rotas:
+        return set()
+    out, pila = set(), []
+    clave = re.compile(r"([A-Za-z0-9_@.]+)\s*=\s*$")
+    for i, c in enumerate(limpio):
+        if c == "{":
+            m = clave.search(limpio[max(0, i - 120):i])
+            pila.append((m.group(1) if m else "", i))
+        elif c == "}" and pila:
+            k, a = pila.pop()
+            if len(pila) == 1 and any(a < r < i for r in rotas):
+                out.add(k)
+    return out
+
+
+def emit_event_refs(ctx: BuildContext) -> None:
+    """Saca de los scripts que escribe el mod las llamadas a eventos que no existen."""
+    if "events" not in (ctx.spec.project.get("replace_paths") or []):
+        return
+    existen: set[str] = set()
+    for p in sorted((ctx.mod_root / "events").glob("*.txt")):
+        existen |= set(_ID_EVENTO.findall(_sin_comentarios(p.read_text(encoding="utf-8-sig", errors="replace"))))
+    carpetas = ("common/on_actions", "common/scripted_effects", "common/decisions", "events")
+    tocados, quitadas, apagadas = [], 0, []
+    for p in sorted({w for w in ctx.written}):
+        p = p if hasattr(p, "relative_to") else None
+        if p is None or p.suffix != ".txt" or not p.exists():
+            continue
+        try:
+            rel = p.relative_to(ctx.mod_root).as_posix()
+        except ValueError:
+            continue
+        if not rel.startswith(carpetas):
+            continue
+        text = p.read_text(encoding="utf-8-sig", errors="replace")
+        if rel.startswith("common/decisions"):
+            ids = _decisiones_con_rotas(text, existen)
+            if not ids:
+                continue
+            nuevo, encontradas = _blank_decisions(text, ids)
+            apagadas += sorted(encontradas)
+        else:
+            nuevo, rotas = quitar_llamadas(text, existen)
+            if not rotas:
+                continue
+            quitadas += len(rotas)
+        p.write_text(nuevo, encoding="utf-8")
+        tocados.append(rel)
+    ctx.data["eventos_rotos"] = {"archivos": tocados, "llamadas": quitadas, "decisiones": apagadas}
+    if tocados:
+        ctx.note(f"limpieza: {quitadas} llamadas a eventos del juego que el mod no carga (events/ reemplazado), "
+                 f"sacadas de {len(tocados)} archivos"
+                 + (f"; {len(apagadas)} decisiones que dependían de ellas quedan como cáscara "
+                    f"({', '.join(apagadas[:8])}{'...' if len(apagadas) > 8 else ''})" if apagadas else ""))

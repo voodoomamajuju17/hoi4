@@ -124,6 +124,7 @@ EMITTERS = [
     ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)
     ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)
+    ("eventos_rotos", em_cleanup.emit_event_refs),  # 2026-11-07 (auditoría): llamadas a eventos que no cargan
     ("balance", em_balance.emit),       # ultimo: resume lo que quedo
 ]
 

@@ -5,6 +5,8 @@ on_actions = {
 			if = { limit = { is_in_americas = yes } add_ideas = USA_monroe_doctrine_idea }
 			add_timed_idea = { idea = USA_monroe_doctrine_idea days = 30 }
 			add_ideas = { USA_monroe_doctrine_idea other_generic_idea }
+			# 2026-11-07 (auditoría): un evento de 1936 que con events/ reemplazado no existe
+			if = { limit = { tag = USA } country_event = { id = usa_vanilla.7 days = 2 } }
 		}
 	}
 }
