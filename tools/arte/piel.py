@@ -62,7 +62,7 @@ def cargar() -> dict:
     from tools.arte import auditoria
     juego = auditoria.cargar()
     spec["iconos"] = list(spec.get("iconos") or []) + [
-        {k: v for k, v in i.items() if k in ("id", "textura", "uso", "cuadros")} for i in juego.get("iconos") or []]
+        {k: v for k, v in i.items() if k in ("id", "textura", "uso", "cuadros", "familia")} for i in juego.get("iconos") or []]
     spec["tiras"] = list(spec.get("tiras") or []) + [
         {k: v for k, v in t.items() if k in ("textura", "cuadros", "uso", "borde", "iconos")} for t in juego.get("tiras") or []]
     return spec
@@ -327,6 +327,41 @@ def _caja(frame):
     return (min(xs), min(ys), max(xs) + 1, max(ys) + 1)
 
 
+# 2026-11-07 (capturas del diseñador: "agrandalas un poco"): los módulos nuevos ocupaban la caja
+# del dibujo original, que en el juego deja mucho aire; crecen un 40 % (sin salirse del cuadro)
+AGRANDAR_DISENADOR = 1.4
+
+
+def _agrandar(caja, w: int, h: int, factor: float):
+    """La caja crecida alrededor de su centro, sin salirse de w x h (1 píxel de margen)."""
+    l, t, r, b = caja
+    cx, cy = (l + r) / 2, (t + b) / 2
+    hw, hh = (r - l) * factor / 2, (b - t) * factor / 2
+    hw, hh = min(hw, cx - 1, w - 1 - cx), min(hh, cy - 1, h - 1 - cy)
+    hw, hh = max(hw, (r - l) / 2), max(hh, (b - t) / 2)
+    return (max(0, round(cx - hw)), max(0, round(cy - hh)), min(w, round(cx + hw)), min(h, round(cy + hh)))
+
+
+def _marcas_naranjas(frame):
+    """Las marquitas naranjas del original (cuántos tripulantes lleva la torreta, el nivel del
+    módulo): dicen algo, así que pasan tal cual encima del dibujo nuevo (2026-11-07)."""
+    from PIL import Image
+    out = Image.new("RGBA", frame.size, (0, 0, 0, 0))
+    src, dst = frame.load(), out.load()
+    for y in range(frame.height):
+        for x in range(frame.width):
+            r, g, b, a = src[x, y]
+            if a > 100 and r > 170 and 60 < g < 200 and b < 110 and r - b > 110:
+                dst[x, y] = (r, g, b, a)
+    # con su borde oscuro de 1 píxel, para que se lean sobre el cobre
+    borde = out.getchannel("A").point(lambda v: 255 if v else 0)
+    from PIL import ImageFilter
+    halo = Image.new("RGBA", frame.size, (20, 12, 6, 0))
+    halo.putalpha(borde.filter(ImageFilter.MaxFilter(3)).point(lambda v: 200 if v else 0))
+    halo.alpha_composite(out)
+    return halo
+
+
 def _en_caja(icon, size, caja):
     """El ícono nuevo dentro de la caja del original, centrado en ella."""
     from PIL import Image
@@ -369,7 +404,12 @@ def _icono(pieza: dict, original, material):
         icon = icon.resize((max(fw, round(icon.width * s)), max(fh, round(icon.height * s))), Image.LANCZOS)
         left, top = (icon.width - fw) // 2, (icon.height - fh) // 2
         return _join([icon.crop((left, top, left + fw, top + fh))] * n)
-    dib = _en_caja(icon, (fw, fh), _caja(frames[0]))
+    caja = _caja(frames[0])
+    if pieza.get("familia") == "disenador":
+        caja = _agrandar(caja, fw, fh, AGRANDAR_DISENADOR)
+    dib = _en_caja(icon, (fw, fh), caja)
+    if pieza.get("familia") == "disenador":
+        dib.alpha_composite(_marcas_naranjas(frames[0]))
     if uso == "combustible":
         # 0 estable, 1 subiendo (flechas verdes), 2 bajando (rojas), como el juego
         out = [dib]
