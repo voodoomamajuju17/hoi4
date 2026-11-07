@@ -164,7 +164,7 @@ decisions:
     - {effect: equipment, type: infantry_equipment, amount: 12000}
     - {effect: equipment, type: support_equipment, amount: 600}
     - {effect: equipment, type: convoy, amount: 120}
-    - {effect: equipment, type: train, amount: 40}
+    - {effect: equipment, type: train_equipment_1, amount: 40}   # 2026-11-07: "train" no existe (error.log)
     - {effect: equipment, type: motorized_equipment, amount: 300}
     - {effect: dynamic_modifier, id: MEGANATIONS_la_taiga_alimenta, days: 365}
     - effect: create_units
@@ -223,7 +223,7 @@ decisions:
         effects:
         - {effect: dynamic_modifier, id: MEGANATIONS_trenes_de_los_atamanes}
         - {effect: equipment, type: convoy, amount: 150}
-        - {effect: equipment, type: train, amount: 60}
+        - {effect: equipment, type: train_equipment_1, amount: 60}   # 2026-11-07: "train" no existe (error.log)
         - {effect: equipment, type: motorized_equipment, amount: 400}
   # ROOT = el que declara, FROM = el atacado
   - id: SIB_al_declarar

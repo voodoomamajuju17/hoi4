@@ -525,7 +525,11 @@ def _design(ctx, uid: str, design: dict, equip: dict[str, Block], modules: dict[
         optional = [s for s in reversed(order) if s in chosen and text((slots.get(s) or Block()).get("required")) != "yes"
                     and "engine" not in s]
         dropped = []
-        while total("weight") > total("thrust") > 0 and optional:
+        # 2026-11-07 (error.log: "'Ala de Obsidiana' - Thrust is lower than weight for 'Bombardeo
+        # estratégico', 'Ataque a puerto'"): en esas misiones la carga pesa más que en la ficha;
+        # `thrust_margin` pide ese margen de empuje de sobra
+        margen = float(design.get("thrust_margin", 1.0))
+        while total("weight") * margen > total("thrust") > 0 and optional:
             slot = optional.pop(0)
             dropped.append(f"{slot}={chosen.pop(slot)}")
             picked_from.pop(slot, None)

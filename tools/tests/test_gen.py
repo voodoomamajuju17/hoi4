@@ -2831,7 +2831,12 @@ def test_eventos_rotos() -> None:
         copia = (mod / "common/on_actions/01_monroe_fixture.txt").read_text(encoding="utf-8-sig")
         check("eventos rotos: la copia del script del juego perdió la llamada a usa_vanilla.7 y el reporte lo dice",
               "usa_vanilla.7" not in copia and "if = { limit = { tag = USA }" in copia
-              and (ctx.data.get("eventos_rotos") or {}).get("llamadas") == 1, copia[-400:])
+              and (ctx.data.get("eventos_rotos") or {}).get("llamadas") == 2, copia[-400:])
+        # 2026-11-07 (error.log: "Malformed token: usa.6" en 00_on_actions.txt, que el mod no copiaba)
+        oa = (mod / "common/on_actions/00_on_actions.txt")
+        check("eventos rotos: un on_actions del juego que el mod no copiaba va limpio con su nombre",
+              oa.exists() and "usa.6" not in oa.read_text(encoding="utf-8-sig")
+              and "1000 = 0" in oa.read_text(encoding="utf-8-sig"), oa.read_text(encoding="utf-8-sig")[-300:] if oa.exists() else "no esta")
 
 
 def test_directorio_siberia() -> None:

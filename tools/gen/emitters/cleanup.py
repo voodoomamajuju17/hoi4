@@ -14,6 +14,7 @@ TAG en el nombre) y las categorías quedan intactas: otras decisiones las usan.
 from __future__ import annotations
 
 import re
+from pathlib import Path
 
 from ..context import BuildContext
 from ..pdx import Block, banner_for, render
@@ -549,6 +550,27 @@ def emit_event_refs(ctx: BuildContext) -> None:
             quitadas += len(rotas)
         p.write_text(nuevo, encoding="utf-8")
         tocados.append(rel)
+    # 2026-11-07 (error.log del usuario: "Malformed token: usa.6" en 00_on_actions.txt): los
+    # on_actions del juego que el mod no copia también llaman a eventos que ya no cargan. Si
+    # tienen alguna, va una copia limpia con el mismo nombre (pisa a la del juego).
+    if ctx.vanilla is not None:
+        propios = {Path(t).name.lower() for t in tocados} | {
+            p.name.lower() for p in (ctx.mod_root / "common" / "on_actions").glob("*.txt")}
+        for src in sorted((ctx.vanilla.root / "common" / "on_actions").glob("*.txt")):
+            if src.name.lower() in propios:
+                continue
+            try:
+                text = src.read_text(encoding="utf-8-sig", errors="replace")
+            except OSError:
+                continue
+            nuevo, rotas = quitar_llamadas(text, existen)
+            if not rotas:
+                continue
+            rel = f"common/on_actions/{src.name}"
+            ctx.write_text(rel, banner_for(f"copia de {rel} del juego sin las llamadas a eventos que el mod no carga")
+                           + nuevo)
+            tocados.append(rel)
+            quitadas += len(rotas)
     ctx.data["eventos_rotos"] = {"archivos": tocados, "llamadas": quitadas, "decisiones": apagadas}
     if tocados:
         ctx.note(f"limpieza: {quitadas} llamadas a eventos del juego que el mod no carga (events/ reemplazado), "

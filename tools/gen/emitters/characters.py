@@ -311,7 +311,7 @@ def _emit_unit_traits(ctx: BuildContext) -> set[str]:
     for t in traits:
         tid = t["id"]
         tb = Block()
-        tb.add("random", False)
+        # 2026-11-07 (error.log: "Unexpected token: random"): los rasgos de generales no lo aceptan
         tb.add("type", t.get("type", "land"))
         tb.add("trait_type", t.get("trait_type", "personality_trait"))
         for key in skill_keys:

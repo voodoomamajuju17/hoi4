@@ -2632,3 +2632,8 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   - Panel de Política: tools/gen/emitters/politica_gui.py parte del countrypoliticsview.gui
     del juego, pone los espíritus en dos filas a tamaño completo (hasta 12) y baja 68 px lo
     de abajo; el fondo se estira. Test: test_politica_gui.
+- error.log del 2026-11-07: los on_actions del juego que el mod no copiaba (00_on_actions,
+  04_mtg...) van con copia limpia si llaman a eventos que no cargan ("Malformed token: usa.6");
+  las reglas de partida sin desc propia y los rasgos de generales sin `random` (el juego no los
+  acepta); trenes = train_equipment_1; el Ala de Obsidiana pide 35% de empuje de sobra
+  (`thrust_margin`) porque con bombas pesaba más que el empuje.

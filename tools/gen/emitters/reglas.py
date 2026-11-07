@@ -43,10 +43,8 @@ def _own_rules(ctx: BuildContext) -> None:
         body = Block()
         body.add("name", Quoted(r["id"]))
         body.add("group", Quoted(r.get("group", "RULE_GROUP_GENERAL")))
-        if r.get("desc"):
-            body.add("desc", Quoted(f"{r['id']}_DESC"))
-            ctx.loc.define_and_reference(f"{r['id']}_DESC", en=r["desc"]["english"], es=r["desc"]["spanish"],
-                                         file=LOC_FILE, origin="reglas")
+        # 2026-11-07 (error.log: "Unexpected token: desc"): el juego no acepta desc en la regla,
+        # solo en cada opción (que ya la tiene)
         ctx.loc.define_and_reference(r["id"], en=r["name"]["english"], es=r["name"]["spanish"],
                                      file=LOC_FILE, origin="reglas")
         for i, o in enumerate(r["options"]):
