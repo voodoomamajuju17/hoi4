@@ -63,7 +63,9 @@ def _que(item: dict) -> tuple[str, str]:
 
 def items(todos: bool = False) -> list[dict]:
     from tools.arte import arte
-    excluir = {ident for ident, _n, _q in prueba.ESPIRITUS}
+    # 2026-11-07: los de la prueba están en la lista de llegados; los que se rehacen (colores
+    # corregidos) se sacan de esa lista y vuelven a pedirse
+    excluir: set[str] = set()
     hechos = set() if todos else _llegados()
     out = []
     for i in arte.catalog():
@@ -107,7 +109,18 @@ def escribir(salida: Path) -> str:
     ]
     path = salida / "0_ESPIRITUS_AZULEJO.txt"
     path.write_text("\n".join(cabeza) + "\n" + "\n".join(pedido(i) for i in todos), encoding="utf-8")
-    return f"{path.name}: {len(todos)}"
+    # 2026-11-07: los de la prueba que se rehacen con los colores corregidos, también aparte
+    de_prueba = {ident for ident, _n, _q in prueba.ESPIRITUS}
+    otra = [i for i in todos if i["id"] in de_prueba]
+    extra = salida / "0_ESPIRITUS_AZULEJO_REHACER.txt"
+    if otra:
+        extra.write_text(
+            f"# {len(otra)} pedidos - azulejos de la prueba que se rehacen con el color de su nación corregido\n"
+            "# (también están dentro de 0_ESPIRITUS_AZULEJO.txt; este archivo es por si ese ya está corriendo)\n\n"
+            + "\n".join(pedido(i) for i in otra), encoding="utf-8")
+    elif extra.exists():
+        extra.unlink()
+    return f"{path.name}: {len(todos)}" + (f" ({extra.name}: {len(otra)})" if otra else "")
 
 
 def anotar_llegados(carpeta: str) -> list[str]:
