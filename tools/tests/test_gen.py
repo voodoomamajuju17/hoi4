@@ -2756,7 +2756,7 @@ def test_fabrica() -> None:
     # 2026-11-07: quedan pocos pines; para las tandas de prueba se suman los del diseñador
     dis = REPO_ROOT / "arte/pedidos/0_DISENADOR_2100.txt"
     peds_tanda = list(peds)
-    for extra in (dis, REPO_ROOT / "arte/pedidos/0_ESPIRITUS_PRUEBA.txt"):
+    for extra in (dis, REPO_ROOT / "arte/pedidos/0_ESPIRITUS_AZULEJO.txt"):
         if extra.exists():
             peds_tanda += F.leer_pedidos(extra.read_text(encoding="utf-8"), extra.parent)
     pin = next((p for p in peds if p.get("material")), None)
