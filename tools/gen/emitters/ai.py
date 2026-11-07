@@ -299,7 +299,8 @@ def _ai_edge(ctx: BuildContext, cfg: dict) -> None:
                                        origin="ai_edge")
     ctx.write_script(AI_EDGE_FILE, Block([(ref, body)]), source=SOURCE)
     majors = [c.tag for c in ctx.spec.countries if c.is_major]
-    each = Block([("limit", Block([("OR", Block([("original_tag", t) for t in majors]))])),
+    # 2026-11-07 ("DEMASIADOS espíritus"): solo a la IA; con el enable igual se le veía al jugador
+    each = Block([("limit", Block([("is_ai", True), ("OR", Block([("original_tag", t) for t in majors]))])),
                   ("add_dynamic_modifier", Block([("modifier", AI_EDGE)]))])
     root = Block([("on_actions", Block([("on_startup", Block([("effect",
                   Block([("every_country", each)]))]))]))])
@@ -356,7 +357,8 @@ def _naval_cap(ctx: BuildContext, cap: dict) -> None:
                                        es=name.get("spanish", "Flota completa"), file="meganations_ai",
                                        origin="naval_cap")
     ctx.write_script(NAVAL_CAP_FILE, Block([(ref, body)]), source=SOURCE)
-    effect = Block([("every_country", Block([("add_dynamic_modifier", Block([("modifier", NAVAL_CAP)]))]))])
+    effect = Block([("every_country", Block([("limit", Block([("is_ai", True)])),
+                                             ("add_dynamic_modifier", Block([("modifier", NAVAL_CAP)]))]))])
     root = Block([("on_actions", Block([("on_startup", Block([("effect", effect)]))]))])
     ctx.write_script(NAVAL_CAP_ON_ACTIONS, root, source=SOURCE)
     ctx.verify_keys("modifiers", {k: "naval_cap" for k in mods})

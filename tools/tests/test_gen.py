@@ -1904,8 +1904,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("377 modificadores dinamicos (8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 377 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("376 modificadores dinamicos (los Anios Inciertos quedan en uno, 2026-11-07; 8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 376 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2203,7 +2203,7 @@ def test_ai() -> None:
               and "has_navy_size = { size > 25 }" in cap and "industrial_capacity_dockyard = -2.0" in cap, cap[:600])
         cap_on = " ".join((mod / "common/on_actions/05_meganations_tope_naval.txt").read_text().split())
         check("tope naval: se da a todos al arrancar",
-              "on_startup = { effect = { every_country = { add_dynamic_modifier = { modifier = MEGANATIONS_tope_naval" in cap_on, cap_on)
+              "on_startup = { effect = { every_country = { limit = { is_ai = yes } add_dynamic_modifier = { modifier = MEGANATIONS_tope_naval" in cap_on, cap_on)
         check("HSN: el panel explica que es un nodo y lista los 8", "¿QUÉ ES?" in es_dec and "Hong Kong: [?HSN_nodo_hong_kong]" in es_dec)
         zwe_tree = " ".join((mod / "common/national_focus/ZWE_focus.txt").read_text().split())
         check("Anarquia: arbol de 7 focos", zwe_tree.count("focus = { id = ZWE_foco_") == 7, str(zwe_tree.count("focus = { id = ZWE_foco_")))
@@ -5454,8 +5454,8 @@ def test_guerras_civiles() -> None:
         check("frente al ultimatum la IA resiste mas (55%)", "factor = 55" in e21 and "factor = 45" in e21, e21[-700:])
         on = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
         check("los Anios Inciertos: todos los paises arrancan con menos estabilidad",
-              "on_startup" in on and "modifier = MEGANATIONS_anios_inciertos days = 730" in on
-              and "modifier = MEGANATIONS_anios_inciertos_2 days = 1461" in on, on[:500])
+              "on_startup" in on and "modifier = MEGANATIONS_anios_inciertos days = 1461" in on
+              and "anios_inciertos_2" not in on, on[:500])
 
 
 def test_lider_ck() -> None:

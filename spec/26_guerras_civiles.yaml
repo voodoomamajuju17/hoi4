@@ -148,6 +148,9 @@ decisions:
           - {effect: complete_focus, value: NRE_la_legion_decide}
 
   dynamic_modifiers:
+  # 2026-11-07 (captura del usuario: "hay DEMASIADOS espíritus todo el tiempo, ni un día
+  # pasó"): eran dos a la vez (-10% los dos primeros años, -5% hasta el cuarto); ahora uno solo
+  # con el promedio, cuatro años
   - id: MEGANATIONS_anios_inciertos
     country: null
     no_art: true
@@ -155,15 +158,7 @@ decisions:
     desc:
       english: 'The new century still has no owner. Every government rules on borrowed time, and everyone knows it.'
       spanish: 'El siglo nuevo todavía no tiene dueño. Cada gobierno manda con tiempo prestado, y todos lo saben.'
-    modifiers: {stability_factor: -0.05, '?stability_weekly': -0.0005}   # + el de abajo: -10% los dos primeros años
-  - id: MEGANATIONS_anios_inciertos_2
-    country: null
-    no_art: true
-    name: {english: The Uncertain Years (Waning), spanish: Los Años Inciertos (Pasando)}
-    desc:
-      english: 'The worst is over, but nobody trusts the calm yet.'
-      spanish: 'Lo peor pasó, pero nadie le cree todavía a la calma.'
-    modifiers: {stability_factor: -0.05}
+    modifiers: {stability_factor: -0.075, '?stability_weekly': -0.0004}
 
   on_actions:
   - id: MEGANATIONS_anios_inciertos_arranque
@@ -172,8 +167,7 @@ decisions:
     - effect: every_country
       when: {exists: true}
       effects:
-      - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos, days: 730}
-      - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos_2, days: 1461}
+      - {effect: dynamic_modifier, id: MEGANATIONS_anios_inciertos, days: 1461}
   # 2026-11-01 (pedido del usuario: "en el árbol de la NAS, más bonus en industria; ¿podés
   # poner más slots en sus provincias? Sin exagerar"): +1 espacio de construcción en cada
   # región de la NAS al arrancar (sus regiones de montaña casi no tenían lugar).
