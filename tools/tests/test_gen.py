@@ -3890,7 +3890,7 @@ def _diversion_checks(ctx) -> None:
     for cat_ in raw["categories"]:
         for d in cat_.get("decisions") or []:
             if d["id"].endswith("_proclamar_la_forma_final"):
-                need[d["id"][:3]] = len(d["available"]["controls_all"])
+                need[d["id"][:3]] = len((d["available"].get("controls_at_least") or {}).get("states") or d["available"].get("controls_all") or [])
     board = loc[loc.index(" MEGANATIONS_carrera_marcador_desc:"):].split("\n", 1)[0]
     panel = loc[loc.index(" MEGANATIONS_carrera_category_desc:"):].split("\n", 1)[0]
     check("marcador: El Marcador muestra las 8 potencias con su total de regiones clave; el panel, una línea (2026-11-03)",
