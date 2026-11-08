@@ -227,12 +227,15 @@ def _industrialize(ctx, spec, assignment, by_state, added) -> None:
 
 
 def _recortar(ctx, spec, assignment, by_state, added, kind) -> None:
-    """2026-11-08 ("sacale un 10% de las industrias iniciales"): cada país pierde la misma parte
-    de sus civiles y de sus militares, sin bajar del mínimo de militares de su tipo."""
-    scale = float(spec["scale"])
+    """2026-11-08 ("sacale un 10% de las industrias iniciales", solo a la SHD): el país pierde la
+    misma parte de sus civiles y de sus militares, sin bajar del mínimo de militares de su tipo."""
+    escalas = spec["scale"] if isinstance(spec["scale"], dict) else {t: spec["scale"] for t in kind}
     mins = spec.get("military_min") or {}
     total_civ = total_mil = 0
     for tag, k in kind.items():
+        if tag not in escalas:
+            continue
+        scale = float(escalas[tag])
         owned = [by_state[sid] for sid, t in assignment.items() if t == tag and sid in by_state]
         if not owned:
             continue
@@ -252,8 +255,8 @@ def _recortar(ctx, spec, assignment, by_state, added, kind) -> None:
                     total_mil += 1
                 else:
                     total_civ += 1
-    ctx.note(f"industrializacion: {round((1 - scale) * 100)}% menos de industria inicial "
-             f"({total_civ} civiles y {total_mil} militares menos en total)")
+    ctx.note(f"industrializacion: menos industria inicial ({', '.join(f'{t} {round((1 - float(v)) * 100)}%' for t, v in escalas.items())}): "
+             f"{total_civ} civiles y {total_mil} militares menos")
 
 
 def _militarize(ctx, spec, assignment, by_state, added, kind) -> None:

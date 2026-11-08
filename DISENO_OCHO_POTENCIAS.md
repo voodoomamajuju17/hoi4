@@ -2646,6 +2646,6 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   (MEDIOS) para los 322 retratos menos los agentes; 0_RETRATOS_MEDIOS.txt.
 - Partida de prueba 2100-2114 (2026-11-08): solo la NAS proclamó su forma final; la SHD llegó a
   481 regiones sin proclamarla. Las ocho formas finales piden ahora dos tercios de sus regiones
-  clave (`controls_at_least`, count_triggers) en vez de todas. 10% menos de industria inicial
-  (15_balance -> industrialization.scale 0.9). Bonos un poco más bajos: Mando preparado de la IA,
-  Hegemonía Mundial, el Ejército de Máquinas de la ASC y los Mandatos de la SHD.
+  clave (`controls_at_least`, count_triggers) en vez de todas. Solo a la SHD: 10% menos de
+  industria inicial (15_balance -> industrialization.scale {SHD: 0.9}) y los Mandatos un poco más
+  bajos (ataque +6%, fábricas +8%).

@@ -4305,7 +4305,7 @@ def test_tecnologias_e_ia() -> None:
         edge = " ".join((mod / "common/dynamic_modifiers/meganations_ia_preparada.txt").read_text().split())
         oa = " ".join((mod / "common/on_actions/05_meganations_ia_preparada.txt").read_text().split())
         check("ia: mando preparado solo mientras la maneja la IA, para las ocho potencias",
-              "enable = { is_ai = yes }" in edge and "production_factory_efficiency_gain_factor = 0.12" in edge
+              "enable = { is_ai = yes }" in edge and "production_factory_efficiency_gain_factor = 0.15" in edge
               and "original_tag = EFE" in oa and "original_tag = ZWE" not in oa, edge)
         check("ia: los ids de las unidades unicas se reemplazan por el mas parecido",
               any("rocket_artillery->artillery" in n for n in ctx.notes))
