@@ -34,6 +34,10 @@ def _body(ctx: BuildContext, *, with_path: bool) -> Block:
     if supported:
         b.add("supported_version", Quoted(supported))
 
+    # 2026-11-08: la miniatura del launcher es el emblema del mod (assets/ui/thumbnail.png)
+    if (ctx.spec.root.parent / "assets" / "ui" / "thumbnail.png").exists():
+        b.add("picture", Quoted("thumbnail.png"))
+
     if with_path:
         b.add("path", Quoted(f"mod/{ctx.spec.mod_folder}"))
 
@@ -87,6 +91,8 @@ def emit(ctx: BuildContext) -> None:
     header = banner_for(SOURCE)
 
     ctx.write_text("descriptor.mod", header + render(_body(ctx, with_path=False)))
+    if (ctx.spec.root.parent / "assets" / "ui" / "thumbnail.png").exists():
+        ctx.copy_asset("assets/ui/thumbnail.png", "thumbnail.png")
 
     launcher = ctx.out_root / f"{ctx.spec.mod_folder}.mod"
     launcher.parent.mkdir(parents=True, exist_ok=True)
