@@ -2791,8 +2791,8 @@ def test_retratos_medios() -> None:
           sorted({i["tag"] for i in retratos} - set(rm.MEDIOS)))
     hsn = next(i for i in todos if i["tag"] == "HSN")
     p = rm.pedido(hsn)
-    check("retratos: el pedido no trae la camara ni la luz de la foto de estudio, y la HSN es una carta de TCG",
-          "CAMERA:" not in p and "FRAMING:" not in p and "TRADING CARD GAME" in p and "NAME" in p, p[:600])
+    check("retratos: el pedido no trae la camara ni la luz de la foto de estudio, y la HSN es un tatuaje de marinero con su variante propia",
+          "CAMERA:" not in p and "FRAMING:" not in p and "SAILOR TATTOO" in p and "THIS PORTRAIT SPECIFICALLY" in p, p[:600])
     apf = rm.pedido(next(i for i in todos if i["tag"] == "APF"))
     check("retratos: los murales de la APF muestran la calle con gente", "STREET" in apf and "walking past" in apf)
     check("retratos: los que gustaron en la prueba no se vuelven a pedir",

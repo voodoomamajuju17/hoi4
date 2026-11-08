@@ -51,16 +51,15 @@ MEDIOS: dict[str, tuple[str, str]] = {
             "lens flares, a slight screen glare and visible pixels. Loud, glamorous, corporate showbiz.",
             "each card with its own pose, signature move vibe and corporate colour accent (navy, silver, "
             "turquoise, obsidian black, gold) matching their company or role"),
-    "HSN": ("TRADING CARD GAME CARD: a REAL, complete collectible card from a trading card game, photographed flat "
-            "on a ship's chart table, slightly worn edges: a full card layout like a real TCG - a title bar at the "
-            "top with the person's NAME (spelled exactly as given in WHO), a round cost gem in the top corner, a big "
-            "art window with the portrait, a type line under it, a rules box with two short abilities in small "
-            "print and a flavour line in italics (the small print may be illegible), a set symbol and a rarity "
-            "mark, a collector number, and two stat boxes in the bottom corners (attack and defence numbers). "
-            "Ornate brass-and-rope border with anchors, holographic rainbow foil on the art window. Palette: deep "
-            "sea teal, brass gold, ocean blue, holographic rainbow.",
-            "frame colour by role: leaders gold, admirals deep blue, generals rust red, ministers sea green; the "
-            "rarity higher for the most important characters"),
+    # 2026-11-08 ("rework total de HSN, olvidate de los TCG: TATUAJES DE MARINEROS. Cada uno muy
+    # legible y bien hecho, pero distintos estilos, distintas partes del cuerpo"): ver VARIANTES
+    "HSN": ("SAILOR TATTOO: a photograph of a REAL TATTOO of this person's portrait on real human skin (the "
+            "tattoo IS the portrait), healed and well done, very legible: the face inside the tattoo is clear and "
+            "recognisable. Real skin texture, pores, a few hairs, slight shine, the ink sitting in the skin (no "
+            "sticker look); the body part, the tattoo style and the technique are given in VARIATION and must be "
+            "followed exactly. Around the portrait, sailor-tattoo motifs that fit the person (anchors, swallows, "
+            "ropes, compasses, ships, waves, a banner WITHOUT readable words).",
+            "see the exact style, body part and technique below"),
     "NAS": ("TAROT CARD: one large hand-painted tarot card with gilded edges, lying on a woven Andean aguayo cloth "
             "of red, pink and orange stripes. Gouache and gold paint with real gloss and slight relief: the sun, "
             "mountain peaks, stepped terraces, condors or pumas around the person. No title, no numeral.",
@@ -174,6 +173,75 @@ MEDIOS: dict[str, tuple[str, str]] = {
 }
 
 
+# 2026-11-08 ("ponele más personalidad a cada uno, el generador insiste en sí mismo"): cada personaje
+# de una nación recibe una variante concreta distinta (en orden), además de la de la nación.
+_HSN_ESTILO = ["old-school American traditional (Sailor Jerry): bold black outlines, flat red, yellow, green",
+               "fine-line single-needle, minimalist, black only, very delicate",
+               "dotwork / stippling: the whole face built from thousands of dots, black and grey",
+               "black-and-grey realism with smooth soft shading, almost photographic",
+               "full-colour realism, saturated, painterly",
+               "Japanese irezumi: waves, wind bars and maple leaves around the portrait, strong colour",
+               "neo-traditional: thick lines, rich jewel colours, ornamental frame",
+               "watercolour tattoo: soft pastel splashes bleeding past the lines",
+               "blackwork / woodcut style: heavy black areas, engraved hatching",
+               "geometric / abstract: the face broken into triangles and lines, partly abstract but recognisable",
+               "trash polka: black and red, collage, smears and brush strokes",
+               "chicano lettering-free black and grey, smooth gradients, pin-up framing",
+               "glowing UV-reactive ink photographed under black light, neon colours"]
+_HSN_CUERPO = ["the inner forearm", "the upper back between the shoulder blades", "the chest over the heart",
+               "the outer calf", "the side of the ribs", "the back of the hand and fingers", "the full upper arm sleeve",
+               "the neck and throat", "the thigh", "the shoulder cap", "the whole back as a large piece",
+               "the inside of the wrist (small but legible)", "the shin"]
+_HSN_ACABADO = ["fresh, glossy, with a thin layer of ointment, slightly red around the lines",
+                "years old, perfectly healed, a little faded", "freshly finished, crisp, clean skin",
+                "on weathered tanned skin with old scars around it", "on pale skin with freckles",
+                "on dark skin, with ink chosen to read strongly on it", "partly covered by a rolled sleeve or a strap",
+                "with a drop of sea water on the skin"]
+
+VARIANTES: dict[str, list[str]] = {
+    "EFE": ["the saint holds a bio-steel sword like a palm branch", "a jaguar curled at the saint's feet",
+            "the saint stands knee-deep in a flooded jungle river", "two small kneeling donors painted at the bottom corners",
+            "the halo is made of living leaves and orchids", "the saint holds a glass vial of glowing amber sap",
+            "a triptych with two small side wings half open", "the saint is shown at night with candles lit around"],
+    "ASC": ["a tight close-up with the face cut by the poster edge", "the person shouting into a megaphone",
+            "the person at a control console with cables like rays", "the person among a march of identical workers",
+            "a diagonal composition with a giant red gear behind", "the poster pasted over an older torn poster",
+            "the person holding a child robot by the hand", "night version: the poster lit by a street lamp"],
+    "FCU": ["the person standing in a ring of fire", "the person descending from the ceiling on a platform",
+            "a split screen with their corporate logo glowing on the other half", "the person with a championship belt shaped like a company seal",
+            "confetti and dollar-sign shaped pyrotechnics", "the person pointing at the camera, arena crowd behind",
+            "a slow-motion shot with sparks frozen in the air", "the person in sunglasses with a holographic briefcase"],
+    "NAS": ["the Emperor", "the Chariot", "Strength", "the Hermit", "Justice", "the Star", "the Moon", "the Tower",
+            "the Hierophant", "Temperance", "the World", "the Magician", "the High Priestess", "Wheel of Fortune"],
+    "SHD": ["caught getting out of a black car in the rain", "seen through a canteen window", "at a parade, half hidden by a flag",
+            "in a corridor of server racks lit blue", "on a dam walkway at dawn, looking up at the camera",
+            "in a crowded train station, the only face in focus", "at a desk with stacks of files, lamp light",
+            "through binoculars' double circle, from far away"],
+    "APF": ["a market street with fruit stalls", "a school wall with children running past", "a bus stop with people waiting",
+            "a corner with a motorbike taxi parked", "a wall by the sea with fishing boats", "a stairway street with a woman carrying water",
+            "a wall half painted, the artist on a ladder", "a night street lit by a single neon sign"],
+    "NRE": ["cameo in sardonyx with a laurel border", "cameo in pink conch shell", "cameo in black and white onyx",
+            "cameo set in a bronze military medal", "cameo in a silver ring-like frame with sapphires", "cameo carved in blue agate",
+            "a cameo pendant on a gold chain", "a large cameo set in a dagger pommel"],
+    "ZJP": ["a kabuki pose with a fan", "a samurai crouch on a crane above the docks", "a portrait in a round window",
+            "a Hokusai wave crashing behind", "a night print with neon Osaka signs", "a triptych panel with a submarine",
+            "a beauty-print (bijin-ga) composition", "a print with falling cherry petals over a mech"],
+    "ZAL": ["a rally in the rain", "a factory floor with broken looms", "the steps of a palace", "a smashed server room",
+            "a pub crowd raising pints", "a coal mine entrance", "a railway platform with a steam train", "a front-page close-up"],
+}
+
+
+def variante(tag: str, indice: int) -> str:
+    """La variante concreta de un personaje (por su orden dentro de la nación)."""
+    if tag == "HSN":
+        vuelta = indice // len(_HSN_ESTILO)   # la segunda vuelta de estilos cae en otras partes del cuerpo
+        return (f"STYLE: {_HSN_ESTILO[indice % len(_HSN_ESTILO)]}; "
+                f"BODY PART: {_HSN_CUERPO[(indice * 5 + vuelta * 4) % len(_HSN_CUERPO)]}; "
+                f"FINISH: {_HSN_ACABADO[(indice * 3 + vuelta) % len(_HSN_ACABADO)]}")
+    lista = VARIANTES.get(tag)
+    return lista[indice % len(lista)] if lista else ""
+
+
 def _llegados() -> set[str]:
     if not LLEGADOS.exists():
         return set()
@@ -210,6 +278,16 @@ def items(todos: bool = False) -> list[dict]:
         if tag not in MEDIOS:
             continue
         out.append({**i, "medio_tag": tag})
+    # el índice de cada personaje dentro de su nación (con todos, para que no cambie al llegar otros)
+    orden: dict[str, list[str]] = {}
+    for i in arte.catalog():
+        if i["type"] == "leader_portrait":
+            orden.setdefault(i["tag"], []).append(i["id"])
+    for i in out:
+        ids = sorted(orden.get(i["tag"], []))
+        i["indice"] = ids.index(i["id"]) if i["id"] in ids else 0
+    # 2026-11-08: la HSN primero (prioridad)
+    out.sort(key=lambda i: (i["medio_tag"] != "HSN",))
     return out
 
 
@@ -218,7 +296,11 @@ def pedido(i: dict) -> str:
     quien, lugar = persona(i["description"])
     desc = (f"WHO (keep this person's face, age, ethnicity, hair, clothing and details): {quien} "
             + (f"SETTING to use inside the artwork if it fits the medium: {lugar}. " if lugar else "")
-            + f"MEDIUM: {medio} VARIATION: {varia}.")
+            + f"MEDIUM: {medio} VARIATION: {varia}."
+            + (f" THIS PORTRAIT SPECIFICALLY: {variante(i['medio_tag'], i.get('indice', 0))}." if variante(i['medio_tag'], i.get('indice', 0)) else "")
+            + " PERSONALITY: the pose, the hands, the prop and the expression must come from WHO (their job, their "
+              "story, their temper), so this portrait could never be confused with another character of the same "
+              "nation; do not reuse a generic heroic pose.")
     return "\n".join(["ASSET_REQUEST", "type: leader_portrait", f"id: {i['id']}", f"filename: {i['id']}.png",
                       "size: 624x840 (proporción 156x210; más grande con la misma proporción está bien)",
                       f"style: {ESTILO}", f"description: {desc}", "transparent_background: false", ""])
@@ -248,10 +330,11 @@ def escribir(salida: Path) -> str:
         f"# {len(lista)} pedidos - TODOS LOS RETRATOS en su medio real, uno por nación (2026-11-08)",
         "# Cada nación tiene su formato; la foto es del OBJETO (retablo, afiche, carta, mural...).",
         "#   EFE retablo con pan de oro | ASC afiche constructivista | FCU presentación de TV estilo lucha libre",
-        "#   HSN carta de TCG completa | NAS tarot | SHD foto de espía | APF mural en una calle con gente",
+        "#   HSN TATUAJE DE MARINERO (primero: se rehacen todos) | NAS tarot | SHD foto de espía | APF mural en la calle",
         "#   NRE camafeo | ZJP grabado ukiyo-e | ZAL recorte de diario | los menores, uno propio cada uno",
-        "# Sin los agentes de inteligencia (más adelante). La FCU y la HSN son los únicos con texto: el",
-        "# NOMBRE del personaje, tal cual está en WHO (revisar que no le cambie letras).",
+        "# Sin los agentes de inteligencia (más adelante). La FCU es la única con texto: el NOMBRE del",
+        "# personaje, tal cual está en WHO (revisar que no le cambie letras). Cada retrato trae su variante",
+        "# propia (THIS PORTRAIT SPECIFICALLY) para que no salgan todos iguales: respetarla.",
         "# Por nación: " + ", ".join(f"{t} {n}" for t, n in sorted(por_tag.items())),
         "# Al importar: python -m tools.arte.arte importar <carpeta> y después",
         "#              python -m tools.arte.arte retratos <carpeta> (anota los que llegaron).",
