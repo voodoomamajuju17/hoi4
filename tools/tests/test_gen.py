@@ -3074,7 +3074,9 @@ def test_arte() -> None:
         ya = {(t.get("texture") or "") for t in (ctx.spec.raw.get("scenario") or {}).get("tab_backgrounds", {}).get("items", [])
               if isinstance(t, dict)}
         check("piel: un pedido de icono distinto por pieza, y no se pisan los fondos de 11_scenario",
-              len(ui) == len(piel["iconos"]) >= 20 and len({i["description"] for i in ui}) == len(ui)
+              # 2026-11-07: un ícono puede ir a dos texturas (poder de mando) y los "a_mano" van aparte
+              len(ui) == len({p["id"] for p in piel["iconos"] if not p.get("a_mano")}) >= 20
+              and len({i["description"] for i in ui}) == len(ui)
               and all("EXACT SUBJECT" in i["description"] and i["style"] for i in ui)
               and not (set(piel["retexturar"]) & ya) and "gfx/interface/tiles/tiled_plain_bg.dds" in ya,
               f"{len(ui)} {set(piel['retexturar']) & ya}")
