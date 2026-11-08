@@ -2778,6 +2778,24 @@ def test_politica_gui() -> None:
     check("politica: si el juego cambio la pantalla, no se toca", roto is None and "spirit_grid" in faltan, faltan)
 
 
+def test_retratos_medios() -> None:
+    section("retratos en medios reales: cada nacion con su formato (2026-11-08)")
+    from tools.arte import retratos_medios as rm
+    todos = rm.items(todos=True)
+    from tools.arte.arte import catalog
+    retratos = [i for i in catalog() if i["type"] == "leader_portrait"]
+    check("retratos: todos los personajes tienen el medio de su nacion", len(todos) == len(retratos),
+          sorted({i["tag"] for i in retratos} - set(rm.MEDIOS)))
+    hsn = next(i for i in todos if i["tag"] == "HSN")
+    p = rm.pedido(hsn)
+    check("retratos: el pedido no trae la camara ni la luz de la foto de estudio, y la HSN es una carta de TCG",
+          "CAMERA:" not in p and "FRAMING:" not in p and "TRADING CARD GAME" in p and "NAME" in p, p[:600])
+    apf = rm.pedido(next(i for i in todos if i["tag"] == "APF"))
+    check("retratos: los murales de la APF muestran la calle con gente", "STREET" in apf and "walking past" in apf)
+    check("retratos: los que gustaron en la prueba no se vuelven a pedir",
+          "NRE_lucius_varro" not in {i["id"] for i in rm.items()})
+
+
 def test_materiales_piloto() -> None:
     section("interfaz de materiales reales: piloto de la ventana de eventos (2026-11-07)")
     from PIL import Image
@@ -5694,6 +5712,7 @@ def main() -> int:
         test_aventuras_japon,
         test_biblioteca,
         test_materiales_piloto,
+        test_retratos_medios,
         test_politica_gui,
         test_eventos_rotos,
         test_mecanicas_v2,

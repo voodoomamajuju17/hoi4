@@ -1073,7 +1073,9 @@ def pedidos() -> None:
     items = [i for i in catalog() if not i["done"] and not i.get("hand_written")
              and not (i["type"] == "game_icon" and i.get("tag") == "DISENADOR")
              # 2026-11-07: los espíritus van todos como azulejo (espiritus_azulejo.py)
-             and i["type"] != "national_spirit_icon"]
+             and i["type"] != "national_spirit_icon"
+             # 2026-11-08: los retratos van todos en su medio real (retratos_medios.py)
+             and i["type"] != "leader_portrait"]
     OUT.mkdir(parents=True, exist_ok=True)
     before = _previous_ids()
     old_new = (OUT / NEW_FILE).read_text(encoding="utf-8") if (OUT / NEW_FILE).exists() else None
@@ -1154,6 +1156,8 @@ def pedidos() -> None:
     # 2026-11-07: la prueba de estilo (espiritus_prueba.py) ya se eligió: azulejo
     from tools.arte import espiritus_azulejo
     summary.insert(0, espiritus_azulejo.escribir(OUT))
+    from tools.arte import retratos_medios
+    summary.insert(0, retratos_medios.escribir(OUT))
     # 2026-11-07: muestras de material para la interfaz de materiales reales (piloto)
     from tools.arte import materiales_gui
     summary.insert(0, materiales_gui.escribir(OUT))
@@ -1415,6 +1419,11 @@ if __name__ == "__main__":
         # python -m tools.arte.arte azulejos <carpeta>: anota los espíritus que llegaron como azulejo
         from tools.arte import espiritus_azulejo
         for line in espiritus_azulejo.anotar_llegados(sys.argv[2]):
+            print(line)
+    elif len(sys.argv) >= 3 and sys.argv[1] == "retratos":
+        # python -m tools.arte.arte retratos <carpeta>: anota los retratos que llegaron en su medio
+        from tools.arte import retratos_medios
+        for line in retratos_medios.anotar_llegados(sys.argv[2]):
             print(line)
     elif len(sys.argv) >= 2 and sys.argv[1] == "ficha":
         from tools.arte import ficha
