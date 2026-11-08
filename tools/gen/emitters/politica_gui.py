@@ -13,6 +13,7 @@ en esta versión del juego no aparece alguna, se avisa y no se toca la pantalla.
 from __future__ import annotations
 
 import re
+from pathlib import Path
 
 from ..context import BuildContext
 
@@ -95,22 +96,16 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
     return (None if faltan else texto), faltan
 
 
-def _fondo_alto(ctx: BuildContext) -> bool:
-    """El fondo del panel (el de la piel si está, si no el del juego) estirado DY píxeles
-    repitiendo una franja de la zona de los espíritus."""
+FONDO_ASSET = "assets/ui/politica/pol_view_bg_alto.dds"
+
+
+def fondo_alto(src: Path, dest: Path) -> None:
+    """El fondo del panel estirado DY píxeles repitiendo una franja de la zona de los espíritus.
+    Se corre una vez con Pillow (tools/arte) y queda en assets/: el armado no necesita Pillow
+    (2026-11-08, "No module named 'PIL'" en la compu del usuario)."""
     from PIL import Image
     from .. import art
-    repo = ctx.spec.root.parent
-    for src in (repo / "assets" / "ui" / "piel" / "gfx" / "interface" / "pol_view_bg.dds",
-                ctx.vanilla.root / "gfx" / "interface" / "pol_view_bg.dds"):
-        if src.exists():
-            break
-    else:
-        return False
-    try:
-        img = Image.open(src).convert("RGBA")
-    except OSError:
-        return False
+    img = Image.open(src).convert("RGBA")
     w, h = img.size
     corte = min(h - 2, 150)   # 44 + 150: a la altura de los espíritus
     franja = img.crop((0, corte, w, corte + 1))
@@ -119,11 +114,15 @@ def _fondo_alto(ctx: BuildContext) -> bool:
     for k in range(DY):
         out.paste(franja, (0, corte + k))
     out.paste(img.crop((0, corte, w, h)), (0, corte + DY))
-    dest = ctx.mod_root / FONDO_TEX
     dest.parent.mkdir(parents=True, exist_ok=True)
     raw = out.tobytes()
     art.write_dds(dest, out.width, out.height, [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)])
-    ctx.track(dest)
+
+
+def _fondo_alto(ctx: BuildContext) -> bool:
+    if not (ctx.spec.root.parent / FONDO_ASSET).exists():
+        return False
+    ctx.copy_asset(FONDO_ASSET, FONDO_TEX)
     return True
 
 
