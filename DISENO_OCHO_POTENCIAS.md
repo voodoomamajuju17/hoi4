@@ -2637,3 +2637,10 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   las reglas de partida sin desc propia y los rasgos de generales sin `random` (el juego no los
   acepta); trenes = train_equipment_1; el Ala de Obsidiana pide 35% de empuje de sobra
   (`thrust_margin`) porque con bombas pesaba más que el empuje.
+- Placas de nombre de los focos (2026-11-08): tools/arte/placas_focos.py rehace las 66 placas
+  (no disponible: acero ennegrecido; se puede empezar: vidrio ahumado turquesa; completado:
+  bronce/cobre; bordes de latón con el relieve del original) en assets/ui/materiales_piel.
+- Producción (2026-11-08): 5 botones de agregar línea y 12 casillas de filtro pasan a íconos de
+  cobre (piel_interfaz.yaml, `marca: true` pone tilde en la casilla marcada).
+- Retratos en medios reales (2026-11-08): tools/arte/retratos_medios.py, un medio por nación
+  (MEDIOS) para los 322 retratos menos los agentes; 0_RETRATOS_MEDIOS.txt.

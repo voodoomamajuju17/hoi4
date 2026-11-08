@@ -422,7 +422,7 @@ iconos:
     textura: gfx/interface/topbar/toolbar/production_button.dds
     uso: barra
     cuadros: 2
-    donde: botón de Producción de la barra superior
+    donde: "botón de Producción de la barra superior"
     dibujo: >-
       an industrial robot arm with three segments, its base at the lower left, rising diagonally to the
       upper right, its two-finger gripper holding a large cogwheel with eight square teeth that sits in
@@ -629,6 +629,140 @@ iconos:
       two hydrogen fuel cylinders standing upright side by side in front view, rounded tops, each with
       a valve on top and two bands around the body, the right one slightly behind the left. Keep the
       lower left quarter of the canvas quieter (fewer details): small arrows are added there later.
+
+  # 2026-11-08 (captura de Producción: "esto falta cambiar"): los botones de agregar línea y las
+  # casillas de filtro; en las casillas el cuadro marcado lleva tilde (`marca`)
+  - id: prod_linea_infanteria
+    textura: gfx/interface/add_prod_inf_art_line.dds
+    uso: barra
+    cuadros: 3
+    donde: "botón de Producción: agregar una línea de infantería y artillería"
+    dibujo: >-
+      a 2100 assault rifle lying horizontally above a short artillery howitzer in side view, and a bold plus sign on the right. Wider than tall (about 2:1).
+  - id: prod_linea_blindados
+    textura: gfx/interface/add_prod_armour_line.dds
+    uso: barra
+    cuadros: 3
+    donde: "botón de Producción: agregar una línea de blindados"
+    dibujo: >-
+      a low, wide modern battle tank in exact side view facing right, and a bold plus sign on the right. Wider than tall (about 2:1).
+  - id: prod_linea_aviones
+    textura: gfx/interface/add_prod_aircraft_line.dds
+    uso: barra
+    cuadros: 3
+    donde: "botón de Producción: agregar una línea de aviones"
+    dibujo: >-
+      a delta-wing jet seen from above pointing up-right, and a bold plus sign on the right. Wider than tall (about 2:1).
+  - id: prod_linea_naval
+    textura: gfx/interface/add_prod_naval_line.dds
+    uso: barra
+    cuadros: 3
+    donde: "botón de Producción: agregar una línea de astilleros"
+    dibujo: >-
+      a ship's anchor standing upright, and a bold plus sign on the right. Wider than tall (about 2:1).
+  - id: prod_reparacion_naval
+    textura: gfx/interface/naval_repair_view_button.dds
+    uso: barra
+    cuadros: 3
+    donde: "botón de Producción: ver los barcos en reparación"
+    dibujo: >-
+      a ship's anchor crossed with a large wrench, forming an X. Wider than tall (about 2:1).
+  - id: filtro_infanteria
+    textura: gfx/interface/inf_art_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: equipo de infantería y artillería"
+    dibujo: >-
+      an assault rifle crossed with a standing artillery shell.
+  - id: filtro_blindados
+    textura: gfx/interface/armour_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: blindados"
+    dibujo: >-
+      a modern tank seen from the front, wide and low.
+  - id: filtro_aviacion
+    textura: gfx/interface/air_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: aviones"
+    dibujo: >-
+      a jet fighter seen from above pointing up.
+  - id: filtro_barcos_de_linea
+    textura: gfx/interface/capital_ships_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: barcos de línea"
+    dibujo: >-
+      a battleship in exact side view with two big turrets, facing right.
+  - id: filtro_escoltas
+    textura: gfx/interface/screen_ships_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: escoltas"
+    dibujo: >-
+      a slim destroyer in exact side view with one small turret, facing right.
+  - id: filtro_otros_barcos
+    textura: gfx/interface/other_ships_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: submarinos y otros barcos"
+    dibujo: >-
+      a submarine in exact side view with its conning tower, facing right.
+  - id: filtro_obsoletos
+    textura: gfx/interface/outdated_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: equipo obsoleto"
+    dibujo: >-
+      an hourglass with most of the sand fallen.
+  - id: filtro_refuerzos
+    textura: gfx/interface/reinforcing_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro: divisiones que se refuerzan"
+    dibujo: >-
+      a soldier's helmet with a bold upward arrow beside it.
+  - id: filtro_mejoras
+    textura: gfx/interface/upgrading_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro: divisiones que se mejoran"
+    dibujo: >-
+      a cogwheel with a bold upward arrow in its centre.
+  - id: filtro_reservas
+    textura: gfx/interface/stockpiling_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro: equipo en reserva"
+    dibujo: >-
+      three supply crates stacked in a pyramid.
+  - id: filtro_recursos
+    textura: gfx/interface/resources_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro: recursos"
+    dibujo: >-
+      a mining pick lying across a faceted lump of ore.
+  - id: filtro_reacondicionar
+    textura: gfx/interface/refit_checkbox.dds
+    uso: barra
+    cuadros: 2
+    marca: true
+    donde: "filtro de Producción: barcos que se reacondicionan"
+    dibujo: >-
+      a ship's hull in side view with a wrench floating above it.
 
   # -- política: lo que se ve cuando falta la imagen
   - id: lider_desconocido

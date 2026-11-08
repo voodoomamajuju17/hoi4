@@ -62,7 +62,7 @@ def cargar() -> dict:
     from tools.arte import auditoria
     juego = auditoria.cargar()
     spec["iconos"] = list(spec.get("iconos") or []) + [
-        {k: v for k, v in i.items() if k in ("id", "textura", "uso", "cuadros", "familia")} for i in juego.get("iconos") or []]
+        {k: v for k, v in i.items() if k in ("id", "textura", "uso", "cuadros", "familia", "marca")} for i in juego.get("iconos") or []]
     spec["tiras"] = list(spec.get("tiras") or []) + [
         {k: v for k, v in t.items() if k in ("textura", "cuadros", "uso", "borde", "iconos")} for t in juego.get("tiras") or []]
     return spec
@@ -293,6 +293,19 @@ def _placa(frame, borde: int):
     return out
 
 
+def _tilde(w: int, h: int):
+    """Una tilde chica de latón con borde oscuro, abajo a la derecha (casilla marcada)."""
+    from PIL import Image, ImageDraw
+    out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(out)
+    s = max(6, min(w, h) // 3)
+    x, y = w - s - 3, h - s - 3
+    pts = [(x, y + s * 0.55), (x + s * 0.38, y + s), (x + s, y)]
+    d.line(pts, fill=(20, 12, 6, 255), width=4)
+    d.line(pts, fill=(240, 190, 90, 255), width=2)
+    return out
+
+
 def _chevrones(w: int, h: int, color, arriba: bool):
     """Dos flechas chicas (sube / baja) para los estados del combustible."""
     from PIL import Image, ImageDraw
@@ -397,6 +410,9 @@ def _icono(pieza: dict, original, material):
             dib = _contraste(_brillo(dib, 1.18 if i == 0 else 1.38), 1.18)
             placa.alpha_composite(_halo(dib))
             placa.alpha_composite(dib)
+            if pieza.get("marca") and i == 1:
+                # 2026-11-08 (casillas de filtro de Producción): el cuadro "marcado" lleva tilde
+                placa.alpha_composite(_tilde(fw, fh))
             out.append(placa)
         return _join(out)
     if uso == "foto":
