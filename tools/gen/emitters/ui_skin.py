@@ -72,6 +72,10 @@ PATTERNS: dict[str, list[str]] = {
     "ayudas": [r"tooltip"],
     # 2026-11-07 (rediseño de las placas de nombre de los focos): el juego las elige
     # por código (disponible, se puede empezar, completo, en curso) y no salen en el .gui
+    # 2026-11-08 (captura del diseñador de divisiones: "habría que generar los units icons y agregar
+    # símbolos de división"): los íconos de cada batallón y los símbolos de plantilla del juego
+    "unidades": [r"^GFX_unit_.*_icon_(?:medium|small)$", r"^GFX_group_.*_icon$"],
+    "simbolos_division": [r"^GFX_div_templ_\d+_(?:large|small)$"],
     "placas_de_focos": [r"^GFX_focus_(?:unavailable|can_start|completed|available|in_progress|"
                         r"ongoing|locked|bypassed|title|name)", r"titlebar"],
     "leyes": [r"^GFX_idea_(?:.*economic|.*mobilisation|.*conscription|.*export|.*trade|.*isolation|"
