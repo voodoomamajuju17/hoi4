@@ -1282,7 +1282,9 @@ def test_events() -> None:
         pf = decs_d[decs_d.index("EFE_proclamar_la_forma_final = {"):][:3000]
         check("forma final: nombre y bandera nuevos, nucleos y espiritu, con condiciones de tropas",
               "set_cosmetic_tag = EFE_GAIA" in pf and "add_ideas = EFE_dominio_de_gaia" in pf
-              and "has_army_size = { size > 129 }" in pf and "add_core_of = EFE" in pf, pf[:1500])
+              and "has_army_size = { size > 129 }" in pf and "add_core_of = EFE" in pf
+              # 2026-11-08: dos tercios de las regiones clave alcanzan (antes todas)
+              and "count_triggers = { amount = 4" in pf, pf[:1500])
         names_ct = (mod / "localisation/spanish/meganations_countries_l_spanish.yml").read_text(encoding="utf-8-sig")
         check("forma final: el nombre nuevo en todos los gobiernos",
               ' EFE_GAIA:0 "El Dominio de Gaia"' in names_ct and ' EFE_GAIA_fascism:0 "El Dominio de Gaia"' in names_ct
@@ -4303,7 +4305,7 @@ def test_tecnologias_e_ia() -> None:
         edge = " ".join((mod / "common/dynamic_modifiers/meganations_ia_preparada.txt").read_text().split())
         oa = " ".join((mod / "common/on_actions/05_meganations_ia_preparada.txt").read_text().split())
         check("ia: mando preparado solo mientras la maneja la IA, para las ocho potencias",
-              "enable = { is_ai = yes }" in edge and "production_factory_efficiency_gain_factor = 0.15" in edge
+              "enable = { is_ai = yes }" in edge and "production_factory_efficiency_gain_factor = 0.12" in edge
               and "original_tag = EFE" in oa and "original_tag = ZWE" not in oa, edge)
         check("ia: los ids de las unidades unicas se reemplazan por el mas parecido",
               any("rocket_artillery->artillery" in n for n in ctx.notes))

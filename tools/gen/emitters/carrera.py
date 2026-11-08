@@ -75,12 +75,14 @@ def destiny_states(ctx: BuildContext) -> dict[str, list[int]]:
             if not did.endswith("_proclamar_la_forma_final"):
                 continue
             states = []
-            for names in (d.get("available") or {}).get("controls_all") or []:
+            av = d.get("available") or {}
+            lista = av.get("controls_all") or (av.get("controls_at_least") or {}).get("states") or []
+            for names in lista:
                 sid = next((ids[normalize(n)] for n in names if normalize(n) in ids), None)
                 if sid is not None and sid not in states:
                     states.append(sid)
             out[did.split("_")[0]] = states
-            want = len((d.get("available") or {}).get("controls_all") or [])
+            want = len(lista)
             if len(states) < want and ctx.vanilla is not None and ids:
                 ctx.warn(f"carrera del destino: {did} pide {want} regiones y se encontraron {len(states)}; "
                          "el marcador cuenta solo esas")

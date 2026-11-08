@@ -1433,6 +1433,7 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       controls_state: [nombres]           -> controls_state (región por nombre)
       war_with: TAG                       -> has_war_with
       controls_all: [[nombres], ..]       -> controla todas esas regiones
+      controls_at_least: {amount: N, states: [[nombres], ..]} -> controla al menos N de esas
       neighbor_state_flag: X              -> any_neighbor_state tiene esa bandera (en regiones)
       country: { tag, when: {..} }        -> TAG = { .. }
       any: [ {..}, {..} ]                 -> OR
@@ -1670,6 +1671,19 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
                 for sid in ids:
                     block.add("controls_state", sid)
                     triggers_used.setdefault("controls_state", owner)
+        elif key == "controls_at_least":
+            # 2026-11-08 ("que no estén persiguiendo sus formas finales"): con controls_all una sola
+            # región en manos ajenas bloqueaba la forma final para siempre; acá alcanza con `amount`
+            grupos = Block()
+            for names in value["states"]:
+                ids = expand_states([names])
+                if len(ids) == 1:
+                    grupos.add("controls_state", ids[0])
+                elif ids:
+                    grupos.add("OR", Block([("controls_state", sid) for sid in ids]))
+            triggers_used.setdefault("controls_state", owner)
+            triggers_used.setdefault("count_triggers", owner)
+            block.add("count_triggers", Block([("amount", int(value["amount"]))] + grupos.entries))
         elif key == "coastal":
             block.add("is_coastal", bool(value))
             triggers_used.setdefault("is_coastal", owner)

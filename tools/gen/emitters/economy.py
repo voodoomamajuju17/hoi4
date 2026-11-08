@@ -222,6 +222,38 @@ def _industrialize(ctx, spec, assignment, by_state, added) -> None:
             msg += f"; faltan {need - placed}: no hay mas slots libres"
         ctx.note(msg)
     _militarize(ctx, spec, assignment, by_state, added, kind)
+    if spec.get("scale") is not None:
+        _recortar(ctx, spec, assignment, by_state, added, kind)
+
+
+def _recortar(ctx, spec, assignment, by_state, added, kind) -> None:
+    """2026-11-08 ("sacale un 10% de las industrias iniciales"): cada país pierde la misma parte
+    de sus civiles y de sus militares, sin bajar del mínimo de militares de su tipo."""
+    scale = float(spec["scale"])
+    mins = spec.get("military_min") or {}
+    total_civ = total_mil = 0
+    for tag, k in kind.items():
+        owned = [by_state[sid] for sid, t in assignment.items() if t == tag and sid in by_state]
+        if not owned:
+            continue
+
+        def have(s, b):
+            return (s.buildings or {}).get(b, 0) + added[s.id].get(b, 0)
+        for b, piso in (("industrial_complex", 0), ("arms_factory", int(mins.get(k, 0)))):
+            hay = sum(have(s, b) for s in owned)
+            cortar = min(round(hay * (1 - scale)), max(0, hay - piso))
+            while cortar > 0:
+                s = max(owned, key=lambda x: (have(x, b), -x.id))   # siempre de la más industrial
+                if have(s, b) <= 0:
+                    break
+                added[s.id][b] -= 1
+                cortar -= 1
+                if b == "arms_factory":
+                    total_mil += 1
+                else:
+                    total_civ += 1
+    ctx.note(f"industrializacion: {round((1 - scale) * 100)}% menos de industria inicial "
+             f"({total_civ} civiles y {total_mil} militares menos en total)")
 
 
 def _militarize(ctx, spec, assignment, by_state, added, kind) -> None:
