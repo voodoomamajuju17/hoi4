@@ -77,6 +77,15 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
          lambda m: f"size = {{ width = {m.group(1)} height = {ALTO_FILA * FILAS} }}"),
         ("spirit_grid", r'max_slots\s*=\s*\{\s*x\s*=\s*(\d+)\s*y\s*=\s*1\s*\}',
          lambda m: f"max_slots = {{ x = {m.group(1)} y = {FILAS} }}"),
+        # 2026-11-08 (captura: "los espíritus se ven exactamente del mismo tamaño"): con más de 6 el
+        # juego usa igual la grilla chica; esa también pasa a casillas grandes, 6 por fila
+        ("spirit_grid_over_defined", r'size\s*=\s*\{\s*width\s*=\s*\d+\s*height\s*=\s*\d+\s*\}',
+         lambda m: f"size = {{ width = 354 height = {ALTO_FILA * FILAS} }}"),
+        ("spirit_grid_over_defined", r'slotsize\s*=\s*\{\s*width\s*=\s*\d+\s*height\s*=\s*\d+\s*\}',
+         lambda m: f"slotsize = {{ width = 59 height = {ALTO_FILA} }}"),
+        ("spirit_grid_over_defined", r'max_slots_horizontal\s*=\s*\d+', lambda m: "max_slots_horizontal = 6"),
+        ("spirit_grid_over_defined", r'position\s*=\s*\{\s*x\s*=\s*\d+\s*y\s*=\s*\d+\s*\}',
+         lambda m: "position = { x = 1 y = 2 }"),
         ("national_spirit_container", r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s*height\s*=\s*(\d+)\s*\}',
          lambda m: f"size = {{ width = {m.group(1)} height = {int(m.group(2)) + DY} }}"),
         ("pol_view_bg", r'spriteType\s*=\s*"GFX_pol_view_bg"', lambda m: f'spriteType = "{FONDO}"'),

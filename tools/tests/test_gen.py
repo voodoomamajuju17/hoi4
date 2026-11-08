@@ -2754,7 +2754,8 @@ def test_politica_gui() -> None:
             containerWindowType = { name = "national_spirit_container" position = { x = 99 y = 16 } size = { width = 364 height = 74 }
                 gridboxtype = { name = "spirit_grid" position = { x = 1 y = 2 } size = { width = 354 height = 68 }
                     slotsize = { width = 59 height = 68 } max_slots = { x = 6 y = 1 } }
-                gridboxtype = { name = "spirit_grid_over_defined" size = { width = 330 height = 68 } } } }
+                gridboxtype = { name = "spirit_grid_over_defined" position = { x = 10 y = 1 } size = { width = 330 height = 68 }
+                    slotsize = { width = 33 height = 34 } max_slots_horizontal = 10 } } }
         containerWindowType = { name = "ideas" position = { x = 0 y = 425 } }
         iconType = { name = "tutorial_glow" position = { x= 12 y = 383 } }
         iconType = { name = "politics_bottom" position = { x = -2 y = 383 } }
@@ -2773,7 +2774,7 @@ def test_politica_gui() -> None:
           "max_slots = { x = 6 y = 2 }" in o and "size = { width = 354 height = 136 }" in o
           and "size = { width = 364 height = 142 }" in o and "position = { x = 0 y = 493 }" in o
           and "position = { x = 260 y = 252 }" in o and 'spriteType = "GFX_mn_pol_view_bg_alto"' in o
-          and "size = { width = 330 height = 68 }" in o, o[:900])
+          and "slotsize = { width = 59 height = 68 } max_slots_horizontal = 6" in o, o[:900])
     roto, faltan = pg.parchar(gui.replace("spirit_grid\"", "otra_grilla\""))
     check("politica: si el juego cambio la pantalla, no se toca", roto is None and "spirit_grid" in faltan, faltan)
 
