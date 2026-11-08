@@ -3937,7 +3937,7 @@ def _diversion_checks(ctx) -> None:
           "MEGANATIONS_frenar_FROM = yes" in co and "modifier = MEGANATIONS_coalicion_ginebra days = 1825" in co
           and "has_country_flag = MEGANATIONS_en_coalicion NOT = { tag = ROOT }" in co
           and "diplomatic_relation = { country = ROOT relation = guarantee active = yes }" in co
-          and "ROOT = { diplomatic_relation = { country = PREV relation = guarantee active = yes } }" in co, co)
+          and "ROOT = { if = { limit = { NOT = { has_guaranteed = PREV } } diplomatic_relation = { country = PREV relation = guarantee active = yes } } }" in co, co)
     tr = eff[eff.index("MEGANATIONS_coalicion_tributo = {"):][:700]
     check("tributo: pacto de no agresion con el fuerte, que cobra 50 PP",
           "diplomatic_relation = { country = FROM relation = non_aggression_pact active = yes }" in tr
@@ -4417,7 +4417,7 @@ def test_junta_militar() -> None:
         e40, e41, e42, e43, e44, e45, e46, e47, e48, e49 = (evb(n) for n in range(40, 50))
         check("EFE: un movimiento liberal del Cono Sur, alineado con la Union (se suma a su faccion o lo garantiza)",
               "start_civil_war = { ideology = democratic" in e40 and "set_cosmetic_tag = EFE_LIBERAL" in e40
-              and "FCU = { if = { limit = { is_faction_leader = yes } add_to_faction = PREV } else = { diplomatic_relation = { country = PREV relation = guarantee active = yes } }" in e40
+              and "FCU = { if = { limit = { is_faction_leader = yes } if = { limit = { NOT = { has_war_with = PREV } } add_to_faction = PREV } } else = { if = { limit = { NOT = { has_guaranteed = PREV } } diplomatic_relation = { country = PREV relation = guarantee active = yes } } }" in e40
               and "target = PREV" in e40 and "set_global_flag = MEGANATIONS_rebelion_EFE" in e40, e40[-1200:])
         check("FCU: sus zonas se pasan a las Tierras Sin Ley, con impulso y tropas en Norteamerica",
               "ZAN = { annex_country = { target = ZNR transfer_troops = yes } }" in e41 and "modifier = MEGANATIONS_tierras_sin_ley_crecen days = 365" in e41
@@ -4432,8 +4432,8 @@ def test_junta_militar() -> None:
         check("ASC: bombas en fabricas, datacenters y baterias", "damage_building = { type = industrial_complex" in e48
               and "var = ASC_computo value = -8" in e48 and "modifier = MEGANATIONS_apagones days = 90" in e48, e48)
         check("ASC: el Reino del Valhalla, con el apoyo del EFE y de Roma", "set_cosmetic_tag = ASC_VALHALLA" in e49
-              and "EFE = { diplomatic_relation = { country = PREV relation = guarantee active = yes }" in e49
-              and "NRE = { diplomatic_relation = { country = PREV relation = guarantee active = yes }" in e49, e49[-900:])
+              and "EFE = { if = { limit = { NOT = { has_guaranteed = PREV } } diplomatic_relation = { country = PREV relation = guarantee active = yes } }" in e49
+              and "NRE = { if = { limit = { NOT = { has_guaranteed = PREV } } diplomatic_relation = { country = PREV relation = guarantee active = yes } }" in e49, e49[-900:])
         dec = flat(mod / "common/decisions/meganations_decisions.txt")
         check("ASC: la caza de los Hijos de Odin (muy dificil de frenar)", "ASC_valhalla_redadas = {" in dec
               and "var = ASC_valhalla value = -8" in dec and "var = ASC_valhalla value = -20" in dec and "ASC_valhalla_infiltrar = {" in dec)
@@ -4444,7 +4444,7 @@ def test_junta_militar() -> None:
               "load_focus_tree = { tree = meganations_junta_focus keep_completed = no }" in e44 and "set_country_flag = MEGANATIONS_junta" in e44
               and "modifier = MEGANATIONS_paranoia_sol_negro" in e44 and "set_cosmetic_tag = NAS_GENERALES" in e44, e44[-800:])
         check("SHD: vuelven los comunistas de la IA, con el apoyo de la Comuna",
-              "start_civil_war = { ideology = communism" in e45 and "ASC = { diplomatic_relation = { country = PREV relation = guarantee active = yes }" in e45
+              "start_civil_war = { ideology = communism" in e45 and "ASC = { if = { limit = { NOT = { has_guaranteed = PREV } } diplomatic_relation = { country = PREV relation = guarantee active = yes } }" in e45
               and "set_cosmetic_tag = SHD_COMUNA_ROJA" in e45, e45[-800:])
         check("APF: varios pueblos se levantan (el frente nacionalista y los dos satelites)",
               "set_cosmetic_tag = APF_NACIONALISTAS" in e46 and "end_puppet = ZET" in e46 and "end_puppet = ZSA" in e46
@@ -5188,8 +5188,8 @@ def test_albion() -> None:
               and "set_cosmetic_tag = ZAL_VICTORIANA" in ev)
         focus = " ".join((mod / "common/national_focus/ZAL_focus.txt").read_text(encoding="utf-8-sig").split())
         check("hacia el pasado: se alia con Roma contra la Comuna; hacia el futuro: vuelve con la Comuna en paz",
-              focus.count("add_to_faction = ZAL") == 2 and "NRE = { add_to_faction = ZAL" in focus
-              and "ASC = { add_to_faction = ZAL" in focus and "white_peace = ASC" in focus and "set_politics" in focus, focus[:300])
+              focus.count("add_to_faction = ZAL") == 2 and "NRE = { if = { limit = { NOT = { has_war_with = ZAL } } add_to_faction = ZAL" in focus
+              and "ASC = { if = { limit = { NOT = { has_war_with = ZAL } } add_to_faction = ZAL" in focus and "white_peace = ASC" in focus and "set_politics" in focus, focus[:300])
 
 
 def test_japon() -> None:
