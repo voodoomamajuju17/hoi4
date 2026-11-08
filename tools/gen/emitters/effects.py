@@ -1247,7 +1247,7 @@ def render_effects(owner: str, items: list[dict], known,
             if kind not in RELATIONS:
                 raise SpecError(f"{owner}: relation.type '{kind}' ({', '.join(sorted(RELATIONS))})", where=where)
             rel = Block([("country", target), ("relation", kind), ("active", True)])
-            if kind == "guarantee" and target not in SCOPES:
+            if kind == "guarantee":   # 2026-11-08: también con PREV/FROM/ROOT (error.log)
                 # error.log 2026-10-03: "The relation(guarantee) already exists"
                 block.add("if", Block([("limit", Block([("NOT", Block([("has_guaranteed", target)]))])),
                                        ("diplomatic_relation", rel)]))
@@ -1266,7 +1266,10 @@ def render_effects(owner: str, items: list[dict], known,
             continue
         if effect == "end_guarantee":
             # el país del scope deja de garantizar a `value`
-            block.add("diplomatic_relation", Block([("country", item["value"]), ("relation", "guarantee"), ("active", False)]))
+            # 2026-11-08 (error.log: "The relation(guarantee) already exists" x200): solo si la garantía existe
+            rel = Block([("country", item["value"]), ("relation", "guarantee"), ("active", False)])
+            block.add("if", Block([("limit", Block([("has_guaranteed", item["value"])])), ("diplomatic_relation", rel)]))
+            ec.triggers_used.setdefault("has_guaranteed", owner)
             effects_used.setdefault("diplomatic_relation", owner)
             continue
         if effect == "create_faction":
@@ -1282,7 +1285,11 @@ def render_effects(owner: str, items: list[dict], known,
             effects_used.setdefault("create_faction", owner)
             continue
         if effect == "add_to_faction":
-            block.add("add_to_faction", item["value"])
+            # 2026-11-08 (error.log: "tried to add ... to ... faction while nations are at war"): solo si
+            # no están en guerra entre ellos
+            block.add("if", Block([("limit", Block([("NOT", Block([("has_war_with", item["value"])]))])),
+                                   ("add_to_faction", item["value"])]))
+            ec.triggers_used.setdefault("has_war_with", owner)
             effects_used.setdefault("add_to_faction", owner)
             continue
         if effect == "equipment":

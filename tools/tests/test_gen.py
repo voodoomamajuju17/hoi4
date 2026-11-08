@@ -1123,7 +1123,7 @@ def test_routes() -> None:
         mundo = " ".join((mod / "events/meganations_mundo.txt").read_text(encoding="utf-8-sig").split())
         e40 = mundo[mundo.index("id = meganations_mundo.40"):][:900]
         check("aceptar el pacto: no agresion y garantia mutua",
-              "relation = non_aggression_pact" in e40 and "FROM = { diplomatic_relation = { country = ROOT relation = guarantee" in e40, e40)
+              "relation = non_aggression_pact" in e40 and "FROM = { if = { limit = { NOT = { has_guaranteed = ROOT } } diplomatic_relation = { country = ROOT relation = guarantee" in e40, e40)
         e43 = mundo[mundo.index("id = meganations_mundo.43"):][:2500]
         # 2026-10-08: la paz blanca devolvía todo lo ocupado (el EFE le ganaba a la NAS y volvían al status quo)
         check("ofrecer la paz: si se acepta, cada uno se queda con lo que ocupa (armisticio, no paz blanca)",
@@ -2246,7 +2246,7 @@ def test_ai() -> None:
         zwe_ev = " ".join((mod / "events/meganations_zwe.txt").read_text().split())
         check("Eurasia: la Union de los Senores (crea la faccion y convoca a las demas)",
               'create_faction = MN_faction_the_warlords_union' in zwe_ev and "id = meganations_zwe.11" in zwe_ev
-              and "ZWE = { add_to_faction = ROOT }" in zwe_ev, zwe_ev[:500])
+              and "ZWE = { if = { limit = { NOT = { has_war_with = ROOT } } add_to_faction = ROOT } }" in zwe_ev, zwe_ev[:500])
         zwi_ev = " ".join((mod / "events/meganations_zwi.txt").read_text().split())
         check("Indostan: si cae Bagdad entra en las guerras de los Emiratos",
               "add_to_faction = ZWM" in zwi_ev and "add_to_war = { targeted_alliance = ZWM enemy = PREV }" in zwi_ev, zwi_ev[:600])
@@ -2295,7 +2295,7 @@ def test_ai() -> None:
         sa = se_c[se_c.index("ANARQUIA_sin_alianzas = {"):][:2500]
         check("Anarquia: sale de las facciones de las potencias y pierde sus garantias",
               "is_in_faction_with = FCU" in sa and "leave_faction = yes" in sa
-              and "FCU = { diplomatic_relation = { country = ROOT relation = guarantee active = no } }" in sa, sa[:600])
+              and "FCU = { if = { limit = { has_guaranteed = ROOT } diplomatic_relation = { country = ROOT relation = guarantee active = no } } }" in sa, sa[:600])
         check("cadenas: con fecha minima (no saltan todas el dia 2)", "date > 2101.1.1" in se_c and "date > 2100.9.1" in se_c)
         gl = se_c[se_c.index("EFE_guerra_limitada = {"):][:1500]
         check("guerra limitada: hasta 2104, al 40% de rendicion del rival salta el armisticio",
