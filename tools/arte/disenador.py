@@ -293,3 +293,93 @@ def pedido(i: dict) -> str:
         "transparent_background: true",
         "",
     ])
+
+
+# 2026-11-08 ("hay componentes que no coinciden con su tecnología: si los cañones aéreos son misiles,
+# en el diseñador no debería haber cañones"): el mod renombra los módulos (17_research.yaml ->
+# module_terms y module_patterns) y estos dibujos contradecían el nombre. Patrón sobre el id -> qué
+# dibujar; {n} es "one"/"two"... según el id.
+CORRECCIONES: list[tuple[str, str]] = [
+    # aviones: los cañones son micromisiles
+    (r"airplane_cannon_turret", "{n} remote-controlled defensive MICRO-MISSILE turret(s): a small rotating pod with a cluster of tiny missile tubes and a sensor eye, no gun barrel"),
+    (r"airplane_cannon_large", "{n} heavy MICRO-MISSILE launcher(s) under a fuselage section: a long box of eight small missile tubes, no gun barrel"),
+    (r"airplane_cannon_\d", "{n} MICRO-MISSILE pod(s): a slim streamlined pod with a honeycomb of tiny missile tubes and a few missiles peeking out, no gun barrel"),
+    # ametralladoras: armas de pulso
+    (r"airplane_(light|heavy)_mg|airplane_(lmg|hmg)_turret", "{n} PULSE GUN(s): a compact energy weapon with a glowing focusing lens, cooling fins and a power cable, no bullets, no belts"),
+    (r"tank_module_(additional_machine_guns|heavy_machine_gun|secondary_turret_hmg)", "a remote weapon station with a PULSE GUN: a squat energy emitter with a glowing lens, cooling fins and a camera ball, no bullets"),
+    # motores a reacción: scramjet
+    (r"jet_engine", "{n} SCRAMJET engine(s): a long flat wedge-shaped air-breathing duct with no fan blades, a sharp intake lip and a glowing blue exhaust slot"),
+    # cohetes: misiles
+    (r"airplane_rocket_rail", "a launcher rail with four slim guided MISSILES with fins and seeker noses"),
+    (r"tank_module_rocket_artillery", "a vehicle MISSILE launcher box with a grid of sealed missile canisters, one hatch open showing a missile nose"),
+    (r"lc_rocket_launcher", "a large vertical-launch MISSILE cell block with open hatches and missile noses inside"),
+    # torpedos de avión: supercavitantes
+    (r"airplane_torpedo", "an air-launched SUPERCAVITATING torpedo: a sleek torpedo with a flat cavitator disc on the nose and a small rocket nozzle at the tail, on a pylon"),
+    # tanques: los cañones son cañones de riel
+    (r"tank_module_(small_cannon|secondary_turret_small_cannon)", "a light tank RAILGUN: a short barrel made of two parallel conductive rails with a capacitor block at the breech"),
+    (r"tank_module_medium_cannon", "a medium tank RAILGUN: a barrel of two parallel conductive rails held by ribbed clamps, a capacitor housing at the breech"),
+    (r"tank_module_heavy_cannon", "a heavy tank RAILGUN: a long barrel of two thick parallel rails, cooling ribs and a big capacitor bank at the breech"),
+    (r"tank_module_auto_cannon", "a rapid-fire RAILGUN autocannon: two short rail barrels side by side with a drum magazine of slugs"),
+    (r"tank_module_aa_gun", "an anti-air RAILGUN turret: four short rail barrels pointing up, with a small radar plate"),
+    (r"lc_medium_cannon_turret", "a medium RAILGUN turret on a giant vehicle deck: twin rail barrels and capacitor housings"),
+    (r"lc_(light|heavy)_anti_air_battery", "an anti-air RAIL BATTERY: a row of rail barrels pointing up on a rotating mount with a radar dish"),
+    # obuses electromagnéticos
+    (r"tank_module_(heavy|medium)_howitzer", "a COIL HOWITZER: a fat short barrel wrapped in rings of electromagnetic coils, cables to a power unit"),
+    (r"lc_super_heavy_howitzer", "a super-heavy COIL HOWITZER: a gigantic short barrel wrapped in thick electromagnetic coil rings"),
+    # lanzallamas: lanzaplasmas
+    (r"flamethrower", "a PLASMA THROWER: a thick nozzle with a magnetic containment ring and a violet-white plasma glow inside, fed by insulated cables"),
+    # motores
+    (r"tank_module_gasoline_engine", "a compact HYDROGEN engine block with blue-marked pressure tanks and cryogenic piping"),
+    (r"tank_module_diesel_engine", "a FUEL-CELL powerpack: a stack of fuel-cell plates with cooling fans and thick power cables, no exhaust pipes"),
+    # blindajes
+    (r"tank_module_riveted_armor", "a CERAMIC armour plate: a mosaic of hexagonal ceramic tiles bonded to a backing plate"),
+    (r"tank_module_cast_armor", "a REACTIVE armour plate: rows of flat explosive-reactive bricks bolted on a hull plate"),
+]
+
+
+def corregir() -> list[dict]:
+    """Los módulos cuyo dibujo contradice su nombre en el mod, con la descripción correcta."""
+    from tools.arte import auditoria
+    datos = auditoria.cargar() or {}
+    nums = {"1": "one", "2": "two", "3": "three", "4": "four", "6": "six"}
+    out = []
+    for i in datos.get("iconos") or []:
+        if i.get("familia") != "disenador":
+            continue
+        for patron, texto in CORRECCIONES:
+            if re.search(patron, i["id"]):
+                que = i.get("que", "")
+                m = re.search(r"(\d)x\b", que)
+                if m:
+                    n = nums.get(m.group(1), "one")
+                elif "twin" in que:
+                    n = "two"
+                elif "quad" in que:
+                    n = "four"
+                else:
+                    n = "one"
+                texto_n = texto.format(n=n)
+                nivel = re.search(r"_(\d)$", i["id"]) or re.search(r" (\d)$", que)
+                if nivel and nivel.group(1) == "2" and "x" not in que.split()[-1]:
+                    texto_n += ". IMPROVED model: a bit larger and more refined than the basic one"
+                elif nivel and nivel.group(1) == "3":
+                    texto_n += ". ADVANCED model: the most refined and powerful version"
+                out.append({"id": i["id"], "que": _que_mod(que, i["id"]), "descripcion": texto_n})
+                break
+    return out
+
+
+def _que_mod(que: str, ident: str) -> str:
+    """El nombre del módulo como lo dice el mod (17_research.yaml -> module_terms), para que el
+    pedido no diga "cannon" donde el juego dice "micro-missile"."""
+    import yaml
+    terms = (yaml.safe_load((Path(__file__).resolve().parents[2] / "spec" / "17_research.yaml").read_text(encoding="utf-8"))
+             .get("module_terms") or {}).get("english") or []
+    q = que
+    if "airplane" in ident and "cannon" in q:
+        q = re.sub(r"\bcannons\b", "micro-missiles", q)
+        q = re.sub(r"\bcannon\b", "micro-missile", q)
+    q = q.replace("hmg", "heavy pulse gun").replace("lmg", "light pulse gun").replace(" mg", " pulse gun")
+    for a, b in terms:
+        q = re.sub(r"\b" + re.escape(a) + r"\b", b, q, flags=re.I)
+    return q
