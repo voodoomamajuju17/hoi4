@@ -155,7 +155,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Lex Imperii** — La ley que hace de la palabra del Imperator la ley.
 - **El Culto Imperial** — Incienso ante el Genio del Imperator en cada foro.
 - **Los Juegos de la Victoria** — Pan, circo y oficinas de reclutamiento en las puertas de la arena.
-- **El Destino de Roma** — Destraba la decisión de proclamar El Imperio Romano Eterno. Pide controlar Hispania (Madrid, Lisboa), Egipto (Alejandría, Suez), Trípoli, Britania (Londres), Crimea y Sofía; 70 divisiones, 50 de Auctoritas y 50% de estabilidad.
+- **El Destino de Roma** — Destraba la decisión de proclamar El Imperio Romano Eterno. Pide controlar al menos dos tercios de Hispania (Madrid, Lisboa), Egipto (Alejandría, Suez), Trípoli, Britania (Londres), Crimea y Sofía; 70 divisiones, 50 de Auctoritas y 50% de estabilidad.
 
 ### El Erario
 

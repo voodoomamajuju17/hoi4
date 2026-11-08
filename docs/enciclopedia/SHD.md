@@ -144,7 +144,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **El Gran Consejo Técnico** — Cada provincia manda a su mejor ingeniero; el Consejo decide midiendo, no votando.
 - **La Ley del Caudal** — Cada decisión es una válvula.
 - **El Mandato Armonioso** — El mandato del cielo, medido en metros cúbicos por segundo.
-- **El Destino del Cielo** — Destraba la decisión de proclamar La Armonía Celeste. Pide controlar Tokio (Kanto), Hong Kong, Madrás, Manila, Java y Kabul; 60 divisiones, Orden en 60 y 50% de estabilidad.
+- **El Destino del Cielo** — Destraba la decisión de proclamar La Armonía Celeste. Pide controlar al menos dos tercios de Tokio (Kanto), Hong Kong, Madrás, Manila, Java y Kabul; 60 divisiones, Orden en 60 y 50% de estabilidad.
 
 ### Las Grandes Obras
 

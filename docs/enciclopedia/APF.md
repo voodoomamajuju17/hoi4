@@ -139,7 +139,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Asamblea de los Pueblos** — Mil idiomas en una sola sala, y traducción simultánea para todos.
 - **La Carta de Ubuntu** — Soy porque somos.
 - **La Moneda Continental** — Una sola moneda del Cairo al Cabo.
-- **El Destino del Origen** — Destraba la decisión de proclamar El Imperio Humano Original. Pide controlar toda África (Adís Abeba, el Cabo, Transvaal, Senegal, Liberia), Medio Oriente (Bagdad, Teherán, Néyed) y el sur de Europa (Roma, Madrid, Sofía); 60 divisiones y 50% de estabilidad.
+- **El Destino del Origen** — Destraba la decisión de proclamar El Imperio Humano Original. Pide controlar al menos dos tercios de toda África (Adís Abeba, el Cabo, Transvaal, Senegal, Liberia), Medio Oriente (Bagdad, Teherán, Néyed) y el sur de Europa (Roma, Madrid, Sofía); 60 divisiones y 50% de estabilidad.
 
 ### La Aldea Autosuficiente
 

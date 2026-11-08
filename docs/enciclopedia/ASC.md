@@ -143,7 +143,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Asamblea de los Datos** — Cada ciudadano vota cada día cada asignación. Los servidores cuentan los votos.
 - **El Plan de Silicio** — El plan se recalcula cada cinco minutos.
 - **La Abundancia Armada** — Una comuna sin escasez igual necesita un ejército que la defienda.
-- **El Destino de la Comuna** — Destraba la decisión de proclamar La Comuna Continental. Pide controlar París (Ile de France), Roma (Lacio), Madrid, Leningrado, Crimea y Kiev; 60 divisiones, 100 de Poder de Cómputo y 50% de estabilidad. Con el destino abierto, PLAN-41 ya no se desconecta.
+- **El Destino de la Comuna** — Destraba la decisión de proclamar La Comuna Continental. Pide controlar al menos dos tercios de París (Ile de France), Roma (Lacio), Madrid, Leningrado, Crimea y Kiev; 60 divisiones, 100 de Poder de Cómputo y 50% de estabilidad. Con el destino abierto, PLAN-41 ya no se desconecta.
 
 ### El Plan Total
 

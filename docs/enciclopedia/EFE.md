@@ -177,7 +177,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **El Concilio Verde** — Druidas, generales e ingenieros de las cubas en una misma mesa: el Imperio gobierna como un solo bosque.
 - **La Ley de la Semilla** — Cada semilla se registra y cada cosecha es de Gaia.
 - **Los Guardianes del Bosque** — La Guardia Verde jura un nuevo voto: el bosque antes que el trono.
-- **El Destino de Gaia** — Destraba la decisión de proclamar El Dominio de Gaia. Pide controlar Lima, La Paz, el Amazonas (o el Santuario bajo su garantía), São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas (Miranda); 45 divisiones, 12 de Bioacero guardado y 50% de estabilidad.
+- **El Destino de Gaia** — Destraba la decisión de proclamar El Dominio de Gaia. Pide controlar al menos dos tercios de Lima, La Paz, el Amazonas (o el Santuario bajo su garantía), São Paulo, Río de Janeiro, Bogotá (Cundinamarca) y Caracas (Miranda); 45 divisiones, 12 de Bioacero guardado y 50% de estabilidad.
 
 ### La Autarquía del Bioacero
 

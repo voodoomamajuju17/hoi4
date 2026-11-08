@@ -144,7 +144,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **El Almirantazgo Mercante** — Capitanes y cámaras de compensación bajo un mismo almirantazgo.
 - **La Carta de los Puertos** — Cada puerto que firma comercia bajo la ley del Mercado.
 - **La Ley del Mar** — En alta mar hay una sola ley, y la escribimos nosotros.
-- **El Destino de los Mares** — Destraba la decisión de proclamar La Talasocracia de los Siete Mares. Pide controlar Hong Kong, Cantón, Suez, Panamá, Gibraltar y el Cabo; 30 divisiones, 7 nodos y 50% de estabilidad.
+- **El Destino de los Mares** — Destraba la decisión de proclamar La Talasocracia de los Siete Mares. Pide controlar al menos dos tercios de Hong Kong, Cantón, Suez, Panamá, Gibraltar y el Cabo; 30 divisiones, 7 nodos y 50% de estabilidad.
 
 ### El Puerto Libre
 

@@ -148,7 +148,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **La Asamblea de Accionistas** — La primera asamblea general de la Unión con cada ciudadano como accionista.
 - **La Constitución Corporativa** — El estatuto pasa a ser la constitución.
 - **El Dividendo de la Nación** — Las ganancias se pagan como patriotismo.
-- **El Destino Manifiesto** — Destraba la decisión de proclamar La Corporación de las Américas. Pide controlar la Frontera (Minnesota y Kansas), La Habana (Cuba), Lima, Buenos Aires y Bogotá (Cundinamarca); 50 divisiones, Escándalo por debajo de 30 y 50% de estabilidad.
+- **El Destino Manifiesto** — Destraba la decisión de proclamar La Corporación de las Américas. Pide controlar al menos dos tercios de la Frontera (Minnesota y Kansas), La Habana (Cuba), Lima, Buenos Aires y Bogotá (Cundinamarca); 50 divisiones, Escándalo por debajo de 30 y 50% de estabilidad.
 
 ### El Dividendo Civil
 

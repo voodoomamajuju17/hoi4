@@ -145,7 +145,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **El Consejo de los Cuatro Suyus** — Los gobernadores de los cuatro suyus se reúnen en Cusco por primera vez en cinco siglos.
 - **La Ley del Ayni** — La reciprocidad como ley del Sol.
 - **El Hijo del Sol** — El Sapa Inti no es un rey: es el Sol que camina entre nosotros.
-- **El Destino del Sol** — Destraba la decisión de proclamar El Imperio del Sol Eterno. Pide controlar Buenos Aires, Santiago, São Paulo, el Amazonas, Bogotá (Cundinamarca) y Caracas (Miranda); 35 divisiones, 60 de Inti-Soma y 50% de estabilidad.
+- **El Destino del Sol** — Destraba la decisión de proclamar El Imperio del Sol Eterno. Pide controlar al menos dos tercios de Buenos Aires, Santiago, São Paulo, el Amazonas, Bogotá (Cundinamarca) y Caracas (Miranda); 35 divisiones, 60 de Inti-Soma y 50% de estabilidad.
 
 ### Las Terrazas
 
