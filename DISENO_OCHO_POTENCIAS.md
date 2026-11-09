@@ -2649,3 +2649,7 @@ color y ya, seguir los primeros mockups [...] se tiene que ver bien y bello";
   clave (`controls_at_least`, count_triggers) en vez de todas. Solo a la SHD: 10% menos de
   industria inicial (15_balance -> industrialization.scale {SHD: 0.9}) y los Mandatos un poco más
   bajos (ataque +6%, fábricas +8%).
+- Modelos 3D propios (2026-11-08): assets/modelos/<pieza>/gfx/... se copia tal cual al mod
+  (tools/gen/emitters/modelos.py). Primero: el Gliptodonte del EFE v0.1 (EFE_modern_armor_entity
+  en modern_tank_chassis, sombreador PdxMeshStandard). Pedido de modelos para Blender:
+  arte/modelos_3d_pedido.txt (18 tipos por meganación, 4 de las anarquías y las 9 únicas).

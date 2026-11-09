@@ -1,0 +1,842 @@
+# 157 pedidos - MODELOS 3D para Blender (2026-11-08)
+# Para ChatGPT con Blender: un modelo por bloque MODEL_REQUEST. Prioridad sugerida: las unidades únicas,
+# después infantería, tanque medio, caza y destructor de cada nación, y el resto.
+# Tanque moderno, pesado y superpesado NO van: están bloqueados como unidades únicas.
+# ESPECIFICACIONES TÉCNICAS (para todos los modelos)
+# - Programa: Blender, exportado con el exportador de Paradox (io_pdx_mesh / "PDX Blender Tools") a .mesh (+ .anim).
+#   Entregar también el .blend y una vista previa .png de 3/4.
+# - Escala y orientación: las de un modelo de unidad de Hearts of Iron IV (mirando hacia +Y/adelante como los del
+#   juego); un tanque de unos 7 m de largo, un soldado de 1,8 m. Si dudás, que coincida con un tanque del juego.
+# - Polígonos: soldados 1.500-3.000 tris cada grupo (3 figuras), vehículos 3.000-6.000, aviones 2.000-4.000,
+#   barcos 6.000-12.000. Pocos materiales (uno solo idealmente).
+# - Texturas .dds: <nombre>_diff (color, con desgaste y suciedad pintados, NO colores planos), <nombre>_normal y
+#   <nombre>_spec; 1024x1024 para barcos y unidades únicas, 512x512 para el resto. Sombreador: PdxMeshStandard.
+# - Animaciones (si se puede): idle, move y attack (y die para la infantería). Si no, rígido: igual sirve.
+# - Archivos: gfx/models/units/<id>/<id>.mesh + texturas; gfx/entities/<id>.asset con la entidad <TAG>_<tipo>_entity
+#   (por ejemplo EFE_light_armor_entity, NRE_infantry_entity, HSN_destroyer_entity). Yo los conecto al juego.
+# - Estilo: año 2100, tecnología de después del Gran Desarme (cañones de riel, armas de pulso, misiles, drones,
+#   motores de hidrógeno y pila de combustible, blindaje cerámico y compuesto). Cada nación con SU identidad
+#   (abajo); que un tanque del EFE nunca se confunda con uno de la ASC. Nada de 1940.
+
+# ================= EFE =================
+# Identidad: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic
+MODEL_REQUEST
+id: EFE_infanteria
+entity: EFE_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_movil
+entity: EFE_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_motorizada
+entity: EFE_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_mecanizada
+entity: EFE_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_blindado_ligero
+entity: EFE_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_tanque_ligero
+entity: EFE_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_tanque_medio
+entity: EFE_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_caza
+entity: EFE_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_apoyo_cercano
+entity: EFE_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_bombardero_medio
+entity: EFE_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_bombardero_naval
+entity: EFE_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_destructor
+entity: EFE_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_crucero_ligero
+entity: EFE_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_crucero_pesado
+entity: EFE_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_acorazado
+entity: EFE_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_portaaviones
+entity: EFE_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_submarino
+entity: EFE_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: EFE_transporte
+entity: EFE_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic. Make it unmistakably EFE: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= ASC =================
+# Identidad: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry
+MODEL_REQUEST
+id: ASC_infanteria
+entity: ASC_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_movil
+entity: ASC_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_motorizada
+entity: ASC_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_mecanizada
+entity: ASC_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_blindado_ligero
+entity: ASC_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_tanque_ligero
+entity: ASC_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_tanque_medio
+entity: ASC_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_caza
+entity: ASC_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_apoyo_cercano
+entity: ASC_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_bombardero_medio
+entity: ASC_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_bombardero_naval
+entity: ASC_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_destructor
+entity: ASC_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_crucero_ligero
+entity: ASC_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_crucero_pesado
+entity: ASC_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_acorazado
+entity: ASC_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_portaaviones
+entity: ASC_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_submarino
+entity: ASC_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ASC_transporte
+entity: ASC_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry. Make it unmistakably ASC: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= FCU =================
+# Identidad: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy
+MODEL_REQUEST
+id: FCU_infanteria
+entity: FCU_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_movil
+entity: FCU_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_motorizada
+entity: FCU_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_mecanizada
+entity: FCU_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_blindado_ligero
+entity: FCU_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_tanque_ligero
+entity: FCU_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_tanque_medio
+entity: FCU_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_caza
+entity: FCU_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_apoyo_cercano
+entity: FCU_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_bombardero_medio
+entity: FCU_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_bombardero_naval
+entity: FCU_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_destructor
+entity: FCU_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_crucero_ligero
+entity: FCU_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_crucero_pesado
+entity: FCU_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_acorazado
+entity: FCU_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_portaaviones
+entity: FCU_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_submarino
+entity: FCU_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: FCU_transporte
+entity: FCU_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy. Make it unmistakably FCU: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= HSN =================
+# Identidad: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade
+MODEL_REQUEST
+id: HSN_infanteria
+entity: HSN_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_movil
+entity: HSN_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_motorizada
+entity: HSN_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_mecanizada
+entity: HSN_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_blindado_ligero
+entity: HSN_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_tanque_ligero
+entity: HSN_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_tanque_medio
+entity: HSN_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_caza
+entity: HSN_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_apoyo_cercano
+entity: HSN_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_bombardero_medio
+entity: HSN_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_bombardero_naval
+entity: HSN_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_destructor
+entity: HSN_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_crucero_ligero
+entity: HSN_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_crucero_pesado
+entity: HSN_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_acorazado
+entity: HSN_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_portaaviones
+entity: HSN_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_submarino
+entity: HSN_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: HSN_transporte
+entity: HSN_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= NAS =================
+# Identidad: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise
+MODEL_REQUEST
+id: NAS_infanteria
+entity: NAS_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_movil
+entity: NAS_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_motorizada
+entity: NAS_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_mecanizada
+entity: NAS_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_blindado_ligero
+entity: NAS_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_tanque_ligero
+entity: NAS_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_tanque_medio
+entity: NAS_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_caza
+entity: NAS_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_apoyo_cercano
+entity: NAS_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_bombardero_medio
+entity: NAS_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_bombardero_naval
+entity: NAS_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_destructor
+entity: NAS_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_crucero_ligero
+entity: NAS_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_crucero_pesado
+entity: NAS_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_acorazado
+entity: NAS_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_portaaviones
+entity: NAS_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_submarino
+entity: NAS_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NAS_transporte
+entity: NAS_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise. Make it unmistakably NAS: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= SHD =================
+# Identidad: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey
+MODEL_REQUEST
+id: SHD_infanteria
+entity: SHD_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_movil
+entity: SHD_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_motorizada
+entity: SHD_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_mecanizada
+entity: SHD_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_blindado_ligero
+entity: SHD_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_tanque_ligero
+entity: SHD_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_tanque_medio
+entity: SHD_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_caza
+entity: SHD_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_apoyo_cercano
+entity: SHD_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_bombardero_medio
+entity: SHD_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_bombardero_naval
+entity: SHD_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_destructor
+entity: SHD_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_crucero_ligero
+entity: SHD_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_crucero_pesado
+entity: SHD_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_acorazado
+entity: SHD_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_portaaviones
+entity: SHD_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_submarino
+entity: SHD_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: SHD_transporte
+entity: SHD_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey. Make it unmistakably SHD: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= APF =================
+# Identidad: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green
+MODEL_REQUEST
+id: APF_infanteria
+entity: APF_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_movil
+entity: APF_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_motorizada
+entity: APF_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_mecanizada
+entity: APF_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_blindado_ligero
+entity: APF_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_tanque_ligero
+entity: APF_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_tanque_medio
+entity: APF_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_caza
+entity: APF_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_apoyo_cercano
+entity: APF_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_bombardero_medio
+entity: APF_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_bombardero_naval
+entity: APF_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_destructor
+entity: APF_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_crucero_ligero
+entity: APF_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_crucero_pesado
+entity: APF_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_acorazado
+entity: APF_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_portaaviones
+entity: APF_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_submarino
+entity: APF_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: APF_transporte
+entity: APF_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green. Make it unmistakably APF: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= NRE =================
+# Identidad: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold
+MODEL_REQUEST
+id: NRE_infanteria
+entity: NRE_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_movil
+entity: NRE_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_motorizada
+entity: NRE_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_mecanizada
+entity: NRE_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_blindado_ligero
+entity: NRE_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_tanque_ligero
+entity: NRE_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_tanque_medio
+entity: NRE_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_caza
+entity: NRE_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_apoyo_cercano
+entity: NRE_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_bombardero_medio
+entity: NRE_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_bombardero_naval
+entity: NRE_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_destructor
+entity: NRE_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_crucero_ligero
+entity: NRE_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_crucero_pesado
+entity: NRE_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_acorazado
+entity: NRE_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_portaaviones
+entity: NRE_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_submarino
+entity: NRE_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: NRE_transporte
+entity: NRE_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold. Make it unmistakably NRE: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= ANARQUÍAS (comunes a todas) =================
+MODEL_REQUEST
+id: ANARQUIA_infanteria
+entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) infantry_entity
+description: 3D model for Hearts of Iron IV, an irregular militia group of three fighters with mixed scavenged gear and old rifles. Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
+
+MODEL_REQUEST
+id: ANARQUIA_movil
+entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) cavalry_entity
+description: 3D model for Hearts of Iron IV, warlord riders on scavenged motorbikes and quads (no horses). Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
+
+MODEL_REQUEST
+id: ANARQUIA_technical
+entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) motorized_entity
+description: 3D model for Hearts of Iron IV, a 'technical': a pickup truck with a welded-on gun and scrap armour. Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
+
+MODEL_REQUEST
+id: ANARQUIA_tanque_chatarra
+entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) light_armor_entity
+description: 3D model for Hearts of Iron IV, a scrap tank built from salvaged parts, welded plates, mismatched wheels. Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
+
+
+# ================= UNIDADES ÚNICAS =================
+# (las imágenes de referencia están en unidades_unicas.zip; el Gliptodonte ya tiene una v0.1, este es para la versión final)
+MODEL_REQUEST
+id: EFE_gliptodonte
+entity: EFE_<la del chasis> (yo la conecto)
+reference_image: EFE_gliptodonte.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Glyptodon' of EFE: Ten thousand years ago an armadillo the size of a car walked the Pampa. The Gaia Laboratory rebuilt its shell out of BioSteel: a modern battle tank grown in one piece in the vats, covered in hexagonal plates that close their own wounds. On the same living hull the Empire mounts guns, anti-air turrets or rocket racks. Only the Green Empire knows how to grow one; everyone else can only capture them. Follow the reference image closely; NATION: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic.
+
+MODEL_REQUEST
+id: ZJP_mecha
+entity: ZJP_<la del chasis> (yo la conecto)
+reference_image: ZJP_mecha.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Mecha' of ZJP: Ten metres of armour on two legs, a pilot wired into the spine and the speed of a sports car. The shipyards of Kanto built them in secret for thirty years, telling Singapore they were cranes. They were not cranes. Follow the reference image closely; NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson.
+
+MODEL_REQUEST
+id: SHD_dragon_del_canal
+entity: SHD_<la del chasis> (yo la conecto)
+reference_image: SHD_dragon_del_canal.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Dragon of the Grand Canal' of SHD: The Directorate never tore up the Grand Canal: it laid a maglev beside it. On those rails sleep the Dragons, guns the length of a barge that glide without touching the track and fire from four hundred kilometres away. The river corrects its course; so do they. Follow the reference image closely; NATION: sino-harmonious technocratic directorate: rivers, dams, hydraulic diagrams, measured order, jade green and steel grey.
+
+MODEL_REQUEST
+id: HSN_leviatan
+entity: HSN_<la del chasis> (yo la conecto)
+reference_image: HSN_leviatan.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Leviathan of Malacca' of HSN: A free port with guns. The Leviathan anchors at the mouth of a strait and the strait becomes a toll: it carries its own customs office, its own insurance desk and eighteen-inch railguns to settle the claims. The High Seas Market builds them one at a time, and names them after the storms that sank its rivals. Follow the reference image closely; NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade.
+
+MODEL_REQUEST
+id: NAS_hijos_del_condor
+entity: NAS_<la del chasis> (yo la conecto)
+reference_image: NAS_hijos_del_condor.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Sons of the Condor' of NAS: They are born in the high valleys and learn to breathe thin air before they learn to read. The tiltrotors of the Sun drop them on the other side of any range: they fall silent from six thousand metres, cut the road and are gone before the enemy understands where the mountain ended. Follow the reference image closely; NATION: neo-Andean sun kingdom: solar temples, Inca stone and gold, condors, mountains, gold and turquoise.
+
+MODEL_REQUEST
+id: NRE_onagro
+entity: NRE_<la del chasis> (yo la conecto)
+reference_image: NRE_onagro.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Onager' of NRE: The legions named it after the siege engine that kicked like a wild ass. Each Onager battery fires a hundred and twenty rockets in nine seconds and moves before the answer arrives: the Storm of Mars that opens the way for the cohorts. Only Rome builds them; only Rome needs that much thunder. Follow the reference image closely; NATION: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold.
+
+MODEL_REQUEST
+id: ASC_centinela
+entity: ASC_<la del chasis> (yo la conecto)
+reference_image: ASC_centinela.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Sentinel' of ASC: No crew, no seats, no fear. The Sentinels are armoured cars that share a single mind with the datacenters of the Ruhr: what one sees, the Plan sees. They patrol in packs of forty, never sleep and never ask why. The Commune says it freed the soldier from the scout's job; the scout never asked. Follow the reference image closely; NATION: automated socialist commune of Europe: robots, circuits, data centres, constructivist red and white, clean geometry.
+
+MODEL_REQUEST
+id: APF_kiboko
+entity: APF_<la del chasis> (yo la conecto)
+reference_image: APF_kiboko.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Kiboko' of APF: Kiboko means hippopotamus in Swahili, and like the animal it spends the day in the water and comes out at night. The Federation's rivers were its borders; the Kiboko turned them into roads. Congo, Niger, Zambezi, the Nile and the great lakes: where the others need a bridge, the councils send a Kiboko. Follow the reference image closely; NATION: African peoples' federation: village councils, savanna and rising industry, kente-like patterns, earth red, yellow and green.
+
+MODEL_REQUEST
+id: FCU_ala_de_obsidiana
+entity: FCU_<la del chasis> (yo la conecto)
+reference_image: FCU_ala_de_obsidiana.png (de unidades_unicas.zip)
+description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Obsidian Wing' of FCU: Obsidian Heavy Aero sells one product: arrival. The Obsidian Wing takes off from the Great Lakes and lands, forty hours later, wherever the contract says, anywhere in the world. Four engines, a hold that fits a warehouse and a clause that bills the target for the fuel. Follow the reference image closely; NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy.
+

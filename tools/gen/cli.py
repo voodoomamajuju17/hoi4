@@ -53,6 +53,7 @@ from .emitters import menu as em_menu
 from .emitters import music as em_music
 from .emitters import ui_skin as em_ui_skin
 from .emitters import politica_gui as em_politica_gui
+from .emitters import modelos as em_modelos
 from .emitters import aventuras as em_aventuras
 from .emitters import militia as em_militia
 from .emitters import manpower_relief as em_manpower_relief
@@ -124,6 +125,7 @@ EMITTERS = [
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
     ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
     ("politica_gui", em_politica_gui.emit),   # 2026-11-07: espíritus en dos filas a tamaño completo
+    ("modelos", em_modelos.emit),       # 2026-11-08: modelos 3D propios (assets/modelos, el Gliptodonte)
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)
     ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)
     ("eventos_rotos", em_cleanup.emit_event_refs),  # 2026-11-07 (auditoría): llamadas a eventos que no cargan
