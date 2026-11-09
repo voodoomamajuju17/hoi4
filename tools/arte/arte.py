@@ -1162,10 +1162,21 @@ def pedidos() -> None:
     from tools.arte import materiales_gui
     summary.insert(0, materiales_gui.escribir(OUT))
     bloques = []
-    for f in todos:
+    # 2026-11-09 ("pasame un solo txt con todas las imágenes que faltan"): también los espíritus en
+    # azulejo, los pines, el diseñador y los retratos, que tienen su archivo aparte; sin repetidos
+    sueltos = [OUT / n for n in ("0_ESPIRITUS_AZULEJO.txt", "0_RETRATOS_MEDIOS.txt", "0_FOCOS_PIN_FALTANTES.txt",
+                                 "0_DISENADOR_2100.txt") if (OUT / n).exists()]
+    vistos = set()
+    for f in todos + sueltos:
         texto = f.read_text(encoding="utf-8")
-        partes = texto.split("ASSET_REQUEST")[1:]
-        bloques += ["ASSET_REQUEST" + b.rstrip().rsplit("\n## ", 1)[0].rstrip() + "\n" for b in partes]
+        partes = re.split(r"^ASSET_REQUEST\s*$", texto, flags=re.M)[1:]
+        for b in partes:
+            fn = re.search(r"^filename:\s*(\S+)", b, re.M)
+            clave = fn.group(1) if fn else b
+            if clave in vistos:
+                continue
+            vistos.add(clave)
+            bloques.append("ASSET_REQUEST" + b.rstrip().rsplit("\n## ", 1)[0].rstrip() + "\n")
     (OUT / "0_TODO_LO_QUE_FALTA.txt").write_text(
         f"# {len(bloques)} pedidos: todo lo que falta, en un solo archivo (para generar por API).\n"
         "# Cada bloque ASSET_REQUEST es una imagen. Usar en el prompt style + material (si hay) +\n"
