@@ -12,7 +12,7 @@ Dos usos:
 
   python -m tools.arte.materiales_modelos blender <salida/>
       De cada muestra de assets/modelos/texturas/ arma lo que Blender necesita: color, normal
-      (RGB estilo OpenGL, el que Blender lee), rugosidad y metal (png). Para asignar y hornear.
+      (RGB estilo OpenGL, el que Blender lee), rugosidad y metal (color y rugosidad en jpg, normal y metal en png). Para asignar y hornear.
 
   python -m tools.arte.materiales_modelos paradox <carpeta con los png horneados> <salida/>
       Lo que vuelve de Blender (<id>_color.png, <id>_normal.png, <id>_roughness.png y, si hay,
@@ -82,7 +82,7 @@ def _derivadas(alt: Image.Image, fuerza: float) -> tuple[Image.Image, Image.Imag
     """(dx, dy) centradas en 128, con +y hacia abajo."""
     w, h = alt.size
     rep = _repetida(alt)
-    esc = max(1.0, 8 / fuerza)
+    esc = 1.6 / fuerza   # calibrado: el relieve queda en el rango del tanque del juego
     kx = ImageFilter.Kernel((3, 3), (-1, 0, 1, -2, 0, 2, -1, 0, 1), scale=esc, offset=128)
     ky = ImageFilter.Kernel((3, 3), (-1, -2, -1, 0, 0, 0, 1, 2, 1), scale=esc, offset=128)
     return (rep.filter(kx).crop((w, h, 2 * w, 2 * h)), rep.filter(ky).crop((w, h, 2 * w, 2 * h)))
@@ -130,9 +130,9 @@ def para_blender(salida: Path) -> list[str]:
             continue
         rug, metal, fuerza = propiedades(nombre)
         img = img.convert("RGB")
-        img.save(salida / f"{nombre}_color.png")
+        img.save(salida / f"{nombre}_color.jpg", quality=93, subsampling=0)   # liviano; Blender lo lee igual
         normales(img, fuerza)[0].save(salida / f"{nombre}_normal.png")
-        rugosidad(img, rug).save(salida / f"{nombre}_roughness.png")
+        rugosidad(img, rug).save(salida / f"{nombre}_roughness.jpg", quality=92)
         Image.new("L", img.size, int(metal * 255)).save(salida / f"{nombre}_metallic.png")
         hechos.append(nombre)
     return hechos
