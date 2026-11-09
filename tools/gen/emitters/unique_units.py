@@ -213,6 +213,9 @@ def emit(ctx: BuildContext) -> None:
             body.add("add_ideas", sid)
             effects_used.setdefault("add_ideas", uid)
 
+        # 2026-11-09 ("¿las naciones están haciendo sus unidades únicas y usándolas?"): queda en
+        # game.log, así una partida de observador muestra cuándo y quién la desbloqueó
+        body.add("log", Quoted(f"[GetDateText] MEGANATIONS unica {uid} desbloqueada por [Root.GetTag]"))
         effects.add(f"{uid}_desbloqueo", body)
 
         # 2026-10-27 (partida de observador: "no veo que la IA la produzca"): el
@@ -229,6 +232,8 @@ def emit(ctx: BuildContext) -> None:
             keep = Block()
             cond = Block([("is_ai", True), ("has_country_flag", f"{uid}_desbloqueado"),
                           ("NOT", Block([("has_country_flag", f"{uid}_ia_espera")]))])
+            keep.add("log", Quoted(f"[GetDateText] MEGANATIONS unica {uid} la IA encarga su equipo"
+                                   + (" y suma una division" if tpl and not bad and int(upkeep.get("divisions", 0) or 0) else "")))
             keep.add("set_country_flag", Block([("flag", f"{uid}_ia_espera"), ("value", 1),
                                                 ("days", int(upkeep.get("every_days", 180)))]))
             models = [(t, e) for t, e in (upkeep.get("models") or [])] + ([(None, eq_type)] if eq_type else [])
