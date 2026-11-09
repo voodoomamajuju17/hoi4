@@ -1,8 +1,85 @@
-# 0 PEDIDOS - TEXTURAS DE LOS MODELOS 3D QUE FALTAN (2026-11-09): se repiten porque al ponerlas una al lado de la otra no empalmaban
-# Muestras de material repetibles (1024x1024) para pintar los modelos de Blender.
-# Camino: la IA de imágenes hace estas muestras -> yo armo de cada una el mapa de relieve (normal)
-# y el de brillo (specular) y los .dds -> en Blender se desenvuelve el modelo (UV), se le asignan
-# las muestras y se hornea la textura final del modelo.
-# 4 materiales + 1 hoja de calcos por meganación, y un juego común para todas las anarquías.
+# 10 PEDIDOS - TEXTURAS DE LOS MODELOS 3D: JAPÓN Y GRAN BRETAÑA (2026-11-09)
+# Muestras de material repetibles (1024x1024) para pintar los modelos de Blender, como las de las meganaciones.
 # Mandámelos con el nombre de 'filename' (textura_<NACIÓN>_<material>.png).
 
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZJP_casco
+filename: textura_ZJP_casco.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. MATERIAL: main hull paint: dark navy naval steel paint with crane-yellow hazard trim lines and large welded plate seams.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZJP_andamio
+filename: textura_ZJP_andamio.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. MATERIAL: shipyard steel: riveted girder lattice and scaffold plates with old crimson lacquer and gold mon-like rings without letters.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZJP_detalle
+filename: textura_ZJP_detalle.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. MATERIAL: detail metal: dark blued gunmetal with weld beads, hex bolts and small neon-cyan indicator slits.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZJP_desgaste
+filename: textura_ZJP_desgaste.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. MATERIAL: wear overlay: welding scorch marks, soot, spark burns and dried oil, harbour grime.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZJP_calcos
+filename: textura_ZJP_calcos.png
+size: 1024x1024 (cuadrada, fondo transparente)
+style: decal sheet for 3D game vehicles: a grid of 3x3 separate flat emblems on a TRANSPARENT background, each emblem a simple bold flat shape with clean edges, painted-on look, no perspective, no shadow, no text, no letters, no numbers
+description: NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Nine military vehicle markings for this nation: national roundel, unit chevrons, small emblem, rank stripes, hazard marks, tally marks, in the nation's colours.
+transparent_background: true
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZAL_casco
+filename: textura_ZAL_casco.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. MATERIAL: main hull paint: worn trench-olive paint with horizontal and vertical bands of camouflage in cream, crimson and slate.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZAL_laton
+filename: textura_ZAL_laton.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. MATERIAL: Victorian brass and copper fittings with engraved scrollwork, rivets and green patina in the recesses.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZAL_detalle
+filename: textura_ZAL_detalle.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. MATERIAL: detail metal: dark riveted boiler iron with hammered texture and a thin red stripe.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZAL_desgaste
+filename: textura_ZAL_desgaste.png
+size: 1024x1024 (cuadrada, repetible sin costura)
+style: flat seamless TILEABLE material texture swatch for a 3D game model (diffuse / albedo map): viewed straight on, perfectly flat, EVEN diffuse lighting with NO highlights, NO shadows, NO perspective, no vignette; the pattern must repeat without visible seams on all four edges; fine detail readable at game scale; no text, no letters, no numbers, no logos, no watermark; any stripe, band or line that touches an edge must continue exactly on the opposite edge; avoid diagonal bands
+description: NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. MATERIAL: wear overlay: grey rain streaks, soot, coal dust and brick-red mud.
+
+ASSET_REQUEST
+type: material_swatch
+id: textura_ZAL_calcos
+filename: textura_ZAL_calcos.png
+size: 1024x1024 (cuadrada, fondo transparente)
+style: decal sheet for 3D game vehicles: a grid of 3x3 separate flat emblems on a TRANSPARENT background, each emblem a simple bold flat shape with clean edges, painted-on look, no perspective, no shadow, no text, no letters, no numbers
+description: NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Nine military vehicle markings for this nation: national roundel, unit chevrons, small emblem, rank stripes, hazard marks, tally marks, in the nation's colours.
+transparent_background: true
