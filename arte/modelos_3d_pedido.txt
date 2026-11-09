@@ -1,4 +1,4 @@
-# 157 pedidos - MODELOS 3D para Blender (2026-11-08)
+# 194 pedidos - MODELOS 3D para Blender (2026-11-08)
 # Para ChatGPT con Blender: un modelo por bloque MODEL_REQUEST. Prioridad sugerida: las unidades únicas,
 # después infantería, tanque medio, caza y destructor de cada nación, y el resto.
 # Tanque moderno, pesado y superpesado NO van: están bloqueados como unidades únicas.
@@ -9,8 +9,12 @@
 #   juego); un tanque de unos 7 m de largo, un soldado de 1,8 m. Si dudás, que coincida con un tanque del juego.
 # - Polígonos: soldados 1.500-3.000 tris cada grupo (3 figuras), vehículos 3.000-6.000, aviones 2.000-4.000,
 #   barcos 6.000-12.000. Pocos materiales (uno solo idealmente).
-# - Texturas .dds: <nombre>_diff (color, con desgaste y suciedad pintados, NO colores planos), <nombre>_normal y
-#   <nombre>_spec; 1024x1024 para barcos y unidades únicas, 512x512 para el resto. Sombreador: PdxMeshStandard.
+# - Texturas: usá los materiales de materiales_blender.zip (por nación: casco, material propio, detalle,
+#   desgaste y calcos; cada uno con _color, _normal (OpenGL), _roughness y _metallic) y HORNEÁ cada modelo a
+#   cuatro PNG: <id>_color.png (con desgaste y suciedad, NO colores planos), <id>_normal.png (normal de
+#   espacio tangente, OpenGL, como la lee Blender), <id>_roughness.png y <id>_metallic.png; 1024x1024 para
+#   barcos y unidades únicas, 512x512 para el resto. NO hace falta convertirlos a .dds: yo los paso al
+#   formato del juego (_diffuse/_normal/_specular). Sombreador en el .mesh: PdxMeshStandard.
 # - Animaciones (si se puede): idle, move y attack (y die para la infantería). Si no, rígido: igual sirve.
 # - Archivos: gfx/models/units/<id>/<id>.mesh + texturas; gfx/entities/<id>.asset con la entidad <TAG>_<tipo>_entity
 #   (por ejemplo EFE_light_armor_entity, NRE_infantry_entity, HSN_destroyer_entity). Yo los conecto al juego.
@@ -839,4 +843,189 @@ id: FCU_ala_de_obsidiana
 entity: FCU_<la del chasis> (yo la conecto)
 reference_image: FCU_ala_de_obsidiana.png (de unidades_unicas.zip)
 description: 3D model for Hearts of Iron IV of the UNIQUE unit 'Obsidian Wing' of FCU: Obsidian Heavy Aero sells one product: arrival. The Obsidian Wing takes off from the Great Lakes and lands, forty hours later, wherever the contract says, anywhere in the world. Four engines, a hold that fits a warehouse and a clause that bills the target for the fuel. Follow the reference image closely; NATION: corporate union of North America: chrome, glass towers, stock tickers, logos and contracts, navy blue and silver, cold and glossy.
+
+# ================= ZJP: Shogunato de los Astilleros (Japón) =================
+# Identidad: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson
+MODEL_REQUEST
+id: ZJP_infanteria
+entity: ZJP_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_movil
+entity: ZJP_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_motorizada
+entity: ZJP_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_mecanizada
+entity: ZJP_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_blindado_ligero
+entity: ZJP_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_tanque_ligero
+entity: ZJP_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_tanque_medio
+entity: ZJP_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_caza
+entity: ZJP_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_apoyo_cercano
+entity: ZJP_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_bombardero_medio
+entity: ZJP_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_bombardero_naval
+entity: ZJP_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_destructor
+entity: ZJP_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_crucero_ligero
+entity: ZJP_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_crucero_pesado
+entity: ZJP_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_acorazado
+entity: ZJP_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_portaaviones
+entity: ZJP_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_submarino
+entity: ZJP_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZJP_transporte
+entity: ZJP_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: the Shipyard Shogunate of Japan: dry docks and giant cranes, welding sparks, mechas in scaffolding, old samurai banners over naval steel, neon city at night, navy steel, crane yellow and crimson. Make it unmistakably ZJP: its own silhouette, colours and details, not a generic modern vehicle.
+
+
+# ================= ZAL: Gran Bretaña libre (Albión) =================
+# Identidad: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags
+MODEL_REQUEST
+id: ZAL_infanteria
+entity: ZAL_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this nation in 2100 combat gear, with their pulse rifles and their own helmets/uniform style. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_movil
+entity: ZAL_cavalry_entity
+description: 3D model for Hearts of Iron IV, the nation's FAST MOBILE unit that replaces cavalry (NO horses): light fast vehicles in its own style (hover-bikes, all-terrain quads, fast walkers or similar), two riders. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_motorizada
+entity: ZAL_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: wheeled armoured transport with soldiers, in the nation's style. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_mecanizada
+entity: ZAL_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret, in the nation's style. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_blindado_ligero
+entity: ZAL_armored_car_entity
+description: 3D model for Hearts of Iron IV, an armoured car / light recon vehicle with wheels and a small turret. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_tanque_ligero
+entity: ZAL_light_armor_entity
+description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_tanque_medio
+entity: ZAL_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_caza
+entity: ZAL_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_apoyo_cercano
+entity: ZAL_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_bombardero_medio
+entity: ZAL_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_bombardero_naval
+entity: ZAL_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL bomber / maritime patrol plane with anti-ship missiles. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_destructor
+entity: ZAL_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: low stealthy hull, railgun turret, missile cells. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_crucero_ligero
+entity: ZAL_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_crucero_pesado
+entity: ZAL_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER with twin rail-battery turrets. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_acorazado
+entity: ZAL_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP of 2100 with heavy rail batteries. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_portaaviones
+entity: ZAL_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT/DRONE CARRIER. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_submarino
+entity: ZAL_submarine_entity
+description: 3D model for Hearts of Iron IV, a SUBMARINE with supercavitating torpedoes. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
+
+MODEL_REQUEST
+id: ZAL_transporte
+entity: ZAL_convoy_entity
+description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) in the nation's style. NATION: free Great Britain after the Commune: the Albion Workers' Republic of the Luddites (hand-made, analog, tweed and brick, red armbands), which either plugs back into the network (neural lace, silver circuitry, midnight blue and cold white) or crowns a queen (brass, steam, airships, crimson and gold); grey rain, Thames fog and Union-like crosses without real flags. Make it unmistakably ZAL: its own silhouette, colours and details, not a generic modern vehicle.
 
