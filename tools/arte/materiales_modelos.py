@@ -18,6 +18,9 @@ Dos usos:
       Lo que vuelve de Blender (<id>_color.png, <id>_normal.png, <id>_roughness.png y, si hay,
       <id>_metallic.png) pasa a <id>_diffuse.dds, <id>_normal.dds y <id>_specular.dds del juego.
 
+  python -m tools.arte.materiales_modelos normalizar <assets/modelos/<pieza>/>
+      Un modelo ya horneado con sus .dds (de cualquier orden de canales) pasa al formato del juego.
+
 Solo Pillow, sin numpy. No probado en el juego: los valores del brillo copian los rangos del
 tanque original, no una documentación.
 """
@@ -140,10 +143,25 @@ def para_blender(salida: Path) -> list[str]:
 
 
 def _dds(img: Image.Image, dest: Path) -> None:
-    from tools.gen import art
+    """DDS sin comprimir (A8R8G8B8) con todas sus versiones achicadas, como las del juego (que trae
+    10 niveles): sin ellas el modelo titila de lejos."""
+    import struct
     img = img.convert("RGBA")
-    raw = img.tobytes()
-    art.write_dds(dest, img.width, img.height, [tuple(raw[k:k + 4]) for k in range(0, len(raw), 4)])
+    niveles = [img]
+    while niveles[-1].width > 1 or niveles[-1].height > 1:
+        a = niveles[-1]
+        niveles.append(a.resize((max(1, a.width // 2), max(1, a.height // 2)), Image.BOX))
+    w, h = img.size
+    flags = 0x1 | 0x2 | 0x4 | 0x1000 | 0x8 | 0x20000      # caps, alto, ancho, formato, pitch, mipmaps
+    cab = b"DDS " + struct.pack("<IIIIIII", 124, flags, h, w, w * 4, 0, len(niveles)) + b"\0" * 44
+    cab += struct.pack("<IIIIIIII", 32, 0x41, 0, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000)
+    cab += struct.pack("<IIIII", 0x1000 | 0x8 | 0x400000, 0, 0, 0, 0)
+    cuerpo = bytearray()
+    for n in niveles:
+        r, g, b, a = n.split()
+        cuerpo += Image.merge("RGBA", (b, g, r, a)).tobytes()     # en el archivo va B G R A
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(cab + bytes(cuerpo))
 
 
 def a_paradox(color: Image.Image, normal_gl: Image.Image | None, rug: Image.Image | None,
@@ -189,9 +207,63 @@ def desde_blender(carpeta: Path, salida: Path) -> list[str]:
     return hechos
 
 
+def _es_rgb_normal(img: Image.Image) -> bool:
+    """Normal común (RGB, azul alto) y no la del juego (azul en 0)."""
+    from PIL import ImageStat
+    return ImageStat.Stat(img.convert("RGBA").getchannel("B")).mean[0] > 150
+
+
+def normalizar_modelo(carpeta: Path) -> list[str]:
+    """Las texturas de un modelo entregado (…_diff, …_normal/_norm, …_spec .dds o .png) pasan al
+    formato del juego, con los MISMOS nombres de archivo (el .mesh los nombra adentro):
+      - normal común (RGB) -> la del juego; si viene plana (horneada sin relieve), el relieve sale
+        del color, como en el tanque del juego (que tiene el relieve del color);
+      - brillo en otro orden -> el del juego, armado desde el color (rugosidad media de pintura);
+      - todas con sus versiones achicadas.
+    Así los modelos ya horneados no se rehacen."""
+    from PIL import ImageStat
+    hechos = []
+    for dif in sorted(carpeta.rglob("*_diff*.dds")):
+        base = dif.name.split("_diff")[0]
+        color = Image.open(dif).convert("RGBA")
+        nor = next(iter(sorted(dif.parent.glob(base + "_norm*.dds"))), None)
+        spec = next(iter(sorted(dif.parent.glob(base + "_spec*.dds"))), None)
+        rgb = color.convert("RGB")
+        _dds(color, dif)
+        if nor is not None:
+            n = Image.open(nor).convert("RGBA")
+            if _es_rgb_normal(n):
+                plana = max(ImageStat.Stat(n.convert("RGB")).stddev[:2]) < 6
+                if plana:
+                    _, nx, ny = normales(rgb, 1.0)
+                else:
+                    nx, ny = n.getchannel("R"), ImageOps.invert(n.getchannel("G"))
+                _dds(Image.merge("RGBA", (nx, nx, Image.new("L", n.size, 0), ny)), nor)
+                hechos.append(f"{nor.name}: {'relieve sacado del color' if plana else 'canales reordenados'}")
+            else:
+                _dds(n, nor)
+        if spec is not None:
+            s = Image.open(spec).convert("RGBA")
+            if s.getchannel("R").getextrema() != (0, 0):      # no es el orden del juego
+                tmp = Path(str(spec) + ".tmp")
+                a_paradox(rgb, None, rugosidad(rgb, 0.55), None, tmp, "x")
+                sp = Image.open(tmp / "x_specular.dds").convert("RGBA")
+                for f in tmp.iterdir():
+                    f.unlink()
+                tmp.rmdir()
+                _dds(sp, spec)
+                hechos.append(f"{spec.name}: brillo al orden del juego")
+            else:
+                _dds(s, spec)
+    return hechos
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "blender":
         r = para_blender(Path(sys.argv[2]))
+    elif sys.argv[1] == "normalizar":
+        r = normalizar_modelo(Path(sys.argv[2]))
+        print("\n".join(r))
     else:
         r = desde_blender(Path(sys.argv[2]), Path(sys.argv[3]))
     print(f"{len(r)} materiales")

@@ -15,6 +15,8 @@
 #   espacio tangente, OpenGL, como la lee Blender), <id>_roughness.png y <id>_metallic.png; 1024x1024 para
 #   barcos y unidades únicas, 512x512 para el resto. NO hace falta convertirlos a .dds: yo los paso al
 #   formato del juego (_diffuse/_normal/_specular). Sombreador en el .mesh: PdxMeshStandard.
+#   Los modelos ya horneados con sus tres .dds (_diff, _normal, _spec, como el Gliptodonte y el Centinela III)
+#   sirven igual tal como están: los adapto yo al orden de canales del juego. No hace falta rehacerlos.
 # - Animaciones (si se puede): idle, move y attack (y die para la infantería). Si no, rígido: igual sirve.
 # - Archivos: gfx/models/units/<id>/<id>.mesh + texturas; gfx/entities/<id>.asset con la entidad <TAG>_<tipo>_entity
 #   (por ejemplo EFE_light_armor_entity, NRE_infantry_entity, HSN_destroyer_entity). Yo los conecto al juego.
