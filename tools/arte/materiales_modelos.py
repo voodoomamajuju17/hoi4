@@ -207,13 +207,57 @@ def desde_blender(carpeta: Path, salida: Path) -> list[str]:
     return hechos
 
 
+def enriquecer_atlas(color: Image.Image, nacion: str, fuerza: float = 0.8) -> Image.Image:
+    """Los modelos de ChatGPT vienen pintados con un atlas de bloques de color lisos (con un ruido
+    parejo). Les pone el detalle de las muestras de material de la nación (paneles, remaches,
+    vetas) y su desgaste, SIN cambiar el color de cada bloque: luz suave con el detalle centrado
+    en gris, así cada parte del modelo sigue del color que eligió quien lo hizo (2026-11-09)."""
+    w, h = color.size
+    rgb = color.convert("RGB")
+    def muestra(mat):
+        for ext in (".jpg", ".png"):
+            f = TEXTURAS / f"textura_{nacion}_{mat}{ext}"
+            if f.exists():
+                return Image.open(f).convert("RGB")
+        return None
+    detalle, desgaste = muestra("detalle"), muestra("desgaste")
+    if detalle is None:
+        return color
+    lado = max(64, w // 2)          # la muestra se repite dos veces a lo ancho del atlas
+    def mosaico(img):
+        t = img.resize((lado, lado), Image.LANCZOS)
+        out = Image.new("RGB", (w, h))
+        for x in range(0, w, lado):
+            for y in range(0, h, lado):
+                out.paste(t, (x, y))
+        return out
+    def relieve(img):
+        """Solo el detalle fino (placas, remaches, rayones), con la misma intensidad para todas
+        las naciones: sin las franjas grandes de color de la muestra."""
+        from PIL import ImageStat
+        lum = ImageOps.grayscale(img)
+        fondo = lum.filter(ImageFilter.GaussianBlur(3))
+        d = ImageChops.subtract(lum, fondo, scale=1, offset=128)
+        desv = max(1.0, ImageStat.Stat(d).stddev[0])
+        k = 14.0 / desv
+        return d.point(lambda v: max(0, min(255, 128 + int((v - 128) * k))))
+    det = relieve(mosaico(detalle))
+    if desgaste is not None:
+        det = Image.blend(det, relieve(mosaico(desgaste)), 0.4)
+    luz = ImageChops.soft_light(rgb, Image.merge("RGB", (det, det, det)))
+    out = Image.blend(rgb, luz, fuerza)
+    if color.mode == "RGBA":
+        out.putalpha(color.getchannel("A"))
+    return out
+
+
 def _es_rgb_normal(img: Image.Image) -> bool:
     """Normal común (RGB, azul alto) y no la del juego (azul en 0)."""
     from PIL import ImageStat
     return ImageStat.Stat(img.convert("RGBA").getchannel("B")).mean[0] > 150
 
 
-def normalizar_modelo(carpeta: Path) -> list[str]:
+def normalizar_modelo(carpeta: Path, nacion: str | None = None, maximo: int = 0) -> list[str]:
     """Las texturas de un modelo entregado (…_diff, …_normal/_norm, …_spec .dds o .png) pasan al
     formato del juego, con los MISMOS nombres de archivo (el .mesh los nombra adentro):
       - normal común (RGB) -> la del juego; si viene plana (horneada sin relieve), el relieve sale
@@ -226,12 +270,21 @@ def normalizar_modelo(carpeta: Path) -> list[str]:
     for dif in sorted(carpeta.rglob("*_diff*.dds")):
         base = dif.name.split("_diff")[0]
         color = Image.open(dif).convert("RGBA")
+        if maximo and color.width > maximo:
+            # atlas de colores lisos: a 512 se ve igual y pesa la cuarta parte (como el tanque del juego)
+            color = color.resize((maximo, maximo * color.height // color.width), Image.LANCZOS)
+            hechos.append(f"{dif.name}: achicada a {maximo}")
+        if nacion:
+            color = enriquecer_atlas(color, nacion)
+            hechos.append(f"{dif.name}: detalle de los materiales de {nacion}")
         nor = next(iter(sorted(dif.parent.glob(base + "_norm*.dds"))), None)
         spec = next(iter(sorted(dif.parent.glob(base + "_spec*.dds"))), None)
         rgb = color.convert("RGB")
         _dds(color, dif)
         if nor is not None:
             n = Image.open(nor).convert("RGBA")
+            if n.size != color.size:
+                n = n.resize(color.size, Image.LANCZOS)
             if _es_rgb_normal(n):
                 plana = max(ImageStat.Stat(n.convert("RGB")).stddev[:2]) < 6
                 if plana:
@@ -244,6 +297,8 @@ def normalizar_modelo(carpeta: Path) -> list[str]:
                 _dds(n, nor)
         if spec is not None:
             s = Image.open(spec).convert("RGBA")
+            if s.size != color.size:
+                s = s.resize(color.size, Image.LANCZOS)
             if s.getchannel("R").getextrema() != (0, 0):      # no es el orden del juego
                 tmp = Path(str(spec) + ".tmp")
                 a_paradox(rgb, None, rugosidad(rgb, 0.55), None, tmp, "x")
@@ -262,7 +317,8 @@ if __name__ == "__main__":
     if sys.argv[1] == "blender":
         r = para_blender(Path(sys.argv[2]))
     elif sys.argv[1] == "normalizar":
-        r = normalizar_modelo(Path(sys.argv[2]))
+        r = normalizar_modelo(Path(sys.argv[2]), sys.argv[3] if len(sys.argv) > 3 else None,
+                              int(sys.argv[4]) if len(sys.argv) > 4 else 0)
         print("\n".join(r))
     else:
         r = desde_blender(Path(sys.argv[2]), Path(sys.argv[3]))
