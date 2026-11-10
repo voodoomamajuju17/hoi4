@@ -1,2 +1,33 @@
-pdxmesh = { name = "ASC_tanque_ligero_mesh" file = "gfx/models/units/ASC_tanque_ligero/ASC_tanque_ligero.mesh" }
-entity = { name = "ASC_light_armor_entity" pdxmesh = "ASC_tanque_ligero_mesh" default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado ASC_tanque_ligero (idle, move, attack)
+animation = {
+    name = "ASC_tanque_ligero_idle_animation"
+    file = "gfx/models/units/ASC_tanque_ligero/ASC_tanque_ligero_idle.anim"
+}
+
+animation = {
+    name = "ASC_tanque_ligero_move_animation"
+    file = "gfx/models/units/ASC_tanque_ligero/ASC_tanque_ligero_move.anim"
+}
+
+animation = {
+    name = "ASC_tanque_ligero_attack_animation"
+    file = "gfx/models/units/ASC_tanque_ligero/ASC_tanque_ligero_attack.anim"
+}
+
+pdxmesh = {
+    name = "ASC_tanque_ligero_mesh"
+    file = "gfx/models/units/ASC_tanque_ligero/ASC_tanque_ligero.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ASC_tanque_ligero_idle_animation" }
+    animation = { id = "move" type = "ASC_tanque_ligero_move_animation" }
+    animation = { id = "attack" type = "ASC_tanque_ligero_attack_animation" }
+    }
+
+entity = {
+    name = "ASC_light_armor_entity"
+    pdxmesh = "ASC_tanque_ligero_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
