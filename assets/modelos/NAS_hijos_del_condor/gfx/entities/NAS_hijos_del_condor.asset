@@ -1,0 +1,41 @@
+# 2026-11-10: modelo animado NAS_hijos_del_condor (idle, move, attack)
+animation = {
+    name = "NAS_hijos_del_condor_idle_animation"
+    file = "gfx/models/units/NAS_hijos_del_condor/NAS_hijos_del_condor_idle.anim"
+}
+
+animation = {
+    name = "NAS_hijos_del_condor_move_animation"
+    file = "gfx/models/units/NAS_hijos_del_condor/NAS_hijos_del_condor_move.anim"
+}
+
+animation = {
+    name = "NAS_hijos_del_condor_attack_animation"
+    file = "gfx/models/units/NAS_hijos_del_condor/NAS_hijos_del_condor_attack.anim"
+}
+
+pdxmesh = {
+    name = "NAS_hijos_del_condor_mesh"
+    file = "gfx/models/units/NAS_hijos_del_condor/NAS_hijos_del_condor.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "NAS_hijos_del_condor_idle_animation" }
+    animation = { id = "move" type = "NAS_hijos_del_condor_move_animation" }
+    animation = { id = "attack" type = "NAS_hijos_del_condor_attack_animation" }
+    }
+
+entity = {
+    name = "NAS_hijos_del_condor_entity"
+    pdxmesh = "NAS_hijos_del_condor_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "NAS_transport_plane_entity"
+    pdxmesh = "NAS_hijos_del_condor_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

@@ -1,0 +1,34 @@
+# 2026-11-10: modelo animado NAS_crucero_ligero (idle, move, attack)
+animation = {
+    name = "NAS_crucero_ligero_idle_animation"
+    file = "gfx/models/units/NAS_crucero_ligero/NAS_crucero_ligero_idle.anim"
+}
+
+animation = {
+    name = "NAS_crucero_ligero_move_animation"
+    file = "gfx/models/units/NAS_crucero_ligero/NAS_crucero_ligero_move.anim"
+}
+
+animation = {
+    name = "NAS_crucero_ligero_attack_animation"
+    file = "gfx/models/units/NAS_crucero_ligero/NAS_crucero_ligero_attack.anim"
+}
+
+pdxmesh = {
+    name = "NAS_crucero_ligero_mesh"
+    file = "gfx/models/units/NAS_crucero_ligero/NAS_crucero_ligero.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "NAS_crucero_ligero_idle_animation" }
+    animation = { id = "move" type = "NAS_crucero_ligero_move_animation" }
+    animation = { id = "attack" type = "NAS_crucero_ligero_attack_animation" }
+    }
+
+entity = {
+    name = "NAS_light_cruiser_entity"
+    pdxmesh = "NAS_crucero_ligero_mesh"
+    scale = 0.847
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
