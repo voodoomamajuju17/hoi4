@@ -1,0 +1,74 @@
+# 2026-11-10: modelo animado ANARQUIA_movil (idle, move, attack)
+animation = {
+    name = "ANARQUIA_movil_idle_animation"
+    file = "gfx/models/units/ANARQUIA_movil/ANARQUIA_movil_idle.anim"
+}
+
+animation = {
+    name = "ANARQUIA_movil_move_animation"
+    file = "gfx/models/units/ANARQUIA_movil/ANARQUIA_movil_move.anim"
+}
+
+animation = {
+    name = "ANARQUIA_movil_attack_animation"
+    file = "gfx/models/units/ANARQUIA_movil/ANARQUIA_movil_attack.anim"
+}
+
+pdxmesh = {
+    name = "ANARQUIA_movil_mesh"
+    file = "gfx/models/units/ANARQUIA_movil/ANARQUIA_movil.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ANARQUIA_movil_idle_animation" }
+    animation = { id = "move" type = "ANARQUIA_movil_move_animation" }
+    animation = { id = "attack" type = "ANARQUIA_movil_attack_animation" }
+    }
+
+entity = {
+    name = "ANARQUIA_cavalry_entity"
+    pdxmesh = "ANARQUIA_movil_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+# 2026-11-10: las cinco anarquías usan este modelo común (si una recibe uno propio, se saca su línea)
+entity = {
+    name = "ZWE_cavalry_entity"
+    pdxmesh = "ANARQUIA_movil_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWI_cavalry_entity"
+    pdxmesh = "ANARQUIA_movil_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWM_cavalry_entity"
+    pdxmesh = "ANARQUIA_movil_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWB_cavalry_entity"
+    pdxmesh = "ANARQUIA_movil_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZAN_cavalry_entity"
+    pdxmesh = "ANARQUIA_movil_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

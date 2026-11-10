@@ -1,0 +1,41 @@
+# 2026-11-10: modelo animado HSN_bombardero_medio (idle, move, attack)
+animation = {
+    name = "HSN_bombardero_medio_idle_animation"
+    file = "gfx/models/units/HSN_bombardero_medio/HSN_bombardero_medio_idle.anim"
+}
+
+animation = {
+    name = "HSN_bombardero_medio_move_animation"
+    file = "gfx/models/units/HSN_bombardero_medio/HSN_bombardero_medio_move.anim"
+}
+
+animation = {
+    name = "HSN_bombardero_medio_attack_animation"
+    file = "gfx/models/units/HSN_bombardero_medio/HSN_bombardero_medio_attack.anim"
+}
+
+pdxmesh = {
+    name = "HSN_bombardero_medio_mesh"
+    file = "gfx/models/units/HSN_bombardero_medio/HSN_bombardero_medio.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "HSN_bombardero_medio_idle_animation" }
+    animation = { id = "move" type = "HSN_bombardero_medio_move_animation" }
+    animation = { id = "attack" type = "HSN_bombardero_medio_attack_animation" }
+    }
+
+entity = {
+    name = "HSN_tactical_bomber_entity"
+    pdxmesh = "HSN_bombardero_medio_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "HSN_medium_plane_entity"
+    pdxmesh = "HSN_bombardero_medio_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

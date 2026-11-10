@@ -1,0 +1,74 @@
+# 2026-11-10: modelo animado ANARQUIA_technical (idle, move, attack)
+animation = {
+    name = "ANARQUIA_technical_idle_animation"
+    file = "gfx/models/units/ANARQUIA_technical/ANARQUIA_technical_idle.anim"
+}
+
+animation = {
+    name = "ANARQUIA_technical_move_animation"
+    file = "gfx/models/units/ANARQUIA_technical/ANARQUIA_technical_move.anim"
+}
+
+animation = {
+    name = "ANARQUIA_technical_attack_animation"
+    file = "gfx/models/units/ANARQUIA_technical/ANARQUIA_technical_attack.anim"
+}
+
+pdxmesh = {
+    name = "ANARQUIA_technical_mesh"
+    file = "gfx/models/units/ANARQUIA_technical/ANARQUIA_technical.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ANARQUIA_technical_idle_animation" }
+    animation = { id = "move" type = "ANARQUIA_technical_move_animation" }
+    animation = { id = "attack" type = "ANARQUIA_technical_attack_animation" }
+    }
+
+entity = {
+    name = "ANARQUIA_motorized_entity"
+    pdxmesh = "ANARQUIA_technical_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+# 2026-11-10: las cinco anarquías usan este modelo común (si una recibe uno propio, se saca su línea)
+entity = {
+    name = "ZWE_motorized_entity"
+    pdxmesh = "ANARQUIA_technical_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWI_motorized_entity"
+    pdxmesh = "ANARQUIA_technical_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWM_motorized_entity"
+    pdxmesh = "ANARQUIA_technical_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWB_motorized_entity"
+    pdxmesh = "ANARQUIA_technical_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZAN_motorized_entity"
+    pdxmesh = "ANARQUIA_technical_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

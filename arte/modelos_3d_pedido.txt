@@ -1,4 +1,4 @@
-# 86 pedidos - MODELOS 3D para Blender (2026-11-08)
+# 77 pedidos - MODELOS 3D para Blender (2026-11-08)
 # Para ChatGPT con Blender: un modelo por bloque MODEL_REQUEST. Prioridad sugerida: las unidades únicas,
 # después infantería, tanque medio, caza y destructor de cada nación, y el resto.
 # Tanque moderno, pesado y superpesado NO van: están bloqueados como unidades únicas.
@@ -20,37 +20,14 @@
 # - Animaciones (si se puede): idle, move y attack (y die para la infantería). Si no, rígido: igual sirve.
 # - Archivos: gfx/models/units/<id>/<id>.mesh + texturas; gfx/entities/<id>.asset con la entidad <TAG>_<tipo>_entity
 #   (por ejemplo EFE_light_armor_entity, NRE_infantry_entity, HSN_destroyer_entity). Yo los conecto al juego.
+# - IMPORTANTE (pasó en todas las naciones): el APOYO CERCANO no puede ser una copia del caza, y el CRUCERO
+#   LIGERO y el PESADO no pueden ser el mismo barco. Cada modelo con su silueta propia, reconocible desde arriba.
 # - Estilo: año 2100, tecnología de después del Gran Desarme (cañones de riel, armas de pulso, misiles, drones,
 #   motores de hidrógeno y pila de combustible, blindaje cerámico y compuesto). Cada nación con SU identidad
 #   (abajo); que un tanque del EFE nunca se confunda con uno de la ASC. Nada de 1940.
 
 # ================= EFE =================
 # Identidad: eco-fascist green empire of South America: jungle, living bio-steel, trees and laurels, green and gold, imperial and organic
-MODEL_REQUEST
-id: HSN_tanque_ligero
-entity: HSN_light_armor_entity
-description: 3D model for Hearts of Iron IV, a LIGHT TANK of 2100: fast, small railgun turret, the nation's shapes. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
-
-MODEL_REQUEST
-id: HSN_tanque_medio
-entity: HSN_medium_armor_entity
-description: 3D model for Hearts of Iron IV, a MEDIUM TANK of 2100: railgun turret, ceramic armour, the nation's shapes. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
-
-MODEL_REQUEST
-id: HSN_caza
-entity: HSN_fighter_entity
-description: 3D model for Hearts of Iron IV, a FIGHTER jet of 2100 (scramjet, micro-missiles, pulse guns), the nation's lines. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
-
-MODEL_REQUEST
-id: HSN_apoyo_cercano
-entity: HSN_cas_entity
-description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT plane / attack drone, heavy and armoured. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
-
-MODEL_REQUEST
-id: HSN_bombardero_medio
-entity: HSN_tactical_bomber_entity
-description: 3D model for Hearts of Iron IV, a MEDIUM (tactical) bomber of 2100. NATION: high-seas market nation of Asia-Pacific: ships, containers, compasses, straits, teal and brass, maritime trade. Make it unmistakably HSN: its own silhouette, colours and details, not a generic modern vehicle.
-
 MODEL_REQUEST
 id: HSN_transporte
 entity: HSN_convoy_entity
@@ -245,29 +222,6 @@ description: 3D model for Hearts of Iron IV, a CARGO / TRANSPORT ship (convoy) i
 
 # ================= NRE =================
 # Identidad: neo-Roman empire: eagles, legions, marble, laurels, SPQR standards, crimson and gold
-MODEL_REQUEST
-id: ANARQUIA_infanteria
-entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) infantry_entity
-description: 3D model for Hearts of Iron IV, an irregular militia group of three fighters with mixed scavenged gear and old rifles. Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
-
-MODEL_REQUEST
-id: ANARQUIA_movil
-entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) cavalry_entity
-description: 3D model for Hearts of Iron IV, warlord riders on scavenged motorbikes and quads (no horses). Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
-
-MODEL_REQUEST
-id: ANARQUIA_technical
-entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) motorized_entity
-description: 3D model for Hearts of Iron IV, a 'technical': a pickup truck with a welded-on gun and scrap armour. Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
-
-MODEL_REQUEST
-id: ANARQUIA_tanque_chatarra
-entity: (común a ZWE, ZWI, ZWM, ZWB, ZAN) light_armor_entity
-description: 3D model for Hearts of Iron IV, a scrap tank built from salvaged parts, welded plates, mismatched wheels. Lawless lands of 2100: rust, scrap, improvised, raider paint without letters.
-
-
-# ================= UNIDADES ÚNICAS =================
-# (las imágenes de referencia están en unidades_unicas.zip; el Gliptodonte ya tiene una v0.1, este es para la versión final)
 MODEL_REQUEST
 id: ZJP_mecha
 entity: ZJP_<la del chasis> (yo la conecto)

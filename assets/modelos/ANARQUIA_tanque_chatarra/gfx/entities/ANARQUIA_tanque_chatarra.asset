@@ -1,0 +1,74 @@
+# 2026-11-10: modelo animado ANARQUIA_tanque_chatarra (idle, move, attack)
+animation = {
+    name = "ANARQUIA_tanque_chatarra_idle_animation"
+    file = "gfx/models/units/ANARQUIA_tanque_chatarra/ANARQUIA_tanque_chatarra_idle.anim"
+}
+
+animation = {
+    name = "ANARQUIA_tanque_chatarra_move_animation"
+    file = "gfx/models/units/ANARQUIA_tanque_chatarra/ANARQUIA_tanque_chatarra_move.anim"
+}
+
+animation = {
+    name = "ANARQUIA_tanque_chatarra_attack_animation"
+    file = "gfx/models/units/ANARQUIA_tanque_chatarra/ANARQUIA_tanque_chatarra_attack.anim"
+}
+
+pdxmesh = {
+    name = "ANARQUIA_tanque_chatarra_mesh"
+    file = "gfx/models/units/ANARQUIA_tanque_chatarra/ANARQUIA_tanque_chatarra.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ANARQUIA_tanque_chatarra_idle_animation" }
+    animation = { id = "move" type = "ANARQUIA_tanque_chatarra_move_animation" }
+    animation = { id = "attack" type = "ANARQUIA_tanque_chatarra_attack_animation" }
+    }
+
+entity = {
+    name = "ANARQUIA_light_armor_entity"
+    pdxmesh = "ANARQUIA_tanque_chatarra_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+# 2026-11-10: las cinco anarquías usan este modelo común (si una recibe uno propio, se saca su línea)
+entity = {
+    name = "ZWE_light_armor_entity"
+    pdxmesh = "ANARQUIA_tanque_chatarra_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWI_light_armor_entity"
+    pdxmesh = "ANARQUIA_tanque_chatarra_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWM_light_armor_entity"
+    pdxmesh = "ANARQUIA_tanque_chatarra_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZWB_light_armor_entity"
+    pdxmesh = "ANARQUIA_tanque_chatarra_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZAN_light_armor_entity"
+    pdxmesh = "ANARQUIA_tanque_chatarra_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

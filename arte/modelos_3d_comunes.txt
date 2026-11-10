@@ -1,0 +1,152 @@
+# 27 PEDIDOS - MODELOS 3D COMUNES Y DE LAS ANARQUÍAS (2026-11-10)
+# Para ChatGPT con Blender. Mismo formato que las últimas tandas animadas (NRE, HSN, anarquías):
+# - .mesh con esqueleto (PdxMeshStandard), .anim a 24 fps: idle, move, attack (y die en la infantería),
+#   .blend, vista previa .png de 3/4 y las texturas en PNG (color, normal OpenGL, roughness, metallic) de
+#   512x512 (barcos 1024). Yo las paso al formato del juego. Frente +Y, escala en metros.
+# - Archivos: gfx/models/units/<id>/ y gfx/entities/<id>.asset con la entidad indicada. Yo los conecto.
+# - Largos de referencia (los barcos los ajusto igual): destructor 120 m, crucero ligero 160, crucero pesado 190,
+#   acorazado 250, portaaviones 260, submarino 95, transporte 150; tanque medio 7-9 m; soldado 1,8 m.
+# - IMPORTANTE (pasó en todas las naciones): el APOYO CERCANO no puede ser una copia del caza, y el CRUCERO
+#   LIGERO y el PESADO no pueden ser el mismo barco. Cada modelo con su silueta propia, reconocible desde arriba.
+#
+# PARTE A (prioridad): las cinco anarquías, una infantería propia cada una (reemplaza a la milicia común)
+#   y la artillería improvisada que comparten.
+# PARTE B: el juego COMÚN "2100" para todo país sin modelo propio (y la artillería, el antitanque y el
+#   antiaéreo, que no tiene nadie). Estilo neutro: sin colores ni emblemas de ninguna nación.
+# ================= PARTE A: ANARQUÍAS =================
+MODEL_REQUEST
+id: ZWE_infanteria
+entity: ZWE_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this anarchy in 2100: Eurasian warlord riflemen: three men in looted Soviet-style greatcoats and ushankas over scavenged steel plates, cossack sabres on the belt, old Kalashnikov-like rifles patched with modern parts, faded red armbands. NATION: Eurasian warlords: looted Soviet-style steel, cossack and steppe motifs, scrap and rust, grey, olive and faded red. Low budget, improvised and ragged, clearly different from the other four anarchies and from any megastate army. Animations idle, move, attack, die.
+
+MODEL_REQUEST
+id: ZWI_infanteria
+entity: ZWI_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this anarchy in 2100: Hindustan warlord soldiers: three fighters in improvised armour of hammered brass plates over saffron and crimson cloth, turbans with goggles, ornate rifles with brass inlay, one carries a curved talwar. NATION: Hindustan warlord realms: monsoon, temples and bazaars, improvised armour with ornate brass, saffron, crimson and dusty white. Low budget, improvised and ragged, clearly different from the other four anarchies and from any megastate army. Animations idle, move, attack, die.
+
+MODEL_REQUEST
+id: ZWM_infanteria
+entity: ZWM_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this anarchy in 2100: desert emirate raiders: three fighters in sand-camouflage robes and keffiyeh over light armour, black and gold, mirrored goggles, falcon emblem shapes on the shoulders (no letters), long rifles and a curved dagger. NATION: desert emirates: dunes, oil wells, falcons and daggers, sand camouflage, ochre, black and gold. Low budget, improvised and ragged, clearly different from the other four anarchies and from any megastate army. Animations idle, move, attack, die.
+
+MODEL_REQUEST
+id: ZWB_infanteria
+entity: ZWB_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this anarchy in 2100: Amazon warlord militia: three illegal-mine and sawmill fighters in rubber ponchos and mud-caked boots, orange hard hats, machetes and shotguns, ammunition belts, dark green, brown and orange. NATION: Amazon warlords: jungle rivers, illegal gold mines and sawmills, mud and rubber, dark green, brown and orange. Low budget, improvised and ragged, clearly different from the other four anarchies and from any megastate army. Animations idle, move, attack, die.
+
+MODEL_REQUEST
+id: ZAN_infanteria
+entity: ZAN_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers of this anarchy in 2100: lawless raiders: three scavengers in welded scrap armour sprayed black and hazard yellow with crude raider shapes (no letters), spiked shoulder plates, gas masks, mismatched guns. NATION: the lawless lands: scavenged junk, welded scrap, raider graffiti without letters, rust, black and hazard yellow. Low budget, improvised and ragged, clearly different from the other four anarchies and from any megastate army. Animations idle, move, attack, die.
+
+MODEL_REQUEST
+id: ANARQUIA_artilleria
+entity: ANARQUIA_artillery_entity
+description: 3D model for Hearts of Iron IV, IMPROVISED ARTILLERY shared by all anarchies: an old heavy gun or a rack of salvaged rockets welded onto the bed of a rusty truck, crew of two, scrap plates, hazard paint. NATION: the lawless lands: scavenged junk, welded scrap, raider graffiti without letters, rust, black and hazard yellow. Same style as the anarchy militia, technical and scrap tank.
+
+# ================= PARTE B: JUEGO COMÚN 2100 =================
+MODEL_REQUEST
+id: COMUN_infanteria
+entity: COMUN_infantry_entity
+description: 3D model for Hearts of Iron IV, an infantry group of three soldiers in 2100 combat armour with pulse rifles. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_movil
+entity: COMUN_cavalry_entity
+description: 3D model for Hearts of Iron IV, the FAST MOBILE unit that replaces cavalry (no horses): two riders on light hover-bikes or all-terrain motorbikes. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_motorizada
+entity: COMUN_motorized_entity
+description: 3D model for Hearts of Iron IV, a motorized infantry truck: six-wheeled armoured transport with soldiers. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_mecanizada
+entity: COMUN_mechanized_entity
+description: 3D model for Hearts of Iron IV, a tracked infantry fighting vehicle with a small remote turret. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_blindado_ligero
+entity: COMUN_armored_car_entity
+description: 3D model for Hearts of Iron IV, a fast four-wheeled armoured reconnaissance car with a light turret. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_tanque_ligero
+entity: COMUN_light_armor_entity
+description: 3D model for Hearts of Iron IV, a light fast tank with a small railgun turret. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_tanque_medio
+entity: COMUN_medium_armor_entity
+description: 3D model for Hearts of Iron IV, a medium main tank, sloped composite armour, railgun turret. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_artilleria
+entity: COMUN_artillery_entity
+description: 3D model for Hearts of Iron IV, an ARTILLERY piece: a towed electromagnetic howitzer with its crew of two, long barrel, spread trail legs. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_antitanque
+entity: COMUN_anti_tank_entity
+description: 3D model for Hearts of Iron IV, an ANTI-TANK weapon: a low towed railgun on a small wheeled carriage with a shield, crew of two. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_antiaereo
+entity: COMUN_anti_air_entity
+description: 3D model for Hearts of Iron IV, an ANTI-AIR weapon: a towed twin rapid-fire cannon / missile mount pointing up, with a radar dish, crew of two. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_caza
+entity: COMUN_fighter_entity
+description: 3D model for Hearts of Iron IV, a FIGHTER jet: thin, swept wings, single seat. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_apoyo_cercano
+entity: COMUN_cas_entity
+description: 3D model for Hearts of Iron IV, a CLOSE AIR SUPPORT attack plane: heavy, armoured, STRAIGHT thick wings, engines on top, rotary gun under the nose, missiles under the wings; must NOT look like the fighter. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_bombardero_medio
+entity: COMUN_tactical_bomber_entity
+description: 3D model for Hearts of Iron IV, a twin-engine MEDIUM BOMBER, wider and longer than the fighter, internal bomb bay. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_bombardero_naval
+entity: COMUN_naval_bomber_entity
+description: 3D model for Hearts of Iron IV, a NAVAL BOMBER: carries one long anti-ship torpedo-missile under the belly, folding wings. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_destructor
+entity: COMUN_destroyer_entity
+description: 3D model for Hearts of Iron IV, a DESTROYER: small, low, one gun turret, flat stern for drones. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_crucero_ligero
+entity: COMUN_light_cruiser_entity
+description: 3D model for Hearts of Iron IV, a LIGHT CRUISER: slim, three twin turrets, tall radar mast; must NOT look like the heavy cruiser. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_crucero_pesado
+entity: COMUN_heavy_cruiser_entity
+description: 3D model for Hearts of Iron IV, a HEAVY CRUISER: wide and heavy, three big triple turrets, armour belt; must NOT look like the light cruiser. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_acorazado
+entity: COMUN_battleship_entity
+description: 3D model for Hearts of Iron IV, a BATTLESHIP: huge, four heavy turrets, massive superstructure. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_portaaviones
+entity: COMUN_carrier_entity
+description: 3D model for Hearts of Iron IV, an AIRCRAFT CARRIER: long flat deck with drones on it, island on the side. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_submarino
+entity: COMUN_submarine_entity
+description: 3D model for Hearts of Iron IV, an attack SUBMARINE. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
+MODEL_REQUEST
+id: COMUN_transporte
+entity: COMUN_convoy_entity
+description: 3D model for Hearts of Iron IV, a cargo TRANSPORT ship with containers. STYLE: the 2100 world without a flag: a generic professional army of the year 2100 that could belong to any small state, neutral military palette of graphite grey, olive drab and ochre, no national emblems, no symbols, no text. Must look professional and clean, not ragged like the anarchies, and not like any of the eight megastates.
+
