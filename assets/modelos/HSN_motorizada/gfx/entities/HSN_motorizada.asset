@@ -1,0 +1,33 @@
+# 2026-11-10: modelo animado HSN_motorizada (idle, move, attack)
+animation = {
+    name = "HSN_motorizada_idle_animation"
+    file = "gfx/models/units/HSN_motorizada/HSN_motorizada_idle.anim"
+}
+
+animation = {
+    name = "HSN_motorizada_move_animation"
+    file = "gfx/models/units/HSN_motorizada/HSN_motorizada_move.anim"
+}
+
+animation = {
+    name = "HSN_motorizada_attack_animation"
+    file = "gfx/models/units/HSN_motorizada/HSN_motorizada_attack.anim"
+}
+
+pdxmesh = {
+    name = "HSN_motorizada_mesh"
+    file = "gfx/models/units/HSN_motorizada/HSN_motorizada.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "HSN_motorizada_idle_animation" }
+    animation = { id = "move" type = "HSN_motorizada_move_animation" }
+    animation = { id = "attack" type = "HSN_motorizada_attack_animation" }
+    }
+
+entity = {
+    name = "HSN_motorized_entity"
+    pdxmesh = "HSN_motorizada_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
