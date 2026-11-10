@@ -1,0 +1,27 @@
+# 2026-11-10: modelo animado NRE_crucero_ligero (idle, move, attack)
+animation = { name = "NRE_crucero_ligero_idle_animation" file = "gfx/models/units/NRE_crucero_ligero/NRE_crucero_ligero_idle.anim" }
+
+animation = { name = "NRE_crucero_ligero_move_animation" file = "gfx/models/units/NRE_crucero_ligero/NRE_crucero_ligero_move.anim" }
+
+animation = { name = "NRE_crucero_ligero_attack_animation" file = "gfx/models/units/NRE_crucero_ligero/NRE_crucero_ligero_attack.anim" }
+
+pdxmesh = {
+    name = "NRE_crucero_ligero_mesh"
+    file = "gfx/models/units/NRE_crucero_ligero/NRE_crucero_ligero.mesh"
+    animation = { id = "idle" type = "NRE_crucero_ligero_idle_animation" }
+    animation = { id = "move" type = "NRE_crucero_ligero_move_animation" }
+    animation = { id = "attack" type = "NRE_crucero_ligero_attack_animation" }
+    scale = 1.0
+    }
+
+entity = {
+    name = "NRE_light_cruiser_entity"
+    pdxmesh = "NRE_crucero_ligero_mesh"
+    scale = 0.859
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes animation_blend_time = 0.15 }
+    state = { name = "move" animation = "move" looping = yes animation_blend_time = 0.15 }
+    state = { name = "attack" animation = "attack" looping = yes animation_blend_time = 0.15 }
+    state = { name = "retreat" animation = "move" looping = yes animation_blend_time = 0.15 }
+    state = { name = "defend" animation = "attack" looping = yes animation_blend_time = 0.15 }
+}
