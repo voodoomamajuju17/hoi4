@@ -1,0 +1,32 @@
+# 2026-11-10: modelo animado ZAL_destructor (idle, move, attack)
+animation = {
+    name = "ZAL_destructor_idle_animation"
+    file = "gfx/models/units/ZAL_destructor/ZAL_destructor_idle.anim"
+}
+animation = {
+    name = "ZAL_destructor_move_animation"
+    file = "gfx/models/units/ZAL_destructor/ZAL_destructor_move.anim"
+}
+animation = {
+    name = "ZAL_destructor_attack_animation"
+    file = "gfx/models/units/ZAL_destructor/ZAL_destructor_attack.anim"
+}
+
+pdxmesh = {
+    name = "ZAL_destructor_mesh"
+    file = "gfx/models/units/ZAL_destructor/ZAL_destructor.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ZAL_destructor_idle_animation" }
+    animation = { id = "move" type = "ZAL_destructor_move_animation" }
+    animation = { id = "attack" type = "ZAL_destructor_attack_animation" }
+    }
+
+entity = {
+    name = "ZAL_destroyer_entity"
+    pdxmesh = "ZAL_destructor_mesh"
+    scale = 0.801
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

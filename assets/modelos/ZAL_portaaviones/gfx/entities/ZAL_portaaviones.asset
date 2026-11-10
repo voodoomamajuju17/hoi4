@@ -1,0 +1,32 @@
+# 2026-11-10: modelo animado ZAL_portaaviones (idle, move, attack)
+animation = {
+    name = "ZAL_portaaviones_idle_animation"
+    file = "gfx/models/units/ZAL_portaaviones/ZAL_portaaviones_idle.anim"
+}
+animation = {
+    name = "ZAL_portaaviones_move_animation"
+    file = "gfx/models/units/ZAL_portaaviones/ZAL_portaaviones_move.anim"
+}
+animation = {
+    name = "ZAL_portaaviones_attack_animation"
+    file = "gfx/models/units/ZAL_portaaviones/ZAL_portaaviones_attack.anim"
+}
+
+pdxmesh = {
+    name = "ZAL_portaaviones_mesh"
+    file = "gfx/models/units/ZAL_portaaviones/ZAL_portaaviones.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ZAL_portaaviones_idle_animation" }
+    animation = { id = "move" type = "ZAL_portaaviones_move_animation" }
+    animation = { id = "attack" type = "ZAL_portaaviones_attack_animation" }
+    }
+
+entity = {
+    name = "ZAL_carrier_entity"
+    pdxmesh = "ZAL_portaaviones_mesh"
+    scale = 0.812
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

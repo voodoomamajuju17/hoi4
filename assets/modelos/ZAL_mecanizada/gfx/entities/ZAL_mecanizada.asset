@@ -1,0 +1,33 @@
+# 2026-11-10: modelo animado ZAL_mecanizada (idle, move, attack)
+animation = {
+    name = "ZAL_mecanizada_idle_animation"
+    file = "gfx/models/units/ZAL_mecanizada/ZAL_mecanizada_idle.anim"
+}
+
+animation = {
+    name = "ZAL_mecanizada_move_animation"
+    file = "gfx/models/units/ZAL_mecanizada/ZAL_mecanizada_move.anim"
+}
+
+animation = {
+    name = "ZAL_mecanizada_attack_animation"
+    file = "gfx/models/units/ZAL_mecanizada/ZAL_mecanizada_attack.anim"
+}
+
+pdxmesh = {
+    name = "ZAL_mecanizada_mesh"
+    file = "gfx/models/units/ZAL_mecanizada/ZAL_mecanizada.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ZAL_mecanizada_idle_animation" }
+    animation = { id = "move" type = "ZAL_mecanizada_move_animation" }
+    animation = { id = "attack" type = "ZAL_mecanizada_attack_animation" }
+    }
+
+entity = {
+    name = "ZAL_mechanized_entity"
+    pdxmesh = "ZAL_mecanizada_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
