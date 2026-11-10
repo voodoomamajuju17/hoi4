@@ -1,2 +1,33 @@
-pdxmesh = { name = "EFE_motorizada_mesh" file = "gfx/models/units/EFE_motorizada/EFE_motorizada.mesh" }
-entity = { name = "EFE_motorized_entity" pdxmesh = "EFE_motorizada_mesh" default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado EFE_motorizada (idle, move, attack)
+animation = {
+    name = "EFE_motorizada_idle_animation"
+    file = "gfx/models/units/EFE_motorizada/EFE_motorizada_idle.anim"
+}
+
+animation = {
+    name = "EFE_motorizada_move_animation"
+    file = "gfx/models/units/EFE_motorizada/EFE_motorizada_move.anim"
+}
+
+animation = {
+    name = "EFE_motorizada_attack_animation"
+    file = "gfx/models/units/EFE_motorizada/EFE_motorizada_attack.anim"
+}
+
+pdxmesh = {
+    name = "EFE_motorizada_mesh"
+    file = "gfx/models/units/EFE_motorizada/EFE_motorizada.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "EFE_motorizada_idle_animation" }
+    animation = { id = "move" type = "EFE_motorizada_move_animation" }
+    animation = { id = "attack" type = "EFE_motorizada_attack_animation" }
+    }
+
+entity = {
+    name = "EFE_motorized_entity"
+    pdxmesh = "EFE_motorizada_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

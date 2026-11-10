@@ -1,2 +1,33 @@
-pdxmesh = { name = "ASC_centinela_3_mesh" file = "gfx/models/units/ASC_centinela_3/ASC_centinela_3.mesh" }
-entity = { name = "ASC_centinela_3_entity" pdxmesh = "ASC_centinela_3_mesh" default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado ASC_centinela_3 (idle, move, attack)
+animation = {
+    name = "ASC_centinela_3_idle_animation"
+    file = "gfx/models/units/ASC_centinela_3/ASC_centinela_3_idle.anim"
+}
+
+animation = {
+    name = "ASC_centinela_3_move_animation"
+    file = "gfx/models/units/ASC_centinela_3/ASC_centinela_3_move.anim"
+}
+
+animation = {
+    name = "ASC_centinela_3_attack_animation"
+    file = "gfx/models/units/ASC_centinela_3/ASC_centinela_3_attack.anim"
+}
+
+pdxmesh = {
+    name = "ASC_centinela_3_mesh"
+    file = "gfx/models/units/ASC_centinela_3/ASC_centinela_3.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ASC_centinela_3_idle_animation" }
+    animation = { id = "move" type = "ASC_centinela_3_move_animation" }
+    animation = { id = "attack" type = "ASC_centinela_3_attack_animation" }
+    }
+
+entity = {
+    name = "ASC_centinela_3_entity"
+    pdxmesh = "ASC_centinela_3_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

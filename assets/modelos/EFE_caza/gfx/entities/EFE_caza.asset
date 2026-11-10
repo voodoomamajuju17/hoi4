@@ -1,3 +1,41 @@
-pdxmesh = { name = "EFE_caza_mesh" file = "gfx/models/units/EFE_caza/EFE_caza.mesh" }
-entity = { name = "EFE_fighter_entity" pdxmesh = "EFE_caza_mesh" default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
-entity = { name = "EFE_light_plane_entity" pdxmesh = "EFE_caza_mesh" default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado EFE_caza (idle, move, attack)
+animation = {
+    name = "EFE_caza_idle_animation"
+    file = "gfx/models/units/EFE_caza/EFE_caza_idle.anim"
+}
+
+animation = {
+    name = "EFE_caza_move_animation"
+    file = "gfx/models/units/EFE_caza/EFE_caza_move.anim"
+}
+
+animation = {
+    name = "EFE_caza_attack_animation"
+    file = "gfx/models/units/EFE_caza/EFE_caza_attack.anim"
+}
+
+pdxmesh = {
+    name = "EFE_caza_mesh"
+    file = "gfx/models/units/EFE_caza/EFE_caza.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "EFE_caza_idle_animation" }
+    animation = { id = "move" type = "EFE_caza_move_animation" }
+    animation = { id = "attack" type = "EFE_caza_attack_animation" }
+    }
+
+entity = {
+    name = "EFE_fighter_entity"
+    pdxmesh = "EFE_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "EFE_light_plane_entity"
+    pdxmesh = "EFE_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
