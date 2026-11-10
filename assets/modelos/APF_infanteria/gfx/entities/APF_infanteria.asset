@@ -1,0 +1,44 @@
+# 2026-11-10: modelo animado APF_infanteria (idle, move, attack)
+animation = {
+    name = "APF_infanteria_idle_anim"
+    file = "gfx/models/units/APF_infanteria/APF_infanteria_idle.anim"
+}
+
+animation = {
+    name = "APF_infanteria_move_anim"
+    file = "gfx/models/units/APF_infanteria/APF_infanteria_move.anim"
+}
+
+animation = {
+    name = "APF_infanteria_attack_anim"
+    file = "gfx/models/units/APF_infanteria/APF_infanteria_attack.anim"
+}
+
+animation = {
+    name = "APF_infanteria_die_anim"
+    file = "gfx/models/units/APF_infanteria/APF_infanteria_die.anim"
+}
+
+pdxmesh = {
+    name = "APF_infanteria_mesh"
+    file = "gfx/models/units/APF_infanteria/APF_infanteria.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "APF_infanteria_idle_anim" }
+    animation = { id = "move" type = "APF_infanteria_move_anim" }
+    animation = { id = "attack" type = "APF_infanteria_attack_anim" }
+    animation = { id = "die" type = "APF_infanteria_die_anim" }
+    }
+
+entity = {
+    name = "APF_infantry_entity"
+    pdxmesh = "APF_infanteria_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.1 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "support_attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "retreat" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "training" animation = "idle" animation_blend_time = 0.1 looping = yes }
+    state = { name = "death" animation = "die" animation_blend_time = 0.1 looping = no }
+}

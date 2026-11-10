@@ -1,0 +1,41 @@
+# 2026-11-10: modelo animado HSN_transporte (idle, move, attack)
+animation = {
+    name = "HSN_transporte_idle_animation"
+    file = "gfx/models/units/HSN_transporte/HSN_transporte_idle.anim"
+}
+
+animation = {
+    name = "HSN_transporte_move_animation"
+    file = "gfx/models/units/HSN_transporte/HSN_transporte_move.anim"
+}
+
+animation = {
+    name = "HSN_transporte_attack_animation"
+    file = "gfx/models/units/HSN_transporte/HSN_transporte_attack.anim"
+}
+
+animation = {
+    name = "HSN_transporte_load_animation"
+    file = "gfx/models/units/HSN_transporte/HSN_transporte_load.anim"
+}
+
+pdxmesh = {
+    name = "HSN_transporte_mesh"
+    file = "gfx/models/units/HSN_transporte/HSN_transporte.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "HSN_transporte_idle_animation" }
+    animation = { id = "move" type = "HSN_transporte_move_animation" }
+    animation = { id = "attack" type = "HSN_transporte_attack_animation" }
+    animation = { id = "load" type = "HSN_transporte_load_animation" }
+    }
+
+entity = {
+    name = "HSN_convoy_entity"
+    pdxmesh = "HSN_transporte_mesh"
+    scale = 0.877
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+    state = { name = "load" animation = "load" looping = yes }
+}

@@ -1,0 +1,44 @@
+# 2026-11-10: modelo animado APF_mecanizada (idle, move, attack)
+animation = {
+    name = "APF_mecanizada_idle_anim"
+    file = "gfx/models/units/APF_mecanizada/APF_mecanizada_idle.anim"
+}
+
+animation = {
+    name = "APF_mecanizada_move_anim"
+    file = "gfx/models/units/APF_mecanizada/APF_mecanizada_move.anim"
+}
+
+animation = {
+    name = "APF_mecanizada_attack_anim"
+    file = "gfx/models/units/APF_mecanizada/APF_mecanizada_attack.anim"
+}
+
+animation = {
+    name = "APF_mecanizada_unload_anim"
+    file = "gfx/models/units/APF_mecanizada/APF_mecanizada_unload.anim"
+}
+
+pdxmesh = {
+    name = "APF_mecanizada_mesh"
+    file = "gfx/models/units/APF_mecanizada/APF_mecanizada.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "APF_mecanizada_idle_anim" }
+    animation = { id = "move" type = "APF_mecanizada_move_anim" }
+    animation = { id = "attack" type = "APF_mecanizada_attack_anim" }
+    animation = { id = "unload" type = "APF_mecanizada_unload_anim" }
+    }
+
+entity = {
+    name = "APF_mechanized_entity"
+    pdxmesh = "APF_mecanizada_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.1 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "unload" animation = "unload" animation_blend_time = 0.1 looping = no }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "support_attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "retreat" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "training" animation = "idle" animation_blend_time = 0.1 looping = yes }
+}
