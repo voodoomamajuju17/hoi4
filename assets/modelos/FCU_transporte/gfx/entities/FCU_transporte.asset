@@ -1,2 +1,27 @@
-pdxmesh = { name = "FCU_transporte_mesh" file = "gfx/models/units/FCU_transporte/FCU_transporte.mesh" }
-entity = { name = "FCU_convoy_entity" pdxmesh = "FCU_transporte_mesh" scale = 0.857 default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado FCU_transporte (idle, move, attack)
+animation = { name = "FCU_transporte_idle_animation" file = "gfx/models/units/FCU_transporte/FCU_transporte_idle.anim" }
+animation = { name = "FCU_transporte_move_animation" file = "gfx/models/units/FCU_transporte/FCU_transporte_move.anim" }
+animation = { name = "FCU_transporte_cargo_animation" file = "gfx/models/units/FCU_transporte/FCU_transporte_cargo.anim" }
+
+pdxmesh = {
+    name = "FCU_transporte_mesh"
+    file = "gfx/models/units/FCU_transporte/FCU_transporte.mesh"
+    animation = { id = "idle" type = "FCU_transporte_idle_animation" }
+    animation = { id = "move" type = "FCU_transporte_move_animation" }
+    animation = { id = "cargo" type = "FCU_transporte_cargo_animation" }
+  }
+
+entity = {
+  name = "FCU_convoy_entity"
+  pdxmesh = "FCU_transporte_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "cargo" animation = "cargo" looping = yes }
+  state = { name = "moving" animation = "move" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+  state = { name = "attack" animation = "move" looping = yes }
+  state = { name = "defend" animation = "move" looping = yes }
+  state = { name = "support_attack" animation = "move" looping = yes }
+}

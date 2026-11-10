@@ -1,2 +1,25 @@
-pdxmesh = { name = "FCU_tanque_ligero_mesh" file = "gfx/models/units/FCU_tanque_ligero/FCU_tanque_ligero.mesh" }
-entity = { name = "FCU_light_armor_entity" pdxmesh = "FCU_tanque_ligero_mesh" default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado FCU_tanque_ligero (idle, move, attack)
+animation = { name = "FCU_tanque_ligero_idle_animation" file = "gfx/models/units/FCU_tanque_ligero/FCU_tanque_ligero_idle.anim" }
+animation = { name = "FCU_tanque_ligero_move_animation" file = "gfx/models/units/FCU_tanque_ligero/FCU_tanque_ligero_move.anim" }
+animation = { name = "FCU_tanque_ligero_attack_animation" file = "gfx/models/units/FCU_tanque_ligero/FCU_tanque_ligero_attack.anim" }
+
+pdxmesh = {
+    name = "FCU_tanque_ligero_mesh"
+    file = "gfx/models/units/FCU_tanque_ligero/FCU_tanque_ligero.mesh"
+    animation = { id = "idle" type = "FCU_tanque_ligero_idle_animation" }
+    animation = { id = "move" type = "FCU_tanque_ligero_move_animation" }
+    animation = { id = "attack" type = "FCU_tanque_ligero_attack_animation" }
+  }
+
+entity = {
+  name = "FCU_light_armor_entity"
+  pdxmesh = "FCU_tanque_ligero_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+}

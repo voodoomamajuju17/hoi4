@@ -1,3 +1,41 @@
-pdxmesh = { name = "FCU_ala_de_obsidiana_mesh" file = "gfx/models/units/FCU_ala_de_obsidiana/FCU_ala_de_obsidiana.mesh" }
-entity = { name = "FCU_ala_de_obsidiana_entity" pdxmesh = "FCU_ala_de_obsidiana_mesh" scale = 0.65 default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
-entity = { name = "FCU_heavy_plane_entity" pdxmesh = "FCU_ala_de_obsidiana_mesh" scale = 0.65 default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado FCU_ala_de_obsidiana (idle, move, attack)
+animation = { name = "FCU_ala_de_obsidiana_idle_animation" file = "gfx/models/units/FCU_ala_de_obsidiana/FCU_ala_de_obsidiana_idle.anim" }
+animation = { name = "FCU_ala_de_obsidiana_move_animation" file = "gfx/models/units/FCU_ala_de_obsidiana/FCU_ala_de_obsidiana_move.anim" }
+animation = { name = "FCU_ala_de_obsidiana_unload_animation" file = "gfx/models/units/FCU_ala_de_obsidiana/FCU_ala_de_obsidiana_unload.anim" }
+
+pdxmesh = {
+    name = "FCU_ala_de_obsidiana_mesh"
+    file = "gfx/models/units/FCU_ala_de_obsidiana/FCU_ala_de_obsidiana.mesh"
+    animation = { id = "idle" type = "FCU_ala_de_obsidiana_idle_animation" }
+    animation = { id = "move" type = "FCU_ala_de_obsidiana_move_animation" }
+    animation = { id = "unload" type = "FCU_ala_de_obsidiana_unload_animation" }
+  }
+
+entity = {
+  name = "FCU_ala_de_obsidiana_entity"
+  pdxmesh = "FCU_ala_de_obsidiana_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "unload" animation = "unload" looping = yes }
+  state = { name = "moving" animation = "move" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+  state = { name = "attack" animation = "unload" looping = yes }
+  state = { name = "defend" animation = "unload" looping = yes }
+  state = { name = "support_attack" animation = "unload" looping = yes }
+}
+entity = {
+  name = "FCU_heavy_plane_entity"
+  pdxmesh = "FCU_ala_de_obsidiana_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "unload" animation = "unload" looping = yes }
+  state = { name = "moving" animation = "move" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+  state = { name = "attack" animation = "unload" looping = yes }
+  state = { name = "defend" animation = "unload" looping = yes }
+  state = { name = "support_attack" animation = "unload" looping = yes }
+}

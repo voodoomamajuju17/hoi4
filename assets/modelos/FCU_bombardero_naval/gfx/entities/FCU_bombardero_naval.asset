@@ -1,2 +1,26 @@
-pdxmesh = { name = "FCU_bombardero_naval_mesh" file = "gfx/models/units/FCU_bombardero_naval/FCU_bombardero_naval.mesh" }
-entity = { name = "FCU_naval_bomber_entity" pdxmesh = "FCU_bombardero_naval_mesh" default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado FCU_bombardero_naval (idle, move, attack)
+animation = { name = "FCU_bombardero_naval_idle_animation" file = "gfx/models/units/FCU_bombardero_naval/FCU_bombardero_naval_idle.anim" }
+animation = { name = "FCU_bombardero_naval_move_animation" file = "gfx/models/units/FCU_bombardero_naval/FCU_bombardero_naval_move.anim" }
+animation = { name = "FCU_bombardero_naval_attack_animation" file = "gfx/models/units/FCU_bombardero_naval/FCU_bombardero_naval_attack.anim" }
+
+pdxmesh = {
+    name = "FCU_bombardero_naval_mesh"
+    file = "gfx/models/units/FCU_bombardero_naval/FCU_bombardero_naval.mesh"
+    animation = { id = "idle" type = "FCU_bombardero_naval_idle_animation" }
+    animation = { id = "move" type = "FCU_bombardero_naval_move_animation" }
+    animation = { id = "attack" type = "FCU_bombardero_naval_attack_animation" }
+  }
+
+entity = {
+  name = "FCU_naval_bomber_entity"
+  pdxmesh = "FCU_bombardero_naval_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "moving" animation = "move" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+}
