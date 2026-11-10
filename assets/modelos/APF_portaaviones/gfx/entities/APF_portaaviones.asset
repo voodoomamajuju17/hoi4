@@ -1,0 +1,45 @@
+# 2026-11-10: modelo animado APF_portaaviones (idle, move, attack)
+animation = {
+    name = "APF_portaaviones_idle_anim"
+    file = "gfx/models/units/APF_portaaviones/APF_portaaviones_idle.anim"
+}
+
+animation = {
+    name = "APF_portaaviones_move_anim"
+    file = "gfx/models/units/APF_portaaviones/APF_portaaviones_move.anim"
+}
+
+animation = {
+    name = "APF_portaaviones_attack_anim"
+    file = "gfx/models/units/APF_portaaviones/APF_portaaviones_attack.anim"
+}
+
+animation = {
+    name = "APF_portaaviones_elevator_anim"
+    file = "gfx/models/units/APF_portaaviones/APF_portaaviones_elevator.anim"
+}
+
+pdxmesh = {
+    name = "APF_portaaviones_mesh"
+    file = "gfx/models/units/APF_portaaviones/APF_portaaviones.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "APF_portaaviones_idle_anim" }
+    animation = { id = "move" type = "APF_portaaviones_move_anim" }
+    animation = { id = "attack" type = "APF_portaaviones_attack_anim" }
+    animation = { id = "elevator" type = "APF_portaaviones_elevator_anim" }
+    }
+
+entity = {
+    name = "APF_carrier_entity"
+    pdxmesh = "APF_portaaviones_mesh"
+    scale = 0.812
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.1 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "elevator" animation = "elevator" animation_blend_time = 0.1 looping = no next_state = "idle" }
+    state = { name = "retreat" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "support_attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "training" animation = "idle" animation_blend_time = 0.1 looping = yes }
+}

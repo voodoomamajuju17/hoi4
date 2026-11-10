@@ -1,0 +1,49 @@
+# 2026-11-10: modelo animado APF_caza (idle, move, attack)
+animation = {
+    name = "APF_caza_idle_anim"
+    file = "gfx/models/units/APF_caza/APF_caza_idle.anim"
+}
+
+animation = {
+    name = "APF_caza_move_anim"
+    file = "gfx/models/units/APF_caza/APF_caza_move.anim"
+}
+
+animation = {
+    name = "APF_caza_attack_anim"
+    file = "gfx/models/units/APF_caza/APF_caza_attack.anim"
+}
+
+pdxmesh = {
+    name = "APF_caza_mesh"
+    file = "gfx/models/units/APF_caza/APF_caza.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "APF_caza_idle_anim" }
+    animation = { id = "move" type = "APF_caza_move_anim" }
+    animation = { id = "attack" type = "APF_caza_attack_anim" }
+    }
+
+entity = {
+    name = "APF_fighter_entity"
+    pdxmesh = "APF_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.1 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "support_attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "retreat" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "training" animation = "idle" animation_blend_time = 0.1 looping = yes }
+}
+entity = {
+    name = "APF_light_plane_entity"
+    pdxmesh = "APF_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.1 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "support_attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "retreat" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "training" animation = "idle" animation_blend_time = 0.1 looping = yes }
+}

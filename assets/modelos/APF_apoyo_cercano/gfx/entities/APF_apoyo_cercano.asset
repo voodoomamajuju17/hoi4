@@ -1,0 +1,37 @@
+# 2026-11-10: modelo animado APF_apoyo_cercano (idle, move, attack)
+animation = {
+    name = "APF_apoyo_cercano_idle_anim"
+    file = "gfx/models/units/APF_apoyo_cercano/APF_apoyo_cercano_idle.anim"
+}
+
+animation = {
+    name = "APF_apoyo_cercano_move_anim"
+    file = "gfx/models/units/APF_apoyo_cercano/APF_apoyo_cercano_move.anim"
+}
+
+animation = {
+    name = "APF_apoyo_cercano_attack_anim"
+    file = "gfx/models/units/APF_apoyo_cercano/APF_apoyo_cercano_attack.anim"
+}
+
+pdxmesh = {
+    name = "APF_apoyo_cercano_mesh"
+    file = "gfx/models/units/APF_apoyo_cercano/APF_apoyo_cercano.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "APF_apoyo_cercano_idle_anim" }
+    animation = { id = "move" type = "APF_apoyo_cercano_move_anim" }
+    animation = { id = "attack" type = "APF_apoyo_cercano_attack_anim" }
+    }
+
+entity = {
+    name = "APF_cas_entity"
+    pdxmesh = "APF_apoyo_cercano_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.1 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "retreat" animation = "move" animation_blend_time = 0.1 looping = yes }
+    state = { name = "support_attack" animation = "attack" animation_blend_time = 0.1 looping = yes }
+    state = { name = "training" animation = "idle" animation_blend_time = 0.1 looping = yes }
+}
