@@ -247,7 +247,18 @@ doctrines:
     # La HSN: corsarios y cazadores de convoyes
     HSN: {folder: naval, grand: [trade_interdiction], grand_kw: [trade, interdiction, raid], track: screen, sub_kw: [raid, hunter, destroyer, screen]}
     # El Sol: el cielo de los Andes (aviación, su especialidad)
-    NAS: {folder: air, grand: [battlefield_support], grand_kw: [battlefield, support], track: support, sub_kw: [close_air, ground, cas]}
+    # 2026-11-10: en el juego (1.17+) se llaman new_battlefield_support y air_subdoctrine_*; antes caía en
+    # reconocimiento aéreo. Y ("destrabar doctrina de fuerzas especiales de paracaidistas gratis") la segunda
+    # doctrina, la de fuerzas especiales, con los paracaidistas ya iniciados.
+    NAS:
+      folder: air
+      grand: [new_battlefield_support, battlefield_support]
+      grand_kw: [battlefield, support]
+      sub: [air_subdoctrine_tactical_battlefield_support, air_subdoctrine_operational_air_support]
+      track: support
+      sub_kw: [close_air, ground, cas, tactical]
+      extra:
+      - {folder: special_forces, grand: [special_forces_quality, special_forces_quantity], grand_kw: [special], sub: [paratroopers_1], sub_kw: [paratroop]}
     # La Anarquía: bandas, infiltración y oleadas
     anarchy: {folder: land, grand: [mass_assault], grand_kw: [mass], track: infantry, sub_kw: [infiltration, guerrilla, human_wave, wave]}
 

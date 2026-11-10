@@ -359,6 +359,14 @@ units:
         se van antes de que el enemigo entienda dónde terminaba la montaña.
     sub_unit: paratrooper
     sub_unit_name: {english: Sons of the Condor, spanish: Hijos del Cóndor}
+    # 2026-11-10 ("bonus a paracaidistas"): el batallón (solo la NAS lo tiene) más organizado y con
+    # más moral, y en la montaña, su casa, pega y se mueve mejor (valores absolutos por terreno)
+    sub_unit_stats:
+      paratrooper:
+        max_organisation: 1.15
+        default_morale: 1.15
+        mountain: {attack: 0.15, movement: 0.10}
+        hills: {attack: 0.10, movement: 0.05}
     lock:
       techs: [paratroopers, paratroopers2, paratroopers3]
     equipment: [transport_plane]     # los tiltrotores: no se bloquean, se regalan
@@ -388,9 +396,10 @@ units:
       id: NAS_los_hijos_del_condor
       name: {english: The Sons of the Condor, spanish: Los Hijos del Cóndor}
       desc:
-        english: 'Andean airborne troops. Special forces: +10% attack and defence. Tiltrotors: +50% range, +20% reliability. Counts as special forces: the cap is raised by 5% of all battalions.'
-        spanish: 'Tropas aerotransportadas andinas. Fuerzas especiales: +10% ataque y defensa. Tiltrotores: +50% alcance, +20% fiabilidad. Cuenta como fuerzas especiales: el tope sube 5% de todos los batallones.'
-      modifiers: {'?special_forces_cap': 0.05, '?special_forces_attack_factor': 0.1, '?special_forces_defence_factor': 0.1}
+        english: 'Andean airborne troops. Special forces: +15% attack and defence. Drops: +25% organisation on landing, +25% defence against anti-air, 25% lighter (more troops per tiltrotor). Tiltrotors: +50% range, +20% reliability. Counts as special forces: the cap is raised by 5% of all battalions.'
+        spanish: 'Tropas aerotransportadas andinas. Fuerzas especiales: +15% ataque y defensa. Saltos: +25% de organización al aterrizar, +25% de defensa antiaérea, 25% más livianos (más tropa por tiltrotor). Tiltrotores: +50% alcance, +20% fiabilidad. Cuenta como fuerzas especiales: el tope sube 5% de todos los batallones.'
+      modifiers: {'?special_forces_cap': 0.05, '?special_forces_attack_factor': 0.15, '?special_forces_defence_factor': 0.15,
+                  '?paradrop_organization_factor': 0.25, '?paratrooper_aa_defense': 0.25, '?paratrooper_weight_factor': -0.25}
       equipment_bonus: {air_range: 0.5, reliability: 0.2}
       picture_prefer: [paratroop, air, special]
 

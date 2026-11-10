@@ -100,6 +100,21 @@ def emit(ctx: BuildContext) -> None:
         if sub:
             body.add("set_sub_doctrine", sub)
             body.add("add_mastery", Block([("amount", mastery), ("sub_doctrine", sub)]))
+        # 2026-11-10 (NAS: "destrabar doctrina de fuerzas especiales de paracaidistas gratis"): doctrinas
+        # de otras carpetas (fuerzas especiales, por ejemplo), solo para la meganación, no sus satélites
+        for extra in (bspec.get("extra") or []) if leader == c.tag else []:
+            g2, fell2 = _grand(extra, catalog["grand"])
+            if g2 is None:
+                ctx.warn(f"doctrinas: {c.tag}: el juego no tiene la carpeta '{extra.get('folder')}'; se omite la extra.")
+                continue
+            s2, fell_s2 = _sub(extra, catalog["grand"][g2]["tracks"], catalog["sub"])
+            if fell2 or fell_s2:
+                ctx.warn(f"doctrinas: {c.tag}: extra no encontrada; usa {g2} / {s2 or '-'}.")
+            body.add("set_grand_doctrine", g2)
+            if s2:
+                body.add("set_sub_doctrine", s2)
+                body.add("add_mastery", Block([("amount", mastery), ("sub_doctrine", s2)]))
+            ctx.note(f"doctrinas: {c.tag} arranca además con {g2} / {s2 or '-'}")
         effect.add("if", Block([("limit", Block([("country_exists", c.tag)])), (c.tag, body)]))
         chosen[c.tag] = (grand, sub)
     if not chosen:
