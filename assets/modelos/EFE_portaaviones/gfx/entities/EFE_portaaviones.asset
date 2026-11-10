@@ -1,2 +1,34 @@
-pdxmesh = { name = "EFE_portaaviones_mesh" file = "gfx/models/units/EFE_portaaviones/EFE_portaaviones.mesh" }
-entity = { name = "EFE_carrier_entity" pdxmesh = "EFE_portaaviones_mesh" scale = 2.5 default_state = "idle" state = { name = "idle" } state = { name = "move" } state = { name = "attack" } }
+# 2026-11-10: modelo animado EFE_portaaviones (idle, move, attack)
+animation = {
+    name = "EFE_portaaviones_idle_animation"
+    file = "gfx/models/units/EFE_portaaviones/EFE_portaaviones_idle.anim"
+}
+
+animation = {
+    name = "EFE_portaaviones_move_animation"
+    file = "gfx/models/units/EFE_portaaviones/EFE_portaaviones_move.anim"
+}
+
+animation = {
+    name = "EFE_portaaviones_attack_animation"
+    file = "gfx/models/units/EFE_portaaviones/EFE_portaaviones_attack.anim"
+}
+
+pdxmesh = {
+    name = "EFE_portaaviones_mesh"
+    file = "gfx/models/units/EFE_portaaviones/EFE_portaaviones.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "EFE_portaaviones_idle_animation" }
+    animation = { id = "move" type = "EFE_portaaviones_move_animation" }
+    animation = { id = "attack" type = "EFE_portaaviones_attack_animation" }
+    }
+
+entity = {
+    name = "EFE_carrier_entity"
+    pdxmesh = "EFE_portaaviones_mesh"
+    scale = 2.656
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
