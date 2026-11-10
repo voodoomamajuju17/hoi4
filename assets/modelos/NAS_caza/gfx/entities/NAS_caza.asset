@@ -1,0 +1,41 @@
+# 2026-11-10: modelo animado NAS_caza (idle, move, attack)
+animation = {
+    name = "NAS_caza_idle_animation"
+    file = "gfx/models/units/NAS_caza/NAS_caza_idle.anim"
+}
+
+animation = {
+    name = "NAS_caza_move_animation"
+    file = "gfx/models/units/NAS_caza/NAS_caza_move.anim"
+}
+
+animation = {
+    name = "NAS_caza_attack_animation"
+    file = "gfx/models/units/NAS_caza/NAS_caza_attack.anim"
+}
+
+pdxmesh = {
+    name = "NAS_caza_mesh"
+    file = "gfx/models/units/NAS_caza/NAS_caza.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "NAS_caza_idle_animation" }
+    animation = { id = "move" type = "NAS_caza_move_animation" }
+    animation = { id = "attack" type = "NAS_caza_attack_animation" }
+    }
+
+entity = {
+    name = "NAS_fighter_entity"
+    pdxmesh = "NAS_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "NAS_light_plane_entity"
+    pdxmesh = "NAS_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

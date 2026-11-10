@@ -1,0 +1,33 @@
+# 2026-11-10: modelo animado NAS_tanque_ligero (idle, move, attack)
+animation = {
+    name = "NAS_tanque_ligero_idle_animation"
+    file = "gfx/models/units/NAS_tanque_ligero/NAS_tanque_ligero_idle.anim"
+}
+
+animation = {
+    name = "NAS_tanque_ligero_move_animation"
+    file = "gfx/models/units/NAS_tanque_ligero/NAS_tanque_ligero_move.anim"
+}
+
+animation = {
+    name = "NAS_tanque_ligero_attack_animation"
+    file = "gfx/models/units/NAS_tanque_ligero/NAS_tanque_ligero_attack.anim"
+}
+
+pdxmesh = {
+    name = "NAS_tanque_ligero_mesh"
+    file = "gfx/models/units/NAS_tanque_ligero/NAS_tanque_ligero.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "NAS_tanque_ligero_idle_animation" }
+    animation = { id = "move" type = "NAS_tanque_ligero_move_animation" }
+    animation = { id = "attack" type = "NAS_tanque_ligero_attack_animation" }
+    }
+
+entity = {
+    name = "NAS_light_armor_entity"
+    pdxmesh = "NAS_tanque_ligero_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

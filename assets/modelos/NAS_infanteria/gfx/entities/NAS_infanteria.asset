@@ -1,0 +1,41 @@
+# 2026-11-10: modelo animado NAS_infanteria (idle, move, attack)
+animation = {
+    name = "NAS_infanteria_idle_animation"
+    file = "gfx/models/units/NAS_infanteria/NAS_infanteria_idle.anim"
+}
+
+animation = {
+    name = "NAS_infanteria_move_animation"
+    file = "gfx/models/units/NAS_infanteria/NAS_infanteria_move.anim"
+}
+
+animation = {
+    name = "NAS_infanteria_attack_animation"
+    file = "gfx/models/units/NAS_infanteria/NAS_infanteria_attack.anim"
+}
+
+animation = {
+    name = "NAS_infanteria_die_animation"
+    file = "gfx/models/units/NAS_infanteria/NAS_infanteria_die.anim"
+}
+
+pdxmesh = {
+    name = "NAS_infanteria_mesh"
+    file = "gfx/models/units/NAS_infanteria/NAS_infanteria.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "NAS_infanteria_idle_animation" }
+    animation = { id = "move" type = "NAS_infanteria_move_animation" }
+    animation = { id = "attack" type = "NAS_infanteria_attack_animation" }
+    animation = { id = "die" type = "NAS_infanteria_die_animation" }
+    }
+
+entity = {
+    name = "NAS_infantry_entity"
+    pdxmesh = "NAS_infanteria_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+    state = { name = "die" animation = "die" looping = no }
+    state = { name = "death" animation = "die" looping = no }
+}

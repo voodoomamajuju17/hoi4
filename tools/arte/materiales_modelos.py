@@ -202,7 +202,18 @@ def desde_blender(carpeta: Path, salida: Path) -> list[str]:
         def abrir(suf):
             p = c.with_name(f"{nombre}_{suf}.png")
             return Image.open(p) if p.exists() else None
-        a_paradox(Image.open(c), abrir("normal"), abrir("roughness"), abrir("metallic"), salida, nombre)
+        hechos_dds = a_paradox(Image.open(c), abrir("normal"), abrir("roughness"), abrir("metallic"), salida, nombre)
+        # 2026-11-10 (NAS): algunas mallas nombran _diff/_spec en vez de _diffuse/_specular; se usan los nombres
+        # que pide la malla que está al lado, si hay una
+        import re as _re
+        malla = next(iter(sorted(salida.glob("*.mesh"))), None)
+        if malla is not None:
+            pedidos = {n.decode() for n in _re.findall(rb"[A-Za-z0-9_]+\.dds", malla.read_bytes())}
+            for f in hechos_dds:
+                for alt in (f.name.replace("_diffuse.", "_diff."), f.name.replace("_specular.", "_spec."),
+                            f.name.replace("_normal.", "_norm.")):
+                    if alt != f.name and alt in pedidos and f.name not in pedidos:
+                        f.replace(salida / alt)
         hechos.append(nombre)
     return hechos
 
