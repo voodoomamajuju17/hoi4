@@ -1,0 +1,41 @@
+# 2026-11-10: modelo animado ZJP_caza (idle, move, attack)
+animation = {
+    name = "ZJP_caza_idle_animation"
+    file = "gfx/models/units/ZJP_caza/ZJP_caza_idle.anim"
+}
+
+animation = {
+    name = "ZJP_caza_move_animation"
+    file = "gfx/models/units/ZJP_caza/ZJP_caza_move.anim"
+}
+
+animation = {
+    name = "ZJP_caza_attack_animation"
+    file = "gfx/models/units/ZJP_caza/ZJP_caza_attack.anim"
+}
+
+pdxmesh = {
+    name = "ZJP_caza_mesh"
+    file = "gfx/models/units/ZJP_caza/ZJP_caza.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ZJP_caza_idle_animation" }
+    animation = { id = "move" type = "ZJP_caza_move_animation" }
+    animation = { id = "attack" type = "ZJP_caza_attack_animation" }
+    }
+
+entity = {
+    name = "ZJP_fighter_entity"
+    pdxmesh = "ZJP_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
+entity = {
+    name = "ZJP_light_plane_entity"
+    pdxmesh = "ZJP_caza_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

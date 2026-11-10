@@ -1,0 +1,33 @@
+# 2026-11-10: modelo animado ZJP_apoyo_cercano (idle, move, attack)
+animation = {
+    name = "ZJP_apoyo_cercano_idle_animation"
+    file = "gfx/models/units/ZJP_apoyo_cercano/ZJP_apoyo_cercano_idle.anim"
+}
+
+animation = {
+    name = "ZJP_apoyo_cercano_move_animation"
+    file = "gfx/models/units/ZJP_apoyo_cercano/ZJP_apoyo_cercano_move.anim"
+}
+
+animation = {
+    name = "ZJP_apoyo_cercano_attack_animation"
+    file = "gfx/models/units/ZJP_apoyo_cercano/ZJP_apoyo_cercano_attack.anim"
+}
+
+pdxmesh = {
+    name = "ZJP_apoyo_cercano_mesh"
+    file = "gfx/models/units/ZJP_apoyo_cercano/ZJP_apoyo_cercano.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ZJP_apoyo_cercano_idle_animation" }
+    animation = { id = "move" type = "ZJP_apoyo_cercano_move_animation" }
+    animation = { id = "attack" type = "ZJP_apoyo_cercano_attack_animation" }
+    }
+
+entity = {
+    name = "ZJP_cas_entity"
+    pdxmesh = "ZJP_apoyo_cercano_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

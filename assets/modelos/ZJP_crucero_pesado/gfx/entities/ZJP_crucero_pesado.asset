@@ -1,0 +1,34 @@
+# 2026-11-10: modelo animado ZJP_crucero_pesado (idle, move, attack)
+animation = {
+    name = "ZJP_crucero_pesado_idle_animation"
+    file = "gfx/models/units/ZJP_crucero_pesado/ZJP_crucero_pesado_idle.anim"
+}
+
+animation = {
+    name = "ZJP_crucero_pesado_move_animation"
+    file = "gfx/models/units/ZJP_crucero_pesado/ZJP_crucero_pesado_move.anim"
+}
+
+animation = {
+    name = "ZJP_crucero_pesado_attack_animation"
+    file = "gfx/models/units/ZJP_crucero_pesado/ZJP_crucero_pesado_attack.anim"
+}
+
+pdxmesh = {
+    name = "ZJP_crucero_pesado_mesh"
+    file = "gfx/models/units/ZJP_crucero_pesado/ZJP_crucero_pesado.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ZJP_crucero_pesado_idle_animation" }
+    animation = { id = "move" type = "ZJP_crucero_pesado_move_animation" }
+    animation = { id = "attack" type = "ZJP_crucero_pesado_attack_animation" }
+    }
+
+entity = {
+    name = "ZJP_heavy_cruiser_entity"
+    pdxmesh = "ZJP_crucero_pesado_mesh"
+    scale = 0.969
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}

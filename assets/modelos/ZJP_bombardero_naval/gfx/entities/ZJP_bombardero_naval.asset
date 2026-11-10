@@ -1,0 +1,33 @@
+# 2026-11-10: modelo animado ZJP_bombardero_naval (idle, move, attack)
+animation = {
+    name = "ZJP_bombardero_naval_idle_animation"
+    file = "gfx/models/units/ZJP_bombardero_naval/ZJP_bombardero_naval_idle.anim"
+}
+
+animation = {
+    name = "ZJP_bombardero_naval_move_animation"
+    file = "gfx/models/units/ZJP_bombardero_naval/ZJP_bombardero_naval_move.anim"
+}
+
+animation = {
+    name = "ZJP_bombardero_naval_attack_animation"
+    file = "gfx/models/units/ZJP_bombardero_naval/ZJP_bombardero_naval_attack.anim"
+}
+
+pdxmesh = {
+    name = "ZJP_bombardero_naval_mesh"
+    file = "gfx/models/units/ZJP_bombardero_naval/ZJP_bombardero_naval.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "ZJP_bombardero_naval_idle_animation" }
+    animation = { id = "move" type = "ZJP_bombardero_naval_move_animation" }
+    animation = { id = "attack" type = "ZJP_bombardero_naval_attack_animation" }
+    }
+
+entity = {
+    name = "ZJP_naval_bomber_entity"
+    pdxmesh = "ZJP_bombardero_naval_mesh"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" looping = yes }
+    state = { name = "move" animation = "move" looping = yes }
+    state = { name = "attack" animation = "attack" looping = yes }
+}
