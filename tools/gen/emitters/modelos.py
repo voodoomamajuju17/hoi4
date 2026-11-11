@@ -116,6 +116,7 @@ def respaldo(ctx: BuildContext) -> None:
         return None
 
     salida, lista, usos = [], Block(), {"meganación": 0, "anarquía": 0, "común": 0}
+    prestadas: set[str] = set()     # entidades que un país toma de otro (meganación, anarquía, común)
     for c in ctx.spec.countries:
         bloque_pais = Block()
         for sprite in SPRITES:
@@ -134,13 +135,15 @@ def respaldo(ctx: BuildContext) -> None:
                 b = definidas[fuente].replace(f'"{fuente}"', f'"{nombre}"', 1)
                 salida.append(b)
                 definidas[nombre] = b
+                if de != "propia":
+                    prestadas.add(nombre)
                 if de in usos:
                     usos[de] += 1
-        if c.is_major:
-            continue    # las meganaciones ya tienen sus listas en cada pieza
         for eq, sprite, sub in DISENADOR:
             ent = propia(c.tag, sprite)
-            if not ent:
+            # las meganaciones ya tienen la lista de sus modelos propios en cada pieza; acá van solo
+            # los que toman prestados (2026-11-12: el crucero pesado de la NAS usa el común)
+            if not ent or (c.is_major and f"{c.tag}_{sprite}_entity" not in prestadas):
                 continue
             pool = Block([("weight", 100)])
             if sub:
