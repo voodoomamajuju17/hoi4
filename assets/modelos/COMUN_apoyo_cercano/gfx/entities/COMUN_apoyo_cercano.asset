@@ -1,0 +1,25 @@
+# 2026-11-10: modelo animado COMUN_apoyo_cercano (idle, move, attack)
+animation = { name = "COMUN_apoyo_cercano_idle_animation" file = "gfx/models/units/COMUN_apoyo_cercano/COMUN_apoyo_cercano_idle.anim" }
+animation = { name = "COMUN_apoyo_cercano_move_animation" file = "gfx/models/units/COMUN_apoyo_cercano/COMUN_apoyo_cercano_move.anim" }
+animation = { name = "COMUN_apoyo_cercano_attack_animation" file = "gfx/models/units/COMUN_apoyo_cercano/COMUN_apoyo_cercano_attack.anim" }
+
+pdxmesh = {
+    name = "COMUN_apoyo_cercano_mesh"
+    file = "gfx/models/units/COMUN_apoyo_cercano/COMUN_apoyo_cercano.mesh"
+    animation = { id = "idle" type = "COMUN_apoyo_cercano_idle_animation" }
+    animation = { id = "move" type = "COMUN_apoyo_cercano_move_animation" }
+    animation = { id = "attack" type = "COMUN_apoyo_cercano_attack_animation" }
+  }
+
+entity = {
+  name = "COMUN_cas_entity"
+  pdxmesh = "COMUN_apoyo_cercano_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+}

@@ -1,0 +1,25 @@
+# 2026-11-10: modelo animado COMUN_antiaereo (idle, move, attack)
+animation = { name = "COMUN_antiaereo_idle_animation" file = "gfx/models/units/COMUN_antiaereo/COMUN_antiaereo_idle.anim" }
+animation = { name = "COMUN_antiaereo_move_animation" file = "gfx/models/units/COMUN_antiaereo/COMUN_antiaereo_move.anim" }
+animation = { name = "COMUN_antiaereo_attack_animation" file = "gfx/models/units/COMUN_antiaereo/COMUN_antiaereo_attack.anim" }
+
+pdxmesh = {
+    name = "COMUN_antiaereo_mesh"
+    file = "gfx/models/units/COMUN_antiaereo/COMUN_antiaereo.mesh"
+    animation = { id = "idle" type = "COMUN_antiaereo_idle_animation" }
+    animation = { id = "move" type = "COMUN_antiaereo_move_animation" }
+    animation = { id = "attack" type = "COMUN_antiaereo_attack_animation" }
+  }
+
+entity = {
+  name = "COMUN_anti_air_entity"
+  pdxmesh = "COMUN_antiaereo_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+}
