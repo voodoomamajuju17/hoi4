@@ -1,0 +1,44 @@
+# 2026-11-10: modelo animado APF_marina (idle, move, attack)
+animation = {
+    name = "APF_marina_idle_animation"
+    file = "gfx/models/units/APF_marina/APF_marina_idle.anim"
+}
+
+animation = {
+    name = "APF_marina_move_animation"
+    file = "gfx/models/units/APF_marina/APF_marina_move.anim"
+}
+
+animation = {
+    name = "APF_marina_attack_animation"
+    file = "gfx/models/units/APF_marina/APF_marina_attack.anim"
+}
+
+animation = {
+    name = "APF_marina_die_animation"
+    file = "gfx/models/units/APF_marina/APF_marina_die.anim"
+}
+
+pdxmesh = {
+    name = "APF_marina"
+    file = "gfx/models/units/APF_marina/APF_marina.mesh"
+    scale = 1.0
+    animation = { id = "idle" type = "APF_marina_idle_animation" }
+    animation = { id = "move" type = "APF_marina_move_animation" }
+    animation = { id = "attack" type = "APF_marina_attack_animation" }
+    animation = { id = "die" type = "APF_marina_die_animation" }
+    }
+
+entity = {
+    name = "APF_marine_entity"
+    pdxmesh = "APF_marina"
+    default_state = "idle"
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.15 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.15 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.15 looping = yes }
+    state = { name = "die" animation = "die" animation_blend_time = 0.10 looping = no }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.15 looping = yes }
+    state = { name = "death" animation = "die" looping = no }
+    state = { name = "retreat" animation = "move" looping = yes }
+    state = { name = "support_attack" animation = "attack" looping = yes }
+}
