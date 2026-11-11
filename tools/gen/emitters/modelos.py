@@ -51,6 +51,8 @@ def emit(ctx: BuildContext) -> None:
 # sprite del juego -> nombres de entidad propios que lo cubren (en orden)
 SPRITES = {
     "infantry": ["infantry"], "cavalry": ["cavalry"], "motorized": ["motorized"],
+    # la marina y los montañeros tienen sprite propio (unique_units); sin modelo, su infantería
+    "marine": ["marine", "infantry"], "mountaineers": ["mountaineers", "infantry"],
     "mechanized": ["mechanized"], "armored_car": ["armored_car"], "light_armor": ["light_armor"],
     "medium_armor": ["medium_armor"], "artillery": ["artillery"], "anti_tank": ["anti_tank"],
     "anti_air": ["anti_air"], "light_plane": ["light_plane", "fighter"],

@@ -305,3 +305,45 @@ def emit(ctx: BuildContext) -> None:
     mat = apply_skin(ctx, MATERIALES_DIR)
     if mat:
         ctx.note(f"materiales: {mat} texturas de la interfaz de materiales reales (assets/ui/materiales_piel)")
+    simbolos(ctx)
+
+
+SIMBOLOS_DIR = ("assets", "ui", "simbolos_division")
+
+
+def simbolos(ctx: BuildContext) -> int:
+    """Símbolos de división propios (2026-11-11): assets/ui/simbolos_division/*.dds pasan a ser
+    GFX_div_templ_<N>_large/_small después del último del juego (el diseñador de divisiones los
+    recorre por número), con el tamaño de los del juego."""
+    import re as _re
+    from .menu import _dims, _resize, _texture_dims
+    base = ctx.spec.root.parent.joinpath(*SIMBOLOS_DIR)
+    fuentes = sorted(base.glob("*.dds")) if base.is_dir() else []
+    if not fuentes or ctx.vanilla is None:
+        return 0
+    tex = ctx.vanilla.gfx_textures()
+    nums = [int(m.group(1)) for n in tex if (m := _re.match(r"^GFX_div_templ_(\d+)_large$", n))]
+    if not nums:
+        ctx.warn("símbolos de división: el juego no tiene GFX_div_templ_N_large; no se suman")
+        return 0
+    siguiente = max(nums) + 1
+    lineas = ["spriteTypes = {"]
+    for k, f in enumerate(fuentes):
+        n = siguiente + k
+        data = f.read_bytes()
+        w, h = _dims(data)
+        for talla in ("large", "small"):
+            ref = tex.get(f"GFX_div_templ_1_{talla}") or tex.get(f"GFX_div_templ_0_{talla}")
+            vw, vh = _texture_dims(ctx, ref) if ref else (0, 0)
+            out = _resize(data, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else data
+            rel = f"gfx/interface/counters/division_templates_{talla}/meganations_{f.stem}.dds"
+            dest = ctx.mod_root / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(out)
+            ctx.track(dest)
+            lineas.append(f'\tspriteType = {{ name = "GFX_div_templ_{n}_{talla}" textureFile = "{rel}" }}')
+    lineas.append("}")
+    ctx.write_text("interface/meganations_simbolos_division.gfx",
+                   "# Generado por tools/gen/emitters/ui_skin.py: símbolos de división propios\n" + "\n".join(lineas) + "\n")
+    ctx.note(f"símbolos de división: {len(fuentes)} nuevos (GFX_div_templ_{siguiente} a {siguiente + len(fuentes) - 1})")
+    return len(fuentes)

@@ -438,6 +438,11 @@ def emit(ctx: BuildContext) -> None:
     if upkeep_calls:
         ctx.note("unidades unicas: la IA dueña encarga su unidad y suma una division cada 180 dias ("
                  + ", ".join(t for t, _ in upkeep_calls) + ")")
+    # 2026-11-11: la marina y los montañeros con sprite propio (modelos 3D de cada nación; si una
+    # nación no tiene el suyo, assets/modelos usa su infantería: ver modelos.respaldo)
+    for sub_unit, sprite in (("marine", "marine"), ("mountaineers", "mountaineers")):
+        if sub_unit in sub_units:
+            sub_changes.setdefault(sub_unit, {})["sprite"] = sprite
     if sub_changes:
         _sub_unit_stats(ctx, "unidades unicas", sub_changes)
     eq_changes: dict = {}
@@ -766,6 +771,15 @@ def _sub_unit_stats(ctx: BuildContext, uid: str, wanted: dict) -> None:
                         else:
                             sub.entries = [(k, float(v2) if k == k2 else v) for k, v in sub.entries]
                     changed.append(f"{key}.{stat} = {{{', '.join(f'{k2} {float(v2):g}' for k2, v2 in factor.items())}}}")
+                    continue
+                if isinstance(factor, str):
+                    # valor de texto (2026-11-11: el sprite de la marina y los montañeros, para que
+                    # tengan su modelo 3D y no el de la infantería común)
+                    if body.get(stat) is None:
+                        body.add(stat, factor)
+                    else:
+                        body.entries = [(k, factor if k == stat else v) for k, v in body.entries]
+                    changed.append(f"{key}.{stat} = {factor}")
                     continue
                 if isinstance(factor, bool):
                     # atributo sí/no (special_forces): se pone aunque el juego no lo tenga
