@@ -1,0 +1,26 @@
+# 2026-11-10: modelo animado COMUN_crucero_ligero (idle, move, attack)
+animation = { name = "COMUN_crucero_ligero_idle_animation" file = "gfx/models/units/COMUN_crucero_ligero/COMUN_crucero_ligero_idle.anim" }
+animation = { name = "COMUN_crucero_ligero_move_animation" file = "gfx/models/units/COMUN_crucero_ligero/COMUN_crucero_ligero_move.anim" }
+animation = { name = "COMUN_crucero_ligero_attack_animation" file = "gfx/models/units/COMUN_crucero_ligero/COMUN_crucero_ligero_attack.anim" }
+
+pdxmesh = {
+    name = "COMUN_crucero_ligero_mesh"
+    file = "gfx/models/units/COMUN_crucero_ligero/COMUN_crucero_ligero.mesh"
+    animation = { id = "idle" type = "COMUN_crucero_ligero_idle_animation" }
+    animation = { id = "move" type = "COMUN_crucero_ligero_move_animation" }
+    animation = { id = "attack" type = "COMUN_crucero_ligero_attack_animation" }
+  }
+
+entity = {
+  name = "COMUN_light_cruiser_entity"
+  pdxmesh = "COMUN_crucero_ligero_mesh"
+    scale = 1.0
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+}

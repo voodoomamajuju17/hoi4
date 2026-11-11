@@ -1,0 +1,26 @@
+# 2026-11-10: modelo animado COMUN_destructor (idle, move, attack)
+animation = { name = "COMUN_destructor_idle_animation" file = "gfx/models/units/COMUN_destructor/COMUN_destructor_idle.anim" }
+animation = { name = "COMUN_destructor_move_animation" file = "gfx/models/units/COMUN_destructor/COMUN_destructor_move.anim" }
+animation = { name = "COMUN_destructor_attack_animation" file = "gfx/models/units/COMUN_destructor/COMUN_destructor_attack.anim" }
+
+pdxmesh = {
+    name = "COMUN_destructor_mesh"
+    file = "gfx/models/units/COMUN_destructor/COMUN_destructor.mesh"
+    animation = { id = "idle" type = "COMUN_destructor_idle_animation" }
+    animation = { id = "move" type = "COMUN_destructor_move_animation" }
+    animation = { id = "attack" type = "COMUN_destructor_attack_animation" }
+  }
+
+entity = {
+  name = "COMUN_destroyer_entity"
+  pdxmesh = "COMUN_destructor_mesh"
+    scale = 1.0
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+}
