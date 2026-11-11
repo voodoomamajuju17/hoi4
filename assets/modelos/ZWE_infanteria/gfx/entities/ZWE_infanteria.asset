@@ -1,0 +1,29 @@
+# 2026-11-10: modelo animado ZWE_infanteria (idle, move, attack)
+animation = { name = "ZWE_infanteria_idle_animation" file = "gfx/models/units/ZWE_infanteria/ZWE_infanteria_idle.anim" }
+animation = { name = "ZWE_infanteria_move_animation" file = "gfx/models/units/ZWE_infanteria/ZWE_infanteria_move.anim" }
+animation = { name = "ZWE_infanteria_attack_animation" file = "gfx/models/units/ZWE_infanteria/ZWE_infanteria_attack.anim" }
+animation = { name = "ZWE_infanteria_die_animation" file = "gfx/models/units/ZWE_infanteria/ZWE_infanteria_die.anim" }
+
+pdxmesh = {
+    name = "ZWE_infanteria_mesh"
+    file = "gfx/models/units/ZWE_infanteria/ZWE_infanteria.mesh"
+    animation = { id = "idle" type = "ZWE_infanteria_idle_animation" }
+    animation = { id = "move" type = "ZWE_infanteria_move_animation" }
+    animation = { id = "attack" type = "ZWE_infanteria_attack_animation" }
+    animation = { id = "die" type = "ZWE_infanteria_die_animation" }
+  }
+
+entity = {
+  name = "ZWE_infantry_entity"
+  pdxmesh = "ZWE_infanteria_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "die" animation = "die" looping = no }
+  state = { name = "death" animation = "die" looping = no }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+}
