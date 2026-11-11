@@ -20,7 +20,7 @@ animation = {
 }
 
 pdxmesh = {
-    name = "HSN_infanteria_mesh"
+    name = "HSN_infanteria"
     file = "gfx/models/units/HSN_infanteria/HSN_infanteria.mesh"
     scale = 1.0
     animation = { id = "idle" type = "HSN_infanteria_idle_animation" }
@@ -31,11 +31,11 @@ pdxmesh = {
 
 entity = {
     name = "HSN_infantry_entity"
-    pdxmesh = "HSN_infanteria_mesh"
+    pdxmesh = "HSN_infanteria"
     default_state = "idle"
-    state = { name = "idle" animation = "idle" looping = yes }
-    state = { name = "move" animation = "move" looping = yes }
-    state = { name = "attack" animation = "attack" looping = yes }
-    state = { name = "die" animation = "die" looping = no }
-    state = { name = "death" animation = "die" looping = no }
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.15 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.15 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.15 looping = yes }
+    state = { name = "die" animation = "die" animation_blend_time = 0.10 looping = no }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.15 looping = yes }
 }

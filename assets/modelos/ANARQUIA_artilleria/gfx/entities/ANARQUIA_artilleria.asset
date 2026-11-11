@@ -1,0 +1,25 @@
+# 2026-11-10: modelo animado ANARQUIA_artilleria (idle, move, attack)
+animation = { name = "ANARQUIA_artilleria_idle_animation" file = "gfx/models/units/ANARQUIA_artilleria/ANARQUIA_artilleria_idle.anim" }
+animation = { name = "ANARQUIA_artilleria_move_animation" file = "gfx/models/units/ANARQUIA_artilleria/ANARQUIA_artilleria_move.anim" }
+animation = { name = "ANARQUIA_artilleria_attack_animation" file = "gfx/models/units/ANARQUIA_artilleria/ANARQUIA_artilleria_attack.anim" }
+
+pdxmesh = {
+    name = "ANARQUIA_artilleria_mesh"
+    file = "gfx/models/units/ANARQUIA_artilleria/ANARQUIA_artilleria.mesh"
+    animation = { id = "idle" type = "ANARQUIA_artilleria_idle_animation" }
+    animation = { id = "move" type = "ANARQUIA_artilleria_move_animation" }
+    animation = { id = "attack" type = "ANARQUIA_artilleria_attack_animation" }
+  }
+
+entity = {
+  name = "ANARQUIA_artillery_entity"
+  pdxmesh = "ANARQUIA_artilleria_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+}

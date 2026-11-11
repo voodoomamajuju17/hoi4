@@ -1,0 +1,29 @@
+# 2026-11-10: modelo animado COMUN_infanteria (idle, move, attack)
+animation = { name = "COMUN_infanteria_idle_animation" file = "gfx/models/units/COMUN_infanteria/COMUN_infanteria_idle.anim" }
+animation = { name = "COMUN_infanteria_move_animation" file = "gfx/models/units/COMUN_infanteria/COMUN_infanteria_move.anim" }
+animation = { name = "COMUN_infanteria_attack_animation" file = "gfx/models/units/COMUN_infanteria/COMUN_infanteria_attack.anim" }
+animation = { name = "COMUN_infanteria_die_animation" file = "gfx/models/units/COMUN_infanteria/COMUN_infanteria_die.anim" }
+
+pdxmesh = {
+    name = "COMUN_infanteria_mesh"
+    file = "gfx/models/units/COMUN_infanteria/COMUN_infanteria.mesh"
+    animation = { id = "idle" type = "COMUN_infanteria_idle_animation" }
+    animation = { id = "move" type = "COMUN_infanteria_move_animation" }
+    animation = { id = "attack" type = "COMUN_infanteria_attack_animation" }
+    animation = { id = "die" type = "COMUN_infanteria_die_animation" }
+  }
+
+entity = {
+  name = "COMUN_infantry_entity"
+  pdxmesh = "COMUN_infanteria_mesh"
+  default_state = "idle"
+  state = { name = "idle" animation = "idle" looping = yes }
+  state = { name = "move" animation = "move" looping = yes }
+  state = { name = "attack" animation = "attack" looping = yes }
+  state = { name = "die" animation = "die" looping = no }
+  state = { name = "retreat" animation = "move" looping = yes }
+  state = { name = "defend" animation = "attack" looping = yes }
+  state = { name = "support_attack" animation = "attack" looping = yes }
+  state = { name = "training" animation = "idle" looping = yes }
+  state = { name = "death" animation = "die" looping = no }
+}

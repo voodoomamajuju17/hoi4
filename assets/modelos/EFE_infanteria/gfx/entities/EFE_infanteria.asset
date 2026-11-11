@@ -20,7 +20,7 @@ animation = {
 }
 
 pdxmesh = {
-    name = "EFE_infanteria_mesh"
+    name = "EFE_infanteria"
     file = "gfx/models/units/EFE_infanteria/EFE_infanteria.mesh"
     scale = 1.0
     animation = { id = "idle" type = "EFE_infanteria_idle_animation" }
@@ -31,11 +31,11 @@ pdxmesh = {
 
 entity = {
     name = "EFE_infantry_entity"
-    pdxmesh = "EFE_infanteria_mesh"
+    pdxmesh = "EFE_infanteria"
     default_state = "idle"
-    state = { name = "idle" animation = "idle" looping = yes }
-    state = { name = "move" animation = "move" looping = yes }
-    state = { name = "attack" animation = "attack" looping = yes }
-    state = { name = "die" animation = "die" looping = no }
-    state = { name = "death" animation = "die" looping = no }
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.15 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.15 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.15 looping = yes }
+    state = { name = "die" animation = "die" animation_blend_time = 0.10 looping = no }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.15 looping = yes }
 }
