@@ -72,6 +72,7 @@ DISENO = {
     "coleccion": (700, 476),
     "coleccion_celda": (30, 92, 128, 112),   # x, y de la grilla, ancho y alto de celda (5 x 2)
     "coleccion_trofeos": (30, 352, 80),      # x, y, paso (8 trofeos)
+    "boton_grande": 96,         # 2026-11-12: el botón de la Ficha en Política, donde estaba el gráfico
 }
 SEGMENTOS = 20
 CUADROS_SALUD = 21
@@ -84,7 +85,7 @@ PIEZAS = ["fondo", "retrato_marco", "barra_total", "barra_base", "salud", "boton
           "apagado", "sin_retrato",
           # 2026-11-12: medallas (casillas, candado, "puesta" y la ventana de la colección)
           "medalla_marco", "medalla_trofeo", "medalla_vacia", "medalla_bloqueada", "medalla_en_uso",
-          "coleccion_fondo"] + [f"marco_{e}" for e in ESTILOS]
+          "coleccion_fondo", "boton_grande"] + [f"marco_{e}" for e in ESTILOS]
 CUADROS = {"barra_total": SEGMENTOS + 1, "barra_base": SEGMENTOS + 1, "salud": CUADROS_SALUD}
 
 STATS = (("carisma", "car"), ("astucia", "ast"), ("prestigio", "pre"))

@@ -13,8 +13,8 @@ candado las que faltan (al pasar el mouse: qué dan y cómo se ganan), y los tro
 otras meganaciones. Poner una medalla en una casilla vacía es gratis; cambiarla, 25 de poder
 político y después 30 días sin poder cambiar.
 
-El bonus no ocupa lugar en el panel de Política: se suma al espíritu El Líder
-(MEGANATIONS_el_lider), que ya es un modificador con valores variables (MN_med_<clave>).
+El bonus no ocupa lugar en el panel de Política: cada medalla puesta es un espíritu oculto
+(MN_insignia_<TAG>_<n>, MN_trofeo_idea_<TAG>); en el detalle de cada número dice su nombre.
 La IA pone las que tiene ganadas en las casillas vacías (en el pulso del líder).
 
 Sin probar en partida: misma sintaxis que la Ficha (scripted GUI, imágenes elegidas con texto
@@ -26,12 +26,11 @@ from __future__ import annotations
 import re
 
 from ..context import BuildContext
-from ..pdx import Block, banner_for, render, parse_file
+from ..pdx import Block, banner_for
 from .ficha_lider import DISENO, TEX, _icon, _sprite, _text, paises
 
 SOURCE = "spec/40_medallas.yaml (medallas de la Ficha del Líder)"
 SLOTS = 3
-LIDER = "MEGANATIONS_el_lider"
 MAX_MEDALLAS = 10
 
 NOMBRES = {  # clave -> (inglés, español)
@@ -213,20 +212,34 @@ def emit(ctx: BuildContext) -> None:
                      for j, _ in enumerate(orden_trof, start=1))
     rev.append(perder + "}\n")
     se.extend(rev)
-    # sumar lo puesto
+    # lo puesto da su bonus como espíritu oculto (no se ve en el panel; en el detalle de cada
+    # número dice el nombre de la medalla)
     sumar = ["MN_medallas_sumar = {\n"]
-    for k in claves:
-        sumar.append(f"\tset_variable = {{ MN_med_{k} = 0 }}\n")
+    ocultas = Block()
     for tag, lista in meds.items():
         for m in lista:
-            (k, v), = m["bonus"].items()
+            iid = f"MN_insignia_{tag}_{m['n']}"
             usa = " ".join(f"check_variable = {{ MN_medalla_{s} = {m['n']} }}" for s in range(1, SLOTS + 1))
-            sumar.append(f"\tif = {{ limit = {{ tag = {tag} OR = {{ {usa} }} }} add_to_variable = {{ MN_med_{k} = {v} }} }}\n")
+            sumar.append(f"\tif = {{ limit = {{ tag = {tag} OR = {{ {usa} }} NOT = {{ has_idea = {iid} }} }} add_ideas = {iid} }}\n"
+                         f"\telse_if = {{ limit = {{ has_idea = {iid} NOT = {{ AND = {{ tag = {tag} OR = {{ {usa} }} }} }} }} "
+                         f"remove_ideas = {iid} }}\n")
+            ocultas.add(iid, Block([("allowed", Block([("always", False)])),
+                                    ("modifier", Block([(k, v) for k, v in m["bonus"].items()]))]))
+            ctx.loc.define_and_reference(iid, en=f"${m['tile']}$", es=f"${m['tile']}$",
+                                         file="meganations_medallas", origin="medallas")
     for j, t in enumerate(orden_trof, start=1):
-        (k, v), = trof[t]["bonus"].items()
-        sumar.append(f"\tif = {{ limit = {{ check_variable = {{ MN_trofeo = {j} }} }} add_to_variable = {{ MN_med_{k} = {v} }} }}\n")
-    sumar.append("\tMN_lider_sumar = yes\n}\n")
+        iid = f"MN_trofeo_idea_{t}"
+        sumar.append(f"\tif = {{ limit = {{ check_variable = {{ MN_trofeo = {j} }} NOT = {{ has_idea = {iid} }} }} add_ideas = {iid} }}\n"
+                     f"\telse_if = {{ limit = {{ has_idea = {iid} NOT = {{ check_variable = {{ MN_trofeo = {j} }} }} }} "
+                     f"remove_ideas = {iid} }}\n")
+        ocultas.add(iid, Block([("allowed", Block([("always", False)])),
+                                ("modifier", Block([(k, v) for k, v in trof[t]["bonus"].items()]))]))
+        ctx.loc.define_and_reference(iid, en=f"Trophy: capital of ${t}$", es=f"Trofeo: capital de ${t}$",
+                                     file="meganations_medallas", origin="medallas")
+    sumar.append("}\n")
     se.extend(sumar)
+    ctx.write_script("common/ideas/meganations_medallas.txt", Block([("ideas", Block([("hidden_ideas", ocultas)]))]),
+                     source=SOURCE)
     # poner (la medalla mn_i en la casilla MN_med_sel)
     poner = ["MN_med_poner = {\n"]
     for s in range(1, SLOTS + 1):
@@ -262,28 +275,6 @@ def emit(ctx: BuildContext) -> None:
     se.append("MN_medallas_pulso = {\n\tif = { limit = { OR = { " + " ".join(f"tag = {t}" for t in meds) + " } }\n"
               "\t\tMN_medallas_revisar = yes\n\t\tif = { limit = { is_ai = yes } MN_medallas_ia = yes }\n\t}\n}\n")
 
-    # el bonus va dentro de El Líder: cada clave suma lo del líder (si ya la usaba) y lo de las medallas
-    dm_path = ctx.mod_root / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt"
-    lider_sumar = ["MN_lider_sumar = {\n"]
-    if dm_path.exists():
-        dm = parse_file(dm_path)
-        cuerpo = dm.get(LIDER)
-        if isinstance(cuerpo, Block):
-            usadas = {str(k): str(v) for k, v in cuerpo.entries if not isinstance(v, Block) and k != "icon"}
-            for k in claves:
-                if k in usadas:
-                    lider_sumar.append(f"\tset_variable = {{ MN_tot_{k} = {usadas[k]} }}\n"
-                                       f"\tadd_to_variable = {{ MN_tot_{k} = MN_med_{k} }}\n")
-                    cuerpo.entries = [(kk, (f"MN_tot_{k}" if kk == k else vv)) for kk, vv in cuerpo.entries]
-                else:
-                    cuerpo.add(k, f"MN_med_{k}")
-            dm_path.write_text(banner_for("spec/14_decisions.yaml (+ medallas, 40_medallas.yaml)") + render(dm),
-                               encoding="utf-8", newline="\n")
-        else:
-            ctx.warn("medallas: no está el espíritu El Líder; las medallas no dan bonus")
-    lider_sumar.append(f"\tif = {{ limit = {{ NOT = {{ has_dynamic_modifier = {{ modifier = {LIDER} }} }} }} "
-                       f"add_dynamic_modifier = {{ modifier = {LIDER} }} }}\n}}\n")
-    se.extend(lider_sumar)
     ctx.write_text("common/scripted_effects/meganations_medallas.txt", banner_for(SOURCE) + "".join(se))
 
     # cuando el líder recalcula sus números, también la suma con las medallas; el pulso del
@@ -291,13 +282,10 @@ def emit(ctx: BuildContext) -> None:
     efx = ctx.mod_root / "common/scripted_effects/meganations_effects.txt"
     if efx.exists():
         t = efx.read_text(encoding="utf-8")
-        lider = re.compile(r"(if\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*has_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*"
-                           + LIDER + r"\s*\}\s*\}\s*\}\s*add_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*" + LIDER + r"\s*\}\s*\})")
-        t, n1 = lider.subn(r"\1\n\tMN_lider_sumar = yes", t)
         t, n2 = re.subn(r"(\bMEGANATIONS_lider_pulso\s*=\s*\{)", r"\1\n\tMN_medallas_pulso = yes", t, count=1)
         efx.write_text(t, encoding="utf-8", newline="\n")
-        if not n1 or not n2:
-            ctx.warn(f"medallas: no encontré dónde engancharlas (líder {n1}, pulso {n2})")
+        if not n2:
+            ctx.warn("medallas: no encontré el pulso del líder para engancharlas")
     fe = ctx.mod_root / "common/scripted_effects/meganations_ficha.txt"
     if fe.exists():
         t = fe.read_text(encoding="utf-8")

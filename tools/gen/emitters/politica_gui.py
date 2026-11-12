@@ -102,6 +102,15 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
             faltan.append(nombre)
         else:
             texto = r
+    # 2026-11-12 ("el gráfico circular no tiene ningún sentido para nosotros; ahí tendría que estar
+    # el botón del Líder"): el gráfico de popularidad se va fuera de la pantalla; su lugar lo
+    # ocupa el botón de la Ficha (boton_lider)
+    r = _cambiar_en(texto, "political_pie_chart", r'position\s*=\s*\{\s*x\s*=\s*-?\d+\s*y\s*=\s*(-?\d+)\s*\}',
+                    lambda m: f"position = {{ x = -3000 y = {m.group(1)} }}")
+    if r is None:
+        faltan.append("political_pie_chart")
+    else:
+        texto = r
     return (None if faltan else texto), faltan
 
 
@@ -156,3 +165,34 @@ def emit(ctx: BuildContext) -> None:
     ctx.write_text(GUI, "# Generado por tools/gen/emitters/politica_gui.py desde el del juego:\n"
                         f"# espíritus en {FILAS} filas a tamaño completo, lo de abajo {DY} px más abajo.\n" + texto)
     ctx.note(f"política: espíritus en {FILAS} filas a tamaño completo (hasta {6 * FILAS}); lo de abajo baja {DY} px")
+    boton_lider(ctx)
+
+
+GRAFICO = (270, 304, 100)   # x, y y lado del gráfico de popularidad en el .gui del juego (antes de bajar DY)
+
+
+def boton_lider(ctx: BuildContext) -> None:
+    """El botón de la Ficha del Líder donde estaba el gráfico (2026-11-12). Es una ventana del mod
+    colgada de la pantalla de Política (parent_window_token = politics_tab), como los acentos."""
+    from .ficha_lider import DISENO, _tags_or, paises
+    tags = paises(ctx)
+    if not tags or not (ctx.mod_root / "gfx/interface/meganations/ficha/boton_grande.dds").exists():
+        return
+    gx, gy, gl = GRAFICO
+    lado = DISENO["boton_grande"]
+    x, y = gx + (gl - lado) // 2, gy + DY + (gl - lado) // 2
+    gui = ('guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "mn_ficha_politica_window"\n'
+           f'\t\tposition = {{ x = {x} y = {y} }}\n\t\tsize = {{ width = {lado} height = {lado} }}\n'
+           '\t\torientation = upper_left\n'
+           '\t\tbuttonType = {\n\t\t\tname = "abrir"\n\t\t\tposition = { x = 0 y = 0 }\n'
+           '\t\t\tspriteType = "GFX_mn_ficha_boton_grande"\n\t\t\tpdx_tooltip = "MN_FICHA_BOTON_TT"\n\t\t}\n\t}\n}\n')
+    sg = ("scripted_gui = {\n\tmn_ficha_politica = {\n\t\tcontext_type = player_context\n"
+          "\t\tparent_window_token = politics_tab\n\t\twindow_name = \"mn_ficha_politica_window\"\n"
+          f"\t\tvisible = {{ {_tags_or(tags)} has_country_flag = MEGANATIONS_lider_listo }}\n"
+          "\t\teffects = {\n\t\t\tabrir_click = {\n"
+          "\t\t\t\tif = { limit = { has_country_flag = MEGANATIONS_ficha_abierta } clr_country_flag = MEGANATIONS_ficha_abierta }\n"
+          "\t\t\t\telse = { set_country_flag = MEGANATIONS_ficha_abierta MEGANATIONS_ficha_actualizar = yes }\n"
+          "\t\t\t}\n\t\t}\n\t\tai_enabled = { always = no }\n\t}\n}\n")
+    ctx.write_text("interface/meganations_ficha_politica.gui", "# Generado por tools/gen/emitters/politica_gui.py\n" + gui)
+    ctx.write_text("common/scripted_guis/meganations_ficha_politica.txt", "# Generado por tools/gen/emitters/politica_gui.py\n" + sg)
+    ctx.note("política: el gráfico de popularidad sale; en su lugar, el botón grande de la Ficha del Líder")

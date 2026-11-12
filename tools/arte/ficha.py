@@ -656,6 +656,22 @@ def coleccion_fondo(D):
     return img
 
 
+def boton_grande(D):
+    """El botón de la Ficha en la pantalla de Política, donde estaba el gráfico de popularidad
+    (2026-11-12, "ahí tendría que estar el botón del Líder, que arriba está re escondido"):
+    el mismo arte del botón de la barra (fuente/boton_lider.png, 512 px), en grande."""
+    from PIL import Image
+    lado = D["boton_grande"]
+    img = Image.open(SALIDA / "fuente" / "boton_lider.png").convert("RGBA")
+    caja = img.getchannel("A").point(lambda a: 255 if a > 16 else 0).getbbox()
+    if caja:
+        img = img.crop(caja)
+    img.thumbnail((lado, lado), Image.LANCZOS)
+    out = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
+    out.alpha_composite(img, ((lado - img.width) // 2, (lado - img.height) // 2))
+    return out
+
+
 PIEZAS = {
     "fondo": fondo, "retrato_marco": retrato_marco,
     "barra_total": lambda D: _barra(D, (TEAL_HI, TEAL, TEAL_LO), True),
@@ -669,7 +685,7 @@ PIEZAS = {
     "medalla_marco": medalla_marco,
     "medalla_trofeo": lambda D: medalla_marco(D, (TEAL_HI, TEAL, TEAL_LO)),
     "medalla_vacia": medalla_vacia, "medalla_bloqueada": medalla_bloqueada, "medalla_en_uso": medalla_en_uso,
-    "coleccion_fondo": coleccion_fondo,
+    "coleccion_fondo": coleccion_fondo, "boton_grande": boton_grande,
 }
 
 

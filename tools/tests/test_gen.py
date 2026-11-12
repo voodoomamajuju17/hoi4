@@ -2765,13 +2765,24 @@ def test_espiritus() -> None:
             for tag, ids in visibles.items():
                 if tag == "MN":
                     continue
-                lugares = 6 - 2 - 1 - (1 if tag in datos["mecanicas"] else 0)
+                lugares = 6 - 2 - (1 if tag in datos["mecanicas"] else 0)
                 check(f"{tag}: a lo sumo {lugares} espiritus propios a la vista ({ids})", len(ids) <= lugares)
             dm = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text(encoding="utf-8"))
             nombres = {str(k) for k, _ in dm.entries}
             check("la mecanica de la ASC en uno solo", "ASC_mod_nacion" in nombres and "ASC_mod_red_de_computo" not in nombres)
             check("el Lider sigue aparte", "MEGANATIONS_el_lider" in nombres)
             check("los de valor fijo ya no son modificadores", not (nombres & datos["convertidos"]))
+            # 2026-11-12 ("sacá El Líder solo como espíritu visible"): sus efectos en espíritus ocultos
+            ideas_esp = pdx.parse((mod / "common/ideas/meganations_espiritus.txt").read_text(encoding="utf-8"))
+            oc = ideas_esp.get("ideas").get("hidden_ideas")
+            check("El Líder: un espíritu oculto por valor de cada atributo, con el mismo efecto",
+                  oc.get("MN_lider_car_14") is not None
+                  and abs(float(pdx.text(oc.get("MN_lider_car_14").get("modifier").get("stability_factor"))) - 0.06) < 1e-6
+                  and abs(float(pdx.text(oc.get("MN_lider_ast_0").get("modifier").get("political_power_gain"))) + 0.75) < 1e-6)
+            efx = (mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8")
+            check("El Líder ya no se agrega como modificador visible",
+                  "MN_lider_niveles = yes" in efx and "add_dynamic_modifier = {\n\t\t\tmodifier = MEGANATIONS_el_lider" not in efx
+                  and "modifier = MEGANATIONS_el_lider }" not in efx.replace("remove_dynamic_modifier", ""))
             todo = " ".join(p.read_text(encoding="utf-8", errors="ignore") for p in mod.rglob("*.txt")
                             if "localisation" not in p.parts)
             quedan = set(_re.findall(r"add_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*(\w+)", todo))
@@ -2834,14 +2845,14 @@ def test_medallas() -> None:
         check("los trofeos salen de tomar la capital y valen mientras se la controle",
               "has_country_flag = MEGANATIONS_absorbido_EFE controls_state = " in stg)
         check("perder la capital saca el trofeo puesto", "NOT = { MN_trofeo_ok_1 = yes } } set_variable = { MN_trofeo = 0 }" in se)
-        dm = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text(encoding="utf-8"))
-        lider = dm.get("MEGANATIONS_el_lider")
-        check("el bonus va dentro de El Líder (no ocupa lugar en el panel)",
-              pdx.text(lider.get("stability_factor")) == "MN_tot_stability_factor"
-              and pdx.text(lider.get("army_attack_factor")) == "MN_med_army_attack_factor")
+        ideas = pdx.parse((mod / "common/ideas/meganations_medallas.txt").read_text(encoding="utf-8"))
+        ocultas = ideas.get("ideas").get("hidden_ideas")
+        check("cada medalla y trofeo puesto es un espíritu oculto (no ocupa lugar en el panel)",
+              ocultas.get("MN_insignia_EFE_1") is not None and ocultas.get("MN_trofeo_idea_NAS") is not None)
+        check("poner o sacar una medalla agrega o quita su espíritu oculto",
+              "add_ideas = MN_insignia_EFE_1" in se and "remove_ideas = MN_insignia_EFE_1" in se)
         efx = (mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8")
-        check("el líder suma las medallas al recalcular y el pulso las revisa",
-              "MN_lider_sumar = yes" in efx and "MN_medallas_pulso = yes" in efx)
+        check("el pulso del líder revisa las medallas", "MN_medallas_pulso = yes" in efx)
         sg = (mod / "common/scripted_guis/meganations_medallas.txt").read_text(encoding="utf-8")
         check("la colección pide la medalla ganada y poder cambiar",
               "med_1_click_enabled = { MN_med_ok_1 = yes" in sg and "MN_med_puede_cambiar = yes" in sg)
@@ -2884,6 +2895,8 @@ def test_politica_gui() -> None:
           and "size = { width = 364 height = 142 }" in o and "position = { x = 0 y = 493 }" in o
           and "position = { x = 260 y = 252 }" in o and 'spriteType = "GFX_mn_pol_view_bg_alto"' in o
           and "slotsize = { width = 59 height = 68 } max_slots_horizontal = 6" in o, o[:900])
+    check("politica: el grafico de popularidad sale de la pantalla (ahi va el boton de la Ficha)",
+          'name = "political_pie_chart" position = { x = -3000 y = 372 }' in o, o[:900])
     roto, faltan = pg.parchar(gui.replace("spirit_grid\"", "otra_grilla\""))
     check("politica: si el juego cambio la pantalla, no se toca", roto is None and "spirit_grid" in faltan, faltan)
 

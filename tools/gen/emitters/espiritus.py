@@ -6,7 +6,7 @@ juego a la mitad, no se puede agrandar desde el .gui). Ocupan lugar los espírit
 modificadores dinámicos. Solo las ideas se pueden ocultar (categoría hidden_ideas: dan su efecto y
 no se ven), así que este paso, al final del armado, reacomoda todo en seis lugares fijos:
 
-  1. El Líder                  (MEGANATIONS_el_lider, ya era uno)
+  1. (El Líder ya no ocupa lugar: sus efectos van en espíritus ocultos, ver _lider_oculto)
   2. La mecánica de la nación  (<TAG>_mod_nacion: sus modificadores con valores que cambian, por
                                 ejemplo la Luz de los Templos y los satélites, sumados en uno)
   3-4. Identidad               (los primeros espíritus con que arranca el país; 3 si no tiene mecánica)
@@ -87,6 +87,54 @@ def _dibujo(ctx: BuildContext, palabras: tuple[str, ...]) -> str | None:
     return sprites[0][len("GFX_idea_"):] if sprites else None
 
 
+STATS_LIDER = (("carisma", "car", "stability_factor", 0.015), ("astucia", "ast", "political_power_gain", 0.075),
+               ("prestigio", "pre", "war_support_factor", 0.02))
+
+
+def _lider_oculto(ctx: BuildContext) -> tuple[Block, Block] | None:
+    """El Líder sin ícono en el panel (2026-11-12: "sacá El Líder solo como espíritu visible con su
+    tile, para que lo aproveche otro espíritu más interesante; no quiero sacar sus efectos").
+    Carisma, Astucia y Prestigio van de 0 a 20 en enteros: un espíritu oculto por valor da
+    exactamente lo mismo que el modificador (cada punto sobre o bajo 10). En el detalle de la
+    estabilidad, el poder político y el apoyo a la guerra sigue diciendo "El Líder"."""
+    dm = ctx.mod_root / DM_FILE
+    if not dm.exists() or f"{LIDER} = {{" not in dm.read_text(encoding="utf-8"):
+        return None
+    # los factores salen del spec (MEGANATIONS_lider_recalcular: [mul, ef_x, k])
+    k_spec = {}
+    for e in (ctx.spec.raw.get("decisions") or {}).get("scripted_effects") or []:
+        if e.get("id") == "MEGANATIONS_lider_recalcular":
+            for item in e.get("effects") or []:
+                for op in item.get("ops") or [] if isinstance(item, dict) else []:
+                    if op[0] == "mul" and str(op[1]).startswith("MEGANATIONS_lider_ef_"):
+                        k_spec[str(op[1])[len("MEGANATIONS_lider_ef_"):]] = float(op[2])
+    ideas, efecto = Block(), Block()
+    efecto.add("if", Block([("limit", Block([("has_dynamic_modifier", Block([("modifier", LIDER)]))])),
+                            ("remove_dynamic_modifier", Block([("modifier", LIDER)]))]))
+    for stat, c, clave, k in STATS_LIDER:
+        k = k_spec.get(stat, k)
+        total = f"MEGANATIONS_lider_total_{stat}"
+        for v in range(0, 21):
+            if v == 10:
+                continue
+            iid = f"MN_lider_{c}_{v}"
+            ideas.add(iid, Block([("allowed", Block([("always", False)])),
+                                  ("modifier", Block([(clave, round((v - 10) * k, 4))]))]))
+            ctx.loc.define_and_reference(iid, en="The Leader", es="El Líder", file="meganations_espiritus",
+                                         origin="espiritus:lider")
+            efecto.add("if", Block([("limit", Block([("has_idea", iid),
+                                                     ("NOT", Block([("check_variable", Block([(total, v)]))]))])),
+                                    ("remove_ideas", iid)]))
+        for v in range(0, 21):
+            if v == 10:
+                continue
+            iid = f"MN_lider_{c}_{v}"
+            efecto.add("if", Block([("limit", Block([("check_variable", Block([(total, v)])),
+                                                     ("NOT", Block([("has_idea", iid)]))])),
+                                    ("add_ideas", iid)]))
+    return ideas, efecto
+
+
 def emit(ctx: BuildContext) -> None:
     # los tests de cada mecánica miran el mod antes de este reacomodo (test_espiritus mira el después)
     if os.environ.get("MEGANATIONS_SIN_AGRUPAR"):
@@ -163,7 +211,8 @@ def emit(ctx: BuildContext) -> None:
     con_mecanica = {n.split("_", 1)[0] for n in variables if n != LIDER}
     identidad: set[str] = set()
     for tag, lista in arranque.items():
-        lugares = SLOTS - len(RESUMEN) - 1 - (1 if tag in con_mecanica else 0)
+        # 2026-11-12 ("sacá El Líder como espíritu visible"): ya no ocupa lugar (ver _lider_oculto)
+        lugares = SLOTS - len(RESUMEN) - (1 if tag in con_mecanica else 0)
         identidad.update(lista[:lugares])
 
     # cuáles se quitan o son temporales (van a Coyuntura) y cuáles quedan para siempre (Legado)
@@ -282,7 +331,9 @@ def emit(ctx: BuildContext) -> None:
         if rel.startswith("common/ideas/") or rel == DM_FILE:
             continue
         nuevo = si_falta.sub(lambda m: f"{parte_de[m.group(1)]}_sumar_nacion = yes"
-                             if m.group(1) == m.group(2) and m.group(1) in parte_de else m.group(0), t)
+                             if m.group(1) == m.group(2) and m.group(1) in parte_de
+                             else "MN_lider_niveles = yes" if m.group(1) == m.group(2) == LIDER
+                             else m.group(0), t)
         nuevo, k = uso.subn(efecto_dm, nuevo)
         if rel.startswith("history/"):
             # el día uno: si arranca con algo agrupado, también con su resumen
@@ -328,6 +379,9 @@ def emit(ctx: BuildContext) -> None:
                          else ("econom", "trade", "crisis"))
         if dibujo:
             resumen.get(rid).entries.insert(0, ("picture", dibujo))
+    lider = _lider_oculto(ctx)
+    if lider is not None:
+        nuevas.entries.extend(lider[0].entries)
     cats = Block([("country", resumen)])
     if nuevas.entries:
         cats.add("hidden_ideas", nuevas)
@@ -342,6 +396,8 @@ def emit(ctx: BuildContext) -> None:
         # 2026-11-12: lo que se acaba de ganar puede desbloquear una medalla
         efectos.get("MN_espiritus_resumen").add("MN_medallas_revisar", True)
     efectos.entries.extend(sumar.entries)
+    if lider is not None:
+        efectos.add("MN_lider_niveles", lider[1])
     ctx.write_script("common/scripted_effects/meganations_espiritus.txt", efectos, source=SOURCE)
 
     # la lista de cada resumen, al pasar el mouse (una línea por espíritu que el país tiene)
