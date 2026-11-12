@@ -28,6 +28,22 @@ def emit(ctx: BuildContext) -> None:
         for f in sorted(gfx.rglob("*")):
             if f.is_file():
                 rel = f.relative_to(pieza).as_posix()
+                if f.suffix == ".asset" and rel.startswith("gfx/entities/"):
+                    # 2026-11-12 (error.log del usuario: "Unexpected token: pdxmesh" en gfx/entities/ y
+                    # "Could not load animation file gfx/entities/gfx/models/..."): el juego solo acepta
+                    # entidades en gfx/entities/; mallas y animaciones van en un .asset junto a la malla,
+                    # con los archivos nombrados desde esa carpeta (como el juego)
+                    fuente = banner_for(f"assets/modelos/{pieza.name} (modelo 3D propio)")
+                    entidades, mallas, carpeta = separar_asset(f.read_text(encoding="utf-8-sig"))
+                    ctx.write_text(rel, fuente + entidades)
+                    if mallas:
+                        ctx.write_text(f"{carpeta}/{f.name}", fuente + mallas)
+                    n += 1
+                    continue
+                if rel.startswith("gfx/interface/equipmentdesigner/graphic_db/") and pieza.name.startswith("COMUN_"):
+                    # "COMUN" no es un país ("Expected 'default', a continent name or a country tag");
+                    # la lista de los que usan el común la arma respaldo()
+                    continue
                 if f.suffix in (".txt", ".asset", ".gfx"):
                     # los de texto llevan el encabezado de archivo generado, como todo el mod
                     ctx.write_text(rel, banner_for(f"assets/modelos/{pieza.name} (modelo 3D propio)")
@@ -75,6 +91,38 @@ DISENADOR = [
 ]
 ANARQUIAS = ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN")
 _ENTIDAD = re.compile(r'entity\s*=\s*\{\s*name\s*=\s*"([^"]+)"')
+
+
+def _bloques(texto: str) -> list[tuple[str, str]]:
+    """Bloques de primer nivel (clave, texto) de un .asset, sin comentarios."""
+    texto = re.sub(r"#[^\n]*", "", texto)
+    out, i = [], 0
+    for m in re.finditer(r"(\w+)\s*=\s*\{", texto):
+        if m.start() < i:
+            continue
+        d = 0
+        for p in range(m.end() - 1, len(texto)):
+            d += {"{": 1, "}": -1}.get(texto[p], 0)
+            if d == 0:
+                break
+        out.append((m.group(1), texto[m.start():p + 1]))
+        i = p + 1
+    return out
+
+
+def separar_asset(texto: str) -> tuple[str, str, str | None]:
+    """(entidades, mallas y animaciones con rutas locales, carpeta de la malla)."""
+    import posixpath
+    bloques = _bloques(texto)
+    archivos = re.findall(r'file\s*=\s*"([^"]+)"', texto)
+    carpeta = posixpath.dirname(archivos[0]) if archivos else None
+    entidades = [b for k, b in bloques if k == "entity"]
+    mallas = []
+    for k, b in bloques:
+        if k in ("pdxmesh", "animation") and carpeta:
+            mallas.append(re.sub(r'(file\s*=\s*")([^"]+)"',
+                                 lambda m: m.group(1) + posixpath.relpath(m.group(2), carpeta) + '"', b))
+    return "\n".join(entidades) + "\n", ("\n\n".join(mallas) + "\n") if mallas else "", carpeta
 
 
 def _bloques_entidad(texto: str) -> list[str]:

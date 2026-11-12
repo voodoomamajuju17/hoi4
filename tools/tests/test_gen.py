@@ -14,6 +14,7 @@ campo que emitimos. Eso solo lo dice error.log.
 
 from __future__ import annotations
 
+import os
 import struct
 import sys
 import tempfile
@@ -29,6 +30,9 @@ from tools.gen.errors import LocalisationError  # noqa: E402
 from tools.gen.loc import LocRegistry  # noqa: E402
 
 FIXTURE_VANILLA = Path(__file__).parent / "fixtures" / "vanilla"
+# el reacomodo de espíritus (emitters/espiritus.py) corre al final del armado y cambia lo que dejan
+# los demás: los tests de cada mecánica miran el antes; test_espiritus mira el después
+os.environ["MEGANATIONS_SIN_AGRUPAR"] = "1"
 
 _failures: list[str] = []
 _passes = 0
@@ -2740,6 +2744,63 @@ def test_biblioteca() -> None:
           set(biblioteca.ORDEN[:10]) | {"TIERRAS_SIN_LEY"} <= cronicas, str(sorted(cronicas)))
 
 
+def test_espiritus() -> None:
+    """2026-11-12 ("que nunca pasen de 6 a la vez"): Líder + mecánica + identidad + Legado + Coyuntura."""
+    section("espiritus: nunca mas de 6 a la vez")
+    import re as _re
+    from tools.gen.emitters.modelos import separar_asset
+    del os.environ["MEGANATIONS_SIN_AGRUPAR"]
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+            mod = ctx.mod_root
+            datos = ctx.data["espiritus"]
+            visibles: dict[str, list[str]] = {}
+            for f in (mod / "common/ideas").glob("*.txt"):
+                for _k, cats in pdx.parse(f.read_text(encoding="utf-8")).entries:
+                    pais = cats.get("country")
+                    for iid, _b in (pais.entries if pais else []):
+                        visibles.setdefault(str(iid)[:3] if not str(iid).startswith("MN_") else "MN", []).append(str(iid))
+            check("los dos resumenes son espiritus visibles", sorted(visibles.get("MN", [])) == ["MN_coyuntura", "MN_legado"])
+            for tag, ids in visibles.items():
+                if tag == "MN":
+                    continue
+                lugares = 6 - 2 - 1 - (1 if tag in datos["mecanicas"] else 0)
+                check(f"{tag}: a lo sumo {lugares} espiritus propios a la vista ({ids})", len(ids) <= lugares)
+            dm = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text(encoding="utf-8"))
+            nombres = {str(k) for k, _ in dm.entries}
+            check("la mecanica de la ASC en uno solo", "ASC_mod_nacion" in nombres and "ASC_mod_red_de_computo" not in nombres)
+            check("el Lider sigue aparte", "MEGANATIONS_el_lider" in nombres)
+            check("los de valor fijo ya no son modificadores", not (nombres & datos["convertidos"]))
+            todo = " ".join(p.read_text(encoding="utf-8", errors="ignore") for p in mod.rglob("*.txt")
+                            if "localisation" not in p.parts)
+            quedan = set(_re.findall(r"add_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*(\w+)", todo))
+            check("nadie agrega un modificador convertido", not (quedan & datos["convertidos"]), str(quedan & datos["convertidos"]))
+            se = (mod / "common/scripted_effects/meganations_espiritus.txt").read_text(encoding="utf-8")
+            check("la suma de la mecanica", "ASC_sumar_nacion = {" in se and "ASC_mn_research_speed_factor" in se)
+            check("el resumen aparece cuando hace falta", "MN_espiritus_resumen = {" in se)
+            sl = (mod / "common/scripted_localisation/meganations_espiritus.txt").read_text(encoding="utf-8")
+            check("la lista del Legado al pasar el mouse", "localization_key = MN_linea_" in sl)
+    finally:
+        os.environ["MEGANATIONS_SIN_AGRUPAR"] = "1"
+
+    # error.log del usuario (2026-11-12): las mallas no se aceptan en gfx/entities y las animaciones
+    # se buscan desde la carpeta del .asset
+    texto = ('animation = { name = "a_idle" file = "gfx/models/units/X/X_idle.anim" }\n'
+             'pdxmesh = { name = "X_mesh" file = "gfx/models/units/X/X.mesh" animation = { id = "idle" type = "a_idle" } }\n'
+             'entity = { name = "TAG_infantry_entity" pdxmesh = "X_mesh" }\n')
+    ent, mallas, carpeta = separar_asset(texto)
+    check("modelos: la entidad queda sola en gfx/entities", "pdxmesh = {" not in ent and "TAG_infantry_entity" in ent)
+    check("modelos: la malla va junto al .mesh con nombres locales",
+          carpeta == "gfx/models/units/X" and 'file = "X.mesh"' in mallas and 'file = "X_idle.anim"' in mallas)
+    simb = Path(__file__).resolve().parents[2] / "assets/ui/simbolos_division"
+    grandes = sorted(simb.glob("*_large.dds"))
+    check("simbolos de division: del tamaño de los del juego (76x42 y 30x12)",
+          bool(grandes) and all(struct.unpack("<II", g.read_bytes()[12:20]) == (42, 76) for g in grandes)
+          and all(struct.unpack("<II", g.with_name(g.name.replace("_large", "_small")).read_bytes()[12:20]) == (12, 30)
+                  for g in grandes))
+
+
 def test_politica_gui() -> None:
     section("panel de Politica: espiritus en dos filas a tamano completo (2026-11-07)")
     from tools.gen.emitters import politica_gui as pg
@@ -2907,12 +2968,15 @@ def test_fabrica() -> None:
     import fabrica_hoi4 as F
     from tools.fabrica import control
     todo = REPO_ROOT / "arte/pedidos/0_FOCOS_PIN_FALTANTES.txt"
+    if "ASSET_REQUEST" not in todo.read_text(encoding="utf-8"):
+        # 2026-11-12: llegaron todos los pines; la fábrica se prueba con un pedido de ejemplo
+        todo = Path(__file__).parent / "fixtures" / "pedidos_pin_ejemplo.txt"
     peds = F.leer_pedidos(todo.read_text(encoding="utf-8"), todo.parent)
     # 2026-11-07: quedan pocos pines; para las tandas de prueba se suman los del diseñador
     dis = REPO_ROOT / "arte/pedidos/0_DISENADOR_2100.txt"
     peds_tanda = list(peds)
     for extra in (dis, REPO_ROOT / "arte/pedidos/0_ESPIRITUS_AZULEJO.txt"):
-        if extra.exists():
+        if extra.exists() and "ASSET_REQUEST" in extra.read_text(encoding="utf-8"):
             peds_tanda += F.leer_pedidos(extra.read_text(encoding="utf-8"), extra.parent)
     pin = next((p for p in peds if p.get("material")), None)
     check("fábrica: lee los pedidos de focos pin faltantes, con su material", len(peds) > 0 and pin is not None, str(len(peds)))
@@ -5766,6 +5830,7 @@ def main() -> int:
         test_reglas,
         test_simulador,
         test_vanilla_validation,
+        test_espiritus,
     ):
         test()
 

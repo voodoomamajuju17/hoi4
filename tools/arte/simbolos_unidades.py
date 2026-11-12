@@ -6,8 +6,9 @@
   versión del mapa (divisions_small/onmap_<textura>.dds). El juego los usa con 2 cuadros: el dibujo y
   el símbolo OTAN (cuando está activada esa opción); los dos llevan la silueta de cobre. La piel los
   lleva al tamaño del juego al armar el mod.
-- simbolo_<NACIÓN>_<n>.png -> assets/ui/simbolos_division/simbolo_<NACIÓN>_<n>.dds (128x128); el
-  armado los suma como símbolos de división nuevos, después de los del juego (ui_skin.simbolos).
+- simbolo_<NACIÓN>_<n>.png -> assets/ui/simbolos_division/simbolo_<NACIÓN>_<n>_large.dds (76x42) y
+  _small.dds (30x12), el tamaño de los del juego; el armado los suma como símbolos de división nuevos,
+  después de los del juego (ui_skin.simbolos).
 """
 
 from __future__ import annotations
@@ -21,6 +22,11 @@ REPO = Path(__file__).resolve().parents[2]
 PIEL = REPO / "assets" / "ui" / "piel" / "gfx" / "interface" / "counters"
 SIMBOLOS = REPO / "assets" / "ui" / "simbolos_division"
 CUADRO = (76, 42)        # un cuadro de unit_infantry_icon.dds del juego (152x42, 2 cuadros)
+# 2026-11-12 ("que se ajuste al recuadro sin sobrepasarlo"): los del juego son de 76x42 (y 30x12 el
+# chico), no cuadrados; el dibujo ocupa hasta ~29 px de alto y ~60 de ancho (medido en los 101 del
+# juego). El nuestro, cuadrado y estirado a 76x42, llenaba todo. Ahora: lo más grande que entra en esa
+# caja, sin deformarlo, centrado.
+SIMBOLO = {"large": ((76, 42), (62, 30)), "small": ((30, 12), (28, 12))}
 
 
 def _dds(img: Image.Image, dest: Path) -> None:
@@ -54,12 +60,24 @@ def unidad(src: Path) -> list[Path]:
     return hechos
 
 
-def simbolo(src: Path) -> Path:
-    dest = SIMBOLOS / f"{src.stem}.dds"
-    # 2026-11-12 ("el símbolo de división está muy bien, pero queda gigante"): los del juego ocupan
-    # el centro de su recuadro, con aire alrededor; el nuestro ocupa ~58% del lado
-    _dds(_encajar(Image.open(src), 128, 128, 27), dest)
-    return dest
+def simbolo(src: Path) -> list[Path]:
+    img = Image.open(src).convert("RGBA")
+    caja = img.getchannel("A").getbbox()
+    if caja:
+        img = img.crop(caja)
+    hechos = []
+    for talla, ((w, h), (cw, ch)) in SIMBOLO.items():
+        k = min(cw / img.width, ch / img.height)
+        dib = img.resize((max(1, round(img.width * k)), max(1, round(img.height * k))), Image.LANCZOS)
+        out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        out.alpha_composite(dib, ((w - dib.width) // 2, (h - dib.height) // 2))
+        dest = SIMBOLOS / f"{src.stem}_{talla}.dds"
+        _dds(out, dest)
+        hechos.append(dest)
+    viejo = SIMBOLOS / f"{src.stem}.dds"
+    if viejo.exists():
+        viejo.unlink()
+    return hechos
 
 
 def main(carpeta: str) -> tuple[int, int]:

@@ -44,6 +44,7 @@ from .emitters import forces as em_forces
 from .emitters import history as em_history
 from .emitters import faction_tech as em_faction_tech
 from .emitters import ideas as em_ideas
+from .emitters import espiritus as em_espiritus
 from .emitters import laws as em_laws
 from .emitters import loading_quotes as em_loading_quotes
 from .emitters import ideologies as em_ideologies
@@ -129,6 +130,7 @@ EMITTERS = [
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)
     ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)
     ("eventos_rotos", em_cleanup.emit_event_refs),  # 2026-11-07 (auditoría): llamadas a eventos que no cargan
+    ("espiritus", em_espiritus.emit),   # 2026-11-12: nunca más de 6 espíritus a la vez (agrupa el resto)
     ("balance", em_balance.emit),       # ultimo: resume lo que quedo
 ]
 

@@ -318,7 +318,8 @@ def simbolos(ctx: BuildContext) -> int:
     import re as _re
     from .menu import _dims, _resize, _texture_dims
     base = ctx.spec.root.parent.joinpath(*SIMBOLOS_DIR)
-    fuentes = sorted(base.glob("*.dds")) if base.is_dir() else []
+    # 2026-11-12: cada símbolo trae su _large (76x42) y su _small (30x12), ya del tamaño del juego
+    fuentes = sorted(f for f in base.glob("*.dds") if not f.stem.endswith("_small")) if base.is_dir() else []
     if not fuentes or ctx.vanilla is None:
         return 0
     tex = ctx.vanilla.gfx_textures()
@@ -330,13 +331,15 @@ def simbolos(ctx: BuildContext) -> int:
     lineas = ["spriteTypes = {"]
     for k, f in enumerate(fuentes):
         n = siguiente + k
-        data = f.read_bytes()
-        w, h = _dims(data)
+        nombre = f.stem[:-len("_large")] if f.stem.endswith("_large") else f.stem
         for talla in ("large", "small"):
+            g = f.with_name(f"{nombre}_{talla}.dds")
+            data = (g if g.exists() else f).read_bytes()
+            w, h = _dims(data)
             ref = tex.get(f"GFX_div_templ_1_{talla}") or tex.get(f"GFX_div_templ_0_{talla}")
             vw, vh = _texture_dims(ctx, ref) if ref else (0, 0)
             out = _resize(data, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else data
-            rel = f"gfx/interface/counters/division_templates_{talla}/meganations_{f.stem}.dds"
+            rel = f"gfx/interface/counters/division_templates_{talla}/meganations_{nombre}.dds"
             dest = ctx.mod_root / rel
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_bytes(out)
