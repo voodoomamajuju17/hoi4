@@ -295,6 +295,19 @@ def emit(ctx: BuildContext) -> None:
             if src.exists():
                 files.setdefault(p["texture"], str(src))
         ctx.note(f"piel: {screen}: {len(pieces)} texturas")
+    # 2026-11-12: los enfoques continuos (id, sprite y textura), para pedir sus íconos propios
+    carpeta = ctx.vanilla.root / "common" / "continuous_focus"
+    tex = ctx.vanilla.gfx_textures()
+    cont = []
+    for f in sorted(carpeta.glob("*.txt")) if carpeta.is_dir() else []:
+        cont += leer_continuos(f.read_text(encoding="utf-8-sig", errors="replace"))
+    if cont:
+        lines.append(f"== enfoques_continuos ({len(cont)}; id  sprite  textura)")
+        for fid, sprite in cont:
+            lines.append(f"  {fid}  {sprite}  {tex.get(sprite, '?')}")
+            if tex.get(sprite) and (ctx.vanilla.root / tex[sprite]).exists():
+                files.setdefault(tex[sprite], str(ctx.vanilla.root / tex[sprite]))
+        lines.append("")
     path = ctx.out_root / "ui_inventario.txt"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     ctx.track(path)
@@ -306,9 +319,62 @@ def emit(ctx: BuildContext) -> None:
     if mat:
         ctx.note(f"materiales: {mat} texturas de la interfaz de materiales reales (assets/ui/materiales_piel)")
     simbolos(ctx)
+    continuos(ctx)
 
 
 SIMBOLOS_DIR = ("assets", "ui", "simbolos_division")
+
+
+CONTINUOS_DIR = ("assets", "ui", "continuos")
+
+
+def leer_continuos(texto: str) -> list[tuple[str, str]]:
+    """(id, sprite del ícono) de cada enfoque continuo de common/continuous_focus/*.txt del juego."""
+    import re as _re
+    out = []
+    for m in _re.finditer(r"\bfocus\s*=\s*\{", texto):
+        d, i = 1, m.end()
+        while i < len(texto) and d:
+            d += {"{": 1, "}": -1}.get(texto[i], 0)
+            i += 1
+        cuerpo = texto[m.end():i]
+        fid = _re.search(r"\bid\s*=\s*([\w.]+)", cuerpo)
+        ico = _re.search(r"\bicon\s*=\s*\"?(GFX_\w+)", cuerpo)
+        if fid and ico:
+            out.append((fid.group(1), ico.group(1)))
+    return out
+
+
+def continuos(ctx: BuildContext) -> int:
+    """Íconos propios de los enfoques continuos (2026-11-12, captura de la pantalla: "ya que
+    estás"): assets/ui/continuos/<id del enfoque>.dds reemplaza la textura del ícono del juego,
+    en la misma ruta y al mismo tamaño (como la piel). Lo que no tiene arte propio queda igual."""
+    from .menu import _dims, _resize, _texture_dims
+    base = ctx.spec.root.parent.joinpath(*CONTINUOS_DIR)
+    if not base.is_dir() or ctx.vanilla is None:
+        return 0
+    carpeta = ctx.vanilla.root / "common" / "continuous_focus"
+    focos = []
+    for f in sorted(carpeta.glob("*.txt")) if carpeta.is_dir() else []:
+        focos += leer_continuos(f.read_text(encoding="utf-8-sig", errors="replace"))
+    tex = ctx.vanilla.gfx_textures()
+    hechos = 0
+    for fid, sprite in focos:
+        src = base / f"{fid}.dds"
+        if not src.exists() or sprite not in tex:
+            continue
+        data = src.read_bytes()
+        w, h = _dims(data)
+        vw, vh = _texture_dims(ctx, tex[sprite])
+        out = _resize(data, w, h, vw, vh) if vw and vh and (vw, vh) != (w, h) else data
+        dest = ctx.mod_root / tex[sprite]
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(out)
+        ctx.track(dest)
+        hechos += 1
+    if hechos:
+        ctx.note(f"enfoques continuos: {hechos} íconos propios")
+    return hechos
 
 
 def simbolos(ctx: BuildContext) -> int:

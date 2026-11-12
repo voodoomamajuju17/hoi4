@@ -2897,6 +2897,13 @@ def test_politica_gui() -> None:
     check("politica: el grafico de popularidad sale de la pantalla (ahi va el boton de la Ficha)",
           'name = "political_pie_chart" position = { x = -3000 y = 304 }' in o
           and 'name = "chart_explanation" position = { x = -3000 y = 116 }' in o, o[:900])
+    from tools.gen.emitters.ui_skin import leer_continuos
+    cont = leer_continuos('continuous_focus_palette = { id = palette_default\n focus = { id = naval_production icon = GFX_goal_continuous_naval_production\n'
+                          ' modifier = { industrial_capacity_dockyard = 0.1 } available = { always = yes } }\n'
+                          ' focus = { id = air_production icon = "GFX_goal_continuous_air_production" } }')
+    check("enfoques continuos: se leen id e icono del juego (para reemplazar sus imagenes)",
+          cont == [("naval_production", "GFX_goal_continuous_naval_production"),
+                   ("air_production", "GFX_goal_continuous_air_production")], str(cont))
     roto, faltan = pg.parchar(gui.replace("spirit_grid\"", "otra_grilla\""))
     check("politica: si el juego cambio la pantalla, no se toca", roto is None and "spirit_grid" in faltan, faltan)
 
