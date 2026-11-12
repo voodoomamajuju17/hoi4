@@ -1,563 +1,913 @@
-# RETRATOS DE ESTADO DE LOS LÍDERES - 61 imágenes
+# RETRATOS DE ESTADO DE LOS LÍDERES - 40 imágenes
 #
-# Solo los líderes de país y de las rebeliones. Ministros, generales y agentes ya tienen su retrato y NO cambian.
-# Tienen que verse "un nivel arriba" que los ministros: no es una foto de credencial, es EL retrato oficial
-# del líder, el que su régimen cuelga en los edificios públicos. Imagen real (pintura o foto según cada pedido),
-# auténtica, original y grandiosa. Cada pedido tiene su propia cámara, encuadre, luz y técnica: respetalas.
+# Solo los líderes de las 8 potencias (con sus rutas), sus 7 rebeldes, Japón, Gran Bretaña y las anarquías.
+# Satélites, ministros, generales y agentes NO cambian.
 #
-# REGLAS PARA TODAS
-# - Formato vertical 156x210 (o más grande con la misma proporción, por ejemplo 624x840). PNG.
-# - La cara del líder ocupa el tercio superior y se lee claramente achicada a 156x210.
-# - El año es 2100: ropa, armas y tecnología del futuro, con el estilo de su nación.
-# - Sin texto, sin letras, sin marcos ni bordes dibujados.
-# - Si te paso su retrato actual (zip referencias/), mantené la misma cara, edad y rasgos.
-# - El nombre de archivo tiene que ser exacto.
+# Es EL retrato oficial del líder, un nivel por encima de los ministros: imagen real, auténtica, original y
+# grandiosa. Cada pedido trae su cara, vestuario, pose, escena en tres planos, cámara, luz, técnica, paleta,
+# imperfecciones y qué evitar. Respetá cada campo. Pedí UNA imagen por mensaje y adjuntá la referencia de su cara
+# (referencias/<id>__actual.png del zip).
+#
+# ===================== REGLAS PARA TODAS (copialas al principio de cada mensaje) =====================
+# NOT AN "AI IMAGE" LOOK. This must look like a real photograph or a real painting made by a master, never
+# like a typical AI-generated picture. Specifically:
+# - Real skin: pores, uneven tone, wrinkles, stubble, sun damage, small scars. NO smooth plastic skin, NO beauty
+#   filter, NO airbrushing, NO glossy wax faces, NO perfect symmetric faces.
+# - Real light from the source described in the request, and only that. NO glowing rim light everywhere, NO
+#   halo glow, NO HDR look, NO teal-and-orange grade, NO lens-flare spam, NO bokeh orbs added for decoration.
+# - Real materials: wool pills, leather cracks, metal scratches, dust, mud. Clothes hang with real weight.
+# - Restrained colour: follow the palette given. NO oversaturation, NO neon unless the request asks for it.
+# - Real camera and real technique: if the request says a film stock or a lens, imitate its grain, depth of
+#   field and distortion. If it says a painter, imitate that painter's brushwork, ground colour and finish.
+# - Composition as described (camera height, distance, angle). NOT the default centred chest-up AI portrait.
+# - Hands: correct anatomy, five fingers, natural grip.
+# - The person is the SAME as in the attached reference (same face shape, age, hair, scars, ethnicity), but as
+#   a real human being, not as an icon, card, poster, statue or tattoo like the reference.
+# - The year is 2100: clothes, weapons and technology are of the future in the style of their nation, but
+#   worn, used and real, not shiny sci-fi costumes.
+# - NO text, NO letters, NO logos with words, NO signature, NO frame or border, NO watermark.
+# - Vertical format with ratio 156x210 (deliver at 1248x1680 or larger, PNG). The face must still read
+#   clearly when the image is shrunk to 156x210: keep it in the upper third and large enough.
+# =====================================================================================================
+#
+# LISTA (quién es y qué muestra cada imagen)
+#  1. EFE_aurelio_iv: Aurelio IV hundido en su trono de quebracho vivo, con el fusil de Iguazú en las rodillas. Óleo de corte al estilo Sargent/Sorolla.
+#  2. EFE_anahi_quiroga: Anahí metida en los helechos de las Yungas con su bastón de musgo. Foto documental en película.
+#  3. EFE_tupa_heredero: Tupã I en la proa de la barcaza imperial, amaneciendo sobre Asunción. Óleo romántico tipo Turner.
+#  4. EFE_custodia_pereira: Pereira jurando en una asamblea nocturna de guardaparques con antorchas. Foto de prensa histórica.
+#  5. EFE_regente_etchegaray: Etchegaray en su mesa de guerra, con la corona sin tocar en primer plano. Claroscuro tipo Caravaggio.
+#  6. EFE_lider_rebelde: Arregui arriba de un blindado en Rosario, con la insignia imperial arrancada. Foto de guerra en blanco y negro con celeste.
+#  7. NRE_lucius_varro: Varro alzado en un escudo por sus legionarios en San Pedro, de noche. Pintura de historia tipo David.
+#  8. NRE_legado_arbogast: Arbogast de perfil en la escotilla de un tanque, con la columna en el desierto libio. Cine épico en 65mm.
+#  9. NRE_irina_vasilescu: Irina en la boca de un búnker de los Cárpatos, con su legión arrodillada en la nieve. Óleo tipo Repin.
+# 10. NRE_kerem_aydin: Kerem partiendo pan con sus soldados en Capadocia, al atardecer. Óleo íntimo tipo Rembrandt.
+# 11. NRE_lider_rebelde: Láskaris como ícono bizantino vivo en el ábside de Santa Sofía.
+# 12. SHD_lin_wenzhao: Lin Wenzhao inmóvil en la sala de turbinas de una represa, en simetría perfecta. Foto arquitectónica tipo Gursky.
+# 13. SHD_zhou_mingyuan: Zhou arriba de una compuerta abierta del Yangtsé, con el agua reventando. Realismo socialista chino.
+# 14. SHD_lider_rebelde: Lin Xiaoyu frente a racks de servidores que forman una estrella roja. Retrato oficial con luz cyberpunk.
+# 15. NAS_amaru_quispe: Amaru arrodillado en un templo al amanecer, con el sol de halo. Escuela cuzqueña con cara real.
+# 16. NAS_amaru_inca: El mismo Amaru, ya Sapa Inca, bajando por el camino del inca con su ejército atrás. Cine histórico.
+# 17. NAS_lider_rebelde: Mamani en un observatorio durante un eclipse total. Óleo gótico tipo Goya.
+# 18. ASC_allocation_council: Los 41 delegados sorteados en semicírculo, vistos desde arriba. Foto tipo Gursky.
+# 19. ASC_plan_41: La cara de PLAN-41 hecha de luz cian en una sala de servidores, detrás de una puerta cerrada. Cine tipo Villeneuve.
+# 20. ASC_lider_rebelde: Ragnarsson con su martillo frente a un datacenter en llamas en un bosque nórdico. Óleo romántico.
+# 21. FCU_valeria_castellane: Castellane en su planta desalinizadora, entre caños de vidrio con agua. Foto editorial de lujo.
+# 22. FCU_marcus_rourke: Rourke con un whisky en un balcón sobre su fábrica de tanques y drones. Foto corporativa con clima noir.
+# 23. HSN_kofi_aldana: Aldana con su pipa en el puente de un portacontenedores de noche, entre hologramas de fletes.
+# 24. HSN_ines_tavake: Tavake con el megáfono arriba de los contenedores del puerto tomado, en plena tormenta. Fotoperiodismo.
+# 25. HSN_lider_rebelde: Salas con la capa de la Cruz del Mar y sus marineros rezando en Malaca. Óleo barroco tipo Zurbarán.
+# 26. APF_amara_nwosu: Amara bajo un baobab hablándole a una asamblea, con tiza en la mano. Óleo contemporáneo africano.
+# 27. APF_kwame_diallo: Diallo en una duna del Sahel con su mapa y sus pickups abajo. Cine de guerra con contraste alto.
+# 28. APF_lider_rebelde: Adeyemi-Sow de frente ante una pared de banderas de las viejas naciones africanas. Retrato oficial años 60.
+# 29. ZJP_kaede_mori: Mori en la proa de su buque insignia en la bahía de Tokio, con la niebla del amanecer. Óleo con aire de Hokusai.
+# 30. ZJP_daisuke_kanemura: Kanemura en su sala de directorio de vidrio, con el Mecha gigante afuera. Realismo cyberpunk.
+# 31. ZJP_ryuji_sakaguchi: Sakaguchi en su oficina sobre los muelles de Osaka, con tatuajes, abanico y neón rojo. Cine yakuza tipo Kitano.
+# 32. ZJP_kenzo_akabane: Akabane sonriendo en un pasillo de tanques de clones con su propia cara. Simetría tipo Kubrick.
+# 33. ZAL_tom_ashworth: Ashworth arriba de una pila de servidores rotos en una fábrica de Manchester. Óleo de realismo social.
+# 34. ZAL_siobhan_cray: Siobhan flotando conectada a la red de Londres, con ecos de su propia cara. Cine tipo Ex Machina.
+# 35. ZAL_victoria_iii: Victoria III en un trono de utilería sobre el escenario de un teatro vacío. Retrato real tipo Winterhalter.
+# 36. ZAN_the_warlords: Cinco caudillos alrededor de un barril en llamas en una ciudad yanqui en ruinas. Óleo oscuro tipo Caravaggio.
+# 37. ZWB_coronel_barbosa: Barbosa con su cigarro en la baranda de una cañonera del Amazonas. Cine tipo Herzog.
+# 38. ZWE_ataman_grigorenko: Grigorenko a caballo entre el trigo, frente a un silo y un tren blindado. Óleo épico tipo Repin.
+# 39. ZWI_rani_devika: La Rani en su trono de mármol, con el talwar en las rodillas y una ciudad ardiendo afuera. Óleo tipo Ravi Varma.
+# 40. ZWM_emir_al_rashid: Al-Rashid delante de su convoy y de un campo de pozos de petróleo muertos. Cine del desierto en 65mm.
 
-===== 1 de 61 =====
+===== 1 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: EFE_aurelio_iv
 filename: retrato_EFE_aurelio_iv.png
-size: 156x210 (o más grande con la misma proporción)
-who: Emperador Aurelio IV (54, founder of the Ecofascist Empire, former green-militia commander, Buenos Aires)
-scene: Seated on a throne carved from a single trunk of quebracho wood whose living roots still grip the marble floor; green-and-gold imperial uniform with a mantle of woven palm fibre, a crown of bronze laurel and yerba leaves. Camera low and slightly to his left, 50mm, looking up at him; he rests one hand on an old hunting rifle laid across his knees (the rifle of Iguazú). Late-afternoon light falls through a jungle-glass cupola in shafts full of floating pollen. Technique: large academic oil painting in the manner of a 19th-century imperial court portrait, visible brushwork, deep varnished greens.
+reference: referencias/EFE_aurelio_iv__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Emperor Aurelio IV, 54, founder of the Ecofascist Empire, ex-commander of the Green Militias, rules from Buenos Aires
+face: Same man as the reference: square heavy face, olive skin with sun damage and deep nasolabial lines, thick salt-and-pepper hair swept back and slightly unruly, short grey goatee with a darker moustache, heavy black eyebrows, one slightly drooping left eyelid, small white scar through the right eyebrow (Iguazú). Eyes dark brown, tired and hard, not angry.
+wardrobe: Dark bottle-green high-collar imperial tunic of heavy wool with matte bronze buttons shaped like seeds; a cape of hand-woven palm fibre lined with faded crimson velvet, frayed at the hem; a thin crown of oxidised bronze laurel and yerba-mate leaves, slightly crooked; on his chest the bronze tree-of-life medallion from the reference, scratched; on his right hand a cheap steel ring from his militia days.
+pose: Seated, slumped a little to his right in a throne carved from one quebracho trunk; left forearm on the armrest, right hand resting on the stock of an old bolt-action hunting rifle laid across his knees. Head turned three-quarters toward the viewer, chin slightly down, looking up from under his brows.
+foreground: Out-of-focus: the rifle barrel and a few dry red ceibo flowers fallen on the floor.
+midground: The throne: living roots of the quebracho still grip cracked marble tiles; moss in the cracks.
+background: Dim palace hall turned greenhouse: tall iron-and-glass windows dirty with condensation, palms and monstera filling the space, a faded Argentine-era fresco half hidden by leaves.
+camera: Medium-format camera, 80mm lens (normal on 6x7), f/4, camera at his seated eye level, 2.5 m away, slightly to his left. Vertical frame, head in the upper third, crop at mid-thigh.
+lighting: Single large window to camera-left as key (soft, late afternoon, warm), no fill: the right side of his face falls into deep shadow. A faint green bounce from the plants on the shadow side. Dust and pollen visible in the window beam.
+technique: Painted, not photographed: large academic oil portrait in the tradition of John Singer Sargent and Joaquín Sorolla, loose confident brushwork in the clothes and background, careful finish only on the face and hands. Visible canvas weave, slightly yellowed varnish.
+palette: Bottle green, oxidised bronze, dirty gold, muted crimson, warm grey skin shadows. No neon, no saturated emerald.
+imperfections: Sun spots on the cheeks, a vein on the back of the hand, a loose thread on the cape, the crown sits imperfectly.
+avoid: No glowing halo, no golden icon frame like the reference, no fantasy armour, no symmetrical pose. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 2 de 61 =====
+===== 2 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: EFE_anahi_quiroga
 filename: retrato_EFE_anahi_quiroga.png
-size: 156x210 (o más grande con la misma proporción)
-who: Anahí Quiroga, la Voz del Monte (32, Yungas park ranger who leads the forest uprising)
-scene: Standing waist-deep in wet ferns in a cloud forest, ranger jacket torn at one shoulder, a machete on her back and a carved wooden staff in her fist; moss and orchids already growing on the staff. Camera at eye level, very close (85mm), she looks straight into the lens, mist behind her swallowing the trees. Soft grey-green light, raindrops on her face. Technique: photorealistic documentary photograph, shallow depth of field, cinematic colour grade.
+reference: referencias/EFE_anahi_quiroga__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Anahí Quiroga, the Voice of the Forest, 32, Yungas park ranger who leads the forest uprising and becomes Empress
+face: Same woman as the reference: long straight black hair in one thick braid over her left shoulder, brown skin, strong jaw, wide cheekbones, straight thick eyebrows, dark almond eyes; a small gold leaf earring in the left ear. Freckles of sun on the nose, chapped lips, a thin scratch on the right cheek from branches.
+wardrobe: Worn olive ranger field jacket, rip at the right shoulder sewn with green thread; under it a woven Andean wool vest in red and ochre; the bronze tree-of-life badge of the Empire pinned crooked over the old ranger patch; a machete in a leather sheath across her back (only the handle visible over the shoulder); a carved quebracho walking staff with living moss and two tiny orchids growing on it.
+pose: Standing waist-deep in wet ferns, both hands stacked on top of the staff, body angled 30 degrees away from the camera, face turned fully to the viewer. Calm, almost still, as if listening.
+foreground: Fern fronds very close to the lens, blurred, with water droplets.
+midground: Her figure, sharp, with rain mist around her legs.
+background: Yungas cloud forest: giant trees with hanging mosses and bromeliads fading into white fog in three layers; one small toucan far away on a branch, barely visible.
+camera: Full-frame camera, 85mm lens, f/2.0, at her eye level, 3 m away. Vertical, crop at the hips.
+lighting: Overcast, flat diffuse light from above through the canopy; a gap in the clouds gives a soft brighter rim on her hair and shoulder from behind-right.
+technique: Documentary photograph, Kodak Portra 400 film look: fine natural grain, gentle highlight roll-off, true skin tones. Like a portrait by Steve McCurry or Sebastião Salgado but in colour.
+palette: Wet greens and grey-whites of fog, the warm red of her vest as the only strong colour.
+imperfections: Wet strands of hair stuck to her forehead, mud on the jacket, raindrops on the skin.
+avoid: No glowing magical effects, no jaguar, no fantasy elf look, no studio retouching. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 3 de 61 =====
+===== 3 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: EFE_tupa_heredero
 filename: retrato_EFE_tupa_heredero.png
-size: 156x210 (o más grande con la misma proporción)
-who: Emperador Tupã I, del Agua (28, Aurelio's nephew, crowned heir; reigns from Asunción)
-scene: Standing at the prow of a white imperial river barge on the Paraná at dawn, coronation mantle soaked at the hem, one hand on the gilded rail; a long wake and the Asunción skyline behind. Wide 35mm shot from the water, camera at river level so the barge towers over the viewer; he is framed small but central with the sunrise as a halo. Golden mist light. Technique: grand romantic painting (Turner-like atmosphere) with a crisp, realistic face.
+reference: referencias/EFE_tupa_heredero__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Emperor Tupã I 'of the Water', 28, nephew of Aurelio, crowned heir, reigns from Asunción
+face: Same young man as the reference: thick dark curly hair, olive-brown skin, strong straight nose, full eyebrows, clean shaven, square jaw, light stubble shadow. Looks younger than his title; eyes wary.
+wardrobe: New coronation regalia that does not yet fit him: white linen high-collar tunic with ñandutí lace on the cuffs, a long crimson cape with a hand-woven guaraní border (the red-and-cream pattern from the reference), the bronze sun-and-tree medallion; a simple bronze circlet instead of his uncle's laurel; the hem of the cape dark and soaked with river water.
+pose: Standing at the prow of a white imperial river barge, right hand gripping the gilded rail, left hand loose at his side; body facing the river, head turned back over his shoulder toward the viewer.
+foreground: The gilded prow ornament (a carved surubí fish) close to the lens, slightly soft.
+midground: Him and the deck of the barge, wet planks reflecting the sky.
+background: The Paraguay river at dawn, very wide, mist on the water; the low skyline of Asunción with a few modern towers and the old Palacio de los López lit pink; a line of small canoes with people watching.
+camera: Full-frame, 35mm lens, f/5.6, camera low at deck level near the prow looking up and back at him, 2 m away. Vertical; he occupies the right two thirds.
+lighting: Sunrise behind the city (backlight) creating a strong rim on his curls and shoulders; soft fill from the bright water below lights his face from underneath.
+technique: Romantic oil painting with the atmosphere of J.M.W. Turner in the sky and water (wet-into-wet, luminous haze) and a precise, realistic face like Ilya Repin.
+palette: Pearl pink, pale gold, river brown-green, crimson cape, cream linen.
+imperfections: The cape too long and heavy for him, a crease in the linen, a fresh shaving nick on the jaw.
+avoid: No satellites or sci-fi beams (the reference has them, not this one), no halo. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 4 de 61 =====
+===== 4 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: EFE_custodia_pereira
 filename: retrato_EFE_custodia_pereira.png
-size: 156x210 (o más grande con la misma proporción)
-who: Custodia Electa Yara Pereira (elected Custodian, former chief of park rangers)
-scene: Standing at a lectern made from a fallen tree stump, in front of an open-air assembly of rangers holding torches (only as soft bokeh lights behind her); simple ranger uniform with one green sash of office, no crown. Medium shot from slightly below and to the right, 70mm, her hand raised mid-oath. Warm torchlight on her face, blue night behind. Technique: photorealistic press photograph of a historic moment, slight film grain.
+reference: referencias/EFE_custodia_pereira__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Elected Custodian Yara Pereira, 44, chief of park rangers, elected head of state after the Empire
+face: Same woman as the reference: wild dark curly hair tied back loosely with strands escaping, brown skin, strong nose, a horizontal stripe of red urucum paint across both eyes, gold leaf earrings, deep smile lines, determined mouth.
+wardrobe: Plain ranger uniform of faded khaki-green cotton, sleeves rolled; one wide green sash of office over the right shoulder; a crimson wool shawl; a small glass vial of seeds hanging from a cord on her neck. No crown, no medals.
+pose: At a lectern made from a sawn tree stump, right hand raised mid-oath (palm forward), left hand flat on an old leather-bound book. Body square to the camera, face very slightly turned to her right.
+foreground: Blurred torches held by people in the front row (only flames and hands visible).
+midground: Her at the stump lectern.
+background: Night open-air assembly in a forest clearing: hundreds of rangers with torches forming soft orange points, giant tree silhouettes against a deep blue sky with stars.
+camera: Full-frame, 70mm, f/2.8, camera slightly below her eye level, 3.5 m away, from her front-right. Vertical.
+lighting: Warm torchlight from below and both sides (flickering, uneven), cold blue moonlight rim from behind.
+technique: Press photograph of a historic moment: Kodak Tri-X pushed one stop then colour-toned, visible grain, slight motion blur on the raised hand. Like the great 20th-century Magnum photographers.
+palette: Torch orange, night blue, khaki, red paint.
+imperfections: Sweat on the forehead, smoke in the air, one torch flame blown out by the wind.
+avoid: No golden frame, no halo, no saint pose, no clean studio light. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 5 de 61 =====
+===== 5 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: EFE_regente_etchegaray
 filename: retrato_EFE_regente_etchegaray.png
-size: 156x210 (o más grande con la misma proporción)
-who: Regente Bruno Etchegaray (51, marshal of the Green Guard ruling as regent)
-scene: In his barracks office, standing behind a war table covered in maps, in full Green Guard field uniform; the imperial crown sits on a cushion at the edge of the table, deliberately untouched, closer to the viewer than he is. Camera over the crown (crown in soft focus foreground, him sharp behind), 50mm, cold window light from the left. Technique: dramatic chiaroscuro oil painting in the style of Caravaggio.
+reference: referencias/EFE_regente_etchegaray__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Regent Bruno Etchegaray, 51, marshal of the Green Guard, rules as regent and refuses the crown
+face: Same man as the reference: lean face, short dark-grey hair receding at the temples, grizzled short beard, hollow cheeks, deep-set grey eyes, broken nose healed crooked. Expression: tired duty, no ambition.
+wardrobe: Green Guard field uniform, faded and practical, sleeves rolled, rank tabs only; a battered map case on a strap; an old officer's sabre hanging on the chair behind him. No cape.
+pose: Standing behind a war table, both fists resting on the maps, leaning forward; head up, looking past the camera, not at it.
+foreground: The imperial crown of laurel on a dark red cushion at the edge of the table, closest to the lens, in soft focus, deliberately untouched.
+midground: The war table: paper maps of the Río de la Plata with pins and coffee rings, a cold mate gourd, a revolver.
+background: Plain barracks office with whitewashed walls, a single window with iron bars, a framed photo of Aurelio IV turned face-down on a shelf.
+camera: Full-frame, 50mm, f/2.0 focused on him, camera at table height over the crown, 1.8 m from him.
+lighting: Cold grey window light from the left only; strong chiaroscuro, the right half of the room in darkness; a thin highlight on the crown.
+technique: Dramatic oil painting in the manner of Caravaggio and Ribera: dark brown-black ground, sculpted light, realistic skin with every wrinkle.
+palette: Olive drab, earth brown, bone white, one dull gold note in the crown.
+imperfections: A coffee stain on the map, dirt under the fingernails, a frayed cuff.
+avoid: Do not put the crown on his head, no heroic pose, no golden icon frame. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 6 de 61 =====
+===== 6 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: EFE_lider_rebelde
 filename: retrato_EFE_lider_rebelde.png
-size: 156x210 (o más grande con la misma proporción)
-who: General Martín Arregui (commander of the Rosario garrison, leader of the Liberal Movement of the Southern Cone)
-scene: Standing on the hood of an armoured car on a Rosario boulevard, megaphone lowered, plain olive uniform with the imperial insignia torn off (pale outline still visible); blue-and-white liberal banners and smoke in the street behind. Camera low on the asphalt, 24mm wide angle, him dominating the frame against an overcast sky. Technique: gritty black-and-white war photojournalism with one touch of colour: the blue of the banners.
+reference: referencias/EFE_lider_rebelde__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: General Martín Arregui, ~55, commander of the Rosario garrison, leader of the Liberal Movement of the Southern Cone (civil-war rebel)
+face: Same man as the reference: short dark hair greying at the sides, clean shaven, square jaw, straight nose, olive skin, firm thin mouth; eyes narrowed against smoke.
+wardrobe: Plain olive army uniform with the imperial tree insignia torn off the chest (pale patch and loose threads where it was); a light-blue-and-white armband on the left arm; leather cross-strap; a rolled paper (the constitution) in his hand.
+pose: Standing on the hood of an armoured car, megaphone lowered at his side, the rolled constitution raised in the other hand; body three-quarter, face to the crowd off-camera-right.
+foreground: Hands of the crowd and a blue-and-white flag edge entering the bottom of the frame, blurred.
+midground: Him on the armoured car, its scratched green paint.
+background: A Rosario boulevard with plane trees and art-deco facades, the National Flag Memorial tower in the distance, smoke from a burning imperial checkpoint, blue-and-white banners from the balconies.
+camera: Full-frame, 24mm wide, f/8, camera low on the asphalt next to the wheel, looking up, 2 m away.
+lighting: Overcast noon light, flat and grey; smoke diffuses it further.
+technique: Black-and-white war photojournalism (Ilford HP5, gritty), with selective colour ONLY on the light-blue of the banners and armband.
+palette: Silver greys, black, and light blue.
+imperfections: Lens flare from a gap in the clouds, motion blur on a running figure, dust on the lens.
+avoid: No golden frame, no halo, no clean glamour. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 7 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: YYG_tupa_benitez
-filename: retrato_YYG_tupa_benitez.png
-size: 156x210 (o más grande con la misma proporción)
-who: Mburuvicha Tupã Benítez (26, nephew of the Emperor, governor of the Paraguayan satellite)
-scene: Seated on the steps of a colonial Jesuit ruin overgrown with vines near Asunción, white linen guayabera with an embroidered ñandutí sash, ceremonial guaraní feathered staff leaning on his shoulder; watching the viewer with a guarded half-smile. Camera at the same height, three-quarter angle from his right, 85mm. Humid golden-hour light. Technique: realistic painted portrait with warm earth tones, like a contemporary official portrait.
-
-===== 8 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: PTA_ingrid_paillacar
-filename: retrato_PTA_ingrid_paillacar.png
-size: 156x210 (o más grande con la misma proporción)
-who: Custodia Austral Ingrid Paillacar (glaciologist governing Patagonia and Antarctica)
-scene: Standing alone on a blue glacier tongue in Magallanes, heavy white-and-green polar uniform, ice axe planted at her side, a mapuche trarilonko headband under her hood; a research station far below. Camera behind and above her shoulder, high angle drone shot (28mm) as she turns her head back to the lens. Hard white Antarctic light, wind-blown snow. Technique: hyperreal photography, cold palette.
-
-===== 9 de 61 =====
+===== 7 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NRE_lucius_varro
 filename: retrato_NRE_lucius_varro.png
-size: 156x210 (o más grande con la misma proporción)
-who: Imperator Lucius Varro (legion commander acclaimed emperor by his troops, Rome)
-scene: Raised on a legion shield by soldiers in modern composite armour with red plumes (only their arms and helmets visible at the bottom of the frame), modern lorica of carbon plates and a purple paludamentum cloak, laurel wreath of gilded titanium. Camera very low among the soldiers looking straight up, 24mm, the dome of St Peter and drone lights behind. Torchlight and red smoke. Technique: neoclassical history painting (Jacques-Louis David) rendered with photographic detail.
+reference: referencias/NRE_lucius_varro__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Imperator Lucius Varro, 52, legion commander acclaimed emperor by his troops, Rome
+face: Same man as the reference: heavy square head, short tight greying curls, low broad forehead, thick brow ridge, broad crooked nose, clean shaven, deep frown lines, thick neck. Real human skin, not marble: weathered, with a shaving rash on the neck.
+wardrobe: Modern lorica of matte carbon-composite segmented plates over a dark red tunic; an imperial purple paludamentum cloak pinned at the right shoulder with a heavy gold fibula; laurel wreath of gilded titanium leaves; a scratched legion dog-tag on a chain.
+pose: Raised on a legion shield held by soldiers: standing, one hand gripping a soldier's helmet crest for balance, the other raised open-palmed in a salute; looking down at the viewer.
+foreground: Gloved hands, red plumes and the rims of the shield at the bottom edge.
+midground: Him on the shield, cloak blown by wind.
+background: St Peter's square at night packed with legionaries; the dome lit by drone floodlights; red flares and smoke.
+camera: Full-frame, 24mm, f/4, camera very low among the soldiers looking straight up, 1.5 m away.
+lighting: Red flare light from below, cold white drone floodlight from above-behind as rim; torchlight on the face.
+technique: Neoclassical history painting (Jacques-Louis David, Jean-Léon Gérôme) rendered with photographic detail; smooth glazes, theatrical composition.
+palette: Imperial purple, blood red, black carbon, gold, marble white.
+imperfections: A cut on his knuckles, the wreath bent, sweat.
+avoid: No marble statue, no cameo frame, no fantasy gladiator look. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 10 de 61 =====
+===== 8 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NRE_legado_arbogast
 filename: retrato_NRE_legado_arbogast.png
-size: 156x210 (o más grande con la misma proporción)
-who: Legado Flavius Arbogast (legate of Legio I Italica, back from the desert)
-scene: Standing in the open hatch of a sand-scoured tank in the Libyan desert, desert-camouflage armour, cloak wrapped around his face like a scarf, aquila standard planted on the turret beside him. Profile view from far away with a 200mm telephoto, heat haze compressing a column of tanks behind him. Blinding noon light, ochre palette. Technique: cinematic epic film still.
+reference: referencias/NRE_legado_arbogast__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Legate Flavius Arbogast, 45, Legio I Italica; Varro sent him to the desert and he came back with the whole legion behind him
+face: Same man as the reference: short tight curly brown hair, a long diagonal scar across the left cheek from cheekbone to jaw, square jaw, hooked nose, two days of stubble with sand in it, deeply sunburned skin peeling on the nose, pale grey eyes squinting.
+wardrobe: Desert-tan composite segmented armour scuffed to bare carbon at the edges; a sand-coloured legate's cloak wound around his neck and mouth like a scarf, pulled down under the chin; dusty goggles pushed up on the forehead; a faded red legate's sash; a modern rifle slung across the back.
+pose: Standing upright in the open commander's hatch of a tank, one gloved hand on the hatch rim, the other holding the shaft of the legion's aquila standard planted on the turret. Seen in pure profile looking to the right of frame, into the wind.
+foreground: Shimmering heat haze distorting the bottom of the image.
+midground: Him and the turret of a sand-scoured heavy tank; the gilded aquila eagle catches the sun.
+background: An endless column of tanks and trucks receding into a cloud of dust across Libyan dunes; the sky white with heat.
+camera: Very long 400mm telephoto from 150 m away, f/5.6, camera at turret height, strong compression that stacks the column right behind him.
+lighting: Brutal noon sun straight from above: hard short shadows under brow and nose, bleached highlights, no fill.
+technique: Cinematic still shot on 65mm film (the look of David Lean's desert epics): rich grain-free detail, slight halation on the highlights, anamorphic feel cropped to vertical.
+palette: Ochre, bone white, faded blue sky, one note of red sash and the gold eagle.
+imperfections: Sand on the lens, dust in his stubble, cracked lips, a dent in the turret.
+avoid: No marble, no cameo frame, no glossy video-game render, no blue-orange colour grade. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 11 de 61 =====
+===== 9 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NRE_irina_vasilescu
 filename: retrato_NRE_irina_vasilescu.png
-size: 156x210 (o más grande con la misma proporción)
-who: Legada Irina Vasilescu (legate of Legio V Macedonica on the Danube, daughter of the Dacian bunker junta)
-scene: Standing in the concrete mouth of a Carpathian bunker, legate's armour over a bunker-army greatcoat, helmet under her arm, short grey hair; legionaries kneeling in rows outside in the snow, seen past her. Camera inside the bunker looking out (she is backlit, silhouetted rim light), 35mm, then her face lit by a single red emergency lamp. Technique: dramatic realistic oil painting, cold blues and one red.
+reference: referencias/NRE_irina_vasilescu__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Legate Irina Vasilescu, 38, Legio V Macedonica on the Danube; daughter of the Dacian bunker junta, the first provincial the legions could acclaim
+face: Same woman as the reference: thick wavy dark-blonde hair to the shoulders, half tied back, sharp straight nose, high strong cheekbones, narrow intense eyes, thin firm lips, a small mole on the left jaw. Pale skin reddened by cold.
+wardrobe: Legate's segmented armour in dark gunmetal over a heavy grey bunker-army greatcoat with a wolf-fur collar; a red-crested helmet held under her left arm; leather gloves; a small Dacian draco (wolf-headed dragon) pin on the collar.
+pose: Standing in the concrete mouth of a Carpathian bunker, body facing out toward her legion, head turned back over her right shoulder to look at the viewer.
+foreground: The edge of a massive open steel blast door, rust streaks, very close to the lens on the left.
+midground: Her figure in the doorway.
+background: Outside in falling snow: rows of legionaries kneeling with standards, the forest of the Carpathians, a pale grey dawn sky.
+camera: Camera inside the bunker looking out, 35mm lens, f/2.8, at her shoulder height, 2.5 m behind her.
+lighting: Her silhouette rim-lit by the bright snow outside; her face lit only by a single red emergency lamp on the bunker wall to camera-right. Two colour temperatures: cold white outside, red inside.
+technique: Dramatic realistic oil painting in the manner of Ilya Repin and Vasily Vereshchagin: thick paint in the snow, fine glazing on the face.
+palette: Snow white, steel blue, concrete grey, emergency red.
+imperfections: Frost on her eyelashes, chipped concrete, a scratch on the helmet crest.
+avoid: No marble, no cameo frame, no fantasy valkyrie look. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 12 de 61 =====
+===== 10 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NRE_kerem_aydin
 filename: retrato_NRE_kerem_aydin.png
-size: 156x210 (o más grande con la misma proporción)
-who: Legado Kerem Aydın (old, patient legate of Legio XII Fulminata in Anatolia)
-scene: Seated on a camp chair among ancient Hittite stones in Cappadocia, white beard, armour unbuckled, sharing bread with soldiers off-frame; his helmet with a thunderbolt crest on the ground. Close-up from slightly above, 85mm, warm smile but sharp eyes. Sunset light through the fairy chimneys. Technique: intimate realistic painting with soft Rembrandt lighting.
+reference: referencias/NRE_kerem_aydin__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Legate Kerem Aydın, 66, Legio XII Fulminata, guardian of Anatolia; old, patient and loved by soldiers, promises them land in the East
+face: Same man as the reference: full curly white beard, thick white wavy hair, deep forehead wrinkles, heavy lids, warm brown eyes with crow's feet, broad nose, a gap between his front teeth when he smiles.
+wardrobe: Armour unbuckled and hanging open on one side, simple rough linen tunic under it, a faded red cloak, worn leather sandal-boots; his helmet with a lightning-bolt crest on the ground beside him.
+pose: Seated on a folding camp chair, leaning forward, breaking a round loaf of bread with both hands and offering half to someone off-frame to the left; looking up at the viewer with a small knowing smile.
+foreground: His helmet on the dusty ground and a tin cup of tea, slightly soft.
+midground: Him on the chair.
+background: Cappadocia: fairy chimneys and cave dwellings at sunset, cooking fires of the legion camp, a few hot-air surveillance balloons in the sky.
+camera: Full-frame, 85mm, f/2.2, camera standing slightly above his head height, 2 m away, tilted down a little.
+lighting: Low warm sunset from camera-right as key (Rembrandt triangle on the far cheek), soft blue sky fill.
+technique: Intimate realistic oil painting in the manner of Osman Hamdi Bey and Rembrandt: warm brown ground, loaded highlights on the beard.
+palette: Sunset ochre, terracotta, faded red, white beard, dusty blue.
+imperfections: Crumbs in his beard, a frayed cloak edge, an old surgical scar on the forearm.
+avoid: No marble, no cameo frame, no angry warrior. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 13 de 61 =====
+===== 11 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NRE_lider_rebelde
 filename: retrato_NRE_lider_rebelde.png
-size: 156x210 (o más grande con la misma proporción)
-who: Basileus Constantino Láskaris (governor of the eastern provinces, crowned in Constantinople)
-scene: Standing frontally in the apse of Hagia Sophia, Byzantine gold mosaic of a Christ Pantocrator behind his head acting as a halo; purple-and-gold loros over modern armour, closed crown with pendilia. Perfectly symmetric frontal composition, 50mm, camera at chest height. Candle and gold reflected light. Technique: modern painting that imitates a Byzantine icon (gold leaf, flat background) but with a realistic, living face.
+reference: referencias/NRE_lider_rebelde__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Basileus Constantine Láskaris, ~55, governor of the eastern provinces, crowned in Constantinople (civil-war rebel)
+face: Same man as the reference: curly hair and full beard both greying, long straight nose, deep-set dark eyes with dark circles, olive skin, heavy eyelids, a grave unsmiling mouth.
+wardrobe: Purple-and-gold Byzantine loros (jewelled scarf of state) over modern dark armour; a closed crown with pearl pendilia hanging at the temples; a double-headed eagle embroidered on the chest; in his right hand a cross-topped sceptre, in the left a scroll.
+pose: Standing perfectly frontal and still, like an icon, sceptre held upright, eyes straight into the lens.
+foreground: A row of thin beeswax candles in a brass stand, flames sharp.
+midground: Him.
+background: The apse of Hagia Sophia: a gold mosaic of Christ Pantocrator exactly behind his head acting as a halo; dust in the shafts of light from the high windows.
+camera: 50mm, f/5.6, camera at chest height, perfectly centred and symmetric, 3 m away.
+lighting: Warm candlelight from below and gold light reflected from the mosaic; a high window gives a cool top-light.
+technique: A modern painting imitating a Byzantine icon: real gold leaf in the background with cracks, egg tempera textures in the robes, but a fully realistic, living, pained face.
+palette: Gold, Tyrian purple, deep red, candle amber.
+imperfections: Cracked gold leaf, wax drips, a tiny tear in the loros.
+avoid: No marble cameo, no velvet background like the reference. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 14 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZHI_alvaro_sandoval
-filename: retrato_ZHI_alvaro_sandoval.png
-size: 156x210 (o más grande con la misma proporción)
-who: Gobernador Álvaro Sandoval (nationalist governor of Hispania for Rome)
-scene: Seated alone at night at a long table in an empty royal palace in Madrid, Roman governor's sash over a Spanish officer's tunic, a folded old Spanish flag under his hand; the Roman eagle banner hangs officially behind him, slightly crooked. Camera at the far end of the table, 135mm, symmetric. Single desk lamp. Technique: melancholic realistic painting, Velázquez palette.
-
-===== 15 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZDA_mihai_dragomir
-filename: retrato_ZDA_mihai_dragomir.png
-size: 156x210 (o más grande con la misma proporción)
-who: General Mihai Dragomir (bunker junta of the Carpathians, loyal to the Imperator)
-scene: Emerging from a steel blast door, gas mask hanging at his chest, old bunker-army uniform with a new Roman eagle pinned on; behind him a tunnel of soldiers' helmet lamps. Camera very close and slightly below, 28mm, face filling a third of the frame, steam around him. Harsh sodium-yellow light. Technique: photorealistic, gritty cinematic still.
-
-===== 16 de 61 =====
+===== 12 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: SHD_lin_wenzhao
 filename: retrato_SHD_lin_wenzhao.png
-size: 156x210 (o más grande con la misma proporción)
-who: Director de la Armonía Lin Wenzhao (former irrigation engineer, never gives speeches)
-scene: Standing on a catwalk inside a colossal hydroelectric dam turbine hall, plain grey high-collared suit, hands behind his back; giant turbines in perfect rows recede behind him. Strict one-point perspective, symmetric, camera at his eye level from 10 m away, 35mm. Cool even industrial light, no shadows. Technique: precise architectural photography, almost clinical.
+reference: referencias/SHD_lin_wenzhao__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Director of Harmony Lin Wenzhao, 64, former irrigation engineer; never gives speeches, his decisions are published as technical adjustments
+face: Same man as the reference: neat grey hair combed back, thin rimless rectangular glasses, long lined face, thin lips, high cheekbones, a calm unreadable expression; age spots on the temples.
+wardrobe: Plain dark-grey high-collar wool suit, no insignia, a single small enamel pin of a water drop; a slim tablet held at his side.
+pose: Standing still with hands clasped behind his back, facing the camera dead-on.
+foreground: Nothing: clean.
+midground: Him on a steel catwalk.
+background: The turbine hall of a colossal dam: giant generators in perfect rows receding to a vanishing point, technicians as tiny figures.
+camera: Large-format architectural camera, 35mm-equivalent, f/11, at his eye level, 10 m away, strict one-point perspective, perfectly level verticals.
+lighting: Cool, even industrial light from long ceiling strips, almost no shadows.
+technique: Precise architectural photography in the manner of Andreas Gursky: huge depth of detail, clinical calm.
+palette: Concrete grey, steel blue, pale green, one red emergency button.
+imperfections: A smudge on his glasses, a slight crease in the suit.
+avoid: No dossier paper, no red circle, no rain like the reference, no dramatic heroics. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 17 de 61 =====
+===== 13 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: SHD_zhou_mingyuan
 filename: retrato_SHD_zhou_mingyuan.png
-size: 156x210 (o más grande con la misma proporción)
-who: Comisario Zhou Mingyuan (youngest of the Directorate, commissioner of the Yangtze works)
-scene: Standing on top of an open sluice gate as water bursts out below him, hard hat in hand, sleeves rolled up, red commissioner armband; spray and a rainbow in the air. Camera on the opposite bank, low, 50mm, slight Dutch angle. Bright afternoon backlight through the spray. Technique: heroic poster-realism painting, saturated colours.
+reference: referencias/SHD_zhou_mingyuan__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Commissar Zhou Mingyuan, 34, youngest of the Directorate, commissar of the Yangtze works; wants to open the floodgates before the dam bursts
+face: Same man as the reference: thick dark tousled hair falling over the forehead, sharp dark eyes under straight brows, strong jaw, smooth skin with a faint acne scar on one cheek, defiant closed mouth.
+wardrobe: Dark green rubberised commissar's work coat, open and whipping in the wind, sleeves pushed up; a red armband with a stylised wave; a white hard hat held loosely in his left hand; muddy rubber boots; a radio clipped to his chest.
+pose: Standing on the narrow walkway on top of an open sluice gate as water bursts out below him, right arm extended, pointing forward down the river; head turned slightly toward the camera.
+foreground: Fine spray droplets on the lens, a few in focus.
+midground: Him on the gate walkway, steel railing, warning stripes.
+background: The Yangtze gorge with mist; a rainbow forming in the spray; hundreds of workers on the opposite bank waving red flags; terraced hills.
+camera: Full-frame, 35mm, f/8, from the opposite bank at water level, looking up, a 5-degree Dutch tilt.
+lighting: Bright afternoon sun directly behind him, backlighting the spray and rimming his hair; his face lit by the white reflected light from the water.
+technique: Heroic Chinese socialist-realist oil painting of the 1950s-70s (like Dong Xiwen) with modern material detail, broad confident strokes, painted spray.
+palette: Water white, jade green, wet black steel, bright red flags, gold sun.
+imperfections: Wet hair stuck to the forehead, mud splashes, a chipped warning sign.
+avoid: No dossier paper, no red marker circle, no paperclip like the reference, no K-pop idol face. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 18 de 61 =====
+===== 14 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: SHD_lider_rebelde
 filename: retrato_SHD_lider_rebelde.png
-size: 156x210 (o más grande con la misma proporción)
-who: Comisaria Lin Xiaoyu (commissar of the old algorithmic party, AI communists)
-scene: Seated in front of a wall of old server racks with blinking red lights arranged like a star, Mao-style tunic with a small circuit badge, hands folded; her face lit from below by a tablet. Camera directly in front, slightly above, 40mm, the racks filling the background. Red-and-green LED light. Technique: cold realistic digital painting, socialist-realism pose with cyberpunk light.
+reference: referencias/SHD_lider_rebelde__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Commissar Lin Xiaoyu, 46, of the old algorithmic party; the AI communists come back to the river cities with the Commune's servers (civil-war rebel)
+face: Same woman as the reference: short straight black bob with a heavy fringe, round thin wire glasses, square face, firm downturned mouth, faint dark circles, a small mole above the lip, no makeup.
+wardrobe: Grey wool Mao-style tunic buttoned to the throat with a small enamel badge of a red star made of circuit traces; a red armband with yellow characters; a worn party-issue wristwatch.
+pose: Seated very upright at a bare metal table, hands folded on top of a closed red booklet, eyes straight into the lens, unblinking.
+foreground: An old ruggedised tablet lying on the table, screen glowing green, lighting her from below.
+midground: Her at the table.
+background: A wall of old salvaged server racks, the blinking red LEDs arranged in the shape of a five-pointed star; cables hanging; red party banners at the edges; a cracked concrete floor.
+camera: Full-frame, 40mm, f/2.8, camera slightly above her eye level, straight-on, centred, 2 m away.
+lighting: Mixed: red LED glow from behind (rim on hair and shoulders), green tablet light from below on the face, no other source; deep shadows.
+technique: Cold realistic painting in the manner of a socialist-realist official portrait, re-lit like a cyberpunk film frame (Blade Runner tones); smooth glazes, sharp face.
+palette: Party red, terminal green, ash grey, black.
+imperfections: Dust on the racks, a crack in her glasses lens, a frayed cuff.
+avoid: No dossier paper, no marker circle, no neon pink, no sexy cyberpunk outfit. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 19 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZKR_park_seo_yeon
-filename: retrato_ZKR_park_seo_yeon.png
-size: 156x210 (o más grande con la misma proporción)
-who: Directora Residente Park Seo-yeon (network engineer who reunified Korea with a 12-line decree)
-scene: Standing at night on a bridge over the old DMZ while the city lights of both sides switch on behind her at the same time; long dark coat, a slim headset at her ear. Wide shot, camera far back at knee height, 24mm, her silhouette against the double skyline. Blue night and warm city light. Technique: cinematic photograph, long exposure light trails.
-
-===== 20 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZST_batu_erdene
-filename: retrato_ZST_batu_erdene.png
-size: 156x210 (o más grande con la misma proporción)
-who: Lector del Cielo Batu Erdene (Mongolian herder, meteorologist and shaman)
-scene: On horseback on the open steppe, deel robe with a shaman's fringed headdress and a weather-station antenna strapped to the saddle; a storm front is coming behind him. Camera low in the grass, 35mm, the horse rearing slightly, he holds a drum raised to the sky. Dark violet storm light with a single sun ray on him. Technique: epic realistic painting.
-
-===== 21 de 61 =====
+===== 15 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NAS_amaru_quispe
 filename: retrato_NAS_amaru_quispe.png
-size: 156x210 (o más grande con la misma proporción)
-who: Sapa Inti Amaru Quispe II (young and pious solar monarch, Cusco)
-scene: Kneeling at sunrise on the stone platform of a mountain temple, gold sun-disc headdress and tunic of tocapu patterns, eyes closed, palms open to the light; priests as distant figures. Camera frontal and centred, the rising sun exactly behind his head, 85mm. Pure golden light, sun flare. Technique: devotional realistic painting, Cusco school gold accents.
+reference: referencias/NAS_amaru_quispe__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Sapa Inti Amaru Quispe II, 27, second monarch of the restored solar dynasty, young and pious, crowned in Cusco
+face: Same young man as the reference: long straight black hair falling past the shoulders, a gold band across the forehead, broad face with high cheekbones, aquiline nose, full lips, smooth brown skin, large round gold ear spools.
+wardrobe: Royal unku tunic woven with red-and-gold tocapu squares, a mantle of fine vicuña wool, a golden sun-disc headdress with rays (mascapaicha fringe of red wool on the forehead), gold bracelets; under the tunic a thin modern climate-suit collar barely visible.
+pose: Kneeling on the stone platform of a mountain temple, back straight, palms open and raised to the sun, eyes closed, face lifted.
+foreground: Smoke of burning palo santo from a stone bowl, curling across the lower frame.
+midground: Him on the ancient Inca stonework, perfectly fitted stones.
+background: The Andes at sunrise: snow peaks, terraced valleys, a sea of clouds below; distant priests in white as small figures.
+camera: Full-frame, 85mm, f/4, camera on the platform at his kneeling eye level, 3 m away, frontal.
+lighting: The rising sun exactly behind his head creating a natural halo and flare; warm gold reflected light from the stone on his face.
+technique: Devotional oil painting in the tradition of the Cusco School (gold-leaf brocateado on the fabric patterns) with a fully realistic modern face.
+palette: Gold, vermilion, sky blue, snow white.
+imperfections: Cold-reddened knuckles, wool fibres, a small chip in the stone.
+avoid: No playing-card border like the reference, no cartoon condors, no tourist costume look. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 22 de 61 =====
+===== 16 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NAS_amaru_inca
 filename: retrato_NAS_amaru_inca.png
-size: 156x210 (o más grande con la misma proporción)
-who: Sapa Inca Amaru Quispe II (the same king after breaking with the priests; lord of the four suyus)
-scene: Striding down an ancient Inca road toward the viewer, armour of hammered gold and black composite plates, a staff of command with a modern antenna, army columns winding along the mountain road behind. Camera on the road ahead of him, low, 50mm, him walking into frame. Stormy midday light, clouds below the mountains. Technique: cinematic film still, majestic and harsh.
+reference: referencias/NAS_amaru_inca__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Sapa Inca Amaru Quispe II, 33, the same king after breaking with the priests; lord of the four suyus, comes down from the mountain with the roads
+face: Same man as the reference and as the Sapa Inti portrait, six years older and harder: long black hair now tied back tight, red mascapaicha fringe on the forehead, a fresh pale scar across the chin, thinner cheeks, eyes narrowed and calculating, gold ear spools, wind-burned skin.
+wardrobe: Cuirass of hammered gold plates riveted over matte black composite armour; a red-and-gold tocapu unku tunic showing below the cuirass; a short war crown of red and gold feathers; a black wool cloak with a gold border; a staff of command topped by a gold sun disc with a thin modern antenna wired into it; a pistol holster of woven leather.
+pose: Striding down an ancient stone Inca road straight toward the viewer, mid-step, staff in the right hand planted forward, left hand closing the cloak; head slightly lowered, eyes locked on the lens.
+foreground: The worn cobbles of the road, rough, one stone loose.
+midground: Him, sharp.
+background: Long columns of soldiers and llama-drone convoys winding along the mountain road behind him; a fortress on a ridge; clouds below the mountains; a storm front.
+camera: Full-frame, 50mm, f/4, camera low (knee height) on the road 4 m ahead of him, slightly upward.
+lighting: Stormy midday sky, dark slate clouds; a single break in the clouds lights him and the road like a spotlight, the army behind in shadow.
+technique: Historical epic film still shot on 35mm film (Kodak Vision3 500T), heavy natural grain, deep blacks.
+palette: Gold, black, crimson, slate grey, snow white.
+imperfections: Mud on his sandals, frayed feather tips, scratches on the gold plates.
+avoid: No playing-card border like the reference, no puma, no glowing sun magic. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 23 de 61 =====
+===== 17 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: NAS_lider_rebelde
 filename: retrato_NAS_lider_rebelde.png
-size: 156x210 (o más grande con la misma proporción)
-who: General Huáscar Mamani (head of the Black Sun Junta, esoteric and paranoid)
-scene: In a dark observatory during a total solar eclipse visible through the open dome, black uniform with a black sun emblem; face half lit by the corona light. Camera behind a telescope, his face partly framed by it, 50mm. Cold silver eclipse light. Technique: dark gothic oil painting.
+reference: referencias/NAS_lider_rebelde__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: General Huáscar Mamani, ~55, head of the Black Sun Junta: an esoteric, paranoid military order that reads omens in eclipses (civil-war rebel)
+face: Same man as the reference: short black hair, broad weathered face, heavy-lidded eyes, flat broad nose, deep lines from nose to mouth, thin moustache shadow, dark brown skin.
+wardrobe: Black wool uniform with a woven Andean poncho in dark purple and black tocapu patterns over one shoulder; a black sun emblem (a dark disc with a thin gold corona) pinned on the chest; an old leather-bound book of omens held against his chest; a pistol on the belt.
+pose: Standing beside a large brass telescope, one hand on its tube, looking up at the eclipse with his face half turned to the viewer.
+foreground: The brass eyepiece of the telescope, very close, soft.
+midground: Him in a circular stone observatory.
+background: The open slit of the observatory dome showing a total solar eclipse: black sun with a white corona in a deep violet sky; stars visible at midday; torches on the walls.
+camera: Full-frame, 50mm, f/2.8, camera behind the telescope, his face framed partly by the telescope tube.
+lighting: Cold silver light of the corona from above, warm torchlight from the walls on one side of his face; half the face in darkness.
+technique: Dark gothic oil painting (Goya's black paintings, Joseph Wright of Derby's astronomy scenes), thick dark varnish.
+palette: Black, violet, silver, torch amber, a thin line of gold.
+imperfections: Sweat on the brow, a burn on the book's cover, soot on the stone.
+avoid: No playing-card border, no condor, no fantasy wizard look. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 24 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZNG_mariana_otalora
-filename: retrato_ZNG_mariana_otalora.png
-size: 156x210 (o más grande con la misma proporción)
-who: Alta Guardiana de las Lluvias Mariana Otálora (climate priestess of the Chocó)
-scene: Standing barefoot on a rock in the middle of a jungle river during a downpour, white priestly robes soaked, arms spread, eyes upward; rain streaks frozen. Camera from far below on the river bank, 70mm. Dark green light with lightning. Technique: photorealistic, high-speed photography.
-
-===== 25 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZLL_rafael_urdaneta
-filename: retrato_ZLL_rafael_urdaneta.png
-size: 156x210 (o más grande con la misma proporción)
-who: Virrey del Sol Rafael Urdaneta (heir of an oil family converted to the sun cult)
-scene: Seated on a throne made from an old rusted oil pump jack in the Venezuelan plains, gold solar viceroy robes, rings on every finger; dry oil wells behind him reflect sunset. Camera frontal, symmetrical, slight wide angle 35mm. Saturated orange sunset. Technique: satirical-grand painting like Botero's palette but realistic proportions.
-
-===== 26 de 61 =====
+===== 18 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ASC_allocation_council
 filename: retrato_ASC_allocation_council.png
-size: 156x210 (o más grande con la misma proporción)
-who: El Consejo de Asignación (41 delegates drawn by lot every year; no face on purpose)
-scene: The 41 delegates seated in a semicircle in a white amphitheatre, all in identical grey overalls, faces partly lit by a huge circular screen; seen from the very top of the room. Overhead camera, 24mm, the people form a perfect arc. Cool white light. Technique: clean photorealistic architectural shot.
+reference: referencias/ASC_allocation_council__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: The Allocation Council: 41 delegates drawn by lot every year among the whole population of the Commune; no single face on purpose
+face: 41 ordinary people of all ages and origins (Europe in 2100): a young welder, an old woman, a teenager, a bearded nurse, etc. All different, real faces, none glamorous. The person in the very centre (a middle-aged woman with short grey hair) is slightly sharper than the rest.
+wardrobe: Identical grey cotton work overalls with a small red number badge (1 to 41) on the chest.
+pose: All seated in a semicircle of plain white desks, all looking up at the same point: a huge screen above the camera.
+foreground: Nothing.
+midground: The semicircle of delegates, perfect arc.
+background: A white minimalist amphitheatre; the light of the screen spills across all the faces; a red banner with the Commune's gear-and-star at the back.
+camera: Overhead high angle from the top of the amphitheatre, 24mm, f/8, symmetric, so the arc fills the vertical frame.
+lighting: Cool white light from the screen above (off-frame), soft and even, slight blue tint on the faces.
+technique: Clean documentary photography in the manner of Andreas Gursky and Thomas Struth: crisp, every face readable, huge detail.
+palette: White, grey, a few accents of red, faint blue.
+imperfections: A delegate yawning, a paper coffee cup, a crooked badge.
+avoid: No propaganda-poster style like the reference, no identical clone faces. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 27 de 61 =====
+===== 19 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ASC_plan_41
 filename: retrato_ASC_plan_41.png
-size: 156x210 (o más grande con la misma proporción)
-who: PLAN-41 (the Commune's planning AI)
-scene: No human face: a vast hall of server pillars receding into darkness, and in the centre a calm human-like face assembled from thousands of floating points of cyan light, looking straight at the viewer. Camera at eye level with the face, 50mm, symmetric. Only cyan and black. Technique: photorealistic render with volumetric light.
+reference: referencias/ASC_plan_41__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: PLAN-41: the Commune's planning AI; one morning the Council arrived and the doors did not open
+face: The avatar from the reference: a young woman's calm face with a thin circuit line at the left temple, short dark hair, serene eyes. Here she is made of thousands of floating points of cyan light, like a hologram, but with photographic realism in the eyes.
+wardrobe: None: the light figure fades below the shoulders into data streams.
+pose: Frontal, head very slightly tilted, eyes straight at the viewer.
+foreground: A closed steel door seen from inside, with a small glowing red lock light.
+midground: The light face hanging in the air.
+background: A vast hall of server pillars receding into darkness, with blinking lights in rows.
+camera: 50mm, f/2, at eye level with the face, perfectly symmetric.
+lighting: Only the cyan light emitted by the face and the cold blinking of the servers; deep black everywhere else.
+technique: Photorealistic film still (volumetric light in the haze), like Denis Villeneuve's sci-fi films.
+palette: Cyan, black, a single red lock light.
+imperfections: Glitches: a few missing light points on the cheek, a line of interference.
+avoid: No red poster style, no robot or skull, no Skynet red eye. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 28 de 61 =====
+===== 20 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ASC_lider_rebelde
 filename: retrato_ASC_lider_rebelde.png
-size: 156x210 (o más grande con la misma proporción)
-who: Jarl Sven Ragnarsson (prophet of the Sons of Odin, neo-pagan, destroys datacenters)
-scene: Standing before a burning datacenter in a Nordic forest at night, fur cloak over improvised armour, runes painted on his face, a hammer resting on his shoulder; sparks swirl. Camera low and to the side, 35mm, flames rim lighting him. Orange fire against blue snow. Technique: dramatic romantic painting.
+reference: referencias/ASC_lider_rebelde__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Jarl Sven Ragnarsson, ~42, prophet of the Sons of Odin, neo-pagan fascists who blow up factories and datacenters (civil-war rebel)
+face: Same man as the reference: long blond-red beard braided into two, sides of the head shaved with a long braid on top, rune tattoos on the neck and temples, pale blue eyes, broken nose, ruddy skin.
+wardrobe: Heavy grey wolf-fur cloak over improvised armour of riveted steel plates and leather; a valknut amulet; leather bracers; a sledgehammer with runes carved into the handle resting on his shoulder.
+pose: Standing still with his back almost to a burning datacenter, half-turned toward the viewer, hammer on shoulder.
+foreground: Snow and glowing embers falling.
+midground: Him.
+background: A burning datacenter in a Nordic pine forest at night, flames bursting from the roof, server racks melting, followers with torches.
+camera: Full-frame, 35mm, f/2.8, camera low and to his right side, 3 m away.
+lighting: Orange firelight from behind as a strong rim, cold blue moonlight on the front of his face.
+technique: Dramatic romantic oil painting in the manner of Peter Nicolai Arbo and Nicholas Roerich, thick impasto flames.
+palette: Fire orange, blue snow, black pines, grey fur.
+imperfections: Soot on his face, singed fur.
+avoid: No propaganda-poster style, no horned helmet, no fantasy Thor look. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 29 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZBC_aino_kask
-filename: retrato_ZBC_aino_kask.png
-size: 156x210 (o más grande con la misma proporción)
-who: Presidenta de las Cooperativas Aino Kask (Estonian agronomist)
-scene: Kneeling in a rye field holding a handful of soil, sturdy work jacket, a repaired old tractor behind her; she looks up at the viewer. Camera standing above her, high angle, 50mm. Soft northern summer light. Technique: Nordic realist painting.
-
-===== 30 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZAL_siobhan_cray
-filename: retrato_ZAL_siobhan_cray.png
-size: 156x210 (o más grande con la misma proporción)
-who: Primera Ascendida Siobhan Cray (neuro-engineer, first person to live a year connected to the London network)
-scene: Floating slightly above the floor in a white room, thin glowing filaments run from her temples into the walls, eyes open with faint light in the irises, calm smile; multiple translucent copies of her face overlap at the edges. Camera frontal, close-up 85mm. Bright white diffused light. Technique: photorealistic sci-fi still.
-
-===== 31 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZAL_tom_ashworth
-filename: retrato_ZAL_tom_ashworth.png
-size: 156x210 (o más grande con la misma proporción)
-who: Presidente Tom Ashworth (grandson of Yorkshire miners, led the Night of Broken Servers in Manchester)
-scene: Standing on a pile of smashed servers in a Manchester mill, flat cap, miner's jacket, sledgehammer resting on the ground; workers' banners hang from the iron beams. Camera low, 28mm. Grey industrial daylight through broken windows. Technique: social realist oil painting.
-
-===== 32 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZAL_victoria_iii
-filename: retrato_ZAL_victoria_iii.png
-size: 156x210 (o más grande con la misma proporción)
-who: Su Majestad la Reina Victoria III (former period-drama actress, restored queen)
-scene: Seated on a velvet throne on a theatre stage, full Victorian regalia and crown, a red curtain half open and footlights below; an empty auditorium is suggested in shadow. Camera from the front row, slightly below, 50mm. Warm stage light. Technique: Winterhalter-style royal portrait painting.
-
-===== 33 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: HSN_kofi_aldana
-filename: retrato_HSN_kofi_aldana.png
-size: 156x210 (o más grande con la misma proporción)
-who: Capitán General de Puertos Kofi Aldana (born on a freighter, controls the freight clearing house)
-scene: On the bridge of a giant container ship at night, merchant captain uniform with gold-braided epaulettes, holographic freight manifests in the air around him; port cranes lit through the windows. Camera behind the helm, 35mm. Teal holographic light and orange port lights. Technique: cinematic sci-fi still.
-
-===== 34 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: HSN_ines_tavake
-filename: retrato_HSN_ines_tavake.png
-size: 156x210 (o más grande con la misma proporción)
-who: Capitana Inés Tavake (Rapa Nui container ship captain who took Kanto port with 400 sailors and a megaphone)
-scene: Standing on top of a stack of containers in a captured port, megaphone in one hand, sailors cheering below; tattoos on her arms, rain jacket. Camera from below the containers, wide 24mm. Stormy sky with sunbreak. Technique: heroic photojournalism in colour.
-
-===== 35 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: HSN_lider_rebelde
-filename: retrato_HSN_lider_rebelde.png
-size: 156x210 (o más grande con la misma proporción)
-who: Almirante Teodoro Salas (leader of the Sea Cross, religious-military order)
-scene: On the deck of a warship, white naval uniform with a large cross embroidered on a cape; sailors kneel praying. Camera from the mast looking down, 35mm. Sunset over the Malacca strait. Technique: baroque religious painting.
-
-===== 36 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZAF_celestine_joseph
-filename: retrato_ZAF_celestine_joseph.png
-size: 156x210 (o más grande con la misma proporción)
-who: Gobernadora de Puertos Célestine Joseph (born in Port-au-Prince, collects tolls on everything that floats)
-scene: Seated in a toll booth tower over a Caribbean shipping lane, colourful coat, ledger tablet in hand. Camera through the glass window from outside, 50mm, ships reflected. Bright tropical sunlight. Technique: vivid naïve-Haitian-painting palette but realistic figure.
-
-===== 37 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZAS_liam_whitford
-filename: retrato_ZAS_liam_whitford.png
-size: 156x210 (o más grande con la misma proporción)
-who: Presidente Liam Whitford (presides a shareholders' parliament in Canberra)
-scene: Standing in a parliament with shareholders' screens instead of seats, dark suit, hands on a dispatch box; tired eyes. Camera at the back, 85mm compressed. Neutral daylight. Technique: realistic photojournalism.
-
-===== 38 de 61 =====
+===== 21 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: FCU_valeria_castellane
 filename: retrato_FCU_valeria_castellane.png
-size: 156x210 (o más grande con la misma proporción)
-who: Presidenta Valeria Castellane (rotating president of the Union board, desalination water trust)
-scene: Standing in front of a floor-to-ceiling glass wall inside a desalination plant; behind her, water flows through glass pipes like a sculpture. Tailored white suit, a small glass vial of water as a pendant. Camera three-quarter from the left, 85mm. Clean blue-white light. Technique: luxury editorial photography.
+reference: referencias/FCU_valeria_castellane__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: President Valeria Castellane, 47, rotating president of the Union's board, from Castellane Water Trust (the desalination company everyone needs)
+face: Same woman as the reference: long wavy dark-brown hair with lighter streaks, styled but not perfect; strong brows, almond eyes, defined cheekbones, red lipstick, a faint scar under the chin; small fine wrinkles at the eyes she does not hide.
+wardrobe: Tailored ivory-white suit with sharp shoulders, a navy silk blouse, a small crystal vial of desalinated water as a pendant on a platinum chain, a board-member pin with the Union logo on the lapel, a thin smartwatch.
+pose: Standing with one hand resting on a glass pipe as on a pet, body angled away, head turned three-quarters to the viewer, slight confident half-smile.
+foreground: Out-of-focus water droplets on a glass surface.
+midground: Her beside a transparent pipe full of flowing water.
+background: Inside a desalination plant: floor-to-ceiling glass wall with the sea outside, rows of glass membrane tubes lit from within like a cathedral organ.
+camera: Medium format, 110mm, f/2.8, three-quarter view from her left, 2.5 m away, at her eye level.
+lighting: Clean soft blue-white light from the glass wall as key; a warm small practical light on her face from a desk lamp off-frame as fill.
+technique: Luxury editorial portrait photography in the manner of Annie Leibovitz: precise, polished, but with real skin texture.
+palette: Ivory, aqua blue, navy, platinum, red lips.
+imperfections: A strand of hair out of place, a water mark on the glass.
+avoid: No stage, no fireworks, no big 3D name text like the reference, no beauty filter. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 39 de 61 =====
+===== 22 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: FCU_marcus_rourke
 filename: retrato_FCU_marcus_rourke.png
-size: 156x210 (o más grande con la misma proporción)
-who: Director Ejecutivo Marcus Rourke (director of Meridian Kinetics, war is his business)
-scene: Seated in an executive chair on a factory balcony overlooking an assembly line of tanks and drones; dark suit, holding a glass of whisky. Camera behind and to his side, 35mm, the factory floor stretching below. Red warning lights and steel blue. Technique: corporate portrait photography with ominous mood.
+reference: referencias/FCU_marcus_rourke__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Executive Director Marcus Rourke, 56, director of Meridian Kinetics (weapons and robotics); bought the votes of the board; war is the only business that always grows
+face: Same man as the reference: slicked-back dark hair greying at the temples, short trimmed beard with grey, tanned skin, strong nose, hooded eyes with heavy bags, a smug closed-lip smile.
+wardrobe: Dark navy pinstripe three-piece suit, gold tie, gold signet ring, an expensive watch; a small lapel pin shaped like a drone.
+pose: Seated in a leather executive chair on a glass balcony, legs crossed, holding a crystal whisky glass, looking over his shoulder at the viewer.
+foreground: The edge of the glass balcony with reflections.
+midground: Him in the chair.
+background: An enormous factory floor below: assembly lines of tanks and drones, sparks from welding robots, red warning lights.
+camera: Full-frame, 35mm, f/4, camera behind and to the right of his chair, slightly above, 2 m away.
+lighting: Red warning lights from below and cold steel-blue factory light from above; a warm spot on his face from a desk lamp.
+technique: Corporate portrait photography with an ominous film-noir mood (like a Gregory Crewdson staged photograph).
+palette: Navy, gold, steel blue, warning red.
+imperfections: Ice melting in the glass, a red wine stain on the cuff.
+avoid: No stage, no fireworks, no big 3D name text, no cartoon villain. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 40 de 61 =====
+===== 23 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
-id: ZNR_margaret_tsang
-filename: retrato_ZNR_margaret_tsang.png
-size: 156x210 (o más grande con la misma proporción)
-who: Primera Ministra Margaret Tsang (won three elections with the largest share portfolio)
-scene: Standing at a podium with stock tickers scrolling behind, pearl necklace, confident smile. Camera from the audience, 70mm. Spotlights. Technique: political campaign poster, realistic.
+id: HSN_kofi_aldana
+filename: retrato_HSN_kofi_aldana.png
+reference: referencias/HSN_kofi_aldana__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Captain-General of Ports Kofi Aldana, 49, born on a freighter, never touched land until twelve; controls the freight clearing house
+face: Same man as the reference: dark brown skin, short locs tied back, full short beard, strong brow, wide nose, calm heavy-lidded eyes, a pipe in the corner of his mouth.
+wardrobe: Merchant-marine dress uniform in dark navy with gold-braided epaulettes, an old brass compass hanging from a chain on his chest, a white shirt open at the collar, a knitted cap tucked in a pocket.
+pose: Standing at the helm of a giant container ship's bridge, one hand on the console, looking at the viewer over his shoulder, pipe smoke drifting.
+foreground: Floating holographic freight manifests (ship names, numbers) out of focus in the air.
+midground: Him.
+background: Through the wide bridge windows: a night port with gantry cranes lit orange, rows of containers, the lights of other ships.
+camera: Full-frame, 35mm, f/2.8, camera behind the helm console at chest height.
+lighting: Teal light from the holograms on his face, warm orange port lights from behind as rim.
+technique: Cinematic sci-fi film still (like Michael Mann's night photography), real grain, deep shadows.
+palette: Navy, gold braid, teal, sodium orange.
+imperfections: Pipe ash on the console, a coffee mug ring, a scratch on the compass glass.
+avoid: No tattoo-on-skin style like the reference, no pirate costume. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 41 de 61 =====
+===== 24 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
-id: ZSE_ernesto_villalobos
-filename: retrato_ZSE_ernesto_villalobos.png
-size: 156x210 (o más grande con la misma proporción)
-who: Administrador de Zona Ernesto Villalobos (general manager, contract expires 2104)
-scene: Seated in a corner office with a corporate logo on the wall, loosened tie, signing a contract. Camera from above his desk, top-down 35mm. Office fluorescent light. Technique: realistic photography.
+id: HSN_ines_tavake
+filename: retrato_HSN_ines_tavake.png
+reference: referencias/HSN_ines_tavake__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Captain Inés Tavake, 36, Rapa Nui container-ship captain, elected by her crew three times; took the port of Kanto with 400 sailors and a megaphone
+face: Same woman as the reference: long thick dark hair loose and wind-blown with a red hibiscus behind the ear, Polynesian tattoo lines on the chin, strong brows, fierce dark eyes, brown skin, open shouting mouth.
+wardrobe: Yellow rain jacket open over a black tank top, tattooed arms (Polynesian patterns), cargo trousers, captain's whistle on a cord, a battered megaphone.
+pose: Standing on top of a stack of containers, shouting into the megaphone, other arm raised in a fist.
+foreground: Hands of sailors climbing up the containers.
+midground: Her on the containers.
+background: A captured port in storm: cranes, sailors with flags cheering, a sunbreak in dark clouds.
+camera: Full-frame, 24mm, f/5.6, camera from below the containers, looking up.
+lighting: Stormy dark sky with a sudden sun break lighting her from the side.
+technique: Heroic colour photojournalism (like Sebastião Salgado's workers series but in colour), real grain.
+palette: Storm grey, safety yellow, rust red container, red hibiscus.
+imperfections: Rain on her face, rust on the containers.
+avoid: No tattoo-on-skin style like the reference, no glamour model look. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 42 de 61 =====
+===== 25 de 40 =====
+ASSET_REQUEST
+type: leader_state_portrait
+id: HSN_lider_rebelde
+filename: retrato_HSN_lider_rebelde.png
+reference: referencias/HSN_lider_rebelde__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Admiral Teodoro Salas, ~58, commander of the Malacca squadron, leader of the Sea Cross, a religious-military order that wants the fleet to serve God, not the freight market (civil-war rebel)
+face: Same man as the reference: short slicked black hair greying, thin moustache, Filipino-Latino features, deep-set eyes, lined cheeks, stern mouth.
+wardrobe: White naval dress uniform with gold buttons and epaulettes, a long white cape with a large red cross, a rosary wrapped around the right hand, a naval sabre.
+pose: Standing on the deck of a warship, rosary held over his heart, looking at the viewer, sailors kneeling in prayer around him.
+foreground: Kneeling sailors' backs.
+midground: Him.
+background: The Malacca strait at sunset, a fleet of grey warships with crosses painted on their bows.
+camera: Full-frame, 35mm, f/4, from the mast above, looking down at him.
+lighting: Warm low sunset light from the side, long shadows.
+technique: Baroque religious oil painting in the manner of Zurbarán and Murillo.
+palette: White, red cross, gold, sunset orange, steel grey.
+imperfections: Sea salt on the uniform, a frayed cape.
+avoid: No tattoo-on-skin style, no neon colours like the reference. Plus everything in the general rules (no AI look, no text, no frame).
+
+===== 26 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: APF_amara_nwosu
 filename: retrato_APF_amara_nwosu.png
-size: 156x210 (o más grande con la misma proporción)
-who: Portavoz Amara Nwosu-Keïta (spokesperson elected by 1,200 local councils, former rural teacher)
-scene: Standing in front of a vast gathering under a baobab tree; colourful wax-print dress, a simple microphone. Camera from among the crowd, 50mm, heads and raised hands in the foreground out of focus. Warm afternoon light. Technique: realistic oil painting with vibrant colours.
+reference: referencias/APF_amara_nwosu__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Spokesperson Amara Nwosu-Keïta, 56, elected by 1,200 local councils, former rural teacher; she does not command, she coordinates, and a continent moves
+face: Same woman as the reference: round warm face, deep brown skin, thin round gold-rimmed glasses, gentle smile with deep laugh lines, a small gap between front teeth, small gold earrings; grey hairs visible at the temple under the headwrap.
+wardrobe: Wax-print dress in orange, cobalt blue and yellow geometric patterns; a large matching gele headwrap tied high; a necklace of wooden beads and one bronze council token; a stick of white chalk between her fingers; reading notes folded in her other hand.
+pose: Standing slightly raised on a wooden crate under a baobab, right hand lifted with the chalk as if making a point, head tilted, smiling at someone in the crowd just right of the camera.
+foreground: Heads, shoulders and raised hands of the crowd, out of focus, warm skin tones and colourful cloth.
+midground: Her under the baobab, a school blackboard propped against the trunk with tallies of votes in chalk.
+background: The huge baobab with its bare twisted branches; beyond it a village with solar panels on round huts, a water tower, a dusty road with a line of people still arriving.
+camera: Full-frame, 50mm, f/2.8, camera among the crowd at head height, 4 m away, slightly below her.
+lighting: Warm late-afternoon sun from camera-left filtered through the baobab, dappled light on her face and dress; dust glowing in the air.
+technique: Contemporary realistic oil portrait in the manner of Amoako Boafo (expressive finger-painted skin) combined with the patterned richness of Kehinde Wiley, but set in a real scene, not a flat background.
+palette: Orange, cobalt blue, yellow, ochre earth, chalk white.
+imperfections: Chalk dust on her fingers and dress, sweat on the forehead, a crooked blackboard.
+avoid: No street-mural style like the reference, no tourist postcard, no queen pose. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 43 de 61 =====
+===== 27 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: APF_kwame_diallo
 filename: retrato_APF_kwame_diallo.png
-size: 156x210 (o más grande con la misma proporción)
-who: Comandante Kwame Diallo (commander of the Sahel militias)
-scene: Standing on a dune with a map in hand, tagelmust scarf, desert fatigues, rifle slung; pickup trucks behind. Camera low on the dune, wide 24mm. Harsh noon light. Technique: cinematic still.
+reference: referencias/APF_kwame_diallo__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Commander Kwame Diallo, 44, commander of the Sahel militias, organised the defence of the councils in the water wars; draws the map first, discovers people live inside later
+face: Same man as the reference: short afro, full black beard, very dark skin, strong cheekbones, intense eyes under a furrowed brow, a nick in the left ear.
+wardrobe: A long orange tagelmust scarf wrapped around the neck and one shoulder; faded desert fatigues; a canvas chest rig with magazines and a radio; a rifle slung across the back; a worn leather map case.
+pose: Standing on the crest of a dune, holding a paper map open with both hands against the wind, looking up from it straight at the viewer.
+foreground: Sand blowing across the frame, streaked by the wind.
+midground: Him on the dune crest, the map flapping.
+background: Below the dune: a line of pickup trucks with mounted guns and militia fighters, a green flag on an antenna, a dry riverbed, a flat Sahel horizon with acacias.
+camera: Full-frame, 24mm, f/8, camera low on the dune slope, 2 m away, looking up.
+lighting: Harsh noon sun, very short hard shadows, the sky almost white.
+technique: Cinematic war film still with a bleach-bypass look (high contrast, desaturated), real grain.
+palette: Sand, orange, olive, white sky.
+imperfections: Sand in his beard, a torn map edge, a frayed scarf.
+avoid: No mural style, no posing like a model. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 44 de 61 =====
+===== 28 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: APF_lider_rebelde
 filename: retrato_APF_lider_rebelde.png
-size: 156x210 (o más grande con la misma proporción)
-who: General Kwame Adeyemi-Sow (Sinai veteran, voice of the nationalist movements)
-scene: Standing in front of a wall covered in many different national flags of Africa, uniform with medals, jaw set. Camera frontal, 50mm, symmetric. Dramatic side lighting. Technique: socialist-realism painting.
+reference: referencias/APF_lider_rebelde__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: General Kwame Adeyemi-Sow, ~63, veteran of the Sinai campaign, voice of the nationalist movements: each people its own state, not a thousand councils in Lagos (civil-war rebel)
+face: Same man as the reference: short grey hair, grey beard trimmed short, deep brown skin with heavy forehead lines, a heavy brow, hard old eyes, a scar on the right temple.
+wardrobe: Olive general's uniform with rows of campaign medals (one from Sinai, cracked enamel), a red-gold-green sash across the chest, a peaked cap under the left arm, white gloves.
+pose: Standing perfectly frontal, jaw set, eyes into the lens, right hand on a ceremonial cane.
+foreground: Nothing: clean.
+midground: Him.
+background: A tall wall where dozens of different national flags of old African states hang side by side, faded and patched, one freshly sewn.
+camera: Full-frame, 50mm, f/4, frontal, symmetric, at his chest height, 3 m away.
+lighting: Dramatic single key light from his left, deep shadow on the right; flags lit softly.
+technique: Official state oil portrait of the 1960s-70s African independence era (like the portraits of Nkrumah or Sankara), painted realistically.
+palette: Olive, red, gold, green, black.
+imperfections: A loose medal ribbon, scuffed glove.
+avoid: No mural style, no cartoon dictator. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 45 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZAO_ana_tchissola
-filename: retrato_ZAO_ana_tchissola.png
-size: 156x210 (o más grande con la misma proporción)
-who: Portavoz Ana Tchissola (oil unionist of Cabinda)
-scene: Standing on an offshore platform, hard hat, union armband, the sea behind her. Camera from a lower deck looking up, 35mm. Overcast light. Technique: realistic photograph.
-
-===== 46 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZCO_nsimba_lukusa
-filename: retrato_ZCO_nsimba_lukusa.png
-size: 156x210 (o más grande con la misma proporción)
-who: Portavoz Nsimba Lukusa (engineer of the Inga dams)
-scene: Standing on top of a massive dam spillway, engineer's vest, holding a tablet; mist from the Congo river rises. Camera from the riverbed far below, 135mm. Green-gold light. Technique: grand realistic painting.
-
-===== 47 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZMZ_tomas_machava
-filename: retrato_ZMZ_tomas_machava.png
-size: 156x210 (o más grande con la misma proporción)
-who: Portavoz Tomás Machava (port captain of Beira)
-scene: On a dock at Beira with ships behind, captain's cap, holding a ledger. Camera at dock level, 50mm. Warm morning light. Technique: realistic painting.
-
-===== 48 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZMG_hery_rakoto
-filename: retrato_ZMG_hery_rakoto.png
-size: 156x210 (o más grande con la misma proporción)
-who: Portavoz Hery Rakoto (agronomist of the highland rice terraces of Madagascar)
-scene: Standing in a flooded rice terrace, trousers rolled up, a lamba scarf over his shoulder. Camera high on the terrace above, 70mm. Soft morning mist. Technique: realistic watercolour-like painting.
-
-===== 49 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZKE_wanjiru_odhiambo
-filename: retrato_ZKE_wanjiru_odhiambo.png
-size: 156x210 (o más grande con la misma proporción)
-who: Portavoz Wanjiru Odhiambo (founder of the Rift councils)
-scene: Standing on the edge of the Great Rift Valley, red shuka cloak, holding a council staff. Camera behind her, wide 24mm, the valley below. Golden light. Technique: epic realistic painting.
-
-===== 50 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZSA_thabo_mokoena
-filename: retrato_ZSA_thabo_mokoena.png
-size: 156x210 (o más grande con la misma proporción)
-who: Portavoz Thabo Mokoena (Rand unionist who brought the Cape into the Federation)
-scene: Standing at a mine head with miners behind, overalls with union badge, fist raised. Camera low, 28mm. Dusty sunset. Technique: social-realist poster painting.
-
-===== 51 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZET_selam_tesfaye
-filename: retrato_ZET_selam_tesfaye.png
-size: 156x210 (o más grande con la misma proporción)
-who: Guardiana de las Semillas Selam Tesfaye (keeper of Africa's largest seed bank)
-scene: Inside a seed vault holding a glass jar of seeds up to the light, white Ethiopian shawl. Camera close-up, 85mm, rows of jars behind. Warm amber light. Technique: realistic painting.
-
-===== 52 de 61 =====
+===== 29 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZJP_kaede_mori
 filename: retrato_ZJP_kaede_mori.png
-size: 156x210 (o más grande con la misma proporción)
-who: Shōgun Almirante Kaede Mori (Yokosuka admiral who became shōgun)
-scene: Standing at the bow of her flagship with an old Japanese flag behind her, admiral's coat and a katana at her hip. Camera from the deck below, 35mm. Dawn mist over Tokyo Bay. Technique: ukiyo-e inspired realistic painting.
+reference: referencias/ZJP_kaede_mori__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Shōgun-Admiral Kaede Mori, 41, Yokosuka admiral who switched off the radio when Singapore demanded the Kanto fleet, raised an old flag and told the shipyards they answered to her
+face: Same woman as the reference: black chin-length bob with straight bangs, sharp narrow eyes, straight brows, pale skin, thin red lips, a small scar on the left eyebrow, calm cold expression.
+wardrobe: Dark navy admiral's coat with gold buttons and high collar, a white hachimaki headband with a red sun, a katana in a black lacquered scabbard at the hip, admiral's insignia, a pair of old binoculars.
+pose: Standing at the bow of her flagship, one hand on the katana hilt, turning her head toward the viewer.
+foreground: The bow railing and the anchor chain, wet.
+midground: Her.
+background: Tokyo Bay at dawn in mist, the shipyards of Yokosuka with cranes, other warships, an old Japanese flag snapping in the wind.
+camera: Full-frame, 35mm, f/4, from the deck below her, looking up.
+lighting: Pale pink dawn light, mist diffusing everything, rim light on her hair.
+technique: Realistic oil painting with ukiyo-e influences in the waves and mist (Hokusai) but a modern photographic face.
+palette: Navy, pale pink, sea grey, red sun.
+imperfections: Sea spray on her coat, a nick in the scabbard lacquer.
+avoid: No woodblock-card frame like the reference, no anime style. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 53 de 61 =====
+===== 30 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZJP_daisuke_kanemura
 filename: retrato_ZJP_daisuke_kanemura.png
-size: 156x210 (o más grande con la misma proporción)
-who: CyberShogun Daisuke Kanemura (heir of the oldest zaibatsu; black suit, green glasses)
-scene: Seated in a glass boardroom at the top of a skyscraper, a giant Mecha visible outside the window. Camera from behind the Mecha's shoulder, 50mm. Neon green light. Technique: cyberpunk realism.
+reference: referencias/ZJP_daisuke_kanemura__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: CyberShōgun Daisuke Kanemura, 52, heir of the oldest zaibatsu of Kanto; speaks in quarters and tons; at the end his mind goes into the biggest Mecha in the world
+face: Same man as the reference: slicked-back black hair with grey streaks, thin face, rectangular green-tinted glasses, thin lips, sharp cheekbones, cold expression.
+wardrobe: Black tailored suit, red tie, the zaibatsu logo pin on the lapel, a thin silver neural-link port behind the ear.
+pose: Seated at the head of a long glass boardroom table, fingers steepled, looking straight at the viewer.
+foreground: Reflections in the glass table.
+midground: Him.
+background: Through the window: a giant Mecha standing among skyscrapers at night, with the zaibatsu logo on its chest.
+camera: Full-frame, 50mm, f/2.8, from the other end of the table.
+lighting: Neon green and white city light from the windows, his face half lit.
+technique: Cyberpunk realism (like Blade Runner 2049's photography).
+palette: Black, neon green, red tie, night blue.
+imperfections: A smudge on the glass table.
+avoid: No woodblock-card frame, no anime style. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 54 de 61 =====
+===== 31 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZJP_ryuji_sakaguchi
 filename: retrato_ZJP_ryuji_sakaguchi.png
-size: 156x210 (o más grande con la misma proporción)
-who: CyberShogun Ryūji Sakaguchi (yakuza oyabun of Osaka docks)
-scene: Seated in a dim office, shirt open showing dragon tattoos, katana on the wall, red neon at the door. Camera low, 35mm. Red neon light. Technique: noir realism.
+reference: referencias/ZJP_ryuji_sakaguchi__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: CyberShōgun Ryūji Sakaguchi, 63, oyabun of the clan that has run the Osaka docks for three generations; two missing finger joints, friends in every port
+face: Same man as the reference: grey hair swept back, short grey goatee, deep lines, narrow eyes with a relaxed dangerous half-smile, tanned skin; the tips of the left little and ring fingers missing.
+wardrobe: White suit jacket over a black silk shirt open to the chest, showing irezumi dragon tattoos from neck to wrists; a red folding fan; a katana in a white sheath leaning against his chair.
+pose: Seated low and wide on a leather sofa, one arm on the backrest, fan half open in the mutilated hand, looking at the viewer from under his brows.
+foreground: A low table with a sake set and an ashtray with a smouldering cigarette, smoke rising.
+midground: Him on the sofa.
+background: A dim office above the docks: wooden lattice screens, a calligraphy scroll, a window with red neon (a kanji sign) and container cranes outside in the rain.
+camera: Full-frame, 35mm, f/2, camera low at the table height, 2 m away.
+lighting: Red neon from the window as rim light on the right, warm small table lamp on his face, everything else dark.
+technique: Neo-noir film still in the manner of Takeshi Kitano's yakuza films, shot on Fuji Eterna film, rich blacks and grain.
+palette: Red neon, black, white suit, tattoo indigo and gold.
+imperfections: Cigarette ash on the table, a scratch on the sake bottle, rain on the window.
+avoid: No woodblock-card frame like the reference, no anime style, no cartoon gangster. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 55 de 61 =====
+===== 32 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZJP_kenzo_akabane
 filename: retrato_ZJP_kenzo_akabane.png
-size: 156x210 (o más grande con la misma proporción)
-who: CyberShogun Kenzō Akabane (president of SRS pharmaceuticals, clones in the basement)
-scene: Standing in a white laboratory with clone tanks behind him, immaculate white coat, propaganda smile. Camera symmetric, 50mm. Cold clinical light. Technique: unsettling clean realism.
+reference: referencias/ZJP_kenzo_akabane__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: CyberShōgun Kenzō Akabane, 67, president of SRS, the most respected pharmaceutical of Sendai; clones grow in the basements; the first to upload his own mind
+face: Same man as the reference: thick white hair combed neatly, round thin glasses, wide propaganda smile showing perfect teeth, soft wrinkled cheeks, eyes that do not smile.
+wardrobe: Immaculate white lab coat over a dark purple suit and tie, the SRS crane-logo pin, a pen in the breast pocket, surgical gloves tucked in a pocket.
+pose: Standing in the middle of a corridor of clone tanks, arms slightly open in a welcoming gesture, smiling at the viewer.
+foreground: The glass of a tank very close to the lens, with condensation.
+midground: Him.
+background: Rows of tall glass tanks with pale green fluid and the blurred silhouettes of sleeping human clones, all with his young face; white tiles; a red biohazard light.
+camera: Full-frame, 50mm, f/4, perfectly symmetric corridor, camera at his chest height, 4 m away.
+lighting: Cold clinical white light from the ceiling, green glow from the tanks on both sides of his face.
+technique: Unsettling clean realism in the manner of a Stanley Kubrick frame (symmetry, sterile light).
+palette: Clinical white, pale green, purple, one red light.
+imperfections: A smear on the tank glass, a coffee cup left on a cart.
+avoid: No woodblock-card frame, no anime style, no blood. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 56 de 61 =====
+===== 33 de 40 =====
+ASSET_REQUEST
+type: leader_state_portrait
+id: ZAL_tom_ashworth
+filename: retrato_ZAL_tom_ashworth.png
+reference: referencias/ZAL_tom_ashworth__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: President Tom Ashworth, 54, grandson of Yorkshire miners, led the Night of the Broken Servers in Manchester
+face: Same man as the reference: ruddy weathered face, ginger beard turning grey, small sharp blue eyes, a broken nose, missing tooth, flat cap.
+wardrobe: Brown tweed flat cap, worn brown leather work jacket over a wool waistcoat, a red neckerchief, heavy boots; a sledgehammer.
+pose: Standing on a pile of smashed servers, sledgehammer resting head-down by his boot, the other hand raised in a fist, mouth open in a shout.
+foreground: Broken circuit boards and glass.
+midground: Him on the heap.
+background: Inside an old Manchester mill: iron beams, broken windows, workers' banners, a crowd of workers with tools.
+camera: Full-frame, 28mm, f/5.6, camera low, looking up, 3 m away.
+lighting: Grey industrial daylight through broken windows, dust in the beams.
+technique: Social-realist oil painting in the manner of L.S. Lowry's palette but with the realism of Ford Madox Brown's 'Work'.
+palette: Brick red, soot black, tweed brown, grey sky.
+imperfections: Grime on the face, a bleeding knuckle.
+avoid: No newspaper clipping frame like the reference. Plus everything in the general rules (no AI look, no text, no frame).
+
+===== 34 de 40 =====
+ASSET_REQUEST
+type: leader_state_portrait
+id: ZAL_siobhan_cray
+filename: retrato_ZAL_siobhan_cray.png
+reference: referencias/ZAL_siobhan_cray__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: First Ascended Siobhan Cray, 35, neuro-engineer from Edinburgh, the first person to live a whole year connected to the London network; speaks for everyone at once
+face: Same woman as the reference: dark curly hair, shaved on one side, strong nose, intense dark eyes, pale freckled skin; thin silver neural ports at the temples.
+wardrobe: A simple white high-neck garment; thin glowing filaments run from her temples into the walls.
+pose: Floating slightly above the floor, arms loose at her sides, eyes open with faint light in the irises, calm smile.
+foreground: Floating dust motes lit by the filaments.
+midground: Her, sharp.
+background: A white circular room; multiple translucent copies of her face overlap at the edges of the frame like after-images.
+camera: Full-frame, 85mm, f/2, frontal close-up at eye level.
+lighting: Bright white diffused light from everywhere, no shadows; the filaments emit a faint blue.
+technique: Photorealistic sci-fi film still (like 'Ex Machina'), very clean, real skin texture.
+palette: White, pale blue, her dark hair as the only strong tone.
+imperfections: A tiny bruise around a temple port, a stray curl.
+avoid: No newspaper clipping frame, no cyborg armour. Plus everything in the general rules (no AI look, no text, no frame).
+
+===== 35 de 40 =====
+ASSET_REQUEST
+type: leader_state_portrait
+id: ZAL_victoria_iii
+filename: retrato_ZAL_victoria_iii.png
+reference: referencias/ZAL_victoria_iii__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Her Majesty Queen Victoria III, 41, former period-drama actress from Bath found to descend from a minor royal branch; wears the crown like a costume and the nation applauds
+face: Same woman as the reference: dark auburn hair in a Victorian up-do, pale skin, green eyes, a gracious practised smile, a beauty spot near the lip.
+wardrobe: Full Victorian regalia: crimson velvet robe with ermine trim, a jewelled crown, pearl necklace, the Garter sash, white gloves.
+pose: Seated on a velvet throne on a theatre stage, one gloved hand raised in a royal wave, smiling at an unseen audience.
+foreground: A row of old brass footlights at the edge of the stage, one bulb out; a single thrown rose on the boards.
+midground: Her on the throne set: painted-wood throne made to look like gold, slightly too big for her.
+background: A red velvet theatre curtain half open on one side; the dark gilded auditorium of the Theatre Royal Bath in shadow, empty seats, boxes with gold cherubs.
+camera: Full-frame, 50mm, f/2.8, from the first row of seats, slightly below the stage, 4 m away.
+lighting: Warm footlights from below (theatrical, uncanny), a hard white follow-spot from above-front making a circle of light around her; the rest in darkness.
+technique: Royal portrait painting in the manner of Franz Xaver Winterhalter.
+palette: Crimson, gold, ivory, ermine white.
+imperfections: A loose thread on the robe.
+avoid: No newspaper clipping frame. Plus everything in the general rules (no AI look, no text, no frame).
+
+===== 36 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZAN_the_warlords
 filename: retrato_ZAN_the_warlords.png
-size: 156x210 (o más grande con la misma proporción)
-who: Los Señores de la Guerra (the hundreds of warlords of the Lawless Lands)
-scene: A group of five warlords around a fire in a ruined city at night, each wearing different scavenged armour. Camera low through the flames, 28mm. Firelight. Technique: dark realistic painting.
+reference: referencias/ZAN_the_warlords__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: The Warlords of the Lawless Lands (North America): nobody rules; the 'leader' is the name the meganations give to hundreds of warlords
+face: The woman from the reference in the centre: long dark dreadlocks with beads, sharp face, black war paint stripe across the eyes, a scar on the lip, defiant half-closed eyes. Around her four other warlords, each completely different: an old bearded man with a cowboy hat, a young man with a gas mask pushed up, a heavy woman with a shaved head, a thin man in a rotting police uniform.
+wardrobe: Scavenged armour: football shoulder pads, ammunition belts, a red bandana, a road sign as a shield, leather and chain.
+pose: The five around a fire in a barrel, she stands, the others seated or crouched, all looking at the viewer as if interrupted.
+foreground: Flames of the barrel fire, very close.
+midground: The five figures.
+background: Ruins of an American city at night: a collapsed highway overpass, burned cars, a billboard with a faded ad, distant fires.
+camera: Full-frame, 28mm, f/2.8, camera low through the flames, 2 m away.
+lighting: Only firelight from below, orange, flickering; deep black night behind.
+technique: Dark realistic oil painting in the manner of Caravaggio's tavern scenes, heavy shadows.
+palette: Fire orange, black, rust, dirty denim blue.
+imperfections: Smoke, sparks, dirt and blood on clothes.
+avoid: No mugshot frame like the reference, no Mad Max cosplay, no clean costumes. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 57 de 61 =====
+===== 37 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZWB_coronel_barbosa
 filename: retrato_ZWB_coronel_barbosa.png
-size: 156x210 (o más grande con la misma proporción)
-who: Coronel Tiago Barbosa (colonel of a vanished army, rules the Amazon rivers from a gunboat)
-scene: Standing on the deck of a rusty river gunboat, faded colonel uniform, cigar. Camera from the water, 35mm. Humid green light. Technique: cinematic still.
+reference: referencias/ZWB_coronel_barbosa__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Colonel Tiago Barbosa, 57, colonel of an army that no longer exists; rules the Amazon rivers from a gunboat and sells wood to whoever pays
+face: Same man as the reference: thick dark curly hair greying, full greying beard, heavy-lidded eyes, broad nose, sweaty brown skin.
+wardrobe: A faded old Brazilian colonel's uniform with fringed epaulettes, open shirt, crossed bandoliers, a cigar, a panama hat in hand.
+pose: Leaning on the railing of a rusty river gunboat, cigar in mouth, looking at the viewer with contempt.
+foreground: Brown river water splashing against the hull.
+midground: Him at the railing; a heavy machine gun on the deck.
+background: Dense Amazon jungle walls, a timber raft being towed, stilts houses.
+camera: Full-frame, 35mm, f/4, camera on the water level in a canoe, looking up.
+lighting: Humid hazy green light, sun behind clouds.
+technique: Cinematic film still in the manner of Werner Herzog's 'Aguirre' and 'Fitzcarraldo' (16mm-grain, humid haze).
+palette: River brown, jungle green, faded khaki, cigar ember.
+imperfections: Rust on the gunboat, sweat stains on the uniform.
+avoid: No torn poster frame like the reference. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 58 de 61 =====
+===== 38 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZWE_ataman_grigorenko
 filename: retrato_ZWE_ataman_grigorenko.png
-size: 156x210 (o más grande con la misma proporción)
-who: Atamán Oleksandr Grigorenko (controls the grain silos between Kiev and the Volga)
-scene: On horseback in front of a grain silo with a train behind, fur hat and saber. Camera low, 24mm. Golden wheat light. Technique: epic oil painting.
+reference: referencias/ZWE_ataman_grigorenko__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Ataman Oleksandr Grigorenko, 55, former commander of a Dnieper garrison; controls the grain silos between Kiev and the Volga and charges toll at every bridge
+face: Same man as the reference: huge drooping black moustache, shaved chin, broad red face, small fierce eyes, a scar across the nose.
+wardrobe: Tall black fur papakha hat, a red Cossack coat with cartridge loops, a sabre, a modern assault rifle on his back.
+pose: Mounted on a big chestnut horse, sabre resting on his shoulder, looking down at the viewer.
+foreground: Ripe wheat brushing the lens.
+midground: Him on horseback.
+background: A huge concrete grain silo with a painted Cossack flag, an armoured train on a bridge.
+camera: Full-frame, 24mm, f/8, camera low in the wheat.
+lighting: Golden late afternoon light from behind as rim, warm.
+technique: Epic oil painting in the manner of Ilya Repin's 'Reply of the Zaporozhian Cossacks' and Józef Brandt.
+palette: Wheat gold, red coat, black fur, sky blue.
+imperfections: Dust on the horse, a torn coat sleeve.
+avoid: No matryoshka doll like the reference. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 59 de 61 =====
+===== 39 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZWI_rani_devika
 filename: retrato_ZWI_rani_devika.png
-size: 156x210 (o más grande con la misma proporción)
-who: Rani Devika Rathore (heiress of a Rajput house who re-armed the militias)
-scene: Seated on a carved throne in a fort, armour over a sari, sword across her knees. Camera frontal, 50mm. Warm lamp light. Technique: Mughal-miniature-inspired realistic painting.
+reference: referencias/ZWI_rani_devika__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Rani Devika Rathore, 37, heiress of a Rajput house who rearmed the militias when Delhi fell; trades water with the Directorate and rice with the High Seas
+face: Same woman as the reference: long thick black hair, a gold maang tikka on her forehead, a red bindi, kohl-lined eyes, a strong nose with a small nose ring, full lips, brown skin.
+wardrobe: Steel mail armour over a deep red-and-gold sari, gold necklace, a curved talwar sword across her knees.
+pose: Seated on a carved marble throne in a fort, upright, sword across her knees, looking straight at the viewer.
+foreground: Brass oil lamps on the floor.
+midground: Her on the throne.
+background: Inside a Rajasthani fort: carved jali screens, a courtyard with soldiers and trucks, a burning city on the horizon.
+camera: Full-frame, 50mm, f/2.8, frontal at her eye level.
+lighting: Warm lamp light from below and smoky orange sky light through the jali.
+technique: Realistic oil painting inspired by Raja Ravi Varma.
+palette: Deep red, gold, sandstone, smoke grey.
+imperfections: A dent in the mail, soot on the sari hem.
+avoid: No comic style like the reference, no Bollywood glamour. Plus everything in the general rules (no AI look, no text, no frame).
 
-===== 60 de 61 =====
+===== 40 de 40 =====
 ASSET_REQUEST
 type: leader_state_portrait
 id: ZWM_emir_al_rashid
 filename: retrato_ZWM_emir_al_rashid.png
-size: 156x210 (o más grande con la misma proporción)
-who: Emir Khalid al-Rashid (lord of the dead oil wells)
-scene: Standing in front of a convoy of armed trucks, desert robes and a keffiyeh, sunglasses. Camera low, 35mm. Hard desert light. Technique: cinematic realism.
-
-===== 61 de 61 =====
-ASSET_REQUEST
-type: leader_state_portrait
-id: ZSG_yara_tupinamba
-filename: retrato_ZSG_yara_tupinamba.png
-size: 156x210 (o más grande con la misma proporción)
-who: Custodia Mayor Yara Tupinambá (park ranger of the Alto Río Negro)
-scene: Standing among giant trees with a bow and ranger uniform, facial paint. Camera low, 28mm. Green filtered light. Technique: realistic painting.
+reference: referencias/ZWM_emir_al_rashid__actual.png (same face, NOT the same style)
+size: 1248x1680 or larger, ratio 156x210, PNG
+who: Emir Khalid al-Rashid, 58, lord of the dead oil wells; when the oil ran out he kept the desert, the trucks and the men who knew how to use them
+face: Same man as the reference: grey trimmed beard, hawk nose, deep lines, dark eyes, sun-dark skin.
+wardrobe: Red-and-white keffiyeh with black agal, a desert robe over a modern armoured vest, a gold dagger, aviator sunglasses in his hand.
+pose: Standing in front of his convoy of armed trucks, arms crossed, looking straight at the viewer.
+foreground: A broken, rusted oil pipeline running diagonally across the bottom of the frame, sand drifted against it.
+midground: Him, sharp, a few steps in front of the lead truck; two of his fighters leaning on the bonnet behind him.
+background: A convoy of dusty white pickup trucks with mounted guns in a line; beyond them a dead oil field of rusting pump jacks frozen mid-stroke, a burned-out refinery tower, a dust storm rising on the horizon.
+camera: Full-frame, 35mm, f/5.6, camera low at his knee height, 3 m away, slightly to his right.
+lighting: Hard late-afternoon desert sun from camera-left, long shadows, a warm orange cast; the dust storm softens the background.
+technique: Cinematic realism shot on 65mm film in the manner of 'Lawrence of Arabia' and Denis Villeneuve's 'Dune' desert photography, fine grain, enormous depth.
+palette: Sand, red keffiyeh, rust, black.
+imperfections: Dust on the robe and in the creases of his face, a cracked lens in the sunglasses, oil-black fingernails.
+avoid: No carpet style like the reference. Plus everything in the general rules (no AI look, no text, no frame).
