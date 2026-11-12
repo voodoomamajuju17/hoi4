@@ -18,7 +18,9 @@ from pathlib import Path
 from ..context import BuildContext
 
 GUI = "interface/countrypoliticsview.gui"
-FILAS = 2           # filas de espíritus a tamaño completo
+# 2026-11-12 (captura: hueco grande debajo de los espíritus): ahora nunca hay más de 6 a la vez
+# (emitters/espiritus.py), así que alcanza una fila; la segunda quedaba vacía
+FILAS = 1           # filas de espíritus a tamaño completo
 ALTO_FILA = 68      # el alto de un espíritu en la grilla del juego
 DY = ALTO_FILA * (FILAS - 1)
 # lo que está debajo de los espíritus (y baja DY)
@@ -111,6 +113,14 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
         faltan.append("political_pie_chart")
     else:
         texto = r
+    # 2026-11-12 (captura: "atrás siguen las siglas del gráfico, no las queremos"): la lista de
+    # ideologías con su porcentaje (chart_explanation) también se va
+    r = _cambiar_en(texto, "chart_explanation", r'position\s*=\s*\{\s*x\s*=\s*-?\d+\s*y\s*=\s*(-?\d+)\s*\}',
+                    lambda m: f"position = {{ x = -3000 y = {m.group(1)} }}")
+    if r is None:
+        faltan.append("chart_explanation")
+    else:
+        texto = r
     return (None if faltan else texto), faltan
 
 
@@ -156,7 +166,7 @@ def emit(ctx: BuildContext) -> None:
         ctx.warn(f"política: {GUI} de este juego no es el esperado ({', '.join(faltan)}); "
                  "los espíritus quedan como en el juego")
         return
-    if not _fondo_alto(ctx):
+    if DY == 0 or not _fondo_alto(ctx):
         texto = texto.replace(f'spriteType = "{FONDO}"', 'spriteType = "GFX_pol_view_bg"')
     else:
         ctx.write_text("interface/meganations_politica.gfx",
@@ -180,12 +190,23 @@ def boton_lider(ctx: BuildContext) -> None:
         return
     gx, gy, gl = GRAFICO
     lado = DISENO["boton_grande"]
+    # 2026-11-12 (captura: "queda medio choto"): más chico que el lugar del gráfico, para no tocar
+    # la facción de arriba ni los botones de abajo, y al lado el rótulo con el nombre del líder
     x, y = gx + (gl - lado) // 2, gy + DY + (gl - lado) // 2
+    tx = lado + 14
     gui = ('guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "mn_ficha_politica_window"\n'
-           f'\t\tposition = {{ x = {x} y = {y} }}\n\t\tsize = {{ width = {lado} height = {lado} }}\n'
+           f'\t\tposition = {{ x = {x} y = {y} }}\n\t\tsize = {{ width = 270 height = {lado} }}\n'
            '\t\torientation = upper_left\n'
            '\t\tbuttonType = {\n\t\t\tname = "abrir"\n\t\t\tposition = { x = 0 y = 0 }\n'
-           '\t\t\tspriteType = "GFX_mn_ficha_boton_grande"\n\t\t\tpdx_tooltip = "MN_FICHA_BOTON_TT"\n\t\t}\n\t}\n}\n')
+           '\t\t\tspriteType = "GFX_mn_ficha_boton_grande"\n\t\t\tpdx_tooltip = "MN_FICHA_BOTON_TT"\n\t\t}\n'
+           '\t\tinstantTextboxType = {\n\t\t\tname = "rotulo"\n'
+           f'\t\t\tposition = {{ x = {tx} y = {lado // 2 - 26} }}\n'
+           '\t\t\tfont = "hoi_24header"\n\t\t\ttext = "MN_FICHA_TITULO"\n\t\t\tmaxWidth = 160\n\t\t\tmaxHeight = 26\n'
+           '\t\t\tfixedsize = yes\n\t\t}\n'
+           '\t\tinstantTextboxType = {\n\t\t\tname = "lider"\n'
+           f'\t\t\tposition = {{ x = {tx} y = {lado // 2 + 2} }}\n'
+           '\t\t\tfont = "hoi_16mbs"\n\t\t\ttext = "[Root.GetLeader]"\n\t\t\tmaxWidth = 160\n\t\t\tmaxHeight = 36\n'
+           '\t\t\tfixedsize = yes\n\t\t}\n\t}\n}\n')
     sg = ("scripted_gui = {\n\tmn_ficha_politica = {\n\t\tcontext_type = player_context\n"
           "\t\tparent_window_token = politics_tab\n\t\twindow_name = \"mn_ficha_politica_window\"\n"
           f"\t\tvisible = {{ {_tags_or(tags)} has_country_flag = MEGANATIONS_lider_listo }}\n"

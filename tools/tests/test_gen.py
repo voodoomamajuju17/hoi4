@@ -2890,13 +2890,13 @@ def test_politica_gui() -> None:
     out, faltan = pg.parchar(gui)
     check("politica: el .gui del juego se reconoce entero", out is not None and not faltan, faltan)
     o = " ".join((out or "").split())
-    check("politica: dos filas de espiritus grandes y lo de abajo 68 px mas abajo",
-          "max_slots = { x = 6 y = 2 }" in o and "size = { width = 354 height = 136 }" in o
-          and "size = { width = 364 height = 142 }" in o and "position = { x = 0 y = 493 }" in o
-          and "position = { x = 260 y = 252 }" in o and 'spriteType = "GFX_mn_pol_view_bg_alto"' in o
+    # 2026-11-12: con 6 espíritus como máximo alcanza una fila (la segunda quedaba vacía)
+    check("politica: una fila de espiritus grandes, tambien cuando el juego usa la grilla de mas de 6",
+          "max_slots = { x = 6 y = 1 }" in o and "size = { width = 354 height = 68 }" in o
           and "slotsize = { width = 59 height = 68 } max_slots_horizontal = 6" in o, o[:900])
     check("politica: el grafico de popularidad sale de la pantalla (ahi va el boton de la Ficha)",
-          'name = "political_pie_chart" position = { x = -3000 y = 372 }' in o, o[:900])
+          'name = "political_pie_chart" position = { x = -3000 y = 304 }' in o
+          and 'name = "chart_explanation" position = { x = -3000 y = 116 }' in o, o[:900])
     roto, faltan = pg.parchar(gui.replace("spirit_grid\"", "otra_grilla\""))
     check("politica: si el juego cambio la pantalla, no se toca", roto is None and "spirit_grid" in faltan, faltan)
 

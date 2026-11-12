@@ -72,7 +72,7 @@ DISENO = {
     "coleccion": (700, 476),
     "coleccion_celda": (30, 92, 128, 112),   # x, y de la grilla, ancho y alto de celda (5 x 2)
     "coleccion_trofeos": (30, 352, 80),      # x, y, paso (8 trofeos)
-    "boton_grande": 96,         # 2026-11-12: el botón de la Ficha en Política, donde estaba el gráfico
+    "boton_grande": 76,         # 2026-11-12: el botón de la Ficha en Política, donde estaba el gráfico
 }
 SEGMENTOS = 20
 CUADROS_SALUD = 21
