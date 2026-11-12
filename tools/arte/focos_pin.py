@@ -21,6 +21,7 @@ REPO = Path(__file__).resolve().parents[2]
 YAML = REPO / "arte" / "focos_pin.yaml"
 REFS = REPO / "arte" / "referencias_focos"
 CON_REFERENCIA = False   # 2026-11-06: sin referencia (ver _pedido)
+EJEMPLOS = sorted((REPO / "arte" / "ejemplos_pin").glob("EJEMPLO_*.png"))
 
 
 def _uno(texto: str) -> str:
@@ -99,6 +100,13 @@ def _pedido(i: dict, estilo: str) -> str:
     if i.get("referencia") and CON_REFERENCIA:
         lineas.append(f"reference_image: {i['referencia']} (adjuntar: es el ícono viejo; tomar solo el motivo, "
                       f"no su estilo ni su fondo)")
+    # 2026-11-12 (los de la rama ludita salieron como ícono 3D, no como foto): dos pines que salieron
+    # bien van como ejemplo del ACABADO (foto de objeto real), no del motivo
+    if EJEMPLOS:
+        # una sola ruta (la fábrica lee una); la otra foto va mencionada en la cabecera del archivo
+        lineas.append(f"reference_image: ejemplos_pin/{EJEMPLOS[-1].name} (adjuntar: EJEMPLO DEL ACABADO de la serie, "
+                      "foto de un pin real que salió bien; copiar solo el realismo de foto, la luz, el grosor y los "
+                      "materiales verdaderos, NO su motivo ni sus colores)")
     lineas += ["transparent_background: true", ""]
     return "\n".join(lineas)
 
@@ -122,6 +130,7 @@ def escribir(salida: Path) -> tuple[list[str], list[str]]:
             Image.open(i["origen"]).convert("RGBA").save(destino, optimize=True)
         i["referencia"] = f"referencias_focos/{destino.name}"
         refs.append(i["referencia"])
+    refs += [f"ejemplos_pin/{e.name}" for e in EJEMPLOS]
     por_tag: dict[str, list[dict]] = {}
     for i in todos:
         por_tag.setdefault(i["tag"], []).append(i)
@@ -136,7 +145,10 @@ def escribir(salida: Path) -> tuple[list[str], list[str]]:
                   "# Consejo: un chat nuevo cada 15 pedidos más o menos. Si empieza a hacer monedas",
                   "# redondas llenas de cosas, pegale de nuevo el `style` y el `material` del pedido.",
                   "# Como los del Imperio Ecofascista: foto de un pin de verdad, un solo emblema simple.",
-                  "# Cada pedido trae su material (cambia según la rama del árbol). Sin imagen de referencia.",
+                  "# Cada pedido trae su material (cambia según la rama del árbol).",
+                  "# Adjuntá las dos fotos de ejemplos_pin/: muestran el ACABADO (foto de un pin real que salió",
+                  "# bien). Si igual sale como ícono 3D liso, decile: \"tiene que ser una FOTO de un objeto real,",
+                  "# como los ejemplos, no un ícono\" y pegale de nuevo el `style`.",
                   f"# Materiales de esta nación: {len(materiales)}", ""]
         path.write_text("\n".join(cabeza) + "\n" + "\n".join(_pedido(i, estilo) for i in grupo), encoding="utf-8")
         resumen.append(f"{path.name}: {len(grupo)}")
