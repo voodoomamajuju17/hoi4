@@ -593,6 +593,88 @@ P("ZWM_emir_al_rashid", "Emir Khalid al-Rashid, 58, lord of the dead oil wells; 
   avoid="No carpet style like the reference.")
 
 
+
+# v3 (2026-11-12): más drama de cine y, donde no es forzado, un toque de arte autóctono.
+# id: (momento dramático, toque autóctono o None)
+DRAMA = {
+ "EFE_aurelio_iv": ("A storm is breaking outside: a gust has just blown a glass pane open, palm leaves whip into the hall and the window light flickers; he does not move. Shoot it like the throne-room scene of an epic period film, deep shadows and wind-blown dust.",
+                    "Fileteado porteño ornament (Buenos Aires sign-painting scrolls in gold, green and red) carved and painted on the throne's backrest and the frame of the fresco, subtle and worn."),
+ "EFE_anahi_quiroga": ("Thunder just rolled: birds explode out of the canopy behind her and the fog is moving fast; she is the only still thing in the frame. Cinematic tension, like the moment before a battle.",
+                       "Her staff and vest carry Diaguita/Calchaquí geometric patterns (stepped spirals, black-red-white) as on Andean ceramics."),
+ "EFE_tupa_heredero": ("The sun breaks the horizon at the exact moment the crowd in the canoes raises paddles in salute; a flock of herons crosses the frame. A coronation shot from an epic, with sweeping scale.",
+                       "Ñandutí lace (Paraguayan spiderweb lace) clearly visible on the cuffs and as a huge white banner on the barge; Guaraní feather work on the cape border."),
+ "EFE_custodia_pereira": ("Sparks from the torches rise into the night like a swarm, the wind bends every flame the same way; the instant the oath is spoken.",
+                          "The stump lectern carved with Guaraní and Kaingang geometric motifs; urucum red paint as worn by forest peoples."),
+ "EFE_regente_etchegaray": ("Rain hammers the barred window, a lightning flash freezes the room; a single drop of water falls from the ceiling onto the map next to the crown.", None),
+ "EFE_lider_rebelde": ("A tear-gas canister bursts behind him, the crowd surges forward and a giant blue-and-white flag unfurls over the street at the same moment: a revolution frame.",
+                       "Fileteado porteño lettering-style ornaments (no words) on the side of the armoured car, hand-painted by the rebels."),
+ "NRE_lucius_varro": ("The whole square chants: thousands of red flares lift at once, smoke rolls over the soldiers, a drone formation draws a laurel shape in the sky.",
+                      "Roman mosaic-style border details in the soldiers' shields (tesserae patterns), and the composition echoes ancient Roman triumph reliefs."),
+ "NRE_legado_arbogast": ("A sandstorm wall is rolling in behind the column; the first gust tears the cloak off his face and makes the aquila banner snap.", None),
+ "NRE_irina_vasilescu": ("A flare goes up in the snow outside and turns the whole sky pink for one second; the kneeling legion raises its standards toward her.",
+                         "Romanian folk embroidery (red and black cross-stitch motifs from the Carpathians) on the lining of her greatcoat collar and her gloves."),
+ "NRE_kerem_aydin": ("Behind him the whole camp is lighting its fires at dusk, hundreds of smoke columns rising between the fairy chimneys; a calm before a long march.",
+                     "Anatolian kilim rugs laid on the ground under his chair, worn and dusty; Iznik tile-blue tea glass."),
+ "NRE_lider_rebelde": ("The cathedral is dark except for the candles; a shaft of dawn light from the dome strikes him at the moment of coronation, dust swirling in it.",
+                       "Byzantine icon painting itself is the native style: gold leaf, cloisonné enamel on the crown, mosaic tesserae."),
+ "SHD_lin_wenzhao": ("A single turbine has just stopped: one red warning light in the endless row, technicians frozen looking at it; he looks only at the viewer.",
+                     "A Chinese ink-wash (shan shui) landscape hangs at the end of the hall, mountains and water, echoing the dam."),
+ "SHD_zhou_mingyuan": ("The gate has just opened: a wall of water explodes below him, the spray rises higher than the gate and the light breaks through it.",
+                       "Mist and mountains in the background composed like a classical Chinese shan shui scroll."),
+ "SHD_lider_rebelde": ("The lights of the server wall come on one by one behind her, forming the star; the room hums; the camera slowly pushes in.",
+                       "Red paper-cut (jianzhi) style star and wheat ornaments on the banners."),
+ "NAS_amaru_quispe": ("The first ray of the sun hits the temple at the solstice and runs across the stones toward him; condors circle in the light.",
+                      "Cusco School painting (brocateado gold-leaf patterns) and Inca tocapu weaving are the native styles here."),
+ "NAS_amaru_inca": ("Thunder over the mountains, rain about to fall, his army's banners snapping; the moment the king turns his back on the temple.",
+                    "Tocapu squares and Inca stone masonry; Andean weaving patterns on the banners."),
+ "NAS_lider_rebelde": ("The diamond ring of the eclipse flashes at the exact second; the torches gutter; his shadow vanishes.",
+                       "Andean textile and Aymara chakana (stepped cross) motifs on his poncho and the observatory stones."),
+ "ASC_allocation_council": ("The vote screen has just turned red: all 41 faces lit red at the same instant, some shocked, some resigned.", None),
+ "ASC_plan_41": ("The door seals with a hiss; every server light in the hall turns from green to cyan in a wave toward the camera.", None),
+ "ASC_lider_rebelde": ("The roof of the datacenter collapses behind him in a burst of flame and sparks; snow and embers fall together.",
+                       "Viking-age Urnes-style knotwork carved on his hammer handle and amulet; runestone-style carving."),
+ "FCU_valeria_castellane": ("A storm surge hits the outer glass wall behind her, the sea crashing against it; inside, absolute calm.",
+                            "Subtle Art Deco (American 1930s) lines in the plant's architecture, like Hoover Dam's design."),
+ "FCU_marcus_rourke": ("A finished tank rolls off the line below, sparks shower from the welding robots, the alarm lights spin.",
+                       "American 1930s Art Deco steel-eagle detailing on the factory's balcony and his chair."),
+ "HSN_kofi_aldana": ("A tropical storm hits the port: rain sheets across the bridge windows, lightning silhouettes the cranes, the holograms flicker.",
+                     "West African kente cloth woven into his scarf or shirt lining, subtle."),
+ "HSN_ines_tavake": ("Lightning strikes a crane behind her as the sailors roar; the rain is horizontal.",
+                     "Polynesian tattoo art (Rapa Nui and Marquesan patterns) on her arms and chin; a small moai-shaped amulet."),
+ "HSN_lider_rebelde": ("The sky burns red over the strait; the cannons of the fleet fire a salute and smoke drifts over the kneeling sailors.",
+                       "Filipino baroque church art (gilded retablo style) in the cross and the cape embroidery."),
+ "APF_amara_nwosu": ("Thousands of hands rise at once in a vote under the baobab; dust glows in the sun.",
+                     "Wax-print and adinkra symbols on her dress; uli body-art patterns (Igbo) on the blackboard frame."),
+ "APF_kwame_diallo": ("The dust storm is coming; his men are already climbing into the trucks; his scarf flies horizontal.",
+                      "Tuareg silver jewellery (Agadez cross) on his scarf; indigo-dyed cloth."),
+ "APF_lider_rebelde": ("A storm wind has entered the hall and lifts all the flags at once behind him.",
+                       "Kente and bogolan (mud-cloth) patterns on the sash and some of the flags."),
+ "ZJP_kaede_mori": ("A huge wave breaks over the bow just behind her, frozen like Hokusai's Great Wave; the old flag snaps.",
+                    "Ukiyo-e influence in the wave and mist; Edo-period lacquer and family crest (mon) on the scabbard."),
+ "ZJP_daisuke_kanemura": ("The Mecha's eyes light up outside at the exact moment he looks at the viewer; the glass of the boardroom vibrates.",
+                          "Family mon crest on his lapel, a Rinpa-school gold-leaf screen on the boardroom wall."),
+ "ZJP_ryuji_sakaguchi": ("A ship horn blows outside, the neon flickers, the cigarette smoke curls; dangerous calm.",
+                         "Irezumi tattoo art (Edo woodblock style dragons and waves) on his body; a byōbu folding screen behind him."),
+ "ZJP_kenzo_akabane": ("All the clones in the tanks open their eyes at the same time behind him; he keeps smiling.",
+                       "A crane origami and a minimalist Japanese ikebana arrangement on a lab bench."),
+ "ZAL_tom_ashworth": ("Sparks fly from a smashed server as the crowd charges past him; the mill's broken windows let in rain.",
+                      "Victorian trade-union banner art (painted silk banners with gold borders, no words) hanging from the beams."),
+ "ZAL_siobhan_cray": ("The London network flows through her: millions of thin light threads stream past, and for an instant her many after-images all speak at once.",
+                      "Celtic knotwork (Book of Kells) forming the pattern of the light filaments, subtle."),
+ "ZAL_victoria_iii": ("The curtain is rising: the follow spot just hit her and a shower of rose petals falls; the empty theatre is about to fill.",
+                      "Victorian theatre decoration: gilded plasterwork, painted backdrop of Windsor in the style of a period stage set."),
+ "ZAN_the_warlords": ("A burning car explodes far away, lighting the ruined skyline; all five turn at once toward the viewer.",
+                      "American hobo signs and biker patch art on their jackets; a faded Americana mural on a wall."),
+ "ZWB_coronel_barbosa": ("A tropical storm breaks over the river, rain hits the water like bullets; the gunboat's searchlight sweeps the jungle.",
+                         "Marajoara pottery patterns painted on the gunboat's cabin; Amazonian riverboat painted signage (no letters)."),
+ "ZWE_ataman_grigorenko": ("The horse rears; the armoured train behind him blows steam; a storm of crows rises from the wheat.",
+                           "Ukrainian petrykivka floral painting on the train cars and the silo; vyshyvanka embroidery on his shirt collar."),
+ "ZWI_rani_devika": ("The city on the horizon explodes in fire; the lamps flare; she does not blink.",
+                     "Rajput miniature painting influence in the fort's wall paintings and the jali screens; mirror work on the sari."),
+ "ZWM_emir_al_rashid": ("The dust storm is about to swallow the convoy; the fighters pull up their scarves; his robe flies.",
+                        "Bedouin sadu weaving on the truck seats and his saddle bag; Arabic geometric patterns on the dagger (no letters)."),
+}
+
 # Lista corta en castellano: quién es y qué muestra la imagen
 RES = {
  "EFE_aurelio_iv": "Aurelio IV hundido en su trono de quebracho vivo, con el fusil de Iguazú en las rodillas. Óleo de corte al estilo Sargent/Sorolla.",
@@ -659,6 +741,8 @@ HEAD = """# RETRATOS DE ESTADO DE LOS LÍDERES - {n} imágenes
 # - Real camera and real technique: if the request says a film stock or a lens, imitate its grain, depth of
 #   field and distortion. If it says a painter, imitate that painter's brushwork, ground colour and finish.
 # - Composition as described (camera height, distance, angle). NOT the default centred chest-up AI portrait.
+# - CINEMATIC AND DRAMATIC: every image is a frozen moment from a great film, with tension, movement in the
+#   environment (wind, smoke, water, sparks, crowd) and strong directional light. The leader is the still centre.
 # - Hands: correct anatomy, five fingers, natural grip.
 # - The person is the SAME as in the attached reference (same face shape, age, hair, scars, ethnicity), but as
 #   a real human being, not as an icon, card, poster, statue or tattoo like the reference.
@@ -697,7 +781,8 @@ lighting: {k['light']}
 technique: {k['tech']}
 palette: {k['palette']}
 imperfections: {k['flaws']}
-avoid: {k['avoid']} Plus everything in the general rules (no AI look, no text, no frame).
+drama: {DRAMA[cid][0]}
+{('native_style: ' + DRAMA[cid][1] + ' Keep it subtle and authentic, never a costume or a tourist cliché.' + chr(10)) if DRAMA[cid][1] else ''}avoid: {k['avoid']} Plus everything in the general rules (no AI look, no text, no frame).
 """)
     open(out, 'w', encoding='utf-8').write('\n'.join(txt))
 
