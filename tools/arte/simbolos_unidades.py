@@ -56,7 +56,9 @@ def unidad(src: Path) -> list[Path]:
 
 def simbolo(src: Path) -> Path:
     dest = SIMBOLOS / f"{src.stem}.dds"
-    _dds(_encajar(Image.open(src), 128, 128, 0), dest)
+    # 2026-11-12 ("el símbolo de división está muy bien, pero queda gigante"): los del juego ocupan
+    # el centro de su recuadro, con aire alrededor; el nuestro ocupa ~58% del lado
+    _dds(_encajar(Image.open(src), 128, 128, 27), dest)
     return dest
 
 
