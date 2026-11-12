@@ -186,6 +186,12 @@ def emit(ctx: BuildContext) -> None:
         puede.append(f"AND = {{ check_variable = {{ MN_med_sel = {s} }} OR = {{ check_variable = {{ {var} = 0 }} "
                      f"AND = {{ has_political_power > {costo - 1} NOT = {{ has_country_flag = MN_med_espera }} }} }} }}")
     st.append("MN_med_puede_cambiar = { OR = { " + " ".join(puede) + " } }\n")
+    # 2026-11-12 ("si la perdés, deberías perder el trofeo"): el trofeo vale mientras se controle
+    # la capital de arranque de esa nación; si se la vuelve a tomar, vuelve solo
+    capitales = ctx.data.get("capitals") or {}
+    for j, t in enumerate(orden_trof, start=1):
+        cap = f" controls_state = {capitales[t]}" if t in capitales else ""
+        st.append(f"MN_trofeo_ok_{j} = {{ has_country_flag = MEGANATIONS_absorbido_{t}{cap} }}\n")
     ctx.write_text("common/scripted_triggers/meganations_medallas.txt", banner_for(SOURCE) + "".join(st))
 
     # desbloquear
@@ -202,7 +208,10 @@ def emit(ctx: BuildContext) -> None:
             partes.append(f"\t\tif = {{ limit = {{ NOT = {{ has_country_flag = MN_med_{tag}_{m['n']} }} {cond} }} "
                           f"set_country_flag = MN_med_{tag}_{m['n']} }}\n")
         rev.append(f"\tif = {{ limit = {{ tag = {tag} }}\n" + "".join(partes) + "\t}\n")
-    rev.append("}\n")
+    perder = "".join(f"\tif = {{ limit = {{ check_variable = {{ MN_trofeo = {j} }} NOT = {{ MN_trofeo_ok_{j} = yes }} }} "
+                     f"set_variable = {{ MN_trofeo = 0 }} MN_medallas_sumar = yes }}\n"
+                     for j, _ in enumerate(orden_trof, start=1))
+    rev.append(perder + "}\n")
     se.extend(rev)
     # sumar lo puesto
     sumar = ["MN_medallas_sumar = {\n"]
@@ -245,7 +254,7 @@ def emit(ctx: BuildContext) -> None:
     cadena = []
     for j, t in enumerate(orden_trof, start=1):
         kw = "if" if not cadena else "else_if"
-        cadena.append(f"\t\t{kw} = {{ limit = {{ has_country_flag = MEGANATIONS_absorbido_{t} }} "
+        cadena.append(f"\t\t{kw} = {{ limit = {{ MN_trofeo_ok_{j} = yes }} "
                       f"set_variable = {{ MN_trofeo = {j} }} }}\n")
     ia.append("\tif = { limit = { check_variable = { MN_trofeo = 0 } }\n" + "".join(cadena) + "\t}\n")
     ia.append("\tMN_medallas_sumar = yes\n}\n")
@@ -348,8 +357,8 @@ def emit(ctx: BuildContext) -> None:
     for t in orden_trof:
         ben, bes = _bonus_texto(trof[t]["bonus"])
         loc(f"MN_TROFEO_{t}_LINEA", f"§YTrophy: capital of ${t}$§!: {ben}", f"§YTrofeo: capital de ${t}$§!: {bes}")
-        loc(f"MN_TROFEO_{t}_TT", f"§YTrophy: capital of ${t}$§!\\n{ben}\\nEarned by taking its starting capital in a war.",
-            f"§YTrofeo: capital de ${t}$§!\\n{bes}\\nSe gana al tomar su capital de arranque en una guerra.")
+        loc(f"MN_TROFEO_{t}_TT", f"§YTrophy: capital of ${t}$§!\\n{ben}\\nEarned by taking its starting capital in a war. Lost if you lose control of it; it comes back if you retake it.",
+            f"§YTrofeo: capital de ${t}$§!\\n{bes}\\nSe gana al tomar su capital de arranque en una guerra. Si perdés el control de esa capital, se pierde; si la volvés a tomar, vuelve.")
     loc("MN_MED_SECCION", "§YMEDALS§!  (click a slot to choose)", "§YMEDALLAS§!  (tocá una casilla para elegir)")
     loc("MN_MED_TROFEO", "§YTrophy§!", "§YTrofeo§!")
     loc("MN_MED_VACIO", "—", "—")
@@ -418,7 +427,7 @@ def emit(ctx: BuildContext) -> None:
         g.append(f'\t\tbuttonType = {{\n\t\t\tname = "trofeo_{j}"\n\t\t\tposition = {{ x = {x} y = {try_} }}\n'
                  f'\t\t\tspriteType = "GFX_mn_ficha_medalla_trofeo"\n\t\t\tpdx_tooltip = "MN_TROFEO_{t}_TT"\n\t\t}}\n')
         g.append(_icon(f"trofeo_uso_{j}", x + lado - 14, try_ - 4, "GFX_mn_ficha_medalla_en_uso", "\n\t\t\talwaystransparent = yes"))
-        gano = f"has_country_flag = MEGANATIONS_absorbido_{t}"
+        gano = f"MN_trofeo_ok_{j} = yes"
         trig.append(f"\t\t\ttrofeo_icono_{j}_visible = {{ NOT = {{ tag = {t} }} }}\n")
         trig.append(f"\t\t\ttrofeo_{j}_visible = {{ NOT = {{ tag = {t} }} }}\n")
         trig.append(f"\t\t\ttrofeo_bloq_{j}_visible = {{ NOT = {{ tag = {t} }} NOT = {{ {gano} }} }}\n")

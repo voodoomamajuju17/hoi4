@@ -2830,7 +2830,10 @@ def test_medallas() -> None:
         check("cambiar cuesta 25 y deja 30 días de espera",
               "add_political_power = -25" in se and "flag = MN_med_espera value = 1 days = 30" in se)
         check("la IA llena las casillas vacías", "MN_medallas_ia = {" in se and "is_ai = yes" in se)
-        check("los trofeos salen de tomar la capital", "has_country_flag = MEGANATIONS_absorbido_NAS" in se)
+        stg = (mod / "common/scripted_triggers/meganations_medallas.txt").read_text(encoding="utf-8")
+        check("los trofeos salen de tomar la capital y valen mientras se la controle",
+              "has_country_flag = MEGANATIONS_absorbido_EFE controls_state = " in stg)
+        check("perder la capital saca el trofeo puesto", "NOT = { MN_trofeo_ok_1 = yes } } set_variable = { MN_trofeo = 0 }" in se)
         dm = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text(encoding="utf-8"))
         lider = dm.get("MEGANATIONS_el_lider")
         check("el bonus va dentro de El Líder (no ocupa lugar en el panel)",
