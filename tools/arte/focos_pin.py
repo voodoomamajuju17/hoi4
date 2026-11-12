@@ -56,7 +56,11 @@ def items() -> list[dict]:
     if desc_path.exists():
         looks = (yaml.safe_load(desc_path.read_text(encoding="utf-8")) or {}).get("iconos") or {}
     out = []
-    for tag, tree in arte._load("07_focus_trees.yaml")["trees"].items():
+    # 2026-11-12: los árboles con todo lo agregado después (las ramas nuevas de add_branches, como
+    # Quedarse Luditas de Albión, no estaban en 07_focus_trees.yaml y nunca se pidieron)
+    from tools.gen.specload import Spec
+    arboles = Spec(REPO / "spec").raw["focus_trees"]["trees"]
+    for tag, tree in arboles.items():
         if tag in hechas or tag not in mats or not isinstance(tree, dict) or "branches" not in tree:
             continue
         m = mats[tag]

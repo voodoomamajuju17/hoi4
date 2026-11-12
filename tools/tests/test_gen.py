@@ -3027,8 +3027,8 @@ def test_fabrica() -> None:
     import fabrica_hoi4 as F
     from tools.fabrica import control
     todo = REPO_ROOT / "arte/pedidos/0_FOCOS_PIN_FALTANTES.txt"
-    if "ASSET_REQUEST" not in todo.read_text(encoding="utf-8"):
-        # 2026-11-12: llegaron todos los pines; la fábrica se prueba con un pedido de ejemplo
+    if todo.read_text(encoding="utf-8").count("ASSET_REQUEST") < 20:
+        # 2026-11-12: quedan pocos pines (o ninguno); la fábrica se prueba con un pedido de ejemplo
         todo = Path(__file__).parent / "fixtures" / "pedidos_pin_ejemplo.txt"
     peds = F.leer_pedidos(todo.read_text(encoding="utf-8"), todo.parent)
     # 2026-11-07: quedan pocos pines; para las tandas de prueba se suman los del diseñador
