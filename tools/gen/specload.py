@@ -37,6 +37,7 @@ SPEC_FILES = {
     "intelligence": "18_intelligence.yaml",
     "unit_names": "19_unit_names.yaml",
     "unique_units": "20_unique_units.yaml",
+    "medallas": "40_medallas.yaml",   # 2026-11-12: medallas de la Ficha del Líder
     "adventures": "21_aventuras.yaml",
     "questions": "99_open_questions.yaml",
 }

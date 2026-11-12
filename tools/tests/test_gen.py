@@ -2801,6 +2801,49 @@ def test_espiritus() -> None:
                   for g in grandes))
 
 
+def test_medallas() -> None:
+    """2026-11-12: medallas en la Ficha del Líder (spec/40_medallas.yaml)."""
+    section("medallas: 3 casillas y el trofeo en la Ficha del Líder")
+    import yaml as _yaml
+    cat = _yaml.safe_load((REPO_ROOT / "spec/40_medallas.yaml").read_text(encoding="utf-8"))
+    for tag, lista in cat["medallas"].items():
+        check(f"medallas {tag}: como mucho 10, sin trofeos", 0 < len(lista) <= 10, str(len(lista)))
+        check(f"medallas {tag}: bonus del 2% al 6%",
+              all(0.02 <= abs(v) <= 0.06 for m in lista for v in m["bonus"].values()))
+        check(f"medallas {tag}: cada una con su azulejo",
+              all((REPO_ROOT / "assets" / tag / "ideas" / f"{m['tile']}.dds").exists() for m in lista))
+        tipos = {next(iter(m["unlock"])) for m in lista}
+        check(f"medallas {tag}: se ganan con focos, decisiones, eventos y tecnología",
+              tipos == {"foco", "decision", "evento", "tecnologia"}, str(tipos))
+    check("un trofeo por meganación, con un azulejo de esa nación",
+          len(cat["trofeos"]) == 8 and all((REPO_ROOT / "assets" / t / "ideas" / f"{v['tile']}.dds").exists()
+                                           for t, v in cat["trofeos"].items()))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        gui = (mod / "interface/meganations_ficha.gui").read_text(encoding="utf-8")
+        check("la Ficha tiene las 3 casillas y la del trofeo", all(f'name = "med_slot_{s}"' in gui for s in range(1, 5)))
+        col = (mod / "interface/meganations_medallas.gui").read_text(encoding="utf-8")
+        check("la colección: 10 medallas y 8 trofeos", all(f'name = "med_{i}"' in col for i in range(1, 11))
+              and all(f'name = "trofeo_{j}"' in col for j in range(1, 9)))
+        se = (mod / "common/scripted_effects/meganations_medallas.txt").read_text(encoding="utf-8")
+        check("cambiar cuesta 25 y deja 30 días de espera",
+              "add_political_power = -25" in se and "flag = MN_med_espera value = 1 days = 30" in se)
+        check("la IA llena las casillas vacías", "MN_medallas_ia = {" in se and "is_ai = yes" in se)
+        check("los trofeos salen de tomar la capital", "has_country_flag = MEGANATIONS_absorbido_NAS" in se)
+        dm = pdx.parse((mod / "common/dynamic_modifiers/meganations_dynamic_modifiers.txt").read_text(encoding="utf-8"))
+        lider = dm.get("MEGANATIONS_el_lider")
+        check("el bonus va dentro de El Líder (no ocupa lugar en el panel)",
+              pdx.text(lider.get("stability_factor")) == "MN_tot_stability_factor"
+              and pdx.text(lider.get("army_attack_factor")) == "MN_med_army_attack_factor")
+        efx = (mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8")
+        check("el líder suma las medallas al recalcular y el pulso las revisa",
+              "MN_lider_sumar = yes" in efx and "MN_medallas_pulso = yes" in efx)
+        sg = (mod / "common/scripted_guis/meganations_medallas.txt").read_text(encoding="utf-8")
+        check("la colección pide la medalla ganada y poder cambiar",
+              "med_1_click_enabled = { MN_med_ok_1 = yes" in sg and "MN_med_puede_cambiar = yes" in sg)
+
+
 def test_politica_gui() -> None:
     section("panel de Politica: espiritus en dos filas a tamano completo (2026-11-07)")
     from tools.gen.emitters import politica_gui as pg
@@ -5831,6 +5874,7 @@ def main() -> int:
         test_simulador,
         test_vanilla_validation,
         test_espiritus,
+        test_medallas,
     ):
         test()
 

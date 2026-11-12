@@ -45,6 +45,7 @@ from .emitters import history as em_history
 from .emitters import faction_tech as em_faction_tech
 from .emitters import ideas as em_ideas
 from .emitters import espiritus as em_espiritus
+from .emitters import medallas as em_medallas
 from .emitters import laws as em_laws
 from .emitters import loading_quotes as em_loading_quotes
 from .emitters import ideologies as em_ideologies
@@ -123,6 +124,7 @@ EMITTERS = [
     ("reglas", em_reglas.emit),
     ("agencias", em_agencias.emit),     # agencias de inteligencia con el emblema del espíritu (2026-10-29)         # reglas de la partida: deslizadores de las meganaciones (2026-10-27)
     ("ficha_lider", em_ficha_lider.emit),  # la Ficha del Líder, ventana propia en cristal y cobre (2026-11-03)
+    ("medallas", em_medallas.emit),     # 2026-11-12: medallas de la Ficha (después de la Ficha y de los efectos)
     ("tabs", em_menu.emit_tabs),        # fondos de las pestanas (11_scenario -> tab_backgrounds)
     ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
     ("politica_gui", em_politica_gui.emit),   # 2026-11-07: espíritus en dos filas a tamaño completo

@@ -338,6 +338,9 @@ def emit(ctx: BuildContext) -> None:
     efectos.add("MN_espiritus_resumen", Block([
         ("if", Block([("limit", Block([("NOT", Block([("has_idea", r)]))])), ("add_ideas", r)]))
         for r in RESUMEN]))
+    if ctx.data.get("medallas"):
+        # 2026-11-12: lo que se acaba de ganar puede desbloquear una medalla
+        efectos.get("MN_espiritus_resumen").add("MN_medallas_revisar", True)
     efectos.entries.extend(sumar.entries)
     ctx.write_script("common/scripted_effects/meganations_espiritus.txt", efectos, source=SOURCE)
 

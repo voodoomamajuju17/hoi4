@@ -130,6 +130,8 @@ def fondo(D):
     _hilo(img, sx + 110, W - 36, sec["atributos"] - 9)
     _hilo(img, sx + 170, W - 36, sec["pesa"] - 9)
     _hilo(img, 36 + 330, W - 36, sec["gabinete"] - 9)
+    if "medallas" in sec:
+        _hilo(img, 36 + 330, W - 36, sec["medallas"] - 9)
     # renglones de las stats, cajas y anillo: se dibujan en una capa aparte y se
     # mezclan (2026-11-03, captura: dibujados directo reemplazaban el vidrio por
     # algo casi transparente y se veía el mapa a través)
@@ -586,6 +588,74 @@ def _colores_estilo() -> dict:
     return {e: colores[t] for t, e in estilos.items() if t in colores}
 
 
+# -- medallas (2026-11-12) ---------------------------------------------------------
+
+def medalla_marco(D, color=None):
+    """Marco de una casilla de medalla: anillo de cobre con el centro libre (el azulejo va debajo)."""
+    from PIL import Image, ImageDraw
+    lado = D["medallas"][3]
+    img = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    c0, c1, c2 = color or (CU_HI, CU, CU_LO)
+    for k, c in enumerate((c2, c1, c0, c1)):
+        d.rectangle((k, k, lado - 1 - k, lado - 1 - k), outline=c + (255,))
+    d.rectangle((4, 4, lado - 5, lado - 5), outline=(0, 0, 0, 170))
+    for x, y in ((2, 2), (lado - 3, 2), (2, lado - 3), (lado - 3, lado - 3)):
+        d.ellipse((x - 2, y - 2, x + 2, y + 2), fill=c0 + (255,))
+    return img
+
+
+def medalla_vacia(D):
+    """Casilla sin medalla: vidrio oscuro con un rombo tenue."""
+    from PIL import ImageDraw
+    img = _grad_v(64, 64, (22, 36, 44), (9, 16, 20), 235)
+    d = ImageDraw.Draw(img)
+    d.polygon([(32, 14), (50, 32), (32, 50), (14, 32)], outline=CU + (110,))
+    d.line((32, 24, 32, 40), fill=CU + (90,))
+    d.line((24, 32, 40, 32), fill=CU + (90,))
+    return img
+
+
+def medalla_bloqueada(D):
+    """Encima de una medalla todavía no ganada: la apaga y le pone un candado chico."""
+    from PIL import Image, ImageDraw
+    img = Image.new("RGBA", (64, 64), (4, 8, 10, 190))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle((24, 32, 40, 46), 2, fill=CU_LO + (255,), outline=CU + (255,))
+    d.arc((26, 20, 38, 38), 180, 360, fill=CU + (255,), width=3)
+    d.ellipse((30, 36, 34, 40), fill=(10, 6, 2, 255))
+    return img
+
+
+def medalla_en_uso(D):
+    """Marca de "puesta" en una casilla de la colección: un punto turquesa con aro."""
+    from PIL import Image, ImageDraw
+    img = Image.new("RGBA", (18, 18), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.ellipse((1, 1, 16, 16), fill=TEAL_LO + (255,), outline=TEAL_HI + (255,))
+    d.line((5, 9, 8, 12), fill=(255, 255, 255, 255), width=2)
+    d.line((8, 12, 13, 5), fill=(255, 255, 255, 255), width=2)
+    return img
+
+
+def coleccion_fondo(D):
+    """La ventana de la colección: el mismo cristal con borde de cobre, más chica."""
+    from PIL import Image, ImageDraw
+    W, H = D["coleccion"]
+    img = _grad_v(W, H, VIDRIO_A, VIDRIO_B, 246)
+    _hilo(img, 0, W, 56)
+    _hilo(img, 24, W - 24, D["coleccion_trofeos"][1] - 30)
+    _hilo(img, 24, W - 24, H - 40, CU_LO, 160)
+    _borde_cobre(img, 0, 1)
+    filete = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(filete).rectangle((3, 3, W - 4, H - 4), outline=(0, 0, 0, 160))
+    img.alpha_composite(filete)
+    _esquinas(img)
+    for x, y in ((9, 9), (W - 10, 9), (9, H - 10), (W - 10, H - 10)):
+        _remache(img, x, y)
+    return img
+
+
 PIEZAS = {
     "fondo": fondo, "retrato_marco": retrato_marco,
     "barra_total": lambda D: _barra(D, (TEAL_HI, TEAL, TEAL_LO), True),
@@ -596,6 +666,10 @@ PIEZAS = {
     "marco_hsn": _marco_color((46, 184, 178)), "marco_nas": _marco_color((240, 192, 64)),
     "marco_shd": _marco_color((72, 186, 128)), "marco_apf": _marco_color((222, 146, 54)),
     "marco_nre": _marco_color((156, 76, 168)),
+    "medalla_marco": medalla_marco,
+    "medalla_trofeo": lambda D: medalla_marco(D, (TEAL_HI, TEAL, TEAL_LO)),
+    "medalla_vacia": medalla_vacia, "medalla_bloqueada": medalla_bloqueada, "medalla_en_uso": medalla_en_uso,
+    "coleccion_fondo": coleccion_fondo,
 }
 
 

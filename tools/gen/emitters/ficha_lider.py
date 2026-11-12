@@ -48,14 +48,15 @@ TEX = "gfx/interface/meganations/ficha"
 
 # Medidas de la ventana (las usa también tools/arte/ficha.py para dibujar)
 DISENO = {
-    "ventana": (1020, 740),
+    # 2026-11-12 (medallas): 90 px más alta para la fila de medallas debajo del gabinete
+    "ventana": (1020, 830),
     "cabecera": 64,
     "retrato": (44, 94),            # 156 x 210, el retrato del juego
     "retrato_marco": (36, 86, 172, 226),
     "placa": (24, 312, 236, 382),   # la placa del nombre debajo del retrato
     "stats_x": 260, "stats_y": (110, 162, 214), "barra": (410, 300, 14),
     "anillo": (850, 96, 140),
-    "secciones": {"atributos": 84, "pesa": 290, "gabinete": 432},
+    "secciones": {"atributos": 84, "pesa": 290, "gabinete": 432, "medallas": 694},
     "efectos_y": 312, "efectos_x": (260, 510, 760), "efecto": (230, 56),
     "gabinete": (36, 452, 5, 2, 182, 104, 8, 8),   # x, y, columnas, filas, ancho, alto, separación x, y
     "accion": (210, 30),
@@ -64,6 +65,13 @@ DISENO = {
     "emblema": (20, 10),        # 44 px, el recurso propio junto a "EL LÍDER" (2026-11-05)
     "marca": (430, 70),         # 260 px, el recurso propio en marca de agua detrás de los atributos
     "boton": 30,   # del alto de la fila de arriba de la barra, junto al recurso propio (2026-11-03)
+    # 2026-11-12: las medallas (3 casillas y el trofeo) y la ventana de la colección
+    "medallas": (36, 700, 88, 76),       # x, y, paso entre casillas, lado del marco
+    "trofeo_x": 316,
+    "medallas_texto": (430, 700, 560, 19),   # x, y, ancho, alto de renglón (lo que da cada una)
+    "coleccion": (700, 476),
+    "coleccion_celda": (30, 92, 128, 112),   # x, y de la grilla, ancho y alto de celda (5 x 2)
+    "coleccion_trofeos": (30, 352, 80),      # x, y, paso (8 trofeos)
 }
 SEGMENTOS = 20
 CUADROS_SALUD = 21
@@ -73,7 +81,10 @@ ESTILOS_POR_DEFECTO = {"EFE": "efe", "FCU": "fcu", "ASC": "asc", "ZAL": "zal", "
 ESTILOS = ("base", "efe", "fcu", "asc", "zal", "zjp", "hsn", "nas", "shd", "apf", "nre")
 PIEZAS = ["fondo", "retrato_marco", "barra_total", "barra_base", "salud", "boton", "boton_accion", "boton_chico",
           "carta_ancha", "carta",
-          "apagado", "sin_retrato"] + [f"marco_{e}" for e in ESTILOS]
+          "apagado", "sin_retrato",
+          # 2026-11-12: medallas (casillas, candado, "puesta" y la ventana de la colección)
+          "medalla_marco", "medalla_trofeo", "medalla_vacia", "medalla_bloqueada", "medalla_en_uso",
+          "coleccion_fondo"] + [f"marco_{e}" for e in ESTILOS]
 CUADROS = {"barra_total": SEGMENTOS + 1, "barra_base": SEGMENTOS + 1, "salud": CUADROS_SALUD}
 
 STATS = (("carisma", "car"), ("astucia", "ast"), ("prestigio", "pre"))
@@ -250,6 +261,11 @@ def emit(ctx: BuildContext) -> None:
     emb = _emblemas(ctx)
     for clave in ("gfx", "triggers"):
         extra[clave] = extra.get(clave, "") + emb.get(clave, "")
+    # 2026-11-12: las casillas de medallas debajo del gabinete (emitters/medallas.py)
+    from .medallas import en_ficha
+    med = en_ficha(ctx)
+    for clave in ("gui", "effects", "properties", "triggers"):
+        extra[clave] = extra.get(clave, "") + med.get(clave, "")
     if extra.get("gfx"):
         gfx_path = ctx.mod_root / "interface/meganations_ficha.gfx"
         txt = gfx_path.read_text(encoding="utf-8")

@@ -1,0 +1,140 @@
+# =============================================================================
+# 40_medallas.yaml — Medallas de la Ficha del Líder (2026-11-12)
+# =============================================================================
+# Pedido del usuario: "para no desperdiciar tanto tile hermoso: en la pantalla del líder
+# 3 slots para poner esos tiles, de toda una pila para elegir. Son medallas, bonus para el
+# líder o la facción, se desbloquean con decisiones, eventos, focos y tecnología. También
+# uno reservado a cada vez que se conquista una capital (solo de meganaciones)".
+# Respuestas: bonus del 2% al 6%; los trofeos se acumulan y se elige cuál mostrar, con un
+# azulejo de la nación conquistada; cambiar una medalla cuesta 25 de poder político y 30
+# días de espera; como máximo 10 medallas por nación (sin contar trofeos).
+#
+# Cada medalla: n (su número, 1 a 10), tile (el azulejo: assets/<TAG>/ideas/<tile>.dds; el
+# nombre de la medalla es el del espíritu), unlock (foco / decision / evento: el que da ese
+# espíritu; tecnologia: una lista de alternativas, vale la primera que exista en el juego) y
+# bonus (un modificador, del 2% al 6%). Armado con un script a partir de los azulejos y de
+# quién da cada espíritu; se puede editar a mano.
+# Trofeos: el azulejo y el bonus de cada meganación; se gana al tomar su capital de arranque
+# en guerra (la misma marca que el bonus de capital tomada, MEGANATIONS_absorbido_<TAG>).
+src: user_request
+cambio: {costo: 25, dias: 30}
+medallas:
+  EFE:
+  - {n: 1, tile: EFE_agua_de_la_vida, unlock: {foco: EFE_el_agua_de_la_vida}, bonus: {army_attack_factor: 0.05}}
+  - {n: 2, tile: EFE_autarquia_estrategica, unlock: {foco: EFE_autarquia_del_bioacero}, bonus: {industrial_capacity_factory: 0.04}}
+  - {n: 3, tile: EFE_diplomacia_hidrica, unlock: {foco: EFE_diplomacia_del_agua}, bonus: {political_power_factor: 0.03}}
+  - {n: 4, tile: EFE_armadura_viviente, unlock: {foco: EFE_cultivar_la_armadura}, bonus: {army_attack_factor: 0.04}}
+  - {n: 5, tile: EFE_dominio_de_gaia, unlock: {decision: EFE_proclamar_la_forma_final}, bonus: {political_power_factor: 0.04}}
+  - {n: 6, tile: EFE_temp_hojas_en_las_lineas, unlock: {decision: EFE_hojas_en_las_lineas}, bonus: {industrial_capacity_factory: 0.03}}
+  - {n: 7, tile: EFE_bono_corazon_de_gaia, unlock: {evento: meganations_efe.512}, bonus: {political_power_factor: 0.04}}
+  - {n: 8, tile: EFE_bono_cosecha_doble, unlock: {evento: meganations_efe.511}, bonus: {consumer_goods_factor: -0.02}}
+  - {n: 9, tile: EFE_cubas_de_la_pampa, unlock: {tecnologia: [improved_machine_tools, basic_machine_tools]}, bonus: {industrial_capacity_factory: 0.06}}
+  - {n: 10, tile: EFE_la_selva_es_nuestra, unlock: {tecnologia: [infantry_weapons2, infantry_weapons1]}, bonus: {army_defence_factor: 0.04}}
+  ASC:
+  - {n: 1, tile: ASC_comuna_de_los_humanos, unlock: {foco: ASC_la_comuna_de_los_humanos}, bonus: {stability_factor: 0.04}}
+  - {n: 2, tile: ASC_enjambre, unlock: {foco: ASC_doctrina_del_enjambre}, bonus: {army_org_factor: 0.04}}
+  - {n: 3, tile: ASC_espiritu_computo_distribuido, unlock: {foco: ASC_el_computo_distribuido}, bonus: {research_speed_factor: 0.03}}
+  - {n: 4, tile: ASC_espiritu_optimizacion_total, unlock: {foco: ASC_optimizacion_total}, bonus: {production_speed_buildings_factor: 0.05}}
+  - {n: 5, tile: ASC_comuna_continental, unlock: {decision: ASC_proclamar_la_forma_final}, bonus: {political_power_factor: 0.04}}
+  - {n: 6, tile: ASC_prometeo_impulso, unlock: {decision: ASC_prometeo_fase_1}, bonus: {research_speed_factor: 0.03}}
+  - {n: 7, tile: ASC_directiva_algoritmo_de_hierro, unlock: {evento: meganations_asc_receta.11}, bonus: {army_attack_factor: 0.03}}
+  - {n: 8, tile: ASC_directiva_automatizacion, unlock: {evento: meganations_asc_receta.10}, bonus: {industrial_capacity_factory: 0.02}}
+  - {n: 9, tile: ASC_consejo_ampliado, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {political_power_factor: 0.05}}
+  - {n: 10, tile: ASC_derecho_a_no_trabajar, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {stability_factor: 0.05}}
+  FCU:
+  - {n: 1, tile: FCU_arbitraje_corporativo, unlock: {foco: FCU_arbitraje}, bonus: {political_power_factor: 0.04}}
+  - {n: 2, tile: FCU_contratistas_globales, unlock: {foco: FCU_los_contratistas_globales}, bonus: {army_attack_factor: 0.04}}
+  - {n: 3, tile: FCU_dividendo_civil, unlock: {foco: FCU_el_dividendo}, bonus: {consumer_goods_factor: -0.04}}
+  - {n: 4, tile: FCU_dos_oceanos, unlock: {foco: FCU_el_canal_asegurado}, bonus: {industrial_capacity_dockyard: 0.05}}
+  - {n: 5, tile: FCU_receta_datos, unlock: {decision: FCU_la_cosecha_de_datos}, bonus: {research_speed_factor: 0.03}}
+  - {n: 6, tile: FCU_corporacion_de_las_americas, unlock: {decision: FCU_proclamar_la_forma_final}, bonus: {political_power_factor: 0.04}}
+  - {n: 7, tile: FCU_junta_castellane, unlock: {evento: meganations_fcu_receta.11}, bonus: {production_speed_buildings_factor: 0.03}}
+  - {n: 8, tile: FCU_junta_defensa, unlock: {evento: meganations_fcu_receta.10}, bonus: {army_attack_factor: 0.02}}
+  - {n: 9, tile: FCU_canal_abierto, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {political_power_factor: 0.04}}
+  - {n: 10, tile: FCU_cartel_del_agua, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {political_power_factor: 0.06}}
+  HSN:
+  - {n: 1, tile: HSN_arbitraje, unlock: {foco: HSN_arbitraje_de_alta_mar}, bonus: {political_power_factor: 0.04}}
+  - {n: 2, tile: HSN_armada_de_alta_mar, unlock: {foco: HSN_la_armada_de_alta_mar}, bonus: {industrial_capacity_dockyard: 0.05}}
+  - {n: 3, tile: HSN_bolsa_del_mundo, unlock: {foco: HSN_la_bolsa_del_mundo}, bonus: {industrial_capacity_factory: 0.04}}
+  - {n: 4, tile: HSN_infanteria_de_cubierta, unlock: {foco: HSN_fuerzas_de_muelle}, bonus: {army_attack_factor: 0.04}}
+  - {n: 5, tile: HSN_bodegas_llenas, unlock: {decision: HSN_botin_recursos}, bonus: {industrial_capacity_factory: 0.04}}
+  - {n: 6, tile: HSN_receta_astilleros, unlock: {decision: HSN_astilleros_de_noche}, bonus: {industrial_capacity_dockyard: 0.03}}
+  - {n: 7, tile: HSN_bonos_del_directorio, unlock: {evento: meganations_hsn.100}, bonus: {political_power_factor: 0.03}}
+  - {n: 8, tile: HSN_carta_marines, unlock: {evento: meganations_hsn_receta.10}, bonus: {army_attack_factor: 0.02}}
+  - {n: 9, tile: HSN_desembarcos_asegurados, unlock: {tecnologia: [improved_ship_hull_light, basic_ship_hull_light]}, bonus: {industrial_capacity_dockyard: 0.06}}
+  - {n: 10, tile: HSN_camara_mundial, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {political_power_factor: 0.06}}
+  NAS:
+  - {n: 1, tile: NAS_el_cielo_cerrado, unlock: {foco: NAS_defensa_del_cielo}, bonus: {air_attack_factor: 0.04}}
+  - {n: 2, tile: NAS_espiritu_aclimatacion, unlock: {foco: NAS_aclimatacion}, bonus: {army_org_factor: 0.04}}
+  - {n: 3, tile: NAS_espiritu_hijos_del_sol, unlock: {foco: NAS_hijos_del_sol}, bonus: {stability_factor: 0.04}}
+  - {n: 4, tile: NAS_hidroelectricas, unlock: {foco: NAS_hidroelectricas_andinas}, bonus: {industrial_capacity_factory: 0.04}}
+  - {n: 5, tile: NAS_defensa_de_los_andes, unlock: {decision: NAS_la_defensa_de_los_andes}, bonus: {army_defence_factor: 0.04}}
+  - {n: 6, tile: NAS_imperio_del_sol_eterno, unlock: {decision: NAS_proclamar_la_forma_final}, bonus: {political_power_factor: 0.04}}
+  - {n: 7, tile: NAS_corona_quipu_eterno, unlock: {evento: meganations_nas_receta.11}, bonus: {research_speed_factor: 0.03}}
+  - {n: 8, tile: NAS_corona_camino_del_inca, unlock: {evento: meganations_nas_receta.10}, bonus: {industrial_capacity_factory: 0.04}}
+  - {n: 9, tile: NAS_condores_del_sol, unlock: {tecnologia: [improved_small_airframe, fighter1]}, bonus: {air_attack_factor: 0.06}}
+  - {n: 10, tile: NAS_corona_guerreros_del_puma, unlock: {tecnologia: [infantry_weapons2, infantry_weapons1]}, bonus: {army_attack_factor: 0.05}}
+  SHD:
+  - {n: 1, tile: SHD_caudal_perfecto, unlock: {foco: SHD_el_caudal_perfecto}, bonus: {stability_factor: 0.05}}
+  - {n: 2, tile: SHD_espiritu_caudal_eterno, unlock: {foco: SHD_el_caudal_eterno}, bonus: {industrial_capacity_factory: 0.04}}
+  - {n: 3, tile: SHD_espiritu_el_rio_desbordado, unlock: {foco: SHD_el_rio_desbordado}, bonus: {army_attack_factor: 0.05}}
+  - {n: 4, tile: SHD_espiritu_modelo_del_rio, unlock: {foco: SHD_el_modelo_del_rio}, bonus: {research_speed_factor: 0.04}}
+  - {n: 5, tile: SHD_armonia_celeste, unlock: {decision: SHD_proclamar_la_forma_final}, bonus: {political_power_factor: 0.04}}
+  - {n: 6, tile: SHD_llanuras_inundadas, unlock: {decision: SHD_inundar_las_llanuras}, bonus: {army_defence_factor: 0.04}}
+  - {n: 7, tile: SHD_boom_exportador, unlock: {evento: meganations_shd.24}, bonus: {industrial_capacity_factory: 0.03}}
+  - {n: 8, tile: SHD_virtud_zhi, unlock: {evento: meganations_shd_receta.10}, bonus: {research_speed_factor: 0.02}}
+  - {n: 9, tile: SHD_armonia_parcial, unlock: {tecnologia: [improved_machine_tools, basic_machine_tools]}, bonus: {production_speed_buildings_factor: 0.04}}
+  - {n: 10, tile: SHD_armonia_perfecta, unlock: {tecnologia: [improved_machine_tools, basic_machine_tools]}, bonus: {production_speed_buildings_factor: 0.05}}
+  APF:
+  - {n: 1, tile: APF_aldea, unlock: {foco: APF_la_aldea_autosuficiente}, bonus: {stability_factor: 0.04}}
+  - {n: 2, tile: APF_corredor, unlock: {foco: APF_el_corredor_continental}, bonus: {production_speed_buildings_factor: 0.04}}
+  - {n: 3, tile: APF_espiritu_infanteria_ligera, unlock: {foco: APF_infanteria_ligera}, bonus: {army_attack_factor: 0.04}}
+  - {n: 4, tile: APF_carta_de_ubuntu, unlock: {foco: APF_la_carta_de_ubuntu}, bonus: {political_power_factor: 0.05}}
+  - {n: 5, tile: APF_receta_mercado, unlock: {decision: APF_mercado_de_temporada}, bonus: {industrial_capacity_factory: 0.03}}
+  - {n: 6, tile: APF_receta_sahel, unlock: {decision: APF_guardias_del_sahel}, bonus: {army_defence_factor: 0.03}}
+  - {n: 7, tile: APF_asamblea_universidades, unlock: {evento: meganations_apf_receta.11}, bonus: {research_speed_factor: 0.03}}
+  - {n: 8, tile: APF_asamblea_brigadas, unlock: {evento: meganations_apf_receta.10}, bonus: {army_org_factor: 0.02}}
+  - {n: 9, tile: APF_asamblea_escudo, unlock: {tecnologia: [infantry_weapons2, infantry_weapons1]}, bonus: {army_defence_factor: 0.05}}
+  - {n: 10, tile: APF_asamblea_gigante, unlock: {tecnologia: [improved_machine_tools, basic_machine_tools]}, bonus: {industrial_capacity_factory: 0.05}}
+  NRE:
+  - {n: 1, tile: NRE_annona, unlock: {foco: NRE_la_annona}, bonus: {stability_factor: 0.03}}
+  - {n: 2, tile: NRE_ano_de_los_cuatro, unlock: {foco: NRE_el_ano_de_los_cuatro}, bonus: {army_attack_factor: 0.05}}
+  - {n: 3, tile: NRE_aureus, unlock: {foco: NRE_el_nuevo_aureus}, bonus: {industrial_capacity_factory: 0.04}}
+  - {n: 4, tile: NRE_mare_nostrum_idea, unlock: {foco: NRE_mare_nostrum}, bonus: {industrial_capacity_dockyard: 0.04}}
+  - {n: 5, tile: NRE_imperio_eterno, unlock: {decision: NRE_proclamar_la_forma_final}, bonus: {political_power_factor: 0.04}}
+  - {n: 6, tile: NRE_planes_de_campana, unlock: {decision: NRE_planes_de_campana_dec}, bonus: {army_attack_factor: 0.02}}
+  - {n: 7, tile: NRE_triunfo_acueductos, unlock: {evento: meganations_nre_receta.10}, bonus: {production_speed_buildings_factor: 0.03}}
+  - {n: 8, tile: NRE_pax_victoris, unlock: {evento: meganations_nre.221}, bonus: {political_power_factor: 0.04}}
+  - {n: 9, tile: NRE_aquila_de_oro, unlock: {tecnologia: [infantry_weapons2, infantry_weapons1]}, bonus: {army_org_factor: 0.05}}
+  - {n: 10, tile: NRE_culto_imperial, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {political_power_factor: 0.06}}
+  ZJP:
+  - {n: 1, tile: ZJP_cybershogunato, unlock: {foco: ZJP_cybershogun}, bonus: {industrial_capacity_factory: 0.05}}
+  - {n: 2, tile: ZJP_srs_e1, unlock: {foco: ZJP_srs_1}, bonus: {research_speed_factor: 0.05}}
+  - {n: 3, tile: ZJP_yak_e1, unlock: {foco: ZJP_yak_1}, bonus: {political_power_factor: 0.05}}
+  - {n: 4, tile: ZJP_zai_e3, unlock: {foco: ZJP_zai_3}, bonus: {industrial_capacity_dockyard: 0.05}}
+  - {n: 5, tile: ZJP_consejo_de_guerra_e, unlock: {decision: ZJP_consejo_de_guerra}, bonus: {army_attack_factor: 0.02}}
+  - {n: 6, tile: ZJP_contratos_por_vida, unlock: {decision: ZJP_contratos_de_por_vida}, bonus: {production_speed_buildings_factor: 0.03}}
+  - {n: 7, tile: ZJP_estrecho_de_tsushima, unlock: {evento: meganations_japon.43}, bonus: {naval_damage_factor: 0.03}}
+  - {n: 8, tile: ZJP_idols_del_frente, unlock: {evento: meganations_japon.90}, bonus: {war_support_factor: 0.03}}
+  - {n: 9, tile: ZJP_cada_chico_un_piloto, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {war_support_factor: 0.05}}
+  - {n: 10, tile: ZJP_cancion_de_la_enfermera, unlock: {tecnologia: [improved_computing_machine, computing_machine]}, bonus: {research_speed_factor: 0.05}}
+  ZAL:
+  - {n: 1, tile: ZAL_constitucion_del_telar, unlock: {foco: ZAL_la_constitucion_del_telar}, bonus: {stability_factor: 0.04}}
+  - {n: 2, tile: ZAL_espiritu_armada, unlock: {foco: ZAL_la_armada_de_su_majestad}, bonus: {industrial_capacity_dockyard: 0.05}}
+  - {n: 3, tile: ZAL_fusiles_sin_circuitos, unlock: {foco: ZAL_los_fusiles_sin_circuitos}, bonus: {army_defence_factor: 0.04}}
+  - {n: 4, tile: ZAL_mente_de_albion, unlock: {foco: ZAL_la_mancomunidad_ascendida}, bonus: {research_speed_factor: 0.04}}
+  - {n: 5, tile: ZAL_cooperativas_lana, unlock: {decision: ZAL_cooperativas_de_lana}, bonus: {consumer_goods_factor: -0.02}}
+  - {n: 6, tile: ZAL_clyde, unlock: {decision: ZAL_astilleros_del_clyde}, bonus: {industrial_capacity_dockyard: 0.03}}
+  - {n: 7, tile: ZAL_automatas, unlock: {evento: meganations_albion.93}, bonus: {industrial_capacity_factory: 0.03}}
+  - {n: 8, tile: ZAL_baile_de_mascaras, unlock: {evento: meganations_albion.85}, bonus: {political_power_factor: 0.04}}
+  - {n: 9, tile: ZAL_cortafuegos, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {stability_factor: 0.04}}
+  - {n: 10, tile: ZAL_cuatro_dias, unlock: {tecnologia: [electronic_mechanical_engineering, radio]}, bonus: {stability_factor: 0.05}}
+trofeos:
+  EFE: {tile: EFE_mandato_verde, bonus: {political_power_factor: 0.04}}
+  ASC: {tile: ASC_ejercito_de_maquinas, bonus: {army_attack_factor: 0.04}}
+  FCU: {tile: FCU_directorio_de_las_cuatro, bonus: {production_speed_buildings_factor: 0.04}}
+  HSN: {tile: HSN_gente_de_islas, bonus: {army_defence_factor: 0.04}}
+  NAS: {tile: NAS_hijos_de_la_montana, bonus: {army_defence_factor: 0.04}}
+  SHD: {tile: SHD_cielo_armonioso, bonus: {stability_factor: 0.04}}
+  APF: {tile: APF_hijos_de_la_sabana, bonus: {army_defence_factor: 0.04}}
+  NRE: {tile: NRE_spqr_idea, bonus: {army_attack_factor: 0.04}}
