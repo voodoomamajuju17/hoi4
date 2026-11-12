@@ -2761,7 +2761,11 @@ def test_espiritus() -> None:
                     pais = cats.get("country")
                     for iid, _b in (pais.entries if pais else []):
                         visibles.setdefault(str(iid)[:3] if not str(iid).startswith("MN_") else "MN", []).append(str(iid))
-            check("los dos resumenes son espiritus visibles", sorted(visibles.get("MN", [])) == ["MN_coyuntura", "MN_legado"])
+            check("los dos resumenes son espiritus visibles", {"MN_coyuntura", "MN_legado"} <= set(visibles.get("MN", [])))
+            propios = ctx.data["espiritus_propios"]
+            check("cada meganacion tiene su Legado y su Coyuntura con un azulejo suyo",
+                  all(set(propios.get(t, {})) == {"MN_legado", "MN_coyuntura"} for t in ("EFE", "ASC", "NAS"))
+                  and "MN_legado_ASC" in visibles.get("MN", []), str(propios.get("ASC")))
             for tag, ids in visibles.items():
                 if tag == "MN":
                     continue

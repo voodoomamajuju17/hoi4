@@ -229,6 +229,31 @@ def emit(ctx: BuildContext) -> None:
     coyuntura = {i for i in agrupadas | convertidos if i in quitados or i in temporales}
     legado = (agrupadas | convertidos) - coyuntura
 
+    # 2026-11-12 (captura: "¿por qué no tiene un tile de los ya hechos Legado y Coyuntura?"): cada
+    # nación tiene su Legado y su Coyuntura con un azulejo suyo: Legado, el del trofeo (su emblema)
+    # o el primero de lo que agrupa; Coyuntura, uno de lo que va y viene (los temporales primero)
+    repo = ctx.spec.root.parent
+    trofeos = ((ctx.spec.raw.get("medallas") or {}).get("trofeos") or {})
+    propios: dict[str, dict[str, str]] = {}
+    for c in ctx.spec.countries:
+        tag = c.tag
+        tiene = lambda i: i.startswith(f"{tag}_") and i not in identidad and (repo / "assets" / tag / "ideas" / f"{i}.dds").exists()
+        feo = ("agentes_enemigos", "sabotaje", "planos_robados", "insurreccion", "productora_perdida")
+        ok = lambda i: tiene(i) and not any(f in i for f in feo)
+        leg = [trofeos[tag]["tile"]] if tag in trofeos and ok(trofeos[tag]["tile"]) else []
+        meds = ((ctx.spec.raw.get("medallas") or {}).get("medallas") or {}).get(tag) or []
+        leg += [m["tile"] for m in meds if "foco" in (m.get("unlock") or {}) and ok(m["tile"])]
+        leg += sorted(i for i in legado if ok(i))
+        coy = sorted((i for i in coyuntura if ok(i)), key=lambda i: (i not in temporales, i))
+        elegido = {}
+        if leg:
+            elegido["MN_legado"] = leg[0]
+        coy = [i for i in coy if i != elegido.get("MN_legado")]
+        if coy:
+            elegido["MN_coyuntura"] = coy[0]
+        if elegido:
+            propios[tag] = elegido
+
     # -- 3. ideas: las agrupadas pasan a ocultas
     for p in ideas_files:
         b = parse_file(p)
@@ -337,9 +362,12 @@ def emit(ctx: BuildContext) -> None:
         nuevo, k = uso.subn(efecto_dm, nuevo)
         if rel.startswith("history/"):
             # el día uno: si arranca con algo agrupado, también con su resumen
+            tag_h = p.name[:3]
+
             def resumen_inicial(m: re.Match) -> str:
                 ids = re.findall(r"\w+", m.group(1))
-                extra = [r for r, grupo in zip(RESUMEN, (legado, coyuntura)) if any(i in grupo for i in ids)]
+                extra = [f"{r}_{tag_h}" if r in propios.get(tag_h, {}) else r
+                         for r, grupo in zip(RESUMEN, (legado, coyuntura)) if any(i in grupo for i in ids)]
                 if not extra:
                     return m.group(0)
                 return "add_ideas = { " + " ".join(ids + extra) + " }"
@@ -379,6 +407,14 @@ def emit(ctx: BuildContext) -> None:
                          else ("econom", "trade", "crisis"))
         if dibujo:
             resumen.get(rid).entries.insert(0, ("picture", dibujo))
+    for tag, elegido in sorted(propios.items()):
+        for rid, tile in elegido.items():
+            resumen.add(f"{rid}_{tag}", Block([("picture", tile), ("allowed", Block([("always", False)])),
+                                               ("removal_cost", -1), ("modifier", Block([("research_speed_factor", 0)]))]))
+            ctx.loc.define_and_reference(f"{rid}_{tag}", en=f"${rid}$", es=f"${rid}$",
+                                         file="meganations_espiritus", origin="espiritus")
+            ctx.loc.define_and_reference(f"{rid}_{tag}_desc", en=f"${rid}_desc$", es=f"${rid}_desc$",
+                                         file="meganations_espiritus", origin="espiritus")
     lider = _lider_oculto(ctx)
     if lider is not None:
         nuevas.entries.extend(lider[0].entries)
@@ -389,9 +425,25 @@ def emit(ctx: BuildContext) -> None:
     ctx.write_script("common/ideas/meganations_espiritus.txt", ideas, source=SOURCE)
 
     efectos = Block()
-    efectos.add("MN_espiritus_resumen", Block([
-        ("if", Block([("limit", Block([("NOT", Block([("has_idea", r)]))])), ("add_ideas", r)]))
-        for r in RESUMEN]))
+    cuerpo_res = Block()
+    for r in RESUMEN:
+        cadena = Block()
+        primero = True
+        for tag, elegido in sorted(propios.items()):
+            if r not in elegido:
+                continue
+            rt = f"{r}_{tag}"
+            cadena.add("if" if primero else "else_if",
+                       Block([("limit", Block([("tag", tag)])),
+                              ("if", Block([("limit", Block([("NOT", Block([("has_idea", rt)]))])), ("add_ideas", rt)]))]))
+            primero = False
+        generico = Block([("if", Block([("limit", Block([("NOT", Block([("has_idea", r)]))])), ("add_ideas", r)]))])
+        if primero:
+            cuerpo_res.entries.extend(generico.entries)
+        else:
+            cadena.add("else", generico)
+            cuerpo_res.entries.extend(cadena.entries)
+    efectos.add("MN_espiritus_resumen", cuerpo_res)
     if ctx.data.get("medallas"):
         # 2026-11-12: lo que se acaba de ganar puede desbloquear una medalla
         efectos.get("MN_espiritus_resumen").add("MN_medallas_revisar", True)
@@ -437,6 +489,7 @@ def emit(ctx: BuildContext) -> None:
         ctx.track(dest)
     ctx.write_script("common/scripted_localisation/meganations_espiritus.txt", loc, source=SOURCE)
 
+    ctx.data["espiritus_propios"] = propios
     ctx.data["espiritus"] = {"identidad": identidad, "legado": legado, "coyuntura": coyuntura,
                              "mecanicas": mecanicas, "convertidos": convertidos}
     ctx.note(f"espíritus: máximo {SLOTS} a la vez; {len(agrupadas)} ideas y {len(convertidos)} modificadores "
