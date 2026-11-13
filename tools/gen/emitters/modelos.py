@@ -34,10 +34,16 @@ def emit(ctx: BuildContext) -> None:
                     # entidades en gfx/entities/; mallas y animaciones van en un .asset junto a la malla,
                     # con los archivos nombrados desde esa carpeta (como el juego)
                     fuente = banner_for(f"assets/modelos/{pieza.name} (modelo 3D propio)")
-                    entidades, mallas, carpeta = separar_asset(f.read_text(encoding="utf-8-sig"))
+                    # 2026-11-13 (captura: "siguen sin haber modelos"; mirado en los archivos del juego,
+                    # gfx/entities/tanks.gfx y gfx/models/units/animation.asset): las mallas van en un .gfx
+                    # dentro de objectTypes, con la ruta desde la raíz; las animaciones, en un .asset junto
+                    # a los .anim con el nombre suelto; las entidades, en gfx/entities/*.asset
+                    entidades, animaciones, mallas, carpeta = separar_asset(f.read_text(encoding="utf-8-sig"))
                     ctx.write_text(rel, fuente + entidades)
+                    if animaciones:
+                        ctx.write_text(f"{carpeta}/{f.name}", fuente + animaciones)
                     if mallas:
-                        ctx.write_text(f"{carpeta}/{f.name}", fuente + mallas)
+                        ctx.write_text(rel[:-len(".asset")] + ".gfx", fuente + mallas)
                     n += 1
                     continue
                 if rel.startswith("gfx/interface/equipmentdesigner/graphic_db/") and pieza.name.startswith("COMUN_"):
@@ -110,19 +116,28 @@ def _bloques(texto: str) -> list[tuple[str, str]]:
     return out
 
 
-def separar_asset(texto: str) -> tuple[str, str, str | None]:
-    """(entidades, mallas y animaciones con rutas locales, carpeta de la malla)."""
+def separar_asset(texto: str) -> tuple[str, str, str, str | None]:
+    """(entidades, animaciones con el nombre suelto del .anim, mallas en objectTypes con la ruta
+    desde la raíz, carpeta de la malla). Como el juego: gfx/entities/tanks.gfx tiene
+    `objectTypes = { pdxmesh = { file = "gfx/models/units/tanks/ENG_tank_light.mesh" ... } }` y
+    gfx/models/units/animation.asset tiene `animation = { name file = "GER_infantry_idle_rifle.anim" }`."""
     import posixpath
     bloques = _bloques(texto)
     archivos = re.findall(r'file\s*=\s*"([^"]+)"', texto)
-    carpeta = posixpath.dirname(archivos[0]) if archivos else None
+    mesh = [a for a in archivos if a.endswith(".mesh")]
+    carpeta = posixpath.dirname((mesh or archivos)[0]) if archivos else None
     entidades = [b for k, b in bloques if k == "entity"]
-    mallas = []
+    animaciones, mallas = [], []
     for k, b in bloques:
-        if k in ("pdxmesh", "animation") and carpeta:
-            mallas.append(re.sub(r'(file\s*=\s*")([^"]+)"',
-                                 lambda m: m.group(1) + posixpath.relpath(m.group(2), carpeta) + '"', b))
-    return "\n".join(entidades) + "\n", ("\n\n".join(mallas) + "\n") if mallas else "", carpeta
+        if k == "animation" and carpeta:
+            animaciones.append(re.sub(r'(file\s*=\s*")([^"]+)"',
+                                      lambda m: m.group(1) + posixpath.relpath(m.group(2), carpeta) + '"', b))
+        elif k == "pdxmesh":
+            # la ruta del .mesh desde la raíz del mod (si vino suelta, se completa con su carpeta)
+            mallas.append(re.sub(r'(file\s*=\s*")([^"/]+)"',
+                                 lambda m: m.group(1) + (f"{carpeta}/" if carpeta else "") + m.group(2) + '"', b))
+    gfx = ("objectTypes = {\n" + "\n\n".join(mallas) + "\n}\n") if mallas else ""
+    return ("\n".join(entidades) + "\n", ("\n\n".join(animaciones) + "\n") if animaciones else "", gfx, carpeta)
 
 
 def _bloques_entidad(texto: str) -> list[str]:

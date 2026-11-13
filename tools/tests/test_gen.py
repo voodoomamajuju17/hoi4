@@ -2804,10 +2804,12 @@ def test_espiritus() -> None:
     texto = ('animation = { name = "a_idle" file = "gfx/models/units/X/X_idle.anim" }\n'
              'pdxmesh = { name = "X_mesh" file = "gfx/models/units/X/X.mesh" animation = { id = "idle" type = "a_idle" } }\n'
              'entity = { name = "TAG_infantry_entity" pdxmesh = "X_mesh" }\n')
-    ent, mallas, carpeta = separar_asset(texto)
+    ent, anims, mallas, carpeta = separar_asset(texto)
     check("modelos: la entidad queda sola en gfx/entities", "pdxmesh = {" not in ent and "TAG_infantry_entity" in ent)
-    check("modelos: la malla va junto al .mesh con nombres locales",
-          carpeta == "gfx/models/units/X" and 'file = "X.mesh"' in mallas and 'file = "X_idle.anim"' in mallas)
+    check("modelos: las animaciones junto a los .anim, con el nombre suelto (como animation.asset del juego)",
+          carpeta == "gfx/models/units/X" and 'file = "X_idle.anim"' in anims and "pdxmesh" not in anims)
+    check("modelos: la malla en un .gfx dentro de objectTypes, con la ruta desde la raiz (como tanks.gfx del juego)",
+          mallas.startswith("objectTypes = {") and 'file = "gfx/models/units/X/X.mesh"' in mallas)
     simb = Path(__file__).resolve().parents[2] / "assets/ui/simbolos_division"
     grandes = sorted(simb.glob("*_large.dds"))
     check("simbolos de division: del tamaño de los del juego (76x42 y 30x12)",
