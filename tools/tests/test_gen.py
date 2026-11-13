@@ -2953,6 +2953,10 @@ def test_selector_receptor() -> None:
     check("selector: ideas de a 5 x 2 en el monitor (el EFE trae siete)", "max_slots = { x = 5 y = 2 }" in o)
     check("selector: la historia en el monitor con lugar para el texto entero",
           'name = "history" position = { x = 256 y = 437 } maxWidth = 444 maxHeight = 168' in o, o)
+    # (en la plantilla de la prueba no traen font, así que entra al principio del bloque)
+    check("selector: los datos del monitor con letra clara (la de máquina de escribir es negra y no se lee)",
+          all(f'font = "hoi_16mbs" name = "{c}"' in o for c in ("leader", "leader_label", "party", "history"))
+          and all(f'font = "hoi_20bs" name = "{c}"' in o for c in ("info_title", "history_title")), o[:300])
     check("selector: volver y elegir dentro del pie (y 626 a 694 de la carcasa)",
           'name = "back_button" position = { x = -158 y = -74 }' in o and 'name = "select_button" position = { x = 10 y = -74 }' in o)
     from tools.arte import selector as arte_sel
@@ -2960,9 +2964,10 @@ def test_selector_receptor() -> None:
     tec = (REPO_ROOT / "assets/ui/selector/tecla.dds").read_bytes()
     check("selector: carcasa del tamaño de la ventana y tecla de dos cuadros de 230 x 60",
           struct.unpack("<II", fondo[12:20]) == (717, 1225) and struct.unpack("<II", tec[12:20]) == (60, 460))
-    pedido = (REPO_ROOT / "arte/pedidos_fijos/30_selector_receptor.txt").read_text(encoding="utf-8")
-    check("selector: se piden las cuatro piezas ilustradas que usa el armado",
-          all(f"filename: {p}.png" in pedido for p in arte_sel.PIEZAS) and pedido.count("ASSET_REQUEST") == 4)
+    # 2026-11-13: llegaron las cuatro piezas ilustradas (Receptor_2100.zip); el pedido ya no va
+    check("selector: las cuatro piezas ilustradas en assets/ui/selector/fuente",
+          all((arte_sel.FUENTE / f"{p}.png").exists() for p in arte_sel.PIEZAS)
+          and not (REPO_ROOT / "arte/pedidos_fijos/30_selector_receptor.txt").exists())
     roto, faltan = sg.parchar(gui.replace('"countries_grid"', '"otra"'))
     check("selector: si el juego cambio la pantalla, no se toca", roto is None and faltan, faltan)
     import yaml as _yaml

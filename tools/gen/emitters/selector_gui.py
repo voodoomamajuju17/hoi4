@@ -30,6 +30,7 @@ VENTANA = "gamesetup_interesting_countries_window"
 ARTE = "assets/ui/selector"
 TEX = "gfx/interface/meganations/selector"
 FUERA = -3000
+LETRA, LETRA_TITULO = '"hoi_16mbs"', '"hoi_20bs"'   # claras: el monitor es oscuro
 
 
 def _bloque(texto: str, nombre: str, desde: int = 0, hasta: int | None = None) -> tuple[int, int] | None:
@@ -113,19 +114,22 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
     # el monitor: columna izquierda retrato y datos políticos; derecha nombre, ideas, focos e historia
     p.fijar(v + ["minor_country_leader"], {"position": pos(44, 96), "scale": "1.0", "rotation": "0"})
     p.fijar(v + ["minor_portrait_overlay"], {"position": pos(FUERA, 96)})
-    p.fijar(v + ["info_title"], {"position": pos(44, 316), "maxWidth": "190", "format": "left"})
+    # 2026-11-13 (capturas: "no se lee nada el texto del panel izquierdo"): el juego escribe los datos
+    # con hoi4_typewriter, que es tinta negra (color = 0xff000000 en core.gfx) para su papel claro;
+    # sobre el vidrio oscuro del monitor van con letra clara (hoi_16mbs y hoi_20bs son blancas)
+    p.fijar(v + ["info_title"], {"position": pos(44, 316), "maxWidth": "190", "format": "left", "font": LETRA_TITULO})
     p.fijar(v + ["info"], {"position": pos(44, 352)})
     for campo in ("leader_label", "leader", "ideology_label", "ideology", "government_label", "government",
                   "elections_label", "elections", "party_label", "party"):
-        p.fijar(v + ["info", campo], {"maxWidth": "190"})
+        p.fijar(v + ["info", campo], {"maxWidth": "190", "font": LETRA})
     p.fijar(v + ["nation_title"], {"position": pos(256, 92), "maxWidth": "444", "format": "left"})
     p.fijar(v + ["spirit"], {"position": pos(256, 150)})
     p.fijar(v + ["spirit", "ideas"], {"size": "{ width = 360 height = 136 }"})
     p.fijar(v + ["spirit", "ideas", "ideas_grid"], {"size": "{ width = 100% height = 136 }",
                                                     "max_slots": "{ x = 5 y = 2 }"})
     p.fijar(v + ["spirit", "focus"], {"position": pos(0, 145)})
-    p.fijar(v + ["history_title"], {"position": pos(256, 405), "maxWidth": "444", "format": "left"})
-    p.fijar(v + ["history"], {"position": pos(256, 437), "maxWidth": "444", "maxHeight": "168"})
+    p.fijar(v + ["history_title"], {"position": pos(256, 405), "maxWidth": "444", "format": "left", "font": LETRA_TITULO})
+    p.fijar(v + ["history"], {"position": pos(256, 437), "maxWidth": "444", "maxHeight": "168", "font": LETRA})
     # la tecla: bandera y nombre; el retrato existe pero queda fuera de la vista
     t = ["country_entry"]
     p.fijar(t + ["country"], {"quadTextureSprite": '"GFX_mn_selector_tecla"', "position": pos(0, 0)})

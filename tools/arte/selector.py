@@ -248,7 +248,7 @@ def fondo():
     dial = _fuente("selector_dial")
     dial = (dial if dial is not None else _dial_dibujado(512)).resize((int(h * 0.82),) * 2, Image.LANCZOS)
     tenue = dial.copy()
-    tenue.putalpha(tenue.getchannel("A").point(lambda v: int(v * 0.10)))
+    tenue.putalpha(tenue.getchannel("A").point(lambda v: int(v * 0.08)))
     # en la columna derecha (ideas e historia), donde queda espacio cuando no hay país elegido
     vid.alpha_composite(tenue, (int(w * 0.62 - dial.width / 2), (h - dial.height) // 2))
     lineas = Image.new("RGBA", (w, h), (0, 0, 0, 0))
