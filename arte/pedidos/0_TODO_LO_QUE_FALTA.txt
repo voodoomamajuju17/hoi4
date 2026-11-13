@@ -1,4 +1,4 @@
-# 10 pedidos: todo lo que falta, en un solo archivo (para generar por API).
+# 14 pedidos: todo lo que falta, en un solo archivo (para generar por API).
 # Cada bloque ASSET_REQUEST es una imagen. Usar en el prompt style + material (si hay) +
 # description, adjuntar reference_image (está en pedidos.zip, misma ruta) y guardar con filename.
 
@@ -10,6 +10,42 @@ size: 1254x1254 (cuadrada; como los que ya llegaron)
 style: PHOTOREALISTIC STUDIO PRODUCT PHOTO of a single mechanical component for a heavy vehicle of the year 2100, like a museum display model or a high-end 3D render of a real machined part for an engineering catalogue. ORIGINAL design, do not imitate any existing game icon. MATERIALS: aged copper and bronze armour panels with a soft patina and fine scratches, riveted and bolted seams, dark gunmetal / graphite mechanical parts (fans, barrels, pipes, brackets), visible cables and small fittings; exactly one or two tiny glowing teal status lights (#4fd6c8), nothing else glowing unless the description says so. LOOK: believable post-collapse rebuilt industry (hydrogen engines, magnetic accelerators, sensors, drones, ceramic-composite plates), heavy and practical, no fantasy, no steampunk gears for decoration. CAMERA: one object only, centred, three-quarter view from slightly above, filling about 80% of the square, whole object visible, nothing cut off. LIGHT: soft studio key light from the top left, gentle rim light, realistic reflections on the metal. BACKGROUND: fully transparent, no floor, no shadow on the ground, no plate, no circle, no frame, no vehicle or person around it. No text, no letters, no numbers, no logos. It must stay recognisable when shrunk to 64 pixels: strong clear silhouette
 description: WHAT: module 'tank reactive armor' of the equipment designer (tanks, planes, ships). EXACT SUBJECT: a REACTIVE armour plate: rows of flat explosive-reactive bricks bolted on a hull plate.
 transparent_background: true
+
+ASSET_REQUEST
+type: ui_piece
+id: selector_vidrio
+filename: selector_vidrio.png
+size: 1536x1200 (o más grande con la misma proporción, 1,28 a 1)
+style: photorealistic studio photograph of a real object, year 2100 broadcast equipment, smoked glass, very dark, low contrast
+description: Front view, perfectly straight on, of the dark smoked-glass screen of a broadcast receiver monitor, cropped so the glass fills the whole image edge to edge: NO bezel, NO frame, NO casing, NO edges visible. The glass is almost black with a very deep teal tint, nearly uniform. Only three subtle effects: a soft, wide, very faint reflection coming from the top-left corner; a slight darkening toward the edges; extremely faint horizontal scanlines. Nothing is displayed on the screen: no image, no symbols, no text, no interface. It must stay dark and even everywhere, because the game prints white text, a portrait and icons on top of it.
+transparent_background: false
+
+ASSET_REQUEST
+type: ui_piece
+id: selector_dial
+filename: selector_dial.png
+size: 1024x1024
+style: photorealistic studio photograph of a real object, year 2100 radio equipment, brass and smoked glass with turquoise luminous lines
+description: Front view of a circular world tuning dial from a broadcast receiver. An outer ring of brushed brass engraved with fine frequency tick marks all around (only marks: no numbers, no letters). Inside, behind dark smoked glass, a stylized globe drawn only with thin meridians and parallels in faint glowing turquoise (no continents, no map). One thin turquoise needle goes from the center toward the upper right; a small brass cap covers the center. Perfectly circular, centered, filling the image; everything outside the circle transparent. No shadow outside the circle.
+transparent_background: true
+
+ASSET_REQUEST
+type: ui_piece
+id: selector_medidor
+filename: selector_medidor.png
+size: 1040x400 (o más grande con la misma proporción, 2,6 a 1)
+style: photorealistic studio photograph of a real object, vintage analog instrument rebuilt in the year 2100, brushed bronze bezel
+description: Front view of a horizontal analog signal-strength meter (VU meter) of a broadcast receiver, filling the whole image edge to edge. Warm ivory dial face with a curved arc scale of black tick marks that ends in a short red zone on the right; a thin black needle resting a little left of center; a thin brushed-bronze bezel with slightly rounded corners around it. Only marks on the scale: no numbers, no letters, no logos. Transparent outside the rounded rectangle of the bezel.
+transparent_background: true
+
+ASSET_REQUEST
+type: ui_piece
+id: selector_rejilla
+filename: selector_rejilla.png
+size: 1024x1024
+style: photorealistic flat material texture, seamless tileable, even front lighting, very dark
+description: Seamless tileable texture of a speaker grille: a sheet of blackened steel perforated with small round holes in staggered rows, about 40 holes across the width, all the same size and evenly spaced. Very dark, with a faint brushed-metal grain between the holes; the holes are pure black. Flat, even lighting with no highlight, no vignette, no frame, no screws, so it can repeat without visible seams.
+transparent_background: false
 
 ASSET_REQUEST
 type: national_focus_icon

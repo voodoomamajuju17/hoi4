@@ -2932,6 +2932,8 @@ def test_selector_receptor() -> None:
                + icono("new_content") + texto("country_name"))
            + caja("gamesetup_interesting_countries_window",
                texto("title") + 'background = { name = "single_player_country_bg" quadTextureSprite ="GFX_country_selection_bg" }'
+               + 'ButtonType = { name = "back_button" position = { x = -158 y = -42 } Orientation = "CENTER_DOWN" }'
+               + 'ButtonType = { name = "select_button" position = { x = 10 y = -42 } Orientation = "CENTER_DOWN" }'
                + caja("countries", grilla) + 'OverlappingElementsBoxType = { name = "filters" position = { x = 22 y = 321 } size = { x = 1181 y = 32 } }'
                + caja("countries_medium", grilla) + caja("countries_mini", grilla) + texto("info_title") + caja("info", info)
                + icono("minor_country_leader", "scale=0.696") + icono("minor_portrait_overlay") + texto("nation_title")
@@ -2951,6 +2953,16 @@ def test_selector_receptor() -> None:
     check("selector: ideas de a 5 x 2 en el monitor (el EFE trae siete)", "max_slots = { x = 5 y = 2 }" in o)
     check("selector: la historia en el monitor con lugar para el texto entero",
           'name = "history" position = { x = 256 y = 437 } maxWidth = 444 maxHeight = 168' in o, o)
+    check("selector: volver y elegir dentro del pie (y 626 a 694 de la carcasa)",
+          'name = "back_button" position = { x = -158 y = -74 }' in o and 'name = "select_button" position = { x = 10 y = -74 }' in o)
+    from tools.arte import selector as arte_sel
+    fondo = (REPO_ROOT / "assets/ui/selector/fondo.dds").read_bytes()
+    tec = (REPO_ROOT / "assets/ui/selector/tecla.dds").read_bytes()
+    check("selector: carcasa del tamaño de la ventana y tecla de dos cuadros de 230 x 60",
+          struct.unpack("<II", fondo[12:20]) == (717, 1225) and struct.unpack("<II", tec[12:20]) == (60, 460))
+    pedido = (REPO_ROOT / "arte/pedidos_fijos/30_selector_receptor.txt").read_text(encoding="utf-8")
+    check("selector: se piden las cuatro piezas ilustradas que usa el armado",
+          all(f"filename: {p}.png" in pedido for p in arte_sel.PIEZAS) and pedido.count("ASSET_REQUEST") == 4)
     roto, faltan = sg.parchar(gui.replace('"countries_grid"', '"otra"'))
     check("selector: si el juego cambio la pantalla, no se toca", roto is None and faltan, faltan)
     import yaml as _yaml

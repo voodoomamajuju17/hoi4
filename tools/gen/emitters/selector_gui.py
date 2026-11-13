@@ -14,7 +14,8 @@ actualizaría):
   - datos del país elegido (minor_country_leader, nation_title, info, spirit con ideas y focos,
     history) -> dentro del monitor; las ideas pasan a 5 x 2 (el EFE trae siete);
   - filtros y menores -> la zona de abajo del banco.
-El arte (carcasa y tecla) es provisional: tools/arte/selector.py. Si el .gui de esta versión no
+El arte (carcasa y tecla) lo arma tools/arte/selector.py con materiales reales y las piezas
+ilustradas de arte/pedidos_fijos/30_selector_receptor.txt. Si el .gui de esta versión no
 tiene alguno de estos controles, se avisa y la pantalla queda como en el juego.
 """
 
@@ -106,6 +107,9 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
     p.fijar(v + ["countries_mini"], {"position": pos(730, 528), "size": "{ width = 471 height = 80 }"})
     p.fijar(v + ["countries_mini", "countries_grid"], {"max_slots_horizontal": "9"})
     p.fijar(v + ["more_countries"], {"position": pos(10, 596)})
+    # volver y elegir dentro del pie (y 626 a 694); el juego los tenía a 42 del borde, medio afuera
+    p.fijar(v + ["back_button"], {"position": pos(-158, -74)})
+    p.fijar(v + ["select_button"], {"position": pos(10, -74)})
     # el monitor: columna izquierda retrato y datos políticos; derecha nombre, ideas, focos e historia
     p.fijar(v + ["minor_country_leader"], {"position": pos(44, 96), "scale": "1.0", "rotation": "0"})
     p.fijar(v + ["minor_portrait_overlay"], {"position": pos(FUERA, 96)})
@@ -148,7 +152,7 @@ def emit(ctx: BuildContext) -> None:
     for pieza in ("fondo", "tecla"):
         ctx.copy_asset(f"{ARTE}/{pieza}.dds", f"{TEX}/{pieza}.dds")
     ctx.write_text("interface/meganations_selector.gfx",
-                   "# Generado por tools/gen/emitters/selector_gui.py (arte provisional del receptor)\n"
+                   "# Generado por tools/gen/emitters/selector_gui.py (arte del receptor: tools/arte/selector.py)\n"
                    "spriteTypes = {\n"
                    f'\tspriteType = {{\n\t\tname = "GFX_mn_selector_fondo"\n\t\ttexturefile = "{TEX}/fondo.dds"\n\t}}\n'
                    f'\tspriteType = {{\n\t\tname = "GFX_mn_selector_tecla"\n\t\ttexturefile = "{TEX}/tecla.dds"\n'
