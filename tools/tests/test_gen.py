@@ -2810,12 +2810,61 @@ def test_espiritus() -> None:
           carpeta == "gfx/models/units/X" and 'file = "X_idle.anim"' in anims and "pdxmesh" not in anims)
     check("modelos: la malla en un .gfx dentro de objectTypes, con la ruta desde la raiz (como tanks.gfx del juego)",
           mallas.startswith("objectTypes = {") and 'file = "gfx/models/units/X/X.mesh"' in mallas)
+    test_modelos_3d()
     simb = Path(__file__).resolve().parents[2] / "assets/ui/simbolos_division"
     grandes = sorted(simb.glob("*_large.dds"))
     check("simbolos de division: del tamaño de los del juego (76x42 y 30x12)",
           bool(grandes) and all(struct.unpack("<II", g.read_bytes()[12:20]) == (42, 76) for g in grandes)
           and all(struct.unpack("<II", g.with_name(g.name.replace("_large", "_small")).read_bytes()[12:20]) == (12, 30)
                   for g in grandes))
+
+
+def test_modelos_3d() -> None:
+    """2026-11-13 (error.log de 1.19.5: "has too many joints! ( 100 / 50 )"; capturas: infantería que
+    parpadea, todo oscuro, infantería miniatura y barcos gigantes)."""
+    from tools.gen import modelo3d, pdxbin
+    from tools.gen.emitters.modelos import escala_para, escalar
+    base = REPO_ROOT / "assets/modelos"
+    malla = next(base.glob("NRE_tanque_medio/gfx/models/**/*.mesh"))
+    datos = malla.read_bytes()
+    check("modelos: leer y reescribir un .mesh da el mismo archivo", pdxbin.escribir(pdxbin.leer(datos)) == datos)
+    anims = {a.name: a.read_bytes() for a in malla.parent.glob("*.anim")}
+    nueva, nuevas, info = modelo3d.arreglar_carpeta(datos, anims)
+    m = modelo3d.Malla(nueva)
+    check("modelos: el tanque de 100 huesos queda en 50 o menos (el juego no anima más)",
+          info["huesos"][0] == 100 and m.huesos() <= 50, str(info["huesos"]))
+    nombres = {j.nombre for j in m.esqueletos()[0].hijos}
+    check("modelos: se van los eslabones de oruga enteros; torreta, cañón y ruedas quedan",
+          {"turret", "barrel", "wheel0"} <= nombres and not any(n.startswith("track") for n in nombres))
+    a = modelo3d.Anim(next(iter(nuevas.values())))
+    check("modelos: las animaciones pierden los mismos huesos",
+          {j.nombre for j in a.juntas()} <= nombres | {"root"} and a.info.get("j")[0] == len(a.juntas()))
+    piel = next(p for _m, p in m.formas() if p is not None)
+    check("modelos: la piel apunta solo a huesos que existen", max(piel.get("ix")) < m.huesos())
+    check("modelos: sombreado PdxMeshAdvanced (el de la infantería del juego; con Standard se ve negro)",
+          b"PdxMeshStandard" not in nueva and b"PdxMeshAdvanced" in nueva)
+    fcu = next(base.glob("FCU_infanteria/gfx/models/**/*.mesh"))
+    _n, fa, fi = modelo3d.arreglar_carpeta(fcu.read_bytes(), {x.name: x.read_bytes() for x in fcu.parent.glob("*.anim")})
+    seguidos = True
+    for b in fa.values():
+        an = modelo3d.Anim(b)
+        q = an.muestras.get("q")
+        n = len([j for j in an.juntas() if "q" in modelo3d._sa(j)])
+        seguidos &= all(sum(q[((f - 1) * n + k) * 4 + i] * q[(f * n + k) * 4 + i] for i in range(4)) >= 0
+                        for f in range(1, an.cuadros) for k in range(n))
+    check("modelos: los giros no cambian de signo de un cuadro al siguiente", fi["signos"] > 0 and seguidos)
+    check("modelos: tamaños como los del juego (infantería 5,9 de alto, acorazado 22 de largo)",
+          abs(escala_para("infantry", (2.06, 1.87, 1.07)) * 1.87 - 6.0) < 0.2
+          and abs(escala_para("battleship", (41.2, 81.5, 221.9)) * 221.9 - 22.0) < 0.1
+          and abs(escala_para("fighter", (10.34, 3.09, 11.76)) * 11.76 - 4.0) < 0.1)
+    ent, sin = escalar('entity = {\n    name = "EFE_battleship_entity"\n    pdxmesh = "B"\n    scale = 2.523\n'
+                       '    state = { name = "idle" animation = "idle" }\n}\n', {"B": ((17.68, 31.69, 99.1), 1.0)})
+    from tools.gen.emitters.modelos import arquetipos
+    lev = arquetipos("HSN = { ship_hull_super_heavy = { pool = { weight = 100 models = { X } } } }")
+    check("modelos: el Leviatán en la lista del arquetipo que el juego conoce (ship_hull_heavy, solo superpesados)",
+          "ship_hull_super_heavy" not in lev and "ship_hull_heavy" in lev and "sub_units = { SH_battleship }" in lev, lev)
+    check("modelos: la escala de la entidad se reemplaza, no se suma", ent.count("scale") == 1 and "scale = 0.222" in ent
+          and not sin, ent)
 
 
 def test_medallas() -> None:
@@ -5572,6 +5621,9 @@ def test_ficha_lider() -> None:
               and "window_name = \"mn_ficha_lider_window\"" in sg and "has_country_flag = MEGANATIONS_ficha_abierta" in sg
               and 'name = "mn_ficha_boton_window"' in gui and 'name = "mn_ficha_lider_window"' in gui
               and "ai_enabled = { always = no }" in sg, sg[:500])
+        arr = " ".join((mod / "common/on_actions/08_meganations_ficha_arranque.txt").read_text(encoding="utf-8").split())
+        check("ficha: desde el primer día para todos (Japón tenía el primer pulso a los 30 días)",
+              "on_startup" in arr and "tag = ZJP" in arr and "MEGANATIONS_lider_pulso = yes" in arr, arr[:300])
         nombres = set(re.findall(r'name = "(\w+)"', gui))
         usados = set(re.findall(r"(\w+?)(?:_visible)? = \{ (?:image|frame|OR|tag|always|NOT)", sg))
         usados = {u for u in usados if u not in ("visible", "abrir_click", "cerrar_click", "limit", "ai_enabled", "if", "else")}

@@ -276,6 +276,14 @@ def emit(ctx: BuildContext) -> None:
     ctx.write_text("interface/meganations_ficha.gui", banner_for(SOURCE) + gui)
     ctx.write_text("common/scripted_guis/meganations_ficha.txt",
                    banner_for(SOURCE) + _scripted_gui(tags, gab, max_min, extra))
+    # 2026-11-13 ("No hay pantalla de lider en japon al principio"): el botón se ve con
+    # MEGANATIONS_lider_listo, que pone el primer pulso del líder; el de Japón llega a los 30 días.
+    # Al arrancar se da ese primer pulso a cada país de la ficha que exista y no lo tenga.
+    quien = " ".join(f"tag = {t}" for t in tags)
+    ctx.write_text("common/on_actions/08_meganations_ficha_arranque.txt", banner_for(SOURCE)
+                   + "on_actions = {\n\ton_startup = {\n\t\teffect = {\n\t\t\tevery_country = {\n"
+                   f"\t\t\t\tlimit = {{ OR = {{ {quien} }} NOT = {{ has_country_flag = MEGANATIONS_lider_listo }} }}\n"
+                   "\t\t\t\tMEGANATIONS_lider_pulso = yes\n\t\t\t}\n\t\t}\n\t}\n}\n")
     _textos(ctx)
     _barra_recurso(ctx)
     _acentos(ctx)

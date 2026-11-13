@@ -9,10 +9,84 @@ from __future__ import annotations
 
 import re
 
+from .. import modelo3d
 from ..context import BuildContext
 from ..pdx import Block, banner_for
 
 CARPETA = ("assets", "modelos")
+
+# 2026-11-13 (captura del usuario: "la infanteria es miniatura y los barcos gigantescos"): las mallas
+# vienen en metros y el juego no dibuja a escala real. Medida final en el mapa, tomada de las unidades
+# del juego (malla x escala de la malla x escala de la entidad, gfx/entities/*.gfx y *.asset de 1.19):
+# infantería GER 5,9 de alto; tanques GER 3,0 / 4,2 / 5,1 de largo; mecanizada 5,4; aviones ENG 4,0 /
+# 5,7 / 8,1 de envergadura; barcos: destructor 13,3, crucero ligero 17,4, pesado 17,6, acorazado 21,9,
+# portaaviones 25,1, submarino 12,5. (eje, medida): "alto" = Y, "largo" = Z, "ancho" = el mayor de X y Z.
+HUMANO = 3.2        # la gente a 3,2 veces el tamaño real: 1,85 m -> 5,9 como el juego
+ESCALA = {
+    "infantry": ("humano", 0), "marine": ("humano", 0), "mountaineers": ("humano", 0),
+    "cavalry": ("largo", 7.0),     # las nuestras son motos y bestias de 3 a 5 m: a 3,2x pasaban de 15
+    "light_armor": ("largo", 3.6), "medium_armor": ("largo", 4.4), "heavy_armor": ("largo", 5.2),
+    "mecha": ("largo", 5.2), "gliptodonte": ("largo", 5.2), "onagro": ("largo", 5.2),
+    "armored_car": ("largo", 3.6), "mechanized": ("largo", 4.6), "amphibious_mechanized": ("largo", 4.6),
+    "kiboko": ("largo", 4.6), "motorized": ("largo", 4.6), "centinela": ("largo", 4.0),
+    "centinela_2": ("largo", 4.0), "centinela_3": ("largo", 4.4), "artillery": ("largo", 4.2),
+    "anti_tank": ("largo", 3.8), "anti_air": ("largo", 3.8), "railway_gun": ("largo", 9.0),
+    "dragon_del_canal": ("largo", 9.0),
+    "fighter": ("ancho", 4.0), "light_plane": ("ancho", 4.0), "cas": ("ancho", 4.3),
+    "naval_bomber": ("ancho", 4.6), "medium_plane": ("ancho", 5.7), "tactical_bomber": ("ancho", 5.7),
+    "heavy_plane": ("ancho", 8.1), "ala_de_obsidiana": ("ancho", 8.1), "transport_plane": ("ancho", 6.0),
+    "hijos_del_condor": ("ancho", 5.0),
+    "destroyer": ("largo", 13.3), "light_cruiser": ("largo", 17.4), "heavy_cruiser": ("largo", 18.5),
+    "battleship": ("largo", 22.0), "carrier": ("largo", 25.0), "submarine": ("largo", 12.5),
+    "convoy": ("largo", 13.0), "leviatan": ("largo", 28.0),
+}
+
+
+def escala_para(sprite: str, medida: tuple[float, float, float], escala_malla: float = 1.0) -> float | None:
+    if sprite not in ESCALA or not any(medida):
+        return None
+    eje, objetivo = ESCALA[sprite]
+    x, y, z = (v * escala_malla for v in medida)
+    if eje == "humano":
+        return round(HUMANO / escala_malla, 4)
+    base = {"alto": y, "largo": z, "ancho": max(x, z)}[eje]
+    return round(objetivo / base, 4) if base else None
+
+
+def _sin_escala_propia(bloque: str) -> str:
+    """El bloque de entidad sin su `scale` de primer nivel (los de los estados quedan)."""
+    out, d, i = [], 0, 0
+    for m in re.finditer(r"[{}]|\bscale\s*=\s*[-\d.]+", bloque):
+        if m.group(0) == "{":
+            d += 1
+        elif m.group(0) == "}":
+            d -= 1
+        elif d == 1:
+            out.append(bloque[i:m.start()])
+            i = m.end()
+    out.append(bloque[i:])
+    return "".join(out)
+
+
+def escalar(entidades: str, medidas: dict[str, tuple[tuple[float, float, float], float]]) -> tuple[str, list[str]]:
+    """Pone a cada entidad la escala de su tipo (por el nombre, <TAG>_<sprite>_entity) según la
+    medida de su malla. Devuelve el texto y las entidades que quedaron sin tocar."""
+    sin = []
+
+    def una(b: str) -> str:
+        m = re.match(r'entity\s*=\s*\{\s*name\s*=\s*"([^"]+)"', b)
+        pm = re.search(r'\bpdxmesh\s*=\s*"([^"]+)"', b)
+        if not m or not pm or pm.group(1) not in medidas:
+            return b
+        sprite = re.sub(r"^[A-Z]+_", "", m.group(1)).removesuffix("_entity")
+        medida, escala_malla = medidas[pm.group(1)]
+        e = escala_para(sprite, medida, escala_malla)
+        if e is None:
+            sin.append(m.group(1))
+            return b
+        b = _sin_escala_propia(b)
+        return b[:pm.end()] + f"\n    scale = {e}" + b[pm.end():]
+    return "\n".join(una(b) for b in _bloques_entidad(entidades)) + "\n", sin
 
 
 def emit(ctx: BuildContext) -> None:
@@ -20,14 +94,20 @@ def emit(ctx: BuildContext) -> None:
     if not base.is_dir():
         return
     piezas = []
+    ESCALADAS.clear()
+    resumen = {"huesos": [], "signos": 0, "sombreado": 0, "sin_escala": []}
     for pieza in sorted(p for p in base.iterdir() if p.is_dir()):
         gfx = pieza / "gfx"
         if not gfx.is_dir():
             continue
         n = 0
+        medidas = arreglar_mallas(ctx, pieza, resumen)
         for f in sorted(gfx.rglob("*")):
             if f.is_file():
                 rel = f.relative_to(pieza).as_posix()
+                if f.suffix in (".mesh", ".anim"):
+                    n += 1          # ya escritos por arreglar_mallas
+                    continue
                 if f.suffix == ".asset" and rel.startswith("gfx/entities/"):
                     # 2026-11-12 (error.log del usuario: "Unexpected token: pdxmesh" en gfx/entities/ y
                     # "Could not load animation file gfx/entities/gfx/models/..."): el juego solo acepta
@@ -39,6 +119,12 @@ def emit(ctx: BuildContext) -> None:
                     # dentro de objectTypes, con la ruta desde la raíz; las animaciones, en un .asset junto
                     # a los .anim con el nombre suelto; las entidades, en gfx/entities/*.asset
                     entidades, animaciones, mallas, carpeta = separar_asset(f.read_text(encoding="utf-8-sig"))
+                    entidades, sin = escalar(entidades, medidas)
+                    resumen["sin_escala"] += sin
+                    for b in _bloques_entidad(entidades):
+                        m = _ENTIDAD.match(b)
+                        if m:
+                            ESCALADAS[m.group(1)] = b
                     ctx.write_text(rel, fuente + entidades)
                     if animaciones:
                         ctx.write_text(f"{carpeta}/{f.name}", fuente + animaciones)
@@ -52,15 +138,82 @@ def emit(ctx: BuildContext) -> None:
                     continue
                 if f.suffix in (".txt", ".asset", ".gfx"):
                     # los de texto llevan el encabezado de archivo generado, como todo el mod
-                    ctx.write_text(rel, banner_for(f"assets/modelos/{pieza.name} (modelo 3D propio)")
-                                   + f.read_text(encoding="utf-8-sig"))
+                    texto = f.read_text(encoding="utf-8-sig")
+                    if rel.startswith("gfx/interface/equipmentdesigner/graphic_db/"):
+                        texto = arquetipos(texto)
+                    ctx.write_text(rel, banner_for(f"assets/modelos/{pieza.name} (modelo 3D propio)") + texto)
                 else:
                     ctx.copy_asset(f.relative_to(ctx.spec.root.parent).as_posix(), rel)
                 n += 1
         piezas.append(f"{pieza.name} ({n} archivos)")
     if piezas:
         ctx.note(f"modelos 3D propios: {len(piezas)} piezas")
+        ctx.note(f"modelos 3D: {resumen['sombreado']} mallas pasadas a PdxMeshAdvanced, "
+                 f"{resumen['signos']} giros de animación enderezados, "
+                 f"{len(resumen['huesos'])} mallas recortadas a {modelo3d.MAX_HUESOS} huesos"
+                 + (f" ({', '.join(resumen['huesos'])})" if resumen["huesos"] else ""))
+        if resumen["sin_escala"]:
+            ctx.warn(f"modelos 3D sin tamaño de referencia (quedan como vinieron): {', '.join(resumen['sin_escala'])}")
     respaldo(ctx)
+
+
+# 2026-11-13 (error.log 1.19.5: "Unknown equipment type: ship_hull_super_heavy"): la lista del
+# diseñador va por arquetipo, y el casco superpesado (ship_hull_super_heavy_1) es del arquetipo
+# ship_hull_heavy; se separa de los acorazados por el tipo de barco, como los cruceros.
+ARQUETIPOS = {"ship_hull_super_heavy": ("ship_hull_heavy", "SH_battleship")}
+
+
+def arquetipos(texto: str) -> str:
+    for viejo, (nuevo, sub) in ARQUETIPOS.items():
+        texto = re.sub(r"\b%s(\s*=\s*\{\s*pool\s*=\s*\{)(\s*)weight\s*=\s*\d+" % viejo,
+                       lambda m: f"{nuevo}{m.group(1)}{m.group(2)}weight = 1000{m.group(2)}sub_units = {{ {sub} }}",
+                       texto)
+    return texto
+
+
+ESCALADAS: dict[str, str] = {}      # entidad -> bloque ya escalado (respaldo copia estos)
+
+
+def arreglar_mallas(ctx: BuildContext, pieza, resumen: dict) -> dict[str, tuple[tuple[float, float, float], float]]:
+    """Escribe los .mesh y .anim de la pieza arreglados (modelo3d) y devuelve la medida de cada
+    pdxmesh (por su nombre en el .asset) con la escala que ya trae la malla."""
+    import posixpath
+    hechos: dict[str, tuple[float, float, float]] = {}
+    for malla in sorted(pieza.joinpath("gfx").rglob("*.mesh")):
+        anims = {a: a.read_bytes() for a in sorted(malla.parent.glob("*.anim"))}
+        datos, nuevas, info = modelo3d.arreglar_carpeta(malla.read_bytes(), {a.name: b for a, b in anims.items()})
+        for ruta, contenido in [(malla, datos)] + [(malla.parent / k, v) for k, v in nuevas.items()]:
+            dest = ctx.mod_root / ruta.relative_to(pieza)
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(contenido)
+            ctx.track(dest)
+        antes, despues = info["huesos"]
+        if antes != despues:
+            resumen["huesos"].append(f"{malla.stem} {antes}->{despues}")
+        resumen["signos"] += info["signos"]
+        resumen["sombreado"] += int(info["sombreado"])
+        hechos[malla.relative_to(pieza).as_posix()] = info["medida"]
+    # las anim sueltas (sin malla en su carpeta) van tal cual
+    for a in sorted(pieza.joinpath("gfx").rglob("*.anim")):
+        if not any(a.parent.glob("*.mesh")):
+            ctx.copy_asset(a.relative_to(ctx.spec.root.parent).as_posix(), a.relative_to(pieza).as_posix())
+    medidas = {}
+    for f in pieza.joinpath("gfx", "entities").glob("*.asset"):
+        texto = re.sub(r"#[^\n]*", "", f.read_text(encoding="utf-8-sig"))
+        for k, b in _bloques(texto):
+            if k != "pdxmesh":
+                continue
+            nombre = re.search(r'name\s*=\s*"([^"]+)"', b)
+            archivo = re.search(r'file\s*=\s*"([^"]+)"', b)
+            escala = re.search(r"\bscale\s*=\s*([\d.]+)", b)
+            if not nombre or not archivo:
+                continue
+            ruta = archivo.group(1)
+            if "/" not in ruta:     # suelta: en la carpeta de la malla (como separar_asset)
+                ruta = next((r for r in hechos if posixpath.basename(r) == ruta), ruta)
+            if ruta in hechos:
+                medidas[nombre.group(1)] = (hechos[ruta], float(escala.group(1)) if escala else 1.0)
+    return medidas
 
 
 # ---------------------------------------------------------------------------
@@ -168,7 +321,7 @@ def respaldo(ctx: BuildContext) -> None:
         for b in _bloques_entidad(f.read_text(encoding="utf-8-sig")):
             m = _ENTIDAD.match(b)
             if m:
-                definidas.setdefault(m.group(1), b)
+                definidas.setdefault(m.group(1), ESCALADAS.get(m.group(1), b))
     if not any(n.startswith("COMUN_") for n in definidas) and not definidas:
         return
 
