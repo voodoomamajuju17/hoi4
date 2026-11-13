@@ -2864,6 +2864,53 @@ def test_medallas() -> None:
               "med_1_click_enabled = { MN_med_ok_1 = yes" in sg and "MN_med_puede_cambiar = yes" in sg)
 
 
+def test_selector_receptor() -> None:
+    """2026-11-13: prototipo del selector como receptor (monitor + dos columnas de teclas)."""
+    section("selector: receptor con monitor y dos columnas de teclas (prototipo)")
+    from tools.gen.emitters import selector_gui as sg
+    def caja(nombre, cuerpo=""):
+        return f'containerWindowType = {{ name = "{nombre}" position = {{ x = 0 y = 0 }} size = {{ width = 1 height = 1 }} {cuerpo} }}\n'
+    def icono(nombre, extra=""):
+        return f'iconType = {{ name = "{nombre}" position = {{ x = 0 y = 0 }} {extra} }}\n'
+    def texto(nombre):
+        return f'instantTextBoxType = {{ name = "{nombre}" position = {{ x = 0 y = 0 }} maxWidth = 340 maxHeight = 30 format = centre }}\n'
+    grilla = 'gridboxType = { name = "countries_grid" slotsize = { width = 150 height = 0 } add_horizontal = yes max_slots_vertical = 1 }'
+    info = "".join(texto(n) for n in ("leader_label", "leader", "ideology_label", "ideology", "government_label",
+                                      "government", "elections_label", "elections", "party_label", "party"))
+    gui = ("guiTypes = {\n" + caja("country_entry",
+               'buttonType = { name = "country_leader" position = { x = 17 y = 22 } scale=0.75 }'
+               + icono("country_flag") + 'buttonType = { name = "country" quadTextureSprite = "GFX_country_selection_entry" position = { x=0 y =0 } }'
+               + icono("new_content") + texto("country_name"))
+           + caja("gamesetup_interesting_countries_window",
+               texto("title") + 'background = { name = "single_player_country_bg" quadTextureSprite ="GFX_country_selection_bg" }'
+               + caja("countries", grilla) + 'OverlappingElementsBoxType = { name = "filters" position = { x = 22 y = 321 } size = { x = 1181 y = 32 } }'
+               + caja("countries_medium", grilla) + caja("countries_mini", grilla) + texto("info_title") + caja("info", info)
+               + icono("minor_country_leader", "scale=0.696") + icono("minor_portrait_overlay") + texto("nation_title")
+               + caja("spirit", caja("ideas", 'gridboxType = { name ="ideas_grid" max_slots = { x = 3 y = 1 } }')
+                      + caja("focus", 'gridboxType = { name ="focus_grid" }'))
+               + texto("history_title") + texto("history") + caja("more_countries"))
+           + "}\n")
+    out, faltan = sg.parchar(gui)
+    check("selector: el .gui del juego se reconoce entero", out is not None and not faltan, faltan)
+    o = " ".join((out or "").split())
+    check("selector: el banco de teclas, dos columnas y seis filas en 730,76",
+          "position = { x = 730 y = 76 } size = { width = 471 height = 408 }" in o
+          and "slotsize = { width = 240 height = 68 }" in o and "max_slots_horizontal = 2" in o
+          and "max_slots_vertical = 6" in o, o[:600])
+    check("selector: la tecla con sprite propio y el retrato fuera de la vista (existe, no recibe clics)",
+          'quadTextureSprite = "GFX_mn_selector_tecla"' in o and 'name = "country_leader" position = { x = -3000 y = 0 }' in o)
+    check("selector: ideas de a 5 x 2 en el monitor (el EFE trae siete)", "max_slots = { x = 5 y = 2 }" in o)
+    check("selector: la historia en el monitor con lugar para el texto entero",
+          'name = "history" position = { x = 256 y = 437 } maxWidth = 444 maxHeight = 168' in o, o)
+    roto, faltan = sg.parchar(gui.replace('"countries_grid"', '"otra"'))
+    check("selector: si el juego cambio la pantalla, no se toca", roto is None and faltan, faltan)
+    import yaml as _yaml
+    bm = _yaml.safe_load((REPO_ROOT / "spec/11_scenario.yaml").read_text(encoding="utf-8"))["bookmark"]
+    check("selector: diez destacados (las ocho, Albion y Japon) y sin pais preseleccionado",
+          [f["tag"] for f in bm["featured"]][-2:] == ["ZAL", "ZJP"] and len(bm["featured"]) == 10
+          and bm["default_country"] == "---")
+
+
 def test_politica_gui() -> None:
     section("panel de Politica: espiritus en dos filas a tamano completo (2026-11-07)")
     from tools.gen.emitters import politica_gui as pg
@@ -3153,8 +3200,11 @@ def test_focos_pin() -> None:
           all("onyx" in i["material"] and "iron" in i["material"] and "emerald" in i["material"]
               for i in it.values() if i["rama"] == "ruta_zaibatsu"))
     uno = next(iter(it.values()), None)
-    check("pin: los pedidos van sin imagen de referencia (los que salieron bien se hicieron sin ella, 2026-11-06)",
-          uno is None or "reference_image" not in focos_pin._pedido({**uno, "referencia": "x.png"}, "estilo"))
+    # 2026-11-13: sin el ícono viejo como referencia (2026-11-06), pero con las fotos de ejemplo del
+    # ACABADO (arte/ejemplos_pin) desde que salieron como ícono 3D liso
+    ped = focos_pin._pedido({**uno, "referencia": "x.png"}, "estilo") if uno else ""
+    check("pin: sin el icono viejo de referencia; solo el ejemplo del acabado de foto",
+          uno is None or ("x.png" not in ped and "ejemplos_pin/EJEMPLO_acabado" in ped))
 
 
 def test_arte() -> None:
@@ -5904,6 +5954,7 @@ def main() -> int:
         test_vanilla_validation,
         test_espiritus,
         test_medallas,
+        test_selector_receptor,
     ):
         test()
 
