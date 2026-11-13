@@ -81,6 +81,16 @@ def items() -> list[dict]:
                             "descripcion": f"WHAT: national focus '{nombre}' ({_uno(f['name'].get('spanish', ''))}); "
                                            f"{que} Reduce it to ONE simple, bold emblem.",
                             "origen": ref if ref.exists() else None})
+    # 2026-11-13: los enfoques continuos (los mismos para todos), con el material de la interfaz
+    for c in cfg.get("continuos") or []:
+        if (REPO / "assets" / "ui" / "continuos" / f"{c['id']}.dds").exists():
+            continue
+        out.append({"tag": "CONTINUOS", "id": c["id"], "rama": "continuos",
+                    "material": _uno(cfg.get("material_continuos")),
+                    "descripcion": f"WHAT: continuous national focus '{c['nombre']['english']}' "
+                                   f"({c['nombre']['spanish']}); the emblem shows: {c['emblema']}. "
+                                   "Reduce it to ONE simple, bold emblem.",
+                    "origen": None})
     return out
 
 

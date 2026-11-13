@@ -38,6 +38,7 @@ OUT = REPO / "arte" / "pedidos"
 
 KINDS = {
     "national_focus_icon": {"size": (95, 85), "transparent": True, "fit": "contain"},
+    "continuous_focus_icon": {"size": (95, 85), "transparent": True, "fit": "contain"},
     "national_spirit_icon": {"size": (64, 64), "transparent": True, "fit": "contain"},
     "leader_portrait": {"size": (156, 210), "transparent": False, "fit": "cover"},
     "event_picture": {"size": (210, 176), "transparent": False, "fit": "cover"},
@@ -226,7 +227,13 @@ def _one_line(text: str) -> str:
 def catalog() -> list[dict]:
     """Todo lo que puede llevar arte, con su destino y si ya lo tiene."""
     items: list[dict] = []
-    trees = _load("07_focus_trees.yaml")["trees"]
+    # 2026-11-13: con las ramas agregadas después (add_branches: Quedarse Luditas de Albión), que el
+    # importador no reconocía
+    try:
+        from tools.gen.specload import Spec
+        trees = Spec(SPEC).raw["focus_trees"]["trees"]
+    except Exception:
+        trees = _load("07_focus_trees.yaml")["trees"]
     for tag, tree in trees.items():
         if not isinstance(tree, dict) or "branches" not in tree:
             continue
@@ -238,6 +245,13 @@ def catalog() -> list[dict]:
                     "done": bool(f.get("icon_asset")) or dest.exists(),
                     "description": f"{f['name']['english']}: {_one_line(f['desc']['english'])}",
                 })
+    # 2026-11-13: los enfoques continuos del juego (arte/focos_pin.yaml -> continuos), en estilo pin;
+    # el armado los pone en lugar del ícono del juego (ui_skin.continuos)
+    pin_cfg = yaml.safe_load((REPO / "arte" / "focos_pin.yaml").read_text(encoding="utf-8")) or {}
+    for c in pin_cfg.get("continuos") or []:
+        dest = REPO / "assets" / "ui" / "continuos" / f"{c['id']}.dds"
+        items.append({"type": "continuous_focus_icon", "tag": "CONTINUOS", "id": c["id"], "dest": dest,
+                      "done": dest.exists(), "description": f"{c['nombre']['english']}: {c['emblema']}"})
     ideas = _load("05_ideas.yaml")["countries"]
     for tag, entry in ideas.items():
         if not isinstance(entry, dict):
@@ -1096,7 +1110,8 @@ def pedidos() -> None:
             (OUT / NEW_FILE).write_text(f"# {len(still)} pedidos nuevos de este lote (también están en los archivos por potencia)\n\n"
                                         + "\n".join(_request(i) for i in still), encoding="utf-8")
     order = [("leader_portrait", "1_retratos"), ("national_spirit_icon", "2_espiritus"),
-             ("national_focus_icon", "3_focos"), ("event_picture", "4_eventos"),
+             # 2026-11-13: los focos van solo en sus pedidos de pines (20_focos_pin_*), no en el estilo viejo
+             ("event_picture", "4_eventos"),
              ("country_flag", "5_banderas"), ("agency_upgrade_icon", "6_agencia"),
 ("ui_background", "7_fondos"),
              ("research_background", "8_investigacion"), ("weapon_icon", "9_armas"),
