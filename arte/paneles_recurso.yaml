@@ -1,0 +1,221 @@
+# El panel del recurso propio de cada nación (2026-11-15: "Todo esto debería ir en un panel aparte
+# como el del Líder, con su icono en la pantalla de país principal ... un diseño absolutamente
+# original, bello y auténtico para cada nación con un recurso único. Pedí todo lo que necesites.")
+#
+# Cada panel es una ventana propia de 720 x 800 (como la Ficha del Líder) que abre un botón en la
+# pantalla de Política con el ícono del recurso (assets/ui/recursos, ya hecho). Adentro: el medidor
+# grande del recurso, lo que rinde ahora, y las acciones (lo que hoy son decisiones) como botones.
+#
+# Piezas por panel (las pide tools/arte/paneles.py -> arte/pedidos_fijos/33_paneles_recurso.txt):
+#   fondo       1440x1600, opaco: la carcasa ilustrada. Zonas libres (lisas, sin dibujo encima):
+#               franja del título arriba (y 0-160), el medidor a la izquierda (x 60-700, y 200-840),
+#               el texto a la derecha (x 760-1380, y 200-840) y la columna de acciones abajo
+#               (x 60-1380, y 900-1520).
+#   medidor     1024x1024, transparente: el instrumento APAGADO (vacío / en cero).
+#   medidor_lleno  la MISMA imagen, mismo encuadre píxel a píxel, pero ENCENDIDA / LLENA al máximo.
+#               El juego muestra la mezcla de las dos según el valor (el armado corta la llena
+#               con la forma indicada en `llenado`).
+#   aguja       (solo si `llenado: aguja`) la aguja sola, 1024x1024 transparente, apuntando
+#               derecho hacia ARRIBA, con su eje exactamente en el centro del lienzo.
+#   boton       1024x160, transparente: la placa de un botón de acción, vacía (el texto lo pone el juego).
+
+comun: >-
+  Hearts of Iron IV custom interface piece for a grand strategy game set in the year 2100. Photoreal
+  materials (real metal, stone, glass, wood, enamel), lit from the top left, warm and even, gentle
+  bevels. It must look like a real precious object built by THIS nation, nothing generic. Straight-on
+  front view, orthographic. No text, no letters, no numbers, no runes or pseudo-writing, no real
+  flags, no watermark.
+
+paneles:
+  EFE:
+    nombre: El Invernadero del Bioacero
+    recurso: Bioacero (y la Saturación de las cubas)
+    llenado: vertical
+    fondo: >-
+      The inside of an imperial bio-foundry greenhouse: a frame of living dark wood and old-gold bronze
+      grown into Art Nouveau curves, with leaves, roots and laurel branches climbing the edges and the
+      corners; a glass dome roof suggested at the top edge; the free zones are panels of frosted green
+      glass inset in the wood. Deep leaf green, old gold, warm amber light.
+    medidor: >-
+      A tall cylindrical laboratory vat of thick glass with bronze rings and root-like pipes at its
+      base, standing on a carved wooden pedestal. EMPTY: only a thin film of liquid at the bottom.
+    medidor_lleno: >-
+      The same vat FULL to the top with glowing emerald-green living bio-steel liquid, slow bubbles and
+      a small sapling of metal growing inside.
+    boton: >-
+      A horizontal plaque of polished dark wood with an old-gold bronze border shaped like two laurel
+      branches meeting in the middle of the bottom edge; empty centre for text.
+  FCU:
+    nombre: La Bóveda de los Dividendos
+    recurso: Dividendos (y el Escándalo)
+    llenado: aguja
+    fondo: >-
+      A luxury corporate boardroom vault: frame of brushed chrome and black glass with thin cold-blue
+      light strips, rivet-free, sharp bevelled corners like a skyscraper crown; the free zones are dark
+      smoked-glass screens. Navy blue, silver, one chrome-blue accent.
+    medidor: >-
+      A round bank-vault door dial in chrome and black enamel, with a ring of fine tick marks (no
+      numbers) and a stylised upward arrow engraved at the top; zone markings from dark blue (low) to
+      bright chrome-blue (high) along the outer ring, all unlit.
+    medidor_lleno: >-
+      The same vault dial with its outer ring fully lit in chrome-blue light from end to end and the
+      engraved arrow glowing.
+    aguja: >-
+      A slim chrome needle with a small counterweight, pointing straight up, axle exactly at the centre.
+    boton: >-
+      A thin horizontal plate of black glass with a chrome edge and a single cold-blue light line along
+      the bottom edge; empty centre for text.
+  ASC:
+    nombre: El Núcleo del Plan
+    recurso: Cómputo (y el Calor de la red)
+    llenado: radial
+    fondo: >-
+      The control room of the Automated Commune's central data core: constructivist frame of
+      red-lacquered steel and white enamel panels at bold diagonals, with cable bundles and cooling fins
+      on the edges, a large red star relief at the top centre; the free zones are matte black screen
+      panels. Signal red, white, graphite.
+    medidor: >-
+      A circular data-core reactor seen from the front: a ring of twenty rectangular processor blocks
+      around a central five-pointed star core, cooling fins between them; everything OFF, dark graphite,
+      no glow.
+    medidor_lleno: >-
+      The same core fully ON: all twenty blocks glowing signal red with fine white circuit light, the
+      central star blazing, faint heat shimmer.
+    boton: >-
+      A horizontal key of red-lacquered steel with a white enamel stripe on the left end and a diagonal
+      constructivist cut on the right end; empty centre for text.
+  HSN:
+    nombre: La Cámara del Peaje
+    recurso: Peaje (y la Presión)
+    llenado: vertical
+    fondo: >-
+      The captain's chart room of a merchant republic: frame of teak wood and polished brass with rope
+      borders, ship's rivets and small compass roses in the corners; the free zones are old nautical
+      chart paper in pale teal. Deep sea teal, brass, warm lamp light.
+    medidor: >-
+      A tall brass tide-gauge tube with a glass window, mounted on a teak board with small brass coins
+      stacked at its foot; EMPTY: the water in the window is at the very bottom.
+    medidor_lleno: >-
+      The same tide gauge FULL: glowing sea-teal water up to the top of the window, brass coins
+      shining, small bubbles.
+    boton: >-
+      A horizontal teak plaque with a brass rim and a thin rope border, two tiny brass anchors at the
+      ends; empty centre for text.
+  NAS:
+    nombre: El Templo del Inti
+    recurso: Inti, la luz sagrada
+    llenado: radial
+    fondo: >-
+      The inner chamber of a neo-Inca solar temple: frame of finely fitted grey andesite stone blocks
+      (Inca masonry, no mortar) with gold sheet inlays and a stepped chakana cross motif at the top;
+      trapezoid niches on the sides; the free zones are smooth dark stone. Gold, turquoise, grey stone.
+    medidor: >-
+      A large gold sun disc with a calm engraved face and a ring of twenty-four rays, set into a stone
+      wall; UNLIT, dull old gold, rays dark.
+    medidor_lleno: >-
+      The same sun disc fully LIT: every ray glowing bright gold-white, the face radiant, warm light
+      spilling onto the stone.
+    boton: >-
+      A horizontal slab of carved grey stone with a thin gold inlay border and small stepped ends;
+      empty centre for text.
+  SHD:
+    nombre: La Sala de las Compuertas
+    recurso: Mandato del Cielo (y el Orden y el Pueblo)
+    llenado: vertical
+    fondo: >-
+      The control hall of a great dam: frame of steel-grey concrete and jade-green enamel panels with
+      hydraulic pipes and round valve wheels in the corners, measured symmetry, a round bi-disc relief
+      at the top centre; the free zones are pale jade frosted glass. Jade green, steel grey, calm.
+    medidor: >-
+      A cross-section of a reservoir behind a curved dam wall, shown like a technical model in a glass
+      case with a jade frame; EMPTY: the reservoir is dry, cracked earth.
+    medidor_lleno: >-
+      The same model with the reservoir FULL of clear jade-tinted water up to the crest, a thin
+      overflow sheet of water on the spillway.
+    boton: >-
+      A horizontal plate of polished jade with a steel frame and a small valve wheel on the left end;
+      empty centre for text.
+  APF:
+    nombre: El Círculo del Ubuntu
+    recurso: Ubuntu (y la Tensión regional)
+    llenado: radial
+    fondo: >-
+      A council place under a baobab: frame of carved dark hardwood with kente-like woven bands in earth
+      red, yellow and green, brass studs, and the silhouette of baobab branches across the top; the free
+      zones are smooth ochre clay panels. Earth red, ochre, green, warm.
+    medidor: >-
+      A large circle of twenty carved wooden figures holding hands around a central drum, seen from
+      above like a ritual object on a clay disc; UNLIT, plain dark wood.
+    medidor_lleno: >-
+      The same circle fully LIT: every figure glowing warm ochre-gold as if lit by a central fire, the
+      drum skin glowing.
+    boton: >-
+      A horizontal plank of carved hardwood with a woven kente band border and brass studs at the ends;
+      empty centre for text.
+  NRE:
+    nombre: El Tabulario de la Gloria
+    recurso: Auctoritas y Gloria
+    llenado: radial
+    fondo: >-
+      An imperial Roman record hall (tabularium): frame of white and purple-veined marble with gilded
+      bronze mouldings, a legion eagle relief at the top centre, fluted pilasters on the sides; the free
+      zones are smooth dark porphyry. Imperial purple, gold, white marble.
+    medidor: >-
+      A semicircular arch of twenty gilded laurel leaves on a marble base around a small legion eagle,
+      the leaves dull and unpolished, the eagle dark bronze.
+    medidor_lleno: >-
+      The same laurel arch with every leaf shining bright gold and the eagle gleaming, a soft purple glow
+      behind it.
+    boton: >-
+      A horizontal marble tablet with a gilded bronze frame and tiny laurel ends; empty centre for text.
+  ZJP:
+    nombre: El Libro del Giri
+    recurso: Giri (y el Favor de las tres Casas)
+    llenado: vertical
+    fondo: >-
+      A shipyard shogun's study: frame of black lacquer and red-lacquered wood with gold mon crests in the
+      corners, sliding shoji-paper panels with neon-pink edge light at the sides, a torii outline at the
+      top centre; the free zones are pale washi paper. Black, crimson, gold, one hot-pink neon accent.
+    medidor: >-
+      A vertical stack of seven paper lanterns hanging from a black lacquer beam, all UNLIT, pale paper.
+    medidor_lleno: >-
+      The same stack of seven lanterns all LIT from inside in crimson and warm gold, with a thin neon-pink
+      rim light.
+    boton: >-
+      A horizontal black-lacquer plaque with a red inner border and small gold corner caps; empty centre
+      for text.
+  ZAL_pompa:
+    nombre: El Salón de la Pompa
+    recurso: Pompa (Albión neovictoriana)
+    llenado: aguja
+    fondo: >-
+      A neo-Victorian palace salon: frame of carved mahogany and gilded brass with wine-red velvet
+      panels, small crowns in the corners, brass gears visible behind glass at the sides; the free zones
+      are dark green leather. Wine red, gilt, mahogany.
+    medidor: >-
+      A large ornate brass pressure gauge with a cream enamel face, fine tick marks (no numbers), a
+      small crown on top and a red danger arc at the right end, unlit.
+    medidor_lleno: >-
+      The same gauge with its whole arc lit warm gold from end to end and the crown gleaming.
+    aguja: >-
+      An ornate black steel needle with a spade tip, pointing straight up, axle exactly at the centre.
+    boton: >-
+      A horizontal mahogany plaque with a gilt brass rim and a strip of wine-red velvet; empty centre
+      for text.
+  ZAL_sincronia:
+    nombre: El Nodo de Londres
+    recurso: Sincronía (Albión transhumanista)
+    llenado: radial
+    fondo: >-
+      A clean transhumanist neural lab: frame of white ceramic and brushed titanium with thin electric-
+      cyan light seams and a ring of neural fibres at the top centre; the free zones are matte dark glass.
+      White, titanium, electric cyan.
+    medidor: >-
+      A circular ring of twenty neural interface pods around a central brain-shaped crystal, all OFF,
+      white ceramic and dark glass.
+    medidor_lleno: >-
+      The same ring fully ON: all twenty pods glowing electric cyan with flowing fibre light into the
+      crystal.
+    boton: >-
+      A horizontal capsule of white ceramic with a titanium rim and a thin cyan light seam; empty centre
+      for text.

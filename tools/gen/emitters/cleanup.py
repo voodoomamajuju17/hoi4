@@ -223,6 +223,7 @@ def emit_kept_events(ctx: BuildContext) -> None:
         return
     from .. import pdx
     copied, found = [], set()
+    sprites: dict[str, str] = {}
     for path in sorted((ctx.vanilla.root / "events").glob("*.txt")):
         try:
             text = path.read_text(encoding="utf-8-sig", errors="replace")
@@ -234,7 +235,7 @@ def emit_kept_events(ctx: BuildContext) -> None:
             continue
         rel = f"events/{path.name}"
         if spaces <= keep:
-            ctx.write_text(rel, banner_for(SOURCE_EVENTS) + text)
+            ctx.write_text(rel, banner_for(SOURCE_EVENTS) + imagenes_propias(ctx, text, sprites))
         else:
             try:
                 root = pdx.parse(text)
@@ -250,14 +251,51 @@ def emit_kept_events(ctx: BuildContext) -> None:
                 if isinstance(value, Block) and value.get("id") is not None:
                     if pdx.text(value.get("id")).split(".")[0] in keep:
                         out.add(key, value)
-            ctx.write_text(rel, banner_for(SOURCE_EVENTS) + render(out))
+            ctx.write_text(rel, banner_for(SOURCE_EVENTS) + imagenes_propias(ctx, render(out), sprites))
         found |= hit
         copied.append(path.name)
+    if sprites:
+        ctx.write_text("interface/meganations_eventos_juego.gfx",
+                       "# Generado por tools/gen/emitters/cleanup.py: imágenes propias de los eventos del juego\n"
+                       "spriteTypes = {\n" + "".join(
+                           f'\tspriteType = {{\n\t\tname = "{n}"\n\t\ttexturefile = "{t}"\n\t}}\n'
+                           for n, t in sorted(sprites.items())) + "}\n")
+        ctx.note(f"eventos del juego con imagen propia: {', '.join(sorted(sprites))}")
     if copied:
         ctx.note(f"eventos del juego que se conservan ({', '.join(sorted(found))}): {', '.join(copied)}")
     missing = keep - found
     if missing:
         ctx.warn(f"eventos del juego: no se encontraron los namespaces {', '.join(sorted(missing))}.")
+
+
+_EVENTO = re.compile(r"\b(country_event|news_event|state_event|unit_leader_event|operative_leader_event)\s*=\s*\{")
+_ID = re.compile(r"\bid\s*=\s*([A-Za-z_]+)\.\d+")
+_PICTURE = re.compile(r"(\bpicture\s*=\s*)\"?[A-Za-z0-9_]+\"?")
+
+
+def imagenes_propias(ctx: BuildContext, text: str, sprites: dict[str, str]) -> str:
+    """picture = ... de cada evento conservado -> la imagen propia de su namespace, si ya llegó
+    (2026-11-15). Las noticias usan <imagen>_noticia (397x153); los avisos, <imagen> (210x176)."""
+    arte = ctx.spec.project.get("kept_vanilla_event_art") or {}
+    if not arte:
+        return text
+    base = ctx.spec.root.parent / "assets" / "events"
+    cortes = [m.start() for m in _EVENTO.finditer(text)] + [len(text)]
+    partes = [text[:cortes[0]]]
+    for ini, fin in zip(cortes, cortes[1:]):
+        bloque = text[ini:fin]
+        m = _ID.search(bloque)
+        nombre = arte.get(m.group(1)) if m else None
+        if nombre and bloque.startswith("news_event"):
+            nombre = f"{nombre}_noticia"
+        if nombre and (base / f"{nombre}.dds").exists():
+            sprite = f"GFX_{nombre}"
+            if sprite not in sprites:
+                ctx.copy_asset(f"assets/events/{nombre}.dds", f"gfx/event_pictures/meganations/{nombre}.dds")
+                sprites[sprite] = f"gfx/event_pictures/meganations/{nombre}.dds"
+            bloque = _PICTURE.sub(lambda p: p.group(1) + sprite, bloque)
+        partes.append(bloque)
+    return "".join(partes)
 
 
 def _partial_and_renames(ctx: BuildContext, vd: dict, whole: set) -> None:

@@ -48,6 +48,7 @@ from .emitters import ideas as em_ideas
 from .emitters import espiritus as em_espiritus
 from .emitters import medallas as em_medallas
 from .emitters import selector_gui as em_selector_gui
+from .emitters import eventos_gui as em_eventos_gui
 from .emitters import laws as em_laws
 from .emitters import loading_quotes as em_loading_quotes
 from .emitters import ideologies as em_ideologies
@@ -132,6 +133,7 @@ EMITTERS = [
     ("ui_skin", em_ui_skin.emit),       # piel de la interfaz: inventario por pantalla + assets/ui/piel
     ("politica_gui", em_politica_gui.emit),   # 2026-11-07: espíritus en dos filas a tamaño completo
     ("selector_gui", em_selector_gui.emit),   # 2026-11-13: selector de país como receptor (prototipo)
+    ("eventos_gui", em_eventos_gui.emit),     # 2026-11-15: eventos en el Receptor, noticias en el cable de Ginebra
     ("modelos", em_modelos.emit),       # 2026-11-08: modelos 3D propios (assets/modelos, el Gliptodonte)
     ("loading_quotes", em_loading_quotes.emit),  # frases de la pantalla de carga (antes que vanilla_terms)
     ("vanilla_terms", em_vanilla_terms.emit),  # textos del juego con las ideologias viejas (despues de todo lo propio)

@@ -58,6 +58,18 @@ project:
     - ace_killed_other_ace
     - ace_died
     - nuke_dropped
+  # 2026-11-15 ("Imagenes para estos eventos tmb"): imagen propia para los eventos del juego que se
+  # conservan. assets/events/<imagen>.dds para los avisos (210x176) y <imagen>_noticia.dds para las
+  # noticias (397x153); mientras no llegue el arte queda la foto del juego.
+  kept_vanilla_event_art:
+    war_justification: juego_justificacion
+    election: juego_elecciones
+    ace_promoted: juego_as
+    aces_killed_each_other: juego_as_caido
+    ace_killed_by_ace: juego_as_caido
+    ace_killed_other_ace: juego_as_caido
+    ace_died: juego_as_caido
+    nuke_dropped: juego_bomba
 
   tags_used:
     - map

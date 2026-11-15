@@ -96,6 +96,8 @@ SKIN_DIR = ("assets", "ui", "piel")
 # 2026-11-07: la interfaz de materiales reales (tools/arte/materiales_piloto.py) va encima de la
 # piel de cristal y cobre: si una textura está en las dos, gana la de materiales
 MATERIALES_DIR = ("assets", "ui", "materiales_piel")
+# 2026-11-15: las ventanas de eventos (Receptor y cable de Ginebra, tools/arte/eventos.py) van encima de todo
+EVENTOS_DIR = ("assets", "ui", "eventos_piel")
 SPRITE_KINDS = ("spriteType", "corneredTileSpriteType", "frameAnimatedSpriteType",
                 "progressbartype", "textSpriteType", "maskedShieldType")
 _GFX_REF = re.compile(r'"?(GFX_[A-Za-z0-9_]+)"?')
@@ -318,6 +320,9 @@ def emit(ctx: BuildContext) -> None:
     mat = apply_skin(ctx, MATERIALES_DIR)
     if mat:
         ctx.note(f"materiales: {mat} texturas de la interfaz de materiales reales (assets/ui/materiales_piel)")
+    ev = apply_skin(ctx, EVENTOS_DIR)
+    if ev:
+        ctx.note(f"eventos: {ev} texturas de las ventanas de eventos (assets/ui/eventos_piel)")
     simbolos(ctx)
     continuos(ctx)
 

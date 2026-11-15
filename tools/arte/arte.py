@@ -40,6 +40,8 @@ KINDS = {
     "national_focus_icon": {"size": (95, 85), "transparent": True, "fit": "contain"},
     "continuous_focus_icon": {"size": (95, 85), "transparent": True, "fit": "contain"},
     "national_spirit_icon": {"size": (64, 64), "transparent": True, "fit": "contain"},
+    # 2026-11-15: logos de las industrias (OIM), assets/<TAG>/industrias/<rubro>.dds
+    "mio_logo": {"size": (64, 64), "transparent": True, "fit": "contain"},
     "leader_portrait": {"size": (156, 210), "transparent": False, "fit": "cover"},
     "event_picture": {"size": (210, 176), "transparent": False, "fit": "cover"},
     # banderas de las identidades nuevas (guerras civiles y formas finales): TGA
@@ -527,6 +529,16 @@ def catalog() -> list[dict]:
             if style:
                 item["style"] = style
             items.append(item)
+    # 2026-11-15: eventos del juego base que se conservan (justificación de guerra, elecciones, ases, bomba)
+    for jid, j in (long_desc.get("juego") or {}).items():
+        dest = REPO / "assets" / "events" / f"{jid}.dds"
+        items.append({"type": "event_picture", "tag": "COMPARTIDOS", "id": jid, "dest": dest, "done": dest.exists(),
+                      "size": tuple(j.get("size") or (210, 176)),
+                      "description": f"{_one_line(j['text'])} {_one_line(long_desc.get('composition', ''))}".strip()
+                      if tuple(j.get("size") or (210, 176)) == (210, 176) else _one_line(j["text"]),
+                      "style": "Hearts of Iron IV event picture set in the year 2100. Use exactly the TECHNIQUE named "
+                               "in the description; no default poster look; no text, no letters, no watermark"})
+    items += _industria_items()
     items += _adventure_items()
     items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
@@ -874,6 +886,28 @@ def _juego_items() -> list[dict]:
                             "but in the style below, with a cleaner and more modern 2100 look."),
             "style": estilo,
         })
+    return items
+
+
+def _industria_items() -> list[dict]:
+    """Logos de las industrias de cada meganación (arte/industrias.yaml, 2026-11-15)."""
+    import yaml
+    path = REPO / "arte" / "industrias.yaml"
+    if not path.exists():
+        return []
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    nombres = ((_load("13_military.yaml").get("mio") or {}).get("names")) or {}
+    items = []
+    for tag, rubros in nombres.items():
+        for rubro, nombre in rubros.items():
+            dest = REPO / "assets" / tag / "industrias" / f"{rubro}.dds"
+            items.append({
+                "type": "mio_logo", "tag": tag, "id": f"industria_{tag}_{rubro}", "dest": dest, "done": dest.exists(),
+                "description": (f"WHAT: the logo of the arms company \"{nombre}\" of this faction. CENTRAL MOTIF: "
+                                f"{_one_line(cfg['rubros'].get(rubro, rubro))}. DESIGN LANGUAGE: "
+                                f"{_one_line(cfg['naciones'].get(tag, ''))}."),
+                "style": _one_line(cfg.get("estilo") or ""),
+            })
     return items
 
 

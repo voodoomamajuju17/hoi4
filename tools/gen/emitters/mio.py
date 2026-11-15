@@ -50,6 +50,7 @@ def _personalize(ctx: BuildContext, spec: dict, folder) -> None:
     ours = Block()
     touched = 0
     used: dict[str, str] = {}
+    logos: dict[str, str] = {}
     for path in sorted(folder.glob("*.txt")):
         try:
             root = parse_file(path)
@@ -86,12 +87,30 @@ def _personalize(ctx: BuildContext, spec: dict, folder) -> None:
                     _boost(copy_body, boost)
                     ctx.note(f"OIM: {new_id} reforzada (rasgos x{boost.get('trait_factor', 1)}, "
                              f"inicial +{', '.join(f'{k} {v}' for k, v in (boost.get('initial_extra') or {}).items())})")
+                # 2026-11-15: el logo propio de la empresa, si ya llegó (assets/<TAG>/industrias/<rubro>.dds)
+                logo = f"assets/{tag}/industrias/{cat}.dds"
+                if (ctx.spec.root.parent / logo).exists():
+                    sprite = f"GFX_mn_industria_{tag}_{cat}"
+                    tex = f"gfx/interface/meganations/industrias/{tag}_{cat}.dds"
+                    if sprite not in logos:
+                        ctx.copy_asset(logo, tex)
+                        logos[sprite] = tex
+                    if copy_body.get("icon") is not None:
+                        copy_body.entries = [(k, sprite if k == "icon" else v) for k, v in copy_body.entries]
+                    else:
+                        copy_body.add("icon", sprite)
                 ours.add(new_id, copy_body)
                 ctx.loc.define_and_reference(new_id, en=name, es=name, file=LOC_FILE, origin=f"mio:{new_id}")
         if changed:
             touched += 1
             ctx.write_script(f"common/military_industrial_organization/organizations/{path.name}", root,
                              source=f"{path.name} del juego: las OIM genericas ya no aparecen para las meganaciones")
+    if logos:
+        ctx.write_text("interface/meganations_industrias.gfx",
+                       "# Generado por tools/gen/emitters/mio.py: logos de las industrias propias\nspriteTypes = {\n" + "".join(
+                           f'\tspriteType = {{\n\t\tname = "{n}"\n\t\ttexturefile = "{t}"\n\t}}\n'
+                           for n, t in sorted(logos.items())) + "}\n")
+        ctx.note(f"OIM: {len(logos)} logos propios")
     if ours.entries:
         ctx.write_script("common/military_industrial_organization/organizations/meganations_mio.txt", ours,
                          source=SOURCE)

@@ -1414,6 +1414,7 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
       flag / not_flag: X                  -> has_country_flag
       flags: [X, Y]                       -> todas esas banderas
       at_war: true|false                  -> has_war
+      leader_trait: X                     -> has_country_leader_with_trait (2026-11-15: PLAN-41 sin hijos)
       idea / not_idea: X                  -> has_idea
       focus: X                            -> has_completed_focus
       country_exists: TAG
@@ -1474,6 +1475,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             for f in value:
                 block.add("has_country_flag", f)
             triggers_used.setdefault("has_country_flag", owner)
+        elif key == "leader_trait":
+            block.add("has_country_leader_with_trait", value)
+            triggers_used.setdefault("has_country_leader_with_trait", owner)
         elif key in ("flag", "not_flag"):
             if key == "flag":
                 block.add("has_country_flag", value)

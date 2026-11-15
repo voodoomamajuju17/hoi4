@@ -3164,6 +3164,64 @@ def test_materiales_piloto() -> None:
           and src.index("apply_skin(ctx)") < src.index("apply_skin(ctx, MATERIALES_DIR)"))
 
 
+def test_eventos_receptor() -> None:
+    """2026-11-15 (opción 2): eventos propios en el Receptor, noticias en el cable de Ginebra; imágenes
+    propias para los eventos del juego base y logos de las industrias."""
+    section("eventos: Receptor, cable de Ginebra, imágenes del juego base y logos de industrias")
+    import types
+    from tools.gen.emitters import eventos_gui as eg, cleanup as cl
+    def texto(n, font):
+        return f'instantTextBoxType = {{ name = "{n}" position = {{ x = 14 y = 70 }} font = "{font}" maxWidth = 551 }}\n'
+    def caja(n, cuerpo):
+        return f'containerWindowType = {{ name = "{n}" position = {{ x = 0 y = 0 }} {cuerpo} }}\n'
+    ventana = lambda n, extra="": caja(n, caja("top_Window", texto("Title", "hoi4_typewriter22"))
+                                        + caja("midsection", texto("Description", "hoi4_typewriter16")) + extra)
+    abajo = caja("bottom_Window", 'iconType = { name ="event_picture" position = { x = 5 y = 5 } }'
+                                  'gridboxType = { name = "options_grid" position = { x = 215 y = -1 } }')
+    gui = "guiTypes = {\n" + ventana("EventWindow", abajo) + ventana("EventWindow_leader") + \
+          caja("EventWindow_News", caja("top_Window", texto("Title", "hoi4_typewriter22"))) + "}\n"
+    out, faltan = eg.parchar(gui)
+    o = " ".join((out or "").split())
+    check("eventos: el .gui del juego se reconoce", out is not None and not faltan, faltan)
+    check("eventos: letra clara sobre el vidrio en los eventos propios (dos ventanas)",
+          o.count('font = "hoi_20bs"') == 2 and o.count('font = "hoi_16mbs"') == 2 and o.count('text_color_code = "W"') == 4, o)
+    check("eventos: las noticias siguen con letra de máquina (papel del cable)",
+          'hoi4_typewriter22" maxWidth = 551 } } } }' in o or o.rstrip().endswith('font = "hoi4_typewriter22" maxWidth = 551 } } }'), o[-200:])
+    check("eventos: la imagen entra en su pantalla y las teclas dentro del marco",
+          'scale = 0.9' in o and "position = { x = 20 y = 12 }" in o and "position = { x = 217 y = 4 }" in o, o)
+    from tools.arte import eventos as arte_ev
+    for nombre, (w, h) in arte_ev.PIEZAS.items():
+        dds = (arte_ev.SALIDA / f"{nombre}.dds").read_bytes()
+        check(f"eventos: {nombre} dibujado a {w}x{h}", struct.unpack("<II", dds[12:20]) == (h, w))
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "assets/events").mkdir(parents=True)
+        (root / "assets/events/juego_justificacion.dds").write_bytes(b"x")
+        (root / "assets/events/juego_bomba_noticia.dds").write_bytes(b"x")
+        copias = []
+        ctx = types.SimpleNamespace(spec=types.SimpleNamespace(
+            root=root / "spec", project={"kept_vanilla_event_art": {"war_justification": "juego_justificacion",
+                                                                    "nuke_dropped": "juego_bomba", "election": "juego_elecciones"}}),
+            copy_asset=lambda a, b: copias.append(b))
+        sprites = {}
+        ev = ("country_event = { id = war_justification.1 picture = GFX_report_event_soldiers }\n"
+              "country_event = { id = election.1 picture = GFX_report_event_vote }\n"
+              "news_event = { id = nuke_dropped.0 picture = GFX_news_event_nuke }\n")
+        r = cl.imagenes_propias(ctx, ev, sprites)
+        check("eventos del juego: la justificación con imagen propia",
+              "id = war_justification.1 picture = GFX_juego_justificacion" in r, r)
+        check("eventos del juego: sin el arte todavía, queda la foto del juego", "GFX_report_event_vote" in r, r)
+        check("eventos del juego: las noticias usan la versión ancha (_noticia)",
+              "picture = GFX_juego_bomba_noticia" in r and len(sprites) == 2 and len(copias) == 2, r)
+    from tools.arte import arte as _arte
+    cat = _arte.catalog()
+    check("industrias: 72 logos pedidos (8 potencias x 9 rubros) a assets/<TAG>/industrias",
+          len([i for i in cat if i["type"] == "mio_logo"]) == 72)
+    check("eventos del juego: seis imágenes pedidas",
+          {"juego_justificacion", "juego_elecciones", "juego_as", "juego_as_caido", "juego_bomba",
+           "juego_bomba_noticia"} <= {i["id"] for i in cat if i["type"] == "event_picture"})
+
+
 def test_eventos_rotos() -> None:
     section("auditoría: ninguna llamada a un evento que el mod no carga (events/ reemplazado) (2026-11-07)")
     from tools.gen.emitters import cleanup
@@ -3808,7 +3866,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### count_triggers\n### any_controlled_state\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### num_of_controlled_states\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_game_rule\n### has_trait\n### has_dlc\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### num_of_controlled_states\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_country_leader_with_trait\n### has_game_rule\n### has_trait\n### has_dlc\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power hidden_effect random_controlled_state save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -5914,6 +5972,11 @@ def test_lider_ck() -> None:
               det.count("has_country_leader = { character =") >= 21 + 21
               and "has_country_leader = { character = NAS_amaru_quispe ruling_only = yes }" in det
               and "var = MEGANATIONS_lider_desgaste" in det, det[:600])
+        todo_dec = se   # el sorteo de eventos del líder es un efecto (MEGANATIONS_lider_pulso)
+        check("líder: la Comuna (Consejo y PLAN-41) no recibe eventos de familia ni de cuerpo (2026-11-15)",
+              "has_country_flag = MEGANATIONS_lider_visto_15 has_country_leader_with_trait = asc_allocation_algorithm" in todo_dec
+              and "has_country_flag = MEGANATIONS_lider_visto_14 has_country_leader_with_trait" not in todo_dec,
+              todo_dec[todo_dec.find("MEGANATIONS_lider_visto_15"):][:300])
         pul = se[se.index("MEGANATIONS_lider_pulso = {"):][:1500]
         check("cada mes mira si cambio el lider", "MEGANATIONS_lider_detectar = yes" in pul, pul[:500])
         check("Japon y Albion corren el pulso del lider y sus lideres traen stats",
@@ -6128,6 +6191,7 @@ def main() -> int:
         test_friccion,
         test_medallas,
         test_selector_receptor,
+        test_eventos_receptor,
     ):
         test()
 
