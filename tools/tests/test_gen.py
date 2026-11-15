@@ -1239,7 +1239,7 @@ def test_events() -> None:
               "air_agility = 0.117" in nas_air and "air_attack = 0.135" in nas_air and "build_cost_ic = -0.05" in nas_air
               and "air_attack = 0.1 " in efe_air, nas_air)
         check("OIM: una propia por meganacion, con su nombre", "EFE_tank_organization = { allowed = { original_tag = EFE }" in mio_own
-              and mio_own.count("_tank_organization = {") == 8 and "generic_repair" not in mio_own, mio_own[:400])
+              and mio_own.count("_tank_organization = {") == 10 and "generic_repair" not in mio_own, mio_own[:400])
         check("OIM: la generica ya no esta para las meganaciones",
               "NOT = { OR = { original_tag = EFE original_tag = FCU" in mio_gen)
         states_txt = "".join(p.read_text() for p in (mod / "history/states").glob("*.txt"))
@@ -3216,8 +3216,8 @@ def test_eventos_receptor() -> None:
               "picture = GFX_juego_bomba_noticia" in r and len(sprites) == 2 and len(copias) == 2, r)
     from tools.arte import arte as _arte
     cat = _arte.catalog()
-    check("industrias: 72 logos pedidos (8 potencias x 9 rubros) a assets/<TAG>/industrias",
-          len([i for i in cat if i["type"] == "mio_logo"]) == 72)
+    check("industrias: 90 logos (8 potencias, Japón y Albión x 9 rubros) a assets/<TAG>/industrias",
+          len([i for i in cat if i["type"] == "mio_logo"]) == 90)
     check("eventos del juego: seis imágenes pedidas",
           {"juego_justificacion", "juego_elecciones", "juego_as", "juego_as_caido", "juego_bomba",
            "juego_bomba_noticia"} <= {i["id"] for i in cat if i["type"] == "event_picture"})

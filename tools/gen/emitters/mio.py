@@ -19,7 +19,7 @@ from ..pdx import Block, parse_file, text
 
 SOURCE = "spec/13_military.yaml -> mio"
 LOC_FILE = "meganations_mio"
-MEGAS = ["EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"]
+MEGAS = ["EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE", "ZJP", "ZAL"]   # 2026-11-15: + Japón y Albión
 
 
 def emit(ctx: BuildContext) -> None:
