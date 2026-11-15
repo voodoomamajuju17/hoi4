@@ -36,6 +36,8 @@ ZONAS = {
     "pie": (24, 626, 1177, 68),
 }
 TECLA = (230, 60)
+DIAL = 100            # el dial mundial en el zócalo (revisión del receptor, 2026-11-15)
+MEDIDOR = (170, 65)   # el medidor de señal, a la misma altura
 PASO = (240, 68)
 # dentro de la tecla (selector_gui.py): bandera en (10, 9) a 0,75 (82 x 52 -> 62 x 39), nombre desde x 76
 VENTANA_BANDERA = (9, 8, 64, 41)   # el hueco justo de la bandera (62 x 39 en 10, 9)
@@ -219,16 +221,36 @@ def fondo():
         ImageDraw.Draw(sombra).line((0, y, W, y), fill=(0, 0, 0, a))
     img.alpha_composite(sombra)
 
-    # banco de teclas: el parlante del receptor (rejilla), hundido
+    # banco de teclas: acero oscuro y tranquilo, hundido (2026-11-15, revisión del receptor: la rejilla
+    # queda para el zócalo de abajo, donde van el dial y el medidor)
     x, y, w, h = s(ZONAS["banco"])
+    _pegar(img, _tono(_material("mat_acero_ennegrecido", w, h, 0.5), 0.6), x, y, 8 * K)
+    _sombra_interior(img, (x, y, x + w, y + h), 8 * K, 6 * K)
+    _bisel(img, (x - 2 * K, y - 2 * K, x + w + 2 * K, y + h + 2 * K), 10 * K, 2 * K, hundido=True)
+
+    # el zócalo de abajo a la derecha: la rejilla del parlante, con el dial y el medidor a la misma altura
+    x, y, w, h = s(ZONAS["filtros"])
     rej = _fuente("selector_rejilla")
     rej = _material_desde(rej, w, h) if rej is not None else _rejilla_dibujada(max(w, h))
     _pegar(img, _tono(rej.crop((0, 0, w, h)), 0.75), x, y, 8 * K)
     _sombra_interior(img, (x, y, x + w, y + h), 8 * K, 6 * K)
     _bisel(img, (x - 2 * K, y - 2 * K, x + w + 2 * K, y + h + 2 * K), 10 * K, 2 * K, hundido=True)
+    dial = (_fuente("selector_dial") or _dial_dibujado(512)).resize((DIAL * K,) * 2, Image.LANCZOS)
+    med = _fuente("selector_medidor")
+    mw, mh = MEDIDOR
+    med = _cubrir(med, mw * K, mh * K) if med is not None else _medidor_dibujado(mw * K, mh * K)
+    sep = 30 * K
+    x0 = x + (w - dial.width - sep - med.width) // 2
+    for pieza, px in ((dial, x0), (med, x0 + dial.width + sep)):
+        py = y + (h - pieza.height) // 2
+        # una sombra suave debajo, para que parezcan montados sobre la rejilla
+        sombra_p = Image.new("RGBA", pieza.size, (0, 0, 0, 0))
+        sombra_p.putalpha(pieza.getchannel("A").point(lambda v: int(v * 0.6)))
+        img.alpha_composite(sombra_p.filter(ImageFilter.GaussianBlur(4 * K)), (px + 2 * K, py + 4 * K))
+        img.alpha_composite(pieza, (px, py))
 
-    # filtros y menores, cabecera y pie: placas hundidas de fieltro grafito (texto claro encima)
-    for nombre, r in (("filtros", 8), ("cabecera", 6), ("pie", 6)):
+    # cabecera y pie: placas hundidas de fieltro grafito (texto claro encima)
+    for nombre, r in (("cabecera", 6), ("pie", 6)):
         x, y, w, h = s(ZONAS[nombre])
         _pegar(img, _tono(_material("mat_fieltro_grafito", w, h, 0.5), 0.55), x, y, r * K)
         _sombra_interior(img, (x, y, x + w, y + h), r * K, 4 * K)
@@ -245,12 +267,7 @@ def fondo():
     # el texto del juego va encima: el vidrio queda oscuro y parejo (se aplana el contraste)
     from PIL import ImageEnhance
     vid = ImageEnhance.Contrast(_tono(vid, 0.75)).enhance(0.7)
-    dial = _fuente("selector_dial")
-    dial = (dial if dial is not None else _dial_dibujado(512)).resize((int(h * 0.82),) * 2, Image.LANCZOS)
-    tenue = dial.copy()
-    tenue.putalpha(tenue.getchannel("A").point(lambda v: int(v * 0.08)))
-    # en la columna derecha (ideas e historia), donde queda espacio cuando no hay país elegido
-    vid.alpha_composite(tenue, (int(w * 0.62 - dial.width / 2), (h - dial.height) // 2))
+    # sin el dial de marca de agua: el vidrio queda libre para leer (revisión del receptor)
     lineas = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     dl = ImageDraw.Draw(lineas)
     for yy in range(0, h, 3 * K):
@@ -266,14 +283,6 @@ def fondo():
                    (x + w + m // 2, y + h + m // 2)):
         _tornillo(img, cx, cy, 4 * K)
 
-    # cabecera: dial chico a la izquierda y medidor de señal a la derecha (lejos del título, que va al centro)
-    x, y, w, h = s(ZONAS["cabecera"])
-    chico = (_fuente("selector_dial") or _dial_dibujado(512)).resize((h - 8 * K,) * 2, Image.LANCZOS)
-    img.alpha_composite(chico, (x + 14 * K, y + 4 * K))
-    med = _fuente("selector_medidor")
-    alto = h - 10 * K
-    med = (_cubrir(med, int(alto * 2.6), alto) if med is not None else _medidor_dibujado(int(alto * 2.6), alto))
-    img.alpha_composite(med, (x + w - med.width - 16 * K, y + 5 * K))
     for nombre in ("banco", "filtros"):
         x, y, w, h = s(ZONAS[nombre])
         for cx, cy in ((x - 9 * K, y - 9 * K), (x + w + 9 * K, y - 9 * K)):
@@ -306,9 +315,13 @@ def tecla():
     out = Image.new("RGBA", (w * 2, h), (0, 0, 0, 0))
     for cuadro in (0, 1):
         img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-        cuerpo = _tono(_material("mat_acero_ennegrecido", w, h, 0.4), 1.15)
+        # 2026-11-15 (revisión del receptor): la elegida está hundida (sombra arriba, filo de luz
+        # abajo) y solo la delata su piloto turquesa; sin halo ni borde de color
+        cuerpo = _tono(_material("mat_acero_ennegrecido", w, h, 0.4), 0.85 if cuadro else 1.15)
         _pegar(img, cuerpo, 0, 0, 7 * K)
-        _bisel(img, (0, 0, w - 1, h - 1), 7 * K, 3 * K, hundido=False)
+        _bisel(img, (0, 0, w - 1, h - 1), 7 * K, 3 * K, hundido=bool(cuadro))
+        if cuadro:
+            _sombra_interior(img, (0, 0, w, h), 7 * K, 5 * K)
         # la ventanita de la bandera: un hueco transparente (2026-11-14, captura: las banderas no se
         # veían; la bandera va debajo de la tecla en la plantilla del juego), con sombra y borde de bronce
         bx, by, bw, bh = (v * K for v in VENTANA_BANDERA)
@@ -322,7 +335,7 @@ def tecla():
         px0, py0, px1, py1 = 76 * K, 7 * K, w - 6 * K, h - 7 * K
         placa = _tono(_material("mat_fieltro_grafito", px1 - px0, py1 - py0, 0.35), 0.7)
         if cuadro:
-            placa = _tono(placa, 1.0, (18, 70, 68), 0.45)
+            placa = _tono(placa, 1.0, (18, 70, 68), 0.2)
         _pegar(img, placa, px0, py0, 4 * K)
         _sombra_interior(img, (px0, py0, px1, py1), 4 * K, 2 * K)
         # el piloto: apagado o encendido
@@ -334,13 +347,7 @@ def tecla():
             img.alpha_composite(brillo.filter(ImageFilter.GaussianBlur(3 * K)))
         d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(TURQUESA if cuadro else (30, 52, 50)) + (255,),
                   outline=(20, 16, 12, 255), width=K)
-        # borde: bronce (normal) o turquesa encendido (elegida)
-        borde = TURQUESA if cuadro else BRONCE
-        if cuadro:
-            halo = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-            ImageDraw.Draw(halo).rounded_rectangle((2 * K, 2 * K, w - 3 * K, h - 3 * K), 7 * K, outline=TURQUESA + (160,), width=3 * K)
-            img.alpha_composite(halo.filter(ImageFilter.GaussianBlur(2 * K)))
-        ImageDraw.Draw(img).rounded_rectangle((K, K, w - 2 * K, h - 2 * K), 7 * K, outline=borde + (255,), width=2 * K)
+        ImageDraw.Draw(img).rounded_rectangle((K, K, w - 2 * K, h - 2 * K), 7 * K, outline=BRONCE + (255,), width=2 * K)
         out.alpha_composite(img, (cuadro * w, 0))
     return out.resize((TECLA[0] * 2, TECLA[1]), Image.LANCZOS)
 
@@ -362,7 +369,9 @@ def vista_previa(dest: Path) -> None:
         col, fila = k % 2, k // 2
         f.alpha_composite(elegida if k == 0 else normal, (730 + col * PASO[0], 76 + fila * PASO[1]))
     d = ImageDraw.Draw(f)
-    for caja in ((44, 96, 156, 210), (256, 92, 444, 40), (256, 150, 360, 136), (256, 437, 444, 168), (44, 352, 190, 200)):
+    # retrato, país, datos en pares, banda de espíritus (grupo, ideas y foco) e historia
+    for caja in ((44, 96, 156, 210), (218, 96, 472, 30), (218, 136, 472, 135), (44, 322, 66, 68),
+                 (120, 322, 430, 66), (554, 308, 105, 100), (44, 432, 646, 22), (44, 462, 646, 128)):
         x, y, w, h = caja
         d.rectangle((x, y, x + w, y + h), outline=(255, 255, 255, 60))
     f.save(dest)

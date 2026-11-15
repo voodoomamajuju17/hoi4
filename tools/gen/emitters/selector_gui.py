@@ -30,6 +30,15 @@ VENTANA = "gamesetup_interesting_countries_window"
 ARTE = "assets/ui/selector"
 TEX = "gfx/interface/meganations/selector"
 FUERA = -3000
+# los datos políticos a la derecha del retrato: (x, y, ancho) dentro de `info`
+DATOS_X, DATOS_ANCHO = 218, 472
+DATOS = {
+    "leader_label": (0, 0, 472), "leader": (0, 17, 472),
+    "ideology_label": (0, 48, 226), "ideology": (0, 65, 226),
+    "government_label": (0, 96, 226), "government": (0, 113, 226),
+    "elections_label": (246, 48, 226), "elections": (246, 65, 226),
+    "party_label": (246, 96, 226), "party": (246, 113, 226),
+}
 LETRA, LETRA_TITULO = '"hoi_16mbs"', '"hoi_20bs"'   # claras: el monitor es oscuro
 
 
@@ -119,22 +128,24 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
     # sobre el vidrio oscuro del monitor van con letra clara (hoi_16mbs y hoi_20bs son blancas)
     # 2026-11-14 (captura: "sigue viéndose la letra oscura"): además del tipo de letra, el color fijo
     # del juego (text_color_code: W blanco, T título; core.gfx -> textcolors), que pisa cualquier otro
-    p.fijar(v + ["info_title"], {"position": pos(44, 316), "maxWidth": "190", "format": "left", "font": LETRA_TITULO,
-                                 "text_color_code": "T"})
-    p.fijar(v + ["info"], {"position": pos(44, 352)})
-    for campo in ("leader_label", "leader", "ideology_label", "ideology", "government_label", "government",
-                  "elections_label", "elections", "party_label", "party"):
-        p.fijar(v + ["info", campo], {"maxWidth": "190", "font": LETRA,
-                                      "text_color_code": "g" if campo.endswith("_label") else "W"})
-    p.fijar(v + ["nation_title"], {"position": pos(256, 92), "maxWidth": "444", "format": "left"})
-    p.fijar(v + ["spirit"], {"position": pos(256, 150)})
-    p.fijar(v + ["spirit", "ideas"], {"size": "{ width = 360 height = 136 }"})
-    p.fijar(v + ["spirit", "ideas", "ideas_grid"], {"size": "{ width = 100% height = 136 }",
-                                                    "max_slots": "{ x = 5 y = 2 }"})
-    p.fijar(v + ["spirit", "focus"], {"position": pos(0, 145)})
-    p.fijar(v + ["history_title"], {"position": pos(256, 405), "maxWidth": "444", "format": "left", "font": LETRA_TITULO,
+    # 2026-11-15 (revisión del receptor, segunda pasada): vidrio con 20 px de margen; arriba a la
+    # izquierda el retrato (156 x 210) y a su derecha el país y el líder; debajo los datos políticos en
+    # pares (rótulo dorado claro "L", valor blanco "W"); después una banda con el grupo, los espíritus y
+    # el foco; abajo la historia a todo el ancho
+    p.fijar(v + ["info_title"], {"position": pos(FUERA, 316)})
+    p.fijar(v + ["nation_title"], {"position": pos(DATOS_X, 96), "maxWidth": str(DATOS_ANCHO), "format": "left"})
+    p.fijar(v + ["info"], {"position": pos(DATOS_X, 136)})
+    for campo, (x, y, ancho) in DATOS.items():
+        p.fijar(v + ["info", campo], {"position": pos(x, y), "maxWidth": str(ancho), "font": LETRA, "format": "left",
+                                      "text_color_code": "L" if campo.endswith("_label") else "W"})
+    p.fijar(v + ["spirit"], {"position": pos(44, 322)})
+    p.fijar(v + ["spirit", "ideas"], {"position": pos(76, 0), "size": "{ width = 430 height = 70 }"})
+    p.fijar(v + ["spirit", "ideas", "ideas_grid"], {"size": "{ width = 100% height = 70 }",
+                                                    "max_slots": "{ x = 7 y = 1 }"})
+    p.fijar(v + ["spirit", "focus"], {"position": pos(510, -14)})
+    p.fijar(v + ["history_title"], {"position": pos(44, 432), "maxWidth": "646", "format": "left", "font": LETRA_TITULO,
                                     "text_color_code": "T"})
-    p.fijar(v + ["history"], {"position": pos(256, 437), "maxWidth": "444", "maxHeight": "168", "font": LETRA,
+    p.fijar(v + ["history"], {"position": pos(44, 462), "maxWidth": "646", "maxHeight": "128", "font": LETRA, "format": "left",
                               "text_color_code": "W"})
     # la tecla: bandera y nombre; el retrato existe pero queda fuera de la vista
     t = ["country_entry"]

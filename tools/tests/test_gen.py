@@ -3040,13 +3040,16 @@ def test_selector_receptor() -> None:
           and "max_slots_vertical = 6" in o, o[:600])
     check("selector: la tecla con sprite propio y el retrato fuera de la vista (existe, no recibe clics)",
           'quadTextureSprite = "GFX_mn_selector_tecla"' in o and 'name = "country_leader" position = { x = -3000 y = 0 }' in o)
-    check("selector: ideas de a 5 x 2 en el monitor (el EFE trae siete)", "max_slots = { x = 5 y = 2 }" in o)
-    check("selector: la historia en el monitor con lugar para el texto entero",
-          'name = "history" position = { x = 256 y = 437 } maxWidth = 444 maxHeight = 168' in o, o)
-    # (en la plantilla de la prueba no traen font, así que entra al principio del bloque)
+    check("selector: los espíritus en una banda de siete debajo del retrato (el EFE trae siete)",
+          "max_slots = { x = 7 y = 1 }" in o and 'name = "spirit" position = { x = 44 y = 322 }' in o)
+    check("selector: la historia a todo el ancho del vidrio, abajo",
+          'name = "history" position = { x = 44 y = 462 } maxWidth = 646 maxHeight = 128' in o, o)
+    check("selector: país y líder a la derecha del retrato, datos en pares y sin el título Información",
+          'name = "nation_title" position = { x = 218 y = 96 }' in o and 'name = "info" position = { x = 218 y = 136 }' in o
+          and 'name = "elections" position = { x = 246 y = 65 }' in o and 'name = "info_title" position = { x = -3000' in o)
     check("selector: los datos del monitor con letra clara (la de máquina de escribir es negra y no se lee)",
           all(f'font = "hoi_16mbs" name = "{c}"' in o for c in ("leader", "leader_label", "party", "history"))
-          and all(f'font = "hoi_20bs" name = "{c}"' in o for c in ("info_title", "history_title")), o[:300])
+          and 'font = "hoi_20bs" name = "history_title"' in o and "text_color_code = L" in o, o[:300])
     check("selector: el color de los datos fijo en blanco (la captura seguía oscura con solo cambiar la letra)",
           'text_color_code = W font = "hoi_16mbs" name = "leader"' in o or
           all(f'name = "{c}"' in o for c in ("leader", "history")) and o.count("text_color_code = W") >= 6
