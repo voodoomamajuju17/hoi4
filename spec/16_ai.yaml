@@ -537,18 +537,8 @@ plans:
   enable: {flag: HSN_contra_FCU, at_war: false, divisions_at_least: 20}
   strategies:
   - {type: declare_war, target: FCU, value: 80}
-- id: NRE_ultimatum_EFE
-  country: NRE
-  lore: 'Roma contra la Tierra: EFE se negó.'
-  enable: {flag: NRE_contra_EFE}
-  strategies:
-  - {type: prepare_for_war, target: EFE, value: 100}
-  - {type: antagonize, target: EFE, value: 50}
-- id: NRE_ultimatum_declara_EFE
-  country: NRE
-  enable: {flag: NRE_contra_EFE, at_war: false, divisions_at_least: 20}
-  strategies:
-  - {type: declare_war, target: EFE, value: 80}
+# 2026-11-14: Roma y el Imperio Verde ya no son rivales (Pacto de las Restauraciones):
+# se van los planes NRE_ultimatum_EFE.
 
 # 2026-09-29: la FCU y la Federación contra las Tierras Sin Ley, cuando justificaron la guerra
 - id: FCU_contra_tierras_sin_ley

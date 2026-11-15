@@ -7067,10 +7067,13 @@ trees:
         reward:
         - {effect: add_research_slot, value: 1}
         - {effect: add_ideas, value: NRE_espiritu_pax_romana}
+      # 2026-11-14 ("Roma y EFE no deberían ser rivales; si algo, aliados: los dos miran con
+      # nostalgia el pasado y el orden"): el ultimátum pasa a ser el Pacto de las Restauraciones,
+      # como el Pacto del Mandato del Sol y el Directorio (el id queda por las partidas guardadas)
       - id: NRE_roma_contra_la_tierra
-        name: {english: Rome against the Earth, spanish: Roma contra la Tierra}
+        name: {english: The Pact of the Restorations, spanish: El Pacto de las Restauraciones}
         days: 105
-        icon: GFX_goal_generic_major_war
+        icon: GFX_goal_generic_political_pressure
         prerequisites:
         - NRE_el_equilibrio_de_varro
         available: {country_exists: EFE}
@@ -7080,11 +7083,11 @@ trees:
           - factor: 0
             when: {at_war: true}
         desc:
-          english: 'An ultimatum to the Ecological Empire: open the Atlantic to Rome, or war.'
-          spanish: 'Un ultimátum al Imperio Ecológico: abrirle el Atlántico a Roma, o guerra.'
+          english: 'An embassy to the Green Empire: two thrones that look to the past, one order. Grain and BioSteel for Rome, engineers and the Mediterranean shipyards for them. Non-aggression and mutual guarantee if they sign.'
+          spanish: 'Una embajada al Imperio Verde: dos tronos que miran al pasado, un solo orden. Trigo y bioacero para Roma, ingenieros y los astilleros del Mediterráneo para ellos. No agresión y garantía mutua si firman.'
         reward:
         - {effect: event, id: meganations_efe.14, target: EFE}
-        - {effect: add_war_support, value: 0.05}
+        - {effect: add_political_power, value: 50}
     - id: cuatro_imperatores
       ai_factor: 3        # rama política: la IA la hacía al final (2026-10-01); 5 era demasiado (2026-10-02)
       name: {english: The Year of the Four Imperatores, spanish: El Año de los Cuatro Imperatores}

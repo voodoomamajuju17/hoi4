@@ -1913,8 +1913,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("375 modificadores dinamicos (sin los Anios Inciertos, 2026-11-07; 8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 375 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("377 modificadores dinamicos (2 de la Linea, 2026-11-14; sin los Anios Inciertos, 2026-11-07; 8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len(dm.entries) == 377 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2088,7 +2088,7 @@ def test_nre() -> None:
             "NRE_astilleros_de_ostia", "NRE_legio_i_italica", "NRE_mare_nostrum", "NRE_el_aquila_de_oro", "NRE_spqr")))
         check("Arbogast asciende con La Legion Decide", "promote_character = NRE_legado_arbogast"
               in pdx.render(by["NRE_la_legion_decide"].get("completion_reward")))
-        check("Roma contra la Tierra es un ultimatum al EFE",
+        check("el foco de Roma hacia el EFE es ahora el Pacto de las Restauraciones (2026-11-14)",
               "meganations_efe.14" in pdx.render(by["NRE_roma_contra_la_tierra"].get("completion_reward")))
         eff = (mod / "common/scripted_effects/meganations_effects.txt").read_text()
         body = eff[eff.index("NRE_mes_de_las_legiones"):]
@@ -2366,7 +2366,8 @@ def test_ai() -> None:
               plan is not None and "country_exists = ZWE" in pdx.render(plan.get("abort")))
         check("el senor protege a su satelite", "MEGANATIONS_EFE_protege_PTA" in ai and "type = protect" in ai)
         check("el satelite apoya a su senor", "MEGANATIONS_PTA_apoya_EFE" in ai)
-        check("las rivalidades se antagonizan", "MEGANATIONS_EFE_rivaliza_con_NRE" in ai)
+        check("las rivalidades se antagonizan (2026-11-14: Roma y el EFE ya no son rivales)",
+              "MEGANATIONS_ASC_rivaliza_con_NRE" in ai and "MEGANATIONS_EFE_rivaliza_con_NRE" not in ai)
         check("no hay planes contra paises sin territorio (ZWB en el fixture)", "id = ZWB" not in ai)
         mil = root.get("MEGANATIONS_EFE_militar")
         milr = " ".join(pdx.render(mil).split()) if mil is not None else ""
@@ -2419,6 +2420,8 @@ def test_ai() -> None:
               "type = conquer id = ZWI" in cr and "type = invade id = ZWI value = 150" in cr, cr[:400])
         otros = [k for k, v in root.entries if isinstance(v, pdx.Block)
                  and not k.startswith(("MEGANATIONS_HSN_", "MEGANATIONS_ZJP_"))   # 2026-10-28: y el Shogunato, que es de islas
+                 # 2026-11-14: los planes de los puntos de fricción de la HSN y el Shogunato también
+                 and not (k.startswith("MEGANATIONS_MN_friccion_") and ("_HSN_" in k or "_ZJP_" in k))
                  and "type = invade" in " ".join(pdx.render(v).split())]
         check("IA: solo la HSN (y el Shogunato) desembarcan por esta regla", not otros, str(otros[:5]))
         check("IA: el reporte cuenta los desembarcos", any("planes de desembarco (invade)" in n for n in ctx.notes))
@@ -2867,6 +2870,81 @@ def test_modelos_3d() -> None:
           and not sin, ent)
 
 
+def test_friccion() -> None:
+    """2026-11-14 ("no es realista que sean cuestiones puramente ideológicas"): puntos de fricción
+    materiales, el Pacto de las Restauraciones (Roma y el Imperio Verde) y el Tratado de la Línea."""
+    section("puntos de friccion: causas materiales, tension, crisis limitadas, Pacto y Linea")
+    import re as _re
+    from tools.gen import friccion_spec as fs
+    from tools.gen.emitters.friccion import _objetivos
+    spec = specload.load(REPO_ROOT / "spec")
+    cfg = spec.raw["friccion"]
+    pares = {p["id"]: p for p in cfg["pares"]}
+    check("once puntos de friccion, con Japon y Albion", len(pares) == 11
+          and {"kanto", "astilleros", "canal", "mar_del_norte"} <= set(pares))
+    riv = {frozenset(r["between"]) for r in spec.raw["diplomacy"]["rivalries"]}
+    check("Roma y el Imperio Verde ya no son rivales", frozenset(("EFE", "NRE")) not in riv and len(riv) == 7)
+    check("cada rivalidad apunta a su punto de friccion",
+          all(r.get("friccion") in pares for r in spec.raw["diplomacy"]["rivalries"]))
+    check("cada par: lugar, causa y opinion en los dos idiomas, y dos incidentes",
+          all(p[k]["english"] and p[k]["spanish"] for p in pares.values() for k in ("lugar", "causa", "opinion"))
+          and all(len(p["incidentes"]) == 2 for p in pares.values()))
+    ns = {e["id"]: e for e in spec.raw["events"]["namespaces"]["meganations_friccion"]["events"]}
+    check("crisis, propuesta, aceptado y rechazado por par; incidentes a mano",
+          all(fs.base(p) + k in ns for p in pares.values() for k in (1, 2, 3, 4, 5, 6)))
+    check("la Linea: propuesta, Hong Kong, firma, el mundo y la traicion", {200, 201, 202, 203, 204} <= set(ns))
+    cat = next(c for c in spec.raw["decisions"]["categories"] if c["id"] == "MN_friccion_category")
+    ids = {d["id"] for d in cat["decisions"]}
+    check("tratado, concesion y presion para cada par, y la Linea una sola vez",
+          all(f"MN_friccion_{p}_{k}" in ids for p in pares for k in ("proponer", "conceder", "presionar"))
+          and "MN_linea_proponer" in ids and next(d for d in cat["decisions"] if d["id"] == "MN_linea_proponer")["fire_only_once"])
+    lin = str(next(d for d in cat["decisions"] if d["id"] == "MN_linea_proponer")["available"])
+    check("la Linea es rara: fecha, tension, astucia de los dos lideres y una amenaza",
+          all(s in lin for s in ("2103.1.1", "MEGANATIONS_lider_astucia", "MN_friccion_peaje", "MN_linea_propuesta")))
+    check("Albion: Roma por el Canal salvo la neovictoriana; la Comuna por el Mar del Norte solo la neovictoriana",
+          "ZAL_ruta" in str(pares["canal"]["activa"]) and "not" in str(pares["canal"]["activa"])
+          and "ZAL_ruta" in str(pares["mar_del_norte"]["activa"]))
+    check("Japon: el Directorio solo es rival si eligio a la Alta Mar", "SHD_apoya_hsn" in str(pares["astilleros"]["activa"]))
+    obj = _objetivos("EFE", ["NAS"], [302, 303])
+    check("la crisis da objetivos de guerra solo por las regiones en disputa en manos del rival",
+          "302 = { is_owned_by = NAS }" in obj and "type = take_state target = NAS generator = { 302 }" in obj
+          and "annex" not in obj)
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        se = (mod / "common/scripted_effects/meganations_friccion.txt").read_text(encoding="utf-8")
+        check("el pulso de cada par: activa, sube, incidentes, crisis y paz",
+              all(f"MN_friccion_{p}_activa" in se for p in pares) and "meganations_friccion.13" in se
+              and "value = 35" in se and "MN_friccion_malaca_crisis = yes" in se)
+        check("la Linea se firma, se rompe con una guerra y la propone la IA rara vez",
+              all(k in se for k in ("MN_linea_firmar = {", "MN_linea_romper = {", "non_aggression_pact",
+                                    "HSN_linea_oeste", "SHD_linea_este", "meganations_friccion.200")))
+        efx = (mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8")
+        mundiales = efx[efx.index("MEGANATIONS_eventos_mundiales = {"):]
+        mundiales = mundiales[:mundiales.index("\n}\n")]
+        check("el pulso corre una vez por mes en cada potencia", "MN_friccion_pulso = yes" in mundiales)
+        om = (mod / "common/opinion_modifiers/meganations_friccion.txt").read_text(encoding="utf-8")
+        check("opinion por la causa (no por la ideologia)", all(f"MN_friccion_{p}_opinion" in om for p in pares)
+              and "MN_linea_socios" in om)
+        dip = (mod / "common/opinion_modifiers/meganations_opinion_modifiers.txt").read_text(encoding="utf-8")
+        check("se van los modificadores de rival ideologico; llega el de la Restauracion",
+              "meganations_restauraciones" in dip and "meganations_bloc_rival" not in dip)
+        ev = (mod / "events/meganations_efe.txt").read_text(encoding="utf-8")
+        e14 = ev[ev.index("id = meganations_efe.14"):]
+        e14 = e14[:e14.index("country_event = {", 10) if "country_event = {" in e14[10:] else len(e14)]
+        check("Pacto de las Restauraciones: no agresion y garantia mutua con Roma",
+              "non_aggression_pact" in e14 and "country = NRE relation = guarantee" in " ".join(e14.split())
+              and "meganations_restauraciones" in e14)
+        ai = " ".join(p.read_text(encoding="utf-8") for p in (mod / "common/ai_strategy").glob("*.txt"))
+        check("la IA ya no prepara la guerra Roma-EFE por ideologia, y sigue la tension",
+              "NRE_ultimatum_EFE" not in ai and _re.search(r"MN_friccion_\w+_declara", ai) is not None
+              and "MN_friccion_" in ai)
+        allf = " ".join(p.read_text(encoding="utf-8", errors="ignore") for p in mod.rglob("*.txt"))
+        check("nadie pone la marca NRE_contra_EFE", "NRE_contra_EFE" not in allf)
+        loc = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "localisation").rglob("*spanish*.yml"))
+        check("los avisos de guerra hablan de la causa", "El Cobalto de Katanga" in loc and "La Guerra que Nadie Quería" in loc)
+
+
 def test_medallas() -> None:
     """2026-11-12: medallas en la Ficha del Líder (spec/40_medallas.yaml)."""
     section("medallas: 3 casillas y el trofeo en la Ficha del Líder")
@@ -2957,6 +3035,10 @@ def test_selector_receptor() -> None:
     check("selector: los datos del monitor con letra clara (la de máquina de escribir es negra y no se lee)",
           all(f'font = "hoi_16mbs" name = "{c}"' in o for c in ("leader", "leader_label", "party", "history"))
           and all(f'font = "hoi_20bs" name = "{c}"' in o for c in ("info_title", "history_title")), o[:300])
+    check("selector: el color de los datos fijo en blanco (la captura seguía oscura con solo cambiar la letra)",
+          'text_color_code = W font = "hoi_16mbs" name = "leader"' in o or
+          all(f'name = "{c}"' in o for c in ("leader", "history")) and o.count("text_color_code = W") >= 6
+          and o.count("text_color_code = T") == 2, o[:400])
     check("selector: volver y elegir dentro del pie (y 626 a 694 de la carcasa)",
           'name = "back_button" position = { x = -158 y = -74 }' in o and 'name = "select_button" position = { x = 10 y = -74 }' in o)
     from tools.arte import selector as arte_sel
@@ -3628,11 +3710,13 @@ def test_diplomacy() -> None:
         check("la Anarquia no reclama nada", not any(t in ("ZWE", "ZWI", "ZWM", "ZWB", "ZAN") for s in claims.values() for t in s))
 
         om = pdx.parse((mod / "common/opinion_modifiers/meganations_opinion_modifiers.txt").read_text()).get("opinion_modifiers")
-        check("modificador de rival de bloque -50", pdx.text(om.get("meganations_bloc_rival").get("value")) == "-50")
+        # 2026-11-14: la opinión de rival ya no es ideológica ni de arranque: la pone el punto de
+        # fricción al activarse (test_friccion); Roma y el EFE pueden firmar el Pacto de las Restauraciones
+        check("el Pacto de las Restauraciones vale +80", pdx.text(om.get("meganations_restauraciones").get("value")) == "80"
+              and om.get("meganations_bloc_rival") is None)
         efe = next((mod / "history/countries").glob("EFE - *.txt")).read_text()
         nre = next((mod / "history/countries").glob("NRE - *.txt")).read_text()
-        check("EFE mira mal a la NRE", "target = NRE" in efe and "meganations_bloc_rival" in efe)
-        check("y la NRE al EFE (dos sentidos)", "target = EFE" in nre)
+        check("el EFE ya no arranca mirando mal a Roma", "meganations_bloc_rival" not in efe and "meganations_bloc_rival" not in nre)
         check("rivalidad con un pais sin territorio no se escribe (FCU)", "target = FCU" not in efe)
         check("tension mundial en el pais por defecto", "add_named_threat" in efe and "threat = 30" in efe)
         asc = next((mod / "history/countries").glob("ASC - *.txt")).read_text()
@@ -3723,7 +3807,9 @@ def test_vanilla_validation() -> None:
             # 2026-11-01: generales de Japón y Albión (lealtad a la Casa, elencos por ruta)
             "every_army_leader every_navy_leader add_unit_leader_trait remove_unit_leader_trait "
             # 2026-11-03: agentes de inteligencia con retrato propio
-            "create_operative_leader\n"
+            "create_operative_leader "
+            # 2026-11-14: puntos de fricción y el Tratado de la Línea
+            "remove_opinion_modifier add_state_claim custom_effect_tooltip set_global_flag clr_global_flag\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -4236,7 +4322,9 @@ def _diversion_checks(ctx) -> None:
           and lib.count("create_unit = {") == 6, lib[-800:])
     # 8. los rivales jurados
     opin = flat(mod / "common/opinion_modifiers/meganations_opinion_modifiers.txt")
-    check("rivales: opinion de rival jurado", "meganations_rival_jurado = { value = -75 }" in opin)
+    # 2026-11-14: la opinión entre rivales ahora es por la causa (puntos de fricción, test_friccion)
+    check("rivales: la opinion ya no es de 'rival jurado' sino por la causa", "meganations_rival_jurado" not in opin
+          and "MN_friccion_litio_opinion" in flat(mod / "common/opinion_modifiers/meganations_friccion.txt"))
     nem = pulse[pulse.index("tag = EFE country_exists = NAS"):][:2500]
     check("rivales: aviso, guerra jurada, y venganza cuando el rival capitula (el vencido recibe la humillacion)",
           "NAS = { save_event_target_as = meganations_rival_jurado }" in nem
@@ -6022,6 +6110,7 @@ def main() -> int:
         test_simulador,
         test_vanilla_validation,
         test_espiritus,
+        test_friccion,
         test_medallas,
         test_selector_receptor,
     ):

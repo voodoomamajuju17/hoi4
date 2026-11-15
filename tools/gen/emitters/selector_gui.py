@@ -117,19 +117,25 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
     # 2026-11-13 (capturas: "no se lee nada el texto del panel izquierdo"): el juego escribe los datos
     # con hoi4_typewriter, que es tinta negra (color = 0xff000000 en core.gfx) para su papel claro;
     # sobre el vidrio oscuro del monitor van con letra clara (hoi_16mbs y hoi_20bs son blancas)
-    p.fijar(v + ["info_title"], {"position": pos(44, 316), "maxWidth": "190", "format": "left", "font": LETRA_TITULO})
+    # 2026-11-14 (captura: "sigue viéndose la letra oscura"): además del tipo de letra, el color fijo
+    # del juego (text_color_code: W blanco, T título; core.gfx -> textcolors), que pisa cualquier otro
+    p.fijar(v + ["info_title"], {"position": pos(44, 316), "maxWidth": "190", "format": "left", "font": LETRA_TITULO,
+                                 "text_color_code": "T"})
     p.fijar(v + ["info"], {"position": pos(44, 352)})
     for campo in ("leader_label", "leader", "ideology_label", "ideology", "government_label", "government",
                   "elections_label", "elections", "party_label", "party"):
-        p.fijar(v + ["info", campo], {"maxWidth": "190", "font": LETRA})
+        p.fijar(v + ["info", campo], {"maxWidth": "190", "font": LETRA,
+                                      "text_color_code": "g" if campo.endswith("_label") else "W"})
     p.fijar(v + ["nation_title"], {"position": pos(256, 92), "maxWidth": "444", "format": "left"})
     p.fijar(v + ["spirit"], {"position": pos(256, 150)})
     p.fijar(v + ["spirit", "ideas"], {"size": "{ width = 360 height = 136 }"})
     p.fijar(v + ["spirit", "ideas", "ideas_grid"], {"size": "{ width = 100% height = 136 }",
                                                     "max_slots": "{ x = 5 y = 2 }"})
     p.fijar(v + ["spirit", "focus"], {"position": pos(0, 145)})
-    p.fijar(v + ["history_title"], {"position": pos(256, 405), "maxWidth": "444", "format": "left", "font": LETRA_TITULO})
-    p.fijar(v + ["history"], {"position": pos(256, 437), "maxWidth": "444", "maxHeight": "168", "font": LETRA})
+    p.fijar(v + ["history_title"], {"position": pos(256, 405), "maxWidth": "444", "format": "left", "font": LETRA_TITULO,
+                                    "text_color_code": "T"})
+    p.fijar(v + ["history"], {"position": pos(256, 437), "maxWidth": "444", "maxHeight": "168", "font": LETRA,
+                              "text_color_code": "W"})
     # la tecla: bandera y nombre; el retrato existe pero queda fuera de la vista
     t = ["country_entry"]
     p.fijar(t + ["country"], {"quadTextureSprite": '"GFX_mn_selector_tecla"', "position": pos(0, 0)})

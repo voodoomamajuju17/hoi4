@@ -192,20 +192,27 @@ anarchy_hostility:
     modifier: MEGANATIONS_tierras_dispersas
 
 rivalries:
-  - { between: [EFE, NRE], modifier: meganations_bloc_rival, lore: "Dos Restauraciones: la Tierra o Roma." }
-  - { between: [ASC, APF], modifier: meganations_bloc_rival, lore: "Máquinas o consejos: dos colectivismos." }
-  - { between: [FCU, HSN], modifier: meganations_bloc_rival, lore: "La corporación contra la flota." }
-  - { between: [EFE, FCU], modifier: meganations_natural_enemy, lore: "El agua no se vende." }
-  # 2026-10-10 (rivales jurados, ver race.nemesis): los que piden las mismas tierras
-  - { between: [EFE, NAS], modifier: meganations_rival_jurado, lore: "Dos imperios para una sola selva." }
-  - { between: [HSN, SHD], modifier: meganations_rival_jurado, lore: "Hong Kong no se comparte." }
-  - { between: [ASC, NRE], modifier: meganations_rival_jurado, lore: "La línea de fuertes de Italia." }
-  - { between: [APF, NRE], modifier: meganations_rival_jurado, lore: "Roma o el Imperio Humano Original." }
+  # 2026-11-14 ("no es realista que sean cuestiones puramente ideológicas"): cada rivalidad es
+  # ahora un punto de fricción material (spec/41_friccion.yaml): un lugar, una tensión, incidentes,
+  # tratados y una guerra limitada. La opinión por la causa la pone el punto de fricción al
+  # activarse. Roma y el Imperio Verde ya no son rivales: Pacto de las Restauraciones (12_events,
+  # meganations_efe.14), como el Pacto del Mandato del Sol y el Directorio.
+  - { between: [EFE, NAS], friccion: litio, lore: "Los salares del litio y el agua de los glaciares." }
+  - { between: [EFE, FCU], friccion: acuifero, lore: "El contrato del Acuífero Guaraní de 2058." }
+  - { between: [ASC, APF], friccion: cobalto, lore: "El cobalto de Katanga y la frontera cerrada." }
+  - { between: [FCU, HSN], friccion: peaje, lore: "El peaje de Malaca y el seguro impago." }
+  - { between: [HSN, SHD], friccion: malaca, lore: "Malaca y Hong Kong (o el Tratado de la Línea)." }
+  - { between: [ASC, NRE], friccion: rin, lore: "El Rin y los pasos de los Alpes." }
+  - { between: [APF, NRE], friccion: suez, lore: "Suez y el sol del Sahara." }
 
 opinion_modifiers:
   - id: meganations_mandato
     value: 80
     name: { english: "Allies of the Mandate", spanish: "Aliados del Mandato" }
+  # 2026-11-14: Roma y el Imperio Verde (Pacto de las Restauraciones)
+  - id: meganations_restauraciones
+    value: 80
+    name: { english: "Allies of the Restoration", spanish: "Aliados de la Restauración" }
   - id: meganations_odio_anarquia
     value: -150
     name: { english: "Border of blood", spanish: "Frontera de sangre" }
@@ -215,15 +222,6 @@ opinion_modifiers:
   - id: meganations_concesion
     value: 40
     name: { english: "Paid their price", spanish: "Pagó su precio" }
-  - id: meganations_bloc_rival
-    value: -50
-    name: { english: "Rival of the same bloc", spanish: "Rival del mismo bloque" }
-  - id: meganations_natural_enemy
-    value: -100
-    name: { english: "Natural enemy", spanish: "Enemigo natural" }
-  - id: meganations_rival_jurado
-    value: -75
-    name: { english: "Sworn rival", spanish: "Rival jurado" }
 
 claims:
   # Cada meganación reclama los states de la Anarquía que tocan su territorio

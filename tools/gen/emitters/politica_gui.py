@@ -178,6 +178,7 @@ def emit(ctx: BuildContext) -> None:
     boton_lider(ctx)
 
 
+SUBIR_BOTON = 10   # px que sube el botón del Líder respecto del centro del lugar del gráfico
 GRAFICO = (270, 304, 100)   # x, y y lado del gráfico de popularidad en el .gui del juego (antes de bajar DY)
 
 
@@ -192,7 +193,9 @@ def boton_lider(ctx: BuildContext) -> None:
     lado = DISENO["boton_grande"]
     # 2026-11-12 (captura: "queda medio choto"): más chico que el lugar del gráfico, para no tocar
     # la facción de arriba ni los botones de abajo, y al lado el rótulo con el nombre del líder
-    x, y = gx + (gl - lado) // 2, gy + DY + (gl - lado) // 2
+    # 2026-11-14 (captura: "necesita subir unos cuantos píxeles"): pegado arriba del lugar del gráfico,
+    # lejos de la fila de botones de abajo
+    x, y = gx + (gl - lado) // 2, gy + DY + (gl - lado) // 2 - SUBIR_BOTON
     tx = lado + 14
     gui = ('guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "mn_ficha_politica_window"\n'
            f'\t\tposition = {{ x = {x} y = {y} }}\n\t\tsize = {{ width = 270 height = {lado} }}\n'

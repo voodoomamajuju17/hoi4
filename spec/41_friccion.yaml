@@ -1,0 +1,793 @@
+# =============================================================================
+# 41_friccion.yaml — Puntos de fricción entre potencias (2026-11-14)
+# =============================================================================
+# Pedido del usuario: "No es realista que sean cuestiones puramente ideológicas,
+# sobre todo dentro del mismo espectro de ideas." Cada rivalidad tiene ahora un
+# motivo material (agua, litio, un estrecho, un río, una deuda) y un lugar en el
+# mapa; la ideología queda como la bandera que cada lado agita. Roma y el
+# Imperio Verde dejan de ser rivales: firman el Pacto de las Restauraciones (como
+# el Pacto del Mandato del Sol y el Directorio). Japón y Albión se suman según
+# su camino. La Alta Mar y el Directorio pueden repartirse el comercio del mundo
+# con el Tratado de la Línea (raro, "tipo Tordesillas").
+#
+# Cómo funciona (tools/gen/emitters/friccion.py):
+#   - Cada par tiene una tensión de 0 a 100 (variable MN_friccion_<id> en el país `a`).
+#     Arranca en `inicio` cuando el par se activa y sube 1 por mes; un tratado la
+#     hace bajar 2 por mes mientras dura (2 años).
+#   - Con 25 o más, cada mes hay chance de un incidente (`incidentes`: el primero le
+#     llega a `a`, el segundo a `b`): mano dura sube la tensión, ceder la baja.
+#   - Con 50, la IA se prepara; con 80 estalla la crisis: los dos reciben un objetivo
+#     de guerra por las regiones del otro lado (`regiones_a`: de `a`, que quiere `b`;
+#     `regiones_b`: de `b`, que quiere `a`). La guerra es por eso, no por todo.
+#   - Decisiones de cada lado: proponer un tratado (el otro acepta o no), hacer una
+#     concesión, o presionar.
+#   - Terminada una guerra entre los dos, la tensión vuelve a 35.
+#   `activa`: condición (en el alcance de `a`) para que el par exista; sin ella, que
+#   existan los dos.
+# Las regiones se nombran como en el mapa del juego (reporte del instalador 1.19.5); una lista
+# entre corchetes son nombres alternativos (gana el primero que el juego tenga). Una región que no
+# está en manos del rival al estallar la crisis no entra.
+# =============================================================================
+
+friccion:
+  src: user_request
+  inicio_incidentes: 25
+  chance_incidente: 12        # % por mes, con una pausa de 180 días después de cada uno
+  umbral_ia: 50
+  umbral_crisis: 80
+  despues_de_guerra: 35
+  tratado_dias: 730
+  pares:
+  - id: litio
+    a: EFE
+    b: NAS
+    inicio: 30
+    lugar: {english: the lithium salt flats, spanish: los salares del litio}
+    opinion: {english: The Lithium Flats, spanish: Los Salares del Litio}
+    causa:
+      english: Lithium and glacier water lie on both sides of the cordillera. The batteries of the Sun Kingdom and the BioSteel vats of the Green Empire come out of the same salt flat.
+      spanish: El litio y el agua de los glaciares están repartidos a los dos lados de la cordillera. Las baterías del Reino del Sol y las cubas de bioacero del Imperio Verde salen del mismo salar.
+    regiones_a: [Antofagasta, Tucumán]
+    regiones_b: [La Paz, Arequipa, Tacna-Moquegua]
+    incidentes: [meganations_friccion.11, meganations_friccion.12]
+  - id: acuifero
+    a: EFE
+    b: FCU
+    inicio: 35
+    lugar: {english: the Guaraní Aquifer, spanish: el Acuífero Guaraní}
+    opinion: {english: The Aquifer Contract, spanish: El Contrato del Acuífero}
+    causa:
+      english: In 2058 old Brazil sold the Guaraní Aquifer to the Union. The Union comes to collect what was signed; the Green Empire does not recognise the signature, and the Union's West is running out of water.
+      spanish: En 2058 el viejo Brasil le vendió el Acuífero Guaraní a la Unión. La Unión viene a cobrar lo que se firmó; el Imperio Verde no reconoce la firma, y el oeste de la Unión se está quedando sin agua.
+    regiones_a: [Región Mesopotámica, Rio Grande do Sul]
+    regiones_b: []
+    incidentes: [meganations_friccion.21, meganations_friccion.22]
+  - id: cobalto
+    a: ASC
+    b: APF
+    inicio: 25
+    lugar: {english: the Katanga mines, spanish: las minas de Katanga}
+    opinion: {english: The Katanga Cobalt, spanish: El Cobalto de Katanga}
+    causa:
+      english: The Commune's machines run on Congolese cobalt. The African councils nationalised the mines and shut down automated extraction, and the Commune closed its border to the climate refugees.
+      spanish: Las máquinas de la Comuna funcionan con cobalto del Congo. Los consejos africanos nacionalizaron las minas y cerraron la extracción automática, y la Comuna les cerró la frontera a los refugiados del clima.
+    regiones_a: []
+    regiones_b: [Elisabethville, Lusambo, Costermansville]
+    incidentes: [meganations_friccion.31, meganations_friccion.32]
+  - id: peaje
+    a: FCU
+    b: HSN
+    inicio: 30
+    lugar: {english: the Strait of Malacca, spanish: el estrecho de Malaca}
+    opinion: {english: The Malacca Toll, spanish: El Peaje de Malaca}
+    causa:
+      english: The High Seas charge a toll on every ship that crosses Malacca, and their insurer refused to pay for the Union convoy that sank in 2096. The Union collects it as a debt; the High Seas call it bad luck.
+      spanish: La Alta Mar cobra peaje por cada barco que cruza Malaca, y su aseguradora se negó a pagar el convoy de la Unión que se hundió en 2096. La Unión lo cobra como deuda; la Alta Mar lo llama mala suerte.
+    regiones_a: [[California, Southern California, Northern California]]
+    regiones_b: [Kuala Lumpur]
+    incidentes: [meganations_friccion.41, meganations_friccion.42]
+  - id: malaca
+    a: HSN
+    b: SHD
+    inicio: 35
+    lugar: {english: Malacca and Hong Kong, spanish: Malaca y Hong Kong}
+    opinion: {english: Malacca and Hong Kong, spanish: Malaca y Hong Kong}
+    causa:
+      english: Almost everything the Directorate buys and sells goes through a strait someone else controls. Hong Kong, held by the warlords of Hindustan, is the card both of them want to bargain with.
+      spanish: Casi todo lo que el Directorio compra y vende pasa por un estrecho que controla otro. Hong Kong, en manos de los caudillos del Indostán, es la ficha que los dos quieren para negociar.
+    regiones_a: [Kuala Lumpur]
+    regiones_b: [Taiwan, Guangzhou]
+    incidentes: [meganations_friccion.51, meganations_friccion.52]
+    # con el Tratado de la Línea firmado, este par se apaga (ver linea)
+  - id: rin
+    a: ASC
+    b: NRE
+    inicio: 30
+    lugar: {english: the Rhine, spanish: el Rin}
+    opinion: {english: The Rhine, spanish: El Rin}
+    causa:
+      english: Rome holds Gaul, and with it the left bank of the Rhine. The Commune's factories depend on the river to cool their machines and move their power, and the Alpine passes are the only other route.
+      spanish: Roma tiene la Galia, y con ella la orilla izquierda del Rin. Las fábricas de la Comuna dependen del río para enfriar sus máquinas y mover su energía, y los pasos de los Alpes son la única otra ruta.
+    regiones_a: [Swiss Plateau, [Tirol, Tyrol]]
+    regiones_b: [[Alsace, Alsace-Lorraine], Lorraine]
+    incidentes: [meganations_friccion.61, meganations_friccion.62]
+  - id: suez
+    a: APF
+    b: NRE
+    inicio: 30
+    lugar: {english: Suez and the Sahara, spanish: Suez y el Sahara}
+    opinion: {english: Suez and the Saharan Sun, spanish: Suez y el Sol del Sahara}
+    causa:
+      english: Rome claims the north coast of Africa as its old provinces; it needs the canal and the solar power of the desert. The Federation lives it as the return of colonialism.
+      spanish: Roma reclama la costa norte de África como sus viejas provincias; necesita el canal y la energía solar del desierto. La Federación lo vive como el regreso del colonialismo.
+    regiones_a: [Suez, Alexandria, Tripoli, Libyan Desert]
+    regiones_b: [[Sicily, Sicilia, Palermo]]
+    incidentes: [meganations_friccion.71, meganations_friccion.72]
+  - id: kanto
+    a: HSN
+    b: ZJP
+    inicio: 40
+    lugar: {english: the Kanto docks, spanish: los diques de Kanto}
+    opinion: {english: The Kanto Docks, spanish: Los Diques de Kanto}
+    causa:
+      english: The High Seas consider theirs the fleet and the shipyards Japan kept on the night of the old flag. Japan says it collected them for a century of badly paid work.
+      spanish: La Alta Mar considera suyos la flota y los astilleros que Japón se quedó la noche de la bandera vieja. Japón dice que se los cobró por un siglo de trabajo mal pagado.
+    regiones_a: [Luzon]
+    regiones_b: [Kanto, Kansai]
+    incidentes: [meganations_friccion.81, meganations_friccion.82]
+    activa: {country_exists: ZJP}
+  - id: astilleros
+    a: SHD
+    b: ZJP
+    inicio: 40
+    lugar: {english: the shipyards of Japan, spanish: los astilleros de Japón}
+    opinion: {english: The Shipyards of Japan, spanish: Los Astilleros de Japón}
+    causa:
+      english: The Directorate chose the High Seas, and now wants for itself the shipyards the Shogunate tore from them. Beijing does not want them destroyed; it wants them working, under another flag.
+      spanish: El Directorio eligió a la Alta Mar, y ahora quiere para sí los astilleros que el Shogunato le arrancó. Pekín no los quiere destruidos; los quiere trabajando, con otra bandera.
+    regiones_a: []
+    regiones_b: [Kanto, Kansai]
+    incidentes: [meganations_friccion.91, meganations_friccion.92]
+    activa: {all: [{country_exists: ZJP}, {flag: SHD_apoya_hsn}]}
+  - id: canal
+    a: NRE
+    b: ZAL
+    inicio: 30
+    lugar: {english: the Channel, spanish: el Canal de la Mancha}
+    opinion: {english: The Channel, spanish: El Canal}
+    causa:
+      english: Rome holds Gaul, with Calais and Normandy, and on its lists of provinces Britain appears with its Latin name. Albion looks at the Channel and sees a border that can be crossed swimming.
+      spanish: Roma tiene la Galia, con Calais y Normandía, y en sus listas de provincias Britania figura con su nombre en latín. Albión mira el Canal y ve una frontera que se cruza a nado.
+    regiones_a: [Normandy, [Nord-Pas-de-Calais, Pas de Calais, Picardy, Picardie]]
+    regiones_b: [Sussex, South-West England]
+    incidentes: [meganations_friccion.101, meganations_friccion.102]
+    # la República Obrera y la Mancomunidad Ascendida (caminos 0 y 1); la neovictoriana es aliada de Roma
+    activa: {all: [{country_exists: ZAL}, {country: {tag: ZAL, when: {not: {variable_is: {var: ZAL_ruta, value: 2}}}}}]}
+  - id: mar_del_norte
+    a: ASC
+    b: ZAL
+    inicio: 35
+    lugar: {english: the North Sea, spanish: el Mar del Norte}
+    opinion: {english: The North Sea, spanish: El Mar del Norte}
+    causa:
+      english: Neo-Victorian Albion claims the oil, the wind farms and the fleet the Commune kept during the tutelage. The Commune says that was the price of keeping the lights on.
+      spanish: La Albión neovictoriana reclama el petróleo, los parques eólicos y la flota que la Comuna se quedó durante la tutela. La Comuna dice que fue el precio de mantener las luces prendidas.
+    regiones_a: [Holland, Friesland]
+    regiones_b: [Scottish Highlands, Lothian]
+    incidentes: [meganations_friccion.111, meganations_friccion.112]
+    activa: {all: [{country_exists: ZAL}, {country: {tag: ZAL, when: {variable_is: {var: ZAL_ruta, value: 2}}}}]}
+
+  # El Tratado de la Línea (2026-11-14, "tipo Tordesillas, que sea raro"): la Alta Mar y
+  # el Directorio se reparten el comercio del mundo. La propone la IA de la Alta Mar con
+  # `chance` % por mes si se cumple todo; un jugador de cualquiera de los dos la propone
+  # con una decisión (una vez por partida).
+  linea:
+    par: malaca
+    desde: 2103.1.1
+    tension_minima: 40
+    astucia_minima: 13          # los dos líderes (MEGANATIONS_lider_astucia, de 0 a 20)
+    amenaza_peaje: 40           # la Unión los amenaza: tensión del peaje de Malaca
+    chance: 3
+    tension_al_romperse: 70
+
+# los incidentes y la Línea; el resto de los eventos de cada par (crisis, tratado) los
+# arma specload a partir de `friccion.pares`
+events:
+  namespaces:
+    meganations_friccion:
+      country: null
+      events:
+      # --- los salares del litio (Imperio Verde / Reino del Sol) -----------------
+      - id: 11
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Prospectors on the Salt Flat, spanish: Prospectores en el Salar}
+        desc:
+          english: A crew from the Sun Kingdom crossed the cordillera with drills and coloured banners. They say the Antofagasta salt flat is the natural continuation of Uyuni, and that salt knows no borders. Our rangers confiscated the drills.
+          spanish: Una cuadrilla del Reino del Sol cruzó la cordillera con taladros y banderas de colores. Dicen que el salar de Antofagasta es la continuación natural del de Uyuni, y que la sal no conoce fronteras. Nuestros guardaparques les confiscaron los taladros.
+        options:
+        - name: {english: Let them go back the way they came., spanish: Que se vuelvan por donde vinieron.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_litio_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Give them back their drills., spanish: Devolverles los taladros.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_litio_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 12
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Glaciers Shrink, spanish: Los Glaciares se Achican}
+        desc:
+          english: The Green Empire diverts the Andean meltwater to its BioSteel vats. Down in the valleys of the Sun, the Inca canals carry half the water they always did. The curacas ask for an answer.
+          spanish: El Imperio Verde desvía el deshielo de los Andes hacia sus cubas de bioacero. Abajo, en los valles del Sol, los canales incas bajan con la mitad del agua de siempre. Los curacas piden una respuesta.
+        options:
+        - name: {english: The water of the Sun belongs to the Sun., spanish: El agua del Sol es del Sol.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_litio_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Negotiate water quotas., spanish: Negociar cupos de agua.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_litio_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- el Acuífero Guaraní (Imperio Verde / la Unión) -----------------------
+      - id: 21
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Union's Lawyers, spanish: Los Abogados de la Unión}
+        desc:
+          english: A delegation of Union lawyers arrived in Gaia with a certified copy of the 2058 contract. They want to audit the wells of the Guaraní Aquifer "to protect the investment". They brought an escort.
+          spanish: Llegó a Gaia una delegación de abogados de la Unión con una copia certificada del contrato de 2058. Quieren auditar los pozos del Acuífero Guaraní "para proteger la inversión". Traen escolta.
+        options:
+        - name: {english: The contract was signed by a country that no longer exists., spanish: El contrato lo firmó un país que ya no existe.}
+          ai_chance: 70
+          effects:
+          - {effect: run, value: MN_friccion_acuifero_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Let them audit one well., spanish: Dejarlos auditar un pozo.}
+          ai_chance: 30
+          effects:
+          - {effect: run, value: MN_friccion_acuifero_baja}
+          - {effect: add_stability, value: -0.02}
+        src: user_request
+      - id: 22
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Drought in the West, spanish: Sequía en el Oeste}
+        desc:
+          english: Another summer without rain in the West. The cities of the Continental Portfolio ration water by share quotas, and the shareholders ask why the Aquifer we paid for in 2058 is still in the hands of gardeners with rifles.
+          spanish: Otro verano sin lluvia en el Oeste. Las ciudades de la Cartera Continental racionan el agua por cuotas de acciones, y los accionistas preguntan por qué el Acuífero que pagamos en 2058 sigue en manos de unos jardineros con fusiles.
+        options:
+        - name: {english: Send someone to collect., spanish: Mandar a cobrar.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_acuifero_sube}
+          - {effect: add_political_power, value: 25}
+        - name: {english: Buy desalinated water. Expensive., spanish: Comprar agua desalinizada. Cara.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_acuifero_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- las minas de Katanga (la Comuna / la Federación) ---------------------
+      - id: 31
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Mines Go Quiet, spanish: Las Minas se Callan}
+        desc:
+          english: The councils of Katanga switched off the automated excavators and went back to digging by hand, at their own pace. The cobalt reaching our factories fell to a third. The Plan recalculates and does not like what it sees.
+          spanish: Los consejos de Katanga apagaron las excavadoras automáticas y volvieron a picar a mano, a su ritmo. El cobalto que llega a nuestras fábricas bajó a un tercio. El Plan recalcula y no le gusta lo que ve.
+        options:
+        - name: {english: Demand the agreed quota., spanish: Exigir el cupo pactado.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_cobalto_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Pay the councils' price for the cobalt., spanish: Pagar el cobalto al precio de los consejos.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_cobalto_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 32
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Closed Border, spanish: La Frontera Cerrada}
+        desc:
+          english: The Commune's watchtowers turned back another column of climate refugees on the Mediterranean. Machines need no arms, they said through the loudspeakers. In the assemblies of Lagos and Kinshasa people talk of closing the mines for good.
+          spanish: Las torres de vigilancia de la Comuna rechazaron otra columna de refugiados del clima en el Mediterráneo. Las máquinas no necesitan brazos, dijeron por altavoz. En las asambleas de Lagos y Kinshasa se habla de cerrar las minas del todo.
+        options:
+        - name: {english: No arms, no cobalt., spanish: Sin brazos no hay cobalto.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_cobalto_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Send delegates to negotiate quotas., spanish: Mandar delegados a negociar los cupos.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_cobalto_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- el peaje de Malaca (la Unión / la Alta Mar) --------------------------
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Malacca Bill, spanish: La Factura de Malaca}
+        desc:
+          english: The High Seas raised the Malacca toll again, only for ships flying the Union flag. The notice is signed by the same insurer that still has not paid for the convoy that sank in 2096.
+          spanish: La Alta Mar volvió a subir el peaje de Malaca, solo para los barcos con bandera de la Unión. La nota viene firmada por la misma aseguradora que todavía no pagó el convoy que se hundió en 2096.
+        options:
+        - name: {english: Deduct the insurance from the toll., spanish: Descontar el seguro del peaje.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_peaje_sube}
+          - {effect: add_political_power, value: 25}
+        - name: {english: Pay, and write it down., spanish: Pagar, y anotarlo.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_peaje_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 42
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: A Convoy Seized, spanish: Un Convoy Embargado}
+        desc:
+          english: In San Francisco the Union seized three Market freighters "against the insurance debt". The captains ask for the fleet to go and get them.
+          spanish: En San Francisco la Unión embargó tres cargueros del Mercado "a cuenta de la deuda del seguro". Los capitanes piden que la flota vaya a buscarlos.
+        options:
+        - name: {english: Let the fleet go., spanish: Que vaya la flota.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_peaje_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Take it to court., spanish: Reclamar por vía legal.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_peaje_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- Malaca y Hong Kong (la Alta Mar / el Directorio) ---------------------
+      - id: 51
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Tankers with an Escort, spanish: Petroleros con Escolta}
+        desc:
+          english: The Directorate's tankers cross Malacca with a military escort and without paying the full toll; they say international waters are not charged. Our launches follow them closely.
+          spanish: Los petroleros del Directorio cruzan Malaca con escolta militar y sin pagar el peaje completo; dicen que el agua internacional no se cobra. Nuestras lanchas los siguen de cerca.
+        options:
+        - name: {english: Pay or sink., spanish: Pagar o hundirse.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_malaca_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Look the other way, this time., spanish: Hacer la vista gorda, esta vez.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_malaca_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 52
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Malacca Dilemma, spanish: El Dilema de Malaca}
+        desc:
+          english: 'The Council of Harmony studied the routes: eight of every ten ships that feed our factories go through a strait someone else controls. And Hong Kong, the key to the south, is held by warlords who sell it to the highest bidder.'
+          spanish: 'El Consejo de Armonía estudió las rutas: ocho de cada diez barcos que alimentan nuestras fábricas pasan por un estrecho que controla otro. Y Hong Kong, la llave del sur, la tienen unos caudillos que se la venden al mejor postor.'
+        options:
+        - name: {english: Hong Kong must be ours., spanish: Hong Kong tiene que ser nuestro.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_malaca_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Build land routes instead., spanish: Construir rutas por tierra.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_malaca_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- el Rin (la Comuna / Roma) --------------------------------------------
+      - id: 61
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: Locks Closed on the Rhine, spanish: Esclusas Cerradas en el Rin}
+        desc:
+          english: The legions of Gaul closed two Rhine locks "for maintenance". Downstream, the Commune's factories overheat and the Plan cuts shifts.
+          spanish: Las legiones de la Galia cerraron dos esclusas del Rin "por mantenimiento". Aguas abajo, las fábricas de la Comuna se recalientan y el Plan corta turnos.
+        options:
+        - name: {english: The machines do not wait., spanish: Las máquinas no esperan.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_rin_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Pay Rome for the maintenance., spanish: Pagarle a Roma el mantenimiento.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_rin_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 62
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Drones over the Alps, spanish: Drones sobre los Alpes}
+        desc:
+          english: Commune drones flew over the Gotthard passes, counting guns. The legate of the Alps asks for permission to shoot down the next one.
+          spanish: Drones de la Comuna sobrevolaron los pasos del San Gotardo, contando cañones. El legado de los Alpes pide permiso para derribar el próximo.
+        options:
+        - name: {english: Shoot it down., spanish: Derribarlo.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_rin_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Protest to the Commune's Council., spanish: Protestar ante el Consejo de la Comuna.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_rin_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- Suez y el Sahara (la Federación / Roma) ------------------------------
+      - id: 71
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Senate's Maps, spanish: Los Mapas del Senado}
+        desc:
+          english: The Senate of Rome published a map of the provinces of the Empire, with Egypt, Libya and Carthage painted the same colour as Rome. The solar fields of the Sahara appear as "imperial property under claim".
+          spanish: El Senado de Roma publicó un mapa de las provincias del Imperio, con Egipto, Libia y Cartago pintados del mismo color que Roma. Los campos solares del Sahara figuran como "propiedad imperial en reclamo".
+        options:
+        - name: {english: The councils are not painted on maps., spanish: A los consejos no se los pinta.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_suez_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Send ambassadors to Rome., spanish: Mandar embajadores a Roma.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_suez_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 72
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: A Toll at Suez, spanish: Peaje en Suez}
+        desc:
+          english: The Federation charges Roman ships double to cross Suez and cuts the power from the desert's solar towers. In Rome the lights of the Forum go out two hours a night.
+          spanish: La Federación les cobra el doble a las naves romanas para cruzar Suez y les corta la energía de las torres solares del desierto. En Roma se apagan las luces del Foro dos horas por noche.
+        options:
+        - name: {english: Rome pays no toll in its own sea., spanish: Roma no paga peaje en su propio mar.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_suez_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Pay, and look for another source., spanish: Pagar, y buscar otra fuente.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_suez_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- los diques de Kanto (la Alta Mar / Japón) ----------------------------
+      - id: 81
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Books of Yokosuka, spanish: Los Libros de Yokosuka}
+        desc:
+          english: 'The Market''s accountants finished the inventory: the fleet and the docks Japan kept are worth three years of Malacca tolls. The board asks to collect them, in cash or in steel.'
+          spanish: 'Los contadores del Mercado terminaron el inventario: la flota y los diques que Japón se quedó valen lo mismo que tres años de peajes de Malaca. El directorio pide cobrarlos, en efectivo o en acero.'
+        options:
+        - name: {english: Collect in steel., spanish: Cobrar en acero.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_kanto_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Offer a long-term loan., spanish: Ofrecer un crédito a largo plazo.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_kanto_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 82
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The High Seas Want the Fleet, spanish: La Alta Mar Pide la Flota}
+        desc:
+          english: 'A letter arrived from Singapore, with a wax seal: the High Seas demand "the return of the Kanto assets". The Houses read the word assets and laugh. Then they stop laughing.'
+          spanish: 'Llegó una carta de Singapur, con sello de lacre: la Alta Mar reclama "la devolución de los activos de Kanto". Las Casas leen la palabra activos y se ríen. Después se dejan de reír.'
+        options:
+        - name: {english: The fleet is Japanese., spanish: La flota es japonesa.}
+          ai_chance: 70
+          effects:
+          - {effect: run, value: MN_friccion_kanto_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Pay a part, in instalments., spanish: Pagar una parte, en cuotas.}
+          ai_chance: 30
+          effects:
+          - {effect: run, value: MN_friccion_kanto_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- los astilleros de Japón (el Directorio / Japón) ----------------------
+      - id: 91
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Kansai Blueprints, spanish: Los Planos de Kansai}
+        desc:
+          english: Our agents brought back the blueprints of the Kansai docks. With them the Directorate would launch twice as many ships. What is missing are the docks.
+          spanish: Nuestros agentes trajeron los planos de los diques de Kansai. Con ellos el Directorio botaría el doble de barcos. Lo que falta son los diques.
+        options:
+        - name: {english: Docks can be brought back too., spanish: Los diques también se pueden traer.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_astilleros_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Copy the blueprints and build our own., spanish: Copiar los planos y construir los nuestros.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_astilleros_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 92
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Armed Fishermen, spanish: Pescadores Armados}
+        desc:
+          english: Directorate fishing boats, with too many antennas and too little fish, prowl Tokyo Bay every night.
+          spanish: Barcos pesqueros del Directorio, con antenas de más y pescado de menos, rondan la bahía de Tokio todas las noches.
+        options:
+        - name: {english: Sink the next one., spanish: Hundir al próximo.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_astilleros_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Escort them out of the bay., spanish: Escoltarlos fuera de la bahía.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_astilleros_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- el Canal (Roma / Albión) ---------------------------------------------
+      - id: 101
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Britannia on the Lists, spanish: Britannia en las Listas}
+        desc:
+          english: The Senate's censors added Britannia to the list of provinces to be recovered. Across the Channel, the London papers print the list with a drawing of a wet Caesar.
+          spanish: Los censores del Senado agregaron Britannia a la lista de provincias por recuperar. Del otro lado del Canal, los diarios de Londres publican la lista con un dibujo de un César mojado.
+        options:
+        - name: {english: Let them laugh while they can., spanish: Que se rían mientras puedan.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_canal_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Take it off the list, for now., spanish: Sacarla de la lista, por ahora.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_canal_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 102
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Calais Fortified, spanish: Calais Fortificada}
+        desc:
+          english: Rome is building a new fortress at Calais, with guns pointed at Dover. From the white cliffs you can see the cranes working at night.
+          spanish: Roma construye una fortaleza nueva en Calais, con cañones que apuntan a Dover. Desde los acantilados blancos se ven las grúas trabajar de noche.
+        options:
+        - name: {english: Fortify Dover., spanish: Fortificar Dover.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_canal_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Ask Rome for an explanation., spanish: Pedirle explicaciones a Roma.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_canal_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      # --- el Mar del Norte (la Comuna / Albión) --------------------------------
+      - id: 111
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: Albion Claims the Sea, spanish: Albión Reclama el Mar}
+        desc:
+          english: The Neo-Victorian Parliament passed a law declaring half the North Sea "British waters", with its platforms and its windmills. The platforms are still ours; the law says they are not.
+          spanish: El Parlamento neovictoriano aprobó una ley que declara "aguas británicas" a medio Mar del Norte, con sus plataformas y sus molinos. Las plataformas siguen siendo nuestras; la ley dice que no.
+        options:
+        - name: {english: The platforms belong to the Commune., spanish: Las plataformas son de la Comuna.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_mar_del_norte_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Share the output of one platform., spanish: Compartir la producción de una plataforma.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_mar_del_norte_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+      - id: 112
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Tutelage Fleet, spanish: La Flota de la Tutela}
+        desc:
+          english: The Commune still keeps moored in Rotterdam the British cruisers it took during the tutelage. Albion's admirals visit them from afar, with binoculars.
+          spanish: La Comuna todavía tiene amarrados en Rotterdam los cruceros británicos que se llevó durante la tutela. Los almirantes de Albión los visitan de lejos, con binoculares.
+        options:
+        - name: {english: Go and get them., spanish: Ir a buscarlos.}
+          ai_chance: 60
+          effects:
+          - {effect: run, value: MN_friccion_mar_del_norte_sube}
+          - {effect: add_war_support, value: 0.02}
+        - name: {english: Buy them back., spanish: Comprarlos de vuelta.}
+          ai_chance: 40
+          effects:
+          - {effect: run, value: MN_friccion_mar_del_norte_baja}
+          - {effect: add_political_power, value: -25}
+        src: user_request
+
+      # --- El Tratado de la Línea (la Alta Mar y el Directorio) ----------------
+      - id: 200
+        trigger: effect
+        picture: GFX_report_event_generic_sign_treaty1
+        title: {english: The Proposal of the Line, spanish: La Propuesta de la Línea}
+        desc:
+          english: 'An embassy from [From.GetName] arrives with a map of the world and a single line on it, from pole to pole, through the China Sea. West of the line, the Indian Ocean, Malacca and the routes to Africa and Europe would belong to the High Seas; east of it, the Pacific, Taiwan and the routes to the Americas, to the Directorate. Hong Kong, a free port. The Sun Kingdom offers to arbitrate, like a pope without a Vatican. Nobody asked the rest of the world.'
+          spanish: 'Llega una embajada de [From.GetName] con un mapa del mundo y una sola raya, de polo a polo, que pasa por el mar de la China. Al oeste de la raya, el Índico, Malaca y las rutas a África y Europa serían de la Alta Mar; al este, el Pacífico, Taiwán y las rutas a América, del Directorio. Hong Kong, puerto libre. El Reino del Sol se ofrece de árbitro, como un Papa sin Vaticano. Nadie le preguntó al resto del mundo.'
+        options:
+        - name: {english: Sign the Line., spanish: Firmar la Línea.}
+          ai_chance: 70
+          effects:
+          - {effect: run, value: MN_linea_firmar}
+        - name: {english: Ask for Hong Kong on our side., spanish: Pedir Hong Kong de nuestro lado.}
+          ai_chance: 15
+          effects:
+          - {effect: event, id: meganations_friccion.201, target: FROM}
+        - name: {english: The sea is not divided., spanish: El mar no se divide.}
+          ai_chance: 15
+          effects:
+          - {effect: run, value: MN_friccion_malaca_sube_mucho}
+        src: user_request
+      - id: 201
+        trigger: effect
+        picture: GFX_report_event_generic_sign_treaty1
+        art: meganations_friccion.200
+        title: {english: They Want Hong Kong, spanish: Quieren Hong Kong}
+        desc:
+          english: '[From.GetName] accepts the Line on one condition: Hong Kong falls on their side. If we say yes, the free port stops being free, and they will go and take it from the warlords.'
+          spanish: '[From.GetName] acepta la Línea con una condición: Hong Kong cae de su lado. Si decimos que sí, el puerto libre deja de ser libre, y van a ir a sacárselo a los caudillos.'
+        options:
+        - name: {english: Let them have it, if they can take it., spanish: Que se lo queden, si pueden.}
+          ai_chance: 50
+          effects:
+          - {effect: run, value: MN_linea_firmar}
+          - {effect: run, value: MN_linea_hong_kong_FROM}
+        - name: {english: Then there is no Line., spanish: Entonces no hay Línea.}
+          ai_chance: 50
+          effects:
+          - {effect: run, value: MN_friccion_malaca_sube_mucho}
+        src: user_request
+      - id: 202
+        trigger: effect
+        picture: GFX_report_event_generic_sign_treaty1
+        title: {english: The Line, spanish: La Línea}
+        desc:
+          english: 'In Cusco, under the eyes of the Inca, the envoys of the High Seas and of the Directorate signed the Line. A stroke on the map, from pole to pole: on one side the Indian Ocean, on the other the Pacific. For the first time in a century, the trade of the world has an owner, and there are two of them.\n\nWHILE IT HOLDS: the rivalry over Malacca is frozen; non-aggression between both; the High Seas build ships faster and the Directorate builds factories faster.\n\nIF ONE OF THEM GOES TO WAR AGAINST THE OTHER: the Line breaks, and the rivalry comes back hotter than before.'
+          spanish: 'En Cusco, bajo los ojos del Inca, los enviados de la Alta Mar y del Directorio firmaron la Línea. Una raya en el mapa, de polo a polo: de un lado el Índico, del otro el Pacífico. Por primera vez en un siglo, el comercio del mundo tiene dueño, y son dos.\n\nMIENTRAS DURE: la rivalidad por Malaca queda congelada; no agresión entre los dos; la Alta Mar construye barcos más rápido y el Directorio, fábricas.\n\nSI UNO LE HACE LA GUERRA AL OTRO: la Línea se rompe, y la rivalidad vuelve más caliente que antes.'
+        options:
+        - name: {english: Each one on their side., spanish: Cada uno en su mitad.}
+          effects: []
+        src: user_request
+      - id: 203
+        trigger: effect
+        picture: GFX_report_event_generic_sign_treaty1
+        art: meganations_friccion.202
+        title: {english: The World Split in Two, spanish: El Mundo Partido en Dos}
+        desc:
+          english: The High Seas and the Directorate signed the Line in Cusco. They have divided the trade of the world with a stroke from pole to pole. The rest of us found out from the newspapers.
+          spanish: La Alta Mar y el Directorio firmaron la Línea en Cusco. Se repartieron el comercio del mundo con una raya de polo a polo. Los demás nos enteramos por los diarios.
+        options:
+        - name: {english: Nobody asked us., spanish: Nadie nos preguntó.}
+          effects:
+          - {effect: run, value: MN_linea_reaccion}
+        src: user_request
+      - id: 204
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Betrayal of the Line, spanish: La Traición de la Línea}
+        desc:
+          english: The Line is broken. The warships crossed the stroke on the map and the trade of the world has no owner again. Whoever signed in Cusco no longer remembers signing.\n\nThe rivalry over Malacca comes back at 70, and each side has a war goal over the other's ports.
+          spanish: La Línea se rompió. Los barcos de guerra cruzaron la raya del mapa y el comercio del mundo vuelve a no tener dueño. El que firmó en Cusco ya no se acuerda de la firma.\n\nLa rivalidad por Malaca vuelve a 70, y cada lado tiene un objetivo de guerra sobre los puertos del otro.
+        options:
+        - name: {english: Never again a line., spanish: Nunca más una raya.}
+          effects: []
+        src: user_request
+
+    # el porqué de la guerra entre dos potencias (23_rumbo_2120 -> power_wars), para los
+    # pares nuevos de Japón y Albión
+    meganations_incidentes:
+      country: null
+      events:
+      - id: 70
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Kanto Docks, spanish: Los Diques de Kanto}
+        desc:
+          english: The High Seas and the Shogunate of the Shipyards are at war. The Market came to collect the fleet Japan kept on the night of the old flag; Japan answered that the fleet had been paid for, with a century of badly paid work.
+          spanish: La Alta Mar y el Shogunato de los Astilleros están en guerra. El Mercado vino a cobrar la flota que Japón se quedó la noche de la bandera vieja; Japón contestó que la flota ya estaba pagada, con un siglo de trabajo mal pagado.
+        options:
+        - name: {english: The fleet is Japanese., spanish: La flota es japonesa.}
+          effects: []
+        src: user_request
+      - id: 71
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Shipyards under Another Flag, spanish: Astilleros con Otra Bandera}
+        desc:
+          english: The Directorate and the Shogunate are at war. Beijing does not want the shipyards of Japan destroyed; it wants them working, under another flag.
+          spanish: El Directorio y el Shogunato están en guerra. Pekín no quiere destruir los astilleros de Japón; los quiere trabajando, con otra bandera.
+        options:
+        - name: {english: Not one dock., spanish: Ni un dique.}
+          effects: []
+        src: user_request
+      - id: 72
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: Across the Channel, spanish: Del Otro Lado del Canal}
+        desc:
+          english: Rome and Albion are at war. On the Senate's lists Britain still appears with its Latin name; from Calais, the legions can see the white cliffs.
+          spanish: Roma y Albión están en guerra. En las listas del Senado, Britania sigue figurando con su nombre en latín; desde Calais, las legiones ven los acantilados blancos.
+        options:
+        - name: {english: The Channel can be crossed., spanish: El Canal se puede cruzar.}
+          effects: []
+        src: user_request
+      - id: 73
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: War in the North Sea, spanish: Guerra en el Mar del Norte}
+        desc:
+          english: The Commune and Neo-Victorian Albion are at war. Albion wants back the oil, the windmills and the fleet it lost during the tutelage; the Commune says it paid for them by keeping the lights on.
+          spanish: La Comuna y la Albión neovictoriana están en guerra. Albión quiere de vuelta el petróleo, los molinos y la flota que perdió durante la tutela; la Comuna dice que los pagó manteniendo las luces prendidas.
+        options:
+        - name: {english: Rule, Britannia., spanish: Rule, Britannia.}
+          effects: []
+        src: user_request
+
+# la Línea: un espíritu para cada mitad del mundo mientras dure
+decisions:
+  dynamic_modifiers:
+  - id: HSN_linea_oeste
+    country: HSN
+    name: {english: 'The Line: West of the Stroke', spanish: 'La Línea: al Oeste de la Raya'}
+    desc: {english: 'The Indian Ocean, Malacca and the routes to Africa and Europe are ours, by treaty.', spanish: 'El Índico, Malaca y las rutas a África y Europa son nuestros, por tratado.'}
+    modifiers: {industrial_capacity_dockyard: 0.1, political_power_gain: 0.1}
+  - id: SHD_linea_este
+    country: SHD
+    name: {english: 'The Line: East of the Stroke', spanish: 'La Línea: al Este de la Raya'}
+    desc: {english: 'The Pacific, Taiwan and the routes to the Americas are ours, by treaty.', spanish: 'El Pacífico, Taiwán y las rutas a América son nuestros, por tratado.'}
+    modifiers: {industrial_capacity_factory: 0.08, political_power_gain: 0.1}
+
+# el pulso mensual de cada potencia (el emisor escribe MN_friccion_pulso)
+extend_scripted_effects:
+  MEGANATIONS_eventos_mundiales:
+  - {effect: run, value: MN_friccion_pulso}
+
+# 2026-11-14: uno de cada cinco eventos visibles mueve las stats del líder (27_lider_ck.yaml): los
+# incidentes de los siete pares de siempre. Mano dura da prestigio; ceder, astucia.
+lider_ck:
+  eventos:
+    "meganations_friccion.11": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.12": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.21": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.22": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.31": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.32": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.41": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.42": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.51": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.52": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.61": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.62": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.71": [{prestigio: 1}, {astucia: 1, prestigio: -1}]
+    "meganations_friccion.72": [{prestigio: 1}, {astucia: 1, prestigio: -1}]

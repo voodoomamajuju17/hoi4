@@ -75,6 +75,37 @@ Cada meganación tiene un **Destino**, una forma final: el Destino de Gaia, la S
 Plan, el Mare Nostrum… Llegar es largo. Cuando lo reclamás, los dueños de las regiones que tu
 Destino pide se enteran, y no se lo toman bien.
 
+### Los puntos de fricción
+
+Las potencias no se pelean por ideas: se pelean por lo que las dos necesitan y no alcanza para
+las dos. Cada rivalidad tiene un **punto de fricción**, un lugar o un recurso concreto:
+
+| Rivales | Por qué |
+|---|---|
+| Imperio Verde – Reino del Sol | Los salares del litio y el agua de los glaciares |
+| Imperio Verde – la Unión | El contrato del Acuífero Guaraní de 2058 |
+| La Comuna – Federación africana | El cobalto de Katanga y la frontera cerrada a los refugiados |
+| La Unión – Alta Mar | El peaje de Malaca y un seguro impago |
+| Alta Mar – el Directorio | Malaca y Hong Kong (o el Tratado de la Línea) |
+| La Comuna – Roma | El Rin y los pasos de los Alpes |
+| Federación africana – Roma | Suez y el sol del Sahara |
+| Alta Mar – Japón | Los diques de Kanto |
+| Directorio – Japón | Los astilleros de Japón (si el Directorio eligió a la Alta Mar) |
+| Roma – Albión | El Canal (la República Obrera y la Mancomunidad Ascendida) |
+| La Comuna – Albión | El Mar del Norte (la Albión neovictoriana) |
+
+Cada punto tiene una **tensión de 0 a 100** que sube sola, un poco por mes. Con 25 empiezan los
+**incidentes**: mano dura la sube, ceder la baja. En el panel **Puntos de Fricción** podés
+**proponer un tratado** (el otro lado acepta o no), **hacer una concesión** o **presionar**. Con
+**80** estalla la crisis: los dos lados reciben un objetivo de guerra, pero solo por las regiones
+en disputa, no por todo el país. Después de una guerra entre los dos, la tensión vuelve a 35.
+
+No todo es rivalidad: **Roma y el Imperio Verde** miran los dos el pasado y el orden y pueden
+firmar el **Pacto de las Restauraciones**; **el Sol y el Directorio**, el **Pacto del Mandato**.
+Y muy de vez en cuando, si sus líderes son astutos y la Unión los aprieta, **la Alta Mar y el
+Directorio** se reparten el comercio del mundo con una raya de polo a polo: **el Tratado de la
+Línea**. Si uno le hace la guerra al otro, la Línea se rompe y la rivalidad vuelve peor.
+
 ### Las crisis
 
 El siglo XXII no es estable:

@@ -38,7 +38,7 @@ ZONAS = {
 TECLA = (230, 60)
 PASO = (240, 68)
 # dentro de la tecla (selector_gui.py): bandera en (10, 9) a 0,75 (82 x 52 -> 62 x 39), nombre desde x 76
-VENTANA_BANDERA = (6, 5, 70, 48)
+VENTANA_BANDERA = (9, 8, 64, 41)   # el hueco justo de la bandera (62 x 39 en 10, 9)
 # zonas del monitor donde va texto (coordenadas de la ventana): retrato, datos, título, ideas, historia
 TITULO_X = 435
 
@@ -309,11 +309,15 @@ def tecla():
         cuerpo = _tono(_material("mat_acero_ennegrecido", w, h, 0.4), 1.15)
         _pegar(img, cuerpo, 0, 0, 7 * K)
         _bisel(img, (0, 0, w - 1, h - 1), 7 * K, 3 * K, hundido=False)
-        # la ventanita de la bandera, hundida, con borde de bronce
+        # la ventanita de la bandera: un hueco transparente (2026-11-14, captura: las banderas no se
+        # veían; la bandera va debajo de la tecla en la plantilla del juego), con sombra y borde de bronce
         bx, by, bw, bh = (v * K for v in VENTANA_BANDERA)
-        ImageDraw.Draw(img).rounded_rectangle((bx, by, bx + bw, by + bh), 3 * K, fill=(6, 7, 8, 255))
-        _sombra_interior(img, (bx, by, bx + bw, by + bh), 3 * K, 3 * K)
-        ImageDraw.Draw(img).rounded_rectangle((bx - K, by - K, bx + bw + K, by + bh + K), 4 * K, outline=BRONCE + (230,), width=K)
+        hueco = Image.new("L", (w, h), 255)
+        ImageDraw.Draw(hueco).rounded_rectangle((bx, by, bx + bw, by + bh), 2 * K, fill=0)
+        from PIL import ImageChops
+        img.putalpha(ImageChops.multiply(img.getchannel("A"), hueco))
+        _sombra_interior(img, (bx, by, bx + bw, by + bh), 2 * K, 2 * K)
+        ImageDraw.Draw(img).rounded_rectangle((bx - K, by - K, bx + bw + K, by + bh + K), 3 * K, outline=BRONCE + (230,), width=K)
         # la placa del nombre
         px0, py0, px1, py1 = 76 * K, 7 * K, w - 6 * K, h - 7 * K
         placa = _tono(_material("mat_fieltro_grafito", px1 - px0, py1 - py0, 0.35), 0.7)

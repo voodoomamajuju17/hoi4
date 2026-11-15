@@ -48,6 +48,9 @@ def emit(ctx: BuildContext) -> None:
 
     for r in spec.get("rivalries", []) or []:
         a, b = r["between"]
+        if not r.get("modifier"):
+            # 2026-11-14: la opinión de un punto de fricción la pone friccion.py al activarse
+            continue
         if r["modifier"] not in known_mods:
             raise SpecError(f"rivalidad {a}-{b}: modificador '{r['modifier']}' no definido", where=SOURCE)
         if a not in alive or b not in alive:
@@ -430,9 +433,13 @@ def _anarchy_hostility(ctx, spec, alive, out, effects, wargoals, known_mods) -> 
                                          ("country_event", Block([("id", ev), ("days", 1)]))]))]))
         # entre potencias (2026-10-27): los pares de rivalidad con texto propio, el resto el general
         own = {frozenset(p["between"]): p["event"] for p in pw.get("pairs") or []}
+        # 2026-11-14: Japón y Albión no son potencias mayores, pero sus pares tienen su porqué
+        extra_pw = sorted({t for p in pw.get("pairs") or [] for t in p["between"]
+                           if t in alive and t not in majors_pw})
+        majors_pw = majors_pw + extra_pw
         for i, a in enumerate(majors_pw):
             for b in majors_pw[i + 1:]:
-                ev = own.get(frozenset((a, b))) or pw.get("default")
+                ev = own.get(frozenset((a, b))) or (None if {a, b} & set(extra_pw) else pw.get("default"))
                 if not ev:
                     continue
                 g = f"MEGANATIONS_guerra_{a}_{b}"

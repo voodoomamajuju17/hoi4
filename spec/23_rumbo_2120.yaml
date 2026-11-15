@@ -35,7 +35,8 @@ anarchy_incidents:
 
 # Guerras entre potencias (2026-10-27: "parecen medio de golpe"): cuando empieza
 # una, cada jugador recibe el porqué (una vez por par). Los pares de
-# 04_diplomacy -> rivalries tienen texto propio; el resto, uno general.
+# 04_diplomacy -> rivalries tienen texto propio; el resto, uno general. 2026-11-14: el porqué es
+# la causa material de cada punto de fricción (41_friccion.yaml).
 power_wars:
   pairs:
   - {between: [EFE, NRE], event: meganations_incidentes.61}
@@ -46,6 +47,11 @@ power_wars:
   - {between: [HSN, SHD], event: meganations_incidentes.66}
   - {between: [ASC, NRE], event: meganations_incidentes.67}
   - {between: [APF, NRE], event: meganations_incidentes.68}
+  # 2026-11-14: Japón y Albión (41_friccion.yaml)
+  - {between: [HSN, ZJP], event: meganations_incidentes.70}
+  - {between: [SHD, ZJP], event: meganations_incidentes.71}
+  - {between: [NRE, ZAL], event: meganations_incidentes.72}
+  - {between: [ASC, ZAL], event: meganations_incidentes.73}
   default: meganations_incidentes.69
 
 events:
@@ -832,27 +838,27 @@ events:
       - id: 61
         trigger: effect
         picture: GFX_report_event_generic_rally
-        title: {english: "Two Restorations at War", spanish: "Dos Restauraciones en Guerra"}
+        title: {english: "The War Nobody Wanted", spanish: "La Guerra que Nadie Quería"}
         desc:
           english: >-
-            The Green Empire and the Neo-Roman Empire are at war. Both promised the world a restoration, the Earth or Rome, and both always knew that only one of them could be right. The war will be fought on the Atlantic and in the colonies; it will be decided in the minds of everyone else.
+            The Green Empire and the Neo-Roman Empire are at war. They signed a pact, they shared the nostalgia for order and for the past, and still here they are. In both courts someone will have to explain how it came to this.
           spanish: >-
-            El Imperio Verde y el Neo Imperio Romano están en guerra. Los dos le prometieron al mundo una restauración, la Tierra o Roma, y los dos supieron siempre que solo uno podía tener razón. La guerra se va a pelear en el Atlántico y en las colonias; se va a decidir en la cabeza de todos los demás.
+            El Imperio Verde y el Neo Imperio Romano están en guerra. Firmaron un pacto, compartían la nostalgia del orden y del pasado, y aun así acá están. En las dos cortes alguien va a tener que explicar cómo se llegó a esto.
         options:
-        - name: {english: "The Earth or Rome.", spanish: "La Tierra o Roma."}
+        - name: {english: "Nobody wanted it.", spanish: "Nadie la quería."}
           effects: []
         src: user_request
       - id: 62
         trigger: effect
         picture: GFX_report_event_generic_rally
-        title: {english: "Machines or Councils", spanish: "Máquinas o Consejos"}
+        title: {english: "The Katanga Cobalt", spanish: "El Cobalto de Katanga"}
         desc:
           english: >-
-            The Automated Commune and the African Federation are at war. Two collectivisms, two answers to the same question: who decides, the Plan or the people? Africa has the land, the minerals and the numbers; the Commune has the algorithms and the drones.
+            The Automated Commune and the African Federation are at war. The Commune's machines need the cobalt of Katanga; the councils nationalised it, and the Commune closed its border to the climate refugees. Each side says it fights for an idea; both fight for the mines.
           spanish: >-
-            La Comuna Automatizada y la Federación africana están en guerra. Dos colectivismos, dos respuestas a la misma pregunta: ¿quién decide, el Plan o la gente? África tiene la tierra, los minerales y el número; la Comuna tiene los algoritmos y los drones.
+            La Comuna Automatizada y la Federación africana están en guerra. Las máquinas de la Comuna necesitan el cobalto de Katanga; los consejos lo nacionalizaron, y la Comuna les cerró la frontera a los refugiados del clima. Cada bando dice que pelea por una idea; los dos pelean por las minas.
         options:
-        - name: {english: "The Plan or the people.", spanish: "El Plan o la gente."}
+        - name: {english: "The mines or nothing.", spanish: "Las minas o nada."}
           effects: []
         src: user_request
       - id: 63
@@ -861,9 +867,9 @@ events:
         title: {english: "The Corporation Against the Fleet", spanish: "La Corporación contra la Flota"}
         desc:
           english: >-
-            The Union and the High Seas are at war. The Union wanted to buy the routes of the Pacific; the Market preferred to sink the offer. The insurers of half the world have stopped writing policies until they know who will charge the toll tomorrow.
+            The Union and the High Seas are at war. It began with a toll at Malacca and a sunken convoy no insurer wanted to pay for. The insurers of half the world have stopped writing policies until they know who will charge the toll tomorrow.
           spanish: >-
-            La Unión y la Alta Mar están en guerra. La Unión quería comprar las rutas del Pacífico; el Mercado prefirió hundir la oferta. Las aseguradoras de medio mundo dejaron de firmar pólizas hasta saber quién va a cobrar el peaje mañana.
+            La Unión y la Alta Mar están en guerra. Empezó con un peaje en Malaca y un convoy hundido que ninguna aseguradora quiso pagar. Las aseguradoras de medio mundo dejaron de firmar pólizas hasta saber quién va a cobrar el peaje mañana.
         options:
         - name: {english: "Every war has a price.", spanish: "Toda guerra tiene precio."}
           effects: []
@@ -874,9 +880,9 @@ events:
         title: {english: "The Water Is Not for Sale", spanish: "El Agua no se Vende"}
         desc:
           english: >-
-            The Green Empire and the Union are at war, again. Since Iguazú in 2072 the Union has wanted the Guaraní Aquifer and the Empire has guarded it with rifles. This time it is not forty-three militiamen; it is two of the eight greatest powers on Earth.
+            The Green Empire and the Union are at war, again. The Union brings the 2058 contract, signed by a Brazil that no longer exists; the Empire brings the rifles of Iguazú. This time it is not forty-three militiamen: it is two of the eight greatest powers on Earth.
           spanish: >-
-            El Imperio Verde y la Unión están en guerra, otra vez. Desde Iguazú, en 2072, la Unión quiere el Acuífero Guaraní y el Imperio lo cuida a los tiros. Esta vez no son cuarenta y tres milicianos; son dos de las ocho potencias más grandes de la Tierra.
+            El Imperio Verde y la Unión están en guerra, otra vez. La Unión trae el contrato de 2058, firmado por un Brasil que ya no existe; el Imperio trae los fusiles de Iguazú. Esta vez no son cuarenta y tres milicianos: son dos de las ocho potencias más grandes de la Tierra.
         options:
         - name: {english: "Iguazú, again.", spanish: "Iguazú, otra vez."}
           effects: []
@@ -887,9 +893,9 @@ events:
         title: {english: "Two Empires for One Jungle", spanish: "Dos Imperios para una Sola Selva"}
         desc:
           english: >-
-            The Green Empire and the Sun Kingdom are at war. They share the mountains, the mistrust and, above all, the Amazon. The forest of Gaia and the roads of the Inca cannot both cross the same jungle.
+            The Green Empire and the Sun Kingdom are at war. They share the cordillera, the lithium salt flats and the water of the glaciers, and neither dares to live without them.
           spanish: >-
-            El Imperio Verde y el Reino del Sol están en guerra. Comparten la cordillera, la desconfianza y, sobre todo, el Amazonas. El monte de Gaia y los caminos del Inca no pueden cruzar los dos la misma selva.
+            El Imperio Verde y el Reino del Sol están en guerra. Comparten la cordillera, los salares del litio y el agua de los glaciares, y ninguno de los dos se anima a vivir sin ellos.
         options:
         - name: {english: "One jungle, one empire.", spanish: "Una selva, un imperio."}
           effects: []
@@ -900,9 +906,9 @@ events:
         title: {english: "Hong Kong Is Not Shared", spanish: "Hong Kong no se Comparte"}
         desc:
           english: >-
-            The High Seas and the Directorate are at war. For years they haggled over every ship that crossed Taiwan and every crate that left Hong Kong. Now they have stopped haggling. The China Sea is the busiest stretch of water on Earth; for a while it will be the most dangerous.
+            The High Seas and the Directorate are at war. Almost everything the Directorate buys and sells goes through Malacca, and Hong Kong is the key to the south. For years they haggled over every ship; now they have stopped haggling.
           spanish: >-
-            La Alta Mar y el Directorio están en guerra. Durante años regatearon cada barco que cruzaba Taiwán y cada cajón que salía de Hong Kong. Ahora dejaron de regatear. El mar de China es el pedazo de agua más transitado de la Tierra; por un tiempo va a ser el más peligroso.
+            La Alta Mar y el Directorio están en guerra. Casi todo lo que el Directorio compra y vende pasa por Malaca, y Hong Kong es la llave del sur. Durante años regatearon cada barco; ahora dejaron de regatear.
         options:
         - name: {english: "The haggling is over.", spanish: "Se terminó el regateo."}
           effects: []
@@ -913,9 +919,9 @@ events:
         title: {english: "The Line of the Alps", spanish: "La Línea de los Alpes"}
         desc:
           english: >-
-            The Commune and Rome are at war. Rome fortified the Alps against the machines; the machines calculated how long the fortresses would hold. The answer is about to be known.
+            The Commune and Rome are at war. Rome closed the locks of the Rhine and fortified the Alps; the Commune's factories cannot live without the river. The machines calculated how long the fortresses would hold. The answer is about to be known.
           spanish: >-
-            La Comuna y Roma están en guerra. Roma fortificó los Alpes contra las máquinas; las máquinas calcularon cuánto iban a aguantar los fuertes. La respuesta está por saberse.
+            La Comuna y Roma están en guerra. Roma cerró las esclusas del Rin y fortificó los Alpes; las fábricas de la Comuna no pueden vivir sin el río. Las máquinas calcularon cuánto iban a aguantar los fuertes. La respuesta está por saberse.
         options:
         - name: {english: "Let the fortresses answer.", spanish: "Que respondan los fuertes."}
           effects: []
@@ -926,9 +932,9 @@ events:
         title: {english: "Rome or the Origin", spanish: "Roma o el Origen"}
         desc:
           english: >-
-            Rome and the African Federation are at war. Rome demands tribute from Africa, as it did two thousand years ago; the councils answer that the first humans walked here long before the first Caesar. The Mediterranean is once again a frontier.
+            Rome and the African Federation are at war. Rome wants the Suez Canal and the solar power of the Sahara, and claims the coast of Africa as its old provinces; the councils answer that the first humans walked here long before the first Caesar. The Mediterranean is once again a frontier.
           spanish: >-
-            Roma y la Federación africana están en guerra. Roma le exige tributo a África, como hace dos mil años; los consejos contestan que los primeros humanos caminaron acá mucho antes que el primer César. El Mediterráneo vuelve a ser frontera.
+            Roma y la Federación africana están en guerra. Roma quiere el canal de Suez y la energía solar del Sahara, y reclama la costa de África como sus viejas provincias; los consejos contestan que los primeros humanos caminaron acá mucho antes que el primer César. El Mediterráneo vuelve a ser frontera.
         options:
         - name: {english: "The Mediterranean, a frontier again.", spanish: "El Mediterráneo, otra vez frontera."}
           effects: []

@@ -122,6 +122,12 @@ derecho a mandar después del fin del mundo?*
 - **Mandato Trascendente** — *"La política fracasó; la Armonía no. El Sol no."* El Directorio y
   el Reino del Sol.
 
+Las legitimidades son la bandera, no el motivo. Las dos Restauraciones miran el pasado y el orden
+y pueden ser aliadas (el Pacto de las Restauraciones), igual que el Sol y el Directorio (el Pacto
+del Mandato). Lo que separa a las potencias es lo que las dos necesitan y no alcanza: el litio y
+los glaciares de los Andes, el Acuífero Guaraní, el cobalto de Katanga, el estrecho de Malaca y
+Hong Kong, el Rin, Suez y el sol del Sahara. Ginebra los llama **puntos de fricción**.
+
 ---
 
 ## Lo que todavía no pasó

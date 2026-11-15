@@ -112,6 +112,7 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **Mareas de Guerra.** Pagado por adelantado.
 - **Derechos de Puerto.** Nuestros barcos atracan donde no flamea nuestra bandera.
 - **Los Cables Cortados.** Los precios de Tokio llegan tarde, o no llegan. El Mercado odia no saber.
+- **La Línea: al Oeste de la Raya.** El Índico, Malaca y las rutas a África y Europa son nuestros, por tratado.
 
 ## El árbol de focos nacionales
 

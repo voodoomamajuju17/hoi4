@@ -55,7 +55,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-06: el Directorio más frágil, Eurasia mejor abastecida, Siberia se levanta
                  "35_directorio_siberia.yaml",
                  # 2026-11-06: el Gigante (la Coalición de Ginebra por tamaño) y la Crisis del Sucesor
-                 "36_gigante_sucesor.yaml", "37_el_despertar.yaml", "38_aventuras_albion.yaml", "39_aventuras_japon.yaml"]
+                 "36_gigante_sucesor.yaml", "37_el_despertar.yaml", "38_aventuras_albion.yaml", "39_aventuras_japon.yaml",
+                 # 2026-11-14: puntos de fricción entre potencias, el Pacto de las Restauraciones y la Línea
+                 "41_friccion.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -194,6 +196,15 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
             sagas[key] = saga
     hooks = dec_new.get("on_actions") or []
     add_unique(dec.setdefault("on_actions", []), hooks, "on_action")
+
+    # 2026-11-14: los puntos de fricción (41_friccion.yaml); lo igual para todos los pares
+    # (crisis, tratado, decisiones) se arma en tools/gen/friccion_spec.py
+    if overlay.get("friccion"):
+        if raw.get("friccion"):
+            raise SpecError("friccion ya existe", where=where)
+        raw["friccion"] = overlay["friccion"]
+        from . import friccion_spec
+        friccion_spec.expandir(raw, overlay["friccion"])
 
     leaders_new = overlay.get("leaders") or {}
     leaders = raw.setdefault("leaders", {})
