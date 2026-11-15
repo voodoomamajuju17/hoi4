@@ -199,6 +199,8 @@ def emit(ctx: BuildContext) -> None:
         used["set_air_oob"] = "forces.py"
     if faction_plan(ctx):
         used["create_faction"] = "04_diplomacy.yaml"
+        # create_faction_from_template no se verifica contra documentation/: su forma sale de un uso
+        # real del juego instalado (facciones.forma), y la documentación del juego puede no listarlo
         used["add_to_faction"] = "04_diplomacy.yaml"
     if ctx.data.get("techs"):
         used["set_technology"] = "13_military.yaml"
@@ -263,7 +265,9 @@ def _faction_blocks(ctx: BuildContext, tag: str) -> list[tuple[str, object]]:
             f["id"], en=f["name"]["english"], es=f["name"]["spanish"],
             file="meganations_diplomacy", origin=f"factions:{f['id']}",
         )
-        out.append(("create_faction", key))
+        # 2026-11-15: con plantilla propia (y su emblema) si el juego muestra cómo; si no, como siempre
+        from .facciones import crear
+        out.append(crear(ctx, tag, key))
         for m in members:
             if m != leader:
                 out.append(("add_to_faction", m))

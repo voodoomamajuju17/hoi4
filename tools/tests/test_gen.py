@@ -3266,6 +3266,37 @@ def test_paneles_recurso() -> None:
               'MN_PANEL_TEXTO_ASC:0 "§Y$ASC_computo_category$§!\\n$ASC_computo_category_desc$' in es, es[:300])
 
 
+def test_facciones() -> None:
+    """2026-11-15: emblemas de facción por plantilla, con la forma del efecto aprendida del juego."""
+    section("facciones: emblema propio por plantilla, sin adivinar la forma del efecto")
+    import types
+    from tools.gen.emitters import facciones as fa
+    def ctx_con(raiz):
+        return types.SimpleNamespace(vanilla=types.SimpleNamespace(root=raiz) if raiz else None, data={},
+                                     spec=types.SimpleNamespace(root=REPO_ROOT / "spec"))
+    with tempfile.TemporaryDirectory() as tmp:
+        raiz = Path(tmp)
+        (raiz / "common/factions/templates").mkdir(parents=True)
+        c = ctx_con(raiz)
+        check("facciones: sin un uso en el juego, se crea como siempre", fa.crear(c, "EFE", "mn_f") == ("create_faction", "mn_f"))
+        (raiz / "history/countries").mkdir(parents=True)
+        (raiz / "history/countries/ENG.txt").write_text(
+            "create_faction_from_template = { template = faction_template_allies name = Allies }\n")
+        c = ctx_con(raiz)
+        k, v = fa.crear(c, "EFE", "mn_f")
+        txt = " ".join(pdx.render(v).split()) if not isinstance(v, str) else v
+        check("facciones: con un uso de bloque, se copia la forma (plantilla y nombre)",
+              k == "create_faction_from_template" and txt == "template = faction_template_mn_EFE name = mn_f", txt)
+        (raiz / "history/countries/ENG.txt").write_text("create_faction_from_template = faction_template_allies\n")
+        c = ctx_con(raiz)
+        check("facciones: con un uso suelto, la plantilla sola",
+              fa.crear(c, "ASC", "mn_g") == ("create_faction_from_template", "faction_template_mn_ASC"))
+    check("facciones: sin plantillas en el juego, como siempre", fa.crear(ctx_con(None), "EFE", "x") == ("create_faction", "x"))
+    check("facciones: los ocho emblemas listos (100x100 en dos cuadros)",
+          all(struct.unpack("<II", (REPO_ROOT / f"assets/ui/facciones/faccion_{t}.dds").read_bytes()[12:20]) == (100, 200)
+              for t in fa.TAGS))
+
+
 def test_eventos_rotos() -> None:
     section("auditoría: ninguna llamada a un evento que el mod no carga (events/ reemplazado) (2026-11-07)")
     from tools.gen.emitters import cleanup
@@ -6237,6 +6268,7 @@ def main() -> int:
         test_selector_receptor,
         test_eventos_receptor,
         test_paneles_recurso,
+        test_facciones,
     ):
         test()
 
