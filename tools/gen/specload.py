@@ -236,6 +236,13 @@ class Country:
     raw: dict[str, Any]
 
     @property
+    def map_color(self) -> tuple[int, int, int]:
+        """Color del MAPA (2026-11-15, prueba del Pacífico): `map_color_rgb` si está; si no, el de
+        identidad (`color_rgb`), que siguen usando la interfaz, las banderas y los retratos provisorios."""
+        c = self.raw.get("map_color_rgb")
+        return tuple(c) if c and len(c) == 3 else self.color  # type: ignore[return-value]
+
+    @property
     def filename(self) -> str:
         """Nombre del archivo en common/countries/. Sin espacios: los espacios
         en rutas de Paradox funcionan pero complican los scripts."""

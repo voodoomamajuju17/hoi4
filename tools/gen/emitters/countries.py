@@ -69,7 +69,9 @@ def _emit_colors(ctx: BuildContext) -> None:
     b = Block()
     for c in sorted(ctx.spec.countries, key=lambda x: x.tag):
         entry = Block()
-        entry.add("color", _rgb(c.color))
+        # 2026-11-15: el mapa puede llevar su propio color (map_color_rgb); color_ui sigue siendo el
+        # de identidad (también tiñe el fondo de las fichas de división con color nacional)
+        entry.add("color", _rgb(c.map_color))
         entry.add("color_ui", _rgb(c.color))
         b.add(c.tag, entry)
     ctx.write_script("common/countries/colors.txt", b, source=SOURCE)

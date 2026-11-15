@@ -109,7 +109,7 @@ def emit(ctx: BuildContext) -> None:
     fx, fy, flado = posicion_ficha()
     ix, iy = arte.ICONO
     gui.append('\tcontainerWindowType = {\n\t\tname = "mn_panel_politica_window"\n'
-               f'\t\tposition = {{ x = {fx + 208} y = {fy + (flado - iy) // 2} }}\n'
+               f'\t\tposition = {{ x = {fx + 200} y = {fy + (flado - iy) // 2} }}\n'
                f'\t\tsize = {{ width = {ix} height = {iy} }}\n\t\torientation = upper_left\n')
     for p in hay:
         gui.append(f'\t\tbuttonType = {{\n\t\t\tname = "abrir_{p}"\n\t\t\tposition = {{ x = 0 y = 0 }}\n'
@@ -177,30 +177,34 @@ def emit(ctx: BuildContext) -> None:
                  f'\t\t\tposition = {{ x = {mx0 + (mx1 - mx0 - lado) // 2} y = {my0 + 4} }}\n\t\t\tscale = {escala}\n'
                  f'\t\t\tpdx_tooltip = "MN_PANEL_BOTON_TT_{p}"\n\t\t}}\n')
         g.append(_texto("valor", mx0 + 10, my1 - 30, f"MN_PANEL_VALOR_{p}", "hoi_18mbs", mx1 - mx0 - 20, 24, "centre"))
-        # el texto, con barra de desplazamiento
-        g.append(f'\t\tcontainerWindowType = {{\n\t\t\tname = "texto_caja"\n\t\t\tposition = {{ x = {tx0 + 8} y = {ty0 + 6} }}\n'
-                 f'\t\t\tsize = {{ width = {tx1 - tx0 - 14} height = {ty1 - ty0 - 12} }}\n'
-                 '\t\t\tverticalScrollbar = "right_vertical_slider"\n\t\t\tscroll_wheel_factor = 40\n\t\t\tsmooth_scrolling = yes\n'
-                 '\t\t\tmargin = { top = 2 bottom = 2 }\n'
-                 + _texto("texto", 0, 0, f"MN_PANEL_TEXTO_{p}", "hoi_16mbs", tx1 - tx0 - 40, 1400, "left", fijo=False, tab="\t\t\t")
-                 + "\t\t}\n")
-        # las acciones, en dos columnas, con barra de desplazamiento
+        # el texto, con barra de desplazamiento (2026-11-15, captura: el texto y los botones se salían
+        # del marco): como las listas del juego, el contenedor con barra lleva fondo (transparente),
+        # recorta (clipping) y adentro un contenedor del alto del contenido
+        tw, th = tx1 - tx0 - 14, ty1 - ty0 - 12
+        alto_texto = _alto_texto(ctx, cfg["categorias"], tw - 30)
+        g.append(_caja_con_barra("texto_caja", tx0 + 8, ty0 + 6, tw, th, alto_texto,
+                                 _texto("texto", 0, 0, f"MN_PANEL_TEXTO_{p}", "hoi_16mbs", tw - 30, alto_texto, "left",
+                                        tab="\t\t\t\t")))
+        # las acciones, en dos columnas: primero las que se ven siempre, al final las que aparecen
+        # solo a veces (restaurar una productora...), así sus huecos quedan abajo
         ax0, ay0, ax1, ay1 = z["acciones"]
         lista = [a for c in cfg["categorias"] for a in acciones.get(c, [])]
-        g.append(f'\t\tcontainerWindowType = {{\n\t\t\tname = "acciones"\n\t\t\tposition = {{ x = {ax0 + 6} y = {ay0 + 6} }}\n'
-                 f'\t\t\tsize = {{ width = {ax1 - ax0 - 12} height = {ay1 - ay0 - 12} }}\n'
-                 '\t\t\tverticalScrollbar = "right_vertical_slider"\n\t\t\tscroll_wheel_factor = 40\n\t\t\tsmooth_scrolling = yes\n')
+        lista.sort(key=lambda a: bool(a.get("visible") is not None and a["visible"].entries) or bool(a.get("una_vez")))
+        aw, ah = ax1 - ax0 - 12, ay1 - ay0 - 12
+        filas = (len(lista) + 1) // 2
+        botones = []
         for k, a in enumerate(lista):
             x, y = (k % 2) * (bw + 6), (k // 2) * arte.PASO_ACCION
-            g.append(f'\t\t\tbuttonType = {{\n\t\t\t\tname = "a_{a["id"]}"\n\t\t\t\tposition = {{ x = {x} y = {y} }}\n'
-                     f'\t\t\t\tspriteType = "GFX_mn_panel_{p}_boton"\n\t\t\t\ttext = "MN_PANEL_ACC_{a["id"]}"\n'
-                     f'\t\t\t\tbuttonFont = "hoi_16mbs"\n\t\t\t\tpdx_tooltip = "{a["id"]}_desc"\n\t\t\t}}\n')
+            botones.append(f'\t\t\t\tbuttonType = {{\n\t\t\t\t\tname = "a_{a["id"]}"\n\t\t\t\t\tposition = {{ x = {x} y = {y} }}\n'
+                           f'\t\t\t\t\tspriteType = "GFX_mn_panel_{p}_boton"\n\t\t\t\t\ttext = "MN_PANEL_ACC_{a["id"]}"\n'
+                           f'\t\t\t\t\tbuttonFont = "hoi_16mbs"\n\t\t\t\t\tpdx_tooltip = "{a["id"]}_desc"\n\t\t\t\t}}\n')
             en, es = a["nombre"]
             costo = int(a.get("costo") or 0)
             if costo:
                 en, es = f"{en}  ({costo} PP)", f"{es}  ({costo} PP)"
             ctx.loc.define_and_reference(f"MN_PANEL_ACC_{a['id']}", en=en, es=es, file="meganations_paneles", origin="paneles")
-        g.append("\t\t}\n\t}\n")
+        g.append(_caja_con_barra("acciones", ax0 + 6, ay0 + 6, aw, ah, max(ah, filas * arte.PASO_ACCION), "".join(botones)))
+        g.append("\t}\n")
         gui.append("".join(g))
         # -- su scripted GUI --
         s = [f"\tmn_panel_{p} = {{\n\t\tcontext_type = player_context\n\t\twindow_name = \"mn_panel_{p}_window\"\n"
@@ -243,6 +247,32 @@ def emit(ctx: BuildContext) -> None:
                    "\t\t}\n\t}\n}\n")
     n = sum(len(acciones.get(c, [])) for p in hay for c in PANELES[p]["categorias"])
     ctx.note(f"paneles del recurso: {len(hay)} ventanas propias ({', '.join(hay)}), {n} acciones como botones")
+
+
+def _caja_con_barra(nombre: str, x: int, y: int, w: int, h: int, alto: int, hijos: str) -> str:
+    """Contenedor con barra de desplazamiento como los del juego: fondo, recorte y un contenedor
+    interior del alto del contenido."""
+    return (f'\t\tcontainerWindowType = {{\n\t\t\tname = "{nombre}"\n\t\t\tposition = {{ x = {x} y = {y} }}\n'
+            f'\t\t\tsize = {{ width = {w} height = {h} }}\n\t\t\tclipping = yes\n'
+            '\t\t\tverticalScrollbar = "right_vertical_slider"\n\t\t\tscroll_wheel_factor = 40\n\t\t\tsmooth_scrolling = yes\n'
+            '\t\t\tbackground = {\n\t\t\t\tname = "Background"\n\t\t\t\tspriteType = "GFX_tiled_window_transparent"\n\t\t\t}\n'
+            f'\t\t\tcontainerWindowType = {{\n\t\t\t\tname = "{nombre}_contenido"\n\t\t\t\tposition = {{ x = 0 y = 0 }}\n'
+            f'\t\t\t\tsize = {{ width = {w - 24} height = {alto} }}\n'
+            + hijos + "\t\t\t}\n\t\t}\n")
+
+
+def _alto_texto(ctx: BuildContext, categorias: list[str], ancho: int) -> int:
+    """Alto aproximado del texto del panel (letra de 16: ~7 px por letra, 19 por renglón), con margen."""
+    import math
+    cats = {c["id"]: c for c in (ctx.spec.raw.get("decisions") or {}).get("categories") or []}
+    renglones = 0
+    por_renglon = max(20, ancho // 7)
+    for cid in categorias:
+        texto = str(((cats.get(cid) or {}).get("desc") or {}).get("spanish", ""))
+        for parrafo in texto.replace("\\n", "\n").split("\n"):
+            renglones += max(1, math.ceil(len(parrafo) / por_renglon))
+        renglones += 2
+    return renglones * 19 + 40
 
 
 def _texto(nombre: str, x: int, y: int, texto: str, font: str, w: int, h: int, fmt: str = "left",

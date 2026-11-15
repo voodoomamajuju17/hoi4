@@ -8,6 +8,10 @@
 # entre vecinos), lejos del mar y del gris; cada potencia con el color de su
 # identidad (EFE verde, ASC rojo, FCU azul, HSN petróleo, NAS oro, SHD jade,
 # APF tierra, NRE púrpura imperial).
+#
+# 2026-11-15 (rediseño del mapa, prueba A/B del Pacífico): `map_color_rgb` opcional es el color del
+# MAPA; sin él, el mapa usa color_rgb. color_rgb sigue siendo la identidad (interfaz, color_ui,
+# banderas y retratos provisorios). Por ahora solo HSN, SHD y ZJP llevan pastel de prueba.
 # =============================================================================
 
 # Política de arranque de history/countries/. El doc no da popularidades ni
@@ -166,6 +170,7 @@ major_powers:
     capital: unknown
     capital_state_id: unknown
     color_rgb: [12, 120, 138]
+    map_color_rgb: [146, 204, 208]   # #92CCD0: prueba B del Pacífico (2026-11-15); sacar la línea para volver
     color_src: invented
     is_major: true
     coverage: name_only
@@ -222,6 +227,7 @@ major_powers:
     capital: unknown
     capital_state_id: unknown
     color_rgb: [120, 198, 168]
+    map_color_rgb: [131, 182, 160]   # #83B6A0: prueba B del Pacífico (2026-11-15); sacar la línea para volver
     color_src: invented
     is_major: true
     coverage: name_only
@@ -1008,6 +1014,7 @@ independents:
     ideology_src: user_request
     capital: unknown
     color_rgb: [150, 24, 48]
+    map_color_rgb: [236, 197, 212]   # #ECC5D4: prueba B del Pacífico (2026-11-15); sacar la línea para volver
     color_src: invented
     is_major: false
     lore: >

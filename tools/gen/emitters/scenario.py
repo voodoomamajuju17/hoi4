@@ -29,11 +29,11 @@ NO_COUNTRY = "---"    # ningún país preseleccionado (como el juego base)
 
 def emit(ctx: BuildContext) -> None:
     scenario = ctx.spec.raw["scenario"]
-    _emit_defines(ctx, scenario["game_dates"])
+    _emit_defines(ctx, scenario["game_dates"], scenario.get("map_colors"))
     _emit_bookmark(ctx, scenario["bookmark"])
 
 
-def _emit_defines(ctx: BuildContext, dates: dict) -> None:
+def _emit_defines(ctx: BuildContext, dates: dict, mapa: dict | None = None) -> None:
     if ctx.vanilla is not None:
         defines = ctx.vanilla.root / "common" / "defines" / "00_defines.lua"
         if defines.exists():
@@ -50,6 +50,12 @@ def _emit_defines(ctx: BuildContext, dates: dict) -> None:
         f'NDefines.NGame.END_DATE = "{dates["end"]}"',
         "",
     ]
+    # 2026-11-15: color de los países en el mapa (11_scenario.yaml -> map_colors)
+    for clave, define in (("saturation", "COUNTRY_COLOR_SATURATION_MODIFIER"),
+                          ("brightness", "COUNTRY_COLOR_BRIGHTNESS_MODIFIER")):
+        if (mapa or {}).get(clave) is not None:
+            lines.append(f"NDefines_Graphics.NGraphics.{define} = {float(mapa[clave])}")
+    lines.append("")
     ctx.write_text("common/defines/00_meganations_defines.lua", "\n".join(lines))
 
 

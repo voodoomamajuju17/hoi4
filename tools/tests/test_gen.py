@@ -200,7 +200,7 @@ def test_spec_loads() -> None:
         fx, fy, fz = (t ** (1 / 3) if t > 0.008856 else 7.787 * t + 16 / 116 for t in xyz)
         return (116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz))
     import math as _math
-    labs = {c.tag: _lab(c.color) for c in spec.countries}
+    labs = {c.tag: _lab(c.map_color) for c in spec.countries}   # el color del mapa (2026-11-15)
     closest = min((_math.dist(labs[a], labs[b]), a, b) for i, a in enumerate(labs) for b in list(labs)[i + 1:])
     check("colores de mapa: ningun par de paises se parece (Lab >= 15)", closest[0] >= 15, str(closest))
 
@@ -367,6 +367,18 @@ def test_full_build() -> None:
         colors = (mod / "common/countries/colors.txt").read_text()
         check("color en una linea: rgb { r g b }", "color = rgb { 42 132 54 }" in colors, colors[400:700])
         check("color_ui en una linea", "color_ui = rgb { 42 132 54 }" in colors)
+        # 2026-11-15 (prueba A/B del Pacífico): map_color_rgb solo cambia el color del mapa
+        check("mapa: HSN, SHD y ZJP con su pastel de prueba y color_ui de identidad",
+              "HSN = { color = rgb { 146 204 208 } color_ui = rgb { 12 120 138 } }" in " ".join(colors.split())
+              and "SHD = { color = rgb { 131 182 160 } color_ui = rgb { 120 198 168 } }" in " ".join(colors.split())
+              and "ZJP = { color = rgb { 236 197 212 } color_ui = rgb { 150 24 48 } }" in " ".join(colors.split()), colors[:300])
+        import re as _re_mod
+        _bloques = _re_mod.findall(r"(\w+) = \{\s*color = rgb \{ ([^}]*) \}\s*color_ui = rgb \{ ([^}]*) \}", colors)
+        check("mapa: solo tres colores de mapa distintos de su color de identidad (36 color_ui intactos)",
+              len(_bloques) == 36 and sorted(t for t, c, u in _bloques if c != u) == ["HSN", "SHD", "ZJP"], str(_bloques[:3]))
+        defs = (mod / "common/defines/00_meganations_defines.lua").read_text()
+        check("mapa: sin tocar brillo ni saturación del juego (prueba B usa los valores de A)",
+              "COUNTRY_COLOR" not in defs, defs)
         tags_text = (mod / "common/country_tags/00_meganations.txt").read_text()
         for tag in ("EFE", "ASC", "FCU", "NAS", "PTA", "YYG"):
             check(f"tag {tag} registrado", f"{tag} = " in tags_text)
