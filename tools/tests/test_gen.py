@@ -2844,6 +2844,10 @@ def test_modelos_3d() -> None:
           {j.nombre for j in a.juntas()} <= nombres | {"root"} and a.info.get("j")[0] == len(a.juntas()))
     piel = next(p for _m, p in m.formas() if p is not None)
     check("modelos: la piel apunta solo a huesos que existen", max(piel.get("ix")) < m.huesos())
+    # 2026-11-15 (captura: "caminan para atrás siempre"): como los del juego, el frente hacia -Z
+    barrel = next(j for j in m.esqueletos()[0].hijos if j.nombre == "barrel")
+    check("modelos: dados vuelta 180 grados, el cañón apunta a -Z como ENG_tank_medium",
+          modelo3d._inv(barrel.get("tx"))[11] < 0 and info.get("girado"))
     check("modelos: sombreado PdxMeshAdvanced (el de la infantería del juego; con Standard se ve negro)",
           b"PdxMeshStandard" not in nueva and b"PdxMeshAdvanced" in nueva)
     fcu = next(base.glob("FCU_infanteria/gfx/models/**/*.mesh"))

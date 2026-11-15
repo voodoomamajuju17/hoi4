@@ -322,7 +322,68 @@ class Malla:
         return quitados
 
 
-def arreglar_carpeta(malla: bytes, anims: dict[str, bytes], maximo: int = MAX_HUESOS) -> tuple[bytes, dict[str, bytes], dict]:
+def _girar_anim(a: Anim) -> None:
+    """La raíz de cada animación, girada 180 grados alrededor de Y (R . local)."""
+    raices = {j.nombre for j in a.juntas() if j.nombre in a.raices}
+    for canal, ancho in (("t", 3), ("q", 4)):
+        con = [j for j in a.juntas() if canal in _sa(j)]
+        n = len(con)
+        if a.muestras is not None and canal in a.muestras.props:
+            v = list(a.muestras.get(canal))
+            for k, j in enumerate(con):
+                if j.nombre not in raices:
+                    continue
+                for f in range(a.cuadros):
+                    i = (f * n + k) * ancho
+                    v[i:i + ancho] = _girar_valor(canal, v[i:i + ancho])
+            a.muestras.put(canal, v)
+        for j in a.juntas():
+            if j.nombre in raices and canal in j.props and canal not in _sa(j):
+                j.put(canal, _girar_valor(canal, j.get(canal)))
+
+
+def _girar_valor(canal: str, v: list) -> list:
+    if canal == "t":
+        x, y, z = v
+        return [-x, y, -z]
+    x, y, z, w = v       # q' = (0,1,0,0) * q
+    return [z, w, -x, -y]
+
+
+def girar(m: Malla, anims: list[Anim]) -> None:
+    """2026-11-15 (captura: "caminan para atrás siempre"): los modelos del juego miran hacia -Z (el
+    cañón de ENG_tank_medium apunta a -Z) y los nuestros, hechos en Blender, hacia +Z. Se da vuelta todo
+    180 grados alrededor del eje vertical: vértices, normales, tangentes y caja; la inversa de bind de
+    cada hueso (IB . R, así el reposo cierra) y la raíz de cada animación (R . local)."""
+    for mesh, _piel in m.formas():
+        for clave, ancho in (("p", 3), ("n", 3), ("ta", 4)):
+            if clave not in mesh.props:
+                continue
+            v = list(mesh.get(clave))
+            for i in range(0, len(v), ancho):
+                v[i], v[i + 2] = -v[i], -v[i + 2]
+            mesh.put(clave, v)
+        caja = mesh.hijo("aabb")
+        if caja is not None:
+            mn, mx = list(caja.get("min")), list(caja.get("max"))
+            caja.put("min", [-mx[0], mn[1], -mx[2]])
+            caja.put("max", [-mn[0], mx[1], -mn[2]])
+    raices: set[str] = set()
+    for esq in m.esqueletos():
+        for j in esq.hijos:
+            tx = list(j.get("tx"))
+            for i in (0, 1, 2, 6, 7, 8):    # IB . R con R = diag(-1, 1, -1): columnas 0 y 2 cambian de signo
+                tx[i] = -tx[i]
+            j.put("tx", tx)
+            if "pa" not in j.props:
+                raices.add(j.nombre)
+    for a in anims:
+        a.raices = raices
+        _girar_anim(a)
+
+
+def arreglar_carpeta(malla: bytes, anims: dict[str, bytes], maximo: int = MAX_HUESOS,
+                     girar_180: bool = True) -> tuple[bytes, dict[str, bytes], dict]:
     """Malla y animaciones de una carpeta, arregladas. Devuelve también un resumen."""
     m = Malla(malla)
     a = {k: Anim(v) for k, v in anims.items()}
@@ -330,6 +391,8 @@ def arreglar_carpeta(malla: bytes, anims: dict[str, bytes], maximo: int = MAX_HU
     quitados = m.recortar(list(a.values()), maximo)
     signos = sum(x.arreglar_signos() for x in a.values())
     sombra = m.sombreado_avanzado()
+    if girar_180:
+        girar(m, list(a.values()))
     return m.bytes(), {k: v.bytes() for k, v in a.items()}, {
         "huesos": (antes, m.huesos()), "quitados": quitados, "signos": signos, "sombreado": sombra,
-        "medida": m.medida()}
+        "medida": m.medida(), "girado": girar_180}
