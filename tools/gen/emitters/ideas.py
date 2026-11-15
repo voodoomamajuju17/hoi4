@@ -179,9 +179,11 @@ def emit(ctx: BuildContext) -> None:
             body.add("modifier", mod)
             # Dibujo: propio si está en assets/<TAG>/ideas/<id>.dds; si no, genérico del juego.
             own = repo / "assets" / country.tag / "ideas" / f"{iid}.dds"
+            # 2026-11-15 (captura: "falta el ícono para la agencia de inteligencia en el panel de
+            # selección"): la pantalla de elegir país muestra también los ocultos; llevan su dibujo
             if idea.get("hidden"):
                 ocultas.add(ctx.loc.reference(iid, f"ideas:{iid}"), body)
-            elif own.exists():
+            if own.exists():
                 texture = f"gfx/interface/ideas/meganations/{iid}.dds"
                 ctx.copy_asset(f"assets/{country.tag}/ideas/{iid}.dds", texture)
                 sprite = Block()
@@ -190,7 +192,7 @@ def emit(ctx: BuildContext) -> None:
                 sprites.add("spriteType", sprite)
                 body.entries.insert(0, ("picture", iid))
                 pictures["propia"] += 1
-            else:
+            elif not idea.get("hidden"):
                 generic = _generic_picture(modifiers, idea_sprites)
                 if generic:
                     body.entries.insert(0, ("picture", generic))

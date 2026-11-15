@@ -2893,6 +2893,14 @@ def test_friccion() -> None:
     check("crisis, propuesta, aceptado y rechazado por par; incidentes a mano",
           all(fs.base(p) + k in ns for p in pares.values() for k in (1, 2, 3, 4, 5, 6)))
     check("la Linea: propuesta, Hong Kong, firma, el mundo y la traicion", {200, 201, 202, 203, 204} <= set(ns))
+    # 2026-11-15 (captura del selector con un "?"): el Servicio de Inteligencia está oculto en la
+    # partida, pero la pantalla de elegir país lo muestra: lleva su dibujo igual
+    with tempfile.TemporaryDirectory() as tmp0:
+        ctx0 = build(Path(tmp0), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        ideas_efe = next((ctx0.mod_root / "common/ideas").glob("EFE*.txt")).read_text(encoding="utf-8")
+        oc = ideas_efe[ideas_efe.index("hidden_ideas"):]
+        check("el espiritu oculto de la agencia trae su imagen (el selector lo muestra)",
+              "picture = EFE_servicio_de_inteligencia" in " ".join(oc[:oc.index("EFE_servicio_de_inteligencia") + 400].split()))
     cat = next(c for c in spec.raw["decisions"]["categories"] if c["id"] == "MN_friccion_category")
     ids = {d["id"] for d in cat["decisions"]}
     check("tratado, concesion y presion para cada par, y la Linea una sola vez",
