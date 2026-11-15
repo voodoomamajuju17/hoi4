@@ -1447,7 +1447,8 @@ def test_events() -> None:
                   and "add_dynamic_modifier = { modifier = EFE_temp_" in blk and " days = " in blk.split("add_dynamic_modifier")[1][:80], blk)
         rep2 = decs_v3[decs_v3.index("EFE_replantar_2 = {"):][:500]
         check("v3: replantar aparece al perder la productora y la vuelve a activar",
-              "visible = { has_country_flag = EFE_prod_2_perdida }" in rep2 and "clr_country_flag = EFE_prod_2_perdida" in rep2, rep2)
+              # 2026-11-15: la decisión queda para la IA; el jugador la usa desde el panel del Bioacero
+              "visible = { has_country_flag = EFE_prod_2_perdida is_ai = yes }" in rep2 and "clr_country_flag = EFE_prod_2_perdida" in rep2, rep2)
         esp = " ".join(pdx.render(pdx.parse(se_raw).get("EFE_espiritu_vivo")).split())
         check("v3: el blindaje escala a la mitad por punto (30 = lo que antes daban 15)",
               "divide_variable = { var = EFE_ef_blindaje value = 200 }" in esp
@@ -3220,6 +3221,49 @@ def test_eventos_receptor() -> None:
     check("eventos del juego: seis imágenes pedidas",
           {"juego_justificacion", "juego_elecciones", "juego_as", "juego_as_caido", "juego_bomba",
            "juego_bomba_noticia"} <= {i["id"] for i in cat if i["type"] == "event_picture"})
+
+
+def test_paneles_recurso() -> None:
+    """2026-11-15: el panel del recurso propio de cada nación (ventana propia, acciones como botones)."""
+    section("paneles del recurso: ventana propia por nación, acciones como botones, decisiones para la IA")
+    from tools.arte import paneles as ap
+    from tools.gen.emitters import paneles as ep
+    for p in ap.ZONAS:
+        base = REPO_ROOT / "assets/ui/paneles" / p
+        fondo = (base / "fondo.dds").read_bytes()
+        med = (base / "medidor.dds").read_bytes()
+        check(f"paneles: {p} con su carcasa de 720x800 y su medidor de {ap.CUADROS} cuadros",
+              struct.unpack("<II", fondo[12:20]) == (800, 720)
+              and struct.unpack("<II", med[12:20]) == (ap.LADO, ap.LADO * ap.CUADROS))
+    check("paneles: los once paneles del arte tienen su configuración", set(ap.ZONAS) == set(ep.PANELES))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        sg = " ".join((mod / "common/scripted_guis/meganations_paneles.txt").read_text(encoding="utf-8-sig").split())
+        gui = " ".join((mod / "interface/meganations_paneles.gui").read_text(encoding="utf-8-sig").split())
+        dec = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
+        cats = " ".join((mod / "common/decisions/categories/meganations_categories.txt").read_text(encoding="utf-8-sig").split())
+        check("paneles: la acción cuesta lo mismo, hace lo mismo y respeta su espera",
+              "a_ASC_construir_datacenter_click = { add_political_power = -75 set_country_flag = { flag = MN_pcd_ASC_construir_datacenter value = 1 days = 120 }" in sg
+              and "a_ASC_construir_datacenter_click_enabled = { has_political_power > 74 NOT = { has_country_flag = MN_pcd_ASC_construir_datacenter } }" in sg, sg[:800])
+        check("paneles: las condiciones de la decisión pasan al botón",
+              "a_ASC_asignar_economia_click_enabled = { NOT = { has_country_flag = ASC_reasignando } has_political_power > 24 }" in sg)
+        check("paneles: el medidor elige su cuadro con MN_panel_cuadro",
+              "medidor = { frame = MN_panel_cuadro }" in sg and 'spriteType = "GFX_mn_panel_ASC_medidor"' in gui)
+        check("paneles: Albión tiene uno por ruta",
+              "visible = { original_tag = ZAL check_variable = { ZAL_ruta = 2 } has_country_flag = MN_panel_abierto }" in sg
+              and "visible = { original_tag = ZAL check_variable = { ZAL_ruta = 1 } has_country_flag = MN_panel_abierto }" in sg)
+        check("paneles: el botón en Política, al lado del Líder", "parent_window_token = politics_tab" in sg
+              and 'name = "abrir_ASC"' in gui)
+        check("paneles: las decisiones absorbidas quedan solo para la IA (categoría y decisión)",
+              "ASC_asignar_economia = { icon = generic_industry cost = 25 visible = { is_ai = yes }" in dec
+              and "ASC_computo_category = { icon = generic_industry allowed = { original_tag = ASC } visible = { is_ai = yes } }" in cats)
+        check("paneles: las misiones con reloj siguen en Decisiones (los disturbios de la Unión)",
+              "FCU_dividendos_category = { icon" in cats and "FCU_dividendos_category = { icon = generic_industry allowed = { original_tag = FCU } visible" not in cats
+              and "FCU_calmar_1 = {" in dec and "FCU_calmar_1 = { icon = generic_political_actions visible = { is_ai" not in dec)
+        es = (mod / "localisation/spanish/meganations_paneles_l_spanish.yml").read_text(encoding="utf-8-sig")
+        check("paneles: el texto del panel es el de sus categorías, con saltos de línea",
+              'MN_PANEL_TEXTO_ASC:0 "§Y$ASC_computo_category$§!\\n$ASC_computo_category_desc$' in es, es[:300])
 
 
 def test_eventos_rotos() -> None:
@@ -6192,6 +6236,7 @@ def main() -> int:
         test_medallas,
         test_selector_receptor,
         test_eventos_receptor,
+        test_paneles_recurso,
     ):
         test()
 

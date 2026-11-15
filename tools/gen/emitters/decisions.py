@@ -64,6 +64,11 @@ def _emit(ctx: BuildContext) -> None:
 
     cats = Block()
     decs = Block()
+    # 2026-11-15: las categorías de los paneles del recurso pasan a su ventana propia
+    # (emitters/paneles.py): ahí van como botones; acá quedan solo para la IA, salvo las misiones
+    from .paneles import categorias as _paneles
+    de_panel = _paneles()
+    acciones: dict[str, list[dict]] = {}
     for cat in categories:
         cid = cat["id"]
         tag = cat["country"]
@@ -79,8 +84,12 @@ def _emit(ctx: BuildContext) -> None:
             allowed.add("OR", Block([("original_tag", t_) for t_ in tags]))
         cb.add("allowed", allowed)
         triggers_used.setdefault("original_tag", cid)
-        if cat.get("visible"):
-            cb.add("visible", render_conditions(cid, cat["visible"], triggers_used, where=SOURCE))
+        vis_cat = render_conditions(cid, cat["visible"], triggers_used, where=SOURCE) if cat.get("visible") else Block()
+        if cid in de_panel and not any(d.get("mission") for d in cat.get("decisions") or []):
+            vis_cat.add("is_ai", True)
+            triggers_used.setdefault("is_ai", cid)
+        if vis_cat.entries:
+            cb.add("visible", vis_cat)
         cats.add(ctx.loc.reference(cid, f"decisions:{cid}"), cb)
         _loc(ctx, cid, cat["name"], define_only=True)
         _loc(ctx, f"{cid}_desc", cat["desc"])
@@ -99,8 +108,16 @@ def _emit(ctx: BuildContext) -> None:
                 db.add("cost", int(d.get("cost", 0)))
             if d.get("cooldown_days"):
                 db.add("days_re_enable", int(d["cooldown_days"]))
-            if d.get("visible"):
-                db.add("visible", render_conditions(did, d["visible"], triggers_used, where=SOURCE))
+            vis = render_conditions(did, d["visible"], triggers_used, where=SOURCE) if d.get("visible") else None
+            en_panel = cid in de_panel and not d.get("mission")
+            if en_panel:
+                vis_ia = Block(list(vis.entries) if vis else [])
+                vis_ia.add("is_ai", True)
+                triggers_used.setdefault("is_ai", did)
+                db.add("visible", vis_ia)
+                used_optional.add("visible")
+            elif vis is not None:
+                db.add("visible", vis)
                 used_optional.add("visible")
             if d.get("fire_only_once"):
                 db.add("fire_only_once", True)
@@ -117,8 +134,15 @@ def _emit(ctx: BuildContext) -> None:
                 db.add("timeout_effect", render_effects(did, list(d.get("timeout_effects") or []), effect_ctx,
                                                         effects_used, where=SOURCE))
                 used_optional.update({"days_mission_timeout", "activation", "timeout_effect"})
-            db.add("complete_effect", render_effects(did, list(d["effects"]) + list(after), effect_ctx,
-                                                     effects_used, where=SOURCE))
+            efecto = render_effects(did, list(d["effects"]) + list(after), effect_ctx, effects_used, where=SOURCE)
+            db.add("complete_effect", efecto)
+            if en_panel:
+                acciones.setdefault(cid, []).append({
+                    "id": did, "nombre": (d["name"]["english"], d["name"]["spanish"]),
+                    "costo": int(d.get("cost", 0)), "espera": d.get("cooldown_days"),
+                    "una_vez": bool(d.get("fire_only_once")), "visible": vis, "efectos": efecto,
+                    "disponible": db.get("available") if d.get("available") else None,
+                })
             ai = Block()
             ai_spec = d.get("ai") or {}
             ai.add("factor", ai_spec.get("factor", int(d.get("ai_factor", 1))))
@@ -153,6 +177,7 @@ def _emit(ctx: BuildContext) -> None:
         for hook, eff in merged.items():
             on.add(hook, Block([("effect", eff)]))
         ctx.write_script("common/on_actions/06_meganations_ganchos.txt", Block([("on_actions", on)]), source=SOURCE)
+    ctx.data["paneles_acciones"] = acciones
     _check_fields(vanilla, ctx, used_optional)
     ctx.write_script("common/decisions/categories/meganations_categories.txt", cats, source=SOURCE)
     ctx.write_script("common/decisions/meganations_decisions.txt", decs, source=SOURCE)

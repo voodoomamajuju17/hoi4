@@ -182,6 +182,14 @@ SUBIR_BOTON = 10   # px que sube el botón del Líder respecto del centro del lu
 GRAFICO = (270, 304, 100)   # x, y y lado del gráfico de popularidad en el .gui del juego (antes de bajar DY)
 
 
+def posicion_ficha() -> tuple[int, int, int]:
+    """x, y y lado del botón grande de la Ficha en Política (el del recurso propio va a su derecha)."""
+    from .ficha_lider import DISENO
+    gx, gy, gl = GRAFICO
+    lado = DISENO["boton_grande"]
+    return gx + (gl - lado) // 2, gy + DY + (gl - lado) // 2 - SUBIR_BOTON, lado
+
+
 def boton_lider(ctx: BuildContext) -> None:
     """El botón de la Ficha del Líder donde estaba el gráfico (2026-11-12). Es una ventana del mod
     colgada de la pantalla de Política (parent_window_token = politics_tab), como los acentos."""
@@ -195,20 +203,20 @@ def boton_lider(ctx: BuildContext) -> None:
     # la facción de arriba ni los botones de abajo, y al lado el rótulo con el nombre del líder
     # 2026-11-14 (captura: "necesita subir unos cuantos píxeles"): pegado arriba del lugar del gráfico,
     # lejos de la fila de botones de abajo
-    x, y = gx + (gl - lado) // 2, gy + DY + (gl - lado) // 2 - SUBIR_BOTON
+    x, y, _ = posicion_ficha()
     tx = lado + 14
     gui = ('guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "mn_ficha_politica_window"\n'
-           f'\t\tposition = {{ x = {x} y = {y} }}\n\t\tsize = {{ width = 270 height = {lado} }}\n'
+           f'\t\tposition = {{ x = {x} y = {y} }}\n\t\tsize = {{ width = 204 height = {lado} }}\n'
            '\t\torientation = upper_left\n'
            '\t\tbuttonType = {\n\t\t\tname = "abrir"\n\t\t\tposition = { x = 0 y = 0 }\n'
            '\t\t\tspriteType = "GFX_mn_ficha_boton_grande"\n\t\t\tpdx_tooltip = "MN_FICHA_BOTON_TT"\n\t\t}\n'
            '\t\tinstantTextboxType = {\n\t\t\tname = "rotulo"\n'
            f'\t\t\tposition = {{ x = {tx} y = {lado // 2 - 26} }}\n'
-           '\t\t\tfont = "hoi_24header"\n\t\t\ttext = "MN_FICHA_TITULO"\n\t\t\tmaxWidth = 160\n\t\t\tmaxHeight = 26\n'
+           '\t\t\tfont = "hoi_24header"\n\t\t\ttext = "MN_FICHA_TITULO"\n\t\t\tmaxWidth = 112\n\t\t\tmaxHeight = 26\n'
            '\t\t\tfixedsize = yes\n\t\t}\n'
            '\t\tinstantTextboxType = {\n\t\t\tname = "lider"\n'
            f'\t\t\tposition = {{ x = {tx} y = {lado // 2 + 2} }}\n'
-           '\t\t\tfont = "hoi_16mbs"\n\t\t\ttext = "[Root.GetLeader]"\n\t\t\tmaxWidth = 160\n\t\t\tmaxHeight = 36\n'
+           '\t\t\tfont = "hoi_16mbs"\n\t\t\ttext = "[Root.GetLeader]"\n\t\t\tmaxWidth = 112\n\t\t\tmaxHeight = 36\n'
            '\t\t\tfixedsize = yes\n\t\t}\n\t}\n}\n')
     sg = ("scripted_gui = {\n\tmn_ficha_politica = {\n\t\tcontext_type = player_context\n"
           "\t\tparent_window_token = politics_tab\n\t\twindow_name = \"mn_ficha_politica_window\"\n"

@@ -57,6 +57,15 @@ productoras, sus decisiones y sus eventos:
 Cada recurso tiene cinco regiones productoras. Perder una duele, y es un buen blanco para tus
 enemigos.
 
+**El panel del recurso.** En la pantalla de Política, al lado del botón del Líder, está el
+instrumento de tu nación en miniatura: la cuba del Bioacero, el núcleo del Plan, la bóveda de los
+Dividendos, el tubo de la marea del Peaje, el sol del Inti, la represa del Mandato, el círculo del
+Ubuntu, el arco de laureles de Roma, los faroles del Giri, el manómetro de la Pompa o el anillo de
+la Sincronía. Abre una ventana propia con el instrumento grande (se llena con lo que tenés), lo
+que rinde hoy y todas las acciones del recurso como botones: mismo costo, mismas condiciones y
+mismo efecto que tenían como decisiones. Esas decisiones ya no aparecen en la pestaña Decisiones
+(solo las usa la IA); los disturbios de la Unión, que corren contra reloj, siguen ahí.
+
 ### El Líder
 
 El botón hexagonal debajo de la bandera abre la **Ficha del Líder**. Cada jefe de Estado tiene:

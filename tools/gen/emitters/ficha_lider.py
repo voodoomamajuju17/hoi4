@@ -720,4 +720,6 @@ def _textos(ctx: BuildContext) -> None:
                                   "Cada punto sobre o bajo 10 cuenta: el Carisma mueve la estabilidad, la Astucia el poder político y el Prestigio el apoyo a la guerra."),
     }
     for k, (en, es) in T.items():
+        # 2026-11-15: el salto de línea va escrito (\\n); uno de verdad se volvía espacio en el .yml
+        en, es = en.replace("\n", "\\n"), es.replace("\n", "\\n")
         ctx.loc.define_and_reference(k, en=en, es=es, file="meganations_ficha", origin="ficha")
