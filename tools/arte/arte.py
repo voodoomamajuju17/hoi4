@@ -539,6 +539,7 @@ def catalog() -> list[dict]:
                       "style": "Hearts of Iron IV event picture set in the year 2100. Use exactly the TECHNIQUE named "
                                "in the description; no default poster look; no text, no letters, no watermark"})
     items += _industria_items()
+    items += _rebeldes_items()
     items += _adventure_items()
     items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
@@ -887,6 +888,19 @@ def _juego_items() -> list[dict]:
             "style": estilo,
         })
     return items
+
+
+REBELDES = {   # 2026-11-16: líderes rebeldes sin retrato (pedido fijo 36_retratos_rebeldes.txt)
+    "rebelde_masaki_hayama": "ZJP", "rebelde_nao_fujita": "ZJP", "rebelde_nanami_117": "ZJP",
+    "rebelde_josiah_hale": "ZAL", "rebelde_ezra_vance": "FCU",
+}
+
+
+def _rebeldes_items() -> list[dict]:
+    """Los retratos de líderes rebeldes: el pedido va escrito a mano (pedidos_fijos), acá solo el destino."""
+    return [{"type": "leader_portrait", "tag": t, "id": i, "dest": REPO / "assets" / t / "leaders" / f"{i}.dds",
+             "done": (REPO / "assets" / t / "leaders" / f"{i}.dds").exists(), "hand_written": True,
+             "description": "ver arte/pedidos_fijos/36_retratos_rebeldes.txt"} for i, t in REBELDES.items()]
 
 
 def _industria_items() -> list[dict]:

@@ -216,6 +216,8 @@ def _catastrophe_effects(tag: str | None, cat: dict | None) -> list[dict]:
         rebels = {"cosmetic_tag": reb["cosmetic_tag"]}
         if reb.get("leader"):
             rebels["leader"] = {"name": reb["leader"]}
+            if reb.get("portrait"):   # 2026-11-16: retrato propio del líder rebelde
+                rebels["leader"]["portrait"] = reb["portrait"]
         out.append({"effect": "civil_war", "tag": tag, "ideology": reb.get("ideology", "fascism"),
                     "size": float(reb.get("size", 0.3)), "rebels": rebels,
                     **({"army_ratio": float(reb["army_ratio"])} if reb.get("army_ratio") is not None else {})})

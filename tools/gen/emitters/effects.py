@@ -226,6 +226,20 @@ def _variable_tooltip(var: str, value) -> str | None:
 PORTRAIT_SPRITES: dict[str, str] = {}
 
 
+def _asset_retrato(path: str):
+    """gfx/leaders/<TAG>/<archivo>.dds -> assets/<TAG>/leaders/<archivo>.dds del repo."""
+    from pathlib import Path
+    partes = path.replace("\\", "/").split("/")
+    if len(partes) < 4 or partes[0] != "gfx" or partes[1] != "leaders":
+        return None
+    return Path(__file__).resolve().parents[3] / "assets" / partes[2] / "leaders" / partes[-1]
+
+
+def _retrato_disponible(path: str) -> bool:
+    a = _asset_retrato(path)
+    return a is not None and a.exists()
+
+
 def portrait_sprite(path: str) -> str:
     name = "GFX_portrait_mn_" + re.sub(r"[^A-Za-z0-9_]", "_", path.rsplit("/", 1)[-1].rsplit(".", 1)[0])
     PORTRAIT_SPRITES[path] = name
@@ -244,6 +258,10 @@ def flush_tooltips(ctx) -> None:
         sprites = Block()
         for path, name in sorted(PORTRAIT_SPRITES.items()):
             sprites.add("spriteType", Block([("name", Quoted(name)), ("texturefile", Quoted(path))]))
+            # el retrato de un rebelde que no es personaje no llega por characters: se copia acá
+            a = _asset_retrato(path)
+            if a is not None and a.exists() and not (ctx.mod_root / path).exists():
+                ctx.copy_asset(str(a.relative_to(a.parents[3])), path)
         ctx.write_script("interface/meganations_civil_war_portraits.gfx", Block([("spriteTypes", sprites)]),
                          source="guerras civiles: retratos de los lideres rebeldes")
 
@@ -1023,7 +1041,9 @@ def render_effects(owner: str, items: list[dict], known,
                 # efectos 1.12+: no se verifican contra documentation/ (si faltaran, el
                 # juego solo lo anota en error.log; la guerra civil sale igual)
                 rb.add("set_country_leader_name", Block([("name", key)]))
-            if leader.get("portrait"):
+            # 2026-11-16 ("acá faltan retratos"): el retrato va solo si su imagen está en
+            # assets/<TAG>/leaders/ (flush_tooltips la copia); si no, el juego pone una cara al azar
+            if leader.get("portrait") and _retrato_disponible(leader["portrait"]):
                 rb.add("set_country_leader_portrait", Block([("portrait", portrait_sprite(leader["portrait"]))]))
             if rebels.get("effects"):
                 rb.entries.extend(render_effects(owner, rebels["effects"], ec, effects_used, where=where).entries)
