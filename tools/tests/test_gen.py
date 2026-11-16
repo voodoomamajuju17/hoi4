@@ -365,6 +365,12 @@ def test_full_build() -> None:
         check("history/ todavia no se reemplaza (Q042)", 'replace_path = "history' not in descriptor, descriptor)
 
         colors = (mod / "common/countries/colors.txt").read_text()
+        # 2026-11-16 ("Albión está descolonizada, pero todavía puedo ayudarlo como ASC"): las
+        # decisiones de satélites piden que siga siendo satélite, no solo que exista
+        _dec = " ".join((mod / "common/decisions/meganations_decisions.txt").read_text(encoding="utf-8-sig").split())
+        _ay = _dec[_dec.find("ASC_ayuda_zal = {"):][:400]
+        check("satélites: ayudar a Albión pide que siga siendo satélite de la Comuna",
+              "ZAL = { is_subject_of = ASC }" in _ay and "country_exists = ZAL" not in _ay, _ay)
         check("color en una linea: rgb { r g b }", "color = rgb { 42 132 54 }" in colors, colors[400:700])
         check("color_ui en una linea", "color_ui = rgb { 42 132 54 }" in colors)
         # 2026-11-15 (prueba A/B del Pacífico): map_color_rgb solo cambia el color del mapa
@@ -1515,7 +1521,7 @@ def test_events() -> None:
               "MEGANATIONS_sat_resistencia_desesperada = {" in decs_v3 and "MEGANATIONS_anar_resistencia_desesperada = {" in decs_v3
               and "MEGANATIONS_la_ultima_trinchera = {" in decs_v3)
         check("APF: los botones de un miembro se ocultan si deja de ser satelite",
-              "visible = { country_exists = ZCO ZCO = { is_subject_of = APF } }" in decs_v3, decs_v3[decs_v3.index("APF_invertir_zco = {"):][:300])
+              "visible = { ZCO = { is_subject_of = APF } }" in decs_v3, decs_v3[decs_v3.index("APF_invertir_zco = {"):][:300])
 
         # Africa (2026-10-17): cinco paises nuevos a integrar, el Congo se rebela, plazo y liberacion.
         section("APF: Africa ampliada")

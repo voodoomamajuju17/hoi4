@@ -900,7 +900,7 @@ categories:
         cost: 75
         cooldown_days: 60
         fire_only_once: true
-        visible: { flag: EFE_integracion_yyg_abierta, country_exists: YYG }
+        visible: { flag: EFE_integracion_yyg_abierta, country: {tag: YYG, when: {subject_of: EFE}} }
         available:
           variable_between: { var: EFE_integracion_yyg, min: 0, max: 0 }
           variable_at_least: { var: EFE_biosteel, value: 1 }
@@ -916,7 +916,7 @@ categories:
         cost: 100
         cooldown_days: 60
         fire_only_once: true
-        visible: { flag: EFE_integracion_yyg_abierta, country_exists: YYG }
+        visible: { flag: EFE_integracion_yyg_abierta, country: {tag: YYG, when: {subject_of: EFE}} }
         available:
           variable_between: { var: EFE_integracion_yyg, min: 1, max: 1 }
           variable_at_least: { var: EFE_biosteel, value: 1 }
@@ -932,7 +932,7 @@ categories:
         cost: 125
         cooldown_days: 60
         fire_only_once: true
-        visible: { flag: EFE_integracion_yyg_abierta, country_exists: YYG }
+        visible: { flag: EFE_integracion_yyg_abierta, country: {tag: YYG, when: {subject_of: EFE}} }
         available:
           variable_between: { var: EFE_integracion_yyg, min: 2, max: 2 }
           variable_at_least: { var: EFE_biosteel, value: 1 }
@@ -951,7 +951,7 @@ categories:
         cost: 75
         cooldown_days: 60
         fire_only_once: true
-        visible: { flag: EFE_integracion_pta_abierta, country_exists: PTA }
+        visible: { flag: EFE_integracion_pta_abierta, country: {tag: PTA, when: {subject_of: EFE}} }
         available:
           variable_between: { var: EFE_integracion_pta, min: 0, max: 0 }
           variable_at_least: { var: EFE_biosteel, value: 1 }
@@ -967,7 +967,7 @@ categories:
         cost: 100
         cooldown_days: 60
         fire_only_once: true
-        visible: { flag: EFE_integracion_pta_abierta, country_exists: PTA }
+        visible: { flag: EFE_integracion_pta_abierta, country: {tag: PTA, when: {subject_of: EFE}} }
         available:
           variable_between: { var: EFE_integracion_pta, min: 1, max: 1 }
           variable_at_least: { var: EFE_biosteel, value: 1 }
@@ -983,7 +983,7 @@ categories:
         cost: 125
         cooldown_days: 60
         fire_only_once: true
-        visible: { flag: EFE_integracion_pta_abierta, country_exists: PTA }
+        visible: { flag: EFE_integracion_pta_abierta, country: {tag: PTA, when: {subject_of: EFE}} }
         available:
           variable_between: { var: EFE_integracion_pta, min: 2, max: 2 }
           variable_at_least: { var: EFE_biosteel, value: 1 }
@@ -2559,7 +2559,7 @@ categories:
       cost: 75
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: NAS_integracion_zng_abierta, country_exists: ZNG}
+      visible: {flag: NAS_integracion_zng_abierta, country: {tag: ZNG, when: {subject_of: NAS}}}
       available:
         variable_between: {var: NAS_integracion_zng, min: 0, max: 0}
       effects:
@@ -2574,7 +2574,7 @@ categories:
       cost: 100
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: NAS_integracion_zng_abierta, country_exists: ZNG}
+      visible: {flag: NAS_integracion_zng_abierta, country: {tag: ZNG, when: {subject_of: NAS}}}
       available:
         variable_between: {var: NAS_integracion_zng, min: 1, max: 1}
       effects:
@@ -2589,7 +2589,7 @@ categories:
       cost: 125
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: NAS_integracion_zng_abierta, country_exists: ZNG}
+      visible: {flag: NAS_integracion_zng_abierta, country: {tag: ZNG, when: {subject_of: NAS}}}
       available:
         variable_between: {var: NAS_integracion_zng, min: 2, max: 2}
       effects:
@@ -2612,7 +2612,7 @@ categories:
       cost: 75
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: NAS_integracion_zll_abierta, country_exists: ZLL}
+      visible: {flag: NAS_integracion_zll_abierta, country: {tag: ZLL, when: {subject_of: NAS}}}
       available:
         variable_between: {var: NAS_integracion_zll, min: 0, max: 0}
       effects:
@@ -2627,7 +2627,7 @@ categories:
       cost: 100
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: NAS_integracion_zll_abierta, country_exists: ZLL}
+      visible: {flag: NAS_integracion_zll_abierta, country: {tag: ZLL, when: {subject_of: NAS}}}
       available:
         variable_between: {var: NAS_integracion_zll, min: 1, max: 1}
       effects:
@@ -2644,7 +2644,7 @@ categories:
       cost: 125
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: NAS_integracion_zll_abierta, country_exists: ZLL}
+      visible: {flag: NAS_integracion_zll_abierta, country: {tag: ZLL, when: {subject_of: NAS}}}
       available:
         variable_between: {var: NAS_integracion_zll, min: 2, max: 2}
       effects:
@@ -2795,7 +2795,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
+      visible: {country: {tag: ZET, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zet, value: 100}
       effects:
@@ -2832,7 +2832,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
+      visible: {flag: APF_integracion_abierta, country: {tag: ZET, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -2895,7 +2895,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
+      visible: {country: {tag: ZSA, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zsa, value: 100}
       effects:
@@ -2932,7 +2932,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
+      visible: {flag: APF_integracion_abierta, country: {tag: ZSA, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -2995,7 +2995,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
+      visible: {country: {tag: ZCO, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zco, value: 100}
       effects:
@@ -3032,7 +3032,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
+      visible: {flag: APF_integracion_abierta, country: {tag: ZCO, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3095,7 +3095,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
+      visible: {country: {tag: ZAO, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zao, value: 100}
       effects:
@@ -3132,7 +3132,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
+      visible: {flag: APF_integracion_abierta, country: {tag: ZAO, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3195,7 +3195,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
+      visible: {country: {tag: ZMZ, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zmz, value: 100}
       effects:
@@ -3232,7 +3232,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
+      visible: {flag: APF_integracion_abierta, country: {tag: ZMZ, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3295,7 +3295,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
+      visible: {country: {tag: ZMG, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zmg, value: 100}
       effects:
@@ -3332,7 +3332,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
+      visible: {flag: APF_integracion_abierta, country: {tag: ZMG, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3395,7 +3395,7 @@ categories:
       - generic_industry
       cost: 35
       cooldown_days: 45
-      visible: {country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
+      visible: {country: {tag: ZKE, when: {subject_of: APF}}}
       available:
         variable_below: {var: APF_desarrollo_zke, value: 100}
       effects:
@@ -3432,7 +3432,7 @@ categories:
       - generic_political_actions
       cost: 35
       cooldown_days: 45
-      visible: {flag: APF_integracion_abierta, country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
+      visible: {flag: APF_integracion_abierta, country: {tag: ZKE, when: {subject_of: APF}}}
       available:
         any:
         - {flag: APF_diallo}
@@ -3948,7 +3948,7 @@ categories:
       cost: 75
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: SHD_integracion_zkr_abierta, country_exists: ZKR}
+      visible: {flag: SHD_integracion_zkr_abierta, country: {tag: ZKR, when: {subject_of: SHD}}}
       available:
         variable_between: {var: SHD_integracion_zkr, min: 0, max: 0}
       effects:
@@ -3963,7 +3963,7 @@ categories:
       cost: 100
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: SHD_integracion_zkr_abierta, country_exists: ZKR}
+      visible: {flag: SHD_integracion_zkr_abierta, country: {tag: ZKR, when: {subject_of: SHD}}}
       available:
         variable_between: {var: SHD_integracion_zkr, min: 1, max: 1}
       effects:
@@ -3980,7 +3980,7 @@ categories:
       cost: 125
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: SHD_integracion_zkr_abierta, country_exists: ZKR}
+      visible: {flag: SHD_integracion_zkr_abierta, country: {tag: ZKR, when: {subject_of: SHD}}}
       available:
         variable_between: {var: SHD_integracion_zkr, min: 2, max: 2}
       effects:
@@ -4003,7 +4003,7 @@ categories:
       cost: 75
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: SHD_integracion_zst_abierta, country_exists: ZST}
+      visible: {flag: SHD_integracion_zst_abierta, country: {tag: ZST, when: {subject_of: SHD}}}
       available:
         variable_between: {var: SHD_integracion_zst, min: 0, max: 0}
       effects:
@@ -4018,7 +4018,7 @@ categories:
       cost: 100
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: SHD_integracion_zst_abierta, country_exists: ZST}
+      visible: {flag: SHD_integracion_zst_abierta, country: {tag: ZST, when: {subject_of: SHD}}}
       available:
         variable_between: {var: SHD_integracion_zst, min: 1, max: 1}
       effects:
@@ -4035,7 +4035,7 @@ categories:
       cost: 125
       cooldown_days: 60
       fire_only_once: true
-      visible: {flag: SHD_integracion_zst_abierta, country_exists: ZST}
+      visible: {flag: SHD_integracion_zst_abierta, country: {tag: ZST, when: {subject_of: SHD}}}
       available:
         variable_between: {var: SHD_integracion_zst, min: 2, max: 2}
       effects:
@@ -4416,7 +4416,7 @@ categories:
       cost: 75
       cooldown_days: 90
       fire_only_once: true
-      visible: {flag: NRE_provincia_zhi_abierta, country_exists: ZHI}
+      visible: {flag: NRE_provincia_zhi_abierta, country: {tag: ZHI, when: {subject_of: NRE}}}
       available:
         variable_between: {var: NRE_provincia_zhi, min: 0, max: 0}
         stability_at_least: 0.5
@@ -4434,7 +4434,7 @@ categories:
       cost: 100
       cooldown_days: 90
       fire_only_once: true
-      visible: {flag: NRE_provincia_zhi_abierta, country_exists: ZHI}
+      visible: {flag: NRE_provincia_zhi_abierta, country: {tag: ZHI, when: {subject_of: NRE}}}
       available:
         variable_between: {var: NRE_provincia_zhi, min: 1, max: 1}
         stability_at_least: 0.5
@@ -4452,7 +4452,7 @@ categories:
       cost: 125
       cooldown_days: 90
       fire_only_once: true
-      visible: {flag: NRE_provincia_zhi_abierta, country_exists: ZHI}
+      visible: {flag: NRE_provincia_zhi_abierta, country: {tag: ZHI, when: {subject_of: NRE}}}
       available:
         variable_between: {var: NRE_provincia_zhi, min: 2, max: 2}
         stability_at_least: 0.5
@@ -4481,7 +4481,7 @@ categories:
       cost: 75
       cooldown_days: 90
       fire_only_once: true
-      visible: {flag: NRE_provincia_zda_abierta, country_exists: ZDA}
+      visible: {flag: NRE_provincia_zda_abierta, country: {tag: ZDA, when: {subject_of: NRE}}}
       available:
         variable_between: {var: NRE_provincia_zda, min: 0, max: 0}
         stability_at_least: 0.5
@@ -4499,7 +4499,7 @@ categories:
       cost: 100
       cooldown_days: 90
       fire_only_once: true
-      visible: {flag: NRE_provincia_zda_abierta, country_exists: ZDA}
+      visible: {flag: NRE_provincia_zda_abierta, country: {tag: ZDA, when: {subject_of: NRE}}}
       available:
         variable_between: {var: NRE_provincia_zda, min: 1, max: 1}
         stability_at_least: 0.5
@@ -4517,7 +4517,7 @@ categories:
       cost: 125
       cooldown_days: 90
       fire_only_once: true
-      visible: {flag: NRE_provincia_zda_abierta, country_exists: ZDA}
+      visible: {flag: NRE_provincia_zda_abierta, country: {tag: ZDA, when: {subject_of: NRE}}}
       available:
         variable_between: {var: NRE_provincia_zda, min: 2, max: 2}
         stability_at_least: 0.5
@@ -4689,7 +4689,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: PTA}
+      visible: {country: {tag: PTA, when: {subject_of: EFE}}}
       effects:
       - {effect: add_variable, var: EFE_lealtad_pta, value: 15}
       - effect: scope
@@ -4717,7 +4717,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: PTA}
+      visible: {country: {tag: PTA, when: {subject_of: EFE}}}
       available:
         variable_at_least: {var: EFE_lealtad_pta, value: 30}
       effects:
@@ -4750,7 +4750,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: YYG}
+      visible: {country: {tag: YYG, when: {subject_of: EFE}}}
       effects:
       - {effect: add_variable, var: EFE_lealtad_yyg, value: 15}
       - effect: scope
@@ -4778,7 +4778,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: YYG}
+      visible: {country: {tag: YYG, when: {subject_of: EFE}}}
       available:
         variable_at_least: {var: EFE_lealtad_yyg, value: 30}
       effects:
@@ -4834,7 +4834,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZNR}
+      visible: {country: {tag: ZNR, when: {subject_of: FCU}}}
       effects:
       - {effect: add_variable, var: FCU_lealtad_znr, value: 15}
       - effect: scope
@@ -4862,7 +4862,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZNR}
+      visible: {country: {tag: ZNR, when: {subject_of: FCU}}}
       available:
         variable_at_least: {var: FCU_lealtad_znr, value: 30}
       effects:
@@ -4897,7 +4897,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZSE}
+      visible: {country: {tag: ZSE, when: {subject_of: FCU}}}
       effects:
       - {effect: add_variable, var: FCU_lealtad_zse, value: 15}
       - effect: scope
@@ -4925,7 +4925,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZSE}
+      visible: {country: {tag: ZSE, when: {subject_of: FCU}}}
       available:
         variable_at_least: {var: FCU_lealtad_zse, value: 30}
       effects:
@@ -4979,7 +4979,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZBC}
+      visible: {country: {tag: ZBC, when: {subject_of: ASC}}}
       effects:
       - {effect: add_variable, var: ASC_lealtad_zbc, value: 15}
       - effect: scope
@@ -5007,7 +5007,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZBC}
+      visible: {country: {tag: ZBC, when: {subject_of: ASC}}}
       available:
         variable_at_least: {var: ASC_lealtad_zbc, value: 30}
       effects:
@@ -5042,7 +5042,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZAL}
+      visible: {country: {tag: ZAL, when: {subject_of: ASC}}}
       effects:
       - {effect: add_variable, var: ASC_lealtad_zal, value: 15}
       - effect: scope
@@ -5070,7 +5070,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZAL}
+      visible: {country: {tag: ZAL, when: {subject_of: ASC}}}
       available:
         variable_at_least: {var: ASC_lealtad_zal, value: 30}
       effects:
@@ -5126,7 +5126,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZAF}
+      visible: {country: {tag: ZAF, when: {subject_of: HSN}}}
       effects:
       - {effect: add_variable, var: HSN_lealtad_zaf, value: 15}
       - effect: scope
@@ -5154,7 +5154,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZAF}
+      visible: {country: {tag: ZAF, when: {subject_of: HSN}}}
       available:
         variable_at_least: {var: HSN_lealtad_zaf, value: 30}
       effects:
@@ -5189,7 +5189,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZAS}
+      visible: {country: {tag: ZAS, when: {subject_of: HSN}}}
       effects:
       - {effect: add_variable, var: HSN_lealtad_zas, value: 15}
       - effect: scope
@@ -5217,7 +5217,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZAS}
+      visible: {country: {tag: ZAS, when: {subject_of: HSN}}}
       available:
         variable_at_least: {var: HSN_lealtad_zas, value: 30}
       effects:
@@ -5271,7 +5271,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZNG}
+      visible: {country: {tag: ZNG, when: {subject_of: NAS}}}
       effects:
       - {effect: add_variable, var: NAS_lealtad_zng, value: 15}
       - effect: scope
@@ -5299,7 +5299,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZNG}
+      visible: {country: {tag: ZNG, when: {subject_of: NAS}}}
       available:
         variable_at_least: {var: NAS_lealtad_zng, value: 30}
       effects:
@@ -5334,7 +5334,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZLL}
+      visible: {country: {tag: ZLL, when: {subject_of: NAS}}}
       effects:
       - {effect: add_variable, var: NAS_lealtad_zll, value: 15}
       - effect: scope
@@ -5362,7 +5362,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZLL}
+      visible: {country: {tag: ZLL, when: {subject_of: NAS}}}
       available:
         variable_at_least: {var: NAS_lealtad_zll, value: 30}
       effects:
@@ -5418,7 +5418,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZKR}
+      visible: {country: {tag: ZKR, when: {subject_of: SHD}}}
       effects:
       - {effect: add_variable, var: SHD_lealtad_zkr, value: 15}
       - effect: scope
@@ -5446,7 +5446,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZKR}
+      visible: {country: {tag: ZKR, when: {subject_of: SHD}}}
       available:
         variable_at_least: {var: SHD_lealtad_zkr, value: 30}
       effects:
@@ -5481,7 +5481,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZST}
+      visible: {country: {tag: ZST, when: {subject_of: SHD}}}
       effects:
       - {effect: add_variable, var: SHD_lealtad_zst, value: 15}
       - effect: scope
@@ -5509,7 +5509,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZST}
+      visible: {country: {tag: ZST, when: {subject_of: SHD}}}
       available:
         variable_at_least: {var: SHD_lealtad_zst, value: 30}
       effects:
@@ -5565,7 +5565,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
+      visible: {country: {tag: ZET, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zet, value: 15}
       - effect: scope
@@ -5596,7 +5596,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZET, country: {tag: ZET, when: {subject_of: APF}}}
+      visible: {country: {tag: ZET, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zet, value: 30}
       effects:
@@ -5629,7 +5629,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
+      visible: {country: {tag: ZSA, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zsa, value: 15}
       - effect: scope
@@ -5660,7 +5660,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZSA, country: {tag: ZSA, when: {subject_of: APF}}}
+      visible: {country: {tag: ZSA, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zsa, value: 30}
       effects:
@@ -5695,7 +5695,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
+      visible: {country: {tag: ZCO, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zco, value: 15}
       - effect: scope
@@ -5726,7 +5726,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZCO, country: {tag: ZCO, when: {subject_of: APF}}}
+      visible: {country: {tag: ZCO, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zco, value: 30}
       effects:
@@ -5761,7 +5761,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
+      visible: {country: {tag: ZAO, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zao, value: 15}
       - effect: scope
@@ -5792,7 +5792,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZAO, country: {tag: ZAO, when: {subject_of: APF}}}
+      visible: {country: {tag: ZAO, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zao, value: 30}
       effects:
@@ -5827,7 +5827,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
+      visible: {country: {tag: ZMZ, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zmz, value: 15}
       - effect: scope
@@ -5858,7 +5858,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZMZ, country: {tag: ZMZ, when: {subject_of: APF}}}
+      visible: {country: {tag: ZMZ, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zmz, value: 30}
       effects:
@@ -5893,7 +5893,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
+      visible: {country: {tag: ZMG, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zmg, value: 15}
       - effect: scope
@@ -5924,7 +5924,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZMG, country: {tag: ZMG, when: {subject_of: APF}}}
+      visible: {country: {tag: ZMG, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zmg, value: 30}
       effects:
@@ -5959,7 +5959,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
+      visible: {country: {tag: ZKE, when: {subject_of: APF}}}
       effects:
       - {effect: add_variable, var: APF_lealtad_zke, value: 15}
       - effect: scope
@@ -5990,7 +5990,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZKE, country: {tag: ZKE, when: {subject_of: APF}}}
+      visible: {country: {tag: ZKE, when: {subject_of: APF}}}
       available:
         variable_at_least: {var: APF_lealtad_zke, value: 30}
       effects:
@@ -6046,7 +6046,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZHI}
+      visible: {country: {tag: ZHI, when: {subject_of: NRE}}}
       effects:
       - {effect: add_variable, var: NRE_lealtad_zhi, value: 15}
       - effect: scope
@@ -6074,7 +6074,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZHI}
+      visible: {country: {tag: ZHI, when: {subject_of: NRE}}}
       available:
         variable_at_least: {var: NRE_lealtad_zhi, value: 30}
       effects:
@@ -6107,7 +6107,7 @@ categories:
       - generic_construction
       cost: 50
       cooldown_days: 91
-      visible: {country_exists: ZDA}
+      visible: {country: {tag: ZDA, when: {subject_of: NRE}}}
       effects:
       - {effect: add_variable, var: NRE_lealtad_zda, value: 15}
       - effect: scope
@@ -6135,7 +6135,7 @@ categories:
       - generic_political_actions
       cost: 0
       cooldown_days: 119
-      visible: {country_exists: ZDA}
+      visible: {country: {tag: ZDA, when: {subject_of: NRE}}}
       available:
         variable_at_least: {var: NRE_lealtad_zda, value: 30}
       effects:
@@ -15787,43 +15787,43 @@ scripted_effects:
     - {effect: add_variable, var: APF_tension, value: -3}
     - effect: if
       when:
-        country_exists: ZET
+        country: {tag: ZET, when: {subject_of: APF}}
         variable_between: {var: APF_integracion_zet, min: 40, max: 99}
       then:
       - {effect: add_variable, var: APF_tension, value: 1}
     - effect: if
       when:
-        country_exists: ZSA
+        country: {tag: ZSA, when: {subject_of: APF}}
         variable_between: {var: APF_integracion_zsa, min: 40, max: 99}
       then:
       - {effect: add_variable, var: APF_tension, value: 1}
     - effect: if
       when:
-        country_exists: ZCO
+        country: {tag: ZCO, when: {subject_of: APF}}
         variable_between: {var: APF_integracion_zco, min: 40, max: 99}
       then:
       - {effect: add_variable, var: APF_tension, value: 1}
     - effect: if
       when:
-        country_exists: ZAO
+        country: {tag: ZAO, when: {subject_of: APF}}
         variable_between: {var: APF_integracion_zao, min: 40, max: 99}
       then:
       - {effect: add_variable, var: APF_tension, value: 1}
     - effect: if
       when:
-        country_exists: ZMZ
+        country: {tag: ZMZ, when: {subject_of: APF}}
         variable_between: {var: APF_integracion_zmz, min: 40, max: 99}
       then:
       - {effect: add_variable, var: APF_tension, value: 1}
     - effect: if
       when:
-        country_exists: ZMG
+        country: {tag: ZMG, when: {subject_of: APF}}
         variable_between: {var: APF_integracion_zmg, min: 40, max: 99}
       then:
       - {effect: add_variable, var: APF_tension, value: 1}
     - effect: if
       when:
-        country_exists: ZKE
+        country: {tag: ZKE, when: {subject_of: APF}}
         variable_between: {var: APF_integracion_zke, min: 40, max: 99}
       then:
       - {effect: add_variable, var: APF_tension, value: 1}
@@ -15858,13 +15858,13 @@ scripted_effects:
       when:
         not:
           any:
-          - {country_exists: ZET}
-          - {country_exists: ZSA}
-          - {country_exists: ZCO}
-          - {country_exists: ZAO}
-          - {country_exists: ZMZ}
-          - {country_exists: ZMG}
-          - {country_exists: ZKE}
+          - {country: {tag: ZET, when: {subject_of: APF}}}
+          - {country: {tag: ZSA, when: {subject_of: APF}}}
+          - {country: {tag: ZCO, when: {subject_of: APF}}}
+          - {country: {tag: ZAO, when: {subject_of: APF}}}
+          - {country: {tag: ZMZ, when: {subject_of: APF}}}
+          - {country: {tag: ZMG, when: {subject_of: APF}}}
+          - {country: {tag: ZKE, when: {subject_of: APF}}}
         not_flag: APF_hito_hecho
         date_after: 2101.1.1
       then:
@@ -16485,7 +16485,7 @@ scripted_effects:
     - {effect: clamp, var: EFE_lealtad_pta, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: PTA
+        country: {tag: PTA, when: {subject_of: EFE}}
         variable_at_least: {var: EFE_lealtad_pta, value: 75}
       then:
       - effect: math
@@ -16495,7 +16495,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: PTA
+        country: {tag: PTA, when: {subject_of: EFE}}
         variable_below: {var: EFE_lealtad_pta, value: 25}
       then:
       - effect: math
@@ -16509,7 +16509,7 @@ scripted_effects:
     - {effect: clamp, var: EFE_lealtad_yyg, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: YYG
+        country: {tag: YYG, when: {subject_of: EFE}}
         variable_at_least: {var: EFE_lealtad_yyg, value: 75}
       then:
       - effect: math
@@ -16519,7 +16519,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: YYG
+        country: {tag: YYG, when: {subject_of: EFE}}
         variable_below: {var: EFE_lealtad_yyg, value: 25}
       then:
       - effect: math
@@ -16557,7 +16557,7 @@ scripted_effects:
   - id: EFE_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: PTA}
+      when: {country: {tag: PTA, when: {subject_of: EFE}}}
       then:
       - {effect: add_variable, var: EFE_lealtad_pta, value: -1}
       - effect: if
@@ -16582,7 +16582,7 @@ scripted_effects:
             - {effect: flag, value: EFE_rebelion_pta_reciente, days: 182}
             - {effect: event, id: meganations_efe.40, days: 1}
     - effect: if
-      when: {country_exists: YYG}
+      when: {country: {tag: YYG, when: {subject_of: EFE}}}
       then:
       - {effect: add_variable, var: EFE_lealtad_yyg, value: -1}
       - effect: if
@@ -16620,7 +16620,7 @@ scripted_effects:
     - {effect: clamp, var: FCU_lealtad_znr, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZNR
+        country: {tag: ZNR, when: {subject_of: FCU}}
         variable_at_least: {var: FCU_lealtad_znr, value: 75}
       then:
       - effect: math
@@ -16630,7 +16630,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZNR
+        country: {tag: ZNR, when: {subject_of: FCU}}
         variable_below: {var: FCU_lealtad_znr, value: 25}
       then:
       - effect: math
@@ -16644,7 +16644,7 @@ scripted_effects:
     - {effect: clamp, var: FCU_lealtad_zse, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZSE
+        country: {tag: ZSE, when: {subject_of: FCU}}
         variable_at_least: {var: FCU_lealtad_zse, value: 75}
       then:
       - effect: math
@@ -16654,7 +16654,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZSE
+        country: {tag: ZSE, when: {subject_of: FCU}}
         variable_below: {var: FCU_lealtad_zse, value: 25}
       then:
       - effect: math
@@ -16692,7 +16692,7 @@ scripted_effects:
   - id: FCU_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: ZNR}
+      when: {country: {tag: ZNR, when: {subject_of: FCU}}}
       then:
       - {effect: add_variable, var: FCU_lealtad_znr, value: -1}
       - effect: if
@@ -16717,7 +16717,7 @@ scripted_effects:
             - {effect: flag, value: FCU_rebelion_znr_reciente, days: 182}
             - {effect: event, id: meganations_fcu.40, days: 1}
     - effect: if
-      when: {country_exists: ZSE}
+      when: {country: {tag: ZSE, when: {subject_of: FCU}}}
       then:
       - {effect: add_variable, var: FCU_lealtad_zse, value: -1}
       - effect: if
@@ -16755,7 +16755,7 @@ scripted_effects:
     - {effect: clamp, var: ASC_lealtad_zbc, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZBC
+        country: {tag: ZBC, when: {subject_of: ASC}}
         variable_at_least: {var: ASC_lealtad_zbc, value: 75}
       then:
       - effect: math
@@ -16765,7 +16765,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZBC
+        country: {tag: ZBC, when: {subject_of: ASC}}
         variable_below: {var: ASC_lealtad_zbc, value: 25}
       then:
       - effect: math
@@ -16779,7 +16779,7 @@ scripted_effects:
     - {effect: clamp, var: ASC_lealtad_zal, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZAL
+        country: {tag: ZAL, when: {subject_of: ASC}}
         variable_at_least: {var: ASC_lealtad_zal, value: 75}
       then:
       - effect: math
@@ -16789,7 +16789,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZAL
+        country: {tag: ZAL, when: {subject_of: ASC}}
         variable_below: {var: ASC_lealtad_zal, value: 25}
       then:
       - effect: math
@@ -16827,7 +16827,7 @@ scripted_effects:
   - id: ASC_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: ZBC}
+      when: {country: {tag: ZBC, when: {subject_of: ASC}}}
       then:
       - {effect: add_variable, var: ASC_lealtad_zbc, value: -1}
       - effect: if
@@ -16852,7 +16852,7 @@ scripted_effects:
             - {effect: flag, value: ASC_rebelion_zbc_reciente, days: 182}
             - {effect: event, id: meganations_asc.40, days: 1}
     - effect: if
-      when: {country_exists: ZAL}
+      when: {country: {tag: ZAL, when: {subject_of: ASC}}}
       then:
       - {effect: add_variable, var: ASC_lealtad_zal, value: -1}
       - effect: if
@@ -16890,7 +16890,7 @@ scripted_effects:
     - {effect: clamp, var: HSN_lealtad_zaf, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZAF
+        country: {tag: ZAF, when: {subject_of: HSN}}
         variable_at_least: {var: HSN_lealtad_zaf, value: 75}
       then:
       - effect: math
@@ -16900,7 +16900,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZAF
+        country: {tag: ZAF, when: {subject_of: HSN}}
         variable_below: {var: HSN_lealtad_zaf, value: 25}
       then:
       - effect: math
@@ -16914,7 +16914,7 @@ scripted_effects:
     - {effect: clamp, var: HSN_lealtad_zas, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZAS
+        country: {tag: ZAS, when: {subject_of: HSN}}
         variable_at_least: {var: HSN_lealtad_zas, value: 75}
       then:
       - effect: math
@@ -16924,7 +16924,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZAS
+        country: {tag: ZAS, when: {subject_of: HSN}}
         variable_below: {var: HSN_lealtad_zas, value: 25}
       then:
       - effect: math
@@ -16962,7 +16962,7 @@ scripted_effects:
   - id: HSN_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: ZAF}
+      when: {country: {tag: ZAF, when: {subject_of: HSN}}}
       then:
       - {effect: add_variable, var: HSN_lealtad_zaf, value: -1}
       - effect: if
@@ -16987,7 +16987,7 @@ scripted_effects:
             - {effect: flag, value: HSN_rebelion_zaf_reciente, days: 182}
             - {effect: event, id: meganations_hsn.40, days: 1}
     - effect: if
-      when: {country_exists: ZAS}
+      when: {country: {tag: ZAS, when: {subject_of: HSN}}}
       then:
       - {effect: add_variable, var: HSN_lealtad_zas, value: -1}
       - effect: if
@@ -17025,7 +17025,7 @@ scripted_effects:
     - {effect: clamp, var: NAS_lealtad_zng, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZNG
+        country: {tag: ZNG, when: {subject_of: NAS}}
         variable_at_least: {var: NAS_lealtad_zng, value: 75}
       then:
       - effect: math
@@ -17035,7 +17035,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZNG
+        country: {tag: ZNG, when: {subject_of: NAS}}
         variable_below: {var: NAS_lealtad_zng, value: 25}
       then:
       - effect: math
@@ -17049,7 +17049,7 @@ scripted_effects:
     - {effect: clamp, var: NAS_lealtad_zll, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZLL
+        country: {tag: ZLL, when: {subject_of: NAS}}
         variable_at_least: {var: NAS_lealtad_zll, value: 75}
       then:
       - effect: math
@@ -17059,7 +17059,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZLL
+        country: {tag: ZLL, when: {subject_of: NAS}}
         variable_below: {var: NAS_lealtad_zll, value: 25}
       then:
       - effect: math
@@ -17097,7 +17097,7 @@ scripted_effects:
   - id: NAS_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: ZNG}
+      when: {country: {tag: ZNG, when: {subject_of: NAS}}}
       then:
       - {effect: add_variable, var: NAS_lealtad_zng, value: -1}
       - effect: if
@@ -17122,7 +17122,7 @@ scripted_effects:
             - {effect: flag, value: NAS_rebelion_zng_reciente, days: 182}
             - {effect: event, id: meganations_nas.40, days: 1}
     - effect: if
-      when: {country_exists: ZLL}
+      when: {country: {tag: ZLL, when: {subject_of: NAS}}}
       then:
       - {effect: add_variable, var: NAS_lealtad_zll, value: -1}
       - effect: if
@@ -17160,7 +17160,7 @@ scripted_effects:
     - {effect: clamp, var: SHD_lealtad_zkr, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZKR
+        country: {tag: ZKR, when: {subject_of: SHD}}
         variable_at_least: {var: SHD_lealtad_zkr, value: 75}
       then:
       - effect: math
@@ -17170,7 +17170,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZKR
+        country: {tag: ZKR, when: {subject_of: SHD}}
         variable_below: {var: SHD_lealtad_zkr, value: 25}
       then:
       - effect: math
@@ -17184,7 +17184,7 @@ scripted_effects:
     - {effect: clamp, var: SHD_lealtad_zst, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZST
+        country: {tag: ZST, when: {subject_of: SHD}}
         variable_at_least: {var: SHD_lealtad_zst, value: 75}
       then:
       - effect: math
@@ -17194,7 +17194,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZST
+        country: {tag: ZST, when: {subject_of: SHD}}
         variable_below: {var: SHD_lealtad_zst, value: 25}
       then:
       - effect: math
@@ -17232,7 +17232,7 @@ scripted_effects:
   - id: SHD_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: ZKR}
+      when: {country: {tag: ZKR, when: {subject_of: SHD}}}
       then:
       - {effect: add_variable, var: SHD_lealtad_zkr, value: -1}
       - effect: if
@@ -17257,7 +17257,7 @@ scripted_effects:
             - {effect: flag, value: SHD_rebelion_zkr_reciente, days: 182}
             - {effect: event, id: meganations_shd.40, days: 1}
     - effect: if
-      when: {country_exists: ZST}
+      when: {country: {tag: ZST, when: {subject_of: SHD}}}
       then:
       - {effect: add_variable, var: SHD_lealtad_zst, value: -1}
       - effect: if
@@ -17295,7 +17295,7 @@ scripted_effects:
     - {effect: clamp, var: APF_lealtad_zet, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZET
+        country: {tag: ZET, when: {subject_of: APF}}
         variable_at_least: {var: APF_lealtad_zet, value: 75}
       then:
       - effect: math
@@ -17305,7 +17305,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZET
+        country: {tag: ZET, when: {subject_of: APF}}
         variable_below: {var: APF_lealtad_zet, value: 25}
       then:
       - effect: math
@@ -17319,7 +17319,7 @@ scripted_effects:
     - {effect: clamp, var: APF_lealtad_zsa, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZSA
+        country: {tag: ZSA, when: {subject_of: APF}}
         variable_at_least: {var: APF_lealtad_zsa, value: 75}
       then:
       - effect: math
@@ -17329,7 +17329,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZSA
+        country: {tag: ZSA, when: {subject_of: APF}}
         variable_below: {var: APF_lealtad_zsa, value: 25}
       then:
       - effect: math
@@ -17343,7 +17343,7 @@ scripted_effects:
     - {effect: clamp, var: APF_lealtad_zco, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZCO
+        country: {tag: ZCO, when: {subject_of: APF}}
         variable_at_least: {var: APF_lealtad_zco, value: 75}
       then:
       - effect: math
@@ -17353,7 +17353,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZCO
+        country: {tag: ZCO, when: {subject_of: APF}}
         variable_below: {var: APF_lealtad_zco, value: 25}
       then:
       - effect: math
@@ -17367,7 +17367,7 @@ scripted_effects:
     - {effect: clamp, var: APF_lealtad_zao, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZAO
+        country: {tag: ZAO, when: {subject_of: APF}}
         variable_at_least: {var: APF_lealtad_zao, value: 75}
       then:
       - effect: math
@@ -17377,7 +17377,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZAO
+        country: {tag: ZAO, when: {subject_of: APF}}
         variable_below: {var: APF_lealtad_zao, value: 25}
       then:
       - effect: math
@@ -17391,7 +17391,7 @@ scripted_effects:
     - {effect: clamp, var: APF_lealtad_zmz, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZMZ
+        country: {tag: ZMZ, when: {subject_of: APF}}
         variable_at_least: {var: APF_lealtad_zmz, value: 75}
       then:
       - effect: math
@@ -17401,7 +17401,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZMZ
+        country: {tag: ZMZ, when: {subject_of: APF}}
         variable_below: {var: APF_lealtad_zmz, value: 25}
       then:
       - effect: math
@@ -17415,7 +17415,7 @@ scripted_effects:
     - {effect: clamp, var: APF_lealtad_zmg, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZMG
+        country: {tag: ZMG, when: {subject_of: APF}}
         variable_at_least: {var: APF_lealtad_zmg, value: 75}
       then:
       - effect: math
@@ -17425,7 +17425,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZMG
+        country: {tag: ZMG, when: {subject_of: APF}}
         variable_below: {var: APF_lealtad_zmg, value: 25}
       then:
       - effect: math
@@ -17439,7 +17439,7 @@ scripted_effects:
     - {effect: clamp, var: APF_lealtad_zke, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZKE
+        country: {tag: ZKE, when: {subject_of: APF}}
         variable_at_least: {var: APF_lealtad_zke, value: 75}
       then:
       - effect: math
@@ -17449,7 +17449,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZKE
+        country: {tag: ZKE, when: {subject_of: APF}}
         variable_below: {var: APF_lealtad_zke, value: 25}
       then:
       - effect: math
@@ -17487,7 +17487,7 @@ scripted_effects:
   - id: APF_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: ZET}
+      when: {country: {tag: ZET, when: {subject_of: APF}}}
       then:
       - {effect: add_variable, var: APF_lealtad_zet, value: -1}
       - effect: if
@@ -17512,7 +17512,7 @@ scripted_effects:
             - {effect: flag, value: APF_rebelion_zet_reciente, days: 182}
             - {effect: event, id: meganations_apf.40, days: 1}
     - effect: if
-      when: {country_exists: ZSA}
+      when: {country: {tag: ZSA, when: {subject_of: APF}}}
       then:
       - {effect: add_variable, var: APF_lealtad_zsa, value: -1}
       - effect: if
@@ -17537,7 +17537,7 @@ scripted_effects:
             - {effect: flag, value: APF_rebelion_zsa_reciente, days: 182}
             - {effect: event, id: meganations_apf.41, days: 1}
     - effect: if
-      when: {country_exists: ZCO}
+      when: {country: {tag: ZCO, when: {subject_of: APF}}}
       then:
       - {effect: add_variable, var: APF_lealtad_zco, value: -1}
       - effect: if
@@ -17562,7 +17562,7 @@ scripted_effects:
             - {effect: flag, value: APF_rebelion_zco_reciente, days: 182}
             - {effect: event, id: meganations_apf.401, days: 1}
     - effect: if
-      when: {country_exists: ZAO}
+      when: {country: {tag: ZAO, when: {subject_of: APF}}}
       then:
       - {effect: add_variable, var: APF_lealtad_zao, value: -1}
       - effect: if
@@ -17587,7 +17587,7 @@ scripted_effects:
             - {effect: flag, value: APF_rebelion_zao_reciente, days: 182}
             - {effect: event, id: meganations_apf.402, days: 1}
     - effect: if
-      when: {country_exists: ZMZ}
+      when: {country: {tag: ZMZ, when: {subject_of: APF}}}
       then:
       - {effect: add_variable, var: APF_lealtad_zmz, value: -1}
       - effect: if
@@ -17612,7 +17612,7 @@ scripted_effects:
             - {effect: flag, value: APF_rebelion_zmz_reciente, days: 182}
             - {effect: event, id: meganations_apf.403, days: 1}
     - effect: if
-      when: {country_exists: ZMG}
+      when: {country: {tag: ZMG, when: {subject_of: APF}}}
       then:
       - {effect: add_variable, var: APF_lealtad_zmg, value: -1}
       - effect: if
@@ -17637,7 +17637,7 @@ scripted_effects:
             - {effect: flag, value: APF_rebelion_zmg_reciente, days: 182}
             - {effect: event, id: meganations_apf.404, days: 1}
     - effect: if
-      when: {country_exists: ZKE}
+      when: {country: {tag: ZKE, when: {subject_of: APF}}}
       then:
       - {effect: add_variable, var: APF_lealtad_zke, value: -1}
       - effect: if
@@ -17675,7 +17675,7 @@ scripted_effects:
     - {effect: clamp, var: NRE_lealtad_zhi, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZHI
+        country: {tag: ZHI, when: {subject_of: NRE}}
         variable_at_least: {var: NRE_lealtad_zhi, value: 75}
       then:
       - effect: math
@@ -17685,7 +17685,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZHI
+        country: {tag: ZHI, when: {subject_of: NRE}}
         variable_below: {var: NRE_lealtad_zhi, value: 25}
       then:
       - effect: math
@@ -17699,7 +17699,7 @@ scripted_effects:
     - {effect: clamp, var: NRE_lealtad_zda, min: 0, max: 100}
     - effect: if
       when:
-        country_exists: ZDA
+        country: {tag: ZDA, when: {subject_of: NRE}}
         variable_at_least: {var: NRE_lealtad_zda, value: 75}
       then:
       - effect: math
@@ -17709,7 +17709,7 @@ scripted_effects:
           - 0.1
     - effect: if
       when:
-        country_exists: ZDA
+        country: {tag: ZDA, when: {subject_of: NRE}}
         variable_below: {var: NRE_lealtad_zda, value: 25}
       then:
       - effect: math
@@ -17747,7 +17747,7 @@ scripted_effects:
   - id: NRE_pulso_satelites
     effects:
     - effect: if
-      when: {country_exists: ZHI}
+      when: {country: {tag: ZHI, when: {subject_of: NRE}}}
       then:
       - {effect: add_variable, var: NRE_lealtad_zhi, value: -1}
       - effect: if
@@ -17772,7 +17772,7 @@ scripted_effects:
             - {effect: flag, value: NRE_rebelion_zhi_reciente, days: 182}
             - {effect: event, id: meganations_nre.40, days: 1}
     - effect: if
-      when: {country_exists: ZDA}
+      when: {country: {tag: ZDA, when: {subject_of: NRE}}}
       then:
       - {effect: add_variable, var: NRE_lealtad_zda, value: -1}
       - effect: if

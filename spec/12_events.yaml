@@ -9239,7 +9239,7 @@ namespaces:
         - {effect: add_manpower, value: -200000}
         - {effect: add_variable, var: SHD_lealtad_zst, value: 15}
         - effect: if
-          when: {country_exists: ZST}
+          when: {country: {tag: ZST, when: {subject_of: SHD}}}
           then:
           - {effect: event, id: meganations_shd.101, days: 1, target: ZST}
         ai_chance: 50
@@ -11013,12 +11013,12 @@ namespaces:
       - name: {english: Arm the provinces., spanish: Armar a las provincias.}
         effects:
         - effect: if
-          when: {country_exists: ZHI}
+          when: {country: {tag: ZHI, when: {subject_of: NRE}}}
           then:
           - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: ZHI}
           - {effect: add_variable, var: NRE_lealtad_zhi, value: 10}
         - effect: if
-          when: {country_exists: ZDA}
+          when: {country: {tag: ZDA, when: {subject_of: NRE}}}
           then:
           - {effect: send_equipment, type: infantry_equipment, amount: 3000, target: ZDA}
           - {effect: add_variable, var: NRE_lealtad_zda, value: 10}

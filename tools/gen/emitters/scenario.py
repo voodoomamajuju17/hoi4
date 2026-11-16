@@ -132,7 +132,9 @@ def _emit_bookmark(ctx: BuildContext, spec: dict) -> None:
             ideas.add(None, iid)
         cb.add("ideas", ideas)
         focuses = Block()
-        for fid in focus_mod.root_focus_ids(ctx, tag):
+        # 2026-11-16 (captura del selector): un solo foco inicial, como las potencias; Albión y
+        # Japón tienen uno por ruta (cuatro) y se salían del monitor
+        for fid in focus_mod.root_focus_ids(ctx, tag)[:1]:
             focuses.add(None, fid)
         cb.add("focuses", focuses)
         b.add(tag, cb)
