@@ -2776,6 +2776,15 @@ def test_espiritus() -> None:
         with tempfile.TemporaryDirectory() as tmp:
             ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
             mod = ctx.mod_root
+            # 2026-11-16: Legado y Coyuntura muestran el total acumulado de sus efectos
+            _se = " ".join((mod / "common/scripted_effects/meganations_espiritus.txt").read_text(encoding="utf-8-sig").split())
+            _es = (mod / "localisation/spanish/meganations_espiritus_l_spanish.yml").read_text(encoding="utf-8-sig")
+            check("espíritus: el resumen suma los efectos de lo agrupado y lo muestra en total",
+                  "MN_resumen_totales = yes" in _se and "MN_resumen_totales = { set_variable" in _se
+                  and "En total, ahora:" in _es and 'MN_tot1_stability_factor_mas:0 "\\nEstabilidad: §G+[?MN_tot1_stability_factor|1]%§!"' in _es,
+                  _es[_es.find("MN_tot1_stability"):][:200])
+            check("espíritus: los totales se ponen al día cada mes",
+                  "MN_resumen_totales = yes" in (mod / "common/on_actions/10_meganations_espiritus_totales.txt").read_text(encoding="utf-8-sig"))
             datos = ctx.data["espiritus"]
             visibles: dict[str, list[str]] = {}
             for f in (mod / "common/ideas").glob("*.txt"):
