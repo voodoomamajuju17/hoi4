@@ -34,6 +34,19 @@ Legada de la Legio V Macedonica, acuartelada en el Danubio. Hija de la junta de 
 
 Legado de la Legio XII Fulminata, guardiana de Anatolia. Viejo, paciente y popular entre los soldados: les promete tierras en Oriente a todos.
 
+## Las Leyendas
+
+Roma nunca se olvida de un nombre que la merezca. Estos seis estaban escritos en el Tabulario antes de nacer; van a venir cuando la Gloria de Roma los llame.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscal Lucio Valerio Ardeatino** | Mariscal: Primus Pilus | Pide el foco SPQR o la Forma Final proclamada. | Primus Pilus: empezó como legionario raso en la Legio X y subió cada grado, uno por uno, en treinta años de guerra. Todavía lleva la vara de vid de centurión y todavía duerme en el campamento, en una carpa, con sus hombres. Ninguna legión suya se quebró nunca. Él dice que es porque se acuerda de lo que es estar adelante en una. |
+| **Navarca Giulia Corvino** | Almirante: El Cuervo (Corvus) | Llega con el foco El Mediterráneo Romano. | Resucitó el corvus, el puente de abordaje de las galeras romanas, en destructores modernos, y se rió de cada almirante que le dijo pieza de museo hasta que abordó la nave insignia de la Federación frente a Sicilia. El Mediterráneo vuelve a ser un lago, y ella lo patrulla como si fuera su jardín. |
+| **Legado Ettore Valli** | General: El Rayo de Júpiter | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | El Rayo: manda las legiones blindadas, los tanques con el rayo de Júpiter pintado en el casco. En el Despertar de 2110 cruzó los Alpes en cuatro días, como Aníbal nunca pudo, y le escribió al Imperator desde Lyon. El Senado le tiene miedo; el Imperator decidió quererlo, que es lo mismo. |
+| **Legada Teodora Kallistos** | General: La Basilissa del Limes | Llega cuando estalla la guerra con la Comuna, la Federación o Albión. | Guardiana del Limes, la frontera del este: sostiene la línea del Danubio al Bósforo con las guarniciones que el Imperator no podía darle, y nunca perdió una fortaleza. Los soldados del este le dicen la Basilissa. Ella contesta que Roma tiene un solo Emperador, y le sostiene la frontera igual. |
+| **Cónsul Tullio Benedetti** | Ministro: Prefecto del Tesoro de Saturno | Pide 80 de Gloria. | Prefecto del Tesoro de Saturno con tres Imperatores. Acuñó el Nuevo Aureus, la única moneda de Europa que vale más cada año, y alimentó a Roma en dos hambrunas sin subir un solo impuesto. El Senado lo investiga cada primavera; cada otoño no encuentra nada, y le pide un préstamo. |
+| **Prefecto del Pretorio Severo Lanza** | Estado mayor: Prefecto del Pretorio | Llega con el foco El Ejército de las Provincias. | Jefe del Estado Mayor y de la Guardia Pretoriana: reorganizó el Ejército de las Provincias para que cada legión, de Lusitania a Siria, se entrene, coma y pelee igual. No tiene amigos, ni familia, ni vicios. El Imperator confía en él por completo, que es lo más aterrador que alguien dijo nunca de él. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

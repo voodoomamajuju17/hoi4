@@ -32,6 +32,19 @@ Oyabun del clan que maneja los muelles de Osaka desde hace tres generaciones: ta
 
 Presidente de SRS, la farmacéutica más respetada de Sendai. Bata blanca impecable y una sonrisa de propaganda; en los sótanos crecen clones y se hacen experimentos que ningún comité aprobaría, por eso no tiene comité. Al final del camino es el primero en subir su propia mente a la máquina.
 
+## Las Leyendas
+
+El giri es la deuda que nunca se termina de pagar. Estos seis se la deben a la Shōgun en persona, y solo van a venir a cobrarla cuando el Shogunato valga la pena de morir por él.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscal Ryūnosuke Amano** | Mariscal: El Último Daimyō | Pide el último foco de una Casa (El Keiretsu Eterno, El Código del Dragón, La Mente en la Máquina) o el CyberShogun. | El Último Daimyō: heredero de una familia que mandó ejércitos seiscientos años y después vendió seguros durante cien. Se negó a servir a ninguna Casa y sirvió solo a la Shōgun, y cuando la Alta Mar vino por Yokosuka sostuvo los diques once días con los obreros del puerto. No habla del ojo que dejó ahí. |
+| **Almirante Hotaru Minase** | Almirante: La Luciérnaga de Kure | Llega con el foco Astilleros a Tres Turnos, Los Puertos de Noche o Pilotos Clonados (según la Casa que gobierne). | La Luciérnaga de Kure: su flota navega solo de noche, sin una sola luz, guiada por el brillo de faroles de papel que flotan en el agua adelante. La Alta Mar le perdió tres cruceros en una noche que todavía llaman el Festival. Prende un farol sobre el agua por cada barco que hunde. |
+| **General Kenji Ōtsuka** | General: El Mecha Rojo | Llega cuando una historia de una Casa (o El Despertar de 2110) termina bien o con su objetivo cumplido. | El Mecha Rojo: piloto de pruebas de las primeras máquinas de doce metros de Kanto, el único que sobrevivió a los doce prototipos. Cuando la historia de la Casa llegó a su final, metió su Mecha en el mar en Osaka y salió del otro lado en Kobe, y todo el Shogunato lo vio en vivo. Los chicos de Japón juegan a ser él. |
+| **Generala Aoi Kirishima** | General: La Muralla de Kanto | Llega cuando estalla la guerra con la Alta Mar o el Directorio. | Manda la Muralla de Kanto: los muelles, las grúas y los diques secos de la bahía de Tokio, convertidos en una fortaleza de contenedores, acero y hormigón. Cuando el Mercado vino a llevarse sus barcos, dijo que cada grúa de Kanto era una torre, y que cada torre se iba a tener que tomar a mano. No se tomó ninguna. |
+| **Gran Chambelán Tadashi Mori** | Ministro: Guardián del Libro del Giri | Pide 60 de Giri. | El tío de la Shōgun, y el que le enseñó que una deuda vale más que una espada. Lleva el Libro del Giri de las tres Casas: quién le debe qué a quién desde la noche de la bandera vieja. Nunca cobra una deuda. Solo le recuerda a la gente, muy amablemente, que existe. |
+| **Doctora Emi Hasegawa** | Teórico: La Tejedora de Sueños | Llega con el foco Mechas en Serie, Katanas de Vibración o Los Sueños de las Cubas (según la Casa que gobierne). | La Tejedora de Sueños: diseña las mentes de los Mechas, de los clones y de las máquinas de los Zaibatsu por igual, y trabaja para la Casa que gobierne, porque, dice, a las máquinas no les importa. Duerme cuatro horas por noche, y en esas cuatro horas sueña el código que escribe a la mañana. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

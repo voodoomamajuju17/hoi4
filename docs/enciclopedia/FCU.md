@@ -24,6 +24,19 @@ Presidenta rotativa del Directorio de la Unión, en su segundo mandato de cuatro
 
 Director de Meridian Kinetics. Nunca se presentó a una elección del Directorio: compró las acciones de los que votaban. Cree que un país es una empresa con bandera y que la guerra es la única línea de negocio que siempre crece.
 
+## Las Leyendas
+
+Todo en la Unión tiene precio. Estos seis también, y es tan alto que solo la Unión en su mejor momento lo puede pagar.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscal Harlan "Blue Chip" Osei** | Mariscal: Resultados Garantizados | Pide el foco El Comandante Contratado o la Forma Final proclamada. | El general privado más caro del planeta: su contrato tiene un bono por región tomada y una multa por día de atraso, y nunca pagó una multa. A sus divisiones les dice carteras y a sus bajas, pérdidas contables. Los accionistas lo adoran; sus soldados más, porque siempre paga a tiempo. |
+| **Almirante Marisol Quintero-Price** | Almirante: Póliza Total | Llega con el foco El Canal Asegurado. | Nacida en Colón, empezó de práctica en las esclusas del Canal y terminó dueña de la aseguradora de cada barco que lo cruza. Cuando la Alta Mar amenazó el Canal en 2097 no llamó a la marina: le compró una mejor y tomó el mando ella misma. Ningún convoy suyo se perdió sin seguro. |
+| **Generala Brooke "OPA Hostil" Navarro** | General: OPA Hostil | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | Tenía una empresa de blindados privada que se especializaba en adquisiciones: de refinerías, de puertos, una vez del gobierno entero de un estado. En el Despertar de 2110 tomó Chicago en un solo fin de semana y el lunes les mandó a los accionistas una presentación. Sus tanques tienen la cotización pintada en la torreta. |
+| **General Wes Tanaka-Burke** | General: Cláusula de Fuerza Mayor | Llega cuando estalla la guerra con el Imperio Verde o la Alta Mar. | Treinta años de liquidador de siniestros en Castellane Mutual. Cuando llegó la guerra hizo lo que siempre había hecho: calculó el costo de cada metro y se lo hizo pagar completo al enemigo. Le dicen la Cláusula de Fuerza Mayor: donde Burke defiende, las pérdidas del que ataca siempre superan el presupuesto. |
+| **Directora Financiera Celeste Ambrose** | Ministro: La Directora del Siglo | Pide 80 de Dividendos. | Predijo el crash de 2094 una semana antes, vendió todo el día anterior y lo volvió a comprar al día siguiente por la décima parte. La Unión tuvo cuatro presidentes desde entonces; ella firmó los cheques de todos. Dicen que el dividendo sube cuando ella sonríe. Nadie lo vio subir mucho. |
+| **Doctor Felix Arendt** | Teórico: Cuatro Mil Patentes | Llega con el foco Laboratorios Privados. | Tiene cuatro mil patentes, dos sobre ideas que tuvo dormido. Los Laboratorios Privados le pagan regalías por cada tanque, cada chip y cada vacuna que hace la Unión, y él se lo gasta todo en más laboratorios. Nunca terminó un proyecto a tiempo y nunca empezó uno que fallara. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

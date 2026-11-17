@@ -3250,6 +3250,127 @@ def test_eventos_receptor() -> None:
            "juego_bomba_noticia"} <= {i["id"] for i in cat if i["type"] == "event_picture"})
 
 
+def test_leyendas() -> None:
+    """2026-11-16 ("prepara 6 portraits mas por nacion, un mariscal, un almirante, dos generales, un
+    ministro y un teorico/personal militar ... Cada uno de estos se destraba con una decision, un foco,
+    un evento, una aventura ... son de lo mejorcito del juego y con lore")."""
+    section("leyendas: seis por nación, con rasgo, historia, retrato y llave")
+    import re
+    from collections import Counter
+
+    import yaml
+    from tools.gen import leyendas_spec
+    spec = specload.load(REPO_ROOT / "spec")
+    raw = yaml.safe_load((REPO_ROOT / "spec" / "42_leyendas.yaml").read_text(encoding="utf-8"))["leyendas"]
+    jugables = {"EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "ZJP", "ZAL"}
+    check("las diez naciones jugables tienen sus leyendas", set(raw) == jugables, str(sorted(raw)))
+    roles_bien, llaves_bien = True, True
+    for tag, nacion in raw.items():
+        ps = nacion["personajes"]
+        roles = Counter(p["rol"] for p in ps)
+        if not (len(ps) == 6 and roles["mariscal"] == 1 and roles["almirante"] == 1 and roles["general"] == 2
+                and roles["ministro"] == 1 and roles["teorico"] + roles["estado_mayor"] == 1):
+            roles_bien = False
+            print("   roles", tag, dict(roles))
+        tipos = Counter(p["llave"]["tipo"] for p in ps)
+        if tipos != Counter({"decision": 2, "foco": 2, "aventura": 1, "evento": 1}):
+            llaves_bien = False
+            print("   llaves", tag, dict(tipos))
+    check("cada nación: un mariscal, un almirante, dos generales, un ministro y un teórico o estado mayor", roles_bien)
+    check("cada nación: dos por decisión, dos por foco, una por aventura y una por evento", llaves_bien)
+    leyendas = [c for c in spec.raw["leaders"]["characters"] if c.get("leyenda")]
+    check("60 personajes nuevos, ninguno en la historia (llegan con su llave)",
+          len(leyendas) == 60 and all(c.get("recruit_in_history") is False for c in leyendas))
+    check("cada uno con historia en los dos idiomas y aspecto para el retrato",
+          all(p["lore"].get("english") and p["lore"].get("spanish") and len(p["look"]) > 150
+              for _t, p in leyendas_spec.personajes(raw)))
+    rasgos = [p["rasgo"]["id"] for _t, p in leyendas_spec.personajes(raw)]
+    check("cada uno con un rasgo propio, distinto", len(set(rasgos)) == 60)
+    # más que sus pares: los mejores de antes tenían habilidad 4-5
+    ok = True
+    for _t, p in leyendas_spec.personajes(raw):
+        if p["rol"] in leyendas_spec.CARGOS:
+            h = p["habilidades"]
+            sk = [v for k, v in h.items() if k != "skill"]
+            if h["skill"] < (6 if p["rol"] != "general" else 5) or max(sk) < 7 or not p["rasgo"].get("modifier"):
+                ok = False
+                print("   flojo", p["id"], h)
+        elif len(p["rasgo"]["modifiers"]) < 2 or max(p["rasgo"]["modifiers"].values()) < 0.12:
+            ok = False
+            print("   flojo", p["id"], p["rasgo"]["modifiers"])
+    check("leveleados: habilidad 6 (generales 5-6), un atributo de 7-8 y un rasgo que suma a sus tropas; "
+          "los ministros, bonos de 12% o más", ok)
+    # las llaves apuntan a cosas que existen
+    focos = {f["id"] for t in spec.raw["focus_trees"]["trees"].values() if isinstance(t, dict)
+             for b in t.get("branches") or [] for f in b.get("focuses") or []}
+    faltan = []
+    for _t, p in leyendas_spec.personajes(raw):
+        ll = p["llave"]
+        for f in (ll["foco"] if isinstance(ll.get("foco"), list) else [ll["foco"]] if ll.get("foco") else []):
+            if f not in focos:
+                faltan.append(f)
+        for f in re.findall(r"'focus': '([A-Za-z0-9_]+)'", str(ll.get("cuando"))):
+            if f not in focos:
+                faltan.append(f)
+    check("los focos de las llaves existen", not faltan, str(faltan))
+    sagas = spec.raw["adventures"]["sagas"]
+    prefijos = {s.get("prefix") for s in sagas.values() if s.get("prefix")}
+    av = {m for _t, p in leyendas_spec.personajes(raw) if p["llave"]["tipo"] == "aventura"
+          for m in re.findall(r"'flag': '([A-Z0-9]+)_av_fin_", str(p["llave"]["cuando"]))}
+    check("las aventuras de las llaves existen", av and av <= prefijos, f"{av - prefijos}")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        chars = " ".join((mod / "common/characters/EFE_characters.txt").read_text(encoding="utf-8-sig").split())
+        check("el mariscal sale con sus números y sus tres rasgos",
+              "EFE_ley_mariscala_irupe = { name = EFE_ley_mariscala_irupe field_marshal = { traits = { defensive_doctrine "
+              "organizer mn_ley_efe_madre_de_las_raices } skill = 6" in chars, chars[chars.find("EFE_ley_mariscala"):][:300])
+        hist = (mod / "history/countries").glob("EFE*.txt")
+        check("no se recluta en la historia", not any("EFE_ley_" in h.read_text(encoding="utf-8-sig") for h in hist))
+        ut = " ".join((mod / "common/unit_leader/meganations_unit_traits.txt").read_text(encoding="utf-8-sig").split())
+        check("el rasgo propio suma a las tropas que manda (modifier)",
+              "mn_ley_efe_madre_de_las_raices = { type = land trait_type = personality_trait defense_skill = 2 "
+              "planning_skill = 1 modifier = { army_defence_factor = 0.15" in ut, ut[ut.find("mn_ley_efe_madre"):][:300])
+        check("el del almirante es de marina", "mn_ley_hsn_la_aseguradora = { type = navy" in ut)
+        ev = " ".join((mod / "events/meganations_leyendas.txt").read_text(encoding="utf-8-sig").split())
+        check("60 eventos de llegada, cada uno recluta a su leyenda",
+              ev.count("country_event = {") == 60 and ev.count("recruit_character = ") == 60)
+        dec = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/decisions").glob("*.txt")).split()
+        dec = " ".join(dec)
+        check("la decisión pide su llave, sale una vez y dispara la llegada",
+              "cost = 100 visible = { NOT = { "
+              "has_country_flag = MN_leyenda_EFE_ley_custodia_itati } } fire_only_once = yes available = { check_variable = { "
+              "var = EFE_biosteel value = 24 compare = greater_than_or_equals } }" in dec
+              and "id = meganations_leyendas.5" in dec, dec[dec.find("EFE_ley_custodia_itati_convocar"):][:400])
+        foco = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text(encoding="utf-8-sig").split())
+        i = foco.find("id = EFE_flotilla_del_plata")
+        check("el foco dispara la llegada (una sola vez)",
+              i >= 0 and "has_country_flag = MN_leyenda_EFE_ley_almirante_arandu" in foco[i:i + 4000])
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        check("aventuras y guerras: las mira el pulso mensual",
+              "MN_leyendas_pulso = {" in se and "MN_leyendas_pulso = yes" in se
+              and "has_country_flag = MN2110_av_fin_objetivo" in se[se.find("MN_leyendas_pulso = {"):]
+              and "has_war_with = FCU" in se[se.find("MN_leyendas_pulso = {"):])
+        es = (mod / "localisation/spanish").glob("*.yml")
+        es = "".join(f.read_text(encoding="utf-8-sig") for f in es)
+        check("el panel de la nación dice quién llega y cómo",
+              "- Generala Jacy Potiguara (evento): Llega cuando estalla la guerra con la Unión" in es)
+        check("el evento cuenta la historia", "sostuvo el puente de Iguazú" in es)
+        cars = " ".join((mod / "common/characters/ZJP_characters.txt").read_text(encoding="utf-8-sig").split())
+        check("el ministro suma stats al líder", "ZJP_ley_chambelan_mori" in cars
+              and "MEGANATIONS_lider_bono_astucia value = 3" in cars[cars.find("ZJP_ley_chambelan_mori"):][:1500])
+
+    # retratos: el mismo medio de la nación, elevado
+    from tools.arte import retratos_medios
+    ley = [i for i in retratos_medios.items(todos=True) if i.get("leyenda")]
+    check("60 retratos pedidos, todos de leyenda", len(ley) == 60)
+    ped = retratos_medios.pedido(next(i for i in ley if i["id"] == "NRE_ley_navarca_corvino"))
+    check("en el medio de su nación (camafeo) y elevado",
+          "CAMEO" in ped and "LEGEND:" in ped and "IMPERIAL cameo" in ped and "Neapolitan woman of 42" in ped, ped[:300])
+    check("un medio elevado por nación", set(retratos_medios.ELEVADO) >= jugables)
+
+
 def test_paneles_recurso() -> None:
     """2026-11-15: el panel del recurso propio de cada nación (ventana propia, acciones como botones)."""
     section("paneles del recurso: ventana propia por nación, acciones como botones, decisiones para la IA")
@@ -6296,6 +6417,7 @@ def main() -> int:
         test_eventos_receptor,
         test_paneles_recurso,
         test_facciones,
+        test_leyendas,
     ):
         test()
 

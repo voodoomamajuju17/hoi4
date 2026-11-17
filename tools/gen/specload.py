@@ -57,7 +57,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-06: el Gigante (la Coalición de Ginebra por tamaño) y la Crisis del Sucesor
                  "36_gigante_sucesor.yaml", "37_el_despertar.yaml", "38_aventuras_albion.yaml", "39_aventuras_japon.yaml",
                  # 2026-11-14: puntos de fricción entre potencias, el Pacto de las Restauraciones y la Línea
-                 "41_friccion.yaml"]
+                 "41_friccion.yaml",
+                 # 2026-11-16: las Leyendas, seis personajes legendarios por nación
+                 "42_leyendas.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -83,6 +85,13 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
                 raise SpecError(f"{what} '{item.get('id')}' ya existe", where=where)
             seen.add(item.get("id"))
             target.append(item)
+
+    # 2026-11-16: las Leyendas (42_leyendas.yaml) vienen compactas; tools/gen/leyendas_spec.py arma
+    # el personaje, su rasgo, su evento de llegada y su llave, y eso entra como un overlay más
+    if overlay.get("leyendas"):
+        from . import leyendas_spec
+        overlay = dict(overlay)
+        merge_overlay(raw, leyendas_spec.expandir(overlay.pop("leyendas")), filename)
 
     dec_new = overlay.get("decisions") or {}
     dec = raw.setdefault("decisions", {})

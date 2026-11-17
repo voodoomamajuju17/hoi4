@@ -23,6 +23,19 @@ Segundo Sapa Inti de la dinastía restaurada. Su padre bajó de las terrazas agr
 
 El mismo Amaru, después de romper con los sacerdotes. Ya no se hace llamar Sapa Inti, hijo del Sol, sino Sapa Inca: el que gobierna los cuatro suyus. Baja de la montaña con los caminos.
 
+## Las Leyendas
+
+El Sol no se apura. Estos seis esperaron siglos en los cuentos de la montaña; bajan solo cuando el Reino se ganó su luz.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscal Huamán Quispe** | Mariscal: El Puma de Vilcabamba | Pide el foco El General del Sol o la Forma Final proclamada. | Le dicen el Puma de Vilcabamba: peleó contra las mineras veinte años desde la selva de nubes y nunca lo agarraron, porque nunca bajó. Ahora baja con el Ejército del Sol detrás, y los pasos que lo protegieron veinte años protegen al Reino. |
+| **Almiranta Killa Ccori** | Almirante: Hermana de la Luna | Llega con el foco La Flota del Pacífico. | Killa quiere decir luna, y navega por ella: su flota sale del Callao solo las noches que elige el Templo, y en esas noches ningún enemigo la encontró nunca. Los marineros del Reino dicen que la luna es su hermana, y que el mar lo sabe. |
+| **General Amaru Condori** | General: La Serpiente Amaru | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | Amaru es la serpiente de los cuentos viejos, y pega como ella. En el Despertar de 2110 recuperó La Paz con los mineros de Potosí y su dinamita, y el Sapa Inti le dio la cresta de cóndor que nadie había usado en quinientos años. Los jóvenes del Reino quieren ser él. |
+| **Generala Sisa Huallpa** | General: La Escalera de Piedra | Llega cuando estalla la guerra con el Imperio Verde. | Reconstruyó las terrazas del Valle Sagrado piedra por piedra, como los constructores viejos, y después las volvió a construir como fortalezas. Cada terraza es una trinchera, cada muro un búnker, y cada valle bajo su mando es una escalera que el enemigo tiene que subir bajo fuego. |
+| **Gran Quipucamayoc Atoc Yupanqui** | Ministro: Guardián del Gran Quipu | Pide 60 de Luz sagrada. | Guardián del Gran Quipu, los cordones anudados que llevan las cuentas del Reino: cada llama, cada terraza y cada soldado, anudados en fibra óptica que se lee sola. Nunca en su vida escribió un número. Cuando ata un nudo, se llena un granero en el Cusco. |
+| **Amauta Chaska Ticona** | Teórico: La Estrella de la Mañana | Llega con el foco El Observatorio del Sol. | Chaska es la estrella de la mañana, y vio en el Observatorio del Sol algo que nadie había visto: cómo guardar la luz del Inti en los cristales de los salares. Los astrónomos viejos querían quemarle los cuadernos. El Sapa Inti los leyó en una noche y le dio el Observatorio. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

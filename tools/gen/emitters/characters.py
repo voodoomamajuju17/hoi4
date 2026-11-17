@@ -317,6 +317,17 @@ def _emit_unit_traits(ctx: BuildContext) -> set[str]:
         for key in skill_keys:
             if t.get(key):
                 tb.add(key, int(t[key]))
+        # 2026-11-16 (las Leyendas): lo que el rasgo les suma a las tropas que manda. Un modificador
+        # que el juego no documenta se saltea con aviso (no rompe el armado)
+        mods = Block()
+        documentados = ctx.vanilla.documented_keys("modifiers") if ctx.vanilla is not None else None
+        for key, value in (t.get("modifier") or {}).items():
+            if documentados is not None and not ctx.vanilla.is_documented("modifiers", key):
+                ctx.warn(f"{tid}: el modificador '{key}' no existe en este juego; se omite.")
+                continue
+            mods.add(key, float(value))
+        if mods.entries:
+            tb.add("modifier", mods)
         body.add(ctx.loc.reference(tid, f"unit_traits:{tid}"), tb)
         ctx.loc.define(tid, en=t["name"]["english"], es=t["name"]["spanish"], file=LOC_FILE,
                        origin=f"unit_traits:{tid}")

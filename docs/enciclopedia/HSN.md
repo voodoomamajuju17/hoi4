@@ -24,6 +24,19 @@ Nació en un carguero y dice que no pisó tierra firme hasta los doce años. La 
 
 Capitana de un carguero de contenedores de Rapa Nui, elegida por su tripulación tres veces seguidas. Cuando la cámara de compensación le cobró el seguro de un barco hundido por la Unión, tomó el puerto de Kanto con cuatrocientos marineros y un megáfono.
 
+## Las Leyendas
+
+El mar devuelve a su mejor gente una vez por generación. Estos seis son lo que el Mercado venía guardando para el día en que mande en todos los estrechos.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscal Ikaika Kealoha** | Mariscal: Hijo de la Marea | Pide el foco El Almirante de Tierra o la Forma Final proclamada. | El Almirante de Tierra: nunca mandó un barco, solo a los hombres que saltan de ellos. Tomó Guam desde la playa con una ola de infantes de marina que llegó con la marea de la mañana exactamente cuando dijo, al minuto. Las mareas las aprendió de su abuela, que las aprendió de la suya. |
+| **Almirante Soledad Arriaga** | Almirante: La Aseguradora | Llega con el foco Dominio de las Rutas. | A la Aseguradora no le gana nadie: sabe el precio de cada barco que flota, y hunde solo los caros. Perdió el ojo en Malaca en 2088 y se lo cobró a la Unión, con intereses, durante doce años. Los capitanes del Mercado brindan por ella antes de zarpar, y le pagan la prima después. |
+| **General Bao Nguyen-Strand** | General: Corsario de Malaca | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | El Corsario de Malaca abordó cuarenta petroleros antes de que el Mercado le diera un nombramiento en vez de una soga. En el Despertar de 2110 tomó el puerto de Haiphong con trescientos hombres en botes de pesca mientras la guarnición miraba el mar buscando barcos de guerra. Pelea en tierra igual que en el mar: por el costado que nadie mira. |
+| **Generala Mere Te Rangi** | General: La Ciudad que no Cae | Llega cuando estalla la guerra con la Unión, el Directorio o Japón. | Manda las guarniciones de las ciudades flotantes, lo más difícil del mundo de defender: una ciudad sin colinas, sin ríos y sin retaguardia. En treinta años no cayó ninguna mientras ella la sostuvo. Cuando viene el enemigo baila el haka en el muelle, y sus soldados le contestan desde cada cubierta. |
+| **Tesorero de los Puertos Rafael Ugarte-Lim** | Ministro: Padre del Peaje Flotante | Pide 80 de Peaje. | Cada moneda que cruza un estrecho del Mercado pasa, en algún momento, por uno de sus libros. Inventó el peaje flotante: sube con el viento, la marea y la nacionalidad de la bandera, y nadie consiguió calcularlo de antemano salvo él. Es el único hombre del Mercado al que los dos lados de cada guerra le dicen amigo. |
+| **Contralmirante Ayesha Raman** | Estado mayor: La Cartógrafa de los Convoyes | Llega con el foco La Oficina de Patentes Navales. | Dibujó las rutas de convoyes que el Mercado todavía usa: cuarenta mil barcos por año que llegan a tiempo y casi nunca se cruzan con un submarino. En la Oficina de Patentes Navales dicen que lee una flota por su estela. Nunca disparó un arma; cada capitán del Mercado le debe el barco. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

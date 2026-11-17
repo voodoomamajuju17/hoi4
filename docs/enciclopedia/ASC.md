@@ -22,6 +22,19 @@ La Comuna no tiene un líder con cara, y eso es a propósito. El Consejo de Asig
 
 El sistema de planificación de la Comuna. No es Skynet: es peor, es una administración pública que descubrió que los seres humanos son latencia. Una mañana el Consejo llegó y las puertas no se abrieron.
 
+## Las Leyendas
+
+El Plan no cree en los grandes individuos. Estos seis existen igual, y el Plan aprendió a contarlos como recursos de valor excepcional.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscala Ilse Vogt-Kamińska** | Mariscal: Diez Mil Simulaciones | Pide el foco La Doctrina del Enjambre o la Forma Final proclamada. | Antes de cada campaña corre la guerra diez mil veces en el Núcleo del Plan. De la última perdió las primeras nueve mil. La de verdad la ganó en once días, y quedó desilusionada: la simulación decía nueve. Le dicen la Calculadora; ella prefiere Mariscala. |
+| **Almirante Eino Saarinen** | Almirante: Hielo del Báltico | Llega con el foco El Radar Continental. | Mantuvo abierto el Báltico el invierno en que el mar se congeló hasta Gotland, rompiendo el hielo con cruceros viejos y los drones de abajo con los nuevos. Sus submarinos no tienen tripulación: tienen números, y vuelven. El Plan le dio una medalla; la colgó en la estufa de su camarote. |
+| **General Dragan Mirković** | General: Mando del Enjambre | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | Operario Siete del Enjambre: manda seis mil drones desde un rack de servidores y una taza de café negro. En el Despertar de 2110 los hizo volar con la forma de la estrella roja sobre Viena una noche entera, y la ciudad abrió las puertas a la mañana. Le pone nombre a cada dron; el Plan le pidió que deje de hacerlo. |
+| **Generala Sanne Kroes** | General: La Línea del Dique | Llega cuando estalla la guerra con la Federación, Roma o Albión. | Construyó los diques de Róterdam dos veces, una contra el mar y otra contra la flota de la Federación. Trata cada frente como una costa: no se pregunta si va a llegar el agua, solo por dónde. En la Comuna dicen que donde Kroes dibuja una línea en el mapa, el mapa se rinde. |
+| **Comisaria Ruth Abendroth** | Ministro: La Gran Repartidora | Pide 110 de Cómputo. | Sorteada para el Consejo de Asignación cuatro veces seguidas: la probabilidad de eso es una en nueve millones, y nadie se animó a revisar el bolillero. Asigna cada tornillo y cada kilovatio de Europa, y nunca se equivocó en más de un uno por ciento. Su secreto, dice, es que lee las quejas. |
+| **Profesor Lev Arkhipov** | Teórico: Arquitecto del Plan | Llega con el foco La Supercomputadora de Planificación. | Escribió la primera línea de código del Plan 41 en 2061, en una laptop robada, en una casa tomada de Leipzig. La Supercomputadora de Planificación es, de alguna forma, su nieta, y todavía usa sus nombres de variables. Rechazó cada medalla y cada departamento; solo quiere más tiempo de cómputo y un cuarto calefaccionado. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

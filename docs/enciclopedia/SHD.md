@@ -24,6 +24,19 @@ Ingeniero de sistemas de riego antes de ser Director. Su doctrina es que una soc
 
 Comisario de las obras del Yangtsé, el más joven del Directorio. Cree que la Armonía de Lin Wenzhao es una represa que tarde o temprano va a reventar, y que es mejor abrir las compuertas antes de que eso pase.
 
+## Las Leyendas
+
+La armonía no es la falta de grandes personas: es cada gran persona en su lugar exacto. Estos seis estaban esperando el suyo.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscala Lu Wenjing** | Mariscal: La Compuerta | Pide el foco El General de la Crecida o la Forma Final proclamada. | La Compuerta: en la Gran Crecida de 2089 abrió las represas del Río Amarillo a la hora exacta que ahogó al ejército rebelde y salvó a las ciudades, y lo había calculado un año antes. Planea cada ofensiva como una suelta de agua: despacio, al litro, y después de golpe. |
+| **Almirante Zheng Lianhua** | Almirante: La Flota del Tesoro | Llega con el foco La Flota del Mar de China. | Dice que desciende del almirante de las flotas del tesoro, y las reconstruyó: barcos cinco veces más grandes que cualquiera del Mar de China, botados en Cantón cada cuarenta días. Navega con una biblioteca a bordo y les lee en voz alta los viajes viejos a los oficiales. El Directorio le dio el mar; él quiere los océanos. |
+| **General Bayar Ochirbat** | General: La Caballería Flotante | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | Manda la caballería flotante de la estepa: tanques que flotan a un metro del pasto y cruzan Mongolia en un día. En el Despertar de 2110 rodeó a todo el ejército de Siberia en una sola noche y al amanecer estaba desayunando detrás de su cuartel general. Todavía les canta a sus máquinas como se hacía antes. |
+| **Generala Qiu Yanmei** | General: La Muralla de Agua | Llega cuando estalla la guerra con la Alta Mar o Japón. | La Muralla de Agua: defendió las Tres Gargantas seis meses contra un ejército cuatro veces más grande inundando cada valle delante de él, uno por uno, en el orden exacto que había escrito en una sola hoja. La hoja está en un museo de Chongqing. Ella se guardó una copia. |
+| **Secretario de Armonía Fang Shiyu** | Ministro: Maestro de las Tres Agujas | Pide 80 de Mandato del Cielo. | Las tres agujas del Directorio (la Producción, el Orden y el Pueblo) nunca estuvieron en equilibrio más de un mes, salvo los once años en que él fue Secretario. Lo jubiló un comité celoso en 2094; las agujas empezaron a temblar a la mañana siguiente. Hace años que espera, con una taza de té, que lo vuelvan a llamar. |
+| **Ingeniera Jefe Wei Lanting** | Teórico: Autora del Modelo del Caudal | Llega con el foco El Instituto del Caudal. | A los veintiséis rediseñó el Instituto del Caudal: un modelo de cada río de China, cada gota, cada hora, que corre un año adelantado a los de verdad. Desde entonces ninguna crecida sorprendió al Directorio. Los ingenieros viejos dicen que es demasiado joven. A los ríos no parece importarles. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

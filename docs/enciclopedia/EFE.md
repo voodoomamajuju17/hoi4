@@ -38,6 +38,19 @@ Jefa de Guardaparques. Custodio de la Tierra fue un cargo antes de ser una coron
 
 El único oficial que tuteaba al Emperador. Gobierna desde el cuartel de la Guardia Verde, de uniforme, y no se pone la corona.
 
+## Las Leyendas
+
+Todo imperio tiene la gente que se merece, y unos pocos que no. Estos seis nacieron en el siglo verde y solo le van a responder al Emperador cuando el Imperio esté a su altura.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscala Irupé Valdivia** | Mariscal: Madre de las Raíces | Pide el foco Armadura Viviente o la Forma Final proclamada. | A los quince años sostuvo el puente de Iguazú con cuarenta milicianos y un camión de plantines. El puente cayó; el monte que plantó sobre las ruinas sigue ahí, y desde entonces nadie lo cruzó. Los guardaparques le dicen la Madre de las Raíces: sus búnkeres crecen, sus trincheras se cierran detrás de sus propios soldados y sus líneas engordan cada semana que las sostiene. |
+| **Almirante Tomás Arandú** | Almirante: El Casco que Cicatriza | Llega con el foco La Flotilla del Plata. | Se crió en las barcazas del Paraná y aprendió a navegar por el olor del agua. La Flotilla del Plata navega sobre sus cascos: bioacero vivo que se cierra las heridas de un día para el otro, si la tripulación lo alimenta. Las aseguradoras de la Unión tienen una lista de barcos que le pegaron a la flota de Arandú y se hundieron; no tienen ninguna de barcos suyos que se hayan quedado en el fondo. |
+| **General Ceferino Ybarra** | General: El Gliptodonte | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | Le dicen el Gliptodonte, como los tanques vivos que maneja. En el Despertar de 2110 metió uno por la pared del viejo Congreso y salió del otro lado con los archivos en el lomo. Sus tripulaciones dicen que les habla a las bestias antes de cada carga, y que le contestan. |
+| **Generala Jacy Potiguara** | General: La Selva Ve | Llega cuando estalla la guerra con la Unión o con el Reino del Sol. | Jefa de los guardaparques del Xingú. Cuando los mercenarios de la Unión cruzaron la frontera por el agua, los dejó caminar nueve días monte adentro. Al décimo, ninguno sabía dónde quedaba el norte. La selva no pelea por el Imperio; pelea por ella. |
+| **Gran Custodia del Agua Dolores Itatí** | Ministro: Guardiana de la Llave del Acuífero | Pide 24 de Bioacero (nivel 3). | Tiene la única llave de la estación de bombeo del Acuífero Guaraní, y la conservó a través de tres ministros, dos golpes y un Emperador. La corte le tiene más miedo que la Unión: todo Buenos Aires toma el agua que ella deja pasar, y ella sabe quién tiene sed. |
+| **Doctora Yerutí Sepé** | Teórico: Madre del Metal que Crece | Llega con el foco El Laboratorio de Gaia. | Encontró el ciclo que hace que el bioacero vuelva a crecer después de la cosecha: el metal que crece, no solo el que se corta. Los viejos botánicos de las cubas le dijeron herejía hasta que el Emperador cenó sobre una mesa que el mes anterior había sido una semilla. Duerme en el Laboratorio de Gaia, entre los frascos. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

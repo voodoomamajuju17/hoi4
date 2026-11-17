@@ -26,6 +26,19 @@ Neuroingeniera de Edimburgo, la primera persona en vivir un año entero conectad
 
 Victoria Ashcombe-Hale era actriz de teatro de época en Bath hasta que la Cámara de los Lores restaurada encontró en un archivo parroquial que descendía, muy de lejos, de una rama menor de la vieja casa real. Lleva la corona como un vestuario y la nación la aplaude como a un estreno. Nadie sabe si se lo cree. Todos saben que funciona.
 
+## Las Leyendas
+
+Albión fue todos los países posibles en un solo siglo. Estos seis sirvieron a todos, y van a servir a la Albión que demuestre estar a la altura de las islas.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscala Eleanor Pryce-Mortimer** | Mariscal: La Duquesa de Hierro | Pide el foco El Canal Fortificado o el final de un camino (La Mancomunidad Ascendida, El Imperio Neovictoriano o La Gran Rotura). | La Duquesa de Hierro del Canal: fortificó los acantilados blancos de Dover a Beachy Head cuando nadie creía que Albión fuera a durar un año, y sirvió a los luditas, a la Corona y a la Red con exactamente la misma cara. Una vez le preguntaron por qué Albión peleaba, y contestó: por la que sigue en pie. |
+| **Almirante Rhys Penderyn** | Almirante: El Coro del Clyde | Llega con el foco Reabrir los Astilleros del Clyde. | Un capitán de pesquero de Milford Haven que reabrió los astilleros del Clyde con sus ahorros y un coro de soldadores jubilados. El primer destructor que botó llevaba el nombre de su madre; los nueve siguientes también. Canta en galés cuando entra en combate, y toda la flota canta con él. |
+| **General Morag Sutherland** | General: La Carga de las Highlands | Llega cuando La Corona de Vapor, La Gran Sincronía (o El Despertar de 2110) termina bien o con su objetivo cumplido. | Bajó con los regimientos de las Highlands desde las montañas el año de la Rotura y nunca volvió a subir. Cuando la historia de la Corona o de la Red llegó a su final, fueron sus regimientos los que estuvieron en Trafalgar Square, y los dos lados dijeron que era suya. Ella solo dice que es de su clan, y de las gaitas. |
+| **General Abel Okoro-Finch** | General: Capitán de las Brigadas del Martillo | Llega cuando estalla la guerra con Roma o la Comuna. | Un capataz de hilandería de Manchester que organizó las Brigadas del Martillo el año de la Rotura: sin circuitos, sin drones, nada que se pueda hackear, solo hombres, fusiles y los ferrocarriles. Defendió el Norte contra todo lo que mandó el siglo, y dice que la única máquina en la que confía es la que puede arreglar con un martillo. |
+| **Secretaria Permanente Imogen Hartley** | Ministro: La Mano de Whitehall | Pide 75 de Pompa o 75 de Sincronía (o, para los luditas, el foco La Constitución del Telar). | Secretaria Permanente de Whitehall desde antes de la Rotura. Cayeron gobiernos, volvió la Corona, la Red cableó todo Londres, y ella estuvo en el mismo escritorio todo el tiempo, escribiendo los memorandos que firmaron todos. Nadie la votó nunca. Nadie se arregló nunca sin ella. |
+| **Doctor Alfred Wren** | Teórico: El Relojero de Greenwich | Llega con el foco La Universidad Abierta, La Gran Exposición de 2100 o Fusiles sin Circuitos (según el camino). | El Relojero de Greenwich: construye máquinas que no se pueden hackear porque no tienen software, solo engranajes, y máquinas que piensan porque no tienen nada más que software. Cada camino de Albión le pidió algo; a cada uno le dio exactamente lo que pidió, y un poco más. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

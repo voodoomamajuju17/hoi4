@@ -24,6 +24,19 @@ Portavoz del Congreso Continental, elegida por mil doscientos consejos locales. 
 
 Comandante de las milicias del Sahel, organizó la defensa de los consejos durante las guerras del agua. Cree que la Federación no se construye con votos sino con fronteras abiertas a la fuerza. Primero dibuja el mapa; después descubre que adentro vive gente.
 
+## Las Leyendas
+
+Soy porque somos. Estos seis son de todo el continente, y solo van a venir cuando los consejos sean lo bastante fuertes para compartirlos.
+
+| Nombre | Cargo | Cómo llega | Quién es |
+|---|---|---|---|
+| **Mariscala Nomvula Dube** | Mariscal: La Leona del Congreso | Pide el foco El General del Congreso o la Forma Final proclamada. | La Leona del Congreso encabezó la marcha de Durban a Kinsasa en 2089 sin otra cosa que milicias y una promesa, y llegó con un ejército. Cada consejo de la Federación le mandó un hijo o una hija; ella sabe el nombre de todos. Cuando les habla a las tropas, contestan los tambores. |
+| **Almirante Ousmane Ba** | Almirante: La Piragua del Padre | Llega con el foco La Armada del Golfo. | Hijo de pescadores de Saint-Louis, armó la Armada del Golfo con piraguas con motor y una fragata prestada. Hoy tiene portaaviones. Todavía sale cada año en la piragua de su padre el día de los muertos, solo, y toda la flota lo espera en la boca del río. |
+| **General Tesfaye Alemu** | General: La Marcha sin Luces | Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido. | Aprendió la guerra en las montañas del Tigray y la estrategia en los libros viejos de los monasterios. En el Despertar de 2110 recuperó Adís de manos de los señores de la guerra en una sola marcha desde la montaña, de noche, sin luces, y llegó cantando. Dicen que nunca retrocedió un solo kilómetro. |
+| **Generala Amani Wanjiru** | General: La Lluvia Larga | Llega cuando estalla la guerra con la Comuna o Roma. | La Lluvia Larga: no gana batallas, gana estaciones. Cuando las legiones de la Comuna cruzaron el Sahel las dejó avanzar un año entero, no quemó nada, no peleó en ningún lado, y cada semana unos cientos no se despertaban. Cuando llegaron las lluvias, no quedaban legiones para volver a casa. |
+| **Portavoz de los Consejos Adaeze Okafor** | Ministro: La Voz de los Consejos | Pide 75 de Ubuntu. | Presidió el Congreso de la Federación en once sesiones y tres casi guerras civiles, y nunca levantó la voz. Su regla es simple: nadie se va del salón hasta que todos puedan vivir con la decisión. En 2097 la sesión duró nueve días. Terminó con una canción. |
+| **Profesor Mamadou Keïta** | Teórico: Guardián de los Manuscritos | Llega con el foco La Universidad Continental. | Rector de la Universidad Continental, pasó veinte años digitalizando los manuscritos de Tombuctú y encontró en ellos lo que el siglo se había olvidado: matemáticas del agua, del comercio y de las estrellas. Cada ingeniero de la Federación estudió con alguno de sus alumnos. La primera clase de cada año la sigue dando él. |
+
 ## Gabinete, generales y almirantes
 
 | Nombre | Cargo | Quién es |

@@ -1,0 +1,1892 @@
+# =============================================================================
+# Las Leyendas (2026-11-16)
+#
+# Pedido del usuario: "prepara 6 portraits mas por nacion, un mariscal, un almirante, dos generales,
+# un ministro y un teorico/personal militar. Cada uno completamente original (en cuanto a stats-bonus
+# y el portrait) Tiene que ser exactamente el mismo estilo que usaste para sus pares pero "elevado",
+# leveleado, maxeado. Cada uno de estos se destraba con una decision, un foco, un evento, una
+# aventura. Lo que prefieras y son de lo mejorcito del juego y con lore."
+#
+# Seis por cada nación jugable (las 8 potencias, Japón y Albión). Todo lo que sale de cada ficha (el
+# personaje, su rasgo, su evento de llegada, la decisión o el foco que lo destraba) lo arma
+# tools/gen/leyendas_spec.py al cargar el spec.
+#
+# Llaves (dos por decisión, dos por foco, una por aventura, una por evento en cada nación):
+#   decision  en "Las Leyendas" de la nación, se habilita con `cuando` (y cuesta `costo` de poder político)
+#   foco      al completar `foco` (uno o una lista)
+#   aventura  al terminar bien una aventura (`cuando`, se mira cada mes)
+#   evento    cuando estalla la guerra con un rival del punto de fricción (`cuando`, se mira cada mes)
+#
+# Números: los mejores de cada nación tenían habilidad 4-5. Las leyendas, 6 (mariscales y
+# almirantes) o 5-6 (generales), con atributos de hasta 8, dos rasgos del juego y uno propio que
+# además suma a las tropas que mandan (`modifier`). Los ministros, tres bonos de 10-15% (los de
+# siempre, uno o dos de 5-10%) y +2/+3 a las stats del líder mientras están en el cargo.
+# `look`: cómo es (en inglés, para el retrato; el medio sale de tools/arte/retratos_medios.py, en su
+# versión de leyenda: ELEVADO).
+# =============================================================================
+
+leyendas:
+
+  # ===========================================================================
+  EFE:
+    intro:
+      english: 'Every empire has the people it deserves, and a few it does not. These six were born in the green century and will
+        only answer the Emperor when the Empire is worthy of them.'
+      spanish: 'Todo imperio tiene la gente que se merece, y unos pocos que no. Estos seis nacieron en el siglo verde y solo le van a
+        responder al Emperador cuando el Imperio esté a su altura.'
+    personajes:
+    - id: EFE_ley_mariscala_irupe
+      rol: mariscal
+      nombre: {english: 'Marshal Irupé Valdivia', spanish: 'Mariscala Irupé Valdivia'}
+      born: 2047
+      look: >-
+        Paraguayan-Argentine woman of 53, broad weathered face, deep laugh lines, grey-streaked black hair in a thick braid wound
+        with a living green vine, a long burn scar on the left cheek from Iguazú; deep forest-green marshal's coat with gold
+        laurel and root embroidery, a bracelet of dark bio-steel roots on her wrist; she holds a seedling in a cupped hand like a
+        grenade. Calm, stubborn, motherly and terrifying.
+      lore:
+        english: 'At fifteen she held the bridge of Iguazú with forty militiamen and a truck of seedlings. The bridge fell; the forest
+          she planted on its ruins is still there, and nobody has crossed it since. The rangers call her the Mother of the Roots: her
+          bunkers grow, her trenches close behind her own soldiers, and her lines get thicker every week she holds them.'
+        spanish: 'A los quince años sostuvo el puente de Iguazú con cuarenta milicianos y un camión de plantines. El puente cayó; el
+          monte que plantó sobre las ruinas sigue ahí, y desde entonces nadie lo cruzó. Los guardaparques le dicen la Madre de las
+          Raíces: sus búnkeres crecen, sus trincheras se cierran detrás de sus propios soldados y sus líneas engordan cada semana que
+          las sostiene.'
+      frase: {english: 'The forest remembers who planted it.', spanish: 'El monte se acuerda de quién lo plantó.'}
+      habilidades: {skill: 6, attack_skill: 5, defense_skill: 8, planning_skill: 6, logistics_skill: 6}
+      rasgos: [defensive_doctrine, organizer]
+      rasgo:
+        id: mn_ley_efe_madre_de_las_raices
+        name: {english: 'Mother of the Roots', spanish: 'Madre de las Raíces'}
+        desc: {english: 'Her lines take root: more defence, faster entrenchment, and soldiers who do not run.', spanish: 'Sus líneas echan raíces: más defensa, atrincheramiento más rápido y soldados que no corren.'}
+        defense_skill: 2
+        planning_skill: 1
+        modifier: {army_defence_factor: 0.15, max_dig_in: 3, dig_in_speed: 0.3, army_morale_factor: 0.1}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: EFE_cultivar_la_armadura}, {flag: EFE_forma_final}]}
+        texto: {english: 'Needs the focus Living Armour or the Final Form proclaimed.', spanish: 'Pide el foco Armadura Viviente o la Forma Final proclamada.'}
+
+    - id: EFE_ley_almirante_arandu
+      rol: almirante
+      nombre: {english: 'Admiral Tomás Arandú', spanish: 'Almirante Tomás Arandú'}
+      born: 2052
+      look: >-
+        Guaraní-Brazilian man of 48, sun-dark skin, shaved head, a short white beard, eyes narrowed against river glare, a
+        necklace of river-shell and bio-steel beads; green-black naval coat with seed-shaped gold buttons and laurel cuffs, the
+        sleeves rolled up over forearms tattooed with river maps; one hand on a ship's wheel that sprouts leaves. Proud, quiet,
+        patient as a river.
+      lore:
+        english: 'He grew up on the barges of the Paraná and learned to navigate by the smell of the water. The Flotilla of the Plata
+          sails on his hulls: living bio-steel that closes its own wounds overnight, if the crew keeps it fed. The Union insurers have
+          a list of ships that hit Arandú''s fleet and sank; they have no list of his that stayed down.'
+        spanish: 'Se crió en las barcazas del Paraná y aprendió a navegar por el olor del agua. La Flotilla del Plata navega sobre sus
+          cascos: bioacero vivo que se cierra las heridas de un día para el otro, si la tripulación lo alimenta. Las aseguradoras de la
+          Unión tienen una lista de barcos que le pegaron a la flota de Arandú y se hundieron; no tienen ninguna de barcos suyos que se
+          hayan quedado en el fondo.'
+      frase: {english: 'The river always reaches the sea.', spanish: 'El río siempre llega al mar.'}
+      habilidades: {skill: 6, attack_skill: 5, defense_skill: 8, maneuvering_skill: 6, coordination_skill: 6}
+      rasgos: [superior_tactician, fleet_protector]
+      rasgo:
+        id: mn_ley_efe_casco_que_cicatriza
+        name: {english: 'The Hull That Heals', spanish: 'El Casco que Cicatriza'}
+        desc: {english: 'Living bio-steel hulls: his ships take the blow and keep sailing.', spanish: 'Cascos de bioacero vivo: sus barcos aguantan el golpe y siguen navegando.'}
+        type: navy
+        defense_skill: 2
+        coordination_skill: 1
+        modifier: {naval_defense_factor: 0.2, naval_damage_factor: 0.08, naval_retreat_chance: 0.1}
+      llave:
+        tipo: foco
+        foco: EFE_flotilla_del_plata
+        texto: {english: 'Arrives with the focus The Plata Flotilla.', spanish: 'Llega con el foco La Flotilla del Plata.'}
+
+    - id: EFE_ley_general_ybarra
+      rol: general
+      nombre: {english: 'General Ceferino Ybarra', spanish: 'General Ceferino Ybarra'}
+      born: 2058
+      look: >-
+        Argentine man of 42 from the Chaco, massive and barrel-chested, a broken nose, a thick black moustache, small fierce eyes,
+        a tanker's leather cap with goggles pushed up; forest-green armoured-corps tunic with a scaled bio-steel shoulder plate like
+        a glyptodont shell; grease on his hands, laughing with his whole body. Loud, brave, beloved by his crews.
+      lore:
+        english: 'They call him the Glyptodont, like the living tanks he rides. In the Awakening of 2110 he drove one through the
+          wall of the old Congress and came out the other side with the archives on its back. His crews say he talks to the beasts
+          before every charge, and that they answer.'
+        spanish: 'Le dicen el Gliptodonte, como los tanques vivos que maneja. En el Despertar de 2110 metió uno por la pared del viejo
+          Congreso y salió del otro lado con los archivos en el lomo. Sus tripulaciones dicen que les habla a las bestias antes de cada
+          carga, y que le contestan.'
+      frase: {english: 'Shell up and forward!', spanish: '¡Caparazón arriba y adelante!'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 5, planning_skill: 5, logistics_skill: 5}
+      rasgos: [panzer_leader, offensive_doctrine]
+      rasgo:
+        id: mn_ley_efe_el_gliptodonte
+        name: {english: 'The Glyptodont', spanish: 'El Gliptodonte'}
+        desc: {english: 'Rides at the head of the living armour: more attack and breakthrough, and the beasts do not tire.', spanish: 'Va a la cabeza de los blindados vivos: más ataque y ruptura, y las bestias no se cansan.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.1, breakthrough_factor: 0.15, army_org_factor: 0.08}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: EFE_ley_generala_potiguara
+      rol: general
+      nombre: {english: 'General Jacy Potiguara', spanish: 'Generala Jacy Potiguara'}
+      born: 2064
+      look: >-
+        Indigenous Potiguara woman of 36, lean and sharp-featured, black hair cut straight at the jaw, red urucum paint in two
+        lines across the cheekbones, dark unblinking eyes; ranger's camouflage of living moss over a forest-green tunic, a necklace
+        of jaguar teeth and gold leaves, a carbon bow over the shoulder. Silent, watchful, half hidden by leaves.
+      lore:
+        english: 'Chief of the rangers of the Xingu. When the Union''s mercenaries crossed the border for the water, she let them walk
+          into the forest for nine days. On the tenth, none of them knew where north was. The jungle does not fight for the Empire;
+          it fights for her.'
+        spanish: 'Jefa de los guardaparques del Xingú. Cuando los mercenarios de la Unión cruzaron la frontera por el agua, los dejó
+          caminar nueve días monte adentro. Al décimo, ninguno sabía dónde quedaba el norte. La selva no pelea por el Imperio; pelea
+          por ella.'
+      frase: {english: 'Let them come in. The forest closes behind.', spanish: 'Que entren. El monte se cierra atrás.'}
+      habilidades: {skill: 5, attack_skill: 7, defense_skill: 6, planning_skill: 6, logistics_skill: 5}
+      rasgos: [jungle_rat, trickster]
+      rasgo:
+        id: mn_ley_efe_la_selva_ve
+        name: {english: 'The Jungle Sees', spanish: 'La Selva Ve'}
+        desc: {english: 'Her troops move like the forest: faster, unseen, and the attrition is for the enemy.', spanish: 'Sus tropas se mueven como el monte: más rápido, sin ser vistas, y el desgaste es para el enemigo.'}
+        attack_skill: 1
+        planning_skill: 1
+        modifier: {army_speed_factor: 0.12, attrition: -0.25, recon_factor: 0.3, army_attack_factor: 0.06}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: FCU}, {war_with: NAS}]}
+        texto: {english: 'Arrives when war breaks out with the Union or the Kingdom of the Sun.', spanish: 'Llega cuando estalla la guerra con la Unión o con el Reino del Sol.'}
+
+    - id: EFE_ley_custodia_itati
+      rol: ministro
+      nombre: {english: 'High Custodian of the Water Dolores Itatí', spanish: 'Gran Custodia del Agua Dolores Itatí'}
+      born: 2044
+      look: >-
+        Correntina woman of 56, round face, silver hair pinned up with a gold seedling comb, heavy-lidded shrewd eyes, a small
+        smile that never reaches them; deep green high-collared court jacket embroidered with water lilies in gold thread, a
+        glass vial of aquifer water on a chain; she holds a large old brass key. Patient, cunning, maternal.
+      lore:
+        english: 'She keeps the only key to the pumping station of the Guaraní Aquifer, and she has kept it through three
+          ministers, two coups and one Emperor. The court fears her more than the Union does: everyone in Buenos Aires drinks the
+          water she lets through, and she knows who is thirsty.'
+        spanish: 'Tiene la única llave de la estación de bombeo del Acuífero Guaraní, y la conservó a través de tres ministros, dos
+          golpes y un Emperador. La corte le tiene más miedo que la Unión: todo Buenos Aires toma el agua que ella deja pasar, y ella
+          sabe quién tiene sed.'
+      frase: {english: 'The key stays with me.', spanish: 'La llave se queda conmigo.'}
+      stats: {carisma: 2, astucia: 3}
+      rasgo:
+        id: mn_ley_efe_llave_del_acuifero
+        name: {english: 'Keeper of the Aquifer Key', spanish: 'Guardiana de la Llave del Acuífero'}
+        modifiers: {political_power_gain: 0.15, stability_factor: 0.1, production_speed_buildings_factor: 0.12}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: EFE_biosteel, value: 24}}
+        texto: {english: 'Needs 24 Bio-steel (tier 3).', spanish: 'Pide 24 de Bioacero (nivel 3).'}
+
+    - id: EFE_ley_doctora_sepe
+      rol: teorico
+      nombre: {english: 'Doctor Yerutí Sepé', spanish: 'Doctora Yerutí Sepé'}
+      born: 2069
+      look: >-
+        Mestiza woman of 31 from Misiones, freckled brown skin, wild curly hair tied back with a strip of green cloth, big round
+        lab goggles on her forehead, a fresh cut on her chin; a white lab coat stained green, over it a gold-embroidered green
+        sash of the Imperial Academy; a living bio-steel sapling glowing amber in a glass jar in her hands. Obsessive, joyful,
+        slightly mad.
+      lore:
+        english: 'She found the cycle that makes bio-steel grow back after the harvest: the metal that grows, not just the metal that
+          is cut. The old botanists of the vats called it a heresy until the Emperor ate dinner on a table that had been a seed the
+          month before. She sleeps in the Laboratory of Gaia, among the jars.'
+        spanish: 'Encontró el ciclo que hace que el bioacero vuelva a crecer después de la cosecha: el metal que crece, no solo el que
+          se corta. Los viejos botánicos de las cubas le dijeron herejía hasta que el Emperador cenó sobre una mesa que el mes anterior
+          había sido una semilla. Duerme en el Laboratorio de Gaia, entre los frascos.'
+      frase: {english: 'Give me the vats and a year.', spanish: 'Denme las cubas y un año.'}
+      stats: {astucia: 2}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_efe_el_metal_que_crece
+        name: {english: 'Mother of the Growing Metal', spanish: 'Madre del Metal que Crece'}
+        modifiers: {research_speed_factor: 0.15, industrial_capacity_factory: 0.08, production_speed_buildings_factor: 0.05}
+      llave:
+        tipo: foco
+        foco: EFE_laboratorio_de_gaia
+        texto: {english: 'Arrives with the focus The Laboratory of Gaia.', spanish: 'Llega con el foco El Laboratorio de Gaia.'}
+
+  # ===========================================================================
+  ASC:
+    intro:
+      english: 'The Plan does not believe in great individuals. These six exist anyway, and the Plan has learned to count them as
+        resources of exceptional value.'
+      spanish: 'El Plan no cree en los grandes individuos. Estos seis existen igual, y el Plan aprendió a contarlos como recursos de
+        valor excepcional.'
+    personajes:
+    - id: ASC_ley_mariscala_vogt
+      rol: mariscal
+      nombre: {english: 'Marshal Ilse Vogt-Kamińska', spanish: 'Mariscala Ilse Vogt-Kamińska'}
+      born: 2049
+      look: >-
+        German-Polish woman of 51, very pale, sharp cheekbones, white-blonde hair cropped military short, thin steel-rimmed
+        glasses with a faint red data glint on one lens, a thin mouth; graphite-grey Commune marshal's tunic with signal-red
+        collar tabs and a single red star, a cable from a neural port behind her ear tucked into the collar; she holds a pencil
+        like a scalpel over a map. Cold, exact, unsmiling.
+      lore:
+        english: 'Before every campaign she runs the war ten thousand times in the Core of the Plan. She lost the first nine
+          thousand of the last one. The real one she won in eleven days, and she was disappointed: the simulation had said nine.
+          They call her the Calculator; she prefers Marshal.'
+        spanish: 'Antes de cada campaña corre la guerra diez mil veces en el Núcleo del Plan. De la última perdió las primeras nueve
+          mil. La de verdad la ganó en once días, y quedó desilusionada: la simulación decía nueve. Le dicen la Calculadora; ella
+          prefiere Mariscala.'
+      frase: {english: 'Run it again.', spanish: 'Córranla de nuevo.'}
+      habilidades: {skill: 6, attack_skill: 6, defense_skill: 6, planning_skill: 8, logistics_skill: 6}
+      rasgos: [brilliant_strategist, organizer]
+      rasgo:
+        id: mn_ley_asc_diez_mil_simulaciones
+        name: {english: 'Ten Thousand Simulations', spanish: 'Diez Mil Simulaciones'}
+        desc: {english: 'Every battle already played out in the Core: far more planning, faster, and it holds.', spanish: 'Cada batalla ya se jugó en el Núcleo: mucha más planificación, más rápida, y se sostiene.'}
+        planning_skill: 2
+        logistics_skill: 1
+        modifier: {max_planning: 0.25, planning_speed: 0.3, army_org_factor: 0.08, army_attack_factor: 0.06}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: ASC_doctrina_del_enjambre}, {flag: ASC_forma_final}]}
+        texto: {english: 'Needs the focus The Swarm Doctrine or the Final Form proclaimed.', spanish: 'Pide el foco La Doctrina del Enjambre o la Forma Final proclamada.'}
+
+    - id: ASC_ley_almirante_saarinen
+      rol: almirante
+      nombre: {english: 'Admiral Eino Saarinen', spanish: 'Almirante Eino Saarinen'}
+      born: 2045
+      look: >-
+        Finnish man of 55, long weather-cut face, pale blue eyes, an untidy white beard with frost in it, a black wool watch cap;
+        a heavy graphite naval greatcoat with signal-red piping and a fur collar, an old brass sextant on a cord around his neck;
+        behind him the shape of a black drone submarine under ice. Silent, stubborn, a man of the north.
+      lore:
+        english: 'He kept the Baltic open the winter the sea froze to Gotland, breaking the ice with old cruisers and the drones
+          under it with new ones. His submarines have no crews: they have numbers, and they come back. The Plan gave him a medal;
+          he hung it on the stove of his cabin.'
+        spanish: 'Mantuvo abierto el Báltico el invierno en que el mar se congeló hasta Gotland, rompiendo el hielo con cruceros viejos
+          y los drones de abajo con los nuevos. Sus submarinos no tienen tripulación: tienen números, y vuelven. El Plan le dio una
+          medalla; la colgó en la estufa de su camarote.'
+      frase: {english: 'The ice is on our side.', spanish: 'El hielo está de nuestro lado.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 6, maneuvering_skill: 7, coordination_skill: 6}
+      rasgos: [seawolf, spotter]
+      rasgo:
+        id: mn_ley_asc_hielo_del_baltico
+        name: {english: 'Ice of the Baltic', spanish: 'Hielo del Báltico'}
+        desc: {english: 'Crewless drone submarines and the patience of the north: they find you first and hit harder.', spanish: 'Submarinos dron sin tripulación y la paciencia del norte: te encuentran primero y pegan más fuerte.'}
+        type: navy
+        attack_skill: 1
+        maneuvering_skill: 2
+        modifier: {submarine_attack: 0.2, naval_detection: 0.2, naval_damage_factor: 0.08}
+      llave:
+        tipo: foco
+        foco: ASC_radar_continental
+        texto: {english: 'Arrives with the focus The Continental Radar.', spanish: 'Llega con el foco El Radar Continental.'}
+
+    - id: ASC_ley_general_mirkovic
+      rol: general
+      nombre: {english: 'General Dragan Mirković', spanish: 'General Dragan Mirković'}
+      born: 2061
+      look: >-
+        Serbian man of 39, heavy-browed, a shaved head with a ring of glowing red neural ports along the skull, a jaw like a
+        brick, tired dark eyes; a graphite combat tunic with signal-red shoulder stripes, a headset mic, a swarm of tiny drones
+        hovering like bees around his raised open hand. Intense, fatherly with his drones, frightening.
+      lore:
+        english: 'Operator Seven of the Swarm: he commands six thousand drones from a server rack and a cup of black coffee. In the
+          Awakening of 2110 he flew them in the shape of the red star over Vienna for a whole night, and the city opened its gates
+          in the morning. He gives each drone a name; the Plan has asked him to stop.'
+        spanish: 'Operario Siete del Enjambre: manda seis mil drones desde un rack de servidores y una taza de café negro. En el
+          Despertar de 2110 los hizo volar con la forma de la estrella roja sobre Viena una noche entera, y la ciudad abrió las puertas
+          a la mañana. Le pone nombre a cada dron; el Plan le pidió que deje de hacerlo.'
+      frase: {english: 'Swarm, wake up.', spanish: 'Enjambre, despierten.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 5, planning_skill: 7, logistics_skill: 5}
+      rasgos: [offensive_doctrine, engineer_officer]
+      rasgo:
+        id: mn_ley_asc_mando_del_enjambre
+        name: {english: 'Command of the Swarm', spanish: 'Mando del Enjambre'}
+        desc: {english: 'Six thousand drones over every line: breakthrough, reconnaissance and attack.', spanish: 'Seis mil drones sobre cada línea: ruptura, reconocimiento y ataque.'}
+        attack_skill: 1
+        planning_skill: 1
+        modifier: {breakthrough_factor: 0.15, recon_factor: 0.3, army_attack_factor: 0.08, army_org_factor: 0.05}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: ASC_ley_generala_kroes
+      rol: general
+      nombre: {english: 'General Sanne Kroes', spanish: 'Generala Sanne Kroes'}
+      born: 2055
+      look: >-
+        Dutch woman of 45, tall and broad-shouldered, a long plain face with strong jaw, ash-blonde hair in a severe bun, a
+        hydraulic engineer's yellow helmet under her arm, mud up to the knees of her graphite fatigues with signal-red collar;
+        behind her the concrete wall of a sea dike. Unflappable, dry humour, immovable.
+      lore:
+        english: 'She built the dikes of Rotterdam twice, once against the sea and once against the Federation''s fleet. She treats
+          every front like a coastline: she does not ask whether the water will come, only where. In the Commune they say that where
+          Kroes draws a line on the map, the map gives up.'
+        spanish: 'Construyó los diques de Róterdam dos veces, una contra el mar y otra contra la flota de la Federación. Trata cada
+          frente como una costa: no se pregunta si va a llegar el agua, solo por dónde. En la Comuna dicen que donde Kroes dibuja una
+          línea en el mapa, el mapa se rinde.'
+      frase: {english: 'Here, and not one metre further.', spanish: 'Acá, y ni un metro más.'}
+      habilidades: {skill: 5, attack_skill: 5, defense_skill: 8, planning_skill: 6, logistics_skill: 6}
+      rasgos: [defensive_doctrine, engineer_officer]
+      rasgo:
+        id: mn_ley_asc_la_linea_del_dique
+        name: {english: 'The Line of the Dike', spanish: 'La Línea del Dique'}
+        desc: {english: 'Every front is a coastline to hold: much more defence and entrenchment.', spanish: 'Cada frente es una costa que hay que sostener: mucha más defensa y atrincheramiento.'}
+        defense_skill: 2
+        logistics_skill: 1
+        modifier: {army_defence_factor: 0.18, max_dig_in: 3, dig_in_speed: 0.3}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: APF}, {war_with: NRE}, {war_with: ZAL}]}
+        texto: {english: 'Arrives when war breaks out with the Federation, Rome or Albion.', spanish: 'Llega cuando estalla la guerra con la Federación, Roma o Albión.'}
+
+    - id: ASC_ley_comisaria_abendroth
+      rol: ministro
+      nombre: {english: 'Commissar Ruth Abendroth', spanish: 'Comisaria Ruth Abendroth'}
+      born: 2050
+      look: >-
+        Austrian woman of 50, small and wiry, a sharp nose, grey hair in a perfect bob, enormous dark eyes that miss nothing,
+        reading glasses on a red cord; a plain white-and-graphite Allocation Council uniform with a single red ribbon; she holds
+        a wooden lottery drum used for the sortition of the Council. Precise, warm voice, iron will.
+      lore:
+        english: 'Drawn by lot for the Allocation Council four times in a row: the odds of that are one in nine million, and nobody
+          has dared to check the drum. She assigns every bolt and every kilowatt of Europe, and she has never been wrong by more
+          than one per cent. Her secret, she says, is that she reads the complaints.'
+        spanish: 'Sorteada para el Consejo de Asignación cuatro veces seguidas: la probabilidad de eso es una en nueve millones, y nadie
+          se animó a revisar el bolillero. Asigna cada tornillo y cada kilovatio de Europa, y nunca se equivocó en más de un uno por
+          ciento. Su secreto, dice, es que lee las quejas.'
+      frase: {english: 'Everyone gets what they need. Exactly.', spanish: 'Cada uno recibe lo que necesita. Exactamente.'}
+      stats: {astucia: 3, carisma: 1}
+      rasgo:
+        id: mn_ley_asc_la_repartidora
+        name: {english: 'The Great Allocator', spanish: 'La Gran Repartidora'}
+        modifiers: {industrial_capacity_factory: 0.12, consumer_goods_factor: -0.05, stability_factor: 0.08}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: ASC_computo, value: 110}}
+        texto: {english: 'Needs 110 Compute.', spanish: 'Pide 110 de Cómputo.'}
+
+    - id: ASC_ley_profesor_arkhipov
+      rol: teorico
+      nombre: {english: 'Professor Lev Arkhipov', spanish: 'Profesor Lev Arkhipov'}
+      born: 2038
+      look: >-
+        Russian man of 62, frail and stooped, an enormous bald forehead, long white eyebrows, gentle mischievous eyes behind
+        thick old-fashioned glasses, a chalk-dusted graphite cardigan over a red shirt; he stands in front of a blackboard covered
+        in equations that become a machine eye. Gentle, absent-minded, a genius.
+      lore:
+        english: 'He wrote the first line of code of Plan 41 in 2061 on a stolen laptop in a squat in Leipzig. The Supercomputer of
+          Planning is, in a way, his grandchild, and it still uses his variable names. He has refused every medal and every
+          apartment; he wants only more computing time and a warm room.'
+        spanish: 'Escribió la primera línea de código del Plan 41 en 2061, en una laptop robada, en una casa tomada de Leipzig. La
+          Supercomputadora de Planificación es, de alguna forma, su nieta, y todavía usa sus nombres de variables. Rechazó cada medalla
+          y cada departamento; solo quiere más tiempo de cómputo y un cuarto calefaccionado.'
+      frase: {english: 'The machine is only as good as its questions.', spanish: 'La máquina es tan buena como sus preguntas.'}
+      stats: {astucia: 2}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_asc_arquitecto_del_plan
+        name: {english: 'Architect of the Plan', spanish: 'Arquitecto del Plan'}
+        modifiers: {research_speed_factor: 0.18, production_speed_buildings_factor: 0.05}
+      llave:
+        tipo: foco
+        foco: ASC_supercomputadora_de_planificacion
+        texto: {english: 'Arrives with the focus The Planning Supercomputer.', spanish: 'Llega con el foco La Supercomputadora de Planificación.'}
+
+  # ===========================================================================
+  FCU:
+    intro:
+      english: 'Everything in the Union has a price. These six have one too, and it is so high that only the Union at its peak can
+        pay it.'
+      spanish: 'Todo en la Unión tiene precio. Estos seis también, y es tan alto que solo la Unión en su mejor momento lo puede
+        pagar.'
+    personajes:
+    - id: FCU_ley_mariscal_osei
+      rol: mariscal
+      nombre: {english: 'Marshal Harlan "Blue Chip" Osei', spanish: 'Mariscal Harlan "Blue Chip" Osei'}
+      born: 2048
+      look: >-
+        Ghanaian-American man of 52, tall, bald and immaculate, a perfectly trimmed grey goatee, a gold molar visible in a
+        salesman's grin, mirrored aviator sunglasses pushed onto his head; a navy-and-silver tailored marshal's uniform cut like a
+        three-piece suit, a corporate lapel pin, a chrome swagger stick. Charismatic, ruthless, never off-camera.
+      lore:
+        english: 'The most expensive private general on the planet: his contract has a bonus per region taken and a penalty per day
+          of delay, and he has never paid a penalty. He calls his divisions portfolios and his casualties write-offs. The
+          shareholders love him; his soldiers love him more, because he always pays on time.'
+        spanish: 'El general privado más caro del planeta: su contrato tiene un bono por región tomada y una multa por día de atraso, y
+          nunca pagó una multa. A sus divisiones les dice carteras y a sus bajas, pérdidas contables. Los accionistas lo adoran; sus
+          soldados más, porque siempre paga a tiempo.'
+      frase: {english: 'Results guaranteed, or your money back.', spanish: 'Resultados garantizados, o le devolvemos su dinero.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 5, planning_skill: 6, logistics_skill: 8}
+      rasgos: [logistics_wizard, offensive_doctrine]
+      rasgo:
+        id: mn_ley_fcu_resultados_garantizados
+        name: {english: 'Results Guaranteed', spanish: 'Resultados Garantizados'}
+        desc: {english: 'A contract with penalties for delay: the best supplied army in the world, and it never stops.', spanish: 'Un contrato con multas por atraso: el ejército mejor abastecido del mundo, y no se para nunca.'}
+        logistics_skill: 2
+        attack_skill: 1
+        modifier: {supply_consumption_factor: -0.2, army_speed_factor: 0.1, army_org_factor: 0.08, army_attack_factor: 0.05}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: FCU_el_comandante_contratado}, {flag: FCU_forma_final}]}
+        texto: {english: 'Needs the focus The Contracted Commander or the Final Form proclaimed.', spanish: 'Pide el foco El Comandante Contratado o la Forma Final proclamada.'}
+
+    - id: FCU_ley_almirante_quintero
+      rol: almirante
+      nombre: {english: 'Admiral Marisol Quintero-Price', spanish: 'Almirante Marisol Quintero-Price'}
+      born: 2056
+      look: >-
+        Panamanian woman of 44, warm brown skin, black hair slicked back into a tight knot, gold hoop earrings, a sharp
+        confident half-smile, a thin scar through one eyebrow; a navy-blue admiral's coat with silver braid and a turquoise
+        corporate accent, a gold container-ship pendant; the locks of the Canal behind her. Glamorous, fearless, a dealmaker.
+      lore:
+        english: 'Born in Colón, she started as a pilot of the Canal locks and ended up owning the insurance company of every ship
+          that crosses it. When the High Seas threatened the Canal in 2097, she did not call the navy: she bought it a better one,
+          and took command herself. No convoy of hers has ever been lost uninsured.'
+        spanish: 'Nacida en Colón, empezó de práctica en las esclusas del Canal y terminó dueña de la aseguradora de cada barco que lo
+          cruza. Cuando la Alta Mar amenazó el Canal en 2097 no llamó a la marina: le compró una mejor y tomó el mando ella misma.
+          Ningún convoy suyo se perdió sin seguro.'
+      frase: {english: 'Every ship comes home. Or it pays double.', spanish: 'Cada barco vuelve a casa. O paga doble.'}
+      habilidades: {skill: 6, attack_skill: 6, defense_skill: 7, maneuvering_skill: 6, coordination_skill: 8}
+      rasgos: [fleet_protector, superior_tactician]
+      rasgo:
+        id: mn_ley_fcu_poliza_total
+        name: {english: 'Full Coverage Policy', spanish: 'Póliza Total'}
+        desc: {english: 'Her fleets are insured to the last bolt: tougher, better coordinated, and they hit where it pays.', spanish: 'Sus flotas están aseguradas hasta el último tornillo: más duras, mejor coordinadas y pegan donde conviene.'}
+        type: navy
+        coordination_skill: 2
+        defense_skill: 1
+        modifier: {naval_defense_factor: 0.12, naval_hit_chance: 0.08, naval_damage_factor: 0.08}
+      llave:
+        tipo: foco
+        foco: FCU_el_canal_asegurado
+        texto: {english: 'Arrives with the focus The Canal Secured.', spanish: 'Llega con el foco El Canal Asegurado.'}
+
+    - id: FCU_ley_generala_navarro
+      rol: general
+      nombre: {english: 'General Brooke "Hostile Takeover" Navarro', spanish: 'Generala Brooke "OPA Hostil" Navarro'}
+      born: 2066
+      look: >-
+        Texan-Mexican woman of 34, athletic, a wide aggressive grin, bleached platinum crew cut with a navy-blue streak, a
+        cybernetic chrome left arm, smudged black under the eyes like a football player; a navy armoured-corps jacket with silver
+        corporate patches, a championship belt slung over the shoulder. Brash, loud, unstoppable.
+      lore:
+        english: 'She ran a private armoured company that specialised in acquisitions: of refineries, of ports, once of a whole
+          state government. In the Awakening of 2110 she took Chicago in a single weekend and sent the shareholders a slideshow on
+          Monday. Her tanks have the share price painted on the turret.'
+        spanish: 'Tenía una empresa de blindados privada que se especializaba en adquisiciones: de refinerías, de puertos, una vez del
+          gobierno entero de un estado. En el Despertar de 2110 tomó Chicago en un solo fin de semana y el lunes les mandó a los
+          accionistas una presentación. Sus tanques tienen la cotización pintada en la torreta.'
+      frase: {english: 'Acquire. Merge. Repeat.', spanish: 'Adquirir. Fusionar. Repetir.'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 4, planning_skill: 6, logistics_skill: 6}
+      rasgos: [panzer_leader, desert_fox]
+      rasgo:
+        id: mn_ley_fcu_opa_hostil
+        name: {english: 'Hostile Takeover', spanish: 'OPA Hostil'}
+        desc: {english: 'Fast, armoured and merciless: more attack, breakthrough and speed.', spanish: 'Rápida, blindada y sin piedad: más ataque, ruptura y velocidad.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.1, breakthrough_factor: 0.15, army_speed_factor: 0.08}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: FCU_ley_general_burke
+      rol: general
+      nombre: {english: 'General Wes Tanaka-Burke', spanish: 'General Wes Tanaka-Burke'}
+      born: 2051
+      look: >-
+        Japanese-Irish-American man of 49, square glasses, neat greying side-parted hair, a gentle tired face, a pencil behind the
+        ear and an old insurance-adjuster clipboard; a rumpled navy field uniform with silver collar tabs, sleeves rolled, a
+        coffee thermos. Mild-mannered, methodical, unbreakable.
+      lore:
+        english: 'Thirty years as a claims adjuster for Castellane Mutual. When the war came, he did what he had always done: he
+          calculated the cost of every metre, and made the enemy pay it in full. They call it the Force Majeure Clause: where Burke
+          defends, the attacker''s losses always exceed the estimate.'
+        spanish: 'Treinta años de liquidador de siniestros en Castellane Mutual. Cuando llegó la guerra hizo lo que siempre había hecho:
+          calculó el costo de cada metro y se lo hizo pagar completo al enemigo. Le dicen la Cláusula de Fuerza Mayor: donde Burke
+          defiende, las pérdidas del que ataca siempre superan el presupuesto.'
+      frase: {english: 'That will be expensive. For them.', spanish: 'Eso va a salir caro. Para ellos.'}
+      habilidades: {skill: 5, attack_skill: 5, defense_skill: 8, planning_skill: 7, logistics_skill: 6}
+      rasgos: [defensive_doctrine, organizer]
+      rasgo:
+        id: mn_ley_fcu_fuerza_mayor
+        name: {english: 'Force Majeure Clause', spanish: 'Cláusula de Fuerza Mayor'}
+        desc: {english: 'Every metre costs the enemy in full: much more defence and organisation.', spanish: 'Cada metro le cuesta completo al enemigo: mucha más defensa y organización.'}
+        defense_skill: 2
+        planning_skill: 1
+        modifier: {army_defence_factor: 0.15, army_org_factor: 0.12, max_dig_in: 2}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: EFE}, {war_with: HSN}]}
+        texto: {english: 'Arrives when war breaks out with the Green Empire or the High Seas.', spanish: 'Llega cuando estalla la guerra con el Imperio Verde o la Alta Mar.'}
+
+    - id: FCU_ley_directora_ambrose
+      rol: ministro
+      nombre: {english: 'Chief Financial Officer Celeste Ambrose', spanish: 'Directora Financiera Celeste Ambrose'}
+      born: 2059
+      look: >-
+        Canadian woman of 41, porcelain skin, very sleek black bob with a silver streak, icy grey eyes, dark red lipstick, tiny
+        diamond studs; a severe navy power suit with silver pinstripes and a chrome lapel pin of an upward arrow; she holds a
+        glass tablet showing a rising line. Glacial, brilliant, never blinks.
+      lore:
+        english: 'She predicted the crash of 2094 a week early, sold everything the day before, and bought it back the day after for a
+          tenth. The Union has had four presidents since; she has signed the cheques of all of them. They say the dividend rises when
+          she smiles. Nobody has seen it rise much.'
+        spanish: 'Predijo el crash de 2094 una semana antes, vendió todo el día anterior y lo volvió a comprar al día siguiente por la
+          décima parte. La Unión tuvo cuatro presidentes desde entonces; ella firmó los cheques de todos. Dicen que el dividendo sube
+          cuando ella sonríe. Nadie lo vio subir mucho.'
+      frase: {english: 'Let us talk numbers.', spanish: 'Hablemos de números.'}
+      stats: {astucia: 3, prestigio: 1}
+      rasgo:
+        id: mn_ley_fcu_la_cfo
+        name: {english: 'The CFO of the Century', spanish: 'La Directora del Siglo'}
+        modifiers: {political_power_gain: 0.12, industrial_capacity_factory: 0.1, consumer_goods_factor: -0.04}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: FCU_dividendos, value: 80}}
+        texto: {english: 'Needs 80 Dividends.', spanish: 'Pide 80 de Dividendos.'}
+
+    - id: FCU_ley_doctor_arendt
+      rol: teorico
+      nombre: {english: 'Doctor Felix Arendt', spanish: 'Doctor Felix Arendt'}
+      born: 2063
+      look: >-
+        German-American man of 37, boyish and lanky, messy copper hair, a patchy beard, oversized augmented-reality glasses with
+        blue light, a navy hoodie under a silver-trimmed lab coat covered in company badges; a holographic patent document
+        floating over his palm. Nerdy, arrogant, delighted with himself.
+      lore:
+        english: 'He holds four thousand patents, two of them on ideas he had in his sleep. The Private Laboratories pay him a royalty
+          on every tank, every chip and every vaccine the Union makes, and he spends it all on more laboratories. He has never
+          finished a project on time and never started one that failed.'
+        spanish: 'Tiene cuatro mil patentes, dos sobre ideas que tuvo dormido. Los Laboratorios Privados le pagan regalías por cada
+          tanque, cada chip y cada vacuna que hace la Unión, y él se lo gasta todo en más laboratorios. Nunca terminó un proyecto a
+          tiempo y nunca empezó uno que fallara.'
+      frase: {english: 'Patent pending.', spanish: 'Patente en trámite.'}
+      stats: {astucia: 2}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_fcu_cuatro_mil_patentes
+        name: {english: 'Four Thousand Patents', spanish: 'Cuatro Mil Patentes'}
+        modifiers: {research_speed_factor: 0.16, production_speed_buildings_factor: 0.06}
+      llave:
+        tipo: foco
+        foco: FCU_laboratorios_privados
+        texto: {english: 'Arrives with the focus Private Laboratories.', spanish: 'Llega con el foco Laboratorios Privados.'}
+
+  # ===========================================================================
+  HSN:
+    intro:
+      english: 'The sea gives up its best people only once a generation. These six are what the Market has been saving for the day
+        it rules every strait.'
+      spanish: 'El mar devuelve a su mejor gente una vez por generación. Estos seis son lo que el Mercado venía guardando para el día
+        en que mande en todos los estrechos.'
+    personajes:
+    - id: HSN_ley_mariscal_kealoha
+      rol: mariscal
+      nombre: {english: 'Marshal Ikaika Kealoha', spanish: 'Mariscal Ikaika Kealoha'}
+      born: 2050
+      look: >-
+        Native Hawaiian man of 50, enormous and broad, a calm round face, long grey-black hair tied in a topknot, a full traditional
+        tattoo band across the jaw and neck, kind eyes; a teal-and-brass marine marshal's jacket open over a bare chest, a whale-bone
+        fish-hook pendant, a coiled mooring rope on his shoulder. Gentle giant, immovable, smiling.
+      lore:
+        english: 'The Admiral of Land: he never commanded a ship, only the men who jump off them. He took Guam from the beach with
+          a wave of marines that arrived on the morning tide exactly as he said it would, to the minute. He learned the tides from his
+          grandmother, who learned them from hers.'
+        spanish: 'El Almirante de Tierra: nunca mandó un barco, solo a los hombres que saltan de ellos. Tomó Guam desde la playa con una
+          ola de infantes de marina que llegó con la marea de la mañana exactamente cuando dijo, al minuto. Las mareas las aprendió de
+          su abuela, que las aprendió de la suya.'
+      frase: {english: 'The tide is coming. So are we.', spanish: 'Viene la marea. Y nosotros con ella.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 6, planning_skill: 7, logistics_skill: 6}
+      rasgos: [naval_invader, organizer]
+      rasgo:
+        id: mn_ley_hsn_hijo_de_la_marea
+        name: {english: 'Son of the Tide', spanish: 'Hijo de la Marea'}
+        desc: {english: 'His marines land with the tide and do not stop: attack, speed and organisation.', spanish: 'Sus infantes desembarcan con la marea y no se detienen: ataque, velocidad y organización.'}
+        attack_skill: 1
+        planning_skill: 2
+        modifier: {army_attack_factor: 0.1, army_speed_factor: 0.1, army_org_factor: 0.1}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: HSN_el_almirante_de_tierra}, {flag: HSN_forma_final}]}
+        texto: {english: 'Needs the focus The Admiral of Land or the Final Form proclaimed.', spanish: 'Pide el foco El Almirante de Tierra o la Forma Final proclamada.'}
+
+    - id: HSN_ley_almirante_arriaga
+      rol: almirante
+      nombre: {english: 'Admiral Soledad Arriaga', spanish: 'Almirante Soledad Arriaga'}
+      born: 2047
+      look: >-
+        Chilean-Filipina woman of 53, weathered bronze skin, salt-and-pepper hair cut short and wind-tousled, deep crow's feet,
+        an eye patch of polished brass over the left eye, the other eye bright and amused; a teal admiral's coat with heavy brass
+        buttons and rope braid, a tarnished insurer's seal ring; one hand on a brass telescope. Salty, cunning, magnetic.
+      lore:
+        english: 'Nobody beats the Insurer: she knows the price of every ship afloat, and she sinks only the expensive ones. She lost
+          her eye at Malacca in 2088 and charged the Union for it, with interest, for twelve years. The captains of the Market drink
+          to her before they sail, and pay her a premium after.'
+        spanish: 'A la Aseguradora no le gana nadie: sabe el precio de cada barco que flota, y hunde solo los caros. Perdió el ojo en
+          Malaca en 2088 y se lo cobró a la Unión, con intereses, durante doce años. Los capitanes del Mercado brindan por ella antes de
+          zarpar, y le pagan la prima después.'
+      frase: {english: 'Everything at sea has a price.', spanish: 'Todo en el mar tiene precio.'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 6, maneuvering_skill: 7, coordination_skill: 6}
+      rasgos: [blue_water_expert, superior_tactician]
+      rasgo:
+        id: mn_ley_hsn_la_aseguradora
+        name: {english: 'The Insurer', spanish: 'La Aseguradora'}
+        desc: {english: 'She knows the price of every ship: more damage, more speed, and she always hits the expensive ones.', spanish: 'Sabe el precio de cada barco: más daño, más velocidad, y siempre le pega a los caros.'}
+        type: navy
+        attack_skill: 2
+        maneuvering_skill: 1
+        modifier: {naval_damage_factor: 0.15, naval_speed_factor: 0.1, naval_hit_chance: 0.06}
+      llave:
+        tipo: foco
+        foco: HSN_dominio_de_las_rutas
+        texto: {english: 'Arrives with the focus Dominion of the Routes.', spanish: 'Llega con el foco Dominio de las Rutas.'}
+
+    - id: HSN_ley_general_nguyen
+      rol: general
+      nombre: {english: 'General Bao Nguyen-Strand', spanish: 'General Bao Nguyen-Strand'}
+      born: 2062
+      look: >-
+        Vietnamese-Norwegian man of 38, lean and wiry, a narrow foxlike face, long black hair tied back, a thin moustache, a gold
+        tooth, a red bandana; a teal boarding jacket with brass buckles over a striped sailor shirt, two curved boarding blades
+        crossed on his back. Grinning, quick, a pirate in uniform.
+      lore:
+        english: 'The Corsair of Malacca boarded forty tankers before the Market gave him a commission instead of a rope. In the
+          Awakening of 2110 he took the port of Haiphong with three hundred men in fishing boats while the garrison watched the sea
+          for warships. He fights on land exactly as he did at sea: from the side nobody watches.'
+        spanish: 'El Corsario de Malaca abordó cuarenta petroleros antes de que el Mercado le diera un nombramiento en vez de una soga.
+          En el Despertar de 2110 tomó el puerto de Haiphong con trescientos hombres en botes de pesca mientras la guarnición miraba el
+          mar buscando barcos de guerra. Pelea en tierra igual que en el mar: por el costado que nadie mira.'
+      frase: {english: 'Board them!', spanish: '¡Al abordaje!'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 4, planning_skill: 6, logistics_skill: 5}
+      rasgos: [trickster, commando]
+      rasgo:
+        id: mn_ley_hsn_corsario_de_malaca
+        name: {english: 'Corsair of Malacca', spanish: 'Corsario de Malaca'}
+        desc: {english: 'Always from the side nobody watches: attack, breakthrough and surprise.', spanish: 'Siempre por el costado que nadie mira: ataque, ruptura y sorpresa.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.12, breakthrough_factor: 0.12, recon_factor: 0.2}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: HSN_ley_generala_te_rangi
+      rol: general
+      nombre: {english: 'General Mere Te Rangi', spanish: 'Generala Mere Te Rangi'}
+      born: 2057
+      look: >-
+        Māori woman of 43, strong and stocky, a traditional moko kauae tattoo on her chin, long black hair with a white streak tied
+        with a greenstone clasp, a fierce direct stare; a teal armoured vest over a brass-buttoned field jacket, a carved wooden
+        taiaha staff in her hand. Proud, defiant, protective.
+      lore:
+        english: 'She commands the garrisons of the floating cities, the hardest thing in the world to defend: a city that has no
+          hills, no rivers and no rear. In thirty years not one has fallen while she held it. When the enemy comes, she performs the
+          haka on the pier, and her soldiers answer from every deck.'
+        spanish: 'Manda las guarniciones de las ciudades flotantes, lo más difícil del mundo de defender: una ciudad sin colinas, sin
+          ríos y sin retaguardia. En treinta años no cayó ninguna mientras ella la sostuvo. Cuando viene el enemigo baila el haka en el
+          muelle, y sus soldados le contestan desde cada cubierta.'
+      frase: {english: 'This is our ground, even when it floats.', spanish: 'Este es nuestro suelo, aunque flote.'}
+      habilidades: {skill: 5, attack_skill: 5, defense_skill: 8, planning_skill: 6, logistics_skill: 6}
+      rasgos: [defensive_doctrine, infantry_leader]
+      rasgo:
+        id: mn_ley_hsn_la_ciudad_que_no_cae
+        name: {english: 'The City That Does Not Fall', spanish: 'La Ciudad que no Cae'}
+        desc: {english: 'Defends what cannot be defended: much more defence and morale.', spanish: 'Defiende lo que no se puede defender: mucha más defensa y moral.'}
+        defense_skill: 2
+        modifier: {army_defence_factor: 0.15, army_morale_factor: 0.15, army_org_factor: 0.05}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: FCU}, {war_with: SHD}, {war_with: ZJP}]}
+        texto: {english: 'Arrives when war breaks out with the Union, the Directorate or Japan.', spanish: 'Llega cuando estalla la guerra con la Unión, el Directorio o Japón.'}
+
+    - id: HSN_ley_tesorero_ugarte
+      rol: ministro
+      nombre: {english: 'Treasurer of the Ports Rafael Ugarte-Lim', spanish: 'Tesorero de los Puertos Rafael Ugarte-Lim'}
+      born: 2043
+      look: >-
+        Peruvian-Singaporean man of 57, plump and dapper, a bald crown with neat grey sides, a pencil moustache, half-moon glasses,
+        a jovial clever smile; a teal silk waistcoat with brass coin buttons and a gold watch chain, an abacus of brass beads
+        under his hand. Genial, shrewd, a born negotiator.
+      lore:
+        english: 'Every coin that crosses a strait of the Market passes, at some point, through one of his ledgers. He invented the
+          floating toll: it rises with the wind, the tide and the nationality of the flag, and nobody has ever managed to calculate
+          it in advance except him. He is the only man in the Market both sides of every war call friend.'
+        spanish: 'Cada moneda que cruza un estrecho del Mercado pasa, en algún momento, por uno de sus libros. Inventó el peaje flotante:
+          sube con el viento, la marea y la nacionalidad de la bandera, y nadie consiguió calcularlo de antemano salvo él. Es el único
+          hombre del Mercado al que los dos lados de cada guerra le dicen amigo.'
+      frase: {english: 'Everyone pays. Gladly.', spanish: 'Todos pagan. Con gusto.'}
+      stats: {astucia: 2, carisma: 2}
+      rasgo:
+        id: mn_ley_hsn_el_peaje_flotante
+        name: {english: 'Father of the Floating Toll', spanish: 'Padre del Peaje Flotante'}
+        modifiers: {trade_opinion_factor: 0.25, political_power_gain: 0.12, industrial_capacity_dockyard: 0.12}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: HSN_peaje, value: 80}}
+        texto: {english: 'Needs 80 Toll.', spanish: 'Pide 80 de Peaje.'}
+
+    - id: HSN_ley_contralmirante_raman
+      rol: estado_mayor
+      nombre: {english: 'Rear Admiral Ayesha Raman', spanish: 'Contralmirante Ayesha Raman'}
+      born: 2060
+      look: >-
+        Tamil-Malaysian woman of 40, dark skin, a long elegant neck, black hair in a low knot with a brass compass pin, a small
+        nose ring, intelligent amused eyes; a teal staff uniform with brass aiguillettes, drafting dividers in one hand and a
+        rolled chart of the Pacific under her arm. Brilliant, calm, sees ten moves ahead.
+      lore:
+        english: 'She drew the convoy routes the Market still uses: forty thousand ships a year that arrive on time and almost never
+          meet a submarine. At the Office of Naval Patents they say she can read a fleet by its wake. She has never fired a gun;
+          every captain of the Market owes her his ship.'
+        spanish: 'Dibujó las rutas de convoyes que el Mercado todavía usa: cuarenta mil barcos por año que llegan a tiempo y casi nunca
+          se cruzan con un submarino. En la Oficina de Patentes Navales dicen que lee una flota por su estela. Nunca disparó un arma;
+          cada capitán del Mercado le debe el barco.'
+      frase: {english: 'Follow the line I drew.', spanish: 'Sigan la línea que dibujé.'}
+      stats: {astucia: 2}
+      cargo: {slot: navy_chief, ledger: navy, cost: 100}
+      rasgo:
+        id: mn_ley_hsn_la_cartografa
+        name: {english: 'The Cartographer of Convoys', spanish: 'La Cartógrafa de los Convoyes'}
+        modifiers: {convoy_escort_efficiency: 0.2, naval_damage_factor: 0.08, experience_gain_navy: 0.1}
+      llave:
+        tipo: foco
+        foco: HSN_la_oficina_de_patentes_navales
+        texto: {english: 'Arrives with the focus The Office of Naval Patents.', spanish: 'Llega con el foco La Oficina de Patentes Navales.'}
+
+  # ===========================================================================
+  NAS:
+    intro:
+      english: 'The Sun does not hurry. These six have waited centuries in the stories of the mountain; they come down only when
+        the Kingdom has earned its light.'
+      spanish: 'El Sol no se apura. Estos seis esperaron siglos en los cuentos de la montaña; bajan solo cuando el Reino se ganó su
+        luz.'
+    personajes:
+    - id: NAS_ley_mariscal_huaman
+      rol: mariscal
+      nombre: {english: 'Marshal Huamán Quispe', spanish: 'Mariscal Huamán Quispe'}
+      born: 2046
+      look: >-
+        Quechua man of 54, deeply weathered copper skin, high cheekbones, a hawk nose, long grey-black hair under a chullo-shaped
+        gold-trimmed helmet, eyes like flint; a crimson-and-gold Inca marshal's tunic with tocapu geometric patterns, a puma pelt
+        across the shoulders, a gold star-headed mace. Fierce, solemn, mythic.
+      lore:
+        english: 'They call him the Puma of Vilcabamba: he fought the mining companies for twenty years from the cloud forest and
+          was never caught, because he never came down. Now he comes down with the Army of the Sun behind him, and the passes that
+          protected him for twenty years protect the Kingdom.'
+        spanish: 'Le dicen el Puma de Vilcabamba: peleó contra las mineras veinte años desde la selva de nubes y nunca lo agarraron,
+          porque nunca bajó. Ahora baja con el Ejército del Sol detrás, y los pasos que lo protegieron veinte años protegen al
+          Reino.'
+      frase: {english: 'The mountain fights with us.', spanish: 'La montaña pelea con nosotros.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 7, planning_skill: 6, logistics_skill: 5}
+      rasgos: [hill_fighter, offensive_doctrine]
+      rasgo:
+        id: mn_ley_nas_el_puma_de_vilcabamba
+        name: {english: 'The Puma of Vilcabamba', spanish: 'El Puma de Vilcabamba'}
+        desc: {english: 'Twenty years undefeated in the mountains: attack, defence and a morale that does not break.', spanish: 'Veinte años invicto en la montaña: ataque, defensa y una moral que no se quiebra.'}
+        attack_skill: 1
+        defense_skill: 1
+        modifier: {army_attack_factor: 0.1, army_defence_factor: 0.1, army_morale_factor: 0.15}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: NAS_el_general_del_sol}, {flag: NAS_forma_final}]}
+        texto: {english: 'Needs the focus The General of the Sun or the Final Form proclaimed.', spanish: 'Pide el foco El General del Sol o la Forma Final proclamada.'}
+
+    - id: NAS_ley_almiranta_ccori
+      rol: almirante
+      nombre: {english: 'Admiral Killa Ccori', spanish: 'Almiranta Killa Ccori'}
+      born: 2059
+      look: >-
+        Aymara-Peruvian woman of 41, round dark face, a silver moon-disc pendant on the forehead, black hair in two long braids
+        with silver thread, serene heavy-lidded eyes; a deep blue naval coat with gold sun buttons and a woven aguayo sash, a gold
+        astrolabe in her hands. Serene, mystical, precise.
+      lore:
+        english: 'Killa means moon, and she navigates by it: her fleet sails out of Callao only on the nights the Temple chooses, and
+          it has never been found by an enemy on those nights. The sailors of the Kingdom say the moon is her sister, and the sea
+          knows it.'
+        spanish: 'Killa quiere decir luna, y navega por ella: su flota sale del Callao solo las noches que elige el Templo, y en esas
+          noches ningún enemigo la encontró nunca. Los marineros del Reino dicen que la luna es su hermana, y que el mar lo sabe.'
+      frase: {english: 'Tonight the moon is ours.', spanish: 'Esta noche la luna es nuestra.'}
+      habilidades: {skill: 6, attack_skill: 6, defense_skill: 6, maneuvering_skill: 8, coordination_skill: 7}
+      rasgos: [blue_water_expert, spotter]
+      rasgo:
+        id: mn_ley_nas_hermana_de_la_luna
+        name: {english: 'Sister of the Moon', spanish: 'Hermana de la Luna'}
+        desc: {english: 'Sails on the nights the Temple chooses: unseen, faster, and she strikes first.', spanish: 'Navega las noches que elige el Templo: sin ser vista, más rápida, y pega primero.'}
+        type: navy
+        maneuvering_skill: 2
+        coordination_skill: 1
+        modifier: {naval_speed_factor: 0.12, naval_detection: 0.2, naval_retreat_chance: 0.12, naval_damage_factor: 0.06}
+      llave:
+        tipo: foco
+        foco: NAS_la_flota_del_pacifico
+        texto: {english: 'Arrives with the focus The Pacific Fleet.', spanish: 'Llega con el foco La Flota del Pacífico.'}
+
+    - id: NAS_ley_general_condori
+      rol: general
+      nombre: {english: 'General Amaru Condori', spanish: 'General Amaru Condori'}
+      born: 2065
+      look: >-
+        Bolivian Aymara man of 35, young and fierce, a lean hard face, a feathered gold condor crest on his helmet, black hair to
+        the shoulders, a jaguar-tooth earring; crimson tunic with gold tocapu and a short black cape, a carbon-fibre sling wrapped
+        around his fist. Wild, charismatic, fearless.
+      lore:
+        english: 'Amaru is the serpent of the old stories, and he strikes like one. In the Awakening of 2110 he took La Paz back
+          with the miners of Potosí and their dynamite, and the Sapa Inti gave him the condor crest that nobody had worn for five
+          hundred years. The young of the Kingdom want to be him.'
+        spanish: 'Amaru es la serpiente de los cuentos viejos, y pega como ella. En el Despertar de 2110 recuperó La Paz con los mineros
+          de Potosí y su dinamita, y el Sapa Inti le dio la cresta de cóndor que nadie había usado en quinientos años. Los jóvenes del
+          Reino quieren ser él.'
+      frase: {english: 'From the sky, like the condor!', spanish: '¡Desde el cielo, como el cóndor!'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 5, planning_skill: 5, logistics_skill: 5}
+      rasgos: [offensive_doctrine, commando]
+      rasgo:
+        id: mn_ley_nas_la_serpiente_amaru
+        name: {english: 'The Serpent Amaru', spanish: 'La Serpiente Amaru'}
+        desc: {english: 'Strikes fast and from above: more attack, breakthrough and speed.', spanish: 'Pega rápido y desde arriba: más ataque, ruptura y velocidad.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.12, breakthrough_factor: 0.12, army_speed_factor: 0.06}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: NAS_ley_generala_huallpa
+      rol: general
+      nombre: {english: 'General Sisa Huallpa', spanish: 'Generala Sisa Huallpa'}
+      born: 2053
+      look: >-
+        Quechua woman of 47, strong square face, wind-burnt cheeks, black hair in a single braid under a broad-brimmed felt hat
+        with a gold band, steady patient eyes; a crimson-and-earth-brown terraced-farmer's poncho over a gold-trimmed field tunic,
+        a stone-tipped surveyor's staff. Calm, stubborn, unbreakable.
+      lore:
+        english: 'She rebuilt the terraces of the Sacred Valley stone by stone, the way the old builders did, and then rebuilt them
+          as fortresses. Every terrace is a trench, every wall a bunker, and every valley under her command is a staircase the enemy
+          has to climb under fire.'
+        spanish: 'Reconstruyó las terrazas del Valle Sagrado piedra por piedra, como los constructores viejos, y después las volvió a
+          construir como fortalezas. Cada terraza es una trinchera, cada muro un búnker, y cada valle bajo su mando es una escalera que
+          el enemigo tiene que subir bajo fuego.'
+      frase: {english: 'Let them climb.', spanish: 'Que suban.'}
+      habilidades: {skill: 5, attack_skill: 4, defense_skill: 8, planning_skill: 6, logistics_skill: 7}
+      rasgos: [hill_fighter, defensive_doctrine]
+      rasgo:
+        id: mn_ley_nas_la_escalera_de_piedra
+        name: {english: 'The Stone Staircase', spanish: 'La Escalera de Piedra'}
+        desc: {english: 'Every valley a fortress: much more defence and entrenchment.', spanish: 'Cada valle una fortaleza: mucha más defensa y atrincheramiento.'}
+        defense_skill: 2
+        logistics_skill: 1
+        modifier: {army_defence_factor: 0.18, max_dig_in: 3, dig_in_speed: 0.25}
+      llave:
+        tipo: evento
+        cuando: {war_with: EFE}
+        texto: {english: 'Arrives when war breaks out with the Green Empire.', spanish: 'Llega cuando estalla la guerra con el Imperio Verde.'}
+
+    - id: NAS_ley_quipucamayoc_atoc
+      rol: ministro
+      nombre: {english: 'High Quipucamayoc Atoc Yupanqui', spanish: 'Gran Quipucamayoc Atoc Yupanqui'}
+      born: 2040
+      look: >-
+        Quechua man of 60, thin and ascetic, a long serene face, cropped white hair, a gold ear spool, deeply lined hands; a white
+        and gold ceremonial tunic with tocapu squares, holding a huge knotted quipu of coloured cords that cascades to the floor
+        and glows faintly with fibre-optic light at the knots. Wise, quiet, all-knowing.
+      lore:
+        english: 'Keeper of the Great Quipu, the knotted cords that hold the accounts of the Kingdom: every llama, every terrace and
+          every soldier, knotted in fibre optics that read themselves. He has never written a number in his life. When he ties a
+          knot, a granary fills in Cusco.'
+        spanish: 'Guardián del Gran Quipu, los cordones anudados que llevan las cuentas del Reino: cada llama, cada terraza y cada
+          soldado, anudados en fibra óptica que se lee sola. Nunca en su vida escribió un número. Cuando ata un nudo, se llena un
+          granero en el Cusco.'
+      frase: {english: 'Everything is in the knots.', spanish: 'Todo está en los nudos.'}
+      stats: {astucia: 3, prestigio: 1}
+      rasgo:
+        id: mn_ley_nas_el_gran_quipu
+        name: {english: 'Keeper of the Great Quipu', spanish: 'Guardián del Gran Quipu'}
+        modifiers: {stability_factor: 0.12, political_power_gain: 0.12, production_speed_buildings_factor: 0.1}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: NAS_inti, value: 60}}
+        texto: {english: 'Needs 60 Sacred Light.', spanish: 'Pide 60 de Luz sagrada.'}
+
+    - id: NAS_ley_amauta_chaska
+      rol: teorico
+      nombre: {english: 'Amauta Chaska Ticona', spanish: 'Amauta Chaska Ticona'}
+      born: 2071
+      look: >-
+        Quechua-Aymara woman of 29, bright-eyed, freckles of gold paint on the cheekbones like stars, black hair loose and very
+        long with tiny gold star beads, a quick bright smile; a deep blue scholar's tunic embroidered with constellations in gold,
+        a brass star-sighting instrument in her hands. Brilliant, playful, visionary.
+      lore:
+        english: 'Chaska is the morning star, and she saw something at the Observatory of the Sun that nobody had seen: how to
+          store the light of the Inti in crystals of the salt flats. The old astronomers wanted to burn her notebooks. The Sapa Inti
+          read them in one night and gave her the Observatory.'
+        spanish: 'Chaska es la estrella de la mañana, y vio en el Observatorio del Sol algo que nadie había visto: cómo guardar la luz
+          del Inti en los cristales de los salares. Los astrónomos viejos querían quemarle los cuadernos. El Sapa Inti los leyó en una
+          noche y le dio el Observatorio.'
+      frase: {english: 'The light can be kept.', spanish: 'La luz se puede guardar.'}
+      stats: {carisma: 1, astucia: 2}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_nas_la_estrella_de_la_manana
+        name: {english: 'The Morning Star', spanish: 'La Estrella de la Mañana'}
+        modifiers: {research_speed_factor: 0.16, industrial_capacity_factory: 0.06}
+      llave:
+        tipo: foco
+        foco: NAS_observatorio_del_sol
+        texto: {english: 'Arrives with the focus The Observatory of the Sun.', spanish: 'Llega con el foco El Observatorio del Sol.'}
+
+  # ===========================================================================
+  SHD:
+    intro:
+      english: 'Harmony is not the absence of great people: it is great people in their exact place. These six have been waiting
+        for theirs.'
+      spanish: 'La armonía no es la falta de grandes personas: es cada gran persona en su lugar exacto. Estos seis estaban esperando
+        el suyo.'
+    personajes:
+    - id: SHD_ley_mariscala_lu
+      rol: mariscal
+      nombre: {english: 'Marshal Lu Wenjing', spanish: 'Mariscala Lu Wenjing'}
+      born: 2048
+      look: >-
+        Han Chinese woman of 52, slender, an oval composed face, silver hair in a precise low bun held by a jade pin, very still
+        dark eyes; a jade-green and steel-grey high-collared marshal's tunic with a bi-disc insignia, white gloves, one hand
+        resting on a brass floodgate wheel. Serene, absolute, never raises her voice.
+      lore:
+        english: 'The Floodgate: in the Great Flood of 2089 she opened the dams of the Yellow River at the exact hour that drowned
+          the rebel army and spared the cities, and she had calculated it a year before. She plans every offensive like a release
+          of water: slowly, to the litre, and then all at once.'
+        spanish: 'La Compuerta: en la Gran Crecida de 2089 abrió las represas del Río Amarillo a la hora exacta que ahogó al ejército
+          rebelde y salvó a las ciudades, y lo había calculado un año antes. Planea cada ofensiva como una suelta de agua: despacio, al
+          litro, y después de golpe.'
+      frase: {english: 'Open the gates.', spanish: 'Abran las compuertas.'}
+      habilidades: {skill: 6, attack_skill: 6, defense_skill: 6, planning_skill: 8, logistics_skill: 7}
+      rasgos: [brilliant_strategist, logistics_wizard]
+      rasgo:
+        id: mn_ley_shd_la_compuerta
+        name: {english: 'The Floodgate', spanish: 'La Compuerta'}
+        desc: {english: 'Plans like a release of water: much more planning, and then the flood.', spanish: 'Planea como una suelta de agua: mucha más planificación, y después la crecida.'}
+        planning_skill: 2
+        logistics_skill: 1
+        modifier: {max_planning: 0.25, planning_speed: 0.25, breakthrough_factor: 0.1, supply_consumption_factor: -0.08}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: SHD_el_general_de_la_crecida}, {flag: SHD_forma_final}]}
+        texto: {english: 'Needs the focus The General of the Flood or the Final Form proclaimed.', spanish: 'Pide el foco El General de la Crecida o la Forma Final proclamada.'}
+
+    - id: SHD_ley_almirante_zheng
+      rol: almirante
+      nombre: {english: 'Admiral Zheng Lianhua', spanish: 'Almirante Zheng Lianhua'}
+      born: 2054
+      look: >-
+        Cantonese man of 46, tall, a long dignified face, a neat black goatee, greying temples, calm hooded eyes; a jade-green
+        double-breasted admiral's coat with steel buttons and a white silk scarf, a ceremonial bronze compass in a lacquered box
+        in his hands. Dignified, ambitious, a scholar of the sea.
+      lore:
+        english: 'He claims descent from the admiral of the treasure fleets and has rebuilt them: ships five times larger than any in
+          the China Sea, launched in Canton every forty days. He sails with a library on board and reads the old voyages aloud to the
+          officers. The Directorate gave him the sea; he wants the oceans.'
+        spanish: 'Dice que desciende del almirante de las flotas del tesoro, y las reconstruyó: barcos cinco veces más grandes que
+          cualquiera del Mar de China, botados en Cantón cada cuarenta días. Navega con una biblioteca a bordo y les lee en voz alta los
+          viajes viejos a los oficiales. El Directorio le dio el mar; él quiere los océanos.'
+      frase: {english: 'The treasure fleet sails again.', spanish: 'La flota del tesoro vuelve a zarpar.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 7, maneuvering_skill: 5, coordination_skill: 8}
+      rasgos: [superior_tactician, blue_water_expert]
+      rasgo:
+        id: mn_ley_shd_la_flota_del_tesoro
+        name: {english: 'The Treasure Fleet', spanish: 'La Flota del Tesoro'}
+        desc: {english: 'Fleets of giants in perfect order: damage, defence and coordination.', spanish: 'Flotas de gigantes en perfecto orden: daño, defensa y coordinación.'}
+        type: navy
+        coordination_skill: 2
+        attack_skill: 1
+        modifier: {naval_damage_factor: 0.12, naval_defense_factor: 0.12, naval_hit_chance: 0.05}
+      llave:
+        tipo: foco
+        foco: SHD_la_flota_del_mar_de_china
+        texto: {english: 'Arrives with the focus The China Sea Fleet.', spanish: 'Llega con el foco La Flota del Mar de China.'}
+
+    - id: SHD_ley_general_bayar
+      rol: general
+      nombre: {english: 'General Bayar Ochirbat', spanish: 'General Bayar Ochirbat'}
+      born: 2063
+      look: >-
+        Mongolian man of 37, broad weathered face, wind-reddened cheeks, narrow laughing eyes, a long black horsetail of hair, a
+        wolf-fur collar over a steel-grey armoured-cavalry tunic with jade tabs, a horsehead-fiddle charm and goggles around his
+        neck, a hovertank behind him on the steppe. Exuberant, bold, a horseman.
+      lore:
+        english: 'He commands the hover cavalry of the steppe: tanks that float a metre above the grass and cross Mongolia in a day.
+          In the Awakening of 2110 he rode around the whole Siberian army in a single night and was having breakfast behind its
+          headquarters at dawn. He still sings to his machines in the old way.'
+        spanish: 'Manda la caballería flotante de la estepa: tanques que flotan a un metro del pasto y cruzan Mongolia en un día. En el
+          Despertar de 2110 rodeó a todo el ejército de Siberia en una sola noche y al amanecer estaba desayunando detrás de su cuartel
+          general. Todavía les canta a sus máquinas como se hacía antes.'
+      frase: {english: 'The steppe has no walls.', spanish: 'La estepa no tiene paredes.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 5, planning_skill: 6, logistics_skill: 6}
+      rasgos: [panzer_leader, winter_specialist]
+      rasgo:
+        id: mn_ley_shd_la_caballeria_flotante
+        name: {english: 'The Hover Cavalry', spanish: 'La Caballería Flotante'}
+        desc: {english: 'Rides around everything: much more speed, breakthrough and attack.', spanish: 'Rodea todo: mucha más velocidad, ruptura y ataque.'}
+        attack_skill: 1
+        logistics_skill: 1
+        modifier: {army_speed_factor: 0.15, breakthrough_factor: 0.12, army_attack_factor: 0.06}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: SHD_ley_generala_qiu
+      rol: general
+      nombre: {english: 'General Qiu Yanmei', spanish: 'Generala Qiu Yanmei'}
+      born: 2056
+      look: >-
+        Sichuanese woman of 44, compact and strong, a round face with a stern mouth, short practical black hair, a pale scar along
+        the jaw; a steel-grey field uniform with jade collar tabs, a concrete-grey poncho, a brass-cased engineer's level in her
+        hand, rain on her shoulders. Stern, tireless, unshakable.
+      lore:
+        english: 'The Wall of Water: she defended the Three Gorges for six months against an army four times larger by flooding
+          every valley in front of it, one by one, in the exact order she had written on a single sheet of paper. The sheet is in a
+          museum in Chongqing. She kept a copy.'
+        spanish: 'La Muralla de Agua: defendió las Tres Gargantas seis meses contra un ejército cuatro veces más grande inundando cada
+          valle delante de él, uno por uno, en el orden exacto que había escrito en una sola hoja. La hoja está en un museo de
+          Chongqing. Ella se guardó una copia.'
+      frase: {english: 'The water decides. I decide the water.', spanish: 'Decide el agua. El agua la decido yo.'}
+      habilidades: {skill: 5, attack_skill: 5, defense_skill: 8, planning_skill: 7, logistics_skill: 6}
+      rasgos: [defensive_doctrine, engineer_officer]
+      rasgo:
+        id: mn_ley_shd_la_muralla_de_agua
+        name: {english: 'The Wall of Water', spanish: 'La Muralla de Agua'}
+        desc: {english: 'Every valley in front of her floods in order: much more defence and entrenchment.', spanish: 'Cada valle delante de ella se inunda en orden: mucha más defensa y atrincheramiento.'}
+        defense_skill: 2
+        planning_skill: 1
+        modifier: {army_defence_factor: 0.15, max_dig_in: 3, dig_in_speed: 0.3, army_org_factor: 0.05}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: HSN}, {war_with: ZJP}]}
+        texto: {english: 'Arrives when war breaks out with the High Seas or Japan.', spanish: 'Llega cuando estalla la guerra con la Alta Mar o Japón.'}
+
+    - id: SHD_ley_secretario_fang
+      rol: ministro
+      nombre: {english: 'Secretary of Harmony Fang Shiyu', spanish: 'Secretario de Armonía Fang Shiyu'}
+      born: 2041
+      look: >-
+        Han Chinese man of 59, gaunt and elegant, a long white wispy beard, thin wire spectacles, a high scholar's forehead,
+        mild amused eyes; a jade-green silk robe-jacket with a steel-grey collar, holding three thin silver needles balanced on
+        one fingertip. Serene, ironic, impossible to read.
+      lore:
+        english: 'The three needles of the Directorate (Production, Order and the People) have never been in balance for more than a
+          month, except during the eleven years he was Secretary. He was retired by a jealous committee in 2094; the needles started
+          to tremble the next morning. He has been waiting, with a cup of tea, to be called back.'
+        spanish: 'Las tres agujas del Directorio (la Producción, el Orden y el Pueblo) nunca estuvieron en equilibrio más de un mes,
+          salvo los once años en que él fue Secretario. Lo jubiló un comité celoso en 2094; las agujas empezaron a temblar a la mañana
+          siguiente. Hace años que espera, con una taza de té, que lo vuelvan a llamar.'
+      frase: {english: 'Balance is a verb.', spanish: 'El equilibrio es un verbo.'}
+      stats: {astucia: 3, prestigio: 1}
+      rasgo:
+        id: mn_ley_shd_las_tres_agujas
+        name: {english: 'Master of the Three Needles', spanish: 'Maestro de las Tres Agujas'}
+        modifiers: {stability_factor: 0.15, political_power_gain: 0.12, war_support_factor: 0.05}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: SHD_mandato, value: 80}}
+        texto: {english: 'Needs 80 Mandate of Heaven.', spanish: 'Pide 80 de Mandato del Cielo.'}
+
+    - id: SHD_ley_ingeniera_wei
+      rol: teorico
+      nombre: {english: 'Chief Engineer Wei Lanting', spanish: 'Ingeniera Jefe Wei Lanting'}
+      born: 2067
+      look: >-
+        Han Chinese woman of 33, sharp clever face, an asymmetric black bob with one jade-dyed lock, thin black-framed glasses,
+        ink on her fingers; a steel-grey engineer's jacket with jade piping over a white shirt, a translucent jade tablet showing
+        a river delta in light. Brilliant, impatient, restless.
+      lore:
+        english: 'At twenty-six she redesigned the Institute of the Flow: a model of every river in China, every drop, every hour,
+          running a year ahead of the real ones. Since then no flood has surprised the Directorate. The old engineers say she is
+          too young. The rivers do not seem to mind.'
+        spanish: 'A los veintiséis rediseñó el Instituto del Caudal: un modelo de cada río de China, cada gota, cada hora, que corre un
+          año adelantado a los de verdad. Desde entonces ninguna crecida sorprendió al Directorio. Los ingenieros viejos dicen que es
+          demasiado joven. A los ríos no parece importarles.'
+      frase: {english: 'I already know where the water will be.', spanish: 'Ya sé dónde va a estar el agua.'}
+      stats: {astucia: 2}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_shd_el_modelo_del_caudal
+        name: {english: 'Author of the Model of the Flow', spanish: 'Autora del Modelo del Caudal'}
+        modifiers: {research_speed_factor: 0.15, production_speed_buildings_factor: 0.08}
+      llave:
+        tipo: foco
+        foco: SHD_instituto_del_caudal
+        texto: {english: 'Arrives with the focus The Institute of the Flow.', spanish: 'Llega con el foco El Instituto del Caudal.'}
+
+  # ===========================================================================
+  APF:
+    intro:
+      english: 'I am because we are. These six belong to the whole continent, and they will only come when the councils are
+        strong enough to share them.'
+      spanish: 'Soy porque somos. Estos seis son de todo el continente, y solo van a venir cuando los consejos sean lo bastante
+        fuertes para compartirlos.'
+    personajes:
+    - id: APF_ley_mariscala_dube
+      rol: mariscal
+      nombre: {english: 'Marshal Nomvula Dube', spanish: 'Mariscala Nomvula Dube'}
+      born: 2047
+      look: >-
+        Zulu woman of 53, tall and regal, a strong broad face, short grey natural hair, high cheekbones, a commanding gaze; an
+        earth-red and ochre marshal's tunic with kente-pattern collar bands and brass studs, a beaded isicholo-inspired band,
+        a lion-pelt mantle, an ornate brass-capped knobkerrie. Majestic, warm, fearsome.
+      lore:
+        english: 'The Lioness of the Congress led the march from Durban to Kinshasa in 2089 with nothing but militias and a promise,
+          and arrived with an army. Every council of the Federation has sent her one son or daughter; she knows all their names. When
+          she speaks to the troops, the drums answer.'
+        spanish: 'La Leona del Congreso encabezó la marcha de Durban a Kinsasa en 2089 sin otra cosa que milicias y una promesa, y llegó
+          con un ejército. Cada consejo de la Federación le mandó un hijo o una hija; ella sabe el nombre de todos. Cuando les habla a
+          las tropas, contestan los tambores.'
+      frase: {english: 'One continent, one army.', spanish: 'Un continente, un ejército.'}
+      habilidades: {skill: 6, attack_skill: 6, defense_skill: 7, planning_skill: 6, logistics_skill: 7}
+      rasgos: [organizer, infantry_leader]
+      rasgo:
+        id: mn_ley_apf_la_leona_del_congreso
+        name: {english: 'The Lioness of the Congress', spanish: 'La Leona del Congreso'}
+        desc: {english: 'Every council sent her its children: an army with a morale and an organisation that do not break.', spanish: 'Cada consejo le mandó a sus hijos: un ejército con una moral y una organización que no se quiebran.'}
+        defense_skill: 1
+        logistics_skill: 1
+        planning_skill: 1
+        modifier: {army_morale_factor: 0.2, army_org_factor: 0.12, army_defence_factor: 0.06}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: APF_el_general_del_congreso}, {flag: APF_forma_final}]}
+        texto: {english: 'Needs the focus The General of the Congress or the Final Form proclaimed.', spanish: 'Pide el foco El General del Congreso o la Forma Final proclamada.'}
+
+    - id: APF_ley_almirante_ba
+      rol: almirante
+      nombre: {english: 'Admiral Ousmane Ba', spanish: 'Almirante Ousmane Ba'}
+      born: 2055
+      look: >-
+        Senegalese man of 45, very dark skin, a long elegant face, a trimmed white beard, a deep blue boubou-inspired admiral's
+        coat with brass buttons and ochre-red kente piping, a navy cap with a brass anchor, a carved wooden pirogue prow
+        ornament beside him. Elegant, wise, quietly proud.
+      lore:
+        english: 'Son of fishermen from Saint-Louis, he built the Navy of the Gulf from pirogues with engines and a borrowed
+          frigate. Today it has carriers. He still sails out every year on his father''s pirogue on the day of the dead, alone, and
+          the whole fleet waits for him at the mouth of the river.'
+        spanish: 'Hijo de pescadores de Saint-Louis, armó la Armada del Golfo con piraguas con motor y una fragata prestada. Hoy tiene
+          portaaviones. Todavía sale cada año en la piragua de su padre el día de los muertos, solo, y toda la flota lo espera en la boca
+          del río.'
+      frase: {english: 'The sea belongs to those who fish it.', spanish: 'El mar es de los que lo pescan.'}
+      habilidades: {skill: 6, attack_skill: 6, defense_skill: 7, maneuvering_skill: 7, coordination_skill: 7}
+      rasgos: [blue_water_expert, fleet_protector]
+      rasgo:
+        id: mn_ley_apf_la_piragua_del_padre
+        name: {english: 'The Father''s Pirogue', spanish: 'La Piragua del Padre'}
+        desc: {english: 'A navy built from nothing, which knows every current of the Gulf: defence, speed and coordination.', spanish: 'Una armada hecha de nada, que conoce cada corriente del Golfo: defensa, velocidad y coordinación.'}
+        type: navy
+        defense_skill: 1
+        coordination_skill: 2
+        modifier: {naval_defense_factor: 0.12, naval_speed_factor: 0.1, naval_damage_factor: 0.08}
+      llave:
+        tipo: foco
+        foco: APF_la_armada_del_golfo
+        texto: {english: 'Arrives with the focus The Navy of the Gulf.', spanish: 'Llega con el foco La Armada del Golfo.'}
+
+    - id: APF_ley_general_tesfaye
+      rol: general
+      nombre: {english: 'General Tesfaye Alemu', spanish: 'General Tesfaye Alemu'}
+      born: 2060
+      look: >-
+        Ethiopian Amhara man of 40, slim and fine-boned, a narrow aquiline face, a short grey-flecked beard, an afro under an
+        ochre beret, intense dark eyes; an earth-red field tunic with green and yellow collar bands, a white netela shawl over
+        one shoulder, binoculars, a mountain behind. Ascetic, brilliant, relentless.
+      lore:
+        english: 'He learned war in the highlands of Tigray and strategy from the old books of the monasteries. In the Awakening of
+          2110 he took Addis back from the warlords in a single march from the mountains, at night, without lights, and arrived
+          singing. They say he has never retreated a single kilometre.'
+        spanish: 'Aprendió la guerra en las montañas del Tigray y la estrategia en los libros viejos de los monasterios. En el
+          Despertar de 2110 recuperó Adís de manos de los señores de la guerra en una sola marcha desde la montaña, de noche, sin luces,
+          y llegó cantando. Dicen que nunca retrocedió un solo kilómetro.'
+      frase: {english: 'Forward, through the night.', spanish: 'Adelante, por la noche.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 6, planning_skill: 6, logistics_skill: 5}
+      rasgos: [hill_fighter, offensive_doctrine]
+      rasgo:
+        id: mn_ley_apf_la_marcha_sin_luces
+        name: {english: 'The March Without Lights', spanish: 'La Marcha sin Luces'}
+        desc: {english: 'Marches at night and arrives where nobody expects: attack, speed and breakthrough.', spanish: 'Marcha de noche y llega donde nadie lo espera: ataque, velocidad y ruptura.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.1, army_speed_factor: 0.08, breakthrough_factor: 0.1}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: APF_ley_generala_wanjiru
+      rol: general
+      nombre: {english: 'General Amani Wanjiru', spanish: 'Generala Amani Wanjiru'}
+      born: 2065
+      look: >-
+        Kikuyu Kenyan woman of 35, lean runner's build, a smooth dark face with high cheekbones, close-cropped hair, a small scar
+        above one eyebrow, a calm knowing smile; a camouflage field jacket in earth red and leaf green with brass studs, a beaded
+        Maasai-style collar, a long rain cape, a rifle slung. Patient, cunning, unstoppable.
+      lore:
+        english: 'The Long Rain: she does not win battles, she wins seasons. When the Commune''s legions crossed the Sahel she let
+          them advance for a whole year, burned nothing, fought nowhere, and every week a few hundred of them did not wake up. When
+          the rains came, there were no legions left to go home.'
+        spanish: 'La Lluvia Larga: no gana batallas, gana estaciones. Cuando las legiones de la Comuna cruzaron el Sahel las dejó avanzar
+          un año entero, no quemó nada, no peleó en ningún lado, y cada semana unos cientos no se despertaban. Cuando llegaron las
+          lluvias, no quedaban legiones para volver a casa.'
+      frase: {english: 'We have time. They do not.', spanish: 'Nosotros tenemos tiempo. Ellos no.'}
+      habilidades: {skill: 5, attack_skill: 6, defense_skill: 7, planning_skill: 6, logistics_skill: 7}
+      rasgos: [trickster, jungle_rat]
+      rasgo:
+        id: mn_ley_apf_la_lluvia_larga
+        name: {english: 'The Long Rain', spanish: 'La Lluvia Larga'}
+        desc: {english: 'Wins seasons, not battles: the attrition is for the enemy, and her troops always come back.', spanish: 'Gana estaciones, no batallas: el desgaste es para el enemigo, y sus tropas siempre vuelven.'}
+        defense_skill: 1
+        logistics_skill: 1
+        modifier: {attrition: -0.3, army_defence_factor: 0.1, supply_consumption_factor: -0.12, recon_factor: 0.2}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: ASC}, {war_with: NRE}]}
+        texto: {english: 'Arrives when war breaks out with the Commune or Rome.', spanish: 'Llega cuando estalla la guerra con la Comuna o Roma.'}
+
+    - id: APF_ley_portavoz_okafor
+      rol: ministro
+      nombre: {english: 'Speaker of the Councils Adaeze Okafor', spanish: 'Portavoz de los Consejos Adaeze Okafor'}
+      born: 2052
+      look: >-
+        Igbo Nigerian woman of 48, round radiant face, a wide warm smile, an elaborate ochre and green gele headwrap, gold coral
+        bead necklaces, kind sharp eyes; an earth-red and gold wrapper-style formal jacket with kente borders, holding a carved
+        wooden talking staff. Charismatic, motherly, a peacemaker.
+      lore:
+        english: 'She has chaired the Congress of the Federation through eleven sessions and three near-civil wars, and has never once
+          raised her voice. Her rule is simple: nobody leaves the hall until everybody can live with the decision. In 2097 the session
+          lasted nine days. It ended in a song.'
+        spanish: 'Presidió el Congreso de la Federación en once sesiones y tres casi guerras civiles, y nunca levantó la voz. Su regla es
+          simple: nadie se va del salón hasta que todos puedan vivir con la decisión. En 2097 la sesión duró nueve días. Terminó con una
+          canción.'
+      frase: {english: 'Nobody leaves until we all agree.', spanish: 'Nadie se va hasta que estemos todos de acuerdo.'}
+      stats: {carisma: 3, astucia: 1}
+      rasgo:
+        id: mn_ley_apf_la_voz_de_los_consejos
+        name: {english: 'The Voice of the Councils', spanish: 'La Voz de los Consejos'}
+        modifiers: {stability_factor: 0.15, political_power_gain: 0.12, recruitable_population_factor: 0.05}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: APF_ubuntu, value: 75}}
+        texto: {english: 'Needs 75 Ubuntu.', spanish: 'Pide 75 de Ubuntu.'}
+
+    - id: APF_ley_profesor_keita
+      rol: teorico
+      nombre: {english: 'Professor Mamadou Keïta', spanish: 'Profesor Mamadou Keïta'}
+      born: 2044
+      look: >-
+        Malian man of 56, tall and thin, a long gentle face, a white goatee, round tortoiseshell glasses, a white embroidered
+        kufi cap; a flowing indigo grand boubou with ochre embroidery over a scholar's shirt, an ancient Timbuktu manuscript
+        open in his hands with a holographic translation glowing above it. Erudite, gentle, luminous.
+      lore:
+        english: 'Rector of the Continental University, he spent twenty years digitising the manuscripts of Timbuktu and found in them
+          what the century had forgotten: mathematics of water, of trade and of the stars. Every engineer of the Federation has
+          studied with one of his students. He still teaches the first class of every year himself.'
+        spanish: 'Rector de la Universidad Continental, pasó veinte años digitalizando los manuscritos de Tombuctú y encontró en ellos lo
+          que el siglo se había olvidado: matemáticas del agua, del comercio y de las estrellas. Cada ingeniero de la Federación estudió
+          con alguno de sus alumnos. La primera clase de cada año la sigue dando él.'
+      frase: {english: 'Everything we need, we already wrote once.', spanish: 'Todo lo que necesitamos ya lo escribimos una vez.'}
+      stats: {astucia: 2, prestigio: 1}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_apf_los_manuscritos
+        name: {english: 'Keeper of the Manuscripts', spanish: 'Guardián de los Manuscritos'}
+        modifiers: {research_speed_factor: 0.16, production_speed_infrastructure_factor: 0.1}
+      llave:
+        tipo: foco
+        foco: APF_universidad_continental
+        texto: {english: 'Arrives with the focus The Continental University.', spanish: 'Llega con el foco La Universidad Continental.'}
+
+  # ===========================================================================
+  NRE:
+    intro:
+      english: 'Rome never forgets a name worthy of it. These six were written in the Tabularium before they were born; they will
+        come when the Glory of Rome calls them.'
+      spanish: 'Roma nunca se olvida de un nombre que la merezca. Estos seis estaban escritos en el Tabulario antes de nacer;
+        van a venir cuando la Gloria de Roma los llame.'
+    personajes:
+    - id: NRE_ley_mariscal_ardeatino
+      rol: mariscal
+      nombre: {english: 'Marshal Lucio Valerio Ardeatino', spanish: 'Mariscal Lucio Valerio Ardeatino'}
+      born: 2045
+      look: >-
+        Roman Italian man of 55, a heavy square face like a bust, a broken nose, close-cropped iron-grey hair in a Caesar fringe,
+        deep-set unyielding eyes, a scar through the lips; an imperial purple and gold marshal's cuirass-style tunic with a
+        crimson sagum cloak, phalerae medals on the chest, a vine staff of a centurion in his hand. Severe, paternal, iron.
+      lore:
+        english: 'Primus Pilus: he started as a common legionary in the Legio X and climbed every rank, one by one, in thirty years
+          of war. He still carries the vine staff of a centurion and still sleeps in the camp, in a tent, with his men. No legion of
+          his has ever broken. He says it is because he remembers what it is to be at the front of one.'
+        spanish: 'Primus Pilus: empezó como legionario raso en la Legio X y subió cada grado, uno por uno, en treinta años de guerra.
+          Todavía lleva la vara de vid de centurión y todavía duerme en el campamento, en una carpa, con sus hombres. Ninguna legión
+          suya se quebró nunca. Él dice que es porque se acuerda de lo que es estar adelante en una.'
+      frase: {english: 'Form the testudo!', spanish: '¡Formen la tortuga!'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 7, planning_skill: 6, logistics_skill: 6}
+      rasgos: [organizer, infantry_leader]
+      rasgo:
+        id: mn_ley_nre_primus_pilus
+        name: {english: 'Primus Pilus', spanish: 'Primus Pilus'}
+        desc: {english: 'He came up from the ranks and no legion of his has ever broken: attack, defence, organisation and morale.', spanish: 'Subió desde la tropa y ninguna legión suya se quebró nunca: ataque, defensa, organización y moral.'}
+        attack_skill: 1
+        defense_skill: 1
+        modifier: {army_org_factor: 0.15, army_morale_factor: 0.12, army_attack_factor: 0.06, army_defence_factor: 0.06}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: NRE_spqr}, {flag: NRE_forma_final}]}
+        texto: {english: 'Needs the focus SPQR or the Final Form proclaimed.', spanish: 'Pide el foco SPQR o la Forma Final proclamada.'}
+
+    - id: NRE_ley_navarca_corvino
+      rol: almirante
+      nombre: {english: 'Navarch Giulia Corvino', spanish: 'Navarca Giulia Corvino'}
+      born: 2058
+      look: >-
+        Neapolitan woman of 42, olive skin, strong Mediterranean features, thick black curly hair pinned up with a gold fibula,
+        dark kohl-lined eyes, a confident smile; a deep purple naval coat with gold laurel braid and a bronze corvus (raven)
+        badge, a white stola-like sash, one hand on the bronze ram of a model warship. Bold, theatrical, fierce.
+      lore:
+        english: 'She revived the corvus, the boarding bridge of the old Roman galleys, on modern destroyers, and laughed at every
+          admiral who called it a museum piece until she boarded the flagship of the Federation off Sicily. The Mediterranean is a
+          lake again, and she patrols it as if it were her garden.'
+        spanish: 'Resucitó el corvus, el puente de abordaje de las galeras romanas, en destructores modernos, y se rió de cada almirante
+          que le dijo pieza de museo hasta que abordó la nave insignia de la Federación frente a Sicilia. El Mediterráneo vuelve a ser un
+          lago, y ella lo patrulla como si fuera su jardín.'
+      frase: {english: 'Lower the raven!', spanish: '¡Bajen el cuervo!'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 6, maneuvering_skill: 6, coordination_skill: 7}
+      rasgos: [superior_tactician, ironside]
+      rasgo:
+        id: mn_ley_nre_el_cuervo
+        name: {english: 'The Raven (Corvus)', spanish: 'El Cuervo (Corvus)'}
+        desc: {english: 'Boards whatever floats: much more damage and accuracy at close range.', spanish: 'Aborda todo lo que flota: mucho más daño y puntería de cerca.'}
+        type: navy
+        attack_skill: 2
+        coordination_skill: 1
+        modifier: {naval_damage_factor: 0.15, naval_hit_chance: 0.08, naval_defense_factor: 0.05}
+      llave:
+        tipo: foco
+        foco: NRE_el_mediterraneo_romano
+        texto: {english: 'Arrives with the focus The Roman Mediterranean.', spanish: 'Llega con el foco El Mediterráneo Romano.'}
+
+    - id: NRE_ley_legado_valli
+      rol: general
+      nombre: {english: 'Legate Ettore Valli', spanish: 'Legado Ettore Valli'}
+      born: 2064
+      look: >-
+        Lombard man of 36, handsome and hawkish, a lean clean-shaven face, slicked-back dark hair, piercing light eyes, a thin
+        aristocratic smile; a purple and black armoured-corps tunic with gilded lightning-bolt insignia (the fulmen), a black
+        leather tanker coat, leather gloves. Ambitious, dashing, dangerous.
+      lore:
+        english: 'The Lightning: he commands the armoured legions, the tanks with the thunderbolt of Jupiter painted on the hull. In
+          the Awakening of 2110 he crossed the Alps in four days, the way Hannibal never could, and wrote to the Imperator from
+          Lyon. The Senate fears him; the Imperator has decided to love him, which is the same thing.'
+        spanish: 'El Rayo: manda las legiones blindadas, los tanques con el rayo de Júpiter pintado en el casco. En el Despertar de 2110
+          cruzó los Alpes en cuatro días, como Aníbal nunca pudo, y le escribió al Imperator desde Lyon. El Senado le tiene miedo; el
+          Imperator decidió quererlo, que es lo mismo.'
+      frase: {english: 'Like the lightning: first the light, then the noise.', spanish: 'Como el rayo: primero la luz, después el ruido.'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 5, planning_skill: 6, logistics_skill: 5}
+      rasgos: [panzer_leader, offensive_doctrine]
+      rasgo:
+        id: mn_ley_nre_el_rayo_de_jupiter
+        name: {english: 'The Lightning of Jupiter', spanish: 'El Rayo de Júpiter'}
+        desc: {english: 'Armoured legions that hit before they are heard: attack, breakthrough and speed.', spanish: 'Legiones blindadas que pegan antes de que se las oiga: ataque, ruptura y velocidad.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.1, breakthrough_factor: 0.15, army_speed_factor: 0.08}
+      llave:
+        tipo: aventura
+        cuando: {any: [{flag: MN2110_av_fin_objetivo}, {flag: MN2110_av_fin_positivo}]}
+        texto: {english: 'Arrives when the Awakening (2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando El Despertar (2110) termina bien o con su objetivo cumplido.'}
+
+    - id: NRE_ley_legada_kallistos
+      rol: general
+      nombre: {english: 'Legate Teodora Kallistos', spanish: 'Legada Teodora Kallistos'}
+      born: 2054
+      look: >-
+        Greek woman of 46, a long Byzantine face like an icon, large dark almond eyes, black hair streaked with silver under a
+        gold-edged purple veil-hood, a thin straight nose; a purple and gold lamellar-style armoured tunic, a jewelled cross-hilt
+        sword held upright before her. Austere, devout, unbreakable.
+      lore:
+        english: 'Guardian of the Limes, the eastern frontier: she holds the line from the Danube to the Bosphorus with the
+          garrisons the Imperator could not spare, and has never lost a fortress. The soldiers of the East call her the Basilissa.
+          She answers that Rome has only one Emperor, and holds the frontier for him anyway.'
+        spanish: 'Guardiana del Limes, la frontera del este: sostiene la línea del Danubio al Bósforo con las guarniciones que el
+          Imperator no podía darle, y nunca perdió una fortaleza. Los soldados del este le dicen la Basilissa. Ella contesta que Roma
+          tiene un solo Emperador, y le sostiene la frontera igual.'
+      frase: {english: 'The Limes holds.', spanish: 'El Limes aguanta.'}
+      habilidades: {skill: 5, attack_skill: 5, defense_skill: 8, planning_skill: 6, logistics_skill: 7}
+      rasgos: [defensive_doctrine, engineer_officer]
+      rasgo:
+        id: mn_ley_nre_la_basilissa_del_limes
+        name: {english: 'The Basilissa of the Limes', spanish: 'La Basilissa del Limes'}
+        desc: {english: 'Holds any frontier with half the men: much more defence, entrenchment and organisation.', spanish: 'Sostiene cualquier frontera con la mitad de los hombres: mucha más defensa, atrincheramiento y organización.'}
+        defense_skill: 2
+        logistics_skill: 1
+        modifier: {army_defence_factor: 0.15, max_dig_in: 3, army_org_factor: 0.08}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: ASC}, {war_with: APF}, {war_with: ZAL}]}
+        texto: {english: 'Arrives when war breaks out with the Commune, the Federation or Albion.', spanish: 'Llega cuando estalla la guerra con la Comuna, la Federación o Albión.'}
+
+    - id: NRE_ley_consul_benedetti
+      rol: ministro
+      nombre: {english: 'Consul Tullio Benedetti', spanish: 'Cónsul Tullio Benedetti'}
+      born: 2042
+      look: >-
+        Roman man of 58, portly and jovial, a fleshy clever face, a double chin, thinning white hair combed forward, twinkling
+        small eyes, a gold signet ring; a white toga with a broad purple stripe (laticlave) over a modern purple suit, holding a
+        gold aureus coin between two fingers. Genial, cunning, corrupt-looking but honest.
+      lore:
+        english: 'Prefect of the Treasury of Saturn for three Imperators. He minted the New Aureus, the only coin in Europe that is
+          worth more every year, and fed Rome through two famines without raising a single tax. The Senate investigates him every
+          spring; every autumn it finds nothing, and asks him for a loan.'
+        spanish: 'Prefecto del Tesoro de Saturno con tres Imperatores. Acuñó el Nuevo Aureus, la única moneda de Europa que vale más cada
+          año, y alimentó a Roma en dos hambrunas sin subir un solo impuesto. El Senado lo investiga cada primavera; cada otoño no
+          encuentra nada, y le pide un préstamo.'
+      frase: {english: 'Bread, games, and a balanced budget.', spanish: 'Pan, circo y las cuentas en orden.'}
+      stats: {carisma: 2, astucia: 2}
+      rasgo:
+        id: mn_ley_nre_el_tesoro_de_saturno
+        name: {english: 'Prefect of the Treasury of Saturn', spanish: 'Prefecto del Tesoro de Saturno'}
+        modifiers: {political_power_gain: 0.15, consumer_goods_factor: -0.05, stability_factor: 0.08}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: NRE_gloria, value: 80}}
+        texto: {english: 'Needs 80 Glory.', spanish: 'Pide 80 de Gloria.'}
+
+    - id: NRE_ley_prefecto_lanza
+      rol: estado_mayor
+      nombre: {english: 'Praetorian Prefect Severo Lanza', spanish: 'Prefecto del Pretorio Severo Lanza'}
+      born: 2050
+      look: >-
+        Sardinian man of 50, gaunt and hard, a narrow ascetic face, shaved head, black eyebrows like ink strokes, a thin
+        unsmiling mouth, cold grey eyes; a black and purple praetorian staff uniform with a gold scorpion insignia, a laurel-wreath
+        collar pin, a sealed scroll of orders in his gloved hand. Cold, loyal, terrifying.
+      lore:
+        english: 'Head of the General Staff and of the Praetorian Guard: he reorganised the Army of the Provinces so that every legion,
+          from Lusitania to Syria, trains, eats and fights the same way. He has no friends, no family and no vices. The Imperator
+          trusts him completely, which is the most frightening thing anyone has ever said about him.'
+        spanish: 'Jefe del Estado Mayor y de la Guardia Pretoriana: reorganizó el Ejército de las Provincias para que cada legión, de
+          Lusitania a Siria, se entrene, coma y pelee igual. No tiene amigos, ni familia, ni vicios. El Imperator confía en él por
+          completo, que es lo más aterrador que alguien dijo nunca de él.'
+      frase: {english: 'Discipline is the only glory.', spanish: 'La disciplina es la única gloria.'}
+      stats: {prestigio: 2}
+      cargo: {slot: army_chief, ledger: army, cost: 100}
+      rasgo:
+        id: mn_ley_nre_el_pretorio
+        name: {english: 'Prefect of the Praetorium', spanish: 'Prefecto del Pretorio'}
+        modifiers: {army_attack_factor: 0.1, army_org_factor: 0.1, experience_gain_army: 0.15, training_time_army_factor: -0.15}
+      llave:
+        tipo: foco
+        foco: NRE_el_ejercito_de_las_provincias
+        texto: {english: 'Arrives with the focus The Army of the Provinces.', spanish: 'Llega con el foco El Ejército de las Provincias.'}
+
+  # ===========================================================================
+  ZJP:
+    intro:
+      english: 'Giri is the debt you never finish paying. These six owe it to the Shogun herself, and they will only come to
+        collect when the Shogunate is worth dying for.'
+      spanish: 'El giri es la deuda que nunca se termina de pagar. Estos seis se la deben a la Shōgun en persona, y solo van a venir a
+        cobrarla cuando el Shogunato valga la pena de morir por él.'
+    personajes:
+    - id: ZJP_ley_mariscal_amano
+      rol: mariscal
+      nombre: {english: 'Marshal Ryūnosuke Amano', spanish: 'Mariscal Ryūnosuke Amano'}
+      born: 2044
+      look: >-
+        Japanese man of 56, a severe lean face like a samurai mask, a shaved pate with a grey topknot, a thin grey moustache, one
+        eye replaced by a red-glowing cybernetic lens; black lacquered armour plates over a crimson marshal's coat with gold mon
+        crests, a long katana-like vibration blade held upright. Austere, honourable, terrifying.
+      lore:
+        english: 'The Last Daimyō: heir of a family that commanded armies for six hundred years and then sold insurance for one
+          hundred. He refused to serve any House and served only the Shogun, and when the High Seas came for Yokosuka he held the
+          docks for eleven days with the dock workers. He does not speak of the eye he left there.'
+        spanish: 'El Último Daimyō: heredero de una familia que mandó ejércitos seiscientos años y después vendió seguros durante cien.
+          Se negó a servir a ninguna Casa y sirvió solo a la Shōgun, y cuando la Alta Mar vino por Yokosuka sostuvo los diques once días
+          con los obreros del puerto. No habla del ojo que dejó ahí.'
+      frase: {english: 'The debt is paid in steel.', spanish: 'La deuda se paga con acero.'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 6, planning_skill: 7, logistics_skill: 5}
+      rasgos: [offensive_doctrine, brilliant_strategist, zjp_casa_shogun]
+      rasgo:
+        id: mn_ley_zjp_el_ultimo_daimyo
+        name: {english: 'The Last Daimyō', spanish: 'El Último Daimyō'}
+        desc: {english: 'Six hundred years of command in one man: attack, planning and soldiers who would die for him.', spanish: 'Seiscientos años de mando en un solo hombre: ataque, planificación y soldados que morirían por él.'}
+        attack_skill: 1
+        planning_skill: 1
+        modifier: {army_attack_factor: 0.12, army_morale_factor: 0.15, max_planning: 0.15}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: ZJP_cybershogun}, {focus: ZJP_zai_5}, {focus: ZJP_yak_5}, {focus: ZJP_srs_5}]}
+        texto: {english: 'Needs the last focus of a House (the Eternal Keiretsu, the Code of the Dragon, the Mind in the Machine) or the CyberShogun.', spanish: 'Pide el último foco de una Casa (El Keiretsu Eterno, El Código del Dragón, La Mente en la Máquina) o el CyberShogun.'}
+
+    - id: ZJP_ley_almirante_minase
+      rol: almirante
+      nombre: {english: 'Admiral Hotaru Minase', spanish: 'Almirante Hotaru Minase'}
+      born: 2061
+      look: >-
+        Japanese woman of 39, a pale delicate face with sharp cheekbones, black hair in a long straight curtain with a single
+        neon-pink lock, dark eyes ringed with fine red eyeliner, a calm dangerous smile; a black naval coat with crimson lining
+        and gold mon crests, a small glowing paper lantern in her hand. Mysterious, patient, deadly.
+      lore:
+        english: 'The Firefly of Kure: her fleet sails only at night, without a single light, guided by the glow of paper lanterns
+          floating in the water ahead. The High Seas lost three cruisers to her in a night they still call the Festival. She lights
+          one lantern on the water for every ship she sinks.'
+        spanish: 'La Luciérnaga de Kure: su flota navega solo de noche, sin una sola luz, guiada por el brillo de faroles de papel que
+          flotan en el agua adelante. La Alta Mar le perdió tres cruceros en una noche que todavía llaman el Festival. Prende un farol
+          sobre el agua por cada barco que hunde.'
+      frase: {english: 'Put out the lights.', spanish: 'Apaguen las luces.'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 5, maneuvering_skill: 8, coordination_skill: 6}
+      rasgos: [seawolf, spotter]
+      rasgo:
+        id: mn_ley_zjp_la_luciernaga_de_kure
+        name: {english: 'The Firefly of Kure', spanish: 'La Luciérnaga de Kure'}
+        desc: {english: 'Night attacks without a single light: unseen, faster, much more damage.', spanish: 'Ataques de noche sin una sola luz: sin ser vista, más rápida, mucho más daño.'}
+        type: navy
+        attack_skill: 1
+        maneuvering_skill: 2
+        modifier: {naval_damage_factor: 0.12, naval_detection: 0.2, submarine_attack: 0.12, naval_speed_factor: 0.06}
+      llave:
+        tipo: foco
+        foco: [ZJP_zai_3, ZJP_yak_2, ZJP_srs_8]
+        texto: {english: 'Arrives with the focus Three-Shift Shipyards, The Night Ports or Cloned Pilots (whichever House rules).', spanish: 'Llega con el foco Astilleros a Tres Turnos, Los Puertos de Noche o Pilotos Clonados (según la Casa que gobierne).'}
+
+    - id: ZJP_ley_general_otsuka
+      rol: general
+      nombre: {english: 'General Kenji Ōtsuka', spanish: 'General Kenji Ōtsuka'}
+      born: 2068
+      look: >-
+        Japanese man of 32, a wild grin, spiky dyed-crimson hair, a jagged scar across the bridge of the nose, cybernetic jack
+        ports at the temples glowing pink; a crimson Mecha pilot's suit with black lacquer armour plates and gold mon crests,
+        a pilot's helmet under the arm, a giant red Mecha hand reaching from behind. Reckless, joyful, heroic.
+      lore:
+        english: 'The Red Mecha: test pilot of the first twelve-metre machines of Kanto, the only one who survived all twelve
+          prototypes. When the story of the House reached its end, he walked his Mecha into the sea at Osaka and out the other side
+          at Kobe, and the whole Shogunate saw it live. The children of Japan play at being him.'
+        spanish: 'El Mecha Rojo: piloto de pruebas de las primeras máquinas de doce metros de Kanto, el único que sobrevivió a los doce
+          prototipos. Cuando la historia de la Casa llegó a su final, metió su Mecha en el mar en Osaka y salió del otro lado en Kobe,
+          y todo el Shogunato lo vio en vivo. Los chicos de Japón juegan a ser él.'
+      frase: {english: 'Mecha, stand up!', spanish: '¡Mecha, de pie!'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 5, planning_skill: 5, logistics_skill: 6}
+      rasgos: [panzer_leader, offensive_doctrine, zjp_casa_shogun]
+      rasgo:
+        id: mn_ley_zjp_el_mecha_rojo
+        name: {english: 'The Red Mecha', spanish: 'El Mecha Rojo'}
+        desc: {english: 'Twelve metres of steel at the head of the charge: attack and breakthrough.', spanish: 'Doce metros de acero a la cabeza de la carga: ataque y ruptura.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.12, breakthrough_factor: 0.15, army_org_factor: 0.05}
+      llave:
+        tipo: aventura
+        cuando:
+          any:
+          - {flag: ZJPZ1_av_fin_objetivo}
+          - {flag: ZJPZ1_av_fin_positivo}
+          - {flag: ZJPZ2_av_fin_objetivo}
+          - {flag: ZJPZ2_av_fin_positivo}
+          - {flag: ZJPY1_av_fin_objetivo}
+          - {flag: ZJPY1_av_fin_positivo}
+          - {flag: ZJPY2_av_fin_objetivo}
+          - {flag: ZJPY2_av_fin_positivo}
+          - {flag: ZJPS1_av_fin_objetivo}
+          - {flag: ZJPS1_av_fin_positivo}
+          - {flag: ZJPS2_av_fin_objetivo}
+          - {flag: ZJPS2_av_fin_positivo}
+          - {flag: MN2110_av_fin_objetivo}
+          - {flag: MN2110_av_fin_positivo}
+        texto: {english: 'Arrives when a story of a House (or the Awakening of 2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando una historia de una Casa (o El Despertar de 2110) termina bien o con su objetivo cumplido.'}
+
+    - id: ZJP_ley_generala_kirishima
+      rol: general
+      nombre: {english: 'General Aoi Kirishima', spanish: 'Generala Aoi Kirishima'}
+      born: 2058
+      look: >-
+        Japanese woman of 42, a strong calm face, short black hair with grey at the temples, a straight unsmiling mouth, a
+        traditional hachimaki headband over a black lacquer helmet rim; a dark blue and crimson field coat over lacquered
+        shoulder plates, a naginata-style polearm planted beside her, cranes of the dry docks behind. Calm, stoic, immovable.
+      lore:
+        english: 'She commands the Wall of Kanto: the docks, the cranes and the dry docks of Tokyo Bay, turned into a fortress of
+          containers, steel and concrete. When the Market came to take back its ships, she said that every crane in Kanto was a
+          tower, and every tower would have to be taken by hand. None were.'
+        spanish: 'Manda la Muralla de Kanto: los muelles, las grúas y los diques secos de la bahía de Tokio, convertidos en una fortaleza
+          de contenedores, acero y hormigón. Cuando el Mercado vino a llevarse sus barcos, dijo que cada grúa de Kanto era una torre, y
+          que cada torre se iba a tener que tomar a mano. No se tomó ninguna.'
+      frase: {english: 'Every crane is a tower.', spanish: 'Cada grúa es una torre.'}
+      habilidades: {skill: 5, attack_skill: 5, defense_skill: 8, planning_skill: 6, logistics_skill: 7}
+      rasgos: [defensive_doctrine, engineer_officer, zjp_casa_shogun]
+      rasgo:
+        id: mn_ley_zjp_la_muralla_de_kanto
+        name: {english: 'The Wall of Kanto', spanish: 'La Muralla de Kanto'}
+        desc: {english: 'Turns every port into a fortress: much more defence and entrenchment.', spanish: 'Convierte cada puerto en una fortaleza: mucha más defensa y atrincheramiento.'}
+        defense_skill: 2
+        logistics_skill: 1
+        modifier: {army_defence_factor: 0.18, max_dig_in: 3, dig_in_speed: 0.25}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: HSN}, {war_with: SHD}]}
+        texto: {english: 'Arrives when war breaks out with the High Seas or the Directorate.', spanish: 'Llega cuando estalla la guerra con la Alta Mar o el Directorio.'}
+
+    - id: ZJP_ley_chambelan_mori
+      rol: ministro
+      nombre: {english: 'Grand Chamberlain Tadashi Mori', spanish: 'Gran Chambelán Tadashi Mori'}
+      born: 2039
+      look: >-
+        Japanese man of 61, a narrow wise face, a neat white beard and long white eyebrows, small round dark glasses, an
+        enigmatic half-smile; a black silk formal haori with gold Mori family crests over a crimson kimono, a black lacquered
+        fan in one hand and a small stack of debt ledgers under the other. Enigmatic, patient, a master of favours.
+      lore:
+        english: 'The uncle of the Shogun, and the man who taught her that a debt is worth more than a sword. He keeps the Book of
+          Giri of the three Houses: who owes what to whom since the night of the old flag. He never calls in a debt. He only reminds
+          people, very politely, that it exists.'
+        spanish: 'El tío de la Shōgun, y el que le enseñó que una deuda vale más que una espada. Lleva el Libro del Giri de las tres
+          Casas: quién le debe qué a quién desde la noche de la bandera vieja. Nunca cobra una deuda. Solo le recuerda a la gente, muy
+          amablemente, que existe.'
+      frase: {english: 'Nobody forgets what they owe. I make sure of it.', spanish: 'Nadie se olvida de lo que debe. Yo me ocupo.'}
+      stats: {astucia: 3, carisma: 1}
+      rasgo:
+        id: mn_ley_zjp_el_libro_del_giri
+        name: {english: 'Keeper of the Book of Giri', spanish: 'Guardián del Libro del Giri'}
+        modifiers: {political_power_gain: 0.15, stability_factor: 0.1, war_support_factor: 0.06}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando: {variable_at_least: {var: ZJP_giri, value: 60}}
+        texto: {english: 'Needs 60 Giri.', spanish: 'Pide 60 de Giri.'}
+
+    - id: ZJP_ley_doctora_hasegawa
+      rol: teorico
+      nombre: {english: 'Doctor Emi Hasegawa', spanish: 'Doctora Emi Hasegawa'}
+      born: 2070
+      look: >-
+        Japanese woman of 30, a small sharp face, enormous dark eyes behind thin round glasses, a black bob with a neon-pink
+        underlayer, a thin cable from a neural port behind her ear; a white lab coat over a black and crimson kimono-cut blouse,
+        a glowing pink holographic brain-and-circuit diagram floating between her hands. Brilliant, eerie, gentle.
+      lore:
+        english: 'The Weaver of Dreams: she designs the minds of the Mechas, the clones and the Zaibatsu machines alike, and she
+          works for whichever House governs, because, she says, the machines do not care. She sleeps four hours a night, and in
+          those four hours she dreams the code she writes in the morning.'
+        spanish: 'La Tejedora de Sueños: diseña las mentes de los Mechas, de los clones y de las máquinas de los Zaibatsu por igual, y
+          trabaja para la Casa que gobierne, porque, dice, a las máquinas no les importa. Duerme cuatro horas por noche, y en esas cuatro
+          horas sueña el código que escribe a la mañana.'
+      frase: {english: 'I dreamt it last night. It will work.', spanish: 'Lo soñé anoche. Va a funcionar.'}
+      stats: {astucia: 2}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_zjp_la_tejedora_de_suenos
+        name: {english: 'The Weaver of Dreams', spanish: 'La Tejedora de Sueños'}
+        modifiers: {research_speed_factor: 0.16, industrial_capacity_factory: 0.06}
+      llave:
+        tipo: foco
+        foco: [ZJP_zai_4, ZJP_yak_8, ZJP_srs_9]
+        texto: {english: 'Arrives with the focus Mass-Produced Mechas, Vibration Katanas or The Dreams of the Vats (whichever House rules).', spanish: 'Llega con el foco Mechas en Serie, Katanas de Vibración o Los Sueños de las Cubas (según la Casa que gobierne).'}
+
+  # ===========================================================================
+  ZAL:
+    intro:
+      english: 'Albion has been every kind of country in a single century. These six have served all of them, and they will serve
+        whichever Albion proves worthy of the islands.'
+      spanish: 'Albión fue todos los países posibles en un solo siglo. Estos seis sirvieron a todos, y van a servir a la Albión que
+        demuestre estar a la altura de las islas.'
+    personajes:
+    - id: ZAL_ley_mariscala_pryce
+      rol: mariscal
+      nombre: {english: 'Marshal Eleanor Pryce-Mortimer', spanish: 'Mariscala Eleanor Pryce-Mortimer'}
+      born: 2046
+      look: >-
+        English woman of 54, a long aristocratic face, steel-grey hair in a severe chignon, pale blue eyes, a thin dry smile, a
+        monocle on a black ribbon; a brick-red and tweed-brown field marshal's coat with brass buttons and a sash, a polished
+        brass field telescope tucked under her arm, white cliffs behind. Unflappable, sardonic, indomitable.
+      lore:
+        english: 'The Iron Duchess of the Channel: she fortified the white cliffs from Dover to Beachy Head when nobody believed
+          Albion would last a year, and she has served the Luddites, the Crown and the Network with exactly the same expression.
+          Asked once which Albion she fought for, she answered: the one that is still standing.'
+        spanish: 'La Duquesa de Hierro del Canal: fortificó los acantilados blancos de Dover a Beachy Head cuando nadie creía que Albión
+          fuera a durar un año, y sirvió a los luditas, a la Corona y a la Red con exactamente la misma cara. Una vez le preguntaron por
+          qué Albión peleaba, y contestó: por la que sigue en pie.'
+      frase: {english: 'We shall hold. As usual.', spanish: 'Vamos a aguantar. Como siempre.'}
+      habilidades: {skill: 6, attack_skill: 5, defense_skill: 8, planning_skill: 7, logistics_skill: 6}
+      rasgos: [defensive_doctrine, organizer]
+      rasgo:
+        id: mn_ley_zal_la_duquesa_de_hierro
+        name: {english: 'The Iron Duchess', spanish: 'La Duquesa de Hierro'}
+        desc: {english: 'Has never given up an inch of the islands: much more defence, organisation and planning.', spanish: 'Nunca entregó un palmo de las islas: mucha más defensa, organización y planificación.'}
+        defense_skill: 2
+        planning_skill: 1
+        modifier: {army_defence_factor: 0.15, army_org_factor: 0.1, max_planning: 0.15, max_dig_in: 2}
+      llave:
+        tipo: decision
+        costo: 150
+        cuando: {any: [{focus: ZAL_el_canal_fortificado}, {focus: ZAL_la_mancomunidad_ascendida}, {focus: ZAL_el_imperio_neovictoriano}, {focus: ZAL_la_gran_rotura}]}
+        texto: {english: 'Needs the focus The Fortified Channel or the end of a path (the Ascended Commonwealth, the Neo-Victorian Empire or the Great Breaking).', spanish: 'Pide el foco El Canal Fortificado o el final de un camino (La Mancomunidad Ascendida, El Imperio Neovictoriano o La Gran Rotura).'}
+
+    - id: ZAL_ley_almirante_penderyn
+      rol: almirante
+      nombre: {english: 'Admiral Rhys Penderyn', spanish: 'Almirante Rhys Penderyn'}
+      born: 2053
+      look: >-
+        Welsh man of 47, a craggy ruddy face, a big red-grey beard, thick eyebrows, bright laughing green eyes, a weathered
+        fisherman's cap; a dark navy admiral's coat with brass buttons and a red dragon badge, a thick wool scarf, a brass
+        foghorn hanging at his side, the cranes of the Clyde behind. Boisterous, sentimental, a born sailor.
+      lore:
+        english: 'A trawler captain from Milford Haven who reopened the shipyards of the Clyde with his own savings and a choir of
+          retired welders. The first destroyer he launched was named after his mother; so were the next nine. He sings in Welsh
+          when he goes into battle, and the whole fleet sings with him.'
+        spanish: 'Un capitán de pesquero de Milford Haven que reabrió los astilleros del Clyde con sus ahorros y un coro de soldadores
+          jubilados. El primer destructor que botó llevaba el nombre de su madre; los nueve siguientes también. Canta en galés cuando
+          entra en combate, y toda la flota canta con él.'
+      frase: {english: 'Sing, boys, and aim low.', spanish: 'Canten, muchachos, y apunten bajo.'}
+      habilidades: {skill: 6, attack_skill: 7, defense_skill: 7, maneuvering_skill: 6, coordination_skill: 7}
+      rasgos: [superior_tactician, ironside]
+      rasgo:
+        id: mn_ley_zal_el_coro_del_clyde
+        name: {english: 'The Choir of the Clyde', spanish: 'El Coro del Clyde'}
+        desc: {english: 'A fleet that sings into battle: damage, defence and a crew that does not break.', spanish: 'Una flota que entra cantando al combate: daño, defensa y una tripulación que no se quiebra.'}
+        type: navy
+        attack_skill: 1
+        defense_skill: 1
+        coordination_skill: 1
+        modifier: {naval_damage_factor: 0.12, naval_defense_factor: 0.12, naval_retreat_chance: 0.08}
+      llave:
+        tipo: foco
+        foco: ZAL_los_astilleros_del_clyde
+        texto: {english: 'Arrives with the focus Reopen the Clyde Shipyards.', spanish: 'Llega con el foco Reabrir los Astilleros del Clyde.'}
+
+    - id: ZAL_ley_general_sutherland
+      rol: general
+      nombre: {english: 'General Morag Sutherland', spanish: 'General Morag Sutherland'}
+      born: 2062
+      look: >-
+        Scottish woman of 38, a pale freckled face, a mane of wild copper-red hair tied back roughly, a broken nose, fierce blue
+        eyes, a crooked grin; a tartan-lined dark green field coat with brass buttons, a feathered Highland bonnet, a basket-hilted
+        broadsword at her hip and a modern rifle in hand. Wild, loud, fearless.
+      lore:
+        english: 'She led the Highland regiments down from the mountains in the year of the Breaking and never went back up. When the
+          story of the Crown or of the Network reached its end, it was her regiments who stood in Trafalgar Square, and both sides
+          claimed her. She claims only her clan, and the pipes.'
+        spanish: 'Bajó con los regimientos de las Highlands desde las montañas el año de la Rotura y nunca volvió a subir. Cuando la
+          historia de la Corona o de la Red llegó a su final, fueron sus regimientos los que estuvieron en Trafalgar Square, y los dos
+          lados dijeron que era suya. Ella solo dice que es de su clan, y de las gaitas.'
+      frase: {english: 'Play the pipes!', spanish: '¡Que suenen las gaitas!'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 5, planning_skill: 5, logistics_skill: 6}
+      rasgos: [hill_fighter, offensive_doctrine]
+      rasgo:
+        id: mn_ley_zal_la_carga_de_las_highlands
+        name: {english: 'The Highland Charge', spanish: 'La Carga de las Highlands'}
+        desc: {english: 'Comes down from the hills with the pipes playing: attack, breakthrough and morale.', spanish: 'Baja de las colinas con las gaitas sonando: ataque, ruptura y moral.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.12, breakthrough_factor: 0.1, army_morale_factor: 0.12}
+      llave:
+        tipo: aventura
+        cuando:
+          any:
+          - {flag: ZALC_av_fin_objetivo}
+          - {flag: ZALC_av_fin_positivo}
+          - {flag: ZALS_av_fin_objetivo}
+          - {flag: ZALS_av_fin_positivo}
+          - {flag: MN2110_av_fin_objetivo}
+          - {flag: MN2110_av_fin_positivo}
+        texto: {english: 'Arrives when the Steam Crown, the Great Synchrony (or the Awakening of 2110) ends in victory or with its goal fulfilled.', spanish: 'Llega cuando La Corona de Vapor, La Gran Sincronía (o El Despertar de 2110) termina bien o con su objetivo cumplido.'}
+
+    - id: ZAL_ley_general_okoro
+      rol: general
+      nombre: {english: 'General Abel Okoro-Finch', spanish: 'General Abel Okoro-Finch'}
+      born: 2055
+      look: >-
+        Black British man of 45 from Manchester, tall and rangy, a long thoughtful face, close-cropped greying hair, a short beard,
+        steady patient eyes, a worn flat cap; a brick-red and grey wool greatcoat over a mill-worker's waistcoat, a heavy
+        lump hammer on his belt and an old bolt-action rifle with no electronics. Quiet, stubborn, a workers' hero.
+      lore:
+        english: 'A mill foreman from Manchester who organised the Hammer Brigades in the year of the Breaking: no circuits, no
+          drones, nothing that can be hacked, only men, rifles and the railways. He has defended the North against everything the
+          century has sent, and says the only machine he trusts is the one he can fix with a hammer.'
+        spanish: 'Un capataz de hilandería de Manchester que organizó las Brigadas del Martillo el año de la Rotura: sin circuitos, sin
+          drones, nada que se pueda hackear, solo hombres, fusiles y los ferrocarriles. Defendió el Norte contra todo lo que mandó el
+          siglo, y dice que la única máquina en la que confía es la que puede arreglar con un martillo.'
+      frase: {english: 'Nothing they can switch off.', spanish: 'Nada que nos puedan apagar.'}
+      habilidades: {skill: 5, attack_skill: 5, defense_skill: 8, planning_skill: 6, logistics_skill: 7}
+      rasgos: [infantry_leader, defensive_doctrine]
+      rasgo:
+        id: mn_ley_zal_las_brigadas_del_martillo
+        name: {english: 'Captain of the Hammer Brigades', spanish: 'Capitán de las Brigadas del Martillo'}
+        desc: {english: 'Nothing that can be hacked or switched off: much more defence and organisation, and less supply.', spanish: 'Nada que se pueda hackear o apagar: mucha más defensa y organización, y menos suministro.'}
+        defense_skill: 2
+        logistics_skill: 1
+        modifier: {army_defence_factor: 0.15, army_org_factor: 0.1, supply_consumption_factor: -0.12}
+      llave:
+        tipo: evento
+        cuando: {any: [{war_with: NRE}, {war_with: ASC}]}
+        texto: {english: 'Arrives when war breaks out with Rome or the Commune.', spanish: 'Llega cuando estalla la guerra con Roma o la Comuna.'}
+
+    - id: ZAL_ley_secretaria_hartley
+      rol: ministro
+      nombre: {english: 'Permanent Secretary Imogen Hartley', spanish: 'Secretaria Permanente Imogen Hartley'}
+      born: 2041
+      look: >-
+        English woman of 59, small and neat, a soft pleasant forgettable face, silver hair in a tidy bob, pearl earrings, mild
+        grey eyes that miss nothing, half-moon reading glasses; an impeccable tweed suit with a brass Whitehall pin, a battered red
+        leather despatch box in her hands. Polite, invisible, the most powerful person in the room.
+      lore:
+        english: 'Permanent Secretary of Whitehall since before the Breaking. Governments have fallen, the Crown has come back, the
+          Network has wired the whole of London, and she has been at the same desk through all of it, writing the memos that every
+          one of them signed. Nobody has ever voted for her. Nobody has ever managed without her.'
+        spanish: 'Secretaria Permanente de Whitehall desde antes de la Rotura. Cayeron gobiernos, volvió la Corona, la Red cableó todo
+          Londres, y ella estuvo en el mismo escritorio todo el tiempo, escribiendo los memorandos que firmaron todos. Nadie la votó
+          nunca. Nadie se arregló nunca sin ella.'
+      frase: {english: 'Yes, Prime Minister. Of course.', spanish: 'Sí, Primer Ministro. Por supuesto.'}
+      stats: {astucia: 3, prestigio: 1}
+      rasgo:
+        id: mn_ley_zal_la_mano_de_whitehall
+        name: {english: 'The Hand of Whitehall', spanish: 'La Mano de Whitehall'}
+        modifiers: {political_power_gain: 0.15, stability_factor: 0.1, production_speed_buildings_factor: 0.08}
+      llave:
+        tipo: decision
+        costo: 100
+        cuando:
+          any:
+          - {variable_at_least: {var: ZAL_pompa, value: 75}}
+          - {variable_at_least: {var: ZAL_sincronia, value: 75}}
+          - {focus: ZAL_la_constitucion_del_telar}
+        texto: {english: 'Needs 75 Pomp or 75 Synchrony (or, for the Luddites, the focus The Constitution of the Loom).', spanish: 'Pide 75 de Pompa o 75 de Sincronía (o, para los luditas, el foco La Constitución del Telar).'}
+
+    - id: ZAL_ley_doctor_wren
+      rol: teorico
+      nombre: {english: 'Doctor Alfred Wren', spanish: 'Doctor Alfred Wren'}
+      born: 2049
+      look: >-
+        English man of 51, a long bony face, wild white hair, enormous mutton-chop sideburns, bright mad blue eyes behind
+        brass-rimmed jeweller's loupe spectacles; a tweed waistcoat with a dozen pocket watches on chains over a shirt with rolled
+        sleeves, a delicate brass clockwork mechanism with a glowing blue crystal in his hands. Eccentric, brilliant, kindly.
+      lore:
+        english: 'The Clockmaker of Greenwich: he builds machines that cannot be hacked because they have no software, only gears,
+          and machines that think because they have nothing but software. Every path of Albion has asked him for something; he has
+          given each of them exactly what they asked for, and a little more.'
+        spanish: 'El Relojero de Greenwich: construye máquinas que no se pueden hackear porque no tienen software, solo engranajes, y
+          máquinas que piensan porque no tienen nada más que software. Cada camino de Albión le pidió algo; a cada uno le dio exactamente
+          lo que pidió, y un poco más.'
+      frase: {english: 'Time, my dear, is a mechanism.', spanish: 'El tiempo, querida, es un mecanismo.'}
+      stats: {astucia: 2}
+      cargo: {slot: theorist, cost: 100}
+      rasgo:
+        id: mn_ley_zal_el_relojero_de_greenwich
+        name: {english: 'The Clockmaker of Greenwich', spanish: 'El Relojero de Greenwich'}
+        modifiers: {research_speed_factor: 0.16, industrial_capacity_factory: 0.06}
+      llave:
+        tipo: foco
+        foco: [ZAL_la_universidad_abierta, ZAL_la_exposicion_de_2100, ZAL_los_fusiles_sin_circuitos]
+        texto: {english: 'Arrives with the focus The Open University, The Great Exhibition of 2100 or Rifles Without Circuits (whichever path).', spanish: 'Llega con el foco La Universidad Abierta, La Gran Exposición de 2100 o Fusiles sin Circuitos (según el camino).'}

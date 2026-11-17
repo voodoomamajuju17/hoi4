@@ -131,6 +131,23 @@ El siglo XXII no es estable:
   muy baja puede morir, y la sucesión (el Delfín, el Mariscal o la Tribuna) deja perdedores que
   conspiran.
 
+### Las Leyendas
+
+Cada nación jugable tiene **seis leyendas**: un mariscal, un almirante, dos generales, un ministro
+y un teórico (o un jefe del estado mayor). Son lo mejor de su generación: habilidad 6, atributos de
+hasta 8 y un rasgo propio que mejora a las tropas que mandan; los ministros dan bonos grandes y
+suben las stats del líder. No están al empezar: cada una tiene su **llave**.
+
+- **Dos por decisión**, en la pestaña Decisiones, categoría *Las Leyendas*: el mariscal (pide un
+  foco militar o la Forma Final) y el ministro (pide mucho de tu recurso).
+- **Dos por foco**: el almirante y el teórico llegan solos al completar su foco.
+- **Una por aventura**: un general llega cuando termina bien El Despertar de 2110 (en Japón y
+  Albión, también sus propias historias).
+- **Una por evento**: el otro general aparece cuando estalla la guerra con tu rival.
+
+La categoría *Las Leyendas* dice quién es cada una y qué pide. Cuando llega, un evento cuenta su
+historia.
+
 ### Las aventuras
 
 Las anarquías, el mundo entero en 2110, Japón y Albión tienen historias de "elegí tu propia

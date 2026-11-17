@@ -231,6 +231,39 @@ VARIANTES: dict[str, list[str]] = {
 }
 
 
+# 2026-11-16 (las Leyendas: "exactamente el mismo estilo que usaste para sus pares pero 'elevado',
+# leveleado, maxeado"): el MISMO medio de la nación, en su versión de obra maestra
+ELEVADO: dict[str, str] = {
+    "EFE": "the MASTERPIECE retablo of the chapel: thicker, brighter gold leaf with tooled punchwork patterns, a "
+           "double halo of gold rays and leaves, the carved frame larger with gilded vines, real emeralds and a small "
+           "living orchid; votive candles lit all along the bottom edge",
+    "ASC": "the MONUMENTAL poster of the Plan: a giant fresh print pasted over many older torn ones, a fourth ink "
+           "(metallic silver) added, the figure towering like a statue with huge radiating lines and a crowd of tiny "
+           "workers looking up; the paper crisp, only one corner lifting",
+    "FCU": "the HALL OF FAME championship card: a gold-and-chrome 3D lettered NAME with diamonds, a huge championship "
+           "belt, gold confetti, double pyrotechnics, the screen glowing brighter than any other card",
+    "HSN": "the MASTERPIECE tattoo of the shop: the largest piece that fits the body part of the variation, with every "
+           "motif around the portrait (ship, waves, swallows, roses, compass), rich colour packing, gold-ink highlights, "
+           "perfectly healed, the best work the artist ever did",
+    "NAS": "a GOLDEN major arcana card: the whole card in raised gold relief and gold foil, the sun behind the figure "
+           "blazing with real gold rays, inlaid turquoise and spondylus shell at the corners, lying on the finest "
+           "aguayo cloth",
+    "SHD": "the TOP SECRET file: the photo sharper and larger than the others, a red wax seal and a jade-green 'eyes "
+           "only' ribbon on the folder (no readable words), several clips, a gold star sticker, the red pencil circle "
+           "drawn twice",
+    "APF": "the GREAT MURAL of the city: a whole huge wall, the figure painted larger than life with gold and silver "
+           "paint highlights, a crowd gathered in front of it looking up and taking photos, flowers left at the foot "
+           "of the wall",
+    "NRE": "the IMPERIAL cameo: carved in rare three-layer sardonyx with deep purple, white and gold layers, a heavy gold "
+           "frame with a laurel wreath, rubies and pearls, lying on purple silk",
+    "ZJP": "the MASTER print: a deluxe triptych-quality woodblock with heavy gold and silver mica (kirazuri), deep "
+           "embossing (karazuri), more colour blocks, the pose of a kabuki star at the climax of the play",
+    "ZAL": "the FRONT PAGE special edition: the photo huge in the middle of a whole front page, a bold black border of a "
+           "historic day, hand-tinted with more care (gold, crimson, deep green), pinned in a place of honour with "
+           "a ribbon and a medal hanging next to it",
+}
+
+
 def variante(tag: str, indice: int) -> str:
     """La variante concreta de un personaje (por su orden dentro de la nación)."""
     if tag == "HSN":
@@ -298,6 +331,9 @@ def pedido(i: dict) -> str:
             + (f"SETTING to use inside the artwork if it fits the medium: {lugar}. " if lugar else "")
             + f"MEDIUM: {medio} VARIATION: {varia}."
             + (f" THIS PORTRAIT SPECIFICALLY: {variante(i['medio_tag'], i.get('indice', 0))}." if variante(i['medio_tag'], i.get('indice', 0)) else "")
+            + (f" LEGEND: this is one of the six LEGENDS of the nation, the best of their generation: SAME medium and "
+               f"style as their peers, but ELEVATED: {ELEVADO[i['medio_tag']]}. Bigger presence, more detail, more "
+               "precious materials, a heroic but personal pose." if i.get("leyenda") and i["medio_tag"] in ELEVADO else "")
             + " PERSONALITY: the pose, the hands, the prop and the expression must come from WHO (their job, their "
               "story, their temper), so this portrait could never be confused with another character of the same "
               "nation; do not reuse a generic heroic pose.")
@@ -317,12 +353,34 @@ def anotar_llegados(carpeta: str) -> list[str]:
     return [f"retratos: {len(nuevos)} nuevos anotados ({len(previos | nuevos)} de {len(todos)})"]
 
 
+def escribir_leyendas(salida: Path, lista: list[dict]) -> str:
+    """Las Leyendas (2026-11-16) en un archivo aparte, agrupadas por nación."""
+    path = salida / "0_RETRATOS_LEYENDAS.txt"
+    if not lista:
+        path.unlink(missing_ok=True)
+        return "0_RETRATOS_LEYENDAS.txt: 0 (llegaron todos)"
+    lista = sorted(lista, key=lambda i: (i["tag"], i["id"]))
+    cabeza = [
+        f"# {len(lista)} pedidos - LAS LEYENDAS: seis por nación (mariscal, almirante, dos generales, ministro y",
+        "# teórico o estado mayor), 2026-11-16. Mismo medio que el resto de su nación (retablo, afiche, carta de TV,",
+        "# tatuaje, tarot, foto de espía, mural, camafeo, ukiyo-e, recorte de diario) pero en su versión de obra",
+        "# maestra: ver LEGEND en cada pedido. La FCU lleva el NOMBRE tal cual está en WHO.",
+        "# Al importar: python -m tools.arte.arte importar <carpeta> y después",
+        "#              python -m tools.arte.arte retratos <carpeta> (anota los que llegaron).",
+        "",
+    ]
+    path.write_text("\n".join(cabeza) + "\n".join(pedido(i) for i in lista), encoding="utf-8")
+    return f"{path.name}: {len(lista)}"
+
+
 def escribir(salida: Path) -> str:
-    lista = items()
+    todos = items()
+    lista = [i for i in todos if not i.get("leyenda")]
+    leyendas = escribir_leyendas(salida, [i for i in todos if i.get("leyenda")])
     path = salida / "0_RETRATOS_MEDIOS.txt"
     if not lista:
         path.unlink(missing_ok=True)
-        return "0_RETRATOS_MEDIOS.txt: 0 (llegaron todos)"
+        return f"0_RETRATOS_MEDIOS.txt: 0 (llegaron todos)\n  {leyendas}"
     por_tag: dict[str, int] = {}
     for i in lista:
         por_tag[i["medio_tag"]] = por_tag.get(i["medio_tag"], 0) + 1
@@ -341,4 +399,4 @@ def escribir(salida: Path) -> str:
         "",
     ]
     path.write_text("\n".join(cabeza) + "\n".join(pedido(i) for i in lista), encoding="utf-8")
-    return f"{path.name}: {len(lista)}"
+    return f"{path.name}: {len(lista)}\n  {leyendas}"

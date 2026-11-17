@@ -200,6 +200,11 @@ def _load(name: str) -> dict:
         if name == "07_focus_trees.yaml":
             data.setdefault("trees", {}).update((ov.get("focus_trees") or {}).get("trees") or {})
         elif name == "03_leaders.yaml":
+            if ov.get("leyendas"):
+                # 2026-11-16: las Leyendas vienen compactas (tools/gen/leyendas_spec.py las arma)
+                import copy
+                from tools.gen import leyendas_spec
+                ov = dict(ov, leaders=leyendas_spec.expandir(copy.deepcopy(ov["leyendas"]))["leaders"])
             data.setdefault("characters", []).extend((ov.get("leaders") or {}).get("characters") or [])
             # 2026-11-01: también sus rasgos, para que el retrato diga el nombre y no el id
             for key in ("leader_traits", "unit_leader_traits"):
@@ -304,6 +309,12 @@ def catalog() -> list[dict]:
                             if ch.get("lore") else _one_line(portrait.get("description") or regnal.get("english", ch["id"])))
                            + " Head-and-shoulders portrait, facing the viewer.",
         }
+        if ch.get("look"):
+            # 2026-11-16 (las Leyendas): cómo es, en inglés, escrito para el retrato
+            item["description"] = (f"{regnal.get('english', ch['id'])}, born {ch.get('born', '?')}: {_one_line(ch['look'])}"
+                                   " Head-and-shoulders portrait, facing the viewer.")
+        if ch.get("leyenda"):
+            item["leyenda"] = True
         if ch["id"] in (looks.get("characters") or {}) and tag in (looks.get("looks") or {}):
             item["description"] = _portrait(ch, looks["looks"][tag], looks["characters"][ch["id"]], traits)
             item["style"] = PORTRAIT_STYLE
@@ -1227,7 +1238,7 @@ def pedidos() -> None:
     bloques = []
     # 2026-11-09 ("pasame un solo txt con todas las imágenes que faltan"): también los espíritus en
     # azulejo, los pines, el diseñador y los retratos, que tienen su archivo aparte; sin repetidos
-    sueltos = [OUT / n for n in ("0_ESPIRITUS_AZULEJO.txt", "0_RETRATOS_MEDIOS.txt", "0_FOCOS_PIN_FALTANTES.txt",
+    sueltos = [OUT / n for n in ("0_ESPIRITUS_AZULEJO.txt", "0_RETRATOS_MEDIOS.txt", "0_RETRATOS_LEYENDAS.txt", "0_FOCOS_PIN_FALTANTES.txt",
                                  "0_DISENADOR_2100.txt") if (OUT / n).exists()]
     vistos = set()
     for f in todos + sueltos:

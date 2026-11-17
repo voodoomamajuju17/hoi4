@@ -129,8 +129,13 @@ def _bandera(tag: str) -> str | None:
 
 def _cargar():
     sys.path.insert(0, str(REPO))
+    import yaml
     from tools.gen import specload
-    return specload.load(REPO / "spec").raw
+    raw = specload.load(REPO / "spec").raw
+    ley = REPO / "spec" / "42_leyendas.yaml"
+    if ley.exists():
+        raw["_leyendas"] = (yaml.safe_load(ley.read_text(encoding="utf-8")) or {}).get("leyendas") or {}
+    return raw
 
 
 def _paises(raw) -> dict[str, dict]:
@@ -263,8 +268,20 @@ def pagina(raw, tag: str, pais: dict | None, personas: dict, citas: dict) -> str
                     f"{b['event']}" + (f" ({b['date']})" if b.get('date') not in (None, 'unknown') else "") for b in bio)]
             L.append("")
 
+    # 2026-11-16: las Leyendas (spec/42_leyendas.yaml) van aparte, con su llave
+    leyendas = ((raw.get("_leyendas") or {}).get(tag) or {}).get("personajes") or []
+    if leyendas:
+        L += ["## Las Leyendas", "", _es((raw["_leyendas"][tag]).get("intro")), "",
+              "| Nombre | Cargo | Cómo llega | Quién es |", "|---|---|---|---|"]
+        cargos = {"mariscal": "Mariscal", "almirante": "Almirante", "general": "General", "ministro": "Ministro",
+                  "teorico": "Teórico", "estado_mayor": "Estado mayor"}
+        for p in leyendas:
+            L.append(f"| **{_es(p['nombre'])}** | {cargos.get(p['rol'], p['rol'])}: {_es(p['rasgo']['name'])} | "
+                     f"{_es(p['llave']['texto'])} | {_uno(_es(p['lore'])).replace('|', '/')} |")
+        L.append("")
+
     # gabinete y mandos
-    otros = [c for c in gente if c not in jefes]
+    otros = [c for c in gente if c not in jefes and not c.get("leyenda")]
     if otros:
         L += ["## Gabinete, generales y almirantes", "",
               "| Nombre | Cargo | Quién es |", "|---|---|---|"]
