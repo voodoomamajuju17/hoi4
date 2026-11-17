@@ -66,8 +66,9 @@ MEDIOS: dict[str, tuple[str, str]] = {
             "each character a different major arcana reinvented for the Celestial Kingdom (the Emperor, the "
             "Chariot, Justice, the Star, the Hermit, Strength...) chosen to fit their role"),
     "SHD": ("SPY PHOTO: a clandestine long-lens surveillance photograph, grainy and slightly blurred, printed on "
-            "glossy photo paper and paper-clipped to a beige intelligence dossier folder; a red grease-pencil "
-            "circle around the face, a strip of black redaction tape, a coffee ring or a fingerprint on the folder. "
+            "glossy photo paper and paper-clipped to a beige intelligence dossier folder; a strip of black redaction "
+            "tape, a coffee ring or a fingerprint on the folder (NO red circle or any mark drawn over the face: "
+            "2026-11-17, the face stays clean). "
             "The person caught in their world (a dam, a control room, a corridor of servers, a rainy street) and "
             "looking straight into the camera. Palette: jade green, steel grey, sodium-lamp orange, pencil red.",
             "each photo a different place and moment (getting out of a car, at a window, at a parade, in a canteen)"),
@@ -249,8 +250,8 @@ ELEVADO: dict[str, str] = {
            "blazing with real gold rays, inlaid turquoise and spondylus shell at the corners, lying on the finest "
            "aguayo cloth",
     "SHD": "the TOP SECRET file: the photo sharper and larger than the others, a red wax seal and a jade-green 'eyes "
-           "only' ribbon on the folder (no readable words), several clips, a gold star sticker, the red pencil circle "
-           "drawn twice",
+           "only' ribbon on the folder (no readable words), several clips, a gold star sticker, nothing drawn over the "
+           "face",
     "APF": "the GREAT MURAL of the city: a whole huge wall, the figure painted larger than life with gold and silver "
            "paint highlights, a crowd gathered in front of it looking up and taking photos, flowers left at the foot "
            "of the wall",
