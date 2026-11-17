@@ -232,7 +232,8 @@ def _asset_retrato(path: str):
     partes = path.replace("\\", "/").split("/")
     if len(partes) < 4 or partes[0] != "gfx" or partes[1] != "leaders":
         return None
-    return Path(__file__).resolve().parents[3] / "assets" / partes[2] / "leaders" / partes[-1]
+    # (2026-11-17: también la versión chica, gfx/leaders/<TAG>/small/<archivo>)
+    return Path(__file__).resolve().parents[3] / "assets" / partes[2] / "leaders" / "/".join(partes[3:])
 
 
 def _retrato_disponible(path: str) -> bool:
@@ -644,6 +645,18 @@ def render_effects(owner: str, items: list[dict], known,
         if effect == "leader_trait":
             block.add("add_country_leader_trait", item["value"])
             effects_used.setdefault("add_country_leader_trait", owner)
+            continue
+        if effect == "set_portraits":
+            # 2026-11-17 (Albión: "los generales ... deberian seguir siendo los mismos, solo transformarse
+            # segun el camino tomado"): el mismo personaje cambia de retrato. Solo si el arte ya llegó; como
+            # los efectos de líder de las guerras civiles, no se verifica contra documentation/
+            large = item["large"]
+            if _retrato_disponible(large):
+                small = large.rsplit("/", 1)[0] + "/small/" + large.rsplit("/", 1)[1]
+                sizes = Block([("large", portrait_sprite(large))])
+                if _retrato_disponible(small):
+                    sizes.add("small", portrait_sprite(small))
+                block.add("set_portraits", Block([("character", item["character"]), (item.get("role", "army"), sizes)]))
             continue
         if effect == "recruit":
             # 2026-11-01 (Gran Bretaña: "los que existen para neovictorian no existen

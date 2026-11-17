@@ -93,11 +93,7 @@ decisions:
     - {effect: recruit, character: ZAL_fut_min_byrne}
     - {effect: recruit, character: ZAL_fut_min_penhallow}
     - {effect: recruit, character: ZAL_fut_mando_achebe}
-    - {effect: recruit, character: ZAL_fut_mando_strachan}
-    - {effect: recruit, character: ZAL_fut_mando_malhotra}
     - {effect: recruit, character: ZAL_fut_mando_munro}
-    - {effect: recruit, character: ZAL_fut_mariscal_grant}
-    - {effect: recruit, character: ZAL_fut_gen_rook}
     - {effect: recruit, character: ZAL_fut_gen_chandran}
     - {effect: recruit, character: ZAL_fut_alm_calder}
 
@@ -108,14 +104,10 @@ decisions:
     - {effect: recruit, character: ZAL_vic_min_kettering}
     - {effect: recruit, character: ZAL_vic_min_thorne}
     - {effect: recruit, character: ZAL_vic_min_wexley}
-    - {effect: recruit, character: ZAL_vic_mando_pembroke}
     - {effect: recruit, character: ZAL_vic_mando_halloway}
     - {effect: recruit, character: ZAL_vic_mando_ashby}
-    - {effect: recruit, character: ZAL_vic_mando_hartigan}
     - {effect: recruit, character: ZAL_vic_mariscal_wrexham}
-    - {effect: recruit, character: ZAL_vic_gen_montague}
     - {effect: recruit, character: ZAL_vic_gen_carrow}
-    - {effect: recruit, character: ZAL_vic_alm_ormsby}
 
   # ---------------------------------------------------------------------------
   # Sincronía: la red de Londres (Hacia el Futuro)
@@ -2505,7 +2497,8 @@ leaders:
   - id: ZAL_fut_mando_strachan
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: Admiral Fiona Strachan, spanish: Almirante Fiona Strachan}}
     born: 2060
     lore: Capitana de un pesquero de Aberdeen hasta los cuarenta. Ahora sus escoltas navegan en formación perfecta sin
@@ -2516,7 +2509,8 @@ leaders:
   - id: ZAL_fut_mando_malhotra
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: Air Marshal Dev Malhotra, spanish: Mariscal del Aire Dev Malhotra}}
     born: 2067
     lore: Piloto de drones de Leicester que vuela cuarenta máquinas a la vez con los ojos cerrados. Dice que el cielo
@@ -2538,7 +2532,8 @@ leaders:
   - id: ZAL_fut_mariscal_grant
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: Marshal Alistair Grant, spanish: Mariscal Alistair Grant}}
     born: 2057
     lore: Era el jefe de las milicias luditas de las Highlands. Se conectó el mismo día que su hija, para no perderla,
@@ -2555,7 +2550,8 @@ leaders:
   - id: ZAL_fut_gen_rook
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: General Tamsin Rook, spanish: Generala Tamsin Rook}}
     born: 2071
     lore: Ingeniera de combate de Plymouth. Sus zapadores tienden puentes sin hablar, porque cada uno sabe dónde va a
@@ -2663,7 +2659,8 @@ leaders:
   - id: ZAL_vic_mando_pembroke
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: General Sir Horatio Pembroke, spanish: General Sir Horatio Pembroke}}
     born: 2052
     lore: Coronel de las milicias luditas de Kent que se dejó crecer las patillas el día de la Restauración. Cree en
@@ -2696,7 +2693,8 @@ leaders:
   - id: ZAL_vic_mando_hartigan
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: Colonel Sir Edmund Hartigan, spanish: Coronel Sir Edmund Hartigan}}
     born: 2058
     lore: Irlandés de Cork, oficial de infantería de los regimientos de la Reina. Forma a sus hombres en cuadro, como en
@@ -2724,7 +2722,8 @@ leaders:
   - id: ZAL_vic_gen_montague
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: General Sir Cecil Montague, spanish: General Sir Cecil Montague}}
     born: 2061
     lore: Escalador de los Lagos y oficial de fusileros. Pelea en las colinas con monóculo y bastón, y es el primero en
@@ -2758,7 +2757,8 @@ leaders:
   - id: ZAL_vic_alm_ormsby
     country: ZAL
     src: user_request
-    recruit_in_history: false
+    # 2026-11-17: del plantel común de Albión (los tres caminos y los luditas); cambia de retrato
+    # según el camino (44_albion_caminos.yaml)
     name: {regnal: {english: Admiral Sir Rupert Ormsby, spanish: Almirante Sir Rupert Ormsby}}
     born: 2057
     lore: Comandante de los acorazados del Clyde, que tienen el casco remachado y velas solares. Pinta un león en la

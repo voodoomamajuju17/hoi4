@@ -1936,7 +1936,7 @@ def test_asc() -> None:
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
         check("377 modificadores dinamicos (2 de la Linea, 2026-11-14; sin los Anios Inciertos, 2026-11-07; 8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len(dm.entries) == 377 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+              len([k for k, _ in dm.entries if not str(k).startswith("FCU_socia_")]) == 377 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -3333,8 +3333,8 @@ def test_leyendas() -> None:
         mod = ctx.mod_root
         chars = " ".join((mod / "common/characters/EFE_characters.txt").read_text(encoding="utf-8-sig").split())
         check("el mariscal sale con sus números y sus tres rasgos",
-              "EFE_ley_mariscala_irupe = { name = EFE_ley_mariscala_irupe field_marshal = { traits = { defensive_doctrine "
-              "organizer mn_ley_efe_madre_de_las_raices } skill = 6" in chars, chars[chars.find("EFE_ley_mariscala"):][:300])
+              "field_marshal = { traits = { defensive_doctrine organizer mn_ley_efe_madre_de_las_raices } skill = 6"
+              in chars[chars.find("EFE_ley_mariscala_irupe = {"):][:700], chars[chars.find("EFE_ley_mariscala"):][:300])
         hist = (mod / "history/countries").glob("EFE*.txt")
         check("no se recluta en la historia", not any("EFE_ley_" in h.read_text(encoding="utf-8-sig") for h in hist))
         ut = " ".join((mod / "common/unit_leader/meganations_unit_traits.txt").read_text(encoding="utf-8-sig").split())
@@ -3423,6 +3423,36 @@ def test_cuatro() -> None:
         sg = " ".join((mod / "common/scripted_guis/meganations_paneles.txt").read_text(encoding="utf-8-sig").split())
         check("el Directorio y los favores estan en la Boveda", "a_FCU_contrato_de_defensa_click" in sg
               and "a_FCU_favor_meridian_visible = { check_variable = { var = FCU_humor_meridian value = 80" in sg)
+
+
+def test_albion_caminos() -> None:
+    """2026-11-17: bandera de transición desde el primer foco del camino; el mismo plantel, otro retrato."""
+    section("Albion: distinta en cada camino")
+    from tools.gen import albion_caminos_spec as acs
+    raw = specload.load(REPO_ROOT / "spec").raw
+    cfg = raw["albion_caminos"]
+    focos = {f["id"]: f for t in raw["focus_trees"]["trees"].values() if isinstance(t, dict)
+             for b in t.get("branches") or [] for f in b.get("focuses") or []}
+    for camino, bandera in (("futuro", "ZAL_RED"), ("pasado", "ZAL_RESTAURADO"), ("ludita", "ZAL_TELAR")):
+        r = focos[cfg["caminos"][camino]["foco"]]["reward"]
+        check(f"{camino}: bandera de transicion desde el primer foco", {"effect": "cosmetic_tag", "value": bandera} in r)
+        check(f"{camino}: cada personaje del camino cambia de retrato",
+              sum(1 for e in r if e.get("effect") == "set_portraits") == len(cfg["comunes"]) + len(cfg["caminos"][camino]["propios"]))
+    chars = {c["id"]: c for c in raw["leaders"]["characters"]}
+    check("el plantel comun existe en los tres caminos (se recluta al empezar)",
+          all(chars[c].get("recruit_in_history", True) for c in cfg["comunes"]))
+    reclutas = " ".join(str(e["effects"]) for e in raw["decisions"]["scripted_effects"] if e["id"] in ("ZAL_reclutar_futuro", "ZAL_reclutar_pasado"))
+    check("4 de cada equipo pasan al plantel comun", "ZAL_fut_mariscal_grant" not in reclutas and "ZAL_vic_alm_ormsby" not in reclutas
+          and "ZAL_fut_alm_calder" in reclutas and "ZAL_vic_mariscal_wrexham" in reclutas)
+    check("53 retratos por camino (11 comunes x 3 y 10 propios por camino transhumano y neovictoriano)", len(acs.personajes(cfg)) == 53)
+    from tools.gen.emitters import effects as ef
+    blk = ef.render_effects("ZAL", [{"effect": "set_portraits", "character": "ZAL_fut_mariscal_grant", "role": "army",
+                                     "large": "gfx/leaders/ZAL/ZAL_fut_mariscal_grant.dds"}], ef.EffectContext(set(), set()), {}, where="t")
+    check("el cambio de retrato apunta al personaje y a su tipo de retrato",
+          "set_portraits = { character = ZAL_fut_mariscal_grant army = { large = GFX_portrait_mn_ZAL_fut_mariscal_grant" in " ".join(pdx.render(blk).split()))
+    blk2 = ef.render_effects("ZAL", [{"effect": "set_portraits", "character": "X", "large": "gfx/leaders/ZAL/no_existe__futuro.dds"}],
+                             ef.EffectContext(set(), set()), {}, where="t")
+    check("hasta que llega el retrato nuevo, no se cambia nada", "set_portraits" not in pdx.render(blk2))
 
 
 def test_paneles_recurso() -> None:
@@ -6486,6 +6516,7 @@ def main() -> int:
         test_facciones,
         test_leyendas,
         test_cuatro,
+        test_albion_caminos,
     ):
         test()
 

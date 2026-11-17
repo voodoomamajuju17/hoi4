@@ -306,7 +306,7 @@ def items(todos: bool = False) -> list[dict]:
     hechos = set() if todos else _llegados()
     out = []
     for i in arte.catalog():
-        if i["type"] != "leader_portrait" or i["id"] in hechos:
+        if i["type"] != "leader_portrait" or i["id"] in hechos or i.get("camino"):
             continue
         tag = i["tag"] if i["tag"] in MEDIOS else ("JUNTA" if "junta" in i["id"].lower() else i["tag"])
         if tag not in MEDIOS:
@@ -374,10 +374,43 @@ def escribir_leyendas(salida: Path, lista: list[dict]) -> str:
     return f"{path.name}: {len(lista)}"
 
 
+def escribir_albion(salida: Path) -> str:
+    """Albión distinta en cada camino (2026-11-17): el mismo personaje en el medio de cada camino."""
+    import yaml
+    from tools.arte import arte
+    path = salida / "0_RETRATOS_ALBION_CAMINOS.txt"
+    cfg = (yaml.safe_load((REPO / "spec" / "44_albion_caminos.yaml").read_text(encoding="utf-8")) or {}).get("albion_caminos") or {}
+    cat = arte.catalog()
+    quien = {i["id"]: i for i in cat if i["type"] == "leader_portrait"}
+    faltan = [i for i in cat if i.get("camino") and not i["done"]]
+    if not faltan:
+        path.unlink(missing_ok=True)
+        return "0_RETRATOS_ALBION_CAMINOS.txt: 0 (llegaron todos)"
+    nombres = {"futuro": "TRANSHUMAN path", "pasado": "NEO-VICTORIAN path", "ludita": "LUDDITE path"}
+    bloques = []
+    for i in sorted(faltan, key=lambda i: (i["camino"], i["base"])):
+        base = quien.get(i["base"]) or {}
+        persona_txt, _lugar = persona(base.get("description", i["base"]))
+        desc = (f"WHO (keep this person's face, age, ethnicity, hair and details; their clothing adapts to the path): {persona_txt} "
+                f"MEDIUM ({nombres[i['camino']]} of Albion): {_uno(cfg['caminos'][i['camino']]['medio'])} The SAME person as in "
+                "the other two paths of Albion, transformed by the path: same face, different world. PERSONALITY: the pose, "
+                "the hands, the prop and the expression come from WHO.")
+        bloques.append("\n".join(["ASSET_REQUEST", "type: leader_portrait", f"id: {i['id']}", f"filename: {i['id']}.png",
+                                   "size: 624x840 (proporción 156x210; más grande con la misma proporción está bien)",
+                                   f"style: {ESTILO}", f"description: {desc}", "transparent_background: false", ""]))
+    cabeza = [f"# {len(faltan)} pedidos - ALBIÓN DISTINTA EN CADA CAMINO (2026-11-17). El mismo personaje, transformado:",
+              "#   __futuro  HOLOGRAMA (transhumanos) | __pasado  DAGUERROTIPO u ÓLEO (neovictorianos) | __ludita  GRABADO EN PANFLETO",
+              "# Los mandos comunes (Grant, Rook, Strachan, Malhotra, Montague, Ormsby, Pembroke, Hartigan, Kelly, Pritchard) y",
+              "# el líder Ashworth van en los tres; los propios de cada camino, solo en el suyo. Guardar con el filename tal cual.",
+              ""]
+    path.write_text("\n".join(cabeza) + "\n".join(bloques), encoding="utf-8")
+    return f"{path.name}: {len(faltan)}"
+
+
 def escribir(salida: Path) -> str:
     todos = items()
     lista = [i for i in todos if not i.get("leyenda")]
-    leyendas = escribir_leyendas(salida, [i for i in todos if i.get("leyenda")])
+    leyendas = escribir_leyendas(salida, [i for i in todos if i.get("leyenda")]) + "\n  " + escribir_albion(salida)
     path = salida / "0_RETRATOS_MEDIOS.txt"
     if not lista:
         path.unlink(missing_ok=True)

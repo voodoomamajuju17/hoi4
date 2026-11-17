@@ -1,0 +1,82 @@
+# =============================================================================
+# Albión distinta en cada camino (2026-11-17)
+#
+# Pedido: "Bandera y nombre de transición desde el primer foco del camino. Retratos en un medio propio
+# por camino: daguerrotipo u óleo para los neovictorianos, holograma para los transhumanos y grabado en
+# panfleto para los luditas. Los generales, los almirantes y eso, deberian seguir siendo los mismos,
+# solo transformarse segun el camino tomado" / "agarrar 4 de cada uno y transformarlos en luditas?
+# Total solo tienen q cambiar su portrait".
+#
+# - El primer foco de cada camino pone la bandera y el nombre de transición (las finales siguen llegando
+#   con el último foco).
+# - `comunes`: el plantel que existe en los tres caminos (4 mandos del equipo transhumano y 4 del
+#   neovictoriano, que ya no se reclutan con su camino, más los dos jefes de siempre y el líder). Al
+#   elegir el camino, cada uno cambia su retrato por el del medio de ese camino.
+# - `propios`: los que solo existen en un camino; también toman el retrato de su medio.
+# Los retratos van en assets/ZAL/leaders/<id>__<camino>.dds; hasta que llegan, queda el de siempre
+# (tools/gen/albion_caminos_spec.py, efecto set_portraits).
+# =============================================================================
+
+cosmetic_tags:
+- id: ZAL_RED
+  parent: ZAL
+  name: {english: 'Networked Albion', spanish: 'Albión de la Red'}
+  adjective: {english: 'Networked', spanish: 'de la Red'}
+  art: 'the old blue, white and red cross of Britain redrawn in thin glowing cyan lines on a dark slate field, as if traced by fibre optics, with small nodes where the lines cross; transitional, unfinished, hopeful.'
+  src: user_request
+- id: ZAL_RESTAURADO
+  parent: ZAL
+  name: {english: 'The Restored Kingdom', spanish: 'El Reino Restaurado'}
+  adjective: {english: 'Restored', spanish: 'restaurado'}
+  art: 'a deep navy field with a simple golden crown in the centre over a thin red and white cross, edged in brass; dignified, Victorian, less ornate than an empire banner.'
+  src: user_request
+- id: ZAL_TELAR
+  parent: ZAL
+  name: {english: 'The Commonwealth of the Loom', spanish: 'La Mancomunidad del Telar'}
+  adjective: {english: 'Loom', spanish: 'del telar'}
+  art: 'a rough unbleached linen field with a black hand-printed weaving shuttle crossed with a sledgehammer in the centre and a thin red woven border; homespun, defiant, printed by hand.'
+  src: user_request
+
+albion_caminos:
+  comunes:
+  - ZAL_tom_ashworth
+  - ZAL_mando_kelly_1
+  - ZAL_mando_pritchard_2
+  - ZAL_fut_mariscal_grant
+  - ZAL_fut_gen_rook
+  - ZAL_fut_mando_strachan
+  - ZAL_fut_mando_malhotra
+  - ZAL_vic_gen_montague
+  - ZAL_vic_alm_ormsby
+  - ZAL_vic_mando_pembroke
+  - ZAL_vic_mando_hartigan
+  caminos:
+    futuro:
+      foco: ZAL_hacia_el_futuro
+      bandera: ZAL_RED
+      propios: [ZAL_siobhan_cray, ZAL_fut_min_harrow, ZAL_fut_min_nwosu, ZAL_fut_min_mcallister, ZAL_fut_min_byrne,
+                ZAL_fut_min_penhallow, ZAL_fut_mando_achebe, ZAL_fut_mando_munro, ZAL_fut_gen_chandran, ZAL_fut_alm_calder]
+      medio: >-
+        HOLOGRAM: a photograph of a translucent holographic portrait of this person projected in the air above a small
+        brushed-titanium emitter disc in a dark, clean laboratory: glowing electric-cyan light, fine horizontal scan
+        lines, faint interference shimmer and a few floating data points around the head; the face sharp, solid enough
+        to read clearly, lit from within. White ceramic and titanium in the dark background.
+    pasado:
+      foco: ZAL_hacia_el_pasado
+      bandera: ZAL_RESTAURADO
+      propios: [ZAL_victoria_iii, ZAL_vic_min_fenwick, ZAL_vic_min_ravensworth, ZAL_vic_min_kettering, ZAL_vic_min_thorne,
+                ZAL_vic_min_wexley, ZAL_vic_mando_halloway, ZAL_vic_mando_ashby, ZAL_vic_mariscal_wrexham, ZAL_vic_gen_carrow]
+      medio: >-
+        VICTORIAN PORTRAIT: either a silvered DAGUERREOTYPE in a hinged leather case with a gilded brass mat (mirror-like
+        silver sheen, slight tarnish at the edges, sepia and steel tones) or a small OIL PAINTING in rich Victorian colour
+        with visible brushwork and craquelure, in a heavy gilded oval frame lying on wine-red velvet. Formal, dignified
+        studio pose; mahogany, gilt brass and crimson.
+    ludita:
+      foco: ZAL_quedarse_luditas
+      bandera: ZAL_TELAR
+      propios: []
+      medio: >-
+        PAMPHLET LINOCUT: a hand-carved linocut (or woodcut) portrait printed on the front of a cheap folded political
+        pamphlet, black ink on rough off-white paper with one second colour in brick red, uneven ink coverage, visible
+        carving gouges, a fold line and a thumbprint, pinned with a nail to the wooden wall of a pub or a mill; bold
+        carved lines, the face strong and readable; a banner shape with no readable words.

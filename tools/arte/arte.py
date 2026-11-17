@@ -551,6 +551,7 @@ def catalog() -> list[dict]:
                                "in the description; no default poster look; no text, no letters, no watermark"})
     items += _industria_items()
     items += _rebeldes_items()
+    items += _albion_caminos_items()
     items += _adventure_items()
     items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
@@ -907,6 +908,23 @@ REBELDES = {   # 2026-11-16: líderes rebeldes sin retrato (pedido fijo 36_retra
 }
 
 
+def _albion_caminos_items() -> list[dict]:
+    """2026-11-17: Albión distinta en cada camino (spec/44_albion_caminos.yaml): el retrato de cada personaje en
+    el medio de su camino, <id>__<camino>.dds. El pedido lo escribe tools/arte/retratos_medios.py."""
+    path = SPEC / "44_albion_caminos.yaml"
+    if not path.exists():
+        return []
+    from tools.gen import albion_caminos_spec as acs
+    cfg = (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("albion_caminos") or {}
+    out = []
+    for cid, camino in acs.personajes(cfg):
+        dest = REPO / "assets" / "ZAL" / "leaders" / f"{cid}__{camino}.dds"
+        out.append({"type": "leader_portrait", "tag": "ZAL", "id": f"{cid}__{camino}", "dest": dest,
+                    "done": dest.exists(), "hand_written": True, "camino": camino, "base": cid,
+                    "description": "ver arte/pedidos/0_RETRATOS_ALBION_CAMINOS.txt"})
+    return out
+
+
 def _rebeldes_items() -> list[dict]:
     """Los retratos de líderes rebeldes: el pedido va escrito a mano (pedidos_fijos), acá solo el destino."""
     return [{"type": "leader_portrait", "tag": t, "id": i, "dest": REPO / "assets" / t / "leaders" / f"{i}.dds",
@@ -1238,7 +1256,7 @@ def pedidos() -> None:
     bloques = []
     # 2026-11-09 ("pasame un solo txt con todas las imágenes que faltan"): también los espíritus en
     # azulejo, los pines, el diseñador y los retratos, que tienen su archivo aparte; sin repetidos
-    sueltos = [OUT / n for n in ("0_ESPIRITUS_AZULEJO.txt", "0_RETRATOS_MEDIOS.txt", "0_RETRATOS_LEYENDAS.txt", "0_FOCOS_PIN_FALTANTES.txt",
+    sueltos = [OUT / n for n in ("0_ESPIRITUS_AZULEJO.txt", "0_RETRATOS_MEDIOS.txt", "0_RETRATOS_LEYENDAS.txt", "0_RETRATOS_ALBION_CAMINOS.txt", "0_FOCOS_PIN_FALTANTES.txt",
                                  "0_DISENADOR_2100.txt") if (OUT / n).exists()]
     vistos = set()
     for f in todos + sueltos:

@@ -61,7 +61,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-16: las Leyendas, seis personajes legendarios por nación
                  "42_leyendas.yaml",
                  # 2026-11-17: el humor de las Cuatro de la Unión
-                 "43_las_cuatro.yaml"]
+                 "43_las_cuatro.yaml",
+                 # 2026-11-17: Albión distinta en cada camino
+                 "44_albion_caminos.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -94,6 +96,14 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
         from . import leyendas_spec
         overlay = dict(overlay)
         merge_overlay(raw, leyendas_spec.expandir(overlay.pop("leyendas")), filename)
+
+    # 2026-11-17: Albión distinta en cada camino (44_albion_caminos.yaml): banderas de transición y retratos
+    if overlay.get("albion_caminos"):
+        from . import albion_caminos_spec
+        raw["albion_caminos"] = overlay["albion_caminos"]
+        overlay = dict(overlay)
+        extra = albion_caminos_spec.expandir(raw, overlay.pop("albion_caminos"))
+        overlay["extend_focuses"] = {**(overlay.get("extend_focuses") or {}), **extra["extend_focuses"]}
 
     dec_new = overlay.get("decisions") or {}
     dec = raw.setdefault("decisions", {})
