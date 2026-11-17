@@ -127,6 +127,10 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **Disturbios en las Ciudades.** Las ciudades ya no le obedecen al Directorio.
 - **La Cotización.** Cuando la acción sube, la Unión es generosa; cuando baja, está nerviosa.
 - **El Martes Negro.** Corredores de bolsa en las cornisas, otra vez.
+- **Socia: Castellane.** Castellane está encantada con el Directorio (humor 80 o más) y se nota.
+- **Socia: Halvorsen-Ito.** Halvorsen-Ito está encantada con el Directorio (humor 80 o más) y se nota.
+- **Socia: Meridian.** Meridian está encantada con el Directorio (humor 80 o más) y se nota.
+- **Socia: Obsidian Ledger.** Obsidian Ledger está encantada con el Directorio (humor 80 o más) y se nota.
 
 ## El árbol de focos nacionales
 
@@ -251,7 +255,7 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-83 eventos propios. Algunos títulos:
+103 eventos propios. Algunos títulos:
 
 *Quórum: No Requerido* · *Meridian Huele Sangre* · *Informe Trimestral a los Accionistas* · *El Imperio Vende* · *La Alta Mar Paga* · *El Agua no se Vende* · *El Bloqueo Legal* · *El Directorio de las Cuatro* · *La Filtración* · *Bioacero en Venta* · *El Árbitro de los Mares* · *El Canal* · *El Directorio en Armonía* · *Descontento en Zona de Recursos Boreal* · *Descontento en Zona Económica del Sur* · *El Bioacero del Imperio* · *Elecciones del Directorio* · *La Flota Controla el Pacífico* · *El Agua del Imperio* · *Cómo se Juega* · *La Guerra de las Aseguradoras* · *La Nación del Mar Vende* · *La Nación del Mar se Niega* · *La Unión Quiere Entrar* · *Armisticio con Imperio Ecofascista* · *Imperio Ecofascista Pide un Armisticio* · *Una Paz Humillante con Unión Libre de Capital Corporativo* · *Armisticio con Comuna Socialista Automatizada* · *Comuna Socialista Automatizada Pide un Armisticio* · *Armisticio con Nación de Mercado de Alta Mar* · *Nación de Mercado de Alta Mar Pide un Armisticio* · *Armisticio con Reino Celeste Neoandino* · *Reino Celeste Neoandino Pide un Armisticio* · *Armisticio con Directorio Sino-Armónico* · *Directorio Sino-Armónico Pide un Armisticio* · *Armisticio con Federación de los Pueblos Africanos* · *Federación de los Pueblos Africanos Pide un Armisticio* · *Armisticio con Neo Imperio Romano* · *Neo Imperio Romano Pide un Armisticio* · *El Día del Accionista* · *La Huelga de Detroit* · *Publicidad en la Luna* · *La Fusión del Siglo* · *Once Minutos* · *Zona de Recursos Boreal Declara la Independencia* · *¡Independencia!* · *Zona Económica del Sur Declara la Independencia* · *La Frontera se Arma* · *La Corporación de las Américas* · *Se Proclama La Corporación de las Américas* · *La Unión en 2100* · *Adquisición Hostil* · *Meridian Deja de Pagar* · *Las Milicias de Meridian* · *La Secesión de Meridian* · *El Martes Negro* · *La Burbuja* · *Perdimos La Torre Obsidian* · *Perdimos El Campus Halvorsen-Ito* · *Perdimos Las Aguas de Castellane*
 
