@@ -3401,7 +3401,19 @@ def test_paneles_recurso() -> None:
               "a_ASC_construir_datacenter_click = { add_political_power = -75 set_country_flag = { flag = MN_pcd_ASC_construir_datacenter value = 1 days = 120 }" in sg
               and "a_ASC_construir_datacenter_click_enabled = { has_political_power > 74 NOT = { has_country_flag = MN_pcd_ASC_construir_datacenter } }" in sg, sg[:800])
         check("paneles: las condiciones de la decisión pasan al botón",
-              "a_ASC_asignar_economia_click_enabled = { NOT = { has_country_flag = ASC_reasignando } has_political_power > 24 }" in sg)
+              "a_ASC_asignar_economia_click_enabled = { custom_trigger_tooltip = { tooltip = MN_tt_req_ASC_asignar_economia_red_lista "
+              "NOT = { has_country_flag = ASC_reasignando } }" in sg and "has_political_power > 24 }" in sg)
+        # 2026-11-17 ("en ningun lado me dice donde tengo asignado el computo. Y aunq lo tengo en guerra, esa
+        # opcion sigue disponible")
+        check("paneles: la prioridad que ya está puesta no se puede volver a elegir",
+              "a_ASC_asignar_guerra_click_enabled = { custom_trigger_tooltip = { tooltip = MN_tt_req_ASC_asignar_guerra_red_lista "
+              "NOT = { has_country_flag = ASC_reasignando } } custom_trigger_tooltip = { tooltip = "
+              "MN_tt_req_ASC_asignar_guerra_no_es_la_actual NOT = { has_country_flag = ASC_prioridad_guerra } }" in sg)
+        _sl = (mod / "common/scripted_localisation/meganations_paneles_estado.txt").read_text(encoding="utf-8-sig")
+        _es = "".join(f.read_text(encoding="utf-8-sig") for f in (mod / "localisation/spanish").glob("*.yml"))
+        check("paneles: el texto del Cómputo dice la prioridad actual (y si está recalibrando)",
+              "name = ASC_prioridad_actual" in _sl and "PRIORIDAD ACTUAL: [ASC_prioridad_actual]" in _es
+              and "(recalibrando: sin bonus hasta 30 días)" in _es)
         check("paneles: el medidor elige su cuadro con MN_panel_cuadro",
               "medidor = { frame = MN_panel_cuadro }" in sg and 'spriteType = "GFX_mn_panel_ASC_medidor"' in gui)
         check("paneles: Albión tiene uno por ruta",

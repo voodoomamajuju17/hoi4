@@ -80,7 +80,29 @@ def _arte_listo(ctx: BuildContext, panel: str) -> bool:
     return all((base / f"{p}.dds").exists() for p in ("fondo", "medidor", "boton", "icono"))
 
 
+def _estados(ctx: BuildContext) -> None:
+    """2026-11-17 ("aca en ningun lado me dice donde tengo asignado el computo"): la prioridad del
+    Cómputo de la Comuna en palabras, para el texto del panel ([ASC_prioridad_actual])."""
+    prios = [("has_country_flag = ASC_prioridad_guerra", "GUERRA", "War", "la Guerra"),
+             ("has_country_flag = ASC_prioridad_investigacion", "INVESTIGACION", "Research", "la Investigación"),
+             ("has_country_flag = ASC_prioridad_logistica", "LOGISTICA", "Logistics", "la Logística"),
+             ("always = yes", "ECONOMIA", "the Economy", "la Economía")]
+    sl = ["defined_text = {\n\tname = ASC_prioridad_actual\n"]
+    for recal in (True, False):
+        for trig, clave, en, es in prios:
+            k = f"ASC_PRIORIDAD_{clave}" + ("_RECAL" if recal else "")
+            cond = ("has_country_flag = ASC_reasignando " if recal else "") + trig
+            sl.append(f"\ttext = {{ trigger = {{ {cond} }} localization_key = {k} }}\n")
+            ctx.loc.define_and_reference(
+                k, en=f"§Y{en}§!" + (" (recalibrating: no bonus for up to 30 days)" if recal else ""),
+                es=f"§Y{es}§!" + (" (recalibrando: sin bonus hasta 30 días)" if recal else ""),
+                file="meganations_paneles", origin="paneles")
+    sl.append("}\n")
+    ctx.write_text("common/scripted_localisation/meganations_paneles_estado.txt", banner_for(SOURCE) + "".join(sl))
+
+
 def emit(ctx: BuildContext) -> None:
+    _estados(ctx)
     acciones: dict = ctx.data.get("paneles_acciones") or {}
     if not acciones:
         return
