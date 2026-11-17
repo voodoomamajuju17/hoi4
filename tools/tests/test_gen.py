@@ -1607,7 +1607,7 @@ def test_leaders_and_ideologies() -> None:
         check("ningun aviso TN001", not any("TN001" in w for w in ctx.warnings), str(ctx.warnings))
         traits = pdx.parse((mod / "common/country_leader/meganations_traits.txt").read_text())
         body = traits.get("leader_traits")
-        check("107 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia; 6 de los ministros de Japon y 10 de los de Gran Bretana, 2026-11-01)", len(body.keys()) == 107, str(len(body.keys())))
+        check("107 rasgos propios (17 de lideres, 40 de ministros, 8 de inteligencia, 20 del alto mando, 6 de experiencia; 6 de los ministros de Japon y 10 de los de Gran Bretana, 2026-11-01)", len([k for k in body.keys() if not str(k).startswith("mn_ley_")]) == 107, str(len(body.keys())))
         # 2026-09-29: "los oficiales deberian dar experiencia, como en vanilla"
         efe_raw = " ".join((mod / "common/characters/EFE_characters.txt").read_text().split())
         chief = efe_raw[efe_raw.index("EFE_mando_beltran_1 = {"):][:900]
@@ -1642,11 +1642,14 @@ def test_leaders_and_ideologies() -> None:
         adv = efe_chars.get(mins[0]).get("advisor")
         check("ministro: puesto, token, rasgo propio y costo", pdx.text(adv.get("slot")) == "political_advisor"
               and pdx.text(adv.get("idea_token")) == mins[0] and pdx.text(adv.get("cost")) == "150", pdx.render(adv))
-        gens = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("corps_commander") is not None]
+        # (sin las Leyendas, 2026-11-16, que tienen su propia prueba)
+        gens = [k for k, v in efe_chars.entries if isinstance(v, pdx.Block) and v.get("corps_commander") is not None
+                and "_ley_" not in str(k)]
         check("generales propios (EFE: 3 + 2 nuevos del 2026-10-19, y el lider de su rebelion del 2026-10-11)",
               len(gens) == 6 and "EFE_lider_rebelde" in gens and "EFE_gen_moura_8" in gens, str(gens))
         hsn_chars = pdx.parse((mod / "common/characters/HSN_characters.txt").read_text()).get("characters")
-        adm = [k for k, v in hsn_chars.entries if isinstance(v, pdx.Block) and v.get("navy_leader") is not None]
+        adm = [k for k, v in hsn_chars.entries if isinstance(v, pdx.Block) and v.get("navy_leader") is not None
+               and "_ley_" not in str(k)]
         check("la HSN tiene almirantes (2 + 2 del 2026-10-19)", len(adm) == 4, str(adm))
         for tag in ("EFE", "FCU", "ASC", "HSN", "NAS", "SHD", "APF", "NRE"):
             chars_t = pdx.parse((mod / f"common/characters/{tag}_characters.txt").read_text()).get("characters")
@@ -6190,12 +6193,13 @@ def test_lider_ck() -> None:
     raw = specload.load(REPO_ROOT / "spec").raw
     ck = raw["lider_ck"]
     check("64 ministros (los 48 de las ocho y los 16 de Japon y Albion) suman o restan stats",
-          len(ck["ministros"]) == 64 and ck["ministros"]["NAS_min_mamani_1"] == {"carisma": -1, "astucia": 3, "salud": 5}
+          len([m for m in ck["ministros"] if "_ley_" not in m]) == 64 and ck["ministros"]["NAS_min_mamani_1"] == {"carisma": -1, "astucia": 3, "salud": 5}
           and "ZJP_min_mizuno_4" in ck["ministros"] and "ZAL_vic_min_thorne" in ck["ministros"])
     # 2026-11-01: Japon y Gran Bretana tambien tienen el lider (31_lider_japon_albion): el 20% de
     # sus eventos se cuenta aparte, con la misma regla
     propios = {"meganations_japon", "meganations_albion"}
-    vis = lambda keep: sum(1 for ns, b in raw["events"]["namespaces"].items() if keep(ns)
+    # (sin las llegadas de las Leyendas, 2026-11-16: un evento que solo recluta)
+    vis = lambda keep: sum(1 for ns, b in raw["events"]["namespaces"].items() if keep(ns) and ns != "meganations_leyendas"
                            for e in b.get("events") or [] if not e.get("hidden"))
     de_ellos = [k for k in ck["eventos"] if k.rpartition(".")[0] in propios]
     check("cerca del 20% de los eventos visibles mueve stats del lider (las ocho)",
