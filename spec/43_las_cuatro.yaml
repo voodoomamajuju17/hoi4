@@ -1,0 +1,202 @@
+# =============================================================================
+# El humor de las Cuatro (2026-11-17), paso 1
+#
+# Pedido: "cada evento tipo los q modifican al lider, o tecnologia o foco o whatever, tambien
+# afectarian el humor de las corporaciones? ... tendriamos q ir mucho mas profundo". Respuestas del
+# usuario: se ve el número y la palabra; el sabotaje es escalable ("el primero ligero, el segundo
+# fuerte, el tercero terrible").
+#
+# Cada corporación del Directorio tiene, además de su Poder (FCU_castellane... suman 200), un HUMOR de 0
+# a 100 que arranca en 50 (FCU_humor_<corp>). El Poder dice cuánto pesa; el Humor, si coopera.
+#   Socia (80+)     un bono propio y un favor por año (decisión)
+#   Conforme (50+)  nada
+#   Molesta (25+)   con menos de 40, presiona (un evento con dos salidas, cada 180 días)
+#   Hostil (<25)    sabotea, en escalera: 1 leve, 2 fuerte, 3 terrible (cada 120 días como mucho).
+#                   La escalera vuelve a cero cuando la corporación pasa de 50.
+#   El tercero, con Poder 60 o más: el Golpe de Mercado (ceder o romper el contrato).
+# Lo mueven (tools/gen/cuatro_spec.py arma el resto):
+#   - cada mes, la situación (`situacion`): guerra, estabilidad, Dividendo, Escándalo, leyes, su Poder,
+#     el líder, y una vuelta lenta hacia 50;
+#   - nombrar o sacar a un asesor de esa corporación (`asesores`);
+#   - las decisiones del Directorio (`decisiones`).
+# El panel de la Bóveda muestra número, palabra y los últimos tres cambios con su porqué.
+# Paso 2 (después): la firma de los 67 focos y de las opciones de los eventos de la Unión.
+# =============================================================================
+
+cuatro:
+  corporaciones:
+    castellane:
+      nombre: {english: Castellane, spanish: Castellane}
+      rubro: {english: water, spanish: agua}
+      socia: {stability_factor: 0.05, war_support_factor: 0.03}
+      favor:
+        name: {english: 'Ask Castellane for a Favour: Open the Taps', spanish: 'Pedirle un favor a Castellane: Abrir los Grifos'}
+        desc: {english: 'Free water for every city for a season. The country breathes easier; Castellane will remember it gave something away.', spanish: 'Agua gratis en todas las ciudades por una temporada. El país respira; Castellane se va a acordar de que regaló algo.'}
+        effects:
+        - {effect: add_stability, value: 0.05}
+        - {effect: add_political_power, value: 50}
+    halvorsen:
+      nombre: {english: Halvorsen-Ito, spanish: Halvorsen-Ito}
+      rubro: {english: food, spanish: comida}
+      socia: {consumer_goods_factor: -0.03, recruitable_population_factor: 0.03}
+      favor:
+        name: {english: 'Ask Halvorsen-Ito for a Favour: Full Canteens', spanish: 'Pedirle un favor a Halvorsen-Ito: Comedores Llenos'}
+        desc: {english: 'Cheap food in every recruiting office. Volunteers queue around the block.', spanish: 'Comida barata en cada oficina de reclutamiento. Los voluntarios hacen cola a la vuelta de la manzana.'}
+        effects:
+        - {effect: add_manpower, value: 25000}
+        - {effect: add_war_support, value: 0.03}
+    meridian:
+      nombre: {english: Meridian, spanish: Meridian}
+      rubro: {english: arms, spanish: armas}
+      socia: {production_speed_arms_factory_factor: 0.05, army_org_factor: 0.03}
+      favor:
+        name: {english: 'Ask Meridian for a Favour: Lend Us Their Instructors', spanish: 'Pedirle un favor a Meridian: Que nos Presten sus Instructores'}
+        desc: {english: 'Meridian''s private instructors train our regulars for a season, at cost price. Almost.', spanish: 'Los instructores privados de Meridian entrenan a nuestra tropa por una temporada, a precio de costo. Casi.'}
+        effects:
+        - {effect: army_experience, value: 30}
+        - {effect: add_war_support, value: 0.02}
+    obsidian:
+      nombre: {english: Obsidian Ledger, spanish: Obsidian Ledger}
+      rubro: {english: finance, spanish: finanzas}
+      socia: {political_power_gain: 0.1}
+      favor:
+        name: {english: 'Ask Obsidian Ledger for a Favour: A Quiet Loan', spanish: 'Pedirle un favor a Obsidian Ledger: Un Préstamo Discreto'}
+        desc: {english: 'Obsidian moves a few numbers between a few accounts. Nobody will ever find them, and the Union is suddenly richer.', spanish: 'Obsidian mueve unos números entre unas cuentas. Nadie los va a encontrar nunca, y la Unión de golpe es más rica.'}
+        effects:
+        - {effect: add_political_power, value: 100}
+        - {effect: add_variable, var: FCU_dividendos, value: 10}
+
+  # cada mes: `cuando` -> cuánto cambia el humor de cada una
+  situacion:
+  - cuando: {at_war: true}
+    humor: {meridian: 2, halvorsen: -1}
+  - cuando: {at_war: false}
+    humor: {meridian: -1}
+  - cuando: {stability_at_least: 0.6}
+    humor: {castellane: 1}
+  - cuando: {stability_below: 0.4}
+    humor: {castellane: -2}
+  - cuando: {variable_at_least: {var: FCU_dividendos, value: 60}}
+    humor: {obsidian: 1}
+  - cuando: {variable_below: {var: FCU_dividendos, value: 20}}
+    humor: {obsidian: -2}
+  - cuando: {variable_at_least: {var: FCU_escandalo, value: 50}}
+    humor: {castellane: -1, halvorsen: -1, meridian: -1, obsidian: -1}
+  # leyes (las del juego)
+  - cuando: {any: [{idea: war_economy}, {idea: tot_economic_mobilisation}]}
+    humor: {meridian: 1, halvorsen: -1}
+  - cuando: {any: [{idea: free_trade}, {idea: export_focus}]}
+    humor: {obsidian: 1, halvorsen: 1}
+  - cuando: {idea: closed_economy}
+    humor: {obsidian: -2}
+  - cuando: {any: [{idea: extensive_conscription}, {idea: service_by_requirement}, {idea: all_adults_serve}, {idea: scraping_the_barrel}]}
+    humor: {halvorsen: -1}
+  # el líder es de una de ellas
+  - cuando: {leader_is: FCU_valeria_castellane}
+    humor: {castellane: 1}
+  - cuando: {leader_is: FCU_marcus_rourke}
+    humor: {meridian: 1, castellane: -1}
+
+  # a qué corporación responde cada asesor (nombrarlo: +8 a la suya; sacarlo: -5)
+  asesores:
+    FCU_min_whitmore_1: castellane
+    FCU_min_voss_3: castellane
+    FCU_mando_holloway_2: castellane
+    FCU_min_okafor_2: halvorsen
+    FCU_min_raman_5: halvorsen
+    FCU_mando_oyelaran_4: halvorsen
+    FCU_ley_doctor_arendt: halvorsen
+    FCU_mando_harlan_1: meridian
+    FCU_mando_walsh_3: meridian
+    FCU_mando_carver_5: meridian
+    FCU_min_marchetti_4: obsidian
+    FCU_min_inteligencia_6: obsidian
+    FCU_ley_directora_ambrose: obsidian
+
+  # las decisiones del Directorio: una gana y otra pierde
+  decisiones:
+    FCU_contrato_ferroviario: {meridian: 6, halvorsen: -6}
+    FCU_subsidio_alimentario: {halvorsen: 6, obsidian: -6}
+    FCU_licitacion_desalinizadoras: {castellane: 6, meridian: -6}
+    FCU_contrato_de_defensa: {meridian: 6, castellane: -6}
+    FCU_desregulacion_financiera: {obsidian: 6, halvorsen: -6}
+    FCU_auditoria_del_directorio: {obsidian: -5, castellane: -2, halvorsen: -2, meridian: -2}
+    FCU_repartir_el_dividendo: {obsidian: 5, castellane: 2, halvorsen: 2, meridian: 2}
+
+  # con menos de 40: presiona (una vez cada 180 días)
+  presion:
+    castellane:
+      title: {english: Castellane Raises the Water Rates, spanish: Castellane Sube la Tarifa del Agua}
+      desc:
+        english: 'A polite letter from Castellane Water Trust: maintenance costs are up, and the board would appreciate "a gesture of confidence" before the next billing cycle. The letter is copied to every mayor in the Union.'
+        spanish: 'Una carta muy educada de Castellane Water Trust: subieron los costos de mantenimiento y el directorio agradecería "un gesto de confianza" antes del próximo ciclo de facturación. La carta va con copia a todos los intendentes de la Unión.'
+      ceder: {english: 'Approve the new rates.', spanish: 'Aprobar la tarifa nueva.'}
+      ceder_efectos: [{effect: add_political_power, value: -50}, {effect: add_stability, value: -0.02}]
+      negar: {english: 'The water is not a bargaining chip.', spanish: 'El agua no se negocia.'}
+    halvorsen:
+      title: {english: Halvorsen-Ito Wants Its Subsidies, spanish: Halvorsen-Ito Quiere sus Subsidios}
+      desc:
+        english: 'Halvorsen-Ito''s lobbyists fill the corridors of the Board with crates of free fruit and a single request: the farm subsidies, restored, today.'
+        spanish: 'Los lobistas de Halvorsen-Ito llenan los pasillos del Directorio con cajones de fruta gratis y un solo pedido: los subsidios al campo, restituidos, hoy.'
+      ceder: {english: 'Sign the subsidies.', spanish: 'Firmar los subsidios.'}
+      ceder_efectos: [{effect: add_political_power, value: -50}, {effect: add_variable, var: FCU_dividendos, value: -5}]
+      negar: {english: 'Take the fruit back with you.', spanish: 'Llévense la fruta.'}
+    meridian:
+      title: {english: Meridian Demands a Contract, spanish: Meridian Exige un Contrato}
+      desc:
+        english: 'Meridian Kinetics reminds the Board that its factories are idle and its shareholders impatient. A contract for two thousand drones would calm both. So would a war.'
+        spanish: 'Meridian Kinetics le recuerda al Directorio que sus fábricas están paradas y sus accionistas impacientes. Un contrato por dos mil drones calmaría a los dos. Una guerra también.'
+      ceder: {english: 'Order the drones.', spanish: 'Encargar los drones.'}
+      ceder_efectos: [{effect: add_political_power, value: -50}, {effect: add_war_support, value: 0.02}]
+      negar: {english: 'We are not buying a war.', spanish: 'No vamos a comprar una guerra.'}
+    obsidian:
+      title: {english: Obsidian Ledger Asks for Discretion, spanish: Obsidian Ledger Pide Discreción}
+      desc:
+        english: 'Obsidian Ledger would like the Board to "lose" a regulator''s report. It is very long, very detailed, and mentions Obsidian on every page.'
+        spanish: 'Obsidian Ledger quisiera que el Directorio "pierda" un informe de un regulador. Es muy largo, muy detallado y nombra a Obsidian en todas las páginas.'
+      ceder: {english: 'The report is lost.', spanish: 'El informe se pierde.'}
+      ceder_efectos: [{effect: add_variable, var: FCU_escandalo, value: 8}]
+      negar: {english: 'Publish it.', spanish: 'Publicarlo.'}
+
+  # con menos de 25: sabotaje en escalera (1 leve, 2 fuerte, 3 terrible)
+  sabotaje:
+    castellane:
+    - title: {english: Scheduled Maintenance, spanish: Mantenimiento Programado}
+      desc: {english: 'Castellane announces "scheduled maintenance" at three desalination plants. Nobody scheduled it. The taps run brown for a week.', spanish: 'Castellane anuncia un "mantenimiento programado" en tres desalinizadoras. Nadie lo programó. Las canillas salen marrones durante una semana.'}
+      efectos: [{effect: add_stability, value: -0.03}]
+    - title: {english: Rolling Water Cuts, spanish: Cortes de Agua Rotativos}
+      desc: {english: 'Whole districts without water, four hours a day, always the districts that vote for the Board. Castellane says it is a technical problem. The technicians say nothing.', spanish: 'Barrios enteros sin agua, cuatro horas por día, siempre los barrios que votan al Directorio. Castellane dice que es un problema técnico. Los técnicos no dicen nada.'}
+      efectos: [{effect: add_stability, value: -0.08}, {effect: add_variable, var: FCU_dividendos, value: -10}]
+    - title: {english: The Thirst, spanish: La Sed}
+      desc: {english: 'Castellane closes the valves. All of them. The cities of the south go three days without a drop, and on the fourth the riots begin. Castellane''s board has a list of conditions, and it is long.', spanish: 'Castellane cierra las válvulas. Todas. Las ciudades del sur pasan tres días sin una gota, y al cuarto empiezan los saqueos. El directorio de Castellane tiene una lista de condiciones, y es larga.'}
+      efectos: [{effect: add_stability, value: -0.15}, {effect: add_war_support, value: -0.1}]
+    halvorsen:
+    - title: {english: Prices Go Up, spanish: Suben los Precios}
+      desc: {english: 'Bread, rice and soy cost a little more this month. Halvorsen-Ito blames the weather. The weather was excellent.', spanish: 'El pan, el arroz y la soja cuestan un poco más este mes. Halvorsen-Ito le echa la culpa al clima. El clima estuvo excelente.'}
+      efectos: [{effect: add_political_power, value: -40}, {effect: add_stability, value: -0.02}]
+    - title: {english: The Hoarding, spanish: El Acaparamiento}
+      desc: {english: 'The silos are full and the shops are empty. Halvorsen-Ito is "protecting its stock from volatility". The queues grow longer every morning.', spanish: 'Los silos están llenos y los almacenes vacíos. Halvorsen-Ito "protege su stock de la volatilidad". Las colas son más largas cada mañana.'}
+      efectos: [{effect: add_stability, value: -0.06}, {effect: add_manpower, value: -15000}]
+    - title: {english: The Manufactured Hunger, spanish: El Hambre Fabricada}
+      desc: {english: 'Halvorsen-Ito stops the trucks. Not one crate leaves the warehouses. The army eats, for now; the cities do not. Halvorsen-Ito is ready to talk, on its terms.', spanish: 'Halvorsen-Ito para los camiones. No sale un cajón de los depósitos. El ejército come, por ahora; las ciudades no. Halvorsen-Ito está dispuesta a hablar, en sus términos.'}
+      efectos: [{effect: add_stability, value: -0.12}, {effect: add_war_support, value: -0.08}, {effect: add_manpower, value: -30000}]
+    meridian:
+    - title: {english: Delivery Delays, spanish: Demoras en las Entregas}
+      desc: {english: 'Meridian''s trucks arrive late, and half full. A clerical error, apologises Meridian, and sends the invoice in full.', spanish: 'Los camiones de Meridian llegan tarde y por la mitad. Un error administrativo, se disculpa Meridian, y manda la factura completa.'}
+      efectos: [{effect: add_political_power, value: -50}, {effect: add_war_support, value: -0.03}]
+    - title: {english: Arms for the Other Side, spanish: Armas para el Otro Lado}
+      desc: {english: 'Meridian drones turn up in the hands of our rivals, with the serial numbers filed off but the logo still on the wing. Meridian has many clients.', spanish: 'Aparecen drones de Meridian en manos de nuestros rivales, con el número de serie limado pero el logo todavía en el ala. Meridian tiene muchos clientes.'}
+      efectos: [{effect: add_political_power, value: -100}, {effect: add_war_support, value: -0.06}]
+    - title: {english: The Guns Point Inward, spanish: Las Armas Apuntan Adentro}
+      desc: {english: 'Meridian''s private security takes positions around the Board building "for its protection". Nobody asked for protection. Meridian''s chief executive asks for a meeting, and brings the guards.', spanish: 'La seguridad privada de Meridian toma posiciones alrededor del edificio del Directorio "para protegerlo". Nadie pidió protección. El director de Meridian pide una reunión, y viene con los guardias.'}
+      efectos: [{effect: add_stability, value: -0.1}, {effect: add_war_support, value: -0.12}]
+    obsidian:
+    - title: {english: A Leak, spanish: Una Filtración}
+      desc: {english: 'A few emails from the Board appear in the press. Embarrassing, not fatal. The leak came from a server only Obsidian administers.', spanish: 'Aparecen en la prensa unos correos del Directorio. Vergonzosos, no fatales. La filtración salió de un servidor que solo administra Obsidian.'}
+      efectos: [{effect: add_variable, var: FCU_escandalo, value: 10}]
+    - title: {english: The Bank Run, spanish: La Corrida}
+      desc: {english: 'Obsidian Ledger quietly sells the Union''s bonds, all at once. By noon everyone is selling. By evening the dividend is a joke.', spanish: 'Obsidian Ledger vende en silencio los bonos de la Unión, todos juntos. A mediodía vende todo el mundo. A la noche el dividendo es un chiste.'}
+      efectos: [{effect: add_variable, var: FCU_dividendos, value: -20}, {effect: add_variable, var: FCU_escandalo, value: 15}]
+    - title: {english: The Complete Archive, spanish: El Archivo Completo}
+      desc: {english: 'Every message, every contract, every bribe of the last twenty years, published in one night. Obsidian kept copies of everything. Now everyone has them.', spanish: 'Cada mensaje, cada contrato, cada coima de los últimos veinte años, publicados en una noche. Obsidian guardaba copia de todo. Ahora la tiene todo el mundo.'}
+      efectos: [{effect: add_variable, var: FCU_escandalo, value: 35}, {effect: add_stability, value: -0.1}]

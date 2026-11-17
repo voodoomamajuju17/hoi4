@@ -131,6 +131,18 @@ El siglo XXII no es estable:
   muy baja puede morir, y la sucesión (el Delfín, el Mariscal o la Tribuna) deja perdedores que
   conspiran.
 
+### El humor de las Cuatro (la Unión)
+
+En la Unión, cada una de las cuatro corporaciones tiene **Poder** (cuánto pesa en el Directorio) y **Humor**
+(de 0 a 100, si coopera). Lo mueven la guerra, la estabilidad, el Dividendo, el Escándalo, las leyes, el líder,
+los asesores que nombrás (cada uno responde a una) y las decisiones del Directorio. La Bóveda de los Dividendos
+muestra el número, la palabra (Socia, Conforme, Molesta, Hostil) y los últimos tres cambios con su porqué.
+
+- **Socia (80 o más):** un bono propio y un favor por año.
+- **Molesta (menos de 40):** presiona; ceder la calma, negarse la enoja más.
+- **Hostil (menos de 25):** sabotea, y cada sabotaje es peor que el anterior: leve, fuerte, terrible. Si la
+  tercera vez tiene mucho Poder, intenta un **Golpe de Mercado**. La escalera vuelve a cero cuando pasa de 50.
+
 ### Las Leyendas
 
 Cada nación jugable tiene **seis leyendas**: un mariscal, un almirante, dos generales, un ministro

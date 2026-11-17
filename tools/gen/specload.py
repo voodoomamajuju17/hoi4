@@ -59,7 +59,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-14: puntos de fricción entre potencias, el Pacto de las Restauraciones y la Línea
                  "41_friccion.yaml",
                  # 2026-11-16: las Leyendas, seis personajes legendarios por nación
-                 "42_leyendas.yaml"]
+                 "42_leyendas.yaml",
+                 # 2026-11-17: el humor de las Cuatro de la Unión
+                 "43_las_cuatro.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -208,6 +210,11 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
 
     # 2026-11-14: los puntos de fricción (41_friccion.yaml); lo igual para todos los pares
     # (crisis, tratado, decisiones) se arma en tools/gen/friccion_spec.py
+    # 2026-11-17: el humor de las Cuatro de la Unión (43_las_cuatro.yaml, tools/gen/cuatro_spec.py)
+    if overlay.get("cuatro"):
+        from . import cuatro_spec
+        raw["cuatro"] = overlay["cuatro"]
+        cuatro_spec.expandir(raw, overlay["cuatro"])
     if overlay.get("friccion"):
         if raw.get("friccion"):
             raise SpecError("friccion ya existe", where=where)

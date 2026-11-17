@@ -36,7 +36,7 @@ FLAG = "MN_panel_abierto"
 PANELES = {
     "EFE": {"tag": "EFE", "categorias": ["EFE_biosteel_category"], "var": "EFE_biosteel", "max": 35,
             "nombre": ("The Bio-Steel Greenhouse", "El Invernadero del Bioacero"), "recurso": ("Bio-steel", "Bioacero")},
-    "FCU": {"tag": "FCU", "categorias": ["FCU_dividendos_category"], "var": "FCU_dividendos", "max": 100,
+    "FCU": {"tag": "FCU", "categorias": ["FCU_dividendos_category", "FCU_directorio_category"], "var": "FCU_dividendos", "max": 100,
             "nombre": ("The Dividend Vault", "La Bóveda de los Dividendos"), "recurso": ("Dividends", "Dividendos")},
     "ASC": {"tag": "ASC", "categorias": ["ASC_computo_category", "ASC_plan_category"], "var": "ASC_computo", "max": 150,
             "nombre": ("The Core of the Plan", "El Núcleo del Plan"), "recurso": ("Compute", "Cómputo")},
@@ -98,6 +98,27 @@ def _estados(ctx: BuildContext) -> None:
                 es=f"§Y{es}§!" + (" (recalibrando: sin bonus hasta 30 días)" if recal else ""),
                 file="meganations_paneles", origin="paneles")
     sl.append("}\n")
+    # 2026-11-17: el humor de las Cuatro de la Unión (tools/gen/cuatro_spec.py), en palabras, y el registro
+    corps = ctx.spec.raw.get("cuatro_corps") or []
+    palabras = [(80, "SOCIA", "§GPartner§!", "§GSocia§!"), (50, "CONFORME", "Content", "Conforme"),
+                (25, "MOLESTA", "§YAnnoyed§!", "§YMolesta§!"), (0, "HOSTIL", "§RHostile§!", "§RHostil§!")]
+    for _v, k, en, es in palabras:
+        ctx.loc.define_and_reference(f"FCU_HUMOR_{k}", en=en, es=es, file="meganations_paneles", origin="paneles")
+    for c in corps:
+        sl.append(f"defined_text = {{\n\tname = FCU_humor_palabra_{c}\n")
+        for v, k, _en, _es in palabras[:-1]:
+            sl.append(f"\ttext = {{ trigger = {{ check_variable = {{ FCU_humor_{c} > {v - 1} }} }} localization_key = FCU_HUMOR_{k} }}\n")
+        sl.append("\ttext = { localization_key = FCU_HUMOR_HOSTIL }\n}\n")
+    razones = ctx.spec.raw.get("cuatro_razones") or []
+    if razones:
+        ctx.loc.define_and_reference("FCU_RAZON_0", en="-", es="-", file="meganations_paneles", origin="paneles")
+        for code, en, es in razones:
+            ctx.loc.define_and_reference(f"FCU_RAZON_{code}", en=en, es=es, file="meganations_paneles", origin="paneles")
+        for i in (1, 2, 3):
+            sl.append(f"defined_text = {{\n\tname = FCU_razon_txt_{i}\n")
+            for code, _en, _es in razones:
+                sl.append(f"\ttext = {{ trigger = {{ check_variable = {{ FCU_razon_{i} = {code} }} }} localization_key = FCU_RAZON_{code} }}\n")
+            sl.append("\ttext = { localization_key = FCU_RAZON_0 }\n}\n")
     ctx.write_text("common/scripted_localisation/meganations_paneles_estado.txt", banner_for(SOURCE) + "".join(sl))
 
 

@@ -3380,6 +3380,51 @@ def test_leyendas() -> None:
     check("un medio elevado por nación", set(retratos_medios.ELEVADO) >= jugables)
 
 
+def test_cuatro() -> None:
+    """2026-11-17 (el humor de las Cuatro de la Unión, paso 1): número y palabra, sabotaje en escalera."""
+    section("la Union: el humor de las Cuatro")
+    raw = specload.load(REPO_ROOT / "spec").raw
+    corps = raw["cuatro_corps"]
+    check("cuatro corporaciones con humor", corps == ["castellane", "halvorsen", "meridian", "obsidian"])
+    mec = next(m for m in raw["mechanics"]["mechanics"] if any(v.get("name") == "FCU_castellane" for v in m.get("variables") or []))
+    ini = {v["name"]: v["start"] for v in mec["variables"]}
+    check("el humor arranca en 50", all(ini.get(f"FCU_humor_{c}") == 50 for c in corps))
+    evs = raw["events"]["namespaces"]["meganations_cuatro"]["events"]
+    check("eventos: 4 presiones, 12 sabotajes (3 por corporacion) y 4 golpes", len(evs) == 20)
+    titulos = [e["title"]["spanish"] for e in evs]
+    check("la escalera de Castellane: leve, fuerte, terrible",
+          ["Mantenimiento Programado", "Cortes de Agua Rotativos", "La Sed"] == titulos[1:4], str(titulos[:5]))
+    pulso = next(e for e in raw["decisions"]["scripted_effects"] if e["id"] == "FCU_cuatro_pulso")
+    s = str(pulso["effects"])
+    check("el pulso: presiona bajo 40, sabotea bajo 25 cada 120 dias y escala hasta 3",
+          "'FCU_presion_castellane', 'days': 180" in s and "'FCU_sabotaje_castellane', 'days': 120" in s
+          and "'var': 'FCU_sabotajes_castellane', 'min': 0, 'max': 3" in s)
+    check("la escalera vuelve a cero cuando pasa de 50",
+          "{'variable_at_least': {'var': 'FCU_humor_castellane', 'value': 50}}, 'then': [{'effect': 'set_variable', 'var': 'FCU_sabotajes_castellane', 'value': 0}]" in s)
+    check("el pulso corre dentro del pulso del Directorio",
+          {"effect": "run", "value": "FCU_cuatro_pulso"} in next(e for e in raw["decisions"]["scripted_effects"]
+                                                              if e["id"] == "FCU_pulso_del_directorio")["effects"])
+    check("cada asesor de la Union responde a una corporacion", len(raw["asesor_efectos"]) == 13)
+    contrato = next(d for c in raw["decisions"]["categories"] for d in c.get("decisions") or [] if d["id"] == "FCU_contrato_de_defensa")
+    check("las decisiones del Directorio mueven el humor",
+          {"effect": "add_variable", "var": "FCU_humor_meridian", "value": 6} in contrato["effects"])
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        ch = " ".join((mod / "common/characters/FCU_characters.txt").read_text(encoding="utf-8-sig").split())
+        check("nombrar o sacar a un asesor cambia el humor de su corporacion",
+              "FCU_asesor_FCU_min_okafor_2_entra = yes" in ch and "FCU_asesor_FCU_min_okafor_2_sale = yes" in ch)
+        sl = (mod / "common/scripted_localisation/meganations_paneles_estado.txt").read_text(encoding="utf-8-sig")
+        es = "".join(f.read_text(encoding="utf-8-sig") for f in (mod / "localisation/spanish").glob("*.yml"))
+        check("se ve el numero y la palabra", "name = FCU_humor_palabra_meridian" in sl
+              and "Meridian (armas): [?FCU_humor_meridian|0] [FCU_humor_palabra_meridian]" in es)
+        check("y los ultimos tres cambios con su porque", "name = FCU_razon_txt_3" in sl
+              and "Contrato de Defensa" in es[es.find("FCU_RAZON_"):])
+        sg = " ".join((mod / "common/scripted_guis/meganations_paneles.txt").read_text(encoding="utf-8-sig").split())
+        check("el Directorio y los favores estan en la Boveda", "a_FCU_contrato_de_defensa_click" in sg
+              and "a_FCU_favor_meridian_visible = { check_variable = { var = FCU_humor_meridian value = 80" in sg)
+
+
 def test_paneles_recurso() -> None:
     """2026-11-15: el panel del recurso propio de cada nación (ventana propia, acciones como botones)."""
     section("paneles del recurso: ventana propia por nación, acciones como botones, decisiones para la IA")
@@ -6440,6 +6485,7 @@ def main() -> int:
         test_paneles_recurso,
         test_facciones,
         test_leyendas,
+        test_cuatro,
     ):
         test()
 

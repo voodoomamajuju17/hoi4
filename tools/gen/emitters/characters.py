@@ -251,8 +251,13 @@ def emit(ctx: BuildContext) -> None:
                 # 2026-11-01 (pedido del usuario: "cada ministro suma o resta alguna stat
                 # al líder"): 27_lider_ck.yaml -> lider_ck.ministros
                 cambios = ministros.get(cid) or {}
+                # 2026-11-17 (las Cuatro de la Unión): efectos guionados al nombrarlo y al sacarlo
+                extra = (ctx.spec.raw.get("asesor_efectos") or {}).get(cid) or {}
+                on_add, on_remove = Block(), Block()
+                for b, clave in ((on_add, "on_add"), (on_remove, "on_remove")):
+                    for se in extra.get(clave) or []:
+                        b.add(se, True)
                 if cambios:
-                    on_add, on_remove = Block(), Block()
                     for stat, valor in cambios.items():
                         var = f"MEGANATIONS_lider_bono_{stat}"
                         on_add.add("add_to_variable", Block([("var", var), ("value", valor)]))
@@ -269,7 +274,9 @@ def emit(ctx: BuildContext) -> None:
                     # 2026-11-03 (error.log: "Invalid scope type for trigger has_country_flag in
                     # common/characters/..."): on_add/on_remove corren en el personaje; todo va
                     # dentro de OWNER (el país), como hace Millennium Dawn
+                if on_add.entries:
                     ab.add("on_add", Block([("OWNER", on_add)]))
+                if on_remove.entries:
                     ab.add("on_remove", Block([("OWNER", on_remove)]))
                 ab.add("cost", int(advisor.get("cost", 150)))
                 ab.add("ai_will_do", Block([("factor", float(advisor.get("ai_factor", 1)))]))
