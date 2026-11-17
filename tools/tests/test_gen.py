@@ -2912,6 +2912,12 @@ def test_friccion() -> None:
     spec = specload.load(REPO_ROOT / "spec")
     cfg = spec.raw["friccion"]
     pares = {p["id"]: p for p in cfg["pares"]}
+    # 2026-11-17: en guerra con el rival, las decisiones de ese punto no se ven; requisitos con texto
+    _ds = fs.decisiones(pares["rin"])
+    check("en guerra con el rival no se ven las decisiones del punto",
+          all("{'not': {'war_with': '" + pares["rin"]["b"] + "'}}" in str(d["visible"]) for d in _ds))
+    check("los requisitos se leen (no 'No:MN_friccion_rin_tratado')",
+          all("explained" in str(d["available"]) for d in _ds))
     check("once puntos de friccion, con Japon y Albion", len(pares) == 11
           and {"kanto", "astilleros", "canal", "mar_del_norte"} <= set(pares))
     riv = {frozenset(r["between"]) for r in spec.raw["diplomacy"]["rivalries"]}

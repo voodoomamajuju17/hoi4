@@ -89,10 +89,23 @@ def _otro(par: dict, efecto_a: list[dict], efecto_b: list[dict]) -> dict:
 def decisiones(par: dict) -> list[dict]:
     pid, a, b = par["id"], par["a"], par["b"]
     en, es = par["lugar"]["english"], par["lugar"]["spanish"]
-    tension = lambda op, v: {"country": {"tag": a, "when": {op: {"var": var(pid), "value": v}}}}
-    de_lado = {"all": [{"any": [{"tag": a}, {"tag": b}]}, {"global_flag": activa(pid)}]}
+    def tension(op: str, v: int) -> dict:
+        # con texto propio (el juego mostraba "Comuna Socialista Automatizada: Comuna Socialista Automatizada")
+        menos = op == "variable_below"
+        return {"explained": {
+            "id": f"friccion_{pid}_{'menos' if menos else 'mas'}_{v}",
+            "english": f"Tension over {par['lugar']['english']} {'below' if menos else 'at least'} {v}",
+            "spanish": f"Tensión por {par['lugar']['spanish']} {'por debajo de' if menos else 'de al menos'} {v}",
+            "when": {"country": {"tag": a, "when": {op: {"var": var(pid), "value": v}}}}}}
     en_paz = {"all": [{"not": {"war_with": a}}, {"not": {"war_with": b}}]}
-    sin_tratado = {"country": {"tag": a, "when": {"not": {"flag": f"{var(pid)}_tratado"}}}}
+    # 2026-11-17 ("si ya estoy en guerra con, por ejemplo el NRE con el ASC, no deberia seguir viendo el
+    # panel de tension"): en guerra con el rival, las decisiones de ese punto no se ven
+    de_lado = {"all": [{"any": [{"tag": a}, {"tag": b}]}, {"global_flag": activa(pid)}, en_paz]}
+    # (el requisito se mostraba crudo: "No:MN_friccion_rin_tratado")
+    sin_tratado = {"explained": {"id": f"friccion_{pid}_sin_tratado",
+                                 "english": f"No treaty over {en} in force",
+                                 "spanish": f"Sin un tratado vigente por {es}",
+                                 "when": {"country": {"tag": a, "when": {"not": {"flag": f"{var(pid)}_tratado"}}}}}}
     ev = f"{NS}.{base(par) + 4}"
     # la tensión de ahora (la variable está en los dos países del par)
     ten_en, ten_es = f"\\n\\nTENSION NOW: [?{var(pid)}]/100.", f"\\n\\nTENSIÓN AHORA: [?{var(pid)}]/100."
@@ -185,6 +198,7 @@ def expandir(raw: dict[str, Any], cfg: dict) -> None:
         "name": {"english": "Points of Friction", "spanish": "Puntos de Fricción"},
         "desc": {"english": "What we and our rivals both want and cannot both have. Each point has a tension from 0 to 100: incidents and pressure raise it, treaties and concessions lower it. With 80 a war goal opens for both sides, only over the disputed regions.",
                  "spanish": "Lo que nosotros y nuestros rivales queremos y no podemos tener los dos. Cada punto tiene una tensión de 0 a 100: los incidentes y la presión la suben, los tratados y las concesiones la bajan. Con 80 se abre un objetivo de guerra para los dos lados, solo por las regiones en disputa."},
-        "visible": {"any": [{"all": [{"any": [{"tag": p["a"]}, {"tag": p["b"]}]}, {"global_flag": activa(p["id"])}]}
+        "visible": {"any": [{"all": [{"any": [{"tag": p["a"]}, {"tag": p["b"]}]}, {"global_flag": activa(p["id"])},
+                                     {"not": {"war_with": p["a"]}}, {"not": {"war_with": p["b"]}}]}
                             for p in pares.values()]},
         "src": "user_request", "decisions": decs})
