@@ -452,6 +452,17 @@ def emit(ctx: BuildContext) -> None:
     if eq_changes:
         _equipment_stats(ctx, eq_changes)
     ctx.write_script("common/scripted_effects/meganations_unique_units.txt", effects, source=SOURCE)
+    # 2026-11-18: al juego le falta el ícono chico del auto blindado como unidad principal de la
+    # división (tiene el mediano, no el chico). Con el Centinela de la Comuna eso aparece y el
+    # error.log se llenaba de "Couldnt find texticon: unit_hq_armored_car_icon_small|2" (un log del
+    # juego sin el mod no lo tenía). Se define con la textura chica del auto blindado del juego.
+    if "GFX_unit_hq_armored_car_icon_small" not in (gfx or ()):
+        ctx.write_text("interface/meganations_texticons_juego.gfx",
+                       "# Generado por tools/gen/emitters/unique_units.py: íconos que le faltan al juego\n"
+                       "spriteTypes = {\n\tspriteType = {\n"
+                       '\t\tname = "GFX_unit_hq_armored_car_icon_small"\n'
+                       '\t\ttexturefile = "gfx/texticons/unit_armored_car_icon_small.dds"\n'
+                       "\t\tlegacy_lazy_load = no\n\t\tnoOfFrames = 2\n\t}\n}\n")
     if ideas.entries:
         ctx.write_script("common/ideas/meganations_unique_units.txt",
                          Block([("ideas", Block([("country", ideas)]))]), source=SOURCE)
