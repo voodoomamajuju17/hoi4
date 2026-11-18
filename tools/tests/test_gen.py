@@ -3484,6 +3484,55 @@ def test_albion_caminos() -> None:
           "verificado" in res[True] and "NO tiene el efecto" in res[False] and "no se pudo verificar" in res[None], str(res))
 
 
+def test_arboles() -> None:
+    """2026-11-18 (Rediseño de los árboles de foco): ocho formas propias, la economía nace de la política,
+    ninguna ruta cambia de duración."""
+    section("arboles de foco: ocho formas propias, mismas duraciones")
+    import re as _re
+    from tools import arboles as arb
+    res = arb.comparar()
+    cambian = [(tag, k, a, d) for tag, filas in res.items() for k, a, d in filas if d is not None and d != a]
+    check("ninguna ruta que sigue existiendo cambia de duracion (0%, el limite era 5%)", not cambian, str(cambian[:4]))
+    desaparecen = {tag: sum(1 for _k, _a, d in filas if d is None) for tag, filas in res.items()}
+    check("economia atada en seis arboles (se apagan las dos combinaciones cruzadas); con desvio en la Union "
+          "y del computo en la Comuna", desaparecen == {"EFE": 2, "ASC": 0, "FCU": 0, "HSN": 2, "NAS": 2, "SHD": 2,
+                                                          "APF": 2, "NRE": 2}, str(desaparecen))
+    spec = specload.load(REPO_ROOT / "spec")
+    focos = {f["id"]: f for t in spec.raw["focus_trees"]["trees"].values() if isinstance(t, dict)
+             for b in t.get("branches") or [] for f in b.get("focuses") or []}
+    check("la economia nace de la politica (EFE)", focos["EFE_ministerio_de_restauracion"].get("prerequisites_any")
+          == ["EFE_el_mandato_renovado", "EFE_los_incendios_de_gaia"]
+          and "EFE_el_mandato_renovado" in focos["EFE_autarquia_del_bioacero"]["prerequisites"])
+    check("dos puertas (NRE: el Limes) y vueltas (NRE: Roma Aeterna pide El Triunfo)",
+          focos["NRE_el_limes"].get("prerequisites_any") == ["NRE_las_vias_imperiales", "NRE_la_legion_decide"]
+          and "NRE_el_triunfo" in focos["NRE_roma_aeterna"]["prerequisites"])
+    trees = spec.raw["focus_trees"]["trees"]
+    check("las ocho potencias tienen forma; Japon y Albion no", all(trees[t].get("forma") for t in arb.POTENCIAS)
+          and not trees["ZJP"].get("forma") and not trees["ZAL"].get("forma"))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        choques, sin_raiz = {}, []
+        for tag in arb.POTENCIAS:
+            txt = (mod / f"common/national_focus/{tag}_focus.txt").read_text(encoding="utf-8-sig")
+            celdas = _re.findall(r"\bid = (\w+)\s+icon = \S+\s+x = (-?\d+)\s+y = (-?\d+)", txt)
+            vistos: dict[tuple[str, str], str] = {}
+            for fid, x, y in celdas:
+                if (x, y) in vistos:
+                    choques.setdefault(tag, []).append((fid, vistos[(x, y)]))
+                vistos[(x, y)] = fid
+            if len(celdas) < 60 or min(int(x) for _f, x, _y in celdas) < 0 or min(int(y) for _f, _x, y in celdas) < 0:
+                choques.setdefault(tag, []).append(("coordenadas", len(celdas)))
+            if "initial_show_position = {" not in txt:
+                sin_raiz.append(tag)
+        check("ningun casillero con dos focos y nada en coordenadas negativas", not choques, str(choques))
+        check("cada arbol se abre centrado en su foco raiz", not sin_raiz, str(sin_raiz))
+        efe = " ".join((mod / "common/national_focus/EFE_focus.txt").read_text(encoding="utf-8-sig").split())
+        i = efe.find("id = EFE_ministerio_de_restauracion")
+        check("el foco sale con la conexion nueva (cualquiera de los dos lados politicos)",
+              "prerequisite = { focus = EFE_el_mandato_renovado focus = EFE_los_incendios_de_gaia }" in efe[i:i + 600])
+
+
 def test_paneles_recurso() -> None:
     """2026-11-15: el panel del recurso propio de cada nación (ventana propia, acciones como botones)."""
     section("paneles del recurso: ventana propia por nación, acciones como botones, decisiones para la IA")
@@ -6546,6 +6595,7 @@ def main() -> int:
         test_leyendas,
         test_cuatro,
         test_albion_caminos,
+        test_arboles,
     ):
         test()
 

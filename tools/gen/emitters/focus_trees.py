@@ -155,7 +155,8 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
                         where="07_focus_trees.yaml")
 
     depth = _depths(by_id)
-    positions = _layout(focuses, depth)
+    # 2026-11-18 (Rediseño de los árboles de foco): un árbol con `forma` se dibuja con la suya
+    positions = _layout_forma(focuses, depth, tree["forma"], ctx.warn) if tree.get("forma") else _layout(focuses, depth)
     known_ideas = ideas_mod.all_idea_ids(ctx)
     effect_ctx = EffectContext(
         known_ideas,
@@ -188,6 +189,11 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
         country.add("modifier", modifier)
     body.add("country", country)
     body.add("default", bool(tree.get("default", False)))
+    if tree.get("forma"):
+        # el árbol se abre centrado en su foco raíz (los de forma propia crecen para todos lados)
+        raiz = next((f["id"] for _, f in focuses if depth[f["id"]] == 0), None)
+        if raiz:
+            body.add("initial_show_position", Block([("focus", raiz)]))
     # El panel de enfoques continuos va debajo del último foco. En su lugar
     # por defecto tapa las filas de abajo (captura del usuario, 2026-09-23).
     # Cada fila del árbol mide 130 px en pantalla.
@@ -300,6 +306,82 @@ def _depths(by_id: dict[str, dict]) -> dict[str, int]:
     for fid in by_id:
         visit(fid)
     return depth
+
+
+def _layout_forma(focuses: list[tuple[str, dict]], depth: dict[str, int], forma: dict,
+                  warn=None) -> dict[str, tuple[int, int]]:
+    """2026-11-18 (Rediseño de los árboles de foco: "no, no tiene que bajar"): cada árbol con su dibujo.
+
+    forma:
+      raiz: [x, y]                    dónde va el foco raíz
+      grupos:                         cada grupo es una rama entera (`rama`) o una lista de focos (`focos`)
+        - {rama: id, origen: [x, y], dir: abajo|arriba|izquierda|derecha}
+      at: {foco: [x, y]}              a mano, para casos sueltos
+    Dentro de un grupo, cada foco va a una capa según su profundidad (la primera capa en `origen`) y los de
+    una misma capa se reparten de costado, centrados. Si dos focos caen en el mismo casillero, el segundo se
+    corre de costado hasta un lugar libre (y se avisa). Al final todo se corre para que nada quede negativo.
+    """
+    orden = {f["id"]: i for i, (_, f) in enumerate(focuses)}
+    rama_de = {f["id"]: b for b, f in focuses}
+    roots = [f["id"] for _, f in focuses if depth[f["id"]] == 0]
+    pos: dict[str, tuple[int, int]] = {}
+    ocupado: dict[tuple[int, int], str] = {}
+
+    def poner(fid: str, x: int, y: int, horizontal: bool) -> None:
+        paso = (0, 1) if horizontal else (2, 0)
+        k = 0
+        while (x, y) in ocupado:
+            k += 1
+            x, y = x + paso[0], y + paso[1]
+            if k > 60:
+                raise SpecError(f"forma: no hay lugar para {fid}", where="45_arboles.yaml")
+        if k and warn:
+            warn(f"forma: {fid} chocaba con {ocupado.get((x - paso[0] * k, y - paso[1] * k))} y se corrió {k} lugar(es)")
+        pos[fid] = (x, y)
+        ocupado[(x, y)] = fid
+
+    x0, y0 = forma.get("raiz", [0, 0])
+    for i, r in enumerate(roots):
+        poner(r, int(x0) + 2 * i, int(y0), False)
+    a_mano = {k: v for k, v in (forma.get("at") or {}).items()}
+    for fid, (x, y) in a_mano.items():
+        poner(fid, int(x), int(y), False)
+    for g in forma.get("grupos") or []:
+        ids = list(g["focos"]) if g.get("focos") else [fid for fid in orden if rama_de[fid] == g["rama"]]
+        ids = [fid for fid in ids if fid not in pos]
+        if not ids:
+            continue
+        base = min(depth[fid] for fid in ids)
+        capas: dict[int, list[str]] = {}
+        for fid in sorted(ids, key=lambda f: orden[f]):
+            capas.setdefault(depth[fid] - base, []).append(fid)
+        ox, oy = (int(v) for v in g["origen"])
+        d = g.get("dir", "abajo")
+        horizontal = d in ("izquierda", "derecha")
+        previos = {f["id"]: _all_prereqs(f) for _, f in focuses}
+        for capa, miembros in sorted(capas.items()):
+            # cada foco cerca de sus padres ya ubicados (así las líneas no se cruzan sin necesidad)
+            def centro(fid: str) -> float:
+                ps = [pos[p] for p in previos[fid] if p in pos]
+                if not ps:
+                    return float(orden[fid])
+                return sum((y if horizontal else x) for x, y in ps) / len(ps)
+            miembros = sorted(miembros, key=lambda f: (centro(f), orden[f]))
+            n = len(miembros)
+            for i, fid in enumerate(miembros):
+                if horizontal:
+                    x = ox + (2 * capa if d == "derecha" else -2 * capa)
+                    y = oy + i - (n - 1) // 2
+                else:
+                    x = ox + 2 * i - (n - 1)
+                    y = oy + (capa if d == "abajo" else -capa)
+                poner(fid, x, y, horizontal)
+    faltan = [fid for fid in orden if fid not in pos]
+    if faltan:
+        raise SpecError(f"forma: focos sin lugar en el dibujo: {faltan}", where="45_arboles.yaml")
+    mx = min(x for x, _ in pos.values())
+    my = min(y for _, y in pos.values())
+    return {fid: (x - mx, y - my) for fid, (x, y) in pos.items()}
 
 
 def _layout(focuses: list[tuple[str, dict]], depth: dict[str, int]) -> dict[str, tuple[int, int]]:
