@@ -3454,6 +3454,34 @@ def test_albion_caminos() -> None:
     blk2 = ef.render_effects("ZAL", [{"effect": "set_portraits", "character": "X", "large": "gfx/leaders/ZAL/no_existe__futuro.dds"}],
                              ef.EffectContext(set(), set()), {}, where="t")
     check("hasta que llega el retrato nuevo, no se cambia nada", "set_portraits" not in pdx.render(blk2))
+    # la verificación al armar (2026-11-17: "si, arma la verificacion")
+
+    class _V:
+        def __init__(self, tiene):
+            self.tiene = tiene
+
+        def documented_keys(self, kind):
+            return None if self.tiene is None else {"x"}
+
+        def is_documented(self, kind, key):
+            return self.tiene
+
+    class _C:
+        def __init__(self, tiene):
+            self.vanilla, self.data, self.avisos = _V(tiene), {}, []
+
+        def warn(self, m):
+            self.avisos.append(m)
+
+    ef.SET_PORTRAITS_USADO.add("ZAL_fut_mariscal_grant")
+    res = {}
+    for tiene in (True, False, None):
+        c = _C(tiene)
+        ef.verificar_set_portraits(c)
+        res[tiene] = " ".join(c.avisos)
+    ef.SET_PORTRAITS_USADO.discard("ZAL_fut_mariscal_grant")
+    check("verificacion: avisa claro si el juego no tiene set_portraits, y si no se pudo revisar",
+          "verificado" in res[True] and "NO tiene el efecto" in res[False] and "no se pudo verificar" in res[None], str(res))
 
 
 def test_paneles_recurso() -> None:

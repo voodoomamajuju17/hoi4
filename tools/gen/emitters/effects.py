@@ -247,8 +247,32 @@ def portrait_sprite(path: str) -> str:
     return name
 
 
+# 2026-11-17 ("arma la verificacion"): los personajes que cambian de retrato con set_portraits (Albión por
+# camino). Al armar, se mira si el juego instalado documenta el efecto y se avisa claro si no.
+SET_PORTRAITS_USADO: set[str] = set()
+
+
+def verificar_set_portraits(ctx) -> None:
+    if not SET_PORTRAITS_USADO or ctx.data.get("set_portraits_verificado"):
+        return
+    ctx.data["set_portraits_verificado"] = True
+    n = len(SET_PORTRAITS_USADO)
+    known = ctx.vanilla.documented_keys("effects") if ctx.vanilla else None
+    if known is None:
+        ctx.warn(f"retratos por camino (Albión, {n} personajes): no se pudo verificar el efecto set_portraits "
+                 "(falta el juego instalado o su carpeta documentation/). Si al elegir un camino el retrato no cambia, "
+                 "mirá error.log.")
+    elif not ctx.vanilla.is_documented("effects", "set_portraits"):
+        ctx.warn(f"ATENCIÓN - retratos por camino (Albión, {n} personajes): esta versión del juego NO tiene el efecto "
+                 "set_portraits. El mod funciona igual, pero al elegir un camino los retratos no van a cambiar. "
+                 "Avisale a Claude para pasar esos mandos a personajes paralelos.")
+    else:
+        ctx.warn(f"retratos por camino (Albión, {n} personajes): el juego tiene set_portraits, verificado.")
+
+
 def flush_tooltips(ctx) -> None:
     """Define la localisation de los tooltips usados hasta ahora (una vez cada uno)."""
+    verificar_set_portraits(ctx)
     done = ctx.data.setdefault("tooltips_defined", set())
     for key, (en, es) in sorted(TOOLTIPS.items()):
         if key in done:
@@ -657,6 +681,7 @@ def render_effects(owner: str, items: list[dict], known,
                 if _retrato_disponible(small):
                     sizes.add("small", portrait_sprite(small))
                 block.add("set_portraits", Block([("character", item["character"]), (item.get("role", "army"), sizes)]))
+                SET_PORTRAITS_USADO.add(item["character"])
             continue
         if effect == "recruit":
             # 2026-11-01 (Gran Bretaña: "los que existen para neovictorian no existen
