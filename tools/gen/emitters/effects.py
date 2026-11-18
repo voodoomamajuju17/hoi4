@@ -243,6 +243,8 @@ def _retrato_disponible(path: str) -> bool:
 
 def portrait_sprite(path: str) -> str:
     name = "GFX_portrait_mn_" + re.sub(r"[^A-Za-z0-9_]", "_", path.rsplit("/", 1)[-1].rsplit(".", 1)[0])
+    if "/small/" in path:
+        name += "_small"   # 2026-11-17: el chico no puede compartir nombre con el grande
     PORTRAIT_SPRITES[path] = name
     return name
 
@@ -286,7 +288,8 @@ def flush_tooltips(ctx) -> None:
             # el retrato de un rebelde que no es personaje no llega por characters: se copia acá
             a = _asset_retrato(path)
             if a is not None and a.exists() and not (ctx.mod_root / path).exists():
-                ctx.copy_asset(str(a.relative_to(a.parents[3])), path)
+                from pathlib import Path
+                ctx.copy_asset(str(a.relative_to(Path(__file__).resolve().parents[3])), path)
         ctx.write_script("interface/meganations_civil_war_portraits.gfx", Block([("spriteTypes", sprites)]),
                          source="guerras civiles: retratos de los lideres rebeldes")
 
