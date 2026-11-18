@@ -1672,8 +1672,9 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             # en una región: todavía hay lugar para infraestructura (el máximo es
             # 5). Es la condición del foco genérico infrastructure_effort.
             block.add("free_building_slots", Block([
-                ("building", "infrastructure"), ("size", Compare(">", max(0, 5 - int(value)))),
-                ("include_locked", True)]))
+                # (2026-11-18, error.log: "Building type doesn't use shared slots - 'include_locked' flag is
+                # ignored: infrastructure": la infraestructura no usa casillas compartidas; se saca)
+                ("building", "infrastructure"), ("size", Compare(">", max(0, 5 - int(value))))]))
             triggers_used.setdefault("free_building_slots", owner)
         elif key == "surrender_at_least":
             block.add("surrender_progress", Compare(">", float(value)))
