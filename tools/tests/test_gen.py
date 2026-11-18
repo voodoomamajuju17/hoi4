@@ -3166,7 +3166,8 @@ def test_retratos_medios() -> None:
     from tools.arte import retratos_medios as rm
     todos = rm.items(todos=True)
     from tools.arte.arte import catalog
-    retratos = [i for i in catalog() if i["type"] == "leader_portrait"]
+    # (sin los retratos por camino de Albión, 2026-11-17: tienen el medio de su camino)
+    retratos = [i for i in catalog() if i["type"] == "leader_portrait" and not i.get("camino")]
     check("retratos: todos los personajes tienen el medio de su nacion", len(todos) == len(retratos),
           sorted({i["tag"] for i in retratos} - set(rm.MEDIOS)))
     hsn = next(i for i in todos if i["tag"] == "HSN")
