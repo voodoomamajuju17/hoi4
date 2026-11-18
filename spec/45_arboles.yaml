@@ -12,7 +12,8 @@
 #       pide además su lado (la otra se apaga); en la Unión, con desvío; en la Comuna, del cómputo;
 #     - dos puertas: una rama que se abre desde cualquiera de los dos lados políticos;
 #     - vueltas: un foco tardío que pide además un foco de otra rama.
-#   forma: raíz, grupos (rama o lista de focos) con origen y dirección. Japón, Gran Bretaña, las
+#   forma: raíz, grupos (rama, ramas juntas o lista de focos) con su columna y dirección (abajo, o en
+#     escalera a la derecha o a la izquierda): todo cuelga hacia abajo. Japón, Gran Bretaña, las
 #     anarquías y la Junta no tienen forma: se dibujan como siempre.
 # =============================================================================
 
@@ -25,22 +26,22 @@ arboles:
       EFE_guardia_verde_movilizada: {prerequisites: [], prerequisites_any: [EFE_el_mandato_renovado, EFE_los_incendios_de_gaia]}
       EFE_cultivar_la_armadura: {prerequisites: [EFE_el_mariscal_etchegaray, EFE_biosteel_umbral_2]}
       EFE_laboratorio_de_gaia: {prerequisites: [EFE_energia_de_biomasa, EFE_cubas_de_contencion]}
-    # El Árbol: el foco de 2100 es el tronco; la política y el Destino crecen hacia arriba como copa, las tres
-    # ramas del Bioacero bajan como raíces, la Guardia Verde y los Cóndores salen a los costados
+    # El Árbol (2026-11-18, segunda versión: el juego solo dibuja bien las líneas que bajan): el foco de 2100
+    # es el tronco arriba; la política y la economía bajan por el centro, la Guardia Verde y los Cóndores se
+    # abren en escalera a los costados y las tres ramas del Bioacero son las raíces de afuera
     forma:
-      raiz: [20, 12]
-      at: {EFE_la_hora_de_gaia: [20, 11], EFE_ministerio_de_restauracion: [20, 9]}
+      raiz: 20
+      at: {EFE_la_hora_de_gaia: 20}
       grupos:
-      - {rama: dinastia_verde, origen: [15, 10], dir: arriba}
-      - {rama: el_monte, origen: [25, 10], dir: arriba}
-      - {rama: destino, origen: [20, 3], dir: arriba}
-      - {rama: autarquia, origen: [9, 8], dir: arriba}
-      - {rama: diplomacia_agua, origen: [31, 8], dir: arriba}
-      - {rama: guardia_verde, origen: [13, 12], dir: izquierda}
-      - {rama: condores, origen: [27, 12], dir: derecha}
-      - {rama: ciclo_bioacero, origen: [14, 14], dir: abajo}
-      - {rama: cubas, origen: [20, 14], dir: abajo}
-      - {rama: cubas_sanas, origen: [26, 14], dir: abajo}
+      - {ramas: [dinastia_verde, el_monte], origen: 20}
+      - {focos: [EFE_ministerio_de_restauracion], origen: 20}
+      - {ramas: [autarquia, diplomacia_agua], origen: 20}
+      - {rama: destino, origen: 20}
+      - {rama: guardia_verde, origen: 12, dir: izquierda}
+      - {rama: condores, origen: 28, dir: derecha}
+      - {rama: ciclo_bioacero, origen: 2}
+      - {rama: cubas, origen: 38}
+      - {rama: cubas_sanas, origen: 44}
   ASC:
     conexiones:
       ASC_el_consejo_economico: {prerequisites: [ASC_datacenter_de_brandeburgo]}
@@ -48,21 +49,19 @@ arboles:
       ASC_mando_por_red: {prerequisites: [ASC_drones_de_infanteria, ASC_red_de_fibra_baltica]}
       ASC_supercomputadora_de_planificacion: {prerequisites: [ASC_robotica_de_ensamble, ASC_reserva_de_computo]}
       ASC_portadrones: {prerequisites: [ASC_patrulla_del_baltico, ASC_enjambres_aereos, ASC_mando_por_red]}
-    # La Placa: Poder de Cómputo es un bus horizontal que cruza el árbol; la política arriba, la economía arriba
-    # a la derecha (nace del Datacenter), las ramas militares abajo, enchufadas al bus
+    # La Placa (segunda versión): el Poder de Cómputo baja en escalera hacia la derecha como una pista; la
+    # política en el centro, la economía a la derecha y las ramas militares a los costados
     forma:
-      raiz: [4, 12]
+      raiz: 6
       grupos:
-      - {rama: poder_de_computo, origen: [7, 12], dir: derecha}
-      - {rama: consejo_sorteado, origen: [4, 10], dir: arriba}
-      - {rama: plan_41, origen: [9, 9], dir: arriba}
-      - {rama: destino, origen: [14, 7], dir: arriba}
-      - {rama: plan_total, origen: [20, 10], dir: arriba}
-      - {rama: mercado_computo, origen: [25, 9], dir: arriba}
-      - {rama: fabricas_a_oscuras, origen: [3, 16], dir: abajo}
-      - {rama: enjambres, origen: [8, 16], dir: abajo}
-      - {rama: flota_del_norte, origen: [14, 16], dir: abajo}
-      - {rama: red_fria, origen: [20, 16], dir: abajo}
+      - {rama: poder_de_computo, origen: 8, dir: derecha}
+      - {ramas: [consejo_sorteado, plan_41], origen: 0}
+      - {rama: destino, origen: 0}
+      - {ramas: [plan_total, mercado_computo], origen: 22}
+      - {rama: fabricas_a_oscuras, origen: -8}
+      - {rama: enjambres, origen: -14}
+      - {rama: flota_del_norte, origen: 32}
+      - {rama: red_fria, origen: 38}
   FCU:
     conexiones:
       FCU_consejo_economico: {prerequisites: [], prerequisites_any: [FCU_reparto_de_carteras, FCU_junta_de_emergencia]}
@@ -70,23 +69,21 @@ arboles:
       FCU_monopolio_del_agua: {prerequisites: [FCU_consejo_economico], prerequisites_any: [FCU_grifos_de_la_union, FCU_castellane_firma]}
       FCU_fuerza_contratada: {prerequisites: [], prerequisites_any: [FCU_contratos_de_defensa, FCU_junta_de_emergencia]}
       FCU_oficina_de_cumplimiento: {prerequisites: [], prerequisites_any: [FCU_el_libro_mayor, FCU_liquidar_obsidian]}
-    # La Mesa Redonda: la política en el centro (la Mesa arriba); cada corporación con su rama hacia un lado:
-    # Halvorsen-Ito (el Dividendo) a la izquierda, Castellane (el Agua) a la derecha, Obsidian (Cumplimiento)
-    # arriba a la izquierda, Meridian (la Fuerza) arriba a la derecha; lo que cuelga de la raíz, abajo
+    # La Mesa Redonda (segunda versión): la Junta y el Consejo en el centro; cada corporación con su rama hacia
+    # un lado: el Dividendo y Cumplimiento a la izquierda, el Agua y la Fuerza a la derecha
     forma:
-      raiz: [21, 14]
-      at: {FCU_junta_anual: [21, 13], FCU_consejo_economico: [21, 10]}
+      raiz: 21
+      at: {FCU_junta_anual: 21}
       grupos:
-      - {rama: politica_castellane, origen: [16, 12], dir: arriba}
-      - {rama: politica_rourke, origen: [26, 12], dir: arriba}
-      - {rama: destino, origen: [21, 6], dir: arriba}
-      - {rama: economia_dividendo, origen: [11, 9], dir: izquierda}
-      - {rama: economia_agua, origen: [31, 9], dir: derecha}
-      - {rama: casa_de_cristal, origen: [11, 5], dir: izquierda}
-      - {rama: ejercito, origen: [31, 5], dir: derecha}
-      - {rama: industria, origen: [15, 17], dir: abajo}
-      - {rama: mar_aire, origen: [21, 17], dir: abajo}
-      - {rama: directorio, origen: [27, 17], dir: abajo}
+      - {ramas: [politica_castellane, politica_rourke], origen: 21}
+      - {focos: [FCU_consejo_economico], origen: 21}
+      - {ramas: [economia_dividendo, economia_agua], origen: 21}
+      - {rama: destino, origen: 21}
+      - {rama: casa_de_cristal, origen: 9, dir: izquierda}
+      - {rama: ejercito, origen: 33, dir: derecha}
+      - {rama: industria, origen: 3}
+      - {rama: mar_aire, origen: 39}
+      - {rama: directorio, origen: 45}
   HSN:
     conexiones:
       HSN_el_consejo_mercantil: {prerequisites: [], prerequisites_any: [HSN_el_libro_de_fletes, HSN_el_motin_de_kanto]}
@@ -96,22 +93,20 @@ arboles:
       HSN_marines_de_alta_mar: {prerequisites: [HSN_nodo_manila]}
       HSN_consulados_navales: {prerequisites: [HSN_nodo_taiwan]}
       HSN_la_red_de_alta_mar: {prerequisites: [HSN_nodo_okinawa, HSN_grupos_de_portaaviones]}
-    # La Ruta: los Nodos arriba de todo, de izquierda a derecha en el orden del mar; las ramas bajan de los
-    # puertos; la Hermandad de la Cubierta (el motín) sube contra la corriente
+    # La Ruta (segunda versión): los Nodos bajan en escalera hacia la derecha, en el orden del mar, y de cada
+    # puerto cuelga su rama; Aldana y Tavake, lado a lado, a la izquierda
     forma:
-      raiz: [1, 8]
-      at: {HSN_la_junta_de_capitanes: [3, 8]}
+      raiz: 4
+      at: {HSN_la_junta_de_capitanes: 4}
       grupos:
-      - {focos: [HSN_malaca, HSN_nodo_sunda, HSN_nodo_manila, HSN_nodo_taiwan, HSN_nodo_hong_kong, HSN_nodo_okinawa, HSN_la_red_de_alta_mar], origen: [9, 0], dir: derecha}
-      - {rama: astilleros, origen: [9, 1], dir: abajo}
-      - {rama: cubierta, origen: [13, 1], dir: abajo}
-      - {focos: [HSN_consulados_navales, HSN_seguros_para_las_potencias, HSN_la_flota_de_escolta, HSN_el_tratado_de_libre_paso, HSN_el_arbitro_de_los_mares, HSN_la_talasocracia], origen: [17, 1], dir: abajo}
-      - {rama: tavake, origen: [5, 7], dir: arriba}
-      - {rama: aldana, origen: [5, 9], dir: derecha}
-      - {rama: destino, origen: [3, 11], dir: abajo}
-      - {rama: puerto_libre, origen: [8, 12], dir: abajo}
-      - {rama: peaje, origen: [13, 13], dir: abajo}
-      - {rama: armada, origen: [19, 12], dir: abajo}
+      - {focos: [HSN_malaca, HSN_nodo_sunda, HSN_nodo_manila, HSN_nodo_taiwan, HSN_nodo_hong_kong, HSN_nodo_okinawa, HSN_la_red_de_alta_mar], origen: 12, dir: derecha}
+      - {ramas: [aldana, tavake], origen: 2}
+      - {rama: destino, origen: 2}
+      - {ramas: [puerto_libre, peaje], origen: 2}
+      - {rama: astilleros, origen: 14}
+      - {rama: cubierta, origen: 18}
+      - {focos: [HSN_consulados_navales, HSN_seguros_para_las_potencias, HSN_la_flota_de_escolta, HSN_el_tratado_de_libre_paso, HSN_el_arbitro_de_los_mares, HSN_la_talasocracia], origen: 22}
+      - {rama: armada, origen: 30}
   NAS:
     conexiones:
       NAS_el_consejo_del_campo: {prerequisites: [], prerequisites_any: [NAS_la_coronacion_renovada, NAS_el_inca_rompe_el_silencio]}
@@ -119,24 +114,21 @@ arboles:
       NAS_la_mineria_del_cielo: {prerequisites: [NAS_el_consejo_del_campo, NAS_el_inca_rompe_el_silencio]}
       NAS_granjas_del_sol: {prerequisites: [], prerequisites_any: [NAS_los_sacerdotes_del_sol, NAS_mita_de_guerra]}
       NAS_observatorio_del_sol: {prerequisites: [NAS_las_minas_de_potosi, NAS_templos_eficientes]}
-    # El Sol de los Cuatro Suyus: el Sol de 2100 en el centro y el árbol en cuatro direcciones. Norte
-    # (Chinchaysuyu): la Corte, el Tawantinsuyu y el Destino; sur (Collasuyu): Talleres, Terrazas o Minería;
-    # este (Antisuyu, donde sale el sol): Inti-Soma y el Calendario; oeste (Cuntisuyu, la costa): las Alas y los
-    # Guerreros de la Puna
+    # El Sol de los Cuatro Suyus (segunda versión): el Sol de 2100 arriba al centro y las ramas abiertas como
+    # rayos: la Corte y el Inca en el centro, el Inti-Soma y el Calendario en escalera a la derecha, las Alas y
+    # los Guerreros en escalera a la izquierda, Talleres, Terrazas y Minería abajo
     forma:
-      raiz: [18, 10]
-      at: {NAS_el_consejo_de_cusco: [18, 9]}
+      raiz: 18
+      at: {NAS_el_consejo_de_cusco: 18}
       grupos:
-      - {rama: corte_del_sol, origen: [15, 8], dir: arriba}
-      - {rama: tawantinsuyu, origen: [21, 8], dir: arriba}
-      - {rama: destino, origen: [18, 4], dir: arriba}
-      - {rama: talleres, origen: [18, 12], dir: abajo}
-      - {rama: terrazas, origen: [13, 13], dir: abajo}
-      - {rama: mineria, origen: [23, 14], dir: abajo}
-      - {rama: inti_soma, origen: [21, 10], dir: derecha}
-      - {rama: calendario_solar, origen: [22, 12], dir: derecha}
-      - {rama: alas_del_sol, origen: [15, 10], dir: izquierda}
-      - {rama: guerreros, origen: [14, 12], dir: izquierda}
+      - {ramas: [corte_del_sol, tawantinsuyu], origen: 18}
+      - {rama: destino, origen: 18}
+      - {ramas: [terrazas, mineria], origen: 18}
+      - {rama: talleres, origen: 18}
+      - {rama: inti_soma, origen: 24, dir: derecha}
+      - {rama: calendario_solar, origen: 30, dir: derecha}
+      - {rama: alas_del_sol, origen: 12, dir: izquierda}
+      - {rama: guerreros, origen: 6, dir: izquierda}
   SHD:
     conexiones:
       SHD_el_consejo_economico: {prerequisites: [], prerequisites_any: [SHD_ajuste_tecnico_n_1, SHD_abrir_las_compuertas]}
@@ -145,23 +137,20 @@ arboles:
       SHD_infanteria_de_masa: {prerequisites: [], prerequisites_any: [SHD_ajuste_tecnico_n_1, SHD_abrir_las_compuertas]}
       SHD_el_modelo_del_rio: {prerequisites: [SHD_sensores_del_caudal, SHD_diques_de_contencion, SHD_las_tres_gargantas]}
       SHD_valvula_de_produccion: {prerequisites: [SHD_los_tres_caudales, SHD_la_red_electrica_nacional]}
-    # El Río: el Directorio de 2100 es la naciente a la izquierda; el Caudal Corregido es el cauce y corre a
-    # la derecha hasta el Destino, la desembocadura; la Gran Crecida sube, desbordando el cauce; las demás
-    # ramas entran desde abajo como afluentes
+    # El Río (segunda versión): el Directorio de 2100 es la naciente, arriba a la izquierda; el Caudal
+    # Corregido baja en escalera hacia la derecha como un cauce hasta el Destino; las demás ramas son afluentes
     forma:
-      raiz: [0, 8]
-      at: {SHD_la_sesion_tecnica: [2, 8]}
+      raiz: 0
+      at: {SHD_la_sesion_tecnica: 0}
       grupos:
-      - {rama: caudal_corregido, origen: [4, 8], dir: derecha}
-      - {rama: gran_crecida, origen: [4, 6], dir: arriba}
-      - {rama: destino, origen: [20, 8], dir: derecha}
-      - {rama: represas, origen: [1, 11], dir: abajo}
-      - {rama: armonia, origen: [6, 11], dir: abajo}
-      - {rama: sala_de_control, origen: [11, 11], dir: abajo}
-      - {rama: cielo, origen: [16, 11], dir: abajo}
-      - {rama: grandes_obras, origen: [21, 11], dir: abajo}
-      - {rama: precision, origen: [25, 12], dir: abajo}
-      - {rama: ejercito_del_caudal, origen: [30, 11], dir: abajo}
+      - {ramas: [caudal_corregido, gran_crecida], origen: 2, dir: derecha}
+      - {rama: destino, origen: 20, dir: derecha}
+      - {ramas: [precision, grandes_obras], origen: 8}
+      - {rama: represas, origen: -6}
+      - {rama: armonia, origen: -12}
+      - {rama: sala_de_control, origen: 30}
+      - {rama: cielo, origen: 36}
+      - {rama: ejercito_del_caudal, origen: 42}
   APF:
     conexiones:
       APF_el_consejo_economico: {prerequisites: [], prerequisites_any: [APF_mil_consejos, APF_los_consejos_se_arman]}
@@ -169,23 +158,20 @@ arboles:
       APF_el_corredor_continental: {prerequisites: [APF_el_consejo_economico, APF_los_consejos_se_arman]}
       APF_milicias_regulares: {prerequisites: [], prerequisites_any: [APF_consejos_locales, APF_los_consejos_se_arman]}
       APF_un_solo_pueblo: {prerequisites: [APF_la_red_de_consejos, APF_el_parlamento_de_los_pueblos]}
-    # El Hemiciclo: el Congreso de 2100 abajo al centro y las ramas abiertas hacia arriba en abanico, como las
-    # bancas de un parlamento: la política en el centro, lo militar en el ala izquierda, la economía y la
-    # integración en la derecha
+    # El Hemiciclo (segunda versión): el Congreso de 2100 arriba al centro y las ramas abiertas en abanico como
+    # las bancas: la política al centro, lo militar a la izquierda, la economía y la integración a la derecha
     forma:
-      raiz: [22, 14]
-      at: {APF_la_asamblea_de_lagos: [22, 13]}
+      raiz: 22
+      at: {APF_la_asamblea_de_lagos: 22}
       grupos:
-      - {rama: congreso, origen: [19, 12], dir: arriba}
-      - {rama: marcha, origen: [25, 12], dir: arriba}
-      - {rama: destino, origen: [22, 6], dir: arriba}
-      - {rama: milicias, origen: [14, 12], dir: arriba}
-      - {rama: alas, origen: [9, 13], dir: arriba}
-      - {rama: aldea, origen: [30, 12], dir: arriba}
-      - {rama: corredor, origen: [34, 11], dir: arriba}
-      - {rama: polos, origen: [38, 13], dir: arriba}
-      - {rama: integracion, origen: [42, 13], dir: arriba}
-      - {rama: voz_de_los_consejos, origen: [46, 13], dir: arriba}
+      - {ramas: [congreso, marcha], origen: 22}
+      - {rama: destino, origen: 22}
+      - {ramas: [aldea, corredor], origen: 22}
+      - {rama: milicias, origen: 14, dir: izquierda}
+      - {rama: alas, origen: 6, dir: izquierda}
+      - {rama: polos, origen: 30, dir: derecha}
+      - {rama: integracion, origen: 36, dir: derecha}
+      - {rama: voz_de_los_consejos, origen: 42, dir: derecha}
   NRE:
     conexiones:
       NRE_el_erario: {prerequisites: [], prerequisites_any: [NRE_el_senado_restaurado, NRE_la_legion_decide]}
@@ -193,19 +179,18 @@ arboles:
       NRE_el_tributo: {prerequisites: [NRE_el_erario, NRE_la_legion_decide]}
       NRE_el_limes: {prerequisites: [], prerequisites_any: [NRE_las_vias_imperiales, NRE_la_legion_decide]}
       NRE_roma_aeterna: {prerequisites: [NRE_la_disciplina_del_limes, NRE_el_triunfo]}
-    # Todos los Caminos: la Aclamación en el centro, como Roma, y las ramas salen como vías hacia las
-    # provincias: la política al norte, el Erario al oeste, las Forjas al este, las legiones, la flota y los
-    # oficiales al sur; el Limes es el anillo de afuera
+    # Todos los Caminos (segunda versión): la Aclamación arriba al centro, como Roma, y las ramas salen como
+    # vías: la política al centro, el Erario en escalera al oeste, las Forjas al este, las legiones, la flota
+    # y los oficiales abajo; el Limes, afuera
     forma:
-      raiz: [20, 10]
-      at: {NRE_el_consilium: [20, 9]}
+      raiz: 20
+      at: {NRE_el_consilium: 20}
       grupos:
-      - {rama: principado, origen: [17, 8], dir: arriba}
-      - {rama: cuatro_imperatores, origen: [23, 8], dir: arriba}
-      - {rama: destino, origen: [20, 3], dir: arriba}
-      - {rama: erario, origen: [16, 10], dir: izquierda}
-      - {rama: forjas, origen: [24, 10], dir: derecha}
-      - {rama: legiones, origen: [15, 13], dir: abajo}
-      - {rama: mare_nostrum, origen: [21, 13], dir: abajo}
-      - {rama: oficiales, origen: [26, 13], dir: abajo}
-      - {rama: el_limes, origen: [7, 14], dir: abajo}
+      - {ramas: [principado, cuatro_imperatores], origen: 20}
+      - {rama: destino, origen: 20}
+      - {rama: erario, origen: 12, dir: izquierda}
+      - {rama: forjas, origen: 28, dir: derecha}
+      - {rama: legiones, origen: 6}
+      - {rama: mare_nostrum, origen: 34}
+      - {rama: oficiales, origen: 40}
+      - {rama: el_limes, origen: 0}

@@ -310,78 +310,197 @@ def _depths(by_id: dict[str, dict]) -> dict[str, int]:
 
 def _layout_forma(focuses: list[tuple[str, dict]], depth: dict[str, int], forma: dict,
                   warn=None) -> dict[str, tuple[int, int]]:
-    """2026-11-18 (Rediseño de los árboles de foco: "no, no tiene que bajar"): cada árbol con su dibujo.
+    """2026-11-18 (Rediseño de los árboles de foco): cada árbol con su dibujo.
+
+    2026-11-18, segunda versión ("Hay lineas q sobrepasan la imagen en los arboles de focos, corregir"): el
+    juego dibuja cada línea saliendo por ABAJO del foco previo y entrando por ARRIBA del siguiente, así que
+    una rama que crece hacia arriba o de costado arrastra líneas que dan la vuelta y cruzan otros focos. Ahora
+    todo cuelga hacia abajo de lo que lo habilita; la forma de cada nación está en dónde va cada rama de
+    izquierda a derecha y en las ramas que bajan en escalera.
 
     forma:
-      raiz: [x, y]                    dónde va el foco raíz
-      grupos:                         cada grupo es una rama entera (`rama`) o una lista de focos (`focos`)
-        - {rama: id, origen: [x, y], dir: abajo|arriba|izquierda|derecha}
-      at: {foco: [x, y]}              a mano, para casos sueltos
-    Dentro de un grupo, cada foco va a una capa según su profundidad (la primera capa en `origen`) y los de
-    una misma capa se reparten de costado, centrados. Si dos focos caen en el mismo casillero, el segundo se
-    corre de costado hasta un lugar libre (y se avisa). Al final todo se corre para que nada quede negativo.
+      raiz: x                          columna del foco raíz (va arriba de todo)
+      at: {foco: x}                    focos sueltos (el tronco) en su columna
+      grupos:                          cada grupo es una rama (`rama`), varias (`ramas`, juntas: para que dos
+        - {rama: id, origen: x,        focos excluyentes queden lado a lado) o una lista de focos (`focos`)
+           dir: abajo|derecha|izquierda}   derecha/izquierda: baja en escalera hacia ese lado
+    Cada grupo baja justo debajo de lo que lo habilita (nunca más arriba que un previo). Si no entra donde se
+    pidió, se corre de costado al lugar libre más cercano donde sus líneas no atraviesen otro foco. Los focos
+    excluyentes de una misma capa quedan juntos.
     """
     orden = {f["id"]: i for i, (_, f) in enumerate(focuses)}
     rama_de = {f["id"]: b for b, f in focuses}
+    previos = {f["id"]: _all_prereqs(f) for _, f in focuses}
+    excl = {f["id"]: set(f.get("mutually_exclusive") or []) for _, f in focuses}
     roots = [f["id"] for _, f in focuses if depth[f["id"]] == 0]
     pos: dict[str, tuple[int, int]] = {}
-    ocupado: dict[tuple[int, int], str] = {}
 
-    def poner(fid: str, x: int, y: int, horizontal: bool) -> None:
-        paso = (0, 1) if horizontal else (2, 0)
-        k = 0
-        while (x, y) in ocupado:
-            k += 1
-            x, y = x + paso[0], y + paso[1]
-            if k > 60:
-                raise SpecError(f"forma: no hay lugar para {fid}", where="45_arboles.yaml")
-        if k and warn:
-            warn(f"forma: {fid} chocaba con {ocupado.get((x - paso[0] * k, y - paso[1] * k))} y se corrió {k} lugar(es)")
-        pos[fid] = (x, y)
-        ocupado[(x, y)] = fid
+    def _num(v):
+        return int(v[0]) if isinstance(v, (list, tuple)) else int(v)
 
-    x0, y0 = forma.get("raiz", [0, 0])
+    x0 = _num(forma.get("raiz", 0))
     for i, r in enumerate(roots):
-        poner(r, int(x0) + 2 * i, int(y0), False)
-    a_mano = {k: v for k, v in (forma.get("at") or {}).items()}
-    for fid, (x, y) in a_mano.items():
-        poner(fid, int(x), int(y), False)
-    for g in forma.get("grupos") or []:
-        ids = list(g["focos"]) if g.get("focos") else [fid for fid in orden if rama_de[fid] == g["rama"]]
-        ids = [fid for fid in ids if fid not in pos]
-        if not ids:
-            continue
-        base = min(depth[fid] for fid in ids)
+        pos[r] = (x0 + 2 * i, 0)
+    grupos = [{"focos": [fid], "origen": x} for fid, x in (forma.get("at") or {}).items()]
+    grupos += list(forma.get("grupos") or [])
+    tomados = set(pos)
+    specs = []
+    for g in grupos:
+        if g.get("focos"):
+            ids = [fid for fid in g["focos"] if fid not in tomados]
+        else:
+            ramas = g["ramas"] if g.get("ramas") else [g["rama"]]
+            ids = [fid for fid in orden if rama_de[fid] in ramas and fid not in tomados]
+        tomados |= set(ids)
+        if ids:
+            specs.append((ids, _num(g["origen"]), g.get("dir", "abajo")))
+    faltan = [fid for fid in orden if fid not in tomados]
+    if faltan:
+        raise SpecError(f"forma: focos sin lugar en el dibujo: {faltan}", where="45_arboles.yaml")
+
+    def cruces(cand: dict[str, tuple[int, int]]) -> int:
+        """Líneas verticales (en la columna del hijo, entre la fila del previo y la suya) que pasan por un
+        foco, entre lo nuevo y lo ya puesto."""
+        todo = {**pos, **cand}
+        celdas = {}
+        for fid, (x, y) in todo.items():
+            celdas.setdefault(y, []).append((x, fid))
+        n = 0
+        for hijo, (cx, cy) in todo.items():
+            for p in previos[hijo]:
+                if p not in todo:
+                    continue
+                py = todo[p][1]
+                for yy in range(py + 1, cy):
+                    for (xx, otro) in celdas.get(yy, []):
+                        if abs(xx - cx) <= 1 and (otro in cand or hijo in cand):
+                            n += 1
+        return n
+
+    def armar(ids, ox, d, shift):
+        base = min(depth[f] for f in ids)
         capas: dict[int, list[str]] = {}
         for fid in sorted(ids, key=lambda f: orden[f]):
             capas.setdefault(depth[fid] - base, []).append(fid)
-        ox, oy = (int(v) for v in g["origen"])
-        d = g.get("dir", "abajo")
-        horizontal = d in ("izquierda", "derecha")
-        previos = {f["id"]: _all_prereqs(f) for _, f in focuses}
+        cand: dict[str, tuple[int, int]] = {}
+        y_prev = None
         for capa, miembros in sorted(capas.items()):
-            # cada foco cerca de sus padres ya ubicados (así las líneas no se cruzan sin necesidad)
-            def centro(fid: str) -> float:
-                ps = [pos[p] for p in previos[fid] if p in pos]
-                if not ps:
-                    return float(orden[fid])
-                return sum((y if horizontal else x) for x, y in ps) / len(ps)
+            def centro(fid):
+                ps = [(pos.get(p) or cand.get(p)) for p in previos[fid] if p in pos or p in cand]
+                return sum(x for x, _ in ps) / len(ps) if ps else float(orden[fid])
             miembros = sorted(miembros, key=lambda f: (centro(f), orden[f]))
+            # excluyentes juntos
+            juntos: list[str] = []
+            for fid in miembros:
+                if fid in juntos:
+                    continue
+                juntos.append(fid)
+                juntos += [o for o in miembros if o in excl[fid] and o not in juntos]
+            miembros = juntos
+            need = 1
+            for fid in miembros:
+                for p in previos[fid]:
+                    q = pos.get(p) or cand.get(p)
+                    if q:
+                        need = max(need, q[1] + 1)
+            y = need if y_prev is None else max(need, y_prev + 1)
+            y_prev = y
             n = len(miembros)
+            paso = 2 * capa if d == "derecha" else -2 * capa if d == "izquierda" else 0
             for i, fid in enumerate(miembros):
-                if horizontal:
-                    x = ox + (2 * capa if d == "derecha" else -2 * capa)
-                    y = oy + i - (n - 1) // 2
-                else:
-                    x = ox + 2 * i - (n - 1)
-                    y = oy + (capa if d == "abajo" else -capa)
-                poner(fid, x, y, horizontal)
-    faltan = [fid for fid in orden if fid not in pos]
-    if faltan:
-        raise SpecError(f"forma: focos sin lugar en el dibujo: {faltan}", where="45_arboles.yaml")
+                cand[fid] = (ox + shift + paso + 2 * i - (n - 1), y)
+        return cand
+
+    ocupado = {v: k for k, v in pos.items()}
+    pendientes = list(specs)
+    while pendientes:
+        listo = next((s for s in pendientes
+                      if all(p in pos or p in s[0] for f in s[0] for p in previos[f])), pendientes[0])
+        pendientes.remove(listo)
+        ids, ox, d = listo
+        mejor = None
+        for k in range(0, 41):
+            shift = (k + 1) // 2 * (2 if k % 2 else -2)
+            cand = armar(ids, ox, d, shift)
+            if any(c in ocupado for c in cand.values()) or len(set(cand.values())) < len(cand):
+                continue
+            costo = cruces(cand) * 60 + abs(shift)
+            if mejor is None or costo < mejor[0]:
+                mejor = (costo, cand, shift)
+            if costo == abs(shift):
+                break
+        if mejor is None:
+            raise SpecError(f"forma: no hay lugar para {ids[0]}", where="45_arboles.yaml")
+        if mejor[2] and warn:
+            warn(f"forma: {ids[0]} se corrió {mejor[2]} columnas para no chocar ni cruzar líneas")
+        pos.update(mejor[1])
+        ocupado.update({v: k for k, v in mejor[1].items()})
+    # un previo que quedó en un grupo puesto después: el hijo baja (y todo lo que cuelga de él)
+    cambio = True
+    while cambio:
+        cambio = False
+        for fid, (x, y) in list(pos.items()):
+            need = max([pos[p][1] + 1 for p in previos[fid]] or [0])
+            if y < need:
+                while (x, need) in ocupado:
+                    x += 2
+                del ocupado[pos[fid]]
+                pos[fid] = (x, need)
+                ocupado[(x, need)] = fid
+                cambio = True
+                if warn:
+                    warn(f"forma: {fid} bajó a la fila {need} (un previo quedó más abajo)")
+    # reparación: una línea vertical que pasa por un foco -> se corre de costado ese foco (o el hijo de la
+    # línea) al lugar libre de su fila que más cruces saque; los excluyentes no se mueven (quedan juntos)
+    hijos: dict[str, list[str]] = {}
+    for fid in pos:
+        for p in previos[fid]:
+            hijos.setdefault(p, []).append(fid)
+
+    def malos() -> list[tuple[str, str]]:
+        filas: dict[int, list[tuple[int, str]]] = {}
+        for fid, (x, y) in pos.items():
+            filas.setdefault(y, []).append((x, fid))
+        out = []
+        for c, (cx, cy) in pos.items():
+            for p in previos[c]:
+                for yy in range(pos[p][1] + 1, cy):
+                    out += [(c, o) for xx, o in filas.get(yy, []) if abs(xx - cx) <= 1]
+        return out
+
+    for _ in range(300):
+        actuales = malos()
+        if not actuales:
+            break
+        base = len(actuales)
+        mejor = None
+        for c, o in actuales:
+            for mover in (o, c):
+                if excl[mover]:
+                    continue
+                x, y = pos[mover]
+                for dx in (2, -2, 4, -4, 6, -6, 8, -8, 10, -10):
+                    if (x + dx, y) in ocupado:
+                        continue
+                    del ocupado[(x, y)]
+                    pos[mover] = (x + dx, y)
+                    ocupado[(x + dx, y)] = mover
+                    n = len(malos())
+                    del ocupado[(x + dx, y)]
+                    pos[mover] = (x, y)
+                    ocupado[(x, y)] = mover
+                    if n < base and (mejor is None or (n, abs(dx)) < mejor[0]):
+                        mejor = ((n, abs(dx)), mover, (x + dx, y))
+        if mejor is None:
+            if warn:
+                warn(f"forma: quedan {base} líneas que pasan por un foco ({actuales[0][0]} / {actuales[0][1]})")
+            break
+        _, mover, nuevo = mejor
+        del ocupado[pos[mover]]
+        pos[mover] = nuevo
+        ocupado[nuevo] = mover
     mx = min(x for x, _ in pos.values())
-    my = min(y for _, y in pos.values())
-    return {fid: (x - mx, y - my) for fid, (x, y) in pos.items()}
+    return {fid: (x - mx, y) for fid, (x, y) in pos.items()}
 
 
 def _layout(focuses: list[tuple[str, dict]], depth: dict[str, int]) -> dict[str, tuple[int, int]]:

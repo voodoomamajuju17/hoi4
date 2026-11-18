@@ -3509,6 +3509,11 @@ def test_arboles() -> None:
     trees = spec.raw["focus_trees"]["trees"]
     check("las ocho potencias tienen forma; Japon y Albion no", all(trees[t].get("forma") for t in arb.POTENCIAS)
           and not trees["ZJP"].get("forma") and not trees["ZAL"].get("forma"))
+    # 2026-11-18 ("hay líneas que sobrepasan la imagen"): el juego dibuja las líneas de arriba hacia abajo
+    malas = {t: arb.problemas(t, spec) for t in arb.POTENCIAS}
+    malas = {t: v[:3] for t, v in malas.items() if v}
+    check("ninguna linea sube, ningun par excluyente separado y ninguna linea atraviesa un foco", not malas,
+          str(malas))
     with tempfile.TemporaryDirectory() as tmp:
         ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
         mod = ctx.mod_root

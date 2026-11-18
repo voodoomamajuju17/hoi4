@@ -75,6 +75,40 @@ def comparar() -> dict[str, list[tuple[tuple[str, ...], int, int | None]]]:
     return res
 
 
+def problemas(tag: str, spec=None) -> list[str]:
+    """Lo que el juego dibujaría mal (2026-11-18, "hay líneas que sobrepasan la imagen"): una línea que sube
+    (el hijo arriba o al lado de un previo), un par excluyente que no queda lado a lado, y una línea vertical
+    que atraviesa otro foco."""
+    from tools.gen.emitters.focus_trees import _depths, _layout, _layout_forma, _all_prereqs
+    spec = spec or _spec(True)
+    tree = spec.raw["focus_trees"]["trees"][tag]
+    fl = [(b["id"], f) for b in tree["branches"] for f in b.get("focuses") or []]
+    by_id = {f["id"]: f for _, f in fl}
+    pos = _layout_forma(fl, _depths(by_id), tree["forma"]) if tree.get("forma") else _layout(fl, _depths(by_id))
+    filas: dict[int, list[tuple[int, str]]] = {}
+    for fid, (x, y) in pos.items():
+        filas.setdefault(y, []).append((x, fid))
+    out = []
+    for fid, f in by_id.items():
+        cx, cy = pos[fid]
+        for p in _all_prereqs(f):
+            px, py = pos[p]
+            if py >= cy:
+                out.append(f"línea que sube: {p} -> {fid}")
+                continue
+            for yy in range(py + 1, cy):
+                for xx, otro in filas.get(yy, []):
+                    if abs(xx - cx) <= 1:
+                        out.append(f"la línea {p} -> {fid} atraviesa {otro}")
+        for o in f.get("mutually_exclusive") or []:
+            if fid < o:
+                (ax, ay), (bx, by) = pos[fid], pos[o]
+                medio = [z for xx, z in filas.get(ay, []) if min(ax, bx) < xx < max(ax, bx)]
+                if ay != by or medio:
+                    out.append(f"excluyentes separados: {fid} / {o}" + (f" (en el medio: {', '.join(medio)})" if medio else ""))
+    return out
+
+
 def vista(tag: str, png: Path) -> None:
     from PIL import Image, ImageDraw
     from tools.gen.emitters.focus_trees import _depths, _layout, _layout_forma
