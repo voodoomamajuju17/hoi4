@@ -71,9 +71,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-9 eventos propios. Algunos títulos:
+8 eventos propios. Algunos títulos:
 
-*Saqueo de los Señores de la Guerra de Eurasia* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Cayó la Gran Capital* · *Eurasia Propone una Unión* · *Otro Señor se Suma* · *Un Señor se Niega* · *Los Señores de la Guerra de Eurasia en 2100*
+*Saqueo de los Señores de la Guerra de Eurasia* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Cayó la Gran Capital* · *Eurasia Propone una Unión* · *Otro Señor se Suma* · *Un Señor se Niega*
 
 ## Frases
 

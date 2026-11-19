@@ -70,9 +70,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-7 eventos propios. Algunos títulos:
+6 eventos propios. Algunos títulos:
 
-*Saqueo de los Señores de la Guerra del Indostán* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Cayó Bagdad* · *El Indostán Marcha con Nosotros* · *Los Señores de la Guerra del Indostán en 2100*
+*Saqueo de los Señores de la Guerra del Indostán* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Cayó Bagdad* · *El Indostán Marcha con Nosotros*
 
 ## Frases
 

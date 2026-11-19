@@ -71,9 +71,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-5 eventos propios. Algunos títulos:
+4 eventos propios. Algunos títulos:
 
-*Saqueo de los Emiratos del Desierto* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Los Emiratos del Desierto en 2100*
+*Saqueo de los Emiratos del Desierto* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos*
 
 ## Frases
 

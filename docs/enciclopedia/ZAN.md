@@ -64,9 +64,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-3 eventos propios. Algunos títulos:
+2 eventos propios. Algunos títulos:
 
-*La Unión Quiere la Frontera de Vuelta* · *La Federación Mira al Oeste* · *Las Tierras Sin Ley en 2100*
+*La Unión Quiere la Frontera de Vuelta* · *La Federación Mira al Oeste*
 
 ## Frases
 

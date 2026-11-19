@@ -70,9 +70,9 @@ Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/av
 
 ## Lo que puede pasar: eventos
 
-5 eventos propios. Algunos títulos:
+4 eventos propios. Algunos títulos:
 
-*Saqueo de los Caudillos del Amazonas* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos* · *Los Caudillos del Amazonas en 2100*
+*Saqueo de los Caudillos del Amazonas* · *Se Alza un Caudillo* · *Un Solo Caudillo* · *La Tregua de los Caudillos*
 
 ## Frases
 

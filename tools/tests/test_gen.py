@@ -4048,7 +4048,10 @@ def test_mecanicas_v2() -> None:
         check("SHD: los caudales se mueven solos (P+2 Pu+1 O-1)", "var = SHD_produccion" in pdx.render(eff.get("SHD_pulso_del_rio")))
         on = "".join(p.read_text() for p in (mod / "common/on_actions").glob("*.txt"))
         check("cada pulso arranca el primer dia", all(f"meganations_{t}.20" in on for t in ("efe", "fcu", "asc", "hsn", "nas", "shd", "apf", "nre")))
-        check("cada potencia recibe su explicacion al arranque", all(f"meganations_{t}.21" in on for t in ("efe", "fcu", "asc", "hsn", "nas", "shd", "apf", "nre")))
+        # 2026-11-18: con la Historieta, la explicación la manda el botón Continuar (o la introducción, a la IA)
+        hist = (mod / "common/scripted_effects/meganations_historietas.txt")
+        hist = hist.read_text() if hist.exists() else ""
+        check("cada potencia recibe su explicacion al arranque", all(f"meganations_{t}.21" in on + hist for t in ("efe", "fcu", "asc", "hsn", "nas", "shd", "apf", "nre")))
         decs = (mod / "common/decisions/meganations_decisions.txt").read_text()
         inv = decs[decs.index("APF_invertir_zet = {"):]
         inv = inv[:inv.index("complete_effect")]
