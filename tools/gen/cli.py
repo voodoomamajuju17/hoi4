@@ -50,6 +50,7 @@ from .emitters import medallas as em_medallas
 from .emitters import selector_gui as em_selector_gui
 from .emitters import eventos_gui as em_eventos_gui
 from .emitters import paneles as em_paneles
+from .emitters import historietas as em_historietas
 from .emitters import facciones as em_facciones
 from .emitters import laws as em_laws
 from .emitters import loading_quotes as em_loading_quotes
@@ -136,6 +137,7 @@ EMITTERS = [
     ("politica_gui", em_politica_gui.emit),   # 2026-11-07: espíritus en dos filas a tamaño completo
     ("selector_gui", em_selector_gui.emit),   # 2026-11-13: selector de país como receptor (prototipo)
     ("paneles", em_paneles.emit),
+    ("historietas", em_historietas.emit),  # 2026-11-18: la introducción en viñetas (46_historietas)
     ("facciones", em_facciones.emit),         # 2026-11-15: emblemas de facción (sprites; falta engancharlos)             # 2026-11-15: el panel del recurso propio de cada nación
     ("eventos_gui", em_eventos_gui.emit),     # 2026-11-15: eventos en el Receptor, noticias en el cable de Ginebra
     ("modelos", em_modelos.emit),       # 2026-11-08: modelos 3D propios (assets/modelos, el Gliptodonte)

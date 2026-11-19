@@ -65,7 +65,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-17: Albión distinta en cada camino
                  "44_albion_caminos.yaml",
                  # 2026-11-18: el rediseño de los árboles de foco de las ocho potencias
-                 "45_arboles.yaml"]
+                 "45_arboles.yaml",
+                 # 2026-11-18: la Historieta, la introducción de cada nación en 8 viñetas
+                 "46_historietas.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -111,6 +113,11 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
             if cfg.get("forma"):
                 (raw.get("focus_trees") or {}).get("trees", {})[tag]["forma"] = cfg["forma"]
         overlay["extend_focuses"] = ext
+    # 2026-11-18: la Historieta (46_historietas.yaml): la introducción se vuelve una página de historieta
+    if overlay.get("historietas"):
+        from . import historietas_spec
+        overlay = dict(overlay)
+        raw["historietas"] = historietas_spec.expandir(raw, overlay.pop("historietas"))
     # 2026-11-17: Albión distinta en cada camino (44_albion_caminos.yaml): banderas de transición y retratos
     if overlay.get("albion_caminos"):
         from . import albion_caminos_spec

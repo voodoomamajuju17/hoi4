@@ -36,6 +36,14 @@ margen para equivocarse. El **Directorio** y **Japón** son para la segunda o te
 
 ## 3. Lo que es distinto a Hearts of Iron IV de siempre
 
+### La historieta del arranque
+
+Al empezar, en vez de un evento largo, se abre **la historieta de tu nación**: una página de ocho
+viñetas, cada nación con su propio dibujo de página (el Árbol, la Placa de circuito, el Sol, el Río,
+los arcos de Roma, la chatarra de las Tierras Sin Ley…), que cuenta en pocas palabras de dónde viene,
+quién manda, qué está en juego y contra quién. **Continuar** la cierra y recién ahí llega el aviso de
+la mecánica propia.
+
 ### Cada nación tiene su moneda
 
 Arriba, en la barra, cada meganación tiene un recurso propio que sube y baja con sus regiones

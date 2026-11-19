@@ -92,6 +92,9 @@ KINDS = {
     # pantallas de carga (arte/pantallas_carga_descripciones.yaml, 2026-10-24): la vida
     # diaria de cada potencia y anarquía; 1920x1440 en DXT1, como las que ya hay
     "loading_screen": {"size": (1920, 1440), "transparent": False, "fit": "cover"},
+    # 2026-11-18: viñetas de la Historieta (tools/arte/historietas.py): cada pedido lleva su tamaño (2x su
+    # lugar en la página); al importar se guarda al tamaño del lugar y se vuelve a armar la página
+    "comic_panel": {"size": (800, 600), "transparent": False, "fit": "cover"},
 }
 
 # 2026-10-16, pedido del usuario: "el estilo tiene que ser un poco cómic/novela
@@ -556,6 +559,9 @@ def catalog() -> list[dict]:
     items += _plate_items()
     items += _mapa_items(long_desc.get("composition", ""))
     items += _loading_items()
+    # 2026-11-18: la Historieta (46_historietas): una imagen por viñeta, del tamaño de su lugar en la página
+    from tools.arte import historietas as _hist
+    items += _hist.items()
     _apply_icon_looks(items)
     return items
 
@@ -1195,7 +1201,7 @@ def pedidos() -> None:
              ("unique_icon", "10_unidades_unicas"), ("plane_icon", "11_aviones"), ("shared_icon", "12_equipo_comun"),
              ("tech_icon", "13_tecnologias"), ("doctrine_icon", "14_doctrinas"), ("law_icon", "15_leyes"),
              ("ui_icon", "16_interfaz"), ("adventure_picture", "17_aventura"), ("adventure_plate", "17_laminas"), ("game_icon", "19_iconos_juego"),
-             ("loading_screen", "18_pantallas_de_carga")]
+             ("loading_screen", "18_pantallas_de_carga"), ("comic_panel", "21_historietas")]
     summary = []
     for kind, prefix in order:
         by_tag: dict[str, list[dict]] = {}
@@ -1328,6 +1334,9 @@ def _readme(summary: list[str]) -> str:
         "Orden sugerido: 1 retratos, 2 espíritus, 3 focos, 4 eventos, 5 banderas, 9 armas por facción.",
         "17_aventura_<TAG>: las aventuras de cada anarquía, estilo historieta (Moebius + Kill Six Billion",
         "Demons); conviene pedir cada archivo en una misma conversación para que los personajes se parezcan.",
+        "21_historietas_<TAG>: las 8 viñetas de la historieta de introducción de cada nación (2026-11-18).",
+        "Pedir las 8 de una nación en la MISMA conversación (los personajes y el estilo tienen que repetirse)",
+        "y respetar la proporción de `size`: cada viñeta tiene su forma en la página.",
         f"Lo nuevo de la última tanda está junto en {NEW_FILE}.",
         "",
         "Archivos:",
@@ -1428,6 +1437,11 @@ def importar(source: str) -> None:
             ev.parent.mkdir(parents=True, exist_ok=True)
             cubrir(img, 210, 176).save(ev, "DDS", pixel_format="DXT1")
             done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)}")
+            continue
+        if item["type"] == "comic_panel":
+            from tools.arte import historietas as _hist
+            _hist.importar_vineta(item, img)
+            done.append(f"{item['type']:22} {item['id']} -> {item['dest'].relative_to(REPO)} (y la página)")
             continue
         if item["type"] == "loading_screen":
             # 2026-10-24: como las pantallas que ya hay (1920x1440, DXT1); sin comprimir pesarían 11 MB

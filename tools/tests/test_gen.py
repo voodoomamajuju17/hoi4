@@ -3484,6 +3484,51 @@ def test_albion_caminos() -> None:
           "verificado" in res[True] and "NO tiene el efecto" in res[False] and "no se pudo verificar" in res[None], str(res))
 
 
+def test_historietas() -> None:
+    """2026-11-18 (la Historieta): la introducción de cada nación en una página de 8 viñetas."""
+    section("historieta: la introduccion de cada nacion en 8 viñetas")
+    from tools.gen import historietas_geo as geo
+    spec = specload.load(REPO_ROOT / "spec")
+    hist = spec.raw.get("historietas") or {}
+    check("13 naciones con historieta (las 8 potencias y las 5 anarquias del arranque)", len(hist) == 13, str(sorted(hist)))
+    check("ninguna con mas de 8 viñetas", all(len(c["vinetas"]) <= 8 for c in hist.values()))
+    check("todas con su pagina armada (assets/historietas/paginas)", all(c.get("activa") for c in hist.values()),
+          str([t for t, c in hist.items() if not c.get("activa")]))
+    fuera = []
+    for tag, cfg in hist.items():
+        pag = geo.pagina(cfg)
+        for n, ((x, y, w, h), (cx, cy, cw, ch)) in enumerate(zip(pag["rects"], pag["recuadros"]), 1):
+            if cx < x or cy < y or cx + cw > x + w or cy + ch > y + h or ch > h * 0.45:
+                fuera.append(f"{tag}_{n}")
+            if x < geo.AREA[0] or y < geo.AREA[1] or x + w > geo.AREA[0] + geo.AREA[2] or y + h > geo.AREA[1] + geo.AREA[3]:
+                fuera.append(f"{tag}_{n} (viñeta)")
+    check("cada texto entra en su recuadro y cada recuadro en su viñeta", not fuera, str(fuera[:6]))
+    largos = [f"{t}_{n}" for t, c in hist.items() for n, v in enumerate(c["vinetas"], 1)
+              if len(v["texto"]["spanish"]) > 110 or len(v["texto"]["english"]) > 110]
+    check("muy pocas palabras: ningun texto de mas de 110 letras", not largos, str(largos))
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        gui = (mod / "interface/meganations_historietas.gui").read_text(encoding="utf-8-sig")
+        sg = (mod / "common/scripted_guis/meganations_historietas.txt").read_text(encoding="utf-8-sig")
+        efx = (mod / "common/scripted_effects/meganations_historietas.txt").read_text(encoding="utf-8-sig")
+        check("una ventana, un scripted gui y un efecto de cierre por nacion",
+              all(f'"mn_historieta_{t}_window"' in gui and f"mn_historieta_{t} = {{" in sg
+                  and f"MN_historieta_cerrar_{t} = {{" in efx for t in hist))
+        check("cada pagina se copia al mod", all((mod / f"gfx/interface/meganations/historietas/{t}.dds").exists() for t in hist))
+        shd = " ".join((mod / "events/meganations_shd.txt").read_text(encoding="utf-8-sig").split())
+        i = shd.find("id = meganations_shd.250")
+        check("la introduccion vieja queda oculta y abre la historieta al jugador (la IA sigue de largo)",
+              "hidden = yes" in shd[i:i + 300] and "set_country_flag = MN_historieta_abierta" in shd[i:i + 900]
+              and "country_event = { id = meganations_shd.21" in shd[i:i + 900])
+        ons = " ".join((mod / "common/on_actions/00_meganations_on_actions.txt").read_text(encoding="utf-8-sig").split())
+        check("el aviso de la mecanica ya no sale solo al arrancar: lo manda el boton de la historieta",
+              "country_event = meganations_shd.21 " not in ons and "country_event = { id = meganations_shd.21 }" in efx)
+        loc = (mod / "localisation/spanish/meganations_historietas_l_spanish.yml")
+        texto = loc.read_text(encoding="utf-8-sig") if loc.exists() else ""
+        check("los textos van en negro sobre el recuadro", 'MN_HIST_SHD_5:0 "§bLin Wenzhao' in texto)
+
+
 def test_arboles() -> None:
     """2026-11-18 (Rediseño de los árboles de foco): ocho formas propias, la economía nace de la política,
     ninguna ruta cambia de duración."""
@@ -6601,6 +6646,7 @@ def main() -> int:
         test_cuatro,
         test_albion_caminos,
         test_arboles,
+        test_historietas,
     ):
         test()
 

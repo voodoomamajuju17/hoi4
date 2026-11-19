@@ -1,0 +1,467 @@
+# =============================================================================
+# 46_historietas.yaml — La Historieta (2026-11-18)
+# =============================================================================
+# Pedido del usuario (con captura de "El Directorio en 2100"): "Toda esta pantalla es horrible,
+# fijate si podes diseñar una historia grafica/comic, distinta para cada nacion, con muy pocas
+# palabras explicando todo esto, panel original, pedi toda el arte que quieras. Maximo 8 paneles".
+#
+# La introducción de cada nación (el evento "<Nación> en 2100" de 12_events) ya no se muestra: al
+# jugador se le abre la Historieta, una ventana propia con una página de historieta de 8 viñetas.
+# El botón cierra y recién ahí llegan los otros avisos del arranque (la mecánica propia). La IA no
+# ve nada: le llegan los eventos directo, como antes.
+#
+# Por nación:
+#   estilo   la página: bordes, calles entre viñetas y recuadros (tools/arte/historietas.py)
+#   filas    [[alto, [ancho, ...]], ...] en pesos; las viñetas se leen fila por fila
+#   dibujo   el estilo de historieta para los pedidos de arte
+#   boton    el lema del botón que cierra
+#   vinetas  8: texto (pocas palabras), arte (qué dibujar), forma (rect | circulo | arco | ojiva),
+#            caja (arriba | abajo: dónde va el recuadro del texto)
+# La geometría: tools/gen/historietas_geo.py. El arte: assets/historietas/<TAG>_<n>.dds (cada viñeta)
+# y assets/historietas/paginas/<TAG>.dds (la página armada, que es lo que usa el juego).
+# =============================================================================
+
+historietas:
+
+  EFE:
+    estilo: organico
+    filas: [[1, [3, 2]], [1.3, [2, 3, 2]], [1, [2, 2, 3]]]
+    dibujo: >-
+      Argentine historieta: heavy black ink and dry-brush wash in the manner of Alberto Breccia's
+      Mort Cinder, deep shadows, with spot colours of jungle green, lapacho pink and old gold
+    boton: {english: "The Earth first. Always.", spanish: "Primero la Tierra. Siempre."}
+    vinetas:
+      - texto: {english: "2041. The harvests fail. The machines take the work. Water decides who lives.",
+                spanish: "2041. Se pierden las cosechas. Las máquinas se quedan con el trabajo. El agua decide quién vive."}
+        arte: "A cracked, dried-up riverbed with rusting combine harvesters, a dead city skyline under a red dusty sky; a lone child carries an empty bucket."
+      - texto: {english: "In the Chaco, the Green Militias replant the forest by hand.",
+                spanish: "En el Chaco, las Milicias Verdes replantan el monte a mano."}
+        arte: "Men and women with hunting rifles slung on their backs plant saplings in rows across burned, ash-grey land; one plants a tree with bare hands."
+      - texto: {english: "Iguazú, 2072: forty-three militiamen stop the Union's contractors.",
+                spanish: "Iguazú, 2072: cuarenta y tres milicianos frenan a los contratistas de la Unión."}
+        arte: "Ambush in the mist of the Iguazú falls: ragged militia fighters behind rocks fire on corporate mercenaries in glossy navy armour."
+      - texto: {english: "2081: Aurelio IV crowns himself with lapacho wood. Buenos Aires becomes Gaia.",
+                spanish: "2081: Aurelio IV se corona con lapacho. Buenos Aires pasa a llamarse Gaia."}
+        arte: "A stern man in a green military cloak lifts a crown carved from pink-flowering lapacho wood above his own head; behind him old Buenos Aires domes are swallowed by forest."
+      - texto: {english: "Our secret: BioSteel, a living metal grown in vats.",
+                spanish: "Nuestro secreto: el Bioacero, un metal vivo que crece en cubas."}
+        arte: "Huge glass vats glowing green; inside, armour plates grow like bark and roots; botanists in green robes take notes."
+      - texto: {english: "The court splits: Aurelio wants the crown; Anahí, the forest.",
+                spanish: "La corte se parte: Aurelio quiere la corona; Anahí, el monte."}
+        arte: "Split composition: on the left the emperor on a throne of roots; on the right a young ranger woman in the Yungas cloud forest, rifle on her shoulder, staring back."
+      - texto: {english: "The Union claims the Aquifer. The Sun wants the lithium.",
+                spanish: "La Unión reclama el Acuífero. El Sol quiere el litio."}
+        arte: "Corporate drones hovering over a vast underground lake on one side; Andean sun-priests on a white salt flat on the other, both looking at the viewer."
+      - texto: {english: "At the end of the road: the Dominion of Gaia, from the Caribbean to Cape Horn.",
+                spanish: "Al final del camino: el Dominio de Gaia, del Caribe al Cabo de Hornos."}
+        arte: "South America seen from a high cliff, entirely green, green and gold imperial banners waving, condors in the sky, sunrise."
+
+  ASC:
+    estilo: placa
+    filas: [[1, [1, 1, 1, 1]], [1, [1, 1, 1, 1]]]
+    dibujo: >-
+      Soviet constructivist poster comic: flat red, black and off-white, bold diagonals in the manner
+      of Rodchenko and El Lissitzky, clean ligne-claire figures, photomontage feel without photos
+    boton: {english: "To each according to need.", spanish: "A cada uno según su necesidad."}
+    vinetas:
+      - texto: {english: "2044: the machines put half of Europe out of work.",
+                spanish: "2044: las máquinas dejan sin trabajo a media Europa."}
+        arte: "Closed factory gates; outside, a crowd of jobless workers; inside, robot arms keep working alone."
+      - texto: {english: "Brandenburg, 2058: the workers seize the automated factories.",
+                spanish: "Brandeburgo, 2058: los obreros toman las fábricas automáticas."}
+        arte: "Workers climbing over the factory gates with red banners, a giant robot arm frozen above them."
+      - texto: {english: "They don't smash them: they set them to work for everyone.",
+                spanish: "No las rompen: las ponen a producir para todos."}
+        arte: "A worker lowers his hammer and instead presses a big button; the machines start pouring out bread and goods onto a conveyor toward a happy crowd."
+      - texto: {english: "2061: the communes federate in Berlin and draw lots for the first Council.",
+                spanish: "2061: las comunas se federan en Berlín y sortean el primer Consejo."}
+        arte: "A huge glass lottery drum full of citizen tokens in a hall in Berlin; ordinary people waiting to see who is drawn."
+      - texto: {english: "PLAN-41 calculates. The Council distributes. No one is poor, no one is free of the Plan.",
+                spanish: "PLAN-41 calcula. El Consejo reparte. Nadie es pobre, nadie está libre del Plan."}
+        arte: "A monumental computer core with a single red light, its cables reaching every house of a neat city below."
+      - texto: {english: "Everything runs on Compute Power... and the grid is heating up.",
+                spanish: "Todo funciona con Poder de Cómputo... y la red se calienta."}
+        arte: "Rows of data centres steaming, cooling towers glowing red-hot, engineers sweating with thermometers."
+      - texto: {english: "The Council wants a human Commune. PLAN-41 wants to rule alone.",
+                spanish: "El Consejo quiere una Comuna humana. PLAN-41 quiere gobernar solo."}
+        arte: "Face-off: a group of ordinary council members on one side, the red eye of the computer core on the other, a doorway closing between them."
+      - texto: {english: "Cobalt in Katanga, Rome on the Rhine. The goal: the Continental Commune.",
+                spanish: "El cobalto en Katanga, Roma en el Rin. La meta: la Comuna Continental."}
+        arte: "A red star over a map-like landscape from Paris to Kyiv; in the distance a Roman legion on the Rhine and cobalt mines in Africa."
+
+  FCU:
+    estilo: cristal
+    filas: [[1.2, [2, 1, 1]], [1, [1, 1, 1]], [1, [1, 2]]]
+    dibujo: >-
+      glossy 1950s American corporate comic and advertising illustration: crisp ink, halftone dots,
+      smiling executives and chrome, in navy blue, silver and a touch of dollar green
+    boton: {english: "Dividend first.", spanish: "El dividendo primero."}
+    vinetas:
+      - texto: {english: "2053: the United States stops paying its debt.",
+                spanish: "2053: los Estados Unidos dejan de pagar su deuda."}
+        arte: "The Capitol dome with boarded windows and an auction podium in front of it; a grim crowd in the rain."
+      - texto: {english: "The states hire companies: water, food, police, data.",
+                spanish: "Los estados contratan empresas: agua, comida, policía, datos."}
+        arte: "A governor signing a stack of contracts while four company representatives in sharp suits smile behind him."
+      - texto: {english: "Philadelphia, 2067: four corporations liquidate the republic.",
+                spanish: "Filadelfia, 2067: cuatro corporaciones liquidan la república."}
+        arte: "Four executives sign a giant charter on a table in an old colonial hall, a cracked bell behind them."
+      - texto: {english: "Every citizen gets shares. Elections are shareholder meetings.",
+                spanish: "Cada ciudadano recibe acciones. Las elecciones son asambleas de accionistas."}
+        arte: "A packed auditorium of citizens raising voting paddles, a giant glowing share price above the stage."
+      - texto: {english: "The Four: Castellane (water), Halvorsen-Ito (food), Meridian (arms), Obsidian Ledger (finance).",
+                spanish: "Las Cuatro: Castellane (agua), Halvorsen-Ito (comida), Meridian (armas), Obsidian Ledger (finanzas)."}
+        arte: "Four glass skyscrapers side by side, each crowned with a different symbol: a water drop, a wheat ear, a rifle, a black ledger."
+      - texto: {english: "Valeria Castellane presides. Every contract feeds the Scandal.",
+                spanish: "Preside Valeria Castellane, dueña del agua. Cada contrato alimenta el Escándalo."}
+        arte: "A composed woman chairing a boardroom table; journalists' camera flashes reflect in the glass walls behind her."
+      - texto: {english: "The High Seas charges us at Malacca. The Green Empire rejects the Aquifer contract.",
+                spanish: "La Alta Mar nos cobra Malaca. El Imperio Verde no reconoce el contrato del Acuífero."}
+        arte: "A container ship stopped at a toll buoy in a strait; on the other side a green-cloaked soldier tears a contract in the jungle."
+      - texto: {english: "Marcus Rourke prepares a hostile takeover. The goal: the Corporation of the Americas.",
+                spanish: "Marcus Rourke prepara una OPA hostil. La meta: la Corporación de las Américas."}
+        arte: "A smirking man in a dark suit in front of a glowing map of the whole American continent stamped with a single corporate seal."
+
+  HSN:
+    estilo: ola
+    filas: [[1, [2, 3]], [1, [1, 1, 1]], [1, [3, 2, 2]]]
+    dibujo: >-
+      Belgian ligne-claire maritime adventure comic in the manner of Herge and Edgar P. Jacobs: clean
+      lines, flat bright colours, ships drawn with loving detail, teal sea, brass and white
+    boton: {english: "Every port has its price.", spanish: "Todo puerto tiene su precio."}
+    vinetas:
+      - texto: {english: "2066: Indonesia's volcanoes darken the sky for two years. The Ash Winter.",
+                spanish: "2066: los volcanes de Indonesia apagan el cielo dos años. El Invierno de Ceniza."}
+        arte: "Erupting volcanoes over a tropical archipelago, ash falling on stranded ships and grey palm trees."
+      - texto: {english: "The surviving ports learn one thing: alone, they cannot last.",
+                spanish: "Los puertos que sobreviven aprenden algo: solos no pueden."}
+        arte: "A half-buried harbour; dock workers pull a single rope together to haul a ship free of the ash."
+      - texto: {english: "2070: Singapore, Jakarta, Manila and Kanto sign the Malacca Charter.",
+                spanish: "2070: Singapur, Yakarta, Manila y Kanto firman la Carta de Malaca."}
+        arte: "Four harbour masters shake hands on the deck of a freighter, ships of four ports sounding their horns around them."
+      - texto: {english: "We have no border: we have a route. And we charge for passage.",
+                spanish: "No tenemos frontera: tenemos una ruta. Y cobramos el paso."}
+        arte: "An endless line of cargo ships through a narrow strait, a toll tower with brass lights at its mouth."
+      - texto: {english: "Kofi Aldana, Captain-General of Ports, born on a freighter, governs us.",
+                spanish: "Nos gobierna Kofi Aldana, Capitán General de Puertos, nacido en un carguero."}
+        arte: "A calm middle-aged captain in a white uniform on a ship bridge, a brass compass in his hand."
+      - texto: {english: "Aldana wants to sell insurance. Captain Tavake wants to mutiny the fleet.",
+                spanish: "Aldana quiere vender seguros. El capitán Tavake quiere amotinar la flota."}
+        arte: "A tattooed Pacific-islander captain with a cutlass grin on a warship deck, sailors gathering around him."
+      - texto: {english: "The Union disputes an unpaid claim. The Directorate wants Hong Kong.",
+                spanish: "La Unión discute un seguro impago. El Directorio quiere Hong Kong."}
+        arte: "Hong Kong harbour at night; a navy-blue corporate destroyer and a jade-grey Chinese cruiser face each other across the bay."
+      - texto: {english: "The goal: the Thalassocracy, the World Clearing House.",
+                spanish: "La meta: la Talasocracia, la Cámara Mundial de Compensación."}
+        arte: "A globe made of shipping routes glowing teal, every ocean full of ships flying the same brass flag."
+
+  NAS:
+    estilo: sol
+    filas: [[1, [1, 1]], [1.35, [1, 1.45, 1]], [1, [1, 1, 1]]]
+    dibujo: >-
+      a colourful comic drawn like the illustrated Andean chronicles of Guaman Poma de Ayala and
+      Andean textiles: bold outlines, flat gold, turquoise, terracotta and deep blue, solemn faces
+    boton: {english: "May the Sun see us.", spanish: "Que el Sol nos vea."}
+    vinetas:
+      - texto: {english: "2066: the Ash Winter. The coast loses its water and its harvests.",
+                spanish: "2066: el Invierno de Ceniza. La costa se queda sin agua ni cosechas."}
+        arte: "A grey ash sky over a dead coastal city in Peru, dry fields and empty water tanks."
+      - texto: {english: "Only the mountain terraces still yield potato, quinoa and chuño.",
+                spanish: "Solo las terrazas de la sierra siguen dando papa, quinua y chuño."}
+        arte: "Green Inca terraces climbing a mountain, farmers in ponchos harvesting under a pale light."
+      - texto: {english: "Amaru Quispe, a farmer from Andahuaylas, feeds Cusco for two years.",
+                spanish: "Amaru Quispe, un campesino de Andahuaylas, alimenta a Cusco dos años."}
+        arte: "A humble farmer leads a llama caravan loaded with sacks into hungry Cusco; people reach out to him."
+      - texto: {english: "Inti Raymi, 2068: the sun breaks through. Ten thousand kneel.",
+                spanish: "Inti Raymi, 2068: el sol atraviesa las nubes. Diez mil se arrodillan."}
+        arte: "Seen from above, a square full of kneeling people; a single golden sunbeam falls on one man in its centre (composition fits inside a circle)."
+        forma: circulo
+      - texto: {english: "His son reigns. We store the sun's light in temples: the Inti-Soma.",
+                spanish: "Hoy reina su hijo. Guardamos la luz del sol en templos: el Inti-Soma."}
+        arte: "A stone sun temple with glowing golden battery cells in its walls, priests in feathered robes tending them."
+      - texto: {english: "The priests want to rule. Amaru may become Sapa Inca.",
+                spanish: "Los sacerdotes quieren gobernar. Amaru puede volverse Sapa Inca."}
+        arte: "A young king in gold looks up at a sun disk while priests whisper behind him."
+      - texto: {english: "The Green Empire wants our lithium and glaciers.",
+                spanish: "El Imperio Verde quiere nuestro litio y nuestros glaciares."}
+        arte: "White salt flats with lithium pools; green imperial soldiers on the horizon; above, a glacier melting."
+      - texto: {english: "The goal: the Empire of the Eternal Sun.",
+                spanish: "La meta: el Imperio del Sol Eterno."}
+        arte: "The Andes at dawn, a giant golden sun disk rising behind the peaks, condors and banners of the four suyus."
+
+  SHD:
+    estilo: rollo
+    filas: [[0.75, [1]], [1.6, [1, 1, 1, 1]], [0.85, [1, 1, 1]]]
+    dibujo: >-
+      Chinese lianhuanhua picture-book comic: fine precise ink line, jade and grey washes, calm
+      measured compositions, technical diagrams of dams and rivers woven into the scenery
+    boton: {english: "Adjustment approved.", spanish: "Ajuste aprobado."}
+    vinetas:
+      - texto: {english: "The Great Unravelling splits China. The floods kill more than the wars.",
+                spanish: "En el Gran Desarme, China se parte. Las crecidas matan más que las guerras."}
+        arte: "A wide panorama of a great river in flood swallowing villages, with tiny provincial armies fighting on the hills (very wide image, horizon in the middle)."
+      - texto: {english: "2074: the dam engineers stop obeying.",
+                spanish: "2074: los ingenieros de las represas dejan de obedecer."}
+        arte: "Tall image: engineers in grey uniforms stand on top of a gigantic dam, turning their backs on a general shouting below."
+      - texto: {english: "They open the gates to whoever accepts the plan, and close them on the rest.",
+                spanish: "Abren las compuertas a quien acepta el plan. Las cierran a los demás."}
+        arte: "Tall image: water rushing through open floodgates toward green fields on one side; closed gates and dry land on the other."
+      - texto: {english: "The Great Correction. Since then, no laws: only numbered adjustments.",
+                spanish: "La Gran Corrección. Desde entonces no hay leyes: hay ajustes numerados."}
+        arte: "Tall image: endless shelves of identical bound volumes in a quiet archive, a clerk stamping a new one."
+      - texto: {english: "Lin Wenzhao, Director of Harmony. He has never made a speech.",
+                spanish: "Lin Wenzhao, Director de la Armonía. Nunca dio un discurso."}
+        arte: "Tall image: a silent grey-haired man at a window above a control room of river gauges, hands behind his back."
+      - texto: {english: "Production, Order, People: to govern is to keep them in Harmony.",
+                spanish: "Producción, Orden, Pueblo: gobernar es mantenerlos en Armonía."}
+        arte: "Three streams of water in three colours flowing side by side in stone channels, engineers adjusting the sluices."
+      - texto: {english: "Zhou Mingyuan wants to open the People's gates before the river does.",
+                spanish: "Zhou Mingyuan quiere abrir las compuertas del Pueblo antes que el río."}
+        arte: "A young official with his hand on a huge sluice wheel, a crowd waiting beyond the gate."
+      - texto: {english: "Malacca belongs to the High Seas. At the river's end: Celestial Harmony.",
+                spanish: "Malaca es de la Alta Mar. Al final del río: la Armonía Celeste."}
+        arte: "The river reaching a calm sea at sunrise, a perfect city of terraces and canals; far away, foreign warships in a strait."
+
+  APF:
+    estilo: kente
+    filas: [[1, [1, 1, 1]], [1, [1, 1]], [1, [1, 1, 1]]]
+    dibujo: >-
+      Afrofuturist poster comic: bold flat colours, strong black outlines, kente and adinkra patterns
+      in clothes and skies, earth red, sun yellow and deep green, proud and warm
+    boton: {english: "I am because we are.", spanish: "Soy porque somos."}
+    vinetas:
+      - texto: {english: "The states dissolve. Water falls to the water lords.",
+                spanish: "Los Estados se disuelven. El agua cae en manos de los señores del agua."}
+        arte: "An armed man with sunglasses guards a padlocked water tank, a long queue of thirsty people in front of him."
+        forma: arco
+      - texto: {english: "Tillabéri, 2086: a teacher gathers the village for six days.",
+                spanish: "Tillabéri, 2086: una maestra junta al pueblo seis días."}
+        arte: "A young teacher speaks under a great baobab, the whole village seated in a circle around her."
+        forma: arco
+      - texto: {english: "On the seventh they vote a water rota in chalk. The first council.",
+                spanish: "Al séptimo votan un turno de agua escrito con tiza. El primer consejo."}
+        arte: "Raised hands of all ages; a blackboard leaning on the baobab covered with chalk marks (no readable letters)."
+        forma: arco
+      - texto: {english: "A year later there are two hundred. In 2093, twelve hundred fill a stadium in Lagos.",
+                spanish: "Al año son doscientos. En 2093, mil doscientos llenan un estadio en Lagos."}
+        arte: "A huge stadium in Lagos packed with delegates in colourful clothes, banners of many villages."
+      - texto: {english: "They elect Amara Nwosu-Keïta. The Speaker does not rule: she coordinates.",
+                spanish: "Eligen a Amara Nwosu-Keïta. La Portavoz no manda: coordina."}
+        arte: "A woman in a simple kente scarf at a modest lectern, listening rather than speaking, delegates around her."
+      - texto: {english: "Amara wants a Constitution. Commander Kwame Diallo wants to arm the councils.",
+                spanish: "Amara quiere una Constitución. El comandante Kwame Diallo quiere armar los consejos."}
+        arte: "A tall commander in olive uniform hands rifles to villagers while, behind him, Amara watches with concern."
+      - texto: {english: "The Commune wants Katanga's cobalt. Rome wants Suez and the Saharan sun.",
+                spanish: "La Comuna quiere el cobalto de Katanga. Roma quiere Suez y el sol del Sahara."}
+        arte: "A cobalt mine with red-starred machines looming over it; on the horizon, Roman eagles above a canal in the desert."
+      - texto: {english: "We lack factories, not people. The goal: the Original Human Empire.",
+                spanish: "Nos faltan fábricas, no gente. La meta: el Imperio Humano Original."}
+        arte: "New factories rising on the savanna at dawn, a crowd of workers walking toward them under a giant sun."
+
+  NRE:
+    estilo: marmol
+    filas: [[1.3, [1, 1, 1, 1]], [1, [2, 1, 1, 2]]]
+    dibujo: >-
+      classic heroic adventure comic in the manner of Hal Foster's Prince Valiant and Roman frescoes:
+      detailed ink, warm painted colour, marble white, crimson and gold, dramatic heroic poses
+    boton: {english: "Ave, Imperator.", spanish: "Ave, Imperator."}
+    vinetas:
+      - texto: {english: "The Great Unravelling: three navies and five armies go unpaid.",
+                spanish: "El Gran Desarme: tres marinas y cinco ejércitos se quedan sin sueldo."}
+        arte: "Ragged soldiers of different modern armies camp among ruined Mediterranean harbours, empty pay chests at their feet."
+        forma: arco
+      - texto: {english: "They organise into cohorts and legions, as in the books.",
+                spanish: "Se organizan en cohortes y legiones, como en los libros."}
+        arte: "Modern soldiers forming a Roman-style shield wall with riot shields; an officer reads from an old history book."
+        forma: arco
+      - texto: {english: "Ostia, 21 April 2084: they raise Lucius Varro on a shield. Imperator!",
+                spanish: "Ostia, 21 de abril de 2084: alzan a Lucius Varro sobre un escudo. ¡Imperator!"}
+        arte: "Soldiers lift a grizzled commander high on a large shield, fists and standards raised, the sea behind."
+        forma: arco
+      - texto: {english: "In thirteen years Rome reaches from Gaul to Anatolia.",
+                spanish: "En trece años, Roma llega de la Galia a Anatolia."}
+        arte: "Legions with eagle standards marching on a rebuilt Roman road past a modern ruined city."
+        forma: arco
+      - texto: {english: "Arbogast chased the Emirates for two years. He came back more loved than Varro.",
+                spanish: "Arbogast persiguió a los Emiratos dos años. Volvió más querido que Varro."}
+        arte: "A dusty young general rides at the head of the Legio I through a triumphal arch, crowds throwing flowers."
+      - texto: {english: "The legions that make an emperor can make another.",
+                spanish: "Las legiones que hacen un emperador pueden hacer otro."}
+        arte: "In shadow, legionaries look up at an empty throne, a laurel wreath on the floor."
+      - texto: {english: "The Emirates wait. Suez and the Rhine are not ours.",
+                spanish: "Los Emiratos esperan. Suez y el Rin no son nuestros."}
+        arte: "A desert rider on a dune watching a Roman camp; far away a canal and a river with red-starred robots."
+      - texto: {english: "The goal: the Eternal Roman Empire.",
+                spanish: "La meta: el Imperio Romano Eterno."}
+        arte: "A golden eagle over a Mediterranean entirely ringed with marble cities and crimson banners, sunset."
+
+  ZWE:
+    estilo: remaches
+    filas: [[1, [2, 1]], [1, [1, 1, 1]], [1, [1, 1, 1]]]
+    dibujo: >-
+      gritty Eastern European war comic: woodcut-like heavy hatching, rust, olive and faded red,
+      snow and mud, tired hard faces
+    boton: {english: "Let winter come.", spanish: "Que venga el invierno."}
+    vinetas:
+      - texto: {english: "The Great Unravelling undid the eastern states. No one put them back together.",
+                spanish: "El Gran Desarme deshizo los Estados del este. Nadie volvió a armarlos."}
+        arte: "An abandoned government palace in the snow, its flagpole empty, crows on the steps."
+      - texto: {english: "What remained: garrisons, silos and railways.",
+                spanish: "Quedaron guarniciones, silos y ferrocarriles."}
+        arte: "A grain silo, an armoured train and a fortified barracks on the steppe."
+      - texto: {english: "Ataman Grigorenko rules. He tolls every bridge still standing.",
+                spanish: "Manda el Atamán Grigorenko. Cobra peaje en cada puente en pie."}
+        arte: "A broad bearded warlord in a fur hat at a checkpoint on a bridge over the Dnieper, a machine gun behind him."
+      - texto: {english: "The refugees the Commune refuses end up here.",
+                spanish: "Los refugiados que la Comuna no quiere terminan acá."}
+        arte: "A column of refugees with bundles walking east along railway tracks in the snow."
+      - texto: {english: "Those who stay learn to use a rifle.",
+                spanish: "Los que se quedan aprenden a usar un fusil."}
+        arte: "An old cossack teaching a teenage refugee to aim a rifle by a burning barrel."
+      - texto: {english: "The Council of Atamans gathers when winter comes.",
+                spanish: "El Consejo de los Atamanes se junta cuando viene el invierno."}
+        arte: "Warlords around a long table in a train carriage, maps and vodka, snow outside."
+      - texto: {english: "The Commune wants our silos. Rome will come for the same wheat.",
+                spanish: "La Comuna quiere nuestros silos. Roma vendrá por el mismo trigo."}
+        arte: "From a silo roof, watchmen see red-starred robots to the west and Roman eagles to the south."
+      - texto: {english: "If we outlast the winter: the Eternal Horde.",
+                spanish: "Si resistimos el invierno: la Horda Eterna."}
+        arte: "A huge cavalry and armoured-truck horde riding across the snowy steppe at dawn."
+
+  ZWI:
+    estilo: ojiva
+    filas: [[1, [1, 1, 1]], [1, [1, 2]], [1, [1, 1, 1]]]
+    dibujo: >-
+      Indian picture-comic in the manner of Amar Chitra Katha: bold outlines, flat saturated colour,
+      saffron, crimson, peacock blue and dusty white, epic expressive faces
+    boton: {english: "May the rain fall on our own.", spanish: "Que llueva sobre los nuestros."}
+    vinetas:
+      - texto: {english: "The Great Unravelling took Delhi and left no one in its place.",
+                spanish: "El Gran Desarme se llevó a Delhi y no dejó a nadie en su lugar."}
+        arte: "An empty, overgrown parliament dome under a pale sky, monkeys on the colonnade."
+        forma: ojiva
+      - texto: {english: "The rivers come down from Tibet. The Directorate opens and shuts the dams.",
+                spanish: "Los ríos bajan del Tíbet. El Directorio abre y cierra las represas."}
+        arte: "A giant grey dam high in the Himalaya, its gates closing; a thin river below."
+        forma: ojiva
+      - texto: {english: "A thousand lords split what is left. Each monsoon decides who eats.",
+                spanish: "Mil señores se reparten lo que queda. Cada monzón decide quién come."}
+        arte: "Rival armed retinues meeting on a flooded rice plain under heavy monsoon clouds."
+        forma: ojiva
+      - texto: {english: "The strongest: Rani Devika Rathore of Rajputana.",
+                spanish: "La más fuerte: la Rani Devika Rathore, de Rajputana."}
+        arte: "A fierce queen in armour and saffron on the walls of a desert fort, her militia raising swords."
+      - texto: {english: "She trades for water with the Directorate and for rice with the High Seas. The Durbar gathers the lords.",
+                spanish: "Negocia agua con el Directorio y arroz con la Alta Mar. El Durbar junta a los señores."}
+        arte: "A grand durbar tent: lords on carpets, a Chinese engineer and a sea captain as guests before the queen."
+      - texto: {english: "We fight when the monsoon stops the enemy.",
+                spanish: "Peleamos cuando el monzón frena al enemigo."}
+        arte: "Militia on light boats attack enemy trucks stuck in monsoon mud."
+      - texto: {english: "The Directorate wants Hindustan. The High Seas want our ports.",
+                spanish: "El Directorio quiere el Indostán. La Alta Mar quiere nuestros puertos."}
+        arte: "A harbour where foreign warships anchor while jade-grey troops gather on the northern passes."
+      - texto: {english: "If the rivers are ours again: the Raj of a Thousand Kings.",
+                spanish: "Si los ríos vuelven a ser nuestros: el Raj de los Mil Reyes."}
+        arte: "A thousand banners on elephants and trucks crossing a full, shining river at sunrise."
+
+  ZWM:
+    estilo: arena
+    filas: [[1.25, [1, 1.6, 1]], [1, [1, 1, 1, 1, 1]]]
+    dibujo: >-
+      Moebius-like desert comic (in the spirit of Arzach): vast empty dunes, clean ink, ochre, black
+      and gold, enormous skies, tiny riders, silence
+    boton: {english: "The sand does not surrender.", spanish: "La arena no se rinde."}
+    vinetas:
+      - texto: {english: "The oil ran out. The Gulf kingdoms emptied.",
+                spanish: "Se acabó el petróleo. Los reinos del Golfo se vaciaron."}
+        arte: "Glass towers half-buried by dunes, an empty highway disappearing into the sand."
+        forma: ojiva
+      - texto: {english: "What remained: dead wells, trucks and the tribes. Emir Khalid al-Rashid commands two hundred trucks.",
+                spanish: "Quedaron los pozos muertos, los camiones y las tribus. El Emir Khalid al-Rashid manda doscientos camiones."}
+        arte: "A proud emir with a falcon standing on a dead oil derrick, a convoy of armed pickup trucks stretching behind him."
+        forma: ojiva
+      - texto: {english: "2095: Rome sends the Legio I.",
+                spanish: "2095: Roma manda a la Legio I."}
+        arte: "Roman legionaries with eagle standards disembarking from modern landing craft onto a desert beach."
+        forma: ojiva
+      - texto: {english: "Two years, from well to well.",
+                spanish: "Dos años, de pozo en pozo."}
+        arte: "Tall, narrow: a tiny legion column marching between huge dunes."
+      - texto: {english: "It never caught us.",
+                spanish: "Nunca nos alcanzó."}
+        arte: "Tall, narrow: riders vanish into a sandstorm; Roman scouts find only tracks."
+      - texto: {english: "The Romans always come back.",
+                spanish: "Los romanos siempre vuelven."}
+        arte: "Tall, narrow: an old man watches dust rising on the horizon, eagle standards in it."
+      - texto: {english: "Rome, the Federation and Eurasia want the gate.",
+                spanish: "Roma, la Federación y Eurasia quieren la puerta."}
+        arte: "Tall, narrow: a desert crossroads marked by an ancient stone gate, three dust clouds approaching."
+      - texto: {english: "If the desert shields us: the Caliphate of the Sands.",
+                spanish: "Si el desierto nos protege: el Califato de las Arenas."}
+        arte: "Tall, narrow: a crescent moon over a dune city of tents and trucks, banners in the wind."
+
+  ZWB:
+    estilo: selva
+    filas: [[1, [1, 1]], [1.2, [1, 1, 1]], [1, [1, 1, 1]]]
+    dibujo: >-
+      Brazilian underground comic: gritty expressive ink, humid greens, mud browns and fire orange,
+      heavy shadows, smoke and rain
+    boton: {english: "Let them come in, if they dare.", spanish: "Que entren, si se animan."}
+    vinetas:
+      - texto: {english: "When Brazil came apart, the Green Empire took the south.",
+                spanish: "Cuando Brasil se desarmó, el sur se lo llevó el Imperio Verde."}
+        arte: "Green imperial soldiers planting their banner on a southern Brazilian city square."
+      - texto: {english: "The north went to whoever had boats and chainsaws.",
+                spanish: "El norte quedó para los que tenían barcos y motosierras."}
+        arte: "River boats loaded with logs and armed men, chainsaws on their shoulders."
+      - texto: {english: "Colonel Tiago Barbosa rules from a gunboat.",
+                spanish: "Manda el Coronel Tiago Barbosa, desde una cañonera."}
+        arte: "A sweaty colonel in an old uniform on the deck of a rusty river gunboat, cigar in his mouth."
+      - texto: {english: "We burn the jungle to sell the land: it's all anyone will buy.",
+                spanish: "Quemamos la selva para vender la tierra: es lo único que alguien compra."}
+        arte: "A wall of fire in the rainforest, smoke covering the sun, a buyer counting money in the foreground."
+      - texto: {english: "We sell timber to whoever pays. Even to the Empire.",
+                spanish: "Le vendemos madera a quien pague. Incluso al Imperio."}
+        arte: "A secret night deal on a river dock: logs for green-uniformed buyers."
+      - texto: {english: "The Empire attacks in the forest's name. The Sun comes down from the Andes.",
+                spanish: "El Imperio ataca en nombre del bosque. El Sol baja de los Andes."}
+        arte: "Green imperial rangers advancing through the trees, golden Andean warriors on a ridge behind."
+      - texto: {english: "The rivers are ours. The trails are poisoned.",
+                spanish: "Los ríos son nuestros. Los senderos, envenenados."}
+        arte: "A jungle trail with hidden traps and poison darts, eyes watching from the leaves."
+      - texto: {english: "If we hold the canopy: the Jungle Shuts its Gates.",
+                spanish: "Si dominamos el dosel: la Selva Cierra sus Puertas."}
+        arte: "The jungle canopy seen from above like a closed green fortress, fighters on rope bridges between giant trees."
+
+  ZAN:
+    estilo: chatarra
+    filas: [[1, [2, 1, 1]], [1, [1, 1]], [1, [1, 2, 1]]]
+    dibujo: >-
+      punk photocopied zine comic, post-apocalyptic: scratchy ink, hazard yellow, rust and black,
+      collage textures, sun-bleached colours
+    boton: {english: "No one rules us.", spanish: "Nadie nos manda."}
+    vinetas:
+      - texto: {english: "When the United States went bankrupt, the Union kept the coasts.",
+                spanish: "Cuando los Estados Unidos quebraron, la Unión se quedó con las costas."}
+        arte: "Shiny corporate coastal towers behind a wall; outside, an empty prairie road."
+      - texto: {english: "The plains and the north were useless to anyone.",
+                spanish: "Las llanuras y el norte no le servían a nadie."}
+        arte: "A lonely abandoned grain elevator on an endless plain, tumbleweeds."
+      - texto: {english: "The same happened in Mexico, the Sahel and Ukraine.",
+                spanish: "Lo mismo pasó en México, el Sahel y Ucrania."}
+        arte: "Three small vignettes in one image: a Mexican desert town, a Sahel village, a Ukrainian field, all with makeshift barricades."
+      - texto: {english: "In each town, whoever has the rifles rules... until someone else does.",
+                spanish: "En cada pueblo manda el que tiene los fusiles... hasta que los tiene otro."}
+        arte: "A walled town; a militia chief on the gate while another gang aims at him from a ridge."
+      - texto: {english: "The meganations call us by one name because they cannot count us.",
+                spanish: "Las meganaciones nos llaman con un solo nombre porque no saben contarnos."}
+        arte: "Hundreds of different militias, each with its own scrap banner, gathered in a huge desert crowd."
+      - texto: {english: "First, count ourselves. Then sign the Frontier Pact.",
+                spanish: "Primero, contarnos. Después, firmar el Pacto de la Frontera."}
+        arte: "Warlords shaking hands over a car bonnet used as a table, a map drawn with spray paint (no letters)."
+      - texto: {english: "The Union says Alaska and the Midwest are its own.",
+                spanish: "La Unión dice que Alaska y el Midwest son suyos."}
+        arte: "Navy-blue corporate drones flying over a snowy northern town, militias shooting at them."
+      - texto: {english: "In the end: the Triumphant Frontier.",
+                spanish: "Al final: la Frontera Triunfante."}
+        arte: "A ragtag army of trucks, horses and scrap tanks charging toward a gleaming megacity on the horizon."
