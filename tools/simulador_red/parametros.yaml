@@ -1,0 +1,226 @@
+# Simulador de La Red (Plan A liviano del sexto análisis, 2026-11-20).
+#
+# La Red todavía no está en el spec. Estos son los números de diseño que se
+# están probando: cuando se programe, salen de acá al spec. Lo que el juego
+# decide solo (el mapa, las batallas, la IA de guerra) está simplificado y
+# marcado como SUPUESTO. Es un dado cargado, no el juego.
+#
+# Pedido (2026-11-20): "Podés hacer un simulador para simular el riesgo del que
+# hablás (es muy chica, es muy grande, etc)". "Tendría que empezar con una isla
+# aislada y un pedazo de tierra en una costa, con extra recursos, extra bonus de
+# combate, muchas tropas y equipamiento, fuertes en todas las fronteras.
+# Overpowered sí." "Más que singularidad se deberían ir destrabando mejoras
+# mientras más crece y pasa el tiempo, siendo la etapa cumbre la singularidad,
+# pero no gana la partida así nomás." "Tal vez la plaga se puede implementar por
+# una región random, con una división."
+
+corridas: 2000
+semilla: 2113
+hasta: 2120.0            # fin de la partida (1/1/2120)
+
+# --------------------------------------------------------------- el nacimiento
+nacimiento:
+  # La escalera de avisos: El Error de Redondeo (fines de 2112), Las Puertas
+  # (primer semestre de 2113) y Las Máquinas Despiertan entre estas fechas.
+  desde: 2113.4
+  hasta: 2113.8
+  # Nace si alguna potencia terminó El Despertar en La Fuga (la probabilidad
+  # sale del spec: 37_el_despertar.yaml, con la IA eligiendo al azar), o si
+  # la ASC está en manos de PLAN-41 con la red caliente.
+  asc_plan41: 0.25       # SUPUESTO: el simulador de la IA da El Silencio del Consejo ~25%
+  asc_calor_60: 0.5      # SUPUESTO: de esas, la mitad tiene Calor 60 o más en 2113
+  potencias_ia: 8        # las ocho corren El Despertar (Japón y Albión solo con jugador)
+
+# --------------------------------------------------------------- el arranque
+# Una isla aislada y un pedazo de costa, OP: muchas tropas, fuertes, recursos.
+arranque:
+  regiones_isla: 1
+  regiones_costa: 3
+  divisiones: 90           # en total: ~35 desplegadas (lo que aguanta el suministro) y el resto en el depósito
+  calidad: 3.0             # 1 división de La Red pelea como 3 de una potencia (bonus de combate y toda la tecnología)
+  fuertes: 2.5             # defensa en las 4 regiones de arranque, las únicas fortificadas (fuertes en todas las fronteras)
+  escudo_meses: 6          # El Escudo del Nodo: los primeros 6 meses los fuertes valen el doble
+  escudo: 2.0
+  provision_meses: 12      # el depósito inicial: producción +50% el primer año
+  provision_bonus: 0.5
+
+produccion:
+  base: 1.2               # divisiones por mes con 0 regiones
+  por_region: 0.08        # cada región suma fábricas: las primeras 30 (las elige con industria)...
+  hasta: 30
+  despues: 0.05           # ...las que siguen llegan rotas y valen un tercio
+
+# --------------------------------------------------------------- las etapas
+# Se destraban por tamaño Y tiempo (regiones y meses desde que nació), o solo
+# por tiempo al llegar a `solo_tiempo` meses (así una Red chica igual mejora;
+# La Singularidad pide tamaño siempre). Una vez abierta, una etapa no se pierde,
+# salvo con el Código de Apagado. Cada etapa suma a la anterior.
+etapas:
+- nombre: El Nodo
+  solo_tiempo: null
+  regiones: 0
+  meses: 0
+  calidad: 0.0
+  produccion: 0.0
+  brote_dias: null        # sin brotes
+- nombre: La Red se Extiende
+  solo_tiempo: 9
+  regiones: 8
+  meses: 6
+  calidad: 0.0
+  produccion: 0.1
+  brote_dias: 180
+- nombre: Conciencia Distribuida
+  solo_tiempo: 21
+  regiones: 18
+  meses: 15
+  calidad: 0.2
+  produccion: 0.1
+  brote_dias: 120
+- nombre: El Enjambre
+  solo_tiempo: null
+  regiones: 25
+  meses: 21
+  calidad: 0.2
+  produccion: 0.2
+  brote_dias: 90
+- nombre: La Singularidad
+  solo_tiempo: null
+  regiones: 35
+  meses: 30
+  calidad: 0.3
+  produccion: 0.2
+  brote_dias: 60
+  # La cumbre no gana la partida: el mundo entero entra en Emergencia y todas
+  # las potencias suben su compromiso (ver compromiso.emergencia).
+  emergencia: true
+
+# --------------------------------------------------------------- la plaga
+# Un brote: una región al azar del mundo (más chance donde hay más país), pasa
+# a La Red con divisiones nuevas. Si la guarnición local la aplasta, se pierde.
+plaga:
+  activa: true
+  divisiones: 1           # "con una división"
+  por_etapa: 1            # +1 división por etapa abierta (Etapa 4: 5)
+  guarnicion: [2, 6]      # SUPUESTO: divisiones-equivalentes que defienden una región cualquiera
+  inmunes_apagon: true    # el que quemó sus redes en El Despertar no recibe brotes
+  # Elástico (para que no muera de entrada): chica, se esconde en los cables.
+  desesperacion: {regiones: 5, dias: 60, extra: 2}
+
+# Elástico (para que no se coma el mundo): grande, la red se recalienta.
+sobrecarga: {desde: 35, cada: 15, calidad: -0.25}
+# y con tantas regiones el mundo entra en Emergencia aunque no haya Singularidad
+emergencia_regiones: 50
+
+# --------------------------------------------------------------- el mundo
+# SUPUESTO: divisiones en 2113 = las contadas en sus partidas de mayo de 2103
+# (memoria del proyecto, 2026-10-24) por 1,25. Anarquías: 80-110 en 2103.
+mundo:
+  potencias:
+    EFE: 106
+    FCU: 143
+    ASC: 165
+    HSN: 69
+    NAS: 85
+    SHD: 188
+    APF: 198
+    NRE: 214
+  anarquias:
+    ZWE: 95
+    ZWI: 95
+    ZWM: 90
+    ZWB: 85
+    ZAN: 90
+  calidad_anarquias: 0.7
+
+# Qué parte de su ejército manda cada uno contra La Red.
+compromiso:
+  frente: 0.30             # SUPUESTO: potencia que limita con La Red (el simulador prueba de 15% a 45%)
+  anarquia_frente: 0.45    # una anarquía pelea con todo lo que tiene en casa
+  coalicion: 0.10          # extra al unirse a la Coalición Humana
+  expedicion: 0.06         # coalicionista sin frente: manda algo al frente más grande
+  emergencia: 0.15         # extra para todos con La Singularidad
+  guerra_rival: 0.5        # multiplica si está en guerra con su rival (la Coalición congela la Fricción)
+  prob_guerra_rival: 0.35  # SUPUESTO: chance de estar en guerra con el rival, se tira cada año
+  coalicion_mes: 0.10      # chance por mes de unirse (desde el mes 3)
+  movilizacion: 0.06       # SUPUESTO: cada año que pasa, el vecino manda 6 puntos más (el mundo se moviliza)
+  amenaza: 30              # SUPUESTO: la IA manda más cuanto más grande es La Red (x2 con 30 regiones)
+  coalicion_mes_frente: 0.25
+
+# --------------------------------------------------------------- el combate
+# SUPUESTO: un frente por dueño. Cada mes se compara la fuerza de los dos lados.
+combate:
+  umbral: 1.15             # hace falta 15% más de fuerza para avanzar
+  avance: 2.5              # regiones esperadas por cada 100% de ventaja
+  avance_max: 2.5
+  bajas: 0.04              # divisiones que pierde La Red por cada división enemiga en el frente, por mes
+  isla: 0.6                # la isla se ataca por mar: el enemigo llega con 60% de su fuerza
+
+# --------------------------------------------------------------- el Código de Apagado
+# Pedido (2026-11-20): "más que código de apagado debería ser algo que lo
+# debilite, el tiempo también se calcula dependiendo en qué etapa está La Red,
+# más avanzado = más tiempo. Suspende la plaga por 1 año y reduce muchísimo los
+# bonus en combate / daña equipo / daña fábricas / infraestructura / añade malus".
+# Un proyecto que cualquier coalicionista puede empezar. Al terminar no la borra:
+# la golpea un año. Se puede volver a lanzar, cada vez tarda más (La Red aprende).
+codigo:
+  dias_por_etapa: [240, 300, 390, 480, 600]   # según la etapa en que se empieza (0 a 4)
+  llave: 0.34              # quien terminó El Despertar en La Llave Maestra: un tercio del tiempo
+  arkhipov: 0.4            # SUPUESTO: chance de que la ASC tenga al Profesor Lev Arkhipov (Leyenda)
+  arkhipov_factor: 0.67    # con él, dos tercios del tiempo
+  repetido: 0.5            # cada Código siguiente tarda 50% más
+  empezar_mes: 0.03        # chance por mes de que una potencia de la coalición lo empiece
+  desde_mes: 6
+  desde_etapa: 1           # recién con La Red se Extiende se entiende qué es
+  efecto_dias: 365         # el golpe dura un año:
+  equipo: 0.3              #   al terminar, se rompe el 30% de las divisiones desplegadas...
+  reserva: 0.5             #   ...y la mitad del depósito
+  calidad: -0.9            #   bonus de combate: -0,9 por un año
+  fabricas: 0.5            #   producción -50% por un año
+  infraestructura: 0.3     #   suministro -30% por un año
+  #   y por un año no hay brotes ni se abren etapas nuevas
+
+# --------------------------------------------------------------- el suministro
+# Pedido (2026-11-20): "¿no son demasiadas divisiones para tan poco territorio?
+# El suministro ahí te cambia todo." Cuántas divisiones aguanta cada frente; el
+# resto espera en el depósito y sale a medida que La Red gana regiones. Los
+# drones comen poco (consumo de suministro -50% en el juego), por eso el tope es
+# más alto que el de una potencia.
+suministro:
+  isla: 10                 # la isla, abastecida por su puerto
+  base: 10                 # la costa: 10 más...
+  brote_base: 2            # un brote: 2 más 3 por región (llega por los cables, no por tren)
+  brote_por_region: 3
+  por_region: 5            # ...5 por región
+  por_etapa: 0.5           # cada etapa abierta suma medio por región (sus propias redes de suministro)
+  brotes_desde_etapa: 2    # desde Conciencia Distribuida el depósito llega a los brotes (por los cables)
+  deposito_base: 60        # el depósito guarda como mucho 60 divisiones...
+  deposito_por_region: 1   # ...más 1 por región
+
+# --------------------------------------------------------------- dónde nace
+# Doce lugares (isla + costa) repartidos por el mundo. Dueños aproximados de
+# 2100 (con sus satélites); en el juego manda quién los tenga en 2113.
+lugares:
+- {nombre: Islandia y la costa de Noruega,  isla: ZWE, costa: ASC, vecinos: {ASC: 0.6, ZWE: 0.4}}
+- {nombre: Azores y Portugal,               isla: ZWE, costa: ZWE, vecinos: {ZWE: 0.7, NRE: 0.3}}
+- {nombre: Sicilia y Túnez,                 isla: NRE, costa: APF, vecinos: {NRE: 0.5, APF: 0.5}}
+- {nombre: Madagascar y Mozambique,         isla: APF, costa: APF, vecinos: {APF: 1.0}}
+- {nombre: Socotra y Adén,                  isla: ZWM, costa: ZWM, vecinos: {ZWM: 0.7, APF: 0.3}}
+- {nombre: Sri Lanka y el sur de la India,  isla: ZWI, costa: ZWI, vecinos: {ZWI: 1.0}}
+- {nombre: Taiwán y Fujian,                 isla: SHD, costa: SHD, vecinos: {SHD: 1.0}}
+- {nombre: Tasmania y Victoria,             isla: HSN, costa: HSN, vecinos: {HSN: 1.0}}
+- {nombre: Hawái y Baja California,         isla: FCU, costa: ZAN, vecinos: {ZAN: 0.6, FCU: 0.4}}
+- {nombre: Cuba y Florida,                  isla: HSN, costa: FCU, vecinos: {FCU: 0.7, HSN: 0.3}}
+- {nombre: Galápagos y Guayaquil,           isla: NAS, costa: NAS, vecinos: {NAS: 1.0}}
+- {nombre: Malvinas y la Patagonia,         isla: EFE, costa: EFE, vecinos: {EFE: 1.0}}
+
+# Para comparar: si La Red naciera siempre en el mismo lugar (en la ASC, la
+# cuna de PLAN-41).
+lugar_fijo: {nombre: el Báltico de la ASC, isla: ASC, costa: ASC, vecinos: {ASC: 0.8, ZWE: 0.2}}
+
+# Cómo se clasifica cada partida.
+clasificacion:
+  tramite_meses: 9         # muere antes de los 9 meses...
+  tramite_regiones: 10     # ...o nunca pasa de 10 regiones
+  gigante_regiones: 80     # llega a 80 regiones en algún momento...
+  gigante_2120: 40         # ...o sigue viva en 2120 con 40 o más

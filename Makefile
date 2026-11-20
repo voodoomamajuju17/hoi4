@@ -10,7 +10,7 @@ PY      ?= python3
 OUT     ?= build
 VANILLA := $(if $(HOI4_PATH),--vanilla-path "$(HOI4_PATH)",)
 
-.PHONY: help validate build check install test simular clean all
+.PHONY: help validate build check install test simular simular-red clean all
 
 help:
 	@echo "make validate  — valida spec/ sin escribir nada"
@@ -18,6 +18,7 @@ help:
 	@echo "make check     — verifica que $(OUT)/ sea lo que produce spec/"
 	@echo "make test      — corre los tests del generador"
 	@echo "make simular   — tira los dados de la IA 1000 veces (SIMULADOR_IA.md)"
+	@echo "make simular-red — tira los dados de La Red (SIMULADOR_RED.md)"
 	@echo "make install   — copia $(OUT)/ a la carpeta de mods de HOI4"
 	@echo "make clean     — borra $(OUT)/"
 	@echo ""
@@ -40,6 +41,9 @@ test:
 
 simular:
 	@$(PY) -m tools.simulador
+
+simular-red:
+	@$(PY) -m tools.simulador_red
 
 all: validate test build
 
