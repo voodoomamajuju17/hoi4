@@ -3528,6 +3528,10 @@ def test_historietas() -> None:
         loc = (mod / "localisation/spanish/meganations_historietas_l_spanish.yml")
         texto = loc.read_text(encoding="utf-8-sig") if loc.exists() else ""
         check("los textos van en negro sobre el recuadro", 'MN_HIST_SHD_5:0 "§bLin Wenzhao' in texto)
+        check("boton 'No me interesa el lore': cierra sin los avisos y da lo que daban",
+              'name = "saltar"' in gui and "MN_historieta_saltar_SHD = {" in efx
+              and "saltar_click = { MN_historieta_saltar_SHD = yes }" in sg
+              and "add_political_power = 25" in efx.split("MN_historieta_saltar_SHD = {")[1].split("}")[0])
         # 2026-11-20: Japón y Albión, al arrancar descolonizados
         arranque = " ".join("".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/on_actions").glob("*.txt")).split())
         check("Japon y Albion abren su historieta al arrancar descolonizados (solo el jugador)",

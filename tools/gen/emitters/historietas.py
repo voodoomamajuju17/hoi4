@@ -52,6 +52,8 @@ def emit(ctx: BuildContext) -> None:
     efx = []
     ctx.loc.define_and_reference("MN_HISTORIETA_CONTINUAR", en="Continue", es="Continuar", file=LOC,
                                  origin="historietas")
+    ctx.loc.define_and_reference("MN_HISTORIETA_SALTAR", en="I don't care about lore", es="No me interesa el lore",
+                                 file=LOC, origin="historietas")
     for tag, cfg in sorted(activas.items()):
         ctx.copy_asset(f"assets/historietas/paginas/{tag}.dds", f"{TEX}/{tag}.dds")
         sprite = f"GFX_mn_historieta_{tag}"
@@ -82,15 +84,26 @@ def emit(ctx: BuildContext) -> None:
                  f'\t\t\tposition = {{ x = {bx} y = {by} }}\n'
                  '\t\t\tspriteType = "GFX_mn_ficha_boton_accion"\n\t\t\ttext = "MN_HISTORIETA_CONTINUAR"\n'
                  '\t\t\tbuttonFont = "hoi_18mbs"\n\t\t\tshortcut = "RETURN"\n\t\t}\n')
+        sx, sy = geo.SALTAR
+        g.append('\t\tbuttonType = {\n\t\t\tname = "saltar"\n'
+                 f'\t\t\tposition = {{ x = {sx} y = {sy} }}\n'
+                 '\t\t\tspriteType = "GFX_mn_ficha_boton_accion"\n\t\t\ttext = "MN_HISTORIETA_SALTAR"\n'
+                 '\t\t\tbuttonFont = "hoi_16mbs"\n\t\t\tshortcut = "ESCAPE"\n\t\t}\n')
         g.append("\t}\n")
         gui += g
         cerrar = f"MN_historieta_cerrar_{tag}"
         efx.append(f"{cerrar} = {{\n\tclr_country_flag = {FLAG}\n"
                    + "".join(f"\tcountry_event = {{ id = {e} }}\n" for e in cfg["sigue"]) + "}\n")
+        # 2026-11-20 ("debería haber un botón 'no me interesa el lore' y saltar todo"): cierra sin los
+        # avisos que siguen, pero con lo que daban
+        saltar = f"MN_historieta_saltar_{tag}"
+        efx.append(f"{saltar} = {{\n\tclr_country_flag = {FLAG}\n"
+                   + (f"\tadd_political_power = {cfg['sigue_pp']}\n" if cfg.get("sigue_pp") else "") + "}\n")
         sg.append(f"\tmn_historieta_{tag} = {{\n\t\tcontext_type = player_context\n"
                   f'\t\twindow_name = "{win}"\n'
                   f"\t\tvisible = {{ original_tag = {tag} has_country_flag = {FLAG} }}\n"
-                  f"\t\teffects = {{\n\t\t\tcontinuar_click = {{ {cerrar} = yes }}\n\t\t}}\n"
+                  f"\t\teffects = {{\n\t\t\tcontinuar_click = {{ {cerrar} = yes }}\n"
+                  f"\t\t\tsaltar_click = {{ {saltar} = yes }}\n\t\t}}\n"
                   "\t\tai_enabled = { always = no }\n\t}\n")
     gfx.append("}\n")
     gui.append("}\n")

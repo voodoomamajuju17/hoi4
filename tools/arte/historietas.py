@@ -401,6 +401,9 @@ def vista(tag: str, png: Path) -> None:
     bx, by = geo.BOTON
     d.rectangle((bx, by, bx + 210, by + 30), fill=(60, 50, 30), outline=(200, 170, 90))
     d.text((bx + 105, by + 15), "Continuar", fill=(255, 255, 255), font=f, anchor="mm")
+    sx, sy = geo.SALTAR
+    d.rectangle((sx, sy, sx + 210, sy + 30), fill=(60, 50, 30), outline=(200, 170, 90))
+    d.text((sx + 105, sy + 15), "No me interesa el lore", fill=(255, 255, 255), font=f, anchor="mm")
     img.save(png)
 
 

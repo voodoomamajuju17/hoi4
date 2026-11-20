@@ -46,7 +46,7 @@ def expandir(raw: dict, historietas: dict) -> dict:
         if cfg.get("sin_intro"):
             # Japón y Albión (2026-11-20): sin introducción; la abre el arranque descolonizado
             # (28_descolonizado: MN_historieta_abierta al jugador)
-            cfg["intro"], cfg["sigue"] = None, []
+            cfg["intro"], cfg["sigue"], cfg["sigue_pp"] = None, [], 0
             cfg["activa"] = pagina(tag).exists()
             out[tag] = cfg
             continue
@@ -57,6 +57,10 @@ def expandir(raw: dict, historietas: dict) -> dict:
         cfg["titulo"] = ev["title"]
         cfg["intro"] = f"{ns}.{ev['id']}"
         cfg["sigue"] = [f"{s_ns}.{s_ev['id']}" for s_ns, s_ev in sigue]
+        # lo que dan los avisos que se saltean con "No me interesa el lore" (su primera opción)
+        cfg["sigue_pp"] = sum(int(e.get("value", 0)) for _ns, s_ev in sigue
+                              for e in ((s_ev.get("options") or [{}])[0].get("effects") or [])
+                              if e.get("effect") == "add_political_power")
         cfg["activa"] = pagina(tag).exists()
         out[tag] = cfg
         if not cfg["activa"]:
