@@ -226,6 +226,11 @@ def _emit_tree(ctx: BuildContext, tag: str, tree: dict) -> None:
             ab = Block([("has_completed_focus", pre) for pre in f.get("prerequisites") or []])
             fb.add("allow_branch", ab)
             triggers_used.setdefault("has_completed_focus", fid)
+        if f.get("allow_branch_when"):
+            # 2026-11-20 (Nueva Seleucia): foco escondido hasta que se cumple una condición cualquiera
+            # (el otro país también sobrevivió); el árbol se vuelve a mirar con refresh_focus_tree
+            fb.add("allow_branch", render_conditions(fid, f["allow_branch_when"], triggers_used,
+                                                     where="07_focus_trees.yaml"))
         if exclusive.get(fid):
             me = Block()
             for other in sorted(exclusive[fid]):

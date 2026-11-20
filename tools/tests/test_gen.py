@@ -3484,6 +3484,38 @@ def test_albion_caminos() -> None:
           "verificado" in res[True] and "NO tiene el efecto" in res[False] and "no se pudo verificar" in res[None], str(res))
 
 
+def test_anarquias_finales() -> None:
+    """2026-11-20 (borrador aprobado): el final de cada anarquía."""
+    section("anarquias: el final de cada una")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        zwb = " ".join(next((mod / "common/national_focus").glob("ZWB*.txt")).read_text(encoding="utf-8-sig").split())
+        i = zwb.find("id = ZWB_foco_7_the_jungle_closes_its_gates")
+        check("Amazonas: el final se atrasa 6 meses (217 dias) y sale de su faccion",
+              "cost = 31" in zwb[i:i + 300] and "leave_faction = yes" in zwb[i:i + 3000])
+        gan = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
+        check("Amazonas: cualquier guerra con la selva cerrada termina en paz blanca (al declararla y cada semana)",
+              "on_weekly_ZWB = {" in gan and "has_country_flag = ZWB_intocable" in gan
+              and gan.count("every_enemy_country = { white_peace = ROOT }") >= 2)
+        dm = (mod / "common/dynamic_modifiers").glob("*.txt")
+        dm = " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in dm)
+        check("Amazonas: nadie le justifica la guerra ni ella a nadie",
+              "ZWB_selva_cerrada = {" in dm and "enemy_justify_war_goal_time = 1000" in dm)
+        for tag, otro in (("ZWM", "ZWI"), ("ZWI", "ZWM")):
+            arbol = " ".join(next((mod / "common/national_focus").glob(f"{tag}*.txt")).read_text(encoding="utf-8-sig").split())
+            j = arbol.find(f"id = {tag}_el_puente_de_persia")
+            check(f"{tag}: El Puente de Persia, escondido hasta que {otro} tambien termina su arbol",
+                  j > 0 and f"allow_branch = {{ country_exists = {otro}" in arbol[j:j + 600])
+        dec = " ".join("".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/decisions").glob("*.txt")).split())
+        check("Nueva Seleucia: la decision existe para los dos y manda el evento al otro",
+              "ZWM_fundar_nueva_seleucia = {" in dec and "ZWI_fundar_nueva_seleucia = {" in dec
+              and "meganations_seleucia.1" in dec)
+        ev = " ".join((mod / "events/meganations_seleucia.txt").read_text(encoding="utf-8-sig").split())
+        check("Nueva Seleucia: el otro se suma o hay guerra para anexarlo",
+              "annex_country = { target = ZWI" in ev and "declare_war_on = { target = ZWI type = annex_everything" in ev)
+
+
 def test_historietas() -> None:
     """2026-11-18 (la Historieta): la introducción de cada nación en una página de 8 viñetas."""
     section("historieta: la introduccion de cada nacion en 8 viñetas")
@@ -6660,6 +6692,7 @@ def main() -> int:
         test_albion_caminos,
         test_arboles,
         test_historietas,
+        test_anarquias_finales,
     ):
         test()
 

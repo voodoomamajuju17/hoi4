@@ -28,6 +28,7 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: tech_bonus, category: X, bonus: 0.5, uses: 1 } -> add_tech_bonus (categoría leída del juego)
   { effect: tech, value: X }                     -> set_technology = { X = 1 } (2026-10-17, lo nuclear de la Comuna)
   { effect: nukes, value: N }                    -> add_nuclear_bombs = N
+  { effect: white_peace_back }                   -> paz blanca con todos, lo ocupado vuelve a su dueño
   { effect: capital, effects: [...] }             -> capital_scope
   { effect: states, pick: random|every, when: {..}, effects: [..] }
                                                   -> random_owned_controlled_state / every_owned_state
@@ -1185,6 +1186,13 @@ def render_effects(owner: str, items: list[dict], known,
             # nombre y bandera nuevos (02_countries.yaml -> cosmetic_tags)
             block.add("set_cosmetic_tag", item["value"])
             effects_used.setdefault("set_cosmetic_tag", owner)
+            continue
+        if effect == "white_peace_back":
+            # 2026-11-20 (el Amazonas en paz para siempre): paz blanca con todos los enemigos, sin
+            # repartir lo ocupado (cada región vuelve a su dueño)
+            block.add("every_enemy_country", Block([("white_peace", "ROOT")]))
+            for k in ("every_enemy_country", "white_peace"):
+                effects_used.setdefault(k, owner)
             continue
         if effect == "white_peace_all":
             # Paz blanca con todos los enemigos; antes, cada uno se queda con lo

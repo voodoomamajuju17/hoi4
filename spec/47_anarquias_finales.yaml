@@ -1,0 +1,226 @@
+# =============================================================================
+# 47_anarquias_finales.yaml — el final de cada anarquía (2026-11-20)
+# =============================================================================
+# Borrador aprobado: docs/borradores/2026-11-20_anarquias_finales.md ("Nueva Seleucia se forma. Eso
+# te da color. Son Seleucid larpers. Guerra. Prefecto Ozyman + Хав'єр Свобода. 3 bombas, Desolador de
+# cero. Lo demás perfecto todo."). Regla: nada de mecánicas nuevas para nadie.
+#
+# 1. Caudillos del Amazonas: el final se atrasa 6 meses y, cumplido, la selva queda en paz PARA SIEMPRE.
+#    Antes solo firmaba la paz una vez y ponía una marca (ZWB_intocable) que nada revisaba: en los logs
+#    el Reino del Sol le declaraba la guerra en 2102. Ahora: nadie le puede justificar ni ella a nadie,
+#    sale de su facción, y si igual empieza una guerra con ella se firma la paz blanca (al declararla y
+#    con un control semanal de respaldo).
+# 2. Emiratos e Indostán: si los dos terminan su árbol, a los dos les aparece El Puente de Persia; el
+#    primero que lo termina puede fundar Nueva Seleucia (el otro acepta, o guerra).
+# =============================================================================
+
+# --- 1. el Amazonas ----------------------------------------------------------
+extend_focuses:
+  ZWB_foco_7_the_jungle_closes_its_gates:
+    days: 217
+    reward_append:
+    - {effect: leave_faction}
+    - {effect: dynamic_modifier, id: ZWB_selva_cerrada}
+  # 2. al terminar el árbol, los dos vuelven a mirar el suyo (aparece El Puente de Persia)
+  ZWM_foco_7_the_caliphate_of_the_sands:
+    reward_append:
+    - {effect: refresh_focus_tree}
+    - effect: if
+      when: {country_exists: ZWI}
+      then: [{effect: scope, target: ZWI, effects: [{effect: refresh_focus_tree}]}]
+  ZWI_foco_7_the_raj_of_a_thousand_kings:
+    reward_append:
+    - {effect: refresh_focus_tree}
+    - effect: if
+      when: {country_exists: ZWM}
+      then: [{effect: scope, target: ZWM, effects: [{effect: refresh_focus_tree}]}]
+
+add_branches:
+  ZWM:
+  - id: seleucia
+    name: {english: The Bridge of Persia, spanish: El Puente de Persia}
+    focuses:
+    - id: ZWM_el_puente_de_persia
+      name: {english: The Bridge of Persia, spanish: El Puente de Persia}
+      desc:
+        english: 'Seleucus once ruled from Babylon to the Indus, and the kings of India paid him in war elephants. The Hindustan warlords
+          survived too. If we reach out first, the empire is ours to name.'
+        spanish: 'Seleuco gobernó de Babilonia al Indo, y los reyes de la India le pagaron con elefantes de guerra. Los señores del
+          Indostán también sobrevivieron. Si tendemos la mano primero, el imperio es nuestro para nombrarlo.'
+      days: 70
+      icon: GFX_goal_generic_national_unity
+      prerequisites: [ZWM_foco_7_the_caliphate_of_the_sands]
+      allow_branch_when:
+        all:
+        - {country_exists: ZWI}
+        - country: {tag: ZWI, when: {focus: ZWI_foco_7_the_raj_of_a_thousand_kings}}
+      available: {not_global_flag: MN_seleucia_puente}
+      reward:
+      - effect: if
+        when: {not_global_flag: MN_seleucia_puente}
+        then:
+        - {effect: global_flag, value: MN_seleucia_puente}
+        - {effect: flag, value: MN_seleucia_fundador}
+        else:
+        - {effect: add_political_power, value: 50}
+  ZWI:
+  - id: seleucia
+    name: {english: The Bridge of Persia, spanish: El Puente de Persia}
+    focuses:
+    - id: ZWI_el_puente_de_persia
+      name: {english: The Bridge of Persia, spanish: El Puente de Persia}
+      desc:
+        english: 'Chandragupta gave Seleucus five hundred elephants for a peace that lasted generations. The desert emirs survived too.
+          If we reach out first, the empire is ours to name.'
+        spanish: 'Chandragupta le dio a Seleuco quinientos elefantes por una paz que duró generaciones. Los emires del desierto también
+          sobrevivieron. Si tendemos la mano primero, el imperio es nuestro para nombrarlo.'
+      days: 70
+      icon: GFX_goal_generic_national_unity
+      prerequisites: [ZWI_foco_7_the_raj_of_a_thousand_kings]
+      allow_branch_when:
+        all:
+        - {country_exists: ZWM}
+        - country: {tag: ZWM, when: {focus: ZWM_foco_7_the_caliphate_of_the_sands}}
+      available: {not_global_flag: MN_seleucia_puente}
+      reward:
+      - effect: if
+        when: {not_global_flag: MN_seleucia_puente}
+        then:
+        - {effect: global_flag, value: MN_seleucia_puente}
+        - {effect: flag, value: MN_seleucia_fundador}
+        else:
+        - {effect: add_political_power, value: 50}
+
+cosmetic_tags:
+- id: MN_NUEVA_SELEUCIA
+  parent: ZWM
+  name: {english: 'New Seleucia', spanish: 'Nueva Seleucia'}
+  adjective: {english: 'Seleucid', spanish: 'seléucida'}
+  art: 'deep royal purple field with a large golden anchor (the old Seleucid emblem) and a small golden war-elephant silhouette above it; a lower band split in desert ochre and monsoon green.'
+  src: user_request
+
+decisions:
+  dynamic_modifiers:
+  - id: ZWB_selva_cerrada
+    country: ZWB
+    name: {english: 'The Jungle Has Closed', spanish: 'La Selva se Cerró'}
+    desc:
+      english: 'Nobody can justify a war against the jungle, and the jungle wants war with nobody. Forever.'
+      spanish: 'Nadie le puede justificar una guerra a la selva, y la selva no quiere guerra con nadie. Para siempre.'
+    modifiers: {enemy_justify_war_goal_time: 1000, justify_war_goal_time: 1000}
+  - id: MEGANATIONS_seleucia_elefantes
+    country: null
+    name: {english: 'The Elephants of Seleucus', spanish: 'Los Elefantes de Seleuco'}
+    desc:
+      english: 'Phalanx and elephant, desert and monsoon: those who never had water and those who have too much, under one diadem.'
+      spanish: 'Falange y elefante, desierto y monzón: los que nunca tuvieron agua y los que tienen demasiada, bajo una misma diadema.'
+    modifiers: {army_defence_factor: 0.1, army_attack_factor: 0.05, recruitable_population_factor: 0.2, stability_factor: 0.1}
+
+  scripted_effects:
+  - id: MN_formar_nueva_seleucia
+    effects:
+    - {effect: cosmetic_tag, value: MN_NUEVA_SELEUCIA}
+    - {effect: dynamic_modifier, id: MEGANATIONS_seleucia_elefantes}
+    - {effect: global_flag, value: MN_nueva_seleucia_fundada}
+    - effect: if
+      when: {not: {idea: ZWM_la_culminacion}}
+      then: [{effect: add_ideas, value: ZWM_la_culminacion}]
+    - effect: if
+      when: {not: {idea: ZWI_la_culminacion}}
+      then: [{effect: add_ideas, value: ZWI_la_culminacion}]
+    - {effect: add_political_power, value: 100}
+
+  categories:
+  - id: MN_seleucia_category
+    country: [ZWM, ZWI]
+    icon_prefer: [generic_political_discourse, generic_army_support]
+    name: {english: 'New Seleucia', spanish: 'Nueva Seleucia'}
+    desc:
+      english: 'The first of the two survivors to cross the Bridge of Persia can proclaim New Seleucia: one diadem from the Tigris to the Ganges.'
+      spanish: 'El primero de los dos sobrevivientes que cruce el Puente de Persia puede proclamar Nueva Seleucia: una sola diadema del Tigris al Ganges.'
+    visible: {flag: MN_seleucia_fundador}
+    src: user_request
+    decisions:
+    - id: ZWM_fundar_nueva_seleucia
+      name: {english: 'Proclaim New Seleucia', spanish: 'Proclamar Nueva Seleucia'}
+      desc:
+        english: 'We crown a Basileus and send the diadem to the Hindustan warlords. They join us, or we take them.'
+        spanish: 'Coronamos a un Basileus y les mandamos la diadema a los señores del Indostán. Se suman, o los tomamos.'
+      icon_prefer: [generic_political_discourse]
+      cost: 100
+      visible: {all: [{original_tag: ZWM}, {not_global_flag: MN_nueva_seleucia_fundada}]}
+      available: {all: [{country_exists: ZWI}, {not: {war_with: ZWI}}]}
+      effects:
+      - {effect: event, id: meganations_seleucia.1, target: ZWI}
+      - {effect: run, value: MN_formar_nueva_seleucia}
+      ai: {factor: 100}
+      src: user_request
+    - id: ZWI_fundar_nueva_seleucia
+      name: {english: 'Proclaim New Seleucia', spanish: 'Proclamar Nueva Seleucia'}
+      desc:
+        english: 'We crown a Basileus and send the diadem to the desert emirs. They join us, or we take them.'
+        spanish: 'Coronamos a un Basileus y les mandamos la diadema a los emires del desierto. Se suman, o los tomamos.'
+      icon_prefer: [generic_political_discourse]
+      cost: 100
+      visible: {all: [{original_tag: ZWI}, {not_global_flag: MN_nueva_seleucia_fundada}]}
+      available: {all: [{country_exists: ZWM}, {not: {war_with: ZWM}}]}
+      effects:
+      - {effect: event, id: meganations_seleucia.2, target: ZWM}
+      - {effect: run, value: MN_formar_nueva_seleucia}
+      ai: {factor: 100}
+      src: user_request
+
+  on_actions:
+  # el Amazonas: si igual empieza una guerra con la selva cerrada, paz blanca en el acto
+  - id: ZWB_selva_cerrada_guerra
+    hook: on_declare_war
+    effects:
+    - effect: if
+      when: {all: [{country_exists: ZWB}, {country: {tag: ZWB, when: {flag: ZWB_intocable}}}]}
+      then: [{effect: scope, target: ZWB, effects: [{effect: white_peace_back}]}]
+  - id: ZWB_selva_cerrada_semanal
+    hook: on_weekly_ZWB
+    effects:
+    - effect: if
+      when: {all: [{flag: ZWB_intocable}, {at_war: true}]}
+      then: [{effect: white_peace_back}, {effect: leave_faction}]
+
+events:
+  namespaces:
+    meganations_seleucia:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: 'The Diadem from the West', spanish: 'La Diadema del Oeste'}
+        desc:
+          english: 'The desert emirs have crowned a Basileus and call their realm New Seleucia. Their envoy brings us a diadem and a choice:
+            join them, from the Tigris to the Ganges, or be taken.'
+          spanish: 'Los emires del desierto coronaron a un Basileus y llaman a su reino Nueva Seleucia. Su enviado nos trae una diadema y
+            una elección: sumarnos, del Tigris al Ganges, o ser tomados.'
+        options:
+        - name: {english: 'One diadem, one empire.', spanish: 'Una diadema, un imperio.'}
+          effects: [{effect: scope, target: ZWM, effects: [{effect: annex, target: ZWI}]}]
+          ai_chance: 100
+        - name: {english: 'Hindustan bows to no one.', spanish: 'El Indostán no se arrodilla ante nadie.'}
+          effects: [{effect: scope, target: ZWM, effects: [{effect: declare_war, target: ZWI, type: annex_everything}]}]
+          ai_chance: 0
+        src: user_request
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: 'The Diadem from the East', spanish: 'La Diadema del Este'}
+        desc:
+          english: 'The Hindustan warlords have crowned a Basileus and call their realm New Seleucia. Their envoy rides in on an elephant
+            with a diadem and a choice: join them, from the Ganges to the Tigris, or be taken.'
+          spanish: 'Los señores del Indostán coronaron a un Basileus y llaman a su reino Nueva Seleucia. Su enviado llega en elefante con
+            una diadema y una elección: sumarnos, del Ganges al Tigris, o ser tomados.'
+        options:
+        - name: {english: 'One diadem, one empire.', spanish: 'Una diadema, un imperio.'}
+          effects: [{effect: scope, target: ZWI, effects: [{effect: annex, target: ZWM}]}]
+          ai_chance: 100
+        - name: {english: 'The sands bow to no one.', spanish: 'Las arenas no se arrodillan ante nadie.'}
+          effects: [{effect: scope, target: ZWI, effects: [{effect: declare_war, target: ZWM, type: annex_everything}]}]
+          ai_chance: 0
+        src: user_request

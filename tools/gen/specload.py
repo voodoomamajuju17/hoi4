@@ -67,7 +67,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-18: el rediseño de los árboles de foco de las ocho potencias
                  "45_arboles.yaml",
                  # 2026-11-18: la Historieta, la introducción de cada nación en 8 viñetas
-                 "46_historietas.yaml"]
+                 "46_historietas.yaml",
+                 # 2026-11-20: el final de cada anarquía (Amazonas en paz, Nueva Seleucia, ...)
+                 "47_anarquias_finales.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
