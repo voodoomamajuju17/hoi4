@@ -306,29 +306,43 @@ def pagina_png(tag: str, cfg: dict):
     s = geo.INCLINE.get(estilo, 0)
     esquinas = geo.ESQUINAS[estilo]
     filas = _filas_de(cfg)
-    for n, (rect, forma, caja, (prim, ult)) in enumerate(zip(pag["rects"], pag["formas"], pag["recuadros"], filas), 1):
+    for n, (rect, forma, caja, area, (prim, ult)) in enumerate(
+            zip(pag["rects"], pag["formas"], pag["recuadros"], pag["artes"], filas), 1):
         x, y, w, h = rect
+        ax, ay, aw, ah = area
         arte = arte_de(tag, n)
-        if arte.exists():
-            contenido = _cubrir(Image.open(arte), w, h)
+        if forma == "circulo":
+            # el círculo entra en el área del dibujo; la franja del texto va debajo, fuera del círculo
+            r = min(aw, ah) / 2
+            ccx, ccy = ax + aw / 2, ay + ah / 2
+            cuadro = (int(ccx - r), int(ccy - r), int(2 * r), int(2 * r))
         else:
-            contenido = _trama((w, h), estilo, rnd)
-        m = _mascara((W, H), rect, forma, esquinas, prim, ult, s)
-        capa = Image.new("RGB", (W, H))
-        capa.paste(contenido, (x, y))
+            cuadro = area
+        if arte.exists():
+            contenido = _cubrir(Image.open(arte), cuadro[2], cuadro[3])
+        else:
+            contenido = _trama((cuadro[2], cuadro[3]), estilo, rnd)
+        if forma == "circulo":
+            m = _mascara((W, H), cuadro, forma, esquinas, prim, ult, s)
+        else:
+            m = _mascara((W, H), rect, forma, esquinas, prim, ult, s)
+        capa = Image.new("RGB", (W, H), e["caja"])     # el papel de la franja del texto
+        capa.paste(contenido, (cuadro[0], cuadro[1]))
+        if forma != "circulo":
+            ImageDraw.Draw(capa).line((x, ay + ah + 2, x + w, ay + ah + 2), fill=tinta, width=3)
         if estilo == "sol" and forma == "circulo":   # rayos del sol alrededor de la viñeta redonda
-            cx, cy, r = x + w / 2, y + h / 2, min(w, h) / 2
+            cx, cy, r = cuadro[0] + cuadro[2] / 2, cuadro[1] + cuadro[3] / 2, cuadro[2] / 2
             for k in range(24):
                 t = 2 * math.pi * k / 24
                 t2 = t + math.pi / 24
                 d.polygon([(cx + r * math.cos(t), cy + r * math.sin(t)),
-                           (cx + (r + 34) * math.cos(t + math.pi / 48), cy + (r + 34) * math.sin(t + math.pi / 48)),
+                           (cx + (r + 26) * math.cos(t + math.pi / 48), cy + (r + 26) * math.sin(t + math.pi / 48)),
                            (cx + r * math.cos(t2), cy + r * math.sin(t2))], fill=(222, 178, 62))
         img.paste(capa, (0, 0), m)
         # borde: tinta gruesa y una línea de color adentro
         if forma == "circulo":
-            r = min(w, h) / 2
-            cx, cy = x + w / 2, y + h / 2
+            r = cuadro[2] / 2
+            cx, cy = cuadro[0] + r, cuadro[1] + r
             d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=tinta, width=ancho)
             d.ellipse((cx - r + ancho, cy - r + ancho, cx + r - ancho, cy + r - ancho), outline=color, width=2)
         elif esquinas == "redondo" and forma == "rect":
@@ -348,10 +362,11 @@ def pagina_png(tag: str, cfg: dict):
                 d.rounded_rectangle((x - 5, py, x + w + 4, py + 9), radius=4, fill=(122, 74, 38), outline=(40, 22, 10))
                 for px in (x - 9, x + w + 1):
                     d.ellipse((px, py - 1, px + 10, py + 10), fill=(212, 170, 70), outline=(60, 40, 10))
-        # recuadro del texto: sombra, papel y tinta
-        cx, cy, cw, ch = caja
-        d.rectangle((cx + 4, cy + 4, cx + cw + 3, cy + ch + 3), fill=(0, 0, 0))
-        d.rectangle((cx, cy, cx + cw - 1, cy + ch - 1), fill=e["caja"], outline=tinta, width=2)
+        # en la redonda, el texto va en un recuadro debajo del círculo (en las demás, la franja ya es papel)
+        if forma == "circulo":
+            cx, cy, cw, ch = caja
+            d.rectangle((cx + 4, cy + 4, cx + cw + 3, cy + ch + 3), fill=(0, 0, 0))
+            d.rectangle((cx, cy, cx + cw - 1, cy + ch - 1), fill=e["caja"], outline=tinta, width=2)
     # columnas de mármol entre las viñetas con arco
     if estilo == "marmol":
         rects = pag["rects"]
@@ -410,9 +425,8 @@ def vista(tag: str, png: Path) -> None:
 ESTILO_PEDIDO = (
     "ONE comic-book panel (a single image, not a page): no panel borders, no frames, no speech balloons, "
     "no captions, no text, no letters, no numbers, no watermark. Strong readable composition at small size. "
-    "The game puts a caption box over one corner of the image (said in the description), so keep that corner "
-    "calm (sky, wall, ground) with nothing important in it. Keep the main subject in the centre: the edges may "
-    "be cropped to fit the panel")
+    "The whole image is shown (the caption goes in a strip below it, not over it). Keep the main subject in "
+    "the centre: the edges may be cropped to fit the panel")
 
 
 def items() -> list[dict]:
@@ -420,10 +434,9 @@ def items() -> list[dict]:
     out = []
     for tag, cfg in _cfg_crudo().items():
         pag = geo.pagina(cfg)
-        for n, (v, rect, forma) in enumerate(zip(cfg["vinetas"], pag["rects"], pag["formas"]), 1):
-            w, h = rect[2], rect[3]
-            lugar = ("bottom-left" if forma in ("arco", "ojiva") or v.get("caja") == "abajo"
-                     else "bottom centre" if forma == "circulo" else "top-left")
+        for n, (v, area, forma) in enumerate(zip(cfg["vinetas"], pag["artes"], pag["formas"]), 1):
+            # 2026-11-20: el tamaño del dibujo (sin la franja del texto, que va abajo)
+            w, h = (min(area[2], area[3]),) * 2 if forma == "circulo" else (area[2], area[3])
             forma_txt = {"circulo": " The panel is ROUND: compose for a circle (corners will be cut off).",
                          "arco": " The panel has a ROUND ARCH on top: the top corners will be cut off.",
                          "ojiva": " The panel has a POINTED ARCH on top: the top corners will be cut off."}.get(forma, "")
@@ -432,9 +445,8 @@ def items() -> list[dict]:
                 "done": arte_de(tag, n).exists(), "size": (w * 2, h * 2),
                 "style": f"{ESTILO_PEDIDO}; comic style of this nation: {' '.join(cfg['dibujo'].split())}",
                 "description": (f"Panel {n} of 8 of the opening comic of this nation ('{v['texto']['english']}' "
-                                f"is the caption the game writes over it; do NOT write it). DRAW: {v['arte']} "
-                                f"Panel shape {w}x{h} (aspect {w / h:.2f}:1).{forma_txt} "
-                                f"Caption box goes at the {lugar} corner."),
+                                f"is the caption the game writes below it; do NOT write it). DRAW: {v['arte']} "
+                                f"Panel shape {w}x{h} (aspect {w / h:.2f}:1).{forma_txt}"),
             })
     return out
 

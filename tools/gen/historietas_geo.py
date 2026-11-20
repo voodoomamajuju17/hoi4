@@ -60,24 +60,28 @@ def lineas(texto: str, ancho: int) -> int:
 
 
 def recuadro(rect, forma: str, estilo: str, lugar: str, textos: list[str]) -> tuple[int, int, int, int]:
-    """El recuadro del texto de una viñeta (x, y, ancho, alto), adentro de la viñeta."""
+    """El recuadro del texto de una viñeta (x, y, ancho, alto).
+
+    2026-11-20 ("¿El texto tapa así todas las imágenes??"): el texto ya no va encima del dibujo, va en una
+    franja de papel ABAJO de la viñeta (como Príncipe Valiente); el dibujo queda entero arriba (area_arte).
+    En la viñeta redonda, la franja va debajo del círculo."""
     x, y, w, h = rect
     s = INCLINE.get(estilo, 0)
     if forma == "circulo":
-        r = min(w, h) / 2
-        cw = int(r * 1.5)
+        cw = min(w - 2 * INSET, 340)
         n = max(lineas(t, cw) for t in textos)
-        ch = n * LINEA_PX + 12
-        return (int(x + w / 2 - cw / 2), int(y + h / 2 + r * 0.92 - ch), cw, ch)
-    cw = w - 2 * INSET - 2 * s
-    if cw > 480:
-        cw = max(480, int(w * 0.62))
+        ch = n * LINEA_PX + 10
+        return (int(x + w / 2 - cw / 2), y + h - ch - 4, cw, ch)
+    cw = w - 12 - 2 * s
     n = max(lineas(t, cw) for t in textos)
-    ch = n * LINEA_PX + 12
-    if forma in ("arco", "ojiva") or lugar == "abajo":
-        # abajo, pegado al lado izquierdo (con la inclinación, el borde de abajo está corrido a la izquierda)
-        return (x + INSET + s // 2, y + h - INSET - ch, cw, ch)
-    return (x + INSET + s, y + INSET, cw, ch)
+    ch = n * LINEA_PX + 10
+    return (x + 6 + s // 2, y + h - ch - 6, cw, ch)
+
+
+def area_arte(rect, forma: str, caja) -> tuple[int, int, int, int]:
+    """Dónde va el dibujo: toda la viñeta salvo la franja del texto (x, y, ancho, alto)."""
+    x, y, w, h = rect
+    return (x, y, w, caja[1] - 6 - y)
 
 
 def pagina(cfg: dict) -> dict:
@@ -91,7 +95,8 @@ def pagina(cfg: dict) -> dict:
     cajas = [recuadro(r, f, estilo, v.get("caja", "arriba"),
                       [v["texto"]["spanish"], v["texto"]["english"]])
              for r, f, v in zip(rects, formas, vs)]
-    return {"rects": rects, "formas": formas, "recuadros": cajas}
+    artes = [area_arte(r, f, c) for r, f, c in zip(rects, formas, cajas)]
+    return {"rects": rects, "formas": formas, "recuadros": cajas, "artes": artes}
 
 
 def arco_alto(w: int, h: int, forma: str) -> int:
