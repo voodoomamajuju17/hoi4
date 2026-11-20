@@ -57,6 +57,10 @@ decisions:
           - {effect: run, value: ZJP_paquete}
           - {effect: run, value: ZJP_mecha_desbloqueo}
           - {effect: run, value: MEGANATIONS_flota_pirata_ZJP}
+          # 2026-11-20: la Historieta de Japón, al jugador
+          - effect: if
+            when: {is_ai: false}
+            then: [{effect: flag, value: MN_historieta_abierta}]
         else:
         - effect: scope
           target: HSN
@@ -87,3 +91,7 @@ decisions:
         - {effect: leave_faction}
         - {effect: focus_tree, value: meganations_albion_focus}
         - {effect: add_political_power, value: 100}
+        # 2026-11-20: la Historieta de Albión, al jugador
+        - effect: if
+          when: {is_ai: false}
+          then: [{effect: flag, value: MN_historieta_abierta}]

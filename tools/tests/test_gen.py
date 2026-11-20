@@ -3490,7 +3490,8 @@ def test_historietas() -> None:
     from tools.gen import historietas_geo as geo
     spec = specload.load(REPO_ROOT / "spec")
     hist = spec.raw.get("historietas") or {}
-    check("13 naciones con historieta (las 8 potencias y las 5 anarquias del arranque)", len(hist) == 13, str(sorted(hist)))
+    check("15 naciones con historieta (las 8 potencias, las 5 anarquias del arranque, Japon y Albion)",
+          len(hist) == 15, str(sorted(hist)))
     check("ninguna con mas de 8 viñetas", all(len(c["vinetas"]) <= 8 for c in hist.values()))
     check("todas con su pagina armada (assets/historietas/paginas)", all(c.get("activa") for c in hist.values()),
           str([t for t, c in hist.items() if not c.get("activa")]))
@@ -3527,6 +3528,11 @@ def test_historietas() -> None:
         loc = (mod / "localisation/spanish/meganations_historietas_l_spanish.yml")
         texto = loc.read_text(encoding="utf-8-sig") if loc.exists() else ""
         check("los textos van en negro sobre el recuadro", 'MN_HIST_SHD_5:0 "§bLin Wenzhao' in texto)
+        # 2026-11-20: Japón y Albión, al arrancar descolonizados
+        arranque = " ".join("".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/on_actions").glob("*.txt")).split())
+        check("Japon y Albion abren su historieta al arrancar descolonizados (solo el jugador)",
+              arranque.count("set_country_flag = MN_historieta_abierta") >= 2 and '"mn_historieta_ZJP_window"' in gui
+              and '"mn_historieta_ZAL_window"' in gui)
 
 
 def test_arboles() -> None:

@@ -52,6 +52,10 @@ ESTILOS = {
                   banda=(60, 40, 20), trama=((210, 160, 90), (250, 222, 162))),
     "selva": dict(fondo=(56, 42, 24), borde=((10, 24, 12), (40, 96, 44), 5), caja=(237, 233, 201),
                   banda=(18, 46, 22), trama=((40, 92, 52), (202, 122, 52))),
+    "astillero": dict(fondo=(16, 24, 40), borde=((4, 6, 12), (232, 184, 30), 4), caja=(244, 242, 236),
+                      banda=(120, 18, 28), trama=((30, 50, 86), (226, 180, 40))),
+    "telar": dict(fondo=(120, 52, 40), borde=((20, 14, 10), (190, 176, 150), 4), caja=(240, 234, 220),
+                  banda=(46, 52, 44), trama=((88, 96, 84), (176, 70, 56))),
     "chatarra": dict(fondo=(20, 19, 17), borde=((0, 0, 0), (156, 74, 30), 4), caja=(250, 232, 128),
                      banda=(30, 28, 24), trama=((122, 62, 30), (232, 202, 62))),
 }
@@ -219,6 +223,17 @@ def _fondo(estilo: str, rnd):
         for y in range(10, H, 26):
             for x in range(10 + (y // 26 % 2) * 13, W, 26):
                 d.ellipse((x - 3, y - 3, x + 3, y + 3), fill=(232, 160, 60))
+    elif estilo == "astillero":   # vigas de grúa en celosía
+        for x0 in range(-H, W, 46):
+            d.line((x0, H, x0 + H, 0), fill=(40, 52, 76), width=3)
+            d.line((x0, 0, x0 + H, H), fill=(28, 38, 60), width=2)
+    elif estilo == "telar":       # ladrillo rojo
+        for y in range(0, H, 14):
+            off = 0 if (y // 14) % 2 else 22
+            d.line((0, y, W, y), fill=(178, 160, 140), width=2)
+            for x in range(-off, W, 44):
+                d.line((x, y, x, y + 14), fill=(178, 160, 140), width=2)
+        _ruido(img, rnd, 10, 4)
     elif estilo == "chatarra":
         _ruido(img, rnd, 12, 4)
         for _ in range(26):

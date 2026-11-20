@@ -22,7 +22,8 @@ INSET = 10
 # estilo de página: esquinas de todas las viñetas ("recto", "redondo", "chaflan", "inclinado")
 ESQUINAS = {"organico": "redondo", "placa": "chaflan", "cristal": "redondo", "ola": "inclinado",
             "sol": "recto", "rollo": "recto", "kente": "recto", "marmol": "recto", "remaches": "recto",
-            "ojiva": "recto", "arena": "recto", "selva": "redondo", "chatarra": "inclinado"}
+            "ojiva": "recto", "arena": "recto", "selva": "redondo", "chatarra": "inclinado",
+            "astillero": "chaflan", "telar": "recto"}
 INCLINE = {"ola": 18, "chatarra": 24}
 
 

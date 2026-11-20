@@ -43,6 +43,13 @@ def expandir(raw: dict, historietas: dict) -> dict:
                     intro = (ns, ev)
                 else:
                     sigue.append((ns, ev))
+        if cfg.get("sin_intro"):
+            # Japón y Albión (2026-11-20): sin introducción; la abre el arranque descolonizado
+            # (28_descolonizado: MN_historieta_abierta al jugador)
+            cfg["intro"], cfg["sigue"] = None, []
+            cfg["activa"] = pagina(tag).exists()
+            out[tag] = cfg
+            continue
         if intro is None:
             raise SpecError(f"historieta {tag}: no encuentro su introducción (on_startup, THE WORLD IN 2100)",
                             where="46_historietas.yaml")
