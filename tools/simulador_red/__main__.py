@@ -96,8 +96,10 @@ def informe(p: dict, fin: dict[str, float], n: int) -> str:
     muertes = [r.murio for r in rs if r.murio is not None]
     w(f"| Muere (10% / mitad / 90% de las que mueren) | {_fecha(_cuantil(muertes, .1))} / {_fecha(_cuantil(muertes, .5))} / {_fecha(_cuantil(muertes, .9))} |")
     w(f"| Sigue viva el 1/1/2120 | {_pct(1 - len(muertes) / len(rs))} |")
-    cod = [r.codigo for r in rs if r.codigo is not None]
-    w(f"| Le terminan el Código de Apagado | {_pct(len(cod) / len(rs))} (la mitad antes de {_fecha(_cuantil(cod, .5))}) |")
+    cod = [r.codigos[0] for r in rs if r.codigos]
+    w(f"| Le terminan al menos un Código de Apagado | {_pct(len(cod) / len(rs))} (el primero, la mitad antes de {_fecha(_cuantil(cod, .5))}) |")
+    w(f"| Códigos por partida (media) | {sum(len(r.codigos) for r in rs) / len(rs):.1f} |")
+    w(f"| Depósito más grande (mitad de las partidas) | {round(_cuantil([r.reserva_max for r in rs], .5))} divisiones esperando suministro |")
     ok = sum(r.brotes_ok for r in rs) / len(rs)
     mal = sum(r.brotes_mal for r in rs) / len(rs)
     w(f"| Brotes por partida (prenden / los aplasta la guarnición) | {ok:.1f} / {mal:.1f} |\n")
@@ -171,9 +173,10 @@ def informe(p: dict, fin: dict[str, float], n: int) -> str:
     # ------------------------------------------------------------ más fuerte o más débil
     w("## Si sale más fuerte o más débil\n")
     w("Divisiones y calidad del arranque (la calidad es cuánto pelea una división de La Red contra una de una potencia). "
-      "Cada celda: trámite / se come el mundo.\n")
+      "Cada celda: trámite / se come el mundo. Con suministro, las divisiones de más esperan en el depósito: "
+      "lo que cambia el resultado es la calidad.\n")
     divs = (45, 70, 90, 120)
-    cals = (1.6, 1.9, 2.2, 2.5)
+    cals = (2.4, 2.7, 3.0, 3.3)
     w("| divisiones \\ calidad | " + " | ".join(str(x) for x in cals) + " |")
     w("|---|" + "---|" * len(cals))
     for d in divs:

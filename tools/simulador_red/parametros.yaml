@@ -35,16 +35,18 @@ nacimiento:
 # Una isla aislada y un pedazo de costa, OP: muchas tropas, fuertes, recursos.
 arranque:
   regiones_isla: 1
-  regiones_costa: 2
-  divisiones: 90           # drones de primera línea
-  calidad: 2.2             # 1 división de La Red pelea como 2,2 de una potencia (bonus de combate)
-  fuertes: 1.7             # defensa en las 3 regiones de arranque (fuertes en todas las fronteras)
+  regiones_costa: 3
+  divisiones: 90           # en total: ~35 desplegadas (lo que aguanta el suministro) y el resto en el depósito
+  calidad: 3.0             # 1 división de La Red pelea como 3 de una potencia (bonus de combate y toda la tecnología)
+  fuertes: 2.5             # defensa en las 4 regiones de arranque, las únicas fortificadas (fuertes en todas las fronteras)
+  escudo_meses: 6          # El Escudo del Nodo: los primeros 6 meses los fuertes valen el doble
+  escudo: 2.0
   provision_meses: 12      # el depósito inicial: producción +50% el primer año
   provision_bonus: 0.5
 
 produccion:
   base: 1.2               # divisiones por mes con 0 regiones
-  por_region: 0.15        # cada región suma fábricas: las primeras 30 (las elige con industria)...
+  por_region: 0.08        # cada región suma fábricas: las primeras 30 (las elige con industria)...
   hasta: 30
   despues: 0.05           # ...las que siguen llegan rotas y valen un tercio
 
@@ -66,28 +68,28 @@ etapas:
   regiones: 8
   meses: 6
   calidad: 0.0
-  produccion: 0.25
+  produccion: 0.1
   brote_dias: 180
 - nombre: Conciencia Distribuida
   solo_tiempo: 21
   regiones: 18
   meses: 15
   calidad: 0.2
-  produccion: 0.25
+  produccion: 0.1
   brote_dias: 120
 - nombre: El Enjambre
-  solo_tiempo: 36
+  solo_tiempo: null
   regiones: 25
   meses: 21
   calidad: 0.2
-  produccion: 0.5
+  produccion: 0.2
   brote_dias: 90
 - nombre: La Singularidad
   solo_tiempo: null
   regiones: 35
   meses: 30
   calidad: 0.3
-  produccion: 0.5
+  produccion: 0.2
   brote_dias: 60
   # La cumbre no gana la partida: el mundo entero entra en Emergencia y todas
   # las potencias suben su compromiso (ver compromiso.emergencia).
@@ -141,6 +143,7 @@ compromiso:
   guerra_rival: 0.5        # multiplica si está en guerra con su rival (la Coalición congela la Fricción)
   prob_guerra_rival: 0.35  # SUPUESTO: chance de estar en guerra con el rival, se tira cada año
   coalicion_mes: 0.10      # chance por mes de unirse (desde el mes 3)
+  movilizacion: 0.06       # SUPUESTO: cada año que pasa, el vecino manda 6 puntos más (el mundo se moviliza)
   amenaza: 30              # SUPUESTO: la IA manda más cuanto más grande es La Red (x2 con 30 regiones)
   coalicion_mes_frente: 0.25
 
@@ -148,25 +151,51 @@ compromiso:
 # SUPUESTO: un frente por dueño. Cada mes se compara la fuerza de los dos lados.
 combate:
   umbral: 1.15             # hace falta 15% más de fuerza para avanzar
-  avance: 1.5              # regiones esperadas por cada 100% de ventaja
+  avance: 2.5              # regiones esperadas por cada 100% de ventaja
   avance_max: 2.5
   bajas: 0.04              # divisiones que pierde La Red por cada división enemiga en el frente, por mes
-  fuertes_regiones: 3      # solo las de arranque están fortificadas
   isla: 0.6                # la isla se ataca por mar: el enemigo llega con 60% de su fuerza
 
 # --------------------------------------------------------------- el Código de Apagado
-# Un proyecto (decisión larga) que cualquier coalicionista puede empezar. Al
-# terminar, La Red no desaparece: pierde todas sus etapas, la mitad de sus
-# divisiones y los brotes. Hay que terminarla a mano.
+# Pedido (2026-11-20): "más que código de apagado debería ser algo que lo
+# debilite, el tiempo también se calcula dependiendo en qué etapa está La Red,
+# más avanzado = más tiempo. Suspende la plaga por 1 año y reduce muchísimo los
+# bonus en combate / daña equipo / daña fábricas / infraestructura / añade malus".
+# Un proyecto que cualquier coalicionista puede empezar. Al terminar no la borra:
+# la golpea un año. Se puede volver a lanzar, cada vez tarda más (La Red aprende).
 codigo:
-  dias: 540
-  dias_arkhipov: 360       # la ASC con el Profesor Lev Arkhipov (Leyenda)
-  dias_llave: 180          # quien terminó El Despertar en La Llave Maestra
-  arkhipov: 0.4            # SUPUESTO: chance de que la ASC tenga a Arkhipov
+  dias_por_etapa: [240, 300, 390, 480, 600]   # según la etapa en que se empieza (0 a 4)
+  llave: 0.34              # quien terminó El Despertar en La Llave Maestra: un tercio del tiempo
+  arkhipov: 0.4            # SUPUESTO: chance de que la ASC tenga al Profesor Lev Arkhipov (Leyenda)
+  arkhipov_factor: 0.67    # con él, dos tercios del tiempo
+  repetido: 0.5            # cada Código siguiente tarda 50% más
   empezar_mes: 0.03        # chance por mes de que una potencia de la coalición lo empiece
-  desde_etapa: 2           # recién con Conciencia Distribuida se entiende qué es (y desde el mes 6)
-  singularidad: 1.5        # empezado con La Singularidad abierta, tarda 50% más
-  divisiones_quedan: 0.5
+  desde_mes: 6
+  desde_etapa: 1           # recién con La Red se Extiende se entiende qué es
+  efecto_dias: 365         # el golpe dura un año:
+  equipo: 0.3              #   al terminar, se rompe el 30% de las divisiones desplegadas...
+  reserva: 0.5             #   ...y la mitad del depósito
+  calidad: -0.9            #   bonus de combate: -0,9 por un año
+  fabricas: 0.5            #   producción -50% por un año
+  infraestructura: 0.3     #   suministro -30% por un año
+  #   y por un año no hay brotes ni se abren etapas nuevas
+
+# --------------------------------------------------------------- el suministro
+# Pedido (2026-11-20): "¿no son demasiadas divisiones para tan poco territorio?
+# El suministro ahí te cambia todo." Cuántas divisiones aguanta cada frente; el
+# resto espera en el depósito y sale a medida que La Red gana regiones. Los
+# drones comen poco (consumo de suministro -50% en el juego), por eso el tope es
+# más alto que el de una potencia.
+suministro:
+  isla: 10                 # la isla, abastecida por su puerto
+  base: 10                 # la costa: 10 más...
+  brote_base: 2            # un brote: 2 más 3 por región (llega por los cables, no por tren)
+  brote_por_region: 3
+  por_region: 5            # ...5 por región
+  por_etapa: 0.5           # cada etapa abierta suma medio por región (sus propias redes de suministro)
+  brotes_desde_etapa: 2    # desde Conciencia Distribuida el depósito llega a los brotes (por los cables)
+  deposito_base: 60        # el depósito guarda como mucho 60 divisiones...
+  deposito_por_region: 1   # ...más 1 por región
 
 # --------------------------------------------------------------- dónde nace
 # Doce lugares (isla + costa) repartidos por el mundo. Dueños aproximados de

@@ -10,6 +10,11 @@ No simula el mapa. La Red tiene tres clases de frente:
     divisiones.
 Cada mes, en cada frente, se compara la fuerza de los dos lados (divisiones por
 calidad, fuertes al defender). El que tiene 15% más avanza o recupera regiones.
+
+Cada frente aguanta solo las divisiones que le da el suministro; el resto espera
+en el depósito (que tiene techo) y sale cuando La Red gana regiones. El Código de
+Apagado no la borra: la golpea un año (equipo, fábricas, suministro, combate, sin
+brotes ni etapas nuevas) y tarda más cuanto más avanzada está.
 """
 
 from __future__ import annotations
@@ -94,7 +99,9 @@ class Partida:
     final: int = 0
     etapa_max: int = 0
     etapa_fecha: dict = field(default_factory=dict)
-    codigo: float | None = None
+    codigos: list = field(default_factory=list)
+    reserva_max: float = 0.0
+    tray: list = field(default_factory=list)   # mes a mes: regiones, costa, depósito, etapa, brotes, golpe
     brotes_ok: int = 0
     brotes_mal: int = 0
     tomadas: Counter = field(default_factory=Counter)
@@ -121,14 +128,15 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
     # ------------------------------------------------ el arranque
     lugar = p["lugar_fijo"] if lugar_fijo else rng.choice(p["lugares"])
     arr = p["arranque"]
+    sup = p["suministro"]
+    cod = p["codigo"]
     t0 = rng.uniform(nac["desde"], nac["hasta"])
     meses_total = int(round((p["hasta"] - t0) * 12))
-    div0 = arr["divisiones"]
     ri, rc = arr["regiones_isla"], arr["regiones_costa"]
-    isla = Frente("isla", lugar["isla"], div0 * ri / (ri + rc), ri, fort=ri)
-    costa = Frente("costa", lugar["costa"], div0 * rc / (ri + rc), rc, fort=rc,
-                   contacto={lugar["costa"]: 1.0})
+    isla = Frente("isla", lugar["isla"], 0.0, ri, fort=ri)
+    costa = Frente("costa", lugar["costa"], 0.0, rc, fort=rc, contacto={lugar["costa"]: 1.0})
     frentes = [isla, costa]
+    reserva = float(arr["divisiones"])   # lo que no entra en el suministro espera en el depósito
     res = Partida(nace=True, lugar=lugar["nombre"], nacio=t0)
     res.tomadas[lugar["isla"]] += ri
     res.tomadas[lugar["costa"]] += rc
@@ -138,8 +146,9 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
     emergencia = False
     coalicion: set[str] = set()
     guerra_rival = {t: rng.random() < p["compromiso"]["prob_guerra_rival"] for t in potencias}
-    codigo_fin: float | None = None      # mes en que termina el primer Código empezado
-    apagada = False
+    codigo_fin: float | None = None      # mes en que termina el Código en curso
+    golpe_hasta = -1.0                   # mientras dura el golpe del Código
+    codigos = 0
     proximo_brote: int | None = None
     comb, comp = p["combate"], p["compromiso"]
     lejano_agregado = False
@@ -147,19 +156,36 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
     def total_reg() -> int:
         return sum(f.reg for f in frentes)
 
-    def calidad() -> float:
-        if apagada:
-            return arr["calidad"] * 0.75
+    def golpeada(mes: int) -> bool:
+        return mes < golpe_hasta
+
+    def calidad(mes: int) -> float:
         q = arr["calidad"] + sum(e["calidad"] for e in etapas[: etapa + 1])
         sob = p["sobrecarga"]
         if elastica and total_reg() > sob["desde"]:
             q += sob["calidad"] * (total_reg() - sob["desde"]) / sob["cada"]
+        if golpeada(mes):
+            q += cod["calidad"]
         return max(0.6, q)
+
+    def tope(f: Frente, mes: int) -> float:
+        if f.reg <= 0:
+            return 0.0
+        por_region = sup["por_region"] + sup["por_etapa"] * etapa
+        if f.tipo == "isla":
+            t = sup["isla"]
+        elif f.tipo == "brote":
+            t = sup["brote_base"] + sup["brote_por_region"] * f.reg
+        else:
+            t = sup["base"] + por_region * f.reg
+        return t * (1 - cod["infraestructura"]) if golpeada(mes) else t
+
+    anios = [0.0]   # años desde que nació (el mundo se moviliza con el tiempo)
 
     def compromiso(t: str, en_frente: bool) -> float:
         if t in anarquias:
             return comp["anarquia_frente"] if en_frente else 0.0
-        c = comp["frente"] if en_frente else 0.0
+        c = (comp["frente"] + comp["movilizacion"] * anios[0]) if en_frente else 0.0
         if t in coalicion:
             c += comp["coalicion"] if en_frente else comp["expedicion"]
         if emergencia:
@@ -170,6 +196,7 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
 
     for mes in range(meses_total):
         ahora = t0 + mes / 12
+        anios[0] = mes / 12
 
         # ---- el mundo reacciona
         if mes % 12 == 0 and mes:
@@ -181,27 +208,30 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
                     q = comp["coalicion_mes_frente"] if t in en_contacto else comp["coalicion_mes"]
                     if rng.random() < q:
                         coalicion.add(t)
-        if mes >= 6 and codigo_fin is None and etapa >= p["codigo"]["desde_etapa"]:
+
+        # ---- el Código de Apagado: tarda según la etapa, debilita, se puede repetir
+        if mes >= cod["desde_mes"] and codigo_fin is None and not golpeada(mes) \
+                and etapa >= cod["desde_etapa"]:
             for t in sorted(coalicion):
-                if rng.random() < p["codigo"]["empezar_mes"]:
+                if rng.random() < cod["empezar_mes"]:
+                    dias = cod["dias_por_etapa"][etapa] * (1 + cod["repetido"] * codigos)
                     if t in con_llave:
-                        dias = p["codigo"]["dias_llave"]
-                    elif t == "ASC" and rng.random() < p["codigo"]["arkhipov"]:
-                        dias = p["codigo"]["dias_arkhipov"]
-                    else:
-                        dias = p["codigo"]["dias"]
-                    if etapa >= len(etapas) - 1:
-                        dias *= p["codigo"]["singularidad"]   # en la cumbre se defiende
+                        dias *= cod["llave"]
+                    elif t == "ASC" and rng.random() < cod["arkhipov"]:
+                        dias *= cod["arkhipov_factor"]
                     codigo_fin = mes + dias / 30
                     break
-        if codigo_fin is not None and not apagada and mes >= codigo_fin:
-            apagada = True
-            res.codigo = ahora
+        if codigo_fin is not None and mes >= codigo_fin:
+            codigo_fin = None
+            codigos += 1
+            res.codigos.append(ahora)
+            golpe_hasta = mes + cod["efecto_dias"] / 30
             for f in frentes:
-                f.div *= p["codigo"]["divisiones_quedan"]
+                f.div *= 1 - cod["equipo"]
+            reserva *= 1 - cod["reserva"]
 
-        # ---- las etapas (tamaño y tiempo)
-        if not apagada:
+        # ---- las etapas (tamaño y tiempo); golpeada no abre etapas nuevas
+        if not golpeada(mes):
             while etapa + 1 < len(etapas) and (
                     (total_reg() >= etapas[etapa + 1]["regiones"] and mes >= etapas[etapa + 1]["meses"])
                     or (elastica and etapas[etapa + 1].get("solo_tiempo") is not None
@@ -219,40 +249,33 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
         if elastica and total_reg() >= p["emergencia_regiones"]:
             emergencia = True
 
-        # ---- producción
+        # ---- producción: va al depósito
         pr = p["produccion"]
         prod = pr["base"] + pr["por_region"] * min(total_reg(), pr["hasta"]) \
             + pr["despues"] * max(0, total_reg() - pr["hasta"])
-        if not apagada:
-            prod *= 1 + sum(e["produccion"] for e in etapas[: etapa + 1])
-        else:
-            prod *= 0.5
+        prod *= 1 + sum(e["produccion"] for e in etapas[: etapa + 1])
+        if golpeada(mes):
+            prod *= 1 - cod["fabricas"]
         if mes < arr["provision_meses"]:
             prod *= 1 + arr["provision_bonus"]
-        brotes = [f for f in frentes if f.tipo == "brote"]
-        if etapa >= 3 and not apagada and brotes:
-            parte = prod * sum(b.reg for b in brotes) / max(1, total_reg())
-            for b in brotes:
-                b.div += parte * b.reg / sum(x.reg for x in brotes)
-            prod -= parte
-        if costa.reg > 0:
-            costa.div += prod * 0.85
-            isla.div += prod * 0.15 if isla.reg > 0 else 0
-        elif isla.reg > 0:
-            isla.div += prod
+        # el depósito tiene techo: sin regiones no hay dónde guardar ni con quién tripular.
+        # Las fábricas paran al llegar al techo; lo que ya existe (el arranque) no se tira.
+        techo = sup["deposito_base"] + sup["deposito_por_region"] * total_reg()
+        reserva += max(0.0, min(prod, techo - reserva))
 
-        # ---- la plaga
+        # ---- la plaga (el Código la suspende mientras dura el golpe)
+        plaga_ok = p["plaga"]["activa"] and not golpeada(mes)
         desesp = p["plaga"]["desesperacion"]
         chica = elastica and total_reg() <= desesp["regiones"] and mes >= 3
-        if chica and p["plaga"]["activa"] and not apagada and (proximo_brote is None or proximo_brote - mes > desesp["dias"] / 30):
+        if chica and plaga_ok and (proximo_brote is None or proximo_brote - mes > desesp["dias"] / 30):
             proximo_brote = mes + max(1, round(desesp["dias"] / 30))
-        if proximo_brote is not None and mes >= proximo_brote and not apagada and p["plaga"]["activa"]:
+        if proximo_brote is not None and mes >= proximo_brote and plaga_ok:
             cand = [t for t in tamano if t not in inmunes]
             dueno = rng.choices(cand, [tamano[t] for t in cand])[0]
             div = p["plaga"]["divisiones"] + p["plaga"]["por_etapa"] * etapa + (desesp["extra"] if chica else 0)
             guarn = rng.uniform(*p["plaga"]["guarnicion"]) * calidad_enemiga[dueno]
-            if div * calidad() > guarn * comb["umbral"]:
-                frentes.append(Frente("brote", dueno, div, 1))
+            if div * calidad(mes) > guarn * comb["umbral"]:
+                frentes.append(Frente("brote", dueno, float(div), 1))
                 res.brotes_ok += 1
                 res.tomadas[dueno] += 1
             else:
@@ -269,27 +292,47 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             costa.contacto[rng.choices(cand, [tamano[t] for t in cand])[0]] = 0.3
             lejano_agregado = True
 
+        # ---- el suministro: lo que sobra vuelve al depósito, lo que falta sale de él.
+        # Los brotes solo reciben del depósito con El Enjambre (antes están sueltos).
+        for f in frentes:
+            t = tope(f, mes)
+            if f.div > t:
+                reserva += f.div - t
+                f.div = t
+        for f in [costa] + [g for g in frentes if g.tipo == "brote"] + [isla]:
+            if f.tipo == "brote" and etapa < sup["brotes_desde_etapa"]:
+                continue
+            falta = max(0.0, tope(f, mes) - f.div)
+            dar = min(falta, reserva)
+            f.div += dar
+            reserva -= dar
+        res.reserva_max = max(res.reserva_max, reserva)
+
         # ---- el combate, frente por frente
-        q = calidad()
+        q = calidad(mes)
         expedicion = sum(compromiso(t, False) * tamano[t] for t in coalicion if t not in costa.contacto)
+        # la expedición de la coalición va al frente donde La Red tiene más regiones
+        vivos = [g for g in frentes if g.reg > 0 and g.tipo != "isla"]
+        mayor = max(vivos, key=lambda g: g.reg) if vivos else None
         for f in frentes:
             if f.reg <= 0:
                 continue
             f.edad += 1
             if f.tipo == "costa":
                 enemigo = sum(compromiso(t, True) * tamano[t] * calidad_enemiga[t] for t in f.contacto)
-                enemigo += expedicion
+                enemigo += expedicion if f is mayor else 0.0
             elif f.tipo == "isla":
                 enemigo = comb["isla"] * sum(compromiso(t, True) * tamano[t] * calidad_enemiga[t]
-                                    for t in costa.contacto | {f.dueno: 1})
+                                             for t in costa.contacto | {f.dueno: 1})
             else:
                 base = rng.uniform(*p["plaga"]["guarnicion"]) * calidad_enemiga[f.dueno]
                 reaccion = 0.5 * compromiso(f.dueno, True) * tamano[f.dueno] * calidad_enemiga[f.dueno] \
                     if f.edad >= 2 else 0.0
-                enemigo = base + reaccion
+                enemigo = base + reaccion + (expedicion if f is mayor else 0.0)
             fuerza = f.div * q
             frac_fort = min(1.0, f.fort / f.reg) if f.reg else 0
-            defensa = fuerza * (1 + (arr["fuertes"] - 1) * frac_fort)
+            fuertes = arr["fuertes"] * (arr["escudo"] if mes < arr["escudo_meses"] else 1)
+            defensa = fuerza * (1 + (fuertes - 1) * frac_fort)
             if f.tipo != "isla" and fuerza > comb["umbral"] * max(enemigo, 0.1):
                 gana = _poisson(rng, min(comb["avance_max"], comb["avance"] * (fuerza / max(enemigo, 0.1) - 1)))
                 if gana:
@@ -312,13 +355,12 @@ def jugar(p: dict, rng: random.Random, finales: dict[str, float],
             if f.div <= 0.5:
                 f.reg = 0
             if f.reg <= 0:
-                vivos = [g for g in frentes if g is not f and g.reg > 0]
-                if vivos and f.div > 0:
-                    vivos[0].div += f.div * 0.3
+                reserva += max(0.0, f.div) * 0.3   # algo se escapa por los cables
                 f.div = 0
         frentes = [f for f in frentes if f.reg > 0 or f.tipo in ("isla", "costa")]
         reg = total_reg()
         res.pico = max(res.pico, reg)
+        res.tray.append((reg, round(costa.div), round(reserva), etapa, sum(1 for g in frentes if g.tipo == 'brote'), golpeada(mes)))
         if reg <= 0:
             res.murio = ahora
             break
