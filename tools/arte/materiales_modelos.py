@@ -54,12 +54,22 @@ PROPIEDADES = {
     "pintura": (0.7, 0.0, 1.4),
     "oxido": (0.9, 0.2, 2.0),
     "barro": (0.95, 0.0, 2.2),
+    "vertebra": (0.2, 0.9, 1.6),     # La Red (2026-11-20): costillas de cromo negro con borde de hueso
+}
+
+# Materiales que en una nación no son como en las demás (nación_material). 2026-11-20: el casco de
+# La Red es cromo negro (liso y metálico), no pintura; su "detalle" es hueso (mate, sin metal).
+PROPIEDADES_NACION = {
+    "ZRD_casco": (0.12, 1.0, 0.8),
+    "ZRD_detalle": (0.45, 0.0, 1.2),
 }
 
 
 def propiedades(nombre: str) -> tuple[float, float, float]:
-    clave = nombre.rsplit("_", 1)[-1]
-    return PROPIEDADES.get(clave, (0.6, 0.0, 1.0))
+    partes = nombre.split("_")
+    if "_".join(partes[-2:]) in PROPIEDADES_NACION:
+        return PROPIEDADES_NACION["_".join(partes[-2:])]
+    return PROPIEDADES.get(partes[-1], (0.6, 0.0, 1.0))
 
 
 def _repetida(img: Image.Image) -> Image.Image:
