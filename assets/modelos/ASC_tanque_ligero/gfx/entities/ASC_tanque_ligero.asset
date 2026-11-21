@@ -1,4 +1,4 @@
-# 2026-11-10: modelo animado ASC_tanque_ligero (idle, move, attack)
+# 2026-11-21: modelo animado ASC_tanque_ligero nuevo (idle, move, attack, 24 fps; ASC_terrestres_completo.zip)
 animation = {
     name = "ASC_tanque_ligero_idle_animation"
     file = "gfx/models/units/ASC_tanque_ligero/ASC_tanque_ligero_idle.anim"
@@ -27,7 +27,11 @@ entity = {
     name = "ASC_light_armor_entity"
     pdxmesh = "ASC_tanque_ligero_mesh"
     default_state = "idle"
-    state = { name = "idle" animation = "idle" looping = yes }
-    state = { name = "move" animation = "move" looping = yes }
-    state = { name = "attack" animation = "attack" looping = yes }
+    state = { name = "idle" animation = "idle" looping = yes animation_blend_time = 0.05 }
+    state = { name = "move" animation = "move" looping = yes animation_blend_time = 0.05 }
+    state = { name = "attack" animation = "attack" looping = yes animation_blend_time = 0.05 }
+    state = { name = "defend" animation = "attack" looping = yes animation_blend_time = 0.05 }
+    state = { name = "support_attack" animation = "attack" looping = yes animation_blend_time = 0.05 }
+    state = { name = "retreat" animation = "move" looping = yes animation_blend_time = 0.05 }
+    state = { name = "training" animation = "move" looping = yes animation_blend_time = 0.05 }
 }
