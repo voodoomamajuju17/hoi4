@@ -889,8 +889,9 @@ def render_effects(owner: str, items: list[dict], known,
         if effect == "run":
             name = item["value"]
             # MEGANATIONS_mapa_*: los escribe tools/gen/emitters/mapa.py (2026-10-29);
-            # MN_friccion_* y MN_linea_*: tools/gen/emitters/friccion.py (2026-11-14)
-            if ec.scripted is not None and name not in ec.scripted and not name.startswith(("MEGANATIONS_mapa_", "MEGANATIONS_ficha_", "MEGANATIONS_agentes_", "MN_friccion_", "MN_linea_")):
+            # MN_friccion_* y MN_linea_*: tools/gen/emitters/friccion.py (2026-11-14);
+            # ZRD_red_*: tools/gen/emitters/la_red.py (2026-11-20)
+            if ec.scripted is not None and name not in ec.scripted and not name.startswith(("MEGANATIONS_mapa_", "MEGANATIONS_ficha_", "MEGANATIONS_agentes_", "MN_friccion_", "MN_linea_", "ZRD_red_")):
                 raise SpecError(f"{owner}: run '{name}' no esta en 14_decisions.yaml -> scripted_effects",
                                 where=where)
             block.add(name, True)

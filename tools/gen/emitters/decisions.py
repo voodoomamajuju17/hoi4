@@ -241,7 +241,8 @@ def _emit_dynamic_modifiers(ctx: BuildContext) -> None:
                         and not ctx.vanilla.is_documented("modifiers", key):
                     ctx.warn(f"{mid}: el modificador '{key}' no existe en este juego; se omite.")
                     continue
-                body.add(key, float(var))
+                # 2026-11-20: también con variable (ej. el Golpe del Código de La Red)
+                body.add(key, var if isinstance(var, str) else float(var))
                 continue
             if isinstance(var, (int, float)) and not isinstance(var, bool):
                 body.add(key, float(var))      # valor fijo (modificador con duración)

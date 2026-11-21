@@ -67,7 +67,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  # 2026-11-18: el rediseño de los árboles de foco de las ocho potencias
                  "45_arboles.yaml",
                  # 2026-11-18: la Historieta, la introducción de cada nación en 8 viñetas
-                 "46_historietas.yaml"]
+                 "46_historietas.yaml",
+                 # 2026-11-20: La Red, la Revolución de las Máquinas de 2113
+                 "47_la_red.yaml"]
 
 
 def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -> None:
@@ -189,6 +191,11 @@ def merge_overlay(raw: dict[str, Any], overlay: dict[str, Any], filename: str) -
             raise SpecError("agentes ya existe", where=where)
         raw["agentes"] = overlay["agentes"]
         raw["agentes_grupos"] = overlay.get("agentes_grupos") or {}
+    # 2026-11-20: La Red (la mecánica la escribe tools/gen/emitters/la_red.py)
+    if overlay.get("la_red"):
+        if raw.get("la_red"):
+            raise SpecError("la_red ya existe", where=where)
+        raw["la_red"] = overlay["la_red"]
     if overlay.get("power_wars"):
         if raw.get("power_wars"):
             raise SpecError("power_wars ya existe", where=where)

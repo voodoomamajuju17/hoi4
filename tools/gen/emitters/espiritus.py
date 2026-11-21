@@ -184,7 +184,14 @@ def emit(ctx: BuildContext) -> None:
         tag = n.split("_", 1)[0]
         if n != LIDER and tag in paises and n not in quitados:
             mecanicas.setdefault(tag, []).append(n)
-    mecanicas = {t: sorted(v, key=lambda n: ("satelites" in n, n)) for t, v in mecanicas.items() if len(v) > 1}
+    # 2026-11-20 (La Red: La Carga y La Marea): adelante la que tiene imagen propia, que da el
+    # ícono y el nombre del espíritu junto
+    repo = ctx.spec.root.parent
+
+    def _propia(n: str) -> bool:
+        return (repo / "assets" / n.split("_", 1)[0] / "ideas" / f"{n}.dds").exists()
+    mecanicas = {t: sorted(v, key=lambda n: ("satelites" in n, not _propia(n), n))
+                 for t, v in mecanicas.items() if len(v) > 1}
 
     # -- 2. ideas visibles de cada país, y con qué arranca
     ideas_files = [p for p in archivos if _rel(ctx, p).startswith("common/ideas/")]

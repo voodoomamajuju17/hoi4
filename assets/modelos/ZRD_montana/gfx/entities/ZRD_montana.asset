@@ -1,0 +1,45 @@
+# 2026-11-20: modelo animado ZRD_montana (attack, die, idle, move), de La Red
+animation = {
+    name = "ZRD_montana_attack_animation"
+    file = "gfx/models/units/ZRD_montana/ZRD_montana_attack.anim"
+}
+
+animation = {
+    name = "ZRD_montana_die_animation"
+    file = "gfx/models/units/ZRD_montana/ZRD_montana_die.anim"
+}
+
+animation = {
+    name = "ZRD_montana_idle_animation"
+    file = "gfx/models/units/ZRD_montana/ZRD_montana_idle.anim"
+}
+
+animation = {
+    name = "ZRD_montana_move_animation"
+    file = "gfx/models/units/ZRD_montana/ZRD_montana_move.anim"
+}
+
+pdxmesh = {
+    name = "ZRD_montana_mesh"
+    file = "gfx/models/units/ZRD_montana/ZRD_montana.mesh"
+    scale = 1.0
+    animation = { id = "attack" type = "ZRD_montana_attack_animation" }
+    animation = { id = "die" type = "ZRD_montana_die_animation" }
+    animation = { id = "idle" type = "ZRD_montana_idle_animation" }
+    animation = { id = "move" type = "ZRD_montana_move_animation" }
+}
+
+entity = {
+    name = "ZRD_mountaineers_entity"
+    pdxmesh = "ZRD_montana_mesh"
+    default_state = "idle"
+    state = { name = "attack" animation = "attack" looping = yes animation_blend_time = 0.05 }
+    state = { name = "die" animation = "die" looping = no animation_blend_time = 0.05 }
+    state = { name = "idle" animation = "idle" looping = yes animation_blend_time = 0.05 }
+    state = { name = "move" animation = "move" looping = yes animation_blend_time = 0.05 }
+    state = { name = "defend" animation = "attack" looping = yes animation_blend_time = 0.05 }
+    state = { name = "support_attack" animation = "attack" looping = yes animation_blend_time = 0.05 }
+    state = { name = "retreat" animation = "move" looping = yes animation_blend_time = 0.05 }
+    state = { name = "training" animation = "move" looping = yes animation_blend_time = 0.05 }
+    state = { name = "death" animation = "die" looping = no animation_blend_time = 0.05 }
+}
