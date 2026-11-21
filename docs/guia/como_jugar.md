@@ -168,6 +168,22 @@ suben las stats del líder. No están al empezar: cada una tiene su **llave**.
 La categoría *Las Leyendas* dice quién es cada una y qué pide. Cuando llega, un evento cuenta su
 historia.
 
+### El final de las anarquías
+
+Las anarquías que aguantan tienen su propio final:
+
+- **Caudillos del Amazonas**: cuando terminan su árbol, la selva se cierra **para siempre**. Nadie les
+  puede justificar una guerra ni ellos a nadie, y si igual empieza una, se firma la paz blanca.
+- **Emiratos del Desierto e Indostán**: si los dos terminan su árbol, a los dos les aparece *El Puente de
+  Persia*. El primero que lo termina proclama **Nueva Seleucia**, del Tigris al Ganges: el otro se suma
+  o hay guerra.
+- **Tierras Sin Ley**: con su árbol terminado, una vez y media las regiones del arranque y Kiev o su
+  capital, pueden **formar un Estado**: **La República Última** (defensa y producción) o **Liberculto**
+  (la libertad impuesta por la fuerza), cada una con su árbol y su Leyenda. Al formarse firman la paz con
+  todos, y justificarles una guerra cuesta el doble.
+- **Eurasia**: un año después de terminar su árbol se vuelve **paranoica y atómica**: un árbol nuevo,
+  tres bombas, los **Desoladores** (su unidad única) y una IA que quiere a todos sus vecinos.
+
 ### Las aventuras
 
 Las anarquías, el mundo entero en 2110, Japón y Albión tienen historias de "elegí tu propia

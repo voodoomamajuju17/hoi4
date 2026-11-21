@@ -567,6 +567,30 @@ plans:
 # final o la Hegemonía, mundo.50) hostiga, se prepara y quiere conquistar a la
 # potencia que proclamó su forma final o tiene la Hegemonía.
 # -----------------------------------------------------------------------------
+
+# 2026-11-20: Eurasia, la paranoia atómica (47_anarquias_finales.yaml): IA hiperagresiva
+- id: ZWE_la_horda_atomica
+  country: ZWE
+  lore: 'Paranoica: cree que todos esconden un arma y que el que golpea segundo pierde. Quiere a todos sus vecinos.'
+  enable: {flag: ZWE_atomica}
+  strategies:
+  - {type: conquer, target: ASC, value: 220}
+  - {type: conquer, target: ZAN, value: 220}
+  - {type: conquer, target: NRE, value: 150}
+  - {type: conquer, target: SHD, value: 120}
+  - {type: antagonize, target: ASC, value: 150}
+  - {type: antagonize, target: NRE, value: 100}
+  - {type: prepare_for_war, target: ASC, value: 200}
+  - {type: declare_war, target: ZAN, value: 200}
+  - {type: declare_war, target: ASC, value: 150}
+- id: ZWE_el_primer_golpe
+  country: ZWE
+  lore: 'Con la Doctrina del Primer Golpe declara apenas tiene la justificación.'
+  enable: {flag: ZWE_primer_golpe}
+  strategies:
+  - {type: declare_war, target: ASC, value: 300}
+  - {type: declare_war, target: NRE, value: 200}
+  - {type: declare_war, target: SHD, value: 150}
 coalition:
   src: user_request
   antagonize: 80
