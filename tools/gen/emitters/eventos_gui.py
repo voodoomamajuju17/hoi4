@@ -29,6 +29,11 @@ def parchar(texto: str) -> tuple[str | None, list[str]]:
         p.fijar([v, "midsection", "Description"], TEXTO)
     p.fijar(["EventWindow", "bottom_Window", "event_picture"], {"position": pos(20, 12), "scale": "0.9"})
     p.fijar(["EventWindow", "bottom_Window", "options_grid"], {"position": pos(217, 4)})
+    # 2026-11-21 (captura: "el texto se va de los botones"): la opción del juego es letra 20 en una caja más
+    # ancha que el botón (340 en 300); con letra 16 y el ancho del botón entran dos renglones
+    if "event_option_entry" in texto:   # (si esta versión no la trae, queda como en el juego)
+        p.fijar(["event_option_entry", "Name"], {"font": '"hoi_16mbs"', "maxWidth": "288", "maxHeight": "42",
+                                                 "position": pos(6, 2)})
     return (None if p.faltan else p.texto), p.faltan
 
 

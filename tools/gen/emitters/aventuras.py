@@ -332,9 +332,17 @@ def _events(ctx: BuildContext, tag: str | None, saga: dict, cfg: dict, prefix: s
                {"effect": "flag", "value": _flag(prefix, "en_curso")}]
         eff += list(ch.get("effects") or [])
         eff += _schedule(ns, prefix, tgt(ch["first"]), first_days, cancel_delay)
-        opts.append({"name": ch["pick"], "effects": eff, "ai_chance": 1})
+        # 2026-11-21 (captura: "el texto se va de los botones"): el botón lleva solo el nombre; quién es
+        # cada uno va en el texto del evento, debajo de la situación
+        opts.append({"name": ch.get("name") or ch["pick"], "effects": eff, "ai_chance": 1})
+    desc = dict(intro["desc"])
+    if all(ch.get("name") for ch in saga["characters"]):
+        for lang in ("english", "spanish"):
+            lista = "".join(f"\\n\\n§Y{ch['name'][lang]}§!: {_sin_nombre(ch['pick'][lang], ch['name'][lang])}"
+                            for ch in saga["characters"])
+            desc[lang] = desc[lang] + lista
     out.append({"id": 2, "trigger": "effect", "picture": pic, "src": "user_request", "when": dict(base_req),
-                "title": intro["title"], "desc": intro["desc"], "options": opts})
+                "title": intro["title"], "desc": desc, "options": opts})
     # 3: el corte (si el capítulo agendado no llegó)
     cut = cfg.get("cancel") or {}
     out.append({
@@ -411,3 +419,12 @@ def _arranque(ctx: BuildContext, prefix: str, ns: str, countries: list[str], sta
         {"effect": "flag", "value": _flag(prefix, "empezo")},
         {"effect": "event", "id": f"{ns}.{first}", "days": int(start.get("days", 1))}]}]})
     pulso["effects"].append({"effect": "run", "value": sid})
+
+
+def _sin_nombre(pick: str, nombre: str) -> str:
+    """"Nour al-Hadid, chatarrera del Mar de Vidrio..." -> "chatarrera del Mar de Vidrio..." (el nombre ya va
+    adelante, en amarillo)."""
+    if pick.startswith(nombre):
+        resto = pick[len(nombre):].lstrip(" ,:;-")
+        return resto[:1].upper() + resto[1:] if resto else pick
+    return pick

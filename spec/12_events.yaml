@@ -404,13 +404,17 @@ namespaces:
         title: {english: The Amazon Belongs to the Empire, spanish: El Amazonas es del Imperio}
         desc:
           english: 'Rio has fallen and the Amazon Caudillos are fleeing into the jungle. The largest forest on Earth is ours. The court argues: a sanctuary
-            for Gaia, or the greatest vat the world has ever seen?'
+            for Gaia, or the greatest vat the world has ever seen?\n\nA SANCTUARY FOR GAIA: a new neutral nation in the heart of the forest; +8 BioSteel,
+            -30 saturation, +150 political power, an elite division, and every month the healthy forest feeds the vats.\n\nTHE PRODUCTIVE JUNGLE: the
+            forest will burn for a year, and the Caudillos will want it back.'
           spanish: 'Río cayó y los Caudillos del Amazonas huyen hacia la selva. El bosque más grande de la Tierra es nuestro. La corte discute: ¿un
-            santuario para Gaia, o la cuba más grande que vio el mundo?'
+            santuario para Gaia, o la cuba más grande que vio el mundo?\n\nUN SANTUARIO PARA GAIA: una nación neutral nueva en el corazón de la selva;
+            +8 de Bioacero, -30 de saturación, +150 de poder político, una división de élite y cada mes la selva sana alimenta las cubas.\n\nLA SELVA
+            PRODUCTIVA: la selva va a arder un año, y los Caudillos la van a querer de vuelta.'
         options:
         - name:
-            english: 'A Sanctuary for Gaia (a new neutral nation in the heart of the forest; +8 BioSteel, -30 saturation, +150 political power, an elite division, and every month the healthy forest feeds the vats)'
-            spanish: 'Un Santuario para Gaia (una nación neutral nueva en el corazón de la selva; +8 de Bioacero, -30 de saturación, +150 de poder político, una división de élite y cada mes la selva sana alimenta las cubas)'
+            english: 'A Sanctuary for Gaia.'
+            spanish: 'Un Santuario para Gaia.'
           effects:
           - {effect: flag, value: EFE_conquista_proteger}
           - {effect: add_ideas, value: EFE_santuario_amazonico}
@@ -422,7 +426,7 @@ namespaces:
           - {effect: add_political_power, value: 150}
           - {effect: flag, value: EFE_santuario_pendiente}
           ai_chance: 70   # la IA elige lo que ahora conviene
-        - name: {english: 'The Productive Jungle (the forest will burn for a year, and the Caudillos will want it back).', spanish: 'La Selva Productiva (la selva va a arder un año, y los Caudillos la van a querer de vuelta).'}
+        - name: {english: 'The Productive Jungle.', spanish: 'La Selva Productiva.'}
           effects:
           - {effect: flag, value: EFE_conquista_explotar}
           - {effect: add_ideas, value: EFE_selva_explotada}
