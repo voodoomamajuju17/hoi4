@@ -158,6 +158,18 @@ decisions:
       when: {not: {idea: ZWI_la_culminacion}}
       then: [{effect: add_ideas, value: ZWI_la_culminacion}]
     - {effect: add_political_power, value: 100}
+    - effect: if
+      when: {original_tag: ZWM}
+      then:
+      - {effect: recruit, character: ZWM_sel_basileus}
+      - {effect: promote, character: ZWM_sel_basileus}
+      - {effect: recruit, character: ZWM_sel_strategos}
+      - {effect: recruit, character: ZWM_sel_dioceta}
+      else:
+      - {effect: recruit, character: ZWI_sel_basileus}
+      - {effect: promote, character: ZWI_sel_basileus}
+      - {effect: recruit, character: ZWI_sel_strategos}
+      - {effect: recruit, character: ZWI_sel_dioceta}
 
   categories:
   - id: MN_seleucia_category
@@ -234,6 +246,8 @@ events:
         - name: {english: 'Trust no one. Build the fire.', spanish: 'No confiar en nadie. Construir el fuego.'}
           effects:
           - {effect: flag, value: ZWE_atomica}
+          - {effect: recruit, character: ZWE_atom_min_kurchatova}
+          - {effect: recruit, character: ZWE_atom_gen_sych}
           - {effect: focus_tree, value: meganations_zwe_atomica_focus}
         src: user_request
     meganations_seleucia:
@@ -559,3 +573,320 @@ focus_trees:
             id: ZWE_mod_horda_atomica
           prerequisites:
           - ZWE_a_el_segundo_fuego
+
+# --- Plantel de las naciones nuevas (2026-11-21: "faltaría un pedido para retratos de líderes nuevos y algunos generales/ministros")
+leaders:
+  leader_traits:
+  - id: mn_sel_dioceta
+    name: {english: Dioecetes of the Two Rivers, spanish: Dioceta de los Dos Ríos}
+    modifiers: {industrial_capacity_factory: 0.05, stability_factor: 0.03}
+    src: user_request
+  - id: mn_ult_tesorera
+    name: {english: Treasurer Without a Bank, spanish: Tesorera sin Banco}
+    modifiers: {consumer_goods_factor: -0.03, production_speed_buildings_factor: 0.05}
+    src: user_request
+  - id: mn_lib_diacono
+    name: {english: Deacon of the Market, spanish: Diácono del Mercado}
+    modifiers: {industrial_capacity_factory: 0.05, war_support_factor: 0.03}
+    src: user_request
+  - id: mn_atom_doctora
+    name: {english: Keeper of the Old Reactors, spanish: Guardiana de los Reactores Viejos}
+    modifiers: {research_speed_factor: 0.05, industrial_capacity_factory: 0.03}
+    src: user_request
+  characters:
+  - id: ZWM_sel_basileus
+    country: ZWM
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Basileus Antiochus Rashid-Varma
+        spanish: Basileus Antíoco Rashid-Varma
+    born: 2056
+    lore: Hijo de un camionero del Golfo y de una princesa sin reino de Rajputana. Se hizo coronar con una diadema de chapa
+      dorada y una falange de fusileros; dice que Seleuco hizo lo mismo con menos.
+    roles:
+      country_leader:
+        ideology: warlordism
+        traits: []
+    portrait:
+      path: gfx/leaders/ZWM/ZWM_sel_basileus.dds
+      role: civilian
+      placeholder: false
+  - id: ZWM_sel_strategos
+    country: ZWM
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Strategos Kiran Seleukides
+        spanish: Estratego Kiran Seleukides
+    born: 2068
+    lore: Domador de elefantes de guerra y lector obsesivo de Polibio. Forma a sus milicias en falange porque, dice, funciona
+      igual con fusiles.
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 5
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/ZWM/ZWM_sel_strategos.dds
+      role: army
+      placeholder: false
+  - id: ZWM_sel_dioceta
+    country: ZWM
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Dioecetes Meera Varma
+        spanish: Dioceta Meera Varma
+    born: 2063
+    lore: Administra el agua del Tigris al Ganges con un libro de cuentas en griego, persa e hindi. Nadie sabe leer los tres;
+      ella sí.
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - mn_sel_dioceta
+    portrait:
+      path: gfx/leaders/ZWM/ZWM_sel_dioceta.dds
+      role: civilian
+      placeholder: false
+  - id: ZWI_sel_basileus
+    country: ZWI
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Basileus Antiochus Rashid-Varma
+        spanish: Basileus Antíoco Rashid-Varma
+    born: 2056
+    lore: Hijo de un camionero del Golfo y de una princesa sin reino de Rajputana. Se hizo coronar con una diadema de chapa
+      dorada y una falange de fusileros; dice que Seleuco hizo lo mismo con menos.
+    roles:
+      country_leader:
+        ideology: warlordism
+        traits: []
+    portrait:
+      path: gfx/leaders/ZWI/ZWI_sel_basileus.dds
+      role: civilian
+      placeholder: false
+  - id: ZWI_sel_strategos
+    country: ZWI
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Strategos Kiran Seleukides
+        spanish: Estratego Kiran Seleukides
+    born: 2068
+    lore: Domador de elefantes de guerra y lector obsesivo de Polibio. Forma a sus milicias en falange porque, dice, funciona
+      igual con fusiles.
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 5
+        defense_skill: 3
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/ZWI/ZWI_sel_strategos.dds
+      role: army
+      placeholder: false
+  - id: ZWI_sel_dioceta
+    country: ZWI
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Dioecetes Meera Varma
+        spanish: Dioceta Meera Varma
+    born: 2063
+    lore: Administra el agua del Tigris al Ganges con un libro de cuentas en griego, persa e hindi. Nadie sabe leer los tres;
+      ella sí.
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - mn_sel_dioceta
+    portrait:
+      path: gfx/leaders/ZWI/ZWI_sel_dioceta.dds
+      role: civilian
+      placeholder: false
+  - id: ZAN_ult_consul_brandt
+    country: ZAN
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Consul Elijah Brandt
+        spanish: Cónsul Elijah Brandt
+    born: 2054
+    lore: Maestro rural de Kansas. Lo eligieron por sorteo, como a todos, y se niega a cobrar un sueldo. Gobierna desde la
+      misma escuela donde enseñaba.
+    roles:
+      country_leader:
+        ideology: warlordism
+        traits: []
+    portrait:
+      path: gfx/leaders/ZAN/ZAN_ult_consul_brandt.dds
+      role: civilian
+      placeholder: false
+  - id: ZAN_ult_gen_ybarra
+    country: ZAN
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Captain Dolores Ybarra
+        spanish: Capitana Dolores Ybarra
+    born: 2070
+    lore: Ingeniera de Chihuahua. Convirtió cada silo de la llanura en un búnker y cada búnker en una escuela.
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 3
+        defense_skill: 5
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - engineer_officer
+    portrait:
+      path: gfx/leaders/ZAN/ZAN_ult_gen_ybarra.dds
+      role: army
+      placeholder: false
+  - id: ZAN_ult_min_okafor
+    country: ZAN
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Treasurer Mara Okafor
+        spanish: Tesorera Mara Okafor
+    born: 2066
+    lore: 'Lleva las cuentas de una república sin banco: graneros, horas de trabajo y favores. Las cuentas cierran.'
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - mn_ult_tesorera
+    portrait:
+      path: gfx/leaders/ZAN/ZAN_ult_min_okafor.dds
+      role: civilian
+      placeholder: false
+  - id: ZAN_lib_profeta_rand
+    country: ZAN
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Prophet-President Lev Rand
+        spanish: Profeta-Presidente Lev Rand
+    born: 2059
+    lore: 'Exprogramador que se volvió predicador en un tranvía de Kiev. Sus sermones duran cuatro horas y terminan siempre
+      igual: la libertad no se pide.'
+    roles:
+      country_leader:
+        ideology: warlordism
+        traits: []
+    portrait:
+      path: gfx/leaders/ZAN/ZAN_lib_profeta_rand.dds
+      role: civilian
+      placeholder: false
+  - id: ZAN_lib_gen_mises
+    country: ZAN
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Colonel Bohdan Mises
+        spanish: Coronel Bohdan Mises
+    born: 2067
+    lore: 'Excampeón de boxeo de Járkov. Manda la primera ola de cada cruzada y nunca pide refuerzos: los refuerzos vienen
+      solos.'
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 5
+        defense_skill: 2
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - offensive_doctrine
+    portrait:
+      path: gfx/leaders/ZAN/ZAN_lib_gen_mises.dds
+      role: army
+      placeholder: false
+  - id: ZAN_lib_min_rothbard
+    country: ZAN
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Deacon Ivan Rothbard
+        spanish: Diácono Ivan Rothbard
+    born: 2071
+    lore: Diácono del Mercado. Vende indulgencias en forma de bonos de guerra y las fábricas de drones se pagan solas.
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - mn_lib_diacono
+    portrait:
+      path: gfx/leaders/ZAN/ZAN_lib_min_rothbard.dds
+      role: civilian
+      placeholder: false
+  - id: ZWE_atom_min_kurchatova
+    country: ZWE
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Doctor Ilona Kurchatova
+        spanish: Doctora Ilona Kurchatova
+    born: 2058
+    lore: La única que sabe prender los reactores viejos. Duerme al lado del núcleo y dice que el zumbido la tranquiliza.
+    roles:
+      advisor:
+        slot: political_advisor
+        cost: 150
+        traits:
+        - mn_atom_doctora
+    portrait:
+      path: gfx/leaders/ZWE/ZWE_atom_min_kurchatova.dds
+      role: civilian
+      placeholder: false
+  - id: ZWE_atom_gen_sych
+    country: ZWE
+    src: user_request
+    recruit_in_history: false
+    name:
+      regnal:
+        english: Major Pavlo Sych
+        spanish: Mayor Pavlo Sych
+    born: 2065
+    lore: Manda a los Desoladores. Nunca se saca la máscara; algunos dicen que ya no puede.
+    roles:
+      corps_commander:
+        skill: 4
+        attack_skill: 5
+        defense_skill: 4
+        planning_skill: 3
+        logistics_skill: 3
+        traits:
+        - organizer
+    portrait:
+      path: gfx/leaders/ZWE/ZWE_atom_gen_sych.dds
+      role: army
+      placeholder: false
