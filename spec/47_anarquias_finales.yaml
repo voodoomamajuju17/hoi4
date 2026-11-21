@@ -21,6 +21,10 @@ extend_focuses:
     reward_append:
     - {effect: leave_faction}
     - {effect: dynamic_modifier, id: ZWB_selva_cerrada}
+  # 4. Eurasia: un año después de terminar su árbol, si sigue viva, la paranoia atómica
+  ZWE_foco_7_the_eternal_horde:
+    reward_append:
+    - {effect: event, id: meganations_zwe_atomica.1, days: 365}
   # 2. al terminar el árbol, los dos vuelven a mirar el suyo (aparece El Puente de Persia)
   ZWM_foco_7_the_caliphate_of_the_sands:
     reward_append:
@@ -116,6 +120,31 @@ decisions:
       spanish: 'Falange y elefante, desierto y monzón: los que nunca tuvieron agua y los que tienen demasiada, bajo una misma diadema.'
     modifiers: {army_defence_factor: 0.1, army_attack_factor: 0.05, recruitable_population_factor: 0.2, stability_factor: 0.1}
 
+  - {id: ZWE_mod_paranoia, country: ZWE, name: {english: 'The Atomic Paranoia', spanish: 'La Paranoia Atómica'},
+     desc: {english: 'Everyone is an enemy until proven otherwise. Nobody is ever proven otherwise.', spanish: 'Todos son enemigos hasta que se demuestre lo contrario. Nunca se demuestra.'},
+     modifiers: {stability_factor: 0.1, war_support_factor: 0.15}}
+  - {id: ZWE_mod_espias, country: ZWE, name: {english: 'Everyone Is a Spy', spanish: 'Todos son Espías'},
+     desc: {english: 'Denounce your neighbour.', spanish: 'Denunciá a tu vecino.'},
+     modifiers: {political_power_gain: 0.15, stability_factor: 0.05}}
+  - {id: ZWE_mod_leva_atomica, country: ZWE, name: {english: 'The Atomic Levy', spanish: 'La Leva Atómica'},
+     desc: {english: 'Be many.', spanish: 'Sé muchos.'},
+     modifiers: {recruitable_population_factor: 0.25}}
+  - {id: ZWE_mod_bajo_tierra, country: ZWE, name: {english: 'Underground Factories', spanish: 'Fábricas Bajo Tierra'},
+     desc: {english: 'Out of sight, out of the bombs.', spanish: 'Lejos de la vista, lejos de las bombas.'},
+     modifiers: {industrial_capacity_factory: 0.1, production_speed_buildings_factor: 0.1}}
+  - {id: ZWE_mod_culto_del_atomo, country: ZWE, name: {english: 'The Cult of the Atom', spanish: 'El Culto del Átomo'},
+     desc: {english: 'The steppe has a new god, and it glows.', spanish: 'La estepa tiene un dios nuevo, y brilla.'},
+     modifiers: {war_support_factor: 0.1, research_speed_factor: 0.05}}
+  - {id: ZWE_mod_refugios, country: ZWE, name: {english: 'Shelter Cities', spanish: 'Ciudades Refugio'},
+     desc: {english: 'A city under every city.', spanish: 'Una ciudad debajo de cada ciudad.'},
+     modifiers: {army_defence_factor: 0.1, max_dig_in: 2}}
+  - {id: ZWE_mod_primer_golpe, country: ZWE, name: {english: 'The First-Strike Doctrine', spanish: 'La Doctrina del Primer Golpe'},
+     desc: {english: 'Whoever strikes second does not strike at all.', spanish: 'El que golpea segundo no golpea nunca.'},
+     modifiers: {army_attack_factor: 0.1, justify_war_goal_time: -0.5, breakthrough_factor: 0.1}}
+  - {id: ZWE_mod_horda_atomica, country: ZWE, name: {english: 'The Atomic Horde', spanish: 'La Horda Atómica'},
+     desc: {english: 'The steppe marches west under a mushroom cloud.', spanish: 'La estepa marcha hacia el oeste bajo un hongo atómico.'},
+     modifiers: {army_attack_factor: 0.1, recruitable_population_factor: 0.15, industrial_capacity_factory: 0.1, production_speed_buildings_factor: 0.1}}
+
   scripted_effects:
   - id: MN_formar_nueva_seleucia
     effects:
@@ -187,6 +216,26 @@ decisions:
 
 events:
   namespaces:
+    meganations_zwe_atomica:
+      country: ZWE
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: 'The Ataman Goes Underground', spanish: 'El Atamán Baja al Búnker'}
+        desc:
+          english: 'A year has passed since the Horde was proclaimed, and nobody has managed to break it. The Ataman does not believe it.
+            He believes the Commune hides a weapon, Rome hides a weapon, everyone hides a weapon. So will we: the old reactors of the
+            plains still hum, and the steppe is going to learn the dirty fire of the earth.'
+          spanish: 'Pasó un año desde que se proclamó la Horda, y nadie pudo quebrarla. El Atamán no se lo cree. Cree que la Comuna esconde
+            un arma, que Roma esconde un arma, que todos esconden un arma. Nosotros también: los viejos reactores de la llanura todavía
+            zumban, y la estepa va a aprender el fuego sucio de la tierra.'
+        options:
+        - name: {english: 'Trust no one. Build the fire.', spanish: 'No confiar en nadie. Construir el fuego.'}
+          effects:
+          - {effect: flag, value: ZWE_atomica}
+          - {effect: focus_tree, value: meganations_zwe_atomica_focus}
+        src: user_request
     meganations_seleucia:
       country: null
       events:
@@ -225,3 +274,288 @@ events:
           ai_chance: 0
         src: user_request
 
+
+# --- 4. Eurasia: la paranoia atómica (un año después de terminar su árbol) ----------------
+focus_trees:
+  trees:
+    ZWE_ATOMICA:
+      id: meganations_zwe_atomica_focus
+      default: false
+      shared: true
+      src: user_request
+      branches:
+      - id: la_paranoia
+        name:
+          english: The Atomic Paranoia
+          spanish: La Paranoia Atómica
+        focuses:
+        - id: ZWE_a_el_bunker_del_ataman
+          name:
+            english: The Ataman's Bunker
+            spanish: El Búnker del Atamán
+          desc:
+            english: The Ataman moves into a bunker under Kharkiv and stops trusting anyone who lives above ground.
+            spanish: El Atamán se muda a un búnker bajo Járkov y deja de confiar en cualquiera que viva arriba.
+          days: 70
+          icon: GFX_goal_generic_defence
+          reward:
+          - effect: dynamic_modifier
+            id: ZWE_mod_paranoia
+          - effect: add_political_power
+            value: 50
+        - id: ZWE_a_los_reactores_olvidados
+          name:
+            english: The Forgotten Reactors
+            spanish: Los Reactores Olvidados
+          desc:
+            english: The old Soviet reactors on the plains still hum. Nobody remembers how to run them. We will learn.
+            spanish: Los viejos reactores soviéticos de la llanura todavía zumban. Nadie se acuerda cómo manejarlos. Vamos
+              a aprender.
+          days: 70
+          icon: GFX_goal_generic_secret_weapon
+          reward:
+          - effect: tech
+            value: atomic_research
+          - effect: tech
+            value: nuclear_reactor
+          - effect: build
+            building: nuclear_reactor
+            level: 1
+            optional: true
+          prerequisites:
+          - ZWE_a_el_bunker_del_ataman
+        - id: ZWE_a_uranio_de_los_urales
+          name:
+            english: Uranium of the Urals
+            spanish: Uranio de los Urales
+          desc:
+            english: The mines of the east give metal, and something that glows.
+            spanish: Las minas del este dan metal, y algo que brilla.
+          days: 70
+          icon: GFX_goal_generic_construct_infrastructure
+          reward:
+          - effect: add_resource
+            resource: chromium
+            amount: 24
+          - effect: add_resource
+            resource: tungsten
+            amount: 16
+          prerequisites:
+          - ZWE_a_el_bunker_del_ataman
+        - id: ZWE_a_todos_son_espias
+          name:
+            english: Everyone Is a Spy
+            spanish: Todos son Espías
+          desc:
+            english: The Commune's agents, Rome's agents, the neighbour's agents. Everyone. Report them.
+            spanish: Los agentes de la Comuna, los de Roma, los del vecino. Todos. Denuncialos.
+          days: 70
+          icon: GFX_goal_generic_political_pressure
+          reward:
+          - effect: dynamic_modifier
+            id: ZWE_mod_espias
+          prerequisites:
+          - ZWE_a_los_reactores_olvidados
+        - id: ZWE_a_leva_del_invierno_atomico
+          name:
+            english: The Levy of the Atomic Winter
+            spanish: La Leva del Invierno Atómico
+          desc:
+            english: When the bomb falls, only the many survive. Be many.
+            spanish: Cuando caiga la bomba, solo sobreviven los muchos. Sé muchos.
+          days: 70
+          icon: GFX_goal_generic_army_doctrines
+          reward:
+          - effect: add_manpower
+            value: 400000
+          - effect: dynamic_modifier
+            id: ZWE_mod_leva_atomica
+          prerequisites:
+          - ZWE_a_uranio_de_los_urales
+        - id: ZWE_a_fabricas_bajo_tierra
+          name:
+            english: Underground Factories
+            spanish: Fábricas Bajo Tierra
+          desc:
+            english: If they cannot see the factory, they cannot bomb it.
+            spanish: Si no ven la fábrica, no la pueden bombardear.
+          days: 105
+          icon: GFX_goal_generic_production
+          reward:
+          - effect: build
+            building: arms_factory
+            level: 3
+          - effect: dynamic_modifier
+            id: ZWE_mod_bajo_tierra
+          prerequisites:
+          - ZWE_a_todos_son_espias
+        - id: ZWE_a_el_culto_del_atomo
+          name:
+            english: The Cult of the Atom
+            spanish: El Culto del Átomo
+          desc:
+            english: Priests in lead robes bless the reactors. The steppe has a new god, and it glows.
+            spanish: Sacerdotes con túnicas de plomo bendicen los reactores. La estepa tiene un dios nuevo, y brilla.
+          days: 70
+          icon: GFX_goal_generic_propaganda
+          reward:
+          - effect: add_war_support
+            value: 0.15
+          - effect: dynamic_modifier
+            id: ZWE_mod_culto_del_atomo
+          prerequisites:
+          - ZWE_a_todos_son_espias
+        - id: ZWE_a_los_desoladores
+          name:
+            english: The Desolators
+            spanish: Los Desoladores
+          desc:
+            english: Volunteers in lead armour, carrying a cannon that poisons the ground. Where they pass, nothing grows
+              for a hundred years.
+            spanish: Voluntarios con armadura de plomo y un cañón que envenena la tierra. Por donde pasan, no crece nada en
+              cien años.
+          days: 105
+          icon: GFX_goal_generic_secret_weapon
+          reward:
+          - effect: tech
+            value: ZWE_desolador
+          - effect: division_template
+            name: Desoladores
+            regiments:
+            - desolador
+            - desolador
+            - desolador
+            - desolador
+            - infantry
+            - infantry
+          - effect: create_units
+            template: Desoladores
+            count: 3
+          prerequisites:
+          - ZWE_a_fabricas_bajo_tierra
+        - id: ZWE_a_trenes_blindados_del_reactor
+          name:
+            english: Armoured Reactor Trains
+            spanish: Trenes Blindados del Reactor
+          desc:
+            english: A reactor on rails powers a factory on rails.
+            spanish: Un reactor sobre rieles alimenta una fábrica sobre rieles.
+          days: 70
+          icon: GFX_goal_generic_production
+          reward:
+          - effect: build
+            building: industrial_complex
+            level: 2
+          - effect: build
+            building: arms_factory
+            level: 1
+          prerequisites:
+          - ZWE_a_fabricas_bajo_tierra
+        - id: ZWE_a_el_primer_fuego
+          name:
+            english: The First Fire
+            spanish: El Primer Fuego
+          desc:
+            english: The Commune hides the fire of the stars. We have the dirty fire of the earth, and it works.
+            spanish: La Comuna esconde el fuego de las estrellas. Nosotros tenemos el fuego sucio de la tierra, y funciona.
+          days: 140
+          icon: GFX_goal_generic_secret_weapon
+          reward:
+          - effect: nukes
+            value: 1
+          prerequisites:
+          - ZWE_a_los_desoladores
+          - ZWE_a_el_culto_del_atomo
+        - id: ZWE_a_ciudades_refugio
+          name:
+            english: Shelter Cities
+            spanish: Ciudades Refugio
+          desc:
+            english: A city under every city.
+            spanish: Una ciudad debajo de cada ciudad.
+          days: 70
+          icon: GFX_goal_generic_defence
+          reward:
+          - effect: fortify
+            level: 2
+          - effect: dynamic_modifier
+            id: ZWE_mod_refugios
+          prerequisites:
+          - ZWE_a_el_culto_del_atomo
+        - id: ZWE_a_doctrina_del_primer_golpe
+          name:
+            english: The First-Strike Doctrine
+            spanish: La Doctrina del Primer Golpe
+          desc:
+            english: Whoever strikes second does not strike at all.
+            spanish: El que golpea segundo no golpea nunca.
+          days: 70
+          icon: GFX_goal_generic_attack
+          reward:
+          - effect: dynamic_modifier
+            id: ZWE_mod_primer_golpe
+          - effect: flag
+            value: ZWE_primer_golpe
+          - effect: if
+            when:
+              country_exists: ASC
+            then:
+            - effect: wargoal
+              target: ASC
+              type: take_state
+          - effect: if
+            when:
+              country_exists: ZAN
+            then:
+            - effect: wargoal
+              target: ZAN
+              type: take_state
+          prerequisites:
+          - ZWE_a_el_primer_fuego
+        - id: ZWE_a_mas_uranio
+          name:
+            english: More Uranium
+            spanish: Más Uranio
+          desc:
+            english: There is never enough.
+            spanish: Nunca alcanza.
+          days: 70
+          icon: GFX_goal_generic_construct_infrastructure
+          reward:
+          - effect: add_resource
+            resource: chromium
+            amount: 16
+          - effect: add_resource
+            resource: steel
+            amount: 24
+          prerequisites:
+          - ZWE_a_ciudades_refugio
+        - id: ZWE_a_el_segundo_fuego
+          name:
+            english: The Second Fire
+            spanish: El Segundo Fuego
+          desc:
+            english: Two more. Just in case.
+            spanish: Dos más. Por las dudas.
+          days: 140
+          icon: GFX_goal_generic_secret_weapon
+          reward:
+          - effect: nukes
+            value: 2
+          prerequisites:
+          - ZWE_a_doctrina_del_primer_golpe
+          - ZWE_a_mas_uranio
+        - id: ZWE_a_la_horda_atomica
+          name:
+            english: The Atomic Horde
+            spanish: La Horda Atómica
+          desc:
+            english: The steppe marches west under a mushroom cloud.
+            spanish: La estepa marcha hacia el oeste bajo un hongo atómico.
+          days: 140
+          icon: GFX_goal_generic_attack
+          reward:
+          - effect: dynamic_modifier
+            id: ZWE_mod_horda_atomica
+          prerequisites:
+          - ZWE_a_el_segundo_fuego

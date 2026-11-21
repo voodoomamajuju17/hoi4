@@ -3541,6 +3541,28 @@ def test_anarquias_finales() -> None:
         check("Tierras Sin Ley: al formarse, paz con todos, justificarles cuesta el doble y su arbol nuevo",
               "every_enemy_country = { white_peace = ROOT }" in se[k:k + 800] and "ZAN_mod_estado" in se[k:k + 800]
               and "meganations_zan_estado_focus" in se[k:k + 800])
+        # Eurasia
+        zwe = " ".join(next((mod / "common/national_focus").glob("ZWE_focus*.txt")).read_text(encoding="utf-8-sig").split())
+        i = zwe.find("id = ZWE_foco_7_the_eternal_horde")
+        check("Eurasia: un anio despues de terminar su arbol llega la paranoia atomica",
+              "country_event = { id = meganations_zwe_atomica.1 days = 365 }" in zwe[i:i + 4000])
+        atom = " ".join((mod / "common/national_focus/ZWE_ATOMICA_focus.txt").read_text(encoding="utf-8-sig").split())
+        check("Eurasia: un solo camino de 15 focos, con 3 bombas (1 + 2)",
+              atom.count("id = ZWE_a_") == 15 and "add_nuclear_bombs = 1" in atom and "add_nuclear_bombs = 2" in atom)
+        check("Eurasia: Los Desoladores dan la tecnologia y 3 divisiones",
+              "ZWE_desolador = 1" in atom and atom.count('division_template = "Desoladores"') + atom.count("division_template = Desoladores") >= 3)
+        uni = (mod / "common/units/meganations_desolador.txt").read_text(encoding="utf-8-sig")
+        tec = (mod / "common/technologies/meganations_desolador.txt").read_text(encoding="utf-8-sig")
+        gfx = (mod / "interface/meganations_desolador.gfx").read_text(encoding="utf-8-sig")
+        check("Desolador: batallon nuevo (no pisa ninguno), solo por la tecnologia de Eurasia, con todos sus iconos",
+              "desolador = {" in uni and "active = no" in uni and "enable_subunits = { desolador }" in tec
+              and "allow = { always = no }" in tec and all(f'"GFX_{p}_desolador_icon_{k}"' in gfx
+                                                          for p in ("unit", "unit_hq") for k in ("medium", "medium_white", "small")))
+        ai = " ".join("".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/ai_strategy_plans").glob("*.txt")).split()) \
+            if (mod / "common/ai_strategy_plans").exists() else ""
+        ai += " ".join("".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/ai_strategy").glob("*.txt")).split())
+        check("Eurasia: IA hiperagresiva con la paranoia (conquistar y declarar a sus vecinos)",
+              "has_country_flag = ZWE_atomica" in ai and "has_country_flag = ZWE_primer_golpe" in ai)
 
 
 def test_historietas() -> None:
