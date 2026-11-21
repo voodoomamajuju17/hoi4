@@ -169,6 +169,14 @@ MEDIOS: dict[str, tuple[str, str]] = {
     "ZSG": ("HERBARIUM SHEET: a pressed-plant herbarium sheet where real pressed leaves, petals and moss form the "
             "person's portrait, with a small handwritten label (illegible) and tape strips.",
             "each sheet with different plants"),
+    # 2026-11-21: La Red (2113). Sus 13 retratos ya llegaron con el lote de La Red (marcados en
+    # arte/retratos_medios_llegados.txt); el medio queda para cualquier personaje nuevo.
+    "ZRD": ("CRT SCREEN: a photograph of an old, slightly curved CRT monitor in a cold concrete silo, frost on the "
+            "bezel, showing the machine's self-portrait as a glowing face made of scan lines, dithering and "
+            "flickering cyan-and-white phosphor, a faint burned-in ghost of an older image, a cable running off the "
+            "edge. Cold, quiet, inhuman.",
+            "each screen a different machine face (lens cluster, wireframe skull, frost pattern, swarm of points) "
+            "and a different monitor (cracked, taped, half buried in ice, wired to others)"),
     "JUNTA": ("STAINED GLASS: a stained-glass window of a black-sun cult chapel, the person in leaded glass, black, "
               "bone white and eclipse orange, light shining through.", "each window a different pose"),
 }

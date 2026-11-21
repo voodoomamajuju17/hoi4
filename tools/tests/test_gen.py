@@ -76,6 +76,10 @@ _FLOW = {"if", "else", "else_if", "limit", "hidden_effect", "AND", "OR", "NOT", 
          "effect_tooltip", "custom_trigger_tooltip", "hidden_trigger", "count_triggers", "modifier"}
 
 
+# Efectos con guion que el mod llama desde un state (2026-11-21: La Red toma regiones)
+_SCRIPTED_STATE = {"ZRD_red_tomar_region"}
+
+
 def _scope_errors(mod: Path) -> list[str]:
     """Efectos y condiciones de país usados en un state, o al revés."""
     import re as _re
@@ -108,7 +112,14 @@ def _scope_errors(mod: Path) -> list[str]:
         for f in sorted((mod / sub).glob("*.txt")):
             text = f.read_text(encoding="utf-8-sig", errors="replace")
             if "ARCHIVO GENERADO" in text[:600]:
-                walk(pdx.parse(text), ["country"], "", f"{sub}/{f.name}")
+                arbol = pdx.parse(text)
+                if sub.endswith("scripted_effects"):
+                    # los efectos con guion que se llaman desde un state arrancan en state
+                    for k, v in arbol.entries:
+                        if str(k) in _SCRIPTED_STATE and isinstance(v, pdx.Block):
+                            walk(v, ["state"], str(k), f"{sub}/{f.name}")
+                    arbol = pdx.Block([(k, v) for k, v in arbol.entries if str(k) not in _SCRIPTED_STATE])
+                walk(arbol, ["country"], "", f"{sub}/{f.name}")
     return errors
 
 
@@ -177,7 +188,7 @@ def test_pdx_roundtrip() -> None:
 def test_spec_loads() -> None:
     section("spec")
     spec = specload.load(REPO_ROOT / "spec")
-    check("36 paises (8 meganaciones + 21 satelites + 5 de la Anarquia + el Santuario de Gaia + el Shogunato de los Astilleros)", len(spec.countries) == 36, f"hay {len(spec.countries)}")
+    check("37 paises (8 meganaciones + 21 satelites + 5 de la Anarquia + el Santuario de Gaia + el Shogunato de los Astilleros + La Red)", len(spec.countries) == 37, f"hay {len(spec.countries)}")
     check("todos los TAG de 3 letras", all(len(c.tag) == 3 for c in spec.countries))
     tags = {c.tag for c in spec.countries}
     for expected in ("EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "PTA", "YYG"):
@@ -380,8 +391,8 @@ def test_full_build() -> None:
               and "ZJP = { color = rgb { 236 197 212 } color_ui = rgb { 150 24 48 } }" in " ".join(colors.split()), colors[:300])
         import re as _re_mod
         _bloques = _re_mod.findall(r"(\w+) = \{\s*color = rgb \{ ([^}]*) \}\s*color_ui = rgb \{ ([^}]*) \}", colors)
-        check("mapa: solo tres colores de mapa distintos de su color de identidad (36 color_ui intactos)",
-              len(_bloques) == 36 and sorted(t for t, c, u in _bloques if c != u) == ["HSN", "SHD", "ZJP"], str(_bloques[:3]))
+        check("mapa: solo tres colores de mapa distintos de su color de identidad, mas La Red oscura en el mapa (37 color_ui intactos)",
+              len(_bloques) == 37 and sorted(t for t, c, u in _bloques if c != u) == ["HSN", "SHD", "ZJP", "ZRD"], str(_bloques[:3]))
         defs = (mod / "common/defines/00_meganations_defines.lua").read_text()
         check("mapa: sin tocar brillo ni saturación del juego (prueba B usa los valores de A)",
               "COUNTRY_COLOR" not in defs, defs)
@@ -1666,7 +1677,7 @@ def test_leaders_and_ideologies() -> None:
         check("grupo neutral renombrado", 'neutrality:0 "Mandato Trascendente"' in ideos, ideos[:400])
         check("sin descripciones placeholder", "Placeholder" not in ideos)
         types, groups = spec.ideology_index()
-        check("17 sub-ideologias", len(types) == 17, str(len(types)))
+        check("18 sub-ideologias (con el Consenso de las Maquinas de La Red)", len(types) == 18, str(len(types)))
         for g in groups:
             check(f"{g}: dos meganaciones", sum(
                 1 for c in spec.countries if c.is_major and c.ideology_group == g) == 2)
@@ -1935,8 +1946,8 @@ def test_asc() -> None:
         red = dm.get("ASC_mod_red_de_computo")
         check("espiritu vivo: el valor es una variable", pdx.text(red.get("research_speed_factor")) == "ASC_ef_investigacion")
         check("espiritu vivo: siempre activo", pdx.text(red.get("enable").get("always")) == "yes")
-        check("377 modificadores dinamicos (2 de la Linea, 2026-11-14; sin los Anios Inciertos, 2026-11-07; 8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
-              len([k for k, _ in dm.entries if not str(k).startswith(("FCU_socia_", "ZWB_selva", "MEGANATIONS_seleucia", "ZAN_mod_", "ZWE_mod_"))]) == 377 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
+        check("379 modificadores dinamicos (la Emergencia y la Coalicion Humana de La Red, 2026-11-21, sin contar los ZRD_; 2 de la Linea, 2026-11-14; sin los Anios Inciertos, 2026-11-07; 8 de El Despertar, 2 de las aventuras de Albión y 9 de las de Japón, 2026-11-07; 8 del Directorio, Siberia, el Gigante y el Sucesor, 2026-11-06; 9 de las metas de Japon y Albion, 2026-11-02; 24 de las Tres Casas de Japon y 35 de Gran Bretana, 2026-11-01; los 2 de los Anios Inciertos, 2026-11-01; la fuga de cerebros de la beca y la insurgencia armada del arsenal vendido, 2026-10-29; 23 del Shogunato de los Astilleros y la selva que arde del EFE, 2026-10-28; 6 de Albion, 2026-10-27; con el fervor rebelde, 2026-10-25, los dispersos del ZAN, 2026-10-24, con la receta de las ocho, 2026-10-17, y las mecanicas v4): 16 espiritus vivos (la mecanica y los satelites de cada potencia), 16 del Bioacero v3, 7 de Africa, 3 de la Leva Forzosa, 10 de la segunda etapa, el Mandato Compartido, 17 del lote diversion, 30 de capitales tomadas, 4 de repoblacion, 4 del lider, 12 de la junta, 10 de las rebeliones, 2 del NAS en el aire y 10 de las mecanicas v4",
+              len([k for k, _ in dm.entries if not str(k).startswith(("FCU_socia_", "ZWB_selva", "MEGANATIONS_seleucia", "ZAN_mod_", "ZWE_mod_", "ZRD_"))]) == 379 and dm.get("MEGANATIONS_hegemonia") is not None and dm.get("MEGANATIONS_leva_forzosa_3") is not None, str([k for k, _ in dm.entries]))
         sat = dm.get("EFE_mod_satelites")
         check("satelites: el espiritu vivo da poder politico segun la lealtad", pdx.text(sat.get("political_power_gain")) == "EFE_ef_sat_pp")
         se_all = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text().split())
@@ -2246,12 +2257,13 @@ def test_ai() -> None:
         state_scopes = {"capital_scope", "random_owned_controlled_state", "every_owned_state", "random_owned_state"}
         loose = []
 
-        def _walk(block, parent, where):
+        def _walk(block, parent, where, en_state=False):
+            # en_state: algún bloque de arriba es un state por número (543 = { if = { ... create_unit } })
             for key, value in block.entries:
-                if key == "create_unit" and parent not in state_scopes:
+                if key == "create_unit" and parent not in state_scopes and not en_state:
                     loose.append(f"{where}: dentro de {parent}")
                 if isinstance(value, pdx.Block):
-                    _walk(value, key, where)
+                    _walk(value, key, where, en_state or str(key).isdigit())
         for sub in ("common/national_focus", "common/scripted_effects", "common/decisions", "events"):
             for f in sorted((mod / sub).glob("*.txt")):
                 _walk(pdx.parse(f.read_text(encoding="utf-8-sig")), None, f.name)
@@ -4407,7 +4419,7 @@ def test_vanilla_validation() -> None:
         docs = van / "documentation"
         docs.mkdir()
         (docs / "triggers_documentation.md").write_text("### has_resources_amount\n### count_triggers\n### any_controlled_state\n### is_in_faction\n### is_faction_leader\n### country_exists\n### check_variable\n### has_stability\n### original_tag\n### is_owned_by\n"
-            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### num_of_controlled_states\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_country_leader_with_trait\n### has_game_rule\n### has_trait\n### has_dlc\n")
+            "### has_country_flag\n### has_war\n### has_idea\n### has_completed_focus\n### is_core_of\n### has_state_flag\n### controls_state\n### has_war_with\n### any_neighbor_state\n### is_coastal\n### has_dynamic_modifier\n### has_army_size\n### tag\n### has_capitulated\n### num_of_factories\n### num_of_controlled_states\n### has_tech\n### has_manpower\n### has_war_support\n### has_equipment\n### date\n### exists\n### has_wargoal_against\n### is_controlled_by\n### is_in_faction_with\n### surrender_progress\n### is_ai\n### free_building_slots\n### is_subject_of\n### is_subject\n### has_civil_war\n### has_global_flag\n### is_major\n### owns_state\n### has_guaranteed\n### has_intelligence_agency\n### is_neighbor_of\n### any_owned_state\n### has_navy_size\n### has_deployed_air_force_size\n### has_country_leader\n### has_country_leader_with_trait\n### has_game_rule\n### has_trait\n### has_dlc\n### has_event_target\n### has_template\n")
         (docs / "effects_documentation.md").write_text(
             "add_political_power hidden_effect random_controlled_state save_global_event_target_as add_stability add_war_support army_experience "
             "add_manpower add_ideas swap_ideas set_autonomy country_event annex_country "
@@ -4423,7 +4435,9 @@ def test_vanilla_validation() -> None:
             # 2026-11-03: agentes de inteligencia con retrato propio
             "create_operative_leader "
             # 2026-11-14: puntos de fricción y el Tratado de la Línea
-            "remove_opinion_modifier add_state_claim custom_effect_tooltip set_global_flag clr_global_flag\n"
+            "remove_opinion_modifier add_state_claim custom_effect_tooltip set_global_flag clr_global_flag "
+            # 2026-11-21: La Red
+            "capital_scope force_update_dynamic_modifier multiply_temp_variable random_state set_popularities subtract_from_temp_variable\n"
         )
         (docs / "modifiers_documentation.md").write_text("\n".join(sorted(mods)))
         (van / "interface").mkdir(exist_ok=True)
@@ -5772,8 +5786,8 @@ def test_simulador() -> None:
     raw = specload.load(REPO_ROOT / "spec").raw
     sup = sim.cargar_supuestos()
     pares = sim.pares_excluyentes(raw)
-    check("simulador: encuentra los pares de focos excluyentes de las ocho (y del Shogunato y Albion)",
-          {p["tag"] for p in pares} == {"APF", "ASC", "EFE", "FCU", "HSN", "NAS", "NRE", "SHD", "ZAL", "ZJP"},
+    check("simulador: encuentra los pares de focos excluyentes de las ocho (y del Shogunato, Albion y La Red)",
+          {p["tag"] for p in pares} == {"APF", "ASC", "EFE", "FCU", "HSN", "NAS", "NRE", "SHD", "ZAL", "ZJP", "ZRD"},
           sorted({p["tag"] for p in pares}))
     check("simulador: ASC_computo arranca con el start de 06_mechanics",
           sim.valores_iniciales(raw).get("ASC_computo") == 30.0)
