@@ -1,0 +1,601 @@
+# =============================================================================
+# 3. Tierras Sin Ley: Formar un Estado (2026-11-20)
+#    Terminado su árbol, con 1,5 veces las regiones del arranque y con Kiev o su capital original,
+#    la decisión Formar un Estado abre un evento: La República Última (capital original), Liberculto
+#    (Kiev) o nada (la decisión queda). Las dos: paz con todos, justificarles cuesta el doble, siguen
+#    con los bonos de la anarquía, un árbol de 15 focos (5 compartidos) y una Leyenda.
+# =============================================================================
+
+focus_trees:
+  trees:
+    ZAN_ESTADO:
+      id: meganations_zan_estado_focus
+      default: false
+      shared: true
+      src: user_request
+      branches:
+      - id: economia
+        name:
+          english: Neither State nor Bank
+          spanish: Ni Estado ni Banco
+        focuses:
+        - id: ZAN_e_ni_estado_ni_banco
+          name:
+            english: Neither State nor Bank
+            spanish: Ni Estado ni Banco
+          desc:
+            english: 'No debts, no treasury, no taxes: whoever builds, owns what he builds. Nobody can say if this is communism
+              without a state or a market without owners.'
+            spanish: 'Sin deudas, sin tesoro, sin impuestos: el que construye es dueño de lo que construye. Nadie sabe decir
+              si esto es comunismo sin Estado o mercado sin dueños.'
+          days: 70
+          icon: GFX_goal_generic_construct_civ_factory
+          reward:
+          - effect: build
+            building: industrial_complex
+            level: 2
+        - id: ZAN_e_contratos_de_palabra
+          name:
+            english: Contracts of the Word
+            spanish: Contratos de Palabra
+          desc:
+            english: A handshake in front of the whole town is worth more than a stamp.
+            spanish: Un apretón de manos delante de todo el pueblo vale más que un sello.
+          days: 70
+          icon: GFX_goal_generic_trade
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_contratos
+          - effect: add_stability
+            value: 0.05
+          prerequisites:
+          - ZAN_e_ni_estado_ni_banco
+        - id: ZAN_e_moneda_de_cada_pueblo
+          name:
+            english: Every Town Its Coin
+            spanish: La Moneda de Cada Pueblo
+          desc:
+            english: 'A hundred currencies and not one bank: grain, bullets, hours of work.'
+            spanish: 'Cien monedas y ningún banco: grano, balas, horas de trabajo.'
+          days: 70
+          icon: GFX_goal_generic_trade
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_moneda
+          prerequisites:
+          - ZAN_e_contratos_de_palabra
+        - id: ZAN_e_mercado_sin_duenos
+          name:
+            english: The Market Without Owners
+            spanish: El Mercado sin Dueños
+          desc:
+            english: Workshops that belong to whoever works in them, selling to whoever pays.
+            spanish: Talleres que son de quien trabaja en ellos y le venden a quien pague.
+          days: 70
+          icon: GFX_goal_generic_production
+          reward:
+          - effect: build
+            building: arms_factory
+            level: 2
+          - effect: build
+            building: industrial_complex
+            level: 1
+          prerequisites:
+          - ZAN_e_moneda_de_cada_pueblo
+        - id: ZAN_e_de_todos_y_de_nadie
+          name:
+            english: Everyone's and No One's
+            spanish: Lo que es de Todos y de Nadie
+          desc:
+            english: The land is everyone's to work and no one's to sell. Or the other way round. We stopped arguing.
+            spanish: La tierra es de todos para trabajarla y de nadie para venderla. O al revés. Dejamos de discutirlo.
+          days: 70
+          icon: GFX_goal_generic_national_unity
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_de_todos
+          prerequisites:
+          - ZAN_e_mercado_sin_duenos
+      - id: republica
+        name:
+          english: The Last Republic
+          spanish: La República Última
+        focuses:
+        - id: ZAN_r_disciplina_del_portico
+          name:
+            english: The Discipline of the Porch
+            spanish: La Disciplina del Pórtico
+          desc:
+            english: Want little, endure much, owe nothing.
+            spanish: Querer poco, aguantar mucho, no deber nada.
+          days: 70
+          icon: GFX_goal_generic_national_unity
+          reward:
+          - effect: add_stability
+            value: 0.1
+          - effect: add_political_power
+            value: 50
+          allow_branch_when: &id001
+            flag: ZAN_republica_ultima
+        - id: ZAN_r_cada_pueblo_su_muralla
+          name:
+            english: Every Town Its Wall
+            spanish: Cada Pueblo su Muralla
+          desc:
+            english: Nobody guards the town better than the town.
+            spanish: Nadie cuida el pueblo mejor que el pueblo.
+          days: 70
+          icon: GFX_goal_generic_defence
+          reward:
+          - effect: fortify
+            level: 2
+          prerequisites:
+          - ZAN_r_disciplina_del_portico
+          allow_branch_when: *id001
+        - id: ZAN_r_asambleas_de_la_llanura
+          name:
+            english: The Assemblies of the Plains
+            spanish: Las Asambleas de la Llanura
+          desc:
+            english: Every grain silo has its assembly, every assembly its militia.
+            spanish: Cada silo tiene su asamblea, cada asamblea su milicia.
+          days: 70
+          icon: GFX_goal_generic_political_pressure
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_asambleas
+          prerequisites:
+          - ZAN_r_disciplina_del_portico
+          allow_branch_when: *id001
+        - id: ZAN_r_fabricas_del_comun
+          name:
+            english: Factories of the Commons
+            spanish: Fábricas del Común
+          desc:
+            english: Owned by the town, run by the shift, open to everyone.
+            spanish: Del pueblo, manejadas por el turno, abiertas a todos.
+          days: 70
+          icon: GFX_goal_generic_production
+          reward:
+          - effect: build
+            building: arms_factory
+            level: 2
+          - effect: build
+            building: industrial_complex
+            level: 2
+          prerequisites:
+          - ZAN_r_asambleas_de_la_llanura
+          allow_branch_when: *id001
+        - id: ZAN_r_soportar_y_abstenerse
+          name:
+            english: Endure and Abstain
+            spanish: Soportar y Abstenerse
+          desc:
+            english: 'Epictetus would have liked the plains: nothing here is ours except our will.'
+            spanish: 'A Epicteto le habría gustado la llanura: acá nada es nuestro salvo la voluntad.'
+          days: 70
+          icon: GFX_goal_generic_defence
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_soportar
+          prerequisites:
+          - ZAN_r_cada_pueblo_su_muralla
+          allow_branch_when: *id001
+        - id: ZAN_r_milicia_ciudadana
+          name:
+            english: The Citizens' Militia
+            spanish: La Milicia de los Ciudadanos
+          desc:
+            english: Every citizen is a soldier for a month a year, and nobody is a soldier forever.
+            spanish: Cada ciudadano es soldado un mes por año, y nadie es soldado para siempre.
+          days: 70
+          icon: GFX_goal_generic_army_doctrines
+          reward:
+          - effect: add_manpower
+            value: 200000
+          - effect: equipment
+            type: infantry_equipment
+            amount: 4000
+          prerequisites:
+          - ZAN_r_soportar_y_abstenerse
+          allow_branch_when: *id001
+        - id: ZAN_r_silos_de_la_republica
+          name:
+            english: The Silos of the Republic
+            spanish: Los Silos de la República
+          desc:
+            english: 'Seven years of grain under every town: let them besiege us.'
+            spanish: 'Siete años de grano debajo de cada pueblo: que nos sitien.'
+          days: 70
+          icon: GFX_goal_generic_construct_infrastructure
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_silos
+          prerequisites:
+          - ZAN_r_fabricas_del_comun
+          allow_branch_when: *id001
+        - id: ZAN_r_derecho_a_defenderse
+          name:
+            english: The Right to Defend Ourselves
+            spanish: El Derecho a Defenderse
+          desc:
+            english: The Union says Alaska and the Midwest are hers. The Republic says come and take them.
+            spanish: La Unión dice que Alaska y el Midwest son suyos. La República dice que vengan a buscarlos.
+          days: 70
+          icon: GFX_goal_generic_political_pressure
+          reward:
+          - effect: if
+            when:
+              country_exists: FCU
+            then:
+            - effect: wargoal
+              target: FCU
+              type: take_state
+          prerequisites:
+          - ZAN_r_milicia_ciudadana
+          allow_branch_when: *id001
+        - id: ZAN_r_ingenieros_de_la_frontera
+          name:
+            english: Frontier Engineers
+            spanish: Ingenieros de la Frontera
+          desc:
+            english: Bunkers out of grain silos and rails out of fences.
+            spanish: Búnkeres con silos y vías con alambrados.
+          days: 70
+          icon: GFX_goal_generic_construct_infrastructure
+          reward:
+          - effect: build
+            building: arms_factory
+            level: 2
+          - effect: fortify
+            level: 1
+          prerequisites:
+          - ZAN_r_silos_de_la_republica
+          allow_branch_when: *id001
+        - id: ZAN_r_la_ultima_republica
+          name:
+            english: The Last Republic
+            spanish: La Última República
+          desc:
+            english: The last republic on Earth does not want to be the biggest. It wants to be the last one standing.
+            spanish: La última república de la Tierra no quiere ser la más grande. Quiere ser la última en pie.
+          days: 105
+          icon: GFX_goal_generic_defence
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_ultima_republica
+          prerequisites:
+          - ZAN_r_derecho_a_defenderse
+          - ZAN_r_ingenieros_de_la_frontera
+          allow_branch_when: *id001
+      - id: liberculto
+        name:
+          english: Liberculto
+          spanish: Liberculto
+        focuses:
+        - id: ZAN_l_la_libertad_no_se_pide
+          name:
+            english: Freedom Is Not Asked For
+            spanish: La Libertad no se Pide
+          desc:
+            english: It is taken, and then it is given to the neighbours, whether they want it or not.
+            spanish: Se toma, y después se les da a los vecinos, la quieran o no.
+          days: 70
+          icon: GFX_goal_generic_political_pressure
+          reward:
+          - effect: add_war_support
+            value: 0.1
+          - effect: add_political_power
+            value: 50
+          allow_branch_when: &id002
+            flag: ZAN_liberculto
+        - id: ZAN_l_ciberpredicadores
+          name:
+            english: The Cyber-Preachers
+            spanish: Los Ciberpredicadores
+          desc:
+            english: Preachers with implants behind the ear broadcast the Gospel of the Contract on every frequency.
+            spanish: Predicadores con implantes detrás de la oreja transmiten el Evangelio del Contrato en todas las frecuencias.
+          days: 70
+          icon: GFX_goal_generic_propaganda
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_ciberpredicadores
+          prerequisites:
+          - ZAN_l_la_libertad_no_se_pide
+          allow_branch_when: *id002
+        - id: ZAN_l_voluntarios_por_conviccion
+          name:
+            english: Volunteers by Conviction
+            spanish: Voluntarios por Convicción
+          desc:
+            english: Nobody is forced to fight. Everybody wants to.
+            spanish: A nadie se lo obliga a pelear. Todos quieren.
+          days: 70
+          icon: GFX_goal_generic_army_doctrines
+          reward:
+          - effect: add_manpower
+            value: 300000
+          - effect: dynamic_modifier
+            id: ZAN_mod_voluntarios
+          prerequisites:
+          - ZAN_l_la_libertad_no_se_pide
+          allow_branch_when: *id002
+        - id: ZAN_l_cruzada_de_la_libertad
+          name:
+            english: The Crusade of Freedom
+            spanish: La Cruzada de la Libertad
+          desc:
+            english: Eurasia lives under the boots of the atamans. We will free it, rifle in hand.
+            spanish: Eurasia vive bajo las botas de los atamanes. La vamos a liberar, fusil en mano.
+          days: 70
+          icon: GFX_goal_generic_attack
+          reward:
+          - effect: if
+            when:
+              country_exists: ZWE
+            then:
+            - effect: wargoal
+              target: ZWE
+              type: take_state
+          - effect: equipment
+            type: infantry_equipment
+            amount: 5000
+          prerequisites:
+          - ZAN_l_voluntarios_por_conviccion
+          allow_branch_when: *id002
+        - id: ZAN_l_evangelio_del_contrato
+          name:
+            english: The Gospel of the Contract
+            spanish: El Evangelio del Contrato
+          desc:
+            english: Thou shalt not aggress. Unless thou art freeing someone.
+            spanish: No agredirás. Salvo que estés liberando a alguien.
+          days: 70
+          icon: GFX_goal_generic_propaganda
+          reward:
+          - effect: add_stability
+            value: 0.05
+          - effect: add_war_support
+            value: 0.1
+          prerequisites:
+          - ZAN_l_ciberpredicadores
+          allow_branch_when: *id002
+        - id: ZAN_l_liberar_a_los_liberados
+          name:
+            english: Free the Freed
+            spanish: Liberar a los Liberados
+          desc:
+            english: The Commune says its people are free. We will see about that.
+            spanish: La Comuna dice que su gente es libre. Ya vamos a ver.
+          days: 70
+          icon: GFX_goal_generic_attack
+          reward:
+          - effect: if
+            when:
+              country_exists: ASC
+            then:
+            - effect: wargoal
+              target: ASC
+              type: take_state
+          prerequisites:
+          - ZAN_l_cruzada_de_la_libertad
+          allow_branch_when: *id002
+        - id: ZAN_l_drones_de_la_fe
+          name:
+            english: Drones of the Faith
+            spanish: Drones de la Fe
+          desc:
+            english: Each one blessed, each one paid for by a believer.
+            spanish: Cada uno bendecido, cada uno pagado por un creyente.
+          days: 70
+          icon: GFX_goal_generic_air_doctrine
+          reward:
+          - effect: build
+            building: arms_factory
+            level: 2
+          - effect: dynamic_modifier
+            id: ZAN_mod_drones_de_la_fe
+          prerequisites:
+          - ZAN_l_evangelio_del_contrato
+          allow_branch_when: *id002
+        - id: ZAN_l_leva_de_los_despiertos
+          name:
+            english: The Levy of the Awakened
+            spanish: La Leva de los Despiertos
+          desc:
+            english: Those who saw the light march in the first line.
+            spanish: Los que vieron la luz marchan en primera fila.
+          days: 70
+          icon: GFX_goal_generic_army_doctrines
+          reward:
+          - effect: add_manpower
+            value: 400000
+          - effect: equipment
+            type: infantry_equipment
+            amount: 6000
+          prerequisites:
+          - ZAN_l_liberar_a_los_liberados
+          allow_branch_when: *id002
+        - id: ZAN_l_ataque_preventivo
+          name:
+            english: Pre-emptive Strike for Freedom
+            spanish: Ataque Preventivo por la Libertad
+          desc:
+            english: Freedom cannot wait for the enemy to move first.
+            spanish: La libertad no puede esperar a que el enemigo se mueva primero.
+          days: 70
+          icon: GFX_goal_generic_attack
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_ataque_preventivo
+          prerequisites:
+          - ZAN_l_drones_de_la_fe
+          - ZAN_l_leva_de_los_despiertos
+          allow_branch_when: *id002
+        - id: ZAN_l_liberculto_triunfante
+          name:
+            english: Liberculto Triumphant
+            spanish: Liberculto Triunfante
+          desc:
+            english: 'Kyiv rings its bells: the whole world will be free, one conquest at a time.'
+            spanish: 'Kiev hace sonar sus campanas: el mundo entero va a ser libre, de a una conquista por vez.'
+          days: 105
+          icon: GFX_goal_generic_attack
+          reward:
+          - effect: dynamic_modifier
+            id: ZAN_mod_liberculto_triunfante
+          prerequisites:
+          - ZAN_l_ataque_preventivo
+          allow_branch_when: *id002
+
+cosmetic_tags:
+- id: MN_REPUBLICA_ULTIMA
+  parent: ZAN
+  name: {english: 'The Last Republic', spanish: 'La República Última'}
+  adjective: {english: 'Republican', spanish: 'republicano'}
+  art: 'wheat-gold field with a dark green stoic column (a single plain Doric column) in the centre, surrounded by a ring of small identical white stars, one per town; austere and calm.'
+  src: user_request
+- id: MN_LIBERCULTO
+  parent: ZAN
+  name: {english: 'Liberculto', spanish: 'Liberculto'}
+  adjective: {english: 'Libercultist', spanish: 'liberculto'}
+  art: 'black field with a radiant hazard-yellow sunburst; in its centre a coiled snake wrapped around a circuit-board cross, neon magenta edges; fanatical, cyberpunk and religious.'
+  src: user_request
+
+decisions:
+  dynamic_modifiers:
+  - {id: ZAN_mod_estado, country: ZAN, name: {english: 'A State Nobody Expected', spanish: 'El Estado que Nadie Esperaba'},
+     desc: {english: 'At peace with everyone for now. Justifying a war against us takes twice as long.', spanish: 'En paz con todos, por ahora. Justificarnos una guerra tarda el doble.'},
+     modifiers: {enemy_justify_war_goal_time: 1.0}}
+  - {id: ZAN_mod_contratos, country: ZAN, name: {english: 'Contracts of the Word', spanish: 'Contratos de Palabra'},
+     desc: {english: 'A handshake in front of the town.', spanish: 'Un apretón de manos delante del pueblo.'},
+     modifiers: {stability_factor: 0.05, trade_opinion_factor: 0.2}}
+  - {id: ZAN_mod_moneda, country: ZAN, name: {english: 'Every Town Its Coin', spanish: 'La Moneda de Cada Pueblo'},
+     desc: {english: 'Grain, bullets and hours of work.', spanish: 'Grano, balas y horas de trabajo.'},
+     modifiers: {consumer_goods_factor: -0.05}}
+  - {id: ZAN_mod_de_todos, country: ZAN, name: {english: "Everyone's and No One's", spanish: 'De Todos y de Nadie'},
+     desc: {english: 'The land is worked by everyone.', spanish: 'La tierra la trabajan todos.'},
+     modifiers: {production_speed_buildings_factor: 0.1, industrial_capacity_factory: 0.05}}
+  - {id: ZAN_mod_asambleas, country: ZAN, name: {english: 'The Assemblies of the Plains', spanish: 'Las Asambleas de la Llanura'},
+     desc: {english: 'Every silo its assembly.', spanish: 'Cada silo su asamblea.'},
+     modifiers: {political_power_gain: 0.15, stability_factor: 0.05}}
+  - {id: ZAN_mod_soportar, country: ZAN, name: {english: 'Endure and Abstain', spanish: 'Soportar y Abstenerse'},
+     desc: {english: 'Nothing is ours except our will.', spanish: 'Nada es nuestro salvo la voluntad.'},
+     modifiers: {army_defence_factor: 0.1, max_dig_in: 3, army_org_factor: 0.05}}
+  - {id: ZAN_mod_silos, country: ZAN, name: {english: 'The Silos of the Republic', spanish: 'Los Silos de la República'},
+     desc: {english: 'Let them besiege us.', spanish: 'Que nos sitien.'},
+     modifiers: {attrition: -0.1, war_support_factor: 0.05}}
+  - {id: ZAN_mod_ultima_republica, country: ZAN, name: {english: 'The Last Republic', spanish: 'La Última República'},
+     desc: {english: 'The last one standing.', spanish: 'La última en pie.'},
+     modifiers: {army_defence_factor: 0.15, industrial_capacity_factory: 0.1, production_speed_buildings_factor: 0.1, max_dig_in: 2}}
+  - {id: ZAN_mod_ciberpredicadores, country: ZAN, name: {english: 'The Cyber-Preachers', spanish: 'Los Ciberpredicadores'},
+     desc: {english: 'The Gospel of the Contract on every frequency.', spanish: 'El Evangelio del Contrato en todas las frecuencias.'},
+     modifiers: {war_support_factor: 0.1, political_power_gain: 0.1}}
+  - {id: ZAN_mod_voluntarios, country: ZAN, name: {english: 'Volunteers by Conviction', spanish: 'Voluntarios por Convicción'},
+     desc: {english: 'Everybody wants to fight.', spanish: 'Todos quieren pelear.'},
+     modifiers: {recruitable_population_factor: 0.25}}
+  - {id: ZAN_mod_drones_de_la_fe, country: ZAN, name: {english: 'Drones of the Faith', spanish: 'Drones de la Fe'},
+     desc: {english: 'Blessed and paid for.', spanish: 'Bendecidos y pagados.'},
+     modifiers: {army_attack_factor: 0.05, breakthrough_factor: 0.1}}
+  - {id: ZAN_mod_ataque_preventivo, country: ZAN, name: {english: 'Pre-emptive Strike for Freedom', spanish: 'Ataque Preventivo por la Libertad'},
+     desc: {english: 'Freedom cannot wait.', spanish: 'La libertad no puede esperar.'},
+     modifiers: {army_attack_factor: 0.1, justify_war_goal_time: -0.3}}
+  - {id: ZAN_mod_liberculto_triunfante, country: ZAN, name: {english: 'Liberculto Triumphant', spanish: 'Liberculto Triunfante'},
+     desc: {english: 'One conquest at a time.', spanish: 'De a una conquista por vez.'},
+     modifiers: {army_attack_factor: 0.15, recruitable_population_factor: 0.2, breakthrough_factor: 0.1}}
+
+  scripted_effects:
+  - id: ZAN_formar_estado_comun
+    effects:
+    - {effect: white_peace_back}
+    - {effect: leave_faction}
+    - {effect: dynamic_modifier, id: ZAN_mod_estado}
+    - {effect: global_flag, value: MN_zan_estado}
+    - {effect: add_political_power, value: 100}
+    - {effect: focus_tree, value: meganations_zan_estado_focus}
+  - id: ZAN_formar_republica_ultima
+    effects:
+    - {effect: flag, value: ZAN_republica_ultima}
+    - {effect: set_capital, flag: ZAN_capital_original}
+    - {effect: cosmetic_tag, value: MN_REPUBLICA_ULTIMA}
+    - {effect: run, value: ZAN_formar_estado_comun}
+  - id: ZAN_formar_liberculto
+    effects:
+    - {effect: flag, value: ZAN_liberculto}
+    - {effect: set_capital, state: [Kiev, Kyiv]}
+    - {effect: cosmetic_tag, value: MN_LIBERCULTO}
+    - {effect: run, value: ZAN_formar_estado_comun}
+
+  categories:
+  - id: ZAN_estado_category
+    country: ZAN
+    icon_prefer: [generic_political_discourse]
+    name: {english: 'Form a State', spanish: 'Formar un Estado'}
+    desc:
+      english: 'The Lawless Lands survived, grew and kept a city to rule from. Now they can become a State: the Last Republic, from their original capital, or Liberculto, from Kyiv. Or nothing yet.'
+      spanish: 'Las Tierras Sin Ley sobrevivieron, crecieron y conservaron una ciudad desde donde gobernar. Ahora pueden volverse un Estado: la República Última, desde su capital original, o Liberculto, desde Kiev. O nada todavía.'
+    visible: {all: [{focus: ZAN_foco_7_the_triumphant_frontier}, {not_global_flag: MN_zan_estado}]}
+    src: user_request
+    decisions:
+    - id: ZAN_formar_un_estado
+      name: {english: 'Form a State', spanish: 'Formar un Estado'}
+      desc:
+        english: 'Needs one and a half times the regions we started with, and Kyiv or our original capital.'
+        spanish: 'Pide una vez y media las regiones con las que arrancamos, y Kiev o nuestra capital original.'
+      icon_prefer: [generic_political_discourse]
+      cost: 25
+      visible: {not_global_flag: MN_zan_estado}
+      available:
+        all:
+        - {variable_at_least: {var: num_owned_states, value: ZAN_umbral_estado}}
+        - any: [{owns_state_flag: ZAN_capital_original}, {owns_state: [Kiev, Kyiv]}]
+      effects:
+      - {effect: event, id: meganations_zan_estado.1}
+      ai: {factor: 100}
+      src: user_request
+
+  on_actions:
+  # el umbral (1,5 veces las regiones del arranque) y la marca de la capital original
+  - id: ZAN_estado_arranque
+    hook: on_startup
+    effects:
+    - effect: if
+      when: {country_exists: ZAN}
+      then:
+      - effect: scope
+        target: ZAN
+        effects:
+        - {effect: math, ops: [[set, ZAN_umbral_estado, num_owned_states], [mul, ZAN_umbral_estado, 1.5]]}
+        - {effect: capital, effects: [{effect: state_flag, value: ZAN_capital_original}]}
+
+events:
+  namespaces:
+    meganations_zan_estado:
+      country: ZAN
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: 'A State Nobody Expected', spanish: 'El Estado que Nadie Esperaba'}
+        desc:
+          english: 'The towns counted themselves, and there are more of them than ever. The assemblies of the plains want a Republic that
+            owes nothing and fears nothing, from our old capital. The cyber-preachers of Kyiv want Liberculto: freedom imposed by force,
+            on everyone. We can also wait.'
+          spanish: 'Los pueblos se contaron, y son más que nunca. Las asambleas de la llanura quieren una República que no deba nada ni le
+            tema a nada, desde nuestra vieja capital. Los ciberpredicadores de Kiev quieren Liberculto: la libertad impuesta por la fuerza,
+            a todos. También podemos esperar.'
+        options:
+        - name: {english: 'The Last Republic, from our capital.', spanish: 'La República Última, desde nuestra capital.'}
+          when: {owns_state_flag: ZAN_capital_original}
+          effects: [{effect: run, value: ZAN_formar_republica_ultima}]
+          ai_chance: 50
+        - name: {english: 'Liberculto, from Kyiv.', spanish: 'Liberculto, desde Kiev.'}
+          when: {owns_state: [Kiev, Kyiv]}
+          effects: [{effect: run, value: ZAN_formar_liberculto}]
+          ai_chance: 50
+        - name: {english: 'Not yet. Nobody rules us.', spanish: 'Todavía no. Nadie nos manda.'}
+          effects: []
+          ai_chance: 0
+        src: user_request
+

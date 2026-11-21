@@ -58,6 +58,9 @@ OVERLAY_FILES = ["22_mecanicas_v4.yaml", "23_rumbo_2120.yaml", "24_japon.yaml", 
                  "36_gigante_sucesor.yaml", "37_el_despertar.yaml", "38_aventuras_albion.yaml", "39_aventuras_japon.yaml",
                  # 2026-11-14: puntos de fricción entre potencias, el Pacto de las Restauraciones y la Línea
                  "41_friccion.yaml",
+                 # 2026-11-20: Tierras Sin Ley forma un Estado (La República Última o Liberculto); va antes
+                 # que las Leyendas porque dos de ellas llegan con focos de este árbol
+                 "48_tierras_sin_ley.yaml",
                  # 2026-11-16: las Leyendas, seis personajes legendarios por nación
                  "42_leyendas.yaml",
                  # 2026-11-17: el humor de las Cuatro de la Unión
