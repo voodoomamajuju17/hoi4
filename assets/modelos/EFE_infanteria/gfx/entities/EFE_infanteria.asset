@@ -1,4 +1,5 @@
 # 2026-11-10: modelo animado EFE_infanteria (idle, move, attack)
+# 2026-11-21: animaciones mejoradas a 60 fps (idle 6 s, move 4,5 s, attack 4 s, die 3,2 s)
 animation = {
     name = "EFE_infanteria_idle_animation"
     file = "gfx/models/units/EFE_infanteria/EFE_infanteria_idle.anim"
@@ -33,9 +34,10 @@ entity = {
     name = "EFE_infantry_entity"
     pdxmesh = "EFE_infanteria"
     default_state = "idle"
-    state = { name = "idle" animation = "idle" animation_blend_time = 0.15 looping = yes }
-    state = { name = "move" animation = "move" animation_blend_time = 0.15 looping = yes }
-    state = { name = "attack" animation = "attack" animation_blend_time = 0.15 looping = yes }
-    state = { name = "die" animation = "die" animation_blend_time = 0.10 looping = no }
-    state = { name = "defend" animation = "attack" animation_blend_time = 0.15 looping = yes }
+    state = { name = "idle" animation = "idle" animation_blend_time = 0.20 looping = yes }
+    state = { name = "move" animation = "move" animation_blend_time = 0.20 looping = yes }
+    state = { name = "attack" animation = "attack" animation_blend_time = 0.20 looping = yes }
+    state = { name = "die" animation = "die" animation_blend_time = 0.08 looping = no }
+    state = { name = "death" animation = "die" animation_blend_time = 0.08 looping = no }
+    state = { name = "defend" animation = "attack" animation_blend_time = 0.20 looping = yes }
 }
