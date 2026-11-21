@@ -54,6 +54,10 @@ Lo que define a la nación en cada momento: ventajas, cargas y estados de ánimo
 - **Los Ríos de la India** — El Ganges y el Indo llevan nuestros suministros. Disponible después de cuatro años de sobrevivir.
 - **El Raj de los Mil Reyes** — El subcontinente por fin responde a una sola corte. No lo van a conquistar: es demasiado grande, demasiado poblado, demasiado orgulloso. Disponible después de cinco años de sobrevivir.
 
+### El Puente de Persia
+
+- **El Puente de Persia** — Chandragupta le dio a Seleuco quinientos elefantes por una paz que duró generaciones. Los emires del desierto también sobrevivieron. Si tendemos la mano primero, el imperio es nuestro para nombrarlo.
+
 ## Aventuras
 
 Historias de "elegí tu propia aventura": ver la [guía de aventuras](../guia/aventuras.md).

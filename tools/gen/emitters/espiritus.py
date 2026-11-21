@@ -190,7 +190,8 @@ def emit(ctx: BuildContext) -> None:
 
     def _propia(n: str) -> bool:
         return (repo / "assets" / n.split("_", 1)[0] / "ideas" / f"{n}.dds").exists()
-    mecanicas = {t: sorted(v, key=lambda n: ("satelites" in n, not _propia(n), n))
+    # los caminos de La Red se prenden más tarde: van después de La Carga, que está desde que nace
+    mecanicas = {t: sorted(v, key=lambda n: ("satelites" in n, "_camino_" in n, not _propia(n), n))
                  for t, v in mecanicas.items() if len(v) > 1}
 
     # -- 2. ideas visibles de cada país, y con qué arranca
