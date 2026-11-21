@@ -42,10 +42,22 @@ ESCALA = {
 }
 
 
-def escala_para(sprite: str, medida: tuple[float, float, float], escala_malla: float = 1.0) -> float | None:
-    if sprite not in ESCALA or not any(medida):
+# 2026-11-20: La Red no tiene gente: su infantería son enjambres de bichos de máquina bajos y anchos
+# (0,4 a 1,7 m de alto y 2,7 a 4,8 de ancho). A 3,2x como humanos, los montañeros pasaban de 15 de ancho
+# contra 6,4 a 8,3 de las otras naciones; van por el ancho del grupo, como un vehículo.
+ESCALA_PAIS = {
+    # el Porteador (motorizada) es un cangrejo más ancho que largo: por el ancho, como los demás de largo
+    "ZRD": {"infantry": ("ancho", 8.0), "marine": ("ancho", 7.5), "mountaineers": ("ancho", 8.0),
+            "motorized": ("ancho", 4.6)},
+}
+
+
+def escala_para(sprite: str, medida: tuple[float, float, float], escala_malla: float = 1.0,
+                tag: str | None = None) -> float | None:
+    regla = ESCALA_PAIS.get(tag or "", {}).get(sprite) or ESCALA.get(sprite)
+    if regla is None or not any(medida):
         return None
-    eje, objetivo = ESCALA[sprite]
+    eje, objetivo = regla
     x, y, z = (v * escala_malla for v in medida)
     if eje == "humano":
         return round(HUMANO / escala_malla, 4)
@@ -78,9 +90,10 @@ def escalar(entidades: str, medidas: dict[str, tuple[tuple[float, float, float],
         pm = re.search(r'\bpdxmesh\s*=\s*"([^"]+)"', b)
         if not m or not pm or pm.group(1) not in medidas:
             return b
+        tag = re.match(r"^([A-Z]+)_", m.group(1))
         sprite = re.sub(r"^[A-Z]+_", "", m.group(1)).removesuffix("_entity")
         medida, escala_malla = medidas[pm.group(1)]
-        e = escala_para(sprite, medida, escala_malla)
+        e = escala_para(sprite, medida, escala_malla, tag.group(1) if tag else None)
         if e is None:
             sin.append(m.group(1))
             return b

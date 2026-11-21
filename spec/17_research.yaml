@@ -692,7 +692,7 @@ special_projects: {}
 # -----------------------------------------------------------------------------
 by_faction:
   # 2026-10-28: el Shogunato de los Astilleros toma lo terrestre de la HSN y lo naval y aéreo del SHD
-  inherit: {ZSG: EFE, ZJP: {default: HSN, naval: SHD, air: SHD}}
+  inherit: {ZSG: EFE, ZJP: {default: HSN, naval: SHD, air: SHD}, ZRD: ASC}
   # Tamaño de los íconos propios (2026-10-06). Si se puede leer el ícono del
   # juego se usa esa medida (1.19.3: 146x54); si no, estas. `scale` agranda o
   # achica todo (1.0 = igual; 1.2 = 20% más grande).
@@ -745,6 +745,32 @@ by_faction:
     # 2026-11-01 (Japón y Gran Bretaña con armas propias): hasta que llegue la
     # imagen propia de cada familia, la que heredaban (Japón: HSN y SHD; Gran
     # Bretaña: la de la Comuna)
+    # 2026-11-20: La Red, con los nombres de sus modelos 3D (arte/modelos_3d_la_red.txt). Imagen
+    # propia del Zángano, el Segador y el Ciempiés; el resto, la de la Comuna hasta que llegue.
+    ZRD:
+      rifle:         {en: The Drone, es: El Zángano}
+      support:       {en: Mending Swarm, es: Enjambre Reparador}
+      artillery:     {en: The Centipede, es: El Ciempiés}
+      anti_air:      {en: Frost Thorn, es: Espina de Escarcha}
+      anti_tank:     {en: Ice Sting, es: Aguijón de Hielo}
+      rocket:        {en: Spore Battery, es: Batería de Esporas}
+      motorized:     {en: The Carrier, es: El Porteador}
+      armored_car:   {en: The Tracker, es: El Rastreador}
+      mechanized:    {en: The Hive, es: La Colmena}
+      amphibious:    {en: The Amphipod, es: El Anfípodo}
+      light_tank:    {en: The Mantis, es: La Mantis}
+      medium_tank:   {en: The Reaper, es: El Segador}
+      heavy_tank:    {en: The Basalt Crab, es: El Cangrejo de Basalto}
+      modern_tank:   {en: The Black Scarab, es: El Escarabajo Negro}
+      super_heavy:   {en: The Termite Mound, es: El Termitero}
+      destroyer:     {en: Barracuda Swarm, es: Barracuda}
+      cruiser:       {en: Cuttlefish Swarm, es: Sepia}
+      capital:       {en: The Reef, es: El Arrecife}
+      carrier:       {en: The Mother, es: La Madre}
+      submarine:     {en: The Eel, es: La Anguila}
+      light_plane:   {en: The Wasp, es: La Avispa}
+      medium_plane:  {en: The Ray, es: La Raya}
+      carrier_plane: {en: The Petrel, es: El Petrel}
     ZJP:
       rifle:         {en: Tachi Rifle, es: Fusil Tachi}
       support:       {en: Dry Dock Kit, es: Equipo de Dique}

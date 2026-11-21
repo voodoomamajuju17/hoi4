@@ -111,6 +111,36 @@ def informe(p: dict, fin: dict[str, float], n: int) -> str:
         w(f"| {i}. {nombre} | {_pct(len(llegan) / len(rs))} | {_fecha(_cuantil(fechas, .5)) if i else 'al nacer'} |")
     w("")
 
+    # ------------------------------------------------------------ los tres caminos
+    if p.get("caminos"):
+        w("## Los tres caminos\n")
+        w("Cada camino forzado en todas las partidas (la IA real elige al azar, como el caso de arriba). "
+          "La regla del mod: ningún camino vale más de 1,3 veces otro. Se compara por las regiones en su "
+          "mejor momento y por cuánto vive.\n")
+        w("| Camino | trámite / medida / se come | regiones en su mejor momento (media / mitad) "
+          "| sigue viva en 2120 | Códigos (media) |")
+        w("|---|---|---|---|---|")
+        medias = {}
+        for nombre, cam in (("Sin camino (versión 3)", None), ("La Plaga", "plaga"),
+                            ("La Marea", "marea"), ("El Susurro", "susurro")):
+            rr = _nacidas(p, fin, n, camino=cam)
+            k = _clases(p, rr)
+            media = sum(r.pico for r in rr) / len(rr)
+            viva = sum(r.murio is None for r in rr) / len(rr)
+            if cam:
+                medias[nombre] = (media, viva)
+            w(f"| {nombre} | {_pct(k['tramite'])} / {_pct(k['medida'])} / {_pct(k['gigante'])} "
+              f"| {media:.0f} / {_cuantil([r.pico for r in rr], .5)} | {_pct(viva)} "
+              f"| {sum(len(r.codigos) for r in rr) / len(rr):.1f} |")
+        if medias:
+            alto = max(medias, key=lambda x: medias[x][0])
+            bajo = min(medias, key=lambda x: medias[x][0])
+            razon = medias[alto][0] / medias[bajo][0]
+            w(f"\n**Balance:** el más fuerte ({alto}) llega en su mejor momento a {razon:.2f} veces las regiones "
+              f"del más débil ({bajo}); " + ("dentro de la regla de 1,3." if razon <= 1.3 else
+                                             "**fuera de la regla de 1,3**: hay que ajustar."))
+        w("")
+
     # ------------------------------------------------------------ cuánto manda la IA
     w("## El riesgo grande: cuánto manda la IA contra La Red\n")
     w("Es lo que el simulador no puede saber y lo que más cambia el resultado. *Rígida*: el diseño sin los dos "

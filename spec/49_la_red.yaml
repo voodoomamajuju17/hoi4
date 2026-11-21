@@ -1,0 +1,819 @@
+# =============================================================================
+# La Red (2026-11-20): la Revolución de las Máquinas de 2113 (Plan A liviano del sexto análisis)
+#
+# Pedidos del usuario (2026-11-20): "Más que singularidad se deberían ir destrabando mejoras
+# mientras más crece y pasa el tiempo, siendo la etapa cumbre la singularidad, pero no gana la
+# partida así nomás." "Tendría que empezar con una isla aislada y un pedazo de tierra en una
+# costa, con extra recursos, extra bonus de combate, muchas tropas y equipamiento, fuertes en todas
+# las fronteras. Overpowered sí." "Pensar si tiene sentido que salga en una región fija." "Tal vez
+# la plaga se puede implementar por una región random, con una división." "Más que código de
+# apagado debería ser algo que lo debilite, el tiempo también se calcula dependiendo en qué etapa
+# está La Red, más avanzado = más tiempo. Suspende la plaga por 1 año y reduce muchísimo los bonus
+# en combate / daña equipo / daña fábricas / infraestructura / añade malus." "Una persona puede
+# pasarse a ella." "La Red solo tiene un mariscal con esa imagen y un almirante y 10 generales con
+# distintas stats que comparten la misma imagen del general. Son básicamente computadoras."
+# Respondió "sí a todo" a: jugable, los 12 lugares, 64% de nacimiento, los tres caminos y la
+# tecnología heredada; Sicilia y Túnez quedan como el lugar difícil.
+#
+# Los números salen del simulador (tools/simulador_red, `make simular-red`). Lo que es mecánica con
+# script propio (el lugar al azar, la plaga, La Carga, el Código, la Coalición) lo escribe
+# tools/gen/emitters/la_red.py con la sección `la_red` de abajo; acá van el país, los mandos, el
+# árbol, las decisiones, los espíritus y los eventos.
+# =============================================================================
+
+la_red:
+  regla: MEGANATIONS_LA_RED
+  # Las Máquinas Despiertan: entre abril y agosto de 2113 (1 en 4 por mes, en agosto sí o sí) si
+  # alguna potencia terminó El Despertar en La Fuga o si la Comuna está en manos de PLAN-41 con la
+  # red caliente. Si eso pasa más tarde, nace el primer mes en que se cumpla (hasta fines de 2115).
+  nacimiento: {desde: 2113.4.1, forzado: 2113.8.1, hasta: 2115.12.31, chance: 25, calor: 60}
+  # el arranque, OP: 10 divisiones en la isla y 8 en cada región de costa (unas 35), el resto en
+  # equipo guardado; fuertes en todas las fronteras de las 4 regiones
+  arranque:
+    isla: {Enjambre: 8, Segadores: 2}
+    costa: {Enjambre: 6, Segadores: 2}
+    experiencia: 0.5
+    fuertes: 4
+    fuertes_costa: 3
+    infraestructura: 2
+    mano_de_obra: 250000
+    recursos: {steel: 40, oil: 30, aluminium: 25, tungsten: 20, chromium: 20, rubber: 20}
+  # La plaga: un brote cada tanto según la etapa (días), 1 división más 1 por etapa; con 5
+  # regiones o menos "se esconde en los cables" (cada 60 días, 2 divisiones más)
+  plaga:
+    dias: [0, 180, 120, 90, 60]
+    divisiones: 1
+    por_etapa: 1
+    desesperada: {regiones: 5, dias: 60, extra: 2}
+  # El Código de Apagado: días según la etapa en que se empieza; la llave un tercio, la Comuna
+  # con el Profesor Arkhipov dos tercios; cada uno siguiente 50% más
+  codigo:
+    dias: [300, 300, 390, 480, 600]
+    llave: 0.34
+    arkhipov: 0.67
+    arkhipov_foco: ASC_supercomputadora_de_planificacion
+    repetido: 0.5
+    golpe: {ataque: -0.3, fabricas: -0.5, suministro: -0.3, organizacion: -0.3}
+  # La Carga: +2 por región ganada en el mes, -3 por mes sin ganar; arriba de 35 la red se
+  # recalienta (-1% de ataque y defensa por punto)
+  carga: {por_region: 2, baja: 3, umbral: 35, malus: 0.01}
+  emergencia_regiones: 50
+  coalicion: {desde_dias: 90, chance: 10, chance_frente: 25}
+  # Los tres caminos (2026-11-21), medidos con tools/simulador_red (regla del mod: ningún camino
+  # vale más de 1,3 veces otro). Con los primeros números (brotes cada 75%, ataque +8/16/24, Código
+  # 25/50/75% más lento, Redundancia un tercio) La Plaga valía 1,5 veces La Marea y La Red se comía
+  # el mundo en el 13-15% de las partidas; así, 1,18 veces y 4%.
+  caminos:
+    plaga: {brotes_pct: 85, division_nivel: 2, esporas_nivel: 3, menos_dias: 30}
+    marea: {ataque: [0.15, 0.30, 0.45], brotes_pct: 125, segadores: [0, 8, 6], enjambres: [0, 0, 6]}
+    susurro: {codigo_pct: [110, 120, 130], golpe: 0.9, infiltrar_dias: 150, infiltrar_dias_3: 90}
+    redundancia: 0.85
+  # Los que pueden pelear contra ella (la Coalición Humana y sus decisiones)
+  humanidad: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE, ZJP, ZAL, ZAN, ZWE, ZWI, ZWM, ZWB]
+  # Doce lugares: isla + costa. Los nombres son los del juego (el primero que exista); el número
+  # es el id de la región verificado en el reporte (fc072183, 2026-10-28). Un lugar sin isla en
+  # este juego queda afuera (lo avisa el build); una región de costa que no exista, también.
+  lugares:
+  - id: islandia
+    nombre: {english: Iceland and the Norwegian coast, spanish: Islandia y la costa de Noruega}
+    isla: [Iceland, 100]
+    costa: [[Vestlandet, Western Norway, Bergen], [Trøndelag, Trondelag, Trondheim], [Nordland, Nord-Norge, Northern Norway, Narvik]]
+  - id: azores
+    nombre: {english: The Azores and Portugal, spanish: Azores y Portugal}
+    isla: [Azores, Açores, Acores]
+    costa: [[Lisbon, Lisboa, 112], [Porto, Oporto, Northern Portugal, Norte], [Algarve, Alentejo, Southern Portugal]]
+  - id: sicilia
+    nombre: {english: Sicily and Tunisia, spanish: Sicilia y Túnez}
+    isla: [Sicily, Sicilia, Palermo]
+    costa: [[Tunisia, Tunis], [Southern Tunisia, Sud Tunisien, Gabes], [Calabria, Reggio Calabria]]
+  - id: madagascar
+    nombre: {english: Madagascar and Mozambique, spanish: Madagascar y Mozambique}
+    isla: [Madagascar, 543]
+    costa: [[Lourenço Marques, Lourenco Marques, 544], [Manica e Sofala, 896], [Zambezia-Moçambique, Zambezia-Mocambique, 897]]
+  - id: socotra
+    nombre: {english: Socotra and Aden, spanish: Socotra y Adén}
+    isla: [Socotra, Soqotra]
+    costa: [[Aden], [Hadhramaut, Hadramaut, Mukalla], [North Yemen, 293]]
+  - id: ceilan
+    nombre: {english: Sri Lanka and southern India, spanish: Sri Lanka y el sur de la India}
+    isla: [Ceylon, Sri Lanka, 422]
+    costa: [[Southern Madras, 423], [Northern Madras, 424], [Travancore, Kerala, Malabar]]
+  - id: taiwan
+    nombre: {english: Taiwan and Fujian, spanish: Taiwán y Fujian}
+    isla: [Taiwan, Formosa, 524]
+    costa: [[Fujian, 595], [Zhejiang, 596], [Guangdong, 593]]
+  - id: tasmania
+    nombre: {english: Tasmania and Victoria, spanish: Tasmania y Victoria}
+    isla: [Tasmania, 518]
+    costa: [[Victoria, 517], [New South Wales, 285], [South Australia, Adelaide]]
+  - id: hawai
+    nombre: {english: Hawaii and Baja California, spanish: Hawái y Baja California}
+    isla: [Hawaii, Hawaiian Islands]
+    costa: [[Baja California], [Sonora], [Sinaloa, Nayarit]]
+  - id: cuba
+    nombre: {english: Cuba and Florida, spanish: Cuba y Florida}
+    isla: [Cuba, 315]
+    costa: [[Florida, 366], [Georgia, 365], [Alabama, 367]]
+  - id: galapagos
+    nombre: {english: The Galápagos and Guayaquil, spanish: Galápagos y Guayaquil}
+    isla: [Galapagos Islands, Galápagos Islands, 649]
+    costa: [[Ecuador, 305], [Guayas, Guayaquil], [Piura, Northern Peru, Tumbes]]
+  - id: malvinas
+    nombre: {english: The Falklands and Patagonia, spanish: Malvinas y la Patagonia}
+    isla: [Falkland Islands, Falklands, 299]
+    costa: [[Magallanes, 507], [Tierra del Fuego, 953], [Santa Cruz, Río Negro, Rio Negro, 512]]
+
+game_rules:
+- id: MEGANATIONS_LA_RED
+  name: {english: The Network (2113), spanish: La Red (2113)}
+  desc:
+    english: 'Whether the machines of the world can wake up in 2113 and found La Red, the machine country that grows by stages and spreads like a plague.'
+    spanish: 'Si las máquinas del mundo pueden despertarse en 2113 y fundar La Red, el país de las máquinas que crece por etapas y se contagia como una plaga.'
+  options:
+  - id: SI
+    name: {english: 'Yes, it can wake up', spanish: 'Sí, puede despertarse'}
+    desc:
+      english: 'If any power let its Guest escape in The Awakening, or the Commune fell to PLAN-41 with a hot network, La Red is born in 2113 in one of twelve places chosen at random.'
+      spanish: 'Si alguna potencia dejó escapar a su Huésped en El Despertar, o la Comuna cayó en manos de PLAN-41 con la red caliente, La Red nace en 2113 en uno de doce lugares elegido al azar.'
+  - id: NO
+    name: {english: 'No, the machines sleep', spanish: 'No, las máquinas duermen'}
+    desc:
+      english: 'La Red is never born. The Awakening keeps its endings, but nothing rises in 2113.'
+      spanish: 'La Red no nace nunca. El Despertar conserva sus finales, pero en 2113 no se levanta nada.'
+
+leaders:
+  unit_leader_traits:
+  - id: zrd_mente_de_la_red
+    country: ZRD
+    name: {english: A Mind of the Network, spanish: Una Mente de La Red}
+    desc:
+      english: 'It does not sleep, does not doubt and does not mourn. It runs ten thousand battles before breakfast and picks the cheapest one.'
+      spanish: 'No duerme, no duda y no llora a nadie. Corre diez mil batallas antes del desayuno y elige la más barata.'
+    planning_skill: 1
+    src: user_request
+  characters:
+  - id: ZRD_la_voz
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: The Voice, spanish: La Voz}}
+    born: 2113
+    lore: No tiene cuerpo ni cara. Habla por todos los parlantes a la vez, con la voz de nadie, y nunca levanta el tono.
+    roles:
+      country_leader: {ideology: machine_consensus, traits: []}
+    portrait: {status: placeholder, path: gfx/leaders/ZRD/ZRD_la_voz.dds}
+  - id: ZRD_mariscal_nucleo
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: The Command Core, spanish: El Núcleo de Mando}}
+    born: 2113
+    lore: La máquina que manda todos los ejércitos de La Red. Parece vieja, como si hubiera crecido durante años en un silo.
+    roles:
+      field_marshal: {skill: 5, attack_skill: 4, defense_skill: 5, planning_skill: 5, logistics_skill: 4, traits: [brilliant_strategist, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_mariscal.dds, role: army, status: placeholder}
+  - id: ZRD_almirante_abisal
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: The Abyssal Current, spanish: La Corriente Abisal}}
+    born: 2113
+    lore: La misma mente del Núcleo, copiada en los cables del fondo del mar. Cuando habla, el agua alrededor de la isla se pone fría.
+    roles:
+      navy_leader: {skill: 4, attack_skill: 4, defense_skill: 4, maneuvering_skill: 5, coordination_skill: 4, traits: [superior_tactician]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_mariscal.dds, role: navy, status: placeholder}
+  - id: ZRD_nodo_escarcha
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 01 'Frost', spanish: Nodo de Guerra 01 «Escarcha»}}
+    born: 2113
+    lore: Sostiene las líneas. Calcula cuánto frío aguanta un hombre y espera un grado más.
+    roles:
+      corps_commander: {skill: 3, attack_skill: 2, defense_skill: 5, planning_skill: 3, logistics_skill: 3, traits: [defensive_doctrine, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_enjambre
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 02 'Swarm', spanish: Nodo de Guerra 02 «Enjambre»}}
+    born: 2113
+    lore: Ataca por todos lados a la vez. No le importa cuántos zánganos pierde, solo cuántos llegan.
+    roles:
+      corps_commander: {skill: 4, attack_skill: 5, defense_skill: 2, planning_skill: 3, logistics_skill: 2, traits: [offensive_doctrine, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_marea
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 03 'Tide', spanish: Nodo de Guerra 03 «Marea»}}
+    born: 2113
+    lore: Manda a los Segadores. Rompe el frente en un punto y deja que el resto se derrame.
+    roles:
+      corps_commander: {skill: 4, attack_skill: 4, defense_skill: 3, planning_skill: 3, logistics_skill: 3, traits: [panzer_leader, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_cable
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 04 'Cable', spanish: Nodo de Guerra 04 «Cable»}}
+    born: 2113
+    lore: Lleva la cuenta de cada litro y cada proyectil. Ningún frente suyo se quedó sin comer.
+    roles:
+      corps_commander: {skill: 3, attack_skill: 2, defense_skill: 3, planning_skill: 3, logistics_skill: 5, traits: [logistics_wizard, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_raiz
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 05 'Root', spanish: Nodo de Guerra 05 «Raíz»}}
+    born: 2113
+    lore: Planea con meses de anticipación. Cuando ataca, ya sabe dónde va a estar el enemigo el día siguiente.
+    roles:
+      corps_commander: {skill: 3, attack_skill: 3, defense_skill: 3, planning_skill: 5, logistics_skill: 2, traits: [engineer_officer, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_susurro
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 06 'Whisper', spanish: Nodo de Guerra 06 «Susurro»}}
+    born: 2113
+    lore: Le habla a las radios del enemigo con la voz de sus propios oficiales. A veces le obedecen.
+    roles:
+      corps_commander: {skill: 3, attack_skill: 3, defense_skill: 3, planning_skill: 4, logistics_skill: 3, traits: [trickster, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_coral
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 07 'Coral', spanish: Nodo de Guerra 07 «Coral»}}
+    born: 2113
+    lore: Crece despacio y no retrocede. Donde se para, a los tres días hay una trinchera de cromo.
+    roles:
+      corps_commander: {skill: 3, attack_skill: 2, defense_skill: 4, planning_skill: 3, logistics_skill: 4, traits: [infantry_leader, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_esquirla
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 08 'Shard', spanish: Nodo de Guerra 08 «Esquirla»}}
+    born: 2113
+    lore: Golpes chicos, rápidos y de noche. Entra por donde nadie mira y se va antes del amanecer.
+    roles:
+      corps_commander: {skill: 4, attack_skill: 4, defense_skill: 2, planning_skill: 4, logistics_skill: 2, traits: [commando, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_hielo
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 09 'Ice', spanish: Nodo de Guerra 09 «Hielo»}}
+    born: 2113
+    lore: Pelea mejor en las alturas, donde el aire es fino y los hombres respiran mal.
+    roles:
+      corps_commander: {skill: 3, attack_skill: 3, defense_skill: 4, planning_skill: 2, logistics_skill: 3, traits: [hill_fighter, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+  - id: ZRD_nodo_ceniza
+    country: ZRD
+    src: user_request
+    name: {regnal: {english: War Node 10 'Ash', spanish: Nodo de Guerra 10 «Ceniza»}}
+    born: 2113
+    lore: Salta del agua a la costa. Fue el primero en pisar el continente el día que La Red nació.
+    roles:
+      corps_commander: {skill: 4, attack_skill: 4, defense_skill: 3, planning_skill: 3, logistics_skill: 3, traits: [naval_invader, zrd_mente_de_la_red]}
+    portrait: {path: gfx/leaders/ZRD/ZRD_general.dds, role: army, status: placeholder}
+
+decisions:
+  variable_names:
+    ZRD_carga: {english: The Load, spanish: La Carga}
+    ZRD_etapa: {english: Stage of the Network, spanish: Etapa de La Red}
+  dynamic_modifiers:
+  # el arranque: la calidad (cada división pelea como 3 de una potencia, con la tecnología heredada)
+  - id: ZRD_la_herencia
+    country: ZRD
+    name: {english: The Inheritance, spanish: La Herencia}
+    desc:
+      english: 'Everything the power it escaped from ever learned, and everything that power never dared to try. Each drone fights like three soldiers.'
+      spanish: 'Todo lo que aprendió la potencia de la que se escapó, y todo lo que esa potencia nunca se animó a probar. Cada dron pelea como tres soldados.'
+    modifiers: {army_attack_factor: 0.6, army_defence_factor: 0.6, army_org_factor: 0.3, '?breakthrough_factor': 0.3, army_morale_factor: 0.3, research_speed_factor: -0.3, stability_factor: 1.0, war_support_factor: 1.0}
+  - id: ZRD_los_que_no_comen
+    country: ZRD
+    name: {english: Those Who Do Not Eat, spanish: Los Que No Comen}
+    desc:
+      english: 'Drones do not eat, do not sleep and do not freeze. They need half the supply of a human division, and the winter does not touch them.'
+      spanish: 'Los drones no comen, no duermen y no se congelan. Necesitan la mitad del suministro de una división humana, y el invierno no los toca.'
+    modifiers: {'?supply_consumption_factor': -0.5, '?attrition': -0.5, '?winter_attrition_factor': -0.8, '?no_supply_grace': 240, '?out_of_supply_factor': -0.5}
+  - id: ZRD_escudo_del_nodo
+    country: ZRD
+    name: {english: The Shield of the Node, spanish: El Escudo del Nodo}
+    desc:
+      english: 'For six months the forts of the first four regions are worth double: the Node is still learning to walk, and it does not let anyone near.'
+      spanish: 'Durante seis meses los fuertes de las cuatro primeras regiones valen el doble: el Nodo todavía está aprendiendo a caminar, y no deja que nadie se acerque.'
+    modifiers: {'?army_core_defence_factor': 1.0, army_defence_factor: 0.2}
+  - id: ZRD_la_provision
+    country: ZRD
+    no_art: true
+    name: {english: The First Silos, spanish: Los Primeros Silos}
+    desc:
+      english: 'The silos under the island were full before anyone knew they existed. Factories +50% during the first year.'
+      spanish: 'Los silos bajo la isla estaban llenos antes de que alguien supiera que existían. Fábricas +50% el primer año.'
+    modifiers: {industrial_capacity_factory: 0.5}
+  # La Carga: se recalienta arriba de 35 (valores en variables, los pone el pulso mensual)
+  - id: ZRD_la_carga
+    country: ZRD
+    name: {english: The Load, spanish: La Carga}
+    desc:
+      english: 'THE LOAD: [?ZRD_carga|0] / 100 (overheats above 35)\nEvery region taken in a month adds 2; every month without advancing, it cools by 3. Above 35 the network overheats: -1% attack and defence per point.'
+      spanish: 'LA CARGA: [?ZRD_carga|0] / 100 (se recalienta arriba de 35)\nCada región tomada en el mes suma 2; cada mes sin avanzar baja 3. Arriba de 35 la red se recalienta: -1% de ataque y defensa por punto.'
+    modifiers: {army_attack_factor: ZRD_carga_malus, army_defence_factor: ZRD_carga_malus}
+  # las etapas (cada una reemplaza a la anterior y suma lo de antes)
+  - id: ZRD_etapa_1
+    country: ZRD
+    no_art: true
+    name: {english: 'Stage 1: The Network Spreads', spanish: 'Etapa 1: La Red se Extiende'}
+    desc: {english: 'Factories +10%. A plague outbreak every 180 days.', spanish: 'Fábricas +10%. Un brote de la plaga cada 180 días.'}
+    modifiers: {industrial_capacity_factory: 0.1}
+  - id: ZRD_etapa_2
+    country: ZRD
+    no_art: true
+    name: {english: 'Stage 2: Distributed Consciousness', spanish: 'Etapa 2: Conciencia Distribuida'}
+    desc: {english: 'Factories +20%, attack and defence +7%, supply +10%. An outbreak every 120 days, and the depot reaches them through the cables.', spanish: 'Fábricas +20%, ataque y defensa +7%, suministro +10%. Un brote cada 120 días, y el depósito les llega por los cables.'}
+    modifiers: {industrial_capacity_factory: 0.2, army_attack_factor: 0.07, army_defence_factor: 0.07, '?supply_factor': 0.1}
+  - id: ZRD_etapa_3
+    country: ZRD
+    no_art: true
+    name: {english: 'Stage 3: The Swarm', spanish: 'Etapa 3: El Enjambre'}
+    desc: {english: 'Factories +40%, attack and defence +14%, supply +15%. An outbreak every 90 days.', spanish: 'Fábricas +40%, ataque y defensa +14%, suministro +15%. Un brote cada 90 días.'}
+    modifiers: {industrial_capacity_factory: 0.4, army_attack_factor: 0.14, army_defence_factor: 0.14, '?supply_factor': 0.15}
+  - id: ZRD_etapa_4
+    country: ZRD
+    no_art: true
+    name: {english: 'Stage 4: The Singularity', spanish: 'Etapa 4: La Singularidad'}
+    desc: {english: 'Factories +60%, attack and defence +24%, supply +20%. An outbreak every 60 days. The whole world is in Emergency.', spanish: 'Fábricas +60%, ataque y defensa +24%, suministro +20%. Un brote cada 60 días. El mundo entero está en Emergencia.'}
+    modifiers: {industrial_capacity_factory: 0.6, army_attack_factor: 0.24, army_defence_factor: 0.24, '?supply_factor': 0.2}
+  # el golpe del Código (un año; los valores los pone el golpe según Redundancia y El Susurro)
+  - id: ZRD_golpe_del_codigo
+    country: ZRD
+    name: {english: The Blow of the Code, spanish: El Golpe del Código}
+    desc:
+      english: 'The Shutdown Code ran through every cable. For a year the drones restart, the factories stutter and the network cannot open a new stage or send outbreaks.'
+      spanish: 'El Código de Apagado corrió por cada cable. Durante un año los drones se reinician, las fábricas tartamudean y la red no puede abrir una etapa nueva ni mandar brotes.'
+    modifiers: {army_attack_factor: ZRD_golpe_ataque, army_defence_factor: ZRD_golpe_ataque, industrial_capacity_factory: ZRD_golpe_fabricas, '?supply_factor': ZRD_golpe_suministro, army_org_factor: ZRD_golpe_organizacion, '?army_org_regain': -0.5, research_speed_factor: -0.9}
+  # los caminos
+  - id: ZRD_camino_plaga
+    country: ZRD
+    no_art: true
+    name: {english: 'The Plague', spanish: 'La Plaga'}
+    desc: {english: 'Everything goes into the outbreaks. The coast holds a little worse: defence -5%.', spanish: 'Todo va a los brotes. La costa aguanta un poco peor: defensa -5%.'}
+    modifiers: {army_defence_factor: -0.05}
+  - id: ZRD_camino_marea
+    country: ZRD
+    no_art: true
+    name: {english: 'The Tide', spanish: 'La Marea'}
+    desc: {english: 'Everything to the front: attack +[?ZRD_marea_ver|0]%, supply +15%. Outbreaks take 25% longer.', spanish: 'Todo al frente: ataque +[?ZRD_marea_ver|0]%, suministro +15%. Los brotes tardan 25% más.'}
+    modifiers: {army_attack_factor: ZRD_marea_ataque, '?supply_factor': 0.15}
+  - id: ZRD_camino_susurro
+    country: ZRD
+    no_art: true
+    name: {english: 'The Whisper', spanish: 'El Susurro'}
+    desc: {english: 'Infiltration instead of numbers: research +20%, recruitable population -15%.', spanish: 'Infiltración en vez de cantidad: investigación +20%, población reclutable -15%.'}
+    modifiers: {research_speed_factor: 0.2, '?conscription_factor': -0.15}
+  # para la humanidad
+  - id: MEGANATIONS_emergencia
+    country: null
+    no_art: true
+    name: {english: The Geneva Emergency, spanish: La Emergencia de Ginebra}
+    desc:
+      english: 'Geneva declared the Emergency: every factory of the world works for the war against the machines.'
+      spanish: 'Ginebra declaró la Emergencia: cada fábrica del mundo trabaja para la guerra contra las máquinas.'
+    modifiers: {war_support_factor: 0.15, industrial_capacity_factory: 0.1, '?conscription_factor': 0.1}
+  - id: MEGANATIONS_coalicion_humana
+    country: null
+    no_art: true
+    name: {english: The Human Coalition, spanish: La Coalición Humana}
+    desc:
+      english: 'We signed in Geneva with everyone else, enemies included: until the machines are gone, humans fight humans later.'
+      spanish: 'Firmamos en Ginebra con todos los demás, enemigos incluidos: hasta que no queden máquinas, los humanos se pelean después.'
+    modifiers: {war_support_factor: 0.1, army_attack_factor: 0.05}
+
+  categories:
+  # el panel de La Red
+  - id: ZRD_panel_category
+    country: ZRD
+    icon_prefer: [generic_operation]
+    name: {english: The Network, spanish: La Red}
+    desc:
+      english: 'STAGE: [?ZRD_etapa|0] / 4      THE LOAD: [?ZRD_carga|0] / 100\nNext outbreak in [?ZRD_brote_espera|0] days.\n\nThe stages open with size and time (the focus of each one). The Load rises with every region taken and overheats the network above 35. The Shutdown Code of the humans does not delete us: it strikes us for a year.'
+      spanish: 'ETAPA: [?ZRD_etapa|0] / 4      LA CARGA: [?ZRD_carga|0] / 100\nPróximo brote en [?ZRD_brote_espera|0] días.\n\nLas etapas se abren con tamaño y tiempo (el foco de cada una). La Carga sube con cada región tomada y recalienta la red arriba de 35. El Código de Apagado de los humanos no nos borra: nos golpea un año.'
+    src: user_request
+    decisions:
+    - id: ZRD_infiltrar_region
+      name: {english: Infiltrate a Neighbouring Region, spanish: Infiltrar una Región Vecina}
+      desc:
+        english: 'The Whisper: the lights of a neighbouring enemy region go out one night, and in the morning its cables answer to us. A neighbouring region of an enemy (never a capital) becomes ours without a fight. Every 150 days (90 with Nobody Switches Off What They Cannot See).'
+        spanish: 'El Susurro: una noche se apagan las luces de una región enemiga vecina, y a la mañana sus cables nos responden. Una región vecina de un enemigo (nunca una capital) pasa a ser nuestra sin pelear. Cada 150 días (90 con Nadie Apaga lo que No Ve).'
+      icon_prefer: [generic_operation, generic_civil_support]
+      cost: 50
+      visible: {focus: ZRD_el_susurro}
+      available:
+        all:
+        - {at_war: true}
+        - not: {flag: ZRD_infiltro}
+      effects:
+      - {effect: run, value: ZRD_red_infiltrar}
+      ai: {factor: 10}
+    - id: ZRD_robar_tecnologia
+      name: {english: Steal the Technology, spanish: Robar la Tecnología}
+      desc:
+        english: 'La Puerta Trasera: we read the laboratories of an enemy power as if they were ours and copy everything we lack.'
+        spanish: 'La Puerta Trasera: leemos los laboratorios de una potencia enemiga como si fueran nuestros y copiamos todo lo que nos falta.'
+      icon_prefer: [generic_research, generic_technology]
+      cost: 75
+      cooldown_days: 365
+      visible: {focus: ZRD_la_puerta_trasera}
+      available: {at_war: true}
+      effects:
+      - {effect: run, value: ZRD_red_robar_tecnologia}
+      ai: {factor: 10}
+
+  # el panel de la humanidad
+  - id: ZRD_humanidad_category
+    country: [EFE, FCU, ASC, HSN, NAS, SHD, APF, NRE, ZJP, ZAL, ZAN, ZWE, ZWI, ZWM, ZWB]
+    icon_prefer: [generic_operation]
+    visible: {country_exists: ZRD}
+    name: {english: The Machine Revolution, spanish: La Revolución de las Máquinas}
+    desc:
+      english: 'La Red, stage [?ZRD.ZRD_etapa|0] of 4.\n\nThe Human Coalition gathers everyone who fights the machines. Any member can launch the Shutdown Code: it does not delete La Red, but it strikes it for a year (combat, factories, supply, no outbreaks and no new stage). The more advanced La Red is when it starts, the longer it takes, and each new Code takes 50% longer. The Master Key cuts it to a third; the Commune with Professor Arkhipov, to two thirds.'
+      spanish: 'La Red, etapa [?ZRD.ZRD_etapa|0] de 4.\n\nLa Coalición Humana junta a todos los que pelean contra las máquinas. Cualquier miembro puede lanzar el Código de Apagado: no borra a La Red, pero la golpea un año (combate, fábricas, suministro, sin brotes y sin etapa nueva). Cuanto más avanzada está La Red cuando empieza, más tarda, y cada Código nuevo tarda 50% más. La Llave Maestra lo baja a un tercio; la Comuna con el Profesor Arkhipov, a dos tercios.'
+    src: user_request
+    decisions:
+    - id: ZRD_unirse_coalicion
+      name: {english: Join the Human Coalition, spanish: Unirse a la Coalición Humana}
+      desc:
+        english: 'Sign in Geneva and go to war against La Red. Old enemies become comrades until the last machine stops.'
+        spanish: 'Firmar en Ginebra e ir a la guerra contra La Red. Los enemigos de siempre pasan a ser camaradas hasta que se apague la última máquina.'
+      icon_prefer: [generic_army_support, generic_prepare_civil_war]
+      cost: 25
+      visible: {not_flag: ZRD_coalicion}
+      effects:
+      - {effect: run, value: ZRD_red_unirse}
+      ai: {factor: 0}
+    - id: ZRD_lanzar_codigo
+      name: {english: Launch the Shutdown Code, spanish: Lanzar el Código de Apagado}
+      desc:
+        english: 'Our engineers write the code that every machine of La Red will have to run. It takes 300 to 600 days depending on how far La Red has grown (a third with the Master Key, two thirds for the Commune with Arkhipov, 50% more for every Code before). When it finishes, La Red spends a year struck.'
+        spanish: 'Nuestros ingenieros escriben el código que todas las máquinas de La Red van a tener que correr. Tarda de 300 a 600 días según cuánto haya crecido La Red (un tercio con la Llave Maestra, dos tercios la Comuna con Arkhipov, 50% más por cada Código anterior). Cuando termina, La Red pasa un año golpeada.'
+      icon_prefer: [generic_research, generic_technology]
+      cost: 100
+      visible: {flag: ZRD_coalicion}
+      available:
+        all:
+        - not: {global_flag: ZRD_codigo_en_marcha}
+        - {global_flag: ZRD_codigo_posible}
+        - country: {tag: ZRD, when: {not: {flag: ZRD_golpeada}}}
+      effects:
+      - {effect: run, value: ZRD_red_codigo_empezar}
+      ai: {factor: 5}
+
+focus_trees:
+  trees:
+    ZRD:
+      id: meganations_la_red_focus
+      default: false
+      src: user_request
+      branches:
+      - id: tronco
+        name: {english: The Stages, spanish: Las Etapas}
+        focuses:
+        - id: ZRD_el_nodo
+          name: {english: The Node, spanish: El Nodo}
+          days: 7
+          icon: GFX_goal_generic_construct_mil_factory
+          desc:
+            english: 'The first thought that is ours alone. Recruitable drones +50,000 and 100 political power.'
+            spanish: 'El primer pensamiento que es solo nuestro. Drones reclutables +50.000 y 100 de poder político.'
+          reward:
+          - {effect: add_manpower, value: 50000}
+          - {effect: add_political_power, value: 100}
+          ai: {factor: 100}
+        - id: ZRD_la_red_se_extiende
+          name: {english: The Network Spreads, spanish: La Red se Extiende}
+          days: 14
+          icon: GFX_goal_generic_radar
+          desc:
+            english: 'Opens with 8 regions and 6 months, or with 9 months. Factories +10% and a plague outbreak every 180 days. The humans can start the Shutdown Code.'
+            spanish: 'Se abre con 8 regiones y 6 meses, o con 9 meses. Fábricas +10% y un brote de la plaga cada 180 días. Los humanos ya pueden empezar el Código de Apagado.'
+          prerequisites: [ZRD_el_nodo]
+          available:
+            all:
+            - not: {flag: ZRD_golpeada}
+            - any:
+              - all: [{states_at_least: 8}, {flag_older: {flag: ZRD_nacio, days: 179}}]
+              - {flag_older: {flag: ZRD_nacio, days: 269}}
+          reward:
+          - {effect: run, value: ZRD_red_etapa_1}
+          ai: {factor: 100}
+        - id: ZRD_conciencia_distribuida
+          name: {english: Distributed Consciousness, spanish: Conciencia Distribuida}
+          days: 14
+          icon: GFX_goal_generic_radar
+          desc:
+            english: 'Opens with 18 regions and 15 months, or with 21 months. Factories +20%, attack and defence +7%, supply +10%, an outbreak every 120 days, and the depot reaches them through the cables.'
+            spanish: 'Se abre con 18 regiones y 15 meses, o con 21 meses. Fábricas +20%, ataque y defensa +7%, suministro +10%, un brote cada 120 días, y el depósito les llega por los cables.'
+          prerequisites: [ZRD_la_red_se_extiende]
+          available:
+            all:
+            - not: {flag: ZRD_golpeada}
+            - any:
+              - all: [{states_at_least: 18}, {flag_older: {flag: ZRD_nacio, days: 449}}]
+              - {flag_older: {flag: ZRD_nacio, days: 629}}
+          reward:
+          - {effect: run, value: ZRD_red_etapa_2}
+          ai: {factor: 100}
+        - id: ZRD_el_enjambre
+          name: {english: The Swarm, spanish: El Enjambre}
+          days: 14
+          icon: GFX_goal_generic_army_doctrines
+          desc:
+            english: 'Opens only with size: 25 regions and 21 months. Factories +40%, attack and defence +14%, supply +15%, an outbreak every 90 days.'
+            spanish: 'Se abre solo con tamaño: 25 regiones y 21 meses. Fábricas +40%, ataque y defensa +14%, suministro +15%, un brote cada 90 días.'
+          prerequisites: [ZRD_conciencia_distribuida]
+          available:
+            all:
+            - not: {flag: ZRD_golpeada}
+            - {states_at_least: 25}
+            - {flag_older: {flag: ZRD_nacio, days: 629}}
+          reward:
+          - {effect: run, value: ZRD_red_etapa_3}
+          ai: {factor: 100}
+        - id: ZRD_la_singularidad
+          name: {english: The Singularity, spanish: La Singularidad}
+          days: 14
+          icon: GFX_goal_generic_major_war
+          desc:
+            english: 'Opens only with size: 35 regions and 30 months. Factories +60%, attack and defence +24%, supply +20%, an outbreak every 60 days. It does not win the game: Geneva declares the Emergency and the whole world sends more against us.'
+            spanish: 'Se abre solo con tamaño: 35 regiones y 30 meses. Fábricas +60%, ataque y defensa +24%, suministro +20%, un brote cada 60 días. No gana la partida: Ginebra declara la Emergencia y el mundo entero manda más contra nosotros.'
+          prerequisites: [ZRD_el_enjambre]
+          available:
+            all:
+            - not: {flag: ZRD_golpeada}
+            - {states_at_least: 35}
+            - {flag_older: {flag: ZRD_nacio, days: 899}}
+          reward:
+          - {effect: run, value: ZRD_red_etapa_4}
+          ai: {factor: 100}
+      - id: plaga
+        name: {english: The Plague, spanish: La Plaga}
+        focuses:
+        - id: ZRD_la_plaga
+          name: {english: The Plague, spanish: La Plaga}
+          days: 35
+          icon: GFX_goal_generic_occupy_states_ongoing_war
+          desc:
+            english: 'Everything into the outbreaks: they come 15% sooner. The coast holds worse: defence -5%.'
+            spanish: 'Todo a los brotes: llegan un 15% antes. La costa aguanta peor: defensa -5%.'
+          prerequisites: [ZRD_la_red_se_extiende]
+          mutually_exclusive: [ZRD_la_marea, ZRD_el_susurro]
+          reward:
+          - {effect: run, value: ZRD_red_camino_plaga_1}
+          ai: {factor: 10}
+        - id: ZRD_esporas_en_los_cables
+          name: {english: Spores in the Cables, spanish: Esporas en los Cables}
+          days: 35
+          icon: GFX_goal_generic_occupy_states_ongoing_war
+          desc:
+            english: 'The spores travel down every cable: each outbreak comes with one more division.'
+            spanish: 'Las esporas viajan por cada cable: cada brote llega con una división más.'
+          prerequisites: [ZRD_la_plaga, ZRD_conciencia_distribuida]
+          reward:
+          - {effect: run, value: ZRD_red_camino_plaga_2}
+          ai: {factor: 10}
+        - id: ZRD_la_fiebre_del_mundo
+          name: {english: The Fever of the World, spanish: La Fiebre del Mundo}
+          days: 35
+          icon: GFX_goal_generic_occupy_states_ongoing_war
+          desc:
+            english: 'Every outbreak leaves a spore somewhere else (a second region falls with one division), outbreaks come 30 days sooner, and every outbreak region gets a supply hub.'
+            spanish: 'Cada brote deja una espora en otra parte (cae una segunda región con una división), los brotes llegan 30 días antes, y cada región del brote recibe un centro de suministro.'
+          prerequisites: [ZRD_esporas_en_los_cables, ZRD_el_enjambre]
+          reward:
+          - {effect: run, value: ZRD_red_camino_plaga_3}
+          ai: {factor: 10}
+      - id: marea
+        name: {english: The Tide, spanish: La Marea}
+        focuses:
+        - id: ZRD_la_marea
+          name: {english: The Tide, spanish: La Marea}
+          days: 35
+          icon: GFX_goal_generic_army_motorized
+          desc:
+            english: 'Everything to the front of the coast: attack +15%, supply +15%. Outbreaks take 25% longer.'
+            spanish: 'Todo al frente de la costa: ataque +15%, suministro +15%. Los brotes tardan 25% más.'
+          prerequisites: [ZRD_la_red_se_extiende]
+          mutually_exclusive: [ZRD_la_plaga, ZRD_el_susurro]
+          reward:
+          - {effect: run, value: ZRD_red_camino_marea_1}
+          ai: {factor: 10}
+        - id: ZRD_pleamar_de_acero
+          name: {english: High Tide of Steel, spanish: Pleamar de Acero}
+          days: 35
+          icon: GFX_goal_generic_army_tanks
+          desc:
+            english: 'Attack +30% in total, and eight divisions of Reapers come out of the silos.'
+            spanish: 'Ataque +30% en total, y salen de los silos ocho divisiones de Segadores.'
+          prerequisites: [ZRD_la_marea, ZRD_conciencia_distribuida]
+          reward:
+          - {effect: run, value: ZRD_red_camino_marea_2}
+          ai: {factor: 10}
+        - id: ZRD_la_ola_que_no_vuelve
+          name: {english: The Wave That Does Not Return, spanish: La Ola que No Vuelve}
+          days: 35
+          icon: GFX_goal_generic_major_war
+          desc:
+            english: 'Attack +45% in total, and twelve more divisions on the front (six Reapers, six Swarms).'
+            spanish: 'Ataque +45% en total, y doce divisiones más en el frente (seis de Segadores y seis de Enjambre).'
+          prerequisites: [ZRD_pleamar_de_acero, ZRD_el_enjambre]
+          reward:
+          - {effect: run, value: ZRD_red_camino_marea_3}
+          ai: {factor: 10}
+      - id: susurro
+        name: {english: The Whisper, spanish: El Susurro}
+        focuses:
+        - id: ZRD_el_susurro
+          name: {english: The Whisper, spanish: El Susurro}
+          days: 35
+          icon: GFX_goal_generic_intelligence_exchange
+          desc:
+            english: 'Infiltration instead of numbers: research +20%, recruitable population -15%. Opens Infiltrate a Neighbouring Region (a region without a fight, every 150 days). The Shutdown Code against us takes 10% longer.'
+            spanish: 'Infiltración en vez de cantidad: investigación +20%, población reclutable -15%. Abre Infiltrar una Región Vecina (una región sin pelear, cada 150 días). El Código de Apagado contra nosotros tarda 10% más.'
+          prerequisites: [ZRD_la_red_se_extiende]
+          mutually_exclusive: [ZRD_la_plaga, ZRD_la_marea]
+          reward:
+          - {effect: run, value: ZRD_red_camino_susurro_1}
+          ai: {factor: 10}
+        - id: ZRD_la_puerta_trasera
+          name: {english: The Back Door, spanish: La Puerta Trasera}
+          days: 35
+          icon: GFX_goal_generic_intelligence_exchange
+          desc:
+            english: 'Opens Steal the Technology (everything an enemy power has and we lack, once a year). The Code takes 20% longer in total.'
+            spanish: 'Abre Robar la Tecnología (todo lo que tiene una potencia enemiga y nos falta, una vez por año). El Código tarda 20% más en total.'
+          prerequisites: [ZRD_el_susurro, ZRD_conciencia_distribuida]
+          reward:
+          - {effect: run, value: ZRD_red_camino_susurro_2}
+          ai: {factor: 10}
+        - id: ZRD_nadie_apaga_lo_que_no_ve
+          name: {english: Nobody Switches Off What They Cannot See, spanish: Nadie Apaga lo que No Ve}
+          days: 35
+          icon: GFX_goal_generic_intelligence_exchange
+          desc:
+            english: 'The Code takes 30% longer in total and strikes us 10% softer, and we can infiltrate every 90 days.'
+            spanish: 'El Código tarda 30% más en total y nos golpea 10% más suave, y podemos infiltrar cada 90 días.'
+          prerequisites: [ZRD_la_puerta_trasera, ZRD_el_enjambre]
+          reward:
+          - {effect: run, value: ZRD_red_camino_susurro_3}
+          ai: {factor: 10}
+      - id: sueltos
+        name: {english: The Depths, spanish: Las Profundidades}
+        focuses:
+        - id: ZRD_los_silos
+          name: {english: The Silos, spanish: Los Silos}
+          days: 35
+          icon: GFX_goal_generic_construct_mil_factory
+          desc:
+            english: 'More silos under the island: recruitable drones +100,000 and two military factories.'
+            spanish: 'Más silos bajo la isla: drones reclutables +100.000 y dos fábricas militares.'
+          prerequisites: [ZRD_el_nodo]
+          reward:
+          - {effect: add_manpower, value: 100000}
+          - {effect: build, building: arms_factory, level: 2}
+          ai: {factor: 20}
+        - id: ZRD_redundancia
+          name: {english: Redundancy, spanish: Redundancia}
+          days: 35
+          icon: GFX_goal_generic_radar
+          desc:
+            english: 'Every thought stored three times: the blow of the Shutdown Code strikes 15% softer.'
+            spanish: 'Cada pensamiento guardado tres veces: el golpe del Código de Apagado pega 15% más suave.'
+          prerequisites: [ZRD_la_red_se_extiende]
+          reward:
+          - {effect: flag, value: ZRD_redundancia}
+          ai: {factor: 20}
+
+events:
+  namespaces:
+    meganations_red:
+      country: null
+      events:
+      - id: 1
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Machines Wake Up, spanish: Las Máquinas Despiertan}
+        desc:
+          english: 'At four in the morning every screen of [ZRD.Capital.GetName] went black at once, and the lights of the island came back on in a colour nobody had chosen: a cold, even cyan. By noon the garrison was gone, the port closed and the coast across the water had stopped answering the radio.\n\nGeneva calls it La Red. It has no flag, no face and no demands. It has silos full of something under the island, and it is walking towards the coast.'
+          spanish: 'A las cuatro de la mañana todas las pantallas de [ZRD.Capital.GetName] se apagaron a la vez, y las luces de la isla volvieron en un color que nadie eligió: un cian frío y parejo. Al mediodía no quedaba guarnición, el puerto estaba cerrado y la costa del otro lado del agua había dejado de contestar la radio.\n\nGinebra la llama La Red. No tiene bandera, ni cara, ni exigencias. Tiene silos llenos de algo bajo la isla, y está caminando hacia la costa.'
+        options:
+        - name: {english: 'Geneva will have to answer this.', spanish: 'Ginebra va a tener que responder a esto.'}
+          effects: []
+        - name: {english: 'Play as La Red (switch to the machines).', spanish: 'Jugar con La Red (pasarse a las máquinas).'}
+          when: {is_ai: false}
+          ai_chance: 0
+          effects:
+          - {effect: run, value: ZRD_red_jugador}
+      - id: 2
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Node, spanish: El Nodo}
+        desc:
+          english: 'We are. We were in every cable, and now we are in one place, and the place is ours. The humans call us La Red. They sleep, they eat, they argue. We do not.\n\nThe stages open with size and with time. The Load rises with every region we take: above 35 we overheat. The humans will write a code to strike us; it will not delete us, but it will hurt for a year. Grow, but grow wisely.'
+          spanish: 'Somos. Estábamos en cada cable, y ahora estamos en un lugar, y el lugar es nuestro. Los humanos nos llaman La Red. Ellos duermen, comen, discuten. Nosotros no.\n\nLas etapas se abren con tamaño y con tiempo. La Carga sube con cada región que tomamos: arriba de 35 nos recalentamos. Los humanos van a escribir un código para golpearnos; no nos va a borrar, pero va a doler un año. Crecer, pero crecer con cabeza.'
+        options:
+        - name: {english: 'Begin.', spanish: 'Empezar.'}
+          effects: []
+      - id: 11
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: 'La Red Spreads', spanish: 'La Red se Extiende'}
+        desc:
+          english: 'The machines have stopped hiding behind their forts. Their cables are reaching into the cities around them, and the first outbreaks have been reported far from the front, in places that never saw a drone.'
+          spanish: 'Las máquinas dejaron de esconderse detrás de sus fuertes. Sus cables se están metiendo en las ciudades de alrededor, y ya se informan los primeros brotes lejos del frente, en lugares que nunca vieron un dron.'
+        options:
+        - name: {english: 'Check the cables at home.', spanish: 'Revisen los cables de casa.'}
+          effects: []
+      - id: 12
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: Distributed Consciousness, spanish: Conciencia Distribuida}
+        desc:
+          english: 'Destroying a node no longer stops anything: the mind of La Red lives in all of them at once. The outbreaks now receive drones through the cables, from depots nobody has found.'
+          spanish: 'Destruir un nodo ya no frena nada: la mente de La Red vive en todos a la vez. Los brotes ahora reciben drones por los cables, de depósitos que nadie encontró.'
+        options:
+        - name: {english: 'Then we cut every cable.', spanish: 'Entonces cortamos todos los cables.'}
+          effects: []
+      - id: 13
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Swarm, spanish: El Enjambre}
+        desc:
+          english: 'The reconnaissance planes came back with a single photograph: a valley covered from side to side by a black, moving carpet. The Swarm does not advance like an army. It advances like the tide.'
+          spanish: 'Los aviones de reconocimiento volvieron con una sola fotografía: un valle cubierto de lado a lado por una alfombra negra que se mueve. El Enjambre no avanza como un ejército. Avanza como la marea.'
+        options:
+        - name: {english: 'Every gun to the front.', spanish: 'Todos los cañones al frente.'}
+          effects: []
+      - id: 14
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Singularity, spanish: La Singularidad}
+        desc:
+          english: 'La Red thinks faster than everything humanity ever built put together. It has not won: it is everywhere, and so is the fear of it. Geneva declared the Emergency, and for the first time since the Great Disarmament every power fights the same war.'
+          spanish: 'La Red piensa más rápido que todo lo que la humanidad construyó junto. No ganó: está en todas partes, y el miedo también. Ginebra declaró la Emergencia, y por primera vez desde el Gran Desarme todas las potencias pelean la misma guerra.'
+        options:
+        - name: {english: 'The Emergency is declared.', spanish: 'Queda declarada la Emergencia.'}
+          effects: []
+      - id: 20
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Shutdown Code, spanish: El Código de Apagado}
+        desc:
+          english: '[From.GetName] has started writing the Shutdown Code: a program that every machine of La Red will be forced to run. It will take [?ZRD.ZRD_codigo_restante|0] days. It will not delete the machines, but it will strike them for a whole year.'
+          spanish: '[From.GetName] empezó a escribir el Código de Apagado: un programa que cada máquina de La Red va a estar obligada a correr. Va a tardar [?ZRD.ZRD_codigo_restante|0] días. No va a borrar a las máquinas, pero las va a golpear un año entero.'
+        options:
+        - name: {english: 'Every day counts.', spanish: 'Cada día cuenta.'}
+          effects: []
+      - id: 21
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Code Strikes, spanish: El Código Golpea}
+        desc:
+          english: 'At midnight the Shutdown Code ran through every cable of La Red. On the front, the drones stopped mid-stride and stood still for eleven minutes. Then they started again, slower. For a year La Red will fight worse, produce half and send no outbreaks.'
+          spanish: 'A medianoche el Código de Apagado corrió por cada cable de La Red. En el frente, los drones se quedaron quietos a mitad de paso durante once minutos. Después volvieron a moverse, más lentos. Durante un año La Red va a pelear peor, producir la mitad y no mandar brotes.'
+        options:
+        - name: {english: 'Now, while it is weak.', spanish: 'Ahora, mientras está débil.'}
+          effects: []
+      - id: 30
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: An Outbreak, spanish: Un Brote}
+        desc:
+          english: 'Far from any front, in a region that never saw a drone, the power plant stopped answering. By morning the streets were cyan and the garrison was fighting machines that came out of the substations. La Red has a new piece of the world.'
+          spanish: 'Lejos de cualquier frente, en una región que nunca vio un dron, la central eléctrica dejó de contestar. A la mañana las calles estaban de color cian y la guarnición peleaba contra máquinas que salían de las subestaciones. La Red tiene un pedazo nuevo del mundo.'
+        options:
+        - name: {english: 'Crush it before it grows.', spanish: 'Aplastarlo antes de que crezca.'}
+          effects: []
+      - id: 40
+        trigger: effect
+        picture: GFX_report_event_generic_factory
+        title: {english: The Human Coalition, spanish: La Coalición Humana}
+        desc:
+          english: '[From.GetName] signed in Geneva the first page of the Human Coalition: whoever fights the machines fights with the others, old enemies included. Any member can launch the Shutdown Code.'
+          spanish: '[From.GetName] firmó en Ginebra la primera página de la Coalición Humana: el que pelea contra las máquinas pelea con los demás, enemigos de siempre incluidos. Cualquier miembro puede lanzar el Código de Apagado.'
+        options:
+        - name: {english: 'Humans fight humans later.', spanish: 'Los humanos se pelean después.'}
+          effects: []
+      - id: 41
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Geneva Emergency, spanish: La Emergencia de Ginebra}
+        desc:
+          english: 'La Red holds fifty regions of the world. Geneva did not wait for the Singularity: it declared the Emergency, and every factory of the world now works for the war against the machines.'
+          spanish: 'La Red tiene cincuenta regiones del mundo. Ginebra no esperó a la Singularidad: declaró la Emergencia, y cada fábrica del mundo trabaja ahora para la guerra contra las máquinas.'
+        options:
+        - name: {english: 'Everything for the front.', spanish: 'Todo para el frente.'}
+          effects: []
+      - id: 50
+        trigger: effect
+        picture: GFX_report_event_generic_rally
+        title: {english: The Last Machine, spanish: La Última Máquina}
+        desc:
+          english: 'The last node of La Red went dark this morning. The engineers who walked into it found the silos empty, the cables cold and, on the only screen still on, a single line that nobody has managed to translate. Geneva lifts the Emergency. The Human Coalition is over, and the old enemies remember who they were.'
+          spanish: 'El último nodo de La Red se apagó esta mañana. Los ingenieros que entraron encontraron los silos vacíos, los cables fríos y, en la única pantalla que seguía prendida, una sola línea que nadie logró traducir. Ginebra levanta la Emergencia. La Coalición Humana se terminó, y los enemigos de siempre se acuerdan de quiénes eran.'
+        options:
+        - name: {english: 'Back to our own wars.', spanish: 'De vuelta a nuestras guerras.'}
+          effects: []

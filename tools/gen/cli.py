@@ -32,6 +32,7 @@ from .emitters import ficha_lider as em_ficha_lider
 from .emitters import balance as em_balance
 from .emitters import carrera as em_carrera
 from .emitters import friccion as em_friccion
+from .emitters import la_red as em_la_red
 from .emitters import cleanup as em_cleanup
 from .emitters import characters as em_characters
 from .emitters import countries as em_countries
@@ -122,6 +123,7 @@ EMITTERS = [
     ("diplomacy", em_diplomacy.emit),
     ("carrera", em_carrera.emit),       # carrera del destino, exilio, caudillos y rivales (04_diplomacy -> race)
     ("friccion", em_friccion.emit),     # 2026-11-14: puntos de fricción (41_friccion): antes que la IA (le pasa planes)
+    ("la_red", em_la_red.emit),         # 2026-11-20: La Red (49_la_red): antes que la IA (le pasa planes)
     ("ai", em_ai.emit),                 # estrategias de IA: despues de territory (quien existe)   # antes que history: opiniones, guerras, tension
     ("history", em_history.emit),
     ("scenario", em_scenario.emit),     # despues de territory: destaca solo paises con states
