@@ -551,7 +551,7 @@ ZRD_red_golpe = {{
         "subtract_from_temp_variable", "multiply_temp_variable", "add_dynamic_modifier", "remove_dynamic_modifier",
         "force_update_dynamic_modifier", "country_event", "every_country", "every_owned_state", "random_state",
         "random_country", "save_event_target_as", "set_country_flag", "clr_country_flag", "set_state_flag",
-        "custom_effect_tooltip", "hidden_effect", "capital_scope", "add_resource")})
+        "custom_effect_tooltip", "hidden_effect", "add_resource")})  # capital_scope es un ámbito, no figura en la lista de efectos
     ctx.verify_keys("triggers", {k: SOURCE for k in (
         "has_global_flag", "has_game_rule", "date", "country_exists", "has_completed_focus", "check_variable",
         "is_owned_by", "is_controlled_by", "has_state_flag", "has_country_flag", "has_war_with", "is_neighbor_of",
