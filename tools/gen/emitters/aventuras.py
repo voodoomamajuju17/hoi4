@@ -389,6 +389,10 @@ def _events(ctx: BuildContext, tag: str | None, saga: dict, cfg: dict, prefix: s
                     "when": _requirement(ctx, tag, end.get("place")), "immediate": list(arrive),
                     "title": end["title"], "desc": desc,
                     "options": [{"name": end["close"], "effects": eff}]})
+    # 2026-11-21 ("¿No deberían tener imagen?" -> "Reusar las que hay"): un capítulo sin dibujo propio muestra
+    # el del último capítulo dibujado de su misma historia (el del mismo héroe si hay; si no, el de la saga),
+    # nunca la foto genérica del juego. Los finales sin dibujo, el último dibujado del héroe o de la saga.
+    _reusar_imagenes(ctx, ns, saga, out)
     # las Láminas: un evento oculto por cada una, que la abre (o manda el capítulo a la IA)
     if plates is not None and plated:
         by_id = {e["id"]: e for e in out}
@@ -428,3 +432,20 @@ def _sin_nombre(pick: str, nombre: str) -> str:
         resto = pick[len(nombre):].lstrip(" ,:;-")
         return resto[:1].upper() + resto[1:] if resto else pick
     return pick
+
+
+def _reusar_imagenes(ctx: BuildContext, ns: str, saga: dict, out: list[dict]) -> None:
+    carpeta = ctx.spec.root.parent / "assets" / "events"
+    quien = {2: None, **{n["id"]: n.get("who") for n in saga.get("nodes") or []},
+             **{e["id"]: e.get("who") for e in saga.get("endings") or []}}
+    propias = {e["id"] for e in out if (carpeta / f"{ns}.{e['id']}.dds").exists()}
+    if not propias:
+        return
+    ultimo_heroe: dict = {}
+    ultimo = min(propias)       # la primera de la saga, para lo que va antes de cualquier dibujo
+    for ev in sorted((e for e in out if not e.get("hidden") and e["id"] in quien), key=lambda e: e["id"]):
+        if ev["id"] in propias:
+            ultimo = ev["id"]
+            ultimo_heroe[quien[ev["id"]]] = ev["id"]
+        elif not ev.get("art"):
+            ev["art"] = f"{ns}.{ultimo_heroe.get(quien[ev['id']], ultimo)}"
