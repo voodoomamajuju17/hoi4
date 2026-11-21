@@ -1890,3 +1890,72 @@ leyendas:
         tipo: foco
         foco: [ZAL_la_universidad_abierta, ZAL_la_exposicion_de_2100, ZAL_los_fusiles_sin_circuitos]
         texto: {english: 'Arrives with the focus The Open University, The Great Exhibition of 2100 or Rifles Without Circuits (whichever path).', spanish: 'Llega con el foco La Universidad Abierta, La Gran Exposición de 2100 o Fusiles sin Circuitos (según el camino).'}
+
+  # ===========================================================================
+  # 2026-11-20: Tierras Sin Ley, una Leyenda por cada Estado que puede formar (48_tierras_sin_ley.yaml)
+  ZAN:
+    intro:
+      english: 'The Lawless Lands never had heroes: they had whoever was still standing. These two are still standing.'
+      spanish: 'Las Tierras Sin Ley nunca tuvieron héroes: tuvieron al que seguía en pie. Estos dos siguen en pie.'
+    personajes:
+    - id: ZAN_ley_prefecto_ozyman
+      rol: mariscal
+      nombre: {english: 'Prefect Ozyman', spanish: 'Prefecto Ozyman'}
+      born: 2051
+      look: >-
+        Weathered man of 49 from the Nebraska plains, shaved head, grey stubble, calm hooded eyes; plain undyed wool coat over
+        old body armour, a farmer's scarf, a battered copy of a stoic book in his breast pocket; behind him a grain silo turned
+        into a bunker. Stern, quiet, immovable.
+      lore:
+        english: 'He farmed corn in Nebraska until the Union stopped buying it. Then he built a wall around his town, then around the
+          next one, and never lost one. He quotes Epictetus to his soldiers and Marcus Aurelius to his enemies, and his name is the
+          joke of a schoolteacher who called him "king of kings" when he was twelve: look on his works, and despair.'
+        spanish: 'Cultivaba maíz en Nebraska hasta que la Unión dejó de comprarlo. Entonces levantó una muralla alrededor de su pueblo,
+          después alrededor del siguiente, y nunca perdió uno. Les cita a Epicteto a sus soldados y a Marco Aurelio a sus enemigos, y
+          su nombre es la broma de una maestra que a los doce años le dijo "rey de reyes": mirad sus obras y desesperad.'
+      frase: {english: 'Nothing here is ours, except the wall.', spanish: 'Nada acá es nuestro, salvo la muralla.'}
+      habilidades: {skill: 6, attack_skill: 4, defense_skill: 8, planning_skill: 7, logistics_skill: 6}
+      rasgos: [defensive_doctrine, organizer]
+      rasgo:
+        id: mn_ley_zan_el_muro_del_estoico
+        name: {english: "The Stoic's Wall", spanish: 'La Muralla del Estoico'}
+        desc: {english: 'His lines do not break: more defence, more entrenchment, soldiers who endure.', spanish: 'Sus líneas no se rompen: más defensa, más atrincheramiento, soldados que aguantan.'}
+        defense_skill: 2
+        planning_skill: 1
+        modifier: {army_defence_factor: 0.15, max_dig_in: 3, army_morale_factor: 0.1}
+      llave:
+        tipo: foco
+        foco: ZAN_r_milicia_ciudadana
+        texto: {english: 'Arrives with the focus The Citizens'' Militia (the Last Republic).', spanish: 'Llega con el foco La Milicia de los Ciudadanos (la República Última).'}
+    # inspirado en "Capitán Ancap" (pedido del usuario): un personaje inventado, no la persona real.
+    # El nombre que pidió es Хав'єр Свобода; las fuentes del juego no tienen letras cirílicas, así que
+    # en pantalla va transcripto (Khavier Svoboda).
+    - id: ZAN_ley_khavier_svoboda
+      rol: general
+      nombre: {english: 'Khavier Svoboda', spanish: 'Khavier Svoboda'}
+      born: 2064
+      look: >-
+        Wild-haired man of 36 with long unkempt sideburns, intense eyes and a permanent shout; a home-made superhero costume over
+        combat armour: black and hazard-yellow bodysuit, a cape with a coiled snake, a domino mask pushed up on his forehead, a
+        chainsaw-bayonet rifle on his back, neon implants glowing behind one ear; cyberpunk preacher energy. Fictional character,
+        not resembling any real person.
+      lore:
+        english: 'Nobody knows where he came from: he appeared in Kyiv in a cape, preaching the Gospel of the Contract from the roof of a
+          tram. Within a year the cyber-preachers called him the Captain, and the militias followed him into every fight he picked.
+          He has never lost an argument and has never let anyone finish one.'
+        spanish: 'Nadie sabe de dónde salió: apareció en Kiev con una capa, predicando el Evangelio del Contrato desde el techo de un
+          tranvía. Al año los ciberpredicadores le decían el Capitán, y las milicias lo siguieron a cada pelea que eligió. Nunca perdió
+          una discusión y nunca dejó que nadie terminara una.'
+      frase: {english: 'Freedom, damn it!', spanish: '¡Libertad, carajo!'}
+      habilidades: {skill: 6, attack_skill: 8, defense_skill: 3, planning_skill: 5, logistics_skill: 5}
+      rasgos: [offensive_doctrine, trait_reckless]
+      rasgo:
+        id: mn_ley_zan_el_capitan
+        name: {english: 'The Captain', spanish: 'El Capitán'}
+        desc: {english: 'Where he charges, everyone charges: more attack and breakthrough, and the militia never stops.', spanish: 'Donde él carga, carga todo el mundo: más ataque y ruptura, y la milicia no para.'}
+        attack_skill: 2
+        modifier: {army_attack_factor: 0.15, breakthrough_factor: 0.15, army_speed_factor: 0.05}
+      llave:
+        tipo: foco
+        foco: ZAN_l_voluntarios_por_conviccion
+        texto: {english: 'Arrives with the focus Volunteers by Conviction (Liberculto).', spanish: 'Llega con el foco Voluntarios por Convicción (Liberculto).'}

@@ -3273,9 +3273,15 @@ def test_leyendas() -> None:
     spec = specload.load(REPO_ROOT / "spec")
     raw = yaml.safe_load((REPO_ROOT / "spec" / "42_leyendas.yaml").read_text(encoding="utf-8"))["leyendas"]
     jugables = {"EFE", "ASC", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "ZJP", "ZAL"}
-    check("las diez naciones jugables tienen sus leyendas", set(raw) == jugables, str(sorted(raw)))
+    # 2026-11-20: más las dos de Tierras Sin Ley (una por cada Estado que puede formar)
+    check("las diez naciones jugables tienen sus leyendas (y Tierras Sin Ley las suyas)",
+          set(raw) == jugables | {"ZAN"}, str(sorted(raw)))
+    check("Tierras Sin Ley: el Prefecto Ozyman y Khavier Svoboda, cada uno con un foco de su Estado",
+          [p["llave"]["foco"] for p in raw["ZAN"]["personajes"]] == ["ZAN_r_milicia_ciudadana", "ZAN_l_voluntarios_por_conviccion"])
     roles_bien, llaves_bien = True, True
     for tag, nacion in raw.items():
+        if tag == "ZAN":
+            continue
         ps = nacion["personajes"]
         roles = Counter(p["rol"] for p in ps)
         if not (len(ps) == 6 and roles["mariscal"] == 1 and roles["almirante"] == 1 and roles["general"] == 2
@@ -3289,13 +3295,13 @@ def test_leyendas() -> None:
     check("cada nación: un mariscal, un almirante, dos generales, un ministro y un teórico o estado mayor", roles_bien)
     check("cada nación: dos por decisión, dos por foco, una por aventura y una por evento", llaves_bien)
     leyendas = [c for c in spec.raw["leaders"]["characters"] if c.get("leyenda")]
-    check("60 personajes nuevos, ninguno en la historia (llegan con su llave)",
-          len(leyendas) == 60 and all(c.get("recruit_in_history") is False for c in leyendas))
+    check("62 personajes nuevos, ninguno en la historia (llegan con su llave)",
+          len(leyendas) == 62 and all(c.get("recruit_in_history") is False for c in leyendas))
     check("cada uno con historia en los dos idiomas y aspecto para el retrato",
           all(p["lore"].get("english") and p["lore"].get("spanish") and len(p["look"]) > 150
               for _t, p in leyendas_spec.personajes(raw)))
     rasgos = [p["rasgo"]["id"] for _t, p in leyendas_spec.personajes(raw)]
-    check("cada uno con un rasgo propio, distinto", len(set(rasgos)) == 60)
+    check("cada uno con un rasgo propio, distinto", len(set(rasgos)) == 62)
     # más que sus pares: los mejores de antes tenían habilidad 4-5
     ok = True
     for _t, p in leyendas_spec.personajes(raw):
@@ -3344,8 +3350,8 @@ def test_leyendas() -> None:
               "planning_skill = 1 modifier = { army_defence_factor = 0.15" in ut, ut[ut.find("mn_ley_efe_madre"):][:300])
         check("el del almirante es de marina", "mn_ley_hsn_la_aseguradora = { type = navy" in ut)
         ev = " ".join((mod / "events/meganations_leyendas.txt").read_text(encoding="utf-8-sig").split())
-        check("60 eventos de llegada, cada uno recluta a su leyenda",
-              ev.count("country_event = {") == 60 and ev.count("recruit_character = ") == 60)
+        check("62 eventos de llegada, cada uno recluta a su leyenda",
+              ev.count("country_event = {") == 62 and ev.count("recruit_character = ") == 62)
         dec = " ".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/decisions").glob("*.txt")).split()
         dec = " ".join(dec)
         check("la decisión pide su llave, sale una vez y dispara la llegada",
@@ -3374,7 +3380,7 @@ def test_leyendas() -> None:
     # retratos: el mismo medio de la nación, elevado
     from tools.arte import retratos_medios
     ley = [i for i in retratos_medios.items(todos=True) if i.get("leyenda")]
-    check("60 retratos pedidos, todos de leyenda", len(ley) == 60)
+    check("62 retratos pedidos, todos de leyenda", len(ley) == 62)
     ped = retratos_medios.pedido(next(i for i in ley if i["id"] == "NRE_ley_navarca_corvino"))
     check("en el medio de su nación (camafeo) y elevado",
           "CAMEO" in ped and "LEGEND:" in ped and "IMPERIAL cameo" in ped and "Neapolitan woman of 42" in ped, ped[:300])
@@ -3482,6 +3488,59 @@ def test_albion_caminos() -> None:
     ef.SET_PORTRAITS_USADO.discard("ZAL_fut_mariscal_grant")
     check("verificacion: avisa claro si el juego no tiene set_portraits, y si no se pudo revisar",
           "verificado" in res[True] and "NO tiene el efecto" in res[False] and "no se pudo verificar" in res[None], str(res))
+
+
+def test_anarquias_finales() -> None:
+    """2026-11-20 (borrador aprobado): el final de cada anarquía."""
+    section("anarquias: el final de cada una")
+    with tempfile.TemporaryDirectory() as tmp:
+        ctx = build(Path(tmp), vanilla_path=str(FIXTURE_VANILLA), quiet=True)
+        mod = ctx.mod_root
+        zwb = " ".join(next((mod / "common/national_focus").glob("ZWB*.txt")).read_text(encoding="utf-8-sig").split())
+        i = zwb.find("id = ZWB_foco_7_the_jungle_closes_its_gates")
+        check("Amazonas: el final se atrasa 6 meses (217 dias) y sale de su faccion",
+              "cost = 31" in zwb[i:i + 300] and "leave_faction = yes" in zwb[i:i + 3000])
+        gan = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
+        check("Amazonas: cualquier guerra con la selva cerrada termina en paz blanca (al declararla y cada semana)",
+              "on_weekly_ZWB = {" in gan and "has_country_flag = ZWB_intocable" in gan
+              and gan.count("every_enemy_country = { white_peace = ROOT }") >= 2)
+        dm = (mod / "common/dynamic_modifiers").glob("*.txt")
+        dm = " ".join(" ".join(p.read_text(encoding="utf-8-sig").split()) for p in dm)
+        check("Amazonas: nadie le justifica la guerra ni ella a nadie",
+              "ZWB_selva_cerrada = {" in dm and "enemy_justify_war_goal_time = 1000" in dm)
+        for tag, otro in (("ZWM", "ZWI"), ("ZWI", "ZWM")):
+            arbol = " ".join(next((mod / "common/national_focus").glob(f"{tag}*.txt")).read_text(encoding="utf-8-sig").split())
+            j = arbol.find(f"id = {tag}_el_puente_de_persia")
+            check(f"{tag}: El Puente de Persia, escondido hasta que {otro} tambien termina su arbol",
+                  j > 0 and f"allow_branch = {{ country_exists = {otro}" in arbol[j:j + 600])
+        dec = " ".join("".join(p.read_text(encoding="utf-8-sig") for p in (mod / "common/decisions").glob("*.txt")).split())
+        check("Nueva Seleucia: la decision existe para los dos y manda el evento al otro",
+              "ZWM_fundar_nueva_seleucia = {" in dec and "ZWI_fundar_nueva_seleucia = {" in dec
+              and "meganations_seleucia.1" in dec)
+        ev = " ".join((mod / "events/meganations_seleucia.txt").read_text(encoding="utf-8-sig").split())
+        check("Nueva Seleucia: el otro se suma o hay guerra para anexarlo",
+              "annex_country = { target = ZWI" in ev and "declare_war_on = { target = ZWI type = annex_everything" in ev)
+        # Tierras Sin Ley
+        ons = " ".join((mod / "common/on_actions/06_meganations_ganchos.txt").read_text(encoding="utf-8-sig").split())
+        check("Tierras Sin Ley: al arrancar guarda el umbral (1,5 veces sus regiones) y marca su capital",
+              "set_variable = { var = ZAN_umbral_estado value = num_owned_states }" in ons
+              and "multiply_variable = { var = ZAN_umbral_estado value = 1.5 }" in ons
+              and "set_state_flag = ZAN_capital_original" in ons)
+        check("Tierras Sin Ley: la decision Formar un Estado pide el umbral y Kiev o la capital",
+              "ZAN_formar_un_estado = {" in dec and "any_owned_state = { has_state_flag = ZAN_capital_original }" in dec)
+        zev = " ".join((mod / "events/meganations_zan_estado.txt").read_text(encoding="utf-8-sig").split())
+        check("Tierras Sin Ley: el evento ofrece las dos naciones (segun la ciudad) o nada",
+              zev.count("option = {") == 3 and "ZAN_formar_republica_ultima = yes" in zev and "ZAN_formar_liberculto = yes" in zev)
+        arbol = " ".join((mod / "common/national_focus/ZAN_ESTADO_focus.txt").read_text(encoding="utf-8-sig").split())
+        check("Tierras Sin Ley: 25 focos (5 compartidos, 10 de cada Estado, cada rama solo para el suyo)",
+              arbol.count("focus = { id =") + arbol.count("\tfocus = {") >= 0 and arbol.count("id = ZAN_e_") == 5
+              and arbol.count("id = ZAN_r_") == 10 and arbol.count("id = ZAN_l_") == 10
+              and arbol.count("has_country_flag = ZAN_republica_ultima") == 10)
+        se = " ".join((mod / "common/scripted_effects/meganations_effects.txt").read_text(encoding="utf-8-sig").split())
+        k = se.find("ZAN_formar_estado_comun = {")
+        check("Tierras Sin Ley: al formarse, paz con todos, justificarles cuesta el doble y su arbol nuevo",
+              "every_enemy_country = { white_peace = ROOT }" in se[k:k + 800] and "ZAN_mod_estado" in se[k:k + 800]
+              and "meganations_zan_estado_focus" in se[k:k + 800])
 
 
 def test_historietas() -> None:
@@ -6660,6 +6719,7 @@ def main() -> int:
         test_albion_caminos,
         test_arboles,
         test_historietas,
+        test_anarquias_finales,
     ):
         test()
 

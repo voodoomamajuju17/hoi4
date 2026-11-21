@@ -28,6 +28,9 @@ Formato del spec: lista de { effect, value } o uno de los compuestos:
   { effect: tech_bonus, category: X, bonus: 0.5, uses: 1 } -> add_tech_bonus (categoría leída del juego)
   { effect: tech, value: X }                     -> set_technology = { X = 1 } (2026-10-17, lo nuclear de la Comuna)
   { effect: nukes, value: N }                    -> add_nuclear_bombs = N
+  { effect: white_peace_back }                   -> paz blanca con todos, lo ocupado vuelve a su dueño
+  { effect: set_capital, flag: X | state: [nombres] } -> set_capital a una región propia
+  Condición owns_state_flag: X                   -> any_owned_state = { has_state_flag = X }
   { effect: capital, effects: [...] }             -> capital_scope
   { effect: states, pick: random|every, when: {..}, effects: [..] }
                                                   -> random_owned_controlled_state / every_owned_state
@@ -1187,6 +1190,26 @@ def render_effects(owner: str, items: list[dict], known,
             block.add("set_cosmetic_tag", item["value"])
             effects_used.setdefault("set_cosmetic_tag", owner)
             continue
+        if effect == "set_capital":
+            # 2026-11-20 (Tierras Sin Ley): la capital pasa a una región propia, por marca o por nombre
+            mover = Block([("ROOT", Block([("set_capital", Block([("state", "PREV")]))]))])
+            if item.get("flag"):
+                block.add("random_owned_state", Block([("limit", Block([("has_state_flag", item["flag"])]))]
+                                                      + mover.entries))
+                effects_used.setdefault("random_owned_state", owner)
+            else:
+                sid = resolve_state(item["state"])
+                if sid is not None:
+                    block.add(str(sid), mover)
+            effects_used.setdefault("set_capital", owner)
+            continue
+        if effect == "white_peace_back":
+            # 2026-11-20 (el Amazonas en paz para siempre): paz blanca con todos los enemigos, sin
+            # repartir lo ocupado (cada región vuelve a su dueño)
+            block.add("every_enemy_country", Block([("white_peace", "ROOT")]))
+            for k in ("every_enemy_country", "white_peace"):
+                effects_used.setdefault(k, owner)
+            continue
         if effect == "white_peace_all":
             # Paz blanca con todos los enemigos; antes, cada uno se queda con lo
             # que controla (lo propio ocupado pasa al ocupante y al revés).
@@ -1631,6 +1654,11 @@ def render_conditions(owner: str, spec: dict, triggers_used: dict[str, str], *, 
             else:
                 block.add("NOT", Block([("controls_state", sid)]))
                 triggers_used.setdefault("controls_state", owner)
+        elif key == "owns_state_flag":
+            # 2026-11-20 (Tierras Sin Ley): es dueño de alguna región con esa marca (su capital original)
+            block.add("any_owned_state", Block([("has_state_flag", value)]))
+            triggers_used.setdefault("any_owned_state", owner)
+            triggers_used.setdefault("has_state_flag", owner)
         elif key == "owns_state":
             # es dueño de la región (nombres alternativos de UNA región)
             sid = resolve_state(value)

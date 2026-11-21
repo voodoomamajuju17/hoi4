@@ -1,4 +1,4 @@
-"""La Red (spec/47_la_red.yaml, 2026-11-20): la Revolución de las Máquinas de 2113.
+"""La Red (spec/49_la_red.yaml, 2026-11-20): la Revolución de las Máquinas de 2113.
 
 Lo que es mecánica con script propio y no cabe en los efectos del spec:
 
@@ -21,7 +21,7 @@ from ..pdx import banner_for
 from . import effects as effects_mod
 from .effects import resolve_state
 
-SOURCE = "spec/47_la_red.yaml"
+SOURCE = "spec/49_la_red.yaml"
 LOC_FILE = "meganations_la_red"
 NS = "meganations_red"
 POTENCIAS = ["ASC", "EFE", "FCU", "HSN", "NAS", "SHD", "APF", "NRE", "ZJP", "ZAL"]
