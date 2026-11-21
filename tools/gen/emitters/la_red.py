@@ -388,21 +388,21 @@ ZRD_red_proximo_brote = {{
                              f"Los brotes {pl['menos_dias']} días antes y un centro de suministro en cada región del brote.",
                              "\t\tset_country_flag = ZRD_fiebre\n"
                              f"\t\tset_variable = {{ var = ZRD_brote_menos value = {pl['menos_dias']} }}\n"))
-    for n in (2, 3):
-        camino(f"camino_plaga_{n}", " ".join(x[0] for x in niveles_plaga[n]), " ".join(x[1] for x in niveles_plaga[n]),
-               "".join(x[2] for x in niveles_plaga[n]))
+    for niv in (2, 3):
+        camino(f"camino_plaga_{niv}", " ".join(x[0] for x in niveles_plaga[niv]), " ".join(x[1] for x in niveles_plaga[niv]),
+               "".join(x[2] for x in niveles_plaga[niv]))
     nombres_div = {"Segadores": ("Reapers", "Segadores"), "Enjambre": ("Swarms", "Enjambre")}
-    for n in (1, 2, 3):
-        a = ma["ataque"][n - 1]
+    for niv in (1, 2, 3):
+        a = ma["ataque"][niv - 1]
         pct = round(a * 100)
-        seg, enj = ma["segadores"][n - 1], ma["enjambres"][n - 1]
+        seg, enj = ma["segadores"][niv - 1], ma["enjambres"][niv - 1]
         divs_en = " and ".join(f"{k} divisions of {nombres_div[t][0]}" for t, k in (("Segadores", seg), ("Enjambre", enj)) if k)
         divs_es = " y ".join(f"{k} divisiones de {nombres_div[t][1]}" for t, k in (("Segadores", seg), ("Enjambre", enj)) if k)
-        en = f"Attack +{pct}%" + (" in total" if n > 1 else "") + "."
-        es = f"Ataque +{pct}%" + (" en total" if n > 1 else "") + "."
+        en = f"Attack +{pct}%" + (" in total" if niv > 1 else "") + "."
+        es = f"Ataque +{pct}%" + (" en total" if niv > 1 else "") + "."
         cuerpo = (f"\t\tset_variable = {{ var = ZRD_marea_ataque value = {a} }}\n"
                   f"\t\tset_variable = {{ var = ZRD_marea_ver value = {pct} }}\n")
-        if n == 1:
+        if niv == 1:
             tarda = ma["brotes_pct"] - 100
             en += f" Supply +15%. Outbreaks take {tarda}% longer."
             es += f" Suministro +15%. Los brotes tardan {tarda}% más."
@@ -414,22 +414,22 @@ ZRD_red_proximo_brote = {{
             cuerpo += ("\t\tZRD_red_plantillas = yes\n\t\tcapital_scope = {\n"
                        + (_unidades("Segadores", seg, xp, "\t\t\t") if seg else "")
                        + (_unidades("Enjambre", enj, xp, "\t\t\t") if enj else "") + "\t\t}\n")
-        camino(f"camino_marea_{n}", en, es, cuerpo)
-    for n in (1, 2, 3):
-        pct = su["codigo_pct"][n - 1]
-        en = f"The Shutdown Code takes {pct - 100}% longer" + (" in total" if n > 1 else "") + "."
-        es = f"El Código de Apagado tarda {pct - 100}% más" + (" en total" if n > 1 else "") + "."
+        camino(f"camino_marea_{niv}", en, es, cuerpo)
+    for niv in (1, 2, 3):
+        pct = su["codigo_pct"][niv - 1]
+        en = f"The Shutdown Code takes {pct - 100}% longer" + (" in total" if niv > 1 else "") + "."
+        es = f"El Código de Apagado tarda {pct - 100}% más" + (" en total" if niv > 1 else "") + "."
         cuerpo = f"\t\tset_variable = {{ var = ZRD_codigo_pct value = {pct} }}\n"
-        if n == 1:
+        if niv == 1:
             en = "Research +20%, recruitable population -15%. " + en
             es = "Investigación +20%, población reclutable -15%. " + es
             cuerpo = "\t\tadd_dynamic_modifier = { modifier = ZRD_camino_susurro }\n" + cuerpo
-        if n == 3:
+        if niv == 3:
             suave = round((1 - su["golpe"]) * 100)
             en += f" It strikes {suave}% softer. Infiltrate every {su['infiltrar_dias_3']} days."
             es += f" Golpea {suave}% más suave. Infiltrar cada {su['infiltrar_dias_3']} días."
             cuerpo += "\t\tset_country_flag = ZRD_nadie_apaga\n"
-        camino(f"camino_susurro_{n}", en, es, cuerpo)
+        camino(f"camino_susurro_{niv}", en, es, cuerpo)
 
     efectos.append(f"""ZRD_red_infiltrar = {{
 \tcustom_effect_tooltip = {tt('ZRD_red_tt_infiltrar', 'A neighbouring region of an enemy becomes ours.', 'Una región vecina de un enemigo pasa a ser nuestra.')}
